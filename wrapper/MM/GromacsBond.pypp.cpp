@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireCAS/exp.h"
 
+#include "SireCAS/sum.h"
+
 #include "SireCAS/trigfuncs.h"
 
 #include "SireError/errors.h"

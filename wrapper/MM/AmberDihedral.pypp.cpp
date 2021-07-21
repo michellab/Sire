@@ -29,6 +29,8 @@ namespace bp = boost::python;
 
 #include "SireMM/fouratomfunctions.h"
 
+#include "SireMM/gromacsparams.h"
+
 #include "SireMM/threeatomfunctions.h"
 
 #include "SireMM/twoatomfunctions.h"
@@ -53,6 +55,8 @@ namespace bp = boost::python;
 
 #include "SireStream/shareddatastream.h"
 
+#include "SireUnits/units.h"
+
 #include "amberparams.h"
 
 #include <QDebug>
@@ -72,7 +76,7 @@ void register_AmberDihedral_class(){
         AmberDihedral_exposer_t AmberDihedral_exposer = AmberDihedral_exposer_t( "AmberDihedral", "This simple class holds Amber dihedral or improper parameter", bp::init< >("") );
         bp::scope AmberDihedral_scope( AmberDihedral_exposer );
         AmberDihedral_exposer.def( bp::init< SireMM::AmberDihPart >(( bp::arg("part") ), "") );
-        AmberDihedral_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const & >(( bp::arg("f"), bp::arg("PHI") ), "") );
+        AmberDihedral_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const &, bp::optional< bool > >(( bp::arg("f"), bp::arg("PHI"), bp::arg("test_ryckaert_bellemans")=(bool)(true) ), "") );
         AmberDihedral_exposer.def( bp::init< SireMM::AmberDihedral const & >(( bp::arg("other") ), "") );
         { //::SireMM::AmberDihedral::energy
         

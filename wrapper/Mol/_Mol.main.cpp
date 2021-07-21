@@ -401,6 +401,8 @@
 
 #include "ResNum.pypp.hpp"
 
+#include "ResNumAtomNameMatcher.pypp.hpp"
+
 #include "ResProp.pypp.hpp"
 
 #include "ResStringProperty.pypp.hpp"
@@ -949,6 +951,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_ResName_class();
 
     register_ResNum_class();
+
+    register_ResNumAtomNameMatcher_class();
 
     register_ResProp_class();
 

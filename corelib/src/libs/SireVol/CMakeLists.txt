@@ -25,6 +25,7 @@ set ( SIREVOL_HEADERS
       patching.h
       periodicbox.h
       space.h
+      triclinicbox.h
     )
 
 # Define the sources in SireVol
@@ -43,6 +44,7 @@ set ( SIREVOL_SOURCES
       patching.cpp
       periodicbox.cpp
       space.cpp
+      triclinicbox.cpp
 
       ${SIREVOL_HEADERS}
     )

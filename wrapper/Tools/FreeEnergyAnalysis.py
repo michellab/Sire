@@ -101,7 +101,7 @@ class FreeEnergies(object):
         ##testing data overlap:
         if test_overlap:
             overlap_matrix = MBAR_obj.computeOverlap()
-            self._overlap_matrix = overlap_matrix[2]
+            self._overlap_matrix = overlap_matrix["matrix"]
 
 
     @property

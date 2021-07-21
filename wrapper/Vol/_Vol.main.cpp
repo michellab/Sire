@@ -45,6 +45,8 @@
 
 #include "Space.pypp.hpp"
 
+#include "TriclinicBox.pypp.hpp"
+
 namespace bp = boost::python;
 
 #include "SireVol_containers.h"
@@ -100,10 +102,12 @@ BOOST_PYTHON_MODULE(_Vol){
 
     register_PeriodicBox_class();
 
+    register_RegularGrid_class();
+
     register_SireVol_properties();
 
     bp::implicitly_convertible< QVector<SireMaths::Vector>, SireVol::CoordGroup >();
 
-    register_RegularGrid_class();
+    register_TriclinicBox_class();
 }
 

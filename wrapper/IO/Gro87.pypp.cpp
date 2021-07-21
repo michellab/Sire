@@ -49,6 +49,8 @@ namespace bp = boost::python;
 
 #include "SireVol/periodicbox.h"
 
+#include "SireVol/triclinicbox.h"
+
 #include "gro87.h"
 
 #include <QDebug>

@@ -29,7 +29,7 @@
 #ifndef SIREBASE_REFCOUNTDATA_H
 #define SIREBASE_REFCOUNTDATA_H
 
-#include <tbb/atomic.h>
+#include <atomic>
 #include <tbb/spin_mutex.h>
 
 #include "sireglobal.h"
@@ -38,15 +38,13 @@
 
 SIRE_BEGIN_HEADER
 
-// #define SIRE_USE_REFCOUNT_MUTEX 1
-
 namespace SireBase
 {
 
 /** This class provides a reference count that be used by objects
-    that are to be held by a shared pointer, e.g. 
+    that are to be held by a shared pointer, e.g.
     SharedDataPointer, SharedPolyPointer etc.
-    
+
     @author Christopher Woods
 */
 class SIREBASE_EXPORT RefCountData
@@ -54,34 +52,29 @@ class SIREBASE_EXPORT RefCountData
 public:
     RefCountData();
     ~RefCountData();
-    
+
     class Counter
     {
     public:
         Counter();
         ~Counter();
-    
+
         int load() const;
         int refCount() const;
-        
+
         bool ref();
         bool deref();
 
         void reset();
-        
+
         bool hasSingleReference() const;
         bool hasMultipleReferences() const;
-        
+
         bool isNotReferenced() const;
-        
+
     private:
         /** The atomic holding the reference count */
-        tbb::atomic<int> refcount;
-
-        #ifdef SIRE_USE_REFCOUNT_MUTEX
-            /** A mutex used to protect updates to the reference count - 1 byte */
-            tbb::spin_mutex mutex;
-        #endif
+        std::atomic<int> refcount;
     };
 
     bool operator==(const RefCountData &other) const;
@@ -91,7 +84,7 @@ public:
         and also so that the API for RefCountData doesn't pollute any
         inheriting class */
     Counter ref;
-    
+
 private:
     RefCountData(const RefCountData &other);
     RefCountData& operator=(RefCountData &other);
@@ -102,29 +95,13 @@ private:
 /** Reset the counter so that it is set back equal to zero */
 SIRE_ALWAYS_INLINE void RefCountData::Counter::reset()
 {
-    #ifdef SIRE_USE_REFCOUNT_MUTEX
-        const_cast<Counter*>(this)->mutex.lock();
-    #endif
-
-    refcount.fetch_and_store(0);
-
-    #ifdef SIRE_USE_REFCOUNT_MUTEX
-        const_cast<Counter*>(this)->mutex.unlock();
-    #endif
+    refcount.exchange(0);
 }
 
 /** Return the current value of the refcount - note this may change! */
 SIRE_ALWAYS_INLINE int RefCountData::Counter::load() const
 {
-    #ifdef SIRE_USE_REFCOUNT_MUTEX
-        const_cast<Counter*>(this)->mutex.lock();
-    #endif
-    
     int value = refcount;
-    
-    #ifdef SIRE_USE_REFCOUNT_MUTEX
-        const_cast<Counter*>(this)->mutex.unlock();
-    #endif
 
     return value;
 }
@@ -157,15 +134,7 @@ SIRE_ALWAYS_INLINE bool RefCountData::Counter::isNotReferenced() const
 /** Increase the reference count by one */
 SIRE_ALWAYS_INLINE bool RefCountData::Counter::ref()
 {
-    #ifdef SIRE_USE_REFCOUNT_MUTEX
-        mutex.lock();
-    #endif
-    
-    int oldval = refcount.fetch_and_increment();
-    
-    #ifdef SIRE_USE_REFCOUNT_MUTEX
-        mutex.unlock();
-    #endif
+    int oldval = refcount.fetch_add(1);
 
     return (oldval >= 0);
 }
@@ -174,15 +143,7 @@ SIRE_ALWAYS_INLINE bool RefCountData::Counter::ref()
     an error if the reference count drops below 0 */
 SIRE_ALWAYS_INLINE bool RefCountData::Counter::deref()
 {
-    #ifdef SIRE_USE_REFCOUNT_MUTEX
-        mutex.lock();
-    #endif
-    
-    int oldval = refcount.fetch_and_decrement();
-    
-    #ifdef SIRE_USE_REFCOUNT_MUTEX
-        mutex.unlock();
-    #endif
+    int oldval = refcount.fetch_sub(1);
 
     return (oldval > 1);
 }
@@ -200,7 +161,7 @@ SIRE_INLINE_TEMPLATE
 T* create_shared_null()
 {
     static T *shared_null = 0;
-    
+
     if (not shared_null)
     {
         //speculatively create the new shared_null. This is not behind
@@ -210,7 +171,7 @@ T* create_shared_null()
 
         auto mutex = detail::get_shared_null_mutex();
         tbb::spin_mutex::scoped_lock lock(*mutex);
-        
+
         if (not shared_null)
         {
             shared_null = my_null;
@@ -222,7 +183,7 @@ T* create_shared_null()
             delete my_null;
         }
     }
-    
+
     return shared_null;
 }
 
@@ -231,17 +192,17 @@ SIRE_INLINE_TEMPLATE
 T* create_not_refcounted_shared_null()
 {
     static T *shared_null = 0;
-    
+
     if (not shared_null)
     {
         //speculatively create the new shared_null. This is not behind
         //the mutex, as the constructed object may creata another object
-        //that calls create_not_refcounted_shared_null        
+        //that calls create_not_refcounted_shared_null
         T *my_null = new T();
 
         auto mutex = detail::get_shared_null_mutex();
         tbb::spin_mutex::scoped_lock lock(*mutex);
-        
+
         if (not shared_null)
         {
             shared_null = my_null;
@@ -252,7 +213,7 @@ T* create_not_refcounted_shared_null()
             delete my_null;
         }
     }
-    
+
     return shared_null;
 }
 

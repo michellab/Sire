@@ -49,6 +49,12 @@ import Sire.Stream
 import time
 import numpy as np
 
+
+MIN_MASSES = {'C': 5.96, 'N': 7.96}
+HMR_MIN = 1.0
+HMR_MAX = 4.0
+
+
 ####################################################################################################
 #
 #   Config file parameters
@@ -148,7 +154,7 @@ barostat_frequency = Parameter("barostat frequency", 25,
 lj_dispersion = Parameter("lj dispersion", False, """Whether or not to calculate and include the LJ dispersion term.""")
 
 cmm_removal = Parameter("center of mass frequency", 10,
-                        "Frequency of which the system center of mass motion is removed.""")
+                        """Frequency of which the system center of mass motion is removed.""")
 
 center_solute = Parameter("center solute", False,
                           """Whether or not to centre the centre of geometry of the solute in the box.""")
@@ -179,10 +185,14 @@ distance_restraints_dict = Parameter("distance restraints dictionary", {},
                                      D the flat bottom radius. WARNING: PBC distance checks not implemented, avoid
                                      restraining pair of atoms that may diffuse out of the box.""")
 
-hydrogen_mass_repartitioning_factor = Parameter("hydrogen mass repartitioning factor",None,
-                                     """If not None and is a number, all hydrogen atoms in the molecule will
-                                        have their mass increased by the input factor. The atomic mass of the heavy atom
-                                        bonded to the hydrogen is decreased to keep the mass constant.""")
+hydrogen_mass_repartitioning_factor = \
+    Parameter('hydrogen mass repartitioning factor', 1.0,
+              f'If larger than {HMR_MIN} (maximum is {HMR_MAX}), all hydrogen '
+              'atoms in the molecule will have their mass increased by this '
+              'factor. The atomic mass of the heavy atom bonded to the '
+              'hydrogen is decreased to keep the total mass constant '
+              '(except when this would lead to a heavy atom to be lighter '
+              'than a minimum mass).')
 
 ## Free energy specific keywords
 morphfile = Parameter("morphfile", "MORPH.pert",
@@ -283,11 +293,16 @@ def centerSolute(system, space):
     # ! Assuming first molecule in the system is the solute !
 
     if space.isPeriodic():
-        box_center = space.dimensions() / 2
+        # Periodic box.
+        try:
+            box_center = space.dimensions() / 2
+        # TriclincBox.
+        except:
+            box_center = 0.5*(space.vector0() + space.vector1() + space.vector2())
     else:
         box_center = Vector(0.0, 0.0, 0.0)
 
-    solute = system.molecules().at(MolNum(1))[0].molecule() 
+    solute = system.molecules().at(MolNum(1))[0].molecule()
 
     solute_cog = CenterOfGeometry(solute).point()
 
@@ -626,7 +641,7 @@ def setupDistanceRestraints(system, restraints=None):
     prop_list = []
 
     molecules = system[MGName("all")].molecules()
-    
+
     if restraints is None:
         #dic_items = list(distance_restraints_dict.val.items())
         dic_items = list(dict(distance_restraints_dict.val).items())
@@ -686,9 +701,14 @@ def freezeResidues(system):
 
 def repartitionMasses(system, hmassfactor=4.0):
     """
-    Increase the mass of hydrogen atoms to hmass times * amu, and subtract the mass 
+    Increase the mass of hydrogen atoms to hmass times * amu, and subtract the mass
 increase from the heavy atom the hydrogen is bonded to.
     """
+
+    if not (HMR_MIN <= hmassfactor <= HMR_MAX):
+        print(f'The HMR factor must be between {HMR_MIN} and {HMR_MAX} '
+              f'and not {hmassfactor}')
+        sys.exit(-1)
 
     print ("Applying Hydrogen Mass repartition to input using a factor of %s " % hmassfactor)
 
@@ -773,9 +793,36 @@ increase from the heavy atom the hydrogen is bonded to.
         # Now that have worked out mass changes per molecule, update molecule
         for x in range(0,nats):
             at = atoms[x]
+            element_symbol = at.property('element').symbol()
             atidx = at.index()
             atmass = at.property("mass")
             newmass = atmass + atom_masses[atidx.value()]
+
+            # Make sure C and N have a minimum mass in CH3 and NH3
+            #
+            # NOTE: this will change the total mass but dG is independent of
+            #       mass
+            if element_symbol in MIN_MASSES:
+                minmass = MIN_MASSES[element_symbol]
+
+                if newmass.value() < minmass:
+                    newmass = minmass * g_per_mol
+
+                    if verbose:
+                        print(f'Modified mass (total mass changed) for '
+                              f'{element_symbol}-{atidx.value()}: old mass = '
+                              f'{atmass.value():.3f}, '
+                              f'new mass = {newmass.value():.3f}')
+
+            # Sanity check. Note this is likely to occur if hmassfactor > 4
+            if (newmass.value() < 0.0):
+                print ("WARNING! The mass of atom %s is less than zero after "
+                       "hydrogen mass repartitioning. This should not happen! "
+                       "Decrease hydrogen mass repartitioning factor in your "
+                       "cfg file and try again." % atidx)
+                sys.exit(-1)
+
+
             # Sanity check. Note this is likely to occur if hmassfactor > 4
             if (newmass.value() < 0.0):
                 print ("""WARNING ! The mass of atom %s is less than zero after hydrogen mass repartitioning.
@@ -834,7 +881,7 @@ def createSystemFreeEnergy(molecules):
         molecule = molecules.molecule(moleculeNumber)[0].molecule()
         moleculeList.append(molecule)
 
-    # Scan input to find a molecule with passed residue number 
+    # Scan input to find a molecule with passed residue number
     # The residue name of the first residue in this molecule is
     # used to name the solute. This is used later to match
     # templates in the flex/pert files.
@@ -1341,7 +1388,7 @@ def generateDistanceRestraintsDict(system):
     restraints = { (i0, i1): (r01, kl, Dl), (i0,i2): (r02, kl, Dl) }
     #print restraints
     #distance_restraints_dict.val = restraints
-    #distance_restraints_dict 
+    #distance_restraints_dict
     #import pdb; pdb.set_trace()
 
     return restraints
@@ -1399,7 +1446,7 @@ def run():
                 stream.close()
             system = setupDistanceRestraints(system, restraints=restraints)
 
-        if hydrogen_mass_repartitioning_factor.val is not None:
+        if hydrogen_mass_repartitioning_factor.val > 1.0:
             system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
 
         # Note that this just set the mass to zero which freezes residues in OpenMM but Sire doesn't known that
@@ -1557,7 +1604,7 @@ def runFreeNrg():
 
             #import pdb; pdb.set_trace()
 
-        if hydrogen_mass_repartitioning_factor.val is not None:
+        if hydrogen_mass_repartitioning_factor.val > 1.0:
             system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
 
         # Note that this just set the mass to zero which freezes residues in OpenMM but Sire doesn't known that
@@ -1613,7 +1660,7 @@ def runFreeNrg():
     if cycle_start > maxcycles.val:
         print("Maxinum number of cycles reached (%s). If you wish to extend the simulation increase the value of the parameter maxcycle." % maxcycles.val)
         sys.exit(-1)
-        
+
     cycle_end = cycle_start + ncycles.val
 
     if (cycle_end > maxcycles.val):
@@ -1702,7 +1749,7 @@ def runFreeNrg():
         cmd = "cp %s %s.previous" % (restart_file.val, restart_file.val)
         os.system(cmd)
         print ("Saving new restart")
-        Sire.Stream.save([system, moves], restart_file.val)            
+        Sire.Stream.save([system, moves], restart_file.val)
     s2 = timer.elapsed() / 1000.
     outgradients.flush()
     outfile.flush()
@@ -1710,7 +1757,7 @@ def runFreeNrg():
     outfile.close()
     print("Simulation took %d s " % ( s2 - s1))
     print("###===========================================================###\n")
-  
+
 
     if os.path.exists("gradients.s3"):
         siregrads = Sire.Stream.load("gradients.s3")
@@ -1725,8 +1772,5 @@ def runFreeNrg():
         # Necessary to write correct restart
         system.mustNowRecalculateFromScratch()
 
- #   print("Backing up previous restart")
- #   cmd = "cp %s %s.previous" % (restart_file.val, restart_file.val)
- #   os.system(cmd)
- #   print ("Saving new restart")
- #   Sire.Stream.save([system, moves], restart_file.val)
+if __name__ == '__main__':
+    runFreeNrg()

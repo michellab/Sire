@@ -2780,6 +2780,9 @@ static QStringList writeAtomTypes(const QMap<QPair<int,QString>,GroMolType> &mol
             const auto mol = molecules[it.key()];
             const auto cgatomidx = mol.info().cgAtomIdx( AtomIdx(i) );
 
+            // Was this formerly a perturbable molecule.
+            const bool was_perturbable = mol.hasProperty("was_perturbable");
+
             //now get the corresponding Element and LJ properties for this atom
             Element elem;
 
@@ -2806,7 +2809,7 @@ static QStringList writeAtomTypes(const QMap<QPair<int,QString>,GroMolType> &mol
                     atomtype += "_du";
 
                 // Only label dummies for regular simulations.
-                else
+                else if (not was_perturbable)
                     particle_type = "D";
             }
 

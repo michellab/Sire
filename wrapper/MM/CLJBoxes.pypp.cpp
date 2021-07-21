@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "SireVol/space.h"
 
+#include "SireVol/triclinicbox.h"
+
 #include "cljboxes.h"
 
 #include "tostring.h"

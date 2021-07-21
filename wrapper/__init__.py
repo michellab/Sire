@@ -321,8 +321,12 @@ def _uploadUsageData():
 
         sent_usage_data = data
 
-        conn = _htc.HTTPConnection("siremol.org")
+        conn = _htc.HTTPSConnection("siremol.org")
         conn.request("POST", "/phonehome/postusagestats.php", params, headers)
+
+        # Next time this break, remember to uncomment the below lines so that
+        # we can inspect the response code and error from the server...
+
         #r1 = conn.getresponse()
         #print(r1.status, r1.reason)
         #print(r1.read())

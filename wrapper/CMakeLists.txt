@@ -8,7 +8,7 @@
 ################################
 
 # project version
-set (SIRE_VERSION_MAJOR "2020")
+set (SIRE_VERSION_MAJOR "2021")
 set (SIRE_VERSION_MINOR "1")
 set (SIRE_VERSION_PATCH "0")
 

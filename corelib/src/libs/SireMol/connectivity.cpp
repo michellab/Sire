@@ -340,6 +340,67 @@ QString ConnectivityBase::toString() const
     return lines.join("\n");
 }
 
+/** Return a PDB format CONECT record for this connectivity object. */
+QString ConnectivityBase::toCONECT(int offset) const
+{
+    QStringList lines;
+
+    if (nConnections() == 0)
+        return lines.at(0);
+
+    if (not connected_atoms.isEmpty())
+    {
+        // Create a set to store the bonds that have been seen. A pair is
+        // used to identify the atom indices in the bond.
+        QSet<QPair<int, int>> seen_bonds;
+
+        for (int i=0; i<connected_atoms.count(); ++i)
+        {
+            QStringList atoms;
+
+            // Convert set to a list and sort the atom indices.
+            auto list = connected_atoms[i].toList();
+            std::sort(list.begin(), list.end());
+
+            // Loop over each atom and add to the record.
+            foreach (AtomIdx j, list)
+            {
+                // Store outer loop index.
+                int x = i;
+
+                // Convert to int.
+                int y = j.value();
+
+                // Make sure the smaller index is the lead.
+                if (x > y)
+                {
+                    int tmp = x;
+                    x = y;
+                    y = tmp;
+                }
+
+                // Create the bond index pair.
+                QPair<int, int> bond_pair(x, y);
+
+                // Don't duplicate records.
+                if (not seen_bonds.contains(bond_pair))
+                {
+                    atoms.append(QString("%1").arg(j.value() + 1 + offset).rightJustified(4));
+                    seen_bonds.insert(bond_pair);
+                }
+            }
+
+            // Append the record.
+            if (not connected_atoms.at(i).isEmpty() and not atoms.isEmpty())
+                lines.append(QObject::tr("CONECT %1 %2")
+                        .arg(QString("%1").arg(AtomIdx(i + 1 + offset).value()).rightJustified(4))
+                        .arg(atoms.join(" ")));
+        }
+    }
+
+    return lines.join("\n");
+}
+
 /** Return the total number of connections between atoms
     in this connectivity object */
 int ConnectivityBase::nConnections() const

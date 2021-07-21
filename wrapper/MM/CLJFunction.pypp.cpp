@@ -32,6 +32,8 @@ namespace bp = boost::python;
 
 #include "SireVol/periodicbox.h"
 
+#include "SireVol/triclinicbox.h"
+
 #include "cljboxes.h"
 
 #include "cljfunction.h"

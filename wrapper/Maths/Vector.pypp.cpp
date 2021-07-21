@@ -170,7 +170,7 @@ void register_Vector_class(){
                 "cross"
                 , cross_function_value
                 , ( bp::arg("v0"), bp::arg("v1") )
-                , "Return the cross product of v0 and v1" );
+                , "Note that the cross product returns a normal vector, i.e. it has been\nnormalised" );
         
         }
         { //::SireMaths::Vector::dihedral
@@ -469,6 +469,18 @@ void register_Vector_class(){
                 , "Return the components via rgb (limited between 0 and 1)" );
         
         }
+        { //::SireMaths::Vector::realCross
+        
+            typedef ::SireMaths::Vector ( *realCross_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & );
+            realCross_function_type realCross_function_value( &::SireMaths::Vector::realCross );
+            
+            Vector_exposer.def( 
+                "realCross"
+                , realCross_function_value
+                , ( bp::arg("v0"), bp::arg("v1") )
+                , "This is a regular cross product." );
+        
+        }
         { //::SireMaths::Vector::set
         
             typedef void ( ::SireMaths::Vector::*set_function_type)( double,double,double ) ;
@@ -665,6 +677,7 @@ void register_Vector_class(){
         Vector_exposer.staticmethod( "generate" );
         Vector_exposer.staticmethod( "invDistance" );
         Vector_exposer.staticmethod( "invDistance2" );
+        Vector_exposer.staticmethod( "realCross" );
         Vector_exposer.staticmethod( "typeName" );
         Vector_exposer.def( bp::self * bp::other< SireMaths::Quaternion >() );
         Vector_exposer.def( bp::self * bp::other< double >() );

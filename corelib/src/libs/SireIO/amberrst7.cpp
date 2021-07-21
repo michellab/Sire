@@ -39,6 +39,7 @@
 #include "SireMol/moleditor.h"
 
 #include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 
 #include "SireUnits/dimensions.h"
 #include "SireUnits/units.h"
@@ -68,25 +69,25 @@ const RegisterParser<AmberRst7> register_rst7;
 QDataStream &operator<<(QDataStream &ds, const AmberRst7 &rst)
 {
     writeHeader(ds, r_rst, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << rst.ttle << rst.current_time
         << rst.coords << rst.vels
         << rst.box_dims << rst.box_angs
         << static_cast<const MoleculeParser&>(rst);
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, AmberRst7 &rst)
 {
     VersionID v = readHeader(ds, r_rst);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> rst.ttle >> rst.current_time
             >> rst.coords >> rst.vels
             >> rst.box_dims >> rst.box_angs
@@ -94,7 +95,7 @@ QDataStream &operator>>(QDataStream &ds, AmberRst7 &rst)
     }
     else
         throw version_error(v, "1", r_rst, CODELOC);
-    
+
     return ds;
 }
 
@@ -111,22 +112,22 @@ void AmberRst7::readBoxInfo(int boxidx)
 {
     if (boxidx < 0 or boxidx >= lines().count())
         return;
-    
+
     const QString &line = lines().constData()[boxidx];
-    
+
     QStringList local_errors;
-    
+
     if (line.length() >= 36)
     {
         //we can get the box dimensions
         bool x_ok = true;
         bool y_ok = true;
         bool z_ok = true;
-        
+
         const double x = line.midRef(0,12).toDouble(&x_ok);
         const double y = line.midRef(12,12).toDouble(&y_ok);
         const double z = line.midRef(24,12).toDouble(&z_ok);
-        
+
         if (not (x_ok and y_ok and z_ok))
         {
             local_errors.append( QObject::tr(
@@ -144,11 +145,11 @@ void AmberRst7::readBoxInfo(int boxidx)
         bool x_ok = true;
         bool y_ok = true;
         bool z_ok = true;
-        
+
         const double x = line.midRef(36,12).toDouble(&x_ok);
         const double y = line.midRef(48,12).toDouble(&y_ok);
         const double z = line.midRef(60,12).toDouble(&z_ok);
-        
+
         if (not (x_ok and y_ok and z_ok))
         {
             local_errors.append( QObject::tr(
@@ -188,24 +189,24 @@ void AmberRst7::parse(const PropertyMap &map)
     if (lines().count() < 2)
         //there is nothing in the file
         return;
-    
+
     double score = 0;
-    
+
     // read in the title FORMAT(20A4)
     ttle = lines()[0].simplified();
     score += 1;
-    
+
     // read in the number of atoms and time (two space-separated words)
     QStringList words = lines()[1].split(" ", QString::SkipEmptyParts);
-    
+
     if (words.isEmpty())
         throw SireIO::parse_error( QObject::tr(
                 "Could not read the number of atoms from the first word of the "
                 "restart file. Please check that the file is ok."), CODELOC );
-    
+
     bool ok = true;
     int natoms = words[0].toInt(&ok);
-    
+
     if (not ok)
         throw SireIO::parse_error( QObject::tr(
                 "Could not read the number of atoms from the first five columns of "
@@ -216,7 +217,7 @@ void AmberRst7::parse(const PropertyMap &map)
     if (words.count() >= 2)
     {
         current_time = words[1].toDouble(&ok);
-        
+
         if (not ok)
         {
             //we can't read the current time - this is annoying, but some
@@ -238,13 +239,13 @@ void AmberRst7::parse(const PropertyMap &map)
                     .arg(lines().count())
                     .arg(2 + (natoms/2)), CODELOC );
     }
- 
+
     //now read in all of the coordinates
     QMutex mutex;
     coords = QVector<Vector>(natoms, Vector(0));
     Vector *coords_array = coords.data();
     QStringList global_errors;
-    
+
     //get a pointer to the array of lines
     const QString *l = lines().constData();
 
@@ -256,25 +257,25 @@ void AmberRst7::parse(const PropertyMap &map)
 
         //we have already validated that there are enough lines
         const QString &line = l[linenum];
-        
+
         if (line.length() < column+36)
         {
             errors.append( QObject::tr(
                     "Cannot read the coordinates for the atom at index %1 as "
                     "the line at line number %2 is too short.")
                         .arg(i+1).arg(linenum+1) );
-            
+
             return;
         }
-        
+
         bool x_ok = true;
         bool y_ok = true;
         bool z_ok = true;
-        
+
         const double x = line.midRef(column,12).toDouble(&x_ok);
         const double y = line.midRef(column+12,12).toDouble(&y_ok);
         const double z = line.midRef(column+24,12).toDouble(&z_ok);
-        
+
         if (not (x_ok and y_ok and z_ok))
         {
             errors.append( QObject::tr(
@@ -283,22 +284,22 @@ void AmberRst7::parse(const PropertyMap &map)
                     .arg(i+1).arg(linenum+1).arg(x_ok).arg(y_ok).arg(z_ok) );
             return;
         }
-        
+
         coords_array[i] = Vector(x,y,z);
     };
-    
+
     if (usesParallel())
     {
         tbb::parallel_for( tbb::blocked_range<int>(0,natoms),
                            [&](tbb::blocked_range<int> r)
         {
             QStringList local_errors;
-            
+
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 parse_coords(i, local_errors);
             }
-            
+
             if (not local_errors.isEmpty())
             {
                 QMutexLocker lkr(&mutex);
@@ -313,7 +314,7 @@ void AmberRst7::parse(const PropertyMap &map)
             parse_coords(i, global_errors);
         }
     }
-    
+
     if (not global_errors.isEmpty())
     {
         throw SireIO::parse_error( QObject::tr(
@@ -329,7 +330,7 @@ void AmberRst7::parse(const PropertyMap &map)
     {
         //there are no velocities - see if there is periodic box information
         int boxidx = 2 + ((natoms+1)/2);
-        
+
         if (boxidx < lines().count())
         {
             //there is - read in the box information
@@ -352,25 +353,25 @@ void AmberRst7::parse(const PropertyMap &map)
 
         //we have already validated that there are enough lines
         const QString &line = l[linenum];
-        
+
         if (line.length() < column+36)
         {
             errors.append( QObject::tr(
                     "Cannot read the velocities for the atom at index %1 as "
                     "the line at line number %2 is too short.")
                         .arg(i+1).arg(linenum+1) );
-            
+
             return;
         }
-        
+
         bool x_ok = true;
         bool y_ok = true;
         bool z_ok = true;
-        
+
         const double x = line.midRef(column,12).toDouble(&x_ok);
         const double y = line.midRef(column+12,12).toDouble(&y_ok);
         const double z = line.midRef(column+24,12).toDouble(&z_ok);
-        
+
         if (not (x_ok and y_ok and z_ok))
         {
             errors.append( QObject::tr(
@@ -379,7 +380,7 @@ void AmberRst7::parse(const PropertyMap &map)
                     .arg(i+1).arg(linenum+1).arg(x_ok).arg(y_ok).arg(z_ok) );
             return;
         }
-        
+
         // format is (units: Angstroms per 1/20.455 ps)
         vels_array[i] = Vector(x,y,z);
     };
@@ -390,12 +391,12 @@ void AmberRst7::parse(const PropertyMap &map)
                            [&](tbb::blocked_range<int> r)
         {
             QStringList local_errors;
-            
+
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 parse_vels(i, local_errors);
             }
-            
+
             if (not local_errors.isEmpty())
             {
                 QMutexLocker lkr(&mutex);
@@ -468,7 +469,7 @@ static QStringList toLines(const QVector< QVector<Vector> > &all_coords,
     //now find the start index of each molecule
     QVector<qint64> start_idx;
     start_idx.reserve(all_coords.count());
-    
+
     qint64 last_idx = 0;
 
     for (const auto molcoords : all_coords)
@@ -482,7 +483,7 @@ static QStringList toLines(const QVector< QVector<Vector> > &all_coords,
 
     QVector<double> coords(nats * 3, 0.0);
     QVector<double> vels;
-    
+
     if (has_velocities)
     {
         vels = QVector<double>(nats*3, 0.0);
@@ -500,7 +501,7 @@ static QStringList toLines(const QVector< QVector<Vector> > &all_coords,
                     const qint64 idx = start_idx.constData()[i];
                     const auto molcoords = all_coords.constData()[i];
                     const auto molvels = all_vels.constData()[i];
-                    
+
                     for (int j=0; j<molcoords.count(); ++j)
                     {
                         const Vector &atomcoords = molcoords[j];
@@ -508,7 +509,7 @@ static QStringList toLines(const QVector< QVector<Vector> > &all_coords,
                         coords[idx + 3*j + 1] = atomcoords.y();
                         coords[idx + 3*j + 2] = atomcoords.z();
                     }
-                    
+
                     if (not molvels.isEmpty())
                     {
                         for (int j=0; j<molvels.count(); ++j)
@@ -531,7 +532,7 @@ static QStringList toLines(const QVector< QVector<Vector> > &all_coords,
                 {
                     const qint64 idx = start_idx.constData()[i];
                     const auto molcoords = all_coords.constData()[i];
-                    
+
                     for (int j=0; j<molcoords.count(); ++j)
                     {
                         const Vector &atomcoords = molcoords[j];
@@ -552,7 +553,7 @@ static QStringList toLines(const QVector< QVector<Vector> > &all_coords,
                 const qint64 idx = start_idx.constData()[i];
                 const auto molcoords = all_coords.constData()[i];
                 const auto molvels = all_vels.constData()[i];
-                
+
                 for (int j=0; j<molcoords.count(); ++j)
                 {
                     const Vector &atomcoords = molcoords[j];
@@ -560,7 +561,7 @@ static QStringList toLines(const QVector< QVector<Vector> > &all_coords,
                     coords[idx + 3*j + 1] = atomcoords.y();
                     coords[idx + 3*j + 2] = atomcoords.z();
                 }
-                
+
                 if (not molvels.isEmpty())
                 {
                     for (int j=0; j<molvels.count(); ++j)
@@ -579,7 +580,7 @@ static QStringList toLines(const QVector< QVector<Vector> > &all_coords,
             {
                 const qint64 idx = start_idx.constData()[i];
                 const auto molcoords = all_coords.constData()[i];
-                
+
                 for (int j=0; j<molcoords.count(); ++j)
                 {
                     const Vector &atomcoords = molcoords[j];
@@ -590,16 +591,16 @@ static QStringList toLines(const QVector< QVector<Vector> > &all_coords,
             }
         }
     }
-    
+
     QStringList lines = writeFloatData(coords, AmberFormat(AmberPrm::FLOAT, 6, 12, 7),
                                        errors, false, 'f');
-    
+
     if (has_velocities)
     {
         lines += writeFloatData(vels, AmberFormat(AmberPrm::FLOAT, 6, 12, 7),
                                 errors, false, 'f');
     }
-    
+
     return lines;
 }
 
@@ -611,17 +612,17 @@ static QVector<Vector> getCoordinates(const Molecule &mol, const PropertyName &c
     }
 
     QVector<Vector> coords( mol.nAtoms() );
-    
+
     const auto molcoords = mol.property(coords_property).asA<AtomCoords>();
-    
+
     const auto molinfo = mol.info();
-    
+
     for (int i=0; i<mol.nAtoms(); ++i)
     {
         //coords are already in angstroms :-)
         coords[i] = molcoords.at( molinfo.cgAtomIdx( AtomIdx(i) ) );
     }
-    
+
     return coords;
 }
 
@@ -636,21 +637,21 @@ static QVector<Vector> getVelocities(const Molecule &mol, const PropertyName &ve
     {
         const auto molvels = mol.property(vels_property).asA<AtomVelocities>();
         const auto molinfo = mol.info();
-        
+
         QVector<Vector> vels( mol.nAtoms() );
-        
+
         const double units = 1.0 / (angstrom / (20.455*picosecond)).value();
-        
+
         for (int i=0; i<mol.nAtoms(); ++i)
         {
             const auto atomvels = molvels.at( molinfo.cgAtomIdx( AtomIdx(i) ) );
-            
+
             //need to convert the velocities into units of Angstroms / 20.455 picoseconds
             vels[i] = Vector( atomvels.x().value() * units,
                               atomvels.y().value() * units,
                               atomvels.z().value() * units );
         }
-        
+
         return vels;
     }
     catch(...)
@@ -690,7 +691,7 @@ AmberRst7::AmberRst7(const System &system, const PropertyMap &map)
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 const auto mol = system[molnums[i]].molecule();
-            
+
                 tbb::parallel_invoke(
                    [&](){ all_coords[i] = ::getCoordinates(mol, coords_property); },
                    [&](){ all_vels[i] = ::getVelocities(mol, vels_property); }
@@ -713,7 +714,7 @@ AmberRst7::AmberRst7(const System &system, const PropertyMap &map)
 
     //extract the space of the system
     SpacePtr space;
-    
+
     try
     {
         space = system.property( map["space"] ).asA<Space>();
@@ -723,7 +724,7 @@ AmberRst7::AmberRst7(const System &system, const PropertyMap &map)
 
     //extract the current time for the system
     Time time(-1);
-    
+
     try
     {
         time = system.property( map["time"] ).asA<TimeProperty>().value();
@@ -756,14 +757,14 @@ AmberRst7::AmberRst7(const System &system, const PropertyMap &map)
     {
         lines.prepend( QString("%1").arg(natoms, 5) );
     }
-    
+
     lines.prepend(system.name().value());
 
-    //finally add on the box dimensions if we have a periodic box
+    //finally add on the box dimensions and angles
     if (space.read().isA<PeriodicBox>())
     {
         Vector dims = space.read().asA<PeriodicBox>().dimensions();
-    
+
         QVector<double> boxdims(6);
         boxdims[0] = dims.x();
         boxdims[1] = dims.y();
@@ -771,7 +772,28 @@ AmberRst7::AmberRst7(const System &system, const PropertyMap &map)
         boxdims[3] = cubic_angs.x();
         boxdims[4] = cubic_angs.y();
         boxdims[5] = cubic_angs.z();
-        
+
+        lines += writeFloatData(boxdims, AmberFormat( AmberPrm::FLOAT, 6, 12, 7 ),
+                                &errors, false, 'f');
+    }
+    else if (space.read().isA<TriclinicBox>())
+    {
+        Vector v0 = space.read().asA<TriclinicBox>().vector0();
+        Vector v1 = space.read().asA<TriclinicBox>().vector1();
+        Vector v2 = space.read().asA<TriclinicBox>().vector2();
+
+        double alpha = space.read().asA<TriclinicBox>().alpha();
+        double beta  = space.read().asA<TriclinicBox>().beta();
+        double gamma = space.read().asA<TriclinicBox>().gamma();
+
+        QVector<double> boxdims(6);
+        boxdims[0] = v0.magnitude();
+        boxdims[1] = v1.magnitude();
+        boxdims[2] = v2.magnitude();
+        boxdims[3] = alpha;
+        boxdims[4] = beta;
+        boxdims[5] = gamma;
+
         lines += writeFloatData(boxdims, AmberFormat( AmberPrm::FLOAT, 6, 12, 7 ),
                                 &errors, false, 'f');
     }
@@ -811,7 +833,7 @@ AmberRst7& AmberRst7::operator=(const AmberRst7 &other)
         vels = other.vels;
         box_dims = other.box_dims;
         box_angs = other.box_angs;
-    
+
         MoleculeParser::operator=(other);
     }
 
@@ -874,42 +896,42 @@ void AmberRst7::addToSystem(System &system, const PropertyMap &map) const
     const int nmols = allmols.nMolecules();
 
     QVector<int> atom_pointers(nmols+1, -1);
-    
+
     int natoms = 0;
-    
+
     for (int i=0; i<nmols; ++i)
     {
         atom_pointers[i] = natoms;
         const int nats = allmols[MolIdx(i)].data().info().nAtoms();
         natoms += nats;
     }
-    
+
     atom_pointers[nmols] = natoms;
-    
+
     if (natoms != this->nAtoms())
         throw SireIO::parse_error( QObject::tr(
                 "Incompatibility between the files, as this restart file contains data "
                 "for %1 atom(s), while the other file(s) have created a system with "
                 "%2 atom(s)").arg(this->nAtoms()).arg(natoms), CODELOC );
-    
+
     //next, copy the coordinates and optionally the velocities into the molecules
     QVector<Molecule> mols(nmols);
     Molecule *mols_array = mols.data();
     const Vector *coords_array = this->coordinates().constData();
-    
+
     const PropertyName coords_property = map["coordinates"];
-    
+
     if (this->hasVelocities())
     {
         const PropertyName vels_property = map["velocity"];
         const Vector *vels_array = this->velocities().constData();
-    
+
         auto add_coords_and_vels = [&](int i)
         {
             const int atom_start_idx = atom_pointers.constData()[i];
             auto mol = allmols[MolIdx(i)].molecule();
             const auto molinfo = mol.data().info();
-            
+
             //create space for the coordinates and velocities
             auto coords = QVector< QVector<Vector> >(molinfo.nCutGroups());
             auto vels = AtomVelocities(molinfo);
@@ -918,31 +940,31 @@ void AmberRst7::addToSystem(System &system, const PropertyMap &map) const
             {
                 coords[j] = QVector<Vector>(molinfo.nAtoms(CGIdx(j)));
             }
-            
+
             for (int j=0; j<mol.nAtoms(); ++j)
             {
                 auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(j));
-                
+
                 const int atom_idx = atom_start_idx + j;
-                
+
                 coords[cgatomidx.cutGroup()][cgatomidx.atom()] = coords_array[atom_idx];
 
                 //velocity is Angstroms per 1/20.455 ps
                 const auto vel_unit = (1.0 / 20.455) * angstrom / picosecond;
-                
+
                 const Vector &vel = vels_array[atom_idx];
                 vels.set(cgatomidx, Velocity3D(vel.x() * vel_unit,
                                                vel.y() * vel_unit,
                                                vel.z() * vel_unit));
             }
-            
+
             mols_array[i] = mol.edit()
                             .setProperty(vels_property, vels)
                             .setProperty(coords_property,
                                          AtomCoords(CoordGroupArray(coords)))
                             .commit();
         };
-    
+
         if (usesParallel())
         {
             tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
@@ -969,7 +991,7 @@ void AmberRst7::addToSystem(System &system, const PropertyMap &map) const
             const int atom_start_idx = atom_pointers.constData()[i];
             auto mol = system[MolIdx(i)].molecule();
             const auto molinfo = mol.data().info();
-            
+
             //create space for the coordinates
             auto coords = QVector< QVector<Vector> >(molinfo.nCutGroups());
 
@@ -977,22 +999,22 @@ void AmberRst7::addToSystem(System &system, const PropertyMap &map) const
             {
                 coords[j] = QVector<Vector>(molinfo.nAtoms(CGIdx(j)));
             }
-            
+
             for (int j=0; j<mol.nAtoms(); ++j)
             {
                 auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(j));
-                
+
                 const int atom_idx = atom_start_idx + j;
-                
+
                 coords[cgatomidx.cutGroup()][cgatomidx.atom()] = coords_array[atom_idx];
             }
-            
+
             mols_array[i] = mol.edit()
                             .setProperty(coords_property,
                                          AtomCoords(CoordGroupArray(coords)))
                             .commit();
         };
-    
+
         if (usesParallel())
         {
             tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
@@ -1012,7 +1034,7 @@ void AmberRst7::addToSystem(System &system, const PropertyMap &map) const
             }
         }
     }
-    
+
     system.update( Molecules(mols) );
 
     PropertyName space_property = map["space"];
@@ -1022,17 +1044,25 @@ void AmberRst7::addToSystem(System &system, const PropertyMap &map) const
     }
     else if (box_dims != Vector(0) and space_property.hasSource())
     {
-        if (box_angs != cubic_angs)
+        // PeriodicBox.
+        if (box_angs == cubic_angs)
         {
-            throw SireIO::parse_error( QObject::tr(
-                    "Sire cannot currently support a non-cubic periodic box! %1")
-                        .arg(box_angs.toString()), CODELOC );
+            system.setProperty( space_property.source(),
+                                SireVol::PeriodicBox(box_dims) );
         }
-        
-        
-        system.setProperty( space_property.source(), SireVol::PeriodicBox(box_dims) );
+        // TriclinicBox.
+        else
+        {
+            system.setProperty( space_property.source(),
+                                SireVol::TriclinicBox(box_dims.x(),
+                                                      box_dims.y(),
+                                                      box_dims.z(),
+                                                      box_angs.x()*degrees,
+                                                      box_angs.y()*degrees,
+                                                      box_angs.z()*degrees) );
+        }
     }
-    
+
     PropertyName time_property = map["time"];
     if (time_property.hasValue())
     {
@@ -1042,13 +1072,13 @@ void AmberRst7::addToSystem(System &system, const PropertyMap &map) const
     {
         system.setProperty( time_property.source(), TimeProperty(current_time*picosecond) );
     }
-    
+
     //update the System fileformat property to record that it includes
     //data from this file format
     QString fileformat = this->formatName();
-    
+
     PropertyName fileformat_property = map["fileformat"];
-    
+
     try
     {
         QString last_format = system.property(fileformat_property).asA<StringProperty>().value();
@@ -1056,7 +1086,7 @@ void AmberRst7::addToSystem(System &system, const PropertyMap &map) const
     }
     catch(...)
     {}
-    
+
     if (fileformat_property.hasSource())
     {
         system.setProperty(fileformat_property.source(), StringProperty(fileformat));
@@ -1074,8 +1104,8 @@ QString AmberRst7::title() const
 }
 
 /** Return the current time of the simulation from which this restart
-    file was written in picoseconds. 
-    
+    file was written in picoseconds.
+
     This is a negative number if the time has not been set */
 double AmberRst7::time() const
 {

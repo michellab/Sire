@@ -32,6 +32,7 @@
 #include "SireVol/aabox.h"
 #include "SireVol/space.h"
 #include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -1686,12 +1687,27 @@ QVector<CLJBoxDistance> CLJBoxes::getDistances(const Space &space, const CLJBoxe
     {
         if (space.isPeriodic())
         {
-            Vector dimensions = space.asA<PeriodicBox>().dimensions();
-            
-            const float box_x = dimensions.x() / boxes.box_length;
-            const float box_y = dimensions.y() / boxes.box_length;
-            const float box_z = dimensions.z() / boxes.box_length;
-            
+            float box_x, box_y, box_z;
+            try
+            {
+                // Attempt to cast as a PeriodicBox.
+                Vector dimensions = space.asA<PeriodicBox>().dimensions();
+                
+                box_x = dimensions.x() / boxes.box_length;
+                box_y = dimensions.y() / boxes.box_length;
+                box_z = dimensions.z() / boxes.box_length;
+            }
+            catch(...)
+            {
+                // A cubic TriclinicBox is Cartesian.
+                Vector v0 = space.asA<TriclinicBox>().vector0();
+                Vector v1 = space.asA<TriclinicBox>().vector1();
+                Vector v2 = space.asA<TriclinicBox>().vector2();
+                box_x = v0.x() / boxes.box_length;
+                box_y = v1.y() / boxes.box_length;
+                box_z = v2.z() / boxes.box_length;
+            }
+                
             const float half_box_x = 0.5 * box_x;
             const float half_box_y = 0.5 * box_y;
             const float half_box_z = 0.5 * box_z;

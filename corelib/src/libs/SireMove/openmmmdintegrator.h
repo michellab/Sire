@@ -51,7 +51,7 @@ SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::OpenMMMDIntegrat
 
 namespace SireMove {
 
-    /** This class implements a "pure" MD integrator using OpenMM. 
+    /** This class implements a "pure" MD integrator using OpenMM.
      * No free energy methods are supported.
 
         @author Julien Michel and Gaetano Calabro
@@ -173,8 +173,8 @@ namespace SireMove {
         void createContext(IntegratorWorkspace &workspace,
                 SireUnits::Dimension::Time timestep);
         void destroyContext();
-        void updateBoxDimensions(OpenMM::State &state_openmm, 
-        QVector< Vector> &buffered_dimensions, bool Debug, 
+        void updateBoxDimensions(OpenMM::State &state_openmm,
+        QVector<QVector<Vector>> &buffered_dimensions, bool Debug,
         AtomicVelocityWorkspace &ws);
 
         /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
@@ -234,7 +234,7 @@ namespace SireMove {
         SireUnits::Dimension::Time timeskip;
 
         bool is_periodic;
-        
+
         SireUnits::Dimension::MolarEnergy openmmKineticEnergy;
 
     };

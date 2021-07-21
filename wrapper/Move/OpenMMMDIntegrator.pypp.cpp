@@ -61,6 +61,8 @@ namespace bp = boost::python;
 
 #include "SireVol/periodicbox.h"
 
+#include "SireVol/triclinicbox.h"
+
 #include "ensemble.h"
 
 #include "openmmmdintegrator.h"

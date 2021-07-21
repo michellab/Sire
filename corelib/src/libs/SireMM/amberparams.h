@@ -224,7 +224,10 @@ public:
     friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const AmberDihPart&);
     friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, AmberDihPart&);
 
-    AmberDihPart(double k=0, double periodicity=0, double phase=0);
+    // Default to a periodicity of 1 since pmemd will skip torsions with
+    // a periodicity of zero leading to incorrect 1-4 VDW and 1-4 EEL energies.
+    // REF: https://github.com/michellab/Sire/issues/338
+    AmberDihPart(double k=0, double periodicity=1, double phase=0);
 
     AmberDihPart(const AmberDihPart &other);
 
@@ -273,7 +276,8 @@ public:
 
     AmberDihedral(AmberDihPart part);
 
-    AmberDihedral(const SireCAS::Expression &f, const SireCAS::Symbol &PHI);
+    AmberDihedral(const SireCAS::Expression &f, const SireCAS::Symbol &PHI,
+                  bool test_ryckaert_bellemans=true);
 
     AmberDihedral(const AmberDihedral &other);
 

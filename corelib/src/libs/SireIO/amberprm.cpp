@@ -60,6 +60,7 @@
 #include "SireMol/atomcutting.h"
 #include "SireMol/molidx.h"
 #include "SireMol/atomidx.h"
+#include "SireMol/select.h"
 
 #include "SireMol/amberparameters.h"
 
@@ -73,6 +74,7 @@
 
 #include "SireVol/cartesian.h"
 #include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 
 #include "SireMaths/maths.h"
 #include "SireUnits/units.h"
@@ -476,6 +478,34 @@ void AmberPrm::rebuildLJParameters()
         for (int i=0; i<ntypes; ++i)
         {
             build_lj(i);
+        }
+    }
+
+    // The build_lj function above only considers diagonal elements of the
+    // NONBONDED_PARM_INDEX matrix. Here we loop over the off-diagonal elements
+    // to check for 10-12 parameters, which are currently unsupported.
+
+    // The matrix is symmetric, so perform a triangular loop over off-diagonal
+    // elements.
+    for (int i=0; i<ntypes; ++i)
+    {
+        for (int j=i+1; j<ntypes; ++j)
+        {
+            int idx = nb_parm_index[ ntypes * i + j  ];
+
+            if (idx < 0)
+            {
+                auto a = hbond_acoeffs[idx];
+                auto b = hbond_bcoeffs[idx];
+
+                if ((a > 1e-6) and (b > 1e-6))
+                {
+                    //this is a 10-12 parameter
+                    throw SireError::unsupported( QObject::tr(
+                            "Sire does not yet support Amber Parm files that "
+                            "use 10-12 HBond parameters."), CODELOC );
+                }
+            }
         }
     }
 }
@@ -1093,7 +1123,7 @@ void AmberPrm::parse(const PropertyMap &map)
     {
         ffield = map["forcefield"].value().asA<MMDetail>();
 
-        if (not ffield.isAmberStyle())
+        if (not ffield.isAmberStyle() and not ffield.isOPLS())
             throw SireError::incompatible_error( QObject::tr(
                 "This AmberPrm reader can only parse Amber parm files that hold molecules "
                 "that are parameterised using an Amber-style forcefield. It cannot read "
@@ -1836,6 +1866,7 @@ getDihedralData(const AmberParams &params, int start_idx)
     of text lines */
 QStringList toLines(const QVector<AmberParams> &params,
                     const Space &space,
+                    int num_dummies,
                     bool use_parallel=true,
                     QStringList *all_errors=0)
 {
@@ -1933,7 +1964,7 @@ QStringList toLines(const QVector<AmberParams> &params,
     const int total_natoms = pointers[0];
 
     //now see if there is a periodic box
-    const bool has_periodic_box = space.isA<PeriodicBox>();
+    const bool has_periodic_box = space.isPeriodic();
 
     if (has_periodic_box)
     {
@@ -2311,7 +2342,8 @@ QStringList toLines(const QVector<AmberParams> &params,
     {
         QVector< QVector<QString> > amber_types(params.count());
 
-        QHash<QString,int> unique_types;
+        QHash<QString,int> unique_types;    // Unique types in a molecule.
+        QSet<QString> system_unique_types;  // Unique types in the system.
         QMutex unique_mutex;
 
         if (use_parallel)
@@ -2322,6 +2354,16 @@ QStringList toLines(const QVector<AmberParams> &params,
                 for (int i=r.begin(); i<r.end(); ++i)
                 {
                     amber_types[i] = getAmberTypes(params[i], unique_types, unique_mutex);
+
+                    // Store the unique types for the entire system.
+                    for (const auto &type : amber_types[i])
+                    {
+                        // We haven't seen this type in any molecule.
+                        if (not system_unique_types.contains(type))
+                        {
+                            system_unique_types.insert(type);
+                        }
+                    }
                 }
             });
         }
@@ -2330,8 +2372,22 @@ QStringList toLines(const QVector<AmberParams> &params,
             for (int i=0; i<params.count(); ++i)
             {
                 amber_types[i] = getAmberTypes(params[i], unique_types, unique_mutex);
+
+                // Store the unique types for the entire system.
+                for (const auto &type : amber_types[i])
+                {
+                    // We haven't seen this type in any molecule.
+                    if (not system_unique_types.contains(type))
+                    {
+                        system_unique_types.insert(type);
+                    }
+                }
             }
         }
+
+        // Record the NATYP flag.
+        const int ntypes_system = system_unique_types.count();
+        pointers[18] = ntypes_system;
 
         if (all_errors)
         {
@@ -2390,7 +2446,7 @@ QStringList toLines(const QVector<AmberParams> &params,
             atom_types[i] = mol_atom_types;
         }
 
-        //we now have all of the atom types - create the acoeff and bcoeff arrays
+        // We now have all of the atom types - create the acoeff and bcoeff arrays.
         const int ntypes = ljparams.count();
 
         pointers[1] = ntypes;
@@ -3116,9 +3172,12 @@ QStringList toLines(const QVector<AmberParams> &params,
     pointers[6] = std::get<7>(dih_lines);       // NPHIH
     pointers[7] = std::get<8>(dih_lines);       // MPHIA
     pointers[14] = std::get<9>(dih_lines);      // NPHIA
-    pointers[17] = std::get<10>(dih_lines);      // NPTRA
+    pointers[17] = std::get<10>(dih_lines);     // NPTRA
 
-    const int ntypes = pointers[1];     // number of atom types
+    // Add the number of dummy atoms, i.e. NUMEXTRA.
+    pointers[30] = num_dummies;
+
+    const int natyp = pointers[18];             // NATYP
 
     lines.append("%FLAG POINTERS");
     lines += writeIntData(pointers, AmberFormat( AmberPrm::INTEGER, 10, 8 ) );
@@ -3180,7 +3239,7 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG SOLTY");
     //this is currently unused in Amber and should be equal to 0.0 for all atom types
     {
-        QVector<double> solty(ntypes, 0.0);
+        QVector<double> solty(natyp, 0.0);
         lines += writeFloatData(solty, AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ));
     }
 
@@ -3256,6 +3315,9 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG SCREEN");
     lines += screening_lines;
 
+    lines.append("%FLAG ATOMS_PER_MOLECULE");
+    lines += writeIntData(natoms_per_molecule, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
+
     if (has_periodic_box)
     {
         //write out the "SOLVENT_POINTERS". Amber has a concept of solute(s) and solvent.
@@ -3268,27 +3330,46 @@ QStringList toLines(const QVector<AmberParams> &params,
 
         if (nsolvents > 0)
         {
-            solvent_pointers[0] = last_solute_residue; // last solute residue index
-            solvent_pointers[1] = params.count();  // total number of molecules
+            solvent_pointers[0] = last_solute_residue;            // last solute residue index
+            solvent_pointers[1] = params.count();                 // total number of molecules
             solvent_pointers[2] = params.count() - nsolvents + 1; // first solvent molecule index
         }
 
         lines += writeIntData(solvent_pointers, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
 
-        lines.append("%FLAG ATOMS_PER_MOLECULE");
-        lines += writeIntData(natoms_per_molecule, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
 
         //write out the box dimensions
-        const auto dims = space.asA<PeriodicBox>().dimensions();
-        QVector<double> box_dims(4);
+        if (space.isA<PeriodicBox>())
+        {
+            const auto dims = space.asA<PeriodicBox>().dimensions();
+            QVector<double> box_dims(4);
 
-        box_dims[0] = 90.0;
-        box_dims[1] = dims.x();
-        box_dims[2] = dims.y();
-        box_dims[3] = dims.z();
+            box_dims[0] = 90.0;
+            box_dims[1] = dims.x();
+            box_dims[2] = dims.y();
+            box_dims[3] = dims.z();
 
-        lines.append("%FLAG BOX_DIMENSIONS");
-        lines += writeFloatData(box_dims, AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ));
+            lines.append("%FLAG BOX_DIMENSIONS");
+            lines += writeFloatData(box_dims, AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ));
+        }
+        else if (space.isA<TriclinicBox>())
+        {
+            const auto v0 = space.asA<TriclinicBox>().vector0();
+            const auto v1 = space.asA<TriclinicBox>().vector1();
+            const auto v2 = space.asA<TriclinicBox>().vector2();
+            double beta   = space.asA<TriclinicBox>().beta();
+
+            QVector<double> box_dims(4);
+
+            QVector<double> boxdims(6);
+            box_dims[0] = beta;
+            box_dims[1] = v0.magnitude();
+            box_dims[2] = v1.magnitude();
+            box_dims[3] = v2.magnitude();
+
+            lines.append("%FLAG BOX_DIMENSIONS");
+            lines += writeFloatData(box_dims, AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ));
+        }
     }
 
     //we don't currently support IFCAP > 0, IFPERT > 0 or IFPOL > 0
@@ -3347,9 +3428,12 @@ AmberPrm::AmberPrm(const System &system, const PropertyMap &map)
     catch(...)
     {}
 
+    // Work out the number of dummy atoms to add the NUMEXTRA pointer.
+    int num_dummies = system.search("element Xx").count();
+
     //now convert these into text lines that can be written as the file
     //QStringList lines = ::toLines(params, space, this->usesParallel(), &errors);
-    QStringList lines = ::toLines(params, space, false, &errors);
+    QStringList lines = ::toLines(params, space, num_dummies, false, &errors);
 
     if (not errors.isEmpty())
     {
@@ -3560,8 +3644,8 @@ int AmberPrm::nDihedralsNoHydrogen() const
 /** Return the number of excluded atoms */
 int AmberPrm::nExcluded() const
 {
-    if (pointers.count() > 9)
-        return pointers[9];
+    if (pointers.count() > 10)
+        return pointers[10];
     else
         return 0;
 }
@@ -3569,8 +3653,8 @@ int AmberPrm::nExcluded() const
 /** Return the number of residues */
 int AmberPrm::nResidues() const
 {
-    if (pointers.count() > 10)
-        return pointers[10];
+    if (pointers.count() > 11)
+        return pointers[11];
     else
         return 0;
 }
