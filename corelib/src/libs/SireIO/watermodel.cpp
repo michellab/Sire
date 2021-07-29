@@ -34,14 +34,19 @@
 #include "SireError/errors.h"
 
 #include "SireMol/atomelements.h"
+#include "SireMol/atomelements.h"
 #include "SireMol/moleditor.h"
 #include "SireMol/molidx.h"
+
+#include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 
 #include "SireSystem/system.h"
 
 using namespace SireBase;
 using namespace SireMaths;
 using namespace SireMol;
+using namespace SireVol;
 
 namespace SireIO
 {
@@ -133,6 +138,125 @@ SelectResult setAmberWater(const SelectResult& molecules, const QString& model, 
             // Oxygen.
             else if (element == Element("O"))
                 coord_oxygen = water.atom(idx).property<Vector>(map["coordinates"]);
+        }
+
+        // When computing bond potentials for water molecules, AMBER requires
+        // that the hydrogen atoms are un-imaged, i.e. close to the oxygen atom.
+        // Tools such as gmx trjconv do image water hydrogens, so we need to
+        // correct for this.
+
+        // Has the user passed in a "space" property? If so, use this to work
+        // get the box dimensions.
+        if (map["space"] != "space")
+        {
+            // Extract the space property.
+            auto space = map["space"];
+
+            // A vector to hold the box dimensions.
+            Vector box_dims;
+
+            //write out the box dimensions
+            if (space.value().isA<PeriodicBox>())
+            {
+                const auto dims = space.value().asA<PeriodicBox>().dimensions();
+
+                box_dims.setX(dims.x());
+                box_dims.setY(dims.y());
+                box_dims.setZ(dims.z());
+            }
+            else if (space.value().isA<TriclinicBox>())
+            {
+                const auto v0 = space.value().asA<TriclinicBox>().vector0();
+                const auto v1 = space.value().asA<TriclinicBox>().vector1();
+                const auto v2 = space.value().asA<TriclinicBox>().vector2();
+
+                box_dims.setX(v0.magnitude());
+                box_dims.setY(v1.magnitude());
+                box_dims.setZ(v2.magnitude());
+            }
+
+            // Work out separation vector betwen oxygen and first hydrogen.
+            auto sep = coord_hydrogen0 - coord_oxygen;
+
+            // Shift coordinates if separation components exceed half of box.
+
+            // X
+            if (std::abs(sep.x()) > 0.5*box_dims.x())
+            {
+                if (sep.x() < 0)
+                {
+                    coord_hydrogen0.setX(coord_hydrogen0.x() + box_dims.x());
+                }
+                else
+                {
+                    coord_hydrogen0.setX(coord_hydrogen0.x() - box_dims.x());
+                }
+            }
+            // Y
+            if (std::abs(sep.y()) > 0.5*box_dims.y())
+            {
+                if (sep.y() < 0)
+                {
+                    coord_hydrogen0.setY(coord_hydrogen0.y() + box_dims.y());
+                }
+                else
+                {
+                    coord_hydrogen0.setY(coord_hydrogen0.y() - box_dims.y());
+                }
+            }
+            // Z
+            if (std::abs(sep.z()) > 0.5*box_dims.z())
+            {
+                if (sep.z() < 0)
+                {
+                    coord_hydrogen0.setZ(coord_hydrogen0.z() + box_dims.z());
+                }
+                else
+                {
+                    coord_hydrogen0.setZ(coord_hydrogen0.z() - box_dims.z());
+                }
+            }
+
+            // Now do the same for the second hydrogen.
+
+            sep = coord_hydrogen1 - coord_oxygen;
+
+            // X
+            if (std::abs(sep.x()) > 0.5*box_dims.x())
+            {
+                if (sep.x() < 0)
+                {
+                    coord_hydrogen1.setX(coord_hydrogen1.x() + box_dims.x());
+                }
+                else
+                {
+                    coord_hydrogen1.setX(coord_hydrogen1.x() - box_dims.x());
+                }
+            }
+            // Y
+            if (std::abs(sep.y()) > 0.5*box_dims.y())
+            {
+                if (sep.y() < 0)
+                {
+                    coord_hydrogen1.setY(coord_hydrogen1.y() + box_dims.y());
+                }
+                else
+                {
+                    coord_hydrogen1.setY(coord_hydrogen1.y() - box_dims.y());
+                }
+            }
+            // Z
+            if (std::abs(sep.z()) > 0.5*box_dims.z())
+            {
+                if (sep.z() < 0)
+                {
+                    coord_hydrogen1.setZ(coord_hydrogen1.z() + box_dims.z());
+                }
+                else
+                {
+                    coord_hydrogen1.setZ(coord_hydrogen1.z() - box_dims.z());
+                }
+            }
         }
 
         // Replace the atomic coordinates in the template.
