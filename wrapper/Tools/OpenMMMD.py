@@ -793,35 +793,9 @@ increase from the heavy atom the hydrogen is bonded to.
         # Now that have worked out mass changes per molecule, update molecule
         for x in range(0,nats):
             at = atoms[x]
-            element_symbol = at.property('element').symbol()
             atidx = at.index()
             atmass = at.property("mass")
             newmass = atmass + atom_masses[atidx.value()]
-
-            # Make sure C and N have a minimum mass in CH3 and NH3
-            #
-            # NOTE: this will change the total mass but dG is independent of
-            #       mass
-            if element_symbol in MIN_MASSES:
-                minmass = MIN_MASSES[element_symbol]
-
-                if newmass.value() < minmass:
-                    newmass = minmass * g_per_mol
-
-                    if verbose:
-                        print(f'Modified mass (total mass changed) for '
-                              f'{element_symbol}-{atidx.value()}: old mass = '
-                              f'{atmass.value():.3f}, '
-                              f'new mass = {newmass.value():.3f}')
-
-            # Sanity check. Note this is likely to occur if hmassfactor > 4
-            if (newmass.value() < 0.0):
-                print ("WARNING! The mass of atom %s is less than zero after "
-                       "hydrogen mass repartitioning. This should not happen! "
-                       "Decrease hydrogen mass repartitioning factor in your "
-                       "cfg file and try again." % atidx)
-                sys.exit(-1)
-
 
             # Sanity check. Note this is likely to occur if hmassfactor > 4
             if (newmass.value() < 0.0):
