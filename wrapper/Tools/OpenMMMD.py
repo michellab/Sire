@@ -279,9 +279,9 @@ def writeSystemData(system, moves, Trajectory, block, softcore_lambda=False):
             else:
                 Trajectory.writeModel(system[MGName("all")], system.property("space"))
 
-    # Write an AMBER RST coordinate file each cycle.
-    rst = AmberRst(system)
-    rst.writeToFile("latest.rst")
+    # Write a PDB coordinate file each cycle.
+    pdb = PDB2(system)
+    rst.writeToFile("latest.pdb")
 
     moves_file = open("moves.dat", "w")
     print("%s" % moves, file=moves_file)
