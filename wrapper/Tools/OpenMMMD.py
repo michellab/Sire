@@ -281,7 +281,7 @@ def writeSystemData(system, moves, Trajectory, block, softcore_lambda=False):
 
     # Write a PDB coordinate file each cycle.
     pdb = PDB2(system)
-    rst.writeToFile("latest.pdb")
+    pdb.writeToFile("latest.pdb")
 
     moves_file = open("moves.dat", "w")
     print("%s" % moves, file=moves_file)
