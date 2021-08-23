@@ -3,7 +3,7 @@ SIRE changelog
 
 devel branch:
 
-    [2021.1.0] Feb 2021 - Added support for multiple combining rules in SOMD
+    [2021.1.0] Aug 2021 - Added support for multiple combining rules in SOMD
                (@SofiaBariami). Added support for triclinic simulation boxes.
                Convert Ryckaert-Bellememans form dihedral functions from
                GROMACS to Fourier series to allow conversion to AMBER format.
@@ -24,6 +24,9 @@ devel branch:
                conda version of libcpuid. Added support for generating PDB
                CONECT records from a Sire.Mol.Connectivity object. Fixed
                issue with PMEMD skipping torsions with zero periodicity.
+               Fixed random number seeding bug in somd-freenrg, which
+               resulted in the OpenMM generator being seeded with the same
+               seed for each cycle of the simulation.
 
     [2020.1.0] July 2020 - Fixed bug in WaterView program to ensure that a
                molecule is extracted from the returned list. Stable sorting
