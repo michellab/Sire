@@ -508,11 +508,14 @@ def setupMoves(system, debug_seed, GPUS):
     moves = WeightedMoves()
     moves.add(mdmove, 1)
 
-    if debug_seed != 0:
-        debug_seed = RanGenerator().randInt(100000, 1000000)
-        print("Generated debugging seed number %d " % debug_seed)
+    # Choose a random seed for Sire if a debugging seed hasn't been set.
+    if debug_seed == 0:
+        seed = RanGenerator().randInt(100000, 1000000)
+    else:
+        seed = debug_seed
+        print("Using debugging seed number %d " % debug_seed)
 
-    moves.setGenerator(RanGenerator(debug_seed))
+    moves.setGenerator(RanGenerator(seed))
 
     return moves
 
@@ -1203,10 +1206,17 @@ def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
         Integrator_OpenMM.setMCBarostat(barostat.val)
         Integrator_OpenMM.setMCBarostatFrequency(barostat_frequency.val)
 
+    # Choose a random seed for Sire if a debugging seed hasn't been set.
+    if debug_seed == 0:
+        seed = RanGenerator().randInt(100000, 1000000)
+    else:
+        seed = debug_seed
+        print("Using debugging seed number %d " % debug_seed)
+
     #This calls the OpenMMFrEnergyST initialise function
     Integrator_OpenMM.initialise()
     velocity_generator = MaxwellBoltzmann(temperature.val)
-    velocity_generator.setGenerator(RanGenerator(debug_seed))
+    velocity_generator.setGenerator(RanGenerator(seed))
 
     mdmove = MolecularDynamics(molecules, Integrator_OpenMM, timestep.val,
                               {"velocity generator":velocity_generator})
@@ -1216,11 +1226,7 @@ def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
     moves = WeightedMoves()
     moves.add(mdmove, 1)
 
-    if debug_seed != 0:
-        debug_seed = RanGenerator().randInt(100000, 1000000)
-        print("Generated debugging seed number %d " % debug_seed)
-
-    moves.setGenerator(RanGenerator(debug_seed))
+    moves.setGenerator(RanGenerator(seed))
 
     return moves
 
@@ -1429,13 +1435,10 @@ def run():
 
         system = setupForcefields(system, space)
 
-        if debug_seed.val == 0:
-            ranseed = debug_seed.val
-        else:
-            ranseed = RanGenerator().randInt(100000, 1000000)
-            print("Setting up the simulation with debugging seed %s" % ranseed)
+        if debug_seed.val != 0:
+            print("Setting up the simulation with debugging seed %s" % debug_seed.val)
 
-        moves = setupMoves(system, ranseed, gpu.val)
+        moves = setupMoves(system, debug_seed.val, gpu.val)
 
         print("Saving restart")
         Sire.Stream.save([system, moves], restart_file.val)
@@ -1586,13 +1589,10 @@ def runFreeNrg():
 
         system = setupForceFieldsFreeEnergy(system, space)
 
-        if debug_seed.val == 0:
-            ranseed = debug_seed.val
-        else:
-            ranseed = RanGenerator().randInt(100000, 1000000)
-            print("Setting up the simulation with debugging seed %s" % ranseed)
+        if debug_seed.val != 0:
+            print("Setting up the simulation with debugging seed %s" % debug_seed.val)
 
-        moves = setupMovesFreeEnergy(system, ranseed, gpu.val, lambda_val.val)
+        moves = setupMovesFreeEnergy(system, debug_seed.val, gpu.val, lambda_val.val)
 
         print("Saving restart")
         Sire.Stream.save([system, moves], restart_file.val)
