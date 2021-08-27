@@ -1424,7 +1424,7 @@ void OpenMMFrEnergyST::initialise()
 
         } //end of if hasVsites
 
-    Molecule molecule = moleculegroup.moleculeAt(0).molecule();
+    //Molecule molecule = moleculegroup.moleculeAt(0).molecule();
     bool hasPertVirtualSites = molecule.hasProperty("pert_virtual-sites");
     if (hasPertVirtualSites)
         {
@@ -1485,17 +1485,17 @@ void OpenMMFrEnergyST::initialise()
 
                 if (Debug)
                     {
-                        qDebug() << "vsite SYSTEM INDEX:  " << system_index +  nvirtualsites +i << " VSITE: " << pert_vsite;
+                        qDebug() << "vsite SYSTEM INDEX:  " << system_index +  pert_nvirtualsites +i << " VSITE: " << pert_vsite;
                     }
 
-                system_openmm->setVirtualSite(system_index +  nvirtualsites +i, vsite);
-                system_openmm->getParticleMass(system_index+  nvirtualsites +i);
-                system_openmm->isVirtualSite(system_index+  nvirtualsites +i);
-                system_openmm->getVirtualSite(system_index+  nvirtualsites +i);
+                system_openmm->setVirtualSite(system_index +  pert_nvirtualsites +i, pert_vsite);
+                system_openmm->getParticleMass(system_index+  pert_nvirtualsites +i);
+                system_openmm->isVirtualSite(system_index+  pert_nvirtualsites +i);
+                system_openmm->getVirtualSite(system_index+  pert_nvirtualsites +i);
 
                if (Debug)
                 {
-                    qDebug() << "IS PERT VSITE? :  " << system_openmm->isVirtualSite(system_index+  nvirtualsites +i) << "THE MASS IS: " << system_openmm->getParticleMass(system_index+  nvirtualsites +i);
+                    qDebug() << "IS PERT VSITE? :  " << system_openmm->isVirtualSite(system_index+  pert_nvirtualsites +i) << "THE MASS IS: " << system_openmm->getParticleMass(system_index+  pert_nvirtualsites +i);
                     qDebug() << "NUMBER OF PARTICLES :  " << system_openmm->getNumParticles();
                 }
             }
@@ -2707,23 +2707,22 @@ void OpenMMFrEnergyST::initialise()
                 double sigma_vs = virtualSites.property(QString("sigma(%1)").arg(i)).asA<VariantProperty>().toDouble();
                 double epsilon_vs = virtualSites.property(QString("epsilon(%1)").arg(i)).asA<VariantProperty>().toDouble();
                 
-                nonbond_openmm->addParticle(charge_vs, sigma_vs * OpenMM::NmPerAngstrom, epsilon_vs * OpenMM::KJPerKcal);
+                nonbond_openmm->addParticle(charge_vs * (1-Alchemical_value), sigma_vs * OpenMM::NmPerAngstrom, epsilon_vs * OpenMM::KJPerKcal);
 
                   
                 std::vector<double> custom_non_bonded_params_vs(10);
 
-                //custom_non_bonded_params_vs[0] = charge_vs; //charge_start
-		custom_non_bonded_params_vs[0] = 0.0000;
-		custom_non_bonded_params_vs[1] = 0.0000;
+                custom_non_bonded_params_vs[0] = charge_vs * (1-Alchemical_value); //charge_start
+		        custom_non_bonded_params_vs[1] = 0.0000;
                 //custom_non_bonded_params_vs[0] = -0.093425;
-		//custom_non_bonded_params_vs[1] = -0.098838; //charge_end
+		        //custom_non_bonded_params_vs[1] = -0.098838; //charge_end
                 custom_non_bonded_params_vs[2] = epsilon_vs * OpenMM::KJPerKcal; //epsilon_start
                 //custom_non_bonded_params_vs[2] = 0.00000* OpenMM::KJPerKcal;
-		custom_non_bonded_params_vs[3] = 0.00000 * OpenMM::KJPerKcal; //epsilon_end
+		        custom_non_bonded_params_vs[3] = 0.00000 * OpenMM::KJPerKcal; //epsilon_end
                 //custom_non_bonded_params_vs[4] = sigma_vs * OpenMM::NmPerAngstrom; //sigma_start
                 custom_non_bonded_params_vs[4] = 1.00000 * OpenMM::NmPerAngstrom; 
-		custom_non_bonded_params_vs[5] = 0.00000 * OpenMM::NmPerAngstrom; //sigma_end
-		custom_non_bonded_params_vs[6] = 0.0; //isHard
+		        custom_non_bonded_params_vs[5] = 0.00000 * OpenMM::NmPerAngstrom; //sigma_end
+		        custom_non_bonded_params_vs[6] = 0.0; //isHard
                 custom_non_bonded_params_vs[7] = 1.0; //isTodummy
                 custom_non_bonded_params_vs[8] = 0.0; //isFromdummy
                 custom_non_bonded_params_vs[9] = 0.0; //isSolventProtein
@@ -2750,8 +2749,8 @@ void OpenMMFrEnergyST::initialise()
         } 
 
 
-    Molecule molecule = moleculegroup.moleculeAt(0).molecule();
-    bool hasPertVirtualSites = molecule.hasProperty("pert_virtual-sites");
+    //Molecule molecule = moleculegroup.moleculeAt(0).molecule();
+    //bool hasPertVirtualSites = molecule.hasProperty("pert_virtual-sites");
 
     if (Debug)
       qDebug() << " Does it recognise the property? " << hasPertVirtualSites;
@@ -2768,20 +2767,20 @@ void OpenMMFrEnergyST::initialise()
             {
 
 
-                double pert_vcharge_vs = pert_vvirtualSites.property(QString("charge(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                double pert_vsigma_vs = pert_vvirtualSites.property(QString("sigma(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                double pert_vepsilon_vs = pert_vvirtualSites.property(QString("epsilon(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_charge_vs = pert_virtualSites.property(QString("charge(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_sigma_vs = pert_virtualSites.property(QString("sigma(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_epsilon_vs = pert_virtualSites.property(QString("epsilon(%1)").arg(i)).asA<VariantProperty>().toDouble();
                 
-                nonbond_openmm->addParticle(pert_vcharge_vs * (1-Alchemical_value), pert_vsigma_vs * OpenMM::NmPerAngstrom, pert_vepsilon_vs * OpenMM::KJPerKcal);
+                nonbond_openmm->addParticle(pert_charge_vs * Alchemical_value, pert_sigma_vs * OpenMM::NmPerAngstrom, pert_epsilon_vs * OpenMM::KJPerKcal);
 
                   
                 std::vector<double> pert_custom_non_bonded_params_vs(10);
 
-                pert_custom_non_bonded_params_vs[0] = charge_vs *(1-Alchemical_value);
-                pert_custom_non_bonded_params_vs[1] = 0 * Alchemical_value; //charge_end
-                pert_custom_non_bonded_params_vs[2] = epsilon_vs * OpenMM::KJPerKcal; //epsilon_start
+                pert_custom_non_bonded_params_vs[0] = 0 ;
+                pert_custom_non_bonded_params_vs[1] = pert_vcharge_vs; //charge_end
+                pert_custom_non_bonded_params_vs[2] = pert_vepsilon_vs * OpenMM::KJPerKcal; //epsilon_start
                 pert_custom_non_bonded_params_vs[3] = 0.00000 * OpenMM::KJPerKcal; //epsilon_end
-                pert_custom_non_bonded_params_vs[4] = sigma_vs * OpenMM::NmPerAngstrom; //sigma_start
+                pert_custom_non_bonded_params_vs[4] = pert_vsigma_vs * OpenMM::NmPerAngstrom; //sigma_start
                 pert_custom_non_bonded_params_vs[5] = 1.00000 * OpenMM::NmPerAngstrom; //sigma_end
                 pert_custom_non_bonded_params_vs[6] = 0.0; //isHard
                 pert_custom_non_bonded_params_vs[7] = 0.0; //isTodummy
