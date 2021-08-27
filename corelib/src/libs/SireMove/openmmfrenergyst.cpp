@@ -2777,10 +2777,10 @@ void OpenMMFrEnergyST::initialise()
                 std::vector<double> pert_custom_non_bonded_params_vs(10);
 
                 pert_custom_non_bonded_params_vs[0] = 0 ;
-                pert_custom_non_bonded_params_vs[1] = pert_vcharge_vs; //charge_end
-                pert_custom_non_bonded_params_vs[2] = pert_vepsilon_vs * OpenMM::KJPerKcal; //epsilon_start
+                pert_custom_non_bonded_params_vs[1] = pert_charge_vs; //charge_end
+                pert_custom_non_bonded_params_vs[2] = pert_epsilon_vs * OpenMM::KJPerKcal; //epsilon_start
                 pert_custom_non_bonded_params_vs[3] = 0.00000 * OpenMM::KJPerKcal; //epsilon_end
-                pert_custom_non_bonded_params_vs[4] = pert_vsigma_vs * OpenMM::NmPerAngstrom; //sigma_start
+                pert_custom_non_bonded_params_vs[4] = pert_sigma_vs * OpenMM::NmPerAngstrom; //sigma_start
                 pert_custom_non_bonded_params_vs[5] = 1.00000 * OpenMM::NmPerAngstrom; //sigma_end
                 pert_custom_non_bonded_params_vs[6] = 0.0; //isHard
                 pert_custom_non_bonded_params_vs[7] = 0.0; //isTodummy
