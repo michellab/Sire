@@ -100,6 +100,15 @@ SelectResult setAmberWater(const SelectResult& molecules, const QString& model, 
         // Make the template water molecule editable and renumber it.
         auto edit_mol = template_molecule.edit().renumber();
 
+        // Copy across all properties that are unique to the original molecule.
+        for (const auto &prop : water.propertyKeys())
+        {
+            if (not template_molecule.hasProperty(prop))
+            {
+                edit_mol = edit_mol.setProperty(prop, water.property(prop)).molecule();
+            }
+        }
+
         // Counter for the number of hydrogen atoms.
         int num_hydrogen = 0;
 
@@ -359,6 +368,15 @@ SelectResult setGromacsWater(const SelectResult& molecules, const QString& model
 
         // Make the template water molecule editable and renumber it.
         auto edit_mol = template_molecule.edit().renumber();
+
+        // Copy across all properties that are unique to the original molecule.
+        for (const auto &prop : water.propertyKeys())
+        {
+            if (not template_molecule.hasProperty(prop))
+            {
+                edit_mol = edit_mol.setProperty(prop, water.property(prop)).molecule();
+            }
+        }
 
         // Counter for the number of hydrogen atoms.
         int num_hydrogen = 0;
