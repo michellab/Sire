@@ -41,6 +41,7 @@
 #include "SireMol/moleditor.h"
 
 #include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 
 #include "SireUnits/dimensions.h"
 #include "SireUnits/units.h"
@@ -72,27 +73,27 @@ const RegisterParser<AmberRst> register_amberrst;
 QDataStream &operator<<(QDataStream &ds, const AmberRst &rst)
 {
     writeHeader(ds, r_rst, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << rst.ttle << rst.current_time
         << rst.coords << rst.vels << rst.frcs
         << rst.box_dims << rst.box_angs
         << rst.convention_version << rst.creator_app
         << rst.parse_warnings << rst.created_from_restart
         << static_cast<const MoleculeParser&>(rst);
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, AmberRst &rst)
 {
     VersionID v = readHeader(ds, r_rst);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> rst.ttle >> rst.current_time
             >> rst.coords >> rst.vels >> rst.frcs
             >> rst.box_dims >> rst.box_angs
@@ -102,7 +103,7 @@ QDataStream &operator>>(QDataStream &ds, AmberRst &rst)
     }
     else
         throw version_error(v, "1", r_rst, CODELOC);
-    
+
     return ds;
 }
 
@@ -131,7 +132,7 @@ void AmberRst::assertSane() const
 {
     const int nframes = this->nFrames();
     const int natoms = this->nAtoms();
-    
+
     if (not coords.isEmpty())
     {
         SireBase::assert_equal( coords.count(), nframes, CODELOC );
@@ -141,27 +142,27 @@ void AmberRst::assertSane() const
             SireBase::assert_equal( coords[i].count(), natoms, CODELOC );
         }
     }
-    
+
     if (not vels.isEmpty())
     {
         SireBase::assert_equal( vels.count(), nframes, CODELOC );
-        
+
         for (int i=0; i<nframes; ++i)
         {
             SireBase::assert_equal( vels[i].count(), natoms, CODELOC );
         }
     }
-    
+
     if (not frcs.isEmpty())
     {
         SireBase::assert_equal( frcs.count(), nframes, CODELOC );
-        
+
         for (int i=0; i<nframes; ++i)
         {
             SireBase::assert_equal( frcs[i].count(), natoms, CODELOC );
         }
     }
-    
+
     if (not box_dims.isEmpty())
     {
         SireBase::assert_equal( box_dims.count(), nframes, CODELOC );
@@ -193,10 +194,10 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
     //collect all of the conventions
     QString conventions = netcdf.getStringAttribute("Conventions");
-    
+
     //these must contain "AMBER" or "AMBERRESTART", else this may not be a valid file
     created_from_restart = false;
-    
+
     if (conventions.contains("AMBERRESTART"))
     {
         created_from_restart = true;
@@ -222,21 +223,21 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
                 "number of the file format. The value in this file is '%1'")
                     .arg(netcdf.getStringAttribute("ConventionVersion")), CODELOC );
     }
-    
+
     if (convention_version != 1.0)
     {
         parse_warnings.append( QObject::tr(
                 "Reading in an Amber NetCDF CRD/TRJ file with an unsupported version: %1")
                     .arg(convention_version) );
     }
-    
+
     QString program = netcdf.getStringAttribute("program");
     QString program_version = netcdf.getStringAttribute("programVersion");
-    
+
     try
     {
         QString application = netcdf.getStringAttribute("application");
-        
+
         creator_app = QString("%1 %2 version %3").arg(application)
                             .arg(program).arg(program_version);
     }
@@ -244,7 +245,7 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
     {
         creator_app = QString("%1 version %2").arg(program).arg(program_version);
     }
-    
+
     try
     {
         ttle = netcdf.getStringAttribute("title");
@@ -253,13 +254,13 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
     {
         ttle = "default";
     }
-    
+
     //get information about all of the variables
     const auto varinfos = netcdf.getVariablesInfo();
 
     //get information about the number of atoms in the file
     const int natoms = netcdf.getDimensions().value("atom", -1);
-    
+
     if (natoms < 0)
     {
         throw SireIO::parse_error( QObject::tr(
@@ -280,31 +281,31 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
     {
         //extract the current time of the simulation
         current_time.clear();
-        
+
         if (varinfos.contains("time"))
         {
             const auto data = netcdf.read( varinfos["time"] );
-            
+
             const auto atts = data.attributes();
-            
+
             double scale_factor = 1.0;
-            
+
             if (atts.contains("scale_factor"))
             {
                 scale_factor = atts["scale_factor"].toDouble();
             }
-            
+
             if (atts.contains("units"))
             {
                 QString units = atts["units"].toString();
-                
+
                 if (units != "picosecond")
                 {
                     QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Units are not the default of picoseconds. "
                         "They are actually %1!").arg(units) );
                 }
-                
+
                 //we need to interpret different units and set the scale_factor accordingly.
                 //We want to store the time here in picoseconds
             }
@@ -326,7 +327,7 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
                     const auto times = data.toFloatArray();
                     const int nframes = times.count();
                     current_time.reserve(nframes);
-                    
+
                     for (int i=0; i<nframes; ++i)
                     {
                         current_time.append( scale_factor * times[i] );
@@ -339,27 +340,27 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
         if (varinfos.contains("cell_lengths"))
         {
             const auto data = netcdf.read( varinfos["cell_lengths"] );
-            
+
             const auto atts = data.attributes();
-            
+
             double scale_factor = 1.0;
-            
+
             if (atts.contains("scale_factor"))
             {
                 scale_factor = atts["scale_factor"].toDouble();
             }
-            
+
             if (atts.contains("units"))
             {
                 QString units = atts["units"].toString();
-                
+
                 if (units != "angstrom")
                 {
                     QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Units are not the default of angstroms. "
                         "They are actually %1!").arg(units) );
                 }
-                
+
                 //we need to interpret different units and set the scale_factor accordingly.
                 //We want to store the lengths here in angstroms
             }
@@ -383,7 +384,7 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
             {
                 int nframes = data.nValues() / 3;
                 const auto vals = data.toDoubleArray();
-                
+
                 for (int i=0; i<nframes; ++i)
                 {
                     box_dims.append( scale_factor * Vector( vals[3*i + 0],
@@ -397,27 +398,27 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
         if (varinfos.contains("cell_angles"))
         {
             const auto data = netcdf.read( varinfos["cell_angles"] );
-            
+
             const auto atts = data.attributes();
-            
+
             double scale_factor = 1.0;
-            
+
             if (atts.contains("scale_factor"))
             {
                 scale_factor = atts["scale_factor"].toDouble();
             }
-            
+
             if (atts.contains("units"))
             {
                 QString units = atts["units"].toString();
-                
+
                 if (units != "degree")
                 {
                     QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Units are not the default of degrees. "
                         "They are actually %1!").arg(units) );
                 }
-                
+
                 //we need to interpret different units and set the scale_factor accordingly.
                 //We want to store the angles here in degrees
             }
@@ -441,7 +442,7 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
             {
                 int nframes = data.nValues() / 3;
                 const auto vals = data.toDoubleArray();
-                
+
                 for (int i=0; i<nframes; ++i)
                 {
                     box_angs.append( scale_factor * Vector( vals[3*i + 0],
@@ -451,20 +452,20 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
             }
         }
     };
-    
+
     //function to read in all of the coordinates
     auto parseCoordinates = [&]()
     {
         coords = QVector< QVector<Vector> >();
-        
+
         if (varinfos.contains("coordinates"))
         {
             const auto data = netcdf.read( varinfos["coordinates"] );
-            
+
             const auto atts = data.attributes();
-            
+
             double scale_factor = 1.0;
-            
+
             if (atts.contains("scale_factor"))
             {
                 bool ok;
@@ -478,18 +479,18 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
                             .arg(atts["scale_factor"].toString()) );
                 }
             }
-            
+
             if (atts.contains("units"))
             {
                 QString units = atts["units"].toString();
-                
+
                 if (units != "angstrom")
                 {
                     QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Units are not the default of angstroms. "
                         "They are actually %1!").arg(units) );
                 }
-                
+
                 //we need to interpret different units and set the scale_factor accordingly.
                 //We want to store the lengths here in angstroms
             }
@@ -505,9 +506,9 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
             else
             {
                 const auto vals = data.toDoubleArray();
-                
+
                 const int natoms_times_nframes = vals.count() / 3;
-                
+
                 if (natoms_times_nframes % natoms != 0)
                 {
                     QMutexLocker lkr(&warnings_mutex);
@@ -518,30 +519,30 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
                                         .arg(natoms) );
                     return;
                 }
-                
+
                 const int nframes = natoms_times_nframes / natoms;
-                
+
                 coords = QVector< QVector<Vector> >(nframes);
-                
+
                 if (uses_parallel)
                 {
                     for (int i=0; i<nframes; ++i)
                     {
                         QVector<Vector> c(natoms);
-                    
+
                         tbb::parallel_for( tbb::blocked_range<int>(0,natoms),
                                            [&](const tbb::blocked_range<int> &r)
                         {
                             for (int j=r.begin(); j<r.end(); ++j)
                             {
                                 const int idx = 3*natoms*i + 3*j;
-                                
+
                                 c[j] = scale_factor * Vector( vals[idx],
                                                               vals[idx+1],
                                                               vals[idx+2] );
                             }
                         });
-                        
+
                         coords[i] = c;
                     }
                 }
@@ -550,14 +551,14 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
                     for (int i=0; i<nframes; ++i)
                     {
                         QVector<Vector> c(natoms);
-                    
+
                         for (int j=0; j<natoms; ++j)
                         {
                             const int idx = 3*natoms*i + 3*j;
-                        
+
                             c[j] = scale_factor * Vector( vals[idx], vals[idx+1], vals[idx+2] );
                         }
-                        
+
                         coords[i] = c;
                     }
                 }
@@ -569,20 +570,20 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
     auto parseVelocities = [&]()
     {
         vels = QVector< QVector<Vector> >();
-        
+
         if (varinfos.contains("velocities"))
         {
             const auto data = netcdf.read( varinfos["velocities"] );
-            
+
             const auto atts = data.attributes();
-            
+
             double scale_factor = 1.0;
-            
+
             if (atts.contains("scale_factor"))
             {
                 bool ok;
                 scale_factor = atts["scale_factor"].toDouble(&ok);
-                
+
                 if (not ok)
                 {
                     QMutexLocker lkr(&warnings_mutex);
@@ -595,14 +596,14 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
             if (atts.contains("units"))
             {
                 QString units = atts["units"].toString();
-                
+
                 if (units != "angstrom/picosecond")
                 {
                     QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Units are not the default of "
                         "angstrom/picosecond. They are actually %1!").arg(units) );
                 }
-                
+
                 //we need to interpret different units and set the scale_factor accordingly.
                 //We want to store the velocities here in angstroms/picosecond
             }
@@ -610,7 +611,7 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
             //we want to store the velocities here in amber units, i.e.
             //angstroms / 1/20.455 picosecond
             scale_factor /= 20.455;
-            
+
             if (data.nValues() % 3 != 0)
             {
                 QMutexLocker lkr(&warnings_mutex);
@@ -621,9 +622,9 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
             else
             {
                 const auto vals = data.toDoubleArray();
-                
+
                 const int natoms_times_nframes = vals.count() / 3;
-                
+
                 if (natoms_times_nframes % natoms != 0)
                 {
                     QMutexLocker lkr(&warnings_mutex);
@@ -634,30 +635,30 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
                                         .arg(natoms) );
                     return;
                 }
-                
+
                 const int nframes = natoms_times_nframes / natoms;
-                
+
                 vels = QVector< QVector<Vector> >(nframes);
-                
+
                 if (uses_parallel)
                 {
                     for (int i=0; i<nframes; ++i)
                     {
                         QVector<Vector> v(natoms);
-                    
+
                         tbb::parallel_for( tbb::blocked_range<int>(0,natoms),
                                            [&](const tbb::blocked_range<int> &r)
                         {
                             for (int j=r.begin(); j<r.end(); ++j)
                             {
                                 const int idx = 3*natoms*i + 3*j;
-                                
+
                                 v[j] = scale_factor * Vector( vals[idx],
                                                               vals[idx+1],
                                                               vals[idx+2] );
                             }
                         });
-                        
+
                         vels[i] = v;
                     }
                 }
@@ -666,14 +667,14 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
                     for (int i=0; i<nframes; ++i)
                     {
                         QVector<Vector> v(natoms);
-                    
+
                         for (int j=0; j<natoms; ++j)
                         {
                             const int idx = 3*natoms*i + 3*j;
-                        
+
                             v[j] = scale_factor * Vector( vals[idx], vals[idx+1], vals[idx+2] );
                         }
-                        
+
                         vels[i] = v;
                     }
                 }
@@ -685,15 +686,15 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
     auto parseForces = [&]()
     {
         frcs = QVector< QVector<Vector> >();
-        
+
         if (varinfos.contains("forces"))
         {
             const auto data = netcdf.read( varinfos["forces"] );
-            
+
             const auto atts = data.attributes();
-            
+
             double scale_factor = 1.0;
-            
+
             if (atts.contains("scale_factor"))
             {
                 bool ok;
@@ -707,18 +708,18 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
                             .arg(atts["scale_factor"].toString()) );
                 }
             }
-            
+
             if (atts.contains("units"))
             {
                 QString units = atts["units"].toString();
-                
+
                 if (units != "amu*angstrom/picosecond^2")
                 {
                     QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Units are not the default of "
                         "amu*angstrom/picosecond^2. They are actually %1!").arg(units) );
                 }
-                
+
                 //we need to interpret different units and set the scale_factor accordingly.
                 //We want to store the forces here in amu*angstroms/picosecond^2
             }
@@ -733,9 +734,9 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
             else
             {
                 const auto vals = data.toDoubleArray();
-                
+
                 const int natoms_times_nframes = vals.count() / 3;
-                
+
                 if (natoms_times_nframes % natoms != 0)
                 {
                     QMutexLocker lkr(&warnings_mutex);
@@ -746,30 +747,30 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
                                         .arg(natoms) );
                     return;
                 }
-                
+
                 const int nframes = natoms_times_nframes / natoms;
-                
+
                 frcs = QVector< QVector<Vector> >(nframes);
-                
+
                 if (uses_parallel)
                 {
                     for (int i=0; i<nframes; ++i)
                     {
                         QVector<Vector> f(natoms);
-                    
+
                         tbb::parallel_for( tbb::blocked_range<int>(0,natoms),
                                            [&](const tbb::blocked_range<int> &r)
                         {
                             for (int j=r.begin(); j<r.end(); ++j)
                             {
                                 const int idx = 3*natoms*i + 3*j;
-                                
+
                                 f[j] = scale_factor * Vector( vals[idx],
                                                               vals[idx+1],
                                                               vals[idx+2] );
                             }
                         });
-                        
+
                         frcs[i] = f;
                     }
                 }
@@ -778,14 +779,14 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
                     for (int i=0; i<nframes; ++i)
                     {
                         QVector<Vector> f(natoms);
-                    
+
                         for (int j=0; j<natoms; ++j)
                         {
                             const int idx = 3*natoms*i + 3*j;
-                        
+
                             f[j] = scale_factor * Vector( vals[idx], vals[idx+1], vals[idx+2] );
                         }
-                        
+
                         frcs[i] = f;
                     }
                 }
@@ -796,7 +797,7 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
     //this is the list of all functions that need to be called to parse the file
     const QVector< std::function<void()> > parse_functions =
             { parseBase, parseCoordinates, parseVelocities, parseForces };
-    
+
     //call the functions, either in parallel or in serial
     if (uses_parallel)
     {
@@ -820,7 +821,7 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
     //set the score, and save the warnings
     double score = 100.0 / (parse_warnings.count()+1);
     this->setScore(score);
-    
+
     //assert that this is sane
     this->assertSane();
 }
@@ -853,17 +854,17 @@ static QVector<Vector> getCoordinates(const Molecule &mol, const PropertyName &c
     }
 
     QVector<Vector> coords( mol.nAtoms() );
-    
+
     const auto molcoords = mol.property(coords_property).asA<AtomCoords>();
-    
+
     const auto molinfo = mol.info();
-    
+
     for (int i=0; i<mol.nAtoms(); ++i)
     {
         //coords are already in angstroms :-)
         coords[i] = molcoords.at( molinfo.cgAtomIdx( AtomIdx(i) ) );
     }
-    
+
     return coords;
 }
 
@@ -878,21 +879,21 @@ static QVector<Vector> getVelocities(const Molecule &mol, const PropertyName &ve
     {
         const auto molvels = mol.property(vels_property).asA<AtomVelocities>();
         const auto molinfo = mol.info();
-        
+
         QVector<Vector> vels( mol.nAtoms() );
-        
+
         const double units = 1.0 / (angstrom / (20.455*picosecond)).value();
-        
+
         for (int i=0; i<mol.nAtoms(); ++i)
         {
             const auto atomvels = molvels.at( molinfo.cgAtomIdx( AtomIdx(i) ) );
-            
+
             //need to convert the velocities into units of Angstroms / 20.455 picoseconds
             vels[i] = Vector( atomvels.x().value() * units,
                               atomvels.y().value() * units,
                               atomvels.z().value() * units );
         }
-        
+
         return vels;
     }
     catch(...)
@@ -912,22 +913,22 @@ static QVector<Vector> getForces(const Molecule &mol, const PropertyName &forces
     {
         const auto molforces = mol.property(forces_property).asA<AtomForces>();
         const auto molinfo = mol.info();
-        
+
         QVector<Vector> forces( mol.nAtoms() );
-        
+
         const double units = 1.0 / ( atomic_mass_constant * angstrom /
                                      (picosecond*picosecond) ).value();
-        
+
         for (int i=0; i<mol.nAtoms(); ++i)
         {
             const auto atomforces = molforces.at( molinfo.cgAtomIdx( AtomIdx(i) ) );
-            
+
             //need to convert the velocities into units of amu Angstroms / picosecond^2
             forces[i] = Vector( atomforces.x().value() * units,
                                 atomforces.y().value() * units,
                                 atomforces.z().value() * units );
         }
-        
+
         return forces;
     }
     catch(...)
@@ -943,7 +944,7 @@ static bool hasData(const QVector< QVector<Vector> > &array)
         if (not array[i].isEmpty())
             return true;
     }
-    
+
     return false;
 }
 
@@ -981,7 +982,7 @@ AmberRst::AmberRst(const System &system, const PropertyMap &map)
                 for (int i=r.begin(); i<r.end(); ++i)
                 {
                     const auto mol = system[molnums[i]].molecule();
-                
+
                     tbb::parallel_invoke(
                        [&](){ all_coords[i] = ::getCoordinates(mol, coords_property); },
                        [&](){ all_vels[i] = ::getVelocities(mol, vels_property); },
@@ -1001,36 +1002,54 @@ AmberRst::AmberRst(const System &system, const PropertyMap &map)
                 all_forces[i] = ::getForces(mol, forces_property);
             }
         }
-    
+
         coords.clear();
         vels.clear();
         frcs.clear();
-    
+
         if (::hasData(all_coords))
         {
             coords.append( collapse(all_coords) );
         }
-        
+
         if (::hasData(all_vels))
         {
             vels.append( collapse(all_vels) );
         }
-    
+
         if (::hasData(all_forces))
         {
             frcs.append( collapse(all_forces) );
         }
     }
-    
+
     //extract the space of the system
     box_dims.clear();
     box_angs.clear();
-    
+
     try
     {
-        const auto space = system.property( map["space"] ).asA<PeriodicBox>();
-        box_dims.append( space.dimensions() );
-        box_angs.append( Vector(90,90,90) );
+        if (system.property(map["space"]).isA<PeriodicBox>())
+        {
+            box_dims.append(system.property(map["space"]).asA<PeriodicBox>().dimensions());
+            box_angs.append(Vector(90,90,90));
+        }
+        else if (system.property(map["space"]).isA<TriclinicBox>())
+        {
+            Vector v0 = system.property(map["space"]).asA<TriclinicBox>().vector0();
+            Vector v1 = system.property(map["space"]).asA<TriclinicBox>().vector1();
+            Vector v2 = system.property(map["space"]).asA<TriclinicBox>().vector2();
+
+            // Store the box magnitudes.
+            box_dims.append(Vector(v0.magnitude(), v1.magnitude(), v2.magnitude()));
+
+            double alpha = system.property(map["space"]).asA<TriclinicBox>().alpha();
+            double beta  = system.property(map["space"]).asA<TriclinicBox>().alpha();
+            double gamma = system.property(map["space"]).asA<TriclinicBox>().gamma();
+
+            // Store the angles between the box vectors.
+            box_angs.append(Vector(alpha, beta, gamma));
+        }
     }
     catch(...)
     {}
@@ -1055,7 +1074,7 @@ AmberRst::AmberRst(const System &system, const PropertyMap &map)
 
     //extract the title for the system
     ttle = system.name().value();
-    
+
     //this is created by Sire
     creator_app = QString("Sire AmberRst %1").arg(SireBase::getReleaseVersion());
 
@@ -1097,44 +1116,44 @@ int AmberRst::size() const
 AmberRst AmberRst::operator[](int i) const
 {
     i = Index(i).map( this->nFrames() );
-    
+
     if (nFrames() == 1)
         return *this;
-    
+
     AmberRst ret(*this);
-    
+
     if (not coords.isEmpty())
     {
         ret.coords = { coords[i] };
     }
-    
+
     if (not vels.isEmpty())
     {
         ret.vels = { vels[i] };
     }
-    
+
     if (not frcs.isEmpty())
     {
         ret.frcs = { frcs[i] };
     }
-    
+
     if (not current_time.isEmpty())
     {
         ret.current_time = { current_time[i] };
     }
-    
+
     if (not box_dims.isEmpty())
     {
         ret.box_dims = { box_dims[i] };
     }
-    
+
     if (not box_angs.isEmpty())
     {
         ret.box_angs = { box_angs[i] };
     }
-    
+
     ret.assertSane();
-    
+
     return ret;
 }
 
@@ -1153,7 +1172,7 @@ AmberRst& AmberRst::operator=(const AmberRst &other)
         creator_app = other.creator_app;
         parse_warnings = other.parse_warnings;
         created_from_restart = other.created_from_restart;
-    
+
         MoleculeParser::operator=(other);
     }
 
@@ -1238,28 +1257,28 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
     const int nmols = allmols.nMolecules();
 
     QVector<int> atom_pointers(nmols+1, -1);
-    
+
     int natoms = 0;
-    
+
     for (int i=0; i<nmols; ++i)
     {
         atom_pointers[i] = natoms;
         const int nats = allmols[MolIdx(i)].data().info().nAtoms();
         natoms += nats;
     }
-    
+
     atom_pointers[nmols] = natoms;
-    
+
     if (natoms != this->nAtoms())
         throw SireIO::parse_error( QObject::tr(
                 "Incompatibility between the files, as this restart file contains data "
                 "for %1 atom(s), while the other file(s) have created a system with "
                 "%2 atom(s)").arg(this->nAtoms()).arg(natoms), CODELOC );
-    
+
     //next, copy the coordinates and optionally the velocities into the molecules
     QVector<Molecule> mols(nmols);
     Molecule *mols_array = mols.data();
-    
+
     const PropertyName coords_property = map["coordinates"];
     const PropertyName vels_property = map["velocity"];
     const PropertyName forces_property = map["force"];
@@ -1267,15 +1286,15 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
     const Vector *coords_array = this->coordinates().constData();
     const Vector *vels_array = this->velocities().constData();
     const Vector *forces_array = this->forces().constData();
-    
+
     auto add_moldata = [&](int i)
     {
         const int atom_start_idx = atom_pointers.constData()[i];
         auto mol = allmols[MolIdx(i)].molecule();
         const auto molinfo = mol.data().info();
-        
+
         auto moleditor = mol.edit();
-        
+
         if (has_coords)
         {
             auto coords = QVector< QVector<Vector> >(molinfo.nCutGroups());
@@ -1288,15 +1307,15 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
             for (int j=0; j<mol.nAtoms(); ++j)
             {
                 auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(j));
-                
+
                 const int atom_idx = atom_start_idx + j;
-                
+
                 coords[cgatomidx.cutGroup()][cgatomidx.atom()] = coords_array[atom_idx];
             }
 
             moleditor.setProperty( coords_property,AtomCoords(CoordGroupArray(coords)) );
         }
-        
+
         if (has_vels)
         {
             auto vels = AtomVelocities(molinfo);
@@ -1304,46 +1323,46 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
             for (int j=0; j<mol.nAtoms(); ++j)
             {
                 auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(j));
-                
+
                 const int atom_idx = atom_start_idx + j;
 
                 //velocity is Angstroms per 1/20.455 ps
                 const auto vel_unit = (1.0 / 20.455) * angstrom / picosecond;
-                
+
                 const Vector &vel = vels_array[atom_idx];
                 vels.set(cgatomidx, Velocity3D(vel.x() * vel_unit,
                                                vel.y() * vel_unit,
                                                vel.z() * vel_unit));
             }
-            
+
             moleditor.setProperty( vels_property, vels );
         }
-        
+
         if (has_forces)
         {
             auto forces = AtomForces(molinfo);
-            
+
             for (int j=0; j<mol.nAtoms(); ++j)
             {
                 auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(j));
-                
+
                 const int atom_idx = atom_start_idx + j;
 
                 //force is amu Angstroms per ps^2
                 const auto force_unit = atomic_mass_constant * angstrom / (picosecond*picosecond);
-                
+
                 const Vector &f = forces_array[atom_idx];
                 forces.set(cgatomidx, Force3D(f.x() * force_unit,
                                               f.y() * force_unit,
                                               f.z() * force_unit));
             }
-            
+
             moleditor.setProperty( forces_property, forces );
         }
-        
+
         mols_array[i] = moleditor.commit();
     };
-    
+
     if (usesParallel())
     {
         tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
@@ -1362,7 +1381,7 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
             add_moldata(i);
         }
     }
-    
+
     system.update( Molecules(mols) );
 
     PropertyName space_property = map["space"];
@@ -1372,16 +1391,25 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
     }
     else if ((not box_dims.isEmpty()) and space_property.hasSource())
     {
-        if (box_angs[0] != cubic_angs)
+        // PeriodicBox.
+        if (box_angs[0] == cubic_angs)
         {
-            throw SireIO::parse_error( QObject::tr(
-                    "Sire cannot currently support a non-cubic periodic box! %1")
-                        .arg(box_angs[0].toString()), CODELOC );
+            system.setProperty( space_property.source(),
+                                SireVol::PeriodicBox(box_dims[0]) );
         }
-        
-        system.setProperty( space_property.source(), SireVol::PeriodicBox(box_dims[0]) );
+        // TriclinicBox.
+        else
+        {
+            system.setProperty( space_property.source(),
+                                SireVol::TriclinicBox(box_dims[0].x(),
+                                                      box_dims[0].y(),
+                                                      box_dims[0].z(),
+                                                      box_angs[0].x()*degrees,
+                                                      box_angs[0].y()*degrees,
+                                                      box_angs[0].z()*degrees) );
+        }
     }
-    
+
     PropertyName restart_property = map["created_from_restart"];
     if (restart_property.hasSource())
     {
@@ -1391,13 +1419,13 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
     {
         system.setProperty("created_from_restart", BooleanProperty(created_from_restart));
     }
-    
+
     //update the System fileformat property to record that it includes
     //data from this file format
     QString fileformat = this->formatName();
-    
+
     PropertyName fileformat_property = map["fileformat"];
-    
+
     try
     {
         QString last_format = system.property(fileformat_property).asA<StringProperty>().value();
@@ -1405,7 +1433,7 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
     }
     catch(...)
     {}
-    
+
     if (fileformat_property.hasSource())
     {
         system.setProperty(fileformat_property.source(), StringProperty(fileformat));
@@ -1414,11 +1442,11 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
     {
         system.setProperty("fileformat", StringProperty(fileformat));
     }
-    
+
     if (not current_time.isEmpty())
     {
         PropertyName time_property = map["time"];
-        
+
         if (time_property.hasSource())
         {
             system.setProperty(time_property.source(), TimeProperty(current_time[0]*picosecond));
@@ -1625,7 +1653,7 @@ void AmberRst::writeToFile(const QString &filename) const
 {
     //create the hash of all global data
     QHash<QString,QString> globals;
-    
+
     if (created_from_restart)
     {
         globals.insert( "Conventions", "AMBERRESTART" );
@@ -1634,15 +1662,15 @@ void AmberRst::writeToFile(const QString &filename) const
     {
         globals.insert( "Conventions", "AMBER" );
     }
-    
+
     globals.insert( "ConventionVersion", "1.0" );
 
     globals.insert( "application", "Sire" );
-    
+
     globals.insert( "program", "AmberRst" );
-    
+
     globals.insert( "programVersion", SireBase::getReleaseVersion() );
-    
+
     if (ttle.count() > 80)
     {
         globals.insert( "title", ttle.mid(0,80) );
@@ -1654,7 +1682,7 @@ void AmberRst::writeToFile(const QString &filename) const
 
     //convert all of the data into NetCDFData objects
     QHash<QString,NetCDFData> data;
-    
+
     //start off with the label variables
     {
         QStringList dimensions = { "spatial" };
@@ -1667,7 +1695,7 @@ void AmberRst::writeToFile(const QString &filename) const
         values = { 'a', 'b', 'c' };
         data.insert( "cell_spatial", NetCDFData("cell_spatial", values,
                                                 dimensions2, dimension_sizes) );
-        
+
         QStringList dimensions3 = { "cell_angular", "label" };
         dimension_sizes = { 3, 5 };
         values = { 'a', 'l', 'p', 'h', 'a',
@@ -1676,14 +1704,14 @@ void AmberRst::writeToFile(const QString &filename) const
         data.insert( "cell_angular", NetCDFData("cell_angular", values,
                                                 dimensions3, dimension_sizes) );
     }
-    
+
     //now the time
     if (not current_time.isEmpty())
     {
         QHash<QString,QVariant> attributes;
-        
+
         attributes.insert( "units", QString("picosecond") );
-    
+
         if (created_from_restart)
         {
             QVector<double> values = { current_time[0] };
@@ -1693,12 +1721,12 @@ void AmberRst::writeToFile(const QString &filename) const
         else
         {
             QVector<float> values(current_time.count());
-            
+
             for (int i=0; i<current_time.count(); ++i)
             {
                 values[i] = current_time[i];
             }
-            
+
             QStringList dimensions = { "frame" };
             QList<int> dimension_sizes = { current_time.count() };
 
@@ -1718,11 +1746,11 @@ void AmberRst::writeToFile(const QString &filename) const
             QStringList dimensions = { "atom", "spatial" };
             QList<int> dimension_sizes = { coords[0].count(), 3 };
             QVector<double> values( coords[0].count() * 3 );
-            
+
             for (int i=0; i<coords[0].count(); ++i)
             {
                 const Vector &c = coords[0].constData()[i];
-                
+
                 values[3*i + 0] = c.x();
                 values[3*i + 1] = c.y();
                 values[3*i + 2] = c.z();
@@ -1737,15 +1765,15 @@ void AmberRst::writeToFile(const QString &filename) const
             QStringList dimensions = { "frame", "atom", "spatial" };
             QList<int> dimension_sizes = { coords.count(), coords[0].count(), 3 };
             QVector<float> values( coords.count() * coords[0].count() * 3 );
-            
+
             for (int i=0; i<coords.count(); ++i)
             {
                 for (int j=0; j<coords[0].count(); ++j)
                 {
                     const Vector &c = coords[i].constData()[j];
-                    
+
                     const int idx = 3*coords[0].count()*i + 3*j;
-                    
+
                     values[idx + 0] = c.x();
                     values[idx + 1] = c.y();
                     values[idx + 2] = c.z();
@@ -1763,7 +1791,7 @@ void AmberRst::writeToFile(const QString &filename) const
     {
         QHash<QString,QVariant> degree_units;
         degree_units.insert("units", "degree");
-    
+
         if (created_from_restart)
         {
             QStringList dimensions = { "cell_spatial" };
@@ -1786,14 +1814,14 @@ void AmberRst::writeToFile(const QString &filename) const
             QStringList dimensions = { "frame", "cell_spatial" };
             QList<int> dimension_sizes = { box_dims.count(), 3 };
             QVector<float> values( 3 * box_dims.count() );
-            
+
             for (int i=0; i<box_dims.count(); ++i)
             {
                 values[3*i + 0] = box_dims[i].x();
                 values[3*i + 1] = box_dims[i].y();
                 values[3*i + 2] = box_dims[i].z();
             }
-            
+
             data.insert( "cell_lengths", NetCDFData("cell_lengths", values,
                                                     dimensions, dimension_sizes,
                                                     angstrom_units) );
@@ -1812,25 +1840,25 @@ void AmberRst::writeToFile(const QString &filename) const
                                                     degree_units) );
         }
     }
-    
+
     //velocities
     if (not vels.isEmpty())
     {
         QHash<QString,QVariant> vel_attributes;
         vel_attributes.insert("units", "angstrom/picosecond");
-    
+
         if (created_from_restart)
         {
             vel_attributes.insert("scale_factor", double(20.455));
-            
+
             QStringList dimensions = { "atom", "spatial" };
             QList<int> dimension_sizes = { vels[0].count(), 3 };
             QVector<double> values( vels[0].count() * 3 );
-            
+
             for (int i=0; i<vels[0].count(); ++i)
             {
                 const Vector &v = vels[0].constData()[i];
-                
+
                 values[3*i + 0] = v.x();
                 values[3*i + 1] = v.y();
                 values[3*i + 2] = v.z();
@@ -1846,13 +1874,13 @@ void AmberRst::writeToFile(const QString &filename) const
             QStringList dimensions = { "frame", "atom", "spatial" };
             QList<int> dimension_sizes = { vels.count(), vels[0].count(), 3 };
             QVector<float> values( vels.count() * vels[0].count() * 3 );
-            
+
             for (int i=0; i<vels.count(); ++i)
             {
                 for (int j=0; j<vels[0].count(); ++j)
                 {
                     const Vector &v = vels[i].constData()[j];
-                    
+
                     const int idx = 3*i*vels[0].count() + 3*j;
                     values[idx + 0] = v.x();
                     values[idx + 1] = v.y();
@@ -1871,17 +1899,17 @@ void AmberRst::writeToFile(const QString &filename) const
     {
         QHash<QString,QVariant> force_units;
         force_units.insert("units", "amu*angstrom/picosecond^2");
-    
+
         if (created_from_restart)
         {
             QStringList dimensions = { "atom", "spatial" };
             QList<int> dimension_sizes = { frcs[0].count(), 3 };
             QVector<double> values( frcs[0].count() * 3 );
-            
+
             for (int i=0; i<frcs[0].count(); ++i)
             {
                 const Vector &f = frcs[0].constData()[i];
-                
+
                 values[3*i + 0] = f.x();
                 values[3*i + 1] = f.y();
                 values[3*i + 2] = f.z();
@@ -1896,15 +1924,15 @@ void AmberRst::writeToFile(const QString &filename) const
             QStringList dimensions = { "frame", "atom", "spatial" };
             QList<int> dimension_sizes = { frcs.count(), frcs[0].count(), 3 };
             QVector<float> values( frcs.count() * frcs[0].count() * 3 );
-            
+
             for (int i=0; i<frcs.count(); ++i)
             {
                 for (int j=0; j<frcs[0].count(); ++j)
                 {
                     const Vector &f = frcs[i].constData()[j];
-                    
+
                     const int idx = 3*frcs[0].count()*i + 3*j;
-                    
+
                     values[idx + 0] = f.x();
                     values[idx + 1] = f.y();
                     values[idx + 2] = f.z();

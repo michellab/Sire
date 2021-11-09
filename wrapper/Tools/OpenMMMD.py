@@ -1,4 +1,3 @@
-
 ####################################################################################################
 #                                                                                                  #
 #   RUN SCRIPT to perform an MD simulation in Sire with OpenMM                                     #
@@ -49,6 +48,12 @@ import Sire.Stream
 import time
 import numpy as np
 
+
+MIN_MASSES = {'C': 5.96, 'N': 7.96}
+HMR_MIN = 1.0
+HMR_MAX = 4.0
+
+
 ####################################################################################################
 #
 #   Config file parameters
@@ -81,8 +86,10 @@ dcd_root = Parameter("dcd root", "traj", """Root of the filename of the output D
 
 nmoves = Parameter("nmoves", 1000, """Number of Molecular Dynamics moves to be performed during the simulation.""")
 
-random_seed = Parameter("random seed", None, """Random number seed. Set this if you
-                         want to have reproducible simulations.""")
+debug_seed = Parameter("debug seed", 0, """Debugging seed number seed. Set this if you
+                         want to reproduce a single cycle. Don't use this seed for production simulations
+                         since the same seed will be used for all cycles! A value of zero means that a unique
+                         seed will be generated for each cycle.""")
 
 ncycles = Parameter("ncycles", 1,
                     """The number of MD cycles. The total elapsed time will be nmoves*ncycles*timestep""")
@@ -148,7 +155,7 @@ barostat_frequency = Parameter("barostat frequency", 25,
 lj_dispersion = Parameter("lj dispersion", False, """Whether or not to calculate and include the LJ dispersion term.""")
 
 cmm_removal = Parameter("center of mass frequency", 10,
-                        "Frequency of which the system center of mass motion is removed.""")
+                        """Frequency of which the system center of mass motion is removed.""")
 
 center_solute = Parameter("center solute", False,
                           """Whether or not to centre the centre of geometry of the solute in the box.""")
@@ -179,10 +186,14 @@ distance_restraints_dict = Parameter("distance restraints dictionary", {},
                                      D the flat bottom radius. WARNING: PBC distance checks not implemented, avoid
                                      restraining pair of atoms that may diffuse out of the box.""")
 
-hydrogen_mass_repartitioning_factor = Parameter("hydrogen mass repartitioning factor",None,
-                                     """If not None and is a number, all hydrogen atoms in the molecule will
-                                        have their mass increased by the input factor. The atomic mass of the heavy atom
-                                        bonded to the hydrogen is decreased to keep the mass constant.""")
+hydrogen_mass_repartitioning_factor = \
+    Parameter('hydrogen mass repartitioning factor', 1.0,
+              f'If larger than {HMR_MIN} (maximum is {HMR_MAX}), all hydrogen '
+              'atoms in the molecule will have their mass increased by this '
+              'factor. The atomic mass of the heavy atom bonded to the '
+              'hydrogen is decreased to keep the total mass constant '
+              '(except when this would lead to a heavy atom to be lighter '
+              'than a minimum mass).')
 
 ## Free energy specific keywords
 morphfile = Parameter("morphfile", "MORPH.pert",
@@ -269,9 +280,9 @@ def writeSystemData(system, moves, Trajectory, block, softcore_lambda=False):
             else:
                 Trajectory.writeModel(system[MGName("all")], system.property("space"))
 
-    # Write an AMBER RST coordinate file each cycle.
-    rst = AmberRst(system)
-    rst.writeToFile("latest.rst")
+    # Write a PDB coordinate file each cycle.
+    pdb = PDB2(system)
+    pdb.writeToFile("latest.pdb")
 
     moves_file = open("moves.dat", "w")
     print("%s" % moves, file=moves_file)
@@ -283,11 +294,16 @@ def centerSolute(system, space):
     # ! Assuming first molecule in the system is the solute !
 
     if space.isPeriodic():
-        box_center = space.dimensions() / 2
+        # Periodic box.
+        try:
+            box_center = space.dimensions() / 2
+        # TriclincBox.
+        except:
+            box_center = 0.5*(space.vector0() + space.vector1() + space.vector2())
     else:
         box_center = Vector(0.0, 0.0, 0.0)
 
-    solute = system.molecules().at(MolNum(1))[0].molecule() 
+    solute = system.molecules().at(MolNum(1))[0].molecule()
 
     solute_cog = CenterOfGeometry(solute).point()
 
@@ -440,7 +456,7 @@ def setupForcefields(system, space):
     return system
 
 
-def setupMoves(system, random_seed, GPUS):
+def setupMoves(system, debug_seed, GPUS):
 
     print("Setting up moves...")
 
@@ -492,11 +508,14 @@ def setupMoves(system, random_seed, GPUS):
     moves = WeightedMoves()
     moves.add(mdmove, 1)
 
-    if (not random_seed):
-        random_seed = RanGenerator().randInt(100000, 1000000)
-    print("Generated random seed number %d " % random_seed)
+    # Choose a random seed for Sire if a debugging seed hasn't been set.
+    if debug_seed == 0:
+        seed = RanGenerator().randInt(100000, 1000000)
+    else:
+        seed = debug_seed
+        print("Using debugging seed number %d " % debug_seed)
 
-    moves.setGenerator(RanGenerator(random_seed))
+    moves.setGenerator(RanGenerator(seed))
 
     return moves
 
@@ -626,7 +645,7 @@ def setupDistanceRestraints(system, restraints=None):
     prop_list = []
 
     molecules = system[MGName("all")].molecules()
-    
+
     if restraints is None:
         #dic_items = list(distance_restraints_dict.val.items())
         dic_items = list(dict(distance_restraints_dict.val).items())
@@ -686,9 +705,14 @@ def freezeResidues(system):
 
 def repartitionMasses(system, hmassfactor=4.0):
     """
-    Increase the mass of hydrogen atoms to hmass times * amu, and subtract the mass 
+    Increase the mass of hydrogen atoms to hmass times * amu, and subtract the mass
 increase from the heavy atom the hydrogen is bonded to.
     """
+
+    if not (HMR_MIN <= hmassfactor <= HMR_MAX):
+        print(f'The HMR factor must be between {HMR_MIN} and {HMR_MAX} '
+              f'and not {hmassfactor}')
+        sys.exit(-1)
 
     print ("Applying Hydrogen Mass repartition to input using a factor of %s " % hmassfactor)
 
@@ -776,6 +800,7 @@ increase from the heavy atom the hydrogen is bonded to.
             atidx = at.index()
             atmass = at.property("mass")
             newmass = atmass + atom_masses[atidx.value()]
+
             # Sanity check. Note this is likely to occur if hmassfactor > 4
             if (newmass.value() < 0.0):
                 print ("""WARNING ! The mass of atom %s is less than zero after hydrogen mass repartitioning.
@@ -834,7 +859,7 @@ def createSystemFreeEnergy(molecules):
         molecule = molecules.molecule(moleculeNumber)[0].molecule()
         moleculeList.append(molecule)
 
-    # Scan input to find a molecule with passed residue number 
+    # Scan input to find a molecule with passed residue number
     # The residue name of the first residue in this molecule is
     # used to name the solute. This is used later to match
     # templates in the flex/pert files.
@@ -1133,7 +1158,7 @@ def setupForceFieldsFreeEnergy(system, space):
     return system
 
 
-def setupMovesFreeEnergy(system, random_seed, GPUS, lam_val):
+def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
 
     print ("Setting up moves...")
 
@@ -1144,7 +1169,7 @@ def setupMovesFreeEnergy(system, random_seed, GPUS, lam_val):
     solute_fromdummy = system[MGName("solute_ref_fromdummy")]
 
     Integrator_OpenMM = OpenMMFrEnergyST(molecules, solute, solute_hard, solute_todummy, solute_fromdummy)
-    Integrator_OpenMM.setRandomSeed(random_seed)
+    Integrator_OpenMM.setRandomSeed(debug_seed)
     Integrator_OpenMM.setIntegrator(integrator_type.val)
     Integrator_OpenMM.setFriction(inverse_friction.val)  # Only meaningful for Langevin/Brownian integrators
     Integrator_OpenMM.setPlatform(platform.val)
@@ -1181,10 +1206,17 @@ def setupMovesFreeEnergy(system, random_seed, GPUS, lam_val):
         Integrator_OpenMM.setMCBarostat(barostat.val)
         Integrator_OpenMM.setMCBarostatFrequency(barostat_frequency.val)
 
+    # Choose a random seed for Sire if a debugging seed hasn't been set.
+    if debug_seed == 0:
+        seed = RanGenerator().randInt(100000, 1000000)
+    else:
+        seed = debug_seed
+        print("Using debugging seed number %d " % debug_seed)
+
     #This calls the OpenMMFrEnergyST initialise function
     Integrator_OpenMM.initialise()
     velocity_generator = MaxwellBoltzmann(temperature.val)
-    velocity_generator.setGenerator(RanGenerator(random_seed))
+    velocity_generator.setGenerator(RanGenerator(seed))
 
     mdmove = MolecularDynamics(molecules, Integrator_OpenMM, timestep.val,
                               {"velocity generator":velocity_generator})
@@ -1194,12 +1226,7 @@ def setupMovesFreeEnergy(system, random_seed, GPUS, lam_val):
     moves = WeightedMoves()
     moves.add(mdmove, 1)
 
-    if (not random_seed):
-        random_seed = RanGenerator().randInt(100000, 1000000)
-
-    print("Generated random seed number %d " % random_seed)
-
-    moves.setGenerator(RanGenerator(random_seed))
+    moves.setGenerator(RanGenerator(seed))
 
     return moves
 
@@ -1341,7 +1368,7 @@ def generateDistanceRestraintsDict(system):
     restraints = { (i0, i1): (r01, kl, Dl), (i0,i2): (r02, kl, Dl) }
     #print restraints
     #distance_restraints_dict.val = restraints
-    #distance_restraints_dict 
+    #distance_restraints_dict
     #import pdb; pdb.set_trace()
 
     return restraints
@@ -1399,7 +1426,7 @@ def run():
                 stream.close()
             system = setupDistanceRestraints(system, restraints=restraints)
 
-        if hydrogen_mass_repartitioning_factor.val is not None:
+        if hydrogen_mass_repartitioning_factor.val > 1.0:
             system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
 
         # Note that this just set the mass to zero which freezes residues in OpenMM but Sire doesn't known that
@@ -1408,14 +1435,10 @@ def run():
 
         system = setupForcefields(system, space)
 
-        if random_seed.val:
-            ranseed = random_seed.val
-        else:
-            ranseed = RanGenerator().randInt(100000, 1000000)
+        if debug_seed.val != 0:
+            print("Setting up the simulation with debugging seed %s" % debug_seed.val)
 
-        print("Setting up the simulation with random seed %s" % ranseed)
-
-        moves = setupMoves(system, ranseed, gpu.val)
+        moves = setupMoves(system, debug_seed.val, gpu.val)
 
         print("Saving restart")
         Sire.Stream.save([system, moves], restart_file.val)
@@ -1557,7 +1580,7 @@ def runFreeNrg():
 
             #import pdb; pdb.set_trace()
 
-        if hydrogen_mass_repartitioning_factor.val is not None:
+        if hydrogen_mass_repartitioning_factor.val > 1.0:
             system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
 
         # Note that this just set the mass to zero which freezes residues in OpenMM but Sire doesn't known that
@@ -1566,14 +1589,10 @@ def runFreeNrg():
 
         system = setupForceFieldsFreeEnergy(system, space)
 
-        if random_seed.val:
-            ranseed = random_seed.val
-        else:
-            ranseed = RanGenerator().randInt(100000, 1000000)
+        if debug_seed.val != 0:
+            print("Setting up the simulation with debugging seed %s" % debug_seed.val)
 
-        print("Setting up the simulation with random seed %s" % ranseed)
-
-        moves = setupMovesFreeEnergy(system, ranseed, gpu.val, lambda_val.val)
+        moves = setupMovesFreeEnergy(system, debug_seed.val, gpu.val, lambda_val.val)
 
         print("Saving restart")
         Sire.Stream.save([system, moves], restart_file.val)
@@ -1613,7 +1632,7 @@ def runFreeNrg():
     if cycle_start > maxcycles.val:
         print("Maxinum number of cycles reached (%s). If you wish to extend the simulation increase the value of the parameter maxcycle." % maxcycles.val)
         sys.exit(-1)
-        
+
     cycle_end = cycle_start + ncycles.val
 
     if (cycle_end > maxcycles.val):
@@ -1702,7 +1721,7 @@ def runFreeNrg():
         cmd = "cp %s %s.previous" % (restart_file.val, restart_file.val)
         os.system(cmd)
         print ("Saving new restart")
-        Sire.Stream.save([system, moves], restart_file.val)            
+        Sire.Stream.save([system, moves], restart_file.val)
     s2 = timer.elapsed() / 1000.
     outgradients.flush()
     outfile.flush()
@@ -1710,7 +1729,7 @@ def runFreeNrg():
     outfile.close()
     print("Simulation took %d s " % ( s2 - s1))
     print("###===========================================================###\n")
-  
+
 
     if os.path.exists("gradients.s3"):
         siregrads = Sire.Stream.load("gradients.s3")
@@ -1725,8 +1744,5 @@ def runFreeNrg():
         # Necessary to write correct restart
         system.mustNowRecalculateFromScratch()
 
- #   print("Backing up previous restart")
- #   cmd = "cp %s %s.previous" % (restart_file.val, restart_file.val)
- #   os.system(cmd)
- #   print ("Saving new restart")
- #   Sire.Stream.save([system, moves], restart_file.val)
+if __name__ == '__main__':
+    runFreeNrg()

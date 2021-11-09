@@ -40,6 +40,7 @@
 #include "SireVol/cartesian.h"
 #include "SireVol/gridinfo.h"
 #include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 #include "cljboxes.h"
 #include "cljfunction.h"
 #include "switchingfunction.h"

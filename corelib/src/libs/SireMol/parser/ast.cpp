@@ -346,6 +346,14 @@ namespace AST
                     .arg(value.toString());
     }
 
+    QString IDWithinVector::toString() const
+    {
+        return QObject::tr("%1s within %2 of %3")
+                    .arg(idobject_to_string(name))
+                    .arg(distance.toString())
+                    .arg(value.toString());
+    }
+
     SelectEnginePtr Node::toEngine() const
     {
         if (values.size() == 0)
@@ -488,5 +496,10 @@ namespace AST
     SelectEnginePtr IDWithin::toEngine() const
     {
         return IDDistanceEngine::construct(name, distance.value * distance.unit, value.toEngine());
+    }
+
+    SelectEnginePtr IDWithinVector::toEngine() const
+    {
+        return IDDistanceVectorEngine::construct(name, distance.value * distance.unit, value);
     }
 }

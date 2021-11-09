@@ -333,6 +333,38 @@ private:
     double distance;
 };
 
+/** Internal class used to select objects that are within a certain
+    distance of a 3D position vector.
+
+    @author Lester Hedges
+*/
+class IDDistanceVectorEngine : public SelectEngine
+{
+public:
+    static SelectEnginePtr construct( IDObject obj, SireUnits::Dimension::Length distance,
+                                      VectorValue position );
+
+    static SelectEnginePtr construct( IDObject obj, IDCoordType typ,
+                                      SireUnits::Dimension::Length distance,
+                                      VectorValue position );
+
+    ~IDDistanceVectorEngine();
+
+    ObjType objectType() const;
+
+    SelectEnginePtr simplify();
+
+protected:
+    IDDistanceVectorEngine();
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+
+private:
+    IDObject obj;
+    IDCoordType typ;
+    VectorValue position;
+    double distance;
+};
+
 /** Internal class used to select all objects
 
     @author Christopher Woods

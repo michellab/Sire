@@ -134,6 +134,17 @@ void register_MMDetail_class(){
                 , "Return whether or not this forcefield is compatible with other" );
         
         }
+        { //::SireMM::MMDetail::isOPLS
+        
+            typedef bool ( ::SireMM::MMDetail::*isOPLS_function_type)(  ) const;
+            isOPLS_function_type isOPLS_function_value( &::SireMM::MMDetail::isOPLS );
+            
+            MMDetail_exposer.def( 
+                "isOPLS"
+                , isOPLS_function_value
+                , "Return whether or not this is a GROMACS OPLS force field." );
+        
+        }
         MMDetail_exposer.def( bp::self != bp::self );
         { //::SireMM::MMDetail::operator=
         

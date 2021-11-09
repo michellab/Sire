@@ -1036,6 +1036,14 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol, const PropertyMap &map,
     {
         comment = mol.property("mol_comment").toString();
     }
+
+    // Extract the bonds records and update the number of bonds.
+    if (mol.hasProperty(map["tripos_bonds"]))
+    {
+        auto bond_lines = mol.property(map["tripos_bonds"]).toString();
+        QStringList bond_list = bond_lines.split("\n");
+        num_bonds = bond_list.count();
+    }
 }
 
 /** Generate a Mol2 record from the molecule data. */
@@ -1734,6 +1742,13 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
         lines.append("@<TRIPOS>ATOM");
         lines.append(atom_lines[i].toList());
 
+        // Bond records.
+        if (system[molnums[i]].molecule().hasProperty(map["tripos_bonds"]))
+        {
+            lines.append("@<TRIPOS>BOND");
+            lines.append(system[molnums[i]].molecule().property(map["tripos_bonds"]).toString());
+        }
+
         // Substructure records.
         lines.append("@<TRIPOS>SUBSTRUCTURE");
         lines.append(substructure_lines[i].toList());
@@ -1848,6 +1863,7 @@ QVector<QString> Mol2::toLines() const
     for (int i=0; i<num_mols; ++i)
     {
         const int num_atoms = nAtoms(i);
+        const int num_bonds = nBonds(i);
         const int num_subst = nSubstructures(i);
 
         // Generate the Mol2 moleucle data record lines.
@@ -1855,6 +1871,7 @@ QVector<QString> Mol2::toLines() const
 
         // Data record lines for the molecule.
         QVector<QString> atom_lines(num_atoms);
+        QVector<QString> bond_lines(num_bonds);
         QVector<QString> substructure_lines(num_subst);
 
         if (usesParallel())
@@ -1866,6 +1883,16 @@ QVector<QString> Mol2::toLines() const
                 {
                     // Generate the Mol2 atom record lines.
                     atom_lines[j] = molecules[i].getAtom(j).toMol2Record();
+                }
+            });
+
+            tbb::parallel_for(tbb::blocked_range<int>(0, num_bonds),
+                            [&](const tbb::blocked_range<int> r)
+            {
+                for (int j=r.begin(); j<r.end(); ++j)
+                {
+                    // Generate the Mol2 bond record lines.
+                    bond_lines[j] = molecules[i].getBond(j).toMol2Record();
                 }
             });
 
@@ -1888,6 +1915,12 @@ QVector<QString> Mol2::toLines() const
                 atom_lines[j] = molecules[i].getAtom(j).toMol2Record();
             }
 
+            for (int j=0; j<num_bonds; ++j)
+            {
+                // Generate the Mol2 bond record lines.
+                bond_lines[j] = molecules[i].getBond(j).toMol2Record();
+            }
+
             for (int j=0; j<num_subst; ++j)
             {
                 // Generate the Mol2 substructure record lines.
@@ -1902,6 +1935,10 @@ QVector<QString> Mol2::toLines() const
         // Atom records.
         lines.append("@<TRIPOS>ATOM");
         lines += atom_lines;
+
+        // Bond records.
+        lines.append("@<TRIPOS>BOND");
+        lines += bond_lines;
 
         // Substructure records.
         lines.append("@<TRIPOS>SUBSTRUCTURE");
@@ -2514,8 +2551,9 @@ MolStructureEditor Mol2::getMolStructure(int imol, QHash<int, int> &res_map,
 /** Internal function used to get the molecule structure for molecule 'imol'. */
 MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
 {
-    // Get the number of atoms in the molecule.
+    // Get the number of atoms and bonds in the molecule.
     const int nats = nAtoms(imol);
+    const int nbonds = nBonds(imol);
 
     // Make sure that there are atoms in the frame.
     if (nats == 0)
@@ -2559,6 +2597,19 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
         mol.setProperty(map["mol_comment"], StringProperty(molecules[imol].getComment()))
            .commit();
     }
+
+    // Create a string to hold the bond information.
+    QString tripos_bond = "";
+
+    // Loop over all bonds and add the record.
+    for (int i=0; i<nbonds; ++i)
+    {
+        tripos_bond += molecules[imol].getBond(i).toMol2Record();
+        if (i < (nbonds-1))
+            tripos_bond += "\n";
+    }
+
+    mol.setProperty(map["tripos_bonds"], StringProperty(tripos_bond)).commit();
 
     // Instantiate the atom property objects that we need.
     AtomCoords         coords(molinfo);

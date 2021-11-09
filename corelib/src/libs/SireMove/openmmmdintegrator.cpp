@@ -26,8 +26,6 @@
  *
 \*********************************************/
 
-#define _GLIBCXX_USE_CXX11_ABI 0
-
 #include "openmmmdintegrator.h"
 #include "ensemble.h"
 
@@ -64,6 +62,7 @@
 #include "SireMM/atomljs.h"
 
 #include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 
 #include "SireMove/flexibility.h"
 
@@ -133,7 +132,7 @@ QDataStream &operator<<(QDataStream &ds, const OpenMMMDIntegrator &velver)
         << velver.platform_type << velver.Restraint_flag << velver.CMMremoval_frequency
         << velver.buffer_frequency
         << velver.device_index << velver.LJ_dispersion << velver.precision << velver.integration_tol
-        << velver.timeskip 
+        << velver.timeskip
         << velver.reinetialise_context
         << velver.is_periodic
         << static_cast<const Integrator&> (velver);
@@ -164,7 +163,7 @@ QDataStream &operator>>(QDataStream &ds, OpenMMMDIntegrator &velver)
             >> velver.buffer_frequency
             >> velver.device_index >> velver.LJ_dispersion >> velver.precision
             >> velver.integration_tol
-            >> velver.timeskip 
+            >> velver.timeskip
             >> velver.reinetialise_context
             >> velver.is_periodic
             >> static_cast<Integrator&> (velver);
@@ -194,7 +193,7 @@ QDataStream &operator>>(QDataStream &ds, OpenMMMDIntegrator &velver)
             >> velver.buffer_frequency
             >> velver.device_index >> velver.LJ_dispersion >> velver.precision
             >> velver.integration_tol
-            >> velver.timeskip 
+            >> velver.timeskip
             >> velver.reinetialise_context
             >> static_cast<Integrator&> (velver);
 
@@ -359,7 +358,6 @@ bool OpenMMMDIntegrator::operator==(const OpenMMMDIntegrator &other) const
         and reinetialise_context == other.reinetialise_context
         and is_periodic == other.is_periodic
         and Integrator::operator==(other);
-
 }
 
 /** Comparison operator */
@@ -542,7 +540,7 @@ void OpenMMMDIntegrator::initialise()
     {
         const double converted_Temperature = convertTo(Temperature.value(), kelvin);
         const double converted_Pressure = convertTo(Pressure.value(), bar);
-     
+
         OpenMM::MonteCarloBarostat * barostat = new OpenMM::MonteCarloBarostat(converted_Pressure, converted_Temperature, MCBarostat_frequency);
         system_openmm->addForce(barostat);
 
@@ -556,8 +554,8 @@ void OpenMMMDIntegrator::initialise()
         }
     }
 
-    
-    //Setting Lennard Jones dispersion globally, since its default is set to true!    
+
+    //Setting Lennard Jones dispersion globally, since its default is set to true!
     nonbond_openmm->setUseDispersionCorrection(LJ_dispersion);
 
     //OpenMM Bonded Forces
@@ -1190,20 +1188,51 @@ void OpenMMMDIntegrator::createContext(IntegratorWorkspace &workspace,
     {
         const System & ptr_sys = ws.system();
         const PropertyName &space_property = PropertyName("space");
-        const PeriodicBox &space = ptr_sys.property(space_property).asA<PeriodicBox>();
 
-        const double Box_x_Edge_Length = space.dimensions()[0] * OpenMM::NmPerAngstrom; //units in nm
-        const double Box_y_Edge_Length = space.dimensions()[1] * OpenMM::NmPerAngstrom; //units in nm
-        const double Box_z_Edge_Length = space.dimensions()[2] * OpenMM::NmPerAngstrom; //units in nm
+        // PeriodicBox.
+        if (ptr_sys.property(space_property).isA<PeriodicBox>())
+        {
+            const PeriodicBox &space = ptr_sys.property(space_property).asA<PeriodicBox>();
 
-        if (Debug)
-            qDebug() << "\nBOX SIZE [A] = (" << space.dimensions()[0] << " , " << space.dimensions()[1] << " ,  " << space.dimensions()[2] << ")\n\n";
+            const double Box_x_Edge_Length = space.dimensions()[0] * OpenMM::NmPerAngstrom; //units in nm
+            const double Box_y_Edge_Length = space.dimensions()[1] * OpenMM::NmPerAngstrom; //units in nm
+            const double Box_z_Edge_Length = space.dimensions()[2] * OpenMM::NmPerAngstrom; //units in nm
 
-        //Set Periodic Box Condition
+            if (Debug)
+                qDebug() << "\nBOX SIZE [A] = (" << space.dimensions()[0] << " , " << space.dimensions()[1] << " ,  " << space.dimensions()[2] << ")\n\n";
 
-        openmm_context->setPeriodicBoxVectors(OpenMM::Vec3(Box_x_Edge_Length, 0, 0),
-                                              OpenMM::Vec3(0, Box_y_Edge_Length, 0),
-                                              OpenMM::Vec3(0, 0, Box_z_Edge_Length));
+            //Set Periodic Box Condition
+
+            openmm_context->setPeriodicBoxVectors(OpenMM::Vec3(Box_x_Edge_Length, 0, 0),
+                                                  OpenMM::Vec3(0, Box_y_Edge_Length, 0),
+                                                  OpenMM::Vec3(0, 0, Box_z_Edge_Length));
+        }
+        // TriclinicBox.
+        else if (ptr_sys.property(space_property).isA<TriclinicBox>())
+        {
+            const TriclinicBox &space = ptr_sys.property(space_property).asA<TriclinicBox>();
+
+            // Get the three triclinic box vectors.
+            const auto v0 = space.vector0();
+            const auto v1 = space.vector1();
+            const auto v2 = space.vector2();
+
+            // Get cell matrix components in nm.
+            const double xx = v0.x() * OpenMM::NmPerAngstrom;
+            const double xy = v0.y() * OpenMM::NmPerAngstrom;
+            const double xz = v0.z() * OpenMM::NmPerAngstrom;
+            const double yx = v1.x() * OpenMM::NmPerAngstrom;
+            const double yy = v1.y() * OpenMM::NmPerAngstrom;
+            const double yz = v1.z() * OpenMM::NmPerAngstrom;
+            const double zx = v2.x() * OpenMM::NmPerAngstrom;
+            const double zy = v2.y() * OpenMM::NmPerAngstrom;
+            const double zz = v2.z() * OpenMM::NmPerAngstrom;
+
+            openmm_context->setPeriodicBoxVectors(OpenMM::Vec3(xx, xy, xz),
+                                                  OpenMM::Vec3(yx, yy, yz),
+                                                  OpenMM::Vec3(zx, zy, zz));
+        }
+
         is_periodic = true;
     }
 
@@ -1312,12 +1341,12 @@ MolarEnergy OpenMMMDIntegrator::getPotentialEnergy(const System &system)
  * LocalEnergyMinimizer :: minimize() function of OpenMM.
  * @param system                Sire System including molegroup, forcefield
  *                              positions etc
- * @return                      Kinetic energy computed with OpenMM. 
+ * @return                      Kinetic energy computed with OpenMM.
  */
 MolarEnergy OpenMMMDIntegrator::getKineticEnergy()
 {
     //We need to compute the OpenMM kinetic energy because of the Verlet half
-    //step algorithm. Sire kinetic energies will not be the same as the OpenMM 
+    //step algorithm. Sire kinetic energies will not be the same as the OpenMM
     //ones.
     if (!isSystemInitialised)
     {
@@ -1433,21 +1462,21 @@ System OpenMMMDIntegrator::equilibrateSystem(System &system,
     if (Debug)
     {
         PeriodicBox sp = system.property("space").asA<PeriodicBox>();
-        cout << "Box dimensions are: "<< sp.dimensions()[0]<< " "<< 
+        cout << "Box dimensions are: "<< sp.dimensions()[0]<< " "<<
             sp.dimensions()[1]<<" " << sp.dimensions()[2]<<endl;
     }
     workspace.edit().setSystem(system);
     createContext(workspace.edit(), equib_time_step);
     (openmm_context->getIntegrator()).step(equib_steps);
-    
+
     int infoMask = OpenMM::State::Positions;
     infoMask = infoMask + OpenMM::State::Velocities+OpenMM::State::Energy;
     OpenMM::State state_openmm = openmm_context->getState(infoMask);
     std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
     std::vector<OpenMM::Vec3> velocities_openmm = state_openmm.getVelocities();
-    
+
     openmmKineticEnergy = state_openmm.getKineticEnergy()* OpenMM::KcalPerKJ*kcal_per_mol;
-    
+
     // Recast to atomicvelocityworkspace because want to use commitCoordinates() method to update system
     AtomicVelocityWorkspace &ws = workspace.edit().asA<AtomicVelocityWorkspace>();
 
@@ -1475,7 +1504,7 @@ System OpenMMMDIntegrator::equilibrateSystem(System &system,
             sire_momenta[j] = Vector(velocities_openmm[j + k][0] * m[j] * (OpenMM::AngstromsPerNm) * AKMAPerPs,
                                      velocities_openmm[j + k][1] * m[j] * (OpenMM::AngstromsPerNm) * AKMAPerPs,
                                      velocities_openmm[j + k][2] * m[j] * (OpenMM::AngstromsPerNm) * AKMAPerPs);
-          
+
         }
         k = k + ws.nAtoms(i);
     }
@@ -1487,11 +1516,10 @@ System OpenMMMDIntegrator::equilibrateSystem(System &system,
     {
         // dummy buffered dimensions vector, maybe there is better solution
         //to this than just passing an empty vector
-        QVector< Vector> dimensions;
+        QVector<QVector<Vector>> dimensions;
         updateBoxDimensions(state_openmm, dimensions, Debug, ws);
-
     }
-    
+
     this->destroyContext();
     const System & ptr_sys = ws.system();
     return ptr_sys;
@@ -1515,7 +1543,7 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     const int nmols = ws.nMolecules();
 
     QVector< std::vector<OpenMM::Vec3> > buffered_positions;
-    QVector< Vector> buffered_dimensions;
+    QVector<QVector<Vector>> buffered_dimensions;
 
     OpenMM::State state_openmm;
 
@@ -1538,7 +1566,7 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     }
       if (Debug)
     {
-        qDebug() <<"\n"; 
+        qDebug() <<"\n";
         qDebug() <<"-------------info before ---------------";
         qDebug() << "Kinetic energy Sire is "<<ws.kineticEnergy();
         qDebug() << "Kinetic energy OpenMM is "<<state_openmm.getKineticEnergy()*OpenMM::KcalPerKJ;
@@ -1632,8 +1660,14 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
             buffered_positions.append(positions_openmm);
 
             state_openmm.getPeriodicBoxVectors(a, b, c);
-            Vector dims = Vector(a[0] * OpenMM::AngstromsPerNm, b[1] * OpenMM::AngstromsPerNm, c[2] * OpenMM::AngstromsPerNm);
-            buffered_dimensions.append(dims);
+
+            Vector v0 = Vector(a[0] * OpenMM::AngstromsPerNm, a[1] * OpenMM::AngstromsPerNm, a[2] * OpenMM::AngstromsPerNm);
+            Vector v1 = Vector(b[0] * OpenMM::AngstromsPerNm, b[1] * OpenMM::AngstromsPerNm, b[2] * OpenMM::AngstromsPerNm);
+            Vector v2 = Vector(c[0] * OpenMM::AngstromsPerNm, c[1] * OpenMM::AngstromsPerNm, c[2] * OpenMM::AngstromsPerNm);
+
+            QVector<Vector> lattice_vectors{v0, v1, v2};
+
+            buffered_dimensions.append(lattice_vectors);
         }
     }
     else
@@ -1682,7 +1716,7 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
         Vector *sire_coords = ws.coordsArray(i);
         Vector *sire_momenta = ws.momentaArray(i);
         const double *m = ws.massArray(i);
-        
+
         for (int j = 0; j < ws.nAtoms(i); j++)
         {
             if(Debug)
@@ -1714,10 +1748,10 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
                 double vsqrt = velocities_openmm[j + k][0]*velocities_openmm[j + k][0];
                 vsqrt += velocities_openmm[j + k][1]*velocities_openmm[j + k][1];
                 vsqrt += velocities_openmm[j + k][2]*velocities_openmm[j + k][2];
-                Ekin_openmm+=0.5*vsqrt*m[j]; 
+                Ekin_openmm+=0.5*vsqrt*m[j];
                 OpenMM::System *system_openmm = openmm_system;
                 double mass = system_openmm->getParticleMass(j);
-                qDebug()<<"particle mass "<<mass;   
+                qDebug()<<"particle mass "<<mass;
                 qDebug()<<"j is : "<<j<<" k is ";
 ;
             }
@@ -1777,8 +1811,8 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     return;
 }
 
-void OpenMMMDIntegrator::updateBoxDimensions(OpenMM::State &state_openmm, 
-                                             QVector< Vector> &buffered_dimensions, 
+void OpenMMMDIntegrator::updateBoxDimensions(OpenMM::State &state_openmm,
+                                             QVector<QVector<Vector>> &buffered_dimensions,
                                              bool Debug, AtomicVelocityWorkspace &ws)
 {
     Debug = false;
@@ -1786,24 +1820,57 @@ void OpenMMMDIntegrator::updateBoxDimensions(OpenMM::State &state_openmm,
     OpenMM::Vec3 b;
     OpenMM::Vec3 c;
 
-    state_openmm.getPeriodicBoxVectors(a, b, c);
-    Vector new_dims = Vector(a[0] * OpenMM::AngstromsPerNm, b[1] * OpenMM::AngstromsPerNm, c[2] * OpenMM::AngstromsPerNm);
-    if (Debug)
-        qDebug() << " a " << a[0] << " b " << b[1] << " c " << c[2];
-
     System & ptr_sys = ws.nonConstsystem();
-    PeriodicBox sp = ptr_sys.property("space").asA<PeriodicBox>();
 
-    sp.setDimensions(new_dims);
-    const QString string = "space";
-    ptr_sys.setProperty(string, sp);
-
-    /** Buffer dimensions if necessary */
-    for (int k = 0; k < buffered_dimensions.size(); k++)
+    // TriclinicBox.
+    if (ptr_sys.property("space").isA<TriclinicBox>())
     {
-        const QString buffered_space = "buffered_space_" + QString::number(k);
-        PeriodicBox buff_space = PeriodicBox(buffered_dimensions[k]);
-        ptr_sys.setProperty(buffered_space, buff_space);
+        state_openmm.getPeriodicBoxVectors(a, b, c);
+        Vector v0 = Vector(a[0] * OpenMM::AngstromsPerNm, a[1] * OpenMM::AngstromsPerNm, a[2] * OpenMM::AngstromsPerNm);
+        Vector v1 = Vector(b[0] * OpenMM::AngstromsPerNm, b[1] * OpenMM::AngstromsPerNm, b[2] * OpenMM::AngstromsPerNm);
+        Vector v2 = Vector(c[0] * OpenMM::AngstromsPerNm, c[1] * OpenMM::AngstromsPerNm, c[2] * OpenMM::AngstromsPerNm);
+
+        System & ptr_sys = ws.nonConstsystem();
+        TriclinicBox sp(v0, v1, v2);
+
+        const QString string = "space";
+        ptr_sys.setProperty(string, sp);
+
+        /** Buffer dimensions if necessary */
+        for (int k = 0; k < buffered_dimensions.size(); k++)
+        {
+            const QString buffered_space = "buffered_space_" + QString::number(k);
+            TriclinicBox buff_space = TriclinicBox(buffered_dimensions[k][0],
+                                                   buffered_dimensions[k][1],
+                                                   buffered_dimensions[k][2]);
+            ptr_sys.setProperty(buffered_space, buff_space);
+        }
+    }
+    // PeriodicBox.
+    else
+    {
+        state_openmm.getPeriodicBoxVectors(a, b, c);
+        Vector new_dims = Vector(a[0] * OpenMM::AngstromsPerNm, b[1] * OpenMM::AngstromsPerNm, c[2] * OpenMM::AngstromsPerNm);
+        if (Debug)
+            qDebug() << " a " << a[0] << " b " << b[1] << " c " << c[2];
+
+        System & ptr_sys = ws.nonConstsystem();
+        PeriodicBox sp = ptr_sys.property("space").asA<PeriodicBox>();
+
+        sp.setDimensions(new_dims);
+        const QString string = "space";
+        ptr_sys.setProperty(string, sp);
+
+        /** Buffer dimensions if necessary */
+        for (int k = 0; k < buffered_dimensions.size(); k++)
+        {
+            const QString buffered_space = "buffered_space_" + QString::number(k);
+            Vector dims(buffered_dimensions[k][0].x(),
+                        buffered_dimensions[k][1].y(),
+                        buffered_dimensions[k][2].z());
+            PeriodicBox buff_space = PeriodicBox(dims);
+            ptr_sys.setProperty(buffered_space, buff_space);
+        }
     }
 }
 

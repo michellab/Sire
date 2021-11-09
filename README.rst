@@ -31,35 +31,33 @@ built with Sire, please `visit the Sire website <http://siremol.org>`__.
 Installation
 ============
 
-The easiest way to install Sire is using our `conda channel <https://anaconda.org/michellab/repo>`__::
-
-    conda install -c conda-forge -c omnia -c michellab sire
-
-To install the latest development version you can use::
-
-    conda install -c conda-forge -c omnia -c michellab/label/dev sire
-
-Unless you add the required channels to your Conda configuration, then you'll
-need to add them when updating, e.g., for the development package::
-
-    conda update -c conda-forge -c omnia -c michellab/label/dev sire
-
-Note that because of Conda's peculiar scoring metrics you might not end up with
-the latest version of Sire when performing a fresh install or update.
-(It tries to minimise various things, such as the number of dependencies
-installed, which is difficult when your package depends on many other packages.)
-To see what packages are available, run:
+The easiest way to install Sire is using our `conda channel <https://anaconda.org/michellab/repo>`__.
+To create a new environment:
 
 .. code-block:: bash
 
-    conda search -c michellab/label/dev sire
+    conda create -n sire -c conda-forge -c omnia -c michellab sire
+    conda activate sire
 
-You can then install the latest version by explicitly stating the full package
-name, e.g.:
+To install the latest development version you can use:
 
 .. code-block:: bash
 
-    conda install -c conda-forge -c omnia -c michellab/label/dev sire=2019.1.0=py37hf484d3e_13
+    conda create -n sire-dev -c conda-forge -c omnia -c michellab/label/dev sire
+    conda activate sire-dev
+
+If you find that Conda is particularly slow to install or upgrade,
+then we advise using `mamba <https://github.com/TheSnakePit/mamba>`__:
+
+.. code-block:: bash
+
+    conda install -c conda-forge mamba
+
+You can then replace all ``conda`` commands with ``mamba``, e.g.:
+
+.. code-block:: bash
+
+    mamba create -n sire -c conda-forge -c omnia -c michellab sire
 
 There are also many `pre-built binary packages <http://siremol.org/pages/binaries.html>`__,
 which are available for Linux, Mac OS X and Windows, which are quick and easy to install.

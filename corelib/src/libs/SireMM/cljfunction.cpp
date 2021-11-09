@@ -36,6 +36,7 @@
 
 #include "SireVol/cartesian.h"
 #include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 #include "SireVol/gridinfo.h"
 
 #include "SireError/errors.h"
@@ -70,28 +71,28 @@ static const RegisterMetaType<CLJFunction> r_cljfunc(MAGIC_ONLY, CLJFunction::ty
 QDataStream &operator<<(QDataStream &ds, const CLJFunction &cljfunc)
 {
     writeHeader(ds, r_cljfunc, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << cljfunc.spce << cljfunc.use_arithmetic;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, CLJFunction &cljfunc)
 {
     VersionID v = readHeader(ds, r_cljfunc);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> cljfunc.spce >> cljfunc.use_arithmetic;
         cljfunc.extractDetailsFromSpace();
     }
     else
         throw version_error(v, "1", r_cljfunc, CODELOC);
-    
+
     return ds;
 }
 
@@ -135,6 +136,19 @@ void CLJFunction::extractDetailsFromSpace()
     {
         use_box = true;
         box_dimensions = spce.read().asA<PeriodicBox>().dimensions();
+    }
+    else if (spce.read().isA<TriclinicBox>())
+    {
+        // Support Cartesian triclinic boxes. Here we work out the appropriate
+        // box dimensions by extracting the lattice vectors of the triclinic cell.
+        if (spce.read().asA<TriclinicBox>().isCartesian())
+        {
+            use_box = true;
+            auto v0 = spce.read().asA<TriclinicBox>().vector0();
+            auto v1 = spce.read().asA<TriclinicBox>().vector1();
+            auto v2 = spce.read().asA<TriclinicBox>().vector2();
+            box_dimensions = Vector(v0.x(), v1.y(), v2.z());
+        }
     }
     else if (spce.read().isA<Cartesian>())
     {
@@ -185,7 +199,7 @@ CLJFunction& CLJFunction::operator=(const CLJFunction &other)
         use_box = other.use_box;
         Property::operator=(other);
     }
-    
+
     return *this;
 }
 
@@ -213,18 +227,18 @@ Properties CLJFunction::properties() const
 {
     Properties props;
     props.setProperty( "space", spce );
-    
+
     if (use_arithmetic)
         props.setProperty( "combiningRules", StringProperty("arithmetic") );
     else
         props.setProperty( "combiningRules", StringProperty("geometric") );
-    
+
     return props;
 }
 
-/** Return a copy of this function where the property 'name' has been set to 
+/** Return a copy of this function where the property 'name' has been set to
     the value 'value'
-    
+
     \throw SireBase::missing_property
 */
 CLJFunctionPtr CLJFunction::setProperty(const QString &name, const Property &value) const
@@ -238,7 +252,7 @@ CLJFunctionPtr CLJFunction::setProperty(const QString &name, const Property &val
     else if (name == "combiningRules")
     {
         QString typ = value.asAString();
-        
+
         if (typ.toLower() == "arithmetic")
             ret.edit().setCombiningRules( CLJFunction::ARITHMETIC );
         else if (typ.toLower() == "geometric")
@@ -257,7 +271,7 @@ CLJFunctionPtr CLJFunction::setProperty(const QString &name, const Property &val
                     .arg(name).arg(this->toString())
                     .arg( Sire::toString(this->properties().propertyKeys()) ), CODELOC );
     }
-    
+
     return ret;
 }
 
@@ -271,7 +285,7 @@ PropertyPtr CLJFunction::property(const QString &name) const
     {
         static StringProperty arithmetic_property("arithmetic");
         static StringProperty geometric_property("geometric");
-        
+
         if (use_arithmetic)
             return arithmetic_property;
         else
@@ -284,7 +298,7 @@ PropertyPtr CLJFunction::property(const QString &name) const
                 "Available property names are %3.")
                     .arg(name).arg(this->toString())
                     .arg( Sire::toString(this->properties().propertyKeys()) ), CODELOC );
-        
+
         // the code below is never executed
         static NullCLJFunction func;
         return func;
@@ -396,7 +410,7 @@ bool CLJFunction::isPeriodic() const
 void CLJFunction::setSpace(const Space &space)
 {
     SpacePtr old_space = spce;
-    
+
     try
     {
         spce = space;
@@ -458,16 +472,16 @@ namespace SireMM
             CLJGridCalculator()
                 : atoms(0), grid_info(0), cljfunc(0), gridpot(0), use_box(false)
             {}
-            
+
             CLJGridCalculator(const CLJAtoms &_atoms, const GridInfo &_grid_info,
                               const CLJFunction &_cljfunc, float *_gridpot)
                 : atoms(&_atoms), grid_info(&_grid_info), cljfunc(&_cljfunc),
                   gridpot(_gridpot), use_box(_cljfunc.use_box)
             {}
-            
+
             ~CLJGridCalculator()
             {}
-            
+
             void operator()(const tbb::blocked_range<int> &range) const
             {
                 if (use_box)
@@ -483,7 +497,7 @@ namespace SireMM
                                          &(gridpot[range.begin()]));
                 }
             }
-            
+
         private:
             const CLJAtoms* const atoms;
             const GridInfo* const grid_info;
@@ -500,13 +514,13 @@ namespace SireMM
 QVector<float> CLJFunction::calculate(const CLJAtoms &atoms, const GridInfo &gridinfo) const
 {
     QVector<float> gridpot( gridinfo.nPoints(), 0.0 );
-    
+
     if (this->supportsGridCalculation() and not gridinfo.isEmpty())
     {
         SireMM::detail::CLJGridCalculator calc(atoms, gridinfo, *this, gridpot.data());
         tbb::parallel_for(tbb::blocked_range<int>(0,gridinfo.nPoints(),4096), calc);
     }
-    
+
     return gridpot;
 }
 
@@ -735,13 +749,13 @@ void CLJFunction::operator()(const CLJBoxes &atoms, double &cnrg, double &ljnrg)
 {
     cnrg = 0;
     ljnrg = 0;
-    
+
     if (this->hasCutoff())
     {
         const float min_cutoff = qMax( this->coulombCutoff(), this->ljCutoff() );
-    
+
         const CLJBoxes::Container &boxes = atoms.occupiedBoxes();
-    
+
         for (CLJBoxes::const_iterator it0 = boxes.constBegin();
              it0 != boxes.constEnd();
              ++it0)
@@ -750,26 +764,26 @@ void CLJFunction::operator()(const CLJBoxes &atoms, double &cnrg, double &ljnrg)
 
             //calculate the self-energy of the box
             this->total(it0->read().atoms(), icnrg, iljnrg);
-        
+
             cnrg += icnrg;
             ljnrg += iljnrg;
-        
+
             //now calculate its interaction with all other boxes
             CLJBoxes::const_iterator it1 = it0;
-        
+
             const CLJBoxIndex &idx0 = it0->read().index();
-        
+
             for (++it1; it1 != boxes.constEnd(); ++it1)
             {
                 const CLJBoxIndex &idx1 = it1->read().index();
-            
+
                 float mindist = atoms.getDistance(spce.read(), idx0, idx1);
-            
+
                 if (mindist < min_cutoff)
                 {
                     this->total(it0->read().atoms(), it1->read().atoms(),
                                 icnrg, iljnrg, mindist);
-                    
+
                     cnrg += icnrg;
                     ljnrg += iljnrg;
                 }
@@ -779,7 +793,7 @@ void CLJFunction::operator()(const CLJBoxes &atoms, double &cnrg, double &ljnrg)
     else
     {
         const CLJBoxes::Container &boxes = atoms.occupiedBoxes();
-    
+
         for (CLJBoxes::const_iterator it0 = boxes.constBegin();
              it0 != boxes.constEnd();
              ++it0)
@@ -788,18 +802,18 @@ void CLJFunction::operator()(const CLJBoxes &atoms, double &cnrg, double &ljnrg)
 
             //calculate the self-energy of the box
             this->total(it0->read().atoms(), icnrg, iljnrg);
-        
+
             cnrg += icnrg;
             ljnrg += iljnrg;
-        
+
             //now calculate its interaction with all other boxes
             CLJBoxes::const_iterator it1 = it0;
-        
+
             for (++it1; it1 != boxes.constEnd(); ++it1)
             {
                 this->total(it0->read().atoms(), it1->read().atoms(),
                             icnrg, iljnrg);
-                
+
                 cnrg += icnrg;
                 ljnrg += iljnrg;
             }
@@ -814,35 +828,35 @@ void CLJFunction::operator()(const CLJBoxes &atoms0, const CLJBoxes &atoms1,
 {
     cnrg = 0;
     ljnrg = 0;
-    
+
     if (this->hasCutoff() and atoms0.length() == atoms1.length())
     {
         const CLJBoxes::Container &boxes0 = atoms0.occupiedBoxes();
         const CLJBoxes::Container &boxes1 = atoms1.occupiedBoxes();
-        
+
         const float min_cutoff = qMax(this->coulombCutoff(), this->ljCutoff());
-        
+
         for (CLJBoxes::const_iterator it0 = boxes0.constBegin();
              it0 != boxes0.constEnd();
              ++it0)
         {
             const CLJBoxIndex &idx0 = it0->read().index();
-        
+
             for (CLJBoxes::const_iterator it1 = boxes1.constBegin();
                  it1 != boxes1.constEnd();
                  ++it1)
             {
                 double icnrg(0), iljnrg(0);
                 const CLJBoxIndex &idx1 = it1->read().index();
-                
+
                 const float mindist = atoms0.getDistance(spce.read(), idx0, idx1);
-                
+
                 if (mindist < min_cutoff)
                 {
                     this->operator()(it0->read().atoms(), it1->read().atoms(),
                                      icnrg, iljnrg, mindist);
                 }
-                
+
                 cnrg += icnrg;
                 ljnrg += iljnrg;
             }
@@ -852,7 +866,7 @@ void CLJFunction::operator()(const CLJBoxes &atoms0, const CLJBoxes &atoms1,
     {
         const CLJBoxes::Container &boxes0 = atoms0.occupiedBoxes();
         const CLJBoxes::Container &boxes1 = atoms1.occupiedBoxes();
-        
+
         for (CLJBoxes::const_iterator it0 = boxes0.constBegin();
              it0 != boxes0.constEnd();
              ++it0)
@@ -862,10 +876,10 @@ void CLJFunction::operator()(const CLJBoxes &atoms0, const CLJBoxes &atoms1,
                  ++it1)
             {
                 double icnrg(0), iljnrg(0);
-                
+
                 this->operator()(it0->read().atoms(), it1->read().atoms(),
                                  icnrg, iljnrg);
-                
+
                 cnrg += icnrg;
                 ljnrg += iljnrg;
             }
@@ -880,7 +894,7 @@ void CLJFunction::operator()(const CLJAtoms &atoms0, const CLJBoxes &atoms1,
 {
     cnrg = 0;
     ljnrg = 0;
-    
+
     if (this->hasCutoff())
     {
         this->operator()( CLJBoxes(atoms0, atoms1.length()), atoms1, cnrg, ljnrg );
@@ -888,16 +902,16 @@ void CLJFunction::operator()(const CLJAtoms &atoms0, const CLJBoxes &atoms1,
     else
     {
         const CLJBoxes::Container &boxes1 = atoms1.occupiedBoxes();
-        
+
         for (CLJBoxes::const_iterator it1 = boxes1.constBegin();
              it1 != boxes1.constEnd();
              ++it1)
         {
             double icnrg(0), iljnrg(0);
-            
+
             this->operator()(atoms0, it1->read().atoms(),
                              icnrg, iljnrg);
-            
+
             cnrg += icnrg;
             ljnrg += iljnrg;
         }
@@ -1151,16 +1165,16 @@ CLJFunction::multiCalculate(const QVector<CLJFunctionPtr> &funcs, const CLJAtoms
 {
     if (funcs.isEmpty())
         return tuple< QVector<double>,QVector<double> >();
-    
+
     QVector<double> cnrgs(funcs.count()), ljnrgs(funcs.count());
-    
+
     for (int i=0; i<funcs.count(); ++i)
     {
         tuple<double,double> nrgs = funcs.constData()[i].read().calculate(atoms);
         cnrgs[i] = nrgs.get<0>();
         ljnrgs[i] = nrgs.get<1>();
     }
-    
+
     return tuple< QVector<double>,QVector<double> >(cnrgs, ljnrgs);
 }
 
@@ -1171,9 +1185,9 @@ CLJFunction::multiCalculate(const QVector<CLJFunctionPtr> &funcs,
 {
     if (funcs.isEmpty())
         return tuple< QVector<double>,QVector<double> >();
-    
+
     QVector<double> cnrgs(funcs.count()), ljnrgs(funcs.count());
-    
+
     for (int i=0; i<funcs.count(); ++i)
     {
         tuple<double,double> nrgs = funcs.constData()[i].read()
@@ -1181,7 +1195,7 @@ CLJFunction::multiCalculate(const QVector<CLJFunctionPtr> &funcs,
         cnrgs[i] = nrgs.get<0>();
         ljnrgs[i] = nrgs.get<1>();
     }
-    
+
     return tuple< QVector<double>,QVector<double> >(cnrgs, ljnrgs);
 }
 
@@ -1190,16 +1204,16 @@ CLJFunction::multiCalculate(const QVector<CLJFunctionPtr> &funcs, const CLJBoxes
 {
     if (funcs.isEmpty())
         return tuple< QVector<double>,QVector<double> >();
-    
+
     QVector<double> cnrgs(funcs.count()), ljnrgs(funcs.count());
-    
+
     for (int i=0; i<funcs.count(); ++i)
     {
         tuple<double,double> nrgs = funcs.constData()[i].read().calculate(atoms);
         cnrgs[i] = nrgs.get<0>();
         ljnrgs[i] = nrgs.get<1>();
     }
-    
+
     return tuple< QVector<double>,QVector<double> >(cnrgs, ljnrgs);
 }
 
@@ -1209,16 +1223,16 @@ CLJFunction::multiCalculate(const QVector<CLJFunctionPtr> &funcs,
 {
     if (funcs.isEmpty())
         return tuple< QVector<double>,QVector<double> >();
-    
+
     QVector<double> cnrgs(funcs.count()), ljnrgs(funcs.count());
-    
+
     for (int i=0; i<funcs.count(); ++i)
     {
         tuple<double,double> nrgs = funcs.constData()[i].read().calculate(atoms0, atoms1);
         cnrgs[i] = nrgs.get<0>();
         ljnrgs[i] = nrgs.get<1>();
     }
-    
+
     return tuple< QVector<double>,QVector<double> >(cnrgs, ljnrgs);
 }
 
@@ -1228,16 +1242,16 @@ CLJFunction::multiCalculate(const QVector<CLJFunctionPtr> &funcs,
 {
     if (funcs.isEmpty())
         return tuple< QVector<double>,QVector<double> >();
-    
+
     QVector<double> cnrgs(funcs.count()), ljnrgs(funcs.count());
-    
+
     for (int i=0; i<funcs.count(); ++i)
     {
         tuple<double,double> nrgs = funcs.constData()[i].read().calculate(atoms0, atoms1);
         cnrgs[i] = nrgs.get<0>();
         ljnrgs[i] = nrgs.get<1>();
     }
-    
+
     return tuple< QVector<double>,QVector<double> >(cnrgs, ljnrgs);
 }
 
@@ -1250,23 +1264,23 @@ static const RegisterMetaType<NullCLJFunction> r_nullfunc;
 QDataStream &operator<<(QDataStream &ds, const NullCLJFunction &nullfunc)
 {
     writeHeader(ds, r_nullfunc, 1);
-    
+
     ds << static_cast<const CLJFunction&>(nullfunc);
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, NullCLJFunction &nullfunc)
 {
     VersionID v = readHeader(ds, r_nullfunc);
-    
+
     if (v == 1)
     {
         ds >> static_cast<CLJFunction&>(nullfunc);
     }
     else
         throw version_error(v, "1", r_nullfunc, CODELOC);
-    
+
     return ds;
 }
 
@@ -1311,7 +1325,7 @@ const char* NullCLJFunction::what() const
 {
     return NullCLJFunction::typeName();
 }
-    
+
 void NullCLJFunction::calcVacEnergyAri(const CLJAtoms &atoms,
                                       double &cnrg, double &ljnrg) const
 {
@@ -1380,17 +1394,17 @@ static const RegisterMetaType<CLJCutoffFunction> r_cutoff(MAGIC_ONLY,
 QDataStream &operator<<(QDataStream &ds, const CLJCutoffFunction &func)
 {
     writeHeader(ds, r_cutoff, 1);
-    
+
     ds << func.coul_cutoff << func.lj_cutoff
        << static_cast<const CLJFunction&>(func);
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, CLJCutoffFunction &func)
 {
     VersionID v = readHeader(ds, r_cutoff);
-    
+
     if (v == 1)
     {
         ds >> func.coul_cutoff >> func.lj_cutoff
@@ -1398,7 +1412,7 @@ QDataStream &operator>>(QDataStream &ds, CLJCutoffFunction &func)
     }
     else
         throw version_error(v, "1", r_cutoff, CODELOC);
-    
+
     return ds;
 }
 
@@ -1510,7 +1524,7 @@ CLJCutoffFunction& CLJCutoffFunction::operator=(const CLJCutoffFunction &other)
         lj_cutoff = other.lj_cutoff;
         CLJFunction::operator=(other);
     }
-    
+
     return *this;
 }
 
@@ -1537,12 +1551,12 @@ QString CLJCutoffFunction::toString() const
 Properties CLJCutoffFunction::properties() const
 {
     Properties props = CLJFunction::properties();
-    
+
     props.setProperty( "coulombCutoff", LengthProperty( Length(coul_cutoff) ) );
     props.setProperty( "ljCutoff", LengthProperty( Length(lj_cutoff) ) );
     props.setProperty( "switchingFunction", HarmonicSwitchingFunction( Length(coul_cutoff),
                                                                        Length(lj_cutoff) ) );
-    
+
     return props;
 }
 
@@ -1569,7 +1583,7 @@ CLJFunctionPtr CLJCutoffFunction::setProperty(const QString &name, const Propert
     {
         ret = CLJFunction::setProperty(name, value);
     }
-    
+
     return ret;
 }
 
@@ -1652,35 +1666,35 @@ static const RegisterMetaType<CLJIntraFunction> r_intra(MAGIC_ONLY, CLJIntraFunc
 QDataStream &operator<<(QDataStream &ds, const CLJIntraFunction &func)
 {
     writeHeader(ds, r_intra, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << func.cty
         << static_cast<const CLJCutoffFunction&>(func);
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, CLJIntraFunction &func)
 {
     VersionID v = readHeader(ds, r_intra);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
         func.bond_matrix.clear();
         func.cty = Connectivity();
-        
+
         Connectivity connectivity;
-        
+
         sds >> connectivity
             >> static_cast<CLJCutoffFunction&>(func);
-        
+
         func.setConnectivity(connectivity);
     }
     else
         throw version_error(v, "1", r_intra, CODELOC);
-    
+
     return ds;
 }
 
@@ -1751,7 +1765,7 @@ CLJIntraFunction& CLJIntraFunction::operator=(const CLJIntraFunction &other)
         bond_matrix = other.bond_matrix;
         CLJCutoffFunction::operator=(other);
     }
-    
+
     return *this;
 }
 
@@ -1765,9 +1779,9 @@ bool CLJIntraFunction::operator==(const CLJIntraFunction &other) const
 Properties CLJIntraFunction::properties() const
 {
     Properties props = CLJCutoffFunction::properties();
-    
+
     props.setProperty( "connectivity", cty );
-    
+
     return props;
 }
 
@@ -1784,7 +1798,7 @@ CLJFunctionPtr CLJIntraFunction::setProperty(const QString &name, const Property
     {
         ret = CLJCutoffFunction::setProperty(name, value);
     }
-    
+
     return ret;
 }
 
@@ -1827,13 +1841,13 @@ void CLJIntraFunction::setConnectivity(const Connectivity &c)
             bond_matrix.prepend( QVector<bool>(bond_matrix.count() + 1, false) );
 
             bond_matrix[0].squeeze();
-            
+
             for (int i=1; i<bond_matrix.count(); ++i)
             {
                 bond_matrix[i].prepend(false);
                 bond_matrix[i].squeeze();
             }
-            
+
             bond_matrix.squeeze();
         }
     }
@@ -1851,22 +1865,22 @@ bool CLJIntraFunction::isNotBonded(const QVector<MultiInt> &ids0,
 {
     const int nats0 = ids0.count();
     const int nats1 = ids1.count();
-    
+
     const MultiInt *aid0 = ids0.constData();
     const MultiInt *aid1 = ids1.constData();
-    
+
     for (int i=0; i<nats0; ++i)
     {
         const MultiInt &id0 = aid0[i];
-    
+
         for (int ii=0; ii<MultiInt::count(); ++ii)
         {
             const bool *row = bond_matrix.constData()[ id0[ii] ].constData();
-            
+
             for (int j=0; j<nats1; ++j)
             {
                 const MultiInt &id1 = aid1[j];
-                
+
                 for (int jj=0; jj<MultiInt::count(); ++jj)
                 {
                     if (row[id1[jj]])
@@ -1874,15 +1888,15 @@ bool CLJIntraFunction::isNotBonded(const QVector<MultiInt> &ids0,
                 }
             }
         }
-    
+
         /*for (int j=0; j<nats1; ++j)
         {
             const MultiInt &id1 = aid1[j];
-            
+
             for (int ii=0; ii<MultiInt::count(); ++ii)
             {
                 const QVector<bool> &row = bond_matrix.constData()[ id0[ii] ];
-            
+
                 for (int jj=0; jj<MultiInt::count(); ++jj)
                 {
                     if (row.constData()[ id1[jj] ])
@@ -1893,7 +1907,7 @@ bool CLJIntraFunction::isNotBonded(const QVector<MultiInt> &ids0,
             }
         }*/
     }
-    
+
     return true;
 }
 
@@ -1906,17 +1920,17 @@ static const RegisterMetaType<CLJSoftFunction> r_soft(MAGIC_ONLY, CLJSoftFunctio
 QDataStream &operator<<(QDataStream &ds, const CLJSoftFunction &func)
 {
     writeHeader(ds, r_soft, 1);
-    
+
     ds << func.alpha_value << func.shift_delta << func.coulomb_power
        << static_cast<const CLJCutoffFunction&>(func);
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, CLJSoftFunction &func)
 {
     VersionID v = readHeader(ds, r_soft);
-    
+
     if (v == 1)
     {
         ds >> func.alpha_value >> func.shift_delta >> func.coulomb_power
@@ -1924,7 +1938,7 @@ QDataStream &operator>>(QDataStream &ds, CLJSoftFunction &func)
     }
     else
         throw version_error(v, "1", r_soft, CODELOC);
-    
+
     return ds;
 }
 
@@ -1994,7 +2008,7 @@ CLJSoftFunction& CLJSoftFunction::operator=(const CLJSoftFunction &other)
         coulomb_power = other.coulomb_power;
         CLJCutoffFunction::operator=(other);
     }
-    
+
     return *this;
 }
 
@@ -2022,11 +2036,11 @@ bool CLJSoftFunction::isSoftened() const
 Properties CLJSoftFunction::properties() const
 {
     Properties props = CLJCutoffFunction::properties();
-    
+
     props.setProperty( "alpha", NumberProperty(alpha_value) );
     props.setProperty( "shiftDelta", NumberProperty(shift_delta) );
     props.setProperty( "coulombPower", NumberProperty(coulomb_power) );
-    
+
     return props;
 }
 
@@ -2054,7 +2068,7 @@ CLJFunctionPtr CLJSoftFunction::setProperty(const QString &name, const Property 
     {
         ret = CLJCutoffFunction::setProperty(name, value);
     }
-    
+
     return ret;
 }
 
@@ -2087,7 +2101,7 @@ bool CLJSoftFunction::containsProperty(const QString &name) const
 }
 
 /** Return the soft-core alpha value. A value of 0 is a completely hard
-    potential, while increasing values of alpha will increasingly soften 
+    potential, while increasing values of alpha will increasingly soften
     the potential */
 float CLJSoftFunction::alpha() const
 {
@@ -2112,7 +2126,7 @@ void CLJSoftFunction::pvt_set(float alpha, float shift, float power)
 {
     if (alpha < 0)
         alpha = 0;
-    
+
     if (shift < 0)
         shift = 0;
 
@@ -2124,7 +2138,7 @@ void CLJSoftFunction::pvt_set(float alpha, float shift, float power)
                     "you have a non-integer coulomb power (alpha = %1, coulomb power = %2)")
                         .arg(alpha).arg(power), CODELOC );
     }
-    
+
     alpha_value = alpha;
     shift_delta = shift;
     coulomb_power = power;
@@ -2175,17 +2189,17 @@ static const RegisterMetaType<CLJSoftIntraFunction> r_softintra(MAGIC_ONLY,
 QDataStream &operator<<(QDataStream &ds, const CLJSoftIntraFunction &func)
 {
     writeHeader(ds, r_softintra, 1);
-    
+
     ds << func.alpha_value << func.shift_delta << func.coulomb_power
        << static_cast<const CLJIntraFunction&>(func);
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, CLJSoftIntraFunction &func)
 {
     VersionID v = readHeader(ds, r_softintra);
-    
+
     if (v == 1)
     {
         ds >> func.alpha_value >> func.shift_delta >> func.coulomb_power
@@ -2193,7 +2207,7 @@ QDataStream &operator>>(QDataStream &ds, CLJSoftIntraFunction &func)
     }
     else
         throw version_error(v, "1", r_softintra, CODELOC);
-    
+
     return ds;
 }
 
@@ -2262,7 +2276,7 @@ CLJSoftIntraFunction& CLJSoftIntraFunction::operator=(const CLJSoftIntraFunction
         coulomb_power = other.coulomb_power;
         CLJIntraFunction::operator=(other);
     }
-    
+
     return *this;
 }
 
@@ -2290,11 +2304,11 @@ bool CLJSoftIntraFunction::isSoftened() const
 Properties CLJSoftIntraFunction::properties() const
 {
     Properties props = CLJIntraFunction::properties();
-    
+
     props.setProperty( "alpha", NumberProperty(alpha_value) );
     props.setProperty( "shiftDelta", NumberProperty(shift_delta) );
     props.setProperty( "coulombPower", NumberProperty(coulomb_power) );
-    
+
     return props;
 }
 
@@ -2322,7 +2336,7 @@ CLJFunctionPtr CLJSoftIntraFunction::setProperty(const QString &name, const Prop
     {
         ret = CLJIntraFunction::setProperty(name, value);
     }
-    
+
     return ret;
 }
 
@@ -2355,7 +2369,7 @@ bool CLJSoftIntraFunction::containsProperty(const QString &name) const
 }
 
 /** Return the soft-core alpha value. A value of 0 is a completely hard
-    potential, while increasing values of alpha will increasingly soften 
+    potential, while increasing values of alpha will increasingly soften
     the potential */
 float CLJSoftIntraFunction::alpha() const
 {
@@ -2397,7 +2411,7 @@ void CLJSoftIntraFunction::pvt_set(float alpha, float shift, float power)
 {
     if (alpha < 0)
         alpha = 0;
-    
+
     if (shift < 0)
         shift = 0;
 
@@ -2409,7 +2423,7 @@ void CLJSoftIntraFunction::pvt_set(float alpha, float shift, float power)
                     "you have a non-integer coulomb power (alpha = %1, coulomb power = %2)")
                         .arg(alpha).arg(power), CODELOC );
     }
-    
+
     alpha_value = alpha;
     shift_delta = shift;
     coulomb_power = power;

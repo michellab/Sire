@@ -13,6 +13,7 @@
 #include "patching.h"
 #include "periodicbox.h"
 #include "space.h"
+#include "triclinicbox.h"
 
 #endif
 

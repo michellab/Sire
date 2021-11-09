@@ -65,6 +65,8 @@ namespace bp = boost::python;
 
 #include "SireVol/periodicbox.h"
 
+#include "SireVol/triclinicbox.h"
+
 #include "ensemble.h"
 
 #include "openmmfrenergyst.h"
@@ -203,6 +205,17 @@ void register_OpenMMFrEnergyST_class(){
             OpenMMFrEnergyST_exposer.def( 
                 "getCMMremovalFrequency"
                 , getCMMremovalFrequency_function_value
+                , "" );
+        
+        }
+        { //::SireMove::OpenMMFrEnergyST::getCombiningRules
+        
+            typedef ::QString ( ::SireMove::OpenMMFrEnergyST::*getCombiningRules_function_type)(  ) ;
+            getCombiningRules_function_type getCombiningRules_function_value( &::SireMove::OpenMMFrEnergyST::getCombiningRules );
+            
+            OpenMMFrEnergyST_exposer.def( 
+                "getCombiningRules"
+                , getCombiningRules_function_value
                 , "" );
         
         }
@@ -624,6 +637,18 @@ void register_OpenMMFrEnergyST_class(){
                 , setCMMremovalFrequency_function_value
                 , ( bp::arg("arg0") )
                 , "Set the Center of Mass motion removal frequency" );
+        
+        }
+        { //::SireMove::OpenMMFrEnergyST::setCombiningRules
+        
+            typedef void ( ::SireMove::OpenMMFrEnergyST::*setCombiningRules_function_type)( ::QString ) ;
+            setCombiningRules_function_type setCombiningRules_function_value( &::SireMove::OpenMMFrEnergyST::setCombiningRules );
+            
+            OpenMMFrEnergyST_exposer.def( 
+                "setCombiningRules"
+                , setCombiningRules_function_value
+                , ( bp::arg("arg0") )
+                , "Set the combining rules type: arithmetic, geometric" );
         
         }
         { //::SireMove::OpenMMFrEnergyST::setConstraintType

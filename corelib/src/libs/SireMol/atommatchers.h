@@ -30,6 +30,7 @@
 #define SIREMOL_ATOMMATCHERS_H
 
 #include "atommatcher.h"
+#include "residx.h"
 
 SIRE_BEGIN_HEADER
 
@@ -42,6 +43,7 @@ class AtomIDMatcher;
 class AtomMultiMatcher;
 class AtomMCSMatcher;
 class ResIdxAtomNameMatcher;
+class ResNumAtomNameMatcher;
 class ResIdxAtomMCSMatcher;
 class ResIdxAtomCoordMatcher;
 }
@@ -63,6 +65,9 @@ SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomMCSMatcher&);
 
 SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomNameMatcher&);
 SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomNameMatcher&);
+
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResNumAtomNameMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResNumAtomNameMatcher&);
 
 SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomMCSMatcher&);
 SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomMCSMatcher&);
@@ -408,6 +413,47 @@ protected:
                                      const PropertyMap &map1) const;
 };
 
+/** Match atoms by name within each residue (by number rather than index).
+
+    @author Lester Hedges
+*/
+class SIREMOL_EXPORT ResNumAtomNameMatcher
+         : public SireBase::ConcreteProperty<ResNumAtomNameMatcher,AtomMatcher>
+{
+
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ResNumAtomNameMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ResNumAtomNameMatcher&);
+
+public:
+    ResNumAtomNameMatcher();
+    ResNumAtomNameMatcher(const ResNumAtomNameMatcher&);
+
+    ~ResNumAtomNameMatcher();
+
+    static const char* typeName();
+
+    const char* what() const
+    {
+        return ResNumAtomNameMatcher::typeName();
+    }
+
+    ResNumAtomNameMatcher& operator=(const ResNumAtomNameMatcher &other);
+
+    bool operator==(const ResNumAtomNameMatcher &other) const;
+    bool operator!=(const ResNumAtomNameMatcher &other) const;
+
+    QString toString() const;
+
+protected:
+    QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeInfoData &molinfo0,
+                                     const MoleculeInfoData &molinfo1) const;
+
+    QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeView &molview0,
+                                     const PropertyMap &map0,
+                                     const MoleculeView &molview1,
+                                     const PropertyMap &map1) const;
+};
+
 /** Match atoms by name MCS within each residue.
 
     @author Lester Hedges
@@ -501,6 +547,7 @@ friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ResIdxAtomCoordMat
 
 public:
     ResIdxAtomCoordMatcher();
+    ResIdxAtomCoordMatcher(ResIdx res_idx_offset);
     ResIdxAtomCoordMatcher(const ResIdxAtomCoordMatcher&);
 
     ~ResIdxAtomCoordMatcher();
@@ -524,6 +571,8 @@ protected:
                                      const PropertyMap &map0,
                                      const MoleculeView &molview1,
                                      const PropertyMap &map1) const;
+
+    ResIdx res_idx_offset;
 };
 
 }
@@ -534,6 +583,7 @@ Q_DECLARE_METATYPE( SireMol::AtomIDMatcher )
 Q_DECLARE_METATYPE( SireMol::AtomMultiMatcher )
 Q_DECLARE_METATYPE( SireMol::AtomMCSMatcher )
 Q_DECLARE_METATYPE( SireMol::ResIdxAtomNameMatcher )
+Q_DECLARE_METATYPE( SireMol::ResNumAtomNameMatcher )
 Q_DECLARE_METATYPE( SireMol::ResIdxAtomMCSMatcher )
 Q_DECLARE_METATYPE( SireMol::ResIdxAtomCoordMatcher )
 
@@ -543,6 +593,7 @@ SIRE_EXPOSE_CLASS( SireMol::AtomIDMatcher )
 SIRE_EXPOSE_CLASS( SireMol::AtomMultiMatcher )
 SIRE_EXPOSE_CLASS( SireMol::AtomMCSMatcher )
 SIRE_EXPOSE_CLASS( SireMol::ResIdxAtomNameMatcher )
+SIRE_EXPOSE_CLASS( SireMol::ResNumAtomNameMatcher )
 SIRE_EXPOSE_CLASS( SireMol::ResIdxAtomMCSMatcher )
 SIRE_EXPOSE_CLASS( SireMol::ResIdxAtomCoordMatcher )
 

@@ -103,6 +103,7 @@ public:
     }
 
     QString toString() const;
+    QString toCONECT(int offset=0) const;
 
     MoleculeInfo info() const;
 

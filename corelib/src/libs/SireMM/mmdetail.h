@@ -46,7 +46,7 @@ namespace SireMM
 
 /** This class holds most of the data the describes different types
     of molecular mechanics forcefields, e.g. Amber FF99, OPLS etc.
-    
+
     @author Christopher Woods
 */
 class SIREMM_EXPORT MMDetail : public SireBase::ConcreteProperty<MMDetail,SireFF::FFDetail>
@@ -62,50 +62,51 @@ public:
              QString elecstyle, QString vdwstyle,
              QString bondstyle, QString anglestyle,
              QString dihedralstyle);
-    
+
     MMDetail(const MMDetail &other);
-    
+
     ~MMDetail();
-    
+
     MMDetail& operator=(const MMDetail &other);
-    
+
     bool operator==(const MMDetail &other) const;
     bool operator!=(const MMDetail &other) const;
-    
+
     MMDetail* clone() const;
-    
+
     static const char* typeName();
     const char* what() const;
-    
+
     QString toString() const;
-    
+
     QString combiningRules() const;
     bool usesArithmeticCombiningRules() const;
     bool usesGeometricCombiningRules() const;
-    
+
     double electrostatic14ScaleFactor() const;
     double vdw14ScaleFactor() const;
-    
+
     bool usesCoulombCharges() const;
     QString electrostaticStyle() const;
-    
+
     bool usesLJTerm() const;
     bool usesBuckinghamTerm() const;
     QString vdwStyle() const;
-    
+
     bool usesHarmonicBonds() const;
     QString bondStyle() const;
-    
+
     bool usesHarmonicAngles() const;
     QString angleStyle() const;
-    
+
     bool usesCosineDihedrals() const;
     QString dihedralStyle() const;
-    
+
     bool isAmberStyle() const;
-    
+    bool isOPLS() const;
+
     bool isCompatibleWith(const FFDetail &other) const;
-    
+
     static MMDetail guessFrom(QString combrule, QString elecstyle, QString vdwstyle,
                               double elec14, double vdw14, QString bondstyle,
                               QString anglestyle, QString dihedralstyle);

@@ -4,7 +4,7 @@
 #
 ########################################
 
-# these are all simple executables that will be 
+# these are all simple executables that will be
 # used to test for features in a machine before install
 
 check_include_files( gnu/libc-version.h HAVE_LIBC_VERSION_H )

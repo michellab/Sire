@@ -34,14 +34,19 @@
 #include "SireError/errors.h"
 
 #include "SireMol/atomelements.h"
+#include "SireMol/atomelements.h"
 #include "SireMol/moleditor.h"
 #include "SireMol/molidx.h"
+
+#include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 
 #include "SireSystem/system.h"
 
 using namespace SireBase;
 using namespace SireMaths;
 using namespace SireMol;
+using namespace SireVol;
 
 namespace SireIO
 {
@@ -53,10 +58,11 @@ SelectResult setAmberWater(const SelectResult& molecules, const QString& model, 
 
     // Create a hash between the allowed model names and their templace files.
     QHash<QString, QString> models;
-    models["SPC"] = getShareDir() + "/templates/water/spce";
-    models["SPCE"] = getShareDir() + "/templates/water/spce";
+    models["SPC"]   = getShareDir() + "/templates/water/spce";
+    models["SPCE"]  = getShareDir() + "/templates/water/spce";
     models["TIP3P"] = getShareDir() + "/templates/water/tip3p";
     models["TIP4P"] = getShareDir() + "/templates/water/tip4pew";
+    models["TIP5P"] = getShareDir() + "/templates/water/tip5p";
 
     // Make sure the user has passed a valid water model.
     if (not models.contains(_model))
@@ -67,7 +73,7 @@ SelectResult setAmberWater(const SelectResult& molecules, const QString& model, 
 
     // Flag whether the water model has virtual atoms.
     bool has_virtual = false;
-    if (_model == "TIP4P")
+    if ((_model == "TIP4P") or (_model == "TIP5P"))
         has_virtual = true;
 
     // Extract the water model template path.
@@ -134,25 +140,168 @@ SelectResult setAmberWater(const SelectResult& molecules, const QString& model, 
                 coord_oxygen = water.atom(idx).property<Vector>(map["coordinates"]);
         }
 
+        // When computing bond potentials for water molecules, AMBER requires
+        // that the hydrogen atoms are un-imaged, i.e. close to the oxygen atom.
+        // Tools such as gmx trjconv do image water hydrogens, so we need to
+        // correct for this.
+
+        // Has the user passed in a "space" property? If so, use this to work
+        // get the box dimensions.
+        if (map["space"] != "space")
+        {
+            // Extract the space property.
+            auto space = map["space"];
+
+            // A vector to hold the box dimensions.
+            Vector box_dims;
+
+            //write out the box dimensions
+            if (space.value().isA<PeriodicBox>())
+            {
+                const auto dims = space.value().asA<PeriodicBox>().dimensions();
+
+                box_dims.setX(dims.x());
+                box_dims.setY(dims.y());
+                box_dims.setZ(dims.z());
+            }
+            else if (space.value().isA<TriclinicBox>())
+            {
+                const auto v0 = space.value().asA<TriclinicBox>().vector0();
+                const auto v1 = space.value().asA<TriclinicBox>().vector1();
+                const auto v2 = space.value().asA<TriclinicBox>().vector2();
+
+                box_dims.setX(v0.magnitude());
+                box_dims.setY(v1.magnitude());
+                box_dims.setZ(v2.magnitude());
+            }
+
+            // Work out separation vector betwen oxygen and first hydrogen.
+            auto sep = coord_hydrogen0 - coord_oxygen;
+
+            // Shift coordinates if separation components exceed half of box.
+
+            // X
+            if (std::abs(sep.x()) > 0.5*box_dims.x())
+            {
+                if (sep.x() < 0)
+                {
+                    coord_hydrogen0.setX(coord_hydrogen0.x() + box_dims.x());
+                }
+                else
+                {
+                    coord_hydrogen0.setX(coord_hydrogen0.x() - box_dims.x());
+                }
+            }
+            // Y
+            if (std::abs(sep.y()) > 0.5*box_dims.y())
+            {
+                if (sep.y() < 0)
+                {
+                    coord_hydrogen0.setY(coord_hydrogen0.y() + box_dims.y());
+                }
+                else
+                {
+                    coord_hydrogen0.setY(coord_hydrogen0.y() - box_dims.y());
+                }
+            }
+            // Z
+            if (std::abs(sep.z()) > 0.5*box_dims.z())
+            {
+                if (sep.z() < 0)
+                {
+                    coord_hydrogen0.setZ(coord_hydrogen0.z() + box_dims.z());
+                }
+                else
+                {
+                    coord_hydrogen0.setZ(coord_hydrogen0.z() - box_dims.z());
+                }
+            }
+
+            // Now do the same for the second hydrogen.
+
+            sep = coord_hydrogen1 - coord_oxygen;
+
+            // X
+            if (std::abs(sep.x()) > 0.5*box_dims.x())
+            {
+                if (sep.x() < 0)
+                {
+                    coord_hydrogen1.setX(coord_hydrogen1.x() + box_dims.x());
+                }
+                else
+                {
+                    coord_hydrogen1.setX(coord_hydrogen1.x() - box_dims.x());
+                }
+            }
+            // Y
+            if (std::abs(sep.y()) > 0.5*box_dims.y())
+            {
+                if (sep.y() < 0)
+                {
+                    coord_hydrogen1.setY(coord_hydrogen1.y() + box_dims.y());
+                }
+                else
+                {
+                    coord_hydrogen1.setY(coord_hydrogen1.y() - box_dims.y());
+                }
+            }
+            // Z
+            if (std::abs(sep.z()) > 0.5*box_dims.z())
+            {
+                if (sep.z() < 0)
+                {
+                    coord_hydrogen1.setZ(coord_hydrogen1.z() + box_dims.z());
+                }
+                else
+                {
+                    coord_hydrogen1.setZ(coord_hydrogen1.z() - box_dims.z());
+                }
+            }
+        }
+
         // Replace the atomic coordinates in the template.
         edit_mol = edit_mol.atom(AtomIdx(0)).setProperty(map["coordinates"], coord_oxygen).molecule();
         edit_mol = edit_mol.atom(AtomIdx(1)).setProperty(map["coordinates"], coord_hydrogen0).molecule();
         edit_mol = edit_mol.atom(AtomIdx(2)).setProperty(map["coordinates"], coord_hydrogen1).molecule();
 
-        // Work out coordinates of virtual site.
+        // Work out coordinates of virtual site(s).
         if (has_virtual)
         {
-            double a = 0.128012065;
-            double b = 0.128012065;
+            // TIP4P
+            if (_model == "TIP4P")
+            {
+                double a = 0.128012065;
 
-            // Expression taken from GROMACS TIP4P topology file.
-            // Vsite pos x4 = x1 + a*(x2-x1) + b*(x3-x1)
-            // x1 = oxygen, x2 = hydrogen 1, x3 = hydrogn 2
+                // Expression taken from GROMACS TIP4P topology file.
+                // Vsite pos x4 = x1 + a*(x2-x1) + a*(x3-x1)
+                // x1 = oxygen, x2 = hydrogen 1, x3 = hydrogn 2
 
-            auto coord_virtual = coord_oxygen + a*(coord_hydrogen0 - coord_oxygen)
-                                              + b*(coord_hydrogen1 - coord_oxygen);
+                auto coord_virtual = coord_oxygen + a*(coord_hydrogen0 - coord_oxygen)
+                                                  + a*(coord_hydrogen1 - coord_oxygen);
 
-            edit_mol = edit_mol.atom(AtomIdx(3)).setProperty(map["coordinates"], coord_virtual).molecule();
+                edit_mol = edit_mol.atom(AtomIdx(3)).setProperty(map["coordinates"], coord_virtual).molecule();
+            }
+
+            // TIP5P
+            else
+            {
+                double a = -0.344908262;
+                double b = -6.4437903493 / 10.0;
+
+                // Expression taken from GROMACS TIP5P topology file.
+                // Vsite pos x4 = x1 + a*(x2-x1) + a*(x3-x1) + b*((x2-x1) x (x3-x1))
+                // Vsite pos x5 = x1 + a*(x2-x1) + a*(x3-x1) - b*((x2-x1) x (x3-x1))
+                // x1 = oxygen, x2 = hydrogen 1, x3 = hydrogen 2
+
+                auto v0 = coord_hydrogen0 - coord_oxygen;
+                auto v1 = coord_hydrogen1 - coord_oxygen;
+
+                auto coord_virtual0 = coord_oxygen + a*(v0 + v1) + b*cross(v0, v1);
+                auto coord_virtual1 = coord_oxygen + a*(v0 + v1) - b*cross(v0, v1);
+
+                edit_mol = edit_mol.atom(AtomIdx(3)).setProperty(map["coordinates"], coord_virtual0).molecule();
+                edit_mol = edit_mol.atom(AtomIdx(4)).setProperty(map["coordinates"], coord_virtual1).molecule();
+            }
         }
 
         // Append the water molecule.
@@ -169,8 +318,8 @@ SelectResult setGromacsWater(const SelectResult& molecules, const QString& model
 
     // Create a hash between the allowed model names and their templace files.
     QHash<QString, QString> models;
-    models["SPC"] = getShareDir() + "/templates/water/spc";
-    models["SPCE"] = getShareDir() + "/templates/water/spce";
+    models["SPC"]   = getShareDir() + "/templates/water/spc";
+    models["SPCE"]  = getShareDir() + "/templates/water/spce";
     models["TIP3P"] = getShareDir() + "/templates/water/tip3p";
     models["TIP4P"] = getShareDir() + "/templates/water/tip4p";
     models["TIP5P"] = getShareDir() + "/templates/water/tip5p";
