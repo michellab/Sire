@@ -2439,24 +2439,28 @@ SelectResult IDWaterEngine::select(const SelectResult &mols, const PropertyMap &
                 // Get the element.
                 const auto element = data[j];
 
+                // Update the number of protons.
+                num_protons += element.nProtons();
+
                 // Hydrogen.
                 if (element.nProtons() == 1)
                     num_hydrogen++;
                 // Oxygen.
                 else if (element.nProtons() == 8)
                     num_oxygen++;
-                else
-                    num_protons += element.nProtons();
 
                 // Not a water molecule, abort!
-                if (num_oxygen > 1 or num_hydrogen > 2 or num_protons > 10)
+                if (num_oxygen > 1 or
+                    num_hydrogen > 2 or
+                    num_protons > 10 or
+                    num_protons == 0)
                 {
                     is_water = false;
                     break;
                 }
             }
 
-            // Break out of outer loop.
+            // Break out of inner loop.
             if (not is_water)
                 break;
         }
