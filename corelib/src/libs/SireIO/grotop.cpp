@@ -5333,6 +5333,9 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     //wildcard atomtype (this is 'X' in gromacs files)
     static const QString wildcard_atomtype = "X";
 
+    // Whether the file uses a "bond_type" atom type.
+    bool is_bond_type = false;
+
     //internal function to process the atomtypes lines
     auto processAtomTypes = [&]()
     {
@@ -5424,7 +5427,10 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     //some gromacs files don't use 'nprotons', but instead give
                     //a "bond_type" ambertype
                     typ = GromacsAtomType(words[0], words[1], mass*g_per_mol, chg*mod_electron,
-                                          ptyp, ::toLJParameter(v,w,combining_rule));
+                                          ptyp, ::toLJParameter(v,w,combining_rule),
+                                          Element::elementWithMass(mass*g_per_mol));
+
+                    is_bond_type = true;
                 }
             }
             else if (words.count() < 9)
@@ -5978,7 +5984,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
 
                 //we now need to look up the atom type of this atom to see if there
                 //is a separate bond_type
-                const auto atom_type = atom_types.value(atomtyp);
+                auto atom_type = atom_types.value(atomtyp);
 
                 if ((not atom_type.isNull()) and atom_type.bondType() != atomtyp)
                 {
@@ -5989,6 +5995,17 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 if ( (not found_mass) and (not atom_type.isNull()) )
                 {
                     atom.setMass( atom_type.mass() );
+                }
+
+                if (found_mass and is_bond_type)
+                {
+                    if (mass > 0 and atom_type.element() == Element("Xx"))
+                    {
+                        // Set the element of the atom type using the mass and
+                        // update the record in the dictionary.
+                        atom_type.setElement(Element::elementWithMass(mass*g_per_mol));
+                        this->atom_types[atomtyp] = atom_type;
+                    }
                 }
 
                 moltype.addAtom(atom);

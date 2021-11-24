@@ -73,7 +73,7 @@ void register_AmberDihPart_class(){
 
     { //::SireMM::AmberDihPart
         typedef bp::class_< SireMM::AmberDihPart > AmberDihPart_exposer_t;
-        AmberDihPart_exposer_t AmberDihPart_exposer = AmberDihPart_exposer_t( "AmberDihPart", "This simple class holds Amber dihedral or improper parameter parts", bp::init< bp::optional< double, double, double > >(( bp::arg("k")=0, bp::arg("periodicity")=0, bp::arg("phase")=0 ), "") );
+        AmberDihPart_exposer_t AmberDihPart_exposer = AmberDihPart_exposer_t( "AmberDihPart", "This simple class holds Amber dihedral or improper parameter parts", bp::init< bp::optional< double, double, double > >(( bp::arg("k")=0, bp::arg("periodicity")=1, bp::arg("phase")=0 ), "Default to a periodicity of 1 since pmemd will skip torsions with\na periodicity of zero leading to incorrect 1-4 VDW and 1-4 EEL energies.\nREF: https:github.commichellabSireissues338") );
         bp::scope AmberDihPart_scope( AmberDihPart_exposer );
         AmberDihPart_exposer.def( bp::init< SireMM::AmberDihPart const & >(( bp::arg("other") ), "") );
         { //::SireMM::AmberDihPart::energy

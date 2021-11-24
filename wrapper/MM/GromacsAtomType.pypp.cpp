@@ -190,6 +190,18 @@ void register_GromacsAtomType_class(){
                 , "Return a string version of the particle type" );
         
         }
+        { //::SireMM::GromacsAtomType::setElement
+        
+            typedef void ( ::SireMM::GromacsAtomType::*setElement_function_type)( ::SireMol::Element ) ;
+            setElement_function_type setElement_function_value( &::SireMM::GromacsAtomType::setElement );
+            
+            GromacsAtomType_exposer.def( 
+                "setElement"
+                , setElement_function_value
+                , ( bp::arg("elem") )
+                , "Set the element to the passed value. This is useful if the atomtype section has\ninvalid mass informtion, as is the case for many topology files generted by acpype.\nThis allows us to update the element of the type using the mass from the atoms\nsection.\n" );
+        
+        }
         { //::SireMM::GromacsAtomType::toParticleType
         
             typedef ::SireMM::GromacsAtomType::PARTICLE_TYPE ( *toParticleType_function_type )( ::QString const &,bool * );
