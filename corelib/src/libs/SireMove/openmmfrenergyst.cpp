@@ -380,7 +380,7 @@ QString OpenMMFrEnergyST::toString() const
 void OpenMMFrEnergyST::initialise()
 {
 
-    bool Debug = true;
+    bool Debug = false;
     if (Debug)
     {
         qDebug() << "Initialising OpenMMFrEnergyST";
