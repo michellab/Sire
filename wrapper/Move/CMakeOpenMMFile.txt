@@ -3,4 +3,5 @@ set ( PYPP_OPENMM_SOURCES
        OpenMMMDIntegrator.pypp.cpp
        OpenMMFrEnergyDT.pypp.cpp
        OpenMMFrEnergyST.pypp.cpp
+       OpenMMPMEFEP.pypp.cpp
     )
