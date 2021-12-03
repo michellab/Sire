@@ -3944,10 +3944,22 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
 
             const int atom_idx = atom_num - 1;  // 1-index versus 0-index
 
+            Element element;
+
+            if (int(atomic_num_array[atom_idx]) <= 0 and
+                mass_array[atom_idx] > 0)
+            {
+                element = Element::elementWithMass(mass_array[atom_idx] * g_per_mol);
+            }
+            else
+            {
+                element = Element(int(atomic_num_array[atom_idx]));
+            }
+
             params.add( AtomNum(atom_num),
                         (charge_array[atom_idx] / AMBERCHARGECONV) * mod_electron,
                         mass_array[atom_idx] * g_per_mol,
-                        Element(int(atomic_num_array[atom_idx])),
+                        element,
                         lj_data[ amber_type_array[atom_idx] - 1 ],
                         ambertype_array[atom_idx].trimmed(),
                         born_radii_array[atom_idx] * angstrom,
