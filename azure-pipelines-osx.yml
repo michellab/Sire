@@ -11,8 +11,6 @@ jobs:
 
   steps:
   - script: |
-      # Make sure development headers are visible.
-      export CPATH=`xcrun --show-sdk-path`/usr/include
       ./compile_sire.sh --install $HOME/sire.app
     displayName: 'Build Sire'
   - script: |
