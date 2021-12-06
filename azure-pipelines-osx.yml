@@ -11,17 +11,8 @@ jobs:
 
   steps:
   - script: |
-      # make sure development headers are installed
-      xcode-select --install
-      sleep 1
-      osascript << EOD
-        tell application "System Events"
-          tell process "Install Command Line Developer Tools"
-            keystroke return
-            click button "Agree" of window "License Agreement"
-          end tell
-        end tell
-      EOD
+      # Make sure development headers are visible.
+      export CPATH=`xcrun --show-sdk-path`/usr/include
       ./compile_sire.sh --install $HOME/sire.app
     displayName: 'Build Sire'
   - script: |
