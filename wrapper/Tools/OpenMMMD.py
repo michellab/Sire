@@ -186,6 +186,31 @@ distance_restraints_dict = Parameter("distance restraints dictionary", {},
                                      D the flat bottom radius. WARNING: PBC distance checks not implemented, avoid
                                      restraining pair of atoms that may diffuse out of the box.""")
 
+
+use_boresch_restraints = Parameter("use Boresch restraints", False, 
+                                    """Whether or not to use Boresch restraints between the ligand and receptor""")
+
+boresch_restraints_dict = Parameter("Boresch restraints dictionary", {}, 
+                                    """Dictionary of four dictionaries: anchor points in ligand, anchor points in receptor,
+                                    equilibrium values for 6 Boresch-style external degrees of freedom, and associated force
+                                    constants. Syntax is:
+                                    {
+                                    "anchor_points_ligand":{"l1":l1, "l2":l2, "l3":l3],
+                                    "anchor_points_receptor":{"r1":r1, "r2":r2, "r3":r3},
+                                    "equilibrium_values":{"r0":k0, "thetaA0": thetaA0, "thetaB0": thetaB0,
+                                                          "phiA0":phiA0, "phiB0": phiB0, "phiC0":phiC0},
+                                    "force_constants":{"kr":kr, "kthetaA": kthetaA, "kthetaB": kthetaB,
+                                                       "kphiA":kphiA, "kphiB": kphiB, "kphiC":kphiC}}
+                                    } 
+                                    l1 - 3 and r1 - 3 are the anchor points in the ligand and receptor, respectively, 
+                                    given by atomic indices. r is | l1 - r1 | (A). thetaA, and thetaB are the angles
+                                    (r2, r1, l1) and (r1, l1, l2) (rad). phiA, phiB, and phiC are the dihedral angles
+                                    (r3, r2, r1, l1), (r2, r1, l1, l2), and (r1, l1, l2, l3), respectively. A first 
+                                    character of k indicates a force constant (kcal mol^-1 A^-2 for the distance and 
+                                    kcal mol^-1 rad^-2 for the angles) and a final character of 0 indicates an
+                                    equillibrium value (A or rad).
+                                    """)
+
 hydrogen_mass_repartitioning_factor = \
     Parameter('hydrogen mass repartitioning factor', 1.0,
               f'If larger than {HMR_MIN} (maximum is {HMR_MAX}), all hydrogen '
