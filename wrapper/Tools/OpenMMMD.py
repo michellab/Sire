@@ -187,20 +187,20 @@ distance_restraints_dict = Parameter("distance restraints dictionary", {},
                                      restraining pair of atoms that may diffuse out of the box.""")
 
 
-use_boresch_restraints = Parameter("use Boresch restraints", False, 
+use_boresch_restraints = Parameter("use boresch restraints", False, 
                                     """Whether or not to use Boresch restraints between the ligand and receptor""")
 
-boresch_restraints_dict = Parameter("Boresch restraints dictionary", {}, 
+boresch_restraints_dict = Parameter("boresch restraints dictionary", {}, 
                                     """Dictionary of four dictionaries: anchor points in ligand, anchor points in receptor,
                                     equilibrium values for 6 Boresch-style external degrees of freedom, and associated force
                                     constants. Syntax is:
                                     {
-                                    "anchor_points_ligand":{"l1":l1, "l2":l2, "l3":l3],
+                                    "anchor_points_ligand":{"l1":l1, "l2":l2, "l3":l3},
                                     "anchor_points_receptor":{"r1":r1, "r2":r2, "r3":r3},
-                                    "equilibrium_values":{"r0":k0, "thetaA0": thetaA0, "thetaB0": thetaB0,
+                                    "equilibrium_values":{"r0":r0, "thetaA0": thetaA0, "thetaB0": thetaB0,
                                                           "phiA0":phiA0, "phiB0": phiB0, "phiC0":phiC0},
                                     "force_constants":{"kr":kr, "kthetaA": kthetaA, "kthetaB": kthetaB,
-                                                       "kphiA":kphiA, "kphiB": kphiB, "kphiC":kphiC}}
+                                                       "kphiA":kphiA, "kphiB": kphiB, "kphiC":kphiC}
                                     } 
                                     l1 - 3 and r1 - 3 are the anchor points in the ligand and receptor, respectively, 
                                     given by atomic indices. r is | l1 - r1 | (A). thetaA, and thetaB are the angles
@@ -709,6 +709,37 @@ def setupDistanceRestraints(system, restraints=None):
 
     return system
 
+def setupBoreschRestraints(system):
+    molecules = system[MGName("all")].molecules()
+
+    # Get Boresch restraint dict in dict form
+    boresch_dict = dict(boresch_restraints_dict.val)
+
+    # Get anchor points dicts
+    boresch_lig_anchors_dict = boresch_dict["anchor_points_ligand"]
+    boresch_recpt_anchors_dict = boresch_dict["anchor_points_receptor"]
+
+    # Cycle through anchor points and print restrained atoms
+    for rest_dict in [boresch_lig_anchors_dict, boresch_recpt_anchors_dict]:
+        for item in rest_dict:
+            for i in range(0, molecules.nMolecules()):
+                mol = molecules.molecule(MolNum(i + 1))[0].molecule()
+                atoms_mol = mol.atoms()
+                natoms_mol = mol.nAtoms()
+                for j in range(0, natoms_mol):
+                    at = atoms_mol[j]
+                    atnumber = at.number()
+                    if item[1] +1 == atnumber:
+                        print(item[0] + "=" + at)
+
+    #Mol number 0 will store all the information related to the Boresch restraints in the system
+    mol0 = system[MGName("all")].moleculeAt(0)[0].molecule()
+    mol0 = mol0.edit().setProperty("boresch_dist_restraint", boreschDistRestraintToProperty(boresch_dict)).commit()
+    mol0 = mol0.edit().setProperty("boresch_angle_restraints", boreschAngleRestraintsToProperty(boresch_dict)).commit()
+    mol0 = mol0.edit().setProperty("boresch_torsion_restraints", boreschTorsionRestraintsToProperty(boresch_dict)).commit()
+    system.update(mol0)
+
+    return system
 
 def freezeResidues(system):
 
