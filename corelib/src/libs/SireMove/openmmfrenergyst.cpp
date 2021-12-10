@@ -1219,21 +1219,21 @@ void OpenMMFrEnergyST::initialise()
     OpenMM::CustomBondForce * custom_boresch_dist_rest = new OpenMM::CustomBondForce("0.5*force_const*(r-equil_val)^2");
     custom_boresch_dist_rest->addPerBondParameter("force_const");
     custom_boresch_dist_rest->addPerBondParameter("equil_val");
-    custom_boresch_dist_rest->usesPeriodicBoundaryConditions(true);
+    //custom_boresch_dist_rest->usesPeriodicBoundaryConditions() true;
 
     /****************************************BORESCH ANGLE POTENTIAL*****************************/
 
     OpenMM::CustomAngleForce * custom_boresch_angle_rest = new OpenMM::CustomAngleForce("0.5*force_const*(theta-equil_val)^2");
     custom_boresch_angle_rest->addPerAngleParameter("force_const");
     custom_boresch_angle_rest->addPerAngleParameter("equil_val");
-    custom_boresch_angle_rest->usesPeriodicBoundaryConditions(true);
+    //custom_boresch_angle_rest->usesPeriodicBoundaryConditions() true;
 
     /****************************************BORESCH DIHEDRAL POTENTIAL*****************************/
 
-    OpenMM::CustomTorsionForce * custom_boresch_dihedral_rest = new OpenMM::CustomAngleForce("0.5*force_const*(theta-equil_val)^2");
+    OpenMM::CustomTorsionForce * custom_boresch_dihedral_rest = new OpenMM::CustomTorsionForce("0.5*force_const*(theta-equil_val)^2");
     custom_boresch_dihedral_rest->addPerTorsionParameter("force_const");
     custom_boresch_dihedral_rest->addPerTorsionParameter("equil_val");
-    custom_boresch_dihedral_rest->usesPeriodicBoundaryConditions(true);
+    //custom_boresch_dihedral_rest->usesPeriodicBoundaryConditions() true;
 
     //OpenMM vector coordinate
     std::vector<OpenMM::Vec3> positions_openmm(nats);
@@ -2909,9 +2909,9 @@ void OpenMMFrEnergyST::initialise()
     {
         Molecule molecule = moleculegroup.moleculeAt(0).molecule();
 
-        bool has_boresch_dist = molecule.hasProperty('boresch_dist_restraint');
-        bool has_boresch_angle = molecule.hasProperty('boresch_angle_restraints');
-        bool has_boresch_dihedral = molecule.hasProperty('boresch_dihedral_restraints');
+        bool has_boresch_dist = molecule.hasProperty("boresch_dist_restraint");
+        bool has_boresch_angle = molecule.hasProperty("boresch_angle_restraints");
+        bool has_boresch_dihedral = molecule.hasProperty("boresch_dihedral_restraints");
 
         if (has_boresch_dist)
         {
@@ -2944,7 +2944,7 @@ void OpenMMFrEnergyST::initialise()
 
         if (has_boresch_angle)
         {
-            std::vector<double> custom_boresch_dist_par(3);
+            std::vector<double> custom_boresch_angle_par(3);
 
             Properties boresch_angle_prop = molecule.property("boresch_angle_restraints").asA<Properties>();
 
@@ -2955,11 +2955,9 @@ void OpenMMFrEnergyST::initialise()
 
             for (int i = 0; i < n_angles; i++)
             {
-                int atomnum0 = linkprop.property(QString("AtomNum0(%1)").arg(i)).asA<VariantProperty>().toInt();
-
                 int atomnum0 = boresch_angle_prop.property(QString("AtomNum0-%1").arg(i)).asA<VariantProperty>().toInt();
                 int atomnum1 = boresch_angle_prop.property(QString("AtomNum1-%1").arg(i)).asA<VariantProperty>().toInt();
-                int atomnum2 = boresch_angle_prop.property(QString("AtomNum1-%1").arg(i)).asA<VariantProperty>().toInt();
+                int atomnum2 = boresch_angle_prop.property(QString("AtomNum2-%1").arg(i)).asA<VariantProperty>().toInt();
                 double force_const = boresch_angle_prop.property(QString("force_const-%1").arg(i)).asA<VariantProperty>().toDouble();
                 double equil_val = boresch_angle_prop.property(QString("equil_val-%1").arg(i)).asA<VariantProperty>().toDouble();
 
@@ -2978,10 +2976,53 @@ void OpenMMFrEnergyST::initialise()
                     qDebug() << "force_const = " << force_const << " equil_val = " << equil_val;
                 }
 
-                custom_boresch_dist_rest->addBond(openmmindex0, openmmindex1, openmmindex2, custom_boresch_dist_par);
+                custom_boresch_angle_rest->addAngle(openmmindex0, openmmindex1, openmmindex2, custom_boresch_angle_par);
             }
 
-            system_openmm->addForce(custom_boresch_dist_rest);
+            system_openmm->addForce(custom_boresch_angle_rest);
+        }
+
+        if (has_boresch_dihedral)
+        {
+            std::vector<double> custom_boresch_dihedral_par(3);
+
+            Properties boresch_dihedral_prop = molecule.property("boresch_dihedral_restraints").asA<Properties>();
+
+            int n_dihedrals = boresch_dihedral_prop.property(QString("n_boresch_dihedral_restraints")).asA<VariantProperty>().toInt();
+
+            if (Debug)
+                qDebug() << "Number of Boresch dihedral restraints = " << n_dihedrals;
+
+            for (int i = 0; i < n_dihedrals; i++)
+            {
+                int atomnum0 = boresch_dihedral_prop.property(QString("AtomNum0-%1").arg(i)).asA<VariantProperty>().toInt();
+                int atomnum1 = boresch_dihedral_prop.property(QString("AtomNum1-%1").arg(i)).asA<VariantProperty>().toInt();
+                int atomnum2 = boresch_dihedral_prop.property(QString("AtomNum2-%1").arg(i)).asA<VariantProperty>().toInt();
+                int atomnum3 = boresch_dihedral_prop.property(QString("AtomNum3-%1").arg(i)).asA<VariantProperty>().toInt();
+                double force_const = boresch_dihedral_prop.property(QString("force_const-%1").arg(i)).asA<VariantProperty>().toDouble();
+                double equil_val = boresch_dihedral_prop.property(QString("equil_val-%1").arg(i)).asA<VariantProperty>().toDouble();
+
+                int openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
+                int openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
+                int openmmindex2 = AtomNumToOpenMMIndex[atomnum2];
+                int openmmindex3 = AtomNumToOpenMMIndex[atomnum3];
+
+                custom_boresch_dihedral_par[0] = force_const * (OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); //force_const
+                custom_boresch_dihedral_par[1] = equil_val * OpenMM::NmPerAngstrom; //equil_val
+
+                if (Debug)
+                {
+                    qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
+                    qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
+                    qDebug() << "atomnum2 = " << atomnum2 << " openmmindex2 =" << openmmindex2;
+                    qDebug() << "atomnum3 = " << atomnum3 << " openmmindex3 =" << openmmindex3;
+                    qDebug() << "force_const = " << force_const << " equil_val = " << equil_val;
+                }
+
+                custom_boresch_dihedral_rest->addTorsion(openmmindex0, openmmindex1, openmmindex2, openmmindex3, custom_boresch_dihedral_par);
+            }
+
+            system_openmm->addForce(custom_boresch_dihedral_rest);
         }
 
     }//end of Boresch flag
