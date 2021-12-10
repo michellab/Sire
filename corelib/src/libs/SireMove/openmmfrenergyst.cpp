@@ -2901,6 +2901,49 @@ void OpenMMFrEnergyST::initialise()
 
     }//end of bond link flag
 
+    bool UseBoresch_flag = true;
+
+    //Boresch Restaints. All the information is stored in the first molecule only.
+
+    if (UseBoresch_flag == true)
+    {
+        Molecule molecule = moleculegroup.moleculeAt(0).molecule();
+
+        bool has_boresch_dist = molecule.hasProperty('boresch_dist_restraint');
+        bool has_boresch_angle = molecule.hasProperty('boresch_angle_restraints');
+        bool has_boresch_dihedral = molecule.hasProperty('boresch_dihedral_restraints');
+
+        if (has_boresch_dist)
+        {
+            std::vector<double> custom_boresch_dist_par(3);
+
+            Properties boresch_dist_prop = molecule.property("boresch_dist_restraint").asA<Properties>();
+
+            int atomnum0 = boresch_dist_prop.property(QString("AtomNum0")).asA<VariantProperty>().toInt();
+            int atomnum1 = boresch_dist_prop.property(QString("AtomNum1")).asA<VariantProperty>().toInt();
+            double force_const = boresch_dist_prop.property(QString("force_const")).asA<VariantProperty>().toDouble();
+            double equil_val = boresch_dist_prop.property(QString("equil_val")).asA<VariantProperty>().toDouble();
+
+            int openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
+            int openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
+
+            custom_boresch_dist_par[0] = force_const * (OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); //force_const
+            custom_boresch_dist_par[1] = equil_val * OpenMM::NmPerAngstrom; //equil_val
+
+            if (Debug)
+            {
+                qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
+                qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
+                qDebug() << "force_const = " << force_const << " equil_val = " << equil_val;
+            }
+
+            custom_boresch_dist_rest->addBond(openmmindex0, openmmindex1, custom_boresch_dist_par);
+
+            system_openmm->addForce(custom_boresch_dist_rest);
+        }
+
+    }//end of Boresch flag
+
     this->openmm_system = system_openmm;
     this->isSystemInitialised = true;
 }
