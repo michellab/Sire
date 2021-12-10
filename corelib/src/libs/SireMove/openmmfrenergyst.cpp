@@ -1214,6 +1214,27 @@ void OpenMMFrEnergyST::initialise()
     custom_link_bond->addPerBondParameter("kl");
     custom_link_bond->addPerBondParameter("dl");
 
+    /****************************************BORESCH DISTANCE POTENTIAL*****************************/
+
+    OpenMM::CustomBondForce * custom_boresch_dist_rest = new OpenMM::CustomBondForce("0.5*force_const*(r-equil_val)^2");
+    custom_boresch_dist_rest->addPerBondParameter("force_const");
+    custom_boresch_dist_rest->addPerBondParameter("equil_val");
+    custom_boresch_dist_rest->usesPeriodicBoundaryConditions(true);
+
+    /****************************************BORESCH ANGLE POTENTIAL*****************************/
+
+    OpenMM::CustomAngleForce * custom_boresch_angle_rest = new OpenMM::CustomAngleForce("0.5*force_const*(theta-equil_val)^2");
+    custom_boresch_angle_rest->addPerAngleParameter("force_const");
+    custom_boresch_angle_rest->addPerAngleParameter("equil_val");
+    custom_boresch_angle_rest->usesPeriodicBoundaryConditions(true);
+
+    /****************************************BORESCH DIHEDRAL POTENTIAL*****************************/
+
+    OpenMM::CustomTorsionForce * custom_boresch_dihedral_rest = new OpenMM::CustomAngleForce("0.5*force_const*(theta-equil_val)^2");
+    custom_boresch_dihedral_rest->addPerTorsionParameter("force_const");
+    custom_boresch_dihedral_rest->addPerTorsionParameter("equil_val");
+    custom_boresch_dihedral_rest->usesPeriodicBoundaryConditions(true);
+
     //OpenMM vector coordinate
     std::vector<OpenMM::Vec3> positions_openmm(nats);
 
