@@ -2942,6 +2942,48 @@ void OpenMMFrEnergyST::initialise()
             system_openmm->addForce(custom_boresch_dist_rest);
         }
 
+        if (has_boresch_angle)
+        {
+            std::vector<double> custom_boresch_dist_par(3);
+
+            Properties boresch_angle_prop = molecule.property("boresch_angle_restraints").asA<Properties>();
+
+            int n_angles = boresch_angle_prop.property(QString("n_boresch_angle_restraints")).asA<VariantProperty>().toInt();
+
+            if (Debug)
+                qDebug() << "Number of Boresch angle restraints = " << n_angles;
+
+            for (int i = 0; i < n_angles; i++)
+            {
+                int atomnum0 = linkprop.property(QString("AtomNum0(%1)").arg(i)).asA<VariantProperty>().toInt();
+
+                int atomnum0 = boresch_angle_prop.property(QString("AtomNum0-%1").arg(i)).asA<VariantProperty>().toInt();
+                int atomnum1 = boresch_angle_prop.property(QString("AtomNum1-%1").arg(i)).asA<VariantProperty>().toInt();
+                int atomnum2 = boresch_angle_prop.property(QString("AtomNum1-%1").arg(i)).asA<VariantProperty>().toInt();
+                double force_const = boresch_angle_prop.property(QString("force_const-%1").arg(i)).asA<VariantProperty>().toDouble();
+                double equil_val = boresch_angle_prop.property(QString("equil_val-%1").arg(i)).asA<VariantProperty>().toDouble();
+
+                int openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
+                int openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
+                int openmmindex2 = AtomNumToOpenMMIndex[atomnum2];
+
+                custom_boresch_angle_par[0] = force_const * (OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); //force_const
+                custom_boresch_angle_par[1] = equil_val * OpenMM::NmPerAngstrom; //equil_val
+
+                if (Debug)
+                {
+                    qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
+                    qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
+                    qDebug() << "atomnum2 = " << atomnum2 << " openmmindex2 =" << openmmindex2;
+                    qDebug() << "force_const = " << force_const << " equil_val = " << equil_val;
+                }
+
+                custom_boresch_dist_rest->addBond(openmmindex0, openmmindex1, openmmindex2, custom_boresch_dist_par);
+            }
+
+            system_openmm->addForce(custom_boresch_dist_rest);
+        }
+
     }//end of Boresch flag
 
     this->openmm_system = system_openmm;
