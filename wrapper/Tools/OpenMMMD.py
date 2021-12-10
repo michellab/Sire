@@ -1587,6 +1587,9 @@ def run():
                 stream.close()
             system = setupDistanceRestraints(system, restraints=restraints)
 
+        if use_boresch_restraints.val:
+            system = setupBoreschRestraints(system)
+
         if hydrogen_mass_repartitioning_factor.val > 1.0:
             system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
 
@@ -1739,7 +1742,8 @@ def runFreeNrg():
                 stream.close()
             system = setupDistanceRestraints(system, restraints=restraints)
 
-            #import pdb; pdb.set_trace()
+        if use_boresch_restraints.val:
+            system = setupBoreschRestraints(system)
 
         if hydrogen_mass_repartitioning_factor.val > 1.0:
             system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
