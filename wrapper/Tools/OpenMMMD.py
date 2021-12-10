@@ -497,7 +497,7 @@ def setupMoves(system, debug_seed, GPUS):
     Integrator_OpenMM.setTimetoSkip(time_to_skip.val)
 
     Integrator_OpenMM.setDeviceIndex(str(GPUS))
-    Integrator_OpenMM.setLJDispersion(lj_dispersion.val)
+    Integrator_OpenMM.setLJDispersion(lj_dispersion.val)~/Documents/research/restraint_comparison_mif/testing/testing_sire_boresch/output/lambda-0.000
 
     if cutoff_type.val != "nocutoff":
         Integrator_OpenMM.setCutoffDistance(cutoff_dist.val)
@@ -635,11 +635,11 @@ def boreschAngleRestraintsToProperty(boresch_dict):
     for angle in ["thetaA", "thetaB"]:
         if boresch_dict["force_constants"][f"k{angle}"] != 0:
             for j in range(3): 
-                prop.setProperty(f"AtomNum{ij}", 
+                prop.setProperty(f"AtomNum{j}-{i}", 
                     VariantProperty(boresch_dict['anchor_points'][angle_anchor_dict[angle][j]]))
-            prop.setProperty("equil_val{i}", 
+            prop.setProperty(f"equil_val-{i}", 
                 VariantProperty(boresch_dict["equilibrium_values"][f"{angle}0"]))
-            prop.setProperty("force_const{i}", 
+            prop.setProperty(f"force_const-{i}", 
                 VariantProperty(boresch_dict["force_constants"][f"k{angle}"]))
             
             i += 1
@@ -671,11 +671,11 @@ def boreschDihedralRestraintsToProperty(boresch_dict):
     for dihedral in ["phiA", "phiB", "phiC"]:
         if boresch_dict["force_constants"][f"k{dihedral}"] != 0:
             for j in range(4): 
-                prop.setProperty(f"AtomNum{ij}", 
+                prop.setProperty(f"AtomNum{j}-{i}", 
                     VariantProperty(boresch_dict['anchor_points'][dihedral_anchor_dict[dihedral][j]]))
-            prop.setProperty("equil_val{i}", 
+            prop.setProperty(f"equil_val-{i}", 
                 VariantProperty(boresch_dict["equilibrium_values"][f"{dihedral}0"]))
-            prop.setProperty("force_const{i}", 
+            prop.setProperty(f"force_const-{i}", 
                 VariantProperty(boresch_dict["force_constants"][f"k{dihedral}"]))
             
             i += 1
@@ -823,7 +823,7 @@ def setupBoreschRestraints(system):
     anchors_dict = boresch_dict["anchor_points"]
 
     # Cycle through anchor points and print restrained atoms
-    for item in anchors_dict:
+    for anchor in anchors_dict:
         for i in range(0, molecules.nMolecules()):
             mol = molecules.molecule(MolNum(i + 1))[0].molecule()
             atoms_mol = mol.atoms()
@@ -831,7 +831,7 @@ def setupBoreschRestraints(system):
             for j in range(0, natoms_mol):
                 at = atoms_mol[j]
                 atnumber = at.number()
-                if item[1] +1 == atnumber:
+                if anchors_dict[anchor] +1 == atnumber:
                     print(item[0] + "=" + at)
 
     #Mol number 0 will store all the information related to the Boresch restraints in the system
