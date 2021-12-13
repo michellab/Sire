@@ -497,7 +497,7 @@ def setupMoves(system, debug_seed, GPUS):
     Integrator_OpenMM.setTimetoSkip(time_to_skip.val)
 
     Integrator_OpenMM.setDeviceIndex(str(GPUS))
-    Integrator_OpenMM.setLJDispersion(lj_dispersion.val)~/Documents/research/restraint_comparison_mif/testing/testing_sire_boresch/output/lambda-0.000
+    Integrator_OpenMM.setLJDispersion(lj_dispersion.val)
 
     if cutoff_type.val != "nocutoff":
         Integrator_OpenMM.setCutoffDistance(cutoff_dist.val)
@@ -818,11 +818,13 @@ def setupBoreschRestraints(system):
 
     # Get Boresch restraint dict in dict form
     boresch_dict = dict(boresch_restraints_dict.val)
+    print(f"Boresch restraints dictionary = {boresch_dict}")
 
     # Get anchor points dicts
     anchors_dict = boresch_dict["anchor_points"]
 
     # Cycle through anchor points and print restrained atoms
+    print("Boresch anchor points:")
     for anchor in anchors_dict:
         for i in range(0, molecules.nMolecules()):
             mol = molecules.molecule(MolNum(i + 1))[0].molecule()
@@ -831,8 +833,8 @@ def setupBoreschRestraints(system):
             for j in range(0, natoms_mol):
                 at = atoms_mol[j]
                 atnumber = at.number()
-                if anchors_dict[anchor] +1 == atnumber:
-                    print(item[0] + "=" + at)
+                if anchors_dict[anchor] +1 == atnumber.value():
+                    print(anchor + "=" + str(at))
 
     #Mol number 0 will store all the information related to the Boresch restraints in the system
     mol0 = system[MGName("all")].moleculeAt(0)[0].molecule()
@@ -1588,6 +1590,7 @@ def run():
             system = setupDistanceRestraints(system, restraints=restraints)
 
         if use_boresch_restraints.val:
+            print("Setting up Boresch restraints...")
             system = setupBoreschRestraints(system)
 
         if hydrogen_mass_repartitioning_factor.val > 1.0:
@@ -1743,6 +1746,7 @@ def runFreeNrg():
             system = setupDistanceRestraints(system, restraints=restraints)
 
         if use_boresch_restraints.val:
+            print("Setting up Boresch restraints...")
             system = setupBoreschRestraints(system)
 
         if hydrogen_mass_repartitioning_factor.val > 1.0:

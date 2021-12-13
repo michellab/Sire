@@ -2913,9 +2913,20 @@ void OpenMMFrEnergyST::initialise()
         bool has_boresch_angle = molecule.hasProperty("boresch_angle_restraints");
         bool has_boresch_dihedral = molecule.hasProperty("boresch_dihedral_restraints");
 
+        if (Debug)
+        {
+            Properties boresch_dist_prop = molecule.property("boresch_dist_restraint").asA<Properties>();
+            Properties boresch_angle_prop = molecule.property("boresch_angle_restraints").asA<Properties>();
+            Properties boresch_dihedral_prop = molecule.property("boresch_dihedral_restraints").asA<Properties>();
+
+            qDebug() << "has_boresch_distance = " << has_boresch_dist;
+            qDebug() << "has_boresch_angle = " << has_boresch_angle;
+            qDebug() << "has_boresch_dihedral = " << has_boresch_dihedral;
+        }
+
         if (has_boresch_dist)
         {
-            std::vector<double> custom_boresch_dist_par(3);
+            std::vector<double> custom_boresch_dist_par(2);
 
             Properties boresch_dist_prop = molecule.property("boresch_dist_restraint").asA<Properties>();
 
@@ -2932,6 +2943,7 @@ void OpenMMFrEnergyST::initialise()
 
             if (Debug)
             {
+                qDebug() << "Boresch distance restraint implemented";
                 qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
                 qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
                 qDebug() << "force_const = " << force_const << " equil_val = " << equil_val;
@@ -2944,7 +2956,7 @@ void OpenMMFrEnergyST::initialise()
 
         if (has_boresch_angle)
         {
-            std::vector<double> custom_boresch_angle_par(3);
+            std::vector<double> custom_boresch_angle_par(2);
 
             Properties boresch_angle_prop = molecule.property("boresch_angle_restraints").asA<Properties>();
 
@@ -2965,8 +2977,8 @@ void OpenMMFrEnergyST::initialise()
                 int openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
                 int openmmindex2 = AtomNumToOpenMMIndex[atomnum2];
 
-                custom_boresch_angle_par[0] = force_const * (OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); //force_const
-                custom_boresch_angle_par[1] = equil_val * OpenMM::NmPerAngstrom; //equil_val
+                custom_boresch_angle_par[0] = force_const * (OpenMM::KJPerKcal); //force_const
+                custom_boresch_angle_par[1] = equil_val; //equil_val
 
                 if (Debug)
                 {
@@ -2984,7 +2996,7 @@ void OpenMMFrEnergyST::initialise()
 
         if (has_boresch_dihedral)
         {
-            std::vector<double> custom_boresch_dihedral_par(3);
+            std::vector<double> custom_boresch_dihedral_par(2);
 
             Properties boresch_dihedral_prop = molecule.property("boresch_dihedral_restraints").asA<Properties>();
 
@@ -3007,8 +3019,8 @@ void OpenMMFrEnergyST::initialise()
                 int openmmindex2 = AtomNumToOpenMMIndex[atomnum2];
                 int openmmindex3 = AtomNumToOpenMMIndex[atomnum3];
 
-                custom_boresch_dihedral_par[0] = force_const * (OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); //force_const
-                custom_boresch_dihedral_par[1] = equil_val * OpenMM::NmPerAngstrom; //equil_val
+                custom_boresch_dihedral_par[0] = force_const * (OpenMM::KJPerKcal); //force_const
+                custom_boresch_dihedral_par[1] = equil_val; //equil_val
 
                 if (Debug)
                 {
