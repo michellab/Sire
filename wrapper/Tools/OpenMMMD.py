@@ -827,7 +827,9 @@ def setupBoreschRestraints(system):
     # Get anchor points dicts
     anchors_dict = boresch_dict["anchor_points"]
 
-    # Cycle through anchor points and print restrained atoms
+    # Cycle through anchor points and print restrained atoms. Exit and notify
+    # the user if any anchor points specified are not present in the system.
+    anchors_not_present = list(anchors_dict.keys())
     print("Boresch anchor points:")
     for anchor in anchors_dict:
         for i in range(0, molecules.nMolecules()):
@@ -838,8 +840,15 @@ def setupBoreschRestraints(system):
                 at = atoms_mol[j]
                 atnumber = at.number()
                 if anchors_dict[anchor] == atnumber.value():
+                    anchors_not_present.remove(anchor)
                     print(anchor + "=" + str(at))
 
+    if anchors_not_present:
+        print("Error! The following anchor points do not not exist in the system:")
+        for anchor in anchors_not_present:
+            print(f"{anchor}: index {anchors_dict[anchor]-1}")
+        sys.exit(-1)
+    
     #Mol number 0 will store all the information related to the Boresch restraints in the system
     mol0 = system[MGName("all")].moleculeAt(0)[0].molecule()
     mol0 = mol0.edit().setProperty("boresch_dist_restraint", boreschDistRestraintToProperty(boresch_dict)).commit()
