@@ -820,6 +820,10 @@ def setupBoreschRestraints(system):
     boresch_dict = dict(boresch_restraints_dict.val)
     print(f"Boresch restraints dictionary = {boresch_dict}")
 
+    # Correct atom numbers by + 1
+    for key in boresch_dict["anchor_points"].keys():
+        boresch_dict["anchor_points"][key] += 1
+
     # Get anchor points dicts
     anchors_dict = boresch_dict["anchor_points"]
 
@@ -833,7 +837,7 @@ def setupBoreschRestraints(system):
             for j in range(0, natoms_mol):
                 at = atoms_mol[j]
                 atnumber = at.number()
-                if anchors_dict[anchor] +1 == atnumber.value():
+                if anchors_dict[anchor] == atnumber.value():
                     print(anchor + "=" + str(at))
 
     #Mol number 0 will store all the information related to the Boresch restraints in the system
