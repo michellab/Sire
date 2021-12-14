@@ -2915,13 +2915,9 @@ void OpenMMFrEnergyST::initialise()
 
         if (Debug)
         {
-            Properties boresch_dist_prop = molecule.property("boresch_dist_restraint").asA<Properties>();
-            Properties boresch_angle_prop = molecule.property("boresch_angle_restraints").asA<Properties>();
-            Properties boresch_dihedral_prop = molecule.property("boresch_dihedral_restraints").asA<Properties>();
-
-            qDebug() << "has_boresch_distance = " << has_boresch_dist;
-            qDebug() << "has_boresch_angle = " << has_boresch_angle;
-            qDebug() << "has_boresch_dihedral = " << has_boresch_dihedral;
+            qDebug() << "Boresch distance restraint properties stored = " << has_boresch_dist;
+            qDebug() << "Boresch angle restraint properties stored = " << has_boresch_angle;
+            qDebug() << "Boresch dihedral restraint properties stored = " << has_boresch_dihedral;
         }
 
         if (has_boresch_dist)
