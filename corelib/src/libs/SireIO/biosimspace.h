@@ -26,8 +26,8 @@
   *
 \*********************************************/
 
-#ifndef SIREIO_WATERMODEL_H
-#define SIREIO_WATERMODEL_H
+#ifndef SIREIO_BIOSIMSPACE_H
+#define SIREIO_BIOSIMSPACE_H
 
 #include "sireglobal.h"
 
@@ -45,12 +45,26 @@ using namespace SireMol;
 
 namespace SireIO
 {
-    SIREIO_EXPORT SelectResult setAmberWater(const SelectResult& molecules, const QString& model, const PropertyMap& map = PropertyMap());
-    SIREIO_EXPORT SelectResult setGromacsWater(const SelectResult& molecules, const QString& model, const PropertyMap& map = PropertyMap());
+    SIREIO_EXPORT bool isWater(const Molecule& molecule, const PropertyMap& map = PropertyMap());
+    SIREIO_EXPORT bool isAmberWater(const Molecule& molecule, const PropertyMap& map = PropertyMap());
+    SIREIO_EXPORT bool isGromacsWater(const Molecule& molecule, const PropertyMap& map = PropertyMap());
+
+    SIREIO_EXPORT SelectResult setAmberWater(
+            const SelectResult& molecules,
+            const QString& model,
+            const PropertyMap& map = PropertyMap());
+
+    SIREIO_EXPORT SelectResult setGromacsWater(
+            const SelectResult& molecules,
+            const QString& model,
+            const PropertyMap& map = PropertyMap());
 
     Vector cross(const Vector& v0, const Vector& v1);
 }
 
+SIRE_EXPOSE_FUNCTION( SireIO::isWater )
+SIRE_EXPOSE_FUNCTION( SireIO::isAmberWater )
+SIRE_EXPOSE_FUNCTION( SireIO::isGromacsWater )
 SIRE_EXPOSE_FUNCTION( SireIO::setAmberWater )
 SIRE_EXPOSE_FUNCTION( SireIO::setGromacsWater )
 

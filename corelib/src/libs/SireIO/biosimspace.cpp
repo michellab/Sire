@@ -27,13 +27,12 @@
 \*********************************************/
 
 #include "moleculeparser.h"
-#include "watermodel.h"
+#include "biosimspace.h"
 
 #include "SireBase/getinstalldir.h"
 
 #include "SireError/errors.h"
 
-#include "SireMol/atomelements.h"
 #include "SireMol/atomelements.h"
 #include "SireMol/moleditor.h"
 #include "SireMol/molidx.h"
@@ -50,6 +49,149 @@ using namespace SireVol;
 
 namespace SireIO
 {
+
+bool isWater(const Molecule& molecule, const PropertyMap& map)
+{
+    if (molecule.nAtoms() > 5)
+        return false;
+
+    // Get the "element" property from the user map.
+    auto elem_prop = map["element"];
+
+    // Zero counters for number of hydrogen and oxygen atoms.
+    unsigned num_hydrogen = 0;
+    unsigned num_oxygen = 0;
+
+    // Loop over all atoms in the molecule.
+    for (int i=0; i<molecule.nAtoms(); ++i)
+    {
+        const auto atom = molecule.atom(AtomIdx(i));
+
+        try
+        {
+            const auto element = atom.property<Element>(elem_prop);
+
+            if (element == Element("H"))
+                num_hydrogen++;
+            else if (element == Element("O"))
+                num_oxygen++;
+        }
+        catch (...)
+        {
+            // Store the atom name.
+            auto name = atom.name().value();
+
+            // Remove all non letter characters.
+            name = name.remove(QRegExp("[^a-zA-Z]"));
+
+            // Try to infer the element from the atom name.
+            const auto element = Element::biologicalElement(name);
+
+            if (element == Element("H"))
+                num_hydrogen++;
+            else if (element == Element("O"))
+                num_oxygen++;
+        }
+    }
+
+    if (num_hydrogen == 2 and num_oxygen == 1)
+        return true;
+    else return false;
+}
+
+bool isAmberWater(const Molecule& molecule, const PropertyMap& map)
+{
+    // Check that this is a water molecule.
+    if (not isWater(molecule, map))
+        return false;
+
+    // Now check the residue name.
+    if (molecule.residue(ResIdx(0)).name().value() != "WAT")
+        return false;
+
+    // Now check the atom names.
+
+    // Store the number of atoms.
+    const auto num_atoms = molecule.nAtoms();
+
+    // Initialise the atom name template.
+    QSet<QString> atom_names;
+
+    // SPC/E or TIP3P.
+    if (num_atoms == 3)
+    {
+        atom_names = QSet<QString>({"O", "H1", "H2"});
+    }
+    // TIP4P.
+    else if (num_atoms == 4)
+    {
+        atom_names = QSet<QString>({"O", "H1", "H2", "EPW"});
+    }
+    // TIP5P.
+    else if (num_atoms == 5)
+    {
+        atom_names = QSet<QString>({"O", "H1", "H2", "EP1", "EP2"});
+    }
+
+    // Make sure all atom names match the template.
+    for (int i=0; i<num_atoms; ++i)
+    {
+        const auto atom = molecule.atom(AtomIdx(i));
+
+        if (not atom_names.contains(atom.name().value()))
+            return false;
+    }
+
+    // If we've got this far, then it is an AMBER format water.
+    return true;
+}
+
+bool isGromacsWater(const Molecule& molecule, const PropertyMap& map)
+{
+    // Check that this is a water molecule.
+    if (not isWater(molecule, map))
+        return false;
+
+    // Now check the residue name.
+    if (molecule.residue(ResIdx(0)).name().value() != "SOL")
+        return false;
+
+    // Now check the atom names.
+
+    // Store the number of atoms.
+    const auto num_atoms = molecule.nAtoms();
+
+    // Initialise the atom name template.
+    QSet<QString> atom_names;
+
+    // SPC/E or TIP3P.
+    if (num_atoms == 3)
+    {
+        atom_names = QSet<QString>({"OW", "HW1", "HW2"});
+    }
+    // TIP4P.
+    else if (num_atoms == 4)
+    {
+        atom_names = QSet<QString>({"OW", "HW1", "HW2", "MW"});
+    }
+    // TIP5P.
+    else if (num_atoms == 5)
+    {
+        atom_names = QSet<QString>({"OW", "HW1", "HW2", "LP1", "LP2"});
+    }
+
+    // Make sure all atom names match the template.
+    for (int i=0; i<num_atoms; ++i)
+    {
+        const auto atom = molecule.atom(AtomIdx(i));
+
+        if (not atom_names.contains(atom.name().value()))
+            return false;
+    }
+
+    // If we've got this far, then it is a GROMACS format water.
+    return true;
+}
 
 SelectResult setAmberWater(const SelectResult& molecules, const QString& model, const PropertyMap& map)
 {

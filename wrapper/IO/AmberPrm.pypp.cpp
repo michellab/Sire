@@ -77,6 +77,8 @@ namespace bp = boost::python;
 
 #include "SireMol/residuecutting.h"
 
+#include "SireMol/select.h"
+
 #include "SireMol/selector.hpp"
 
 #include "SireMove/flexibility.h"
@@ -94,6 +96,8 @@ namespace bp = boost::python;
 #include "SireVol/cartesian.h"
 
 #include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
 
 #include "amberprm.h"
 

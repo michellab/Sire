@@ -19,11 +19,15 @@ namespace bp = boost::python;
 
 #include "SireSystem/system.h"
 
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
 #include "moleculeparser.h"
 
-#include "watermodel.h"
-
-#include "watermodel.h"
+#include "biosimspace.h"
 
 #include "SireBase/getinstalldir.h"
 
@@ -37,13 +41,122 @@ namespace bp = boost::python;
 
 #include "SireSystem/system.h"
 
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
 #include "moleculeparser.h"
 
-#include "watermodel.h"
+#include "biosimspace.h"
 
-#include "watermodel.h"
+#include "SireBase/getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
+#include "moleculeparser.h"
+
+#include "biosimspace.h"
+
+#include "SireBase/getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
+#include "moleculeparser.h"
+
+#include "biosimspace.h"
+
+#include "SireBase/getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
+#include "moleculeparser.h"
+
+#include "biosimspace.h"
 
 void register_free_functions(){
+
+    { //::SireIO::isAmberWater
+    
+        typedef bool ( *isAmberWater_function_type )( ::SireMol::Molecule const &,::SireBase::PropertyMap const & );
+        isAmberWater_function_type isAmberWater_function_value( &::SireIO::isAmberWater );
+        
+        bp::def( 
+            "isAmberWater"
+            , isAmberWater_function_value
+            , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+            , "" );
+    
+    }
+
+    { //::SireIO::isGromacsWater
+    
+        typedef bool ( *isGromacsWater_function_type )( ::SireMol::Molecule const &,::SireBase::PropertyMap const & );
+        isGromacsWater_function_type isGromacsWater_function_value( &::SireIO::isGromacsWater );
+        
+        bp::def( 
+            "isGromacsWater"
+            , isGromacsWater_function_value
+            , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+            , "" );
+    
+    }
+
+    { //::SireIO::isWater
+    
+        typedef bool ( *isWater_function_type )( ::SireMol::Molecule const &,::SireBase::PropertyMap const & );
+        isWater_function_type isWater_function_value( &::SireIO::isWater );
+        
+        bp::def( 
+            "isWater"
+            , isWater_function_value
+            , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+            , "" );
+    
+    }
 
     { //::SireIO::setAmberWater
     
