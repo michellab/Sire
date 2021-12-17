@@ -104,7 +104,7 @@ save_coords = Parameter("save coordinates", True, """Whether or not to save coor
 buffered_coords_freq = Parameter("buffered coordinates frequency", 1,
                                  """The number of time steps between saving of coordinates during
                                  a cycle of MD. 0 disables buffering.""")
-minimal_coordinate_saving = Parameter("minimal coordinate saving", False, "Reduce the number of coordiantes writing for states"
+minimal_coordinate_saving = Parameter("minimal coordinate saving", False, "Reduce the number of coordinates writing for states"
                                                                     "with lambda in ]0,1[")
 
 time_to_skip = Parameter("time to skip", 0 * picosecond, """Time to skip in picoseconds""")

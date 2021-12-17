@@ -48,3 +48,6 @@ wrapper/Py++/pyplusplus
 
 #Atom
 .idea
+
+#vscode
+.vscode
