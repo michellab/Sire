@@ -13,11 +13,19 @@ namespace bp = boost::python;
 
 #include "SireMol/atomelements.h"
 
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/mgname.h"
+
 #include "SireMol/moleditor.h"
 
 #include "SireMol/molidx.h"
 
 #include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
 
 #include "SireVol/periodicbox.h"
 
@@ -35,11 +43,19 @@ namespace bp = boost::python;
 
 #include "SireMol/atomelements.h"
 
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/mgname.h"
+
 #include "SireMol/moleditor.h"
 
 #include "SireMol/molidx.h"
 
 #include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
 
 #include "SireVol/periodicbox.h"
 
@@ -57,11 +73,19 @@ namespace bp = boost::python;
 
 #include "SireMol/atomelements.h"
 
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/mgname.h"
+
 #include "SireMol/moleditor.h"
 
 #include "SireMol/molidx.h"
 
 #include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
 
 #include "SireVol/periodicbox.h"
 
@@ -79,11 +103,19 @@ namespace bp = boost::python;
 
 #include "SireMol/atomelements.h"
 
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/mgname.h"
+
 #include "SireMol/moleditor.h"
 
 #include "SireMol/molidx.h"
 
 #include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
 
 #include "SireVol/periodicbox.h"
 
@@ -101,11 +133,169 @@ namespace bp = boost::python;
 
 #include "SireMol/atomelements.h"
 
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/mgname.h"
+
 #include "SireMol/moleditor.h"
 
 #include "SireMol/molidx.h"
 
 #include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
+
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
+#include "moleculeparser.h"
+
+#include "biosimspace.h"
+
+#include "SireBase/getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/mgname.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
+
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
+#include "moleculeparser.h"
+
+#include "biosimspace.h"
+
+#include "SireBase/getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/mgname.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
+
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
+#include "moleculeparser.h"
+
+#include "biosimspace.h"
+
+#include "SireBase/getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/mgname.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
+
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
+#include "moleculeparser.h"
+
+#include "biosimspace.h"
+
+#include "SireBase/getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/mgname.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
+
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
+#include "moleculeparser.h"
+
+#include "biosimspace.h"
+
+#include "SireBase/getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/mgname.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
 
 #include "SireVol/periodicbox.h"
 
@@ -128,7 +318,7 @@ void register_free_functions(){
             "isAmberWater"
             , isAmberWater_function_value
             , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
-            , "" );
+            , "Test whether the passed water molecule matches standard AMBER\nformat water topologies.\n\nPar:am molecule\nThe molecule to test.\n\nPar:am map\nA dictionary of user-defined molecular property names.\n\nRetval: is_water\nWhether the molecule is an AMBER format water.\n" );
     
     }
 
@@ -141,7 +331,7 @@ void register_free_functions(){
             "isGromacsWater"
             , isGromacsWater_function_value
             , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
-            , "" );
+            , "Test whether the passed water molecule matches standard GROMACS\nformat water topologies.\n\nPar:am molecule\nThe molecule to test.\n\nPar:am map\nA dictionary of user-defined molecular property names.\n\nRetval: is_water\nWhether the molecule is a GROMACS format water.\n" );
     
     }
 
@@ -154,7 +344,59 @@ void register_free_functions(){
             "isWater"
             , isWater_function_value
             , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
-            , "" );
+            , "Test whether the passed water molecule matches standard water\ntopologies.\n\nPar:am molecule\nThe molecule to test.\n\nPar:am map\nA dictionary of user-defined molecular property names.\n\nRetval: is_water\nWhether the molecule is a water.\n" );
+    
+    }
+
+    { //::SireIO::renumberConstituents
+    
+        typedef ::SireSystem::System ( *renumberConstituents_function_type )( ::SireSystem::System &,unsigned int );
+        renumberConstituents_function_type renumberConstituents_function_value( &::SireIO::renumberConstituents );
+        
+        bp::def( 
+            "renumberConstituents"
+            , renumberConstituents_function_value
+            , ( bp::arg("system"), bp::arg("mol_offset")=(unsigned int)(0) )
+            , "Renumber the constituents of a system (residues and atoms) so that\nthey are unique and are in ascending order.\n\nPar:am system\nThe molecular system of interest.\n\nPar:am mol_offset\nThe index of the molecule at which to begin renumbering.\n\nRetval: system\nThe system with renumbered constituents.\n" );
+    
+    }
+
+    { //::SireIO::repartitionHydrogenMass
+    
+        typedef ::SireSystem::System ( *repartitionHydrogenMass_function_type )( ::SireSystem::System &,double,bool,::SireBase::PropertyMap const & );
+        repartitionHydrogenMass_function_type repartitionHydrogenMass_function_value( &::SireIO::repartitionHydrogenMass );
+        
+        bp::def( 
+            "repartitionHydrogenMass"
+            , repartitionHydrogenMass_function_value
+            , ( bp::arg("system"), bp::arg("factor")=4, bp::arg("ignore_water")=(bool)(false), bp::arg("map")=SireBase::PropertyMap() )
+            , "Redistribute mass of heavy atoms connected to bonded hydrogens into\nthe hydrogen atoms. This allows use of larger simulation integration\ntime steps without encountering instabilities related to high-frequency\nhydrogen motion.\n\nPar:am system\nThe molecular system of interest.\n\nPar:am factor\nThe repartitioning scale factor. Hydrogen masses are scaled by\nthis amount.\n\nPar:am ignore_water\nWhether to ignore water molecules.\n\nPar:am map\nA dictionary of user-defined molecular property names.\n\nRetval: system\nThe system with repartitioned hydrogen mass.\n" );
+    
+    }
+
+    { //::SireIO::repartitionHydrogenMass
+    
+        typedef ::SireMol::Molecule ( *repartitionHydrogenMass_function_type )( ::SireMol::Molecule &,double,bool,::SireBase::PropertyMap const & );
+        repartitionHydrogenMass_function_type repartitionHydrogenMass_function_value( &::SireIO::repartitionHydrogenMass );
+        
+        bp::def( 
+            "repartitionHydrogenMass"
+            , repartitionHydrogenMass_function_value
+            , ( bp::arg("molecule"), bp::arg("factor")=4, bp::arg("ignore_water")=(bool)(false), bp::arg("map")=SireBase::PropertyMap() )
+            , "Redistribute mass of heavy atoms connected to bonded hydrogens into\nthe hydrogen atoms. This allows use of larger simulation integration\ntime steps without encountering instabilities related to high-frequency\nhydrogen motion.\n\nPar:am molecule\nThe molecule of interest.\n\nPar:am factor\nThe repartitioning scale factor. Hydrogen masses are scaled by\nthis amount.\n\nPar:am ignore_water\nWhether to ignore water molecules.\n\nPar:am map\nA dictionary of user-defined molecular property names.\n\nRetval: system\nThe system with repartitioned hydrogen mass.\n" );
+    
+    }
+
+    { //::SireIO::setAmberWater
+    
+        typedef ::SireSystem::System ( *setAmberWater_function_type )( ::SireSystem::System &,::QString const &,::SireBase::PropertyMap const & );
+        setAmberWater_function_type setAmberWater_function_value( &::SireIO::setAmberWater );
+        
+        bp::def( 
+            "setAmberWater"
+            , setAmberWater_function_value
+            , ( bp::arg("system"), bp::arg("model"), bp::arg("map")=SireBase::PropertyMap() )
+            , "Set all water molecules in the passed system to the appropriate AMBER\nformat topology.\n\nPar:am system\nThe molecular system of interest.\n\nPar:am model\nThe name of the water model.\n\nPar:am map\nA dictionary of user-defined molecular property names.\n\nRetval: system\nThe system with updated water topology.\n" );
     
     }
 
@@ -167,7 +409,20 @@ void register_free_functions(){
             "setAmberWater"
             , setAmberWater_function_value
             , ( bp::arg("molecules"), bp::arg("model"), bp::arg("map")=SireBase::PropertyMap() )
-            , "" );
+            , "Set all water molecules in the passed system to the appropriate AMBER\nformat topology.\n\nPar:am system\nThe molecular system of interest.\n\nPar:am model\nThe name of the water model.\n\nPar:am map\nA dictionary of user-defined molecular property names.\n\nRetval: system\nThe system with updated water topology.\n" );
+    
+    }
+
+    { //::SireIO::setGromacsWater
+    
+        typedef ::SireSystem::System ( *setGromacsWater_function_type )( ::SireSystem::System &,::QString const &,::SireBase::PropertyMap const & );
+        setGromacsWater_function_type setGromacsWater_function_value( &::SireIO::setGromacsWater );
+        
+        bp::def( 
+            "setGromacsWater"
+            , setGromacsWater_function_value
+            , ( bp::arg("system"), bp::arg("model"), bp::arg("map")=SireBase::PropertyMap() )
+            , "Set all water molecules in the passed system to the appropriate GROMACS\nformat topology.\n\nPar:am system\nThe molecular system of interest.\n\nPar:am model\nThe name of the water model.\n\nPar:am map\nA dictionary of user-defined molecular property names.\n\nRetval: system\nThe system with updated water topology.\n" );
     
     }
 
@@ -180,7 +435,7 @@ void register_free_functions(){
             "setGromacsWater"
             , setGromacsWater_function_value
             , ( bp::arg("molecules"), bp::arg("model"), bp::arg("map")=SireBase::PropertyMap() )
-            , "" );
+            , "Set all water molecules in the passed system to the appropriate GROMACS\nformat topology.\n\nPar:am system\nThe molecular system of interest.\n\nPar:am model\nThe name of the water model.\n\nPar:am map\nA dictionary of user-defined molecular property names.\n\nRetval: system\nThe system with updated water topology.\n\n" );
     
     }
 
