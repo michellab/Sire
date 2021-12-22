@@ -916,20 +916,9 @@ Molecule repartitionHydrogenMass(
     if (hydrogens.count() == 0)
         return molecule;
 
-    Connectivity connectivity;
-
-    // If the molecule doesn't have a "connectivity" property, or is
-    // a GROMACS format water, then we create the connectivity from
-    // the molecular bonding. (GROMACS water molecules won't necessarily
-    // have explicit hydrogen bonds.)
-    if (not molecule.hasProperty(map["connectivity"]) or isGromacsWater(molecule, map))
-    {
-        connectivity = Connectivity(molecule, CovalentBondHunter(), map);
-    }
-    else
-    {
-        connectivity = molecule.property(map["connectivity"]).asA<Connectivity>();
-    }
+    // Generate the molecular connectivity. (Don't rely on the "connectivity"
+    // property.)
+    const auto connectivity = Connectivity(molecule, CovalentBondHunter(), map);
 
     // Compute the initial mass.
     double initial_mass = 0;
