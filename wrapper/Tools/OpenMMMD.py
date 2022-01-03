@@ -186,8 +186,8 @@ distance_restraints_dict = Parameter("distance restraints dictionary", {},
                                      D the flat bottom radius.""")
 
 turn_on_restraints_mode = Parameter("turn on receptor-ligand restraints mode", False,
-                                  """If true, lambda will be used to scale the receptor-ligand restraint strength and any
-                                  pert files supplied will be ignored.""")
+                                  """If true, lambda will be used to scale the receptor-ligand restraint strength. A dummy
+                                  pert file mapping all original ligand atom parameters to themselves must be supplied.""")
 
 use_boresch_restraints = Parameter("use boresch restraints", False, 
                                     """Whether or not to use Boresch restraints between the ligand and receptor""")
@@ -1013,21 +1013,18 @@ def getDummies(molecule):
     from_dummies = None
     to_dummies = None
 
-    # If we are in "turn on restraints" mode, return none so that no
-    # alchemical changes are made. 
-    if not turn_on_restraints_mode.val:
-        for x in range(0, natoms):
-            atom = atoms[x]
-            if atom.property("initial_ambertype") == "du":
-                if from_dummies is None:
-                    from_dummies = molecule.selectAll(atom.index())
-                else:
-                    from_dummies += molecule.selectAll(atom.index())
-            elif atom.property("final_ambertype") == "du":
-                if to_dummies is None:
-                    to_dummies = molecule.selectAll(atom.index())
-                else:
-                    to_dummies += molecule.selectAll(atom.index())
+    for x in range(0, natoms):
+        atom = atoms[x]
+        if atom.property("initial_ambertype") == "du":
+            if from_dummies is None:
+                from_dummies = molecule.selectAll(atom.index())
+            else:
+                from_dummies += molecule.selectAll(atom.index())
+        elif atom.property("final_ambertype") == "du":
+            if to_dummies is None:
+                to_dummies = molecule.selectAll(atom.index())
+            else:
+                to_dummies += molecule.selectAll(atom.index())
 
     return to_dummies, from_dummies
 
@@ -1608,8 +1605,10 @@ def run():
             system = setupRestraints(system)
 
         if turn_on_restraints_mode.val:
-            print('''In "turn on receptor-ligand restraints mode". Pert file will be ignored and receptor-ligand
-                  restraint strengths will be scaled with lambda''')
+            print('''In "turn on receptor-ligand restraints mode". Receptor-ligand
+                  restraint strengths will be scaled with lambda. Ensure that a dummy
+                  pert file which maps all original ligand atom parameters to themselves
+                  has been supplied.''')
             system = saveTurnOnRestraintsModeProperty(system)
 
         if use_distance_restraints.val:
@@ -1769,8 +1768,10 @@ def runFreeNrg():
             system = setupRestraints(system)
 
         if turn_on_restraints_mode.val:
-            print('''In "turn on receptor-ligand restraints mode". Pert file will be ignored and receptor-ligand
-                  restraint strengths will be scaled with lambda''')
+            print('''In "turn on receptor-ligand restraints mode". Lambda will be used to scale
+                  the strength of protein-ligand restraints. Ensure that a dummy pert file mapping 
+                  the original parameters for all ligand atoms to themselves has been supplied.''')
+                  
             system = saveTurnOnRestraintsModeProperty(system)
 
         if use_distance_restraints.val:

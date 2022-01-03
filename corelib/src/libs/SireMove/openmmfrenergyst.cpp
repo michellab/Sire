@@ -380,7 +380,7 @@ QString OpenMMFrEnergyST::toString() const
 void OpenMMFrEnergyST::initialise()
 {
 
-    bool Debug = true;
+    bool Debug = false;
     if (Debug)
     {
         qDebug() << "Initialising OpenMMFrEnergyST";
@@ -1111,7 +1111,7 @@ void OpenMMFrEnergyST::initialise()
         if (Debug)
         {
             qDebug() << "\nCut off type = " << CutoffType;
-            qDebug() << "CutOff distance = " << converted_cutoff_distance << " Nm";
+            qDebug() << "CutOff distance = " << converted_cutoff_distance << " nm";
             qDebug() << "Dielectric constant = " << field_dielectric;
             qDebug() << "Lambda = " << Alchemical_value << " Coulomb Power = " << coulomb_power << " Delta Shift = " << shift_delta;
         }
