@@ -183,9 +183,11 @@ distance_restraints_dict = Parameter("distance restraints dictionary", {},
                                      """Dictionary of pair of atoms whose distance is restrained, and restraint
                                      parameters. Syntax is {(atom0,atom1):(reql, kl, Dl)} where atom0, atom1 are atomic
                                      indices. reql the equilibrium distance. Kl the force constant of the restraint.
-                                     D the flat bottom radius. WARNING: PBC distance checks not implemented, avoid
-                                     restraining pair of atoms that may diffuse out of the box.""")
+                                     D the flat bottom radius.""")
 
+turn_on_restraints_mode = Parameter("turn on receptor-ligand restraints mode", False,
+                                  """If true, lambda will be used to scale the receptor-ligand restraint strength and any
+                                  pert files supplied will be ignored.""")
 
 use_boresch_restraints = Parameter("use boresch restraints", False, 
                                     """Whether or not to use Boresch restraints between the ligand and receptor""")
@@ -201,13 +203,14 @@ boresch_restraints_dict = Parameter("boresch restraints dictionary", {},
                                     "force_constants":{"kr":kr, "kthetaA": kthetaA, "kthetaB": kthetaB,
                                                        "kphiA":kphiA, "kphiB": kphiB, "kphiC":kphiC}
                                     } 
-                                    r1 - 3 and l1 - 3 are the anchor points in the ligand and receptor, respectively, 
+                                    r1 - 3 and l1 - 3 are the anchor points in the receptor and ligand, respectively, 
                                     given by atomic indices. r is | l1 - r1 | (A). thetaA, and thetaB are the angles
                                     (r2, r1, l1) and (r1, l1, l2) (rad). phiA, phiB, and phiC are the dihedral angles
                                     (r3, r2, r1, l1), (r2, r1, l1, l2), and (r1, l1, l2, l3), respectively. A first 
                                     character of k indicates a force constant (kcal mol^-1 A^-2 for the distance and 
                                     kcal mol^-1 rad^-2 for the angles) and a final character of 0 indicates an
-                                    equillibrium value (A or rad).
+                                    equillibrium value (A or rad). To use Boresch restraints, "use boresch restraints" 
+                                    must be set equal to True in the config file. 
                                     """)
 
 hydrogen_mass_repartitioning_factor = \
@@ -759,6 +762,17 @@ def setupRestraints(system):
     return system
 
 
+def saveTurnOnRestraintsModeProperty(system):
+    """Saves the property "turn_on_restraints_mode" in mol num 0 where
+    the distance or Boresch restraint information is also stored.""" 
+    mol0 = system[MGName("all")].moleculeAt(0)[0].molecule()
+    mol0 = mol0.edit().setProperty("turn_on_restraints_mode",
+                                    VariantProperty(turn_on_restraints_mode.val)).commit()
+    system.update(mol0)
+
+    return(system)
+
+
 def setupDistanceRestraints(system, restraints=None):
     prop_list = []
 
@@ -999,18 +1013,21 @@ def getDummies(molecule):
     from_dummies = None
     to_dummies = None
 
-    for x in range(0, natoms):
-        atom = atoms[x]
-        if atom.property("initial_ambertype") == "du":
-            if from_dummies is None:
-                from_dummies = molecule.selectAll(atom.index())
-            else:
-                from_dummies += molecule.selectAll(atom.index())
-        elif atom.property("final_ambertype") == "du":
-            if to_dummies is None:
-                to_dummies = molecule.selectAll(atom.index())
-            else:
-                to_dummies += molecule.selectAll(atom.index())
+    # If we are in "turn on restraints" mode, return none so that no
+    # alchemical changes are made. 
+    if not turn_on_restraints_mode.val:
+        for x in range(0, natoms):
+            atom = atoms[x]
+            if atom.property("initial_ambertype") == "du":
+                if from_dummies is None:
+                    from_dummies = molecule.selectAll(atom.index())
+                else:
+                    from_dummies += molecule.selectAll(atom.index())
+            elif atom.property("final_ambertype") == "du":
+                if to_dummies is None:
+                    to_dummies = molecule.selectAll(atom.index())
+                else:
+                    to_dummies += molecule.selectAll(atom.index())
 
     return to_dummies, from_dummies
 
@@ -1590,6 +1607,11 @@ def run():
         if use_restraints.val:
             system = setupRestraints(system)
 
+        if turn_on_restraints_mode.val:
+            print('''In "turn on receptor-ligand restraints mode". Pert file will be ignored and receptor-ligand
+                  restraint strengths will be scaled with lambda''')
+            system = saveTurnOnRestraintsModeProperty(system)
+
         if use_distance_restraints.val:
             restraints = None
             if len(distance_restraints_dict.val) == 0:
@@ -1745,6 +1767,11 @@ def runFreeNrg():
 
         if use_restraints.val:
             system = setupRestraints(system)
+
+        if turn_on_restraints_mode.val:
+            print('''In "turn on receptor-ligand restraints mode". Pert file will be ignored and receptor-ligand
+                  restraint strengths will be scaled with lambda''')
+            system = saveTurnOnRestraintsModeProperty(system)
 
         if use_distance_restraints.val:
             restraints = None

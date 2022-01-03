@@ -1207,34 +1207,38 @@ void OpenMMFrEnergyST::initialise()
     /****************************************BOND LINK POTENTIAL*****************************/
     /* FC 12/21 CustomBondForce now (OpenMM 7.4.0) allows application of PBC checks*/
 
-    OpenMM::CustomBondForce * custom_link_bond = new OpenMM::CustomBondForce("kl*max(0,d-dl*dl);"
+    OpenMM::CustomBondForce * custom_link_bond = new OpenMM::CustomBondForce("lamrest*kl*max(0,d-dl*dl);"
                                                                              "d=(r-reql)*(r-reql)");
     custom_link_bond->addPerBondParameter("reql");
     custom_link_bond->addPerBondParameter("kl");
     custom_link_bond->addPerBondParameter("dl");
     custom_link_bond->setUsesPeriodicBoundaryConditions(true);
+    custom_link_bond->addGlobalParameter("lamrest", Alchemical_value);
 
     /****************************************BORESCH DISTANCE POTENTIAL*****************************/
 
-    OpenMM::CustomBondForce * custom_boresch_dist_rest = new OpenMM::CustomBondForce("0.5*force_const*(r-equil_val)^2");
+    OpenMM::CustomBondForce * custom_boresch_dist_rest = new OpenMM::CustomBondForce("lamrest*0.5*force_const*(r-equil_val)^2");
     custom_boresch_dist_rest->addPerBondParameter("force_const");
     custom_boresch_dist_rest->addPerBondParameter("equil_val");
     custom_boresch_dist_rest->setUsesPeriodicBoundaryConditions(true);
+    custom_boresch_dist_rest->addGlobalParameter("lamrest", Alchemical_value);
 
     /****************************************BORESCH ANGLE POTENTIAL*****************************/
 
-    OpenMM::CustomAngleForce * custom_boresch_angle_rest = new OpenMM::CustomAngleForce("0.5*force_const*(theta-equil_val)^2");
+    OpenMM::CustomAngleForce * custom_boresch_angle_rest = new OpenMM::CustomAngleForce("lamrest*0.5*force_const*(theta-equil_val)^2");
     custom_boresch_angle_rest->addPerAngleParameter("force_const");
     custom_boresch_angle_rest->addPerAngleParameter("equil_val");
     custom_boresch_angle_rest->setUsesPeriodicBoundaryConditions(true);
+    custom_boresch_angle_rest->addGlobalParameter("lamrest", Alchemical_value);
 
     /****************************************BORESCH DIHEDRAL POTENTIAL*****************************/
 
-    OpenMM::CustomTorsionForce * custom_boresch_dihedral_rest = new OpenMM::CustomTorsionForce("0.5*force_const*min(dtheta, 2*pi-dtheta)^2;"
+    OpenMM::CustomTorsionForce * custom_boresch_dihedral_rest = new OpenMM::CustomTorsionForce("lamrest*0.5*force_const*min(dtheta, 2*pi-dtheta)^2;"
                                                                                                "dtheta = abs(theta-equil_val); pi = 3.1415926535");
     custom_boresch_dihedral_rest->addPerTorsionParameter("force_const");
     custom_boresch_dihedral_rest->addPerTorsionParameter("equil_val");
     custom_boresch_dihedral_rest->setUsesPeriodicBoundaryConditions(true);
+    custom_boresch_dihedral_rest->addGlobalParameter("lamrest", Alchemical_value);
 
     //OpenMM vector coordinate
     std::vector<OpenMM::Vec3> positions_openmm(nats);
@@ -1430,7 +1434,7 @@ void OpenMMFrEnergyST::initialise()
 
     int nions = 0;
 
-    QVector<bool> perturbed_energies_tmp(8);
+    QVector<bool> perturbed_energies_tmp(9);
 
     for (int i = 0; i < perturbed_energies_tmp.size(); i++)
         perturbed_energies_tmp[i] = false;
@@ -2848,6 +2852,13 @@ void OpenMMFrEnergyST::initialise()
             qDebug() << "Added Perturbed Internal Angle energy term";
     }
 
+    if (moleculegroup.moleculeAt(0).molecule().hasProperty("turn_on_restraints_mode"))
+    {
+        perturbed_energies_tmp[8] = true; //Lambda will be used to turn on the receptor-ligand restraints
+        if (Debug)
+            qDebug() << "Lambda will be used to turn on the receptor-ligand restraints";
+    }
+
     perturbed_energies = perturbed_energies_tmp;
 
     //IMPORTANT: PERTURBED ENERGY TORSIONS ARE ADDED ABOVE
@@ -3812,6 +3823,10 @@ void OpenMMFrEnergyST::updateOpenMMContextLambda(double lambda)
         openmm_context->setParameter("lamangle", lambda); //Angles
     if (perturbed_energies[7])
         openmm_context->setParameter("lamdih", lambda); //Torsions
+
+    // RECEPTOR-LIGAND RESTRAINTS
+    if (perturbed_energies[8])
+        openmm_context->setParameter("lamrest", lambda); //Receptor-ligand restraints
 }
 
 boost::tuples::tuple<double, double, double> OpenMMFrEnergyST::calculateGradient(
