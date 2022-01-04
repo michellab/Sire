@@ -10,6 +10,7 @@ set ( SCRIPTS
         __init__.py
         ap.py
         AmberLoader.py
+        BoreschAnalyticalCorrection.py
         DCDFile.py
         LJcutoff.py
         LSRC.py
