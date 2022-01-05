@@ -363,27 +363,27 @@ void register_free_functions(){
 
     { //::SireIO::repartitionHydrogenMass
     
-        typedef ::SireSystem::System ( *repartitionHydrogenMass_function_type )( ::SireSystem::System &,double,bool,::SireBase::PropertyMap const & );
+        typedef ::SireSystem::System ( *repartitionHydrogenMass_function_type )( ::SireSystem::System &,double const,unsigned int const,::SireBase::PropertyMap const & );
         repartitionHydrogenMass_function_type repartitionHydrogenMass_function_value( &::SireIO::repartitionHydrogenMass );
         
         bp::def( 
             "repartitionHydrogenMass"
             , repartitionHydrogenMass_function_value
-            , ( bp::arg("system"), bp::arg("factor")=4, bp::arg("ignore_water")=(bool)(false), bp::arg("map")=SireBase::PropertyMap() )
-            , "Redistribute mass of heavy atoms connected to bonded hydrogens into\nthe hydrogen atoms. This allows use of larger simulation integration\ntime steps without encountering instabilities related to high-frequency\nhydrogen motion.\n\nPar:am system\nThe molecular system of interest.\n\nPar:am factor\nThe repartitioning scale factor. Hydrogen masses are scaled by\nthis amount.\n\nPar:am ignore_water\nWhether to ignore water molecules.\n\nPar:am map\nA dictionary of user-defined molecular property names.\n\nRetval: system\nThe system with repartitioned hydrogen mass.\n" );
+            , ( bp::arg("system"), bp::arg("factor")=4, bp::arg("water")=(unsigned int const)(0), bp::arg("map")=SireBase::PropertyMap() )
+            , "Redistribute mass of heavy atoms connected to bonded hydrogens into\nthe hydrogen atoms. This allows use of larger simulation integration\ntime steps without encountering instabilities related to high-frequency\nhydrogen motion.\n\nPar:am system\nThe molecular system of interest.\n\nPar:am factor\nThe repartitioning scale factor. Hydrogen masses are scaled by\nthis amount.\n\nPar:am water\nWhether to repartiotion masses for water molecules:\n0 = yes, 1 = no, 2 = only water molecules.\n\nPar:am map\nA dictionary of user-defined molecular property names.\n\nRetval: system\nThe system with repartitioned hydrogen mass.\n" );
     
     }
 
     { //::SireIO::repartitionHydrogenMass
     
-        typedef ::SireMol::Molecule ( *repartitionHydrogenMass_function_type )( ::SireMol::Molecule &,double,bool,::SireBase::PropertyMap const & );
+        typedef ::SireMol::Molecule ( *repartitionHydrogenMass_function_type )( ::SireMol::Molecule &,double const,unsigned int const,::SireBase::PropertyMap const & );
         repartitionHydrogenMass_function_type repartitionHydrogenMass_function_value( &::SireIO::repartitionHydrogenMass );
         
         bp::def( 
             "repartitionHydrogenMass"
             , repartitionHydrogenMass_function_value
-            , ( bp::arg("molecule"), bp::arg("factor")=4, bp::arg("ignore_water")=(bool)(false), bp::arg("map")=SireBase::PropertyMap() )
-            , "Redistribute mass of heavy atoms connected to bonded hydrogens into\nthe hydrogen atoms. This allows use of larger simulation integration\ntime steps without encountering instabilities related to high-frequency\nhydrogen motion.\n\nPar:am molecule\nThe molecule of interest.\n\nPar:am factor\nThe repartitioning scale factor. Hydrogen masses are scaled by\nthis amount.\n\nPar:am ignore_water\nWhether to ignore water molecules.\n\nPar:am map\nA dictionary of user-defined molecular property names.\n\nRetval: system\nThe system with repartitioned hydrogen mass.\n" );
+            , ( bp::arg("molecule"), bp::arg("factor")=4, bp::arg("water")=(unsigned int const)(0), bp::arg("map")=SireBase::PropertyMap() )
+            , "Redistribute mass of heavy atoms connected to bonded hydrogens into\nthe hydrogen atoms. This allows use of larger simulation integration\ntime steps without encountering instabilities related to high-frequency\nhydrogen motion.\n\nPar:am molecule\nThe molecule of interest.\n\nPar:am factor\nThe repartitioning scale factor. Hydrogen masses are scaled by\nthis amount.\n\nPar:am water\nWhether to repartiotion masses for water molecules:\n0 = yes, 1 = no, 2 = only water molecules.\n\nPar:am map\nA dictionary of user-defined molecular property names.\n\nRetval: system\nThe system with repartitioned hydrogen mass.\n" );
     
     }
 

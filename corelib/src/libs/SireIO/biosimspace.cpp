@@ -822,8 +822,8 @@ Molecule pvt_renumberConstituents(
 
 System repartitionHydrogenMass(
     System& system,
-    double factor,
-    bool ignore_water,
+    const double factor,
+    const unsigned water,
     const PropertyMap& map)
 {
     // Repartition the mass of each molecule.
@@ -831,40 +831,48 @@ System repartitionHydrogenMass(
     {
         auto molecule = molview.molecule();
 
-        if (not ignore_water or not isWater(molecule, map))
+        // Skip water molecules.
+        if (water == 0 and isWater(molecule, map))
         {
-            // This is a perturbable molecule. We need to repartition
-            // the mass for both lambda end states.
-            if (molecule.hasProperty("is_perturbable"))
-            {
-                PropertyMap pmap;
-
-                // Lambda = 0 mappings.
-                pmap.set("mass", "mass0");
-                pmap.set("element", "element0");
-                pmap.set("connectivity", "connectivity0");
-                pmap.set("coordinates", "coordinates0");
-
-                molecule = repartitionHydrogenMass(
-                    molecule, factor, ignore_water, pmap);
-
-                // Lambda = 1 mappings.
-                pmap.set("mass", "mass1");
-                pmap.set("element", "element1");
-                pmap.set("connectivity", "connectivity1");
-                pmap.set("coordinates", "coordinates1");
-
-                molecule = repartitionHydrogenMass(
-                    molecule, factor, ignore_water, pmap);
-            }
-            else
-            {
-                molecule = repartitionHydrogenMass(
-                    molecule, factor, ignore_water, map);
-            }
-
-            system.update(molecule);
+            continue;
         }
+        // Skip non-water molecules.
+        else if (water == 2 and not isWater(molecule, map))
+        {
+            continue;
+        }
+
+        // This is a perturbable molecule. We need to repartition
+        // the mass for both lambda end states.
+        if (molecule.hasProperty("is_perturbable"))
+        {
+            PropertyMap pmap;
+
+            // Lambda = 0 mappings.
+            pmap.set("mass", "mass0");
+            pmap.set("element", "element0");
+            pmap.set("connectivity", "connectivity0");
+            pmap.set("coordinates", "coordinates0");
+
+            molecule = repartitionHydrogenMass(
+                molecule, factor, water, pmap);
+
+            // Lambda = 1 mappings.
+            pmap.set("mass", "mass1");
+            pmap.set("element", "element1");
+            pmap.set("connectivity", "connectivity1");
+            pmap.set("coordinates", "coordinates1");
+
+            molecule = repartitionHydrogenMass(
+                molecule, factor, water, pmap);
+        }
+        else
+        {
+            molecule = repartitionHydrogenMass(
+                molecule, factor, water, map);
+        }
+
+        system.update(molecule);
     }
 
     return system;
@@ -872,12 +880,20 @@ System repartitionHydrogenMass(
 
 Molecule repartitionHydrogenMass(
     Molecule& molecule,
-    double factor,
-    bool ignore_water,
+    const double factor,
+    const unsigned water,
     const PropertyMap& map)
 {
-    if (ignore_water and isWater(molecule, map))
+    // Skip water molecules.
+    if (water == 0 and isWater(molecule, map))
+    {
         return molecule;
+    }
+    // Skip non-water molecules.
+    else if (water == 2 and not isWater(molecule, map))
+    {
+        return molecule;
+    }
 
     // Get the name of the element and mass properties.
     const auto elem_prop = map["element"];

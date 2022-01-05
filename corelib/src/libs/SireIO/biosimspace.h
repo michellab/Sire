@@ -222,8 +222,9 @@ namespace SireIO
             The repartitioning scale factor. Hydrogen masses are scaled by
             this amount.
 
-        \param ignore_water
-            Whether to ignore water molecules.
+        \param water
+            Whether to repartiotion masses for water molecules:
+            0 = yes, 1 = no, 2 = only water molecules.
 
         \param map
             A dictionary of user-defined molecular property names.
@@ -233,8 +234,8 @@ namespace SireIO
      */
     SIREIO_EXPORT System repartitionHydrogenMass(
             System& system,
-            double factor=4,
-            bool ignore_water=false,
+            const double factor=4,
+            const unsigned water=0,
             const PropertyMap& map = PropertyMap());
 
     //! Redistribute mass of heavy atoms connected to bonded hydrogens into
@@ -249,8 +250,9 @@ namespace SireIO
             The repartitioning scale factor. Hydrogen masses are scaled by
             this amount.
 
-        \param ignore_water
-            Whether to ignore water molecules.
+        \param water
+            Whether to repartiotion masses for water molecules:
+            0 = yes, 1 = no, 2 = only water molecules.
 
         \param map
             A dictionary of user-defined molecular property names.
@@ -260,8 +262,8 @@ namespace SireIO
      */
     SIREIO_EXPORT Molecule repartitionHydrogenMass(
             Molecule& molecule,
-            double factor=4,
-            bool ignore_water=false,
+            const double factor=4,
+            const unsigned water=0,
             const PropertyMap& map = PropertyMap());
 
     Vector cross(const Vector& v0, const Vector& v1);
