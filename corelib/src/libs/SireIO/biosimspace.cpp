@@ -538,7 +538,7 @@ System setAmberWater(System& system, const QString& model, const PropertyMap& ma
     System new_system;
 
     // Create a single molecule group.
-    auto mgroup = MoleculeGroup("all");
+    auto molgroup = MoleculeGroup("all");
 
     // Copy across all system properties.
     for (const auto prop : system.propertyKeys())
@@ -590,11 +590,11 @@ System setAmberWater(System& system, const QString& model, const PropertyMap& ma
                 template_molecule, _model, has_virtual, map);
         }
 
-        mgroup.add(molecule);
+        molgroup.add(molecule);
     }
 
     // Add the molecule group to the system.
-    new_system.add(mgroup);
+    new_system.add(molgroup);
 
     return new_system;
 }
@@ -605,7 +605,7 @@ System setGromacsWater(System& system, const QString& model, const PropertyMap& 
     System new_system;
 
     // Create a single molecule group.
-    auto mgroup = MoleculeGroup("all");
+    auto molgroup = MoleculeGroup("all");
 
     // Copy across all system properties.
     for (const auto prop : system.propertyKeys())
@@ -657,11 +657,11 @@ System setGromacsWater(System& system, const QString& model, const PropertyMap& 
                 template_molecule, _model, has_virtual, map);
         }
 
-        mgroup.add(molecule);
+        molgroup.add(molecule);
     }
 
     // Add the molecule group to the system.
-    new_system.add(mgroup);
+    new_system.add(molgroup);
 
     return new_system;
 }
@@ -786,7 +786,7 @@ System renumberConstituents(System& system, unsigned mol_offset)
     System new_system;
 
     // Create a single molecule group.
-    auto mgroup = MoleculeGroup("all");
+    auto molgroup = MoleculeGroup("all");
 
     // Copy across all system properties.
     for (const auto prop : system.propertyKeys())
@@ -815,14 +815,14 @@ System renumberConstituents(System& system, unsigned mol_offset)
         molecule = pvt_renumberConstituents(molecule,
             num_residues, num_atoms);
 
-        mgroup.add(molecule);
+        molgroup.add(molecule);
 
         num_residues += molecule.nResidues();
         num_atoms += molecule.nAtoms();
     }
 
     // Add the molecule group to the system.
-    new_system.add(mgroup);
+    new_system.add(molgroup);
 
     return new_system;
 }
@@ -859,10 +859,8 @@ System repartitionHydrogenMass(
     // Create a new system object.
     System new_system;
 
-    // Add a single molecule group.
-    auto mgname = MGName("all");
-    auto mgroup = MoleculeGroup("all");
-    new_system.add(mgroup);
+    // Create a single molecule group.
+    auto molgroup = MoleculeGroup("all");
 
     // Copy across all system properties.
     for (const auto prop : system.propertyKeys())
@@ -870,21 +868,22 @@ System repartitionHydrogenMass(
         new_system.setProperty(prop, system.property(prop));
     }
 
-    // Repartition the mass of each molecule.
-    for (auto &molview : system.molecules())
+    // Loop over all molecules in the system in MolIdx order.
+    for (int i=0; i<system.nMolecules(); ++i)
     {
-        auto molecule = molview.molecule();
+        // Extract the water molecule.
+        auto molecule = system.molecule(MolIdx(i)).molecule();
 
         // Skip water molecules.
         if (water == 0 and isWater(molecule, map))
         {
-            new_system.add(molecule, mgname);
+            molgroup.add(molecule);
             continue;
         }
         // Skip non-water molecules.
         else if (water == 2 and not isWater(molecule, map))
         {
-            new_system.add(molecule, mgname);
+            molgroup.add(molecule);
             continue;
         }
 
@@ -918,8 +917,11 @@ System repartitionHydrogenMass(
                 molecule, factor, water, map);
         }
 
-        new_system.add(molecule, mgname);
+        molgroup.add(molecule);
     }
+
+    // Add the molecule group to the system.
+    new_system.add(molgroup);
 
     return new_system;
 }
