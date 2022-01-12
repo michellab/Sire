@@ -270,9 +270,9 @@ namespace detail
 
             helpers_by_id.insert( helper.formatName(), helper );
 
-            for (const auto suffix : helper.suffixes())
+            for (const auto &suffix : helper.suffixes())
             {
-                helpers_by_suffix.insertMulti(suffix, helper);
+                helpers_by_suffix.insert(suffix, helper);
             }
         }
 
@@ -282,7 +282,7 @@ namespace detail
             QList<ParserFactoryHelper> helpers;
             QStringList missing;
 
-            for (const auto name : parser_names)
+            for (const auto &name : parser_names)
             {
                 helpers.append( helpers_by_id.value(name) );
 
@@ -326,7 +326,7 @@ namespace detail
 
             QList<ParserFactoryHelper> helpers;
 
-            for (const auto helper : helpers_by_id)
+            for (const auto &helper : helpers_by_id)
             {
                 if (not helper.suffixes().contains(suffix))
                 {
@@ -353,7 +353,7 @@ namespace detail
 
             QStringList lines;
 
-            for (const auto key : keys)
+            for (const auto &key : keys)
             {
                 const auto parser = helpers_by_id.value(key);
 
@@ -1137,7 +1137,7 @@ QStringList MoleculeParser::write(const System &system, const QString &filename,
 
         QString basename = QFileInfo(filename).completeBaseName();
 
-        for (const auto format : fileformats)
+        for (const auto &format : fileformats)
         {
             filenames.append( QString("%1.%2").arg(basename,format.toLower()) );
         }
@@ -1166,7 +1166,7 @@ QStringList MoleculeParser::write(const System &system, const QString &filename,
                                 CODELOC );
             }
 
-            for (const auto format : fileformats)
+            for (const auto &format : fileformats)
             {
                 filenames.append( QString("%1.%2").arg(filename).arg(format.toLower()) );
             }

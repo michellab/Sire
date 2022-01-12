@@ -469,8 +469,8 @@ QString PDBAtom::writeToLine() const
         resnum -= 10000;
     }
 
-    QString s;
-    s.sprintf("%-6s%5d %4s%1s%3s %1s%4d%1s   %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s",
+    QString s = QString::asprintf(
+           "%-6s%5d %4s%1s%3s %1s%4d%1s   %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s",
             qPrintable(record_name), num, qPrintable(name),
             qPrintable(altloc), qPrintable(resname), qPrintable(chainid),
             resnum, qPrintable(icode), x, y, z, occupancy, tempfactor,
@@ -1322,7 +1322,7 @@ MoleculeGroup PDB::readMols(const QByteArray &data,
 
         if (line.startsWith("END"))
         {
-            QStringList words = line.split(" ", QString::SkipEmptyParts);
+            QStringList words = line.split(" ", Qt::SkipEmptyParts);
 
             if (words[0].length() == 3)
                 //this is the end of the PDB file

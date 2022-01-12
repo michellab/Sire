@@ -284,7 +284,7 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
         auto nam = name;
 
         // We'll strip all numeric digits and use a maximum of two characters.
-        nam.remove(QRegExp("[0-9]")).mid(0, 2);
+        auto _ret = nam.remove(QRegExp("[0-9]")).mid(0, 2);
         element = Element::biologicalElement(nam).symbol();
     }
 

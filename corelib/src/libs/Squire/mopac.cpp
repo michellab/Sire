@@ -870,7 +870,7 @@ AtomCharges Mopac::calculateCharges(const Molecule &molecule,
 
             for (int i=idx+1; i<lines.count(); ++i)
             {
-                const QStringList words = lines[i].split(" ",QString::SkipEmptyParts);
+                const QStringList words = lines[i].split(" ",Qt::SkipEmptyParts);
 
                 if (words.count() < 3)
                     //we've finished

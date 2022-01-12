@@ -53,7 +53,7 @@
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
-#include <QTime>
+#include <QElapsedTimer>
 #include <QDebug>
 
 using namespace Squire;
@@ -925,7 +925,7 @@ double Molpro::calculateEnergy(const QString &cmdfile, int ntries) const
     }
 
     //run the shell file...
-    QTime t;
+    QElapsedTimer t;
     qDebug() << "Running molpro...";
     t.start();
     Process p = Process::run( "sh", shellfile );

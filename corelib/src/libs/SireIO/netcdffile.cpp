@@ -597,7 +597,7 @@ int NetCDFDataInfo::nValues() const
 {
     int base = 1;
 
-    for (const auto sz : dim_sizes)
+    for (const auto &sz : dim_sizes)
     {
         base *= sz;
     }
@@ -747,7 +747,7 @@ QList<int> NetCDFData::get_attribute_types(const QHash<QString,QVariant> &attrib
 
     QList<int> typs;
 
-    for (const auto name : get_attribute_names(attributes))
+    for (const auto &name : get_attribute_names(attributes))
     {
         typs.append( qvariant_to_nc_type( attributes.value(name) ) );
     }
@@ -763,7 +763,7 @@ QList<QVariant> NetCDFData::get_attribute_values(const QHash<QString,QVariant> &
 
     QList<QVariant> vals;
 
-    for (const auto name : get_attribute_names(attributes))
+    for (const auto &name : get_attribute_names(attributes))
     {
         vals.append( attributes.value(name) );
     }
@@ -1233,7 +1233,7 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
         {
             QHash<QString,int> dimensions;
 
-            for (const auto variable : variables)
+            for (const auto &variable : variables)
             {
                 const auto vardata = variable_data[variable];
 
@@ -1261,7 +1261,7 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
 
             dimension_ids.reserve(dims.count());
 
-            for (const auto dim : dims)
+            for (const auto &dim : dims)
             {
                 int idp;
                 const QByteArray c_dim = dim.toUtf8();
@@ -1285,7 +1285,7 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
         //now go through and save info about all of the variables
         var_ids.reserve(variables.count());
 
-        for (const auto variable : variables)
+        for (const auto &variable : variables)
         {
             const auto vardata = variable_data[variable];
 
@@ -1294,7 +1294,7 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
 
             QVarLengthArray<int,8> dim_ids;
 
-            for (const auto dim : dims)
+            for (const auto &dim : dims)
             {
                 dim_ids.append( dimension_ids[dim] );
             }
@@ -1328,7 +1328,7 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
         QStringList global_attributes = globals.keys();
         std::sort(global_attributes.begin(), global_attributes.end());
 
-        for (const auto global_attribute : global_attributes)
+        for (const auto &global_attribute : global_attributes)
         {
             QByteArray c_name = global_attribute.toUtf8();
             QByteArray c_att = globals.value(global_attribute).toUtf8();
@@ -1340,7 +1340,7 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
         }
 
         //now write all of the attributes
-        for (const auto variable : variables)
+        for (const auto &variable : variables)
         {
             const auto vardata = variable_data[variable];
 
@@ -1354,7 +1354,7 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
             }
 
             //find all of the attributes of this variable
-            for (const auto attribute : vardata.attributeNames())
+            for (const auto &attribute : vardata.attributeNames())
             {
                 const auto att_value = vardata.attribute(attribute);
                 const auto att_type = vardata.attributeType(attribute);
@@ -1408,7 +1408,7 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
         call_netcdf_function( [&](){ return nc_enddef(hndl); } );
 
         //now that the metadata has been written, we can now write the actual data
-        for (const auto variable : variables)
+        for (const auto &variable : variables)
         {
             const auto vardata = variable_data[variable];
 

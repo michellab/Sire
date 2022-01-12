@@ -515,7 +515,7 @@ void AmberPrm::rebuildLJParameters()
     'atom_to_mol' (the molecule containing the passed atom). This uses the bonding information
     in 'bonded_atoms', which is the list of all atoms that are bonded to each atom */
 static void findBondedAtoms(int atom_idx, int mol_idx,
-                            const QHash<int, int> &bonded_atoms,
+                            const QMultiHash<int, int> &bonded_atoms,
                             QHash<int, int> &atom_to_mol,
                             QSet<int> &atoms_in_mol)
 {
@@ -548,22 +548,22 @@ static QVector<qint64> discoverMolecules(const QVector<qint64> &bonds_inc_h,
     //  IBH    : atom involved in bond "i", bond contains hydrogen
     //  JBH    : atom involved in bond "i", bond contains hydrogen
     //  ICBH   : index into parameter arrays RK and REQ
-    QHash<int, int> bonded_atoms;
+    QMultiHash<int, int> bonded_atoms;
 
     for ( int j = 0 ; j < bonds_exc_h.count() ; j = j + 3 )
     {
         int atom0 = bonds_exc_h[ j ] / 3 + 1;
         int atom1 = bonds_exc_h[ j + 1 ] / 3 + 1;
-        bonded_atoms.insertMulti(atom0, atom1);
-        bonded_atoms.insertMulti(atom1, atom0);
+        bonded_atoms.insert(atom0, atom1);
+        bonded_atoms.insert(atom1, atom0);
     }
 
     for ( int j = 0 ; j < bonds_inc_h.count() ; j = j + 3 )
     {
         int atom0 = bonds_inc_h[ j ] / 3 + 1 ;
         int atom1 = bonds_inc_h[ j + 1 ] / 3 + 1 ;
-        bonded_atoms.insertMulti(atom0, atom1);
-        bonded_atoms.insertMulti(atom1, atom0);
+        bonded_atoms.insert(atom0, atom1);
+        bonded_atoms.insert(atom1, atom0);
     }
 
     // Then recursively walk along each atom to find all the atoms that
@@ -614,22 +614,22 @@ void AmberPrm::rebuildMolNumToAtomNums()
     //  IBH    : atom involved in bond "i", bond contains hydrogen
     //  JBH    : atom involved in bond "i", bond contains hydrogen
     //  ICBH   : index into parameter arrays RK and REQ
-    QHash<int, int> bonded_atoms;
+    QMultiHash<int, int> bonded_atoms;
 
     for ( int j = 0 ; j < bonds_exc_h.count() ; j = j + 3 )
     {
         int atom0 = bonds_exc_h[ j ] / 3 + 1;
         int atom1 = bonds_exc_h[ j + 1 ] / 3 + 1;
-        bonded_atoms.insertMulti(atom0, atom1);
-        bonded_atoms.insertMulti(atom1, atom0);
+        bonded_atoms.insert(atom0, atom1);
+        bonded_atoms.insert(atom1, atom0);
     }
 
     for ( int j = 0 ; j < bonds_inc_h.count() ; j = j + 3 )
     {
         int atom0 = bonds_inc_h[ j ] / 3 + 1 ;
         int atom1 = bonds_inc_h[ j + 1 ] / 3 + 1 ;
-        bonded_atoms.insertMulti(atom0, atom1);
-        bonded_atoms.insertMulti(atom1, atom0);
+        bonded_atoms.insert(atom0, atom1);
+        bonded_atoms.insert(atom1, atom0);
     }
 
     // Then recursively walk along each atom to find all the atoms that
@@ -711,7 +711,7 @@ void AmberPrm::rebuildMolNumToAtomNums()
             //add the number of atoms in the molecule to atoms_per_mol
             atoms_per_mol.append( atoms_in_mol.count() );
 
-            auto atms = atoms_in_mol.toList();
+            auto atms = atoms_in_mol.values();
             std::sort(atms.begin(), atms.end());
 
             molnum_to_atomnums.append(atms.toVector());
@@ -1090,7 +1090,7 @@ void AmberPrm::parse(const PropertyMap &map)
                 }
 
                 //find the new flag
-                QStringList words = line.split(" ", QString::SkipEmptyParts);
+                QStringList words = line.split(" ", Qt::SkipEmptyParts);
 
                 QString flag = words[1];
 
@@ -1735,7 +1735,7 @@ getDihedralData(const AmberParams &params, int start_idx)
                         CODELOC );
         }
 
-        for (const auto term : it.value().first.terms())
+        for (const auto &term : it.value().first.terms())
         {
             AmberNBDihPart nbterm(term, nb14);
 
@@ -1801,7 +1801,7 @@ getDihedralData(const AmberParams &params, int start_idx)
         //create a database of them and get their ID
         QList<qint64> idxs;
 
-        for (const auto term : it.value().first.terms())
+        for (const auto &term : it.value().first.terms())
         {
             AmberNBDihPart nbterm(term, AmberNB14(0,0));
 
