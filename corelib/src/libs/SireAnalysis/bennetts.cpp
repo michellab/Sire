@@ -60,27 +60,27 @@ static const RegisterAlternativeName<BennettsRatios> r_altratios("Soiree::Bennet
 QDataStream &operator<<(QDataStream &ds, const BennettsRatios &ratios)
 {
     writeHeader(ds, r_ratios, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << ratios.lamvals << ratios.fwds_ratios << ratios.bwds_ratios;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, BennettsRatios &ratios)
 {
     VersionID v = readHeader(ds, r_ratios);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> ratios.lamvals >> ratios.fwds_ratios >> ratios.bwds_ratios;
     }
     else
         throw version_error(v, "1", r_ratios, CODELOC);
-    
+
     return ds;
 }
 
@@ -116,9 +116,9 @@ void BennettsRatios::checkSane() const
                     .arg(t.toString()).arg(it.value().temperature().toString()),
                         CODELOC );
         }
-    
+
         int idx = lamvals.indexOf(it.key());
-        
+
         if (idx == -1)
             throw SireError::invalid_arg( QObject::tr(
                     "All of the Bennetts ratios must correspond to one of the Bennetts windows. "
@@ -126,7 +126,7 @@ void BennettsRatios::checkSane() const
                     "windows %3")
                         .arg(it.key()).arg(it.value().toString())
                         .arg(Sire::toString(lamvals)), CODELOC );
-        
+
         if (idx == lamvals.count())
             //there should be no forwards delta for the last window
             throw SireError::invalid_arg( QObject::tr(
@@ -153,7 +153,7 @@ void BennettsRatios::checkSane() const
         }
 
         int idx = lamvals.indexOf(it.key());
-        
+
         if (idx == -1)
             throw SireError::invalid_arg( QObject::tr(
                     "All of the Bennetts ratios must correspond to one of the Bennetts windows. "
@@ -161,7 +161,7 @@ void BennettsRatios::checkSane() const
                     "windows %3")
                         .arg(it.key()).arg(it.value().toString())
                         .arg(Sire::toString(lamvals)), CODELOC );
-        
+
         if (idx == lamvals.count())
             //there should be no backwards delta for the first window
             throw SireError::invalid_arg( QObject::tr(
@@ -182,7 +182,7 @@ BennettsRatios::BennettsRatios(const QList<double> &windows,
           : ConcreteProperty<BennettsRatios,Property>(),
             lamvals(windows), fwds_ratios(forwards_ratios), bwds_ratios(backwards_ratios)
 {
-    qSort(lamvals);
+    std::sort(lamvals.begin(), lamvals.end());
     checkSane();
 }
 
@@ -205,7 +205,7 @@ BennettsRatios& BennettsRatios::operator=(const BennettsRatios &other)
         fwds_ratios = other.fwds_ratios;
         bwds_ratios = other.bwds_ratios;
     }
-    
+
     return *this;
 }
 
@@ -279,17 +279,17 @@ BennettsRatios& BennettsRatios::operator+=(const BennettsRatios &other)
                 "%1 vs. %2.")
                     .arg(Sire::toString(lamvals)).arg(Sire::toString(other.lamvals)),
                         CODELOC);
-        
+
         if (temperature() != other.temperature())
             throw SireError::incompatible_error( QObject::tr(
                 "Cannot add together these two BennettsRatios as the temperature at which they "
                 "were collected are different. %1 vs. %2")
                     .arg(temperature().toString()).arg(other.temperature().toString()),
                         CODELOC );
-        
+
         QMap<double,BennettsFreeEnergyAverage> new_fwds_ratios = fwds_ratios;
         QMap<double,BennettsFreeEnergyAverage> new_bwds_ratios = bwds_ratios;
-        
+
         for (QMap<double,BennettsFreeEnergyAverage>::const_iterator
                                     it = other.fwds_ratios.constBegin();
              it != other.fwds_ratios.constEnd();
@@ -311,10 +311,10 @@ BennettsRatios& BennettsRatios::operator+=(const BennettsRatios &other)
             else
                 new_bwds_ratios.insert(it.key(), it.value());
         }
-        
+
         fwds_ratios = new_fwds_ratios;
         bwds_ratios = new_bwds_ratios;
-        
+
         return *this;
     }
 }
@@ -332,10 +332,10 @@ BennettsRatios BennettsRatios::merge(const QList<BennettsRatios> &deltas)
 {
     if (deltas.isEmpty())
         return BennettsRatios();
-    
+
     else if (deltas.count() == 1)
         return deltas.at(0);
-    
+
     else
     {
         BennettsRatios ret = deltas.at(0);
@@ -344,7 +344,7 @@ BennettsRatios BennettsRatios::merge(const QList<BennettsRatios> &deltas)
         {
             ret += deltas.at(i);
         }
-        
+
         return ret;
     }
 }
@@ -377,21 +377,21 @@ int BennettsRatios::nWindows() const
 qint64 BennettsRatios::nSamples() const
 {
     quint64 n = 0;
-    
+
     for (QMap<double,BennettsFreeEnergyAverage>::const_iterator it = fwds_ratios.constBegin();
          it != fwds_ratios.constEnd();
          ++it)
     {
         n += it.value().nSamples();
     }
-    
+
     for (QMap<double,BennettsFreeEnergyAverage>::const_iterator it = bwds_ratios.constBegin();
          it != bwds_ratios.constEnd();
          ++it)
     {
         n += it.value().nSamples();
     }
-    
+
     return n;
 }
 
@@ -405,7 +405,7 @@ const DataPoint& getPoint(const QVector<DataPoint> &points, double lam, bool *fo
             return point;
         }
     }
-    
+
     static DataPoint empty;
     *found = false;
     return empty;
@@ -424,15 +424,15 @@ QVector<DataPoint> BennettsRatios::values() const
     for (int i=0; i<lamvals.count(); ++i)
     {
         double lamval = lamvals.at(i);
-        
+
         bool found_const;
         bool found_num;
         bool found_denom;
-        
+
         const DataPoint &c = getPoint(consts, lamval, &found_const);
         const DataPoint &num = getPoint(nums, lamval, &found_num);
         const DataPoint &denom = getPoint(denoms, lamval, &found_denom);
-        
+
         if (found_const and found_num and found_denom)
         {
             //we have found a matched pair - calculate the ratio, and minimum
@@ -440,13 +440,13 @@ QVector<DataPoint> BennettsRatios::values() const
             double val = num.y() / denom.y();
             double minerr = (num.y()+num.yMinError())/(denom.y()-denom.yMinError());
             double maxerr = (num.y()+num.yMaxError())/(denom.y()-denom.yMaxError());
-            
+
             // ratio = e^(-beta (dG - C)) so dG = -(1/beta) ln(ratio) + C
-            
+
             val = -(k_boltz * temperature().to(kelvin) * std::log(val)) + c.y();
             minerr = -(k_boltz * temperature().to(kelvin) * std::log(minerr)) + c.y();
             maxerr = -(k_boltz * temperature().to(kelvin) * std::log(maxerr)) + c.y();
-            
+
             vals.append( DataPoint(num.x(),val, 0, std::abs(val-minerr),
                                                 0, std::abs(val-maxerr)) );
         }
@@ -476,7 +476,7 @@ QVector<DataPoint> BennettsRatios::values() const
             double minerr = 0.5 * std::abs(fwdsval - bwdsval);
             double maxerr = minerr + fwds.histogram().standardError(90) +
                                      bwds.histogram().standardError(90);
-            
+
             vals.append( DataPoint(lamval,val, 0,minerr, 0,maxerr) );
         }
         else if (found_num)
@@ -489,11 +489,11 @@ QVector<DataPoint> BennettsRatios::values() const
                                 CODELOC );
 
             const BennettsFreeEnergyAverage &fwds = *(fwds_ratios.constFind(lamval));
-        
+
             double val = fwds.average();
-            
+
             double err = fwds.histogram().standardError(90);
-            
+
             vals.append( DataPoint(lamval, val, 0, err) );
         }
         else if (found_denom)
@@ -505,12 +505,12 @@ QVector<DataPoint> BennettsRatios::values() const
                         "No backwards value for lambda %1? %2")
                             .arg(lamvals.at(i+1)).arg(Sire::toString(bwds_ratios.keys())),
                                 CODELOC );
-            
+
             const FreeEnergyAverage &bwds = *(bwds_ratios.constFind(lamvals.at(i+1)));
-        
+
             double val = bwds.average();
             double err = bwds.histogram().standardError(90);
-            
+
             vals.append( DataPoint(lamval, val, 0, err) );
         }
         else
@@ -519,7 +519,7 @@ QVector<DataPoint> BennettsRatios::values() const
             vals.append( DataPoint(lamval, 0) );
         }
     }
-    
+
     return vals;
 }
 
@@ -531,77 +531,77 @@ QVector<DataPoint> BennettsRatios::values() const
 QVector<DataPoint> BennettsRatios::constants() const
 {
     QVector<DataPoint> points;
-    
+
     for (int i=1; i<lamvals.count(); ++i)
     {
         if (fwds_ratios.contains(lamvals[i-1]) and bwds_ratios.contains(lamvals[i]))
         {
             const BennettsFreeEnergyAverage &fwds = *(fwds_ratios.constFind(lamvals[i-1]));
             const BennettsFreeEnergyAverage &bwds = *(bwds_ratios.constFind(lamvals[i]));
-            
+
             if (fwds.constant() == bwds.constant())
                 points.append( DataPoint(lamvals[i-1],fwds.constant().value()) );
             else
                 qDebug() << "WARNING: Bennetts constants for numerator and denominator "
                          << "don't match!" << fwds.toString() << "vs." << bwds.toString();
-            
+
         }
     }
-    
+
     return points;
 }
 
-/** Return the numerators for the Bennetts acceptance ratio. This returns the 
+/** Return the numerators for the Bennetts acceptance ratio. This returns the
     lambda value of the from window, together with the Bennetts ratio for the
     energy difference from this window to the next window */
 QVector<DataPoint> BennettsRatios::numerators() const
 {
     QVector<DataPoint> points;
-    
+
     foreach (double lamval, lamvals)
     {
         if (fwds_ratios.contains(lamval))
         {
             const BennettsFreeEnergyAverage &fwds = *(fwds_ratios.constFind(lamval));
-        
+
             double val = fwds.bennettsRatio();
             double minerr = fwds.bennettsStandardError(50);
             double maxerr = fwds.bennettsStandardError(95);
-            
+
             if (maxerr < minerr)
                 qSwap(maxerr, minerr);
-            
+
             points.append( DataPoint(lamval, val, 0, minerr, 0, maxerr) );
         }
     }
-    
+
     return points;
 }
 
-/** Return the denominators for the Bennetts acceptance ratio. This returns the 
+/** Return the denominators for the Bennetts acceptance ratio. This returns the
     lambda value of the previous window, together with the Bennetts ratio for the
     energy difference from this window to the previous window */
 QVector<DataPoint> BennettsRatios::denominators() const
 {
     QVector<DataPoint> points;
-    
+
     for (int i=1; i<lamvals.count(); ++i)
     {
         if (bwds_ratios.contains(lamvals[i]))
         {
             const BennettsFreeEnergyAverage &bwds = *(bwds_ratios.constFind(lamvals[i]));
-        
+
             double val = bwds.bennettsRatio();
             double minerr = bwds.bennettsStandardError(50);
             double maxerr = bwds.bennettsStandardError(95);
-            
+
             if (maxerr < minerr)
                 qSwap(maxerr, minerr);
-            
+
             points.append( DataPoint(lamvals[i-1], val, 0, minerr, 0, maxerr) );
         }
     }
-    
+
     return points;
 }
 
@@ -636,14 +636,14 @@ PMF BennettsRatios::sum() const
         return PMF();
 
     QVector<DataPoint> vals = this->values();
-    
+
     double total = 0;
     double total_minerr = 0;
     double total_maxerr = 0;
-    
+
     QVector<DataPoint> points;
     points.append( DataPoint(lamvals.first(),0) );
-    
+
     for (int i=0; i<lamvals.count()-1; ++i)
     {
         foreach (const DataPoint &val, vals)
@@ -653,14 +653,14 @@ PMF BennettsRatios::sum() const
                 total += val.y();
                 total_minerr += val.yMinError();
                 total_maxerr += val.yMaxError();
-                
+
                 break;
             }
         }
 
         points.append( DataPoint(lamvals[i+1], total, 0, total_minerr, 0, total_maxerr) );
     }
-    
+
     return PMF(points);
 }
 
@@ -680,27 +680,27 @@ static const RegisterAlternativeName<Bennetts> r_altbennets("Soiree::Bennetts");
 QDataStream &operator<<(QDataStream &ds, const Bennetts &bennetts)
 {
     writeHeader(ds, r_bennetts, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << bennetts.rtios;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, Bennetts &bennetts)
 {
     VersionID v = readHeader(ds, r_bennetts);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> bennetts.rtios;
     }
     else
         throw version_error(v, "1", r_bennetts, CODELOC);
-    
+
     return ds;
 }
 
@@ -809,12 +809,12 @@ int Bennetts::nLambdaValues() const
 qint64 Bennetts::nSamples() const
 {
     quint64 n = 0;
-    
+
     foreach (const BennettsRatios &ratio, rtios)
     {
         n += ratio.nSamples();
     }
-    
+
     return n;
 }
 
@@ -840,7 +840,7 @@ QList<double> Bennetts::lambdaValues() const
 QList<double> Bennetts::windows() const
 {
     QMap<double,int> vals;
-    
+
     foreach (const BennettsRatios &ratio, rtios)
     {
         foreach (double window, ratio.windows())
@@ -848,9 +848,9 @@ QList<double> Bennetts::windows() const
             vals.insert(window,1);
         }
     }
-    
+
     QList<double> wdows = vals.keys();
-    qSort(wdows);
+    std::sort(wdows.begin(), wdows.end());
     return wdows;
 }
 
@@ -901,15 +901,15 @@ BennettsRatios Bennetts::merge(int start, int end) const
 {
     start = Index(start).map(rtios.count());
     end = Index(end).map(rtios.count());
-    
+
     QList<BennettsRatios> set;
-    
+
     for (int i=start; i<=end; ++i)
     {
         if (not rtios.at(i).isEmpty())
             set.append( rtios.at(i) );
     }
-    
+
     return BennettsRatios::merge(set);
 }
 
@@ -917,20 +917,20 @@ BennettsRatios Bennetts::merge(int start, int end) const
 BennettsRatios Bennetts::merge(QList<int> indicies) const
 {
     QList<BennettsRatios> set;
-    
+
     foreach (int idx, indicies)
     {
         int i = Index(idx).map(rtios.count());
-        
+
         if (not rtios.at(i).isEmpty())
             set.append( rtios.at(i) );
     }
- 
+
     return BennettsRatios::merge(set);
 }
 
 /** Return a list of Gradients that represents the rolling average over 'niterations'
-    iterations over this TI data set. If this data set contains 100 iterations, and 
+    iterations over this TI data set. If this data set contains 100 iterations, and
     we calculate the rolling average over 50 iterations, then the returned Gradients
     will be the average from 1-50, then 2-51, 3-52.....51-100 */
 QList<BennettsRatios> Bennetts::rollingAverage(int niterations) const
@@ -939,11 +939,11 @@ QList<BennettsRatios> Bennetts::rollingAverage(int niterations) const
 
     if (rtios.isEmpty())
         return merged;
-    
+
     else if (niterations >= rtios.count())
     {
         BennettsRatios r = this->merge(0,-1);
-        
+
         if (not r.isEmpty())
             merged.append(r);
     }
@@ -958,9 +958,9 @@ QList<BennettsRatios> Bennetts::rollingAverage(int niterations) const
     else
     {
         QList<BennettsRatios> set;
-        
+
         int i=0;
-        
+
         for (i=0; i<rtios.count(); ++i)
         {
             if (not rtios.at(i).isEmpty())
@@ -970,9 +970,9 @@ QList<BennettsRatios> Bennetts::rollingAverage(int niterations) const
                     break;
             }
         }
-        
+
         merged.append( BennettsRatios::merge(set) );
-        
+
         for (i=i+1; i<rtios.count(); ++i)
         {
             if (not rtios.at(i).isEmpty())
@@ -983,7 +983,7 @@ QList<BennettsRatios> Bennetts::rollingAverage(int niterations) const
             }
         }
     }
-    
+
     return merged;
 }
 
@@ -999,10 +999,10 @@ void Bennetts::removeRange(int start, int end)
 {
     start = Index(start).map(rtios.count());
     end = Index(end).map(rtios.count());
-    
+
     if (start > end)
         qSwap(start, end);
-    
+
     for (int i = start; i <= end; ++i)
     {
         rtios[i] = BennettsRatios();

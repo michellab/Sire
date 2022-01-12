@@ -57,15 +57,15 @@ QDataStream &operator<<(QDataStream &ds,
                                       const MolForceTable &molforcetable)
 {
     writeHeader(ds, r_molforcetable, 2);
-    
+
     SharedDataStream sds(ds);
-    
-    sds << molforcetable.molnum 
+
+    sds << molforcetable.molnum
         << molforcetable.moluid
         << molforcetable.ncgroups
         << molforcetable.cgidx_to_idx
         << static_cast<const PackedArray2D<Vector>&>(molforcetable);
-        
+
     return ds;
 }
 
@@ -74,11 +74,11 @@ QDataStream &operator>>(QDataStream &ds,
                                       MolForceTable &molforcetable)
 {
     VersionID v = readHeader(ds, r_molforcetable);
-    
+
     if (v == 2)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> molforcetable.molnum
             >> molforcetable.moluid
             >> molforcetable.ncgroups
@@ -88,7 +88,7 @@ QDataStream &operator>>(QDataStream &ds,
     else if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> molforcetable.molnum
             >> molforcetable.ncgroups
             >> molforcetable.cgidx_to_idx
@@ -98,7 +98,7 @@ QDataStream &operator>>(QDataStream &ds,
     }
     else
         throw version_error(v, "1,2", r_molforcetable, CODELOC);
-        
+
     return ds;
 }
 
@@ -117,37 +117,37 @@ MolForceTable::MolForceTable(const MoleculeView &molview)
 {
     //build arrays for each selected CutGroup
     AtomSelection selected_atoms = molview.selection();
-    
+
     if (selected_atoms.selectedAllCutGroups())
     {
         QVector< QVector<Vector> > forces(ncgroups);
         QVector<Vector> *forces_array = forces.data();
-    
+
         for (CGIdx i(0); i<ncgroups; ++i)
         {
-            forces_array[i] = QVector<Vector>(molview.data().info().nAtoms(i), 
+            forces_array[i] = QVector<Vector>(molview.data().info().nAtoms(i),
                                               Vector(0));
         }
-        
+
         PackedArray2D<Vector>::operator=(forces);
     }
     else
     {
         QVector< QVector<Vector> > forces(selected_atoms.nSelectedCutGroups());
         cgidx_to_idx.reserve(selected_atoms.nSelectedCutGroups());
-        
+
         QVector<Vector> *forces_array = forces.data();
         qint32 idx = 0;
-        
+
         foreach (CGIdx i, selected_atoms.selectedCutGroups())
         {
             forces_array[i] = QVector<Vector>(molview.data().info().nAtoms(i),
                                               Vector(0));
-                                              
+
             cgidx_to_idx.insert(i, idx);
             ++idx;
         }
-        
+
         PackedArray2D<Vector>::operator=(forces);
     }
 }
@@ -155,7 +155,7 @@ MolForceTable::MolForceTable(const MoleculeView &molview)
 /** Copy constructor */
 MolForceTable::MolForceTable(const MolForceTable &other)
               : PackedArray2D<Vector>(other),
-                molnum(other.molnum), 
+                molnum(other.molnum),
                 moluid(other.moluid),
                 ncgroups(other.ncgroups),
                 cgidx_to_idx(other.cgidx_to_idx)
@@ -176,7 +176,7 @@ MolForceTable& MolForceTable::operator=(const MolForceTable &other)
         ncgroups = other.ncgroups;
         cgidx_to_idx = other.cgidx_to_idx;
     }
-    
+
     return *this;
 }
 
@@ -203,7 +203,7 @@ MolForceTable& MolForceTable::operator=(const Vector &force)
 
 /** Add the forces in 'other' onto this table - this only adds forces
     to atoms that are in this table
-    
+
     \throw SireError::incompatible_error
 */
 MolForceTable& MolForceTable::operator+=(const MolForceTable &other)
@@ -214,7 +214,7 @@ MolForceTable& MolForceTable::operator+=(const MolForceTable &other)
 
 /** Subtract the forces in 'other' from this table - this only subtracts forces
     from atoms that are in this table
-    
+
     \throw SireError::incompatible_error
 */
 MolForceTable& MolForceTable::operator-=(const MolForceTable &other)
@@ -223,9 +223,9 @@ MolForceTable& MolForceTable::operator-=(const MolForceTable &other)
     return *this;
 }
 
-/** Return the table where the forces in 'other' have been added to the 
-    forces on the atoms in this table 
-    
+/** Return the table where the forces in 'other' have been added to the
+    forces on the atoms in this table
+
     \throw SireError::incompatible_error
 */
 MolForceTable MolForceTable::operator+(const MolForceTable &other) const
@@ -235,9 +235,9 @@ MolForceTable MolForceTable::operator+(const MolForceTable &other) const
     return ret;
 }
 
-/** Return the table where the forces in 'other' have been subtracted from the 
-    forces on the atoms in this table 
-    
+/** Return the table where the forces in 'other' have been subtracted from the
+    forces on the atoms in this table
+
     \throw SireError::incompatible_error
 */
 MolForceTable MolForceTable::operator-(const MolForceTable &other) const
@@ -261,7 +261,7 @@ MolForceTable& MolForceTable::operator-=(const Vector &force)
     return *this;
 }
 
-/** Return the table where 'force' has been added to all of the 
+/** Return the table where 'force' has been added to all of the
     points in this table */
 MolForceTable MolForceTable::operator+(const Vector &force) const
 {
@@ -270,7 +270,7 @@ MolForceTable MolForceTable::operator+(const Vector &force) const
     return ret;
 }
 
-/** Return the table where 'force' has been subtracted from all of the 
+/** Return the table where 'force' has been subtracted from all of the
     points in this table */
 MolForceTable MolForceTable::operator-(const Vector &force) const
 {
@@ -293,7 +293,7 @@ MolForceTable& MolForceTable::operator/=(double value)
     return *this;
 }
 
-/** Return the table where the force at each point has been 
+/** Return the table where the force at each point has been
     mulitiplied by 'value' */
 MolForceTable MolForceTable::operator*(double value) const
 {
@@ -302,7 +302,7 @@ MolForceTable MolForceTable::operator*(double value) const
     return ret;
 }
 
-/** Return the table where the force at each point has been 
+/** Return the table where the force at each point has been
     divided by 'value' */
 MolForceTable MolForceTable::operator/(double value) const
 {
@@ -327,7 +327,7 @@ void MolForceTable::initialise()
     if (nvals > 0)
     {
         Vector *vals = PackedArray2D<Vector>::valueData();
-        
+
         for (int i=0; i<nvals; ++i)
         {
             vals[i] = Vector(0);
@@ -345,15 +345,15 @@ QVector<Vector> MolForceTable::toVector() const
     forces calculated for atoms that are in CutGroups that are
     not in this table - this returns whether or not the
     atom is in this table
-    
+
     \throw SireError::invalid_index
 */
 bool MolForceTable::add(const CGAtomIdx &cgatomidx, const Vector &force)
 {
     CGIdx cgidx( cgatomidx.cutGroup().map(this->nCutGroups()) );
-    
+
     int i = -1;
-    
+
     if (this->selectedAll())
     {
         i = cgidx;
@@ -366,11 +366,11 @@ bool MolForceTable::add(const CGAtomIdx &cgatomidx, const Vector &force)
     {
         return false;
     }
-    
+
     int j = cgatomidx.atom().map( this->nValues(i) );
-    
+
     this->operator()(i, j) += force;
-    
+
     return true;
 }
 
@@ -378,7 +378,7 @@ bool MolForceTable::add(const CGAtomIdx &cgatomidx, const Vector &force)
     forces calculated for atoms that are in CutGroups that are
     not in this table - this returns whether or not the
     atom is in this table
-    
+
     \throw SireError::invalid_index
 */
 bool MolForceTable::subtract(const CGAtomIdx &cgatomidx, const Vector &force)
@@ -395,10 +395,10 @@ static void addForce(const Vector &force, Vector *forces, const int nats)
 }
 
 /** Add the force 'force' onto this table for all of the atoms
-    in 'selected_atoms'. This ignores forces calculated for atoms 
-    that are in CutGroups that are not in this table - this returns whether 
+    in 'selected_atoms'. This ignores forces calculated for atoms
+    that are in CutGroups that are not in this table - this returns whether
     or not any selected atoms are in this table
-    
+
     \throw SireError::incompatible_error
 */
 bool MolForceTable::add(const AtomSelection &selected_atoms, const Vector &force)
@@ -415,14 +415,14 @@ bool MolForceTable::add(const AtomSelection &selected_atoms, const Vector &force
         //this is easy - all atoms are selected for updating,
         //so just update all of the forces in this table
         ::addForce(force, this->valueData(), this->nValues());
-        
+
         changed_atoms = true;
     }
     else if (this->selectedAll())
     {
         //easy(ish) case - all atoms are in this forcetable,
         //so we only need to update the forces of the selected atoms
-    
+
         if (selected_atoms.selectedAllCutGroups())
         {
             for (CGIdx i(0); i<ncgroups; ++i)
@@ -435,16 +435,16 @@ bool MolForceTable::add(const AtomSelection &selected_atoms, const Vector &force
                 else
                 {
                     QSet<Index> idxs = selected_atoms.selectedAtoms(i);
-                    
+
                     Vector *atomforces = this->data(i);
                     const int nats = this->nValues(i);
-                    
+
                     foreach (Index idx, idxs)
                     {
                         BOOST_ASSERT( idx >= 0 and idx < nats );
                         atomforces[idx] += force;
                     }
-                    
+
                     changed_atoms = true;
                 }
             }
@@ -452,7 +452,7 @@ bool MolForceTable::add(const AtomSelection &selected_atoms, const Vector &force
         else
         {
             QList<CGIdx> cgidxs = selected_atoms.selectedCutGroups();
-            
+
             foreach (CGIdx i, cgidxs)
             {
                 if (selected_atoms.selectedAll(i))
@@ -463,16 +463,16 @@ bool MolForceTable::add(const AtomSelection &selected_atoms, const Vector &force
                 else
                 {
                     QSet<Index> idxs = selected_atoms.selectedAtoms(i);
-                    
+
                     Vector *atomforces = this->data(i);
                     const int nats = this->nValues(i);
-                    
+
                     foreach (Index idx, idxs)
                     {
                         BOOST_ASSERT( idx >= 0 and idx < nats );
                         atomforces[idx] += force;
                     }
-                    
+
                     changed_atoms = true;
                 }
             }
@@ -491,7 +491,7 @@ bool MolForceTable::add(const AtomSelection &selected_atoms, const Vector &force
             {
                 const CGIdx cgidx = it.key();
                 const int i = it.value();
-                
+
                 if (selected_atoms.selectedAll(cgidx))
                 {
                     ::addForce(force, this->data(i), this->nValues(i));
@@ -500,17 +500,17 @@ bool MolForceTable::add(const AtomSelection &selected_atoms, const Vector &force
                 else
                 {
                     QSet<Index> idxs = selected_atoms.selectedAtoms(cgidx);
-                    
+
                     Vector *atomforces = this->data(i);
                     const int nats = this->nValues(i);
-                    
+
                     foreach (Index idx, idxs)
                     {
                         BOOST_ASSERT( idx >= 0 and idx < nats );
                         atomforces[idx] += force;
                     }
                 }
-                
+
                 changed_atoms = true;
             }
         }
@@ -522,7 +522,7 @@ bool MolForceTable::add(const AtomSelection &selected_atoms, const Vector &force
             {
                 const CGIdx cgidx = it.key();
                 const int i = it.value();
-                
+
                 if (selected_atoms.selectedAll(cgidx))
                 {
                     ::addForce(force, this->data(i), this->nValues(i));
@@ -531,30 +531,30 @@ bool MolForceTable::add(const AtomSelection &selected_atoms, const Vector &force
                 else if (selected_atoms.selected(cgidx))
                 {
                     QSet<Index> idxs = selected_atoms.selectedAtoms(cgidx);
-                    
+
                     Vector *atomforces = this->data(i);
                     const int nats = this->nValues(i);
-                    
+
                     foreach (Index idx, idxs)
                     {
                         BOOST_ASSERT( idx >= 0 and idx < nats );
                         atomforces[idx] += force;
                     }
-                    
+
                     changed_atoms = true;
                 }
             }
         }
     }
-    
+
     return changed_atoms;
 }
 
 /** Subtract the force 'force' from this table for all of the atoms
-    in 'selected_atoms'. This ignores forces calculated for atoms 
-    that are in CutGroups that are not in this table - this returns whether 
+    in 'selected_atoms'. This ignores forces calculated for atoms
+    that are in CutGroups that are not in this table - this returns whether
     or not any selected atoms are in this table
-    
+
     \throw SireError::incompatible_error
 */
 bool MolForceTable::subtract(const AtomSelection &selected_atoms, const Vector &force)
@@ -572,13 +572,13 @@ void MolForceTable::add(const MolForceTable &other)
         this->operator*=(2);
         return;
     }
-    
+
     if (molnum != other.molnum)
         throw SireError::incompatible_error( QObject::tr(
                 "You cannot combine the force table for molecule %1 with the "
                 "force table for molecule %2. The molecules must be the same.")
                     .arg(molnum).arg(other.molnum), CODELOC );
-                    
+
     if (moluid != other.moluid)
         throw SireError::incompatible_error( QObject::tr(
                 "You cannot combine together the tables for molecule %1 as the "
@@ -596,7 +596,7 @@ void MolForceTable::add(const MolForceTable &other)
         {
             Vector *vals = PackedArray2D<Vector>::valueData();
             const Vector *other_vals = other.constValueData();
-        
+
             for (int i=0; i<nvals; ++i)
             {
                 vals[i] += other_vals[i];
@@ -608,15 +608,15 @@ void MolForceTable::add(const MolForceTable &other)
         for (CGIdx i(0); i<ncgroups; ++i)
         {
             int idx = other.map(i);
-                
+
             if (idx != -1)
             {
                 int nvals = this->nValues(i);
                 BOOST_ASSERT( nvals == other.nValues(idx) );
-                
+
                 Vector *vals = PackedArray2D<Vector>::data(i);
                 const Vector *other_vals = other.constData(idx);
-                
+
                 for (int j=0; j<nvals; ++j)
                 {
                     vals[j] += other_vals[j];
@@ -631,15 +631,15 @@ void MolForceTable::add(const MolForceTable &other)
              ++it)
         {
             int idx = other.map(it.key());
-            
+
             if (idx != -1)
             {
                 int nvals = this->nValues(it.value());
                 BOOST_ASSERT( nvals == other.nValues(idx) );
-                
+
                 Vector *vals = PackedArray2D<Vector>::data(it.key());
                 const Vector *other_vals = other.constData(idx);
-                
+
                 for (int j=0; j<nvals; ++j)
                 {
                     vals[j] += other_vals[j];
@@ -658,7 +658,7 @@ void MolForceTable::subtract(const MolForceTable &other)
         this->setAll( Vector(0) );
         return;
     }
-    
+
     this->add( -other );
 }
 
@@ -670,7 +670,7 @@ void MolForceTable::add(const Vector &force)
     if (nvals > 0)
     {
         Vector *vals = PackedArray2D<Vector>::valueData();
-        
+
         for (int i=0; i<nvals; ++i)
         {
             vals[i] += force;
@@ -692,7 +692,7 @@ void MolForceTable::setAll(const Vector &force)
     if (nvals > 0)
     {
         Vector *vals = PackedArray2D<Vector>::valueData();
-        
+
         for (int i=0; i<nvals; ++i)
         {
             vals[i] = force;
@@ -708,7 +708,7 @@ void MolForceTable::multiply(double value)
     if (nvals > 0)
     {
         Vector *vals = PackedArray2D<Vector>::valueData();
-        
+
         for (int i=0; i<nvals; ++i)
         {
             vals[i] *= value;
@@ -733,7 +733,7 @@ void MolForceTable::assertCompatibleWith(const AtomSelection &selection) const
     }
 
     bool compatible = true;
-    
+
     if (selection.nCutGroups() != ncgroups)
     {
         compatible = false;
@@ -762,7 +762,7 @@ void MolForceTable::assertCompatibleWith(const AtomSelection &selection) const
             }
         }
     }
-    
+
     if (not compatible)
         throw SireError::incompatible_error( QObject::tr(
             "This MolForceTable is incompatible with the passed atom selection."),
@@ -783,7 +783,7 @@ QVector<Vector> MolForceTable::toVector(const AtomSelection &selection) const
             throw SireMol::missing_atom( QObject::tr(
                 "Cannot return the forces on all atoms as not all of the atoms "
                 "are selected in this forcetable."), CODELOC );
-        
+
         return this->toVector();
     }
 
@@ -791,27 +791,27 @@ QVector<Vector> MolForceTable::toVector(const AtomSelection &selection) const
     Vector *value = vals.data();
 
     if (this->selectedAll())
-    {   
+    {
         if (selection.selectedAllCutGroups())
         {
             const int ncg = selection.nCutGroups();
-        
+
             for (CGIdx i(0); i<ncg; ++i)
             {
                 const Vector *groupforces = PackedArray2D<Vector>::constData(i);
-            
+
                 if (selection.selectedAll(i))
                 {
                     const int nats = PackedArray2D<Vector>::nValues(i);
-                    
+
                     quickCopy<Vector>(value, groupforces, nats);
                     value += nats;
                 }
                 else
                 {
                     QList<Index> idxs = selection.selectedAtoms(i).toList();
-                    qSort(idxs);
-                    
+                    std::sort(idxs.begin(), idxs.end());
+
                     foreach (Index idx, idxs)
                     {
                         *value = groupforces[idx];
@@ -823,24 +823,24 @@ QVector<Vector> MolForceTable::toVector(const AtomSelection &selection) const
         else
         {
             QList<CGIdx> cgidxs = selection.selectedCutGroups();
-            qSort(cgidxs);
-            
+            std::sort(cgidxs.begin(), cgidxs.end());
+
             foreach (CGIdx i, cgidxs)
             {
                 const Vector *groupforces = PackedArray2D<Vector>::constData(i);
-            
+
                 if (selection.selectedAll(i))
                 {
                     const int nats = PackedArray2D<Vector>::nValues(i);
-                    
+
                     quickCopy<Vector>(value, groupforces, nats);
                     value += nats;
                 }
                 else
                 {
                     QList<Index> idxs = selection.selectedAtoms(i).toList();
-                    qSort(idxs);
-                    
+                    std::sort(idxs.begin() idxs.end());
+
                     foreach (Index idx, idxs)
                     {
                         *value = groupforces[idx];
@@ -858,12 +858,12 @@ QVector<Vector> MolForceTable::toVector(const AtomSelection &selection) const
                 "not all CutGroups are present in the forcetable."), CODELOC );
 
         QList<CGIdx> cgidxs = selection.selectedCutGroups();
-        qSort(cgidxs);
-        
+        std::sort(cgidxs.begin(), cgidxs.end());
+
         foreach (CGIdx cgidx, cgidxs)
         {
             int i = cgidx_to_idx.value(cgidx, -1);
-            
+
             if (i == -1)
                 throw SireMol::missing_atom( QObject::tr(
                     "Cannot return the forces as while atoms in CutGroup %1 "
@@ -871,19 +871,19 @@ QVector<Vector> MolForceTable::toVector(const AtomSelection &selection) const
                         .arg(cgidx), CODELOC );
 
             const Vector *groupforces = PackedArray2D<Vector>::constData(i);
-        
+
             if (selection.selectedAll(cgidx))
             {
                 const int nats = PackedArray2D<Vector>::nValues(i);
-                
+
                 quickCopy<Vector>(value, groupforces, nats);
                 value += nats;
             }
             else
             {
                 QList<Index> idxs = selection.selectedAtoms(cgidx).toList();
-                qSort(idxs);
-                
+                std::sort(idxs.begin(), idxs.end());
+
                 foreach (Index idx, idxs)
                 {
                     *value = groupforces[idx];
@@ -892,7 +892,7 @@ QVector<Vector> MolForceTable::toVector(const AtomSelection &selection) const
             }
         }
     }
-    
+
     return vals;
 }
 
@@ -912,11 +912,11 @@ QDataStream &operator<<(QDataStream &ds,
                                       const ForceTable &forcetable)
 {
     writeHeader(ds, r_forcetable, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << forcetable.tables_by_idx << forcetable.molnum_to_idx;
-    
+
     return ds;
 }
 
@@ -925,16 +925,16 @@ QDataStream &operator>>(QDataStream &ds,
                                       ForceTable &forcetable)
 {
     VersionID v = readHeader(ds, r_forcetable);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> forcetable.tables_by_idx >> forcetable.molnum_to_idx;
     }
     else
         throw version_error(v, "1", r_forcetable, CODELOC);
-        
+
     return ds;
 }
 
@@ -949,16 +949,16 @@ ForceTable::ForceTable(const MoleculeGroup &molgroup)
 {
     if (molgroup.isEmpty())
         return;
-        
+
     int nmols = molgroup.nMolecules();
-    
+
     tables_by_idx = QVector<MolForceTable>(nmols);
     molnum_to_idx.reserve(nmols);
-    
+
     MolForceTable *tables_by_idx_array = tables_by_idx.data();
-    
+
     qint32 i = 0;
-    
+
     for (MoleculeGroup::const_iterator it = molgroup.constBegin();
          it != molgroup.constEnd();
          ++it)
@@ -984,7 +984,7 @@ ForceTable& ForceTable::operator=(const ForceTable &other)
 {
     tables_by_idx = other.tables_by_idx;
     molnum_to_idx = other.molnum_to_idx;
-    
+
     return *this;
 }
 
@@ -1050,7 +1050,7 @@ ForceTable& ForceTable::operator+=(const Vector &force)
     return *this;
 }
 
-/** Substract the force 'force' from all of the atom and grid 
+/** Substract the force 'force' from all of the atom and grid
     points in this table */
 ForceTable& ForceTable::operator-=(const Vector &force)
 {
@@ -1117,7 +1117,7 @@ ForceTable ForceTable::operator-() const
     {
         *it = -(*it);
     }
-    
+
     return ret;
 }
 
@@ -1130,7 +1130,7 @@ void ForceTable::add(const ForceTable &other)
          ++it)
     {
         int idx = molnum_to_idx.value(it.key(), -1);
-        
+
         if (idx != -1)
             tables_by_idx[idx] += other.tables_by_idx[it.value()];
     }
@@ -1145,7 +1145,7 @@ void ForceTable::subtract(const ForceTable &other)
          ++it)
     {
         int idx = molnum_to_idx.value(it.key(), -1);
-        
+
         if (idx != -1)
             tables_by_idx[idx] -= other.tables_by_idx[it.value()];
     }
@@ -1206,16 +1206,16 @@ void ForceTable::divide(double value)
     }
 }
 
-/** Initialise all of the tables - this resets all of the forces 
+/** Initialise all of the tables - this resets all of the forces
     back to zero */
 void ForceTable::initialiseTables()
 {
     int nmols = tables_by_idx.count();
-    
+
     if (nmols > 0)
     {
         MolForceTable *tables_by_idx_array = tables_by_idx.data();
-        
+
         for (int i=0; i<nmols; ++i)
         {
             tables_by_idx_array[i].initialise();
@@ -1225,7 +1225,7 @@ void ForceTable::initialiseTables()
 
 /** Initialise all of the forces for the table for the molecule
     with number 'molnum'
-    
+
     \throw SireMol::missing_molecule
 */
 void ForceTable::initialiseTable(MolNum molnum)
@@ -1233,32 +1233,32 @@ void ForceTable::initialiseTable(MolNum molnum)
     this->getTable(molnum).initialise();
 }
 
-/** Return the index of the molecule with number 'molnum' in this table 
+/** Return the index of the molecule with number 'molnum' in this table
 
     \throw SireMol::missing_molecule
 */
 int ForceTable::indexOf(MolNum molnum) const
 {
     QHash<MolNum,qint32>::const_iterator it = molnum_to_idx.constFind(molnum);
-    
+
     if (it == molnum_to_idx.constEnd())
         throw SireMol::missing_molecule( QObject::tr(
             "There is no molecule with number %1 in this forcetable.")
                 .arg(molnum), CODELOC );
-                
+
     return it.value();
 }
 
-/** Assert that this forcetable contains a table for the 
+/** Assert that this forcetable contains a table for the
     forces for the molecule at number 'molnum'
-    
+
     \throw SireMol::missing_molecule
 */
 void ForceTable::assertContainsTableFor(MolNum molnum) const
 {
 
     QList<MolNum> molnums = molnum_to_idx.keys();
-    
+
     qDebug() << " IN FORCE TABL THE MOLNUMS ARE ";
 
     for (int i=0; i<molnums.length() ; i++)
@@ -1280,7 +1280,7 @@ const char* ForceTable::typeName()
  {
    if ( containsTable(molnum))
      {
-       //qDebug() << " THERE IS A TABLE !" << "\n"; 
+       //qDebug() << " THERE IS A TABLE !" << "\n";
        qint32 idx = molnum_to_idx[molnum];
        tables_by_idx[idx] = table;
      }

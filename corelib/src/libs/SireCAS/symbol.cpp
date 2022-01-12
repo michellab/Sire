@@ -58,8 +58,8 @@ Factor::Factor(const Symbol &symbol,
        : s(symbol), f(factor), p(power)
 {}
 
-Factor::Factor(const Symbol &symbol, 
-               double factor, double power) 
+Factor::Factor(const Symbol &symbol,
+               double factor, double power)
        : s(symbol), f(factor), p(power)
 {}
 
@@ -74,7 +74,7 @@ Factor& Factor::operator=(const Factor &other)
     f = other.f;
     p = other.p;
     s = other.s;
-    
+
     return *this;
 }
 
@@ -211,7 +211,7 @@ QDataStream &operator>>(QDataStream &ds, Symbol &sym)
 }
 
 /** Null constructor */
-Symbol::Symbol() : ExBase(), id(0), stringrep(QString::null)
+Symbol::Symbol() : ExBase(), id(0), stringrep(QString())
 {}
 
 /** Construct a symbol from the passed ID number */
@@ -380,7 +380,7 @@ QList<Factor> Symbol::expand(const Symbol &symbol) const
     {
         factors.append( Factor(symbol, *this,0) );
     }
-    
+
     return factors;
 }
 

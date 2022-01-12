@@ -712,7 +712,7 @@ void AmberPrm::rebuildMolNumToAtomNums()
             atoms_per_mol.append( atoms_in_mol.count() );
 
             auto atms = atoms_in_mol.toList();
-            qSort(atms);
+            std::sort(atms.begin(), atms.end());
 
             molnum_to_atomnums.append(atms.toVector());
         }
@@ -1064,7 +1064,7 @@ void AmberPrm::parse(const PropertyMap &map)
 
     // as we are reading, look out for any FLAGs, so that we
     // can record their locations
-    QString last_flag = QString::null;
+    QString last_flag = QString();
 
     const int nlines = lines().count();
     const QString *lines_array = lines().constData();
@@ -1086,7 +1086,7 @@ void AmberPrm::parse(const PropertyMap &map)
                         flag_to_line[last_flag].second = i - flag_to_line[last_flag].first;
                     }
 
-                    last_flag = QString::null;
+                    last_flag = QString();
                 }
 
                 //find the new flag
@@ -1113,7 +1113,7 @@ void AmberPrm::parse(const PropertyMap &map)
     if (not last_flag.isNull())
     {
         flag_to_line[last_flag].second = nlines - flag_to_line[last_flag].first;
-        last_flag = QString::null;
+        last_flag = QString();
     }
 
     //now process all of the flag data
@@ -1537,11 +1537,11 @@ getBondData(const AmberParams &params, int start_idx)
     //molecule is written to a file
     ::detail::Idx3 *start_it = reinterpret_cast<::detail::Idx3*>(bonds_inc_h.data());
     ::detail::Idx3 *end_it = start_it + (bonds_inc_h.count()/3);
-    qSort(start_it, end_it);
+    std::sort(start_it, end_it);
 
     start_it = reinterpret_cast<::detail::Idx3*>(bonds_exc_h.data());
     end_it = start_it + (bonds_exc_h.count()/3);
-    qSort(start_it, end_it);
+    std::sort(start_it, end_it);
 
     return std::make_tuple(bonds_inc_h, bonds_exc_h, param_to_idx);
 }
@@ -1640,11 +1640,11 @@ getAngleData(const AmberParams &params, int start_idx)
     //molecule is written to a file
     ::detail::Idx4 *start_it = reinterpret_cast<::detail::Idx4*>(angs_inc_h.data());
     ::detail::Idx4 *end_it = start_it + (angs_inc_h.count()/4);
-    qSort(start_it, end_it);
+    std::sort(start_it, end_it);
 
     start_it = reinterpret_cast<::detail::Idx4*>(angs_exc_h.data());
     end_it = start_it + (angs_exc_h.count()/4);
-    qSort(start_it, end_it);
+    std::sort(start_it, end_it);
 
     return std::make_tuple(angs_inc_h, angs_exc_h, param_to_idx);
 }
@@ -1853,11 +1853,11 @@ getDihedralData(const AmberParams &params, int start_idx)
     //molecule is written to a file
     ::detail::Idx5 *start_it = reinterpret_cast<::detail::Idx5*>(dihs_inc_h.data());
     ::detail::Idx5 *end_it = start_it + (dihs_inc_h.count()/5);
-    qSort(start_it, end_it);
+    std::sort(start_it, end_it);
 
     start_it = reinterpret_cast<::detail::Idx5*>(dihs_exc_h.data());
     end_it = start_it + (dihs_exc_h.count()/5);
-    qSort(start_it, end_it);
+    std::sort(start_it, end_it);
 
     return std::make_tuple(dihs_inc_h, dihs_exc_h, param_to_idx);
 }
@@ -2689,7 +2689,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         //parameters every time this output file is written
         {
             auto all_bonds = all_bond_to_idx.keys();
-            qSort(all_bonds);
+            std::sort(all_bonds.begin(), all_bonds.end());
 
             k_data = QVector<double>(all_bonds.count());
             r0_data = QVector<double>(all_bonds.count());
@@ -2825,7 +2825,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         //parameters every time this output file is written
         {
             auto all_angs = all_ang_to_idx.keys();
-            qSort(all_angs);
+            std::sort(all_angs.begin(), all_angs.end());
 
             k_data = QVector<double>(all_angs.count());
             t0_data = QVector<double>(all_angs.count());
@@ -2964,7 +2964,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         //parameters every time this output file is written
         {
             auto all_dihs = all_dih_to_idx.keys();
-            qSort(all_dihs);
+            std::sort(all_dihs.begin(), all_dihs.end());
 
             force_data = QVector<double>(all_dihs.count());
             per_data = QVector<double>(all_dihs.count());
@@ -3047,11 +3047,11 @@ QStringList toLines(const QVector<AmberParams> &params,
         //molecule is written to a file
         ::detail::Idx5 *start_it = reinterpret_cast<::detail::Idx5*>(all_dihs_inc_h.data());
         ::detail::Idx5 *end_it = start_it + (all_dihs_inc_h.count()/5);
-        qSort(start_it, end_it);
+        std::sort(start_it, end_it);
 
         start_it = reinterpret_cast<::detail::Idx5*>(all_dihs_exc_h.data());
         end_it = start_it + (all_dihs_exc_h.count()/5);
-        qSort(start_it, end_it);
+        std::sort(start_it, end_it);
 
         auto ignore_14 = [](QVector<qint64> &dihs)
         {

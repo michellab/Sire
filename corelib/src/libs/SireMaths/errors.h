@@ -42,17 +42,17 @@ class SIREMATHS_EXPORT siremaths_error : public SireError::exception
 public:
     siremaths_error() : exception()
     {}
-    
-    siremaths_error(QString err, QString place = QString::null) 
+
+    siremaths_error(QString err, QString place = QString())
                   : exception(err,place)
     {}
-    
+
     siremaths_error(const siremaths_error &other) : exception(other)
     {}
-    
+
     ~siremaths_error() throw()
     {}
-    
+
     static const char* typeName()
     {
         return "SireMaths::siremaths_error";
@@ -65,14 +65,14 @@ class SIREMATHS_EXPORT math_error : public siremaths_error
 public:
     math_error() : siremaths_error()
     {}
-    
-    math_error(QString err, QString place = QString::null) 
+
+    math_error(QString err, QString place = QString())
               : siremaths_error(err,place)
     {}
-    
+
     math_error(const math_error &other) : siremaths_error(other)
     {}
-    
+
     ~math_error() throw()
     {}
 
@@ -82,7 +82,7 @@ public:
     {
         return math_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw math_error(*this);
@@ -95,14 +95,14 @@ class SIREMATHS_EXPORT domain_error : public siremaths_error
 public:
     domain_error() : siremaths_error()
     {}
-    
-    domain_error(QString err, QString place = QString::null) 
+
+    domain_error(QString err, QString place = QString())
               : siremaths_error(err,place)
     {}
-    
+
     domain_error(const domain_error &other) : siremaths_error(other)
     {}
-    
+
     ~domain_error() throw()
     {}
 
@@ -112,7 +112,7 @@ public:
     {
         return domain_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw domain_error(*this);

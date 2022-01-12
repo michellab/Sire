@@ -161,7 +161,7 @@ if __name__ == "__main__":
         import netCDF4
         print("netCDF4 is already installed...")
     except ImportError:
-        conda_pkgs.append("netcdf4=1.5.3")
+        conda_pkgs.append("netcdf4=1.5.8")
 
     CC = None
     CXX = None
@@ -174,7 +174,7 @@ if __name__ == "__main__":
         if os.path.exists(os.path.join(conda_base, "include", "boost", "python.hpp")):
             print("boost is already installed...")
         else:
-            conda_pkgs.append("boost=1.72.0")
+            conda_pkgs.append("boost=1.77.0")
 
         # gsl
         if os.path.exists(os.path.join(conda_base, "include", "gsl", "gsl_version.h")):
@@ -186,15 +186,15 @@ if __name__ == "__main__":
         if os.path.exists(os.path.join(conda_base, "include", "tbb", "tbb.h")):
             print("TBB is already installed...")
         else:
-            conda_pkgs.append("tbb=2019.9")
-            conda_pkgs.append("tbb-devel=2019.9")
+            conda_pkgs.append("tbb=2021.5.0")
+            conda_pkgs.append("tbb-devel=2021.5.0")
 
         # Qt5
         try:
             import PyQt5
             print("Qt5 is already installed...")
         except ImportError:
-            conda_pkgs.append("pyqt=5.12.3")
+            conda_pkgs.append("pyqt=5.15.2")
 
         # compilers (so we keep binary compatibility)
         if is_osx:
@@ -255,6 +255,17 @@ if __name__ == "__main__":
         if status.returncode != 0:
             print("Failed to add conda-forge channel!")
             sys.exit(-1)
+
+        # Need to run this command to prevent conda errors on
+        # some platforms - see
+        # https://github.com/ContinuumIO/anaconda-issues/issues/11246
+        cmd = "%s config --set channel_priority false" % conda_exe
+        print("Setting channel priority to false using: '%s'" % cmd)
+        status = subprocess.run(cmd.split())
+        if status.returncode != 0:
+            print("Failed to set channel priority!")
+            sys.exit(-1)
+
         cmd = [*py_module_install, *conda_pkgs]
         print("Installing packages using: '%s'" % " ".join(cmd))
         status = subprocess.run(cmd)

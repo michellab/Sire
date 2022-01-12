@@ -2510,7 +2510,7 @@ MolStructureEditor Mol2::getMolStructure(int imol, QHash<int, int> &res_map,
 
         // Get a list of the atoms that are part of the residue.
         QList<int> res_atoms = residues.values(res_num);
-        qSort(res_atoms);
+        std::sort(res_atoms.begin(), res_atoms.end());
 
         // Add the residue to the molecule.
         // Here we use the substructure name from the atom record,

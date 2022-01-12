@@ -170,7 +170,7 @@ HistogramValue& HistogramValue::operator=(const HistogramValue &other)
 {
     val = other.val;
     HistogramBin::operator=(other);
-    
+
     return *this;
 }
 
@@ -209,14 +209,14 @@ static const RegisterMetaType<Histogram> r_histogram;
 QDataStream &operator<<(QDataStream &ds, const Histogram &histogram)
 {
     writeHeader(ds, r_histogram, 2);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << histogram.binvals << histogram.binwidth
         << histogram.avgval << histogram.avgval2
         << histogram.sum_of_bins
         << static_cast<const Property&>(histogram);
-    
+
     return ds;
 }
 
@@ -224,7 +224,7 @@ QDataStream &operator<<(QDataStream &ds, const Histogram &histogram)
 QDataStream &operator>>(QDataStream &ds, Histogram &histogram)
 {
     VersionID v = readHeader(ds, r_histogram);
-    
+
     if (v == 2)
     {
         SharedDataStream sds(ds);
@@ -236,7 +236,7 @@ QDataStream &operator>>(QDataStream &ds, Histogram &histogram)
     }
     else
         throw version_error( v, "2", r_histogram, CODELOC );
-        
+
     return ds;
 }
 
@@ -260,7 +260,7 @@ Histogram::Histogram(double width)
         binwidth = 1e20;
 }
 
-/** Construct a histogram of specified bin width, and populating it with 
+/** Construct a histogram of specified bin width, and populating it with
     the passed values (which are all assumed to have weight "1")
     Note that if the binwidth is less than or equal to zero, then a histogram
     will not be collected, and only the mean and standard deviation
@@ -300,7 +300,7 @@ Histogram& Histogram::operator=(const Histogram &other)
         avgval2 = other.avgval2;
         sum_of_bins = other.sum_of_bins;
     }
-    
+
     return *this;
 }
 
@@ -384,7 +384,7 @@ Histogram Histogram::operator+(const Histogram &other) const
     }
 }
 
-/** Return the histogram that is a copy of this, but on which 'value' has 
+/** Return the histogram that is a copy of this, but on which 'value' has
     been added */
 Histogram Histogram::operator+(double value) const
 {
@@ -442,19 +442,19 @@ QVector<HistogramValue> Histogram::values() const
         return QVector<HistogramValue>();
 
     QList<qint64> bins = binvals.keys();
-    qSort(bins);
-    
+    std::sort(bins.begin(), bins.end());
+
     QVector<HistogramValue> vals(binvals.count());
     HistogramValue *val = vals.data();
-    
+
     foreach (qint64 bin, bins)
     {
         *val = HistogramValue( HistogramBin(bin*binwidth, (bin+1)*binwidth),
                                binvals[bin] );
-        
+
         val += 1;
     }
-    
+
     return vals;
 }
 
@@ -464,13 +464,13 @@ QVector<HistogramValue> Histogram::normalDistribution() const
 {
     if (binvals.isEmpty())
         return QVector<HistogramValue>();
-    
+
     QList<qint64> bins = binvals.keys();
-    qSort(bins);
-    
+    std::sort(bins.begin(), bins.end());
+
     QVector<HistogramValue> vals(binvals.count());
     HistogramValue *val = vals.data();
-    
+
     const double avg = this->mean();
     const double stdev = this->standardDeviation();
     const double denom = 1.0 / (2*stdev*stdev);
@@ -480,7 +480,7 @@ QVector<HistogramValue> Histogram::normalDistribution() const
     foreach (qint64 bin, bins)
     {
         double x = (bin+0.5)*binwidth;
-        
+
         if (std::abs( avg - x ) < stdev)
         {
             norm += binvals.value(bin) / std::exp( -pow_2(x-avg) * denom );
@@ -499,17 +499,17 @@ QVector<HistogramValue> Histogram::normalDistribution() const
             double x = (bin+0.5)*binwidth;
             norm += binvals.value(bin) / std::exp( -pow_2(x-avg) * denom );
         }
-        
+
         norm /= binvals.count();
     }
-    
+
     foreach (qint64 bin, bins)
     {
         double x = (bin+0.5)*binwidth;
-        
+
         *val = HistogramValue( HistogramBin(bin*binwidth, (bin+1)*binwidth),
                                norm * std::exp( -pow_2(x-avg) * denom ) );
-        
+
         val += 1;
     }
 
@@ -529,7 +529,7 @@ void Histogram::accumulate(double value, double weight)
     //binwidth is zero then the histogram is disabled
     if (weight <= 0 or binwidth <= 0)
         return;
-    
+
     //first, calculate the average of the
     if (sum_of_bins == 0)
     {
@@ -541,17 +541,17 @@ void Histogram::accumulate(double value, double weight)
     {
         const double bigratio = sum_of_bins / (sum_of_bins + weight);
         const double smallratio = 1.0 - bigratio;
-    
+
         avgval = bigratio*avgval + smallratio*value;
         avgval2 = bigratio*avgval2 + smallratio*value*value;
         sum_of_bins += weight;
     }
-    
+
     if (binwidth > 0)
     {
         //now histogram the data
         qint64 bin = getBin(value, binwidth);
-    
+
         binvals.insert(bin, binvals.value(bin,0) + weight);
     }
 }
@@ -571,7 +571,7 @@ void Histogram::accumulate(const Histogram &other)
     if (this->binWidth() > 0 and other.binWidth() > 0)
     {
         Histogram resized = other.resize( this->binWidth() );
-    
+
         for (QHash<qint64,double>::const_iterator it = resized.binvals.constBegin();
              it != resized.binvals.constEnd();
              ++it)
@@ -588,7 +588,7 @@ void Histogram::accumulate(const Histogram &other)
 
         const double bigratio = sum_of_bins / (sum_of_bins + other.sum_of_bins);
         const double smallratio = 1.0 - bigratio;
-    
+
         avgval = bigratio*avgval + smallratio*other.avgval;
         avgval2 = bigratio*avgval2 + smallratio*other.avgval2;
         sum_of_bins += other.sum_of_bins;
@@ -655,7 +655,7 @@ double Histogram::standardDeviation() const
     return std::sqrt(avgval2 - (avgval*avgval));
 }
 
-/** Return the standard error of the mean (standard deviation 
+/** Return the standard error of the mean (standard deviation
     divided by the square root of the number of samples) */
 double Histogram::standardError() const
 {
@@ -672,14 +672,14 @@ double Histogram::tValue(int nsamples, double level)
     // data copied from wikipedia - "http://en.wikipedia.org/wiki/Student's_t-distribution"
     // see t_values and make_tvalues.py in the same directory as this source
     int nlevels = 11;
-    
+
     double levels[11] = { 50.0, 60.0, 70.0, 80.0, 90.0, 95.0, 98.0, 99.0, 99.5, 99.8, 99.9 };
-    
+
     int ncounts = 37;
-    
+
     int counts[37] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
                       21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 40, 50, 60, 80, 100, 120, 1000 };
-    
+
     double values[37][11] = {
         { 1.0, 1.376, 1.963, 3.078, 6.314, 12.71, 31.82, 63.66, 127.3, 318.3, 636.6 },
         { 0.816, 1.061, 1.386, 1.886, 2.92, 4.303, 6.965, 9.925, 14.09, 22.33, 31.6 },
@@ -719,10 +719,10 @@ double Histogram::tValue(int nsamples, double level)
         { 0.677, 0.845, 1.041, 1.289, 1.658, 1.98, 2.358, 2.617, 2.86, 3.16, 3.373 },
         { 0.674, 0.842, 1.036, 1.282, 1.645, 1.96, 2.326, 2.576, 2.807, 3.09, 3.291 }
     };
-    
+
     //first find the index for the number of samples
     int sample_idx = ncounts - 1;
-    
+
     for (int i=0; i<ncounts; ++i)
     {
         if (nsamples < counts[i])
@@ -731,13 +731,13 @@ double Histogram::tValue(int nsamples, double level)
             break;
         }
     }
-    
+
     if (sample_idx < 0)
         sample_idx = 0;
-    
+
     //now find the confidence level
     int level_idx = nlevels - 1;
-    
+
     for (int i=0; i<nlevels; ++i)
     {
         if (level < levels[i])
@@ -746,10 +746,10 @@ double Histogram::tValue(int nsamples, double level)
             break;
         }
     }
-    
+
     if (level_idx < 0)
         level_idx = 0;
-    
+
     return values[sample_idx][level_idx];
 }
 
@@ -760,7 +760,7 @@ double Histogram::tValue(double level) const
     return tValue( int(sum_of_bins+0.5), level );
 }
 
-/** Return the standard error calculated to the passed level 
+/** Return the standard error calculated to the passed level
     (66, 90, 95 or 99%) */
 double Histogram::standardError(double level) const
 {
@@ -774,16 +774,16 @@ double Histogram::skew() const
     double avg = mean();
     double stdev = standardDeviation();
     double denom = 1.0 / (sum_of_bins*pow_3(stdev));
-    
+
     double skew = 0;
-    
+
     for (QHash<qint64,double>::const_iterator it = binvals.constBegin();
          it != binvals.constEnd();
          ++it)
     {
         skew += denom * it.value() * pow_3((it.key()+0.5) * binwidth - avg);
     }
-    
+
     return skew;
 }
 
@@ -795,16 +795,16 @@ double Histogram::kirtosis() const
     double avg = mean();
     double stdev = standardDeviation();
     double denom = 1.0 / (sum_of_bins*pow_4(stdev));
-    
+
     double kirt = 0;
-    
+
     for (QHash<qint64,double>::const_iterator it = binvals.constBegin();
          it != binvals.constEnd();
          ++it)
     {
         kirt += denom * it.value() * pow_4( (it.key() + 0.5)*binwidth - avg );
     }
-    
+
     return kirt - 3;
 }
 
@@ -817,39 +817,39 @@ double Histogram::median() const
 
     double sum = 0;
     const double half_full = 0.5 * sumOfBins();
-    
+
     QList<qint64> bins = binvals.keys();
-    qSort(bins);
-    
+    std::sort(bins.begin(), bins.end());
+
     foreach (qint64 bin, bins)
     {
         sum += binvals[bin];
-        
+
         if (sum > half_full)
         {
             //by how much have we gone over...
             double amount = (sum - half_full) / binvals[bin];
-            
+
             return (bin+amount)*binwidth;
         }
     }
-    
+
     throw SireError::program_bug( QObject::tr(
             "It should not be possible to reach here...!"), CODELOC );
-    
+
     return 0;
 }
 
-/** Return the mode of all values added to the histogram. This is 
+/** Return the mode of all values added to the histogram. This is
     estimated based on the actual histogram of added data */
 double Histogram::mode() const
 {
     if (binvals.isEmpty())
         return 0;
-    
+
     double maxval = 0;
     qint64 maxbin = 0;
-    
+
     for (QHash<qint64,double>::const_iterator it = binvals.constBegin();
          it != binvals.constEnd();
          ++it)
@@ -860,7 +860,7 @@ double Histogram::mode() const
             maxbin = it.key();
         }
     }
-    
+
     return (maxbin+0.5) * binwidth;
 }
 
@@ -869,10 +869,10 @@ double Histogram::maximumValue() const
 {
     if (binvals.isEmpty())
         return 0;
-    
+
     QList<qint64> bins = binvals.keys();
-    qSort(bins);
-    
+    std::sort(bins.begin(), bins.end());
+
     return (bins.last() + 1) * binwidth;
 }
 
@@ -881,10 +881,10 @@ double Histogram::minimumValue() const
 {
     if (binvals.isEmpty())
         return 0;
-    
+
     QList<qint64> bins = binvals.keys();
-    qSort(bins);
-    
+    std::sort(bins.begin(), bins.end());
+
     return bins.first() * binwidth;
 }
 
@@ -893,10 +893,10 @@ double Histogram::range() const
 {
     if (binvals.isEmpty())
         return 0;
-    
+
     QList<qint64> bins = binvals.keys();
-    qSort(bins);
-    
+    std::sort(bins.begin(), bins.end());
+
     return (bins.last() - bins.first() + 1) * binwidth;
 }
 
@@ -912,14 +912,14 @@ Histogram Histogram::normalise() const
         return *this;
 
     Histogram ret(*this);
-    
+
     foreach (qint64 bin, ret.binvals.keys())
     {
         ret.binvals.insert(bin, ret.binvals.value(bin) / (binwidth*sum_of_bins));
     }
-    
+
     ret.sum_of_bins = binwidth;
-    
+
     return ret;
 }
 
@@ -945,13 +945,13 @@ Histogram Histogram::resize(double width) const
     {
         ret.binwidth = 1e20;
     }
-    
+
     for (QHash<qint64,double>::const_iterator it = binvals.constBegin();
          it != binvals.constEnd();
          ++it)
     {
         double weight = it.value();
-    
+
         double old_minval = it.key() * binwidth;
         double old_maxval = old_minval + binwidth;
 
@@ -960,7 +960,7 @@ Histogram Histogram::resize(double width) const
         while (weight > 0)
         {
             double new_maxval = (bin+1)*width;
-        
+
             if (new_maxval < old_maxval)
             {
                 double partial_weight = weight * (new_maxval - old_minval) / binwidth;
@@ -973,34 +973,34 @@ Histogram Histogram::resize(double width) const
                 ret.binvals.insert( bin, ret.binvals.value(bin,0) + weight );
                 weight = 0;
             }
-            
+
             bin += 1;
         }
     }
-    
+
     if (width < binwidth)
     {
         //the new histogram has a higher resolution, so will need to be smoothed
         QHash<qint64,double> smoothed = ret.binvals;
         QList<qint64> bins = smoothed.keys();
-        qSort(bins);
-        
+        std::sort(bins.begin(), bins.end());
+
         for (int i=1; i<bins.count()-1; ++i)
         {
             smoothed[ bins[i] ] = 0.25*ret.binvals[bins[i-1]] + 0.5 * ret.binvals[bins[i]]
                                       + 0.25*ret.binvals[bins[i+1]];
         }
-        
+
         smoothed[bins[0]] = 0.75*ret.binvals[bins[0]] + 0.25*ret.binvals[bins[1]];
-        
+
         if (bins.count() > 1)
         {
             smoothed[bins[bins.count()-1]] = 0.75*ret.binvals[bins[bins.count()-1]] +
                                 0.25 * ret.binvals[bins[bins.count()-2]];
         }
-        
+
         ret.binvals = smoothed;
     }
-    
+
     return ret;
 }

@@ -97,16 +97,16 @@ IDOrSet<FFID> FFID::operator|(const FFID &other) const
     return this->operator*(other);
 }
 
-QList<FFIdx> FFID::processMatches(QList<FFIdx> &ffidxs, 
+QList<FFIdx> FFID::processMatches(QList<FFIdx> &ffidxs,
                                   const ForceFields &ffields) const
 {
     if (ffidxs.isEmpty())
         throw SireFF::missing_forcefield( QObject::tr(
             "No forcefield in the passed forcefields object matches the ID "
-            "\"%1\".")  
+            "\"%1\".")
                 .arg(this->toString()), CODELOC );
-                
-    qSort(ffidxs);
+
+    std::sort(ffidxs.begin(), ffidxs.end());
 
     return ffidxs;
 }
@@ -121,9 +121,9 @@ static const RegisterMetaType<FFIdx> r_ffidx;
 QDataStream &operator<<(QDataStream &ds, const FFIdx &ffidx)
 {
     writeHeader(ds, r_ffidx, 1);
-    
+
     ds << static_cast<const SireID::Index_T_<FFIdx>&>(ffidx);
-    
+
     return ds;
 }
 
@@ -131,14 +131,14 @@ QDataStream &operator<<(QDataStream &ds, const FFIdx &ffidx)
 QDataStream &operator>>(QDataStream &ds, FFIdx &ffidx)
 {
     VersionID v = readHeader(ds, r_ffidx);
-    
+
     if (v == 1)
     {
         ds >> static_cast<SireID::Index_T_<FFIdx>&>(ffidx);
     }
     else
         throw version_error( v, "1", r_ffidx, CODELOC );
-        
+
     return ds;
 }
 
@@ -201,9 +201,9 @@ static const RegisterMetaType<FFName> r_ffname;
 QDataStream &operator<<(QDataStream &ds, const FFName &ffname)
 {
     writeHeader(ds, r_ffname, 1);
-    
+
     ds << static_cast<const SireID::Name&>(ffname);
-    
+
     return ds;
 }
 
@@ -211,14 +211,14 @@ QDataStream &operator<<(QDataStream &ds, const FFName &ffname)
 QDataStream &operator>>(QDataStream &ds, FFName &ffname)
 {
     VersionID v = readHeader(ds, r_ffname);
-    
+
     if (v == 1)
     {
         ds >> static_cast<SireID::Name&>(ffname);
     }
     else
         throw version_error( v, "1", r_ffname, CODELOC );
-        
+
     return ds;
 }
 

@@ -68,7 +68,7 @@ QDataStream &operator>>(QDataStream &ds,
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> atomcoords.coords
             >> static_cast<MolViewProperty&>(atomcoords);
     }
@@ -154,27 +154,27 @@ const CoordGroup& AtomProperty<Vector>::operator[](CGIdx cgidx) const
     return coords.constData()[cgidx.map(coords.count())];
 }
 
-/** Merge all of the atomic properties into a single array, with 
+/** Merge all of the atomic properties into a single array, with
     the properties arranged in AtomIdx order */
 PropertyPtr AtomProperty<Vector>::merge(const MoleculeInfoData &moldata) const
 {
     this->assertCompatibleWith(moldata);
 
     QVector<Vector> vals( moldata.nAtoms() );
-    
+
     Vector *vals_array = vals.data();
-    
+
     for (AtomIdx i(0); i<moldata.nAtoms(); ++i)
     {
         vals_array[i] = this->at( moldata.cgAtomIdx(i) );
     }
-    
+
     return AtomProperty<Vector>(vals);
 }
 
 /** Divide the AtomProperty into beads according to the passed atom selections,
     and returning the properties in AtomIdx order within each bead
-    
+
     \throw SireError::incompatible_error
 */
 PropertyPtr AtomProperty<Vector>::divide(const QVector<AtomSelection> &beads) const
@@ -187,16 +187,16 @@ PropertyPtr AtomProperty<Vector>::divide(const QVector<AtomSelection> &beads) co
 
     QVector< QVector<Vector> > bead_vals(nbeads);
     QVector<Vector> *bead_vals_array = bead_vals.data();
-    
+
     for (int i=0; i<nbeads; ++i)
     {
         const AtomSelection &bead = beads_array[i];
-        
+
         bead.assertCompatibleWith<Vector>(*this);
-        
+
         QVector<Vector> vals( bead.nSelected() );
         Vector *vals_array = vals.data();
-        
+
         if (bead.selectedAll())
         {
             for (AtomIdx j(0); j<bead.nSelected(); ++j)
@@ -212,14 +212,14 @@ PropertyPtr AtomProperty<Vector>::divide(const QVector<AtomSelection> &beads) co
                 ++vals_array;
             }
         }
-        
+
         bead_vals_array[i] = vals;
     }
-    
+
     return AtomProperty<Vector>(bead_vals);
 }
 
-/** Divide the properties into residues. This returns the values in 
+/** Divide the properties into residues. This returns the values in
     Residue/Index order
 
     \throw SireError::incompatible_error
@@ -227,25 +227,25 @@ PropertyPtr AtomProperty<Vector>::divide(const QVector<AtomSelection> &beads) co
 PropertyPtr AtomProperty<Vector>::divideByResidue(const MoleculeInfoData &molinfo) const
 {
     this->assertCompatibleWith(molinfo);
-    
+
     QVector< QVector<Vector> > res_vals( molinfo.nResidues() );
     QVector<Vector> *res_vals_array = res_vals.data();
-    
+
     for (ResIdx i(0); i<molinfo.nResidues(); ++i)
     {
         const int nats = molinfo.nAtoms(i);
-        
+
         QVector<Vector> vals(nats);
         Vector *vals_array = vals.data();
-        
+
         for (int j=0; j<nats; ++j)
         {
             vals_array[j] = this->at( molinfo.cgAtomIdx(molinfo.getAtom(i,j)) );
         }
-        
+
         res_vals_array[i] = vals;
     }
-    
+
     return AtomProperty<Vector>(res_vals);
 }
 
@@ -255,20 +255,20 @@ AtomProperty<QVariant> AtomProperty<Vector>::toVariant() const
 {
     if (coords.count() == 0)
         return PackedArray2D<QVariant>();
-        
+
     int ngroups = coords.count();
-    
+
     QVector< QVector<QVariant> > converted_coords(ngroups);
     converted_coords.squeeze();
-    
+
     const CoordGroup *coords_array = coords.constData();
     QVector<QVariant> *converted_coords_array = converted_coords.data();
-    
+
     for (int i=0; i<ngroups; ++i)
     {
         const CoordGroup &cgroup = coords_array[i];
         int nats = cgroup.count();
-        
+
         if (nats == 0)
             converted_coords_array[i] = QVector<QVariant>();
         else
@@ -278,16 +278,16 @@ AtomProperty<QVariant> AtomProperty<Vector>::toVariant() const
             QVector<QVariant> converted_vals(nats);
             converted_vals.squeeze();
             QVariant *converted_vals_array = converted_vals.data();
-            
+
             for (int j=0; j<nats; ++j)
             {
                 converted_vals_array[j].setValue<Vector>(cgroup_array[j]);
             }
-            
+
             converted_coords_array[i] = converted_vals;
         }
     }
-    
+
     return AtomProperty<QVariant>( PackedArray2D<QVariant>(converted_coords) );
 }
 
@@ -307,20 +307,20 @@ static CoordGroup makeCoordGroup(const PackedArray2D<QVariant>::Array &values)
 {
     if (values.isEmpty())
         return CoordGroup();
-        
+
     int nvals = values.count();
     const QVariant *values_array = values.constData();
 
     QVector<Vector> tmp_coords(nvals);
-    
+
     for (int i=0; i<nvals; ++i)
     {
         const QVariant &value = values_array[i];
         assertCanConvert(value);
-        
+
         tmp_coords[i] = value.value<Vector>();
     }
-    
+
     return CoordGroup(tmp_coords);
 }
 
@@ -332,17 +332,17 @@ AtomProperty<Vector> AtomProperty<Vector>::fromVariant(
 
     if (variant.isEmpty())
         return AtomProperty<Vector>();
-        
+
     int ngroups = variant.count();
-    
+
     QVector<CoordGroup> coords(ngroups);
     const PackedArray2D<QVariant>::Array *variant_array = variant.constData();
-    
+
     for (int i=0; i<ngroups; ++i)
     {
         coords[i] = ::makeCoordGroup( variant_array[i] );
     }
-    
+
     return AtomProperty<Vector>( CoordGroupArray(coords) );
 }
 
@@ -356,18 +356,18 @@ void AtomProperty<Vector>::assignFrom(const AtomProperty<QVariant> &variant)
 bool AtomProperty<Vector>::isCompatibleWith(const MoleculeInfoData &molinfo) const
 {
     int ncg = molinfo.nCutGroups();
-    
+
     if (ncg != coords.count())
         return false;
-        
+
     const CoordGroup *coords_array = coords.constData();
-    
+
     for (CGIdx i(0); i<ncg; ++i)
     {
         if (molinfo.nAtoms(i) != coords_array[i].count())
             return false;
     }
-    
+
     return true;
 }
 
@@ -419,10 +419,10 @@ AtomProperty<Vector>& AtomProperty<Vector>::set(const CGAtomIdx &cgatomidx,
                                                 const Vector &value)
 {
     quint32 cgidx = cgatomidx.cutGroup().map(coords.count());
-    
+
     const CoordGroup &cgroup = coords.at(cgidx);
     quint32 atomidx = cgatomidx.atom().map(cgroup.count());
-    
+
     coords.update( cgidx, cgroup.edit().setCoordinates(atomidx, value) );
 
     return *this;
@@ -477,7 +477,7 @@ void AtomProperty<Vector>::translate(const Vector &delta)
     coords.translate(delta);
 }
 
-/** Translate all of the atoms in the CutGroup at index 'cgidx' by 'delta' 
+/** Translate all of the atoms in the CutGroup at index 'cgidx' by 'delta'
 
     \throw SireError::invalid_index
 */
@@ -508,10 +508,10 @@ void AtomProperty<Vector>::rotate(const Matrix &rotmat, const Vector &point)
 
 /** Rotate all of the atoms in the CutGroup at index 'cgidx' using
     the quaternion 'quat' about the point 'point'
-    
+
     \throw SireError::invalid_index
 */
-void AtomProperty<Vector>::rotate(CGIdx cgidx, const Quaternion &quat, 
+void AtomProperty<Vector>::rotate(CGIdx cgidx, const Quaternion &quat,
                                   const Vector &point)
 {
     coords.rotate( cgidx.map(coords.count()), quat, point );
@@ -519,7 +519,7 @@ void AtomProperty<Vector>::rotate(CGIdx cgidx, const Quaternion &quat,
 
 /** Transform all of the atoms in the CutGroup at index 'cgidx' using
     the transformation 't'
-    
+
     \throw SireError::invalid_index
 */
 void AtomProperty<Vector>::transform(CGIdx cgidx, const Transform &t)
@@ -529,10 +529,10 @@ void AtomProperty<Vector>::transform(CGIdx cgidx, const Transform &t)
 
 /** Rotate all of the atoms in the CutGroup at index 'cgidx' using
     the matrix 'rotmat' about the point 'point'
-    
+
     \throw SireError::invalid_index
 */
-void AtomProperty<Vector>::rotate(CGIdx cgidx, const Matrix &rotmat, 
+void AtomProperty<Vector>::rotate(CGIdx cgidx, const Matrix &rotmat,
                                   const Vector &point)
 {
     coords.rotate( cgidx.map(coords.count()), rotmat, point );
@@ -545,9 +545,9 @@ void AtomProperty<Vector>::mapInto(const AxisSet &axes)
     coords.mapInto(axes);
 }
 
-/** Map all of the atoms in the CutGroup at index 'cgidx' into 
-    the coordinate space represented by 'axes' 
-    
+/** Map all of the atoms in the CutGroup at index 'cgidx' into
+    the coordinate space represented by 'axes'
+
     \throw SireError::invalid_index
 */
 void AtomProperty<Vector>::mapInto(CGIdx cgidx, const AxisSet &axes)
@@ -558,7 +558,7 @@ void AtomProperty<Vector>::mapInto(CGIdx cgidx, const AxisSet &axes)
 /** Change all of the atoms in this container from residing in the
     coordinate frame 'from_frame' and move them into the coordinate
     frame 'to_frame' */
-void AtomProperty<Vector>::changeFrame(const AxisSet &from_frame, 
+void AtomProperty<Vector>::changeFrame(const AxisSet &from_frame,
                                        const AxisSet &to_frame)
 {
     coords.changeFrame(from_frame, to_frame);
@@ -567,10 +567,10 @@ void AtomProperty<Vector>::changeFrame(const AxisSet &from_frame,
 /** Change all of the atoms in the CutGroup at index 'cgidx' so that
     they move from residing in the coordinate frame 'from_frame' into
     the coordinate frame 'to_frame'
-    
+
     \throw SireError::invalid_index
 */
-void AtomProperty<Vector>::changeFrame(CGIdx cgidx, const AxisSet &from_frame, 
+void AtomProperty<Vector>::changeFrame(CGIdx cgidx, const AxisSet &from_frame,
                                        const AxisSet &to_frame)
 {
     coords.changeFrame( cgidx.map(coords.count()), from_frame, to_frame );
@@ -644,44 +644,44 @@ int AtomProperty<Vector>::nAtoms(CGIdx cgidx) const
 QVector<Vector> AtomProperty<Vector>::toVector() const
 {
     int nats = this->nAtoms();
-    
+
     if (nats == 0)
         return QVector<Vector>();
-        
+
     QVector<Vector> vals(nats);
-    
+
     quickCopy<Vector>( vals.data(), coords.constCoordsData(), nats );
-    
+
     return vals;
 }
 
-/** Convert the properties of the atoms selected in 'selection' to an 
+/** Convert the properties of the atoms selected in 'selection' to an
     array of values. The values are written in CGAtomIdx order
-    
+
     \throw SireError::incompatible_error
 */
 QVector<Vector> AtomProperty<Vector>::toVector(const AtomSelection &selected_atoms) const
 {
     selected_atoms.assertCompatibleWith(*this);
-    
+
     if (selected_atoms.selectedAll())
         return this->toVector();
-        
+
     else if (selected_atoms.selectedAllCutGroups())
     {
         int nselected = selected_atoms.nSelected();
         QVector<Vector> vals(nselected);
-        
+
         Vector *value = vals.data();
-        
+
         const int ncg = selected_atoms.nCutGroups();
-        
+
         const CoordGroup *cgroup_array = coords.constData();
-        
+
         for (CGIdx i(0); i<ncg; ++i)
         {
             const Vector *group_coords = cgroup_array[i].constData();
-            
+
             if (selected_atoms.selectedAll(i))
             {
                 const int nats = cgroup_array[i].count();
@@ -692,8 +692,8 @@ QVector<Vector> AtomProperty<Vector>::toVector(const AtomSelection &selected_ato
             else
             {
                 QList<Index> idxs = selected_atoms.selectedAtoms(i).toList();
-                qSort(idxs);
-                
+                std::sort(idxs.begin(), idxs.end());
+
                 foreach (Index idx, idxs)
                 {
                     *value = group_coords[idx];
@@ -701,25 +701,25 @@ QVector<Vector> AtomProperty<Vector>::toVector(const AtomSelection &selected_ato
                 }
             }
         }
-        
+
         return vals;
     }
     else
     {
         int nselected = selected_atoms.nSelected();
         QVector<Vector> vals(nselected);
-        
+
         Vector *value = vals.data();
-        
+
         const CoordGroup *cgroup_array = coords.constData();
 
         QList<CGIdx> cgidxs = selected_atoms.selectedCutGroups();
-        qSort(cgidxs);
-        
+        std::sort(cgidxs.begin(), cgidxs.end());
+
         foreach (CGIdx i, cgidxs)
         {
             const Vector *group_coords = cgroup_array[i].constData();
-            
+
             if (selected_atoms.selectedAll(i))
             {
                 const int nats = cgroup_array[i].count();
@@ -730,8 +730,8 @@ QVector<Vector> AtomProperty<Vector>::toVector(const AtomSelection &selected_ato
             else
             {
                 QList<Index> idxs = selected_atoms.selectedAtoms(i).toList();
-                qSort(idxs);
-                
+                std::sort(idxs.begin(), idxs.end());
+
                 foreach (Index idx, idxs)
                 {
                     *value = group_coords[idx];
@@ -739,7 +739,7 @@ QVector<Vector> AtomProperty<Vector>::toVector(const AtomSelection &selected_ato
                 }
             }
         }
-        
+
         return vals;
     }
 }
@@ -747,22 +747,22 @@ QVector<Vector> AtomProperty<Vector>::toVector(const AtomSelection &selected_ato
 /** Copy into this atom property set the values from 'values'. The values
     are copied in CGAtomIdx order, and there must be as many values
     as there are atoms
-    
+
     \throw SireError::incompatible_error
 */
 void AtomProperty<Vector>::copyFrom(const QVector<Vector> &values)
 {
     if (values.count() != this->nAtoms())
         this->throwIncorrectNumberOfAtoms(values.count(), this->nAtoms());
-        
+
     const int ncg = coords.nCoordGroups();
-    
+
     const Vector *value = values.constData();
-    
+
     for (int i=0; i<ncg; ++i)
     {
         const int nats = coords.at(i).count();
-        
+
         coords.update(i, value, nats);
         value += nats;
     }
@@ -772,14 +772,14 @@ void AtomProperty<Vector>::copyFrom(const QVector<Vector> &values)
     for the atoms selected in 'selection'. This copies the properties
     in in CGAtomIdx order, and there must be the same number of values
     as there are selected atoms
-    
+
     \throw SireError::incompatible_error
 */
-void AtomProperty<Vector>::copyFrom(const QVector<Vector> &values, 
+void AtomProperty<Vector>::copyFrom(const QVector<Vector> &values,
                                     const AtomSelection &selected_atoms)
 {
     selected_atoms.assertCompatibleWith(*this);
-    
+
     if (selected_atoms.selectedAll())
     {
         this->copyFrom(values);
@@ -793,31 +793,31 @@ void AtomProperty<Vector>::copyFrom(const QVector<Vector> &values,
     if (selected_atoms.selectedAllCutGroups())
     {
         const Vector *value = values.constData();
-        
+
         const int ncg = coords.nCoordGroups();
-        
+
         for (CGIdx i(0); i<ncg; ++i)
         {
             if (selected_atoms.selectedAll(i))
             {
                 const int nats = coords.at(i).count();
-        
+
                 coords.update(i, value, nats);
                 value += nats;
             }
             else
             {
                 QVector<Vector> new_coords = coords.at(i).toVector();
-                
+
                 QList<Index> idxs = selected_atoms.selectedAtoms(i).toList();
-                qSort(idxs);
-                
+                std::sort(idxs.begin(), idxs.end());
+
                 foreach (Index idx, idxs)
                 {
                     new_coords[idx] = *value;
                     ++value;
                 }
-                
+
                 coords.update(i, new_coords);
             }
         }
@@ -825,32 +825,32 @@ void AtomProperty<Vector>::copyFrom(const QVector<Vector> &values,
     else
     {
         QList<CGIdx> cgidxs = selected_atoms.selectedCutGroups();
-        qSort(cgidxs);
-        
+        std::sort(cgidxs.begin(), cgidxs.end());
+
         const Vector *value = values.constData();
-        
+
         foreach (CGIdx i, cgidxs)
         {
             if (selected_atoms.selectedAll(i))
             {
                 const int nats = coords.at(i).count();
-        
+
                 coords.update(i, value, nats);
                 value += nats;
             }
             else
             {
                 QVector<Vector> new_coords = coords.at(i).toVector();
-                
+
                 QList<Index> idxs = selected_atoms.selectedAtoms(i).toList();
-                qSort(idxs);
-                
+                std::sort(idxs.begin(), idxs.end());
+
                 foreach (Index idx, idxs)
                 {
                     new_coords[idx] = *value;
                     ++value;
                 }
-                
+
                 coords.update(i, new_coords);
             }
         }

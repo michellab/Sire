@@ -55,40 +55,40 @@ using namespace SireStream;
 
 static const RegisterMetaType<MolPotentialTable> r_moltable(NO_ROOT);
 
-QDataStream &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds,
                                       const MolPotentialTable &moltable)
 {
     writeHeader(ds, r_moltable, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << moltable.molnum << moltable.moluid << moltable.ncgroups
-        << moltable.cgidx_to_idx 
+        << moltable.cgidx_to_idx
         << static_cast<const PackedArray2D<MolarEnergy>&>(moltable);
-        
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, MolPotentialTable &moltable)
 {
     VersionID v = readHeader(ds, r_moltable);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> moltable.molnum >> moltable.moluid >> moltable.ncgroups
-            >> moltable.cgidx_to_idx 
+            >> moltable.cgidx_to_idx
             >> static_cast<PackedArray2D<MolarEnergy>&>(moltable);
     }
     else
         throw version_error( v, "1", r_moltable, CODELOC );
-        
+
     return ds;
 }
 
 /** Null constructor */
-MolPotentialTable::MolPotentialTable() 
+MolPotentialTable::MolPotentialTable()
                   : PackedArray2D<MolarEnergy>(), molnum(0), ncgroups(0)
 {}
 
@@ -102,37 +102,37 @@ MolPotentialTable::MolPotentialTable(const MoleculeView &molview)
 {
     //build arrays for each selected CutGroup
     AtomSelection selected_atoms = molview.selection();
-    
+
     if (selected_atoms.selectedAllCutGroups())
     {
         QVector< QVector<MolarEnergy> > potentials(ncgroups);
         QVector<MolarEnergy> *potentials_array = potentials.data();
-    
+
         for (CGIdx i(0); i<ncgroups; ++i)
         {
-            potentials_array[i] = QVector<MolarEnergy>(molview.data().info().nAtoms(i), 
+            potentials_array[i] = QVector<MolarEnergy>(molview.data().info().nAtoms(i),
                                                        MolarEnergy(0));
         }
-        
+
         PackedArray2D<MolarEnergy>::operator=(potentials);
     }
     else
     {
         QVector< QVector<MolarEnergy> > potentials(selected_atoms.nSelectedCutGroups());
         cgidx_to_idx.reserve(selected_atoms.nSelectedCutGroups());
-        
+
         QVector<MolarEnergy> *potentials_array = potentials.data();
         qint32 idx = 0;
-        
+
         foreach (CGIdx i, selected_atoms.selectedCutGroups())
         {
             potentials_array[i] = QVector<MolarEnergy>(molview.data().info().nAtoms(i),
                                                        MolarEnergy(0));
-                                              
+
             cgidx_to_idx.insert(i, idx);
             ++idx;
         }
-        
+
         PackedArray2D<MolarEnergy>::operator=(potentials);
     }
 }
@@ -159,7 +159,7 @@ MolPotentialTable& MolPotentialTable::operator=(const MolPotentialTable &other)
         ncgroups = other.ncgroups;
         cgidx_to_idx = other.cgidx_to_idx;
     }
-    
+
     return *this;
 }
 
@@ -237,7 +237,7 @@ MolPotentialTable MolPotentialTable::operator+(const MolarEnergy &potential) con
     return ret;
 }
 
-MolPotentialTable operator+(const MolarEnergy &potential, 
+MolPotentialTable operator+(const MolarEnergy &potential,
                                           const MolPotentialTable &table)
 {
     return table + potential;
@@ -308,7 +308,7 @@ void MolPotentialTable::initialise()
     if (nvals > 0)
     {
         MolarEnergy *vals = PackedArray2D<MolarEnergy>::valueData();
-        
+
         for (int i=0; i<nvals; ++i)
         {
             vals[i] = MolarEnergy(0);
@@ -323,7 +323,7 @@ QVector<MolarEnergy> MolPotentialTable::toVector() const
 }
 
 
-/** Return an array of all of the potentials at the location of 
+/** Return an array of all of the potentials at the location of
     the atoms selected in 'selection'
 
     \throw SireError::incompatible_error
@@ -338,7 +338,7 @@ QVector<MolarEnergy> MolPotentialTable::toVector(const AtomSelection &selection)
             throw SireMol::missing_atom( QObject::tr(
                 "Cannot return the forces on all atoms as not all of the atoms "
                 "are selected in this forcetable."), CODELOC );
-        
+
         return this->toVector();
     }
 
@@ -346,28 +346,28 @@ QVector<MolarEnergy> MolPotentialTable::toVector(const AtomSelection &selection)
     MolarEnergy *value = vals.data();
 
     if (this->selectedAll())
-    {   
+    {
         if (selection.selectedAllCutGroups())
         {
             const int ncg = selection.nCutGroups();
-        
+
             for (CGIdx i(0); i<ncg; ++i)
             {
-                const MolarEnergy *grouppotentials 
+                const MolarEnergy *grouppotentials
                                 = PackedArray2D<MolarEnergy>::constData(i);
-            
+
                 if (selection.selectedAll(i))
                 {
                     const int nats = PackedArray2D<MolarEnergy>::nValues(i);
-                    
+
                     quickCopy<MolarEnergy>(value, grouppotentials, nats);
                     value += nats;
                 }
                 else
                 {
                     QList<Index> idxs = selection.selectedAtoms(i).toList();
-                    qSort(idxs);
-                    
+                    std::sort(idxs.begin(), idxs.end());
+
                     foreach (Index idx, idxs)
                     {
                         *value = grouppotentials[idx];
@@ -379,24 +379,24 @@ QVector<MolarEnergy> MolPotentialTable::toVector(const AtomSelection &selection)
         else
         {
             QList<CGIdx> cgidxs = selection.selectedCutGroups();
-            qSort(cgidxs);
-            
+            std::sort(cgidxs.begin(), cgidxs.end());
+
             foreach (CGIdx i, cgidxs)
             {
                 const MolarEnergy *grouppotentials = PackedArray2D<MolarEnergy>::constData(i);
-            
+
                 if (selection.selectedAll(i))
                 {
                     const int nats = PackedArray2D<MolarEnergy>::nValues(i);
-                    
+
                     quickCopy<MolarEnergy>(value, grouppotentials, nats);
                     value += nats;
                 }
                 else
                 {
                     QList<Index> idxs = selection.selectedAtoms(i).toList();
-                    qSort(idxs);
-                    
+                    std::sort(idxs.begin(), idxs.end());
+
                     foreach (Index idx, idxs)
                     {
                         *value = grouppotentials[idx];
@@ -414,12 +414,12 @@ QVector<MolarEnergy> MolPotentialTable::toVector(const AtomSelection &selection)
                 "not all CutGroups are present in the forcetable."), CODELOC );
 
         QList<CGIdx> cgidxs = selection.selectedCutGroups();
-        qSort(cgidxs);
-        
+        std::sort(cgidxs.begin(), cgidxs.end());
+
         foreach (CGIdx cgidx, cgidxs)
         {
             int i = cgidx_to_idx.value(cgidx, -1);
-            
+
             if (i == -1)
                 throw SireMol::missing_atom( QObject::tr(
                     "Cannot return the potentials as while atoms in CutGroup %1 "
@@ -427,19 +427,19 @@ QVector<MolarEnergy> MolPotentialTable::toVector(const AtomSelection &selection)
                         .arg(cgidx), CODELOC );
 
             const MolarEnergy *grouppotentials = PackedArray2D<MolarEnergy>::constData(i);
-        
+
             if (selection.selectedAll(cgidx))
             {
                 const int nats = PackedArray2D<MolarEnergy>::nValues(i);
-                
+
                 quickCopy<MolarEnergy>(value, grouppotentials, nats);
                 value += nats;
             }
             else
             {
                 QList<Index> idxs = selection.selectedAtoms(cgidx).toList();
-                qSort(idxs);
-                
+                std::sort(idxs.begin(), idxs.end());
+
                 foreach (Index idx, idxs)
                 {
                     *value = grouppotentials[idx];
@@ -448,21 +448,21 @@ QVector<MolarEnergy> MolPotentialTable::toVector(const AtomSelection &selection)
             }
         }
     }
-    
+
     return vals;
 }
 
 /** Add the potential 'potential' onto this table - this returns whether or not the
     atom is in this table
-    
+
     \throw SireError::invalid_index
 */
 bool MolPotentialTable::add(const CGAtomIdx &cgatomidx, const MolarEnergy &potential)
 {
     CGIdx cgidx( cgatomidx.cutGroup().map(this->nCutGroups()) );
-    
+
     int i = -1;
-    
+
     if (this->selectedAll())
     {
         i = cgidx;
@@ -475,17 +475,17 @@ bool MolPotentialTable::add(const CGAtomIdx &cgatomidx, const MolarEnergy &poten
     {
         return false;
     }
-    
+
     int j = cgatomidx.atom().map( this->nValues(i) );
-    
+
     this->operator()(i, j) += potential;
-    
+
     return true;
 }
 
 /** Subtract the potential 'potential' from this table - this returns whether or not the
     atom is in this table
-    
+
     \throw SireError::invalid_index
 */
 bool MolPotentialTable::subtract(const CGAtomIdx &cgatomidx, const MolarEnergy &potential)
@@ -493,7 +493,7 @@ bool MolPotentialTable::subtract(const CGAtomIdx &cgatomidx, const MolarEnergy &
     return this->add( cgatomidx, -potential );
 }
 
-static void addField(const MolarEnergy &potential, MolarEnergy *potentials, 
+static void addField(const MolarEnergy &potential, MolarEnergy *potentials,
                      const int nats)
 {
     for (int i=0; i<nats; ++i)
@@ -503,12 +503,12 @@ static void addField(const MolarEnergy &potential, MolarEnergy *potentials,
 }
 
 /** Add the potential 'potential' onto this table for all of the atoms
-    in 'selected_atoms - this returns whether 
+    in 'selected_atoms - this returns whether
     or not any selected atoms are in this table
-    
+
     \throw SireError::incompatible_error
 */
-bool MolPotentialTable::add(const AtomSelection &selected_atoms, 
+bool MolPotentialTable::add(const AtomSelection &selected_atoms,
                             const MolarEnergy &potential)
 {
     this->assertCompatibleWith(selected_atoms);
@@ -523,14 +523,14 @@ bool MolPotentialTable::add(const AtomSelection &selected_atoms,
         //this is easy - all atoms are selected for updating,
         //so just update all of the forces in this table
         ::addField(potential, this->valueData(), this->nValues());
-        
+
         changed_atoms = true;
     }
     else if (this->selectedAll())
     {
         //easy(ish) case - all atoms are in this forcetable,
         //so we only need to update the forces of the selected atoms
-    
+
         if (selected_atoms.selectedAllCutGroups())
         {
             for (CGIdx i(0); i<ncgroups; ++i)
@@ -543,16 +543,16 @@ bool MolPotentialTable::add(const AtomSelection &selected_atoms,
                 else
                 {
                     QSet<Index> idxs = selected_atoms.selectedAtoms(i);
-                    
+
                     MolarEnergy *atompotentials = this->data(i);
                     const int nats = this->nValues(i);
-                    
+
                     foreach (Index idx, idxs)
                     {
                         BOOST_ASSERT( idx >= 0 and idx < nats );
                         atompotentials[idx] += potential;
                     }
-                    
+
                     changed_atoms = true;
                 }
             }
@@ -560,7 +560,7 @@ bool MolPotentialTable::add(const AtomSelection &selected_atoms,
         else
         {
             QList<CGIdx> cgidxs = selected_atoms.selectedCutGroups();
-            
+
             foreach (CGIdx i, cgidxs)
             {
                 if (selected_atoms.selectedAll(i))
@@ -571,16 +571,16 @@ bool MolPotentialTable::add(const AtomSelection &selected_atoms,
                 else
                 {
                     QSet<Index> idxs = selected_atoms.selectedAtoms(i);
-                    
+
                     MolarEnergy *atompotentials = this->data(i);
                     const int nats = this->nValues(i);
-                    
+
                     foreach (Index idx, idxs)
                     {
                         BOOST_ASSERT( idx >= 0 and idx < nats );
                         atompotentials[idx] += potential;
                     }
-                    
+
                     changed_atoms = true;
                 }
             }
@@ -599,7 +599,7 @@ bool MolPotentialTable::add(const AtomSelection &selected_atoms,
             {
                 const CGIdx cgidx = it.key();
                 const int i = it.value();
-                
+
                 if (selected_atoms.selectedAll(cgidx))
                 {
                     ::addField(potential, this->data(i), this->nValues(i));
@@ -608,17 +608,17 @@ bool MolPotentialTable::add(const AtomSelection &selected_atoms,
                 else
                 {
                     QSet<Index> idxs = selected_atoms.selectedAtoms(cgidx);
-                    
+
                     MolarEnergy *atompotentials = this->data(i);
                     const int nats = this->nValues(i);
-                    
+
                     foreach (Index idx, idxs)
                     {
                         BOOST_ASSERT( idx >= 0 and idx < nats );
                         atompotentials[idx] += potential;
                     }
                 }
-                
+
                 changed_atoms = true;
             }
         }
@@ -630,7 +630,7 @@ bool MolPotentialTable::add(const AtomSelection &selected_atoms,
             {
                 const CGIdx cgidx = it.key();
                 const int i = it.value();
-                
+
                 if (selected_atoms.selectedAll(cgidx))
                 {
                     ::addField(potential, this->data(i), this->nValues(i));
@@ -639,32 +639,32 @@ bool MolPotentialTable::add(const AtomSelection &selected_atoms,
                 else if (selected_atoms.selected(cgidx))
                 {
                     QSet<Index> idxs = selected_atoms.selectedAtoms(cgidx);
-                    
+
                     MolarEnergy *atompotentials = this->data(i);
                     const int nats = this->nValues(i);
-                    
+
                     foreach (Index idx, idxs)
                     {
                         BOOST_ASSERT( idx >= 0 and idx < nats );
                         atompotentials[idx] += potential;
                     }
-                    
+
                     changed_atoms = true;
                 }
             }
         }
     }
-    
+
     return changed_atoms;
 }
 
 /** Subtract the potential 'potential' from this table for all of the atoms
-    in 'selected_atoms' - this returns whether 
+    in 'selected_atoms' - this returns whether
     or not any selected atoms are in this table
-    
+
     \throw SireError::incompatible_error
 */
-bool MolPotentialTable::subtract(const AtomSelection &selected_atoms, 
+bool MolPotentialTable::subtract(const AtomSelection &selected_atoms,
                                  const MolarEnergy &potential)
 {
     return MolPotentialTable::add( selected_atoms, -potential );
@@ -678,7 +678,7 @@ void MolPotentialTable::add(const MolarEnergy &potential)
     if (nvals > 0)
     {
         MolarEnergy *vals = PackedArray2D<MolarEnergy>::valueData();
-        
+
         for (int i=0; i<nvals; ++i)
         {
             vals[i] += potential;
@@ -700,7 +700,7 @@ void MolPotentialTable::multiply(double value)
     if (nvals > 0)
     {
         MolarEnergy *vals = PackedArray2D<MolarEnergy>::valueData();
-        
+
         for (int i=0; i<nvals; ++i)
         {
             vals[i] *= value;
@@ -722,7 +722,7 @@ void MolPotentialTable::setAll(const MolarEnergy &potential)
     if (nvals > 0)
     {
         MolarEnergy *vals = PackedArray2D<MolarEnergy>::valueData();
-        
+
         for (int i=0; i<nvals; ++i)
         {
             vals[i] = potential;
@@ -741,7 +741,7 @@ void MolPotentialTable::assertCompatibleWith(const AtomSelection &selection) con
     }
 
     bool compatible = true;
-    
+
     if (selection.nCutGroups() != ncgroups)
     {
         compatible = false;
@@ -770,7 +770,7 @@ void MolPotentialTable::assertCompatibleWith(const AtomSelection &selection) con
             }
         }
     }
-    
+
     if (not compatible)
         throw SireError::incompatible_error( QObject::tr(
             "This MolForceTable is incompatible with the passed atom selection."),
@@ -787,13 +787,13 @@ void MolPotentialTable::add(const MolPotentialTable &other)
         this->operator*=(2);
         return;
     }
-    
+
     if (molnum != other.molnum)
         throw SireError::incompatible_error( QObject::tr(
                 "You cannot combine the potential table for molecule %1 with the "
                 "potential table for molecule %2. The molecules must be the same.")
                     .arg(molnum).arg(other.molnum), CODELOC );
-                    
+
     if (moluid != other.moluid)
         throw SireError::incompatible_error( QObject::tr(
                 "You cannot combine together the tables for molecule %1 as the "
@@ -811,7 +811,7 @@ void MolPotentialTable::add(const MolPotentialTable &other)
         {
             MolarEnergy *vals = PackedArray2D<MolarEnergy>::valueData();
             const MolarEnergy *other_vals = other.constValueData();
-        
+
             for (int i=0; i<nvals; ++i)
             {
                 vals[i] += other_vals[i];
@@ -823,15 +823,15 @@ void MolPotentialTable::add(const MolPotentialTable &other)
         for (CGIdx i(0); i<ncgroups; ++i)
         {
             int idx = other.map(i);
-                
+
             if (idx != -1)
             {
                 int nvals = this->nValues(i);
                 BOOST_ASSERT( nvals == other.nValues(idx) );
-                
+
                 MolarEnergy *vals = PackedArray2D<MolarEnergy>::data(i);
                 const MolarEnergy *other_vals = other.constData(idx);
-                
+
                 for (int j=0; j<nvals; ++j)
                 {
                     vals[j] += other_vals[j];
@@ -846,15 +846,15 @@ void MolPotentialTable::add(const MolPotentialTable &other)
              ++it)
         {
             int idx = other.map(it.key());
-            
+
             if (idx != -1)
             {
                 int nvals = this->nValues(it.value());
                 BOOST_ASSERT( nvals == other.nValues(idx) );
-                
+
                 MolarEnergy *vals = PackedArray2D<MolarEnergy>::data(it.key());
                 const MolarEnergy *other_vals = other.constData(idx);
-                
+
                 for (int j=0; j<nvals; ++j)
                 {
                     vals[j] += other_vals[j];
@@ -873,7 +873,7 @@ void MolPotentialTable::subtract(const MolPotentialTable &other)
         this->setAll( MolarEnergy(0) );
         return;
     }
-    
+
     return this->add( -other );
 }
 
@@ -886,18 +886,18 @@ static const RegisterMetaType<GridPotentialTable> r_gridtable(NO_ROOT);
 QDataStream &operator<<(QDataStream &ds, const GridPotentialTable &gridtable)
 {
     writeHeader(ds, r_gridtable, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << gridtable.grd << gridtable.potentialvals;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, GridPotentialTable &gridtable)
 {
     VersionID v = readHeader(ds, r_gridtable);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
@@ -905,7 +905,7 @@ QDataStream &operator>>(QDataStream &ds, GridPotentialTable &gridtable)
     }
     else
         throw version_error(v, "1", r_gridtable, CODELOC);
-        
+
     return ds;
 }
 
@@ -940,7 +940,7 @@ GridPotentialTable& GridPotentialTable::operator=(const GridPotentialTable &othe
         grd = other.grd;
         potentialvals = other.potentialvals;
     }
-    
+
     return *this;
 }
 
@@ -954,7 +954,7 @@ GridPotentialTable& GridPotentialTable::operator=(const MolarEnergy &potential)
 /** Comparison operator */
 bool GridPotentialTable::operator==(const GridPotentialTable &other) const
 {
-    return this == &other or 
+    return this == &other or
            (grd == other.grd and potentialvals == other.potentialvals);
 }
 
@@ -972,7 +972,7 @@ GridPotentialTable& GridPotentialTable::operator+=(const GridPotentialTable &oth
     return *this;
 }
 
-/** Subtract the potentials of 'other' from this table. Note that this 
+/** Subtract the potentials of 'other' from this table. Note that this
     only subtracts the potentials if both tables use the same grid points */
 GridPotentialTable& GridPotentialTable::operator-=(const GridPotentialTable &other)
 {
@@ -980,7 +980,7 @@ GridPotentialTable& GridPotentialTable::operator-=(const GridPotentialTable &oth
     return *this;
 }
 
-/** Return the sum of the potentials of this table and 'other' - note that 
+/** Return the sum of the potentials of this table and 'other' - note that
     this returns the first table if the two tables use different grids */
 GridPotentialTable GridPotentialTable::operator+(const GridPotentialTable &other) const
 {
@@ -989,7 +989,7 @@ GridPotentialTable GridPotentialTable::operator+(const GridPotentialTable &other
     return ret;
 }
 
-/** Return the difference of the potentials of this table and 'other' - note that 
+/** Return the difference of the potentials of this table and 'other' - note that
     this returns the first table if the two tables use different grids */
 GridPotentialTable GridPotentialTable::operator-(const GridPotentialTable &other) const
 {
@@ -1071,10 +1071,10 @@ GridPotentialTable GridPotentialTable::operator-() const
     {
         *it = -(*it);
     }
-    
+
     return ret;
 }
-    
+
 /** Return a modifiable reference to the ith grid point's potential value
 
     \throw SireError::invalid_index
@@ -1092,7 +1092,7 @@ const MolarEnergy& GridPotentialTable::operator[](int i) const
 {
     return potentialvals.at( Index(i).map(potentialvals.count()) );
 }
-    
+
 /** Return the potential value of the ith grid point
 
     \throw SireError::invalid_index
@@ -1110,7 +1110,7 @@ const char* GridPotentialTable::typeName()
 /** Initialise the potential at each grid point to equal 0 */
 void GridPotentialTable::initialise()
 {
-    for (QVector<MolarEnergy>::iterator it = potentialvals.begin(); 
+    for (QVector<MolarEnergy>::iterator it = potentialvals.begin();
          it != potentialvals.end();
          ++it)
     {
@@ -1174,12 +1174,12 @@ void GridPotentialTable::add(const GridPotentialTable &other)
     {
         int nvals = potentialvals.count();
         BOOST_ASSERT( nvals == other.potentialvals.count() );
-        
+
         if (nvals > 0)
         {
             MolarEnergy *data = potentialvals.data();
             const MolarEnergy *other_data = other.potentialvals.constData();
-            
+
             for (int i=0; i<nvals; ++i)
             {
                 data[i] += other_data[i];
@@ -1196,12 +1196,12 @@ void GridPotentialTable::subtract(const GridPotentialTable &other)
     {
         int nvals = potentialvals.count();
         BOOST_ASSERT( nvals == other.potentialvals.count() );
-        
+
         if (nvals > 0)
         {
             MolarEnergy *data = potentialvals.data();
             const MolarEnergy *other_data = other.potentialvals.constData();
-            
+
             for (int i=0; i<nvals; ++i)
             {
                 data[i] -= other_data[i];
@@ -1287,7 +1287,7 @@ GridPotentialTable::iterator GridPotentialTable::end()
 {
     return potentialvals.end();
 }
-    
+
 GridPotentialTable::const_iterator GridPotentialTable::begin() const
 {
     return potentialvals.constBegin();
@@ -1297,7 +1297,7 @@ GridPotentialTable::const_iterator GridPotentialTable::end() const
 {
     return potentialvals.constEnd();
 }
-    
+
 GridPotentialTable::const_iterator GridPotentialTable::constBegin() const
 {
     return potentialvals.constBegin();
@@ -1317,30 +1317,30 @@ static const RegisterMetaType<PotentialTable> r_potentialtable(NO_ROOT);
 QDataStream &operator<<(QDataStream &ds, const PotentialTable &potentialtable)
 {
     writeHeader(ds, r_potentialtable, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << potentialtable.moltables_by_idx << potentialtable.gridtables;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, PotentialTable &potentialtable)
 {
     VersionID v = readHeader(ds, r_potentialtable);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> potentialtable.moltables_by_idx >> potentialtable.gridtables;
-        
+
         QHash<MolNum,qint32> molnum_to_idx;
         molnum_to_idx.reserve(potentialtable.moltables_by_idx.count());
-        
+
         quint32 i = 0;
-        
-        for (QVector<MolPotentialTable>::const_iterator 
+
+        for (QVector<MolPotentialTable>::const_iterator
                                     it = potentialtable.moltables_by_idx.constBegin();
              it != potentialtable.moltables_by_idx.constEnd();
              ++it)
@@ -1348,12 +1348,12 @@ QDataStream &operator>>(QDataStream &ds, PotentialTable &potentialtable)
             molnum_to_idx.insert( it->molNum(), i );
             i += 1;
         }
-        
+
         potentialtable.molnum_to_idx = molnum_to_idx;
     }
     else
         throw version_error( v, "1", r_potentialtable, CODELOC );
-        
+
     return ds;
 }
 
@@ -1365,19 +1365,19 @@ void PotentialTable::setGroup(const MoleculeGroup &molgroup)
 {
     if (molgroup.isEmpty())
         return;
-        
+
     int nmols = molgroup.nMolecules();
-    
+
     moltables_by_idx = QVector<MolPotentialTable>(nmols);
     moltables_by_idx.squeeze();
 
     molnum_to_idx = QHash<MolNum,qint32>();
     molnum_to_idx.reserve(nmols);
-    
+
     MolPotentialTable *moltables_by_idx_array = moltables_by_idx.data();
-    
+
     quint32 i = 0;
-    
+
     for (MoleculeGroup::const_iterator it = molgroup.constBegin();
          it != molgroup.constEnd();
          ++it)
@@ -1395,7 +1395,7 @@ PotentialTable::PotentialTable(const MoleculeGroup &molgroup)
 {
     this->setGroup(molgroup);
 }
-         
+
 /** Construct the table to hold the potentials at all of the points
     in the passed grid */
 PotentialTable::PotentialTable(const Grid &grid)
@@ -1418,7 +1418,7 @@ PotentialTable::PotentialTable(const QVector<GridPtr> &grids)
                 gridtables.append( GridPotentialTable(it->read()) );
         }
     }
-    
+
     gridtables.squeeze();
 }
 
@@ -1449,7 +1449,7 @@ PotentialTable::PotentialTable(const MoleculeGroup &molgroup, const QVector<Grid
                 gridtables.append( GridPotentialTable(it->read()) );
         }
     }
-    
+
     gridtables.squeeze();
 }
 
@@ -1478,7 +1478,7 @@ PotentialTable& PotentialTable::operator=(const PotentialTable &other)
         gridtables = other.gridtables;
         molnum_to_idx = other.molnum_to_idx;
     }
-    
+
     return *this;
 }
 
@@ -1493,7 +1493,7 @@ PotentialTable& PotentialTable::operator=(const MolarEnergy &potential)
 bool PotentialTable::operator==(const PotentialTable &other) const
 {
     return this == &other or
-           (moltables_by_idx == other.moltables_by_idx and 
+           (moltables_by_idx == other.moltables_by_idx and
             gridtables == other.gridtables);
 }
 
@@ -1546,7 +1546,7 @@ PotentialTable& PotentialTable::operator+=(const MolarEnergy &potential)
     return *this;
 }
 
-/** Substract the potential 'potential' from all of the atom and grid 
+/** Substract the potential 'potential' from all of the atom and grid
     points in this table */
 PotentialTable& PotentialTable::operator-=(const MolarEnergy &potential)
 {
@@ -1613,28 +1613,28 @@ PotentialTable PotentialTable::operator-() const
     {
         *it = -(*it);
     }
-    
+
     for (QVector<GridPotentialTable>::iterator it = ret.gridtables.begin();
          it != ret.gridtables.end();
          ++it)
     {
         *it = -(*it);
     }
-    
+
     return ret;
 }
 
 /** Return whether or not this contains a table for the passed grid */
 bool PotentialTable::contains(const Grid &grid) const
 {
-    for (QVector<GridPotentialTable>::const_iterator it = gridtables.constBegin(); 
+    for (QVector<GridPotentialTable>::const_iterator it = gridtables.constBegin();
          it != gridtables.constEnd();
          ++it)
     {
         if (it->grid().equals(grid))
             return true;
     }
-    
+
     return false;
 }
 
@@ -1647,7 +1647,7 @@ void PotentialTable::initialiseTables()
     {
         it->initialise();
     }
-    
+
     for (QVector<GridPotentialTable>::iterator it = gridtables.begin();
          it != gridtables.end();
          ++it)
@@ -1660,10 +1660,10 @@ void PotentialTable::initialiseTables()
 void PotentialTable::initialiseTable(MolNum molnum)
 {
     int idx = molnum_to_idx.value(molnum, -1);
-    
+
     if (idx == -1)
         assertContainsTableFor(molnum);
-        
+
     moltables_by_idx[idx].initialise();
 }
 
@@ -1671,7 +1671,7 @@ void PotentialTable::initialiseTable(MolNum molnum)
 void PotentialTable::initialiseTable(const Grid &grid)
 {
     assertContainsTableFor(grid);
-    
+
     for (QVector<GridPotentialTable>::iterator it = gridtables.begin();
          it != gridtables.end();
          ++it)
@@ -1691,7 +1691,7 @@ void PotentialTable::initialiseTable(const Grid &grid)
 GridPotentialTable& PotentialTable::getTable(const Grid &grid)
 {
     this->assertContainsTableFor(grid);
-    
+
     for (QVector<GridPotentialTable>::iterator it = gridtables.begin();
          it != gridtables.end();
          ++it)
@@ -1699,9 +1699,9 @@ GridPotentialTable& PotentialTable::getTable(const Grid &grid)
         if (it->grid().equals(grid))
             return *it;
     }
-    
+
     BOOST_ASSERT( false );
-    
+
     //this line needed to remove warning about lack of return value
     return *( (GridPotentialTable*) 0 );
 }
@@ -1713,7 +1713,7 @@ GridPotentialTable& PotentialTable::getTable(const Grid &grid)
 const GridPotentialTable& PotentialTable::getTable(const Grid &grid) const
 {
     this->assertContainsTableFor(grid);
-    
+
     for (QVector<GridPotentialTable>::const_iterator it = gridtables.constBegin();
          it != gridtables.constEnd();
          ++it)
@@ -1721,9 +1721,9 @@ const GridPotentialTable& PotentialTable::getTable(const Grid &grid) const
         if (it->grid().equals(grid))
             return *it;
     }
-    
+
     BOOST_ASSERT( false );
-    
+
     //this line needed to remove warning about lack of return value
     return *( (GridPotentialTable*) 0 );
 }
@@ -1769,7 +1769,7 @@ void PotentialTable::assertContainsTableFor(const Grid &grid) const
         if (it->grid().equals(grid))
             return;
     }
-    
+
     throw SireError::unavailable_resource( QObject::tr(
             "This potential table does not contain an entry for the grid %1.")
                 .arg(grid.toString()), CODELOC );
@@ -1784,11 +1784,11 @@ void PotentialTable::add(const PotentialTable &other)
          ++it)
     {
         int idx = molnum_to_idx.value(it.key(), -1);
-        
+
         if (idx != -1)
             moltables_by_idx[idx] += other.moltables_by_idx[it.value()];
     }
-    
+
     for (QVector<GridPotentialTable>::const_iterator it = other.gridtables.constBegin();
          it != other.gridtables.constEnd();
          ++it)
@@ -1813,11 +1813,11 @@ void PotentialTable::subtract(const PotentialTable &other)
          ++it)
     {
         int idx = molnum_to_idx.value(it.key(), -1);
-        
+
         if (idx != -1)
             moltables_by_idx[idx] -= other.moltables_by_idx[it.value()];
     }
-    
+
     for (QVector<GridPotentialTable>::const_iterator it = other.gridtables.constBegin();
          it != other.gridtables.constEnd();
          ++it)
@@ -1842,7 +1842,7 @@ void PotentialTable::add(const MolarEnergy &potential)
     {
         it->add(potential);
     }
-    
+
     for (QVector<GridPotentialTable>::iterator it = gridtables.begin();
          it != gridtables.end();
          ++it)
@@ -1860,7 +1860,7 @@ void PotentialTable::subtract(const MolarEnergy &potential)
     {
         it->subtract(potential);
     }
-    
+
     for (QVector<GridPotentialTable>::iterator it = gridtables.begin();
          it != gridtables.end();
          ++it)
@@ -1878,7 +1878,7 @@ void PotentialTable::setAll(const MolarEnergy &potential)
     {
         it->setAll(potential);
     }
-    
+
     for (QVector<GridPotentialTable>::iterator it = gridtables.begin();
          it != gridtables.end();
          ++it)
@@ -1896,7 +1896,7 @@ void PotentialTable::multiply(double value)
     {
         it->multiply(value);
     }
-    
+
     for (QVector<GridPotentialTable>::iterator it = gridtables.begin();
          it != gridtables.end();
          ++it)
@@ -1914,7 +1914,7 @@ void PotentialTable::divide(double value)
     {
         it->divide(value);
     }
-    
+
     for (QVector<GridPotentialTable>::iterator it = gridtables.begin();
          it != gridtables.end();
          ++it)
@@ -1923,18 +1923,18 @@ void PotentialTable::divide(double value)
     }
 }
 
-/** Return the index of the molecule with number 'molnum' in this table 
+/** Return the index of the molecule with number 'molnum' in this table
 
     \throw SireMol::missing_molecule
 */
 int PotentialTable::indexOf(MolNum molnum) const
 {
     QHash<MolNum,qint32>::const_iterator it = molnum_to_idx.constFind(molnum);
-    
+
     if (it == molnum_to_idx.constEnd())
         throw SireMol::missing_molecule( QObject::tr(
             "There is no molecule with number %1 in this potential table.")
                 .arg(molnum), CODELOC );
-                
+
     return it.value();
 }

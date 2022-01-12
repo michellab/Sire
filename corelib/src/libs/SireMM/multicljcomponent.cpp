@@ -44,7 +44,7 @@ namespace SireMM
     boost::tuple<QString,QString> getSubscriptedProperty(QString name)
     {
         QRegExp key_regexp("\\[(.*)\\]$");
- 
+
         int idx = key_regexp.indexIn(name);
         if (idx != -1)
         {
@@ -52,11 +52,11 @@ namespace SireMM
             QString cljprop = name;
             cljprop.truncate(idx);
             cljprop = cljprop.trimmed();
-            
+
             return boost::tuple<QString,QString>(cljprop,cljkey);
         }
         else
-            return boost::tuple<QString,QString>(name, QString::null);
+            return boost::tuple<QString,QString>(name, QString());
     }
 
 }
@@ -68,31 +68,31 @@ namespace SireMM
 QDataStream &operator<<(QDataStream &ds, const MultiCLJEnergy &nrg)
 {
     quint32 version = 1;
-    
+
     ds << version;
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << nrg.cnrgs << nrg.ljnrgs << nrg.coulomb() << nrg.lj();
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, MultiCLJEnergy &nrg)
 {
     quint32 version;
-    
+
     ds >> version;
-    
+
     if (version == 1)
     {
         SharedDataStream sds(ds);
-        
+
         double cnrg, ljnrg;
         QVector<double> cnrgs, ljnrgs;
-        
+
         sds >> cnrgs >> ljnrgs >> cnrg >> ljnrg;
-        
+
         if (cnrgs.isEmpty())
         {
             nrg = MultiCLJEnergy(cnrg, ljnrg);
@@ -106,7 +106,7 @@ QDataStream &operator>>(QDataStream &ds, MultiCLJEnergy &nrg)
         throw version_error( QObject::tr(
                 "Unsupported version of MultiCLJEnergy being loaded (%1). "
                 "Only version 1 is supported.").arg(version), CODELOC );
-    
+
     return ds;
 }
 
@@ -135,33 +135,33 @@ static const RegisterMetaType<MultiCLJComponent> r_cljcomp;
 QDataStream &operator<<(QDataStream &ds, const MultiCLJComponent &cljcomp)
 {
     writeHeader(ds, r_cljcomp, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << cljcomp.comps << cljcomp.key_to_idx
         << static_cast<const FFComponent&>(cljcomp);
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, MultiCLJComponent &cljcomp)
 {
     VersionID v = readHeader(ds, r_cljcomp);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> cljcomp.comps >> cljcomp.key_to_idx
             >> static_cast<FFComponent&>(cljcomp);
     }
     else
         throw version_error(v, "1", r_cljcomp, CODELOC);
-    
+
     return ds;
 }
 
-/** Construct with just a single, default, CLJComponent for the 
+/** Construct with just a single, default, CLJComponent for the
     forcefield with the passed name */
 MultiCLJComponent::MultiCLJComponent(const FFName &name)
                   : FFComponent(name, QLatin1String("CLJ"))
@@ -184,17 +184,17 @@ MultiCLJComponent::~MultiCLJComponent()
 MultiCLJComponent MultiCLJComponent::rename(const FFName &name) const
 {
     MultiCLJComponent ret(name);
-    
+
     ret.comps = QVector<CLJComponent>(comps.count());
     ret.key_to_idx = key_to_idx;
-    
+
     for (QHash<QString,quint32>::const_iterator it = key_to_idx.constBegin();
          it != key_to_idx.constEnd();
          ++it)
     {
         ret.comps[it.value()] = CLJComponent(name, it.key());
     }
-    
+
     return ret;
 }
 
@@ -213,7 +213,7 @@ MultiCLJComponent& MultiCLJComponent::operator=(const MultiCLJComponent &other)
         comps = other.comps;
         key_to_idx = other.key_to_idx;
     }
-    
+
     return *this;
 }
 
@@ -306,7 +306,7 @@ void MultiCLJComponent::setEnergy(FF &ff, const MultiCLJEnergy &value) const
         for (int i=0; i<comps.count(); ++i)
         {
             const CLJComponent &comp = comps.constData()[i];
-        
+
             FFComponent::setEnergy(ff, comp.total(), value.total(i));
             FFComponent::setEnergy(ff, comp.coulomb(), value.coulomb(i));
             FFComponent::setEnergy(ff, comp.lj(), value.lj(i));
@@ -328,7 +328,7 @@ void MultiCLJComponent::changeEnergy(FF &ff, const MultiCLJEnergy &delta) const
         for (int i=0; i<comps.count(); ++i)
         {
             const CLJComponent &comp = comps.constData()[i];
-        
+
             FFComponent::changeEnergy(ff, comp.total(), delta.total(i));
             FFComponent::changeEnergy(ff, comp.coulomb(), delta.coulomb(i));
             FFComponent::changeEnergy(ff, comp.lj(), delta.lj(i));
@@ -340,12 +340,12 @@ void MultiCLJComponent::changeEnergy(FF &ff, const MultiCLJEnergy &delta) const
 SireCAS::Symbols MultiCLJComponent::symbols() const
 {
     Symbols symbs;
-    
+
     for (int i=0; i<comps.count(); ++i)
     {
         symbs.add( comps.at(i).symbols() );
     }
-    
+
     return symbs;
 }
 
@@ -375,19 +375,19 @@ int MultiCLJComponent::remove(QString key)
         quint32 idx = key_to_idx.value(key);
         comps.removeAt(idx);
         key_to_idx.remove(key);
-        
+
         QMutableHashIterator<QString, quint32> it(key_to_idx);
-        
+
         while (it.hasNext())
         {
             it.next();
-            
+
             if (it.value() > idx)
             {
                 it.value() -= 1;
             }
         }
-        
+
         return idx;
     }
     else
@@ -401,7 +401,7 @@ void MultiCLJComponent::removeAll()
     {
         comps.removeLast();
     }
-    
+
     key_to_idx.clear();
     key_to_idx.insert( "default", 0 );
 }
@@ -415,7 +415,7 @@ int MultiCLJComponent::indexOf(QString key) const
                 "There is no CLJComponent with key '%1'. Available keys are %2.")
                     .arg(key).arg(Sire::toString(key_to_idx.keys())), CODELOC );
     }
-    
+
     return key_to_idx.value(key);
 }
 

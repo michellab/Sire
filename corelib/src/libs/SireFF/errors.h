@@ -49,7 +49,7 @@ public:
     sireff_error() : exception()
     {}
 
-    sireff_error(QString err, QString place = QString::null) : exception(err,place)
+    sireff_error(QString err, QString place = QString()) : exception(err,place)
     {}
 
     sireff_error(const sireff_error &other) : exception(other)
@@ -76,7 +76,7 @@ public:
     missing_component() : sireff_error()
     {}
 
-    missing_component(QString err, QString place = QString::null)
+    missing_component(QString err, QString place = QString())
               : sireff_error(err,place)
     {}
 
@@ -92,7 +92,7 @@ public:
     {
         return missing_component::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_component(*this);
@@ -110,7 +110,7 @@ public:
     missing_function() : sireff_error()
     {}
 
-    missing_function(QString err, QString place = QString::null)
+    missing_function(QString err, QString place = QString())
               : sireff_error(err,place)
     {}
 
@@ -126,7 +126,7 @@ public:
     {
         return missing_function::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_function(*this);
@@ -144,7 +144,7 @@ public:
     missing_forcefield() : sireff_error()
     {}
 
-    missing_forcefield(QString err, QString place = QString::null)
+    missing_forcefield(QString err, QString place = QString())
               : sireff_error(err,place)
     {}
 
@@ -160,7 +160,7 @@ public:
     {
         return missing_forcefield::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_forcefield(*this);
@@ -178,7 +178,7 @@ public:
     missing_parameter() : sireff_error()
     {}
 
-    missing_parameter(QString err, QString place = QString::null)
+    missing_parameter(QString err, QString place = QString())
               : sireff_error(err,place)
     {}
 
@@ -194,7 +194,7 @@ public:
     {
         return missing_parameter::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_parameter(*this);
@@ -213,7 +213,7 @@ public:
     missing_derivative() : sireff_error()
     {}
 
-    missing_derivative(QString err, QString place = QString::null)
+    missing_derivative(QString err, QString place = QString())
               : sireff_error(err,place)
     {}
 
@@ -229,7 +229,7 @@ public:
     {
         return missing_derivative::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_derivative(*this);
@@ -247,7 +247,7 @@ public:
     duplicate_forcefield() : sireff_error()
     {}
 
-    duplicate_forcefield(QString err, QString place = QString::null)
+    duplicate_forcefield(QString err, QString place = QString())
               : sireff_error(err,place)
     {}
 
@@ -263,7 +263,7 @@ public:
     {
         return duplicate_forcefield::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw duplicate_forcefield(*this);
@@ -281,7 +281,7 @@ public:
     duplicate_component() : sireff_error()
     {}
 
-    duplicate_component(QString err, QString place = QString::null)
+    duplicate_component(QString err, QString place = QString())
               : sireff_error(err,place)
     {}
 
@@ -297,7 +297,7 @@ public:
     {
         return duplicate_component::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw duplicate_component(*this);
@@ -315,7 +315,7 @@ public:
     duplicate_function() : sireff_error()
     {}
 
-    duplicate_function(QString err, QString place = QString::null)
+    duplicate_function(QString err, QString place = QString())
               : sireff_error(err,place)
     {}
 
@@ -331,7 +331,7 @@ public:
     {
         return duplicate_function::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw duplicate_function(*this);
@@ -349,7 +349,7 @@ public:
     invalid_group() : sireff_error()
     {}
 
-    invalid_group(QString err, QString place = QString::null)
+    invalid_group(QString err, QString place = QString())
               : sireff_error(err,place)
     {}
 
@@ -365,7 +365,7 @@ public:
     {
         return invalid_group::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw invalid_group(*this);

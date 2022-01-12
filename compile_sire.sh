@@ -65,8 +65,8 @@ esac
 
 # Set the version of miniconda to use. Choose "latest" for the latest
 # miniconda, or set a specific version here
-MINICONDA_VERSION="4.8.3"
-PYTHON_VERSION="py37"
+MINICONDA_VERSION="4.10.1"
+PYTHON_VERSION="py38"
 #MINICONDA_VERSION="latest"
 
 if [ -z "$INSTALL_SIRE_DIR" ]; then
@@ -115,6 +115,9 @@ if [ ${OS_BIT} == "x86_64" ]; then
 elif [ ${OS_BIT} == "ppc64le" ]; then
     echo "ppc64le operating system"
     BIT_TYPE=ppc64le
+elif [ ${OS_BIT} == "arm64" ]; then
+    echo "arm64 operating system"
+    BIT_TYPE="arm64"
 elif [ ${LONG_BIT} == "32" ]; then
     # must be 32 bit operating system on 32 bit processor
     echo "i386 operating system"

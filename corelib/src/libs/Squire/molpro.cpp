@@ -73,16 +73,16 @@ static const RegisterMetaType<Molpro> r_molpro;
 QDataStream &operator<<(QDataStream &ds, const Molpro &molpro)
 {
     writeHeader(ds, r_molpro, 3);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << molpro.env_variables
         << molpro.molpro_exe << molpro.basis_set << molpro.qm_method
         << molpro.energy_template << molpro.force_template
         << molpro.total_charge << molpro.memory_requirement
         << molpro.max_molpro_runtime
         << molpro.lattice_in_bohr_radii;
-        
+
     return ds;
 }
 
@@ -90,16 +90,16 @@ QDataStream &operator<<(QDataStream &ds, const Molpro &molpro)
 QDataStream &operator>>(QDataStream &ds, Molpro &molpro)
 {
     VersionID v = readHeader(ds, r_molpro);
-    
+
     if (v <= 3)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> molpro.env_variables
             >> molpro.molpro_exe >> molpro.basis_set >> molpro.qm_method
             >> molpro.energy_template >> molpro.force_template
             >> molpro.total_charge >> molpro.memory_requirement;
-        
+
         if (v == 3)
         {
             sds >> molpro.max_molpro_runtime >> molpro.lattice_in_bohr_radii;
@@ -109,7 +109,7 @@ QDataStream &operator>>(QDataStream &ds, Molpro &molpro)
             sds >> molpro.max_molpro_runtime;
             molpro.lattice_in_bohr_radii = true;
         }
-        else 
+        else
         {
             molpro.max_molpro_runtime = 15 * 60 * 1000;
             molpro.lattice_in_bohr_radii = true;
@@ -117,7 +117,7 @@ QDataStream &operator>>(QDataStream &ds, Molpro &molpro)
     }
     else
         throw version_error(v, "1,2,3", r_molpro, CODELOC);
-        
+
     return ds;
 }
 
@@ -140,7 +140,7 @@ static const QString default_energy_template =
 static const QString default_force_template = "! NEEDS TO BE WRITTEN";
 
 /** Constructor */
-Molpro::Molpro() 
+Molpro::Molpro()
        : ConcreteProperty<Molpro,QMProgram>(),
          basis_set("vdz"), qm_method("HF"),
          energy_template(default_energy_template),
@@ -196,14 +196,14 @@ Molpro& Molpro::operator=(const Molpro &other)
         max_molpro_runtime = other.max_molpro_runtime;
         lattice_in_bohr_radii = other.lattice_in_bohr_radii;
     }
-    
+
     return *this;
 }
 
 /** Comparison operator */
 bool Molpro::operator==(const Molpro &other) const
 {
-    return this == &other or 
+    return this == &other or
            (env_variables == other.env_variables and
             molpro_exe == other.molpro_exe and
             basis_set == other.basis_set and
@@ -266,7 +266,7 @@ bool Molpro::latticeInBohrRadii() const
 }
 
 /** Return the value of the explicitly set environmental variable 'variable'.
-    A null string is returned if this variable has not been set 
+    A null string is returned if this variable has not been set
     explicitly (this does not mean the variable doesn't exist - merely
     that a specific value has not been set) */
 QString Molpro::environment(const QString &variable) const
@@ -275,7 +275,7 @@ QString Molpro::environment(const QString &variable) const
 }
 
 /** Set the string representation of the basis set to be used
-    during the calculation. This will substitute for @BASIS_SET@ in 
+    during the calculation. This will substitute for @BASIS_SET@ in
     the energy and force command file templates. */
 void Molpro::setBasisSet(const QString &basis)
 {
@@ -291,7 +291,7 @@ const QString& Molpro::basisSet() const
 }
 
 /** Set the QM method to be used to calculate the energy or
-    force (e.g. HF, df-ks,b3lyp). This will substitute for 
+    force (e.g. HF, df-ks,b3lyp). This will substitute for
     @QM_METHOD@ in the energy and force command file templates */
 void Molpro::setMethod(const QString &method)
 {
@@ -299,7 +299,7 @@ void Molpro::setMethod(const QString &method)
 }
 
 /** Return the QM method to be used to calculate the energy or
-    force (e.g. HF, df-ks,b3lyp). This will substitute for 
+    force (e.g. HF, df-ks,b3lyp). This will substitute for
     @QM_METHOD@ in the energy and force command file templates */
 const QString& Molpro::method() const
 {
@@ -341,7 +341,7 @@ int Molpro::memoryRequirement() const
 }
 
 /** Set the maximum allowed runtime for the molpro job - this is used
-    to detect hangs - if the molpro job takes longer than this 
+    to detect hangs - if the molpro job takes longer than this
     time then it is killed and an exception raised. The maximum
     runtime is measured in milliseconds */
 void Molpro::setMaximumRunTime(int ms)
@@ -361,7 +361,7 @@ int Molpro::maximumRunTime() const
 /** Set the template for the command file to be used to get
     Molpro to calculate an energy. The following tags will
     be substituted in the template;
-    
+
     @BASIS_SET@          - the desired basis set
     @QM_METHOD@          - the desired QM method (e.g. HF)
     @QM_COORDS@          - the list of elements and coordinates of QM atoms
@@ -385,7 +385,7 @@ const QString& Molpro::energyTemplate() const
 /** Set the template for the command file to be used to get
     Molpro to calculate the forces. The following tags will
     be substituted in the template;
-    
+
     @BASIS_SET@          - the desired basis set
     @QM_METHOD@          - the desired QM method (e.g. HF)
     @QM_COORDS@          - the list of elements and coordinates of QM atoms
@@ -413,11 +413,11 @@ QString Molpro::createCommandFile(QString cmd_template,
                                   const LatticeCharges &lattice_charges) const
 {
     //replace the easy things...
-    cmd_template.replace( QLatin1String("@BASIS_SET@"), 
+    cmd_template.replace( QLatin1String("@BASIS_SET@"),
                           basis_set, Qt::CaseInsensitive );
-    
+
     int required_memory_in_words = memory_requirement / 4;
-    
+
     if (required_memory_in_words > 1000000)
     {
         cmd_template.replace( QLatin1String("@MEMORY_REQUIREMENT@"),
@@ -433,7 +433,7 @@ QString Molpro::createCommandFile(QString cmd_template,
         cmd_template.replace( QLatin1String("@MEMORY_REQUIREMENT@"),
                               QString("%1").arg(required_memory_in_words) );
     }
-    
+
     cmd_template.replace( QLatin1String("@QM_METHOD@"),
                           qm_method, Qt::CaseInsensitive );
 
@@ -445,42 +445,42 @@ QString Molpro::createCommandFile(QString cmd_template,
         //there are no lattice charges
         cmd_template.replace( QLatin1String("@NUM_LATTICE_POINTS@"),
                               QString::number(0), Qt::CaseInsensitive );
-                          
+
         cmd_template.replace( QLatin1String("@LATTICE_POINTS@"),
                               QLatin1String(" "), Qt::CaseInsensitive );
     }
-                  
+
     //now build the list of all of the atoms
     QStringList atom_coords;
-    
+
     int nmols = molecules.count();
-    const ChunkedVector<QMPotential::Molecule> &molecules_array 
+    const ChunkedVector<QMPotential::Molecule> &molecules_array
                                                     = molecules.moleculesByIndex();
-                                                            
+
     for (int i=0; i<nmols; ++i)
     {
         const QMPotential::Molecule &molecule = molecules_array[i];
-        
+
         //loop through the atoms...
         const CoordGroupArray &coords = molecule.coordinates();
         const PackedArray2D<Element> &elements = molecule.parameters().atomicParameters();
-        
+
         int natoms = coords.nCoords();
-        
+
         BOOST_ASSERT( natoms == elements.nValues() );
-        
+
         const Vector *coords_array = coords.constCoordsData();
         const Element *elements_array = elements.constValueData();
-        
+
         for (int j=0; j<natoms; ++j)
         {
             const Element &element = elements_array[j];
-            
+
             if (element.nProtons() > 0)
             {
                 //this is not a dummy atom!
                 const Vector &c = coords_array[j];
-    
+
                 atom_coords.append( QString("%1,%2,%3,%4")
                                         .arg(element.symbol(),
                                              QString::number(c.x(), 'f', 8),
@@ -489,35 +489,35 @@ QString Molpro::createCommandFile(QString cmd_template,
             }
         }
     }
-    
+
     cmd_template.replace( QLatin1String("@NUM_QM_ATOMS@"),
                           QString::number(atom_coords.count()), Qt::CaseInsensitive );
-                          
+
     cmd_template.replace( QLatin1String("@QM_COORDS@"),
                           atom_coords.join("\n"), Qt::CaseInsensitive );
-    
+
     //put the lattice charges in now (as they can make the command
     //file *very* large)
     if (not lattice_charges.isEmpty())
     {
         int ncharges = lattice_charges.nCharges();
         const LatticeCharge *charges_array = lattice_charges.constData();
-        
+
         QStringList charges;
-        
+
         for (int i=0; i<ncharges; ++i)
         {
             const LatticeCharge &charge = charges_array[i];
-        
+
             //note that lattice charges in molpro must be given coordinates
             //in bohr!
-        
+
             if (charge.charge() != 0)
             {
                 if (lattice_in_bohr_radii)
                 {
                     const double bohr_factor = 1.0 / bohr_radii;
-                
+
                     charges.append( QString("%1,%2,%3,%4")
                                     .arg(QString::number(bohr_factor*charge.x(), 'f', 8),
                                          QString::number(bohr_factor*charge.y(), 'f', 8),
@@ -534,25 +534,25 @@ QString Molpro::createCommandFile(QString cmd_template,
                 }
             }
         }
-        
+
         cmd_template.replace( QLatin1String("@NUM_LATTICE_POINTS@"),
                               QString::number(charges.count()), Qt::CaseInsensitive );
-                          
+
         cmd_template.replace( QLatin1String("@LATTICE_POINTS@"),
                               charges.join("\n"), Qt::CaseInsensitive );
     }
-                                       
+
     return cmd_template;
 }
 
-/** Return the command file that will be used to calculate the energy of the 
+/** Return the command file that will be used to calculate the energy of the
     molecules in 'molecules' */
 QString Molpro::energyCommandFile(const QMPotential::Molecules &molecules) const
 {
     return this->createCommandFile(energy_template, molecules);
 }
 
-/** Return the command file that will be used to calculate the energy of the 
+/** Return the command file that will be used to calculate the energy of the
     molecules in 'molecules' in the field of point charges in 'lattice_charges' */
 QString Molpro::energyCommandFile(const QMPotential::Molecules &molecules,
                                   const LatticeCharges &lattice_charges) const
@@ -560,7 +560,7 @@ QString Molpro::energyCommandFile(const QMPotential::Molecules &molecules,
     return this->createCommandFile(energy_template, molecules, lattice_charges);
 }
 
-/** Return the command files that will be used to calculate the forces on the  
+/** Return the command files that will be used to calculate the forces on the
     atoms of the molecules in 'molecules' */
 QString Molpro::forceCommandFile(const QMPotential::Molecules &molecules,
                                  const ForceTable&) const
@@ -568,7 +568,7 @@ QString Molpro::forceCommandFile(const QMPotential::Molecules &molecules,
     return this->createCommandFile(force_template, molecules);
 }
 
-/** Return the command files that will be used to calculate the forces on the  
+/** Return the command files that will be used to calculate the forces on the
     atoms of the molecules in 'molecules' in the field of point charges
     in 'lattice_charges' - this also calculates the forces on those
     point charges */
@@ -579,7 +579,7 @@ QString Molpro::forceCommandFile(const QMPotential::Molecules &molecules,
     return this->createCommandFile(force_template, molecules, lattice_charges);
 }
 
-/** Return the command files that will be used to calculate the fields on the  
+/** Return the command files that will be used to calculate the fields on the
     atoms of the molecules in 'molecules' */
 QString Molpro::fieldCommandFile(const QMPotential::Molecules &molecules,
                                  const FieldTable &fieldtable,
@@ -588,11 +588,11 @@ QString Molpro::fieldCommandFile(const QMPotential::Molecules &molecules,
     throw SireError::unsupported( QObject::tr(
             "Calculating QM fields using the Molpro() interface is "
             "currently not supported."), CODELOC );
-            
-    return QString::null;
+
+    return QString();
 }
 
-/** Return the command files that will be used to calculate the fields on the  
+/** Return the command files that will be used to calculate the fields on the
     atoms of the molecules in 'molecules' */
 QString Molpro::fieldCommandFile(const QMPotential::Molecules &molecules,
                                  const LatticeCharges &lattice_charges,
@@ -602,11 +602,11 @@ QString Molpro::fieldCommandFile(const QMPotential::Molecules &molecules,
     throw SireError::unsupported( QObject::tr(
             "Calculating QM fields using the Molpro() interface is "
             "currently not supported."), CODELOC );
-            
-    return QString::null;
+
+    return QString();
 }
 
-/** Return the command files that will be used to calculate the potentials on the  
+/** Return the command files that will be used to calculate the potentials on the
     atoms of the molecules in 'molecules' */
 QString Molpro::potentialCommandFile(const QMPotential::Molecules &molecules,
                                      const PotentialTable &pottable,
@@ -614,55 +614,55 @@ QString Molpro::potentialCommandFile(const QMPotential::Molecules &molecules,
 {
     if (pottable.nGrids() == 0)
         //there are no points at which the potential can be calculated
-        return QString::null;
+        return QString();
 
     //first, create the file needed to calculate the energy
     QString nrgcmd = this->energyCommandFile(molecules);
 
     QStringList lines;
-    
+
     double charge;
-    
+
     if (probe.isA<CLJProbe>())
         charge = probe.asA<CLJProbe>().charge().to(mod_electron);
     else
         charge = probe.asA<CoulombProbe>().charge().to(mod_electron);
-    
+
     //now add onto the bottom of this the commands needed to calculate
     //the potential - a limit in the way molpro works means that points
     //have to be added in batches of 30
-    for (int igrid=0; igrid<pottable.nGrids(); ++igrid) 
+    for (int igrid=0; igrid<pottable.nGrids(); ++igrid)
     {
         const Grid &grid = pottable.constGridData()[igrid].grid();
-        
+
         const Vector *grid_data = grid.constData();
-        
+
         int idx = 0;
-        
+
         for (int i=0; i<grid.nPoints(); ++i)
         {
             if (idx == 0)
             {
                 lines.append("{property\ndensity");
             }
-            
+
             const Vector &point = grid_data[i];
-            
+
             lines.append( QString("pot,,%1,%2,%3,,%4")
                             .arg(point.x() / bohr_radii.value())
                             .arg(point.y() / bohr_radii.value())
                             .arg(point.z() / bohr_radii.value())
                             .arg(charge) );
-                            
+
             ++idx;
-            
+
             if (idx == 30 or i == grid.nPoints()-1)
             {
                 if (i == grid.nPoints()-1)
                     lines.append("}");
                 else
                     lines.append("}\n\nexpec\nint\n");
-                    
+
                 idx = 0;
             }
         }
@@ -671,7 +671,7 @@ QString Molpro::potentialCommandFile(const QMPotential::Molecules &molecules,
     return nrgcmd + lines.join("\n");
 }
 
-/** Return the command files that will be used to calculate the potentials on the  
+/** Return the command files that will be used to calculate the potentials on the
     atoms of the molecules in 'molecules' */
 QString Molpro::potentialCommandFile(const QMPotential::Molecules &molecules,
                                      const LatticeCharges &lattice_charges,
@@ -680,15 +680,15 @@ QString Molpro::potentialCommandFile(const QMPotential::Molecules &molecules,
 {
     if (pottable.nGrids() == 0 and lattice_charges.count() == 0)
         //there are no points at which the potential can be calculated
-        return QString::null;
+        return QString();
 
     //first, create the file needed to calculate the energy
     QString nrgcmd = this->energyCommandFile(molecules, lattice_charges);
 
     QStringList lines;
-    
+
     double charge;
-    
+
     if (probe.isA<CLJProbe>())
         charge = probe.asA<CLJProbe>().charge().to(mod_electron);
     else
@@ -699,69 +699,69 @@ QString Molpro::potentialCommandFile(const QMPotential::Molecules &molecules,
     //molpro works means that points have to be added in batches of 30
     {
         int idx = 0;
-    
+
         for (int i=0; i<lattice_charges.count(); ++i)
         {
             const LatticeCharge &point = lattice_charges.constData()[i];
-        
+
             if (idx == 0)
             {
                 lines.append("{property\ndensity");
             }
-            
+
             lines.append( QString("pot,,%1,%2,%3,,%4")
                             .arg(point.x()).arg(point.y())
                             .arg(point.z()).arg(charge) );
-                            
+
             ++idx;
-            
+
             if (idx == 30 or i == lattice_charges.count()-1)
             {
                 if (i == lattice_charges.count()-1)
                     lines.append("}");
                 else
                     lines.append("}\n\nexpec\nint\n");
-                    
+
                 idx = 0;
             }
         }
     }
-    
+
     //now add onto the bottom of this the commands needed to calculate
     //the potential - a limit in the way molpro works means that points
     //have to be added in batches of 30
-    for (int igrid=0; igrid<pottable.nGrids(); ++igrid) 
+    for (int igrid=0; igrid<pottable.nGrids(); ++igrid)
     {
         const Grid &grid = pottable.constGridData()[igrid].grid();
-        
+
         const Vector *grid_data = grid.constData();
-        
+
         int idx = 0;
-        
+
         for (int i=0; i<grid.nPoints(); ++i)
         {
             if (idx == 0)
             {
                 lines.append("{property\ndensity");
             }
-            
+
             const Vector &point = grid_data[i];
-            
+
             lines.append( QString("pot,,%1,%2,%3,,%4")
                             .arg(point.x() / bohr_radii.value())
                             .arg(point.y() / bohr_radii.value())
                             .arg(point.z() / bohr_radii.value())
                             .arg(charge) );
-                            
+
             ++idx;
-            
+
             if (idx == 30 or i == grid.nPoints()-1)
             {
                 if (i == grid.nPoints()-1)
                     lines.append("}");
                 else
                     lines.append("}\n\nexpec\nint\n");
-                    
+
                 idx = 0;
             }
         }
@@ -778,7 +778,7 @@ double Molpro::extractEnergy(QFile &molpro_output) const
     QRegExp regexp("SIRE_FINAL_ENERGY\\s*=\\s*([-\\d\\.]+)");
 
     QStringList lines;
-    
+
     while (not ts.atEnd())
     {
         QString line = ts.readLine();
@@ -788,16 +788,16 @@ double Molpro::extractEnergy(QFile &molpro_output) const
         {
             //we've found the SIRE_FINAL_ENERGY line
             QString num = regexp.cap(1);
-        
+
             bool ok;
-        
+
             double nrg = num.toDouble(&ok);
-        
+
             if (not ok)
                 throw SireError::process_error( QObject::tr(
                     "The energy obtained from Molpro is garbled (%1) - %2.")
                         .arg(regexp.cap(1), regexp.cap(0)), CODELOC );
-        
+
             //the energy is in hartrees - convert it to kcal per mol
             return nrg * hartree;
         }
@@ -809,7 +809,7 @@ double Molpro::extractEnergy(QFile &molpro_output) const
     QTextStream ts2(&molpro_output);
 
     lines = QStringList();
-    
+
     while (not ts2.atEnd())
     {
         QString line = ts2.readLine();
@@ -819,16 +819,16 @@ double Molpro::extractEnergy(QFile &molpro_output) const
         {
             //we've found the SIRE_FINAL_ENERGY line
             QString num = regexp.cap(1);
-        
+
             bool ok;
-        
+
             double nrg = num.toDouble(&ok);
-        
+
             if (not ok)
                 throw SireError::process_error( QObject::tr(
                     "The energy obtained from Molpro is garbled (%1) - %2.")
                         .arg(regexp.cap(1), regexp.cap(0)), CODELOC );
-        
+
             //the energy is in hartrees - convert it to kcal per mol
             return nrg * hartree;
         }
@@ -846,12 +846,12 @@ double Molpro::extractEnergy(QFile &molpro_output) const
 QString Molpro::writeShellFile(const TempDir &tempdir) const
 {
     QString cmdfile = QString("%1/run_molpro.cmd").arg(tempdir.path());
-    
+
     QFile f(cmdfile);
-    
+
     if (not f.open(QIODevice::WriteOnly))
         throw SireError::file_error(f, CODELOC);
-    
+
     QTextStream ts(&f);
 
     //set the environmental variables of the job
@@ -878,16 +878,16 @@ QString Molpro::writeShellFile(const TempDir &tempdir) const
                         .arg(molpro_exe, tempdir.path());
 
     ts << "sync\n";
-    
+
     f.close();
-    
+
     return cmdfile;
 }
 
 static QByteArray readAll(const QString &file)
 {
     QFile f(file);
-    
+
     if (f.open(QIODevice::ReadOnly))
     {
         return f.readAll();
@@ -903,7 +903,7 @@ double Molpro::calculateEnergy(const QString &cmdfile, int ntries) const
 {
     //create a temporary directory in which to run Molpro
     QString tmppath = env_variables.value("TMPDIR");
-    
+
     if (tmppath.isEmpty())
         tmppath = QDir::temp().absolutePath();
 
@@ -915,10 +915,10 @@ double Molpro::calculateEnergy(const QString &cmdfile, int ntries) const
 
     {
         QFile f( QString("%1/molpro_input").arg(tmpdir.path()) );
-        
+
         if (not f.open( QIODevice::WriteOnly ))
             throw SireError::file_error(f, CODELOC);
-   
+
         //write the command file
         f.write( cmdfile.toUtf8() );
         f.close();
@@ -935,20 +935,20 @@ double Molpro::calculateEnergy(const QString &cmdfile, int ntries) const
     {
         qDebug() << "Maximum molpro runtime was exceeded - has it hung?";
         p.kill();
-        
+
         if (ntries > 0)
             return this->calculateEnergy(cmdfile, ntries-1);
     }
-    
+
     int ms = t.elapsed();
     qDebug() << "Molpro finised. Took" << ms << "ms";
-    
+
     if (p.wasKilled())
     {
         throw SireError::process_error( QObject::tr(
             "The Molpro job was killed."), CODELOC );
     }
-    
+
     if (p.isError())
     {
         QByteArray shellcontents = ::readAll(shellfile);
@@ -978,12 +978,12 @@ double Molpro::calculateEnergy(const QString &cmdfile, int ntries) const
 
     //read all of the output
     QFile f( QString("%1/molpro_output").arg(tmpdir.path()) );
-    
+
     if ( not (f.exists() and f.open(QIODevice::ReadOnly)) )
     {
         QByteArray shellcontents = ::readAll(shellfile);
         QByteArray cmdcontents = ::readAll(QString("%1/molpro_input").arg(tmpdir.path()));
-    
+
         throw SireError::process_error( QObject::tr(
             "There was an error running the Molpro job - no output was created.\n"
             "The shell script used to run the job was;\n"
@@ -1015,12 +1015,12 @@ double Molpro::calculateEnergy(const QString &cmdfile, int ntries) const
 
         QFile f( QString("%1/molpro_output").arg(tmpdir.path()) );
 
-        if ( not (f.exists() and f.open(QIODevice::ReadOnly)) )    
+        if ( not (f.exists() and f.open(QIODevice::ReadOnly)) )
             qDebug() << "Could not read the file" << tmpdir.path() << "/molpro_output";
         else
         {
             QStringList lines;
- 
+
             QTextStream ts(&f);
 
             while (not ts.atEnd())
@@ -1037,13 +1037,13 @@ double Molpro::calculateEnergy(const QString &cmdfile, int ntries) const
         if (ntries <= 0)
             //don't bother trying again - it's not going to work!
             throw;
-            
+
         //give it one more go - you never know, it may work
         return this->calculateEnergy(cmdfile, ntries-1);
     }
 }
 
-/** Run Molpro and use it to calculate the energy of the molecules in 
+/** Run Molpro and use it to calculate the energy of the molecules in
     'molecules'. This blocks until Molpro has completed */
 double Molpro::calculateEnergy(const QMPotential::Molecules &molecules,
                                int ntries) const
@@ -1053,7 +1053,7 @@ double Molpro::calculateEnergy(const QMPotential::Molecules &molecules,
 
     //create the command file to be used by Molpro
     QString cmdfile = this->energyCommandFile(molecules);
-    
+
     return this->calculateEnergy(cmdfile, ntries);
 }
 
@@ -1068,7 +1068,7 @@ double Molpro::calculateEnergy(const QMPotential::Molecules &molecules,
 
     //create the command file to be used by Molpro
     QString cmdfile = this->energyCommandFile(molecules, lattice_charges);
-    
+
     return this->calculateEnergy(cmdfile, ntries);
 }
 
@@ -1077,11 +1077,11 @@ SIRE_ALWAYS_INLINE QString get_key(const Vector &vector)
     QString key;
 
     QTextStream ts(&key, QIODevice::WriteOnly);
-    
+
     ts.setRealNumberPrecision(3);
-    
+
     ts << vector.x() << " " << vector.y() << " " << vector.z();
-    
+
     return key;
 }
 
@@ -1090,13 +1090,13 @@ SIRE_ALWAYS_INLINE QString get_key(const LatticeCharge &point)
     QString key;
 
     QTextStream ts(&key, QIODevice::WriteOnly);
-    
+
     ts.setRealNumberPrecision(3);
-    
-    ts << point.x() * bohr_radii << " " 
-       << point.y() * bohr_radii << " " 
+
+    ts << point.x() * bohr_radii << " "
+       << point.y() * bohr_radii << " "
        << point.z() * bohr_radii;
-    
+
     return key;
 }
 
@@ -1115,14 +1115,14 @@ QHash<QString,double> Molpro::extractPotentials(QFile &molpro_output) const
     nrg_regexp.setCaseSensitivity( Qt::CaseInsensitive );
 
     QStringList lines;
-    
+
     Vector point;
     double nrg = 0;
     bool have_point = false;
     bool have_nrg = false;
-    
+
     QHash<QString,double> potentials;
-    
+
     while (not ts.atEnd())
     {
         QString line = ts.readLine();
@@ -1133,7 +1133,7 @@ QHash<QString,double> Molpro::extractPotentials(QFile &molpro_output) const
             point = Vector(coords_regexp.cap(2).toDouble() * bohr_radii,
                            coords_regexp.cap(3).toDouble() * bohr_radii,
                            coords_regexp.cap(4).toDouble() * bohr_radii);
-                           
+
             have_point = true;
         }
         else if (nrg_regexp.indexIn(line) != -1)
@@ -1141,17 +1141,17 @@ QHash<QString,double> Molpro::extractPotentials(QFile &molpro_output) const
             nrg = nrg_regexp.cap(1).toDouble();
             have_nrg = true;
         }
-        
+
         if (have_point and have_nrg)
         {
             potentials.insert( ::get_key(point), nrg );
         }
     }
-    
+
     return potentials;
 }
 
-/** Internal function to calculate the potentials specified in the 
+/** Internal function to calculate the potentials specified in the
     passed command file, and to return then together with the points
     at which they were evaluated */
 QHash<QString,double> Molpro::calculatePotential(const QString &cmdfile,
@@ -1159,7 +1159,7 @@ QHash<QString,double> Molpro::calculatePotential(const QString &cmdfile,
 {
     //create a temporary directory in which to run Molpro
     QString tmppath = env_variables.value("TMPDIR");
-    
+
     if (tmppath.isEmpty())
         tmppath = QDir::temp().absolutePath();
 
@@ -1171,10 +1171,10 @@ QHash<QString,double> Molpro::calculatePotential(const QString &cmdfile,
 
     {
         QFile f( QString("%1/molpro_input").arg(tmpdir.path()) );
-        
+
         if (not f.open( QIODevice::WriteOnly ))
             throw SireError::file_error(f, CODELOC);
-   
+
         //write the command file
         f.write( cmdfile.toUtf8() );
         f.close();
@@ -1188,17 +1188,17 @@ QHash<QString,double> Molpro::calculatePotential(const QString &cmdfile,
     {
         qDebug() << "Maximum molpro runtime was exceeded - has it hung?";
         p.kill();
-        
+
         if (ntries > 0)
             return this->calculatePotential(cmdfile, ntries-1);
     }
-    
+
     if (p.wasKilled())
     {
         throw SireError::process_error( QObject::tr(
             "The Molpro job was killed."), CODELOC );
     }
-    
+
     if (p.isError())
     {
         QByteArray shellcontents = ::readAll(shellfile);
@@ -1228,12 +1228,12 @@ QHash<QString,double> Molpro::calculatePotential(const QString &cmdfile,
 
     //read all of the output
     QFile f( QString("%1/molpro_output").arg(tmpdir.path()) );
-    
+
     if ( not (f.exists() and f.open(QIODevice::ReadOnly)) )
     {
         QByteArray shellcontents = ::readAll(shellfile);
         QByteArray cmdcontents = ::readAll(QString("%1/molpro_input").arg(tmpdir.path()));
-    
+
         throw SireError::process_error( QObject::tr(
             "There was an error running the Molpro job - no output was created.\n"
             "The shell script used to run the job was;\n"
@@ -1264,12 +1264,12 @@ QHash<QString,double> Molpro::calculatePotential(const QString &cmdfile,
 
         QFile f( QString("%1/molpro_output").arg(tmpdir.path()) );
 
-        if ( not (f.exists() and f.open(QIODevice::ReadOnly)) )    
+        if ( not (f.exists() and f.open(QIODevice::ReadOnly)) )
             qDebug() << "Could not read the file" << tmpdir.path() << "/molpro_output";
         else
         {
             QStringList lines;
- 
+
             QTextStream ts(&f);
 
             while (not ts.atEnd())
@@ -1286,7 +1286,7 @@ QHash<QString,double> Molpro::calculatePotential(const QString &cmdfile,
         if (ntries <= 0)
             //don't bother trying again - it's not going to work!
             throw;
-            
+
         //give it one more go - you never know, it may work
         return this->calculatePotential(cmdfile, ntries-1);
     }
@@ -1301,36 +1301,36 @@ void Molpro::calculatePotential(const QMPotential::Molecules &molecules,
 {
     if (molecules.count() == 0)
         return;
-        
+
     //create a command file to calculate the potential at all grid points
     QString cmdfile = this->potentialCommandFile(molecules, pottable, probe);
-    
+
     if (cmdfile.isEmpty())
         //there were no grid points at which to calculate the potential
         return;
-    
+
     //call molpro to calculate the potential using the command file
     // - this returns the points with associated potentials
     QHash<QString,double> pots = this->calculatePotential(cmdfile, ntries);
-    
+
     //now loop through the grid(s) and assign potentials to points
     GridPotentialTable *grids = pottable.gridData();
-    
+
     for (int i=0; i<pottable.nGrids(); ++i)
     {
         GridPotentialTable &grid = grids[i];
-        
+
         const Vector *points = grid.grid().constData();
-        
+
         for (int j=0; j<grid.nPoints(); ++j)
         {
             const QString key = ::get_key(points[j]);
 
-            grid.add( j, MolarEnergy(scale_potential * pots.value(key) 
+            grid.add( j, MolarEnergy(scale_potential * pots.value(key)
                                             * hartree.value()) );
         }
     }
-} 
+}
 
 /** Calculate the potentials around the passed molecules, and place them into the passed
     potential table, optionally scaled by 'scale_potential', and return the accompanying
@@ -1339,7 +1339,7 @@ QVector<MolarEnergy> Molpro::calculatePotential(const QMPotential::Molecules &mo
                                                 const LatticeCharges &lattice_charges,
                                                 PotentialTable &pottable,
                                                 const SireFF::Probe &probe,
-                                                double scale_potential, int ntries) const 
+                                                double scale_potential, int ntries) const
 {
     if (lattice_charges.count() == 0)
     {
@@ -1348,52 +1348,52 @@ QVector<MolarEnergy> Molpro::calculatePotential(const QMPotential::Molecules &mo
     }
     else if (molecules.count() == 0)
         return QVector<MolarEnergy>();
-        
+
     //create a command file to calculate the potential at all grid points
-    QString cmdfile = this->potentialCommandFile(molecules, lattice_charges, 
+    QString cmdfile = this->potentialCommandFile(molecules, lattice_charges,
                                                  pottable, probe);
-    
+
     if (cmdfile.isEmpty())
         //there were no points at which to calculate the potential
         return QVector<MolarEnergy>();
-    
+
     //call molpro to calculate the potential using the command file
     // - this returns the points with associated potentials
     QHash<QString,double> pots = this->calculatePotential(cmdfile, ntries);
-    
+
     //now loop through all of the lattice charges and assign potentials to points
     QVector<MolarEnergy> lattice_nrgs( lattice_charges.count() );
     lattice_nrgs.squeeze();
     MolarEnergy *lattice_nrgs_array = lattice_nrgs.data();
-    
+
     for (int i=0; i<lattice_charges.count(); ++i)
     {
         const LatticeCharge &point = lattice_charges.constData()[i];
-        
+
         const QString key = ::get_key(point);
-        
+
         lattice_nrgs_array[i] = MolarEnergy(scale_potential * pots.value(key)
                                              * hartree.value() );
     }
-    
+
     //now loop through the grid(s) and assign potentials to points
     GridPotentialTable *grids = pottable.gridData();
-    
+
     for (int i=0; i<pottable.nGrids(); ++i)
     {
         GridPotentialTable &grid = grids[i];
-        
+
         const Vector *points = grid.grid().constData();
-        
+
         for (int j=0; j<grid.nPoints(); ++j)
         {
             const QString key = ::get_key(points[j]);
 
-            grid.add( j, MolarEnergy(scale_potential * pots.value(key) 
+            grid.add( j, MolarEnergy(scale_potential * pots.value(key)
                                             * hartree.value()) );
         }
     }
-    
+
     return lattice_nrgs;
 }
 

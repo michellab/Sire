@@ -53,9 +53,9 @@ namespace SireBase
     {
         if (last_part.isEmpty() or path.isEmpty())
             return path;
-    
+
         int j = path.lastIndexOf(last_part);
-        
+
         if (j == path.length() - last_part.length())
         {
             path.remove(j, last_part.length());
@@ -76,7 +76,7 @@ namespace SireBase
     {
         return QString(SIRE_REPOSITORY_URL);
     }
-    
+
     /** This function returns the version number(s) of this copy of the corelib
         from the online source repository */
     QString getRepositoryVersion()
@@ -89,7 +89,7 @@ namespace SireBase
     {
         return QString(SIRE_REPOSITORY_BRANCH);
     }
-    
+
     /** Return whether this is a clean copy from this repository version
         (i.e. there have been no local changes to the code) */
     bool getRepositoryVersionIsClean()
@@ -104,13 +104,13 @@ namespace SireBase
     void setInstallDir(QString dir)
     {
         QDir d(dir);
-        
+
         if (not d.exists())
             throw SireError::file_error( QObject::tr(
                 "You cannot set the installation directory of Sire to a value "
                 "that doesn't exist (%1).")
                     .arg(dir), CODELOC );
-        
+
         install_dir = d.absolutePath();
     }
 
@@ -124,10 +124,10 @@ namespace SireBase
         QString sire_root_env = qgetenv("SIRE_ROOT");
         if (!sire_root_env.isEmpty())
             return sire_root_env;
-    
+
         //first, find the full path to the running executable. We assume that
         //we are using a Sire executable
-        
+
         //we follow the instructions from a stackoverflow answer by mark40
         //<http://stackoverflow.com/questions/1023306/finding-current-executables-path-without-proc-self-exe/1024937#1024937>
         //Mac OS X: _NSGetExecutablePath() (man 3 dyld)
@@ -136,17 +136,17 @@ namespace SireBase
         //FreeBSD: sysctl CTL_KERN KERN_PROC KERN_PROC_PATHNAME -1
         //BSD with procfs: readlink /proc/curproc/file
         //Windows: GetModuleFileName() with hModule = NULL
-        
+
         #ifdef Q_OS_MAC
             char pathbuf[PATH_MAX + 1];
             uint32_t bufsize = PATH_MAX+1;
             int ok = _NSGetExecutablePath((char*)pathbuf, &bufsize);
-        
+
             if (ok != 0)
                 throw SireError::program_bug( QObject::tr(
                         "For some reason, _NSGetExecutablePath has not worked! (%1)")
                             .arg(ok), CODELOC );
-        
+
             QFileInfo f(pathbuf);
 
             //sometimes we may use a python executable in python.app/Contents/MacOS.
@@ -166,13 +166,13 @@ namespace SireBase
         #else
         #ifdef Q_OS_LINUX
             QFileInfo f( "/proc/self/exe" );
-        
+
             if (not f.exists())
                 throw SireError::program_bug( QObject::tr(
                         "For some reason /proc/self/exe does not exist for your "
                         "version of Linux. Let the developers know and we will get it "
                         "working for you."), CODELOC );
-        
+
             setInstallDir( stripDir(SIRE_BIN_DIR,f.canonicalPath()) );
             return install_dir;
         #else
@@ -198,12 +198,12 @@ namespace SireBase
             throw SireError::incomplete_code( QObject::tr(
                     "Ask the Sire developers to write the \"getInstallDir\" function "
                     "for your platform. Sorry that it has yet to be written."), CODELOC );
-            return QString::null;
+            return QString();
         #endif
         #endif
         #endif
     }
-    
+
     /** This function is used to get the full path to the file or directory 'path'
         that is contained in the Sire directory, e.g. "bin" would
         return SIRE_INSTALL_PREFIX/bin. An exception will be raised
@@ -212,7 +212,7 @@ namespace SireBase
     QString getSireDir(const QString &path, bool assert_exists)
     {
         QDir dir(getInstallDir());
-        
+
         if (assert_exists)
         {
             if (not dir.exists(path))
@@ -222,34 +222,34 @@ namespace SireBase
                             .arg(dir.absolutePath(), path)
                             .arg(dir.absoluteFilePath(path)), CODELOC );
         }
-        
+
         return dir.absoluteFilePath(path);
     }
-    
+
     /** This returns the directory containing the Sire executables */
     QString getBinDir()
     {
         return getSireDir(SIRE_BIN_DIR);
     }
-    
+
     /** This returns the directory containing the Sire libraries */
     QString getLibDir()
     {
         return getSireDir(SIRE_LIBS_DIR);
     }
-    
+
     /** This returns the directory containing the Sire bundled libraries */
     QString getBundledLibDir()
     {
         return getSireDir(SIRE_BUNDLED_LIBS_DIR);
     }
-    
+
     /** This returns the directory containing the Sire support files */
     QString getShareDir()
     {
         return getSireDir(SIRE_SHARE_DIR);
     }
-    
+
     /** This returns the release version of Sire */
     QString getReleaseVersion()
     {

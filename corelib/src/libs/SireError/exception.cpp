@@ -82,10 +82,10 @@ namespace detail
         {
             leaf_classes.insert(r, QSet<QString>());
         }
-        
+
         leaf_classes[r].insert(type_name);
     }
-    
+
     void registerBranch(const QString &type_name, const char *root)
     {
         QLatin1String r(root);
@@ -93,10 +93,10 @@ namespace detail
         {
             branch_classes.insert(r, QSet<QString>());
         }
-        
+
         branch_classes[r].insert(type_name);
     }
-    
+
     void registerRootless(const QString &type_name)
     {
         rootless_classes.insert(type_name);
@@ -125,12 +125,12 @@ void setThreadString(const QString &s)
 QString getProcessString()
 {
     QString *s = processString();
-    
+
     if (s->isEmpty())
     {
         return *s = QObject::tr("master");
     }
-    
+
     return *s;
 }
 
@@ -138,14 +138,14 @@ QString getProcessString()
 QString getThreadString()
 {
     QThreadStorage<QString*> *store = pidStrings();
-    
+
     if (store->hasLocalData())
     {
         return *(store->localData());
     }
     else
     {
-        return QString::null;
+        return QString();
     }
 }
 
@@ -154,7 +154,7 @@ QString getThreadString()
 QString getPIDString()
 {
     QThreadStorage<QString*> *store = pidStrings();
-    
+
     if (store->hasLocalData())
     {
         return QString("%1:%2").arg( getProcessString(),
@@ -250,7 +250,7 @@ exception::exception(QString error, QString place) : err(error), plce(place)
 
 /** Copy constructor */
 exception::exception(const exception &other)
-          : std::exception(other), err(other.err), plce(other.plce), 
+          : std::exception(other), err(other.err), plce(other.plce),
                                    bt(other.bt), pidstr(other.pidstr)
 {}
 
@@ -278,13 +278,13 @@ exception* exception::clone() const
 QByteArray exception::pack() const
 {
     QByteArray data;
-    
+
     //reserve 128K of space for the exception (should be way
     //more than enough!)
     data.reserve( 128 * 1024 );
-    
+
     QDataStream ds(&data, QIODevice::WriteOnly);
-    
+
     //get the ID number of this type
     int id = QMetaType::type( this->what() );
 
@@ -311,12 +311,12 @@ QByteArray exception::pack() const
 boost::shared_ptr<SireError::exception> exception::unpack(const QByteArray &data)
 {
     QDataStream ds(data);
-    
+
     //read the type of exception first
     QString type_name;
-    
+
     ds >> type_name;
-    
+
     //get the type that represents this name
     int id = QMetaType::type( type_name.toLatin1().constData() );
 
@@ -326,11 +326,11 @@ boost::shared_ptr<SireError::exception> exception::unpack(const QByteArray &data
               "Ensure that the library or module containing "
               "this exception has been loaded and that it has been registered "
               "with QMetaType.").arg(type_name), CODELOC );
-    
+
     //construct an exception of this type
-    boost::shared_ptr<exception> ptr(  
+    boost::shared_ptr<exception> ptr(
                         static_cast<exception*>(QMetaType::create(id,0)) );
-                        
+
     //load the object from the datastream
     if ( not QMetaType::load(ds, id, ptr.get()) )
         throw SireError::program_bug(QObject::tr(
@@ -393,7 +393,7 @@ QStringList exception::trace() const throw()
         btrace.append( QObject::tr("No backtrace available. "
                 "Recompile the SireError library with -DSIRE_ENABLE_BACKTRACE "
                 "to enable backtraces.") );
-    
+
         return btrace;
     #endif
 }

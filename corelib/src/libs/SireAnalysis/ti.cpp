@@ -59,31 +59,31 @@ static const RegisterAlternativeName<TIPMF> r_alttipmf("Soiree::TIPMF");
 QDataStream &operator<<(QDataStream &ds, const TIPMF &pmf)
 {
     writeHeader(ds, r_tipmf, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << pmf.grads << pmf.range_min << pmf.range_max << pmf.npoly
         << static_cast<const PMF&>(pmf);
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, TIPMF &pmf)
 {
     VersionID v = readHeader(ds, r_tipmf);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> pmf.grads >> pmf.range_min >> pmf.range_max >> pmf.npoly
             >> static_cast<PMF&>(pmf);
-        
+
         pmf.recalculate();
     }
     else
         throw version_error(v, "1", r_tipmf, CODELOC);
-    
+
     return ds;
 }
 
@@ -139,7 +139,7 @@ void TIPMF::setOrder(int order)
         npoly = 100;
     else
         npoly = order;
-    
+
     recalculate();
 }
 
@@ -148,10 +148,10 @@ void TIPMF::setRange(double min_x, double max_x)
 {
     range_min = min_x;
     range_max = max_x;
-    
+
     if (range_min > range_max)
         qSwap(range_min, range_max);
-    
+
     recalculate();
 }
 
@@ -159,14 +159,14 @@ void TIPMF::setRange(double min_x, double max_x)
 void TIPMF::setGradients(const QVector<DataPoint> &gradients)
 {
     grads = gradients;
-    
+
     //ensure that the gradients are in sorted x numerical order
     bool sorted = false;
-    
+
     while (not sorted)
     {
         sorted = true;
-    
+
         //bubble sort - compare neighbours and swap if in the wrong order
         for (int i=1; i<grads.count(); ++i)
         {
@@ -177,7 +177,7 @@ void TIPMF::setGradients(const QVector<DataPoint> &gradients)
             }
         }
     }
-    
+
     recalculate();
 }
 
@@ -225,12 +225,12 @@ void TIPMF::recalculate()
     std::list<stREGRESS> min_min_regress_grads;
     {
         stREGRESS val;
-        
+
         foreach (const DataPoint &grad, grads)
         {
             val.x = grad.x();
             val.y = grad.y();
-        
+
             regress_grads.push_back(val);
             regress_grads_plus_endpoints.push_back(val);
 
@@ -238,13 +238,13 @@ void TIPMF::recalculate()
             max_regress_grads.push_back(val);
             val.y = grad.y() + grad.yMaxError();
             max_max_regress_grads.push_back(val);
-            
+
             val.y = grad.y() - grad.yMinError();
             min_regress_grads.push_back(val);
             val.y = grad.y() - grad.yMaxError();
             min_min_regress_grads.push_back(val);
         }
-        
+
         //if the range extends before the first available gradient, then
         //we assume that this gradient is constant in this range
         if (grads.first().x() > range_min)
@@ -253,20 +253,20 @@ void TIPMF::recalculate()
 
             val.x = range_min;
             val.y = grad.y();
-        
+
             regress_grads_plus_endpoints.push_front(val);
 
             val.y = grad.y() + grad.yMinError();
             max_regress_grads.push_front(val);
             val.y = grad.y() + grad.yMaxError();
             max_max_regress_grads.push_front(val);
-            
+
             val.y = grad.y() - grad.yMinError();
             min_regress_grads.push_front(val);
             val.y = grad.y() - grad.yMaxError();
             min_min_regress_grads.push_front(val);
         }
-        
+
         //similarly, if the range extends beyond the last datapoint, then
         //continue this gradient
         if (grads.last().x() < range_max)
@@ -275,14 +275,14 @@ void TIPMF::recalculate()
 
             val.x = range_max;
             val.y = grad.y();
-        
+
             regress_grads_plus_endpoints.push_back(val);
 
             val.y = grad.y() + grad.yMinError();
             max_regress_grads.push_back(val);
             val.y = grad.y() + grad.yMaxError();
             max_max_regress_grads.push_back(val);
-            
+
             val.y = grad.y() - grad.yMinError();
             min_regress_grads.push_back(val);
             val.y = grad.y() - grad.yMaxError();
@@ -296,7 +296,7 @@ void TIPMF::recalculate()
     Regress max_max_regress(max_max_regress_grads, npoly);
     Regress min_regress(min_regress_grads, npoly);
     Regress min_min_regress(min_min_regress_grads, npoly);
-    
+
     //get the coefficients of the polynomial
     std::vector<double> coeffs = regress.GetPolynomial();
     std::vector<double> max_coeffs = max_regress.GetPolynomial();
@@ -309,7 +309,7 @@ void TIPMF::recalculate()
     if (range_min != range_max)
     {
         smoothed_grads.clear();
-    
+
         double x = range_min;
         double y = 0;
         double max_y = 0;
@@ -325,7 +325,7 @@ void TIPMF::recalculate()
             max_max_y = 0;
             min_y = 0;
             min_min_y = 0;
-        
+
             for (size_t i=0; i<coeffs.size(); ++i)
             {
                 double power = i;
@@ -349,7 +349,7 @@ void TIPMF::recalculate()
         max_max_y = 0;
         min_y = 0;
         min_min_y = 0;
-    
+
         for (size_t i=0; i<coeffs.size(); ++i)
         {
             double power = i;
@@ -371,7 +371,7 @@ void TIPMF::recalculate()
     if (range_min != range_max)
     {
         vals.clear();
-    
+
         double x = range_min;
         double y = 0;
         double max_y = 0;
@@ -388,29 +388,29 @@ void TIPMF::recalculate()
         {
             xmin = x;
             xmax = x+step;
-        
+
             double area = 0;
             double max_area = 0;
             double max_max_area = 0;
             double min_area = 0;
             double min_min_area = 0;
-        
+
             for (size_t i=0; i<coeffs.size(); ++i)
             {
                 double power = double(i + 1);
-                
+
                 area += ( ( pow( xmax, power ) / power ) * coeffs[ i ] -
                           ( pow( xmin, power ) / power ) * coeffs[ i ] );
 
                 max_area += ( ( pow( xmax, power ) / power ) * max_coeffs[ i ] -
                               ( pow( xmin, power ) / power ) * max_coeffs[ i ] );
-                
+
                 max_max_area += ( ( pow( xmax, power ) / power ) * max_max_coeffs[ i ] -
                                   ( pow( xmin, power ) / power ) * max_max_coeffs[ i ] );
-                
+
                 min_area += ( ( pow( xmax, power ) / power ) * min_coeffs[ i ] -
                               ( pow( xmin, power ) / power ) * min_coeffs[ i ] );
-                
+
                 min_min_area += ( ( pow( xmax, power ) / power ) * min_min_coeffs[ i ] -
                                   ( pow( xmin, power ) / power ) * min_min_coeffs[ i ] );
             }
@@ -420,7 +420,7 @@ void TIPMF::recalculate()
             max_max_y += max_max_area;
             min_y += min_area;
             min_min_y += min_min_area;
-            
+
             double err = qMax( std::abs(max_y-y), std::abs(y-min_y) );
             double max_err = qMax( std::abs(max_max_y-y), std::abs(y-min_min_y) );
 
@@ -434,29 +434,29 @@ void TIPMF::recalculate()
         if (x != xmax)
         {
             xmin = x;
-        
+
             double area = 0;
             double max_area = 0;
             double max_max_area = 0;
             double min_area = 0;
             double min_min_area = 0;
-        
+
             for (size_t i=0; i<coeffs.size(); ++i)
             {
                 double power = double(i + 1);
-                
+
                 area += ( ( pow( xmax, power ) / power ) * coeffs[ i ] -
                           ( pow( xmin, power ) / power ) * coeffs[ i ] );
 
                 max_area += ( ( pow( xmax, power ) / power ) * max_coeffs[ i ] -
                               ( pow( xmin, power ) / power ) * max_coeffs[ i ] );
-                
+
                 max_max_area += ( ( pow( xmax, power ) / power ) * max_max_coeffs[ i ] -
                                   ( pow( xmin, power ) / power ) * max_max_coeffs[ i ] );
-                
+
                 min_area += ( ( pow( xmax, power ) / power ) * min_coeffs[ i ] -
                               ( pow( xmin, power ) / power ) * min_coeffs[ i ] );
-                
+
                 min_min_area += ( ( pow( xmax, power ) / power ) * min_min_coeffs[ i ] -
                                   ( pow( xmin, power ) / power ) * min_min_coeffs[ i ] );
             }
@@ -466,16 +466,16 @@ void TIPMF::recalculate()
             max_max_y += max_max_area;
             min_y += min_area;
             min_min_y += min_min_area;
-            
+
             double err = qMax( std::abs(max_y-y), std::abs(y-min_y) );
             double max_err = qMax( std::abs(max_max_y-y), std::abs(y-min_min_y) );
 
             vals.append( DataPoint(x,y,0,err,0,max_err) );
         }
-        
+
         quad_value = regress_plus_endpoints.DoQuadrature();
     }
-    
+
     setValues(vals);
 }
 
@@ -503,7 +503,7 @@ TIPMF& TIPMF::operator=(const TIPMF &other)
         quad_value = other.quad_value;
         npoly = other.npoly;
     }
-    
+
     return *this;
 }
 
@@ -531,7 +531,7 @@ const char* TIPMF::typeName()
     return QMetaType::typeName( qMetaTypeId<TIPMF>() );
 }
 
-/** Return the free energy calculated using integration of the 
+/** Return the free energy calculated using integration of the
     polynomial fitted to the gradients */
 double TIPMF::integral() const
 {
@@ -577,17 +577,17 @@ QVector<DataPoint> TIPMF::smoothedGradients() const
 TIPMF TIPMF::dropEndPoints() const
 {
     TIPMF ret(*this);
-    
+
     QVector<DataPoint> reduced_grads = grads;
-    
+
     if (not reduced_grads.isEmpty())
         reduced_grads.pop_front();
-    
+
     if (not reduced_grads.isEmpty())
         reduced_grads.pop_back();
-    
+
     ret.setGradients(reduced_grads);
-    
+
     return ret;
 }
 
@@ -601,35 +601,35 @@ static const RegisterAlternativeName<Gradients> r_altgrads("Soiree::Gradients");
 QDataStream &operator<<(QDataStream &ds, const Gradients &grads)
 {
     writeHeader(ds, r_grads, 2);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << grads.analytic << grads.fwds << grads.bwds << grads.delta_lam;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, Gradients &grads)
 {
     VersionID v = readHeader(ds, r_grads);
-    
+
     if (v == 2)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> grads.analytic >> grads.fwds >> grads.bwds >> grads.delta_lam;
     }
     else if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         grads.analytic.clear();
-        
+
         sds >> grads.fwds >> grads.bwds >> grads.delta_lam;
     }
     else
         throw version_error(v, "1,2", r_grads, CODELOC);
-    
+
     return ds;
 }
 
@@ -644,7 +644,7 @@ void Gradients::checkSane() const
 
     Temperature t;
     bool have_first = false;
-    
+
     for (QMap<double,FreeEnergyAverage>::const_iterator it = fwds.constBegin();
          it != fwds.constEnd();
          ++it)
@@ -716,7 +716,7 @@ Gradients::Gradients(const QMap<double,FreeEnergyAverage> &gradients,
 
 /** Construct from the passed finite difference TI forwards and backwards
     gradients, using the passed value of delta lambda. Note that the
-    forwards gradients should be the zwanzig free energies from 
+    forwards gradients should be the zwanzig free energies from
     lambda->lambda+delta_lambda, while the backwards gradients should
     be the zwanzig free energies from lambda-delta_lambda->lambda */
 Gradients::Gradients(const QMap<double,FreeEnergyAverage> &forwards,
@@ -735,10 +735,10 @@ Gradients::Gradients(const QMap<double,FreeEnergyAverage> &forwards,
     //partners set
     if (backwards.isEmpty())
         bwds = fwds;
-    
+
     else if (forwards.isEmpty())
         fwds = bwds;
-    
+
     else
     {
         for (QMap<double,FreeEnergyAverage>::const_iterator it = bwds.constBegin();
@@ -748,7 +748,7 @@ Gradients::Gradients(const QMap<double,FreeEnergyAverage> &forwards,
             if (not fwds.contains(it.key()))
                 fwds.insert( it.key(), it.value() );
         }
-        
+
         for (QMap<double,FreeEnergyAverage>::const_iterator it = fwds.constBegin();
              it != fwds.constEnd();
              ++it)
@@ -788,7 +788,7 @@ Gradients& Gradients::operator=(const Gradients &other)
         bwds = other.bwds;
         delta_lam = other.delta_lam;
     }
-    
+
     return *this;
 }
 
@@ -874,19 +874,19 @@ Gradients& Gradients::operator+=(const Gradients &other)
                 "as the temperatures are different. %1 vs. %2.")
                     .arg(temperature().toString())
                     .arg(other.temperature().toString()), CODELOC );
-        
+
         if (analytic.isEmpty())
         {
             QMap<double,FreeEnergyAverage> new_fwds = fwds;
             QMap<double,FreeEnergyAverage> new_bwds = bwds;
-        
+
             for (QMap<double,FreeEnergyAverage>::const_iterator it = other.fwds.constBegin();
                  it != other.fwds.constEnd();
                  ++it)
             {
                 double lam = it.key();
                 const FreeEnergyAverage &grad = it.value();
-                
+
                 if (grad.nSamples() != 0)
                 {
                     if (new_fwds.contains(lam))
@@ -899,14 +899,14 @@ Gradients& Gradients::operator+=(const Gradients &other)
                     }
                 }
             }
-            
+
             for (QMap<double,FreeEnergyAverage>::const_iterator it = other.bwds.constBegin();
                  it != other.bwds.constEnd();
                  ++it)
             {
                 double lam = it.key();
                 const FreeEnergyAverage &grad = it.value();
-                
+
                 if (grad.nSamples() != 0)
                 {
                     if (new_bwds.contains(lam))
@@ -919,7 +919,7 @@ Gradients& Gradients::operator+=(const Gradients &other)
                     }
                 }
             }
-            
+
             if (new_fwds == new_bwds)
             {
                 fwds = new_fwds;
@@ -934,14 +934,14 @@ Gradients& Gradients::operator+=(const Gradients &other)
         else
         {
             QMap<double,AverageAndStddev> new_analytic = analytic;
-        
+
             for (QMap<double,AverageAndStddev>::const_iterator it = other.analytic.constBegin();
                  it != other.analytic.constEnd();
                  ++it)
             {
                 double lam = it.key();
                 const AverageAndStddev &grad = it.value();
-                
+
                 if (grad.nSamples() != 0)
                 {
                     if (new_analytic.contains(lam))
@@ -954,10 +954,10 @@ Gradients& Gradients::operator+=(const Gradients &other)
                     }
                 }
             }
-            
+
             analytic = new_analytic;
         }
-        
+
         return *this;
     }
 }
@@ -979,14 +979,14 @@ Gradients Gradients::merge(const QList<Gradients> &gradients)
         return Gradients();
     else if (gradients.count() == 1)
         return gradients.at(0);
-    
+
     Gradients ret = gradients.at(0);
-    
+
     for (int i=1; i<gradients.count(); ++i)
     {
         ret += gradients.at(i);
     }
-    
+
     return ret;
 }
 
@@ -996,32 +996,32 @@ QList<double> Gradients::lambdaValues() const
     if (not analytic.isEmpty())
     {
         QList<double> lams = analytic.keys();
-        qSort(lams);
+        std::sort(lams.begin(), lams.end());
         return lams;
     }
     else if (delta_lam == 0 or fwds == bwds)
     {
         QList<double> lams = fwds.keys();
-        qSort(lams);
+        std::sort(lams.begin(), lams.end());
         return lams;
     }
     else
     {
         QMap<double,int> lams;
-        
+
         foreach (double lam, fwds.keys())
         {
             lams.insert(lam, 1);
         }
-        
+
         foreach (double lam, bwds.keys())
         {
             lams.insert(lam, 1);
         }
-        
+
         QList<double> l = lams.keys();
-        qSort(l);
-        
+        std::sort(l.begin(), l.end());
+
         return l;
     }
 }
@@ -1077,7 +1077,7 @@ qint64 Gradients::nSamples() const
             n += it.value().nSamples();
         }
     }
-    
+
     return n;
 }
 
@@ -1099,7 +1099,7 @@ MolarEnergy Gradients::forwards(double lam) const
             throw SireError::invalid_key( QObject::tr(
                     "There is no gradient value at lambda == %1. Available lambda values "
                     "are %2.").arg(lam).arg( Sire::toString(lambdaValues()) ), CODELOC );
-        
+
         if (delta_lam == 0)
             //pure TI, so just need the normal average energy
             return MolarEnergy( fwds[lam].histogram().mean() );
@@ -1130,7 +1130,7 @@ MolarEnergy Gradients::backwards(double lam) const
             throw SireError::invalid_key( QObject::tr(
                     "There is no gradient value at lambda == %1. Available lambda values "
                     "are %2.").arg(lam).arg( Sire::toString(lambdaValues()) ), CODELOC );
-        
+
         if (delta_lam == 0)
             //pure TI, so just need the normal average energy
             return MolarEnergy( fwds[lam].histogram().mean() );
@@ -1143,7 +1143,7 @@ MolarEnergy Gradients::backwards(double lam) const
     }
 }
 
-/** Return the gradient at the passed lambda value. This is the 
+/** Return the gradient at the passed lambda value. This is the
     average of the forwards and backwards gradient if finite difference
     is used */
 MolarEnergy Gradients::gradient(double lam) const
@@ -1163,7 +1163,7 @@ MolarEnergy Gradients::gradient(double lam) const
             throw SireError::invalid_key( QObject::tr(
                     "There is no gradient value at lambda == %1. Available lambda values "
                     "are %2.").arg(lam).arg( Sire::toString(lambdaValues()) ), CODELOC );
-        
+
         if (delta_lam == 0)
             //pure TI, so just need the normal average energy
             return MolarEnergy( fwds[lam].histogram().mean() );
@@ -1177,7 +1177,7 @@ MolarEnergy Gradients::gradient(double lam) const
     }
 }
 
-/** Return the value of delta lambda. This will be zero if these are 
+/** Return the value of delta lambda. This will be zero if these are
     pure TI gradients */
 double Gradients::deltaLambda() const
 {
@@ -1202,25 +1202,25 @@ QMap<double,FreeEnergyAverage> Gradients::backwardsData() const
     return bwds;
 }
 
-/** Return the values of the gradients as data points. This returns the 
+/** Return the values of the gradients as data points. This returns the
     average of the forwards and backwards gradients, with errors calculated
     based on both the difference between the forwards and backwards values,
     and the 90% confidence level of the average of gradients */
 QVector<DataPoint> Gradients::values() const
 {
     QList<double> lamvals = this->lambdaValues();
- 
+
     if (lamvals.isEmpty())
         return QVector<DataPoint>();
-    
+
     QVector<DataPoint> points( lamvals.count() );
-    
+
     if (not analytic.isEmpty())
     {
         for (int i=0; i<lamvals.count(); ++i)
         {
             double lam = lamvals[i];
-        
+
             const AverageAndStddev &avg = *(analytic.constFind(lam));
             points[i] = DataPoint(lam, avg.average(), 0, avg.standardError(90));
         }
@@ -1230,7 +1230,7 @@ QVector<DataPoint> Gradients::values() const
         for (int i=0; i<lamvals.count(); ++i)
         {
             double lam = lamvals[i];
-        
+
             if (delta_lam == 0)
             {
                 //pure TI data
@@ -1245,10 +1245,10 @@ QVector<DataPoint> Gradients::values() const
             {
                 const FreeEnergyAverage *fwdsavg = 0;
                 const FreeEnergyAverage *bwdsavg = 0;
-                
+
                 if (fwds.contains(lam))
                     fwdsavg = &(*(fwds.constFind(lam)));
-                
+
                 if (bwds.contains(lam))
                     bwdsavg = &(*(bwds.constFind(lam)));
 
@@ -1256,42 +1256,42 @@ QVector<DataPoint> Gradients::values() const
                     bwdsavg = fwdsavg;
                 else if (fwdsavg == 0)
                     fwdsavg = bwdsavg;
-                
+
                 if (fwdsavg == bwdsavg or (*fwdsavg == *bwdsavg))
                 {
                     double fwdsval = fwdsavg->average() / delta_lam;
                     double fwdserr = fwdsavg->histogram().standardError(90) / delta_lam;
-                    
+
                     double val = fwdsval;
                     double maxerr = fwdserr;
-                    
+
                     if (fwdserr > maxerr)
                         qSwap(fwdserr, maxerr);
-                
+
                     points[i] = DataPoint(lam, val, 0, fwdserr, 0, maxerr);
                 }
                 else
                 {
                     double fwdsval = fwdsavg->average() / delta_lam;
                     double bwdsval = bwdsavg->average() / delta_lam;
-                    
+
                     double fwdserr = fwdsavg->histogram().standardError(90) / delta_lam;
                     double bwdserr = bwdsavg->histogram().standardError(90) / delta_lam;
-                    
+
                     double val = 0.5 * (fwdsval + bwdsval);
                     double minerr = std::abs( fwdsval - bwdsval );
                     double maxerr = minerr + fwdserr + bwdserr;
-                    
+
                     points[i] = DataPoint(lam, val, 0, minerr, 0, maxerr);
                 }
             }
         }
     }
-    
+
     return points;
 }
 
-/** Return the values of the forwards gradients as data points. This returns the 
+/** Return the values of the forwards gradients as data points. This returns the
     average forwards gradient for each lambda value, together with the
     standard error at the 90% confidence level */
 QVector<DataPoint> Gradients::forwardsValues() const
@@ -1300,16 +1300,16 @@ QVector<DataPoint> Gradients::forwardsValues() const
         return values();
 
     QList<double> lamvals = this->lambdaValues();
- 
+
     if (lamvals.isEmpty())
         return QVector<DataPoint>();
-    
+
     QVector<DataPoint> points( lamvals.count() );
-    
+
     for (int i=0; i<lamvals.count(); ++i)
     {
         double lam = lamvals[i];
-    
+
         if (fwds.contains(lam))
         {
             if (delta_lam == 0)
@@ -1322,25 +1322,25 @@ QVector<DataPoint> Gradients::forwardsValues() const
             else
             {
                 const FreeEnergyAverage &fwdsavg = *(fwds.constFind(lam));
-                
+
                 double fwdsval = fwdsavg.fepFreeEnergy() / delta_lam;
                 double fwdserr = fwdsavg.histogram().standardError(90) / delta_lam;
-                
+
                 double val = fwdsval;
                 double maxerr = fwdserr;
-                
+
                 if (fwdserr > maxerr)
                     qSwap(fwdserr, maxerr);
-            
+
                 points[i] = DataPoint(lam, val, 0, fwdserr, 0, maxerr);
             }
         }
     }
-    
+
     return points;
 }
 
-/** Return the values of the backwards gradients as data points. This returns the 
+/** Return the values of the backwards gradients as data points. This returns the
     average backwards gradient for each lambda value, together with the
     standard error at the 90% confidence level */
 QVector<DataPoint> Gradients::backwardsValues() const
@@ -1349,16 +1349,16 @@ QVector<DataPoint> Gradients::backwardsValues() const
         return values();
 
     QList<double> lamvals = this->lambdaValues();
- 
+
     if (lamvals.isEmpty())
         return QVector<DataPoint>();
-    
+
     QVector<DataPoint> points( lamvals.count() );
-    
+
     for (int i=0; i<lamvals.count(); ++i)
     {
         double lam = lamvals[i];
-    
+
         if (bwds.contains(lam))
         {
             if (delta_lam == 0)
@@ -1371,21 +1371,21 @@ QVector<DataPoint> Gradients::backwardsValues() const
             else
             {
                 const FreeEnergyAverage &bwdsavg = *(bwds.constFind(lam));
-                
+
                 double bwdsval = bwdsavg.fepFreeEnergy() / delta_lam;
                 double bwdserr = bwdsavg.histogram().standardError(90) / delta_lam;
-                
+
                 double val = bwdsval;
                 double maxerr = bwdserr;
-                
+
                 if (bwdserr > maxerr)
                     qSwap(bwdserr, maxerr);
-            
+
                 points[i] = DataPoint(lam, val, 0, bwdserr, 0, maxerr);
             }
         }
     }
-    
+
     return points;
 }
 
@@ -1394,10 +1394,10 @@ QVector<DataPoint> Gradients::backwardsValues() const
 TIPMF Gradients::integrate(double range_min, double range_max, int order) const
 {
     TIPMF pmf(range_min, range_max, order);
-    
+
     if (not this->isEmpty())
         pmf.setGradients(this->values());
-    
+
     return pmf;
 }
 
@@ -1415,7 +1415,7 @@ TIPMF Gradients::integrate(int order) const
     return this->integrate(0, 1, order);
 }
 
-/** Integrate these gradients between 0 and 1 using a polynomial of 
+/** Integrate these gradients between 0 and 1 using a polynomial of
     order ngradients-2 and return them as a potential of mean force (PMF) */
 TIPMF Gradients::integrate() const
 {
@@ -1432,26 +1432,26 @@ static const RegisterAlternativeName<TI> r_altti("Soiree::TI");
 QDataStream &operator<<(QDataStream &ds, const TI &ti)
 {
     writeHeader(ds, r_ti, 1);
-    
+
     SharedDataStream sds(ds);
     sds << ti.grads;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, TI &ti)
 {
     VersionID v = readHeader(ds, r_ti);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> ti.grads;
     }
     else
         throw version_error(v, "1", r_ti, CODELOC);
-    
+
     return ds;
 }
 
@@ -1528,7 +1528,7 @@ void TI::add(const QMap<double,AverageAndStddev> &gradients)
 }
 
 /** Add the passed free energy gradients to the TI calculation. The gradients
-    are in a dictionary, indexed by lambda value, and are "pure" TI gradients, 
+    are in a dictionary, indexed by lambda value, and are "pure" TI gradients,
     i.e. they have been calculated exactly with an infinitesimal delta lambda */
 void TI::add(const QMap<double,FreeEnergyAverage> &gradients)
 {
@@ -1550,11 +1550,11 @@ void TI::add(const QMap<double,FreeEnergyAverage> &gradients,
 
 /** Add the passed free energy gradients to the TI calculation. The gradients
     are in dictionaries, indexed by lambda values, and are the raw forwards and
-    backwards free energies calculated via the zwanzig equation as part of 
+    backwards free energies calculated via the zwanzig equation as part of
     a finite-difference TI calculation (backwards gradients calculated as the
     free energy from lambda-delta_lambda -> lambda, while forwards gradients calculated as the
     difference between lambda -> lambda+delta_lambda). The value of delta lambda
-    must be passed (so that we can then divide each gradient by delta lambda to get 
+    must be passed (so that we can then divide each gradient by delta lambda to get
     an approximation of the true gradient) */
 void TI::add(const QMap<double,FreeEnergyAverage> &forwards,
              const QMap<double,FreeEnergyAverage> &backwards,
@@ -1578,12 +1578,12 @@ int TI::nIterations() const
     return grads.count();
 }
 
-/** Return all values of lambda that have data. The values are returned 
+/** Return all values of lambda that have data. The values are returned
     in numerical order */
 QList<double> TI::lambdaValues() const
 {
     QMap<double,int> vals;
-    
+
     for (int i=0; i<grads.count(); ++i)
     {
         foreach (double lam, grads.at(i).lambdaValues())
@@ -1591,10 +1591,10 @@ QList<double> TI::lambdaValues() const
             vals.insert(lam, 0);
         }
     }
-    
+
     QList<double> lams = vals.keys();
-    qSort(lams);
-    
+    std::sort(lams.begin(), lams.end());
+
     return lams;
 }
 
@@ -1608,12 +1608,12 @@ int TI::nLambdaValues() const
 qint64 TI::nSamples() const
 {
     qint64 n = 0;
-    
+
     for (int i=0; i<grads.count(); ++i)
     {
         n += grads.at(i).nSamples();
     }
-    
+
     return n;
 }
 
@@ -1658,7 +1658,7 @@ void TI::set(int i, const QMap<double,AverageAndStddev> &gradients)
     }
 
     i = Index(i).map(grads.count());
-    
+
     if (gradients.isEmpty())
         grads[i] = Gradients();
     else
@@ -1675,7 +1675,7 @@ void TI::set(int i, const QMap<double,FreeEnergyAverage> &gradients)
     }
 
     i = Index(i).map(grads.count());
-    
+
     if (gradients.isEmpty())
         grads[i] = Gradients();
     else
@@ -1694,7 +1694,7 @@ void TI::set(int i, const QMap<double,FreeEnergyAverage> &gradients,
     }
 
     i = Index(i).map(grads.count());
-    
+
     if (gradients.isEmpty())
         grads[i] = Gradients();
     else
@@ -1716,7 +1716,7 @@ void TI::set(int i, const QMap<double,FreeEnergyAverage> &forwards,
     }
 
     i = Index(i).map(grads.count());
-    
+
     if (forwards.isEmpty() and backwards.isEmpty())
         grads[i] = Gradients();
     else
@@ -1731,7 +1731,7 @@ void TI::set(int i, const Gradients &gradients)
     }
 
     i = Index(i).map(grads.count());
-    
+
     if (gradients.isEmpty())
         grads[i] = Gradients();
     else
@@ -1751,10 +1751,10 @@ void TI::removeRange(int start, int end)
 {
     start = Index(start).map(grads.count());
     end = Index(end).map(grads.count());
-    
+
     if (start > end)
         qSwap(start, end);
-    
+
     for (int i = start; i <= end; ++i)
     {
         grads[i] = Gradients();
@@ -1773,15 +1773,15 @@ Gradients TI::merge(int start, int end) const
 {
     start = Index(start).map(grads.count());
     end = Index(end).map(grads.count());
-    
+
     QList<Gradients> set;
-    
+
     for (int i=start; i<=end; ++i)
     {
         if (not grads.at(i).isEmpty())
             set.append( grads.at(i) );
     }
-    
+
     return Gradients::merge(set);
 }
 
@@ -1789,20 +1789,20 @@ Gradients TI::merge(int start, int end) const
 Gradients TI::merge(QList<int> indicies) const
 {
     QList<Gradients> set;
-    
+
     foreach (int idx, indicies)
     {
         int i = Index(idx).map(grads.count());
-        
+
         if (not grads.at(i).isEmpty())
             set.append( grads.at(i) );
     }
- 
+
     return Gradients::merge(set);
 }
-    
+
 /** Return a list of Gradients that represents the rolling average over 'niterations'
-    iterations over this TI data set. If this data set contains 100 iterations, and 
+    iterations over this TI data set. If this data set contains 100 iterations, and
     we calculate the rolling average over 50 iterations, then the returned Gradients
     will be the average from 1-50, then 2-51, 3-52.....51-100 */
 QList<Gradients> TI::rollingAverage(int niterations) const
@@ -1815,7 +1815,7 @@ QList<Gradients> TI::rollingAverage(int niterations) const
     if (niterations >= grads.count())
     {
         Gradients m = this->merge(0,-1);
-        
+
         if (not m.isEmpty())
             merged.append(m);
     }
@@ -1830,15 +1830,15 @@ QList<Gradients> TI::rollingAverage(int niterations) const
     else
     {
         QList<Gradients> set;
-        
+
         int i = 0;
-        
+
         for (i=0; i<grads.count(); ++i)
         {
             if (not grads.at(i).isEmpty())
             {
                 set.append(grads.at(i));
-                
+
                 if (set.count() == niterations)
                     break;
             }
@@ -1846,7 +1846,7 @@ QList<Gradients> TI::rollingAverage(int niterations) const
 
         if (not set.isEmpty())
             merged.append( Gradients::merge(set) );
-        
+
         for (i = i+1; i<grads.count(); ++i)
         {
             if (not grads.at(i).isEmpty())
@@ -1857,7 +1857,7 @@ QList<Gradients> TI::rollingAverage(int niterations) const
             }
         }
     }
-    
+
     return merged;
 }
 

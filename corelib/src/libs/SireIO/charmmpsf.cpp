@@ -3359,7 +3359,7 @@ QString CharmmPSF::generateKey(QVector<QString> words, int type) const
         }
 
         // Sort the words.
-        qSort(words);
+        std::sort(words.begin(), words.end());
 
         // Now create the key.
 
@@ -3796,7 +3796,7 @@ MolStructureEditor CharmmPSF::getMolStructure(int imol, const PropertyName &cutt
 
         // Get a sorted list of the atoms in the residue.
         QList<int> res_atoms = res_to_atom.values(res_num);
-        qSort(res_atoms);
+        std::sort(res_atoms.begin(), res_atoms.end());
 
         // Add the residue to the molecule.
         auto res = mol.add(ResNum(res_num));
@@ -3966,7 +3966,7 @@ void CharmmPSF::findMolecules()
             }
 
             // Add the sorted atom indices.
-            qSort(mol_atoms);
+            std::sort(mol_atoms.begin(), mol_atoms.end());
             molecules.append(mol_atoms);
         }
     }

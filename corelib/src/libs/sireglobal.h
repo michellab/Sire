@@ -452,7 +452,7 @@ public:
     {
         return typnam;
     }
-    
+
     QString typeNameString() const
     {
         return QLatin1String(typnam);

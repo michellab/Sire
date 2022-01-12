@@ -2883,7 +2883,7 @@ static QStringList writeAtomTypes(const QMap<QPair<int,QString>,GroMolType> &mol
     //now sort and write all of the atomtypes
     QStringList lines;
     auto keys = atomtypes.keys();
-    qSort(keys);
+    std::sort(keys.begin(), keys.end());
 
     lines.append( "[ atomtypes ]" );
     lines.append( "; name      at.num        mass      charge   ptype       sigma     epsilon" );
@@ -3215,7 +3215,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
             }
         }
 
-        qSort(bondlines);
+        std::sort(bondlines.begin(), bondlines.end());
     };
 
     //write all of the angles
@@ -3429,7 +3429,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
             }
         }
 
-        qSort(anglines);
+        std::sort(anglines.begin(), anglines.end());
     };
 
     //write all of the dihedrals/impropers (they are merged)
@@ -3683,7 +3683,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
             }
         }
 
-        qSort(dihlines);
+        std::sort(dihlines.begin(), dihlines.end());
     };
 
     //write all of the pairs (1-4 scaling factors). This is needed even though

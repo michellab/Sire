@@ -102,9 +102,9 @@ QList<SysIdx> SysID::processMatches(QList<SysIdx> &matches,
         throw SireSystem::missing_system( QObject::tr(
             "There are no systems that match the ID \"%1\".")
                 .arg(this->toString()), CODELOC );
-                
-    qSort(matches);
-    
+
+    std::sort(matches.begin(), matches.end());
+
     return matches;
 }
 
@@ -132,9 +132,9 @@ static const RegisterMetaType<SysIdx> r_sysidx;
 QDataStream &operator<<(QDataStream &ds, const SysIdx &sysidx)
 {
     writeHeader(ds, r_sysidx, 1);
-    
+
     ds << static_cast<const SireID::Index_T_<SysIdx>&>(sysidx);
-    
+
     return ds;
 }
 
@@ -142,14 +142,14 @@ QDataStream &operator<<(QDataStream &ds, const SysIdx &sysidx)
 QDataStream &operator>>(QDataStream &ds, SysIdx &sysidx)
 {
     VersionID v = readHeader(ds, r_sysidx);
-    
+
     if (v == 1)
     {
         ds >> static_cast<SireID::Index_T_<SysIdx>&>(sysidx);
     }
     else
         throw version_error( v, "1", r_sysidx, CODELOC );
-        
+
     return ds;
 }
 
@@ -164,7 +164,7 @@ SysIdx::SysIdx(const SysIdx &other) : SireID::Index_T_<SysIdx>(other), SysID(oth
 
 SysIdx::~SysIdx()
 {}
-  
+
 SysIdx SysIdx::null()
 {
     return SysIdx();
@@ -217,9 +217,9 @@ static const RegisterMetaType<SysName> r_sysname;
 QDataStream &operator<<(QDataStream &ds, const SysName &sysname)
 {
     writeHeader(ds, r_sysname, 1);
-    
+
     ds << static_cast<const SireID::Name&>(sysname);
-    
+
     return ds;
 }
 
@@ -227,14 +227,14 @@ QDataStream &operator<<(QDataStream &ds, const SysName &sysname)
 QDataStream &operator>>(QDataStream &ds, SysName &sysname)
 {
     VersionID v = readHeader(ds, r_sysname);
-    
+
     if (v == 1)
     {
         ds >> static_cast<SireID::Name&>(sysname);
     }
     else
         throw version_error( v, "1", r_sysname, CODELOC );
-        
+
     return ds;
 }
 
@@ -249,7 +249,7 @@ SysName::SysName(const SysName &other) : SireID::Name(other), SysID(other)
 
 SysName::~SysName()
 {}
-    
+
 bool SysName::isNull() const
 {
     return SireID::Name::isNull();
