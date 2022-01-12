@@ -365,7 +365,7 @@ QVector<MolarEnergy> MolPotentialTable::toVector(const AtomSelection &selection)
                 }
                 else
                 {
-                    QList<Index> idxs = selection.selectedAtoms(i).toList();
+                    QList<Index> idxs = selection.selectedAtoms(i).values();
                     std::sort(idxs.begin(), idxs.end());
 
                     foreach (Index idx, idxs)
@@ -394,7 +394,7 @@ QVector<MolarEnergy> MolPotentialTable::toVector(const AtomSelection &selection)
                 }
                 else
                 {
-                    QList<Index> idxs = selection.selectedAtoms(i).toList();
+                    QList<Index> idxs = selection.selectedAtoms(i).values();
                     std::sort(idxs.begin(), idxs.end());
 
                     foreach (Index idx, idxs)
@@ -437,7 +437,7 @@ QVector<MolarEnergy> MolPotentialTable::toVector(const AtomSelection &selection)
             }
             else
             {
-                QList<Index> idxs = selection.selectedAtoms(cgidx).toList();
+                QList<Index> idxs = selection.selectedAtoms(cgidx).values();
                 std::sort(idxs.begin(), idxs.end());
 
                 foreach (Index idx, idxs)

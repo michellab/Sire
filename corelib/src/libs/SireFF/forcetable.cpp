@@ -809,7 +809,7 @@ QVector<Vector> MolForceTable::toVector(const AtomSelection &selection) const
                 }
                 else
                 {
-                    QList<Index> idxs = selection.selectedAtoms(i).toList();
+                    QList<Index> idxs = selection.selectedAtoms(i).values();
                     std::sort(idxs.begin(), idxs.end());
 
                     foreach (Index idx, idxs)
@@ -838,8 +838,8 @@ QVector<Vector> MolForceTable::toVector(const AtomSelection &selection) const
                 }
                 else
                 {
-                    QList<Index> idxs = selection.selectedAtoms(i).toList();
-                    std::sort(idxs.begin() idxs.end());
+                    QList<Index> idxs = selection.selectedAtoms(i).values();
+                    std::sort(idxs.begin(), idxs.end());
 
                     foreach (Index idx, idxs)
                     {
@@ -881,7 +881,7 @@ QVector<Vector> MolForceTable::toVector(const AtomSelection &selection) const
             }
             else
             {
-                QList<Index> idxs = selection.selectedAtoms(cgidx).toList();
+                QList<Index> idxs = selection.selectedAtoms(cgidx).values();
                 std::sort(idxs.begin(), idxs.end());
 
                 foreach (Index idx, idxs)
