@@ -41,9 +41,9 @@ using namespace SireStream;
 void printOut(const QString &line)
 {
     QTextStream stream(stdout);
-    
+
     stream << line;
-    endl(stream);
+    Qt::endl(stream);
 }
 
 static QString repeated(const QString &s, int n)
@@ -52,12 +52,12 @@ static QString repeated(const QString &s, int n)
         return s.repeated(n);
     #else
         QString r = s;
-        
+
         for (int i=1; i<n; ++i)
         {
             r += s;
         }
-        
+
         return r;
     #endif
 }
@@ -65,28 +65,28 @@ static QString repeated(const QString &s, int n)
 void printBox(const QString &line, QTextStream &stream)
 {
     QStringList lines = line.split("\n");
-    
+
     int maxlength = 0;
-    
+
     for (QStringList::iterator it = lines.begin(); it != lines.end(); ++it)
     {
         *it = it->simplified();
-    
+
         if (it->length() > maxlength)
             maxlength = it->length();
     }
-    
+
     const int max_maxlength = 80;
-    
+
     if (maxlength > max_maxlength)
         maxlength = max_maxlength;
-    
+
     QString hashline = ::repeated( "-", maxlength + 2 );
-    
-    endl(stream);
+
+    Qt::endl(stream);
     stream << "*" << hashline << "*";
-    endl(stream);
-    
+    Qt::endl(stream);
+
     foreach (const QString &l, lines)
     {
         if (l.length() > max_maxlength)
@@ -96,19 +96,19 @@ void printBox(const QString &line, QTextStream &stream)
                 stream << "| " << l.mid(j,max_maxlength).leftJustified(maxlength)
                        << " |";
 
-                endl(stream);
+                Qt::endl(stream);
             }
         }
         else
         {
             stream << "| " << l.leftJustified(maxlength) << " |";
-            endl(stream);
+            Qt::endl(stream);
         }
     }
-    
+
     stream << "*" << hashline << "*";
-    endl(stream);
-    endl(stream);
+    Qt::endl(stream);
+    Qt::endl(stream);
 }
 
 void printBox(const QString &line)
@@ -120,12 +120,12 @@ void printBox(const QString &line)
 void printError(const QString &line)
 {
     QTextStream stream(stderr);
-    
+
     printBox( QObject::tr("Command line error!"), stream );
-    
+
     stream << line;
-    endl(stream);
-    endl(stream);
+    Qt::endl(stream);
+    Qt::endl(stream);
 }
 
 #ifdef Q_OS_UNIX
@@ -133,23 +133,23 @@ void printError(const QString &line)
 #include <signal.h>
 
 //handle CTRL-C signal - this should kill the calculation
-// - with thanks to 
+// - with thanks to
 //  <http://www.gnu.org/software/libtool/manual/libc/Termination-in-Handler.html#Termination-in-Handler>
 
 volatile sig_atomic_t fatal_error_in_progress = 0;
-     
+
 void fatal_error_signal (int sig)
 {
-    // Since this handler is established for more than one kind of signal, 
+    // Since this handler is established for more than one kind of signal,
     // it might still get invoked recursively by delivery of some other kind
     // of signal.  Use a static variable to keep track of that.
     if (fatal_error_in_progress)
         raise (sig);
- 
+
     fatal_error_in_progress = 1;
 
     printBox( QObject::tr("You're killing me!!!") );
-     
+
     // Kill any child processes
     SireBase::Process::killAll();
 
@@ -182,12 +182,12 @@ void throwIncompatibleError(const Property *p0, const Property *p1)
 void testLoad(const QString &filename)
 {
     QFile f(filename);
-    
+
     if (not f.open( QIODevice::ReadOnly) )
         throw SireError::file_error(f, CODELOC);
-        
+
     QByteArray restart_data = f.readAll();
-    
+
     if (restart_data.isEmpty())
         throw SireError::file_error( QObject::tr(
             "There was an error reading data from the file %1. Either "
@@ -197,12 +197,12 @@ void testLoad(const QString &filename)
     //read the header
     {
         FileHeader header = SireStream::getDataHeader(restart_data);
-        
+
         printBox( header.toString() );
     }
-    
+
     //unpack the binary data
-    QList< boost::tuple<boost::shared_ptr<void>,QString> > objects 
+    QList< boost::tuple<boost::shared_ptr<void>,QString> > objects
                          = SireStream::load(restart_data);
 
     for (int i=0; i<objects.count(); ++i)
@@ -224,7 +224,7 @@ WorkPacket createWorkPacket(const QString &filename,
 
     if (not f.open( QIODevice::ReadOnly) )
         throw SireError::file_error(f, CODELOC);
-    
+
     printOut( QObject::tr("Reading the file...") );
     QByteArray restart_data = f.readAll();
 
@@ -238,9 +238,9 @@ WorkPacket createWorkPacket(const QString &filename,
     {
         printOut( QObject::tr("Reading the file header...") );
         FileHeader header = SireStream::getDataHeader(restart_data);
-    
+
         printOut( QObject::tr("File Header ==\n%1").arg(header.toString()) );
-    
+
         if (header.dataTypes().count() != 2)
         {
             throw SireError::incompatible_error( QObject::tr(
@@ -251,31 +251,31 @@ WorkPacket createWorkPacket(const QString &filename,
                 "are [ %1 ].").arg(header.dataTypes().join(", ")), CODELOC );
         }
     }
-    
+
     printOut( QObject::tr("Unpacking the data...") );
-    
+
     //unpack the binary data
-    QList< boost::tuple<boost::shared_ptr<void>,QString> > objects 
+    QList< boost::tuple<boost::shared_ptr<void>,QString> > objects
                          = SireStream::load(restart_data);
-    
+
     printOut( QObject::tr("Number of loaded objects equals %1").arg(objects.count()) );
-    
+
     if (objects.count() != 2)
         throw SireError::file_error( QObject::tr(
             "The restart file may be corrupted as despite the header claiming "
             "there were two objects, the number of objects is actually equal "
             "to %1.").arg(objects.count()), CODELOC );
-    
+
     //the objects must both be derived from Property - if they are not
     //then this will cause a segfault
     Property *p0 = static_cast<Property*>(objects[0].get<0>().get());
     Property *p1 = static_cast<Property*>(objects[1].get<0>().get());
-    
+
     //the first object should be derived from System or SupraSystem
     if (p0->isA<System>())
     {
         printOut( QObject::tr("Creating a SimPacket simulation...") );
-    
+
         //the second object must be a 'Move' or 'Moves'
         if (p1->isA<Moves>())
         {
@@ -293,7 +293,7 @@ WorkPacket createWorkPacket(const QString &filename,
     else if (p0->isA<SupraSystem>())
     {
         printOut( QObject::tr("Creating a SupraSimPacket simulation...") );
-    
+
         //the second object must be a 'SupraMove' or 'SupraMoves'
         if (p1->isA<SupraMoves>())
         {
@@ -311,21 +311,21 @@ WorkPacket createWorkPacket(const QString &filename,
     }
     else
         ::throwIncompatibleError(p0, p1);
-        
+
     return WorkPacket();
 }
 
 /** Return the name of the next restart file in the sequence. Restart
-    files are name [filename]_[number].[extension] where [number] has to 
+    files are name [filename]_[number].[extension] where [number] has to
     increment */
 QString getNextName(QString old_name)
 {
     QFileInfo filename(old_name);
-    
+
     QString base_name = filename.baseName();
-    
+
     QRegExp regexp("([\\w\\d]+)_(\\d+)");
-    
+
     if (regexp.indexIn(base_name) != -1)
     {
         base_name = QString("%1_%2").arg(regexp.cap(1))
@@ -357,7 +357,7 @@ void saveRestartFile(const WorkPacket &workpacket, const QString &filename)
         if (workpacket.isA<SimPacket>())
         {
             SimPacket simpacket = workpacket.asA<SimPacket>();
-            
+
             SireStream::saveToFile( simpacket.system(),
                                     simpacket.moves().read(),
                                     filename );
@@ -365,7 +365,7 @@ void saveRestartFile(const WorkPacket &workpacket, const QString &filename)
         else if (workpacket.isA<SupraSimPacket>())
         {
             SupraSimPacket simpacket = workpacket.asA<SupraSimPacket>();
-            
+
             SireStream::saveToFile( simpacket.system(),
                                     simpacket.moves(),
                                     filename );
@@ -396,9 +396,9 @@ void printLicense()
     Q_INIT_RESOURCE(sire);
 
     QFile f(":COPYING");
-    
+
     f.open( QIODevice::ReadOnly );
-    
+
     QString copying = f.readAll();
 
     printBox( QObject::tr("This program is licensed under the terms of the\n"
@@ -451,9 +451,9 @@ void printVersion()
 int readTime(const QString &time, bool &ok)
 {
     QStringList parts = time.split(":");
-    
+
     int times[3];
-    
+
     while (parts.count() < 3)
     {
         parts.prepend("0");
@@ -465,7 +465,7 @@ int readTime(const QString &time, bool &ok)
 
         if (times[i] < 0)
             ok = false;
-        
+
         if (not ok)
             printError( QObject::tr("Could not interpret the time from \"%1\". "
                          "The correct format is hh:mm:ss, where hh is hours, "
@@ -481,24 +481,24 @@ QString timeToString(int time)
     int hours = time / 3600;
     int mins = (time - hours*3600) / 60;
     int secs = time - hours*3600 - mins*60;
-    
+
     QStringList parts;
-    
+
     if (hours == 1)
         parts.append( QObject::tr("1 hour") );
     else if (hours > 0)
         parts.append( QObject::tr("%1 hours").arg(hours) );
-        
+
     if (mins == 1)
         parts.append( QObject::tr("1 minute") );
     else if (mins > 0)
         parts.append( QObject::tr("%1 minutes").arg(mins) );
-        
+
     if (secs == 1)
         parts.append( QObject::tr("1 second") );
     else if (secs > 0)
         parts.append( QObject::tr("%1 seconds").arg(secs) );
-        
+
     if (parts.isEmpty())
         return QObject::tr("Unspecified time");
 
@@ -511,7 +511,7 @@ QString timeToString(int time)
         return QObject::tr("%1 and %2").arg(parts.at(0), parts.at(1));
     }
     else
-    {   
+    {
         return QObject::tr("%1, %2 and %3")
                     .arg(parts.at(0), parts.at(1), parts.at(2));
     }
@@ -520,7 +520,7 @@ QString timeToString(int time)
 bool readBool(const QString &flag, bool &ok)
 {
     QString lower_flag = flag.toLower();
-    
+
     if (lower_flag == QLatin1String("true") or
         lower_flag == QLatin1String("on") or
         lower_flag == QLatin1String("yes") or
@@ -541,9 +541,9 @@ bool readBool(const QString &flag, bool &ok)
                                 "You should use true, on, yes or 1 to mean true, or "
                                 "false, off, no or 0 to mean false (case insensitive).")
                                     .arg(flag) );
-                                    
+
         ok = false;
-        
+
         return false;
     }
 }
@@ -562,38 +562,38 @@ int readRepeat(const QString &repeat, bool &ok)
 
     if (r <= 0)
         ok = false;
-    
+
     if (not ok)
         printError( QObject::tr( "Could not read the number of repetitions "
                                  "from \"%1\". This should be an integer (whole number).")
                                     .arg(repeat) );
-    
+
     return r;
 }
 
 int readNMoves(const QString &nmoves, bool &ok)
 {
     int n = nmoves.toInt(&ok);
-    
+
     if (n <= 0)
         ok = false;
-    
+
     if (not ok)
         printError( QObject::tr( "Could not read the number of moves from \"%1\". "
                                  "This should be an integer (whole number).")
                                     .arg(nmoves) );
-                                    
+
     return n;
 }
 
-QList<RestartFile> parseCommandLine(int argc, char **argv, 
+QList<RestartFile> parseCommandLine(int argc, char **argv,
                                     int &repeat, int &time, bool &ok, bool &test)
 {
     //  sire --repeat=10 --time=02:00:00 --nmoves=100 --statistics=true
     //                    restart_file --nmoves=150 restart_file2
-    
+
     //  sire -r 10 -t 02:00:00 -n 100 -s true restart_file -n 150 restart_file2
-    
+
     //  sire --help
 
     ok = true;
@@ -621,7 +621,7 @@ QList<RestartFile> parseCommandLine(int argc, char **argv,
             return QList<RestartFile>();
 
         const QString arg(argv[i]);
-        
+
         if (arg.startsWith("--"))
         {
             if (arg == QLatin1String("--help"))
@@ -646,18 +646,18 @@ QList<RestartFile> parseCommandLine(int argc, char **argv,
             else if (arg.startsWith("--time"))
             {
                 QStringList times = arg.split("=");
-                
+
                 if (times.count() != 2)
                 {
                     ok = false;
                     printHelp();
-                
+
                     printError( QObject::tr(
                         "Cannot interpret the time %1. The time should be set "
                         "using the argument \"--time=hh:mm:ss\" or \"-t hh:mm:ss\".")
                             .arg(arg) );
                 }
-                else 
+                else
                 {
                     time = readTime(times[1], ok);
                 }
@@ -665,12 +665,12 @@ QList<RestartFile> parseCommandLine(int argc, char **argv,
             else if (arg.startsWith("--repeat"))
             {
                 QStringList repeats = arg.split("=");
-                
+
                 if (repeats.count() != 2)
                 {
                     ok = false;
                     printHelp();
-                    
+
                     printError( QObject::tr(
                         "Cannot interpret the number of repetitions from %1. "
                         "This should be set using the argument "
@@ -685,12 +685,12 @@ QList<RestartFile> parseCommandLine(int argc, char **argv,
             else if (arg.startsWith("--nmoves"))
             {
                 QStringList moves = arg.split("=");
-                
+
                 if (moves.count() != 2)
                 {
                     ok = false;
                     printHelp();
-                    
+
                     printError( QObject::tr(
                         "Cannot interpret the number of moves from %1. "
                         "This should be set using the argument "
@@ -705,12 +705,12 @@ QList<RestartFile> parseCommandLine(int argc, char **argv,
             else if (arg.startsWith("--statistics"))
             {
                 QStringList stats = arg.split("=");
-                
+
                 if (stats.count() != 2)
                 {
                     ok = false;
                     printHelp();
-                    
+
                     printError( QObject::tr(
                         "Cannot interpret whether or not to record statistics "
                         "from %1. This should be set using the argument "
@@ -726,7 +726,7 @@ QList<RestartFile> parseCommandLine(int argc, char **argv,
             {
                 ok = false;
                 printHelp();
-                
+
                 printError( QObject::tr("Unrecognised argument \"%1\".").arg(arg) );
             }
         }
@@ -754,28 +754,28 @@ QList<RestartFile> parseCommandLine(int argc, char **argv,
             else if (arg == QLatin1String("-t"))
             {
                 ++i;
-                
+
                 if (i == argc)
                 {
                     ok = false;
                     printHelp();
-                    
+
                     printError( QObject::tr(
                         "Cannot interpret the time. The time should be set using "
                         "the argument \"--time=hh:nm:ss\" or \"-t hh:mm:ss\".") );
-                        
+
                     return QList<RestartFile>();
                 }
-                
+
                 time = readTime(argv[i], ok );
-                
+
                 if (not ok)
                     return QList<RestartFile>();
             }
             else if (arg == QLatin1String("-r"))
             {
                 ++i;
-                
+
                 if (i == argc)
                 {
                     ok = false;
@@ -795,12 +795,12 @@ QList<RestartFile> parseCommandLine(int argc, char **argv,
             else if (arg == QLatin1String("-n"))
             {
                 ++i;
-                
+
                 if (i == argc)
                 {
                     ok = false;
                     printHelp();
-                    
+
                     printError( QObject::tr(
                         "Cannot interpret the number of moves from %1. "
                         "This should be set using the argument "
@@ -815,12 +815,12 @@ QList<RestartFile> parseCommandLine(int argc, char **argv,
             else if (arg == QLatin1String("-s"))
             {
                 ++i;
-                
+
                 if (i == argc)
                 {
                     ok = false;
                     printHelp();
-                    
+
                     printError( QObject::tr(
                         "Cannot interpret whether or not to record statistics. "
                         "This should be set using the argument "
@@ -835,7 +835,7 @@ QList<RestartFile> parseCommandLine(int argc, char **argv,
             {
                 ok = false;
                 printHelp();
-                
+
                 printError( QObject::tr("Unrecognised argument \"1\".").arg(arg) );
             }
         }
@@ -844,20 +844,20 @@ QList<RestartFile> parseCommandLine(int argc, char **argv,
             //this must be a restart file name - add it to the list
             //with the current number of moves and state of recording statistics
             RestartFile restart_file;
-            
+
             restart_file.filename = arg;
             restart_file.nmoves = nmoves;
             restart_file.record_stats = record_stats;
-            
+
             restart_files.append(restart_file);
         }
-        
+
         ++i;
     }
-    
+
     if (ok and restart_files.isEmpty())
         printHelp();
-    
+
     return restart_files;
 }
 
@@ -874,7 +874,7 @@ int main(int argc, char **argv)
         char buffer[128];
         gethostname(buffer, 128);
         hostname = buffer;
-    
+
     #else
         username = "unknown";
         hostname = username;
@@ -933,11 +933,11 @@ int main(int argc, char **argv)
             bool ok, test_load;
 
             QList<RestartFile> restart_files = parseCommandLine(argc, argv,
-                                                                repeat, time, 
+                                                                repeat, time,
                                                                 ok, test_load);
 
             int nrestarts = restart_files.count();
-        
+
             if (not ok)
             {
                 status = -1;
@@ -949,12 +949,12 @@ int main(int argc, char **argv)
                 {
                     printOut( QObject::tr("Loading restart file %1...")
                                 .arg(restart_files.at(i).filename) );
-                
-                    try 
+
+                    try
                     {
                         testLoad(restart_files.at(i).filename);
                     }
-                    catch(const SireError::exception &e) 
+                    catch(const SireError::exception &e)
                     {
                         printError(e);
                     }
@@ -964,13 +964,13 @@ int main(int argc, char **argv)
             {
                 printOut( QObject::tr("Number of repetitions equals %1.")
                             .arg(repeat) );
-                
+
                 if (time > 0)
-                    printOut( QObject::tr("Total allowed runtime equals %1.") 
+                    printOut( QObject::tr("Total allowed runtime equals %1.")
                                   .arg(timeToString(time)) );
 
                 printBox( QObject::tr("Restart files to run:") );
-                
+
                 for (int i=0; i<nrestarts; ++i)
                 {
                     const RestartFile &r = restart_files.at(i);
@@ -988,11 +988,11 @@ int main(int argc, char **argv)
                 for (int ir=0; ir<repeat; ++ir)
                 {
                     const QDateTime time_start = QDateTime::currentDateTime();
-                
+
                     if (repeat > 1)
                         printOut( QObject::tr("\nRunning repetition %1 of %2...")
                                     .arg(ir+1).arg(repeat) );
-            
+
                     printOut( QObject::tr("Running %1 simulation(s)...").arg(nrestarts) );
 
                     Nodes nodes = Cluster::getNodes(nrestarts);
@@ -1008,12 +1008,12 @@ int main(int argc, char **argv)
                     int nskipped = 0;
 
                     printOut( QObject::tr("About to loop over simulations to submit") );
- 
+
                     //submit all of the simulations
                     for (int i=0; i<nrestarts; ++i)
                     {
                         const RestartFile &r = restart_files.at(i);
-                
+
                         if (error_count[i] > 5)
                         {
                             printOut( QObject::tr(
@@ -1024,8 +1024,8 @@ int main(int argc, char **argv)
 
                             continue;
                         }
-                    
-                        try 
+
+                        try
                         {
                             //create a workpacket for this simulation
                             printOut( QObject::tr("Creating workpacket %1...")
@@ -1034,23 +1034,23 @@ int main(int argc, char **argv)
                                                                      r.nmoves,
                                                                      r.record_stats);
 
-                            printOut( QObject::tr("Running simulation %1 of %2: %3") 
+                            printOut( QObject::tr("Running simulation %1 of %2: %3")
                                         .arg(i+1).arg(nrestarts).arg(r.filename) );
-                        
+
                             Node node = nodes.getNode();
-                        
+
                             printOut( QObject::tr("Starting the job...") );
-                            promises.append( node.startJob(workpacket) ); 
+                            promises.append( node.startJob(workpacket) );
                             running_files.append( r.filename );
                             restart_idxs.append( i );
                         }
-                        catch (const SireError::exception &e) 
+                        catch (const SireError::exception &e)
                         {
                             printOut( QObject::tr("There was a problem when reading %1.")
                                         .arg(r.filename) );
 
                             SireError::printError(e);
-                            
+
                             error_count[i] += 1;
                         }
                     }
@@ -1061,10 +1061,10 @@ int main(int argc, char **argv)
                                     "All restart files have finished in error!") );
                         break;
                     }
-                
+
                     printOut( QObject::tr(
                                     "Waiting for all submitted jobs to finish...") );
-                
+
                     //wait for them all to finish
                     for (int i=0; i < promises.count(); ++i)
                     {
@@ -1081,16 +1081,16 @@ int main(int argc, char **argv)
                             printOut( QObject::tr(
                                         "The simulation connected with %1 has finished.")
                                             .arg(running_files[i]) );
-                                
+
                             //get the name of the new binary restart file
                             QString newfile = getNextName(running_files[i]);
-                                
+
                             //save the files to the new binary restart file
                             saveRestartFile(promises[i].result(), newfile);
-                            
+
                             //update the name of this restart file (for repetitions)
                             restart_files[ restart_idxs[i] ].filename = newfile;
-                            
+
                             error_count[ restart_idxs[i] ] = 0;
                         }
                     }
@@ -1102,9 +1102,9 @@ int main(int argc, char **argv)
                         {
                             printOut( QObject::tr("There was a problem when running %1.")
                                         .arg(running_files[i]) );
-                        
+
                             error_count[ restart_idxs[i] ] += 1;
-                        
+
                             try
                             {
                                 promises[i].throwError();
@@ -1125,17 +1125,17 @@ int main(int argc, char **argv)
                           "took %3.")
                             .arg(ir+1).arg(repeat)
                             .arg(timeToString(work_time)) );
-                            
+
                     if (ir+1 != repeat and time > 0)
                     {
                         printOut( QObject::tr("Remaining time: %1.")
                                     .arg(timeToString(time - elapsed_time)) );
-                                    
+
                         if (elapsed_time + work_time + 600 >= time)
                         {
                             printOut( QObject::tr("There is not sufficient remaning "
                                 "time to complete another repetition. Exiting...") );
-                                
+
                             break;
                         }
                     }
@@ -1146,7 +1146,7 @@ int main(int argc, char **argv)
         {
             //this is one of the compute nodes...
             printBox( QObject::tr(
-                        "%4@%5: Starting one of the compute nodes (%1 of %2): nThreads()=%3") 
+                        "%4@%5: Starting one of the compute nodes (%1 of %2): nThreads()=%3")
                             .arg(Cluster::getRank()).arg(Cluster::getCount())
                             .arg(ppn)
                             .arg(username,hostname) );
@@ -1159,13 +1159,13 @@ int main(int argc, char **argv)
             //blocks while it is running
             printOut( QObject::tr("compute%1 waiting to start...")
                                 .arg(Cluster::getRank()) );
-                                
+
             #ifdef SIRE_USE_MPI
                 MPI_Barrier( MPI_COMM_WORLD );
             #endif
- 
+
             printOut( QObject::tr("compute%1 starting...").arg(Cluster::getRank()) );
- 
+
             Cluster::start(ppn);
 
             printOut( QObject::tr("compute%1 waiting to wait...")
@@ -1179,7 +1179,7 @@ int main(int argc, char **argv)
 
             Cluster::wait();
             status = 0;
-            
+
             printOut( QObject::tr("compute%1 finished").arg(Cluster::getRank()) );
         }
     }
@@ -1205,7 +1205,7 @@ int main(int argc, char **argv)
     #ifdef SIRE_USE_MPI
         int rank;
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    
+
         if (rank == 0)
         {
             printOut( QObject::tr("Shutting down the cluster...") );
@@ -1226,6 +1226,6 @@ int main(int argc, char **argv)
         Cluster::shutdown();
         printOut( QObject::tr("The entire cluster has now shutdown.") );
     #endif
-    
+
     return status;
 }

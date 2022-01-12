@@ -3,7 +3,7 @@
 #include "SireMaths/multidouble.h"
 #include "SireMaths/rangenerator.h"
 
-#include <QTime>
+#include <QElapsedTimer>
 #include <QVector>
 
 #include <QDebug>
@@ -13,7 +13,7 @@ static const int NLOOPS = 2000000;
 
 using namespace SireMaths;
 
-void compareErrors(const QVector<MultiFloat> &exact, const QVector<MultiFloat> &approx, 
+void compareErrors(const QVector<MultiFloat> &exact, const QVector<MultiFloat> &approx,
                    const QVector<MultiFloat> &approx_nr)
 {
     MultiFloat err(0), err_nr(0);
@@ -34,7 +34,7 @@ void compareErrors(const QVector<MultiFloat> &exact, const QVector<MultiFloat> &
 
 int main(int argc, const char **argv)
 {
-    QTime t;
+    QElapsedTimer t;
 
     qDebug() << "Calculating lots of square roots and approximations....";
 

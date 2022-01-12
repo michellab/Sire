@@ -30,7 +30,7 @@
 
 #include <QMutex>
 #include <QList>
-#include <QTime>
+#include <QElapsedTimer>
 
 #include <boost/weak_ptr.hpp>
 
@@ -133,7 +133,7 @@ public:
 
     /** The HANDLE of the job to which the process is assigned */
     HANDLE job_handle;
-    
+
     /** Kill the whole process group */
     void kill_process_group()
     {
@@ -431,7 +431,7 @@ bool Process::wait(int ms)
     if (d.get() == 0)
         return true;
 
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     #if QT_VERSION >= 0x040300
