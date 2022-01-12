@@ -102,7 +102,7 @@ if ( ANACONDA_BUILD )
 #  set( SIRE_APP "${MINGW_BASE}" )
 
 else()
-  # Option to set the install directory of Sire
+  #ï¿½Option to set the install directory of Sire
   if (NOT DEFINED SIRE_APP)
     set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
             "The full path to the sire.app installed Sire application." )
@@ -144,6 +144,8 @@ message( STATUS "Setting C compiler to ${SIRE_C_COMPILER} and C++ compiler to ${
 
 # name the project
 project (SirePython CXX C)
+
+message( STATUS "PROJECT COMPLETED" )
 
 set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
          "Prefix prepended to install directories" FORCE )
