@@ -437,10 +437,10 @@ SelectResult::SelectResult() : ConcreteProperty<SelectResult,Property>()
 SelectResult::SelectResult(const Molecules &molecules)
              : ConcreteProperty<SelectResult,Property>()
 {
-    auto molnums = molecules.molNums().toList();
+    auto molnums = molecules.molNums().values();
     std::sort(molnums.begin(), molnums.end());
 
-    for (const auto molnum : molnums)
+    for (const auto &molnum : molnums)
     {
         const auto &view = molecules[molnum];
 
@@ -847,7 +847,7 @@ SelectResultMover::SelectResultMover()
 SelectResultMover::SelectResultMover(const SelectResult &other)
                   : ConcreteProperty<SelectResultMover,Property>()
 {
-    for (const auto view : other.views())
+    for (const auto &view : other.views())
     {
         molviews.append( view.move() );
     }
@@ -918,7 +918,7 @@ SelectResult SelectResultMover::commit() const
 {
     QList<ViewsOfMol> views;
 
-    for (const auto view : molviews)
+    for (const auto &view : molviews)
     {
         views.append( view.commit() );
     }

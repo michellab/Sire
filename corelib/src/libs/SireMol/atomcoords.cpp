@@ -691,7 +691,7 @@ QVector<Vector> AtomProperty<Vector>::toVector(const AtomSelection &selected_ato
             }
             else
             {
-                QList<Index> idxs = selected_atoms.selectedAtoms(i).toList();
+                QList<Index> idxs = selected_atoms.selectedAtoms(i).values();
                 std::sort(idxs.begin(), idxs.end());
 
                 foreach (Index idx, idxs)
@@ -729,7 +729,7 @@ QVector<Vector> AtomProperty<Vector>::toVector(const AtomSelection &selected_ato
             }
             else
             {
-                QList<Index> idxs = selected_atoms.selectedAtoms(i).toList();
+                QList<Index> idxs = selected_atoms.selectedAtoms(i).values();
                 std::sort(idxs.begin(), idxs.end());
 
                 foreach (Index idx, idxs)
@@ -809,7 +809,7 @@ void AtomProperty<Vector>::copyFrom(const QVector<Vector> &values,
             {
                 QVector<Vector> new_coords = coords.at(i).toVector();
 
-                QList<Index> idxs = selected_atoms.selectedAtoms(i).toList();
+                QList<Index> idxs = selected_atoms.selectedAtoms(i).values();
                 std::sort(idxs.begin(), idxs.end());
 
                 foreach (Index idx, idxs)
@@ -842,7 +842,7 @@ void AtomProperty<Vector>::copyFrom(const QVector<Vector> &values,
             {
                 QVector<Vector> new_coords = coords.at(i).toVector();
 
-                QList<Index> idxs = selected_atoms.selectedAtoms(i).toList();
+                QList<Index> idxs = selected_atoms.selectedAtoms(i).values();
                 std::sort(idxs.begin(), idxs.end());
 
                 foreach (Index idx, idxs)

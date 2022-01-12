@@ -86,13 +86,13 @@ SIREMOL_EXPORT bool has_metadata(const Segment*, const MoleculeData &moldata,
 } // end of namespace detail
 
 /** This template class provides a way to manipulate the selection
-    of parts of a a molecule, e.g. Selector<Atom> provides a 
-    MoleculeView that has a user-configurable view of an 
+    of parts of a a molecule, e.g. Selector<Atom> provides a
+    MoleculeView that has a user-configurable view of an
     arbitrary set of atoms. This class is used by the code
     whenever multiple groups from within the same molecule
-    are returned, e.g. when returning all residues that 
+    are returned, e.g. when returning all residues that
     have a particular name
-    
+
     @author Christopher Woods
 */
 template<class T>
@@ -100,41 +100,41 @@ class Selector : public SireBase::ConcreteProperty<Selector<T>,MoleculeView>
 {
 public:
     Selector();
-    
+
     Selector(const T &view);
 
     Selector(const MoleculeData &moldata);
-    
+
     Selector(const MoleculeData &moldata,
              const AtomSelection &selected_atoms);
-    
+
     Selector(const MoleculeData &moldata, const typename T::ID &viewid);
 
     Selector(const MoleculeData &moldata, const QList<typename T::Index> &idxs);
 
     Selector(const Selector<T> &other);
-    
+
     ~Selector();
-    
+
     Selector<T>& operator=(const Selector<T> &other);
     Selector<T>& operator=(const T &view);
 
     static const char* typeName();
-    
+
     Selector<T>* clone() const;
 
     bool operator==(const Selector<T> &other) const;
     bool operator!=(const Selector<T> &other) const;
-    
+
     Selector<T> operator+(const Selector<T> &other) const;
     Selector<T> operator-(const Selector<T> &other) const;
-    
+
     Selector<T> operator+(const typename T::ID &id) const;
     Selector<T> operator-(const typename T::ID &id) const;
-    
+
     Selector<T> operator+(const T &view) const;
     Selector<T> operator-(const T &view) const;
-    
+
     int nViews() const;
 
     MolViewPtr operator[](int i) const;
@@ -151,14 +151,14 @@ public:
     typename T::Index index(int i) const;
 
     QString toString() const;
-    
+
     bool isEmpty() const;
     bool selectedAll() const;
 
     Selector<T> add(const Selector<T> &other) const;
     Selector<T> add(const T &view) const;
     Selector<T> add(const typename T::ID &id) const;
-    
+
     Selector<T> subtract(const Selector<T> &other) const;
     Selector<T> subtract(const T &view) const;
     Selector<T> subtract(const typename T::ID &id) const;
@@ -166,9 +166,9 @@ public:
     Selector<T> intersection(const Selector<T> &other) const;
     Selector<T> intersection(const T &view) const;
     Selector<T> intersection(const typename T::ID &id) const;
-    
+
     Selector<T> invert() const;
-    
+
     bool intersects(const Selector<T> &other) const;
     bool intersects(const T &view) const;
     bool intersects(const typename T::ID &id) const;
@@ -180,15 +180,15 @@ public:
     AtomSelection selection() const;
     AtomSelection selection(int i) const;
     AtomSelection selection(int i, int j) const;
-    
+
     Mover< Selector<T> > move() const;
     Mover< Selector<T> > move(int i) const;
     Mover< Selector<T> > move(int i, int j) const;
-    
+
     Evaluator evaluate() const;
     Evaluator evaluate(int i) const;
     Evaluator evaluate(int i, int j) const;
-    
+
     Selector<T> selector() const;
     Selector<T> selector(int i) const;
     Selector<T> selector(int i, int j) const;
@@ -204,7 +204,7 @@ public:
 
     template<class V>
     QList<V> property(const PropertyName &key) const;
-    
+
     template<class V>
     QList<V> metadata(const PropertyName &metakey) const;
 
@@ -215,20 +215,20 @@ public:
 protected:
     template<class V>
     void setProperty(const QString &key, const QList<V> &values);
-    
+
     template<class V>
     void setMetadata(const QString &metakey, const QList<V> &values);
-    
+
     template<class V>
     void setMetadata(const QString &key, const QString &metakey,
                      const QList<V> &values);
 
     template<class V>
     void setProperty(const QString &key, const V &value);
-    
+
     template<class V>
     void setMetadata(const QString &metakey, V &value);
-    
+
     template<class V>
     void setMetadata(const QString &key, const QString &metakey,
                      const V &value);
@@ -240,7 +240,7 @@ private:
     /** The list of indicies of the selected parts
         of the molecule */
     QList<typename T::Index> idxs;
-    
+
     /** The set of indicies of the selected parts - used
         for rapid searching */
     QSet<typename T::Index> idxs_set;
@@ -258,11 +258,11 @@ Selector<T>::Selector() : SireBase::ConcreteProperty<Selector<T>,MoleculeView>()
     data is in 'moldata' */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-Selector<T>::Selector(const MoleculeData &moldata) 
+Selector<T>::Selector(const MoleculeData &moldata)
             : SireBase::ConcreteProperty<Selector<T>,MoleculeView>(moldata)
 {
     idxs = detail::getAll<T>(moldata.info());
-    idxs_set = idxs.toSet();
+    idxs_set = QSet<typename T::Index>(idxs.constBegin(), idxs.constEnd());
 }
 
 /** Construct the set of all groups for the molecule whose data is in 'moldata'
@@ -274,7 +274,7 @@ Selector<T>::Selector(const MoleculeData &moldata,
             : SireBase::ConcreteProperty<Selector<T>,MoleculeView>(moldata)
 {
     int nats = moldata.info().nAtoms();
-    
+
     //ensure all of the indexes are valid!
     foreach (typename T::Index idx, indexes)
     {
@@ -282,12 +282,12 @@ Selector<T>::Selector(const MoleculeData &moldata,
     }
 
     idxs = indexes;
-    idxs_set = idxs.toSet();
+    idxs_set = QSet<typename T::Index>(idxs.constBegin(), idxs.constEnd());
 }
 
 /** Construct the set of all groups that contain at least
     one of the atoms selected in 'selected_atoms'
-    
+
     \throw SireError::incompatible_error
 */
 template<class T>
@@ -297,22 +297,22 @@ Selector<T>::Selector(const MoleculeData &moldata,
             : SireBase::ConcreteProperty<Selector<T>,MoleculeView>(moldata)
 {
     idxs = detail::getAll<T>(moldata.info(), selected_atoms);
-    idxs_set = idxs.toSet();
+    idxs_set = QSet<typename T::Index>(idxs.constBegin(), idxs.constEnd());
 }
 
 /** Construct the set that contains only the view 'view' */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-Selector<T>::Selector(const T &view) 
+Selector<T>::Selector(const T &view)
             : SireBase::ConcreteProperty<Selector<T>,MoleculeView>(view)
 {
     idxs.append(view.index());
     idxs_set.insert(view.index());
 }
 
-/** Construct the set of parts that match the ID 'id' from the 
+/** Construct the set of parts that match the ID 'id' from the
     molecule whose data is in 'moldata'
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::missing_residue
     \throw SireMol::missing_chain
@@ -322,12 +322,12 @@ Selector<T>::Selector(const T &view)
 */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-Selector<T>::Selector(const MoleculeData &moldata, 
+Selector<T>::Selector(const MoleculeData &moldata,
                       const typename T::ID &viewid)
             : SireBase::ConcreteProperty<Selector<T>,MoleculeView>(moldata)
 {
     idxs = viewid.map(moldata.info());
-    idxs_set = idxs.toSet();
+    idxs_set = QSet<typename T::Index>(idxs.constBegin(), idxs.constEnd());
 }
 
 /** Copy constructor */
@@ -352,7 +352,7 @@ Selector<T>& Selector<T>::operator=(const Selector<T> &other)
     MoleculeView::operator=(other);
     idxs = other.idxs;
     idxs_set = other.idxs_set;
-    
+
     return *this;
 }
 
@@ -362,13 +362,13 @@ SIRE_OUTOFLINE_TEMPLATE
 Selector<T>& Selector<T>::operator=(const T &view)
 {
     MoleculeView::operator=(view);
-    
+
     idxs.clear();
     idxs.append(view.index());
-    
+
     idxs_set.clear();
     idxs_set.insert(view.index());
-    
+
     return *this;
 }
 
@@ -453,8 +453,8 @@ void Selector<T>::_pvt_sub(typename T::Index idx)
 
 /** Return the sum of this selection with 'other' - items from
     'other' are appended to this set only if they are not already
-    in this set 
-    
+    in this set
+
     \throw SireError::incompatible_error
 */
 template<class T>
@@ -462,14 +462,14 @@ SIRE_OUTOFLINE_TEMPLATE
 Selector<T> Selector<T>::add(const Selector<T> &other) const
 {
     MoleculeView::assertSameMolecule(other);
-    
+
     Selector<T> ret(*this);
-    
+
     foreach (typename T::Index idx, other.idxs)
     {
         ret._pvt_add(idx);
     }
-    
+
     return ret;
 }
 
@@ -486,8 +486,8 @@ Selector<T> Selector<T>::add(const T &view) const
 }
 
 /** Return the set that has all views that match the ID 'id'
-    added 
-    
+    added
+
     \throw SireMol::missing_atom
     \throw SireMol::missing_residue
     \throw SireMol::missing_chain
@@ -501,16 +501,16 @@ Selector<T> Selector<T>::add(const typename T::ID &id) const
 {
     Selector<T> ret(*this);
     QList<typename T::Index> idxs = id.map(this->d->info());
-    
+
     foreach (typename T::Index idx, idxs)
     {
         ret._pvt_add(idx);
     }
-    
+
     return ret;
 }
 
-/** Subtract all of the views in 'other' from this set 
+/** Subtract all of the views in 'other' from this set
 
     \throw SireError::incompatible_error
 */
@@ -519,18 +519,18 @@ SIRE_OUTOFLINE_TEMPLATE
 Selector<T> Selector<T>::subtract(const Selector<T> &other) const
 {
     MoleculeView::assertSameMolecule(other);
-    
+
     Selector<T> ret(*this);
-    
+
     foreach (typename T::Index idx, other.idxs)
     {
         ret._pvt_sub(idx);
     }
-    
+
     return ret;
 }
 
-/** Remove the view 'view' from this set 
+/** Remove the view 'view' from this set
 
     \throw SireError::incompatible_error
 */
@@ -539,16 +539,16 @@ SIRE_OUTOFLINE_TEMPLATE
 Selector<T> Selector<T>::subtract(const T &view) const
 {
     MoleculeView::assertSameMolecule(view);
-    
+
     Selector<T> ret(*this);
     ret._pvt_sub(view.index());
-    
+
     return ret;
 }
 
 /** Subtract all of the views that match the ID 'id' from
     this set
-      
+
     \throw SireMol::missing_atom
     \throw SireMol::missing_residue
     \throw SireMol::missing_chain
@@ -561,14 +561,14 @@ SIRE_OUTOFLINE_TEMPLATE
 Selector<T> Selector<T>::subtract(const typename T::ID &id) const
 {
     QList<typename T::Index> idxs = id.map(this->d->info());
-    
+
     Selector<T> ret(*this);
-    
+
     foreach (typename T::Index idx, idxs)
     {
         ret._pvt_sub(idx);
     }
-    
+
     return ret;
 }
 
@@ -704,7 +704,7 @@ T Selector<T>::operator()(int i) const
 /** Return the range of views from index i to j in this set. This
     supports negative indexing, and also, if j is less then i, then
     the order of views in the returned set is reversed
-    
+
     \throw SireError::invalid_index
 */
 template<class T>
@@ -713,11 +713,11 @@ Selector<T> Selector<T>::operator()(int i, int j) const
 {
     i = SireID::Index(i).map(idxs.count());
     j = SireID::Index(j).map(idxs.count());
-    
+
     Selector<T> ret(*this);
     ret.idxs.clear();
     ret.idxs_set.clear();
-        
+
     if (i <= j)
     {
         for ( ; i<=j; ++i)
@@ -732,7 +732,7 @@ Selector<T> Selector<T>::operator()(int i, int j) const
             ret._pvt_add( typename T::Index(i) );
         }
     }
-    
+
     return ret;
 }
 
@@ -746,8 +746,8 @@ int Selector<T>::nViews() const
 
 /** Return the intersection of this set with 'other' - the
     views in both sets are returned, in the order that they
-    appear in this set 
-    
+    appear in this set
+
     \throw SireError::incompatible_error
 */
 template<class T>
@@ -755,9 +755,9 @@ SIRE_OUTOFLINE_TEMPLATE
 Selector<T> Selector<T>::intersection(const Selector<T> &other) const
 {
     MoleculeView::assertSameMolecule(other);
-    
+
     Selector<T> ret(*this);
-    
+
     if (idxs.count() <= other.idxs.count())
     {
         foreach (typename T::Index idx, idxs)
@@ -774,12 +774,12 @@ Selector<T> Selector<T>::intersection(const Selector<T> &other) const
                 ret._pvt_sub(idx);
         }
     }
-    
+
     return ret;
 }
 
-/** Return the intersection of this set with 'view' 
-    
+/** Return the intersection of this set with 'view'
+
     \throw SireError::incompatible_error
 */
 template<class T>
@@ -801,7 +801,7 @@ Selector<T> Selector<T>::intersection(const T &view) const
 }
 
 /** Return the intersection of this set with the views identified
-    by the ID 'id' 
+    by the ID 'id'
 
     \throw SireMol::missing_atom
     \throw SireMol::missing_residue
@@ -815,13 +815,14 @@ SIRE_OUTOFLINE_TEMPLATE
 Selector<T> Selector<T>::intersection(const typename T::ID &id) const
 {
     QList<typename T::Index> other_idxs = id.map(this->d->info());
-    
+
     Selector<T> ret(*this);
-    
+
     if (idxs.count() <= other_idxs.count())
     {
-        QSet<typename T::Index> other_idxs_set = other_idxs.toSet();
-        
+        QSet<typename T::Index> other_idxs_set(other_idxs.constBegin(),
+                                               other_idxs.constEnd());
+
         foreach (typename T::Index idx, idxs)
         {
             if (not other_idxs_set.contains(idx))
@@ -836,7 +837,7 @@ Selector<T> Selector<T>::intersection(const typename T::ID &id) const
                 ret._pvt_sub(idx);
         }
     }
-    
+
     return ret;
 }
 
@@ -846,17 +847,17 @@ SIRE_OUTOFLINE_TEMPLATE
 Selector<T> Selector<T>::invert() const
 {
     QList<typename T::Index> all_idxs = detail::getAll<T>(this->d->info());
-    
+
     Selector<T> ret(*this);
     ret.idxs.clear();
     ret.idxs_set.clear();
-    
+
     foreach (typename T::Index idx, all_idxs)
     {
         if (not idxs_set.contains(idx))
             ret._pvt_add(idx);
     }
-    
+
     return ret;
 }
 
@@ -875,7 +876,7 @@ bool Selector<T>::contains(const Selector<T> &other) const
             if (not idxs_set.contains(idx))
                 return false;
         }
-    
+
         return true;
     }
 }
@@ -890,7 +891,7 @@ SIRE_OUTOFLINE_TEMPLATE
 bool Selector<T>::intersects(const Selector<T> &other) const
 {
     MoleculeView::assertSameMolecule(other);
-    
+
     if (idxs_set.count() <= other.idxs_set.count())
     {
         foreach (typename T::Index idx, idxs)
@@ -907,7 +908,7 @@ bool Selector<T>::intersects(const Selector<T> &other) const
                 return true;
         }
     }
-    
+
     return false;
 }
 
@@ -920,14 +921,14 @@ bool Selector<T>::contains(const T &view) const
     return idxs_set.contains(view.index());
 }
 
-/** Return whether or not this set contains all of the  
+/** Return whether or not this set contains all of the
     view identified by the ID 'id' */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 bool Selector<T>::contains(const typename T::ID &id) const
 {
     QList<typename T::Index> id_idxs = id.map(this->d->info());
-    
+
     if (idxs.count() < id_idxs.count())
         return false;
     else
@@ -937,7 +938,7 @@ bool Selector<T>::contains(const typename T::ID &id) const
             if (not idxs_set.contains(idx))
                 return false;
         }
-        
+
         return true;
     }
 }
@@ -948,7 +949,7 @@ SIRE_OUTOFLINE_TEMPLATE
 bool Selector<T>::intersects(const T &view) const
 {
     return this->isSameMolecule(view) and idxs.contains(view.index());
-} 
+}
 
 /** Return whether this set contains some of the views
     identified by the ID 'id' */
@@ -957,11 +958,12 @@ SIRE_OUTOFLINE_TEMPLATE
 bool Selector<T>::intersects(const typename T::ID &id) const
 {
     QList<typename T::Index> id_idxs = id.map(this->d->info());
-    
+
     if (idxs.count() <= id_idxs.count())
     {
-        QSet<typename T::Index> id_idxs_set = id_idxs.toSet();
-        
+        QSet<typename T::Index> id_idxs_set(id_idxs.constBegin(),
+                                            id_idxs.constEnd());
+
         foreach (typename T::Index idx, idxs)
         {
             if (id_idxs_set.contains(idx))
@@ -976,7 +978,7 @@ bool Selector<T>::intersects(const typename T::ID &id) const
                 return true;
         }
     }
-    
+
     return false;
 }
 
@@ -986,14 +988,14 @@ SIRE_OUTOFLINE_TEMPLATE
 AtomSelection Selector<T>::selection() const
 {
     AtomSelection selected_atoms(*(this->d));
-    
+
     selected_atoms.selectNone();
-    
+
     foreach (typename T::Index idx, idxs)
     {
         selected_atoms.select(idx);
     }
-    
+
     return selected_atoms;
 }
 
@@ -1006,9 +1008,9 @@ SIRE_OUTOFLINE_TEMPLATE
 AtomSelection Selector<T>::selection(int i) const
 {
     AtomSelection selected_atoms(*(this->d));
-    
+
     selected_atoms.selectOnly( idxs.at( SireID::Index(i).map(idxs.count()) ) );
-    
+
     return selected_atoms;
 }
 
@@ -1022,18 +1024,18 @@ AtomSelection Selector<T>::selection(int i, int j) const
 {
     AtomSelection selected_atoms(*(this->d));
     selected_atoms.selectNone();
-    
+
     i = SireID::Index(i).map(idxs.count());
     j = SireID::Index(j).map(idxs.count());
-    
+
     if (i > j)
         qSwap(i,j);
-    
+
     for ( ; i<=j; ++i)
     {
         selected_atoms = selected_atoms.select( idxs.at(i) );
     }
-    
+
     return selected_atoms;
 }
 
@@ -1062,7 +1064,7 @@ Mover< Selector<T> > Selector<T>::move(int i, int j) const
     return Mover< Selector<T> >(*this, this->selection(i,j));
 }
 
-/** Return an evaluator that can evaluate properties over all 
+/** Return an evaluator that can evaluate properties over all
     of the views in this set */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -1071,7 +1073,7 @@ Evaluator Selector<T>::evaluate() const
     return Evaluator(*this);
 }
 
-/** Return an evaluator that can evaluate properties over the 
+/** Return an evaluator that can evaluate properties over the
     ith view in this set */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -1080,7 +1082,7 @@ Evaluator Selector<T>::evaluate(int i) const
     return Evaluator(*this, this->selection(i));
 }
 
-/** Return an evaluator that can evaluate properties over  
+/** Return an evaluator that can evaluate properties over
     the ith to jth views in this set */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -1097,9 +1099,9 @@ Selector<T> Selector<T>::selector() const
     return *this;
 }
 
-/** Return a selector for the ith view that can change the 
+/** Return a selector for the ith view that can change the
     selection of that view
-    
+
     \throw SireError::invalid_index
 */
 template<class T>
@@ -1109,7 +1111,7 @@ Selector<T> Selector<T>::selector(int i) const
     return Selector<T>(*(this->d), this->selection(i));
 }
 
-/** Return a selector for the ith to jth views 
+/** Return a selector for the ith to jth views
 
     \throw SireError::invalid_index
 */
@@ -1122,7 +1124,7 @@ Selector<T> Selector<T>::selector(int i, int j) const
 
 /** Return a list of the values of the property called 'key' for each
     of the views in this set, in the order that they appear in this set.
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
 */
@@ -1137,7 +1139,7 @@ QList<V> Selector<T>::property(const PropertyName &key) const
 
 /** Return a list of all of the metadata called 'metakey' for each
     of the views in this set, in the order they appear in this set.
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
 */
@@ -1147,13 +1149,13 @@ SIRE_OUTOFLINE_TEMPLATE
 QList<V> Selector<T>::metadata(const PropertyName &metakey) const
 {
     T *ptr = 0;
-    return detail::get_metadata<V>(ptr, this->data(), 
+    return detail::get_metadata<V>(ptr, this->data(),
                                    this->idxs, metakey);
 }
 
 /** Return a list of all of the metadata called 'key'/'metakey' for each
     of the views in this set, in the order they appear in this set.
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
 */
@@ -1164,14 +1166,14 @@ QList<V> Selector<T>::metadata(const PropertyName &key,
                                const PropertyName &metakey) const
 {
     T *ptr = 0;
-    return detail::get_metadata<V>(ptr, this->data(), this->idxs, 
+    return detail::get_metadata<V>(ptr, this->data(), this->idxs,
                                    key, metakey);
 }
 
 /** Set the property at key 'key' for all of the views in this set
     to the values in 'values', with the values given in the same
     order as the views in this set.
-    
+
     \throw SireError::incompatible_error
     \throw SireError::invalid_cast
 */
@@ -1187,7 +1189,7 @@ void Selector<T>::setProperty(const QString &key, const QList<V> &values)
 /** Set the metadata at key 'metakey' for all of the views in this set
     to the values in 'values', with the values given in the same
     order as the views in this set.
-    
+
     \throw SireError::incompatible_error
     \throw SireError::invalid_cast
 */
@@ -1204,7 +1206,7 @@ void Selector<T>::setMetadata(const QString &metakey, const QList<V> &values)
 /** Set the metadata at key 'key'/'metakey' for all of the views in this set
     to the values in 'values', with the values given in the same
     order as the views in this set.
-    
+
     \throw SireError::incompatible_error
     \throw SireError::invalid_cast
 */
@@ -1218,9 +1220,9 @@ void Selector<T>::setMetadata(const QString &key, const QString &metakey,
     detail::set_metadata<V>(ptr, this->data(), this->idxs, key, metakey, values);
 }
 
-/** Set the property at key 'key' for all of the views in this set 
+/** Set the property at key 'key' for all of the views in this set
     to the value 'value'
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -1232,9 +1234,9 @@ void Selector<T>::setProperty(const QString &key, const V &value)
     detail::set_property<V>(ptr, this->data(), this->idxs, key, value);
 }
 
-/** Set the metadata at metakey 'metakey' for all of the views in this set 
+/** Set the metadata at metakey 'metakey' for all of the views in this set
     to the value 'value'
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -1246,9 +1248,9 @@ void Selector<T>::setMetadata(const QString &metakey, V &value)
     detail::set_metadata<V>(ptr, this->data(), this->idxs, metakey, value);
 }
 
-/** Set the metadata at key 'key'/'metakey' for all of the views in this set 
+/** Set the metadata at key 'key'/'metakey' for all of the views in this set
     to the value 'value'
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -1282,8 +1284,8 @@ bool Selector<T>::hasMetadata(const PropertyName &metakey) const
 }
 
 /** Return whether or not the property at key 'key' for the views
-    of this selector has metadata at metakey 'metakey' 
-    
+    of this selector has metadata at metakey 'metakey'
+
     \throw SireBase::missing_property
 */
 template<class T>
@@ -1321,7 +1323,7 @@ QStringList Selector<T>::metadataKeys() const
 
 /** Return all of the metakeys for the metadata attached to the
     parts of this selection for the property at key 'key'
-    
+
     \throw SireBase::missing_property
 */
 template<class T>

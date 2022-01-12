@@ -54,8 +54,8 @@ namespace SireID
 {
 
 /** This class holds a set of IDs, thereby allowing for
-    "and" matching of IDs 
-    
+    "and" matching of IDs
+
     @author Christopher Woods
 */
 template<class ID>
@@ -73,42 +73,42 @@ public:
     IDAndSet();
     IDAndSet(const ID &id);
     IDAndSet(const ID &id0, const ID &id1);
-    
+
     IDAndSet(const QList<typename ID::Identifier> &ids);
-    
+
     template<class T>
     IDAndSet(const T &ids);
-    
+
     IDAndSet(const IDAndSet<ID> &other);
-    
+
     ~IDAndSet();
-    
+
     static const char* typeName();
-    
+
     const char* what() const;
-    
+
     IDAndSet<ID>* clone() const;
-    
+
     bool isNull() const;
-    
+
     uint hash() const;
-                
+
     QString toString() const;
 
     const QSet<Identifier>& IDs() const;
-    
+
     IDAndSet<ID>& operator=(const IDAndSet<ID> &other);
     IDAndSet<ID>& operator=(const ID &other);
-    
+
     bool operator==(const SireID::ID &other) const;
     bool operator!=(const SireID::ID &other) const;
-   
+
     bool operator==(const IDAndSet<ID> &other) const;
     bool operator!=(const IDAndSet<ID> &other) const;
-    
+
     bool operator==(const ID &other) const;
     bool operator!=(const ID &other) const;
-    
+
     QList<Index> map(const SearchObject &obj) const;
 
 private:
@@ -198,7 +198,7 @@ template<class ID>
 SIRE_OUTOFLINE_TEMPLATE
 IDAndSet<ID>::~IDAndSet()
 {}
-    
+
 template<class ID>
 SIRE_OUTOFLINE_TEMPLATE
 const char* IDAndSet<ID>::typeName()
@@ -234,17 +234,17 @@ SIRE_OUTOFLINE_TEMPLATE
 uint IDAndSet<ID>::hash() const
 {
     uint h = 0;
-    
+
     for (typename QSet<Identifier>::const_iterator it = ids.constBegin();
          it != ids.constEnd();
          ++it)
     {
         h += it->hash();
     }
-    
+
     return h;
 }
-            
+
 /** Return a string representatio of this ID */
 template<class ID>
 SIRE_OUTOFLINE_TEMPLATE
@@ -255,14 +255,14 @@ QString IDAndSet<ID>::toString() const
     else
     {
         QStringList idstrings;
-        
+
         for (typename QSet<Identifier>::const_iterator it = ids.constBegin();
              it != ids.constEnd();
              ++it)
         {
             idstrings.append( it->toString() );
         }
-    
+
         return QString("[ %1 ]").arg(idstrings.join( QObject::tr(" and ") ));
     }
 }
@@ -291,7 +291,7 @@ IDAndSet<ID>& IDAndSet<ID>::operator=(const ID &other)
 {
     ids.clear();
     this->add(other);
-    
+
     return *this;
 }
 
@@ -354,24 +354,26 @@ QList<typename ID::Index> IDAndSet<ID>::map(const typename ID::SearchObject &obj
     typename QSet<Identifier>::const_iterator it = ids.constBegin();
 
     QSet<Index> idxs;
-    
+
     try
     {
-        idxs = it->map(obj).toSet();
+        auto s = it->map(obj);
+        idxs = QSet<typename ID::Index>(s.begin(), s.end());
     }
     catch(...)
     {
         //no match
     }
-        
+
     for ( ++it; it != ids.constEnd(); ++it )
     {
         if (idxs.isEmpty())
             break;
-    
+
         try
         {
-            idxs.intersect( it->map(obj).toSet() );
+            auto s = it->map(obj);
+            idxs.intersect( QSet<typename ID::Index>(s.begin(), s.end()) );
         }
         catch(...)
         {
@@ -379,8 +381,8 @@ QList<typename ID::Index> IDAndSet<ID>::map(const typename ID::SearchObject &obj
             idxs.clear();
         }
     }
-    
-    QList<Index> matches = idxs.toList();
+
+    QList<Index> matches = idxs.values();
     ID::processMatches(matches, obj);
 
     return matches;

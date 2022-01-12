@@ -290,7 +290,7 @@ bool AtomSelection::selected(ResIdx residx) const
         return nselected > 0;
     else
     {
-        for ( const auto atomidx : info().cgAtomIdxs(residx) )
+        for ( const auto &atomidx : info().cgAtomIdxs(residx) )
         {
             if (this->_pvt_selected(atomidx))
                 return true;
@@ -2963,8 +2963,10 @@ AtomSelection& AtomSelection::intersect(const AtomSelection &other)
         }
         else
         {
-            QSet<CGIdx> cgidxs = this->selectedCutGroups().toSet();
-            cgidxs.intersect( other.selectedCutGroups().toSet() );
+            const auto s = this->selectedCutGroups();
+            QSet<CGIdx> cgidxs(s.begin(), s.end());
+            const auto t = other.selectedCutGroups();
+            cgidxs.intersect(QSet<CGIdx>(t.begin(), t.end()));
 
             int ncg = info().nCutGroups();
 
@@ -3891,162 +3893,162 @@ void AtomSelection::assertCompatibleWith(const AtomSelection &other) const
 
 AtomSelection& AtomSelection::select(const QSet<SireMol::ResIdx> &ids)
 {
-    return this->select(ids.toList());
+    return this->select(ids.values());
 }
 
 AtomSelection& AtomSelection::selectOnly(const QSet<SireMol::ResIdx> &ids)
 {
-    return this->selectOnly(ids.toList());
+    return this->selectOnly(ids.values());
 }
 
 AtomSelection& AtomSelection::selectOnly(const QSet<SireMol::CGIdx> &ids)
 {
-    return this->selectOnly(ids.toList());
+    return this->selectOnly(ids.values());
 }
 
 AtomSelection& AtomSelection::intersect(const QSet<SireMol::CGIdx> &ids)
 {
-    return this->intersect(ids.toList());
+    return this->intersect(ids.values());
 }
 
 AtomSelection& AtomSelection::subtract(const QSet<SireMol::ResIdx> &ids)
 {
-    return this->subtract(ids.toList());
+    return this->subtract(ids.values());
 }
 
 AtomSelection& AtomSelection::subtract(const QSet<SireMol::AtomIdx> &ids)
 {
-    return this->subtract(ids.toList());
+    return this->subtract(ids.values());
 }
 
 AtomSelection& AtomSelection::unite(const QSet<SireMol::SegIdx> &ids)
 {
-    return this->unite(ids.toList());
+    return this->unite(ids.values());
 }
 
 AtomSelection& AtomSelection::mask(const QSet<SireMol::AtomIdx> &ids)
 {
-    return this->select(ids.toList());
+    return this->select(ids.values());
 }
 
 AtomSelection& AtomSelection::selectOnly(const QSet<SireMol::ChainIdx> &ids)
 {
-    return this->selectOnly(ids.toList());
+    return this->selectOnly(ids.values());
 }
 
 AtomSelection& AtomSelection::select(const QSet<SireMol::ChainIdx> &ids)
 {
-    return this->select(ids.toList());
+    return this->select(ids.values());
 }
 
 AtomSelection& AtomSelection::mask(const QSet<SireMol::SegIdx> &ids)
 {
-    return this->mask(ids.toList());
+    return this->mask(ids.values());
 }
 
 AtomSelection& AtomSelection::intersect(const QSet<SireMol::SegIdx> &ids)
 {
-    return this->intersect(ids.toList());
+    return this->intersect(ids.values());
 }
 
 AtomSelection& AtomSelection::deselect(const QSet<SireMol::SegIdx> &ids)
 {
-    return this->deselect(ids.toList());
+    return this->deselect(ids.values());
 }
 
 AtomSelection& AtomSelection::unite(const QSet<SireMol::ResIdx> &ids)
 {
-    return this->unite(ids.toList());
+    return this->unite(ids.values());
 }
 
 AtomSelection& AtomSelection::select(const QSet<SireMol::CGIdx> &ids)
 {
-    return this->select(ids.toList());
+    return this->select(ids.values());
 }
 
 AtomSelection& AtomSelection::mask(const QSet<SireMol::ResIdx> &ids)
 {
-    return this->mask(ids.toList());
+    return this->mask(ids.values());
 }
 
 AtomSelection& AtomSelection::intersect(const QSet<SireMol::ResIdx> &ids)
 {
-    return this->intersect(ids.toList());
+    return this->intersect(ids.values());
 }
 
 AtomSelection& AtomSelection::deselect(const QSet<SireMol::ResIdx> &ids)
 {
-    return this->deselect(ids.toList());
+    return this->deselect(ids.values());
 }
 
 AtomSelection& AtomSelection::intersect(const QSet<SireMol::AtomIdx> &ids)
 {
-    return this->intersect(ids.toList());
+    return this->intersect(ids.values());
 }
 
 AtomSelection& AtomSelection::intersect(const QSet<SireMol::ChainIdx> &ids)
 {
-    return this->intersect(ids.toList());
+    return this->intersect(ids.values());
 }
 
 AtomSelection& AtomSelection::deselect(const QSet<SireMol::CGIdx> &ids)
 {
-    return this->deselect(ids.toList());
+    return this->deselect(ids.values());
 }
 
 AtomSelection& AtomSelection::unite(const QSet<SireMol::ChainIdx> &ids)
 {
-    return this->unite(ids.toList());
+    return this->unite(ids.values());
 }
 
 AtomSelection& AtomSelection::select(const QSet<SireMol::SegIdx> &ids)
 {
-    return this->select(ids.toList());
+    return this->select(ids.values());
 }
 
 AtomSelection& AtomSelection::selectOnly(const QSet<SireMol::SegIdx> &ids)
 {
-    return this->selectOnly(ids.toList());
+    return this->selectOnly(ids.values());
 }
 
 AtomSelection& AtomSelection::subtract(const QSet<SireMol::CGIdx> &ids)
 {
-    return this->subtract(ids.toList());
+    return this->subtract(ids.values());
 }
 
 AtomSelection& AtomSelection::deselect(const QSet<SireMol::ChainIdx> &ids)
 {
-    return this->deselect(ids.toList());
+    return this->deselect(ids.values());
 }
 
 AtomSelection& AtomSelection::subtract(const QSet<SireMol::SegIdx> &ids)
 {
-    return this->subtract(ids.toList());
+    return this->subtract(ids.values());
 }
 
 AtomSelection& AtomSelection::unite(const QSet<SireMol::CGIdx> &ids)
 {
-    return this->unite(ids.toList());
+    return this->unite(ids.values());
 }
 
 AtomSelection& AtomSelection::mask(const QSet<SireMol::ChainIdx> &ids)
 {
-    return this->mask(ids.toList());
+    return this->mask(ids.values());
 }
 
 AtomSelection& AtomSelection::mask(const QSet<SireMol::CGIdx> &ids)
 {
-    return this->mask(ids.toList());
+    return this->mask(ids.values());
 }
 
 AtomSelection& AtomSelection::subtract(const QSet<SireMol::ChainIdx> &ids)
 {
-    return this->subtract(ids.toList());
+    return this->subtract(ids.values());
 }
 
 AtomSelection& AtomSelection::unite(const QSet<SireMol::AtomIdx> &ids)
 {
-    return this->unite(ids.toList());
+    return this->unite(ids.values());
 }
 
 const char* AtomSelection::typeName()

@@ -67,7 +67,7 @@ class AtomSelection;
     source based on an ID, e.g. being able to find the index
     of an atom based on its name and the name of residue
     that contains it.
-    
+
     @author Christopher Woods
 */
 class SIREMOL_EXPORT MolInfo
@@ -80,61 +80,61 @@ public:
     virtual QList<AtomIdx> map(AtomNum num) const=0;
     virtual QList<AtomIdx> map(AtomIdx idx) const=0;
     virtual QList<AtomIdx> map(const AtomID &atomid) const=0;
-    
+
     virtual QList<ResIdx> map(const ResName &name) const=0;
     virtual QList<ResIdx> map(ResNum num) const=0;
     virtual QList<ResIdx> map(ResIdx idx) const=0;
     virtual QList<ResIdx> map(const ResID &resid) const=0;
-    
+
     virtual QList<CGIdx> map(const CGName &name) const=0;
     virtual QList<CGIdx> map(CGIdx idx) const=0;
     virtual QList<CGIdx> map(const CGID &cgid) const=0;
-    
+
     virtual QList<ChainIdx> map(const ChainName &name) const=0;
     virtual QList<ChainIdx> map(ChainIdx idx) const=0;
     virtual QList<ChainIdx> map(const ChainID &chainid) const=0;
-    
+
     virtual QList<SegIdx> map(const SegName &name) const=0;
     virtual QList<SegIdx> map(SegIdx idx) const=0;
     virtual QList<SegIdx> map(const SegID &segid) const=0;
-    
+
     virtual QList<AtomIdx> getAtoms() const=0;
-    
+
     virtual AtomIdx getAtom(CGIdx cgidx, int i) const=0;
     virtual AtomIdx getAtom(ResIdx residx, int i) const=0;
     virtual AtomIdx getAtom(ChainIdx chainidx, int i) const=0;
     virtual AtomIdx getAtom(SegIdx segidx, int i) const=0;
-    
+
     virtual QList<AtomIdx> getAtomsIn(const ResID &resid) const=0;
     virtual QList<AtomIdx> getAtomsIn(const CGID &cgid) const=0;
     virtual QList<AtomIdx> getAtomsIn(const ChainID &chainid) const=0;
     virtual QList<AtomIdx> getAtomsIn(const SegID &segid) const=0;
 
     virtual QList<ResIdx> getResidues() const=0;
-    
+
     virtual ResIdx getResidue(ChainIdx chainidx, int i) const=0;
 
     virtual QList<ResIdx> getResiduesIn(const ChainID &chainid) const=0;
-    
+
     virtual QList<CGIdx> getCutGroups() const=0;
     virtual QList<ChainIdx> getChains() const=0;
     virtual QList<SegIdx> getSegments() const=0;
 
     virtual ChainIdx parentChain(ResIdx residx) const=0;
     virtual ChainIdx parentChain(const ResID &resid) const=0;
-    
+
     virtual ChainIdx parentChain(AtomIdx atomidx) const=0;
     virtual ChainIdx parentChain(const AtomID &atomid) const=0;
-    
+
     virtual ResIdx parentResidue(AtomIdx atomidx) const=0;
     virtual ResIdx parentResidue(const AtomID &atomid) const=0;
-    
+
     virtual SegIdx parentSegment(AtomIdx atomidx) const=0;
     virtual SegIdx parentSegment(const AtomID &atomid) const=0;
-    
+
     virtual CGIdx parentCutGroup(AtomIdx atomidx) const=0;
     virtual CGIdx parentCutGroup(const AtomID &atomid) const=0;
-    
+
     virtual AtomIdx atomIdx(const AtomID &atomid) const=0;
     virtual CGIdx cgIdx(const CGID &cgid) const=0;
     virtual ResIdx resIdx(const ResID &resid) const=0;
@@ -168,8 +168,8 @@ QList<T> MolInfo::intersection(const QList<T> &list0, const QList<T> &list1)
 
     if (list0.count() <= list1.count())
     {
-        QSet<T> set1 = list1.toSet();
-        
+        QSet<T> set1(list1.constBegin(), list1.constEnd());
+
         for (typename QList<T>::const_iterator it = list0.constBegin();
              it != list0.constEnd();
              ++it)
@@ -180,8 +180,8 @@ QList<T> MolInfo::intersection(const QList<T> &list0, const QList<T> &list1)
     }
     else
     {
-        QSet<T> set0 = list0.toSet();
-        
+        QSet<T> set0(list0.constBegin(), list0.constEnd());
+
         for (typename QList<T>::const_iterator it = list1.constBegin();
              it != list1.constEnd();
              ++it)
@@ -190,7 +190,7 @@ QList<T> MolInfo::intersection(const QList<T> &list0, const QList<T> &list1)
                 intersection_list.append(*it);
         }
     }
-    
+
     return intersection_list;
 }
 

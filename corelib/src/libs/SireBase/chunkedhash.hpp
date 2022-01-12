@@ -58,7 +58,7 @@ const void* get_shared_container_pointer(const SireBase::ChunkedHash<Key,T,N>&);
 /** This is a hash that stores the values and keys in separate
     chunks - this prevents large copies if only small parts
     of the hash are changed at a time
-    
+
     @author Christopher Woods
 */
 template<class Key, class T, int N=100>
@@ -68,7 +68,7 @@ class ChunkedHash
 friend SIREBASE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const ChunkedHash<Key,T,N>&);
 friend SIREBASE_EXPORT QDataStream& ::operator>><>(QDataStream&, ChunkedHash<Key,T,N>&);
 
-friend const void* 
+friend const void*
 SireBase::detail::get_shared_container_pointer<>(const ChunkedHash<Key,T,N>&);
 
 public:
@@ -78,48 +78,48 @@ public:
     /** Iterator over a ChunkedHash that is allowed to modify its contents */
     class iterator
     {
-    
+
     friend class ChunkedHash;
     friend class const_iterator;
-    
+
     public:
         iterator();
         iterator(const iterator &other);
-        
+
         ~iterator();
-        
+
         iterator& operator=(const iterator &other);
         iterator& operator=(const const_iterator &other);
-        
+
         bool operator==(const iterator &other) const;
         bool operator!=(const iterator &other) const;
         bool operator==(const const_iterator &other) const;
         bool operator!=(const const_iterator &other) const;
 
         const Key& key() const;
-        
+
         T& value() const;
-        
+
         T& operator*() const;
         T* operator->() const;
-        
+
         iterator operator+(int j) const;
         iterator& operator++();
         iterator operator++(int);
         iterator& operator+=(int j);
-    
+
         iterator operator-(int j) const;
         iterator& operator--();
         iterator operator--( int);
-        iterator& operator-=( int j );   
+        iterator& operator-=( int j );
 
     private:
         /** Pointer to the parent's chunks */
         QVector< QHash<Key,T> > *chunks;
-        
+
         /** Index of the current chunk */
         int current_chunk;
-        
+
         /** Iterator over the values in the current chunk */
         typename QHash<Key,T>::iterator current_it;
     };
@@ -127,36 +127,36 @@ public:
     /** Iterator over a ChunkedHash that is not allowed to modify its contents */
     class const_iterator
     {
-    
+
     friend class ChunkedHash;
     friend class iterator;
-    
+
     public:
         const_iterator();
         const_iterator(const iterator &other);
         const_iterator(const const_iterator &other);
-        
+
         ~const_iterator();
-        
+
         const_iterator& operator=(const iterator &other);
         const_iterator& operator=(const const_iterator &other);
-        
+
         bool operator==(const const_iterator &other) const;
         bool operator!=(const const_iterator &other) const;
         bool operator==(const iterator &other) const;
         bool operator!=(const iterator &other) const;
-        
+
         const Key& key() const;
         const T& value() const;
-        
+
         const T& operator*() const;
         const T* operator->() const;
-        
+
         const_iterator operator+(int j) const;
         const_iterator& operator++();
         const_iterator operator++(int);
         const_iterator& operator+=(int j);
-        
+
         const_iterator operator-(int j) const;
         const_iterator& operator--();
         const_iterator operator--(int);
@@ -165,30 +165,30 @@ public:
     private:
         /** Pointer to the parent's chunks */
         const QVector< QHash<Key,T> > *chunks;
-        
+
         /** Index of the current chunk */
         int current_chunk;
-        
+
         /** Iterator over the values in the current chunk */
         typename QHash<Key,T>::const_iterator current_it;
     };
 
     ChunkedHash();
     ChunkedHash(const QHash<Key,T> &hash);
-    
+
     ChunkedHash(const ChunkedHash<Key,T,N> &other);
-    
+
     ~ChunkedHash();
-    
+
     ChunkedHash<Key,T,N>& operator=(const QHash<Key,T> &hash);
     ChunkedHash<Key,T,N>& operator=(const ChunkedHash<Key,T,N> &other);
-    
+
     bool operator==(const ChunkedHash<Key,T,N> &other) const;
     bool operator!=(const ChunkedHash<Key,T,N> &other) const;
-    
+
     T& operator[](const Key &key);
     const T operator[](const Key &key) const;
-    
+
     iterator begin();
     const_iterator begin() const;
     const_iterator constBegin() const;
@@ -200,13 +200,13 @@ public:
     iterator end();
     const_iterator end() const;
     const_iterator constEnd() const;
-    
+
     int capacity() const;
-    
+
     void clear();
-    
+
     bool contains(const Key &key) const;
-    
+
     int count(const Key &key) const;
     int count() const;
 
@@ -216,21 +216,21 @@ public:
     iterator insertMulti(const Key &key, const T &value);
 
     bool isEmpty() const;
-    
+
     const Key key(const T & value) const;
     const Key key(const T & value, const Key &defaultKey) const;
-    
+
     QList<Key> keys() const;
     QList<Key> keys(const T &value) const;
 
     int remove(const Key &key);
-    
+
     void reserve(int size);
-    
+
     int size() const;
-    
+
     void squeeze();
-    
+
     T take (const Key &key);
 
     QList<Key> uniqueKeys() const;
@@ -239,14 +239,14 @@ public:
 
     const T value(const Key &key) const;
     const T value(const Key &key, const T &defaultValue) const;
-    
+
     QList<T> values() const;
     QList<T> values(const Key &key) const;
-    
+
 private:
     /** All of the sub-hashes in this hash */
     QVector< QHash<Key,T> > _chunks;
-    
+
     /** The index of the chunk that contains a particular key */
     QHash<Key,qint32> key_to_chunkidx;
 };
@@ -255,12 +255,12 @@ private:
 
 ////////////
 //////////// Implementation of ChunkedHash::iterator
-//////////// 
+////////////
 
 /** Empty constructor */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-ChunkedHash<Key,T,N>::iterator::iterator() 
+ChunkedHash<Key,T,N>::iterator::iterator()
                      : chunks(0), current_chunk(0)
 {}
 
@@ -371,9 +371,9 @@ typename ChunkedHash<Key,T,N>::iterator& ChunkedHash<Key,T,N>::iterator::operato
         return *this;
 
     ++current_it;
-    
+
     Q_ASSERT( current_chunk < chunks->count() );
-    
+
     while (current_it == (*chunks)[current_chunk].end())
     {
         //are we on the last chunk?
@@ -399,31 +399,31 @@ SIRE_OUTOFLINE_TEMPLATE
 typename ChunkedHash<Key,T,N>::iterator ChunkedHash<Key,T,N>::iterator::operator++(int)
 {
     typename ChunkedHash<Key,T,N>::iterator ret(*this);
-    
+
     return ++ret;
 }
 
 /** Increment this iterator by 'j' steps */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::iterator& 
+typename ChunkedHash<Key,T,N>::iterator&
 ChunkedHash<Key,T,N>::iterator::operator+=(int j)
 {
     if (j < 0)
         return (*this -= -j);
-        
+
     for (int i=0; i<j; ++i)
     {
         ++(*this);
     }
-    
+
     return *this;
 }
 
 /** Return a copy of this iterator that has been advanced by 'j' steps */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::iterator 
+typename ChunkedHash<Key,T,N>::iterator
 ChunkedHash<Key,T,N>::iterator::operator+(int j) const
 {
     typename ChunkedHash<Key,T,N>::iterator ret(*this);
@@ -434,7 +434,7 @@ ChunkedHash<Key,T,N>::iterator::operator+(int j) const
 /** Pre-decrement operator */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::iterator& 
+typename ChunkedHash<Key,T,N>::iterator&
 ChunkedHash<Key,T,N>::iterator::operator--()
 {
     if (chunks == 0)
@@ -454,7 +454,7 @@ ChunkedHash<Key,T,N>::iterator::operator--()
         {
             //move onto the previous chunk
             --current_chunk;
-            
+
             current_it = (*chunks)[current_chunk].end();
         }
     }
@@ -467,11 +467,11 @@ ChunkedHash<Key,T,N>::iterator::operator--()
 /** Post-decrement operator */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::iterator 
+typename ChunkedHash<Key,T,N>::iterator
 ChunkedHash<Key,T,N>::iterator::operator--( int)
 {
     typename ChunkedHash<Key,T,N>::iterator ret(*this);
-    
+
     return --ret;
 }
 
@@ -483,19 +483,19 @@ ChunkedHash<Key,T,N>::iterator::operator-=( int j )
 {
     if (j < 0)
         return (*this += -j);
-        
+
     for (int i=0; i<j; ++i)
     {
         --(*this);
     }
-    
+
     return *this;
 }
 
 /** Return a copy of this iterator that has been stepped back by 'j' steps */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::iterator 
+typename ChunkedHash<Key,T,N>::iterator
 ChunkedHash<Key,T,N>::iterator::operator-(int j) const
 {
     typename ChunkedHash<Key,T,N>::iterator ret(*this);
@@ -505,12 +505,12 @@ ChunkedHash<Key,T,N>::iterator::operator-(int j) const
 
 ////////////
 //////////// Implementation of ChunkedHash::const_iterator
-//////////// 
+////////////
 
 /** Empty constructor */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-ChunkedHash<Key,T,N>::const_iterator::const_iterator() 
+ChunkedHash<Key,T,N>::const_iterator::const_iterator()
                      : chunks(0), current_chunk(0)
 {}
 
@@ -533,7 +533,7 @@ ChunkedHash<Key,T,N>::const_iterator::~const_iterator()
 /** Copy assignment operator */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::const_iterator& 
+typename ChunkedHash<Key,T,N>::const_iterator&
 ChunkedHash<Key,T,N>::const_iterator::operator=(
                             const typename ChunkedHash<Key,T,N>::iterator &other)
 {
@@ -546,7 +546,7 @@ ChunkedHash<Key,T,N>::const_iterator::operator=(
 /** Copy assignment operator */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::const_iterator& 
+typename ChunkedHash<Key,T,N>::const_iterator&
 ChunkedHash<Key,T,N>::const_iterator::operator=(
                             const typename ChunkedHash<Key,T,N>::const_iterator &other)
 {
@@ -581,7 +581,7 @@ SIRE_OUTOFLINE_TEMPLATE
 bool ChunkedHash<Key,T,N>::const_iterator::operator==(
                     const typename ChunkedHash<Key,T,N>::iterator &other) const
 {
-    return chunks == other.chunks and 
+    return chunks == other.chunks and
            current_it == other.current_it;
 }
 
@@ -629,16 +629,16 @@ const T* ChunkedHash<Key,T,N>::const_iterator::operator->() const
 /** Pre-increment operator */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::const_iterator& 
+typename ChunkedHash<Key,T,N>::const_iterator&
 ChunkedHash<Key,T,N>::const_iterator::operator++()
 {
     if (chunks == 0)
         return *this;
 
     ++current_it;
-    
+
     Q_ASSERT( current_chunk < chunks->count() );
-    
+
     while (current_it == (*chunks)[current_chunk].end())
     {
         //are we on the last chunk?
@@ -661,35 +661,35 @@ ChunkedHash<Key,T,N>::const_iterator::operator++()
 /** Post-increment operator */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::const_iterator 
+typename ChunkedHash<Key,T,N>::const_iterator
 ChunkedHash<Key,T,N>::const_iterator::operator++(int)
 {
     typename ChunkedHash<Key,T,N>::const_iterator ret(*this);
-    
+
     return ++ret;
 }
 
 /** Increment this const_iterator by 'j' steps */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::const_iterator& 
+typename ChunkedHash<Key,T,N>::const_iterator&
 ChunkedHash<Key,T,N>::const_iterator::operator+=(int j)
 {
     if (j < 0)
         return (*this -= -j);
-        
+
     for (int i=0; i<j; ++i)
     {
         ++(*this);
     }
-    
+
     return *this;
 }
 
 /** Return a copy of this const_iterator that has been advanced by 'j' steps */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::const_iterator 
+typename ChunkedHash<Key,T,N>::const_iterator
 ChunkedHash<Key,T,N>::const_iterator::operator+(int j) const
 {
     typename ChunkedHash<Key,T,N>::const_iterator ret(*this);
@@ -700,7 +700,7 @@ ChunkedHash<Key,T,N>::const_iterator::operator+(int j) const
 /** Pre-decrement operator */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::const_iterator& 
+typename ChunkedHash<Key,T,N>::const_iterator&
 ChunkedHash<Key,T,N>::const_iterator::operator--()
 {
     if (chunks == 0)
@@ -720,11 +720,12 @@ ChunkedHash<Key,T,N>::const_iterator::operator--()
         {
             //move onto the previous chunk
             --current_chunk;
-            
+
             current_it = (*chunks)[current_chunk].constEnd();
         }
     }
 
+    // this has been deprecated, but I don't see any replacement...
     --current_it;
 
     return *this;
@@ -733,11 +734,11 @@ ChunkedHash<Key,T,N>::const_iterator::operator--()
 /** Post-decrement operator */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::const_iterator 
+typename ChunkedHash<Key,T,N>::const_iterator
 ChunkedHash<Key,T,N>::const_iterator::operator--( int)
 {
     typename ChunkedHash<Key,T,N>::const_iterator ret(*this);
-    
+
     return --ret;
 }
 
@@ -749,19 +750,19 @@ ChunkedHash<Key,T,N>::const_iterator::operator-=( int j )
 {
     if (j < 0)
         return (*this += -j);
-        
+
     for (int i=0; i<j; ++i)
     {
         --(*this);
     }
-    
+
     return *this;
 }
 
 /** Return a copy of this const_iterator that has been stepped back by 'j' steps */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::const_iterator 
+typename ChunkedHash<Key,T,N>::const_iterator
 ChunkedHash<Key,T,N>::const_iterator::operator-(int j) const
 {
     typename ChunkedHash<Key,T,N>::const_iterator ret(*this);
@@ -771,7 +772,7 @@ ChunkedHash<Key,T,N>::const_iterator::operator-(int j) const
 
 ////////////
 //////////// Implementation of ChunkedHash
-//////////// 
+////////////
 
 /** Construct an empty hash */
 template<class Key, class T, int N>
@@ -850,15 +851,15 @@ SIRE_OUTOFLINE_TEMPLATE
 T& ChunkedHash<Key,T,N>::operator[](const Key &key)
 {
     int idx = key_to_chunkidx.value(key, -1);
-    
+
     if (idx == -1)
     {
         this->insert( key, T() );
         idx = key_to_chunkidx.value(key, -1);
-        
+
         Q_ASSERT( idx != -1 );
     }
-    
+
     return _chunks.data()[idx][key];
 }
 
@@ -869,7 +870,7 @@ SIRE_OUTOFLINE_TEMPLATE
 const T ChunkedHash<Key,T,N>::operator[](const Key &key) const
 {
     int idx = key_to_chunkidx.value(key, -1);
-    
+
     if (idx == -1)
         return T();
     else
@@ -882,10 +883,10 @@ SIRE_OUTOFLINE_TEMPLATE
 typename ChunkedHash<Key,T,N>::iterator ChunkedHash<Key,T,N>::begin()
 {
     typename ChunkedHash<Key,T,N>::iterator it;
-   
+
     if (key_to_chunkidx.isEmpty())
         return it;
-   
+
     it.chunks = &_chunks;
     it.current_chunk = 0;
 
@@ -901,7 +902,7 @@ typename ChunkedHash<Key,T,N>::iterator ChunkedHash<Key,T,N>::begin()
             break;
         }
     }
-    
+
     return it;
 }
 
@@ -911,7 +912,7 @@ SIRE_OUTOFLINE_TEMPLATE
 typename ChunkedHash<Key,T,N>::const_iterator ChunkedHash<Key,T,N>::begin() const
 {
     typename ChunkedHash<Key,T,N>::const_iterator it;
-   
+
     if (key_to_chunkidx.isEmpty())
         return it;
 
@@ -920,7 +921,7 @@ typename ChunkedHash<Key,T,N>::const_iterator ChunkedHash<Key,T,N>::begin() cons
 
     qint32 nchunks = _chunks.count();
     const QHash<Key,T> *chunks_array = _chunks.constData();
-   
+
     for (qint32 i=0; i<nchunks; ++i)
     {
         if (chunks_array[i].count() != 0)
@@ -930,7 +931,7 @@ typename ChunkedHash<Key,T,N>::const_iterator ChunkedHash<Key,T,N>::begin() cons
             break;
         }
     }
-    
+
     return it;
 }
 
@@ -949,16 +950,16 @@ SIRE_OUTOFLINE_TEMPLATE
 typename ChunkedHash<Key,T,N>::iterator ChunkedHash<Key,T,N>::find(const Key &key)
 {
     int idx = key_to_chunkidx.value(key, -1);
-    
+
     if (idx == -1)
         return this->end();
-        
+
     typename ChunkedHash<Key,T,N>::iterator it;
-    
+
     it.chunks = &_chunks;
     it.current_chunk = idx;
     it.current_it = _chunks[idx].find(key);
-    
+
     return it;
 }
 
@@ -966,20 +967,20 @@ typename ChunkedHash<Key,T,N>::iterator ChunkedHash<Key,T,N>::find(const Key &ke
     or end() if no such item exists */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::const_iterator 
+typename ChunkedHash<Key,T,N>::const_iterator
 ChunkedHash<Key,T,N>::find(const Key &key) const
 {
     int idx = key_to_chunkidx.value(key, -1);
-    
+
     if (idx == -1)
         return this->end();
-        
+
     typename ChunkedHash<Key,T,N>::const_iterator it;
-    
+
     it.chunks = &_chunks;
     it.current_chunk = idx;
     it.current_it = _chunks[idx].find(key);
-    
+
     return it;
 }
 
@@ -987,7 +988,7 @@ ChunkedHash<Key,T,N>::find(const Key &key) const
     or constEnd() if no such item exists */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::const_iterator 
+typename ChunkedHash<Key,T,N>::const_iterator
 ChunkedHash<Key,T,N>::constFind(const Key &key) const
 {
     return this->find(key);
@@ -1002,12 +1003,12 @@ typename ChunkedHash<Key,T,N>::iterator ChunkedHash<Key,T,N>::end()
 
     if (key_to_chunkidx.isEmpty())
         return it;
-        
+
     it.chunks = &_chunks;
     it.current_chunk = _chunks.count() - 1;
-    
+
     it.current_it = _chunks[ _chunks.count() - 1 ].end();
-    
+
     return it;
 }
 
@@ -1020,12 +1021,12 @@ typename ChunkedHash<Key,T,N>::const_iterator ChunkedHash<Key,T,N>::end() const
 
     if (key_to_chunkidx.isEmpty())
         return it;
-        
+
     it.chunks = &_chunks;
     it.current_chunk = _chunks.count() - 1;
-    
+
     it.current_it = _chunks[ _chunks.count() - 1 ].end();
-    
+
     return it;
 }
 
@@ -1044,14 +1045,14 @@ SIRE_OUTOFLINE_TEMPLATE
 int ChunkedHash<Key,T,N>::capacity() const
 {
     int c = 0;
-    
+
     int nchunks = _chunks.count();
-    
+
     for (int i=0; i<nchunks; ++i)
     {
         c += _chunks.constData()[i].capacity();
     }
-    
+
     return qMin(c, key_to_chunkidx.capacity());
 }
 
@@ -1100,41 +1101,44 @@ bool ChunkedHash<Key,T,N>::empty() const
     existing value with that key is overwritten */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::iterator 
+typename ChunkedHash<Key,T,N>::iterator
 ChunkedHash<Key,T,N>::insert(const Key &key, const T &value)
 {
     int idx = key_to_chunkidx.value(key, -1);
 
     typename ChunkedHash<Key,T,N>::iterator it;
-    
+
     if (idx == -1)
     {
         //this is a new key
         int nchunks = _chunks.count();
         QHash<Key,T> *chunks_array = _chunks.data();
-        
+
         //can we fit this item into an existing chunk?
         for (int i=0; i<nchunks; ++i)
         {
             if (chunks_array[i].count() < N)
             {
                 key_to_chunkidx.insert(key, i);
-                
+
                 it.chunks = &(_chunks);
                 it.current_chunk = i;
-                it.current_it = chunks_array[i].insertMulti(key, value);
-                
+
+                // This used to be insertMulti, but this is deprecated
+                // in Qt5. I suspect it should be insert()
+                it.current_it = chunks_array[i].insert(key, value);
+
                 return it;
             }
         }
-        
+
         //we need to add a new chunk
         _chunks.append( QHash<Key,T>() );
         chunks_array = _chunks.data();
         chunks_array[nchunks].reserve(N);
-        
+
         key_to_chunkidx.insert(key, nchunks);
-        
+
         it.chunks = &(_chunks);
         it.current_chunk = nchunks;
         it.current_it = chunks_array[nchunks].insert(key, value);
@@ -1155,11 +1159,11 @@ ChunkedHash<Key,T,N>::insert(const Key &key, const T &value)
     item if there is already an item with this key */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-typename ChunkedHash<Key,T,N>::iterator 
+typename ChunkedHash<Key,T,N>::iterator
 ChunkedHash<Key,T,N>::insertMulti(const Key &key, const T &value)
 {
     int idx = key_to_chunkidx.value(key, -1);
-    
+
     if (idx == -1)
     {
         //this item doesn't exist in the hash
@@ -1169,13 +1173,13 @@ ChunkedHash<Key,T,N>::insertMulti(const Key &key, const T &value)
     {
         //add this value to the same chunk that contains the other value(s)
         typename ChunkedHash<Key,T,N>::iterator it;
-        
+
         it.chunks = &_chunks;
         it.current_chunk = idx;
         it.current_it = _chunks[idx].insertMulti(key, value);
-        
+
         key_to_chunkidx.insert(key, idx);
-        
+
         return it;
     }
 }
@@ -1196,7 +1200,7 @@ const Key ChunkedHash<Key,T,N>::key(const T &value, const Key &defaultKey) const
 {
     int nchunks = _chunks.count();
     const QHash<Key,T> *chunks_array = _chunks.constData();
-    
+
     for (int i=0; i<nchunks; ++i)
     {
         for (typename QHash<Key,T>::const_iterator it = chunks_array[i].constBegin();
@@ -1207,7 +1211,7 @@ const Key ChunkedHash<Key,T,N>::key(const T &value, const Key &defaultKey) const
                 return it.key();
         }
     }
-    
+
     return defaultKey;
 }
 
@@ -1233,10 +1237,10 @@ SIRE_OUTOFLINE_TEMPLATE
 QList<Key> ChunkedHash<Key,T,N>::keys(const T &value) const
 {
     QList<Key> ks;
-    
+
     int nchunks = _chunks.count();
     const QHash<Key,T> *chunks_array = _chunks.constData();
-    
+
     for (int i=0; i<nchunks; ++i)
     {
         for (typename QHash<Key,T>::const_iterator it = chunks_array[i].constBegin();
@@ -1260,7 +1264,7 @@ int ChunkedHash<Key,T,N>::remove(const Key &key)
     //all values with the same key are in the same chunk
     int idx = key_to_chunkidx.value(key, -1);
     key_to_chunkidx.remove(key);
-    
+
     if (idx != -1)
     {
         return _chunks[idx].remove(key);
@@ -1276,13 +1280,13 @@ SIRE_OUTOFLINE_TEMPLATE
 void ChunkedHash<Key,T,N>::reserve(int size)
 {
     key_to_chunkidx.reserve(size);
-    
+
     int nchunks = (size / N) + 1;
-    
+
     if (_chunks.count() < nchunks)
     {
         _chunks.resize( nchunks );
-        
+
         for (int i=0; i<nchunks; ++i)
         {
             _chunks[i].reserve(N);
@@ -1314,12 +1318,12 @@ SIRE_OUTOFLINE_TEMPLATE
 T ChunkedHash<Key,T,N>::take(const Key &key)
 {
     int idx = key_to_chunkidx.value(key, -1);
-    
+
     if (idx == -1)
         return T();
 
     key_to_chunkidx.take(key);
-        
+
     return _chunks[idx].take(key);
 }
 
@@ -1342,7 +1346,7 @@ ChunkedHash<Key,T,N>& ChunkedHash<Key,T,N>::unite(const ChunkedHash<Key,T,N> &ot
     {
         this->insertMulti( it.key() , it.value() );
     }
-    
+
     return *this;
 }
 
@@ -1353,7 +1357,7 @@ SIRE_OUTOFLINE_TEMPLATE
 const T ChunkedHash<Key,T,N>::value(const Key &key) const
 {
     int idx = key_to_chunkidx.value(key, -1);
-    
+
     if (idx == -1)
         return T();
     else
@@ -1367,7 +1371,7 @@ SIRE_OUTOFLINE_TEMPLATE
 const T ChunkedHash<Key,T,N>::value(const Key &key, const T &defaultValue) const
 {
     int idx = key_to_chunkidx.value(-1);
-    
+
     if (idx == -1)
         return defaultValue;
     else
@@ -1380,15 +1384,15 @@ SIRE_OUTOFLINE_TEMPLATE
 QList<T> ChunkedHash<Key,T,N>::values() const
 {
     QList<T> vals;
-    
+
     int nchunks = _chunks.count();
     const QHash<Key,T> *chunks_array = _chunks.constData();
-    
+
     for (int i=0; i<nchunks; ++i)
     {
         vals += chunks_array[i].values();
     }
-    
+
     return vals;
 }
 
@@ -1398,7 +1402,7 @@ SIRE_OUTOFLINE_TEMPLATE
 QList<T> ChunkedHash<Key,T,N>::values(const Key &key) const
 {
     int idx = key_to_chunkidx.value(key, -1);
-    
+
     if (idx == -1)
         return QList<T>();
     else
@@ -1435,7 +1439,7 @@ struct GetChunkedHashPointer
     {
         ds >> hash;
     }
-    
+
     static void save(QDataStream &ds, const ChunkedHash<Key,T,N> &hash)
     {
         ds << hash;
@@ -1457,14 +1461,14 @@ QDataStream& operator<<(QDataStream &ds, const SireBase::ChunkedHash<Key,T,N> &h
 {
     //this streams out the data using the same format as QHash
     ds << qint32( hash.count() );
-    
+
     for (typename SireBase::ChunkedHash<Key,T,N>::const_iterator it = hash.constBegin();
          it != hash.constEnd();
          ++it)
     {
         ds << it.key() << it.value();
     }
-    
+
     return ds;
 }
 
@@ -1475,18 +1479,18 @@ QDataStream& operator>>(QDataStream &ds, SireBase::ChunkedHash<Key,T,N> &hash)
 {
     //this reads in using the same format as QHash
     qint32 count;
-    
+
     ds >> count;
-    
+
     hash.clear();
     hash.reserve(count);
-    
+
     for (qint32 i=0; i<count; ++i)
     {
         Key key;
         T value;
         ds >> key >> value;
-        
+
         hash.insert(key, value);
     }
 
@@ -1496,24 +1500,24 @@ QDataStream& operator>>(QDataStream &ds, SireBase::ChunkedHash<Key,T,N> &hash)
 /** Serialise to a binary datastream */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-SireStream::SharedDataStream& 
+SireStream::SharedDataStream&
 operator<<(SireStream::SharedDataStream &sds, const SireBase::ChunkedHash<Key,T,N> &hash)
 {
-    sds.sharedSaveContainer< SireBase::ChunkedHash<Key,T,N>, 
+    sds.sharedSaveContainer< SireBase::ChunkedHash<Key,T,N>,
                              SireBase::detail::GetChunkedHashPointer<Key,T,N> >(hash);
-                            
+
     return sds;
 }
 
 /** Extract from a binary datastream */
 template<class Key, class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-SireStream::SharedDataStream& 
+SireStream::SharedDataStream&
 operator>>(SireStream::SharedDataStream &sds, SireBase::ChunkedHash<Key,T,N> &hash)
 {
-    sds.sharedLoadContainer< SireBase::ChunkedHash<Key,T,N>, 
+    sds.sharedLoadContainer< SireBase::ChunkedHash<Key,T,N>,
                              SireBase::detail::GetChunkedHashPointer<Key,T,N> >(hash);
-                            
+
     return sds;
 }
 

@@ -58,7 +58,7 @@ SelectEnginePtr IDNameEngine::construct(IDObject o, NameValues vals)
 
     try
     {
-        for (const auto val : vals)
+        for (const auto &val : vals)
         {
             if (val.value.which() == 0)
             {
@@ -134,7 +134,7 @@ SelectResult searchForMatch(const SelectResult &mols, const T &searchFunction, b
     }
     else
     {
-        for (const auto mol : mols.views())
+        for (const auto &mol : mols.views())
         {
             auto match = searchFunction(mol);
 
@@ -223,7 +223,7 @@ ViewsOfMol genericSelect(const ViewsOfMol &mol, const T &selectFunc,
         }
         else
         {
-            for (const auto idx : viewed)
+            for (const auto &idx : viewed)
             {
                 if (selectFunc(molinfo, idx))
                     selected.append(idx);
@@ -302,7 +302,7 @@ static auto getSelectedSegments = [](const ViewsOfMol &mol)
 bool IDNameEngine::match(const QString &val) const
 {
     //try all of the fixed names
-    for (const auto name : names)
+    for (const auto &name : names)
     {
         if (name == val)
         {
@@ -312,7 +312,7 @@ bool IDNameEngine::match(const QString &val) const
     }
 
     //now try all of the regexps
-    for (const auto regexp : regexps)
+    for (const auto &regexp : regexps)
     {
         auto match = regexp.match(val);
 
@@ -415,7 +415,7 @@ SelectResult IDNameEngine::selectMolecules(const SelectResult &mols, bool uses_p
         const auto molname = mol.data().name().value();
 
         //try all of the fixed names
-        for (const auto name : names)
+        for (const auto &name : names)
         {
             if (name == molname)
             {
@@ -425,7 +425,7 @@ SelectResult IDNameEngine::selectMolecules(const SelectResult &mols, bool uses_p
         }
 
         //now try all of the regexps
-        for (const auto regexp : regexps)
+        for (const auto &regexp : regexps)
         {
             auto match = regexp.match(molname);
 
@@ -502,7 +502,7 @@ SelectEngine::ObjType IDNameEngine::objectType() const
     range values */
 bool IDNumberEngine::match(const int idx) const
 {
-    for (const auto val : vals)
+    for (const auto &val : vals)
     {
         if (val.which() == 0)
         {
@@ -697,7 +697,7 @@ bool IDIndexEngine::match(int idx, const int count) const
 {
     idx = map(idx, count);
 
-    for (const auto val : vals)
+    for (const auto &val : vals)
     {
         if (val.which() == 0)
         {
@@ -994,12 +994,12 @@ SelectResult IDAndEngine::select(const SelectResult &mols, const PropertyMap &ma
     }
 
     //match up the results
-    for (const auto mol0 : result0.views())
+    for (const auto &mol0 : result0.views())
     {
         const auto molnum = mol0.data().number();
 
         //is this molecule in the other match?
-        for (const auto mol1 : result1.views())
+        for (const auto &mol1 : result1.views())
         {
             if (mol1.data().number() == molnum)
             {
@@ -1180,7 +1180,7 @@ SelectResult IDOrEngine::select(const SelectResult &mols, const PropertyMap &map
 
     for (int i=0; i<results.count(); ++i)
     {
-        for (const auto mol : results[i].views())
+        for (const auto &mol : results[i].views())
         {
             const auto molnum = mol.data().number();
 
@@ -1572,7 +1572,7 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
         //we just need to expand and then re-join the parts
         selected = this->expand(selected);
 
-        for (const auto mol : selected.views())
+        for (const auto &mol : selected.views())
         {
             result.append( mol.join() );
         }
@@ -1684,7 +1684,7 @@ SelectEnginePtr IDElementEngine::construct(const std::vector<SireMol::Element> &
     IDElementEngine *ptr = new IDElementEngine();
     auto p = makePtr(ptr);
 
-    for (const auto value : vals)
+    for (const auto &value : vals)
     {
         ptr->elements.insert(value);
     }
@@ -1727,7 +1727,7 @@ SelectResult IDElementEngine::select(const SelectResult &mols, const PropertyMap
         auto selected = mol.selection();
 
         //deselect any atoms that are not the right element
-        for (const auto atomidx : selected.selectedAtoms())
+        for (const auto &atomidx : selected.selectedAtoms())
         {
             const auto element = elms[ molinfo.cgAtomIdx(atomidx) ];
 
@@ -1770,7 +1770,7 @@ SelectResult IDElementEngine::select(const SelectResult &mols, const PropertyMap
     }
     else
     {
-        for (const auto mol : mols.views())
+        for (const auto &mol : mols.views())
         {
             auto match = getAtomsWithElement(mol);
 
@@ -1946,7 +1946,7 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
         }
         else
         {
-            for (const auto atom : mol.selection().selectedAtoms())
+            for (const auto &atom : mol.selection().selectedAtoms())
             {
                 if (space.read().calcDist2(point, coords[molinfo.cgAtomIdx(atom)]) < dist2)
                 {
@@ -2072,7 +2072,7 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
     }
     else
     {
-        for (const auto mol : mols.views())
+        for (const auto &mol : mols.views())
         {
             auto match = getWithin(mol);
 
@@ -2321,7 +2321,7 @@ SelectResult IDDistanceVectorEngine::select(const SelectResult &mols, const Prop
     }
     else
     {
-        for (const auto mol : mols.views())
+        for (const auto &mol : mols.views())
         {
             auto match = getWithin(mol);
 

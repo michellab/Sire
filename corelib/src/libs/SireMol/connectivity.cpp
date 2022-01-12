@@ -359,7 +359,7 @@ QString ConnectivityBase::toCONECT(int offset) const
             QStringList atoms;
 
             // Convert set to a list and sort the atom indices.
-            auto list = connected_atoms[i].toList();
+            auto list = connected_atoms[i].values();
             std::sort(list.begin(), list.end());
 
             // Loop over each atom and add to the record.
@@ -733,9 +733,9 @@ bool ConnectivityBase::areConnected(CGIdx cg0, CGIdx cg1) const
     else
     {
         //need to look at all pairs of atoms in both CutGroups
-        for (const auto atom0 : minfo.getAtomsIn(cg0))
+        for (const auto &atom0 : minfo.getAtomsIn(cg0))
         {
-            for (const auto atom1 : minfo.getAtomsIn(cg1))
+            for (const auto &atom1 : minfo.getAtomsIn(cg1))
             {
                 if (this->areConnected(atom0,atom1))
                     return true;

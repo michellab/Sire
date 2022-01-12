@@ -767,7 +767,7 @@ QVector<T> AtomProperty<T>::toVector(const AtomSelection &selected_atoms) const
             }
             else
             {
-                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).toList();
+                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).values();
                 std::sort(idxs.begin(), idxs.end());
 
                 foreach (SireID::Index idx, idxs)
@@ -804,7 +804,7 @@ QVector<T> AtomProperty<T>::toVector(const AtomSelection &selected_atoms) const
             }
             else
             {
-                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).toList();
+                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).values();
                 std::sort(idxs.begin(), idxs.end());
 
                 foreach (SireID::Index idx, idxs)
@@ -878,7 +878,7 @@ void AtomProperty<T>::copyFrom(const QVector<T> &values,
             }
             else
             {
-                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).toList();
+                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).values();
                 std::sort(idxs.begin(), idxs.end());
 
                 foreach (SireID::Index idx, idxs)
@@ -907,7 +907,7 @@ void AtomProperty<T>::copyFrom(const QVector<T> &values,
             }
             else
             {
-                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).toList();
+                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).values();
                 std::sort(idxs.begin(), idxs.end());
 
                 foreach (SireID::Index idx, idxs)

@@ -49,9 +49,9 @@ QDataStream &operator<<(QDataStream &ds,
                                        const MolIdentifier &molid)
 {
     writeHeader(ds, r_molid, 1);
-    
+
     SireStream::savePolyPointer(ds, molid.d);
-    
+
     return ds;
 }
 
@@ -60,14 +60,14 @@ QDataStream &operator>>(QDataStream &ds,
                                        MolIdentifier &molid)
 {
     VersionID v = readHeader(ds, r_molid);
-    
+
     if (v == 1)
     {
         SireStream::loadPolyPointer(ds, molid.d);
     }
     else
         throw version_error( v, "1", r_molid, CODELOC );
-    
+
     return ds;
 }
 
@@ -108,7 +108,7 @@ uint MolIdentifier::hash() const
     else
         return d->hash();
 }
-            
+
 /** Return a string representatio of this ID */
 QString MolIdentifier::toString() const
 {
@@ -143,7 +143,7 @@ MolIdentifier& MolIdentifier::operator=(const MolID &other)
         d.reset();
     else
         d.reset(other.clone());
-    
+
     return *this;
 }
 
@@ -196,21 +196,24 @@ bool MolIdentifier::operator!=(const MolID &other) const
 QList<MolNum> MolIdentifier::map(const Molecules &molecules) const
 {
     if (d.get() == 0)
-        return molecules.molNums().toList();
+        return molecules.molNums().values();
     else
         return d->map(molecules);
 }
 
-/** Map this ID back to the numbers of the matching molecules in the 
+/** Map this ID back to the numbers of the matching molecules in the
     molecule group 'molgroup'
-    
+
     \throw SireMol::missing_molecule
     \throw SireError::invalid_index
 */
 QList<MolNum> MolIdentifier::map(const MoleculeGroup &molgroup) const
 {
     if (d.get() == 0)
-        return molgroup.molNums().toList();
+    {
+        const auto s = molgroup.molNums();
+        return QList<MolNum>(s.begin(), s.end());
+    }
     else
         return d->map(molgroup);
 }
