@@ -36,7 +36,7 @@
 #include <QSet>
 #include <QList>
 
-#include <QTime>
+#include <QElapsedTimer>
 
 #include "nodes.h"
 #include "node.h"
@@ -65,29 +65,29 @@ class NodesPvt
 public:
     NodesPvt()
     {}
-    
+
     ~NodesPvt()
     {}
-    
+
     /** Mutex to protect access to the main data
         (the busy and free queues) */
     QMutex datamutex;
-    
+
     /** Pointer to a semaphore that is used to control
         the reservation and allocation of nodes */
     shared_ptr<QSemaphore> nodesem;
-    
+
     /** WaitCondition used to wait until all of the nodes are free */
     QWaitCondition waiter;
-    
+
     /** The collection of all non-null Frontends in this
         nodes object, indexed by the UID of the backend they
         are connected to */
     QHash<QUuid,Frontend> frontends;
-    
+
     /** The set of UIDs of the busy frontends */
     QSet<QUuid> busy_frontends;
-    
+
     /** The list of UIDs of the free frontends - local front
         ends will tend to be at the beginning of this list */
     QList<QUuid> free_frontends;
@@ -111,17 +111,17 @@ Nodes::Nodes()
 Nodes::Nodes(Frontend frontend)
 {
     QUuid uid = frontend.UID();
-    
+
     if (uid.isNull())
         return;
-        
+
     d.reset( new NodesPvt() );
-    
+
     QMutexLocker lkr( &(d->datamutex) );
-    
+
     d->frontends.insert( uid, frontend );
     d->free_frontends.append(uid);
-    
+
     d->nodesem.reset( new QSemaphore(d->frontends.count()) );
 }
 
@@ -136,12 +136,12 @@ Nodes::Nodes(const QList<Frontend> &frontends) : d( new NodesPvt() )
         foreach (Frontend frontend, frontends)
         {
             QUuid uid = frontend.UID();
-            
+
             if (uid.isNull())
                 continue;
-                
+
             d->frontends.insert( uid, frontend );
-            
+
             if (frontend.isLocal())
             {
                 d->free_frontends.prepend(uid);
@@ -151,13 +151,13 @@ Nodes::Nodes(const QList<Frontend> &frontends) : d( new NodesPvt() )
                 d->free_frontends.append(uid);
             }
         }
-        
+
         if (not d->frontends.isEmpty())
         {
             d->nodesem.reset( new QSemaphore(d->frontends.count()) );
         }
     }
-    
+
     if (d->frontends.isEmpty())
     {
         //this is an empty set of Nodes
@@ -206,7 +206,7 @@ bool Nodes::isEmpty()
 {
     if (d.get() == 0)
         return true;
-        
+
     else
     {
         QMutexLocker lkr( &(d->datamutex) );
@@ -224,19 +224,19 @@ QString Nodes::toString() const
     else
     {
         Nodes *nonconst_this = const_cast<Nodes*>(this);
-    
+
         QStringList lines;
-        
+
         QMutexLocker lkr( &(nonconst_this->d->datamutex) );
-    
+
         lines.append( QObject::tr("Nodes( nBusy() == %1, nFree() == %2 )")
                             .arg(nonconst_this->d->busy_frontends.count())
                             .arg(nonconst_this->d->free_frontends.count()) );
-                            
+
         if (nonconst_this->d->busy_frontends.count() > 0)
         {
             lines.append( QObject::tr("****** Busy nodes ******") );
-            
+
             foreach (QUuid uid, nonconst_this->d->busy_frontends)
             {
                 lines.append( QObject::tr("* Node %1").arg(uid.toString()) );
@@ -246,16 +246,16 @@ QString Nodes::toString() const
         if (nonconst_this->d->free_frontends.count() > 0)
         {
             lines.append( QObject::tr("****** Free nodes ******") );
-            
+
             foreach (QUuid uid, nonconst_this->d->free_frontends)
             {
                 lines.append( QObject::tr("* Node %1").arg(uid.toString()) );
             }
         }
-        
+
         if (lines.count() > 1)
             lines.append( QObject::tr("************************") );
-            
+
         return lines.join("\n");
     }
 }
@@ -265,14 +265,14 @@ QString Nodes::toString() const
 Node Nodes::_pvt_getNode()
 {
     QUuid uid = d->free_frontends.takeFirst();
-    
+
     if (uid.isNull())
         throw SireError::program_bug( QObject::tr(
             "How have we managed to reserve a node, but there are no "
             "free nodes available???"), CODELOC );
-        
+
     d->busy_frontends.insert(uid);
-    
+
     Frontend frontend = d->frontends.value(uid);
 
     return Node::create(*this, frontend);
@@ -287,12 +287,12 @@ Node Nodes::getNode()
 {
     if (this->isEmpty())
         return Node();
-    
+
     QMutexLocker lkr( &(d->datamutex) );
     shared_ptr<QSemaphore> nodesem = d->nodesem;
 
     bool reserved_node = false;
-    
+
     //keep trying to reserve a node
     while (not reserved_node)
     {
@@ -312,7 +312,7 @@ Node Nodes::getNode()
             lkr.relock();
             nodesem = d->nodesem;
             lkr.unlock();
-            
+
             if (nodesem.get() == 0)
                 //all of the nodes have been removed
                 return Node();
@@ -323,7 +323,7 @@ Node Nodes::getNode()
         }
 
         lkr.relock();
-        
+
         //check that the semaphore hasn't changed while we were waiting
         if (d->nodesem.get() != nodesem.get())
         {
@@ -340,7 +340,7 @@ Node Nodes::getNode()
     return this->_pvt_getNode();
 }
 
-/** Return 'n' free nodes - this blocks until all of the 
+/** Return 'n' free nodes - this blocks until all of the
     nodes are available. In some circumstances this will fail,
     e.g. if there aren't enough nodes to fulfill this request
 */
@@ -359,19 +359,19 @@ QList<Node> Nodes::getNodes(int n)
     else
     {
         QMutexLocker lkr( &(d->datamutex) );
-        
+
         shared_ptr<QSemaphore> nodesem = d->nodesem;
-        
+
         bool reserved_nodes = false;
-        
+
         while (not reserved_nodes)
         {
             lkr.unlock();
-            
+
             if (nodesem.get() == 0)
                 //all of the nodes have been removed!
                 return nodes;
-                
+
             //reserve n nodes
             #if QT_VERSION >= 0x040300
             while (not nodesem->tryAcquire(n, 2000))
@@ -382,18 +382,18 @@ QList<Node> Nodes::getNodes(int n)
                 lkr.relock();
                 nodesem = d->nodesem;
                 lkr.unlock();
-                
+
                 if (nodesem.get() == 0)
                     //all of the nodes have been removed!
                     return nodes;
-                    
+
                 #if QT_VERSION < 0x40300
                 sleep(2);
                 #endif
             }
-            
+
             lkr.relock();
-            
+
             if (nodesem.get() != d->nodesem.get())
             {
                 //the nodes available changed while we were making
@@ -412,11 +412,11 @@ QList<Node> Nodes::getNodes(int n)
             nodes.append( this-> _pvt_getNode() );
         }
     }
-    
+
     return nodes;
 }
 
-/** Return all of the nodes - this blocks until all of the 
+/** Return all of the nodes - this blocks until all of the
     nodes are available. Remember that this will return an
     empty list if there are no nodes.
 */
@@ -426,19 +426,19 @@ QList<Node> Nodes::getAllNodes()
         return QList<Node>();
 
     QMutexLocker lkr( &(d->datamutex) );
-    
+
     shared_ptr<QSemaphore> nodesem = d->nodesem;
-    
+
     bool reserved_nodes = false;
-    
+
     while (not reserved_nodes)
     {
         lkr.unlock();
-        
+
         if (nodesem.get() == 0)
             //all of the nodes have been removed!
             return QList<Node>();
-            
+
         //reserve all nodes
         #if QT_VERSION >= 0x040300
         while (not nodesem->tryAcquire( nodesem->available(), 2000 ))
@@ -449,18 +449,18 @@ QList<Node> Nodes::getAllNodes()
             lkr.relock();
             nodesem = d->nodesem;
             lkr.unlock();
-            
+
             if (nodesem.get() == 0)
                 //all of the nodes have been rmeoved
                 return QList<Node>();
-                
+
             #if QT_VERSION < 0x40300
             sleep(2);
             #endif
         }
-        
+
         lkr.relock();
-        
+
         if (nodesem.get() != d->nodesem.get())
         {
             //the nodes available changed while we were making
@@ -482,7 +482,7 @@ QList<Node> Nodes::getAllNodes()
     {
         nodes.append( this-> _pvt_getNode() );
     }
-    
+
     return nodes;
 }
 
@@ -491,34 +491,34 @@ QList<Node> Nodes::getAllNodes()
     is unsuccessful */
 Node Nodes::getNode(int timeout)
 {
-    QTime t;
+    QElapsedTimer t;
     t.start();
-    
+
     if (timeout <= 0)
         return this->getNode();
 
     if (this->isEmpty())
         return Node();
-    
+
     QMutexLocker lkr( &(d->datamutex) );
-    
+
     shared_ptr<QSemaphore> nodesem = d->nodesem;
-    
+
     bool reserved_node = false;
-    
+
     while (not reserved_node)
     {
         lkr.unlock();
-        
+
         if (nodesem.get() == 0)
             //all of the nodes have gone!
             return Node();
-            
+
         int new_timeout = timeout - t.elapsed();
         if (new_timeout <= 0)
             //we've run out of time
             return Node();
-        
+
         #if QT_VERSION >= 0x040300
             //try to reserve a node
             if (not nodesem->tryAcquire(1, new_timeout))
@@ -528,7 +528,7 @@ Node Nodes::getNode(int timeout)
             if (not nodesem->tryAcquire(1))
             {
                 bool acquired_node = false;
-            
+
                 while (new_timeout > 0)
                 {
                     if (nodesem->tryAcquire(1))
@@ -536,29 +536,29 @@ Node Nodes::getNode(int timeout)
                         acquired_node = true;
                         break;
                     }
-                    
+
                     --new_timeout;
                     sleep(1);
                 }
-                
+
                 if (not acquired_node)
                     //we ran out of time
                     return Node();
             }
         #endif
-            
+
         lkr.relock();
-        
+
         if (t.elapsed() >= timeout)
         {
             //we've run out of time
             nodesem->release();
             return Node();
         }
-        
+
         if (nodesem.get() != d->nodesem.get())
         {
-            //the nodes changed while we were waiting 
+            //the nodes changed while we were waiting
             //our reservation isn't valid
             nodesem->release();
             nodesem = d->nodesem;
@@ -576,14 +576,14 @@ Node Nodes::getNode(int timeout)
     If this fails, then *no* nodes are returned */
 QList<Node> Nodes::getNodes(int n, int timeout)
 {
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     if (timeout <= 0)
         return this->getNodes(n);
 
     QList<Node> nodes;
-    
+
     if (n <= 0)
     {
         return nodes;
@@ -597,36 +597,36 @@ QList<Node> Nodes::getNodes(int n, int timeout)
         QMutexLocker lkr( &(d->datamutex) );
 
         shared_ptr<QSemaphore> nodesem = d->nodesem;
-        
+
         bool reserved_nodes = false;
-        
+
         while (not reserved_nodes)
         {
             lkr.unlock();
-            
+
             if (nodesem.get() == 0)
                 //there are no nodes
                 return nodes;
-                
+
             int new_timeout = timeout - t.elapsed();
             if (new_timeout <= 0)
                 //we've run out of time
                 return nodes;
-                
+
             //reserve the nodes
             if (not nodesem->tryAcquire(n))
                 //we ran out of time
                 return nodes;
-            
+
             lkr.relock();
-                
+
             if (t.elapsed() >= timeout)
             {
                 //we've run out of time
                 nodesem->release(n);
                 return nodes;
             }
-            
+
             if (nodesem.get() != d->nodesem.get())
             {
                 //the nodes changed, so our reservation isn't valid
@@ -644,7 +644,7 @@ QList<Node> Nodes::getNodes(int n, int timeout)
             nodes.append( _pvt_getNode() );
         }
     }
-    
+
     return nodes;
 }
 
@@ -652,7 +652,7 @@ QList<Node> Nodes::getNodes(int n, int timeout)
     If this fails, then *no* nodes are returned */
 QList<Node> Nodes::getAllNodes(int timeout)
 {
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     if (timeout <= 0)
@@ -664,36 +664,36 @@ QList<Node> Nodes::getAllNodes(int timeout)
     QMutexLocker lkr( &(d->datamutex) );
 
     shared_ptr<QSemaphore> nodesem = d->nodesem;
-    
+
     bool reserved_nodes = false;
-    
+
     while (not reserved_nodes)
     {
         lkr.unlock();
-        
+
         if (nodesem.get() == 0)
             //there are no nodes
             return QList<Node>();
-            
+
         int new_timeout = timeout - t.elapsed();
         if (new_timeout <= 0)
             //we've run out of time
             return QList<Node>();
-            
+
         //reserve the nodes
         if (not nodesem->tryAcquire( nodesem->available()) )
             //we ran out of time
             return QList<Node>();
-        
+
         lkr.relock();
-            
+
         if (t.elapsed() >= timeout)
         {
             //we've run out of time
             nodesem->release( nodesem->available() );
             return QList<Node>();
         }
-        
+
         if (nodesem.get() != d->nodesem.get())
         {
             //the nodes changed, so our reservation isn't valid
@@ -714,7 +714,7 @@ QList<Node> Nodes::getAllNodes(int timeout)
     {
         nodes.append( _pvt_getNode() );
     }
-    
+
     return nodes;
 }
 
@@ -737,7 +737,7 @@ void Nodes::waitUntilAllFree()
     whether or not all of the nodes are free */
 bool Nodes::waitUntilAllFree(int timeout)
 {
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     if (timeout < 0)
@@ -748,19 +748,19 @@ bool Nodes::waitUntilAllFree(int timeout)
 
     if (d.get() == 0)
         return true;
-        
+
     QMutexLocker lkr( &(d->datamutex) );
-    
+
     while (not d->busy_frontends.isEmpty())
     {
         int new_timeout = timeout - t.elapsed();
         if (new_timeout <= 0)
             return false;
-    
+
         if (not d->waiter.wait( &(d->datamutex), new_timeout) )
             return false;
     }
-    
+
     return true;
 }
 
@@ -805,22 +805,22 @@ void Nodes::add(Node node)
 {
     if (node.isNull())
         return;
-        
+
     if (d.get() == 0)
     {
         d.reset( new NodesPvt() );
     }
-    
+
     QUuid uid = node.UID();
 
     if (uid.isNull())
         //something is dodgy with this node...
         return;
-    
+
     QMutexLocker lkr( &(d->datamutex) );
-    
+
     Nodes old_nodes = node.nodes();
-    
+
     //are we 'old_nodes'?
     if (old_nodes.d.get() == d.get())
     {
@@ -830,28 +830,28 @@ void Nodes::add(Node node)
                 "The node %1 thinks it is part of this Nodes object, but "
                 "this Nodes object isn't so sure!").arg(uid.toString()),
                     CODELOC );
-    
+
         //nothing to do
         return;
     }
-    
+
     //remove the node from its old set
     old_nodes.remove(node);
-    
+
     //add it to this set
     d->frontends.insert(uid, node.frontend());
     d->busy_frontends.insert(uid);
-    
+
     //increase the semaphore count
     shared_ptr<QSemaphore> old_nodesem = d->nodesem;
 
     d->nodesem.reset( new QSemaphore(d->frontends.count()) );
-    
+
     if (old_nodesem.get() != 0)
     {
         old_nodesem->release( old_nodesem->available() );
     }
-    
+
     //tell the node that it is now living here
     node.rehome(*this);
 }
@@ -862,13 +862,13 @@ void Nodes::add(Nodes &nodes)
     while (nodes.nNodes() > 0)
     {
         Node node = nodes.getNode(250);
-        
+
         if (not node.isNull())
             this->add(node);
     }
 }
 
-/** Try to add one more node to this set by taking a node from the 
+/** Try to add one more node to this set by taking a node from the
     pool - this only looks for immediately available nodes, and may
     not work! */
 void Nodes::addNode()
@@ -878,7 +878,7 @@ void Nodes::addNode()
 }
 
 /** Try to add one more node to this set by taking a node from the
-    pool - this only tries to find an available node for 
+    pool - this only tries to find an available node for
     'timeout' milliseconds, and so it may fail */
 void Nodes::addNode(int timeout)
 {
@@ -897,7 +897,7 @@ void Nodes::addNodes(int n)
 
 /** Try to add up to 'n' nodes to this set, by taking the nodes
     from the pool - this only looks for available
-    nodes for 'timeout' milliseconds, so you may get less 
+    nodes for 'timeout' milliseconds, so you may get less
     than 'n' (you may even get zero!) */
 void Nodes::addNodes(int n, int timeout)
 {
@@ -908,25 +908,25 @@ void Nodes::addNodes(int n, int timeout)
 /** Remove the node 'node' from this set. This doesn't abort
     the job running on the node, but the node will be automatically
     returned to the Cluster pool once it is destroyed.
-      
+
     This does nothing if this node isn't in this set.
 */
 void Nodes::remove(Node node)
 {
     if (d.get() == 0)
         return;
-        
+
     QUuid uid = node.UID();
-        
+
     QMutexLocker lkr( &(d->datamutex) );
-    
+
     if (d->frontends.contains(uid))
     {
         //remove this frontend
         d->frontends.remove(uid);
         d->busy_frontends.remove(uid);
         d->free_frontends.removeAll(uid);
-        
+
         //reset the semaphore
         if (d->frontends.isEmpty())
         {
@@ -934,14 +934,14 @@ void Nodes::remove(Node node)
         }
         else
             d->nodesem.reset( new QSemaphore(d->frontends.count()) );
-    
+
         //tell the node!
         node.evict();
     }
 }
 
 /** Remove all nodes from this set - this aborts any running
-    jobs, then disconnects from all of the backends. 
+    jobs, then disconnects from all of the backends.
     Note that this does not block  */
 void Nodes::removeAll()
 {
@@ -955,21 +955,21 @@ void Nodes::removeAll()
     d->nodesem.reset();
 
     QList<Frontend> frontends = d->frontends.values();
-    
+
     d->frontends.clear();
     d->busy_frontends.clear();
     d->free_frontends.clear();
-    
+
     //wake anyone waiting for all the nodes to become free
     d->waiter.wakeAll();
-    
+
     lkr.unlock();
 
     //wake up everyone waiting for a node, as they are now
     //out of luck
     if (old_nodesem.get() != 0)
         old_nodesem->release( old_nodesem->available() );
-    
+
     //finally, tell each frontend to abort it current job,
     //so that the node will exit and the backend will be
     //returned to the pool
@@ -1039,35 +1039,35 @@ void NodesPtr::reset()
 void NodesPtr::returnFrontend(Frontend frontend)
 {
     shared_ptr<NodesPvt> nodes = d.lock();
-    
+
     if (nodes.get() == 0)
         //we don't have a parent Nodes object any more
         return;
-    
+
     QUuid uid = frontend.UID();
-                
+
     QMutexLocker lkr( &(nodes->datamutex) );
-    
+
     if (nodes->busy_frontends.contains(uid))
     {
         //the parent Nodes object still contains this Node
-    
-        //put the local front ends at the beginning of 
+
+        //put the local front ends at the beginning of
         //the list so that they are used first
 
         if (frontend.isLocal())
             nodes->free_frontends.prepend(uid);
         else
             nodes->free_frontends.append(uid);
-    
+
         nodes->busy_frontends.remove(uid);
-        
+
         if (nodes->busy_frontends.isEmpty())
         {
             //wake up anyone waiting for all of the nodes to become free
             nodes->waiter.wakeAll();
         }
-        
+
         if (nodes->nodesem.get() != 0)
             nodes->nodesem->release();
     }
@@ -1076,12 +1076,12 @@ void NodesPtr::returnFrontend(Frontend frontend)
 static QThreadStorage<QUuid*> this_thread_uids;
 
 /** Let this Nodes scheduler borrow this thread to run WorkPackets.
-    Technically, this doesn't use the current thread, but instead 
+    Technically, this doesn't use the current thread, but instead
     creates a duplicate, so you are still able to use your thread.
     However, you should avoid doing anything compute intensive in
-    your thread while the Node has borrowed it, as otherwise you 
+    your thread while the Node has borrowed it, as otherwise you
     risk using more CPU than is available.
-    
+
     This returns a ThisThread holder that is used to ask the Nodes
     object to return this thread when the ThisThread object is
     deleted, or when ThisThread::reclaim() is called.
@@ -1091,7 +1091,7 @@ ThisThread Nodes::borrowThisThread()
     if (this_thread_uids.hasLocalData())
         //this thread is already being borrowed
         return ThisThread();
-        
+
     else
     {
         if (d.get() == 0)
@@ -1110,19 +1110,19 @@ QUuid Nodes::createThisThread()
     Frontend frontend( Backend::createLocalOnly() );
 
     QMutexLocker lkr( &(d->datamutex) );
-    
+
     //unlock anyone waiting for a node
     if (d->nodesem.get() != 0)
         d->nodesem->release( d->nodesem->available() );
-    
+
     //add the new frontend to the set of available frontends
     QUuid uid = frontend.UID();
-    
+
     d->frontends.insert( uid, frontend );
     d->free_frontends.prepend(uid);
-    
+
     d->nodesem.reset( new QSemaphore(d->frontends.count()) );
-    
+
     return uid;
 }
 
@@ -1139,24 +1139,24 @@ void Nodes::reclaimThisThread(const QUuid &uid)
         {
             throw SireError::program_bug( QObject::tr(
                 "We cannot reclaim the local thread (UID == %1) as "
-                "the UID of the local thread should be %2.") 
+                "the UID of the local thread should be %2.")
                     .arg(uid.toString(), this_thread_uids.localData()->toString()),
                         CODELOC );
         }
-        
+
         //yes - it is safe to remove this thread
         QMutexLocker lkr( &(d->datamutex) );
-        
+
         if (d->nodesem.get() != 0)
             d->nodesem->release( d->nodesem->available() );
-        
+
         d->frontends.remove(uid);
         d->free_frontends.removeAll(uid);
         d->busy_frontends.remove(uid);
 
         if (d->frontends.isEmpty())
             d->nodesem.reset();
-            
+
         else
             d->nodesem.reset( new QSemaphore(d->frontends.count()) );
     }
@@ -1177,13 +1177,13 @@ public:
     ThisThreadPvt(Nodes nodes)
     {
         if (not this_thread_uids.hasLocalData())
-        { 
+        {
             QUuid uid = nodes.createThisThread();
             this_thread_uids.setLocalData( new QUuid(uid) );
             nodesptr = nodes;
         }
     }
-    
+
     ~ThisThreadPvt()
     {
         Nodes nodes = nodesptr.lock();
@@ -1191,15 +1191,15 @@ public:
         if (not nodes.isEmpty())
         {
             QUuid *uid = this_thread_uids.localData();
-    
+
             //we need to remove this thread from the nodes object
             if (uid)
                 nodes.reclaimThisThread(*uid);
-        
+
             this_thread_uids.setLocalData(0);
         }
     }
-    
+
     NodesPtr nodesptr;
 };
 
@@ -1210,7 +1210,7 @@ public:
 ThisThread::ThisThread()
 {}
 
-/** Construct a lock for this thread being added to 
+/** Construct a lock for this thread being added to
     the nodes object 'nodes' */
 ThisThread::ThisThread(const Nodes &nodes) : d( new ThisThreadPvt(nodes) )
 {}
