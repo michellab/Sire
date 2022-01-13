@@ -38,6 +38,14 @@ using namespace SireMove;
 using namespace SireSystem;
 using namespace SireStream;
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+    // need this for older Qt
+    namespace Qt
+    {
+        static auto endl = ::endl;
+    }
+#endif
+
 void printOut(const QString &line)
 {
     QTextStream stream(stdout);
@@ -48,7 +56,7 @@ void printOut(const QString &line)
 
 static QString repeated(const QString &s, int n)
 {
-    #if QT_VERSION >= 0x040500
+    #if QT_VERSION >= QT_VERSION_CHECK(4, 5, 0)
         return s.repeated(n);
     #else
         QString r = s;

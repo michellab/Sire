@@ -211,8 +211,7 @@ QList<MolNum> MolIdentifier::map(const MoleculeGroup &molgroup) const
 {
     if (d.get() == 0)
     {
-        const auto s = molgroup.molNums();
-        return QList<MolNum>(s.begin(), s.end());
+        return convert_to_qlist(molgroup.molNums());
     }
     else
         return d->map(molgroup);

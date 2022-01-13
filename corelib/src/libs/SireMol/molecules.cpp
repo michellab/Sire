@@ -634,8 +634,7 @@ QString Molecules::toString() const
 /** Return the numbers of all of the molecules in this set */
 QSet<MolNum> Molecules::molNums() const
 {
-    const auto s = mols.keys();
-    return QSet<MolNum>(s.begin(), s.end());
+    return convert_to_qset(mols.keys());
 }
 
 /** Assert that this set contains any of the atoms of

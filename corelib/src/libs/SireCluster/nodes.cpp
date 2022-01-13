@@ -303,7 +303,7 @@ Node Nodes::getNode()
             return Node();
 
         //reserve a node
-        #if QT_VERSION >= 0x040300
+        #if QT_VERSION >= QT_VERSION_CHECK(4, 3, 0)
         while (not nodesem->tryAcquire(1, 1000))
         #else
         while (not nodesem->tryAcquire(1))
@@ -317,7 +317,7 @@ Node Nodes::getNode()
                 //all of the nodes have been removed
                 return Node();
 
-            #if QT_VERSION < 0x40300
+            #if QT_VERSION < QT_VERSION_CHECK(4, 3, 0)
             sleep(1);
             #endif
         }
@@ -373,7 +373,7 @@ QList<Node> Nodes::getNodes(int n)
                 return nodes;
 
             //reserve n nodes
-            #if QT_VERSION >= 0x040300
+            #if QT_VERSION >= QT_VERSION_CHECK(4, 3, 0)
             while (not nodesem->tryAcquire(n, 2000))
             #else
             while (not nodesem->tryAcquire(n))
@@ -387,7 +387,7 @@ QList<Node> Nodes::getNodes(int n)
                     //all of the nodes have been removed!
                     return nodes;
 
-                #if QT_VERSION < 0x40300
+                #if QT_VERSION < QT_VERSION_CHECK(4, 3, 0)
                 sleep(2);
                 #endif
             }
@@ -440,7 +440,7 @@ QList<Node> Nodes::getAllNodes()
             return QList<Node>();
 
         //reserve all nodes
-        #if QT_VERSION >= 0x040300
+        #if QT_VERSION >= QT_VERSION_CHECK(4, 3, 0)
         while (not nodesem->tryAcquire( nodesem->available(), 2000 ))
         #else
         while (not nodesem->tryAcquire( nodesem->available() ))
@@ -454,7 +454,7 @@ QList<Node> Nodes::getAllNodes()
                 //all of the nodes have been rmeoved
                 return QList<Node>();
 
-            #if QT_VERSION < 0x40300
+            #if QT_VERSION < QT_VERSION_CHECK(4, 3, 0)
             sleep(2);
             #endif
         }
@@ -519,7 +519,7 @@ Node Nodes::getNode(int timeout)
             //we've run out of time
             return Node();
 
-        #if QT_VERSION >= 0x040300
+        #if QT_VERSION >= QT_VERSION_CHECK(4, 3, 0)
             //try to reserve a node
             if (not nodesem->tryAcquire(1, new_timeout))
                 //we ran out of time

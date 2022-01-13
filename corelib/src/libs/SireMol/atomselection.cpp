@@ -2963,10 +2963,8 @@ AtomSelection& AtomSelection::intersect(const AtomSelection &other)
         }
         else
         {
-            const auto s = this->selectedCutGroups();
-            QSet<CGIdx> cgidxs(s.begin(), s.end());
-            const auto t = other.selectedCutGroups();
-            cgidxs.intersect(QSet<CGIdx>(t.begin(), t.end()));
+            auto cgidxs = convert_to_qset(this->selectedCutGroups());
+            cgidxs.intersect(convert_to_qset(other.selectedCutGroups()));
 
             int ncg = info().nCutGroups();
 

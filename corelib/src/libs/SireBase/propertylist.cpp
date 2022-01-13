@@ -475,7 +475,11 @@ void PropertyList::swap(int i, int j)
                     "Cannot swap elements %1 and %2. Number of elements in list equals %3.")
                         .arg(i).arg(j).arg(l.count()), CODELOC );
 
-    l.swapItemsAt(idx_i, idx_j);
+    #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+        l.swap(idx_i, idx_j);
+    #else
+        l.swapItemsAt(idx_i, idx_j);
+    #endif
 }
 
 /** Take the element at index 'i' */

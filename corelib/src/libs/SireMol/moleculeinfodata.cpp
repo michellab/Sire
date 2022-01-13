@@ -1172,7 +1172,7 @@ AtomNum MoleculeInfoData::number(AtomIdx atomidx) const
     return atoms_by_index[atomidx].number;
 }
 
-#if QT_VERSION < 0x040300
+#if QT_VERSION < QT_VERSION_CHECK(4, 3, 0)
     /** This function provides the same functionality as the Qt 4.3 QMultiHash::remove(Key, Value) function */
     template<class Key, class T>
     void remove_from_hash(QMultiHash<Key,T> &hash, const Key &key, const T &value)
@@ -1210,7 +1210,7 @@ MoleculeInfoData MoleculeInfoData::rename(AtomIdx atomidx,
 
     AtomInfo &atom = newinfo.atoms_by_index[atomidx];
 
-    #if QT_VERSION >= 0x040300
+    #if QT_VERSION >= QT_VERSION_CHECK(4, 3, 0)
         newinfo.atoms_by_name.remove(atom.name, atomidx);
     #else
         ::remove_from_hash(newinfo.atoms_by_name, QString(atom.name), atomidx);
@@ -1220,7 +1220,7 @@ MoleculeInfoData MoleculeInfoData::rename(AtomIdx atomidx,
     {
         ResInfo &residue = newinfo.res_by_index[atom.residx];
 
-        #if QT_VERSION >= 0x040300
+        #if QT_VERSION >= QT_VERSION_CHECK(4, 3, 0)
             residue.atoms_by_name.remove(atom.name, atomidx);
         #else
             ::remove_from_hash(residue.atoms_by_name, QString(atom.name), atomidx);
@@ -1258,7 +1258,7 @@ MoleculeInfoData MoleculeInfoData::renumber(AtomIdx atomidx,
 
     AtomInfo &atom = newinfo.atoms_by_index[atomidx];
 
-    #if QT_VERSION >= 0x040300
+    #if QT_VERSION >= QT_VERSION_CHECK(4, 3, 0)
         newinfo.atoms_by_num.remove(atom.number, atomidx);
     #else
         ::remove_from_hash(newinfo.atoms_by_num, atom.number, atomidx);
@@ -1367,7 +1367,7 @@ MoleculeInfoData MoleculeInfoData::rename(ResIdx residx,
 
     ResInfo &residue = newinfo.res_by_index[residx];
 
-    #if QT_VERSION >= 0x040300
+    #if QT_VERSION >= QT_VERSION_CHECK(4, 3, 0)
         newinfo.res_by_name.remove(residue.name, residx);
     #else
         ::remove_from_hash(newinfo.res_by_name, QString(residue.name), residx);
@@ -1401,7 +1401,7 @@ MoleculeInfoData MoleculeInfoData::renumber(ResIdx residx,
 
     ResInfo &residue = newinfo.res_by_index[residx];
 
-    #if QT_VERSION >= 0x040300
+    #if QT_VERSION >= QT_VERSION_CHECK(4, 3, 0)
         newinfo.res_by_num.remove(residue.number, residx);
     #else
         ::remove_from_hash(newinfo.res_by_num, residue.number, residx);
@@ -1434,7 +1434,7 @@ MoleculeInfoData MoleculeInfoData::rename(CGIdx cgidx,
 
     CGInfo &cgroup = newinfo.cg_by_index[cgidx];
 
-    #if QT_VERSION >= 0x040300
+    #if QT_VERSION >= QT_VERSION_CHECK(4, 3, 0)
         newinfo.cg_by_name.remove(cgroup.name, cgidx);
     #else
         ::remove_from_hash(newinfo.cg_by_name, QString(cgroup.name), cgidx);
@@ -1467,7 +1467,7 @@ MoleculeInfoData MoleculeInfoData::rename(ChainIdx chainidx,
 
     ChainInfo &chain = newinfo.chains_by_index[chainidx];
 
-    #if QT_VERSION >= 0x040300
+    #if QT_VERSION >= QT_VERSION_CHECK(4, 3, 0)
         newinfo.chains_by_name.remove(chain.name, chainidx);
     #else
         ::remove_from_hash(newinfo.chains_by_name, QString(chain.name), chainidx);
@@ -1500,7 +1500,7 @@ MoleculeInfoData MoleculeInfoData::rename(SegIdx segidx,
 
     SegInfo &segment = newinfo.seg_by_index[segidx];
 
-    #if QT_VERSION >= 0x040300
+    #if QT_VERSION >= QT_VERSION_CHECK(4, 3, 0)
         newinfo.seg_by_name.remove(segment.name, segidx);
     #else
         ::remove_from_hash(newinfo.seg_by_name, QString(segment.name), segidx);

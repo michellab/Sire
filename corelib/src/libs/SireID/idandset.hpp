@@ -357,8 +357,7 @@ QList<typename ID::Index> IDAndSet<ID>::map(const typename ID::SearchObject &obj
 
     try
     {
-        auto s = it->map(obj);
-        idxs = QSet<typename ID::Index>(s.begin(), s.end());
+        idxs = convert_to_qset(it->map(obj));
     }
     catch(...)
     {
@@ -372,8 +371,7 @@ QList<typename ID::Index> IDAndSet<ID>::map(const typename ID::SearchObject &obj
 
         try
         {
-            auto s = it->map(obj);
-            idxs.intersect( QSet<typename ID::Index>(s.begin(), s.end()) );
+            idxs.intersect( convert_to_qset(it->map(obj)) );
         }
         catch(...)
         {

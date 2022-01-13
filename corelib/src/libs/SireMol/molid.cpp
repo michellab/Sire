@@ -722,8 +722,7 @@ QList<MolNum> IDAndSet<MolID>::_pvt_map(const T &group) const
 
     try
     {
-        const auto s = it->map(group);
-        molnums = QSet<MolNum>(s.begin(), s.end());
+        molnums = convert_to_qset(it->map(group));
     }
     catch(...)
     {
@@ -737,8 +736,7 @@ QList<MolNum> IDAndSet<MolID>::_pvt_map(const T &group) const
 
         try
         {
-            const auto s = it->map(group);
-            molnums.intersect( QSet<MolNum>(s.begin(), s.end()) );
+            molnums.intersect( convert_to_qset(it->map(group)) );
         }
         catch(...)
         {

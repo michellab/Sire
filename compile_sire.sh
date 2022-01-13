@@ -26,8 +26,8 @@ if [ ! -z "$CONDA_PYTHON" ]; then
     echo "** . \"$CONDA_BINDIR/activate\""
     . "$CONDA_BINDIR/activate" ""
     echo "** Running the Python install script... **"
-    echo "** \"$CONDA_PYTHON\" build/build_sire.py **"
-    "$CONDA_PYTHON" build/build_sire.py
+    echo "** $CONDA_PYTHON build/build_sire.py $NO_OPENMM **"
+    $CONDA_PYTHON build/build_sire.py $NO_OPENMM
     err=$?
     conda deactivate
     exit $err
@@ -54,6 +54,10 @@ case $key in
     INSTALL_SIRE_DIR="$2"
     echo "Installing Sire into ${INSTALL_SIRE_DIR}"
     ;;
+    --no-openmm)
+    NO_OPENMM="--no-openmm"
+    echo "Compiling a version of Sire without OpenMM support"
+    ;;
     --clean)
     echo "Completely cleaning the build directories..."
     echo "rm -rf build/miniconda.sh build/corelib/* build/wrapper/*"
@@ -65,8 +69,8 @@ esac
 
 # Set the version of miniconda to use. Choose "latest" for the latest
 # miniconda, or set a specific version here
-MINICONDA_VERSION="4.10.1"
-PYTHON_VERSION="py38"
+MINICONDA_VERSION="4.10.3"
+PYTHON_VERSION="py39"
 #MINICONDA_VERSION="latest"
 
 if [ -z "$INSTALL_SIRE_DIR" ]; then
@@ -87,7 +91,7 @@ fi
 
 echo "Installing into directory '${INSTALL_DIR}'"
 
-# Check whether or not miniconda has been downloaded and 
+# Check whether or not miniconda has been downloaded and
 # installed into this directory
 if [ -e "${INSTALL_DIR}/bin/python" ] || [ -e "${INSTALL_DIR}/python.exe" ]; then
     build_and_install_sire
@@ -135,7 +139,13 @@ fi
 # then download the appropriate miniconda distribution
 if [ "$(uname)" == "Darwin" ]; then
     # This is running on a Mac
-    PLATFORM="OSX"
+    PLATFORM="MacOS"
+
+    if [ ${BIT_TYPE} == "arm64" ]; then
+      echo "Compiling an x86_64 executable as Sire does not yet support arm64"
+      BIT_TYPE="x86_64"
+    fi
+
     MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${PYTHON_VERSION}_${MINICONDA_VERSION}-MacOSX-${BIT_TYPE}.sh"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # This is running on Linux

@@ -168,7 +168,7 @@ QList<T> MolInfo::intersection(const QList<T> &list0, const QList<T> &list1)
 
     if (list0.count() <= list1.count())
     {
-        QSet<T> set1(list1.constBegin(), list1.constEnd());
+        auto set1 = convert_to_qset(list1);
 
         for (typename QList<T>::const_iterator it = list0.constBegin();
              it != list0.constEnd();
@@ -180,7 +180,7 @@ QList<T> MolInfo::intersection(const QList<T> &list0, const QList<T> &list1)
     }
     else
     {
-        QSet<T> set0(list0.constBegin(), list0.constEnd());
+        auto set0 = convert_to_qset(list0);
 
         for (typename QList<T>::const_iterator it = list1.constBegin();
              it != list1.constEnd();

@@ -83,7 +83,7 @@ SelectEnginePtr IDNameEngine::construct(IDObject o, NameValues vals)
 
                 //optimise (JIT-compile) the regular expression now as it will
                 //be used a lot
-                #if QT_VERSION >= 0x504000
+                #if QT_VERSION >= QT_VERSION_CHECK(5, 4, 0)
                     regexp.optimize();  // introduced in Qt 5.4
                 #endif
 

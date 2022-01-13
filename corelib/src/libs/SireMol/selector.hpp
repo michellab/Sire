@@ -262,7 +262,7 @@ Selector<T>::Selector(const MoleculeData &moldata)
             : SireBase::ConcreteProperty<Selector<T>,MoleculeView>(moldata)
 {
     idxs = detail::getAll<T>(moldata.info());
-    idxs_set = QSet<typename T::Index>(idxs.constBegin(), idxs.constEnd());
+    idxs_set = convert_to_qset(idxs);
 }
 
 /** Construct the set of all groups for the molecule whose data is in 'moldata'
@@ -282,7 +282,7 @@ Selector<T>::Selector(const MoleculeData &moldata,
     }
 
     idxs = indexes;
-    idxs_set = QSet<typename T::Index>(idxs.constBegin(), idxs.constEnd());
+    idxs_set = convert_to_qset(idxs);
 }
 
 /** Construct the set of all groups that contain at least
@@ -297,7 +297,7 @@ Selector<T>::Selector(const MoleculeData &moldata,
             : SireBase::ConcreteProperty<Selector<T>,MoleculeView>(moldata)
 {
     idxs = detail::getAll<T>(moldata.info(), selected_atoms);
-    idxs_set = QSet<typename T::Index>(idxs.constBegin(), idxs.constEnd());
+    idxs_set = convert_to_qset(idxs);
 }
 
 /** Construct the set that contains only the view 'view' */
@@ -327,7 +327,7 @@ Selector<T>::Selector(const MoleculeData &moldata,
             : SireBase::ConcreteProperty<Selector<T>,MoleculeView>(moldata)
 {
     idxs = viewid.map(moldata.info());
-    idxs_set = QSet<typename T::Index>(idxs.constBegin(), idxs.constEnd());
+    idxs_set = convert_to_qset(idxs);
 }
 
 /** Copy constructor */
@@ -820,8 +820,7 @@ Selector<T> Selector<T>::intersection(const typename T::ID &id) const
 
     if (idxs.count() <= other_idxs.count())
     {
-        QSet<typename T::Index> other_idxs_set(other_idxs.constBegin(),
-                                               other_idxs.constEnd());
+        auto other_idxs_set = convert_to_qset(other_idxs);
 
         foreach (typename T::Index idx, idxs)
         {
@@ -961,8 +960,7 @@ bool Selector<T>::intersects(const typename T::ID &id) const
 
     if (idxs.count() <= id_idxs.count())
     {
-        QSet<typename T::Index> id_idxs_set(id_idxs.constBegin(),
-                                            id_idxs.constEnd());
+        auto id_idxs_set = convert_to_qset(id_idxs);
 
         foreach (typename T::Index idx, idxs)
         {

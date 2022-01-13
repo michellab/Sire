@@ -434,7 +434,7 @@ bool Process::wait(int ms)
     QElapsedTimer t;
     t.start();
 
-    #if QT_VERSION >= 0x040300
+    #if QT_VERSION >= QT_VERSION_CHECK(4, 3, 0)
     if (d->datamutex.tryLock(ms))
     #else
     if (d->datamutex.tryLock())

@@ -54,15 +54,15 @@ void register_SireCAS_containers()
     register_list< QVector<Expression> >();
 
     register_list< QList<Factor> >();
-    
+
     register_list< QList<Symbol> >();
     register_list< QVector<Symbol> >();
-    
+
     register_list< QList<SymbolValue> >();
     register_list< QList<SymbolComplex> >();
-    register_list< QList<SymbolExpression> >();    
-    
-    #if QT_VERSION >= 0x402000
+    register_list< QList<SymbolExpression> >();
+
+    #if QT_VERSION >= QT_VERSION_CHECK(4, 2, 0)
     register_set< QSet<SymbolID> >();
     register_set< QSet<Symbol> >();
 
@@ -79,16 +79,16 @@ void register_SireCAS_containers()
     #else
     register_set< QSet<SymbolID>, SymbolID >();
     register_set< QSet<Symbol>, Symbol >();
-    
+
     register_set< Symbols, Symbol >();
-    
+
     register_dict< QHash<SymbolID,Complex>, SymbolID, Complex >();
     register_dict< QHash<SymbolID,Expression>, SymbolID, Expression >();
     register_dict< QHash<SymbolID,double>, SymbolID, double >();
-    
+
     register_dict< QHash<Symbol,double>, Symbol, double >();
     register_dict< QHash<Symbol,Complex>, Symbol, Complex >();
     register_dict< QHash<Symbol,Expression>, Symbol, Expression >();
 
-    #endif    
+    #endif
 }

@@ -653,8 +653,7 @@ QList<MolNum> MolGroupsBase::map(const MolName &molname) const
     else if (molnums.count() > 1)
     {
         //remove any duplicates
-        QSet<MolNum> s(molnums.constBegin(), molnums.constEnd());
-        molnums = s.values();
+        molnums = convert_to_qset(molnums).values();
     }
 
     return molnums;
@@ -1871,8 +1870,7 @@ bool MolGroupsBase::remove(const QSet<MolNum> &molnums)
         mgnums += molnum_to_mgnum.value(molnum);
     }
 
-    QSet<MGNum> s(mgnums.constBegin(), mgnums.constEnd());
-    mgnums = s.values();
+    mgnums = convert_to_qset(mgnums).values();
 
     if (not mgnums.isEmpty())
         return this->remove(molnums, IDOrSet<MGID>(mgnums));
@@ -1887,8 +1885,7 @@ bool MolGroupsBase::remove(const MolID &molid)
     {
         const QList<MolNum> molnums = this->map(molid);
 
-        return MolGroupsBase::remove( QSet<MolNum>(molnums.begin(),
-                                                   molnums.end()) );
+        return MolGroupsBase::remove( convert_to_qset(molnums) );
     }
     catch(...)
     {}
@@ -1995,8 +1992,7 @@ void MolGroupsBase::addToIndex(const MoleculeGroup &molgroup)
     mgname_to_mgnum[molgroup.name()].append(molgroup.number());
 
     //now add the contents of this group to the index
-    const auto s = molgroup.molNums();
-    this->addToIndex(molgroup.number(), QSet<MolNum>(s.begin(), s.end()));
+    this->addToIndex(molgroup.number(), convert_to_qset(molgroup.molNums()));
 }
 
 /** Add the molecule with number 'molnum' to the index of the group
@@ -2246,8 +2242,7 @@ void MoleculeGroups::reindex()
     //completely clear the index
     MolGroupsBase::clearIndex();
 
-    const auto s = mgroups.keys();
-    QSet<MGNum> remaining_groups(s.begin(), s.end());
+    auto remaining_groups = convert_to_qset(mgroups.keys());
 
     //reindex the groups, in order
     foreach (MGNum mgnum, mgnums)
@@ -2337,12 +2332,10 @@ void MoleculeGroups::update(const MoleculeGroup &molgroup, bool auto_commit)
         //in the index...
 
         //get the list of current molecules in this group
-        const auto s = it->read().molNums();
-        QSet<MolNum> old_molnums(s.begin(), s.end());
+        auto old_molnums = convert_to_qset(it->read().molNums());
 
         //now the new set of numbers...
-        const auto t = molgroup.molNums();
-        QSet<MolNum> new_molnums(t.begin(), t.end());
+        auto new_molnums = convert_to_qset(molgroup.molNums());
 
         this->addToIndex(molgroup.number(), new_molnums - old_molnums);
         this->removeFromIndex(molgroup.number(), old_molnums - new_molnums);
@@ -2419,10 +2412,7 @@ bool MoleculeGroups::remove(const MolID &molid)
 {
     try
     {
-        const QList<MolNum> molnums = this->map(molid);
-
-        return MolGroupsBase::remove(QSet<MolNum>(molnums.begin(),
-                                                  molnums.end()) );
+        return MolGroupsBase::remove(convert_to_qset(this->map(molid)));
     }
     catch(...)
     {}
@@ -2546,8 +2536,7 @@ void MoleculeGroups::add(const MoleculeGroup &molgroup, const MGID &mgid)
     MolGroupPtr group(molgroup);
     group.edit().update( this->matchToExistingVersion(group.read().molecules()) );
 
-    const auto s = group.read().molNums();
-    QSet<MolNum> molnums(s.begin(), s.end());
+    auto molnums = convert_to_qset(group.read().molNums());
 
     foreach (MGNum mgnum, mgnums)
     {

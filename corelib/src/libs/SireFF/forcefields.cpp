@@ -3105,8 +3105,7 @@ void ForceFields::setComponent(const Symbol &symbol, const Expression &expressio
 /** Return the symbols representing all of the constant and energy components */
 QSet<Symbol> ForceFields::componentSymbols() const
 {
-    const auto s = ffsymbols.keys();
-    return QSet<Symbol>(s.begin(), s.end());
+    return convert_to_qset(ffsymbols.keys());
 }
 
 /** Return whether or not there is a constant or energy component with symbol 'symbol' */
@@ -4158,13 +4157,9 @@ QStringList ForceFields::propertyKeys() const
 {
     QSet<QString> keys;
 
-    const auto s = property_aliases.keys();
-    const auto t = combined_properties.keys();
-    const auto w = additional_properties.keys();
-
-    keys.unite( QSet<QString>(s.begin(), s.end()) );
-    keys.unite( QSet<QString>(t.begin(), t.end()) );
-    keys.unite( QSet<QString>(w.begin(), w.end()) );
+    keys.unite( convert_to_qset(property_aliases.keys()) );
+    keys.unite( convert_to_qset(combined_properties.keys()) );
+    keys.unite( convert_to_qset(additional_properties.keys()) );
 
     int nffields = this->nForceFields();
 
@@ -4174,15 +4169,13 @@ QStringList ForceFields::propertyKeys() const
     }
     else if (nffields == 1)
     {
-        const auto t = this->_pvt_forceField(0).propertyKeys();
-        keys.unite( QSet<QString>(t.begin(), t.end()) );
+        keys.unite( convert_to_qset(this->_pvt_forceField(0).propertyKeys()) );
         return QStringList( keys.values() );
     }
 
     for (int i=0; i<nffields; ++i)
     {
-        const auto t = this->_pvt_forceField(i).propertyKeys();
-        keys.unite( QSet<QString>(t.begin(), t.end()) );
+        keys.unite( convert_to_qset(this->_pvt_forceField(i).propertyKeys()) );
     }
 
     return QStringList( keys.values() );
@@ -4211,8 +4204,7 @@ QStringList ForceFields::propertyKeys(const FFID &ffid) const
 
     foreach (FFIdx idx, ffidxs)
     {
-        const auto t = this->_pvt_forceField(idx).propertyKeys();
-        keys.unite( QSet<QString>(t.begin(), t.end()) );
+        keys.unite(convert_to_qset(this->_pvt_forceField(idx).propertyKeys()));
     }
 
     return QStringList( keys.values() );
@@ -4744,8 +4736,8 @@ void ForceFields::add(const MoleculeGroup &molgroup, const MGID &mgid,
         {
             this->_pvt_forceField(mgnum).add(group, mgnum, map);
 
-            const auto t = group->molNums();
-            MolGroupsBase::addToIndex(mgnum, QSet<MolNum>(t.begin(), t.end()));
+            MolGroupsBase::addToIndex(mgnum,
+                                      convert_to_qset(group->molNums()));
         }
     }
     catch(...)
@@ -4890,9 +4882,8 @@ void ForceFields::addIfUnique(const MoleculeGroup &molgroup, const MGID &mgid,
         {
             this->_pvt_forceField(mgnum).addIfUnique(group, mgnum, map);
 
-            const auto t = group.read().molNums();
-
-            MolGroupsBase::addToIndex(mgnum, QSet<MolNum>(t.begin(), t.end()));
+            MolGroupsBase::addToIndex(mgnum,
+                                      convert_to_qset(group.read().molNums()));
         }
     }
     catch(...)

@@ -1953,8 +1953,7 @@ void Gro87::addToSystem(System &system, const PropertyMap &map) const
         }
 
         // Convert the vector to a set to check for duplicates.
-        QSet<int> unique_idx_in_gro(idx_in_gro.constBegin(),
-                                    idx_in_gro.constEnd());
+        auto unique_idx_in_gro = convert_to_qset(idx_in_gro);
 
         // Duplicate matches were found!
         if (idx_in_gro.count() != unique_idx_in_gro.count())

@@ -34,6 +34,8 @@ def parse_args():
         "(defaults to the number of CPU cores used for compiling corelib)")
     parser.add_argument("--noconda", action="store_true",
         help="Use pip rather than conda to install dependencies")
+    parser.add_argument("--no-openmm", action="store_true",
+        help="Compile Sire without OpenMM support")
     return parser.parse_args()
 
 
@@ -180,7 +182,7 @@ if __name__ == "__main__":
         if os.path.exists(os.path.join(conda_base, "include", "gsl", "gsl_version.h")):
             print("gsl is already installed...")
         else:
-            conda_pkgs.append("gsl=2.6")
+            conda_pkgs.append("gsl=2.7")
 
         # tbb
         if os.path.exists(os.path.join(conda_base, "include", "tbb", "tbb.h")):
@@ -194,7 +196,9 @@ if __name__ == "__main__":
             import PyQt5
             print("Qt5 is already installed...")
         except ImportError:
-            conda_pkgs.append("pyqt=5.15.2")
+            conda_pkgs.append("pyqt=5.12.3")
+            # This is the version for Apple M1
+            #conda_pkgs.append("pyqt=5.15.2")
 
         # compilers (so we keep binary compatibility)
         if is_osx:
@@ -276,6 +280,11 @@ if __name__ == "__main__":
 
     # check if the user wants to link against openmm
     use_openmm = True
+
+    if args.no_openmm:
+        print("DISABLING OPENMM SUPPORT")
+        use_openmm = False
+
     for d in args.corelib:
         if ("SIRE_USE_OPENMM=OFF" in d[0]):
             use_openmm = False
