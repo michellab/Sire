@@ -803,6 +803,10 @@ System renumberConstituents(System& system, unsigned mol_offset)
     for (unsigned i=0; i<mol_offset; i++)
     {
         const auto molecule = system.molecule(MolIdx(i)).molecule();
+
+        // Add the molecule.
+        molgroup.add(molecule);
+
         num_residues += molecule.nResidues();
         num_atoms += molecule.nAtoms();
     }
