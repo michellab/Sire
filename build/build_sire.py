@@ -253,22 +253,24 @@ if __name__ == "__main__":
     installed_something = False
 
     if (not args.noconda) and conda_pkgs:
-        cmd = "%s config --prepend channels conda-forge" % conda_exe
-        print("Activating conda-forge channel using: '%s'" % cmd)
-        status = subprocess.run(cmd.split())
-        if status.returncode != 0:
-            print("Failed to add conda-forge channel!")
-            sys.exit(-1)
+        # Do we still need to do this - my miniconda looks in conda-forge
+        # already. Maybe this is what is slowing the environment processing?
+        #cmd = "%s config --prepend channels conda-forge" % conda_exe
+        #print("Activating conda-forge channel using: '%s'" % cmd)
+        #status = subprocess.run(cmd.split())
+        #if status.returncode != 0:
+        #    print("Failed to add conda-forge channel!")
+        #    sys.exit(-1)
 
         # Need to run this command to prevent conda errors on
         # some platforms - see
         # https://github.com/ContinuumIO/anaconda-issues/issues/11246
-        cmd = "%s config --set channel_priority false" % conda_exe
-        print("Setting channel priority to false using: '%s'" % cmd)
-        status = subprocess.run(cmd.split())
-        if status.returncode != 0:
-            print("Failed to set channel priority!")
-            sys.exit(-1)
+        #cmd = "%s config --set channel_priority false" % conda_exe
+        #print("Setting channel priority to false using: '%s'" % cmd)
+        #status = subprocess.run(cmd.split())
+        #if status.returncode != 0:
+        #    print("Failed to set channel priority!")
+        #    sys.exit(-1)
 
         cmd = [*py_module_install, *conda_pkgs]
         print("Installing packages using: '%s'" % " ".join(cmd))
@@ -301,7 +303,7 @@ if __name__ == "__main__":
                 sys.exit(-1)
             else:
                 print("Installing openmm from the Omnia channel...")
-                subprocess.run(("%s install --yes -c omnia openmm=7.4.2" % conda_exe).split())
+                subprocess.run(("%s install --yes openmm=7.7.0" % conda_exe).split())
                 installed_something = True
 
     # make sure we really have found the compilers
