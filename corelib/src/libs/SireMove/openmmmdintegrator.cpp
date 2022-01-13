@@ -429,7 +429,7 @@ void OpenMMMDIntegrator::initialise()
         flag_cutoff = PME;
     else
         throw SireError::program_bug(QObject::tr(
-                                                 "The CutOff method has not been specified. Possible choises: nocutoff, cutoffnonperiodic, cutoffperiodic,ewal,pme"), CODELOC);
+                                                 "The CutOff method has not been specified. Possible choices: nocutoff, cutoffnonperiodic, cutoffperiodic,ewal,pme"), CODELOC);
 
     if (Debug)
         qDebug() << "\nCutoffType = " << CutoffType << "\n";
@@ -444,7 +444,7 @@ void OpenMMMDIntegrator::initialise()
         flag_constraint = HANGLES;
     else
         throw SireError::program_bug(QObject::tr(
-                                                 "The Constraints method has not been specified. Possible choises: none, hbonds, allbonds, hangles"), CODELOC);
+                                                 "The Constraints method has not been specified. Possible choices: none, hbonds, allbonds, hangles"), CODELOC);
 
     if (Debug)
         qDebug() << "\nConstraint Type = " << ConstraintType << "\n";
