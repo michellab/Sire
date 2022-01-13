@@ -158,11 +158,11 @@ void register_SireMol_containers()
     register_dict< QHash<ResNum,ResNum> >();
 
     #if QT_VERSION >= QT_VERSION_CHECK(4, 2, 0)
-    register_dict< QHash<MolNum,Selector<Atom> >();
-    register_dict< QHash<MolNum,Selector<CutGroup> >();
-    register_dict< QHash<MolNum,Selector<Residue> >();
-    register_dict< QHash<MolNum,Selector<Chain> >();
-    register_dict< QHash<MolNum,Selector<Segment> >();
+    register_dict< QHash<MolNum,Selector<Atom> > >();
+    register_dict< QHash<MolNum,Selector<CutGroup> > >();
+    register_dict< QHash<MolNum,Selector<Residue> > >();
+    register_dict< QHash<MolNum,Selector<Chain> > >();
+    register_dict< QHash<MolNum,Selector<Segment> > >();
     register_dict< QHash<MolNum,double> >();
     register_dict< QHash<AtomIdx,AtomIdx> >();
 

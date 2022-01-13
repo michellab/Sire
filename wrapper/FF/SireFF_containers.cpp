@@ -58,10 +58,10 @@ void register_SireFF_containers()
     register_list< QList<PointPtr> >();
 
     #if QT_VERSION >= QT_VERSION_CHECK(4, 2, 0)
-    register_dict< QHash<FFName,Properties>();
+    register_dict< QHash<FFName,Properties> >();
 
     #else
-    register_dict< QHash<FFName,Properties>, FFName, Properties >();
+    register_dict< QHash<FFName,Properties>, FFName, Properties > >();
 
     #endif
 }
