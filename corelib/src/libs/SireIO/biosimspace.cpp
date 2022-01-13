@@ -532,7 +532,7 @@ Molecule _pvt_setGromacsWater(
     return edit_mol.commit();
 }
 
-System setAmberWater(System& system, const QString& model, const PropertyMap& map)
+System setAmberWater(const System& system, const QString& model, const PropertyMap& map)
 {
     // Create a new system object.
     System new_system;
@@ -599,7 +599,7 @@ System setAmberWater(System& system, const QString& model, const PropertyMap& ma
     return new_system;
 }
 
-System setGromacsWater(System& system, const QString& model, const PropertyMap& map)
+System setGromacsWater(const System& system, const QString& model, const PropertyMap& map)
 {
     // Create a new system object.
     System new_system;
@@ -780,7 +780,7 @@ SelectResult setGromacsWater(const SelectResult& molecules, const QString& model
     return result;
 }
 
-System renumberConstituents(System& system, unsigned mol_offset)
+System renumberConstituents(const System& system, unsigned mol_offset)
 {
     // Create a new system object.
     System new_system;
@@ -854,8 +854,46 @@ Molecule pvt_renumberConstituents(
     return edit_mol.commit();
 }
 
+System updateAndPreserveOrder(
+    const System& system,
+    const Molecule& molecule,
+    unsigned index)
+{
+    // Create a new system object.
+    System new_system;
+
+    // Create a single molecule group.
+    auto molgroup = MoleculeGroup("all");
+
+    // Copy across all system properties.
+    for (const auto prop : system.propertyKeys())
+    {
+        new_system.setProperty(prop, system.property(prop));
+    }
+
+    // Add all of the molecules, preserving the ordering.
+    for (unsigned i=0; i<index; ++i)
+    {
+        auto mol = system.molecule(MolIdx(i)).molecule();
+        molgroup.add(mol);
+    }
+
+    molgroup.add(molecule);
+
+    for (int i=index+1; i<system.nMolecules(); ++i)
+    {
+        auto mol = system.molecule(MolIdx(i)).molecule();
+        molgroup.add(mol);
+    }
+
+    // Add the molecule group to the system.
+    new_system.add(molgroup);
+
+    return new_system;
+}
+
 System repartitionHydrogenMass(
-    System& system,
+    const System& system,
     const double factor,
     const unsigned water,
     const PropertyMap& map)

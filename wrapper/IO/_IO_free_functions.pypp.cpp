@@ -307,6 +307,36 @@ namespace bp = boost::python;
 
 #include "biosimspace.h"
 
+#include "SireBase/getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/mgname.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
+
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
+#include "moleculeparser.h"
+
+#include "biosimspace.h"
+
 void register_free_functions(){
 
     { //::SireIO::isAmberWater
@@ -350,7 +380,7 @@ void register_free_functions(){
 
     { //::SireIO::renumberConstituents
     
-        typedef ::SireSystem::System ( *renumberConstituents_function_type )( ::SireSystem::System &,unsigned int );
+        typedef ::SireSystem::System ( *renumberConstituents_function_type )( ::SireSystem::System const &,unsigned int );
         renumberConstituents_function_type renumberConstituents_function_value( &::SireIO::renumberConstituents );
         
         bp::def( 
@@ -363,7 +393,7 @@ void register_free_functions(){
 
     { //::SireIO::repartitionHydrogenMass
     
-        typedef ::SireSystem::System ( *repartitionHydrogenMass_function_type )( ::SireSystem::System &,double const,unsigned int const,::SireBase::PropertyMap const & );
+        typedef ::SireSystem::System ( *repartitionHydrogenMass_function_type )( ::SireSystem::System const &,double const,unsigned int const,::SireBase::PropertyMap const & );
         repartitionHydrogenMass_function_type repartitionHydrogenMass_function_value( &::SireIO::repartitionHydrogenMass );
         
         bp::def( 
@@ -389,7 +419,7 @@ void register_free_functions(){
 
     { //::SireIO::setAmberWater
     
-        typedef ::SireSystem::System ( *setAmberWater_function_type )( ::SireSystem::System &,::QString const &,::SireBase::PropertyMap const & );
+        typedef ::SireSystem::System ( *setAmberWater_function_type )( ::SireSystem::System const &,::QString const &,::SireBase::PropertyMap const & );
         setAmberWater_function_type setAmberWater_function_value( &::SireIO::setAmberWater );
         
         bp::def( 
@@ -415,7 +445,7 @@ void register_free_functions(){
 
     { //::SireIO::setGromacsWater
     
-        typedef ::SireSystem::System ( *setGromacsWater_function_type )( ::SireSystem::System &,::QString const &,::SireBase::PropertyMap const & );
+        typedef ::SireSystem::System ( *setGromacsWater_function_type )( ::SireSystem::System const &,::QString const &,::SireBase::PropertyMap const & );
         setGromacsWater_function_type setGromacsWater_function_value( &::SireIO::setGromacsWater );
         
         bp::def( 
@@ -436,6 +466,19 @@ void register_free_functions(){
             , setGromacsWater_function_value
             , ( bp::arg("molecules"), bp::arg("model"), bp::arg("map")=SireBase::PropertyMap() )
             , "Set all water molecules in the passed system to the appropriate GROMACS\nformat topology.\n\nPar:am system\nThe molecular system of interest.\n\nPar:am model\nThe name of the water model.\n\nPar:am map\nA dictionary of user-defined molecular property names.\n\nRetval: system\nThe system with updated water topology.\n\n" );
+    
+    }
+
+    { //::SireIO::updateAndPreserveOrder
+    
+        typedef ::SireSystem::System ( *updateAndPreserveOrder_function_type )( ::SireSystem::System const &,::SireMol::Molecule const &,unsigned int );
+        updateAndPreserveOrder_function_type updateAndPreserveOrder_function_value( &::SireIO::updateAndPreserveOrder );
+        
+        bp::def( 
+            "updateAndPreserveOrder"
+            , updateAndPreserveOrder_function_value
+            , ( bp::arg("system"), bp::arg("molecule"), bp::arg("index") )
+            , "Update a molecule in the system with a different UUID while\npreserving the molecular ordering. Normally we would need to\ndelete and re-add the molecule, which would place it at the\nend, even if the MolNum was unchanged.\n\nPar:am system\nThe molecular system of interest.\n\nPar:am molecule\nThe updated molecule.\n\nPar:am index\nThe index of the molecule in the system.\n\nRetval: system\nThe system with renumbered constituents.\n" );
     
     }
 

@@ -124,7 +124,7 @@ namespace SireIO
             The system with updated water topology.
      */
     SIREIO_EXPORT System setAmberWater(
-            System& system,
+            const System& system,
             const QString& model,
             const PropertyMap& map = PropertyMap());
 
@@ -144,7 +144,7 @@ namespace SireIO
             The system with updated water topology.
      */
     SIREIO_EXPORT System setGromacsWater(
-            System& system,
+            const System& system,
             const QString& model,
             const PropertyMap& map = PropertyMap());
 
@@ -202,13 +202,35 @@ namespace SireIO
             The system with renumbered constituents.
      */
     SIREIO_EXPORT System renumberConstituents(
-            System& system,
+            const System& system,
             unsigned mol_offset=0);
 
     Molecule pvt_renumberConstituents(
             Molecule& molecule,
             const unsigned residue_offset,
             const unsigned atom_offset);
+
+    //! Update a molecule in the system with a different UUID while
+    /*! preserving the molecular ordering. Normally we would need to
+        delete and re-add the molecule, which would place it at the
+        end, even if the MolNum was unchanged.
+
+        \param system
+            The molecular system of interest.
+
+        \param molecule
+            The updated molecule.
+
+        \param index
+            The index of the molecule in the system.
+
+        \retval system
+            The system with renumbered constituents.
+     */
+    SIREIO_EXPORT System updateAndPreserveOrder(
+            const System& system,
+            const Molecule& molecule,
+            unsigned index);
 
     //! Redistribute mass of heavy atoms connected to bonded hydrogens into
     /*! the hydrogen atoms. This allows use of larger simulation integration
@@ -233,7 +255,7 @@ namespace SireIO
             The system with repartitioned hydrogen mass.
      */
     SIREIO_EXPORT System repartitionHydrogenMass(
-            System& system,
+            const System& system,
             const double factor=4,
             const unsigned water=0,
             const PropertyMap& map = PropertyMap());
@@ -275,6 +297,7 @@ SIRE_EXPOSE_FUNCTION( SireIO::isGromacsWater )
 SIRE_EXPOSE_FUNCTION( SireIO::setAmberWater )
 SIRE_EXPOSE_FUNCTION( SireIO::setGromacsWater )
 SIRE_EXPOSE_FUNCTION( SireIO::renumberConstituents )
+SIRE_EXPOSE_FUNCTION( SireIO::updateAndPreserveOrder )
 SIRE_EXPOSE_FUNCTION( SireIO::repartitionHydrogenMass )
 
 SIRE_END_HEADER
