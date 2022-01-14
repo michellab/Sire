@@ -70,8 +70,12 @@ esac
 # Set the version of miniconda to use. Choose "latest" for the latest
 # miniconda, or set a specific version here
 MINICONDA_VERSION="4.10.3"
-PYTHON_VERSION="py39"
 #MINICONDA_VERSION="latest"
+
+# Set the Python version. Sire has been compiled successfully
+# for all versions from Python 3.6-3.9. Your choice is more about
+# what things you want to install on top of Sire, e.g. RDKit etc
+PYTHON_VERSION="py37"
 
 if [ -z "$INSTALL_SIRE_DIR" ]; then
     # Ask the user where they would like to install sire. By default
