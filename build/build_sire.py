@@ -163,7 +163,9 @@ if __name__ == "__main__":
         import netCDF4
         print("netCDF4 is already installed...")
     except ImportError:
-        conda_pkgs.append("netcdf4=1.5.8")
+        # had to step back from 1.5.8 as this isn't available
+        # yet on Linux (works on MacOS)
+        conda_pkgs.append("netcdf4=1.5.7")
 
     CC = None
     CXX = None
@@ -217,12 +219,9 @@ if __name__ == "__main__":
                 conda_pkgs.append("gcc_linux-64")
                 conda_pkgs.append("gxx_linux-64")
 
-                # Use libgfortran4 since libgfortan5 pulls in libgcc-ng=9.3.0,
-                # which breaks the Sire development environment.
-                conda_pkgs.append("libgfortran4")
-
-                # Explicitly install working libgcc-ng version.
-                conda_pkgs.append("libgcc-ng=9.1.0")
+                # trying not to fix these, as these cause issues later...
+                conda_pkgs.append("libgfortran5")
+                conda_pkgs.append("libgcc-ng")
 
         if (not is_windows):
             if os.path.exists(os.path.join(conda_bin, "make")):
