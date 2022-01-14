@@ -219,9 +219,12 @@ if __name__ == "__main__":
                 conda_pkgs.append("gcc_linux-64")
                 conda_pkgs.append("gxx_linux-64")
 
-                # trying not to fix these, as these cause issues later...
-                conda_pkgs.append("libgfortran5")
-                conda_pkgs.append("libgcc-ng")
+                # Use libgfortran4 since libgfortan5 pulls in libgcc-ng=9.3.0,
+                # which breaks the Sire development environment.
+                conda_pkgs.append("libgfortran4")
+
+                # Explicitly install working libgcc-ng version.
+                conda_pkgs.append("libgcc-ng=9.1.0")
 
         if (not is_windows):
             if os.path.exists(os.path.join(conda_bin, "make")):
