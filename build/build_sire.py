@@ -298,7 +298,7 @@ if __name__ == "__main__":
                     "available - please check your openmm installation")
                 sys.exit(-1)
             else:
-                print("Installing openmm from the Omnia channel...")
+                print("Installing openmm...")
                 subprocess.run(("%s install --yes openmm=7.7.0" % conda_exe).split())
                 installed_something = True
 
