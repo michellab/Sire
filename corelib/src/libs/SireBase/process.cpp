@@ -61,7 +61,7 @@ static QVector<wchar_t> toWCharVec(const QString &str)
 }
 #endif
 #include <errno.h>      // CONDITIONAL_INCLUDE
-#include <string.h>     // CONDITIONAL_INCLUDE
+#include <string>     // CONDITIONAL_INCLUDE
 
 #include <sys/stat.h>   // CONDITIONAL_INCLUDE
 #include <sys/types.h>  // CONDITIONAL_INCLUDE

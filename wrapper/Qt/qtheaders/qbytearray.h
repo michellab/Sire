@@ -47,7 +47,7 @@
 #include <QtCore/qarraydata.h>
 
 #include <stdlib.h>
-#include <string.h>
+#include <string>
 #include <stdarg.h>
 
 #ifdef truncate

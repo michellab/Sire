@@ -24,7 +24,7 @@
     // the Qt namespace, so we need to do this here
     namespace Qt
     {
-        static auto SkipEmptyParts = QString::SkipEmptyParts;
+        const auto SkipEmptyParts = QString::SkipEmptyParts;
     }
 
     // Older Qt also uses a now deprecated way to initialise QSets
