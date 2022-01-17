@@ -253,6 +253,7 @@ include_directories (BEFORE ${CMAKE_CURRENT_SOURCE_DIR})
 include_directories (BEFORE ${CMAKE_CURRENT_BINARY_DIR})
 if (TBB_INCLUDE_DIR)
   include_directories (${TBB_INCLUDE_DIR})
+  message( STATUS "Using TBB from ${TBB_INCLUDE_DIR}")
 endif()
 if (SIRE_GSL_INCLUDE_PATH)
   include_directories (${SIRE_GSL_INCLUDE_PATH})
@@ -412,7 +413,7 @@ endif()
 
 message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR} | ${PYTHON_SITE_DIR}" )
 include_directories( ${PYTHON_INCLUDE_DIR} )
-include_directories( ${BOOST_PYTHON_HEADERS} )
+include_directories( "${BOOST_PYTHON_HEADERS}" )
 
 message( STATUS "boost::python library ${BOOST_PYTHON_LIBRARY} | ${BOOST_PYTHON_HEADERS}" )
 

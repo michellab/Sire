@@ -79,7 +79,7 @@ if ( CMAKE_GENERATOR MATCHES "Xcode" )
 
   set ( SIRE_COMP_CMAKE "${SIRE_INCLUDE_DIR}/cmake/SireCompileVariables.cmake" )
 
-  # Look for the "SireCompileVariables.cmake" file in the install directory
+  #ï¿½Look for the "SireCompileVariables.cmake" file in the install directory
   if (EXISTS "${SIRE_COMP_CMAKE}")
     include( "${SIRE_COMP_CMAKE}" )
   else()
@@ -163,7 +163,7 @@ else()
 #    set( CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
 #           "Prefix prepended to install directories" FORCE )
   else()
-    # Option to set the install directory of Sire
+    #ï¿½Option to set the install directory of Sire
     if (NOT DEFINED SIRE_APP)
       set(SIRE_APP "$ENV{HOME}/sire.app")
     endif()
@@ -303,7 +303,7 @@ save_sire_variable( "SIRE_TEST" "${SIRE_TEST}" )
 set (CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/build/cmake ${CMAKE_SOURCE_DIR}/build/cmake/cmake_cxx11)
 
 # Options to pass to 'strip' when stripping the libraries
-# (on linux, aix and mac need to use '-x' to ensure we leave
+#ï¿½(on linux, aix and mac need to use '-x' to ensure we leave
 # the global symbols)
 set ( SIRE_STRIP_OPTIONS "-x" CACHE STRING "Options to pass to 'strip'" )
 save_sire_variable( "SIRE_STRIP_OPTIONS" "${SIRE_STRIP_OPTIONS}" )
@@ -560,17 +560,6 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
     set ( SIRE_STATIC_LINK_FLAGS "-static" )
 
     GET_SIRE_VECTOR_FLAGS( "-fopenmp-simd" "-msse2" "-mavx" "-mavx512f" )
-
-    # Now gcc 5 specific options
-    if ( GCC_MAJOR_VERSION GREATER 4 )
-      if (MSYS)
-        message(STATUS "MSYS2 will use builtin OpenMM if available...")
-      else()
-        # OpenMM with conda uses the old C++ binary API!
-        # Tell GCC 5 to respect the old API
-        set( SIRE_PLATFORM_FLAGS "${SIRE_PLATFORM_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=0" )
-      endif()
-    endif()
 
     # support for ppc64le architecture
     if ( CMAKE_HOST_SYSTEM_PROCESSOR STREQUAL "ppc64le" )
@@ -1062,7 +1051,7 @@ message( STATUS "Shared library flags    == ${CMAKE_SHARED_LINKER_FLAGS}" )
 message( STATUS "Static library flags    == ${CMAKE_STATIC_LINKER_FLAGS}" )
 message( STATUS "Executable link flags   == ${CMAKE_EXE_LINKER_FLAGS}" )
 
-# Now save the compile variables so that they can be re-used by libraries that use Sire
+#ï¿½Now save the compile variables so that they can be re-used by libraries that use Sire
 save_sire_variable( "SIRE_C_COMPILER" "${CMAKE_C_COMPILER}" )
 save_sire_variable( "SIRE_CXX_COMPILER" "${CMAKE_CXX_COMPILER}" )
 save_sire_variable( "SIRE_C_FLAGS_RELEASE" "${CMAKE_C_FLAGS_RELEASE}" )
