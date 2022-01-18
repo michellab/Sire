@@ -229,7 +229,7 @@ def has_clone_function(t):
         return False
 
     try:
-        c.mem_funs("clone")
+        c.member_functions("clone")
         return True
     except:
         return False
@@ -290,7 +290,7 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
    try:
        #all copy_const_reference call policies with clone_const_reference
        #funs = c.mem_funs( lambda f: declarations.is_reference( f.return_type ) )
-       funs = c.mem_funs( lambda f: f.return_type.decl_string.endswith("&") )
+       funs = c.member_functions( lambda f: f.return_type.decl_string.endswith("&") )
    except:
        pass
 
