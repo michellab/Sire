@@ -271,7 +271,16 @@ def is_copy_constructor(f):
 
     decl_string = arg.decl_type.decl_string
 
-    return decl_string.endswith(f"{f.partial_name} const &")
+    if decl_string.endswith(f"{f.partial_name} const &"):
+        return True
+
+    # we need something fuzzier for some templates. Here, if the
+    # argument is called "other" and it ends with 'const &' then
+    # it is probably a copy constructor
+    if decl_string.endswith(" const &") and arg.name == "other":
+        return True
+
+    return False
 
 
 def export_class(mb, classname, aliases, includes, special_code, auto_str_function=True):
