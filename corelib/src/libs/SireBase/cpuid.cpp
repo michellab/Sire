@@ -32,12 +32,12 @@
     #include <libcpuid/libcpuid.h> // CONDITIONAL_INCLUDE
 #elif defined(_WIN32)
     #define WIN32_LEAN_AND_MEAN
-    #include <Windows.h>
+    #include <Windows.h>    // CONDITIONAL_INCLUDE
 #elif defined(__APPLE__) || defined(__FreeBSD__)
-    #include <sys/param.h>
-    #include <sys/sysctl.h>
+    #include <sys/param.h>  // CONDITIONAL_INCLUDE
+    #include <sys/sysctl.h> // CONDITIONAL_INCLUDE
 #else
-    #include <sys/sysinfo.h>
+    #include <sys/sysinfo.h>    // CONDITIONAL_INCLUDE
 #endif
 
 #include "SireStream/shareddatastream.h"
