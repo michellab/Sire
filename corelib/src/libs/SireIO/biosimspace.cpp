@@ -541,7 +541,7 @@ System setAmberWater(const System& system, const QString& model, const PropertyM
     auto molgroup = MoleculeGroup("all");
 
     // Copy across all system properties.
-    for (const auto prop : system.propertyKeys())
+    for (const auto &prop : system.propertyKeys())
     {
         new_system.setProperty(prop, system.property(prop));
     }
@@ -608,7 +608,7 @@ System setGromacsWater(const System& system, const QString& model, const Propert
     auto molgroup = MoleculeGroup("all");
 
     // Copy across all system properties.
-    for (const auto prop : system.propertyKeys())
+    for (const auto &prop : system.propertyKeys())
     {
         new_system.setProperty(prop, system.property(prop));
     }
@@ -789,7 +789,7 @@ System renumberConstituents(const System& system, unsigned mol_offset)
     auto molgroup = MoleculeGroup("all");
 
     // Copy across all system properties.
-    for (const auto prop : system.propertyKeys())
+    for (const auto &prop : system.propertyKeys())
     {
         new_system.setProperty(prop, system.property(prop));
     }
@@ -866,7 +866,7 @@ System updateAndPreserveOrder(
     auto molgroup = MoleculeGroup("all");
 
     // Copy across all system properties.
-    for (const auto prop : system.propertyKeys())
+    for (const auto &prop : system.propertyKeys())
     {
         new_system.setProperty(prop, system.property(prop));
     }
@@ -905,7 +905,7 @@ System repartitionHydrogenMass(
     auto molgroup = MoleculeGroup("all");
 
     // Copy across all system properties.
-    for (const auto prop : system.propertyKeys())
+    for (const auto &prop : system.propertyKeys())
     {
         new_system.setProperty(prop, system.property(prop));
     }
