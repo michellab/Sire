@@ -1109,6 +1109,8 @@ void OpenMMMDIntegrator::createContext(IntegratorWorkspace &workspace,
             integrator_openmm = new OpenMM::VariableVerletIntegrator(integration_tol); //integration tolerance error unitless
         else if (Integrator_type == "langevin")
             integrator_openmm = new OpenMM::LangevinIntegrator(converted_Temperature, converted_friction, dt);
+        else if (Integrator_type == "langevinmiddle")
+            integrator_openmm = new OpenMM::LangevinMiddleIntegrator(converted_Temperature, converted_friction, dt);
         else if (Integrator_type == "variablelangevin")
             integrator_openmm = new OpenMM::VariableLangevinIntegrator(converted_Temperature, converted_friction, integration_tol);
         else if (Integrator_type == "brownian")
