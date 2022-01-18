@@ -253,6 +253,27 @@ def fix_Index_T_(c):
 has_copy_function = {}
 
 
+def is_copy_constructor(f):
+    """Return whether or not this function is a public copy constructor"""
+    if f.access_type != "public":
+        return False
+
+    if type(f) != calldef_wrapper.constructor_t:
+        # Not a constructor according to Py++
+        return False
+
+    args = f.arguments
+
+    if len(args) != 1:
+        return False
+
+    arg = args[0]
+
+    decl_string = arg.decl_type.decl_string
+
+    return decl_string.endswith(f"{f.partial_name} const &")
+
+
 def export_class(mb, classname, aliases, includes, special_code, auto_str_function=True):
    """Do all the work necessary to allow the class called 'classname'
       to be exported, using the supplied aliases, and using the
@@ -352,7 +373,7 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
               break
 
           try:
-              if decl.is_copy_constructor:
+              if is_copy_constructor(decl):
                   #create a __copy__ function
                   class_name = re.sub(r"\s\[class\]","",str(c))
                   class_name = re.sub(r"\s\[struct\]","",class_name)
