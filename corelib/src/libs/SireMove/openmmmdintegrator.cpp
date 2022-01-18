@@ -429,7 +429,7 @@ void OpenMMMDIntegrator::initialise()
         flag_cutoff = PME;
     else
         throw SireError::program_bug(QObject::tr(
-                                                 "The CutOff method has not been specified. Possible choises: nocutoff, cutoffnonperiodic, cutoffperiodic,ewal,pme"), CODELOC);
+                                                 "The CutOff method has not been specified. Possible choices: nocutoff, cutoffnonperiodic, cutoffperiodic,ewal,pme"), CODELOC);
 
     if (Debug)
         qDebug() << "\nCutoffType = " << CutoffType << "\n";
@@ -444,7 +444,7 @@ void OpenMMMDIntegrator::initialise()
         flag_constraint = HANGLES;
     else
         throw SireError::program_bug(QObject::tr(
-                                                 "The Constraints method has not been specified. Possible choises: none, hbonds, allbonds, hangles"), CODELOC);
+                                                 "The Constraints method has not been specified. Possible choices: none, hbonds, allbonds, hangles"), CODELOC);
 
     if (Debug)
         qDebug() << "\nConstraint Type = " << ConstraintType << "\n";
@@ -1109,6 +1109,8 @@ void OpenMMMDIntegrator::createContext(IntegratorWorkspace &workspace,
             integrator_openmm = new OpenMM::VariableVerletIntegrator(integration_tol); //integration tolerance error unitless
         else if (Integrator_type == "langevin")
             integrator_openmm = new OpenMM::LangevinIntegrator(converted_Temperature, converted_friction, dt);
+        else if (Integrator_type == "langevinmiddle")
+            integrator_openmm = new OpenMM::LangevinMiddleIntegrator(converted_Temperature, converted_friction, dt);
         else if (Integrator_type == "variablelangevin")
             integrator_openmm = new OpenMM::VariableLangevinIntegrator(converted_Temperature, converted_friction, integration_tol);
         else if (Integrator_type == "brownian")

@@ -137,7 +137,7 @@ cutoff_type = Parameter("cutoff type", "cutoffperiodic", """The cutoff method to
 cutoff_dist = Parameter("cutoff distance", 10 * angstrom,
                         """The cutoff distance to use for the non-bonded interactions.""")
 
-integrator_type = Parameter("integrator", "leapfrogverlet", """The integrator to use for dynamics.""")
+integrator_type = Parameter("integrator", "leapfrogverlet", "langevinmiddle", """The integrator to use for dynamics.""")
 
 inverse_friction = Parameter("inverse friction", 0.1 * picosecond,
                              """Inverse friction time for the Langevin thermostat.""")

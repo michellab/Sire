@@ -53,6 +53,8 @@ namespace bp = boost::python;
 
 #include "SireUnits/units.h"
 
+#include "SireVol/periodicbox.h"
+
 #include "SireVol/triclinicbox.h"
 
 #include "charmmpsf.h"
