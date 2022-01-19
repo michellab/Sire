@@ -10,8 +10,6 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
-#include "SireFF/intra2b2gff.hpp"
-
 #include "SireMol/errors.h"
 
 #include "SireMol/mgname.h"
@@ -31,6 +29,8 @@ namespace bp = boost::python;
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
+#include "SireFF/intra2b2gff.hpp"
+
 
 #include "g2ff.h"
 
