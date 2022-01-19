@@ -246,7 +246,38 @@ if __name__ == "__main__":
 
         cmake = os.path.join(conda_bin, "cmake%s" % exe_suffix)
 
-    installed_something = False
+    # check if the user wants to link against openmm
+    use_openmm = True
+
+    if args.no_openmm:
+        print("DISABLING OPENMM SUPPORT")
+        use_openmm = False
+
+    for d in args.corelib:
+        if ("SIRE_USE_OPENMM=OFF" in d[0]):
+            use_openmm = False
+            break
+
+    # openmm last as different repo
+    if use_openmm:
+        try:
+            import openmm
+            print("openmm is already installed...")
+        except ImportError:
+            if args.noconda:
+                print("It looks like the openmm Python modules are not "
+                    "available - please check your openmm installation")
+                sys.exit(-1)
+            else:
+                print("Installing openmm...")
+                conda_pkgs.append("openmm=7.7.0")
+
+    # Write the packages as a requirements.txt file. This will help
+    # us later when we develop other ways of installing Sire
+    if len(conda_pkgs) > 0:
+        with open("requirements.txt", "w") as FILE:
+            for pkg in conda_pkgs:
+                FILE.write(f"{pkg}\n")
 
     if (not args.noconda) and conda_pkgs:
         # Do we still need to do this - my miniconda looks in conda-forge
@@ -271,36 +302,10 @@ if __name__ == "__main__":
         cmd = [*py_module_install, *conda_pkgs]
         print("Installing packages using: '%s'" % " ".join(cmd))
         status = subprocess.run(cmd)
-        installed_something = True
+
         if status.returncode != 0:
             print("Something went wrong installing dependencies!")
             sys.exit(-1)
-
-    # check if the user wants to link against openmm
-    use_openmm = True
-
-    if args.no_openmm:
-        print("DISABLING OPENMM SUPPORT")
-        use_openmm = False
-
-    for d in args.corelib:
-        if ("SIRE_USE_OPENMM=OFF" in d[0]):
-            use_openmm = False
-            break
-    # openmm last as different repo
-    if use_openmm:
-        try:
-            import simtk.openmm
-            print("openmm is already installed...")
-        except ImportError:
-            if args.noconda:
-                print("It looks like the openmm Python modules are not "
-                    "available - please check your openmm installation")
-                sys.exit(-1)
-            else:
-                print("Installing openmm...")
-                subprocess.run(("%s install --yes openmm=7.7.0" % conda_exe).split())
-                installed_something = True
 
     # make sure we really have found the compilers
     if (not args.noconda):
