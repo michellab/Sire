@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/trigarray2d.h"
+
 #include "SireError/errors.h"
 
 #include "SireMaths/boys.h"

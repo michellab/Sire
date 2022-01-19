@@ -41,6 +41,8 @@ namespace bp = boost::python;
 
 #include <QDebug>
 
+#include <QElapsedTimer>
+
 #include <QTime>
 
 #include "zmatrix.h"

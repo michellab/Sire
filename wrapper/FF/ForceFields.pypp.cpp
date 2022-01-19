@@ -6,10 +6,6 @@
 #include "Helpers/clone_const_reference.hpp"
 #include "ForceFields.pypp.hpp"
 
-#ifdef _WIN32
-struct IUnknown;
-#endif
-
 namespace bp = boost::python;
 
 #include "SireBase/combineproperties.h"

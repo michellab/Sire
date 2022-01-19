@@ -41,64 +41,64 @@ void register_TestFF_class(){
         bp::scope TestFF_scope( TestFF_exposer );
         TestFF_exposer.def( bp::init< SireMM::TestFF const & >(( bp::arg("other") ), "") );
         { //::SireMM::TestFF::add
-
+        
             typedef void ( ::SireMM::TestFF::*add_function_type)( ::SireMol::Molecules const & ) ;
             add_function_type add_function_value( &::SireMM::TestFF::add );
-
-            TestFF_exposer.def(
+            
+            TestFF_exposer.def( 
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules") )
                 , "" );
-
+        
         }
         { //::SireMM::TestFF::addFixedAtoms
-
+        
             typedef void ( ::SireMM::TestFF::*addFixedAtoms_function_type)( ::SireMol::Molecules const & ) ;
             addFixedAtoms_function_type addFixedAtoms_function_value( &::SireMM::TestFF::addFixedAtoms );
-
-            TestFF_exposer.def(
+            
+            TestFF_exposer.def( 
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
                 , ( bp::arg("molecules") )
                 , "" );
-
+        
         }
         { //::SireMM::TestFF::calculateEnergy
-
+        
             typedef void ( ::SireMM::TestFF::*calculateEnergy_function_type)(  ) ;
             calculateEnergy_function_type calculateEnergy_function_value( &::SireMM::TestFF::calculateEnergy );
-
-            TestFF_exposer.def(
+            
+            TestFF_exposer.def( 
                 "calculateEnergy"
                 , calculateEnergy_function_value
                 , "" );
-
+        
         }
         { //::SireMM::TestFF::operator=
-
+        
             typedef ::SireMM::TestFF & ( ::SireMM::TestFF::*assign_function_type)( ::SireMM::TestFF const & ) ;
             assign_function_type assign_function_value( &::SireMM::TestFF::operator= );
-
-            TestFF_exposer.def(
+            
+            TestFF_exposer.def( 
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
                 , bp::return_self< >()
                 , "" );
-
+        
         }
         { //::SireMM::TestFF::setCutoff
-
+        
             typedef void ( ::SireMM::TestFF::*setCutoff_function_type)( ::SireUnits::Dimension::Length,::SireUnits::Dimension::Length ) ;
             setCutoff_function_type setCutoff_function_value( &::SireMM::TestFF::setCutoff );
-
-            TestFF_exposer.def(
+            
+            TestFF_exposer.def( 
                 "setCutoff"
                 , setCutoff_function_value
                 , ( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") )
                 , "" );
-
+        
         }
         TestFF_exposer.def( "__copy__", &__copy__);
         TestFF_exposer.def( "__deepcopy__", &__copy__);

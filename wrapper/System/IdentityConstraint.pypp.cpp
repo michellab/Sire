@@ -46,7 +46,7 @@ namespace bp = boost::python;
 
 #include <QDebug>
 
-#include <QTime>
+#include <QElapsedTimer>
 
 #include <QVarLengthArray>
 
