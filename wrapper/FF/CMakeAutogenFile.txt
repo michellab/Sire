@@ -14,8 +14,10 @@ set ( PYPP_SOURCES
        FFMolGroup.pypp.cpp
        FFName.pypp.cpp
        FieldTable.pypp.cpp
+       ForceFields.pypp.cpp
        ForceTable.pypp.cpp
        G1FF.pypp.cpp
+       G2FF.pypp.cpp
        GridFieldTable.pypp.cpp
        GridPotentialTable.pypp.cpp
        IDAndSet_FFID_.pypp.cpp
@@ -33,8 +35,6 @@ set ( PYPP_SOURCES
        SingleComponent.pypp.cpp
        Specify_FFID_.pypp.cpp
        VectorPoint.pypp.cpp
-       ForceFields.pypp.cpp
-       G2FF.pypp.cpp
        SireFF_containers.cpp
        SireFF_properties.cpp
        SireFF_registrars.cpp

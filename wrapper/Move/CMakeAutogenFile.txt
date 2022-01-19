@@ -76,8 +76,8 @@ set ( PYPP_SOURCES
        ZMatMove.pypp.cpp
        ZMatrix.pypp.cpp
        ZMatrixCoords.pypp.cpp
-       ZMatrixLine.pypp.cpp
        ZMatrixCoordsLine.pypp.cpp
+       ZMatrixLine.pypp.cpp
        SireMove_containers.cpp
        SireMove_properties.cpp
        SireMove_registrars.cpp

@@ -170,6 +170,7 @@ set ( PYPP_SOURCES
        StretchStretchParameterName.pypp.cpp
        StretchStretchSymbols.pypp.cpp
        SwitchingFunction.pypp.cpp
+       TestFF.pypp.cpp
        ThreeAtomFunction.pypp.cpp
        ThreeAtomFunctions.pypp.cpp
        ThreeAtomPerturbation.pypp.cpp
@@ -179,7 +180,6 @@ set ( PYPP_SOURCES
        TwoAtomPerturbation.pypp.cpp
        UreyBradleyComponent.pypp.cpp
        UreyBradleyParameterName.pypp.cpp
-       TestFF.pypp.cpp
        SireMM_containers.cpp
        SireMM_properties.cpp
        SireMM_registrars.cpp
