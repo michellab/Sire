@@ -53,6 +53,7 @@ void register_SireUnits_containers()
     register_list< QVector<Dimension::Charge> >();
     register_list< QVector<Dimension::Mass> >();
     register_list< QVector<Dimension::MolarMass> >();
+    register_list< QVector<Dimension::Length> > ();
 
     register_PackedArray< SireBase::PackedArray2D<Dimension::Charge> >();
     register_PackedArray< SireBase::PackedArray2D<Dimension::Mass> >();
