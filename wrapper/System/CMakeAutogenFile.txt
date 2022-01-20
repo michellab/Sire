@@ -46,6 +46,7 @@ set ( PYPP_SOURCES
        TripleDistanceComponent.pypp.cpp
        VolMapMonitor.pypp.cpp
        WindowedComponent.pypp.cpp
+       _System_free_functions.pypp.cpp
        SireSystem_containers.cpp
        SireSystem_properties.cpp
        SireSystem_registrars.cpp
