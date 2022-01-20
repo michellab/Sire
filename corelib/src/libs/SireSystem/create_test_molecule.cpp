@@ -11,6 +11,8 @@
 #include "SireMol/atomname.h"
 #include "SireMol/mover.hpp"
 #include "SireMol/moleditor.h"
+#include "SireMol/atomnum.h"
+#include "SireMol/resnum.h"
 
 #include "create_test_molecule.h"
 
@@ -21,9 +23,10 @@ namespace SireSystem
     Molecule create_test_molecule()
     {
         auto m = Molecule();
-        m = m.edit().add(CGName("1")).add(AtomName("H")).renumber(1).molecule()
+        m = m.edit().add(CGName("1")).add(AtomName("H"))
+                    .renumber(AtomNum(1)).molecule()
                     .add(ChainName("A"))
-                    .add(ResName("R")).renumber(1).molecule()
+                    .add(ResName("R")).renumber(ResNum(1)).molecule()
                     .add(SegName("S")).molecule()
                     .atom(AtomName("H"))
                     .reparent(ResName("R")).reparent(SegName("S")).molecule()
