@@ -21,12 +21,12 @@ namespace SireSystem
     Molecule create_test_molecule()
     {
         auto m = Molecule();
-        m = m.edit().add(CGName("0")).add(AtomName("H")).molecule()
+        m = m.edit().add(CGName("1")).add(AtomName("H")).renumber(1).molecule()
                     .add(ChainName("A"))
-                    .add(ResName("H")).molecule()
-                    .add(SegName("A")).molecule()
+                    .add(ResName("R")).renumber(1).molecule()
+                    .add(SegName("S")).molecule()
                     .atom(AtomName("H"))
-                    .reparent(ResName("H")).reparent(SegName("A")).molecule()
+                    .reparent(ResName("R")).reparent(SegName("S")).molecule()
                     .commit();
 
         return m;
