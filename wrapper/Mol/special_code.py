@@ -45,7 +45,7 @@ def fix_MolView(c, molview, props):
        c.add_declaration_code( """ const %s& get_Metadata_%s_function1(const %s &atom,
                                    const QString &metakey){ return atom.metadata< %s >(metakey); }""" \
                                       % (p, prop, molview, p) )
- 
+
        c.add_declaration_code( """ const %s& get_Metadata_%s_function2(const %s &atom,
                                    const QString &key, const QString &metakey){
                                         return atom.metadata< %s >(key, metakey); }""" \
@@ -71,12 +71,12 @@ def fix_Bead(c):
 
 def fix_MolEditorBase(c):
    c.decls( "removeProperty" ).call_policies = call_policies.return_self()
-   c.decls( "removeMetadata" ).call_policies = call_policies.return_self()   
+   c.decls( "removeMetadata" ).call_policies = call_policies.return_self()
 
    c.add_registration_code( """def( \"setProperty\",
                                &SireMol::MolEditorBase::setProperty<SireBase::Property>, %s )""" \
                                % (return_self ) )
-   
+
    c.add_registration_code( "def( \"setMetadata\", &set_Metadata_function1, %s)" \
                                % (return_self) )
 
@@ -90,7 +90,7 @@ def fix_MolEditorBase(c):
 
    c.add_declaration_code( """SireMol::MolEditorBase& set_Metadata_function2(
                               SireMol::MolEditorBase &molview,
-                              const QString &key, const QString &metakey, 
+                              const QString &key, const QString &metakey,
                               const SireBase::Property &p)
                               { return molview.setMetadata<SireBase::Property>(key, metakey, p); }""" )
 
@@ -108,7 +108,7 @@ def fix_MolViewEditorBase(c, molview, props):
        p_rep = p.replace("::","_").replace("<","_").replace(">","_")
        prop = property[1].replace("::","_").replace("<","_").replace(">","_")
 
-       c.add_registration_code( """def( \"_set_property_%s\", 
+       c.add_registration_code( """def( \"_set_property_%s\",
                                    &%s::setProperty< %s >, %s )""" \
                                    % (p_rep, molview, p, return_self ) )
 
@@ -156,7 +156,7 @@ def fix_AtomStructureEditor(c):
    fix_AtomEditor(c)
 
    c.decls( "reindex" ).call_policies = call_policies.return_self()
-   c.decls( "reparent" ).call_policies = call_policies.return_self()   
+   c.decls( "reparent" ).call_policies = call_policies.return_self()
 
 def fix_AtomSelection(c):
    c.decls( "selectAll" ).call_policies = call_policies.return_self()
@@ -176,7 +176,7 @@ def fix_CGEditor(c):
 
 def fix_CGStructureEditor(c):
    fix_CGEditor(c)
-   
+
    c.decls( "reindex" ).call_policies = call_policies.return_self()
    c.decls( "remove" ).call_policies = call_policies.return_self()
    c.decls( "transfer" ).call_policies = call_policies.return_self()
@@ -261,7 +261,7 @@ def fix_Mover(c):
 
     #also include all of the header files included in mover.cpp
     for header in active_headers["mover.h"].dependencies():
-        c.add_declaration_code( "#include %s" % header )    
+        c.add_declaration_code( "#include %s" % header )
 
 def fix_MolViewProperty(c):
     c.add_declaration_code( "#include \"SireMaths/vector.h\"" )
@@ -289,7 +289,7 @@ def fix_AtomID(c):
     #also include all of the header files included in atomid.cpp
     for header in active_headers["atomid.h"].dependencies():
         c.add_declaration_code( "#include %s" % header )
-    
+
 def fix_CGID(c):
     #also include all of the header files included in cgid.cpp
     for header in active_headers["cgid.h"].dependencies():
@@ -347,7 +347,7 @@ special_code = { "SireMol::Atom" : fix_Atom,
                  "SireMol::Bead" : fix_Bead,
                  "SireMol::Editor<SireMol::BeadEditor, SireMol::Bead>" : fix_BeadEditorBase,
                  "SireMol::Mover<SireMol::Bead>" : fix_Mover,
-                 
+
                  "SireMol::Mover<SireMol::Beads>" : fix_Mover,
 
                  "SireMol::CutGroup" : fix_CutGroup,
@@ -416,11 +416,13 @@ special_code = { "SireMol::Atom" : fix_Atom,
                  "AtomCharges" : fix_MolViewProperty,
                  "AtomElements" : fix_MolViewProperty,
                  "AtomEnergies" : fix_MolViewProperty,
-                 "AtomForces" : fix_MolViewProperty,                
+                 "AtomForces" : fix_MolViewProperty,
                  "AtomMasses"  : fix_MolViewProperty,
                  "AtomVelocities" : fix_MolViewProperty,
                  "AtomPolarisabilities" : fix_MolViewProperty,
                  "AtomRadii" : fix_MolViewProperty,
+                 "AtomFloatProperty" : fix_MolViewProperty,
+                 "AtomStringProperty" : fix_MolViewProperty,
 
                  "SireMol::ConnectivityEditor" : fix_ConnectivityEditor,
                  "SireMol::MGName" : fix_MGName,
@@ -429,7 +431,7 @@ special_code = { "SireMol::Atom" : fix_Atom,
                  "SireMol::MolNum" : fix_MolNum,
                  "SireMol::MolName" : fix_MolName,
                  "SireMol::MolIdx" : fix_MolIdx,
-                 "SireMol::MolInfo" : fix_MolInfo, 
+                 "SireMol::MolInfo" : fix_MolInfo,
                  "SireMol::MoleculeInfo" : fix_MolInfo,
 
                  "SireMol::PerturbationSymbols" : fix_PerturbationSymbols,
