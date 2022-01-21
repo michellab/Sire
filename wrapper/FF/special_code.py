@@ -21,8 +21,8 @@ def fix_ForceFields(c):
    c.add_declaration_code("#include \"energytable.h\"")
 
 def fix_G2FF(c):
-   c.add_declaration_code("#include \"SireMol/molecule.h\"")
-   c.add_declaration_code("#include \"SireMol/partialmolecule.h\"")
+   c.add_declaration_code("#include \"SireMol/molecule.h\"", tail=False)
+   c.add_declaration_code("#include \"SireMol/partialmolecule.h\"", tail=False)
 
 special_code = { "SireFF::ForceTable" : fix_Table,
                  "SireFF::FieldTable" : fix_Table,
