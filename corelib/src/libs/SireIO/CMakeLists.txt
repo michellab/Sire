@@ -29,6 +29,7 @@ set ( SIREIO_HEADERS
       amberprm.h
       amberrst.h
       amberrst7.h
+      biosimspace.h
       charmmpsf.h
       cube.h
       errors.h
@@ -46,7 +47,6 @@ set ( SIREIO_HEADERS
       supplementary.h
       tinker.h
       trajectorymonitor.h
-      watermodel.h
       zmatrixmaker.h
     )
 
@@ -60,6 +60,7 @@ set ( SIREIO_SOURCES
       amberprm.cpp
       amberrst.cpp
       amberrst7.cpp
+      biosimspace.cpp
       charmmpsf.cpp
       cube.cpp
       errors.cpp
@@ -77,7 +78,6 @@ set ( SIREIO_SOURCES
       supplementary.cpp
       tinker.cpp
       trajectorymonitor.cpp    
-      watermodel.cpp
       zmatrixmaker.cpp
 
       ${SIREIO_HEADERS}

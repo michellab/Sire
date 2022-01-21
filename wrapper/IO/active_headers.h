@@ -7,6 +7,7 @@
 #include "amberprm.h"
 #include "amberrst.h"
 #include "amberrst7.h"
+#include "biosimspace.h"
 #include "charmmpsf.h"
 #include "cube.h"
 #include "flexibilitylibrary.h"
@@ -22,7 +23,6 @@
 #include "supplementary.h"
 #include "tinker.h"
 #include "trajectorymonitor.h"
-#include "watermodel.h"
 #include "zmatrixmaker.h"
 
 #endif

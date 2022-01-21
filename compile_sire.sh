@@ -12,7 +12,10 @@ build_and_install_sire()
 {
 # Now set the MACOSX_DEPLOYMENT_TARGET to make sure
 # that we can work with Mavericks or above (needed by Qt5)
-export MACOSX_DEPLOYMENT_TARGET="10.9"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    export MACOSX_DEPLOYMENT_TARGET="10.9"
+    export SDKROOT=`xcrun --show-sdk-path`
+fi
 
 # Now run the python install script
 [ -z "$CONDA_PYTHON" ] && [ -e "${INSTALL_DIR}/bin/python" ] && CONDA_PYTHON="${INSTALL_DIR}/bin/python"

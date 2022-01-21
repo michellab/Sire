@@ -5,14 +5,12 @@ trigger:
 jobs:
 - job: 'SireOSX'
   pool:
-    vmImage: 'macOS-10.14'
+    vmImage: 'macOS-10.15'
 
   timeoutInMinutes: 180
 
   steps:
   - script: |
-      # make sure development headers are installed
-      sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
       ./compile_sire.sh --install $HOME/sire.app
     displayName: 'Build Sire'
   - script: |
