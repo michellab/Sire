@@ -6,7 +6,7 @@
 #
 ################################
 
-set (S_VERSION_MAJOR "2021")
+set (S_VERSION_MAJOR "2022")
 set (S_VERSION_MINOR "1")
 set (S_VERSION_PATCH "0")
 
