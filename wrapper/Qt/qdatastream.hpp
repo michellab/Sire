@@ -73,10 +73,26 @@ struct sire_pickle_suite : bp::pickle_suite
     static bp::tuple getstate(const T &value)
     {
         QByteArray b;
+
+        // reserve 48MB of space, so that we avoid continual reallocation
+        static const auto RESERVE_SIZE = 48 * 1024 * 1024;
+
+        b.reserve(RESERVE_SIZE);
+
+        if (b.capacity() != RESERVE_SIZE)
+            qWarning() << "Possible memory allocation error!";
+
         QDataStream ds(&b, QIODevice::WriteOnly);
+
+        // version 1 of the format uses Qt 4.2 datastream format
+        // This is the same as the s3 file format
+        ds.setVersion( QDataStream::Qt_4_2 );
+
         ds << value;
 
-        b = qCompress(b);
+        // compress at level 3 (this is used for s3 files, and has
+        // always given a good balance between size and speed)
+        b = qCompress(b, 3);
 
         bp::dict d;
         d["sire_pickle_version"] = 1;
