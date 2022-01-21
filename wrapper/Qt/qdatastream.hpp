@@ -76,6 +76,8 @@ struct sire_pickle_suite : bp::pickle_suite
         QDataStream ds(&b, QIODevice::WriteOnly);
         ds << value;
 
+        b = qCompress(b);
+
         bp::dict d;
         d["sire_pickle_version"] = 1;
         d["sire_pickle_data"] = bp::str(b.toBase64().constData());
@@ -99,6 +101,7 @@ struct sire_pickle_suite : bp::pickle_suite
         const char *s = bp::extract<const char*>(d["sire_pickle_data"]);
 
         auto b = QByteArray::fromBase64(QByteArray(s));
+        b = qUncompress(b);
 
         QDataStream ds(&b, QIODevice::ReadOnly);
 
