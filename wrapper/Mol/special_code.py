@@ -316,7 +316,7 @@ def fix_BeadID(c):
         c.add_declaration_code( "#include %s" % header )
 
 def fix_PerturbationSymbols(c):
-    c.mem_funs("lambda").rename("Lambda")
+    c.member_functions("lambda").rename("Lambda")
 
 def fix_SelectResultMover(c):
     c.decls("translate").call_policies = call_policies.return_self()
