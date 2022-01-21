@@ -8,6 +8,9 @@
 
 namespace bp = boost::python;
 
+#include "SireMol/molecule.h"
+#include "SireMol/partialmolecule.h"
+
 #include "SireError/errors.h"
 
 #include "SireFF/intra2b2gff.hpp"

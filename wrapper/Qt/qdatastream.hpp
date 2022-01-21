@@ -69,7 +69,7 @@ bp::dict __getstate__base64(const T &value)
 
     bp::dict d;
     d["sire_pickle_version"] = 1;
-    d["sire_pickle_data"] = b.toBase64();
+    d["sire_pickle_data"] = bp::str(b.toBase64().constData());
 
     return d;
 }
