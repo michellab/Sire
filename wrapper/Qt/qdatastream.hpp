@@ -39,6 +39,8 @@
 
 #include "sireglobal.h"
 
+#include "SireStream/version_error.h"
+
 namespace bp = boost::python;
 
 SIRE_BEGIN_HEADER
@@ -59,27 +61,46 @@ QDataStream& __rrshift__QDataStream(T &value, QDataStream &ds)
     return ds;
 }
 
-/** Also allow pickling */
+/** Template class to handle the whole pickling process */
 template<class T>
-bp::dict __getstate__base64(const T &value)
+struct sire_pickle_suite : bp::pickle_suite
 {
-    QByteArray b;
-    QDataStream ds(&b, QIODevice::WriteOnly);
-    ds << value;
+    static bp::tuple getinitargs(const T&)
+    {
+        return bp::tuple();
+    }
 
-    bp::dict d;
-    d["sire_pickle_version"] = 1;
-    d["sire_pickle_data"] = bp::str(b.toBase64().constData());
+    static bp::tuple getstate(const T &value)
+    {
+        QByteArray b;
+        QDataStream ds(&b, QIODevice::WriteOnly);
+        ds << value;
 
-    return d;
-}
+        bp::dict d;
+        d["sire_pickle_version"] = 1;
+        d["sire_pickle_data"] = bp::str(b.toBase64().constData());
 
-/** Also allow pickling */
-template<class T>
-void __setstate__base64(T &value, const bp::dict &d)
-{
-    qDebug() << "NEED TO WRITE THIS!";
-}
+        return bp::make_tuple(d);
+    }
+
+    static void setstate(T &value, bp::tuple state)
+    {
+        bp::dict d = state[0];
+
+        if (d["sire_pickle_version"] != 1)
+        {
+            throw SireStream::version_error(
+              QObject::tr("Unsupported pickle version: %1").arg(
+                d["sire_pickle_version"]), CODELOC );
+        }
+
+        auto b = QByteArray::fromBase64(QByteArray(d["sire_pickle_data"]));
+
+        QDataStream ds(&b, QIODevice::ReadOnly);
+
+        ds >> value;
+    }
+};
 
 
 SIRE_END_HEADER

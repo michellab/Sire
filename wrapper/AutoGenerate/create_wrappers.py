@@ -424,20 +424,7 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
                     bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() )""" % c.decl_string )
 
         c.add_registration_code(
-            """def( \"__getstate_manages_dict__\", true)"""
-        )
-
-        c.add_registration_code(
-            """def( \"__safe_for_unpickling__\", true)"""
-        )
-
-        c.add_registration_code(
-            """def( \"__setstate__\", &__setstate__base64< %s > )""" % c.decl_string
-        )
-
-        c.add_registration_code(
-            """def( \"__getstate__\", &__getstate__base64< %s > )""" % c.decl_string
-        )
+            """def_pickle(sire_pickle_suite< %s >())""" % c.decl_string )
 
    #is there a "toString" function for this class?
    if auto_str_function:

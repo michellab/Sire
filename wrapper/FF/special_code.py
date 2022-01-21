@@ -20,6 +20,10 @@ def fix_ForceFields(c):
    c.add_declaration_code("#include \"forcetable.h\"")
    c.add_declaration_code("#include \"energytable.h\"")
 
+def fix_G2FF(c):
+   c.add_declaration_code("#include \"SireMol/molecule.h\"")
+   c.add_declaration_code("#include \"SireMol/partialmolecule.h\"")
+
 special_code = { "SireFF::ForceTable" : fix_Table,
                  "SireFF::FieldTable" : fix_Table,
                  "SireFF::PotentialTable" : fix_Table,
@@ -27,7 +31,8 @@ special_code = { "SireFF::ForceTable" : fix_Table,
                  "SireFF::FFID" : fix_FFID,
                  "SireFF::FFIdx" : fix_FFID,
                  "SireFF::FFName" : fix_FFID,
-                 "SireFF::ForceFields" : fix_ForceFields }
+                 "SireFF::ForceFields" : fix_ForceFields,
+                 "SireFF::G2FF" : fix_G2FF }
 
 implicitly_convertible = [ ("SireMaths::Vector", "SireFF::PointRef"),
                            ("SireMol::Atom", "SireFF::PointRef"),
