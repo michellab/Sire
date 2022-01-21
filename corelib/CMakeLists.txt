@@ -566,9 +566,7 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
       if (MSYS)
         message(STATUS "MSYS2 will use builtin OpenMM if available...")
       else()
-        # OpenMM with conda uses the old C++ binary API!
-        # Tell GCC 5 to respect the old API
-        set( SIRE_PLATFORM_FLAGS "${SIRE_PLATFORM_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=0" )
+        set( SIRE_PLATFORM_FLAGS "${SIRE_PLATFORM_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=1" )
       endif()
     endif()
 
