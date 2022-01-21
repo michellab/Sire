@@ -101,6 +101,8 @@ void register_Array2DBase_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Array2DBase_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireBase::Array2DBase >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        Array2DBase_exposer.def( "__getstate_manages_dict__", true);
+        Array2DBase_exposer.def( "__safe_for_unpickling__", true);
         Array2DBase_exposer.def( "__setstate__", &__setstate__base64< ::SireBase::Array2DBase > );
         Array2DBase_exposer.def( "__getstate__", &__getstate__base64< ::SireBase::Array2DBase > );
         Array2DBase_exposer.def( "__str__", &pvt_get_name);

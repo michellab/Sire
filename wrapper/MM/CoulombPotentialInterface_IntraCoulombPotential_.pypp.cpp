@@ -173,6 +173,8 @@ void register_CoulombPotentialInterface_IntraCoulombPotential__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CoulombPotentialInterface_IntraCoulombPotential__exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMM::CoulombPotentialInterface<SireMM::IntraCoulombPotential> >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        CoulombPotentialInterface_IntraCoulombPotential__exposer.def( "__getstate_manages_dict__", true);
+        CoulombPotentialInterface_IntraCoulombPotential__exposer.def( "__safe_for_unpickling__", true);
         CoulombPotentialInterface_IntraCoulombPotential__exposer.def( "__setstate__", &__setstate__base64< ::SireMM::CoulombPotentialInterface<SireMM::IntraCoulombPotential> > );
         CoulombPotentialInterface_IntraCoulombPotential__exposer.def( "__getstate__", &__getstate__base64< ::SireMM::CoulombPotentialInterface<SireMM::IntraCoulombPotential> > );
         CoulombPotentialInterface_IntraCoulombPotential__exposer.def( "__str__", &pvt_get_name);

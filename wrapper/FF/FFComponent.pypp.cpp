@@ -102,6 +102,8 @@ void register_FFComponent_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         FFComponent_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireFF::FFComponent >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        FFComponent_exposer.def( "__getstate_manages_dict__", true);
+        FFComponent_exposer.def( "__safe_for_unpickling__", true);
         FFComponent_exposer.def( "__setstate__", &__setstate__base64< ::SireFF::FFComponent > );
         FFComponent_exposer.def( "__getstate__", &__getstate__base64< ::SireFF::FFComponent > );
         FFComponent_exposer.def( "__str__", &__str__< ::SireFF::FFComponent > );

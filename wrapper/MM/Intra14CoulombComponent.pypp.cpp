@@ -107,6 +107,8 @@ void register_Intra14CoulombComponent_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Intra14CoulombComponent_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMM::Intra14CoulombComponent >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        Intra14CoulombComponent_exposer.def( "__getstate_manages_dict__", true);
+        Intra14CoulombComponent_exposer.def( "__safe_for_unpickling__", true);
         Intra14CoulombComponent_exposer.def( "__setstate__", &__setstate__base64< ::SireMM::Intra14CoulombComponent > );
         Intra14CoulombComponent_exposer.def( "__getstate__", &__getstate__base64< ::SireMM::Intra14CoulombComponent > );
         Intra14CoulombComponent_exposer.def( "__str__", &__str__< ::SireMM::Intra14CoulombComponent > );

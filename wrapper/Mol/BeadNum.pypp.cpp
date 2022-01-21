@@ -118,6 +118,8 @@ void register_BeadNum_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         BeadNum_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::BeadNum >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        BeadNum_exposer.def( "__getstate_manages_dict__", true);
+        BeadNum_exposer.def( "__safe_for_unpickling__", true);
         BeadNum_exposer.def( "__setstate__", &__setstate__base64< ::SireMol::BeadNum > );
         BeadNum_exposer.def( "__getstate__", &__getstate__base64< ::SireMol::BeadNum > );
         BeadNum_exposer.def( "__str__", &__str__< ::SireMol::BeadNum > );
