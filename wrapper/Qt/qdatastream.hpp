@@ -32,8 +32,14 @@
 #include <Python.h>
 
 #include <QDataStream>
+#include <QByteArray>
+#include <QDebug>
+
+#include <boost/python.hpp>
 
 #include "sireglobal.h"
+
+namespace bp = boost::python;
 
 SIRE_BEGIN_HEADER
 
@@ -52,6 +58,29 @@ QDataStream& __rrshift__QDataStream(T &value, QDataStream &ds)
     ds >> value;
     return ds;
 }
+
+/** Also allow pickling */
+template<class T>
+bp::dict __getstate__base64(const T &value)
+{
+    QByteArray b;
+    QDataStream ds(&b, QIODevice::WriteOnly);
+    ds << value;
+
+    bp::dict d;
+    d["sire_pickle_version"] = 1;
+    d["sire_pickle_data"] = b.toBase64();
+
+    return d;
+}
+
+/** Also allow pickling */
+template<class T>
+void __setstate__base64(T &value, const bp::dict &d)
+{
+    qDebug() << "NEED TO WRITE THIS!";
+}
+
 
 SIRE_END_HEADER
 

@@ -414,14 +414,23 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
    #if this class can be streamed to a QDataStream then add
    #streaming operators
    if has_datastream_operators(mb,c):
-       c.add_declaration_code( "#include \"Qt/qdatastream.hpp\"" )
+        c.add_declaration_code( "#include \"Qt/qdatastream.hpp\"" )
 
-       c.add_registration_code(
+        c.add_registration_code(
             """def( \"__rlshift__\", &__rlshift__QDataStream< %s >,
                     bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() )""" % c.decl_string )
-       c.add_registration_code(
+        c.add_registration_code(
             """def( \"__rrshift__\", &__rrshift__QDataStream< %s >,
                     bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() )""" % c.decl_string )
+
+        c.add_registration_code(
+            """def( \"__setstate__\", &__setstate__base64< %s > )""" % c.decl_string
+        )
+
+        c.add_registration_code(
+            """def( \"__getstate__\", &__getstate__base64< %s > )""" % c.decl_string
+        )
+
 
 
    #is there a "toString" function for this class?
