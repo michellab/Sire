@@ -3,9 +3,12 @@
 """
 
 import os
-import re
 import sys
+import re
+import time
 
+
+import numpy as np
 from Sire.Base import *
 
 # Make sure that the OPENMM_PLUGIN_DIR enviroment variable is set correctly if
@@ -35,8 +38,7 @@ from Sire.Analysis import *
 from Sire.Tools.DCDFile import *
 from Sire.Tools import Parameter, resolveParameters
 import Sire.Stream
-import time
-import numpy as np
+
 
 __author__ = 'Julien Michel, Gaetano Calabro, Antonia Mey, Hannes H Loeffler'
 __version__ = '0.1'
@@ -45,7 +47,6 @@ __maintainer__ = 'Julien Michel'
 __email__ = 'julien.michel@ed.ac.uk'
 __status__ = 'Development'
 
-MIN_MASSES = {"C": 5.96, "N": 7.96}
 HMR_MIN = 1.0
 HMR_MAX = 4.0
 
