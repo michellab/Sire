@@ -275,7 +275,7 @@ if __name__ == "__main__":
     # Write the packages as a requirements.txt file. This will help
     # us later when we develop other ways of installing Sire
     if len(conda_pkgs) > 0:
-        with open("requirements.txt", "w") as FILE:
+        with open(f"requirements/requirements_{platform.system()}_{platform.machine()}.txt", "w") as FILE:
             for pkg in conda_pkgs:
                 FILE.write(f"{pkg}\n")
 
