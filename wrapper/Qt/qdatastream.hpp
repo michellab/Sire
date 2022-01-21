@@ -85,16 +85,20 @@ struct sire_pickle_suite : bp::pickle_suite
 
     static void setstate(T &value, bp::tuple state)
     {
-        bp::dict d = state[0];
+        bp::dict d = bp::extract<bp::dict>(state[0])();
 
-        if (d["sire_pickle_version"] != 1)
+        int version = bp::extract<int>(d["sire_pickle_version"]);
+
+        if (version != 1)
         {
             throw SireStream::version_error(
-              QObject::tr("Unsupported pickle version: %1").arg(
-                d["sire_pickle_version"]), CODELOC );
+              QObject::tr("Unsupported pickle version: %1")
+                .arg(version), CODELOC );
         }
 
-        auto b = QByteArray::fromBase64(QByteArray(d["sire_pickle_data"]));
+        const char *s = bp::extract<const char*>(d["sire_pickle_data"]);
+
+        auto b = QByteArray::fromBase64(QByteArray(s));
 
         QDataStream ds(&b, QIODevice::ReadOnly);
 
