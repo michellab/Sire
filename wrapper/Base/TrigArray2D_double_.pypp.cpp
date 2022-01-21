@@ -162,10 +162,7 @@ void register_TrigArray2D_double__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         TrigArray2D_double__exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireBase::TrigArray2D<double> >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        TrigArray2D_double__exposer.def( "__getstate_manages_dict__", true);
-        TrigArray2D_double__exposer.def( "__safe_for_unpickling__", true);
-        TrigArray2D_double__exposer.def( "__setstate__", &__setstate__base64< ::SireBase::TrigArray2D<double> > );
-        TrigArray2D_double__exposer.def( "__getstate__", &__getstate__base64< ::SireBase::TrigArray2D<double> > );
+        TrigArray2D_double__exposer.def_pickle(sire_pickle_suite< ::SireBase::TrigArray2D<double> >());
         TrigArray2D_double__exposer.def( "__str__", &__str__< ::SireBase::TrigArray2D<double> > );
         TrigArray2D_double__exposer.def( "__repr__", &__str__< ::SireBase::TrigArray2D<double> > );
         TrigArray2D_double__exposer.def( "__len__", &__len_size< ::SireBase::TrigArray2D<double> > );

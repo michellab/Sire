@@ -1984,10 +1984,7 @@ void register_MolGroupsBase_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         MolGroupsBase_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::MolGroupsBase >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        MolGroupsBase_exposer.def( "__getstate_manages_dict__", true);
-        MolGroupsBase_exposer.def( "__safe_for_unpickling__", true);
-        MolGroupsBase_exposer.def( "__setstate__", &__setstate__base64< ::SireMol::MolGroupsBase > );
-        MolGroupsBase_exposer.def( "__getstate__", &__getstate__base64< ::SireMol::MolGroupsBase > );
+        MolGroupsBase_exposer.def_pickle(sire_pickle_suite< ::SireMol::MolGroupsBase >());
         MolGroupsBase_exposer.def( "__str__", &__str__< ::SireMol::MolGroupsBase > );
         MolGroupsBase_exposer.def( "__repr__", &__str__< ::SireMol::MolGroupsBase > );
         MolGroupsBase_exposer.def( "__len__", &__len_count< ::SireMol::MolGroupsBase > );

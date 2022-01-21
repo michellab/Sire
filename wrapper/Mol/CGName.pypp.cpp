@@ -159,10 +159,7 @@ void register_CGName_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CGName_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::CGName >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        CGName_exposer.def( "__getstate_manages_dict__", true);
-        CGName_exposer.def( "__safe_for_unpickling__", true);
-        CGName_exposer.def( "__setstate__", &__setstate__base64< ::SireMol::CGName > );
-        CGName_exposer.def( "__getstate__", &__getstate__base64< ::SireMol::CGName > );
+        CGName_exposer.def_pickle(sire_pickle_suite< ::SireMol::CGName >());
         CGName_exposer.def( "__str__", &__str__< ::SireMol::CGName > );
         CGName_exposer.def( "__repr__", &__str__< ::SireMol::CGName > );
         CGName_exposer.def( "__hash__", &::SireMol::CGName::hash );

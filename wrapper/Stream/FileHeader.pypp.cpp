@@ -299,10 +299,7 @@ void register_FileHeader_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         FileHeader_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireStream::FileHeader >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        FileHeader_exposer.def( "__getstate_manages_dict__", true);
-        FileHeader_exposer.def( "__safe_for_unpickling__", true);
-        FileHeader_exposer.def( "__setstate__", &__setstate__base64< ::SireStream::FileHeader > );
-        FileHeader_exposer.def( "__getstate__", &__getstate__base64< ::SireStream::FileHeader > );
+        FileHeader_exposer.def_pickle(sire_pickle_suite< ::SireStream::FileHeader >());
         FileHeader_exposer.def( "__str__", &__str__< ::SireStream::FileHeader > );
         FileHeader_exposer.def( "__repr__", &__str__< ::SireStream::FileHeader > );
     }

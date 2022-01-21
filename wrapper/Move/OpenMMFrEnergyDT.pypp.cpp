@@ -674,10 +674,7 @@ void register_OpenMMFrEnergyDT_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         OpenMMFrEnergyDT_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMove::OpenMMFrEnergyDT >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        OpenMMFrEnergyDT_exposer.def( "__getstate_manages_dict__", true);
-        OpenMMFrEnergyDT_exposer.def( "__safe_for_unpickling__", true);
-        OpenMMFrEnergyDT_exposer.def( "__setstate__", &__setstate__base64< ::SireMove::OpenMMFrEnergyDT > );
-        OpenMMFrEnergyDT_exposer.def( "__getstate__", &__getstate__base64< ::SireMove::OpenMMFrEnergyDT > );
+        OpenMMFrEnergyDT_exposer.def_pickle(sire_pickle_suite< ::SireMove::OpenMMFrEnergyDT >());
         OpenMMFrEnergyDT_exposer.def( "__str__", &__str__< ::SireMove::OpenMMFrEnergyDT > );
         OpenMMFrEnergyDT_exposer.def( "__repr__", &__str__< ::SireMove::OpenMMFrEnergyDT > );
     }

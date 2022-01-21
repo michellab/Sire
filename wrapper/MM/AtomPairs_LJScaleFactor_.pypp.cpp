@@ -475,10 +475,7 @@ void register_AtomPairs_LJScaleFactor__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AtomPairs_LJScaleFactor__exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMM::AtomPairs<SireMM::LJScaleFactor> >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        AtomPairs_LJScaleFactor__exposer.def( "__getstate_manages_dict__", true);
-        AtomPairs_LJScaleFactor__exposer.def( "__safe_for_unpickling__", true);
-        AtomPairs_LJScaleFactor__exposer.def( "__setstate__", &__setstate__base64< ::SireMM::AtomPairs<SireMM::LJScaleFactor> > );
-        AtomPairs_LJScaleFactor__exposer.def( "__getstate__", &__getstate__base64< ::SireMM::AtomPairs<SireMM::LJScaleFactor> > );
+        AtomPairs_LJScaleFactor__exposer.def_pickle(sire_pickle_suite< ::SireMM::AtomPairs<SireMM::LJScaleFactor> >());
         AtomPairs_LJScaleFactor__exposer.def( "__str__", &__str__< ::SireMM::AtomPairs<SireMM::LJScaleFactor> > );
         AtomPairs_LJScaleFactor__exposer.def( "__repr__", &__str__< ::SireMM::AtomPairs<SireMM::LJScaleFactor> > );
     }

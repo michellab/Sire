@@ -116,10 +116,7 @@ void register_PerturbationConstraint_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         PerturbationConstraint_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireSystem::PerturbationConstraint >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        PerturbationConstraint_exposer.def( "__getstate_manages_dict__", true);
-        PerturbationConstraint_exposer.def( "__safe_for_unpickling__", true);
-        PerturbationConstraint_exposer.def( "__setstate__", &__setstate__base64< ::SireSystem::PerturbationConstraint > );
-        PerturbationConstraint_exposer.def( "__getstate__", &__getstate__base64< ::SireSystem::PerturbationConstraint > );
+        PerturbationConstraint_exposer.def_pickle(sire_pickle_suite< ::SireSystem::PerturbationConstraint >());
         PerturbationConstraint_exposer.def( "__str__", &__str__< ::SireSystem::PerturbationConstraint > );
         PerturbationConstraint_exposer.def( "__repr__", &__str__< ::SireSystem::PerturbationConstraint > );
     }

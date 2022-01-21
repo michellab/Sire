@@ -219,10 +219,7 @@ void register_IdentityConstraint_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         IdentityConstraint_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireSystem::IdentityConstraint >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        IdentityConstraint_exposer.def( "__getstate_manages_dict__", true);
-        IdentityConstraint_exposer.def( "__safe_for_unpickling__", true);
-        IdentityConstraint_exposer.def( "__setstate__", &__setstate__base64< ::SireSystem::IdentityConstraint > );
-        IdentityConstraint_exposer.def( "__getstate__", &__getstate__base64< ::SireSystem::IdentityConstraint > );
+        IdentityConstraint_exposer.def_pickle(sire_pickle_suite< ::SireSystem::IdentityConstraint >());
         IdentityConstraint_exposer.def( "__str__", &__str__< ::SireSystem::IdentityConstraint > );
         IdentityConstraint_exposer.def( "__repr__", &__str__< ::SireSystem::IdentityConstraint > );
     }

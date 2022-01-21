@@ -88,10 +88,7 @@ void register_CuttingFunction_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CuttingFunction_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::CuttingFunction >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        CuttingFunction_exposer.def( "__getstate_manages_dict__", true);
-        CuttingFunction_exposer.def( "__safe_for_unpickling__", true);
-        CuttingFunction_exposer.def( "__setstate__", &__setstate__base64< ::SireMol::CuttingFunction > );
-        CuttingFunction_exposer.def( "__getstate__", &__getstate__base64< ::SireMol::CuttingFunction > );
+        CuttingFunction_exposer.def_pickle(sire_pickle_suite< ::SireMol::CuttingFunction >());
         CuttingFunction_exposer.def( "__str__", &__str__< ::SireMol::CuttingFunction > );
         CuttingFunction_exposer.def( "__repr__", &__str__< ::SireMol::CuttingFunction > );
     }

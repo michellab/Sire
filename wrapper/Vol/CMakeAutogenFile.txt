@@ -2,7 +2,6 @@
 set ( PYPP_SOURCES
        CoordGroupBase.pypp.cpp
        CoordGroupEditor.pypp.cpp
-       AABox.pypp.cpp
        Patching.pypp.cpp
        BoxPatching.pypp.cpp
        Space.pypp.cpp
@@ -20,6 +19,7 @@ set ( PYPP_SOURCES
        PeriodicBox.pypp.cpp
        RegularGrid.pypp.cpp
        TriclinicBox.pypp.cpp
+       AABox.pypp.cpp
        SireVol_containers.cpp
        SireVol_properties.cpp
        SireVol_registrars.cpp

@@ -4,15 +4,13 @@
 
 #include "boost/python.hpp"
 #include "Helpers/clone_const_reference.hpp"
+#include "SireMol/partialmolecule.h"
+#include "SireMol/molecule.h"
 #include "G2FF.pypp.hpp"
 
 namespace bp = boost::python;
 
 #include "SireError/errors.h"
-
-#include "SireMol/molecule.h"
-
-#include "SireMol/partialmolecule.h"
 
 #include "SireFF/intra2b2gff.hpp"
 
@@ -55,60 +53,57 @@ void register_G2FF_class(){
         G2FF_exposer_t G2FF_exposer = G2FF_exposer_t( "G2FF", "This is the base class of all forcefields that hold\ntwo groups of molecules, e.g. InterGroupCLJFF, that calculates\nthe CLJ energy between two groups of molecules, or\nQMMMFF, that calculates the QMMM energy of a QM group\nof molecules interacting with an MM group\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope G2FF_scope( G2FF_exposer );
         { //::SireFF::G2FF::accept
-
+        
             typedef void ( ::SireFF::G2FF::*accept_function_type)(  ) ;
             accept_function_type accept_function_value( &::SireFF::G2FF::accept );
-
-            G2FF_exposer.def(
+            
+            G2FF_exposer.def( 
                 "accept"
                 , accept_function_value
                 , "Tell the forcefield that the last move was accepted. This tells the\nforcefield to make permanent any temporary changes that were used a workspace\nto avoid memory allocation during a move" );
-
+        
         }
         { //::SireFF::G2FF::assertContains
-
+        
             typedef void ( ::SireFF::G2FF::*assertContains_function_type)( ::SireMol::MGNum ) const;
             assertContains_function_type assertContains_function_value( &::SireFF::G2FF::assertContains );
-
-            G2FF_exposer.def(
+            
+            G2FF_exposer.def( 
                 "assertContains"
                 , assertContains_function_value
                 , ( bp::arg("mgnum") )
                 , "Assert that this forcefield contains the group with number mgnum\nThrow: SireMol::missing_group\n" );
-
+        
         }
         { //::SireFF::G2FF::at
-
+        
             typedef ::SireMol::MoleculeGroup const & ( ::SireFF::G2FF::*at_function_type)( ::SireMol::MGNum ) const;
             at_function_type at_function_value( &::SireFF::G2FF::at );
-
-            G2FF_exposer.def(
+            
+            G2FF_exposer.def( 
                 "at"
                 , at_function_value
                 , ( bp::arg("mgnum") )
                 , bp::return_value_policy<bp::clone_const_reference>()
                 , "Return the molecule group with number mgnum\nThrow: SireMol::missing_group\n" );
-
+        
         }
         { //::SireFF::G2FF::needsAccepting
-
+        
             typedef bool ( ::SireFF::G2FF::*needsAccepting_function_type)(  ) const;
             needsAccepting_function_type needsAccepting_function_value( &::SireFF::G2FF::needsAccepting );
-
-            G2FF_exposer.def(
+            
+            G2FF_exposer.def( 
                 "needsAccepting"
                 , needsAccepting_function_value
                 , "Return whether or not this forcefield is using any temporary workspace\nthat needs to be accepted" );
-
+        
         }
         G2FF_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireFF::G2FF >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         G2FF_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireFF::G2FF >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        G2FF_exposer.def( "__getstate_manages_dict__", true);
-        G2FF_exposer.def( "__safe_for_unpickling__", true);
-        G2FF_exposer.def( "__setstate__", &__setstate__base64< ::SireFF::G2FF > );
-        G2FF_exposer.def( "__getstate__", &__getstate__base64< ::SireFF::G2FF > );
+        G2FF_exposer.def_pickle(sire_pickle_suite< ::SireFF::G2FF >());
         G2FF_exposer.def( "__str__", &__str__< ::SireFF::G2FF > );
         G2FF_exposer.def( "__repr__", &__str__< ::SireFF::G2FF > );
         G2FF_exposer.def( "__len__", &__len_count< ::SireFF::G2FF > );

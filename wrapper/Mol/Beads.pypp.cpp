@@ -365,10 +365,7 @@ void register_Beads_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Beads_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::Beads >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        Beads_exposer.def( "__getstate_manages_dict__", true);
-        Beads_exposer.def( "__safe_for_unpickling__", true);
-        Beads_exposer.def( "__setstate__", &__setstate__base64< ::SireMol::Beads > );
-        Beads_exposer.def( "__getstate__", &__getstate__base64< ::SireMol::Beads > );
+        Beads_exposer.def_pickle(sire_pickle_suite< ::SireMol::Beads >());
         Beads_exposer.def( "__str__", &__str__< ::SireMol::Beads > );
         Beads_exposer.def( "__repr__", &__str__< ::SireMol::Beads > );
         Beads_exposer.def( "__len__", &__len_size< ::SireMol::Beads > );

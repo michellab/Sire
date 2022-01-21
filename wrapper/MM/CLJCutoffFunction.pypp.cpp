@@ -214,10 +214,7 @@ void register_CLJCutoffFunction_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CLJCutoffFunction_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMM::CLJCutoffFunction >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        CLJCutoffFunction_exposer.def( "__getstate_manages_dict__", true);
-        CLJCutoffFunction_exposer.def( "__safe_for_unpickling__", true);
-        CLJCutoffFunction_exposer.def( "__setstate__", &__setstate__base64< ::SireMM::CLJCutoffFunction > );
-        CLJCutoffFunction_exposer.def( "__getstate__", &__getstate__base64< ::SireMM::CLJCutoffFunction > );
+        CLJCutoffFunction_exposer.def_pickle(sire_pickle_suite< ::SireMM::CLJCutoffFunction >());
         CLJCutoffFunction_exposer.def( "__str__", &__str__< ::SireMM::CLJCutoffFunction > );
         CLJCutoffFunction_exposer.def( "__repr__", &__str__< ::SireMM::CLJCutoffFunction > );
     }

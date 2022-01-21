@@ -166,10 +166,7 @@ void register_InvertMatch_AtomID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         InvertMatch_AtomID__exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireID::InvertMatch<SireMol::AtomID> >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        InvertMatch_AtomID__exposer.def( "__getstate_manages_dict__", true);
-        InvertMatch_AtomID__exposer.def( "__safe_for_unpickling__", true);
-        InvertMatch_AtomID__exposer.def( "__setstate__", &__setstate__base64< ::SireID::InvertMatch<SireMol::AtomID> > );
-        InvertMatch_AtomID__exposer.def( "__getstate__", &__getstate__base64< ::SireID::InvertMatch<SireMol::AtomID> > );
+        InvertMatch_AtomID__exposer.def_pickle(sire_pickle_suite< ::SireID::InvertMatch<SireMol::AtomID> >());
         InvertMatch_AtomID__exposer.def( "__str__", &__str__< ::SireID::InvertMatch<SireMol::AtomID> > );
         InvertMatch_AtomID__exposer.def( "__repr__", &__str__< ::SireID::InvertMatch<SireMol::AtomID> > );
         InvertMatch_AtomID__exposer.def( "__hash__", &::SireID::InvertMatch<SireMol::AtomID>::hash );

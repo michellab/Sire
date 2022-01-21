@@ -167,10 +167,7 @@ void register_VolumeChanger_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         VolumeChanger_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMove::VolumeChanger >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        VolumeChanger_exposer.def( "__getstate_manages_dict__", true);
-        VolumeChanger_exposer.def( "__safe_for_unpickling__", true);
-        VolumeChanger_exposer.def( "__setstate__", &__setstate__base64< ::SireMove::VolumeChanger > );
-        VolumeChanger_exposer.def( "__getstate__", &__getstate__base64< ::SireMove::VolumeChanger > );
+        VolumeChanger_exposer.def_pickle(sire_pickle_suite< ::SireMove::VolumeChanger >());
         VolumeChanger_exposer.def( "__str__", &__str__< ::SireMove::VolumeChanger > );
         VolumeChanger_exposer.def( "__repr__", &__str__< ::SireMove::VolumeChanger > );
     }

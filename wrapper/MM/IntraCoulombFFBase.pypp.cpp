@@ -158,10 +158,7 @@ void register_IntraCoulombFFBase_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         IntraCoulombFFBase_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireFF::Intra2BFF<SireMM::CoulombPotentialInterface<SireMM::IntraCoulombPotential> > >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        IntraCoulombFFBase_exposer.def( "__getstate_manages_dict__", true);
-        IntraCoulombFFBase_exposer.def( "__safe_for_unpickling__", true);
-        IntraCoulombFFBase_exposer.def( "__setstate__", &__setstate__base64< ::SireFF::Intra2BFF<SireMM::CoulombPotentialInterface<SireMM::IntraCoulombPotential> > > );
-        IntraCoulombFFBase_exposer.def( "__getstate__", &__getstate__base64< ::SireFF::Intra2BFF<SireMM::CoulombPotentialInterface<SireMM::IntraCoulombPotential> > > );
+        IntraCoulombFFBase_exposer.def_pickle(sire_pickle_suite< ::SireFF::Intra2BFF<SireMM::CoulombPotentialInterface<SireMM::IntraCoulombPotential> > >());
         IntraCoulombFFBase_exposer.def( "__str__", &__str__< ::SireFF::Intra2BFF<SireMM::CoulombPotentialInterface<SireMM::IntraCoulombPotential> > > );
         IntraCoulombFFBase_exposer.def( "__repr__", &__str__< ::SireFF::Intra2BFF<SireMM::CoulombPotentialInterface<SireMM::IntraCoulombPotential> > > );
         IntraCoulombFFBase_exposer.def( "__len__", &__len_count< ::SireFF::Intra2BFF<SireMM::CoulombPotentialInterface<SireMM::IntraCoulombPotential> > > );
