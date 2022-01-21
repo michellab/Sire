@@ -339,19 +339,19 @@ void register_BeadEditorBase_class(){
                 , "" );
         
         }
-        BeadEditorBase_exposer.def( "_set_property_QString", 
+        BeadEditorBase_exposer.def( "_set_property_QString",
                                            &SireMol::BeadEditorBase::setProperty< QString >, bp::return_self< >() );
         BeadEditorBase_exposer.def( "_set_metadata_QString", &set_Metadata_SireMol_BeadStringProperty_function1, bp::return_self< >());
         BeadEditorBase_exposer.def( "_set_metadata_QString", &set_Metadata_SireMol_BeadStringProperty_function2, bp::return_self< >());
-        BeadEditorBase_exposer.def( "_set_property_qint64", 
+        BeadEditorBase_exposer.def( "_set_property_qint64",
                                            &SireMol::BeadEditorBase::setProperty< qint64 >, bp::return_self< >() );
         BeadEditorBase_exposer.def( "_set_metadata_qint64", &set_Metadata_SireMol_BeadIntProperty_function1, bp::return_self< >());
         BeadEditorBase_exposer.def( "_set_metadata_qint64", &set_Metadata_SireMol_BeadIntProperty_function2, bp::return_self< >());
-        BeadEditorBase_exposer.def( "_set_property_double", 
+        BeadEditorBase_exposer.def( "_set_property_double",
                                            &SireMol::BeadEditorBase::setProperty< double >, bp::return_self< >() );
         BeadEditorBase_exposer.def( "_set_metadata_double", &set_Metadata_SireMol_BeadFloatProperty_function1, bp::return_self< >());
         BeadEditorBase_exposer.def( "_set_metadata_double", &set_Metadata_SireMol_BeadFloatProperty_function2, bp::return_self< >());
-        BeadEditorBase_exposer.def( "_set_property_QVariant", 
+        BeadEditorBase_exposer.def( "_set_property_QVariant",
                                            &SireMol::BeadEditorBase::setProperty< QVariant >, bp::return_self< >() );
         BeadEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_BeadVariantProperty_function1, bp::return_self< >());
         BeadEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_BeadVariantProperty_function2, bp::return_self< >());

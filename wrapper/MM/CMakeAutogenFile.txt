@@ -12,7 +12,6 @@ set ( PYPP_SOURCES
        AngleSymbols.pypp.cpp
        AtomFunction.pypp.cpp
        AtomFunctions.pypp.cpp
-       AtomLJs.pypp.cpp
        AtomPairs_CLJScaleFactor_.pypp.cpp
        AtomPairs_CoulombScaleFactor_.pypp.cpp
        AtomPairs_LJScaleFactor_.pypp.cpp
@@ -177,9 +176,10 @@ set ( PYPP_SOURCES
        TripleDistanceRestraint.pypp.cpp
        TwoAtomFunction.pypp.cpp
        TwoAtomFunctions.pypp.cpp
+       UreyBradleyParameterName.pypp.cpp
        TwoAtomPerturbation.pypp.cpp
        UreyBradleyComponent.pypp.cpp
-       UreyBradleyParameterName.pypp.cpp
+       AtomLJs.pypp.cpp
        SireMM_containers.cpp
        SireMM_properties.cpp
        SireMM_registrars.cpp

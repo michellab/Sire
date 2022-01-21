@@ -98,6 +98,8 @@ void register_ArcTanh_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ArcTanh_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireCAS::ArcTanh >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        ArcTanh_exposer.def( "__setstate__", &__setstate__base64< ::SireCAS::ArcTanh > );
+        ArcTanh_exposer.def( "__getstate__", &__getstate__base64< ::SireCAS::ArcTanh > );
         ArcTanh_exposer.def( "__str__", &__str__< ::SireCAS::ArcTanh > );
         ArcTanh_exposer.def( "__repr__", &__str__< ::SireCAS::ArcTanh > );
         ArcTanh_exposer.def( "__hash__", &::SireCAS::ArcTanh::hash );

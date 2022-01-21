@@ -59,7 +59,7 @@ void register_AtomIDMatcher_class(){
         AtomIDMatcher_exposer.def( bp::init< QList< QPair< int, int > > const & >(( bp::arg("match_idxs") ), "Construct to match atom indexes") );
         AtomIDMatcher_exposer.def( bp::init< QList< QPair< SireMol::AtomIdentifier, SireMol::AtomIdentifier > > const & >(( bp::arg("match_ids") ), "Construct to match specified AtomIdentifiers") );
         AtomIDMatcher_exposer.def( bp::init< QList< boost::tuples::tuple< QString, QString, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("match_names") ), "Construct to match atom names") );
-        AtomIDMatcher_exposer.def( bp::init< QList< boost::tuples::tuple< int, int, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("match_idxs") ), "Construct to match atom indexes") );
+        AtomIDMatcher_exposer.def( bp::init< QList< boost::tuples::tuple< int, int, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("match_idxs") ), "Construct to match specified AtomIdentifiers") );
         AtomIDMatcher_exposer.def( bp::init< QList< boost::tuples::tuple< SireMol::AtomIdentifier, SireMol::AtomIdentifier, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("match_ids") ), "Construct to match specified AtomIdentifiers") );
         AtomIDMatcher_exposer.def( bp::init< QHash< QString, QString > const & >(( bp::arg("match_names") ), "Construct to match atom names") );
         AtomIDMatcher_exposer.def( bp::init< QHash< int, int > const & >(( bp::arg("match_idxs") ), "Construct to match atom indexes") );
@@ -133,6 +133,8 @@ void register_AtomIDMatcher_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AtomIDMatcher_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::AtomIDMatcher >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        AtomIDMatcher_exposer.def( "__setstate__", &__setstate__base64< ::SireMol::AtomIDMatcher > );
+        AtomIDMatcher_exposer.def( "__getstate__", &__getstate__base64< ::SireMol::AtomIDMatcher > );
         AtomIDMatcher_exposer.def( "__str__", &__str__< ::SireMol::AtomIDMatcher > );
         AtomIDMatcher_exposer.def( "__repr__", &__str__< ::SireMol::AtomIDMatcher > );
     }

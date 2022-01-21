@@ -62,10 +62,10 @@ set ( PYPP_SOURCES
        SymbolComplex.pypp.cpp
        SymbolExpression.pypp.cpp
        SymbolValue.pypp.cpp
+       _CAS_free_functions.pypp.cpp
        Tan.pypp.cpp
        Tanh.pypp.cpp
        Values.pypp.cpp
-       _CAS_free_functions.pypp.cpp
        SireCAS_containers.cpp
        SireCAS_registrars.cpp
     )

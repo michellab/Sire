@@ -10,6 +10,8 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
+#include "SireFF/intra2b2gff.hpp"
+
 #include "SireMol/errors.h"
 
 #include "SireMol/mgname.h"
@@ -29,8 +31,6 @@ namespace bp = boost::python;
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
-#include "SireFF/intra2b2gff.hpp"
-
 
 #include "g2ff.h"
 
@@ -101,6 +101,8 @@ void register_G2FF_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         G2FF_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireFF::G2FF >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        G2FF_exposer.def( "__setstate__", &__setstate__base64< ::SireFF::G2FF > );
+        G2FF_exposer.def( "__getstate__", &__getstate__base64< ::SireFF::G2FF > );
         G2FF_exposer.def( "__str__", &__str__< ::SireFF::G2FF > );
         G2FF_exposer.def( "__repr__", &__str__< ::SireFF::G2FF > );
         G2FF_exposer.def( "__len__", &__len_count< ::SireFF::G2FF > );

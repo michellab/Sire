@@ -48,9 +48,9 @@ set ( PYPP_SOURCES
        UnitTest.pypp.cpp
        UpperCaseString.pypp.cpp
        Version.pypp.cpp
-       VariantProperty.pypp.cpp
        _Base_free_functions.pypp.cpp
        vector_less__double__greater_.pypp.cpp
+       VariantProperty.pypp.cpp
        SireBase_containers.cpp
        SireBase_properties.cpp
        SireBase_registrars.cpp

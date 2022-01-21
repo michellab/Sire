@@ -13,13 +13,23 @@ namespace bp = boost::python;
 
 #include "SireMol/atomname.h"
 
+#include "SireMol/atomnum.h"
+
 #include "SireMol/cgname.h"
+
+#include "SireMol/chainname.h"
 
 #include "SireMol/molecule.h"
 
 #include "SireMol/moleditor.h"
 
 #include "SireMol/mover.hpp"
+
+#include "SireMol/resname.h"
+
+#include "SireMol/resnum.h"
+
+#include "SireMol/segname.h"
 
 #include "create_test_molecule.h"
 

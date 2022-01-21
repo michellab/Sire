@@ -133,6 +133,8 @@ void register_ChainsWithAtoms_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ChainsWithAtoms_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::ChainsWithAtoms >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        ChainsWithAtoms_exposer.def( "__setstate__", &__setstate__base64< ::SireMol::ChainsWithAtoms > );
+        ChainsWithAtoms_exposer.def( "__getstate__", &__getstate__base64< ::SireMol::ChainsWithAtoms > );
         ChainsWithAtoms_exposer.def( "__str__", &__str__< ::SireMol::ChainsWithAtoms > );
         ChainsWithAtoms_exposer.def( "__repr__", &__str__< ::SireMol::ChainsWithAtoms > );
         ChainsWithAtoms_exposer.def( "__hash__", &::SireMol::ChainsWithAtoms::hash );

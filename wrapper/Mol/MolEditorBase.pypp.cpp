@@ -46,7 +46,7 @@ SireMol::MolEditorBase& set_Metadata_function1(
 
 SireMol::MolEditorBase& set_Metadata_function2(
                               SireMol::MolEditorBase &molview,
-                              const QString &key, const QString &metakey, 
+                              const QString &key, const QString &metakey,
                               const SireBase::Property &p)
                               { return molview.setMetadata<SireBase::Property>(key, metakey, p); }
 

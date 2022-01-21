@@ -52,11 +52,9 @@ set ( PYPP_SOURCES
        SimStore.pypp.cpp
        Simulation.pypp.cpp
        SpecifiedGroupsDeleter.pypp.cpp
-       SupraMove.pypp.cpp
        SupraMoves.pypp.cpp
        SupraSim.pypp.cpp
        SupraSimPacket.pypp.cpp
-       SupraSubMove.pypp.cpp
        SupraSubMoves.pypp.cpp
        SupraSubSim.pypp.cpp
        SupraSubSimPacket.pypp.cpp
@@ -68,9 +66,7 @@ set ( PYPP_SOURCES
        UniformInserter.pypp.cpp
        UniformSampler.pypp.cpp
        VelocitiesFromProperty.pypp.cpp
-       VelocityGenerator.pypp.cpp
        VelocityVerlet.pypp.cpp
-       VolumeChanger.pypp.cpp
        VolumeMove.pypp.cpp
        WeightedMoves.pypp.cpp
        ZMatMove.pypp.cpp
@@ -78,6 +74,10 @@ set ( PYPP_SOURCES
        ZMatrixCoords.pypp.cpp
        ZMatrixCoordsLine.pypp.cpp
        ZMatrixLine.pypp.cpp
+       VelocityGenerator.pypp.cpp
+       SupraMove.pypp.cpp
+       SupraSubMove.pypp.cpp
+       VolumeChanger.pypp.cpp
        SireMove_containers.cpp
        SireMove_properties.cpp
        SireMove_registrars.cpp

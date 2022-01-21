@@ -76,7 +76,7 @@ void register_MolEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atom") )
-                , "Add an atom with number number and return an editor that\ncan be used to edit it" );
+                , "Add an atom called name and return an editor that can\nbe used to edit it" );
         
         }
         { //::SireMol::MolEditor::add
@@ -398,6 +398,8 @@ void register_MolEditor_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         MolEditor_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::MolEditor >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        MolEditor_exposer.def( "__setstate__", &__setstate__base64< ::SireMol::MolEditor > );
+        MolEditor_exposer.def( "__getstate__", &__getstate__base64< ::SireMol::MolEditor > );
         MolEditor_exposer.def( "__str__", &__str__< ::SireMol::MolEditor > );
         MolEditor_exposer.def( "__repr__", &__str__< ::SireMol::MolEditor > );
         MolEditor_exposer.def( "__len__", &__len_size< ::SireMol::MolEditor > );

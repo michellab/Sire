@@ -92,6 +92,8 @@ void register_Cosh_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Cosh_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireCAS::Cosh >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        Cosh_exposer.def( "__setstate__", &__setstate__base64< ::SireCAS::Cosh > );
+        Cosh_exposer.def( "__getstate__", &__getstate__base64< ::SireCAS::Cosh > );
         Cosh_exposer.def( "__str__", &__str__< ::SireCAS::Cosh > );
         Cosh_exposer.def( "__repr__", &__str__< ::SireCAS::Cosh > );
         Cosh_exposer.def( "__hash__", &::SireCAS::Cosh::hash );
