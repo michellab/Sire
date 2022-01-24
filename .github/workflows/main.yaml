@@ -1,0 +1,43 @@
+name: Build
+
+on:
+  push:
+    branches: [ devel ]
+    tags:
+      - "*"
+  pull_request:
+    branches: [ devel ]
+
+jobs:
+  build:
+    name: build (${{ matrix.python-version }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    strategy:
+      max-parallel: 6
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "macos-latest"]
+        python-version: ["3.7", "3.8", "3.9"]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
+          activate-environment: sire_build
+      - name: Get tags
+        run: git fetch --prune --unshallow --tags
+      - name: Setup Conda
+        run: conda install -y conda-build anaconda-client
+      - name: Update Conda recipe
+        run: actions/update_recipe.sh "$GITHUB_WORKSPACE"
+      - name: Build Conda package
+        run: conda-build -c conda-forge -c michellab recipes/sire
+      - name: Upload Conda package
+        if: github.event_name != 'pull_request'
+        run: actions/upload_package.sh "$GITHUB_WORKSPACE" "$CONDA" "$ANACONDA_TOKEN"
+        env:
+          ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}

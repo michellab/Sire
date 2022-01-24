@@ -1,0 +1,39 @@
+{% set name = "libcpuid" %}
+{% set version = "0.5.1" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/anrieff/{{ name }}/archive/v{{ version }}.tar.gz
+  sha256: 36d62842ef43c749c0ba82237b10ede05b298d79a0e39ef5fd1115ba1ff8e126
+
+build:
+  number: 0
+  run_exports:
+    - {{ pin_subpackage("libcpuid") }}
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - cmake
+    - ninja
+
+test:
+  commands:
+    - test -f $PREFIX/lib/libcpuid$SHLIB_EXT  # [unix]
+
+about:
+  home: http://libcpuid.sourceforge.net
+  license: BSD-2-Clause
+  license_file: '{{ environ["RECIPE_DIR"] }}/LICENSE'
+  summary: "A small C library for x86 CPU detection and feature extraction."
+  dev_url: https://github.com/anrieff/libcpuid
+  doc_url: http://libcpuid.sourceforge.net/doxy
+  description: A small C library for x86 CPU detection and feature extraction.
+
+extra:
+  recipe-maintainers:
+    - lohedges
