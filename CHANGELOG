@@ -17,7 +17,8 @@ devel branch:
                container constructors, moving to OneAPI, switching to the
                conda-forge OpenMM and switching to the new C++ ABI (@chryswoods).
                Simplified Sire wrapper generation using a minimal Docker
-               container with the latest Py++ (@chryswoods).
+               container with the latest Py++ (@chryswoods). At support for
+               native Python pickling of Sire objects (@chryswoods.)
 
     [2021.1.0] Aug 2021 - Added support for multiple combining rules in SOMD
                (@SofiaBariami). Added support for triclinic simulation boxes.
