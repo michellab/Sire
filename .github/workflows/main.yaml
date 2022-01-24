@@ -29,13 +29,16 @@ jobs:
           python-version: ${{ matrix.python-version }}
           activate-environment: sire_build
       - name: Setup Conda
+        shell: bash -l {0}
         run: conda install -y conda-build anaconda-client
       - name: Update Conda recipe
         run: actions/update_recipe.sh "$GITHUB_WORKSPACE"
       - name: Build Conda package
+        shell: bash -l {0}
         run: conda-build -c conda-forge -c michellab recipes/sire
       - name: Upload Conda package
         if: github.event_name != 'pull_request'
+        shell: bash -l {0}
         run: actions/upload_package.sh "$GITHUB_WORKSPACE" "$CONDA" "$ANACONDA_TOKEN"
         env:
           ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
