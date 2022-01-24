@@ -30,12 +30,12 @@ jobs:
           activate-environment: sire_build
       - name: Clone the repository
         run: git clone https://github.com/michellab/Sire
-      - name: Checkout the base branch
+      - name: Checkout the head branch if a pull request
         run: |
           cd Sire
-          git checkout "$BASE_BRANCH"
+          git checkout "$HEAD_BRANCH"
         env:
-          BASE_BRANCH: ${{ github.base_ref }}
+          HEAD_BRANCH: ${{ github.head_ref }}
         if: github.event_name == 'pull_request'
       - name: Setup Conda
         shell: bash -l {0}
