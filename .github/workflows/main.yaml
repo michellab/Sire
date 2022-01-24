@@ -34,7 +34,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           activate-environment: sire_build
       - name: Checkout the base branch
-        run: git checkout "BASE_BRANCH"
+        run: git checkout "$BASE_BRANCH"
         env:
           BASE_BRANCH: ${{ github.base_ref }}
         if: github.event_name == 'pull_request'
