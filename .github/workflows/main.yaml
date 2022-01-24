@@ -20,6 +20,9 @@ jobs:
         os: ["ubuntu-latest", "macos-latest"]
         python-version: ["3.7", "3.8", "3.9"]
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
@@ -38,13 +41,13 @@ jobs:
         shell: bash -l {0}
         run: conda install -y conda-build anaconda-client
       - name: Update Conda recipe
-        run: Sire/actions/update_recipe.sh "$GITHUB_WORKSPACE"/Sire
+        run: actions/update_recipe.sh "$GITHUB_WORKSPACE"/Sire
       - name: Build Conda package
         shell: bash -l {0}
         run: conda-build -c conda-forge -c michellab recipes/sire
       - name: Upload Conda package
         shell: bash -l {0}
-        run: Sire/actions/upload_package.sh "$GITHUB_WORKSPACE"/Sire "$CONDA" "$ANACONDA_TOKEN"
+        run: actions/upload_package.sh "$GITHUB_WORKSPACE"/Sire "$CONDA" "$ANACONDA_TOKEN"
         env:
           ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
         if: github.event_name != 'pull_request'
