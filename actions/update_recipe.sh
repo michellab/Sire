@@ -17,10 +17,10 @@ cp "$TEMPLATE" "$RECIPE"
 SIRE_VERSION=$(git --git-dir="$SRC_DIR"/.git --work-tree="$SRC_DIR" describe --tags --abbrev=0)
 
 # Get the build number. (Number of commits since last tag.)
-SIRE_BUILD=$(git --git-dir="$SRC_DIR"/.git --work-tree="$SRC_DIR" log --oneline "$SIRE_VERSION".. | wc -l)
+SIRE_BUILD=$(git --git-dir="$SRC_DIR"/.git --work-tree="$SRC_DIR" log --oneline "$SIRE_VERSION".. | wc -l | xargs)
 
 # Get the Sire branch.
-SIRE_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+SIRE_BRANCH=$(git --git-dir="$SRC_DIR"/.git --work-tree="$SRC_DIR" rev-parse --abbrev-ref HEAD)
 
 # Update the Sire version number.
 echo "Updating Sire version number: '$SIRE_VERSION'"
