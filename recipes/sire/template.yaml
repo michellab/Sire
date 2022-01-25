@@ -7,6 +7,7 @@ package:
 source:
   git_url: https://github.com/michellab/Sire.git
   git_tag: SIRE_BRANCH
+  patches: conda_build.patch
 
 build:
   number: SIRE_BUILD
