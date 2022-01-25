@@ -48,3 +48,5 @@ else
         "$CONDA_BLD"/"$OS"/libcpuid-* \
         "${CONDA_BLD}"/"$OS"/sire-*
 fi
+
+echo "Package uploaded!"
