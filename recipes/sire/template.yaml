@@ -45,6 +45,8 @@ requirements:
     - qt
 
 test:
+  requires:
+    - git
   imports:
     - Sire
     - Sire.Analysis
@@ -65,6 +67,8 @@ test:
     - Sire.System
     - Sire.Units
     - Sire.Vol
+  commands:
+    - sire_test
 
 about:
   home: https://github.com/michellab/Sire
