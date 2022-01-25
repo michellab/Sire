@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # Get the path to GitHub workspace.
-SRC_DIR=${GITHUB_WORKSPACE:-$1}
+SRC_DIR=${SRC_DIR:-$1}
 
 # Set the Conda build directory path.
-CONDA_DIR="$GITHUB_WORKSPACE"/recipes/sire
+CONDA_DIR="$SRC_DIR"/recipes/sire
 
 # Store the name of the recipe and template YAML files.
 RECIPE="$CONDA_DIR"/meta.yaml

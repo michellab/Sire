@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Get the path to GitHub workspace.
-SRC_DIR=${GITHUB_WORKSPACE:-$1}
+SRC_DIR=${SRC_DIR:-$1}
 
 # Get the path to the Conda installation.
 CONDA=${CONDA:-$2}
