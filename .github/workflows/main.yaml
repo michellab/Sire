@@ -44,7 +44,7 @@ jobs:
         run: conda-build -c conda-forge -c michellab Sire/recipes/sire
       - name: Upload Conda package
         shell: bash -l {0}
-        run: Sire/actions/upload_package.sh "$GITHUB_WORKSPACE"/Sire "$CONDA" "$ANACONDA_TOKEN"
+        run: Sire/actions/upload_package.sh "$GITHUB_WORKSPACE"/Sire "$CONDA"
         env:
           ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
         if: github.event_name != 'pull_request'
