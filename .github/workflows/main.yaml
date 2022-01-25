@@ -32,6 +32,7 @@ jobs:
           cd Sire
           git checkout "$HEAD_BRANCH"
           pwd
+          echo "$GITHUB_WORKSPACE"
         env:
           HEAD_BRANCH: ${{ github.head_ref }}
         if: github.event_name == 'pull_request'
