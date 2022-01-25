@@ -24,7 +24,7 @@ SIRE_BRANCH=$(git --git-dir="$SRC_DIR"/.git --work-tree="$SRC_DIR" rev-parse --a
 
 # Update the Sire version number.
 echo "Updating Sire version number: '$SIRE_VERSION'"
-sed -i.bak -e "s/VERSION/$SIRE_VERSION/" "$RECIPE" && rm "$RECIPE".bak
+sed -i.bak -e "s/SIRE_VERSION/$SIRE_VERSION/" "$RECIPE" && rm "$RECIPE".bak
 
 # Update the build number.
 echo "Updating Sire build number: '$SIRE_BUILD'"
