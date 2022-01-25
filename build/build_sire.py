@@ -202,6 +202,14 @@ if __name__ == "__main__":
             # This is the version for Apple M1
             #conda_pkgs.append("pyqt=5.15.2")
 
+        # pymbar (not available on aarch64)
+        if platform.machine() != "aarch64":
+            try:
+                import pymbar
+                print("pymbar is already installed...")
+            except ImportError:
+                conda_pkgs.append("pymbar=3.0.5")
+
         # compilers (so we keep binary compatibility)
         if is_osx:
             try:
