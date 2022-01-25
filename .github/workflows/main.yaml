@@ -3,8 +3,6 @@ name: Build
 on:
   push:
     branches: [ devel ]
-    tags:
-      - "*"
   pull_request:
     branches: [ devel ]
 
