@@ -26,7 +26,7 @@
   *
 \*********************************************/
 
-#include <QTime>
+#include <QElapsedTimer>
 
 #include "zmatrix.h"
 
@@ -1440,7 +1440,7 @@ ZMatrix ZMatrix::matchToSelection(const AtomSelection &selection) const
         }
     }
 
-    qSort(selected_atom_lines.begin(), selected_atom_lines.end());
+    std::sort(selected_atom_lines.begin(), selected_atom_lines.end());
 
     int nzmat = selected_atom_lines.count();
     const int *selected_atom_lines_array = selected_atom_lines.constData();
@@ -1652,7 +1652,7 @@ ZMatrixCoords::ZMatrixCoords(const PartialMolecule &molecule, const PropertyMap 
                 zmat(molecule.molecule()),
                 need_rebuild(false)
 {
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     cartesian_coords = molecule.molecule().property( map["coordinates"] )

@@ -121,6 +121,7 @@ void register_FFName_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         FFName_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireFF::FFName >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        FFName_exposer.def_pickle(sire_pickle_suite< ::SireFF::FFName >());
         FFName_exposer.def( "__str__", &__str__< ::SireFF::FFName > );
         FFName_exposer.def( "__repr__", &__str__< ::SireFF::FFName > );
         FFName_exposer.def( "__hash__", &::SireFF::FFName::hash );

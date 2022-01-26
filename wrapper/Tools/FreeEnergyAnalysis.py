@@ -19,10 +19,18 @@ try:
     scipy = Sire.try_import("scipy")
 except ImportError:
     raise ImportError('Numpy is not installed. Please install numpy in order to use MBAR for your free energy analysis.')
-from pymbar import MBAR
-from pymbar import timeseries
-import warnings
 
+
+import platform
+
+# pymbar is currently unavailable on aarch64.
+if platform.machine() != "aarch64":
+    from pymbar import MBAR
+    from pymbar import timeseries
+else:
+    raise ImportError("'pymbar' is currently unavailable on the 'aarch64' platform. Unable to use 'analyse_freenrg'")
+
+import warnings
 
 class FreeEnergies(object):
     r"""This class contains all the different pmf information
@@ -76,10 +84,9 @@ class FreeEnergies(object):
             self._pmf_ti[-1][1] = numpy.trapz(means, self._lambda_array)
             self._deltaF_ti = numpy.trapz(means, self._lambda_array)
 
-
     def run_mbar(self, test_overlap = True):
         r"""Runs MBAR free energy estimate """
-        
+
         try:
             MBAR_obj = MBAR(self._u_kln, self._N_k, verbose=True)
             self._f_k = MBAR_obj.f_k

@@ -5,7 +5,12 @@
 
 #include <QDir>
 
-#include "tbb/task_scheduler_init.h"
+
+#ifdef emit
+#undef emit
+#endif
+
+#include <tbb/tbb.h>
 
 #include "SireError/errors.h"
 #include "SireError/printerror.h"
@@ -213,7 +218,7 @@ int main(int argc, char **argv)
         printf("Starting %ls: number of threads equals %d\n", python_argv[0], ppn);
 
         // parallel implementation
-        tbb::task_scheduler_init init(ppn);
+        //tbb::task_scheduler_init init(ppn);
 
         if (not ignore_ipython)
         {

@@ -85,11 +85,11 @@ QDataStream &operator<<(QDataStream &ds,
                                       const PerturbationsTemplate &pertstemplate)
 {
     writeHeader(ds, r_pertstemplate, 1);
-    
+
     SharedDataStream sds(ds);
-    
-    sds << pertstemplate.name 
-        << pertstemplate.initcharges << pertstemplate.finalcharges 
+
+    sds << pertstemplate.name
+        << pertstemplate.initcharges << pertstemplate.finalcharges
 	<< pertstemplate.initLJs << pertstemplate.finalLJs
 	<< pertstemplate.initatypes << pertstemplate.finalatypes
 	<< pertstemplate.initbondsk << pertstemplate.initbondsr
@@ -97,22 +97,22 @@ QDataStream &operator<<(QDataStream &ds,
 	<< pertstemplate.initanglesk << pertstemplate.initanglest
 	<< pertstemplate.finalanglesk << pertstemplate.finalanglest
       //<< pertstemplate.initdihpotential << pertstemplate.finaldihpotential
-	<< pertstemplate.initdihparams << pertstemplate.finaldihparams 
+	<< pertstemplate.initdihparams << pertstemplate.finaldihparams
       //<< pertstemplate.initimppotential << pertstemplate.finalimppotential;
 	<< pertstemplate.initimpparams << pertstemplate.finalimpparams;
-        
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, PerturbationsTemplate &pertstemplate)
 {
     VersionID v = readHeader(ds, r_pertstemplate);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
-        sds >> pertstemplate.name 
+
+        sds >> pertstemplate.name
             >> pertstemplate.initcharges >> pertstemplate.finalcharges
 	    >> pertstemplate.initLJs >> pertstemplate.finalLJs
 	    >> pertstemplate.initatypes >> pertstemplate.finalatypes
@@ -128,7 +128,7 @@ QDataStream &operator>>(QDataStream &ds, PerturbationsTemplate &pertstemplate)
     }
     else
         throw version_error(v, "1", r_pertstemplate, CODELOC);
-        
+
     return ds;
 }
 
@@ -143,18 +143,18 @@ PerturbationsTemplate::PerturbationsTemplate(const QString &name)
 /** Copy constructor */
 PerturbationsTemplate::PerturbationsTemplate(const PerturbationsTemplate &other)
                     : name(other.name), initcharges(other.initcharges),
-                      finalcharges(other.finalcharges), initLJs(other.initLJs), 
+                      finalcharges(other.finalcharges), initLJs(other.initLJs),
 		      finalLJs(other.finalLJs),initatypes(other.initatypes),
 		      finalatypes(other.finalatypes),initbondsk(other.initbondsk),
 		      initbondsr(other.initbondsr),finalbondsk(other.finalbondsk),
 		      finalbondsr(other.finalbondsr), initanglesk(other.initanglesk),
 		      initanglest(other.initanglest),finalanglesk(other.finalanglesk),
 		      finalanglest(other.finalanglest),
-                      //initdihpotential(other.initdihpotential), 
+                      //initdihpotential(other.initdihpotential),
                       //finaldihpotential(other.finaldihpotential),
 		      initdihparams(other.initdihparams),
 		      finaldihparams(other.finaldihparams),
-                      //initimppotential(other.initimppotential), 
+                      //initimppotential(other.initimppotential),
                       //finalimppotential(other.finalimppotential)
 		      initimpparams(other.initimpparams),
 		      finalimpparams(other.finalimpparams)
@@ -198,7 +198,7 @@ PerturbationsTemplate& PerturbationsTemplate::operator=(const PerturbationsTempl
 	initimpparams = other.initimpparams;
 	finalimpparams = other.finalimpparams;
     }
-    
+
     return *this;
 }
 
@@ -206,13 +206,13 @@ PerturbationsTemplate& PerturbationsTemplate::operator=(const PerturbationsTempl
 bool PerturbationsTemplate::operator==(const PerturbationsTemplate &other) const
 {
     return this == &other or
-           (name == other.name and 
-	    initcharges == other.initcharges and finalcharges == other.finalcharges and 
-	    initLJs == other.initLJs and finalLJs == other.finalLJs and 
-	    initatypes == other.initatypes and finalatypes == other.finalatypes and 
-	    initbondsk == other.initbondsk and initbondsr == other.initbondsr and 
-	    finalbondsk == other.finalbondsk and finalbondsr == other.finalbondsr and 
-	    initanglesk == other.initanglesk and initanglest == other.initanglest and 
+           (name == other.name and
+	    initcharges == other.initcharges and finalcharges == other.finalcharges and
+	    initLJs == other.initLJs and finalLJs == other.finalLJs and
+	    initatypes == other.initatypes and finalatypes == other.finalatypes and
+	    initbondsk == other.initbondsk and initbondsr == other.initbondsr and
+	    finalbondsk == other.finalbondsk and finalbondsr == other.finalbondsr and
+	    initanglesk == other.initanglesk and initanglest == other.initanglest and
 	    finalanglesk == other.finalanglesk and finalanglest == other.finalanglest and
             //initdihpotential == other.initdihpotential and finaldihpotential == other.finaldihpotential and
 	    initdihparams == other.initdihparams and finaldihparams == other.finaldihparams and
@@ -254,7 +254,7 @@ SireUnits::Dimension::Charge PerturbationsTemplate::getFinalCharge(const QString
   if ( not finalcharges.contains(atomname) )
     throw SireError::invalid_key( QObject::tr("No value for key %1").arg(atomname) );
   else
-    return finalcharges.value(atomname); 
+    return finalcharges.value(atomname);
 }
 
 void PerturbationsTemplate::setInitLJ(const QString &atomname, const LJParameter &atomlj)
@@ -363,7 +363,7 @@ double PerturbationsTemplate::getFinalBondR(const BondID &bond) const
 
 QList<BondID> PerturbationsTemplate::getBonds() const
 {
-  // Flaw, which hash do we get the bonds from ? Should rewrite to have a data structure 
+  // Flaw, which hash do we get the bonds from ? Should rewrite to have a data structure
   // that holds all bond parameters (initial and final)
   return initbondsk.keys();
 }
@@ -685,10 +685,10 @@ QList<ImproperID> PerturbationsTemplate::getImpropers() const
 
 static int processVersionLine( QString& line)
 {
-    QStringList words = line.split(" ", QString::SkipEmptyParts);
+    QStringList words = line.split(" ", Qt::SkipEmptyParts);
     bool ok;
     int version = words[1].toInt(&ok);
-    
+
     if (not ok)
         throw SireError::program_bug( QObject::tr(
                     "Unexpected error while trying to read the version line "
@@ -703,33 +703,33 @@ static int processVersionLine( QString& line)
 static const RegisterMetaType<PerturbationsLibrary> r_pertslibrary(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds,
                                       const PerturbationsLibrary &pertslibrary)
 {
     writeHeader(ds, r_pertslibrary, 1);
-    
+
     SharedDataStream sds(ds);
 
     sds << pertslibrary.templates;
-    
+
     return ds;
 }
 
 /** Extract from a binary datastream */
-QDataStream &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds,
                                       PerturbationsLibrary &pertslibrary)
 {
     VersionID v = readHeader(ds, r_pertslibrary);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> pertslibrary.templates;
     }
     else
         throw version_error( v, "1", r_pertslibrary, CODELOC );
-        
+
     return ds;
 }
 
@@ -785,7 +785,7 @@ PerturbationsLibrary& PerturbationsLibrary::operator+=(const PerturbationsLibrar
     }
     else
     {
-        for (QHash<QString,PerturbationsTemplate>::const_iterator 
+        for (QHash<QString,PerturbationsTemplate>::const_iterator
                                             it = other.templates.constBegin();
              it != other.templates.constEnd();
              ++it)
@@ -793,7 +793,7 @@ PerturbationsLibrary& PerturbationsLibrary::operator+=(const PerturbationsLibrar
             templates.insert( it.key(), it.value() );
         }
     }
-    
+
     return *this;
 }
 
@@ -818,7 +818,7 @@ void PerturbationsLibrary::add(const PerturbationsLibrary &other)
 const PerturbationsTemplate& PerturbationsLibrary::getTemplate(const QString &key)
 {
     QHash<QString,PerturbationsTemplate>::const_iterator it = templates.constFind(key);
-    
+
     if (it == templates.constEnd())
         throw SireError::invalid_key( QObject::tr(
                 "Cannot find the template with key \"%1\". Available templates "
@@ -829,7 +829,7 @@ const PerturbationsTemplate& PerturbationsLibrary::getTemplate(const QString &ke
 }
 
 /** Set the template associated with the passed key */
-void PerturbationsLibrary::setTemplate(const QString &key, 
+void PerturbationsLibrary::setTemplate(const QString &key,
                                      const PerturbationsTemplate &tmplate)
 {
     templates.insert(key, tmplate);
@@ -838,14 +838,14 @@ void PerturbationsLibrary::setTemplate(const QString &key,
 void PerturbationsLibrary::loadTemplates(const QString &templatefile)
 {
     QFile template_f(templatefile);
-  
+
     if ( not (template_f.exists() and template_f.open(QIODevice::ReadOnly) ) )
     {
         throw SireError::file_error(template_f, CODELOC);
     }
-  
+
     QTextStream ts(&template_f);
-  
+
     QString line = ts.readLine();
 
     // The first line contains the version
@@ -855,10 +855,10 @@ void PerturbationsLibrary::loadTemplates(const QString &templatefile)
         throw SireError::process_error( QObject::tr(
                     "Invalid version of the template, got '%1' but only support '1'")
                         .arg(version), CODELOC);
-  
+
     QString current = " "; // the template currently being read
 
-    QHash <QString,PerturbationsTemplate> new_templates; 
+    QHash <QString,PerturbationsTemplate> new_templates;
 
     /** Define temporary place holders */
     QString atname = " ";
@@ -888,13 +888,13 @@ void PerturbationsLibrary::loadTemplates(const QString &templatefile)
     bool inbond = false;
     bool inangle = false;
     bool indihedral = false;
-    
+
     /** Now read rest of the file */
     while ( not line.isNull() )
     {
         line = ts.readLine();
 	line = line.simplified();
-        QStringList words = line.split(" ", QString::SkipEmptyParts);
+        QStringList words = line.split(" ", Qt::SkipEmptyParts);
         //qDebug() << line;
         //qDebug() << words;
         if ( words.count() < 1 )
@@ -1113,10 +1113,10 @@ void PerturbationsLibrary::loadTemplates(const QString &templatefile)
 	    inangle = false;
 	    continue;
 	  }
-	if ( line.startsWith("enddihedral") ) 
+	if ( line.startsWith("enddihedral") )
 	  {
 	    DihedralID dihedral = DihedralID( AtomName(atom0), AtomName(atom1), AtomName(atom2), AtomName(atom3) );
-	    
+
 	    //qDebug() << "SETTING DIHEDRAL " << dihedral.toString() ;
 	    //qDebug() << " INIT FORM " << init_form;
 	    //qDebug() << " FINAL FORM " << final_form;
@@ -1135,7 +1135,7 @@ void PerturbationsLibrary::loadTemplates(const QString &templatefile)
 
 	    //qDebug() << " SETING IMPROPER" ;
 	    //qDebug() << improper.toString() << init_form << final_form;
-	    
+
 	    //atom0 << atom1 << atom2 << atom3 << k0i << ni << phasei << k0f << nf << phasef;
 
             //new_templates[current].setInitImpPotential( improper, init_pot);
@@ -1143,13 +1143,13 @@ void PerturbationsLibrary::loadTemplates(const QString &templatefile)
 
             new_templates[current].setInitImpParams( improper, init_form);
             new_templates[current].setFinalImpParams( improper, final_form);
-	    
+
 	    // JM 02/13 WHY IS THE ABOVE COMMENTED OUT??
 
 	    indihedral = false;
 	    continue;
 	  }
-	
+
     }
 
     foreach (PerturbationsTemplate templ, new_templates)
@@ -1176,7 +1176,7 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
   MolEditor editmol = newmol.edit();
 
   QList<PerturbationPtr> perturbations;
-  
+
   QList<GeomPertPtr> geom_perturbations;
 
   // Set initial and final charges/LJ, first assuming are unchanged
@@ -1204,7 +1204,7 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
   for (int i=0; i<nats; ++i)
     {
       AtomEditor atom = editmol.atom(AtomIdx(i));
-      
+
       QString iname = atom.name().value();
       //qDebug() << atom.name();
       // the charges...
@@ -1291,7 +1291,7 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
       double kf = pert.getFinalBondK(bond);
       double rf = pert.getFinalBondR(bond);
       AtomIdx atom0 = editmol.select( bond.atom0() ).index();
-      AtomIdx atom1 = editmol.select( bond.atom1() ).index();	
+      AtomIdx atom1 = editmol.select( bond.atom1() ).index();
 
       Symbol r = InternalPotential::symbols().bond().r();
       Symbol k("k");
@@ -1302,16 +1302,16 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
 
       initial_forms.set(k, ki);
       initial_forms.set(r0, ri);
-      
+
       final_forms.set(k, kf);
       final_forms.set(r0, rf);
 
-      TwoAtomPerturbation bondpert = TwoAtomPerturbation( atom0, atom1, 
+      TwoAtomPerturbation bondpert = TwoAtomPerturbation( atom0, atom1,
 							  base, initial_forms, final_forms,
 							  PropertyMap("parameters", "bond") );
       perturbations.append(bondpert);
-      
-      // Also create a GeometryPerturbation if ri != rf 
+
+      // Also create a GeometryPerturbation if ri != rf
       if (std::abs(ri - rf) > 0.000001)
 	{
 	BondPerturbation geom_bondpert = BondPerturbation(atom0, atom1, ri*angstrom, rf*angstrom);
@@ -1319,7 +1319,7 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
 	}
 
     }
-  
+
   // Now make angle perturbations
   QList<AngleID> angles = pert.getAngles();
 
@@ -1331,8 +1331,8 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
       double kf = pert.getFinalAngleK(angle);
       double rf = pert.getFinalAngleT(angle);
       AtomIdx atom0 = editmol.select( angle.atom0() ).index();
-      AtomIdx atom1 = editmol.select( angle.atom1() ).index();	
-      AtomIdx atom2 = editmol.select( angle.atom2() ).index();	
+      AtomIdx atom1 = editmol.select( angle.atom1() ).index();
+      AtomIdx atom2 = editmol.select( angle.atom2() ).index();
 
       Symbol theta = InternalPotential::symbols().angle().theta();
       Symbol k("k");
@@ -1343,7 +1343,7 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
 
       initial_forms.set(k, ki);
       initial_forms.set(theta0, ri);
-      
+
       final_forms.set(k, kf);
       final_forms.set(theta0, rf);
 
@@ -1351,7 +1351,7 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
 							     base, initial_forms, final_forms,
 							     PropertyMap("parameters", "angle") );
       perturbations.append(anglepert);
-      // Also create a GeometryPerturbation if ri != rf 
+      // Also create a GeometryPerturbation if ri != rf
       if (std::abs(ri - rf) > 0.000001)
 	{
 	  AnglePerturbation geom_anglepert = AnglePerturbation(atom0, atom1, atom2, ri*radians, rf*radians);
@@ -1360,7 +1360,7 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
     }
   // Now make dihedral perturbations
   QList<DihedralID> dihedrals = pert.getDihedrals();
-  
+
   for (int i=0; i < dihedrals.size() ; i++ )
     {
       DihedralID dihedral = dihedrals.at(i);
@@ -1373,7 +1373,7 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
       Symbol phi = InternalPotential::symbols().dihedral().phi();
 
       //Expression dihedralfunc_i = pert.getInitDihPotential(dihedral);
-      //Expression dihedralfunc_f = pert.getFinalDihPotential(dihedral);      
+      //Expression dihedralfunc_f = pert.getFinalDihPotential(dihedral);
 
       //
       // The lenght of the list should be a multiple of 3. The parameters are
@@ -1399,11 +1399,11 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
 	  double k = init_params[ j ];
 	  double periodicity = init_params[ j + 1 ] ;
 	  double phase = init_params[ j + 2 ];
-	  
+
 	  Expression dih =  k * ( 1 + Cos( periodicity * ( phi - 0 ) - phase ) );
 	  dihedralfunc_i += dih;
 	}
-      
+
       QList<double> final_params = pert.getFinalDihParams(dihedral);
 
       if ( ( final_params.size() % 3 ) != 0)
@@ -1411,7 +1411,7 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
 	  throw SireError::program_bug( QObject::tr(
 		     "Non standard number of parameters in perturbation for dihedral. Should be a multiple of 3")
 					, CODELOC );
-	}      
+	}
 
       Expression dihedralfunc_f = Expression(0);
 
@@ -1420,7 +1420,7 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
 	  double k = final_params[ j ];
 	  double periodicity = final_params[ j + 1 ] ;
 	  double phase = final_params[ j + 2 ];
-	  
+
 	  Expression dih =  k * ( 1 + Cos( periodicity * ( phi - 0 ) - phase ) );
 	  dihedralfunc_f += dih;
 	}
@@ -1429,7 +1429,7 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
       //qDebug() << dihedralfunc_i.toString();
       //qDebug() << "DIHEDRAL FINAL ";
       //qDebug() << dihedralfunc_f.toString();
-       
+
       FourAtomPerturbation dihedralpert = FourAtomPerturbation( atom0, atom1, atom2, atom3,
 								dihedralfunc_i, dihedralfunc_f,
 								PropertyMap("parameters", "dihedral") );
@@ -1472,11 +1472,11 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
 	  double k = init_params[ j ];
 	  double periodicity = init_params[ j + 1 ] ;
 	  double phase = init_params[ j + 2 ];
-	  
+
 	  Expression dih =  k * ( 1 + Cos( periodicity * ( phi - 0 ) - phase ) );
 	  improperfunc_i += dih;
 	}
-      
+
       QList<double> final_params = pert.getFinalImpParams(improper);
 
       if ( ( final_params.size() % 3 ) != 0)
@@ -1484,7 +1484,7 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
 	  throw SireError::program_bug( QObject::tr(
 		     "Non standard number of parameters in perturbation for improper. Should be a multiple of 3")
 					, CODELOC );
-	}      
+	}
 
       Expression improperfunc_f = Expression(0);
 
@@ -1493,7 +1493,7 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
 	  double k = final_params[ j ];
 	  double periodicity = final_params[ j + 1 ] ;
 	  double phase = final_params[ j + 2 ];
-	  
+
 	  Expression dih =  k * ( 1 + Cos( periodicity * ( phi - 0 ) - phase ) );
 	  improperfunc_f += dih;
 	}

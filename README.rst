@@ -84,67 +84,32 @@ compiling and installing Sire, then please get in touch using the links below.
 If you want to install Sire into an existing Miniconda or Anaconda
 Python installation, please follow the instructions in `build/INSTALL_INTO_ANACONDA.rst <build/INSTALL_INTO_ANACONDA.rst>`__.
 
-Docker images
-=============
-
-If you don't want to build or install, you can also run Sire via one of our
-docker images. The easy way to run the latest development image of Sire is via::
-
-    docker run -it siremol/sire-devel:latest
-
-This will download the latest Sire development container, and will run it,
-giving you a bash prompt inside the container.
-
-OpenMM compatibility
-====================
-
-Some Sire functionality requires `OpenMM <http://openmm.org>`__. Although
-a bundled version is provided as part of the installation, this may not
-be appropriate for your GPU drivers. To automatically detect and install
-a suitable version of OpenMM, simply run the following command post-install::
-
-    optimise_openmm
-
-(Note that, depending on your installation method, ``optimise_openmm`` may
-be located in ``$HOME/sire.app/bin``.)
-
-Alternatively, to manually install a particular version of OpenMM you can
-use a specific Conda label, e.g.::
-
-    conda install -c omnia/label/cuda90 openmm
-
-If you have compiled Sire against a custom OpenMM installation, then you'll
-need to set the ``OPENMM_PLUGIN_DIR`` environment variable to point to the
-correct plugin location. By default this variable is set to the plugin
-directory of the bundled OpenMM package.
-
 Support and Development
 =======================
 
 Bugs, Comments, Questions
---------------------------
+-------------------------
 For bug reports/sugguestions/complains please file an issue on
 `GitHub <http://github.com/michellab/Sire>`__.
 or contact the developers via the google user group: `https://groups.google.com/forum/#!forum/sire-users`
 
 Developers guide
------------------
+----------------
 Please `visit the website <http://siremol.org>`__ for information on how to
 develop applications using Sire.
 
-Azure Pipelines -- Autobuild feature
----------------------------
+GitHub actions
+--------------
 Since Sire is quite large, a build can take quite long and might not be neccessary
-if a commit is only fixing a couple of typos. Simply add the line ``***NO_CI***``
-to your commit message and Azure Pipelines will not invoke an autobuild.
+if a commit is only fixing a couple of typos. Simply add ``ci skip``
+to your commit message and GitHub actions will not invoke an autobuild.
 
 Note that every time you commit to devel, it will trigger a build of Sire,
-full testing, construction of a package and upload to siremol.org (so that it
-can be downloaded as the latest version of sire_devel_latest_linux.run). Please
-think twice before committing directly to devel. You should ideally be working
-in a feature branch, and only commit to devel once you are happy the code
-works on your branch. Use ``***NO_CI***`` until you are happy that you want to
-trigger a full build, test and deployment. This full pipeline will take
-several hours to complete.
+full testing, construction of a Conda package and upload to our Anaconda
+channel. Please think twice before committing directly to devel. You should
+ideally be working in a _feature_ branch, and only commit to devel once you are
+happy the code works on your branch. Use ``ci skip`` until you are happy that
+you want to trigger a full build, test and deployment. This full pipeline will
+take several hours to complete.
 
 Have fun :-)

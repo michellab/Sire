@@ -85,7 +85,7 @@ void register_SireMol_containers()
     register_list< QList<AtomNum> >();
     register_list< QVector<AtomIdx> >();
 
-    register_list< QList<BondID> >(); 
+    register_list< QList<BondID> >();
     register_list< QList<AngleID> >();
     register_list< QList<DihedralID> >();
     register_list< QList<ImproperID> >();
@@ -120,7 +120,7 @@ void register_SireMol_containers()
 
     register_list< QList< boost::tuple<AtomIdentifier,AtomIdentifier> > >();
 
-    register_list< QVector< boost::tuple<MolNum,SireID::Index> > >(); 
+    register_list< QVector< boost::tuple<MolNum,SireID::Index> > >();
 
     register_list< QList<MGIDsAndMaps> >();
 
@@ -132,13 +132,13 @@ void register_SireMol_containers()
     register_tuple< boost::tuple<AtomIdx,AtomIdx> >();
     register_tuple< boost::tuple<AtomIdx,AtomIdx,AtomIdx> >();
     register_tuple< boost::tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx> >();
-    
+
     register_tuple< boost::tuple<Molecules,SireVol::SpacePtr> >();
     register_tuple< boost::tuple<MoleculeGroup,SireVol::SpacePtr> >();
-    
+
     register_tuple< boost::tuple<AtomIdentifier,AtomIdentifier> >();
 
-    register_tuple< boost::tuple<AtomSelection,AtomSelection> >();    
+    register_tuple< boost::tuple<AtomSelection,AtomSelection> >();
 
     register_tuple< boost::tuple<PartialMolecule,double> >();
 
@@ -152,17 +152,17 @@ void register_SireMol_containers()
     register_PackedArray< SireBase::PackedArray2D<Element> >();
     register_PackedArray< SireBase::PackedArray2D<BeadNum> >();
 
-    register_dict< QHash<AtomIdentifier,AtomIdentifier> >();   
+    register_dict< QHash<AtomIdentifier,AtomIdentifier> >();
 
     register_dict< QHash<AtomNum,AtomNum> >();
     register_dict< QHash<ResNum,ResNum> >();
 
-    #if QT_VERSION >= 0x402000
-    register_dict< QHash<MolNum,Selector<Atom> >();
-    register_dict< QHash<MolNum,Selector<CutGroup> >();
-    register_dict< QHash<MolNum,Selector<Residue> >();
-    register_dict< QHash<MolNum,Selector<Chain> >();
-    register_dict< QHash<MolNum,Selector<Segment> >();
+    #if QT_VERSION >= QT_VERSION_CHECK(4, 2, 0)
+    register_dict< QHash<MolNum,Selector<Atom> > >();
+    register_dict< QHash<MolNum,Selector<CutGroup> > >();
+    register_dict< QHash<MolNum,Selector<Residue> > >();
+    register_dict< QHash<MolNum,Selector<Chain> > >();
+    register_dict< QHash<MolNum,Selector<Segment> > >();
     register_dict< QHash<MolNum,double> >();
     register_dict< QHash<AtomIdx,AtomIdx> >();
 
@@ -183,9 +183,9 @@ void register_SireMol_containers()
 
     register_set< QSet<AtomIdx>, AtomIdx >();
     register_set< QSet<ResIdx>, ResIdx >();
-    
+
     register_set< QSet<MolNum>, MolNum >();
     register_set< QSet<MolName>, MolName >();
 
-    #endif    
+    #endif
 }

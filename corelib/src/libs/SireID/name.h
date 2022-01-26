@@ -54,12 +54,12 @@ enum CaseSensitivity{  CaseInsensitive = 0,
     to provide an object with a human-readable name that can be
     used to identify the object, e.g. identifying atoms by their
     name within a residue, or identifying forcefields by their name.
-    
-    A name does not have to uniquely identify an object, though it 
+
+    A name does not have to uniquely identify an object, though it
     helps, as generally only the first object with a specified name
     is returned if there are in fact multiple objects with the same
     name.
-    
+
     @author Christopher Woods
 */
 class SIREID_EXPORT Name
@@ -70,7 +70,7 @@ friend SIREID_EXPORT QDataStream& ::operator>>(QDataStream&, Name&);
 
 public:
     ~Name();
-    
+
     operator QString() const;
 
     bool isNull() const;
@@ -78,25 +78,25 @@ public:
     bool isEmpty() const;
 
     uint hash() const;
-    
+
     const QString& value() const;
 
     bool isCaseSensitive() const;
 
 protected:
-    explicit Name(const QString &name = QString::null,
+    explicit Name(const QString &name = QString(),
                   CaseSensitivity = CaseSensitive);
-    
+
     Name(const Name &other);
 
     Name& operator=(const Name &other);
-    
+
     bool operator==(const Name &other) const;
     bool operator!=(const Name &other) const;
-    
+
     /** The actual name */
     QString _name;
-    
+
     /** Should this name be case sensitive or not? */
     bool case_sensitive;
 };

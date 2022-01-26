@@ -506,6 +506,7 @@ void register_PeriodicBox_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         PeriodicBox_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireVol::PeriodicBox >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        PeriodicBox_exposer.def_pickle(sire_pickle_suite< ::SireVol::PeriodicBox >());
         PeriodicBox_exposer.def( "__str__", &__str__< ::SireVol::PeriodicBox > );
         PeriodicBox_exposer.def( "__repr__", &__str__< ::SireVol::PeriodicBox > );
     }

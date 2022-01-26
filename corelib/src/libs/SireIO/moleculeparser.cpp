@@ -270,9 +270,9 @@ namespace detail
 
             helpers_by_id.insert( helper.formatName(), helper );
 
-            for (const auto suffix : helper.suffixes())
+            for (const auto &suffix : helper.suffixes())
             {
-                helpers_by_suffix.insertMulti(suffix, helper);
+                helpers_by_suffix.insert(suffix, helper);
             }
         }
 
@@ -282,7 +282,7 @@ namespace detail
             QList<ParserFactoryHelper> helpers;
             QStringList missing;
 
-            for (const auto name : parser_names)
+            for (const auto &name : parser_names)
             {
                 helpers.append( helpers_by_id.value(name) );
 
@@ -309,7 +309,7 @@ namespace detail
         {
             QMutexLocker lkr(&mutex);
             auto helpers = helpers_by_suffix.values(suffix);
-            qSort(helpers);
+            std::sort(helpers.begin(), helpers.end());
             return helpers;
         }
 
@@ -320,13 +320,13 @@ namespace detail
             if (suffix.isEmpty())
             {
                 auto helpers = helpers_by_id.values();
-                qSort(helpers);
+                std::sort(helpers.begin(), helpers.end());
                 return helpers;
             }
 
             QList<ParserFactoryHelper> helpers;
 
-            for (const auto helper : helpers_by_id)
+            for (const auto &helper : helpers_by_id)
             {
                 if (not helper.suffixes().contains(suffix))
                 {
@@ -334,7 +334,7 @@ namespace detail
                 }
             }
 
-            qSort(helpers);
+            std::sort(helpers.begin(), helpers.end());
             return helpers;
         }
 
@@ -349,11 +349,11 @@ namespace detail
             QMutexLocker lkr(&mutex);
 
             auto keys = helpers_by_id.keys();
-            qSort(keys);
+            std::sort(keys.begin(), keys.end());
 
             QStringList lines;
 
-            for (const auto key : keys)
+            for (const auto &key : keys)
             {
                 const auto parser = helpers_by_id.value(key);
 
@@ -620,14 +620,14 @@ bool MoleculeParser::canFollow() const
     return true;
 }
 
-/** Extract and return a FFDetail forcefield that is compatible with all of the 
+/** Extract and return a FFDetail forcefield that is compatible with all of the
     molecules in this system, using the passed property map to find the property.
     Note that this will raise an incompatible_error exception if there is no
     forcefield that adequately covers all of the molecules */
 PropertyPtr MoleculeParser::getForceField(const System &system, const PropertyMap &map) const
 {
     const auto ffprop = map["forcefield"];
-    
+
     //make sure that the user is not telling us a specific forcefield to use
     if (ffprop.hasValue())
     {
@@ -636,7 +636,7 @@ PropertyPtr MoleculeParser::getForceField(const System &system, const PropertyMa
                 "Cannot convert the passed mapped value '%1' to an object of type FFDetail. "
                 "If you want to specify the focefield it must be an object derived from FFDetail.")
                     .arg(ffprop.value().toString()), CODELOC );
-        
+
         return ffprop.value();
     }
 
@@ -652,15 +652,15 @@ PropertyPtr MoleculeParser::getForceField(const System &system, const PropertyMa
     {
         const auto mol = system[ molnums[i] ].molecule();
         PropertyPtr molff;
-        
+
         if (mol.hasProperty(ffprop))
         {
             const auto &p = mol.property(ffprop);
-            
+
             if (p.isA<FFDetail>())
                 molff = p;
         }
-        
+
         if (molff.isNull())
         {
             errors.append( QObject::tr("Molecule '%1' does not have a valid 'forcefield' "
@@ -683,7 +683,7 @@ PropertyPtr MoleculeParser::getForceField(const System &system, const PropertyMa
                     .arg(ffield.read().toString()) );
         }
     }
-    
+
     if (not errors.isEmpty())
         throw SireError::incompatible_error( QObject::tr("There were some problems "
           "extracting a valid forcefield object from all of the molecules.\n\n%1")
@@ -1137,7 +1137,7 @@ QStringList MoleculeParser::write(const System &system, const QString &filename,
 
         QString basename = QFileInfo(filename).completeBaseName();
 
-        for (const auto format : fileformats)
+        for (const auto &format : fileformats)
         {
             filenames.append( QString("%1.%2").arg(basename,format.toLower()) );
         }
@@ -1166,7 +1166,7 @@ QStringList MoleculeParser::write(const System &system, const QString &filename,
                                 CODELOC );
             }
 
-            for (const auto format : fileformats)
+            for (const auto &format : fileformats)
             {
                 filenames.append( QString("%1.%2").arg(filename).arg(format.toLower()) );
             }

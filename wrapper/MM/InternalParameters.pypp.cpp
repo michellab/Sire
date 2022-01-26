@@ -329,6 +329,7 @@ void register_InternalParameters_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         InternalParameters_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMM::InternalParameters >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        InternalParameters_exposer.def_pickle(sire_pickle_suite< ::SireMM::InternalParameters >());
         InternalParameters_exposer.def( "__str__", &pvt_get_name);
         InternalParameters_exposer.def( "__repr__", &pvt_get_name);
     }

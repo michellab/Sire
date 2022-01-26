@@ -113,6 +113,7 @@ void register_ZmatrixMaker_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ZmatrixMaker_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireIO::ZmatrixMaker >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        ZmatrixMaker_exposer.def_pickle(sire_pickle_suite< ::SireIO::ZmatrixMaker >());
         ZmatrixMaker_exposer.def( "__str__", &pvt_get_name);
         ZmatrixMaker_exposer.def( "__repr__", &pvt_get_name);
     }

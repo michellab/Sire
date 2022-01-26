@@ -1,0 +1,45 @@
+#!/bin/bash
+
+while (( "$#" )); do
+  case "$1" in
+    -s|--sire)
+      if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+        SIRE_APP=$2
+        shift 2
+      else
+        echo "Error: Argument for $1 is missing" >&2
+        exit 1
+      fi
+      ;;
+    -*|--*=) # unsupported flags
+      echo "Error: Unsupported flag $1" >&2
+      exit 1
+      ;;
+  esac
+done
+
+if [[ -z "${SIRE_APP+set}" ]]; then
+    SIRE_APP="$HOME/sire.app"
+fi
+
+if [[ ! -d "$SIRE_APP/include" ]]; then
+    echo "Cannot find $SIRE_APP/include"
+    echo "Please set the location via the --sire argument!"
+    exit 1
+fi
+
+echo "Creating includes.tar.bz2 from the headers in $SIRE_APP/include"
+
+DIR=`pwd`
+
+TARBALL="$DIR/includes.tar.bz2"
+
+cd $SIRE_APP
+
+tar -jcvf $TARBALL include/qt include/gsl include/openmm \
+      include/OpenMM* include/boost include/tbb \
+      include/oneapi
+
+cd $DIR
+
+echo "Completed!"

@@ -43,7 +43,7 @@ public:
     sirevol_error() : exception()
     {}
 
-    sirevol_error(QString err, QString place = QString::null) : exception(err,place)
+    sirevol_error(QString err, QString place = QString()) : exception(err,place)
     {}
 
     sirevol_error(const sirevol_error &other) : exception(other)
@@ -69,7 +69,7 @@ public:
     incompatible_space() : sirevol_error()
     {}
 
-    incompatible_space(QString err, QString place = QString::null)
+    incompatible_space(QString err, QString place = QString())
               : sirevol_error(err,place)
     {}
 
@@ -85,7 +85,7 @@ public:
     {
         return incompatible_space::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw incompatible_space(*this);

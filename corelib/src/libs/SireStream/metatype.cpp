@@ -46,7 +46,7 @@ namespace SireStream
     {
         QHash< QString, QSet<QString> >::const_iterator
                     it = Sire::detail::leafClasses().constFind( QLatin1String(base) );
-        
+
         if (it != Sire::detail::leafClasses().constEnd())
         {
             return it.value().contains(type_name);
@@ -61,7 +61,7 @@ namespace SireStream
     {
         QHash< QString, QSet<QString> >::const_iterator
                     it = Sire::detail::branchClasses().constFind( QLatin1String(base) );
-        
+
         if (it != Sire::detail::branchClasses().constEnd())
         {
             return it.value().contains(type_name);
@@ -77,21 +77,21 @@ namespace SireStream
     {
         return isLeafOf(base, type_name) or isBranchOf(base, type_name);
     }
-    
+
     /** Return whether or not the class 'type_name' has been registered
         as rootless */
     bool isRootless(const QString &type_name)
     {
         return Sire::detail::rootlessClasses().contains(type_name);
     }
-    
+
     /** Return whether or not the class with name 'type_name' is registered
         with the metatype system */
     bool isRegistered(const QString &type_name)
     {
         if ( Sire::detail::rootlessClasses().contains(type_name) )
             return true;
-        
+
         else
         {
             for (QHash< QString,QSet<QString> >::const_iterator
@@ -102,7 +102,7 @@ namespace SireStream
                 if (it.value().contains(type_name))
                     return true;
             }
-            
+
             for (QHash< QString,QSet<QString> >::const_iterator
                         it = Sire::detail::branchClasses().constBegin();
                  it != Sire::detail::branchClasses().constEnd();
@@ -111,11 +111,11 @@ namespace SireStream
                 if (it.value().contains(type_name))
                     return true;
             }
-            
+
             return false;
         }
     }
-    
+
     /** Return the name of the class registered as the root of class 'type_name'.
         This returns an empty string if there is no registered root,
         or this class has not been registered */
@@ -123,7 +123,7 @@ namespace SireStream
     {
         if (Sire::detail::rootlessClasses().contains(type_name))
         {
-            return QString::null;
+            return QString();
         }
         else
         {
@@ -144,40 +144,40 @@ namespace SireStream
                 if (it.value().contains(type_name))
                     return it.key();
             }
-            
-            return QString::null;
+
+            return QString();
         }
     }
-    
+
     /** Return all of the leaf classes of root class 'base' */
     QSet<QString> leafClassesOf(const char *base)
     {
         return Sire::detail::leafClasses().value( QLatin1String(base) );
     }
-    
+
     /** Return all of the branch classes of root class 'base' */
     QSet<QString> branchClassesOf(const char *base)
     {
         return Sire::detail::branchClasses().value( QLatin1String(base) );
     }
-    
+
     /** Return all of the classes registered as derived from root class 'base' */
     QSet<QString> derivedClassesOf(const char *base)
     {
         return leafClassesOf(base).unite(branchClassesOf(base));
     }
-    
+
     /** Return the set of all rootless registered classes */
     QSet<QString> rootlessClasses()
     {
         return Sire::detail::rootlessClasses();
     }
-    
+
     /** Return the set of all registered classes */
     QSet<QString> registeredClasses()
     {
         QSet<QString> classes = rootlessClasses();
-        
+
         for (QHash< QString,QSet<QString> >::const_iterator
                     it = Sire::detail::leafClasses().constBegin();
              it != Sire::detail::leafClasses().constEnd();
@@ -193,7 +193,7 @@ namespace SireStream
         {
             classes.unite(it.value());
         }
-        
+
         return classes;
     }
 }

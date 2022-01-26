@@ -373,6 +373,7 @@ void register_Values_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Values_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireCAS::Values >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        Values_exposer.def_pickle(sire_pickle_suite< ::SireCAS::Values >());
         Values_exposer.def( "__str__", &__str__< ::SireCAS::Values > );
         Values_exposer.def( "__repr__", &__str__< ::SireCAS::Values > );
         Values_exposer.def( "__len__", &__len_count< ::SireCAS::Values > );

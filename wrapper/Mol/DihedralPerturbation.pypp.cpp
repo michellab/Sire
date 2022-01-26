@@ -138,6 +138,7 @@ void register_DihedralPerturbation_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         DihedralPerturbation_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::DihedralPerturbation >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        DihedralPerturbation_exposer.def_pickle(sire_pickle_suite< ::SireMol::DihedralPerturbation >());
         DihedralPerturbation_exposer.def( "__str__", &__str__< ::SireMol::DihedralPerturbation > );
         DihedralPerturbation_exposer.def( "__repr__", &__str__< ::SireMol::DihedralPerturbation > );
     }

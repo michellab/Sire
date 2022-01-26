@@ -363,19 +363,19 @@ void register_SegEditorBase_class(){
                 , "" );
         
         }
-        SegEditorBase_exposer.def( "_set_property_QString", 
+        SegEditorBase_exposer.def( "_set_property_QString",
                                            &SireMol::SegEditorBase::setProperty< QString >, bp::return_self< >() );
         SegEditorBase_exposer.def( "_set_metadata_QString", &set_Metadata_SireMol_SegStringProperty_function1, bp::return_self< >());
         SegEditorBase_exposer.def( "_set_metadata_QString", &set_Metadata_SireMol_SegStringProperty_function2, bp::return_self< >());
-        SegEditorBase_exposer.def( "_set_property_qint64", 
+        SegEditorBase_exposer.def( "_set_property_qint64",
                                            &SireMol::SegEditorBase::setProperty< qint64 >, bp::return_self< >() );
         SegEditorBase_exposer.def( "_set_metadata_qint64", &set_Metadata_SireMol_SegIntProperty_function1, bp::return_self< >());
         SegEditorBase_exposer.def( "_set_metadata_qint64", &set_Metadata_SireMol_SegIntProperty_function2, bp::return_self< >());
-        SegEditorBase_exposer.def( "_set_property_double", 
+        SegEditorBase_exposer.def( "_set_property_double",
                                            &SireMol::SegEditorBase::setProperty< double >, bp::return_self< >() );
         SegEditorBase_exposer.def( "_set_metadata_double", &set_Metadata_SireMol_SegFloatProperty_function1, bp::return_self< >());
         SegEditorBase_exposer.def( "_set_metadata_double", &set_Metadata_SireMol_SegFloatProperty_function2, bp::return_self< >());
-        SegEditorBase_exposer.def( "_set_property_QVariant", 
+        SegEditorBase_exposer.def( "_set_property_QVariant",
                                            &SireMol::SegEditorBase::setProperty< QVariant >, bp::return_self< >() );
         SegEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_SegVariantProperty_function1, bp::return_self< >());
         SegEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_SegVariantProperty_function2, bp::return_self< >());

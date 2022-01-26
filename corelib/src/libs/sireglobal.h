@@ -13,6 +13,58 @@
 
 #include <qmetatype.h>
 #include <QString>
+#include <QList>
+#include <QSet>
+#include <QVector>
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+    // Newer Qt moves QString::SkipEmptyParts to the Qt namespace,
+    // and deprecates the functions that use the QString value.
+    // However, Qt < 5.14 doesn't have SkipEmptyParts defined in
+    // the Qt namespace, so we need to do this here
+    namespace Qt
+    {
+        const auto SkipEmptyParts = QString::SkipEmptyParts;
+    }
+
+    // Older Qt also uses a now deprecated way to initialise QSets
+    template<class T>
+    inline QSet<T> convert_to_qset(const QList<T> &l)
+    {
+        return l.toSet();
+    }
+
+    template<class T>
+    inline QSet<T> convert_to_qset(const QVector<T> &v)
+    {
+        return v.toList().toSet();
+    }
+
+    template<class T>
+    inline QList<T> convert_to_qlist(const QVector<T> &v)
+    {
+        return v.toList();
+    }
+#else
+    //Newer Qt also has a different way of initialising QSet!
+    template<class T>
+    inline QSet<T> convert_to_qset(const QList<T> &l)
+    {
+        return QSet<T>(l.begin(), l.end());
+    }
+
+    template<class T>
+    inline QSet<T> convert_to_qset(const QVector<T> &v)
+    {
+        return QSet<T>(v.begin(), v.end());
+    }
+
+    template<class T>
+    inline QList<T> convert_to_qlist(const QVector<T> &v)
+    {
+        return QList<T>(v.begin(), v.end());
+    }
+#endif
 
 #include <boost/current_function.hpp>
 //macro used to return the current file and line as a QString
@@ -452,7 +504,7 @@ public:
     {
         return typnam;
     }
-    
+
     QString typeNameString() const
     {
         return QLatin1String(typnam);

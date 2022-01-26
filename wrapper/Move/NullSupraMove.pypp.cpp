@@ -87,6 +87,7 @@ void register_NullSupraMove_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         NullSupraMove_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMove::NullSupraMove >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        NullSupraMove_exposer.def_pickle(sire_pickle_suite< ::SireMove::NullSupraMove >());
         NullSupraMove_exposer.def( "__str__", &__str__< ::SireMove::NullSupraMove > );
         NullSupraMove_exposer.def( "__repr__", &__str__< ::SireMove::NullSupraMove > );
     }

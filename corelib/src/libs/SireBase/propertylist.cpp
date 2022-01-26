@@ -54,15 +54,15 @@ namespace SireBase
         int checkIndex(int i, int count)
         {
             int idx = i;
-        
+
             if (i < 0)
                 idx = count + i;
-            
+
             if (idx < 0 or idx >= count)
                 throw SireError::invalid_index( QObject::tr(
                         "Cannot access element %1. The number of elements is %2.")
                             .arg(i).arg(count), CODELOC );
-            
+
             return idx;
         }
     }
@@ -76,30 +76,30 @@ namespace SireBase
     {
         return PropertyList(value);
     }
-    
+
     PropertyPtr wrap(const QString &value)
     {
         return StringProperty(value);
     }
-    
+
     PropertyPtr wrap(double value)
     {
         return NumberProperty(value);
     }
-    
+
     PropertyPtr wrap(const QList<int> &values)
     {
         QVector<qint64> ivals;
         ivals.reserve(values.count());
-        
+
         foreach(int value, values)
         {
             ivals.append(value);
         }
-    
+
         return IntegerArrayProperty(ivals);
     }
-    
+
     PropertyPtr wrap(const QList<double> &values)
     {
         return DoubleArrayProperty(values);
@@ -109,7 +109,7 @@ namespace SireBase
     {
         QVector<qint64> ivals;
         ivals.reserve(values.count());
-        
+
         foreach(int value, values)
         {
             ivals.append(value);
@@ -117,22 +117,22 @@ namespace SireBase
 
         return IntegerArrayProperty(ivals);
     }
-    
+
     PropertyPtr wrap(const QVector<double> &values)
     {
         return DoubleArrayProperty(values);
     }
-    
+
     PropertyPtr wrap(const QList<QString> &values)
     {
         return StringArrayProperty(values);
     }
-    
+
     PropertyPtr wrap(const QVector<QString> &values)
     {
         return StringArrayProperty(values);
     }
-    
+
     PropertyPtr wrap(const QStringList &values)
     {
         return StringArrayProperty(values);
@@ -146,17 +146,17 @@ namespace SireBase
 QDataStream &operator<<(QDataStream &ds, const PropertyList &list)
 {
     writeHeader(ds, r_proplist, 1);
-    
+
     SharedDataStream sds(ds);
     sds << list.l;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, PropertyList &list)
 {
     VersionID v = readHeader(ds, r_proplist);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
@@ -164,7 +164,7 @@ QDataStream &operator>>(QDataStream &ds, PropertyList &list)
     }
     else
         throw version_error(v, "1", r_proplist, CODELOC);
-    
+
     return ds;
 }
 
@@ -293,7 +293,7 @@ const Property& PropertyList::operator[](int i) const
 
     if (i < 0)
         idx = l.count() + i;
-    
+
     if (idx < 0 or idx >= l.count())
         throw SireError::invalid_index( QObject::tr(
                     "Cannot access element at index %1. Number of elements in list equals %2.")
@@ -412,7 +412,7 @@ void PropertyList::removeAt(int i)
 
     if (i < 0)
         idx = l.count() + i;
-    
+
     if (idx < 0 or idx >= l.count())
         throw SireError::invalid_index( QObject::tr(
                     "Cannot remove element at index %1. Number of elements in list equals %2.")
@@ -440,7 +440,7 @@ void PropertyList::replace(int i, const Property &value)
 
     if (i < 0)
         idx = l.count() + i;
-    
+
     if (idx < 0 or idx >= l.count())
         throw SireError::invalid_index( QObject::tr(
                     "Cannot replace element at index %1. Number of elements in list equals %2.")
@@ -475,7 +475,11 @@ void PropertyList::swap(int i, int j)
                     "Cannot swap elements %1 and %2. Number of elements in list equals %3.")
                         .arg(i).arg(j).arg(l.count()), CODELOC );
 
-    l.swap(idx_i, idx_j);
+    #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+        l.swap(idx_i, idx_j);
+    #else
+        l.swapItemsAt(idx_i, idx_j);
+    #endif
 }
 
 /** Take the element at index 'i' */
@@ -485,12 +489,12 @@ PropertyPtr PropertyList::takeAt(int i)
 
     if (i < 0)
         idx = l.count() + i;
-    
+
     if (idx < 0 or idx >= l.count())
         throw SireError::invalid_index( QObject::tr(
                     "Cannot take element at index %1. Number of elements in list equals %2.")
                         .arg(i).arg(l.count()), CODELOC );
-    
+
     return l.takeAt(idx);
 }
 
@@ -525,7 +529,7 @@ PropertyPtr PropertyList::value(int i, const Property &default_value) const
 
     if (i < 0)
         idx = l.count() + i;
-    
+
     if (idx < 0 or idx >= l.count())
         return default_value;
 
@@ -582,7 +586,7 @@ QString PropertyList::asAString() const
     if (l.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot convert %s to a string").arg(this->toString()), CODELOC );
-    
+
     return l.at(0).read().asAString();
 }
 
@@ -591,7 +595,7 @@ double PropertyList::asADouble() const
     if (l.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot convert %s to a double").arg(this->toString()), CODELOC );
-    
+
     return l.at(0).read().asADouble();
 }
 
@@ -600,7 +604,7 @@ int PropertyList::asAnInteger() const
     if (l.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot convert %s to an integer").arg(this->toString()), CODELOC );
-    
+
     return l.at(0).read().asAnInteger();
 }
 
@@ -609,7 +613,7 @@ bool PropertyList::asABoolean() const
     if (l.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot convert %s to a boolean").arg(this->toString()), CODELOC );
-    
+
     return l.at(0).read().asABoolean();
 }
 

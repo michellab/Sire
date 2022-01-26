@@ -79,7 +79,7 @@ AtomID::AtomID(const AtomID &other) : ID(other)
 /** Destructor */
 AtomID::~AtomID()
 {}
-  
+
 /** Return a specific atom that matches this ID */
 Specify<AtomID> AtomID::operator[](qint64 i) const
 {
@@ -399,7 +399,7 @@ void AtomID::processMatches(QList<AtomIdx> &matches, const MolInfo&) const
             "There are no atoms that match the ID \"%1\" in the passed molecule.")
                 .arg(this->toString()), CODELOC );
 
-    qSort(matches);
+    std::sort(matches.begin(), matches.end());
 }
 
 /** Function used by MatchAll<AtomID> to return everything */
@@ -417,28 +417,28 @@ QList<AtomIdx> AtomID::matchAll(const MolInfo &molinfo)
 QList<AtomIdx> AtomID::map(const MoleculeView &molview, const PropertyMap&) const
 {
     QList<AtomIdx> atomidxs = this->map( molview.data().info() );
-    
+
     if (molview.selectedAll())
         return atomidxs;
-    else 
+    else
     {
         QMutableListIterator<AtomIdx> it(atomidxs);
-        
+
         const AtomSelection selected_atoms = molview.selection();
-        
+
         while (it.hasNext())
         {
             it.next();
-            
+
             if (not selected_atoms.selected(it.value()))
                 it.remove();
         }
-        
+
         if (atomidxs.isEmpty())
             throw SireMol::missing_atom( QObject::tr(
                     "No atoms matching %1 can be found in the passed molecule.")
                         .arg(this->toString()), CODELOC );
-                        
+
         return atomidxs;
     }
 }
@@ -452,14 +452,14 @@ QList<AtomIdx> AtomID::map(const MoleculeView &molview, const PropertyMap&) cons
 Atom AtomID::selectFrom(const MoleculeView &molview, const PropertyMap &map) const
 {
     QList<AtomIdx> atomidxs = this->map(molview, map);
-    
+
     if (atomidxs.count() > 1)
         throw SireMol::duplicate_atom( QObject::tr(
                 "More than one atom matches the ID %1 (atoms %2).")
                     .arg(this->toString()).arg(Sire::toString(atomidxs)),
                         CODELOC );
-                        
-    return Atom(molview.data(), atomidxs.at(0)); 
+
+    return Atom(molview.data(), atomidxs.at(0));
 }
 
 /** Select all the atoms from the passed view that match this ID
@@ -468,24 +468,24 @@ Atom AtomID::selectFrom(const MoleculeView &molview, const PropertyMap &map) con
     \throw SireError::invalid_index
     \throw SireMol::duplicate_atom
 */
-Selector<Atom> AtomID::selectAllFrom(const MoleculeView &molview, 
+Selector<Atom> AtomID::selectAllFrom(const MoleculeView &molview,
                                      const PropertyMap &map) const
 {
     QList<AtomIdx> atomidxs = this->map(molview, map);
-                        
-    return Selector<Atom>(molview.data(), atomidxs); 
+
+    return Selector<Atom>(molview.data(), atomidxs);
 }
 
 /** Return all of the atoms from the 'molecules' that match
     this ID
-    
+
     \throw SireMol::missing_atom
 */
 QHash< MolNum,Selector<Atom> >
 AtomID::selectAllFrom(const Molecules &molecules, const PropertyMap &map) const
 {
     QHash< MolNum,Selector<Atom> > selected_atoms;
-    
+
     //loop over all molecules...
     for (Molecules::const_iterator it = molecules.constBegin();
          it != molecules.constEnd();
@@ -499,7 +499,7 @@ AtomID::selectAllFrom(const Molecules &molecules, const PropertyMap &map) const
         catch(...)
         {}
     }
-    
+
     if (selected_atoms.isEmpty())
         throw SireMol::missing_atom( QObject::tr(
             "There was no atom matching the ID \"%1\" in "
@@ -511,23 +511,23 @@ AtomID::selectAllFrom(const Molecules &molecules, const PropertyMap &map) const
 
 /** Return the atom from the molecules 'molecules' that matches
     this ID
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
 */
 Atom AtomID::selectFrom(const Molecules &molecules, const PropertyMap &map) const
 {
     QHash< MolNum,Selector<Atom> > mols = this->selectAllFrom(molecules, map);
-    
+
     if (mols.count() > 1)
         throw SireMol::duplicate_atom( QObject::tr(
             "More than one molecule contains an atom that "
             "matches this ID (%1). These molecules have numbers %2.")
                 .arg(this->toString()).arg(Sire::toString(mols.keys())),
                     CODELOC );
-                    
+
     const Selector<Atom> &atoms = *(mols.constBegin());
-    
+
     if (atoms.count() > 1)
         throw SireMol::duplicate_atom( QObject::tr(
             "While only one molecule (MolNum == %1) "
@@ -535,17 +535,17 @@ Atom AtomID::selectFrom(const Molecules &molecules, const PropertyMap &map) cons
             "more than one atom that matches.")
                 .arg(atoms.data().number()).arg(this->toString()),
                     CODELOC );
-                    
+
     return atoms(0);
 }
 
 /** Return the atom from the molecule group 'molgroup' that matches
     this ID
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
 */
-Atom AtomID::selectFrom(const MoleculeGroup &molgroup, 
+Atom AtomID::selectFrom(const MoleculeGroup &molgroup,
                         const PropertyMap &map) const
 {
     return this->selectFrom(molgroup.molecules(), map);
@@ -553,7 +553,7 @@ Atom AtomID::selectFrom(const MoleculeGroup &molgroup,
 
 /** Return the atoms from the molecule group 'molgroup' that match
     this ID
-    
+
     \throw SireMol::missing_atom
 */
 QHash< MolNum,Selector<Atom> >
@@ -563,9 +563,9 @@ AtomID::selectAllFrom(const MoleculeGroup &molgroup,
     return this->selectAllFrom(molgroup.molecules(), map);
 }
 
-/** Return the atom from the molecule groups 'molgroups' that matches 
+/** Return the atom from the molecule groups 'molgroups' that matches
     this ID
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
 */
@@ -576,8 +576,8 @@ Atom AtomID::selectFrom(const MolGroupsBase &molgroups,
 }
 
 /** Return the set of atoms that match this ID in the molecule groups
-    set 'molgroups' 
-    
+    set 'molgroups'
+
     \throw SireMol::missing_atom
 */
 QHash< MolNum,Selector<Atom> >
@@ -625,9 +625,9 @@ static const RegisterMetaType<AtomIdx> r_atomidx;
 QDataStream &operator<<(QDataStream &ds, const AtomIdx &atomidx)
 {
     writeHeader(ds, r_atomidx, 1);
-    
+
     ds << static_cast<const SireID::Index_T_<AtomIdx>&>(atomidx);
-    
+
     return ds;
 }
 
@@ -635,14 +635,14 @@ QDataStream &operator<<(QDataStream &ds, const AtomIdx &atomidx)
 QDataStream &operator>>(QDataStream &ds, AtomIdx &atomidx)
 {
     VersionID v = readHeader(ds, r_atomidx);
-    
+
     if (v == 1)
     {
         ds >> static_cast<SireID::Index_T_<AtomIdx>&>(atomidx);
     }
     else
         throw version_error( v, "1", r_atomidx, CODELOC );
-        
+
     return ds;
 }
 
@@ -710,9 +710,9 @@ static const RegisterMetaType<AtomNum> r_atomnum;
 QDataStream &operator<<(QDataStream &ds, const AtomNum &atomnum)
 {
     writeHeader(ds, r_atomnum, 1);
-    
+
     ds << static_cast<const SireID::Number&>(atomnum);
-    
+
     return ds;
 }
 
@@ -720,14 +720,14 @@ QDataStream &operator<<(QDataStream &ds, const AtomNum &atomnum)
 QDataStream &operator>>(QDataStream &ds, AtomNum &atomnum)
 {
     VersionID v = readHeader(ds, r_atomnum);
-    
+
     if (v == 1)
     {
         ds >> static_cast<SireID::Number&>(atomnum);
     }
     else
         throw version_error( v, "1", r_atomnum, CODELOC );
-        
+
     return ds;
 }
 
@@ -820,9 +820,9 @@ static const RegisterMetaType<AtomName> r_atomname;
 QDataStream &operator<<(QDataStream &ds, const AtomName &atomname)
 {
     writeHeader(ds, r_atomname, 1);
-    
+
     ds << static_cast<const SireID::Name&>(atomname);
-    
+
     return ds;
 }
 
@@ -830,14 +830,14 @@ QDataStream &operator<<(QDataStream &ds, const AtomName &atomname)
 QDataStream &operator>>(QDataStream &ds, AtomName &atomname)
 {
     VersionID v = readHeader(ds, r_atomname);
-    
+
     if (v == 1)
     {
         ds >> static_cast<SireID::Name&>(atomname);
     }
     else
         throw version_error( v, "1", r_atomname, CODELOC );
-        
+
     return ds;
 }
 

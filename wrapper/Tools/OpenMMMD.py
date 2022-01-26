@@ -6,36 +6,39 @@ import os
 import sys
 import re
 import time
-
+import warnings
 
 import numpy as np
-from Sire.Base import *
+
+import Sire.Base
 
 # Make sure that the OPENMM_PLUGIN_DIR enviroment variable is set correctly if
 # unset.
 try:
     # The user has already set the plugin location.
-    os.environ["OPENMM_PLUGIN_DIR"]
+    openmm_dir = os.environ["OPENMM_PLUGIN_DIR"]
 except KeyError:
     # Set to the default location of the bundled OpenMM package.
-    os.environ["OPENMM_PLUGIN_DIR"] = getLibDir() + "/plugins"
+    openmm_dir = os.environ["OPENMM_PLUGIN_DIR"] = \
+                 Sire.Base.getLibDir() + "/plugins"
+finally:
+    if not os.path.isdir(openmm_dir):
+        warnings.warn('OPENMM_PLUGIN_DIR is not accessible')
 
-# FIXME: star imports...
-from Sire.IO import *
-from Sire.Mol import *
-from Sire.CAS import *
-from Sire.System import *
-from Sire.Move import *
-from Sire.MM import *
-from Sire.FF import *
-from Sire.Units import *
-from Sire.Vol import *
-from Sire.Maths import *
-from Sire.Qt import *
-from Sire.ID import *
-from Sire.Config import *
-from Sire.Analysis import *
-from Sire.Tools.DCDFile import *
+    print(f'OPENMM_PLUGIN_DIR = {openmm_dir}')
+
+import Sire.IO
+# import Sire.Mol
+import Sire.CAS
+import Sire.System
+import Sire.Move
+import Sire.MM
+import Sire.FF
+import Sire.Units
+import Sire.Maths
+import Sire.Qt
+import Sire.Analysis
+import Sire.Tools.DCDFile
 from Sire.Tools import Parameter, resolveParameters
 import Sire.Stream
 
@@ -67,10 +70,11 @@ rf_dielectric = Parameter(
 )
 
 temperature = Parameter(
-    "temperature", 25 * celsius, """Simulation temperature"""
+    "temperature", 25.0 * Sire.Units.celsius, """Simulation temperature"""
 )
 
-pressure = Parameter("pressure", 1 * atm, """Simulation pressure""")
+pressure = Parameter("pressure", 1.0 * Sire.Units.atm,
+                     """Simulation pressure""")
 
 topfile = Parameter(
     "topfile",
@@ -157,7 +161,8 @@ minimal_coordinate_saving = Parameter(
 )
 
 time_to_skip = Parameter(
-    "time to skip", 0 * picosecond, """Time to skip in picoseconds"""
+    "time to skip", 0.0 * Sire.Units.picosecond,
+    """Time to skip in picoseconds"""
 )
 
 minimise = Parameter(
@@ -192,7 +197,7 @@ equil_iterations = Parameter(
 
 equil_timestep = Parameter(
     "equilibration timestep",
-    0.5 * femtosecond,
+    0.5 * Sire.Units.femtosecond,
     """Timestep to use during equilibration.""",
 )
 
@@ -203,7 +208,8 @@ combining_rules = Parameter(
 )
 
 timestep = Parameter(
-    "timestep", 2 * femtosecond, """Timestep for the dynamics simulation."""
+    "timestep", 2.0 * Sire.Units.femtosecond,
+    """Timestep for the dynamics simulation."""
 )
 
 platform = Parameter(
@@ -230,7 +236,7 @@ cutoff_type = Parameter(
 
 cutoff_dist = Parameter(
     "cutoff distance",
-    10 * angstrom,
+    10.0 * Sire.Units.angstrom,
     """The cutoff distance to use for the non-bonded interactions.""",
 )
 
@@ -240,7 +246,7 @@ integrator_type = Parameter(
 
 inverse_friction = Parameter(
     "inverse friction",
-    0.1 * picosecond,
+    0.1 * Sire.Units.picosecond,
     """Inverse friction time for the Langevin thermostat.""",
 )
 
@@ -432,11 +438,11 @@ def setupDCD(system):
 
     dcd_filename = dcd_root.val + "%0009d" % index + ".dcd"
     softcore_almbda = True
-    if lambda_val.val == 1.0 or lambda_val.val == 0.0:
+    if lambda_val.val in (0.0, 1.0):
         softcore_almbda = False
     if minimal_coordinate_saving.val and softcore_almbda:
         interval = ncycles.val * nmoves.val
-        Trajectory = DCDFile(
+        Trajectory = Sire.Tools.DCDFile.DCDFile(
             dcd_filename,
             system[MGName("all")],
             system.property("space"),
@@ -444,7 +450,7 @@ def setupDCD(system):
             interval,
         )
     else:
-        Trajectory = DCDFile(
+        Trajectory = Sire.Tools.DCDFile.DCDFile(
             dcd_filename,
             system[MGName("all")],
             system.property("space"),
@@ -479,7 +485,7 @@ def writeSystemData(system, moves, Trajectory, block, softcore_lambda=False):
                 )
 
     # Write a PDB coordinate file each cycle.
-    pdb = PDB2(system)
+    pdb = Sire.IO.PDB2(system)
     pdb.writeToFile("latest.pdb")
 
     moves_file = open("moves.dat", "w")
@@ -501,11 +507,11 @@ def centerSolute(system, space):
                 space.vector0() + space.vector1() + space.vector2()
             )
     else:
-        box_center = Vector(0.0, 0.0, 0.0)
+        box_center = Sire.Maths.Vector(0.0, 0.0, 0.0)
 
     solute = system.molecules().at(MolNum(1))[0].molecule()
 
-    solute_cog = CenterOfGeometry(solute).point()
+    solute_cog = Sire.FF.CenterOfGeometry(solute).point()
 
     delta = box_center - solute_cog
 
@@ -547,7 +553,7 @@ def createSystem(molecules):
     all.add(ions)
 
     # Add these groups to the System
-    system = System()
+    system = Sire.System.System()
 
     system.add(all)
     system.add(molecules)
@@ -560,25 +566,25 @@ def setupForcefields(system, space):
 
     print("Creating force fields... ")
 
-    all = system[MGName("all")]
     molecules = system[MGName("molecules")]
     ions = system[MGName("ions")]
 
     # - first solvent-solvent coulomb/LJ (CLJ) energy
-    internonbondedff = InterCLJFF("molecules:molecules")
+    internonbondedff = Sire.MM.InterCLJFF("molecules:molecules")
     if cutoff_type.val != "nocutoff":
         internonbondedff.setUseReactionField(True)
         internonbondedff.setReactionFieldDielectric(rf_dielectric.val)
     internonbondedff.add(molecules)
 
-    inter_ions_nonbondedff = InterCLJFF("ions:ions")
+    inter_ions_nonbondedff = Sire.MM.InterCLJFF("ions:ions")
     if cutoff_type.val != "nocutoff":
         inter_ions_nonbondedff.setUseReactionField(True)
         inter_ions_nonbondedff.setReactionFieldDielectric(rf_dielectric.val)
 
     inter_ions_nonbondedff.add(ions)
 
-    inter_ions_molecules_nonbondedff = InterGroupCLJFF("ions:molecules")
+    inter_ions_molecules_nonbondedff = \
+        Sire.MM.InterGroupCLJFF("ions:molecules")
     if cutoff_type.val != "nocutoff":
         inter_ions_molecules_nonbondedff.setUseReactionField(True)
         inter_ions_molecules_nonbondedff.setReactionFieldDielectric(
@@ -589,11 +595,11 @@ def setupForcefields(system, space):
     inter_ions_molecules_nonbondedff.add(molecules, MGIdx(1))
 
     # Now solute bond, angle, dihedral energy
-    intrabondedff = InternalFF("molecules-intrabonded")
+    intrabondedff = Sire.MM.InternalFF("molecules-intrabonded")
     intrabondedff.add(molecules)
 
     # Now solute intramolecular CLJ energy
-    intranonbondedff = IntraCLJFF("molecules-intranonbonded")
+    intranonbondedff = Sire.MM.IntraCLJFF("molecules-intranonbonded")
 
     if cutoff_type.val != "nocutoff":
         intranonbondedff.setUseReactionField(True)
@@ -605,7 +611,7 @@ def setupForcefields(system, space):
     #
     # We restrain atoms based ont he contents of the property "restrainedatoms"
     #
-    restraintff = RestraintFF("restraint")
+    restraintff = Sire.MM.RestraintFF("restraint")
 
     if use_restraints.val:
         molnums = molecules.molecules().molNums()
@@ -628,10 +634,11 @@ def setupForcefields(system, space):
                 restraint_atom = mol.select(atnum)
                 restraint_coords = restrained_line[1]
                 restraint_k = (
-                    restrained_line[2] * kcal_per_mol / (angstrom * angstrom)
+                    restrained_line[2] * Sire.Units.kcal_per_mol /
+                    (Sire.Units.angstrom * Sire.Units.angstrom)
                 )
 
-                restraint = DistanceRestraint.harmonic(
+                restraint = Sire.MM.DistanceRestraint.harmonic(
                     restraint_atom, restraint_coords, restraint_k
                 )
 
@@ -652,9 +659,10 @@ def setupForcefields(system, space):
 
     system.setProperty("space", space)
     system.setProperty(
-        "switchingFunction", CHARMMSwitchingFunction(cutoff_dist.val)
+        "switchingFunction", Sire.MM.CHARMMSwitchingFunction(cutoff_dist.val)
     )
-    system.setProperty("combiningRules", VariantProperty(combining_rules.val))
+    system.setProperty("combiningRules",
+                       Sire.Base.VariantProperty(combining_rules.val))
 
     total_nrg = (
         internonbondedff.components().total()
@@ -671,7 +679,8 @@ def setupForcefields(system, space):
 
     # Add a monitor that calculates the average total energy and average energy
     # deltas - we will collect both a mean average and an zwanzig average
-    system.add("total_energy", MonitorComponent(e_total, Average()))
+    system.add("total_energy",
+               Sire.System.MonitorComponent(e_total, Sire.Maths.Average()))
 
     return system
 
@@ -682,7 +691,7 @@ def setupMoves(system, debug_seed, GPUS):
 
     molecules = system[MGName("all")]
 
-    Integrator_OpenMM = OpenMMMDIntegrator(molecules)
+    Integrator_OpenMM = Sire.Move.OpenMMMDIntegrator(molecules)
 
     Integrator_OpenMM.setPlatform(platform.val)
     Integrator_OpenMM.setConstraintType(constraint.val)
@@ -722,73 +731,76 @@ def setupMoves(system, debug_seed, GPUS):
     # print Integrator_OpenMM.getDeviceIndex()
     Integrator_OpenMM.initialise()
 
-    mdmove = MolecularDynamics(
+    mdmove = Sire.Move.MolecularDynamics(
         molecules,
         Integrator_OpenMM,
         timestep.val,
-        {"velocity generator": MaxwellBoltzmann(temperature.val)},
+        {"velocity generator": Sire.Move.MaxwellBoltzmann(temperature.val)},
     )
 
     print("Created a MD move that uses OpenMM for all molecules on %s " % GPUS)
 
-    moves = WeightedMoves()
+    moves = Sire.Move.WeightedMoves()
     moves.add(mdmove, 1)
 
     # Choose a random seed for Sire if a debugging seed hasn't been set.
     if debug_seed == 0:
-        seed = RanGenerator().randInt(100000, 1000000)
+        seed = Sire.Maths.RanGenerator().randInt(100000, 1000000)
     else:
         seed = debug_seed
         print("Using debugging seed number %d " % debug_seed)
 
-    moves.setGenerator(RanGenerator(seed))
+    moves.setGenerator(Sire.Maths.RanGenerator(seed))
 
     return moves
 
 
 def atomNumListToProperty(list):
 
-    prop = Properties()
+    prop = Sire.Base.Properties()
     i = 0
     for value in list:
-        prop.setProperty(str(i), VariantProperty(value.value()))
+        prop.setProperty(str(i), Sire.Base.VariantProperty(value.value()))
         i += 1
     return prop
 
 
 def atomNumVectorListToProperty(list):
-    prop = Properties()
+    prop = Sire.Base.Properties()
 
     i = 0
 
     for value in list:
-        prop.setProperty("AtomNum(%d)" % i, VariantProperty(value[0].value()))
-        prop.setProperty("x(%d)" % i, VariantProperty(value[1].x()))
-        prop.setProperty("y(%d)" % i, VariantProperty(value[1].y()))
-        prop.setProperty("z(%d)" % i, VariantProperty(value[1].z()))
-        prop.setProperty("k(%d)" % i, VariantProperty(value[2].val))
+        prop.setProperty("AtomNum(%d)" % i,
+                         Sire.Base.VariantProperty(value[0].value()))
+        prop.setProperty("x(%d)" % i, Sire.Base.VariantProperty(value[1].x()))
+        prop.setProperty("y(%d)" % i, Sire.Base.VariantProperty(value[1].y()))
+        prop.setProperty("z(%d)" % i, Sire.Base.VariantProperty(value[1].z()))
+        prop.setProperty("k(%d)" % i, Sire.Base.VariantProperty(value[2].val))
         i += 1
 
-    prop.setProperty("nrestrainedatoms", VariantProperty(i))
+    prop.setProperty("nrestrainedatoms", Sire.Base.VariantProperty(i))
 
     return prop
 
 
 def linkbondVectorListToProperty(list):
 
-    prop = Properties()
+    prop = Sire.Base.Properties()
 
     i = 0
 
     for value in list:
-        prop.setProperty("AtomNum0(%d)" % i, VariantProperty(value[0]))
-        prop.setProperty("AtomNum1(%d)" % i, VariantProperty(value[1]))
-        prop.setProperty("reql(%d)" % i, VariantProperty(value[2]))
-        prop.setProperty("kl(%d)" % i, VariantProperty(value[3]))
-        prop.setProperty("dl(%d)" % i, VariantProperty(value[4]))
+        prop.setProperty("AtomNum0(%d)" % i,
+                         Sire.Base.VariantProperty(value[0]))
+        prop.setProperty("AtomNum1(%d)" % i,
+                         Sire.Base.VariantProperty(value[1]))
+        prop.setProperty("reql(%d)" % i, Sire.Base.VariantProperty(value[2]))
+        prop.setProperty("kl(%d)" % i, Sire.Base.VariantProperty(value[3]))
+        prop.setProperty("dl(%d)" % i, Sire.Base.VariantProperty(value[4]))
         i += 1
 
-    prop.setProperty("nbondlinks", VariantProperty(i))
+    prop.setProperty("nbondlinks", Sire.Base.VariantProperty(i))
 
     return prop
 
@@ -816,7 +828,7 @@ def propertyToAtomNumVectorList(prop):
             z = prop["z(%d)" % i].toDouble()
             k = prop["k(%d)" % i].toDouble()
 
-            list.append((num, Vector(x, y, z), k))
+            list.append((num, Sire.Maths.Vector(x, y, z), k))
 
             i += 1
     except:
@@ -956,7 +968,8 @@ def freezeResidues(system):
                     "Freezing %s %s %s "
                     % (at, atnumber, at.residue().name().value())
                 )
-                mol = at.edit().setProperty("mass", 0 * g_per_mol).molecule()
+                mol = at.edit().setProperty(
+                    "mass", 0.0 * Sire.Units.g_per_mol).molecule()
 
         system.update(mol)
 
@@ -1003,9 +1016,9 @@ def repartitionMasses(system, hmassfactor=4.0):
         for x in range(0, nats):
             at = atoms[x]
             atidx = at.index()
-            atom_masses[atidx.value()] = 0 * g_per_mol
+            atom_masses[atidx.value()] = 0.0 * Sire.Units.g_per_mol
 
-        total_delta = 0.0 * g_per_mol
+        total_delta = 0.0 * Sire.Units.g_per_mol
 
         #
         # Second pass. Decide how the mass of each atom should change.
@@ -1168,12 +1181,12 @@ def createSystemFreeEnergy(molecules):
 
     solute = solute.edit().rename(lig_name).commit()
 
-    perturbations_lib = PerturbationsLibrary(morphfile.val)
+    perturbations_lib = Sire.IO.PerturbationsLibrary(morphfile.val)
     solute = perturbations_lib.applyTemplate(solute)
 
     perturbations = solute.property("perturbations")
 
-    lam = Symbol("lambda")
+    lam = Sire.CAS.Symbol("lambda")
 
     initial = Perturbation.symbols().initial()
     final = Perturbation.symbols().final()
@@ -1264,7 +1277,7 @@ def createSystemFreeEnergy(molecules):
     all.add(solute_grp_ref_fromdummy)
 
     # Add these groups to the System
-    system = System()
+    system = Sire.System.System()
 
     system.add(solutes)
     system.add(solute_grp_ref)
@@ -1303,38 +1316,36 @@ def setupForceFieldsFreeEnergy(system, space):
 
     solvent = system[MGName("solvent")]
 
-    all = system[MGName("all")]
-
     # ''solvent'' is actually every molecule that isn't perturbed !
-    solvent_intraff = InternalFF("solvent_intraff")
+    solvent_intraff = Sire.MM.InternalFF("solvent_intraff")
     solvent_intraff.add(solvent)
 
     # Solute bond, angle, dihedral energy
-    solute_intraff = InternalFF("solute_intraff")
+    solute_intraff = Sire.MM.InternalFF("solute_intraff")
     solute_intraff.add(solute)
 
     # Solvent-solvent coulomb/LJ (CLJ) energy
-    solventff = InterCLJFF("solvent:solvent")
+    solventff = Sire.MM.InterCLJFF("solvent:solvent")
     if cutoff_type.val != "nocutoff":
         solventff.setUseReactionField(True)
         solventff.setReactionFieldDielectric(rf_dielectric.val)
     solventff.add(solvent)
 
     # Solvent intramolecular CLJ energy
-    solvent_intraclj = IntraCLJFF("solvent_intraclj")
+    solvent_intraclj = Sire.MM.IntraCLJFF("solvent_intraclj")
     if cutoff_type.val != "nocutoff":
         solvent_intraclj.setUseReactionField(True)
         solvent_intraclj.setReactionFieldDielectric(rf_dielectric.val)
     solvent_intraclj.add(solvent)
 
     # Solute intramolecular CLJ energy
-    solute_hard_intraclj = IntraCLJFF("solute_hard_intraclj")
+    solute_hard_intraclj = Sire.MM.IntraCLJFF("solute_hard_intraclj")
     if cutoff_type.val != "nocutoff":
         solute_hard_intraclj.setUseReactionField(True)
         solute_hard_intraclj.setReactionFieldDielectric(rf_dielectric.val)
     solute_hard_intraclj.add(solute_hard)
 
-    solute_todummy_intraclj = IntraSoftCLJFF("solute_todummy_intraclj")
+    solute_todummy_intraclj = Sire.MM.IntraSoftCLJFF("solute_todummy_intraclj")
     solute_todummy_intraclj.setShiftDelta(shift_delta.val)
     solute_todummy_intraclj.setCoulombPower(coulomb_power.val)
     if cutoff_type.val != "nocutoff":
@@ -1342,7 +1353,8 @@ def setupForceFieldsFreeEnergy(system, space):
         solute_todummy_intraclj.setReactionFieldDielectric(rf_dielectric.val)
     solute_todummy_intraclj.add(solute_todummy)
 
-    solute_fromdummy_intraclj = IntraSoftCLJFF("solute_fromdummy_intraclj")
+    solute_fromdummy_intraclj = Sire.MM.IntraSoftCLJFF(
+        "solute_fromdummy_intraclj")
     solute_fromdummy_intraclj.setShiftDelta(shift_delta.val)
     solute_fromdummy_intraclj.setCoulombPower(coulomb_power.val)
     if cutoff_type.val != "nocutoff":
@@ -1350,7 +1362,7 @@ def setupForceFieldsFreeEnergy(system, space):
         solute_fromdummy_intraclj.setReactionFieldDielectric(rf_dielectric.val)
     solute_fromdummy_intraclj.add(solute_fromdummy)
 
-    solute_hard_todummy_intraclj = IntraGroupSoftCLJFF(
+    solute_hard_todummy_intraclj = Sire.MM.IntraGroupSoftCLJFF(
         "solute_hard:todummy_intraclj"
     )
     solute_hard_todummy_intraclj.setShiftDelta(shift_delta.val)
@@ -1363,7 +1375,7 @@ def setupForceFieldsFreeEnergy(system, space):
     solute_hard_todummy_intraclj.add(solute_hard, MGIdx(0))
     solute_hard_todummy_intraclj.add(solute_todummy, MGIdx(1))
 
-    solute_hard_fromdummy_intraclj = IntraGroupSoftCLJFF(
+    solute_hard_fromdummy_intraclj = Sire.MM.IntraGroupSoftCLJFF(
         "solute_hard:fromdummy_intraclj"
     )
     solute_hard_fromdummy_intraclj.setShiftDelta(shift_delta.val)
@@ -1376,7 +1388,7 @@ def setupForceFieldsFreeEnergy(system, space):
     solute_hard_fromdummy_intraclj.add(solute_hard, MGIdx(0))
     solute_hard_fromdummy_intraclj.add(solute_fromdummy, MGIdx(1))
 
-    solute_todummy_fromdummy_intraclj = IntraGroupSoftCLJFF(
+    solute_todummy_fromdummy_intraclj = Sire.MM.IntraGroupSoftCLJFF(
         "solute_todummy:fromdummy_intraclj"
     )
     solute_todummy_fromdummy_intraclj.setShiftDelta(shift_delta.val)
@@ -1390,21 +1402,22 @@ def setupForceFieldsFreeEnergy(system, space):
     solute_todummy_fromdummy_intraclj.add(solute_fromdummy, MGIdx(1))
 
     # Solute-solvent CLJ energy
-    solute_hard_solventff = InterGroupCLJFF("solute_hard:solvent")
+    solute_hard_solventff = Sire.MM.InterGroupCLJFF("solute_hard:solvent")
     if cutoff_type.val != "nocutoff":
         solute_hard_solventff.setUseReactionField(True)
         solute_hard_solventff.setReactionFieldDielectric(rf_dielectric.val)
     solute_hard_solventff.add(solute_hard, MGIdx(0))
     solute_hard_solventff.add(solvent, MGIdx(1))
 
-    solute_todummy_solventff = InterGroupSoftCLJFF("solute_todummy:solvent")
+    solute_todummy_solventff = Sire.MM.InterGroupSoftCLJFF(
+        "solute_todummy:solvent")
     if cutoff_type.val != "nocutoff":
         solute_todummy_solventff.setUseReactionField(True)
         solute_todummy_solventff.setReactionFieldDielectric(rf_dielectric.val)
     solute_todummy_solventff.add(solute_todummy, MGIdx(0))
     solute_todummy_solventff.add(solvent, MGIdx(1))
 
-    solute_fromdummy_solventff = InterGroupSoftCLJFF(
+    solute_fromdummy_solventff = Sire.MM.InterGroupSoftCLJFF(
         "solute_fromdummy:solvent"
     )
     if cutoff_type.val != "nocutoff":
@@ -1439,14 +1452,18 @@ def setupForceFieldsFreeEnergy(system, space):
 
     if cutoff_type.val != "nocutoff":
         system.setProperty(
-            "switchingFunction", CHARMMSwitchingFunction(cutoff_dist.val)
+            "switchingFunction",
+            Sire.MM.CHARMMSwitchingFunction(cutoff_dist.val)
         )
     else:
-        system.setProperty("switchingFunction", NoCutoff())
+        system.setProperty("switchingFunction", Sire.MM.NoCutoff())
 
-    system.setProperty("combiningRules", VariantProperty(combining_rules.val))
-    system.setProperty("coulombPower", VariantProperty(coulomb_power.val))
-    system.setProperty("shiftDelta", VariantProperty(shift_delta.val))
+    system.setProperty("combiningRules",
+                       Sire.Base.VariantProperty(combining_rules.val))
+    system.setProperty("coulombPower",
+                       Sire.Base.VariantProperty(coulomb_power.val))
+    system.setProperty("shiftDelta",
+                       Sire.Base.VariantProperty(shift_delta.val))
 
     # TOTAL
     total_nrg = (
@@ -1467,47 +1484,51 @@ def setupForceFieldsFreeEnergy(system, space):
 
     e_total = system.totalComponent()
 
-    lam = Symbol("lambda")
+    lam = Sire.CAS.Symbol("lambda")
 
     system.setComponent(e_total, total_nrg)
 
     system.setConstant(lam, 0.0)
 
-    system.add(PerturbationConstraint(solutes))
+    system.add(Sire.System.PerturbationConstraint(solutes))
 
     # NON BONDED Alpha constraints for the soft force fields
 
     system.add(
-        PropertyConstraint("alpha0", FFName("solute_todummy_intraclj"), lam)
-    )
-    system.add(
-        PropertyConstraint(
-            "alpha0", FFName("solute_fromdummy_intraclj"), 1 - lam
-        )
-    )
-    system.add(
-        PropertyConstraint(
-            "alpha0", FFName("solute_hard:todummy_intraclj"), lam
-        )
-    )
-    system.add(
-        PropertyConstraint(
-            "alpha0", FFName("solute_hard:fromdummy_intraclj"), 1 - lam
-        )
-    )
-    system.add(
-        PropertyConstraint(
+        Sire.System.PropertyConstraint(
             "alpha0",
-            FFName("solute_todummy:fromdummy_intraclj"),
-            Max(lam, 1 - lam),
+            Sire.FF.FFName("solute_todummy_intraclj"), lam)
+    )
+    system.add(
+        Sire.System.PropertyConstraint(
+            "alpha0", Sire.FF.FFName("solute_fromdummy_intraclj"), 1 - lam
         )
     )
     system.add(
-        PropertyConstraint("alpha0", FFName("solute_todummy:solvent"), lam)
+        Sire.System.PropertyConstraint(
+            "alpha0", Sire.FF.FFName("solute_hard:todummy_intraclj"), lam
+        )
     )
     system.add(
-        PropertyConstraint(
-            "alpha0", FFName("solute_fromdummy:solvent"), 1 - lam
+        Sire.System.PropertyConstraint(
+            "alpha0", Sire.FF.FFName("solute_hard:fromdummy_intraclj"), 1 - lam
+        )
+    )
+    system.add(
+        Sire.System.PropertyConstraint(
+            "alpha0",
+            Sire.FF.FFName("solute_todummy:fromdummy_intraclj"),
+            Sire.CAS.Max(lam, 1 - lam),
+        )
+    )
+    system.add(
+        Sire.System.PropertyConstraint(
+            "alpha0",
+            Sire.FF.FFName("solute_todummy:solvent"), lam)
+    )
+    system.add(
+        Sire.System.PropertyConstraint(
+            "alpha0", Sire.FF.FFName("solute_fromdummy:solvent"), 1 - lam
         )
     )
 
@@ -1528,7 +1549,7 @@ def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
     solute_todummy = system[MGName("solute_ref_todummy")]
     solute_fromdummy = system[MGName("solute_ref_fromdummy")]
     # import pdb ; pdb.set_trace()
-    Integrator_OpenMM = OpenMMFrEnergyST(
+    Integrator_OpenMM = Sire.Move.OpenMMFrEnergyST(
         molecules, solute, solute_hard, solute_todummy, solute_fromdummy
     )
     Integrator_OpenMM.setRandomSeed(debug_seed)
@@ -1572,17 +1593,17 @@ def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
 
     # Choose a random seed for Sire if a debugging seed hasn't been set.
     if debug_seed == 0:
-        seed = RanGenerator().randInt(100000, 1000000)
+        seed = Sire.Maths.RanGenerator().randInt(100000, 1000000)
     else:
         seed = debug_seed
         print("Using debugging seed number %d " % debug_seed)
 
     # This calls the OpenMMFrEnergyST initialise function
     Integrator_OpenMM.initialise()
-    velocity_generator = MaxwellBoltzmann(temperature.val)
-    velocity_generator.setGenerator(RanGenerator(seed))
+    velocity_generator = Sire.Move.MaxwellBoltzmann(temperature.val)
+    velocity_generator.setGenerator(Sire.Maths.RanGenerator(seed))
 
-    mdmove = MolecularDynamics(
+    mdmove = Sire.Move.MolecularDynamics(
         molecules,
         Integrator_OpenMM,
         timestep.val,
@@ -1591,10 +1612,10 @@ def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
 
     print("Created a MD move that uses OpenMM for all molecules on %s " % GPUS)
 
-    moves = WeightedMoves()
+    moves = Sire.Move.WeightedMoves()
     moves.add(mdmove, 1)
 
-    moves.setGenerator(RanGenerator(seed))
+    moves.setGenerator(Sire.Maths.RanGenerator(seed))
 
     return moves
 
@@ -1625,7 +1646,7 @@ def clearBuffers(system):
         for molprop in molprops:
             if molprop.startswith("buffered_"):
                 # print "Removing property %s " % molprop
-                editmol.removeProperty(PropertyName(molprop))
+                editmol.removeProperty(Sire.Base.PropertyName(molprop))
         mol = editmol.commit()
         changedmols.add(mol)
         # system.update(mol)
@@ -1692,7 +1713,7 @@ def getAtomNearCOG(molecule):
     for x in range(0, molecule.nAtoms()):
         atom = molecule.atoms()[x]
         at_coords = atom.property("coordinates")
-        dist = Vector().distance2(at_coords, mol_centre)
+        dist = Sire.Maths.Vector().distance2(at_coords, mol_centre)
         if dist < mindist:
             mindist = dist
             nearest_atom = atom
@@ -1728,7 +1749,7 @@ def generateDistanceRestraintsDict(system):
         ca_atoms = molecule.selectAll(AtomName("CA"))
         for ca in ca_atoms:
             jcoord = ca.property("coordinates")
-            d = Vector().distance(icoord, jcoord)
+            d = Sire.Maths.Vector().distance(icoord, jcoord)
             if d < dmin:
                 dmin = d
                 closest = ca
@@ -1748,7 +1769,7 @@ def generateDistanceRestraintsDict(system):
         ca_atoms = molecule.selectAll(AtomName("CA"))
         for ca in ca_atoms:
             jcoord = ca.property("coordinates")
-            d = Vector().distance(mirror_coord, jcoord)
+            d = Sire.Maths.Vector().distance(mirror_coord, jcoord)
             if d < dmin:
                 dmin = d
                 mirror_closest = ca
@@ -1759,11 +1780,11 @@ def generateDistanceRestraintsDict(system):
     i0 = nearestcog_atom.index().value()
     i1 = closest.index().value()
     i2 = mirror_closest.index().value()
-    r01 = Vector().distance(
+    r01 = Sire.Maths.Vector().distance(
         nearestcog_atom.property("coordinates"),
         closest.property("coordinates"),
     )
-    r02 = Vector().distance(
+    r02 = Sire.Maths.Vector().distance(
         nearestcog_atom.property("coordinates"),
         mirror_closest.property("coordinates"),
     )
@@ -1801,7 +1822,7 @@ def run():
             "###\n"
         )
 
-    timer = QTime()
+    timer = Sire.Qt.QTime()
     timer.start()
 
     # Setup the system from scratch if no restart file is available
@@ -1810,7 +1831,7 @@ def run():
 
         print("New run. Loading input and creating restart")
 
-        amber = Amber()
+        amber = Sire.IO.Amber()
 
         if os.path.exists(s3file.val):
             (molecules, space) = Sire.Stream.load(s3file.val)
@@ -1874,7 +1895,7 @@ def run():
         integrator = move0.integrator()
         integrator.setDeviceIndex(str(gpu.val))
         move0.setIntegrator(integrator)
-        moves = WeightedMoves()
+        moves = Sire.Move.WeightedMoves()
         moves.add(move0)
         print(
             "Index GPU = %s " % moves.moves()[0].integrator().getDeviceIndex()
@@ -2009,7 +2030,7 @@ def runFreeNrg():
             "###\n"
         )
 
-    timer = QTime()
+    timer = Sire.Qt.QTime()
     timer.start()
     outfile = open(simfile.val, "ab")
     lam_str = "%7.5f" % lambda_val.val
@@ -2022,7 +2043,7 @@ def runFreeNrg():
 
         print("lambda is %s" % lambda_val.val)
 
-        amber = Amber()
+        amber = Sire.IO.Amber()
 
         if os.path.exists(s3file.val):
             (molecules, space) = Sire.Stream.load(s3file.val)
@@ -2163,7 +2184,7 @@ def runFreeNrg():
         integrator = move0.integrator()
         integrator.setDeviceIndex(str(gpu.val))
         move0.setIntegrator(integrator)
-        moves = WeightedMoves()
+        moves = Sire.Move.WeightedMoves()
         moves.add(move0)
         cycle_start = int(moves.nMoves() / nmoves.val)
         cycle_end = cycle_start + ncycles.val
@@ -2174,7 +2195,6 @@ def runFreeNrg():
             "Loaded a restart file on which we have performed %d moves."
             % moves.nMoves()
         )
-        restart = True
 
     cycle_start = int(moves.nMoves() / nmoves.val) + 1
 
@@ -2266,7 +2286,7 @@ def runFreeNrg():
             softcore_lambda = True
 
     grads = {}
-    grads[lambda_val.val] = AverageAndStddev()
+    grads[lambda_val.val] = Sire.Maths.AverageAndStddev()
     s1 = timer.elapsed() / 1000.0
     for i in range(cycle_start, cycle_end):
         print("\nCycle = ", i, "\n")
@@ -2317,8 +2337,8 @@ def runFreeNrg():
     if os.path.exists("gradients.s3"):
         siregrads = Sire.Stream.load("gradients.s3")
     else:
-        siregrads = Gradients()
-    siregrads = siregrads + Gradients(grads)
+        siregrads = Sire.Analysis.Gradients()
+    siregrads = siregrads + Sire.Analysis.Gradients(grads)
 
     Sire.Stream.save(siregrads, "gradients.s3")
 

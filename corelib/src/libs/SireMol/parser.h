@@ -47,7 +47,7 @@ public:
     parse_error() : siremol_error()
     {}
 
-    parse_error(QString err, QString place = QString::null)
+    parse_error(QString err, QString place = QString())
               : siremol_error(err,place)
     {}
 
@@ -63,7 +63,7 @@ public:
     {
         return parse_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw parse_error(*this);

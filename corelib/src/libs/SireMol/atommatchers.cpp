@@ -1241,7 +1241,7 @@ QDataStream &operator<<(QDataStream &ds,
                                        const ResIdxAtomNameMatcher &residxatomnamematcher)
 {
     writeHeader(ds, r_residxatomnamematcher, 1);
-    ds << static_cast<const ResIdxAtomNameMatcher&>(residxatomnamematcher);
+    ds << static_cast<const AtomMatcher&>(residxatomnamematcher);
 
     return ds;
 }
@@ -1253,7 +1253,7 @@ QDataStream &operator>>(QDataStream &ds, ResIdxAtomNameMatcher &residxatomnamema
 
     if (v == 1)
     {
-        ds >> static_cast<ResIdxAtomNameMatcher&>(residxatomnamematcher);
+        ds >> static_cast<AtomMatcher&>(residxatomnamematcher);
     }
     else
         throw version_error(v, "1", r_residxatomnamematcher, CODELOC);
@@ -1392,7 +1392,7 @@ QDataStream &operator<<(QDataStream &ds,
                                        const ResNumAtomNameMatcher &resnumatomnamematcher)
 {
     writeHeader(ds, r_resnumatomnamematcher, 1);
-    ds << static_cast<const ResNumAtomNameMatcher&>(resnumatomnamematcher);
+    ds << static_cast<const AtomMatcher&>(resnumatomnamematcher);
 
     return ds;
 }
@@ -1404,7 +1404,7 @@ QDataStream &operator>>(QDataStream &ds, ResNumAtomNameMatcher &resnumatomnamema
 
     if (v == 1)
     {
-        ds >> static_cast<ResNumAtomNameMatcher&>(resnumatomnamematcher);
+        ds >> static_cast<AtomMatcher&>(resnumatomnamematcher);
     }
     else
         throw version_error(v, "1", r_resnumatomnamematcher, CODELOC);
@@ -1789,7 +1789,11 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomMCSMatcher::pvt_match(const MoleculeView &mol0,
             }
 
             // Update the atom index map.
-            map.unite(local_map);
+            for (auto key : local_map.keys()){
+                if (not map.contains(key)){
+                    map.insert(key, local_map[key]);
+                }
+            }
         }
     }
     else
@@ -1817,7 +1821,7 @@ QDataStream &operator<<(QDataStream &ds,
                                        const ResIdxAtomCoordMatcher &residxatomcoordmatcher)
 {
     writeHeader(ds, r_residxatomcoordmatcher, 1);
-    ds << static_cast<const ResIdxAtomCoordMatcher&>(residxatomcoordmatcher);
+    ds << static_cast<const AtomMatcher&>(residxatomcoordmatcher);
 
     return ds;
 }
@@ -1829,7 +1833,7 @@ QDataStream &operator>>(QDataStream &ds, ResIdxAtomCoordMatcher &residxatomcoord
 
     if (v == 1)
     {
-        ds >> static_cast<ResIdxAtomCoordMatcher&>(residxatomcoordmatcher);
+        ds >> static_cast<AtomMatcher&>(residxatomcoordmatcher);
     }
     else
         throw version_error(v, "1", r_residxatomcoordmatcher, CODELOC);

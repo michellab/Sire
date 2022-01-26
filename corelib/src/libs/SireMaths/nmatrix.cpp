@@ -54,11 +54,11 @@ static const RegisterMetaType<NMatrix> r_nmatrix(NO_ROOT);
 QDataStream &operator<<(QDataStream &ds, const NMatrix &matrix)
 {
     writeHeader(ds, r_nmatrix, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << matrix.array << matrix.nrows << matrix.ncolumns << matrix.is_transpose;
-    
+
     return ds;
 }
 
@@ -66,16 +66,16 @@ QDataStream &operator<<(QDataStream &ds, const NMatrix &matrix)
 QDataStream &operator>>(QDataStream &ds, NMatrix &matrix)
 {
     VersionID v = readHeader(ds, r_nmatrix);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> matrix.array >> matrix.nrows >> matrix.ncolumns >> matrix.is_transpose;
     }
     else
         throw version_error(v, "1", r_nmatrix, CODELOC);
-        
+
     return ds;
 }
 
@@ -123,9 +123,9 @@ NMatrix::NMatrix(const Matrix &matrix)
 {
     array = QVector<double>(9);
     array.squeeze();
-    
+
     double *data = array.data();
-    
+
     memcpy(data, matrix.column0().constData(), 3*sizeof(double));
     memcpy(data+3, matrix.column1().constData(), 3*sizeof(double));
     memcpy(data+6, matrix.column2().constData(), 3*sizeof(double));
@@ -141,7 +141,7 @@ NMatrix::NMatrix(const SireBase::Array2D<double> &array2d)
     {
         array = QVector<double>(sz);
         array.squeeze();
-        
+
         memcpy(array.data(), array2d.constData(), sz*sizeof(double));
     }
 }
@@ -151,24 +151,24 @@ NMatrix::NMatrix(const QVector< QVector<double> > &array2d)
         : nrows(array2d.count()), ncolumns(0), is_transpose(true)
 {
     const QVector<double> *array2d_data = array2d.constData();
-    
+
     for (int i=0; i<nrows; ++i)
     {
         ncolumns = qMax(ncolumns, array2d_data[i].count());
     }
-    
+
     if (ncolumns > 0)
     {
         array = QVector<double>(nrows*ncolumns, 0);
         array.squeeze();
-        
+
         double *d = array.data();
-        
+
         for (int i=0; i<nrows; ++i)
         {
             const double *array_d = array2d_data[i].constData();
             const int sz = array2d_data[i].count();
-            
+
             for (int j=0; j<sz; ++j)
             {
                 d[offset(i,j)] = array_d[j];
@@ -182,16 +182,16 @@ NMatrix::NMatrix(const QVector< QVector<double> > &array2d)
 }
 
 /** Construct from the passed vector - this is copied to a column
-    matrix, unless 'transpose' is true, in which case this is 
+    matrix, unless 'transpose' is true, in which case this is
     copied as a row matrix */
 NMatrix::NMatrix(const Vector &vector, bool transpose)
         : is_transpose(false)
 {
     array = QVector<double>(3);
     array.squeeze();
-    
+
     memcpy(array.data(), vector.constData(), 3*sizeof(double));
-    
+
     if (transpose)
     {
         nrows = 1;
@@ -205,7 +205,7 @@ NMatrix::NMatrix(const Vector &vector, bool transpose)
 }
 
 /** Construct from the passed vector - this is copied to a column
-    matrix, unless 'transpose' is true, in which case this is 
+    matrix, unless 'transpose' is true, in which case this is
     copied as a row matrix */
 NMatrix::NMatrix(const NVector &vector, bool transpose)
         : nrows(0), ncolumns(0), is_transpose(false)
@@ -214,7 +214,7 @@ NMatrix::NMatrix(const NVector &vector, bool transpose)
     {
         array = QVector<double>(vector.count());
         array.squeeze();
-        
+
         memcpy(array.data(), vector.constData(), vector.count()*sizeof(double));
 
         if (transpose)
@@ -231,7 +231,7 @@ NMatrix::NMatrix(const NVector &vector, bool transpose)
 }
 
 /** Construct from the passed vector - this is copied to a column
-    matrix, unless 'transpose' is true, in which case this is 
+    matrix, unless 'transpose' is true, in which case this is
     copied as a row matrix */
 NMatrix::NMatrix(const QVector<double> &vector, bool transpose)
         : nrows(0), ncolumns(0), is_transpose(false)
@@ -262,13 +262,13 @@ NMatrix::NMatrix(const TrigMatrix &matrix)
     {
         nrows = matrix.nRows();
         ncolumns = nrows;
-        
+
         array = QVector<double>(nrows * ncolumns);
         array.squeeze();
-        
+
         double *d = array.data();
         const double *md = matrix.constData();
-        
+
         for (int j=0; j<nrows; ++j)
         {
             for (int i=0; i<nrows; ++i)
@@ -297,7 +297,7 @@ NMatrix NMatrix::createColumnMajor(int nr, int nc)
     return NMatrix(nr, nc);
 }
 
-/** Construct a matrix with dimension 'nrows' by 'ncolumns' that 
+/** Construct a matrix with dimension 'nrows' by 'ncolumns' that
     stores the data in row-major order */
 NMatrix NMatrix::createRowMajor(int nr, int nc)
 {
@@ -359,7 +359,7 @@ void NMatrix::assertValidIndex(int i, int j) const
     }
 }
 
-/** Assert that this is a square matrix 
+/** Assert that this is a square matrix
 
     \throw SireError::incompatible_error
 */
@@ -368,7 +368,7 @@ void NMatrix::assertSquare() const
     if (nrows == 0 or ncolumns == 0)
         throw SireError::incompatible_error( QObject::tr(
             "The null matrix of zero dimension is not a square matrix!"), CODELOC );
-            
+
     else if (nrows != ncolumns)
         throw SireError::incompatible_error( QObject::tr(
             "The operation is only compatible with square matricies. This "
@@ -383,7 +383,7 @@ void NMatrix::assertSquare() const
 double& NMatrix::operator()(int i, int j)
 {
     this->assertValidIndex(i,j);
-    
+
     return array.data()[ this->offset(i,j) ];
 }
 
@@ -394,7 +394,7 @@ double& NMatrix::operator()(int i, int j)
 const double& NMatrix::operator()(int i, int j) const
 {
     this->assertValidIndex(i,j);
-    
+
     return array.data()[ this->offset(i,j) ];
 }
 
@@ -434,10 +434,10 @@ NMatrix NMatrix::transpose() const
          | d e f |  =>  | b e h k |
          | g h i |      \ c f i l /
          \ j k l /
-    
+
        in memory stored as column-major
        (a d g j b e h k c f i l)
-      
+
         offset(i,j)   == i + (j*nrows)     [2,1] => 2+4 == 6 == 'h'
         offset(i,j)^T == (i*ncolumns) + j  [1,2] => 4+2 == 6 == 'h'
     */
@@ -446,7 +446,7 @@ NMatrix NMatrix::transpose() const
     ret.is_transpose = not is_transpose;
     ret.nrows = ncolumns;
     ret.ncolumns = nrows;
-    
+
     return ret;
 }
 
@@ -463,7 +463,7 @@ NMatrix NMatrix::fullTranspose() const
         //the data needs to be transposed
         double *ret_data = ret.array.data();
         const double *this_data = array.constData();
-        
+
         for (qint32 i=0; i<nrows; ++i)
         {
             for (qint32 j=0; j<ncolumns; ++j)
@@ -472,11 +472,11 @@ NMatrix NMatrix::fullTranspose() const
             }
         }
     }
-     
-    return ret;   
+
+    return ret;
 }
 
-/** Matrix addition 
+/** Matrix addition
 
     \throw SireError::incompatible_error
 */
@@ -484,13 +484,13 @@ NMatrix& NMatrix::operator+=(const NMatrix &other)
 {
     assertNRows(other.nRows());
     assertNColumns(other.nColumns());
-    
+
     if (is_transpose == other.is_transpose)
     {
         double *data = array.data();
         const double *other_data = other.array.constData();
         const int sz = array.count();
-    
+
         for (int i=0; i<sz; ++i)
         {
             data[i] += other_data[i];
@@ -500,11 +500,11 @@ NMatrix& NMatrix::operator+=(const NMatrix &other)
     {
         this->operator+=(other.fullTranspose());
     }
-    
+
     return *this;
 }
 
-/** Matrix subtraction 
+/** Matrix subtraction
 
     \throw SireError::incompatible_error
 */
@@ -512,13 +512,13 @@ NMatrix& NMatrix::operator-=(const NMatrix &other)
 {
     assertNRows(other.nRows());
     assertNColumns(other.nColumns());
-    
+
     if (is_transpose == other.is_transpose)
     {
         double *data = array.data();
         const double *other_data = other.array.constData();
         const int sz = array.count();
-    
+
         for (int i=0; i<sz; ++i)
         {
             data[i] -= other_data[i];
@@ -528,7 +528,7 @@ NMatrix& NMatrix::operator-=(const NMatrix &other)
     {
         this->operator-=(other.fullTranspose());
     }
-    
+
     return *this;
 }
 
@@ -552,7 +552,7 @@ NMatrix& NMatrix::operator*=(double scale)
             data[i] *= scale;
         }
     }
-    
+
     return *this;
 }
 
@@ -562,29 +562,29 @@ NMatrix& NMatrix::operator/=(double scale)
     if (scale == 0)
         throw SireMaths::domain_error( QObject::tr(
             "This code does not support dividing a matrix by zero!"), CODELOC );
-            
+
     return this->operator*=( 1/scale );
 }
 
 /** Matrix multiplication - this uses dgemm under the hood
-    for speed 
-    
+    for speed
+
     \throw SireError::incompatible_error
-*/  
+*/
 NMatrix& NMatrix::operator*=(const NMatrix &other)
 {
     if (other.nRows() == 1 and other.nColumns() == 1)
         return this->operator*=(other(0,0));
-        
+
     this->operator=( dgemm(*this, other) );
-    
+
     return *this;
 }
 
 /** Return the inverse of this matrix
-    
+
     This uses LAPACK under the hood, for speed
-    
+
     \throw SireError::incompatible_error
     \throw SireMaths::domain_error
 */
@@ -596,7 +596,7 @@ NMatrix NMatrix::inverse() const
                          factors_with_pivot.second);
 }
 
-/** Matrix division - this multiplies this matrix with the inverse of 'other' 
+/** Matrix division - this multiplies this matrix with the inverse of 'other'
 
     \throw SireMaths::domain_error
     \throw SireError::incompatible_error
@@ -613,16 +613,16 @@ NMatrix NMatrix::operator-() const
 
     const int sz = array.count();
     double *ret_data = ret.array.data();
-    
+
     for (int i=0; i<sz; ++i)
     {
         ret_data[i] = -ret_data[i];
     }
-    
+
     return ret;
 }
 
-/** Matrix addition 
+/** Matrix addition
 
     \throw SireError::incompatible_error
 */
@@ -630,11 +630,11 @@ NMatrix NMatrix::operator+(const NMatrix &other) const
 {
     NMatrix ret(*this);
     ret += other;
-    
+
     return ret;
 }
 
-/** Matrix subtraction 
+/** Matrix subtraction
 
     \throw SireError::incompatible_error
 */
@@ -642,25 +642,25 @@ NMatrix NMatrix::operator-(const NMatrix &other) const
 {
     NMatrix ret(*this);
     ret -= other;
-    
+
     return ret;
 }
 
 /** Matrix multiplication - this uses dgemm under the hood
-    for speed 
-    
+    for speed
+
     \throw SireError::incompatible_error
-*/  
+*/
 NMatrix NMatrix::operator*(const NMatrix &other) const
 {
     NMatrix ret(*this);
-    
+
     ret *= other;
-    
+
     return ret;
 }
 
-/** Matrix division - this multiplies this matrix with the inverse of 'other' 
+/** Matrix division - this multiplies this matrix with the inverse of 'other'
 
     \throw SireMaths::domain_error
     \throw SireError::incompatible_error
@@ -668,9 +668,9 @@ NMatrix NMatrix::operator*(const NMatrix &other) const
 NMatrix NMatrix::operator/(const NMatrix &other) const
 {
     NMatrix ret(*this);
-    
+
     ret /= other;
-    
+
     return ret;
 }
 
@@ -678,9 +678,9 @@ NMatrix NMatrix::operator/(const NMatrix &other) const
 NMatrix NMatrix::operator*(double scale) const
 {
     NMatrix ret(*this);
-    
+
     ret *= scale;
-    
+
     return ret;
 }
 
@@ -688,13 +688,13 @@ NMatrix NMatrix::operator*(double scale) const
 NMatrix NMatrix::operator/(double scale) const
 {
     NMatrix ret(*this);
-    
+
     ret /= scale;
-    
+
     return ret;
 }
 
-/** Perform matrix-vector multiplication - the number of 
+/** Perform matrix-vector multiplication - the number of
     rows of the vector must equal to the number of rows
     of this matrix
 
@@ -707,7 +707,7 @@ NVector NMatrix::operator*(const NVector &vector) const
     return dgemv(*this, vector);
 }
 
-/** Perform matrix-vector multiplication - the number of 
+/** Perform matrix-vector multiplication - the number of
     rows of the vector must equal to the number of rows
     of this matrix
 
@@ -721,13 +721,13 @@ NVector NMatrix::operator*(const Vector &vector) const
     {
         //use hand-written code
         const double *d = array.constData();
-        
+
         if (is_transpose)
         {
             Matrix m( d[0], d[1], d[2],
                       d[3], d[4], d[5],
                       d[6], d[7], d[8] );   // Matrix uses row-major ordering
-                      
+
             return m*vector;
         }
         else
@@ -735,28 +735,28 @@ NVector NMatrix::operator*(const Vector &vector) const
             Matrix m( d[0], d[3], d[6],
                       d[1], d[4], d[7],
                       d[2], d[5], d[8] );   // Matrix uses row-major ordering
-    
+
             return m*vector;
         }
     }
     else
     {
         this->assertNColumns(3);
-        
+
         NVector v(nrows);
-        
+
         const double *d = array.data();
-        
+
         for (int i=0; i<nrows; ++i)
         {
             double sum = 0;
-            
-            for (int j=0; j<3; ++i)
+
+            for (int j=0; j<3; ++j)
             {
                 sum += vector[j]*d[offset(i,j)];
             }
         }
-        
+
         return v;
     }
 }
@@ -773,7 +773,7 @@ int NMatrix::nColumns() const
     return ncolumns;
 }
 
-/** Redimension this matrix to have 'nrows' rows and 'ncolumns' 
+/** Redimension this matrix to have 'nrows' rows and 'ncolumns'
     columns. The contents of this matrix are undefined after
     this redimension. This function will only reallocate
     memory if there is not enough memory allocated to store
@@ -786,7 +786,7 @@ int NMatrix::nColumns() const
 void NMatrix::redimension(int nr, int nc)
 {
     const int sz = nr * nc;
-    
+
     if (sz <= 0)
     {
         nrows = 0;
@@ -796,15 +796,15 @@ void NMatrix::redimension(int nr, int nc)
     {
         if (sz > array.count())
             array.resize(sz);
-            
+
         nrows = nr;
         ncolumns = nc;
-        
+
         is_transpose = false;
     }
 }
 
-/** Assert that there is an ith row! 
+/** Assert that there is an ith row!
 
     \throw SireError::invalid_index
 */
@@ -816,7 +816,7 @@ void NMatrix::assertValidRow(int i) const
                     .arg(nrows).arg(ncolumns).arg(i), CODELOC );
 }
 
-/** Assert that there is an jth column! 
+/** Assert that there is an jth column!
 
     \throw SireError::invalid_index
 */
@@ -828,7 +828,7 @@ void NMatrix::assertValidColumn(int j) const
                     .arg(nrows).arg(ncolumns).arg(j), CODELOC );
 }
 
-/** Return a vector containing the contents of the ith row 
+/** Return a vector containing the contents of the ith row
 
     \throw SireError::invalid_index
 */
@@ -837,7 +837,7 @@ NVector NMatrix::row(int i) const
     this->assertValidRow(i);
 
     NVector v(ncolumns);
-    
+
     if (is_transpose)
     {
         //row-major storage
@@ -848,7 +848,7 @@ NVector NMatrix::row(int i) const
         //column-major storage
         double *d = v.data();
         const double *row = array.constData();
-        
+
         for (int j=0; j<ncolumns; ++j)
         {
             d[j] = row[ j*nrows + i ];
@@ -858,7 +858,7 @@ NVector NMatrix::row(int i) const
     return v;
 }
 
-/** Return a vector containing the contents of the ith row 
+/** Return a vector containing the contents of the ith row
 
     \throw SireError::invalid_index
 */
@@ -867,13 +867,13 @@ NVector NMatrix::column(int j) const
     this->assertValidColumn(j);
 
     NVector v(nrows);
-    
+
     if (is_transpose)
     {
         //row-major storage
         double *d = v.data();
         const double *column = array.constData();
-        
+
         for (int i=0; i<nrows; ++i)
         {
             d[i] = column[ i*ncolumns + j ];
@@ -904,9 +904,9 @@ void NMatrix::set(int i, int j, double value)
 void NMatrix::setRow(int i, double value)
 {
     this->assertValidRow(i);
-    
+
     double *d = array.data();
-    
+
     for (int j=0; j<ncolumns; ++j)
     {
         d[offset(i,j)] = value;
@@ -922,10 +922,10 @@ void NMatrix::setRow(int i, const NVector &row)
 {
     this->assertValidRow(i);
     this->assertNColumns(row.count());
-    
+
     double *d = array.data();
     const double *v = row.constData();
-    
+
     if (is_transpose)
     {
         memcpy(d + offset(i,0), v, ncolumns*sizeof(double));
@@ -946,9 +946,9 @@ void NMatrix::setRow(int i, const NVector &row)
 void NMatrix::setColumn(int j, double value)
 {
     this->assertValidColumn(j);
-    
+
     double *d = array.data();
-    
+
     for (int i=0; i<nrows; ++i)
     {
         d[offset(i,j)] = value;
@@ -964,10 +964,10 @@ void NMatrix::setColumn(int j, const NVector &column)
 {
     this->assertValidColumn(j);
     this->assertNRows(column.count());
-    
+
     double *d = array.data();
     const double *v = column.constData();
-    
+
     if (is_transpose)
     {
         for (int i=0; i<nrows; ++i)
@@ -986,7 +986,7 @@ void NMatrix::setAll(double value)
 {
     double *d = array.data();
     int sz = array.count();
-    
+
     for (int i=0; i<sz; ++i)
     {
         d[i] = value;
@@ -995,7 +995,7 @@ void NMatrix::setAll(double value)
 
 /** Return a raw pointer to the data of this matrix. The data is
     stored in column-major order (same as Fortran - not same as C++ or C).
-    To be safe, use the 'offset' function to get the offset of 
+    To be safe, use the 'offset' function to get the offset of
     the value at [i,j] in this array */
 double* NMatrix::data()
 {
@@ -1004,7 +1004,7 @@ double* NMatrix::data()
 
 /** Return a raw pointer to the data of this matrix. The data is
     stored in column-major order (same as Fortran - not same as C++ or C).
-    To be safe, use the 'offset' function to get the offset of 
+    To be safe, use the 'offset' function to get the offset of
     the value at [i,j] in this array */
 const double* NMatrix::data() const
 {
@@ -1013,7 +1013,7 @@ const double* NMatrix::data() const
 
 /** Return a raw pointer to the data of this matrix. The data is
     stored in column-major order (same as Fortran - not same as C++ or C).
-    To be safe, use the 'offset' function to get the offset of 
+    To be safe, use the 'offset' function to get the offset of
     the value at [i,j] in this array */
 const double* NMatrix::constData() const
 {
@@ -1028,7 +1028,7 @@ QVector<double> NMatrix::memory() const
 
 /** Calculate the offset in the 1D array of the value
     at index [i,j]
-    
+
     \throw SireError::invalid_index
 */
 int NMatrix::checkedOffset(int i, int j) const
@@ -1042,33 +1042,33 @@ QString NMatrix::toString() const
 {
     if (nrows == 0)
         return "( )";
-        
+
     else if (nrows == 1)
     {
         const double *d = array.constData();
-    
+
         QStringList row;
         for (qint32 j=0; j<ncolumns; ++j)
         {
             row.append( QString("%1").arg(d[j], 8) );
         }
-        
+
         return QString("( %1 )").arg( row.join(", ") );
     }
 
     QStringList rows;
-    
+
     const double *d = array.constData();
-    
+
     for (qint32 i=0; i<nrows; ++i)
     {
         QStringList row;
-        
+
         for (qint32 j=0; j<ncolumns; ++j)
         {
             row.append( QString("%1").arg(d[offset(i,j)], 8) );
         }
-        
+
         if (i == 0)
             rows.append( QString("/ %1 \\").arg( row.join(", ") ) );
         else if (i == this->nRows() - 1)
@@ -1076,25 +1076,25 @@ QString NMatrix::toString() const
         else
             rows.append( QString("| %1 |").arg( row.join(", ") ) );
     }
-    
+
     return rows.join("\n");
 }
 
 /** Reflect the contents of the top half to the bottom
-    half. If n == nRows(), then this sets 
-    
+    half. If n == nRows(), then this sets
+
     matrix[n-i,j] = matrix[i,j]
-    
-    1 2 3      1 2 3  
-    4 5 6  =>  4 5 6  
+
+    1 2 3      1 2 3
+    4 5 6  =>  4 5 6
     7 8 9      1 2 3
-    
+
     \throw SireError::incompatible_error
 */
 void NMatrix::reflectTopToBottom()
 {
     double *data = array.data();
-    
+
     for (int i=0; i<nrows/2; ++i)
     {
         for (int j=0; j<ncolumns; ++j)
@@ -1105,20 +1105,20 @@ void NMatrix::reflectTopToBottom()
 }
 
 /** Reflect the contents of the bottom half to the top
-    half. If n == nRows(), then this sets 
-    
+    half. If n == nRows(), then this sets
+
     matrix[i,j] = matrix[n-i,j]
-    
-    1 2 3      7 8 9  
-    4 5 6  =>  4 5 6  
+
+    1 2 3      7 8 9
+    4 5 6  =>  4 5 6
     7 8 9      7 8 9
-    
+
     \throw SireError::incompatible_error
 */
 void NMatrix::reflectBottomToTop()
 {
     double *data = array.data();
-    
+
     for (int i=0; i<nrows/2; ++i)
     {
         for (int j=0; j<ncolumns; ++j)
@@ -1129,20 +1129,20 @@ void NMatrix::reflectBottomToTop()
 }
 
 /** Reflect the contents of the left half to the right
-    half. If n == nColumns(), then this sets 
-    
+    half. If n == nColumns(), then this sets
+
     matrix[i,n-j] = matrix[i,j]
-    
-    1 2 3      1 2 1  
-    4 5 6  =>  4 5 4  
+
+    1 2 3      1 2 1
+    4 5 6  =>  4 5 4
     7 8 9      7 8 7
-    
+
     \throw SireError::incompatible_error
 */
 void NMatrix::reflectLeftToRight()
 {
     double *data = array.data();
-    
+
     for (int i=0; i<nrows; ++i)
     {
         for (int j=0; j<ncolumns/2; ++j)
@@ -1153,20 +1153,20 @@ void NMatrix::reflectLeftToRight()
 }
 
 /** Reflect the contents of the left half to the right
-    half. If n == nColumns(), then this sets 
-    
+    half. If n == nColumns(), then this sets
+
     matrix[i,j] = matrix[i,n-j]
-    
-    1 2 3      3 2 3  
-    4 5 6  =>  6 5 6  
+
+    1 2 3      3 2 3
+    4 5 6  =>  6 5 6
     7 8 9      9 8 9
-    
+
     \throw SireError::incompatible_error
 */
 void NMatrix::reflectRightToLeft()
 {
     double *data = array.data();
-    
+
     for (int i=0; i<nrows; ++i)
     {
         for (int j=0; j<ncolumns/2; ++j)
@@ -1177,24 +1177,24 @@ void NMatrix::reflectRightToLeft()
 }
 
 /** Copy the contents of the top left diagonal to the bottom
-    right diagonal. If n == nRows(), then this sets 
-    
+    right diagonal. If n == nRows(), then this sets
+
     matrix[n-j,n-i] = matrix[i,j]
-    
+
     1 2 3      1 2 3       [2,1] => [1,0]    [0,2] == [0,2]
     4 5 6  =>  4 5 2       [1,2] => [0,1]    [1,1] == [1,1]
     7 8 9      7 4 1       [2,2] => [0,0]    [2,0] == [2,0]
-    
+
     This must be a square matrix.
-    
+
     \throw SireError::incompatible_error
 */
 void NMatrix::reflectTopLeftToBottomRight()
 {
     assertSquare();
-    
+
     double *data = array.data();
-    
+
     for (int i=0; i<nrows-1; ++i)
     {
         for (int j=0; j<nrows-i-1; ++j)
@@ -1206,21 +1206,21 @@ void NMatrix::reflectTopLeftToBottomRight()
 
 /** Copy the contents of the top right diagonal to the bottom
     left diagonal. This sets matrix[j,i] = matrix[i,j]
-    
+
     This must be a square matrix.
-    
+
     1 2 3      1 2 3
     4 5 6  =>  2 5 6
     7 8 9      3 6 9
-    
+
     \throw SireError::incompatible_error
 */
 void NMatrix::reflectTopRightToBottomLeft()
 {
     assertSquare();
-    
+
     double *data = array.data();
-    
+
     for (int i=0; i<nrows-1; ++i)
     {
         for (int j=i+1; j<nrows; ++j)
@@ -1231,24 +1231,24 @@ void NMatrix::reflectTopRightToBottomLeft()
 }
 
 /** Copy the contents of the bottom right diagonal to the top
-    left diagonal. If n == nRows(), then this sets 
-    
+    left diagonal. If n == nRows(), then this sets
+
     matrix[i,j] = matrix[n-j,n-i]
-    
+
     This must be a square matrix.
 
     1 2 3      9 6 3
     4 5 6  =>  8 5 6
     7 8 9      7 8 9
-    
+
     \throw SireError::incompatible_error
 */
 void NMatrix::reflectBottomRightToTopLeft()
 {
     assertSquare();
-    
+
     double *data = array.data();
-    
+
     for (int i=0; i<nrows-1; ++i)
     {
         for (int j=0; j<nrows-i-1; ++j)
@@ -1260,21 +1260,21 @@ void NMatrix::reflectBottomRightToTopLeft()
 
 /** Copy the contents of the bottom left diagonal to the top
     right diagonal. This sets matrix[i,j] = matrix[j,i]
-    
+
     This must be a square matrix.
 
     1 2 3      1 4 7
     4 5 6  =>  4 5 8
     7 8 9      7 8 9
-    
+
     \throw SireError::incompatible_error
 */
 void NMatrix::reflectBottomLeftToTopRight()
 {
     assertSquare();
-    
+
     double *data = array.data();
-    
+
     for (int i=0; i<nrows-1; ++i)
     {
         for (int j=i+1; j<nrows; ++j)
@@ -1293,7 +1293,7 @@ void NMatrix::reflectBottomLeftToTopRight()
 double NMatrix::determinant() const
 {
     this->assertSquare();
-    
+
     std::pair< NMatrix,QVector<int> > factors_with_pivot = dgeco(*this);
     return dgedi_determinant(factors_with_pivot.first,
                              factors_with_pivot.second);
@@ -1306,37 +1306,37 @@ double NMatrix::determinant() const
 double NMatrix::trace() const
 {
     this->assertSquare();
-    
+
     const double *d = array.constData();
     double sum = 0;
-    
+
     for (int i=0; i<nrows; ++i)
     {
         sum += d[i*nrows + i];
     }
-    
+
     return sum;
 }
-    
+
 /** Return a vector containing the diagonal of this matrix - this is only
     valid for a square matrix
-    
+
     \throw SireError::incompatible_error
 */
 NVector NMatrix::diagonal() const
 {
     this->assertSquare();
-    
+
     const double *d = array.constData();
 
     NVector vector(nrows);
     double *v = vector.data();
-    
+
     for (int i=0; i<nrows; ++i)
     {
         v[i] = d[i*nrows + i];
     }
-    
+
     return vector;
 }
 

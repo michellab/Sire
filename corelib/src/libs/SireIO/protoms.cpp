@@ -131,11 +131,11 @@ static const RegisterMetaType<ProtoMS> r_protoms(NO_ROOT);
 QDataStream &operator<<(QDataStream &ds, const ProtoMS &protoms)
 {
     writeHeader(ds, r_protoms, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << protoms.paramfiles << protoms.protoms_exe;
-    
+
     return ds;
 }
 
@@ -143,16 +143,16 @@ QDataStream &operator<<(QDataStream &ds, const ProtoMS &protoms)
 QDataStream &operator>>(QDataStream &ds, ProtoMS &protoms)
 {
     VersionID v = readHeader(ds, r_protoms);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> protoms.paramfiles >> protoms.protoms_exe;
     }
     else
         throw version_error( v, "1", r_protoms, CODELOC );
-        
+
     return ds;
 }
 
@@ -178,8 +178,8 @@ void ProtoMS::addParameterFile(const QString &paramfile)
 {
     //get the absolute path to this file
     QFile f(paramfile);
-    
-    if (not f.open( QIODevice::ReadOnly)) 
+
+    if (not f.open( QIODevice::ReadOnly))
     {
         throw SireError::file_error(f, CODELOC);
     }
@@ -192,7 +192,7 @@ void ProtoMS::addParameterFile(const QString &paramfile)
         paramfiles.append(absfilepath);
 }
 
-/** Return the list of parameter files which will be used to 
+/** Return the list of parameter files which will be used to
     parameterise the molecules, in the order that they will
     be read */
 QStringList ProtoMS::parameterFiles() const
@@ -216,15 +216,15 @@ QString ProtoMS::parameterisationCommandFile(const Molecule &molecule,
     QTextStream ts(&contents, QIODevice::WriteOnly);
 
     QString name = molecule.name();
-          
+
     if (name.isEmpty())
         name = "molecule";
-    
+
     for (int i=0; i<paramfiles.count(); ++i)
     {
         ts << QString("parfile%1 %2\n").arg(i+1).arg(paramfiles[i]);
     }
-    
+
     switch (type)
     {
     case PROTEIN:
@@ -233,7 +233,7 @@ QString ProtoMS::parameterisationCommandFile(const Molecule &molecule,
     case SOLUTE:
         ts << "solute1 " << name << "\n";
         break;
-    case SOLVENT:  
+    case SOLVENT:
         ts << "solvent1 " << name << "\n";
         break;
 
@@ -243,7 +243,7 @@ QString ProtoMS::parameterisationCommandFile(const Molecule &molecule,
     }
 
     ts << "streamheader off\n"
-          "streaminfo stdout\n"   
+          "streaminfo stdout\n"
           "streamwarning stdout\n"
           "streamfatal stdout\n"
           "streamparameters stdout\n\n"
@@ -253,49 +253,49 @@ QString ProtoMS::parameterisationCommandFile(const Molecule &molecule,
 }
 
 /** Internal function used to write the ProtoMS command file */
-QString ProtoMS::writeCommandFile(const TempDir &tmpdir, 
+QString ProtoMS::writeCommandFile(const TempDir &tmpdir,
                                   const Molecule &molecule, int type) const
 {
     //write a PDB of the molecule to the TMPDIR for ProtoMS to read
     // ProtoMS solutes can be named by setting the name of the
     // PDB file
     QString name = molecule.name();
-    
+
     if (name.isEmpty())
         name = "molecule";
-    
+
     {
         QFile f( QString("%1/%2").arg(tmpdir.path(),name) );
         f.open(QIODevice::WriteOnly);
 
         f.write( QString("header %1\n").arg(name).toUtf8().constData() );
-        
+
         PDB().write( molecule, f );
-        
+
         f.close();
     }
 
     QString cmdfile = QString("%1/protoms_input").arg(tmpdir.path());
-    
+
     QFile f(cmdfile);
     f.open(QIODevice::WriteOnly);
-    
+
     QTextStream ts(&f);
-    
+
     ts << this->parameterisationCommandFile(molecule, type);
 
     return cmdfile;
 }
 
 /** Internal function used to write a shell file used to run ProtoMS */
-QString ProtoMS::writeShellFile(const TempDir &tempdir, 
+QString ProtoMS::writeShellFile(const TempDir &tempdir,
                                 const QString &cmdfile) const
 {
     QString shellfile = QString("%1/run_protoms.cmd").arg(tempdir.path());
-    
+
     QFile f(shellfile);
     f.open(QIODevice::WriteOnly);
-    
+
     QTextStream ts(&f);
 
     //set the script to change into the run directory of the job
@@ -312,16 +312,16 @@ QString ProtoMS::writeShellFile(const TempDir &tempdir,
     else
         ts << QString("%1 %2 > protoms_output\n")
                         .arg(protoms_exe, cmdfile);
-    
+
     f.close();
-    
+
     return shellfile;
 }
 
 static QByteArray readAll(const QString &file)
 {
     QFile f(file);
-    
+
     if (f.open(QIODevice::ReadOnly))
     {
         return f.readAll();
@@ -340,10 +340,10 @@ class ProtoMSWorkspace
 public:
     ProtoMSWorkspace()
     {}
-    
+
     ~ProtoMSWorkspace()
     {}
-    
+
     QHash< QString, QHash<QString,AtomIdx> > solute_atom_cache;
     QHash< ResNum, QHash<QString,AtomIdx> > protein_atom_cache;
 };
@@ -367,7 +367,7 @@ static AtomIdx getSoluteAtom(const Molecule &molecule,
     QList<AtomIdx> atomidxs = molinfo.getAtomsIn( ResName(resname,CaseInsensitive) );
 
     QString lower_atomname = atomname.toLower();
-    
+
     foreach (AtomIdx atomidx, atomidxs)
     {
         if (molinfo.name(atomidx).value().toLower() == lower_atomname)
@@ -376,7 +376,7 @@ static AtomIdx getSoluteAtom(const Molecule &molecule,
             return atomidx;
         }
     }
-    
+
     throw SireMol::missing_atom( QObject::tr(
             "There is no atom in residue %1 with name %2.")
                 .arg(resname).arg(atomname), CODELOC );
@@ -389,25 +389,25 @@ static AtomIdx getProteinAtom(const Molecule &molecule,
                               ProtoMSWorkspace &workspace)
 {
     bool ok;
-    
+
     ResNum rnum( resnum.toInt(&ok) );
-    
+
     if (not ok)
         throw SireError::program_bug( QObject::tr(
             "The string '%1' should contain a residue number!").arg(resnum),
                 CODELOC );
-            
+
     if (workspace.protein_atom_cache[rnum].contains(atomname))
     {
         return workspace.protein_atom_cache[rnum][atomname];
     }
-            
+
     const MoleculeInfoData &molinfo = molecule.data().info();
-                        
+
     QList<AtomIdx> atomidxs = molinfo.getAtomsIn(rnum);
-    
+
     QString lower_atomname = atomname.toLower();
-    
+
     foreach (AtomIdx atomidx, atomidxs)
     {
         if (molinfo.name(atomidx).value().toLower() == lower_atomname)
@@ -416,7 +416,7 @@ static AtomIdx getProteinAtom(const Molecule &molecule,
             return atomidx;
         }
     }
-    
+
     throw SireMol::missing_atom( QObject::tr(
             "There is no atom in residue %1 with name %2.")
                 .arg(resnum).arg(atomname), CODELOC );
@@ -445,17 +445,17 @@ static AtomEditor getProteinAtom(MolEditor &molecule,
                                  ProtoMSWorkspace &workspace)
 {
     bool ok;
-    
+
     ResNum rnum( resnum.toInt(&ok) );
-    
+
     if (not ok)
         throw SireError::program_bug( QObject::tr(
             "The string '%1' should contain a residue number!").arg(resnum),
                 CODELOC );
-                
+
     AtomIdx atomidx = ::getProteinAtom( static_cast<const Molecule&>(molecule),
                                         atomname, resnum, workspace );
-                
+
     return molecule.atom(atomidx);
 }
 
@@ -465,10 +465,10 @@ void ProtoMS::processZMatrixLine(const QStringList &words, const Molecule &mol,
                                  ProtoMSWorkspace &workspace) const
 {
     AtomIdx atom, bond, angle, dihedral;
-    
+
     if (type == SOLVENT)
         return;
-        
+
     else if (type == SOLUTE)
     {
         atom = getSoluteAtom(mol, words[2], words[4], workspace);
@@ -480,14 +480,14 @@ void ProtoMS::processZMatrixLine(const QStringList &words, const Molecule &mol,
     {
         atom = getProteinAtom(mol, words[2], words[4], workspace);
         bond = getProteinAtom(mol, words[7], words[9], workspace);
-        angle = getProteinAtom(mol, words[12], words[14], workspace); 
+        angle = getProteinAtom(mol, words[12], words[14], workspace);
         dihedral = getProteinAtom(mol, words[17], words[19], workspace);
     }
-    
+
     zmatrix.add( atom, bond, angle, dihedral );
 }
 
-void ProtoMS::processZMatrixPertLine(const QStringList &words, 
+void ProtoMS::processZMatrixPertLine(const QStringList &words,
                                      const Molecule &mol, int type,
                                      QList<SireMol::GeomPertPtr> &geom_perturbations,
                                      const ZMatrix &zmatrix,
@@ -495,10 +495,10 @@ void ProtoMS::processZMatrixPertLine(const QStringList &words,
                                      ProtoMSWorkspace &workspace) const
 {
     AtomIdx atom;
-    
+
     if (type == SOLVENT)
         return;
-        
+
     else if (type == SOLUTE)
     {
         atom = getSoluteAtom(mol, words[2], words[4], workspace);
@@ -509,11 +509,11 @@ void ProtoMS::processZMatrixPertLine(const QStringList &words,
     }
 
     const ZMatrixLine &line = zmatrix[atom];
-    
+
     bool ok1, ok2;
     double initial = words[7].toDouble(&ok1);
     double final = words[8].toDouble(&ok2);
-    
+
     if (not (ok1 and ok2))
         throw SireError::io_error( QObject::tr(
             "Could not interpret the range of a variable perturbation "
@@ -551,35 +551,35 @@ void ProtoMS::processZMatrixPertLine(const QStringList &words,
     }
 }
 
-void ProtoMS::processAtomPertLine(const QStringList &words, 
+void ProtoMS::processAtomPertLine(const QStringList &words,
                                   MolEditor &mol, int type,
                                   const QString &initial_charge_property,
                                   const QString &final_charge_property,
-                                  const QString &initial_lj_property, 
+                                  const QString &initial_lj_property,
                                   const QString &final_lj_property,
                                   ProtoMSWorkspace &workspace) const
 {
     AtomEditor atom;
-    
+
     if (type == SOLUTE)
         atom = getSoluteAtom(mol, words[2], words[4], workspace);
-                             
+
     else if (type == SOLVENT)
         atom = getSolventAtom(mol, words[2], workspace);
-        
+
     else if (type == PROTEIN)
         atom = getProteinAtom(mol, words[2], words[4], workspace);
 
     atom.setProperty( initial_charge_property,
                       words[7].toDouble() * mod_electron );
-    
+
     atom.setProperty( final_charge_property,
                       words[8].toDouble() * mod_electron );
-                      
+
     atom.setProperty( initial_lj_property,
                       LJParameter( words[10].toDouble() * angstrom,
                                    words[13].toDouble() * kcal_per_mol ) );
-                                   
+
     atom.setProperty( final_lj_property,
                       LJParameter( words[11].toDouble() * angstrom,
                                    words[14].toDouble() * kcal_per_mol ) );
@@ -592,10 +592,10 @@ void ProtoMS::processBondDeltaLine(const QStringList &words, const Molecule &mol
                                    ProtoMSWorkspace &workspace) const
 {
     AtomIdx atom, bond;
-    
+
     if (type == SOLVENT)
         return;
-        
+
     else if (type == SOLUTE)
     {
         atom = getSoluteAtom(mol, words[2], words[4], workspace);
@@ -624,10 +624,10 @@ void ProtoMS::processAngleDeltaLine(const QStringList &words, const Molecule &mo
                                     ProtoMSWorkspace &workspace) const
 {
     AtomIdx atom, bond, angle;
-    
+
     if (type == SOLVENT)
         return;
-        
+
     else if (type == SOLUTE)
     {
         atom = getSoluteAtom(mol, words[2], words[4], workspace);
@@ -658,10 +658,10 @@ void ProtoMS::processDihedralDeltaLine(const QStringList &words, const Molecule 
                                        ProtoMSWorkspace &workspace) const
 {
     AtomIdx atom, bond, angle, dihedral;
-    
+
     if (type == SOLVENT)
         return;
-        
+
     else if (type == SOLUTE)
     {
         atom = getSoluteAtom(mol, words[2], words[4], workspace);
@@ -679,14 +679,14 @@ void ProtoMS::processDihedralDeltaLine(const QStringList &words, const Molecule 
 
     try
     {
-        zmatrix.setDihedralDelta( atom, bond, 
+        zmatrix.setDihedralDelta( atom, bond,
                                   angle, dihedral,
                                   words[22].toDouble() * degrees );
     }
     catch(const SireMove::zmatrix_error &e)
     {
         qDebug() << e.toString();
-    
+
         //ignore zmatrix errors
         return;
     }
@@ -699,13 +699,13 @@ void ProtoMS::processAtomLine(const QStringList &words, MolEditor &editmol,
                               ProtoMSWorkspace &workspace) const
 {
     AtomEditor atom;
-    
+
     if (type == SOLUTE)
         atom = getSoluteAtom(editmol, words[2], words[4], workspace);
-                             
+
     else if (type == SOLVENT)
         atom = getSolventAtom(editmol, words[2], workspace);
-        
+
     else if (type == PROTEIN)
         atom = getProteinAtom(editmol, words[2], words[4], workspace);
 
@@ -734,10 +734,10 @@ void ProtoMS::processBondLine(const QStringList &words, const Molecule &mol,
                 .arg(words.join(" ")), CODELOC );
 
     Symbol r = InternalPotential::symbols().bond().r();
-    
+
     double k = words[12].toDouble();
     double r0 = words[14].toDouble();
-    
+
     Expression bondfunc = k * SireMaths::pow_2( r - r0 );
 
     AtomIdx atom0, atom1;
@@ -752,12 +752,12 @@ void ProtoMS::processBondLine(const QStringList &words, const Molecule &mol,
         atom0 = getProteinAtom(mol, words[2], words[4], workspace);
         atom1 = getProteinAtom(mol, words[7], words[9], workspace);
     }
-    
+
     bondfuncs.set( atom0, atom1, bondfunc );
 }
 
 /** This processes the output line that contains the bond perturbation parameters */
-PerturbationPtr ProtoMS::processBondPertLine(const QStringList &words, 
+PerturbationPtr ProtoMS::processBondPertLine(const QStringList &words,
                                              const Molecule &mol,
                                              int type,
                                              const PropertyName &bond_property,
@@ -770,10 +770,10 @@ PerturbationPtr ProtoMS::processBondPertLine(const QStringList &words,
         throw SireError::io_error( QObject::tr(
             "Cannot understand the ProtoMS bond perturbation line\n%1")
                 .arg(words.join(" ")), CODELOC );
-    
+
     double kb = words[12].toDouble();
     double r0b = words[14].toDouble();
-    
+
     double kf = words[16].toDouble();
     double r0f = words[18].toDouble();
 
@@ -789,7 +789,7 @@ PerturbationPtr ProtoMS::processBondPertLine(const QStringList &words,
         atom0 = getProteinAtom(mol, words[2], words[4], workspace);
         atom1 = getProteinAtom(mol, words[7], words[9], workspace);
     }
-    
+
     if (kb != kf or r0b != r0f)
     {
         Symbol r = InternalPotential::symbols().bond().r();
@@ -798,13 +798,13 @@ PerturbationPtr ProtoMS::processBondPertLine(const QStringList &words,
 
         Expression base = k * SireMaths::pow_2(r0 - r);
         Identities initial_forms, final_forms;
-        
+
         initial_forms.set(k, kb);
         initial_forms.set(r0, r0b);
-        
+
         final_forms.set(k, kf);
         final_forms.set(r0, r0f);
-    
+
         return TwoAtomPerturbation( atom0, atom1,
                                     base, initial_forms, final_forms,
                                     PropertyMap("parameters",bond_property) );
@@ -851,8 +851,8 @@ void ProtoMS::processAngleLine(const QStringList &words, const Molecule &mol,
         return;
 
     Symbol theta = InternalPotential::symbols().angle().theta();
-    
-    Expression anglefunc = words[17].toDouble() 
+
+    Expression anglefunc = words[17].toDouble()
                 * SireMaths::pow_2( theta - (words[19].toDouble()*degrees).to(radians) );
 
     AtomIdx atom0, atom1, atom2;
@@ -869,19 +869,19 @@ void ProtoMS::processAngleLine(const QStringList &words, const Molecule &mol,
         atom1 = getProteinAtom(mol, words[7], words[9], workspace);
         atom2 = getProteinAtom(mol, words[12], words[14],workspace);
     }
-    
+
     anglefuncs.set( atom0, atom1, atom2, anglefunc );
 }
 
 /** This processes the output line that contains the angle perturbation parameters */
-PerturbationPtr ProtoMS::processAnglePertLine(const QStringList &words, 
-                                              const Molecule &mol, int type, 
+PerturbationPtr ProtoMS::processAnglePertLine(const QStringList &words,
+                                              const Molecule &mol, int type,
                                               const PropertyName &angle_property,
                                               ProtoMSWorkspace &workspace) const
 {
     if (type == SOLVENT)
         return PerturbationPtr();
-    
+
     double kb = words[17].toDouble();
     double t0b = (words[19].toDouble() * degrees).to(radians);
     double kf = words[21].toDouble();
@@ -901,22 +901,22 @@ PerturbationPtr ProtoMS::processAnglePertLine(const QStringList &words,
         atom1 = getProteinAtom(mol, words[7], words[9], workspace);
         atom2 = getProteinAtom(mol, words[12], words[14],workspace);
     }
-    
+
     if (kb != kf or t0b != t0f)
     {
         Symbol theta = InternalPotential::symbols().angle().theta();
         Symbol k("k");
         Symbol theta0("theta0");
-        
+
         Expression base = k * SireMaths::pow_2(theta - theta0);
-        
+
         Identities initial_forms, final_forms;
-        
+
         initial_forms.set(k, kb);
         initial_forms.set(theta0, t0b);
         final_forms.set(k, kf);
         final_forms.set(theta0, t0f);
-        
+
         return ThreeAtomPerturbation( atom0, atom1, atom2,
                                       base, initial_forms, final_forms,
                                       PropertyMap("parameters", angle_property) );
@@ -934,8 +934,8 @@ void ProtoMS::processUBLine(const QStringList &words, const Molecule &mol,
         return;
 
     Symbol r = InternalPotential::symbols().ureyBradley().r();
-    
-    Expression ubfunc = words[12].toDouble() 
+
+    Expression ubfunc = words[12].toDouble()
                                 * SireMaths::pow_2( r - words[14].toDouble() );
 
     AtomIdx atom0, atom1;
@@ -950,7 +950,7 @@ void ProtoMS::processUBLine(const QStringList &words, const Molecule &mol,
         atom0 = getProteinAtom(mol, words[2], words[4], workspace);
         atom1 = getProteinAtom(mol, words[7], words[9], workspace);
     }
-    
+
     ubfuncs.set( atom0, atom1, ubfunc );
 }
 
@@ -964,7 +964,7 @@ PerturbationPtr ProtoMS::processUBPertLine(const QStringList &words, const Molec
 
     double kb = words[12].toDouble();
     double r0b = words[14].toDouble();
-    
+
     double kf = words[16].toDouble();
     double r0f = words[18].toDouble();
 
@@ -980,22 +980,22 @@ PerturbationPtr ProtoMS::processUBPertLine(const QStringList &words, const Molec
         atom0 = getProteinAtom(mol, words[2], words[4], workspace);
         atom1 = getProteinAtom(mol, words[7], words[9], workspace);
     }
-    
+
     if (kb != kf or r0b != r0f)
     {
         Symbol r = InternalPotential::symbols().ureyBradley().r();
         Symbol k("k");
         Symbol r0("r0");
-        
+
         Expression base = k * SireMaths::pow_2(r - r0);
-        
+
         Identities initial_forms, final_forms;
-        
+
         initial_forms.set(k, kb);
         initial_forms.set(r0, r0b);
         final_forms.set(k, kf);
         final_forms.set(r0, r0b);
-        
+
         return TwoAtomPerturbation(atom0, atom1,
                                    base, initial_forms, final_forms,
                                    PropertyMap("parameters", ub_property));
@@ -1016,25 +1016,26 @@ QString ProtoMS::processDihedralLine(QTextStream &ts, const QStringList &words,
     QString line = ts.readLine();
 
     Expression dihedralfunc, dihedralfunc_f, dihedralfunc_b;
-    
+
     Symbol phi = InternalPotential::symbols().dihedral().phi();
-    
+
     enum TYPE { REFERENCE, BACKWARDS, FORWARDS };
-    
+
     bool have_perturbation = false;
-    
+
     while (not line.isNull())
     {
-        QStringList words = line.split(" ", QString::SkipEmptyParts);
-    
+
+        QStringList words = line.split(" ", Qt::SkipEmptyParts);
+
         if (words[0] != "PARAMS")
         {
             line = ts.readLine();
             continue;
         }
-    
+
         TYPE type;
-        
+
         if (words[1] == "DihedralParameter")
         {
             type = REFERENCE;
@@ -1051,7 +1052,7 @@ QString ProtoMS::processDihedralLine(QTextStream &ts, const QStringList &words,
         }
         else
             break;
-        
+
         //there are four parameters, k0, k1, k2, k3
         // The cosine function is;
         //  k0 { 1 + k1 [ cos(k2*phi + k3) ] }
@@ -1059,9 +1060,9 @@ QString ProtoMS::processDihedralLine(QTextStream &ts, const QStringList &words,
         double k1 = words[5].toDouble();
         double k2 = (words[7].toDouble() * radians).to(radians);
         double k3 = words[9].toDouble();
-        
+
         Expression term = k0 * ( 1 + k1*( Cos(k2*phi + k3) ) );
-        
+
         switch (type)
         {
             case REFERENCE:
@@ -1074,15 +1075,15 @@ QString ProtoMS::processDihedralLine(QTextStream &ts, const QStringList &words,
                 dihedralfunc_b += term;
                 break;
         }
-        
+
         line = ts.readLine();
     }
 
     AtomIdx atom0, atom1, atom2, atom3;
-    
+
     if (type == SOLVENT)
         return line;
-        
+
     else if (type == SOLUTE)
     {
         atom0 = getSoluteAtom(mol, words[2], words[4], workspace);
@@ -1097,7 +1098,7 @@ QString ProtoMS::processDihedralLine(QTextStream &ts, const QStringList &words,
         atom2 = getProteinAtom(mol, words[12], words[14], workspace);
         atom3 = getProteinAtom(mol, words[17], words[19], workspace);
     }
-    
+
     dihedralfuncs.set( atom0, atom1, atom2, atom3, dihedralfunc );
 
     if (have_perturbation and dihedralfunc_f != dihedralfunc_b)
@@ -1110,17 +1111,17 @@ QString ProtoMS::processDihedralLine(QTextStream &ts, const QStringList &words,
     return line;
 }
 
-/** Process the line that contains information about the 
+/** Process the line that contains information about the
     intramolecular non-bonded pairs */
 void ProtoMS::processNBLine(const QStringList &words, const Molecule &mol, int type,
                             CLJNBPairs &cljpairs,
                             ProtoMSWorkspace &workspace) const
 {
     AtomIdx atom0, atom1;
-    
+
     if (type == SOLVENT)
         return;
-        
+
     else if (type == SOLUTE)
     {
         atom0 = getSoluteAtom(mol, words[2], words[4], workspace);
@@ -1135,12 +1136,12 @@ void ProtoMS::processNBLine(const QStringList &words, const Molecule &mol, int t
     double cscl = words[12].toDouble();
     double ljscl = words[14].toDouble();
 
-    cljpairs.set( mol.data().info().cgAtomIdx(atom0), 
+    cljpairs.set( mol.data().info().cgAtomIdx(atom0),
                   mol.data().info().cgAtomIdx(atom1),
                   CLJScaleFactor(cscl, ljscl) );
 }
 
-/** Internal function used to run ProtoMS to get it to 
+/** Internal function used to run ProtoMS to get it to
     parameterise a molecule */
 Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
                              const PropertyMap &map) const
@@ -1153,23 +1154,23 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
     QString final_charge_property = map[ parameters().finalCharge() ].source();
     QString initial_lj_property = map[ parameters().initialLJ() ].source();
     QString final_lj_property = map[ parameters().finalLJ() ].source();
-    
+
     QString bond_property = map[ parameters().bond() ].source();
     QString angle_property = map[ parameters().angle() ].source();
     QString dihedral_property = map[ parameters().dihedral() ].source();
     QString ub_property = map[ parameters().ureyBradley() ].source();
     QString nb_property = map[ parameters().nonBonded() ].source();
-    
+
     QString zmatrix_property = map[ parameters().zmatrix() ].source();
-    
+
     QString coords_property = map[ parameters().coordinates() ].source();
     QString connectivity_property = map[ parameters().connectivity() ].source();
-    
+
     QString perts_property = map[ parameters().perturbations() ].source();
 
     //create a temporary directory in which to run ProtoMS
     QString tmppath = QDir::temp().absolutePath();
-    
+
     if (tmppath.isEmpty())
         tmppath = QDir::temp().absolutePath();
 
@@ -1182,9 +1183,9 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
     QString shellfile = this->writeShellFile(tmpdir, cmdfile);
 
     Process p = Process::run("sh", shellfile);
-    
+
     p.wait();
-    
+
     if (p.wasKilled())
         throw SireError::process_error( QObject::tr(
                 "The ProtoMS job was killed!"), CODELOC );
@@ -1196,7 +1197,7 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
                                                 .arg(tmpdir.path()));
         QByteArray outputcontents = ::readAll(QString("%1/protoms_output")
                                                     .arg(tmpdir.path()));
-    
+
         throw SireError::process_error( QObject::tr(
             "There was an error running the ProtoMS - no output was created.\n"
             "The shell script used to run the job was;\n"
@@ -1218,12 +1219,12 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
     }
 
     QFile f( QString("%1/protoms_output").arg(tmpdir.path()) );
-    
+
     if ( not (f.exists() and f.open(QIODevice::ReadOnly)) )
     {
         QByteArray shellcontents = ::readAll(shellfile);
         QByteArray cmdcontents = ::readAll(QString("%1/protoms_input").arg(tmpdir.path()));
-    
+
         throw SireError::process_error( QObject::tr(
             "There was an error running the ProtoMS - no output was created.\n"
             "The shell script used to run the job was;\n"
@@ -1240,16 +1241,16 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
 
     //now read the output to parameterise the molecule
     QTextStream ts(&f);
-    
+
     QString line = ts.readLine();
-    
+
     MolEditor editmol = molecule.edit();
-    
+
     //if we are parameterising a solute, then we need to add dummy atoms
     if (type == SOLUTE)
     {
         MolStructureEditor edit_structure_mol( editmol );
-    
+
         ResStructureEditor dummies = edit_structure_mol.add( ResName("DUM") );
         dummies.renumber( ResNum(0) );
 
@@ -1265,33 +1266,33 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
 
         //get the center of the molecule
         Vector center = molecule.evaluate().center();
-        
+
         dm1.setProperty(coords_property, center);
         dm2.setProperty(coords_property, center + Vector(1,0,0));
         dm3.setProperty(coords_property, center + Vector(0,1,0));
-        
+
         dm1.setProperty(charge_property, 0.0*mod_electron);
         dm2.setProperty(charge_property, 0.0*mod_electron);
         dm3.setProperty(charge_property, 0.0*mod_electron);
-        
+
         dm1.setProperty(lj_property, LJParameter::dummy());
         dm2.setProperty(lj_property, LJParameter::dummy());
         dm3.setProperty(lj_property, LJParameter::dummy());
-        
+
         editmol = edit_structure_mol;
     }
-    
+
     ZMatrix zmatrix( editmol );
-    
+
     TwoAtomFunctions bondfuncs(editmol);
     ThreeAtomFunctions anglefuncs(editmol);
     FourAtomFunctions dihedralfuncs(editmol);
     TwoAtomFunctions ubfuncs(editmol);
-    
+
     ConnectivityEditor connectivity = Connectivity(editmol.data()).edit();
-    
+
     CLJNBPairs nbpairs;
-    
+
     if (type == SOLUTE)
     {
         //by default, say that all atom pairs are bonded
@@ -1301,47 +1302,47 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
     {
         //by default, say that all atom pairs are non-bonded...
         nbpairs = CLJNBPairs( editmol.data().info(), CLJScaleFactor(1,1) );
-        
+
         //...except for intra-residue pairs
         int nres = editmol.nResidues();
-        
+
         for (ResIdx i(0); i<nres; ++i)
         {
             Residue residue = editmol.residue(i);
-        
+
             Selector<Atom> atoms = residue.atoms();
-        
+
             int nats = atoms.count();
-            
+
             for (int j=0; j<nats; ++j)
             {
                 Atom atom0 = atoms(j);
-                
-                nbpairs.set( atom0.cgAtomIdx(), atom0.cgAtomIdx(), 
+
+                nbpairs.set( atom0.cgAtomIdx(), atom0.cgAtomIdx(),
                              CLJScaleFactor(0,0) );
-                
+
                 for (int k=j+1; k<nats; ++k)
                 {
                     Atom atom1 = atoms(k);
-                
-                    nbpairs.set( atom0.cgAtomIdx(), atom1.cgAtomIdx(), 
+
+                    nbpairs.set( atom0.cgAtomIdx(), atom1.cgAtomIdx(),
                                  CLJScaleFactor(0,0) );
-                    nbpairs.set( atom1.cgAtomIdx(), atom1.cgAtomIdx(), 
+                    nbpairs.set( atom1.cgAtomIdx(), atom1.cgAtomIdx(),
                                  CLJScaleFactor(0,0) );
                 }
             }
         }
     }
-    
+
     ProtoMSWorkspace workspace;
-    
+
     QStringList fatal_errors;
-    
+
     QList<GeomPertPtr> geom_perturbations;
     QList<PerturbationPtr> perturbations;
-    
+
     QList<QStringList> atom_pert_lines;
-    
+
     PropertyMap pert_map;
     pert_map.set("coordinates", coords_property);
     pert_map.set("connectivity", connectivity_property);
@@ -1349,77 +1350,77 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
     AtomSelection anchors(editmol);
     anchors.selectOnly( AtomIdx(0) );
     pert_map.set("anchors", anchors);
-    
+
     while (not line.isNull())
     {
         if (line.startsWith("PARAMS "))
         {
-            QStringList words = line.split(" ", QString::SkipEmptyParts);
-            
+            QStringList words = line.split(" ", Qt::SkipEmptyParts);
+
             if (words[1] == "ZMATRIX")
                 this->processZMatrixLine(words, editmol, type, zmatrix, workspace);
 
             else if (words[1] == "ZMATRIXPERT")
-                this->processZMatrixPertLine(words, editmol, type, geom_perturbations, 
+                this->processZMatrixPertLine(words, editmol, type, geom_perturbations,
                                              zmatrix, pert_map, workspace);
 
             else if (words[1] == "Atom")
                 this->processAtomLine(words, editmol, type,
                                       charge_property, lj_property, workspace);
-            
+
             else if (words[1] == "AtomPert")
                 atom_pert_lines.append(words);
-                
+
             else if (words[1] == "Bond")
-                this->processBondLine(words, editmol, type, 
+                this->processBondLine(words, editmol, type,
                                       bondfuncs, workspace);
-                
+
             else if (words[1] == "BondPert")
             {
                 PerturbationPtr pert = this->processBondPertLine(words, editmol, type,
-                                                                 bond_property, 
+                                                                 bond_property,
                                                                  workspace);
-                                                                 
+
                 if (pert.constData() != 0)
                     perturbations.append(pert);
-            }    
+            }
             else if (words[1] == "Connect")
                 this->processConnectLine(words, editmol, type,
                                          connectivity, workspace);
-                
+
             else if (words[1] == "BondDelta")
                 this->processBondDeltaLine(words, editmol, type, zmatrix, workspace);
-            
+
             else if (words[1] == "Angle")
                 this->processAngleLine(words, editmol, type, anglefuncs, workspace);
-                
+
             else if (words[1] == "AnglePert")
             {
-                PerturbationPtr pert = this->processAnglePertLine(words, editmol, type, 
-                                                                  angle_property, 
+                PerturbationPtr pert = this->processAnglePertLine(words, editmol, type,
+                                                                  angle_property,
                                                                   workspace);
-                                                                  
+
                 if (pert.constData() != 0)
                     perturbations.append(pert);
             }
             else if (words[1] == "AngleDelta")
                 this->processAngleDeltaLine(words, editmol, type, zmatrix, workspace);
-                
+
             else if (words[1] == "UreyBradley")
                 this->processUBLine(words, editmol, type, ubfuncs, workspace);
-                
+
             else if (words[1] == "UreyBradleyPert")
             {
-                PerturbationPtr pert = this->processUBPertLine(words, editmol, type, 
+                PerturbationPtr pert = this->processUBPertLine(words, editmol, type,
                                                                ub_property, workspace);
-                                                               
+
                 if (pert.constData() != 0)
                     perturbations.append(pert);
             }
             else if (words[1] == "Dihedral")
             {
-                line = this->processDihedralLine(ts, words, editmol, 
-                                                 type, dihedralfuncs, 
+                line = this->processDihedralLine(ts, words, editmol,
+                                                 type, dihedralfuncs,
                                                  dihedral_property,
                                                  perturbations,
                                                  workspace);
@@ -1427,7 +1428,7 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
             }
 
             else if (words[1] == "DihedralDelta")
-                this->processDihedralDeltaLine(words, editmol, type, 
+                this->processDihedralDeltaLine(words, editmol, type,
                                                zmatrix, workspace);
 
             else if (words[1] == "NB")
@@ -1440,7 +1441,7 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
 
         line = ts.readLine();
     }
-    
+
     if (not fatal_errors.isEmpty())
     {
         //something went wrong in ProtoMS
@@ -1463,13 +1464,13 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
         QFileInfo finfo( QString("%1/protoms_output").arg(tmpdir.path()) );
 
         QFile f2( finfo.absoluteFilePath() );
-        
+
         if (not f2.open(QIODevice::ReadOnly))
         {
-        
+
             errors.append( QString("Cannot open the file %1.")
                                 .arg(finfo.absoluteFilePath()) );
-                                
+
             if (finfo.exists())
                 errors.append( QString("This is weird, as the file exists "
                                        "(size == %1 bytes)").arg(finfo.size()) );
@@ -1480,24 +1481,24 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
         else
         {
             QTextStream ts2(&f2);
-        
+
             bool read_line = false;
-        
+
             while (not ts2.atEnd())
             {
                 QString line2 = ts2.readLine();
                 errors.append(line2);
                 read_line = true;
             }
-            
+
             if (not read_line)
-                errors.append( 
+                errors.append(
                    QString("The output file %1 appears to be empty "
                            "(size == %d bytes)")
                                   .arg(finfo.absoluteFilePath())
                                   .arg(finfo.size()) );
         }
-        
+
         throw SireError::process_error( errors.join("\n"), CODELOC );
     }
 
@@ -1507,10 +1508,10 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
         //copy the current charges and then apply the differences
         editmol.setProperty( initial_charge_property, editmol.property(charge_property) );
         editmol.setProperty( final_charge_property, editmol.property(charge_property) );
-        
+
         editmol.setProperty( initial_lj_property, editmol.property(lj_property) );
         editmol.setProperty( final_lj_property, editmol.property(lj_property) );
-        
+
         foreach (QStringList words, atom_pert_lines)
         {
             this->processAtomPertLine(words, editmol, type,
@@ -1520,19 +1521,19 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
                                       final_lj_property,
                                       workspace);
         }
-        
+
         PropertyMap charge_map;
         charge_map.set("initial_charge", initial_charge_property);
         charge_map.set("charge", charge_property);
         charge_map.set("final_charge", final_charge_property);
-        
+
         perturbations.append( ChargePerturbation(charge_map) );
-        
+
         PropertyMap lj_map;
         lj_map.set("initial_LJ", initial_lj_property);
         lj_map.set("LJ", lj_property);
         lj_map.set("final_LJ", final_lj_property);
-        
+
         perturbations.append( LJPerturbation(lj_map) );
     }
 
@@ -1545,14 +1546,14 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
         editmol.setProperty( dihedral_property, dihedralfuncs );
         editmol.setProperty( ub_property, ubfuncs );
         editmol.setProperty( nb_property, nbpairs );
-        
+
         if (not geom_perturbations.isEmpty())
             perturbations.append( GeometryPerturbations(geom_perturbations) );
-        
+
         if (not perturbations.isEmpty())
             editmol.setProperty( perts_property, Perturbations(perturbations) );
     }
-    
+
     return editmol.commit();
 }
 
@@ -1576,7 +1577,7 @@ Molecules ProtoMS::parameterise(const Molecules &molecules, int type,
                                 const PropertyMap &map)
 {
     Molecules new_molecules = molecules;
-    
+
     for (Molecules::const_iterator it = molecules.constBegin();
          it != molecules.constEnd();
          ++it)

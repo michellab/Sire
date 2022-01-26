@@ -46,10 +46,10 @@ static const RegisterMetaType<MolWithResID> r_mol;
 QDataStream &operator<<(QDataStream &ds, const MolWithResID &mol)
 {
     writeHeader(ds, r_mol, 1);
-    
+
     SharedDataStream sds(ds);
     sds << mol.resid;
-    
+
     return ds;
 }
 
@@ -57,7 +57,7 @@ QDataStream &operator<<(QDataStream &ds, const MolWithResID &mol)
 QDataStream &operator>>(QDataStream &ds, MolWithResID &mol)
 {
     VersionID v = readHeader(ds, r_mol);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
@@ -65,7 +65,7 @@ QDataStream &operator>>(QDataStream &ds, MolWithResID &mol)
     }
     else
         throw version_error( v, "1", r_mol, CODELOC );
-        
+
     return ds;
 }
 
@@ -78,7 +78,7 @@ MolWithResID::MolWithResID(const QString &resname)
              : MolID(), resid( ResName(resname) )
 {}
 
-/** Construct to match any molecule that contains the residue with name 'resname'. 
+/** Construct to match any molecule that contains the residue with name 'resname'.
     (allowing you to specify whether the name match should be case sensitive or not) */
 MolWithResID::MolWithResID(const QString &resname, SireID::CaseSensitivity case_sensitivity)
              : MolID(), resid( ResName(resname,case_sensitivity) )
@@ -159,12 +159,12 @@ QList<MolNum> MolWithResID::map(const Molecules &molecules) const
 
     if (resid.isNull())
     {
-        molnums = molecules.molNums().toList();
+        molnums = molecules.molNums().values();
     }
     else
     {
         SireError::FastExceptionFlag f = SireError::exception::enableFastExceptions();
-    
+
         for (Molecules::const_iterator it = molecules.constBegin();
              it != molecules.constEnd();
              ++it)
@@ -172,13 +172,13 @@ QList<MolNum> MolWithResID::map(const Molecules &molecules) const
             try
             {
                 QList<ResIdx> residxs = resid.map(it.value().data().info());
-                
+
                 if (not it.value().selectedAll())
                 {
                     AtomSelection selection = it.value().selection();
-                    
+
                     bool is_selected = false;
-                    
+
                     foreach (ResIdx residx, residxs)
                     {
                         if (selection.selected(residx))
@@ -187,7 +187,7 @@ QList<MolNum> MolWithResID::map(const Molecules &molecules) const
                             break;
                         }
                     }
-                    
+
                     if (is_selected)
                         molnums.append( it.key() );
                 }
@@ -198,12 +198,12 @@ QList<MolNum> MolWithResID::map(const Molecules &molecules) const
             {}
         }
     }
-    
+
     if (molnums.isEmpty())
         throw SireMol::missing_molecule( QObject::tr(
             "There is no molecule with residue matching \"%1\" in the set of molecules.")
                 .arg(resid.toString()), CODELOC );
-                
+
     return molnums;
 }
 

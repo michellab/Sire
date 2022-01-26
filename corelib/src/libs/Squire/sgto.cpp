@@ -55,9 +55,9 @@ static const RegisterMetaType<S_GTO> r_sgto;
 QDataStream &operator<<(QDataStream &ds, const S_GTO &sgto)
 {
     writeHeader(ds, r_sgto, 1);
-    
+
     ds << static_cast<const GTO&>(sgto);
-    
+
     return ds;
 }
 
@@ -65,14 +65,14 @@ QDataStream &operator<<(QDataStream &ds, const S_GTO &sgto)
 QDataStream &operator>>(QDataStream &ds, S_GTO &sgto)
 {
     VersionID v = readHeader(ds, r_sgto);
-    
+
     if (v == 1)
     {
         ds >> static_cast<GTO&>(sgto);
     }
     else
         throw version_error(v, "1", r_sgto, CODELOC);
-    
+
     return ds;
 }
 
@@ -149,9 +149,9 @@ static const RegisterMetaType<SS_GTO> r_ssgto;
 QDataStream &operator<<(QDataStream &ds, const SS_GTO &ssgto)
 {
     writeHeader(ds, r_ssgto, 1);
-    
+
     ds << static_cast<const GTOPair&>(ssgto);
-    
+
     return ds;
 }
 
@@ -159,14 +159,14 @@ QDataStream &operator<<(QDataStream &ds, const SS_GTO &ssgto)
 QDataStream &operator>>(QDataStream &ds, SS_GTO &ssgto)
 {
     VersionID v = readHeader(ds, r_ssgto);
-    
+
     if (v == 1)
     {
         ds >> static_cast<GTOPair&>(ssgto);
     }
     else
         throw version_error(v, "1", r_ssgto, CODELOC);
-    
+
     return ds;
 }
 
@@ -270,7 +270,7 @@ double overlap_integral(const SS_GTO &P)
     return P.ss();
 }
 
-/** Return the potential energy integral with an array of 
+/** Return the potential energy integral with an array of
     point charges, (s|C|s) */
 double potential_integral(const QVector<PointCharge> &C,
                                         const SS_GTO &P)
@@ -282,7 +282,7 @@ double potential_integral(const QVector<PointCharge> &C,
     const PointCharge *c = C.constData();
 
     double total = 0;
-    
+
     for (int i=0; i<nc; ++i)
     {
         const double U = P.zeta() * ((P.P() - c[i].center()).length2());
@@ -297,7 +297,7 @@ double potential_integral(const QVector<PointCharge> &C,
         return 0;
 }
 
-/** Return the potential energy integral with an array of 
+/** Return the potential energy integral with an array of
     point charges, (s|C|s)^m */
 double potential_integral(const QVector<PointCharge> &C,
                                         const SS_GTO &P, int m)
@@ -306,7 +306,7 @@ double potential_integral(const QVector<PointCharge> &C,
     const PointCharge *c = C.constData();
 
     double total = 0;
-    
+
     for (int i=0; i<nc; ++i)
     {
         const double U = P.zeta() * ((P.P() - c[i].center()).length2());
@@ -321,7 +321,7 @@ double potential_integral(const QVector<PointCharge> &C,
         return 0;
 }
 
-/** Return the potential energy integral with a single point charge, 
+/** Return the potential energy integral with a single point charge,
     (s|C|s) */
 double potential_integral(const PointCharge &C, const SS_GTO &P)
 {
@@ -337,7 +337,7 @@ double potential_integral(const PointCharge &C, const SS_GTO &P, int m)
     return potential_integral(Cs, P, m);
 }
 
-/** Return the potential energy integral with an array of point dipoles, 
+/** Return the potential energy integral with an array of point dipoles,
     (s|C|s) */
 double potential_integral(const QVector<PointDipole> &C, const SS_GTO &P)
 {
@@ -347,7 +347,7 @@ double potential_integral(const QVector<PointDipole> &C, const SS_GTO &P)
 
 /** Return the potential energy integral with an array of point dipoles,
     (s|C|s)^m */
-double potential_integral(const QVector<PointDipole> &C, 
+double potential_integral(const QVector<PointDipole> &C,
                                         const SS_GTO &P, int m)
 {
     throw SireError::incomplete_code("Not implemented", CODELOC);
@@ -392,35 +392,36 @@ SS_GTOs::SS_GTOs()
 
 /** Construct for the passed set of S orbitals (on the associated
     centers)
-    
+
     \throw SireError::incompatible_error
 */
-SS_GTOs::SS_GTOs(const QVector<S_GTO> &s_gtos, 
+SS_GTOs::SS_GTOs(const QVector<S_GTO> &s_gtos,
         		 const QVector<Vector> &centers)
 {
 	const int n = s_gtos.count();
-    
+
     if (n != centers.count())
+    {
     	throw SireError::incompatible_error( QObject::tr(
         		"The number of S orbitals (%1) does not equal the number "
                 "of centers (%2)!")
                 	.arg(n).arg(centers.count()), CODELOC );
+    }
 
-	if (n <= 0)
-    	return;
-        
+	if (n <= 0)	return;
+
 	orbs = TrigArray2D<SS_GTO>(n);
-    
+
     SS_GTO *orbs_data = orbs.data();
 
 	const S_GTO *s = s_gtos.constData();
     const Vector *c = centers.constData();
-    
+
     for (int i=0; i<n; ++i)
     {
     	const S_GTO &si = s[i];
         const Vector &ci = c[i];
-    
+
     	for (int j=i; j<n; ++j)
         {
         	orbs_data[ orbs.offset(i,j) ] = SS_GTO(ci, si, c[j], s[j]);
@@ -447,20 +448,20 @@ SS_GTOs& SS_GTOs::operator=(const SS_GTOs &other)
 TrigMatrix SS_GTOs::overlap_integral() const
 {
 	const int n = orbs.count();
-    
+
     if (n <= 0)
     	return TrigMatrix();
-    
+
     TrigMatrix mat(orbs.nRows());
 
 	const SS_GTO *orbs_data = orbs.constData();
     double *m = mat.data();
-    
+
     for (int i=0; i<n; ++i)
     {
     	m[i] = Squire::overlap_integral(orbs_data[i]);
     }
-    
+
     return mat;
 }
 
@@ -468,20 +469,19 @@ TrigMatrix SS_GTOs::overlap_integral() const
 TrigMatrix SS_GTOs::kinetic_integral() const
 {
 	const int n = orbs.count();
-    
-    if (n <= 0)
-    	return TrigMatrix();
-        
+
+    if (n <= 0) return TrigMatrix();
+
 	TrigMatrix mat(orbs.nRows());
-    
+
     const SS_GTO *orbs_data = orbs.constData();
     double *m = mat.data();
-    
+
     for (int i=0; i<n; ++i)
     {
     	m[i] = Squire::kinetic_integral(orbs_data[i]);
     }
-    
+
     return mat;
 }
 
@@ -490,20 +490,19 @@ TrigMatrix SS_GTOs::kinetic_integral() const
 TrigMatrix SS_GTOs::potential_integral(const QVector<PointCharge> &C) const
 {
 	const int n = orbs.count();
-    
-    if (n <= 0 or C.count() == 0)
-    	return TrigMatrix();
+
+    if (n <= 0 or C.count() == 0) return TrigMatrix();
 
 	TrigMatrix mat(orbs.nRows());
-    
+
     const SS_GTO *orbs_data = orbs.constData();
     double *m = mat.data();
-    
+
     for (int i=0; i<n; ++i)
     {
     	m[i] = Squire::potential_integral(C, orbs_data[i]);
     }
-    
+
     return mat;
 }
 
@@ -515,24 +514,23 @@ TrigMatrix SS_GTOs::potential_integral(const QVector<PointCharge> &C, int maux) 
     	return this->potential_integral(C);
 
 	const int n = orbs.count();
-    
-    if (n <= 0 or C.count() == 0)
-    	return TrigMatrix();
-        
+
+    if (n <= 0 or C.count() == 0) return TrigMatrix();
+
 	TrigMatrix mat(orbs.nRows());
-    
+
     const SS_GTO *orbs_data = orbs.constData();
     double *m = mat.data();
-    
+
     for (int i=0; i<n; ++i)
     {
     	m[i] = Squire::potential_integral(C, orbs_data[i], maux);
     }
-    
+
     return mat;
 }
 
-/** Return the coulomb integral between this set of pair of 
+/** Return the coulomb integral between this set of pair of
     S orbitals and the pairs other S orbitals in 'other' */
 TrigMatrix SS_GTOs::coulomb_integral(const SS_GTOs &other) const
 {
@@ -542,12 +540,12 @@ TrigMatrix SS_GTOs::coulomb_integral(const SS_GTOs &other) const
 
     const int n = orbs.count();
     const int other_n = other.orbs.count();
-    
+
     if (n <= 0 or other_n <= 0)
         return TrigMatrix();
-    
+
     TrigMatrix mat(orbs.nRows());
-    
+
     const SS_GTO *orbs_data = orbs.constData();
     const SS_GTO *other_orbs_data = other.orbs.constData();
 
@@ -556,40 +554,39 @@ TrigMatrix SS_GTOs::coulomb_integral(const SS_GTOs &other) const
     for (int i=0; i<n; ++i)
     {
         const SS_GTO &orb = orbs_data[i];
-        
+
         double j_sum = 0;
-        
+
         for (int j=0; j<other_n; ++j)
         {
             j_sum += Squire::electron_integral( orb, other_orbs_data[j] );
         }
-        
+
         m[i] = j_sum;
     }
-    
+
     return mat;
 }
 
-/** Return the exchange integral between this set of pair of 
+/** Return the exchange integral between this set of pair of
     orbitals and the other set of pairs in 'other' */
 TrigMatrix SS_GTOs::exchange_integral(const SS_GTOs &other) const
 {
     // K_ij = D_ij Sum_kl < s_i s_k | s_j s_l >
-    
+
     // (this does not include D_ij)
-    
+
     const int n = orbs.count();
     const int other_n = other.orbs.count();
-    
-    if (n <= 0 or other_n <= 0)
-        return TrigMatrix();
-    
-    TrigMatrix mat(orbs.nRows());
-    
-    const SS_GTO *orbs_data = orbs.constData();
-    const SS_GTO *other_orbs_data = other.orbs.constData();
 
-    double *m = mat.data();
+    if (n <= 0 or other_n <= 0) return TrigMatrix();
+
+    TrigMatrix mat(orbs.nRows());
+
+    //const SS_GTO *orbs_data = orbs.constData();
+    //const SS_GTO *other_orbs_data = other.orbs.constData();
+
+    //double *m = mat.data();
 
     throw SireError::incomplete_code( QObject::tr("NEED TO FINISH"), CODELOC );
 

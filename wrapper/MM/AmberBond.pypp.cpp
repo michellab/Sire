@@ -206,6 +206,7 @@ void register_AmberBond_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AmberBond_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMM::AmberBond >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        AmberBond_exposer.def_pickle(sire_pickle_suite< ::SireMM::AmberBond >());
         AmberBond_exposer.def( "__str__", &__str__< ::SireMM::AmberBond > );
         AmberBond_exposer.def( "__repr__", &__str__< ::SireMM::AmberBond > );
         AmberBond_exposer.def( "__hash__", &::SireMM::AmberBond::hash );

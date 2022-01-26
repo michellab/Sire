@@ -19,8 +19,6 @@ namespace bp = boost::python;
 
 #include "tbb/parallel_for.h"
 
-#include "tbb/task_scheduler_init.h"
-
 #include "testff.h"
 
 #include "tostring.h"

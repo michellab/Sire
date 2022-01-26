@@ -284,7 +284,7 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
         auto nam = name;
 
         // We'll strip all numeric digits and use a maximum of two characters.
-        nam.remove(QRegExp("[0-9]")).mid(0, 2);
+        auto _ret = nam.remove(QRegExp("[0-9]")).mid(0, 2);
         element = Element::biologicalElement(nam).symbol();
     }
 
@@ -2052,7 +2052,7 @@ MolStructureEditor PDB2::getMolStructure(int imol, const PropertyName &cutting) 
 
         // Get a sorted list of the atoms that are part of the residue.
         QList<qint64> res_atoms = residues[imol].values(res_idx);
-        qSort(res_atoms);
+        std::sort(res_atoms.begin(), res_atoms.end());
 
         // Use the first atom to get the name and number of this residue
         QString res_name = atoms[imol][res_atoms[0]].getResName();

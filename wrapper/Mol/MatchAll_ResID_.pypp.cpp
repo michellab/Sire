@@ -165,6 +165,7 @@ void register_MatchAll_ResID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         MatchAll_ResID__exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireID::MatchAll<SireMol::ResID> >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        MatchAll_ResID__exposer.def_pickle(sire_pickle_suite< ::SireID::MatchAll<SireMol::ResID> >());
         MatchAll_ResID__exposer.def( "__str__", &__str__< ::SireID::MatchAll<SireMol::ResID> > );
         MatchAll_ResID__exposer.def( "__repr__", &__str__< ::SireID::MatchAll<SireMol::ResID> > );
         MatchAll_ResID__exposer.def( "__hash__", &::SireID::MatchAll<SireMol::ResID>::hash );

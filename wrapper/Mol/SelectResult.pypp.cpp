@@ -336,6 +336,7 @@ void register_SelectResult_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         SelectResult_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::SelectResult >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        SelectResult_exposer.def_pickle(sire_pickle_suite< ::SireMol::SelectResult >());
         SelectResult_exposer.def( "__str__", &__str__< ::SireMol::SelectResult > );
         SelectResult_exposer.def( "__repr__", &__str__< ::SireMol::SelectResult > );
         SelectResult_exposer.def( "__len__", &__len_size< ::SireMol::SelectResult > );

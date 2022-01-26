@@ -111,6 +111,7 @@ void register_CGResID_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CGResID_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::GroupGroupID<SireMol::CGID, SireMol::ResID> >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        CGResID_exposer.def_pickle(sire_pickle_suite< ::SireMol::GroupGroupID<SireMol::CGID, SireMol::ResID> >());
         CGResID_exposer.def( "__str__", &__str__< ::SireMol::GroupGroupID<SireMol::CGID, SireMol::ResID> > );
         CGResID_exposer.def( "__repr__", &__str__< ::SireMol::GroupGroupID<SireMol::CGID, SireMol::ResID> > );
         CGResID_exposer.def( "__hash__", &::SireMol::GroupGroupID<SireMol::CGID, SireMol::ResID>::hash );

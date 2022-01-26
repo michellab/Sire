@@ -94,6 +94,7 @@ void register_NullVelocityGenerator_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         NullVelocityGenerator_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMove::NullVelocityGenerator >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        NullVelocityGenerator_exposer.def_pickle(sire_pickle_suite< ::SireMove::NullVelocityGenerator >());
         NullVelocityGenerator_exposer.def( "__str__", &__str__< ::SireMove::NullVelocityGenerator > );
         NullVelocityGenerator_exposer.def( "__repr__", &__str__< ::SireMove::NullVelocityGenerator > );
     }

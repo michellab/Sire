@@ -418,6 +418,7 @@ void register_CutGroup_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CutGroup_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::CutGroup >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        CutGroup_exposer.def_pickle(sire_pickle_suite< ::SireMol::CutGroup >());
         CutGroup_exposer.def( "__str__", &__str__< ::SireMol::CutGroup > );
         CutGroup_exposer.def( "__repr__", &__str__< ::SireMol::CutGroup > );
         CutGroup_exposer.def( "__len__", &__len_size< ::SireMol::CutGroup > );

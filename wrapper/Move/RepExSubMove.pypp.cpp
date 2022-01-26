@@ -152,6 +152,7 @@ void register_RepExSubMove_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         RepExSubMove_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMove::RepExSubMove >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        RepExSubMove_exposer.def_pickle(sire_pickle_suite< ::SireMove::RepExSubMove >());
         RepExSubMove_exposer.def( "__str__", &__str__< ::SireMove::RepExSubMove > );
         RepExSubMove_exposer.def( "__repr__", &__str__< ::SireMove::RepExSubMove > );
     }

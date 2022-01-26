@@ -229,21 +229,21 @@ QString processError(const QString &executable,
         case QProcess::Timedout:
             return err + QObject::tr("The last operation timed out (something went wrong?). "
                                      "PID == %1, Exit status == %2, Exit code == %3")
-                                        .arg(process.pid())
+                                        .arg(process.processId())
                                         .arg(exitStatusString(process.exitStatus()))
                                         .arg(process.exitCode());
 
         case QProcess::WriteError:
-            return err + QObject::tr("There was a write error! PID == %1").arg(process.pid());
+            return err + QObject::tr("There was a write error! PID == %1").arg(process.processId());
 
         case QProcess::ReadError:
-            return err + QObject::tr("There was a read error! PID == %1").arg(process.pid());
+            return err + QObject::tr("There was a read error! PID == %1").arg(process.processId());
 
         case QProcess::UnknownError:
         default:
             return err + QObject::tr("There was an unknown error! ."
                                      "PID == %1, Exit status == %2, Exit code == %3")
-                                        .arg(process.pid())
+                                        .arg(process.processId())
                                         .arg(exitStatusString(process.exitStatus()))
                                         .arg(process.exitCode());
     }

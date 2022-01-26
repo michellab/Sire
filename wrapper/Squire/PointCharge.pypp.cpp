@@ -87,6 +87,7 @@ void register_PointCharge_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         PointCharge_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::Squire::PointCharge >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        PointCharge_exposer.def_pickle(sire_pickle_suite< ::Squire::PointCharge >());
         PointCharge_exposer.def( "__str__", &pvt_get_name);
         PointCharge_exposer.def( "__repr__", &pvt_get_name);
     }

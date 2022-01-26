@@ -64,9 +64,9 @@ static const RegisterMetaType<GridFF> r_gridff;
 QDataStream &operator<<(QDataStream &ds, const GridFF &gridff)
 {
     writeHeader(ds, r_gridff, 5);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << gridff.gridbox << gridff.dimx << gridff.dimy << gridff.dimz
         << gridff.gridpot
         << gridff.buffer_size << gridff.grid_spacing
@@ -75,20 +75,20 @@ QDataStream &operator<<(QDataStream &ds, const GridFF &gridff)
         << gridff.fixedatoms_params
         << gridff.closemols_coords
         << gridff.closemols_params;
-    
+
     sds << quint32( gridff.oldnrgs.count() );
-    
+
     for (QHash<MolNum,CLJEnergy>::const_iterator it = gridff.oldnrgs.constBegin();
          it != gridff.oldnrgs.constEnd();
          ++it)
     {
         sds << it.key() << it.value().coulomb() << it.value().lj();
     }
-    
+
     //collect together the used LJParameters and write those to the stream.
     //This will let us know if we need to update the LJIDs...
     QHash<quint32,LJParameter> used_ljs;
-    
+
     LJParameterDB::lock();
     for (int i=0; i<gridff.fixedatoms_params.count(); ++i)
     {
@@ -103,9 +103,9 @@ QDataStream &operator<<(QDataStream &ds, const GridFF &gridff)
     LJParameterDB::unlock();
 
     sds << used_ljs;
-    
+
     sds << static_cast<const InterGroupCLJFF&>(gridff);
-    
+
     return ds;
 }
 
@@ -116,16 +116,16 @@ QDataStream &operator>>(QDataStream &ds, GridFF &gridff)
     if (v == 5)
     {
         SharedDataStream sds(ds);
-        
+
         gridff = GridFF();
-        
+
         gridff.fixedatoms_coords.clear();
         gridff.fixedatoms_params.clear();
-        
+
         QVector<SireMM::detail::CLJParameter> fixedatoms_params;
         QVector<SireMM::detail::CLJParameter> closemols_params;
         QHash<quint32,LJParameter> used_ljs;
-        
+
         sds >> gridff.gridbox >> gridff.dimx >> gridff.dimy >> gridff.dimz
             >> gridff.gridpot
             >> gridff.buffer_size >> gridff.grid_spacing
@@ -134,22 +134,22 @@ QDataStream &operator>>(QDataStream &ds, GridFF &gridff)
             >> fixedatoms_params
             >> gridff.closemols_coords
             >> closemols_params;
-        
+
         quint32 noldnrgs;
         sds >> noldnrgs;
-        
+
         gridff.oldnrgs.clear();
         gridff.oldnrgs.reserve(noldnrgs);
-        
+
         for (quint32 i=0; i<noldnrgs; ++i)
         {
             MolNum molnum;
             double cnrg, ljnrg;
-            
+
             sds >> molnum >> cnrg >> ljnrg;
             gridff.oldnrgs.insert(molnum,CLJEnergy(cnrg,ljnrg));
         }
-        
+
         sds >> used_ljs;
 
         QHash<quint32,quint32> ljidmap;
@@ -160,12 +160,12 @@ QDataStream &operator>>(QDataStream &ds, GridFF &gridff)
              ++it)
         {
             quint32 newid = LJParameterDB::_locked_addLJParameter(it.value());
-            
+
             if (it.key() != newid)
                 ljidmap.insert(it.key(), newid);
         }
         LJParameterDB::unlock();
-        
+
         if (not ljidmap.isEmpty())
         {
             //some of the LJIDs have changed
@@ -183,7 +183,7 @@ QDataStream &operator>>(QDataStream &ds, GridFF &gridff)
 
         gridff.fixedatoms_params = fixedatoms_params;
         gridff.closemols_params = closemols_params;
-        
+
         sds >> static_cast<InterGroupCLJFF&>(gridff);
 
         gridff.need_update_ljpairs = true;
@@ -191,15 +191,15 @@ QDataStream &operator>>(QDataStream &ds, GridFF &gridff)
     else if (v == 4)
     {
         SharedDataStream sds(ds);
-        
+
         gridff = GridFF();
-        
+
         gridff.fixedatoms_coords.clear();
         gridff.fixedatoms_params.clear();
-        
+
         QVector<SireMM::detail::CLJParameter> fixedatoms_params;
         QHash<quint32,LJParameter> used_ljs;
-        
+
         sds >> gridff.buffer_size >> gridff.grid_spacing
             >> gridff.coul_cutoff >> gridff.lj_cutoff
             >> gridff.fixedatoms_coords
@@ -214,12 +214,12 @@ QDataStream &operator>>(QDataStream &ds, GridFF &gridff)
              ++it)
         {
             quint32 newid = LJParameterDB::_locked_addLJParameter(it.value());
-            
+
             if (it.key() != newid)
                 ljidmap.insert(it.key(), newid);
         }
         LJParameterDB::unlock();
-        
+
         if (not ljidmap.isEmpty())
         {
             //some of the LJIDs have changed
@@ -231,7 +231,7 @@ QDataStream &operator>>(QDataStream &ds, GridFF &gridff)
         }
 
         gridff.fixedatoms_params = fixedatoms_params;
-        
+
         sds >> static_cast<InterGroupCLJFF&>(gridff);
 
         gridff.need_update_ljpairs = true;
@@ -239,35 +239,35 @@ QDataStream &operator>>(QDataStream &ds, GridFF &gridff)
     else if (v == 3)
     {
         SharedDataStream sds(ds);
-        
+
         gridff = GridFF();
-        
+
         gridff.fixedatoms_coords.clear();
         gridff.fixedatoms_params.clear();
-        
+
         sds >> gridff.buffer_size >> gridff.grid_spacing
             >> gridff.coul_cutoff >> gridff.lj_cutoff
             >> gridff.fixedatoms_coords;
-        
+
         gridff.fixedatoms_params.resize(gridff.fixedatoms_coords.count());
-        
+
         LJParameterDB::lock();
-        
+
         try
         {
             for (int i=0; i<gridff.fixedatoms_coords.count(); ++i)
             {
                 double reduced_chg;
                 LJParameter ljparam;
-                
+
                 sds >> reduced_chg >> ljparam;
-                
+
                 gridff.fixedatoms_params[i].reduced_charge = reduced_chg;
                 gridff.fixedatoms_params[i].ljid = LJParameterDB::_locked_addLJParameter(ljparam);
-            
+
                 LJParameterDB::unlock();
             }
-            
+
             gridff.need_update_ljpairs = true;
         }
         catch(...)
@@ -275,41 +275,41 @@ QDataStream &operator>>(QDataStream &ds, GridFF &gridff)
             LJParameterDB::unlock();
             throw;
         }
-        
+
         sds >> static_cast<InterGroupCLJFF&>(gridff);
     }
     else if (v == 2)
     {
         SharedDataStream sds(ds);
-        
+
         gridff = GridFF();
-        
+
         gridff.fixedatoms_coords.clear();
         gridff.fixedatoms_params.clear();
-        
+
         sds >> gridff.buffer_size >> gridff.grid_spacing
             >> gridff.coul_cutoff >> gridff.lj_cutoff
             >> static_cast<InterGroupCLJFF&>(gridff);
     }
     else
         throw version_error(v, "2,3,4,5", r_gridff, CODELOC);
-        
+
     return ds;
 }
 
 /** Empty constructor */
-GridFF::GridFF() 
+GridFF::GridFF()
        : ConcreteProperty<GridFF,InterGroupCLJFF>(),
-         buffer_size(2.5), grid_spacing(1.0), 
+         buffer_size(2.5), grid_spacing(1.0),
          coul_cutoff(50), lj_cutoff(7.5)
 {
     this->setSwitchingFunction(NoCutoff());
 }
 
 /** Construct a grid forcefield with a specified name */
-GridFF::GridFF(const QString &name) 
+GridFF::GridFF(const QString &name)
        : ConcreteProperty<GridFF,InterGroupCLJFF>(name),
-         buffer_size(2.5), grid_spacing(1.0), 
+         buffer_size(2.5), grid_spacing(1.0),
          coul_cutoff(50), lj_cutoff(7.5)
 {
     this->setSwitchingFunction(NoCutoff());
@@ -365,10 +365,10 @@ GridFF& GridFF::operator=(const GridFF &other)
         closemols_coords = other.closemols_coords;
         closemols_params = other.closemols_params;
         oldnrgs = other.oldnrgs;
-    
+
         InterGroupCLJFF::operator=(other);
     }
-    
+
     return *this;
 }
 
@@ -391,14 +391,14 @@ GridFF* GridFF::clone() const
     return new GridFF(*this);
 }
 
-/** Add fixed atoms to the grid. This will copy the fixed atoms from 
+/** Add fixed atoms to the grid. This will copy the fixed atoms from
     the passed GridFF. This allows multiple grid forcefields to share the
     memory cost of a shared set of fixed atoms */
 void GridFF::addFixedAtoms(const GridFF &other)
 {
     if (other.fixedatoms_coords.isEmpty())
         return;
-    
+
     if (fixedatoms_coords.isEmpty())
     {
         fixedatoms_coords = other.fixedatoms_coords;
@@ -419,14 +419,14 @@ void GridFF::addFixedAtoms(const GridFF &other)
     position or charge during the simulation, and that you wish to be
     included in the energy expression. The atoms can be placed here, and
     then do not need to be added to the simulation System. This is useful
-    if you are simulating a small cutout of the system and do not want to 
+    if you are simulating a small cutout of the system and do not want to
     have all of the atoms loaded into the system during the simulation */
 void GridFF::addFixedAtoms(const MoleculeView &fixed_atoms, const PropertyMap &map)
 {
     const PropertyName coords_property = map["coordinates"];
     const PropertyName chg_property = map["charge"];
     const PropertyName lj_property = map["LJ"];
-    
+
     const QVector<Vector> coords = fixed_atoms.molecule().property(coords_property)
                                       .asA<AtomCoords>().toVector(fixed_atoms.selection());
 
@@ -436,30 +436,30 @@ void GridFF::addFixedAtoms(const MoleculeView &fixed_atoms, const PropertyMap &m
 
     const QVector<LJParameter> ljs = fixed_atoms.molecule().property(lj_property)
                                       .asA<AtomLJs>().toVector(fixed_atoms.selection());
-    
+
     int nats = coords.count();
-    
+
     fixedatoms_coords.reserve( fixedatoms_coords.count() + nats );
     fixedatoms_params.reserve( fixedatoms_params.count() + nats );
-    
+
     fixedatoms_coords += coords;
-    
+
     LJParameterDB::lock();
-    
+
     const double sqrt_one_over_4pieps0 = std::sqrt(SireUnits::one_over_four_pi_eps0);
-    
+
     for (int i=0; i<nats; ++i)
     {
         SireMM::detail::CLJParameter cljparam;
-        
+
         cljparam.reduced_charge = charges[i] * sqrt_one_over_4pieps0;
         cljparam.ljid = LJParameterDB::_locked_addLJParameter(ljs[i]);
-        
+
         fixedatoms_params.append(cljparam);
     }
-    
+
     LJParameterDB::unlock();
-    
+
     fixedatoms_coords.squeeze();
     fixedatoms_params.squeeze();
 
@@ -472,7 +472,7 @@ void GridFF::addFixedAtoms(const MoleculeView &fixed_atoms, const PropertyMap &m
     position or charge during the simulation, and that you wish to be
     included in the energy expression. The atoms can be placed here, and
     then do not need to be added to the simulation System. This is useful
-    if you are simulating a small cutout of the system and do not want to 
+    if you are simulating a small cutout of the system and do not want to
     have all of the atoms loaded into the system during the simulation */
 void GridFF::addFixedAtoms(const SireMol::Molecules &fixed_atoms, const PropertyMap &map)
 {
@@ -481,47 +481,47 @@ void GridFF::addFixedAtoms(const SireMol::Molecules &fixed_atoms, const Property
     const PropertyName lj_property = map["LJ"];
 
     const double sqrt_one_over_4pieps0 = std::sqrt(SireUnits::one_over_four_pi_eps0);
-    
+
     LJParameterDB::lock();
-    
+
     for (SireMol::Molecules::const_iterator it = fixed_atoms.constBegin();
          it != fixed_atoms.constEnd();
          ++it)
     {
         SireMol::Molecule mol = it->molecule();
         AtomSelection selection = it->selection();
-        
+
         const QVector<Vector> coords = mol.property(coords_property)
                                         .asA<AtomCoords>().toVector(selection);
-        
+
         const QVector<SireUnits::Dimension::Charge> charges = mol.property(chg_property)
                                         .asA<AtomCharges>().toVector(selection);
-        
+
         const QVector<LJParameter> ljs = mol.property(lj_property)
                                             .asA<AtomLJs>().toVector(selection);
 
         int nats = coords.count();
-        
+
         fixedatoms_coords.reserve( fixedatoms_coords.count() + nats );
         fixedatoms_params.reserve( fixedatoms_params.count() + nats );
-        
+
         fixedatoms_coords += coords;
-        
+
         for (int i=0; i<nats; ++i)
         {
             SireMM::detail::CLJParameter cljparam;
-            
+
             cljparam.reduced_charge = charges[i] * sqrt_one_over_4pieps0;
             cljparam.ljid = LJParameterDB::_locked_addLJParameter(ljs[i]);
 
             fixedatoms_params.append(cljparam);
         }
     }
-    
+
     LJParameterDB::unlock();
 
     need_update_ljpairs = true;
-    
+
     fixedatoms_coords.squeeze();
     fixedatoms_params.squeeze();
 
@@ -648,11 +648,11 @@ void GridFF::appendTo(QVector<GridFF::Vector4> &coords_and_charges,
     if (nats > 0)
     {
         coords_and_charges.reserve( coords_and_charges.count() + nats );
-        
+
         for (int i=0; i<nats; ++i)
         {
             double q = params[i].reduced_charge;
-            
+
             if (q != 0)
             {
                 coords_and_charges.append( Vector4(coords[i],q) );
@@ -681,10 +681,10 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
     const int nats = coords_and_charges.count();
 
     const double Rc = coul_cutoff;
-    
+
     QElapsedTimer t;
     t.start();
-    
+
     if (shiftElectrostatics())
     {
         const double one_over_Rc = double(1) / Rc;
@@ -693,29 +693,29 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
         #ifdef SIRE_USE_SSE
         {
             const int remainder = npts % 2;
-            
+
             quint32 i0=0;
             quint32 j0=0;
             quint32 k0=0;
-            
+
             quint32 i1=0;
             quint32 j1=0;
             quint32 k1=1;
-            
+
             double gx0 = minpoint.x();
             double gy0 = minpoint.y();
             double gz0 = minpoint.z();
-            
+
             double gx1 = minpoint.x();
             double gy1 = minpoint.y();
             double gz1 = minpoint.z()+grid_spacing;
-            
+
             const __m128d sse_one = { 1.0, 1.0 };
-            
+
             const __m128d sse_Rc = { Rc, Rc };
             const __m128d sse_one_over_Rc = { one_over_Rc, one_over_Rc };
             const __m128d sse_one_over_Rc2 = { one_over_Rc2, one_over_Rc2 };
-            
+
             for (int ipt=0; ipt<(npts-1); ipt+=2)
             {
                 //set the sse values - note that _mm_set_pd is backwards,
@@ -725,7 +725,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                 const __m128d sse_gz = _mm_set_pd(gz1,gz0);
 
                 __m128d sse_cnrg = { 0.0, 0.0 };
-                
+
                 //loop through each atom
                 for (int iat=0; iat<nats; ++iat)
                 {
@@ -741,7 +741,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                                                       _mm_mul_pd(sse_dz,sse_dz) ) ) );
 
                     const __m128d sse_one_over_r = _mm_div_pd(sse_one, sse_r);
-                
+
                     __m128d nrg = _mm_sub_pd(sse_r, sse_Rc);
                     nrg = _mm_mul_pd(nrg, sse_one_over_Rc2);
                     nrg = _mm_add_pd(nrg, sse_one_over_r);
@@ -750,7 +750,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
 
                     const __m128d sse_in_cutoff = _mm_cmplt_pd(sse_r, sse_Rc);
                     nrg = _mm_and_pd(nrg, sse_in_cutoff);
-                    
+
                     sse_cnrg = _mm_add_pd(sse_cnrg, nrg);
                 }
 
@@ -762,23 +762,23 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                     //advance the indicies (twice, as two grid points per iteration)
                     k0 += 1;
                     gz0 += grid_spacing;
-                    
+
                     if (k0 == dimz)
                     {
                         k0 = 0;
                         gz0 = minpoint.z();
-                        
+
                         j0 += 1;
                         gy0 += grid_spacing;
-                        
+
                         if (j0 == dimy)
                         {
                             j0 = 0;
                             gy0 = minpoint.y();
-                            
+
                             i0 += 1;
                             gx0 += grid_spacing;
-                            
+
                             if (i0 == dimx)
                             {
                                 i0 = 0;
@@ -789,23 +789,23 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
 
                     k1 += 1;
                     gz1 += grid_spacing;
-                    
+
                     if (k1 == dimz)
                     {
                         k1 = 0;
                         gz1 = minpoint.z();
-                        
+
                         j1 += 1;
                         gy1 += grid_spacing;
-                        
+
                         if (j1 == dimy)
                         {
                             j1 = 0;
                             gy1 = minpoint.y();
-                            
+
                             i1 += 1;
                             gx1 += grid_spacing;
-                            
+
                             if (i1 == dimx)
                             {
                                 i1 = 0;
@@ -815,16 +815,16 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                     }
                 }
             }
-            
+
             if (remainder)
             {
                 //we need to process the last grid point
                 const double gx = minpoint.x() + (dimx-1)*grid_spacing;
                 const double gy = minpoint.y() + (dimy-1)*grid_spacing;
                 const double gz = minpoint.z() + (dimz-1)*grid_spacing;
-                
+
                 double total = 0;
-                
+
                 //loop through each atom...
                 for (int iat=0; iat<nats; ++iat)
                 {
@@ -841,7 +841,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                     total += in_cutoff * c.q * (one_over_r - one_over_Rc +
                                                    one_over_Rc2*(r - Rc));
                 }
-                
+
                 pot[npts-1] += total;
             }
         }
@@ -850,7 +850,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
             int i=0;
             int j=0;
             int k=0;
-            
+
             double gx = minpoint.x();
             double gy = minpoint.y();
             double gz = minpoint.z();
@@ -858,7 +858,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
             for (int ipt=0; ipt<npts; ++ipt)
             {
                 double total = 0;
-                
+
                 //loop through each atom...
                 for (int iat=0; iat<nats; ++iat)
                 {
@@ -876,28 +876,28 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                     total += in_cutoff * c.q * (one_over_r - one_over_Rc +
                                                 one_over_Rc2*(r - Rc));
                 }
-                        
+
                 pot[ipt] += total;
-                
+
                 k += 1;
                 gz += grid_spacing;
-                
+
                 if (k == dimz)
                 {
                     k = 0;
                     gz = minpoint.z();
-                    
+
                     j += 1;
                     gy += grid_spacing;
-                    
+
                     if (j == dimy)
                     {
                         j = 0;
                         gy = minpoint.y();
-                        
+
                         i += 1;
                         gx += grid_spacing;
-                        
+
                         if (i == dimx)
                         {
                             i = 0;
@@ -917,33 +917,33 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                                                   (2*rf_dielectric + 1) );
         const double c_rf = (1.0 / Rc) * ( (3*rf_dielectric) /
                                            (2*rf_dielectric + 1) );
-    
+
         #ifdef SIRE_USE_SSE
         {
             const int remainder = npts % 2;
-            
+
             quint32 i0=0;
             quint32 j0=0;
             quint32 k0=0;
-            
+
             quint32 i1=0;
             quint32 j1=0;
             quint32 k1=1;
-            
+
             double gx0 = minpoint.x();
             double gy0 = minpoint.y();
             double gz0 = minpoint.z();
-            
+
             double gx1 = minpoint.x();
             double gy1 = minpoint.y();
             double gz1 = minpoint.z()+grid_spacing;
-            
+
             const __m128d sse_one = { 1.0, 1.0 };
-            
+
             const __m128d sse_Rc = { Rc, Rc };
             const __m128d sse_k_rf = { k_rf, k_rf };
             const __m128d sse_c_rf = { c_rf, c_rf };
-            
+
             for (int ipt=0; ipt<(npts-1); ipt+=2)
             {
                 //set the sse values - note that _mm_set_pd is backwards,
@@ -953,7 +953,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                 const __m128d sse_gz = _mm_set_pd(gz1,gz0);
 
                 __m128d sse_cnrg = { 0.0, 0.0 };
-                
+
                 //loop through each atom
                 for (int iat=0; iat<nats; ++iat)
                 {
@@ -978,7 +978,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
 
                     const __m128d sse_in_cutoff = _mm_cmplt_pd(sse_r, sse_Rc);
                     nrg = _mm_and_pd(nrg, sse_in_cutoff);
-                    
+
                     sse_cnrg = _mm_add_pd(sse_cnrg, nrg);
                 }
 
@@ -990,23 +990,23 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                     //advance the indicies (twice, as two grid points per iteration)
                     k0 += 1;
                     gz0 += grid_spacing;
-                    
+
                     if (k0 == dimz)
                     {
                         k0 = 0;
                         gz0 = minpoint.z();
-                        
+
                         j0 += 1;
                         gy0 += grid_spacing;
-                        
+
                         if (j0 == dimy)
                         {
                             j0 = 0;
                             gy0 = minpoint.y();
-                            
+
                             i0 += 1;
                             gx0 += grid_spacing;
-                            
+
                             if (i0 == dimx)
                             {
                                 i0 = 0;
@@ -1017,23 +1017,23 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
 
                     k1 += 1;
                     gz1 += grid_spacing;
-                    
+
                     if (k1 == dimz)
                     {
                         k1 = 0;
                         gz1 = minpoint.z();
-                        
+
                         j1 += 1;
                         gy1 += grid_spacing;
-                        
+
                         if (j1 == dimy)
                         {
                             j1 = 0;
                             gy1 = minpoint.y();
-                            
+
                             i1 += 1;
                             gx1 += grid_spacing;
-                            
+
                             if (i1 == dimx)
                             {
                                 i1 = 0;
@@ -1043,16 +1043,16 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                     }
                 }
             }
-            
+
             if (remainder)
             {
                 //we need to process the last grid point
                 const double gx = minpoint.x() + (dimx-1)*grid_spacing;
                 const double gy = minpoint.y() + (dimy-1)*grid_spacing;
                 const double gz = minpoint.z() + (dimz-1)*grid_spacing;
-                
+
                 double total = 0;
-                
+
                 //loop through each atom...
                 for (int iat=0; iat<nats; ++iat)
                 {
@@ -1068,7 +1068,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                     const double in_cutoff = (r < Rc);
                     total += in_cutoff * c.q * (one_over_r + k_rf*r*r - c_rf);
                 }
-                
+
                 pot[npts-1] += total;
             }
         }
@@ -1077,7 +1077,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
             int i=0;
             int j=0;
             int k=0;
-            
+
             double gx = minpoint.x();
             double gy = minpoint.y();
             double gz = minpoint.z();
@@ -1085,7 +1085,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
             for (int ipt=0; ipt<npts; ++ipt)
             {
                 double total = 0;
-                
+
                 //loop through each atom...
                 for (int iat=0; iat<nats; ++iat)
                 {
@@ -1102,28 +1102,28 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
 
                     total += in_cutoff * c.q * (one_over_r + k_rf*r*r - c_rf);
                 }
-                        
+
                 pot[ipt] += total;
-                
+
                 k += 1;
                 gz += grid_spacing;
-                
+
                 if (k == dimz)
                 {
                     k = 0;
                     gz = minpoint.z();
-                    
+
                     j += 1;
                     gy += grid_spacing;
-                    
+
                     if (j == dimy)
                     {
                         j = 0;
                         gy = minpoint.y();
-                        
+
                         i += 1;
                         gx += grid_spacing;
-                        
+
                         if (i == dimx)
                         {
                             i = 0;
@@ -1141,27 +1141,27 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
         #ifdef SIRE_USE_SSE
         {
             const int remainder = npts % 2;
-            
+
             quint32 i0=0;
             quint32 j0=0;
             quint32 k0=0;
-            
+
             quint32 i1=0;
             quint32 j1=0;
             quint32 k1=1;
-            
+
             double gx0 = minpoint.x();
             double gy0 = minpoint.y();
             double gz0 = minpoint.z();
-            
+
             double gx1 = minpoint.x();
             double gy1 = minpoint.y();
             double gz1 = minpoint.z()+grid_spacing;
-            
+
             const __m128d sse_one = { 1.0, 1.0 };
-            
+
             const __m128d sse_Rc = { Rc, Rc };
-            
+
             for (int ipt=0; ipt<(npts-1); ipt+=2)
             {
                 //set the sse values - note that _mm_set_pd is backwards,
@@ -1171,7 +1171,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                 const __m128d sse_gz = _mm_set_pd(gz1,gz0);
 
                 __m128d sse_cnrg = { 0.0, 0.0 };
-                
+
                 //loop through each atom
                 for (int iat=0; iat<nats; ++iat)
                 {
@@ -1187,12 +1187,12 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                                                       _mm_mul_pd(sse_dz,sse_dz) ) ) );
 
                     const __m128d sse_one_over_r = _mm_div_pd(sse_one, sse_r);
-                
+
                     __m128d nrg = _mm_mul_pd(sse_one_over_r, _mm_set1_pd(c.q));
 
                     const __m128d sse_in_cutoff = _mm_cmplt_pd(sse_r, sse_Rc);
                     nrg = _mm_and_pd(nrg, sse_in_cutoff);
-                    
+
                     sse_cnrg = _mm_add_pd(sse_cnrg, nrg);
                 }
 
@@ -1204,23 +1204,23 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                     //advance the indicies (twice, as two grid points per iteration)
                     k0 += 1;
                     gz0 += grid_spacing;
-                    
+
                     if (k0 == dimz)
                     {
                         k0 = 0;
                         gz0 = minpoint.z();
-                        
+
                         j0 += 1;
                         gy0 += grid_spacing;
-                        
+
                         if (j0 == dimy)
                         {
                             j0 = 0;
                             gy0 = minpoint.y();
-                            
+
                             i0 += 1;
                             gx0 += grid_spacing;
-                            
+
                             if (i0 == dimx)
                             {
                                 i0 = 0;
@@ -1231,23 +1231,23 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
 
                     k1 += 1;
                     gz1 += grid_spacing;
-                    
+
                     if (k1 == dimz)
                     {
                         k1 = 0;
                         gz1 = minpoint.z();
-                        
+
                         j1 += 1;
                         gy1 += grid_spacing;
-                        
+
                         if (j1 == dimy)
                         {
                             j1 = 0;
                             gy1 = minpoint.y();
-                            
+
                             i1 += 1;
                             gx1 += grid_spacing;
-                            
+
                             if (i1 == dimx)
                             {
                                 i1 = 0;
@@ -1257,16 +1257,16 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                     }
                 }
             }
-            
+
             if (remainder)
             {
                 //we need to process the last grid point
                 const double gx = minpoint.x() + (dimx-1)*grid_spacing;
                 const double gy = minpoint.y() + (dimy-1)*grid_spacing;
                 const double gz = minpoint.z() + (dimz-1)*grid_spacing;
-                
+
                 double total = 0;
-                
+
                 //loop through each atom...
                 for (int iat=0; iat<nats; ++iat)
                 {
@@ -1282,7 +1282,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                     const double in_cutoff = (r < Rc);
                     total += in_cutoff * c.q * one_over_r;
                 }
-                
+
                 pot[npts-1] += total;
             }
         }
@@ -1291,7 +1291,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
             int i=0;
             int j=0;
             int k=0;
-            
+
             double gx = minpoint.x();
             double gy = minpoint.y();
             double gz = minpoint.z();
@@ -1299,7 +1299,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
             for (int ipt=0; ipt<npts; ++ipt)
             {
                 double total = 0;
-                
+
                 //loop through each atom...
                 for (int iat=0; iat<nats; ++iat)
                 {
@@ -1310,34 +1310,34 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
                     const double dz = c.z - gz;
 
                     const double r = std::sqrt(dx*dx + dy*dy + dz*dz);
-                    
+
                     if (r < Rc)
                     {
                         total += c.q / r;
                     }
                 }
-                        
+
                 pot[ipt] += total;
 
                 k += 1;
                 gz += grid_spacing;
-                
+
                 if (k == dimz)
                 {
                     k = 0;
                     gz = minpoint.z();
-                    
+
                     j += 1;
                     gy += grid_spacing;
-                    
+
                     if (j == dimy)
                     {
                         j = 0;
                         gy = minpoint.y();
-                        
+
                         i += 1;
                         gx += grid_spacing;
-                        
+
                         if (i == dimx)
                         {
                             i = 0;
@@ -1349,9 +1349,9 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
         }
         #endif
     }
-    
+
     //int ms = t.elapsed();
-    
+
     //qDebug() << "Added" << nats << "more atoms to" << npts << "grid points in"
     //         << ms << "ms";
 }
@@ -1375,7 +1375,7 @@ double minimumDistanceToGrid(const Vector &coords, const AABox &gridbox)
 
     int ix(0), iy(0), iz(0);
     double dx(0), dy(0), dz(0);
-    
+
     if (coords.x() < mincoords.x())
     {
         ix = -1;
@@ -1386,7 +1386,7 @@ double minimumDistanceToGrid(const Vector &coords, const AABox &gridbox)
         ix = 1;
         dx = coords.x() - maxcoords.x();
     }
-    
+
     if (coords.y() < mincoords.y())
     {
         iy = -1;
@@ -1397,7 +1397,7 @@ double minimumDistanceToGrid(const Vector &coords, const AABox &gridbox)
         iy = 1;
         dy = coords.y() - maxcoords.y();
     }
-    
+
     if (coords.z() < mincoords.z())
     {
         iz = -1;
@@ -1408,7 +1408,7 @@ double minimumDistanceToGrid(const Vector &coords, const AABox &gridbox)
         iz = 1;
         dz = coords.z() - maxcoords.z();
     }
-    
+
     if (ix == 0 and iy == 0 and iz == 0)
         //the box contains the point
         return 0;
@@ -1452,21 +1452,21 @@ double minimumDistanceToGrid(const Vector &coords, const AABox &gridbox)
 /** Internal function used to rebuild the coulomb potential grid */
 void GridFF::rebuildGrid()
 {
-    QTime t;
+    //QTime t;
 
     if (mols[0].moleculesByIndex().isEmpty())
         return;
 
     //find the bounding box that contains all of the atoms from group0
     AABox group0_box;
-    
+
     for (ChunkedVector<CLJMolecule>::const_iterator
                                 it = mols[0].moleculesByIndex().constBegin();
          it != mols[0].moleculesByIndex().constEnd();
          ++it)
     {
         const CoordGroupArray &coords = (*it).coordinates();
-        
+
         for (int i=0; i<coords.count(); ++i)
         {
             if (group0_box.isNull())
@@ -1479,23 +1479,23 @@ void GridFF::rebuildGrid()
             }
         }
     }
-    
+
     //now add the buffer region onto the box - this extends the grid by
     //buffer_size in all dimensions
     if (buffer_size > 0)
         gridbox = AABox::from( group0_box.minCoords() - Vector(buffer_size),
                                group0_box.maxCoords() + Vector(buffer_size) );
-                         
+
     //now work out how many gridpoints are needed in each dimension
     if (grid_spacing <= 0)
         grid_spacing = 0.5;
-        
+
     Vector boxsize = gridbox.maxCoords() - gridbox.minCoords();
-    
+
     dimx = 2 + int(boxsize.x() / grid_spacing);
     dimy = 2 + int(boxsize.y() / grid_spacing);
     dimz = 2 + int(boxsize.z() / grid_spacing);
-    
+
     const quint32 MAX_DIM = 250;
 
     while ( dimx > MAX_DIM or dimy > MAX_DIM or dimz > MAX_DIM )
@@ -1503,62 +1503,62 @@ void GridFF::rebuildGrid()
         double grid_x = boxsize.x() / MAX_DIM;
         double grid_y = boxsize.y() / MAX_DIM;
         double grid_z = boxsize.z() / MAX_DIM;
-        
+
         grid_spacing = qMax( grid_x, qMax(grid_y,grid_z) );
 
         dimx = 1 + int(boxsize.x() / grid_spacing);
         dimy = 1 + int(boxsize.y() / grid_spacing);
         dimz = 1 + int(boxsize.z() / grid_spacing);
     }
-    
+
     Vector maxpoint = gridbox.minCoords() + Vector( (dimx-1) * grid_spacing,
                                                     (dimy-1) * grid_spacing,
                                                     (dimz-1) * grid_spacing );
 
     gridbox = AABox::from(gridbox.minCoords(), maxpoint);
     const Vector &grid_center = gridbox.center();
-    
+
     //create space for the grid
     gridpot = QVector<double>(dimx*dimy*dimz, 0.0);
     gridpot.squeeze();
 
     closemols_coords.clear();
     closemols_params.clear();
-    
+
     //now build the grid - we take atoms that are within the LJ cutoff
     //and calculate those manually (saving them in the closemols list), and
     //only add coulomb potentials of CoordGroups that are beyond the LJ cutoff
     const ChunkedVector<CLJMolecule> &cljmols = mols[1].moleculesByIndex();
-    
+
     const Space &spce = this->space();
-    
+
     QVector<Vector4> far_mols;
 
     int atomcount = 0;
     int gridcount = 0;
-    
+
     closemols_coords.reserve(cljmols.count() + (fixedatoms_coords.count() / 2));
     closemols_params.reserve(cljmols.count() + (fixedatoms_coords.count() / 2));
-    
+
     if (fixedatoms_coords.count() > 0)
     {
         for (int i=0; i<fixedatoms_coords.count(); ++i)
         {
             Vector coords = fixedatoms_coords.constData()[i];
-            
+
             if (spce.isPeriodic())
             {
                 coords = spce.getMinimumImage(coords, grid_center);
             }
-            
+
             const SireMM::detail::CLJParameter &params = fixedatoms_params.constData()[i];
 
             if (params.reduced_charge == 0 and params.ljid == 0)
                 continue;
-            
+
             //calculate the closest distance between this point and the grid
             double dist = ::minimumDistanceToGrid(coords, gridbox);
-            
+
             //only explicitly evaluate points within the LJ cutoff of the grid
             if (dist < lj_cutoff)
             {
@@ -1572,7 +1572,7 @@ void GridFF::rebuildGrid()
                 if (params.reduced_charge != 0)
                 {
                     far_mols.append( Vector4(coords, params.reduced_charge) );
-                
+
                     if (far_mols.count() > 1023)
                     {
                         addToGrid(far_mols);
@@ -1584,30 +1584,30 @@ void GridFF::rebuildGrid()
                 }
             }
         }
-        
+
         addToGrid(far_mols);
         gridcount += far_mols.count();
         far_mols.clear();
     }
-    
+
     if (not cljmols.isEmpty())
     {
         int nmols = 0;
-    
+
         for (ChunkedVector<CLJMolecule>::const_iterator it = cljmols.constBegin();
              it != cljmols.constEnd();
              ++it)
         {
             nmols += 1;
-        
+
             const CLJMolecule &cljmol = *it;
 
             //loop through each CutGroup of this molecule
             const int ngroups = cljmol.coordinates().count();
-            
+
             const CoordGroup *groups_array = cljmol.coordinates().constData();
-            
-            const CLJParameters::Array *params_array 
+
+            const CLJParameters::Array *params_array
                                     = cljmol.parameters().atomicParameters().constData();
 
             for (int igroup=0; igroup<ngroups; ++igroup)
@@ -1618,20 +1618,20 @@ void GridFF::rebuildGrid()
                 for (int i=0; i<coordgroup.count(); ++i)
                 {
                     Vector coords = coordgroup.constData()[i];
-            
+
                     if (spce.isPeriodic())
                     {
                         coords = spce.getMinimumImage(coords, grid_center);
                     }
-            
+
                     const SireMM::detail::CLJParameter &params = paramsgroup.constData()[i];
-            
+
                     if (params.reduced_charge == 0 and params.ljid == 0)
                         continue;
-            
+
                     //calculate the closest distance between this point and the grid
                     double dist = ::minimumDistanceToGrid(coords, gridbox);
-            
+
                     //only explicitly evaluate points within the LJ cutoff of the grid
                     if (dist < lj_cutoff)
                     {
@@ -1645,7 +1645,7 @@ void GridFF::rebuildGrid()
                         if (params.reduced_charge != 0)
                         {
                             far_mols.append( Vector4(coords, params.reduced_charge) );
-                
+
                             if (far_mols.count() > 1023)
                             {
                                 addToGrid(far_mols);
@@ -1657,17 +1657,17 @@ void GridFF::rebuildGrid()
                 }
             }
         }
-        
+
         addToGrid(far_mols);
         gridcount += far_mols.count();
         far_mols.clear();
     }
-    
+
     closemols_coords.squeeze();
     closemols_params.squeeze();
 }
 
-void GridFF::calculateEnergy(const CoordGroup &coords0, 
+void GridFF::calculateEnergy(const CoordGroup &coords0,
                              const GridFF::CLJParameters::Array &params0,
                              double &cnrg, double &ljnrg)
 {
@@ -1675,7 +1675,7 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
     double iljnrg = 0;
 
     const int nats0 = coords0.count();
-    
+
     const Vector *coords0_array = coords0.constData();
     const detail::CLJParameter *params0_array = params0.constData();
 
@@ -1683,7 +1683,7 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
     const detail::CLJParameter *params1_array = closemols_params.constData();
 
     const int nats1 = closemols_coords.count();
-        
+
     BOOST_ASSERT( closemols_coords.count() == closemols_params.count() );
 
     if (nats1 > 0)
@@ -1693,25 +1693,25 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
             //use the force-shifted cutoff with an alpha value of 0
             const double Rc = coul_cutoff;
             const double Rlj = lj_cutoff;
-            
+
             const double one_over_Rc = double(1) / Rc;
             const double one_over_Rc2 = double(1) / (Rc*Rc);
-        
+
             #ifdef SIRE_USE_SSE
             {
                 const int remainder = nats1 % 2;
-                
+
                 __m128d sse_cnrg = { 0, 0 };
                 __m128d sse_ljnrg = { 0, 0 };
 
                 const __m128d sse_one = { 1.0, 1.0 };
-                
+
                 const __m128d sse_Rc = { Rc, Rc };
                 const __m128d sse_Rlj = { Rlj, Rlj };
-                
+
                 const __m128d sse_one_over_Rc = { one_over_Rc, one_over_Rc };
                 const __m128d sse_one_over_Rc2 = { one_over_Rc2, one_over_Rc2 };
-                
+
                 for (int j=0; j<nats1-1; j += 2)
                 {
                     const Parameter &param10 = params1_array[j];
@@ -1719,14 +1719,14 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
 
                     const Vector &c10 = coords1_array[j];
                     const Vector &c11 = coords1_array[j+1];
-                    
+
                     for (int i=0; i<nats0; ++i)
                     {
                         const Parameter &param0 = params0_array[i];
-                    
+
                         __m128d sse_chg0 = _mm_set_pd( param0.reduced_charge,
                                                        param0.reduced_charge );
-                    
+
                         const Vector &c0 = coords0_array[i];
 
                         __m128d sse_r;
@@ -1734,17 +1734,17 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
                             __m128d dx = _mm_set_pd( c0.x() - c10.x(), c0.x() - c11.x() );
                             __m128d dy = _mm_set_pd( c0.y() - c10.y(), c0.y() - c11.y() );
                             __m128d dz = _mm_set_pd( c0.z() - c10.z(), c0.z() - c11.z() );
-                        
+
                             __m128d dx2 = _mm_mul_pd(dx, dx);
                             __m128d dy2 = _mm_mul_pd(dy, dy);
                             __m128d dz2 = _mm_mul_pd(dz, dz);
-                        
+
                             __m128d sse_r2 = _mm_add_pd(dx2,dy2);
                             sse_r2 = _mm_add_pd(sse_r2, dz2);
-                        
+
                             sse_r = _mm_sqrt_pd(sse_r2);
                         }
-                        
+
                         const __m128d sse_one_over_r = _mm_div_pd(sse_one, sse_r);
 
                         //calculate the coulomb energy
@@ -1757,23 +1757,23 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
 
                             __m128d sse_chg = _mm_set_pd( param10.reduced_charge,
                                                           param11.reduced_charge );
-                        
+
                             sse_chg = _mm_mul_pd(sse_chg, sse_chg0);
-                        
+
                             nrg = _mm_mul_pd(sse_chg, nrg);
 
                             nrg = _mm_and_pd(nrg, sse_in_cutoff);
-                            
+
                             sse_cnrg = _mm_add_pd(sse_cnrg, nrg);
                         }
-                        
+
                         //calculate the LJ energy
                         {
                             const __m128d sse_in_cutoff = _mm_cmplt_pd(sse_r, sse_Rlj);
                             const LJPair &ljpair0 = ljpairs.constData()[
                                                         ljpairs.map(param0.ljid,
                                                                     param10.ljid)];
-                    
+
                             const LJPair &ljpair1 = ljpairs.constData()[
                                                         ljpairs.map(param0.ljid,
                                                                     param11.ljid)];
@@ -1781,32 +1781,32 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
                             const __m128d sse_sig = _mm_set_pd( ljpair0.sigma(), ljpair1.sigma() );
                             const __m128d sse_eps = _mm_set_pd( ljpair0.epsilon(),
                                                                 ljpair1.epsilon() );
-                        
+
                             //calculate (sigma/r)^6 and (sigma/r)^12
                             __m128d sse_sig_over_r2 = _mm_mul_pd(sse_sig, sse_one_over_r);
                             sse_sig_over_r2 = _mm_mul_pd( sse_sig_over_r2,
                                                           sse_sig_over_r2 );
-                                                     
+
                             __m128d sse_sig_over_r6 = _mm_mul_pd(sse_sig_over_r2,
                                                                  sse_sig_over_r2);
-                                                        
+
                             sse_sig_over_r6 = _mm_mul_pd(sse_sig_over_r6,
                                                          sse_sig_over_r2);
-                                                     
+
                             __m128d sse_sig_over_r12 = _mm_mul_pd(sse_sig_over_r6,
                                                                   sse_sig_over_r6);
-                                              
+
                             //calculate LJ energy (the factor of 4 is added later)
                             __m128d tmp = _mm_sub_pd(sse_sig_over_r12,
                                                      sse_sig_over_r6);
-                                                 
+
                             tmp = _mm_mul_pd(tmp, sse_eps);
                             tmp = _mm_and_pd(tmp, sse_in_cutoff);
                             sse_ljnrg = _mm_add_pd(sse_ljnrg, tmp);
                         }
                     }
                 }
-                
+
                 if (remainder == 1)
                 {
                     const Vector &c1 = coords1_array[nats1-1];
@@ -1819,7 +1819,7 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
 
                         const double r = Vector::distance(c0,c1);
                         const double one_over_r = double(1) / r;
-                        
+
                         if (r < Rc)
                         {
                             icnrg += param0.reduced_charge * param1.reduced_charge
@@ -1831,7 +1831,7 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
                             const LJPair &ljpair = ljpairs.constData()[
                                                     ljpairs.map(param0.ljid,
                                                                 param1.ljid)];
-                        
+
                             double sig_over_dist6 = pow_6(ljpair.sigma()*one_over_r);
                             double sig_over_dist12 = pow_2(sig_over_dist6);
 
@@ -1840,10 +1840,10 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
                         }
                     }
                 }
-                
+
                 icnrg += *((const double*)&sse_cnrg) +
                          *( ((const double*)&sse_cnrg) + 1 );
-                         
+
                 iljnrg += *((const double*)&sse_ljnrg) +
                           *( ((const double*)&sse_ljnrg) + 1 );
             }
@@ -1858,7 +1858,7 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
                 {
                     const Parameter &param1 = params1_array[j];
                     const Vector &c1 = coords1_array[j];
-                    
+
                     for (int i=0; i<nats0; ++i)
                     {
                         const Parameter &param0 = params0_array[i];
@@ -1866,13 +1866,13 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
 
                         const double r = Vector::distance(c0,c1);
                         const double one_over_r = double(1) / r;
-                        
+
                         if (r < Rc)
                         {
                             icnrg += (param0.reduced_charge * param1.reduced_charge) *
                                         (one_over_r - one_over_Rc + one_over_Rc2 * (r-Rc));
                         }
-                        
+
                         if (r < Rlj)
                         {
                             const LJPair &ljpair = ljpairs.constData()[
@@ -1895,28 +1895,28 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
             //use the reaction field potential
             const double Rc = coul_cutoff;
             const double Rlj = lj_cutoff;
-            
+
             const double rf_dielectric = reactionFieldDielectric();
             const double k_rf = (1.0 / pow_3(Rc)) * ( (rf_dielectric-1) /
                                                       (2*rf_dielectric + 1) );
             const double c_rf = (1.0 / Rc) * ( (3*rf_dielectric) /
-                                               (2*rf_dielectric + 1) );            
-        
+                                               (2*rf_dielectric + 1) );
+
             #ifdef SIRE_USE_SSE
             {
                 const int remainder = nats1 % 2;
-                
+
                 __m128d sse_cnrg = { 0, 0 };
                 __m128d sse_ljnrg = { 0, 0 };
 
                 const __m128d sse_one = { 1.0, 1.0 };
-                
+
                 const __m128d sse_Rc = { Rc, Rc };
                 const __m128d sse_Rlj = { Rlj, Rlj };
-                
+
                 const __m128d sse_k_rf = { k_rf, k_rf };
                 const __m128d sse_c_rf = { c_rf, c_rf };
-                
+
                 for (int j=0; j<nats1-1; j += 2)
                 {
                     const Parameter &param10 = params1_array[j];
@@ -1928,10 +1928,10 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
                     for (int i=0; i<nats0; ++i)
                     {
                         const Parameter &param0 = params0_array[i];
-                    
+
                         __m128d sse_chg0 = _mm_set_pd( param0.reduced_charge,
                                                        param0.reduced_charge );
-                    
+
                         const Vector &c0 = coords0_array[i];
 
                         __m128d sse_r;
@@ -1939,19 +1939,19 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
                             __m128d dx = _mm_set_pd( c0.x() - c10.x(), c0.x() - c11.x() );
                             __m128d dy = _mm_set_pd( c0.y() - c10.y(), c0.y() - c11.y() );
                             __m128d dz = _mm_set_pd( c0.z() - c10.z(), c0.z() - c11.z() );
-                        
+
                             __m128d dx2 = _mm_mul_pd(dx, dx);
                             __m128d dy2 = _mm_mul_pd(dy, dy);
                             __m128d dz2 = _mm_mul_pd(dz, dz);
-                        
+
                             __m128d sse_r2 = _mm_add_pd(dx2,dy2);
                             sse_r2 = _mm_add_pd(sse_r2, dz2);
-                        
+
                             sse_r = _mm_sqrt_pd(sse_r2);
                         }
-                        
+
                         const __m128d sse_one_over_r = _mm_div_pd(sse_one, sse_r);
-                        
+
                         //calculate the coulomb energy
                         {
                             const __m128d sse_in_cutoff = _mm_cmplt_pd(sse_r, sse_Rc);
@@ -1963,23 +1963,23 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
 
                             __m128d sse_chg = _mm_set_pd( param10.reduced_charge,
                                                           param11.reduced_charge );
-                    
+
                             sse_chg = _mm_mul_pd(sse_chg, sse_chg0);
-                    
+
                             nrg = _mm_mul_pd(sse_chg, nrg);
 
                             nrg = _mm_and_pd(nrg, sse_in_cutoff);
-                            
+
                             sse_cnrg = _mm_add_pd(sse_cnrg, nrg);
                         }
-                        
+
                         //calculate the LJ energy
                         {
                             const __m128d sse_in_cutoff = _mm_cmplt_pd(sse_r, sse_Rlj);
                             const LJPair &ljpair0 = ljpairs.constData()[
                                                 ljpairs.map(param0.ljid,
                                                             param10.ljid)];
-                    
+
                             const LJPair &ljpair1 = ljpairs.constData()[
                                                         ljpairs.map(param0.ljid,
                                                                     param11.ljid)];
@@ -1987,32 +1987,32 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
                             const __m128d sse_sig = _mm_set_pd( ljpair0.sigma(), ljpair1.sigma() );
                             const __m128d sse_eps = _mm_set_pd( ljpair0.epsilon(),
                                                                 ljpair1.epsilon() );
-                        
+
                             //calculate (sigma/r)^6 and (sigma/r)^12
                             __m128d sse_sig_over_r2 = _mm_mul_pd(sse_sig, sse_one_over_r);
                             sse_sig_over_r2 = _mm_mul_pd( sse_sig_over_r2,
                                                           sse_sig_over_r2 );
-                                                     
+
                             __m128d sse_sig_over_r6 = _mm_mul_pd(sse_sig_over_r2,
                                                                  sse_sig_over_r2);
-                                                        
+
                             sse_sig_over_r6 = _mm_mul_pd(sse_sig_over_r6,
                                                          sse_sig_over_r2);
-                                                     
+
                             __m128d sse_sig_over_r12 = _mm_mul_pd(sse_sig_over_r6,
                                                                   sse_sig_over_r6);
-                                              
+
                             //calculate LJ energy (the factor of 4 is added later)
                             __m128d tmp = _mm_sub_pd(sse_sig_over_r12,
                                                      sse_sig_over_r6);
-                                                 
+
                             tmp = _mm_mul_pd(tmp, sse_eps);
                             tmp = _mm_and_pd(tmp, sse_in_cutoff);
                             sse_ljnrg = _mm_add_pd(sse_ljnrg, tmp);
                         }
                     }
                 }
-                
+
                 if (remainder == 1)
                 {
                     const Vector &c1 = coords1_array[nats1-1];
@@ -2025,19 +2025,19 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
 
                         const double r = Vector::distance(c0,c1);
                         const double one_over_r = double(1) / r;
-                        
+
                         if (r < Rc)
                         {
                             icnrg += param0.reduced_charge * param1.reduced_charge
                                         * (one_over_r + k_rf*r*r - c_rf);
                         }
-                        
+
                         if (r < Rlj)
                         {
                             const LJPair &ljpair = ljpairs.constData()[
                                                     ljpairs.map(param0.ljid,
                                                                 param1.ljid)];
-                        
+
                             double sig_over_dist6 = pow_6(ljpair.sigma()*one_over_r);
                             double sig_over_dist12 = pow_2(sig_over_dist6);
 
@@ -2046,10 +2046,10 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
                         }
                     }
                 }
-                
+
                 icnrg += *((const double*)&sse_cnrg) +
                          *( ((const double*)&sse_cnrg) + 1 );
-                         
+
                 iljnrg += *((const double*)&sse_ljnrg) +
                           *( ((const double*)&sse_ljnrg) + 1 );
             }
@@ -2064,7 +2064,7 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
                 {
                     const Parameter &param1 = params1_array[j];
                     const Vector &c1 = coords1_array[j];
-                    
+
                     for (int i=0; i<nats0; ++i)
                     {
                         const Parameter &param0 = params0_array[i];
@@ -2072,13 +2072,13 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
 
                         const double r = Vector::distance(c0,c1);
                         const double one_over_r = double(1) / r;
-                        
+
                         if (r < Rc)
                         {
                             icnrg += (param0.reduced_charge * param1.reduced_charge) *
                                      (one_over_r + k_rf*r*r - c_rf);
                         }
-                        
+
                         if (r < Rlj)
                         {
                             const LJPair &ljpair = ljpairs.constData()[
@@ -2101,18 +2101,18 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
             //use a simple atom-based cutoff
             const double Rc = coul_cutoff;
             const double Rlj = lj_cutoff;
-        
+
             #ifdef SIRE_USE_SSE
             {
                 const int remainder = nats1 % 2;
-                
+
                 __m128d sse_cnrg = { 0, 0 };
                 __m128d sse_ljnrg = { 0, 0 };
 
                 const __m128d sse_one = { 1.0, 1.0 };
                 const __m128d sse_Rc = { Rc, Rc };
                 const __m128d sse_Rlj = { Rlj, Rlj };
-                
+
                 for (int j=0; j<nats1-1; j += 2)
                 {
                     const Parameter &param10 = params1_array[j];
@@ -2124,54 +2124,54 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
                     for (int i=0; i<nats0; ++i)
                     {
                         const Parameter &param0 = params0_array[i];
-                    
+
                         __m128d sse_chg0 = _mm_set_pd( param0.reduced_charge,
                                                        param0.reduced_charge );
-                    
+
                         const Vector &c0 = coords0_array[i];
-                    
+
                         __m128d sse_r;
                         {
                             __m128d dx = _mm_set_pd( c0.x() - c10.x(), c0.x() - c11.x() );
                             __m128d dy = _mm_set_pd( c0.y() - c10.y(), c0.y() - c11.y() );
                             __m128d dz = _mm_set_pd( c0.z() - c10.z(), c0.z() - c11.z() );
-                        
+
                             __m128d dx2 = _mm_mul_pd(dx, dx);
                             __m128d dy2 = _mm_mul_pd(dy, dy);
                             __m128d dz2 = _mm_mul_pd(dz, dz);
-                        
+
                             __m128d sse_r2 = _mm_add_pd(dx2,dy2);
                             sse_r2 = _mm_add_pd(sse_r2, dz2);
-                        
+
                             sse_r = _mm_sqrt_pd(sse_r2);
                         }
-                        
+
                         const __m128d sse_one_over_r = _mm_div_pd(sse_one, sse_r);
-                        
+
                         //calculate the coulomb energy
                         {
                             const __m128d sse_in_cutoff = _mm_cmplt_pd(sse_r, sse_Rc);
 
                             __m128d sse_chg = _mm_set_pd( param10.reduced_charge,
                                                           param11.reduced_charge );
-                        
+
                             sse_chg = _mm_mul_pd(sse_chg, sse_chg0);
-                        
+
                             __m128d nrg = _mm_mul_pd(sse_chg, sse_one_over_r);
 
                             nrg = _mm_and_pd(nrg, sse_in_cutoff);
-                            
+
                             sse_cnrg = _mm_add_pd(sse_cnrg, nrg);
                         }
-                        
+
                         //calculate the LJ energy
                         {
                             const __m128d sse_in_cutoff = _mm_cmplt_pd(sse_r, sse_Rlj);
-                        
+
                             const LJPair &ljpair0 = ljpairs.constData()[
                                                         ljpairs.map(param0.ljid,
                                                                     param10.ljid)];
-                    
+
                             const LJPair &ljpair1 = ljpairs.constData()[
                                                         ljpairs.map(param0.ljid,
                                                                     param11.ljid)];
@@ -2179,32 +2179,32 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
                             const __m128d sse_sig = _mm_set_pd( ljpair0.sigma(), ljpair1.sigma() );
                             const __m128d sse_eps = _mm_set_pd( ljpair0.epsilon(),
                                                                 ljpair1.epsilon() );
-                        
+
                             //calculate (sigma/r)^6 and (sigma/r)^12
                             __m128d sse_sig_over_r2 = _mm_mul_pd(sse_sig, sse_one_over_r);
                             sse_sig_over_r2 = _mm_mul_pd( sse_sig_over_r2,
                                                           sse_sig_over_r2 );
-                                                     
+
                             __m128d sse_sig_over_r6 = _mm_mul_pd(sse_sig_over_r2,
                                                                  sse_sig_over_r2);
-                                                        
+
                             sse_sig_over_r6 = _mm_mul_pd(sse_sig_over_r6,
                                                          sse_sig_over_r2);
-                                                     
+
                             __m128d sse_sig_over_r12 = _mm_mul_pd(sse_sig_over_r6,
                                                                   sse_sig_over_r6);
-                                              
+
                             //calculate LJ energy (the factor of 4 is added later)
                             __m128d tmp = _mm_sub_pd(sse_sig_over_r12,
                                                      sse_sig_over_r6);
-                                                 
+
                             tmp = _mm_mul_pd(tmp, sse_eps);
                             tmp = _mm_and_pd(tmp, sse_in_cutoff);
                             sse_ljnrg = _mm_add_pd(sse_ljnrg, tmp);
                         }
                     }
                 }
-                          
+
                 if (remainder == 1)
                 {
                     const Vector &c1 = coords1_array[nats1-1];
@@ -2217,7 +2217,7 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
 
                         const double r = Vector::distance(c0,c1);
                         const double one_over_r = double(1) / r;
-                        
+
                         if (r < Rc)
                         {
                             icnrg += param0.reduced_charge * param1.reduced_charge
@@ -2229,7 +2229,7 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
                             const LJPair &ljpair = ljpairs.constData()[
                                                     ljpairs.map(param0.ljid,
                                                                 param1.ljid)];
-                        
+
                             double sig_over_dist6 = pow_6(ljpair.sigma()*one_over_r);
                             double sig_over_dist12 = pow_2(sig_over_dist6);
 
@@ -2238,10 +2238,10 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
                         }
                     }
                 }
-                
+
                 icnrg += *((const double*)&sse_cnrg) +
                          *( ((const double*)&sse_cnrg) + 1 );
-                         
+
                 iljnrg += *((const double*)&sse_ljnrg) +
                           *( ((const double*)&sse_ljnrg) + 1 );
             }
@@ -2252,7 +2252,7 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
                 {
                     const Parameter &param1 = params1_array[j];
                     const Vector &c1 = coords1_array[j];
-                    
+
                     for (int i=0; i<nats0; ++i)
                     {
                         const Parameter &param0 = params0_array[i];
@@ -2260,13 +2260,13 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
 
                         const double r = Vector::distance(c0,c1);
                         const double one_over_r = double(1) / r;
-                        
+
                         if (r < Rc)
                         {
                             icnrg += (param0.reduced_charge * param1.reduced_charge) *
                                         one_over_r;
                         }
-                        
+
                         if (r < Rlj)
                         {
                             const LJPair &ljpair = ljpairs.constData()[
@@ -2294,13 +2294,13 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
     {
         const Vector &c0 = coords0[i0];
         const detail::CLJParameter &p0 = params0[i0];
-        
+
         Vector grid_coords = c0 - gridbox.minCoords();
-        
+
         int i_0 = int(grid_coords.x() / grid_spacing);
         int j_0 = int(grid_coords.y() / grid_spacing);
         int k_0 = int(grid_coords.z() / grid_spacing);
-        
+
         if (i_0 < 0 or i_0 >= int(dimx-1) or
             j_0 < 0 or j_0 >= int(dimy-1) or
             k_0 < 0 or k_0 >= int(dimz-1))
@@ -2312,7 +2312,7 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
         {
             //use tri-linear interpolation to get the potential at the atom
             //
-            // This is described in 
+            // This is described in
             //
             // Davis, Madura and McCammon, Comp. Phys. Comm., 62, 187-197, 1991
             //
@@ -2325,11 +2325,11 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
             //              phi(i  ,j+1,k+1)*(1-R)(  S)(  T) +
             //              phi(i+1,j+1,k+1)*(  R)(  S)(  T) +
             //
-            // where R, S and T are the coordinates of the atom in 
+            // where R, S and T are the coordinates of the atom in
             // fractional grid coordinates from the point (i,j,k), e.g.
             // (0,0,0) is (i,j,k) and (1,1,1) is (i+1,j+1,k+1)
             //
-            const Vector c000 = gridbox.minCoords() + 
+            const Vector c000 = gridbox.minCoords() +
                                     Vector( i_0 * grid_spacing,
                                             j_0 * grid_spacing,
                                             k_0 * grid_spacing );
@@ -2338,7 +2338,7 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
             const double R = RST.x();
             const double S = RST.y();
             const double T = RST.z();
-            
+
             int i000 = (i_0  ) * (dimy*dimz) + (j_0  )*dimz + (k_0  );
             int i001 = (i_0  ) * (dimy*dimz) + (j_0  )*dimz + (k_0+1);
             int i010 = (i_0  ) * (dimy*dimz) + (j_0+1)*dimz + (k_0  );
@@ -2347,16 +2347,16 @@ void GridFF::calculateEnergy(const CoordGroup &coords0,
             int i101 = (i_0+1) * (dimy*dimz) + (j_0  )*dimz + (k_0+1);
             int i110 = (i_0+1) * (dimy*dimz) + (j_0+1)*dimz + (k_0  );
             int i111 = (i_0+1) * (dimy*dimz) + (j_0+1)*dimz + (k_0+1);
-            
-            double phi = (gridpot_array[i000] * (1-R)*(1-S)*(1-T)) + 
+
+            double phi = (gridpot_array[i000] * (1-R)*(1-S)*(1-T)) +
                          (gridpot_array[i001] * (1-R)*(1-S)*(  T)) +
                          (gridpot_array[i010] * (1-R)*(  S)*(1-T)) +
                          (gridpot_array[i100] * (  R)*(1-S)*(1-T)) +
                          (gridpot_array[i011] * (1-R)*(  S)*(  T)) +
                          (gridpot_array[i101] * (  R)*(1-S)*(  T)) +
                          (gridpot_array[i110] * (  R)*(  S)*(1-T)) +
-                         (gridpot_array[i111] * (  R)*(  S)*(  T));                         
-                              
+                         (gridpot_array[i111] * (  R)*(  S)*(  T));
+
             gridnrg += phi * p0.reduced_charge;
         }
     }
@@ -2372,12 +2372,12 @@ void GridFF::mustNowRecalculateFromScratch()
     closemols_coords.clear();
     closemols_params.clear();
     oldnrgs.clear();
-    
+
     InterGroupCLJFF::mustNowRecalculateFromScratch();
 }
 
 /** Any additions mean that the forcefield must be recalculated from scratch */
-void GridFF::_pvt_added(quint32 groupid, const PartialMolecule &mol, 
+void GridFF::_pvt_added(quint32 groupid, const PartialMolecule &mol,
                         const PropertyMap &map)
 {
     this->mustNowRecalculateFromScratch();
@@ -2424,7 +2424,7 @@ void GridFF::recalculateEnergy()
         this->setClean();
         return;
     }
-    
+
     bool must_recalculate = false;
 
     //we need to recalculate if either something has changed in group 1,
@@ -2451,11 +2451,11 @@ void GridFF::recalculateEnergy()
                 break;
             }
         }
-        
+
         if (not must_recalculate)
         {
             changed_mols[1].clear();
-        
+
             if (changed_mols[0].isEmpty())
             {
                 //there is nothing to do :-)
@@ -2463,7 +2463,7 @@ void GridFF::recalculateEnergy()
                 this->setClean();
                 return;
             }
-            
+
             //otherwise a part of the molecule in group 0 has changed,
             //so evaluate the change
         }
@@ -2473,12 +2473,12 @@ void GridFF::recalculateEnergy()
         //probably not recording changes - assume everything has changed
         must_recalculate = true;
     }
-    
+
     if (must_recalculate)
     {
         QElapsedTimer t;
         t.start();
-    
+
         this->mustNowRecalculateFromScratch();
         this->rebuildGrid();
 
@@ -2491,10 +2491,10 @@ void GridFF::recalculateEnergy()
         //calculate all of the energies from scratch and store
         //them in 'oldnrgs'
         oldnrgs.reserve( mols[0].count() );
-    
+
         //loop through all of the molecules and calculate the energies.
         //First, calculate the CLJ energies for the closemols
-        for (ChunkedVector<CLJMolecule>::const_iterator 
+        for (ChunkedVector<CLJMolecule>::const_iterator
                     it = mols[0].moleculesByIndex().constBegin();
              it != mols[0].moleculesByIndex().constEnd();
              ++it)
@@ -2503,13 +2503,13 @@ void GridFF::recalculateEnergy()
 
             double cnrg(0);
             double ljnrg(0);
-        
+
             //loop through each CutGroup of this molecule
             const int ngroups = cljmol.coordinates().count();
-        
+
             const CoordGroup *groups_array = cljmol.coordinates().constData();
-        
-            const CLJParameters::Array *params_array 
+
+            const CLJParameters::Array *params_array
                                 = cljmol.parameters().atomicParameters().constData();
 
             for (int igroup=0; igroup<ngroups; ++igroup)
@@ -2524,18 +2524,18 @@ void GridFF::recalculateEnergy()
                     this->recalculateEnergy();
                     return;
                 }
-                        
+
                 double icnrg, iljnrg;
                 calculateEnergy(group, params_array[igroup],
                                 icnrg, iljnrg);
-                                      
+
                 cnrg += icnrg;
                 ljnrg += iljnrg;
 
             }
-            
+
             oldnrgs.insert(cljmol.number(), CLJEnergy(cnrg,ljnrg));
-            
+
             total_cnrg += cnrg;
             total_ljnrg += ljnrg;
         }
@@ -2548,7 +2548,7 @@ void GridFF::recalculateEnergy()
     {
         double delta_cnrg(0);
         double delta_ljnrg(0);
-    
+
         for (QHash<MolNum,ChangedMolecule>::const_iterator
                                       it = this->changed_mols[0].constBegin();
              it != this->changed_mols[0].constEnd();
@@ -2561,18 +2561,18 @@ void GridFF::recalculateEnergy()
             else if (it->changedAll())
             {
                 const CLJMolecule &cljmol = it->newMolecule();
-                
+
                 //loop through each CutGroup of this molecule
                 const int ngroups = cljmol.coordinates().count();
-            
+
                 const CoordGroup *groups_array = cljmol.coordinates().constData();
-            
-                const CLJParameters::Array *params_array 
+
+                const CLJParameters::Array *params_array
                                     = cljmol.parameters().atomicParameters().constData();
 
                 double cnrg(0);
                 double ljnrg(0);
-            
+
                 for (int igroup=0; igroup<ngroups; ++igroup)
                 {
                     const CoordGroup &group = groups_array[igroup];
@@ -2589,15 +2589,15 @@ void GridFF::recalculateEnergy()
                     double icnrg, iljnrg;
                     calculateEnergy(group, params_array[igroup],
                                     icnrg, iljnrg);
-                                
+
                     cnrg += icnrg;
                     ljnrg += iljnrg;
 
                 }
-                
+
                 CLJEnergy old_nrg = oldnrgs[cljmol.number()];
                 oldnrgs[cljmol.number()] = CLJEnergy(cnrg,ljnrg);
-                
+
                 delta_cnrg += (cnrg - old_nrg.coulomb());
                 delta_ljnrg += (ljnrg - old_nrg.lj());
             }
@@ -2607,18 +2607,18 @@ void GridFF::recalculateEnergy()
                 //molecule that has changed
                 const CLJMolecule &oldmol = it->oldParts();
                 const CLJMolecule &newmol = it->newParts();
-                
+
                 //calculate the energy of the old parts
                 double old_cnrg(0);
                 double old_ljnrg(0);
                 {
                     const int ngroups = oldmol.coordinates().count();
-            
+
                     const CoordGroup *groups_array = oldmol.coordinates().constData();
-            
+
                     const CLJParameters::Array *params_array
                                     = oldmol.parameters().atomicParameters().constData();
-            
+
                     for (int igroup=0; igroup<ngroups; ++igroup)
                     {
                         const CoordGroup &group = groups_array[igroup];
@@ -2635,23 +2635,23 @@ void GridFF::recalculateEnergy()
                         double icnrg, iljnrg;
                         calculateEnergy(group, params_array[igroup],
                                         icnrg, iljnrg);
-                                    
+
                         old_cnrg += icnrg;
                         old_ljnrg += iljnrg;
                     }
                 }
-                
+
                 //calculate the energy of the new parts
                 double new_cnrg(0);
                 double new_ljnrg(0);
                 {
                     const int ngroups = newmol.coordinates().count();
-            
+
                     const CoordGroup *groups_array = newmol.coordinates().constData();
-            
+
                     const CLJParameters::Array *params_array
                                     = newmol.parameters().atomicParameters().constData();
-            
+
                     for (int igroup=0; igroup<ngroups; ++igroup)
                     {
                         const CoordGroup &group = groups_array[igroup];
@@ -2668,7 +2668,7 @@ void GridFF::recalculateEnergy()
                         double icnrg, iljnrg;
                         calculateEnergy(group, params_array[igroup],
                                         icnrg, iljnrg);
-                                    
+
                         new_cnrg += icnrg;
                         new_ljnrg += iljnrg;
                     }
@@ -2677,21 +2677,21 @@ void GridFF::recalculateEnergy()
                 CLJEnergy old_nrg = oldnrgs[oldmol.number()];
                 CLJEnergy new_nrg = CLJEnergy(old_nrg.coulomb() + new_cnrg - old_cnrg,
                                               old_nrg.lj() + new_ljnrg - old_ljnrg);
-                
+
                 oldnrgs[oldmol.number()] = new_nrg;
-                
+
                 delta_cnrg += (new_nrg.coulomb() - old_nrg.coulomb());
                 delta_ljnrg += (new_nrg.lj() - old_nrg.lj());
             }
         }
-        
+
         //change the energy
         this->components().changeEnergy(*this, CLJEnergy(delta_cnrg,delta_ljnrg));
-        
+
         //clear the changed molecules
         this->changed_mols[0].clear();
     }
- 
+
     CLJPotential::finishedEvaluation();
     this->setClean();
 }
