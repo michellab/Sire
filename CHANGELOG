@@ -18,7 +18,9 @@ devel branch:
                conda-forge OpenMM and switching to the new C++ ABI (@chryswoods).
                Simplified Sire wrapper generation using a minimal Docker
                container with the latest Py++ (@chryswoods). At support for
-               native Python pickling of Sire objects (@chryswoods.)
+               native Python pickling of Sire objects (@chryswoods.) Switch
+               to GitHub actions for CI. This uses a conda-forge compliant
+               conda build, with packages then uploaded to the Anaconda cloud.
 
     [2021.1.0] Aug 2021 - Added support for multiple combining rules in SOMD
                (@SofiaBariami). Added support for triclinic simulation boxes.
