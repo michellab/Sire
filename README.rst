@@ -36,14 +36,14 @@ To create a new environment:
 
 .. code-block:: bash
 
-    conda create -n sire -c conda-forge -c omnia -c michellab sire
+    conda create -n sire -c conda-forge -c michellab sire
     conda activate sire
 
 To install the latest development version you can use:
 
 .. code-block:: bash
 
-    conda create -n sire-dev -c conda-forge -c omnia -c michellab/label/dev sire
+    conda create -n sire-dev -c conda-forge -c michellab/label/dev sire
     conda activate sire-dev
 
 If you find that Conda is particularly slow to install or upgrade,
@@ -57,7 +57,7 @@ You can then replace all ``conda`` commands with ``mamba``, e.g.:
 
 .. code-block:: bash
 
-    mamba create -n sire -c conda-forge -c omnia -c michellab sire
+    mamba create -n sire -c conda-forge -c michellab sire
 
 There are also many `pre-built binary packages <http://siremol.org/pages/binaries.html>`__,
 which are available for Linux, Mac OS X and Windows, which are quick and easy to install.
