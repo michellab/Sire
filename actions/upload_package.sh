@@ -27,9 +27,10 @@ if [ ! -e "$TAG" ]; then
     LABEL=main
 fi
 
-# Upload the package to the michellab channel on Anaconda Cloud.
+# Upload the packages to the michellab channel on Anaconda Cloud.
 
 # Label release packages with main and dev so that dev is at least as new as main.
+# Uncomment the libcpuid package upload as and when there are new releases.
 if [ "$LABEL" = "main" ]; then
     anaconda \
         --token "$ANACONDA_TOKEN" upload \
@@ -38,15 +39,16 @@ if [ "$LABEL" = "main" ]; then
         --label dev \
         --force \
         "$CONDA_BLD"/"$OS"/sire-* \
-        "$CONDA_BLD"/"$OS"/libcpuid-*
+        "$CONDA_BLD"/"$OS"/sire-*
+#        "$CONDA_BLD"/"$OS"/libcpuid-*
 else
     anaconda \
         --token "$ANACONDA_TOKEN" upload \
         --user michellab \
         --label dev \
         --force \
-        "$CONDA_BLD"/"$OS"/sire-* \
-        "$CONDA_BLD"/"$OS"/libcpuid-*
+        "$CONDA_BLD"/"$OS"/sire-*
+#        "$CONDA_BLD"/"$OS"/libcpuid-*
 fi
 
 echo "Package uploaded!"
