@@ -2,11 +2,13 @@
 `Sire <http://siremol.org>`__
 ****
 
-.. image:: https://dev.azure.com/michellab/Sire/_apis/build/status/michellab.Sire?branchName=devel
-   :target: https://dev.azure.com/michellab/Sire/_build
+.. image:: https://github.com/michellab/Sire/workflows/Build/badge.svg
+   :target: https://github.com/michellab/Sire/actions?query=workflow%3ABuild)
+   :alt: Build status
 
 .. image:: https://anaconda.org/michellab/sire/badges/downloads.svg
    :target: https://anaconda.org/michellab/sire
+   :alt: Downloads
 
 .. image:: https://img.shields.io/badge/License-GPL%20v2-blue.svg
    :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
