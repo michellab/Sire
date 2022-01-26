@@ -123,6 +123,7 @@ void register_ResAtomID_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ResAtomID_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::GroupAtomID<SireMol::ResID, SireMol::AtomID> >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        ResAtomID_exposer.def_pickle(sire_pickle_suite< ::SireMol::GroupAtomID<SireMol::ResID, SireMol::AtomID> >());
         ResAtomID_exposer.def( "__str__", &__str__< ::SireMol::GroupAtomID<SireMol::ResID, SireMol::AtomID> > );
         ResAtomID_exposer.def( "__repr__", &__str__< ::SireMol::GroupAtomID<SireMol::ResID, SireMol::AtomID> > );
         ResAtomID_exposer.def( "__hash__", &::SireMol::GroupAtomID<SireMol::ResID, SireMol::AtomID>::hash );

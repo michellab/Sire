@@ -30,6 +30,14 @@
 #define SIREBASE_REFCOUNTDATA_H
 
 #include <atomic>
+
+// We have to undef the 'emit' from Qt as this is a function
+// name used in TBB! This should be safe for Qt as that
+// code uses Q_EMIT, and we don't use signals and slots in Sire
+#ifdef emit
+#undef emit
+#endif
+
 #include <tbb/spin_mutex.h>
 
 #include "sireglobal.h"

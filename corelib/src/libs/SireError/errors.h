@@ -66,7 +66,7 @@ public:
     program_bug() : exception()
     {}
 
-    program_bug(QString err, QString place = QString::null) : exception(err,place)
+    program_bug(QString err, QString place = QString()) : exception(err,place)
     {}
 
     program_bug(const program_bug &other) : exception(other)
@@ -81,7 +81,7 @@ public:
     {
         return program_bug::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw program_bug(*this);
@@ -99,7 +99,7 @@ public:
     unsupported() : exception()
     {}
 
-    unsupported(QString err, QString place = QString::null) : exception(err,place)
+    unsupported(QString err, QString place = QString()) : exception(err,place)
     {}
 
     unsupported(const unsupported &other) : exception(other)
@@ -114,7 +114,7 @@ public:
     {
         return unsupported::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw unsupported(*this);
@@ -131,7 +131,7 @@ public:
     invalid_key() : exception()
     {}
 
-    invalid_key(QString err, QString place = QString::null) : exception(err,place)
+    invalid_key(QString err, QString place = QString()) : exception(err,place)
     {}
 
     invalid_key(const invalid_key &other) : exception(other)
@@ -146,7 +146,7 @@ public:
     {
         return invalid_key::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw invalid_key(*this);
@@ -163,7 +163,7 @@ public:
     invalid_index() : exception()
     {}
 
-    invalid_index(QString err, QString place=QString::null) : exception(err,place)
+    invalid_index(QString err, QString place=QString()) : exception(err,place)
     {}
 
     invalid_index(const invalid_index &other) : exception(other)
@@ -178,7 +178,7 @@ public:
     {
         return invalid_index::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw invalid_index(*this);
@@ -195,7 +195,7 @@ public:
     invalid_cast() : exception()
     {}
 
-    invalid_cast(QString err, QString place = QString::null) : exception(err,place)
+    invalid_cast(QString err, QString place = QString()) : exception(err,place)
     {}
 
     invalid_cast(const invalid_cast &other) : exception(other)
@@ -210,7 +210,7 @@ public:
     {
         return invalid_cast::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw invalid_cast(*this);
@@ -228,7 +228,7 @@ public:
     incompatible_error() : exception()
     {}
 
-    incompatible_error(QString err, QString place = QString::null) : exception(err,place)
+    incompatible_error(QString err, QString place = QString()) : exception(err,place)
     {}
 
     incompatible_error(const incompatible_error &other) : exception(other)
@@ -243,7 +243,7 @@ public:
     {
         return incompatible_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw incompatible_error(*this);
@@ -261,7 +261,7 @@ public:
     unknown_type() : exception()
     {}
 
-    unknown_type(QString err, QString place = QString::null) : exception(err,place)
+    unknown_type(QString err, QString place = QString()) : exception(err,place)
     {}
 
     unknown_type(const unknown_type &other) : exception(other)
@@ -276,7 +276,7 @@ public:
     {
         return unknown_type::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw unknown_type(*this);
@@ -293,7 +293,7 @@ public:
     noncopyable_error() : exception()
     {}
 
-    noncopyable_error(QString err, QString place=QString::null) : exception(err,place)
+    noncopyable_error(QString err, QString place=QString()) : exception(err,place)
     {}
 
     noncopyable_error(const noncopyable_error &other) : exception(other)
@@ -308,7 +308,7 @@ public:
     {
         return noncopyable_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw noncopyable_error(*this);
@@ -324,7 +324,7 @@ public:
     nullptr_error() : exception()
     {}
 
-    nullptr_error(QString err, QString place=QString::null) : exception(err,place)
+    nullptr_error(QString err, QString place=QString()) : exception(err,place)
     {}
 
     nullptr_error(const nullptr_error &other) : exception(other)
@@ -339,7 +339,7 @@ public:
     {
         return nullptr_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw nullptr_error(*this);
@@ -356,7 +356,7 @@ public:
     lock_error() : exception()
     {}
 
-    lock_error(QString err, QString place=QString::null) : exception(err,place)
+    lock_error(QString err, QString place=QString()) : exception(err,place)
     {}
 
     lock_error(const lock_error &other) : exception(other)
@@ -371,7 +371,7 @@ public:
     {
         return lock_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw lock_error(*this);
@@ -389,7 +389,7 @@ public:
     assertation_failed() : exception()
     {}
 
-    assertation_failed(QString err, QString place=QString::null)
+    assertation_failed(QString err, QString place=QString())
           : exception(err,place)
     {}
 
@@ -405,7 +405,7 @@ public:
     {
         return assertation_failed::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw assertation_failed(*this);
@@ -419,11 +419,11 @@ public:
     file_error() : exception()
     {}
 
-    file_error(const QString &err, const QString &place=QString::null)
+    file_error(const QString &err, const QString &place=QString())
               : exception(err, place)
     {}
 
-    file_error(const QFile &file, QString place=QString::null)
+    file_error(const QFile &file, QString place=QString())
               : exception(fileError(file), place)
     {}
 
@@ -439,7 +439,7 @@ public:
     {
         return file_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw file_error(*this);
@@ -453,12 +453,12 @@ public:
     process_error() : exception()
     {}
 
-    process_error(const QString &err, const QString place=QString::null)
+    process_error(const QString &err, const QString place=QString())
               : exception(err, place)
     {}
 
     process_error(const QString &executable, const QProcess &process,
-                  QString place=QString::null)
+                  QString place=QString())
               : exception(processError(executable,process), place)
     {}
 
@@ -474,7 +474,7 @@ public:
     {
         return process_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw process_error(*this);
@@ -489,7 +489,7 @@ public:
     unavailable_resource() : exception()
     {}
 
-    unavailable_resource(QString err, QString place=QString::null)
+    unavailable_resource(QString err, QString place=QString())
               : exception(err,place)
     {}
 
@@ -505,7 +505,7 @@ public:
     {
         return unavailable_resource::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw unavailable_resource(*this);
@@ -519,7 +519,7 @@ public:
     io_error() : exception()
     {}
 
-    io_error(QString err, QString place=QString::null)
+    io_error(QString err, QString place=QString())
               : exception(err,place)
     {}
 
@@ -535,7 +535,7 @@ public:
     {
         return io_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw io_error(*this);
@@ -553,7 +553,7 @@ public:
     invalid_arg() : exception()
     {}
 
-    invalid_arg(QString err, QString place=QString::null) : exception(err,place)
+    invalid_arg(QString err, QString place=QString()) : exception(err,place)
     {}
 
     invalid_arg(const invalid_arg &other) : exception(other)
@@ -568,7 +568,7 @@ public:
     {
         return invalid_arg::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw invalid_arg(*this);
@@ -586,7 +586,7 @@ public:
     invalid_state() : exception()
     {}
 
-    invalid_state(QString err, QString place=QString::null) : exception(err,place)
+    invalid_state(QString err, QString place=QString()) : exception(err,place)
     {}
 
     invalid_state(const invalid_state &other) : exception(other)
@@ -601,7 +601,7 @@ public:
     {
         return invalid_state::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw invalid_state(*this);
@@ -618,7 +618,7 @@ public:
     invalid_operation() : exception()
     {}
 
-    invalid_operation(QString err, QString place=QString::null) : exception(err,place)
+    invalid_operation(QString err, QString place=QString()) : exception(err,place)
     {}
 
     invalid_operation(const invalid_operation &other) : exception(other)
@@ -633,7 +633,7 @@ public:
     {
         return invalid_operation::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw invalid_operation(*this);
@@ -651,7 +651,7 @@ public:
     incomplete_code() : exception()
     {}
 
-    incomplete_code(QString err, QString place=QString::null) : exception(err,place)
+    incomplete_code(QString err, QString place=QString()) : exception(err,place)
     {}
 
     incomplete_code(const incomplete_code &other) : exception(other)
@@ -666,7 +666,7 @@ public:
     {
         return incomplete_code::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw incomplete_code(*this);
@@ -698,7 +698,7 @@ public:
     {
         return std_exception::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw std_exception(*this);
@@ -710,7 +710,7 @@ protected:
 
 /** This exception is thrown whenever an unidentified exception needs translating into
     a SireError::exception, or when an unidentified SireError::exception is detected.
-    
+
     @author Christopher Woods
 */
 class SIREERROR_EXPORT unknown_exception : public SireError::exception
@@ -719,7 +719,7 @@ public:
     unknown_exception() : exception()
     {}
 
-    unknown_exception(QString err, QString place=QString::null) : exception(err,place)
+    unknown_exception(QString err, QString place=QString()) : exception(err,place)
     {}
 
     unknown_exception(const unknown_exception &other) : exception(other)
@@ -734,7 +734,7 @@ public:
     {
         return unknown_exception::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw unknown_exception(*this);
@@ -744,7 +744,7 @@ public:
 /** This exception is thrown whenever a problem is detected
     that involves dependencies, e.g. a dependency is missing,
     or a dependency may be about to be broken.
-    
+
     @author Christopher Woods
 */
 class SIREERROR_EXPORT dependency_error : public SireError::exception
@@ -753,7 +753,7 @@ public:
     dependency_error() : exception()
     {}
 
-    dependency_error(QString err, QString place=QString::null) : exception(err,place)
+    dependency_error(QString err, QString place=QString()) : exception(err,place)
     {}
 
     dependency_error(const dependency_error &other) : exception(other)
@@ -768,7 +768,7 @@ public:
     {
         return dependency_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw dependency_error(*this);
@@ -786,7 +786,7 @@ public:
     id_error() : exception()
     {}
 
-    id_error(QString err, QString place = QString::null)
+    id_error(QString err, QString place = QString())
                   : exception(err,place)
     {}
 
@@ -802,7 +802,7 @@ public:
     {
         return id_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw id_error(*this);

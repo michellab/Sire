@@ -49,7 +49,7 @@ public:
     siremol_error() : exception()
     {}
 
-    siremol_error(QString err, QString place = QString::null) : exception(err,place)
+    siremol_error(QString err, QString place = QString()) : exception(err,place)
     {}
 
     siremol_error(const siremol_error &other) : exception(other)
@@ -75,7 +75,7 @@ public:
     missing_atom() : siremol_error()
     {}
 
-    missing_atom(QString err, QString place = QString::null)
+    missing_atom(QString err, QString place = QString())
               : siremol_error(err,place)
     {}
 
@@ -91,7 +91,7 @@ public:
     {
         return missing_atom::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_atom(*this);
@@ -109,7 +109,7 @@ public:
     duplicate_atom() : siremol_error()
     {}
 
-    duplicate_atom(QString err, QString place = QString::null)
+    duplicate_atom(QString err, QString place = QString())
                 : siremol_error(err,place)
     {}
 
@@ -125,7 +125,7 @@ public:
     {
         return duplicate_atom::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw duplicate_atom(*this);
@@ -142,7 +142,7 @@ public:
     missing_residue() : siremol_error()
     {}
 
-    missing_residue(QString err, QString place = QString::null)
+    missing_residue(QString err, QString place = QString())
                     : siremol_error(err,place)
     {}
 
@@ -158,7 +158,7 @@ public:
     {
         return missing_residue::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_residue(*this);
@@ -176,7 +176,7 @@ public:
     duplicate_residue() : siremol_error()
     {}
 
-    duplicate_residue(QString err, QString place = QString::null)
+    duplicate_residue(QString err, QString place = QString())
                   : siremol_error(err,place)
     {}
 
@@ -192,7 +192,7 @@ public:
     {
         return duplicate_residue::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw duplicate_residue(*this);
@@ -209,7 +209,7 @@ public:
     missing_cutgroup() : siremol_error()
     {}
 
-    missing_cutgroup(QString err, QString place = QString::null)
+    missing_cutgroup(QString err, QString place = QString())
                     : siremol_error(err,place)
     {}
 
@@ -225,7 +225,7 @@ public:
     {
         return missing_cutgroup::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_cutgroup(*this);
@@ -243,7 +243,7 @@ public:
     duplicate_cutgroup() : siremol_error()
     {}
 
-    duplicate_cutgroup(QString err, QString place = QString::null)
+    duplicate_cutgroup(QString err, QString place = QString())
                   : siremol_error(err,place)
     {}
 
@@ -259,7 +259,7 @@ public:
     {
         return duplicate_cutgroup::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw duplicate_cutgroup(*this);
@@ -276,7 +276,7 @@ public:
     missing_chain() : siremol_error()
     {}
 
-    missing_chain(QString err, QString place = QString::null)
+    missing_chain(QString err, QString place = QString())
                     : siremol_error(err,place)
     {}
 
@@ -292,7 +292,7 @@ public:
     {
         return missing_chain::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_chain(*this);
@@ -310,7 +310,7 @@ public:
     duplicate_chain() : siremol_error()
     {}
 
-    duplicate_chain(QString err, QString place = QString::null)
+    duplicate_chain(QString err, QString place = QString())
                   : siremol_error(err,place)
     {}
 
@@ -326,7 +326,7 @@ public:
     {
         return duplicate_chain::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw duplicate_chain(*this);
@@ -343,7 +343,7 @@ public:
     missing_segment() : siremol_error()
     {}
 
-    missing_segment(QString err, QString place = QString::null)
+    missing_segment(QString err, QString place = QString())
                     : siremol_error(err,place)
     {}
 
@@ -359,7 +359,7 @@ public:
     {
         return missing_segment::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_segment(*this);
@@ -377,7 +377,7 @@ public:
     duplicate_segment() : siremol_error()
     {}
 
-    duplicate_segment(QString err, QString place = QString::null)
+    duplicate_segment(QString err, QString place = QString())
                   : siremol_error(err,place)
     {}
 
@@ -393,7 +393,7 @@ public:
     {
         return duplicate_segment::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw duplicate_segment(*this);
@@ -410,7 +410,7 @@ public:
     missing_group() : siremol_error()
     {}
 
-    missing_group(QString err, QString place = QString::null)
+    missing_group(QString err, QString place = QString())
               : siremol_error(err,place)
     {}
 
@@ -426,14 +426,14 @@ public:
     {
         return missing_group::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_group(*this);
     }
 };
 
-/** This exception is thrown when a new molecule group is added 
+/** This exception is thrown when a new molecule group is added
     to a set that already contains a group with the same ID, or
     when multiple groups match the same ID, but only one group
     is required.
@@ -446,7 +446,7 @@ public:
     duplicate_group() : siremol_error()
     {}
 
-    duplicate_group(QString err, QString place = QString::null)
+    duplicate_group(QString err, QString place = QString())
                   : siremol_error(err,place)
     {}
 
@@ -462,7 +462,7 @@ public:
     {
         return duplicate_group::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw duplicate_group(*this);
@@ -479,7 +479,7 @@ public:
     missing_molecule() : siremol_error()
     {}
 
-    missing_molecule(QString err, QString place = QString::null)
+    missing_molecule(QString err, QString place = QString())
                     : siremol_error(err,place)
     {}
 
@@ -495,7 +495,7 @@ public:
     {
         return missing_molecule::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_molecule(*this);
@@ -513,7 +513,7 @@ public:
     duplicate_molecule() : siremol_error()
     {}
 
-    duplicate_molecule(QString err, QString place = QString::null)
+    duplicate_molecule(QString err, QString place = QString())
                   : siremol_error(err,place)
     {}
 
@@ -529,7 +529,7 @@ public:
     {
         return duplicate_molecule::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw duplicate_molecule(*this);
@@ -547,7 +547,7 @@ public:
     template_error() : siremol_error()
     {}
 
-    template_error(QString err, QString place = QString::null)
+    template_error(QString err, QString place = QString())
                   : siremol_error(err,place)
     {}
 
@@ -563,7 +563,7 @@ public:
     {
         return template_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw template_error(*this);
@@ -581,7 +581,7 @@ public:
     anchor_error() : siremol_error()
     {}
 
-    anchor_error(QString err, QString place = QString::null)
+    anchor_error(QString err, QString place = QString())
                   : siremol_error(err,place)
     {}
 
@@ -597,7 +597,7 @@ public:
     {
         return anchor_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw anchor_error(*this);
@@ -615,7 +615,7 @@ public:
     ring_error() : siremol_error()
     {}
 
-    ring_error(QString err, QString place = QString::null)
+    ring_error(QString err, QString place = QString())
                   : siremol_error(err,place)
     {}
 
@@ -631,7 +631,7 @@ public:
     {
         return ring_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw ring_error(*this);
@@ -648,7 +648,7 @@ public:
     incompatible_molecule() : siremol_error()
     {}
 
-    incompatible_molecule(QString err, QString place = QString::null)
+    incompatible_molecule(QString err, QString place = QString())
                           : siremol_error(err,place)
     {}
 
@@ -665,7 +665,7 @@ public:
     {
         return incompatible_molecule::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw incompatible_molecule(*this);
@@ -682,7 +682,7 @@ public:
     missing_bond() : siremol_error()
     {}
 
-    missing_bond(QString err, QString place = QString::null)
+    missing_bond(QString err, QString place = QString())
               : siremol_error(err,place)
     {}
 
@@ -698,7 +698,7 @@ public:
     {
         return missing_bond::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_bond(*this);
@@ -715,7 +715,7 @@ public:
     missing_angle() : siremol_error()
     {}
 
-    missing_angle(QString err, QString place = QString::null)
+    missing_angle(QString err, QString place = QString())
               : siremol_error(err,place)
     {}
 
@@ -731,7 +731,7 @@ public:
     {
         return missing_angle::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_angle(*this);
@@ -748,7 +748,7 @@ public:
     missing_dihedral() : siremol_error()
     {}
 
-    missing_dihedral(QString err, QString place = QString::null)
+    missing_dihedral(QString err, QString place = QString())
               : siremol_error(err,place)
     {}
 
@@ -764,7 +764,7 @@ public:
     {
         return missing_dihedral::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_dihedral(*this);

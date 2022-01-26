@@ -64,46 +64,46 @@ TinkerParameters::~TinkerParameters()
 {}
 
 /////////////
-///////////// Implementation of everything needed to get the 
+///////////// Implementation of everything needed to get the
 ///////////// Tinker reader/writer working
 /////////////
 
 /** This is an internal class used to store all of the information
     available on a tinker XYZ atom line
-    
+
     e.g.
      2  CT1  -22.301380   12.051195   -1.495658    24     1     3     8     9
 
     First entry is atom number, then atom name, then x,y,z coordinates,
     then the numbers of the atoms this atom is bonded to.
-    
-    Tinker XYZ does not separate the file into molecules - this is 
+
+    Tinker XYZ does not separate the file into molecules - this is
     implied by the connectivity information
-*/          
+*/
 class TinkerXYZAtom
 {
 public:
     TinkerXYZAtom();
-  
+
     ~TinkerXYZAtom();
-    
+
     static TinkerXYZAtom readFromLine(const QString &line, int linenum);
-    
+
     QString writeToLine() const;
-    
+
     Element guessElement() const;
-    
+
     Vector coordinates() const;
 
     int linenum;
-    
+
     int atomnum;
     QString atomname;
-    
+
     double x, y, z;
-    
+
     int param;
-    
+
     QList<int> bonded_to;
 };
 
@@ -115,8 +115,8 @@ TinkerXYZAtom::~TinkerXYZAtom()
 
 TinkerXYZAtom TinkerXYZAtom::readFromLine(const QString &line, int linenum)
 {
-    QStringList words = line.split(" ", QString::SkipEmptyParts);
-    
+    QStringList words = line.split(" ", Qt::SkipEmptyParts);
+
     if (words.count() < 6)
         throw SireIO::parse_error( QObject::tr(
                 "Line %1 does not look like a valid Tinker XYZ line. A Tinker "
@@ -125,14 +125,14 @@ TinkerXYZAtom TinkerXYZAtom::readFromLine(const QString &line, int linenum)
                     .arg(linenum).arg(words.count()).arg(line), CODELOC );
 
     TinkerXYZAtom atom;
-    
+
     atom.linenum = linenum;
-    
+
     bool ok = true;
-    
+
     atom.atomnum = words[0].toInt(&ok);
-    
-    if (not ok) 
+
+    if (not ok)
         throw SireIO::parse_error( QObject::tr(
                 "Line %1 does not look like a valid Tinker XYZ line. The first "
                 "space separated word in the line should be an integer, but "
@@ -140,28 +140,28 @@ TinkerXYZAtom TinkerXYZAtom::readFromLine(const QString &line, int linenum)
                     .arg(linenum).arg(words[0]).arg(line), CODELOC );
 
     atom.atomname = words[1];
-    
+
     atom.x = words[2].toDouble(&ok);
 
-    if (not ok) 
+    if (not ok)
         throw SireIO::parse_error( QObject::tr(
                 "Line %1 does not look like a valid Tinker XYZ line. The third "
                 "space separated word in the line should be the X coordinate, but "
                 "the third word (%2) does not look like a number.\n%3")
                     .arg(linenum).arg(words[2]).arg(line), CODELOC );
-    
+
     atom.y = words[3].toDouble(&ok);
 
-    if (not ok) 
+    if (not ok)
         throw SireIO::parse_error( QObject::tr(
                 "Line %1 does not look like a valid Tinker XYZ line. The fourth "
                 "space separated word in the line should be the Y coordinate, but "
                 "the fourth word (%2) does not look like a number.\n%3")
                     .arg(linenum).arg(words[3]).arg(line), CODELOC );
-    
+
     atom.z = words[4].toDouble(&ok);
 
-    if (not ok) 
+    if (not ok)
         throw SireIO::parse_error( QObject::tr(
                 "Line %1 does not look like a valid Tinker XYZ line. The fifth "
                 "space separated word in the line should be the Z coordinate, but "
@@ -170,7 +170,7 @@ TinkerXYZAtom TinkerXYZAtom::readFromLine(const QString &line, int linenum)
 
     //now read in the parameter number
     atom.param = words[5].toInt(&ok);
-    
+
     if (not ok)
         throw SireIO::parse_error( QObject::tr(
                 "Line %1 does not look like a valid Tinker XYZ line. The sixth "
@@ -182,7 +182,7 @@ TinkerXYZAtom TinkerXYZAtom::readFromLine(const QString &line, int linenum)
     for (int i=6; i<words.count(); ++i)
     {
         atom.bonded_to.append( words[i].toInt(&ok) );
-        
+
         if (not ok)
             throw SireIO::parse_error( QObject::tr(
                     "Line %1 does not look like a valid Tinker XYZ line. The last "
@@ -197,75 +197,75 @@ TinkerXYZAtom TinkerXYZAtom::readFromLine(const QString &line, int linenum)
 QString TinkerXYZAtom::writeToLine() const
 {
     QString line;
-    
+
     QTextStream ts(&line);
-    
+
     ts.setRealNumberNotation( QTextStream::FixedNotation );
     ts.setRealNumberPrecision( 6 );
-    
+
     ts.setFieldWidth(6);
     ts << atomnum;
 
     ts.setFieldWidth(1);
     ts << " ";
-    
+
     ts.setFieldWidth(4);
     ts << atomname;
-    
+
     ts.setFieldWidth(1);
     ts << " ";
-    
+
     ts.setFieldWidth(11);
     ts << x;
-    
+
     ts.setFieldWidth(1);
     ts << " ";
-    
+
     ts.setFieldWidth(11);
     ts << y;
-    
+
     ts.setFieldWidth(1);
     ts << " ";
-    
+
     ts.setFieldWidth(11);
     ts << z;
-    
+
     ts.setFieldWidth(1);
-    
+
     ts << " ";
     ts.setFieldWidth(5);
     ts << param;
-    
+
     ts.setFieldWidth(1);
-    
+
     foreach (int bond, bonded_to)
     {
         ts << " ";
-        
+
         ts.setFieldWidth(5);
         ts << bond;
-        
+
         ts.setFieldWidth(1);
     }
-    
+
     return line;
 }
 
-/** This is a Tinker XYZ molecule - this is used just to hold all of the 
-    atoms, and to help resolve the connectivity (so only a set of 
+/** This is a Tinker XYZ molecule - this is used just to hold all of the
+    atoms, and to help resolve the connectivity (so only a set of
     connected atoms will be added to the molecule) */
 class TinkerXYZMolecule
 {
 public:
     TinkerXYZMolecule();
     ~TinkerXYZMolecule();
-    
+
     bool contains(const TinkerXYZAtom &atom) const;
 
     void add(const TinkerXYZAtom &atom);
-    
+
     QList<TinkerXYZAtom> atoms;
-    
+
     QSet<int> contained_atoms;
 };
 
@@ -278,9 +278,9 @@ TinkerXYZMolecule::~TinkerXYZMolecule()
 void TinkerXYZMolecule::add(const TinkerXYZAtom &atom)
 {
     atoms.append(atom);
-    
+
     contained_atoms.insert(atom.atomnum);
-    
+
     foreach (int bond, atom.bonded_to)
     {
         contained_atoms.insert(bond);
@@ -298,7 +298,7 @@ bool TinkerXYZMolecule::contains(const TinkerXYZAtom &atom) const
             if (contained_atoms.contains(bond))
                 return true;
         }
-        
+
         return false;
     }
 }
@@ -308,13 +308,13 @@ bool TinkerXYZMolecule::contains(const TinkerXYZAtom &atom) const
 {
 public:
     TinkerAtomParam();
-    
+
     ~TinkerAtomParam();
-    
+
     static bool matches(const QString &line);
-    
+
     static TinkerAtomParam readFromLine(const QString &line, int linenum);
-    
+
     int id_num;
     int lj_type;
     QString atm_type;
@@ -349,7 +349,7 @@ TinkerAtomParam TinkerAtomParam::readFromLine(const QString &line, int linenum)
                     .arg(linenum).arg(line), CODELOC );
 
     TinkerAtomParam param;
-    
+
     param.id_num = atom_regexp.cap(1).toInt();
     param.lj_typ = atom_regexp.cap(2).toInt();
     param.atm_typ = atom_regexp.cap(3);
@@ -357,7 +357,7 @@ TinkerAtomParam TinkerAtomParam::readFromLine(const QString &line, int linenum)
     param.element = Element( atom_regexp.cap(5).toInt() );
     param.mass = atom_regexp.cap(6).toDouble();
     param.bond_order = atom_regexp.cap(7).toInt();
-    
+
     return param;
 }
 */
@@ -371,12 +371,12 @@ static const RegisterMetaType<Tinker> r_tinker;
 QDataStream &operator<<(QDataStream &ds, const Tinker &tinker)
 {
     writeHeader(ds, r_tinker, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds //<<
         << static_cast<const IOBase&>(tinker);
-    
+
     return ds;
 }
 
@@ -384,17 +384,17 @@ QDataStream &operator<<(QDataStream &ds, const Tinker &tinker)
 QDataStream &operator>>(QDataStream &ds, Tinker &tinker)
 {
     VersionID v = readHeader(ds, r_tinker);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds //>>
             >> static_cast<IOBase&>(tinker);
     }
     else
         throw version_error(v, "1", r_tinker, CODELOC);
-        
+
     return ds;
 }
 
@@ -447,7 +447,7 @@ const TinkerParameters& Tinker::parameters()
 void Tinker::loadParameters(const QString &prmfile)
 {
     QFile f(prmfile);
-    
+
     if (not f.open(QIODevice::ReadOnly))
         throw SireError::file_error(f, CODELOC);
 
@@ -458,15 +458,15 @@ void Tinker::loadParameters(const QString &prmfile)
                         "\"([\\w\\s\\d]+)\"\\s+(\\d+)\\s+([\\d\\.]+)\\s+(\\d+)");
 
     QTextStream ts(&f);
-    
+
     int linenum = -1;
-                
+
     while (not ts.atEnd())
     {
         ++linenum;
-    
+
         QString line = ts.readLine().simplified();
-        
+
         if (line.isEmpty() or line.startsWith("#"))
             continue;
 
@@ -492,7 +492,7 @@ MoleculeGroup Tinker::readMols(const QByteArray &data, const PropertyMap &map) c
     while (not ts.atEnd())
     {
         ++linenum;
-    
+
         //read a line from the file
         QString line = ts.readLine().simplified();
 
@@ -503,9 +503,9 @@ MoleculeGroup Tinker::readMols(const QByteArray &data, const PropertyMap &map) c
         if (linenum > 0)
         {
             TinkerXYZAtom atom = TinkerXYZAtom::readFromLine(line, linenum);
-            
+
             bool added_atom = false;
-            
+
             for (QList<TinkerXYZMolecule>::iterator it = mols.begin();
                  it != mols.end();
                  ++it)
@@ -517,7 +517,7 @@ MoleculeGroup Tinker::readMols(const QByteArray &data, const PropertyMap &map) c
                     break;
                 }
             }
-            
+
             if (not added_atom)
             {
                 TinkerXYZMolecule mol;
@@ -538,7 +538,7 @@ MoleculeGroup Tinker::readMols(const QByteArray &data, const PropertyMap &map) c
 
     return MoleculeGroup();
 }
- 
+
 /** Write the molecule group in 'molgroup' to an array, using the parameters
     in map */
 QByteArray Tinker::writeMols(const MoleculeGroup &molgroup, const PropertyMap &map) const
@@ -547,7 +547,7 @@ QByteArray Tinker::writeMols(const MoleculeGroup &molgroup, const PropertyMap &m
 }
 
 /** Write the molecules in 'molecules' to an  array, using the parameters
-    in map */                    
+    in map */
 QByteArray Tinker::writeMols(const Molecules &molecules, const PropertyMap &map) const
 {
     return QByteArray();

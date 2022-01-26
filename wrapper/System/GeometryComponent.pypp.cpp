@@ -72,6 +72,7 @@ void register_GeometryComponent_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         GeometryComponent_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireSystem::GeometryComponent >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        GeometryComponent_exposer.def_pickle(sire_pickle_suite< ::SireSystem::GeometryComponent >());
         GeometryComponent_exposer.def( "__str__", &__str__< ::SireSystem::GeometryComponent > );
         GeometryComponent_exposer.def( "__repr__", &__str__< ::SireSystem::GeometryComponent > );
     }

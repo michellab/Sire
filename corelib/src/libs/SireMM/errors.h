@@ -48,16 +48,16 @@ class SIREMM_EXPORT siremm_error : public SireError::exception
 public:
     siremm_error() : exception()
     {}
-    
-    siremm_error(QString err, QString place = QString::null) : exception(err,place)
+
+    siremm_error(QString err, QString place = QString()) : exception(err,place)
     {}
-    
+
     siremm_error(const siremm_error &other) : exception(other)
     {}
-    
+
     ~siremm_error() throw()
     {}
-    
+
     static const char* typeName()
     {
         return "SireMM::siremm_error";
@@ -74,14 +74,14 @@ class SIREMM_EXPORT missing_bond : public siremm_error
 public:
     missing_bond() : siremm_error()
     {}
-    
-    missing_bond(QString err, QString place = QString::null) 
+
+    missing_bond(QString err, QString place = QString())
               : siremm_error(err,place)
     {}
-    
+
     missing_bond(const missing_bond &other) : siremm_error(other)
     {}
-    
+
     ~missing_bond() throw()
     {}
 
@@ -91,7 +91,7 @@ public:
     {
         return missing_bond::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_bond(*this);
@@ -107,14 +107,14 @@ class SIREMM_EXPORT missing_angle : public siremm_error
 public:
     missing_angle() : siremm_error()
     {}
-    
-    missing_angle(QString err, QString place = QString::null) 
+
+    missing_angle(QString err, QString place = QString())
               : siremm_error(err,place)
     {}
-    
+
     missing_angle(const missing_angle &other) : siremm_error(other)
     {}
-    
+
     ~missing_angle() throw()
     {}
 
@@ -124,7 +124,7 @@ public:
     {
         return missing_angle::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_angle(*this);
@@ -140,14 +140,14 @@ class SIREMM_EXPORT missing_dihedral : public siremm_error
 public:
     missing_dihedral() : siremm_error()
     {}
-    
-    missing_dihedral(QString err, QString place = QString::null) 
+
+    missing_dihedral(QString err, QString place = QString())
               : siremm_error(err,place)
     {}
-    
+
     missing_dihedral(const missing_dihedral &other) : siremm_error(other)
     {}
-    
+
     ~missing_dihedral() throw()
     {}
 
@@ -157,7 +157,7 @@ public:
     {
         return missing_dihedral::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_dihedral(*this);

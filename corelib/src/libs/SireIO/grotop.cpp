@@ -670,7 +670,7 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
             //get the bond potentials first
             if (has_funcs)
             {
-                for (const auto bond : funcs.potentials())
+                for (const auto &bond : funcs.potentials())
                 {
                     AtomIdx atom0 = molinfo.atomIdx(bond.atom0());
                     AtomIdx atom1 = molinfo.atomIdx(bond.atom1());
@@ -688,7 +688,7 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
             //now fill in any missing bonded atoms with null bonds
             if (has_conn)
             {
-                for (const auto bond : conn.getBonds())
+                for (const auto &bond : conn.getBonds())
                 {
                     AtomIdx atom0 = molinfo.atomIdx(bond.atom0());
                     AtomIdx atom1 = molinfo.atomIdx(bond.atom1());
@@ -734,7 +734,7 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
 
             if (has_funcs)
             {
-                for (const auto angle : funcs.potentials())
+                for (const auto &angle : funcs.potentials())
                 {
                     AtomIdx atom0 = molinfo.atomIdx(angle.atom0());
                     AtomIdx atom1 = molinfo.atomIdx(angle.atom1());
@@ -779,7 +779,7 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
 
             if (has_funcs)
             {
-                for (const auto dihedral : funcs.potentials())
+                for (const auto &dihedral : funcs.potentials())
                 {
                     AtomIdx atom0 = molinfo.atomIdx(dihedral.atom0());
                     AtomIdx atom1 = molinfo.atomIdx(dihedral.atom1());
@@ -797,12 +797,12 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
 
                     DihedralID dihid(atom0,atom1,atom2,atom3);
 
-                    for (const auto part : parts)
+                    for (const auto &part : parts)
                     {
                         if (is_lambda1)
-                            dihs1.insertMulti(dihid, part);
+                            dihs1.insert(dihid, part);
                         else
-                            dihs0.insertMulti(dihid, part);
+                            dihs0.insert(dihid, part);
                     }
                 }
             }
@@ -824,7 +824,7 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
 
             if (has_imps)
             {
-                for (const auto improper : imps.potentials())
+                for (const auto &improper : imps.potentials())
                 {
                     AtomIdx atom0 = molinfo.atomIdx(improper.atom0());
                     AtomIdx atom1 = molinfo.atomIdx(improper.atom1());
@@ -836,12 +836,12 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
 
                     DihedralID impid(atom0,atom1,atom2,atom3);
 
-                    for (const auto part : parts)
+                    for (const auto &part : parts)
                     {
                         if (is_lambda1)
-                            dihs1.insertMulti(impid, part);
+                            dihs1.insert(impid, part);
                         else
-                            dihs0.insertMulti(impid, part);
+                            dihs0.insert(impid, part);
                     }
                 }
             }
@@ -1106,7 +1106,7 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
             //get the bond potentials first
             if (has_funcs)
             {
-                for (const auto bond : funcs.potentials())
+                for (const auto &bond : funcs.potentials())
                 {
                     AtomIdx atom0 = molinfo.atomIdx(bond.atom0());
                     AtomIdx atom1 = molinfo.atomIdx(bond.atom1());
@@ -1121,7 +1121,7 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
             //now fill in any missing bonded atoms with null bonds
             if (has_conn)
             {
-                for (const auto bond : conn.getBonds())
+                for (const auto &bond : conn.getBonds())
                 {
                     AtomIdx atom0 = molinfo.atomIdx(bond.atom0());
                     AtomIdx atom1 = molinfo.atomIdx(bond.atom1());
@@ -1158,7 +1158,7 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
 
             if (has_funcs)
             {
-                for (const auto angle : funcs.potentials())
+                for (const auto &angle : funcs.potentials())
                 {
                     AtomIdx atom0 = molinfo.atomIdx(angle.atom0());
                     AtomIdx atom1 = molinfo.atomIdx(angle.atom1());
@@ -1192,7 +1192,7 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
 
             if (has_funcs)
             {
-                for (const auto dihedral : funcs.potentials())
+                for (const auto &dihedral : funcs.potentials())
                 {
                     AtomIdx atom0 = molinfo.atomIdx(dihedral.atom0());
                     AtomIdx atom1 = molinfo.atomIdx(dihedral.atom1());
@@ -1210,9 +1210,9 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
 
                     DihedralID dihid(atom0,atom1,atom2,atom3);
 
-                    for (const auto part : parts)
+                    for (const auto &part : parts)
                     {
-                        dihs0.insertMulti(dihid, part);
+                        dihs0.insert(dihid, part);
                     }
                 }
             }
@@ -1231,7 +1231,7 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
 
             if (has_imps)
             {
-                for (const auto improper : imps.potentials())
+                for (const auto &improper : imps.potentials())
                 {
                     AtomIdx atom0 = molinfo.atomIdx(improper.atom0());
                     AtomIdx atom1 = molinfo.atomIdx(improper.atom1());
@@ -1243,9 +1243,9 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
 
                     DihedralID impid(atom0,atom1,atom2,atom3);
 
-                    for (const auto part : parts)
+                    for (const auto &part : parts)
                     {
-                        dihs0.insertMulti(impid, part);
+                        dihs0.insert(impid, part);
                     }
                 }
             }
@@ -1774,7 +1774,7 @@ QVector<GroAtom> GroMolType::atoms(const ResNum &resnum, bool is_lambda1) const
 
     QVector<GroAtom> ret;
 
-    for (const auto idx : idxs)
+    for (const auto &idx : idxs)
     {
         ret += this->atoms(idx, is_lambda1);
     }
@@ -1822,7 +1822,7 @@ QVector<GroAtom> GroMolType::atoms(const ResName &resnam, bool is_lambda1) const
 
     QVector<GroAtom> ret;
 
-    for (const auto idx : idxs)
+    for (const auto &idx : idxs)
     {
         ret += this->atoms(idx, is_lambda1);
     }
@@ -1969,9 +1969,9 @@ void GroMolType::addBond(const BondID &bond, const GromacsBond &param, bool is_l
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
     if (is_lambda1)
-        bnds1.insertMulti(bond, param);
+        bnds1.insert(bond, param);
     else
-        bnds0.insertMulti(bond, param);
+        bnds0.insert(bond, param);
 }
 
 /** Add the passed angle to the molecule */
@@ -1983,9 +1983,9 @@ void GroMolType::addAngle(const AngleID &angle, const GromacsAngle &param,
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
     if (is_lambda1)
-        angs1.insertMulti(angle, param);
+        angs1.insert(angle, param);
     else
-        angs0.insertMulti(angle, param);
+        angs0.insert(angle, param);
 }
 
 /** Add the passed dihedral to the molecule */
@@ -1997,9 +1997,9 @@ void GroMolType::addDihedral(const DihedralID &dihedral, const GromacsDihedral &
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
     if (is_lambda1)
-        dihs1.insertMulti(dihedral, param);
+        dihs1.insert(dihedral, param);
     else
-        dihs0.insertMulti(dihedral, param);
+        dihs0.insert(dihedral, param);
 }
 
 /** Add the passed bonds to the molecule */
@@ -2429,7 +2429,7 @@ QStringList GroSystem::uniqueTypes() const
 {
     QStringList typs;
 
-    for (const auto moltype : moltypes)
+    for (const auto &moltype : moltypes)
     {
         if (not typs.contains(moltype))
         {
@@ -2642,11 +2642,11 @@ void GroTop::getIncludePath(const PropertyMap &map)
 
         if (p.hasValue())
         {
-            path += p.value().asA<StringProperty>().toString().split(":", QString::SkipEmptyParts);
+            path += p.value().asA<StringProperty>().toString().split(":", Qt::SkipEmptyParts);
         }
         else if (p.source() != "GROMACS_PATH")
         {
-            path += p.source().split(":", QString::SkipEmptyParts);
+            path += p.source().split(":", Qt::SkipEmptyParts);
         }
     }
     catch(...)
@@ -2657,12 +2657,12 @@ void GroTop::getIncludePath(const PropertyMap &map)
 
     if (not val.isEmpty())
     {
-        path += val.split(":", QString::SkipEmptyParts);
+        path += val.split(":", Qt::SkipEmptyParts);
     }
 
     //now go through each path and convert it into an absolute path based on the
     //current directory
-    for (const auto p : path)
+    for (const auto &p : path)
     {
         include_path.append( QFileInfo(p).canonicalFilePath() );
     }
@@ -2883,12 +2883,12 @@ static QStringList writeAtomTypes(const QMap<QPair<int,QString>,GroMolType> &mol
     //now sort and write all of the atomtypes
     QStringList lines;
     auto keys = atomtypes.keys();
-    qSort(keys);
+    std::sort(keys.begin(), keys.end());
 
     lines.append( "[ atomtypes ]" );
     lines.append( "; name      at.num        mass      charge   ptype       sigma     epsilon" );
 
-    for (const auto key : keys )
+    for (const auto &key : keys )
     {
         lines.append( atomtypes[key] );
     }
@@ -3074,7 +3074,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                 for (const auto &param : params)
                 {
                     QStringList param_string;
-                    for (const auto p : param.parameters())
+                    for (const auto &p : param.parameters())
                         param_string.append( QString::number(p) );
 
                     bondlines.append( QString("%1 %2 %3  %4  0.0000  0.0000")
@@ -3097,7 +3097,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                 for (const auto &param : params)
                 {
                     QStringList param_string;
-                    for (const auto p : param.parameters())
+                    for (const auto &p : param.parameters())
                         param_string.append( QString::number(p) );
 
                     bondlines.append( QString("%1 %2 %3  0.0000  0.0000  %4")
@@ -3130,11 +3130,11 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (int i=0; i<params1.count(); ++i)
                     {
                         QStringList param_string0;
-                        for (const auto p : params0[i].parameters())
+                        for (const auto &p : params0[i].parameters())
                             param_string0.append( QString::number(p) );
 
                         QStringList param_string1;
-                        for (const auto p : params1[i].parameters())
+                        for (const auto &p : params1[i].parameters())
                             param_string1.append( QString::number(p) );
 
                         bondlines.append( QString("%1 %2 %3  %4  %5")
@@ -3148,7 +3148,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (int i=params1.count(); i<params0.count(); ++i)
                     {
                         QStringList param_string;
-                        for (const auto p : params0[i].parameters())
+                        for (const auto &p : params0[i].parameters())
                             param_string.append( QString::number(p) );
 
                         bondlines.append( QString("%1 %2 %3  %4  0.0000  0.0000")
@@ -3163,11 +3163,11 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (int i=0; i<params0.count(); ++i)
                     {
                         QStringList param_string0;
-                        for (const auto p : params0[i].parameters())
+                        for (const auto &p : params0[i].parameters())
                             param_string0.append( QString::number(p) );
 
                         QStringList param_string1;
-                        for (const auto p : params1[i].parameters())
+                        for (const auto &p : params1[i].parameters())
                             param_string1.append( QString::number(p) );
 
                         bondlines.append( QString("%1 %2 %3  %4  %5")
@@ -3181,7 +3181,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (int i=params0.count(); i<params1.count(); ++i)
                     {
                         QStringList param_string;
-                        for (const auto p : params1[i].parameters())
+                        for (const auto &p : params1[i].parameters())
                             param_string.append( QString::number(p) );
 
                         bondlines.append( QString("%1 %2 %3  0.0000  0.0000  %4")
@@ -3206,7 +3206,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                 int atom1 = bond.atom1().asA<AtomIdx>().value() + 1;
 
                 QStringList params;
-                for (const auto p : param.parameters())
+                for (const auto &p : param.parameters())
                     params.append( QString::number(p) );
 
                 bondlines.append( QString("%1 %2 %3  %4")
@@ -3215,7 +3215,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
             }
         }
 
-        qSort(bondlines);
+        std::sort(bondlines.begin(), bondlines.end());
     };
 
     //write all of the angles
@@ -3285,7 +3285,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                 for (const auto &param : params)
                 {
                     QStringList param_string;
-                    for (const auto p : param.parameters())
+                    for (const auto &p : param.parameters())
                         param_string.append( QString::number(p) );
 
                     anglines.append( QString("%1 %2 %3 %4   %5  0.0000  0.0000")
@@ -3309,7 +3309,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                 for (const auto &param : params)
                 {
                     QStringList param_string;
-                    for (const auto p : param.parameters())
+                    for (const auto &p : param.parameters())
                         param_string.append( QString::number(p) );
 
                     anglines.append( QString("%1 %2 %3 %4   0.0000  0.0000  %5")
@@ -3343,11 +3343,11 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (int i=0; i<params1.count(); ++i)
                     {
                         QStringList param_string0;
-                        for (const auto p : params0[i].parameters())
+                        for (const auto &p : params0[i].parameters())
                             param_string0.append( QString::number(p) );
 
                         QStringList param_string1;
-                        for (const auto p : params1[i].parameters())
+                        for (const auto &p : params1[i].parameters())
                             param_string1.append( QString::number(p) );
 
                         anglines.append( QString("%1 %2 %3 %4   %5  %6")
@@ -3361,7 +3361,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (int i=params1.count(); i<params0.count(); ++i)
                     {
                         QStringList param_string;
-                        for (const auto p : params0[i].parameters())
+                        for (const auto &p : params0[i].parameters())
                             param_string.append( QString::number(p) );
 
                         anglines.append( QString("%1 %2 %3 %4   %5  0.0000  0.0000")
@@ -3376,11 +3376,11 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (int i=0; i<params0.count(); ++i)
                     {
                         QStringList param_string0;
-                        for (const auto p : params0[i].parameters())
+                        for (const auto &p : params0[i].parameters())
                             param_string0.append( QString::number(p) );
 
                         QStringList param_string1;
-                        for (const auto p : params1[i].parameters())
+                        for (const auto &p : params1[i].parameters())
                             param_string1.append( QString::number(p) );
 
                         anglines.append( QString("%1 %2 %3 %4   %5  %6")
@@ -3394,7 +3394,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (int i=params0.count(); i<params1.count(); ++i)
                     {
                         QStringList param_string;
-                        for (const auto p : params1[i].parameters())
+                        for (const auto &p : params1[i].parameters())
                             param_string.append( QString::number(p) );
 
                         anglines.append( QString("%1 %2 %3 %4   0.0000  0.0000  %5")
@@ -3420,7 +3420,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                 int atom2 = angle.atom2().asA<AtomIdx>().value() + 1;
 
                 QStringList params;
-                for (const auto p : param.parameters())
+                for (const auto &p : param.parameters())
                     params.append( QString::number(p) );
 
                 anglines.append( QString("%1 %2 %3 %4   %5")
@@ -3429,7 +3429,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
             }
         }
 
-        qSort(anglines);
+        std::sort(anglines.begin(), anglines.end());
     };
 
     //write all of the dihedrals/impropers (they are merged)
@@ -3500,7 +3500,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                 for (const auto &param : params)
                 {
                     QStringList param_string;
-                    for (const auto p : param.parameters())
+                    for (const auto &p : param.parameters())
                         param_string.append( QString::number(p) );
 
                     // Get the periodicity of the dihedral term. This is the last
@@ -3530,7 +3530,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                 for (const auto &param : params)
                 {
                     QStringList param_string;
-                    for (const auto p : param.parameters())
+                    for (const auto &p : param.parameters())
                         param_string.append( QString::number(p) );
 
                     // Get the periodicity of the dihedral term. This is the last
@@ -3604,13 +3604,13 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     {
                         QStringList param_string0;
                         QStringList param_string1;
-                        for (const auto p : params0_hash[i].parameters())
+                        for (const auto &p : params0_hash[i].parameters())
                             param_string0.append( QString::number(p) );
 
                         // There is a term at lambda = 1 with this periodicity.
                         if (params1_hash.contains(i))
                         {
-                            for (const auto p : params1_hash[i].parameters())
+                            for (const auto &p : params1_hash[i].parameters())
                                 param_string1.append( QString::number(p) );
                         }
                         // No term, create a zero term with the same periodicity.
@@ -3641,7 +3641,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                             param_string0.append( QString::number(0.0000) );
                             param_string0.append( QString::number(i) );
 
-                            for (const auto p : params1_hash[i].parameters())
+                            for (const auto &p : params1_hash[i].parameters())
                                 param_string1.append( QString::number(p) );
 
                             // Append the dihedral term.
@@ -3673,7 +3673,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                 int atom3 = dihedral.atom3().asA<AtomIdx>().value() + 1;
 
                 QStringList params;
-                for (const auto p : param.parameters())
+                for (const auto &p : param.parameters())
                     params.append( QString::number(p) );
 
                 dihlines.append( QString("%1 %2 %3 %4 %5  %6")
@@ -3683,7 +3683,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
             }
         }
 
-        qSort(dihlines);
+        std::sort(dihlines.begin(), dihlines.end());
     };
 
     //write all of the pairs (1-4 scaling factors). This is needed even though
@@ -3952,7 +3952,7 @@ static QStringList writeMolTypes(const QMap<QPair<int,QString>,GroMolType> &molt
 
     QStringList lines;
 
-    for (const auto key : keys)
+    for (const auto &key : keys)
     {
         lines += typs[key];
         lines += "";
@@ -4296,7 +4296,7 @@ QStringList GroTop::includePath(bool absolute_paths) const
     {
         QStringList abspaths;
 
-        for (const auto path : include_path)
+        for (const auto &path : include_path)
         {
             QFileInfo file(path);
 
@@ -4342,7 +4342,7 @@ QStringList GroTop::includedFiles(bool absolute_paths) const
             }
             else
             {
-                for (const auto path : include_path)
+                for (const auto &path : include_path)
                 {
                     if (it->startsWith(path))
                     {
@@ -4654,7 +4654,7 @@ QMultiHash<QString,SireMM::GromacsDihedral> GroTop::dihedralPotentials() const
     GroMolType if one with this name does not exist */
 GroMolType GroTop::moleculeType(const QString &name) const
 {
-    for (const auto moltype : moltypes)
+    for (const auto &moltype : moltypes)
     {
         if (moltype.name() == name)
             return moltype;
@@ -4682,7 +4682,7 @@ static bool gromacs_preprocess_would_change(const QVector<QString> &lines,
     {
         regexps.reserve(defines.count());
 
-        for (const auto key : defines.keys())
+        for (const auto &key : defines.keys())
         {
             regexps.append( QRegularExpression( QString("\\s+%1\\s*").arg(key) ) );
         }
@@ -4786,7 +4786,7 @@ QString GroTop::findIncludeFile(QString filename, QString current_dir)
         return file.absoluteFilePath();
 
     //otherwise search the GROMACS_PATH
-    for (const auto path : include_path)
+    for (const auto &path : include_path)
     {
         file = QFileInfo( QString("%1/%2").arg(path).arg(filename) );
 
@@ -4904,7 +4904,7 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
         if (line.startsWith("#ifdef"))
         {
             //we have an ifdef - has it been defined?
-            auto symbol = line.split(" ", QString::SkipEmptyParts).last();
+            auto symbol = line.split(" ", Qt::SkipEmptyParts).last();
 
             //push the current parse state (whether we parse if or else)
             ifparse.append( defines.value(symbol,"0") != "0" );
@@ -4915,7 +4915,7 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
         if (line.startsWith("#ifndef"))
         {
             //we have an ifndef - has it been defined?
-            auto symbol = line.split(" ", QString::SkipEmptyParts).last();
+            auto symbol = line.split(" ", Qt::SkipEmptyParts).last();
 
             //push the current parse state (whether we parse if or else)
             ifparse.append( defines.value(symbol,"0") == "0" );
@@ -4957,7 +4957,7 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
         //now look for any #define lines
         if (line.startsWith("#define"))
         {
-            auto words = line.split(" ", QString::SkipEmptyParts);
+            auto words = line.split(" ", Qt::SkipEmptyParts);
 
             if (words.count() == 1)
                 throw SireIO::parse_error( QObject::tr(
@@ -4983,7 +4983,7 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
         {
             if (line.indexOf(it.key()) != -1)
             {
-                auto words = line.split(" ", QString::SkipEmptyParts);
+                auto words = line.split(" ", Qt::SkipEmptyParts);
 
                 for (int i=0; i<words.count(); ++i)
                 {
@@ -5236,7 +5236,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 "The required data for the '[defaults]' directive in Gromacs is "
                 "not supplied. This is not a valid Gromacs topology file!"), CODELOC );
 
-        auto words = lines[0].split(" ", QString::SkipEmptyParts);
+        auto words = lines[0].split(" ", Qt::SkipEmptyParts);
 
         //there should be five words; non-bonded function type, combinination rule,
         //                            generate pairs, fudge LJ and fudge QQ
@@ -5348,9 +5348,9 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         QHash<QString,GromacsAtomType> typs;
 
         //now parse each atom
-        for (const auto line : lines)
+        for (const auto &line : lines)
         {
-            const auto words = line.split(" ", QString::SkipEmptyParts);
+            const auto words = line.split(" ", Qt::SkipEmptyParts);
 
             //should either have 2 words (atom type, mass) or
             //have 6 words; atom type, mass, charge, type, V, W or
@@ -5491,11 +5491,11 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         //save into a database of bonds
         QMultiHash<QString,GromacsBond> bnds;
 
-        for (const auto line : lines)
+        for (const auto &line : lines)
         {
             //each line should contain the atom types of the two atoms, then
             //the function type, then the parameters for the function
-            const auto words = line.split(" ", QString::SkipEmptyParts);
+            const auto words = line.split(" ", Qt::SkipEmptyParts);
 
             if (words.count() < 3)
             {
@@ -5544,7 +5544,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             }
 
             QString key = get_bond_id(atm0,atm1,bond.functionType());
-            bnds.insertMulti(key, bond);
+            bnds.insert(key, bond);
         }
 
         bond_potentials = bnds;
@@ -5560,7 +5560,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         //get all 'bondtypes' lines
         const auto lines = getAllLines("pairtypes");
 
-        for (const auto line : lines)
+        for (const auto &line : lines)
         {
             warnings.append( QString("Ignoring 'pairtypes' %1").arg(line) );
         }
@@ -5579,11 +5579,11 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         //save into a database of angles
         QMultiHash<QString,GromacsAngle> angs;
 
-        for (const auto line : lines)
+        for (const auto &line : lines)
         {
             //each line should contain the atom types of the three atoms, then
             //the function type, then the parameters for the function
-            const auto words = line.split(" ", QString::SkipEmptyParts);
+            const auto words = line.split(" ", Qt::SkipEmptyParts);
 
             if (words.count() < 4)
             {
@@ -5633,7 +5633,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             }
 
             QString key = get_angle_id(atm0,atm1,atm2,angle.functionType());
-            angs.insertMulti(key, angle);
+            angs.insert(key, angle);
         }
 
         ang_potentials = angs;
@@ -5652,13 +5652,13 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         //save into a database of dihedrals
         QMultiHash<QString,GromacsDihedral> dihs;
 
-        for (const auto line : lines)
+        for (const auto &line : lines)
         {
             //each line should contain the atom types of the four atoms, then
             //the function type, then the parameters for the function.
             //(however, some files have the atom types of just two atoms, which
             // I assume are the two middle atoms of the dihedral...)
-            const auto words = line.split(" ", QString::SkipEmptyParts);
+            const auto words = line.split(" ", Qt::SkipEmptyParts);
 
             if (words.count() < 3)
             {
@@ -5754,7 +5754,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             }
 
             QString key = get_dihedral_id(atm0,atm1,atm2,atm3,dihedral.functionType());
-            dihs.insertMulti(key, dihedral);
+            dihs.insert(key, dihedral);
         }
 
         dih_potentials = dihs;
@@ -5770,7 +5770,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         //get all 'bondtypes' lines
         const auto lines = getAllLines("constrainttypes");
 
-        for (const auto line : lines)
+        for (const auto &line : lines)
         {
             warnings.append( QString("Ignoring 'constrainttypes' %1").arg(line) );
         }
@@ -5786,7 +5786,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         //get all 'bondtypes' lines
         const auto lines = getAllLines("nonbond_params");
 
-        for (const auto line : lines)
+        for (const auto &line : lines)
         {
             warnings.append( QString("Ignoring 'nonbond_params' %1").arg(line) );
         }
@@ -5831,7 +5831,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                         {
                             //this is a valid child tag - save its location
                             //(note that a tag can exist multiple times!)
-                            tags.insertMulti(it.value(), it.key());
+                            tags.insert(it.value(), it.key());
                             ++it;
                         }
                         else if (it.value() == "moleculetype")
@@ -5921,7 +5921,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         {
             QStringList lines = getDirectiveLines(linenum);
 
-            for (const auto line : lines)
+            for (const auto &line : lines)
             {
                 //each line should contain index number, atom type,
                 //residue number, residue name, atom name, charge group number,
@@ -6020,7 +6020,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             QMultiHash<BondID,GromacsBond> bonds;
             bonds.reserve(lines.count());
 
-            for (const auto line : lines)
+            for (const auto &line : lines)
             {
                 const auto words = line.split(" ");
 
@@ -6091,8 +6091,8 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     }
                 }
 
-                bonds.insertMulti( BondID(AtomNum(atm0),AtomNum(atm1)),
-                                   bond );
+                bonds.insert( BondID(AtomNum(atm0),AtomNum(atm1)),
+                              bond );
             }
 
             //save the bonds in the molecule
@@ -6107,7 +6107,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             QMultiHash<AngleID,GromacsAngle> angs;
             angs.reserve(lines.count());
 
-            for (const auto line : lines)
+            for (const auto &line : lines)
             {
                 const auto words = line.split(" ");
 
@@ -6179,8 +6179,8 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     }
                 }
 
-                angs.insertMulti( AngleID(AtomNum(atm0),AtomNum(atm1),AtomNum(atm2)),
-                                  angle );
+                angs.insert( AngleID(AtomNum(atm0),AtomNum(atm1),AtomNum(atm2)),
+                             angle );
             }
 
             //save the angles in the molecule
@@ -6195,7 +6195,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             QMultiHash<DihedralID,GromacsDihedral> dihs;
             dihs.reserve(lines.count());
 
-            for (const auto line : lines)
+            for (const auto &line : lines)
             {
                 const auto words = line.split(" ");
 
@@ -6268,9 +6268,9 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     }
                 }
 
-                dihs.insertMulti( DihedralID(AtomNum(atm0),AtomNum(atm1),
-                                             AtomNum(atm2),AtomNum(atm3)),
-                                  dihedral );
+                dihs.insert( DihedralID(AtomNum(atm0),AtomNum(atm1),
+                                        AtomNum(atm2),AtomNum(atm3)),
+                             dihedral );
             }
 
             //save the dihedrals in the molecule
@@ -6284,7 +6284,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         const QString combrules = _getCombiningRules(combining_rule);
 
         //ok, now we know the location of all child tags of each moleculetype
-        auto processMolType = [&](const QHash<QString,int> &moltag)
+        auto processMolType = [&](const QMultiHash<QString,int> &moltag)
         {
             auto moltype = getMolType( moltag.value("moleculetype", -1) );
 
@@ -6316,7 +6316,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                                               "distance_restraints", "orientation_restraints",
                                               "angle_restraints", "angle_restraints_z" };
 
-            for (const auto tag : missed_tags)
+            for (const auto &tag : missed_tags)
             {
                 //not parsed this tag type
                 for (auto linenum : moltag.values(tag))
@@ -6360,7 +6360,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         }
 
         //now collect any warnings from the types
-        for (const auto moltype : moltypes)
+        for (const auto &moltype : moltypes)
         {
             if (not moltype.warnings().isEmpty())
             {
@@ -6402,7 +6402,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                         {
                             //this is a valid child tag - save its location
                             //(note that a tag can exist multiple times!)
-                            tags.insertMulti(it.value(), it.key());
+                            tags.insert(it.value(), it.key());
                             ++it;
                         }
                         else
@@ -6451,7 +6451,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         {
             const auto lines = getDirectiveLines(linenum);
 
-            for (const auto line : lines)
+            for (const auto &line : lines)
             {
                 //each line should be the molecule type name, followed by the number
                 const auto words = line.split(" ");
@@ -6637,7 +6637,7 @@ QStringList GroTop::warnings() const
 {
     QStringList w = parse_warnings;
 
-    for (const auto moltype : moltypes)
+    for (const auto &moltype : moltypes)
     {
         auto molwarns = moltype.warnings();
 
@@ -6668,14 +6668,14 @@ void GroTop::parseLines(const QString &path, const PropertyMap &map)
 
             if (p.hasValue())
             {
-                d = p.value().asA<StringProperty>().toString().split(":", QString::SkipEmptyParts);
+                d = p.value().asA<StringProperty>().toString().split(":", Qt::SkipEmptyParts);
             }
             else if (p.source() != "GROMACS_DEFINE")
             {
-                d = p.source().split(":", QString::SkipEmptyParts);
+                d = p.source().split(":", Qt::SkipEmptyParts);
             }
 
-            for (const auto define : d)
+            for (const auto &define : d)
             {
                 auto words = define.split("=");
 
@@ -7077,7 +7077,7 @@ GroTop::PropsAndErrors GroTop::getDihedralProperties(const MoleculeInfo &molinfo
             }
 
             //sum all of the parts together
-            for (const auto r : resolved)
+            for (const auto &r : resolved)
             {
                 if (r.isResolved())
                 {
@@ -7192,7 +7192,7 @@ Molecule GroTop::createMolecule(QString moltype_name, QStringList &errors,
             errors += pe;
         }
 
-        for (const auto key : p.propertyKeys())
+        for (const auto &key : p.propertyKeys())
         {
             const auto mapped = map[key];
 

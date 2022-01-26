@@ -106,6 +106,7 @@ void register_P_GTO_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         P_GTO_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::Squire::P_GTO >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        P_GTO_exposer.def_pickle(sire_pickle_suite< ::Squire::P_GTO >());
         P_GTO_exposer.def( "__str__", &__str__< ::Squire::P_GTO > );
         P_GTO_exposer.def( "__repr__", &__str__< ::Squire::P_GTO > );
     }

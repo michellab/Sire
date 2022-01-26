@@ -3,6 +3,23 @@ SIRE changelog
 
 devel branch:
 
+    [2022.1.0] Jan 2022 - Fixed counting of protons to account for dummy atoms
+               when swapping water topology and ensure that original molecular
+               properties are preserved. Added a fallback to the BGFS solver
+               to improve robustness of FEP analysis (@kexul). Fixed a bug
+               that caused distance restraints to be skipped if the ligand
+               wasn't the first molecule in the FEP topology (@jmichel80,
+               @fjclark). Improved atomic element inference in AMBER parsers.
+               Update Sire build to latest versions of dependencies on macOS
+               and Linux. This required substantial mini-changes across the
+               entire codebase due to changes in APIs and deprecations. This
+               includes moving away from qAlgorithm, using the new Qt
+               container constructors, moving to OneAPI, switching to the
+               conda-forge OpenMM and switching to the new C++ ABI (@chryswoods).
+               Simplified Sire wrapper generation using a minimal Docker
+               container with the latest Py++ (@chryswoods). At support for
+               native Python pickling of Sire objects (@chryswoods.)
+
     [2021.1.0] Aug 2021 - Added support for multiple combining rules in SOMD
                (@SofiaBariami). Added support for triclinic simulation boxes.
                Convert Ryckaert-Bellememans form dihedral functions from

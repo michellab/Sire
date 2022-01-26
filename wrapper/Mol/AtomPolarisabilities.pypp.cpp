@@ -478,6 +478,7 @@ void register_AtomPolarisabilities_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AtomPolarisabilities_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<0, 3, 0, 0, 0, 0, 0> > >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        AtomPolarisabilities_exposer.def_pickle(sire_pickle_suite< ::SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<0, 3, 0, 0, 0, 0, 0> > >());
         AtomPolarisabilities_exposer.def( "__str__", &__str__< ::SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<0, 3, 0, 0, 0, 0, 0> > > );
         AtomPolarisabilities_exposer.def( "__repr__", &__str__< ::SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<0, 3, 0, 0, 0, 0, 0> > > );
         AtomPolarisabilities_exposer.def( "__len__", &__len_size< ::SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<0, 3, 0, 0, 0, 0, 0> > > );

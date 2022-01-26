@@ -44,7 +44,7 @@ QDataStream &operator<<(QDataStream &ds, const MD5Sum &md5sum)
     {
         ds << quint8(md5sum.dgst[i]);
     }
-    
+
     return ds;
 }
 
@@ -54,10 +54,10 @@ QDataStream &operator>>(QDataStream &ds, MD5Sum &md5sum)
     {
         quint8 c;
         ds >> c;
-        
+
         md5sum.dgst[i] = c;
     }
-    
+
     return ds;
 }
 
@@ -132,18 +132,18 @@ const MD5Sum& MD5Sum::operator=(const MD5Sum &other)
 
 QString MD5Sum::toString() const
 {
-    return QString().sprintf("%02x%02x%02x%02x-%02x%02x%02x%02x-%02x%02x%02x%02x-%02x%02x%02x%02x",
-                             dgst[0],dgst[1],dgst[2],dgst[3],
-                             dgst[4],dgst[5],dgst[6],dgst[7],
-                             dgst[8],dgst[9],dgst[10],dgst[11],
-                             dgst[12],dgst[13],dgst[14],dgst[15]);
+    return QString::asprintf("%02x%02x%02x%02x-%02x%02x%02x%02x-%02x%02x%02x%02x-%02x%02x%02x%02x",
+                              dgst[0],dgst[1],dgst[2],dgst[3],
+                              dgst[4],dgst[5],dgst[6],dgst[7],
+                              dgst[8],dgst[9],dgst[10],dgst[11],
+                              dgst[12],dgst[13],dgst[14],dgst[15]);
 }
 
 const md5_byte_t* MD5Sum::digest() const
 {
     return dgst;
-} 
- 
+}
+
 bool MD5Sum::operator==(const MD5Sum &other) const
 {
     return (dgst[0] == other.dgst[0] and

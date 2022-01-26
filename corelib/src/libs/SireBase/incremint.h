@@ -31,9 +31,9 @@
 
 #include "sireglobal.h"
 
-#if QT_VERSION >= 0x040400
+#if QT_VERSION >= QT_VERSION_CHECK(4, 4, 0)
   #include <QAtomicInt>
-#elif QT_VERSION >= 0x040100
+#elif QT_VERSION >= QT_VERSION_CHECK(4, 1, 0)
   #include <QAtomic>
 #else
   #error You need at least Qt Version 4.1
@@ -49,7 +49,7 @@ namespace SireBase
 /** This is a simple class that provides a thread-safe
     incrementable integer. This can be used, for example,
     to give a unique version of ID number to objects.
-    
+
     @author Christopher Woods
 */
 class Incremint
@@ -57,9 +57,9 @@ class Incremint
 public:
     Incremint(int value=0);
     Incremint(const Incremint &other);
-    
+
     ~Incremint();
-    
+
     int increment();
 
 private:
@@ -74,7 +74,7 @@ SIRE_ALWAYS_INLINE Incremint::Incremint(int value) : atomic_int(value)
 {}
 
 /** Copy constructor */
-SIRE_ALWAYS_INLINE Incremint::Incremint(const Incremint &other) 
+SIRE_ALWAYS_INLINE Incremint::Incremint(const Incremint &other)
                  : atomic_int(other.atomic_int)
 {}
 

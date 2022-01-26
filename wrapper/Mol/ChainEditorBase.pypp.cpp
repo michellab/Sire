@@ -365,19 +365,19 @@ void register_ChainEditorBase_class(){
                 , "" );
         
         }
-        ChainEditorBase_exposer.def( "_set_property_QString", 
+        ChainEditorBase_exposer.def( "_set_property_QString",
                                            &SireMol::ChainEditorBase::setProperty< QString >, bp::return_self< >() );
         ChainEditorBase_exposer.def( "_set_metadata_QString", &set_Metadata_SireMol_ChainStringProperty_function1, bp::return_self< >());
         ChainEditorBase_exposer.def( "_set_metadata_QString", &set_Metadata_SireMol_ChainStringProperty_function2, bp::return_self< >());
-        ChainEditorBase_exposer.def( "_set_property_qint64", 
+        ChainEditorBase_exposer.def( "_set_property_qint64",
                                            &SireMol::ChainEditorBase::setProperty< qint64 >, bp::return_self< >() );
         ChainEditorBase_exposer.def( "_set_metadata_qint64", &set_Metadata_SireMol_ChainIntProperty_function1, bp::return_self< >());
         ChainEditorBase_exposer.def( "_set_metadata_qint64", &set_Metadata_SireMol_ChainIntProperty_function2, bp::return_self< >());
-        ChainEditorBase_exposer.def( "_set_property_double", 
+        ChainEditorBase_exposer.def( "_set_property_double",
                                            &SireMol::ChainEditorBase::setProperty< double >, bp::return_self< >() );
         ChainEditorBase_exposer.def( "_set_metadata_double", &set_Metadata_SireMol_ChainFloatProperty_function1, bp::return_self< >());
         ChainEditorBase_exposer.def( "_set_metadata_double", &set_Metadata_SireMol_ChainFloatProperty_function2, bp::return_self< >());
-        ChainEditorBase_exposer.def( "_set_property_QVariant", 
+        ChainEditorBase_exposer.def( "_set_property_QVariant",
                                            &SireMol::ChainEditorBase::setProperty< QVariant >, bp::return_self< >() );
         ChainEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_ChainVariantProperty_function1, bp::return_self< >());
         ChainEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_ChainVariantProperty_function2, bp::return_self< >());

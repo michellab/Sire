@@ -56,10 +56,10 @@ void register_SireQt_containers()
 
     register_list< QVector<qint32> >();
     register_list< QList<qint32> >();
-    
+
     register_list< QVector<quint64> >();
     register_list< QList<quint64> >();
-    
+
     register_list< QVector<qint64> >();
     register_list< QList<qint64> >();
 
@@ -88,15 +88,15 @@ void register_SireQt_containers()
     register_tuple< boost::tuple<double,double> >();
     register_tuple< boost::tuple<double,double,double> >();
 
-    #if QT_VERSION >= 0x402000
+    #if QT_VERSION >= QT_VERSION_CHECK(4, 2, 0)
     register_set< QSet<QString> >();
-    
+
     register_dict< QMap<QString,QVariant> >();
-    
+
     #else
     register_set< QSet<QString>, QString >();
-    
+
     register_dict< QMap<QString,QVariant>, QString, QVariant >();
-    
+
     #endif
 }

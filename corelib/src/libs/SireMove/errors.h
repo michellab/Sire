@@ -49,7 +49,7 @@ public:
     siremove_error() : exception()
     {}
 
-    siremove_error(QString err, QString place = QString::null) : exception(err,place)
+    siremove_error(QString err, QString place = QString()) : exception(err,place)
     {}
 
     siremove_error(const siremove_error &other) : exception(other)
@@ -74,7 +74,7 @@ public:
     zmatrix_error() : siremove_error()
     {}
 
-    zmatrix_error(QString err, QString place = QString::null)
+    zmatrix_error(QString err, QString place = QString())
               : siremove_error(err,place)
     {}
 
@@ -90,7 +90,7 @@ public:
     {
         return zmatrix_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw zmatrix_error(*this);

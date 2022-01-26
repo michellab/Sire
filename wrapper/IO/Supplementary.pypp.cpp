@@ -172,6 +172,7 @@ void register_Supplementary_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Supplementary_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireIO::Supplementary >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        Supplementary_exposer.def_pickle(sire_pickle_suite< ::SireIO::Supplementary >());
         Supplementary_exposer.def( "__str__", &__str__< ::SireIO::Supplementary > );
         Supplementary_exposer.def( "__repr__", &__str__< ::SireIO::Supplementary > );
     }

@@ -180,6 +180,7 @@ void register_TrigArray2D_Vector__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         TrigArray2D_Vector__exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireBase::TrigArray2D<SireMaths::Vector> >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        TrigArray2D_Vector__exposer.def_pickle(sire_pickle_suite< ::SireBase::TrigArray2D<SireMaths::Vector> >());
         TrigArray2D_Vector__exposer.def( "__str__", &__str__< ::SireBase::TrigArray2D<SireMaths::Vector> > );
         TrigArray2D_Vector__exposer.def( "__repr__", &__str__< ::SireBase::TrigArray2D<SireMaths::Vector> > );
         TrigArray2D_Vector__exposer.def( "__len__", &__len_size< ::SireBase::TrigArray2D<SireMaths::Vector> > );

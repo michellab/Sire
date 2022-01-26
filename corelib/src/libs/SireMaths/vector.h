@@ -124,13 +124,13 @@ public:
     Vector( double val=0.0 );
     Vector( double xpos, double ypos, double zpos );
     Vector( const tuple<double,double,double> &pos );
-    
+
     Vector( const QString &str );
-    
+
     Vector(const NVector &other);
-    
+
     Vector(const Vector &other);
-    
+
     ~Vector();
 
     static const char* typeName();
@@ -160,7 +160,7 @@ public:
 
     bool operator==(const Vector &p1) const;
     bool operator!=(const Vector &p1) const;
-    
+
     const Vector& operator+=(const Vector &other);
     const Vector& operator-=(const Vector &other);
     const Vector& operator*=(const double &other);
@@ -186,13 +186,13 @@ public:
     double getitem(int i) const;
 
     double manhattanLength() const;
-    
+
     double length() const;
     double length2() const;
-    
+
     double invLength() const;
     double invLength2() const;
-    
+
     Vector normalise() const;
 
     bool isZero() const;
@@ -224,7 +224,7 @@ public:
 
     static double distance2(const Vector &v1, const Vector &v2);
     static double distance(const Vector &v1, const Vector &v2);
-    
+
     static double invDistance(const Vector &v1, const Vector &v2);
     static double invDistance2(const Vector &v1, const Vector &v2);
 
@@ -258,6 +258,8 @@ SIRE_ALWAYS_INLINE Vector::Vector(double val)
 {
     for (int i=0; i<3; i++)
         sc[i] = val;
+
+    sc[3] = 0.0;
 }
 
 /** Create the vector (xpos,ypos,zpos) */
@@ -266,6 +268,7 @@ SIRE_ALWAYS_INLINE Vector::Vector(double x, double y, double z)
     sc[0] = x;
     sc[1] = y;
     sc[2] = z;
+    sc[3] = 0.0;
 }
 
 /** Destructor */
@@ -275,8 +278,11 @@ SIRE_ALWAYS_INLINE Vector::~Vector()
 /** Copy assignment operator */
 SIRE_ALWAYS_INLINE const Vector& Vector::operator=(const Vector &other)
 {
-    for (int i=0; i<4; ++i)
-        sc[i] = other.sc[i];
+    if (this != &other)
+    {
+        for (int i=0; i<4; ++i)
+            sc[i] = other.sc[i];
+    }
 
     return *this;
 }

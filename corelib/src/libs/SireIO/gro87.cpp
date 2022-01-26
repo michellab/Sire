@@ -1456,7 +1456,7 @@ void Gro87::parseLines(const PropertyMap &map)
         //v1(x) v2(y) v3(z) v1(y) v1(z) v2(x) v2(z) v3(x) v3(y) (the last six values can be omitted)
         {
             const auto boxline = lines()[iline + 2 + nats];
-            const auto words = boxline.split(" ", QString::SkipEmptyParts);
+            const auto words = boxline.split(" ", Qt::SkipEmptyParts);
 
             bool all_ok = false;
             Vector v1(0), v2(0), v3(0);
@@ -1953,7 +1953,7 @@ void Gro87::addToSystem(System &system, const PropertyMap &map) const
         }
 
         // Convert the vector to a set to check for duplicates.
-        QSet<int> unique_idx_in_gro = QSet<int>::fromList(idx_in_gro.toList());
+        auto unique_idx_in_gro = convert_to_qset(idx_in_gro);
 
         // Duplicate matches were found!
         if (idx_in_gro.count() != unique_idx_in_gro.count())
@@ -2072,7 +2072,7 @@ void Gro87::addToSystem(System &system, const PropertyMap &map) const
 
     MoleculeGroup new_group("all");
 
-    for (const auto mol : mols)
+    for (const auto &mol : mols)
     {
         new_group.add(mol);
     }

@@ -137,6 +137,7 @@ void register_CHARMMSwitchingFunction_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CHARMMSwitchingFunction_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMM::CHARMMSwitchingFunction >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        CHARMMSwitchingFunction_exposer.def_pickle(sire_pickle_suite< ::SireMM::CHARMMSwitchingFunction >());
         CHARMMSwitchingFunction_exposer.def( "__str__", &__str__< ::SireMM::CHARMMSwitchingFunction > );
         CHARMMSwitchingFunction_exposer.def( "__repr__", &__str__< ::SireMM::CHARMMSwitchingFunction > );
     }

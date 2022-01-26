@@ -149,6 +149,7 @@ void register_Within_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Within_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::Within >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        Within_exposer.def_pickle(sire_pickle_suite< ::SireMol::Within >());
         Within_exposer.def( "__str__", &__str__< ::SireMol::Within > );
         Within_exposer.def( "__repr__", &__str__< ::SireMol::Within > );
         Within_exposer.def( "__hash__", &::SireMol::Within::hash );

@@ -46,9 +46,9 @@ static const RegisterMetaType<ResWithAtoms> r_resid;
 QDataStream &operator<<(QDataStream &ds, const ResWithAtoms &resid)
 {
     writeHeader(ds, r_resid, 1);
-    
+
     ds << resid.atomid;
-    
+
     return ds;
 }
 
@@ -56,14 +56,14 @@ QDataStream &operator<<(QDataStream &ds, const ResWithAtoms &resid)
 QDataStream &operator>>(QDataStream &ds, ResWithAtoms &resid)
 {
     VersionID v = readHeader(ds, r_resid);
-    
+
     if (v == 1)
     {
         ds >> resid.atomid;
     }
     else
         throw version_error( v, "1", r_resid, CODELOC );
-        
+
     return ds;
 }
 
@@ -96,7 +96,7 @@ uint ResWithAtoms::hash() const
 {
     return atomid.hash();
 }
-            
+
 /** Return a string representatio of this ID */
 QString ResWithAtoms::toString() const
 {
@@ -144,13 +144,13 @@ QList<ResIdx> ResWithAtoms::map(const MolInfo &molinfo) const
 {
     QSet<ResIdx> resids;
     QList<ResIdx> residxs;
-    
+
     foreach (AtomIdx atomidx, molinfo.map(atomid))
     {
         try
         {
             ResIdx residx = molinfo.parentResidue(atomidx);
-        
+
             if (not resids.contains(residx))
             {
                 residxs.append(residx);
@@ -160,15 +160,15 @@ QList<ResIdx> ResWithAtoms::map(const MolInfo &molinfo) const
         catch(...)
         {}
     }
-    
+
     if (residxs.isEmpty())
         throw SireMol::missing_residue( QObject::tr(
                 "There are no residues that contain atoms that match "
                 "the Atom ID \"%1\".")
                     .arg(atomid.toString()), CODELOC );
-    
-    qSort(residxs);
-    
+
+    std::sort(residxs.begin(), residxs.end());
+
     return residxs;
 }
 
@@ -192,9 +192,9 @@ static const RegisterMetaType<CGsWithAtoms> r_cgid;
 QDataStream &operator<<(QDataStream &ds, const CGsWithAtoms &cgid)
 {
     writeHeader(ds, r_cgid, 1);
-    
+
     ds << cgid.atomid;
-    
+
     return ds;
 }
 
@@ -202,14 +202,14 @@ QDataStream &operator<<(QDataStream &ds, const CGsWithAtoms &cgid)
 QDataStream &operator>>(QDataStream &ds, CGsWithAtoms &cgid)
 {
     VersionID v = readHeader(ds, r_cgid);
-    
+
     if (v == 1)
     {
         ds >> cgid.atomid;
     }
     else
         throw version_error( v, "1", r_cgid, CODELOC );
-        
+
     return ds;
 }
 
@@ -242,7 +242,7 @@ uint CGsWithAtoms::hash() const
 {
     return atomid.hash();
 }
-            
+
 /** Return a string representatio of this ID */
 QString CGsWithAtoms::toString() const
 {
@@ -289,13 +289,13 @@ QList<CGIdx> CGsWithAtoms::map(const MolInfo &molinfo) const
 {
     QSet<CGIdx> cgids;
     QList<CGIdx> cgidxs;
-    
+
     foreach (AtomIdx atomidx, molinfo.map(atomid))
     {
         try
         {
             CGIdx cgidx = molinfo.parentCutGroup(atomidx);
-        
+
             if (not cgids.contains(cgidx))
             {
                 cgidxs.append(cgidx);
@@ -305,15 +305,15 @@ QList<CGIdx> CGsWithAtoms::map(const MolInfo &molinfo) const
         catch(...)
         {}
     }
-    
+
     if (cgidxs.isEmpty())
         throw SireMol::missing_cutgroup( QObject::tr(
                 "There are no CutGroups that contain atoms that match "
                 "the Atom ID \"%1\".")
                     .arg(atomid.toString()), CODELOC );
-    
-    qSort(cgidxs);
-    
+
+    std::sort(cgidxs.begin(), cgidxs.end());
+
     return cgidxs;
 }
 
@@ -337,9 +337,9 @@ static const RegisterMetaType<ChainsWithAtoms> r_chainid;
 QDataStream &operator<<(QDataStream &ds, const ChainsWithAtoms &chainid)
 {
     writeHeader(ds, r_chainid, 1);
-    
+
     ds << chainid.atomid;
-    
+
     return ds;
 }
 
@@ -347,14 +347,14 @@ QDataStream &operator<<(QDataStream &ds, const ChainsWithAtoms &chainid)
 QDataStream &operator>>(QDataStream &ds, ChainsWithAtoms &chainid)
 {
     VersionID v = readHeader(ds, r_chainid);
-    
+
     if (v == 1)
     {
         ds >> chainid.atomid;
     }
     else
         throw version_error( v, "1", r_chainid, CODELOC );
-        
+
     return ds;
 }
 
@@ -387,7 +387,7 @@ uint ChainsWithAtoms::hash() const
 {
     return atomid.hash();
 }
-            
+
 /** Return a string representatio of this ID */
 QString ChainsWithAtoms::toString() const
 {
@@ -434,13 +434,13 @@ QList<ChainIdx> ChainsWithAtoms::map(const MolInfo &molinfo) const
 {
     QSet<ChainIdx> chainids;
     QList<ChainIdx> chainidxs;
-    
+
     foreach (AtomIdx atomidx, molinfo.map(atomid))
     {
         try
         {
             ChainIdx chainidx = molinfo.parentChain(atomidx);
-        
+
             if (not chainids.contains(chainidx))
             {
                 chainidxs.append(chainidx);
@@ -450,15 +450,15 @@ QList<ChainIdx> ChainsWithAtoms::map(const MolInfo &molinfo) const
         catch(...)
         {}
     }
-    
+
     if (chainidxs.isEmpty())
         throw SireMol::missing_chain( QObject::tr(
                 "There are no chains that contain atoms that match "
                 "the Atom ID \"%1\".")
                     .arg(atomid.toString()), CODELOC );
-    
-    qSort(chainidxs);
-    
+
+    std::sort(chainidxs.begin(), chainidxs.end());
+
     return chainidxs;
 }
 
@@ -482,9 +482,9 @@ static const RegisterMetaType<SegsWithAtoms> r_segid;
 QDataStream &operator<<(QDataStream &ds, const SegsWithAtoms &segid)
 {
     writeHeader(ds, r_segid, 1);
-    
+
     ds << segid.atomid;
-    
+
     return ds;
 }
 
@@ -492,14 +492,14 @@ QDataStream &operator<<(QDataStream &ds, const SegsWithAtoms &segid)
 QDataStream &operator>>(QDataStream &ds, SegsWithAtoms &segid)
 {
     VersionID v = readHeader(ds, r_segid);
-    
+
     if (v == 1)
     {
         ds >> segid.atomid;
     }
     else
         throw version_error( v, "1", r_segid, CODELOC );
-        
+
     return ds;
 }
 
@@ -532,7 +532,7 @@ uint SegsWithAtoms::hash() const
 {
     return atomid.hash();
 }
-            
+
 /** Return a string representatio of this ID */
 QString SegsWithAtoms::toString() const
 {
@@ -579,13 +579,13 @@ QList<SegIdx> SegsWithAtoms::map(const MolInfo &molinfo) const
 {
     QSet<SegIdx> segids;
     QList<SegIdx> segidxs;
-    
+
     foreach (AtomIdx atomidx, molinfo.map(atomid))
     {
         try
         {
             SegIdx segidx = molinfo.parentSegment(atomidx);
-        
+
             if (not segids.contains(segidx))
             {
                 segidxs.append(segidx);
@@ -595,15 +595,15 @@ QList<SegIdx> SegsWithAtoms::map(const MolInfo &molinfo) const
         catch(...)
         {}
     }
-    
+
     if (segidxs.isEmpty())
         throw SireMol::missing_segment( QObject::tr(
                 "There are no segments that contain atoms that match "
                 "the Atom ID \"%1\".")
                     .arg(atomid.toString()), CODELOC );
-    
-    qSort(segidxs);
-    
+
+    std::sort(segidxs.begin(), segidxs.end());
+
     return segidxs;
 }
 

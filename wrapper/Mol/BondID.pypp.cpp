@@ -286,6 +286,7 @@ void register_BondID_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         BondID_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::BondID >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        BondID_exposer.def_pickle(sire_pickle_suite< ::SireMol::BondID >());
         BondID_exposer.def( "__str__", &__str__< ::SireMol::BondID > );
         BondID_exposer.def( "__repr__", &__str__< ::SireMol::BondID > );
         BondID_exposer.def( "__hash__", &::SireMol::BondID::hash );

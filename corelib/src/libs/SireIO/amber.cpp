@@ -1191,10 +1191,10 @@ static void setNonBondedPairs(MolEditor &editmol, int pointer,
 }
 
 static void walk(int atom,
-                 const QHash<int, int> &atoms12,
+                 const QMultiHash<int, int> &atoms12,
                  int totalMolecules,
                  QHash<int, int> &atIsInMol,
-                 QHash<int, int> &atomsInMolecule)
+                 QMultiHash<int, int> &atomsInMolecule)
 {
     QList<int> neighbors = atoms12.values( atom );
     //qDebug() << " neighbors of " << atom << " are : " << neighbors;
@@ -1206,7 +1206,7 @@ static void walk(int atom,
         if ( not nn.contains(neighbor) )
         {
             atIsInMol[ neighbor ] = totalMolecules;
-            atomsInMolecule.insertMulti( totalMolecules, neighbor );
+            atomsInMolecule.insert( totalMolecules, neighbor );
             walk( neighbor, atoms12, totalMolecules, atIsInMol, atomsInMolecule);
         }
     }
@@ -1219,7 +1219,7 @@ static void calcNumberMolecules(int &totalMolecules,
                                 int natoms, int nbondsh, int nbondsa)
 {
     QHash<int, int> atIsInMol;
-    QHash<int, int> atoms12 ;
+    QMultiHash<int, int> atoms12 ;
 
     /** First construct a list of atoms bonded to each atom*/
     for ( int i = 1 ; i <= natoms ; i++ )
@@ -1231,22 +1231,22 @@ static void calcNumberMolecules(int &totalMolecules,
     {
         int atom0 = bonds_exc_h[ j ] / 3 + 1 ;
         int atom1 = bonds_exc_h[ j + 1 ] / 3 + 1 ;
-        atoms12.insertMulti(atom0, atom1);
-        atoms12.insertMulti(atom1, atom0);
+        atoms12.insert(atom0, atom1);
+        atoms12.insert(atom1, atom0);
     }
 
     for ( int j = 0 ; j < 3 * nbondsh ; j = j + 3 )
     {
         int atom0 = bond_inc_h[ j ] / 3 + 1 ;
         int atom1 = bond_inc_h[ j + 1 ] / 3 + 1 ;
-        atoms12.insertMulti(atom0, atom1);
-        atoms12.insertMulti(atom1, atom0);
+        atoms12.insert(atom0, atom1);
+        atoms12.insert(atom1, atom0);
     }
 
     // Then recursively walk along each atom find all the atoms that
     // are in the same molecule
     totalMolecules = 0;
-    QHash<int, int> atomsInMolecule;
+    QMultiHash<int, int> atomsInMolecule;
 
     for ( int i = 1 ; i <= natoms ; i++ )
     {
@@ -1254,7 +1254,7 @@ static void calcNumberMolecules(int &totalMolecules,
         {
             totalMolecules++;
             atIsInMol[ i ] = totalMolecules;
-            atomsInMolecule.insertMulti( totalMolecules, i );
+            atomsInMolecule.insert( totalMolecules, i );
 
             // Recursive walk
             //qDebug() << " Calling walk ";
@@ -1736,7 +1736,7 @@ tuple<MoleculeGroup,SpacePtr> Amber::readCrdTop(const QString &crdfile,
         if (line.startsWith("%"))
         {
             // We are reading meta data, can be VERSION, FLAG, FORMAT
-            QStringList words = line.split(" ", QString::SkipEmptyParts);
+            QStringList words = line.split(" ", Qt::SkipEmptyParts);
 
             if (line.startsWith("%FLAG"))
                 processFlagLine(words, currentFlag);
@@ -1947,7 +1947,7 @@ tuple<MoleculeGroup,SpacePtr> Amber::readCrdTop(const QString &crdfile,
 
     // Split by space to get the first number. I unfortunately discovered that
     // leap and sander do not produce exactly the same crd files...
-    QStringList temp = line.split(" ", QString::SkipEmptyParts);
+    QStringList temp = line.split(" ", Qt::SkipEmptyParts);
     bool ok;
     int crd_atoms = temp[0].toInt(&ok);
 

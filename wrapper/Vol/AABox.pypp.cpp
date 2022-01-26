@@ -404,6 +404,7 @@ void register_AABox_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AABox_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireVol::AABox >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        AABox_exposer.def_pickle(sire_pickle_suite< ::SireVol::AABox >());
         AABox_exposer.def( "__str__", &__str__< ::SireVol::AABox > );
         AABox_exposer.def( "__repr__", &__str__< ::SireVol::AABox > );
     }

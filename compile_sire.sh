@@ -26,8 +26,8 @@ if [ ! -z "$CONDA_PYTHON" ]; then
     echo "** . \"$CONDA_BINDIR/activate\""
     . "$CONDA_BINDIR/activate" ""
     echo "** Running the Python install script... **"
-    echo "** \"$CONDA_PYTHON\" build/build_sire.py **"
-    "$CONDA_PYTHON" build/build_sire.py
+    echo "** $CONDA_PYTHON build/build_sire.py $NO_OPENMM **"
+    $CONDA_PYTHON build/build_sire.py $NO_OPENMM
     err=$?
     conda deactivate
     exit $err
@@ -54,6 +54,10 @@ case $key in
     INSTALL_SIRE_DIR="$2"
     echo "Installing Sire into ${INSTALL_SIRE_DIR}"
     ;;
+    --no-openmm)
+    NO_OPENMM="--no-openmm"
+    echo "Compiling a version of Sire without OpenMM support"
+    ;;
     --clean)
     echo "Completely cleaning the build directories..."
     echo "rm -rf build/miniconda.sh build/corelib/* build/wrapper/*"
@@ -65,9 +69,13 @@ esac
 
 # Set the version of miniconda to use. Choose "latest" for the latest
 # miniconda, or set a specific version here
-MINICONDA_VERSION="4.8.3"
-PYTHON_VERSION="py37"
+MINICONDA_VERSION="4.10.3"
 #MINICONDA_VERSION="latest"
+
+# Set the Python version. Sire has been compiled successfully
+# for all versions from Python 3.6-3.9. Your choice is more about
+# what things you want to install on top of Sire, e.g. RDKit etc
+PYTHON_VERSION="py38"
 
 if [ -z "$INSTALL_SIRE_DIR" ]; then
     # Ask the user where they would like to install sire. By default
@@ -87,7 +95,7 @@ fi
 
 echo "Installing into directory '${INSTALL_DIR}'"
 
-# Check whether or not miniconda has been downloaded and 
+# Check whether or not miniconda has been downloaded and
 # installed into this directory
 if [ -e "${INSTALL_DIR}/bin/python" ] || [ -e "${INSTALL_DIR}/python.exe" ]; then
     build_and_install_sire
@@ -115,6 +123,12 @@ if [ ${OS_BIT} == "x86_64" ]; then
 elif [ ${OS_BIT} == "ppc64le" ]; then
     echo "ppc64le operating system"
     BIT_TYPE=ppc64le
+elif [ ${OS_BIT} == "arm64" ]; then
+    echo "arm64 operating system"
+    BIT_TYPE="arm64"
+elif [ ${OS_BIT} == "aarch64" ]; then
+    echo "arm64 operating system"
+    BIT_TYPE="aarch64"
 elif [ ${LONG_BIT} == "32" ]; then
     # must be 32 bit operating system on 32 bit processor
     echo "i386 operating system"
@@ -128,16 +142,24 @@ else
     #BIT_TYPE="x86"
 fi
 
+REPO="https://repo.anaconda.com/miniconda"
+
 # Work out whether we are on OS X, Linux or Windows, and
 # then download the appropriate miniconda distribution
 if [ "$(uname)" == "Darwin" ]; then
     # This is running on a Mac
-    PLATFORM="OSX"
-    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${PYTHON_VERSION}_${MINICONDA_VERSION}-MacOSX-${BIT_TYPE}.sh"
+    PLATFORM="MacOS"
+
+    if [ ${BIT_TYPE} == "arm64" ]; then
+      echo "Compiling an x86_64 executable as Sire does not yet support arm64"
+      BIT_TYPE="x86_64"
+    fi
+
+    MINICONDA="${REPO}/Miniconda3-${PYTHON_VERSION}_${MINICONDA_VERSION}-MacOSX-${BIT_TYPE}.sh"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # This is running on Linux
     PLATFORM="Linux"
-    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${PYTHON_VERSION}_${MINICONDA_VERSION}-Linux-${BIT_TYPE}.sh"
+    MINICONDA="${REPO}/Miniconda3-${PYTHON_VERSION}_${MINICONDA_VERSION}-Linux-${BIT_TYPE}.sh"
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     # This is running on Windows NT
     echo "Compilation on windows is not supported."
@@ -147,13 +169,13 @@ elif [ "$(expr substr $(uname -s) 1 9)" == "CYGWIN_NT" ]; then
     echo "Running an install under cygwin on windows"
     PLATFORM="Windows"
     SUBPLATFORM="Cygwin"
-    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${PYTHON_VERSION}_${MINICONDA_VERSION}-Windows-${BIT_TYPE}.exe"
+    MINICONDA="${REPO}/Miniconda3-${PYTHON_VERSION}_${MINICONDA_VERSION}-Windows-${BIT_TYPE}.exe"
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]; then
     # This is running on windows under cygwin
     echo "Running an install under MSYS2 on windows"
     PLATFORM="Windows"
     SUBPLATFORM="MSYS2"
-    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${PYTHON_VERSION}_${MINICONDA_VERSION}-Windows-${BIT_TYPE}.exe"
+    MINICONDA="${REPO}/Miniconda3-${PYTHON_VERSION}_${MINICONDA_VERSION}-Windows-${BIT_TYPE}.exe"
 else
     # Cannot identify the platform. Tell the user to download
     # miniconda directly

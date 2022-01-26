@@ -172,7 +172,7 @@ void TriclinicBox::construct(const Vector &v0,
     magnitudes.append(qMakePair(m2, v2));
 
     // Sort the pairs in ascending order.
-    qSort(magnitudes.begin(), magnitudes.end(), QPairFirstComparer());
+    std::sort(magnitudes.begin(), magnitudes.end(), QPairFirstComparer());
 
     // Reorder the vectors in order of descending magnitude.
     this->v0 = magnitudes[2].second;

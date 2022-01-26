@@ -36,11 +36,17 @@ SIRE_BEGIN_HEADER
 #include <QVector>
 #include <QMutex>
 
+// We have to undef the 'emit' from Qt as this is a function
+// name used in TBB! This should be safe for Qt as that
+// code uses Q_EMIT, and we don't use signals and slots in Sire
+#ifdef emit
+#undef emit
+#endif
+
 #include <tbb/parallel_for.h>
 #include <tbb/parallel_for_each.h>
 #include <tbb/parallel_reduce.h>
 #include <tbb/parallel_invoke.h>
-#include <tbb/tbb_exception.h>
 
 #include <memory>
 

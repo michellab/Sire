@@ -48,17 +48,17 @@ static const RegisterMetaType<DoubleArrayProperty> r_doublearray;
 QDataStream &operator<<(QDataStream &ds, const DoubleArrayProperty &array)
 {
     writeHeader(ds, r_doublearray, 1);
-    
+
     SharedDataStream sds(ds);
     sds << array.array();
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, DoubleArrayProperty &array)
 {
     VersionID v = readHeader(ds, r_doublearray);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
@@ -68,7 +68,7 @@ QDataStream &operator>>(QDataStream &ds, DoubleArrayProperty &array)
     }
     else
         throw version_error(v, "1", r_doublearray, CODELOC);
-    
+
     return ds;
 }
 
@@ -139,7 +139,7 @@ bool DoubleArrayProperty::isAnInteger() const
     {
         return NumberProperty(a.at(0)).isAnInteger();
     }
-    
+
     return false;
 }
 
@@ -153,7 +153,7 @@ QString DoubleArrayProperty::asAString() const
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot cast %s to a string").arg(this->toString()), CODELOC );
-    
+
     return StringProperty(a.at(0)).asAString();
 }
 
@@ -162,7 +162,7 @@ double DoubleArrayProperty::asADouble() const
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot cast %s to a double").arg(this->toString()), CODELOC );
-    
+
     return NumberProperty(a.at(0)).asADouble();
 }
 
@@ -171,7 +171,7 @@ int DoubleArrayProperty::asAnInteger() const
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot cast %s to an integer").arg(this->toString()), CODELOC );
-    
+
     return NumberProperty(a.at(0)).asAnInteger();
 }
 
@@ -180,7 +180,7 @@ bool DoubleArrayProperty::asABoolean() const
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot cast %s to a boolean").arg(this->toString()), CODELOC );
-    
+
     return BooleanProperty(a.at(0)).asABoolean();
 }
 
@@ -198,17 +198,17 @@ static const RegisterMetaType<IntegerArrayProperty> r_intarray;
 QDataStream &operator<<(QDataStream &ds, const IntegerArrayProperty &array)
 {
     writeHeader(ds, r_intarray, 1);
-    
+
     SharedDataStream sds(ds);
     sds << array.array();
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, IntegerArrayProperty &array)
 {
     VersionID v = readHeader(ds, r_intarray);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
@@ -218,7 +218,7 @@ QDataStream &operator>>(QDataStream &ds, IntegerArrayProperty &array)
     }
     else
         throw version_error(v, "1", r_intarray, CODELOC);
-    
+
     return ds;
 }
 
@@ -298,7 +298,7 @@ QString IntegerArrayProperty::asAString() const
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot cast %s to a string").arg(this->toString()), CODELOC );
-    
+
     return StringProperty(a.at(0)).asAString();
 }
 
@@ -307,7 +307,7 @@ double IntegerArrayProperty::asADouble() const
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot cast %s to a double").arg(this->toString()), CODELOC );
-    
+
     return NumberProperty(a.at(0)).asADouble();
 }
 
@@ -316,7 +316,7 @@ int IntegerArrayProperty::asAnInteger() const
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot cast %s to an integer").arg(this->toString()), CODELOC );
-    
+
     return NumberProperty(a.at(0)).asAnInteger();
 }
 
@@ -325,7 +325,7 @@ bool IntegerArrayProperty::asABoolean() const
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot cast %s to a boolean").arg(this->toString()), CODELOC );
-    
+
     return BooleanProperty(a.at(0)).asABoolean();
 }
 
@@ -343,17 +343,17 @@ static const RegisterMetaType<StringArrayProperty> r_stringarray;
 QDataStream &operator<<(QDataStream &ds, const StringArrayProperty &array)
 {
     writeHeader(ds, r_stringarray, 1);
-    
+
     SharedDataStream sds(ds);
     sds << array.array();
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, StringArrayProperty &array)
 {
     VersionID v = readHeader(ds, r_stringarray);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
@@ -363,7 +363,7 @@ QDataStream &operator>>(QDataStream &ds, StringArrayProperty &array)
     }
     else
         throw version_error(v, "1", r_stringarray, CODELOC);
-    
+
     return ds;
 }
 
@@ -434,7 +434,7 @@ bool StringArrayProperty::isADouble() const
         catch(...)
         {}
     }
-    
+
     return false;
 }
 
@@ -449,7 +449,7 @@ bool StringArrayProperty::isAnInteger() const
         catch(...)
         {}
     }
-    
+
     return false;
 }
 
@@ -464,7 +464,7 @@ bool StringArrayProperty::isABoolean() const
         catch(...)
         {}
     }
-    
+
     return false;
 }
 
@@ -473,7 +473,7 @@ QString StringArrayProperty::asAString() const
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot cast %s to a string").arg(this->toString()), CODELOC );
-    
+
     return StringProperty(a.at(0)).asAString();
 }
 
@@ -482,7 +482,7 @@ double StringArrayProperty::asADouble() const
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot cast %s to a double").arg(this->toString()), CODELOC );
-    
+
     return NumberProperty(a.at(0)).asADouble();
 }
 
@@ -491,7 +491,7 @@ int StringArrayProperty::asAnInteger() const
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot cast %s to an integer").arg(this->toString()), CODELOC );
-    
+
     return NumberProperty(a.at(0)).asAnInteger();
 }
 
@@ -500,7 +500,7 @@ bool StringArrayProperty::asABoolean() const
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
             "Cannot cast %s to a boolean").arg(this->toString()), CODELOC );
-    
+
     return BooleanProperty(a.at(0)).asABoolean();
 }
 

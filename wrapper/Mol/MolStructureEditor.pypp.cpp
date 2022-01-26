@@ -76,7 +76,7 @@ void register_MolStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atom") )
-                , "Add an atom with number number to this molecule and\nreturn an editor for this atom" );
+                , "Add an atom called name to this molecule and return an\neditor for this atom" );
         
         }
         { //::SireMol::MolStructureEditor::add
@@ -602,6 +602,7 @@ void register_MolStructureEditor_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         MolStructureEditor_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::MolStructureEditor >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        MolStructureEditor_exposer.def_pickle(sire_pickle_suite< ::SireMol::MolStructureEditor >());
         MolStructureEditor_exposer.def( "__str__", &__str__< ::SireMol::MolStructureEditor > );
         MolStructureEditor_exposer.def( "__repr__", &__str__< ::SireMol::MolStructureEditor > );
     }

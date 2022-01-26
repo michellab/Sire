@@ -44,6 +44,8 @@
 
 #include <QDebug>
 
+#include <algorithm>
+
 using namespace SireStream;
 using namespace SireStream::detail;
 
@@ -83,8 +85,8 @@ void SharedDataRegistry::assertValidID(quint32 id) const
     if (not objects_by_id.contains(id))
     {
         QList<quint32> keys = objects_by_id.keys();
-        qSort(keys);
-    
+        std::sort(keys.begin(), keys.end());
+
         throw SireError::program_bug( QObject::tr(
             "The SharedDataStream has encountered an invalid object ID (%1). "
             "The maximum ID available is %2. This is sometimes caused "
@@ -112,21 +114,21 @@ Q_GLOBAL_STATIC( GlobalRegistry, globalRegistry );
 shared_ptr<SharedDataRegistry> SharedDataRegistry::construct(QDataStream &ds)
 {
     QMutexLocker lkr( registryMutex() );
-   
+
     if (globalRegistry()->contains(&ds))
     {
         shared_ptr<SharedDataRegistry> reg = globalRegistry()->value(&ds).lock();
-        
+
         if (reg.get() != 0)
             return reg;
     }
-    
+
     shared_ptr<SharedDataRegistry> reg( new SharedDataRegistry() );
-    
+
     reg->ds = &ds;
-    
+
     globalRegistry()->insert( &ds, reg );
-    
+
     return reg;
 }
 
@@ -135,7 +137,7 @@ SharedDataRegistry::~SharedDataRegistry()
 {
     //remove this registry from the global_registry
     QMutexLocker lkr( registryMutex() );
-    
+
     if (ds)
     {
         if (globalRegistry())
@@ -178,7 +180,7 @@ bool SharedDataRegistry::peekMagic()
     char magic_number_data[8];
 
     int nbytes_read = ds->device()->peek( magic_number_data, 8 );
-    
+
     if (nbytes_read < 8)
     {
         //there is not enough data to contain the magic number
@@ -187,7 +189,7 @@ bool SharedDataRegistry::peekMagic()
 
     //now read the number
     quint64 magic_number = qFromBigEndian<quint64>( *((quint64*)magic_number_data) );
-    
+
     return (magic_number == SHARED_DATASTREAM_MAGIC);
 }
 
@@ -200,25 +202,25 @@ void SharedDataRegistry::readVersion()
 
     if (version_number != 0)
         return;
-        
+
     if (not this->peekMagic())
     {
         //there is no magic - we must be at version 1
         version_number = 1;
         return;
     }
-    
+
     //read the magic number and version number
     quint64 magic_number;
-    
+
     (*ds) >> magic_number >> version_number;
-    
+
     if (magic_number != SHARED_DATASTREAM_MAGIC)
         throw SireError::program_bug( QObject::tr(
             "Something went wrong when reading the SharedDataStream version! "
             "The magic number changed (from %1 to %2)")
                 .arg(SHARED_DATASTREAM_MAGIC).arg(magic_number), CODELOC );
-                
+
     if (version_number == 0)
         throw SireError::program_bug( QObject::tr(
             "There was no version number, even though there should have been one!"),
@@ -232,7 +234,7 @@ void SharedDataRegistry::readVersion()
     }
 }
 
-/** This function writes the version number of the SharedDataStream into the 
+/** This function writes the version number of the SharedDataStream into the
     stream - it only does this once, before any of the objects are written */
 void SharedDataRegistry::writeVersion()
 {
@@ -241,10 +243,10 @@ void SharedDataRegistry::writeVersion()
 
     if (version_number != 0)
         return;
-        
+
     //we are at version 2
     version_number = 2;
-    
+
     (*ds) << SHARED_DATASTREAM_MAGIC << version_number;
 }
 
@@ -287,7 +289,7 @@ bool SharedDataStream::peekMagic()
 quint32 SharedDataStream::loadID()
 {
     quint32 id;
-    
+
     if (this->version() == 1)
     {
         bool already_streamed;
@@ -297,7 +299,7 @@ quint32 SharedDataStream::loadID()
     {
         quint64 magic;
         ds >> magic >> id;
-        
+
         if (magic != SHARED_DATASTREAM_MAGIC)
             throw SireStream::corrupted_data( QObject::tr(
                 "There was a problem reading the magic number of the "
@@ -320,7 +322,7 @@ void SharedDataStream::readVersion()
     registry->readVersion();
 }
 
-/** This function writes the version number of the SharedDataStream into the 
+/** This function writes the version number of the SharedDataStream into the
     stream - it only does this once, before any of the objects are written */
 void SharedDataStream::writeVersion()
 {
@@ -346,12 +348,12 @@ struct GetQStringPointer
     {
         return string.constData();
     }
-    
+
     static void load(QDataStream &ds, QString &string)
     {
         ds >> string;
     }
-    
+
     static void save(QDataStream &ds, const QString &string)
     {
         ds << string;
@@ -362,7 +364,7 @@ struct GetQStringPointer
 
 
 
-SharedDataStream &operator<<(SharedDataStream &sds, 
+SharedDataStream &operator<<(SharedDataStream &sds,
                                                const QString &string)
 {
     sds.sharedSave<QString, GetQStringPointer>( shareString(string) );
@@ -373,7 +375,7 @@ SharedDataStream &operator>>(SharedDataStream &sds, QString &string)
 {
     sds.sharedLoad<QString, GetQStringPointer>(string);
     string = shareString(string);
-    
+
     return sds;
 }
 

@@ -42,9 +42,9 @@ static const RegisterMetaType<ChainsWithRes> r_chainid;
 QDataStream &operator<<(QDataStream &ds, const ChainsWithRes &chainid)
 {
     writeHeader(ds, r_chainid, 1);
-    
+
     ds << chainid.resid;
-    
+
     return ds;
 }
 
@@ -52,14 +52,14 @@ QDataStream &operator<<(QDataStream &ds, const ChainsWithRes &chainid)
 QDataStream &operator>>(QDataStream &ds, ChainsWithRes &chainid)
 {
     VersionID v = readHeader(ds, r_chainid);
-    
+
     if (v == 1)
     {
         ds >> chainid.resid;
     }
     else
         throw version_error( v, "1", r_chainid, CODELOC );
-        
+
     return ds;
 }
 
@@ -92,7 +92,7 @@ uint ChainsWithRes::hash() const
 {
     return resid.hash();
 }
-            
+
 /** Return a string representatio of this ID */
 QString ChainsWithRes::toString() const
 {
@@ -139,13 +139,13 @@ QList<ChainIdx> ChainsWithRes::map(const MolInfo &molinfo) const
 {
     QSet<ChainIdx> chainids;
     QList<ChainIdx> chainidxs;
-    
+
     foreach (ResIdx residx, molinfo.map(resid))
     {
         try
         {
             ChainIdx chainidx = molinfo.parentChain(residx);
-        
+
             if (not chainids.contains(chainidx))
             {
                 chainidxs.append(chainidx);
@@ -155,15 +155,15 @@ QList<ChainIdx> ChainsWithRes::map(const MolInfo &molinfo) const
         catch(...)
         {}
     }
-    
+
     if (chainidxs.isEmpty())
         throw SireMol::missing_chain( QObject::tr(
                 "There are no chains that contain residues that match "
                 "the residue ID \"%1\".")
                     .arg(resid.toString()), CODELOC );
-    
-    qSort(chainidxs);
-    
+
+    std::sort(chainidxs.begin(), chainidxs.end());
+
     return chainidxs;
 }
 

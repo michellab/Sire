@@ -391,6 +391,7 @@ void register_ChunkedVector_double__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ChunkedVector_double__exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireBase::ChunkedVector<double, 100> >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        ChunkedVector_double__exposer.def_pickle(sire_pickle_suite< ::SireBase::ChunkedVector<double, 100> >());
         ChunkedVector_double__exposer.def( "__str__", &pvt_get_name);
         ChunkedVector_double__exposer.def( "__repr__", &pvt_get_name);
         ChunkedVector_double__exposer.def( "__len__", &__len_size< ::SireBase::ChunkedVector<double, 100> > );

@@ -1,0 +1,56 @@
+#!/bin/bash
+
+while (( "$#" )); do
+  case "$1" in
+    -b|--branch)
+      if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+        BRANCH=$2
+        shift 2
+      else
+        echo "Error: Argument for $1 is missing" >&2
+        exit 1
+      fi
+      ;;
+    -*|--*=) # unsupported flags
+      echo "Error: Unsupported flag $1" >&2
+      exit 1
+      ;;
+  esac
+done
+
+if [[ -z "${BRANCH+set}" ]]; then
+    BRANCH="devel"
+fi
+
+cd $HOME
+
+echo "Generating wrappers for branch $BRANCH"
+
+if [[ -f "/opt/conda/includes.tar.bz2" ]]
+then
+    echo "Extracting headers for Sire dependencies"
+    cd /opt/conda && \
+       tar -jxvf includes.tar.bz2 && \
+       rm includes.tar.bz2 && \
+       cd $HOME
+fi
+
+if [[ -d "Sire" ]]
+then
+    echo "Removing old Sire directory..."
+    rm -rf Sire
+fi
+
+echo "Checking out Sire..."
+git clone --branch $BRANCH https://github.com/michellab/Sire
+
+echo "Changing into the wrapper directory..."
+cd Sire/wrapper
+
+echo "Running scanheaders..."
+python AutoGenerate/scanheaders.py $HOME/Sire/corelib/src/libs .
+
+echo "Now generating all of the headers..."
+python create_all_wrappers.py
+
+echo "Complete"

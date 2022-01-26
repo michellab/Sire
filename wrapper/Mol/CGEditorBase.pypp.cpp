@@ -367,19 +367,19 @@ void register_CGEditorBase_class(){
                 , "" );
         
         }
-        CGEditorBase_exposer.def( "_set_property_QString", 
+        CGEditorBase_exposer.def( "_set_property_QString",
                                            &SireMol::CGEditorBase::setProperty< QString >, bp::return_self< >() );
         CGEditorBase_exposer.def( "_set_metadata_QString", &set_Metadata_SireMol_CGStringProperty_function1, bp::return_self< >());
         CGEditorBase_exposer.def( "_set_metadata_QString", &set_Metadata_SireMol_CGStringProperty_function2, bp::return_self< >());
-        CGEditorBase_exposer.def( "_set_property_qint64", 
+        CGEditorBase_exposer.def( "_set_property_qint64",
                                            &SireMol::CGEditorBase::setProperty< qint64 >, bp::return_self< >() );
         CGEditorBase_exposer.def( "_set_metadata_qint64", &set_Metadata_SireMol_CGIntProperty_function1, bp::return_self< >());
         CGEditorBase_exposer.def( "_set_metadata_qint64", &set_Metadata_SireMol_CGIntProperty_function2, bp::return_self< >());
-        CGEditorBase_exposer.def( "_set_property_double", 
+        CGEditorBase_exposer.def( "_set_property_double",
                                            &SireMol::CGEditorBase::setProperty< double >, bp::return_self< >() );
         CGEditorBase_exposer.def( "_set_metadata_double", &set_Metadata_SireMol_CGFloatProperty_function1, bp::return_self< >());
         CGEditorBase_exposer.def( "_set_metadata_double", &set_Metadata_SireMol_CGFloatProperty_function2, bp::return_self< >());
-        CGEditorBase_exposer.def( "_set_property_QVariant", 
+        CGEditorBase_exposer.def( "_set_property_QVariant",
                                            &SireMol::CGEditorBase::setProperty< QVariant >, bp::return_self< >() );
         CGEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_CGVariantProperty_function1, bp::return_self< >());
         CGEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_CGVariantProperty_function2, bp::return_self< >());

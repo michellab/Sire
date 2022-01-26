@@ -51,12 +51,12 @@ QDataStream &operator<<(QDataStream &ds,
                                        const AtomSelection &selection)
 {
     writeHeader(ds, r_selection, 2);
-    
+
     SharedDataStream sds(ds);
 
-    sds << selection.d << selection.selected_atoms 
+    sds << selection.d << selection.selected_atoms
         << selection.nselected;
-        
+
     return ds;
 }
 
@@ -65,26 +65,26 @@ QDataStream &operator>>(QDataStream &ds,
                                        AtomSelection &selection)
 {
     VersionID v = readHeader(ds, r_selection);
-    
+
     if (v == 2)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> selection.d >> selection.selected_atoms
             >> selection.nselected;
     }
     else if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> selection.d >> selection.selected_atoms
             >> selection.nselected;
-        
+
         if (not (selection.selectedAll() or selection.selectedNone()))
         {
             //we need to invert the CutGroup selections.
             QHash< CGIdx, QSet<Index> > s;
-            
+
             for (CGIdx i(0); i<selection.d.read().nCutGroups(); ++i)
             {
                 if (not selection.selected_atoms.contains(i))
@@ -96,7 +96,7 @@ QDataStream &operator>>(QDataStream &ds,
                 else
                 {
                     const auto cgatoms = selection.selected_atoms.value(i);
-                    
+
                     if (not cgatoms.isEmpty())
                     {
                         //some of the atoms are selected
@@ -104,18 +104,18 @@ QDataStream &operator>>(QDataStream &ds,
                     }
                 }
             }
-            
+
             selection.selected_atoms = s;
         }
     }
     else
         throw version_error(v, "1,2", r_selection, CODELOC);
-        
+
     return ds;
 }
 
 /** Null constructor */
-AtomSelection::AtomSelection() 
+AtomSelection::AtomSelection()
               : ConcreteProperty<AtomSelection,MoleculeProperty>(),
                 d(MoleculeInfoData::null()),
                 nselected(0)
@@ -128,7 +128,7 @@ const MoleculeInfoData& AtomSelection::info() const
     return *d;
 }
 
-/** Construct a selection of all of the atoms in the view 
+/** Construct a selection of all of the atoms in the view
     'molecule' */
 AtomSelection::AtomSelection(const MoleculeView &molecule)
               : ConcreteProperty<AtomSelection,MoleculeProperty>()
@@ -136,12 +136,12 @@ AtomSelection::AtomSelection(const MoleculeView &molecule)
     this->operator=(molecule.selection());
 }
 
-/** Construct a selection of all of the atoms in the 
+/** Construct a selection of all of the atoms in the
     molecule whose data is in 'moldata' */
 AtomSelection::AtomSelection(const MoleculeData &moldata)
               : ConcreteProperty<AtomSelection,MoleculeProperty>(),
                 d(moldata.info()), nselected(moldata.info().nAtoms())
-{}              
+{}
 
 /** Construct a selection of all of the atoms in the
     molecule that is described by the info object 'molinfo' */
@@ -169,7 +169,7 @@ AtomSelection& AtomSelection::operator=(const AtomSelection &other)
     selected_atoms = other.selected_atoms;
     d = other.d;
     nselected = other.nselected;
-    
+
     return *this;
 }
 
@@ -177,7 +177,7 @@ AtomSelection& AtomSelection::operator=(const AtomSelection &other)
 bool AtomSelection::operator==(const AtomSelection &other) const
 {
     return this == &other or
-           ( nselected == other.nselected and 
+           ( nselected == other.nselected and
              (d == other.d or *d == *(other.d)) and
              selected_atoms == other.selected_atoms );
 }
@@ -212,7 +212,7 @@ int AtomSelection::nSelected() const
 bool AtomSelection::_pvt_selected(const CGAtomIdx &cgatomidx) const
 {
     auto it = selected_atoms.constFind( cgatomidx.cutGroup() );
-    
+
     if (it != selected_atoms.constEnd())
     {
         return (it->isEmpty() or it->contains(cgatomidx.atom()));
@@ -228,7 +228,7 @@ bool AtomSelection::_pvt_selected(AtomIdx atomidx) const
 
 /** Return whether or not the atom at index 'cgatomidx' has
     been selected
-    
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::selected(const CGAtomIdx &cgatomidx) const
@@ -236,11 +236,11 @@ bool AtomSelection::selected(const CGAtomIdx &cgatomidx) const
     CGAtomIdx sane_idx( CGIdx(cgatomidx.cutGroup().map(info().nCutGroups())),
                         Index(cgatomidx.atom()
                                         .map(info().nAtoms(cgatomidx.cutGroup()))) );
-                                              
+
     return this->_pvt_selected(sane_idx);
 }
 
-/** Return whether the atom at index 'atomidx' has been selected 
+/** Return whether the atom at index 'atomidx' has been selected
 
     \throw SireError::invalid_index
 */
@@ -251,7 +251,7 @@ bool AtomSelection::selected(AtomIdx atomidx) const
 
 /** Return whether any of the atom(s) identified by the ID 'atomid'
     have been selected
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
@@ -262,13 +262,13 @@ bool AtomSelection::selected(const AtomID &atomid) const
         if (this->_pvt_selected(atomidx))
             return true;
     }
-    
+
     return false;
 }
 
 /** Return whether or not any atom in the CutGroup
     at index 'cgidx' has been selected
-    
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::selected(CGIdx cgidx) const
@@ -279,36 +279,36 @@ bool AtomSelection::selected(CGIdx cgidx) const
 
 /** Return whether or not any atoms in the residue
     at index 'residx' has been selected
-    
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::selected(ResIdx residx) const
 {
     residx = ResIdx( residx.map(info().nResidues()) );
-    
+
     if (selected_atoms.isEmpty())
         return nselected > 0;
     else
     {
-        for ( const auto atomidx : info().cgAtomIdxs(residx) )
+        for ( const auto &atomidx : info().cgAtomIdxs(residx) )
         {
             if (this->_pvt_selected(atomidx))
                 return true;
         }
-        
+
         return false;
     }
 }
 
 /** Return whether or not any atoms in the chain
     at index 'chainidx' have been selected
-    
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::selected(ChainIdx chainidx) const
 {
     chainidx = ChainIdx( chainidx.map(info().nChains()) );
-    
+
     if (selected_atoms.isEmpty())
         return nselected > 0;
     else
@@ -321,20 +321,20 @@ bool AtomSelection::selected(ChainIdx chainidx) const
                     return true;
             }
         }
-        
+
         return false;
     }
 }
 
-/** Return whether or not any atoms in the segment at 
+/** Return whether or not any atoms in the segment at
     index 'segidx' have been selected
-    
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::selected(SegIdx segidx) const
 {
     segidx = SegIdx( segidx.map(info().nSegments()) );
-    
+
     if (selected_atoms.isEmpty())
         return nselected > 0;
     else
@@ -344,14 +344,14 @@ bool AtomSelection::selected(SegIdx segidx) const
             if (this->_pvt_selected(atomidx))
                 return true;
         }
-        
+
         return false;
     }
 }
 
 /** Return whether any atoms in the CutGroup(s) identified
-    by 'cgid' have been selected 
-    
+    by 'cgid' have been selected
+
     \throw SireMol::missing_cutgroup
     \throw SireError::invalid_index
 */
@@ -362,13 +362,13 @@ bool AtomSelection::selected(const CGID &cgid) const
         if (this->selected(cgidx))
             return true;
     }
-    
+
     return false;
 }
 
 /** Return whether any atoms in the residue(s) identified
     by 'resid' have been selected
-    
+
     \throw SireMol::missing_residue
     \throw SireError::invalid_index
 */
@@ -379,13 +379,13 @@ bool AtomSelection::selected(const ResID &resid) const
         if (this->selected(residx))
             return true;
     }
-    
+
     return false;
 }
 
 /** Return whether any atoms in the chain(s) identified
-    by 'chainid' have been selected 
-    
+    by 'chainid' have been selected
+
     \throw SireMol::missing_chain
     \throw SireError::invalid_index
 */
@@ -396,13 +396,13 @@ bool AtomSelection::selected(const ChainID &chainid) const
         if (this->selected(chainidx))
             return true;
     }
-    
+
     return false;
 }
 
 /** Return whether any atoms in the segment(s) identified
-    by 'segid' have been selected 
-    
+    by 'segid' have been selected
+
     \throw SireMol::missing_segment
     \throw SireError::invalid_index
 */
@@ -413,25 +413,25 @@ bool AtomSelection::selected(const SegID &segid) const
         if (this->selected(segidx))
             return true;
     }
-    
+
     return false;
 }
 
 /** Return whether or not any of the atoms selected in 'selection'
-    are also selected in this set 
-    
+    are also selected in this set
+
     \throw SireError::incompatible_error
 */
 bool AtomSelection::selected(const AtomSelection &selection) const
 {
     this->info().assertEqualTo( selection.info() );
-    
+
     //get rid of the easy cases...
     if (this->isEmpty() or selection.isEmpty())
         return false;
     else if (this->selectedAll() or selection.selectedAll())
         return true;
-            
+
     //now do the hard stuff!
     if (selection.selectedAllCutGroups())
     {
@@ -444,7 +444,7 @@ bool AtomSelection::selected(const AtomSelection &selection) const
             else if (not this->selectedNone(i))
             {
                 const QSet<Index> &atoms = *(selected_atoms.find(i));
-                
+
                 foreach (Index idx, selection.selectedAtoms(i))
                 {
                     if (atoms.contains(idx))
@@ -456,7 +456,7 @@ bool AtomSelection::selected(const AtomSelection &selection) const
     else
     {
         QList<CGIdx> cgidxs = selection.selectedCutGroups();
-        
+
         foreach (CGIdx i, cgidxs)
         {
             if (this->selectedAll(i))
@@ -466,7 +466,7 @@ bool AtomSelection::selected(const AtomSelection &selection) const
             else if (not this->selectedNone(i))
             {
                 const QSet<Index> &atoms = *(selected_atoms.find(i));
-                
+
                 foreach (Index idx, selection.selectedAtoms(i))
                 {
                     if (atoms.contains(idx))
@@ -475,7 +475,7 @@ bool AtomSelection::selected(const AtomSelection &selection) const
             }
         }
     }
-    
+
     return false;
 }
 
@@ -508,7 +508,7 @@ bool AtomSelection::selectedAllResidues() const
             if (not this->selected(i))
                 return false;
         }
-        
+
         return true;
     }
 }
@@ -526,7 +526,7 @@ bool AtomSelection::selectedAllChains() const
             if (not this->selected(i))
                 return false;
         }
-        
+
         return true;
     }
 }
@@ -544,7 +544,7 @@ bool AtomSelection::selectedAllSegments() const
             if (not this->selected(i))
                 return false;
         }
-        
+
         return true;
     }
 }
@@ -566,7 +566,7 @@ bool AtomSelection::selectedNone(AtomIdx atomidx) const
 
 /** Return whether none of the atoms in the CutGroup at
     index 'cgidx' have been selected
-    
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::selectedNone(CGIdx cgidx) const
@@ -576,7 +576,7 @@ bool AtomSelection::selectedNone(CGIdx cgidx) const
 
 /** Return whether none of the atoms in the residue at
     index 'residx' have been selected
-    
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::selectedNone(ResIdx residx) const
@@ -586,7 +586,7 @@ bool AtomSelection::selectedNone(ResIdx residx) const
 
 /** Return whether none of the atoms in the chain at
     index 'chainidx' have been selected
-    
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::selectedNone(ChainIdx chainidx) const
@@ -596,7 +596,7 @@ bool AtomSelection::selectedNone(ChainIdx chainidx) const
 
 /** Return whether none of the atoms in the segment at
     index 'segidx' have been selected
-    
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::selectedNone(SegIdx segidx) const
@@ -606,7 +606,7 @@ bool AtomSelection::selectedNone(SegIdx segidx) const
 
 /** Return whether none of the atoms identified by 'atomid'
     have been selected
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
@@ -615,9 +615,9 @@ bool AtomSelection::selectedNone(const AtomID &atomid) const
     return not this->selected(atomid);
 }
 
-/** Return whether none of the atoms in the CutGroup(s) 
-    identified by 'cgid' have been selected 
-    
+/** Return whether none of the atoms in the CutGroup(s)
+    identified by 'cgid' have been selected
+
     \throw SireMol::missing_cutgroup
     \throw SireError::invalid_index
 */
@@ -626,9 +626,9 @@ bool AtomSelection::selectedNone(const CGID &cgid) const
     return not this->selected(cgid);
 }
 
-/** Return whether none of the atoms in the residue(s) 
-    identified by 'resid' have been selected 
-    
+/** Return whether none of the atoms in the residue(s)
+    identified by 'resid' have been selected
+
     \throw SireMol::missing_residue
     \throw SireError::invalid_index
 */
@@ -637,9 +637,9 @@ bool AtomSelection::selectedNone(const ResID &resid) const
     return not this->selected(resid);
 }
 
-/** Return whether none of the atoms in the chain(s) 
-    identified by 'chainid' have been selected 
-    
+/** Return whether none of the atoms in the chain(s)
+    identified by 'chainid' have been selected
+
     \throw SireMol::missing_chain
     \throw SireError::invalid_index
 */
@@ -648,9 +648,9 @@ bool AtomSelection::selectedNone(const ChainID &chainid) const
     return not this->selected(chainid);
 }
 
-/** Return whether none of the atoms in the segment(s) 
-    identified by 'segid' have been selected 
-    
+/** Return whether none of the atoms in the segment(s)
+    identified by 'segid' have been selected
+
     \throw SireMol::missing_segment
     \throw SireError::invalid_index
 */
@@ -661,7 +661,7 @@ bool AtomSelection::selectedNone(const SegID &segid) const
 
 /** Return whether none of the atoms selected in 'selection' have
     been selected in this set
-    
+
     \throw SireError::incompatible_error
 */
 bool AtomSelection::selectedNone(const AtomSelection &selection) const
@@ -675,7 +675,7 @@ bool AtomSelection::selectedAll() const
     return nselected != 0 and selected_atoms.isEmpty();
 }
 
-/** Return whether or not the atom at index 'atomidx' is selected 
+/** Return whether or not the atom at index 'atomidx' is selected
 
     \throw SireError::invalid_index
 */
@@ -691,9 +691,9 @@ bool AtomSelection::_pvt_selectedAll(CGIdx cgidx) const
         //have all atoms been selected?
         if (selected_atoms.isEmpty())
             return true;
-    
+
         const auto it = selected_atoms.constFind(cgidx);
-        
+
         //have all atoms in the cutgroup been selected?
         if (it != selected_atoms.constEnd())
         {
@@ -708,7 +708,7 @@ bool AtomSelection::_pvt_selectedAll(CGIdx cgidx) const
 
 /** Return whether or not all of the atoms in the CutGroup
     at index 'cgidx' have been selected
-    
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::selectedAll(CGIdx cgidx) const
@@ -731,13 +731,13 @@ bool AtomSelection::_pvt_selectedAll(const QVector<CGAtomIdx> &atomidxs) const
         if (not this->_pvt_selected(atomidxs_array[i]))
             return false;
     }
-    
+
     return true;
 }
 
 /** Return whether or not all of the atoms in the residue
-    at index 'residx' have been selected 
-    
+    at index 'residx' have been selected
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::selectedAll(ResIdx residx) const
@@ -746,8 +746,8 @@ bool AtomSelection::selectedAll(ResIdx residx) const
 }
 
 /** Return whether or not all of the atoms in the chain
-    at index 'chainidx' have been selected 
-    
+    at index 'chainidx' have been selected
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::selectedAll(ChainIdx chainidx) const
@@ -757,7 +757,7 @@ bool AtomSelection::selectedAll(ChainIdx chainidx) const
 
 /** Return whether or not all of the atoms in the segment
     at index 'segidx' have been selected
-    
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::selectedAll(SegIdx segidx) const
@@ -765,9 +765,9 @@ bool AtomSelection::selectedAll(SegIdx segidx) const
     return this->selectedAll() or this->_pvt_selectedAll( info().cgAtomIdxs(segidx) );
 }
 
-/** Return whether or not all of the atoms matching the 
+/** Return whether or not all of the atoms matching the
     ID 'atomid' have been selected
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
@@ -776,9 +776,9 @@ bool AtomSelection::selectedAll(const AtomID &atomid) const
     return this->selectedAll() or this->_pvt_selectedAll( info().cgAtomIdxs(atomid) );
 }
 
-/** Return whether or not all of the atoms in the CutGroups matching the 
+/** Return whether or not all of the atoms in the CutGroups matching the
     ID 'cgid' have been selected
-    
+
     \throw SireMol::missing_cutgroup
     \throw SireError::invalid_index
 */
@@ -789,13 +789,13 @@ bool AtomSelection::selectedAll(const CGID &cgid) const
         if (not this->_pvt_selectedAll(cgidx))
             return false;
     }
-    
+
     return true;
 }
 
-/** Return whether or not all of the atoms in the residues matching the 
+/** Return whether or not all of the atoms in the residues matching the
     ID 'resid' have been selected
-    
+
     \throw SireMol::missing_residue
     \throw SireError::invalid_index
 */
@@ -804,9 +804,9 @@ bool AtomSelection::selectedAll(const ResID &resid) const
     return this->_pvt_selectedAll( info().cgAtomIdxs(resid) );
 }
 
-/** Return whether or not all of the atoms in the chains matching the 
+/** Return whether or not all of the atoms in the chains matching the
     ID 'atomid' have been selected
-    
+
     \throw SireMol::missing_chain
     \throw SireError::invalid_index
 */
@@ -815,9 +815,9 @@ bool AtomSelection::selectedAll(const ChainID &chainid) const
     return this->_pvt_selectedAll( info().cgAtomIdxs(chainid) );
 }
 
-/** Return whether or not all of the atoms in the segments matching the 
+/** Return whether or not all of the atoms in the segments matching the
     ID 'atomid' have been selected
-    
+
     \throw SireMol::missing_segment
     \throw SireError::invalid_index
 */
@@ -828,31 +828,31 @@ bool AtomSelection::selectedAll(const SegID &segid) const
 
 /** Return the set of indicies of the atoms in the CutGroup
     at index 'cgidx' that are selected within this CutGroup
-    
+
     \throw SireError::invalid_index
 */
 QSet<Index> AtomSelection::selectedAtoms(CGIdx cgidx) const
 {
     cgidx = CGIdx( cgidx.map(info().nCutGroups()) );
-    
+
     if (this->selectedAll())
     {
         //all atoms selected
         QSet<Index> ret;
         const int nats = info().nAtoms(cgidx);
         ret.reserve(nats);
-        
+
         for (Index i(0); i<nats; ++i)
         {
             ret.insert(i);
         }
-        
+
         return ret;
     }
     else
     {
         const auto it = selected_atoms.constFind(cgidx);
-    
+
         if (it != selected_atoms.constEnd())
         {
             if (it->isEmpty())
@@ -861,12 +861,12 @@ QSet<Index> AtomSelection::selectedAtoms(CGIdx cgidx) const
                 QSet<Index> ret;
                 const int nats = info().nAtoms(cgidx);
                 ret.reserve(nats);
-                
+
                 for (Index i(0); i<nats; ++i)
                 {
                     ret.insert(i);
                 }
-                
+
                 return ret;
             }
             else
@@ -889,7 +889,7 @@ QList<CGIdx> AtomSelection::selectedCutGroups() const
     else
     {
         QList<CGIdx> keys = selected_atoms.keys();
-        qSort(keys);
+        std::sort(keys.begin(), keys.end());
         return keys;
     }
 }
@@ -911,11 +911,11 @@ QList<ResIdx> AtomSelection::selectedResidues() const
         //any selected atoms
         int nres = info().nResidues();
         QList<ResIdx> selected_res;
-        
+
         for (ResIdx i(0); i<nres; ++i)
         {
             int nats = info().nAtoms(i);
-            
+
             for (int j(0); j<nats; ++j)
             {
                 if (this->selected( info().getAtom(i,j) ))
@@ -925,7 +925,7 @@ QList<ResIdx> AtomSelection::selectedResidues() const
                 }
             }
         }
-        
+
         return selected_res;
     }
 }
@@ -947,15 +947,15 @@ QList<ChainIdx> AtomSelection::selectedChains() const
         //any selected atoms
         int nchains = info().nChains();
         QList<ChainIdx> selected_chains;
-        
+
         for (ChainIdx i(0); i<nchains; ++i)
         {
             bool has_atom = false;
-            
+
             for (ResIdx j : info().getResiduesIn(i))
             {
                 int nats = info().nAtoms(j);
-            
+
                 for (int k(0); k<nats; ++k)
                 {
                     if (this->selected( info().getAtom(j,k) ))
@@ -964,15 +964,15 @@ QList<ChainIdx> AtomSelection::selectedChains() const
                         break;
                     }
                 }
-                
+
                 if (has_atom)
                     break;
             }
-            
+
             if (has_atom)
                 selected_chains.append(i);
         }
-        
+
         return selected_chains;
     }
 }
@@ -994,11 +994,11 @@ QList<SegIdx> AtomSelection::selectedSegments() const
         //any selected atoms
         int nseg = info().nSegments();
         QList<SegIdx> selected_seg;
-        
+
         for (SegIdx i(0); i<nseg; ++i)
         {
             int nats = info().nAtoms(i);
-            
+
             for (int j(0); j<nats; ++j)
             {
                 if (this->selected( info().getAtom(i,j) ))
@@ -1008,20 +1008,20 @@ QList<SegIdx> AtomSelection::selectedSegments() const
                 }
             }
         }
-        
+
         return selected_seg;
     }
 }
 
-/** Return whether or not all of the atoms selected in 'selection' 
+/** Return whether or not all of the atoms selected in 'selection'
     have also been selected in this object
-    
+
     \throw SireError::incompatible_error
 */
 bool AtomSelection::selectedAll(const AtomSelection &selection) const
 {
     this->info().assertEqualTo( selection.info() );
-    
+
     //get rid of the easy cases...
     if (this->isEmpty() or selection.isEmpty())
         return false;
@@ -1031,14 +1031,14 @@ bool AtomSelection::selectedAll(const AtomSelection &selection) const
         return false;
     else if (selection.selectedAllCutGroups() and not this->selectedAllCutGroups())
         return false;
-            
+
     //now do the hard stuff!
     if (selection.selectedAllCutGroups())
     {
         for (CGIdx i(0); i < this->info().nCutGroups(); ++i)
         {
             bool selected_all = this->selectedAll(i);
-        
+
             if (selection.selectedAll(i) and not selected_all)
                 return false;
             else if (selection.nSelected(i) > this->nSelected(i))
@@ -1046,7 +1046,7 @@ bool AtomSelection::selectedAll(const AtomSelection &selection) const
             else if (not selected_all)
             {
                 const QSet<Index> &atoms = *(selected_atoms.find(i));
-            
+
                 foreach (Index idx, selection.selectedAtoms(i))
                 {
                     if (not atoms.contains(idx))
@@ -1058,14 +1058,14 @@ bool AtomSelection::selectedAll(const AtomSelection &selection) const
     else
     {
         QList<CGIdx> cgidxs = selection.selectedCutGroups();
-        
+
         foreach (CGIdx i, cgidxs)
         {
             if (this->selectedNone(i))
                 return false;
-        
+
             bool selected_all = this->selectedAll(i);
-            
+
             if (selection.selectedAll(i) and not selected_all)
                 return false;
             else if (selection.nSelected(i) > this->nSelected(i))
@@ -1073,7 +1073,7 @@ bool AtomSelection::selectedAll(const AtomSelection &selection) const
             else
             {
                 const QSet<Index> &atoms = *(selected_atoms.find(i));
-                
+
                 foreach (Index idx, selection.selectedAtoms(i))
                 {
                     if (not atoms.contains(idx))
@@ -1082,11 +1082,11 @@ bool AtomSelection::selectedAll(const AtomSelection &selection) const
             }
         }
     }
-    
+
     return true;
 }
 
-/** Return the number of atoms selected in the CutGroup at 
+/** Return the number of atoms selected in the CutGroup at
     index 'cgidx' */
 int AtomSelection::nSelected(CGIdx cgidx) const
 {
@@ -1098,7 +1098,7 @@ int AtomSelection::nSelected(CGIdx cgidx) const
     }
 }
 
-/** Return whether the atom at index atomidx has been selected 
+/** Return whether the atom at index atomidx has been selected
 
     \throw SireError::invalid_index
 */
@@ -1124,13 +1124,13 @@ int AtomSelection::_pvt_nSelected(ResIdx residx) const
         if (this->_pvt_selected(atomidx))
             ++nats;
     }
-    
+
     return nats;
 }
 
 /** Return the number of atoms from the residue at index 'residx'
-    that have been selected 
-    
+    that have been selected
+
     \throw SireError::invalid_index
 */
 int AtomSelection::nSelected(ResIdx residx) const
@@ -1139,57 +1139,57 @@ int AtomSelection::nSelected(ResIdx residx) const
 }
 
 /** Return the number of atoms from the chain at index 'chainidx'
-    that have been selected 
-    
+    that have been selected
+
     \throw SireError::invalid_index
 */
 int AtomSelection::nSelected(ChainIdx chainidx) const
 {
     chainidx = ChainIdx( chainidx.map(info().nChains()) );
-    
+
     if (this->isEmpty())
         return 0;
     else if (this->selectedAll())
         return info().nChains();
-    
+
     int nats = 0;
-    
+
     foreach (ResIdx residx, info().getResiduesIn(chainidx))
     {
         nats += this->_pvt_nSelected(residx);
     }
-    
+
     return nats;
 }
 
 /** Return the number of atoms from the segment at index 'segidx'
-    that have been selected 
-    
+    that have been selected
+
     \throw SireError::invalid_index
 */
 int AtomSelection::nSelected(SegIdx segidx) const
 {
     segidx = SegIdx( segidx.map(info().nSegments()) );
-    
+
     if (this->isEmpty())
         return 0;
     else if (this->selectedAll())
         return info().nAtoms(segidx);
-     
+
     int nats = 0;
-          
+
     foreach (const CGAtomIdx &atomidx, info().cgAtomIdxs(segidx))
     {
         if (this->_pvt_selected(atomidx))
             ++nats;
     }
-    
+
     return nats;
 }
 
 /** Return the number of atoms from the CutGroups identified
-    by 'cgid' that have been selected 
-    
+    by 'cgid' that have been selected
+
     \throw SireMol::missing_cutgroup
     \throw SireError::invalid_index
 */
@@ -1201,101 +1201,101 @@ int AtomSelection::nSelected(const CGID &cgid) const
     {
         nats += this->nSelected(cgidx);
     }
-    
+
     return nats;
 }
 
 /** Return the number of atoms that are identified by
     'atomid' that have been selected
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
 int AtomSelection::nSelected(const AtomID &atomid) const
 {
     int nats = 0;
-    
+
     foreach (const CGAtomIdx &atomidx, info().cgAtomIdxs(atomid))
     {
         if (this->_pvt_selected(atomidx))
             ++nats;
     }
-    
+
     return nats;
 }
 
 /** Return the number of atoms from the residues identified
     by 'resid' that have been selected
-    
+
     \throw SireMol::missing_residue
     \throw SireError::invalid_index
 */
 int AtomSelection::nSelected(const ResID &resid) const
 {
     int nats = 0;
-    
+
     foreach (ResIdx residx, resid.map(info()))
     {
         nats += this->nSelected(residx);
     }
-    
+
     return nats;
 }
 
 /** Return the number of atoms from the chain(s) identified
     by 'chainid' that have been selected
-    
+
     \throw SireMol::missing_chain
     \throw SireError::invalid_index
 */
 int AtomSelection::nSelected(const ChainID &chainid) const
 {
     int nats = 0;
-    
+
     foreach (ChainIdx chainidx, chainid.map(info()))
     {
         nats += this->nSelected(chainidx);
     }
-    
+
     return nats;
 }
 
-/** Return the number of atoms from the segment(s) 
+/** Return the number of atoms from the segment(s)
     identified by 'segid' that have been selected
-    
+
     \throw SireMol::missing_segment
     \throw SireError::invalid_index
 */
 int AtomSelection::nSelected(const SegID &segid) const
 {
     int nats = 0;
-    
+
     foreach (SegIdx segidx, segid.map(info()))
     {
         nats += this->nSelected(segidx);
     }
-    
+
     return nats;
 }
 
 /** Return the number of atoms from the passed selection
     that have also been selected in this selection
-    
+
     \throw SireError::incompatible_error
 */
 int AtomSelection::nSelected(const AtomSelection &selection) const
 {
     info().assertEqualTo(selection.info());
-    
+
     if (selection.isEmpty() or this->isEmpty())
         return 0;
     else if (selection.selectedAll())
         return this->nSelected();
     else if (this->selectedAll())
         return selection.nSelected();
-     
+
     int nats = 0;
-              
+
     if (selection.selectedAllCutGroups())
     {
         for (CGIdx i(0); i < info().nCutGroups(); ++i)
@@ -1307,7 +1307,7 @@ int AtomSelection::nSelected(const AtomSelection &selection) const
             else if (not this->selectedNone(i))
             {
                 const QSet<Index> &atoms = *(selected_atoms.find(i));
-            
+
                 foreach (Index idx, selection.selectedAtoms(i))
                 {
                     if (atoms.contains(idx))
@@ -1327,7 +1327,7 @@ int AtomSelection::nSelected(const AtomSelection &selection) const
             else if (not this->selectedNone(i))
             {
                 const QSet<Index> &atoms = *(selected_atoms.find(i));
-            
+
                 foreach (Index idx, selection.selectedAtoms(i))
                 {
                     if (atoms.contains(idx))
@@ -1336,7 +1336,7 @@ int AtomSelection::nSelected(const AtomSelection &selection) const
             }
         }
     }
-    
+
     return nats;
 }
 
@@ -1369,7 +1369,7 @@ int AtomSelection::nSelectedResidues() const
     else
     {
         int nres = 0;
-        
+
         for (ResIdx i(0); i<info().nResidues(); ++i)
         {
             foreach (const CGAtomIdx &atomidx, info().cgAtomIdxs(i))
@@ -1381,7 +1381,7 @@ int AtomSelection::nSelectedResidues() const
                 }
             }
         }
-        
+
         return nres;
     }
 }
@@ -1396,18 +1396,18 @@ int AtomSelection::nSelectedChains() const
     else
     {
         int nchains = 0;
-        
+
         for (ChainIdx i(0); i<info().nChains(); ++i)
         {
             if (this->selected(i))
                 ++nchains;
         }
-        
+
         return nchains;
     }
 }
 
-/** Return the number of segments that contain at 
+/** Return the number of segments that contain at
     least one selected atom */
 int AtomSelection::nSelectedSegments() const
 {
@@ -1418,13 +1418,13 @@ int AtomSelection::nSelectedSegments() const
     else
     {
         int nsegs = 0;
-        
+
         for (SegIdx i(0); i<info().nSegments(); ++i)
         {
             if (this->selected(i))
                 ++nsegs;
         }
-        
+
         return nsegs;
     }
 }
@@ -1464,7 +1464,7 @@ AtomSelection& AtomSelection::selectAll()
 {
     selected_atoms.clear();
     nselected = info().nAtoms();
-    
+
     return *this;
 }
 
@@ -1473,7 +1473,7 @@ AtomSelection& AtomSelection::deselectAll()
 {
     selected_atoms.clear();
     nselected = 0;
-    
+
     return *this;
 }
 
@@ -1487,17 +1487,17 @@ void AtomSelection::_pvt_select(const CGAtomIdx &cgatomidx)
 {
     if (this->_pvt_selected(cgatomidx))
         return;
-    
+
     if (this->nSelected() == (info().nAtoms() - 1))
     {
         //this would result in selecting all atoms
         this->selectAll();
         return;
     }
-    
+
     //if the cutgroup is already in selected_atoms then it has been selected before
     auto it = selected_atoms.find(cgatomidx.cutGroup());
-    
+
     if (it == selected_atoms.end())
     {
         //this is the first atom selected in this CutGroup
@@ -1516,7 +1516,7 @@ void AtomSelection::_pvt_select(const CGAtomIdx &cgatomidx)
         else
             it->insert(cgatomidx.atom());
     }
-    
+
     ++nselected;
 }
 
@@ -1527,7 +1527,7 @@ void AtomSelection::_pvt_select(const QVector<CGAtomIdx> &cgatomidxs)
 
     const CGAtomIdx *cgatomidxs_array = cgatomidxs.constData();
     int nats = cgatomidxs.count();
-    
+
     for (int i=0; i<nats; ++i)
     {
         this->_pvt_select(cgatomidxs_array[i]);
@@ -1538,7 +1538,7 @@ void AtomSelection::_pvt_select(CGIdx cgidx, const QSet<Index> &atoms)
 {
     if (this->selectedAll())
         return;
-        
+
     foreach (Index atom, atoms)
     {
         this->_pvt_select( CGAtomIdx(cgidx,atom) );
@@ -1550,7 +1550,7 @@ void AtomSelection::_pvt_select(AtomIdx atomidx)
     this->_pvt_select( info().cgAtomIdx(atomidx) );
 }
 
-/** Select the atom at index 'atomidx' 
+/** Select the atom at index 'atomidx'
 
     \throw SireError::invalid_index
 */
@@ -1564,7 +1564,7 @@ void AtomSelection::_pvt_deselect(const CGAtomIdx &cgatomidx)
 {
     if (not this->selected(cgatomidx))
         return;
-    
+
     else if (nselected == 1)
     {
         //we have just removed the last selected atom
@@ -1577,7 +1577,7 @@ void AtomSelection::_pvt_deselect(const CGAtomIdx &cgatomidx)
         //we need to create space for all CutGroups
         selected_atoms.clear();
         selected_atoms.reserve( info().nCutGroups() );
-        
+
         for (CGIdx i(0); i<info().nCutGroups(); ++i)
         {
             if (i != cgatomidx.cutGroup())
@@ -1587,16 +1587,16 @@ void AtomSelection::_pvt_deselect(const CGAtomIdx &cgatomidx)
             else
             {
                 int nats = info().nAtoms(i);
-            
+
                 QSet<Index> atoms;
                 atoms.reserve(nats-1);
-                
+
                 for (Index j(0); j<nats; ++j)
                 {
                     if (j != cgatomidx.atom())
                         atoms.insert(j);
                 }
-                
+
                 selected_atoms.insert(i, atoms);
             }
         }
@@ -1605,18 +1605,18 @@ void AtomSelection::_pvt_deselect(const CGAtomIdx &cgatomidx)
     {
         //we need to recreate space for this CutGroup
         int nats = info().nAtoms(cgatomidx.cutGroup());
-        
+
         if (nats > 1)
         {
             QSet<Index> atoms;
             atoms.reserve(nats-1);
-            
+
             for (Index i(0); i<nats; ++i)
             {
                 if (i != cgatomidx.atom())
                     atoms.insert(i);
             }
-            
+
             selected_atoms[cgatomidx.cutGroup()] = atoms;
         }
         else
@@ -1632,7 +1632,7 @@ void AtomSelection::_pvt_deselect(const CGAtomIdx &cgatomidx)
         if (selected_atoms[cgatomidx.cutGroup()].isEmpty())
         {
             selected_atoms.remove(cgatomidx.cutGroup());
-            
+
             if (selected_atoms.isEmpty() and nselected > 1)
             {
                 throw SireError::program_bug( QObject::tr(
@@ -1641,7 +1641,7 @@ void AtomSelection::_pvt_deselect(const CGAtomIdx &cgatomidx)
             }
         }
     }
-    
+
     --nselected;
 
     if (selected_atoms.isEmpty() and nselected > 0)
@@ -1665,7 +1665,7 @@ void AtomSelection::_pvt_deselect(const QVector<CGAtomIdx> &cgatomidxs)
 
     const CGAtomIdx *cgatomidxs_array = cgatomidxs.constData();
     int nats = cgatomidxs.count();
-    
+
     for (int i=0; i<nats; ++i)
     {
         this->_pvt_deselect( cgatomidxs_array[i] );
@@ -1677,7 +1677,7 @@ void AtomSelection::_pvt_deselect(AtomIdx atomidx)
     this->_pvt_deselect( info().cgAtomIdx(atomidx) );
 }
 
-/** Deselect the atom at index 'atomidx' 
+/** Deselect the atom at index 'atomidx'
 
     \throw SireError::invalid_index
 */
@@ -1688,7 +1688,7 @@ AtomSelection& AtomSelection::deselect(AtomIdx atomidx)
 }
 
 /** Select only the atom at index 'atomidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::selectOnly(AtomIdx atomidx)
@@ -1701,7 +1701,7 @@ void AtomSelection::_pvt_select(CGIdx cgidx)
 {
     if (this->selectedAll(cgidx))
         return;
-    
+
     else if (this->selectedNone())
     {
         if (info().nCutGroups() == 1)
@@ -1717,9 +1717,9 @@ void AtomSelection::_pvt_select(CGIdx cgidx)
         QSet<Index> atoms = selected_atoms.take(cgidx);
 
         int nadded = info().nAtoms(cgidx) - atoms.count();
-        
+
         nselected += nadded;
-        
+
         if (nselected == info().nAtoms())
         {
             //we have now selected all atoms
@@ -1741,13 +1741,13 @@ void AtomSelection::_pvt_deselect(CGIdx cgidx)
     {
         selected_atoms.clear();
         nselected -= info().nAtoms(cgidx);
-        
+
         if (info().nCutGroups() > 1)
         {
             //we need to indicate that all other CutGroups are selected by adding
             //in extra empty sets
             selected_atoms.reserve( info().nCutGroups()-1 );
-            
+
             for (CGIdx i(0); i<info().nCutGroups(); ++i)
             {
                 if (i != cgidx)
@@ -1763,7 +1763,7 @@ void AtomSelection::_pvt_deselect(CGIdx cgidx)
         if (selected_atoms.contains(cgidx))
         {
             auto atoms = selected_atoms.take(cgidx);
-            
+
             if (atoms.isEmpty())
             {
                 //the whole cutgroup was selected
@@ -1776,7 +1776,7 @@ void AtomSelection::_pvt_deselect(CGIdx cgidx)
             }
         }
     }
-    
+
     if (selected_atoms.isEmpty() and nselected > 0)
     {
         throw SireError::program_bug( QObject::tr(
@@ -1792,7 +1792,7 @@ void AtomSelection::_pvt_deselect(CGIdx cgidx)
 }
 
 /** Select the CutGroup at index 'cgidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::select(CGIdx cgidx)
@@ -1802,7 +1802,7 @@ AtomSelection& AtomSelection::select(CGIdx cgidx)
 }
 
 /** Deselect the CutGroup at index 'cgidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::deselect(CGIdx cgidx)
@@ -1812,7 +1812,7 @@ AtomSelection& AtomSelection::deselect(CGIdx cgidx)
 }
 
 /** Select only the CutGroup at index 'cgidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::selectOnly(CGIdx cgidx)
@@ -1840,7 +1840,7 @@ void AtomSelection::_pvt_deselectAtoms(const IDXS &atoms)
 }
 
 /** Select the atoms in the residue at index 'residx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::select(ResIdx residx)
@@ -1853,12 +1853,12 @@ AtomSelection& AtomSelection::select(ResIdx residx)
     {
         this->_pvt_selectAtoms( info().getAtomsIn(residx) );
     }
-    
+
     return *this;
 }
 
 /** Deselect the atoms in the residue at index 'residx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::deselect(ResIdx residx)
@@ -1871,12 +1871,12 @@ AtomSelection& AtomSelection::deselect(ResIdx residx)
     {
         this->_pvt_deselectAtoms( info().getAtomsIn(residx) );
     }
-    
+
     return *this;
 }
 
 /** Select only the atoms in the residue at index 'residx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::selectOnly(ResIdx residx)
@@ -1886,7 +1886,7 @@ AtomSelection& AtomSelection::selectOnly(ResIdx residx)
 }
 
 /** Select all of the atoms in the chain at index 'chainidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::select(ChainIdx chainidx)
@@ -1895,12 +1895,12 @@ AtomSelection& AtomSelection::select(ChainIdx chainidx)
     {
         this->select(residx);
     }
-    
+
     return *this;
 }
 
 /** Deselect all of the atoms in the chain at index 'chainidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::deselect(ChainIdx chainidx)
@@ -1909,12 +1909,12 @@ AtomSelection& AtomSelection::deselect(ChainIdx chainidx)
     {
         this->deselect(residx);
     }
-    
+
     return *this;
 }
 
 /** Select only the atoms that are in the chain at index 'chainidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::selectOnly(ChainIdx chainidx)
@@ -1924,7 +1924,7 @@ AtomSelection& AtomSelection::selectOnly(ChainIdx chainidx)
 }
 
 /** Select all of the atoms in the segment at index 'segidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::select(SegIdx segidx)
@@ -1934,7 +1934,7 @@ AtomSelection& AtomSelection::select(SegIdx segidx)
 }
 
 /** Deselect all of the atoms in the segment at index 'segidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::deselect(SegIdx segidx)
@@ -1944,7 +1944,7 @@ AtomSelection& AtomSelection::deselect(SegIdx segidx)
 }
 
 /** Select only the atoms that are in the segment at index 'segidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::selectOnly(SegIdx segidx)
@@ -1966,12 +1966,12 @@ AtomSelection& AtomSelection::select(const QSet<AtomIdx> &atomidxs)
     }
 
     this->_pvt_selectAtoms(atomidxs);
-    
+
     return *this;
 }
 
 /** Deselect all of the atoms whose indicies are in 'atomidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::deselect(const QSet<AtomIdx> &atomidxs)
@@ -1983,12 +1983,12 @@ AtomSelection& AtomSelection::deselect(const QSet<AtomIdx> &atomidxs)
     }
 
     this->_pvt_deselectAtoms(atomidxs);
-    
+
     return *this;
 }
 
 /** Select only the atoms whose indicies are in 'atomidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::selectOnly(const QSet<AtomIdx> &atomidxs)
@@ -2001,7 +2001,7 @@ AtomSelection& AtomSelection::selectOnly(const QSet<AtomIdx> &atomidxs)
 
     this->deselectAll();
     this->_pvt_selectAtoms(atomidxs);
-    
+
     return *this;
 }
 
@@ -2016,14 +2016,14 @@ AtomSelection& AtomSelection::select(const QList<AtomIdx> &atomidxs)
     {
         info().assertContains(atomidx);
     }
-    
+
     this->_pvt_selectAtoms(atomidxs);
-    
+
     return *this;
 }
 
 /** Deselect all of the atoms whose indicies are in 'atomidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::deselect(const QList<AtomIdx> &atomidxs)
@@ -2035,12 +2035,12 @@ AtomSelection& AtomSelection::deselect(const QList<AtomIdx> &atomidxs)
     }
 
     this->_pvt_deselectAtoms(atomidxs);
-    
+
     return *this;
 }
 
 /** Select only the atoms whose indicies are in 'atomidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::selectOnly(const QList<AtomIdx> &atomidxs)
@@ -2053,12 +2053,12 @@ AtomSelection& AtomSelection::selectOnly(const QList<AtomIdx> &atomidxs)
 
     this->deselectAll();
     this->_pvt_selectAtoms(atomidxs);
-    
+
     return *this;
 }
 
 /** Select all of the CutGroups whose indicies are in 'cgidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::select(const QList<CGIdx> &cgidxs)
@@ -2068,19 +2068,19 @@ AtomSelection& AtomSelection::select(const QList<CGIdx> &cgidxs)
     {
         info().assertContains(cgidx);
     }
-    
+
     int ncg = info().nCutGroups();
-    
+
     foreach (const CGIdx &cgidx, cgidxs)
     {
         this->_pvt_select( CGIdx(cgidx.map(ncg)) );
     }
-    
+
     return *this;
 }
 
 /** Deselect all of the CutGroups whose indicies are in 'cgidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::deselect(const QList<CGIdx> &cgidxs)
@@ -2090,19 +2090,19 @@ AtomSelection& AtomSelection::deselect(const QList<CGIdx> &cgidxs)
     {
         info().assertContains(cgidx);
     }
-    
+
     int ncg = info().nCutGroups();
-    
+
     foreach (const CGIdx &cgidx, cgidxs)
     {
         this->_pvt_deselect( CGIdx(cgidx.map(ncg)) );
     }
-    
+
     return *this;
 }
 
 /** Select only the atoms in the CutGroups whose indicies are in 'cgidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::selectOnly(const QList<CGIdx> &cgidxs)
@@ -2112,20 +2112,20 @@ AtomSelection& AtomSelection::selectOnly(const QList<CGIdx> &cgidxs)
     {
         info().assertContains(cgidx);
     }
-    
+
     int ncg = info().nCutGroups();
     this->deselectAll();
-    
+
     foreach (const CGIdx &cgidx, cgidxs)
     {
         this->_pvt_select( CGIdx(cgidx.map(ncg)) );
     }
-    
+
     return *this;
 }
 
 /** Select the atoms in the residues whose indicies are in 'residxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::select(const QList<ResIdx> &residxs)
@@ -2139,13 +2139,13 @@ AtomSelection& AtomSelection::select(const QList<ResIdx> &residxs)
     {
         this->_pvt_selectAtoms( d->getAtomsIn(residx) );
     }
-    
+
     return *this;
 }
 
 /** Deselect all of the atoms that are in the residues whose
     indicies are in 'residxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::deselect(const QList<ResIdx> &residxs)
@@ -2159,13 +2159,13 @@ AtomSelection& AtomSelection::deselect(const QList<ResIdx> &residxs)
     {
         this->_pvt_deselectAtoms( d->getAtomsIn(residx) );
     }
-    
+
     return *this;
 }
 
 /** Select only the atoms that in the residues whose indicies are
     in 'residxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::selectOnly(const QList<ResIdx> &residxs)
@@ -2174,19 +2174,19 @@ AtomSelection& AtomSelection::selectOnly(const QList<ResIdx> &residxs)
     {
         info().assertContains(residx);
     }
-    
+
     this->selectNone();
-    
+
     foreach (const ResIdx &residx, residxs)
     {
         this->_pvt_selectAtoms( d->getAtomsIn(residx) );
     }
-    
+
     return *this;
 }
 
 /** Select the atoms that are in the chains whose indicies are in 'chainidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::select(const QList<ChainIdx> &chainidxs)
@@ -2195,7 +2195,7 @@ AtomSelection& AtomSelection::select(const QList<ChainIdx> &chainidxs)
     {
         info().assertContains(chainidx);
     }
-    
+
     foreach (const ChainIdx &chainidx, chainidxs)
     {
         foreach (const ResIdx &residx, d->getResiduesIn(chainidx))
@@ -2203,13 +2203,13 @@ AtomSelection& AtomSelection::select(const QList<ChainIdx> &chainidxs)
             this->_pvt_selectAtoms( d->getAtomsIn(residx) );
         }
     }
-    
+
     return *this;
 }
 
 /** Deselect the atoms that are in the chains whose indicies
     are in 'chainidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::deselect(const QList<ChainIdx> &chainidxs)
@@ -2218,7 +2218,7 @@ AtomSelection& AtomSelection::deselect(const QList<ChainIdx> &chainidxs)
     {
         info().assertContains(chainidx);
     }
-    
+
     foreach (const ChainIdx &chainidx, chainidxs)
     {
         foreach (const ResIdx &residx, d->getResiduesIn(chainidx))
@@ -2226,13 +2226,13 @@ AtomSelection& AtomSelection::deselect(const QList<ChainIdx> &chainidxs)
             this->_pvt_deselectAtoms( d->getAtomsIn(residx) );
         }
     }
-    
+
     return *this;
 }
 
 /** Select only the atoms that are in the chains whose indicies are
     in 'chainidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::selectOnly(const QList<ChainIdx> &chainidxs)
@@ -2243,7 +2243,7 @@ AtomSelection& AtomSelection::selectOnly(const QList<ChainIdx> &chainidxs)
     }
 
     this->deselectAll();
-    
+
     foreach (const ChainIdx &chainidx, chainidxs)
     {
         foreach (const ResIdx &residx, d->getResiduesIn(chainidx))
@@ -2251,13 +2251,13 @@ AtomSelection& AtomSelection::selectOnly(const QList<ChainIdx> &chainidxs)
             this->_pvt_selectAtoms( d->getAtomsIn(residx) );
         }
     }
-    
+
     return *this;
 }
 
 /** Select the atoms that are in the segments whose indicies
     are in 'segidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::select(const QList<SegIdx> &segidxs)
@@ -2266,18 +2266,18 @@ AtomSelection& AtomSelection::select(const QList<SegIdx> &segidxs)
     {
         info().assertContains(segidx);
     }
-    
+
     foreach (const SegIdx &segidx, segidxs)
     {
         this->_pvt_selectAtoms( d->getAtomsIn(segidx) );
     }
-    
+
     return *this;
 }
 
 /** Deselect all of the atoms in the segments whose indicies are
     in 'segidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::deselect(const QList<SegIdx> &segidxs)
@@ -2286,18 +2286,18 @@ AtomSelection& AtomSelection::deselect(const QList<SegIdx> &segidxs)
     {
         info().assertContains(segidx);
     }
-    
+
     foreach (const SegIdx &segidx, segidxs)
     {
         this->_pvt_deselectAtoms( d->getAtomsIn(segidx) );
     }
-    
+
     return *this;
 }
 
 /** Select only the atoms in the segments whose indicies are
     in 'segidxs'
-        
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::selectOnly(const QList<SegIdx> &segidxs)
@@ -2308,17 +2308,17 @@ AtomSelection& AtomSelection::selectOnly(const QList<SegIdx> &segidxs)
     }
 
     this->deselectAll();
-    
+
     foreach (const SegIdx &segidx, segidxs)
     {
         this->_pvt_selectAtoms( d->getAtomsIn(segidx) );
     }
-    
+
     return *this;
 }
 
 /** Select all of the atoms that match 'atomid'
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
@@ -2329,38 +2329,38 @@ AtomSelection& AtomSelection::select(const AtomID &atomid)
 }
 
 /** Deselect all of the atoms that match 'atomid'
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::deselect(const AtomID &atomid)
 {
     this->_pvt_deselect( info().cgAtomIdxs(atomid) );
-    
+
     return *this;
 }
 
 /** Select only that atoms that match 'atomid'
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::selectOnly(const AtomID &atomid)
 {
     QList<AtomIdx> atomidxs = atomid.map(info());
-    
+
     this->deselectAll();
-    
+
     foreach (AtomIdx atomidx, atomidxs)
     {
         this->_pvt_select(atomidx);
     }
-    
+
     return *this;
 }
 
 /** Select the atoms in the CutGroups that match 'cgid'
-    
+
     \throw SireMol::missing_cutgroup
     \throw SireError::invalid_index
 */
@@ -2372,35 +2372,35 @@ AtomSelection& AtomSelection::select(const CGID &cgid)
 }
 
 /** Deselect the atoms in the CutGroups that match 'cgid'
-    
+
     \throw SireMol::missing_cutgroup
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::deselect(const CGID &cgid)
 {
     this->_pvt_deselectAtoms( d->getAtomsIn(cgid) );
-    
+
     return *this;
 }
 
 /** Select only the atoms that are in the CutGroups that
     match 'cgid'
-    
+
     \throw SireMol::missing_cutgroup
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::selectOnly(const CGID &cgid)
 {
     QList<AtomIdx> atomidxs = info().getAtomsIn(cgid);
-    
+
     this->deselectAll();
     this->_pvt_selectAtoms(atomidxs);
-    
+
     return *this;
 }
 
 /** Select the atoms in the residues that match 'resid'
-    
+
     \throw SireMol::missing_residue
     \throw SireError::invalid_index
 */
@@ -2412,19 +2412,19 @@ AtomSelection& AtomSelection::select(const ResID &resid)
 }
 
 /** Deselect the atoms in the residues that match 'resid'
-    
+
     \throw SireMol::missing_residue
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::deselect(const ResID &resid)
 {
     this->_pvt_deselectAtoms( d->getAtomsIn(resid) );
-    
+
     return *this;
 }
 
 /** Select only the atoms in the residues that match 'resid'
-    
+
     \throw SireMol::missing_residue
     \throw SireError::invalid_index
 */
@@ -2434,51 +2434,51 @@ AtomSelection& AtomSelection::selectOnly(const ResID &resid)
 
     this->deselectAll();
     this->_pvt_selectAtoms(atomidxs);
-    
+
     return *this;
 }
 
 /** Select the atoms in the chains that match 'chainid'
-    
+
     \throw SireMol::missing_chain
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::select(const ChainID &chainid)
 {
     this->_pvt_selectAtoms( d->getAtomsIn(chainid) );
-    
+
     return *this;
 }
 
 /** Deselect the atoms in the chains that match 'chainid'
-    
+
     \throw SireMol::missing_chain
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::deselect(const ChainID &chainid)
 {
     this->_pvt_deselectAtoms( d->getAtomsIn(chainid) );
-    
+
     return *this;
 }
 
 /** Select only the atoms in the chains that match 'chainid'
-    
+
     \throw SireMol::missing_chain
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::selectOnly(const ChainID &chainid)
 {
     QList<AtomIdx> atomidxs = info().getAtomsIn(chainid);
-    
+
     this->deselectAll();
     this->_pvt_selectAtoms( d->getAtomsIn(chainid) );
-    
+
     return *this;
 }
 
 /** Select all of the atoms in the segments that match 'segid'
-    
+
     \throw SireMol::missing_segment
     \throw SireError::invalid_index
 */
@@ -2489,19 +2489,19 @@ AtomSelection& AtomSelection::select(const SegID &segid)
 }
 
 /** Deselect all of the atoms in the segments that match 'segid'
-    
+
     \throw SireMol::missing_segment
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::deselect(const SegID &segid)
 {
     this->_pvt_deselectAtoms( d->getAtomsIn(segid) );
-    
+
     return *this;
 }
 
 /** Select only the atoms in the segments that match 'segid'
-    
+
     \throw SireMol::missing_segment
     \throw SireError::invalid_index
 */
@@ -2511,7 +2511,7 @@ AtomSelection& AtomSelection::selectOnly(const SegID &segid)
 
     this->deselectAll();
     this->_pvt_selectAtoms( d->getAtomsIn(segid) );
-    
+
     return *this;
 }
 
@@ -2521,7 +2521,7 @@ void AtomSelection::_pvt_select(const AtomSelection &selection)
         return;
 
     info().assertEqualTo(selection.info());
-    
+
     if (this->selectedAll())
         return;
     else if (selection.selectedAll())
@@ -2530,11 +2530,11 @@ void AtomSelection::_pvt_select(const AtomSelection &selection)
         nselected = info().nAtoms();
         return;
     }
-    
+
     if (selection.selectedAllCutGroups())
     {
         int ncg = info().nCutGroups();
-        
+
         for (CGIdx i(0); i<ncg; ++i)
         {
             if (selection.selectedAll(i))
@@ -2566,24 +2566,24 @@ void AtomSelection::_pvt_select(const AtomSelection &selection)
 }
 
 /** Select all of the atoms in 'selection'
-    
+
     \throw SireError::incompatible_error
 */
 AtomSelection& AtomSelection::select(const AtomSelection &selection)
 {
     this->_pvt_select(selection);
-      
+
     return *this;
 }
 
 /** Deselect all of the atoms in 'selection'
-    
+
     \throw SireError::incompatible_error
 */
 AtomSelection& AtomSelection::deselect(const AtomSelection &selection)
 {
     info().assertEqualTo(selection.info());
-    
+
     if (this->selectedNone())
         return *this;
     else if (selection.selectedAll())
@@ -2591,11 +2591,11 @@ AtomSelection& AtomSelection::deselect(const AtomSelection &selection)
         this->deselectAll();
         return *this;
     }
-    
+
     if (selection.selectedAllCutGroups())
     {
         int ncg = info().nCutGroups();
-        
+
         for (CGIdx i(0); i<ncg; ++i)
         {
             if (selection.selectedAll(i))
@@ -2628,21 +2628,21 @@ AtomSelection& AtomSelection::deselect(const AtomSelection &selection)
             }
         }
     }
-    
+
     return *this;
 }
 
 /** Select only the atoms that are selected in 'selection'
-    
+
     \throw SireError::incompatible_error
 */
 AtomSelection& AtomSelection::selectOnly(const AtomSelection &selection)
 {
     info().assertEqualTo(selection.info());
-    
+
     selected_atoms = selection.selected_atoms;
     nselected = selection.nselected;
-    
+
     return *this;
 }
 
@@ -2653,7 +2653,7 @@ AtomSelection& AtomSelection::invert()
         return this->selectNone();
     else if (this->selectedNone())
         return this->selectAll();
-        
+
     for (CGIdx i(0); i<info().nCutGroups(); ++i)
     {
         if (this->selectedAll(i))
@@ -2666,7 +2666,7 @@ AtomSelection& AtomSelection::invert()
             int nats = info().nAtoms(i);
 
             this->_pvt_deselect(i);
-            
+
             for (Index j(0); j<nats; ++j)
             {
                 if (not atoms.contains(j))
@@ -2674,7 +2674,7 @@ AtomSelection& AtomSelection::invert()
             }
         }
     }
-    
+
     return *this;
 }
 
@@ -2688,8 +2688,8 @@ bool AtomSelection::intersects(AtomIdx atomidx) const
 }
 
 /** Return whether or not the CutGroup at index 'cgidx' contains
-    some atoms that have been selected 
-    
+    some atoms that have been selected
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::intersects(CGIdx cgidx) const
@@ -2698,8 +2698,8 @@ bool AtomSelection::intersects(CGIdx cgidx) const
 }
 
 /** Return whether or not the residue at index 'residx' contains
-    some atoms that have been selected 
-    
+    some atoms that have been selected
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::intersects(ResIdx residx) const
@@ -2708,8 +2708,8 @@ bool AtomSelection::intersects(ResIdx residx) const
 }
 
 /** Return whether or not the chain at index 'chainidx' contains
-    some atoms that have been selected 
-    
+    some atoms that have been selected
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::intersects(ChainIdx chainidx) const
@@ -2718,8 +2718,8 @@ bool AtomSelection::intersects(ChainIdx chainidx) const
 }
 
 /** Return whether or not the segment at index 'segidx' contains
-    some atoms that have been selected 
-    
+    some atoms that have been selected
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::intersects(SegIdx segidx) const
@@ -2727,9 +2727,9 @@ bool AtomSelection::intersects(SegIdx segidx) const
     return this->selected(segidx);
 }
 
-/** Return whether or not any of the atoms identified 
+/** Return whether or not any of the atoms identified
     by 'atomid' have been selected
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
@@ -2738,9 +2738,9 @@ bool AtomSelection::intersects(const AtomID &atomid) const
     return this->selected(atomid);
 }
 
-/** Return whether or not any of the atoms in the CutGroup(s) identified 
+/** Return whether or not any of the atoms in the CutGroup(s) identified
     by 'cgid' have been selected
-    
+
     \throw SireMol::missing_cutgroup
     \throw SireError::invalid_index
 */
@@ -2749,9 +2749,9 @@ bool AtomSelection::intersects(const CGID &cgid) const
     return this->selected(cgid);
 }
 
-/** Return whether or not any of the atoms in the residue(s) identified 
+/** Return whether or not any of the atoms in the residue(s) identified
     by 'resid' have been selected
-    
+
     \throw SireMol::missing_residue
     \throw SireError::invalid_index
 */
@@ -2760,9 +2760,9 @@ bool AtomSelection::intersects(const ResID &resid) const
     return this->selected(resid);
 }
 
-/** Return whether or not any of the atoms in the chain(s) identified 
+/** Return whether or not any of the atoms in the chain(s) identified
     by 'chainid' have been selected
-    
+
     \throw SireMol::missing_chain
     \throw SireError::invalid_index
 */
@@ -2771,9 +2771,9 @@ bool AtomSelection::intersects(const ChainID &chainid) const
     return this->selected(chainid);
 }
 
-/** Return whether or not any of the atoms in the segment(s) identified 
+/** Return whether or not any of the atoms in the segment(s) identified
     by 'segid' have been selected
-    
+
     \throw SireMol::missing_segment
     \throw SireError::invalid_index
 */
@@ -2784,7 +2784,7 @@ bool AtomSelection::intersects(const SegID &segid) const
 
 /** Return whether any of the atoms selected in 'selection'
     are also selected in this set
-    
+
     \throw SireError::incompatible_error
 */
 bool AtomSelection::intersects(const AtomSelection &selection) const
@@ -2801,9 +2801,9 @@ bool AtomSelection::contains(AtomIdx atomidx) const
     return this->selected(atomidx);
 }
 
-/** Return whether all of the atoms in the CutGroup at 
+/** Return whether all of the atoms in the CutGroup at
     index 'cgidx' have been selected
-    
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::contains(CGIdx cgidx) const
@@ -2811,9 +2811,9 @@ bool AtomSelection::contains(CGIdx cgidx) const
     return this->selectedAll(cgidx);
 }
 
-/** Return whether all of the atoms in the residue at 
+/** Return whether all of the atoms in the residue at
     index 'residx' have been selected
-    
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::contains(ResIdx residx) const
@@ -2821,9 +2821,9 @@ bool AtomSelection::contains(ResIdx residx) const
     return this->selectedAll(residx);
 }
 
-/** Return whether all of the atoms in the chain at 
+/** Return whether all of the atoms in the chain at
     index 'chainidx' have been selected
-    
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::contains(ChainIdx chainidx) const
@@ -2831,9 +2831,9 @@ bool AtomSelection::contains(ChainIdx chainidx) const
     return this->selectedAll(chainidx);
 }
 
-/** Return whether all of the atoms in the segments at 
+/** Return whether all of the atoms in the segments at
     index 'segidx' have been selected
-    
+
     \throw SireError::invalid_index
 */
 bool AtomSelection::contains(SegIdx segidx) const
@@ -2843,7 +2843,7 @@ bool AtomSelection::contains(SegIdx segidx) const
 
 /** Return whether all of the atoms identified by
     'atomid' have been selected
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
@@ -2854,7 +2854,7 @@ bool AtomSelection::contains(const AtomID &atomid) const
 
 /** Return whether all of the atoms in the CutGroup(s) identified by
     'cgid' have been selected
-    
+
     \throw SireMol::missing_cutgroup
     \throw SireError::invalid_index
 */
@@ -2865,7 +2865,7 @@ bool AtomSelection::contains(const CGID &cgid) const
 
 /** Return whether all of the atoms in the residue(s) identified by
     'resid' have been selected
-    
+
     \throw SireMol::missing_residue
     \throw SireError::invalid_index
 */
@@ -2876,7 +2876,7 @@ bool AtomSelection::contains(const ResID &resid) const
 
 /** Return whether all of the atoms in the chain(s) identified by
     'chainid' have been selected
-    
+
     \throw SireMol::missing_chain
     \throw SireError::invalid_index
 */
@@ -2887,7 +2887,7 @@ bool AtomSelection::contains(const ChainID &chainid) const
 
 /** Return whether all of the atoms in the segment(s) identified by
     'segid' have been selected
-    
+
     \throw SireMol::missing_segment
     \throw SireError::invalid_index
 */
@@ -2898,7 +2898,7 @@ bool AtomSelection::contains(const SegID &segid) const
 
 /** Return whether all of the atoms selected in 'selection' are
     selected in this set
-    
+
     \throw SireError::incompatible_error
 */
 bool AtomSelection::contains(const AtomSelection &selection) const
@@ -2930,12 +2930,12 @@ AtomSelection& AtomSelection::intersect(const AtomSelection &other)
         if (this->selectedAllCutGroups() and other.selectedAllCutGroups())
         {
             int ncg = info().nCutGroups();
-            
+
             for (CGIdx i(0); i<ncg; ++i)
             {
                 bool this_all = this->selectedAll(i);
                 bool other_all = other.selectedAll(i);
-            
+
                 if (this_all and other_all)
                 {
                     //nothing to do
@@ -2958,16 +2958,16 @@ AtomSelection& AtomSelection::intersect(const AtomSelection &other)
 
                     this->_pvt_deselect(i);
                     this->_pvt_select(i, atoms);
-                } 
+                }
             }
         }
         else
         {
-            QSet<CGIdx> cgidxs = this->selectedCutGroups().toSet();
-            cgidxs.intersect( other.selectedCutGroups().toSet() );
-            
+            auto cgidxs = convert_to_qset(this->selectedCutGroups());
+            cgidxs.intersect(convert_to_qset(other.selectedCutGroups()));
+
             int ncg = info().nCutGroups();
-            
+
             for (CGIdx i(0); i<ncg; ++i)
             {
                 if (not cgidxs.contains(i))
@@ -2975,10 +2975,10 @@ AtomSelection& AtomSelection::intersect(const AtomSelection &other)
                     this->_pvt_deselect(i);
                     continue;
                 }
-            
+
                 bool this_all = this->selectedAll(i);
                 bool other_all = other.selectedAll(i);
-            
+
                 if (this_all and other_all)
                 {
                     //nothing to do
@@ -2998,13 +2998,13 @@ AtomSelection& AtomSelection::intersect(const AtomSelection &other)
                 {
                     QSet<Index> atoms = this->selectedAtoms(i);
                     atoms.intersect(other.selectedAtoms(i));
-                    
+
                     this->_pvt_deselect(i);
                     this->_pvt_select(i, atoms);
-                } 
+                }
             }
         }
-        
+
         return *this;
     }
 }
@@ -3033,19 +3033,19 @@ AtomSelection& AtomSelection::intersect(CGIdx cgidx)
     else
     {
         int ncg = info().nCutGroups();
-        
+
         for (CGIdx i(0); i<ncg; ++i)
         {
             if (i != cgidx)
                 this->_pvt_deselect(i);
         }
-        
+
         return *this;
     }
 }
 
 /** Intersect this with the atoms whose indicies are in 'atomidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::intersect(const QList<AtomIdx> &atomidxs)
@@ -3058,7 +3058,7 @@ AtomSelection& AtomSelection::intersect(const QList<AtomIdx> &atomidxs)
 
 /** Intersect this with the atoms in the CutGroups whose indicies
     are in 'cgidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::intersect(const QList<CGIdx> &cgidxs)
@@ -3115,7 +3115,7 @@ AtomSelection& AtomSelection::intersect(ChainIdx chainidx)
     return this->intersect( info().getAtomsIn(chainidx) );
 }
 
-/** Intersect this selection with the index 'segidx' 
+/** Intersect this selection with the index 'segidx'
 
     \throw SireError::invalid_index
 */
@@ -3126,7 +3126,7 @@ AtomSelection& AtomSelection::intersect(SegIdx segidx)
 
 /** Intersect this with the atoms in the residues whose indicies are
     in 'residxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::intersect(const QList<ResIdx> &residxs)
@@ -3139,7 +3139,7 @@ AtomSelection& AtomSelection::intersect(const QList<ResIdx> &residxs)
 
 /** Intersect this with the atoms in the chains whose indicies are
     in 'chainidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::intersect(const QList<ChainIdx> &chainidxs)
@@ -3151,7 +3151,7 @@ AtomSelection& AtomSelection::intersect(const QList<ChainIdx> &chainidxs)
 
 /** Intersect this with the atoms in the segments whose indicies are
     in 'segidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::intersect(const QList<SegIdx> &segidxs)
@@ -3163,7 +3163,7 @@ AtomSelection& AtomSelection::intersect(const QList<SegIdx> &segidxs)
 
 /** Intersect this set with the atoms that match
     the ID 'atomid'
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
@@ -3172,9 +3172,9 @@ AtomSelection& AtomSelection::intersect(const AtomID &atomid)
     return this->intersect( atomid.map(info()) );
 }
 
-/** Intersect this set with the atoms in the 
+/** Intersect this set with the atoms in the
     CutGroup(s) that match the ID 'cgid'
-    
+
     \throw SireMol::missing_cutgroup
 */
 AtomSelection& AtomSelection::intersect(const CGID &cgid)
@@ -3182,9 +3182,9 @@ AtomSelection& AtomSelection::intersect(const CGID &cgid)
     return this->intersect( cgid.map(info()) );
 }
 
-/** Intersect this set with the atoms in the 
+/** Intersect this set with the atoms in the
     residue(s) that match the ID 'resid'
-    
+
     \throw SireMol::missing_residue
 */
 AtomSelection& AtomSelection::intersect(const ResID &resid)
@@ -3192,9 +3192,9 @@ AtomSelection& AtomSelection::intersect(const ResID &resid)
     return this->intersect( resid.map(info()) );
 }
 
-/** Intersect this set with the atoms in the 
+/** Intersect this set with the atoms in the
     chain(s) that match the ID 'chainid'
-    
+
     \throw SireMol::missing_chain
 */
 AtomSelection& AtomSelection::intersect(const ChainID &chainid)
@@ -3202,9 +3202,9 @@ AtomSelection& AtomSelection::intersect(const ChainID &chainid)
     return this->intersect( chainid.map(info()) );
 }
 
-/** Intersect this set with the atoms in the 
+/** Intersect this set with the atoms in the
     segment(s) that match the ID 'segid'
-    
+
     \throw SireMol::missing_segment
 */
 AtomSelection& AtomSelection::intersect(const SegID &segid)
@@ -3221,9 +3221,9 @@ AtomSelection& AtomSelection::unite(AtomIdx atomidx)
     return this->select(atomidx);
 }
 
-/** Unite this set with the atoms in the   
+/** Unite this set with the atoms in the
     CutGroup at index 'cgidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::unite(CGIdx cgidx)
@@ -3231,9 +3231,9 @@ AtomSelection& AtomSelection::unite(CGIdx cgidx)
     return this->select(cgidx);
 }
 
-/** Unite this set with the atoms in the   
+/** Unite this set with the atoms in the
     residue at index 'residx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::unite(ResIdx residx)
@@ -3241,9 +3241,9 @@ AtomSelection& AtomSelection::unite(ResIdx residx)
     return this->select(residx);
 }
 
-/** Unite this set with the atoms in the   
+/** Unite this set with the atoms in the
     chain at index 'chainidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::unite(ChainIdx chainidx)
@@ -3251,9 +3251,9 @@ AtomSelection& AtomSelection::unite(ChainIdx chainidx)
     return this->select(chainidx);
 }
 
-/** Unite this set with the atoms in the   
+/** Unite this set with the atoms in the
     segment at index 'segidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::unite(SegIdx segidx)
@@ -3261,9 +3261,9 @@ AtomSelection& AtomSelection::unite(SegIdx segidx)
     return this->select(segidx);
 }
 
-/** Unite this set with the atoms whose   
+/** Unite this set with the atoms whose
     indicies are in 'atomidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::unite(const QList<AtomIdx> &atomidxs)
@@ -3271,9 +3271,9 @@ AtomSelection& AtomSelection::unite(const QList<AtomIdx> &atomidxs)
     return this->select(atomidxs);
 }
 
-/** Unite this set with the atoms in the   
+/** Unite this set with the atoms in the
     CutGroups whose indicies are in 'cgidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::unite(const QList<CGIdx> &cgidxs)
@@ -3281,9 +3281,9 @@ AtomSelection& AtomSelection::unite(const QList<CGIdx> &cgidxs)
     return this->select(cgidxs);
 }
 
-/** Unite this set with the atoms in the   
+/** Unite this set with the atoms in the
     residues whose indicies are in 'residxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::unite(const QList<ResIdx> &residxs)
@@ -3291,9 +3291,9 @@ AtomSelection& AtomSelection::unite(const QList<ResIdx> &residxs)
     return this->select(residxs);
 }
 
-/** Unite this set with the atoms in the   
+/** Unite this set with the atoms in the
     chains whose indicies are in 'chainidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::unite(const QList<ChainIdx> &chainidxs)
@@ -3301,9 +3301,9 @@ AtomSelection& AtomSelection::unite(const QList<ChainIdx> &chainidxs)
     return this->select(chainidxs);
 }
 
-/** Unite this set with the atoms in the   
+/** Unite this set with the atoms in the
     segments whose indicies are in 'segidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::unite(const QList<SegIdx> &segidxs)
@@ -3313,7 +3313,7 @@ AtomSelection& AtomSelection::unite(const QList<SegIdx> &segidxs)
 
 /** Unite this set with the atoms identified by
     'atomid'
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
@@ -3322,9 +3322,9 @@ AtomSelection& AtomSelection::unite(const AtomID &atomid)
     return this->select(atomid);
 }
 
-/** Unite this set with the atoms in the 
+/** Unite this set with the atoms in the
     CutGroups identified by 'cgid'
-    
+
     \throw SireMol::missing_cutgroup
 */
 AtomSelection& AtomSelection::unite(const CGID &cgid)
@@ -3332,9 +3332,9 @@ AtomSelection& AtomSelection::unite(const CGID &cgid)
     return this->select(cgid);
 }
 
-/** Unite this set with the atoms in the 
+/** Unite this set with the atoms in the
     residues identified by 'resid'
-    
+
     \throw SireMol::missing_residue
 */
 AtomSelection& AtomSelection::unite(const ResID &resid)
@@ -3342,9 +3342,9 @@ AtomSelection& AtomSelection::unite(const ResID &resid)
     return this->select(resid);
 }
 
-/** Unite this set with the atoms in the 
+/** Unite this set with the atoms in the
     chains identified by 'chainid'
-    
+
     \throw SireMol::missing_chain
 */
 AtomSelection& AtomSelection::unite(const ChainID &chainid)
@@ -3352,9 +3352,9 @@ AtomSelection& AtomSelection::unite(const ChainID &chainid)
     return this->select(chainid);
 }
 
-/** Unite this set with the atoms in the 
+/** Unite this set with the atoms in the
     segments identified by 'segid'
-    
+
     \throw SireMol::missing_segment
 */
 AtomSelection& AtomSelection::unite(const SegID &segid)
@@ -3362,9 +3362,9 @@ AtomSelection& AtomSelection::unite(const SegID &segid)
     return this->select(segid);
 }
 
-/** Unite this set with the atoms selected 
+/** Unite this set with the atoms selected
     in 'selection'
-    
+
     \throw SireError::incompatible_error
 */
 AtomSelection& AtomSelection::unite(const AtomSelection &selection)
@@ -3388,15 +3388,15 @@ AtomSelection& AtomSelection::unite(const QList<AtomSelection> &selections)
     {
         if (this->selectedAll())
             break;
-            
+
         this->_pvt_select(selection);
     }
-    
+
     return *this;
 }
 
-/** Subtract the atom at index 'atomidx' 
-    
+/** Subtract the atom at index 'atomidx'
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::subtract(AtomIdx atomidx)
@@ -3406,7 +3406,7 @@ AtomSelection& AtomSelection::subtract(AtomIdx atomidx)
 
 /** Subtract the atoms in the CutGroup
     at index 'cgidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::subtract(CGIdx cgidx)
@@ -3416,7 +3416,7 @@ AtomSelection& AtomSelection::subtract(CGIdx cgidx)
 
 /** Subtract the atoms in the residue
     at index 'residx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::subtract(ResIdx residx)
@@ -3426,7 +3426,7 @@ AtomSelection& AtomSelection::subtract(ResIdx residx)
 
 /** Subtract the atoms in the chain
     at index 'chainidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::subtract(ChainIdx chainidx)
@@ -3436,7 +3436,7 @@ AtomSelection& AtomSelection::subtract(ChainIdx chainidx)
 
 /** Subtract the atoms in the segment
     at index 'segidx' have been subtracted
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::subtract(SegIdx segidx)
@@ -3446,7 +3446,7 @@ AtomSelection& AtomSelection::subtract(SegIdx segidx)
 
 /** Subtract the atoms whose indicies
     are in 'atomidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::subtract(const QList<AtomIdx> &atomidxs)
@@ -3456,7 +3456,7 @@ AtomSelection& AtomSelection::subtract(const QList<AtomIdx> &atomidxs)
 
 /** Subtract the atoms that
     are in the CutGroups whose indicies are in 'cgidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::subtract(const QList<CGIdx> &cgidxs)
@@ -3466,7 +3466,7 @@ AtomSelection& AtomSelection::subtract(const QList<CGIdx> &cgidxs)
 
 /** Subtract the atoms that
     are in the residues whose indicies are in 'residxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::subtract(const QList<ResIdx> &residxs)
@@ -3476,7 +3476,7 @@ AtomSelection& AtomSelection::subtract(const QList<ResIdx> &residxs)
 
 /** Subtract all of the atoms that
     are in the chains whose indicies are in 'chainidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::subtract(const QList<ChainIdx> &chainidxs)
@@ -3486,7 +3486,7 @@ AtomSelection& AtomSelection::subtract(const QList<ChainIdx> &chainidxs)
 
 /** Subtract all of the atoms that
     are in the segments whose indicies are in 'segidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::subtract(const QList<SegIdx> &segidxs)
@@ -3494,9 +3494,9 @@ AtomSelection& AtomSelection::subtract(const QList<SegIdx> &segidxs)
     return this->deselect(segidxs);
 }
 
-/** Subtract all of the atoms that 
+/** Subtract all of the atoms that
     match the ID 'atomid'
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
@@ -3507,7 +3507,7 @@ AtomSelection& AtomSelection::subtract(const AtomID &atomid)
 
 /** Subtract all of the atoms that
     are in the CutGroup(s) that match the ID 'cgid'
-    
+
     \throw SireMol::missing_cutgroup
     \throw SireError::invalid_index
 */
@@ -3518,7 +3518,7 @@ AtomSelection& AtomSelection::subtract(const CGID &cgid)
 
 /** Subtract all of the atoms that
     are in the residue(s) that match the ID 'resid'
-    
+
     \throw SireMol::missing_residue
     \throw SireError::invalid_index
 */
@@ -3529,7 +3529,7 @@ AtomSelection& AtomSelection::subtract(const ResID &resid)
 
 /** Subtract all of the atoms that
     are in the chain(s) that match the ID 'resid'
-    
+
     \throw SireMol::missing_residue
     \throw SireError::invalid_index
 */
@@ -3540,7 +3540,7 @@ AtomSelection& AtomSelection::subtract(const ChainID &chainid)
 
 /** Subtract all of the atoms that
     are in the segment(s) that match the ID 'segid'
-    
+
     \throw SireMol::missing_segment
     \throw SireError::invalid_index
 */
@@ -3551,7 +3551,7 @@ AtomSelection& AtomSelection::subtract(const SegID &segid)
 
 /** Subtract all of the atoms selected
     in 'selection'
-    
+
     \throw SireError::incompatible_error
 */
 AtomSelection& AtomSelection::subtract(const AtomSelection &selection)
@@ -3559,9 +3559,9 @@ AtomSelection& AtomSelection::subtract(const AtomSelection &selection)
     return this->deselect(selection);
 }
 
-/** Mask this selection by the 
+/** Mask this selection by the
     atom at index 'atomidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::mask(AtomIdx atomidx)
@@ -3569,9 +3569,9 @@ AtomSelection& AtomSelection::mask(AtomIdx atomidx)
     return this->intersect(atomidx);
 }
 
-/** Mask this selection by the 
+/** Mask this selection by the
     CutGroup at index 'cgidx'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::mask(CGIdx cgidx)
@@ -3579,9 +3579,9 @@ AtomSelection& AtomSelection::mask(CGIdx cgidx)
     return this->intersect(cgidx);
 }
 
-/** Mask this selection by the 
-    residue at index 'residx' 
-    
+/** Mask this selection by the
+    residue at index 'residx'
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::mask(ResIdx residx)
@@ -3589,9 +3589,9 @@ AtomSelection& AtomSelection::mask(ResIdx residx)
     return this->intersect(residx);
 }
 
-/** Mask this selection by the 
-    chain at index 'chainidx' 
-    
+/** Mask this selection by the
+    chain at index 'chainidx'
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::mask(ChainIdx chainidx)
@@ -3599,9 +3599,9 @@ AtomSelection& AtomSelection::mask(ChainIdx chainidx)
     return this->intersect(chainidx);
 }
 
-/** Mask this selection by the 
-    segment at index 'segidx' 
-    
+/** Mask this selection by the
+    segment at index 'segidx'
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::mask(SegIdx segidx)
@@ -3609,9 +3609,9 @@ AtomSelection& AtomSelection::mask(SegIdx segidx)
     return this->intersect(segidx);
 }
 
-/** Mask this selection by the 
+/** Mask this selection by the
     indicies are in 'atomidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::mask(const QList<AtomIdx> &atomidxs)
@@ -3619,9 +3619,9 @@ AtomSelection& AtomSelection::mask(const QList<AtomIdx> &atomidxs)
     return this->intersect(atomidxs);
 }
 
-/** Mask this selection by the 
+/** Mask this selection by the
     CutGroups whose indicies are in 'cgidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::mask(const QList<CGIdx> &cgidxs)
@@ -3629,9 +3629,9 @@ AtomSelection& AtomSelection::mask(const QList<CGIdx> &cgidxs)
     return this->intersect(cgidxs);
 }
 
-/** Mask this selection by the 
+/** Mask this selection by the
     residues whose indicies are in 'residxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::mask(const QList<ResIdx> &residxs)
@@ -3639,9 +3639,9 @@ AtomSelection& AtomSelection::mask(const QList<ResIdx> &residxs)
     return this->intersect(residxs);
 }
 
-/** Mask this selection by the 
+/** Mask this selection by the
     chains whose indicies are in 'chainidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::mask(const QList<ChainIdx> &chainidxs)
@@ -3649,9 +3649,9 @@ AtomSelection& AtomSelection::mask(const QList<ChainIdx> &chainidxs)
     return this->intersect(chainidxs);
 }
 
-/** Mask this selection by the 
+/** Mask this selection by the
     segments whose indicies are in 'segidxs'
-    
+
     \throw SireError::invalid_index
 */
 AtomSelection& AtomSelection::mask(const QList<SegIdx> &segidxs)
@@ -3659,9 +3659,9 @@ AtomSelection& AtomSelection::mask(const QList<SegIdx> &segidxs)
     return this->intersect(segidxs);
 }
 
-/** Mask this selection by the 
+/** Mask this selection by the
     atoms that match the ID 'atomid'
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
@@ -3670,9 +3670,9 @@ AtomSelection& AtomSelection::mask(const AtomID &atomid)
     return this->intersect(atomid);
 }
 
-/** Mask this selection by the 
+/** Mask this selection by the
     CutGroups that match the ID 'cgid'
-    
+
     \throw SireMol::missing_cutgroup
     \throw SireError::invalid_index
 */
@@ -3681,9 +3681,9 @@ AtomSelection& AtomSelection::mask(const CGID &cgid)
     return this->intersect(cgid);
 }
 
-/** Mask this selection by the 
+/** Mask this selection by the
     residues that match the ID 'atomid'
-    
+
     \throw SireMol::missing_residue
     \throw SireError::invalid_index
 */
@@ -3692,9 +3692,9 @@ AtomSelection& AtomSelection::mask(const ResID &resid)
     return this->intersect(resid);
 }
 
-/** Mask this selection by the 
+/** Mask this selection by the
     chains that match the ID 'chainid'
-    
+
     \throw SireMol::missing_chain
     \throw SireError::invalid_index
 */
@@ -3703,9 +3703,9 @@ AtomSelection& AtomSelection::mask(const ChainID &chainid)
     return this->intersect(chainid);
 }
 
-/** Mask this selection by the 
+/** Mask this selection by the
     segments that match the ID 'atomid'
-    
+
     \throw SireMol::missing_segments
     \throw SireError::invalid_index
 */
@@ -3731,9 +3731,9 @@ QVector<AtomIdx> AtomSelection::selectedAtoms() const
         return QVector<AtomIdx>();
 
     QVector<AtomIdx> ret(nselected);
-    
+
     AtomIdx *ret_array = ret.data();
-    
+
     if (this->selectedAll())
     {
         if (nselected != info().nAtoms())
@@ -3751,7 +3751,7 @@ QVector<AtomIdx> AtomSelection::selectedAtoms() const
     else if (this->selectedAllCutGroups())
     {
         int count = 0;
-        
+
         for (CGIdx i(0); i<info().nCutGroups(); ++i)
         {
             if (this->selectedAll(i))
@@ -3775,7 +3775,7 @@ QVector<AtomIdx> AtomSelection::selectedAtoms() const
     else
     {
         int count = 0;
-    
+
         foreach (CGIdx i, this->selectedCutGroups())
         {
             if (this->selectedAll(i))
@@ -3797,8 +3797,8 @@ QVector<AtomIdx> AtomSelection::selectedAtoms() const
         }
     }
 
-    qSort(ret);
-    
+    std::sort(ret.begin(), ret.end());
+
     return ret;
 }
 
@@ -3814,9 +3814,9 @@ void AtomSelection::assertSelected(AtomIdx atomidx) const
                 .arg(atomidx), CODELOC );
 }
 
-/** Assert that this selection contains all of the atoms identified 
+/** Assert that this selection contains all of the atoms identified
     by the ID 'atomid'
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
@@ -3831,7 +3831,7 @@ void AtomSelection::assertSelected(const AtomID &atomid) const
 
 /** Assert that this selection is compatible with the molecule info
     in 'molinfo'
-    
+
     \throw SireError::incompatible_error
 */
 void AtomSelection::assertCompatibleWith(const MoleculeInfoData &molinfo) const
@@ -3845,7 +3845,7 @@ void AtomSelection::assertCompatibleWith(const MoleculeInfoData &molinfo) const
 
 /** Assert that this selection is compatible with the molecule whose
     data is in 'moldata'
-    
+
     \throw SireError::incompatible_error
 */
 void AtomSelection::assertCompatibleWith(const MoleculeData &moldata) const
@@ -3867,7 +3867,7 @@ bool AtomSelection::isCompatibleWith(const MoleculeInfoData &molinfo) const
 
 /** Assert that this selection is compatible with the molecule viewed
     in 'molview'
-    
+
     \throw SireError::incompatible_error
 */
 void AtomSelection::assertCompatibleWith(const MoleculeView &molview) const
@@ -3891,162 +3891,162 @@ void AtomSelection::assertCompatibleWith(const AtomSelection &other) const
 
 AtomSelection& AtomSelection::select(const QSet<SireMol::ResIdx> &ids)
 {
-    return this->select(ids.toList());
+    return this->select(ids.values());
 }
 
 AtomSelection& AtomSelection::selectOnly(const QSet<SireMol::ResIdx> &ids)
 {
-    return this->selectOnly(ids.toList());
+    return this->selectOnly(ids.values());
 }
 
 AtomSelection& AtomSelection::selectOnly(const QSet<SireMol::CGIdx> &ids)
 {
-    return this->selectOnly(ids.toList());
+    return this->selectOnly(ids.values());
 }
 
 AtomSelection& AtomSelection::intersect(const QSet<SireMol::CGIdx> &ids)
 {
-    return this->intersect(ids.toList());
+    return this->intersect(ids.values());
 }
 
 AtomSelection& AtomSelection::subtract(const QSet<SireMol::ResIdx> &ids)
 {
-    return this->subtract(ids.toList());
+    return this->subtract(ids.values());
 }
 
 AtomSelection& AtomSelection::subtract(const QSet<SireMol::AtomIdx> &ids)
 {
-    return this->subtract(ids.toList());
+    return this->subtract(ids.values());
 }
 
 AtomSelection& AtomSelection::unite(const QSet<SireMol::SegIdx> &ids)
 {
-    return this->unite(ids.toList());
+    return this->unite(ids.values());
 }
 
 AtomSelection& AtomSelection::mask(const QSet<SireMol::AtomIdx> &ids)
 {
-    return this->select(ids.toList());
+    return this->select(ids.values());
 }
 
 AtomSelection& AtomSelection::selectOnly(const QSet<SireMol::ChainIdx> &ids)
 {
-    return this->selectOnly(ids.toList());
+    return this->selectOnly(ids.values());
 }
 
 AtomSelection& AtomSelection::select(const QSet<SireMol::ChainIdx> &ids)
 {
-    return this->select(ids.toList());
+    return this->select(ids.values());
 }
 
 AtomSelection& AtomSelection::mask(const QSet<SireMol::SegIdx> &ids)
 {
-    return this->mask(ids.toList());
+    return this->mask(ids.values());
 }
 
 AtomSelection& AtomSelection::intersect(const QSet<SireMol::SegIdx> &ids)
 {
-    return this->intersect(ids.toList());
+    return this->intersect(ids.values());
 }
 
 AtomSelection& AtomSelection::deselect(const QSet<SireMol::SegIdx> &ids)
 {
-    return this->deselect(ids.toList());
+    return this->deselect(ids.values());
 }
 
 AtomSelection& AtomSelection::unite(const QSet<SireMol::ResIdx> &ids)
 {
-    return this->unite(ids.toList());
+    return this->unite(ids.values());
 }
 
 AtomSelection& AtomSelection::select(const QSet<SireMol::CGIdx> &ids)
 {
-    return this->select(ids.toList());
+    return this->select(ids.values());
 }
 
 AtomSelection& AtomSelection::mask(const QSet<SireMol::ResIdx> &ids)
 {
-    return this->mask(ids.toList());
+    return this->mask(ids.values());
 }
 
 AtomSelection& AtomSelection::intersect(const QSet<SireMol::ResIdx> &ids)
 {
-    return this->intersect(ids.toList());
+    return this->intersect(ids.values());
 }
 
 AtomSelection& AtomSelection::deselect(const QSet<SireMol::ResIdx> &ids)
 {
-    return this->deselect(ids.toList());
+    return this->deselect(ids.values());
 }
 
 AtomSelection& AtomSelection::intersect(const QSet<SireMol::AtomIdx> &ids)
 {
-    return this->intersect(ids.toList());
+    return this->intersect(ids.values());
 }
 
 AtomSelection& AtomSelection::intersect(const QSet<SireMol::ChainIdx> &ids)
 {
-    return this->intersect(ids.toList());
+    return this->intersect(ids.values());
 }
 
 AtomSelection& AtomSelection::deselect(const QSet<SireMol::CGIdx> &ids)
 {
-    return this->deselect(ids.toList());
+    return this->deselect(ids.values());
 }
 
 AtomSelection& AtomSelection::unite(const QSet<SireMol::ChainIdx> &ids)
 {
-    return this->unite(ids.toList());
+    return this->unite(ids.values());
 }
 
 AtomSelection& AtomSelection::select(const QSet<SireMol::SegIdx> &ids)
 {
-    return this->select(ids.toList());
+    return this->select(ids.values());
 }
 
 AtomSelection& AtomSelection::selectOnly(const QSet<SireMol::SegIdx> &ids)
 {
-    return this->selectOnly(ids.toList());
+    return this->selectOnly(ids.values());
 }
 
 AtomSelection& AtomSelection::subtract(const QSet<SireMol::CGIdx> &ids)
 {
-    return this->subtract(ids.toList());
+    return this->subtract(ids.values());
 }
 
 AtomSelection& AtomSelection::deselect(const QSet<SireMol::ChainIdx> &ids)
 {
-    return this->deselect(ids.toList());
+    return this->deselect(ids.values());
 }
 
 AtomSelection& AtomSelection::subtract(const QSet<SireMol::SegIdx> &ids)
 {
-    return this->subtract(ids.toList());
+    return this->subtract(ids.values());
 }
 
 AtomSelection& AtomSelection::unite(const QSet<SireMol::CGIdx> &ids)
 {
-    return this->unite(ids.toList());
+    return this->unite(ids.values());
 }
 
 AtomSelection& AtomSelection::mask(const QSet<SireMol::ChainIdx> &ids)
 {
-    return this->mask(ids.toList());
+    return this->mask(ids.values());
 }
 
 AtomSelection& AtomSelection::mask(const QSet<SireMol::CGIdx> &ids)
 {
-    return this->mask(ids.toList());
+    return this->mask(ids.values());
 }
 
 AtomSelection& AtomSelection::subtract(const QSet<SireMol::ChainIdx> &ids)
 {
-    return this->subtract(ids.toList());
+    return this->subtract(ids.values());
 }
 
 AtomSelection& AtomSelection::unite(const QSet<SireMol::AtomIdx> &ids)
 {
-    return this->unite(ids.toList());
+    return this->unite(ids.values());
 }
 
 const char* AtomSelection::typeName()

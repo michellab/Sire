@@ -229,7 +229,7 @@ def has_clone_function(t):
         return False
 
     try:
-        c.mem_funs("clone")
+        c.member_functions("clone")
         return True
     except:
         return False
@@ -251,6 +251,36 @@ def fix_Index_T_(c):
        pass
 
 has_copy_function = {}
+
+
+def is_copy_constructor(f):
+    """Return whether or not this function is a public copy constructor"""
+    if f.access_type != "public":
+        return False
+
+    if type(f) != calldef_wrapper.constructor_t:
+        # Not a constructor according to Py++
+        return False
+
+    args = f.arguments
+
+    if len(args) != 1:
+        return False
+
+    arg = args[0]
+
+    decl_string = arg.decl_type.decl_string
+
+    if decl_string.endswith(f"{f.partial_name} const &"):
+        return True
+
+    # we need something fuzzier for some templates. Here, if the
+    # argument is called "other" and it ends with 'const &' then
+    # it is probably a copy constructor
+    if decl_string.endswith(" const &") and arg.name == "other":
+        return True
+
+    return False
 
 
 def export_class(mb, classname, aliases, includes, special_code, auto_str_function=True):
@@ -290,7 +320,7 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
    try:
        #all copy_const_reference call policies with clone_const_reference
        #funs = c.mem_funs( lambda f: declarations.is_reference( f.return_type ) )
-       funs = c.mem_funs( lambda f: f.return_type.decl_string.endswith("&") )
+       funs = c.member_functions( lambda f: f.return_type.decl_string.endswith("&") )
    except:
        pass
 
@@ -352,7 +382,7 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
               break
 
           try:
-              if decl.is_copy_constructor:
+              if is_copy_constructor(decl):
                   #create a __copy__ function
                   class_name = re.sub(r"\s\[class\]","",str(c))
                   class_name = re.sub(r"\s\[struct\]","",class_name)
@@ -384,15 +414,17 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
    #if this class can be streamed to a QDataStream then add
    #streaming operators
    if has_datastream_operators(mb,c):
-       c.add_declaration_code( "#include \"Qt/qdatastream.hpp\"" )
+        c.add_declaration_code( "#include \"Qt/qdatastream.hpp\"" )
 
-       c.add_registration_code(
+        c.add_registration_code(
             """def( \"__rlshift__\", &__rlshift__QDataStream< %s >,
                     bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() )""" % c.decl_string )
-       c.add_registration_code(
+        c.add_registration_code(
             """def( \"__rrshift__\", &__rrshift__QDataStream< %s >,
                     bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() )""" % c.decl_string )
 
+        c.add_registration_code(
+            """def_pickle(sire_pickle_suite< %s >())""" % c.decl_string )
 
    #is there a "toString" function for this class?
    if auto_str_function:

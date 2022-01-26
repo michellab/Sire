@@ -519,6 +519,7 @@ void register_Gro87_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Gro87_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireIO::Gro87 >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        Gro87_exposer.def_pickle(sire_pickle_suite< ::SireIO::Gro87 >());
         Gro87_exposer.def( "__str__", &__str__< ::SireIO::Gro87 > );
         Gro87_exposer.def( "__repr__", &__str__< ::SireIO::Gro87 > );
         Gro87_exposer.def( "__len__", &__len_size< ::SireIO::Gro87 > );

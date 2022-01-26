@@ -101,6 +101,7 @@ void register_Array2DBase_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Array2DBase_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireBase::Array2DBase >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        Array2DBase_exposer.def_pickle(sire_pickle_suite< ::SireBase::Array2DBase >());
         Array2DBase_exposer.def( "__str__", &pvt_get_name);
         Array2DBase_exposer.def( "__repr__", &pvt_get_name);
     }

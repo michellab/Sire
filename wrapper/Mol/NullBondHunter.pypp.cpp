@@ -98,6 +98,7 @@ void register_NullBondHunter_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         NullBondHunter_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::NullBondHunter >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        NullBondHunter_exposer.def_pickle(sire_pickle_suite< ::SireMol::NullBondHunter >());
         NullBondHunter_exposer.def( "__str__", &__str__< ::SireMol::NullBondHunter > );
         NullBondHunter_exposer.def( "__repr__", &__str__< ::SireMol::NullBondHunter > );
     }

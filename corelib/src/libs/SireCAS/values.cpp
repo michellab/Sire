@@ -41,11 +41,11 @@ static const RegisterMetaType<Values> r_values(NO_ROOT);
 QDataStream &operator<<(QDataStream &ds, const Values &values)
 {
     writeHeader(ds, r_values, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << quint32( values.vals.count() );
-    
+
     for (QHash<SymbolID,double>::const_iterator it = values.vals.constBegin();
          it != values.vals.constEnd();
          ++it)
@@ -64,23 +64,23 @@ QDataStream &operator>>(QDataStream &ds, Values &values)
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         quint32 nvals;
         sds >> nvals;
-        
+
         QHash<SymbolID,double> vals;
         vals.reserve(nvals);
-        
+
         for (quint32 i=0; i<nvals; ++i)
         {
-            Symbol symbol; 
+            Symbol symbol;
             double value;
-            
+
             sds >> symbol >> value;
-            
+
             vals.insert( symbol.ID(), value );
         }
-    
+
         values.vals = vals;
     }
     else
@@ -136,11 +136,11 @@ QString Values::toString() const
 {
     QStringList words;
     QStringList lines;
-    
+
     QList<Symbol> syms = this->symbols();
-    
-    qSort(syms);
-    
+
+    std::sort(syms.begin(), syms.end());
+
     foreach (const Symbol &sym, syms)
     {
         words.append( QString("%1 == %2").arg(sym.toString())
@@ -152,12 +152,12 @@ QString Values::toString() const
             words.clear();
         }
     }
-    
+
     if (not words.isEmpty())
     {
         lines.append( words.join(", ") );
     }
-    
+
     return QString("{ %1 }").arg( lines.join("\n  ") );
 }
 
@@ -165,7 +165,7 @@ QString Values::toString() const
 QList<Symbol> Values::symbols() const
 {
     QList<Symbol> s;
-    
+
     for (QHash<SymbolID,double>::const_iterator it = vals.constBegin();
          it != vals.constEnd();
          ++it)
@@ -462,7 +462,7 @@ Values::const_iterator Values::constFind(const Symbol &symbol) const
     return vals.constFind(symbol.ID());
 }
 
-/** Set the value of the symbol/value pair pointed to by the   
+/** Set the value of the symbol/value pair pointed to by the
     iterator 'it' in this set */
 void Values::set(const Values::const_iterator &it)
 {
@@ -493,7 +493,7 @@ namespace SireCAS
     {
         Values vals(val0);
         vals += val1;
-        
+
         return vals;
     }
 
@@ -503,7 +503,7 @@ namespace SireCAS
         new_vals += val;
         return new_vals;
     }
-    
+
     Values operator+(const SymbolValue &val, const Values &vals)
     {
         Values new_vals(vals);

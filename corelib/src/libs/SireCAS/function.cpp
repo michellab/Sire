@@ -103,7 +103,7 @@ QString FunctionPvt::toString() const
 {
     if (sig.name().isNull() or sig.name().isEmpty() or syms.count() == 0)
         //this is a null function
-        return QString::null;
+        return QString();
     else
     {
         //create a string for the arguments

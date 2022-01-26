@@ -8,7 +8,7 @@
 ################################
 
 # project version
-set (SIRE_VERSION_MAJOR "2021")
+set (SIRE_VERSION_MAJOR "2022")
 set (SIRE_VERSION_MINOR "1")
 set (SIRE_VERSION_PATCH "0")
 
@@ -102,7 +102,7 @@ if ( ANACONDA_BUILD )
 #  set( SIRE_APP "${MINGW_BASE}" )
 
 else()
-  # Option to set the install directory of Sire
+  #ï¿½Option to set the install directory of Sire
   if (NOT DEFINED SIRE_APP)
     set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
             "The full path to the sire.app installed Sire application." )
@@ -144,6 +144,8 @@ message( STATUS "Setting C compiler to ${SIRE_C_COMPILER} and C++ compiler to ${
 
 # name the project
 project (SirePython CXX C)
+
+message( STATUS "PROJECT COMPLETED" )
 
 set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
          "Prefix prepended to install directories" FORCE )
@@ -251,6 +253,7 @@ include_directories (BEFORE ${CMAKE_CURRENT_SOURCE_DIR})
 include_directories (BEFORE ${CMAKE_CURRENT_BINARY_DIR})
 if (TBB_INCLUDE_DIR)
   include_directories (${TBB_INCLUDE_DIR})
+  message( STATUS "Using TBB from ${TBB_INCLUDE_DIR}")
 endif()
 if (SIRE_GSL_INCLUDE_PATH)
   include_directories (${SIRE_GSL_INCLUDE_PATH})
@@ -410,7 +413,7 @@ endif()
 
 message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR} | ${PYTHON_SITE_DIR}" )
 include_directories( ${PYTHON_INCLUDE_DIR} )
-include_directories( ${BOOST_PYTHON_HEADERS} )
+include_directories( "${BOOST_PYTHON_HEADERS}" )
 
 message( STATUS "boost::python library ${BOOST_PYTHON_LIBRARY} | ${BOOST_PYTHON_HEADERS}" )
 

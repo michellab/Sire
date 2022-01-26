@@ -536,6 +536,7 @@ void register_QMMMFF_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         QMMMFF_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::Squire::QMMMFF >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        QMMMFF_exposer.def_pickle(sire_pickle_suite< ::Squire::QMMMFF >());
         QMMMFF_exposer.def( "__str__", &__str__< ::Squire::QMMMFF > );
         QMMMFF_exposer.def( "__repr__", &__str__< ::Squire::QMMMFF > );
         QMMMFF_exposer.def( "__len__", &__len_count< ::Squire::QMMMFF > );

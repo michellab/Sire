@@ -43,7 +43,7 @@ public:
     sirebase_error() : exception()
     {}
 
-    sirebase_error(QString err, QString place = QString::null) : exception(err,place)
+    sirebase_error(QString err, QString place = QString()) : exception(err,place)
     {}
 
     sirebase_error(const sirebase_error &other) : exception(other)
@@ -68,7 +68,7 @@ public:
     missing_property() : sirebase_error()
     {}
 
-    missing_property(QString err, QString place = QString::null)
+    missing_property(QString err, QString place = QString())
               : sirebase_error(err,place)
     {}
 
@@ -84,7 +84,7 @@ public:
     {
         return missing_property::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_property(*this);
@@ -103,7 +103,7 @@ public:
     duplicate_property() : sirebase_error()
     {}
 
-    duplicate_property(QString err, QString place = QString::null)
+    duplicate_property(QString err, QString place = QString())
               : sirebase_error(err,place)
     {}
 
@@ -119,7 +119,7 @@ public:
     {
         return duplicate_property::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw duplicate_property(*this);

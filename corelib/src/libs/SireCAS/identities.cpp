@@ -42,13 +42,13 @@ static const RegisterMetaType<Identities> r_identities(NO_ROOT);
 QDataStream &operator<<(QDataStream &ds, const Identities &ids)
 {
     writeHeader(ds, r_identities, 2);
-    
+
     SharedDataStream sds(ds);
-    
+
     QList<Symbol> symbols = ids.symbols();
-    
+
     sds << symbols;
-    
+
     foreach (Symbol symbol, symbols)
     {
         sds << ids[symbol];
@@ -65,21 +65,21 @@ QDataStream &operator>>(QDataStream &ds, Identities &ids)
     if (v == 2)
     {
         SharedDataStream sds(ds);
-        
+
         QList<Symbol> symbols;
-        
+
         sds >> symbols;
-        
+
         Identities new_ids;
-        
+
         foreach (Symbol symbol, symbols)
         {
             Expression e;
             sds >> e;
-            
+
             new_ids.set(symbol, e);
         }
-        
+
         ids = new_ids;
     }
     else if (v == 1)
@@ -147,11 +147,11 @@ QString Identities::toString() const
 {
     QStringList words;
     QStringList lines;
-    
+
     QList<Symbol> syms = this->symbols();
-    
-    qSort(syms);
-    
+
+    std::sort(syms.begin(), syms.end());
+
     foreach (const Symbol &sym, syms)
     {
         words.append( QString("%1 == %2").arg(sym.toString())
@@ -163,12 +163,12 @@ QString Identities::toString() const
             words.clear();
         }
     }
-    
+
     if (not words.isEmpty())
     {
         lines.append( words.join(", ") );
     }
-    
+
     return QString("{ %1 }").arg( lines.join("\n  ") );
 }
 
@@ -436,7 +436,7 @@ const char* Identities::typeName()
 QList<Symbol> Identities::symbols() const
 {
     QList<Symbol> s;
-    
+
     for (QHash<SymbolID,Expression>::const_iterator it = idhash.constBegin();
          it != idhash.constEnd();
          ++it)
