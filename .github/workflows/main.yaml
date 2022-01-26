@@ -40,6 +40,7 @@ jobs:
       - name: Update Conda recipe
         run: Sire/actions/update_recipe.sh
         env:
+          SRC_DIR: ${{ github.workspace }}/Sire
           SRC_DIR: "$GITHUB_WORKSPACE"/Sire
       - name: Build Conda package
         shell: bash -l {0}
@@ -48,6 +49,6 @@ jobs:
         shell: bash -l {0}
         run: Sire/actions/upload_package.sh
         env:
-          SRC_DIR: "$GITHUB_WORKSPACE"/Sire
+          SRC_DIR: ${{ github.workspace }}/Sire
           ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
         if: github.event_name != 'pull_request'
