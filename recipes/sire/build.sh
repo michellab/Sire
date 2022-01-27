@@ -14,6 +14,8 @@ cmake ${CMAKE_ARGS} \
     -D ANACONDA_BUILD=ON \
     -D ANACONDA_BASE=${PREFIX} \
     -D BUILD_NCORES=$CPU_COUNT \
+    -D SIRE_DISABLE_AVX=ON \
+    -D SIRE_DISABLE_AVX512F=ON \
     ../../corelib
 cmake --build . --target install -- VERBOSE=1 -j$CPU_COUNT
 
