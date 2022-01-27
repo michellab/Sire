@@ -44,6 +44,7 @@ class InternalPerturbation;
 class TwoAtomPerturbation;
 class ThreeAtomPerturbation;
 class FourAtomPerturbation;
+class ScalePerturbation;
 }
 
 SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::InternalPerturbation&);
@@ -57,6 +58,9 @@ SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::ThreeAtomPerturbatio
 
 SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::FourAtomPerturbation&);
 SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::FourAtomPerturbation&);
+
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::ScalePerturbation&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::ScalePerturbation&);
 
 namespace SireMM
 {
@@ -245,6 +249,46 @@ private:
     SireMol::AtomIdentifier atm0, atm1;
 };
 
+class SIREMM_EXPORT ScalePerturbation
+        : public SireBase::ConcreteProperty<ScalePerturbation,InternalPerturbation>
+{
+
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const ScalePerturbation&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, ScalePerturbation&);
+
+public:
+    ScalePerturbation();
+    ScalePerturbation(const AtomID &atom0, const AtomID &atom1,
+                        const double &csci,
+                        const double &ljsci,
+                        const double &cscf,
+                        const double &ljscf,
+                        const PropertyMap &map = PropertyMap());
+    ScalePerturbation& operator=(const ScalePerturbation &other);
+    ~ScalePerturbation();
+
+    static const char* typeName();
+
+    const AtomID& atom0() const;
+    const AtomID& atom1() const;
+    const double& getcsci() const;
+    const double& getljsci() const;
+    const double& getcscf() const;
+    const double& getljscf() const;
+
+    QSet<QString> requiredProperties() const;
+    bool wouldChange(const SireMol::Molecule &molecule,
+                     const SireCAS::Values &values) const;
+protected:
+    void perturbMolecule(SireMol::MolEditor &molecule,
+                         const SireCAS::Values &values) const;
+
+private:
+    /** The identifiers of the two atoms */
+    SireMol::AtomIdentifier atm0, atm1;
+    double ci, lji, cf, ljf;
+};
+
 /** This class represents a perturbation that maps the three-atom potential
     function using a perturbation function
   
@@ -424,11 +468,13 @@ private:
 Q_DECLARE_METATYPE( SireMM::TwoAtomPerturbation )
 Q_DECLARE_METATYPE( SireMM::ThreeAtomPerturbation )
 Q_DECLARE_METATYPE( SireMM::FourAtomPerturbation )
+Q_DECLARE_METATYPE( SireMM::ScalePerturbation )
 
 SIRE_EXPOSE_CLASS( SireMM::InternalPerturbation )
 SIRE_EXPOSE_CLASS( SireMM::TwoAtomPerturbation )
 SIRE_EXPOSE_CLASS( SireMM::ThreeAtomPerturbation )
 SIRE_EXPOSE_CLASS( SireMM::FourAtomPerturbation )
+SIRE_EXPOSE_CLASS( SireMM::ScalePerturbation )
 
 SIRE_END_HEADER
 

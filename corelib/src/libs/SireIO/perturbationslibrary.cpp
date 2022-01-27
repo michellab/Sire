@@ -99,8 +99,10 @@ QDataStream &operator<<(QDataStream &ds,
       //<< pertstemplate.initdihpotential << pertstemplate.finaldihpotential
 	<< pertstemplate.initdihparams << pertstemplate.finaldihparams
       //<< pertstemplate.initimppotential << pertstemplate.finalimppotential;
-	<< pertstemplate.initimpparams << pertstemplate.finalimpparams;
-
+    << pertstemplate.initimpparams << pertstemplate.finalimpparams
+    << pertstemplate.initscalec << pertstemplate.finalscalec
+    << pertstemplate.initscalelj << pertstemplate.finalscalelj;
+        
     return ds;
 }
 
@@ -123,7 +125,9 @@ QDataStream &operator>>(QDataStream &ds, PerturbationsTemplate &pertstemplate)
 	  //>> pertstemplate.initdihpotential >> pertstemplate.finaldihpotential
 	    >> pertstemplate.initdihparams >> pertstemplate.finaldihparams
 	  //>> pertstemplate.initimppotential >> pertstemplate.finalimppotential;
-	    >> pertstemplate.initimpparams >> pertstemplate.finalimpparams;
+        >> pertstemplate.initimpparams >> pertstemplate.finalimpparams
+        >> pertstemplate.initscalec >> pertstemplate.finalscalec
+        >> pertstemplate.initscalelj >> pertstemplate.finalscalelj;
 
     }
     else
@@ -157,7 +161,11 @@ PerturbationsTemplate::PerturbationsTemplate(const PerturbationsTemplate &other)
                       //initimppotential(other.initimppotential),
                       //finalimppotential(other.finalimppotential)
 		      initimpparams(other.initimpparams),
-		      finalimpparams(other.finalimpparams)
+              finalimpparams(other.finalimpparams),
+              initscalec(other.initscalec),
+              initscalelj(other.initscalelj),
+              finalscalec(other.finalscalec),
+              finalscalelj(other.finalscalelj)
 {}
 
 /** Destructor */
@@ -197,6 +205,10 @@ PerturbationsTemplate& PerturbationsTemplate::operator=(const PerturbationsTempl
         //finalimppotential = other.finalimppotential;
 	initimpparams = other.initimpparams;
 	finalimpparams = other.finalimpparams;
+    initscalec = other.initscalec;
+    initscalelj = other.initscalelj;
+    finalscalec = other.finalscalec;
+    finalscalelj = other.finalscalelj;
     }
 
     return *this;
@@ -217,7 +229,9 @@ bool PerturbationsTemplate::operator==(const PerturbationsTemplate &other) const
             //initdihpotential == other.initdihpotential and finaldihpotential == other.finaldihpotential and
 	    initdihparams == other.initdihparams and finaldihparams == other.finaldihparams and
             //initimppotential == other.initimppotential and finalimppotential == other.finalimppotential
-	    initimpparams == other.initimpparams and finalimpparams == other.finalimpparams);
+        initimpparams == other.initimpparams and finalimpparams == other.finalimpparams and
+        initscalec == other.initscalec and finalscalec == other.finalscalec and
+        initscalelj == other.initscalelj and finalscalelj == other.finalscalelj);
 }
 
 /** Comparison operator */
@@ -329,6 +343,55 @@ void PerturbationsTemplate::setFinalBondR(const BondID &bond, const double &r)
   finalbondsr.insert(bond, r);
 }
 
+void PerturbationsTemplate::setInitScaleC(const BondID &bond, const double &sc)
+{
+    initscalec.insert(bond, sc);
+}
+void PerturbationsTemplate::setInitScaleLJ(const BondID &bond, const double &sc)
+{
+    initscalelj.insert(bond, sc);
+}
+void PerturbationsTemplate::setFinalScaleC(const BondID &bond, const double &sc)
+{
+    finalscalec.insert(bond, sc);
+}
+void PerturbationsTemplate::setFinalScaleLJ(const BondID &bond, const double &sc)
+{
+    finalscalelj.insert(bond, sc);
+}
+
+double PerturbationsTemplate::getInitScaleC(const BondID &bond) const
+{
+   if (not initscalec.contains(bond))
+       throw SireError::invalid_key( QObject::tr("No value for key %1").arg(bond.toString()) );
+   else
+       return initscalec.value(bond);
+}
+
+double PerturbationsTemplate::getInitScaleLJ(const BondID &bond) const
+{
+   if (not initscalelj.contains(bond))
+       throw SireError::invalid_key( QObject::tr("No value for key %1").arg(bond.toString()) );
+   else
+       return initscalelj.value(bond);
+}
+
+double PerturbationsTemplate::getFinalScaleC(const BondID &bond) const
+{
+   if (not finalscalec.contains(bond))
+       throw SireError::invalid_key( QObject::tr("No value for key %1").arg(bond.toString()) );
+   else
+       return finalscalec.value(bond);
+}
+
+double PerturbationsTemplate::getFinalScaleLJ(const BondID &bond) const
+{
+   if (not finalscalelj.contains(bond))
+       throw SireError::invalid_key( QObject::tr("No value for key %1").arg(bond.toString()) );
+   else
+       return finalscalelj.value(bond);
+}
+
 double PerturbationsTemplate::getInitBondK(const BondID &bond) const
 {
   if ( not initbondsk.contains(bond) )
@@ -366,6 +429,11 @@ QList<BondID> PerturbationsTemplate::getBonds() const
   // Flaw, which hash do we get the bonds from ? Should rewrite to have a data structure
   // that holds all bond parameters (initial and final)
   return initbondsk.keys();
+}
+
+QList<BondID> PerturbationsTemplate::getScaledBonds() const
+{
+    return initscalec.keys();
 }
 
 void PerturbationsTemplate::setInitAngleK(const AngleID &angle, const double &k)
@@ -889,6 +957,12 @@ void PerturbationsLibrary::loadTemplates(const QString &templatefile)
     bool inangle = false;
     bool indihedral = false;
 
+    bool inscale = false;
+    double csci = 0.0;
+    double ljsci = 0.0;
+    double cscf = 0.0;
+    double ljscf = 0.0;
+    
     /** Now read rest of the file */
     while ( not line.isNull() )
     {
@@ -1014,12 +1088,23 @@ void PerturbationsLibrary::loadTemplates(const QString &templatefile)
 
             continue;
         }
-        if ( line.startsWith("atom0") and ( inbond or inangle or indihedral) )
+        if (line.startsWith("scale"))
+        {
+            inscale = true;
+            atom0 = " ";
+            atom1 = " ";
+            csci = 0.0;
+            ljsci = 0.0;
+            cscf = 0.0;
+            ljscf = 0.0;
+            continue;
+        }
+        if ( line.startsWith("atom0") and ( inbond or inangle or indihedral or inscale) )
         {
             atom0 = words[1];
             continue;
         }
-        if ( line.startsWith("atom1") and ( inbond or inangle or indihedral) )
+        if ( line.startsWith("atom1") and ( inbond or inangle or indihedral or inscale) )
         {
             atom1 = words[1];
             continue;
@@ -1091,6 +1176,28 @@ void PerturbationsLibrary::loadTemplates(const QString &templatefile)
 
 	    continue;
 	  }
+    if (line.startsWith("initial_csc") and inscale)
+    {
+        csci = words[1].toDouble();
+        continue;
+    }
+    if (line.startsWith("initial_ljsc") and inscale)
+    {
+        ljsci = words[1].toDouble();
+        continue;
+    }
+    if (line.startsWith("final_csc") and inscale)
+    {
+        cscf = words[1].toDouble();
+        continue;
+    }
+    if (line.startsWith("final_ljsc") and inscale)
+    {
+        ljscf = words[1].toDouble();
+        continue;
+    }
+
+
 	if ( line.startsWith("endbond") )
 	  {
 	    BondID bond = BondID( AtomName(atom0), AtomName(atom1) );
@@ -1102,6 +1209,16 @@ void PerturbationsLibrary::loadTemplates(const QString &templatefile)
 	    inbond = false;
 	    continue;
 	  }
+    if (line.startsWith("endscale"))
+    {
+        BondID bond = BondID(AtomName(atom0), AtomName(atom1));
+        new_templates[current].setInitScaleC(bond, csci);
+        new_templates[current].setInitScaleLJ(bond, ljsci);
+        new_templates[current].setFinalScaleC(bond, cscf);
+        new_templates[current].setFinalScaleLJ(bond, ljscf);
+        inscale = false;
+        continue;
+    }
 	if ( line.startsWith("endangle") )
 	  {
 	    AngleID angle = AngleID( AtomName(atom0), AtomName(atom1), AtomName(atom2) );
@@ -1320,6 +1437,22 @@ Molecule PerturbationsLibrary::applyTemplate(const Molecule &molecule) const
 
     }
 
+  QList<BondID> bonds_scaled = pert.getScaledBonds();
+
+  for (int i=0; i< bonds_scaled.size(); i++)
+  {
+      BondID bond = bonds_scaled.at(i);
+      double csci = pert.getInitScaleC(bond);
+      double ljsci = pert.getInitScaleLJ(bond);
+      double cscf = pert.getFinalScaleC(bond);
+      double ljscf = pert.getFinalScaleLJ(bond);
+      AtomIdx atom0 = editmol.select(bond.atom0()).index();
+      AtomIdx atom1 = editmol.select(bond.atom1()).index();
+      ScalePerturbation scalepert = ScalePerturbation(atom0, atom1, csci,  ljsci, cscf, ljscf, PropertyMap("parameters", "scale"));
+      perturbations.append(scalepert);
+
+  }
+  
   // Now make angle perturbations
   QList<AngleID> angles = pert.getAngles();
 
