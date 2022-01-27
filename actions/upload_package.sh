@@ -38,16 +38,16 @@ if [ "$LABEL" = "main" ]; then
         --label main \
         --label dev \
         --force \
-        "$CONDA_BLD"/"$OS"/sire-* \
-        "$CONDA_BLD"/"$OS"/libcpuid-*
+        "$CONDA_BLD"/"$OS"/sire-*
+#        "$CONDA_BLD"/"$OS"/libcpuid-*
 else
     anaconda \
         --token "$ANACONDA_TOKEN" upload \
         --user michellab \
         --label dev \
         --force \
-        "$CONDA_BLD"/"$OS"/sire-* \
-        "$CONDA_BLD"/"$OS"/libcpuid-*
+        "$CONDA_BLD"/"$OS"/sire-*
+#        "$CONDA_BLD"/"$OS"/libcpuid-*
 fi
 
 echo "Package uploaded!"
