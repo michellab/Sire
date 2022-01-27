@@ -1,0 +1,7 @@
+boost: 1.77
+openmm: 7.7.0
+pin_run_as_build:
+  boost:
+    max_pin: x.x
+  openmm:
+    max_pin: x.x
