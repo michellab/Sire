@@ -39,7 +39,6 @@ if [ "$LABEL" = "main" ]; then
         --label dev \
         --force \
         "$CONDA_BLD"/"$OS"/sire-* \
-        "$CONDA_BLD"/"$OS"/sire-* \
         "$CONDA_BLD"/"$OS"/libcpuid-*
 else
     anaconda \
