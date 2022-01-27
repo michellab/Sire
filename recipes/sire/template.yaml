@@ -47,6 +47,7 @@ requirements:
 test:
   requires:
     - git
+    - nose
   imports:
     - Sire
     - Sire.Analysis
