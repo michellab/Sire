@@ -41,7 +41,6 @@ jobs:
         run: Sire/actions/update_recipe.sh
         env:
           SRC_DIR: ${{ github.workspace }}/Sire
-          SRC_DIR: "$GITHUB_WORKSPACE"/Sire
       - name: Build Conda package
         shell: bash -l {0}
         run: conda-build -c conda-forge -c michellab Sire/recipes/sire

@@ -11,6 +11,8 @@ source:
 
 build:
   number: 0
+  run_exports:
+    - {{ pin_subpackage("libcpuid", max_pin="x.x") }}
 
 requirements:
   build:
@@ -27,7 +29,7 @@ about:
   home: http://libcpuid.sourceforge.net
   license: BSD-2-Clause
   license_file: '{{ environ["RECIPE_DIR"] }}/LICENSE'
-  summary: "A small C library for x86 CPU detection and feature extraction."
+  summary: A small C library for x86 CPU detection and feature extraction.
   dev_url: https://github.com/anrieff/libcpuid
   doc_url: http://libcpuid.sourceforge.net/doxy
   description: A small C library for x86 CPU detection and feature extraction.
