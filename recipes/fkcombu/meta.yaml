@@ -1,0 +1,35 @@
+{% set name = "fkcombu" %}
+{% set version = "2020.04.14" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  url: https://pdbj.org/kcombu/cgi-bin/dwnld_src_file.cgi?filename=kcombu-src-20200414.tar.gz
+  sha256: 2394029273667260817ff14ff0ed9e38cd3fd9f0756a48456c55a53c47a39d75
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - make
+
+test:
+  commands:
+    - test -f $PREFIX/bin/fkcombu
+
+about:
+  home: https://pdbj.org/kcombu/doc/README_fkcombu.html
+  license: BSD-3-Clause
+  license_file: '{{ environ["RECIPE_DIR"] }}/LICENSE'
+  summary: A tool for flexible transformation of a target molecule onto a reference molecule.
+  dev_url: https://pdbj.org/kcombu/doc/README_fkcombu.html
+  doc_url: https://pdbj.org/kcombu/doc/README_fkcombu.html
+  description: A tool for flexible transformation of a target molecule onto a reference molecule.
+
+extra:
+  recipe-maintainers:
+    - lohedges
