@@ -371,6 +371,12 @@ if __name__ == "__main__":
             if (not found):
                 cmake_defs.append([a])
 
+        if is_osx:
+            # don't compile with AVX as the resulting binaries won't
+            # work on M1 macs
+            cmake_defs.append("SIRE_DISABLE_AVX=ON")
+            cmake_defs.append("SIRE_DISABLE_AVX512F=ON")
+
     def make_cmd(ncores, install = False):
         if is_windows:
             action = "INSTALL" if install else "ALL_BUILD"
