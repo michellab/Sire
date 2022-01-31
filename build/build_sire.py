@@ -240,14 +240,6 @@ if __name__ == "__main__":
                 print("libtool is already installed...")
             else:
                 conda_pkgs.append("libtool")
-            if os.path.exists(os.path.join(conda_bin, "autoreconf")):
-                print("autoconf is already installed...")
-            else:
-                conda_pkgs.append("autoconf")
-            if os.path.exists(os.path.join(conda_bin, "aclocal")):
-                print("automake is already installed...")
-            else:
-                conda_pkgs.append("automake")
 
         if os.path.exists(os.path.join(conda_bin, "cmake%s" % exe_suffix)):
             print("cmake is already installed...")
@@ -279,7 +271,6 @@ if __name__ == "__main__":
                     "available - please check your openmm installation")
                 sys.exit(-1)
             else:
-                print("Installing openmm...")
                 conda_pkgs.append("openmm=7.7.0")
 
     # Write the packages as a requirements.txt file. This will help
@@ -290,24 +281,49 @@ if __name__ == "__main__":
                 FILE.write(f"{pkg}\n")
 
     if (not args.noconda) and conda_pkgs:
-        # Do we still need to do this - my miniconda looks in conda-forge
-        # already. Maybe this is what is slowing the environment processing?
-        #cmd = "%s config --prepend channels conda-forge" % conda_exe
-        #print("Activating conda-forge channel using: '%s'" % cmd)
-        #status = subprocess.run(cmd.split())
-        #if status.returncode != 0:
-        #    print("Failed to add conda-forge channel!")
-        #    sys.exit(-1)
+        cmd = "%s config --prepend channels conda-forge" % conda_exe
+        print("Activating conda-forge channel using: '%s'" % cmd)
+        status = subprocess.run(cmd.split())
+        if status.returncode != 0:
+            print("Failed to add conda-forge channel!")
+            sys.exit(-1)
 
-        # Need to run this command to prevent conda errors on
-        # some platforms - see
-        # https://github.com/ContinuumIO/anaconda-issues/issues/11246
-        #cmd = "%s config --set channel_priority false" % conda_exe
-        #print("Setting channel priority to false using: '%s'" % cmd)
-        #status = subprocess.run(cmd.split())
-        #if status.returncode != 0:
-        #    print("Failed to set channel priority!")
-        #    sys.exit(-1)
+        cmd = "%s config --set channel_priority strict" % conda_exe
+        print("Setting channel priority to strict using: '%s'" % cmd)
+        status = subprocess.run(cmd.split())
+        if status.returncode != 0:
+            print("Failed to set channel priority!")
+            sys.exit(-1)
+
+        if is_osx and platform.machine() == "arm64":
+            # Now update conda
+            cmd = [conda_exe, "update", "-y", "-n", "base",
+                   "-c", "defaults", "conda"]
+            print("Updating conda base using: '%s'" % " ".join(cmd))
+            status = subprocess.run(cmd)
+
+            if status.returncode != 0:
+                print("Something went wrong with the update!")
+                sys.exit(-1)
+
+            # Need to manually install libffi first, or else it is not
+            # upgraded with the other packages, and conda is then
+            # completely broken!
+            #cmd = [*py_module_install, "libffi"]
+            #print("Installing libffi on MacOS M1 using: '%s'" %
+            #              " ".join(cmd))
+            #status = subprocess.run(cmd)
+
+            #if status.returncode != 0:
+            #    print("Something went wrong installing libffi!")
+            #    sys.exit(-1)
+
+            cmd = "%s config --set channel_priority false" % conda_exe
+            print("Setting channel priority to false using: '%s'" % cmd)
+            status = subprocess.run(cmd.split())
+            if status.returncode != 0:
+                print("Failed to set channel priority!")
+                sys.exit(-1)
 
         cmd = [*py_module_install, *conda_pkgs]
         print("Installing packages using: '%s'" % " ".join(cmd))
