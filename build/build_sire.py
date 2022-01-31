@@ -53,7 +53,7 @@ if __name__ == "__main__":
         print("Compiling on Linux")
     elif platform.system() == "Darwin":
         is_osx = True
-        print("Compiling on OS X")
+        print("Compiling on MacOS")
     elif platform.system() == "Windows":
         exe_suffix = ".exe"
         #print("Sorry - compiling into miniconda on Windows is not supported yet")
@@ -198,12 +198,14 @@ if __name__ == "__main__":
             import PyQt5
             print("Qt5 is already installed...")
         except ImportError:
-            conda_pkgs.append("pyqt=5.12.3")
-            # This is the version for Apple M1
-            #conda_pkgs.append("pyqt=5.15.2")
+            if is_osx and platform.machine() == "arm64":
+                # This is the version needed for Apple M1
+                conda_pkgs.append("pyqt=5.15.2")
+            else:
+                conda_pkgs.append("pyqt=5.12.3")
 
-        # pymbar (not available on aarch64)
-        if platform.machine() != "aarch64":
+        # pymbar (not available on aarch64 and breaks some MacOS)
+        if (not is_osx) and platform.machine() not in ["aarch64", "arm64"]:
             try:
                 import pymbar
                 print("pymbar is already installed...")
