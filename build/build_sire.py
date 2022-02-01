@@ -296,7 +296,8 @@ if __name__ == "__main__":
             sys.exit(-1)
 
         if is_osx and platform.machine() == "arm64":
-            # Now update conda
+            # Now update conda - this is needed to fix libffi compatibility
+            # errors that break conda
             cmd = [conda_exe, "update", "-y", "-n", "base",
                    "-c", "defaults", "conda"]
             print("Updating conda base using: '%s'" % " ".join(cmd))
@@ -306,20 +307,13 @@ if __name__ == "__main__":
                 print("Something went wrong with the update!")
                 sys.exit(-1)
 
-            # Need to manually install libffi first, or else it is not
-            # upgraded with the other packages, and conda is then
-            # completely broken!
-            #cmd = [*py_module_install, "libffi"]
-            #print("Installing libffi on MacOS M1 using: '%s'" %
-            #              " ".join(cmd))
-            #status = subprocess.run(cmd)
-
-            #if status.returncode != 0:
-            #    print("Something went wrong installing libffi!")
-            #    sys.exit(-1)
-
-            cmd = "%s config --set channel_priority false" % conda_exe
+            # Need to run this command to prevent conda errors on
+            # some platforms - see
+            # https://github.com/ContinuumIO/anaconda-issues/issues/11246
+            # If we don't do this, then we can't resolve dependencies
+            # on MacOS M1
             print("Setting channel priority to false using: '%s'" % cmd)
+            cmd = "%s config --set channel_priority false" % conda_exe
             status = subprocess.run(cmd.split())
             if status.returncode != 0:
                 print("Failed to set channel priority!")
