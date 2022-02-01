@@ -29,9 +29,8 @@ fi
 
 # Upload the packages to the michellab channel on Anaconda Cloud.
 
-# Label release packages with main and dev so that dev is at least as new as
-# main. Only need to uncomment the libcpuid and fkcombu package uploads when
-# there new versions are released.
+# Label release packages with main and dev so that dev is at least
+# as new as main.
 if [ "$LABEL" = "main" ]; then
     anaconda \
         --token "$ANACONDA_TOKEN" upload \
@@ -39,18 +38,14 @@ if [ "$LABEL" = "main" ]; then
         --label main \
         --label dev \
         --force \
-        "$CONDA_BLD"/"$OS"/sire-* \
-        "$CONDA_BLD"/"$OS"/libcpuid-* \
-        "$CONDA_BLD"/"$OS"/fkcombu-*
+        "$CONDA_BLD"/"$OS"/*.bz2
 else
     anaconda \
         --token "$ANACONDA_TOKEN" upload \
         --user michellab \
         --label dev \
         --force \
-        "$CONDA_BLD"/"$OS"/sire-* \
-        "$CONDA_BLD"/"$OS"/libcpuid-* \
-        "$CONDA_BLD"/"$OS"/fkcombu-*
+        "$CONDA_BLD"/"$OS"/*.bz2
 fi
 
 echo "Package uploaded!"
