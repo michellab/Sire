@@ -32,6 +32,22 @@ requirements:
     - qt
     - tbb-devel
     - tbb
+# Add BioSimSpace run dependencies so Sire dependencies
+# are resolved in a compatible way.
+    - configargparse
+    - fkcombu
+    - mdtraj
+    - mdanalysis
+    - nglview
+    - openff-toolkit-base
+    - parmed
+    - pydot
+    - pygtail
+    - pypdb
+    - pytest
+    - pyyaml
+    - rdkit
+    - watchdog
   run:
     - boost
     - gsl
