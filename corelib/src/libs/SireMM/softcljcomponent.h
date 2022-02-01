@@ -58,7 +58,7 @@ const int MAX_ALPHA_VALUES = 6;
     components are available). This combined component gives
     access to each of the individual components, and also
     to the sum of them all
-    
+
     @author Christopher Woods
 */
 class SIREMM_EXPORT SoftCLJComponent : public CLJComponent
@@ -71,20 +71,20 @@ public:
     SoftCLJComponent();
     SoftCLJComponent(const FFName &name);
     SoftCLJComponent(const SireCAS::Symbol &symbol);
-    
+
     SoftCLJComponent(const SoftCLJComponent &other);
-    
+
     ~SoftCLJComponent();
-    
+
     SoftCLJComponent& operator=(const SoftCLJComponent &other);
-    
+
     static const char* typeName();
-    
+
     const char* what() const
     {
         return SoftCLJComponent::typeName();
     }
-    
+
     SoftCLJComponent* clone() const
     {
         return new SoftCLJComponent(*this);
@@ -108,41 +108,41 @@ public:
 
     void setEnergy(FF &ff, const SoftCLJEnergy &value) const;
     void changeEnergy(FF &ff, const SoftCLJEnergy &delta) const;
-    
+
     SireCAS::Symbols symbols() const;
 
 protected:
     void rebuildComponents();
 
-    //the coulomb and LJ components on CLJComponent represent the 
+    //the coulomb and LJ components on CLJComponent represent the
     //total energy of all of the soft core components
-    
+
     /** The individual components for each alpha value in the same
         order as the corresponding alpha values */
     QVector<CLJComponent> alpha_components;
 };
 
-/** This class holds all of the energy component values of 
+/** This class holds all of the energy component values of
     a multi-alpha SoftCLJPotential-derived forcefield
-    
+
     @author Christopher Woods
 */
 class SIREMM_EXPORT SoftCLJEnergy
 {
 public:
     typedef SoftCLJComponent Components;
-    
+
     SoftCLJEnergy();
 
     SoftCLJEnergy(const SoftCLJEnergy &other);
 
     ~SoftCLJEnergy();
-    
+
     static const char* typeName()
     {
         return "SireMM::SoftCLJEnergy";
     }
-    
+
     const char* what() const
     {
         return SoftCLJEnergy::typeName();
@@ -152,42 +152,42 @@ public:
 
     SoftCLJEnergy& operator+=(const SoftCLJEnergy &other);
     SoftCLJEnergy& operator-=(const SoftCLJEnergy &other);
-    
+
     SoftCLJEnergy operator+(const SoftCLJEnergy &other) const;
     SoftCLJEnergy operator-(const SoftCLJEnergy &other) const;
-    
+
     Components components() const
     {
         return Components();
     }
-    
+
     int count() const
     {
         return detail::MAX_ALPHA_VALUES;
     }
-    
+
     int size() const
     {
         return this->count();
     }
-    
+
     void setEnergy(int i, double cnrg, double ljnrg);
-    
+
     double coulomb() const;
     double lj() const;
-    
+
     double coulomb(int i) const;
     double lj(int i) const;
-    
+
     double total() const;
     double total(int i) const;
-    
+
     double component(const CoulombComponent&) const;
     double component(const LJComponent&) const;
-    
+
     double component(const CoulombComponent&, int i) const;
     double component(const LJComponent&, int i) const;
-    
+
     operator double() const
     {
         return total();
@@ -197,7 +197,7 @@ public:
     {
         return SireUnits::Dimension::Energy(total());
     }
-    
+
     operator CoulombEnergy() const
     {
         return CoulombEnergy(coulomb());
@@ -209,11 +209,7 @@ public:
     }
 
 private:
-    #ifdef SIRE_USE_SSE
-    __m128d nrgs[detail::MAX_ALPHA_VALUES];
-    #else
     double nrgs[detail::MAX_ALPHA_VALUES][2];
-    #endif
 };
 
 }

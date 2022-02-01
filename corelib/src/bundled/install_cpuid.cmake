@@ -73,16 +73,9 @@ else()
                 list( APPEND CPUID_OPTIONS "libcpuid_vc10.sln" )
                 message( STATUS "${CMAKE_MAKE_PROGRAM} | ${CPUID_OPTIONS}" )
             else()
-                list( APPEND CPUID_OPTIONS "--enable-static=no" )
-                list( APPEND CPUID_OPTIONS "--enable-shared=yes" )
-                list( APPEND CPUID_OPTIONS "--prefix=${BUNDLE_STAGEDIR}" )
-                list( APPEND CPUID_OPTIONS "--libdir=${BUNDLE_STAGEDIR}/lib" )
-                list( APPEND CPUID_OPTIONS "CC=${CMAKE_C_COMPILER}" )
-
-                if (HAVE_STDINT_H)
-                    list( APPEND CPUID_OPTIONS "CFLAGS=-DHAVE_STDINT_H" )
-                endif()
-                message( STATUS "${CPUID_BUILD_DIR}/configure | ${CPUID_OPTIONS}" )
+                list( APPEND CPUID_OPTIONS "-DCMAKE_INSTALL_PREFIX=${BUNDLE_STAGEDIR}")
+                list( APPEND CPUID_OPTIONS ".")
+                message( STATUS "CPUID | ${CPUID_BUILD_DIR} | ${CPUID_OPTIONS}" )
             endif()
 
             if (MSYS)
@@ -95,15 +88,9 @@ else()
                             )
             else()
                 message( STATUS "Patience... Configuring libcpuid..." )
-                execute_process( COMMAND "libtoolize"
-                                WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-                            )
-                execute_process( COMMAND "autoreconf" "--install"
-                                WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-                            )
-                execute_process( COMMAND "${CPUID_BUILD_DIR}/configure" ${CPUID_OPTIONS}
-                                WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-                            )
+                execute_process( COMMAND "${CMAKE_COMMAND}" ${CPUID_OPTIONS}
+                                 WORKING_DIRECTORY ${CPUID_BUILD_DIR}
+                               )
                 message( STATUS "Patience... Compiling libcpuid..." )
                 execute_process( COMMAND "${CMAKE_MAKE_PROGRAM}" -k -j ${NCORES}
                                 WORKING_DIRECTORY ${CPUID_BUILD_DIR}
