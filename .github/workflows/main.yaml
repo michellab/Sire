@@ -19,6 +19,9 @@ jobs:
         python-version: ["3.7", "3.8", "3.9"]
     environment:
       name: sire-build
+    env:
+      - SIRE_DONT_PHONEHOME: 1
+      - SIRE_SILENT_PHONEHOME: 1
     steps:
       - uses: conda-incubator/setup-miniconda@v2
         with:

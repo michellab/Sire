@@ -61,6 +61,9 @@ requirements:
     - qt
 
 test:
+  script_env:
+    - SIRE_DONT_PHONEHOME
+    - SIRE_SILENT_PHONEHOME
   requires:
     - git
     - nose
