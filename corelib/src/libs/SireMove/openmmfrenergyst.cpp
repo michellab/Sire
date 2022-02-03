@@ -3406,7 +3406,7 @@ void OpenMMFrEnergyST::initialise()
 
     if (solute_bond_perturbation_anni->getNumBonds() != 0)
     {
-        solute_bond_perturbation_anni->setForceGroup(2);
+        solute_bond_perturbation_anni->setForceGroup(0);
         system_openmm->addForce(solute_bond_perturbation_anni);
         perturbed_energies_tmp[12] = true; // Custom soft bond annihilation potential
         if (Debug)
