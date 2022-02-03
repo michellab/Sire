@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Get the path to GitHub workspace.
+# Get the path to source directory.
 SRC_DIR=${SRC_DIR:-$1}
 
 # Get the path to the Conda installation.
@@ -27,9 +27,11 @@ if [ ! -e "$TAG" ]; then
     LABEL=main
 fi
 
-# Upload the package to the michellab channel on Anaconda Cloud.
+# Upload the packages to the michellab channel on Anaconda Cloud.
 
-# Label release packages with main and dev so that dev is at least as new as main.
+# Label release packages with main and dev so that dev is at least as new as
+# main. Only need to uncomment the libcpuid and fkcombu package uploads when
+# there new versions are released.
 if [ "$LABEL" = "main" ]; then
     anaconda \
         --token "$ANACONDA_TOKEN" upload \
@@ -38,7 +40,8 @@ if [ "$LABEL" = "main" ]; then
         --label dev \
         --force \
         "$CONDA_BLD"/"$OS"/sire-* \
-        "$CONDA_BLD"/"$OS"/libcpuid-*
+        "$CONDA_BLD"/"$OS"/libcpuid-* \
+        "$CONDA_BLD"/"$OS"/fkcombu-*
 else
     anaconda \
         --token "$ANACONDA_TOKEN" upload \
@@ -46,7 +49,8 @@ else
         --label dev \
         --force \
         "$CONDA_BLD"/"$OS"/sire-* \
-        "$CONDA_BLD"/"$OS"/libcpuid-*
+        "$CONDA_BLD"/"$OS"/libcpuid-* \
+        "$CONDA_BLD"/"$OS"/fkcombu-*
 fi
 
 echo "Package uploaded!"

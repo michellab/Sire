@@ -2,11 +2,13 @@
 `Sire <http://siremol.org>`__
 ****
 
-.. image:: https://dev.azure.com/michellab/Sire/_apis/build/status/michellab.Sire?branchName=devel
-   :target: https://dev.azure.com/michellab/Sire/_build
+.. image:: https://github.com/michellab/Sire/workflows/Build/badge.svg
+   :target: https://github.com/michellab/Sire/actions?query=workflow%3ABuild)
+   :alt: Build status
 
 .. image:: https://anaconda.org/michellab/sire/badges/downloads.svg
    :target: https://anaconda.org/michellab/sire
+   :alt: Downloads
 
 .. image:: https://img.shields.io/badge/License-GPL%20v2-blue.svg
    :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
@@ -36,14 +38,14 @@ To create a new environment:
 
 .. code-block:: bash
 
-    conda create -n sire -c conda-forge -c omnia -c michellab sire
+    conda create -n sire -c conda-forge -c michellab sire
     conda activate sire
 
 To install the latest development version you can use:
 
 .. code-block:: bash
 
-    conda create -n sire-dev -c conda-forge -c omnia -c michellab/label/dev sire
+    conda create -n sire-dev -c conda-forge -c michellab/label/dev sire
     conda activate sire-dev
 
 If you find that Conda is particularly slow to install or upgrade,
@@ -57,7 +59,7 @@ You can then replace all ``conda`` commands with ``mamba``, e.g.:
 
 .. code-block:: bash
 
-    mamba create -n sire -c conda-forge -c omnia -c michellab sire
+    mamba create -n sire -c conda-forge -c michellab sire
 
 There are also many `pre-built binary packages <http://siremol.org/pages/binaries.html>`__,
 which are available for Linux, Mac OS X and Windows, which are quick and easy to install.

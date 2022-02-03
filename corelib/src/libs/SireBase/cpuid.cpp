@@ -103,7 +103,6 @@ QDataStream &operator>>(QDataStream &ds, CPUID &cpuid)
     {
         if (not cpuid_present())
         {
-            qDebug() << "Sorry, your CPU doesn't support CPUID";
             return QHash<QString,QString>();
         }
 
@@ -111,7 +110,6 @@ QDataStream &operator>>(QDataStream &ds, CPUID &cpuid)
 
         if (cpuid_get_raw_data(&raw_data) != 0)
         {
-            qDebug() << "Sorry, could not get raw CPUID data";
             return QHash<QString,QString>();
         }
 
@@ -119,7 +117,6 @@ QDataStream &operator>>(QDataStream &ds, CPUID &cpuid)
 
         if (cpu_identify(&raw_data, &cpuid) != 0)
         {
-            qDebug() << "Sorry, could not identify the CPU";
             return QHash<QString,QString>();
         }
 

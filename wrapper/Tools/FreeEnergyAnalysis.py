@@ -20,15 +20,15 @@ try:
 except ImportError:
     raise ImportError('Numpy is not installed. Please install numpy in order to use MBAR for your free energy analysis.')
 
-
-import platform
-
-# pymbar is currently unavailable on aarch64.
-if platform.machine() != "aarch64":
+try:
     from pymbar import MBAR
     from pymbar import timeseries
-else:
-    raise ImportError("'pymbar' is currently unavailable on the 'aarch64' platform. Unable to use 'analyse_freenrg'")
+except ImportError:
+    import platform
+    if platform.machine() in ["aarch64", "arm64"]:
+        print("'pymbar' is not available on the 'aarch64' or 'arm64' platforms")
+
+    raise ImportError("'pymbar' is not installed. Please install pymbar in order to use MBAR for your free energy analysis.`")
 
 import warnings
 
