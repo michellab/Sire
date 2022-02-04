@@ -17,7 +17,7 @@ devel branch:
                container constructors, moving to OneAPI, switching to the
                conda-forge OpenMM and switching to the new C++ ABI (@chryswoods).
                Simplified Sire wrapper generation using a minimal Docker
-               container with the latest Py++ (@chryswoods). At support for
+               container with the latest Py++ (@chryswoods). Add support for
                native Python pickling of Sire objects (@chryswoods.) Switch
                to GitHub actions for CI. This uses a conda-forge compliant
                conda build, with packages then uploaded to the Anaconda cloud.
