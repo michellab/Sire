@@ -10,6 +10,11 @@ import warnings
 
 import numpy as np
 
+import openmm.app as app
+import openmm
+import openmm.unit as units
+
+
 import Sire.Base
 
 # Make sure that the OPENMM_PLUGIN_DIR enviroment variable is set correctly if
@@ -38,7 +43,7 @@ import Sire.Units
 import Sire.Maths
 import Sire.Qt
 import Sire.Analysis
-import Sire.Tools.DCDFile
+from Sire.Tools.DCDFile import *
 from Sire.Tools import Parameter, resolveParameters
 import Sire.Stream
 
@@ -1796,6 +1801,28 @@ def generateDistanceRestraintsDict(system):
 
     return restraints
 
+def computeOpenMMEnergy(prmtop_filename, inpcrd_filename):
+    prmtop = app.AmberPrmtopFile(prmtop_filename)
+    inpcrd = app.AmberInpcrdFile(inpcrd_filename)
+
+    system = prmtop.createSystem(nonbondedMethod=app.PME,
+                                 nonbondedCutoff=1.0*units.nanometer,
+                                 constraints=app.HBonds)
+    integrator = openmm.LangevinMiddleIntegrator(300.0*units.kelvin,
+                                                 1.0/units.picosecond,
+                                                 0.004*units.picoseconds)
+    simulation = app.Simulation(prmtop.topology, system, integrator)
+    context = simulation.context
+
+    context.setPositions(inpcrd.positions)
+
+    if inpcrd.boxVectors is not None:
+        context.setPeriodicBoxVectors(*inpcrd.boxVectors)
+
+    state = context.getState(getEnergy=True)
+
+    return state.getPotentialEnergy() / units.kilocalorie
+
 
 ##############
 # MAIN METHODS
@@ -2219,6 +2246,9 @@ def runFreeNrg():
 
     mdmoves = moves.moves()[0]
     integrator = mdmoves.integrator()
+    energy = computeOpenMMEnergy(topfile.val, crdfile.val)
+    print(f'>>> OpenMM Energy: {energy}')
+
     print(
         "###===========================================================###\n"
     )
