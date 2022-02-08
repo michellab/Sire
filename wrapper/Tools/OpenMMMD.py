@@ -1801,17 +1801,31 @@ def generateDistanceRestraintsDict(system):
 
     return restraints
 
-def computeOpenMMEnergy(prmtop_filename, inpcrd_filename):
+def computeOpenMMEnergy(prmtop_filename, inpcrd_filename, cutoff):
+    """
+    Compute the energy for a given AMBER parm7 and inpcrd file.
+
+    :param str prmtop_filename: name of parm7 file
+    :param str inpcrd_filename: name of inpcrd file
+    :cutoff: cutoff in Angstrom
+    :type cutoff: Sire.GeneralUnit
+    """
+
     prmtop = app.AmberPrmtopFile(prmtop_filename)
     inpcrd = app.AmberInpcrdFile(inpcrd_filename)
 
+    cutoff = cutoff.value()
+
     system = prmtop.createSystem(nonbondedMethod=app.PME,
-                                 nonbondedCutoff=1.0*units.nanometer,
+                                 nonbondedCutoff=cutoff*units.angstrom,
                                  constraints=app.HBonds)
+
     integrator = openmm.LangevinMiddleIntegrator(300.0*units.kelvin,
                                                  1.0/units.picosecond,
                                                  0.004*units.picoseconds)
+
     simulation = app.Simulation(prmtop.topology, system, integrator)
+
     context = simulation.context
 
     context.setPositions(inpcrd.positions)
@@ -1955,6 +1969,9 @@ def run():
     print(
         "###===========================================================###\n"
     )
+
+    energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
+    print(f'OpenMM Energy (PME): {energy}\n')
 
     if minimise.val:
         print(
@@ -2246,12 +2263,14 @@ def runFreeNrg():
 
     mdmoves = moves.moves()[0]
     integrator = mdmoves.integrator()
-    energy = computeOpenMMEnergy(topfile.val, crdfile.val)
-    print(f'>>> OpenMM Energy: {energy}')
 
     print(
         "###===========================================================###\n"
     )
+
+    energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
+    print(f'Raw OpenMM Energy (PME, may be different from below): {energy}\n')
+
     if minimise.val:
         print(
             "###=======================Minimisation========================###"
