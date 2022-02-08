@@ -17,6 +17,11 @@ jobs:
       matrix:
         os: ["ubuntu-latest", "macos-latest"]
         python-version: ["3.7", "3.8", "3.9"]
+    environment:
+      name: sire-build
+    env:
+      SIRE_DONT_PHONEHOME: 1
+      SIRE_SILENT_PHONEHOME: 1
     steps:
       - uses: conda-incubator/setup-miniconda@v2
         with:
@@ -34,15 +39,18 @@ jobs:
         if: github.event_name == 'pull_request'
       - name: Setup Conda
         shell: bash -l {0}
-        run: conda install -y conda-build anaconda-client
+        run: conda install -y -c conda-forge conda-build anaconda-client
       - name: Update Conda recipe
-        run: Sire/actions/update_recipe.sh "$GITHUB_WORKSPACE"/Sire
+        run: Sire/actions/update_recipe.sh
+        env:
+          SRC_DIR: ${{ github.workspace }}/Sire
       - name: Build Conda package
         shell: bash -l {0}
         run: conda-build -c conda-forge -c michellab Sire/recipes/sire
       - name: Upload Conda package
         shell: bash -l {0}
-        run: Sire/actions/upload_package.sh "$GITHUB_WORKSPACE"/Sire "$CONDA"
+        run: Sire/actions/upload_package.sh
         env:
+          SRC_DIR: ${{ github.workspace }}/Sire
           ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
         if: github.event_name != 'pull_request'

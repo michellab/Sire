@@ -53,7 +53,7 @@ if __name__ == "__main__":
         print("Compiling on Linux")
     elif platform.system() == "Darwin":
         is_osx = True
-        print("Compiling on OS X")
+        print("Compiling on MacOS")
     elif platform.system() == "Windows":
         exe_suffix = ".exe"
         #print("Sorry - compiling into miniconda on Windows is not supported yet")
@@ -198,12 +198,14 @@ if __name__ == "__main__":
             import PyQt5
             print("Qt5 is already installed...")
         except ImportError:
-            conda_pkgs.append("pyqt=5.12.3")
-            # This is the version for Apple M1
-            #conda_pkgs.append("pyqt=5.15.2")
+            if is_osx and platform.machine() == "arm64":
+                # This is the version needed for Apple M1
+                conda_pkgs.append("pyqt=5.15.2")
+            else:
+                conda_pkgs.append("pyqt=5.12.3")
 
-        # pymbar (not available on aarch64)
-        if platform.machine() != "aarch64":
+        # pymbar (not available on aarch64 and breaks some MacOS)
+        if (not is_osx) and platform.machine() not in ["aarch64", "arm64"]:
             try:
                 import pymbar
                 print("pymbar is already installed...")
@@ -238,14 +240,6 @@ if __name__ == "__main__":
                 print("libtool is already installed...")
             else:
                 conda_pkgs.append("libtool")
-            if os.path.exists(os.path.join(conda_bin, "autoreconf")):
-                print("autoconf is already installed...")
-            else:
-                conda_pkgs.append("autoconf")
-            if os.path.exists(os.path.join(conda_bin, "aclocal")):
-                print("automake is already installed...")
-            else:
-                conda_pkgs.append("automake")
 
         if os.path.exists(os.path.join(conda_bin, "cmake%s" % exe_suffix)):
             print("cmake is already installed...")
@@ -277,7 +271,6 @@ if __name__ == "__main__":
                     "available - please check your openmm installation")
                 sys.exit(-1)
             else:
-                print("Installing openmm...")
                 conda_pkgs.append("openmm=7.7.0")
 
     # Write the packages as a requirements.txt file. This will help
@@ -288,24 +281,43 @@ if __name__ == "__main__":
                 FILE.write(f"{pkg}\n")
 
     if (not args.noconda) and conda_pkgs:
-        # Do we still need to do this - my miniconda looks in conda-forge
-        # already. Maybe this is what is slowing the environment processing?
-        #cmd = "%s config --prepend channels conda-forge" % conda_exe
-        #print("Activating conda-forge channel using: '%s'" % cmd)
-        #status = subprocess.run(cmd.split())
-        #if status.returncode != 0:
-        #    print("Failed to add conda-forge channel!")
-        #    sys.exit(-1)
+        cmd = "%s config --prepend channels conda-forge" % conda_exe
+        print("Activating conda-forge channel using: '%s'" % cmd)
+        status = subprocess.run(cmd.split())
+        if status.returncode != 0:
+            print("Failed to add conda-forge channel!")
+            sys.exit(-1)
 
-        # Need to run this command to prevent conda errors on
-        # some platforms - see
-        # https://github.com/ContinuumIO/anaconda-issues/issues/11246
-        #cmd = "%s config --set channel_priority false" % conda_exe
-        #print("Setting channel priority to false using: '%s'" % cmd)
-        #status = subprocess.run(cmd.split())
-        #if status.returncode != 0:
-        #    print("Failed to set channel priority!")
-        #    sys.exit(-1)
+        cmd = "%s config --set channel_priority strict" % conda_exe
+        print("Setting channel priority to strict using: '%s'" % cmd)
+        status = subprocess.run(cmd.split())
+        if status.returncode != 0:
+            print("Failed to set channel priority!")
+            sys.exit(-1)
+
+        if is_osx and platform.machine() == "arm64":
+            # Now update conda - this is needed to fix libffi compatibility
+            # errors that break conda
+            cmd = [conda_exe, "update", "-y", "-n", "base",
+                   "-c", "defaults", "conda"]
+            print("Updating conda base using: '%s'" % " ".join(cmd))
+            status = subprocess.run(cmd)
+
+            if status.returncode != 0:
+                print("Something went wrong with the update!")
+                sys.exit(-1)
+
+            # Need to run this command to prevent conda errors on
+            # some platforms - see
+            # https://github.com/ContinuumIO/anaconda-issues/issues/11246
+            # If we don't do this, then we can't resolve dependencies
+            # on MacOS M1
+            print("Setting channel priority to false using: '%s'" % cmd)
+            cmd = "%s config --set channel_priority false" % conda_exe
+            status = subprocess.run(cmd.split())
+            if status.returncode != 0:
+                print("Failed to set channel priority!")
+                sys.exit(-1)
 
         cmd = [*py_module_install, *conda_pkgs]
         print("Installing packages using: '%s'" % " ".join(cmd))
@@ -368,6 +380,12 @@ if __name__ == "__main__":
                     break
             if (not found):
                 cmake_defs.append([a])
+
+        if is_osx:
+            # don't compile with AVX as the resulting binaries won't
+            # work on M1 macs
+            cmake_defs.append(["SIRE_DISABLE_AVX=ON"])
+            cmake_defs.append(["SIRE_DISABLE_AVX512F=ON"])
 
     def make_cmd(ncores, install = False):
         if is_windows:
