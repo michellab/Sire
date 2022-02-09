@@ -6,6 +6,7 @@ import os
 import sys
 import re
 import time
+import platform as pf
 import warnings
 
 import numpy as np
@@ -49,7 +50,7 @@ import Sire.Stream
 
 
 __author__ = 'Julien Michel, Gaetano Calabro, Antonia Mey, Hannes H Loeffler'
-__version__ = '0.1'
+__version__ = '0.2'
 __license__ = 'GPL'
 __maintainer__ = 'Julien Michel'
 __email__ = 'julien.michel@ed.ac.uk'
@@ -233,6 +234,8 @@ constraint = Parameter(
     "constraint", "hbonds", """The constraint model to use during dynamics."""
 )
 
+# types: nocutoff, cutoffperiodic, cutoffnonperiodic(?)
+# added: PME for FEP only
 cutoff_type = Parameter(
     "cutoff type",
     "cutoffperiodic",
@@ -568,6 +571,9 @@ def createSystem(molecules):
 
 
 def setupForcefields(system, space):
+    """
+    No PME support here.
+    """
 
     print("Creating force fields... ")
 
@@ -691,6 +697,9 @@ def setupForcefields(system, space):
 
 
 def setupMoves(system, debug_seed, GPUS):
+    """
+    No PME support here.
+    """
 
     print("Setting up moves...")
 
@@ -1300,7 +1309,11 @@ def createSystemFreeEnergy(molecules):
 
 
 def setupForceFieldsFreeEnergy(system, space):
-    r"""sets up the force field for the free energy calculation
+    r"""Sets up the force field for the free energy calculation
+
+    FIXME: For the moment we only check if cutoff_type is not nocutoff
+           and so also allow the RF setup for PME.
+
     Parameters
     ----------
     system : Sire.system
@@ -1544,7 +1557,10 @@ def setupForceFieldsFreeEnergy(system, space):
     return system
 
 
-def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
+def setupMovesFreeEnergy(system, debug_seed, gpu_idx, lam_val):
+    """
+    Setup one Sire MD move using OpenMM.  Supports PME.
+    """
 
     print("Setting up moves...")
 
@@ -1553,10 +1569,16 @@ def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
     solute_hard = system[MGName("solute_ref_hard")]
     solute_todummy = system[MGName("solute_ref_todummy")]
     solute_fromdummy = system[MGName("solute_ref_fromdummy")]
-    # import pdb ; pdb.set_trace()
-    Integrator_OpenMM = Sire.Move.OpenMMFrEnergyST(
+
+    if cutoff_type == 'PME':
+        fep_cls = Sire.Move.OpenMMPMEFEP
+    else:                       # no cutoff and RF
+        fep_cls = Sire.Move.OpenMMFrEnergyST
+
+    Integrator_OpenMM = fep_cls(
         molecules, solute, solute_hard, solute_todummy, solute_fromdummy
     )
+
     Integrator_OpenMM.setRandomSeed(debug_seed)
     Integrator_OpenMM.setIntegrator(integrator_type.val)
     Integrator_OpenMM.setFriction(
@@ -1568,7 +1590,7 @@ def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
     Integrator_OpenMM.setFieldDielectric(rf_dielectric.val)
     Integrator_OpenMM.setAlchemicalValue(lambda_val.val)
     Integrator_OpenMM.setAlchemicalArray(lambda_array.val)
-    Integrator_OpenMM.setDeviceIndex(str(GPUS))
+    Integrator_OpenMM.setDeviceIndex(str(gpu_idx))
     Integrator_OpenMM.setCoulombPower(coulomb_power.val)
     Integrator_OpenMM.setShiftDelta(shift_delta.val)
     Integrator_OpenMM.setDeltatAlchemical(delta_lambda.val)
@@ -1615,7 +1637,8 @@ def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
         {"velocity generator": velocity_generator},
     )
 
-    print("Created a MD move that uses OpenMM for all molecules on %s " % GPUS)
+    print(f'Created one MD move that uses OpenMM for all molecules on '
+          'GPU device {gpu_idx}')
 
     moves = Sire.Move.WeightedMoves()
     moves.add(mdmove, 1)
@@ -1845,6 +1868,9 @@ def computeOpenMMEnergy(prmtop_filename, inpcrd_filename, cutoff):
 
 @resolveParameters
 def run():
+    """
+    Normal MD run.
+    """
 
     try:
         host = os.environ["HOSTNAME"]
@@ -2049,20 +2075,17 @@ def run():
 
 @resolveParameters
 def runFreeNrg():
-    # if (save_coords.val):
-    #    buffer_freq = 500
-    # else:
-    #    buffer_freq = 0
+    """
+    Cut-and-paste for FEP runs.
+    """
 
-    try:
-        host = os.environ["HOSTNAME"]
-    except KeyError:
-        host = "unknown"
+    host = pf.node()
 
     print(
-        "### Running Single Topology Molecular Dynamics Free Energy on %s ###"
-        % host
+        '### Running Single Topology Molecular Dynamics Free Energy '
+        f'(v{__version__}) on {host} ###'
     )
+
     if verbose.val:
         print(
             "###================= Simulation Parameters====================="
