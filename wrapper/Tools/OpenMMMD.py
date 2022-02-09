@@ -234,7 +234,7 @@ constraint = Parameter(
     "constraint", "hbonds", """The constraint model to use during dynamics."""
 )
 
-# types: nocutoff, cutoffperiodic, cutoffnonperiodic(?)
+# types: nocutoff, cutoffnonperiodic, cutoffperiodic
 # added: PME for FEP only
 cutoff_type = Parameter(
     "cutoff type",
@@ -1637,8 +1637,8 @@ def setupMovesFreeEnergy(system, debug_seed, gpu_idx, lam_val):
         {"velocity generator": velocity_generator},
     )
 
-    print(f'Created one MD move that uses OpenMM for all molecules on '
-          'GPU device {gpu_idx}')
+    print('Created one MD move that uses OpenMM for all molecules on '
+          f'GPU device {gpu_idx}')
 
     moves = Sire.Move.WeightedMoves()
     moves.add(mdmove, 1)
