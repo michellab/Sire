@@ -52,9 +52,9 @@ SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::OpenMMPMEFEP&);
 
 namespace SireMove {
 
-    /** This class implements single topology a free energy method using OpenMM. 
- 
-        @author Julien Michel,Gaetano Calabro and Antonia Mey
+    /** This class implements single topology a free energy method using OpenMM.
+
+        @author Julien Michel, Gaetano Calabro, Antonia Mey, Hannes H Loeffler
      */
     class SIREMOVE_EXPORT OpenMMPMEFEP
     : public SireBase::ConcreteProperty<OpenMMPMEFEP, Integrator> {
@@ -68,7 +68,7 @@ namespace SireMove {
                 const MoleculeGroup &solutes,
                 const MoleculeGroup &solute_hard,
                 const MoleculeGroup &solute_todummy,
-                const MoleculeGroup & solute_fromdummy,
+                const MoleculeGroup &solute_fromdummy,
                 bool frequent_save_velocities = false);
 
         OpenMMPMEFEP(const OpenMMPMEFEP &other);
@@ -108,7 +108,7 @@ namespace SireMove {
 
 	QString getCombiningRules(void);
 	void setCombiningRules(QString);
-	
+
         QString getCutoffType(void);
         void setCutoffType(QString);
 
@@ -204,13 +204,13 @@ namespace SireMove {
         void createContext(IntegratorWorkspace &workspace,
                 SireUnits::Dimension::Time timestep);
         void destroyContext();
-        void updateBoxDimensions(OpenMM::State &state_openmm, 
-        QVector<QVector<Vector>> &buffered_dimensions, bool Debug, 
+        void updateBoxDimensions(OpenMM::State &state_openmm,
+        QVector<QVector<Vector>> &buffered_dimensions, bool Debug,
         AtomicVelocityWorkspace &ws);
-        
+
         double getPotentialEnergyAtLambda(double lambda);
         void updateOpenMMContextLambda(double lambda);
-        boost::tuples::tuple<double, double, double> calculateGradient(double increment_plus, 
+        boost::tuples::tuple<double, double, double> calculateGradient(double increment_plus,
         double increment_minus, double potential_energy_lambda, double beta);
         QVector<double> computeReducedPerturbedEnergies(double);
         void emptyContainers(void);
@@ -282,7 +282,7 @@ namespace SireMove {
         QVector<double> pot_energies;
 
         QVector<double> forward_Metropolis;
-        
+
         QVector<double> backward_Metropolis;
 
         QVector<QVector <double> > reduced_perturbed_energies;
