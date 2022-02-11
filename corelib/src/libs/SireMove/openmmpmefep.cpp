@@ -379,11 +379,12 @@ QString OpenMMPMEFEP::toString() const
  * Initialise must be called before anything else happens.
  */
 
+// FIXME: remove RF specific code
 // JM 9/10/20 multiply Logix_mix_lam * 0 instead of max(lam,1.0-lam)
 // JM 9/10/10 setting Logix_mix_lam output to 0 for lambda
 const std::string ENERGYBASE =
     "(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hls + Hcs);"
-    "Hcs = %1% * 138.935456 * q_prod*(1/sqrt(diff_cl+r*r) + krflam*(diff_cl+r*r)-crflam);"
+    "Hcs = %1% 138.935456 * q_prod*(1/sqrt(diff_cl+r*r) + krflam*(diff_cl+r*r)-crflam);"
     "crflam = crf * src;"
     "krflam = krf * src * src * src;"
     "src = cutoff/sqrt(diff_cl + cutoff*cutoff);"
@@ -414,7 +415,7 @@ const std::string ENERGYBASE =
 const std::string TODUMMY =
     "withinCutoff*(Hcs + Hls);"
     "withinCutoff=step(cutofftd-r);"
-    "Hcs=%1% * 138.935456*q_prod/sqrt(diff_cl+r^2);"
+    "Hcs=%1% 138.935456*q_prod/sqrt(diff_cl+r^2);"
     "diff_cl=(1.0-lamtd)*0.01;"
     "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
     "LJ=((sigma_avg*sigma_avg)/soft)^3;"
@@ -426,7 +427,7 @@ const std::string TODUMMY =
 const std::string FROMDUMMY =
     "withinCutoff*(Hcs + Hls);"
     "withinCutoff=step(cutofffd-r);"
-    "Hcs=%1% * 138.935456*q_prod/sqrt(diff_cl+r^2);"
+    "Hcs=%1% 138.935456*q_prod/sqrt(diff_cl+r^2);"
     "diff_cl=(1.0-lamfd)*0.01;"
     "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
     "LJ=((sigma_avg*sigma_avg)/soft)^3;"
@@ -438,7 +439,7 @@ const std::string FROMDUMMY =
 const std::string FROMTODUMMY =
     "withinCutoff*(Hcs + Hls);"
     "withinCutoff=step(cutoffftd-r);"
-    "Hcs=%1% * 138.935456*q_prod/sqrt(diff_cl+r^2);"
+    "Hcs=%1% 138.935456*q_prod/sqrt(diff_cl+r^2);"
     "diff_cl=(1.0-lamFTD)*0.01;"
     "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
     "LJ=((sigma_avg*sigma_avg)/soft)^3;"
@@ -579,8 +580,6 @@ void OpenMMPMEFEP::initialise(bool Debug = false)
     OpenMM::CustomBondForce * custom_intra_14_fromdummy = NULL;
     OpenMM::CustomBondForce * custom_intra_14_fromdummy_todummy = NULL;
 
-    // we only support PME here
-
     const double converted_cutoff_distance = convertTo(cutoff_distance.value(), nanometer);
 
     double eps2 = (field_dielectric - 1.0) / (2 * field_dielectric + 1.0);
@@ -590,12 +589,11 @@ void OpenMMPMEFEP::initialise(bool Debug = false)
     std::string lam_pre;
     boost::format fmt;
 
-
     // The check is necessary to avoid nan errors on the GPUs platform caused
     // by the calculation of 0^0
     if (coulomb_power > 0)
     {
-       lam_pre = "(lambda^n)";
+       lam_pre = "(lambda^n) *";
     }
     else
     {
@@ -624,6 +622,7 @@ void OpenMMPMEFEP::initialise(bool Debug = false)
     custom_force_field->addGlobalParameter("cutoff", converted_cutoff_distance);
     custom_force_field->addGlobalParameter("SPOnOff", 0.0);
 
+    // FIXME: replace with PME and then switch off direct space handling
     if (flag_cutoff == CUTOFFNONPERIODIC)
     {
        custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
