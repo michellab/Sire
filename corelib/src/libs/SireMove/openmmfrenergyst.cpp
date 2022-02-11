@@ -609,7 +609,6 @@ void OpenMMFrEnergyST::initialise()
                 "soft=(diff_lj*deltaftd*sigma_avg+r*r);"
                 "diff_lj=(1.0-lamFTD)*0.1;"
                 "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
-                "sigma_avg = lamftd*saend + (1-lamftd)*sastart;"
                 "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
                 "lamFTD = max(lamftd,1-lamftd);""";
 
