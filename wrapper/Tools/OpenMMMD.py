@@ -2292,7 +2292,8 @@ def runFreeNrg():
     )
 
     energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
-    print(f'Raw OpenMM Energy (PME, may be different from below): {energy}\n')
+    print(f'Raw OpenMM Energy ({cutoff_type}, may be different from below): '
+          f'{energy}\n')
 
     if minimise.val:
         print(
