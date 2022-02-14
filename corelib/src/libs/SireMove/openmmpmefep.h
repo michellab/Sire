@@ -88,7 +88,7 @@ namespace SireMove {
 
         bool isTimeReversible() const;
 
-        void initialise();
+        void initialise(bool Debug = false);
 
 
         SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);

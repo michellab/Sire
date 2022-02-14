@@ -101,7 +101,7 @@ enum
     NOCUTOFF = 0,
     CUTOFFNONPERIODIC = 1,
     CUTOFFPERIODIC = 2,
-    PME = 3
+    PME = 3			// only PME used here
 };
 
 /** TYPES OF CONSTRAINTS IMPLEMENTED **/
@@ -450,7 +450,7 @@ const std::string FROMTODUMMY =
     "lamFTD = max(lamftd,1-lamftd);";
 
 // standard LJ term
-const std::string intra_14_clj =
+std::string intra_14_clj =
     "withinCutoff*(Hc+Hl);"
     "withinCutoff=step(cutoffhd-r);"
     "Hc=138.935456*q_prod/r;"
@@ -459,7 +459,7 @@ const std::string intra_14_clj =
     "q_prod = lamhd*lamhd*qpend + (1-lamhd)*(1-lamhd)*qpstart + lamhd*(1-lamhd)*qmix;";
 
 
-void OpenMMPMEFEP::initialise(bool Debug = false)
+void OpenMMPMEFEP::initialise(bool Debug)
 {
     if (Debug)
     {
@@ -478,11 +478,6 @@ void OpenMMPMEFEP::initialise(bool Debug = false)
     }
 
     const MoleculeGroup solute = this->solute.read();
-
-    //if ( solute.isEmpty() ){
-    //    throw SireError::program_bug(QObject::tr("Cannot initialise OpenMMPMEFEP because solute group has not been defined"), CODELOC);
-    //}
-
 
     const MoleculeGroup solutehard = this->solutehard.read();
 
@@ -565,7 +560,11 @@ void OpenMMPMEFEP::initialise(bool Debug = false)
                                                 OpenMM::Vec3(0, 6, 0),
                                                 OpenMM::Vec3(0, 0, 6));
 
-    //The Standard Non Bonded is only defined to extract 1-2,1-3,1-4 pairs from the system
+    // NOTE: The Standard Non Bonded is *only* defined to extract
+    //       1-2, 1-3 and 1-4 pairs from the system.
+    //       All force field terms including soft-cores are "hand-coded"
+    //       with CustomNonbondedForce, CustomBondForce, etc. (see next few
+    //       hundred lines below).
     OpenMM::NonbondedForce * nonbond_openmm = new OpenMM::NonbondedForce();
 
     nonbond_openmm->setUseDispersionCorrection(false);
@@ -768,15 +767,17 @@ void OpenMMPMEFEP::initialise(bool Debug = false)
 
     OpenMM::CustomAngleForce* solute_angle_perturbation = NULL;
 
-    solute_bond_perturbation = new OpenMM::CustomBondForce("0.5*B*(r-req)^2;"
-                                                           "B=bend*lambond+(1.0-lambond)*bstart;"
-                                                           "req=rend*lambond+(1.0-lambond)*rstart");
+    solute_bond_perturbation = new OpenMM::CustomBondForce(
+       "0.5*B*(r-req)^2;"
+       "B=bend*lambond+(1.0-lambond)*bstart;"
+       "req=rend*lambond+(1.0-lambond)*rstart");
 
     solute_bond_perturbation->addGlobalParameter("lambond", Alchemical_value);
 
-    solute_angle_perturbation = new OpenMM::CustomAngleForce("0.5*A*(theta-thetaeq)^2;"
-                                                             "A=aend*lamangle+(1.0-lamangle)*astart;"
-                                                             "thetaeq=thetaend*lamangle+(1.0-lamangle)*thetastart");
+    solute_angle_perturbation = new OpenMM::CustomAngleForce(
+       "0.5*A*(theta-thetaeq)^2;"
+       "A=aend*lamangle+(1.0-lamangle)*astart;"
+       "thetaeq=thetaend*lamangle+(1.0-lamangle)*thetastart");
 
     solute_angle_perturbation->addGlobalParameter("lamangle", Alchemical_value);
 
@@ -787,9 +788,11 @@ void OpenMMPMEFEP::initialise(bool Debug = false)
 
     if (Restraint_flag == true)
     {
-        positionalRestraints_openmm = new OpenMM::CustomExternalForce("k*d2;"
-                                                                      "d2 = max(0.0, d1 - d^2);"
-                                                                      "d1 = (x-xref)^2 + (y-yref)^2  + (z-zref)^2");
+        positionalRestraints_openmm =
+	   new OpenMM::CustomExternalForce(
+	      "k*d2;"
+	      "d2 = max(0.0, d1 - d^2);"
+	      "d1 = (x-xref)^2 + (y-yref)^2  + (z-zref)^2");
         positionalRestraints_openmm->addPerParticleParameter("xref");
         positionalRestraints_openmm->addPerParticleParameter("yref");
         positionalRestraints_openmm->addPerParticleParameter("zref");
@@ -806,8 +809,9 @@ void OpenMMPMEFEP::initialise(bool Debug = false)
     /* !! CustomBondForce does not (OpenMM 6.2) apply PBC checks so code will be buggy is restraints involve one atom that diffuses
        out of the box. */
 
-    OpenMM::CustomBondForce * custom_link_bond = new OpenMM::CustomBondForce("kl*max(0,d-dl*dl);"
-                                                                             "d=(r-reql)*(r-reql)");
+    OpenMM::CustomBondForce * custom_link_bond =
+       new OpenMM::CustomBondForce("kl*max(0,d-dl*dl);"
+				   "d=(r-reql)*(r-reql)");
     custom_link_bond->addPerBondParameter("reql");
     custom_link_bond->addPerBondParameter("kl");
     custom_link_bond->addPerBondParameter("dl");
