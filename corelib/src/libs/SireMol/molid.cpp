@@ -183,9 +183,9 @@ static const RegisterMetaType<MolIdx> r_molidx;
 QDataStream &operator<<(QDataStream &ds, const MolIdx &molidx)
 {
     writeHeader(ds, r_molidx, 1);
-    
+
     ds << static_cast<const SireID::Index_T_<MolIdx>&>(molidx);
-    
+
     return ds;
 }
 
@@ -193,14 +193,14 @@ QDataStream &operator<<(QDataStream &ds, const MolIdx &molidx)
 QDataStream &operator>>(QDataStream &ds, MolIdx &molidx)
 {
     VersionID v = readHeader(ds, r_molidx);
-    
+
     if (v == 1)
     {
         ds >> static_cast<SireID::Index_T_<MolIdx>&>(molidx);
     }
     else
         throw version_error( v, "1", r_molidx, CODELOC );
-        
+
     return ds;
 }
 
@@ -215,7 +215,7 @@ MolIdx::MolIdx(const MolIdx &other) : SireID::Index_T_<MolIdx>(other), MolID(oth
 
 MolIdx::~MolIdx()
 {}
-  
+
 MolIdx MolIdx::null()
 {
     return MolIdx();
@@ -253,7 +253,7 @@ QList<MolNum> MolIdx::map(const Molecules &molecules) const
     int i = SireID::Index(*this).map( molecules.count() );
 
     QList<MolNum> molnums;
-    
+
     for (Molecules::const_iterator it = molecules.constBegin();
          it != molecules.constEnd();
          ++it)
@@ -264,9 +264,9 @@ QList<MolNum> MolIdx::map(const Molecules &molecules) const
             break;
         }
     }
-    
+
     BOOST_ASSERT( not molnums.isEmpty() );
-    
+
     return molnums;
 }
 
@@ -295,9 +295,9 @@ static const RegisterMetaType<MolNum> r_molnum;
 QDataStream &operator<<(QDataStream &ds, const MolNum &molnum)
 {
     writeHeader(ds, r_molnum, 1);
-    
+
     ds << static_cast<const SireID::Number&>(molnum);
-    
+
     return ds;
 }
 
@@ -305,14 +305,14 @@ QDataStream &operator<<(QDataStream &ds, const MolNum &molnum)
 QDataStream &operator>>(QDataStream &ds, MolNum &molnum)
 {
     VersionID v = readHeader(ds, r_molnum);
-    
+
     if (v == 1)
     {
         ds >> static_cast<SireID::Number&>(molnum);
     }
     else
         throw version_error( v, "1", r_molnum, CODELOC );
-        
+
     return ds;
 }
 
@@ -391,10 +391,10 @@ QList<MolNum> MolNum::map(const Molecules &molecules) const
         throw SireMol::missing_molecule( QObject::tr(
             "There is no molecule with number %1 in the set of molecules.")
                 .arg(this->toString()), CODELOC );
-                
+
     QList<MolNum> molnums;
     molnums.append(*this);
-    
+
     return molnums;
 }
 
@@ -423,9 +423,9 @@ static const RegisterMetaType<MolName> r_molname;
 QDataStream &operator<<(QDataStream &ds, const MolName &molname)
 {
     writeHeader(ds, r_molname, 1);
-    
+
     ds << static_cast<const SireID::Name&>(molname);
-    
+
     return ds;
 }
 
@@ -433,14 +433,14 @@ QDataStream &operator<<(QDataStream &ds, const MolName &molname)
 QDataStream &operator>>(QDataStream &ds, MolName &molname)
 {
     VersionID v = readHeader(ds, r_molname);
-    
+
     if (v == 1)
     {
         ds >> static_cast<SireID::Name&>(molname);
     }
     else
         throw version_error( v, "1", r_molname, CODELOC );
-        
+
     return ds;
 }
 
@@ -503,7 +503,7 @@ bool MolName::operator!=(const MolName &other) const
 QList<MolNum> MolName::map(const Molecules &molecules) const
 {
     QList<MolNum> molnums;
-    
+
     if (this->isCaseSensitive())
     {
         for (Molecules::const_iterator it = molecules.constBegin();
@@ -517,7 +517,7 @@ QList<MolNum> MolName::map(const Molecules &molecules) const
     else
     {
         QString lower_name = QString(*this).toLower();
-        
+
         for (Molecules::const_iterator it = molecules.constBegin();
              it != molecules.constEnd();
              ++it)
@@ -526,12 +526,12 @@ QList<MolNum> MolName::map(const Molecules &molecules) const
                 molnums.append( it.key() );
         }
     }
-    
+
     if (molnums.isEmpty())
         throw SireMol::missing_molecule( QObject::tr(
             "There is no molecule with name \"%1\" in the set of molecules.")
                 .arg(_name), CODELOC );
-                
+
     return molnums;
 }
 
@@ -621,17 +621,17 @@ bool IDAndSet<MolID>::isNull() const
 uint IDAndSet<MolID>::hash() const
 {
     uint h = 0;
-    
+
     for (QSet<MolIdentifier>::const_iterator it = ids.constBegin();
          it != ids.constEnd();
          ++it)
     {
         h += it->hash();
     }
-    
+
     return h;
 }
-            
+
 /** Return a string representatio of this ID */
 QString IDAndSet<MolID>::toString() const
 {
@@ -640,14 +640,14 @@ QString IDAndSet<MolID>::toString() const
     else
     {
         QStringList idstrings;
-        
+
         for (QSet<MolIdentifier>::const_iterator it = ids.constBegin();
              it != ids.constEnd();
              ++it)
         {
             idstrings.append( it->toString() );
         }
-    
+
         return idstrings.join( QObject::tr(" and ") );
     }
 }
@@ -670,7 +670,7 @@ IDAndSet<MolID>& IDAndSet<MolID>::operator=(const MolID &other)
 {
     ids.clear();
     this->add(other);
-    
+
     return *this;
 }
 
@@ -715,28 +715,28 @@ QList<MolNum> IDAndSet<MolID>::_pvt_map(const T &group) const
 {
     if (ids.isEmpty())
         return MolIdentifier().map(group);
-        
+
     QSet<MolNum> molnums;
-        
+
     QSet<MolIdentifier>::const_iterator it = ids.constBegin();
-    
+
     try
     {
-        molnums = it->map(group).toSet();
+        molnums = convert_to_qset(it->map(group));
     }
     catch(...)
     {
         //no match
     }
-        
+
     for ( ++it; it != ids.constEnd(); ++it )
     {
         if (molnums.isEmpty())
             break;
-    
+
         try
         {
-            molnums.intersect( it->map(group).toSet() );
+            molnums.intersect( convert_to_qset(it->map(group)) );
         }
         catch(...)
         {
@@ -749,8 +749,8 @@ QList<MolNum> IDAndSet<MolID>::_pvt_map(const T &group) const
         throw SireMol::missing_molecule( QObject::tr(
             "No molecule matches the ID \"%1\".")
                 .arg(this->toString()), CODELOC );
-                
-    return molnums.toList();
+
+    return molnums.values();
 }
 
 /** Map this ID to the list of indicies that match this ID
@@ -861,17 +861,17 @@ bool IDOrSet<MolID>::isNull() const
 uint IDOrSet<MolID>::hash() const
 {
     uint h = 0;
-    
+
     for (QSet<MolIdentifier>::const_iterator it = ids.constBegin();
          it != ids.constEnd();
          ++it)
     {
         h += it->hash();
     }
-    
+
     return h;
 }
-            
+
 /** Return a string representatio of this ID */
 QString IDOrSet<MolID>::toString() const
 {
@@ -880,14 +880,14 @@ QString IDOrSet<MolID>::toString() const
     else
     {
         QStringList idstrings;
-        
+
         for (QSet<MolIdentifier>::const_iterator it = ids.constBegin();
              it != ids.constEnd();
              ++it)
         {
             idstrings.append( it->toString() );
         }
-    
+
         return idstrings.join( QObject::tr(" and ") );
     }
 }
@@ -910,7 +910,7 @@ IDOrSet<MolID>& IDOrSet<MolID>::operator=(const MolID &other)
 {
     ids.clear();
     this->add(other);
-    
+
     return *this;
 }
 
@@ -952,16 +952,16 @@ bool IDOrSet<MolID>::operator!=(const MolID &other) const
 
 QList<MolNum> IDOrSet<MolID>::process(QList<MolNum> molnums) const
 {
-    
+
     QSet<MolNum> set;
     set.reserve(molnums.count());
-    
+
     QMutableListIterator<MolNum> it(molnums);
-    
+
     while (it.hasNext())
     {
         it.next();
-    
+
         if (set.contains(it.value()))
             it.remove();
         else
@@ -985,9 +985,9 @@ QList<MolNum> IDOrSet<MolID>::map(const Molecules &mols) const
 {
     if (ids.isEmpty())
         return MolIdentifier().map(mols);
-        
+
     QList<MolNum> molnums;
-        
+
     for (QSet<MolIdentifier>::const_iterator it = ids.constBegin();
          it != ids.constEnd();
          ++it)
@@ -1014,9 +1014,9 @@ QList<MolNum> IDOrSet<MolID>::map(const MoleculeGroup &molgroup) const
 {
     if (ids.isEmpty())
         return MolIdentifier().map(molgroup);
-        
+
     QList<MolNum> molnums;
-        
+
     for (QSet<MolIdentifier>::const_iterator it = ids.constBegin();
          it != ids.constEnd();
          ++it)
@@ -1043,9 +1043,9 @@ QList<MolNum> IDOrSet<MolID>::map(const MolGroupsBase &molgroups) const
 {
     if (ids.isEmpty())
         return MolIdentifier().map(molgroups);
-        
+
     QList<MolNum> molnums;
-        
+
     for (QSet<MolIdentifier>::const_iterator it = ids.constBegin();
          it != ids.constEnd();
          ++it)

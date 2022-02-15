@@ -99,6 +99,8 @@
 
 #include "WindowedComponent.pypp.hpp"
 
+#include "_System_free_functions.pypp.hpp"
+
 namespace bp = boost::python;
 
 #include "SireSystem_containers.h"
@@ -206,12 +208,14 @@ BOOST_PYTHON_MODULE(_System){
 
     register_VolMapMonitor_class();
 
+    register_WindowedComponent_class();
+
     register_SireSystem_properties();
 
     bp::implicitly_convertible< SireMol::MoleculeGroup, SireSystem::AssignerGroup >();
 
     bp::implicitly_convertible< SireSystem::IDAssigner, SireSystem::AssignerGroup >();
 
-    register_WindowedComponent_class();
+    register_free_functions();
 }
 

@@ -109,7 +109,7 @@ Supplementary::Supplementary(const QStringList &lines, const PropertyMap &map)
     //MoleculeParser::usesParallel() will be true
 
     // Store the name of the input file.
-    this->filename = filename;
+    this->filename = QObject::tr("MEMORY");
 
     // Set score to one. (Need a low, non-zero score)
     // This ensures that not all files will be flagged as supplementary,

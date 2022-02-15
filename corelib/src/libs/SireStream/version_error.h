@@ -51,20 +51,20 @@ public:
     version_error() : SireError::version_error()
     {}
 
-    version_error(QString err, QString place = QString::null)
+    version_error(QString err, QString place = QString())
                   : SireError::version_error(err,place)
     {}
 
     version_error(VersionID wrongid, QString supported_ids,
                   const RegisterMetaTypeBase &info,
-                  QString place=QString::null)
+                  QString place=QString())
             : SireError::version_error(QObject::tr(
                     "Incompatible version for \"%1\". Got %2, but can only support [ %3 ].")
                         .arg(info.typeName()).arg(wrongid).arg(supported_ids), place)
     {}
 
     version_error(VersionID wrongid, QString supported_ids,
-                  const char *type_name, QString place=QString::null)
+                  const char *type_name, QString place=QString())
             : SireError::version_error(QObject::tr(
                     "Incompatible version for \"%1\". Got %2, but can only support [ %3 ].")
                         .arg(type_name).arg(wrongid).arg(supported_ids), place)
@@ -79,7 +79,7 @@ public:
     static const char* typeName();
 
     const char* what() const throw();
-    
+
     void throwSelf() const
     {
         throw SireStream::version_error(*this);

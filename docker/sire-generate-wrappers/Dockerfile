@@ -1,25 +1,38 @@
-# This image is used to generate and commit Sire Python wrappers.
+FROM continuumio/miniconda3:latest
 
-FROM sire/sire-wrap-devel:latest
+RUN apt-get update && apt-get -y upgrade \
+  && apt-get install -y --no-install-recommends \
+    git \
+    wget \
+    g++ \
+    gcc \
+    nano \
+    ca-certificates \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-WORKDIR $HOME
+WORKDIR /root
 
-ARG github_token
-ARG github_email
-ENV GITHUB_TOKEN=$github_token
-ENV GITHUB_EMAIL=$github_email
+RUN conda install make clang clangdev llvmdev cmake && \
+    conda clean -a -f -y && \
+    pip install pyplusplus pygccxml fuzzywuzzy python-Levenshtein && \
+    rm -fr ~/.cache/pip /tmp*
 
-# Update the Sire source code.
-RUN git pull
+RUN git clone https://github.com/CastXML/CastXML && \
+    cd CastXML && \
+    mkdir build && \
+    cd build && \
+    cmake -DCMAKE_INSTALL_PREFIX=/opt/conda/ .. && \
+    make -j 4 && \
+    make -j 4 install && \
+    cd $HOME && \
+    rm -rf CastXML
 
-# Generate the wrappers.
-RUN $HOME/sire.app/bin/python AutoGenerate/scanheaders.py $HOME/Sire/corelib/src/libs . && \
-    $HOME/sire.app/bin/python create_all_wrappers.py
+COPY includes.tar.bz2 /opt/conda
+COPY generate_wrappers /usr/bin
+RUN chmod a+x /usr/bin/generate_wrappers
+COPY bashrc /root/.bashrc
+COPY push_wrappers /usr/bin
+RUN chmod a+x /usr/bin/push_wrappers
 
-# Commit and push any new/updated Python wrappers.
-RUN git config user.name "BioSimSpaceBot" && \
-    git config user.email "$GITHUB_EMAIL" && \
-    git commit -a -m "Updating Python wrappers." && \
-    git push --repo https://biosimspacebot:$GITHUB_TOKEN@github.com/michellab/Sire.git > /dev/null 2>&1
-
-ENTRYPOINT ["bash"]
+RUN mkdir /tmp

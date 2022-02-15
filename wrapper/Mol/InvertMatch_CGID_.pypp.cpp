@@ -162,6 +162,7 @@ void register_InvertMatch_CGID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         InvertMatch_CGID__exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireID::InvertMatch<SireMol::CGID> >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        InvertMatch_CGID__exposer.def_pickle(sire_pickle_suite< ::SireID::InvertMatch<SireMol::CGID> >());
         InvertMatch_CGID__exposer.def( "__str__", &__str__< ::SireID::InvertMatch<SireMol::CGID> > );
         InvertMatch_CGID__exposer.def( "__repr__", &__str__< ::SireID::InvertMatch<SireMol::CGID> > );
         InvertMatch_CGID__exposer.def( "__hash__", &::SireID::InvertMatch<SireMol::CGID>::hash );

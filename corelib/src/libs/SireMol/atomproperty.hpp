@@ -83,21 +83,21 @@ class SIREMOL_EXPORT AtomProp : public MolViewProperty
 public:
     AtomProp();
     AtomProp(const AtomProp &other);
-    
+
     virtual ~AtomProp();
-    
+
     AtomProp& operator=(const AtomVariantProperty &other)
     {
         this->assignFrom(other);
         return *this;
     }
-    
+
     virtual bool canConvert(const QVariant &value) const=0;
-    
+
     virtual void assignFrom(const AtomVariantProperty &values)=0;
-    
+
     virtual AtomVariantProperty toVariant() const=0;
-    
+
     virtual void assertCanConvert(const QVariant &value) const=0;
 
     virtual PropertyPtr merge(const MoleculeInfoData &molinfo) const=0;
@@ -110,20 +110,20 @@ protected:
 };
 
 /** This is a property that can hold one value for each
-    atom in the molecule. The properties are held in 
+    atom in the molecule. The properties are held in
     a packed array, with each array corresponding to a CutGroup,
-    and the order of the properties stored according 
+    and the order of the properties stored according
     to CutGroup
-    
+
     mol.setProperty( "charge", AtomCharges( [....] ) )
     mol.setProperty( "lj", AtomLJs( [ [...], [...] ] ) )
 
     atom.setProperty( "charge", 0.0 * mod_electron )
-    
+
     @author Christopher Woods
 */
 template<class T>
-class AtomProperty 
+class AtomProperty
     : public SireBase::ConcreteProperty<AtomProperty<T>, AtomProp>
 {
 
@@ -137,32 +137,32 @@ public:
 
     AtomProperty(const MoleculeInfo &molinfo);
     AtomProperty(const MoleculeInfo &molinfo, const T &default_value);
-    
+
     AtomProperty(const MoleculeView &molview);
     AtomProperty(const MoleculeView &molview, const T &default_value);
-    
+
     AtomProperty(const MoleculeInfoData &molinfo);
     AtomProperty(const MoleculeInfoData &molinfo, const T &default_value);
-    
+
     AtomProperty(const T &value);
     AtomProperty(const PackedArray2D<T> &values);
-    
+
     AtomProperty(const AtomProperty<T> &other);
-    
+
     ~AtomProperty();
-    
+
     AtomProperty<T>& operator=(const AtomProperty<T> &other);
-    
+
     static const char* typeName();
-    
+
     AtomProperty<T>* clone() const;
- 
+
     bool operator==(const AtomProperty<T> &other) const;
     bool operator!=(const AtomProperty<T> &other) const;
 
     AtomProperty<QVariant> toVariant() const;
     static AtomProperty<T> fromVariant(const AtomProperty<QVariant> &variant);
-    
+
     void assignFrom(const AtomProperty<QVariant> &values);
 
     const typename PackedArray2D<T>::Array& operator[](CGIdx cgidx) const;
@@ -191,9 +191,9 @@ public:
 
     int size() const;
     int count() const;
-    
+
     int nCutGroups() const;
-    
+
     int nAtoms() const;
     int nAtoms(CGIdx cgidx) const;
 
@@ -208,7 +208,7 @@ public:
     PropertyPtr merge(const MoleculeInfoData &molinfo) const;
     PropertyPtr divide(const QVector<AtomSelection> &beads) const;
     PropertyPtr divideByResidue(const MoleculeInfoData &molinfo) const;
-    
+
     void copyFrom(const QVector<T> &values);
     void copyFrom(const QVector<T> &values, const AtomSelection &selection);
 
@@ -234,7 +234,7 @@ bool AtomProperty<T>::canConvert(const QVariant &value) const
 
 /** Assert that the passed variant value can be converted to be
     held within this property
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -258,14 +258,14 @@ AtomProperty<T>::AtomProperty()
                 : SireBase::ConcreteProperty<AtomProperty<T>,AtomProp>()
 {}
 
-/** Create an AtomProperty that holds one value for each 
+/** Create an AtomProperty that holds one value for each
     atom described in 'molinfo'. Each atom starts with
     a default-constructed value of the property */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 AtomProperty<T>::AtomProperty(const MoleculeInfoData &molinfo)
                 : SireBase::ConcreteProperty<AtomProperty<T>,AtomProp>()
-{   
+{
     int ncg = molinfo.nCutGroups();
 
     if (ncg > 0)
@@ -273,7 +273,7 @@ AtomProperty<T>::AtomProperty(const MoleculeInfoData &molinfo)
         //create space for each CutGroup
         QVector< QVector<T> > tmp_props = QVector< QVector<T> >(ncg);
         QVector<T> *tmp_props_array = tmp_props.data();
-        
+
         for (CGIdx i(0); i<ncg; ++i)
         {
             //now create space for all of the atoms
@@ -285,7 +285,7 @@ AtomProperty<T>::AtomProperty(const MoleculeInfoData &molinfo)
     }
 }
 
-/** Create an AtomProperty that holds one value for each 
+/** Create an AtomProperty that holds one value for each
     atom described in 'molinfo'. Each atom starts with
     a default-constructed value of the property */
 template<class T>
@@ -320,7 +320,7 @@ AtomProperty<T>::AtomProperty(const MoleculeView &molview, const T &default_valu
     this->operator=( AtomProperty<T>(MoleculeInfo(molview), default_value) );
 }
 
-/** Create an AtomProperty that holds one value for each 
+/** Create an AtomProperty that holds one value for each
     atom described in 'molinfo'. Each atom starts with
     the value 'default_value' */
 template<class T>
@@ -328,7 +328,7 @@ SIRE_OUTOFLINE_TEMPLATE
 AtomProperty<T>::AtomProperty(const MoleculeInfoData &molinfo,
                               const T &default_value)
                 : SireBase::ConcreteProperty<AtomProperty<T>,AtomProp>()
-{   
+{
     int ncg = molinfo.nCutGroups();
 
     if (ncg > 0)
@@ -336,7 +336,7 @@ AtomProperty<T>::AtomProperty(const MoleculeInfoData &molinfo,
         //create space for each CutGroup
         QVector< QVector<T> > tmp_props = QVector< QVector<T> >(ncg);
         QVector<T> *tmp_props_array = tmp_props.data();
-        
+
         for (CGIdx i(0); i<ncg; ++i)
         {
             //now create space for all of the atoms
@@ -371,7 +371,7 @@ AtomProperty<T>::AtomProperty(const PackedArray2D<T> &values)
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 AtomProperty<T>::AtomProperty(const AtomProperty<T> &other)
-                : SireBase::ConcreteProperty<AtomProperty<T>,AtomProp>(), 
+                : SireBase::ConcreteProperty<AtomProperty<T>,AtomProp>(),
                   props(other.props)
 {}
 
@@ -412,7 +412,7 @@ AtomProperty<T>* AtomProperty<T>::clone() const
 {
     return new AtomProperty<T>(*this);
 }
-    
+
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 const char* AtomProperty<T>::typeName()
@@ -422,7 +422,7 @@ const char* AtomProperty<T>::typeName()
 
 /** Return the array of properties for the atoms in the CutGroup
     identified by index 'cgidx'
-    
+
     \throw SireError::invalid_index
 */
 template<class T>
@@ -447,7 +447,7 @@ AtomProperty<QVariant> AtomProperty<T>::toVariant() const
 */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-void AtomProperty<T>::assignFrom(const AtomProperty<QVariant> &variant) 
+void AtomProperty<T>::assignFrom(const AtomProperty<QVariant> &variant)
 {
     props = SireBase::PackedArray2D<T>::fromVariant(variant.array());
 }
@@ -462,7 +462,7 @@ AtomProperty<T> AtomProperty<T>::fromVariant(const AtomProperty<QVariant> &varia
 
 /** Return the array of properties for the atoms in the CutGroup
     identified by index 'cgidx'
-    
+
     \throw SireError::invalid_index
 */
 template<class T>
@@ -474,7 +474,7 @@ const typename PackedArray2D<T>::Array& AtomProperty<T>::at(CGIdx cgidx) const
 
 /** Return the array of properties for the atoms in the CutGroup
     identified by index 'cgidx'
-    
+
     \throw SireError::invalid_index
 */
 template<class T>
@@ -484,7 +484,7 @@ const typename PackedArray2D<T>::Array& AtomProperty<T>::get(CGIdx cgidx) const
     return this->operator[](cgidx);
 }
 
-/** Return the property for the atom at index 'cgatomidx' 
+/** Return the property for the atom at index 'cgatomidx'
 
     \throw SireError::invalid_index
 */
@@ -492,13 +492,13 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 const T& AtomProperty<T>::operator[](const CGAtomIdx &cgatomidx) const
 {
-    const typename PackedArray2D<T>::Array &group_props 
+    const typename PackedArray2D<T>::Array &group_props
                             = this->operator[](cgatomidx.cutGroup());
 
     return group_props.constData()[ cgatomidx.atom().map(group_props.count()) ];
 }
 
-/** Return the property for the atom at index 'cgatomidx' 
+/** Return the property for the atom at index 'cgatomidx'
 
     \throw SireError::invalid_index
 */
@@ -509,7 +509,7 @@ const T& AtomProperty<T>::at(const CGAtomIdx &cgatomidx) const
     return this->operator[](cgatomidx);
 }
 
-/** Return the property for the atom at index 'cgatomidx' 
+/** Return the property for the atom at index 'cgatomidx'
 
     \throw SireError::invalid_index
 */
@@ -532,7 +532,7 @@ AtomProperty<T>& AtomProperty<T>::set(const CGAtomIdx &cgatomidx, const T &value
     quint32 atomidx = cgatomidx.atom().map( props.at(cgidx).count() );
 
     props(cgidx, atomidx) = value;
-    
+
     return *this;
 }
 
@@ -546,7 +546,7 @@ SIRE_OUTOFLINE_TEMPLATE
 AtomProperty<T>& AtomProperty<T>::set(CGIdx cgidx, const QVector<T> &values)
 {
     props.update( cgidx.map(props.count()), values );
-    
+
     return *this;
 }
 
@@ -585,9 +585,9 @@ const typename PackedArray2D<T>::Array* AtomProperty<T>::constData() const
     return props.constData();
 }
 
-/** Return a raw pointer to the array of properties for 
+/** Return a raw pointer to the array of properties for
     the atoms in the CutGroup at index 'cgidx'
-    
+
     \throw SireError::invalid_index
 */
 template<class T>
@@ -597,9 +597,9 @@ const T* AtomProperty<T>::data(CGIdx cgidx) const
     return this->at(cgidx).constData();
 }
 
-/** Return a raw pointer to the array of properties for 
+/** Return a raw pointer to the array of properties for
     the atoms in the CutGroup at index 'cgidx'
-    
+
     \throw SireError::invalid_index
 */
 template<class T>
@@ -674,15 +674,15 @@ bool AtomProperty<T>::isCompatibleWith(const MoleculeInfoData &molinfo) const
 
     if (ncg != props.count())
         return false;
-        
+
     const typename PackedArray2D<T>::Array *props_array = props.constData();
-    
+
     for (CGIdx i(0); i<ncg; ++i)
     {
         if (molinfo.nAtoms(i) != props_array[i].count())
             return false;
     }
-    
+
     return true;
 }
 
@@ -700,15 +700,15 @@ bool AtomProperty<T>::isCompatibleWith(const MoleculeInfo &molinfo) const
 
     if (ncg != props.count())
         return false;
-        
+
     const typename PackedArray2D<T>::Array *props_array = props.constData();
-    
+
     for (CGIdx i(0); i<ncg; ++i)
     {
         if (molinfo.nAtoms(i) != props_array[i].count())
             return false;
     }
-    
+
     return true;
 }
 
@@ -720,17 +720,17 @@ QVector<T> AtomProperty<T>::toVector() const
 {
     if (this->nAtoms() == 0)
         return QVector<T>();
-    
+
     QVector<T> ret( this->nAtoms() );
-    
+
     SireBase::quickCopy<T>(ret.data(), props.constValueData(), this->nAtoms());
 
     return ret;
 }
 
-/** Convert the properties of the atoms selected in 'selection' to an 
+/** Convert the properties of the atoms selected in 'selection' to an
     array of values. The values are written in CGAtomIdx order
-    
+
     \throw SireError::incompatible_error
 */
 template<class T>
@@ -738,38 +738,38 @@ SIRE_OUTOFLINE_TEMPLATE
 QVector<T> AtomProperty<T>::toVector(const AtomSelection &selected_atoms) const
 {
     selected_atoms.assertCompatibleWith(*this);
-    
+
     if (selected_atoms.selectedAll())
         return this->toVector();
-    
+
     else if (selected_atoms.selectedNone())
         return QVector<T>();
-        
+
     else if (selected_atoms.selectedAllCutGroups())
     {
         QVector<T> vals( selected_atoms.nSelected() );
         T *value = vals.data();
-        
+
         const int ncg = selected_atoms.nCutGroups();
         const typename PackedArray2D<T>::Array *props_array = props.constData();
-        
+
         for (CGIdx i(0); i<ncg; ++i)
         {
             const T *group_props = props_array[i].constData();
-        
+
             if (selected_atoms.selectedAll(i))
             {
                 const int nats = props_array[i].nValues();
-            
+
                 SireBase::quickCopy<T>(value, group_props, nats);
-                
+
                 value += nats;
             }
             else
             {
-                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).toList();
-                qSort(idxs);
-                
+                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).values();
+                std::sort(idxs.begin(), idxs.end());
+
                 foreach (SireID::Index idx, idxs)
                 {
                     *value = group_props[idx];
@@ -777,14 +777,14 @@ QVector<T> AtomProperty<T>::toVector(const AtomSelection &selected_atoms) const
                 }
             }
         }
-        
+
         return vals;
     }
     else
     {
         QList<CGIdx> cgidxs = selected_atoms.selectedCutGroups();
-        qSort(cgidxs);
-        
+        std::sort(cgidxs.begin(), cgidxs.end());
+
         QVector<T> vals( selected_atoms.nSelected() );
         T *value = vals.data();
 
@@ -793,20 +793,20 @@ QVector<T> AtomProperty<T>::toVector(const AtomSelection &selected_atoms) const
         foreach (CGIdx i, cgidxs)
         {
             const T *group_props = props_array[i].constData();
-        
+
             if (selected_atoms.selectedAll(i))
             {
                 const int nats = props_array[i].nValues();
-            
+
                 SireBase::quickCopy<T>(value, group_props, nats);
-                
+
                 value += nats;
             }
             else
             {
-                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).toList();
-                qSort(idxs);
-                
+                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).values();
+                std::sort(idxs.begin(), idxs.end());
+
                 foreach (SireID::Index idx, idxs)
                 {
                     *value = group_props[idx];
@@ -814,7 +814,7 @@ QVector<T> AtomProperty<T>::toVector(const AtomSelection &selected_atoms) const
                 }
             }
         }
-        
+
         return vals;
     }
 }
@@ -822,7 +822,7 @@ QVector<T> AtomProperty<T>::toVector(const AtomSelection &selected_atoms) const
 /** Copy into this atom property set the values from 'values'. The values
     are copied in CGAtomIdx order, and there must be as many values
     as there are atoms
-    
+
     \throw SireError::incompatible_error
 */
 template<class T>
@@ -839,16 +839,16 @@ void AtomProperty<T>::copyFrom(const QVector<T> &values)
     for the atoms selected in 'selection'. This copies the properties
     in in CGAtomIdx order, and there must be the same number of values
     as there are selected atoms
-    
+
     \throw SireError::incompatible_error
 */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-void AtomProperty<T>::copyFrom(const QVector<T> &values, 
+void AtomProperty<T>::copyFrom(const QVector<T> &values,
                                const AtomSelection &selected_atoms)
 {
     selected_atoms.assertCompatibleWith(*this);
-    
+
     if (selected_atoms.selectedAll())
     {
         this->copyFrom(values);
@@ -858,13 +858,13 @@ void AtomProperty<T>::copyFrom(const QVector<T> &values,
     if (values.count() != selected_atoms.nSelected())
         this->throwIncorrectNumberOfSelectedAtoms(values.count(),
                                                   selected_atoms.nSelected());
-                                                  
+
     const T *values_array = values.constData();
-    
+
     if (selected_atoms.selectedAllCutGroups())
     {
         const int ncg = selected_atoms.nCutGroups();
-    
+
         for (CGIdx i(0); i<ncg; ++i)
         {
             T *group_props = props.data(i);
@@ -873,14 +873,14 @@ void AtomProperty<T>::copyFrom(const QVector<T> &values,
             {
                 const int nats = props.nValues(i);
                 SireBase::quickCopy<T>(group_props, values_array, nats);
-                
+
                 values_array += nats;
             }
             else
             {
-                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).toList();
-                qSort(idxs);
-                
+                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).values();
+                std::sort(idxs.begin(), idxs.end());
+
                 foreach (SireID::Index idx, idxs)
                 {
                     group_props[idx] = *values_array;
@@ -892,8 +892,8 @@ void AtomProperty<T>::copyFrom(const QVector<T> &values,
     else
     {
         QList<CGIdx> cgidxs = selected_atoms.selectedCutGroups();
-        qSort(cgidxs);
-        
+        std::sort(cgidxs.begin(), cgidxs.end());
+
         foreach (CGIdx i, cgidxs)
         {
             T *group_props = props.data(i);
@@ -902,14 +902,14 @@ void AtomProperty<T>::copyFrom(const QVector<T> &values,
             {
                 const int nats = props.nValues(i);
                 SireBase::quickCopy<T>(group_props, values_array, nats);
-                
+
                 values_array += nats;
             }
             else
             {
-                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).toList();
-                qSort(idxs);
-                
+                QList<SireID::Index> idxs = selected_atoms.selectedAtoms(i).values();
+                std::sort(idxs.begin(), idxs.end());
+
                 foreach (SireID::Index idx, idxs)
                 {
                     group_props[idx] = *values_array;
@@ -927,13 +927,13 @@ void AtomSelection::assertCompatibleWith(const AtomProperty<T> &prop) const
     prop.assertCompatibleWith(this->info());
 }
 
-/** Match this property to the passed selection. This returns 
+/** Match this property to the passed selection. This returns
     the property only for the CutGroups that have been selected,
     and with default values for any atoms in those CutGroups that
     have not been selected. This is useful, e.g. for the forcefield
     classes, as this allows an AtomProperty<T> to be returned
     for only the atoms that are selected as part of the forcefield.
-    
+
     \throw SireError::incompatible_error
 */
 template<class T>
@@ -947,13 +947,13 @@ AtomProperty<T> AtomProperty<T>::matchToSelection(
         return *this;
     else if (selected_atoms.selectedNone())
         return AtomProperty<T>();
-    
+
     else if (selected_atoms.selectedAllCutGroups())
     {
         PackedArray2D<T> new_props = props;
-        
+
         int ncg = props.count();
-        
+
         for (CGIdx i(0); i<ncg; ++i)
         {
             if (not selected_atoms.selectedAll(i))
@@ -962,7 +962,7 @@ AtomProperty<T> AtomProperty<T>::matchToSelection(
                 T *atom_props_array = new_props.data(i);
 
                 const QSet<Index> &atoms = selected_atoms.selectedAtoms(i);
-                
+
                 for (Index j(0); j<nats; ++j)
                 {
                     if (not atoms.contains(j))
@@ -970,20 +970,20 @@ AtomProperty<T> AtomProperty<T>::matchToSelection(
                 }
             }
         }
-        
+
         return AtomProperty<T>(new_props);
     }
     else
     {
         QList<CGIdx> cgidxs = selected_atoms.selectedCutGroups();
-        
+
         QVector< QVector<T> > new_props = QVector< QVector<T> >(cgidxs.count());
         QVector<T> *new_props_array = new_props.data();
-        
+
         const typename PackedArray2D<T>::Array *props_array = props.constData();
-        
+
         int n = 0;
-        
+
         foreach (CGIdx i, cgidxs)
         {
             if (selected_atoms.selectedAll(i))
@@ -994,28 +994,28 @@ AtomProperty<T> AtomProperty<T>::matchToSelection(
             else
             {
                 const QSet<Index> &atoms = selected_atoms.selectedAtoms(i);
-                
+
                 QVector<T> atom_props = props_array[i].toQVector();
                 int nats = atom_props.count();
-                
+
                 T *atom_props_array = atom_props.data();
-                
+
                 for (Index j(0); j<nats; ++j)
                 {
                     if (not atoms.contains(j))
                         atom_props_array[j] = T();
                 }
-                
+
                 new_props_array[n] = atom_props;
                 ++n;
             }
         }
-        
+
         return AtomProperty<T>(new_props);
     }
 }
 
-/** Merge all of the atomic properties into a single array, with 
+/** Merge all of the atomic properties into a single array, with
     the properties arranged in AtomIdx order */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -1024,20 +1024,20 @@ PropertyPtr AtomProperty<T>::merge(const MoleculeInfoData &moldata) const
     this->assertCompatibleWith(moldata);
 
     QVector<T> vals( moldata.nAtoms() );
-    
+
     T *vals_array = vals.data();
-    
+
     for (AtomIdx i(0); i<moldata.nAtoms(); ++i)
     {
         vals_array[i] = this->at( moldata.cgAtomIdx(i) );
     }
-    
+
     return AtomProperty<T>(vals);
 }
 
 /** Divide the AtomProperty into beads according to the passed atom selections,
     and returning the properties in AtomIdx order within each bead
-    
+
     \throw SireError::incompatible_error
 */
 template<class T>
@@ -1052,16 +1052,16 @@ PropertyPtr AtomProperty<T>::divide(const QVector<AtomSelection> &beads) const
 
     QVector< QVector<T> > bead_vals(nbeads);
     QVector<T> *bead_vals_array = bead_vals.data();
-    
+
     for (int i=0; i<nbeads; ++i)
     {
         const AtomSelection &bead = beads_array[i];
-        
+
         bead.assertCompatibleWith<T>(*this);
-        
+
         QVector<T> vals( bead.nSelected() );
         T *vals_array = vals.data();
-        
+
         if (bead.selectedAll())
         {
             for (AtomIdx j(0); j<bead.nSelected(); ++j)
@@ -1077,14 +1077,14 @@ PropertyPtr AtomProperty<T>::divide(const QVector<AtomSelection> &beads) const
                 ++vals_array;
             }
         }
-        
+
         bead_vals_array[i] = vals;
     }
-    
+
     return AtomProperty<T>(bead_vals);
 }
 
-/** Divide the properties into residues. This returns the values in 
+/** Divide the properties into residues. This returns the values in
     Residue/Index order
 
     \throw SireError::incompatible_error
@@ -1094,25 +1094,25 @@ SIRE_OUTOFLINE_TEMPLATE
 PropertyPtr AtomProperty<T>::divideByResidue(const MoleculeInfoData &molinfo) const
 {
     this->assertCompatibleWith(molinfo);
-    
+
     QVector< QVector<T> > res_vals( molinfo.nResidues() );
     QVector<T> *res_vals_array = res_vals.data();
-    
+
     for (ResIdx i(0); i<molinfo.nResidues(); ++i)
     {
         const int nats = molinfo.nAtoms(i);
-        
+
         QVector<T> vals(nats);
         T *vals_array = vals.data();
-        
+
         for (int j=0; j<nats; ++j)
         {
             vals_array[j] = this->at( molinfo.cgAtomIdx(molinfo.getAtom(i,j)) );
         }
-        
+
         res_vals_array[i] = vals;
     }
-    
+
     return AtomProperty<T>(res_vals);
 }
 
@@ -1128,7 +1128,7 @@ QDataStream& operator<<(QDataStream &ds, const SireMol::AtomProperty<T> &prop)
     //serialise the base class - this writes the header and version!
     ds << static_cast<const SireMol::AtomProp&>(prop);
     ds << prop.props;
-    
+
     return ds;
 }
 
@@ -1139,7 +1139,7 @@ QDataStream& operator>>(QDataStream &ds, SireMol::AtomProperty<T> &prop)
 {
     ds >> static_cast<SireMol::AtomProp&>(prop);
     ds >> prop.props;
-        
+
     return ds;
 }
 

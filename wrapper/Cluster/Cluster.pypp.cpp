@@ -21,11 +21,11 @@ namespace bp = boost::python;
 
 #include <QDebug>
 
+#include <QElapsedTimer>
+
 #include <QHash>
 
 #include <QMutex>
-
-#include <QTime>
 
 #include <QWaitCondition>
 

@@ -168,6 +168,7 @@ void register_Array2D_NMatrix__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Array2D_NMatrix__exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireBase::Array2D<SireMaths::NMatrix> >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        Array2D_NMatrix__exposer.def_pickle(sire_pickle_suite< ::SireBase::Array2D<SireMaths::NMatrix> >());
         Array2D_NMatrix__exposer.def( "__str__", &__str__< ::SireBase::Array2D<SireMaths::NMatrix> > );
         Array2D_NMatrix__exposer.def( "__repr__", &__str__< ::SireBase::Array2D<SireMaths::NMatrix> > );
     }

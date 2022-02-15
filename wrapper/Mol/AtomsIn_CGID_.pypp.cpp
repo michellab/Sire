@@ -164,6 +164,7 @@ void register_AtomsIn_CGID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AtomsIn_CGID__exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::AtomsIn<SireMol::CGID> >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        AtomsIn_CGID__exposer.def_pickle(sire_pickle_suite< ::SireMol::AtomsIn<SireMol::CGID> >());
         AtomsIn_CGID__exposer.def( "__str__", &__str__< ::SireMol::AtomsIn<SireMol::CGID> > );
         AtomsIn_CGID__exposer.def( "__repr__", &__str__< ::SireMol::AtomsIn<SireMol::CGID> > );
         AtomsIn_CGID__exposer.def( "__hash__", &::SireMol::AtomsIn<SireMol::CGID>::hash );

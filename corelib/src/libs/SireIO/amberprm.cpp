@@ -515,7 +515,7 @@ void AmberPrm::rebuildLJParameters()
     'atom_to_mol' (the molecule containing the passed atom). This uses the bonding information
     in 'bonded_atoms', which is the list of all atoms that are bonded to each atom */
 static void findBondedAtoms(int atom_idx, int mol_idx,
-                            const QHash<int, int> &bonded_atoms,
+                            const QMultiHash<int, int> &bonded_atoms,
                             QHash<int, int> &atom_to_mol,
                             QSet<int> &atoms_in_mol)
 {
@@ -548,22 +548,22 @@ static QVector<qint64> discoverMolecules(const QVector<qint64> &bonds_inc_h,
     //  IBH    : atom involved in bond "i", bond contains hydrogen
     //  JBH    : atom involved in bond "i", bond contains hydrogen
     //  ICBH   : index into parameter arrays RK and REQ
-    QHash<int, int> bonded_atoms;
+    QMultiHash<int, int> bonded_atoms;
 
     for ( int j = 0 ; j < bonds_exc_h.count() ; j = j + 3 )
     {
         int atom0 = bonds_exc_h[ j ] / 3 + 1;
         int atom1 = bonds_exc_h[ j + 1 ] / 3 + 1;
-        bonded_atoms.insertMulti(atom0, atom1);
-        bonded_atoms.insertMulti(atom1, atom0);
+        bonded_atoms.insert(atom0, atom1);
+        bonded_atoms.insert(atom1, atom0);
     }
 
     for ( int j = 0 ; j < bonds_inc_h.count() ; j = j + 3 )
     {
         int atom0 = bonds_inc_h[ j ] / 3 + 1 ;
         int atom1 = bonds_inc_h[ j + 1 ] / 3 + 1 ;
-        bonded_atoms.insertMulti(atom0, atom1);
-        bonded_atoms.insertMulti(atom1, atom0);
+        bonded_atoms.insert(atom0, atom1);
+        bonded_atoms.insert(atom1, atom0);
     }
 
     // Then recursively walk along each atom to find all the atoms that
@@ -614,22 +614,22 @@ void AmberPrm::rebuildMolNumToAtomNums()
     //  IBH    : atom involved in bond "i", bond contains hydrogen
     //  JBH    : atom involved in bond "i", bond contains hydrogen
     //  ICBH   : index into parameter arrays RK and REQ
-    QHash<int, int> bonded_atoms;
+    QMultiHash<int, int> bonded_atoms;
 
     for ( int j = 0 ; j < bonds_exc_h.count() ; j = j + 3 )
     {
         int atom0 = bonds_exc_h[ j ] / 3 + 1;
         int atom1 = bonds_exc_h[ j + 1 ] / 3 + 1;
-        bonded_atoms.insertMulti(atom0, atom1);
-        bonded_atoms.insertMulti(atom1, atom0);
+        bonded_atoms.insert(atom0, atom1);
+        bonded_atoms.insert(atom1, atom0);
     }
 
     for ( int j = 0 ; j < bonds_inc_h.count() ; j = j + 3 )
     {
         int atom0 = bonds_inc_h[ j ] / 3 + 1 ;
         int atom1 = bonds_inc_h[ j + 1 ] / 3 + 1 ;
-        bonded_atoms.insertMulti(atom0, atom1);
-        bonded_atoms.insertMulti(atom1, atom0);
+        bonded_atoms.insert(atom0, atom1);
+        bonded_atoms.insert(atom1, atom0);
     }
 
     // Then recursively walk along each atom to find all the atoms that
@@ -711,8 +711,8 @@ void AmberPrm::rebuildMolNumToAtomNums()
             //add the number of atoms in the molecule to atoms_per_mol
             atoms_per_mol.append( atoms_in_mol.count() );
 
-            auto atms = atoms_in_mol.toList();
-            qSort(atms);
+            auto atms = atoms_in_mol.values();
+            std::sort(atms.begin(), atms.end());
 
             molnum_to_atomnums.append(atms.toVector());
         }
@@ -1064,7 +1064,7 @@ void AmberPrm::parse(const PropertyMap &map)
 
     // as we are reading, look out for any FLAGs, so that we
     // can record their locations
-    QString last_flag = QString::null;
+    QString last_flag = QString();
 
     const int nlines = lines().count();
     const QString *lines_array = lines().constData();
@@ -1086,11 +1086,11 @@ void AmberPrm::parse(const PropertyMap &map)
                         flag_to_line[last_flag].second = i - flag_to_line[last_flag].first;
                     }
 
-                    last_flag = QString::null;
+                    last_flag = QString();
                 }
 
                 //find the new flag
-                QStringList words = line.split(" ", QString::SkipEmptyParts);
+                QStringList words = line.split(" ", Qt::SkipEmptyParts);
 
                 QString flag = words[1];
 
@@ -1113,7 +1113,7 @@ void AmberPrm::parse(const PropertyMap &map)
     if (not last_flag.isNull())
     {
         flag_to_line[last_flag].second = nlines - flag_to_line[last_flag].first;
-        last_flag = QString::null;
+        last_flag = QString();
     }
 
     //now process all of the flag data
@@ -1537,11 +1537,11 @@ getBondData(const AmberParams &params, int start_idx)
     //molecule is written to a file
     ::detail::Idx3 *start_it = reinterpret_cast<::detail::Idx3*>(bonds_inc_h.data());
     ::detail::Idx3 *end_it = start_it + (bonds_inc_h.count()/3);
-    qSort(start_it, end_it);
+    std::sort(start_it, end_it);
 
     start_it = reinterpret_cast<::detail::Idx3*>(bonds_exc_h.data());
     end_it = start_it + (bonds_exc_h.count()/3);
-    qSort(start_it, end_it);
+    std::sort(start_it, end_it);
 
     return std::make_tuple(bonds_inc_h, bonds_exc_h, param_to_idx);
 }
@@ -1640,11 +1640,11 @@ getAngleData(const AmberParams &params, int start_idx)
     //molecule is written to a file
     ::detail::Idx4 *start_it = reinterpret_cast<::detail::Idx4*>(angs_inc_h.data());
     ::detail::Idx4 *end_it = start_it + (angs_inc_h.count()/4);
-    qSort(start_it, end_it);
+    std::sort(start_it, end_it);
 
     start_it = reinterpret_cast<::detail::Idx4*>(angs_exc_h.data());
     end_it = start_it + (angs_exc_h.count()/4);
-    qSort(start_it, end_it);
+    std::sort(start_it, end_it);
 
     return std::make_tuple(angs_inc_h, angs_exc_h, param_to_idx);
 }
@@ -1735,7 +1735,7 @@ getDihedralData(const AmberParams &params, int start_idx)
                         CODELOC );
         }
 
-        for (const auto term : it.value().first.terms())
+        for (const auto &term : it.value().first.terms())
         {
             AmberNBDihPart nbterm(term, nb14);
 
@@ -1801,7 +1801,7 @@ getDihedralData(const AmberParams &params, int start_idx)
         //create a database of them and get their ID
         QList<qint64> idxs;
 
-        for (const auto term : it.value().first.terms())
+        for (const auto &term : it.value().first.terms())
         {
             AmberNBDihPart nbterm(term, AmberNB14(0,0));
 
@@ -1853,11 +1853,11 @@ getDihedralData(const AmberParams &params, int start_idx)
     //molecule is written to a file
     ::detail::Idx5 *start_it = reinterpret_cast<::detail::Idx5*>(dihs_inc_h.data());
     ::detail::Idx5 *end_it = start_it + (dihs_inc_h.count()/5);
-    qSort(start_it, end_it);
+    std::sort(start_it, end_it);
 
     start_it = reinterpret_cast<::detail::Idx5*>(dihs_exc_h.data());
     end_it = start_it + (dihs_exc_h.count()/5);
-    qSort(start_it, end_it);
+    std::sort(start_it, end_it);
 
     return std::make_tuple(dihs_inc_h, dihs_exc_h, param_to_idx);
 }
@@ -2689,7 +2689,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         //parameters every time this output file is written
         {
             auto all_bonds = all_bond_to_idx.keys();
-            qSort(all_bonds);
+            std::sort(all_bonds.begin(), all_bonds.end());
 
             k_data = QVector<double>(all_bonds.count());
             r0_data = QVector<double>(all_bonds.count());
@@ -2825,7 +2825,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         //parameters every time this output file is written
         {
             auto all_angs = all_ang_to_idx.keys();
-            qSort(all_angs);
+            std::sort(all_angs.begin(), all_angs.end());
 
             k_data = QVector<double>(all_angs.count());
             t0_data = QVector<double>(all_angs.count());
@@ -2964,7 +2964,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         //parameters every time this output file is written
         {
             auto all_dihs = all_dih_to_idx.keys();
-            qSort(all_dihs);
+            std::sort(all_dihs.begin(), all_dihs.end());
 
             force_data = QVector<double>(all_dihs.count());
             per_data = QVector<double>(all_dihs.count());
@@ -3047,11 +3047,11 @@ QStringList toLines(const QVector<AmberParams> &params,
         //molecule is written to a file
         ::detail::Idx5 *start_it = reinterpret_cast<::detail::Idx5*>(all_dihs_inc_h.data());
         ::detail::Idx5 *end_it = start_it + (all_dihs_inc_h.count()/5);
-        qSort(start_it, end_it);
+        std::sort(start_it, end_it);
 
         start_it = reinterpret_cast<::detail::Idx5*>(all_dihs_exc_h.data());
         end_it = start_it + (all_dihs_exc_h.count()/5);
-        qSort(start_it, end_it);
+        std::sort(start_it, end_it);
 
         auto ignore_14 = [](QVector<qint64> &dihs)
         {
@@ -3944,10 +3944,23 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
 
             const int atom_idx = atom_num - 1;  // 1-index versus 0-index
 
+            Element element;
+
+            // Infer element from mass if atomic number is negative, which
+            // can be the case for files generated by Acellara's "parameterize".
+            if (int(atomic_num_array[atom_idx]) < 0 and mass_array[atom_idx] > 0)
+            {
+                element = Element::elementWithMass(mass_array[atom_idx] * g_per_mol);
+            }
+            else
+            {
+                element = Element(int(atomic_num_array[atom_idx]));
+            }
+
             params.add( AtomNum(atom_num),
                         (charge_array[atom_idx] / AMBERCHARGECONV) * mod_electron,
                         mass_array[atom_idx] * g_per_mol,
-                        Element(int(atomic_num_array[atom_idx])),
+                        element,
                         lj_data[ amber_type_array[atom_idx] - 1 ],
                         ambertype_array[atom_idx].trimmed(),
                         born_radii_array[atom_idx] * angstrom,

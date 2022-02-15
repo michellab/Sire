@@ -1,0 +1,115 @@
+{% set name = "sire" %}
+
+package:
+  name: {{ name }}
+  version: SIRE_VERSION
+
+source:
+  git_url: https://github.com/michellab/Sire.git
+  git_tag: SIRE_BRANCH
+  patches: conda_build.patch
+
+build:
+  number: SIRE_BUILD
+  skip: true  # [win]
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - cmake
+    - git
+    - make
+    - sysroot_linux-64 2.17 # [linux]
+  host:
+    - boost
+    - gsl
+    - libcblas
+    - libcpuid
+    - libnetcdf
+    - openmm
+    - python
+    - qt
+    - tbb-devel
+    - tbb
+# Add BioSimSpace run dependencies so Sire dependencies
+# are resolved in a compatible way.
+    - configargparse
+    - fkcombu
+    - mdtraj
+    - mdanalysis
+    - nglview
+    - openff-toolkit-base
+    - parmed
+    - pydot
+    - pygtail
+    - pypdb
+    - pytest
+    - pyyaml
+    - rdkit
+    - watchdog
+  run:
+    - boost
+    - gsl
+    - libcblas
+    - libcpuid
+    - libnetcdf
+    - openmm
+    - pymbar
+    - pyqt
+    - python
+    - qt
+
+test:
+  script_env:
+    - SIRE_DONT_PHONEHOME
+    - SIRE_SILENT_PHONEHOME
+  requires:
+    - git
+    - nose
+  imports:
+    - Sire
+    - Sire.Analysis
+    - Sire.Base
+    - Sire.CAS
+    - Sire.Cluster
+    - Sire.Error
+    - Sire.FF
+    - Sire.ID
+    - Sire.IO
+    - Sire.Maths
+    - Sire.MM
+    - Sire.Mol
+    - Sire.Move
+    - Sire.Qt
+    - Sire.Squire
+    - Sire.Stream
+    - Sire.System
+    - Sire.Units
+    - Sire.Vol
+  commands:
+    - sire_test
+
+about:
+  home: https://github.com/michellab/Sire
+  license: GPL-2.0-or-later
+  license_file: '{{ environ["RECIPE_DIR"] }}/LICENSE'
+  summary: "An advanced, multiscale, molecular-simulation framework."
+  dev_url: https://github.com/michellab/Sire
+  doc_url: https://siremol.org
+  description: |
+                Sire is a free, open source, multiscale molecular-simulation framework,
+                written to allow computational modellers to quickly prototype and develop
+                new algorithms for molecular simulation and molecular design. Sire is written
+                as a collection of libraries, each of which contains self-contained and
+                robust C++/Python building blocks. These building blocks are vectorised
+                and thread-aware and can be streamed (saved/loaded) to and from a
+                version-controlled and tagged binary format, thereby allowing them to be
+                combined together easily to build custom multi-processor molecular
+                simulation applications.
+
+extra:
+  recipe-maintainers:
+    - chryswoods
+    - jmichel80
+    - lohedges

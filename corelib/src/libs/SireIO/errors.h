@@ -47,16 +47,16 @@ class SIREIO_EXPORT sireio_error : public SireError::exception
 public:
     sireio_error() : exception()
     {}
-    
-    sireio_error(QString err, QString place = QString::null) : exception(err,place)
+
+    sireio_error(QString err, QString place = QString()) : exception(err,place)
     {}
-    
+
     sireio_error(const sireio_error &other) : exception(other)
     {}
-    
+
     ~sireio_error() throw()
     {}
-    
+
     static const char* typeName()
     {
         return "SireIO::sireio_error";
@@ -73,14 +73,14 @@ class SIREIO_EXPORT parse_error : public sireio_error
 public:
     parse_error() : sireio_error()
     {}
-    
-    parse_error(QString err, QString place = QString::null) 
+
+    parse_error(QString err, QString place = QString())
               : sireio_error(err,place)
     {}
-    
+
     parse_error(const parse_error &other) : sireio_error(other)
     {}
-    
+
     ~parse_error() throw()
     {}
 
@@ -90,7 +90,7 @@ public:
     {
         return parse_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw parse_error(*this);

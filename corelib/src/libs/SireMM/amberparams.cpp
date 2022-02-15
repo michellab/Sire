@@ -118,7 +118,7 @@ AmberBond::AmberBond(const Expression &f, const Symbol &R) : _k(0), _r0(0)
     double kr0_2 = 0.0;
     double kr0 = 0.0;
 
-    for (const auto factor : factors)
+    for (const auto &factor : factors)
     {
         if (factor.symbol() == R)
         {
@@ -321,7 +321,7 @@ AmberAngle::AmberAngle(const Expression &f, const Symbol &theta) : _k(0), _theta
     double ktheta0_2 = 0.0;
     double ktheta0 = 0.0;
 
-    for (const auto factor : factors)
+    for (const auto &factor : factors)
     {
         if (factor.symbol() == theta)
         {

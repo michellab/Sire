@@ -318,7 +318,7 @@ private:
 
     void findMolecules();
 
-    void findBondedAtoms(int atom_idx, int mol_idx, const QHash<int, int> &bonded_atoms,
+    void findBondedAtoms(int atom_idx, int mol_idx, const QMultiHash<int, int> &bonded_atoms,
         QHash<int, int> &atom_to_mol, QSet<qint64> &atoms_in_mol) const;
 
     QList<CharmmParam> findParameters(const QVector<QString> &search_atoms,

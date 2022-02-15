@@ -360,7 +360,7 @@ void ChainID::processMatches(QList<ChainIdx> &matches, const MolInfo&) const
             "There are no chains that match the ID \"%1\" in the passed molecule.")
                 .arg(this->toString()), CODELOC );
 
-    qSort(matches);
+    std::sort(matches.begin(), matches.end());
 }
 
 /** Map this ChainID to the chains in the passed molecule view
@@ -371,28 +371,28 @@ void ChainID::processMatches(QList<ChainIdx> &matches, const MolInfo&) const
 QList<ChainIdx> ChainID::map(const MoleculeView &molview, const PropertyMap&) const
 {
     QList<ChainIdx> chainidxs = this->map( molview.data().info() );
-    
+
     if (molview.selectedAll())
         return chainidxs;
-    else 
+    else
     {
         QMutableListIterator<ChainIdx> it(chainidxs);
-        
+
         const AtomSelection selected_chains = molview.selection();
-        
+
         while (it.hasNext())
         {
             it.next();
-            
+
             if (not selected_chains.selected(it.value()))
                 it.remove();
         }
-        
+
         if (chainidxs.isEmpty())
             throw SireMol::missing_chain( QObject::tr(
                     "No chains matching %1 can be found in the passed molecule.")
                         .arg(this->toString()), CODELOC );
-                        
+
         return chainidxs;
     }
 }
@@ -406,14 +406,14 @@ QList<ChainIdx> ChainID::map(const MoleculeView &molview, const PropertyMap&) co
 Chain ChainID::selectFrom(const MoleculeView &molview, const PropertyMap &map) const
 {
     QList<ChainIdx> chainidxs = this->map(molview, map);
-    
+
     if (chainidxs.count() > 1)
         throw SireMol::duplicate_chain( QObject::tr(
                 "More than one chain matches the ID %1 (chains %2).")
                     .arg(this->toString()).arg(Sire::toString(chainidxs)),
                         CODELOC );
-                        
-    return Chain(molview.data(), chainidxs.at(0)); 
+
+    return Chain(molview.data(), chainidxs.at(0));
 }
 
 /** Select all the chains from the passed view that match this ID
@@ -422,24 +422,24 @@ Chain ChainID::selectFrom(const MoleculeView &molview, const PropertyMap &map) c
     \throw SireError::invalid_index
     \throw SireMol::duplicate_chain
 */
-Selector<Chain> ChainID::selectAllFrom(const MoleculeView &molview, 
+Selector<Chain> ChainID::selectAllFrom(const MoleculeView &molview,
                                      const PropertyMap &map) const
 {
     QList<ChainIdx> chainidxs = this->map(molview, map);
-                        
-    return Selector<Chain>(molview.data(), chainidxs); 
+
+    return Selector<Chain>(molview.data(), chainidxs);
 }
 
 /** Return all of the chains from the 'molecules' that match
     this ID
-    
+
     \throw SireMol::missing_chain
 */
 QHash< MolNum,Selector<Chain> >
 ChainID::selectAllFrom(const Molecules &molecules, const PropertyMap &map) const
 {
     QHash< MolNum,Selector<Chain> > selected_chains;
-    
+
     //loop over all molecules...
     for (Molecules::const_iterator it = molecules.constBegin();
          it != molecules.constEnd();
@@ -453,7 +453,7 @@ ChainID::selectAllFrom(const Molecules &molecules, const PropertyMap &map) const
         catch(...)
         {}
     }
-    
+
     if (selected_chains.isEmpty())
         throw SireMol::missing_chain( QObject::tr(
             "There was no chain matching the ID \"%1\" in "
@@ -465,23 +465,23 @@ ChainID::selectAllFrom(const Molecules &molecules, const PropertyMap &map) const
 
 /** Return the chain from the molecules 'molecules' that matches
     this ID
-    
+
     \throw SireMol::missing_chain
     \throw SireMol::duplicate_chain
 */
 Chain ChainID::selectFrom(const Molecules &molecules, const PropertyMap &map) const
 {
     QHash< MolNum,Selector<Chain> > mols = this->selectAllFrom(molecules, map);
-    
+
     if (mols.count() > 1)
         throw SireMol::duplicate_chain( QObject::tr(
             "More than one molecule contains an chain that "
             "matches this ID (%1). These molecules have numbers %2.")
                 .arg(this->toString()).arg(Sire::toString(mols.keys())),
                     CODELOC );
-                    
+
     const Selector<Chain> &chains = *(mols.constBegin());
-    
+
     if (chains.count() > 1)
         throw SireMol::duplicate_chain( QObject::tr(
             "While only one molecule (MolNum == %1) "
@@ -489,17 +489,17 @@ Chain ChainID::selectFrom(const Molecules &molecules, const PropertyMap &map) co
             "more than one chain that matches.")
                 .arg(chains.data().number()).arg(this->toString()),
                     CODELOC );
-                    
+
     return chains(0);
 }
 
 /** Return the chain from the molecule group 'molgroup' that matches
     this ID
-    
+
     \throw SireMol::missing_chain
     \throw SireMol::duplicate_chain
 */
-Chain ChainID::selectFrom(const MoleculeGroup &molgroup, 
+Chain ChainID::selectFrom(const MoleculeGroup &molgroup,
                         const PropertyMap &map) const
 {
     return this->selectFrom(molgroup.molecules(), map);
@@ -507,7 +507,7 @@ Chain ChainID::selectFrom(const MoleculeGroup &molgroup,
 
 /** Return the chains from the molecule group 'molgroup' that match
     this ID
-    
+
     \throw SireMol::missing_chain
 */
 QHash< MolNum,Selector<Chain> >
@@ -517,9 +517,9 @@ ChainID::selectAllFrom(const MoleculeGroup &molgroup,
     return this->selectAllFrom(molgroup.molecules(), map);
 }
 
-/** Return the chain from the molecule groups 'molgroups' that matches 
+/** Return the chain from the molecule groups 'molgroups' that matches
     this ID
-    
+
     \throw SireMol::missing_chain
     \throw SireMol::duplicate_chain
 */
@@ -530,8 +530,8 @@ Chain ChainID::selectFrom(const MolGroupsBase &molgroups,
 }
 
 /** Return the set of chains that match this ID in the molecule groups
-    set 'molgroups' 
-    
+    set 'molgroups'
+
     \throw SireMol::missing_chain
 */
 QHash< MolNum,Selector<Chain> >

@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/trigarray2d.h"
+
 #include "SireError/errors.h"
 
 #include "SireMaths/boys.h"
@@ -117,6 +119,7 @@ void register_SS_GTO_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         SS_GTO_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::Squire::SS_GTO >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        SS_GTO_exposer.def_pickle(sire_pickle_suite< ::Squire::SS_GTO >());
         SS_GTO_exposer.def( "__str__", &__str__< ::Squire::SS_GTO > );
         SS_GTO_exposer.def( "__repr__", &__str__< ::Squire::SS_GTO > );
     }

@@ -17,7 +17,7 @@
 
 // Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
 // Copyright (C) 2000 - 2003, Richard J. Wagner
-// All rights reserved.                          
+// All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
@@ -30,8 +30,8 @@
 //      notice, this list of conditions and the following disclaimer in the
 //      documentation and/or other materials provided with the distribution.
 //
-//   3. The names of its contributors may not be used to endorse or promote 
-//      products derived from this software without specific prior written 
+//   3. The names of its contributors may not be used to endorse or promote
+//      products derived from this software without specific prior written
 //      permission.
 //
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -72,13 +72,13 @@ class MTRand {
 // Data
 public:
 	typedef unsigned long uint32;  // unsigned integer type, at least 32 bits
-	
+
 	enum { N = 624 };       // length of state vector
 	enum { SAVE = N + 1 };  // length of array for save()
 
 protected:
 	enum { M = 397 };  // period parameter
-	
+
 	uint32 state[N];   // internal state
 	uint32 *pNext;     // next value to get from state
 	int left;          // number of values left before reload needed
@@ -91,11 +91,11 @@ public:
 	MTRand();  // auto-initialize with /dev/urandom or time() and clock()
 
     MTRand(const MTRand &other); // copy constructor
-	
+
 	// Do NOT use for CRYPTOGRAPHY without securely hashing several returned
 	// values together, otherwise the generator state can be learned after
 	// reading 624 consecutive values.
-	
+
 	// Access to 32-bit random numbers
 	double rand();                          // real number in [0,1]
 	double rand( const double& n );         // real number in [0,n]
@@ -106,18 +106,18 @@ public:
 	uint32 randInt();                       // integer in [0,2^32-1]
 	uint32 randInt( const uint32& n );      // integer in [0,n] for n < 2^32
 	double operator()() { return rand(); }  // same as rand()
-	
+
 	// Access to 53-bit random numbers (capacity of IEEE double precision)
 	double rand53();  // real number in [0,1)
-	
+
 	// Access to nonuniform random number distributions
 	double randNorm( const double& mean = 0.0, const double& variance = 0.0 );
-	
+
 	// Re-seeding functions with same behavior as initializers
 	void seed( const uint32 oneSeed );
 	void seed( uint32 *const bigSeed, const uint32 seedLength = N );
 	void seed();
-	
+
 	// Saving and loading generator state
 	void save( uint32* saveArray ) const;  // to array of size SAVE
 	void load( uint32 *const loadArray );  // from such array
@@ -152,9 +152,9 @@ SIRE_ALWAYS_INLINE MTRand::MTRand(const MTRand &other)
     {
         state[i] = other.state[i];
     }
-    
+
     left = other.left;
-    pNext = &state[N-left];    
+    pNext = &state[N-left];
 }
 
 SIRE_ALWAYS_INLINE MTRand::MTRand( uint32 *const bigSeed, const uint32 seedLength )
@@ -200,11 +200,11 @@ SIRE_ALWAYS_INLINE MTRand::uint32 MTRand::randInt()
 {
 	// Pull a 32-bit integer from the generator state
 	// Every other access function simply transforms the numbers extracted here
-	
+
 	if( left == 0 ) reload();
 	--left;
-		
-	register uint32 s1;
+
+	uint32 s1;
 	s1 = *pNext++;
 	s1 ^= (s1 >> 11);
 	s1 ^= (s1 <<  7) & 0x9d2c5680UL;
@@ -222,7 +222,7 @@ SIRE_ALWAYS_INLINE MTRand::uint32 MTRand::randInt( const uint32& n )
 	used |= used >> 4;
 	used |= used >> 8;
 	used |= used >> 16;
-	
+
 	// Draw numbers until one is found in [0,n]
 	uint32 i;
 	do
@@ -249,9 +249,9 @@ SIRE_ALWAYS_INLINE void MTRand::seed( uint32 *const bigSeed, const uint32 seedLe
 	// in each element are discarded.
 	// Just call seed() if you want to get array from /dev/urandom
 	initialize(19650218UL);
-	register int i = 1;
-	register uint32 j = 0;
-	register int k = ( N > seedLength ? N : seedLength );
+	int i = 1;
+	uint32 j = 0;
+	int k = ( N > seedLength ? N : seedLength );
 	for( ; k; --k )
 	{
 		state[i] =
@@ -280,21 +280,21 @@ SIRE_ALWAYS_INLINE void MTRand::seed()
 {
 	// Seed the generator with an array from /dev/urandom if available
 	// Otherwise use a hash of time() and clock() values
-	
+
 	// First try getting an array from /dev/urandom
 	FILE* urandom = fopen( "/dev/urandom", "rb" );
 	if( urandom )
 	{
 		uint32 bigSeed[N];
-		register uint32 *s = bigSeed;
-		register int i = N;
-		register bool success = true;
+		uint32 *s = bigSeed;
+		int i = N;
+		bool success = true;
 		while( success && i-- )
 			success = fread( s++, sizeof(uint32), 1, urandom );
 		fclose(urandom);
 		if( success ) { seed( bigSeed, N );  return; }
 	}
-	
+
 	// Was not successful, so use time() and clock() instead
 	seed( hash( time(NULL), clock() ) );
 }
@@ -306,9 +306,9 @@ SIRE_ALWAYS_INLINE void MTRand::initialize( const uint32 seed )
 	// See Knuth TAOCP Vol 2, 3rd Ed, p.106 for multiplier.
 	// In previous versions, most significant bits (MSBs) of the seed affect
 	// only MSBs of the state array.  Modified 9 Jan 2002 by Makoto Matsumoto.
-	register uint32 *s = state;
-	register uint32 *r = state;
-	register int i = 1;
+	uint32 *s = state;
+	uint32 *r = state;
+	int i = 1;
 	*s++ = seed & 0xffffffffUL;
 	for( ; i < N; ++i )
 	{
@@ -322,8 +322,8 @@ SIRE_ALWAYS_INLINE void MTRand::reload()
 {
 	// Generate N new values in state
 	// Made clearer and faster by Matthew Bellew (matthew.bellew@home.com)
-	register uint32 *p = state;
-	register int i;
+	uint32 *p = state;
+	int i;
 	for( i = N - M; i--; ++p )
 		*p = twist( p[M], p[0], p[1] );
 	for( i = M; --i; ++p )
@@ -362,9 +362,9 @@ SIRE_ALWAYS_INLINE MTRand::uint32 MTRand::hash( time_t t, clock_t c )
 
 SIRE_ALWAYS_INLINE void MTRand::save( uint32* saveArray ) const
 {
-	register uint32 *sa = saveArray;
-	register const uint32 *s = state;
-	register int i = N;
+	uint32 *sa = saveArray;
+	const uint32 *s = state;
+	int i = N;
 	for( ; i--; *sa++ = *s++ ) {}
 	*sa = left;
 }
@@ -372,9 +372,9 @@ SIRE_ALWAYS_INLINE void MTRand::save( uint32* saveArray ) const
 
 SIRE_ALWAYS_INLINE void MTRand::load( uint32 *const loadArray )
 {
-	register uint32 *s = state;
-	register uint32 *la = loadArray;
-	register int i = N;
+	uint32 *s = state;
+	uint32 *la = loadArray;
+	int i = N;
 	for( ; i--; *s++ = *la++ ) {}
 	left = *la;
 	pNext = &state[N-left];
@@ -383,8 +383,8 @@ SIRE_ALWAYS_INLINE void MTRand::load( uint32 *const loadArray )
 
 SIRE_ALWAYS_INLINE std::ostream& operator<<( std::ostream& os, const MTRand& mtrand )
 {
-	register const MTRand::uint32 *s = mtrand.state;
-	register int i = mtrand.N;
+	const MTRand::uint32 *s = mtrand.state;
+	int i = mtrand.N;
 	for( ; i--; os << *s++ << "\t" ) {}
 	return os << mtrand.left;
 }
@@ -392,8 +392,8 @@ SIRE_ALWAYS_INLINE std::ostream& operator<<( std::ostream& os, const MTRand& mtr
 
 SIRE_ALWAYS_INLINE std::istream& operator>>( std::istream& is, MTRand& mtrand )
 {
-	register MTRand::uint32 *s = mtrand.state;
-	register int i = mtrand.N;
+	MTRand::uint32 *s = mtrand.state;
+	int i = mtrand.N;
 	for( ; i--; is >> *s++ ) {}
 	is >> mtrand.left;
 	mtrand.pNext = &mtrand.state[mtrand.N-mtrand.left];

@@ -56,16 +56,16 @@ QStringList getBackTrace()
     //now get the backtrace of the code at this point
     //(we can only do this if we have 'execinfo.h'
 #ifdef _HAVE_EXECINFO_H_
-    
+
     //create a void* array to hold the function addresses. We will only go at most 128 deep
     void *func_addresses[128];
     int nfuncs = backtrace(func_addresses, 128);
 
     //now get the function names associated with these symbols. This should work for elf
-    //binaries, though additional linker options may need to have been called 
+    //binaries, though additional linker options may need to have been called
     //(e.g. -rdynamic for GNU ld. See the glibc documentation for 'backtrace')
     char **symbols = backtrace_symbols(func_addresses, nfuncs);
-    
+
     //save all of the function names onto the QStringList....
     //(note that none of this will work if we have run out of memory)
     QStringList ret;
@@ -112,12 +112,12 @@ QStringList getBackTrace()
             QString offset = regexp.cap(3);
             //get the address
             QString address = regexp.cap(4);
-        
+
             //now try and demangle the symbol
             int stat;
-            char *demangled = 
+            char *demangled =
                     abi::__cxa_demangle(qPrintable(symbol),0,0,&stat);
-        
+
             if (demangled)
             {
                 symbol = demangled;
@@ -135,8 +135,8 @@ QStringList getBackTrace()
         {
             //split line into words
             QStringList words = QString(symbols[i])
-                                    .split(" ", QString::SkipEmptyParts);
-            
+                                    .split(" ", Qt::SkipEmptyParts);
+
             if (words.count() == 6 and words[4] == "+")
             {
                 //this is probably an OS X line...
@@ -149,12 +149,12 @@ QStringList getBackTrace()
                 QString offset = words[5];
                 //get the address
                 QString address = words[2];
-        
+
                 //now try and demangle the symbol
                 int stat;
-                char *demangled = 
+                char *demangled =
                         abi::__cxa_demangle(qPrintable(symbol),0,0,&stat);
-        
+
                 if (demangled)
                 {
                     symbol = demangled;
@@ -173,7 +173,7 @@ QStringList getBackTrace()
                 ret.append(symbols[i]);
         }
     }
-    
+
     //we now need to release the memory of the symbols array. Since it was allocated using
     //malloc, we must release it using 'free'
     free(symbols);

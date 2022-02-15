@@ -361,6 +361,7 @@ void register_SQM_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         SQM_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::Squire::SQM >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        SQM_exposer.def_pickle(sire_pickle_suite< ::Squire::SQM >());
         SQM_exposer.def( "__str__", &__str__< ::Squire::SQM > );
         SQM_exposer.def( "__repr__", &__str__< ::Squire::SQM > );
     }

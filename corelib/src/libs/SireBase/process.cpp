@@ -30,7 +30,7 @@
 
 #include <QMutex>
 #include <QList>
-#include <QTime>
+#include <QElapsedTimer>
 
 #include <boost/weak_ptr.hpp>
 
@@ -61,7 +61,7 @@ static QVector<wchar_t> toWCharVec(const QString &str)
 }
 #endif
 #include <errno.h>      // CONDITIONAL_INCLUDE
-#include <string.h>     // CONDITIONAL_INCLUDE
+#include <string>     // CONDITIONAL_INCLUDE
 
 #include <sys/stat.h>   // CONDITIONAL_INCLUDE
 #include <sys/types.h>  // CONDITIONAL_INCLUDE
@@ -133,7 +133,7 @@ public:
 
     /** The HANDLE of the job to which the process is assigned */
     HANDLE job_handle;
-    
+
     /** Kill the whole process group */
     void kill_process_group()
     {
@@ -431,10 +431,10 @@ bool Process::wait(int ms)
     if (d.get() == 0)
         return true;
 
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
-    #if QT_VERSION >= 0x040300
+    #if QT_VERSION >= QT_VERSION_CHECK(4, 3, 0)
     if (d->datamutex.tryLock(ms))
     #else
     if (d->datamutex.tryLock())

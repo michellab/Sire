@@ -100,6 +100,7 @@ void register_WorkTest_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         WorkTest_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireCluster::WorkTest >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        WorkTest_exposer.def_pickle(sire_pickle_suite< ::SireCluster::WorkTest >());
         WorkTest_exposer.def( "__str__", &pvt_get_name);
         WorkTest_exposer.def( "__repr__", &pvt_get_name);
     }

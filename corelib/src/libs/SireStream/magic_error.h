@@ -51,20 +51,20 @@ public:
     magic_error() : exception()
     {}
 
-    magic_error(QString err, QString place = QString::null)
+    magic_error(QString err, QString place = QString())
                   : exception(err,place)
     {}
 
     magic_error(MagicID wrongid,
                 const RegisterMetaTypeBase &info,
-                QString place=QString::null)
+                QString place=QString())
             : exception(QObject::tr(
                     "Magic error for \"%1\". Got %2, but expected %3.")
                         .arg(info.typeName()).arg(wrongid).arg(info.magicID()), place)
     {}
 
     magic_error(MagicID wrongid, MagicID rightid, const char *type_name,
-                QString place=QString::null)
+                QString place=QString())
             : exception(QObject::tr(
                     "Magic error for \"%1\". Got %2, but expected %3.")
                         .arg(type_name).arg(wrongid).arg(rightid), place)
@@ -82,7 +82,7 @@ public:
     {
         return magic_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw magic_error(*this);

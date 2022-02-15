@@ -61,26 +61,10 @@ Finally, push the new commit and updated tag:
 Step 5
 ======
 
-Once the build has finished you can log into the `Oracle Cloud <https://cloud.oracle.com/home>`__
-and create pre-authenticated URLs for the new release binaries. (These files
-are currently located in the ``software_releases`` compartment of the ``Object Storage``
-menu.) When generating a download URL make sure to choose a sensible expiry
-date. Copy the URL to your clipboard and then paste it into a new file called
-``redirect_sire_YYYY_MAJOR_MINOR_OS.run`` in the ``largefiles/sire_releases``
-directory of the `siremol.org <https://github.com/chryswoods/siremol.org/tree/master/largefiles/sire_releases>`_
-GitHub repository. Following this you'll also need to update the
-`pages/binaries.md <https://github.com/chryswoods/siremol.org/blob/master/pages/binaries.md>`_
-file with download links for the new release. Make sure to add a MD5 hashes for
-the files and to move the download links for the previous release to the
-``Older Versions`` section at the bottom of the page.
-
-Step 6
-======
-
 Create a `GitHub release <https://github.com/michellab/Sire/releases>`_. When
 drafting the release, simply choose the tag that you have created.
 
-Step 7
+Step 6
 ======
 
 Create a `pull request <https://github.com/michellab/Sire/pulls>`_ to merge

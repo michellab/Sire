@@ -179,7 +179,7 @@ const Quaternion SireMaths::operator*(const Vector &p, const Quaternion &q)
 Matrix Quaternion::toMatrix() const
 {
     /* Thanks to http://www.flipcode.com/documents/matrfaq.html#Q54
-    
+
         |       2     2                                |
         | 1 - 2Y  - 2Z    2XY - 2ZW      2XZ + 2YW     |
         |                                              |
@@ -191,7 +191,7 @@ Matrix Quaternion::toMatrix() const
         |                                              |
     */
 
-    return 
+    return
      Matrix( 1.0-(2.0*sc[1]*sc[1])-(2.0*sc[2]*sc[2]), (2.0*sc[0]*sc[1])-(2.0*sc[3]*sc[2]),
              (2.0*sc[0]*sc[2])+(2.0*sc[1]*sc[3]),
              (2.0*sc[0]*sc[1])+(2.0*sc[3]*sc[2]), 1.0-(2.0*sc[0]*sc[0])-(2.0*sc[2]*sc[2]),
@@ -247,11 +247,11 @@ QVector<Vector> Quaternion::rotate(const QVector<Vector> &points) const
     const double swz = sc[2]*sc[3];
 
     QVector<Vector> ret(points);
-    
+
     for (int i=0; i<ret.count(); ++i)
     {
         Vector &p = ret[i];
-        
+
         p = Vector( 2.0*( ( 0.5 - sy2 - sz2 ) *p.x()
                          + ( sxy - swz )      *p.y()
                          + ( sxz + swy )      *p.z()),
@@ -284,7 +284,7 @@ void Quaternion::fromMatrix(const Matrix &m)
                 "%1\n%2").arg(m.determinant()).arg(m.toString()), CODELOC );
 
   /* Thanks to http://www.flipcode.com/documents/matrfaq.html#Q54
-  
+
   A rotation may be converted back to a quaternion through the use of
   the following algorithm:
 
@@ -391,8 +391,7 @@ void Quaternion::fromMatrix(const Matrix &m)
 /** Return a string representation of this Quaternion */
 QString Quaternion::toString() const
 {
-    QString s;
-    return s.sprintf("(%8.3f, %8.3f, %8.3f, %8.3f)",sc[0],sc[1],sc[2],sc[3]);
+    return QString("%1, %2, %3, %4").arg(sc[0], sc[1], sc[2], sc[3]);
 }
 
 QRegExp quatregexp("([0-9.-]+),\\s{0,}([0-9.-]+),\\s{0,}([0-9.-]+),\\s{0,}([0-9.-]+)");
@@ -466,13 +465,13 @@ double Quaternion::w() const
 
 bool Quaternion::operator==(const Quaternion &p1) const
 {
-    return p1.sc[0] == sc[0] and p1.sc[1] == sc[1] and p1.sc[2] == sc[2] 
+    return p1.sc[0] == sc[0] and p1.sc[1] == sc[1] and p1.sc[2] == sc[2]
                   and p1.sc[3] == sc[3];
 }
 
 bool Quaternion::operator!=(const Quaternion &p1) const
 {
-    return p1.sc[0] != sc[0] or p1.sc[1] != sc[1] or p1.sc[2] != sc[2] 
+    return p1.sc[0] != sc[0] or p1.sc[1] != sc[1] or p1.sc[2] != sc[2]
                   or p1.sc[3] != sc[3];
 }
 

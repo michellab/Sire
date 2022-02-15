@@ -9,6 +9,7 @@
 #include "closemols.h"
 #include "constraint.h"
 #include "constraints.h"
+#include "create_test_molecule.h"
 #include "dihedralcomponent.h"
 #include "distancecomponent.h"
 #include "energymonitor.h"

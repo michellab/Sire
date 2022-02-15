@@ -1731,7 +1731,7 @@ QList<GromacsDihedral> GromacsDihedral::construct(const Expression &dihedral, co
 
         bool multiterm = amberdihedral.terms().count() > 1;
 
-        for (const auto amberdih : amberdihedral.terms())
+        for (const auto &amberdih : amberdihedral.terms())
         {
             double kb = amberdih.k();
             double per = amberdih.periodicity();

@@ -131,7 +131,7 @@ using namespace SireIO;
         {
             throw SireError::io_error( QObject::tr(
                 "Unrecognised NetCDF type - %1").arg(typ), CODELOC );
-            
+
             return 0;
         }
     }
@@ -158,7 +158,7 @@ using namespace SireIO;
                     "Unable to convert the QVariant type %1 to an NC_TYPE")
                         .arg(name), CODELOC );
         }
-        
+
         return 0;
     }
 #else
@@ -201,14 +201,14 @@ static QVector<QVariant> extract_values(const QByteArray &memdata, int nc_type, 
                     .arg(nc_type_to_string(nc_type)), CODELOC );
     }
     #endif
-    
+
     QVector<QVariant> vals;
-    
+
     if (nvals > 0)
     {
     #ifdef SIRE_USE_NETCDF
         vals = QVector<QVariant>(nvals);
-        
+
         const char *data = memdata.constData();
 
         switch(nc_type)
@@ -281,7 +281,7 @@ static QVector<QVariant> extract_values(const QByteArray &memdata, int nc_type, 
 
     #endif
     }
-    
+
     return vals;
 }
 
@@ -297,9 +297,9 @@ static QVariant extract_value(const QByteArray &memdata, int nc_type)
     if (nvals > 0)
     {
     #ifdef SIRE_USE_NETCDF
-        
+
         const char *data = memdata.constData();
-        
+
         switch(nc_type)
         {
             case NC_BYTE:
@@ -315,7 +315,7 @@ static QVariant extract_value(const QByteArray &memdata, int nc_type)
                     {
                         vals.append( qint32( *(reinterpret_cast<const short*>(data) + i) ) );
                     }
-                    
+
                     return QVariant(vals);
                 }
                 else
@@ -331,7 +331,7 @@ static QVariant extract_value(const QByteArray &memdata, int nc_type)
                         vals.append( quint32( *(
                                 reinterpret_cast<const unsigned short*>(data) + i) ) );
                     }
-                    
+
                     return QVariant(vals);
                 }
                 else
@@ -346,7 +346,7 @@ static QVariant extract_value(const QByteArray &memdata, int nc_type)
                     {
                         vals.append( quint32( *(reinterpret_cast<const qint32*>(data) + i) ) );
                     }
-                    
+
                     return QVariant(vals);
                 }
                 else
@@ -361,7 +361,7 @@ static QVariant extract_value(const QByteArray &memdata, int nc_type)
                     {
                         vals.append( quint32( *(reinterpret_cast<const quint32*>(data) + i) ) );
                     }
-                    
+
                     return QVariant(vals);
                 }
                 else
@@ -376,7 +376,7 @@ static QVariant extract_value(const QByteArray &memdata, int nc_type)
                     {
                         vals.append( qint64( *(reinterpret_cast<const qint64*>(data) + i) ) );
                     }
-                    
+
                     return QVariant(vals);
                 }
                 else
@@ -391,7 +391,7 @@ static QVariant extract_value(const QByteArray &memdata, int nc_type)
                     {
                         vals.append( quint64( *(reinterpret_cast<const quint64*>(data) + i) ) );
                     }
-                    
+
                     return QVariant(vals);
                 }
                 else
@@ -406,7 +406,7 @@ static QVariant extract_value(const QByteArray &memdata, int nc_type)
                     {
                         vals.append( float( *(reinterpret_cast<const float*>(data) + i) ) );
                     }
-                    
+
                     return QVariant(vals);
                 }
                 else
@@ -421,7 +421,7 @@ static QVariant extract_value(const QByteArray &memdata, int nc_type)
                     {
                         vals.append( double( *(reinterpret_cast<const double*>(data) + i) ) );
                     }
-                    
+
                     return QVariant(vals);
                 }
                 else
@@ -432,10 +432,10 @@ static QVariant extract_value(const QByteArray &memdata, int nc_type)
             default:
                 return QVariant();
         }
-    
+
     #endif
     }
-    
+
     return QVariant();
 }
 
@@ -457,7 +457,7 @@ NetCDFDataInfo::NetCDFDataInfo(int idn, QString name, int tp,
     att_names = att_ns;
     att_types = att_ts;
     att_values = att_vs;
-    
+
     if (idnum < 0 or xtyp < 0)
     {
         throw SireError::invalid_arg( QObject::tr(
@@ -465,7 +465,7 @@ NetCDFDataInfo::NetCDFDataInfo(int idn, QString name, int tp,
                 "or negative xtype (%2).")
                     .arg(idnum).arg(xtyp), CODELOC );
     }
-    
+
     if (dim_names.count() != dim_sizes.count())
     {
         throw SireError::invalid_arg( QObject::tr(
@@ -473,7 +473,7 @@ NetCDFDataInfo::NetCDFDataInfo(int idn, QString name, int tp,
                 "dimension sizes (%2)").arg(dim_names.count())
                                        .arg(dim_sizes.count()), CODELOC );
     }
-    
+
     if (att_names.count() != att_types.count() or att_names.count() != att_values.count())
     {
         throw SireError::invalid_arg( QObject::tr(
@@ -533,7 +533,7 @@ QString NetCDFDataInfo::toString() const
                                                     .arg(nc_type_to_string(att_types[i]))
                                                     .arg(att_values[i].toString()) );
             }
-            
+
             return QObject::tr("NetCDFDataInfo( %1 = %2[%3](), attributes:{ %4 } )")
                     .arg(idnum).arg(nme).arg(this->type()).arg(atts.join(", "));
         }
@@ -596,12 +596,12 @@ int NetCDFDataInfo::typeSize() const
 int NetCDFDataInfo::nValues() const
 {
     int base = 1;
-    
-    for (const auto sz : dim_sizes)
+
+    for (const auto &sz : dim_sizes)
     {
         base *= sz;
     }
-    
+
     return base;
 }
 
@@ -666,17 +666,17 @@ QString NetCDFDataInfo::attributeType(const QString &name) const
 QHash<QString,QVariant> NetCDFDataInfo::attributes() const
 {
     QHash<QString,QVariant> atts;
-    
+
     if (not att_names.isEmpty())
     {
         atts.reserve(att_names.count());
-        
+
         for (int i=0; i<att_names.count(); ++i)
         {
             atts.insert(att_names[i], att_values[i]);
         }
     }
-    
+
     return atts;
 }
 
@@ -684,19 +684,19 @@ QHash<QString,QVariant> NetCDFDataInfo::attributes() const
 QHash<QString,QString> NetCDFDataInfo::attributeTypes() const
 {
     QHash<QString,QString> atts;
- 
+
     #ifdef SIRE_USE_NETCDF
     if (not att_names.isEmpty())
     {
         atts.reserve(att_names.count());
-        
+
         for (int i=0; i<att_names.count(); ++i)
         {
             atts.insert(att_names[i], nc_type_to_string(att_types[i]));
         }
     }
     #endif
-    
+
     return atts;
 }
 
@@ -733,9 +733,9 @@ QStringList NetCDFData::get_attribute_names(const QHash<QString,QVariant> &attri
 {
     if (attributes.isEmpty())
         return QStringList();
-    
+
     QStringList names = attributes.keys();
-    qSort(names);
+    std::sort(names.begin(), names.end());
     return names;
 }
 
@@ -744,14 +744,14 @@ QList<int> NetCDFData::get_attribute_types(const QHash<QString,QVariant> &attrib
 {
     if (attributes.isEmpty())
         return QList<int>();
-    
+
     QList<int> typs;
-    
-    for (const auto name : get_attribute_names(attributes))
+
+    for (const auto &name : get_attribute_names(attributes))
     {
         typs.append( qvariant_to_nc_type( attributes.value(name) ) );
     }
-    
+
     return typs;
 }
 
@@ -760,14 +760,14 @@ QList<QVariant> NetCDFData::get_attribute_values(const QHash<QString,QVariant> &
 {
     if (attributes.isEmpty())
         return QList<QVariant>();
-    
+
     QList<QVariant> vals;
-    
-    for (const auto name : get_attribute_names(attributes))
+
+    for (const auto &name : get_attribute_names(attributes))
     {
         vals.append( attributes.value(name) );
     }
-    
+
     return vals;
 }
 
@@ -783,11 +783,11 @@ QVector<float> NetCDFData::toFloatArray() const
     #ifdef SIRE_USE_NETCDF
     const int nvals = this->nValues();
     QVector<float> values( nvals );
-    
+
     if (xtyp == NC_FLOAT)
     {
         const char *data = memdata.constData();
-    
+
         for (int i=0; i<nvals; ++i)
         {
             values[i] = *(reinterpret_cast<const float*>(data) + i);
@@ -796,7 +796,7 @@ QVector<float> NetCDFData::toFloatArray() const
     else if (xtyp == NC_DOUBLE)
     {
         const char *data = memdata.constData();
-    
+
         for (int i=0; i<nvals; ++i)
         {
             values[i] = *(reinterpret_cast<const double*>(data) + i);
@@ -806,13 +806,13 @@ QVector<float> NetCDFData::toFloatArray() const
     {
         //need to go via the QVariant list
         const auto vars = this->toArray();
-        
+
         for (int i=0; i<this->nValues(); ++i)
         {
             values[i] = vars[i].toFloat();
         }
     }
-    
+
     return values;
     #else
     return QVector<float>();
@@ -825,11 +825,11 @@ QVector<double> NetCDFData::toDoubleArray() const
     #ifdef SIRE_USE_NETCDF
     const int nvals = this->nValues();
     QVector<double> values( nvals );
-    
+
     if (xtyp == NC_FLOAT)
     {
         const char *data = memdata.constData();
-    
+
         for (int i=0; i<nvals; ++i)
         {
             values[i] = *(reinterpret_cast<const float*>(data) + i);
@@ -838,7 +838,7 @@ QVector<double> NetCDFData::toDoubleArray() const
     else if (xtyp == NC_DOUBLE)
     {
         const char *data = memdata.constData();
-    
+
         for (int i=0; i<nvals; ++i)
         {
             values[i] = *(reinterpret_cast<const double*>(data) + i);
@@ -848,13 +848,13 @@ QVector<double> NetCDFData::toDoubleArray() const
     {
         //need to go via the QVariant list
         const auto vars = this->toArray();
-        
+
         for (int i=0; i<this->nValues(); ++i)
         {
             values[i] = vars[i].toDouble();
         }
     }
-    
+
     return values;
     #else
     return QVector<double>();
@@ -869,7 +869,7 @@ static void assert_no_netcdf_error(int errnum)
 {
     #ifdef SIRE_USE_NETCDF
         QString err;
-    
+
         switch(errnum)
         {
             case NC_NOERR:
@@ -979,7 +979,7 @@ static void assert_no_netcdf_error(int errnum)
             default:
                 err = QObject::tr("NetCDF experienced an unknown error! %1").arg(errnum);
         }
-    
+
         throw SireError::io_error( QObject::tr(
             "NetCDF experienced an error: %1 (%2)").arg(err).arg(errnum), CODELOC );
     #else
@@ -998,12 +998,12 @@ int NetCDFFile::call_netcdf_function(std::function<int()> func, int ignored_erro
 {
     QMutexLocker lkr( const_cast<QMutex*>(&mutex) );
     int err = func();
-    
+
     if (err != ignored_error)
     {
         assert_no_netcdf_error(err);
     }
-    
+
     return err;
 }
 
@@ -1031,7 +1031,7 @@ NetCDFFile::NetCDFFile(const QString &filename, bool overwrite_file,
 {
     #ifdef SIRE_USE_NETCDF
         QFileInfo file(filename);
-    
+
         if (file.exists())
         {
             if (not overwrite_file)
@@ -1041,7 +1041,7 @@ NetCDFFile::NetCDFFile(const QString &filename, bool overwrite_file,
                         "the software is not allowed to overwrite an existing file!")
                             .arg(filename), CODELOC );
             }
-            
+
             if (file.isDir())
             {
                 throw SireError::io_error( QObject::tr(
@@ -1049,7 +1049,7 @@ NetCDFFile::NetCDFFile(const QString &filename, bool overwrite_file,
                         "is a directory!")
                             .arg(filename), CODELOC );
             }
-            
+
             if (not file.isWritable())
             {
                 throw SireError::io_error( QObject::tr(
@@ -1058,29 +1058,29 @@ NetCDFFile::NetCDFFile(const QString &filename, bool overwrite_file,
                             .arg(filename), CODELOC );
             }
         }
-    
+
         int flags = NC_WRITE;
-    
+
         if (not overwrite_file)
         {
             flags |= NC_NOCLOBBER;
         }
-    
+
         if (use_64bit_offset)
         {
             flags |= NC_64BIT_OFFSET;
         }
-    
+
         if (use_netcdf4)
         {
             flags |= NC_NETCDF4;
         }
-    
+
         QByteArray c_filename = file.absoluteFilePath().toUtf8();
         call_netcdf_function(
             [&](){ return nc_create(c_filename.constData(), flags, &hndl); }
                             );
-    
+
     #else
         throw SireError::unsupported( QObject::tr(
                 "Software is missing NetCDF support, so cannot write the NetCDF file '%1'")
@@ -1105,17 +1105,17 @@ NetCDFFile::~NetCDFFile()
 QHash<QString,NetCDFDataInfo> NetCDFFile::getVariablesInfo() const
 {
     QHash<QString,NetCDFDataInfo> vars;
-    
+
     #ifdef SIRE_USE_NETCDF
     if (hndl != -1)
     {
         char *tmp_name = new char[NC_MAX_NAME+1];
         int *dim_ids = new int[NC_MAX_VAR_DIMS];
-    
+
         try
         {
             int i=0;
-            
+
             while (true)
             {
                 nc_type var_type;
@@ -1139,15 +1139,15 @@ QHash<QString,NetCDFDataInfo> NetCDFFile::getVariablesInfo() const
                     size_t dim_len;
                     call_netcdf_function([&](){
                         return nc_inq_dim(hndl, dim_ids[j], tmp_name, &dim_len);});
-                    
+
                     dim_names.append( QString::fromUtf8(tmp_name) );
                     dim_sizes.append(dim_len);
                 }
-                
+
                 QStringList att_names;
                 QList<int> att_types;
                 QList<QVariant> att_values;
-                
+
                 if (natts > 0)
                 {
                     for (int j=0; j<natts; ++j)
@@ -1155,7 +1155,7 @@ QHash<QString,NetCDFDataInfo> NetCDFFile::getVariablesInfo() const
                         //first read in the name of the attribute
                         call_netcdf_function( [&]()
                                 { return nc_inq_attname(hndl, i, j, tmp_name); } );
-                        
+
                         QString attname = QString::fromUtf8(tmp_name);
 
                         //now read in metadata about the attribute
@@ -1163,10 +1163,10 @@ QHash<QString,NetCDFDataInfo> NetCDFFile::getVariablesInfo() const
                         size_t len;
                         call_netcdf_function( [&]()
                             { return nc_inq_att(hndl, i, tmp_name, &xtype, &len); } );
-                        
+
                         //now read in the value of the attribute
                         QByteArray memdata;
-                        
+
                         if (xtype == NC_CHAR)
                         {
                             memdata.fill('\0', len+1);
@@ -1175,12 +1175,12 @@ QHash<QString,NetCDFDataInfo> NetCDFFile::getVariablesInfo() const
                         {
                             memdata.resize( nc_type_to_size(xtype) * len );
                         }
-                        
+
                         call_netcdf_function( [&]()
                             {return nc_get_att(hndl, i, tmp_name, memdata.data()); } );
-                        
+
                         QVariant val = extract_value(memdata, xtype);
-                        
+
                         att_names.append(attname);
                         att_types.append( int(xtype) );
                         att_values.append(val);
@@ -1190,7 +1190,7 @@ QHash<QString,NetCDFDataInfo> NetCDFFile::getVariablesInfo() const
                 vars.insert( var_name, NetCDFDataInfo(i,var_name,var_type,
                                                       dim_names,dim_sizes,
                                                       att_names,att_types,att_values) );
-                
+
                 i += 1;
             }
         }
@@ -1205,7 +1205,7 @@ QHash<QString,NetCDFDataInfo> NetCDFFile::getVariablesInfo() const
         delete[] dim_ids;
     }
     #endif
-    
+
     return vars;
 }
 
@@ -1216,32 +1216,32 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
     if (hndl != -1)
     {
     #ifdef SIRE_USE_NETCDF
-        
+
         //always write the data in alphabetical order, so that
         //we get the same file every time
         QStringList variables = variable_data.keys();
-        qSort(variables);
-        
+        std::sort(variables.begin(), variables.end());
+
         //map of dimension names to IDs
         QHash<QString,int> dimension_ids;
-        
+
         //map of variable info names to IDs
         QHash<QString,int> var_ids;
-        
+
         //first we have to set up the NetCDF file, so get all of the
         //dimensions, variables and attributes
         {
             QHash<QString,int> dimensions;
 
-            for (const auto variable : variables)
+            for (const auto &variable : variables)
             {
                 const auto vardata = variable_data[variable];
-                
+
                 const auto dims = vardata.dimensions();
                 const auto dim_sizes = vardata.dimensionSizes();
-                
+
                 SireBase::assert_equal( dims.count(), dim_sizes.count(), CODELOC );
-                
+
                 for (int i=0; i<dims.count(); ++i)
                 {
                     if (not dimensions.contains(dims[i]))
@@ -1254,18 +1254,18 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
                     }
                 }
             }
-        
+
             //now write all of the dimensions to the file, saving the ID of each dimension
             QStringList dims = dimensions.keys();
-            qSort(dims);
-            
+            std::sort(dims.begin(), dims.end());
+
             dimension_ids.reserve(dims.count());
-            
-            for (const auto dim : dims)
+
+            for (const auto &dim : dims)
             {
                 int idp;
                 const QByteArray c_dim = dim.toUtf8();
-                
+
                 if (c_dim.length() > NC_MAX_NAME)
                 {
                     throw SireError::io_error( QObject::tr(
@@ -1274,36 +1274,36 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
                                 .arg(dim).arg(c_dim.length())
                                 .arg(NC_MAX_NAME), CODELOC );
                 }
-                
+
                 call_netcdf_function( [&](){ return nc_def_dim(hndl, c_dim.constData(),
                                                                dimensions[dim], &idp); } );
-                
+
                 dimension_ids.insert(dim, idp);
             }
         }
-        
+
         //now go through and save info about all of the variables
         var_ids.reserve(variables.count());
-        
-        for (const auto variable : variables)
+
+        for (const auto &variable : variables)
         {
             const auto vardata = variable_data[variable];
-            
+
             //get the IDs of all of the dimensions
             const auto dims = vardata.dimensions();
-            
+
             QVarLengthArray<int,8> dim_ids;
-            
-            for (const auto dim : dims)
+
+            for (const auto &dim : dims)
             {
                 dim_ids.append( dimension_ids[dim] );
             }
-            
+
             int ndims = dims.count();
 
             int idp;
             const QByteArray c_var = variable.toUtf8();
-            
+
             if (c_var.length() > NC_MAX_NAME)
             {
                 throw SireError::io_error( QObject::tr(
@@ -1312,64 +1312,64 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
                             .arg(variable).arg(c_var.length())
                             .arg(NC_MAX_NAME), CODELOC );
             }
-            
+
             //get the type of the data
             nc_type xtyp = string_to_nc_type( vardata.type() );
-            
+
             //now write the variable info to the netcdf file, saving the variable ID
             call_netcdf_function( [&](){ return nc_def_var(hndl, c_var.constData(),
                                                            xtyp, ndims, dim_ids.constData(),
                                                            &idp); } );
-            
+
             var_ids.insert(variable, idp);
         }
-        
+
         //now write all of the global attributes
         QStringList global_attributes = globals.keys();
-        qSort(global_attributes);
-        
-        for (const auto global_attribute : global_attributes)
+        std::sort(global_attributes.begin(), global_attributes.end());
+
+        for (const auto &global_attribute : global_attributes)
         {
             QByteArray c_name = global_attribute.toUtf8();
             QByteArray c_att = globals.value(global_attribute).toUtf8();
-            
+
             //save the attribute to the file
             call_netcdf_function( [&]()
                 { return nc_put_att_text(hndl, NC_GLOBAL, c_name.constData(),
                                          c_att.count(), c_att.constData()); } );
         }
-        
+
         //now write all of the attributes
-        for (const auto variable : variables)
+        for (const auto &variable : variables)
         {
             const auto vardata = variable_data[variable];
-            
+
             const int id = var_ids.value(variable, -1);
-            
+
             if (id < 0)
             {
                 throw SireError::program_bug( QObject::tr(
                         "How can the variable '%1' have a negative ID? %2")
                             .arg(variable).arg(id), CODELOC );
             }
-            
+
             //find all of the attributes of this variable
-            for (const auto attribute : vardata.attributeNames())
+            for (const auto &attribute : vardata.attributeNames())
             {
                 const auto att_value = vardata.attribute(attribute);
                 const auto att_type = vardata.attributeType(attribute);
-                
+
                 const QByteArray c_attname = attribute.toUtf8();
-                
+
                 nc_type xtyp = string_to_nc_type(att_type);
-                
+
                 switch(xtyp)
                 {
                     case NC_CHAR:
                     {
                         const QByteArray c_att = att_value.toString().toUtf8();
                         size_t len = c_att.count();
-                        
+
                         call_netcdf_function( [&](){
                             return nc_put_att(hndl, id, c_attname.constData(),
                                               xtyp, len, c_att.constData()); } );
@@ -1379,7 +1379,7 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
                     {
                         double val = att_value.toDouble();
                         size_t len = 1;
-                        
+
                         call_netcdf_function( [&](){
                             return nc_put_att(hndl, id, c_attname.constData(),
                                               xtyp, len, &val); } );
@@ -1389,7 +1389,7 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
                     {
                         float val = att_value.toFloat();
                         size_t len = 1;
-                        
+
                         call_netcdf_function( [&](){
                             return nc_put_att(hndl, id, c_attname.constData(),
                                               xtyp, len, &val); } );
@@ -1403,25 +1403,25 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
                 }
             }
         }
-        
+
         //we have finished writing the metadata about the file
         call_netcdf_function( [&](){ return nc_enddef(hndl); } );
-        
+
         //now that the metadata has been written, we can now write the actual data
-        for (const auto variable : variables)
+        for (const auto &variable : variables)
         {
             const auto vardata = variable_data[variable];
-            
+
             const int id = var_ids.value(variable, -1);
 
             call_netcdf_function( [&](){
                 return nc_put_var( hndl, id, vardata.memdata.constData() ); } );
         }
-        
+
         //finished writing the file :-)
         call_netcdf_function( [&](){ return nc_close(hndl); } );
         hndl = -1;
-        
+
     #endif
     }
 }
@@ -1430,18 +1430,18 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
 QHash<QString,int> NetCDFFile::getDimensions() const
 {
     QHash<QString,int> dims;
-    
+
     #ifdef SIRE_USE_NETCDF
     if (hndl != -1)
     {
         int ndims;
         call_netcdf_function( [&](){ return nc_inq_ndims(hndl, &ndims); } );
-        
+
         if (ndims <= 0)
             return dims;
-        
+
         char *dim_name = new char[NC_MAX_NAME+1];
-        
+
         try
         {
             for (int i=0; i<ndims; ++i)
@@ -1456,12 +1456,12 @@ QHash<QString,int> NetCDFFile::getDimensions() const
             delete[] dim_name;
             throw;
         }
-        
+
         delete[] dim_name;
-    
+
     }
     #endif
-    
+
     return dims;
 }
 
@@ -1477,7 +1477,7 @@ QString NetCDFFile::write(const QString &filename,
 {
     #ifdef SIRE_USE_NETCDF
         QFileInfo file(filename);
-    
+
         if (file.exists())
         {
             if (not overwrite_file)
@@ -1487,7 +1487,7 @@ QString NetCDFFile::write(const QString &filename,
                         "the software is not allowed to overwrite an existing file!")
                             .arg(filename), CODELOC );
             }
-            
+
             if (file.isDir())
             {
                 throw SireError::io_error( QObject::tr(
@@ -1495,7 +1495,7 @@ QString NetCDFFile::write(const QString &filename,
                         "is a directory!")
                             .arg(filename), CODELOC );
             }
-            
+
             if (not file.isWritable())
             {
                 throw SireError::io_error( QObject::tr(
@@ -1509,7 +1509,7 @@ QString NetCDFFile::write(const QString &filename,
 
         NetCDFFile netcdf(absfile, overwrite_file, use_64bit_offset, use_netcdf4);
         netcdf.writeData(globals, data);
-    
+
         return absfile;
     #else
         throw SireError::unsupported( QObject::tr(
@@ -1524,29 +1524,29 @@ QString NetCDFFile::getStringAttribute(const QString &name) const
     if (hndl != -1)
     {
     #ifdef SIRE_USE_NETCDF
-    
+
         QByteArray c_name = name.toUtf8();
-    
+
         //get the size of the attribute
         size_t vsize;
-        
+
         call_netcdf_function( [&]()
             { return nc_inq_attlen(hndl, NC_GLOBAL, c_name.constData(), &vsize); } );
-        
+
         //get the attribute
         char *c_value = new char[vsize+1];
-        
+
         try
         {
             call_netcdf_function( [&]()
                 { return nc_get_att_text(hndl, NC_GLOBAL, c_name.constData(), c_value); } );
 
             c_value[vsize] = '\0';
-        
+
             QString value = QString::fromUtf8(c_value);
 
             delete[] c_value;
-        
+
             return value;
         }
         catch(...)
@@ -1556,11 +1556,11 @@ QString NetCDFFile::getStringAttribute(const QString &name) const
         }
     #endif
     }
-    
+
     throw SireError::invalid_key( QObject::tr(
             "There is not string attribute called '%1' in the NetCDF file '%2'")
                 .arg(name).arg(fname), CODELOC );
-    
+
     return QString();
 }
 
@@ -1568,9 +1568,9 @@ QString NetCDFFile::getStringAttribute(const QString &name) const
 NetCDFData NetCDFFile::read(const NetCDFDataInfo &variable) const
 {
     NetCDFData data(variable);
-    
+
     int data_size = data.dataSize();
-    
+
     if (hndl != -1 and data_size > 0)
     {
     #ifdef SIRE_USE_NETCDF
@@ -1580,6 +1580,6 @@ NetCDFData NetCDFFile::read(const NetCDFDataInfo &variable) const
         data.setData(memdata);
     #endif
     }
-    
+
     return data;
 }

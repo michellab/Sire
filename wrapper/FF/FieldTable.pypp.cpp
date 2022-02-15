@@ -399,6 +399,7 @@ void register_FieldTable_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         FieldTable_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireFF::FieldTable >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        FieldTable_exposer.def_pickle(sire_pickle_suite< ::SireFF::FieldTable >());
         FieldTable_exposer.def( "__str__", &pvt_get_name);
         FieldTable_exposer.def( "__repr__", &pvt_get_name);
     }

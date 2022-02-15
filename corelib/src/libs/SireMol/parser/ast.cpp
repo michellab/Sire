@@ -223,7 +223,7 @@ namespace AST
     {
         QStringList lines;
 
-        for (const auto value : values)
+        for (const auto &value : values)
         {
             lines.append( value.toString() );
         }
@@ -234,7 +234,7 @@ namespace AST
     QString IDName::toString() const
     {
         QStringList lines;
-        for (const auto value : values)
+        for (const auto &value : values)
         {
             lines.append( value.toString() );
         }
@@ -262,7 +262,7 @@ namespace AST
     QString IDNumber::toString() const
     {
         QStringList lines;
-        for (const auto value : values)
+        for (const auto &value : values)
         {
             lines.append( boost::apply_visitor( qstring_visitor(), value ) );
         }
@@ -277,7 +277,7 @@ namespace AST
     {
         QStringList lines;
 
-        for (const auto element : values)
+        for (const auto &element : values)
         {
             lines.append( element.symbol() );
         }
@@ -364,7 +364,7 @@ namespace AST
         {
             QList<SelectEnginePtr> engines;
 
-            for (const auto value : values)
+            for (const auto &value : values)
             {
                 engines.append( value.toEngine() );
             }

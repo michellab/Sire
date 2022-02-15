@@ -61,10 +61,10 @@ using namespace SireUnits;
 // Implementation of ZmatrixLine
 //
 
-ZmatrixLineTemplate::ZmatrixLineTemplate(const QString &atom , const QString &bond , const QString &angle , 
-			 const QString &dihedral , const double &bondDelta , const double &angleDelta , 
-			 const double &dihedralDelta ) 
-  : atom (atom), bond(bond), angle(angle), dihedral(dihedral), 
+ZmatrixLineTemplate::ZmatrixLineTemplate(const QString &atom , const QString &bond , const QString &angle ,
+			 const QString &dihedral , const double &bondDelta , const double &angleDelta ,
+			 const double &dihedralDelta )
+  : atom (atom), bond(bond), angle(angle), dihedral(dihedral),
     bondDelta(bondDelta), angleDelta(angleDelta), dihedralDelta(dihedralDelta)
 {}
 
@@ -142,7 +142,7 @@ QString ZmatrixLineTemplate::toString()
 // Implementation of ZmatrixTemplate
 //
 
-ZmatrixTemplate::ZmatrixTemplate(const QString &name) 
+ZmatrixTemplate::ZmatrixTemplate(const QString &name)
   : name(name)
 {}
 
@@ -198,7 +198,7 @@ void ZmatrixTemplate::setAngleDelta( const QString &atom, const QString &bond, c
     this->zmatrix[atom].setAngleDelta(angleDelta);
 }
 
-void ZmatrixTemplate::setDihedralDelta( const QString &atom, const QString &bond, 
+void ZmatrixTemplate::setDihedralDelta( const QString &atom, const QString &bond,
 					const QString &angle, const QString &dihedral, double dihedralDelta )
 {
   if ( not this->zmatrix.contains(atom) )
@@ -217,7 +217,7 @@ void ZmatrixTemplate::setDihedralDelta( const QString &atom, const QString &bond
 // Implementation of ZmatrixResidue
 //
 
-ZmatrixResidue::ZmatrixResidue(const QString &name) 
+ZmatrixResidue::ZmatrixResidue(const QString &name)
   : ZmatrixTemplate(name)
 {}
 
@@ -282,7 +282,7 @@ void ZmatrixResidue::addBBatom( const QString &bbAtom)
 
 static int processVersionLine( QString& line)
 {
-  QStringList words = line.split(" ", QString::SkipEmptyParts);
+  QStringList words = line.split(" ", Qt::SkipEmptyParts);
   bool ok;
   int version = words[1].toInt(&ok);
   if (not ok)
@@ -300,11 +300,11 @@ static const RegisterMetaType<ZmatrixMaker> r_zmatrixmaker(NO_ROOT);
 QDataStream &operator<<(QDataStream &ds, const ZmatrixMaker &zmatrixmaker)
 {
     writeHeader(ds, r_zmatrixmaker, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     //    sds << zmatrixmaker.residues;
-    
+
     return ds;
 }
 
@@ -312,16 +312,16 @@ QDataStream &operator<<(QDataStream &ds, const ZmatrixMaker &zmatrixmaker)
 QDataStream &operator>>(QDataStream &ds, ZmatrixMaker &zmatrixmaker)
 {
     VersionID v = readHeader(ds, r_zmatrixmaker);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
 	//        sds >> zmatrixmaker.residues;
     }
     else
         throw version_error( v, "1", r_zmatrixmaker, CODELOC );
-        
+
     return ds;
 }
 
@@ -347,9 +347,9 @@ void ZmatrixMaker::loadTemplates( const QString &templatefile)
     {
       throw SireError::file_error(template_f, CODELOC);
     }
-  
+
   QTextStream ts(&template_f);
-  
+
   QString line = ts.readLine();
   /** The first line contains the version*/
   int version = ::processVersionLine(line);
@@ -371,9 +371,9 @@ void ZmatrixMaker::loadTemplates( const QString &templatefile)
   while ( not line.isNull() )
     {
       line = ts.readLine();
-      QStringList words = line.split(" ", QString::SkipEmptyParts);
+      QStringList words = line.split(" ", Qt::SkipEmptyParts);
       //qDebug() << line;
-      
+
       if ( line.startsWith("chain") )
 	{
 	  ZmatrixTemplate chain = ZmatrixTemplate ( words[1] );
@@ -443,7 +443,7 @@ void ZmatrixMaker::loadTemplates( const QString &templatefile)
 	  /** The appropriate chain can be defined for a variety of environments */
 	  residues[current].addChain( words[1], chains[words[2]] );
 	  residues[current].addChain( words[3], chains[words[4]] );
-	  residues[current].addChain( words[5], chains[words[6]] );	  
+	  residues[current].addChain( words[5], chains[words[6]] );
 	  residues[current].addChain( words[7], chains[words[8]] );
        	}
     }
@@ -488,23 +488,23 @@ Molecule ZmatrixMaker::applyTemplates( Molecule &molecule)
                                                .asA<Connectivity>();
 
     MolEditor editmol = molecule.edit();
-    
+
     ZMatrix zmatrix( editmol );
 
     int nres = editmol.nResidues();
-    
+
     for (ResIdx i(0) ; i < nres ; ++i)
     {
         Residue residue = editmol.residue(i);
 
         /** Look up a residue among the templates*/
         QString resname = residue.name().value();
- 
+
         if ( not this->residues.contains(resname) )
             throw SireError::invalid_key(resname, CODELOC);
 
         ZmatrixResidue restemplate = this->residues[resname];
-      
+
         /** Is this residue 'first', 'middle' or 'last' or 'single' ?*/
         bool firstbondedwithother = false;
         bool lastbondedwithother = false;
@@ -530,7 +530,7 @@ Molecule ZmatrixMaker::applyTemplates( Molecule &molecule)
 
         Atom firstatom = residue.select( AtomName ( bbatoms.first() ) );
         bonds = connectivity.getBonds(firstatom.index());
-        
+
         foreach (BondID bond, bonds)
         {
             if ( not residue.contains( bond.atom1() ) )
@@ -541,7 +541,7 @@ Molecule ZmatrixMaker::applyTemplates( Molecule &molecule)
         }
 
         QString position;
-        
+
         if ( firstbondedwithother and lastbondedwithother)
             position = "middle";
         else if ( firstbondedwithother )
@@ -553,7 +553,7 @@ Molecule ZmatrixMaker::applyTemplates( Molecule &molecule)
 
         //qDebug() << " The position of this residue is " << position ;
 
-        /** Need to decide where to store info about rigid body 
+        /** Need to decide where to store info about rigid body
             translation and rotations of this residue*/
 
         Selector<Atom> atoms = residue.atoms();
@@ -561,7 +561,7 @@ Molecule ZmatrixMaker::applyTemplates( Molecule &molecule)
         for (int i=0; i<atoms.count(); ++i)
        	{
             Atom atom = atoms(i);
-            
+
             //qDebug() << " Finding template for atom " << atom.name().toString();
 
             /** Backbone atoms do not have a zmatrix line */
@@ -570,7 +570,7 @@ Molecule ZmatrixMaker::applyTemplates( Molecule &molecule)
 
             /** Try to find matching atom in the residue zmatrix */
             ZmatrixLineTemplate linetemplate;
-            
+
             try
             {
                 linetemplate = restemplate.getZmatrixLineTemplate( atom.name().value() );
@@ -589,19 +589,19 @@ Molecule ZmatrixMaker::applyTemplates( Molecule &molecule)
             double bondDelta = linetemplate.getBondDelta();
             double angleDelta = linetemplate.getAngleDelta();
             double dihedralDelta = linetemplate.getDihedralDelta();
-            
-            ZMatrixLine zmatrixline = ZMatrixLine( atom.index(), bond.index(), 
+
+            ZMatrixLine zmatrixline = ZMatrixLine( atom.index(), bond.index(),
                                                    angle.index(), dihedral.index() );
 
             zmatrixline.setBondDelta( bondDelta * angstrom );
             zmatrixline.setAngleDelta( angleDelta * degrees );
             zmatrixline.setDihedralDelta( dihedralDelta * degrees );
-	  
+
             zmatrix.add( zmatrixline );
         }
     }
-    
+
     editmol.setProperty( zmatrix_property, zmatrix );
-    
+
     return editmol.commit();
 }

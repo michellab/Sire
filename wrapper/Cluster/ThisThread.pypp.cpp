@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include <QDebug>
 
+#include <QElapsedTimer>
+
 #include <QHash>
 
 #include <QList>
@@ -34,8 +36,6 @@ namespace bp = boost::python;
 #include <QSet>
 
 #include <QThreadStorage>
-
-#include <QTime>
 
 #include <QUuid>
 

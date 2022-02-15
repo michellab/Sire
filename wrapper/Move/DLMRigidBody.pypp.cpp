@@ -139,6 +139,7 @@ void register_DLMRigidBody_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         DLMRigidBody_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMove::DLMRigidBody >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        DLMRigidBody_exposer.def_pickle(sire_pickle_suite< ::SireMove::DLMRigidBody >());
         DLMRigidBody_exposer.def( "__str__", &__str__< ::SireMove::DLMRigidBody > );
         DLMRigidBody_exposer.def( "__repr__", &__str__< ::SireMove::DLMRigidBody > );
     }

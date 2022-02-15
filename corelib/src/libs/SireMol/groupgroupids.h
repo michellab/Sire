@@ -64,33 +64,33 @@ friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, GroupGroupID<G0,
 
 public:
     GroupGroupID();
-    
+
     GroupGroupID(const G0 &group0, const G1 &group1);
-    
+
     GroupGroupID(const GroupGroupID<G0,G1> &other);
-    
+
     ~GroupGroupID();
-    
+
     static const char* typeName();
-    
+
     const char* what() const;
-       
+
     GroupGroupID<G0,G1>* clone() const;
-    
+
     using SireID::ID::operator!=;
-    
+
     bool operator==(const SireID::ID &other) const;
-    
+
     bool operator==(const GroupGroupID<G0,G1> &other) const;
-    
+
     bool operator!=(const GroupGroupID<G0,G1> &other) const;
-    
+
     QString toString() const;
-    
+
     uint hash() const;
-    
+
     bool isNull() const;
-             
+
     QList<AtomIdx> map(const MolInfo &molinfo) const;
 
 private:
@@ -126,7 +126,7 @@ template<class G0, class G1>
 SIRE_OUTOFLINE_TEMPLATE
 GroupGroupID<G0,G1>::~GroupGroupID()
 {}
-    
+
 template<class G0, class G1>
 SIRE_OUTOFLINE_TEMPLATE
 const char* GroupGroupID<G0,G1>::typeName()
@@ -140,7 +140,7 @@ const char* GroupGroupID<G0,G1>::what() const
 {
     return GroupGroupID<G0,G1>::typeName();
 }
-   
+
 template<class G0, class G1>
 SIRE_OUTOFLINE_TEMPLATE
 GroupGroupID<G0,G1>* GroupGroupID<G0,G1>::clone() const
@@ -200,7 +200,7 @@ QString GroupGroupID<G0,G1>::toString() const
 
 /** Map this pair of group IDs to the list of indicies of atoms that are
     in both of these groups.
-  
+
     \throw ???::missing_G0
     \throw ???::missing_G1
     \throw SireMol::missing_atom
@@ -216,15 +216,15 @@ QList<AtomIdx> GroupGroupID<G0,G1>::map(const MolInfo &molinfo) const
         return molinfo.getAtomsIn(g1);
     else if (g1.isNull())
         return molinfo.getAtomsIn(g0);
-        
-    QList<AtomIdx> atomidxs = 
+
+    QList<AtomIdx> atomidxs =
                      MolInfo::intersection(molinfo.getAtomsIn(g0),
                                            molinfo.getAtomsIn(g1) );
-        
+
     if (atomidxs.isEmpty())
         this->throwMissingAtom(molinfo);
-            
-    qSort(atomidxs);
+
+    std::sort(atomidxs.begin(), atomidxs.end());
     return atomidxs;
 }
 
@@ -265,15 +265,15 @@ Q_DECLARE_METATYPE(SireMol::SegCGID);
 Q_DECLARE_METATYPE(SireMol::CGResID);
 Q_DECLARE_METATYPE(SireMol::CGChainID);
 
-SIRE_EXPOSE_ALIAS( (SireMol::GroupGroupID<SireMol::SegID, SireMol::ResID>), 
+SIRE_EXPOSE_ALIAS( (SireMol::GroupGroupID<SireMol::SegID, SireMol::ResID>),
                     SireMol::SegResID )
-SIRE_EXPOSE_ALIAS( (SireMol::GroupGroupID<SireMol::SegID, SireMol::ChainID>), 
+SIRE_EXPOSE_ALIAS( (SireMol::GroupGroupID<SireMol::SegID, SireMol::ChainID>),
                     SireMol::SegChainID )
-SIRE_EXPOSE_ALIAS( (SireMol::GroupGroupID<SireMol::SegID, SireMol::CGID>), 
+SIRE_EXPOSE_ALIAS( (SireMol::GroupGroupID<SireMol::SegID, SireMol::CGID>),
                     SireMol::SegCGID )
-SIRE_EXPOSE_ALIAS( (SireMol::GroupGroupID<SireMol::CGID, SireMol::ResID>), 
+SIRE_EXPOSE_ALIAS( (SireMol::GroupGroupID<SireMol::CGID, SireMol::ResID>),
                     SireMol::CGResID )
-SIRE_EXPOSE_ALIAS( (SireMol::GroupGroupID<SireMol::CGID, SireMol::ChainID>), 
+SIRE_EXPOSE_ALIAS( (SireMol::GroupGroupID<SireMol::CGID, SireMol::ChainID>),
                     SireMol::CGChainID )
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES

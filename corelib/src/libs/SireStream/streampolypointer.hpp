@@ -47,17 +47,17 @@ namespace SireStream
 
 static const VersionID version = 1;
 
-/** Save the object pointed to by the polymorphic point 'ptr' to 
-    the passed binary datastream */ 
+/** Save the object pointed to by the polymorphic point 'ptr' to
+    the passed binary datastream */
 template<class T>
 void savePolyPointer(QDataStream &ds, const boost::shared_ptr<T> &ptr)
 {
     //save the version number
     ds << version;
-    
+
     if (ptr.get() == 0)
-        ds << QString::null;
-        
+        ds << QString();
+
     else
     {
         //get the object type name
@@ -85,20 +85,20 @@ void savePolyPointer(QDataStream &ds, const boost::shared_ptr<T> &ptr)
 }
 
 /** Load the object pointed to by the polymorphic point 'ptr' from
-    the passed binary datastream */ 
+    the passed binary datastream */
 template<class T>
 void loadPolyPointer(QDataStream &ds, boost::shared_ptr<T> &ptr)
 {
     VersionID v;
     ds >> v;
-    
+
     if (v != version)
     {
         throw version_error( QObject::tr(
                     "Invalid version (%1) for loadPolyPointer - valid version = %2.")
                         .arg(v).arg(version), CODELOC );
     }
-    
+
     //read the type name
     QString type_name;
     ds >> type_name;
