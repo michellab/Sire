@@ -43,7 +43,7 @@ SIRE_BEGIN_HEADER
 
 #ifdef SIRE_USE_OPENMM
 
-        namespace SireMove {
+namespace SireMove {
     class OpenMMPMEFEP;
 }
 
@@ -52,7 +52,8 @@ SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::OpenMMPMEFEP&);
 
 namespace SireMove {
 
-    /** This class implements single topology a free energy method using OpenMM.
+    /** This class implements single topology a free energy method using
+	OpenMM.
 
         @author Julien Michel, Gaetano Calabro, Antonia Mey, Hannes H Loeffler
      */

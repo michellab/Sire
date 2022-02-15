@@ -425,11 +425,11 @@ void OpenMMMDIntegrator::initialise()
         flag_cutoff = CUTOFFPERIODIC;
     else if (CutoffType == "ewald")
         flag_cutoff = EWALD;
-    else if (CutoffType == "pme")
+    else if (CutoffType == "PME")
         flag_cutoff = PME;
     else
         throw SireError::program_bug(QObject::tr(
-                                                 "The CutOff method has not been specified. Possible choices: nocutoff, cutoffnonperiodic, cutoffperiodic,ewal,pme"), CODELOC);
+                                                 "The CutOff method has not been specified. Possible choices: nocutoff, cutoffnonperiodic, cutoffperiodic,ewal,PME"), CODELOC);
 
     if (Debug)
         qDebug() << "\nCutoffType = " << CutoffType << "\n";
@@ -1484,8 +1484,7 @@ System OpenMMMDIntegrator::equilibrateSystem(System &system,
 
     const int nmols = ws.nMolecules();
     int k = 0;
-    double Ekin_sire = 0;
-    double Ekin_openmm = 0;
+
     for (int i = 0; i < nmols; i++)
     {
 
@@ -1712,7 +1711,7 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
 
     int k = 0;
     double Ekin_openmm=0;
-    double Ekin_sire=0;
+
     for (int i = 0; i < nmols; i++)
     {
         Vector *sire_coords = ws.coordsArray(i);
