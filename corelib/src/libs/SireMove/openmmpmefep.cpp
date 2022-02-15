@@ -2520,9 +2520,9 @@ void OpenMMPMEFEP::createContext(IntegratorWorkspace &workspace, SireUnits::Dime
 {
     if (Debug)
     {
-        qDebug() << "In OpenMMPMEFEP::createContext()\n\n";
-        qDebug() << isContextInitialised;
-        qDebug() << reinitialise_context;
+        qDebug() << "OpenMMPMEFEP::createContext(): isContextInitialised ="
+		 << isContextInitialised << ", reinitialise_context ="
+		 << reinitialise_context;
     }
 
     // Check that the openmm system has been initialised
@@ -2538,7 +2538,7 @@ void OpenMMPMEFEP::createContext(IntegratorWorkspace &workspace, SireUnits::Dime
     int nats = system_openmm->getNumParticles();
 
     if (Debug)
-        qDebug() << " openmm nats " << nats;
+        qDebug() << "openmm nats " << nats;
 
     // Integrator
 
@@ -2556,6 +2556,8 @@ void OpenMMPMEFEP::createContext(IntegratorWorkspace &workspace, SireUnits::Dime
             integrator_openmm = new OpenMM::VariableVerletIntegrator(integration_tol); //integration tolerance error unitless
         else if (Integrator_type == "langevin")
             integrator_openmm = new OpenMM::LangevinIntegrator(converted_Temperature, converted_friction, dt);
+	else if (Integrator_type == "langevinmiddle")
+            integrator_openmm = new OpenMM::LangevinMiddleIntegrator(converted_Temperature, converted_friction, dt);
         else if (Integrator_type == "variablelangevin")
             integrator_openmm = new OpenMM::VariableLangevinIntegrator(converted_Temperature, converted_friction, integration_tol);
         else if (Integrator_type == "brownian")
@@ -2565,13 +2567,14 @@ void OpenMMPMEFEP::createContext(IntegratorWorkspace &workspace, SireUnits::Dime
 
         if (Debug)
         {
-            qDebug() << "Using Integrator: " << Integrator_type;
-            qDebug() << "Integration step = " << dt << " ps";
+            qDebug() << "Using Integrator:" << Integrator_type;
+            qDebug() << "Integration step =" << dt << " ps";
 
             if (Integrator_type == "variablelangevin" || Integrator_type == "variableleapfrogverlet")
             {
                 qDebug() << "Integration Tol = " << integration_tol;
             }
+
             if (Integrator_type == "langevin" || Integrator_type == "variablelangevin" || Integrator_type == "brownian")
             {
                 qDebug() << "Converted Friction = " << converted_friction << "1/ps";
@@ -2610,12 +2613,25 @@ void OpenMMPMEFEP::createContext(IntegratorWorkspace &workspace, SireUnits::Dime
         }
 
         delete openmm_context;
-        openmm_context = new OpenMM::Context(*system_openmm, *integrator_openmm, platform_openmm);
+
+	if (Debug)
+	{
+	   qDebug() << "Deleted openmm_context";
+	}
+
+        openmm_context =
+	   new OpenMM::Context(*system_openmm, *integrator_openmm,
+			       platform_openmm);
         this->isContextInitialised = true;
+
+	if (Debug)
+        {
+           qDebug() << "New OpenMM Context created";
+        }
     }
 
     if (Debug)
-        qDebug() << "\n Using OpenMM platform = " << openmm_context->getPlatform().getName().c_str() << "\n";
+        qDebug() << "\nUsing OpenMM platform = " << openmm_context->getPlatform().getName().c_str() << "\n";
 
     // Now update coordinates / velocities / dimensions with sire data
     AtomicVelocityWorkspace &ws = workspace.asA<AtomicVelocityWorkspace>();
@@ -2794,21 +2810,27 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10, 
 {
     const MoleculeGroup moleculegroup = this->molgroup.read();
     IntegratorWorkspacePtr workspace = this->createWorkspace(moleculegroup);
+
     if (system.nMolecules() != moleculegroup.nMolecules())
     {
         std::cerr << "Number of molecules do not agree!";
         exit(1);
     }
+
     workspace.edit().setSystem(system);
+
     // Use helper function to create a Context
     SireUnits::Dimension::Time timestep = 0.0 * picosecond;
     createContext(workspace.edit(), timestep);
+
     // Step 2 minimise
     OpenMM::LocalEnergyMinimizer::minimize(*openmm_context, tolerance, max_iteration);
+
     // Step 3 update the positions in the system
     int infoMask = OpenMM::State::Positions;
     OpenMM::State state_openmm = openmm_context->getState(infoMask);
     std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
+
     // Recast to atomicvelocityworkspace because want to use commitCoordinates() method to update system
     AtomicVelocityWorkspace &ws = workspace.edit().asA<AtomicVelocityWorkspace>();
     const int nmols = ws.nMolecules();
@@ -2945,8 +2967,9 @@ System OpenMMPMEFEP::annealSystemToLambda(System &system,
  * @param record_stats          boolean that tracks recording.
  */
 void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
-                                 const Symbol &nrg_component, SireUnits::Dimension::Time timestep,
-                                 int nmoves, bool record_stats)
+			     const Symbol &nrg_component,
+			     SireUnits::Dimension::Time timestep,
+			     int nmoves, bool record_stats)
 {
     createContext(workspace, timestep);
     const int nats = openmm_system->getNumParticles();
