@@ -459,7 +459,7 @@ const QString INTRA_14_CLJ =
     "q_prod = lamhd*lamhd*qpend + (1-lamhd)*(1-lamhd)*qpstart + lamhd*(1-lamhd)*qmix;";
 
 
-void OpenMMPMEFEP::initialise(bool Debug)
+void OpenMMPMEFEP::initialise()
 {
     if (Debug)
     {
@@ -2518,8 +2518,6 @@ void OpenMMPMEFEP::initialise(bool Debug)
 
 void OpenMMPMEFEP::createContext(IntegratorWorkspace &workspace, SireUnits::Dimension::Time timestep)
 {
-    bool Debug = false;
-
     if (Debug)
     {
         qDebug() << "In OpenMMPMEFEP::createContext()\n\n";
@@ -2794,7 +2792,6 @@ MolarEnergy OpenMMPMEFEP::getPotentialEnergy(const System &system)
  */
 System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10, int max_iteration = 1)
 {
-    bool Debug = false;
     const MoleculeGroup moleculegroup = this->molgroup.read();
     IntegratorWorkspacePtr workspace = this->createWorkspace(moleculegroup);
     if (system.nMolecules() != moleculegroup.nMolecules())
@@ -2863,7 +2860,6 @@ System OpenMMPMEFEP::annealSystemToLambda(System &system,
                                       SireUnits::Dimension::Time anneal_step_size,
                                       int annealing_steps)
 {
-    bool Debug = false;
     const double AKMAPerPs = 0.04888821;
 
     const MoleculeGroup moleculegroup = this->molgroup.read();
@@ -2932,7 +2928,7 @@ System OpenMMPMEFEP::annealSystemToLambda(System &system,
         // dummy buffered dimensions vector, maybe there is better solution
         //to this than just passing an empty vector
         QVector<QVector<Vector>> dimensions;
-        updateBoxDimensions(state_openmm, dimensions, Debug, ws);
+        updateBoxDimensions(state_openmm, dimensions, ws);
     }
     this->destroyContext();
     // Step 5. Return pointer to the workspace's system
@@ -2953,7 +2949,6 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
                                  int nmoves, bool record_stats)
 {
     createContext(workspace, timestep);
-    bool Debug = false;
     const int nats = openmm_system->getNumParticles();
 
     AtomicVelocityWorkspace &ws = workspace.asA<AtomicVelocityWorkspace>();
@@ -3236,7 +3231,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
     //Now the box dimensions
     if (MCBarostat_flag == true)
     {
-        updateBoxDimensions(state_openmm, buffered_dimensions, Debug, ws);
+        updateBoxDimensions(state_openmm, buffered_dimensions, ws);
     }
     // Clear all buffers
 
@@ -3325,7 +3320,6 @@ boost::tuples::tuple<double, double, double> OpenMMPMEFEP::calculateGradient(
 
 QVector<double> OpenMMPMEFEP::computeReducedPerturbedEnergies(double beta)
 {
-    bool Debug = false;
     QVector<double> perturbed;
     QVector<double>::iterator i;
     for (i=alchemical_array.begin(); i!=alchemical_array.end(); i++)
@@ -3351,11 +3345,10 @@ void OpenMMPMEFEP::emptyContainers()
     reduced_perturbed_energies.clear();
 }
 
-void OpenMMPMEFEP::updateBoxDimensions(OpenMM::State &state_openmm,
-                                           QVector<QVector<Vector>> &buffered_dimensions,
-                                           bool Debug, AtomicVelocityWorkspace &ws)
+void OpenMMPMEFEP::updateBoxDimensions(
+   OpenMM::State &state_openmm, QVector<QVector<Vector>> &buffered_dimensions,
+   AtomicVelocityWorkspace &ws)
 {
-    Debug = false;
     OpenMM::Vec3 a;
     OpenMM::Vec3 b;
     OpenMM::Vec3 c;
@@ -3820,4 +3813,9 @@ IntegratorWorkspacePtr OpenMMPMEFEP::createWorkspace(const MoleculeGroup &molgro
 const char* OpenMMPMEFEP::typeName()
 {
     return QMetaType::typeName(qMetaTypeId<OpenMMPMEFEP>());
+}
+
+void OpenMMPMEFEP::setDebug(bool debug)
+{
+   Debug = debug;
 }

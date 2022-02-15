@@ -66,11 +66,12 @@ namespace SireMove {
         OpenMMPMEFEP(bool frequent_save_velocities = false);
 
         OpenMMPMEFEP(const MoleculeGroup &molecule_group,
-                const MoleculeGroup &solutes,
-                const MoleculeGroup &solute_hard,
-                const MoleculeGroup &solute_todummy,
-                const MoleculeGroup &solute_fromdummy,
-                bool frequent_save_velocities = false);
+		     const MoleculeGroup &solutes,
+		     const MoleculeGroup &solute_hard,
+		     const MoleculeGroup &solute_todummy,
+		     const MoleculeGroup &solute_fromdummy,
+		     bool frequent_save_velocities = false
+		     );
 
         OpenMMPMEFEP(const OpenMMPMEFEP &other);
 
@@ -89,7 +90,7 @@ namespace SireMove {
 
         bool isTimeReversible() const;
 
-        void initialise(bool Debug = false);
+        void initialise();
 
 
         SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);
@@ -201,13 +202,15 @@ namespace SireMove {
         int getRandomSeed(void);
         void setRandomSeed(int);
 
+	void setDebug(bool);
+
     private:
         void createContext(IntegratorWorkspace &workspace,
                 SireUnits::Dimension::Time timestep);
         void destroyContext();
         void updateBoxDimensions(OpenMM::State &state_openmm,
-        QVector<QVector<Vector>> &buffered_dimensions, bool Debug,
-        AtomicVelocityWorkspace &ws);
+				 QVector<QVector<Vector>> &buffered_dimensions,
+				 AtomicVelocityWorkspace &ws);
 
         double getPotentialEnergyAtLambda(double lambda);
         void updateOpenMMContextLambda(double lambda);
