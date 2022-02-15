@@ -608,7 +608,7 @@ void OpenMMPMEFEP::initialise(bool Debug)
 
     if (Debug)
     {
-       qDebug() << "energybase" << energybase;
+       qDebug() << "energybase:" << energybase;
     }
 
     custom_force_field =
@@ -649,7 +649,7 @@ void OpenMMPMEFEP::initialise(bool Debug)
 
     if (Debug)
     {
-       qDebug() << "intra_14_todummy\n" << intra_14_todummy;
+       qDebug() << "intra_14_todummy:" << intra_14_todummy;
     }
 
     custom_intra_14_todummy =
@@ -672,7 +672,7 @@ void OpenMMPMEFEP::initialise(bool Debug)
 
     if (Debug)
     {
-       qDebug() << "intra_14_fromdummy:\n" << intra_14_fromdummy;
+       qDebug() << "intra_14_fromdummy:" << intra_14_fromdummy;
     }
 
     custom_intra_14_fromdummy =
@@ -696,7 +696,7 @@ void OpenMMPMEFEP::initialise(bool Debug)
 
     if (Debug)
     {
-       qDebug() << "intra_14_fromtodummy:\n" << intra_14_fromdummy_todummy;
+       qDebug() << "intra_14_fromtodummy:" << intra_14_fromdummy_todummy;
     }
 
     custom_intra_14_fromdummy_todummy =
@@ -719,7 +719,7 @@ void OpenMMPMEFEP::initialise(bool Debug)
 
     if (Debug)
     {
-       qDebug() << "custom_intra_14_clj:\n" << intra_14_clj;
+       qDebug() << "custom_intra_14_clj:" << intra_14_clj;
     }
 
     custom_intra_14_clj =

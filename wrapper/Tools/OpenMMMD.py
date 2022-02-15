@@ -517,7 +517,10 @@ def centerSolute(system, space):
     else:
         box_center = Sire.Maths.Vector(0.0, 0.0, 0.0)
 
-    solute = system.molecules().at(MolNum(1))[0].molecule()
+    # FIXME: we assume that the solute is the first in the returned list
+    solute_num = system.getMoleculeNumbers()[0]
+    solute = system.molecules().at(solute_num)[0].molecule()
+    assert(solute.hasProperty('perturbations'))
 
     solute_cog = Sire.FF.CenterOfGeometry(solute).point()
 
@@ -1172,6 +1175,8 @@ def createSystemFreeEnergy(molecules):
     # templates in the flex/pert files.
 
     solute = None
+
+    # FIXME: assumption that perturbed molecule is at a fixed location
     for molecule in moleculeList:
         if molecule.residue(ResIdx(0)).number() == ResNum(
             perturbed_resnum.val
@@ -1189,6 +1194,7 @@ def createSystemFreeEnergy(molecules):
         )
         sys.exit(-1)
 
+    # FIXME: assumption that perturbed molecule is the first residue
     lig_name = solute.residue(ResIdx(0)).name().value()
 
     solute = solute.edit().rename(lig_name).commit()
@@ -2291,7 +2297,7 @@ def runFreeNrg():
     )
 
     energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
-    print(f'Raw OpenMM (v{openmm.__version__}) energy '
+    print(f'Raw OpenMM {openmm.__version__} energy '
           f'({cutoff_type}, may be different from below): {energy:.2f} '
           'kcal mol-1\n')
 
