@@ -11,6 +11,7 @@ set ( SCRIPTS
         ap.py
         AmberLoader.py
         BoreschAnalyticalCorrection.py
+        BoreschSemiAnaCorrection.py
         DCDFile.py
         LJcutoff.py
         LSRC.py

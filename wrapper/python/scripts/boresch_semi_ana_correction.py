@@ -1,24 +1,23 @@
 description="""
-An app to calculate the analytical correction for releasing Boresch
-restraints - see Equation 32 in J. Phys. Chem. B 2003, 107, 35, 9535–9551
-This includes the standard state correction and will be reliable when
-restraints are sufficiently strong, r is sufficiently far from zero,
-and r2, r1, l1, and r1, l1, l2 are sufficiently far from collinear. If
-this is not the case, the semi-analytical expression should be used."""
+An app to calculate the correction for releasing Boresch restraints
+semi-analytically (with numerical integration) - see Equation 12 in 
+J. Phys. Chem. B 2003, 107, 35, 9535–9551. This is more robust than
+the analytical correction, which can result in substantial errors in
+certain regimes."""
 
-from Sire.Tools import BoreschAnalyticalCorrection
+from Sire.Tools import BoreschSemiAnaCorrection
 from Sire.Tools import readParams
 
 import argparse
 import sys
 import os
 
-parser = argparse.ArgumentParser(description="""Calculates the analytical correction for releasing Boresch restraints,
+parser = argparse.ArgumentParser(description="""Calculates the semi-analytical correction for releasing Boresch restraints,
                                              accounting for the standard state.""",
-                                epilog="boresch_analytical_correction is built using Sire and is distributed "
+                                epilog="boresch_semi_ana_correction is built using Sire and is distributed "
                                         "under the GPL. For more information please visit "
                                         "http://siremol.org",
-                                 prog="boresch_analytical_correction")
+                                 prog="boresch_semi_ana_correction")
 
 parser.add_argument('-C', '--config', nargs="?",
                     help='A config file used for the simulation (all are suitable)')
@@ -43,12 +42,12 @@ args = parser.parse_args()
 must_exit = False
 
 if args.author:
-    print("""\nboresch_analytical_correction was written by Finlay Clark (C) 2022, but is very closely
+    print("""\nboresch_semi_ana_correction was written by Finlay Clark (C) 2022, but is very closely
      based on standardstatecorrection, written by Julien Michel and Stefano Bosisio (C) 2017""")
     must_exit = True
 
 if args.version:
-    print("standardstatecorrection -- from Sire release version <%s>" %Sire.__version__)
+    print("boresch_semi_ana_correction -- from Sire release version <%s>" %Sire.__version__)
     print("This particular release can be downloaded here: "
           "https://github.com/michellab/Sire/releases/tag/v%s" %Sire.__version__)
     must_exit = True
@@ -62,7 +61,6 @@ if must_exit:
 
 if args.config:
     config_file = args.config
-    print(config_file) #debug
     if not os.path.exists(config_file):
         print("(cannot find configuration file %s)" % config_file)
         sys.exit(-1)
@@ -76,9 +74,9 @@ else:
 if args.verbose:
     params["verbose"] = True
 
-print("\nCalculating analytical correction for Boresch restraints using temperature and"
+print("\nCalculating semi-analytical correction for Boresch restraints using temperature and"
       "restraint information from %s." % args.config)
 
-BoreschAnalyticalCorrection.run(params)
+BoreschSemiAnaCorrection.run(params)
 
 
