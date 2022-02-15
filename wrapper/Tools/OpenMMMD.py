@@ -1570,7 +1570,7 @@ def setupMovesFreeEnergy(system, debug_seed, gpu_idx, lam_val):
     solute_todummy = system[MGName("solute_ref_todummy")]
     solute_fromdummy = system[MGName("solute_ref_fromdummy")]
 
-    if cutoff_type == 'PME':
+    if cutoff_type.val == 'PME':
         fep_cls = Sire.Move.OpenMMPMEFEP
     else:                       # no cutoff and RF
         fep_cls = Sire.Move.OpenMMFrEnergyST
@@ -2292,8 +2292,8 @@ def runFreeNrg():
     )
 
     energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
-    print(f'Raw OpenMM Energy ({cutoff_type}, may be different from below): '
-          f'{energy}\n')
+    print(f'Raw OpenMM (v{openmm.__version__}) energy '
+          f'({cutoff_type}, may be different from below): {energy}\n')
 
     if minimise.val:
         print(
