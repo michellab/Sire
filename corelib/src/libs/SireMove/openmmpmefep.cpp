@@ -402,12 +402,12 @@ const QString ENERGYBASE =
     "E_om_lam = (1.0-isHD1)*isHD2*(1.0-isTD1)*isTD2*(1.0-isFD1)*(1.0-isFD2);"
     "Logic_lam = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*isFD1*isFD2, B_lam);"
     "B_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*isFD1*(1.0-isFD2), C_lam);"
-    "C_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*(1.0-isFD1)*isFD2 , D_lam);"
+    "C_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*(1.0-isFD1)*isFD2, D_lam);"
     "D_lam = max((1.0-isHD1)*isHD2*(1.0-isTD1)*(1.0-isTD2)*isFD1*(1.0-isFD2), E_lam);"
     "E_lam = (1.0-isHD1)*isHD2*(1.0-isTD1)*(1.0-isTD2)*(1.0-isFD1)*isFD2;"
     "Logic_mix_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*(1.0-isTD2)*isFD1*(1.0-isFD2), B_mix);"
     "B_mix = max((1.0-isHD1)*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*isFD2, C_mix);"
-    "C_mix = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*isFD1*(1.0-isFD2) , D_mix);"
+    "C_mix = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*isFD1*(1.0-isFD2), D_mix);"
     "D_mix= (1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*(1.0-isFD1)*isFD2;"
     "q_prod = (qend1 * lam+(1.0-lam) * qstart1) * (qend2 * lam+(1.0-lam) * qstart2);"
     "eps_avg = sqrt((epend1*lam+(1.0-lam)*epstart1)*(epend2*lam+(1.0-lam)*epstart2));";
@@ -450,7 +450,7 @@ const QString FROMTODUMMY =
     "lamFTD = max(lamftd,1-lamftd);";
 
 // standard LJ term
-QString intra_14_clj =
+const QString INTRA_14_CLJ =
     "withinCutoff*(Hc+Hl);"
     "withinCutoff=step(cutoffhd-r);"
     "Hc=138.935456*q_prod/r;"
@@ -508,9 +508,6 @@ void OpenMMPMEFEP::initialise(bool Debug)
         flag_cutoff = PME;
     else
         throw SireError::program_bug(QObject::tr("The CutOff method has not been specified. Possible choices: nocutoff, cutoffnonperiodic, cutoffperiodic, PME"), CODELOC);
-
-    if (Debug)
-        qDebug() << "\nCutoffType = " << CutoffType << "\n";
 
     int flag_combRules;
 
@@ -609,6 +606,11 @@ void OpenMMPMEFEP::initialise(bool Debug)
        energybase.append("sigma_avg = sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));");
     }
 
+    if (Debug)
+    {
+       qDebug() << "energybase" << energybase;
+    }
+
     custom_force_field =
 	new OpenMM::CustomNonbondedForce(energybase.toStdString());
     custom_force_field->setCutoffDistance(converted_cutoff_distance);
@@ -645,6 +647,11 @@ void OpenMMPMEFEP::initialise(bool Debug)
        intra_14_todummy.append("sigma_avg = sqrt((1-lamtd)*(1-lamtd)*saend + lamtd*lamtd*sastart + lamtd*(1-lamtd)*samix);");
     }
 
+    if (Debug)
+    {
+       qDebug() << "intra_14_todummy\n" << intra_14_todummy;
+    }
+
     custom_intra_14_todummy =
 	new OpenMM::CustomBondForce(intra_14_todummy.toStdString());
     custom_intra_14_todummy->addGlobalParameter("lamtd", 1.0 - Alchemical_value);
@@ -661,6 +668,11 @@ void OpenMMPMEFEP::initialise(bool Debug)
     else if (flag_combRules == GEOMETRIC)
     {
        intra_14_fromdummy.append("sigma_avg = sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);");
+    }
+
+    if (Debug)
+    {
+       qDebug() << "intra_14_fromdummy:\n" << intra_14_fromdummy;
     }
 
     custom_intra_14_fromdummy =
@@ -682,12 +694,19 @@ void OpenMMPMEFEP::initialise(bool Debug)
        intra_14_fromdummy_todummy.append("sigma_avg = sqrt(lamftd*lamftd*saend + (1-lamftd)*(1-lamftd)*sastart + lamftd*(1-lamftd)*samix);");
     }
 
+    if (Debug)
+    {
+       qDebug() << "intra_14_fromtodummy:\n" << intra_14_fromdummy_todummy;
+    }
+
     custom_intra_14_fromdummy_todummy =
 	new OpenMM::CustomBondForce(intra_14_fromdummy_todummy.toStdString());
     custom_intra_14_fromdummy_todummy->addGlobalParameter("lamftd", Alchemical_value);
     custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
     custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
     custom_intra_14_fromdummy_todummy->addGlobalParameter("cutoffftd", converted_cutoff_distance);
+
+    QString intra_14_clj(INTRA_14_CLJ);
 
     if (flag_combRules == ARITHMETIC)
     {
@@ -696,6 +715,11 @@ void OpenMMPMEFEP::initialise(bool Debug)
     else if (flag_combRules == GEOMETRIC)
     {
        intra_14_clj.append("sigma_avg = sqrt(lamhd*lamhd*saend + (1-lamhd)*(1-lamhd)*sastart + lamhd*(1-lamhd)*samix);");
+    }
+
+    if (Debug)
+    {
+       qDebug() << "custom_intra_14_clj:\n" << intra_14_clj;
     }
 
     custom_intra_14_clj =
@@ -707,7 +731,7 @@ void OpenMMPMEFEP::initialise(bool Debug)
 
     if (Debug)
     {
-       qDebug() << "\nCut off type = " << CutoffType;
+       qDebug() << "\nCutoff type = " << CutoffType;
        qDebug() << "CutOff distance = " << converted_cutoff_distance << " Nm";
        qDebug() << "Dielectric constant = " << field_dielectric;
        qDebug() << "Lambda = " << Alchemical_value << " Coulomb Power = " << coulomb_power << " Delta Shift = " << shift_delta;
