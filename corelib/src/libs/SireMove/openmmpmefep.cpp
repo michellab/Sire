@@ -382,9 +382,9 @@ QString OpenMMPMEFEP::toString() const
 // FIXME: remove RF specific code
 // JM 9/10/20 multiply Logix_mix_lam * 0 instead of max(lam,1.0-lam)
 // JM 9/10/10 setting Logix_mix_lam output to 0 for lambda
-const std::string ENERGYBASE =
+const QString ENERGYBASE =
     "(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hls + Hcs);"
-    "Hcs = %1% 138.935456 * q_prod*(1/sqrt(diff_cl+r*r) + krflam*(diff_cl+r*r)-crflam);"
+    "Hcs = %1 138.935456 * q_prod*(1/sqrt(diff_cl+r*r) + krflam*(diff_cl+r*r)-crflam);"
     "crflam = crf * src;"
     "krflam = krf * src * src * src;"
     "src = cutoff/sqrt(diff_cl + cutoff*cutoff);"
@@ -412,10 +412,10 @@ const std::string ENERGYBASE =
     "q_prod = (qend1 * lam+(1.0-lam) * qstart1) * (qend2 * lam+(1.0-lam) * qstart2);"
     "eps_avg = sqrt((epend1*lam+(1.0-lam)*epstart1)*(epend2*lam+(1.0-lam)*epstart2));";
 
-const std::string TODUMMY =
+const QString TODUMMY =
     "withinCutoff*(Hcs + Hls);"
     "withinCutoff=step(cutofftd-r);"
-    "Hcs=%1% 138.935456*q_prod/sqrt(diff_cl+r^2);"
+    "Hcs=%1 138.935456*q_prod/sqrt(diff_cl+r^2);"
     "diff_cl=(1.0-lamtd)*0.01;"
     "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
     "LJ=((sigma_avg*sigma_avg)/soft)^3;"
@@ -424,10 +424,10 @@ const std::string TODUMMY =
     "eps_avg = sqrt((1-lamtd)*(1-lamtd)*eaend + lamtd*lamtd*eastart + lamtd*(1-lamtd)*emix);"
     "q_prod = (1-lamtd)*(1-lamtd)*qpend + lamtd*lamtd*qpstart + lamtd*(1-lamtd)*qmix;";
 
-const std::string FROMDUMMY =
+const QString FROMDUMMY =
     "withinCutoff*(Hcs + Hls);"
     "withinCutoff=step(cutofffd-r);"
-    "Hcs=%1% 138.935456*q_prod/sqrt(diff_cl+r^2);"
+    "Hcs=%1 138.935456*q_prod/sqrt(diff_cl+r^2);"
     "diff_cl=(1.0-lamfd)*0.01;"
     "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
     "LJ=((sigma_avg*sigma_avg)/soft)^3;"
@@ -436,10 +436,10 @@ const std::string FROMDUMMY =
     "eps_avg = sqrt(lamfd*lamfd*eaend + (1-lamfd)*(1-lamfd)*eastart + lamfd*(1-lamfd)*emix);"
     "q_prod = lamfd*lamfd*qpend + (1-lamfd)*(1-lamfd)*qpstart + lamfd*(1-lamfd)*qmix;";
 
-const std::string FROMTODUMMY =
+const QString FROMTODUMMY =
     "withinCutoff*(Hcs + Hls);"
     "withinCutoff=step(cutoffftd-r);"
-    "Hcs=%1% 138.935456*q_prod/sqrt(diff_cl+r^2);"
+    "Hcs=%1 138.935456*q_prod/sqrt(diff_cl+r^2);"
     "diff_cl=(1.0-lamFTD)*0.01;"
     "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
     "LJ=((sigma_avg*sigma_avg)/soft)^3;"
@@ -450,7 +450,7 @@ const std::string FROMTODUMMY =
     "lamFTD = max(lamftd,1-lamftd);";
 
 // standard LJ term
-std::string intra_14_clj =
+QString intra_14_clj =
     "withinCutoff*(Hc+Hl);"
     "withinCutoff=step(cutoffhd-r);"
     "Hc=138.935456*q_prod/r;"
@@ -585,8 +585,7 @@ void OpenMMPMEFEP::initialise(bool Debug)
     double kvalue = eps2 / (converted_cutoff_distance * converted_cutoff_distance * converted_cutoff_distance);
     double cvalue = (1.0 / converted_cutoff_distance)*(3.0 * field_dielectric) / (2.0 * field_dielectric + 1.0);
 
-    std::string lam_pre;
-    boost::format fmt;
+    QString lam_pre;
 
     // The check is necessary to avoid nan errors on the GPUs platform caused
     // by the calculation of 0^0
@@ -599,8 +598,7 @@ void OpenMMPMEFEP::initialise(bool Debug)
        lam_pre = "";
     }
 
-    fmt = boost::format(ENERGYBASE) % lam_pre;
-    std::string energybase = fmt.str();
+    QString energybase = ENERGYBASE.arg(lam_pre);
 
     if (flag_combRules == ARITHMETIC)
     {
@@ -611,7 +609,8 @@ void OpenMMPMEFEP::initialise(bool Debug)
        energybase.append("sigma_avg = sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));");
     }
 
-    custom_force_field = new OpenMM::CustomNonbondedForce(energybase);
+    custom_force_field =
+	new OpenMM::CustomNonbondedForce(energybase.toStdString());
     custom_force_field->setCutoffDistance(converted_cutoff_distance);
     custom_force_field->addGlobalParameter("lam", Alchemical_value);
     custom_force_field->addGlobalParameter("delta", shift_delta);
@@ -635,8 +634,7 @@ void OpenMMPMEFEP::initialise(bool Debug)
     // the OpenMM potential energy is not equal to he Sire energy. This is caused by the application
     // of the reaction field on the 14 pairs in Sire.
 
-    fmt = boost::format(TODUMMY) % lam_pre;
-    std::string intra_14_todummy = fmt.str();
+    QString intra_14_todummy = TODUMMY.arg(lam_pre);
 
     if (flag_combRules == ARITHMETIC)
     {
@@ -647,14 +645,14 @@ void OpenMMPMEFEP::initialise(bool Debug)
        intra_14_todummy.append("sigma_avg = sqrt((1-lamtd)*(1-lamtd)*saend + lamtd*lamtd*sastart + lamtd*(1-lamtd)*samix);");
     }
 
-    custom_intra_14_todummy = new OpenMM::CustomBondForce(intra_14_todummy) ;
+    custom_intra_14_todummy =
+	new OpenMM::CustomBondForce(intra_14_todummy.toStdString());
     custom_intra_14_todummy->addGlobalParameter("lamtd", 1.0 - Alchemical_value);
     custom_intra_14_todummy->addGlobalParameter("deltatd", shift_delta);
     custom_intra_14_todummy->addGlobalParameter("ntd", coulomb_power);
     custom_intra_14_todummy->addGlobalParameter("cutofftd", converted_cutoff_distance);
 
-    fmt = boost::format(FROMDUMMY) % lam_pre;
-    std::string intra_14_fromdummy = fmt.str();
+    QString intra_14_fromdummy = FROMDUMMY.arg(lam_pre);
 
     if (flag_combRules == ARITHMETIC)
     {
@@ -665,15 +663,15 @@ void OpenMMPMEFEP::initialise(bool Debug)
        intra_14_fromdummy.append("sigma_avg = sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);");
     }
 
-    custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy) ;
+    custom_intra_14_fromdummy =
+	new OpenMM::CustomBondForce(intra_14_fromdummy.toStdString());
     custom_intra_14_fromdummy->addGlobalParameter("lamfd", Alchemical_value);
     custom_intra_14_fromdummy->addGlobalParameter("deltafd", shift_delta);
     custom_intra_14_fromdummy->addGlobalParameter("nfd", coulomb_power);
     custom_intra_14_fromdummy->addGlobalParameter("cutofffd", converted_cutoff_distance);
 
     //JM 9/10/20 set lamFTD to 0
-    fmt = boost::format(FROMTODUMMY) % lam_pre;
-    std::string intra_14_fromdummy_todummy = fmt.str();
+    QString intra_14_fromdummy_todummy = FROMTODUMMY.arg(lam_pre);
 
     if (flag_combRules == ARITHMETIC)
     {
@@ -684,7 +682,8 @@ void OpenMMPMEFEP::initialise(bool Debug)
        intra_14_fromdummy_todummy.append("sigma_avg = sqrt(lamftd*lamftd*saend + (1-lamftd)*(1-lamftd)*sastart + lamftd*(1-lamftd)*samix);");
     }
 
-    custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy) ;
+    custom_intra_14_fromdummy_todummy =
+	new OpenMM::CustomBondForce(intra_14_fromdummy_todummy.toStdString());
     custom_intra_14_fromdummy_todummy->addGlobalParameter("lamftd", Alchemical_value);
     custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
     custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
@@ -699,7 +698,8 @@ void OpenMMPMEFEP::initialise(bool Debug)
        intra_14_clj.append("sigma_avg = sqrt(lamhd*lamhd*saend + (1-lamhd)*(1-lamhd)*sastart + lamhd*(1-lamhd)*samix);");
     }
 
-    custom_intra_14_clj = new OpenMM::CustomBondForce(intra_14_clj) ;
+    custom_intra_14_clj =
+	new OpenMM::CustomBondForce(intra_14_clj.toStdString()) ;
     custom_intra_14_clj->addGlobalParameter("lamhd", Alchemical_value);
     custom_intra_14_clj->addGlobalParameter("cutoffhd", converted_cutoff_distance);
 
