@@ -115,7 +115,7 @@ void register_OpenMMFrEnergyST_class(){
             OpenMMFrEnergyST_exposer.def( 
                 "createWorkspace"
                 , createWorkspace_function_value
-                , ( bp::arg("map")=SireBase::PropertyMap() )
+                , ( bp::arg("map")=(SireBase::PropertyMap()) )
                 , "Create an empty workspace" );
         
         }
@@ -127,7 +127,7 @@ void register_OpenMMFrEnergyST_class(){
             OpenMMFrEnergyST_exposer.def( 
                 "createWorkspace"
                 , createWorkspace_function_value
-                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , ( bp::arg("molgroup"), bp::arg("map")=(SireBase::PropertyMap()) )
                 , "Create a workspace for this integrator for the molecule group molgroup" );
         
         }
@@ -697,6 +697,18 @@ void register_OpenMMFrEnergyST_class(){
                 , setCutoffType_function_value
                 , ( bp::arg("arg0") )
                 , "Set the cutoff type: nocutoff, cutoffnonperiodic, cutoffperiodic" );
+        
+        }
+        { //::SireMove::OpenMMFrEnergyST::setDebug
+        
+            typedef void ( ::SireMove::OpenMMFrEnergyST::*setDebug_function_type)( bool ) ;
+            setDebug_function_type setDebug_function_value( &::SireMove::OpenMMFrEnergyST::setDebug );
+            
+            OpenMMFrEnergyST_exposer.def( 
+                "setDebug"
+                , setDebug_function_value
+                , ( bp::arg("arg0") )
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyST::setDeltatAlchemical

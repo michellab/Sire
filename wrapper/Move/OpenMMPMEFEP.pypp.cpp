@@ -510,13 +510,12 @@ void register_OpenMMPMEFEP_class(){
         }
         { //::SireMove::OpenMMPMEFEP::initialise
         
-            typedef void ( ::SireMove::OpenMMPMEFEP::*initialise_function_type)( bool ) ;
+            typedef void ( ::SireMove::OpenMMPMEFEP::*initialise_function_type)(  ) ;
             initialise_function_type initialise_function_value( &::SireMove::OpenMMPMEFEP::initialise );
             
             OpenMMPMEFEP_exposer.def( 
                 "initialise"
                 , initialise_function_value
-                , ( bp::arg("Debug")=(bool)(false) )
                 , "" );
         
         }
@@ -700,6 +699,18 @@ void register_OpenMMPMEFEP_class(){
                 , setCutoffType_function_value
                 , ( bp::arg("arg0") )
                 , "Set the cutoff type: nocutoff, cutoffnonperiodic, cutoffperiodic" );
+        
+        }
+        { //::SireMove::OpenMMPMEFEP::setDebug
+        
+            typedef void ( ::SireMove::OpenMMPMEFEP::*setDebug_function_type)( bool ) ;
+            setDebug_function_type setDebug_function_value( &::SireMove::OpenMMPMEFEP::setDebug );
+            
+            OpenMMPMEFEP_exposer.def( 
+                "setDebug"
+                , setDebug_function_value
+                , ( bp::arg("arg0") )
+                , "" );
         
         }
         { //::SireMove::OpenMMPMEFEP::setDeltatAlchemical

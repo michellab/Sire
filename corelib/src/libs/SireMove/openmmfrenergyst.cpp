@@ -380,7 +380,6 @@ QString OpenMMFrEnergyST::toString() const
 void OpenMMFrEnergyST::initialise()
 {
 
-    bool Debug = false;
     if (Debug)
     {
         qDebug() << "Initialising OpenMMFrEnergyST";
@@ -2892,8 +2891,6 @@ void OpenMMFrEnergyST::initialise()
 
 void OpenMMFrEnergyST::createContext(IntegratorWorkspace &workspace, SireUnits::Dimension::Time timestep)
 {
-    bool Debug = false;
-
     if (Debug)
     {
         qDebug() << "In OpenMMFrEnergyST::createContext()\n\n";
@@ -3170,7 +3167,6 @@ MolarEnergy OpenMMFrEnergyST::getPotentialEnergy(const System &system)
  */
 System OpenMMFrEnergyST::minimiseEnergy(System &system, double tolerance = 1.0e-10, int max_iteration = 1)
 {
-    bool Debug = false;
     const MoleculeGroup moleculegroup = this->molgroup.read();
     IntegratorWorkspacePtr workspace = this->createWorkspace(moleculegroup);
     if (system.nMolecules() != moleculegroup.nMolecules())
@@ -3239,7 +3235,6 @@ System OpenMMFrEnergyST::annealSystemToLambda(System &system,
                                       SireUnits::Dimension::Time anneal_step_size,
                                       int annealing_steps)
 {
-    bool Debug = false;
     const double AKMAPerPs = 0.04888821;
 
     const MoleculeGroup moleculegroup = this->molgroup.read();
@@ -3308,7 +3303,7 @@ System OpenMMFrEnergyST::annealSystemToLambda(System &system,
         // dummy buffered dimensions vector, maybe there is better solution
         //to this than just passing an empty vector
         QVector<QVector<Vector>> dimensions;
-        updateBoxDimensions(state_openmm, dimensions, Debug, ws);
+        updateBoxDimensions(state_openmm, dimensions, ws);
     }
     this->destroyContext();
     // Step 5. Return pointer to the workspace's system
@@ -3329,7 +3324,6 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
                                  int nmoves, bool record_stats)
 {
     createContext(workspace, timestep);
-    bool Debug = false;
     const int nats = openmm_system->getNumParticles();
 
     AtomicVelocityWorkspace &ws = workspace.asA<AtomicVelocityWorkspace>();
@@ -3612,7 +3606,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
     //Now the box dimensions
     if (MCBarostat_flag == true)
     {
-        updateBoxDimensions(state_openmm, buffered_dimensions, Debug, ws);
+        updateBoxDimensions(state_openmm, buffered_dimensions, ws);
     }
     // Clear all buffers
 
@@ -3701,7 +3695,6 @@ boost::tuples::tuple<double, double, double> OpenMMFrEnergyST::calculateGradient
 
 QVector<double> OpenMMFrEnergyST::computeReducedPerturbedEnergies(double beta)
 {
-    bool Debug = false;
     QVector<double> perturbed;
     QVector<double>::iterator i;
     for (i=alchemical_array.begin(); i!=alchemical_array.end(); i++)
@@ -3727,9 +3720,10 @@ void OpenMMFrEnergyST::emptyContainers()
     reduced_perturbed_energies.clear();
 }
 
-void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm,
-                                           QVector<QVector<Vector>> &buffered_dimensions,
-                                           bool Debug, AtomicVelocityWorkspace &ws)
+void OpenMMFrEnergyST::updateBoxDimensions(
+   OpenMM::State &state_openmm,
+   QVector<QVector<Vector>> &buffered_dimensions,
+   AtomicVelocityWorkspace &ws)
 {
     Debug = false;
     OpenMM::Vec3 a;
@@ -4196,4 +4190,10 @@ IntegratorWorkspacePtr OpenMMFrEnergyST::createWorkspace(const MoleculeGroup &mo
 const char* OpenMMFrEnergyST::typeName()
 {
     return QMetaType::typeName(qMetaTypeId<OpenMMFrEnergyST>());
+}
+
+
+void OpenMMFrEnergyST::setDebug(bool debug)
+{
+   Debug = debug;
 }
