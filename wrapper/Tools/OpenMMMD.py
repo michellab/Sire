@@ -1189,8 +1189,6 @@ def createSystemFreeEnergy(molecules):
         )
         sys.exit(-1)
 
-    # solute = moleculeList[0]
-
     lig_name = solute.residue(ResIdx(0)).name().value()
 
     solute = solute.edit().rename(lig_name).commit()
@@ -1858,7 +1856,8 @@ def computeOpenMMEnergy(prmtop_filename, inpcrd_filename, cutoff):
 
     state = context.getState(getEnergy=True)
 
-    return state.getPotentialEnergy() / units.kilocalorie
+    return state.getPotentialEnergy().value_in_unit(
+        units.kilocalorie / units.mole)
 
 
 ##############
@@ -2113,9 +2112,9 @@ def runFreeNrg():
         amber = Sire.IO.Amber()
 
         if os.path.exists(s3file.val):
-            (molecules, space) = Sire.Stream.load(s3file.val)
+            molecules, space = Sire.Stream.load(s3file.val)
         else:
-            (molecules, space) = amber.readCrdTop(crdfile.val, topfile.val)
+            molecules, space = amber.readCrdTop(crdfile.val, topfile.val)
             Sire.Stream.save((molecules, space), s3file.val)
 
         system = createSystemFreeEnergy(molecules)
@@ -2293,7 +2292,8 @@ def runFreeNrg():
 
     energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
     print(f'Raw OpenMM (v{openmm.__version__}) energy '
-          f'({cutoff_type}, may be different from below): {energy}\n')
+          f'({cutoff_type}, may be different from below): {energy:.2f} '
+          'kcal mol-1\n')
 
     if minimise.val:
         print(
