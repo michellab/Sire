@@ -326,6 +326,7 @@ void register_Mol2_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Mol2_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireIO::Mol2 >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        Mol2_exposer.def_pickle(sire_pickle_suite< ::SireIO::Mol2 >());
         Mol2_exposer.def( "__str__", &__str__< ::SireIO::Mol2 > );
         Mol2_exposer.def( "__repr__", &__str__< ::SireIO::Mol2 > );
     }

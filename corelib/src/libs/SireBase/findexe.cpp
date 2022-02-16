@@ -62,7 +62,7 @@ QFileInfo SireBase::findExe(const QString &exe)
     {
         if (rexp.indexIn(env_variable) != -1)
         {
-            path = rexp.cap(1).split(splitChar, QString::SkipEmptyParts);
+            path = rexp.cap(1).split(splitChar, Qt::SkipEmptyParts);
             break;
         }
     }

@@ -100,6 +100,7 @@ void register_RelFromMass_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         RelFromMass_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::RelFromMass >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        RelFromMass_exposer.def_pickle(sire_pickle_suite< ::SireMol::RelFromMass >());
         RelFromMass_exposer.def( "__str__", &__str__< ::SireMol::RelFromMass > );
         RelFromMass_exposer.def( "__repr__", &__str__< ::SireMol::RelFromMass > );
     }

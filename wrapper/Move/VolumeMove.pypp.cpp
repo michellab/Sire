@@ -195,6 +195,7 @@ void register_VolumeMove_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         VolumeMove_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMove::VolumeMove >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        VolumeMove_exposer.def_pickle(sire_pickle_suite< ::SireMove::VolumeMove >());
         VolumeMove_exposer.def( "__str__", &__str__< ::SireMove::VolumeMove > );
         VolumeMove_exposer.def( "__repr__", &__str__< ::SireMove::VolumeMove > );
     }

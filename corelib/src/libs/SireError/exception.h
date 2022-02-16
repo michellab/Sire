@@ -61,9 +61,9 @@ public:
     FastExceptionFlag();
     FastExceptionFlag(const FastExceptionFlag &other);
     ~FastExceptionFlag();
-    
+
     FastExceptionFlag& operator=(const FastExceptionFlag &other);
-    
+
     void disable();
 
 private:
@@ -76,7 +76,7 @@ private:
         FastExceptionFlagData();
         ~FastExceptionFlagData();
     };
-    
+
     boost::shared_ptr<FastExceptionFlagData> d;
 
     /** Whether or not fast exceptions are enabled */
@@ -101,7 +101,7 @@ public:
     typedef SireError::exception ROOT;
 
     exception();
-    exception(QString error, QString place = QString::null);
+    exception(QString error, QString place = QString());
 
     exception(const exception &other);
 
@@ -118,7 +118,7 @@ public:
 
     QByteArray pack() const;
     static boost::shared_ptr<SireError::exception> unpack(const QByteArray &data);
-    
+
     static void unpackAndThrow(const QByteArray &errordata);
 
     static FastExceptionFlag enableFastExceptions();

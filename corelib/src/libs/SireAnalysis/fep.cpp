@@ -57,18 +57,18 @@ static const RegisterAlternativeName<DataPoint> r_altdp("Soiree::DataPoint");
 QDataStream &operator<<(QDataStream &ds, const DataPoint &dp)
 {
     writeHeader(ds, r_dp, 1);
-    
+
     ds << dp._x << dp._y
        << dp._xminerr << dp._yminerr
        << dp._xmaxerr << dp._ymaxerr;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, DataPoint &dp)
 {
     VersionID v = readHeader(ds, r_dp);
-    
+
     if (v == 1)
     {
         ds >> dp._x >> dp._y
@@ -77,7 +77,7 @@ QDataStream &operator>>(QDataStream &ds, DataPoint &dp)
     }
     else
         throw version_error(v, "1", r_dp, CODELOC);
-    
+
     return ds;
 }
 
@@ -109,7 +109,7 @@ DataPoint::DataPoint(double x, double y, double xminerror, double yminerror,
 {
     if (_xminerr > _xmaxerr)
         qSwap(_xminerr, _xmaxerr);
-    
+
     if (_yminerr > _ymaxerr)
         qSwap(_yminerr, _ymaxerr);
 }
@@ -137,7 +137,7 @@ DataPoint& DataPoint::operator=(const DataPoint &other)
         _xmaxerr = other._xmaxerr;
         _ymaxerr = other._ymaxerr;
     }
-    
+
     return *this;
 }
 
@@ -171,7 +171,7 @@ QString DataPoint::toString() const
     {
         QString xstr;
         QString ystr;
-    
+
         if (hasXError())
         {
             if (xMinError() != xMaxError())
@@ -199,7 +199,7 @@ QString DataPoint::toString() const
         }
         else
             ystr = QString("%1").arg(y());
-        
+
         return QString("DataPoint( %1, %2 )").arg(xstr, ystr);
     }
     else
@@ -298,7 +298,7 @@ bool DataPoint::equalWithinError(const DataPoint &other) const
 {
     return x() + xError() >= other.x() - other.xError() and
            x() - xError() <= other.x() + other.xError() and
-    
+
            y() + yError() >= other.y() - other.yError() and
            y() - yError() <= other.y() + other.yError();
 }
@@ -309,7 +309,7 @@ bool DataPoint::equalWithinMinError(const DataPoint &other) const
 {
     return x() + xMinError() >= other.x() - other.xMinError() and
            x() - xMinError() <= other.x() + other.xMinError() and
-    
+
            y() + yMinError() >= other.y() - other.yMinError() and
            y() - yMinError() <= other.y() + other.yMinError();
 }
@@ -320,7 +320,7 @@ bool DataPoint::equalWithinMaxError(const DataPoint &other) const
 {
     return x() + xMaxError() >= other.x() - other.xMaxError() and
            x() - xMaxError() <= other.x() + other.xMaxError() and
-    
+
            y() + yMaxError() >= other.y() - other.yMaxError() and
            y() - yMaxError() <= other.y() + other.yMaxError();
 }
@@ -335,27 +335,27 @@ static const RegisterAlternativeName<PMF> r_altpmf("Soiree::PMF");
 QDataStream &operator<<(QDataStream &ds, const PMF &pmf)
 {
     writeHeader(ds, r_pmf, 2);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << pmf.vals;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, PMF &pmf)
 {
     VersionID v = readHeader(ds, r_pmf);
-    
+
     if (v == 2)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> pmf.vals;
     }
     else
         throw version_error(v, "2", r_pmf, CODELOC);
-    
+
     return ds;
 }
 
@@ -366,14 +366,14 @@ PMF::PMF() : ConcreteProperty<PMF,Property>()
 void PMF::setValues(const QVector<DataPoint> &values)
 {
     vals = values;
-    
+
     //ensure that the points are in sorted x numerical order
     bool sorted = false;
-    
+
     while (not sorted)
     {
         sorted = true;
-    
+
         //bubble sort - compare neighbours and swap if in the wrong order
         for (int i=1; i<vals.count(); ++i)
         {
@@ -408,7 +408,7 @@ PMF& PMF::operator=(const PMF &other)
     {
         vals = other.vals;
     }
-    
+
     return *this;
 }
 
@@ -505,27 +505,27 @@ static const RegisterAlternativeName<FEPDeltas> r_altdeltas("Soiree::FEPDeltas")
 QDataStream &operator<<(QDataStream &ds, const FEPDeltas &deltas)
 {
     writeHeader(ds, r_deltas, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << deltas.lamvals << deltas.fwds_deltas << deltas.bwds_deltas;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, FEPDeltas &deltas)
 {
     VersionID v = readHeader(ds, r_deltas);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> deltas.lamvals >> deltas.fwds_deltas >> deltas.bwds_deltas;
     }
     else
         throw version_error(v, "1", r_deltas, CODELOC);
-    
+
     return ds;
 }
 
@@ -561,9 +561,9 @@ void FEPDeltas::checkSane() const
                     .arg(t.toString()).arg(it.value().temperature().toString()),
                         CODELOC );
         }
-    
+
         int idx = lamvals.indexOf(it.key());
-        
+
         if (idx == -1)
             throw SireError::invalid_arg( QObject::tr(
                     "All of the FEP deltas must correspond to one of the FEP windows. "
@@ -571,7 +571,7 @@ void FEPDeltas::checkSane() const
                     "windows %3")
                         .arg(it.key()).arg(it.value().toString())
                         .arg(Sire::toString(lamvals)), CODELOC );
-        
+
         if (idx == lamvals.count())
             //there should be no forwards delta for the last window
             throw SireError::invalid_arg( QObject::tr(
@@ -598,7 +598,7 @@ void FEPDeltas::checkSane() const
         }
 
         int idx = lamvals.indexOf(it.key());
-        
+
         if (idx == -1)
             throw SireError::invalid_arg( QObject::tr(
                     "All of the FEP deltas must correspond to one of the FEP windows. "
@@ -606,7 +606,7 @@ void FEPDeltas::checkSane() const
                     "windows %3")
                         .arg(it.key()).arg(it.value().toString())
                         .arg(Sire::toString(lamvals)), CODELOC );
-        
+
         if (idx == lamvals.count())
             //there should be no backwards delta for the first window
             throw SireError::invalid_arg( QObject::tr(
@@ -624,7 +624,7 @@ FEPDeltas::FEPDeltas(const QList<double> &windows, const QMap<double,FreeEnergyA
           : ConcreteProperty<FEPDeltas,Property>(),
             lamvals(windows), fwds_deltas(deltas)
 {
-    qSort(lamvals);
+    std::sort(lamvals.begin(), lamvals.end());
     checkSane();
 }
 
@@ -636,7 +636,7 @@ FEPDeltas::FEPDeltas(const QList<double> &windows,
           : ConcreteProperty<FEPDeltas,Property>(),
             lamvals(windows), fwds_deltas(forwards_deltas), bwds_deltas(backwards_deltas)
 {
-    qSort(lamvals);
+    std::sort(lamvals.begin(), lamvals.end());
     checkSane();
 }
 
@@ -659,7 +659,7 @@ FEPDeltas& FEPDeltas::operator=(const FEPDeltas &other)
         fwds_deltas = other.fwds_deltas;
         bwds_deltas = other.bwds_deltas;
     }
-    
+
     return *this;
 }
 
@@ -733,17 +733,17 @@ FEPDeltas& FEPDeltas::operator+=(const FEPDeltas &other)
                 "%1 vs. %2.")
                     .arg(Sire::toString(lamvals)).arg(Sire::toString(other.lamvals)),
                         CODELOC);
-        
+
         if (temperature() != other.temperature())
             throw SireError::incompatible_error( QObject::tr(
                 "Cannot add together these two FEPDeltas as the temperature at which their "
                 "free energies were collected are different. %1 vs. %2")
                     .arg(temperature().toString()).arg(other.temperature().toString()),
                         CODELOC );
-        
+
         QMap<double,FreeEnergyAverage> new_fwds_deltas = fwds_deltas;
         QMap<double,FreeEnergyAverage> new_bwds_deltas = bwds_deltas;
-        
+
         for (QMap<double,FreeEnergyAverage>::const_iterator it = other.fwds_deltas.constBegin();
              it != other.fwds_deltas.constEnd();
              ++it)
@@ -763,10 +763,10 @@ FEPDeltas& FEPDeltas::operator+=(const FEPDeltas &other)
             else
                 new_bwds_deltas.insert(it.key(), it.value());
         }
-        
+
         fwds_deltas = new_fwds_deltas;
         bwds_deltas = new_bwds_deltas;
-        
+
         return *this;
     }
 }
@@ -784,10 +784,10 @@ FEPDeltas FEPDeltas::merge(const QList<FEPDeltas> &deltas)
 {
     if (deltas.isEmpty())
         return FEPDeltas();
-    
+
     else if (deltas.count() == 1)
         return deltas.at(0);
-    
+
     else
     {
         FEPDeltas ret = deltas.at(0);
@@ -796,7 +796,7 @@ FEPDeltas FEPDeltas::merge(const QList<FEPDeltas> &deltas)
         {
             ret += deltas.at(i);
         }
-        
+
         return ret;
     }
 }
@@ -829,49 +829,49 @@ int FEPDeltas::nWindows() const
 qint64 FEPDeltas::nSamples() const
 {
     quint64 n = 0;
-    
+
     for (QMap<double,FreeEnergyAverage>::const_iterator it = fwds_deltas.constBegin();
          it != fwds_deltas.constEnd();
          ++it)
     {
         n += it.value().nSamples();
     }
-    
+
     for (QMap<double,FreeEnergyAverage>::const_iterator it = bwds_deltas.constBegin();
          it != bwds_deltas.constEnd();
          ++it)
     {
         n += it.value().nSamples();
     }
-    
+
     return n;
 }
 
-/** Return the values between windows. This returns the average of the 
+/** Return the values between windows. This returns the average of the
     forwards and backwards values */
 QVector<DataPoint> FEPDeltas::values() const
 {
     QVector<DataPoint> points;
-    
+
     for (int i=0; i<lamvals.count()-1; ++i)
     {
         const FreeEnergyAverage *fwds = 0;
         const FreeEnergyAverage *bwds = 0;
-        
+
         double lam = lamvals.at(i);
-        
+
         if (fwds_deltas.contains(lam))
             fwds = &(*(fwds_deltas.constFind(lam)));
-        
+
         if (bwds_deltas.contains(lamvals.at(i+1)))
             bwds = &(*(bwds_deltas.constFind(lamvals.at(i+1))));
-        
+
         if (fwds == 0)
         {
             double val = bwds->fepFreeEnergy();
             double minerr = bwds->histogram().standardError(90);
             double maxerr = minerr;
-            
+
             points.append( DataPoint(lam, val, 0, minerr, 0, maxerr) );
         }
         else if (bwds == 0)
@@ -879,7 +879,7 @@ QVector<DataPoint> FEPDeltas::values() const
             double val = fwds->fepFreeEnergy();
             double minerr = fwds->histogram().standardError(90);
             double maxerr = minerr;
-            
+
             points.append( DataPoint(lam, val, 0, minerr, 0, maxerr) );
         }
         else
@@ -888,11 +888,11 @@ QVector<DataPoint> FEPDeltas::values() const
             double minerr = std::abs(fwds->fepFreeEnergy() - bwds->fepFreeEnergy());
             double maxerr = minerr + fwds->histogram().standardError(90)
                                    + bwds->histogram().standardError(90);
-            
+
             points.append( DataPoint(lam, val, 0, minerr, 0, maxerr) );
         }
     }
-    
+
     return points;
 }
 
@@ -901,20 +901,20 @@ QVector<DataPoint> FEPDeltas::values() const
 QVector<DataPoint> FEPDeltas::forwardsValues() const
 {
     QVector<DataPoint> points;
-    
+
     foreach (double lamval, lamvals)
     {
         if (fwds_deltas.contains(lamval))
         {
             const FreeEnergyAverage &fwds = *(fwds_deltas.constFind(lamval));
-        
+
             double val = fwds.fepFreeEnergy();
             double maxerr = fwds.histogram().standardError(90);
             double minerr = maxerr;
             points.append( DataPoint(lamval, val, 0, minerr, 0, maxerr) );
         }
     }
-    
+
     return points;
 }
 
@@ -923,20 +923,20 @@ QVector<DataPoint> FEPDeltas::forwardsValues() const
 QVector<DataPoint> FEPDeltas::backwardsValues() const
 {
     QVector<DataPoint> points;
-    
+
     for (int i=1; i<lamvals.count(); ++i)
     {
         if (bwds_deltas.contains(lamvals.at(i)))
         {
             const FreeEnergyAverage &bwds = *(bwds_deltas.constFind(lamvals.at(i)));
-        
+
             double val = bwds.fepFreeEnergy();
             double maxerr = bwds.histogram().standardError(90);
             double minerr = maxerr;
             points.append( DataPoint(lamvals.at(i-1), val, 0, minerr, 0, maxerr) );
         }
     }
-    
+
     return points;
 }
 
@@ -971,30 +971,30 @@ PMF FEPDeltas::sum() const
         return PMF();
 
     QVector<DataPoint> points;
-    
+
     double total = 0;
     double total_minerr = 0;
     double total_maxerr = 0;
-    
+
     points.append( DataPoint(lamvals.first(),0) );
-    
+
     for (int i=0; i<lamvals.count()-1; ++i)
     {
         const FreeEnergyAverage *fwds = 0;
         const FreeEnergyAverage *bwds = 0;
-        
+
         double lam = lamvals.at(i);
-        
+
         double val = 0;
         double minerr = 0;
         double maxerr = 0;
-        
+
         if (fwds_deltas.contains(lam))
             fwds = &(*(fwds_deltas.constFind(lam)));
-        
+
         if (bwds_deltas.contains(lamvals.at(i+1)))
             bwds = &(*(bwds_deltas.constFind(lamvals.at(i+1))));
-        
+
         if (fwds == 0)
         {
             val = bwds->fepFreeEnergy();
@@ -1014,16 +1014,16 @@ PMF FEPDeltas::sum() const
             maxerr = minerr + fwds->histogram().standardError(90) +
                               bwds->histogram().standardError(90);
         }
-        
+
         total += val;
         total_minerr += minerr;
         total_maxerr += maxerr;
-        
+
         points.append( DataPoint(lamvals.at(i+1), total,
                                  0, total_minerr,
                                  0, total_maxerr ) );
     }
-    
+
     return PMF(points);
 }
 
@@ -1034,28 +1034,28 @@ PMF FEPDeltas::sumForwards() const
         return PMF();
 
     QVector<DataPoint> points;
-    
+
     double total = 0;
     double total_err = 0;
-    
+
     points.append( DataPoint(lamvals.first(),0) );
-    
+
     for (int i=0; i<lamvals.count()-1; ++i)
     {
         const FreeEnergyAverage *fwds = 0;
         const FreeEnergyAverage *bwds = 0;
-        
+
         double lam = lamvals.at(i);
-        
+
         double val = 0;
         double err = 0;
-        
+
         if (fwds_deltas.contains(lam))
             fwds = &(*(fwds_deltas.constFind(lam)));
-        
+
         if (bwds_deltas.contains(lamvals.at(i+1)))
             bwds = &(*(bwds_deltas.constFind(lamvals.at(i+1))));
-        
+
         if (fwds == 0)
         {
             err = bwds->histogram().standardError(90);
@@ -1066,13 +1066,13 @@ PMF FEPDeltas::sumForwards() const
             err = fwds->histogram().standardError(90);
             val = fwds->average();
         }
-        
+
         total += val;
         total_err += err;
-        
+
         points.append( DataPoint(lamvals.at(i+1), total, 0, total_err) );
     }
-    
+
     return PMF(points);
 }
 
@@ -1083,28 +1083,28 @@ PMF FEPDeltas::sumBackwards() const
         return PMF();
 
     QVector<DataPoint> points;
-    
+
     double total = 0;
     double total_err = 0;
-    
+
     points.append( DataPoint(lamvals.first(),0) );
-    
+
     for (int i=0; i<lamvals.count()-1; ++i)
     {
         const FreeEnergyAverage *fwds = 0;
         const FreeEnergyAverage *bwds = 0;
-        
+
         double lam = lamvals.at(i);
-        
+
         double val = 0;
         double err = 0;
-        
+
         if (fwds_deltas.contains(lam))
             fwds = &(*(fwds_deltas.constFind(lam)));
-        
+
         if (bwds_deltas.contains(lamvals.at(i+1)))
             bwds = &(*(bwds_deltas.constFind(lamvals.at(i+1))));
-        
+
         if (bwds == 0)
         {
             err = fwds->histogram().standardError(90);
@@ -1115,13 +1115,13 @@ PMF FEPDeltas::sumBackwards() const
             err = bwds->histogram().standardError(90);
             val = bwds->average();
         }
-        
+
         total += val;
         total_err += err;
-        
+
         points.append( DataPoint(lamvals.at(i+1), total, 0, total_err) );
     }
-    
+
     return PMF(points);
 }
 
@@ -1132,28 +1132,28 @@ PMF FEPDeltas::sumForwardsTaylor() const
         return PMF();
 
     QVector<DataPoint> points;
-    
+
     double total = 0;
     double total_err = 0;
-    
+
     points.append( DataPoint(lamvals.first(),0) );
-    
+
     for (int i=0; i<lamvals.count()-1; ++i)
     {
         const FreeEnergyAverage *fwds = 0;
         const FreeEnergyAverage *bwds = 0;
-        
+
         double lam = lamvals.at(i);
-        
+
         double val = 0;
         double err = 0;
-        
+
         if (fwds_deltas.contains(lam))
             fwds = &(*(fwds_deltas.constFind(lam)));
-        
+
         if (bwds_deltas.contains(lamvals.at(i+1)))
             bwds = &(*(bwds_deltas.constFind(lamvals.at(i+1))));
-        
+
         if (fwds == 0)
         {
             err = bwds->histogram().standardError(90);
@@ -1164,13 +1164,13 @@ PMF FEPDeltas::sumForwardsTaylor() const
             err = fwds->histogram().standardError(90);
             val = fwds->taylorExpansion();
         }
-        
+
         total += val;
         total_err += err;
-        
+
         points.append( DataPoint(lamvals.at(i+1), total, 0, total_err) );
     }
-    
+
     return PMF(points);
 }
 
@@ -1181,28 +1181,28 @@ PMF FEPDeltas::sumBackwardsTaylor() const
         return PMF();
 
     QVector<DataPoint> points;
-    
+
     double total = 0;
     double total_err = 0;
-    
+
     points.append( DataPoint(lamvals.first(),0) );
-    
+
     for (int i=0; i<lamvals.count()-1; ++i)
     {
         const FreeEnergyAverage *fwds = 0;
         const FreeEnergyAverage *bwds = 0;
-        
+
         double lam = lamvals.at(i);
-        
+
         double val = 0;
         double err = 0;
-        
+
         if (fwds_deltas.contains(lam))
             fwds = &(*(fwds_deltas.constFind(lam)));
-        
+
         if (bwds_deltas.contains(lamvals.at(i+1)))
             bwds = &(*(bwds_deltas.constFind(lamvals.at(i+1))));
-        
+
         if (bwds == 0)
         {
             err = fwds->histogram().standardError(90);
@@ -1213,13 +1213,13 @@ PMF FEPDeltas::sumBackwardsTaylor() const
             err = bwds->histogram().standardError(90);
             val = bwds->taylorExpansion();
         }
-        
+
         total += val;
         total_err += err;
-        
+
         points.append( DataPoint(lamvals.at(i+1), total, 0, total_err) );
     }
-    
+
     return PMF(points);
 }
 
@@ -1239,27 +1239,27 @@ static const RegisterAlternativeName<FEP> r_altfep("Soiree::FEP");
 QDataStream &operator<<(QDataStream &ds, const FEP &fep)
 {
     writeHeader(ds, r_fep, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << fep.dltas;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, FEP &fep)
 {
     VersionID v = readHeader(ds, r_fep);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> fep.dltas;
     }
     else
         throw version_error(v, "1", r_fep, CODELOC);
-    
+
     return ds;
 }
 
@@ -1275,7 +1275,7 @@ FEP::FEP(const QList<double> &windows, const QMap<double,FreeEnergyAverage> &del
     this->add( FEPDeltas(windows,deltas) );
 }
 
-/** Construct to use the passed windows, with the free energy deltas from 
+/** Construct to use the passed windows, with the free energy deltas from
     each window to the window above in 'forwards_deltas' and from the window
     below to each window in 'backwards_deltas' */
 FEP::FEP(const QList<double> &windows,
@@ -1383,12 +1383,12 @@ int FEP::nLambdaValues() const
 qint64 FEP::nSamples() const
 {
     quint64 n = 0;
-    
+
     foreach (const FEPDeltas &delta, dltas)
     {
         n += delta.nSamples();
     }
-    
+
     return n;
 }
 
@@ -1414,7 +1414,7 @@ QList<double> FEP::lambdaValues() const
 QList<double> FEP::windows() const
 {
     QMap<double,int> vals;
-    
+
     foreach (const FEPDeltas &delta, dltas)
     {
         foreach (double window, delta.windows())
@@ -1422,9 +1422,9 @@ QList<double> FEP::windows() const
             vals.insert(window,1);
         }
     }
-    
+
     QList<double> wdows = vals.keys();
-    qSort(wdows);
+    std::sort(wdows.begin(), wdows.end());
     return wdows;
 }
 
@@ -1482,15 +1482,15 @@ FEPDeltas FEP::merge(int start, int end) const
 {
     start = Index(start).map(dltas.count());
     end = Index(end).map(dltas.count());
-    
+
     QList<FEPDeltas> set;
-    
+
     for (int i=start; i<=end; ++i)
     {
         if (not dltas.at(i).isEmpty())
             set.append( dltas.at(i) );
     }
-    
+
     return FEPDeltas::merge(set);
 }
 
@@ -1498,7 +1498,7 @@ FEPDeltas FEP::merge(int start, int end) const
 FEPDeltas FEP::merge(QList<int> indicies) const
 {
     QList<FEPDeltas> set;
-    
+
     foreach (int idx, indicies)
     {
         int i = Index(idx).map(dltas.count());
@@ -1506,12 +1506,12 @@ FEPDeltas FEP::merge(QList<int> indicies) const
         if (not dltas.at(i).isEmpty())
            set.append( dltas.at(i) );
     }
- 
+
     return FEPDeltas::merge(set);
 }
 
 /** Return a list of Gradients that represents the rolling average over 'niterations'
-    iterations over this TI data set. If this data set contains 100 iterations, and 
+    iterations over this TI data set. If this data set contains 100 iterations, and
     we calculate the rolling average over 50 iterations, then the returned Gradients
     will be the average from 1-50, then 2-51, 3-52.....51-100 */
 QList<FEPDeltas> FEP::rollingAverage(int niterations) const
@@ -1520,7 +1520,7 @@ QList<FEPDeltas> FEP::rollingAverage(int niterations) const
 
     if (dltas.isEmpty())
         return merged;
-    
+
     if (niterations >= dltas.count())
     {
         FEPDeltas d = this->merge(0,-1);
@@ -1538,9 +1538,9 @@ QList<FEPDeltas> FEP::rollingAverage(int niterations) const
     else
     {
         QList<FEPDeltas> set;
-        
+
         int i=0;
-        
+
         for (i=0; i<dltas.count(); ++i)
         {
             if (not dltas.at(i).isEmpty())
@@ -1550,9 +1550,9 @@ QList<FEPDeltas> FEP::rollingAverage(int niterations) const
                     break;
             }
         }
-        
+
         merged.append( FEPDeltas::merge(set) );
-        
+
         for (i=i+1; i<dltas.count(); ++i)
         {
             if (not dltas.at(i).isEmpty())
@@ -1563,7 +1563,7 @@ QList<FEPDeltas> FEP::rollingAverage(int niterations) const
             }
         }
     }
-    
+
     return merged;
 }
 
@@ -1579,10 +1579,10 @@ void FEP::removeRange(int start, int end)
 {
     start = Index(start).map(dltas.count());
     end = Index(end).map(dltas.count());
-    
+
     if (start > end)
         qSwap(start, end);
-    
+
     for (int i = start; i <= end; ++i)
     {
         dltas[i] = FEPDeltas();

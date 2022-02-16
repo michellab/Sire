@@ -190,6 +190,18 @@ void register_GromacsAtomType_class(){
                 , "Return a string version of the particle type" );
         
         }
+        { //::SireMM::GromacsAtomType::setElement
+        
+            typedef void ( ::SireMM::GromacsAtomType::*setElement_function_type)( ::SireMol::Element ) ;
+            setElement_function_type setElement_function_value( &::SireMM::GromacsAtomType::setElement );
+            
+            GromacsAtomType_exposer.def( 
+                "setElement"
+                , setElement_function_value
+                , ( bp::arg("elem") )
+                , "Set the element to the passed value. This is useful if the atomtype section has\ninvalid mass informtion, as is the case for many topology files generted by acpype.\nThis allows us to update the element of the type using the mass from the atoms\nsection.\n" );
+        
+        }
         { //::SireMM::GromacsAtomType::toParticleType
         
             typedef ::SireMM::GromacsAtomType::PARTICLE_TYPE ( *toParticleType_function_type )( ::QString const &,bool * );
@@ -244,6 +256,7 @@ void register_GromacsAtomType_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         GromacsAtomType_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMM::GromacsAtomType >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        GromacsAtomType_exposer.def_pickle(sire_pickle_suite< ::SireMM::GromacsAtomType >());
         GromacsAtomType_exposer.def( "__str__", &__str__< ::SireMM::GromacsAtomType > );
         GromacsAtomType_exposer.def( "__repr__", &__str__< ::SireMM::GromacsAtomType > );
     }

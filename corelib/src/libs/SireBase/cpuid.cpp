@@ -32,12 +32,12 @@
     #include <libcpuid/libcpuid.h> // CONDITIONAL_INCLUDE
 #elif defined(_WIN32)
     #define WIN32_LEAN_AND_MEAN
-    #include <Windows.h>
+    #include <Windows.h>    // CONDITIONAL_INCLUDE
 #elif defined(__APPLE__) || defined(__FreeBSD__)
-    #include <sys/param.h>
-    #include <sys/sysctl.h>
+    #include <sys/param.h>  // CONDITIONAL_INCLUDE
+    #include <sys/sysctl.h> // CONDITIONAL_INCLUDE
 #else
-    #include <sys/sysinfo.h>
+    #include <sys/sysinfo.h>    // CONDITIONAL_INCLUDE
 #endif
 
 #include "SireStream/shareddatastream.h"
@@ -54,7 +54,7 @@ static const RegisterMetaType<CPUID> r_cpuid;
 QDataStream &operator<<(QDataStream &ds, const CPUID &cpuid)
 {
     writeHeader(ds, r_cpuid, 1);
-    
+
     SharedDataStream sds(ds);
     sds << cpuid.props;
     return ds;
@@ -63,7 +63,7 @@ QDataStream &operator<<(QDataStream &ds, const CPUID &cpuid)
 QDataStream &operator>>(QDataStream &ds, CPUID &cpuid)
 {
     VersionID v = readHeader(ds, r_cpuid);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
@@ -71,7 +71,7 @@ QDataStream &operator>>(QDataStream &ds, CPUID &cpuid)
     }
     else
         throw SireStream::version_error(v, "1", r_cpuid, CODELOC);
-    
+
     return ds;
 }
 
@@ -88,14 +88,14 @@ QDataStream &operator>>(QDataStream &ds, CPUID &cpuid)
     QStringList CPUID::supportableFeatures() const
     {
         QStringList features;
-        
+
         for (int i=0; i<NUM_CPU_FEATURES; ++i)
         {
             features.append( QString(cpu_feature_str(cpu_feature_t(i))) );
         }
-        
-        qSort(features);
-        
+
+        std::sort(features.begin(), features.end());
+
         return features;
     }
 
@@ -103,28 +103,25 @@ QDataStream &operator>>(QDataStream &ds, CPUID &cpuid)
     {
         if (not cpuid_present())
         {
-            qDebug() << "Sorry, your CPU doesn't support CPUID";
             return QHash<QString,QString>();
         }
-    
+
         cpu_raw_data_t raw_data;
-        
+
         if (cpuid_get_raw_data(&raw_data) != 0)
         {
-            qDebug() << "Sorry, could not get raw CPUID data";
             return QHash<QString,QString>();
         }
-        
+
         cpu_id_t cpuid;
-        
+
         if (cpu_identify(&raw_data, &cpuid) != 0)
         {
-            qDebug() << "Sorry, could not identify the CPU";
             return QHash<QString,QString>();
         }
-        
+
         QHash<QString,QString> data;
-        
+
         data.insert("vendor", cpuid.vendor_str);
         data.insert("brand", cpuid.brand_str);
         data.insert("num_cores", QString::number(cpuid.num_cores));
@@ -140,7 +137,7 @@ QDataStream &operator>>(QDataStream &ds, CPUID &cpuid)
         {
             data.insert( QString(cpu_feature_str(cpu_feature_t(i))), trueFalse(cpuid.flags[i]) );
         }
-        
+
         data.insert("cpu_clock_os", QString::number(cpu_clock_by_os()));
         data.insert("cpu_clock", QString::number(cpu_clock_measure(200, true)));
 
@@ -167,13 +164,13 @@ QHash<QString,QString>* CPUID::getCPUID()
     if (not global_props)
     {
         QHash<QString,QString> *p = new QHash<QString,QString>(getCPUInfo());
-        
+
         if (not global_props)
             global_props = p;
         else
             delete p;
     }
-    
+
     return global_props;
 }
 
@@ -242,13 +239,13 @@ bool CPUID::supports(const QString &feature) const
 QStringList CPUID::supportedFeatures() const
 {
     QStringList supported;
-    
+
     foreach( QString feature, supportableFeatures() )
     {
         if (supports(feature))
             supported.append(feature);
     }
-    
+
     return supported;
 }
 

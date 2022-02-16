@@ -6,10 +6,6 @@
 #include "Helpers/clone_const_reference.hpp"
 #include "ForceFields.pypp.hpp"
 
-#ifdef _WIN32
-struct IUnknown;
-#endif
-
 namespace bp = boost::python;
 
 #include "SireBase/combineproperties.h"
@@ -1880,6 +1876,7 @@ void register_ForceFields_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ForceFields_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireFF::ForceFields >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        ForceFields_exposer.def_pickle(sire_pickle_suite< ::SireFF::ForceFields >());
         ForceFields_exposer.def( "__str__", &__str__< ::SireFF::ForceFields > );
         ForceFields_exposer.def( "__repr__", &__str__< ::SireFF::ForceFields > );
         ForceFields_exposer.def( "__len__", &__len_count< ::SireFF::ForceFields > );

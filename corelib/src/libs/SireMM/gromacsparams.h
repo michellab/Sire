@@ -129,6 +129,7 @@ public:
     SireMM::LJParameter ljParameter() const;
 
     SireMol::Element element() const;
+    void setElement(SireMol::Element elem);
 
     PARTICLE_TYPE particleType() const;
 

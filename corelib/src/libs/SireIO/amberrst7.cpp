@@ -197,7 +197,7 @@ void AmberRst7::parse(const PropertyMap &map)
     score += 1;
 
     // read in the number of atoms and time (two space-separated words)
-    QStringList words = lines()[1].split(" ", QString::SkipEmptyParts);
+    QStringList words = lines()[1].split(" ", Qt::SkipEmptyParts);
 
     if (words.isEmpty())
         throw SireIO::parse_error( QObject::tr(
@@ -457,7 +457,7 @@ static QStringList toLines(const QVector< QVector<Vector> > &all_coords,
 {
     //do any of the molecules have velocities?
     bool has_velocities = false;
-    for (const auto molvels : all_vels)
+    for (const auto &molvels : all_vels)
     {
         if (not molvels.isEmpty())
         {
@@ -472,7 +472,7 @@ static QStringList toLines(const QVector< QVector<Vector> > &all_coords,
 
     qint64 last_idx = 0;
 
-    for (const auto molcoords : all_coords)
+    for (const auto &molcoords : all_coords)
     {
         start_idx.append(last_idx);
         last_idx += 3 * molcoords.count();

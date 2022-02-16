@@ -41,6 +41,8 @@ namespace bp = boost::python;
 
 #include <QDebug>
 
+#include <QElapsedTimer>
+
 #include <QTime>
 
 #include "zmatrix.h"
@@ -682,6 +684,7 @@ void register_ZMatrix_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ZMatrix_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMove::ZMatrix >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        ZMatrix_exposer.def_pickle(sire_pickle_suite< ::SireMove::ZMatrix >());
         ZMatrix_exposer.def( "__str__", &__str__< ::SireMove::ZMatrix > );
         ZMatrix_exposer.def( "__repr__", &__str__< ::SireMove::ZMatrix > );
     }

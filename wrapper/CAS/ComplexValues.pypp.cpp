@@ -229,6 +229,7 @@ void register_ComplexValues_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ComplexValues_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireCAS::ComplexValues >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        ComplexValues_exposer.def_pickle(sire_pickle_suite< ::SireCAS::ComplexValues >());
         ComplexValues_exposer.def( "__str__", &pvt_get_name);
         ComplexValues_exposer.def( "__repr__", &pvt_get_name);
     }

@@ -4,11 +4,15 @@
 
 #include "boost/python.hpp"
 #include "Helpers/clone_const_reference.hpp"
+#include "SireMol/partialmolecule.h"
+#include "SireMol/molecule.h"
 #include "G2FF.pypp.hpp"
 
 namespace bp = boost::python;
 
 #include "SireError/errors.h"
+
+#include "SireFF/intra2b2gff.hpp"
 
 #include "SireMol/errors.h"
 
@@ -99,6 +103,7 @@ void register_G2FF_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         G2FF_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireFF::G2FF >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        G2FF_exposer.def_pickle(sire_pickle_suite< ::SireFF::G2FF >());
         G2FF_exposer.def( "__str__", &__str__< ::SireFF::G2FF > );
         G2FF_exposer.def( "__repr__", &__str__< ::SireFF::G2FF > );
         G2FF_exposer.def( "__len__", &__len_count< ::SireFF::G2FF > );

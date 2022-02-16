@@ -37,7 +37,6 @@
 #include <QDebug>
 #include <QElapsedTimer>
 
-#include "tbb/task_scheduler_init.h"
 #include "tbb/blocked_range.h"
 #include "tbb/parallel_for.h"
 
@@ -99,15 +98,15 @@ public:
           coul_nrg(coulomb_energy), lj_nrg(lj_energy),
           coul_cutoff(coulomb_cutoff), lj_cutoff(lenj_cutoff)
     {}
-    
+
     ~CLJCalculator()
     {}
-    
+
     void operator()(const tbb::blocked_range<int> &range) const
     {
         const CLJBoxDistance* ptr = dists + range.begin();
         const CLJBoxPtr* const b = boxes->constData();
-    
+
         for (int i = range.begin(); i != range.end(); ++i)
         {
             if (ptr->box0() == ptr->box1())
@@ -121,19 +120,19 @@ public:
                         b[ptr->box1()].read().atoms(),
                         coul_nrg[i], lj_nrg[i]);
             }
-            
+
             ptr += 1;
         }
     }
-    
+
 private:
     const CLJFunction* const func;
     const CLJBoxDistance* const dists;
     const CLJBoxes::Container* boxes;
-    
+
     double *coul_nrg;
     double *lj_nrg;
-    
+
     const float coul_cutoff;
     const float lj_cutoff;
 };
@@ -156,67 +155,67 @@ void TestFF::calculateEnergy()
     qDebug() << "TestFF" << (cnrg+ljnrg) << cnrg << ljnrg << "took" << (0.000001*ns) << "ms";
 
     qDebug() << "\nintra group energy";
-    
+
     t.start();
-    
+
     (*cljfunc)(atoms1, cnrg, ljnrg);
-    
+
     ns = t.nsecsElapsed();
-    
+
     qDebug() << "TestFF" << (cnrg+ljnrg) << cnrg << ljnrg << "took" << (0.000001*ns) << "ms";
 
     qDebug() << "\nUsing CLJBoxes to accelerate the calculation";
-    
+
     Cartesian space;
-    
+
     Length coul_cutoff = cljfunc->coulombCutoff();
     Length lj_cutoff = cljfunc->ljCutoff();
-    
+
     QVector<CLJBoxDistance> dists;
 
     const CLJBoxes::Container &boxes0 = cljboxes0.occupiedBoxes();
     const CLJBoxes::Container &boxes1 = cljboxes1.occupiedBoxes();
-    
+
     qDebug() << "inter energy";
 
     double icnrg, iljnrg;
 
     dists = CLJBoxes::getDistances(space, cljboxes0, cljboxes1, coul_cutoff);
-    
+
     cnrg = 0;
     ljnrg = 0;
-    
+
     t.start();
-    
+
     const CLJBoxDistance *ptr = dists.constData();
-    
+
     for (int i=0; i<dists.count(); ++i)
     {
         (*cljfunc)(boxes0[ptr->box0()].read().atoms(), boxes1[ptr->box1()].read().atoms(),
                    icnrg, iljnrg);
-        
+
         cnrg += icnrg;
         ljnrg += iljnrg;
-        
+
         ptr += 1;
     }
-    
+
     ns = t.nsecsElapsed();
-    
+
     qDebug() << "Boxed" << (cnrg+ljnrg) << cnrg << ljnrg;
     qDebug() << "Took" << (0.000001*ns) << "ms";
 
     qDebug() << "\nintra energy";
-    
+
     dists = CLJBoxes::getDistances(space, cljboxes1, coul_cutoff);
-    
+
     cnrg = 0;
     ljnrg = 0;
-    
+
     ptr = dists.constData();
-    
+
     t.start();
-    
+
     for (int i=0; i<dists.count(); ++i)
     {
         if (ptr->box0() == ptr->box1())
@@ -231,47 +230,47 @@ void TestFF::calculateEnergy()
 
         cnrg += icnrg;
         ljnrg += iljnrg;
-        
+
         ptr += 1;
     }
-    
+
     ns = t.nsecsElapsed();
-    
+
     qDebug() << "Boxed" << (cnrg+ljnrg) << cnrg << ljnrg;
     qDebug() << "Took" << (0.000001*ns) << "ms";
 
     QVector<double> coul_nrgs(dists.count());
     QVector<double> lj_nrgs(dists.count());
-    
+
     ::CLJCalculator calc(cljfunc.get(), dists.constData(), boxes1, coul_cutoff.value(),
                          lj_cutoff.value(), coul_nrgs.data(), lj_nrgs.data());
-    
+
     t.start();
     tbb::parallel_for(tbb::blocked_range<int>(0,dists.count(),25), calc);
-    
+
     cnrg = 0;
     ljnrg = 0;
-    
+
     for (int i=0; i<dists.count(); ++i)
     {
         cnrg += coul_nrgs.constData()[i];
         ljnrg += lj_nrgs.constData()[i];
     }
-    
+
     ns = t.nsecsElapsed();
-    
+
     qDebug() << "\nParallel" << (cnrg+ljnrg) << cnrg << ljnrg;
     qDebug() << "Parallel version took" << (0.000001*ns) << "ms";
-    
+
     qDebug() << "\nCLJCalculator (reproducible) version";
     SireMM::CLJCalculator calculator(true);
     t.start();
     tuple<double,double> nrgs = calculator.calculate(*cljfunc, cljboxes1);
     ns = t.nsecsElapsed();
-    
+
     cnrg = nrgs.get<0>();
     ljnrg = nrgs.get<1>();
-    
+
     qDebug() << "\nCLJCalculator" << (cnrg+ljnrg) << cnrg << ljnrg;
     qDebug() << "Took" << (0.000001*ns) << "ms";
 
@@ -280,10 +279,10 @@ void TestFF::calculateEnergy()
     t.start();
     nrgs = calculator.calculate(*cljfunc, cljboxes1);
     ns = t.nsecsElapsed();
-    
+
     cnrg = nrgs.get<0>();
     ljnrg = nrgs.get<1>();
-    
+
     qDebug() << "\nCLJCalculator" << (cnrg+ljnrg) << cnrg << ljnrg;
     qDebug() << "Took" << (0.000001*ns) << "ms";
 
@@ -292,10 +291,10 @@ void TestFF::calculateEnergy()
     t.start();
     nrgs = calculator.calculate(*cljfunc, cljboxes0, cljboxes1);
     ns = t.nsecsElapsed();
-    
+
     cnrg = nrgs.get<0>();
     ljnrg = nrgs.get<1>();
-    
+
     qDebug() << "\nCLJCalculator" << (cnrg+ljnrg) << cnrg << ljnrg;
     qDebug() << "Took" << (0.000001*ns) << "ms";
 
@@ -304,10 +303,10 @@ void TestFF::calculateEnergy()
     t.start();
     nrgs = calculator.calculate(*cljfunc, cljboxes0, cljboxes1);
     ns = t.nsecsElapsed();
-    
+
     cnrg = nrgs.get<0>();
     ljnrg = nrgs.get<1>();
-    
+
     qDebug() << "\nCLJCalculator" << (cnrg+ljnrg) << cnrg << ljnrg;
     qDebug() << "Took" << (0.000001*ns) << "ms";
 }

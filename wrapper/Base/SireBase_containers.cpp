@@ -134,7 +134,7 @@ struct from_py_PropertyList
             bp::list l( bp::handle<>(bp::borrowed(obj_ptr)) );
 
             int n = PyList_Size(obj_ptr);
-     
+
             for (int i=0; i<n; ++i)
             {
                 if (not can_convert_to_property(l[i]))
@@ -206,7 +206,7 @@ struct from_py_PropertyList
             int n = PyTuple_Size(obj_ptr);
 
             PropertyList list;
- 
+
             for (int i=0; i<n; ++i)
             {
                 list.append( convert_to_property(t[i]) );
@@ -260,13 +260,13 @@ struct from_py_PropertyList
                     else if (sublist.count() == 1)
                         list.append(sublist.at(0));
                     else
-                        list.append(sublist);                   
+                        list.append(sublist);
                 }
             }
             else if (PyList_Check(obj_ptr))
             {
                 bp::list l( bp::handle<>(bp::borrowed(obj_ptr)) );
-       
+
                 int n = PyList_Size(obj_ptr);
 
                 for (int i=0; i<n; ++i)
@@ -315,11 +315,11 @@ void register_SireBase_containers()
 
     register_PropertyList();
 
-    #if QT_VERSION >= 0x402000
+    #if QT_VERSION >= QT_VERSION_CHECK(4, 2, 0)
     register_dict< QHash<QString,PropertyName> >();
 
     #else
     register_dict< QHash<QString,PropertyName>, QString, PropertyName>();
 
-    #endif    
+    #endif
 }

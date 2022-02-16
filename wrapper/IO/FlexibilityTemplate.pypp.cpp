@@ -329,6 +329,7 @@ void register_FlexibilityTemplate_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         FlexibilityTemplate_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireIO::FlexibilityTemplate >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        FlexibilityTemplate_exposer.def_pickle(sire_pickle_suite< ::SireIO::FlexibilityTemplate >());
         FlexibilityTemplate_exposer.def( "__str__", &pvt_get_name);
         FlexibilityTemplate_exposer.def( "__repr__", &pvt_get_name);
     }

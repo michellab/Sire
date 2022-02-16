@@ -19,10 +19,18 @@ try:
     scipy = Sire.try_import("scipy")
 except ImportError:
     raise ImportError('Numpy is not installed. Please install numpy in order to use MBAR for your free energy analysis.')
-from pymbar import MBAR
-from pymbar import timeseries
-import warnings
 
+try:
+    from pymbar import MBAR
+    from pymbar import timeseries
+except ImportError:
+    import platform
+    if platform.machine() in ["aarch64", "arm64"]:
+        print("'pymbar' is not available on the 'aarch64' or 'arm64' platforms")
+
+    raise ImportError("'pymbar' is not installed. Please install pymbar in order to use MBAR for your free energy analysis.`")
+
+import warnings
 
 class FreeEnergies(object):
     r"""This class contains all the different pmf information
@@ -76,14 +84,18 @@ class FreeEnergies(object):
             self._pmf_ti[-1][1] = numpy.trapz(means, self._lambda_array)
             self._deltaF_ti = numpy.trapz(means, self._lambda_array)
 
-
     def run_mbar(self, test_overlap = True):
         r"""Runs MBAR free energy estimate """
-        MBAR_obj = MBAR(self._u_kln, self._N_k, verbose=True)
-        self._f_k = MBAR_obj.f_k
+
         try:
-            (deltaF_ij, dDeltaF_ij, theta_ij) = MBAR_obj.getFreeEnergyDifferences()
+            MBAR_obj = MBAR(self._u_kln, self._N_k, verbose=True)
+            self._f_k = MBAR_obj.f_k
+            (deltaF_ij, dDeltaF_ij, theta_ij) = MBAR_obj.getFreeEnergyDifferences(return_theta=True)
         except:
+            solver_options = {"maximum_iterations":10000,"verbose":True}
+            solver_protocol = {"method":"BFGS","options":solver_options}
+            MBAR_obj = MBAR(self._u_kln, self._N_k, solver_protocol=(solver_protocol,))
+            self._f_k = MBAR_obj.f_k
             (deltaF_ij, dDeltaF_ij, theta_ij) = MBAR_obj.getFreeEnergyDifferences(return_theta=True)
         self._deltaF_mbar = deltaF_ij[0, self._lambda_array.shape[0]-1]
         self._dDeltaF_mbar = dDeltaF_ij[0, self._lambda_array.shape[0]-1]

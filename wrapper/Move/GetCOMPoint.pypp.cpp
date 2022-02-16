@@ -108,6 +108,7 @@ void register_GetCOMPoint_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         GetCOMPoint_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMove::GetCOMPoint >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        GetCOMPoint_exposer.def_pickle(sire_pickle_suite< ::SireMove::GetCOMPoint >());
         GetCOMPoint_exposer.def( "__str__", &__str__< ::SireMove::GetCOMPoint > );
         GetCOMPoint_exposer.def( "__repr__", &__str__< ::SireMove::GetCOMPoint > );
     }

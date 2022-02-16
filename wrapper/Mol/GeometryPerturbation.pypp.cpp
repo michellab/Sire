@@ -77,6 +77,7 @@ void register_GeometryPerturbation_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         GeometryPerturbation_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::GeometryPerturbation >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        GeometryPerturbation_exposer.def_pickle(sire_pickle_suite< ::SireMol::GeometryPerturbation >());
         GeometryPerturbation_exposer.def( "__str__", &__str__< ::SireMol::GeometryPerturbation > );
         GeometryPerturbation_exposer.def( "__repr__", &__str__< ::SireMol::GeometryPerturbation > );
     }

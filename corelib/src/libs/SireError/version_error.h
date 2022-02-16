@@ -47,7 +47,7 @@ public:
     version_error() : exception()
     {}
 
-    version_error(QString err, QString place = QString::null)
+    version_error(QString err, QString place = QString())
                   : exception(err,place)
     {}
 
@@ -60,7 +60,7 @@ public:
     static const char* typeName();
 
     const char* what() const throw();
-    
+
     void throwSelf() const
     {
         throw version_error(*this);

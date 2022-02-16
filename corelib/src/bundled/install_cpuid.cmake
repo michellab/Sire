@@ -25,13 +25,13 @@ else()
         message( STATUS "Downloading, compiling and installing libcpuid" )
 
         if(NOT DEFINED CPUID_VERSION)
-            set(CPUID_VERSION "0.4.1")
+            set(CPUID_VERSION "0.5.1")
         endif()
         if(NOT DEFINED CPUID_URL)
-            set(CPUID_URL "https://github.com/anrieff/libcpuid/archive/v${CPUID_VERSION}.tar.gz")
+            set(CPUID_URL "https://github.com/anrieff/libcpuid/archive/refs/tags/v${CPUID_VERSION}.tar.gz")
         endif()
         if(NOT DEFINED CPUID_MD5SUM)
-            set(CPUID_MD5SUM "e9ffa7413e14039823ddd7452500ded9")
+            set(CPUID_MD5SUM "1ca29f56482c4f4192875f5efac179a8")
         endif()
         if(NOT DEFINED CPUID_ZIPFILE)
             set(CPUID_ZIPFILE "${CMAKE_SOURCE_DIR}/src/bundled/libcpuid-${CPUID_VERSION}.tar.gz")
@@ -73,16 +73,9 @@ else()
                 list( APPEND CPUID_OPTIONS "libcpuid_vc10.sln" )
                 message( STATUS "${CMAKE_MAKE_PROGRAM} | ${CPUID_OPTIONS}" )
             else()
-                list( APPEND CPUID_OPTIONS "--enable-static=no" )
-                list( APPEND CPUID_OPTIONS "--enable-shared=yes" )
-                list( APPEND CPUID_OPTIONS "--prefix=${BUNDLE_STAGEDIR}" )
-                list( APPEND CPUID_OPTIONS "--libdir=${BUNDLE_STAGEDIR}/lib" )
-                list( APPEND CPUID_OPTIONS "CC=${CMAKE_C_COMPILER}" )
-
-                if (HAVE_STDINT_H)
-                    list( APPEND CPUID_OPTIONS "CFLAGS=-DHAVE_STDINT_H" )
-                endif()
-                message( STATUS "${CPUID_BUILD_DIR}/configure | ${CPUID_OPTIONS}" )
+                list( APPEND CPUID_OPTIONS "-DCMAKE_INSTALL_PREFIX=${BUNDLE_STAGEDIR}")
+                list( APPEND CPUID_OPTIONS ".")
+                message( STATUS "CPUID | ${CPUID_BUILD_DIR} | ${CPUID_OPTIONS}" )
             endif()
 
             if (MSYS)
@@ -95,15 +88,9 @@ else()
                             )
             else()
                 message( STATUS "Patience... Configuring libcpuid..." )
-                execute_process( COMMAND "libtoolize"
-                                WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-                            )
-                execute_process( COMMAND "autoreconf" "--install"
-                                WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-                            )
-                execute_process( COMMAND "${CPUID_BUILD_DIR}/configure" ${CPUID_OPTIONS}
-                                WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-                            )
+                execute_process( COMMAND "${CMAKE_COMMAND}" ${CPUID_OPTIONS}
+                                 WORKING_DIRECTORY ${CPUID_BUILD_DIR}
+                               )
                 message( STATUS "Patience... Compiling libcpuid..." )
                 execute_process( COMMAND "${CMAKE_MAKE_PROGRAM}" -k -j ${NCORES}
                                 WORKING_DIRECTORY ${CPUID_BUILD_DIR}
@@ -116,7 +103,7 @@ else()
 
             if (APPLE)
                 set( CPUID_LIBRARY "${BUNDLE_STAGEDIR}/lib/libcpuid.dylib" )
-                execute_process( COMMAND ${CMAKE_INSTALL_NAME_TOOL} -id "@rpath/libcpuid.14.dylib" ${CPUID_LIBRARY} )
+                execute_process( COMMAND ${CMAKE_INSTALL_NAME_TOOL} -id "@rpath/libcpuid.15.dylib" ${CPUID_LIBRARY} )
             elseif(MSYS)
                 unset(CPUID_LIBRARY CACHE)
                 find_library( CPUID_LIBRARY "cpuid" PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )

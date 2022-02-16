@@ -67,9 +67,9 @@ static const RegisterMetaType<BondHunter> r_hunter( MAGIC_ONLY,
 QDataStream &operator<<(QDataStream &ds, const BondHunter &hunter)
 {
     writeHeader(ds, r_hunter, 0);
-    
+
     ds << static_cast<const Property&>(hunter);
-    
+
     return ds;
 }
 
@@ -77,14 +77,14 @@ QDataStream &operator<<(QDataStream &ds, const BondHunter &hunter)
 QDataStream &operator>>(QDataStream &ds, BondHunter &hunter)
 {
     VersionID v = readHeader(ds, r_hunter);
-    
+
     if (v == 0)
     {
         ds >> static_cast<Property&>(hunter);
     }
     else
         throw version_error(v, "0", r_hunter, CODELOC);
-        
+
     return ds;
 }
 
@@ -111,9 +111,9 @@ static const RegisterMetaType<NullBondHunter> r_nullhunter;
 QDataStream &operator<<(QDataStream &ds, const NullBondHunter &hunter)
 {
     writeHeader(ds, r_nullhunter, 1);
-    
+
     ds << static_cast<const BondHunter&>(hunter);
-    
+
     return ds;
 }
 
@@ -121,14 +121,14 @@ QDataStream &operator<<(QDataStream &ds, const NullBondHunter &hunter)
 QDataStream &operator>>(QDataStream &ds, NullBondHunter &hunter)
 {
     VersionID v = readHeader(ds, r_nullhunter);
-    
+
     if (v == 1)
     {
         ds >> static_cast<BondHunter&>(hunter);
     }
     else
         throw version_error(v, "1", r_nullhunter, CODELOC);
-        
+
     return ds;
 }
 
@@ -183,9 +183,9 @@ static const RegisterMetaType<CovalentBondHunter> r_covalenthunter;
 QDataStream &operator<<(QDataStream &ds, const CovalentBondHunter &hunter)
 {
     writeHeader(ds, r_covalenthunter, 1);
-    
+
     ds << hunter.tol << static_cast<const BondHunter&>(hunter);
-    
+
     return ds;
 }
 
@@ -193,14 +193,14 @@ QDataStream &operator<<(QDataStream &ds, const CovalentBondHunter &hunter)
 QDataStream &operator>>(QDataStream &ds, CovalentBondHunter &hunter)
 {
     VersionID v = readHeader(ds, r_covalenthunter);
-    
+
     if (v == 1)
     {
         ds >> hunter.tol >> static_cast<BondHunter&>(hunter);
     }
     else
         throw version_error(v, "1", r_covalenthunter, CODELOC);
-        
+
     return ds;
 }
 
@@ -225,7 +225,7 @@ CovalentBondHunter& CovalentBondHunter::operator=(const CovalentBondHunter &othe
 {
     tol = other.tol;
     BondHunter::operator=(other);
-    
+
     return *this;
 }
 
@@ -241,27 +241,27 @@ bool CovalentBondHunter::operator!=(const CovalentBondHunter &other) const
     return tol != other.tol;
 }
 
-void addAllIntraBonds(ConnectivityEditor &connectivity, CGIdx cgidx, 
+void addAllIntraBonds(ConnectivityEditor &connectivity, CGIdx cgidx,
                       const CoordGroup &coords,
                       const AtomElements::Array &elements,
                       double tolerance)
 {
     int nats = coords.count();
     BOOST_ASSERT(elements.count() == nats );
-    
+
     const Vector *coords_array = coords.constData();
     const Element *elements_array = elements.constData();
-    
+
     for (Index i(0); i<nats-1; ++i)
     {
         const Vector &v0 = coords_array[i];
         double r0 = elements_array[i].bondOrderRadius();
-        
+
         for (Index j(i+1); j<nats; ++j)
         {
             const Vector &v1 = coords_array[j];
             double r1 = elements_array[j].bondOrderRadius();
-            
+
             if ( SireMaths::pow_2( tolerance*(r0+r1) ) > Vector::distance2(v0,v1) )
             {
                 connectivity.connect( CGAtomIdx(cgidx,i), CGAtomIdx(cgidx,j) );
@@ -275,7 +275,7 @@ void addSomeIntraBonds(ConnectivityEditor &connectivity, CGIdx cgidx,
                        const QSet<Index> &selected_atoms, double tolerance)
 {
     BOOST_ASSERT( coords.count() == elements.count() );
-    
+
     const Vector *coords_array = coords.constData();
     const Element *elements_array = elements.constData();
 
@@ -285,14 +285,15 @@ void addSomeIntraBonds(ConnectivityEditor &connectivity, CGIdx cgidx,
     {
         const Vector &v0 = coords_array[*it0];
         double r0 = elements_array[*it0].bondOrderRadius();
-        
-        for (QSet<Index>::const_iterator it1 = it0 + 1;
+
+        QSet<Index>::const_iterator it1 = it0;
+        for (++it1;
              it1 != selected_atoms.constEnd();
              ++it1)
         {
             const Vector &v1 = coords_array[*it1];
             double r1 = elements_array[*it1].bondOrderRadius();
-            
+
             if ( SireMaths::pow_2(tolerance*(r0+r1)) > Vector::distance2(v0,v1) )
             {
                 connectivity.connect( CGAtomIdx(cgidx,*it0), CGAtomIdx(cgidx,*it1) );
@@ -317,29 +318,29 @@ void addAllInterBonds(ConnectivityEditor &connectivity,
         //the CoordGroups are too far apart to contain any bonded atoms
         return;
     }
-    
+
     int nats0 = coords0.count();
     int nats1 = coords1.count();
-    
+
     BOOST_ASSERT( nats0 == elements0.count() );
     BOOST_ASSERT( nats1 == elements1.count() );
-    
+
     const Vector *coords0_array = coords0.constData();
     const Vector *coords1_array = coords1.constData();
-    
+
     const Element *elements0_array = elements0.constData();
     const Element *elements1_array = elements1.constData();
-    
+
     for (Index i(0); i<nats0; ++i)
     {
         const Vector &v0 = coords0_array[i];
         double r0 = elements0_array[i].bondOrderRadius();
-        
+
         for (Index j(0); j<nats1; ++j)
         {
             const Vector &v1 = coords1_array[j];
             double r1 = elements1_array[j].bondOrderRadius();
-            
+
             if ( SireMaths::pow_2( tolerance * (r0+r1) ) > Vector::distance2(v0,v1) )
             {
                 connectivity.connect( CGAtomIdx(cgidx0,i), CGAtomIdx(cgidx1,j) );
@@ -356,25 +357,25 @@ void addSomeInterBonds(ConnectivityEditor &connectivity, CGIdx cgidx0, CGIdx cgi
     int nats0 = coords0.count();
     BOOST_ASSERT( elements0.count() == nats0 );
     BOOST_ASSERT( coords1.count() == elements1.count() );
-    
+
     const Vector *coords0_array = coords0.constData();
     const Element *elements0_array = elements0.constData();
-    
+
     const Vector *coords1_array = coords1.constData();
     const Element *elements1_array = elements1.constData();
-    
+
     for (QSet<Index>::const_iterator it = selected_atoms1.constBegin();
          it != selected_atoms1.constEnd();
          ++it)
     {
         const Vector &v1 = coords1_array[*it];
         double r1 = elements1_array[*it].bondOrderRadius();
-        
+
         for (Index i(0); i<nats0; ++i)
         {
             const Vector &v0 = coords0_array[i];
             double r0 = elements0_array[i].bondOrderRadius();
-            
+
             if ( SireMaths::pow_2(tolerance*(r0+r1)) > Vector::distance2(v0,v1) )
             {
                 connectivity.connect( CGAtomIdx(cgidx0,i), CGAtomIdx(cgidx1,*it) );
@@ -391,27 +392,27 @@ void addSomeInterBonds(ConnectivityEditor &connectivity, CGIdx cgidx0, CGIdx cgi
 {
     BOOST_ASSERT( coords0.count() == elements0.count() );
     BOOST_ASSERT( coords1.count() == elements1.count() );
-    
+
     const Vector *coords0_array = coords0.constData();
     const Element *elements0_array = elements0.constData();
-    
+
     const Vector *coords1_array = coords1.constData();
     const Element *elements1_array = elements1.constData();
-    
+
     for (QSet<Index>::const_iterator it0 = selected_atoms0.constBegin();
          it0 != selected_atoms0.constEnd();
          ++it0)
     {
         const Vector &v0 = coords0_array[*it0];
         double r0 = elements0_array[*it0].bondOrderRadius();
-        
+
         for (QSet<Index>::const_iterator it1 = selected_atoms1.constBegin();
              it1 != selected_atoms1.constEnd();
              ++it1)
         {
             const Vector &v1 = coords1_array[*it1];
             double r1 = elements1_array[*it1].bondOrderRadius();
-            
+
             if ( SireMaths::pow_2(tolerance*(r0+r1)) > Vector::distance2(v0,v1) )
             {
                 connectivity.connect( CGAtomIdx(cgidx0,*it0), CGAtomIdx(cgidx1,*it1) );
@@ -424,7 +425,7 @@ void addSomeInterBonds(ConnectivityEditor &connectivity, CGIdx cgidx0, CGIdx cgi
     This uses the 'coordinates' property to find the coordinates of the
     atoms, and the 'element' property find the elements, from which the
     VDW radius is taken
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
 */
@@ -442,25 +443,25 @@ Connectivity CovalentBondHunter::operator()(const MoleculeView &molview,
 
     const AtomCoords &coords = coords_property.asA<AtomCoords>();
     const CoordGroup *coords_array = coords.constData();
-    
+
     const Property &elements_property = molview.data().property(elems_prop);
-                                               
+
     const AtomElements &elements = elements_property.asA<AtomElements>();
     const AtomElements::Array *elements_array = elements.constData();
-    
+
     ConnectivityEditor connectivity = Connectivity(molview.data()).edit();
-    
+
     AtomSelection selected_atoms = molview.selection();
-    
+
     if (selected_atoms.selectedAll())
     {
         int ncgroups = coords.count();
-    
+
         for (CGIdx i(0); i<ncgroups; ++i)
         {
             //add the intra-cutgroup bonds
             addAllIntraBonds(connectivity, i, coords_array[i], elements_array[i], tol);
-            
+
             for (CGIdx j(i+1); j<ncgroups; ++j)
             {
                 addAllInterBonds(connectivity, i, j,
@@ -472,25 +473,25 @@ Connectivity CovalentBondHunter::operator()(const MoleculeView &molview,
     else if (selected_atoms.selectedAllCutGroups())
     {
         int ncgroups = coords.count();
-        
+
         for (CGIdx i(0); i<ncgroups; ++i)
         {
             if (selected_atoms.selectedAll(i))
             {
-                addAllIntraBonds(connectivity, i, coords_array[i], 
+                addAllIntraBonds(connectivity, i, coords_array[i],
                                  elements_array[i], tol);
-                
+
                 for (CGIdx j(i+1); j<ncgroups; ++j)
                 {
                     if (selected_atoms.selectedAll(j))
                     {
-                        addAllInterBonds(connectivity, i, j, 
+                        addAllInterBonds(connectivity, i, j,
                                          coords_array[i], elements_array[i],
                                          coords_array[j], elements_array[j], tol);
                     }
                     else
                     {
-                        addSomeInterBonds(connectivity, i, j, 
+                        addSomeInterBonds(connectivity, i, j,
                                           coords_array[i], elements_array[i],
                                           coords_array[j], elements_array[j],
                                           selected_atoms.selectedAtoms(j), tol);
@@ -500,10 +501,10 @@ Connectivity CovalentBondHunter::operator()(const MoleculeView &molview,
             else
             {
                 QSet<Index> atoms0 = selected_atoms.selectedAtoms(i);
-            
-                addSomeIntraBonds(connectivity, i, coords_array[i], 
+
+                addSomeIntraBonds(connectivity, i, coords_array[i],
                                   elements_array[i], atoms0, tol);
-                                  
+
                 for (CGIdx j(i+1); j<ncgroups; ++j)
                 {
                     if (selected_atoms.selectedAll(j))
@@ -532,16 +533,16 @@ Connectivity CovalentBondHunter::operator()(const MoleculeView &molview,
         for (int ii=0; ii<ncgroups; ++ii)
         {
             CGIdx i = selected_cgroups.at(ii);
-            
+
             if (selected_atoms.selectedAll(i))
             {
-                addAllIntraBonds(connectivity, i, coords_array[i], 
+                addAllIntraBonds(connectivity, i, coords_array[i],
                                  elements_array[i], tol);
-                
+
                 for (int jj=ii+1; jj<ncgroups; ++jj)
                 {
                     CGIdx j = selected_cgroups.at(jj);
-                    
+
                     if (selected_atoms.selectedAll(j))
                     {
                         addAllInterBonds(connectivity, i, j,
@@ -560,14 +561,14 @@ Connectivity CovalentBondHunter::operator()(const MoleculeView &molview,
             else
             {
                 QSet<Index> atoms0 = selected_atoms.selectedAtoms(i);
-                
-                addSomeIntraBonds(connectivity, i, coords_array[i], 
+
+                addSomeIntraBonds(connectivity, i, coords_array[i],
                                   elements_array[i], atoms0, tol);
-                
+
                 for (int jj=ii+1; jj<ncgroups; ++jj)
                 {
                     CGIdx j = selected_cgroups.at(jj);
-                    
+
                     if (selected_atoms.selectedAll(j))
                     {
                         addSomeInterBonds(connectivity, j, i,
@@ -586,7 +587,7 @@ Connectivity CovalentBondHunter::operator()(const MoleculeView &molview,
             }
         }
     }
-                                             
+
     return connectivity;
 }
 
@@ -605,9 +606,9 @@ static const RegisterMetaType<ChemicalBondHunter> r_chemicalhunter;
 QDataStream &operator<<(QDataStream &ds, const ChemicalBondHunter &hunter)
 {
     writeHeader(ds, r_chemicalhunter, 1);
-    
+
     ds << static_cast<const CovalentBondHunter&>(hunter);
-    
+
     return ds;
 }
 
@@ -615,14 +616,14 @@ QDataStream &operator<<(QDataStream &ds, const ChemicalBondHunter &hunter)
 QDataStream &operator>>(QDataStream &ds, ChemicalBondHunter &hunter)
 {
     VersionID v = readHeader(ds, r_chemicalhunter);
-    
+
     if (v == 1)
     {
         ds >> static_cast<ChemicalBondHunter&>(hunter);
     }
     else
         throw version_error(v, "1", r_covalenthunter, CODELOC);
-        
+
     return ds;
 }
 
@@ -649,7 +650,7 @@ ChemicalBondHunter::~ChemicalBondHunter()
     This uses the 'coordinates' property to find the coordinates of the
     atoms, and the 'element' property find the elements, from which the
     VDW radius is taken, and also to ensure that no atom has too many bonds.
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
 */
@@ -661,35 +662,35 @@ Connectivity ChemicalBondHunter::operator()(const MoleculeView &molview,
 
     const Property &elements_property = molview.data()
                                                .property( parameters().element() );
-                                               
+
     const AtomElements &elements = elements_property.asA<AtomElements>();
     const AtomElements::Array *elements_array = elements.constData();
-    
+
     const MoleculeInfoData &molinfo = molview.data().info();
-    
+
     //now check that no atom has too many bonds...
     QHash<AtomIdx,int> overbonded_atoms;
-    
+
     AtomSelection selected_atoms = molview.selection();
-    
+
     if (selected_atoms.selectedAllCutGroups())
     {
         int ngroups = elements.count();
-        
+
         for (CGIdx i(0); i<ngroups; ++i)
         {
             const AtomElements::Array &group_elements = elements_array[i];
             const Element *group_elements_array = group_elements.constData();
-            
+
             if (selected_atoms.selectedAll(i))
             {
                 int nats = group_elements.count();
-                
+
                 for (Index j(0); j<nats; ++j)
                 {
                     AtomIdx atomidx = molinfo.atomIdx(CGAtomIdx(i,j));
-                
-                    if ( connectivity.nConnections(atomidx) > 
+
+                    if ( connectivity.nConnections(atomidx) >
                          int(group_elements_array[j].maxBonds()) )
                     {
                         overbonded_atoms.insert(atomidx,
@@ -702,7 +703,7 @@ Connectivity ChemicalBondHunter::operator()(const MoleculeView &molview,
                 foreach (Index j, selected_atoms.selectedAtoms(i))
                 {
                     AtomIdx atomidx = molinfo.atomIdx(CGAtomIdx(i,j));
-                    
+
                     if ( connectivity.nConnections(atomidx) >
                          int(group_elements_array[j].maxBonds()) )
                     {
@@ -723,12 +724,12 @@ Connectivity ChemicalBondHunter::operator()(const MoleculeView &molview,
             if (selected_atoms.selectedAll(i))
             {
                 int nats = group_elements.count();
-                
+
                 for (Index j(0); j<nats; ++j)
                 {
                     AtomIdx atomidx = molinfo.atomIdx(CGAtomIdx(i,j));
-                
-                    if ( connectivity.nConnections(atomidx) > 
+
+                    if ( connectivity.nConnections(atomidx) >
                          int(group_elements_array[j].maxBonds()) )
                     {
                         overbonded_atoms.insert(atomidx,
@@ -741,7 +742,7 @@ Connectivity ChemicalBondHunter::operator()(const MoleculeView &molview,
                 foreach (Index j, selected_atoms.selectedAtoms(i))
                 {
                     AtomIdx atomidx = molinfo.atomIdx(CGAtomIdx(i,j));
-                    
+
                     if ( connectivity.nConnections(atomidx) >
                          int(group_elements_array[j].maxBonds()) )
                     {
@@ -752,26 +753,26 @@ Connectivity ChemicalBondHunter::operator()(const MoleculeView &molview,
             }
         }
     }
-    
+
     //overbonded atoms now contains the indicies of all of atoms with
     //too many bonds, and also the maximum number of bonds this atom
     //should have!
 
     if (overbonded_atoms.isEmpty())
         return connectivity;
-    
+
     ConnectivityEditor editor = connectivity.edit();
-    
+
     for (QHash<AtomIdx,int>::const_iterator it = overbonded_atoms.constBegin();
          it != overbonded_atoms.constEnd();
          ++it)
     {
         AtomIdx atom = it.key();
         int maxbonds = it.value();
-    
+
         //do we still have too many bonds?
         int nbonds = editor.nConnections(atom);
-        
+
         if (nbonds <= maxbonds)
             continue;
 
@@ -781,28 +782,28 @@ Connectivity ChemicalBondHunter::operator()(const MoleculeView &molview,
 
         //calculate all of the distances to the bonded atoms
         QSet<AtomIdx> connected_atoms = editor.connectionsTo(it.key());
-        
+
         QMap<double, AtomIdx> distances2;
-        
+
         foreach (AtomIdx bonded_atom, connected_atoms)
         {
             Vector v1 = Molecule(molview.data())
                                           .atom(bonded_atom)
                                           .property<Vector>(parameters().coordinates());
-                                          
+
             distances2.insert( Vector::distance2(v0,v1), bonded_atom );
         }
-        
+
         //remove the n longest bonds
         QMap<double,AtomIdx>::const_iterator it2 = distances2.constEnd();
-        
+
         for (int i=nbonds; i>maxbonds; --i)
         {
             --it2;
             editor.disconnect( atom, it2.value() );
         }
     }
-    
+
     return editor;
 }
 

@@ -49,7 +49,7 @@ public:
     siresystem_error() : exception()
     {}
 
-    siresystem_error(QString err, QString place = QString::null) : exception(err,place)
+    siresystem_error(QString err, QString place = QString()) : exception(err,place)
     {}
 
     siresystem_error(const siresystem_error &other) : exception(other)
@@ -76,7 +76,7 @@ public:
     missing_monitor() : siresystem_error()
     {}
 
-    missing_monitor(QString err, QString place = QString::null)
+    missing_monitor(QString err, QString place = QString())
               : siresystem_error(err,place)
     {}
 
@@ -92,7 +92,7 @@ public:
     {
         return missing_monitor::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_monitor(*this);
@@ -110,7 +110,7 @@ public:
     duplicate_monitor() : siresystem_error()
     {}
 
-    duplicate_monitor(QString err, QString place = QString::null)
+    duplicate_monitor(QString err, QString place = QString())
               : siresystem_error(err,place)
     {}
 
@@ -126,7 +126,7 @@ public:
     {
         return duplicate_monitor::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw duplicate_monitor(*this);
@@ -144,7 +144,7 @@ public:
     missing_system() : siresystem_error()
     {}
 
-    missing_system(QString err, QString place = QString::null)
+    missing_system(QString err, QString place = QString())
               : siresystem_error(err,place)
     {}
 
@@ -160,7 +160,7 @@ public:
     {
         return missing_system::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_system(*this);
@@ -178,7 +178,7 @@ public:
     duplicate_system() : siresystem_error()
     {}
 
-    duplicate_system(QString err, QString place = QString::null)
+    duplicate_system(QString err, QString place = QString())
               : siresystem_error(err,place)
     {}
 
@@ -194,7 +194,7 @@ public:
     {
         return duplicate_system::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw duplicate_system(*this);
@@ -212,7 +212,7 @@ public:
     constraint_error() : siresystem_error()
     {}
 
-    constraint_error(QString err, QString place = QString::null)
+    constraint_error(QString err, QString place = QString())
               : siresystem_error(err,place)
     {}
 
@@ -228,7 +228,7 @@ public:
     {
         return constraint_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw constraint_error(*this);

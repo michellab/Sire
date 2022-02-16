@@ -170,6 +170,7 @@ void register_MolWithResID_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         MolWithResID_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::MolWithResID >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        MolWithResID_exposer.def_pickle(sire_pickle_suite< ::SireMol::MolWithResID >());
         MolWithResID_exposer.def( "__str__", &__str__< ::SireMol::MolWithResID > );
         MolWithResID_exposer.def( "__repr__", &__str__< ::SireMol::MolWithResID > );
         MolWithResID_exposer.def( "__hash__", &::SireMol::MolWithResID::hash );

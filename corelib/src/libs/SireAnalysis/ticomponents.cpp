@@ -51,27 +51,27 @@ static const RegisterMetaType<ComponentGradients> r_grads;
 QDataStream &operator<<(QDataStream &ds, const ComponentGradients &grads)
 {
     writeHeader(ds, r_grads, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << grads.grads;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, ComponentGradients &grads)
 {
     VersionID v = readHeader(ds, r_grads);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> grads.grads;
     }
     else
         throw version_error(v, "1", r_grads, CODELOC);
-    
+
     return ds;
 }
 
@@ -80,7 +80,7 @@ void ComponentGradients::checkSane() const
 {
     if (grads.isEmpty())
         return;
-    
+
     const FreeEnergyMonitor &first = grads.constBegin().value();
 
     for (QMap<double,FreeEnergyMonitor>::const_iterator it = grads.constBegin();
@@ -91,7 +91,7 @@ void ComponentGradients::checkSane() const
             throw SireError::program_bug( QObject::tr(
                     "Disagreement of lambda value: %1 vs. %2.")
                         .arg(it.key()).arg(it.value().lambdaValue()), CODELOC );
-        
+
         if (not first.isCompatibleExceptLambda(it.value()))
             throw SireError::incompatible_error( QObject::tr(
                     "All of the FreeEnergyMonitors for each lambda value must be compatible. "
@@ -105,15 +105,15 @@ ComponentGradients::ComponentGradients() : ConcreteProperty<ComponentGradients,P
 {}
 
 /** This function reduces the memory used by this object by ensuring that
-    the FreeEnergyMonitor at each lambda value uses the copy of the 
+    the FreeEnergyMonitor at each lambda value uses the copy of the
     molecules used at the first lambda value */
 void ComponentGradients::conserveMemory()
 {
     if (grads.count() <= 1)
         return;
-    
+
     FreeEnergyMonitor first_monitor = grads[ lambdaValues().at(0) ];
-    
+
     for (QMap<double,FreeEnergyMonitor>::iterator it = grads.begin();
          it != grads.end();
          ++it)
@@ -128,9 +128,9 @@ void ComponentGradients::conserveMemory(const ComponentGradients &other)
 {
     if (grads.isEmpty() or other.grads.isEmpty())
         return;
-    
+
     FreeEnergyMonitor first_monitor = other.grads[ other.lambdaValues().at(0) ];
-    
+
     for (QMap<double,FreeEnergyMonitor>::iterator it = grads.begin();
          it != grads.end();
          ++it)
@@ -173,7 +173,7 @@ ComponentGradients::ComponentGradients(const QMap<double,FreeEnergyMonitor> &gra
     }
 
     checkSane();
-    
+
     if (conserve_memory)
         conserveMemory();
 }
@@ -188,9 +188,9 @@ ComponentGradients::ComponentGradients(const QList<FreeEnergyMonitor> &gradients
         if (not (gradient.isEmpty() or gradient.nSamples() == 0))
             grads.insert(gradient.lambdaValue(), gradient);
     }
-    
+
     checkSane();
-    
+
     if (conserve_memory)
         conserveMemory();
 }
@@ -261,7 +261,7 @@ bool ComponentGradients::isCompatible(const ComponentGradients &other) const
         return true;
 }
 
-/** Add all of the component gradients from 'other' onto this set. Note that 
+/** Add all of the component gradients from 'other' onto this set. Note that
     this and 'other' must be compatible or else an error will be raised */
 ComponentGradients& ComponentGradients::operator+=(const ComponentGradients &other)
 {
@@ -270,7 +270,7 @@ ComponentGradients& ComponentGradients::operator+=(const ComponentGradients &oth
                 "You cannot add the ComponentGradients %1 and %2 together as they "
                 "are not compatible.")
                     .arg(this->toString(), other.toString()), CODELOC );
-    
+
     if (this->isEmpty())
     {
         this->operator=(other);
@@ -291,7 +291,7 @@ ComponentGradients& ComponentGradients::operator+=(const ComponentGradients &oth
             }
         }
     }
-    
+
     return *this;
 }
 
@@ -316,12 +316,12 @@ ComponentGradients ComponentGradients::merge(const QList<ComponentGradients> &gr
     else
     {
         ComponentGradients merged = gradients.at(0);
-        
+
         for (int i=1; i<gradients.count(); ++i)
         {
             merged += gradients.at(i);
         }
-        
+
         return merged;
     }
 }
@@ -343,8 +343,8 @@ QList<double> ComponentGradients::lambdaValues() const
     else
     {
         QList<double> lamvals = grads.keys();
-        qSort(lamvals);
-        
+        std::sort(lamvals.begin(), lamvals.end());
+
         return lamvals;
     }
 }
@@ -360,9 +360,9 @@ PartialMolecule ComponentGradients::viewAt(int i) const
                 "Cannot access the view for component %1, as this is an empty "
                 "set of component gradients.")
                     .arg(i), CODELOC );
-    
+
     QVector<PartialMolecule> views = grads.constBegin().value().referenceViews();
-    
+
     return views.at( Index(i).map(views.count()) );
 }
 
@@ -384,7 +384,7 @@ PartialMolecule ComponentGradients::viewAt(int i, double lamval) const
     else
     {
         QVector<PartialMolecule> views = grads[lamval].referenceViews();
-        
+
         return views.at( Index(i).map(views.count()) );
     }
 }
@@ -399,7 +399,7 @@ Gradients ComponentGradients::gradientsAt(int i) const
                     .arg(i), CODELOC );
 
     QMap<double,FreeEnergyAverage> comp_grads;
-    
+
     for (QMap<double,FreeEnergyMonitor>::const_iterator it = grads.constBegin();
          it != grads.constEnd();
          ++it)
@@ -407,7 +407,7 @@ Gradients ComponentGradients::gradientsAt(int i) const
         QVector<FreeEnergyAverage> freenrgs = it.value().freeEnergies();
         comp_grads.insert(it.key(), freenrgs.at( Index(i).map(freenrgs.count()) ));
     }
-    
+
     return Gradients(comp_grads,grads.constBegin().value().deltaLambda());
 }
 
@@ -421,7 +421,7 @@ Gradients ComponentGradients::coulombGradientsAt(int i) const
                     .arg(i), CODELOC );
 
     QMap<double,FreeEnergyAverage> comp_grads;
-    
+
     for (QMap<double,FreeEnergyMonitor>::const_iterator it = grads.constBegin();
          it != grads.constEnd();
          ++it)
@@ -429,7 +429,7 @@ Gradients ComponentGradients::coulombGradientsAt(int i) const
         QVector<FreeEnergyAverage> freenrgs = it.value().coulombFreeEnergies();
         comp_grads.insert(it.key(), freenrgs.at( Index(i).map(freenrgs.count()) ));
     }
-    
+
     return Gradients(comp_grads,grads.constBegin().value().deltaLambda());
 }
 
@@ -443,7 +443,7 @@ Gradients ComponentGradients::ljGradientsAt(int i) const
                     .arg(i), CODELOC );
 
     QMap<double,FreeEnergyAverage> comp_grads;
-    
+
     for (QMap<double,FreeEnergyMonitor>::const_iterator it = grads.constBegin();
          it != grads.constEnd();
          ++it)
@@ -451,7 +451,7 @@ Gradients ComponentGradients::ljGradientsAt(int i) const
         QVector<FreeEnergyAverage> freenrgs = it.value().ljFreeEnergies();
         comp_grads.insert(it.key(), freenrgs.at( Index(i).map(freenrgs.count()) ));
     }
-    
+
     return Gradients(comp_grads,grads.constBegin().value().deltaLambda());
 }
 
@@ -476,19 +476,19 @@ int ComponentGradients::nLambdaValues() const
 qint64 ComponentGradients::nSamples() const
 {
     qint64 n = 0;
-    
+
     for (QMap<double,FreeEnergyMonitor>::const_iterator it = grads.constBegin();
          it != grads.constEnd();
          ++it)
     {
         QVector<FreeEnergyAverage> freenrgs = it.value().freeEnergies();
-        
+
         foreach (const FreeEnergyAverage &freenrg, freenrgs)
         {
             n += freenrg.nSamples();
         }
     }
-    
+
     return n;
 }
 
@@ -525,7 +525,7 @@ QMap<double,FreeEnergyMonitor> ComponentGradients::data() const
     return grads;
 }
 
-/** Integrate the free energy gradients of the ith component 
+/** Integrate the free energy gradients of the ith component
     and return the resulting PMF */
 TIPMF ComponentGradients::integrate(int i) const
 {
@@ -546,14 +546,14 @@ TIPMF ComponentGradients::integrate(int i, double range_min, double range_max) c
     return gradientsAt(i).integrate(range_min, range_max);
 }
 
-/** Integrate the free energy gradients of the ith component to order 'order' 
+/** Integrate the free energy gradients of the ith component to order 'order'
     between the range 'range_min' to 'range_max' and return the resulting PMF */
 TIPMF ComponentGradients::integrate(int i, double range_min, double range_max, int order) const
 {
     return gradientsAt(i).integrate(range_min, range_max, order);
 }
 
-/** Integrate the coulomb free energy gradients of the ith component 
+/** Integrate the coulomb free energy gradients of the ith component
     and return the resulting PMF */
 TIPMF ComponentGradients::integrateCoulomb(int i) const
 {
@@ -574,7 +574,7 @@ TIPMF ComponentGradients::integrateCoulomb(int i, double range_min, double range
     return coulombGradientsAt(i).integrate(range_min, range_max);
 }
 
-/** Integrate the coulomb free energy gradients of the ith component to order 'order' 
+/** Integrate the coulomb free energy gradients of the ith component to order 'order'
     between the range 'range_min' to 'range_max' and return the resulting PMF */
 TIPMF ComponentGradients::integrateCoulomb(int i, double range_min,
                                            double range_max, int order) const
@@ -582,7 +582,7 @@ TIPMF ComponentGradients::integrateCoulomb(int i, double range_min,
     return coulombGradientsAt(i).integrate(range_min, range_max, order);
 }
 
-/** Integrate the LJ free energy gradients of the ith component 
+/** Integrate the LJ free energy gradients of the ith component
     and return the resulting PMF */
 TIPMF ComponentGradients::integrateLJ(int i) const
 {
@@ -603,7 +603,7 @@ TIPMF ComponentGradients::integrateLJ(int i, double range_min, double range_max)
     return ljGradientsAt(i).integrate(range_min, range_max);
 }
 
-/** Integrate the LJ free energy gradients of the ith component to order 'order' 
+/** Integrate the LJ free energy gradients of the ith component to order 'order'
     between the range 'range_min' to 'range_max' and return the resulting PMF */
 TIPMF ComponentGradients::integrateLJ(int i, double range_min, double range_max, int order) const
 {
@@ -619,17 +619,17 @@ static const RegisterMetaType<TIComponents> r_ti;
 QDataStream &operator<<(QDataStream &ds, const TIComponents &ti)
 {
     writeHeader(ds, r_ti, 2);
-    
+
     SharedDataStream sds(ds);
     sds << ti.grads << ti.should_conserve_memory;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, TIComponents &ti)
 {
     VersionID v = readHeader(ds, r_ti);
-    
+
     if (v == 2)
     {
         SharedDataStream sds(ds);
@@ -643,7 +643,7 @@ QDataStream &operator>>(QDataStream &ds, TIComponents &ti)
     }
     else
         throw version_error(v, "1,2", r_ti, CODELOC);
-    
+
     return ds;
 }
 
@@ -733,10 +733,10 @@ void TIComponents::conserveMemory()
 {
     if (grads.isEmpty())
         return;
-    
+
     //find the first non-empty set of gradients
     ComponentGradients first;
-    
+
     for (int i=0; i<grads.count(); ++i)
     {
         if (not grads.at(i).isEmpty())
@@ -745,19 +745,19 @@ void TIComponents::conserveMemory()
             break;
         }
     }
-    
+
     if (first.isEmpty())
         return;
-    
+
     //conserve memory in this first set
     first.conserveMemory();
-    
+
     for (int i=0; i<grads.count(); ++i)
     {
         if (not grads.at(i).isEmpty())
             grads[i].conserveMemory(first);
     }
-    
+
     should_conserve_memory = true;
 }
 
@@ -776,21 +776,21 @@ void TIComponents::set(int i, const ComponentGradients &gradients)
                     throw SireError::incompatible_error( QObject::tr(
                             "Cannot add the passed set of gradients as they are incompatible "
                             "with those that have already been added."), CODELOC );
-                
+
                 break;
             }
         }
     }
-    
+
     while (i >= grads.count())
     {
         grads.append( ComponentGradients() );
     }
-    
+
     if (should_conserve_memory)
     {
         ComponentGradients first;
-        
+
         for (int j=0; j<grads.count(); ++j)
         {
             if (not grads.at(j).isEmpty())
@@ -799,9 +799,9 @@ void TIComponents::set(int i, const ComponentGradients &gradients)
                 break;
             }
         }
-        
+
         ComponentGradients small_grads(gradients);
-        
+
         if (first.isEmpty())
         {
             small_grads.conserveMemory();
@@ -810,7 +810,7 @@ void TIComponents::set(int i, const ComponentGradients &gradients)
         {
             small_grads.conserveMemory(first);
         }
-        
+
         grads[i] = small_grads;
     }
     else
@@ -852,7 +852,7 @@ int TIComponents::nComponents() const
             if (not grads.at(i).isEmpty())
                 return grads.at(i).nComponents();
         }
-    
+
         return 0;
     }
 }
@@ -873,12 +873,12 @@ int TIComponents::nLambdaValues() const
 qint64 TIComponents::nSamples() const
 {
     qint64 n = 0;
-    
+
     for (int i=0; i<grads.count(); ++i)
     {
         n += grads.at(i).nSamples();
     }
-    
+
     return n;
 }
 
@@ -904,7 +904,7 @@ bool TIComponents::conservesMemory() const
 QList<double> TIComponents::lambdaValues() const
 {
     QMap<double,int> vals;
-    
+
     for (int i=0; i<grads.count(); ++i)
     {
         foreach (double lam, grads.at(i).lambdaValues())
@@ -912,10 +912,10 @@ QList<double> TIComponents::lambdaValues() const
             vals.insert(lam, 0);
         }
     }
-    
+
     QList<double> lams = vals.keys();
-    qSort(lams);
-    
+    std::sort(lams.begin(), lams.end());
+
     return lams;
 }
 
@@ -950,10 +950,10 @@ void TIComponents::removeRange(int start, int end)
 {
     start = Index(start).map(grads.count());
     end = Index(end).map(grads.count());
-    
+
     if (start > end)
         qSwap(start, end);
-    
+
     for (int i = start; i <= end; ++i)
     {
         grads[i] = ComponentGradients();
@@ -972,15 +972,15 @@ ComponentGradients TIComponents::merge(int start, int end) const
 {
     start = Index(start).map(grads.count());
     end = Index(end).map(grads.count());
-    
+
     QList<ComponentGradients> set;
-    
+
     for (int i=start; i<=end; ++i)
     {
         if (not grads.at(i).isEmpty())
             set.append( grads.at(i) );
     }
-    
+
     return ComponentGradients::merge(set);
 }
 
@@ -988,20 +988,20 @@ ComponentGradients TIComponents::merge(int start, int end) const
 ComponentGradients TIComponents::merge(QList<int> indicies) const
 {
     QList<ComponentGradients> set;
-    
+
     foreach (int idx, indicies)
     {
         int i = Index(idx).map(grads.count());
-        
+
         if (not grads.at(i).isEmpty())
             set.append( grads.at(i) );
     }
- 
+
     return ComponentGradients::merge(set);
 }
-    
+
 /** Return a list of Gradients that represents the rolling average over 'niterations'
-    iterations over this TI data set. If this data set contains 100 iterations, and 
+    iterations over this TI data set. If this data set contains 100 iterations, and
     we calculate the rolling average over 50 iterations, then the returned Gradients
     will be the average from 1-50, then 2-51, 3-52.....51-100 */
 QList<ComponentGradients> TIComponents::rollingAverage(int niterations) const
@@ -1014,7 +1014,7 @@ QList<ComponentGradients> TIComponents::rollingAverage(int niterations) const
     if (niterations >= grads.count())
     {
         ComponentGradients m = this->merge(0,-1);
-        
+
         if (not m.isEmpty())
             merged.append(m);
     }
@@ -1029,15 +1029,15 @@ QList<ComponentGradients> TIComponents::rollingAverage(int niterations) const
     else
     {
         QList<ComponentGradients> set;
-        
+
         int i = 0;
-        
+
         for (i=0; i<grads.count(); ++i)
         {
             if (not grads.at(i).isEmpty())
             {
                 set.append(grads.at(i));
-                
+
                 if (set.count() == niterations)
                     break;
             }
@@ -1045,7 +1045,7 @@ QList<ComponentGradients> TIComponents::rollingAverage(int niterations) const
 
         if (not set.isEmpty())
             merged.append( ComponentGradients::merge(set) );
-        
+
         for (i = i+1; i<grads.count(); ++i)
         {
             if (not grads.at(i).isEmpty())
@@ -1056,6 +1056,6 @@ QList<ComponentGradients> TIComponents::rollingAverage(int niterations) const
             }
         }
     }
-    
+
     return merged;
 }

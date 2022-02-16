@@ -20,6 +20,7 @@ set ( SIRESYSTEM_HEADERS
       constraint.h
       constraints.h
       checkpoint.h
+      create_test_molecule.h
       delta.h
       dihedralcomponent.h
       distancecomponent.h
@@ -62,6 +63,7 @@ set ( SIRESYSTEM_SOURCES
       constraint.cpp
       constraints.cpp
       checkpoint.cpp
+      create_test_molecule.cpp
       delta.cpp
       dihedralcomponent.cpp
       distancecomponent.cpp
@@ -87,7 +89,7 @@ set ( SIRESYSTEM_SOURCES
       systemmonitor.cpp
       systemmonitors.cpp
       volmapmonitor.cpp
-    
+
       ${SIRESYSTEM_HEADERS}
     )
 

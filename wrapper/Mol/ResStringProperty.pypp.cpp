@@ -275,6 +275,7 @@ void register_ResStringProperty_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ResStringProperty_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::ResProperty<QString> >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        ResStringProperty_exposer.def_pickle(sire_pickle_suite< ::SireMol::ResProperty<QString> >());
         ResStringProperty_exposer.def( "__str__", &__str__< ::SireMol::ResProperty<QString> > );
         ResStringProperty_exposer.def( "__repr__", &__str__< ::SireMol::ResProperty<QString> > );
         ResStringProperty_exposer.def( "__len__", &__len_size< ::SireMol::ResProperty<QString> > );

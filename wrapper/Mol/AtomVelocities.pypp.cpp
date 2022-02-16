@@ -479,6 +479,7 @@ void register_AtomVelocities_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AtomVelocities_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::AtomProperty<SireMaths::Vector3D<SireUnits::Dimension::Velocity> > >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        AtomVelocities_exposer.def_pickle(sire_pickle_suite< ::SireMol::AtomProperty<SireMaths::Vector3D<SireUnits::Dimension::Velocity> > >());
         AtomVelocities_exposer.def( "__str__", &__str__< ::SireMol::AtomProperty<SireMaths::Vector3D<SireUnits::Dimension::Velocity> > > );
         AtomVelocities_exposer.def( "__repr__", &__str__< ::SireMol::AtomProperty<SireMaths::Vector3D<SireUnits::Dimension::Velocity> > > );
         AtomVelocities_exposer.def( "__len__", &__len_size< ::SireMol::AtomProperty<SireMaths::Vector3D<SireUnits::Dimension::Velocity> > > );

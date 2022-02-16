@@ -32,8 +32,16 @@
 #include <Python.h>
 
 #include <QDataStream>
+#include <QByteArray>
+#include <QDebug>
+
+#include <boost/python.hpp>
 
 #include "sireglobal.h"
+
+#include "SireStream/version_error.h"
+
+namespace bp = boost::python;
 
 SIRE_BEGIN_HEADER
 
@@ -52,6 +60,71 @@ QDataStream& __rrshift__QDataStream(T &value, QDataStream &ds)
     ds >> value;
     return ds;
 }
+
+/** Template class to handle the whole pickling process */
+template<class T>
+struct sire_pickle_suite : bp::pickle_suite
+{
+    static bp::tuple getinitargs(const T&)
+    {
+        return bp::tuple();
+    }
+
+    static bp::tuple getstate(const T &value)
+    {
+        QByteArray b;
+
+        // reserve 48MB of space, so that we avoid continual reallocation
+        static const auto RESERVE_SIZE = 48 * 1024 * 1024;
+
+        b.reserve(RESERVE_SIZE);
+
+        if (b.capacity() != RESERVE_SIZE)
+            qWarning() << "Possible memory allocation error!";
+
+        QDataStream ds(&b, QIODevice::WriteOnly);
+
+        // version 1 of the format uses Qt 4.2 datastream format
+        // This is the same as the s3 file format
+        ds.setVersion( QDataStream::Qt_4_2 );
+
+        ds << value;
+
+        // compress at level 3 (this is used for s3 files, and has
+        // always given a good balance between size and speed)
+        b = qCompress(b, 3);
+
+        bp::dict d;
+        d["sire_pickle_version"] = 1;
+        d["sire_pickle_data"] = bp::str(b.toBase64().constData());
+
+        return bp::make_tuple(d);
+    }
+
+    static void setstate(T &value, bp::tuple state)
+    {
+        bp::dict d = bp::extract<bp::dict>(state[0])();
+
+        int version = bp::extract<int>(d["sire_pickle_version"]);
+
+        if (version != 1)
+        {
+            throw SireStream::version_error(
+              QObject::tr("Unsupported pickle version: %1")
+                .arg(version), CODELOC );
+        }
+
+        const char *s = bp::extract<const char*>(d["sire_pickle_data"]);
+
+        auto b = QByteArray::fromBase64(QByteArray(s));
+        b = qUncompress(b);
+
+        QDataStream ds(&b, QIODevice::ReadOnly);
+
+        ds >> value;
+    }
+};
+
 
 SIRE_END_HEADER
 

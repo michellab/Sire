@@ -104,7 +104,7 @@ public:
     RanGeneratorPvt(const RanGeneratorPvt &other) : mutex(QMutex::NonRecursive)
     {
         QMutexLocker lkr( const_cast<QMutex*>( &(other.mutex) ) );
-        
+
         mersenne_generator = other.mersenne_generator;
     }
 
@@ -188,7 +188,7 @@ public:
     void loadState(const QVector<quint32> &state)
     {
         int state_size = MTRand::N + 1;
-    
+
         //check that the array is of the right size...
         if (state.count() != state_size)
             throw SireError::incompatible_error( QObject::tr(
@@ -218,7 +218,7 @@ public:
 //////////// Implementation of RanGeneratorPvt
 ////////////
 
-QDataStream& operator<<(QDataStream &ds, 
+QDataStream& operator<<(QDataStream &ds,
                         const SireMaths::detail::RanGeneratorPvt &rangen)
 {
     ds << const_cast<RanGeneratorPvt*>(&rangen)->getState();
@@ -230,9 +230,9 @@ QDataStream& operator>>(QDataStream &ds,
 {
     QVector<quint32> state;
     ds >> state;
-     
+
     rangen.loadState(state);
-    
+
     return ds;
 }
 
@@ -262,7 +262,7 @@ QDataStream &operator>>(QDataStream &ds, RanGenerator &rangen)
     {
         //I need to detach from shared storage
         rangen.d.reset(new RanGeneratorPvt());
-    
+
         SharedDataStream sds(ds);
         sds >> rangen.d;
     }
@@ -275,31 +275,11 @@ QDataStream &operator>>(QDataStream &ds, RanGenerator &rangen)
 static RanGeneratorPvt* createSharedNull()
 {
     auto mutex = SireBase::detail::get_shared_null_mutex();
-    
+
     tbb::spin_mutex::scoped_lock lock(*mutex);
 
     RanGeneratorPvt *gen = new RanGeneratorPvt();
-    
-    int seed = gen->mersenne_generator.randInt();
-    
-    //QUuid *very annoyingly* calls qsrand using the current time.
-    // THIS IS REALLY ANNOYING WHEN USING QUuid IN AN MPI PROGRAM!!!!
-    
-    // However, it only calls qsrand on the first QUuid - I'll thus
-    // call qsrand after the first...
-    QUuid::createUuid();
-             
-    qsrand(seed);
 
-    //lets dispose of another QUuid while we're at it
-    QUuid::createUuid();
-    
-    //what is even more annoying, is that qsrand is a *per-thread*
-    //seed, so this has only fixed this thread. Other threads
-    //will use a seed of 1, so will all create the same sequence
-    //of QUuids - the only way to fix this is for all new threads
-    //to seed qsrand
-    
     return gen;
 }
 
@@ -409,8 +389,7 @@ namespace SireMaths
 {
     void seed_qrand()
     {
-        RanGenerator rand;
-        qsrand( rand.randInt() );
+        //no longer needed
     }
 }
 
@@ -482,9 +461,9 @@ void RanGenerator::nrand(QVector<double> &result) const
     if (n > 0)
     {
         QMutexLocker lkr( &(nonconst_d().mutex) );
-    
+
         double *d = result.data();
-    
+
         for (int i=0; i<n; ++i)
         {
             d[i] = nonconst_d().mersenne_generator.rand();
@@ -536,9 +515,9 @@ void RanGenerator::nrand(QVector<double> &result, double minval, double maxval) 
     if (n > 0)
     {
         double *d = result.data();
-        
+
         const double diff = maxval - minval;
-        
+
         if (diff == 0)
         {
             for (int i=0; i<n; ++i)
@@ -624,7 +603,7 @@ double RanGenerator::randNorm(double mean, double variance) const
     return nonconst_d().mersenne_generator.randNorm(mean, variance);
 }
 
-/** Return a random number generated from the normal distribution 
+/** Return a random number generated from the normal distribution
     with mean 0 and standard deviation 1 */
 double RanGenerator::randNorm() const
 {
@@ -640,7 +619,7 @@ double RanGenerator::locked_randNorm(double mean, double variance) const
     return nonconst_d().mersenne_generator.randNorm(mean, variance);
 }
 
-/** Return a random number generated from the normal distribution 
+/** Return a random number generated from the normal distribution
     with mean 0 and standard deviation 1. You must hold the generator
     lock when calling this function */
 double RanGenerator::locked_randNorm() const
@@ -653,13 +632,13 @@ double RanGenerator::locked_randNorm() const
 void RanGenerator::nrandNorm(QVector<double> &result, double mean, double variance) const
 {
     const int n = result.count();
-    
+
     if (n > 0)
     {
         double *d = result.data();
-        
+
         QMutexLocker lkr( &(nonconst_d().mutex) );
-        
+
         for (int i=0; i<n; ++i)
         {
             d[i] = nonconst_d().mersenne_generator.randNorm(mean, variance);
@@ -688,13 +667,13 @@ Vector RanGenerator::locked_vectorOnSphere() const
     while (true)
     {
         Vector v;
-        
+
         v.setX( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
         v.setY( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
         v.setZ( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
-        
+
         const double lgth2 = v.length2();
-        
+
         if (lgth2 < 1)
         {
             v /= std::sqrt(lgth2);
@@ -714,23 +693,23 @@ Vector RanGenerator::vectorOnSphere() const
 void RanGenerator::nvectorOnSphere(QVector<Vector> &result) const
 {
     const int n = result.count();
-    
+
     if (n > 0)
     {
         QMutexLocker lkr( &(nonconst_d().mutex) );
-        
+
         int i=0;
-        
+
         while (i < n)
         {
             Vector &v = result[i];
-            
+
             v.setX( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
             v.setY( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
             v.setZ( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
-            
+
             const double lgth2 = v.length2();
-            
+
             if (lgth2 < 1)
             {
                 v /= std::sqrt(lgth2);
@@ -770,23 +749,23 @@ Vector RanGenerator::locked_vectorOnSphere(double radius) const
 void RanGenerator::nvectorOnSphere(QVector<Vector> &result, double radius) const
 {
     const int n = result.count();
-    
+
     if (n > 0)
     {
         QMutexLocker lkr( &(nonconst_d().mutex) );
-        
+
         int i=0;
-        
+
         while (i < n)
         {
             Vector &v = result[i];
-            
+
             v.setX( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
             v.setY( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
             v.setZ( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
-            
+
             const double lgth2 = v.length2();
-            
+
             if (lgth2 < 1)
             {
                 v *= (radius * std::sqrt(lgth2));
@@ -926,7 +905,7 @@ void RanGenerator::setState(const QVector<quint32> &state)
 
 Q_GLOBAL_STATIC( RanGenerator, globalGenerator );
 
-/** Return a reference to the global random number generator 
+/** Return a reference to the global random number generator
     (shared between all threads) */
 const RanGenerator& RanGenerator::global()
 {

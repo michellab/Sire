@@ -77,7 +77,7 @@ public:
     {
         escapedStringRule %= qi::lexeme[
              qi::lit( "'" ) >>
-             *( escapeCharSymbols | ( qi::char_ - qi::char_( "'" ) ) ) >
+             *( escapeCharSymbols | ( qi::char_ - qi::char_( "'" ) ) ) >>
              qi::lit( "'" ) ];
 
         rawStringRule %= qi::lexeme[

@@ -41,6 +41,8 @@ namespace bp = boost::python;
 
 #include <QDebug>
 
+#include <QElapsedTimer>
+
 #include <QTime>
 
 #include "zmatrix.h"
@@ -240,6 +242,7 @@ void register_ZMatrixLine_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ZMatrixLine_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMove::ZMatrixLine >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        ZMatrixLine_exposer.def_pickle(sire_pickle_suite< ::SireMove::ZMatrixLine >());
         ZMatrixLine_exposer.def( "__str__", &__str__< ::SireMove::ZMatrixLine > );
         ZMatrixLine_exposer.def( "__repr__", &__str__< ::SireMove::ZMatrixLine > );
     }

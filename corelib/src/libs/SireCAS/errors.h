@@ -45,7 +45,7 @@ public:
     sirecas_error() : exception()
     {}
 
-    sirecas_error(QString err, QString place = QString::null)
+    sirecas_error(QString err, QString place = QString())
                   : exception(err,place)
     {}
 
@@ -68,7 +68,7 @@ public:
     unavailable_differential() : sirecas_error()
     {}
 
-    unavailable_differential(QString err, QString place = QString::null)
+    unavailable_differential(QString err, QString place = QString())
               : sirecas_error(err,place)
     {}
 
@@ -84,7 +84,7 @@ public:
     {
         return unavailable_differential::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw unavailable_differential(*this);
@@ -98,7 +98,7 @@ public:
     unavailable_integral() : sirecas_error()
     {}
 
-    unavailable_integral(QString err, QString place = QString::null)
+    unavailable_integral(QString err, QString place = QString())
               : sirecas_error(err,place)
     {}
 
@@ -114,7 +114,7 @@ public:
     {
         return unavailable_integral::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw unavailable_integral(*this);
@@ -128,7 +128,7 @@ public:
     unregistered_expression() : sirecas_error()
     {}
 
-    unregistered_expression(QString err, QString place = QString::null)
+    unregistered_expression(QString err, QString place = QString())
               : sirecas_error(err,place)
     {}
 
@@ -144,7 +144,7 @@ public:
     {
         return unregistered_expression::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw unregistered_expression(*this);
@@ -158,7 +158,7 @@ public:
     invalid_symbol() : sirecas_error()
     {}
 
-    invalid_symbol(QString err, QString place = QString::null)
+    invalid_symbol(QString err, QString place = QString())
               : sirecas_error(err,place)
     {}
 
@@ -174,7 +174,7 @@ public:
     {
         return invalid_symbol::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw invalid_symbol(*this);
@@ -188,7 +188,7 @@ public:
     missing_symbol() : sirecas_error()
     {}
 
-    missing_symbol(QString err, QString place = QString::null)
+    missing_symbol(QString err, QString place = QString())
               : sirecas_error(err,place)
     {}
 
@@ -204,7 +204,7 @@ public:
     {
         return missing_symbol::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw missing_symbol(*this);
@@ -219,7 +219,7 @@ public:
     rearrangement_error() : sirecas_error()
     {}
 
-    rearrangement_error(QString err, QString place = QString::null)
+    rearrangement_error(QString err, QString place = QString())
               : sirecas_error(err,place)
     {}
 
@@ -235,7 +235,7 @@ public:
     {
         return rearrangement_error::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw rearrangement_error(*this);

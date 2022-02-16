@@ -41,7 +41,7 @@ namespace bp = boost::python;
 
 #include <QDebug>
 
-#include <QTime>
+#include <QElapsedTimer>
 
 #include "molpro.h"
 
@@ -362,6 +362,7 @@ void register_Molpro_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Molpro_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::Squire::Molpro >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        Molpro_exposer.def_pickle(sire_pickle_suite< ::Squire::Molpro >());
         Molpro_exposer.def( "__str__", &__str__< ::Squire::Molpro > );
         Molpro_exposer.def( "__repr__", &__str__< ::Squire::Molpro > );
     }

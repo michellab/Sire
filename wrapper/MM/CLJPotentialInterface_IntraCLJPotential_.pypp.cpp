@@ -299,6 +299,7 @@ void register_CLJPotentialInterface_IntraCLJPotential__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CLJPotentialInterface_IntraCLJPotential__exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMM::CLJPotentialInterface<SireMM::IntraCLJPotential> >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        CLJPotentialInterface_IntraCLJPotential__exposer.def_pickle(sire_pickle_suite< ::SireMM::CLJPotentialInterface<SireMM::IntraCLJPotential> >());
         CLJPotentialInterface_IntraCLJPotential__exposer.def( "__str__", &pvt_get_name);
         CLJPotentialInterface_IntraCLJPotential__exposer.def( "__repr__", &pvt_get_name);
     }

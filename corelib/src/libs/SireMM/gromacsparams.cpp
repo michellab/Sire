@@ -299,6 +299,16 @@ GromacsAtomType::PARTICLE_TYPE GromacsAtomType::toParticleType(const QString &wo
     }
 }
 
+/** Set the element to the passed value. This is useful if the "atomtype" section has
+    invalid mass informtion, as is the case for many topology files generted by acpype.
+    This allows us to update the element of the type using the mass from the "atoms"
+    section.
+ */
+void GromacsAtomType::setElement(SireMol::Element elem)
+{
+    this->_elem = elem;
+}
+
 /////////
 ///////// Implementation of GromacsBond
 /////////
@@ -1721,7 +1731,7 @@ QList<GromacsDihedral> GromacsDihedral::construct(const Expression &dihedral, co
 
         bool multiterm = amberdihedral.terms().count() > 1;
 
-        for (const auto amberdih : amberdihedral.terms())
+        for (const auto &amberdih : amberdihedral.terms())
         {
             double kb = amberdih.k();
             double per = amberdih.periodicity();

@@ -49,7 +49,7 @@ static const RegisterMetaType<SimStore> r_simstore(NO_ROOT);
 QDataStream &operator<<(QDataStream &ds, const SimStore &simstore)
 {
     writeHeader(ds, r_simstore, 5);
-    
+
     SharedDataStream sds(ds);
 
     if (simstore.isPackedToDisk())
@@ -69,9 +69,9 @@ QDataStream &operator<<(QDataStream &ds, const SimStore &simstore)
             << simstore.sim_system << simstore.sim_moves
             << quint32(simstore.last_packing_state);
     }
-    
+
     sds << simstore.packed_dir;
-    
+
     return ds;
 }
 
@@ -79,64 +79,64 @@ QDataStream &operator<<(QDataStream &ds, const SimStore &simstore)
 QDataStream &operator>>(QDataStream &ds, SimStore &simstore)
 {
     VersionID v = readHeader(ds, r_simstore);
-   
+
     SimStore new_store;
-   
+
     if (v == 5)
     {
         quint32 packed_state( SimStore::NOT_PACKED );
-        
+
         SharedDataStream sds(ds);
         sds >> packed_state;
-        
+
         switch (packed_state)
         {
             case SimStore::TO_DISK:
             {
                 sds >> new_store.compressed_data
                     >> new_store.packed_dir;
-                
+
                 new_store.last_packing_state = SimStore::TO_DISK;
-                
+
                 new_store.packToDisk();
             }
             break;
-            
+
             case SimStore::TO_MEMORY:
             {
                 sds >> new_store.compressed_data
                     >> new_store.packed_dir;
-                    
+
                 new_store.last_packing_state = SimStore::TO_MEMORY;
             }
             break;
-            
+
             case SimStore::NOT_PACKED:
             {
                 sds >> new_store.sim_system >> new_store.sim_moves;
-                
+
                 quint32 last_state( SimStore::TO_MEMORY );
-                
+
                 sds >> last_state;
-                
+
                 switch (last_state)
                 {
                     case SimStore::TO_MEMORY:
                         new_store.last_packing_state = SimStore::TO_MEMORY;
                         break;
-                        
+
                     case SimStore::TO_DISK:
                         new_store.last_packing_state = SimStore::TO_DISK;
                         break;
-                        
+
                     default:
                         new_store.last_packing_state = SimStore::TO_MEMORY;
                 }
-                
+
                 sds >> new_store.packed_dir;
             }
             break;
-            
+
             default:
                 throw SireStream::corrupted_data( QObject::tr(
                     "There was an error reading the state of the SimStore - "
@@ -146,9 +146,9 @@ QDataStream &operator>>(QDataStream &ds, SimStore &simstore)
     else if (v == 4)
     {
         SharedDataStream sds(ds);
-        
+
         QString packed_dir;
-        
+
         sds >> new_store.sim_system >> new_store.sim_moves
             >> new_store.compressed_data >> packed_dir;
 
@@ -158,30 +158,30 @@ QDataStream &operator>>(QDataStream &ds, SimStore &simstore)
     else if (v == 3)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> new_store.sim_system >> new_store.sim_moves >> new_store.compressed_data;
-        
+
         new_store.packed_file.reset();
-        new_store.packed_filename = QString::null;
+        new_store.packed_filename = QString();
     }
     else if (v == 2)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> new_store.compressed_data;
-        
+
         new_store.packed_file.reset();
-        new_store.packed_filename = QString::null;
+        new_store.packed_filename = QString();
     }
     else if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> new_store.sim_system >> new_store.sim_moves;
-        
+
         new_store.compressed_data = QByteArray();
         new_store.packed_file.reset();
-        new_store.packed_filename = QString::null;
+        new_store.packed_filename = QString();
     }
     else
         throw version_error( v, "1-5", r_simstore, CODELOC );
@@ -224,7 +224,7 @@ SimStore& SimStore::operator=(const SimStore &other)
 {
     if (this == &other)
         return *this;
-    
+
     sim_system = other.sim_system;
     sim_moves = other.sim_moves;
     compressed_data = other.compressed_data;
@@ -232,7 +232,7 @@ SimStore& SimStore::operator=(const SimStore &other)
     packed_file = other.packed_file;
     packed_filename = other.packed_filename;
     last_packing_state = other.last_packing_state;
-       
+
     return *this;
 }
 
@@ -241,8 +241,8 @@ bool SimStore::operator==(const SimStore &other) const
 {
     if (this == &other)
         return true;
-        
-    return sim_system == other.sim_system and 
+
+    return sim_system == other.sim_system and
            sim_moves == other.sim_moves and
            compressed_data == other.compressed_data and
            packed_file.get() == other.packed_file.get();
@@ -267,7 +267,7 @@ bool SimStore::isPackedToDisk() const
     return packed_file.get() != 0;
 }
 
-/** Return whether or not the data is packed into memory or 
+/** Return whether or not the data is packed into memory or
     is packed onto disk */
 bool SimStore::isPacked() const
 {
@@ -283,7 +283,7 @@ void SimStore::_pvt_moveFromDiskToMemory()
 
     //open the packed data file using a separate file handle
     QFile f( packed_filename );
-    
+
     if (not f.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
     {
         throw SireError::file_error(f, CODELOC);
@@ -291,13 +291,13 @@ void SimStore::_pvt_moveFromDiskToMemory()
 
     //now read all of the data
     compressed_data = f.readAll();
-    
+
     f.close();
 
     //lose the file (this will auto-delete the temporary file
     //if no other SimStores are using it)
     packed_file.reset();
-    packed_filename = QString::null;
+    packed_filename = QString();
 }
 
 /** Pack the system and moves to memory - this will compress
@@ -318,25 +318,25 @@ void SimStore::packToMemory()
     else
     {
         QByteArray data;
-        
+
         //start by reserving 32 MB
         data.reserve( 32L*1024L*1024L );
-        
+
         QDataStream ds( &data, QIODevice::WriteOnly );
-        
+
         SharedDataStream sds(ds);
-        
+
         sds << sim_system << sim_moves;
-        
+
         sim_system = System();
         sim_moves = MovesPtr();
 
         compressed_data = qCompress(data);
-        
+
         packed_file.reset();
-        packed_filename = QString::null;
+        packed_filename = QString();
     }
-    
+
     last_packing_state = TO_MEMORY;
 }
 
@@ -361,15 +361,15 @@ void SimStore::packToDisk(const QString &tempdir)
         packed_dir = tempdir;
 
     QDir dir(tempdir);
-    
+
     if (not dir.exists())
         dir = QDir::temp();
-        
+
     boost::shared_ptr<QTemporaryFile> tmp;
-    
+
     tmp.reset( new QTemporaryFile( QString("%1/%2_sire_simstore_XXXXXX.data")
                             .arg(dir.absolutePath(), getUserName()) ) );
-                            
+
     if (not tmp->open())
     {
         if (tempdir == QDir::tempPath())
@@ -382,7 +382,7 @@ void SimStore::packToDisk(const QString &tempdir)
         this->packToDisk();
         return;
     }
-    
+
     //pack the data to memory (if it isn't already)
     this->packToMemory();
 
@@ -394,7 +394,7 @@ void SimStore::packToDisk(const QString &tempdir)
     packed_filename = tmp->fileName();
 
     tmp->close();
-    
+
     if (nbytes == -1)
     {
         throw SireError::file_error( QObject::tr(
@@ -411,14 +411,14 @@ void SimStore::packToDisk(const QString &tempdir)
             "Maybe the disk became full while it was being written?")
                 .arg(nbytes).arg(compressed_data.count()), CODELOC );
     }
-    
+
     packed_file = tmp;
     compressed_data = QByteArray();
-    
+
     last_packing_state = TO_DISK;
 }
 
-/** Pack the system and moves to disk - this places the data in 
+/** Pack the system and moves to disk - this places the data in
     a temporary file in QDir::tempPath() */
 void SimStore::packToDisk()
 {
@@ -430,7 +430,7 @@ void SimStore::packToDisk()
 
 /** Pack the system - this packs the system to the same state
     as the last time this function was called (so if it was previously
-    packed to disk, then this will pack it to disk). This allows 
+    packed to disk, then this will pack it to disk). This allows
     you to call SimStore::unpack(), knowing that SimStore::pack()
     will restore the packing state */
 void SimStore::pack()
@@ -438,14 +438,14 @@ void SimStore::pack()
     if (this->isPacked())
         //the data is already packed
         return;
-    
+
     switch (last_packing_state)
     {
         case NOT_PACKED:
         case TO_MEMORY:
             this->packToMemory();
             break;
-            
+
         case TO_DISK:
             this->packToDisk();
             break;
@@ -467,10 +467,10 @@ void SimStore::unpack()
         //as soon as possible
         {
             QByteArray data = qUncompress( compressed_data );
-            
+
             QDataStream ds(data);
             SharedDataStream sds(ds);
-        
+
             sds >> new_system >> new_moves;
         }
 
@@ -478,7 +478,7 @@ void SimStore::unpack()
         sim_system = new_system;
         sim_moves = new_moves;
         packed_file.reset();
-        packed_filename = QString::null;
+        packed_filename = QString();
     }
 }
 
@@ -489,7 +489,7 @@ void SimStore::setSystem(const System &system)
         throw SireError::invalid_state( QObject::tr(
             "Cannot set the system in a SimStore that is packed. You must "
             "unpack it first."), CODELOC );
-    
+
     sim_system = system;
 }
 
@@ -500,7 +500,7 @@ void SimStore::setMoves(const Moves &moves)
         throw SireError::invalid_state( QObject::tr(
             "Cannot set the moves in a SimStore that is packed. You must "
             "unpack it first."), CODELOC );
-        
+
     sim_moves = moves;
 }
 

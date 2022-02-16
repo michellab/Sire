@@ -354,6 +354,7 @@ void register_DoubleDistanceRestraint_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         DoubleDistanceRestraint_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMM::DoubleDistanceRestraint >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        DoubleDistanceRestraint_exposer.def_pickle(sire_pickle_suite< ::SireMM::DoubleDistanceRestraint >());
         DoubleDistanceRestraint_exposer.def( "__str__", &__str__< ::SireMM::DoubleDistanceRestraint > );
         DoubleDistanceRestraint_exposer.def( "__repr__", &__str__< ::SireMM::DoubleDistanceRestraint > );
     }

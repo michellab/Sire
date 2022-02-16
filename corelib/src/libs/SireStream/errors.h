@@ -46,7 +46,7 @@ public:
     corrupted_data() : SireError::exception()
     {}
 
-    corrupted_data(QString err, QString place = QString::null)
+    corrupted_data(QString err, QString place = QString())
               : SireError::exception(err,place)
     {}
 
@@ -62,7 +62,7 @@ public:
     {
         return corrupted_data::typeName();
     }
-    
+
     void throwSelf() const
     {
         throw corrupted_data(*this);

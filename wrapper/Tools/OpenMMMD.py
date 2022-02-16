@@ -675,7 +675,10 @@ def setupDistanceRestraints(system, restraints=None):
     [unique_prop_list.append(item) for item in prop_list if item not in unique_prop_list]
     print (unique_prop_list)
     #Mol number 0 will store all the information related to the bond-links in the system
-    mol0 = molecules.molecule(MolNum(1))[0].molecule()
+    #mol0 = molecules.molecule(MolNum(1))[0].molecule()
+    #JM bugfix 11/21 store distance restraints in the first molecule (by index) contained in molecules which should be solute
+    #import pdb ; pdb.set_trace()
+    mol0 = system[MGName("all")].moleculeAt(0)[0].molecule()
     mol0 = mol0.edit().setProperty("linkbonds", linkbondVectorListToProperty(unique_prop_list)).commit()
     system.update(mol0)
 
@@ -1167,7 +1170,7 @@ def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
     solute_hard = system[MGName("solute_ref_hard")]
     solute_todummy = system[MGName("solute_ref_todummy")]
     solute_fromdummy = system[MGName("solute_ref_fromdummy")]
-
+    #import pdb ; pdb.set_trace()
     Integrator_OpenMM = OpenMMFrEnergyST(molecules, solute, solute_hard, solute_todummy, solute_fromdummy)
     Integrator_OpenMM.setRandomSeed(debug_seed)
     Integrator_OpenMM.setIntegrator(integrator_type.val)

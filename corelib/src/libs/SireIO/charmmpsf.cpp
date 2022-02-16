@@ -883,7 +883,7 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map) :
             charmm_params.append("!");
             charmm_params.append("!atom type   Kb          b0");
             charmm_params.append("!");
-            QStringList params = bond_params.toList();
+            QStringList params = bond_params.values();
             params.sort();
             charmm_params.append(params);
             charmm_params.append("");
@@ -905,7 +905,7 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map) :
             charmm_params.append("!");
             charmm_params.append("!atom types        Ktheta   Theta0       Kub        S0");
             charmm_params.append("!");
-            QStringList params = angle_params.toList();
+            QStringList params = angle_params.values();
             params.sort();
             charmm_params.append(params);
             charmm_params.append("");
@@ -924,7 +924,7 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map) :
             charmm_params.append("!");
             charmm_params.append("!atom types             Kchi     n     delta");
             charmm_params.append("!");
-            QStringList params = dihedral_params.toList();
+            QStringList params = dihedral_params.values();
             params.sort();
             charmm_params.append(params);
             charmm_params.append("");
@@ -943,7 +943,7 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map) :
             charmm_params.append("!");
             charmm_params.append("!atom types             Kpsi                  psi0");
             charmm_params.append("!");
-            QStringList params = improper_params.toList();
+            QStringList params = improper_params.values();
             params.sort();
             charmm_params.append(params);
             charmm_params.append("");
@@ -965,7 +965,7 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map) :
             charmm_params.append("!");
             charmm_params.append("!atom  ignored    epsilon      Rmin/2    ignored    eps,1-4      Rmin/2,1-4");
             charmm_params.append("!");
-            QStringList params = nonbonded_params.toList();
+            QStringList params = nonbonded_params.values();
             params.sort();
             charmm_params.append(params);
             charmm_params.append("");
@@ -3359,7 +3359,7 @@ QString CharmmPSF::generateKey(QVector<QString> words, int type) const
         }
 
         // Sort the words.
-        qSort(words);
+        std::sort(words.begin(), words.end());
 
         // Now create the key.
 
@@ -3796,7 +3796,7 @@ MolStructureEditor CharmmPSF::getMolStructure(int imol, const PropertyName &cutt
 
         // Get a sorted list of the atoms in the residue.
         QList<int> res_atoms = res_to_atom.values(res_num);
-        qSort(res_atoms);
+        std::sort(res_atoms.begin(), res_atoms.end());
 
         // Add the residue to the molecule.
         auto res = mol.add(ResNum(res_num));
@@ -3906,12 +3906,12 @@ void CharmmPSF::findMolecules()
     molecules.clear();
 
     // Create a hash of the bonded atoms.
-    QHash<int, int> bonded_atoms;
+    QMultiHash<int, int> bonded_atoms;
 
     for (int i=0; i<nBonds(); ++i)
     {
-        bonded_atoms.insertMulti(bonds[i][0], bonds[i][1]);
-        bonded_atoms.insertMulti(bonds[i][1], bonds[i][0]);
+        bonded_atoms.insert(bonds[i][0], bonds[i][1]);
+        bonded_atoms.insert(bonds[i][1], bonds[i][0]);
     }
 
     // Now recursively walk along each atom to find all the atoms that
@@ -3955,7 +3955,7 @@ void CharmmPSF::findMolecules()
             // We've now found all of the atoms in this molecule!
 
             // Convert to a vector of atom numbers.
-            QVector<qint64> mol_atoms = atoms_in_mol.toList().toVector();
+            QVector<qint64> mol_atoms = atoms_in_mol.values().toVector();
 
             // Now convert the atom numbers to indices in the atoms vector
             // and set the molecule index for each atom.
@@ -3966,7 +3966,7 @@ void CharmmPSF::findMolecules()
             }
 
             // Add the sorted atom indices.
-            qSort(mol_atoms);
+            std::sort(mol_atoms.begin(), mol_atoms.end());
             molecules.append(mol_atoms);
         }
     }
@@ -4133,7 +4133,7 @@ void CharmmPSF::findMolecules()
 }
 
 /** Helper function to recursively walk through bonded atoms in a molecule. */
-void CharmmPSF::findBondedAtoms(int atom_num, int mol_idx, const QHash<int, int> &bonded_atoms,
+void CharmmPSF::findBondedAtoms(int atom_num, int mol_idx, const QMultiHash<int, int> &bonded_atoms,
     QHash<int, int> &atom_to_mol, QSet<qint64> &atoms_in_mol) const
 {
     for (auto bonded_atom : bonded_atoms.values(atom_num))

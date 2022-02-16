@@ -60,7 +60,7 @@ SelectResult SireMol::parser::SelectEngine::operator()(const SelectResult &resul
                                                        const PropertyMap &map) const
 {
     SelectResult r = this->select(result, map);
-    
+
     if (hasParent())
         return r;
     else
@@ -149,7 +149,7 @@ ViewsOfMol SireMol::parser::SelectEngine::expandMol(const ViewsOfMol &mol) const
 SelectResult SireMol::parser::SelectEngine::expand(const SelectResult &results) const
 {
     const auto objtyp = this->objectType();
-    
+
     if (objtyp == SelectEngine::COMPLEX)
     {
         //we don't need to do anything
@@ -217,22 +217,22 @@ static const RegisterMetaType<Select> r_select;
 QDataStream &operator<<(QDataStream &ds, const Select &select)
 {
     writeHeader(ds, r_select, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << select.search_string;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, Select &select)
 {
     VersionID v = readHeader(ds, r_select);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         QString search_string;
         sds >> search_string;
 
@@ -240,7 +240,7 @@ QDataStream &operator>>(QDataStream &ds, Select &select)
     }
     else
         throw version_error(v, "1", r_select, CODELOC);
-    
+
     return ds;
 }
 
@@ -346,10 +346,10 @@ SelectResult Select::operator()(const SelectResult &result,
 /** Set a user token that will be substituted for the passed selection, e.g.
 
     setToken("protein", "molecules with resname /ala/i")
-    
+
     would allow you to use "protein" to refer to any molecules that contain
     residues called /ala/i
-    
+
     Note that the token is set globally for all searches
 */
 void Select::setToken(const QString &token, const QString &selection)
@@ -367,7 +367,7 @@ QString Select::objectType() const
 {
     if (e.get() == 0)
         return QObject::tr("nothing");
-    
+
     switch(e->objectType())
     {
     case SireMol::parser::SelectEngine::COMPLEX:
@@ -406,18 +406,18 @@ static const RegisterMetaType<SelectResult> r_result;
 QDataStream &operator<<(QDataStream &ds, const SelectResult &result)
 {
     writeHeader(ds, r_result, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << result.molviews << static_cast<const Property&>(result);
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, SelectResult &result)
 {
     VersionID v = readHeader(ds, r_result);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
@@ -425,7 +425,7 @@ QDataStream &operator>>(QDataStream &ds, SelectResult &result)
     }
     else
         throw version_error(v, "1", r_result, CODELOC);
-    
+
     return ds;
 }
 
@@ -437,13 +437,13 @@ SelectResult::SelectResult() : ConcreteProperty<SelectResult,Property>()
 SelectResult::SelectResult(const Molecules &molecules)
              : ConcreteProperty<SelectResult,Property>()
 {
-    auto molnums = molecules.molNums().toList();
-    qSort(molnums);
-    
-    for (const auto molnum : molnums)
+    auto molnums = molecules.molNums().values();
+    std::sort(molnums.begin(), molnums.end());
+
+    for (const auto &molnum : molnums)
     {
         const auto &view = molecules[molnum];
-        
+
         if (not view.isEmpty())
             molviews.append(view);
     }
@@ -463,7 +463,7 @@ SelectResult::SelectResult(const MoleculeGroup &molgroup)
     for (int i=0; i<molgroup.nMolecules(); ++i)
     {
         const auto &view = molgroup.moleculeAt(i);
-        
+
         if (not view.isEmpty())
             molviews.append(view);
     }
@@ -487,9 +487,9 @@ SelectResult::SelectResult(const QList<ViewsOfMol> views)
              : ConcreteProperty<SelectResult,Property>()
 {
     molviews = views;
-    
+
     bool remove_empty = false;
-    
+
     for (const auto &view : views)
     {
         if (view.isEmpty())
@@ -498,15 +498,15 @@ SelectResult::SelectResult(const QList<ViewsOfMol> views)
             break;
         }
     }
-    
+
     if (remove_empty)
     {
         QMutableListIterator<ViewsOfMol> it(molviews);
-        
+
         while (it.hasNext())
         {
             const auto &view = it.next();
-            
+
             if (view.isEmpty())
                 it.remove();
         }
@@ -568,12 +568,12 @@ bool SelectResult::isEmpty() const
 int SelectResult::count() const
 {
     int total = 0;
-    
+
     for (const auto &view : molviews)
     {
         total += view.nViews();
     }
-    
+
     return total;
 }
 
@@ -583,7 +583,7 @@ int SelectResult::size() const
     return this->count();
 }
 
-/** Return whether or not this set contains views of the molecule with 
+/** Return whether or not this set contains views of the molecule with
     number 'molnum' */
 bool SelectResult::contains(MolNum molnum) const
 {
@@ -592,7 +592,7 @@ bool SelectResult::contains(MolNum molnum) const
         if (molview.data().number() == molnum)
             return true;
     }
-    
+
     return false;
 }
 
@@ -611,7 +611,7 @@ ViewsOfMol SelectResult::views(MolNum molnum) const
         if (molview.data().number() == molnum)
             return molview;
     }
-    
+
     return ViewsOfMol();
 }
 
@@ -620,12 +620,12 @@ ViewsOfMol SelectResult::views(MolNum molnum) const
 QList<MolNum> SelectResult::molNums() const
 {
     QList<MolNum> molnums;
-    
+
     for (const auto &molview : molviews)
     {
         molnums.append(molview.data().number());
     }
-    
+
     return molnums;
 }
 
@@ -634,13 +634,13 @@ QList<MolNum> SelectResult::molNums() const
 MolViewPtr SelectResult::operator[](int i) const
 {
     i = Index(i).map( this->count() );
-    
+
     int nmol = 0;
-    
+
     for (const auto &view : molviews)
     {
         nmol += 1;
-    
+
         if (i >= view.nViews())
         {
             i -= view.nViews();
@@ -648,7 +648,7 @@ MolViewPtr SelectResult::operator[](int i) const
         else
         {
             auto mol = view.valueAt(i);
-            
+
             if (mol.selectedAll())
             {
                 return MolViewPtr( mol.molecule() );
@@ -660,40 +660,40 @@ MolViewPtr SelectResult::operator[](int i) const
             else if (mol.nResidues() == 1)
             {
                 const auto res = mol.residue();
-                
+
                 if (mol.selection().selectedAll(res.number()))
                     return MolViewPtr(res);
             }
             else if (mol.nChains() == 1)
             {
                 const auto chain = mol.chain();
-                
+
                 if (mol.selection().selectedAll(chain.name()))
                     return MolViewPtr(chain);
             }
             else if (mol.nSegments() == 1)
             {
                 const auto seg = mol.segment();
-                
+
                 if (mol.selection().selectedAll(seg.name()))
                     return MolViewPtr(seg);
             }
             else if (mol.nCutGroups() == 1)
             {
                 const auto cg = mol.cutGroup();
-                
+
                 if (mol.selection().selectedAll(cg.name()))
                     return MolViewPtr(cg);
             }
-            
+
             //this is a mixed view
             return MolViewPtr(mol);
         }
     }
-    
+
     throw SireError::program_bug( QObject::tr(
                 "Error as we could not find the view..."), CODELOC );
-    
+
     return MolViewPtr();
 }
 
@@ -726,18 +726,18 @@ QString SelectResult::toString() const
         {
             lines.append( QString("%1 : %2").arg(i).arg(this->operator[](i).read().toString()) );
         }
-        
+
         lines.append( "..." );
 
         for (int i=-2; i<0; ++i)
         {
             int idx = Index(i).map(nviews);
-        
+
             lines.append( QString("%1 : %2").arg(idx)
                                             .arg(this->operator[](idx).read().toString()) );
         }
     }
-    
+
     return QObject::tr("SelectResult{ count() == %1,\n  %2\n}")
                 .arg(nviews).arg(lines.join(",\n  "));
 }
@@ -847,7 +847,7 @@ SelectResultMover::SelectResultMover()
 SelectResultMover::SelectResultMover(const SelectResult &other)
                   : ConcreteProperty<SelectResultMover,Property>()
 {
-    for (const auto view : other.views())
+    for (const auto &view : other.views())
     {
         molviews.append( view.move() );
     }
@@ -909,7 +909,7 @@ SelectResultMover& SelectResultMover::translate(const Vector &delta)
     {
         view.translate(delta);
     }
-    
+
     return *this;
 }
 
@@ -917,11 +917,11 @@ SelectResultMover& SelectResultMover::translate(const Vector &delta)
 SelectResult SelectResultMover::commit() const
 {
     QList<ViewsOfMol> views;
-    
-    for (const auto view : molviews)
+
+    for (const auto &view : molviews)
     {
         views.append( view.commit() );
     }
-    
+
     return SelectResult(views);
 }

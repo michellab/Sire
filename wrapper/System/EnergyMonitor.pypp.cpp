@@ -300,6 +300,7 @@ void register_EnergyMonitor_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         EnergyMonitor_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireSystem::EnergyMonitor >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        EnergyMonitor_exposer.def_pickle(sire_pickle_suite< ::SireSystem::EnergyMonitor >());
         EnergyMonitor_exposer.def( "__str__", &__str__< ::SireSystem::EnergyMonitor > );
         EnergyMonitor_exposer.def( "__repr__", &__str__< ::SireSystem::EnergyMonitor > );
     }

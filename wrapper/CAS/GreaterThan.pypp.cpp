@@ -114,6 +114,7 @@ void register_GreaterThan_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         GreaterThan_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireCAS::GreaterThan >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        GreaterThan_exposer.def_pickle(sire_pickle_suite< ::SireCAS::GreaterThan >());
         GreaterThan_exposer.def( "__str__", &__str__< ::SireCAS::GreaterThan > );
         GreaterThan_exposer.def( "__repr__", &__str__< ::SireCAS::GreaterThan > );
         GreaterThan_exposer.def( "__hash__", &::SireCAS::GreaterThan::hash );

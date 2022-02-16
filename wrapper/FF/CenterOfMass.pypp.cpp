@@ -352,6 +352,7 @@ void register_CenterOfMass_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CenterOfMass_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireFF::CenterOfMass >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        CenterOfMass_exposer.def_pickle(sire_pickle_suite< ::SireFF::CenterOfMass >());
         CenterOfMass_exposer.def( "__str__", &__str__< ::SireFF::CenterOfMass > );
         CenterOfMass_exposer.def( "__repr__", &__str__< ::SireFF::CenterOfMass > );
     }

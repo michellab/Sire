@@ -77,6 +77,8 @@ namespace bp = boost::python;
 
 #include "SireMol/residuecutting.h"
 
+#include "SireMol/select.h"
+
 #include "SireMol/selector.hpp"
 
 #include "SireMove/flexibility.h"
@@ -94,6 +96,8 @@ namespace bp = boost::python;
 #include "SireVol/cartesian.h"
 
 #include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
 
 #include "amberprm.h"
 
@@ -594,6 +598,7 @@ void register_AmberPrm_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AmberPrm_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireIO::AmberPrm >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        AmberPrm_exposer.def_pickle(sire_pickle_suite< ::SireIO::AmberPrm >());
         AmberPrm_exposer.def( "__str__", &__str__< ::SireIO::AmberPrm > );
         AmberPrm_exposer.def( "__repr__", &__str__< ::SireIO::AmberPrm > );
     }

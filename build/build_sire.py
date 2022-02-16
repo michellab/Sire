@@ -34,6 +34,8 @@ def parse_args():
         "(defaults to the number of CPU cores used for compiling corelib)")
     parser.add_argument("--noconda", action="store_true",
         help="Use pip rather than conda to install dependencies")
+    parser.add_argument("--no-openmm", action="store_true",
+        help="Compile Sire without OpenMM support")
     return parser.parse_args()
 
 
@@ -51,7 +53,7 @@ if __name__ == "__main__":
         print("Compiling on Linux")
     elif platform.system() == "Darwin":
         is_osx = True
-        print("Compiling on OS X")
+        print("Compiling on MacOS")
     elif platform.system() == "Windows":
         exe_suffix = ".exe"
         #print("Sorry - compiling into miniconda on Windows is not supported yet")
@@ -161,7 +163,9 @@ if __name__ == "__main__":
         import netCDF4
         print("netCDF4 is already installed...")
     except ImportError:
-        conda_pkgs.append("netcdf4=1.5.3")
+        # had to step back from 1.5.8 as this isn't available
+        # yet on Linux (works on MacOS)
+        conda_pkgs.append("netcdf4=1.5.7")
 
     CC = None
     CXX = None
@@ -174,27 +178,39 @@ if __name__ == "__main__":
         if os.path.exists(os.path.join(conda_base, "include", "boost", "python.hpp")):
             print("boost is already installed...")
         else:
-            conda_pkgs.append("boost=1.72.0")
+            conda_pkgs.append("boost=1.74.0")
 
         # gsl
         if os.path.exists(os.path.join(conda_base, "include", "gsl", "gsl_version.h")):
             print("gsl is already installed...")
         else:
-            conda_pkgs.append("gsl=2.6")
+            conda_pkgs.append("gsl=2.7")
 
         # tbb
         if os.path.exists(os.path.join(conda_base, "include", "tbb", "tbb.h")):
             print("TBB is already installed...")
         else:
-            conda_pkgs.append("tbb=2019.9")
-            conda_pkgs.append("tbb-devel=2019.9")
+            conda_pkgs.append("tbb=2021.5.0")
+            conda_pkgs.append("tbb-devel=2021.5.0")
 
         # Qt5
         try:
             import PyQt5
             print("Qt5 is already installed...")
         except ImportError:
-            conda_pkgs.append("pyqt=5.12.3")
+            if is_osx and platform.machine() == "arm64":
+                # This is the version needed for Apple M1
+                conda_pkgs.append("pyqt=5.15.2")
+            else:
+                conda_pkgs.append("pyqt=5.12.3")
+
+        # pymbar (not available on aarch64 and breaks some MacOS)
+        if (not is_osx) and platform.machine() not in ["aarch64", "arm64"]:
+            try:
+                import pymbar
+                print("pymbar is already installed...")
+            except ImportError:
+                conda_pkgs.append("pymbar=3.0.5")
 
         # compilers (so we keep binary compatibility)
         if is_osx:
@@ -212,13 +228,7 @@ if __name__ == "__main__":
             except:
                 conda_pkgs.append("gcc_linux-64")
                 conda_pkgs.append("gxx_linux-64")
-
-                # Use libgfortran4 since libgfortan5 pulls in libgcc-ng=9.3.0,
-                # which breaks the Sire development environment.
-                conda_pkgs.append("libgfortran4")
-
-                # Explicitly install working libgcc-ng version.
-                conda_pkgs.append("libgcc-ng=9.1.0")
+                conda_pkgs.append("sysroot_linux-64==2.17")
 
         if (not is_windows):
             if os.path.exists(os.path.join(conda_bin, "make")):
@@ -230,14 +240,6 @@ if __name__ == "__main__":
                 print("libtool is already installed...")
             else:
                 conda_pkgs.append("libtool")
-            if os.path.exists(os.path.join(conda_bin, "autoreconf")):
-                print("autoconf is already installed...")
-            else:
-                conda_pkgs.append("autoconf")
-            if os.path.exists(os.path.join(conda_bin, "aclocal")):
-                print("automake is already installed...")
-            else:
-                conda_pkgs.append("automake")
 
         if os.path.exists(os.path.join(conda_bin, "cmake%s" % exe_suffix)):
             print("cmake is already installed...")
@@ -246,7 +248,37 @@ if __name__ == "__main__":
 
         cmake = os.path.join(conda_bin, "cmake%s" % exe_suffix)
 
-    installed_something = False
+    # check if the user wants to link against openmm
+    use_openmm = True
+
+    if args.no_openmm:
+        print("DISABLING OPENMM SUPPORT")
+        use_openmm = False
+
+    for d in args.corelib:
+        if ("SIRE_USE_OPENMM=OFF" in d[0]):
+            use_openmm = False
+            break
+
+    # openmm last as different repo
+    if use_openmm:
+        try:
+            import openmm
+            print("openmm is already installed...")
+        except ImportError:
+            if args.noconda:
+                print("It looks like the openmm Python modules are not "
+                    "available - please check your openmm installation")
+                sys.exit(-1)
+            else:
+                conda_pkgs.append("openmm=7.7.0")
+
+    # Write the packages as a requirements.txt file. This will help
+    # us later when we develop other ways of installing Sire
+    if len(conda_pkgs) > 0:
+        with open(f"requirements/requirements_{platform.system()}_{platform.machine()}.txt", "w") as FILE:
+            for pkg in conda_pkgs:
+                FILE.write(f"{pkg}\n")
 
     if (not args.noconda) and conda_pkgs:
         cmd = "%s config --prepend channels conda-forge" % conda_exe
@@ -255,34 +287,45 @@ if __name__ == "__main__":
         if status.returncode != 0:
             print("Failed to add conda-forge channel!")
             sys.exit(-1)
+
+        cmd = "%s config --set channel_priority strict" % conda_exe
+        print("Setting channel priority to strict using: '%s'" % cmd)
+        status = subprocess.run(cmd.split())
+        if status.returncode != 0:
+            print("Failed to set channel priority!")
+            sys.exit(-1)
+
+        if is_osx and platform.machine() == "arm64":
+            # Now update conda - this is needed to fix libffi compatibility
+            # errors that break conda
+            cmd = [conda_exe, "update", "-y", "-n", "base",
+                   "-c", "defaults", "conda"]
+            print("Updating conda base using: '%s'" % " ".join(cmd))
+            status = subprocess.run(cmd)
+
+            if status.returncode != 0:
+                print("Something went wrong with the update!")
+                sys.exit(-1)
+
+            # Need to run this command to prevent conda errors on
+            # some platforms - see
+            # https://github.com/ContinuumIO/anaconda-issues/issues/11246
+            # If we don't do this, then we can't resolve dependencies
+            # on MacOS M1
+            print("Setting channel priority to false using: '%s'" % cmd)
+            cmd = "%s config --set channel_priority false" % conda_exe
+            status = subprocess.run(cmd.split())
+            if status.returncode != 0:
+                print("Failed to set channel priority!")
+                sys.exit(-1)
+
         cmd = [*py_module_install, *conda_pkgs]
         print("Installing packages using: '%s'" % " ".join(cmd))
         status = subprocess.run(cmd)
-        installed_something = True
+
         if status.returncode != 0:
             print("Something went wrong installing dependencies!")
             sys.exit(-1)
-
-    # check if the user wants to link against openmm
-    use_openmm = True
-    for d in args.corelib:
-        if ("SIRE_USE_OPENMM=OFF" in d[0]):
-            use_openmm = False
-            break
-    # openmm last as different repo
-    if use_openmm:
-        try:
-            import simtk.openmm
-            print("openmm is already installed...")
-        except ImportError:
-            if args.noconda:
-                print("It looks like the openmm Python modules are not "
-                    "available - please check your openmm installation")
-                sys.exit(-1)
-            else:
-                print("Installing openmm from the Omnia channel...")
-                subprocess.run(("%s install --yes -c omnia openmm=7.4.2" % conda_exe).split())
-                installed_something = True
 
     # make sure we really have found the compilers
     if (not args.noconda):
@@ -337,6 +380,12 @@ if __name__ == "__main__":
                     break
             if (not found):
                 cmake_defs.append([a])
+
+        if is_osx:
+            # don't compile with AVX as the resulting binaries won't
+            # work on M1 macs
+            cmake_defs.append(["SIRE_DISABLE_AVX=ON"])
+            cmake_defs.append(["SIRE_DISABLE_AVX512F=ON"])
 
     def make_cmd(ncores, install = False):
         if is_windows:

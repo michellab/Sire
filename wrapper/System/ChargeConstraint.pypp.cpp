@@ -76,6 +76,7 @@ void register_ChargeConstraint_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ChargeConstraint_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireSystem::ChargeConstraint >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        ChargeConstraint_exposer.def_pickle(sire_pickle_suite< ::SireSystem::ChargeConstraint >());
         ChargeConstraint_exposer.def( "__str__", &__str__< ::SireSystem::ChargeConstraint > );
         ChargeConstraint_exposer.def( "__repr__", &__str__< ::SireSystem::ChargeConstraint > );
     }
