@@ -77,7 +77,6 @@
 #include <QDebug>
 #include <QTime>
 #include <boost/tuple/tuple.hpp>
-#include <boost/format.hpp>
 
 
 using namespace SireMove;
