@@ -379,7 +379,7 @@ QString OpenMMPMEFEP::toString() const
  * Initialise must be called before anything else happens.
  */
 
-// FIXME: remove RF specific code
+// FIXME: remove RF specific code and replace with PME direct space expressions
 // JM 9/10/20 multiply Logix_mix_lam * 0 instead of max(lam,1.0-lam)
 // JM 9/10/10 setting Logix_mix_lam output to 0 for lambda
 const QString ENERGYBASE =
@@ -410,7 +410,12 @@ const QString ENERGYBASE =
     "C_mix = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*isFD1*(1.0-isFD2), D_mix);"
     "D_mix= (1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*(1.0-isFD1)*isFD2;"
     "q_prod = (qend1 * lam+(1.0-lam) * qstart1) * (qend2 * lam+(1.0-lam) * qstart2);"
-    "eps_avg = sqrt((epend1*lam+(1.0-lam)*epstart1)*(epend2*lam+(1.0-lam)*epstart2));";
+    "eps_avg = sqrt((epend1*lam+(1.0-lam)*epstart1)*(epend2*lam+(1.0-lam)*epstart2));"
+    "sigma_avg=";
+const QString ENERGYBASE_SIGMA[2] = {
+    "0.5*((sigmaend1*lam+(1.0-lam)*sigmastart1)+(sigmaend2*lam+(1.0-lam)*sigmastart2));",
+    "sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));"
+};
 
 const QString TODUMMY =
     "withinCutoff*(Hcs + Hls);"
@@ -422,7 +427,12 @@ const QString TODUMMY =
     "soft=(diff_lj*delta*sigma_avg+r*r);"
     "diff_lj=(1.0-lam)*0.1;"
     "eps_avg = sqrt((1-lam)*(1-lam)*eaend + lam*lam*eastart + lam*(1-lam)*emix);"
-    "q_prod = (1-lam)*(1-lam)*qpend + lam*lam*qpstart + lam*(1-lam)*qmix;";
+    "q_prod = (1-lam)*(1-lam)*qpend + lam*lam*qpstart + lam*(1-lam)*qmix;"
+    "sigma_avg=";
+const QString TODUMMY_SIGMA[2] = {
+    "(1-lam)*saend + lam*sastart;",
+    "sqrt((1-lam)*(1-lam)*saend + lam*lam*sastart + lam*(1-lam)*samix);"
+};
 
 const QString FROMDUMMY =
     "withinCutoff*(Hcs + Hls);"
@@ -434,8 +444,14 @@ const QString FROMDUMMY =
     "soft=(diff_lj*delta*sigma_avg+r*r);"
     "diff_lj=(1.0-lam)*0.1;"
     "eps_avg = sqrt(lam*lam*eaend + (1-lam)*(1-lam)*eastart + lam*(1-lam)*emix);"
-    "q_prod = lam*lam*qpend + (1-lam)*(1-lam)*qpstart + lam*(1-lam)*qmix;";
+    "q_prod = lam*lam*qpend + (1-lam)*(1-lam)*qpstart + lam*(1-lam)*qmix;"
+    "sigma_avg=";
+const QString FROMDUMMY_SIGMA[2] = {
+    "lam*saend + (1-lam)*sastart;",
+    "sqrt(lam*lam*saend + (1-lam)*(1-lam)*sastart + lam*(1-lam)*samix);"
+};
 
+// FIXME: is pre-factor lam or lamFTD?
 const QString FROMTODUMMY =
     "withinCutoff*(Hcs + Hls);"
     "withinCutoff=step(cutoff-r);"
@@ -447,7 +463,12 @@ const QString FROMTODUMMY =
     "diff_lj=(1.0-lamFTD)*0.1;"
     "eps_avg = sqrt(lam*lam*eaend + (1-lam)*(1-lam)*eastart + lam*(1-lam)*emix);"
     "q_prod = lam*lam*qpend + (1-lam)*(1-lam)*qpstart + lam*(1-lam)*qmix;"
-    "lamFTD = max(lam,1-lam);";
+    "lamFTD = max(lam,1-lam);"
+    "sigma_avg=";
+const QString FROMTODUMMY_SIGMA[2] = {
+    "lam*saend + (1-lam)*sastart;",
+    "sqrt(lam*lam*saend + (1-lam)*(1-lam)*sastart + lam*(1-lam)*samix);"
+};
 
 // standard LJ term
 // FIXME: does this need the pre-factor too?
@@ -457,7 +478,12 @@ const QString INTRA_14_CLJ =
     "Hc=138.935456*q_prod/r;"
     "Hl=4*eps_avg*((sigma_avg/r)^12-(sigma_avg/r)^6);"
     "eps_avg = sqrt(lam*lam*eaend + (1-lam)*(1-lam)*eastart + lam*(1-lam)*emix);"
-    "q_prod = lam*lam*qpend + (1-lam)*(1-lam)*qpstart + lam*(1-lam)*qmix;";
+    "q_prod = lam*lam*qpend + (1-lam)*(1-lam)*qpstart + lam*(1-lam)*qmix;"
+    "sigma_avg=";
+const QString INTRA_14_CLJ_SIGMA[2] = {
+    "lam*saend + (1-lam)*sastart;",
+    "sqrt(lam*lam*saend + (1-lam)*(1-lam)*sastart + lam*(1-lam)*samix);"
+};
 
 
 void OpenMMPMEFEP::initialise()
@@ -588,29 +614,15 @@ void OpenMMPMEFEP::initialise()
     // The check is necessary to avoid nan errors on the GPUs platform caused
     // by the calculation of 0^0
     if (coulomb_power > 0)
-    {
        lam_pre = "(lambda^n) *";
-    }
     else
-    {
        lam_pre = "";
-    }
 
     QString energybase = ENERGYBASE.arg(lam_pre);
-
-    if (flag_combRules == ARITHMETIC)
-    {
-       energybase.append("sigma_avg = 0.5*((sigmaend1*lam+(1.0-lam)*sigmastart1)+(sigmaend2*lam+(1.0-lam)*sigmastart2));");
-    }
-    else if (flag_combRules == GEOMETRIC)
-    {
-       energybase.append("sigma_avg = sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));");
-    }
+    energybase.append(ENERGYBASE_SIGMA[flag_combRules]);
 
     if (Debug)
-    {
        qDebug() << "energybase:" << energybase;
-    }
 
     custom_force_field =
 	new OpenMM::CustomNonbondedForce(energybase.toStdString());
@@ -639,29 +651,15 @@ void OpenMMPMEFEP::initialise()
 
     // FIXME: same variable name for lambda in pre-factor
     if (coulomb_power > 0)
-    {
        lam_pre = "(lam^n) *";
-    }
     else
-    {
        lam_pre = "";
-    }
 
     QString intra_14_todummy = TODUMMY.arg(lam_pre);
-
-    if (flag_combRules == ARITHMETIC)
-    {
-       intra_14_todummy.append("sigma_avg = (1-lam)*saend + lam*sastart;");
-    }
-    else if (flag_combRules == GEOMETRIC)
-    {
-       intra_14_todummy.append("sigma_avg = sqrt((1-lam)*(1-lam)*saend + lam*lam*sastart + lam*(1-lam)*samix);");
-    }
+    intra_14_todummy.append(TODUMMY_SIGMA[flag_combRules]);
 
     if (Debug)
-    {
        qDebug() << "intra_14_todummy:" << intra_14_todummy;
-    }
 
     custom_intra_14_todummy =
 	new OpenMM::CustomBondForce(intra_14_todummy.toStdString());
@@ -671,20 +669,10 @@ void OpenMMPMEFEP::initialise()
     custom_intra_14_todummy->addGlobalParameter("cutoff", converted_cutoff_distance);
 
     QString intra_14_fromdummy = FROMDUMMY.arg(lam_pre);
-
-    if (flag_combRules == ARITHMETIC)
-    {
-       intra_14_fromdummy.append("sigma_avg = lam*saend + (1-lam)*sastart;");
-    }
-    else if (flag_combRules == GEOMETRIC)
-    {
-       intra_14_fromdummy.append("sigma_avg = sqrt(lam*lam*saend + (1-lam)*(1-lam)*sastart + lam*(1-lam)*samix);");
-    }
+    intra_14_fromdummy.append(FROMDUMMY_SIGMA[flag_combRules]);
 
     if (Debug)
-    {
        qDebug() << "intra_14_fromdummy:" << intra_14_fromdummy;
-    }
 
     custom_intra_14_fromdummy =
 	new OpenMM::CustomBondForce(intra_14_fromdummy.toStdString());
@@ -695,20 +683,10 @@ void OpenMMPMEFEP::initialise()
 
     //JM 9/10/20 set lamFTD to 0
     QString intra_14_fromdummy_todummy = FROMTODUMMY.arg(lam_pre);
-
-    if (flag_combRules == ARITHMETIC)
-    {
-       intra_14_fromdummy_todummy.append("sigma_avg = lam*saend + (1-lam)*sastart;");
-    }
-    else if (flag_combRules == GEOMETRIC)
-    {
-       intra_14_fromdummy_todummy.append("sigma_avg = sqrt(lam*lam*saend + (1-lam)*(1-lam)*sastart + lam*(1-lam)*samix);");
-    }
+    intra_14_fromdummy_todummy.append(FROMTODUMMY_SIGMA[flag_combRules]);
 
     if (Debug)
-    {
        qDebug() << "intra_14_fromtodummy:" << intra_14_fromdummy_todummy;
-    }
 
     custom_intra_14_fromdummy_todummy =
 	new OpenMM::CustomBondForce(intra_14_fromdummy_todummy.toStdString());
@@ -718,20 +696,10 @@ void OpenMMPMEFEP::initialise()
     custom_intra_14_fromdummy_todummy->addGlobalParameter("cutoff", converted_cutoff_distance);
 
     QString intra_14_clj(INTRA_14_CLJ);
-
-    if (flag_combRules == ARITHMETIC)
-    {
-       intra_14_clj.append("sigma_avg = lam*saend + (1-lam)*sastart;");
-    }
-    else if (flag_combRules == GEOMETRIC)
-    {
-       intra_14_clj.append("sigma_avg = sqrt(lam*lam*saend + (1-lam)*(1-lam)*sastart + lam*(1-lam)*samix);");
-    }
+    intra_14_clj.append(INTRA_14_CLJ_SIGMA[flag_combRules]);
 
     if (Debug)
-    {
        qDebug() << "custom_intra_14_clj:" << intra_14_clj;
-    }
 
     custom_intra_14_clj =
 	new OpenMM::CustomBondForce(intra_14_clj.toStdString()) ;
