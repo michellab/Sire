@@ -3199,7 +3199,7 @@ System OpenMMFrEnergyST::minimiseEnergy(System &system, double tolerance = 1.0e-
                                     positions_openmm[j + k][2] * (OpenMM::AngstromsPerNm));
             if (Debug)
             {
-                std::cout << "X = " << positions_openmm[j + k][0] * OpenMM::AngstromsPerNm << " A" <<
+                qDebug() << "X = " << positions_openmm[j + k][0] * OpenMM::AngstromsPerNm << " A" <<
                     " Y = " << positions_openmm[j + k][1] * OpenMM::AngstromsPerNm << " A" <<
                     " Z = " << positions_openmm[j + k][2] * OpenMM::AngstromsPerNm << " A";
             }
@@ -3458,8 +3458,8 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
         double p_energy_lambda = state_openmm.getPotentialEnergy();
         if (Debug)
         {
-            printf("Lambda = %f Potential energy = %.5f kcal/mol\n", Alchemical_value, p_energy_lambda * OpenMM::KcalPerKJ);
-            //exit(-1);
+            qDebug() << "Lambda =" << Alchemical_value << "Potential energy ="
+		     << p_energy_lambda * OpenMM::KcalPerKJ << "kcal/mol\n";
         }
         IsFiniteNumber = (p_energy_lambda <= DBL_MAX && p_energy_lambda >= -DBL_MAX);
 
