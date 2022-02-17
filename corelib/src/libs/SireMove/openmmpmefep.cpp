@@ -384,6 +384,7 @@ QString OpenMMPMEFEP::toString() const
 const QString ENERGYBASE =
     "(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hls + Hcs);"
     "Hcs = %1 138.935456 * q_prod*(1/sqrt(diff_cl+r*r) + krflam*(diff_cl+r*r)-crflam);"
+    "lam=lambda;"		// NOTE: only for consistency with expressions below
     "crflam = crf * src;"
     "krflam = krf * src * src * src;"
     "src = cutoff/sqrt(diff_cl + cutoff*cutoff);"
@@ -613,7 +614,7 @@ void OpenMMPMEFEP::initialise()
     // The check is necessary to avoid nan errors on the GPUs platform caused
     // by the calculation of 0^0
     if (coulomb_power > 0)
-       lam_pre = "(lambda^n) *";
+       lam_pre = "(lam^n) *";
     else
        lam_pre = "";
 
@@ -647,12 +648,6 @@ void OpenMMPMEFEP::initialise()
     // NO REACTION FIELD IS APPLIED TO 1-4 INTERACTIONS. If the scaling factor is one (Glycam ff) then
     // the OpenMM potential energy is not equal to he Sire energy. This is caused by the application
     // of the reaction field on the 14 pairs in Sire.
-
-    // FIXME: same variable name for lambda in pre-factor
-    if (coulomb_power > 0)
-       lam_pre = "(lam^n) *";
-    else
-       lam_pre = "";
 
     QString intra_14_todummy = TODUMMY.arg(lam_pre);
     intra_14_todummy.append(TODUMMY_SIGMA[flag_combRules]);
