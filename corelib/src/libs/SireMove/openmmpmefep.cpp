@@ -381,10 +381,10 @@ QString OpenMMPMEFEP::toString() const
 // FIXME: remove RF specific code and replace with PME direct space expressions
 // JM 9/10/20 multiply Logix_mix_lam * 0 instead of max(lam,1.0-lam)
 // JM 9/10/10 setting Logix_mix_lam output to 0 for lambda
-const QString ENERGYBASE =
+tmpl_str OpenMMPMEFEP::ENERGYBASE =
     "(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hls + Hcs);"
     "Hcs = %1 138.935456 * q_prod*(1/sqrt(diff_cl+r*r) + krflam*(diff_cl+r*r)-crflam);"
-    "lam=lambda;"		// NOTE: only for consistency with expressions below
+    "lam=lambda;" // NOTE: for consistency with 1-4 dummy expressions
     "crflam = crf * src;"
     "krflam = krf * src * src * src;"
     "src = cutoff/sqrt(diff_cl + cutoff*cutoff);"
@@ -412,12 +412,12 @@ const QString ENERGYBASE =
     "q_prod = (qend1 * lam+(1.0-lam) * qstart1) * (qend2 * lam+(1.0-lam) * qstart2);"
     "eps_avg = sqrt((epend1*lam+(1.0-lam)*epstart1)*(epend2*lam+(1.0-lam)*epstart2));"
     "sigma_avg=";
-const QString ENERGYBASE_SIGMA[2] = {
+tmpl_str OpenMMPMEFEP::ENERGYBASE_SIGMA[2] = {
     "0.5*((sigmaend1*lam+(1.0-lam)*sigmastart1)+(sigmaend2*lam+(1.0-lam)*sigmastart2));",
     "sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));"
 };
 
-const QString TODUMMY =
+tmpl_str OpenMMPMEFEP::TODUMMY =
     "withinCutoff*(Hcs + Hls);"
     "withinCutoff=step(cutoff-r);"
     "Hcs=%1 138.935456*q_prod/sqrt(diff_cl+r^2);"
@@ -429,12 +429,12 @@ const QString TODUMMY =
     "eps_avg = sqrt((1-lam)*(1-lam)*eaend + lam*lam*eastart + lam*(1-lam)*emix);"
     "q_prod = (1-lam)*(1-lam)*qpend + lam*lam*qpstart + lam*(1-lam)*qmix;"
     "sigma_avg=";
-const QString TODUMMY_SIGMA[2] = {
+tmpl_str OpenMMPMEFEP::TODUMMY_SIGMA[2] = {
     "(1-lam)*saend + lam*sastart;",
     "sqrt((1-lam)*(1-lam)*saend + lam*lam*sastart + lam*(1-lam)*samix);"
 };
 
-const QString FROMDUMMY =
+tmpl_str OpenMMPMEFEP::FROMDUMMY =
     "withinCutoff*(Hcs + Hls);"
     "withinCutoff=step(cutoff-r);"
     "Hcs=%1 138.935456*q_prod/sqrt(diff_cl+r^2);"
@@ -446,13 +446,13 @@ const QString FROMDUMMY =
     "eps_avg = sqrt(lam*lam*eaend + (1-lam)*(1-lam)*eastart + lam*(1-lam)*emix);"
     "q_prod = lam*lam*qpend + (1-lam)*(1-lam)*qpstart + lam*(1-lam)*qmix;"
     "sigma_avg=";
-const QString FROMDUMMY_SIGMA[2] = {
+tmpl_str OpenMMPMEFEP::FROMDUMMY_SIGMA[2] = {
     "lam*saend + (1-lam)*sastart;",
     "sqrt(lam*lam*saend + (1-lam)*(1-lam)*sastart + lam*(1-lam)*samix);"
 };
 
 // FIXME: is pre-factor lam or lamFTD?
-const QString FROMTODUMMY =
+tmpl_str OpenMMPMEFEP::FROMTODUMMY =
     "withinCutoff*(Hcs + Hls);"
     "withinCutoff=step(cutoff-r);"
     "Hcs=%1 138.935456*q_prod/sqrt(diff_cl+r^2);"
@@ -465,14 +465,14 @@ const QString FROMTODUMMY =
     "q_prod = lam*lam*qpend + (1-lam)*(1-lam)*qpstart + lam*(1-lam)*qmix;"
     "lamFTD = max(lam,1-lam);"
     "sigma_avg=";
-const QString FROMTODUMMY_SIGMA[2] = {
+tmpl_str OpenMMPMEFEP::FROMTODUMMY_SIGMA[2] = {
     "lam*saend + (1-lam)*sastart;",
     "sqrt(lam*lam*saend + (1-lam)*(1-lam)*sastart + lam*(1-lam)*samix);"
 };
 
 // standard LJ term
 // FIXME: does this need the pre-factor too?
-const QString INTRA_14_CLJ =
+tmpl_str OpenMMPMEFEP::INTRA_14_CLJ =
     "withinCutoff*(Hc+Hl);"
     "withinCutoff=step(cutoff-r);"
     "Hc=138.935456*q_prod/r;"
@@ -480,7 +480,7 @@ const QString INTRA_14_CLJ =
     "eps_avg = sqrt(lam*lam*eaend + (1-lam)*(1-lam)*eastart + lam*(1-lam)*emix);"
     "q_prod = lam*lam*qpend + (1-lam)*(1-lam)*qpstart + lam*(1-lam)*qmix;"
     "sigma_avg=";
-const QString INTRA_14_CLJ_SIGMA[2] = {
+tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
     "lam*saend + (1-lam)*sastart;",
     "sqrt(lam*lam*saend + (1-lam)*(1-lam)*sastart + lam*(1-lam)*samix);"
 };
@@ -496,20 +496,14 @@ void OpenMMPMEFEP::initialise()
     }
 
     // Create a workspace using the stored molgroup
-
     const MoleculeGroup moleculegroup = this->molgroup.read();
 
     if (moleculegroup.isEmpty())
-    {
         throw SireError::program_bug(QObject::tr("Cannot initialise OpenMMPMEFEP because molgroup has not been defined"), CODELOC);
-    }
 
     const MoleculeGroup solute = this->solute.read();
-
     const MoleculeGroup solutehard = this->solutehard.read();
-
     const MoleculeGroup solutetodummy = this->solutetodummy.read();
-
     const MoleculeGroup solutefromdummy = this->solutefromdummy.read();
 
     AtomicVelocityWorkspace ws = this->createWorkspace(moleculegroup).read().asA<AtomicVelocityWorkspace>();
@@ -550,6 +544,7 @@ void OpenMMPMEFEP::initialise()
 
     bool flag_noperturbedconstraints = false;
     bool flag_constraint_water = false;
+
     if (ConstraintType == "none")
         flag_constraint = NONE;
     else if (ConstraintType == "hbonds")
@@ -593,11 +588,10 @@ void OpenMMPMEFEP::initialise()
 
     nonbond_openmm->setUseDispersionCorrection(false);
 
-    //CUSTOM NON BONDED FORCE FIELD
-
+    // CUSTOM NON BONDED FORCE FIELD
     OpenMM::CustomNonbondedForce * custom_force_field = NULL;
 
-    //1-4 interactions
+    // 1-4 interactions
     OpenMM::CustomBondForce * custom_intra_14_clj = NULL;
     OpenMM::CustomBondForce * custom_intra_14_todummy = NULL;
     OpenMM::CustomBondForce * custom_intra_14_fromdummy = NULL;
@@ -605,13 +599,14 @@ void OpenMMPMEFEP::initialise()
 
     const double converted_cutoff_distance = convertTo(cutoff_distance.value(), nanometer);
 
+    // FIXME: remove RF specific code
     double eps2 = (field_dielectric - 1.0) / (2 * field_dielectric + 1.0);
     double kvalue = eps2 / (converted_cutoff_distance * converted_cutoff_distance * converted_cutoff_distance);
     double cvalue = (1.0 / converted_cutoff_distance)*(3.0 * field_dielectric) / (2.0 * field_dielectric + 1.0);
 
     QString lam_pre;
 
-    // The check is necessary to avoid nan errors on the GPUs platform caused
+    // This check is necessary to avoid nan errors on the GPU platform caused
     // by the calculation of 0^0
     if (coulomb_power > 0)
        lam_pre = "(lam^n) *";
@@ -634,6 +629,17 @@ void OpenMMPMEFEP::initialise()
     custom_force_field->addGlobalParameter("crf", cvalue);
     custom_force_field->addGlobalParameter("cutoff", converted_cutoff_distance);
     custom_force_field->addGlobalParameter("SPOnOff", 0.0);
+
+    custom_force_field->addPerParticleParameter("qstart");
+    custom_force_field->addPerParticleParameter("qend");
+    custom_force_field->addPerParticleParameter("epstart");
+    custom_force_field->addPerParticleParameter("epend");
+    custom_force_field->addPerParticleParameter("sigmastart");
+    custom_force_field->addPerParticleParameter("sigmaend");
+    custom_force_field->addPerParticleParameter("isHD");
+    custom_force_field->addPerParticleParameter("isTD");
+    custom_force_field->addPerParticleParameter("isFD");
+    custom_force_field->addPerParticleParameter("isSolvent");
 
     // FIXME: replace with PME and then switch off direct space handling
     if (flag_cutoff == CUTOFFNONPERIODIC)
@@ -662,6 +668,16 @@ void OpenMMPMEFEP::initialise()
     custom_intra_14_todummy->addGlobalParameter("n", coulomb_power);
     custom_intra_14_todummy->addGlobalParameter("cutoff", converted_cutoff_distance);
 
+    custom_intra_14_todummy->addPerBondParameter("qpstart");
+    custom_intra_14_todummy->addPerBondParameter("qpend");
+    custom_intra_14_todummy->addPerBondParameter("qmix");
+    custom_intra_14_todummy->addPerBondParameter("eastart");
+    custom_intra_14_todummy->addPerBondParameter("eaend");
+    custom_intra_14_todummy->addPerBondParameter("emix");
+    custom_intra_14_todummy->addPerBondParameter("sastart");
+    custom_intra_14_todummy->addPerBondParameter("saend");
+    custom_intra_14_todummy->addPerBondParameter("samix");
+
     QString intra_14_fromdummy = FROMDUMMY.arg(lam_pre);
     intra_14_fromdummy.append(FROMDUMMY_SIGMA[flag_combRules]);
 
@@ -674,6 +690,16 @@ void OpenMMPMEFEP::initialise()
     custom_intra_14_fromdummy->addGlobalParameter("delta", shift_delta);
     custom_intra_14_fromdummy->addGlobalParameter("n", coulomb_power);
     custom_intra_14_fromdummy->addGlobalParameter("cutoff", converted_cutoff_distance);
+
+    custom_intra_14_fromdummy->addPerBondParameter("qpstart");
+    custom_intra_14_fromdummy->addPerBondParameter("qpend");
+    custom_intra_14_fromdummy->addPerBondParameter("qmix");
+    custom_intra_14_fromdummy->addPerBondParameter("eastart");
+    custom_intra_14_fromdummy->addPerBondParameter("eaend");
+    custom_intra_14_fromdummy->addPerBondParameter("emix");
+    custom_intra_14_fromdummy->addPerBondParameter("sastart");
+    custom_intra_14_fromdummy->addPerBondParameter("saend");
+    custom_intra_14_fromdummy->addPerBondParameter("samix");
 
     //JM 9/10/20 set lamFTD to 0
     QString intra_14_fromdummy_todummy = FROMTODUMMY.arg(lam_pre);
@@ -689,6 +715,16 @@ void OpenMMPMEFEP::initialise()
     custom_intra_14_fromdummy_todummy->addGlobalParameter("n", coulomb_power);
     custom_intra_14_fromdummy_todummy->addGlobalParameter("cutoff", converted_cutoff_distance);
 
+    custom_intra_14_fromdummy_todummy->addPerBondParameter("qpstart");
+    custom_intra_14_fromdummy_todummy->addPerBondParameter("qpend");
+    custom_intra_14_fromdummy_todummy->addPerBondParameter("qmix");
+    custom_intra_14_fromdummy_todummy->addPerBondParameter("eastart");
+    custom_intra_14_fromdummy_todummy->addPerBondParameter("eaend");
+    custom_intra_14_fromdummy_todummy->addPerBondParameter("emix");
+    custom_intra_14_fromdummy_todummy->addPerBondParameter("sastart");
+    custom_intra_14_fromdummy_todummy->addPerBondParameter("saend");
+    custom_intra_14_fromdummy_todummy->addPerBondParameter("samix");
+
     QString intra_14_clj(INTRA_14_CLJ);
     intra_14_clj.append(INTRA_14_CLJ_SIGMA[flag_combRules]);
 
@@ -700,7 +736,15 @@ void OpenMMPMEFEP::initialise()
     custom_intra_14_clj->addGlobalParameter("lam", Alchemical_value);
     custom_intra_14_clj->addGlobalParameter("cutoff", converted_cutoff_distance);
 
-    //REACTION FIELD 14 IMPLEMENTATION FOR FUTURE USE
+    custom_intra_14_clj->addPerBondParameter("qpstart");
+    custom_intra_14_clj->addPerBondParameter("qpend");
+    custom_intra_14_clj->addPerBondParameter("qmix");
+    custom_intra_14_clj->addPerBondParameter("eastart");
+    custom_intra_14_clj->addPerBondParameter("eaend");
+    custom_intra_14_clj->addPerBondParameter("emix");
+    custom_intra_14_clj->addPerBondParameter("sastart");
+    custom_intra_14_clj->addPerBondParameter("saend");
+    custom_intra_14_clj->addPerBondParameter("samix");
 
     if (Debug)
     {
@@ -771,12 +815,22 @@ void OpenMMPMEFEP::initialise()
 
     solute_bond_perturbation->addGlobalParameter("lam", Alchemical_value);
 
+    solute_bond_perturbation->addPerBondParameter("bstart");
+    solute_bond_perturbation->addPerBondParameter("bend");
+    solute_bond_perturbation->addPerBondParameter("rstart");
+    solute_bond_perturbation->addPerBondParameter("rend");
+
     solute_angle_perturbation = new OpenMM::CustomAngleForce(
        "0.5*A*(theta-thetaeq)^2;"
        "A=aend*lam+(1.0-lam)*astart;"
        "thetaeq=thetaend*lam+(1.0-lam)*thetastart");
 
     solute_angle_perturbation->addGlobalParameter("lam", Alchemical_value);
+
+    solute_angle_perturbation->addPerAngleParameter("astart");
+    solute_angle_perturbation->addPerAngleParameter("aend");
+    solute_angle_perturbation->addPerAngleParameter("thetastart");
+    solute_angle_perturbation->addPerAngleParameter("thetaend");
 
 
     /************************************************************RESTRAINTS********************************************************/
@@ -825,7 +879,7 @@ void OpenMMPMEFEP::initialise()
 
     // To avoid possible mismatch between the index in which atoms are added to the openmm system arrays and
     // their atomic numbers in sire, one array is populated while filling up the openmm global arrays
-    //  AtomNumtoopenmmIndex
+    // AtomNumtoopenmmIndex
     QHash<int, int> AtomNumToOpenMMIndex;
 
     for (int i = 0; i < nmols; ++i)
@@ -851,12 +905,14 @@ void OpenMMPMEFEP::initialise()
             AtomNum atnum = at.number();
 
             if (Debug)
-                qDebug() << " openMM_index " << system_index << " Sire Atom Number " << atnum.toString() << " Mass particle = " << m[j];
+                qDebug() << " openMM_index " << system_index << " Sire Atom Number "
+			 << atnum.toString() << " Mass particle = " << m[j];
 
             AtomNumToOpenMMIndex[atnum.value()] = system_index;
 
             // JM Nov 12
-            // The code below implements a ThreeParticleAverageSite for virtual sites for EPW atoms present in a WAT residue
+            // The code below implements a ThreeParticleAverageSite for virtual
+	    // sites for EPW atoms present in a WAT residue
             // This is very AMBER specific.
 
             AtomName atname = at.name();
@@ -891,28 +947,25 @@ void OpenMMPMEFEP::initialise()
                         AtomName at0name = mol.select(bond_ff.atom0()).name();
                         AtomName at1name = mol.select(bond_ff.atom1()).name();
 
-                        // qDebug() << " at0name " << at0name.toString() << " at1name " << at1name.toString();
-
-                        if ((at0name == AtomName("O") and at1name == AtomName("H1")) or ( at0name == AtomName("H1") and at1name == AtomName("O")))
+                        if ((at0name == AtomName("O") and at1name == AtomName("H1"))
+			    or ( at0name == AtomName("H1") and at1name == AtomName("O")))
                         {
                             distoh = r0;
                         }
-                        else if ((at0name == AtomName("H1") and at1name == AtomName("H2")) or ( at0name == AtomName("H2") and at1name == AtomName("H1")))
+                        else if ((at0name == AtomName("H1") and at1name == AtomName("H2"))
+				 or ( at0name == AtomName("H2") and at1name == AtomName("H1")))
                         {
                             disthh = r0;
                         }
-                        else if ((at0name == AtomName("EPW") and at1name == AtomName("O")) or ( at0name == AtomName("O") and at1name == AtomName("EPW")))
+                        else if ((at0name == AtomName("EPW") and at1name == AtomName("O"))
+				 or ( at0name == AtomName("O") and at1name == AtomName("EPW")))
                         {
                             distoe = r0;
                         }
                     }
 
-                    if (distoh < 0 or disthh < 0 or distoe < 0)
-                    {
-                        throw SireError::program_bug(QObject::tr( "Could not find expected atoms in TIP4P water molecule."), CODELOC);
-                    }
-
-                    //qDebug() << " distoe " << distoe << " distoh " << distoh << " disthh " << disthh;
+                    if (distoh < 0.0 or disthh < 0.0 or distoe < 0.0)
+                        throw SireError::program_bug(QObject::tr("Could not find expected atoms in TIP4P water molecule."), CODELOC);
 
                     double weightH = distoe / sqrt((distoh * distoh) - (0.25 * disthh * disthh));
 
@@ -921,9 +974,15 @@ void OpenMMPMEFEP::initialise()
                     int h2_index = AtomNumToOpenMMIndex[h2atom.number().value()];
 
                     if (Debug)
-                        qDebug() << "virtual site " << system_index << " o " << o_index << " h1 " << h1_index << " h2 " << h2_index << " 1 - weightH " << 1 - weightH << " weightH/2 " << weightH / 2;
+                        qDebug() << "virtual site " << system_index << " o "
+				 << o_index << " h1 " << h1_index << " h2 "
+				 << h2_index << " 1 - weightH " << 1 - weightH
+				 << " weightH/2 " << weightH / 2;
 
-                    OpenMM::ThreeParticleAverageSite * vsite = new OpenMM::ThreeParticleAverageSite(o_index, h1_index, h2_index, 1 - weightH, weightH / 2, weightH / 2);
+                    OpenMM::ThreeParticleAverageSite * vsite =
+			new OpenMM::ThreeParticleAverageSite(o_index, h1_index,
+							     h2_index, 1 - weightH,
+							     weightH / 2, weightH / 2);
 
                     system_openmm->setVirtualSite(system_index, vsite);
                 }
@@ -937,73 +996,8 @@ void OpenMMPMEFEP::initialise()
 
     int num_atoms_till_i = 0;
 
-    /*NON BONDED PER PARTICLE PARAMETERS*/
-
-    custom_force_field->addPerParticleParameter("qstart");
-    custom_force_field->addPerParticleParameter("qend");
-    custom_force_field->addPerParticleParameter("epstart");
-    custom_force_field->addPerParticleParameter("epend");
-    custom_force_field->addPerParticleParameter("sigmastart");
-    custom_force_field->addPerParticleParameter("sigmaend");
-    custom_force_field->addPerParticleParameter("isHD");
-    custom_force_field->addPerParticleParameter("isTD");
-    custom_force_field->addPerParticleParameter("isFD");
-    custom_force_field->addPerParticleParameter("isSolvent");
-
-    custom_intra_14_clj->addPerBondParameter("qpstart");
-    custom_intra_14_clj->addPerBondParameter("qpend");
-    custom_intra_14_clj->addPerBondParameter("qmix");
-    custom_intra_14_clj->addPerBondParameter("eastart");
-    custom_intra_14_clj->addPerBondParameter("eaend");
-    custom_intra_14_clj->addPerBondParameter("emix");
-    custom_intra_14_clj->addPerBondParameter("sastart");
-    custom_intra_14_clj->addPerBondParameter("saend");
-    custom_intra_14_clj->addPerBondParameter("samix");
-
-    custom_intra_14_todummy->addPerBondParameter("qpstart");
-    custom_intra_14_todummy->addPerBondParameter("qpend");
-    custom_intra_14_todummy->addPerBondParameter("qmix");
-    custom_intra_14_todummy->addPerBondParameter("eastart");
-    custom_intra_14_todummy->addPerBondParameter("eaend");
-    custom_intra_14_todummy->addPerBondParameter("emix");
-    custom_intra_14_todummy->addPerBondParameter("sastart");
-    custom_intra_14_todummy->addPerBondParameter("saend");
-    custom_intra_14_todummy->addPerBondParameter("samix");
-
-    custom_intra_14_fromdummy->addPerBondParameter("qpstart");
-    custom_intra_14_fromdummy->addPerBondParameter("qpend");
-    custom_intra_14_fromdummy->addPerBondParameter("qmix");
-    custom_intra_14_fromdummy->addPerBondParameter("eastart");
-    custom_intra_14_fromdummy->addPerBondParameter("eaend");
-    custom_intra_14_fromdummy->addPerBondParameter("emix");
-    custom_intra_14_fromdummy->addPerBondParameter("sastart");
-    custom_intra_14_fromdummy->addPerBondParameter("saend");
-    custom_intra_14_fromdummy->addPerBondParameter("samix");
-
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("qpstart");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("qpend");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("qmix");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("eastart");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("eaend");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("emix");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("sastart");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("saend");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("samix");
-
-    /*BONDED PER PARTICLE PARAMETERS*/
-
-    solute_bond_perturbation->addPerBondParameter("bstart");
-    solute_bond_perturbation->addPerBondParameter("bend");
-    solute_bond_perturbation->addPerBondParameter("rstart");
-    solute_bond_perturbation->addPerBondParameter("rend");
-
-    solute_angle_perturbation->addPerAngleParameter("astart");
-    solute_angle_perturbation->addPerAngleParameter("aend");
-    solute_angle_perturbation->addPerAngleParameter("thetastart");
-    solute_angle_perturbation->addPerAngleParameter("thetaend");
-
     // JM July 13. This also needs to be changed because there could be more than one perturbed molecule
-    //Molecule solutemol = solute.moleculeAt(0).molecule();
+    // Molecule solutemol = solute.moleculeAt(0).molecule();
 
     int nions = 0;
 

@@ -51,6 +51,7 @@ SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::OpenMMPMEF
 SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::OpenMMPMEFEP&);
 
 namespace SireMove {
+    using tmpl_str = const QString;
 
     /** This class implements single topology a free energy method using
 	OpenMM.
@@ -308,9 +309,21 @@ namespace SireMove {
 
         int random_seed;
 
+	static tmpl_str ENERGYBASE;
+	static tmpl_str ENERGYBASE_SIGMA[2];
+
+	static tmpl_str TODUMMY;
+	static tmpl_str TODUMMY_SIGMA[2];
+
+	static tmpl_str FROMDUMMY;
+	static tmpl_str FROMDUMMY_SIGMA[2];
+
+	static tmpl_str FROMTODUMMY;
+	static tmpl_str FROMTODUMMY_SIGMA[2];
+
+	static tmpl_str INTRA_14_CLJ;
+	static tmpl_str INTRA_14_CLJ_SIGMA[2];
     };
-
-
 }
 
 Q_DECLARE_METATYPE(SireMove::OpenMMPMEFEP)
@@ -321,23 +334,20 @@ SIRE_END_HEADER
 
 #else // SIRE_USE_OPENMM
 
-        namespace SireMove {
+namespace SireMove {
 
     class OpenMMPMEFEP {
     public:
 
-        OpenMMPMEFEP() {
-        }
+        OpenMMPMEFEP() {}
 
-        ~OpenMMPMEFEP() {
-        }
+        ~OpenMMPMEFEP() {}
 
-        static const char* typeName() {
+        static const char* typeName()
+	{
             return "SireMM::OpenMMPMEFEP";
         }
-
     };
-
 }
 
 Q_DECLARE_METATYPE(SireMove::OpenMMPMEFEP)
