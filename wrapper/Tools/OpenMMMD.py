@@ -1127,6 +1127,7 @@ def repartitionMasses(system, hmassfactor=4.0):
 
 def getDummies(molecule):
     print("Selecting dummy groups")
+
     natoms = molecule.nAtoms()
     atoms = molecule.atoms()
 
@@ -1135,6 +1136,7 @@ def getDummies(molecule):
 
     for x in range(0, natoms):
         atom = atoms[x]
+
         if atom.property("initial_ambertype") == "du":
             if from_dummies is None:
                 from_dummies = molecule.selectAll(atom.index())
@@ -1150,7 +1152,7 @@ def getDummies(molecule):
 
 
 def createSystemFreeEnergy(molecules):
-    r"""creates the system for free energy calculation
+    """creates the system for free energy calculation
     Parameters
     ----------
     molecules : Sire.molecules
@@ -1194,7 +1196,6 @@ def createSystemFreeEnergy(molecules):
         )
         sys.exit(-1)
 
-    # FIXME: assumption that perturbed molecule is the first residue
     lig_name = solute.residue(ResIdx(0)).name().value()
 
     solute = solute.edit().rename(lig_name).commit()
@@ -1278,7 +1279,6 @@ def createSystemFreeEnergy(molecules):
 
     solvent = MoleculeGroup("solvent")
 
-    # for molecule in moleculeList[1:]:
     for molecule in moleculeList:
         molecules.add(molecule)
         solvent.add(molecule)
@@ -1313,7 +1313,7 @@ def createSystemFreeEnergy(molecules):
 
 
 def setupForceFieldsFreeEnergy(system, space):
-    r"""Sets up the force field for the free energy calculation
+    """Sets up the force field for the free energy calculation
 
     FIXME: For the moment we only check if cutoff_type is not nocutoff
            and so also allow the RF setup for PME.
