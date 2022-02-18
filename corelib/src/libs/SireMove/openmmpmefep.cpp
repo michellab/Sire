@@ -480,6 +480,20 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
     "sqrt(lam*lam*saend + (1-lam)*(1-lam)*sastart + lam*(1-lam)*samix);"
 };
 
+
+void OpenMMPMEFEP::addGlobalParameters(OpenMM::CustomNonbondedForce *force,
+				       std::list<std::pair<std::string,double>> params) {
+    for (auto const &param : params)
+	force->addGlobalParameter(param.first, param.second);
+}
+
+void OpenMMPMEFEP::addGlobalParameters(OpenMM::CustomBondForce *force,
+				       std::list<std::pair<std::string,double>> params) {
+    for (auto const &param : params)
+        force->addGlobalParameter(param.first, param.second);
+}
+
+
 /**
  * initialises the openMM Free energy single topology calculation
  * Initialise must be called before anything else happens.
@@ -582,12 +596,12 @@ void OpenMMPMEFEP::initialise()
     //       All force field terms including soft-cores are "hand-coded"
     //       with CustomNonbondedForce, CustomBondForce, etc. (see next few
     //       hundred lines below).
-    OpenMM::NonbondedForce * nonbond_openmm = new OpenMM::NonbondedForce();
+    OpenMM::NonbondedForce *nonbond_openmm = new OpenMM::NonbondedForce();
 
     nonbond_openmm->setUseDispersionCorrection(false);
 
     // CUSTOM NON BONDED FORCE FIELD
-    OpenMM::CustomNonbondedForce * custom_force_field = NULL;
+    OpenMM::CustomNonbondedForce *custom_force_field = NULL;
 
     // 1-4 interactions
     OpenMM::CustomBondForce *custom_intra_14_clj = NULL;
@@ -619,6 +633,8 @@ void OpenMMPMEFEP::initialise()
 
     custom_force_field =
 	new OpenMM::CustomNonbondedForce(energybase.toStdString());
+
+    custom_force_field->setCutoffDistance(converted_cutoff_distance);
     custom_force_field->setCutoffDistance(converted_cutoff_distance);
     custom_force_field->addGlobalParameter("lam", Alchemical_value);
     custom_force_field->addGlobalParameter("delta", shift_delta);
@@ -661,7 +677,6 @@ void OpenMMPMEFEP::initialise()
     custom_intra_14_fromdummy->addGlobalParameter("n", coulomb_power);
     custom_intra_14_fromdummy->addGlobalParameter("cutoff", converted_cutoff_distance);
 
-
     //JM 9/10/20 set lamFTD to 0
     QString intra_14_fromdummy_todummy = FROMTODUMMY.arg(lam_pre);
     intra_14_fromdummy_todummy.append(FROMTODUMMY_SIGMA[flag_combRules]);
@@ -683,7 +698,7 @@ void OpenMMPMEFEP::initialise()
        qDebug() << "custom_intra_14_clj:" << intra_14_clj;
 
     custom_intra_14_clj =
-	new OpenMM::CustomBondForce(intra_14_clj.toStdString()) ;
+	new OpenMM::CustomBondForce(intra_14_clj.toStdString());
     custom_intra_14_clj->addGlobalParameter("lam", Alchemical_value);
     custom_intra_14_clj->addGlobalParameter("cutoff", converted_cutoff_distance);
 
@@ -939,13 +954,13 @@ void OpenMMPMEFEP::initialise()
     custom_force_field->addPerParticleParameter("isFD");
     custom_force_field->addPerParticleParameter("isSolvent");
 
-    for (auto const& para : {"qpstart", "qpend", "qmix", "eastart", "eaend",
+    for (auto const &param : {"qpstart", "qpend", "qmix", "eastart", "eaend",
 	  "emix", "sastart", "saend", "samix"})
     {
-       custom_intra_14_todummy->addPerBondParameter(para);
-       custom_intra_14_fromdummy->addPerBondParameter(para);
-       custom_intra_14_fromdummy_todummy->addPerBondParameter(para);
-       custom_intra_14_clj->addPerBondParameter(para);
+       custom_intra_14_todummy->addPerBondParameter(param);
+       custom_intra_14_fromdummy->addPerBondParameter(param);
+       custom_intra_14_fromdummy_todummy->addPerBondParameter(param);
+       custom_intra_14_clj->addPerBondParameter(param);
     }
 
     /* BONDED PER PARTICLE PARAMETERS */
@@ -2407,7 +2422,30 @@ void OpenMMPMEFEP::initialise()
 
     this->openmm_system = system_openmm;
     this->isSystemInitialised = true;
-} // initialise END
+
+    // if (Debug)
+    // {
+
+    //    const double dt = convertTo(0.002, picosecond);
+    //    OpenMM::Integrator *integrator_openmm = new OpenMM::VerletIntegrator(dt);
+
+    //    OpenMM::Platform& platform_openmm = OpenMM::Platform::getPlatformByName(platform_type.toStdString());
+
+    //    openmm_context =
+    // 	  new OpenMM::Context(*system_openmm, *integrator_openmm,
+    // 			      platform_openmm);
+
+    //    openmm_context->setPositions(positions_openmm);
+    //    openmm_context->setVelocities(velocities_openmm);
+
+    //    int infoMask = OpenMM::State::Positions + OpenMM::State::Energy;
+    //    OpenMM::State state_openmm = openmm_context->getState(infoMask);
+
+    //    qDebug() << "Initial energy is"
+    // 		<< state_openmm.getPotentialEnergy() * OpenMM::KcalPerKJ
+    // 		<< "kcal/mol at lambda =" << Alchemical_value << "\n";
+    // }
+} // OpenMMPMEFEP::initialise END
 
 /**
  *
@@ -2722,10 +2760,6 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10, 
     SireUnits::Dimension::Time timestep = 0.0 * picosecond;
     createContext(workspace.edit(), timestep);
 
-    // Step 2 minimise
-    OpenMM::LocalEnergyMinimizer::minimize(*openmm_context, tolerance, max_iteration);
-
-    // Step 3 update the positions in the system
     int infoMask = OpenMM::State::Positions;
 
     if (Debug)
@@ -2739,6 +2773,10 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10, 
 		<< state_openmm.getPotentialEnergy() * OpenMM::KcalPerKJ
 		<< "kcal/mol at lambda =" << Alchemical_value << "\n";
 
+    // Step 2 minimise
+    OpenMM::LocalEnergyMinimizer::minimize(*openmm_context, tolerance, max_iteration);
+
+    // Step 3 update the positions in the system
     std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
 
     // Recast to atomicvelocityworkspace because want to use commitCoordinates() method to update system

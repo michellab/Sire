@@ -29,6 +29,9 @@
 #ifndef SIREMOVE_OPENMMPMEFEP_H
 #define SIREMOVE_OPENMMPMEFEP_H
 
+#include <list>
+#include <utility>
+
 #include "integrator.h"
 
 #ifdef SIRE_USE_OPENMM
@@ -220,7 +223,13 @@ namespace SireMove {
         QVector<double> computeReducedPerturbedEnergies(double);
         void emptyContainers(void);
 
-        /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
+	void addGlobalParameters(OpenMM::CustomNonbondedForce *force,
+				 std::list<std::pair<std::string,double>> params);
+	void addGlobalParameters(OpenMM::CustomBondForce *force,
+				 std::list<std::pair<std::string,double>> params);
+
+        /** Whether or not to save the velocities after every step, or to save them
+	    at the end of all of the steps */
         bool frequent_save_velocities;
         /** The Molecule Group on which the integrator operates */
         MolGroupPtr molgroup;
