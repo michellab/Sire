@@ -373,11 +373,6 @@ QString OpenMMPMEFEP::toString() const
     return QObject::tr("OpenMMPMEFEP()");
 }
 
-/**
- * initialises the openMM Free energy single topology calculation
- * Initialise must be called before anything else happens.
- */
-
 // FIXME: remove RF specific code and replace with PME direct space expressions
 // JM 9/10/20 multiply Logix_mix_lam * 0 instead of max(lam,1.0-lam)
 // JM 9/10/10 setting Logix_mix_lam output to 0 for lambda
@@ -485,7 +480,10 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
     "sqrt(lam*lam*saend + (1-lam)*(1-lam)*sastart + lam*(1-lam)*samix);"
 };
 
-
+/**
+ * initialises the openMM Free energy single topology calculation
+ * Initialise must be called before anything else happens.
+ */
 void OpenMMPMEFEP::initialise()
 {
     if (Debug)
@@ -573,7 +571,7 @@ void OpenMMPMEFEP::initialise()
     //Load Plugins from the OpenMM standard Plugin Directory
     OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
 
-    OpenMM::System * system_openmm = new OpenMM::System();
+    OpenMM::System *system_openmm = new OpenMM::System();
 
     system_openmm->setDefaultPeriodicBoxVectors(OpenMM::Vec3(6, 0, 0),
                                                 OpenMM::Vec3(0, 6, 0),
@@ -592,10 +590,10 @@ void OpenMMPMEFEP::initialise()
     OpenMM::CustomNonbondedForce * custom_force_field = NULL;
 
     // 1-4 interactions
-    OpenMM::CustomBondForce * custom_intra_14_clj = NULL;
-    OpenMM::CustomBondForce * custom_intra_14_todummy = NULL;
-    OpenMM::CustomBondForce * custom_intra_14_fromdummy = NULL;
-    OpenMM::CustomBondForce * custom_intra_14_fromdummy_todummy = NULL;
+    OpenMM::CustomBondForce *custom_intra_14_clj = NULL;
+    OpenMM::CustomBondForce *custom_intra_14_todummy = NULL;
+    OpenMM::CustomBondForce *custom_intra_14_fromdummy = NULL;
+    OpenMM::CustomBondForce *custom_intra_14_fromdummy_todummy = NULL;
 
     const double converted_cutoff_distance = convertTo(cutoff_distance.value(), nanometer);
 
@@ -630,26 +628,8 @@ void OpenMMPMEFEP::initialise()
     custom_force_field->addGlobalParameter("cutoff", converted_cutoff_distance);
     custom_force_field->addGlobalParameter("SPOnOff", 0.0);
 
-    custom_force_field->addPerParticleParameter("qstart");
-    custom_force_field->addPerParticleParameter("qend");
-    custom_force_field->addPerParticleParameter("epstart");
-    custom_force_field->addPerParticleParameter("epend");
-    custom_force_field->addPerParticleParameter("sigmastart");
-    custom_force_field->addPerParticleParameter("sigmaend");
-    custom_force_field->addPerParticleParameter("isHD");
-    custom_force_field->addPerParticleParameter("isTD");
-    custom_force_field->addPerParticleParameter("isFD");
-    custom_force_field->addPerParticleParameter("isSolvent");
-
     // FIXME: replace with PME and then switch off direct space handling
-    if (flag_cutoff == CUTOFFNONPERIODIC)
-    {
-       custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-    }
-    else
-    {
-       custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
-    }
+    custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
 
     // NO REACTION FIELD IS APPLIED TO 1-4 INTERACTIONS. If the scaling factor is one (Glycam ff) then
     // the OpenMM potential energy is not equal to he Sire energy. This is caused by the application
@@ -668,16 +648,6 @@ void OpenMMPMEFEP::initialise()
     custom_intra_14_todummy->addGlobalParameter("n", coulomb_power);
     custom_intra_14_todummy->addGlobalParameter("cutoff", converted_cutoff_distance);
 
-    custom_intra_14_todummy->addPerBondParameter("qpstart");
-    custom_intra_14_todummy->addPerBondParameter("qpend");
-    custom_intra_14_todummy->addPerBondParameter("qmix");
-    custom_intra_14_todummy->addPerBondParameter("eastart");
-    custom_intra_14_todummy->addPerBondParameter("eaend");
-    custom_intra_14_todummy->addPerBondParameter("emix");
-    custom_intra_14_todummy->addPerBondParameter("sastart");
-    custom_intra_14_todummy->addPerBondParameter("saend");
-    custom_intra_14_todummy->addPerBondParameter("samix");
-
     QString intra_14_fromdummy = FROMDUMMY.arg(lam_pre);
     intra_14_fromdummy.append(FROMDUMMY_SIGMA[flag_combRules]);
 
@@ -691,15 +661,6 @@ void OpenMMPMEFEP::initialise()
     custom_intra_14_fromdummy->addGlobalParameter("n", coulomb_power);
     custom_intra_14_fromdummy->addGlobalParameter("cutoff", converted_cutoff_distance);
 
-    custom_intra_14_fromdummy->addPerBondParameter("qpstart");
-    custom_intra_14_fromdummy->addPerBondParameter("qpend");
-    custom_intra_14_fromdummy->addPerBondParameter("qmix");
-    custom_intra_14_fromdummy->addPerBondParameter("eastart");
-    custom_intra_14_fromdummy->addPerBondParameter("eaend");
-    custom_intra_14_fromdummy->addPerBondParameter("emix");
-    custom_intra_14_fromdummy->addPerBondParameter("sastart");
-    custom_intra_14_fromdummy->addPerBondParameter("saend");
-    custom_intra_14_fromdummy->addPerBondParameter("samix");
 
     //JM 9/10/20 set lamFTD to 0
     QString intra_14_fromdummy_todummy = FROMTODUMMY.arg(lam_pre);
@@ -715,16 +676,6 @@ void OpenMMPMEFEP::initialise()
     custom_intra_14_fromdummy_todummy->addGlobalParameter("n", coulomb_power);
     custom_intra_14_fromdummy_todummy->addGlobalParameter("cutoff", converted_cutoff_distance);
 
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("qpstart");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("qpend");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("qmix");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("eastart");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("eaend");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("emix");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("sastart");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("saend");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("samix");
-
     QString intra_14_clj(INTRA_14_CLJ);
     intra_14_clj.append(INTRA_14_CLJ_SIGMA[flag_combRules]);
 
@@ -735,16 +686,6 @@ void OpenMMPMEFEP::initialise()
 	new OpenMM::CustomBondForce(intra_14_clj.toStdString()) ;
     custom_intra_14_clj->addGlobalParameter("lam", Alchemical_value);
     custom_intra_14_clj->addGlobalParameter("cutoff", converted_cutoff_distance);
-
-    custom_intra_14_clj->addPerBondParameter("qpstart");
-    custom_intra_14_clj->addPerBondParameter("qpend");
-    custom_intra_14_clj->addPerBondParameter("qmix");
-    custom_intra_14_clj->addPerBondParameter("eastart");
-    custom_intra_14_clj->addPerBondParameter("eaend");
-    custom_intra_14_clj->addPerBondParameter("emix");
-    custom_intra_14_clj->addPerBondParameter("sastart");
-    custom_intra_14_clj->addPerBondParameter("saend");
-    custom_intra_14_clj->addPerBondParameter("samix");
 
     if (Debug)
     {
@@ -815,22 +756,12 @@ void OpenMMPMEFEP::initialise()
 
     solute_bond_perturbation->addGlobalParameter("lam", Alchemical_value);
 
-    solute_bond_perturbation->addPerBondParameter("bstart");
-    solute_bond_perturbation->addPerBondParameter("bend");
-    solute_bond_perturbation->addPerBondParameter("rstart");
-    solute_bond_perturbation->addPerBondParameter("rend");
-
     solute_angle_perturbation = new OpenMM::CustomAngleForce(
        "0.5*A*(theta-thetaeq)^2;"
        "A=aend*lam+(1.0-lam)*astart;"
        "thetaeq=thetaend*lam+(1.0-lam)*thetastart");
 
     solute_angle_perturbation->addGlobalParameter("lam", Alchemical_value);
-
-    solute_angle_perturbation->addPerAngleParameter("astart");
-    solute_angle_perturbation->addPerAngleParameter("aend");
-    solute_angle_perturbation->addPerAngleParameter("thetastart");
-    solute_angle_perturbation->addPerAngleParameter("thetaend");
 
 
     /************************************************************RESTRAINTS********************************************************/
@@ -995,6 +926,39 @@ void OpenMMPMEFEP::initialise()
     }//end of loop on molecules in workspace
 
     int num_atoms_till_i = 0;
+
+    /* NON BONDED PER PARTICLE PARAMETERS */
+    custom_force_field->addPerParticleParameter("qstart");
+    custom_force_field->addPerParticleParameter("qend");
+    custom_force_field->addPerParticleParameter("epstart");
+    custom_force_field->addPerParticleParameter("epend");
+    custom_force_field->addPerParticleParameter("sigmastart");
+    custom_force_field->addPerParticleParameter("sigmaend");
+    custom_force_field->addPerParticleParameter("isHD");
+    custom_force_field->addPerParticleParameter("isTD");
+    custom_force_field->addPerParticleParameter("isFD");
+    custom_force_field->addPerParticleParameter("isSolvent");
+
+    for (auto const& para : {"qpstart", "qpend", "qmix", "eastart", "eaend",
+	  "emix", "sastart", "saend", "samix"})
+    {
+       custom_intra_14_todummy->addPerBondParameter(para);
+       custom_intra_14_fromdummy->addPerBondParameter(para);
+       custom_intra_14_fromdummy_todummy->addPerBondParameter(para);
+       custom_intra_14_clj->addPerBondParameter(para);
+    }
+
+    /* BONDED PER PARTICLE PARAMETERS */
+    solute_bond_perturbation->addPerBondParameter("bstart");
+    solute_bond_perturbation->addPerBondParameter("bend");
+    solute_bond_perturbation->addPerBondParameter("rstart");
+    solute_bond_perturbation->addPerBondParameter("rend");
+
+    solute_angle_perturbation->addPerAngleParameter("astart");
+    solute_angle_perturbation->addPerAngleParameter("aend");
+    solute_angle_perturbation->addPerAngleParameter("thetastart");
+    solute_angle_perturbation->addPerAngleParameter("thetaend");
+
 
     // JM July 13. This also needs to be changed because there could be more than one perturbed molecule
     // Molecule solutemol = solute.moleculeAt(0).molecule();
@@ -1169,14 +1133,14 @@ void OpenMMPMEFEP::initialise()
 		    custom_non_bonded_params[5] = sigma;
 		}
 
-		custom_non_bonded_params[6] = 0.0; //isHard
-		custom_non_bonded_params[7] = 0.0; //isTodummy
-		custom_non_bonded_params[8] = 0.0; //isFromdummy
-		custom_non_bonded_params[9] = 0.0; //isSolventProtein
+		custom_non_bonded_params[6] = 0.0; // isHard
+		custom_non_bonded_params[7] = 0.0; // isTodummy
+		custom_non_bonded_params[8] = 0.0; // isFromdummy
+		custom_non_bonded_params[9] = 0.0; // isSolventProtein
 
                 if (ishard)
                 {
-                    custom_non_bonded_params[6] = 1.0; //isHard
+                    custom_non_bonded_params[6] = 1.0;
 
                     if (Debug)
                         qDebug() << "hard solute = " << atom.index();
@@ -1184,21 +1148,21 @@ void OpenMMPMEFEP::initialise()
 		// JM July 13 THIS NEEDS FIXING TO DEAL WITH GROUPS THAT CONTAIN MORE THAN ONE MOLECULE
                 else if (istodummy)
                 {
-                    custom_non_bonded_params[7] = 1.0; //isTodummy
+                    custom_non_bonded_params[7] = 1.0;
 
                     if (Debug)
                         qDebug() << "to dummy solute = " << atom.index();
                 }
                 else if (isfromdummy)
                 {
-                    custom_non_bonded_params[8] = 1.0; //isFromdummy
+                    custom_non_bonded_params[8] = 1.0;
 
                     if (Debug)
                         qDebug() << "from dummy solute = " << atom.index();
                 }
                 else
                 {
-                    custom_non_bonded_params[6] = 1.0; //isHard
+                    custom_non_bonded_params[6] = 1.0; // isHard
 
                     if (Debug)
                         qDebug() << " unperturbed solute atom " << atom.index();
@@ -1212,10 +1176,10 @@ void OpenMMPMEFEP::initialise()
 	       custom_non_bonded_params[3] = epsilon;
 	       custom_non_bonded_params[4] = sigma;
 	       custom_non_bonded_params[5] = sigma;
-	       custom_non_bonded_params[6] = 1.0; //isHard
-	       custom_non_bonded_params[7] = 0.0; //isTodummy
-	       custom_non_bonded_params[8] = 0.0; //isFromdummy
-	       custom_non_bonded_params[9] = 1.0; //isSolventProtein
+	       custom_non_bonded_params[6] = 1.0; // isHard
+	       custom_non_bonded_params[7] = 0.0; // isTodummy
+	       custom_non_bonded_params[8] = 0.0; // isFromdummy
+	       custom_non_bonded_params[9] = 1.0; // isSolventProtein
 
 	       if (Debug)
 		  qDebug() << "Solvent = " << atom.index();
@@ -2443,7 +2407,7 @@ void OpenMMPMEFEP::initialise()
 
     this->openmm_system = system_openmm;
     this->isSystemInitialised = true;
-}
+} // initialise END
 
 /**
  *
@@ -2763,7 +2727,18 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10, 
 
     // Step 3 update the positions in the system
     int infoMask = OpenMM::State::Positions;
+
+    if (Debug)
+       infoMask += OpenMM::State::Energy;
+
     OpenMM::State state_openmm = openmm_context->getState(infoMask);
+
+    if (Debug)
+       // FIXME: check why this give different energies in different runs
+       qDebug() << "Initial energy is"
+		<< state_openmm.getPotentialEnergy() * OpenMM::KcalPerKJ
+		<< "kcal/mol at lambda =" << Alchemical_value << "\n";
+
     std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
 
     // Recast to atomicvelocityworkspace because want to use commitCoordinates() method to update system
