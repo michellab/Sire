@@ -79,7 +79,6 @@
 #include <boost/tuple/tuple.hpp>
 
 
-
 using namespace SireMove;
 using namespace SireSystem;
 using namespace SireMol;
@@ -100,7 +99,8 @@ enum
 {
     NOCUTOFF = 0,
     CUTOFFNONPERIODIC = 1,
-    CUTOFFPERIODIC = 2
+    CUTOFFPERIODIC = 2,
+    PME = 3			// only PME used here
 };
 
 /** TYPES OF CONSTRAINTS IMPLEMENTED **/
@@ -373,14 +373,133 @@ QString OpenMMPMEFEP::toString() const
     return QObject::tr("OpenMMPMEFEP()");
 }
 
+// FIXME: remove RF specific code and replace with PME direct space expressions
+// JM 9/10/20 multiply Logix_mix_lam * 0 instead of max(lam,1.0-lam)
+// JM 9/10/10 setting Logix_mix_lam output to 0 for lambda
+tmpl_str OpenMMPMEFEP::ENERGYBASE =
+    "(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hls + Hcs);"
+    "Hcs = %1 138.935456 * q_prod*(1/sqrt(diff_cl+r*r) + krflam*(diff_cl+r*r)-crflam);"
+    "lam=lambda;" // NOTE: for consistency with 1-4 dummy expressions
+    "crflam = crf * src;"
+    "krflam = krf * src * src * src;"
+    "src = cutoff/sqrt(diff_cl + cutoff*cutoff);"
+    "diff_cl = (1.0-lambda) * 0.01;"
+    "Hls = 4.0 * eps_avg * (LJ*LJ-LJ);"
+    "LJ=((sigma_avg * sigma_avg)/soft)^3;"
+    "soft=(diff_lj*delta*sigma_avg + r*r);"
+    "diff_lj=(1.0-lambda) * 0.1;"
+    "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+    "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
+    "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
+    "B_om_lam = max(isHD1*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), C_om_lam);"
+    "C_om_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*isTD2*(1.0-isFD1)*(1.0-isFD2), D_om_lam);"
+    "D_om_lam = max((1.0-isHD1)*isHD2*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), E_om_lam);"
+    "E_om_lam = (1.0-isHD1)*isHD2*(1.0-isTD1)*isTD2*(1.0-isFD1)*(1.0-isFD2);"
+    "Logic_lam = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*isFD1*isFD2, B_lam);"
+    "B_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*isFD1*(1.0-isFD2), C_lam);"
+    "C_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*(1.0-isFD1)*isFD2, D_lam);"
+    "D_lam = max((1.0-isHD1)*isHD2*(1.0-isTD1)*(1.0-isTD2)*isFD1*(1.0-isFD2), E_lam);"
+    "E_lam = (1.0-isHD1)*isHD2*(1.0-isTD1)*(1.0-isTD2)*(1.0-isFD1)*isFD2;"
+    "Logic_mix_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*(1.0-isTD2)*isFD1*(1.0-isFD2), B_mix);"
+    "B_mix = max((1.0-isHD1)*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*isFD2, C_mix);"
+    "C_mix = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*isFD1*(1.0-isFD2), D_mix);"
+    "D_mix= (1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*(1.0-isFD1)*isFD2;"
+    "q_prod = (qend1 * lam+(1.0-lam) * qstart1) * (qend2 * lam+(1.0-lam) * qstart2);"
+    "eps_avg = sqrt((epend1*lam+(1.0-lam)*epstart1)*(epend2*lam+(1.0-lam)*epstart2));"
+    "sigma_avg=";
+tmpl_str OpenMMPMEFEP::ENERGYBASE_SIGMA[2] = {
+    "0.5*((sigmaend1*lam+(1.0-lam)*sigmastart1)+(sigmaend2*lam+(1.0-lam)*sigmastart2));",
+    "sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));"
+};
+
+tmpl_str OpenMMPMEFEP::TODUMMY =
+    "withinCutoff*(Hcs + Hls);"
+    "withinCutoff=step(cutoff-r);"
+    "Hcs=%1 138.935456*q_prod/sqrt(diff_cl+r^2);"
+    "diff_cl=(1.0-lam)*0.01;"
+    "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
+    "LJ=((sigma_avg*sigma_avg)/soft)^3;"
+    "soft=(diff_lj*delta*sigma_avg+r*r);"
+    "diff_lj=(1.0-lam)*0.1;"
+    "eps_avg = sqrt((1-lam)*(1-lam)*eaend + lam*lam*eastart + lam*(1-lam)*emix);"
+    "q_prod = (1-lam)*(1-lam)*qpend + lam*lam*qpstart + lam*(1-lam)*qmix;"
+    "sigma_avg=";
+tmpl_str OpenMMPMEFEP::TODUMMY_SIGMA[2] = {
+    "(1-lam)*saend + lam*sastart;",
+    "sqrt((1-lam)*(1-lam)*saend + lam*lam*sastart + lam*(1-lam)*samix);"
+};
+
+tmpl_str OpenMMPMEFEP::FROMDUMMY =
+    "withinCutoff*(Hcs + Hls);"
+    "withinCutoff=step(cutoff-r);"
+    "Hcs=%1 138.935456*q_prod/sqrt(diff_cl+r^2);"
+    "diff_cl=(1.0-lam)*0.01;"
+    "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
+    "LJ=((sigma_avg*sigma_avg)/soft)^3;"
+    "soft=(diff_lj*delta*sigma_avg+r*r);"
+    "diff_lj=(1.0-lam)*0.1;"
+    "eps_avg = sqrt(lam*lam*eaend + (1-lam)*(1-lam)*eastart + lam*(1-lam)*emix);"
+    "q_prod = lam*lam*qpend + (1-lam)*(1-lam)*qpstart + lam*(1-lam)*qmix;"
+    "sigma_avg=";
+tmpl_str OpenMMPMEFEP::FROMDUMMY_SIGMA[2] = {
+    "lam*saend + (1-lam)*sastart;",
+    "sqrt(lam*lam*saend + (1-lam)*(1-lam)*sastart + lam*(1-lam)*samix);"
+};
+
+// FIXME: is pre-factor lam or lamFTD?
+tmpl_str OpenMMPMEFEP::FROMTODUMMY =
+    "withinCutoff*(Hcs + Hls);"
+    "withinCutoff=step(cutoff-r);"
+    "Hcs=%1 138.935456*q_prod/sqrt(diff_cl+r^2);"
+    "diff_cl=(1.0-lamFTD)*0.01;"
+    "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
+    "LJ=((sigma_avg*sigma_avg)/soft)^3;"
+    "soft=(diff_lj*delta*sigma_avg+r*r);"
+    "diff_lj=(1.0-lamFTD)*0.1;"
+    "eps_avg = sqrt(lam*lam*eaend + (1-lam)*(1-lam)*eastart + lam*(1-lam)*emix);"
+    "q_prod = lam*lam*qpend + (1-lam)*(1-lam)*qpstart + lam*(1-lam)*qmix;"
+    "lamFTD = max(lam,1-lam);"
+    "sigma_avg=";
+tmpl_str OpenMMPMEFEP::FROMTODUMMY_SIGMA[2] = {
+    "lam*saend + (1-lam)*sastart;",
+    "sqrt(lam*lam*saend + (1-lam)*(1-lam)*sastart + lam*(1-lam)*samix);"
+};
+
+// standard LJ term
+// FIXME: does this need the pre-factor too?
+tmpl_str OpenMMPMEFEP::INTRA_14_CLJ =
+    "withinCutoff*(Hc+Hl);"
+    "withinCutoff=step(cutoff-r);"
+    "Hc=138.935456*q_prod/r;"
+    "Hl=4*eps_avg*((sigma_avg/r)^12-(sigma_avg/r)^6);"
+    "eps_avg = sqrt(lam*lam*eaend + (1-lam)*(1-lam)*eastart + lam*(1-lam)*emix);"
+    "q_prod = lam*lam*qpend + (1-lam)*(1-lam)*qpstart + lam*(1-lam)*qmix;"
+    "sigma_avg=";
+tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
+    "lam*saend + (1-lam)*sastart;",
+    "sqrt(lam*lam*saend + (1-lam)*(1-lam)*sastart + lam*(1-lam)*samix);"
+};
+
+
+void OpenMMPMEFEP::addGlobalParameters(OpenMM::CustomNonbondedForce *force,
+				       std::list<std::pair<std::string,double>> params) {
+    for (auto const &param : params)
+	force->addGlobalParameter(param.first, param.second);
+}
+
+void OpenMMPMEFEP::addGlobalParameters(OpenMM::CustomBondForce *force,
+				       std::list<std::pair<std::string,double>> params) {
+    for (auto const &param : params)
+        force->addGlobalParameter(param.first, param.second);
+}
+
+
 /**
  * initialises the openMM Free energy single topology calculation
  * Initialise must be called before anything else happens.
  */
 void OpenMMPMEFEP::initialise()
 {
-
-    bool Debug = false;
     if (Debug)
     {
         qDebug() << "Initialising OpenMMPMEFEP";
@@ -389,25 +508,14 @@ void OpenMMPMEFEP::initialise()
     }
 
     // Create a workspace using the stored molgroup
-
     const MoleculeGroup moleculegroup = this->molgroup.read();
 
     if (moleculegroup.isEmpty())
-    {
         throw SireError::program_bug(QObject::tr("Cannot initialise OpenMMPMEFEP because molgroup has not been defined"), CODELOC);
-    }
 
     const MoleculeGroup solute = this->solute.read();
-
-    //if ( solute.isEmpty() ){
-    //    throw SireError::program_bug(QObject::tr("Cannot initialise OpenMMPMEFEP because solute group has not been defined"), CODELOC);
-    //}
-
-
     const MoleculeGroup solutehard = this->solutehard.read();
-
     const MoleculeGroup solutetodummy = this->solutetodummy.read();
-
     const MoleculeGroup solutefromdummy = this->solutefromdummy.read();
 
     AtomicVelocityWorkspace ws = this->createWorkspace(moleculegroup).read().asA<AtomicVelocityWorkspace>();
@@ -427,17 +535,12 @@ void OpenMMPMEFEP::initialise()
     int flag_cutoff;
     int flag_constraint;
 
-    if (CutoffType == "nocutoff")
-        flag_cutoff = NOCUTOFF;
-    else if (CutoffType == "cutoffnonperiodic")
-        flag_cutoff = CUTOFFNONPERIODIC;
-    else if (CutoffType == "cutoffperiodic")
-        flag_cutoff = CUTOFFPERIODIC;
+    // This class here only deals with PME for the time being.  But we leave
+    // the check in place just in case.
+    if (CutoffType == "PME")
+        flag_cutoff = PME;
     else
-        throw SireError::program_bug(QObject::tr("The CutOff method has not been specified. Possible choises: nocutoff, cutoffnonperiodic, cutoffperiodic"), CODELOC);
-
-    if (Debug)
-        qDebug() << "\nCutoffType = " << CutoffType << "\n";
+        throw SireError::program_bug(QObject::tr("The CutOff method has not been specified. Possible choices: nocutoff, cutoffnonperiodic, cutoffperiodic, PME"), CODELOC);
 
     int flag_combRules;
 
@@ -453,6 +556,7 @@ void OpenMMPMEFEP::initialise()
 
     bool flag_noperturbedconstraints = false;
     bool flag_constraint_water = false;
+
     if (ConstraintType == "none")
         flag_constraint = NONE;
     else if (ConstraintType == "hbonds")
@@ -481,641 +585,131 @@ void OpenMMPMEFEP::initialise()
     //Load Plugins from the OpenMM standard Plugin Directory
     OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
 
-    OpenMM::System * system_openmm = new OpenMM::System();
+    OpenMM::System *system_openmm = new OpenMM::System();
 
     system_openmm->setDefaultPeriodicBoxVectors(OpenMM::Vec3(6, 0, 0),
                                                 OpenMM::Vec3(0, 6, 0),
                                                 OpenMM::Vec3(0, 0, 6));
 
-    //The Standard Non Bonded is only defined to extract 1-2,1-3,1-4 pairs from the system
-    OpenMM::NonbondedForce * nonbond_openmm = new OpenMM::NonbondedForce();
+    // NOTE: The Standard Non Bonded is *only* defined to extract
+    //       1-2, 1-3 and 1-4 pairs from the system.
+    //       All force field terms including soft-cores are "hand-coded"
+    //       with CustomNonbondedForce, CustomBondForce, etc. (see next few
+    //       hundred lines below).
+    OpenMM::NonbondedForce *nonbond_openmm = new OpenMM::NonbondedForce();
 
     nonbond_openmm->setUseDispersionCorrection(false);
 
-    //CUSTOM NON BONDED FORCE FIELD
+    // CUSTOM NON BONDED FORCE FIELD
+    OpenMM::CustomNonbondedForce *custom_force_field = NULL;
 
-    OpenMM::CustomNonbondedForce * custom_force_field = NULL;
+    // 1-4 interactions
+    OpenMM::CustomBondForce *custom_intra_14_clj = NULL;
+    OpenMM::CustomBondForce *custom_intra_14_todummy = NULL;
+    OpenMM::CustomBondForce *custom_intra_14_fromdummy = NULL;
+    OpenMM::CustomBondForce *custom_intra_14_fromdummy_todummy = NULL;
 
-    //1-4 interactions
-    OpenMM::CustomBondForce * custom_intra_14_clj = NULL;
-    OpenMM::CustomBondForce * custom_intra_14_todummy = NULL;
-    OpenMM::CustomBondForce * custom_intra_14_fromdummy = NULL;
-    OpenMM::CustomBondForce * custom_intra_14_fromdummy_todummy = NULL;
+    const double converted_cutoff_distance = convertTo(cutoff_distance.value(), nanometer);
 
-    if (flag_cutoff == NOCUTOFF)
-    {
-        if (coulomb_power > 0)
-        {
-            //This is necessary to avoid nan errors on the GPUs platform caused by the calculation of 0^0
-            //JM 9/10/20 multiply Logic_mix_lam by * 0 instead of max(lam,1.0-lam)
-            std::string energybase = """(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hcs + Hls);"
-              "Hcs = (lambda^n) * 138.935456 * q_prod/sqrt(diff_cl+r^2);"
-              "diff_cl = (1.0-lambda) * 0.01;"
-              "Hls = 4.0 * eps_avg * (LJ*LJ-LJ);"
-              "LJ=((sigma_avg * sigma_avg)/soft)^3;"
-              "soft=(diff_lj*delta*sigma_avg + r*r);"
-              "diff_lj=(1.0-lambda) * 0.1;"
-              "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
-              "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
-              "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
-              "B_om_lam = max(isHD1*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), C_om_lam);"
-              "C_om_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*isTD2*(1.0-isFD1)*(1.0-isFD2) , D_om_lam);"
-              "D_om_lam = max((1.0-isHD1)*isHD2*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), E_om_lam);"
-              "E_om_lam = (1.0-isHD1)*isHD2*(1.0-isTD1)*isTD2*(1.0-isFD1)*(1.0-isFD2);"
-              "Logic_lam = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*isFD1*isFD2, B_lam);"
-              "B_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*isFD1*(1.0-isFD2), C_lam);"
-              "C_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*(1.0-isFD1)*isFD2 , D_lam);"
-              "D_lam = max((1.0-isHD1)*isHD2*(1.0-isTD1)*(1.0-isTD2)*isFD1*(1.0-isFD2), E_lam);"
-              "E_lam = (1.0-isHD1)*isHD2*(1.0-isTD1)*(1.0-isTD2)*(1.0-isFD1)*isFD2;"
-              "Logic_mix_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*(1.0-isTD2)*isFD1*(1.0-isFD2), B_mix);"
-              "B_mix = max((1.0-isHD1)*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*isFD2, C_mix);"
-              "C_mix = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*isFD1*(1.0-isFD2) , D_mix);"
-              "D_mix= (1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*(1.0-isFD1)*isFD2;"
-              "q_prod = (qend1 * lam+(1.0-lam) * qstart1) * (qend2 * lam+(1.0-lam) * qstart2);"
-              "eps_avg = sqrt((epend1*lam+(1.0-lam)*epstart1)*(epend2*lam+(1.0-lam)*epstart2));""";
+    // FIXME: remove RF specific code
+    double eps2 = (field_dielectric - 1.0) / (2 * field_dielectric + 1.0);
+    double kvalue = eps2 / (converted_cutoff_distance * converted_cutoff_distance * converted_cutoff_distance);
+    double cvalue = (1.0 / converted_cutoff_distance)*(3.0 * field_dielectric) / (2.0 * field_dielectric + 1.0);
 
-            if (flag_combRules == ARITHMETIC)
-            {
-                energybase.append("sigma_avg = 0.5*((sigmaend1*lam+(1.0-lam)*sigmastart1)+(sigmaend2*lam+(1.0-lam)*sigmastart2));");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                energybase.append("sigma_avg = sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));");
-            }
+    QString lam_pre;
 
-            custom_force_field = new OpenMM::CustomNonbondedForce(energybase) ;
-            custom_force_field->addGlobalParameter("lam", Alchemical_value);
-            custom_force_field->addGlobalParameter("delta", shift_delta);
-            custom_force_field->addGlobalParameter("n", coulomb_power);
-            custom_force_field->addGlobalParameter("SPOnOff", 0.0);
-
-            custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::NoCutoff);
-
-            std::string intra_14_todummy = """Hcs + Hls;"
-                "Hcs=(lamtd^ntd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
-                "diff_cl=(1.0-lamtd)*0.01;"
-                "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
-                "LJ=((sigma_avg*sigma_avg)/soft)^3;"
-                "soft=(diff_lj*deltatd*sigma_avg+r*r);"
-                "diff_lj=(1.0-lamtd)*0.1;"
-                "eps_avg = sqrt((1-lamtd)*(1-lamtd)*eaend + lamtd*lamtd*eastart + lamtd*(1-lamtd)*emix);"
-                "q_prod = (1-lamtd)*(1-lamtd)*qpend + lamtd*lamtd*qpstart + lamtd*(1-lamtd)*qmix;""";
-
-            if (flag_combRules == ARITHMETIC)
-            {
-                intra_14_todummy.append("sigma_avg = (1-lamtd)*saend + lamtd*sastart;");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                intra_14_todummy.append("sigma_avg = sqrt((1-lamtd)*(1-lamtd)*saend + lamtd*lamtd*sastart + lamtd*(1-lamtd)*samix);");
-            }
-
-            custom_intra_14_todummy = new OpenMM::CustomBondForce(intra_14_todummy) ;
-            custom_intra_14_todummy->addGlobalParameter("lamtd", 1.0 - Alchemical_value);
-            custom_intra_14_todummy->addGlobalParameter("deltatd", shift_delta);
-            custom_intra_14_todummy->addGlobalParameter("ntd", coulomb_power);
-
-            std::string intra_14_fromdummy = """Hcs + Hls;"
-                "Hcs=(lamfd^nfd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
-                "diff_cl=(1.0-lamfd)*0.01;"
-                "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
-                "LJ=((sigma_avg*sigma_avg)/soft)^3;"
-                "soft=(diff_lj*deltafd*sigma_avg+r*r);"
-                "diff_lj=(1.0-lamfd)*0.1;"
-                "eps_avg = sqrt(lamfd*lamfd*eaend + (1-lamfd)*(1-lamfd)*eastart + lamfd*(1-lamfd)*emix);"
-                "q_prod = lamfd*lamfd*qpend + (1-lamfd)*(1-lamfd)*qpstart + lamfd*(1-lamfd)*qmix;""";
-
-            if (flag_combRules == ARITHMETIC)
-            {
-                intra_14_fromdummy.append("sigma_avg = lamfd*saend + (1-lamfd)*sastart;");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                intra_14_fromdummy.append("sigma_avg = sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);");
-            }
-
-            custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy) ;
-            custom_intra_14_fromdummy->addGlobalParameter("lamfd", Alchemical_value);
-            custom_intra_14_fromdummy->addGlobalParameter("deltafd", shift_delta);
-            custom_intra_14_fromdummy->addGlobalParameter("nfd", coulomb_power);
-
-            //JM 9/10/20 set lamFTD to 0 instead of max(lamftd,1-lamftd)
-
-            std::string intra_14_fromdummy_todummy = """Hcs + Hls;"
-                "Hcs=(lamFTD^nftd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
-                "diff_cl=(1.0-lamFTD)*0.01;"
-                "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
-                "LJ=((sigma_avg*sigma_avg)/soft)^3;"
-                "soft=(diff_lj*deltaftd*sigma_avg+r*r);"
-                "diff_lj=(1.0-lamFTD)*0.1;"
-                "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
-                "sigma_avg = lamftd*saend + (1-lamftd)*sastart;"
-                "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-                "lamFTD = max(lamftd,1-lamftd);""";
-
-            if (flag_combRules == ARITHMETIC)
-            {
-                intra_14_fromdummy_todummy.append("sigma_avg = lamftd*saend + (1-lamftd)*sastart;");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                intra_14_fromdummy_todummy.append("sigma_avg = sqrt(lamftd*lamftd*saend + (1-lamftd)*(1-lamftd)*sastart + lamftd*(1-lamftd)*samix);");
-            }
-
-            custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy) ;
-            custom_intra_14_fromdummy_todummy->addGlobalParameter("lamftd", Alchemical_value);
-            custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
-            custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
-
-        }
-        else
-        {
-            // coulomb_power == 0. //This is necessary to avoid nan errors on the GPUs platform caused by the calculation of 0^0
-
-            // JM 9/10/20 multiply Logix_mix_lam by 0 instead of max(lam,1.0-lam)
-            std::string energybase ="""(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hcs + Hls);"
-              "Hcs = 138.935456 * q_prod/sqrt(diff_cl+r^2);"
-              "diff_cl = (1.0-lambda) * 0.01;"
-              "Hls = 4.0 * eps_avg * (LJ*LJ-LJ);"
-              "LJ=((sigma_avg * sigma_avg)/soft)^3;"
-              "soft=(diff_lj*delta*sigma_avg + r*r);"
-              "diff_lj=(1.0-lambda) * 0.1;"
-              "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
-              "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
-              "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
-              "B_om_lam = max(isHD1*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), C_om_lam);"
-              "C_om_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*isTD2*(1.0-isFD1)*(1.0-isFD2) , D_om_lam);"
-              "D_om_lam = max((1.0-isHD1)*isHD2*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), E_om_lam);"
-              "E_om_lam = (1.0-isHD1)*isHD2*(1.0-isTD1)*isTD2*(1.0-isFD1)*(1.0-isFD2);"
-              "Logic_lam = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*isFD1*isFD2, B_lam);"
-              "B_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*isFD1*(1.0-isFD2), C_lam);"
-              "C_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*(1.0-isFD1)*isFD2 , D_lam);"
-              "D_lam = max((1.0-isHD1)*isHD2*(1.0-isTD1)*(1.0-isTD2)*isFD1*(1.0-isFD2), E_lam);"
-              "E_lam = (1.0-isHD1)*isHD2*(1.0-isTD1)*(1.0-isTD2)*(1.0-isFD1)*isFD2;"
-              "Logic_mix_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*(1.0-isTD2)*isFD1*(1.0-isFD2), B_mix);"
-              "B_mix = max((1.0-isHD1)*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*isFD2, C_mix);"
-              "C_mix = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*isFD1*(1.0-isFD2) , D_mix);"
-              "D_mix= (1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*(1.0-isFD1)*isFD2;"
-              "q_prod = (qend1 * lam+(1.0-lam) * qstart1) * (qend2 * lam+(1.0-lam) * qstart2);"
-              "eps_avg = sqrt((epend1*lam+(1.0-lam)*epstart1)*(epend2*lam+(1.0-lam)*epstart2));""";
-
-            if (flag_combRules == ARITHMETIC)
-            {
-                energybase.append("sigma_avg = 0.5*((sigmaend1*lam+(1.0-lam)*sigmastart1)+(sigmaend2*lam+(1.0-lam)*sigmastart2));");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                energybase.append("sigma_avg = sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));");
-            }
-
-            custom_force_field = new OpenMM::CustomNonbondedForce(energybase) ;
-            custom_force_field->addGlobalParameter("lam", Alchemical_value);
-            custom_force_field->addGlobalParameter("delta", shift_delta);
-            custom_force_field->addGlobalParameter("n", coulomb_power);
-            custom_force_field->addGlobalParameter("SPOnOff", 0.0);
-
-            custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::NoCutoff);
-
-            std::string intra_14_todummy = """Hcs + Hls;"
-              "Hcs=138.935456*q_prod/sqrt(diff_cl+r^2);"
-              "diff_cl=(1.0-lamtd)*0.01;"
-              "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
-              "LJ=((sigma_avg*sigma_avg)/soft)^3;"
-              "soft=(diff_lj*deltatd*sigma_avg+r*r);"
-              "diff_lj=(1.0-lamtd)*0.1;"
-              "eps_avg = sqrt((1-lamtd)*(1-lamtd)*eaend + lamtd*lamtd*eastart + lamtd*(1-lamtd)*emix);"
-              "q_prod = (1-lamtd)*(1-lamtd)*qpend + lamtd*lamtd*qpstart + lamtd*(1-lamtd)*qmix;""";
-
-            if (flag_combRules == ARITHMETIC)
-            {
-                intra_14_todummy.append("sigma_avg = (1-lamtd)*saend + lamtd*sastart;");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                intra_14_todummy.append("sigma_avg = sqrt((1-lamtd)*(1-lamtd)*saend + lamtd*lamtd*sastart + lamtd*(1-lamtd)*samix);");
-            }
-
-            custom_intra_14_todummy = new OpenMM::CustomBondForce(intra_14_todummy) ;
-            custom_intra_14_todummy->addGlobalParameter("lamtd", 1.0 - Alchemical_value);
-            custom_intra_14_todummy->addGlobalParameter("deltatd", shift_delta);
-            custom_intra_14_todummy->addGlobalParameter("ntd", coulomb_power);
-
-            std::string intra_14_fromdummy = """Hcs + Hls;"
-              "Hcs=(lamfd^nfd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
-              "diff_cl=(1.0-lamfd)*0.01;"
-              "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
-              "LJ=((sigma_avg*sigma_avg)/soft)^3;"
-              "soft=(diff_lj*deltafd*sigma_avg+r*r);"
-              "diff_lj=(1.0-lamfd)*0.1;"
-              "eps_avg = sqrt(lamfd*lamfd*eaend + (1-lamfd)*(1-lamfd)*eastart + lamfd*(1-lamfd)*emix);"
-              "q_prod = lamfd*lamfd*qpend + (1-lamfd)*(1-lamfd)*qpstart + lamfd*(1-lamfd)*qmix;""";
-
-            if (flag_combRules == ARITHMETIC)
-            {
-                intra_14_fromdummy.append("sigma_avg = lamfd*saend + (1-lamfd)*sastart;");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                intra_14_fromdummy.append("sigma_avg = sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);");
-            }
-
-            custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy) ;
-            custom_intra_14_fromdummy->addGlobalParameter("lamfd", Alchemical_value);
-            custom_intra_14_fromdummy->addGlobalParameter("deltafd", shift_delta);
-            custom_intra_14_fromdummy->addGlobalParameter("nfd", coulomb_power);
-
-            // JM 9/10/20 set lamFTD to 0.0
-
-            std::string intra_14_fromdummy_todummy = """Hcs + Hls;"
-              "Hcs=138.935456*q_prod/sqrt(diff_cl+r^2);"
-              "diff_cl=(1.0-lamFTD)*0.01;"
-              "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
-              "LJ=((sigma_avg*sigma_avg)/soft)^3;"
-              "soft=(diff_lj*deltaftd*sigma_avg+r*r);"
-              "diff_lj=(1.0-lamFTD)*0.1;"
-              "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
-              "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-              "lamFTD = max(lamftd,1-lamftd);""";
-
-            if (flag_combRules == ARITHMETIC)
-            {
-                intra_14_fromdummy_todummy.append("sigma_avg = lamftd*saend + (1-lamftd)*sastart;");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                intra_14_fromdummy_todummy.append("sigma_avg = sqrt(lamftd*lamftd*saend + (1-lamftd)*(1-lamftd)*sastart + lamftd*(1-lamftd)*samix);");
-            }
-
-            custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy) ;
-            custom_intra_14_fromdummy_todummy->addGlobalParameter("lamftd", Alchemical_value);
-            custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
-            custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
-        }
-
-        std::string intra_14_clj = """Hl+Hc;"
-            "Hl=4*eps_avg*((sigma_avg/r)^12-(sigma_avg/r)^6);"
-            "Hc=138.935456*q_prod/r;"
-            "eps_avg = sqrt(lamhd*lamhd*eaend + (1-lamhd)*(1-lamhd)*eastart + lamhd*(1-lamhd)*emix);"
-            "q_prod = lamhd*lamhd*qpend + (1-lamhd)*(1-lamhd)*qpstart + lamhd*(1-lamhd)*qmix;""";
-
-        if (flag_combRules == ARITHMETIC)
-        {
-            intra_14_clj.append("sigma_avg = lamhd*saend + (1-lamhd)*sastart;");
-        }
-        else if (flag_combRules == GEOMETRIC)
-        {
-            intra_14_clj.append("sigma_avg = sqrt(lamhd*lamhd*saend + (1-lamhd)*(1-lamhd)*sastart + lamhd*(1-lamhd)*samix);");
-        }
-
-        custom_intra_14_clj = new OpenMM::CustomBondForce(intra_14_clj) ;
-        custom_intra_14_clj->addGlobalParameter("lamhd", Alchemical_value);
-
-        if (Debug)
-        {
-            qDebug() << "\nCut off type = " << CutoffType << "\n";
-            qDebug() << "Lambda = " << Alchemical_value << " Coulomb Power = " << coulomb_power << " Delta Shift = " << shift_delta << "\n";
-        }
-    }
+    // This check is necessary to avoid nan errors on the GPU platform caused
+    // by the calculation of 0^0
+    if (coulomb_power > 0)
+       lam_pre = "(lam^n) *";
     else
+       lam_pre = "";
+
+    QString energybase = ENERGYBASE.arg(lam_pre);
+    energybase.append(ENERGYBASE_SIGMA[flag_combRules]);
+
+    if (Debug)
+       qDebug() << "energybase:" << energybase;
+
+    custom_force_field =
+	new OpenMM::CustomNonbondedForce(energybase.toStdString());
+
+    custom_force_field->setCutoffDistance(converted_cutoff_distance);
+    custom_force_field->setCutoffDistance(converted_cutoff_distance);
+    custom_force_field->addGlobalParameter("lam", Alchemical_value);
+    custom_force_field->addGlobalParameter("delta", shift_delta);
+    custom_force_field->addGlobalParameter("n", coulomb_power);
+    custom_force_field->addGlobalParameter("krf", kvalue);
+    custom_force_field->addGlobalParameter("crf", cvalue);
+    custom_force_field->addGlobalParameter("cutoff", converted_cutoff_distance);
+    custom_force_field->addGlobalParameter("SPOnOff", 0.0);
+
+    // FIXME: replace with PME and then switch off direct space handling
+    custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
+
+    // NO REACTION FIELD IS APPLIED TO 1-4 INTERACTIONS. If the scaling factor is one (Glycam ff) then
+    // the OpenMM potential energy is not equal to he Sire energy. This is caused by the application
+    // of the reaction field on the 14 pairs in Sire.
+
+    QString intra_14_todummy = TODUMMY.arg(lam_pre);
+    intra_14_todummy.append(TODUMMY_SIGMA[flag_combRules]);
+
+    if (Debug)
+       qDebug() << "intra_14_todummy:" << intra_14_todummy;
+
+    custom_intra_14_todummy =
+	new OpenMM::CustomBondForce(intra_14_todummy.toStdString());
+    custom_intra_14_todummy->addGlobalParameter("lam", 1.0 - Alchemical_value);
+    custom_intra_14_todummy->addGlobalParameter("delta", shift_delta);
+    custom_intra_14_todummy->addGlobalParameter("n", coulomb_power);
+    custom_intra_14_todummy->addGlobalParameter("cutoff", converted_cutoff_distance);
+
+    QString intra_14_fromdummy = FROMDUMMY.arg(lam_pre);
+    intra_14_fromdummy.append(FROMDUMMY_SIGMA[flag_combRules]);
+
+    if (Debug)
+       qDebug() << "intra_14_fromdummy:" << intra_14_fromdummy;
+
+    custom_intra_14_fromdummy =
+	new OpenMM::CustomBondForce(intra_14_fromdummy.toStdString());
+    custom_intra_14_fromdummy->addGlobalParameter("lam", Alchemical_value);
+    custom_intra_14_fromdummy->addGlobalParameter("delta", shift_delta);
+    custom_intra_14_fromdummy->addGlobalParameter("n", coulomb_power);
+    custom_intra_14_fromdummy->addGlobalParameter("cutoff", converted_cutoff_distance);
+
+    //JM 9/10/20 set lamFTD to 0
+    QString intra_14_fromdummy_todummy = FROMTODUMMY.arg(lam_pre);
+    intra_14_fromdummy_todummy.append(FROMTODUMMY_SIGMA[flag_combRules]);
+
+    if (Debug)
+       qDebug() << "intra_14_fromtodummy:" << intra_14_fromdummy_todummy;
+
+    custom_intra_14_fromdummy_todummy =
+	new OpenMM::CustomBondForce(intra_14_fromdummy_todummy.toStdString());
+    custom_intra_14_fromdummy_todummy->addGlobalParameter("lam", Alchemical_value);
+    custom_intra_14_fromdummy_todummy->addGlobalParameter("delta", shift_delta);
+    custom_intra_14_fromdummy_todummy->addGlobalParameter("n", coulomb_power);
+    custom_intra_14_fromdummy_todummy->addGlobalParameter("cutoff", converted_cutoff_distance);
+
+    QString intra_14_clj(INTRA_14_CLJ);
+    intra_14_clj.append(INTRA_14_CLJ_SIGMA[flag_combRules]);
+
+    if (Debug)
+       qDebug() << "custom_intra_14_clj:" << intra_14_clj;
+
+    custom_intra_14_clj =
+	new OpenMM::CustomBondForce(intra_14_clj.toStdString());
+    custom_intra_14_clj->addGlobalParameter("lam", Alchemical_value);
+    custom_intra_14_clj->addGlobalParameter("cutoff", converted_cutoff_distance);
+
+    if (Debug)
     {
-        //CUTOFF PERIODIC OR NON PERIODIC
-
-        const double converted_cutoff_distance = convertTo(cutoff_distance.value(), nanometer);
-
-        double eps2 = (field_dielectric - 1.0) / (2 * field_dielectric + 1.0);
-        double kvalue = eps2 / (converted_cutoff_distance * converted_cutoff_distance * converted_cutoff_distance);
-        double cvalue = (1.0 / converted_cutoff_distance)*(3.0 * field_dielectric) / (2.0 * field_dielectric + 1.0);
-
-        if (coulomb_power > 0)
-        {
-            //This is necessary to avoid nan errors on the GPUs platform caused by the calculation of 0^0
-
-            // JM 9/10/20 multiply Logix_mix_lam * 0 instead of max(lam,1.0-lam)
-            std::string energybase = """(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hls + Hcs);"
-             "Hcs = (lambda^n) * 138.935456 * q_prod*(1/sqrt(diff_cl+r*r) + krflam*(diff_cl+r*r)-crflam);"
-             "crflam = crf * src;"
-             "krflam = krf * src * src * src;"
-             "src = cutoff/sqrt(diff_cl + cutoff*cutoff);"
-             "diff_cl = (1.0-lambda) * 0.01;"
-             "Hls = 4.0 * eps_avg * (LJ*LJ-LJ);"
-             "LJ=((sigma_avg * sigma_avg)/soft)^3;"
-             "soft=(diff_lj*delta*sigma_avg + r*r);"
-             "diff_lj=(1.0-lambda) * 0.1;"
-             "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
-             "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
-             "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
-             "B_om_lam = max(isHD1*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), C_om_lam);"
-             "C_om_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*isTD2*(1.0-isFD1)*(1.0-isFD2) , D_om_lam);"
-             "D_om_lam = max((1.0-isHD1)*isHD2*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), E_om_lam);"
-             "E_om_lam = (1.0-isHD1)*isHD2*(1.0-isTD1)*isTD2*(1.0-isFD1)*(1.0-isFD2);"
-             "Logic_lam = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*isFD1*isFD2, B_lam);"
-             "B_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*isFD1*(1.0-isFD2), C_lam);"
-             "C_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*(1.0-isFD1)*isFD2 , D_lam);"
-             "D_lam = max((1.0-isHD1)*isHD2*(1.0-isTD1)*(1.0-isTD2)*isFD1*(1.0-isFD2), E_lam);"
-             "E_lam = (1.0-isHD1)*isHD2*(1.0-isTD1)*(1.0-isTD2)*(1.0-isFD1)*isFD2;"
-             "Logic_mix_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*(1.0-isTD2)*isFD1*(1.0-isFD2), B_mix);"
-             "B_mix = max((1.0-isHD1)*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*isFD2, C_mix);"
-             "C_mix = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*isFD1*(1.0-isFD2) , D_mix);"
-             "D_mix= (1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*(1.0-isFD1)*isFD2;"
-             "q_prod = (qend1 * lam+(1.0-lam) * qstart1) * (qend2 * lam+(1.0-lam) * qstart2);"
-             "eps_avg = sqrt((epend1*lam+(1.0-lam)*epstart1)*(epend2*lam+(1.0-lam)*epstart2));""";
-
-            if (flag_combRules == ARITHMETIC)
-            {
-                energybase.append("sigma_avg = 0.5*((sigmaend1*lam+(1.0-lam)*sigmastart1)+(sigmaend2*lam+(1.0-lam)*sigmastart2));");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                energybase.append("sigma_avg = sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));");
-            }
-
-            custom_force_field = new OpenMM::CustomNonbondedForce(energybase);
-            custom_force_field->setCutoffDistance(converted_cutoff_distance);
-            custom_force_field->addGlobalParameter("lam", Alchemical_value);
-            custom_force_field->addGlobalParameter("delta", shift_delta);
-            custom_force_field->addGlobalParameter("n", coulomb_power);
-            custom_force_field->addGlobalParameter("krf", kvalue);
-            custom_force_field->addGlobalParameter("crf", cvalue);
-            custom_force_field->addGlobalParameter("cutoff", converted_cutoff_distance);
-            custom_force_field->addGlobalParameter("SPOnOff", 0.0);
-
-            if (flag_cutoff == CUTOFFNONPERIODIC)
-            {
-                custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-            }
-            else
-            {
-                custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
-            }
-
-            // NO REACTION FIELD IS APPLIED TO 1-4 INTERACTIONS. If the scaling factor is one (Glycam ff) then
-            // the OpenMM potential energy is not equal to he Sire energy. This is caused by the application
-            // of the reaction field on the 14 pairs in Sire.
-
-            std::string intra_14_todummy = """withinCutoff*(Hcs + Hls);"
-              "withinCutoff=step(cutofftd-r);"
-              "Hcs=(lamtd^ntd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
-              "diff_cl=(1.0-lamtd)*0.01;"
-              "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
-              "LJ=((sigma_avg*sigma_avg)/soft)^3;"
-              "soft=(diff_lj*deltatd*sigma_avg+r*r);"
-              "diff_lj=(1.0-lamtd)*0.1;"
-              "eps_avg = sqrt((1-lamtd)*(1-lamtd)*eaend + lamtd*lamtd*eastart + lamtd*(1-lamtd)*emix);"
-              "q_prod = (1-lamtd)*(1-lamtd)*qpend + lamtd*lamtd*qpstart + lamtd*(1-lamtd)*qmix;""";
-
-            if (flag_combRules == ARITHMETIC)
-            {
-                intra_14_todummy.append("sigma_avg = (1-lamtd)*saend + lamtd*sastart;");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                intra_14_todummy.append("sigma_avg = sqrt((1-lamtd)*(1-lamtd)*saend + lamtd*lamtd*sastart + lamtd*(1-lamtd)*samix);");
-            }
-
-            custom_intra_14_todummy = new OpenMM::CustomBondForce(intra_14_todummy) ;
-            custom_intra_14_todummy->addGlobalParameter("lamtd", 1.0 - Alchemical_value);
-            custom_intra_14_todummy->addGlobalParameter("deltatd", shift_delta);
-            custom_intra_14_todummy->addGlobalParameter("ntd", coulomb_power);
-            custom_intra_14_todummy->addGlobalParameter("cutofftd", converted_cutoff_distance);
-
-            std::string intra_14_fromdummy = """withinCutoff*(Hcs + Hls);"
-              "withinCutoff=step(cutofffd-r);"
-              "Hcs=(lamfd^nfd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
-              "diff_cl=(1.0-lamfd)*0.01;"
-              "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
-              "LJ=((sigma_avg*sigma_avg)/soft)^3;"
-              "soft=(diff_lj*deltafd*sigma_avg+r*r);"
-              "diff_lj=(1.0-lamfd)*0.1;"
-              "eps_avg = sqrt(lamfd*lamfd*eaend + (1-lamfd)*(1-lamfd)*eastart + lamfd*(1-lamfd)*emix);"
-              "q_prod = lamfd*lamfd*qpend + (1-lamfd)*(1-lamfd)*qpstart + lamfd*(1-lamfd)*qmix;""";
-
-            if (flag_combRules == ARITHMETIC)
-            {
-                intra_14_fromdummy.append("sigma_avg = lamfd*saend + (1-lamfd)*sastart;");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                intra_14_fromdummy.append("sigma_avg = sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);");
-            }
-
-            custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy) ;
-            custom_intra_14_fromdummy->addGlobalParameter("lamfd", Alchemical_value);
-            custom_intra_14_fromdummy->addGlobalParameter("deltafd", shift_delta);
-            custom_intra_14_fromdummy->addGlobalParameter("nfd", coulomb_power);
-            custom_intra_14_fromdummy->addGlobalParameter("cutofffd", converted_cutoff_distance);
-
-            //JM 9/10/20 set lamFTD to 0
-            std::string intra_14_fromdummy_todummy = """withinCutoff*(Hcs + Hls);"
-            "withinCutoff=step(cutoffftd-r);"
-            "Hcs=(lamFTD^nftd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
-            "diff_cl=(1.0-lamFTD)*0.01;"
-            "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
-            "LJ=((sigma_avg*sigma_avg)/soft)^3;"
-            "soft=(diff_lj*deltaftd*sigma_avg+r*r);"
-            "diff_lj=(1.0-lamFTD)*0.1;"
-            "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
-            "sigma_avg = lamftd*saend + (1-lamftd)*sastart;"
-            "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-            "lamFTD = max(lamftd,1-lamftd);""";
-
-            if (flag_combRules == ARITHMETIC)
-            {
-                intra_14_fromdummy_todummy.append("sigma_avg = lamftd*saend + (1-lamftd)*sastart;");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                intra_14_fromdummy_todummy.append("sigma_avg = sqrt(lamftd*lamftd*saend + (1-lamftd)*(1-lamftd)*sastart + lamftd*(1-lamftd)*samix);");
-            }
-
-            custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy) ;
-            custom_intra_14_fromdummy_todummy->addGlobalParameter("lamftd", Alchemical_value);
-            custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
-            custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
-            custom_intra_14_fromdummy_todummy->addGlobalParameter("cutoffftd", converted_cutoff_distance);
-        }
-        else
-        {
-            //coulomb_power == 0. //This is necessary to avoid nan errors on the GPUs platform caused by the calculation of 0^0
-
-            //JM 9/10/10 setting Logix_mix_lam output to 0 for lambda
-
-            std::string energybase = """(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hls + Hcs);"
-             "Hcs = 138.935456 * q_prod*(1/sqrt(diff_cl+r*r) + krflam*(diff_cl+r*r)-crflam);"
-             "crflam = crf * src;"
-             "krflam = krf * src * src * src;"
-             "src = cutoff/sqrt(diff_cl + cutoff*cutoff);"
-             "diff_cl = (1.0-lambda) * 0.01;"
-             "Hls = 4.0 * eps_avg * (LJ*LJ-LJ);"
-             "LJ=((sigma_avg * sigma_avg)/soft)^3;"
-             "soft=(diff_lj*delta*sigma_avg + r*r);"
-             "diff_lj=(1.0-lambda) * 0.1;"
-             "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
-             "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
-             "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
-             "B_om_lam = max(isHD1*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), C_om_lam);"
-             "C_om_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*isTD2*(1.0-isFD1)*(1.0-isFD2) , D_om_lam);"
-             "D_om_lam = max((1.0-isHD1)*isHD2*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), E_om_lam);"
-             "E_om_lam = (1.0-isHD1)*isHD2*(1.0-isTD1)*isTD2*(1.0-isFD1)*(1.0-isFD2);"
-             "Logic_lam = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*isFD1*isFD2, B_lam);"
-             "B_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*isFD1*(1.0-isFD2), C_lam);"
-             "C_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*(1.0-isFD1)*isFD2 , D_lam);"
-             "D_lam = max((1.0-isHD1)*isHD2*(1.0-isTD1)*(1.0-isTD2)*isFD1*(1.0-isFD2), E_lam);"
-             "E_lam = (1.0-isHD1)*isHD2*(1.0-isTD1)*(1.0-isTD2)*(1.0-isFD1)*isFD2;"
-             "Logic_mix_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*(1.0-isTD2)*isFD1*(1.0-isFD2), B_mix);"
-             "B_mix = max((1.0-isHD1)*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*isFD2, C_mix);"
-             "C_mix = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*isFD1*(1.0-isFD2) , D_mix);"
-             "D_mix= (1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*(1.0-isFD1)*isFD2;"
-             "q_prod = (qend1 * lam+(1.0-lam) * qstart1) * (qend2 * lam+(1.0-lam) * qstart2);"
-             "eps_avg = sqrt((epend1*lam+(1.0-lam)*epstart1)*(epend2*lam+(1.0-lam)*epstart2));""";
-
-            if (flag_combRules == ARITHMETIC)
-            {
-                energybase.append("sigma_avg = 0.5*((sigmaend1*lam+(1.0-lam)*sigmastart1)+(sigmaend2*lam+(1.0-lam)*sigmastart2));");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                energybase.append("sigma_avg = sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));");
-            }
-
-            custom_force_field = new OpenMM::CustomNonbondedForce(energybase) ;
-            custom_force_field->setCutoffDistance(converted_cutoff_distance);
-            custom_force_field->addGlobalParameter("lam", Alchemical_value);
-            custom_force_field->addGlobalParameter("delta", shift_delta);
-            custom_force_field->addGlobalParameter("n", coulomb_power);
-            custom_force_field->addGlobalParameter("krf", kvalue);
-            custom_force_field->addGlobalParameter("crf", cvalue);
-            custom_force_field->addGlobalParameter("cutoff", converted_cutoff_distance);
-            custom_force_field->addGlobalParameter("SPOnOff", 0.0);
-
-
-            if (flag_cutoff == CUTOFFNONPERIODIC)
-            {
-                custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-            }
-            else
-            {
-                custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
-            }
-
-            // NO REACTION FIELD IS APPLIED TO 1-4 INTERACTIONS. If the scaling factor is one (Glycam ff)
-            // then the OpenMM potential energy is not equal to he Sire energy. This is caused by the
-            // application of the reaction field on the 14 pairs in Sire.
-
-
-            std::string intra_14_todummy = """withinCutoff*(Hcs + Hls);"
-                "withinCutoff=step(cutofftd-r);"
-                "Hcs=138.935456*q_prod/sqrt(diff_cl+r^2);"
-                "diff_cl=(1.0-lamtd)*0.01;"
-                "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
-                "LJ=((sigma_avg*sigma_avg)/soft)^3;"
-                "soft=(diff_lj*deltatd*sigma_avg+r*r);"
-                "diff_lj=(1.0-lamtd)*0.1;"
-                "eps_avg = sqrt((1-lamtd)*(1-lamtd)*eaend + lamtd*lamtd*eastart + lamtd*(1-lamtd)*emix);"
-                "q_prod = (1-lamtd)*(1-lamtd)*qpend + lamtd*lamtd*qpstart + lamtd*(1-lamtd)*qmix;""";
-
-            if (flag_combRules == ARITHMETIC)
-            {
-                intra_14_todummy.append("sigma_avg = (1-lamtd)*saend + lamtd*sastart;");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                intra_14_todummy.append("sigma_avg = sqrt((1-lamtd)*(1-lamtd)*saend + lamtd*lamtd*sastart + lamtd*(1-lamtd)*samix);");
-            }
-
-            custom_intra_14_todummy = new OpenMM::CustomBondForce(intra_14_todummy) ;
-            custom_intra_14_todummy->addGlobalParameter("lamtd", 1.0 - Alchemical_value);
-            custom_intra_14_todummy->addGlobalParameter("deltatd", shift_delta);
-            custom_intra_14_todummy->addGlobalParameter("ntd", coulomb_power);
-            custom_intra_14_todummy->addGlobalParameter("cutofftd", converted_cutoff_distance);
-
-
-            std::string intra_14_fromdummy = """withinCutoff*(Hcs + Hls);"
-                "withinCutoff=step(cutofffd-r);"
-                "Hcs=138.935456*q_prod/sqrt(diff_cl+r^2);"
-                "diff_cl=(1.0-lamfd)*0.01;"
-                "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
-                "LJ=((sigma_avg*sigma_avg)/soft)^3;"
-                "soft=(diff_lj*deltafd*sigma_avg+r*r);"
-                "diff_lj=(1.0-lamfd)*0.1;"
-                "eps_avg = sqrt(lamfd*lamfd*eaend + (1-lamfd)*(1-lamfd)*eastart + lamfd*(1-lamfd)*emix);"
-                "q_prod = lamfd*lamfd*qpend + (1-lamfd)*(1-lamfd)*qpstart + lamfd*(1-lamfd)*qmix;""";
-
-            if (flag_combRules == ARITHMETIC)
-            {
-                intra_14_fromdummy.append("sigma_avg = lamfd*saend + (1-lamfd)*sastart;");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                intra_14_fromdummy.append("sigma_avg = sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);");
-            }
-
-            custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy) ;
-            custom_intra_14_fromdummy->addGlobalParameter("lamfd", Alchemical_value);
-            custom_intra_14_fromdummy->addGlobalParameter("deltafd", shift_delta);
-            custom_intra_14_fromdummy->addGlobalParameter("nfd", coulomb_power);
-            custom_intra_14_fromdummy->addGlobalParameter("cutofffd", converted_cutoff_distance);
-
-            //JM 9/10/20 always set lamFTD to 0.0
-
-            std::string intra_14_fromdummy_todummy = """withinCutoff*(Hcs + Hls);"
-                "withinCutoff=step(cutoffftd-r);"
-                "Hcs=138.935456*q_prod/sqrt(diff_cl+r^2);"
-                "diff_cl=(1.0-lamFTD)*0.01;"
-                "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
-                "LJ=((sigma_avg*sigma_avg)/soft)^3;"
-                "soft=(diff_lj*deltaftd*sigma_avg+r*r);"
-                "diff_lj=(1.0-lamFTD)*0.1;"
-                "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
-                "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-                "lamFTD = max(lamftd,1-lamftd);""";
-
-            if (flag_combRules == ARITHMETIC)
-            {
-                intra_14_fromdummy_todummy.append("sigma_avg = lamftd*saend + (1-lamftd)*sastart;");
-            }
-            else if (flag_combRules == GEOMETRIC)
-            {
-                intra_14_fromdummy_todummy.append("sigma_avg = sqrt(lamftd*lamftd*saend + (1-lamftd)*(1-lamftd)*sastart + lamftd*(1-lamftd)*samix);");
-            }
-
-            custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy) ;
-            custom_intra_14_fromdummy_todummy->addGlobalParameter("lamftd", Alchemical_value);
-            custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
-            custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
-            custom_intra_14_fromdummy_todummy->addGlobalParameter("cutoffftd", converted_cutoff_distance);
-        }
-
-        std::string intra_14_clj = """withinCutoff*(Hl+Hc);"
-          "withinCutoff=step(cutoffhd-r);"
-          "Hl=4*eps_avg*((sigma_avg/r)^12-(sigma_avg/r)^6);"
-          "Hc=138.935456*q_prod/r;"
-          "eps_avg = sqrt(lamhd*lamhd*eaend + (1-lamhd)*(1-lamhd)*eastart + lamhd*(1-lamhd)*emix);"
-          "q_prod = lamhd*lamhd*qpend + (1-lamhd)*(1-lamhd)*qpstart + lamhd*(1-lamhd)*qmix;""";
-
-
-        if (flag_combRules == ARITHMETIC)
-        {
-            intra_14_clj.append("sigma_avg = lamhd*saend + (1-lamhd)*sastart;");
-        }
-        else if (flag_combRules == GEOMETRIC)
-        {
-            intra_14_clj.append("sigma_avg = sqrt(lamhd*lamhd*saend + (1-lamhd)*(1-lamhd)*sastart + lamhd*(1-lamhd)*samix);");
-        }
-
-        custom_intra_14_clj = new OpenMM::CustomBondForce(intra_14_clj) ;
-        custom_intra_14_clj->addGlobalParameter("lamhd", Alchemical_value);
-        custom_intra_14_clj->addGlobalParameter("cutoffhd", converted_cutoff_distance);
-
-        //REACTION FIELD 14 IMPLEMENTATION FOR FUTURE USE
-
-        if (Debug)
-        {
-            qDebug() << "\nCut off type = " << CutoffType;
-            qDebug() << "CutOff distance = " << converted_cutoff_distance << " Nm";
-            qDebug() << "Dielectric constant = " << field_dielectric;
-            qDebug() << "Lambda = " << Alchemical_value << " Coulomb Power = " << coulomb_power << " Delta Shift = " << shift_delta;
-        }
+       qDebug() << "\nCutoff type = " << CutoffType;
+       qDebug() << "CutOff distance = " << converted_cutoff_distance << " Nm";
+       qDebug() << "Dielectric constant = " << field_dielectric;
+       qDebug() << "Lambda = " << Alchemical_value << " Coulomb Power = " << coulomb_power << " Delta Shift = " << shift_delta;
     }
+
 
     // Andersen thermostat
     if (Andersen_flag == true)
@@ -1170,17 +764,19 @@ void OpenMMPMEFEP::initialise()
 
     OpenMM::CustomAngleForce* solute_angle_perturbation = NULL;
 
-    solute_bond_perturbation = new OpenMM::CustomBondForce("0.5*B*(r-req)^2;"
-                                                           "B=bend*lambond+(1.0-lambond)*bstart;"
-                                                           "req=rend*lambond+(1.0-lambond)*rstart");
+    solute_bond_perturbation = new OpenMM::CustomBondForce(
+       "0.5*B*(r-req)^2;"
+       "B=bend*lam+(1.0-lam)*bstart;"
+       "req=rend*lam+(1.0-lam)*rstart");
 
-    solute_bond_perturbation->addGlobalParameter("lambond", Alchemical_value);
+    solute_bond_perturbation->addGlobalParameter("lam", Alchemical_value);
 
-    solute_angle_perturbation = new OpenMM::CustomAngleForce("0.5*A*(theta-thetaeq)^2;"
-                                                             "A=aend*lamangle+(1.0-lamangle)*astart;"
-                                                             "thetaeq=thetaend*lamangle+(1.0-lamangle)*thetastart");
+    solute_angle_perturbation = new OpenMM::CustomAngleForce(
+       "0.5*A*(theta-thetaeq)^2;"
+       "A=aend*lam+(1.0-lam)*astart;"
+       "thetaeq=thetaend*lam+(1.0-lam)*thetastart");
 
-    solute_angle_perturbation->addGlobalParameter("lamangle", Alchemical_value);
+    solute_angle_perturbation->addGlobalParameter("lam", Alchemical_value);
 
 
     /************************************************************RESTRAINTS********************************************************/
@@ -1189,9 +785,11 @@ void OpenMMPMEFEP::initialise()
 
     if (Restraint_flag == true)
     {
-        positionalRestraints_openmm = new OpenMM::CustomExternalForce("k*d2;"
-                                                                      "d2 = max(0.0, d1 - d^2);"
-                                                                      "d1 = (x-xref)^2 + (y-yref)^2  + (z-zref)^2");
+        positionalRestraints_openmm =
+	   new OpenMM::CustomExternalForce(
+	      "k*d2;"
+	      "d2 = max(0.0, d1 - d^2);"
+	      "d1 = (x-xref)^2 + (y-yref)^2  + (z-zref)^2");
         positionalRestraints_openmm->addPerParticleParameter("xref");
         positionalRestraints_openmm->addPerParticleParameter("yref");
         positionalRestraints_openmm->addPerParticleParameter("zref");
@@ -1208,8 +806,9 @@ void OpenMMPMEFEP::initialise()
     /* !! CustomBondForce does not (OpenMM 6.2) apply PBC checks so code will be buggy is restraints involve one atom that diffuses
        out of the box. */
 
-    OpenMM::CustomBondForce * custom_link_bond = new OpenMM::CustomBondForce("kl*max(0,d-dl*dl);"
-                                                                             "d=(r-reql)*(r-reql)");
+    OpenMM::CustomBondForce * custom_link_bond =
+       new OpenMM::CustomBondForce("kl*max(0,d-dl*dl);"
+				   "d=(r-reql)*(r-reql)");
     custom_link_bond->addPerBondParameter("reql");
     custom_link_bond->addPerBondParameter("kl");
     custom_link_bond->addPerBondParameter("dl");
@@ -1226,7 +825,7 @@ void OpenMMPMEFEP::initialise()
 
     // To avoid possible mismatch between the index in which atoms are added to the openmm system arrays and
     // their atomic numbers in sire, one array is populated while filling up the openmm global arrays
-    //  AtomNumtoopenmmIndex
+    // AtomNumtoopenmmIndex
     QHash<int, int> AtomNumToOpenMMIndex;
 
     for (int i = 0; i < nmols; ++i)
@@ -1252,12 +851,14 @@ void OpenMMPMEFEP::initialise()
             AtomNum atnum = at.number();
 
             if (Debug)
-                qDebug() << " openMM_index " << system_index << " Sire Atom Number " << atnum.toString() << " Mass particle = " << m[j];
+                qDebug() << " openMM_index " << system_index << " Sire Atom Number "
+			 << atnum.toString() << " Mass particle = " << m[j];
 
             AtomNumToOpenMMIndex[atnum.value()] = system_index;
 
             // JM Nov 12
-            // The code below implements a ThreeParticleAverageSite for virtual sites for EPW atoms present in a WAT residue
+            // The code below implements a ThreeParticleAverageSite for virtual
+	    // sites for EPW atoms present in a WAT residue
             // This is very AMBER specific.
 
             AtomName atname = at.name();
@@ -1292,28 +893,25 @@ void OpenMMPMEFEP::initialise()
                         AtomName at0name = mol.select(bond_ff.atom0()).name();
                         AtomName at1name = mol.select(bond_ff.atom1()).name();
 
-                        // qDebug() << " at0name " << at0name.toString() << " at1name " << at1name.toString();
-
-                        if ((at0name == AtomName("O") and at1name == AtomName("H1")) or ( at0name == AtomName("H1") and at1name == AtomName("O")))
+                        if ((at0name == AtomName("O") and at1name == AtomName("H1"))
+			    or ( at0name == AtomName("H1") and at1name == AtomName("O")))
                         {
                             distoh = r0;
                         }
-                        else if ((at0name == AtomName("H1") and at1name == AtomName("H2")) or ( at0name == AtomName("H2") and at1name == AtomName("H1")))
+                        else if ((at0name == AtomName("H1") and at1name == AtomName("H2"))
+				 or ( at0name == AtomName("H2") and at1name == AtomName("H1")))
                         {
                             disthh = r0;
                         }
-                        else if ((at0name == AtomName("EPW") and at1name == AtomName("O")) or ( at0name == AtomName("O") and at1name == AtomName("EPW")))
+                        else if ((at0name == AtomName("EPW") and at1name == AtomName("O"))
+				 or ( at0name == AtomName("O") and at1name == AtomName("EPW")))
                         {
                             distoe = r0;
                         }
                     }
 
-                    if (distoh < 0 or disthh < 0 or distoe < 0)
-                    {
-                        throw SireError::program_bug(QObject::tr( "Could not find expected atoms in TIP4P water molecule."), CODELOC);
-                    }
-
-                    //qDebug() << " distoe " << distoe << " distoh " << distoh << " disthh " << disthh;
+                    if (distoh < 0.0 or disthh < 0.0 or distoe < 0.0)
+                        throw SireError::program_bug(QObject::tr("Could not find expected atoms in TIP4P water molecule."), CODELOC);
 
                     double weightH = distoe / sqrt((distoh * distoh) - (0.25 * disthh * disthh));
 
@@ -1322,9 +920,15 @@ void OpenMMPMEFEP::initialise()
                     int h2_index = AtomNumToOpenMMIndex[h2atom.number().value()];
 
                     if (Debug)
-                        qDebug() << "virtual site " << system_index << " o " << o_index << " h1 " << h1_index << " h2 " << h2_index << " 1 - weightH " << 1 - weightH << " weightH/2 " << weightH / 2;
+                        qDebug() << "virtual site " << system_index << " o "
+				 << o_index << " h1 " << h1_index << " h2 "
+				 << h2_index << " 1 - weightH " << 1 - weightH
+				 << " weightH/2 " << weightH / 2;
 
-                    OpenMM::ThreeParticleAverageSite * vsite = new OpenMM::ThreeParticleAverageSite(o_index, h1_index, h2_index, 1 - weightH, weightH / 2, weightH / 2);
+                    OpenMM::ThreeParticleAverageSite * vsite =
+			new OpenMM::ThreeParticleAverageSite(o_index, h1_index,
+							     h2_index, 1 - weightH,
+							     weightH / 2, weightH / 2);
 
                     system_openmm->setVirtualSite(system_index, vsite);
                 }
@@ -1338,8 +942,7 @@ void OpenMMPMEFEP::initialise()
 
     int num_atoms_till_i = 0;
 
-    /*NON BONDED PER PARTICLE PARAMETERS*/
-
+    /* NON BONDED PER PARTICLE PARAMETERS */
     custom_force_field->addPerParticleParameter("qstart");
     custom_force_field->addPerParticleParameter("qend");
     custom_force_field->addPerParticleParameter("epstart");
@@ -1351,48 +954,16 @@ void OpenMMPMEFEP::initialise()
     custom_force_field->addPerParticleParameter("isFD");
     custom_force_field->addPerParticleParameter("isSolvent");
 
-    custom_intra_14_clj->addPerBondParameter("qpstart");
-    custom_intra_14_clj->addPerBondParameter("qpend");
-    custom_intra_14_clj->addPerBondParameter("qmix");
-    custom_intra_14_clj->addPerBondParameter("eastart");
-    custom_intra_14_clj->addPerBondParameter("eaend");
-    custom_intra_14_clj->addPerBondParameter("emix");
-    custom_intra_14_clj->addPerBondParameter("sastart");
-    custom_intra_14_clj->addPerBondParameter("saend");
-    custom_intra_14_clj->addPerBondParameter("samix");
+    for (auto const &param : {"qpstart", "qpend", "qmix", "eastart", "eaend",
+	  "emix", "sastart", "saend", "samix"})
+    {
+       custom_intra_14_todummy->addPerBondParameter(param);
+       custom_intra_14_fromdummy->addPerBondParameter(param);
+       custom_intra_14_fromdummy_todummy->addPerBondParameter(param);
+       custom_intra_14_clj->addPerBondParameter(param);
+    }
 
-    custom_intra_14_todummy->addPerBondParameter("qpstart");
-    custom_intra_14_todummy->addPerBondParameter("qpend");
-    custom_intra_14_todummy->addPerBondParameter("qmix");
-    custom_intra_14_todummy->addPerBondParameter("eastart");
-    custom_intra_14_todummy->addPerBondParameter("eaend");
-    custom_intra_14_todummy->addPerBondParameter("emix");
-    custom_intra_14_todummy->addPerBondParameter("sastart");
-    custom_intra_14_todummy->addPerBondParameter("saend");
-    custom_intra_14_todummy->addPerBondParameter("samix");
-
-    custom_intra_14_fromdummy->addPerBondParameter("qpstart");
-    custom_intra_14_fromdummy->addPerBondParameter("qpend");
-    custom_intra_14_fromdummy->addPerBondParameter("qmix");
-    custom_intra_14_fromdummy->addPerBondParameter("eastart");
-    custom_intra_14_fromdummy->addPerBondParameter("eaend");
-    custom_intra_14_fromdummy->addPerBondParameter("emix");
-    custom_intra_14_fromdummy->addPerBondParameter("sastart");
-    custom_intra_14_fromdummy->addPerBondParameter("saend");
-    custom_intra_14_fromdummy->addPerBondParameter("samix");
-
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("qpstart");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("qpend");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("qmix");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("eastart");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("eaend");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("emix");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("sastart");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("saend");
-    custom_intra_14_fromdummy_todummy->addPerBondParameter("samix");
-
-    /*BONDED PER PARTICLE PARAMETERS*/
-
+    /* BONDED PER PARTICLE PARAMETERS */
     solute_bond_perturbation->addPerBondParameter("bstart");
     solute_bond_perturbation->addPerBondParameter("bend");
     solute_bond_perturbation->addPerBondParameter("rstart");
@@ -1403,8 +974,9 @@ void OpenMMPMEFEP::initialise()
     solute_angle_perturbation->addPerAngleParameter("thetastart");
     solute_angle_perturbation->addPerAngleParameter("thetaend");
 
+
     // JM July 13. This also needs to be changed because there could be more than one perturbed molecule
-    //Molecule solutemol = solute.moleculeAt(0).molecule();
+    // Molecule solutemol = solute.moleculeAt(0).molecule();
 
     int nions = 0;
 
@@ -1464,26 +1036,35 @@ void OpenMMPMEFEP::initialise()
 
             AtomLJs atomvdws_start = molecule.property("initial_LJ").asA<AtomLJs>();
             AtomLJs atomvdws_final = molecule.property("final_LJ").asA<AtomLJs>();
-            start_LJs = atomvdws_start.toVector();
+
+	    start_LJs = atomvdws_start.toVector();
             final_LJs = atomvdws_final.toVector();
         }
 
         for (int j = 0; j < ljparameters.size(); j++)
         {
-            double sigma = ljparameters[j].sigma();
-            double epsilon = ljparameters[j].epsilon();
-            double charge = charges[j].value();
+	    double charge = charges[j].value();
+            double sigma = ljparameters[j].sigma() * OpenMM::NmPerAngstrom;
+            double epsilon = ljparameters[j].epsilon() * OpenMM::KJPerKcal;
 
-            nonbond_openmm->addParticle(charge, sigma * OpenMM::NmPerAngstrom, epsilon * OpenMM::KJPerKcal);
+            nonbond_openmm->addParticle(charge, sigma, epsilon);
 
             Atom atom = molecule.molecule().atoms()(j);
 
             if (molecule.hasProperty("perturbations"))
             {
-                // Is atom a hard, from dummy or to dummy type?
+                // Is atom a hard (changing charge and LJ), from dummy or to dummy type?
                 bool ishard = false;
                 bool istodummy = false;
                 bool isfromdummy = false;
+
+		double charge_start = start_charges[j].value();
+		double charge_final = final_charges[j].value();
+
+		double sigma_start = start_LJs[j].sigma() * OpenMM::NmPerAngstrom;
+		double sigma_final = final_LJs[j].sigma() * OpenMM::NmPerAngstrom;
+		double epsilon_start = start_LJs[j].epsilon() * OpenMM::KJPerKcal;
+		double epsilon_final = final_LJs[j].epsilon() * OpenMM::KJPerKcal;
 
                 for (int l = 0; l < solutehard.nViews(); l++)
                 {
@@ -1548,117 +1129,76 @@ void OpenMMPMEFEP::initialise()
                     }//end for
                 }
 
+		if (ishard || istodummy || isfromdummy)
+		{
+		    custom_non_bonded_params[0] = charge_start;
+		    custom_non_bonded_params[1] = charge_final;
+		    custom_non_bonded_params[2] = epsilon_start;
+		    custom_non_bonded_params[3] = epsilon_final;
+		    custom_non_bonded_params[4] = sigma_start;
+		    custom_non_bonded_params[5] = sigma_final;
+		}
+		else
+		{		// unperturbed atoms
+		    custom_non_bonded_params[0] = charge;
+		    custom_non_bonded_params[1] = charge;
+		    custom_non_bonded_params[2] = epsilon;
+		    custom_non_bonded_params[3] = epsilon;
+		    custom_non_bonded_params[4] = sigma;
+		    custom_non_bonded_params[5] = sigma;
+		}
+
+		custom_non_bonded_params[6] = 0.0; // isHard
+		custom_non_bonded_params[7] = 0.0; // isTodummy
+		custom_non_bonded_params[8] = 0.0; // isFromdummy
+		custom_non_bonded_params[9] = 0.0; // isSolventProtein
+
                 if (ishard)
-                {//hard solute atom
-
-                    double charge_start = start_charges[j].value();
-                    double charge_final = final_charges[j].value();
-
-                    double epsilon_start = start_LJs[j].epsilon();
-                    double epsilon_final = final_LJs[j].epsilon();
-                    double sigma_start = start_LJs[j].sigma();
-                    double sigma_final = final_LJs[j].sigma();
-
-                    custom_non_bonded_params[0] = charge_start;
-                    custom_non_bonded_params[1] = charge_final;
-                    custom_non_bonded_params[2] = epsilon_start * OpenMM::KJPerKcal;
-                    custom_non_bonded_params[3] = epsilon_final * OpenMM::KJPerKcal;
-                    custom_non_bonded_params[4] = sigma_start * OpenMM::NmPerAngstrom;
-                    custom_non_bonded_params[5] = sigma_final * OpenMM::NmPerAngstrom;
-                    custom_non_bonded_params[6] = 1.0; //isHard
-                    custom_non_bonded_params[7] = 0.0; //isTodummy
-                    custom_non_bonded_params[8] = 0.0; //isFromdummy
-                    custom_non_bonded_params[9] = 0.0; //isSolventProtein
+                {
+                    custom_non_bonded_params[6] = 1.0;
 
                     if (Debug)
                         qDebug() << "hard solute = " << atom.index();
                 }
-                    // JM July 13 THIS NEEDS FIXING TO DEAL WITH GROUPS THAT CONTAIN MORE THAN ONE MOLECULE
+		// JM July 13 THIS NEEDS FIXING TO DEAL WITH GROUPS THAT CONTAIN MORE THAN ONE MOLECULE
                 else if (istodummy)
-                {//to dummy solute atom
-
-                    double charge_start = start_charges[j].value();
-                    double charge_final = final_charges[j].value();
-                    double epsilon_start = start_LJs[j].epsilon();
-                    double epsilon_final = final_LJs[j].epsilon();
-                    double sigma_start = start_LJs[j].sigma();
-                    double sigma_final = final_LJs[j].sigma();
-
-                    custom_non_bonded_params[0] = charge_start;
-                    custom_non_bonded_params[1] = charge_final;
-                    custom_non_bonded_params[2] = epsilon_start * OpenMM::KJPerKcal;
-                    custom_non_bonded_params[3] = epsilon_final * OpenMM::KJPerKcal;
-                    custom_non_bonded_params[4] = sigma_start * OpenMM::NmPerAngstrom;
-                    custom_non_bonded_params[5] = sigma_final * OpenMM::NmPerAngstrom;
-                    custom_non_bonded_params[6] = 0.0; //isHard
-                    custom_non_bonded_params[7] = 1.0; //isTodummy
-                    custom_non_bonded_params[8] = 0.0; //isFromdummy
-                    custom_non_bonded_params[9] = 0.0; //isSolventProtein
+                {
+                    custom_non_bonded_params[7] = 1.0;
 
                     if (Debug)
                         qDebug() << "to dummy solute = " << atom.index();
                 }
                 else if (isfromdummy)
-                {//from dummy solute atom
-
-                    double charge_start = start_charges[j].value();
-                    double charge_final = final_charges[j].value();
-                    double epsilon_start = start_LJs[j].epsilon();
-                    double epsilon_final = final_LJs[j].epsilon();
-                    double sigma_start = start_LJs[j].sigma();
-                    double sigma_final = final_LJs[j].sigma();
-
-                    custom_non_bonded_params[0] = charge_start;
-                    custom_non_bonded_params[1] = charge_final;
-                    custom_non_bonded_params[2] = epsilon_start * OpenMM::KJPerKcal;
-                    custom_non_bonded_params[3] = epsilon_final * OpenMM::KJPerKcal;
-                    custom_non_bonded_params[4] = sigma_start * OpenMM::NmPerAngstrom;
-                    custom_non_bonded_params[5] = sigma_final * OpenMM::NmPerAngstrom;
-                    custom_non_bonded_params[6] = 0.0; //isHard
-                    custom_non_bonded_params[7] = 0.0; //isTodummy
-                    custom_non_bonded_params[8] = 1.0; //isFromdummy
-                    custom_non_bonded_params[9] = 0.0; //isSolventProtein
+                {
+                    custom_non_bonded_params[8] = 1.0;
 
                     if (Debug)
                         qDebug() << "from dummy solute = " << atom.index();
                 }
-
                 else
-                {//What if some atoms were not perturbed at all in the pert file? Use default params
-
-                    custom_non_bonded_params[0] = charge;
-                    custom_non_bonded_params[1] = charge;
-                    custom_non_bonded_params[2] = epsilon * OpenMM::KJPerKcal;
-                    custom_non_bonded_params[3] = epsilon * OpenMM::KJPerKcal;
-                    custom_non_bonded_params[4] = sigma * OpenMM::NmPerAngstrom;
-                    custom_non_bonded_params[5] = sigma * OpenMM::NmPerAngstrom;
-                    custom_non_bonded_params[6] = 1.0; //isHard
-                    custom_non_bonded_params[7] = 0.0; //isTodummy
-                    custom_non_bonded_params[8] = 0.0; //isFromdummy
-                    custom_non_bonded_params[9] = 0.0; //isSolventProtein
+                {
+                    custom_non_bonded_params[6] = 1.0; // isHard
 
                     if (Debug)
                         qDebug() << " unperturbed solute atom " << atom.index();
                 }
-            }//end if perturbation section
-            else
-            {//solvent atom like hard
-
-                custom_non_bonded_params[0] = charge;
-                custom_non_bonded_params[1] = charge;
-                custom_non_bonded_params[2] = epsilon * OpenMM::KJPerKcal;
-                custom_non_bonded_params[3] = epsilon * OpenMM::KJPerKcal;
-                custom_non_bonded_params[4] = sigma * OpenMM::NmPerAngstrom;
-                custom_non_bonded_params[5] = sigma * OpenMM::NmPerAngstrom;
-                custom_non_bonded_params[6] = 1.0; //isHard
-                custom_non_bonded_params[7] = 0.0; //isTodummy
-                custom_non_bonded_params[8] = 0.0; //isFromdummy
-                custom_non_bonded_params[9] = 1.0; //isSolventProtein
-
-                if (Debug)
-                    qDebug() << "Solvent = " << atom.index();
-
             }
+	    else
+	    {			// solvent atom like hard
+	       custom_non_bonded_params[0] = charge;
+	       custom_non_bonded_params[1] = charge;
+	       custom_non_bonded_params[2] = epsilon;
+	       custom_non_bonded_params[3] = epsilon;
+	       custom_non_bonded_params[4] = sigma;
+	       custom_non_bonded_params[5] = sigma;
+	       custom_non_bonded_params[6] = 1.0; // isHard
+	       custom_non_bonded_params[7] = 0.0; // isTodummy
+	       custom_non_bonded_params[8] = 0.0; // isFromdummy
+	       custom_non_bonded_params[9] = 1.0; // isSolventProtein
+
+	       if (Debug)
+		  qDebug() << "Solvent = " << atom.index();
+	    } // end if perturbations
 
             if (Debug)
             {
@@ -2882,7 +2422,30 @@ void OpenMMPMEFEP::initialise()
 
     this->openmm_system = system_openmm;
     this->isSystemInitialised = true;
-}
+
+    // if (Debug)
+    // {
+
+    //    const double dt = convertTo(0.002, picosecond);
+    //    OpenMM::Integrator *integrator_openmm = new OpenMM::VerletIntegrator(dt);
+
+    //    OpenMM::Platform& platform_openmm = OpenMM::Platform::getPlatformByName(platform_type.toStdString());
+
+    //    openmm_context =
+    // 	  new OpenMM::Context(*system_openmm, *integrator_openmm,
+    // 			      platform_openmm);
+
+    //    openmm_context->setPositions(positions_openmm);
+    //    openmm_context->setVelocities(velocities_openmm);
+
+    //    int infoMask = OpenMM::State::Positions + OpenMM::State::Energy;
+    //    OpenMM::State state_openmm = openmm_context->getState(infoMask);
+
+    //    qDebug() << "Initial energy is"
+    // 		<< state_openmm.getPotentialEnergy() * OpenMM::KcalPerKJ
+    // 		<< "kcal/mol at lambda =" << Alchemical_value << "\n";
+    // }
+} // OpenMMPMEFEP::initialise END
 
 /**
  *
@@ -2892,13 +2455,11 @@ void OpenMMPMEFEP::initialise()
 
 void OpenMMPMEFEP::createContext(IntegratorWorkspace &workspace, SireUnits::Dimension::Time timestep)
 {
-    bool Debug = false;
-
     if (Debug)
     {
-        qDebug() << "In OpenMMPMEFEP::createContext()\n\n";
-        qDebug() << isContextInitialised;
-        qDebug() << reinitialise_context;
+        qDebug() << "OpenMMPMEFEP::createContext(): isContextInitialised ="
+		 << isContextInitialised << ", reinitialise_context ="
+		 << reinitialise_context;
     }
 
     // Check that the openmm system has been initialised
@@ -2914,7 +2475,7 @@ void OpenMMPMEFEP::createContext(IntegratorWorkspace &workspace, SireUnits::Dime
     int nats = system_openmm->getNumParticles();
 
     if (Debug)
-        qDebug() << " openmm nats " << nats;
+        qDebug() << "openmm nats " << nats;
 
     // Integrator
 
@@ -2932,6 +2493,8 @@ void OpenMMPMEFEP::createContext(IntegratorWorkspace &workspace, SireUnits::Dime
             integrator_openmm = new OpenMM::VariableVerletIntegrator(integration_tol); //integration tolerance error unitless
         else if (Integrator_type == "langevin")
             integrator_openmm = new OpenMM::LangevinIntegrator(converted_Temperature, converted_friction, dt);
+	else if (Integrator_type == "langevinmiddle")
+            integrator_openmm = new OpenMM::LangevinMiddleIntegrator(converted_Temperature, converted_friction, dt);
         else if (Integrator_type == "variablelangevin")
             integrator_openmm = new OpenMM::VariableLangevinIntegrator(converted_Temperature, converted_friction, integration_tol);
         else if (Integrator_type == "brownian")
@@ -2941,13 +2504,14 @@ void OpenMMPMEFEP::createContext(IntegratorWorkspace &workspace, SireUnits::Dime
 
         if (Debug)
         {
-            qDebug() << "Using Integrator: " << Integrator_type;
-            qDebug() << "Integration step = " << dt << " ps";
+            qDebug() << "Using Integrator:" << Integrator_type;
+            qDebug() << "Integration step =" << dt << " ps";
 
             if (Integrator_type == "variablelangevin" || Integrator_type == "variableleapfrogverlet")
             {
                 qDebug() << "Integration Tol = " << integration_tol;
             }
+
             if (Integrator_type == "langevin" || Integrator_type == "variablelangevin" || Integrator_type == "brownian")
             {
                 qDebug() << "Converted Friction = " << converted_friction << "1/ps";
@@ -2986,77 +2550,87 @@ void OpenMMPMEFEP::createContext(IntegratorWorkspace &workspace, SireUnits::Dime
         }
 
         delete openmm_context;
-        openmm_context = new OpenMM::Context(*system_openmm, *integrator_openmm, platform_openmm);
+
+	if (Debug)
+	{
+	   qDebug() << "Deleted openmm_context";
+	}
+
+        openmm_context =
+	   new OpenMM::Context(*system_openmm, *integrator_openmm,
+			       platform_openmm);
         this->isContextInitialised = true;
+
+	if (Debug)
+        {
+           qDebug() << "New OpenMM Context created";
+        }
     }
 
     if (Debug)
-        qDebug() << "\n Using OpenMM platform = " << openmm_context->getPlatform().getName().c_str() << "\n";
+        qDebug() << "\nUsing OpenMM platform = " << openmm_context->getPlatform().getName().c_str() << "\n";
 
     // Now update coordinates / velocities / dimensions with sire data
     AtomicVelocityWorkspace &ws = workspace.asA<AtomicVelocityWorkspace>();
 
-    if (CutoffType == "cutoffperiodic")
+    const System & ptr_sys = ws.system();
+    const PropertyName &space_property = PropertyName("space");
+
+    // PeriodicBox
+    if (ptr_sys.property(space_property).isA<PeriodicBox>())
     {
-        const System & ptr_sys = ws.system();
-        const PropertyName &space_property = PropertyName("space");
+       const PeriodicBox &space = ptr_sys.property(space_property).asA<PeriodicBox>();
 
-        // PeriodicBox.
-        if (ptr_sys.property(space_property).isA<PeriodicBox>())
-        {
-            const PeriodicBox &space = ptr_sys.property(space_property).asA<PeriodicBox>();
+       const double Box_x_Edge_Length = space.dimensions()[0] * OpenMM::NmPerAngstrom; //units in nm
+       const double Box_y_Edge_Length = space.dimensions()[1] * OpenMM::NmPerAngstrom; //units in nm
+       const double Box_z_Edge_Length = space.dimensions()[2] * OpenMM::NmPerAngstrom; //units in nm
 
-            const double Box_x_Edge_Length = space.dimensions()[0] * OpenMM::NmPerAngstrom; //units in nm
-            const double Box_y_Edge_Length = space.dimensions()[1] * OpenMM::NmPerAngstrom; //units in nm
-            const double Box_z_Edge_Length = space.dimensions()[2] * OpenMM::NmPerAngstrom; //units in nm
+       if (Debug)
+	  qDebug() << "\nBOX SIZE [A] = (" << space.dimensions()[0] << " , " << space.dimensions()[1] << " ,  " << space.dimensions()[2] << ")\n\n";
 
-            if (Debug)
-                qDebug() << "\nBOX SIZE [A] = (" << space.dimensions()[0] << " , " << space.dimensions()[1] << " ,  " << space.dimensions()[2] << ")\n\n";
+       //Set Periodic Box Condition
 
-            //Set Periodic Box Condition
+       system_openmm->setDefaultPeriodicBoxVectors(
+	  OpenMM::Vec3(Box_x_Edge_Length, 0, 0),
+	  OpenMM::Vec3(0, Box_y_Edge_Length, 0),
+	  OpenMM::Vec3(0, 0, Box_z_Edge_Length));
 
-            system_openmm->setDefaultPeriodicBoxVectors(
-                                                  OpenMM::Vec3(Box_x_Edge_Length, 0, 0),
-                                                  OpenMM::Vec3(0, Box_y_Edge_Length, 0),
-                                                  OpenMM::Vec3(0, 0, Box_z_Edge_Length));
-
-            openmm_context->setPeriodicBoxVectors(OpenMM::Vec3(Box_x_Edge_Length, 0, 0),
-                                                  OpenMM::Vec3(0, Box_y_Edge_Length, 0),
-                                                  OpenMM::Vec3(0, 0, Box_z_Edge_Length));
-        }
-        // TriclinicBox.
-        else if (ptr_sys.property(space_property).isA<TriclinicBox>())
-        {
-            const TriclinicBox &space = ptr_sys.property(space_property).asA<TriclinicBox>();
-
-            // Get the three triclinic box vectors.
-            const auto v0 = space.vector0();
-            const auto v1 = space.vector1();
-            const auto v2 = space.vector2();
-
-            // Get cell matrix components in nm.
-            const double xx = v0.x() * OpenMM::NmPerAngstrom;
-            const double xy = v0.y() * OpenMM::NmPerAngstrom;
-            const double xz = v0.z() * OpenMM::NmPerAngstrom;
-            const double yx = v1.x() * OpenMM::NmPerAngstrom;
-            const double yy = v1.y() * OpenMM::NmPerAngstrom;
-            const double yz = v1.z() * OpenMM::NmPerAngstrom;
-            const double zx = v2.x() * OpenMM::NmPerAngstrom;
-            const double zy = v2.y() * OpenMM::NmPerAngstrom;
-            const double zz = v2.z() * OpenMM::NmPerAngstrom;
-
-            system_openmm->setDefaultPeriodicBoxVectors(
-                                                  OpenMM::Vec3(xx, xy, xz),
-                                                  OpenMM::Vec3(yx, yy, yz),
-                                                  OpenMM::Vec3(zx, zy, zz));
-
-            openmm_context->setPeriodicBoxVectors(OpenMM::Vec3(xx, xy, xz),
-                                                  OpenMM::Vec3(yx, yy, yz),
-                                                  OpenMM::Vec3(zx, zy, zz));
-        }
-
-        openmm_context->reinitialize();
+       openmm_context->setPeriodicBoxVectors(OpenMM::Vec3(Box_x_Edge_Length, 0, 0),
+					     OpenMM::Vec3(0, Box_y_Edge_Length, 0),
+					     OpenMM::Vec3(0, 0, Box_z_Edge_Length));
     }
+    // TriclinicBox
+    else if (ptr_sys.property(space_property).isA<TriclinicBox>())
+    {
+       const TriclinicBox &space = ptr_sys.property(space_property).asA<TriclinicBox>();
+
+       // Get the three triclinic box vectors.
+       const auto v0 = space.vector0();
+       const auto v1 = space.vector1();
+       const auto v2 = space.vector2();
+
+       // Get cell matrix components in nm.
+       const double xx = v0.x() * OpenMM::NmPerAngstrom;
+       const double xy = v0.y() * OpenMM::NmPerAngstrom;
+       const double xz = v0.z() * OpenMM::NmPerAngstrom;
+       const double yx = v1.x() * OpenMM::NmPerAngstrom;
+       const double yy = v1.y() * OpenMM::NmPerAngstrom;
+       const double yz = v1.z() * OpenMM::NmPerAngstrom;
+       const double zx = v2.x() * OpenMM::NmPerAngstrom;
+       const double zy = v2.y() * OpenMM::NmPerAngstrom;
+       const double zz = v2.z() * OpenMM::NmPerAngstrom;
+
+       system_openmm->setDefaultPeriodicBoxVectors(
+	  OpenMM::Vec3(xx, xy, xz),
+	  OpenMM::Vec3(yx, yy, yz),
+	  OpenMM::Vec3(zx, zy, zz));
+
+       openmm_context->setPeriodicBoxVectors(OpenMM::Vec3(xx, xy, xz),
+					     OpenMM::Vec3(yx, yy, yz),
+					     OpenMM::Vec3(zx, zy, zz));
+    }
+
+    openmm_context->reinitialize();
 
     //OpenMM vector coordinate
     std::vector<OpenMM::Vec3> positions_openmm(nats);
@@ -3168,24 +2742,40 @@ MolarEnergy OpenMMPMEFEP::getPotentialEnergy(const System &system)
  */
 System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10, int max_iteration = 1)
 {
-    bool Debug = false;
     const MoleculeGroup moleculegroup = this->molgroup.read();
     IntegratorWorkspacePtr workspace = this->createWorkspace(moleculegroup);
+
     if (system.nMolecules() != moleculegroup.nMolecules())
     {
         std::cerr << "Number of molecules do not agree!";
         exit(1);
     }
+
     workspace.edit().setSystem(system);
+
     // Use helper function to create a Context
     SireUnits::Dimension::Time timestep = 0.0 * picosecond;
     createContext(workspace.edit(), timestep);
+
+    int infoMask = OpenMM::State::Positions;
+
+    if (Debug)
+       infoMask += OpenMM::State::Energy;
+
+    OpenMM::State state_openmm = openmm_context->getState(infoMask);
+
+    if (Debug)
+       // FIXME: check why this give different energies in different runs
+       qDebug() << "Initial energy is"
+		<< state_openmm.getPotentialEnergy() * OpenMM::KcalPerKJ
+		<< "kcal/mol at lambda =" << Alchemical_value << "\n";
+
     // Step 2 minimise
     OpenMM::LocalEnergyMinimizer::minimize(*openmm_context, tolerance, max_iteration);
+
     // Step 3 update the positions in the system
-    int infoMask = OpenMM::State::Positions;
-    OpenMM::State state_openmm = openmm_context->getState(infoMask);
     std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
+
     // Recast to atomicvelocityworkspace because want to use commitCoordinates() method to update system
     AtomicVelocityWorkspace &ws = workspace.edit().asA<AtomicVelocityWorkspace>();
     const int nmols = ws.nMolecules();
@@ -3201,7 +2791,7 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10, 
                                     positions_openmm[j + k][2] * (OpenMM::AngstromsPerNm));
             if (Debug)
             {
-                std::cout << "X = " << positions_openmm[j + k][0] * OpenMM::AngstromsPerNm << " A" <<
+                qDebug() << "X = " << positions_openmm[j + k][0] * OpenMM::AngstromsPerNm << " A" <<
                     " Y = " << positions_openmm[j + k][1] * OpenMM::AngstromsPerNm << " A" <<
                     " Z = " << positions_openmm[j + k][2] * OpenMM::AngstromsPerNm << " A";
             }
@@ -3237,7 +2827,6 @@ System OpenMMPMEFEP::annealSystemToLambda(System &system,
                                       SireUnits::Dimension::Time anneal_step_size,
                                       int annealing_steps)
 {
-    bool Debug = false;
     const double AKMAPerPs = 0.04888821;
 
     const MoleculeGroup moleculegroup = this->molgroup.read();
@@ -3306,7 +2895,7 @@ System OpenMMPMEFEP::annealSystemToLambda(System &system,
         // dummy buffered dimensions vector, maybe there is better solution
         //to this than just passing an empty vector
         QVector<QVector<Vector>> dimensions;
-        updateBoxDimensions(state_openmm, dimensions, Debug, ws);
+        updateBoxDimensions(state_openmm, dimensions, ws);
     }
     this->destroyContext();
     // Step 5. Return pointer to the workspace's system
@@ -3323,11 +2912,11 @@ System OpenMMPMEFEP::annealSystemToLambda(System &system,
  * @param record_stats          boolean that tracks recording.
  */
 void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
-                                 const Symbol &nrg_component, SireUnits::Dimension::Time timestep,
-                                 int nmoves, bool record_stats)
+			     const Symbol &nrg_component,
+			     SireUnits::Dimension::Time timestep,
+			     int nmoves, bool record_stats)
 {
     createContext(workspace, timestep);
-    bool Debug = false;
     const int nats = openmm_system->getNumParticles();
 
     AtomicVelocityWorkspace &ws = workspace.asA<AtomicVelocityWorkspace>();
@@ -3462,8 +3051,8 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
         double p_energy_lambda = state_openmm.getPotentialEnergy();
         if (Debug)
         {
-            printf("Lambda = %f Potential energy = %.5f kcal/mol\n", Alchemical_value, p_energy_lambda * OpenMM::KcalPerKJ);
-            //exit(-1);
+            qDebug() << "Lambda =" << Alchemical_value << "Potential energy ="
+		     << p_energy_lambda * OpenMM::KcalPerKJ << "kcal/mol";
         }
         IsFiniteNumber = (p_energy_lambda <= DBL_MAX && p_energy_lambda >= -DBL_MAX);
 
@@ -3610,7 +3199,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
     //Now the box dimensions
     if (MCBarostat_flag == true)
     {
-        updateBoxDimensions(state_openmm, buffered_dimensions, Debug, ws);
+        updateBoxDimensions(state_openmm, buffered_dimensions, ws);
     }
     // Clear all buffers
 
@@ -3641,19 +3230,19 @@ void OpenMMPMEFEP::updateOpenMMContextLambda(double lambda)
         openmm_context->setParameter("lam", lambda); //1-5 HD
     //1-4 Interactions
     if (perturbed_energies[1])
-        openmm_context->setParameter("lamhd", lambda); //1-4 HD
+        openmm_context->setParameter("lam", lambda); //1-4 HD
     if (perturbed_energies[2])
-        openmm_context->setParameter("lamtd", 1.0 - lambda); //1-4 To Dummy
+        openmm_context->setParameter("lam", 1.0 - lambda); //1-4 To Dummy
     if (perturbed_energies[3])
-        openmm_context->setParameter("lamfd", lambda); //1-4 From Dummy
+        openmm_context->setParameter("lam", lambda); //1-4 From Dummy
     if (perturbed_energies[4])
-        openmm_context->setParameter("lamftd", lambda); //1-4 From Dummy to Dummy
+        openmm_context->setParameter("lam", lambda); //1-4 From Dummy to Dummy
 
     //BONDED PERTURBED TERMS
     if (perturbed_energies[5])
-        openmm_context->setParameter("lambond", lambda); //Bonds
+        openmm_context->setParameter("lam", lambda); //Bonds
     if (perturbed_energies[6])
-        openmm_context->setParameter("lamangle", lambda); //Angles
+        openmm_context->setParameter("lam", lambda); //Angles
     if (perturbed_energies[7])
         openmm_context->setParameter("lamdih", lambda); //Torsions
 }
@@ -3699,7 +3288,6 @@ boost::tuples::tuple<double, double, double> OpenMMPMEFEP::calculateGradient(
 
 QVector<double> OpenMMPMEFEP::computeReducedPerturbedEnergies(double beta)
 {
-    bool Debug = false;
     QVector<double> perturbed;
     QVector<double>::iterator i;
     for (i=alchemical_array.begin(); i!=alchemical_array.end(); i++)
@@ -3725,11 +3313,10 @@ void OpenMMPMEFEP::emptyContainers()
     reduced_perturbed_energies.clear();
 }
 
-void OpenMMPMEFEP::updateBoxDimensions(OpenMM::State &state_openmm,
-                                           QVector<QVector<Vector>> &buffered_dimensions,
-                                           bool Debug, AtomicVelocityWorkspace &ws)
+void OpenMMPMEFEP::updateBoxDimensions(
+   OpenMM::State &state_openmm, QVector<QVector<Vector>> &buffered_dimensions,
+   AtomicVelocityWorkspace &ws)
 {
-    Debug = false;
     OpenMM::Vec3 a;
     OpenMM::Vec3 b;
     OpenMM::Vec3 c;
@@ -4194,4 +3781,9 @@ IntegratorWorkspacePtr OpenMMPMEFEP::createWorkspace(const MoleculeGroup &molgro
 const char* OpenMMPMEFEP::typeName()
 {
     return QMetaType::typeName(qMetaTypeId<OpenMMPMEFEP>());
+}
+
+void OpenMMPMEFEP::setDebug(bool debug)
+{
+   Debug = debug;
 }

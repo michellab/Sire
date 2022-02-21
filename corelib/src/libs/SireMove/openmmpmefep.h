@@ -29,6 +29,9 @@
 #ifndef SIREMOVE_OPENMMPMEFEP_H
 #define SIREMOVE_OPENMMPMEFEP_H
 
+#include <list>
+#include <utility>
+
 #include "integrator.h"
 
 #ifdef SIRE_USE_OPENMM
@@ -43,7 +46,7 @@ SIRE_BEGIN_HEADER
 
 #ifdef SIRE_USE_OPENMM
 
-        namespace SireMove {
+namespace SireMove {
     class OpenMMPMEFEP;
 }
 
@@ -51,10 +54,12 @@ SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::OpenMMPMEF
 SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::OpenMMPMEFEP&);
 
 namespace SireMove {
+    using tmpl_str = const QString;
 
-    /** This class implements single topology a free energy method using OpenMM. 
- 
-        @author Julien Michel,Gaetano Calabro and Antonia Mey
+    /** This class implements single topology a free energy method using
+	OpenMM.
+
+        @author Julien Michel, Gaetano Calabro, Antonia Mey, Hannes H Loeffler
      */
     class SIREMOVE_EXPORT OpenMMPMEFEP
     : public SireBase::ConcreteProperty<OpenMMPMEFEP, Integrator> {
@@ -65,11 +70,12 @@ namespace SireMove {
         OpenMMPMEFEP(bool frequent_save_velocities = false);
 
         OpenMMPMEFEP(const MoleculeGroup &molecule_group,
-                const MoleculeGroup &solutes,
-                const MoleculeGroup &solute_hard,
-                const MoleculeGroup &solute_todummy,
-                const MoleculeGroup & solute_fromdummy,
-                bool frequent_save_velocities = false);
+		     const MoleculeGroup &solutes,
+		     const MoleculeGroup &solute_hard,
+		     const MoleculeGroup &solute_todummy,
+		     const MoleculeGroup &solute_fromdummy,
+		     bool frequent_save_velocities = false
+		     );
 
         OpenMMPMEFEP(const OpenMMPMEFEP &other);
 
@@ -108,7 +114,7 @@ namespace SireMove {
 
 	QString getCombiningRules(void);
 	void setCombiningRules(QString);
-	
+
         QString getCutoffType(void);
         void setCutoffType(QString);
 
@@ -200,22 +206,30 @@ namespace SireMove {
         int getRandomSeed(void);
         void setRandomSeed(int);
 
+	void setDebug(bool);
+
     private:
         void createContext(IntegratorWorkspace &workspace,
                 SireUnits::Dimension::Time timestep);
         void destroyContext();
-        void updateBoxDimensions(OpenMM::State &state_openmm, 
-        QVector<QVector<Vector>> &buffered_dimensions, bool Debug, 
-        AtomicVelocityWorkspace &ws);
-        
+        void updateBoxDimensions(OpenMM::State &state_openmm,
+				 QVector<QVector<Vector>> &buffered_dimensions,
+				 AtomicVelocityWorkspace &ws);
+
         double getPotentialEnergyAtLambda(double lambda);
         void updateOpenMMContextLambda(double lambda);
-        boost::tuples::tuple<double, double, double> calculateGradient(double increment_plus, 
+        boost::tuples::tuple<double, double, double> calculateGradient(double increment_plus,
         double increment_minus, double potential_energy_lambda, double beta);
         QVector<double> computeReducedPerturbedEnergies(double);
         void emptyContainers(void);
 
-        /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
+	void addGlobalParameters(OpenMM::CustomNonbondedForce *force,
+				 std::list<std::pair<std::string,double>> params);
+	void addGlobalParameters(OpenMM::CustomBondForce *force,
+				 std::list<std::pair<std::string,double>> params);
+
+        /** Whether or not to save the velocities after every step, or to save them
+	    at the end of all of the steps */
         bool frequent_save_velocities;
         /** The Molecule Group on which the integrator operates */
         MolGroupPtr molgroup;
@@ -282,7 +296,7 @@ namespace SireMove {
         QVector<double> pot_energies;
 
         QVector<double> forward_Metropolis;
-        
+
         QVector<double> backward_Metropolis;
 
         QVector<QVector <double> > reduced_perturbed_energies;
@@ -304,9 +318,21 @@ namespace SireMove {
 
         int random_seed;
 
+	static tmpl_str ENERGYBASE;
+	static tmpl_str ENERGYBASE_SIGMA[2];
+
+	static tmpl_str TODUMMY;
+	static tmpl_str TODUMMY_SIGMA[2];
+
+	static tmpl_str FROMDUMMY;
+	static tmpl_str FROMDUMMY_SIGMA[2];
+
+	static tmpl_str FROMTODUMMY;
+	static tmpl_str FROMTODUMMY_SIGMA[2];
+
+	static tmpl_str INTRA_14_CLJ;
+	static tmpl_str INTRA_14_CLJ_SIGMA[2];
     };
-
-
 }
 
 Q_DECLARE_METATYPE(SireMove::OpenMMPMEFEP)
@@ -317,23 +343,20 @@ SIRE_END_HEADER
 
 #else // SIRE_USE_OPENMM
 
-        namespace SireMove {
+namespace SireMove {
 
     class OpenMMPMEFEP {
     public:
 
-        OpenMMPMEFEP() {
-        }
+        OpenMMPMEFEP() {}
 
-        ~OpenMMPMEFEP() {
-        }
+        ~OpenMMPMEFEP() {}
 
-        static const char* typeName() {
+        static const char* typeName()
+	{
             return "SireMM::OpenMMPMEFEP";
         }
-
     };
-
 }
 
 Q_DECLARE_METATYPE(SireMove::OpenMMPMEFEP)

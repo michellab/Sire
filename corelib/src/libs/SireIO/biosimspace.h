@@ -29,6 +29,8 @@
 #ifndef SIREIO_BIOSIMSPACE_H
 #define SIREIO_BIOSIMSPACE_H
 
+#include <boost/tuple/tuple.hpp>
+
 #include "sireglobal.h"
 
 #include "SireBase/propertymap.h"
@@ -288,6 +290,33 @@ namespace SireIO
             const unsigned water=0,
             const PropertyMap& map = PropertyMap());
 
+    //! Update the coordinates and velocities of system0 with those from
+    /*! system1.
+
+        \param system0
+            The reference system.
+
+        \param system1
+            The updated system, where molecules may not be in the same order.
+
+        \param map0
+            A dictionary of user-defined molecular property names for system0.
+
+        \param map1
+            A dictionary of user-defined molecular property names for system1.
+
+        \retval system, mapping
+            The system with updated coordinates and velocities and a mapping
+            between the molecule indices in both systems.
+     */
+    SIREIO_EXPORT boost::tuple<System, QHash<MolIdx, MolIdx> > updateCoordinatesAndVelocities(
+            const System& system0,
+            const System& system1,
+            const QHash<MolIdx, MolIdx>& molecule_mapping,
+            const bool is_lambda1=false,
+            const PropertyMap& map0 = PropertyMap(),
+            const PropertyMap& map1 = PropertyMap());
+
     Vector cross(const Vector& v0, const Vector& v1);
 }
 
@@ -299,6 +328,7 @@ SIRE_EXPOSE_FUNCTION( SireIO::setGromacsWater )
 SIRE_EXPOSE_FUNCTION( SireIO::renumberConstituents )
 SIRE_EXPOSE_FUNCTION( SireIO::updateAndPreserveOrder )
 SIRE_EXPOSE_FUNCTION( SireIO::repartitionHydrogenMass )
+SIRE_EXPOSE_FUNCTION( SireIO::updateCoordinatesAndVelocities )
 
 SIRE_END_HEADER
 

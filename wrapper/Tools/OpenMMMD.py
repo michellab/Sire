@@ -6,9 +6,15 @@ import os
 import sys
 import re
 import time
+import platform as pf
 import warnings
 
 import numpy as np
+
+import openmm.app as app
+import openmm
+import openmm.unit as units
+
 
 import Sire.Base
 
@@ -38,13 +44,13 @@ import Sire.Units
 import Sire.Maths
 import Sire.Qt
 import Sire.Analysis
-import Sire.Tools.DCDFile
+from Sire.Tools.DCDFile import *
 from Sire.Tools import Parameter, resolveParameters
 import Sire.Stream
 
 
 __author__ = 'Julien Michel, Gaetano Calabro, Antonia Mey, Hannes H Loeffler'
-__version__ = '0.1'
+__version__ = '0.2'
 __license__ = 'GPL'
 __maintainer__ = 'Julien Michel'
 __email__ = 'julien.michel@ed.ac.uk'
@@ -228,6 +234,8 @@ constraint = Parameter(
     "constraint", "hbonds", """The constraint model to use during dynamics."""
 )
 
+# types: nocutoff, cutoffnonperiodic, cutoffperiodic
+# added: PME for FEP only
 cutoff_type = Parameter(
     "cutoff type",
     "cutoffperiodic",
@@ -509,7 +517,10 @@ def centerSolute(system, space):
     else:
         box_center = Sire.Maths.Vector(0.0, 0.0, 0.0)
 
-    solute = system.molecules().at(MolNum(1))[0].molecule()
+    # FIXME: we assume that the solute is the first in the returned list
+    solute_num = system.getMoleculeNumbers()[0]
+    solute = system.molecules().at(solute_num)[0].molecule()
+    assert(solute.hasProperty('perturbations'))
 
     solute_cog = Sire.FF.CenterOfGeometry(solute).point()
 
@@ -563,6 +574,9 @@ def createSystem(molecules):
 
 
 def setupForcefields(system, space):
+    """
+    No PME support here.
+    """
 
     print("Creating force fields... ")
 
@@ -686,6 +700,9 @@ def setupForcefields(system, space):
 
 
 def setupMoves(system, debug_seed, GPUS):
+    """
+    No PME support here.
+    """
 
     print("Setting up moves...")
 
@@ -1110,6 +1127,7 @@ def repartitionMasses(system, hmassfactor=4.0):
 
 def getDummies(molecule):
     print("Selecting dummy groups")
+
     natoms = molecule.nAtoms()
     atoms = molecule.atoms()
 
@@ -1118,6 +1136,7 @@ def getDummies(molecule):
 
     for x in range(0, natoms):
         atom = atoms[x]
+
         if atom.property("initial_ambertype") == "du":
             if from_dummies is None:
                 from_dummies = molecule.selectAll(atom.index())
@@ -1133,7 +1152,7 @@ def getDummies(molecule):
 
 
 def createSystemFreeEnergy(molecules):
-    r"""creates the system for free energy calculation
+    """creates the system for free energy calculation
     Parameters
     ----------
     molecules : Sire.molecules
@@ -1158,6 +1177,8 @@ def createSystemFreeEnergy(molecules):
     # templates in the flex/pert files.
 
     solute = None
+
+    # FIXME: assumption that perturbed molecule is at a fixed location
     for molecule in moleculeList:
         if molecule.residue(ResIdx(0)).number() == ResNum(
             perturbed_resnum.val
@@ -1174,8 +1195,6 @@ def createSystemFreeEnergy(molecules):
             % perturbed_resnum.val
         )
         sys.exit(-1)
-
-    # solute = moleculeList[0]
 
     lig_name = solute.residue(ResIdx(0)).name().value()
 
@@ -1260,7 +1279,6 @@ def createSystemFreeEnergy(molecules):
 
     solvent = MoleculeGroup("solvent")
 
-    # for molecule in moleculeList[1:]:
     for molecule in moleculeList:
         molecules.add(molecule)
         solvent.add(molecule)
@@ -1295,7 +1313,11 @@ def createSystemFreeEnergy(molecules):
 
 
 def setupForceFieldsFreeEnergy(system, space):
-    r"""sets up the force field for the free energy calculation
+    """Sets up the force field for the free energy calculation
+
+    FIXME: For the moment we only check if cutoff_type is not nocutoff
+           and so also allow the RF setup for PME.
+
     Parameters
     ----------
     system : Sire.system
@@ -1539,7 +1561,10 @@ def setupForceFieldsFreeEnergy(system, space):
     return system
 
 
-def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
+def setupMovesFreeEnergy(system, debug_seed, gpu_idx, lam_val):
+    """
+    Setup one Sire MD move using OpenMM.  Supports PME.
+    """
 
     print("Setting up moves...")
 
@@ -1548,10 +1573,16 @@ def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
     solute_hard = system[MGName("solute_ref_hard")]
     solute_todummy = system[MGName("solute_ref_todummy")]
     solute_fromdummy = system[MGName("solute_ref_fromdummy")]
-    # import pdb ; pdb.set_trace()
-    Integrator_OpenMM = Sire.Move.OpenMMFrEnergyST(
+
+    if cutoff_type.val == 'PME':
+        fep_cls = Sire.Move.OpenMMPMEFEP
+    else:                       # no cutoff and RF
+        fep_cls = Sire.Move.OpenMMFrEnergyST
+
+    Integrator_OpenMM = fep_cls(
         molecules, solute, solute_hard, solute_todummy, solute_fromdummy
     )
+
     Integrator_OpenMM.setRandomSeed(debug_seed)
     Integrator_OpenMM.setIntegrator(integrator_type.val)
     Integrator_OpenMM.setFriction(
@@ -1563,7 +1594,7 @@ def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
     Integrator_OpenMM.setFieldDielectric(rf_dielectric.val)
     Integrator_OpenMM.setAlchemicalValue(lambda_val.val)
     Integrator_OpenMM.setAlchemicalArray(lambda_array.val)
-    Integrator_OpenMM.setDeviceIndex(str(GPUS))
+    Integrator_OpenMM.setDeviceIndex(str(gpu_idx))
     Integrator_OpenMM.setCoulombPower(coulomb_power.val)
     Integrator_OpenMM.setShiftDelta(shift_delta.val)
     Integrator_OpenMM.setDeltatAlchemical(delta_lambda.val)
@@ -1610,7 +1641,8 @@ def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
         {"velocity generator": velocity_generator},
     )
 
-    print("Created a MD move that uses OpenMM for all molecules on %s " % GPUS)
+    print('Created one MD move that uses OpenMM for all molecules on '
+          f'GPU device {gpu_idx}')
 
     moves = Sire.Move.WeightedMoves()
     moves.add(mdmove, 1)
@@ -1796,6 +1828,43 @@ def generateDistanceRestraintsDict(system):
 
     return restraints
 
+def computeOpenMMEnergy(prmtop_filename, inpcrd_filename, cutoff):
+    """
+    Compute the energy for a given AMBER parm7 and inpcrd file.
+
+    :param str prmtop_filename: name of parm7 file
+    :param str inpcrd_filename: name of inpcrd file
+    :cutoff: cutoff in Angstrom
+    :type cutoff: Sire.GeneralUnit
+    """
+
+    prmtop = app.AmberPrmtopFile(prmtop_filename)
+    inpcrd = app.AmberInpcrdFile(inpcrd_filename)
+
+    cutoff = cutoff.value()
+
+    system = prmtop.createSystem(nonbondedMethod=app.PME,
+                                 nonbondedCutoff=cutoff*units.angstrom,
+                                 constraints=app.HBonds)
+
+    integrator = openmm.LangevinMiddleIntegrator(300.0*units.kelvin,
+                                                 1.0/units.picosecond,
+                                                 0.004*units.picoseconds)
+
+    simulation = app.Simulation(prmtop.topology, system, integrator)
+
+    context = simulation.context
+
+    context.setPositions(inpcrd.positions)
+
+    if inpcrd.boxVectors is not None:
+        context.setPeriodicBoxVectors(*inpcrd.boxVectors)
+
+    state = context.getState(getEnergy=True)
+
+    return state.getPotentialEnergy().value_in_unit(
+        units.kilocalorie / units.mole)
+
 
 ##############
 # MAIN METHODS
@@ -1804,6 +1873,9 @@ def generateDistanceRestraintsDict(system):
 
 @resolveParameters
 def run():
+    """
+    Normal MD run.
+    """
 
     try:
         host = os.environ["HOSTNAME"]
@@ -1929,6 +2001,9 @@ def run():
         "###===========================================================###\n"
     )
 
+    energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
+    print(f'OpenMM Energy (PME): {energy}\n')
+
     if minimise.val:
         print(
             "###=======================Minimisation========================###"
@@ -2005,20 +2080,17 @@ def run():
 
 @resolveParameters
 def runFreeNrg():
-    # if (save_coords.val):
-    #    buffer_freq = 500
-    # else:
-    #    buffer_freq = 0
+    """
+    Cut-and-paste for FEP runs.
+    """
 
-    try:
-        host = os.environ["HOSTNAME"]
-    except KeyError:
-        host = "unknown"
+    host = pf.node()
 
     print(
-        "### Running Single Topology Molecular Dynamics Free Energy on %s ###"
-        % host
+        '### Running Single Topology Molecular Dynamics Free Energy '
+        f'(v{__version__}) on {host} ###'
     )
+
     if verbose.val:
         print(
             "###================= Simulation Parameters====================="
@@ -2046,9 +2118,9 @@ def runFreeNrg():
         amber = Sire.IO.Amber()
 
         if os.path.exists(s3file.val):
-            (molecules, space) = Sire.Stream.load(s3file.val)
+            molecules, space = Sire.Stream.load(s3file.val)
         else:
-            (molecules, space) = amber.readCrdTop(crdfile.val, topfile.val)
+            molecules, space = amber.readCrdTop(crdfile.val, topfile.val)
             Sire.Stream.save((molecules, space), s3file.val)
 
         system = createSystemFreeEnergy(molecules)
@@ -2219,9 +2291,16 @@ def runFreeNrg():
 
     mdmoves = moves.moves()[0]
     integrator = mdmoves.integrator()
+
     print(
         "###===========================================================###\n"
     )
+
+    energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
+    print(f'Raw OpenMM {openmm.__version__} energy '
+          f'({cutoff_type}, may be different from below): {energy:.2f} '
+          'kcal mol-1\n')
+
     if minimise.val:
         print(
             "###=======================Minimisation========================###"

@@ -75,6 +75,8 @@ namespace bp = boost::python;
 
 #include <QTime>
 
+#include <boost/format.hpp>
+
 #include <boost/tuple/tuple.hpp>
 
 #include <iostream>
@@ -91,7 +93,7 @@ void register_OpenMMPMEFEP_class(){
 
     { //::SireMove::OpenMMPMEFEP
         typedef bp::class_< SireMove::OpenMMPMEFEP, bp::bases< SireMove::Integrator, SireBase::Property > > OpenMMPMEFEP_exposer_t;
-        OpenMMPMEFEP_exposer_t OpenMMPMEFEP_exposer = OpenMMPMEFEP_exposer_t( "OpenMMPMEFEP", "This class implements single topology a free energy method using OpenMM.\n\nAuthor: Julien Michel,Gaetano Calabro and Antonia Mey\n", bp::init< bp::optional< bool > >(( bp::arg("frequent_save_velocities")=(bool)(false) ), "Constructor") );
+        OpenMMPMEFEP_exposer_t OpenMMPMEFEP_exposer = OpenMMPMEFEP_exposer_t( "OpenMMPMEFEP", "This class implements single topology a free energy method using\nOpenMM.\n\nAuthor: Julien Michel, Gaetano Calabro, Antonia Mey, Hannes H Loeffler\n", bp::init< bp::optional< bool > >(( bp::arg("frequent_save_velocities")=(bool)(false) ), "Constructor") );
         bp::scope OpenMMPMEFEP_scope( OpenMMPMEFEP_exposer );
         OpenMMPMEFEP_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, bp::optional< bool > >(( bp::arg("molecule_group"), bp::arg("solutes"), bp::arg("solute_hard"), bp::arg("solute_todummy"), bp::arg("solute_fromdummy"), bp::arg("frequent_save_velocities")=(bool)(false) ), "Constructor using the passed molecule groups") );
         OpenMMPMEFEP_exposer.def( bp::init< SireMove::OpenMMPMEFEP const & >(( bp::arg("other") ), "Copy constructor") );
@@ -115,7 +117,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "createWorkspace"
                 , createWorkspace_function_value
-                , ( bp::arg("map")=SireBase::PropertyMap() )
+                , ( bp::arg("map")=(SireBase::PropertyMap()) )
                 , "Create an empty workspace" );
         
         }
@@ -127,7 +129,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "createWorkspace"
                 , createWorkspace_function_value
-                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , ( bp::arg("molgroup"), bp::arg("map")=(SireBase::PropertyMap()) )
                 , "Create a workspace for this integrator for the molecule group molgroup" );
         
         }
@@ -514,7 +516,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "initialise"
                 , initialise_function_value
-                , "\n initialises the openMM Free energy single topology calculation\n Initialise must be called before anything else happens.\n" );
+                , "" );
         
         }
         { //::SireMove::OpenMMPMEFEP::integrate
@@ -697,6 +699,18 @@ void register_OpenMMPMEFEP_class(){
                 , setCutoffType_function_value
                 , ( bp::arg("arg0") )
                 , "Set the cutoff type: nocutoff, cutoffnonperiodic, cutoffperiodic" );
+        
+        }
+        { //::SireMove::OpenMMPMEFEP::setDebug
+        
+            typedef void ( ::SireMove::OpenMMPMEFEP::*setDebug_function_type)( bool ) ;
+            setDebug_function_type setDebug_function_value( &::SireMove::OpenMMPMEFEP::setDebug );
+            
+            OpenMMPMEFEP_exposer.def( 
+                "setDebug"
+                , setDebug_function_value
+                , ( bp::arg("arg0") )
+                , "" );
         
         }
         { //::SireMove::OpenMMPMEFEP::setDeltatAlchemical
@@ -945,6 +959,7 @@ void register_OpenMMPMEFEP_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         OpenMMPMEFEP_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMove::OpenMMPMEFEP >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        OpenMMPMEFEP_exposer.def_pickle(sire_pickle_suite< ::SireMove::OpenMMPMEFEP >());
         OpenMMPMEFEP_exposer.def( "__str__", &__str__< ::SireMove::OpenMMPMEFEP > );
         OpenMMPMEFEP_exposer.def( "__repr__", &__str__< ::SireMove::OpenMMPMEFEP > );
     }
