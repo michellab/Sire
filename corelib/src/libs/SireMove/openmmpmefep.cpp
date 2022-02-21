@@ -416,7 +416,8 @@ tmpl_str OpenMMPMEFEP::ENERGYBASE_SIGMA[2] = {
 };
 
 tmpl_str OpenMMPMEFEP::TODUMMY =
-    "Hcs + Hls;"
+    "withinCutoff*(Hcs + Hls);"
+    "withinCutoff=step(cutofftd-r);"
     "Hcs=%1 138.935456*q_prod/sqrt(diff_cl+r^2);"
     "diff_cl=(1.0-lamtd)*0.01;"
     "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
@@ -432,7 +433,8 @@ tmpl_str OpenMMPMEFEP::TODUMMY_SIGMA[2] = {
 };
 
 tmpl_str OpenMMPMEFEP::FROMDUMMY =
-    "Hcs + Hls;"
+    "withinCutoff*(Hcs + Hls);"
+    "withinCutoff=step(cutofffd-r);"
     "Hcs=%1 138.935456*q_prod/sqrt(diff_cl+r^2);"
     "diff_cl=(1.0-lamfd)*0.01;"
     "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
@@ -449,7 +451,8 @@ tmpl_str OpenMMPMEFEP::FROMDUMMY_SIGMA[2] = {
 
 // FIXME: is pre-factor lam or lamFTD?
 tmpl_str OpenMMPMEFEP::FROMTODUMMY =
-    "Hcs + Hls;"
+    "withinCutoff*(Hcs + Hls);"
+    "withinCutoff=step(cutoffftd-r);"
     "Hcs=%1 138.935456*q_prod/sqrt(diff_cl+r^2);"
     "diff_cl=(1.0-lamFTD)*0.01;"
     "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
@@ -468,7 +471,8 @@ tmpl_str OpenMMPMEFEP::FROMTODUMMY_SIGMA[2] = {
 // standard LJ term
 // FIXME: does this need the pre-factor too?
 tmpl_str OpenMMPMEFEP::INTRA_14_CLJ =
-    "Hl+Hc;"
+    "withinCutoff*(Hl+Hc);"
+    "withinCutoff=step(cutoffhd-r);"
     "Hl=4*eps_avg*((sigma_avg/r)^12-(sigma_avg/r)^6);"
     "Hc=138.935456*q_prod/r;"
     "eps_avg = sqrt(lamhd*lamhd*eaend + (1-lamhd)*(1-lamhd)*eastart + lamhd*(1-lamhd)*emix);"
