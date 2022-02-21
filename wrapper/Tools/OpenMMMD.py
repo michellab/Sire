@@ -1631,6 +1631,7 @@ def setupMovesFreeEnergy(system, debug_seed, gpu_idx, lam_val):
 
     # This calls the OpenMMFrEnergyST initialise function
     Integrator_OpenMM.initialise()
+    Integrator_OpenMM.setDebug(False)
     velocity_generator = Sire.Move.MaxwellBoltzmann(temperature.val)
     velocity_generator.setGenerator(Sire.Maths.RanGenerator(seed))
 
@@ -2297,31 +2298,27 @@ def runFreeNrg():
     )
 
     energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
+    print(f'Sire energy: {integrator.getPotentialEnergy(system)}')
     print(f'Raw OpenMM {openmm.__version__} energy '
-          f'({cutoff_type}, may be different from below): {energy:.2f} '
-          'kcal mol-1\n')
+          f'({cutoff_type}): {energy:.2f} kcal mol-1\b')
 
     if minimise.val:
         print(
             "###=======================Minimisation========================###"
         )
         print("Running minimisation.")
-        # if verbose.val:
-        if True:
-            print("Energy before the minimisation: " + str(system.energy()))
-            print("Tolerance for minimisation: " + str(minimise_tol.val))
-            print(
-                "Maximum number of minimisation iterations: "
-                + str(minimise_max_iter.val)
-            )
+        print(f'Tolerance for minimisation: {str(minimise_tol.val)}')
+        print('Maximum number of minimisation iterations: '
+              f'{str(minimise_max_iter.val)}')
+
         system = integrator.minimiseEnergy(
-            system, minimise_tol.val, minimise_max_iter.val
-        )
+            system, minimise_tol.val, minimise_max_iter.val)
+
         system.mustNowRecalculateFromScratch()
-        # if verbose.val:
-        if True:
-            print("Energy after the minimization: " + str(system.energy()))
-            print("Energy minimization done.")
+
+        print('Energy after the minimization:'
+              f'{integrator.getPotentialEnergy(system)}')
+        print("Energy minimization done.")
         print(
             "###==========================================================="
             "###\n"
