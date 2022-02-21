@@ -374,10 +374,9 @@ QString OpenMMPMEFEP::toString() const
 }
 
 // FIXME: remove RF specific code and replace with PME direct space expressions
-//  NOTE: It appears that expressions have kind of a global name space.  Even
-//        though lambda, n, delta and cutoff are globabl parameters (and
-//        practically also constants) it appears to be necessary to use
-//        different names for the same global variable in each force...
+// NOTE: Vvariable names in expressions for the same logical variable are
+//       different because the variable may be changed with setParameter.  This
+//       only really applies to lambda at the moment.
 // JM 9/10/20 multiply Logix_mix_lam * 0 instead of max(lam,1.0-lam)
 // JM 9/10/10 setting Logix_mix_lam output to 0 for lambda
 tmpl_str OpenMMPMEFEP::ENERGYBASE =
@@ -769,17 +768,17 @@ void OpenMMPMEFEP::initialise()
 
     solute_bond_perturbation = new OpenMM::CustomBondForce(
        "0.5*B*(r-req)^2;"
-       "B=bend*lam+(1.0-lam)*bstart;"
-       "req=rend*lam+(1.0-lam)*rstart");
+       "B=bend*lambond+(1.0-lambond)*bstart;"
+       "req=rend*lambond+(1.0-lambond)*rstart");
 
-    solute_bond_perturbation->addGlobalParameter("lam", Alchemical_value);
+    solute_bond_perturbation->addGlobalParameter("lambond", Alchemical_value);
 
     solute_angle_perturbation = new OpenMM::CustomAngleForce(
        "0.5*A*(theta-thetaeq)^2;"
-       "A=aend*lam+(1.0-lam)*astart;"
-       "thetaeq=thetaend*lam+(1.0-lam)*thetastart");
+       "A=aend*lamangle+(1.0-lamangle)*astart;"
+       "thetaeq=thetaend*lamangle+(1.0-lamangle)*thetastart");
 
-    solute_angle_perturbation->addGlobalParameter("lam", Alchemical_value);
+    solute_angle_perturbation->addGlobalParameter("lamangle", Alchemical_value);
 
 
     /************************************************************RESTRAINTS********************************************************/
@@ -3233,19 +3232,19 @@ void OpenMMPMEFEP::updateOpenMMContextLambda(double lambda)
         openmm_context->setParameter("lam", lambda); //1-5 HD
     //1-4 Interactions
     if (perturbed_energies[1])
-        openmm_context->setParameter("lam", lambda); //1-4 HD
+        openmm_context->setParameter("lamhd", lambda); //1-4 HD
     if (perturbed_energies[2])
-        openmm_context->setParameter("lam", 1.0 - lambda); //1-4 To Dummy
+        openmm_context->setParameter("lamtd", 1.0 - lambda); //1-4 To Dummy
     if (perturbed_energies[3])
-        openmm_context->setParameter("lam", lambda); //1-4 From Dummy
+        openmm_context->setParameter("lamfd", lambda); //1-4 From Dummy
     if (perturbed_energies[4])
-        openmm_context->setParameter("lam", lambda); //1-4 From Dummy to Dummy
+        openmm_context->setParameter("lamftd", lambda); //1-4 From Dummy to Dummy
 
     //BONDED PERTURBED TERMS
     if (perturbed_energies[5])
-        openmm_context->setParameter("lam", lambda); //Bonds
+        openmm_context->setParameter("lambond", lambda); //Bonds
     if (perturbed_energies[6])
-        openmm_context->setParameter("lam", lambda); //Angles
+        openmm_context->setParameter("lamangle", lambda); //Angles
     if (perturbed_energies[7])
         openmm_context->setParameter("lamdih", lambda); //Torsions
 }
