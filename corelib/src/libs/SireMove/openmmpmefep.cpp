@@ -374,12 +374,15 @@ QString OpenMMPMEFEP::toString() const
 }
 
 // FIXME: remove RF specific code and replace with PME direct space expressions
+//  NOTE: It appears that expressions have kind of a global name space.  Even
+//        though lambda, n, delta and cutoff are globabl parameters (and
+//        practically also constants) it appears to be necessary to use
+//        different names for the same global variable in each force...
 // JM 9/10/20 multiply Logix_mix_lam * 0 instead of max(lam,1.0-lam)
 // JM 9/10/10 setting Logix_mix_lam output to 0 for lambda
 tmpl_str OpenMMPMEFEP::ENERGYBASE =
     "(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hls + Hcs);"
     "Hcs = %1 138.935456 * q_prod*(1/sqrt(diff_cl+r*r) + krflam*(diff_cl+r*r)-crflam);"
-    "lam=lambda;" // NOTE: for consistency with 1-4 dummy expressions
     "crflam = crf * src;"
     "krflam = krf * src * src * src;"
     "src = cutoff/sqrt(diff_cl + cutoff*cutoff);"
@@ -610,7 +613,7 @@ void OpenMMPMEFEP::initialise()
     // This check is necessary to avoid nan errors on the GPU platform caused
     // by the calculation of 0^0
     if (coulomb_power > 0)
-       lam_pre = "(lam^n) *";
+       lam_pre = "(lambda^n) *";
 
     QString energybase = ENERGYBASE.arg(lam_pre);
     energybase.append(ENERGYBASE_SIGMA[flag_combRules]);
