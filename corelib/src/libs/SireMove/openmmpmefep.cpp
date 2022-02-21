@@ -2424,29 +2424,6 @@ void OpenMMPMEFEP::initialise()
 
     this->openmm_system = system_openmm;
     this->isSystemInitialised = true;
-
-    // if (Debug)
-    // {
-
-    //    const double dt = convertTo(0.002, picosecond);
-    //    OpenMM::Integrator *integrator_openmm = new OpenMM::VerletIntegrator(dt);
-
-    //    OpenMM::Platform& platform_openmm = OpenMM::Platform::getPlatformByName(platform_type.toStdString());
-
-    //    openmm_context =
-    // 	  new OpenMM::Context(*system_openmm, *integrator_openmm,
-    // 			      platform_openmm);
-
-    //    openmm_context->setPositions(positions_openmm);
-    //    openmm_context->setVelocities(velocities_openmm);
-
-    //    int infoMask = OpenMM::State::Positions + OpenMM::State::Energy;
-    //    OpenMM::State state_openmm = openmm_context->getState(infoMask);
-
-    //    qDebug() << "Initial energy is"
-    // 		<< state_openmm.getPotentialEnergy() * OpenMM::KcalPerKJ
-    // 		<< "kcal/mol at lambda =" << Alchemical_value << "\n";
-    // }
 } // OpenMMPMEFEP::initialise END
 
 /**
@@ -2714,10 +2691,7 @@ MolarEnergy OpenMMPMEFEP::getPotentialEnergy(const System &system)
 
     createContext(ws.edit(), 2 * femtosecond);
 
-    int infoMask = 0;
-    infoMask = infoMask + OpenMM::State::Energy;
-    OpenMM::State state_openmm = openmm_context->getState(infoMask);
-
+    OpenMM::State state_openmm = openmm_context->getState(OpenMM::State::Energy);
     MolarEnergy nrg = state_openmm.getPotentialEnergy() * kJ_per_mol;
 
     this->destroyContext();
@@ -2765,12 +2739,15 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10, 
        infoMask += OpenMM::State::Energy;
 
     OpenMM::State state_openmm = openmm_context->getState(infoMask);
+    std::vector<OpenMM::Vec3> old_positions_openmm = state_openmm.getPositions();
 
     if (Debug)
-       // FIXME: check why this give different energies in different runs
-       qDebug() << "Initial energy is"
-		<< state_openmm.getPotentialEnergy() * OpenMM::KcalPerKJ
-		<< "kcal/mol at lambda =" << Alchemical_value << "\n";
+    {
+       MolarEnergy Epot = state_openmm.getPotentialEnergy() * kJ_per_mol;
+
+       qDebug() << "Energy before minimisation:" << Epot
+		<< "kcal/mol at lambda =" << Alchemical_value;
+    }
 
     // Step 2 minimise
     OpenMM::LocalEnergyMinimizer::minimize(*openmm_context, tolerance, max_iteration);
@@ -2793,9 +2770,12 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10, 
                                     positions_openmm[j + k][2] * (OpenMM::AngstromsPerNm));
             if (Debug)
             {
-                qDebug() << "X = " << positions_openmm[j + k][0] * OpenMM::AngstromsPerNm << " A" <<
-                    " Y = " << positions_openmm[j + k][1] * OpenMM::AngstromsPerNm << " A" <<
-                    " Z = " << positions_openmm[j + k][2] * OpenMM::AngstromsPerNm << " A";
+                qDebug() << "oX =" << old_positions_openmm[j + k][0] * OpenMM::AngstromsPerNm << " A" <<
+                    " oY =" << old_positions_openmm[j + k][1] * OpenMM::AngstromsPerNm << " A" <<
+                    " oZ =" << old_positions_openmm[j + k][2] * OpenMM::AngstromsPerNm << " A";
+                qDebug() << "nX =" << positions_openmm[j + k][0] * OpenMM::AngstromsPerNm << " A" <<
+                    " nY =" << positions_openmm[j + k][1] * OpenMM::AngstromsPerNm << " A" <<
+                    " nZ =" << positions_openmm[j + k][2] * OpenMM::AngstromsPerNm << " A";
             }
         }
         k = k + ws.nAtoms(i);
@@ -2804,6 +2784,16 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10, 
     // This causes the workspace to update the system coordinates with the
     // contents of *sire_coords. Note that velocities aren't touched.
     ws.commitCoordinates();
+
+    // FIXME: looks like OpenMM is not updating the energy
+    if (Debug)
+    {
+       MolarEnergy Epot = state_openmm.getPotentialEnergy() * kJ_per_mol;
+
+       qDebug() << "Energy after minimisation:" << Epot
+		<< "kcal/mol at lambda =" << Alchemical_value;
+    }
+
     // Step 4 delete the context
     // JM 04/15 FIXME: See comment above at step 1
     this->destroyContext();
@@ -3107,7 +3097,6 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
 
         //Computing the potential energies and gradients
         p_energy_lambda = state_openmm.getPotentialEnergy();
-
 
         //Let's calculate the gradients
         double m_forward, m_backward;
