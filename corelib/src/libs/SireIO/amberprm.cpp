@@ -3335,7 +3335,7 @@ QStringList toLines(const QVector<AmberParams> &params,
             solvent_pointers[2] = params.count() - nsolvents + 1; // first solvent molecule index
         }
 
-        lines += writeIntData(solvent_pointers, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
+        lines += writeIntData(solvent_pointers, AmberFormat( AmberPrm::INTEGER, 3, 8 ));
 
 
         //write out the box dimensions
