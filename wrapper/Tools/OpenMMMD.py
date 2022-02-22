@@ -2009,12 +2009,12 @@ def run():
         print(
             "###=======================Minimisation========================###"
         )
-        print("Running minimisation.")
+        print("Running minimization.")
         if verbose.val:
-            print("Energy before the minimisation: " + str(system.energy()))
-            print("Tolerance for minimisation: " + str(minimise_tol.val))
+            print("Energy before the minimization: " + str(system.energy()))
+            print("Tolerance for minimization: " + str(minimise_tol.val))
             print(
-                "Maximum number of minimisation iterations: "
+                "Maximum number of minimization iterations: "
                 + str(minimise_max_iter.val)
             )
         integrator.setConstraintType("none")
@@ -2306,9 +2306,9 @@ def runFreeNrg():
         print(
             "###=======================Minimisation========================###"
         )
-        print("Running minimisation.")
-        print(f'Tolerance for minimisation: {str(minimise_tol.val)}')
-        print('Maximum number of minimisation iterations: '
+        print("Running minimization.")
+        print(f'Tolerance for minimization: {str(minimise_tol.val)}')
+        print('Maximum number of minimization iterations: '
               f'{str(minimise_max_iter.val)}')
 
         system = integrator.minimiseEnergy(
