@@ -1583,6 +1583,8 @@ def setupMovesFreeEnergy(system, debug_seed, gpu_idx, lam_val):
         molecules, solute, solute_hard, solute_todummy, solute_fromdummy
     )
 
+    Integrator_OpenMM.setDebug(False)
+
     Integrator_OpenMM.setRandomSeed(debug_seed)
     Integrator_OpenMM.setIntegrator(integrator_type.val)
     Integrator_OpenMM.setFriction(
@@ -1631,7 +1633,6 @@ def setupMovesFreeEnergy(system, debug_seed, gpu_idx, lam_val):
 
     # This calls the OpenMMFrEnergyST initialise function
     Integrator_OpenMM.initialise()
-    Integrator_OpenMM.setDebug(False)
     velocity_generator = Sire.Move.MaxwellBoltzmann(temperature.val)
     velocity_generator.setGenerator(Sire.Maths.RanGenerator(seed))
 
@@ -2273,7 +2274,7 @@ def runFreeNrg():
 
     if cycle_start > maxcycles.val:
         print(
-            "Maxinum number of cycles reached (%s). If you wish to extend the "
+            "Maxinum number of MD cycles reached (%s). If you wish to extend the "
             "simulation increase the value of the parameter maxcycle."
             % maxcycles.val
         )
@@ -2297,8 +2298,9 @@ def runFreeNrg():
         "###===========================================================###\n"
     )
 
+    print(f'Initial energy: {integrator.getPotentialEnergy(system)}')
+
     energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
-    print(f'Sire energy: {integrator.getPotentialEnergy(system)}')
     print(f'Raw OpenMM {openmm.__version__} energy '
           f'({cutoff_type}): {energy:.2f} kcal mol-1\n')
 
@@ -2316,7 +2318,7 @@ def runFreeNrg():
 
         system.mustNowRecalculateFromScratch()
 
-        print('Energy after the minimization:'
+        print('Energy after the minimization: '
               f'{integrator.getPotentialEnergy(system)}')
         print("Energy minimization done.")
         print(
@@ -2340,7 +2342,7 @@ def runFreeNrg():
         )
         system.mustNowRecalculateFromScratch()
         if verbose.val:
-            print("Energy after the annealing: " + str(system.energy()))
+            print(f'Energy after the annealing: {integrator.getPotentialEnergy(system)}')
             print("Lambda annealing done.\n")
         print(
             "###==========================================================="
