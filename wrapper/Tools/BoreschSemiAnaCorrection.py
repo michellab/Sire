@@ -90,7 +90,7 @@ def run():
 
     # Radial
     r0 = boresch_dict['equilibrium_values']['r0'] # A
-    kr = boresch_dict['force_constants']['k0'] # kcal mol-1 A-1
+    kr = boresch_dict['force_constants']['kr'] # kcal mol-1 A-1
     dist_at_8RT = 4*np.sqrt((R*T)/kr) # Dist. which gives restraint energy = 8 RT
     r_min = max(0, r0-dist_at_8RT)
     r_max = r0 + dist_at_8RT
