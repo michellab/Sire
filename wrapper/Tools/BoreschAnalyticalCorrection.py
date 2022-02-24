@@ -44,12 +44,34 @@ def run():
     thetaA0 = boresch_dict["equilibrium_values"]["thetaA0"] # rad
     thetaB0 = boresch_dict["equilibrium_values"]["thetaB0"] # rad
 
-    force_constants = list(boresch_dict["force_constants"].values()) # kcal mol-1 A-2 or rad-2
+    #force_constants = list(boresch_dict["force_constants"].values()) # kcal mol-1 A-2 or rad-2
+    #prod_force_constants = np.prod(force_constants)
+
+    prefactor = 8*(pi**2)*v0 # Divide this to account for force constants of 0
+    force_constants = []
+
+    # Loop through and correct for force constants of zero,
+    # which break the analytical correction
+    for k, val in boresch_dict["force_constants"].items():
+        if val == 0:
+            if k == "kr":
+                print("Error: kr must not be zero")
+                sys.exit(-1)
+            if k == "kthetaA":
+                prefactor /= 2/sin(thetaA0)
+            if k == "kthetaB":
+                prefactor /= 2/sin(thetaB0)
+            if k[:4] == "kphi":
+                prefactor /= 2*pi
+        else:
+            force_constants.append(val)
+
+    n_nonzero_k = len(force_constants)
     prod_force_constants = np.prod(force_constants)
 
     # Calculation
-    numerator = 8*(pi**2)*v0*np.sqrt(prod_force_constants)
-    denominator = (r0**2)*sin(thetaA0)*sin(thetaB0)*(2*pi*R*T)**3
+    numerator = prefactor*np.sqrt(prod_force_constants)
+    denominator = (r0**2)*sin(thetaA0)*sin(thetaB0)*(2*pi*R*T)**(n_nonzero_k/2)
 
     dg = -R*T*log(numerator/denominator)
 
