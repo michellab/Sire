@@ -48,7 +48,6 @@
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
-
 #include "SireUnits/units.h"
 #include "SireUnits/temperature.h"
 #include "SireUnits/convert.h"
@@ -197,7 +196,7 @@ frequent_save_velocities(frequent_save),
 molgroup(MoleculeGroup()), solute(MoleculeGroup()), solutehard(MoleculeGroup()), solutetodummy(MoleculeGroup()), solutefromdummy(MoleculeGroup()),
 openmm_system(0), openmm_context(0), isSystemInitialised(false), isContextInitialised(false),
 combiningRules("arithmetic"),
-CutoffType("nocutoff"), cutoff_distance(1.0 * nanometer), field_dielectric(78.3),
+CutoffType("PME"), cutoff_distance(1.0 * nanometer), field_dielectric(78.3),
 Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
 Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"), Restraint_flag(false),
@@ -217,7 +216,7 @@ frequent_save_velocities(frequent_save),
 molgroup(molecule_group), solute(solute_group), solutehard(solute_hard), solutetodummy(solute_todummy), solutefromdummy(solute_fromdummy),
 openmm_system(0), openmm_context(0), isSystemInitialised(false), isContextInitialised(false),
 combiningRules("arithmetic"),
-CutoffType("nocutoff"), cutoff_distance(1.0 * nanometer), field_dielectric(78.3),
+CutoffType("PME"), cutoff_distance(1.0 * nanometer), field_dielectric(78.3),
 Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
 Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"), Restraint_flag(false),
@@ -373,24 +372,31 @@ QString OpenMMPMEFEP::toString() const
     return QObject::tr("OpenMMPMEFEP()");
 }
 
-// FIXME: remove RF specific code and replace with PME direct space expressions
-// NOTE: Vvariable names in expressions for the same logical variable are
-//       different because the variable may be changed with setParameter.  This
-//       only really applies to lambda at the moment.
+// General force field
+//
+// NOTE: There is one single namespace for global parameters but each parameter
+//       must added to the force it is used in.  This is relevant for all
+//       global lambdas below because they need to be changed during MD.
+//       Cutoff, delta and n could use a single name each as they are constant
+//       throughout the simulation.
+//
 // JM 9/10/20 multiply Logix_mix_lam * 0 instead of max(lam,1.0-lam)
 // JM 9/10/10 setting Logix_mix_lam output to 0 for lambda
-tmpl_str OpenMMPMEFEP::ENERGYBASE =
-    "(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hls + Hcs);"
-    "Hcs = %1 138.935456 * q_prod*(1/sqrt(diff_cl+r*r) + krflam*(diff_cl+r*r)-crflam);"
-    "crflam = crf * src;"
-    "krflam = krf * src * src * src;"
-    "src = cutoff/sqrt(diff_cl + cutoff*cutoff);"
-    "diff_cl = (1.0-lambda) * 0.01;"
-    "Hls = 4.0 * eps_avg * (LJ*LJ-LJ);"
-    "LJ=((sigma_avg * sigma_avg)/soft)^3;"
-    "soft=(diff_lj*delta*sigma_avg + r*r);"
-    "diff_lj=(1.0-lambda) * 0.1;"
+tmpl_str OpenMMPMEFEP::GENERAL =
+    "(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (U_direct + U_LJ);"
+
+    // need to subtract scaled 1-4 interactions with erf() because computed in reciprocal space
+    // also subtract 1-2 and 1-3 interactions as also computed in reciprocal space
+    "U_direct = %1 138.935456 * q_prod * erfc(alpha_pme*rCoul) / rCoul;"
+    "rCoul = lam_diff + r;"	// do we need to shift?
+
+    "U_LJ = 4.0 * eps_avg * (TWSIX3*TWSIX3 - TWSIX3);"
+    "TWSIX3 = ((sigma_avg * sigma_avg) / rLJ)^3;"
+    "rLJ = delta*sigma_avg*lam_diff + r*r;"
+
+    "lam_diff = (1.0 - lambda) * 0.1;"	// 0.1 to convert to nm
     "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+
     "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
     "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
     "B_om_lam = max(isHD1*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), C_om_lam);"
@@ -406,23 +412,28 @@ tmpl_str OpenMMPMEFEP::ENERGYBASE =
     "B_mix = max((1.0-isHD1)*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*isFD2, C_mix);"
     "C_mix = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*isFD1*(1.0-isFD2), D_mix);"
     "D_mix= (1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*(1.0-isFD1)*isFD2;"
-    "q_prod = (qend1 * lam+(1.0-lam) * qstart1) * (qend2 * lam+(1.0-lam) * qstart2);"
+
+    "q_prod = (qend1*lam + (1.0-lam)*qstart1) * (qend2*lam + (1.0-lam)*qstart2);"
     "eps_avg = sqrt((epend1*lam+(1.0-lam)*epstart1)*(epend2*lam+(1.0-lam)*epstart2));"
     "sigma_avg=";
-tmpl_str OpenMMPMEFEP::ENERGYBASE_SIGMA[2] = {
+tmpl_str OpenMMPMEFEP::GENERAL_SIGMA[2] = {
     "0.5*((sigmaend1*lam+(1.0-lam)*sigmastart1)+(sigmaend2*lam+(1.0-lam)*sigmastart2));",
     "sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));"
 };
 
+// 1-4 terms for to/from/fromto dummies
 tmpl_str OpenMMPMEFEP::TODUMMY =
-    "withinCutoff*(Hcs + Hls);"
-    "withinCutoff=step(cutofftd-r);"
-    "Hcs=%1 138.935456*q_prod/sqrt(diff_cl+r^2);"
-    "diff_cl=(1.0-lamtd)*0.01;"
-    "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
-    "LJ=((sigma_avg*sigma_avg)/soft)^3;"
-    "soft=(diff_lj*deltatd*sigma_avg+r*r);"
-    "diff_lj=(1.0-lamtd)*0.1;"
+    "withinCutoff*(U_direct + U_LJ);"
+    "withinCutoff = step(cutofftd - r);"
+
+    "U_direct = %1 138.935456 * q_prod * erfc(alpha_pme*rCoul) / rCoul;"
+    "rCoul = lam_diff + r;""
+
+    "U_LJ = 4.0 * eps_avg * (TWSIX3*TWSIX3 - TWSIX3);"
+    "TWSIX3 = ((sigma_avg * sigma_avg) / rLJ)^3;"
+    "rLJ = deltatd*sigma_avg*lam_diff + r*r;"
+
+    "lam_diff = (1.0 - lamtd) * 0.1;"
     "eps_avg = sqrt((1-lamtd)*(1-lamtd)*eaend + lamtd*lamtd*eastart + lamtd*(1-lamtd)*emix);"
     "q_prod = (1-lamtd)*(1-lamtd)*qpend + lamtd*lamtd*qpstart + lamtd*(1-lamtd)*qmix;"
     "sigma_avg=";
@@ -432,14 +443,17 @@ tmpl_str OpenMMPMEFEP::TODUMMY_SIGMA[2] = {
 };
 
 tmpl_str OpenMMPMEFEP::FROMDUMMY =
-    "withinCutoff*(Hcs + Hls);"
-    "withinCutoff=step(cutofffd-r);"
-    "Hcs=%1 138.935456*q_prod/sqrt(diff_cl+r^2);"
-    "diff_cl=(1.0-lamfd)*0.01;"
-    "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
-    "LJ=((sigma_avg*sigma_avg)/soft)^3;"
-    "soft=(diff_lj*deltafd*sigma_avg+r*r);"
-    "diff_lj=(1.0-lamfd)*0.1;"
+    "withinCutoff*(U_direct + U_LJ);"
+    "withinCutoff=step(cutofffd - r);"
+
+    "U_direct = %1 138.935456 * q_prod * erfc(alpha_pme*rCoul) / rCoul;"
+    "rCoul = lam_diff + r;""
+
+    "U_LJ = 4.0 * eps_avg * (TWSIX3*TWSIX3 - TWSIX3);"
+    "TWSIX3 = ((sigma_avg * sigma_avg) / rLJ)^3;"
+    "rLJ = deltafd*sigma_avg*lam_diff + r*r;"
+
+    "lam_diff = (1.0 - lamfd) * 0.1;"
     "eps_avg = sqrt(lamfd*lamfd*eaend + (1-lamfd)*(1-lamfd)*eastart + lamfd*(1-lamfd)*emix);"
     "q_prod = lamfd*lamfd*qpend + (1-lamfd)*(1-lamfd)*qpstart + lamfd*(1-lamfd)*qmix;"
     "sigma_avg=";
@@ -448,32 +462,36 @@ tmpl_str OpenMMPMEFEP::FROMDUMMY_SIGMA[2] = {
     "sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);"
 };
 
-// FIXME: is pre-factor lam or lamFTD?
 tmpl_str OpenMMPMEFEP::FROMTODUMMY =
-    "withinCutoff*(Hcs + Hls);"
-    "withinCutoff=step(cutoffftd-r);"
-    "Hcs=%1 138.935456*q_prod/sqrt(diff_cl+r^2);"
-    "diff_cl=(1.0-lamFTD)*0.01;"
-    "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
-    "LJ=((sigma_avg*sigma_avg)/soft)^3;"
-    "soft=(diff_lj*deltaftd*sigma_avg+r*r);"
-    "diff_lj=(1.0-lamFTD)*0.1;"
+    "withinCutoff*(U_direct + U_LJ);"
+    "withinCutoff = step(cutoffftd - r);"
+
+    "U_direct = %1 138.935456 * q_prod * erfc(alpha_pme*rCoul) / rCoul;"
+    "rCoul = lam_diff + r;""
+
+    "U_LJ = 4.0 * eps_avg * (TWSIX3*TWSIX3 - TWSIX3);"
+    "TWSIX3 = ((sigma_avg * sigma_avg) / rLJ)^3;"
+    "rLJ = deltaftd*sigma_avg*lam_diff + r*r;"
+
+    "lam_diff = (1.0 - lamFTD) * 0.1;"
+    "lamFTD = max(lamftd,1-lamftd);"
     "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
     "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-    "lamFTD = max(lamftd,1-lamftd);"
     "sigma_avg=";
 tmpl_str OpenMMPMEFEP::FROMTODUMMY_SIGMA[2] = {
     "lamftd*saend + (1-lamftd)*sastart;",
     "sqrt(lamftd*lamftd*saend + (1-lamftd)*(1-lamftd)*sastart + lamftd*(1-lamftd)*samix);"
 };
 
-// standard LJ term
-// FIXME: does this need the pre-factor too?
+// standard 1-4 Coulomb and LJ terms, scaling is done per each exception below
 tmpl_str OpenMMPMEFEP::INTRA_14_CLJ =
-    "withinCutoff*(Hl+Hc);"
-    "withinCutoff=step(cutoffhd-r);"
-    "Hl=4*eps_avg*((sigma_avg/r)^12-(sigma_avg/r)^6);"
-    "Hc=138.935456*q_prod/r;"
+    "withinCutoff*(U_direct + U_LJ);"
+    "withinCutoff = step(cutoffhd - r);"
+
+    "U_direct = 138.935456 * q_prod * erfc(alpha_pme*r) / r;" // no lambda^n, no shift
+
+    "U_LJ = 4.0 * eps_avg * ((sigma_avg/r)^12 - (sigma_avg/r)^6);" // no shift
+
     "eps_avg = sqrt(lamhd*lamhd*eaend + (1-lamhd)*(1-lamhd)*eastart + lamhd*(1-lamhd)*emix);"
     "q_prod = lamhd*lamhd*qpend + (1-lamhd)*(1-lamhd)*qpstart + lamhd*(1-lamhd)*qmix;"
     "sigma_avg=";
@@ -586,13 +604,15 @@ void OpenMMPMEFEP::initialise()
     //       with CustomNonbondedForce, CustomBondForce, etc. (see next few
     //       hundred lines below).
     OpenMM::NonbondedForce *nonbond_openmm = new OpenMM::NonbondedForce();
+    nonbond_openmm->setNonbondedMethod(OpenMM::NonbondedForce::PME);
+    nonbond_openmm->setIncludeDirectSpace(false);
+
     nonbond_openmm->setUseDispersionCorrection(false);
 
     /*
-    nonbonded.setIncludeDirectSpace(false);
-    nonbonded.addGlobalParameter("lambda", 0.0);
-    nonbonded.addParticleParameterOffset("lambda", particle_idx, (charge_1 – charge_0), 0.0, 0.0)
-    nonbonded.addExceptionParameterOffset("lambda", exception_idx, (chargeProd_new – chargeProd_old), 0.0, 0.0)
+    nonbond_openmm.addGlobalParameter("lambda", 0.0);
+    nonbond_openmm.addParticleParameterOffset("lambda", particle_idx, (charge_1 – charge_0), 0.0, 0.0)
+    nonbond_openmm.addExceptionParameterOffset("lambda", exception_idx, (chargeProd_new – chargeProd_old), 0.0, 0.0)
     */
 
     // CUSTOM NON BONDED FORCE FIELD
@@ -606,11 +626,6 @@ void OpenMMPMEFEP::initialise()
 
     const double converted_cutoff_distance = convertTo(cutoff_distance.value(), nanometer);
 
-    // FIXME: remove RF specific code
-    double eps2 = (field_dielectric - 1.0) / (2 * field_dielectric + 1.0);
-    double kvalue = eps2 / (converted_cutoff_distance * converted_cutoff_distance * converted_cutoff_distance);
-    double cvalue = (1.0 / converted_cutoff_distance)*(3.0 * field_dielectric) / (2.0 * field_dielectric + 1.0);
-
     QString lam_pre = "";
 
     // This check is necessary to avoid nan errors on the GPU platform caused
@@ -618,24 +633,23 @@ void OpenMMPMEFEP::initialise()
     if (coulomb_power > 0)
        lam_pre = "(lambda^n) *";
 
-    QString energybase = ENERGYBASE.arg(lam_pre);
-    energybase.append(ENERGYBASE_SIGMA[flag_combRules]);
+    QString general_ff = GENERAL.arg(lam_pre);
+    general_ff.append(GENERAL_SIGMA[flag_combRules]);
 
     if (Debug)
-       qDebug() << "energybase:" << energybase;
+       qDebug() << "general_ff:" << general_ff;
 
     custom_force_field =
-	new OpenMM::CustomNonbondedForce(energybase.toStdString());
+	new OpenMM::CustomNonbondedForce(general_ff.toStdString());
 
     custom_force_field->setCutoffDistance(converted_cutoff_distance);
     custom_force_field->setCutoffDistance(converted_cutoff_distance);
     custom_force_field->addGlobalParameter("lam", Alchemical_value);
     custom_force_field->addGlobalParameter("delta", shift_delta);
     custom_force_field->addGlobalParameter("n", coulomb_power);
-    custom_force_field->addGlobalParameter("krf", kvalue);
-    custom_force_field->addGlobalParameter("crf", cvalue);
     custom_force_field->addGlobalParameter("cutoff", converted_cutoff_distance);
     custom_force_field->addGlobalParameter("SPOnOff", 0.0);
+    custom_force_field->addGlobalParameter("alpha_pme", alpha_PME);
 
     // FIXME: replace with PME and then switch off direct space handling
     custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
@@ -3383,12 +3397,6 @@ void OpenMMPMEFEP::setCombiningRules(QString combining_rules)
 QString OpenMMPMEFEP::getCutoffType(void)
 {
     return CutoffType;
-}
-
-/** Set the cutoff type: nocutoff, cutoffnonperiodic, cutoffperiodic */
-void OpenMMPMEFEP::setCutoffType(QString cutoff_type)
-{
-    CutoffType = cutoff_type;
 }
 
 /** Get the cutoff distance in A */

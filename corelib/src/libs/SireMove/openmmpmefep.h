@@ -116,7 +116,6 @@ namespace SireMove {
 	void setCombiningRules(QString);
 
         QString getCutoffType(void);
-        void setCutoffType(QString);
 
         SireUnits::Dimension::Length getCutoffDistance(void);
         void setCutoffDistance(SireUnits::Dimension::Length);
@@ -313,8 +312,8 @@ namespace SireMove {
 
         int random_seed;
 
-	static tmpl_str ENERGYBASE;
-	static tmpl_str ENERGYBASE_SIGMA[2];
+	static tmpl_str GENERAL;
+	static tmpl_str GENERAL_SIGMA[2];
 
 	static tmpl_str TODUMMY;
 	static tmpl_str TODUMMY_SIGMA[2];
