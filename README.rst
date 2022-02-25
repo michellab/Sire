@@ -92,7 +92,7 @@ Support and Development
 Bugs, Comments, Questions
 -------------------------
 For bug reports/sugguestions/complains please file an issue on
-`GitHub <http://github.com/michellab/Sire>`__.
+`GitHub <http://github.com/michellab/Sire/issues>`__.
 or contact the developers via the google user group: `https://groups.google.com/forum/#!forum/sire-users`
 
 Developers guide
