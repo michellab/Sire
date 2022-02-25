@@ -289,9 +289,41 @@ def writeSystemData(system, moves, Trajectory, block, softcore_lambda=False):
     moves_file.close()
 
 
-def centerSolute(system, space):
+def getSolute(system):
+    """Find the solute molecule based on the perturbed residue number.
 
-    # ! Assuming first molecule in the system is the solute !
+    Args:
+        system (system): The Sire system
+
+    Returns:
+        molecule: Molecule matching perturbed residue number assumed to be solvent
+    """
+
+    molecules = system[MGName("all")].molecules()
+    moleculeNumbers = molecules.molNums()
+    moleculeList = []
+
+    for moleculeNumber in moleculeNumbers:
+        molecule = molecules.molecule(moleculeNumber)[0].molecule()
+        moleculeList.append(molecule)
+
+    # Scan input to find a molecule with passed residue number
+
+    solute = None
+    for molecule in moleculeList:
+        if ( molecule.residue(ResIdx(0)).number() == ResNum(perturbed_resnum.val) ):
+            solute = molecule
+            break
+
+    if solute is None:
+        print ("FATAL ! Could not find a solute to perturb with residue number %s in the input !" 
+        "Check the value of your cfg keyword 'perturbed residue number'" % perturbed_resnum.val)
+        sys.exit(-1)
+
+    return solute
+
+
+def centerSolute(system, space):
 
     if space.isPeriodic():
         # Periodic box.
@@ -303,7 +335,8 @@ def centerSolute(system, space):
     else:
         box_center = Vector(0.0, 0.0, 0.0)
 
-    solute = system.molecules().at(MolNum(1))[0].molecule()
+    solute = getSolute(system)
+    assert(solute.hasProperty('perturbations'))
 
     solute_cog = CenterOfGeometry(solute).point()
 
@@ -652,8 +685,11 @@ def setupDistanceRestraints(system, restraints=None):
     else:
         dic_items = list(restraints.items())
 
-    for i in range(0, molecules.nMolecules()):
-        mol = molecules.molecule(MolNum(i + 1))[0].molecule()
+    molecules = system[MGName("all")].molecules()
+    moleculeNumbers = molecules.molNums()
+
+    for moleculeNumber in moleculeNumbers:
+        mol = molecules.molecule(moleculeNumber)[0].molecule()
         atoms_mol = mol.atoms()
         natoms_mol = mol.nAtoms()
         for j in range(0, natoms_mol):
@@ -674,13 +710,10 @@ def setupDistanceRestraints(system, restraints=None):
 
     [unique_prop_list.append(item) for item in prop_list if item not in unique_prop_list]
     print (unique_prop_list)
-    #Mol number 0 will store all the information related to the bond-links in the system
-    #mol0 = molecules.molecule(MolNum(1))[0].molecule()
-    #JM bugfix 11/21 store distance restraints in the first molecule (by index) contained in molecules which should be solute
-    #import pdb ; pdb.set_trace()
-    mol0 = system[MGName("all")].moleculeAt(0)[0].molecule()
-    mol0 = mol0.edit().setProperty("linkbonds", linkbondVectorListToProperty(unique_prop_list)).commit()
-    system.update(mol0)
+    # The solute will store all the information related to the receptor-ligand restraints 
+    solute = getSolute(system)
+    solute = solute.edit().setProperty("linkbonds", linkbondVectorListToProperty(unique_prop_list)).commit()
+    system.update(solute)
 
     return system
 

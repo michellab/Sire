@@ -2834,47 +2834,52 @@ void OpenMMFrEnergyST::initialise()
 
     if (UseLink_flag == true)
     {
-        Molecule molecule = moleculegroup.moleculeAt(0).molecule();
 
-        bool haslinkinfo = molecule.hasProperty("linkbonds");
-
-        if (haslinkinfo)
+        for (int i = 0; i < nmols; i++)
         {
-            std::vector<double> custom_bond_link_par(3);
 
-            Properties linkprop = molecule.property("linkbonds").asA<Properties>();
+            Molecule molecule = moleculegroup.moleculeAt(i).molecule();
+            bool haslinkinfo = molecule.hasProperty("linkbonds");
 
-            int nlinks = linkprop.property(QString("nbondlinks")).asA<VariantProperty>().toInt();
-
-            if (Debug)
-                qDebug() << "Number of constraint links = " << nlinks;
-
-            for (int i = 0; i < nlinks; i++)
+            if (haslinkinfo)
             {
-                int atomnum0 = linkprop.property(QString("AtomNum0(%1)").arg(i)).asA<VariantProperty>().toInt();
-                int atomnum1 = linkprop.property(QString("AtomNum1(%1)").arg(i)).asA<VariantProperty>().toInt();
-                double reql = linkprop.property(QString("reql(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                double kl = linkprop.property(QString("kl(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                double dl = linkprop.property(QString("dl(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                std::vector<double> custom_bond_link_par(3);
 
-                int openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
-                int openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
+                Properties linkprop = molecule.property("linkbonds").asA<Properties>();
 
-                custom_bond_link_par[0] = reql * OpenMM::NmPerAngstrom; //req
-                custom_bond_link_par[1] = kl * (OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); //k
-                custom_bond_link_par[2] = dl * OpenMM::NmPerAngstrom; //dl
+                int nlinks = linkprop.property(QString("nbondlinks")).asA<VariantProperty>().toInt();
 
                 if (Debug)
+                    qDebug() << "Number of constraint links = " << nlinks;
+
+                for (int i = 0; i < nlinks; i++)
                 {
-                    qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
-                    qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
-                    qDebug() << "Req = " << reql << " kl = " << kl << " dl = " << dl;
+                    int atomnum0 = linkprop.property(QString("AtomNum0(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    int atomnum1 = linkprop.property(QString("AtomNum1(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    double reql = linkprop.property(QString("reql(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double kl = linkprop.property(QString("kl(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double dl = linkprop.property(QString("dl(%1)").arg(i)).asA<VariantProperty>().toDouble();
+
+                    int openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
+                    int openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
+
+                    custom_bond_link_par[0] = reql * OpenMM::NmPerAngstrom; //req
+                    custom_bond_link_par[1] = kl * (OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); //k
+                    custom_bond_link_par[2] = dl * OpenMM::NmPerAngstrom; //dl
+
+                    if (Debug)
+                    {
+                        qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
+                        qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
+                        qDebug() << "Req = " << reql << " kl = " << kl << " dl = " << dl;
+                    }
+
+                    custom_link_bond->addBond(openmmindex0, openmmindex1, custom_bond_link_par);
                 }
 
-                custom_link_bond->addBond(openmmindex0, openmmindex1, custom_bond_link_par);
-            }
+                system_openmm->addForce(custom_link_bond);
 
-            system_openmm->addForce(custom_link_bond);
+            }//end of loop over molecules in system
         }
 
     }//end of bond link flag
