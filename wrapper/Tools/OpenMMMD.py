@@ -792,12 +792,12 @@ def setupRestraints(system):
 
 
 def saveTurnOnRestraintsModeProperty(system):
-    """Saves the property "turn_on_restraints_mode" in mol num 0 where
+    """Saves the property "turn_on_restraints_mode" in the solute where
     the distance or Boresch restraint information is also stored.""" 
-    mol0 = system[MGName("all")].moleculeAt(0)[0].molecule()
-    mol0 = mol0.edit().setProperty("turn_on_restraints_mode",
+    solute = getSolute(system)
+    solute = solute.edit().setProperty("turn_on_restraints_mode",
                                     VariantProperty(turn_on_restraints_mode.val)).commit()
-    system.update(mol0)
+    system.update(solute)
 
     return(system)
 
@@ -848,7 +848,7 @@ def setupDistanceRestraints(system, restraints=None):
 def setupBoreschRestraints(system):
     """Takes initial system and adds information specifying the Boresch
     restraints. The distance, angle, and torsional restraints are stored as
-    properties in molecule number 0.
+    properties in solute molecule.
 
     Args:
         system (class 'Sire.System._System.System'): The initial system
@@ -893,11 +893,11 @@ def setupBoreschRestraints(system):
         sys.exit(-1)
     
     #Mol number 0 will store all the information related to the Boresch restraints in the system
-    mol0 = system[MGName("all")].moleculeAt(0)[0].molecule()
-    mol0 = mol0.edit().setProperty("boresch_dist_restraint", boreschDistRestraintToProperty(boresch_dict)).commit()
-    mol0 = mol0.edit().setProperty("boresch_angle_restraints", boreschAngleRestraintsToProperty(boresch_dict)).commit()
-    mol0 = mol0.edit().setProperty("boresch_dihedral_restraints", boreschDihedralRestraintsToProperty(boresch_dict)).commit()
-    system.update(mol0)
+    solute = getSolute(system)
+    solute = solute.edit().setProperty("boresch_dist_restraint", boreschDistRestraintToProperty(boresch_dict)).commit()
+    solute = solute.edit().setProperty("boresch_angle_restraints", boreschAngleRestraintsToProperty(boresch_dict)).commit()
+    solute = solute.edit().setProperty("boresch_dihedral_restraints", boreschDihedralRestraintsToProperty(boresch_dict)).commit()
+    system.update(solute)
 
     return system
 
