@@ -111,6 +111,6 @@ def run():
         integrand = lambda phi: numerical_dihedral_integrand(phi, phi0, kphi)
         z_r *= scipy.integrate.quad(integrand, -pi, pi)[0]
 
-    dg = -log(8*pi**2*v0/z_r)
+    dg = -R*T*log(8*pi**2*v0/z_r)
 
     print(f"Semi-analytical correction for releasing Boresch restraints = {dg:.2f} kcal mol-1")
