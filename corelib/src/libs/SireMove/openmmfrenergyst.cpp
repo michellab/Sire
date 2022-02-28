@@ -2859,7 +2859,7 @@ void OpenMMFrEnergyST::initialise()
             perturbed_energies_tmp[8] = true; //Lambda will be used to turn on the receptor-ligand restraints
             if (Debug)
                 qDebug() << "Lambda will be used to turn on the receptor-ligand restraints";
-            break // We've found the solute - exit loop over molecules in system.
+            break; // We've found the solute - exit loop over molecules in system.
         }
     }
 
