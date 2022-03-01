@@ -1128,7 +1128,7 @@ void OpenMMPMEFEP::initialise()
                             ishard = true;
                             break;
                         }
-                    }/
+                    }
 
                     if (ishard)
                         break;

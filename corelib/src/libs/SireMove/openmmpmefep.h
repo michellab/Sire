@@ -327,8 +327,7 @@ namespace SireMove {
 	static tmpl_str INTRA_14_CLJ;
 	static tmpl_str INTRA_14_CLJ_SIGMA[2];
 
-	static tmpl_str CORR12;
-	static tmpl_str CORR13;
+	static tmpl_str CORR_RECIP;
     };
 }
 
