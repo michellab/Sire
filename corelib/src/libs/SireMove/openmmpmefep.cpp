@@ -428,7 +428,7 @@ tmpl_str OpenMMPMEFEP::TODUMMY =
     "withinCutoff = step(cutofftd - r);"
 
     "U_direct = %1 138.935456 * q_prod * erfc(alpha_pme*rCoul) / rCoul;"
-    "rCoul = lam_diff + r;""
+    "rCoul = lam_diff + r;"
 
     "U_LJ = 4.0 * eps_avg * (TWSIX3*TWSIX3 - TWSIX3);"
     "TWSIX3 = ((sigma_avg * sigma_avg) / rLJ)^3;"
@@ -448,7 +448,7 @@ tmpl_str OpenMMPMEFEP::FROMDUMMY =
     "withinCutoff=step(cutofffd - r);"
 
     "U_direct = %1 138.935456 * q_prod * erfc(alpha_pme*rCoul) / rCoul;"
-    "rCoul = lam_diff + r;""
+    "rCoul = lam_diff + r;"
 
     "U_LJ = 4.0 * eps_avg * (TWSIX3*TWSIX3 - TWSIX3);"
     "TWSIX3 = ((sigma_avg * sigma_avg) / rLJ)^3;"
@@ -468,7 +468,7 @@ tmpl_str OpenMMPMEFEP::FROMTODUMMY =
     "withinCutoff = step(cutoffftd - r);"
 
     "U_direct = %1 138.935456 * q_prod * erfc(alpha_pme*rCoul) / rCoul;"
-    "rCoul = lam_diff + r;""
+    "rCoul = lam_diff + r;"
 
     "U_LJ = 4.0 * eps_avg * (TWSIX3*TWSIX3 - TWSIX3);"
     "TWSIX3 = ((sigma_avg * sigma_avg) / rLJ)^3;"
@@ -501,16 +501,10 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
     "sqrt(lamhd*lamhd*saend + (1-lamhd)*(1-lamhd)*sastart + lamhd*(1-lamhd)*samix);"
 };
 
-tmpl_str OpenMMPMEFEP::CORR_12 =
-    "-U_corr_12;"
-    "U_corr_12 = %1 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;" // erf not erfc!
-    "rCoul = lam_diff + r;""
-    "lam_diff = (1.0 - lam12) * 0.1;";
-
-tmpl_str OpenMMPMEFEP::CORR_13 =
-    "-U_corr_13;"
-    "U_corr_13 = %1 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;" // erf not erfc!
-    "rCoul = lam_diff + r;""
+tmpl_str OpenMMPMEFEP::CORR_RECIP =
+    "-U_corr;"
+    "U_corr = %1 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;" // erf not erfc!
+    "rCoul = lam_diff + r;"
     "lam_diff = (1.0 - lam12) * 0.1;";
 
 
@@ -620,12 +614,7 @@ void OpenMMPMEFEP::initialise()
     nonbond_openmm->setUseDispersionCorrection(false);
 
     // scale the charge for the reciprocal space charges linearly
-    nonbond_openmm.addGlobalParameter("lambda", 0.0);
-
-    // Lambda scaling complimentary to scaling in direct space
-    // chargeProd needs charges before scaling!
-    //nonbond_openmm.addParticleParameterOffset("lambda", particle_idx, (charge_1 – charge_0), 0.0, 0.0)
-    //nonbond_openmm.addExceptionParameterOffset("lambda", exception_idx, (chargeProd_new – chargeProd_old), 0.0, 0.0)
+    nonbond_openmm->addGlobalParameter("lambda", 0.0);
 
     // CUSTOM NON BONDED FORCE FIELD
     OpenMM::CustomNonbondedForce *custom_force_field = NULL;
@@ -661,6 +650,8 @@ void OpenMMPMEFEP::initialise()
     custom_force_field->addGlobalParameter("n", coulomb_power);
     custom_force_field->addGlobalParameter("cutoff", converted_cutoff_distance);
     custom_force_field->addGlobalParameter("SPOnOff", 0.0);
+
+    double alpha_PME = 0.2; 	// FIXME
     custom_force_field->addGlobalParameter("alpha_pme", alpha_PME);
 
     // FIXME: replace with PME and then switch off direct space handling
@@ -878,7 +869,38 @@ void OpenMMPMEFEP::initialise()
             Atom at = molatoms(j);
             AtomNum atnum = at.number();
 
-            if (Debug)
+	    // FIXME: use system_index to set offset
+	    //        use mol.hasProperty("perturbations")
+	    //
+            /*
+	    if (mol.hasProperty("perturbations")) {
+	      AtomLJs atomvdws = molecule.property("LJ").asA<AtomLJs>();
+	      QVector<SireMM::LJParameter> ljparameters = atomvdws.toVector();
+
+              AtomCharges atomcharges_start = mol.property("initial_charge").asA<AtomCharges>();
+              AtomCharges atomcharges_final = mol.property("final_charge").asA<AtomCharges>();
+
+	      QVector<SireUnits::Dimension::Charge> start_charges;
+	      QVector<SireUnits::Dimension::Charge> final_charges;
+
+	      start_charges = atomcharges_start.toVector();
+	      final_charges = atomcharges_final.toVector();
+
+	      for (int j = 0; j < ljparameters.size(); j++)
+	      {
+	        double charge_start = start_charges[j].value();
+		double charge_final = final_charges[j].value();
+
+		// Lambda scaling complimentary to scaling in direct space
+		// need to provide the parameter and the chargeScale for reciprocal PME
+		nonbond_openmm.addParticleParameterOffset("lambda", system_index+j, (charge_final – charge_start), 0.0, 0.0)
+	      }
+
+	      continue;
+	    }
+	    */
+
+	    if (Debug)
                 qDebug() << " openMM_index " << system_index << " Sire Atom Number "
 			 << atnum.toString() << " Mass particle = " << m[j];
 
@@ -1020,7 +1042,6 @@ void OpenMMPMEFEP::initialise()
 
     // A list of 1,4 atom pairs with non default scale factors
     // for each entry, first pair has pair of indices, second has pair of scale factors
-    //QList< QPair< QPair<int,int>, QPair<double, double > > > custom14pairs;
     QHash< QPair<int, int>, QPair<double, double> > custom14pairs;
 
     bool special_14 = false;
@@ -1107,11 +1128,11 @@ void OpenMMPMEFEP::initialise()
                             ishard = true;
                             break;
                         }
-                    }//end for
+                    }/
 
                     if (ishard)
                         break;
-                }//end for
+                }
 
                 // if not hard check if to_dummy
                 if (!ishard)
@@ -2129,6 +2150,10 @@ void OpenMMPMEFEP::initialise()
         double charge_prod, sigma_avg, epsilon_avg;
 
         nonbond_openmm->getExceptionParameters(i, p1, p2, charge_prod, sigma_avg, epsilon_avg);
+
+	// FIXME: is this the right place?
+	//        need original charges here, how to get those?
+	//nonbond_openmm.addExceptionParameterOffset("lambda", i, (chargeProd_new – chargeProd_old), 0.0, 0.0)
 
         if (Debug)
             qDebug() << "Exception = " << i << " p1 = " << p1 << " p2 = "
