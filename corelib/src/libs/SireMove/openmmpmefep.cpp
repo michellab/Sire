@@ -373,6 +373,7 @@ QString OpenMMPMEFEP::toString() const
 }
 
 // General force field
+// FIXME: disable SPOnOff and see if it works with PME
 //
 // NOTE: There is one single namespace for global parameters but each parameter
 //       must added to the force it is used in.  This is relevant for all
@@ -500,6 +501,18 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
     "sqrt(lamhd*lamhd*saend + (1-lamhd)*(1-lamhd)*sastart + lamhd*(1-lamhd)*samix);"
 };
 
+tmpl_str OpenMMPMEFEP::CORR_12 =
+    "-U_corr_12;"
+    "U_corr_12 = %1 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;" // erf not erfc!
+    "rCoul = lam_diff + r;""
+    "lam_diff = (1.0 - lam12) * 0.1;";
+
+tmpl_str OpenMMPMEFEP::CORR_13 =
+    "-U_corr_13;"
+    "U_corr_13 = %1 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;" // erf not erfc!
+    "rCoul = lam_diff + r;""
+    "lam_diff = (1.0 - lam12) * 0.1;";
+
 
 /**
  * initialises the openMM Free energy single topology calculation
@@ -598,22 +611,21 @@ void OpenMMPMEFEP::initialise()
                                                 OpenMM::Vec3(0, 6, 0),
                                                 OpenMM::Vec3(0, 0, 6));
 
-    // NOTE: The Standard Non Bonded is *only* defined to extract
-    //       1-2, 1-3 and 1-4 pairs from the system.
-    //       All force field terms including soft-cores are "hand-coded"
-    //       with CustomNonbondedForce, CustomBondForce, etc. (see next few
-    //       hundred lines below).
+    // Use NonbondedForce to compute Ewald reciprocal and self terms
+    // Direct space and LJ need to be implented via expressions see above
     OpenMM::NonbondedForce *nonbond_openmm = new OpenMM::NonbondedForce();
     nonbond_openmm->setNonbondedMethod(OpenMM::NonbondedForce::PME);
     nonbond_openmm->setIncludeDirectSpace(false);
 
     nonbond_openmm->setUseDispersionCorrection(false);
 
-    /*
+    // scale the charge for the reciprocal space charges linearly
     nonbond_openmm.addGlobalParameter("lambda", 0.0);
-    nonbond_openmm.addParticleParameterOffset("lambda", particle_idx, (charge_1 – charge_0), 0.0, 0.0)
-    nonbond_openmm.addExceptionParameterOffset("lambda", exception_idx, (chargeProd_new – chargeProd_old), 0.0, 0.0)
-    */
+
+    // Lambda scaling complimentary to scaling in direct space
+    // chargeProd needs charges before scaling!
+    //nonbond_openmm.addParticleParameterOffset("lambda", particle_idx, (charge_1 – charge_0), 0.0, 0.0)
+    //nonbond_openmm.addExceptionParameterOffset("lambda", exception_idx, (chargeProd_new – chargeProd_old), 0.0, 0.0)
 
     // CUSTOM NON BONDED FORCE FIELD
     OpenMM::CustomNonbondedForce *custom_force_field = NULL;
@@ -819,12 +831,12 @@ void OpenMMPMEFEP::initialise()
     }
 
     /****************************************BOND LINK POTENTIAL*****************************/
-    /* !! CustomBondForce does not (OpenMM 6.2) apply PBC checks so code will be buggy is restraints involve one atom that diffuses
-       out of the box. */
+    /* NOTE: CustomBondForce does not (OpenMM 6.2) apply PBC checks so code will be buggy if
+       restraints involve one atom that diffuses out of the box. */
 
     OpenMM::CustomBondForce * custom_link_bond =
-       new OpenMM::CustomBondForce("kl*max(0,d-dl*dl);"
-				   "d=(r-reql)*(r-reql)");
+       new OpenMM::CustomBondForce("kl * max(0, d - dl*dl);"
+				   "d = (r-reql) * (r-reql)");
     custom_link_bond->addPerBondParameter("reql");
     custom_link_bond->addPerBondParameter("kl");
     custom_link_bond->addPerBondParameter("dl");
@@ -1276,9 +1288,9 @@ void OpenMMPMEFEP::initialise()
                     positionalRestraints_openmm->addParticle(openmmindex, params);
                 }
             }
-        }//end of restraint flag
+        } // end of restraint flag
 
-        // IONS
+        // single atoms like ions
 
         bool hasConnectivity = molecule.hasProperty("connectivity");
 
@@ -1291,11 +1303,12 @@ void OpenMMPMEFEP::initialise()
                 qDebug() << "\nAtoms = " << num_atoms_molecule << " Num atoms till i =" << num_atoms_till_i << "\n";
                 qDebug() << "\n*********************MONOATOMIC MOLECULE DETECTED**************************\n";
             }
-            nions = nions + 1;
+
+	    nions = nions + 1;
             continue;
         }
 
-        //BONDED TERMS
+        // bonded terms
 
         QList< BondID > bond_pert_list;
         QList< BondID > bond_pert_swap_list;
@@ -1313,9 +1326,8 @@ void OpenMMPMEFEP::initialise()
 	   OpenMMMD.py) larger than HMASS.  In this way hydrogens and heavier
 	   atoms (assuming no elements between H and C) should be cleanly
 	   separated by mass. */
-        double HMASS = 5.0;     // g/mol
-
-	double SMALL = 0.0001;
+        const double HMASS = 5.0;     // g/mol
+	const double SMALL = 0.0001;
 
         if (solute.contains(molecule))
         {
@@ -1795,16 +1807,17 @@ void OpenMMPMEFEP::initialise()
                     }
 
                 }
-            }//end for perturbations
+            } // end for perturbations
 
-        }//end solute molecule perturbation
+        } // end solute molecule perturbation
 
         // The bonded parameters are stored in "amberparameters"
         AmberParameters amber_params = molecule.property("amberparameters").asA<AmberParameters>();
         QList<BondID> bonds_ff = amber_params.getAllBonds();
         QVector<BondID> bonds = bonds_ff.toVector();
         ResName molfirstresname = molecule.residues()(0).name();
-        //BOND
+
+        // Bonds
 
         for (int j = 0; j < bonds_ff.length(); j++)
         {
@@ -1866,11 +1879,11 @@ void OpenMMPMEFEP::initialise()
                 }
             }
 
-            //Bond exclusion List
+            // Bond exclusion List
             bondPairs.push_back(std::make_pair(idx0, idx1));
         }
 
-        //Angles
+        // Angles
 
         QList<AngleID> angles_ff = amber_params.getAllAngles();
         QVector<AngleID> angles = angles_ff.toVector();
@@ -1939,9 +1952,9 @@ void OpenMMPMEFEP::initialise()
             {
                 bondBend_openmm->addAngle(idx0, idx1, idx2, theta0, k * 2.0 * OpenMM::KJPerKcal);
             }
-        }//end of angles
+        } // end of angles
 
-        //Dihedrals
+        // Dihedrals
 
         QList<DihedralID> dihedrals_ff = amber_params.getAllDihedrals();
         QVector<DihedralID> dihedrals = dihedrals_ff.toVector();
@@ -1993,7 +2006,7 @@ void OpenMMPMEFEP::initialise()
         } // end of dihedrals
 
 
-        //Improper Dihedrals
+        // Improper Dihedrals
 
         QList<ImproperID> impropers_ff = amber_params.getAllImpropers();
         QVector<ImproperID> impropers = impropers_ff.toVector();
@@ -2043,7 +2056,7 @@ void OpenMMPMEFEP::initialise()
                     qDebug() << "Amplitude_imp = " << v << " periodicity " << periodicity << " phase " << phase << "\n";
                 }
             }
-        }//end of impropers
+        } // end of impropers
 
 
         // Variable 1,4 scaling factors
@@ -2065,7 +2078,6 @@ void OpenMMPMEFEP::initialise()
             // Add to custom pairs if scale factor differs from default
             if (abs(cscl - Coulomb14Scale) > 0.0001 or abs(ljscl - LennardJones14Scale) > 0.0001)
             {
-
                 int idx0 = pair14_ff.atom0().asA<AtomIdx>().value() + num_atoms_till_i;
                 int idx1 = pair14_ff.atom1().asA<AtomIdx>().value() + num_atoms_till_i;
 
@@ -2078,11 +2090,11 @@ void OpenMMPMEFEP::initialise()
                 if (Debug)
                     qDebug() << "IDX0 = " << idx0 << " IDX1 =" << idx1 << "14 OpenMM Index";
             }
-        }// end of variable 1,4 scaling factors
+        } // end of variable 1,4 scaling factors
 
         num_atoms_till_i = num_atoms_till_i + num_atoms_molecule;
 
-    }// end of loop over molecules
+    } // end of loop over molecules
 
 
     if (Debug)
@@ -2119,10 +2131,14 @@ void OpenMMPMEFEP::initialise()
         nonbond_openmm->getExceptionParameters(i, p1, p2, charge_prod, sigma_avg, epsilon_avg);
 
         if (Debug)
-            qDebug() << "Exception = " << i << " p1 = " << p1 << " p2 = " << p2 << " charge prod = " << charge_prod << " sigma avg = " << sigma_avg << " epsilon_avg = " << epsilon_avg << "\n";
+            qDebug() << "Exception = " << i << " p1 = " << p1 << " p2 = "
+		     << p2 << " charge prod = " << charge_prod
+		     << " sigma avg = " << sigma_avg << " epsilon_avg = "
+		     << epsilon_avg << "\n";
 
+	// run only over the 1-4 exceptions
         if (!(charge_prod == 0 && sigma_avg == 1 && epsilon_avg == 0))
-        {//1-4 interactions
+        {
 
             QVector<double> perturbed_14_tmp(13);
 
@@ -2168,7 +2184,6 @@ void OpenMMPMEFEP::initialise()
 
                 if (i_pair != custom14pairs.end())
                 {
-
                     sc_factors = i_pair.value();
                     Coulomb14Scale_tmp = sc_factors.first;
                     LennardJones14Scale_tmp = sc_factors.second;
@@ -2228,7 +2243,6 @@ void OpenMMPMEFEP::initialise()
 
             if (Debug)
             {
-
                 qDebug() << "Particle p1 = " << p1 << "\nQstart = " << Qstart_p1 << "\nQend = " << Qend_p1
                     << "\nEpstart = " << Epstart_p1 << "\nEpend = " << Epend_p1
                     << "\nSgstart = " << Sigstart_p1 << "\nSgend = " << Sigend_p1
@@ -2275,10 +2289,15 @@ void OpenMMPMEFEP::initialise()
                     qDebug() << "Added soft FROM dummy TO dummy 1-4\n";
             }
 
-        }//end if 1-4 interactions
+        } // end if 1-4 exceptions
 
         custom_force_field->addExclusion(p1, p2);
-    }
+    } // end of loop over exceptions
+
+    // FIXME: Compute 1-2 and 1-3 electrostatic interactions to be subtracted
+    //        from the total energy. This is necessary because the reciprocal
+    //        space calculations will compute the interactions of _all_ charges
+    //        in the system.
 
     /*************************************NON BONDED INTERACTIONS*********************************************/
 
@@ -2384,10 +2403,10 @@ void OpenMMPMEFEP::initialise()
 
     perturbed_energies = perturbed_energies_tmp;
 
-    //IMPORTANT: PERTURBED ENERGY TORSIONS ARE ADDED ABOVE
+    // IMPORTANT: PERTURBED ENERGY TORSIONS ARE ADDED ABOVE
     bool UseLink_flag = true;
 
-    //Distance Restaint. All the information are stored in the first molecule only.
+    // Distance Restraint. All the information are stored in the first molecule only.
 
     if (UseLink_flag == true)
     {
@@ -2434,7 +2453,7 @@ void OpenMMPMEFEP::initialise()
             system_openmm->addForce(custom_link_bond);
         }
 
-    }//end of bond link flag
+    } // end of bond link flag
 
     this->openmm_system = system_openmm;
     this->isSystemInitialised = true;
