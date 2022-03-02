@@ -610,6 +610,8 @@ void OpenMMPMEFEP::initialise()
                                                 OpenMM::Vec3(0, 6, 0),
                                                 OpenMM::Vec3(0, 0, 6));
 
+    const double converted_cutoff_distance = convertTo(cutoff_distance.value(), nanometer);
+
     // HHL
     // Use NonbondedForce to compute Ewald reciprocal and self terms
     // Direct space and LJ need to be implemented via expressions to
@@ -651,8 +653,6 @@ void OpenMMPMEFEP::initialise()
     OpenMM::CustomBondForce *custom_intra_14_fromdummy = NULL;
     OpenMM::CustomBondForce *custom_intra_14_fromdummy_todummy = NULL;
     OpenMM::CustomBondForce *custom_corr_recip = NULL;
-
-    const double converted_cutoff_distance = convertTo(cutoff_distance.value(), nanometer);
 
     QString lam_pre = "";
 
