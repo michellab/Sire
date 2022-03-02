@@ -623,7 +623,7 @@ void OpenMMPMEFEP::initialise()
     double alpha_PME;
     int nx, ny, nz;	// unused
     // nonbond_openmm->setEwaldErrorTolerance(tol)
-    nonbond_openmm->getPMEParameters(&alpha_PME, &nx, &ny, &nz);
+    nonbond_openmm->getPMEParameters(alpha_PME, nx, ny, nz);
 
     if (Debug)
     {
@@ -639,6 +639,7 @@ void OpenMMPMEFEP::initialise()
     OpenMM::CustomBondForce *custom_intra_14_todummy = NULL;
     OpenMM::CustomBondForce *custom_intra_14_fromdummy = NULL;
     OpenMM::CustomBondForce *custom_intra_14_fromdummy_todummy = NULL;
+    OpenMM::CustomBondForce *custom_corr_recip = NULL;
 
     const double converted_cutoff_distance = convertTo(cutoff_distance.value(), nanometer);
 
