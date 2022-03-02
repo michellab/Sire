@@ -26,6 +26,9 @@
  *
 \*********************************************/
 
+#include <iostream>
+#include <cmath>
+
 #include "openmmpmefep.h"
 #include "ensemble.h"
 
@@ -72,7 +75,7 @@
 #include "SireMol/mgname.h"
 #include "SireMol/perturbation.h"
 #include "SireMM/internalperturbation.h"
-#include <iostream>
+
 #include <QDebug>
 #include <QTime>
 #include <boost/tuple/tuple.hpp>
@@ -620,17 +623,23 @@ void OpenMMPMEFEP::initialise()
     // scale the charge for the reciprocal space charges linearly
     nonbond_openmm->addGlobalParameter("lambda", 0.0);
 
-    double alpha_PME;
-    int nx, ny, nz;	// unused
-    // nonbond_openmm->setEwaldErrorTolerance(tol)
+    // double alpha_PME;
+    // int nx, ny, nz;
+    // this seems always zero if not set explicetly
+    // nonbond_openmm->getPMEParameters(alpha_PME, nx, ny, nz);
+
+    // use default for the moment
+    double tolerance_PME = nonbond_openmm->getEwaldErrorTolerance();
+
     // from NonbondedForceImpl.cpp
-    // alpha = (1.0/force.getCutoffDistance())*std::sqrt(-log(2.0*tol));
-    nonbond_openmm->getPMEParameters(alpha_PME, nx, ny, nz);
+    // (1.0/force.getCutoffDistance())*std::sqrt(-log(2.0*tol));
+    // FIXME: check if this is also the value for reciprocal space
+    double alpha_PME = (1.0 / converted_cutoff_distance) * std::sqrt(-log(2.0 * tolerance_PME));
 
     if (Debug)
     {
-       qDebug() << "Default PME alpha =" << alpha_PME // this seems to be always 0
-		<< "; PME error tolerance =" << nonbond_openmm->getEwaldErrorTolerance();
+       qDebug() << "PME alpha =" << alpha_PME
+		<< " computed from PME error tolerance =" << tolerance_PME;
     }
 
     // CUSTOM NON BONDED FORCE FIELD
@@ -661,7 +670,6 @@ void OpenMMPMEFEP::initialise()
     custom_force_field =
 	new OpenMM::CustomNonbondedForce(general_ff.toStdString());
 
-    custom_force_field->setCutoffDistance(converted_cutoff_distance);
     custom_force_field->setCutoffDistance(converted_cutoff_distance);
     custom_force_field->addGlobalParameter("lam", Alchemical_value);
     custom_force_field->addGlobalParameter("delta", shift_delta);
