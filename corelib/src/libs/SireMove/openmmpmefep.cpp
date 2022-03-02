@@ -2527,7 +2527,7 @@ void OpenMMPMEFEP::initialise()
        int nx, ny, nz;
        // this seems always zero if not set explicetly
        nonbond_openmm->getPMEParameters(alpha, nx, ny, nz);
-       qDebug() << "PME parmaters (alpha, nx, ny, nz):" << alpha_PME << nx << ny << nz);
+       qDebug() << "PME parmaters (alpha, nx, ny, nz):" << alpha << nx << ny << nz;
     }
 } // OpenMMPMEFEP::initialise END
 
