@@ -2160,7 +2160,7 @@ void OpenMMPMEFEP::initialise()
 	double qprod_end = Qend_p1 * Qend_p2;
 
 	// HHL
-	nonbond_openmm->addExceptionParameterOffset("lambda", i, (qprod_end - qprod_start), 0.0, 0.0)
+	nonbond_openmm->addExceptionParameterOffset("lambda", i, (qprod_end - qprod_start), 0.0, 0.0);
 
         if (Debug)
             qDebug() << "Exception = " << i << " p1 = " << p1 << " p2 = "
