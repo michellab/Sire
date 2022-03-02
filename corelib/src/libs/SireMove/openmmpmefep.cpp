@@ -744,7 +744,7 @@ void OpenMMPMEFEP::initialise()
 
     // HHL
     // correction term for 1-2 and 1-3 exceptions computed in reciprocal space
-    QString corr_recip = CORR_RECIP.arg(lam_pre);
+    QString corr_recip = CORR_RECIP.arg(lam_pre.toStdString());
 
     if (Debug)
 	qDebug() << "corr_recip:" << corr_recip;
