@@ -623,13 +623,15 @@ void OpenMMPMEFEP::initialise()
     double alpha_PME;
     int nx, ny, nz;	// unused
     // nonbond_openmm->setEwaldErrorTolerance(tol)
+    // from NonbondedForceImpl.cpp
+    // alpha = (1.0/force.getCutoffDistance())*std::sqrt(-log(2.0*tol));
     nonbond_openmm->getPMEParameters(alpha_PME, nx, ny, nz);
 
     if (Debug)
     {
-       qDebug() << "Default PME alpha =" << alpha_PME;
+       qDebug() << "Default PME alpha =" << alpha_PME // this seems to be always 0
+		<< "; PME error tolerance =" << nonbond_openmm->getEwaldErrorTolerance();
     }
-
 
     // CUSTOM NON BONDED FORCE FIELD
     OpenMM::CustomNonbondedForce *custom_force_field = NULL;
