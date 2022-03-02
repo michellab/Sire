@@ -506,7 +506,7 @@ tmpl_str OpenMMPMEFEP::CORR_RECIP =
     "-U_corr;"
     "U_corr = %1 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;" // erf not erfc!
     "rCoul = lam_diff + r;"
-    "lam_diff = (1.0 - lam12) * 0.1;";
+    "lam_diff = (1.0 - lam_corr) * 0.1;";
 
 
 /**
@@ -620,6 +620,17 @@ void OpenMMPMEFEP::initialise()
     // scale the charge for the reciprocal space charges linearly
     nonbond_openmm->addGlobalParameter("lambda", 0.0);
 
+    double alpha_PME;
+    int nx, ny, nz;	// unused
+    // nonbond_openmm->setEwaldErrorTolerance(tol)
+    nonbond_openmm->getPMEParameters(&alpha_PME, &nx, &ny, &nz);
+
+    if (Debug)
+    {
+       qDebug() << "Default PME alpha =" << alpha_PME;
+    }
+
+
     // CUSTOM NON BONDED FORCE FIELD
     OpenMM::CustomNonbondedForce *custom_force_field = NULL;
 
@@ -654,8 +665,6 @@ void OpenMMPMEFEP::initialise()
     custom_force_field->addGlobalParameter("n", coulomb_power);
     custom_force_field->addGlobalParameter("cutoff", converted_cutoff_distance);
     custom_force_field->addGlobalParameter("SPOnOff", 0.0);
-
-    double alpha_PME = 0.2; 	// FIXME: compute via user-defined error tolerance
     custom_force_field->addGlobalParameter("alpha_pme", alpha_PME);
 
     // FIXME: do we still need this?
@@ -680,6 +689,7 @@ void OpenMMPMEFEP::initialise()
     custom_intra_14_todummy->addGlobalParameter("deltatd", shift_delta);
     custom_intra_14_todummy->addGlobalParameter("ntd", coulomb_power);
     custom_intra_14_todummy->addGlobalParameter("cutofftd", converted_cutoff_distance);
+    custom_intra_14_todummy->addGlobalParameter("alpha_pme", alpha_PME);
 
     if (coulomb_power > 0)
        lam_pre = "(lamfd^nfd) *";
@@ -696,6 +706,7 @@ void OpenMMPMEFEP::initialise()
     custom_intra_14_fromdummy->addGlobalParameter("deltafd", shift_delta);
     custom_intra_14_fromdummy->addGlobalParameter("nfd", coulomb_power);
     custom_intra_14_fromdummy->addGlobalParameter("cutofffd", converted_cutoff_distance);
+    custom_intra_14_fromdummy->addGlobalParameter("alpha_pme", alpha_PME);
 
     //JM 9/10/20 set lamFTD to 0
     if (coulomb_power > 0)
@@ -713,6 +724,7 @@ void OpenMMPMEFEP::initialise()
     custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
     custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
     custom_intra_14_fromdummy_todummy->addGlobalParameter("cutoffftd", converted_cutoff_distance);
+    custom_intra_14_fromdummy_todummy->addGlobalParameter("alpha_pme", alpha_PME);
 
     QString intra_14_clj(INTRA_14_CLJ);
     intra_14_clj.append(INTRA_14_CLJ_SIGMA[flag_combRules]);
@@ -724,6 +736,23 @@ void OpenMMPMEFEP::initialise()
 	new OpenMM::CustomBondForce(intra_14_clj.toStdString());
     custom_intra_14_clj->addGlobalParameter("lamhd", Alchemical_value);
     custom_intra_14_clj->addGlobalParameter("cutoffhd", converted_cutoff_distance);
+    custom_intra_14_clj->addGlobalParameter("alpha_pme", alpha_PME);
+
+    if (coulomb_power > 0)
+       lam_pre = "(lam_corr^n_corr) *";
+
+    // HHL
+    // correction term for 1-2 and 1-3 exceptions computed in reciprocal space
+    QString corr_recip = CORR_RECIP.arg(lam_pre);
+
+    if (Debug)
+	qDebug() << "corr_recip:" << corr_recip;
+
+    // FIXME: do we need a cutoff here as well?
+    custom_corr_recip = new OpenMM::CustomBondForce(corr_recip);
+    custom_corr_recip->addGlobalParameter("lam_corr", Alchemical_value);
+    custom_corr_recip->addGlobalParameter("n_corr", coulomb_power);
+    custom_corr_recip->addGlobalParameter("alpha_pme", alpha_PME);
 
     if (Debug)
     {
@@ -3285,6 +3314,8 @@ void OpenMMPMEFEP::updateOpenMMContextLambda(double lambda)
         openmm_context->setParameter("lamfd", lambda); //1-4 From Dummy
     if (perturbed_energies[4])
         openmm_context->setParameter("lamftd", lambda); //1-4 From Dummy to Dummy
+
+    // FIXME: also update lam_corr
 
     //BONDED PERTURBED TERMS
     if (perturbed_energies[5])
