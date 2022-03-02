@@ -744,13 +744,13 @@ void OpenMMPMEFEP::initialise()
 
     // HHL
     // correction term for 1-2 and 1-3 exceptions computed in reciprocal space
-    QString corr_recip = CORR_RECIP.arg(lam_pre.toStdString());
+    QString corr_recip = CORR_RECIP.arg(lam_pre);
 
     if (Debug)
 	qDebug() << "corr_recip:" << corr_recip;
 
     // FIXME: do we need a cutoff here as well?
-    custom_corr_recip = new OpenMM::CustomBondForce(corr_recip);
+    custom_corr_recip = new OpenMM::CustomBondForce(corr_recip.toStdString());
     custom_corr_recip->addGlobalParameter("lam_corr", Alchemical_value);
     custom_corr_recip->addGlobalParameter("n_corr", coulomb_power);
     custom_corr_recip->addGlobalParameter("alpha_pme", alpha_PME);
