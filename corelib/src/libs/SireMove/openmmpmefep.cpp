@@ -501,6 +501,7 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
     "sqrt(lamhd*lamhd*saend + (1-lamhd)*(1-lamhd)*sastart + lamhd*(1-lamhd)*samix);"
 };
 
+// subtract 1-2 and 1-3 interactions that have been calculated in reciprocal space
 tmpl_str OpenMMPMEFEP::CORR_RECIP =
     "-U_corr;"
     "U_corr = %1 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;" // erf not erfc!
@@ -596,9 +597,10 @@ void OpenMMPMEFEP::initialise()
     if (Debug)
         qDebug() << "\nConstraint Type = " << ConstraintType << "\n";
 
-    //Load Plugins from the OpenMM standard Plugin Directory
+    // Load Plugins from the OpenMM standard Plugin Directory
     OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
 
+    // the system will hold all
     OpenMM::System *system_openmm = new OpenMM::System();
 
     system_openmm->setDefaultPeriodicBoxVectors(OpenMM::Vec3(6, 0, 0),
@@ -606,7 +608,8 @@ void OpenMMPMEFEP::initialise()
                                                 OpenMM::Vec3(0, 0, 6));
 
     // Use NonbondedForce to compute Ewald reciprocal and self terms
-    // Direct space and LJ need to be implented via expressions see above
+    // Direct space and LJ need to be implemented via expressions to
+    // custom forces, see above
     OpenMM::NonbondedForce *nonbond_openmm = new OpenMM::NonbondedForce();
     nonbond_openmm->setNonbondedMethod(OpenMM::NonbondedForce::PME);
     nonbond_openmm->setIncludeDirectSpace(false);
@@ -651,10 +654,10 @@ void OpenMMPMEFEP::initialise()
     custom_force_field->addGlobalParameter("cutoff", converted_cutoff_distance);
     custom_force_field->addGlobalParameter("SPOnOff", 0.0);
 
-    double alpha_PME = 0.2; 	// FIXME
+    double alpha_PME = 0.2; 	// FIXME: compute via user-defined error tolerance
     custom_force_field->addGlobalParameter("alpha_pme", alpha_PME);
 
-    // FIXME: replace with PME and then switch off direct space handling
+    // FIXME: do we still need this?
     custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
 
     // NO REACTION FIELD IS APPLIED TO 1-4 INTERACTIONS. If the scaling factor is one (Glycam ff) then
@@ -844,7 +847,6 @@ void OpenMMPMEFEP::initialise()
 
     // To avoid possible mismatch between the index in which atoms are added to the openmm system arrays and
     // their atomic numbers in sire, one array is populated while filling up the openmm global arrays
-    // AtomNumtoopenmmIndex
     QHash<int, int> AtomNumToOpenMMIndex;
 
     for (int i = 0; i < nmols; ++i)
@@ -863,42 +865,12 @@ void OpenMMPMEFEP::initialise()
 
         for (int j = 0; j < nats_mol; ++j)
         {
-            /*JM 10/16 make sure that perturbed atoms have mass of heaviest end-state */
+	    // This adds each atom to the system via its mass
+            // JM 10/16 make sure that perturbed atoms have mass of heaviest end-state
             system_openmm->addParticle(m[j]);
 
             Atom at = molatoms(j);
             AtomNum atnum = at.number();
-
-	    // FIXME: use system_index to set offset
-	    //        use mol.hasProperty("perturbations")
-	    //
-            /*
-	    if (mol.hasProperty("perturbations")) {
-	      AtomLJs atomvdws = molecule.property("LJ").asA<AtomLJs>();
-	      QVector<SireMM::LJParameter> ljparameters = atomvdws.toVector();
-
-              AtomCharges atomcharges_start = mol.property("initial_charge").asA<AtomCharges>();
-              AtomCharges atomcharges_final = mol.property("final_charge").asA<AtomCharges>();
-
-	      QVector<SireUnits::Dimension::Charge> start_charges;
-	      QVector<SireUnits::Dimension::Charge> final_charges;
-
-	      start_charges = atomcharges_start.toVector();
-	      final_charges = atomcharges_final.toVector();
-
-	      for (int j = 0; j < ljparameters.size(); j++)
-	      {
-	        double charge_start = start_charges[j].value();
-		double charge_final = final_charges[j].value();
-
-		// Lambda scaling complimentary to scaling in direct space
-		// need to provide the parameter and the chargeScale for reciprocal PME
-		nonbond_openmm.addParticleParameterOffset("lambda", system_index+j, (charge_final – charge_start), 0.0, 0.0)
-	      }
-
-	      continue;
-	    }
-	    */
 
 	    if (Debug)
                 qDebug() << " openMM_index " << system_index << " Sire Atom Number "
@@ -1090,13 +1062,18 @@ void OpenMMPMEFEP::initialise()
             final_LJs = atomvdws_final.toVector();
         }
 
+	int nonbond_idx = 0;
+
         for (int j = 0; j < ljparameters.size(); j++)
         {
 	    double charge = charges[j].value();
             double sigma = ljparameters[j].sigma() * OpenMM::NmPerAngstrom;
             double epsilon = ljparameters[j].epsilon() * OpenMM::KJPerKcal;
+	    double charge_diff = 0.0;
 
-            nonbond_openmm->addParticle(charge, sigma, epsilon);
+	    // This really only adds the nonbonded parameters
+	    // The parameters need to be added in the same order as in the System
+            nonbond_idx = nonbond_openmm->addParticle(charge, sigma, epsilon);
 
             Atom atom = molecule.molecule().atoms()(j);
 
@@ -1110,12 +1087,25 @@ void OpenMMPMEFEP::initialise()
 		double charge_start = start_charges[j].value();
 		double charge_final = final_charges[j].value();
 
+		// FIXME
+		// Lambda scaling complimentary to scaling in direct space which is deactivated above
+		// need to provide the parameter and the chargeScale for reciprocal PME
+		charge_diff = charge_final – charge_start;
+
+		// FIXME: do we really need to ensure this?
+		//        probably best to be defensive
+		if (charge_diff < 0.00001)
+		    charge_diff = 0.0;
+
+		nonbond_openmm.addParticleParameterOffset("lambda", nonbond_idx, charge_diff,
+							  0.0, 0.0); // sigma, epsilon not needed
+
 		double sigma_start = start_LJs[j].sigma() * OpenMM::NmPerAngstrom;
 		double sigma_final = final_LJs[j].sigma() * OpenMM::NmPerAngstrom;
 		double epsilon_start = start_LJs[j].epsilon() * OpenMM::KJPerKcal;
 		double epsilon_final = final_LJs[j].epsilon() * OpenMM::KJPerKcal;
 
-                for (int l = 0; l < solutehard.nViews(); l++)
+		for (int l = 0; l < solutehard.nViews(); l++)
                 {
                     Selector<Atom> view_atoms = solutehard.viewAt(l).atoms();
 
@@ -1263,6 +1253,8 @@ void OpenMMPMEFEP::initialise()
                 qDebug() << "is Solvent = " << custom_non_bonded_params[9] << "\n";
             }
 
+	    // Adds the custom parmaters to _all_ atoms
+	    // Must be in same order as in the System
             custom_force_field->addParticle(custom_non_bonded_params);
         }
 
@@ -1340,6 +1332,7 @@ void OpenMMPMEFEP::initialise()
         QList< ImproperID > improper_pert_list;
         QList< ImproperID > improper_pert_swap_list;
 
+	// FIXME: move this
 	/* "Light" atoms are defined to have a mass of HMASS or smaller.  This
 	   ensures that hydrogens in the HMR scheme will be constraint.  The
 	   specific value of 5.0 assumes that the HMR factor does not exceed
@@ -2124,7 +2117,7 @@ void OpenMMPMEFEP::initialise()
             qDebug() << "\n\nNumber of ions = " << nions << "\n\n";
     }
 
-    //Exclude the 1-2, 1-3 bonded atoms from nonbonded forces, and scale down 1-4 bonded atoms
+    // Exclude the 1-2, 1-3 bonded atoms from nonbonded forces, and scale down 1-4 bonded atoms
 
     nonbond_openmm->createExceptionsFromBonds(bondPairs, Coulomb14Scale, LennardJones14Scale);
 
@@ -2149,11 +2142,19 @@ void OpenMMPMEFEP::initialise()
 
         double charge_prod, sigma_avg, epsilon_avg;
 
-        nonbond_openmm->getExceptionParameters(i, p1, p2, charge_prod, sigma_avg, epsilon_avg);
+	std::vector<double> p1_params(10);
+	std::vector<double> p2_params(10);
+
+	nonbond_openmm->getExceptionParameters(i, p1, p2, charge_prod, sigma_avg, epsilon_avg);
+
+	custom_force_field->getParticleParameters(p1, p1_params);
+	custom_force_field->getParticleParameters(p2, p2_params);
+
+	double qprod_start = p1_params[0] * p2_params[0];
+	double qprod_end = p1_params[1] * p2_params[1];
 
 	// FIXME: is this the right place?
-	//        need original charges here, how to get those?
-	//nonbond_openmm.addExceptionParameterOffset("lambda", i, (chargeProd_new – chargeProd_old), 0.0, 0.0)
+	nonbond_openmm.addExceptionParameterOffset("lambda", i, (qprod_end – qprod_start), 0.0, 0.0)
 
         if (Debug)
             qDebug() << "Exception = " << i << " p1 = " << p1 << " p2 = "
@@ -2164,17 +2165,8 @@ void OpenMMPMEFEP::initialise()
 	// run only over the 1-4 exceptions
         if (!(charge_prod == 0 && sigma_avg == 1 && epsilon_avg == 0))
         {
-
             QVector<double> perturbed_14_tmp(13);
 
-            std::vector<double> p1_params(10);
-            std::vector<double> p2_params(10);
-
-            custom_force_field->getParticleParameters(p1, p1_params);
-            custom_force_field->getParticleParameters(p2, p2_params);
-
-            double Qstart_p1 = p1_params[0];
-            double Qend_p1 = p1_params[1];
             double Epstart_p1 = p1_params[2];
             double Epend_p1 = p1_params[3];
             double Sigstart_p1 = p1_params[4];
@@ -2183,8 +2175,6 @@ void OpenMMPMEFEP::initialise()
             double isTodummy_p1 = p1_params[7];
             double isFromdummy_p1 = p1_params[8];
 
-            double Qstart_p2 = p2_params[0];
-            double Qend_p2 = p2_params[1];
             double Epstart_p2 = p2_params[2];
             double Epend_p2 = p2_params[3];
             double Sigstart_p2 = p2_params[4];
@@ -2336,6 +2326,8 @@ void OpenMMPMEFEP::initialise()
         qDebug() << "Num bonds 1-4 From Dummy = " << custom_intra_14_fromdummy->getNumBonds();
         qDebug() << "Num bonds 1-4 From Dummy To Dummy = " << custom_intra_14_fromdummy_todummy->getNumBonds();
     }
+
+    system_openmm->addForce(nonbond_openmm);
 
     if (npairs != num_exceptions)
     {
