@@ -641,7 +641,7 @@ void OpenMMPMEFEP::initialise()
     if (Debug)
     {
        qDebug() << "PME alpha =" << alpha_PME
-		<< " computed from PME error tolerance =" << tolerance_PME;
+		<< "computed from PME error tolerance =" << tolerance_PME;
     }
 
     // CUSTOM NON BONDED FORCE FIELD
@@ -2520,6 +2520,15 @@ void OpenMMPMEFEP::initialise()
 
     this->openmm_system = system_openmm;
     this->isSystemInitialised = true;
+
+    if (Debug)
+    {
+       double alpha;
+       int nx, ny, nz;
+       // this seems always zero if not set explicetly
+       nonbond_openmm->getPMEParameters(alpha, nx, ny, nz);
+       qDebug() << "PME parmaters (alpha, nx, ny, nz):" << alpha_PME << nx << ny << nz);
+    }
 } // OpenMMPMEFEP::initialise END
 
 /**
