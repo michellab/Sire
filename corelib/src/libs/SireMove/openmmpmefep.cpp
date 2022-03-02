@@ -607,6 +607,7 @@ void OpenMMPMEFEP::initialise()
                                                 OpenMM::Vec3(0, 6, 0),
                                                 OpenMM::Vec3(0, 0, 6));
 
+    // HHL
     // Use NonbondedForce to compute Ewald reciprocal and self terms
     // Direct space and LJ need to be implemented via expressions to
     // custom forces, see above
@@ -1087,18 +1088,18 @@ void OpenMMPMEFEP::initialise()
 		double charge_start = start_charges[j].value();
 		double charge_final = final_charges[j].value();
 
-		// FIXME
+		// HHL
 		// Lambda scaling complimentary to scaling in direct space which is deactivated above
 		// need to provide the parameter and the chargeScale for reciprocal PME
-		charge_diff = charge_final – charge_start;
+		charge_diff = charge_final - charge_start;
 
 		// FIXME: do we really need to ensure this?
 		//        probably best to be defensive
 		if (charge_diff < 0.00001)
 		    charge_diff = 0.0;
 
-		nonbond_openmm.addParticleParameterOffset("lambda", nonbond_idx, charge_diff,
-							  0.0, 0.0); // sigma, epsilon not needed
+		nonbond_openmm->addParticleParameterOffset("lambda", nonbond_idx, charge_diff,
+							   0.0, 0.0); // sigma, epsilon not needed
 
 		double sigma_start = start_LJs[j].sigma() * OpenMM::NmPerAngstrom;
 		double sigma_final = final_LJs[j].sigma() * OpenMM::NmPerAngstrom;
@@ -2142,19 +2143,24 @@ void OpenMMPMEFEP::initialise()
 
         double charge_prod, sigma_avg, epsilon_avg;
 
+	nonbond_openmm->getExceptionParameters(i, p1, p2, charge_prod, sigma_avg, epsilon_avg);
+
 	std::vector<double> p1_params(10);
 	std::vector<double> p2_params(10);
-
-	nonbond_openmm->getExceptionParameters(i, p1, p2, charge_prod, sigma_avg, epsilon_avg);
 
 	custom_force_field->getParticleParameters(p1, p1_params);
 	custom_force_field->getParticleParameters(p2, p2_params);
 
-	double qprod_start = p1_params[0] * p2_params[0];
-	double qprod_end = p1_params[1] * p2_params[1];
+	double Qstart_p1 = p1_params[0];
+	double Qend_p1 = p1_params[1];
+	double Qstart_p2 = p2_params[0];
+	double Qend_p2 = p2_params[1];
 
-	// FIXME: is this the right place?
-	nonbond_openmm.addExceptionParameterOffset("lambda", i, (qprod_end – qprod_start), 0.0, 0.0)
+	double qprod_start = Qstart_p1 * Qstart_p2;
+	double qprod_end = Qend_p1 * Qend_p2;
+
+	// HHL
+	nonbond_openmm->addExceptionParameterOffset("lambda", i, (qprod_end - qprod_start), 0.0, 0.0)
 
         if (Debug)
             qDebug() << "Exception = " << i << " p1 = " << p1 << " p2 = "
