@@ -689,18 +689,6 @@ void register_OpenMMPMEFEP_class(){
                 , "Set the cutoff distance in A" );
         
         }
-        { //::SireMove::OpenMMPMEFEP::setCutoffType
-        
-            typedef void ( ::SireMove::OpenMMPMEFEP::*setCutoffType_function_type)( ::QString ) ;
-            setCutoffType_function_type setCutoffType_function_value( &::SireMove::OpenMMPMEFEP::setCutoffType );
-            
-            OpenMMPMEFEP_exposer.def( 
-                "setCutoffType"
-                , setCutoffType_function_value
-                , ( bp::arg("arg0") )
-                , "Set the cutoff type: nocutoff, cutoffnonperiodic, cutoffperiodic" );
-        
-        }
         { //::SireMove::OpenMMPMEFEP::setDebug
         
             typedef void ( ::SireMove::OpenMMPMEFEP::*setDebug_function_type)( bool ) ;
