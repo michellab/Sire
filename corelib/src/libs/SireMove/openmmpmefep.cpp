@@ -1143,6 +1143,9 @@ void OpenMMPMEFEP::initialise()
 		if (charge_diff < 0.00001)
 		    charge_diff = 0.0;
 
+		if (Debug)
+		   qDebug() << "charge_diff =" << charge_diff;
+
 		// FIXME: what about scaled 1-4 interactions
 		nonbond_openmm->addParticleParameterOffset("lambda", nonbond_idx, charge_diff,
 							   0.0, 0.0); // sigma, epsilon not needed
@@ -2322,7 +2325,7 @@ void OpenMMPMEFEP::initialise()
                 qDebug() << "Product Charge start = " << charge_prod_start << "\nProduct Charge end = " << charge_prod_end << "\nProduct Chrage mixed = " << charge_prod_mix
                     << "\nEpsilon average start = " << epsilon_avg_start << "\nEpsilon average end = " << epsilon_avg_end << "\nEpsilon average mixed = " << charge_prod_mix
                     << "\nSigma average start = " << sigma_avg_start << "\nSigma average end = " << sigma_avg_end;
-                qDebug() << "Columbic Scale Factor = " << Coulomb14Scale_tmp << " Lennard-Jones Scale Factor = " << LennardJones14Scale_tmp << "\n";
+                qDebug() << "Coulombic Scale Factor = " << Coulomb14Scale_tmp << " Lennard-Jones Scale Factor = " << LennardJones14Scale_tmp << "\n";
             }
 
             if ((isHard_p1 == 1.0 && isHard_p2 == 1.0))
@@ -2357,21 +2360,33 @@ void OpenMMPMEFEP::initialise()
             }
 
 	    // FIXME: right location?
-	    nonbond_openmm->addExceptionParameterOffset("lambda", i, (qprod_end - qprod_start), 0.0, 0.0);
+	    //        check if Coulomb scale factor is right
+	    nonbond_openmm->addExceptionParameterOffset(
+	       "lambda", i,
+	       Coulomb14Scale_tmp * (qprod_end - qprod_start), 0.0, 0.0);
 
-	    corr_recip_params = {qprod_start, qprod_end};
+	    corr_recip_params = {Coulomb14Scale_tmp * qprod_start, Coulomb14Scale_tmp * qprod_end};
 	    custom_corr_recip->addBond(p1, p2, corr_recip_params);
 
+	    if (Debug)
+	       qDebug() "offset = " << Coulomb14Scale_tmp * (qprod_end - qprod_start)
+				    << "qprod_start ="
+				    << Coulomb14Scale_tmp * qprod_start
+				    << "qprod_end ="
+				    << Coulomb14Scale_tmp * qprod_end;
         } // 1-4 exceptions
 	else			// 1-2 and 1-3 exceptions
 	{
 	    // FIXME: right location?
-	    //        right scaling factor
 	    nonbond_openmm->addExceptionParameterOffset("lambda", i,
-							Coulomb14Scale * (qprod_end - qprod_start), 0.0, 0.0);
+							qprod_end - qprod_start, 0.0, 0.0);
 
-	    corr_recip_params = {Coulomb14Scale * qprod_start, Coulomb14Scale * qprod_end};
+	    corr_recip_params = {qprod_start, qprod_end};
 	    custom_corr_recip->addBond(p1, p2, corr_recip_params);
+
+	    if (Debug)
+	       qDebug() << "qprod_start =" << qprod_start
+			<< "qprod_end =" << qprod_end;
 	} // end if 1-4 exceptions
 
         custom_force_field->addExclusion(p1, p2);
