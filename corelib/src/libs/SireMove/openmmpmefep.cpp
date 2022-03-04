@@ -509,7 +509,8 @@ tmpl_str OpenMMPMEFEP::CORR_RECIP =
     "-U_corr;"
     "U_corr = %1 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;" // erf not erfc!
     "rCoul = lam_diff + r;"
-    "lam_diff = (1.0 - lam_corr) * 0.1;";
+    "lam_diff = (1.0 - lam_corr) * 0.1;"
+    "q_prod = lam_corr*qpend + (1-lam_corr)*qpstart";
 
 
 /**
@@ -678,7 +679,7 @@ void OpenMMPMEFEP::initialise()
     custom_force_field->addGlobalParameter("SPOnOff", 0.0);
     custom_force_field->addGlobalParameter("alpha_pme", alpha_PME);
 
-    // FIXME: do we still need this?
+    // This ensures that also the custom force field is subject to PBC
     custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
 
     // NO REACTION FIELD IS APPLIED TO 1-4 INTERACTIONS. If the scaling factor is one (Glycam ff) then
@@ -760,6 +761,8 @@ void OpenMMPMEFEP::initialise()
 	qDebug() << "corr_recip:" << corr_recip;
 
     // FIXME: do we need a cutoff here as well?
+    //        add bonds to force
+    //        add to system
     custom_corr_recip = new OpenMM::CustomBondForce(corr_recip.toStdString());
     custom_corr_recip->addGlobalParameter("lam_corr", Alchemical_value);
     custom_corr_recip->addGlobalParameter("n_corr", coulomb_power);
@@ -1005,7 +1008,7 @@ void OpenMMPMEFEP::initialise()
 
     int num_atoms_till_i = 0;
 
-    /* NON BONDED PER PARTICLE PARAMETERS */
+    // nonbonded per particle parameters
     custom_force_field->addPerParticleParameter("qstart");
     custom_force_field->addPerParticleParameter("qend");
     custom_force_field->addPerParticleParameter("epstart");
@@ -1026,6 +1029,9 @@ void OpenMMPMEFEP::initialise()
        custom_intra_14_clj->addPerBondParameter(param);
     }
 
+    custom_corr_recip->addPerBondParameter("qstart");
+    custom_corr_recip->addPerBondParameter("qend");
+
     /* BONDED PER PARTICLE PARAMETERS */
     solute_bond_perturbation->addPerBondParameter("bstart");
     solute_bond_perturbation->addPerBondParameter("bend");
@@ -1043,7 +1049,7 @@ void OpenMMPMEFEP::initialise()
 
     int nions = 0;
 
-    QVector<bool> perturbed_energies_tmp(8);
+    QVector<bool> perturbed_energies_tmp(9);
 
     for (int i = 0; i < perturbed_energies_tmp.size(); i++)
         perturbed_energies_tmp[i] = false;
@@ -1133,11 +1139,11 @@ void OpenMMPMEFEP::initialise()
 		// need to provide the parameter and the chargeScale for reciprocal PME
 		charge_diff = charge_final - charge_start;
 
-		// FIXME: do we really need to ensure this?
-		//        probably best to be defensive
+		// probably best to be defensive
 		if (charge_diff < 0.00001)
 		    charge_diff = 0.0;
 
+		// FIXME: what about scaled 1-4 interactions
 		nonbond_openmm->addParticleParameterOffset("lambda", nonbond_idx, charge_diff,
 							   0.0, 0.0); // sigma, epsilon not needed
 
@@ -2177,6 +2183,10 @@ void OpenMMPMEFEP::initialise()
     if (Debug)
         qDebug() << "NUM EXCEPTIONS = " << num_exceptions << "\n";
 
+    std::vector<double> p1_params(10);
+    std::vector<double> p2_params(10);
+    std::vector<double> corr_recip_params(2)
+
     for (int i = 0; i < num_exceptions; i++)
     {
         int p1, p2;
@@ -2184,9 +2194,6 @@ void OpenMMPMEFEP::initialise()
         double charge_prod, sigma_avg, epsilon_avg;
 
 	nonbond_openmm->getExceptionParameters(i, p1, p2, charge_prod, sigma_avg, epsilon_avg);
-
-	std::vector<double> p1_params(10);
-	std::vector<double> p2_params(10);
 
 	custom_force_field->getParticleParameters(p1, p1_params);
 	custom_force_field->getParticleParameters(p2, p2_params);
@@ -2198,9 +2205,6 @@ void OpenMMPMEFEP::initialise()
 
 	double qprod_start = Qstart_p1 * Qstart_p2;
 	double qprod_end = Qend_p1 * Qend_p2;
-
-	// HHL
-	nonbond_openmm->addExceptionParameterOffset("lambda", i, (qprod_end - qprod_start), 0.0, 0.0);
 
         if (Debug)
             qDebug() << "Exception = " << i << " p1 = " << p1 << " p2 = "
@@ -2290,6 +2294,8 @@ void OpenMMPMEFEP::initialise()
             epsilon_avg_end = Epend_p1 * Epend_p2 * LennardJones14Scale_tmp * LennardJones14Scale_tmp;
             epsilon_avg_mix = (Epend_p1 * Epstart_p2 + Epstart_p1 * Epend_p2) * LennardJones14Scale_tmp * LennardJones14Scale_tmp;
 
+	    // ["qpstart", "qpend", "qmix", "eastart", "eaend", "emix", "sastart", "saend", "samix"]
+	    // see setPerParicleParameters and expressions above
             std::vector<double> params(9);
 
             params[0] = charge_prod_start;
@@ -2350,15 +2356,26 @@ void OpenMMPMEFEP::initialise()
                     qDebug() << "Added soft FROM dummy TO dummy 1-4\n";
             }
 
-        } // end if 1-4 exceptions
+	    // FIXME: right location?
+	    nonbond_openmm->addExceptionParameterOffset("lambda", i, (qprod_end - qprod_start), 0.0, 0.0);
+
+	    corr_recip_params = {qprod_start, qprod_end};
+	    nonbond_openmm->addBond(p1, p2, corr_recip_params);
+
+        } // 1-4 exceptions
+	else			// 1-2 and 1-3 exceptions
+	{
+	    // FIXME: right location?
+	    //        right scaling factor
+	    nonbond_openmm->addExceptionParameterOffset("lambda", i,
+							Coulomb14Scale * (qprod_end - qprod_start), 0.0, 0.0);
+
+	    corr_recip_params = {Coulomb14Scale * qprod_start, Coulomb14Scale * qprod_end};
+	    nonbond_openmm->addBond(p1, p2, corr_recip_params);
+	} // end if 1-4 exceptions
 
         custom_force_field->addExclusion(p1, p2);
     } // end of loop over exceptions
-
-    // FIXME: Compute 1-2 and 1-3 electrostatic interactions to be subtracted
-    //        from the total energy. This is necessary because the reciprocal
-    //        space calculations will compute the interactions of _all_ charges
-    //        in the system.
 
     /*************************************NON BONDED INTERACTIONS*********************************************/
 
@@ -2373,12 +2390,12 @@ void OpenMMPMEFEP::initialise()
         qDebug() << "Num bonds 1-4 From Dummy To Dummy = " << custom_intra_14_fromdummy_todummy->getNumBonds();
     }
 
-    system_openmm->addForce(nonbond_openmm);
+    system_openmm->addForce(nonbond_openmm); // reciprocal space only
 
     if (npairs != num_exceptions)
     {
         custom_force_field->setForceGroup(0);
-        system_openmm->addForce(custom_force_field);
+        system_openmm->addForce(custom_force_field); // direct space and LJ
         perturbed_energies_tmp[0] = true; //Custom non bonded 1-5 is added to the system
         if (Debug)
             qDebug() << "Added 1-5";
@@ -2411,6 +2428,7 @@ void OpenMMPMEFEP::initialise()
         if (Debug)
             qDebug() << "Added 1-4 From Dummy";
     }
+
     if (custom_intra_14_fromdummy_todummy->getNumBonds() != 0)
     {
         custom_intra_14_fromdummy_todummy->setForceGroup(0);
@@ -2419,6 +2437,17 @@ void OpenMMPMEFEP::initialise()
         if (Debug)
             qDebug() << "Added 1-4 From Dummy To Dummy";
     }
+
+    if (custom_corr_recip->getNumBonds() != 0)
+    {
+        custom_corr_recip->setForceGroup(0);
+        system_openmm->addForce(custom_corr_recip);
+        perturbed_energies_tmp[8] = true;
+
+	if (Debug)
+            qDebug() << "Added reciprocal correction term";
+    }
+
 
     /*****************************************BONDED INTERACTIONS***********************************************/
 
@@ -2520,15 +2549,6 @@ void OpenMMPMEFEP::initialise()
 
     this->openmm_system = system_openmm;
     this->isSystemInitialised = true;
-
-    if (Debug)
-    {
-       double alpha;
-       int nx, ny, nz;
-       // this seems always zero if not set explicetly
-       nonbond_openmm->getPMEParameters(alpha, nx, ny, nz);
-       qDebug() << "PME parmaters (alpha, nx, ny, nz):" << alpha << nx << ny << nz;
-    }
 } // OpenMMPMEFEP::initialise END
 
 /**
@@ -3334,8 +3354,8 @@ void OpenMMPMEFEP::updateOpenMMContextLambda(double lambda)
         openmm_context->setParameter("lamfd", lambda); //1-4 From Dummy
     if (perturbed_energies[4])
         openmm_context->setParameter("lamftd", lambda); //1-4 From Dummy to Dummy
-
-    // FIXME: also update lam_corr
+    if (perturbed_energies[8])
+        openmm_context->setParameter("lam_corr", lambda); //1-4 From Dummy to Dummy
 
     //BONDED PERTURBED TERMS
     if (perturbed_energies[5])
