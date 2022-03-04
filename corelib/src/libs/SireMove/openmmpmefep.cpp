@@ -2185,7 +2185,7 @@ void OpenMMPMEFEP::initialise()
 
     std::vector<double> p1_params(10);
     std::vector<double> p2_params(10);
-    std::vector<double> corr_recip_params(2)
+    std::vector<double> corr_recip_params(2);
 
     for (int i = 0; i < num_exceptions; i++)
     {
