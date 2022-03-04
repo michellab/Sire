@@ -845,20 +845,19 @@ def setupDistanceRestraints(system, restraints=None):
 
     return system
 
+
 def setupBoreschRestraints(system):
     """Takes initial system and adds information specifying the Boresch
     restraints. The distance, angle, and torsional restraints are stored as
     properties in solute molecule.
 
     Args:
-        system (class 'Sire.System._System.System'): The initial system
+        system (System): The initial system
 
     Returns:
-        class 'Sire.System._System.System': The updated system with
-        Boresch restraint properties stored in mol number 0
+        System: The updated system with
+        Boresch restraint properties stored in the solute.
     """
-    molecules = system[MGName("all")].molecules()
-
     # Get Boresch restraint dict in dict form
     boresch_dict = dict(boresch_restraints_dict.val)
     print(f"Boresch restraints dictionary = {boresch_dict}")
@@ -869,14 +868,17 @@ def setupBoreschRestraints(system):
 
     # Get anchor points dicts
     anchors_dict = boresch_dict["anchor_points"]
-
+    
+    molecules = system[MGName("all")].molecules()
+    moleculeNumbers = molecules.molNums()
+    
     # Cycle through anchor points and print restrained atoms. Exit and notify
     # the user if any anchor points specified are not present in the system.
     anchors_not_present = list(anchors_dict.keys())
     print("Boresch anchor points:")
     for anchor in anchors_dict:
-        for i in range(0, molecules.nMolecules()):
-            mol = molecules.molecule(MolNum(i + 1))[0].molecule()
+        for moleculeNumber in moleculeNumbers:
+            mol = molecules.molecule(moleculeNumber)[0].molecule()
             atoms_mol = mol.atoms()
             natoms_mol = mol.nAtoms()
             for j in range(0, natoms_mol):
@@ -892,7 +894,7 @@ def setupBoreschRestraints(system):
             print(f"{anchor}: index {anchors_dict[anchor]-1}")
         sys.exit(-1)
     
-    #Mol number 0 will store all the information related to the Boresch restraints in the system
+    # The solute will store all the information related to the Boresch restraints in the system
     solute = getSolute(system)
     solute = solute.edit().setProperty("boresch_dist_restraint", boreschDistRestraintToProperty(boresch_dict)).commit()
     solute = solute.edit().setProperty("boresch_angle_restraints", boreschAngleRestraintsToProperty(boresch_dict)).commit()
