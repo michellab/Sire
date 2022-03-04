@@ -2193,8 +2193,7 @@ void OpenMMPMEFEP::initialise()
     std::vector<double> p1_params(10);
     std::vector<double> p2_params(10);
     std::vector<double> corr_recip_params(3);
-    double Coulomb14Scale_squared = 0.0;
-    double qprod_start, qprod_end, qprod_mix;
+    double qprod_diff, qprod_start, qprod_end, qprod_mix;
     double Qstart_p1, Qend_p1, Qstart_p2, Qend_p2;
 
     for (int i = 0; i < num_exceptions; i++)
@@ -2329,7 +2328,7 @@ void OpenMMPMEFEP::initialise()
                     << "\nSgstart = " << Sigstart_p2 << "\nSgend = " << Sigend_p2
                     << "\nisHard = " << isHard_p2 << "\nisTodummy = " << isTodummy_p2 << "\nisFromdummy = " << isFromdummy_p2 << "\n";
 
-                qDebug() << "Product Charge start = " << qprod_start << "\nProduct Charge end = " << qprod_end << "\nProduct Chrage mixed = " << qprod_mix
+                qDebug() << "Product Charge start = " << qprod_start << "\nProduct Charge end = " << qprod_end << "\nProduct Charge mixed = " << qprod_mix
                     << "\nEpsilon average start = " << epsilon_avg_start << "\nEpsilon average end = " << epsilon_avg_end << "\nEpsilon average mixed = " << qprod_mix
                     << "\nSigma average start = " << sigma_avg_start << "\nSigma average end = " << sigma_avg_end;
                 qDebug() << "Coulombic Scale Factor = " << Coulomb14Scale_tmp << " Lennard-Jones Scale Factor = " << LennardJones14Scale_tmp << "\n";
@@ -2365,43 +2364,23 @@ void OpenMMPMEFEP::initialise()
                 if (Debug)
                     qDebug() << "Added soft FROM dummy TO dummy 1-4\n";
             }
-
-	    // FIXME: right location?
-	    //        check if Coulomb scale factor is right
-	    Coulomb14Scale_squared = Coulomb14Scale_tmp * Coulomb14Scale_tmp;
-
-	    nonbond_openmm->addExceptionParameterOffset(
-	       "lambda", i,
-	        Coulomb14Scale_squared * (qprod_end - qprod_start), 0.0, 0.0);
-
-	    corr_recip_params = {Coulomb14Scale_squared * qprod_start,
-	       Coulomb14Scale_squared * qprod_end, Coulomb14Scale_squared * qprod_mix};
-	    custom_corr_recip->addBond(p1, p2, corr_recip_params);
-
-	    if (Debug)
-	       qDebug() << "offset = "
-			<< Coulomb14Scale_tmp * (qprod_end - qprod_start)
-			<< "qprod_start ="
-			<< Coulomb14Scale_tmp * qprod_start
-			<< "qprod_end ="
-			<< Coulomb14Scale_tmp * qprod_end
-			<< "qprod_mix ="
-			<< Coulomb14Scale_tmp * qprod_mix;
         } // 1-4 exceptions
-	else			// 1-2 and 1-3 exceptions
+
+	// FIXME: right location?
+	qprod_diff = qprod_end - qprod_start;
+
+	if (qprod_diff != 0.0)
 	{
-	    // FIXME: right location?
-	    nonbond_openmm->addExceptionParameterOffset("lambda", i,
-							qprod_end - qprod_start, 0.0, 0.0);
+	   nonbond_openmm->addExceptionParameterOffset("lambda", i, qprod_diff,
+						       0.0, 0.0);
 
-	    corr_recip_params = {qprod_start, qprod_end, qprod_mix};
-	    custom_corr_recip->addBond(p1, p2, corr_recip_params);
+	   	if (Debug)
+	   qDebug() << "offset (" << i << ") ="<< qprod_end - qprod_start;
 
-	    if (Debug)
-	       qDebug() << "qprod_start =" << qprod_start
-			<< "qprod_end =" << qprod_end
-			<< "qprod_mix =" << qprod_end;
-	} // end if 1-4 exceptions
+	}
+
+	corr_recip_params = {qprod_start, qprod_end, qprod_mix};
+	custom_corr_recip->addBond(p1, p2, corr_recip_params);
 
         custom_force_field->addExclusion(p1, p2);
     } // end of loop over exceptions
