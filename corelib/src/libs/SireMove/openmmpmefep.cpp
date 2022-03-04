@@ -504,13 +504,15 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
     "sqrt(lamhd*lamhd*saend + (1-lamhd)*(1-lamhd)*sastart + lamhd*(1-lamhd)*samix);"
 };
 
+// FIXME: do we need the cutoff here?
 // subtract 1-2 and 1-3 interactions that have been calculated in reciprocal space
 tmpl_str OpenMMPMEFEP::CORR_RECIP =
-    "-U_corr;"
-    "U_corr = %1 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;" // erf not erfc!
+    "-U_corr * withinCutoff;"
+    "withinCutoff = step(cutoff - r);"
+    "U_corr = %1 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;" // not erfc!
     "rCoul = lam_diff + r;"
     "lam_diff = (1.0 - lam_corr) * 0.1;"
-    "q_prod = lam_corr*qpend + (1-lam_corr)*qpstart";
+    "q_prod = lam_corr*lam_corr*qcend + (1-lam_corr)*(1-lam_corr)*qcstart + lam_corr*(1-lam_corr)*qcmix";
 
 
 /**
@@ -623,19 +625,13 @@ void OpenMMPMEFEP::initialise()
 
     nonbond_openmm->setUseDispersionCorrection(false);
 
-    // scale the charge for the reciprocal space charges linearly
+    // scale the charges in the reciprocal space
     nonbond_openmm->addGlobalParameter("lambda", 0.0);
-
-    // double alpha_PME;
-    // int nx, ny, nz;
-    // this seems always zero if not set explicetly
-    // nonbond_openmm->getPMEParameters(alpha_PME, nx, ny, nz);
 
     // use default for the moment
     double tolerance_PME = nonbond_openmm->getEwaldErrorTolerance();
 
     // from NonbondedForceImpl.cpp
-    // (1.0/force.getCutoffDistance())*std::sqrt(-log(2.0*tol));
     // FIXME: check if this is also the value for reciprocal space
     double alpha_PME = (1.0 / converted_cutoff_distance) * std::sqrt(-log(2.0 * tolerance_PME));
 
@@ -767,6 +763,7 @@ void OpenMMPMEFEP::initialise()
     custom_corr_recip->addGlobalParameter("lam_corr", Alchemical_value);
     custom_corr_recip->addGlobalParameter("n_corr", coulomb_power);
     custom_corr_recip->addGlobalParameter("alpha_pme", alpha_PME);
+    custom_corr_recip->addGlobalParameter("cutoff", converted_cutoff_distance);
 
     if (Debug)
     {
@@ -1029,8 +1026,10 @@ void OpenMMPMEFEP::initialise()
        custom_intra_14_clj->addPerBondParameter(param);
     }
 
-    custom_corr_recip->addPerBondParameter("qpstart");
-    custom_corr_recip->addPerBondParameter("qpend");
+    for (auto const &param : {"qcstart", "qcend", "qcmix"})
+    {
+       custom_corr_recip->addPerBondParameter(param);
+    }
 
     /* BONDED PER PARTICLE PARAMETERS */
     solute_bond_perturbation->addPerBondParameter("bstart");
@@ -1110,6 +1109,7 @@ void OpenMMPMEFEP::initialise()
         }
 
 	int nonbond_idx = 0;
+	double charge_start = 0.0, charge_final = 0.0;
 
         for (int j = 0; j < ljparameters.size(); j++)
         {
@@ -1131,24 +1131,28 @@ void OpenMMPMEFEP::initialise()
                 bool istodummy = false;
                 bool isfromdummy = false;
 
-		double charge_start = start_charges[j].value();
-		double charge_final = final_charges[j].value();
+		charge_start = start_charges[j].value();
+		charge_final = final_charges[j].value();
 
 		// HHL
-		// Lambda scaling complimentary to scaling in direct space which is deactivated above
+		// Lambda scaling in reciprocal space complimentary to scaling in direct space
 		// need to provide the parameter and the chargeScale for reciprocal PME
 		charge_diff = charge_final - charge_start;
 
-		// probably best to be defensive
+		// FIXME: best to be defensive?
 		if (charge_diff < 0.00001)
 		    charge_diff = 0.0;
 
-		if (Debug)
-		   qDebug() << "charge_diff =" << charge_diff;
+		if (charge_diff != 0.0)
+		{
+		    nonbond_openmm->addParticleParameterOffset("lambda", nonbond_idx, charge_diff,
+							       0.0, 0.0); // sigma, epsilon not needed
 
-		// FIXME: what about scaled 1-4 interactions
-		nonbond_openmm->addParticleParameterOffset("lambda", nonbond_idx, charge_diff,
-							   0.0, 0.0); // sigma, epsilon not needed
+		    if (Debug)
+		       qDebug() << "charge_diff =" << charge_diff
+				<< "charge_start =" << charge_start
+				<< "charge_final =" << charge_final;
+		}
 
 		double sigma_start = start_LJs[j].sigma() * OpenMM::NmPerAngstrom;
 		double sigma_final = final_LJs[j].sigma() * OpenMM::NmPerAngstrom;
@@ -2188,7 +2192,10 @@ void OpenMMPMEFEP::initialise()
 
     std::vector<double> p1_params(10);
     std::vector<double> p2_params(10);
-    std::vector<double> corr_recip_params(2);
+    std::vector<double> corr_recip_params(3);
+    double Coulomb14Scale_squared = 0.0;
+    double qprod_start, qprod_end, qprod_mix;
+    double Qstart_p1, Qend_p1, Qstart_p2, Qend_p2;
 
     for (int i = 0; i < num_exceptions; i++)
     {
@@ -2201,13 +2208,14 @@ void OpenMMPMEFEP::initialise()
 	custom_force_field->getParticleParameters(p1, p1_params);
 	custom_force_field->getParticleParameters(p2, p2_params);
 
-	double Qstart_p1 = p1_params[0];
-	double Qend_p1 = p1_params[1];
-	double Qstart_p2 = p2_params[0];
-	double Qend_p2 = p2_params[1];
+	Qstart_p1 = p1_params[0];
+	Qend_p1 = p1_params[1];
+	Qstart_p2 = p2_params[0];
+	Qend_p2 = p2_params[1];
 
-	double qprod_start = Qstart_p1 * Qstart_p2;
-	double qprod_end = Qend_p1 * Qend_p2;
+	qprod_start = Qstart_p1 * Qstart_p2;
+	qprod_end = Qend_p1 * Qend_p2;
+	qprod_mix = Qend_p1 * Qstart_p2 + Qstart_p1 * Qend_p2;
 
         if (Debug)
             qDebug() << "Exception = " << i << " p1 = " << p1 << " p2 = "
@@ -2236,7 +2244,6 @@ void OpenMMPMEFEP::initialise()
             double isTodummy_p2 = p2_params[7];
             double isFromdummy_p2 = p2_params[8];
 
-            double charge_prod_start, charge_prod_end, charge_prod_mix;
             double sigma_avg_start, sigma_avg_end, sigma_avg_mix;
             double epsilon_avg_start, epsilon_avg_end, epsilon_avg_mix;
 
@@ -2276,9 +2283,9 @@ void OpenMMPMEFEP::initialise()
                 }
             }
 
-            charge_prod_start = Qstart_p1 * Qstart_p2 * Coulomb14Scale_tmp;
-            charge_prod_end = Qend_p1 * Qend_p2 * Coulomb14Scale_tmp;
-            charge_prod_mix = (Qend_p1 * Qstart_p2 + Qstart_p1 * Qend_p2) * Coulomb14Scale_tmp;
+            qprod_start *= Coulomb14Scale_tmp;
+            qprod_end *= Coulomb14Scale_tmp;
+            qprod_mix *= Coulomb14Scale_tmp;
 
             if (flag_combRules == ARITHMETIC)
             {
@@ -2301,9 +2308,9 @@ void OpenMMPMEFEP::initialise()
 	    // see setPerParicleParameters and expressions above
             std::vector<double> params(9);
 
-            params[0] = charge_prod_start;
-            params[1] = charge_prod_end;
-            params[2] = charge_prod_mix;
+            params[0] = qprod_start;
+            params[1] = qprod_end;
+            params[2] = qprod_mix;
             params[3] = epsilon_avg_start;
             params[4] = epsilon_avg_end;
             params[5] = epsilon_avg_mix;
@@ -2322,8 +2329,8 @@ void OpenMMPMEFEP::initialise()
                     << "\nSgstart = " << Sigstart_p2 << "\nSgend = " << Sigend_p2
                     << "\nisHard = " << isHard_p2 << "\nisTodummy = " << isTodummy_p2 << "\nisFromdummy = " << isFromdummy_p2 << "\n";
 
-                qDebug() << "Product Charge start = " << charge_prod_start << "\nProduct Charge end = " << charge_prod_end << "\nProduct Chrage mixed = " << charge_prod_mix
-                    << "\nEpsilon average start = " << epsilon_avg_start << "\nEpsilon average end = " << epsilon_avg_end << "\nEpsilon average mixed = " << charge_prod_mix
+                qDebug() << "Product Charge start = " << qprod_start << "\nProduct Charge end = " << qprod_end << "\nProduct Chrage mixed = " << qprod_mix
+                    << "\nEpsilon average start = " << epsilon_avg_start << "\nEpsilon average end = " << epsilon_avg_end << "\nEpsilon average mixed = " << qprod_mix
                     << "\nSigma average start = " << sigma_avg_start << "\nSigma average end = " << sigma_avg_end;
                 qDebug() << "Coulombic Scale Factor = " << Coulomb14Scale_tmp << " Lennard-Jones Scale Factor = " << LennardJones14Scale_tmp << "\n";
             }
@@ -2361,11 +2368,14 @@ void OpenMMPMEFEP::initialise()
 
 	    // FIXME: right location?
 	    //        check if Coulomb scale factor is right
+	    Coulomb14Scale_squared = Coulomb14Scale_tmp * Coulomb14Scale_tmp;
+
 	    nonbond_openmm->addExceptionParameterOffset(
 	       "lambda", i,
-	       Coulomb14Scale_tmp * (qprod_end - qprod_start), 0.0, 0.0);
+	        Coulomb14Scale_squared * (qprod_end - qprod_start), 0.0, 0.0);
 
-	    corr_recip_params = {Coulomb14Scale_tmp * qprod_start, Coulomb14Scale_tmp * qprod_end};
+	    corr_recip_params = {Coulomb14Scale_squared * qprod_start,
+	       Coulomb14Scale_squared * qprod_end, Coulomb14Scale_squared * qprod_mix};
 	    custom_corr_recip->addBond(p1, p2, corr_recip_params);
 
 	    if (Debug)
@@ -2374,7 +2384,9 @@ void OpenMMPMEFEP::initialise()
 			<< "qprod_start ="
 			<< Coulomb14Scale_tmp * qprod_start
 			<< "qprod_end ="
-			<< Coulomb14Scale_tmp * qprod_end;
+			<< Coulomb14Scale_tmp * qprod_end
+			<< "qprod_mix ="
+			<< Coulomb14Scale_tmp * qprod_mix;
         } // 1-4 exceptions
 	else			// 1-2 and 1-3 exceptions
 	{
@@ -2382,12 +2394,13 @@ void OpenMMPMEFEP::initialise()
 	    nonbond_openmm->addExceptionParameterOffset("lambda", i,
 							qprod_end - qprod_start, 0.0, 0.0);
 
-	    corr_recip_params = {qprod_start, qprod_end};
+	    corr_recip_params = {qprod_start, qprod_end, qprod_mix};
 	    custom_corr_recip->addBond(p1, p2, corr_recip_params);
 
 	    if (Debug)
 	       qDebug() << "qprod_start =" << qprod_start
-			<< "qprod_end =" << qprod_end;
+			<< "qprod_end =" << qprod_end
+			<< "qprod_mix =" << qprod_end;
 	} // end if 1-4 exceptions
 
         custom_force_field->addExclusion(p1, p2);
@@ -3358,28 +3371,31 @@ double OpenMMPMEFEP::getPotentialEnergyAtLambda(double lambda)
 
 void OpenMMPMEFEP::updateOpenMMContextLambda(double lambda)
 {
-    //NON BONDED TERMS
+    // nonbonded terms
     if (perturbed_energies[0])
-        openmm_context->setParameter("lam", lambda); //1-5 HD
-    //1-4 Interactions
-    if (perturbed_energies[1])
-        openmm_context->setParameter("lamhd", lambda); //1-4 HD
-    if (perturbed_energies[2])
-        openmm_context->setParameter("lamtd", 1.0 - lambda); //1-4 To Dummy
-    if (perturbed_energies[3])
-        openmm_context->setParameter("lamfd", lambda); //1-4 From Dummy
-    if (perturbed_energies[4])
-        openmm_context->setParameter("lamftd", lambda); //1-4 From Dummy to Dummy
-    if (perturbed_energies[8])
-        openmm_context->setParameter("lam_corr", lambda); //1-4 From Dummy to Dummy
+        openmm_context->setParameter("lam", lambda); // 1-5 HD
 
-    //BONDED PERTURBED TERMS
+    // 1-4 Interactions
+    if (perturbed_energies[1])
+        openmm_context->setParameter("lamhd", lambda); // 1-4 HD
+    if (perturbed_energies[2])
+        openmm_context->setParameter("lamtd", 1.0 - lambda); // 1-4 To Dummy
+    if (perturbed_energies[3])
+        openmm_context->setParameter("lamfd", lambda); // 1-4 From Dummy
+    if (perturbed_energies[4])
+        openmm_context->setParameter("lamftd", lambda); // 1-4 From Dummy to Dummy
+
+    // reciprocal space corrections for 1-2, 1-3 and scaled 1-4
+    if (perturbed_energies[8])
+        openmm_context->setParameter("lam_corr", lambda);
+
+    // bonded perturbed terms
     if (perturbed_energies[5])
-        openmm_context->setParameter("lambond", lambda); //Bonds
+        openmm_context->setParameter("lambond", lambda); // Bonds
     if (perturbed_energies[6])
-        openmm_context->setParameter("lamangle", lambda); //Angles
+        openmm_context->setParameter("lamangle", lambda); // Angles
     if (perturbed_energies[7])
-        openmm_context->setParameter("lamdih", lambda); //Torsions
+        openmm_context->setParameter("lamdih", lambda); // Torsions
 }
 
 boost::tuples::tuple<double, double, double> OpenMMPMEFEP::calculateGradient(
