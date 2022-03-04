@@ -2360,7 +2360,7 @@ void OpenMMPMEFEP::initialise()
 	    nonbond_openmm->addExceptionParameterOffset("lambda", i, (qprod_end - qprod_start), 0.0, 0.0);
 
 	    corr_recip_params = {qprod_start, qprod_end};
-	    nonbond_openmm->addBond(p1, p2, corr_recip_params);
+	    custom_corr_recip->addBond(p1, p2, corr_recip_params);
 
         } // 1-4 exceptions
 	else			// 1-2 and 1-3 exceptions
@@ -2371,7 +2371,7 @@ void OpenMMPMEFEP::initialise()
 							Coulomb14Scale * (qprod_end - qprod_start), 0.0, 0.0);
 
 	    corr_recip_params = {Coulomb14Scale * qprod_start, Coulomb14Scale * qprod_end};
-	    nonbond_openmm->addBond(p1, p2, corr_recip_params);
+	    custom_corr_recip->addBond(p1, p2, corr_recip_params);
 	} // end if 1-4 exceptions
 
         custom_force_field->addExclusion(p1, p2);
