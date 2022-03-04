@@ -2369,11 +2369,12 @@ void OpenMMPMEFEP::initialise()
 	    custom_corr_recip->addBond(p1, p2, corr_recip_params);
 
 	    if (Debug)
-	       qDebug() "offset = " << Coulomb14Scale_tmp * (qprod_end - qprod_start)
-				    << "qprod_start ="
-				    << Coulomb14Scale_tmp * qprod_start
-				    << "qprod_end ="
-				    << Coulomb14Scale_tmp * qprod_end;
+	       qDebug() << "offset = "
+			<< Coulomb14Scale_tmp * (qprod_end - qprod_start)
+			<< "qprod_start ="
+			<< Coulomb14Scale_tmp * qprod_start
+			<< "qprod_end ="
+			<< Coulomb14Scale_tmp * qprod_end;
         } // 1-4 exceptions
 	else			// 1-2 and 1-3 exceptions
 	{
