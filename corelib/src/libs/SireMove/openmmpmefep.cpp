@@ -1029,8 +1029,8 @@ void OpenMMPMEFEP::initialise()
        custom_intra_14_clj->addPerBondParameter(param);
     }
 
-    custom_corr_recip->addPerBondParameter("qstart");
-    custom_corr_recip->addPerBondParameter("qend");
+    custom_corr_recip->addPerBondParameter("qpstart");
+    custom_corr_recip->addPerBondParameter("qpend");
 
     /* BONDED PER PARTICLE PARAMETERS */
     solute_bond_perturbation->addPerBondParameter("bstart");
