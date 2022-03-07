@@ -386,13 +386,16 @@ QString OpenMMPMEFEP::toString() const
 //
 // JM 9/10/20 multiply Logix_mix_lam * 0 instead of max(lam,1.0-lam)
 // JM 9/10/10 setting Logix_mix_lam output to 0 for lambda
+
+#define COULOMB_SHIFT "rCoul = lam_diff + r;" // can we shift?
+
 tmpl_str OpenMMPMEFEP::GENERAL =
     "(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (U_direct + U_LJ);"
 
     // need to subtract scaled 1-4 interactions with erf() because computed in reciprocal space
     // also subtract 1-2 and 1-3 interactions as also computed in reciprocal space
     "U_direct = %1 138.935456 * q_prod * erfc(alpha_pme*rCoul) / rCoul;"
-    "rCoul = lam_diff + r;"	// do we need to shift?
+    COULOMB_SHIFT
 
     "U_LJ = 4.0 * eps_avg * (TWSIX3*TWSIX3 - TWSIX3);"
     "TWSIX3 = ((sigma_avg * sigma_avg) / rLJ)^3;"
@@ -431,7 +434,7 @@ tmpl_str OpenMMPMEFEP::TODUMMY =
     "withinCutoff = step(cutofftd - r);"
 
     "U_direct = %1 138.935456 * q_prod * erfc(alpha_pme*rCoul) / rCoul;"
-    "rCoul = lam_diff + r;"
+    COULOMB_SHIFT
 
     "U_LJ = 4.0 * eps_avg * (TWSIX3*TWSIX3 - TWSIX3);"
     "TWSIX3 = ((sigma_avg * sigma_avg) / rLJ)^3;"
@@ -451,7 +454,7 @@ tmpl_str OpenMMPMEFEP::FROMDUMMY =
     "withinCutoff=step(cutofffd - r);"
 
     "U_direct = %1 138.935456 * q_prod * erfc(alpha_pme*rCoul) / rCoul;"
-    "rCoul = lam_diff + r;"
+    COULOMB_SHIFT
 
     "U_LJ = 4.0 * eps_avg * (TWSIX3*TWSIX3 - TWSIX3);"
     "TWSIX3 = ((sigma_avg * sigma_avg) / rLJ)^3;"
@@ -471,7 +474,7 @@ tmpl_str OpenMMPMEFEP::FROMTODUMMY =
     "withinCutoff = step(cutoffftd - r);"
 
     "U_direct = %1 138.935456 * q_prod * erfc(alpha_pme*rCoul) / rCoul;"
-    "rCoul = lam_diff + r;"
+    COULOMB_SHIFT
 
     "U_LJ = 4.0 * eps_avg * (TWSIX3*TWSIX3 - TWSIX3);"
     "TWSIX3 = ((sigma_avg * sigma_avg) / rLJ)^3;"
@@ -509,8 +512,11 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
 tmpl_str OpenMMPMEFEP::CORR_RECIP =
     "-U_corr * withinCutoff;"
     "withinCutoff = step(cutoff - r);"
-    "U_corr = %1 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;" // not erfc!
-    "rCoul = lam_diff + r;"
+
+    // erf() instead of erfc()!
+    // no distance shift as not done in reciprocal space either
+    "U_corr = %1 138.935456 * q_prod * erf(alpha_pme*r) / r;"
+
     "lam_diff = (1.0 - lam_corr) * 0.1;"
     "q_prod = lam_corr*lam_corr*qcend + (1-lam_corr)*(1-lam_corr)*qcstart + lam_corr*(1-lam_corr)*qcmix";
 
@@ -675,7 +681,7 @@ void OpenMMPMEFEP::initialise()
     custom_force_field->addGlobalParameter("SPOnOff", 0.0);
     custom_force_field->addGlobalParameter("alpha_pme", alpha_PME);
 
-    // This ensures that also the custom force field is subject to PBC
+    // FIXME: this ensures that also the custom force field is subject to PBC
     custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
 
     // NO REACTION FIELD IS APPLIED TO 1-4 INTERACTIONS. If the scaling factor is one (Glycam ff) then
@@ -2204,6 +2210,7 @@ void OpenMMPMEFEP::initialise()
 
 	nonbond_openmm->getExceptionParameters(i, p1, p2, charge_prod, sigma_avg, epsilon_avg);
 
+	// FIXME: check this
 	custom_force_field->getParticleParameters(p1, p1_params);
 	custom_force_field->getParticleParameters(p2, p2_params);
 
@@ -2282,6 +2289,7 @@ void OpenMMPMEFEP::initialise()
                 }
             }
 
+	    // HHL
             qprod_start *= Coulomb14Scale_tmp;
             qprod_end *= Coulomb14Scale_tmp;
             qprod_mix *= Coulomb14Scale_tmp;
