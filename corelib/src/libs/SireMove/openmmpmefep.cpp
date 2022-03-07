@@ -376,6 +376,7 @@ QString OpenMMPMEFEP::toString() const
 }
 
 // General force field
+// HHL
 // FIXME: disable SPOnOff and see if it works with PME
 //
 // NOTE: There is one single namespace for global parameters but each parameter
@@ -763,9 +764,8 @@ void OpenMMPMEFEP::initialise()
     if (Debug)
 	qDebug() << "corr_recip:" << corr_recip;
 
+    // HHL
     // FIXME: do we need a cutoff here as well?
-    //        add bonds to force
-    //        add to system
     custom_corr_recip = new OpenMM::CustomBondForce(corr_recip.toStdString());
     custom_corr_recip->addGlobalParameter("lam_corr", Alchemical_value);
     custom_corr_recip->addGlobalParameter("n_corr", coulomb_power);
@@ -2213,6 +2213,7 @@ void OpenMMPMEFEP::initialise()
 
 	nonbond_openmm->getExceptionParameters(i, p1, p2, charge_prod, sigma_avg, epsilon_avg);
 
+	// HHL
 	// FIXME: check this
 	custom_force_field->getParticleParameters(p1, p1_params);
 	custom_force_field->getParticleParameters(p2, p2_params);
@@ -2377,6 +2378,7 @@ void OpenMMPMEFEP::initialise()
             }
         } // 1-4 exceptions
 
+	// HHL
 	// FIXME: right location?
 	qprod_diff = qprod_end - qprod_start;
 
@@ -2390,6 +2392,7 @@ void OpenMMPMEFEP::initialise()
 
 	}
 
+	// FIXME: add only affected bonds?
 	corr_recip_params = {qprod_start, qprod_end, qprod_mix};
 	custom_corr_recip->addBond(p1, p2, corr_recip_params);
 
@@ -2930,7 +2933,6 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10, 
     // contents of *sire_coords. Note that velocities aren't touched.
     ws.commitCoordinates();
 
-    // FIXME: looks like OpenMM is not updating the energy
     if (Debug)
     {
        MolarEnergy Epot = state_openmm.getPotentialEnergy() * kJ_per_mol;
