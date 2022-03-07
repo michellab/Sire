@@ -389,6 +389,7 @@ QString OpenMMPMEFEP::toString() const
 
 #define COULOMB_SHIFT "rCoul = lam_diff + r;" // can we shift?
 
+// FIXME: cutoff?
 tmpl_str OpenMMPMEFEP::GENERAL =
     "(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (U_direct + U_LJ);"
 
@@ -507,17 +508,16 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
     "sqrt(lamhd*lamhd*saend + (1-lamhd)*(1-lamhd)*sastart + lamhd*(1-lamhd)*samix);"
 };
 
-// FIXME: do we need the cutoff here?
-// subtract 1-2 and 1-3 interactions that have been calculated in reciprocal space
+// subtract 1-2, 1-3 and 1-4 interactions that have been calculated in reciprocal space
 tmpl_str OpenMMPMEFEP::CORR_RECIP =
     "-U_corr * withinCutoff;"
-    "withinCutoff = step(cutoff - r);"
+    "withinCutoff = step(cutoff - r);" // FIXME: do we need the cutoff here?
 
     // erf() instead of erfc()!
-    // no distance shift as not done in reciprocal space either
+    // FIXME: no distance shift as not done in reciprocal space either
     "U_corr = %1 138.935456 * q_prod * erf(alpha_pme*r) / r;"
 
-    "lam_diff = (1.0 - lam_corr) * 0.1;"
+    //"lam_diff = (1.0 - lam_corr) * 0.1;"
     "q_prod = lam_corr*lam_corr*qcend + (1-lam_corr)*(1-lam_corr)*qcstart + lam_corr*(1-lam_corr)*qcmix";
 
 
@@ -1141,8 +1141,10 @@ void OpenMMPMEFEP::initialise()
 		charge_final = final_charges[j].value();
 
 		// HHL
-		// Lambda scaling in reciprocal space complimentary to scaling in direct space
-		// need to provide the parameter and the chargeScale for reciprocal PME
+		// Lambda scaling for 1-5+ (see exceptions below) in reciprocal
+		// space complimentary to scaling in direct space
+		// need to provide the parameter (lambda) and the chargeScale for
+		// reciprocal PME
 		charge_diff = charge_final - charge_start;
 
 		// FIXME: best to be defensive?
