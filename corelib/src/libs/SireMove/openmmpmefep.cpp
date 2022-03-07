@@ -391,7 +391,8 @@ QString OpenMMPMEFEP::toString() const
 
 // FIXME: cutoff?
 tmpl_str OpenMMPMEFEP::GENERAL =
-    "(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (U_direct + U_LJ);"
+    "withinCutoff * (1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (U_direct + U_LJ);"
+    "withinCutoff = step(cutoff - r);"
 
     // need to subtract scaled 1-4 interactions with erf() because computed in reciprocal space
     // also subtract 1-2 and 1-3 interactions as also computed in reciprocal space
