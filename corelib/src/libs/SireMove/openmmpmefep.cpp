@@ -431,7 +431,7 @@ tmpl_str OpenMMPMEFEP::GENERAL_SIGMA[2] = {
     "sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));"
 };
 
-// 1-4 terms for to/from/fromto dummies
+// 1-4 term for shrinking atoms
 tmpl_str OpenMMPMEFEP::TODUMMY =
     "withinCutoff*(U_direct + U_LJ);"
     "withinCutoff = step(cutofftd - r);"
@@ -452,6 +452,7 @@ tmpl_str OpenMMPMEFEP::TODUMMY_SIGMA[2] = {
     "sqrt((1-lamtd)*(1-lamtd)*saend + lamtd*lamtd*sastart + lamtd*(1-lamtd)*samix);"
 };
 
+// 1-4 term for growing atoms
 tmpl_str OpenMMPMEFEP::FROMDUMMY =
     "withinCutoff*(U_direct + U_LJ);"
     "withinCutoff=step(cutofffd - r);"
@@ -472,6 +473,7 @@ tmpl_str OpenMMPMEFEP::FROMDUMMY_SIGMA[2] = {
     "sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);"
 };
 
+// 1-4 term between shrinking and growing atoms
 tmpl_str OpenMMPMEFEP::FROMTODUMMY =
     "withinCutoff*(U_direct + U_LJ);"
     "withinCutoff = step(cutoffftd - r);"
@@ -517,10 +519,11 @@ tmpl_str OpenMMPMEFEP::CORR_RECIP =
 
     // erf() instead of erfc()!
     // FIXME: no distance shift as not done in reciprocal space either
+    //        is lambda^n needed here?
     "U_corr = %1 138.935456 * q_prod * erf(alpha_pme*r) / r;"
 
     //"lam_diff = (1.0 - lam_corr) * 0.1;"
-    "q_prod = lam_corr*lam_corr*qcend + (1-lam_corr)*(1-lam_corr)*qcstart + lam_corr*(1-lam_corr)*qcmix";
+    "q_prod = lam_corr*lam_corr*qcend + (1-lam_corr)*(1-lam_cor)*qcstart + lam_corr*(1-lam_corr)*qcmix;";
 
 
 /**
