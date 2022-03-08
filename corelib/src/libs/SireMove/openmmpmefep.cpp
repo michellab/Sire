@@ -523,7 +523,7 @@ tmpl_str OpenMMPMEFEP::CORR_RECIP =
     "U_corr = %1 138.935456 * q_prod * erf(alpha_pme*r) / r;"
 
     //"lam_diff = (1.0 - lam_corr) * 0.1;"
-    "q_prod = lam_corr*lam_corr*qcend + (1-lam_corr)*(1-lam_cor)*qcstart + lam_corr*(1-lam_corr)*qcmix;";
+    "q_prod = lam_corr*lam_corr*qcend + (1-lam_corr)*(1-lam_corr)*qcstart + lam_corr*(1-lam_corr)*qcmix;";
 
 
 /**
