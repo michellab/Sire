@@ -2945,6 +2945,9 @@ void OpenMMFrEnergyST::initialise()
 
             if (has_boresch_dist)
             {
+                found_solute = true; // We have found the solute, but before breaking we must also check
+                                    // if there are Boresch angle and torsion restraints.
+
                 std::vector<double> custom_boresch_dist_par(2);
 
                 const auto boresch_dist_prop = molecule.property("boresch_dist_restraint").asA<Properties>();
