@@ -388,15 +388,16 @@ QString OpenMMPMEFEP::toString() const
 // JM 9/10/20 multiply Logix_mix_lam * 0 instead of max(lam,1.0-lam)
 // JM 9/10/10 setting Logix_mix_lam output to 0 for lambda
 
-#define COULOMB_SHIFT "rCoul = lam_diff + r;" // can we shift?
+//#define COULOMB_SHIFT "rCoul = lam_diff + r;" // can we shift?
+#define COULOMB_SHIFT "rCoul = r;"
 
 // FIXME: cutoff?
 tmpl_str OpenMMPMEFEP::GENERAL =
     "withinCutoff * (1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (U_direct + U_LJ);"
     "withinCutoff = step(cutoff - r);"
 
-    // need to subtract scaled 1-4 interactions with erf() because computed in reciprocal space
-    // also subtract 1-2 and 1-3 interactions as also computed in reciprocal space
+    // need to subtract scaled 1-4 interactions with erf() because those are
+    // computed in reciprocal space, the same for 1-2 and 1-3
     "U_direct = %1 138.935456 * q_prod * erfc(alpha_pme*rCoul) / rCoul;"
     COULOMB_SHIFT
 
@@ -432,6 +433,7 @@ tmpl_str OpenMMPMEFEP::GENERAL_SIGMA[2] = {
 };
 
 // 1-4 term for shrinking atoms
+// NOTE: passed-in lamda (lamtd) is 1-lambda
 tmpl_str OpenMMPMEFEP::TODUMMY =
     "withinCutoff*(U_direct + U_LJ);"
     "withinCutoff = step(cutofftd - r);"
@@ -514,15 +516,20 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
 
 // subtract 1-2, 1-3 and 1-4 interactions that have been calculated in reciprocal space
 tmpl_str OpenMMPMEFEP::CORR_RECIP =
+    // cutoff shouldn't be needed because 1-4 should be shorter than cutoff
     "-U_corr * withinCutoff;"
-    "withinCutoff = step(cutoff - r);" // FIXME: do we need the cutoff here?
+    "withinCutoff = step(cutoff - r);"
 
-    // erf() instead of erfc()!
+    // erf() instead of erfc(), see PME implementation in OpenMM
     // FIXME: no distance shift as not done in reciprocal space either
-    //        is lambda^n needed here?
-    "U_corr = %1 138.935456 * q_prod * erf(alpha_pme*r) / r;"
+    //        is lambda^n needed here? consistency with reciprocal space so no but open question
+    "U_corr = %1 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;"
+    COULOMB_SHIFT
 
-    //"lam_diff = (1.0 - lam_corr) * 0.1;"
+    "lam_diff = (1.0 - lam_corr) * 0.1;"
+
+    // FIXME: probably wrong for to and from dummy but maybe ok for fromto dummy and hard
+    //        when qcend and qcstart swapped: ok for from dummy, todummy still off
     "q_prod = lam_corr*lam_corr*qcend + (1-lam_corr)*(1-lam_corr)*qcstart + lam_corr*(1-lam_corr)*qcmix;";
 
 
@@ -686,7 +693,7 @@ void OpenMMPMEFEP::initialise()
     custom_force_field->addGlobalParameter("SPOnOff", 0.0);
     custom_force_field->addGlobalParameter("alpha_pme", alpha_PME);
 
-    // FIXME: this ensures that also the custom force field is subject to PBC
+    // this ensures that also the custom force field is subject to PBC
     custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
 
     // NO REACTION FIELD IS APPLIED TO 1-4 INTERACTIONS. If the scaling factor is one (Glycam ff) then
@@ -768,7 +775,6 @@ void OpenMMPMEFEP::initialise()
 	qDebug() << "corr_recip:" << corr_recip;
 
     // HHL
-    // FIXME: do we need a cutoff here as well?
     custom_corr_recip = new OpenMM::CustomBondForce(corr_recip.toStdString());
     custom_corr_recip->addGlobalParameter("lam_corr", Alchemical_value);
     custom_corr_recip->addGlobalParameter("n_corr", coulomb_power);
@@ -1151,12 +1157,13 @@ void OpenMMPMEFEP::initialise()
 		// reciprocal PME
 		charge_diff = charge_final - charge_start;
 
-		// FIXME: best to be defensive?
-		if (charge_diff < 0.00001)
+		// FIXME: really needed? const for small value
+		if (abs(charge_diff) < 0.00001)
 		    charge_diff = 0.0;
 
 		if (charge_diff != 0.0)
 		{
+		    // FIXME: check if all particles need this?
 		    nonbond_openmm->addParticleParameterOffset("lambda", nonbond_idx, charge_diff,
 							       0.0, 0.0); // sigma, epsilon not needed
 
@@ -2228,7 +2235,7 @@ void OpenMMPMEFEP::initialise()
 
 	qprod_start = Qstart_p1 * Qstart_p2;
 	qprod_end = Qend_p1 * Qend_p2;
-	qprod_mix = Qend_p1 * Qstart_p2 + Qstart_p1 * Qend_p2;
+	qprod_mix = Qend_p1 * Qstart_p2 + Qstart_p1 * Qend_p2; // FIXME: really needed?
 
         if (Debug)
             qDebug() << "Exception = " << i << " p1 = " << p1 << " p2 = "
