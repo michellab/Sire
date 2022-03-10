@@ -524,13 +524,15 @@ tmpl_str OpenMMPMEFEP::CORR_RECIP =
     // FIXME: no distance shift as not done in reciprocal space either
     //        is lambda^n needed here? consistency with reciprocal space so no but open question
     "U_corr = %1 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;"
+    "rCoul = r;"
     COULOMB_SHIFT
 
     "lam_diff = (1.0 - lam_corr) * 0.1;"
 
     // FIXME: probably wrong for to and from dummy but maybe ok for fromto dummy and hard
     //        when qcend and qcstart swapped: ok for from dummy, todummy still off
-    "q_prod = lam_corr*lam_corr*qcend + (1-lam_corr)*(1-lam_corr)*qcstart + lam_corr*(1-lam_corr)*qcmix;";
+    //"q_prod = lam_corr*lam_corr*qcend + (1-lam_corr)*(1-lam_corr)*qcstart + lam_corr*(1-lam_corr)*qcmix;";
+    "q_prod = lam_corr*qcend + (1-lam_corr)*qcstart;"   // this is symmetrical
 
 
 /**
@@ -2224,7 +2226,6 @@ void OpenMMPMEFEP::initialise()
 	nonbond_openmm->getExceptionParameters(i, p1, p2, charge_prod, sigma_avg, epsilon_avg);
 
 	// HHL
-	// FIXME: check this
 	custom_force_field->getParticleParameters(p1, p1_params);
 	custom_force_field->getParticleParameters(p2, p2_params);
 
@@ -2389,7 +2390,6 @@ void OpenMMPMEFEP::initialise()
         } // 1-4 exceptions
 
 	// HHL
-	// FIXME: right location?
 	qprod_diff = qprod_end - qprod_start;
 
 	if (qprod_diff != 0.0)
@@ -2397,8 +2397,8 @@ void OpenMMPMEFEP::initialise()
 	   nonbond_openmm->addExceptionParameterOffset("lambda", i, qprod_diff,
 						       0.0, 0.0);
 
-	   	if (Debug)
-	   qDebug() << "offset (" << i << ") ="<< qprod_end - qprod_start;
+	   if (Debug)
+	       qDebug() << "offset (" << i << ") ="<< qprod_end - qprod_start;
 
 	}
 
