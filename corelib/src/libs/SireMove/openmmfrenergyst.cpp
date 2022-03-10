@@ -401,7 +401,7 @@ void OpenMMFrEnergyST::initialise()
     //if ( solute.isEmpty() ){
     //    throw SireError::program_bug(QObject::tr("Cannot initialise OpenMMFrEnergyST because solute group has not been defined"), CODELOC);
     //}
-    
+
     const MoleculeGroup solutehard = this->solutehard.read();
 
     const MoleculeGroup solutetodummy = this->solutetodummy.read();
@@ -3201,9 +3201,12 @@ System OpenMMFrEnergyST::minimiseEnergy(System &system, double tolerance = 1.0e-
     OpenMM::State state_openmm = openmm_context->getState(infoMask);
 
     if (Debug)
-       qDebug() << "Initial energy is"
-                << state_openmm.getPotentialEnergy() * OpenMM::KcalPerKJ
-                << "kcal/mol at lambda =" << Alchemical_value << "\n";
+    {
+       MolarEnergy Epot = state_openmm.getPotentialEnergy() * kJ_per_mol;
+
+       qDebug() << "Energy before minimisation:" << Epot
+		<< "kcal/mol at lambda =" << Alchemical_value;
+    }
 
     // Step 2 minimise
     OpenMM::LocalEnergyMinimizer::minimize(*openmm_context, tolerance, max_iteration);
@@ -3236,6 +3239,15 @@ System OpenMMFrEnergyST::minimiseEnergy(System &system, double tolerance = 1.0e-
     // This causes the workspace to update the system coordinates with the
     // contents of *sire_coords. Note that velocities aren't touched.
     ws.commitCoordinates();
+
+    if (Debug)
+    {
+       MolarEnergy Epot = state_openmm.getPotentialEnergy() * kJ_per_mol;
+
+       qDebug() << "Energy after minimisation:" << Epot
+		<< "kcal/mol at lambda =" << Alchemical_value;
+    }
+
     // Step 4 delete the context
     // JM 04/15 FIXME: See comment above at step 1
     this->destroyContext();
