@@ -532,7 +532,7 @@ tmpl_str OpenMMPMEFEP::CORR_RECIP =
     // FIXME: probably wrong for to and from dummy but maybe ok for fromto dummy and hard
     //        when qcend and qcstart swapped: ok for from dummy, todummy still off
     //"q_prod = lam_corr*lam_corr*qcend + (1-lam_corr)*(1-lam_corr)*qcstart + lam_corr*(1-lam_corr)*qcmix;";
-    "q_prod = lam_corr*qcend + (1-lam_corr)*qcstart;"   // this is symmetrical
+    "q_prod = lam_corr*qcend + (1-lam_corr)*qcstart;";   // this is symmetrical
 
 
 /**
