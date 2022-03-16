@@ -1213,6 +1213,15 @@ void OpenMMFrEnergyST::initialise()
     custom_link_bond->setUsesPeriodicBoundaryConditions(true);
     custom_link_bond->addGlobalParameter("lamrest", Alchemical_value);
 
+    /****************************************PERMANENT BOND LINK POTENTIAL*****************************/
+
+    OpenMM::CustomBondForce * custom_permanent_link_bond = new OpenMM::CustomBondForce("kl*max(0,d-dl*dl);"
+                                                                             "d=(r-reql)*(r-reql)");
+    custom_permanent_link_bond->addPerBondParameter("reql");
+    custom_permanent_link_bond->addPerBondParameter("kl");
+    custom_permanent_link_bond->addPerBondParameter("dl");
+    custom_permanent_link_bond->setUsesPeriodicBoundaryConditions(true);
+
     /****************************************BORESCH DISTANCE POTENTIAL*****************************/
 
     OpenMM::CustomBondForce * custom_boresch_dist_rest = new OpenMM::CustomBondForce("lamrest*0.5*force_const*(r-equil_val)^2");
@@ -2868,7 +2877,7 @@ void OpenMMFrEnergyST::initialise()
     //IMPORTANT: PERTURBED ENERGY TORSIONS ARE ADDED ABOVE
     bool UseLink_flag = true;
 
-    //Distance Restaint. All the information are stored in the first molecule only.
+    //Distance Restaint. All the information is stored in the solute.
 
     if (UseLink_flag == true)
     {
@@ -2921,6 +2930,59 @@ void OpenMMFrEnergyST::initialise()
         }//end of loop over molecules in system
     }//end of bond link flag
 
+    bool UsePermanentLink_flag = true;
+    // Permanent distance restraints (not affected by lambda in "turn on receptor-ligand restraints" mode)
+
+    if (UsePermanentLink_flag == true)
+    {
+        for (int i = 0; i < nmols; i++)
+        {
+            Molecule molecule = moleculegroup.moleculeAt(i).molecule();
+
+            if (molecule.hasProperty("permanent_linkbonds"))
+            {
+                std::vector<double> custom_bond_link_par(3);
+
+                const auto linkprop = molecule.property("permanent_linkbonds").asA<Properties>();
+
+                const auto nlinks = linkprop.property(QString("nbondlinks")).asA<VariantProperty>().toInt();
+
+                if (Debug)
+                    qDebug() << "Number of permenent constraint links = " << nlinks;
+
+                for (int i = 0; i < nlinks; i++)
+                {
+                    const auto atomnum0 = linkprop.property(QString("AtomNum0(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    const auto atomnum1 = linkprop.property(QString("AtomNum1(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    const auto reql = linkprop.property(QString("reql(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    const auto kl = linkprop.property(QString("kl(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    const auto dl = linkprop.property(QString("dl(%1)").arg(i)).asA<VariantProperty>().toDouble();
+
+                    const int openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
+                    const int openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
+
+                    custom_bond_link_par[0] = reql * OpenMM::NmPerAngstrom; //req
+                    custom_bond_link_par[1] = kl * (OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); //k
+                    custom_bond_link_par[2] = dl * OpenMM::NmPerAngstrom; //dl
+
+                    if (Debug)
+                    {
+                        qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
+                        qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
+                        qDebug() << "Req = " << reql << " kl = " << kl << " dl = " << dl;
+                    }
+
+                    custom_permanent_link_bond->addBond(openmmindex0, openmmindex1, custom_bond_link_par);
+                }
+
+                system_openmm->addForce(custom_permanent_link_bond);
+
+                // We've found the molecule, exit the outer loop.
+                break;
+
+            }
+        }//end of loop over molecules in system
+    }//end of bond link flag
     bool UseBoresch_flag = true;
 
     //Boresch Restaints. All the information is stored in the first molecule only.
