@@ -523,7 +523,7 @@ tmpl_str OpenMMPMEFEP::CORR_RECIP =
     // erf() instead of erfc(), see PME implementation in OpenMM
     // FIXME: no distance shift as not done in reciprocal space either
     //        is lambda^n needed here? consistency with reciprocal space so no but open question
-    "U_corr = %1 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;"
+    "U_corr = 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;"
     "rCoul = r;"
     COULOMB_SHIFT
 
@@ -766,12 +766,13 @@ void OpenMMPMEFEP::initialise()
     custom_intra_14_clj->addGlobalParameter("cutoffhd", converted_cutoff_distance);
     custom_intra_14_clj->addGlobalParameter("alpha_pme", alpha_PME);
 
-    if (coulomb_power > 0)
-       lam_pre = "(lam_corr^n_corr) *";
+    // FIXME: should probably not be used
+    //if (coulomb_power > 0)
+    //   lam_pre = "(lam_corr^n_corr) *";
 
     // HHL
     // correction term for 1-2 and 1-3 exceptions computed in reciprocal space
-    QString corr_recip = CORR_RECIP.arg(lam_pre);
+    QString corr_recip = QString(CORR_RECIP); //.arg(lam_pre);
 
     if (Debug)
 	qDebug() << "corr_recip:" << corr_recip;
