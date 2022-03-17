@@ -1110,6 +1110,13 @@ boost::tuple<System, QHash<MolIdx, MolIdx> > updateCoordinatesAndVelocities(
     const PropertyMap& map0,
     const PropertyMap& map1)
 {
+    // Update coordinates and velocities for the molecules in system0 using
+    // the molecules in system1, which may not be in the same order. We assume
+    // that both molecules contain unique atom and residue numbers and that
+    // atoms retain the same ordering in both systems, i.e. the molecules
+    // could be re-ordered, but the atom ordering within those molecules
+    // remains the same.
+
     // Work out the name of the "coordinates" property.
     const auto prop_c0 = map0["coordinates"];
     const auto prop_c1 = map1["coordinates"];
@@ -1142,7 +1149,7 @@ boost::tuple<System, QHash<MolIdx, MolIdx> > updateCoordinatesAndVelocities(
             auto molecule0 = system0.molecule(MolIdx(i)).molecule();
 
             // Get the number of the first atom in the molecule.
-            const auto num = molecule0.atom(AtomIdx(0)).number().value();
+            const auto num = molecule0.atom(AtomIdx(0)).number();
 
             // Loop over all molecules in system1 in MolIdx order.
             for (int j=0; j<system0.nMolecules(); ++j)
@@ -1153,25 +1160,11 @@ boost::tuple<System, QHash<MolIdx, MolIdx> > updateCoordinatesAndVelocities(
                     // Extract the molecule.
                     const auto molecule1 = system1.molecule(MolIdx(j)).molecule();
 
-                    // Whether we found a match.
-                    bool has_match = false;
+                    // Extract the first atom from molecule1.
+                    const auto atom = molecule1.atom(AtomIdx(0));
 
-                    // Loop over the atoms and check for a match, exiting as
-                    // soon as a match has been found.
-                    for (int k=0; k<molecule1.nAtoms(); k++)
-                    {
-                        // Extract the atom.
-                        const auto atom = molecule1.atom(AtomIdx(k));
-
-                        if (atom.number().value() == num)
-                        {
-                            has_match = true;
-                            break;
-                        }
-                    }
-
-                    // We found a match.
-                    if (has_match)
+                    // The atom numbers match.
+                    if (atom.number() == num)
                     {
                         // Extract the molecule.
                         const auto molNum1 = molecule1.number();
