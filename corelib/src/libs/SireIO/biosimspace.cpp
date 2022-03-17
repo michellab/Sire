@@ -1128,11 +1128,14 @@ boost::tuple<System, QHash<MolIdx, MolIdx> > updateCoordinatesAndVelocities(
     const auto molNums0 = system0.molNums();
     const auto molNums1 = system1.molNums();
 
+    // A set of molecule indices that have been mapped.
+    QSet<int> matched_mols;
+
     // The mapping is empty, we first need to work out the mapping the
     // molecules in the two systems.
     if (molecule_mapping.isEmpty())
     {
-        // Loop over all molecules in the system in MolIdx order.
+        // Loop over all molecules in system0 in MolIdx order.
         for (int i=0; i<system0.nMolecules(); ++i)
         {
             // Extract the molecule.
@@ -1141,67 +1144,101 @@ boost::tuple<System, QHash<MolIdx, MolIdx> > updateCoordinatesAndVelocities(
             // Get the number of the first atom in the molecule.
             const auto num = molecule0.atom(AtomIdx(0)).number().value();
 
-            // Search for a molecule containing this atom number.
-            QString query = QString("mol with atomnum %1").arg(num);
-
-            // Perform the search.
-            const auto search = system1.search(query);
-
-            if (search.count() != 1)
+            // Loop over all molecules in system1 in MolIdx order.
+            for (int j=0; j<system0.nMolecules(); ++j)
             {
-                throw SireError::incompatible_error(QObject::tr(
-                    "Couldn't update coordinates for molecule index '%1'").arg(i), CODELOC);
-            }
-
-            // Extract the molecule.
-            const auto molNum1 = search.molNums()[0];
-            const auto molecule1 = system1[molNum1].molecule();
-
-            // Initialise the coordinates property.
-            auto prop_c = prop_c0;
-
-            // Check whether the molecule is perturbable.
-            if (molecule0.hasProperty("is_perturbable"))
-            {
-                if (is_lambda1) QString
-                    prop_c = "coordinates1";
-                else
-                    prop_c = "coordinates0";
-            }
-
-            // Try to update the coordinates property.
-            try
-            {
-                molecule0 = molecule0.edit().setProperty(
-                    prop_c, molecule1.property(prop_c1)).molecule().commit();
-
-                // Update the local mapping.
-                local_mapping[MolIdx(i)] = MolIdx(molNums1.indexOf(molNum1));
-            }
-            catch (...)
-            {
-                throw SireError::incompatible_error(QObject::tr(
-                    "Couldn't update coordinates for molecule index '%1'").arg(i), CODELOC);
-            }
-
-            // Try to update the velocity property. This isn't always present,
-            // so olny try this when the passed system contains the property.
-            if (molecule1.hasProperty(prop_v1))
-            {
-                try
+                // Make sure this molecule hasn't already been matched.
+                if (not matched_mols.contains(j))
                 {
-                    molecule0 = molecule0.edit().setProperty(
-                        prop_v0, molecule1.property(prop_v1)).molecule().commit();
-                }
-                catch (...)
-                {
-                    throw SireError::incompatible_error(QObject::tr(
-                        "Couldn't update velocities for molecule index '%1'").arg(i), CODELOC);
+                    // Extract the molecule.
+                    const auto molecule1 = system1.molecule(MolIdx(j)).molecule();
+
+                    // Whether we found a match.
+                    bool has_match = false;
+
+                    // Loop over the atoms and check for a match, exiting as
+                    // soon as a match has been found.
+                    for (int k=0; k<molecule1.nAtoms(); k++)
+                    {
+                        // Extract the atom.
+                        const auto atom = molecule1.atom(AtomIdx(k));
+
+                        if (atom.number().value() == num)
+                        {
+                            has_match = true;
+                            break;
+                        }
+                    }
+
+                    // We found a match.
+                    if (has_match)
+                    {
+                        // Extract the molecule.
+                        const auto molNum1 = molecule1.number();
+                        const auto molecule1 = system1[molNum1].molecule();
+
+                        // Initialise the coordinates property.
+                        auto prop_c = prop_c0;
+
+                        // Check whether the molecule is perturbable.
+                        if (molecule0.hasProperty("is_perturbable"))
+                        {
+                            if (is_lambda1) QString
+                                prop_c = "coordinates1";
+                            else
+                                prop_c = "coordinates0";
+                        }
+
+                        // Try to update the coordinates property.
+                        try
+                        {
+                            molecule0 = molecule0.edit().setProperty(
+                                prop_c, molecule1.property(prop_c1)).molecule().commit();
+
+                            // Update the local mapping.
+                            local_mapping[MolIdx(i)] = MolIdx(molNums1.indexOf(molNum1));
+                        }
+                        catch (...)
+                        {
+                            throw SireError::incompatible_error(QObject::tr(
+                                "Couldn't update coordinates for molecule index '%1'").arg(i), CODELOC);
+                        }
+
+                        // Try to update the velocity property. This isn't always present,
+                        // so olny try this when the passed system contains the property.
+                        if (molecule1.hasProperty(prop_v1))
+                        {
+                            try
+                            {
+                                molecule0 = molecule0.edit().setProperty(
+                                    prop_v0, molecule1.property(prop_v1)).molecule().commit();
+                            }
+                            catch (...)
+                            {
+                                throw SireError::incompatible_error(QObject::tr(
+                                    "Couldn't update velocities for molecule index '%1'").arg(i), CODELOC);
+                            }
+                        }
+
+                        // Update the molecule in the original system.
+                        new_system.update(molecule0);
+
+                        // Add the molecule index to the set of matched molecules.
+                        matched_mols.insert(j);
+
+                        // We've found a match, so break.
+                        break;
+                    }
                 }
             }
+        }
 
-            // Update the molecule in the original system.
-            new_system.update(molecule0);
+        // Make sure that we've mapped all of the molecules.
+        if (matched_mols.count() != system0.nMolecules())
+        {
+            throw SireError::incompatible_error(QObject::tr(
+                "Only matched '%1' molecules, expected '%2'")
+                    .arg(matched_mols.count()).arg(system0.nMolecules()), CODELOC);
         }
     }
 
