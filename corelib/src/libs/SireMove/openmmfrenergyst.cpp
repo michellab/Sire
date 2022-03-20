@@ -1289,6 +1289,28 @@ void OpenMMFrEnergyST::initialise()
     // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
     else custom_boresch_dihedral_rest->addGlobalParameter("lamrest", 1);
 
+    /****************************************PERMANENT BORESCH DISTANCE POTENTIAL*****************************/
+
+    OpenMM::CustomBondForce * custom_permanent_boresch_dist_rest = new OpenMM::CustomBondForce("0.5*force_const*(r-equil_val)^2");
+    custom_permanent_boresch_dist_rest->addPerBondParameter("force_const");
+    custom_permanent_boresch_dist_rest->addPerBondParameter("equil_val");
+    custom_permanent_boresch_dist_rest->setUsesPeriodicBoundaryConditions(true);
+
+    /****************************************PERMANENT BORESCH ANGLE POTENTIAL*****************************/
+
+    OpenMM::CustomAngleForce * custom_permanent_boresch_angle_rest = new OpenMM::CustomAngleForce("0.5*force_const*(theta-equil_val)^2");
+    custom_permanent_boresch_angle_rest->addPerAngleParameter("force_const");
+    custom_permanent_boresch_angle_rest->addPerAngleParameter("equil_val");
+    custom_permanent_boresch_angle_rest->setUsesPeriodicBoundaryConditions(true);
+
+    /****************************************PERMANENT BORESCH DIHEDRAL POTENTIAL*****************************/
+
+    OpenMM::CustomTorsionForce * custom_permanent_boresch_dihedral_rest = new OpenMM::CustomTorsionForce("0.5*force_const*min(dtheta, 2*pi-dtheta)^2;"
+                                                                                               "dtheta = abs(theta-equil_val); pi = 3.1415926535");
+    custom_permanent_boresch_dihedral_rest->addPerTorsionParameter("force_const");
+    custom_permanent_boresch_dihedral_rest->addPerTorsionParameter("equil_val");
+    custom_permanent_boresch_dihedral_rest->setUsesPeriodicBoundaryConditions(true);
+
     //OpenMM vector coordinate
     std::vector<OpenMM::Vec3> positions_openmm(nats);
 
@@ -2984,7 +3006,7 @@ void OpenMMFrEnergyST::initialise()
                 const auto nlinks = linkprop.property(QString("nbondlinks")).asA<VariantProperty>().toInt();
 
                 if (Debug)
-                    qDebug() << "Number of permenent constraint links = " << nlinks;
+                    qDebug() << "Number of permanent constraint links = " << nlinks;
 
                 for (int i = 0; i < nlinks; i++)
                 {
@@ -3019,6 +3041,7 @@ void OpenMMFrEnergyST::initialise()
             }
         }//end of loop over molecules in system
     }//end of bond link flag
+
     bool UseBoresch_flag = true;
 
     //Boresch Restaints. All the information is stored in the solute only.
@@ -3164,6 +3187,152 @@ void OpenMMFrEnergyST::initialise()
         }// End of loop over molecules in system
 
     }// End of Boresch flag
+
+    bool UsePermanentBoresch_flag = true;
+
+    //Boresch Restaints. All the information is stored in the first molecule only.
+
+    if (UsePermanentBoresch_flag == true)
+    {
+        bool found_solute{false};
+        for (int i = 0; i < nmols; i++)
+        {
+            Molecule molecule = moleculegroup.moleculeAt(i).molecule();
+
+            bool has_boresch_dist = molecule.hasProperty("permanent_boresch_dist_restraint");
+            bool has_boresch_angle = molecule.hasProperty("permanent_boresch_angle_restraints");
+            bool has_boresch_dihedral = molecule.hasProperty("permanent_boresch_dihedral_restraints");
+
+            if (Debug)
+            {
+                qDebug() << "Permanent Boresch distance restraint properties stored = " << has_boresch_dist;
+                qDebug() << "Permanent Boresch angle restraint properties stored = " << has_boresch_angle;
+                qDebug() << "Permanent Boresch dihedral restraint properties stored = " << has_boresch_dihedral;
+            }
+
+            if (has_boresch_dist)
+            {
+                found_solute = true; // We have found the solute, but before breaking we must also check
+                                    // if there are Boresch angle and torsion restraints.
+
+                std::vector<double> custom_boresch_dist_par(2);
+
+                const auto boresch_dist_prop = molecule.property("permanent_boresch_dist_restraint").asA<Properties>();
+
+                const auto atomnum0 = boresch_dist_prop.property(QString("AtomNum0")).asA<VariantProperty>().toInt();
+                const auto atomnum1 = boresch_dist_prop.property(QString("AtomNum1")).asA<VariantProperty>().toInt();
+                const auto force_const = boresch_dist_prop.property(QString("force_const")).asA<VariantProperty>().toDouble();
+                const auto equil_val = boresch_dist_prop.property(QString("equil_val")).asA<VariantProperty>().toDouble();
+
+                const auto openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
+                const auto openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
+
+                custom_boresch_dist_par[0] = force_const * (OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); //force_const
+                custom_boresch_dist_par[1] = equil_val * OpenMM::NmPerAngstrom; //equil_val
+
+                if (Debug)
+                {
+                    qDebug() << "Permanent Boresch distance restraint implemented";
+                    qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
+                    qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
+                    qDebug() << "force_const = " << force_const << " equil_val = " << equil_val;
+                }
+
+                custom_permanent_boresch_dist_rest->addBond(openmmindex0, openmmindex1, custom_boresch_dist_par);
+
+                system_openmm->addForce(custom_permanent_boresch_dist_rest);
+            }
+
+            if (has_boresch_angle)
+            {
+                std::vector<double> custom_boresch_angle_par(2);
+
+                const auto boresch_angle_prop = molecule.property("permanent_boresch_angle_restraints").asA<Properties>();
+
+                const auto n_angles = boresch_angle_prop.property(QString("n_boresch_angle_restraints")).asA<VariantProperty>().toInt();
+
+                if (Debug)
+                    qDebug() << "Number of Permanent Boresch angle restraints = " << n_angles;
+
+                for (int i = 0; i < n_angles; i++)
+                {
+                    const auto atomnum0 = boresch_angle_prop.property(QString("AtomNum0-%1").arg(i)).asA<VariantProperty>().toInt();
+                    const auto atomnum1 = boresch_angle_prop.property(QString("AtomNum1-%1").arg(i)).asA<VariantProperty>().toInt();
+                    const auto atomnum2 = boresch_angle_prop.property(QString("AtomNum2-%1").arg(i)).asA<VariantProperty>().toInt();
+                    const auto force_const = boresch_angle_prop.property(QString("force_const-%1").arg(i)).asA<VariantProperty>().toDouble();
+                    const auto equil_val = boresch_angle_prop.property(QString("equil_val-%1").arg(i)).asA<VariantProperty>().toDouble();
+
+                    const auto openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
+                    const auto openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
+                    const auto openmmindex2 = AtomNumToOpenMMIndex[atomnum2];
+
+                    custom_boresch_angle_par[0] = force_const * (OpenMM::KJPerKcal); //force_const
+                    custom_boresch_angle_par[1] = equil_val; //equil_val
+
+                    if (Debug)
+                    {
+                        qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
+                        qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
+                        qDebug() << "atomnum2 = " << atomnum2 << " openmmindex2 =" << openmmindex2;
+                        qDebug() << "force_const = " << force_const << " equil_val = " << equil_val;
+                    }
+
+                    custom_permanent_boresch_angle_rest->addAngle(openmmindex0, openmmindex1, openmmindex2, custom_boresch_angle_par);
+                }
+
+                system_openmm->addForce(custom_permanent_boresch_angle_rest);
+            }
+
+            if (has_boresch_dihedral)
+            {
+                std::vector<double> custom_boresch_dihedral_par(2);
+
+                const auto boresch_dihedral_prop = molecule.property("permanent_boresch_dihedral_restraints").asA<Properties>();
+
+                const auto n_dihedrals = boresch_dihedral_prop.property(QString("n_boresch_dihedral_restraints")).asA<VariantProperty>().toInt();
+
+                if (Debug)
+                    qDebug() << "Number of permanent Boresch dihedral restraints = " << n_dihedrals;
+
+                for (int i = 0; i < n_dihedrals; i++)
+                {
+                    const auto atomnum0 = boresch_dihedral_prop.property(QString("AtomNum0-%1").arg(i)).asA<VariantProperty>().toInt();
+                    const auto atomnum1 = boresch_dihedral_prop.property(QString("AtomNum1-%1").arg(i)).asA<VariantProperty>().toInt();
+                    const auto atomnum2 = boresch_dihedral_prop.property(QString("AtomNum2-%1").arg(i)).asA<VariantProperty>().toInt();
+                    const auto atomnum3 = boresch_dihedral_prop.property(QString("AtomNum3-%1").arg(i)).asA<VariantProperty>().toInt();
+                    const auto force_const = boresch_dihedral_prop.property(QString("force_const-%1").arg(i)).asA<VariantProperty>().toDouble();
+                    const auto equil_val = boresch_dihedral_prop.property(QString("equil_val-%1").arg(i)).asA<VariantProperty>().toDouble();
+
+                    const auto openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
+                    const auto openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
+                    const auto openmmindex2 = AtomNumToOpenMMIndex[atomnum2];
+                    const auto openmmindex3 = AtomNumToOpenMMIndex[atomnum3];
+
+                    custom_boresch_dihedral_par[0] = force_const * (OpenMM::KJPerKcal); //force_const
+                    custom_boresch_dihedral_par[1] = equil_val; //equil_val
+
+                    if (Debug)
+                    {
+                        qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
+                        qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
+                        qDebug() << "atomnum2 = " << atomnum2 << " openmmindex2 =" << openmmindex2;
+                        qDebug() << "atomnum3 = " << atomnum3 << " openmmindex3 =" << openmmindex3;
+                        qDebug() << "force_const = " << force_const << " equil_val = " << equil_val;
+                    }
+
+                    custom_permanent_boresch_dihedral_rest->addTorsion(openmmindex0, openmmindex1, openmmindex2, openmmindex3, custom_boresch_dihedral_par);
+                }
+
+                system_openmm->addForce(custom_permanent_boresch_dihedral_rest);
+            }
+        
+            if (found_solute) break; // We've found the molecule, exit the outer loop. If a molecule has Boresch
+                                     // distance restraints it must be the solute, but we cannot break immediately
+                                     // because it may also have angle/ dihedral restraints
+
+        }// End of loop over molecules in system
+
+    }// End of Permanent Boresch flag
 
     this->openmm_system = system_openmm;
     this->isSystemInitialised = true;

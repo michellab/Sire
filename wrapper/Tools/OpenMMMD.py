@@ -225,6 +225,31 @@ boresch_restraints_dict = Parameter("boresch restraints dictionary", {},
                                     E = 0.5*k*x**2 as in the original paper. 
                                     """)
 
+use_permanent_boresch_restraints = Parameter("use permanent boresch restraints", False, 
+                                    """Whether or not to use Boresch restraints between the ligand and receptor, the strength)
+                                    of which is not scaled with lambda when in 'turn on receptor-ligand restraints mode.""")
+
+permanent_boresch_restraints_dict = Parameter("permanent boresch restraints dictionary", {}, 
+                                    """Dictionary of four dictionaries: anchor points in ligand, anchor points in receptor,
+                                    equilibrium values for 6 Boresch-style external degrees of freedom, and associated force
+                                    constants. Syntax is:
+                                    {
+                                    "anchor_points":{"r1":r1, "r2":r2, "r3":r3, "l1":l1, "l2":l2, "l3":l3},
+                                    "equilibrium_values":{"r0":r0, "thetaA0": thetaA0, "thetaB0": thetaB0,
+                                                          "phiA0":phiA0, "phiB0": phiB0, "phiC0":phiC0},
+                                    "force_constants":{"kr":kr, "kthetaA": kthetaA, "kthetaB": kthetaB,
+                                                       "kphiA":kphiA, "kphiB": kphiB, "kphiC":kphiC}
+                                    } 
+                                    r1 - 3 and l1 - 3 are the anchor points in the receptor and ligand, respectively, 
+                                    given by atomic indices. r is | l1 - r1 | (A). thetaA, and thetaB are the angles
+                                    (r2, r1, l1) and (r1, l1, l2) (rad). phiA, phiB, and phiC are the dihedral angles
+                                    (r3, r2, r1, l1), (r2, r1, l1, l2), and (r1, l1, l2, l3), respectively. A first 
+                                    character of k indicates a force constant (kcal mol^-1 A^-2 for the distance and 
+                                    kcal mol^-1 rad^-2 for the angles) and a final character of 0 indicates an
+                                    equillibrium value (A or rad). To use Boresch restraints, "use boresch restraints" 
+                                    must be set equal to True in the config file. 
+                                    """)
+
 hydrogen_mass_repartitioning_factor = \
     Parameter('hydrogen mass repartitioning factor', 1.0,
               f'If larger than {HMR_MIN} (maximum is {HMR_MAX}), all hydrogen '
@@ -858,7 +883,7 @@ def setupDistanceRestraints(system, permanent=False, restraints=None):
     print (unique_prop_list)
     # The solute will store all the information related to the receptor-ligand restraints
     solute = getSolute(system)
-    if permanent == False:
+    if not permanent:
         solute = solute.edit().setProperty("linkbonds", linkbondVectorListToProperty(unique_prop_list)).commit()
     else:
         solute = solute.edit().setProperty("permanent_linkbonds", linkbondVectorListToProperty(unique_prop_list)).commit()
@@ -867,13 +892,15 @@ def setupDistanceRestraints(system, permanent=False, restraints=None):
     return system
 
 
-def setupBoreschRestraints(system):
+def setupBoreschRestraints(system, permanent=False):
     """Takes initial system and adds information specifying the Boresch
     restraints. The distance, angle, and torsional restraints are stored as
     properties in solute molecule.
 
     Args:
         system (System): The initial system
+        permanent (Bool): Whether or not the strength of restraints should be unaffected by
+        lambda when in "turn on receptor-ligand restraints mode"
 
     Returns:
         System: The updated system with
@@ -940,9 +967,14 @@ def setupBoreschRestraints(system):
     
     # The solute will store all the information related to the Boresch restraints in the system
     solute = getSolute(system)
-    solute = solute.edit().setProperty("boresch_dist_restraint", boreschDistRestraintToProperty(boresch_dict)).commit()
-    solute = solute.edit().setProperty("boresch_angle_restraints", boreschAngleRestraintsToProperty(boresch_dict)).commit()
-    solute = solute.edit().setProperty("boresch_dihedral_restraints", boreschDihedralRestraintsToProperty(boresch_dict)).commit()
+    if not permanent:
+        solute = solute.edit().setProperty("boresch_dist_restraint", boreschDistRestraintToProperty(boresch_dict)).commit()
+        solute = solute.edit().setProperty("boresch_angle_restraints", boreschAngleRestraintsToProperty(boresch_dict)).commit()
+        solute = solute.edit().setProperty("boresch_dihedral_restraints", boreschDihedralRestraintsToProperty(boresch_dict)).commit()
+    else:
+        solute = solute.edit().setProperty("permanent_boresch_dist_restraint", boreschDistRestraintToProperty(boresch_dict)).commit()
+        solute = solute.edit().setProperty("permanent_boresch_angle_restraints", boreschAngleRestraintsToProperty(boresch_dict)).commit()
+        solute = solute.edit().setProperty("permanent_boresch_dihedral_restraints", boreschDihedralRestraintsToProperty(boresch_dict)).commit()
     system.update(solute)
 
     return system
@@ -1702,11 +1734,16 @@ def run():
             system = setupDistanceRestraints(system, restraints=restraints)
 
         if use_permanent_distance_restraints.val:
+            print("Setting up permanent distance restraints")
             system = setupDistanceRestraints(system, permanent=True)
 
         if use_boresch_restraints.val:
             print("Setting up Boresch restraints...")
             system = setupBoreschRestraints(system)
+
+        if use_permanent_boresch_restraints.val:
+            print("Setting up permanent Boresch restraints...")
+            system = setupBoreschRestraints(system, permanent=True)
 
         if hydrogen_mass_repartitioning_factor.val > 1.0:
             system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
@@ -1868,11 +1905,16 @@ def runFreeNrg():
             system = setupDistanceRestraints(system, restraints=restraints)
 
         if use_permanent_distance_restraints.val:
+            print("Setting up permanent distance restraints")
             system = setupDistanceRestraints(system, permanent=True)
 
         if use_boresch_restraints.val:
             print("Setting up Boresch restraints...")
             system = setupBoreschRestraints(system)
+
+        if use_permanent_boresch_restraints.val:
+            print("Setting up permanent Boresch restraints...")
+            system = setupBoreschRestraints(system, permanent=True)
 
         if hydrogen_mass_repartitioning_factor.val > 1.0:
             system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
