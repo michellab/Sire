@@ -907,8 +907,12 @@ def setupBoreschRestraints(system, permanent=False):
         Boresch restraint properties stored in the solute.
     """
     # Get Boresch restraint dict in dict form
-    boresch_dict = dict(boresch_restraints_dict.val)
-    print(f"Boresch restraints dictionary = {boresch_dict}")
+    if not permanent:
+        boresch_dict = dict(boresch_restraints_dict.val)
+        print(f"Boresch restraints dictionary = {boresch_dict}")
+    else:
+        boresch_dict = dict(permanent_boresch_restraints_dict.val)
+        print(f"Permanent Boresch restraints dictionary = {boresch_dict}")
 
     # Check that restraint dict has the correct format
     template_dict = {'anchor_points': {'r1':0, 'r2':0, 'r3':0, 'l1':0, 'l2':0, 'l3':0}, 
