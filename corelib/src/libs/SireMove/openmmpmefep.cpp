@@ -388,10 +388,9 @@ QString OpenMMPMEFEP::toString() const
 // JM 9/10/20 multiply Logix_mix_lam * 0 instead of max(lam,1.0-lam)
 // JM 9/10/10 setting Logix_mix_lam output to 0 for lambda
 
-//#define COULOMB_SHIFT "rCoul = lam_diff + r;" // can we shift?
-#define COULOMB_SHIFT "rCoul = r;"
+#define COULOMB_SHIFT "rCoul = lam_diff + r;" // can we shift?
+//#define COULOMB_SHIFT "rCoul = r;"
 
-// FIXME: cutoff?
 tmpl_str OpenMMPMEFEP::GENERAL =
     "withinCutoff * (1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (U_direct + U_LJ);"
     "withinCutoff = step(cutoff - r);"
@@ -433,7 +432,7 @@ tmpl_str OpenMMPMEFEP::GENERAL_SIGMA[2] = {
 };
 
 // 1-4 term for shrinking atoms
-// NOTE: passed-in lamda (lamtd) is 1-lambda
+// NOTE: passed-in lambda (lamtd) is 1-lambda
 tmpl_str OpenMMPMEFEP::TODUMMY =
     "withinCutoff*(U_direct + U_LJ);"
     "withinCutoff = step(cutofftd - r);"
@@ -521,8 +520,6 @@ tmpl_str OpenMMPMEFEP::CORR_RECIP =
     "withinCutoff = step(cutoff - r);"
 
     // erf() instead of erfc(), see PME implementation in OpenMM
-    // FIXME: no distance shift as not done in reciprocal space either
-    //        is lambda^n needed here? consistency with reciprocal space so no but open question
     "U_corr = 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;"
     "rCoul = r;"
     COULOMB_SHIFT
@@ -653,7 +650,8 @@ void OpenMMPMEFEP::initialise()
 
     // from NonbondedForceImpl.cpp
     // FIXME: check if this is also the value for reciprocal space
-    double alpha_PME = (1.0 / converted_cutoff_distance) * std::sqrt(-log(2.0 * tolerance_PME));
+    double alpha_PME = (1.0 / converted_cutoff_distance)
+	* std::sqrt(-log(2.0 * tolerance_PME));
 
     if (Debug)
     {
