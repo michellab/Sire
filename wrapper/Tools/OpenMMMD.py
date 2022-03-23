@@ -1606,7 +1606,10 @@ def setupMovesFreeEnergy(system, debug_seed, gpu_idx, lam_val):
     )  # Only meaningful for Langevin/Brownian integrators
     Integrator_OpenMM.setPlatform(platform.val)
     Integrator_OpenMM.setConstraintType(constraint.val)
-    Integrator_OpenMM.setCutoffType(cutoff_type.val)
+
+    if cutoff_type.val != 'PME':
+        Integrator_OpenMM.setCutoffType(cutoff_type.val)
+
     Integrator_OpenMM.setFieldDielectric(rf_dielectric.val)
     Integrator_OpenMM.setAlchemicalValue(lambda_val.val)
     Integrator_OpenMM.setAlchemicalArray(lambda_array.val)
