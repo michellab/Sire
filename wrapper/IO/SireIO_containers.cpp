@@ -27,23 +27,27 @@
 \*********************************************/
 
 #include <Python.h>
+
 #include <boost/python.hpp>
-
-#include <QVector>
-#include <QSet>
-
 #include <boost/tuple/tuple.hpp>
 
-#include "Helpers/convertlist.hpp"
+#include <QHash>
+#include <QVector>
+
 #include "Helpers/convertdict.hpp"
-#include "Helpers/convertset.hpp"
+#include "Helpers/convertlist.hpp"
 #include "Helpers/tuples.hpp"
-#include "Base/convertpackedarray.hpp"
 
 #include "SireIO/moleculeparser.h"
 #include "SireIO/grotop.h"
 
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
 using namespace SireIO;
+using namespace SireMol;
+using namespace SireSystem;
 
 using boost::python::register_tuple;
 
@@ -53,4 +57,8 @@ void register_SireIO_containers()
 
     register_list< QVector<GroMolType> >();
     register_list< QVector<GroAtom> >();
+
+    register_dict< QHash<MolIdx,MolIdx> >();
+
+    register_tuple< boost::tuple<System,QHash<MolIdx,MolIdx>> >();
 }
