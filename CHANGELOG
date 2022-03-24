@@ -3,6 +3,19 @@ SIRE changelog
 
 devel branch:
 
+    [2022.2.0] March 2022 - Fixed formatting of SOLVENT_POINTERS flag in
+               AmberPrm7 parser. Removed duplicate definition of sigma_av
+               in OpenMMFreEnergySt.cpp. Fixed SOMD issues related to
+               assumption that perturbable molecule always has MolIdx(1)
+               (@fjclark). Fixed wrappers and added significant performance
+               enhancements to the SireIO::updateCoordinatesAndVelocities
+               function. This significantly (200x) speeds up the remapping
+               of coordinates/velocities from SOMD trajectory frames, which
+               was a bottleneck for large protein-ligand simulations within
+               BioSimSpace. Disabled GSL error handling to avoid a potential
+               segmentation fault within a singular value decomposition
+               routine called by SireMaths::align.
+
     [2022.1.0] Jan 2022 - Fixed counting of protons to account for dummy atoms
                when swapping water topology and ensure that original molecular
                properties are preserved. Added a fallback to the BGFS solver
