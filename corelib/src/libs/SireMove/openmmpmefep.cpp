@@ -639,7 +639,7 @@ void OpenMMPMEFEP::initialise()
     OpenMM::NonbondedForce *nonbond_openmm = new OpenMM::NonbondedForce();
     nonbond_openmm->setNonbondedMethod(OpenMM::NonbondedForce::PME);
     nonbond_openmm->setIncludeDirectSpace(false);
-
+    nonbond_openmm->setCutoffDistance(converted_cutoff_distance)
     nonbond_openmm->setUseDispersionCorrection(false);
 
     // scale the charges in the reciprocal space
@@ -1170,9 +1170,7 @@ void OpenMMPMEFEP::initialise()
 
 		    if (Debug)
 			qDebug() << "Adding offset for atom idx" << nonbond_idx
-				 << "; charge_diff =" << charge_diff
-				 << "; charge_start =" << charge_start
-				 << "; charge_final =" << charge_final;
+				 << "; charge_diff =" << charge_diff;
 		}
 
 		double sigma_start = start_LJs[j].sigma() * OpenMM::NmPerAngstrom;
