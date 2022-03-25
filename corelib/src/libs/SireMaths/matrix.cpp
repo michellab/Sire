@@ -42,6 +42,7 @@
 #include "third_party/eig3/eig3.h" // CONDITIONAL_INCLUDE
 
 #include <gsl/gsl_eigen.h>
+#include <gsl/gsl_errno.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_linalg.h>
@@ -60,7 +61,7 @@ static const RegisterMetaType<Matrix> r_matrix(NO_ROOT);
 QDataStream &operator<<(QDataStream &ds, const Matrix &matrix)
 {
     writeHeader(ds, r_matrix, 1);
-    
+
     for (int i=0; i<9; ++i)
     {
         ds << matrix.array[i];
@@ -94,7 +95,7 @@ Matrix::Matrix()
     {
         array[i] = 0;
     }
-    
+
     array[0] = 1;
     array[4] = 1;
     array[8] = 1;
@@ -108,7 +109,7 @@ Matrix::Matrix(double diagonal_value)
     {
         array[i] = 0;
     }
-    
+
     array[0] = diagonal_value;
     array[4] = diagonal_value;
     array[8] = diagonal_value;
@@ -123,11 +124,11 @@ Matrix::Matrix(double xx, double xy, double xz,
     array[0] = xx;
     array[1] = xy;
     array[2] = xz;
-    
+
     array[3] = yx;
     array[4] = yy;
     array[5] = yz;
-    
+
     array[6] = zx;
     array[7] = zy;
     array[8] = zz;
@@ -168,7 +169,7 @@ Matrix::Matrix(const gsl_matrix *m)
 
     for (int i=0; i<9; ++i)
         array[i] = 0;
-    
+
     for (int i=0; i<m->size1; ++i)
     {
         for (int j=0; j<m->size2; ++j)
@@ -199,7 +200,7 @@ Matrix::Matrix(const tuple<Vector,Vector,Vector> &rows)
     const Vector &r1 = rows.get<0>();
     const Vector &r2 = rows.get<1>();
     const Vector &r3 = rows.get<2>();
-    
+
     memcpy(this->data(), r1.constData(), 3*sizeof(double));
     memcpy(this->data()+3, r2.constData(), 3*sizeof(double));
     memcpy(this->data()+6, r3.constData(), 3*sizeof(double));
@@ -216,10 +217,10 @@ Matrix::~Matrix()
 int Matrix::checkedOffset(int i, int j) const
 {
     if (i < 0 or i > 2 or j < 0 or j > 2)
-        throw SireError::invalid_index( QObject::tr(    
+        throw SireError::invalid_index( QObject::tr(
                 "Invalid index for 3x3 matrix - [%1,%2]")
                     .arg(i).arg(j), CODELOC );
-                    
+
     return offset(i,j);
 }
 
@@ -375,7 +376,7 @@ Matrix& Matrix::operator=(const Matrix &other)
     {
         memcpy(array, other.array, 9*sizeof(double));
     }
-    
+
     return *this;
 }
 
@@ -386,7 +387,7 @@ bool Matrix::operator==(const Matrix& m) const
         if (array[i] != m.array[i])
             return false;
     }
-    
+
     return true;
 }
 
@@ -447,7 +448,7 @@ const Matrix SireMaths::operator*(const Matrix &m1, const Matrix &m2)
 {
     Matrix ret(m1);
     ret *= m2;
-    
+
     return ret;
 }
 
@@ -494,7 +495,7 @@ const Matrix SireMaths::operator+(const Matrix &m1, const Matrix &m2)
 {
     Matrix ret(m1);
     ret += m2;
-    
+
     return ret;
 }
 
@@ -638,12 +639,17 @@ boost::tuple<Matrix,Matrix,Matrix> Matrix::singleValueDecomposition() const
     gsl_matrix *A = 0;
     gsl_matrix *W = 0;
     gsl_vector *S = 0;
-    
+
     try
     {
+        // Disable the error handler and check return codes for errors.
+        // This is required since the gsl_linalg_SV_decomp_jacobi function
+        // can segmentation fault when trying to handle errors internally.
+        gsl_set_error_handler_off();
+
         //copy this matrix into A
         A = gsl_matrix_alloc(3, 3);
-        
+
         for (int i=0; i<3; ++i)
         {
             for (int j=0; j<3; ++j)
@@ -651,11 +657,11 @@ boost::tuple<Matrix,Matrix,Matrix> Matrix::singleValueDecomposition() const
                 gsl_matrix_set( A, i, j, array[offset(i,j)] );
             }
         }
-        
+
         //create space to hold the matrices for single value decomposition
         S = gsl_vector_alloc(3);
         W = gsl_matrix_alloc(3, 3);
-            
+
         // calculate single value decomposition of A into V S W^T
         int ok = gsl_linalg_SV_decomp_jacobi(A, W, S);
 
@@ -663,18 +669,18 @@ boost::tuple<Matrix,Matrix,Matrix> Matrix::singleValueDecomposition() const
             throw SireMaths::domain_error( QObject::tr(
                     "Could not calculate the single value decomposition of %1.")
                         .arg(this->toString()), CODELOC );
-        
+
         //copy out the results...
         Matrix a(A);
         Matrix w = Matrix(W).transpose();
         Matrix s( gsl_vector_get(S,0), 0, 0,
                   0, gsl_vector_get(S,1), 0,
                   0, 0, gsl_vector_get(S,2) );
-        
+
         gsl_matrix_free(A);
         gsl_vector_free(S);
         gsl_matrix_free(W);
-        
+
         return boost::tuple<Matrix,Matrix,Matrix>(a,s,w);
     }
     catch(...)
@@ -705,7 +711,7 @@ boost::tuple<Vector,Matrix> Matrix::diagonalise() const
     {
         //we can use the quick eig3 code
         double A[3][3], V[3][3], d[3];
-        
+
         A[0][0] = array[0];
         A[0][1] = array[1];
         A[0][2] = array[2];
@@ -715,9 +721,9 @@ boost::tuple<Vector,Matrix> Matrix::diagonalise() const
         A[2][0] = array[6];
         A[2][1] = array[7];
         A[2][2] = array[8];
-        
+
         eigen_decomposition(A, V, d);
-        
+
         return boost::tuple<Vector,Matrix>(
                     Vector(d[0], d[1], d[2]),
                     Matrix(V[0][0], V[1][0], V[2][0],
@@ -728,7 +734,7 @@ boost::tuple<Vector,Matrix> Matrix::diagonalise() const
     {
         //we need to use BLAS - via NMatrix
         std::pair<NVector,NMatrix> eigs = NMatrix(*this).diagonalise();
-        
+
         return boost::tuple<Vector,Matrix>( Vector(eigs.first), Matrix(eigs.second) );
     }
 }
@@ -752,21 +758,21 @@ Matrix Matrix::covariance(const QVector<Vector> &p, const QVector<Vector> &q, in
         //convert the two vectors of points into GSL matrices
         P = gsl_matrix_alloc(n, 3);
         Q = gsl_matrix_alloc(n, 3);
-        
+
         for (int i=0; i<n; ++i)
         {
             gsl_matrix_set(P, i, 0, p[i].x());
             gsl_matrix_set(P, i, 1, p[i].y());
             gsl_matrix_set(P, i, 2, p[i].z());
-            
+
             gsl_matrix_set(Q, i, 0, q[i].x());
             gsl_matrix_set(Q, i, 1, q[i].y());
             gsl_matrix_set(Q, i, 2, q[i].z());
         }
-        
+
         //create space to hold the covariance matrix
         C = gsl_matrix_alloc(3, 3);
-        
+
         for (int i=0; i<3; ++i)
         {
             for (int j=0; j<3; ++j)
@@ -774,7 +780,7 @@ Matrix Matrix::covariance(const QVector<Vector> &p, const QVector<Vector> &q, in
                 gsl_matrix_set(C, i, j, 0);
             }
         }
-        
+
         //compute the covariance matrix P^T Q
         int ok = gsl_blas_dgemm(CblasTrans, CblasNoTrans, 1.0, P, Q, 0.0, C);
 
@@ -783,11 +789,11 @@ Matrix Matrix::covariance(const QVector<Vector> &p, const QVector<Vector> &q, in
                     "Something went wrong with the dgemm in covariance!"), CODELOC );
 
         Matrix c(C);
-        
+
         gsl_matrix_free(P);
         gsl_matrix_free(Q);
         gsl_matrix_free(C);
-        
+
         return c;
     }
     catch(...)
