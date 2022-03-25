@@ -649,7 +649,6 @@ void OpenMMPMEFEP::initialise()
     double tolerance_PME = nonbond_openmm->getEwaldErrorTolerance();
 
     // from NonbondedForceImpl.cpp
-    // FIXME: check if this is also the value for reciprocal space
     double alpha_PME = (1.0 / converted_cutoff_distance)
 	* std::sqrt(-log(2.0 * tolerance_PME));
 
@@ -1165,13 +1164,15 @@ void OpenMMPMEFEP::initialise()
 		if (charge_diff != 0.0)
 		{
 		    // FIXME: check if all particles need this?
+		    // charge = charge_start + lambda * charge_diff
 		    nonbond_openmm->addParticleParameterOffset("lambda", nonbond_idx, charge_diff,
 							       0.0, 0.0); // sigma, epsilon not needed
 
 		    if (Debug)
-		       qDebug() << "charge_diff =" << charge_diff
-				<< "charge_start =" << charge_start
-				<< "charge_final =" << charge_final;
+			qDebug() << "Adding offset for atom idx" << nonbond_idx
+				 << "; charge_diff =" << charge_diff
+				 << "; charge_start =" << charge_start
+				 << "; charge_final =" << charge_final;
 		}
 
 		double sigma_start = start_LJs[j].sigma() * OpenMM::NmPerAngstrom;
