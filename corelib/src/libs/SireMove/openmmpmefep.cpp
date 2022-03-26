@@ -392,8 +392,7 @@ QString OpenMMPMEFEP::toString() const
 //#define COULOMB_SHIFT "rCoul = r;"
 
 tmpl_str OpenMMPMEFEP::GENERAL =
-    "withinCutoff * (1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (U_direct + U_LJ);"
-    "withinCutoff = step(cutoff - r);"
+    "(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (U_direct + U_LJ);"
 
     // need to subtract scaled 1-4 interactions with erf() because those are
     // computed in reciprocal space, the same for 1-2 and 1-3
@@ -638,8 +637,8 @@ void OpenMMPMEFEP::initialise()
     // custom forces, see above
     OpenMM::NonbondedForce *nonbond_openmm = new OpenMM::NonbondedForce();
     nonbond_openmm->setNonbondedMethod(OpenMM::NonbondedForce::PME);
+    nonbond_openmm->setCutoffDistance(converted_cutoff_distance);
     nonbond_openmm->setIncludeDirectSpace(false);
-    nonbond_openmm->setCutoffDistance(converted_cutoff_distance)
     nonbond_openmm->setUseDispersionCorrection(false);
 
     // scale the charges in the reciprocal space
