@@ -627,7 +627,7 @@ void OpenMMPMEFEP::initialise()
     // Use NonbondedForce to compute Ewald reciprocal and self terms
     // Direct space and LJ need to be implemented via expressions to
     // custom forces, see above
-    OpenMM::NonbondedForce *recip_space = new OpenMM::NonbondedForce();
+    auto recip_space = new OpenMM::NonbondedForce();
     recip_space->setNonbondedMethod(OpenMM::NonbondedForce::PME);
     recip_space->setCutoffDistance(converted_cutoff_distance);
     recip_space->setIncludeDirectSpace(false);
@@ -664,15 +664,15 @@ void OpenMMPMEFEP::initialise()
 
     auto direct_space = new OpenMM::CustomNonbondedForce(general_ff.toStdString());
 
+    // This ensures that also the direct space is subject to PBC
+    direct_space->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
     direct_space->setCutoffDistance(converted_cutoff_distance);
+
     direct_space->addGlobalParameter("lam", Alchemical_value);
     direct_space->addGlobalParameter("delta", shift_delta);
     direct_space->addGlobalParameter("n", coulomb_power);
     direct_space->addGlobalParameter("SPOnOff", 0.0);
     direct_space->addGlobalParameter("alpha_pme", alpha_PME);
-
-    // this ensures that also the custom force field is subject to PBC
-    direct_space->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
 
     // NO REACTION FIELD IS APPLIED TO 1-4 INTERACTIONS. If the scaling factor is one (Glycam ff) then
     // the OpenMM potential energy is not equal to he Sire energy. This is caused by the application
@@ -797,8 +797,8 @@ void OpenMMPMEFEP::initialise()
         const double converted_Pressure = convertTo(Pressure.value(), bar);
 
         auto barostat = new OpenMM::MonteCarloBarostat(converted_Pressure,
-							converted_Temperature,
-							MCBarostat_frequency);
+						       converted_Temperature,
+						       MCBarostat_frequency);
 
         //Set The random seed
         barostat->setRandomNumberSeed(random_seed);
@@ -994,7 +994,7 @@ void OpenMMPMEFEP::initialise()
 
         }// end of loop on atoms in molecule
 
-    }//end of loop on molecules in workspace
+    } // end of loop on molecules in workspace
 
     int num_atoms_till_i = 0;
 
@@ -1145,9 +1145,9 @@ void OpenMMPMEFEP::initialise()
 		{
 		    // charge = charge_start + lambda_offset * charge_diff
 		    recip_space->addParticleParameterOffset("lambda_offset",
-							       nonbond_idx,
-							       charge_diff,
-							       0.0, 0.0); // sigma, epsilon not needed
+							    nonbond_idx,
+							    charge_diff,
+							    0.0, 0.0); // sigma, epsilon not needed
 
 		    if (Debug)
 			qDebug() << "Adding offset for atom idx" << nonbond_idx
@@ -1308,7 +1308,7 @@ void OpenMMPMEFEP::initialise()
             }
 
 	    // Adds the custom parmaters to _all_ atoms
-	    // Must be in same order as in the System
+	    // Must be in the same order as in the System
             direct_space->addParticle(custom_non_bonded_params);
         }
 
@@ -2169,8 +2169,8 @@ void OpenMMPMEFEP::initialise()
             qDebug() << "\n\nNumber of ions = " << nions << "\n\n";
     }
 
+    // FIXME: do we also need to do this for direct_space
     // Exclude the 1-2, 1-3 bonded atoms from nonbonded forces, and scale down 1-4 bonded atoms
-
     recip_space->createExceptionsFromBonds(bondPairs, Coulomb14Scale, LennardJones14Scale);
 
     if (CMMremoval_frequency > 0)
@@ -2371,8 +2371,8 @@ void OpenMMPMEFEP::initialise()
 
 	if (qprod_diff != 0.0)
 	{
-	   recip_space->addExceptionParameterOffset("lambda_offset", i, qprod_diff,
-						       0.0, 0.0);
+	   recip_space->addExceptionParameterOffset("lambda_offset", i,
+						    qprod_diff, 0.0, 0.0);
 
 	   if (Debug)
 	       qDebug() << "Adding exception offset for atom idx" << i
@@ -2596,24 +2596,33 @@ void OpenMMPMEFEP::createContext(IntegratorWorkspace &workspace, SireUnits::Dime
     const double dt = convertTo(timestep.value(), picosecond);
     const double converted_Temperature = convertTo(Temperature.value(), kelvin);
     const double converted_friction = convertTo(friction.value(), picosecond);
-    OpenMM::Integrator * integrator_openmm = NULL;
+    OpenMM::Integrator *integrator_openmm = NULL;
 
     if (!isContextInitialised || (isContextInitialised && reinitialise_context))
     {
         if (Integrator_type == "leapfrogverlet")
-            integrator_openmm = new OpenMM::VerletIntegrator(dt); //dt in picosecond
+            integrator_openmm = new OpenMM::VerletIntegrator(dt);
         else if (Integrator_type == "variableleapfrogverlet")
-            integrator_openmm = new OpenMM::VariableVerletIntegrator(integration_tol); //integration tolerance error unitless
+            integrator_openmm = new OpenMM::VariableVerletIntegrator
+		(integration_tol); // integration tolerance error unitless
         else if (Integrator_type == "langevin")
-            integrator_openmm = new OpenMM::LangevinIntegrator(converted_Temperature, converted_friction, dt);
+            integrator_openmm = new OpenMM::LangevinIntegrator
+		(converted_Temperature, converted_friction, dt);
 	else if (Integrator_type == "langevinmiddle")
-            integrator_openmm = new OpenMM::LangevinMiddleIntegrator(converted_Temperature, converted_friction, dt);
+            integrator_openmm = new OpenMM::LangevinMiddleIntegrator
+		(converted_Temperature, converted_friction, dt);
         else if (Integrator_type == "variablelangevin")
-            integrator_openmm = new OpenMM::VariableLangevinIntegrator(converted_Temperature, converted_friction, integration_tol);
+            integrator_openmm = new OpenMM::VariableLangevinIntegrator
+		(converted_Temperature, converted_friction, integration_tol);
         else if (Integrator_type == "brownian")
-            integrator_openmm = new OpenMM::BrownianIntegrator(converted_Temperature, converted_friction, dt);
+            integrator_openmm = new OpenMM::BrownianIntegrator
+		(converted_Temperature, converted_friction, dt);
         else
-            throw SireError::program_bug(QObject::tr("The user defined Integrator type is not supported. Available types are leapfrogverlet, variableleapfrogverlet, langevin, variablelangevin, brownian"), CODELOC);
+            throw SireError::program_bug
+		(QObject::tr("The user defined Integrator type is not "
+			     "supported. Available types are leapfrogverlet, "
+			     "variableleapfrogverlet, langevin, langevinmiddle"
+			     "variablelangevin, brownian"), CODELOC);
 
         if (Debug)
         {
