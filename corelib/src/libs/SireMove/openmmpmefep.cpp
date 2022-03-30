@@ -642,7 +642,7 @@ void OpenMMPMEFEP::initialise()
     nonbond_openmm->setUseDispersionCorrection(false);
 
     // scale the charges in the reciprocal space
-    nonbond_openmm->addGlobalParameter("lambda", 0.0);
+    nonbond_openmm->addGlobalParameter("lambda_offset", 0.0);
 
     // use default for the moment
     double tolerance_PME = nonbond_openmm->getEwaldErrorTolerance();
@@ -1164,7 +1164,7 @@ void OpenMMPMEFEP::initialise()
 		{
 		    // FIXME: check if all particles need this?
 		    // charge = charge_start + lambda * charge_diff
-		    nonbond_openmm->addParticleParameterOffset("lambda", nonbond_idx, charge_diff,
+		    nonbond_openmm->addParticleParameterOffset("lambda_offset", nonbond_idx, charge_diff,
 							       0.0, 0.0); // sigma, epsilon not needed
 
 		    if (Debug)
@@ -2391,11 +2391,12 @@ void OpenMMPMEFEP::initialise()
 
 	if (qprod_diff != 0.0)
 	{
-	   nonbond_openmm->addExceptionParameterOffset("lambda", i, qprod_diff,
+	   nonbond_openmm->addExceptionParameterOffset("lambda_offset", i, qprod_diff,
 						       0.0, 0.0);
 
 	   if (Debug)
-	       qDebug() << "offset (" << i << ") ="<< qprod_end - qprod_start;
+	       qDebug() << "Adding exception offset for atom idx" << i
+			<< "; qprod_diff =" << qprod_diff;
 
 	}
 
