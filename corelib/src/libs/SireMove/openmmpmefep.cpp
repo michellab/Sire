@@ -1614,6 +1614,9 @@ void OpenMMPMEFEP::initialise()
 
                             if (H_X_H || H_O_X || X_O_H)
                             {
+				const BondID * first_alchemical_bond = NULL;
+                                const BondID * second_alchemical_bond = NULL;
+
                                 double first_alchemical_distance = -1.0;
                                 double second_alchemical_distance = -1.0;
 
@@ -1635,7 +1638,7 @@ void OpenMMPMEFEP::initialise()
                                 {
                                     if (Debug)
                                         qDebug() << "First perturbed bond was not foud in the perturned list";
-                                    auto first_alchemical_bond = new BondID(three.atom0(), three.atom1());
+                                    first_alchemical_bond = new BondID(three.atom0(), three.atom1());
                                 }
 
 
