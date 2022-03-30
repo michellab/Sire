@@ -636,7 +636,7 @@ void OpenMMPMEFEP::initialise()
     // scale the charges in the reciprocal space
     recip_space->addGlobalParameter("lambda_offset", 0.0);
 
-    // use default for the moment
+    // use default tolerance for the moment
     double tolerance_PME = recip_space->getEwaldErrorTolerance();
 
     // from NonbondedForceImpl.cpp
@@ -3385,6 +3385,8 @@ void OpenMMPMEFEP::updateOpenMMContextLambda(double lambda)
         openmm_context->setParameter("lamangle", lambda); // Angles
     if (perturbed_energies[7])
         openmm_context->setParameter("lamdih", lambda); // Torsions
+
+    openmm_context->setParameter("lambda_offset", lambda);
 }
 
 boost::tuples::tuple<double, double, double> OpenMMPMEFEP::calculateGradient(
