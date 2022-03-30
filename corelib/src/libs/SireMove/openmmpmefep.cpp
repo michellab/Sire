@@ -836,13 +836,16 @@ void OpenMMPMEFEP::initialise()
 
     /************************************************************RESTRAINTS********************************************************/
 
+    OpenMM::CustomExternalForce * positionalRestraints_openmm = NULL;
+
     if (Restraint_flag == true)
     {
-        auto positionalRestraints_openmm =
-	   new OpenMM::CustomExternalForce(
-	      "k*d2;"
-	      "d2 = max(0.0, d1 - d^2);"
-	      "d1 = (x-xref)^2 + (y-yref)^2  + (z-zref)^2");
+        positionalRestraints_openmm = new OpenMM::CustomExternalForce
+	    (
+	     "k*d2;"
+	     "d2 = max(0.0, d1 - d^2);"
+	     "d1 = (x-xref)^2 + (y-yref)^2  + (z-zref)^2"
+	    );
         positionalRestraints_openmm->addPerParticleParameter("xref");
         positionalRestraints_openmm->addPerParticleParameter("yref");
         positionalRestraints_openmm->addPerParticleParameter("zref");
@@ -2593,21 +2596,22 @@ void OpenMMPMEFEP::createContext(IntegratorWorkspace &workspace, SireUnits::Dime
     const double dt = convertTo(timestep.value(), picosecond);
     const double converted_Temperature = convertTo(Temperature.value(), kelvin);
     const double converted_friction = convertTo(friction.value(), picosecond);
+    OpenMM::Integrator * integrator_openmm = NULL;
 
     if (!isContextInitialised || (isContextInitialised && reinitialise_context))
     {
         if (Integrator_type == "leapfrogverlet")
-            auto integrator_openmm = new OpenMM::VerletIntegrator(dt); //dt in picosecond
+            integrator_openmm = new OpenMM::VerletIntegrator(dt); //dt in picosecond
         else if (Integrator_type == "variableleapfrogverlet")
-            auto integrator_openmm = new OpenMM::VariableVerletIntegrator(integration_tol); //integration tolerance error unitless
+            integrator_openmm = new OpenMM::VariableVerletIntegrator(integration_tol); //integration tolerance error unitless
         else if (Integrator_type == "langevin")
-            auto integrator_openmm = new OpenMM::LangevinIntegrator(converted_Temperature, converted_friction, dt);
+            integrator_openmm = new OpenMM::LangevinIntegrator(converted_Temperature, converted_friction, dt);
 	else if (Integrator_type == "langevinmiddle")
-            auto integrator_openmm = new OpenMM::LangevinMiddleIntegrator(converted_Temperature, converted_friction, dt);
+            integrator_openmm = new OpenMM::LangevinMiddleIntegrator(converted_Temperature, converted_friction, dt);
         else if (Integrator_type == "variablelangevin")
-            auto integrator_openmm = new OpenMM::VariableLangevinIntegrator(converted_Temperature, converted_friction, integration_tol);
+            integrator_openmm = new OpenMM::VariableLangevinIntegrator(converted_Temperature, converted_friction, integration_tol);
         else if (Integrator_type == "brownian")
-            auto integrator_openmm = new OpenMM::BrownianIntegrator(converted_Temperature, converted_friction, dt);
+            integrator_openmm = new OpenMM::BrownianIntegrator(converted_Temperature, converted_friction, dt);
         else
             throw SireError::program_bug(QObject::tr("The user defined Integrator type is not supported. Available types are leapfrogverlet, variableleapfrogverlet, langevin, variablelangevin, brownian"), CODELOC);
 
