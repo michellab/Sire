@@ -3185,7 +3185,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
     while (sample_count <= n_samples)
     {
         //*********************MD STEPS****************************
-        openmm_context->getIntegrator()).step(energy_frequency;
+        (openmm_context->getIntegrator()).step(energy_frequency);
         state_openmm = openmm_context->getState(stateTypes, false, 0x01);
         double p_energy_lambda = state_openmm.getPotentialEnergy();
 
