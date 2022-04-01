@@ -55,6 +55,11 @@ SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::SDF&);
 namespace SireIO
 {
 
+namespace detail
+{
+    class SDFMolecule;
+}
+
 /** This class holds a parser for reading and writing
     Structure Data File (SDF) molecular file formats
 
@@ -104,6 +109,10 @@ public:
     QString formatDescription() const;
     QStringList formatSuffix() const;
 
+    QStringList parseWarnings() const;
+
+    int nMolecules() const;
+
     bool isLead() const;
 
 protected:
@@ -113,6 +122,9 @@ protected:
 private:
     void assertSane() const;
     void parseLines(const PropertyMap &map);
+
+    /** Any molecules that have been loaded from the file */
+    QList<detail::SDFMolecule> molecules;
 
     /** Any warnings that were raised when reading the file. */
     QStringList parse_warnings;

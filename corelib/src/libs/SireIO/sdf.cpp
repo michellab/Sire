@@ -59,6 +59,108 @@ using namespace SireStream;
 using namespace SireSystem;
 using namespace SireUnits;
 
+namespace SireIO { namespace detail {
+
+class SDFAtom
+{
+public:
+    SDFAtom()
+    {}
+
+    ~SDFAtom()
+    {}
+
+    QString name;
+    double x;
+    double y;
+    double z;
+    qint32 mass_difference;
+    qint32 chg_difference;
+    QStringList fields;
+};
+
+class SDFBond
+{
+public:
+    SDFBond()
+    {}
+
+    ~SDFBond()
+    {}
+
+    qint32 atom0;
+    qint32 atom1;
+    qint32 typ;
+    qint32 stereoscopy;
+    QStringList fields;
+};
+
+class SDFMolecule
+{
+public:
+    SDFMolecule()
+    {}
+
+    ~SDFMolecule()
+    {}
+
+    QVector<SDFAtom> atoms;
+    QVector<SDFBond> bonds;
+
+    QHash<QString, QStringList> properties;
+    QHash<QString, QStringList> data;
+};
+
+}} // end of namespace SireIO::detail
+
+QDataStream &operator<<(QDataStream &ds, const SireIO::detail::SDFAtom &atom)
+{
+    ds << atom.name << atom.x << atom.y << atom.z
+       << atom.chg_difference << atom.mass_difference
+       << atom.fields;
+
+    return ds;
+}
+
+QDataStream &operator>>(QDataStream &ds, SireIO::detail::SDFAtom &atom)
+{
+    ds >> atom.name >> atom.x >> atom.y >> atom.z
+       >> atom.chg_difference >> atom.mass_difference
+       >> atom.fields;
+
+    return ds;
+}
+
+QDataStream &operator<<(QDataStream &ds, const SireIO::detail::SDFBond &bond)
+{
+    ds << bond.atom0 << bond.atom1 << bond.typ
+       << bond.stereoscopy << bond.fields;
+
+    return ds;
+}
+
+QDataStream &operator>>(QDataStream &ds, SireIO::detail::SDFBond &bond)
+{
+    ds >> bond.atom0 >> bond.atom1 >> bond.typ
+       >> bond.stereoscopy >> bond.fields;
+
+    return ds;
+}
+
+QDataStream &operator<<(QDataStream &ds, const SireIO::detail::SDFMolecule &mol)
+{
+    ds << mol.atoms << mol.bonds << mol.properties << mol.data;
+    return ds;
+}
+
+QDataStream &operator>>(QDataStream &ds, SireIO::detail::SDFMolecule &mol)
+{
+    ds >> mol.atoms >> mol.bonds >> mol.properties >> mol.data;
+    return ds;
+}
+
+using namespace SireIO::detail;
+
 const RegisterParser<SDF> register_sdf;
 static const RegisterMetaType<SDF> r_sdf;
 
@@ -68,7 +170,8 @@ QDataStream &operator<<(QDataStream &ds, const SDF &sdf)
 
     SharedDataStream sds(ds);
 
-    sds << sdf.parse_warnings << static_cast<const MoleculeParser&>(sdf);
+    sds << sdf.molecules << sdf.parse_warnings
+        << static_cast<const MoleculeParser&>(sdf);
 
     return ds;
 }
@@ -81,7 +184,8 @@ QDataStream &operator>>(QDataStream &ds, SDF &sdf)
     {
         SharedDataStream sds(ds);
 
-        sds >> sdf.parse_warnings >> static_cast<MoleculeParser&>(sdf);
+        sds >> sdf.molecules >> sdf.parse_warnings
+            >> static_cast<MoleculeParser&>(sdf);
     }
     else
         throw version_error(v, "1", r_sdf, CODELOC);
@@ -91,8 +195,7 @@ QDataStream &operator>>(QDataStream &ds, SDF &sdf)
 
 /** Constructor */
 SDF::SDF() : ConcreteProperty<SDF,MoleculeParser>()
-{
-}
+{}
 
 /** Construct to read in the data from the file called 'filename'. The
     passed property map can be used to pass extra parameters to control
@@ -153,6 +256,7 @@ SDF::SDF(const SireSystem::System &system, const PropertyMap &map) :
 /** Copy constructor */
 SDF::SDF(const SDF &other) :
     ConcreteProperty<SDF,MoleculeParser>(other),
+    molecules(other.molecules),
     parse_warnings(other.parse_warnings)
 {}
 
@@ -165,6 +269,7 @@ SDF& SDF::operator=(const SDF &other)
 {
     if (this != &other)
     {
+        this->molecules = other.molecules;
         this->parse_warnings = other.parse_warnings;
 
         MoleculeParser::operator=(other);
@@ -228,7 +333,8 @@ QString SDF::toString() const
         return QObject::tr("SDF::null");
     else
     {
-        return QObject::tr("SDF()");
+        return QObject::tr("SDF( nMolecules() == %1 )")
+                        .arg(this->nMolecules());
     }
 }
 
@@ -236,6 +342,18 @@ QString SDF::toString() const
 QString SDF::formatName() const
 {
     return "SDF";
+}
+
+/** Return any warnings raised when parsing this file */
+QStringList SDF::parseWarnings() const
+{
+    return this->parse_warnings;
+}
+
+/** Return the number of molecules loaded in this file */
+int SDF::nMolecules() const
+{
+    return this->molecules.count();
 }
 
 /** Return a description of the file format */
@@ -263,14 +381,16 @@ bool SDF::isLead() const
     should raise an exception if the parser is in an invalid state */
 void SDF::assertSane() const
 {
-    QStringList errors;
-
-    // NEED TO DO SOME CHECKS HERE!
-
-    if (not errors.isEmpty())
+    if (this->nMolecules() == 0)
     {
-        throw SireIO::parse_error(QObject::tr("There were errors reading the SDF format "
-          "file:\n%1").arg(errors.join("\n\n")), CODELOC);
+        QStringList errors = this->parse_warnings;
+
+        if (not errors.isEmpty())
+        {
+            throw SireIO::parse_error(QObject::tr(
+                "There were errors reading the SDF format "
+                "file:\n%1").arg(errors.join("\n\n")), CODELOC);
+        }
     }
 }
 
@@ -283,8 +403,219 @@ void SDF::parseLines(const PropertyMap &map)
         http://www.nonlinear.com/progenesis/sdf-studio/v0.9/faq/sdf-file-format-guidance.aspx
      */
 
+    // The first three lines are the header block
+    const auto &l = this->lines();
 
-    this->setScore(0);
+    if (l.count() < 4)
+    {
+        // this is not a valid SDF file
+        this->parse_warnings.append(
+            QObject::tr("There are no enough lines for this "
+                        "to be a valid SDF-formatted file.")
+        );
+        this->setScore(0);
+        return;
+    }
+
+    // first line is the molecule name
+    const auto molname = l[0].simplified();
+    // then the software used to generate the SDF file
+    const auto software = l[1].simplified();
+    // then a user-supplied comment (if any)
+    const auto comment = l[2].simplified();
+
+    // now the counts line - 12 fixed-width fields. The first eleven are 3
+    // characters long. The last is 6 characters long
+    const auto counts_line = l[3];
+
+    if (counts_line.size() < 39)
+    {
+        this->parse_warnings.append(
+            QObject::tr("The counts line in this SDF file does not "
+                        "have enough characters! '%1'. It should be "
+                        "at least 39 characters wide.").arg(counts_line)
+        );
+        this->setScore(0);
+        return;
+    }
+
+    int counts[11];
+    bool is_set[11];
+
+    for (int i=0; i<11; ++i)
+    {
+
+        const auto count = counts_line.midRef(i*3, 3);
+
+        if (count == "   ")
+        {
+            is_set[i] = false;
+            counts[i] = 0;
+        }
+        else
+        {
+            bool ok;
+            counts[i] = count.toInt(&ok);
+
+            if (!ok)
+            {
+                this->parse_warnings.append(
+                    QObject::tr("Could not read count line item %1. This does "
+                                "not appear to be an integer? '%2'")
+                            .arg(i+1).arg(counts_line)
+                );
+
+                is_set[i] = false;
+                counts[i] = 0;
+            }
+            else
+            {
+                is_set[i] = true;
+            }
+        }
+    }
+
+    // the last counts line item can be a string!
+    QString last_counts = counts_line.mid(33, 6);
+
+    // Atom counter.
+    int nats = counts[0];
+
+    // Bonds counter
+    int nbonds = counts[1];
+
+    if (nats == 0)
+    {
+        // nothing to read?
+        this->setScore(0);
+        this->parse_warnings.append(
+            QObject::tr("The number of atoms to read is set to zero?")
+        );
+        return;
+    }
+
+    // next, read in the atoms
+    if (l.count() < 4 + nats)
+    {
+        this->parse_warnings.append(
+            QObject::tr("There aren't enough lines in this file to "
+                        "contain all of the atoms. File is "
+                        "corrupted?")
+        );
+        this->setScore(0);
+        return;
+    }
+
+    QVector<SDFAtom> atoms(nats);
+
+    for (int i=0; i<nats; ++i)
+    {
+        const auto &line = l[i+4];
+
+        //000000000011111111112222222222333333333344444444445555555555666666666
+        //012345678901234567890123456789012345678901234567890123456789012345678
+        //    0.5369    0.9749    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+
+        if (line.size() < 69)
+        {
+            this->parse_warnings.append(
+                QObject::tr("Atom line %1 is too short '%2'")
+                    .arg(i+1).arg(line)
+            );
+            this->setScore(0);
+            return;
+        }
+
+        SDFAtom &atom = atoms[i];
+
+        auto assert_ok = [&](bool is_ok, int line_num,
+                             const QString &line, const QString &field)
+                        {
+                            if (not is_ok)
+                            {
+                                this->parse_warnings.append(
+                                    QObject::tr("Atom line %1 has a problem "
+                                      "with field '%2'. '%3'")
+                                        .arg(line_num)
+                                        .arg(field)
+                                        .arg(line)
+                                );
+
+                                this->setScore(0);
+                                return false;
+                            }
+
+                            return true;
+                        };
+
+        bool ok;
+
+        atom.x = line.midRef(0,10).toDouble(&ok);
+
+        if (not assert_ok(ok, i+1, line, "x"))
+            return;
+
+        atom.y = line.midRef(10, 10).toDouble(&ok);
+
+        if (not assert_ok(ok, i+1, line, "y"))
+            return;
+
+        atom.z = line.midRef(20, 10).toDouble(&ok);
+
+        if (not assert_ok(ok, i+1, line, "z"))
+            return;
+
+        atom.name = line.mid(31,3);
+
+        atom.mass_difference = line.midRef(34, 2).toInt(&ok);
+
+        if (not assert_ok(ok, i+1, line, "mass difference"))
+            return;
+
+        if (atom.mass_difference < -3 or atom.mass_difference > 4)
+        {
+            this->parse_warnings.append(QObject::tr(
+                "Only mass differences between -3 and 4 are supported. "
+                "Cannot have a difference of %1 on line %2. '%3'")
+                    .arg(atom.mass_difference)
+                    .arg(i+1).arg(line));
+            this->setScore(0);
+            return;
+        }
+
+        atom.chg_difference = line.midRef(36, 3).toInt(&ok);
+
+        if (not assert_ok(ok, i+1, line, "charge difference"))
+            return;
+
+        if (atom.chg_difference < 0 or atom.chg_difference > 7)
+        {
+            this->parse_warnings.append(QObject::tr(
+                "Only charge differences between 0 and 7 are supported. "
+                "Cannot have a difference of %1 on line %2. '%3'")
+                    .arg(atom.chg_difference)
+                    .arg(i+1).arg(line));
+        }
+
+        // ten more fields of 3 characters each. We won't convert these
+        // to numbers - just leave as strings
+        for (int j=0; j<10; ++j)
+        {
+            atom.fields.append(line.mid(38+(3*j), 3));
+        }
+    }
+
+    // now load up the bonds
+    QVector<SDFBond> bonds(nbonds);
+
+
+    SDFMolecule molecule;
+    molecule.atoms = atoms;
+    molecule.bonds = bonds;
+
+    this->molecules.append(molecule);
+
+    this->setScore(1000);
 }
 
 /** Use the data contained in this parser to create a new System of molecules,
