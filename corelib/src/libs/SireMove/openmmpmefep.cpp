@@ -125,8 +125,8 @@ enum
 
 enum
 {
-   BOND_FCG,
-   NONBONDED_FCG
+    NONBONDED_FCG = 0,
+    BOND_FCG = 1
 };
 
 
@@ -1860,7 +1860,7 @@ void OpenMMPMEFEP::initialise()
                         solute_torsion_perturbation->addTorsion(idx0, idx1, idx2, idx3, solute_torsion_perturbation_params);
 
                         //********************************BONDED ENERGY TORSIONS ARE ADDED TO THE SYSTEM*****************************
-                        solute_torsion_perturbation->setForceGroup(BOND_FCG);
+                        solute_torsion_perturbation->setForceGroup(NONBONDED_FCG); // FIXME: why in this force group?
                         system_openmm->addForce(solute_torsion_perturbation);
 
                         perturbed_energies_tmp[7] = true; //Torsions are added to the system
@@ -3000,9 +3000,9 @@ System OpenMMPMEFEP::annealSystemToLambda(System &system,
         else
             lam = lam + 0.1;
     }
-    int stateTypes = OpenMM::State::Positions;
-    stateTypes |= OpenMM::State::Velocities;
+    int stateTypes = OpenMM::State::Positions | OpenMM::State::Velocities;
     OpenMM::State state_openmm = openmm_context->getState(stateTypes);
+
     std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
     std::vector<OpenMM::Vec3> velocities_openmm = state_openmm.getVelocities();
 
@@ -3130,9 +3130,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
 
     const double beta = 1.0 / (0.0083144621 * convertTo(Temperature.value(), kelvin)); //mol/kJ
 
-    int stateTypes = 0;
-
-    stateTypes = OpenMM::State::Positions |  OpenMM::State::Velocities
+    int stateTypes = OpenMM::State::Positions |  OpenMM::State::Velocities
        | OpenMM::State::Energy;
 
     OpenMM::State state_openmm;
@@ -3187,9 +3185,10 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
     while (sample_count <= n_samples)
     {
         //*********************MD STEPS****************************
-        (openmm_context->getIntegrator()).step(energy_frequency);
+        openmm_context->getIntegrator()).step(energy_frequency;
         state_openmm = openmm_context->getState(stateTypes, false, 0x01);
         double p_energy_lambda = state_openmm.getPotentialEnergy();
+
         if (Debug)
         {
             qDebug() << "Lambda =" << Alchemical_value << "Potential energy ="
