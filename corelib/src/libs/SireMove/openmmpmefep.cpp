@@ -122,6 +122,14 @@ enum
     GEOMETRIC = 1
 };
 
+
+enum
+{
+   BOND_FCG,
+   NONBONDED_FCG
+};
+
+
 static const RegisterMetaType<OpenMMPMEFEP> r_openmmint;
 
 /** Serialise to a binary datastream */
@@ -1852,7 +1860,7 @@ void OpenMMPMEFEP::initialise()
                         solute_torsion_perturbation->addTorsion(idx0, idx1, idx2, idx3, solute_torsion_perturbation_params);
 
                         //********************************BONDED ENERGY TORSIONS ARE ADDED TO THE SYSTEM*****************************
-                        solute_torsion_perturbation->setForceGroup(0);
+                        solute_torsion_perturbation->setForceGroup(BOND_FCG);
                         system_openmm->addForce(solute_torsion_perturbation);
 
                         perturbed_energies_tmp[7] = true; //Torsions are added to the system
@@ -2404,7 +2412,7 @@ void OpenMMPMEFEP::initialise()
 
     if (npairs != num_exceptions)
     {
-        direct_space->setForceGroup(0);
+        direct_space->setForceGroup(NONBONDED_FCG);
         system_openmm->addForce(direct_space);
         perturbed_energies_tmp[0] = true; //Custom non bonded 1-5 is added to the system
         if (Debug)
@@ -2413,7 +2421,7 @@ void OpenMMPMEFEP::initialise()
 
     if (custom_intra_14_clj->getNumBonds() != 0)
     {
-        custom_intra_14_clj->setForceGroup(0);
+        custom_intra_14_clj->setForceGroup(NONBONDED_FCG);
         system_openmm->addForce(custom_intra_14_clj);
         perturbed_energies_tmp[1] = true; //Custom non bonded 1-4 is added to the system
         if (Debug)
@@ -2422,7 +2430,7 @@ void OpenMMPMEFEP::initialise()
 
     if (custom_intra_14_todummy->getNumBonds() != 0)
     {
-        custom_intra_14_todummy->setForceGroup(0);
+        custom_intra_14_todummy->setForceGroup(NONBONDED_FCG);
         system_openmm->addForce(custom_intra_14_todummy);
         perturbed_energies_tmp[2] = true; //Custom non bonded 1-4 is added to the system
         if (Debug)
@@ -2432,7 +2440,7 @@ void OpenMMPMEFEP::initialise()
 
     if (custom_intra_14_fromdummy->getNumBonds() != 0)
     {
-        custom_intra_14_fromdummy->setForceGroup(0);
+        custom_intra_14_fromdummy->setForceGroup(NONBONDED_FCG);
         system_openmm->addForce(custom_intra_14_fromdummy);
         perturbed_energies_tmp[3] = true; //Custom non bonded 1-4 is added to the system
         if (Debug)
@@ -2441,7 +2449,7 @@ void OpenMMPMEFEP::initialise()
 
     if (custom_intra_14_fromdummy_todummy->getNumBonds() != 0)
     {
-        custom_intra_14_fromdummy_todummy->setForceGroup(0);
+        custom_intra_14_fromdummy_todummy->setForceGroup(NONBONDED_FCG);
         system_openmm->addForce(custom_intra_14_fromdummy_todummy);
         perturbed_energies_tmp[4] = true; //Custom non bonded 1-4 is added to the system
         if (Debug)
@@ -2450,7 +2458,7 @@ void OpenMMPMEFEP::initialise()
 
     if (custom_corr_recip->getNumBonds() != 0)
     {
-        custom_corr_recip->setForceGroup(0);
+        custom_corr_recip->setForceGroup(NONBONDED_FCG);
         system_openmm->addForce(custom_corr_recip);
         perturbed_energies_tmp[8] = true;
 
@@ -2463,7 +2471,7 @@ void OpenMMPMEFEP::initialise()
 
     if (bondStretch_openmm->getNumBonds() != 0)
     {
-        bondStretch_openmm->setForceGroup(1);
+        bondStretch_openmm->setForceGroup(BOND_FCG);
         system_openmm->addForce(bondStretch_openmm);
         if (Debug)
             qDebug() << "Added Internal Bond energy term";
@@ -2471,7 +2479,7 @@ void OpenMMPMEFEP::initialise()
 
     if (bondBend_openmm->getNumAngles() != 0)
     {
-        bondBend_openmm->setForceGroup(1);
+        bondBend_openmm->setForceGroup(BOND_FCG);
         system_openmm->addForce(bondBend_openmm);
         if (Debug)
             qDebug() << "Added Internal Angle energy term";
@@ -2479,7 +2487,7 @@ void OpenMMPMEFEP::initialise()
 
     if (bondTorsion_openmm->getNumTorsions() != 0)
     {
-        bondTorsion_openmm->setForceGroup(1);
+        bondTorsion_openmm->setForceGroup(BOND_FCG);
         system_openmm->addForce(bondTorsion_openmm);
         if (Debug)
             qDebug() << "Added Internal Torsion energy term";
@@ -2487,7 +2495,7 @@ void OpenMMPMEFEP::initialise()
 
     if (solute_bond_perturbation->getNumBonds() != 0)
     {
-        solute_bond_perturbation->setForceGroup(0);
+        solute_bond_perturbation->setForceGroup(BOND_FCG);
         system_openmm->addForce(solute_bond_perturbation);
         perturbed_energies_tmp[5] = true; //Custom bonded is added to the system
         if (Debug)
@@ -2496,7 +2504,7 @@ void OpenMMPMEFEP::initialise()
 
     if (solute_angle_perturbation->getNumAngles() != 0)
     {
-        solute_angle_perturbation->setForceGroup(0);
+        solute_angle_perturbation->setForceGroup(BOND_FCG);
         system_openmm->addForce(solute_angle_perturbation);
         perturbed_energies_tmp[6] = true; //Custom bonded is added to the system
         if (Debug)
@@ -2877,12 +2885,12 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10, 
     SireUnits::Dimension::Time timestep = 0.0 * picosecond;
     createContext(workspace.edit(), timestep);
 
-    int infoMask = OpenMM::State::Positions;
+    int stateTypes = OpenMM::State::Positions;
 
     if (Debug)
-       infoMask += OpenMM::State::Energy;
+       stateTypes |= OpenMM::State::Energy;
 
-    OpenMM::State state_openmm = openmm_context->getState(infoMask);
+    OpenMM::State state_openmm = openmm_context->getState(stateTypes);
     std::vector<OpenMM::Vec3> old_positions_openmm = state_openmm.getPositions();
 
     if (Debug)
@@ -2897,7 +2905,7 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10, 
     OpenMM::LocalEnergyMinimizer::minimize(*openmm_context, tolerance, max_iteration);
 
     // Step 3 update the positions in the system
-    state_openmm = openmm_context->getState(infoMask);
+    state_openmm = openmm_context->getState(stateTypes);
     std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
 
     // Recast to atomicvelocityworkspace because want to use commitCoordinates() method to update system
@@ -2992,9 +3000,9 @@ System OpenMMPMEFEP::annealSystemToLambda(System &system,
         else
             lam = lam + 0.1;
     }
-    int infoMask = OpenMM::State::Positions;
-    infoMask = infoMask + OpenMM::State::Velocities;
-    OpenMM::State state_openmm = openmm_context->getState(infoMask);
+    int stateTypes = OpenMM::State::Positions;
+    stateTypes |= OpenMM::State::Velocities;
+    OpenMM::State state_openmm = openmm_context->getState(stateTypes);
     std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
     std::vector<OpenMM::Vec3> velocities_openmm = state_openmm.getVelocities();
 
@@ -3122,15 +3130,12 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
 
     const double beta = 1.0 / (0.0083144621 * convertTo(Temperature.value(), kelvin)); //mol/kJ
 
-    int infoMask = 0;
+    int stateTypes = 0;
 
-    infoMask = OpenMM::State::Positions;
-    infoMask = infoMask + OpenMM::State::Velocities;
-    infoMask = infoMask + OpenMM::State::Energy;
-    //infoMask = infoMask + OpenMM::State::Parameters;
+    stateTypes = OpenMM::State::Positions |  OpenMM::State::Velocities
+       | OpenMM::State::Energy;
 
-    OpenMM::State state_openmm; //OpenMM State
-
+    OpenMM::State state_openmm;
 
     int sample_count = 1;
 
@@ -3183,7 +3188,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
     {
         //*********************MD STEPS****************************
         (openmm_context->getIntegrator()).step(energy_frequency);
-        state_openmm = openmm_context->getState(infoMask, false, 0x01);
+        state_openmm = openmm_context->getState(stateTypes, false, 0x01);
         double p_energy_lambda = state_openmm.getPotentialEnergy();
         if (Debug)
         {
@@ -3203,7 +3208,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
         {
             openmm_context->setParameter("SPOnOff", 1.0); //Solvent-Solvent and Protein Protein Non Bonded OFF
         }
-        state_openmm = openmm_context->getState(infoMask, false, 0x01);
+        state_openmm = openmm_context->getState(stateTypes, false, 0x01);
 
         if (Debug)
             qDebug() << "Total Time = " << state_openmm.getTime() << " ps";
@@ -3272,7 +3277,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
         timeskip = SireUnits::Dimension::Time(0.0);
     }
 
-    state_openmm = openmm_context->getState(infoMask);
+    state_openmm = openmm_context->getState(stateTypes);
     positions_openmm = state_openmm.getPositions();
     velocities_openmm = state_openmm.getVelocities();
 
@@ -3349,12 +3354,14 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
 double OpenMMPMEFEP::getPotentialEnergyAtLambda(double lambda)
 {
     double curr_potential_energy = 0.0;
-    int infoMask = 0;
-    infoMask = infoMask + OpenMM::State::Energy;
+    int stateTypes = OpenMM::State::Energy;
+
     updateOpenMMContextLambda(lambda);
-    OpenMM::State state_openmm = openmm_context->getState(infoMask);
-    state_openmm = openmm_context->getState(infoMask, false, 0x01);
+
+    OpenMM::State state_openmm = openmm_context->getState(stateTypes, false, 0x01);
+
     curr_potential_energy = state_openmm.getPotentialEnergy();
+
     return curr_potential_energy;
 }
 
@@ -3386,6 +3393,8 @@ void OpenMMPMEFEP::updateOpenMMContextLambda(double lambda)
     if (perturbed_energies[7])
         openmm_context->setParameter("lamdih", lambda); // Torsions
 
+    // lambda for the offsets (linear scaling) of the charges in
+    // reciprocal space
     openmm_context->setParameter("lambda_offset", lambda);
 }
 
