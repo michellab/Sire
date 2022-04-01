@@ -70,6 +70,14 @@ public:
     ~SDFAtom()
     {}
 
+    QString toString() const
+    {
+        return QString("%1  %2 %3 %4  %5 %6  %7")
+                .arg(name).arg(x).arg(y).arg(z)
+                .arg(mass_difference).arg(chg_difference)
+                .arg(fields.join(":"));
+    }
+
     QString name;
     double x;
     double y;
@@ -88,6 +96,14 @@ public:
     ~SDFBond()
     {}
 
+    QString toString() const
+    {
+        return QString("%1-%2  %3  %4  %5")
+                    .arg(atom0).arg(atom1)
+                    .arg(typ).arg(stereoscopy)
+                    .arg(fields.join(":"));
+    }
+
     qint32 atom0;
     qint32 atom1;
     qint32 typ;
@@ -103,6 +119,58 @@ public:
 
     ~SDFMolecule()
     {}
+
+    QString toString() const
+    {
+        QStringList lines;
+
+        lines.append(QString("name = %1").arg(name));
+        lines.append(QString("software = %1").arg(software));
+        lines.append(QString("comment = %1").arg(comment));
+
+        lines.append(QString("counts: %1").arg(counts.join(" ")));
+
+        lines.append(QString("nAtoms == %1").arg(atoms.count()));
+
+        for (auto atom : atoms)
+        {
+            lines.append(atom.toString());
+        }
+
+        lines.append(QString("nBonds == %1").arg(bonds.count()));
+
+        for (auto bond : bonds)
+        {
+            lines.append(bond.toString());
+        }
+
+        for (auto key : properties.keys())
+        {
+            lines.append(QString("property %1").arg(key));
+
+            for (auto s : properties[key])
+            {
+                lines.append(s);
+            }
+        }
+
+        for (auto key : data.keys())
+        {
+            lines.append(QString("data %1").arg(key));
+
+            for (auto s : data[key])
+            {
+                lines.append(s);
+            }
+        }
+
+        return lines.join("\n");
+    }
+
+    QString name;
+    QString software;
+    QString comment;
+    QStringList counts;
 
     QVector<SDFAtom> atoms;
     QVector<SDFBond> bonds;
@@ -439,52 +507,41 @@ void SDF::parseLines(const PropertyMap &map)
         return;
     }
 
-    int counts[11];
-    bool is_set[11];
+    QStringList counts;
 
     for (int i=0; i<11; ++i)
     {
-
-        const auto count = counts_line.midRef(i*3, 3);
-
-        if (count == "   ")
-        {
-            is_set[i] = false;
-            counts[i] = 0;
-        }
-        else
-        {
-            bool ok;
-            counts[i] = count.toInt(&ok);
-
-            if (!ok)
-            {
-                this->parse_warnings.append(
-                    QObject::tr("Could not read count line item %1. This does "
-                                "not appear to be an integer? '%2'")
-                            .arg(i+1).arg(counts_line)
-                );
-
-                is_set[i] = false;
-                counts[i] = 0;
-            }
-            else
-            {
-                is_set[i] = true;
-            }
-        }
+        counts.append(counts_line.mid(i*3, 3));
     }
 
-    // the last counts line item can be a string!
-    QString last_counts = counts_line.mid(33, 6);
+    // the last counts line item can also be a string!
+    counts.append(counts_line.mid(33, 6));
+
+    bool ok;
 
     // Atom counter.
-    int nats = counts[0];
+    const int natoms = counts[0].toInt(&ok);
+
+    if (not ok)
+    {
+        this->setScore(0);
+        this->parse_warnings.append(
+            QObject::tr("Cannot interpret the number of atoms from the "
+                        "counts line: %1").arg(counts_line));
+    }
 
     // Bonds counter
-    int nbonds = counts[1];
+    const int nbonds = counts[1].toInt(&ok);
 
-    if (nats == 0)
+    if (not ok)
+    {
+        this->setScore(0);
+        this->parse_warnings.append(
+            QObject::tr("Cannot interpret the number of bonds from the "
+                        "counts line: %1").arg(counts_line));
+    }
+
+    if (natoms == 0)
     {
         // nothing to read?
         this->setScore(0);
@@ -495,35 +552,29 @@ void SDF::parseLines(const PropertyMap &map)
     }
 
     // next, read in the atoms
-    if (l.count() < 4 + nats)
+    if (l.count() < 4 + natoms + nbonds)
     {
         this->parse_warnings.append(
             QObject::tr("There aren't enough lines in this file to "
-                        "contain all of the atoms. File is "
+                        "contain all of the atoms and bonds. File is "
                         "corrupted?")
         );
         this->setScore(0);
         return;
     }
 
-    QVector<SDFAtom> atoms(nats);
+    QVector<SDFAtom> atoms(natoms);
 
-    for (int i=0; i<nats; ++i)
+    for (int i=0; i<natoms; ++i)
     {
-        const auto &line = l[i+4];
+        QString line = l[i+4];
 
         //000000000011111111112222222222333333333344444444445555555555666666666
         //012345678901234567890123456789012345678901234567890123456789012345678
         //    0.5369    0.9749    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-
-        if (line.size() < 69)
+        while (line.size() < 69)
         {
-            this->parse_warnings.append(
-                QObject::tr("Atom line %1 is too short '%2'")
-                    .arg(i+1).arg(line)
-            );
-            this->setScore(0);
-            return;
+            line.append(" ");
         }
 
         SDFAtom &atom = atoms[i];
@@ -547,8 +598,6 @@ void SDF::parseLines(const PropertyMap &map)
 
                             return true;
                         };
-
-        bool ok;
 
         atom.x = line.midRef(0,10).toDouble(&ok);
 
@@ -605,13 +654,152 @@ void SDF::parseLines(const PropertyMap &map)
         }
     }
 
-    // now load up the bonds
     QVector<SDFBond> bonds(nbonds);
 
+    for (int i=0; i<nbonds; ++i)
+    {
+        QString line = l[4 + natoms + i];
+
+        //000000000011111111112
+        //012345678901234567890
+        //  1  2  1  0  0  0  0
+        while (line.size() < 20)
+        {
+            line.append(" ");
+        }
+
+        SDFBond &bond = bonds[i];
+
+        auto assert_ok = [&](bool is_ok, int line_num,
+                             const QString &line, const QString &field)
+                        {
+                            if (not is_ok)
+                            {
+                                this->parse_warnings.append(
+                                    QObject::tr("Bond line %1 has a problem "
+                                      "with field '%2'. '%3'")
+                                        .arg(line_num)
+                                        .arg(field)
+                                        .arg(line)
+                                );
+
+                                this->setScore(0);
+                                return false;
+                            }
+
+                            return true;
+                        };
+
+        bond.atom0 = line.midRef(0, 3).toInt(&ok);
+
+        if (not assert_ok(ok, i+1, line, "atom0"))
+            return;
+
+        bond.atom1 = line.midRef(3, 3).toInt(&ok);
+
+        if (not assert_ok(ok, i+1, line, "atom1"))
+            return;
+
+        bond.typ = line.midRef(6, 3).toInt(&ok);
+
+        if (not assert_ok(ok, i+1, line, "bond type"))
+            return;
+
+        bond.stereoscopy = line.midRef(9, 3).toInt(&ok);
+
+        if (not assert_ok(ok, i+1, line, "stereoscopy"))
+            return;
+
+        // now add on the three fields, which we will leave as strings
+        for (int j=0; j<3; ++j)
+        {
+            bond.fields.append(line.mid(12+(3*j), 3));
+        }
+    }
+
+    // now read in the properties...
+    int linenum = 4 + natoms + nbonds;
+
+    QHash<QString, QStringList> properties;
+
+    while (linenum < l.count())
+    {
+        const auto line = l[linenum];
+
+        if (line.startsWith("M  END"))
+        {
+            // end of the properties
+            break;
+        }
+        else if (line.startsWith("M  "))
+        {
+            // this is a new property line
+            if (line.size() >= 6)
+            {
+                QString key = line.mid(3, 3);
+                properties[key].append(line);
+            }
+        }
+
+        linenum += 1;
+    }
+
+    // now read in the data...
+    QString key = "";
+    QHash<QString, QStringList> data;
+
+    while (linenum < l.count())
+    {
+        QString line = l[linenum];
+
+        if (line.startsWith("$$$$"))
+        {
+            // end of the data (and molecule)
+            break;
+        }
+        else if (line.startsWith("> "))
+        {
+            line = line.mid(2);
+
+            int start_idx = line.indexOf("<");
+            int end_idx = line.indexOf(">");
+
+            if (start_idx >= 0 and end_idx >= 0)
+            {
+                key = line.mid(start_idx, end_idx-start_idx+1);
+            }
+            else
+            {
+                key = "";
+            }
+        }
+        else if (key.size() > 0)
+        {
+            if (line.simplified().size() > 0)
+            {
+                data[key].append(line);
+            }
+        }
+
+        linenum += 1;
+    }
 
     SDFMolecule molecule;
+    molecule.name = molname;
+    molecule.software = software;
+    molecule.comment = comment;
+    molecule.counts = counts;
     molecule.atoms = atoms;
     molecule.bonds = bonds;
+    molecule.properties = properties;
+    molecule.data = data;
+
+    auto debug_lines = molecule.toString().split("\n");
+
+    for (auto l: debug_lines)
+    {
+        qDebug() << l;
+    }
 
     this->molecules.append(molecule);
 
