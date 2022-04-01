@@ -27,8 +27,8 @@
 \*********************************************/
 
 
-#ifndef SIREIO_PDB2_H
-#define SIREIO_PDB2_H
+#ifndef SIREIO_SDF_H
+#define SIREIO_SDF_H
 
 #include "moleculeparser.h"
 
