@@ -96,8 +96,8 @@ using namespace SireIO;
 using namespace std;
 using boost::tuples::tuple;
 
-/** TYPES OF CUTOFF IMPLEMENTED**/
-enum
+
+enum CutoffTypes
 {
     NOCUTOFF = 0,
     CUTOFFNONPERIODIC = 1,
@@ -105,8 +105,7 @@ enum
     PME = 3			// only PME used here
 };
 
-/** TYPES OF CONSTRAINTS IMPLEMENTED **/
-enum
+enum ConstraintTypes
 {
     NONE = 0,
     HBONDS = 1,
@@ -115,20 +114,18 @@ enum
 
 };
 
-/** TYPES OF COMBINING RULES IMPLEMENTED **/
-enum
+enum CombinationRules
 {
     ARITHMETIC = 0,
     GEOMETRIC = 1
 };
 
 
-enum
+enum ForceGroups
 {
     NONBONDED_FCG = 0,
     BOND_FCG = 1
 };
-
 
 static const RegisterMetaType<OpenMMPMEFEP> r_openmmint;
 
@@ -2844,7 +2841,7 @@ MolarEnergy OpenMMPMEFEP::getPotentialEnergy(const System &system)
     createContext(ws.edit(), 2 * femtosecond);
 
     OpenMM::State state_openmm = openmm_context->getState(OpenMM::State::Energy);
-    MolarEnergy nrg = state_openmm.getPotentialEnergy() * kJ_per_mol;
+    MolarEnergy nrg = state_openmm.getPotentialEnergy() * kJ_per_mol; // convert to kcal/mol
 
     this->destroyContext();
 
