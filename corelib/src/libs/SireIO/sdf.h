@@ -113,6 +113,9 @@ public:
 
     int nMolecules() const;
 
+    int nAtoms() const;
+    int nAtoms(int i) const;
+
     bool isLead() const;
 
 protected:
@@ -125,6 +128,12 @@ private:
 
     void parseMoleculeLines(const PropertyMap &map,
                             const QStringList &lines);
+
+    SireMol::MolStructureEditor getMolStructure(const detail::SDFMolecule &mol,
+        const SireBase::PropertyName &cutting,
+        const QString &resname) const;
+
+    SireMol::MolEditor getMolecule(int imol, const PropertyMap &map = PropertyMap()) const;
 
     /** Any molecules that have been loaded from the file */
     QList<detail::SDFMolecule> molecules;

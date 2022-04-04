@@ -43,9 +43,12 @@
 #include "SireMol/atomcharges.h"
 #include "SireMol/atomcoords.h"
 #include "SireMol/atomelements.h"
+#include "SireMol/atommasses.h"
 #include "SireMol/errors.h"
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
+
+#include "SireBase/propertylist.h"
 
 #include "SireUnits/units.h"
 
@@ -165,6 +168,21 @@ public:
         }
 
         return lines.join("\n");
+    }
+
+    int getCharge(int i) const
+    {
+        return 0;
+    }
+
+    Element getElement(int i) const
+    {
+        return Element(atoms[i].name);
+    }
+
+    double getMass(int i) const
+    {
+        return 0.0;
     }
 
     QString name;
@@ -422,6 +440,24 @@ QStringList SDF::parseWarnings() const
 int SDF::nMolecules() const
 {
     return this->molecules.count();
+}
+
+/** Return the total number of atoms. */
+int SDF::nAtoms() const
+{
+    int num_atoms = 0;
+
+    for (const auto &mol : this->molecules)
+        num_atoms += mol.atoms.count();
+
+    return num_atoms;
+}
+
+/** Return the number of atoms in molecule 'i'. */
+int SDF::nAtoms(int i) const
+{
+    i = Index(i).map(this->molecules.count());
+    return this->molecules[i].atoms.count();
 }
 
 /** Return a description of the file format */
@@ -844,7 +880,154 @@ void SDF::parseLines(const PropertyMap &map)
     assigning properties based on the mapping in 'map'. */
 System SDF::startSystem(const PropertyMap &map) const
 {
-    return System();
+    const int nmols = nMolecules();
+
+    if (nmols == 0)
+        return System();
+
+    QVector<Molecule> mols(nmols);
+    Molecule *mols_array = mols.data();
+
+    if (usesParallel())
+    {
+        tbb::parallel_for(tbb::blocked_range<int>(0, nmols),
+                           [&](tbb::blocked_range<int> r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                mols_array[i] = this->getMolecule(i, map);
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<nmols; ++i)
+        {
+            mols_array[i] = this->getMolecule(i, map);
+        }
+    }
+
+    MoleculeGroup molgroup("all");
+
+    for (auto mol : mols)
+    {
+        molgroup.add(mol);
+    }
+
+    System system;
+    system.add(molgroup);
+    system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
+
+    return system;
+}
+
+/** Internal function used to get the molecule structure for molecule 'imol'. */
+MolStructureEditor SDF::getMolStructure(const SDFMolecule &sdfmol,
+                                        const PropertyName &cutting,
+                                        const QString &resname) const
+{
+    // Make sure that there are atoms in the molecule.
+    if (sdfmol.atoms.count() == 0)
+    {
+        throw SireError::program_bug(QObject::tr(
+            "Strange - there are no atoms in molecule %1?")
+                .arg(sdfmol.toString()), CODELOC);
+    }
+
+    // First step is to build the structure of the molecule, i.e.
+    // the layout of cutgroups, residues and atoms.
+    MolStructureEditor mol;
+
+    // SDF files don't define resiues, so place all atoms in a single residue
+    auto cutgroup = mol.add(CGName("1"));
+
+    auto res = mol.add(ResNum(1));
+    res.rename(ResName(resname));
+
+    // Add each atom in the residue to the molecule.
+    for (int i=0; i<sdfmol.atoms.count(); ++i)
+    {
+        const auto &sdfatom = sdfmol.atoms.at(i);
+
+        auto atom = cutgroup.add(AtomNum(i+1));
+        atom.rename(AtomName(sdfatom.name.trimmed()));
+        // Reparent the atom to its residue.
+        atom.reparent(ResIdx(0));
+    }
+
+    if (cutting.hasValue())
+    {
+        const CuttingFunction &cutfunc = cutting.value().asA<CuttingFunction>();
+
+        if (not cutfunc.isA<ResidueCutting>())
+        {
+            mol = cutfunc(mol);
+        }
+    }
+
+    return mol;
+}
+
+/** Internal function used to get the molecule structure for molecule 'imol'. */
+MolEditor SDF::getMolecule(int imol, const PropertyMap &map) const
+{
+    // Make sure the molecule (model) index is within range.
+    imol = Index(imol).map(this->molecules.count());
+
+    const auto sdfmol = this->molecules.at(imol);
+
+    // Make sure that there are atoms in the molecule.
+    if (sdfmol.atoms.count() == 0)
+    {
+        throw SireError::program_bug(QObject::tr(
+            "Strange - there are no atoms in molecule %1?")
+                .arg(imol), CODELOC);
+    }
+
+    QString resname = "MOL";
+
+    if (map.specified("resname"))
+    {
+        resname = map["resname"].value().toString();
+    }
+
+    // First, construct the layout of the molecule (sorting of atoms into residues and cutgroups).
+    auto mol = this->getMolStructure(sdfmol, map["cutting"],
+                                     resname).commit().edit();
+
+    // Get the info object that can map between AtomNum to AtomIdx etc.
+    const auto molinfo = mol.info();
+
+    // Atom property objects.
+    AtomCoords         coords(molinfo);
+    AtomCharges        charges(molinfo);
+    AtomElements       elements(molinfo);
+    AtomMasses         masses(molinfo);
+
+    // Now loop through the atoms in the molecule and set each property.
+    for (int i=0; i<sdfmol.atoms.count(); ++i)
+    {
+        // Store a reference to the current atom.
+        const auto &atom = sdfmol.atoms.at(i);
+
+        // Determine the CGAtomIdx for this atom.
+        auto cgatomidx = molinfo.cgAtomIdx(AtomNum(i+1));
+
+        // Set the properties.
+        coords.set(cgatomidx, Vector(atom.x, atom.y, atom.z));
+        charges.set(cgatomidx, int(sdfmol.getCharge(i)) * SireUnits::mod_electron);
+        elements.set(cgatomidx, sdfmol.getElement(i));
+        masses.set(cgatomidx, sdfmol.getMass(i) * SireUnits::g_per_mol);
+    }
+
+    return mol.setProperty(map["coordinates"], coords)
+              .setProperty(map["formal_charge"], charges)
+              .setProperty(map["element"], elements)
+              .setProperty(map["mass"], masses)
+              .setProperty(map["software"], SireBase::wrap(sdfmol.software))
+              .setProperty(map["name"], SireBase::wrap(sdfmol.name))
+              .setProperty(map["comment"], SireBase::wrap(sdfmol.comment))
+              .commit();
 }
 
 /** Use the data contained in this parser to add information from the file to
