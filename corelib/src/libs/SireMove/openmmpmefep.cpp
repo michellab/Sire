@@ -543,11 +543,15 @@ tmpl_str OpenMMPMEFEP::CORR_RECIP =
  */
 void OpenMMPMEFEP::initialise()
 {
+    // NOTE: only for debugging with simple non-dummy systems like ions
+    const bool fullPME = true;   // use false for production
+
     if (Debug)
     {
         qDebug() << "Initialising OpenMMPMEFEP";
         const std::string version = OpenMM::Platform::getOpenMMVersion();
         qDebug() << "OpenMM Version: " << QString::fromUtf8(version.data(), version.size());
+        qDebug() << "fullPME = " << fullPME;
     }
 
     // Create a workspace using the stored molgroup
@@ -635,7 +639,7 @@ void OpenMMPMEFEP::initialise()
     auto recip_space = new OpenMM::NonbondedForce();
     recip_space->setNonbondedMethod(OpenMM::NonbondedForce::PME);
     recip_space->setCutoffDistance(converted_cutoff_distance);
-    recip_space->setIncludeDirectSpace(false);
+    recip_space->setIncludeDirectSpace(fullPME);
     recip_space->setUseDispersionCorrection(false);
 
     // scale the charges in the reciprocal space
@@ -772,7 +776,6 @@ void OpenMMPMEFEP::initialise()
        qDebug() << "Dielectric constant = " << field_dielectric;
        qDebug() << "Lambda = " << Alchemical_value << " Coulomb Power = " << coulomb_power << " Delta Shift = " << shift_delta;
     }
-
 
     // Andersen thermostat
     if (Andersen_flag == true)
@@ -1858,7 +1861,9 @@ void OpenMMPMEFEP::initialise()
 
                         //********************************BONDED ENERGY TORSIONS ARE ADDED TO THE SYSTEM*****************************
                         solute_torsion_perturbation->setForceGroup(NONBONDED_FCG); // FIXME: why in this force group?
-                        system_openmm->addForce(solute_torsion_perturbation);
+
+                        if (!fullPME)
+                            system_openmm->addForce(solute_torsion_perturbation);
 
                         perturbed_energies_tmp[7] = true; //Torsions are added to the system
 
@@ -2407,108 +2412,110 @@ void OpenMMPMEFEP::initialise()
 
     system_openmm->addForce(recip_space);
 
-    //if (false)
-    if (npairs != num_exceptions)
-    {
-        direct_space->setForceGroup(NONBONDED_FCG);
-        system_openmm->addForce(direct_space);
-        perturbed_energies_tmp[0] = true; //Custom non bonded 1-5 is added to the system
-        if (Debug)
-            qDebug() << "Added 1-5";
-    }
+    if (!fullPME) {
+        if (npairs != num_exceptions)
+        {
+            direct_space->setForceGroup(NONBONDED_FCG);
+            system_openmm->addForce(direct_space);
+            perturbed_energies_tmp[0] = true; //Custom non bonded 1-5 is added to the system
+            if (Debug)
+                qDebug() << "Added 1-5";
+        }
 
-    if (custom_intra_14_clj->getNumBonds() != 0)
-    {
-        custom_intra_14_clj->setForceGroup(NONBONDED_FCG);
-        system_openmm->addForce(custom_intra_14_clj);
-        perturbed_energies_tmp[1] = true; //Custom non bonded 1-4 is added to the system
-        if (Debug)
-            qDebug() << "Added 1-4 CLJ";
-    }
+        if (custom_intra_14_clj->getNumBonds() != 0)
+        {
+            custom_intra_14_clj->setForceGroup(NONBONDED_FCG);
+            system_openmm->addForce(custom_intra_14_clj);
+            perturbed_energies_tmp[1] = true; //Custom non bonded 1-4 is added to the system
+            if (Debug)
+                qDebug() << "Added 1-4 CLJ";
+        }
 
-    if (custom_intra_14_todummy->getNumBonds() != 0)
-    {
-        custom_intra_14_todummy->setForceGroup(NONBONDED_FCG);
-        system_openmm->addForce(custom_intra_14_todummy);
-        perturbed_energies_tmp[2] = true; //Custom non bonded 1-4 is added to the system
-        if (Debug)
-            qDebug() << "Added 1-4 To Dummy";
-    }
+        if (custom_intra_14_todummy->getNumBonds() != 0)
+        {
+            custom_intra_14_todummy->setForceGroup(NONBONDED_FCG);
+            system_openmm->addForce(custom_intra_14_todummy);
+            perturbed_energies_tmp[2] = true; //Custom non bonded 1-4 is added to the system
+            if (Debug)
+                qDebug() << "Added 1-4 To Dummy";
+        }
 
 
-    if (custom_intra_14_fromdummy->getNumBonds() != 0)
-    {
-        custom_intra_14_fromdummy->setForceGroup(NONBONDED_FCG);
-        system_openmm->addForce(custom_intra_14_fromdummy);
-        perturbed_energies_tmp[3] = true; //Custom non bonded 1-4 is added to the system
-        if (Debug)
-            qDebug() << "Added 1-4 From Dummy";
-    }
+        if (custom_intra_14_fromdummy->getNumBonds() != 0)
+        {
+            custom_intra_14_fromdummy->setForceGroup(NONBONDED_FCG);
+            system_openmm->addForce(custom_intra_14_fromdummy);
+            perturbed_energies_tmp[3] = true; //Custom non bonded 1-4 is added to the system
+            if (Debug)
+                qDebug() << "Added 1-4 From Dummy";
+        }
 
-    if (custom_intra_14_fromdummy_todummy->getNumBonds() != 0)
-    {
-        custom_intra_14_fromdummy_todummy->setForceGroup(NONBONDED_FCG);
-        system_openmm->addForce(custom_intra_14_fromdummy_todummy);
-        perturbed_energies_tmp[4] = true; //Custom non bonded 1-4 is added to the system
-        if (Debug)
-            qDebug() << "Added 1-4 From Dummy To Dummy";
-    }
+        if (custom_intra_14_fromdummy_todummy->getNumBonds() != 0)
+        {
+            custom_intra_14_fromdummy_todummy->setForceGroup(NONBONDED_FCG);
+            system_openmm->addForce(custom_intra_14_fromdummy_todummy);
+            perturbed_energies_tmp[4] = true; //Custom non bonded 1-4 is added to the system
+            if (Debug)
+                qDebug() << "Added 1-4 From Dummy To Dummy";
+        }
 
-    //if (false)
-    if (custom_corr_recip->getNumBonds() != 0)
-    {
-        custom_corr_recip->setForceGroup(NONBONDED_FCG);
-        system_openmm->addForce(custom_corr_recip);
-        perturbed_energies_tmp[8] = true;
+        if (custom_corr_recip->getNumBonds() != 0)
+        {
+            custom_corr_recip->setForceGroup(NONBONDED_FCG);
+            system_openmm->addForce(custom_corr_recip);
+            perturbed_energies_tmp[8] = true;
 
-	if (Debug)
-            qDebug() << "Added reciprocal correction term";
-    }
+	    if (Debug)
+                qDebug() << "Added reciprocal correction term";
+        }
+    } // if (!fullPME)
 
 
     /*****************************************BONDED INTERACTIONS***********************************************/
 
-    if (bondStretch_openmm->getNumBonds() != 0)
-    {
-        bondStretch_openmm->setForceGroup(BOND_FCG);
-        system_openmm->addForce(bondStretch_openmm);
-        if (Debug)
-            qDebug() << "Added Internal Bond energy term";
-    }
+    if (!fullPME) {
+        if (bondStretch_openmm->getNumBonds() != 0)
+        {
+            bondStretch_openmm->setForceGroup(BOND_FCG);
+            system_openmm->addForce(bondStretch_openmm);
+            if (Debug)
+                qDebug() << "Added Internal Bond energy term";
+        }
 
-    if (bondBend_openmm->getNumAngles() != 0)
-    {
-        bondBend_openmm->setForceGroup(BOND_FCG);
-        system_openmm->addForce(bondBend_openmm);
-        if (Debug)
-            qDebug() << "Added Internal Angle energy term";
-    }
+        if (bondBend_openmm->getNumAngles() != 0)
+        {
+            bondBend_openmm->setForceGroup(BOND_FCG);
+            system_openmm->addForce(bondBend_openmm);
+            if (Debug)
+                qDebug() << "Added Internal Angle energy term";
+        }
 
-    if (bondTorsion_openmm->getNumTorsions() != 0)
-    {
-        bondTorsion_openmm->setForceGroup(BOND_FCG);
-        system_openmm->addForce(bondTorsion_openmm);
-        if (Debug)
-            qDebug() << "Added Internal Torsion energy term";
-    }
+        if (bondTorsion_openmm->getNumTorsions() != 0)
+        {
+            bondTorsion_openmm->setForceGroup(BOND_FCG);
+            system_openmm->addForce(bondTorsion_openmm);
+            if (Debug)
+                qDebug() << "Added Internal Torsion energy term";
+        }
 
-    if (solute_bond_perturbation->getNumBonds() != 0)
-    {
-        solute_bond_perturbation->setForceGroup(BOND_FCG);
-        system_openmm->addForce(solute_bond_perturbation);
-        perturbed_energies_tmp[5] = true; //Custom bonded is added to the system
-        if (Debug)
-            qDebug() << "Added Perturbed Internal Bond energy term";
-    }
+        if (solute_bond_perturbation->getNumBonds() != 0)
+        {
+            solute_bond_perturbation->setForceGroup(BOND_FCG);
+            system_openmm->addForce(solute_bond_perturbation);
+            perturbed_energies_tmp[5] = true; //Custom bonded is added to the system
+            if (Debug)
+                qDebug() << "Added Perturbed Internal Bond energy term";
+        }
 
-    if (solute_angle_perturbation->getNumAngles() != 0)
-    {
-        solute_angle_perturbation->setForceGroup(BOND_FCG);
-        system_openmm->addForce(solute_angle_perturbation);
-        perturbed_energies_tmp[6] = true; //Custom bonded is added to the system
-        if (Debug)
-            qDebug() << "Added Perturbed Internal Angle energy term";
-    }
+        if (solute_angle_perturbation->getNumAngles() != 0)
+        {
+            solute_angle_perturbation->setForceGroup(BOND_FCG);
+            system_openmm->addForce(solute_angle_perturbation);
+            perturbed_energies_tmp[6] = true; //Custom bonded is added to the system
+            if (Debug)
+                qDebug() << "Added Perturbed Internal Angle energy term";
+        }
+    } // if (!fullPME)
 
     perturbed_energies = perturbed_energies_tmp;
 
@@ -3070,9 +3077,9 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
 
     const double dt = convertTo(timestep.value(), picosecond);
 
-    if (Debug)
+    if (Debug) {
         qDebug() << " Doing " << nmoves << " steps of dynamics ";
-
+    }
 
     int n_samples = nmoves / energy_frequency;
 
@@ -3136,7 +3143,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
 
     int sample_count = 1;
 
-    if (coord_freq > 0 && Debug)
+    if (Debug && coord_freq > 0)
         qDebug() << "Saving atom coordinates every " << coord_freq << "\n";
 
     if (Debug)
@@ -3186,6 +3193,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
     {
         //*********************MD STEPS****************************
         (openmm_context->getIntegrator()).step(energy_frequency);
+
         state_openmm = openmm_context->getState(stateTypes, false, 0x01);
         double p_energy_lambda = state_openmm.getPotentialEnergy();
 
@@ -3194,6 +3202,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
             qDebug() << "Lambda =" << Alchemical_value << "Potential energy ="
 		     << p_energy_lambda * OpenMM::KcalPerKJ << "kcal/mol";
         }
+
         IsFiniteNumber = (p_energy_lambda <= DBL_MAX && p_energy_lambda >= -DBL_MAX);
 
         if (!IsFiniteNumber)
@@ -3201,12 +3210,18 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
             qDebug() << "NaN or Inf has been generated along the simulation";
             exit(-1);
         }
+
         pot_energies.append(p_energy_lambda * OpenMM::KcalPerKJ);
 
         if (perturbed_energies[0])
         {
-            openmm_context->setParameter("SPOnOff", 1.0); //Solvent-Solvent and Protein Protein Non Bonded OFF
+            // Solvent-Solvent and Protein Protein Non Bonded OFF
+            // NOTE: this can dramatically change the potential energy and so the
+            //       biases (reduced energies)
+            openmm_context->setParameter("SPOnOff", 1.0);
         }
+ 
+        // get new state as SPOnOff was set above
         state_openmm = openmm_context->getState(stateTypes, false, 0x01);
 
         if (Debug)
@@ -3251,7 +3266,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
         boost::tuples::tie(actual_gradient, m_forward, m_backward) = calculateGradient(incr_plus,
                              incr_minus, p_energy_lambda, beta);
 
-        if (alchemical_array.size()>1)
+        if (alchemical_array.size() > 1)
         {
             //Let's calculate the biased energies
             reduced_perturbed_energies.append(computeReducedPerturbedEnergies(beta));
@@ -3265,8 +3280,10 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
         //RESET coupling parameter to its original value
         if (perturbed_energies[0])
         {
-            openmm_context->setParameter("SPOnOff", 0.0); //Solvent-Solvent and Protein Protein Non Bonded ON
+            // Solvent-Solvent and Protein Protein Non Bonded ON
+            openmm_context->setParameter("SPOnOff", 0.0);
         }
+
         updateOpenMMContextLambda(Alchemical_value);
         sample_count = sample_count + 1.0;
 
@@ -3353,19 +3370,12 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
 double OpenMMPMEFEP::getPotentialEnergyAtLambda(double lambda)
 {
     double curr_potential_energy = 0.0;
-    int stateTypes = OpenMM::State::Energy;
 
     updateOpenMMContextLambda(lambda);
 
-    OpenMM::State state_openmm = openmm_context->getState(stateTypes, false, 0x01);
-
+    OpenMM::State state_openmm =
+        openmm_context->getState(OpenMM::State::Energy, false, 0x01);
     curr_potential_energy = state_openmm.getPotentialEnergy();
-
-    if (Debug)
-    {
-        OpenMM::State state = openmm_context->getState(stateTypes);
-        qDebug() << "All energies =" << state.getPotentialEnergy();
-    }
 
     return curr_potential_energy;
 }
@@ -3449,19 +3459,14 @@ QVector<double> OpenMMPMEFEP::computeReducedPerturbedEnergies(double beta)
     double energy = 0.0;
 
     for (auto const &lam: alchemical_array)
-    {
-        energy = getPotentialEnergyAtLambda(lam);
+        perturbed.append(getPotentialEnergyAtLambda(lam) * beta);
 
-        if (Debug)
-            qDebug() << "Energy =" << energy << "at lambda =" << lam;
-
-        perturbed.append(energy * beta);
-    }
     if (Debug)
     {
         for (auto const &red_en: perturbed)
             qDebug() << "bias is: " << red_en;
     }
+
     return perturbed;
 }
 
