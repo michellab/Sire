@@ -825,7 +825,7 @@ void OpenMMPMEFEP::initialise()
 
     auto bondStretch_openmm = new OpenMM::HarmonicBondForce();
     auto bondBend_openmm = new OpenMM::HarmonicAngleForce();
-    auto  bondTorsion_openmm = new OpenMM::PeriodicTorsionForce();
+    auto bondTorsion_openmm = new OpenMM::PeriodicTorsionForce();
 
     auto solute_bond_perturbation = new OpenMM::CustomBondForce(
        "0.5*B*(r-req)^2;"
@@ -1007,16 +1007,10 @@ void OpenMMPMEFEP::initialise()
     int num_atoms_till_i = 0;
 
     // nonbonded per particle parameters
-    direct_space->addPerParticleParameter("qstart");
-    direct_space->addPerParticleParameter("qend");
-    direct_space->addPerParticleParameter("epstart");
-    direct_space->addPerParticleParameter("epend");
-    direct_space->addPerParticleParameter("sigmastart");
-    direct_space->addPerParticleParameter("sigmaend");
-    direct_space->addPerParticleParameter("isHD");
-    direct_space->addPerParticleParameter("isTD");
-    direct_space->addPerParticleParameter("isFD");
-    direct_space->addPerParticleParameter("isSolvent");
+    for (auto const &param : {"qstart", "qend", "epstart", "epend",
+                              "sigmastart", "sigmaend", "isHD", "isTD",
+                              "isFD", "isSolvent"})
+        direct_space->addPerParticleParameter(param);
 
     for (auto const &param : {"qpstart", "qpend", "qmix", "eastart", "eaend",
 	  "emix", "sastart", "saend", "samix"})
@@ -1033,20 +1027,14 @@ void OpenMMPMEFEP::initialise()
     }
 
     /* BONDED PER PARTICLE PARAMETERS */
-    solute_bond_perturbation->addPerBondParameter("bstart");
-    solute_bond_perturbation->addPerBondParameter("bend");
-    solute_bond_perturbation->addPerBondParameter("rstart");
-    solute_bond_perturbation->addPerBondParameter("rend");
+    for (auto const &param : {"bstart", "bend", "rstart", "rend"})
+        solute_bond_perturbation->addPerBondParameter(param);
 
-    solute_angle_perturbation->addPerAngleParameter("astart");
-    solute_angle_perturbation->addPerAngleParameter("aend");
-    solute_angle_perturbation->addPerAngleParameter("thetastart");
-    solute_angle_perturbation->addPerAngleParameter("thetaend");
-
+    for (auto const &param : {"astart", "aend", "thetastart", "thetaend"})
+        solute_angle_perturbation->addPerAngleParameter(param);
 
     // JM July 13. This also needs to be changed because there could be more than one perturbed molecule
     // Molecule solutemol = solute.moleculeAt(0).molecule();
-
     int nions = 0;
 
     QVector<bool> perturbed_energies_tmp(9);
@@ -1054,8 +1042,7 @@ void OpenMMPMEFEP::initialise()
     for (int i = 0; i < perturbed_energies_tmp.size(); i++)
         perturbed_energies_tmp[i] = false;
 
-
-    // The default 1,4 scaling factors
+    // the default AMBER 1-4 scaling factors
     double const Coulomb14Scale = 1.0 / 1.2;
     double const LennardJones14Scale = 1.0 / 2.0;
 
