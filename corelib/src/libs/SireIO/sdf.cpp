@@ -462,9 +462,10 @@ void SDF::assertSane() const
     }
 }
 
-/** Internal function that is used to actually parse the data contained
-    in the lines of the file */
-void SDF::parseLines(const PropertyMap &map)
+/** Internal function that is used to parse a single molecule's set
+    of lines from the SDF file */
+void SDF::parseMoleculeLines(const PropertyMap &map,
+                             const QStringList &l)
 {
     /* File format is decribed here:
         https://www.herongyang.com/Molecule/SDF-Format-Specification.html
@@ -472,8 +473,6 @@ void SDF::parseLines(const PropertyMap &map)
      */
 
     // The first three lines are the header block
-    const auto &l = this->lines();
-
     if (l.count() < 4)
     {
         // this is not a valid SDF file
@@ -481,7 +480,6 @@ void SDF::parseLines(const PropertyMap &map)
             QObject::tr("There are no enough lines for this "
                         "to be a valid SDF-formatted file.")
         );
-        this->setScore(0);
         return;
     }
 
@@ -503,7 +501,6 @@ void SDF::parseLines(const PropertyMap &map)
                         "have enough characters! '%1'. It should be "
                         "at least 39 characters wide.").arg(counts_line)
         );
-        this->setScore(0);
         return;
     }
 
@@ -524,7 +521,6 @@ void SDF::parseLines(const PropertyMap &map)
 
     if (not ok)
     {
-        this->setScore(0);
         this->parse_warnings.append(
             QObject::tr("Cannot interpret the number of atoms from the "
                         "counts line: %1").arg(counts_line));
@@ -535,7 +531,6 @@ void SDF::parseLines(const PropertyMap &map)
 
     if (not ok)
     {
-        this->setScore(0);
         this->parse_warnings.append(
             QObject::tr("Cannot interpret the number of bonds from the "
                         "counts line: %1").arg(counts_line));
@@ -544,7 +539,6 @@ void SDF::parseLines(const PropertyMap &map)
     if (natoms == 0)
     {
         // nothing to read?
-        this->setScore(0);
         this->parse_warnings.append(
             QObject::tr("The number of atoms to read is set to zero?")
         );
@@ -559,7 +553,6 @@ void SDF::parseLines(const PropertyMap &map)
                         "contain all of the atoms and bonds. File is "
                         "corrupted?")
         );
-        this->setScore(0);
         return;
     }
 
@@ -592,7 +585,6 @@ void SDF::parseLines(const PropertyMap &map)
                                         .arg(line)
                                 );
 
-                                this->setScore(0);
                                 return false;
                             }
 
@@ -628,7 +620,6 @@ void SDF::parseLines(const PropertyMap &map)
                 "Cannot have a difference of %1 on line %2. '%3'")
                     .arg(atom.mass_difference)
                     .arg(i+1).arg(line));
-            this->setScore(0);
             return;
         }
 
@@ -644,6 +635,7 @@ void SDF::parseLines(const PropertyMap &map)
                 "Cannot have a difference of %1 on line %2. '%3'")
                     .arg(atom.chg_difference)
                     .arg(i+1).arg(line));
+            return;
         }
 
         // ten more fields of 3 characters each. We won't convert these
@@ -683,7 +675,6 @@ void SDF::parseLines(const PropertyMap &map)
                                         .arg(line)
                                 );
 
-                                this->setScore(0);
                                 return false;
                             }
 
@@ -802,8 +793,51 @@ void SDF::parseLines(const PropertyMap &map)
     }
 
     this->molecules.append(molecule);
+}
 
-    this->setScore(1000);
+/** Internal function that is used to actually parse the data contained
+    in the lines of the file */
+void SDF::parseLines(const PropertyMap &map)
+{
+    const auto &l = this->lines();
+
+    // how many molecules are there? Each molecule is separated
+    // by a '$$$$', so we count these lines
+    int nmolecules = 0;
+
+    for (const auto &line : l)
+    {
+        if (line == "$$$$")
+        {
+            nmolecules += 1;
+        }
+    }
+
+    if (nmolecules == 1)
+    {
+        this->parseMoleculeLines(map, l.toList());
+    }
+    else
+    {
+        // break this into sets of lines and parse independently
+        QStringList lines;
+
+        for (const auto &line : l)
+        {
+            if (line == "$$$$")
+            {
+                lines.append(line);
+                this->parseMoleculeLines(map, lines);
+                lines = QStringList();
+            }
+            else
+            {
+                lines.append(line);
+            }
+        }
+    }
+
+    this->setScore(100 * this->molecules.count());
 }
 
 /** Use the data contained in this parser to create a new System of molecules,

@@ -123,6 +123,9 @@ private:
     void assertSane() const;
     void parseLines(const PropertyMap &map);
 
+    void parseMoleculeLines(const PropertyMap &map,
+                            const QStringList &lines);
+
     /** Any molecules that have been loaded from the file */
     QList<detail::SDFMolecule> molecules;
 
