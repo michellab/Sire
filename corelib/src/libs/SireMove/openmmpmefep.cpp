@@ -2407,6 +2407,7 @@ void OpenMMPMEFEP::initialise()
 
     system_openmm->addForce(recip_space);
 
+    //if (false)
     if (npairs != num_exceptions)
     {
         direct_space->setForceGroup(NONBONDED_FCG);
@@ -2453,6 +2454,7 @@ void OpenMMPMEFEP::initialise()
             qDebug() << "Added 1-4 From Dummy To Dummy";
     }
 
+    //if (false)
     if (custom_corr_recip->getNumBonds() != 0)
     {
         custom_corr_recip->setForceGroup(NONBONDED_FCG);
@@ -3139,6 +3141,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
 
     if (Debug)
     {
+        qDebug() << "kT (beta) =" << beta;
         for (int i = 0; i < perturbed_energies.size(); i++)
             qDebug() << "Perturbed energy flag index" << i << " Value = " << perturbed_energies[i];
     }
@@ -3358,6 +3361,12 @@ double OpenMMPMEFEP::getPotentialEnergyAtLambda(double lambda)
 
     curr_potential_energy = state_openmm.getPotentialEnergy();
 
+    if (Debug)
+    {
+        OpenMM::State state = openmm_context->getState(stateTypes);
+        qDebug() << "All energies =" << state.getPotentialEnergy();
+    }
+
     return curr_potential_energy;
 }
 
@@ -3437,16 +3446,21 @@ QVector<double> OpenMMPMEFEP::computeReducedPerturbedEnergies(double beta)
 {
     QVector<double> perturbed;
     QVector<double>::iterator i;
-    for (i=alchemical_array.begin(); i!=alchemical_array.end(); i++)
+    double energy = 0.0;
+
+    for (auto const &lam: alchemical_array)
     {
-        perturbed.append(getPotentialEnergyAtLambda(*i)*beta);
+        energy = getPotentialEnergyAtLambda(lam);
+
+        if (Debug)
+            qDebug() << "Energy =" << energy << "at lambda =" << lam;
+
+        perturbed.append(energy * beta);
     }
     if (Debug)
     {
-        for (i=perturbed.begin(); i!=perturbed.end(); i++)
-        {
-            qDebug() <<"bias is: "<<*i<<endl;
-        }
+        for (auto const &red_en: perturbed)
+            qDebug() << "bias is: " << red_en;
     }
     return perturbed;
 }
