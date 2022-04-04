@@ -380,6 +380,27 @@ QString OpenMMPMEFEP::toString() const
     return QObject::tr("OpenMMPMEFEP()");
 }
 
+static void addPerParticleParameters(OpenMM::CustomNonbondedForce &force,
+                                     std::vector<std::string> params)
+{
+    for (auto const &param : params)
+        force.addPerParticleParameter(param);
+}
+
+static void addPerBondParameters(OpenMM::CustomBondForce &force,
+                                 std::vector<std::string> params)
+{
+    for (auto const &param : params)
+        force.addPerBondParameter(param);
+}
+
+static void addPerAngleParameters(OpenMM::CustomAngleForce &force,
+                                 std::vector<std::string> params)
+{
+    for (auto const &param : params)
+        force.addPerAngleParameter(param);
+}
+
 // General force field
 // HHL
 // FIXME: disable SPOnOff and see if it works with PME
@@ -544,7 +565,7 @@ tmpl_str OpenMMPMEFEP::CORR_RECIP =
 void OpenMMPMEFEP::initialise()
 {
     // NOTE: only for debugging with simple non-dummy systems like ions
-    const bool fullPME = true;   // use false for production
+    const bool fullPME = false;   // use false for production
 
     if (Debug)
     {
@@ -1000,38 +1021,31 @@ void OpenMMPMEFEP::initialise()
 
             system_index = system_index + 1;
 
-        }// end of loop on atoms in molecule
+        } // end of loop on atoms in molecule
 
     } // end of loop on molecules in workspace
 
     int num_atoms_till_i = 0;
 
     // nonbonded per particle parameters
-    for (auto const &param : {"qstart", "qend", "epstart", "epend",
-                              "sigmastart", "sigmaend", "isHD", "isTD",
-                              "isFD", "isSolvent"})
-        direct_space->addPerParticleParameter(param);
+    addPerParticleParameters(*direct_space, {"qstart", "qend", "epstart", "epend",
+                             "sigmastart", "sigmaend", "isHD", "isTD",
+                             "isFD", "isSolvent"});
+    addPerBondParameters(*custom_corr_recip, {"qcstart", "qcend", "qcmix"});
 
-    for (auto const &param : {"qpstart", "qpend", "qmix", "eastart", "eaend",
-	  "emix", "sastart", "saend", "samix"})
-    {
-       custom_intra_14_todummy->addPerBondParameter(param);
-       custom_intra_14_fromdummy->addPerBondParameter(param);
-       custom_intra_14_fromdummy_todummy->addPerBondParameter(param);
-       custom_intra_14_clj->addPerBondParameter(param);
-    }
+    std::vector<std::string> paramList = {"qpstart", "qpend", "qmix", "eastart",
+                                          "eaend", "emix", "sastart", "saend",
+                                          "samix"};
+    addPerBondParameters(*custom_intra_14_todummy, paramList);
+    addPerBondParameters(*custom_intra_14_fromdummy, paramList);
+    addPerBondParameters(*custom_intra_14_fromdummy_todummy, paramList);
+    addPerBondParameters(*custom_intra_14_clj, paramList);
 
-    for (auto const &param : {"qcstart", "qcend", "qcmix"})
-    {
-       custom_corr_recip->addPerBondParameter(param);
-    }
-
-    /* BONDED PER PARTICLE PARAMETERS */
-    for (auto const &param : {"bstart", "bend", "rstart", "rend"})
-        solute_bond_perturbation->addPerBondParameter(param);
-
-    for (auto const &param : {"astart", "aend", "thetastart", "thetaend"})
-        solute_angle_perturbation->addPerAngleParameter(param);
+    // bonded per particle parameters
+    addPerBondParameters(*solute_bond_perturbation,
+                         {"bstart", "bend", "rstart", "rend"});
+    addPerAngleParameters(*solute_angle_perturbation,
+                         {"astart", "aend", "thetastart", "thetaend"});
 
     // JM July 13. This also needs to be changed because there could be more than one perturbed molecule
     // Molecule solutemol = solute.moleculeAt(0).molecule();
