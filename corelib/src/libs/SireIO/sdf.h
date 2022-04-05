@@ -117,10 +117,10 @@ public:
     int nAtoms(int i) const;
 
     bool isLead() const;
+    bool canFollow() const;
 
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
-    void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
 
 private:
     void assertSane() const;
