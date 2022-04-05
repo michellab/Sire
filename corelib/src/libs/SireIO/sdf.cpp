@@ -125,6 +125,11 @@ public:
     ~SDFMolecule()
     {}
 
+    bool isValid() const
+    {
+        return atoms.count() > 0;
+    }
+
     QString toString() const
     {
         QStringList lines;
@@ -450,13 +455,36 @@ QStringList toLines(const SDFMolecule &molecule)
     return lines;
 }
 
-QStringList toLines(const QList<SDFMolecule> &molecules)
+QStringList toLines(const QList<SDFMolecule> &molecules,
+                    bool uses_parallel=false)
 {
     QStringList lines;
 
-    for (const auto &molecule : molecules)
+    if (uses_parallel and molecules.count() > 1)
     {
-        lines += toLines(molecule);
+        QVector<QStringList> molecule_lines(molecules.count());
+        QStringList *mollines_ptr = molecule_lines.data();
+
+        tbb::parallel_for(tbb::blocked_range<int>(0, molecules.count()),
+                          [&](const tbb::blocked_range<int> r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                mollines_ptr[i] = ::toLines(molecules[i]);
+            }
+        });
+
+        for (const auto &l : molecule_lines)
+        {
+            lines += l;
+        }
+    }
+    else
+    {
+        for (const auto &molecule : molecules)
+        {
+            lines += ::toLines(molecule);
+        }
     }
 
     //add an extra blank line at the end of the file
@@ -465,20 +493,98 @@ QStringList toLines(const QList<SDFMolecule> &molecules)
     return lines;
 }
 
+SDFMolecule parseMolecule(const Molecule &molecule,
+                          QStringList &errors,
+                          const PropertyMap &map)
+{
+    return SDFMolecule();
+}
+
 /** Construct this parser by extracting all necessary information from the
     passed SireSystem::System, looking for the properties that are specified
     in the passed property map */
 SDF::SDF(const SireSystem::System &system, const PropertyMap &map) :
     ConcreteProperty<SDF,MoleculeParser>(map)
 {
+    // Get the MolNums of each molecule in the System - this returns the
+    // numbers in MolIdx order.
+    const QVector<MolNum> molnums = system.getMoleculeNumbers().toVector();
 
-    // write the file into lines, then parse them back for self-consistency
-    QStringList lines;
+    // Store the number of molecules.
+    const int nmols = molnums.count();
 
-    // Reparse the lines as a self-consistency check.
-    SDF parsed(lines, map);
+    // No molecules in the system.
+    if (nmols == 0)
+    {
+        this->operator=(SDF());
+        return;
+    }
 
-    this->operator=(parsed);
+    QVector<SDFMolecule> mols(nmols);
+
+    SDFMolecule *mols_ptr = mols.data();
+
+    if (usesParallel())
+    {
+        QMutex mutex;
+
+        tbb::parallel_for(tbb::blocked_range<int>(0, nmols),
+                          [&](const tbb::blocked_range<int> r)
+        {
+            // Create local data objects.
+            QStringList local_errors;
+
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                // Now parse the rest of the molecular data, i.e. atoms, residues, etc.
+                mols_ptr[i] = parseMolecule(system[molnums[i]].molecule(),
+                                            local_errors, map);
+            }
+
+            if (not local_errors.isEmpty())
+            {
+                // Acquire a lock.
+                QMutexLocker lkr(&mutex);
+
+                // Update the warning messages.
+                parse_warnings += local_errors;
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<nmols; ++i)
+        {
+            // Now parse the rest of the molecular data, i.e. atoms, residues, etc.
+            mols_ptr[i] = parseMolecule(system[molnums[i]].molecule(),
+                                        parse_warnings, map);
+        }
+    }
+
+    QList<SDFMolecule> checked_mols;
+
+    for (int i=0; i<nmols; ++i)
+    {
+        if (mols_ptr[i].isValid())
+        {
+            checked_mols.append(mols_ptr[i]);
+        }
+    }
+
+    mols.clear();
+
+    if (checked_mols.count() > 0)
+    {
+        QStringList lines = ::toLines(checked_mols, usesParallel());
+        checked_mols.clear();
+
+        // Reparse the lines as a self-consistency check.
+        SDF parsed(lines, map);
+
+        QStringList copy_warnings = parse_warnings;
+        this->operator=(parsed);
+        parse_warnings = copy_warnings;
+    }
 }
 
 /** Copy constructor */
@@ -1016,7 +1122,7 @@ void SDF::parseLines(const PropertyMap &map)
 
     this->setScore(100 * this->molecules.count());
 
-    for (const auto &line : ::toLines(this->molecules))
+    for (const auto &line : ::toLines(this->molecules, true))
     {
         qDebug() << line;
     }

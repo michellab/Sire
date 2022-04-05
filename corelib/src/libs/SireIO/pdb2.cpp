@@ -850,7 +850,9 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
     // Copy the velocities vector to the new object.
     parsed.velocities = velocities;
 
+    QStringList copy_warnings = parse_warnings;
     this->operator=(parsed);
+    parse_warnings = copy_warnings;
 }
 
 /** Copy constructor */
