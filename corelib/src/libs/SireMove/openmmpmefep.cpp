@@ -401,6 +401,45 @@ static void addPerAngleParameters(OpenMM::CustomAngleForce &force,
         force.addPerAngleParameter(param);
 }
 
+void OpenMMPMEFEP::addAndersenThermostat(OpenMM::System &system)
+{
+    const double converted_Temperature = convertTo(Temperature.value(), kelvin);
+
+    auto thermostat = new OpenMM::AndersenThermostat(converted_Temperature,
+                                                     Andersen_frequency);
+
+    thermostat->setRandomNumberSeed(random_seed);
+    system.addForce(thermostat);
+
+    if (Debug)
+    {
+        qDebug() << "Andersen Thermostat set";
+        qDebug() << "Temperature =" << converted_Temperature << "K";
+        qDebug() << "Frequency collisions =" << Andersen_frequency << "1/ps";
+    }
+}
+
+void OpenMMPMEFEP::addMCBarostat(OpenMM::System &system)
+{
+    const double converted_Temperature = convertTo(Temperature.value(), kelvin);
+    const double converted_Pressure = convertTo(Pressure.value(), bar);
+
+    auto barostat = new OpenMM::MonteCarloBarostat(converted_Pressure,
+						       converted_Temperature,
+						       MCBarostat_frequency);
+
+    barostat->setRandomNumberSeed(random_seed);
+    system.addForce(barostat);
+
+    if (Debug)
+    {
+        qDebug() << "Monte Carlo Barostat set";
+        qDebug() << "Temperature =" << converted_Temperature << " K";
+        qDebug() << "Pressure =" << converted_Pressure << " bar";
+        qDebug() << "Frequency every" << MCBarostat_frequency << " steps";
+    }
+}
+
 // General force field
 // HHL
 // FIXME: disable SPOnOff and see if it works with PME
@@ -546,15 +585,8 @@ tmpl_str OpenMMPMEFEP::CORR_RECIP =
     "withinCutoff = step(cutoff - r);"
 
     // erf() instead of erfc(), see PME implementation in OpenMM
-    "U_corr = 138.935456 * q_prod * erf(alpha_pme*rCoul) / rCoul;"
-    "rCoul = r;"
-    COULOMB_SHIFT
+    "U_corr = 138.935456 * q_prod * erf(alpha_pme*r) / r;"
 
-    "lam_diff = (1.0 - lam_corr) * 0.1;"
-
-    // FIXME: probably wrong for to and from dummy but maybe ok for fromto dummy and hard
-    //        when qcend and qcstart swapped: ok for from dummy, todummy still off
-    //"q_prod = lam_corr*lam_corr*qcend + (1-lam_corr)*(1-lam_corr)*qcstart + lam_corr*(1-lam_corr)*qcmix;";
     "q_prod = lam_corr*qcend + (1-lam_corr)*qcstart;";   // this is symmetrical
 
 
@@ -645,7 +677,7 @@ void OpenMMPMEFEP::initialise()
     OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
 
     // the system will hold all
-    OpenMM::System *system_openmm = new OpenMM::System();
+    auto system_openmm = new OpenMM::System();
 
     system_openmm->setDefaultPeriodicBoxVectors(OpenMM::Vec3(6, 0, 0),
                                                 OpenMM::Vec3(0, 6, 0),
@@ -800,49 +832,13 @@ void OpenMMPMEFEP::initialise()
 
     // Andersen thermostat
     if (Andersen_flag == true)
-    {
-        const double converted_Temperature = convertTo(Temperature.value(), kelvin);
-
-        auto thermostat = new OpenMM::AndersenThermostat(converted_Temperature,
-							 Andersen_frequency);
-
-        //Set The random seed
-        thermostat->setRandomNumberSeed(random_seed);
-
-        system_openmm->addForce(thermostat);
-
-        if (Debug)
-        {
-            qDebug() << "\nAndersen Thermostat set\n";
-            qDebug() << "Temperature = " << converted_Temperature << " K\n";
-            qDebug() << "Frequency collisions = " << Andersen_frequency << " 1/ps\n";
-        }
-    }
+        addAndersenThermostat(*system_openmm);
 
     // Monte Carlo Barostat
     if (MCBarostat_flag == true)
-    {
-        const double converted_Temperature = convertTo(Temperature.value(), kelvin);
-        const double converted_Pressure = convertTo(Pressure.value(), bar);
+        addMCBarostat(*system_openmm);
 
-        auto barostat = new OpenMM::MonteCarloBarostat(converted_Pressure,
-						       converted_Temperature,
-						       MCBarostat_frequency);
-
-        //Set The random seed
-        barostat->setRandomNumberSeed(random_seed);
-
-        system_openmm->addForce(barostat);
-
-        if (Debug)
-        {
-            qDebug() << "\nMonte Carlo Barostat set\n";
-            qDebug() << "Temperature = " << converted_Temperature << " K\n";
-            qDebug() << "Pressure = " << converted_Pressure << " bar\n";
-            qDebug() << "Frequency every " << MCBarostat_frequency << " steps\n";
-        }
-    }
-    /*******************************************************BONDED INTERACTIONS******************************************************/
+    /***************BONDED INTERACTIONS**************************/
 
     auto bondStretch_openmm = new OpenMM::HarmonicBondForce();
     auto bondBend_openmm = new OpenMM::HarmonicAngleForce();
@@ -863,7 +859,7 @@ void OpenMMPMEFEP::initialise()
     solute_angle_perturbation->addGlobalParameter("lamangle", Alchemical_value);
 
 
-    /************************************************************RESTRAINTS********************************************************/
+    /**************RESTRAINTS************************************/
 
     OpenMM::CustomExternalForce * positionalRestraints_openmm = NULL;
 
@@ -1934,25 +1930,20 @@ void OpenMMPMEFEP::initialise()
                     system_openmm->addConstraint(idx0, idx1, r0 * OpenMM::NmPerAngstrom);
                 else
                     bondStretch_openmm->addBond(idx0, idx1, r0 * OpenMM::NmPerAngstrom, k * 2.0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-
-              //cout << "\nBOND ADDED TO "<< atom0.toStdString() << " AND " << atom1.toStdString() << "\n";
             }
             else if (flag_constraint == ALLBONDS || flag_constraint == HANGLES)
             {
                 system_openmm->addConstraint(idx0, idx1, r0 * OpenMM::NmPerAngstrom);
-                //cout << "\nALLBONDS or HANGLES ADDED BOND CONSTRAINT TO " << atom0.toStdString() << " AND " << atom1.toStdString() << "\n";
             }
             else if (flag_constraint == HBONDS)
             {
                 if ((atom0[6] == 'H') || (atom1[6] == 'H'))
                 {
                     system_openmm->addConstraint(idx0, idx1, r0 * OpenMM::NmPerAngstrom);
-                    //cout << "\nHBONDS ADDED BOND CONSTRAINT TO " << atom0.toStdString() << " AND " << atom1.toStdString() << "\n";
                 }
                 else
                 {
                     bondStretch_openmm->addBond(idx0, idx1, r0 * OpenMM::NmPerAngstrom, k * 2.0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-                    //cout << "\nHBONDS ADDED BOND TO " << atom0.toStdString() << " AND " << atom1.toStdString() << "\n";
                 }
             }
 
@@ -2474,31 +2465,31 @@ void OpenMMPMEFEP::initialise()
 
     /*****************************************BONDED INTERACTIONS***********************************************/
 
+    if (bondStretch_openmm->getNumBonds() != 0)
+    {
+        bondStretch_openmm->setForceGroup(BOND_FCG);
+        system_openmm->addForce(bondStretch_openmm);
+        if (Debug)
+            qDebug() << "Added Internal Bond energy term";
+    }
+
+    if (bondBend_openmm->getNumAngles() != 0)
+    {
+        bondBend_openmm->setForceGroup(BOND_FCG);
+        system_openmm->addForce(bondBend_openmm);
+        if (Debug)
+            qDebug() << "Added Internal Angle energy term";
+    }
+
+    if (bondTorsion_openmm->getNumTorsions() != 0)
+    {
+        bondTorsion_openmm->setForceGroup(BOND_FCG);
+        system_openmm->addForce(bondTorsion_openmm);
+            if (Debug)
+            qDebug() << "Added Internal Torsion energy term";
+    }
+
     if (!fullPME) {
-        if (bondStretch_openmm->getNumBonds() != 0)
-        {
-            bondStretch_openmm->setForceGroup(BOND_FCG);
-            system_openmm->addForce(bondStretch_openmm);
-            if (Debug)
-                qDebug() << "Added Internal Bond energy term";
-        }
-
-        if (bondBend_openmm->getNumAngles() != 0)
-        {
-            bondBend_openmm->setForceGroup(BOND_FCG);
-            system_openmm->addForce(bondBend_openmm);
-            if (Debug)
-                qDebug() << "Added Internal Angle energy term";
-        }
-
-        if (bondTorsion_openmm->getNumTorsions() != 0)
-        {
-            bondTorsion_openmm->setForceGroup(BOND_FCG);
-            system_openmm->addForce(bondTorsion_openmm);
-            if (Debug)
-                qDebug() << "Added Internal Torsion energy term";
-        }
-
         if (solute_bond_perturbation->getNumBonds() != 0)
         {
             solute_bond_perturbation->setForceGroup(BOND_FCG);

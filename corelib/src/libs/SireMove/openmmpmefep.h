@@ -222,6 +222,9 @@ namespace SireMove {
         QVector<double> computeReducedPerturbedEnergies(double);
         void emptyContainers(void);
 
+        void addAndersenThermostat(OpenMM::System &system);
+        void addMCBarostat(OpenMM::System &system);
+
         /** Whether or not to save the velocities after every step, or to save them
 	    at the end of all of the steps */
         bool frequent_save_velocities;
