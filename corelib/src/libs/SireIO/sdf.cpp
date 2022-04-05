@@ -333,7 +333,118 @@ QStringList toLines(const SDFMolecule &molecule)
     lines.append(QString("  -Sire-%1").arg(SIRE_VERSION));
     lines.append(molecule.comment);
 
-    lines.append("");
+    if (molecule.counts.size() != 10)
+    {
+        throw SireError::program_bug(
+            QObject::tr("Problem with the counts line! %1")
+                    .arg(molecule.counts.join(",")), CODELOC);
+    }
+
+    QString count_line = QString("%1%2")
+                            .arg(molecule.atoms.count(), 3)
+                            .arg(molecule.bonds.count(), 3);
+
+    for (int i=0; i<9; ++i)
+    {
+        QString count = molecule.counts[i].trimmed();
+        count.truncate(3);
+        count_line += QString("%1").arg(count, 3);
+    }
+
+    QString count = molecule.counts[9].trimmed();
+
+    count.truncate(6);
+    count_line += QString("%1").arg(count, 6);
+
+    lines.append(count_line);
+
+    for (const auto &atom : molecule.atoms)
+    {
+        QString name = atom.name.trimmed();
+        name.truncate(3);
+
+        QString atom_line = QString("%1%2%3 %4%5%6")
+                                .arg(atom.x, 10, 'f', 4)
+                                .arg(atom.y, 10, 'f', 4)
+                                .arg(atom.z, 10, 'f', 4)
+                                .arg(name, -3)
+                                .arg(atom.mass_difference, 2)
+                                .arg(atom.chg_difference, 3);
+
+        if (atom.fields.count() != 10)
+        {
+            throw SireError::program_bug(
+                QObject::tr("Problem with the atom line! %1")
+                        .arg(atom.fields.join(",")), CODELOC);
+        }
+
+        for (int i=0; i<10; ++i)
+        {
+            QString f = atom.fields[i].trimmed();
+            f.truncate(3);
+            atom_line += QString("%1").arg(f, 3);
+        }
+
+        lines.append(atom_line);
+    }
+
+    for (const auto &bond : molecule.bonds)
+    {
+        QString bond_line = QString("%1%2%3%4")
+                                .arg(bond.atom0, 3)
+                                .arg(bond.atom1, 3)
+                                .arg(bond.typ, 3)
+                                .arg(bond.stereoscopy, 3);
+
+        if (bond.fields.count() != 3)
+        {
+            throw SireError::program_bug(
+                QObject::tr("Problem with the bond line! %1")
+                        .arg(bond.fields.join(",")), CODELOC);
+        }
+
+        for (int i=0; i<3; ++i)
+        {
+            QString f = bond.fields[i].trimmed();
+            f.truncate(3);
+
+            bond_line += QString("%1").arg(f, 3);
+        }
+
+        lines.append(bond_line);
+    }
+
+    for (const auto &key : molecule.properties.keys())
+    {
+        for (const auto &value : molecule.properties[key])
+        {
+            QString k = key.trimmed();
+            k.truncate(3);
+
+            lines.append(QString("M  %1%2").arg(k).arg(value));
+        }
+    }
+
+    lines.append("M  END");
+
+    bool has_last_line = false;
+
+    for (const auto &key : molecule.data.keys())
+    {
+        lines.append(QString("> <%1>").arg(key.trimmed()));
+
+        for (const auto &value : molecule.data[key])
+        {
+            lines.append(value);
+        }
+
+        lines.append("");
+        has_last_line = true;
+    }
+
+    if (not has_last_line)
+        lines.append("");
+
     lines.append("$$$$");
 
     return lines;
@@ -347,6 +458,9 @@ QStringList toLines(const QList<SDFMolecule> &molecules)
     {
         lines += toLines(molecule);
     }
+
+    //add an extra blank line at the end of the file
+    lines.append("");
 
     return lines;
 }
@@ -587,7 +701,7 @@ void SDF::parseMoleculeLines(const PropertyMap &map,
     bool ok;
 
     // Atom counter.
-    const int natoms = counts[0].toInt(&ok);
+    const int natoms = counts.takeFirst().toInt(&ok);
 
     if (not ok)
     {
@@ -597,7 +711,7 @@ void SDF::parseMoleculeLines(const PropertyMap &map,
     }
 
     // Bonds counter
-    const int nbonds = counts[1].toInt(&ok);
+    const int nbonds = counts.takeFirst().toInt(&ok);
 
     if (not ok)
     {
@@ -798,7 +912,7 @@ void SDF::parseMoleculeLines(const PropertyMap &map,
             if (line.size() >= 6)
             {
                 QString key = line.mid(3, 3);
-                properties[key].append(line);
+                properties[key].append(line.mid(6));
             }
         }
 
@@ -827,7 +941,7 @@ void SDF::parseMoleculeLines(const PropertyMap &map,
 
             if (start_idx >= 0 and end_idx >= 0)
             {
-                key = line.mid(start_idx, end_idx-start_idx+1);
+                key = line.mid(start_idx+1, end_idx-start_idx-1);
             }
             else
             {
@@ -902,7 +1016,7 @@ void SDF::parseLines(const PropertyMap &map)
 
     this->setScore(100 * this->molecules.count());
 
-    for (const auto line : ::toLines(this->molecules))
+    for (const auto &line : ::toLines(this->molecules))
     {
         qDebug() << line;
     }
