@@ -47,6 +47,8 @@
 #include "SireMol/errors.h"
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/connectivity.h"
+#include "SireMol/bondid.h"
 
 #include "SireBase/propertylist.h"
 
@@ -69,7 +71,7 @@ namespace SireIO { namespace detail {
 class SDFAtom
 {
 public:
-    SDFAtom()
+    SDFAtom() : x(0), y(0), z(0), mass_difference(0), chg_difference(0)
     {}
 
     ~SDFAtom()
@@ -81,6 +83,14 @@ public:
                 .arg(name).arg(x).arg(y).arg(z)
                 .arg(mass_difference).arg(chg_difference)
                 .arg(fields.join(":"));
+    }
+
+    void completeFields()
+    {
+        while (fields.count() < 10)
+        {
+            fields.append("0");
+        }
     }
 
     QString name;
@@ -95,7 +105,7 @@ public:
 class SDFBond
 {
 public:
-    SDFBond()
+    SDFBond() : atom0(0), atom1(0), typ(0), stereoscopy(0)
     {}
 
     ~SDFBond()
@@ -107,6 +117,14 @@ public:
                     .arg(atom0).arg(atom1)
                     .arg(typ).arg(stereoscopy)
                     .arg(fields.join(":"));
+    }
+
+    void completeFields()
+    {
+        while (fields.count() < 3)
+        {
+            fields.append("0");
+        }
     }
 
     qint32 atom0;
@@ -190,6 +208,14 @@ public:
     double getMass(int i) const
     {
         return 0.0;
+    }
+
+    void completeCounts()
+    {
+        while (counts.count() < 10)
+        {
+            counts.append("0");
+        }
     }
 
     QString name;
@@ -487,9 +513,6 @@ QStringList toLines(const QList<SDFMolecule> &molecules,
         }
     }
 
-    //add an extra blank line at the end of the file
-    lines.append("");
-
     return lines;
 }
 
@@ -497,7 +520,95 @@ SDFMolecule parseMolecule(const Molecule &molecule,
                           QStringList &errors,
                           const PropertyMap &map)
 {
-    return SDFMolecule();
+    // Store the number of atoms in the molecule.
+    int num_atoms = molecule.nAtoms();
+
+    // Early exit.
+    if (num_atoms == 0) return SDFMolecule();
+
+    // TODO: Do we want a hard limit on the number of atoms?
+    if (num_atoms > 999)
+    {
+        errors.append(QObject::tr("The number of atoms (%1) exceeds "
+            " the SDF file format limit (999)!").arg(num_atoms));
+
+        return SDFMolecule();
+    }
+
+    Connectivity connectivity;
+
+    if (molecule.hasProperty(map["connectivity"]))
+    {
+        connectivity = molecule.property(
+                        map["connectivity"]).asA<Connectivity>();
+    }
+
+    int num_bonds = connectivity.nConnections();
+
+    if (num_bonds > 999)
+    {
+        errors.append(QObject::tr("The number of bonds (%1) exceeds "
+            " the SDF file format limit (999)!").arg(num_bonds));
+    }
+
+    if (not molecule.hasProperty(map["coordinates"]))
+    {
+        errors.append(QObject::tr("The molecule is missing a coordinates "
+              "property. This is needed for the SDF file!"));
+        return SDFMolecule();
+    }
+
+    SDFMolecule sdfmol;
+
+    if (molecule.hasProperty(map["name"]))
+    {
+        sdfmol.name = molecule.property(map["name"]).toString();
+    }
+
+    if (molecule.hasProperty(map["software"]))
+    {
+        sdfmol.software = molecule.property(map["software"]).toString();
+    }
+
+    if (molecule.hasProperty(map["comment"]))
+    {
+        sdfmol.comment = molecule.property(map["comment"]).toString();
+    }
+
+    for (int i=0; i<num_atoms; ++i)
+    {
+        const auto atom = molecule.atom(AtomIdx(i));
+
+        const auto coords = atom.property<Vector>(map["coordinates"]);
+
+        SDFAtom sdf_atom;
+
+        sdf_atom.x = coords.x();
+        sdf_atom.y = coords.y();
+        sdf_atom.z = coords.z();
+
+        if (atom.hasProperty(map["element"]))
+        {
+            sdf_atom.name = atom.property<Element>(map["element"]).symbol();
+        }
+        else
+        {
+            sdf_atom.name = atom.name();
+        }
+
+        sdf_atom.completeFields();
+
+        sdfmol.atoms.append(sdf_atom);
+    }
+
+    for (auto bond : connectivity.getBonds())
+    {
+        qDebug() << bond.toString();
+    }
+
+    sdfmol.completeCounts();
+
+    return sdfmol;
 }
 
 /** Construct this parser by extracting all necessary information from the
@@ -1121,11 +1232,6 @@ void SDF::parseLines(const PropertyMap &map)
     }
 
     this->setScore(100 * this->molecules.count());
-
-    for (const auto &line : ::toLines(this->molecules, true))
-    {
-        qDebug() << line;
-    }
 }
 
 /** Use the data contained in this parser to create a new System of molecules,
@@ -1271,6 +1377,8 @@ MolEditor SDF::getMolecule(int imol, const PropertyMap &map) const
         elements.set(cgatomidx, sdfmol.getElement(i));
         masses.set(cgatomidx, sdfmol.getMass(i) * SireUnits::g_per_mol);
     }
+
+    // need to do the bonds...
 
     return mol.setProperty(map["coordinates"], coords)
               .setProperty(map["formal_charge"], charges)
