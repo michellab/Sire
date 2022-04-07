@@ -1395,8 +1395,14 @@ MolEditor SDF::getMolecule(int imol, const PropertyMap &map) const
 
         for (const auto &bond : sdfmol.bonds)
         {
-            connectivity.connect(AtomIdx(bond.atom0 - 1),
-                                 AtomIdx(bond.atom1 - 1));
+            AtomIdx atom0(bond.atom0 - 1);
+            AtomIdx atom1(bond.atom1 - 1);
+
+            BondID bondid(atom0, atom1);
+
+            connectivity.connect(atom0, atom1);
+
+
         }
 
         mol.setProperty(map["connectivity"], connectivity.commit());
