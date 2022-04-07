@@ -45,6 +45,7 @@ set ( PYPP_SOURCES
        WeightFunction.pypp.cpp
        ImproperID.pypp.cpp
        Selector_CutGroup_.pypp.cpp
+       AtomDoubleArrayProperty.pypp.cpp
        Mover_Chain_.pypp.cpp
        NullBondHunter.pypp.cpp
        SegVariantProperty.pypp.cpp
@@ -54,6 +55,7 @@ set ( PYPP_SOURCES
        ResidueBeading.pypp.cpp
        Specify_MGID_.pypp.cpp
        Selector_Chain_.pypp.cpp
+       AtomStringArrayProperty.pypp.cpp
        IDOrSet_ChainID_.pypp.cpp
        SelectResult.pypp.cpp
        DihedralID.pypp.cpp
@@ -123,6 +125,7 @@ set ( PYPP_SOURCES
        Segment.pypp.cpp
        AtomIdxMatcher.pypp.cpp
        ResIntProperty.pypp.cpp
+       AtomIntegerArrayProperty.pypp.cpp
        CGEditor.pypp.cpp
        BeadIntProperty.pypp.cpp
        ResIdxAtomCoordMatcher.pypp.cpp
@@ -215,6 +218,7 @@ set ( PYPP_SOURCES
        MolStructureEditor.pypp.cpp
        RelFromNumber.pypp.cpp
        InvertMatch_AtomID_.pypp.cpp
+       AtomPropertyList.pypp.cpp
        Selector_Segment_.pypp.cpp
        IDOrSet_SegID_.pypp.cpp
        Mover_Bead_.pypp.cpp

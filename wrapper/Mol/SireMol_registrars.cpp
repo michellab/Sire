@@ -9,6 +9,7 @@
 #include "segidx.h"
 #include "within.h"
 #include "cutgroup.h"
+#include "atompropertylist.h"
 #include "chargeperturbation.h"
 #include "mgidx.h"
 #include "moleculedata.h"
@@ -122,6 +123,10 @@ void register_SireMol_objects()
     ObjectRegistry::registerConverterFor< SireMol::Mover<SireMol::CutGroup> >();
     ObjectRegistry::registerConverterFor< SireMol::Selector<SireMol::CutGroup> >();
     ObjectRegistry::registerConverterFor< SireMol::Mover< SireMol::Selector<SireMol::CutGroup> > >();
+    ObjectRegistry::registerConverterFor< SireMol::AtomPropertyList >();
+    ObjectRegistry::registerConverterFor< SireMol::AtomDoubleArrayProperty >();
+    ObjectRegistry::registerConverterFor< SireMol::AtomIntegerArrayProperty >();
+    ObjectRegistry::registerConverterFor< SireMol::AtomStringArrayProperty >();
     ObjectRegistry::registerConverterFor< SireMol::ChargePerturbation >();
     ObjectRegistry::registerConverterFor< SireMol::MGIdx >();
     ObjectRegistry::registerConverterFor< SireMol::MoleculeData >();

@@ -27,6 +27,8 @@
 
 #include "AtomCutting.pypp.hpp"
 
+#include "AtomDoubleArrayProperty.pypp.hpp"
+
 #include "AtomEditor.pypp.hpp"
 
 #include "AtomEditorBase.pypp.hpp"
@@ -49,6 +51,8 @@
 
 #include "AtomIntProperty.pypp.hpp"
 
+#include "AtomIntegerArrayProperty.pypp.hpp"
+
 #include "AtomMCSMatcher.pypp.hpp"
 
 #include "AtomMasses.pypp.hpp"
@@ -69,11 +73,15 @@
 
 #include "AtomProp.pypp.hpp"
 
+#include "AtomPropertyList.pypp.hpp"
+
 #include "AtomRadii.pypp.hpp"
 
 #include "AtomResultMatcher.pypp.hpp"
 
 #include "AtomSelection.pypp.hpp"
+
+#include "AtomStringArrayProperty.pypp.hpp"
 
 #include "AtomStringProperty.pypp.hpp"
 
@@ -659,6 +667,14 @@ BOOST_PYTHON_MODULE(_Mol){
     register_AtomStringProperty_class();
 
     register_AtomVariantProperty_class();
+
+    register_AtomDoubleArrayProperty_class();
+
+    register_AtomIntegerArrayProperty_class();
+
+    register_AtomPropertyList_class();
+
+    register_AtomStringArrayProperty_class();
 
     register_AtomForces_class();
 
