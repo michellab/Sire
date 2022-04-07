@@ -51,11 +51,11 @@ QDataStream &operator<<(QDataStream &ds,
                                        const BondID &bondid)
 {
     writeHeader(ds, r_bondid, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << bondid.atm0 << bondid.atm1;
-    
+
     return ds;
 }
 
@@ -64,16 +64,16 @@ QDataStream &operator>>(QDataStream &ds,
                                        BondID &bondid)
 {
     VersionID v = readHeader(ds, r_bondid);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> bondid.atm0 >> bondid.atm1;
     }
     else
         throw version_error(v, "1", r_bondid, CODELOC);
-        
+
     return ds;
 }
 
@@ -102,7 +102,7 @@ BondID& BondID::operator=(const BondID &other)
 {
     atm0 = other.atm0;
     atm1 = other.atm1;
-    
+
     return *this;
 }
 
@@ -118,19 +118,19 @@ bool BondID::operator!=(const BondID &other) const
     return atm0 != other.atm0 or atm1 != other.atm1;
 }
 
-/** Return the mirror of this BondID - i.e. if this is 
+/** Return the mirror of this BondID - i.e. if this is
     Bond(atom0, atom1), this returns Bond(atom1, atom0).
-    
+
     This is useful if you know that Bond(atom0,atom1) equals
     Bond(atom1,atom0), e.g. you can now write;
-    
+
     if (not (bonds.contains(bond) or bonds.contains(bond.mirror())) )
     {
         bonds.insert(bond);
     }
-    
+
     or
-    
+
     if (bond == other_bond or bond.mirror() == other.bond())
     {
         //this is the same bond
@@ -163,13 +163,13 @@ bool BondID::isNull() const
 bool BondID::operator==(const SireID::ID &other) const
 {
     const BondID *other_bond = dynamic_cast<const BondID*>(&other);
-    
+
     return other_bond and this->operator==(*other_bond);
 }
 
-/** Return the indicies of the two atoms in this bond - this returns 
+/** Return the indicies of the two atoms in this bond - this returns
     them in the order tuple(bond.atom0(),bond.atom1())
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
@@ -183,7 +183,7 @@ tuple<AtomIdx,AtomIdx> BondID::map(const MoleculeInfoData &molinfo) const
 /** Return the indicies of the two atoms of this bond, between the
     two molecules whose data is in 'mol0info' (containing bond.atom0())
     and 'mol1info' (containing bond.atom1())
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
@@ -194,12 +194,30 @@ tuple<AtomIdx,AtomIdx> BondID::map(const MoleculeInfoData &mol0info,
     return tuple<AtomIdx,AtomIdx>( mol0info.atomIdx(atm0),
                                    mol1info.atomIdx(atm1) );
 }
-                           
-/** Return the vector that goes from atom0() to atom1() in the 
+
+/** Return a BondID that comprises two AtomIdx IDs, in AtomIdx order
+    (the lowest index atom is atom0)
+*/
+BondID BondID::mapToOrderedBondIdx(const MoleculeInfoData &molinfo) const
+{
+    auto atom0 = molinfo.atomIdx(atm0);
+    auto atom1 = molinfo.atomIdx(atm1);
+
+    if (atom0 <= atom1)
+    {
+        return BondID(atom0, atom1);
+    }
+    else
+    {
+        return BondID(atom1, atom0);
+    }
+}
+
+/** Return the vector that goes from atom0() to atom1() in the
     molecule whose data is in 'moldata', using the supplied
-    property map to find the property that contains the 
+    property map to find the property that contains the
     coordinates to be used
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
@@ -211,34 +229,34 @@ Vector BondID::vector(const MoleculeData &moldata,
 {
     const AtomCoords &coords = moldata.property(map["coordinates"])
                                              .asA<AtomCoords>();
-                                             
+
     return coords.at( moldata.info().cgAtomIdx(atm1) ) -
            coords.at( moldata.info().cgAtomIdx(atm0) );
 }
 
 /** Return the vector that goes from atom0() in the molecule
     whose data is in 'mol0data' to atom1() in the molecule
-    whose data is in 'mol1data', using map0 to find the 
-    coordinates property of 'mol0' and map1 to find the 
+    whose data is in 'mol1data', using map0 to find the
+    coordinates property of 'mol0' and map1 to find the
     coordinates property of 'mol1'
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
 */
-Vector BondID::vector(const MoleculeData &mol0data, 
+Vector BondID::vector(const MoleculeData &mol0data,
                       const PropertyMap &map0,
                       const MoleculeData &mol1data,
                       const PropertyMap &map1) const
 {
     const AtomCoords &coords0 = mol0data.property(map0["coordinates"])
                                       .asA<AtomCoords>();
-                                      
+
     const AtomCoords &coords1 = mol1data.property(map1["coordinates"])
                                       .asA<AtomCoords>();
-                                      
+
     return coords1.at( mol1data.info().cgAtomIdx(atm1) ) -
            coords0.at( mol0data.info().cgAtomIdx(atm0) );
 }
@@ -247,23 +265,23 @@ Vector BondID::vector(const MoleculeData &mol0data,
     whose data is in 'mol0data' to atom1() in the molecule
     whose data is in 'mol1data', using the supplied map
     to find the coordinates property in both molecules.
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
 */
-Vector BondID::vector(const MoleculeData &mol0data, 
+Vector BondID::vector(const MoleculeData &mol0data,
                       const MoleculeData &mol1data,
                       const PropertyMap &map) const
 {
     return this->vector(mol0data, map, mol1data, map);
 }
-     
+
 /** Return the length of this bond in the molecule whose data
     is in 'moldata', using 'map' to find the coordinates property
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
@@ -276,12 +294,12 @@ double BondID::length(const MoleculeData &moldata,
     return this->vector(moldata,map).length();
 }
 
-/** Return the length of the bond from atom0() in the 
-    molecule whose data is in 'mol0data' to atom1() in the 
+/** Return the length of the bond from atom0() in the
+    molecule whose data is in 'mol0data' to atom1() in the
     molecule whose data is in 'mol1data', using 'map0'
     to the find the coordinates property of 'mol0' and
     'map1' to find the coordinates property of 'mol1'
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
@@ -296,11 +314,11 @@ double BondID::length(const MoleculeData &mol0data,
     return this->vector(mol0data, map0, mol1data, map1).length();
 }
 
-/** Return the length of the bond from atom0() in the 
-    molecule whose data is in 'mol0data' to atom1() in the 
+/** Return the length of the bond from atom0() in the
+    molecule whose data is in 'mol0data' to atom1() in the
     molecule whose data is in 'mol1data', using 'map'
     to the find the coordinates properties both molecules
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
@@ -315,7 +333,7 @@ double BondID::length(const MoleculeData &mol0data,
 }
 
 /** Synonym for BondID::length(const MoleculeData&, const PropertyMap&)
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
@@ -330,14 +348,14 @@ double BondID::size(const MoleculeData &moldata,
 
 /** Synonym for BondID::length(const MoleculeData&, const MoleculeData&,
                                const PropertyMap&)
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
 */
-double BondID::size(const MoleculeData &mol0data, 
+double BondID::size(const MoleculeData &mol0data,
                     const MoleculeData &mol1data,
                     const PropertyMap &map) const
 {
@@ -346,14 +364,14 @@ double BondID::size(const MoleculeData &mol0data,
 
 /** Synonym for BondID::length(const MoleculeData&, const PropertyMap&,
                                const MoleculeData&, const PropertyMap&)
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
 */
-double BondID::size(const MoleculeData &mol0data, 
+double BondID::size(const MoleculeData &mol0data,
                     const PropertyMap &map0,
                     const MoleculeData &mol1data,
                     const PropertyMap &map1) const

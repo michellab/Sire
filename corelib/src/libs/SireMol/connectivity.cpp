@@ -46,6 +46,8 @@
 
 #include "SireMol/errors.h"
 
+#include "SireBase/errors.h"
+
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
@@ -66,15 +68,16 @@ static const RegisterMetaType<ConnectivityBase> r_conbase(MAGIC_ONLY,
 
 /** Serialise ConnectivityBase */
 QDataStream &operator<<(QDataStream &ds,
-                                       const ConnectivityBase &conbase)
+                        const ConnectivityBase &conbase)
 {
-    writeHeader(ds, r_conbase, 2);
+    writeHeader(ds, r_conbase, 3);
 
     SharedDataStream sds(ds);
 
     SharedDataPointer<MoleculeInfoData> d( conbase.minfo );
 
     sds << conbase.connected_atoms << conbase.connected_res
+        << conbase.bond_props
         << d << static_cast<const MolViewProperty&>(conbase);
 
     return ds;
@@ -86,11 +89,26 @@ QDataStream &operator>>(QDataStream &ds,
 {
     VersionID v = readHeader(ds, r_conbase);
 
-    if (v == 2)
+    if (v == 3)
     {
         SharedDataStream sds(ds);
 
         SharedDataPointer<MoleculeInfoData> d;
+
+        sds >> conbase.connected_atoms >> conbase.connected_res
+            >> conbase.bond_props
+            >> d
+            >> static_cast<MolViewProperty&>(conbase);
+
+        conbase.minfo = d;
+    }
+    else if (v == 2)
+    {
+        SharedDataStream sds(ds);
+
+        SharedDataPointer<MoleculeInfoData> d;
+
+        conbase.bond_props.clear();
 
         sds >> conbase.connected_atoms >> conbase.connected_res
             >> d
@@ -103,6 +121,8 @@ QDataStream &operator>>(QDataStream &ds,
         SharedDataStream sds(ds);
 
         SharedDataPointer<MoleculeInfoData> d;
+
+        conbase.bond_props.clear();
 
         sds >> conbase.connected_atoms >> conbase.connected_res
             >> d
@@ -168,6 +188,7 @@ ConnectivityBase::ConnectivityBase(const ConnectivityBase &other)
                  : MolViewProperty(other),
                    connected_atoms(other.connected_atoms),
                    connected_res(other.connected_res),
+                   bond_props(other.bond_props),
                    minfo(other.minfo)
 {}
 
@@ -182,6 +203,7 @@ ConnectivityBase& ConnectivityBase::operator=(const ConnectivityBase &other)
     {
         connected_atoms = other.connected_atoms;
         connected_res = other.connected_res;
+        bond_props = other.bond_props;
         minfo = other.minfo;
     }
 
@@ -192,7 +214,8 @@ ConnectivityBase& ConnectivityBase::operator=(const ConnectivityBase &other)
 bool ConnectivityBase::operator==(const ConnectivityBase &other) const
 {
     return minfo == other.minfo and
-           connected_atoms == other.connected_atoms;
+           connected_atoms == other.connected_atoms and
+           bond_props == other.bond_props;
 }
 
 /** Comparison operator */
@@ -258,7 +281,15 @@ PropertyPtr ConnectivityBase::_pvt_makeCompatibleWith(const MoleculeInfoData &mo
                     if (new_bond != -1)
                     {
                         if (new_bond > new_idx)
+                        {
                             editor.connect(new_idx, new_bond);
+                            Properties props = bond_props.value(BondID(old_idx, old_bond));
+
+                            if (not props.isEmpty())
+                            {
+                                editor.bond_props[BondID(new_idx, new_bond)] = props;
+                            }
+                        }
                     }
                 }
             }
@@ -2642,6 +2673,81 @@ QVector< QVector<bool> > ConnectivityBase::getBondMatrix(int order) const
         return getBondMatrix(0,0);
     else
         return getBondMatrix(1,order);
+}
+
+/** Return the properties of the passed bond */
+Properties ConnectivityBase::properties(const BondID &bond) const
+{
+    return this->bond_props.value(bond.mapToOrderedBondIdx(this->minfo));
+}
+
+/** Return whether the specified bond has a property at key 'key' */
+bool ConnectivityBase::hasProperty(const BondID &bond,
+                                   const PropertyName &key) const
+{
+    return this->properties(bond).hasProperty(key);
+}
+
+/** Return the type of the property for the specified bond at key 'key' */
+const char* ConnectivityBase::propertyType(const BondID &bond,
+                                           const PropertyName &key) const
+{
+    return this->properties(bond).propertyType(key);
+}
+
+/** Return all of the property keys for all of the bonds */
+QStringList ConnectivityBase::propertyKeys() const
+{
+    QSet<QString> keys;
+
+    for (const auto &key : this->bond_props.keys())
+    {
+        const auto &props = this->bond_props[key];
+
+        for (const auto &k : props.propertyKeys())
+        {
+            keys.insert(k);
+        }
+    }
+
+    QStringList ret = keys.values();
+    ret.sort();
+
+    return ret;
+}
+
+/** Return the property keys for the specified bond */
+QStringList ConnectivityBase::propertyKeys(const BondID &bond) const
+{
+    return this->properties(bond).propertyKeys();
+}
+
+/** Return the specified property of the specified bond */
+const Property& ConnectivityBase::property(const BondID &bond,
+                                           const PropertyName &key) const
+{
+    return this->properties(bond).property(key);
+}
+
+/** Return the specified property of the specified bond, or
+    'default_value' if such a property is not defined
+ */
+const Property& ConnectivityBase::property(const BondID &bond,
+                                           const PropertyName &key,
+                                           const Property &default_value) const
+{
+    return this->properties(bond).property(key, default_value);
+}
+
+/** Assert that the specified bond has the specified property */
+void ConnectivityBase::assertHasProperty(const BondID &bond,
+                                         const PropertyName &key) const
+{
+    if (not this->hasProperty(bond, key))
+        throw SireBase::missing_property( QObject::tr(
+            "Bond %1 "
+            "does not have a valid property at key \"%2\".")
+                .arg(bond.toString()).arg(key.toString()), CODELOC );
 }
 
 /////////

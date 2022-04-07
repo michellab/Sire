@@ -40,6 +40,7 @@
 #include "moleculeinfo.h"
 
 #include "SireBase/property.h"
+#include "SireBase/properties.h"
 #include "SireBase/shareddatapointer.hpp"
 
 SIRE_BEGIN_HEADER
@@ -248,6 +249,30 @@ public:
     QVector< QVector<bool> > getBondMatrix(int order) const;
     QVector< QVector<bool> > getBondMatrix(int start, int end) const;
 
+    bool hasProperty(const BondID &bond,
+                     const SireBase::PropertyName &key) const;
+
+    template<class T>
+    bool hasPropertyOfType(const BondID &bond,
+                           const SireBase::PropertyName &key) const;
+
+    const char* propertyType(const BondID &bond,
+                             const SireBase::PropertyName &key) const;
+
+    SireBase::Properties properties(const BondID &bond) const;
+
+    QStringList propertyKeys() const;
+    QStringList propertyKeys(const BondID &bond) const;
+
+    const Property& property(const BondID &bond,
+                             const SireBase::PropertyName &key) const;
+    const Property& property(const BondID &bond,
+                             const SireBase::PropertyName &key,
+                             const Property &default_value) const;
+
+    void assertHasProperty(const BondID &bond,
+                           const SireBase::PropertyName &key) const;
+
 protected:
     ConnectivityBase();
     ConnectivityBase(const MoleculeInfo &molinfo);
@@ -272,6 +297,9 @@ protected:
 
     /** Which residues are connected to which other residues */
     QVector< QSet<ResIdx> > connected_res;
+
+    /** Bond properties */
+    QHash<BondID, SireBase::Properties> bond_props;
 
     /** The info object that describes the molecule */
     MoleculeInfo minfo;
@@ -391,8 +419,28 @@ public:
 
     ConnectivityEditor& disconnectAll();
 
+    void setProperty(const BondID &bond,
+                     const QString &key, const Property &value);
+
+    void removeProperty(const QString &key);
+    void removeProperty(const BondID &bond, const QString &key);
+
+    SireBase::PropertyPtr takeProperty(const BondID &bond, const QString &key);
+
     Connectivity commit() const;
 };
+
+#ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+template<class T>
+SIRE_INLINE_TEMPLATE
+bool ConnectivityBase::hasPropertyOfType(const BondID &bond,
+                                         const SireBase::PropertyName &key) const
+{
+    return this->properties(bond).hasPropertyOfType<T>(key);
+}
+
+#endif
 
 }
 

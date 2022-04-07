@@ -607,8 +607,8 @@ SDFMolecule parseMolecule(const Molecule &molecule,
     {
         SDFBond sdfbond;
 
-        sdfbond.atom0 = molinfo.map(bond.atom0())[0].value() + 1;
-        sdfbond.atom1 = molinfo.map(bond.atom1())[0].value() + 1;
+        sdfbond.atom0 = molinfo.atomIdx(bond.atom0()).value() + 1;
+        sdfbond.atom1 = molinfo.atomIdx(bond.atom1()).value() + 1;
         sdfbond.typ = 1; // assume single for now
         sdfbond.stereoscopy = 0; // assume not stereo for now
 
