@@ -601,9 +601,20 @@ SDFMolecule parseMolecule(const Molecule &molecule,
         sdfmol.atoms.append(sdf_atom);
     }
 
+    const auto &molinfo = molecule.info();
+
     for (auto bond : connectivity.getBonds())
     {
-        qDebug() << bond.toString();
+        SDFBond sdfbond;
+
+        sdfbond.atom0 = molinfo.map(bond.atom0())[0].value() + 1;
+        sdfbond.atom1 = molinfo.map(bond.atom1())[0].value() + 1;
+        sdfbond.typ = 1; // assume single for now
+        sdfbond.stereoscopy = 0; // assume not stereo for now
+
+        sdfbond.completeFields();
+
+        sdfmol.bonds.append(sdfbond);
     }
 
     sdfmol.completeCounts();
@@ -1378,7 +1389,18 @@ MolEditor SDF::getMolecule(int imol, const PropertyMap &map) const
         masses.set(cgatomidx, sdfmol.getMass(i) * SireUnits::g_per_mol);
     }
 
-    // need to do the bonds...
+    if (sdfmol.bonds.count() > 0)
+    {
+        auto connectivity = Connectivity(molinfo).edit();
+
+        for (const auto &bond : sdfmol.bonds)
+        {
+            connectivity.connect(AtomIdx(bond.atom0 - 1),
+                                 AtomIdx(bond.atom1 - 1));
+        }
+
+        mol.setProperty(map["connectivity"], connectivity.commit());
+    }
 
     return mol.setProperty(map["coordinates"], coords)
               .setProperty(map["formal_charge"], charges)
