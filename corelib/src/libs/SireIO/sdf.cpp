@@ -32,6 +32,7 @@
 #include "SireSystem/system.h"
 
 #include "SireBase/parallel.h"
+#include "SireBase/propertylist.h"
 #include "SireBase/stringproperty.h"
 
 #include "SireError/errors.h"
@@ -44,11 +45,14 @@
 #include "SireMol/atomcoords.h"
 #include "SireMol/atomelements.h"
 #include "SireMol/atommasses.h"
+#include "SireMol/atompropertylist.h"
 #include "SireMol/errors.h"
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
 #include "SireMol/connectivity.h"
 #include "SireMol/bondid.h"
+#include "SireMol/bondtype.h"
+#include "SireMol/stereoscopy.h"
 
 #include "SireBase/propertylist.h"
 
@@ -1368,10 +1372,11 @@ MolEditor SDF::getMolecule(int imol, const PropertyMap &map) const
     const auto molinfo = mol.info();
 
     // Atom property objects.
-    AtomCoords         coords(molinfo);
-    AtomCharges        charges(molinfo);
-    AtomElements       elements(molinfo);
-    AtomMasses         masses(molinfo);
+    AtomCoords              coords(molinfo);
+    AtomCharges             charges(molinfo);
+    AtomElements            elements(molinfo);
+    AtomMasses              masses(molinfo);
+    AtomStringArrayProperty atomfields(molinfo);
 
     // Now loop through the atoms in the molecule and set each property.
     for (int i=0; i<sdfmol.atoms.count(); ++i)
@@ -1387,6 +1392,7 @@ MolEditor SDF::getMolecule(int imol, const PropertyMap &map) const
         charges.set(cgatomidx, int(sdfmol.getCharge(i)) * SireUnits::mod_electron);
         elements.set(cgatomidx, sdfmol.getElement(i));
         masses.set(cgatomidx, sdfmol.getMass(i) * SireUnits::g_per_mol);
+        atomfields.set(cgatomidx, atom.fields);
     }
 
     if (sdfmol.bonds.count() > 0)
@@ -1402,7 +1408,12 @@ MolEditor SDF::getMolecule(int imol, const PropertyMap &map) const
 
             connectivity.connect(atom0, atom1);
 
-
+            connectivity.setProperty(bondid, map["type"].source(),
+                                     BondType(bond.typ));
+            connectivity.setProperty(bondid, map["stereoscopy"].source(),
+                                     Stereoscopy(bond.stereoscopy));
+            connectivity.setProperty(bondid, map["sdf_fields"].source(),
+                                     SireBase::wrap(bond.fields));
         }
 
         mol.setProperty(map["connectivity"], connectivity.commit());
@@ -1412,6 +1423,7 @@ MolEditor SDF::getMolecule(int imol, const PropertyMap &map) const
               .setProperty(map["formal_charge"], charges)
               .setProperty(map["element"], elements)
               .setProperty(map["mass"], masses)
+              .setProperty(map["sdf_fields"], atomfields)
               .setProperty(map["software"], SireBase::wrap(sdfmol.software))
               .setProperty(map["name"], SireBase::wrap(sdfmol.name))
               .setProperty(map["comment"], SireBase::wrap(sdfmol.comment))
