@@ -51,9 +51,9 @@ Q_DECLARE_METATYPE( SireMol::AtomIntegerArrayProperty );
 Q_DECLARE_METATYPE( SireMol::AtomStringArrayProperty );
 
 SIRE_EXPOSE_ATOM_PROPERTY( SireBase::PropertyList, SireMol::AtomPropertyList )
-SIRE_EXPOSE_ATOM_PROPERTY( SireBase::AtomDoubleArray, SireMol::AtomDoubleArrayProperty )
-SIRE_EXPOSE_ATOM_PROPERTY( SireBase::AtomIntegerArray, SireMol::AtomIntegerArrayProperty )
-SIRE_EXPOSE_ATOM_PROPERTY( SireBase::AtomStringArray, SireMol::AtomStringArrayProperty )
+SIRE_EXPOSE_ATOM_PROPERTY( SireBase::DoubleArrayProperty, SireMol::AtomDoubleArrayProperty )
+SIRE_EXPOSE_ATOM_PROPERTY( SireBase::IntegerArrayProperty, SireMol::AtomIntegerArrayProperty )
+SIRE_EXPOSE_ATOM_PROPERTY( SireBase::StringArrayProperty, SireMol::AtomStringArrayProperty )
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 template class SireMol::AtomProperty<SireBase::PropertyList>;
