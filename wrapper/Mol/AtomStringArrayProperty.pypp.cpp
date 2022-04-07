@@ -11,6 +11,10 @@ namespace bp = boost::python;
 
 #include "atompropertylist.h"
 
+#include "SireMaths/vector.h"
+
+#include "SireMol/moleculeview.h"
+
 SireMol::AtomProperty<SireBase::StringArrayProperty> __copy__(const SireMol::AtomProperty<SireBase::StringArrayProperty> &other){ return SireMol::AtomProperty<SireBase::StringArrayProperty>(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -374,7 +378,7 @@ void register_AtomStringArrayProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgatomidx"), bp::arg("value") )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -388,7 +392,7 @@ void register_AtomStringArrayProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgidx"), bp::arg("values") )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
