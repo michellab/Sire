@@ -123,6 +123,8 @@
 
 #include "BondPerturbation.pypp.hpp"
 
+#include "BondType.pypp.hpp"
+
 #include "CGAtomID.pypp.hpp"
 
 #include "CGAtomIdx.pypp.hpp"
@@ -483,6 +485,8 @@
 
 #include "Specify_SegID_.pypp.hpp"
 
+#include "Stereoscopy.pypp.hpp"
+
 #include "UserBeading.pypp.hpp"
 
 #include "Velocity3D.pypp.hpp"
@@ -725,6 +729,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_BondID_class();
 
     register_BondPerturbation_class();
+
+    register_BondType_class();
 
     register_CGAtomIdx_class();
 
@@ -999,6 +1005,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_SelectResultMover_class();
 
     register_SpecifyMol_class();
+
+    register_Stereoscopy_class();
 
     register_UserBeading_class();
 

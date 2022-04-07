@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "SireBase/parallel.h"
 
+#include "SireBase/propertylist.h"
+
 #include "SireBase/stringproperty.h"
 
 #include "SireError/errors.h"
@@ -22,6 +24,12 @@ namespace bp = boost::python;
 #include "SireMol/atomcoords.h"
 
 #include "SireMol/atomelements.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/bondid.h"
+
+#include "SireMol/connectivity.h"
 
 #include "SireMol/errors.h"
 
@@ -38,6 +46,8 @@ namespace bp = boost::python;
 #include "SireUnits/units.h"
 
 #include "sdf.h"
+
+#include "sire_version.h"
 
 #include <QFile>
 
@@ -61,6 +71,17 @@ void register_SDF_class(){
         SDF_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to read in the data from the passed text lines. The\npassed property map can be used to pass extra parameters to control\nthe parsing") );
         SDF_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct this parser by extracting all necessary information from the\npassed SireSystem::System, looking for the properties that are specified\nin the passed property map") );
         SDF_exposer.def( bp::init< SireIO::SDF const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireIO::SDF::canFollow
+        
+            typedef bool ( ::SireIO::SDF::*canFollow_function_type)(  ) const;
+            canFollow_function_type canFollow_function_value( &::SireIO::SDF::canFollow );
+            
+            SDF_exposer.def( 
+                "canFollow"
+                , canFollow_function_value
+                , "The SDF cannot follow another lead parsers." );
+        
+        }
         { //::SireIO::SDF::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::SDF::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
@@ -141,6 +162,40 @@ void register_SDF_class(){
                 , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
         
         }
+        { //::SireIO::SDF::nAtoms
+        
+            typedef int ( ::SireIO::SDF::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::SDF::nAtoms );
+            
+            SDF_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , "Return the total number of atoms." );
+        
+        }
+        { //::SireIO::SDF::nAtoms
+        
+            typedef int ( ::SireIO::SDF::*nAtoms_function_type)( int ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::SDF::nAtoms );
+            
+            SDF_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , ( bp::arg("i") )
+                , "Return the number of atoms in molecule i." );
+        
+        }
+        { //::SireIO::SDF::nMolecules
+        
+            typedef int ( ::SireIO::SDF::*nMolecules_function_type)(  ) const;
+            nMolecules_function_type nMolecules_function_value( &::SireIO::SDF::nMolecules );
+            
+            SDF_exposer.def( 
+                "nMolecules"
+                , nMolecules_function_value
+                , "Return the number of molecules loaded in this file" );
+        
+        }
         SDF_exposer.def( bp::self != bp::self );
         { //::SireIO::SDF::operator=
         
@@ -156,6 +211,17 @@ void register_SDF_class(){
         
         }
         SDF_exposer.def( bp::self == bp::self );
+        { //::SireIO::SDF::parseWarnings
+        
+            typedef ::QStringList ( ::SireIO::SDF::*parseWarnings_function_type)(  ) const;
+            parseWarnings_function_type parseWarnings_function_value( &::SireIO::SDF::parseWarnings );
+            
+            SDF_exposer.def( 
+                "parseWarnings"
+                , parseWarnings_function_value
+                , "Return any warnings raised when parsing this file" );
+        
+        }
         { //::SireIO::SDF::toString
         
             typedef ::QString ( ::SireIO::SDF::*toString_function_type)(  ) const;
