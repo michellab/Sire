@@ -107,26 +107,26 @@ const SireBase::PropertyList& get_Metadata_SireMol_AtomPropertyList_function2(co
                                    const QString &key, const QString &metakey){
                                         return atom.metadata< SireBase::PropertyList >(key, metakey); }
 
-const SireBase::AtomDoubleArray& get_Metadata_SireMol_AtomDoubleArrayProperty_function1(const SireMol::Atom &atom,
-                                   const QString &metakey){ return atom.metadata< SireBase::AtomDoubleArray >(metakey); }
+const SireBase::DoubleArrayProperty& get_Metadata_SireMol_AtomDoubleArrayProperty_function1(const SireMol::Atom &atom,
+                                   const QString &metakey){ return atom.metadata< SireBase::DoubleArrayProperty >(metakey); }
 
-const SireBase::AtomDoubleArray& get_Metadata_SireMol_AtomDoubleArrayProperty_function2(const SireMol::Atom &atom,
+const SireBase::DoubleArrayProperty& get_Metadata_SireMol_AtomDoubleArrayProperty_function2(const SireMol::Atom &atom,
                                    const QString &key, const QString &metakey){
-                                        return atom.metadata< SireBase::AtomDoubleArray >(key, metakey); }
+                                        return atom.metadata< SireBase::DoubleArrayProperty >(key, metakey); }
 
-const SireBase::AtomIntegerArray& get_Metadata_SireMol_AtomIntegerArrayProperty_function1(const SireMol::Atom &atom,
-                                   const QString &metakey){ return atom.metadata< SireBase::AtomIntegerArray >(metakey); }
+const SireBase::IntegerArrayProperty& get_Metadata_SireMol_AtomIntegerArrayProperty_function1(const SireMol::Atom &atom,
+                                   const QString &metakey){ return atom.metadata< SireBase::IntegerArrayProperty >(metakey); }
 
-const SireBase::AtomIntegerArray& get_Metadata_SireMol_AtomIntegerArrayProperty_function2(const SireMol::Atom &atom,
+const SireBase::IntegerArrayProperty& get_Metadata_SireMol_AtomIntegerArrayProperty_function2(const SireMol::Atom &atom,
                                    const QString &key, const QString &metakey){
-                                        return atom.metadata< SireBase::AtomIntegerArray >(key, metakey); }
+                                        return atom.metadata< SireBase::IntegerArrayProperty >(key, metakey); }
 
-const SireBase::AtomStringArray& get_Metadata_SireMol_AtomStringArrayProperty_function1(const SireMol::Atom &atom,
-                                   const QString &metakey){ return atom.metadata< SireBase::AtomStringArray >(metakey); }
+const SireBase::StringArrayProperty& get_Metadata_SireMol_AtomStringArrayProperty_function1(const SireMol::Atom &atom,
+                                   const QString &metakey){ return atom.metadata< SireBase::StringArrayProperty >(metakey); }
 
-const SireBase::AtomStringArray& get_Metadata_SireMol_AtomStringArrayProperty_function2(const SireMol::Atom &atom,
+const SireBase::StringArrayProperty& get_Metadata_SireMol_AtomStringArrayProperty_function2(const SireMol::Atom &atom,
                                    const QString &key, const QString &metakey){
-                                        return atom.metadata< SireBase::AtomStringArray >(key, metakey); }
+                                        return atom.metadata< SireBase::StringArrayProperty >(key, metakey); }
 
 const SireUnits::Dimension::MolarEnergy& get_Metadata_SireMol_AtomEnergies_function1(const SireMol::Atom &atom,
                                    const QString &metakey){ return atom.metadata< SireUnits::Dimension::MolarEnergy >(metakey); }
@@ -623,13 +623,13 @@ void register_Atom_class(){
         Atom_exposer.def( "_get_property_SireMol_AtomPropertyList", &SireMol::Atom::property< SireBase::PropertyList >, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomPropertyList", get_Metadata_SireMol_AtomPropertyList_function1, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomPropertyList", &get_Metadata_SireMol_AtomPropertyList_function2, bp::return_value_policy<bp::copy_const_reference>());
-        Atom_exposer.def( "_get_property_SireMol_AtomDoubleArrayProperty", &SireMol::Atom::property< SireBase::AtomDoubleArray >, bp::return_value_policy<bp::copy_const_reference>());
+        Atom_exposer.def( "_get_property_SireMol_AtomDoubleArrayProperty", &SireMol::Atom::property< SireBase::DoubleArrayProperty >, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomDoubleArrayProperty", get_Metadata_SireMol_AtomDoubleArrayProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomDoubleArrayProperty", &get_Metadata_SireMol_AtomDoubleArrayProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
-        Atom_exposer.def( "_get_property_SireMol_AtomIntegerArrayProperty", &SireMol::Atom::property< SireBase::AtomIntegerArray >, bp::return_value_policy<bp::copy_const_reference>());
+        Atom_exposer.def( "_get_property_SireMol_AtomIntegerArrayProperty", &SireMol::Atom::property< SireBase::IntegerArrayProperty >, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomIntegerArrayProperty", get_Metadata_SireMol_AtomIntegerArrayProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomIntegerArrayProperty", &get_Metadata_SireMol_AtomIntegerArrayProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
-        Atom_exposer.def( "_get_property_SireMol_AtomStringArrayProperty", &SireMol::Atom::property< SireBase::AtomStringArray >, bp::return_value_policy<bp::copy_const_reference>());
+        Atom_exposer.def( "_get_property_SireMol_AtomStringArrayProperty", &SireMol::Atom::property< SireBase::StringArrayProperty >, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomStringArrayProperty", get_Metadata_SireMol_AtomStringArrayProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomStringArrayProperty", &get_Metadata_SireMol_AtomStringArrayProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_property_SireMol_AtomEnergies", &SireMol::Atom::property< SireUnits::Dimension::MolarEnergy >, bp::return_value_policy<bp::copy_const_reference>());

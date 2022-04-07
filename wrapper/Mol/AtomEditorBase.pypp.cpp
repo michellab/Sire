@@ -121,33 +121,33 @@ SireMol::AtomEditorBase& set_Metadata_SireMol_AtomPropertyList_function2(
 
 SireMol::AtomEditorBase& set_Metadata_SireMol_AtomDoubleArrayProperty_function1(
                                   SireMol::AtomEditorBase &molview,
-                                   const QString &metakey, const SireBase::AtomDoubleArray &p)
-                                   { return molview.setMetadata< SireBase::AtomDoubleArray >(metakey, p); }
+                                   const QString &metakey, const SireBase::DoubleArrayProperty &p)
+                                   { return molview.setMetadata< SireBase::DoubleArrayProperty >(metakey, p); }
 
 SireMol::AtomEditorBase& set_Metadata_SireMol_AtomDoubleArrayProperty_function2(
                                   SireMol::AtomEditorBase &molview,
-                                   const QString &key, const QString &metakey, const SireBase::AtomDoubleArray &p)
-                                   { return molview.setMetadata< SireBase::AtomDoubleArray >(key, metakey, p); }
+                                   const QString &key, const QString &metakey, const SireBase::DoubleArrayProperty &p)
+                                   { return molview.setMetadata< SireBase::DoubleArrayProperty >(key, metakey, p); }
 
 SireMol::AtomEditorBase& set_Metadata_SireMol_AtomIntegerArrayProperty_function1(
                                   SireMol::AtomEditorBase &molview,
-                                   const QString &metakey, const SireBase::AtomIntegerArray &p)
-                                   { return molview.setMetadata< SireBase::AtomIntegerArray >(metakey, p); }
+                                   const QString &metakey, const SireBase::IntegerArrayProperty &p)
+                                   { return molview.setMetadata< SireBase::IntegerArrayProperty >(metakey, p); }
 
 SireMol::AtomEditorBase& set_Metadata_SireMol_AtomIntegerArrayProperty_function2(
                                   SireMol::AtomEditorBase &molview,
-                                   const QString &key, const QString &metakey, const SireBase::AtomIntegerArray &p)
-                                   { return molview.setMetadata< SireBase::AtomIntegerArray >(key, metakey, p); }
+                                   const QString &key, const QString &metakey, const SireBase::IntegerArrayProperty &p)
+                                   { return molview.setMetadata< SireBase::IntegerArrayProperty >(key, metakey, p); }
 
 SireMol::AtomEditorBase& set_Metadata_SireMol_AtomStringArrayProperty_function1(
                                   SireMol::AtomEditorBase &molview,
-                                   const QString &metakey, const SireBase::AtomStringArray &p)
-                                   { return molview.setMetadata< SireBase::AtomStringArray >(metakey, p); }
+                                   const QString &metakey, const SireBase::StringArrayProperty &p)
+                                   { return molview.setMetadata< SireBase::StringArrayProperty >(metakey, p); }
 
 SireMol::AtomEditorBase& set_Metadata_SireMol_AtomStringArrayProperty_function2(
                                   SireMol::AtomEditorBase &molview,
-                                   const QString &key, const QString &metakey, const SireBase::AtomStringArray &p)
-                                   { return molview.setMetadata< SireBase::AtomStringArray >(key, metakey, p); }
+                                   const QString &key, const QString &metakey, const SireBase::StringArrayProperty &p)
+                                   { return molview.setMetadata< SireBase::StringArrayProperty >(key, metakey, p); }
 
 SireMol::AtomEditorBase& set_Metadata_SireMol_AtomEnergies_function1(
                                   SireMol::AtomEditorBase &molview,
@@ -573,18 +573,18 @@ void register_AtomEditorBase_class(){
                                            &SireMol::AtomEditorBase::setProperty< SireBase::PropertyList >, bp::return_self< >() );
         AtomEditorBase_exposer.def( "_set_metadata_SireBase_PropertyList", &set_Metadata_SireMol_AtomPropertyList_function1, bp::return_self< >());
         AtomEditorBase_exposer.def( "_set_metadata_SireBase_PropertyList", &set_Metadata_SireMol_AtomPropertyList_function2, bp::return_self< >());
-        AtomEditorBase_exposer.def( "_set_property_SireBase_AtomDoubleArray",
-                                           &SireMol::AtomEditorBase::setProperty< SireBase::AtomDoubleArray >, bp::return_self< >() );
-        AtomEditorBase_exposer.def( "_set_metadata_SireBase_AtomDoubleArray", &set_Metadata_SireMol_AtomDoubleArrayProperty_function1, bp::return_self< >());
-        AtomEditorBase_exposer.def( "_set_metadata_SireBase_AtomDoubleArray", &set_Metadata_SireMol_AtomDoubleArrayProperty_function2, bp::return_self< >());
-        AtomEditorBase_exposer.def( "_set_property_SireBase_AtomIntegerArray",
-                                           &SireMol::AtomEditorBase::setProperty< SireBase::AtomIntegerArray >, bp::return_self< >() );
-        AtomEditorBase_exposer.def( "_set_metadata_SireBase_AtomIntegerArray", &set_Metadata_SireMol_AtomIntegerArrayProperty_function1, bp::return_self< >());
-        AtomEditorBase_exposer.def( "_set_metadata_SireBase_AtomIntegerArray", &set_Metadata_SireMol_AtomIntegerArrayProperty_function2, bp::return_self< >());
-        AtomEditorBase_exposer.def( "_set_property_SireBase_AtomStringArray",
-                                           &SireMol::AtomEditorBase::setProperty< SireBase::AtomStringArray >, bp::return_self< >() );
-        AtomEditorBase_exposer.def( "_set_metadata_SireBase_AtomStringArray", &set_Metadata_SireMol_AtomStringArrayProperty_function1, bp::return_self< >());
-        AtomEditorBase_exposer.def( "_set_metadata_SireBase_AtomStringArray", &set_Metadata_SireMol_AtomStringArrayProperty_function2, bp::return_self< >());
+        AtomEditorBase_exposer.def( "_set_property_SireBase_DoubleArrayProperty",
+                                           &SireMol::AtomEditorBase::setProperty< SireBase::DoubleArrayProperty >, bp::return_self< >() );
+        AtomEditorBase_exposer.def( "_set_metadata_SireBase_DoubleArrayProperty", &set_Metadata_SireMol_AtomDoubleArrayProperty_function1, bp::return_self< >());
+        AtomEditorBase_exposer.def( "_set_metadata_SireBase_DoubleArrayProperty", &set_Metadata_SireMol_AtomDoubleArrayProperty_function2, bp::return_self< >());
+        AtomEditorBase_exposer.def( "_set_property_SireBase_IntegerArrayProperty",
+                                           &SireMol::AtomEditorBase::setProperty< SireBase::IntegerArrayProperty >, bp::return_self< >() );
+        AtomEditorBase_exposer.def( "_set_metadata_SireBase_IntegerArrayProperty", &set_Metadata_SireMol_AtomIntegerArrayProperty_function1, bp::return_self< >());
+        AtomEditorBase_exposer.def( "_set_metadata_SireBase_IntegerArrayProperty", &set_Metadata_SireMol_AtomIntegerArrayProperty_function2, bp::return_self< >());
+        AtomEditorBase_exposer.def( "_set_property_SireBase_StringArrayProperty",
+                                           &SireMol::AtomEditorBase::setProperty< SireBase::StringArrayProperty >, bp::return_self< >() );
+        AtomEditorBase_exposer.def( "_set_metadata_SireBase_StringArrayProperty", &set_Metadata_SireMol_AtomStringArrayProperty_function1, bp::return_self< >());
+        AtomEditorBase_exposer.def( "_set_metadata_SireBase_StringArrayProperty", &set_Metadata_SireMol_AtomStringArrayProperty_function2, bp::return_self< >());
         AtomEditorBase_exposer.def( "_set_property_SireUnits_Dimension_MolarEnergy",
                                            &SireMol::AtomEditorBase::setProperty< SireUnits::Dimension::MolarEnergy >, bp::return_self< >() );
         AtomEditorBase_exposer.def( "_set_metadata_SireUnits_Dimension_MolarEnergy", &set_Metadata_SireMol_AtomEnergies_function1, bp::return_self< >());
