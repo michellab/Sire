@@ -110,8 +110,6 @@ public:
     tuple<AtomIdx,AtomIdx> map(const MoleculeInfoData &mol0info,
                                const MoleculeInfoData &mol1info) const;
 
-    BondID mapToOrderedBondIdx(const MoleculeInfoData &molinfo) const;
-
     Vector vector(const MoleculeData &moldata,
                   const PropertyMap &map = PropertyMap()) const;
 

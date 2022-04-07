@@ -85,6 +85,33 @@ class MoleculeInfoData;
 
 class ConnectivityEditor;
 
+namespace detail
+{
+
+class IDPair
+{
+public:
+    IDPair(quint32 atom0=0, quint32 atom1=0);
+    IDPair(const IDPair &other);
+
+    ~IDPair();
+
+    IDPair& operator=(const IDPair &other);
+
+    bool operator==(const IDPair &other) const;
+    bool operator!=(const IDPair &other) const;
+
+    quint32 atom0;
+    quint32 atom1;
+};
+
+SIRE_ALWAYS_INLINE uint qHash(const IDPair &idpair)
+{
+    return (idpair.atom0 << 16) | (idpair.atom1 & 0x0000FFFF);
+}
+
+} // end of namespace detail
+
 /** The base class of Connectivity and ConnectivityEditor
 
     @author Christopher Woods
@@ -299,7 +326,7 @@ protected:
     QVector< QSet<ResIdx> > connected_res;
 
     /** Bond properties */
-    QHash<BondID, SireBase::Properties> bond_props;
+    QHash<detail::IDPair, SireBase::Properties> bond_props;
 
     /** The info object that describes the molecule */
     MoleculeInfo minfo;

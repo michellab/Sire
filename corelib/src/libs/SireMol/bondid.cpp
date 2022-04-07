@@ -195,24 +195,6 @@ tuple<AtomIdx,AtomIdx> BondID::map(const MoleculeInfoData &mol0info,
                                    mol1info.atomIdx(atm1) );
 }
 
-/** Return a BondID that comprises two AtomIdx IDs, in AtomIdx order
-    (the lowest index atom is atom0)
-*/
-BondID BondID::mapToOrderedBondIdx(const MoleculeInfoData &molinfo) const
-{
-    auto atom0 = molinfo.atomIdx(atm0);
-    auto atom1 = molinfo.atomIdx(atm1);
-
-    if (atom0 <= atom1)
-    {
-        return BondID(atom0, atom1);
-    }
-    else
-    {
-        return BondID(atom1, atom0);
-    }
-}
-
 /** Return the vector that goes from atom0() to atom1() in the
     molecule whose data is in 'moldata', using the supplied
     property map to find the property that contains the
