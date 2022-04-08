@@ -27,7 +27,11 @@ namespace bp = boost::python;
 
 #include "SireMol/atommasses.h"
 
+#include "SireMol/atompropertylist.h"
+
 #include "SireMol/bondid.h"
+
+#include "SireMol/bondtype.h"
 
 #include "SireMol/connectivity.h"
 
@@ -36,6 +40,8 @@ namespace bp = boost::python;
 #include "SireMol/molecule.h"
 
 #include "SireMol/moleditor.h"
+
+#include "SireMol/stereoscopy.h"
 
 #include "SireStream/datastream.h"
 

@@ -224,6 +224,32 @@ void register_AtomForces_class(){
                 , "" );
         
         }
+        { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::getAsProperty
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::*getAsProperty_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::getAsProperty );
+            
+            AtomForces_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::getAsVariant
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > > exported_class_t;
+            typedef ::QVariant ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::*getAsVariant_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::getAsVariant );
+            
+            AtomForces_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::isCompatibleWith
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > > exported_class_t;

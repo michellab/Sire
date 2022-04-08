@@ -223,6 +223,32 @@ void register_AtomPropertyList_class(){
                 , "" );
         
         }
+        { //::SireMol::AtomProperty< SireBase::PropertyList >::getAsProperty
+        
+            typedef SireMol::AtomProperty< SireBase::PropertyList > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireBase::PropertyList >::*getAsProperty_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::AtomProperty< SireBase::PropertyList >::getAsProperty );
+            
+            AtomPropertyList_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireBase::PropertyList >::getAsVariant
+        
+            typedef SireMol::AtomProperty< SireBase::PropertyList > exported_class_t;
+            typedef ::QVariant ( ::SireMol::AtomProperty< SireBase::PropertyList >::*getAsVariant_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::AtomProperty< SireBase::PropertyList >::getAsVariant );
+            
+            AtomPropertyList_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
         { //::SireMol::AtomProperty< SireBase::PropertyList >::isCompatibleWith
         
             typedef SireMol::AtomProperty< SireBase::PropertyList > exported_class_t;

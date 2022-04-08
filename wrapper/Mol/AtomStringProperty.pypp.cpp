@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/propertylist.h"
+
 #include "SireError/errors.h"
 
 #include "SireMaths/vector.h"
@@ -242,6 +244,32 @@ void register_AtomStringProperty_class(){
                 , get_function_value
                 , ( bp::arg("cgatomidx") )
                 , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< QString >::getAsProperty
+        
+            typedef SireMol::AtomProperty< QString > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< QString >::*getAsProperty_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::AtomProperty< QString >::getAsProperty );
+            
+            AtomStringProperty_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< QString >::getAsVariant
+        
+            typedef SireMol::AtomProperty< QString > exported_class_t;
+            typedef ::QVariant ( ::SireMol::AtomProperty< QString >::*getAsVariant_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::AtomProperty< QString >::getAsVariant );
+            
+            AtomStringProperty_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("cgatomidx") )
                 , "" );
         
         }

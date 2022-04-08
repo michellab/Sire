@@ -60,6 +60,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/align.h"
 
+#include "SireMaths/vectorproperty.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -79,6 +81,8 @@ namespace bp = boost::python;
 #include "atomforces.h"
 
 #include "atomvelocities.h"
+
+#include "SireBase/propertylist.h"
 
 #include "SireError/errors.h"
 
@@ -513,6 +517,30 @@ void register_Atom_class(){
         
         }
         Atom_exposer.def( bp::self == bp::self );
+        { //::SireMol::Atom::propertyAsProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::Atom::*propertyAsProperty_function_type)( ::SireBase::PropertyName const & ) const;
+            propertyAsProperty_function_type propertyAsProperty_function_value( &::SireMol::Atom::propertyAsProperty );
+            
+            Atom_exposer.def( 
+                "propertyAsProperty"
+                , propertyAsProperty_function_value
+                , ( bp::arg("key") )
+                , "Return the specified property as a PropertyPtr" );
+        
+        }
+        { //::SireMol::Atom::propertyAsVariant
+        
+            typedef ::QVariant ( ::SireMol::Atom::*propertyAsVariant_function_type)( ::SireBase::PropertyName const & ) const;
+            propertyAsVariant_function_type propertyAsVariant_function_value( &::SireMol::Atom::propertyAsVariant );
+            
+            Atom_exposer.def( 
+                "propertyAsVariant"
+                , propertyAsVariant_function_value
+                , ( bp::arg("key") )
+                , "Return the specified property as a QVariant" );
+        
+        }
         { //::SireMol::Atom::propertyKeys
         
             typedef ::QStringList ( ::SireMol::Atom::*propertyKeys_function_type)(  ) const;

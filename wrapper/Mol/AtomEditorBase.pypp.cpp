@@ -63,6 +63,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/align.h"
 
+#include "SireMaths/vectorproperty.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -82,6 +84,8 @@ namespace bp = boost::python;
 #include "atomforces.h"
 
 #include "atomvelocities.h"
+
+#include "SireBase/propertylist.h"
 
 #include "SireError/errors.h"
 

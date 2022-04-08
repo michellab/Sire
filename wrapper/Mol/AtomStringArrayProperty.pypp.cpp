@@ -223,6 +223,32 @@ void register_AtomStringArrayProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::AtomProperty< SireBase::StringArrayProperty >::getAsProperty
+        
+            typedef SireMol::AtomProperty< SireBase::StringArrayProperty > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireBase::StringArrayProperty >::*getAsProperty_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::AtomProperty< SireBase::StringArrayProperty >::getAsProperty );
+            
+            AtomStringArrayProperty_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireBase::StringArrayProperty >::getAsVariant
+        
+            typedef SireMol::AtomProperty< SireBase::StringArrayProperty > exported_class_t;
+            typedef ::QVariant ( ::SireMol::AtomProperty< SireBase::StringArrayProperty >::*getAsVariant_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::AtomProperty< SireBase::StringArrayProperty >::getAsVariant );
+            
+            AtomStringArrayProperty_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
         { //::SireMol::AtomProperty< SireBase::StringArrayProperty >::isCompatibleWith
         
             typedef SireMol::AtomProperty< SireBase::StringArrayProperty > exported_class_t;

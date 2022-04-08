@@ -223,6 +223,32 @@ void register_AtomDoubleArrayProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::AtomProperty< SireBase::DoubleArrayProperty >::getAsProperty
+        
+            typedef SireMol::AtomProperty< SireBase::DoubleArrayProperty > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireBase::DoubleArrayProperty >::*getAsProperty_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::AtomProperty< SireBase::DoubleArrayProperty >::getAsProperty );
+            
+            AtomDoubleArrayProperty_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireBase::DoubleArrayProperty >::getAsVariant
+        
+            typedef SireMol::AtomProperty< SireBase::DoubleArrayProperty > exported_class_t;
+            typedef ::QVariant ( ::SireMol::AtomProperty< SireBase::DoubleArrayProperty >::*getAsVariant_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::AtomProperty< SireBase::DoubleArrayProperty >::getAsVariant );
+            
+            AtomDoubleArrayProperty_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
         { //::SireMol::AtomProperty< SireBase::DoubleArrayProperty >::isCompatibleWith
         
             typedef SireMol::AtomProperty< SireBase::DoubleArrayProperty > exported_class_t;
