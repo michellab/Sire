@@ -446,11 +446,11 @@ public:
 
     ConnectivityEditor& disconnectAll();
 
-    void setProperty(const BondID &bond,
-                     const QString &key, const Property &value);
+    ConnectivityEditor& setProperty(const BondID &bond,
+                                    const QString &key, const Property &value);
 
-    void removeProperty(const QString &key);
-    void removeProperty(const BondID &bond, const QString &key);
+    ConnectivityEditor& removeProperty(const QString &key);
+    ConnectivityEditor& removeProperty(const BondID &bond, const QString &key);
 
     SireBase::PropertyPtr takeProperty(const BondID &bond, const QString &key);
 

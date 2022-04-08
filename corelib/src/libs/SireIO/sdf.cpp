@@ -597,7 +597,49 @@ SDFMolecule parseMolecule(const Molecule &molecule,
         }
         else
         {
-            sdf_atom.name = atom.name();
+            sdf_atom.name = atom.name().value().trimmed();
+            sdf_atom.name.truncate(3);
+        }
+
+        if (atom.hasProperty(map["mass"]))
+        {
+            auto mass = atom.property<SireUnits::Dimension::MolarMass>(map["mass"]);
+
+            if (atom.hasProperty(map["element"]))
+            {
+                auto element = atom.property<Element>(map["element"]);
+
+                // what is the difference between the atom mass and the
+                // element mass?
+                int diff = int((mass - element.mass()).to(g_per_mol));
+
+                if (diff > 4)
+                {
+                    errors.append(QObject::tr(
+                        "Mass difference is too high (%1). "
+                        "Only values up to 4 are supported.").arg(diff));
+                    diff = 4;
+                }
+                else if (diff < -3)
+                {
+                    errors.append(QObject::tr(
+                        "Mass difference is too small (%1). "
+                        "Only values up to -3 are supported.").arg(diff));
+                    diff = -3;
+                }
+
+                sdf_atom.mass_difference = diff;
+            }
+            else
+            {
+                // we don't know what element this is, so have to assume 0
+                sdf_atom.mass_difference = 0;
+            }
+        }
+        else
+        {
+            // we don't know the mass, so have to assume it is 0
+            sdf_atom.mass_difference = 0;
         }
 
         if (atom.hasProperty(map["sdf_fields"]))
@@ -615,6 +657,8 @@ SDFMolecule parseMolecule(const Molecule &molecule,
 
                 if (f.count() < 10)
                     f.append(af);
+                else
+                    break;
             }
 
             sdf_atom.fields = f;
@@ -635,6 +679,29 @@ SDFMolecule parseMolecule(const Molecule &molecule,
         sdfbond.atom1 = molinfo.atomIdx(bond.atom1()).value() + 1;
         sdfbond.typ = 1; // assume single for now
         sdfbond.stereoscopy = 0; // assume not stereo for now
+
+        if (connectivity.hasProperty(bond, map["sdf_fields"]))
+        {
+            auto fields = connectivity.property(bond,
+                                                map["sdf_fields"]).asAnArray();
+
+            qDebug() << fields.toString();
+
+            QStringList f;
+
+            for (int i=0; i<fields.count(); ++i)
+            {
+                auto bf = fields[i].asAString().trimmed();
+                bf.truncate(3);
+
+                if (f.count() < 3)
+                    f.append(bf);
+                else
+                    break;
+            }
+
+            sdfbond.fields = f;
+        }
 
         sdfbond.completeFields();
 

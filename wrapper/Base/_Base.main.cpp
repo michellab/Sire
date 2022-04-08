@@ -9,6 +9,8 @@
 
 #include "Helpers/clone_const_reference.hpp"
 
+#include "SireBase/propertylist.h"
+
 #include "Array2DBase.pypp.hpp"
 
 #include "Array2D_double_.pypp.hpp"
