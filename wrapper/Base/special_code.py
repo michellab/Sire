@@ -22,5 +22,6 @@ def fixMB(mb):
     mb.add_declaration_code( "#include \"SireBase/stringproperty.h\"" )
     mb.add_declaration_code( "#include \"SireBase/numberproperty.h\"" )
     mb.add_declaration_code( "#include \"SireBase/lengthproperty.h\"" )
+    mb.add_declaration_code( "#include \"SireBase/propertylist.h\"" )
     mb.add_declaration_code( "#include <QString>" )
 

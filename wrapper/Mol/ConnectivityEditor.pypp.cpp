@@ -207,37 +207,40 @@ void register_ConnectivityEditor_class(){
         ConnectivityEditor_exposer.def( bp::self == bp::self );
         { //::SireMol::ConnectivityEditor::removeProperty
         
-            typedef void ( ::SireMol::ConnectivityEditor::*removeProperty_function_type)( ::QString const & ) ;
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*removeProperty_function_type)( ::QString const & ) ;
             removeProperty_function_type removeProperty_function_value( &::SireMol::ConnectivityEditor::removeProperty );
             
             ConnectivityEditor_exposer.def( 
                 "removeProperty"
                 , removeProperty_function_value
                 , ( bp::arg("key") )
+                    /* undefined call policies */
                 , "Remove the specified property from all bonds" );
         
         }
         { //::SireMol::ConnectivityEditor::removeProperty
         
-            typedef void ( ::SireMol::ConnectivityEditor::*removeProperty_function_type)( ::SireMol::BondID const &,::QString const & ) ;
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*removeProperty_function_type)( ::SireMol::BondID const &,::QString const & ) ;
             removeProperty_function_type removeProperty_function_value( &::SireMol::ConnectivityEditor::removeProperty );
             
             ConnectivityEditor_exposer.def( 
                 "removeProperty"
                 , removeProperty_function_value
                 , ( bp::arg("bond"), bp::arg("key") )
+                    /* undefined call policies */
                 , "Remove the specified property from the specified bond" );
         
         }
         { //::SireMol::ConnectivityEditor::setProperty
         
-            typedef void ( ::SireMol::ConnectivityEditor::*setProperty_function_type)( ::SireMol::BondID const &,::QString const &,::SireBase::Property const & ) ;
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*setProperty_function_type)( ::SireMol::BondID const &,::QString const &,::SireBase::Property const & ) ;
             setProperty_function_type setProperty_function_value( &::SireMol::ConnectivityEditor::setProperty );
             
             ConnectivityEditor_exposer.def( 
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("bond"), bp::arg("key"), bp::arg("value") )
+                    /* undefined call policies */
                 , "Set the property for the specified bond, at the specified key, to value" );
         
         }
