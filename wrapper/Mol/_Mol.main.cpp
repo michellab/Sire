@@ -75,6 +75,8 @@
 
 #include "AtomPropertyList.pypp.hpp"
 
+#include "AtomRadicals.pypp.hpp"
+
 #include "AtomRadii.pypp.hpp"
 
 #include "AtomResultMatcher.pypp.hpp"
@@ -381,6 +383,8 @@
 
 #include "Perturbations.pypp.hpp"
 
+#include "Radical.pypp.hpp"
+
 #include "RelFromMass.pypp.hpp"
 
 #include "RelFromNumber.pypp.hpp"
@@ -686,6 +690,8 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_AtomElements_class();
 
+    register_AtomRadicals_class();
+
     register_AtomCharges_class();
 
     register_AtomRadii_class();
@@ -953,6 +959,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_PerturbationSymbols_class();
 
     register_Perturbations_class();
+
+    register_Radical_class();
 
     register_RelFromMass_class();
 

@@ -2,6 +2,7 @@
 set ( PYPP_SOURCES
        MolEditorBase.pypp.cpp
        AtomProp.pypp.cpp
+       Radical.pypp.cpp
        MGID.pypp.cpp
        SegStructureEditor.pypp.cpp
        AtomMatchInverter.pypp.cpp
@@ -73,6 +74,7 @@ set ( PYPP_SOURCES
        ChainIntProperty.pypp.cpp
        SegResID.pypp.cpp
        AtomEnergies.pypp.cpp
+       AtomRadicals.pypp.cpp
        IDOrSet_AtomID_.pypp.cpp
        AtomIDMatcher.pypp.cpp
        ResStringProperty.pypp.cpp

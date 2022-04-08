@@ -56,6 +56,8 @@ namespace bp = boost::python;
 
 #include "atombeads.h"
 
+#include "atomradicals.h"
+
 #include "SireBase/quickcopy.hpp"
 
 #include "SireMaths/align.h"
@@ -145,6 +147,13 @@ const SireMol::BeadNum& get_Metadata_SireMol_AtomBeads_function1(const SireMol::
 const SireMol::BeadNum& get_Metadata_SireMol_AtomBeads_function2(const SireMol::Atom &atom,
                                    const QString &key, const QString &metakey){
                                         return atom.metadata< SireMol::BeadNum >(key, metakey); }
+
+const SireMol::Radical& get_Metadata_SireMol_AtomRadicals_function1(const SireMol::Atom &atom,
+                                   const QString &metakey){ return atom.metadata< SireMol::Radical >(metakey); }
+
+const SireMol::Radical& get_Metadata_SireMol_AtomRadicals_function2(const SireMol::Atom &atom,
+                                   const QString &key, const QString &metakey){
+                                        return atom.metadata< SireMol::Radical >(key, metakey); }
 
 const SireMaths::Vector& get_Metadata_SireMol_AtomCoords_function1(const SireMol::Atom &atom,
                                    const QString &metakey){ return atom.metadata< SireMaths::Vector >(metakey); }
@@ -666,6 +675,9 @@ void register_Atom_class(){
         Atom_exposer.def( "_get_property_SireMol_AtomBeads", &SireMol::Atom::property< SireMol::BeadNum >, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomBeads", get_Metadata_SireMol_AtomBeads_function1, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomBeads", &get_Metadata_SireMol_AtomBeads_function2, bp::return_value_policy<bp::copy_const_reference>());
+        Atom_exposer.def( "_get_property_SireMol_AtomRadicals", &SireMol::Atom::property< SireMol::Radical >, bp::return_value_policy<bp::copy_const_reference>());
+        Atom_exposer.def( "_get_metadata_SireMol_AtomRadicals", get_Metadata_SireMol_AtomRadicals_function1, bp::return_value_policy<bp::copy_const_reference>());
+        Atom_exposer.def( "_get_metadata_SireMol_AtomRadicals", &get_Metadata_SireMol_AtomRadicals_function2, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_property_SireMol_AtomCoords", &SireMol::Atom::property< SireMaths::Vector >, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomCoords", get_Metadata_SireMol_AtomCoords_function1, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomCoords", &get_Metadata_SireMol_AtomCoords_function2, bp::return_value_policy<bp::copy_const_reference>());

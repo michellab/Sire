@@ -59,6 +59,8 @@ namespace bp = boost::python;
 
 #include "atombeads.h"
 
+#include "atomradicals.h"
+
 #include "SireBase/quickcopy.hpp"
 
 #include "SireMaths/align.h"
@@ -172,6 +174,16 @@ SireMol::AtomEditorBase& set_Metadata_SireMol_AtomBeads_function2(
                                   SireMol::AtomEditorBase &molview,
                                    const QString &key, const QString &metakey, const SireMol::BeadNum &p)
                                    { return molview.setMetadata< SireMol::BeadNum >(key, metakey, p); }
+
+SireMol::AtomEditorBase& set_Metadata_SireMol_AtomRadicals_function1(
+                                  SireMol::AtomEditorBase &molview,
+                                   const QString &metakey, const SireMol::Radical &p)
+                                   { return molview.setMetadata< SireMol::Radical >(metakey, p); }
+
+SireMol::AtomEditorBase& set_Metadata_SireMol_AtomRadicals_function2(
+                                  SireMol::AtomEditorBase &molview,
+                                   const QString &key, const QString &metakey, const SireMol::Radical &p)
+                                   { return molview.setMetadata< SireMol::Radical >(key, metakey, p); }
 
 SireMol::AtomEditorBase& set_Metadata_SireMol_AtomCoords_function1(
                                   SireMol::AtomEditorBase &molview,
@@ -597,6 +609,10 @@ void register_AtomEditorBase_class(){
                                            &SireMol::AtomEditorBase::setProperty< SireMol::BeadNum >, bp::return_self< >() );
         AtomEditorBase_exposer.def( "_set_metadata_SireMol_BeadNum", &set_Metadata_SireMol_AtomBeads_function1, bp::return_self< >());
         AtomEditorBase_exposer.def( "_set_metadata_SireMol_BeadNum", &set_Metadata_SireMol_AtomBeads_function2, bp::return_self< >());
+        AtomEditorBase_exposer.def( "_set_property_SireMol_Radical",
+                                           &SireMol::AtomEditorBase::setProperty< SireMol::Radical >, bp::return_self< >() );
+        AtomEditorBase_exposer.def( "_set_metadata_SireMol_Radical", &set_Metadata_SireMol_AtomRadicals_function1, bp::return_self< >());
+        AtomEditorBase_exposer.def( "_set_metadata_SireMol_Radical", &set_Metadata_SireMol_AtomRadicals_function2, bp::return_self< >());
         AtomEditorBase_exposer.def( "_set_property_SireMaths_Vector",
                                            &SireMol::AtomEditorBase::setProperty< SireMaths::Vector >, bp::return_self< >() );
         AtomEditorBase_exposer.def( "_set_metadata_SireMaths_Vector", &set_Metadata_SireMol_AtomCoords_function1, bp::return_self< >());

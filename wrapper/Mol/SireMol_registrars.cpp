@@ -58,6 +58,7 @@
 #include "element.h"
 #include "molname.h"
 #include "residx.h"
+#include "atomradicals.h"
 #include "beading.h"
 #include "atomcoords.h"
 #include "angleid.h"
@@ -92,6 +93,7 @@
 #include "segidentifier.h"
 #include "cgatomidx.h"
 #include "weightfunction.h"
+#include "radical.h"
 #include "bead.h"
 #include "atomforces.h"
 #include "atomvelocities.h"
@@ -218,6 +220,7 @@ void register_SireMol_objects()
     ObjectRegistry::registerConverterFor< SireMol::Element >();
     ObjectRegistry::registerConverterFor< SireMol::MolName >();
     ObjectRegistry::registerConverterFor< SireMol::ResIdx >();
+    ObjectRegistry::registerConverterFor< SireMol::AtomRadicals >();
     ObjectRegistry::registerConverterFor< SireMol::MoleculeBeading >();
     ObjectRegistry::registerConverterFor< SireMol::ResidueBeading >();
     ObjectRegistry::registerConverterFor< SireMol::UserBeading >();
@@ -296,6 +299,7 @@ void register_SireMol_objects()
     ObjectRegistry::registerConverterFor< SireMol::RelFromNumber >();
     ObjectRegistry::registerConverterFor< SireMol::AbsFromMass >();
     ObjectRegistry::registerConverterFor< SireMol::AbsFromNumber >();
+    ObjectRegistry::registerConverterFor< SireMol::Radical >();
     ObjectRegistry::registerConverterFor< SireMol::Bead >();
     ObjectRegistry::registerConverterFor< SireMol::Mover<SireMol::Bead> >();
     ObjectRegistry::registerConverterFor< SireMol::AtomForces >();
