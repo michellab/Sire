@@ -8,7 +8,14 @@ special_code = { "SireBase::Array2D<double>" : fix_Array2D }
 
 implicitly_convertible = [ ("QString", "SireBase::PropertyName"),
                            ("SireBase::Property", "SireBase::PropertyName"),
-                           ("QHash<QString,SireBase::PropertyName>", "SireBase::PropertyMap") ] 
+                           ("QHash<QString,SireBase::PropertyName>", "SireBase::PropertyMap"),
+                           ("SireBase::DoubleArrayProperty", "SireBase::StringArrayProperty"),
+                           ("SireBase::DoubleArrayProperty", "SireBase::IntegerArrayProperty"),
+                           ("SireBase::DoubleArrayProperty", "SireBase::PropertyList"),
+                           ("SireBase::IntegerArrayProperty", "SireBase::StringArrayProperty"),
+                           ("SireBase::IntegerArrayProperty", "SireBase::DoubleArrayProperty"),
+                           ("SireBase::IntegerArrayProperty", "SireBase::PropertyList"),
+                           ("SireBase::StringArrayProperty", "SireBase::PropertyList") ] 
 
 def fixMB(mb):
     mb.add_declaration_code( "#include \"SireBase/propertymap.h\"" )

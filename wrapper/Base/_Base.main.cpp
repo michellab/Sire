@@ -242,6 +242,20 @@ BOOST_PYTHON_MODULE(_Base){
 
     bp::implicitly_convertible< QHash<QString,SireBase::PropertyName>, SireBase::PropertyMap >();
 
+    bp::implicitly_convertible< SireBase::DoubleArrayProperty, SireBase::StringArrayProperty >();
+
+    bp::implicitly_convertible< SireBase::DoubleArrayProperty, SireBase::IntegerArrayProperty >();
+
+    bp::implicitly_convertible< SireBase::DoubleArrayProperty, SireBase::PropertyList >();
+
+    bp::implicitly_convertible< SireBase::IntegerArrayProperty, SireBase::StringArrayProperty >();
+
+    bp::implicitly_convertible< SireBase::IntegerArrayProperty, SireBase::DoubleArrayProperty >();
+
+    bp::implicitly_convertible< SireBase::IntegerArrayProperty, SireBase::PropertyList >();
+
+    bp::implicitly_convertible< SireBase::StringArrayProperty, SireBase::PropertyList >();
+
     register_free_functions();
 }
 
