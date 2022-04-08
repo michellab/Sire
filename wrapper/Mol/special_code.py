@@ -219,6 +219,8 @@ def fix_ConnectivityEditor(c):
     c.decls( "connect" ).call_policies = call_policies.return_self()
     c.decls( "disconnect" ).call_policies = call_policies.return_self()
     c.decls( "disconnectAll" ).call_policies = call_policies.return_self()
+    c.decls( "setProperty" ).call_policies = call_policies.return_self()
+    c.decls( "removeProperty" ).call_policies = call_policies.return_self()
 
 def fix_MGNum(c):
     c.add_declaration_code( "#include \"mgid.h\"" )

@@ -214,7 +214,7 @@ void register_ConnectivityEditor_class(){
                 "removeProperty"
                 , removeProperty_function_value
                 , ( bp::arg("key") )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "Remove the specified property from all bonds" );
         
         }
@@ -227,7 +227,7 @@ void register_ConnectivityEditor_class(){
                 "removeProperty"
                 , removeProperty_function_value
                 , ( bp::arg("bond"), bp::arg("key") )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "Remove the specified property from the specified bond" );
         
         }
@@ -240,7 +240,7 @@ void register_ConnectivityEditor_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("bond"), bp::arg("key"), bp::arg("value") )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "Set the property for the specified bond, at the specified key, to value" );
         
         }
