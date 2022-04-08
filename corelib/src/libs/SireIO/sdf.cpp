@@ -201,7 +201,31 @@ public:
 
     int getCharge(int i) const
     {
-        return 0;
+        // NEED TO LOOK FOR THE M  CHG PROPERTIES FIRST!
+
+        switch(atoms[i].chg_difference)
+        {
+            case 0:
+                return 0;
+            case 1:
+                return 1;
+            case 2:
+                return 2;
+            case 3:
+                return 3;
+            case 4:
+                return 4;
+            case 5:
+                return -1;
+            case 6:
+                return -2;
+            case 7:
+                return -3;
+            default:
+                throw SireError::program_bug(
+                    QObject::tr("Strange charge? %1").arg(atoms[i].chg_difference)
+                );
+        }
     }
 
     Element getElement(int i) const
@@ -211,7 +235,10 @@ public:
 
     double getMass(int i) const
     {
-        return 0.0;
+        // NEED TO LOOK FOR THE M  CHG PROPERTIES FIRST!
+
+        auto mass = int(getElement(i).mass().to(g_per_mol) + 0.5);
+        return mass + atoms[i].mass_difference;
     }
 
     void completeCounts()
@@ -220,6 +247,21 @@ public:
         {
             counts.append("0");
         }
+    }
+
+    void addProperty(const QString &id, int index, const QString &value)
+    {
+        if (not properties.contains(id))
+        {
+            properties.insert(id, QStringList());
+        }
+
+        auto v = value.trimmed();
+        v.truncate(4);
+
+        properties[id].append(QString("  1%1%2")
+                                .arg(index, 4)
+                                .arg(v));
     }
 
     QString name;
@@ -611,21 +653,12 @@ SDFMolecule parseMolecule(const Molecule &molecule,
 
                 // what is the difference between the atom mass and the
                 // element mass?
-                int diff = int((mass - element.mass()).to(g_per_mol));
+                int diff = int((mass - element.mass()).to(g_per_mol) + 0.5);
 
-                if (diff > 4)
+                if (diff > 4 or diff < -3)
                 {
-                    errors.append(QObject::tr(
-                        "Mass difference is too high (%1). "
-                        "Only values up to 4 are supported.").arg(diff));
-                    diff = 4;
-                }
-                else if (diff < -3)
-                {
-                    errors.append(QObject::tr(
-                        "Mass difference is too small (%1). "
-                        "Only values up to -3 are supported.").arg(diff));
-                    diff = -3;
+                    sdfmol.addProperty("ISO", i+1, QString::number(diff));
+                    diff = 0;
                 }
 
                 sdf_atom.mass_difference = diff;
@@ -642,11 +675,38 @@ SDFMolecule parseMolecule(const Molecule &molecule,
             sdf_atom.mass_difference = 0;
         }
 
+        if (atom.hasProperty(map["formal_charge"]))
+        {
+            int charge = int(atom.property<SireUnits::Dimension::Charge>(
+                                                map["formal_charge"]).value());
+
+            if (charge >= 4 or charge < -3)
+            {
+                sdfmol.addProperty("CHG", i+1, QString::number(charge));
+                charge = 0;
+            }
+            else if (charge < 0)
+            {
+                switch(charge)
+                {
+                    case -1:
+                        charge = 5;
+                        break;
+                    case -2:
+                        charge = 6;
+                        break;
+                    case -3:
+                        charge = 7;
+                        break;
+                }
+            }
+
+            sdf_atom.chg_difference = charge;
+        }
+
         if (atom.hasProperty(map["sdf_fields"]))
         {
             auto fields = atom.propertyAsProperty(map["sdf_fields"]).asAnArray();
-
-            qDebug() << fields.toString();
 
             QStringList f;
 
@@ -684,8 +744,6 @@ SDFMolecule parseMolecule(const Molecule &molecule,
         {
             auto fields = connectivity.property(bond,
                                                 map["sdf_fields"]).asAnArray();
-
-            qDebug() << fields.toString();
 
             QStringList f;
 
@@ -1145,7 +1203,7 @@ void SDF::parseMoleculeLines(const PropertyMap &map,
         // to numbers - just leave as strings
         for (int j=0; j<10; ++j)
         {
-            atom.fields.append(line.mid(38+(3*j), 3));
+            atom.fields.append(line.mid(39+(3*j), 3));
         }
     }
 
