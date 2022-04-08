@@ -176,6 +176,9 @@ public:
     DoubleArrayProperty();
     DoubleArrayProperty(const QList<double> &array);
     DoubleArrayProperty(const QVector<double> &array);
+    DoubleArrayProperty(const StringArrayProperty &array);
+    DoubleArrayProperty(const IntegerArrayProperty &array);
+    DoubleArrayProperty(const PropertyList &array);
     DoubleArrayProperty(const DoubleArrayProperty &other);
 
     ~DoubleArrayProperty();
@@ -213,6 +216,9 @@ public:
     IntegerArrayProperty();
     IntegerArrayProperty(const QList<qint64> &array);
     IntegerArrayProperty(const QVector<qint64> &array);
+    IntegerArrayProperty(const StringArrayProperty &array);
+    IntegerArrayProperty(const DoubleArrayProperty &array);
+    IntegerArrayProperty(const PropertyList &array);
     IntegerArrayProperty(const IntegerArrayProperty &other);
 
     ~IntegerArrayProperty();
@@ -250,6 +256,9 @@ public:
     StringArrayProperty();
     StringArrayProperty(const QList<QString> &array);
     StringArrayProperty(const QVector<QString> &array);
+    StringArrayProperty(const DoubleArrayProperty &array);
+    StringArrayProperty(const IntegerArrayProperty &array);
+    StringArrayProperty(const PropertyList &array);
     StringArrayProperty(const StringArrayProperty &other);
 
     ~StringArrayProperty();

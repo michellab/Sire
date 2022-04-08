@@ -602,22 +602,22 @@ SDFMolecule parseMolecule(const Molecule &molecule,
 
         if (atom.hasProperty(map["sdf_fields"]))
         {
-            auto fields = atom.propertyAsVariant(map["sdf_fields"]);
+            auto fields = atom.propertyAsProperty(map["sdf_fields"]).asAnArray();
 
-            qDebug() << fields;
+            qDebug() << fields.toString();
 
-            /*QStringList f;
+            QStringList f;
 
-            for (const auto &field : fields)
+            for (int i=0; i<fields.count(); ++i)
             {
-                auto af = field.asAString().trimmed();
+                auto af = fields[i].asAString().trimmed();
                 af.truncate(3);
 
                 if (f.count() < 10)
                     f.append(af);
             }
 
-            sdf_atom.fields = f;*/
+            sdf_atom.fields = f;
         }
 
         sdf_atom.completeFields();

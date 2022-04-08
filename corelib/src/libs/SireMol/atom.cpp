@@ -318,9 +318,14 @@ void Atom::update(const MoleculeData &moldata)
 QVariant Atom::propertyAsVariant(const PropertyName &key) const
 {
     const Property &property = d->property(key);
-    auto atom_props = property.asA<AtomProp>().toVariant();
+    return property.asA<AtomProp>().getAsVariant(this->cgAtomIdx());
+}
 
-    return atom_props.at(this->cgAtomIdx());
+/** Return the specified property as a PropertyPtr */
+PropertyPtr Atom::propertyAsProperty(const PropertyName &key) const
+{
+    const Property &property = d->property(key);
+    return property.asA<AtomProp>().getAsProperty(this->cgAtomIdx());
 }
 
 /** Return whether or not there is an AtomProperty at key 'key' */
