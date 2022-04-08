@@ -333,6 +333,57 @@ public:
         }
     }
 
+    bool hasID() const
+    {
+        return data.contains("ID");
+    }
+
+    QString getID() const
+    {
+        return data["ID"][0];
+    }
+
+    Properties getData() const
+    {
+        Properties props;
+
+        for (const auto &id : data.keys())
+        {
+            if (data[id].count() == 1)
+            {
+                props.setProperty(id, SireBase::wrap(data[id][0]));
+            }
+            else if (data[id].count() > 1)
+            {
+                props.setProperty(id, SireBase::wrap(data[id]));
+            }
+        }
+
+        return props;
+    }
+
+    Properties getProperties() const
+    {
+        Properties props;
+
+        for (const auto &id : properties.keys())
+        {
+            if (id == "ISO" or id == "CHG")
+                continue;
+
+            if (properties[id].count() == 1)
+            {
+                props.setProperty(id, SireBase::wrap(properties[id][0]));
+            }
+            else if (properties[id].count() > 1)
+            {
+                props.setProperty(id, SireBase::wrap(properties[id]));
+            }
+        }
+
+        return props;
+    }
+
     QString name;
     QString software;
     QString comment;
@@ -775,6 +826,21 @@ SDFMolecule parseMolecule(const Molecule &molecule,
             sdf_atom.chg_difference = charge;
         }
 
+        if (atom.hasProperty(map["radical"]))
+        {
+            auto radical = atom.property<Radical>(map["radical"]);
+
+            if (radical.isDoublet())
+            {
+                if (sdf_atom.chg_difference != 0)
+                {
+                    sdfmol.addProperty("CHG", i+1, QString::number(sdf_atom.chg_difference));
+                }
+
+                sdf_atom.chg_difference = 4;
+            }
+        }
+
         if (atom.hasProperty(map["sdf_fields"]))
         {
             auto fields = atom.propertyAsProperty(map["sdf_fields"]).asAnArray();
@@ -808,8 +874,30 @@ SDFMolecule parseMolecule(const Molecule &molecule,
 
         sdfbond.atom0 = molinfo.atomIdx(bond.atom0()).value() + 1;
         sdfbond.atom1 = molinfo.atomIdx(bond.atom1()).value() + 1;
-        sdfbond.typ = 1; // assume single for now
-        sdfbond.stereoscopy = 0; // assume not stereo for now
+
+        if (connectivity.hasProperty(bond, map["bond_type"]))
+        {
+            auto bond_type = connectivity.property(bond,
+                                                   map["bond_type"]).asA<BondType>();
+
+            sdfbond.typ = bond_type.sdfValue();
+        }
+        else
+        {
+            sdfbond.typ = 1; // assume single for now
+        }
+
+        if (connectivity.hasProperty(bond, map["stereoscopy"]))
+        {
+            auto stereo = connectivity.property(bond,
+                                                map["stereoscopy"]).asA<Stereoscopy>();
+
+            sdfbond.stereoscopy = stereo.sdfValue();
+        }
+        else
+        {
+            sdfbond.stereoscopy = 0; // assume not stereo for now
+        }
 
         if (connectivity.hasProperty(bond, map["sdf_fields"]))
         {
@@ -1641,6 +1729,26 @@ MolEditor SDF::getMolecule(int imol, const PropertyMap &map) const
         mol.setProperty(map["connectivity"], connectivity.commit());
     }
 
+    // use ID for the ID data from the SDF file
+    if (sdfmol.hasID())
+    {
+        mol.setProperty(map["ID"], SireBase::wrap(sdfmol.getID()));
+    }
+
+    //now add in any other data fields as 'sdf_data'
+    auto sdf_data = sdfmol.getData();
+
+    if (not sdf_data.isEmpty())
+        mol.setProperty(map["sdf_data"], sdf_data);
+
+    auto sdf_props = sdfmol.getProperties();
+
+    if (not sdf_props.isEmpty())
+        mol.setProperty(map["sdf_properties"], sdf_props);
+
+    if (sdfmol.comment.count() > 0)
+        mol.setProperty(map["comment"], SireBase::wrap(sdfmol.comment));
+
     return mol.setProperty(map["coordinates"], coords)
               .setProperty(map["formal_charge"], charges)
               .setProperty(map["element"], elements)
@@ -1649,6 +1757,5 @@ MolEditor SDF::getMolecule(int imol, const PropertyMap &map) const
               .setProperty(map["sdf_fields"], atomfields)
               .setProperty(map["software"], SireBase::wrap(sdfmol.software))
               .setProperty(map["name"], SireBase::wrap(sdfmol.name))
-              .setProperty(map["comment"], SireBase::wrap(sdfmol.comment))
               .commit();
 }
