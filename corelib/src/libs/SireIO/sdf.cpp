@@ -45,6 +45,7 @@
 #include "SireMol/atomcoords.h"
 #include "SireMol/atomelements.h"
 #include "SireMol/atommasses.h"
+#include "SireMol/atomradicals.h"
 #include "SireMol/atompropertylist.h"
 #include "SireMol/errors.h"
 #include "SireMol/molecule.h"
@@ -53,6 +54,7 @@
 #include "SireMol/bondid.h"
 #include "SireMol/bondtype.h"
 #include "SireMol/stereoscopy.h"
+#include "SireMol/radical.h"
 
 #include "SireBase/propertylist.h"
 
@@ -95,6 +97,11 @@ public:
         {
             fields.append("0");
         }
+    }
+
+    bool isDoubletRadical() const
+    {
+        return chg_difference == 4;
     }
 
     QString name;
@@ -224,7 +231,7 @@ public:
             case 3:
                 return 3;
             case 4:
-                return 4;
+                return 0;
             case 5:
                 return -1;
             case 6:
@@ -1585,6 +1592,7 @@ MolEditor SDF::getMolecule(int imol, const PropertyMap &map) const
     AtomCharges             charges(molinfo);
     AtomElements            elements(molinfo);
     AtomMasses              masses(molinfo);
+    AtomRadicals            radicals(molinfo);
     AtomStringArrayProperty atomfields(molinfo);
 
     // Now loop through the atoms in the molecule and set each property.
@@ -1602,6 +1610,11 @@ MolEditor SDF::getMolecule(int imol, const PropertyMap &map) const
         elements.set(cgatomidx, sdfmol.getElement(i));
         masses.set(cgatomidx, sdfmol.getMass(i) * SireUnits::g_per_mol);
         atomfields.set(cgatomidx, atom.fields);
+
+        if (atom.isDoubletRadical())
+        {
+            radicals.set(cgatomidx, Radical::doublet());
+        }
     }
 
     if (sdfmol.bonds.count() > 0)
@@ -1632,6 +1645,7 @@ MolEditor SDF::getMolecule(int imol, const PropertyMap &map) const
               .setProperty(map["formal_charge"], charges)
               .setProperty(map["element"], elements)
               .setProperty(map["mass"], masses)
+              .setProperty(map["radical"], radicals)
               .setProperty(map["sdf_fields"], atomfields)
               .setProperty(map["software"], SireBase::wrap(sdfmol.software))
               .setProperty(map["name"], SireBase::wrap(sdfmol.name))

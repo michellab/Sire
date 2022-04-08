@@ -38,6 +38,7 @@ set ( SIREMOL_HEADERS
       atomproperty.hpp
       atompropertylist.h
       atomradii.h
+      atomradicals.h
       atomselection.h
       atomsin.hpp
       atomvelocities.h
@@ -121,6 +122,7 @@ set ( SIREMOL_HEADERS
 
       partialmolecule.h
       perturbation.h
+      radical.h
       reseditor.h
       resid.h
       residentifier.h
@@ -229,6 +231,7 @@ set ( SIREMOL_SOURCES
 
       partialmolecule.cpp
       perturbation.cpp
+      radical.cpp
       reseditor.cpp
       resid.cpp
       residentifier.cpp
