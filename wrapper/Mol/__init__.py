@@ -49,12 +49,37 @@ def __get_typename__(obj):
         elif isinstance(obj, str):
             return ("QString", obj)
         else:
-            return ("QVariant", Sire.Qt.QVariant(obj)) 
+            return ("QVariant", Sire.Qt.QVariant(obj))
+
+def _match_to_type(typename, property):
+    """Match the passed type of the property to the typename
+       of the AtomProperty, CGProperty etc that is used to
+       hold that type.
+
+       This is useful to, e.g. allow a AtomStringArrayProperty
+       to be set on a per-atom basis from DoubleArrayProperty
+       values.
+    """
+    if typename.endswith("StringArrayProperty"):
+        return Sire.Base.StringArrayProperty(property)
+    elif typename.endswith("DoubleArrayProperty"):
+        return Sire.Base.DoubleArrayProperty(property)
+    elif typename.endswith("IntegerArrayProperty"):
+        return Sire.Base.IntegerArrayProperty(property)
+    elif typename.endswith("PropertyList"):
+        return Sire.Base.PropertyList(property)
+    else:
+        return property
 
 def __set_property__(molview, key, property):
+    if molview.hasProperty(key):
+        # get the type of the existing property
+        typename = molview.propertyType(key)
+        property = _match_to_type(typename, property)
+
     (typename, property) = __get_typename__(property)
 
-    return getattr(molview, "_set_property_%s" % typename)(key, property)     
+    return getattr(molview, "_set_property_%s" % typename)(key, property)
 
 def __set_metadata__(molview, *args):
 
@@ -69,7 +94,7 @@ def __set_metadata__(molview, *args):
     elif len(args) == 3:
          (key, metakey, property) = args
 
-         (typename, property) = __get_typename__(property)         
+         (typename, property) = __get_typename__(property)
 
          return getattr(molview, "_set_metadata_%s" % typename)(key, metakey, property)
 

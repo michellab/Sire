@@ -3192,9 +3192,9 @@ SireMol::detail::IDPair _get_id(const BondID &bond,
 }
 
 /** Set the property for the specified bond, at the specified key, to 'value' */
-void ConnectivityEditor::setProperty(const BondID &bond,
-                                     const QString &key,
-                                     const Property &value)
+ConnectivityEditor& ConnectivityEditor::setProperty(const BondID &bond,
+                                                    const QString &key,
+                                                    const Property &value)
 {
     auto atom0 = this->minfo.atomIdx(bond.atom0());
     auto atom1 = this->minfo.atomIdx(bond.atom1());
@@ -3214,20 +3214,24 @@ void ConnectivityEditor::setProperty(const BondID &bond,
     }
 
     this->bond_props[id].setProperty(key, value);
+
+    return *this;
 }
 
 /** Remove the specified property from all bonds */
-void ConnectivityEditor::removeProperty(const QString &key)
+ConnectivityEditor& ConnectivityEditor::removeProperty(const QString &key)
 {
     for (const auto &id : this->bond_props.keys())
     {
         this->bond_props[id].removeProperty(key);
     }
+
+    return *this;
 }
 
 /** Remove the specified property from the specified bond */
-void ConnectivityEditor::removeProperty(const BondID &bond,
-                                        const QString &key)
+ConnectivityEditor& ConnectivityEditor::removeProperty(const BondID &bond,
+                                                       const QString &key)
 {
     auto id = _get_id(bond, this->minfo);
 
@@ -3235,6 +3239,8 @@ void ConnectivityEditor::removeProperty(const BondID &bond,
     {
         this->bond_props[id].removeProperty(key);
     }
+
+    return *this;
 }
 
 /** Take the specified property from the specified bond - this removes
