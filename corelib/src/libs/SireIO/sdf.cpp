@@ -202,6 +202,16 @@ public:
     int getCharge(int i) const
     {
         // NEED TO LOOK FOR THE M  CHG PROPERTIES FIRST!
+        parseProperties("CHG");
+
+        if (parsed_properties["CHG"].contains(i))
+        {
+            bool ok;
+            int chg = parsed_properties["CHG"][i].toInt(&ok);
+
+            if (ok)
+                return chg;
+        }
 
         switch(atoms[i].chg_difference)
         {
@@ -236,8 +246,19 @@ public:
     double getMass(int i) const
     {
         // NEED TO LOOK FOR THE M  CHG PROPERTIES FIRST!
+        parseProperties("ISO");
 
         auto mass = int(getElement(i).mass().to(g_per_mol) + 0.5);
+
+        if (parsed_properties["ISO"].contains(i))
+        {
+            bool ok;
+            double m = parsed_properties["ISO"][i].toDouble(&ok);
+
+            if (ok)
+                return mass + m;
+        }
+
         return mass + atoms[i].mass_difference;
     }
 
@@ -261,7 +282,48 @@ public:
 
         properties[id].append(QString("  1%1%2")
                                 .arg(index, 4)
-                                .arg(v));
+                                .arg(v, 4));
+    }
+
+    void parseProperties(const QString &key) const
+    {
+        if (parsed_properties.contains(key))
+            return;
+
+        if (properties.contains(key))
+        {
+            QHash<qint32, QString> props;
+
+            for (const auto &line : properties[key])
+            {
+                if (line.length() < 3)
+                    continue;
+
+                bool ok;
+                int nvals = line.midRef(0, 3).toInt(&ok);
+
+                if (not ok)
+                    continue;
+
+                if (nvals <= 0)
+                    continue;
+
+                if (line.length() < 3 + (nvals*8))
+                    continue;
+
+                for (int i=0; i<nvals; ++i)
+                {
+                    int idx = line.midRef(3+(i*8),4).toInt(&ok);
+
+                    if (not ok)
+                        continue;
+
+                    props.insert(idx-1, line.mid(7+(i*8)));
+                }
+            }
+
+            const_cast<SDFMolecule*>(this)->parsed_properties.insert(key, props);
+        }
     }
 
     QString name;
@@ -274,6 +336,8 @@ public:
 
     QHash<QString, QStringList> properties;
     QHash<QString, QStringList> data;
+
+    QHash< QString, QHash<qint32,QString> > parsed_properties;
 };
 
 }} // end of namespace SireIO::detail
