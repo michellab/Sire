@@ -600,6 +600,26 @@ SDFMolecule parseMolecule(const Molecule &molecule,
             sdf_atom.name = atom.name();
         }
 
+        if (atom.hasProperty(map["sdf_fields"]))
+        {
+            auto fields = atom.propertyAsVariant(map["sdf_fields"]);
+
+            qDebug() << fields;
+
+            /*QStringList f;
+
+            for (const auto &field : fields)
+            {
+                auto af = field.asAString().trimmed();
+                af.truncate(3);
+
+                if (f.count() < 10)
+                    f.append(af);
+            }
+
+            sdf_atom.fields = f;*/
+        }
+
         sdf_atom.completeFields();
 
         sdfmol.atoms.append(sdf_atom);
