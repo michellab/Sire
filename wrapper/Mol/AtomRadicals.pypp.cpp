@@ -11,6 +11,10 @@ namespace bp = boost::python;
 
 #include "atomradicals.h"
 
+#include "SireMaths/vector.h"
+
+#include "SireMol/moleculeview.h"
+
 SireMol::AtomProperty<SireMol::Radical> __copy__(const SireMol::AtomProperty<SireMol::Radical> &other){ return SireMol::AtomProperty<SireMol::Radical>(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -400,7 +404,7 @@ void register_AtomRadicals_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgatomidx"), bp::arg("value") )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -414,7 +418,7 @@ void register_AtomRadicals_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgidx"), bp::arg("values") )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
