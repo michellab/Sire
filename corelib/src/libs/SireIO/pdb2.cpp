@@ -1141,7 +1141,7 @@ QString PDB2::formatDescription() const
 /** Return the suffixes that these files are normally associated with */
 QStringList PDB2::formatSuffix() const
 {
-    static const QStringList suffixes = { "PDB" };
+    static const QStringList suffixes = { "pdb" };
     return suffixes;
 }
 

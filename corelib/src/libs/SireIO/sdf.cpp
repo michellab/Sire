@@ -325,7 +325,7 @@ public:
                     if (not ok)
                         continue;
 
-                    props.insert(idx-1, line.mid(7+(i*8)));
+                    props.insert(idx-1, line.mid(7+(i*8), 4));
                 }
             }
 
@@ -341,6 +341,22 @@ public:
     QString getID() const
     {
         return data["ID"][0];
+    }
+
+    void setID(const QString &ID)
+    {
+        if (not data.contains("ID"))
+        {
+            data.insert("ID", QStringList(ID));
+        }
+        else if (data["ID"].count() == 0)
+        {
+            data["ID"].append(ID);
+        }
+        else
+        {
+            data["ID"][0] = ID;
+        }
     }
 
     Properties getData() const
@@ -360,6 +376,33 @@ public:
         }
 
         return props;
+    }
+
+    void setData(const Properties &props)
+    {
+        data.clear();
+
+        for (const auto &key : props.propertyKeys())
+        {
+            auto k = key.trimmed();
+            k.truncate(195);
+            if (k.count() == 0)
+
+            if (not data.contains(k))
+            {
+                data.insert(k, QStringList());
+            }
+
+            auto all_props = props.property(key).asAnArray();
+
+            for (int i=0; i<all_props.count(); ++i)
+            {
+                const auto &v = all_props[i];
+                auto l = v.asAString().trimmed().replace("\n", " ");
+                l.truncate(200);
+                data[k].append(l);
+            }
+        }
     }
 
     Properties getProperties() const
@@ -382,6 +425,99 @@ public:
         }
 
         return props;
+    }
+
+    void setProperties(const Properties &props)
+    {
+        properties.clear();
+
+        for (const auto &id : props.propertyKeys())
+        {
+            auto k = id.trimmed();
+            k.truncate(3);
+
+            if (not properties.contains(k))
+            {
+                properties.insert(k, QStringList());
+            }
+
+            auto all_props = props.property(id).asAnArray();
+
+            for (int i=0; i<all_props.count(); ++i)
+            {
+                const auto &v = all_props[i];
+                auto l = v.asAString().trimmed().replace("\n", " ");
+                l.truncate(200);
+
+                // should really do some validation that this is correct...
+                QStringList parts = l.split(" ", Qt::SkipEmptyParts);
+
+                if (parts.count() == 0)
+                    continue;
+
+                bool ok;
+                int nvals = parts[0].toInt(&ok);
+
+                if (not ok)
+                    continue;
+
+                if (nvals > 999)
+                    nvals = 999;
+                else if (nvals < 0)
+                    nvals = 0;
+
+                parts[0] = QString("%1").arg(nvals, 3);
+
+                for (int j=1; j<parts.count(); ++j)
+                {
+                    int val = parts[j].toInt(&ok);
+
+                    if (not ok)
+                        val = 0;
+
+                    if (val > 9999)
+                        val = 9999;
+                    else if (val < -999)
+                        val = -999;
+
+                    parts[j] = QString("%1").arg(val, 4);
+                }
+
+                properties[k].append(parts.join(""));
+            }
+        }
+    }
+
+    QStringList getCounts() const
+    {
+        return counts;
+    }
+
+    void setCounts(const Property &vals)
+    {
+        auto values = vals.asAnArray();
+
+        counts.clear();
+
+        for (int i=0; i<values.count(); ++i)
+        {
+            auto value = values[i].asAString().trimmed();
+
+            if (i < 9)
+            {
+                value.truncate(3);
+                counts.append(QString("%1").arg(value, -3));
+            }
+            else if (i == 9)
+            {
+                value.truncate(6);
+                counts.append(QString("%1").arg(value, -6));
+            }
+            else
+            {
+                break;
+            }
+        }
     }
 
     QString name;
@@ -743,6 +879,27 @@ SDFMolecule parseMolecule(const Molecule &molecule,
         sdfmol.comment = molecule.property(map["comment"]).toString();
     }
 
+    // add in the properties and data
+    if (molecule.hasProperty(map["sdf_data"]))
+    {
+        sdfmol.setData(molecule.property(map["sdf_data"]).asA<Properties>());
+    }
+
+    if (molecule.hasProperty(map["sdf_properties"]))
+    {
+        sdfmol.setProperties(molecule.property(map["sdf_properties"]).asA<Properties>());
+    }
+
+    if (molecule.hasProperty(map["ID"]))
+    {
+        sdfmol.setID(molecule.property(map["ID"]).asAString());
+    }
+
+    if (molecule.hasProperty(map["sdf_counts"]))
+    {
+        sdfmol.setCounts(molecule.property(map["sdf_counts"]));
+    }
+
     for (int i=0; i<num_atoms; ++i)
     {
         const auto atom = molecule.atom(AtomIdx(i));
@@ -884,10 +1041,10 @@ SDFMolecule parseMolecule(const Molecule &molecule,
         sdfbond.atom0 = molinfo.atomIdx(bond.atom0()).value() + 1;
         sdfbond.atom1 = molinfo.atomIdx(bond.atom1()).value() + 1;
 
-        if (connectivity.hasProperty(bond, map["bond_type"]))
+        if (connectivity.hasProperty(bond, map["type"]))
         {
             auto bond_type = connectivity.property(bond,
-                                                   map["bond_type"]).asA<BondType>();
+                                                   map["type"]).asA<BondType>();
 
             sdfbond.typ = bond_type.sdfValue();
         }
@@ -1156,7 +1313,7 @@ QString SDF::formatDescription() const
 /** Return the suffixes that these files are normally associated with */
 QStringList SDF::formatSuffix() const
 {
-    static const QStringList suffixes = { "SDF" };
+    static const QStringList suffixes = { "sdf", "mol" };
     return suffixes;
 }
 
@@ -1757,6 +1914,13 @@ MolEditor SDF::getMolecule(int imol, const PropertyMap &map) const
 
     if (sdfmol.comment.count() > 0)
         mol.setProperty(map["comment"], SireBase::wrap(sdfmol.comment));
+
+    auto sdf_counts = sdfmol.getCounts();
+
+    if (sdf_counts.count() > 0)
+    {
+        mol.setProperty(map["sdf_counts"], SireBase::wrap(sdf_counts));
+    }
 
     return mol.setProperty(map["coordinates"], coords)
               .setProperty(map["formal_charge"], charges)
