@@ -40,7 +40,16 @@ def wrap(value):
     except:
         pass
 
-    return PropertyList(value)
+    # if this is a dictionary, then wrap as a Properties object
+    if type(value) is dict:
+        p = Properties()
+
+        for key, value in value.items():
+            p[key] = value
+
+        return p
+    else:
+        return PropertyList(value)
 
 _original_wrap = wrap
 
