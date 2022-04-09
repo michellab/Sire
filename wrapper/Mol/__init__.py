@@ -206,7 +206,11 @@ def _pvt_property_cludge_fix(C):
    __p.setProperty("c", C())
    t = __p.property("c").array()
 
-__props = [ AtomCharges, AtomElements ]
+__props = [ AtomCharges, AtomElements,
+            AtomStringArrayProperty,
+            AtomPropertyList,
+            AtomDoubleArrayProperty,
+            AtomIntegerArrayProperty ]
 
 for __prop in __props:
     _pvt_property_cludge_fix(__prop)

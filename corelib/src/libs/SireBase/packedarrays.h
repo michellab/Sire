@@ -30,6 +30,7 @@
 #define SIREBASE_PACKEDARRAYS_H
 
 #include "packedarray2d.hpp"
+#include "propertylist.h"
 #include "boost/throw_exception.hpp"
 
 SIRE_BEGIN_HEADER
@@ -45,18 +46,43 @@ SIRE_EXPOSE_ALIAS(SireBase::PackedArray2D<int>,
 
 SIRE_EXPOSE_ALIAS(SireBase::detail::PackedArray2D_Array<int>,
                   SireBase::PackedArray2D_int_Array)
-                  
+
 SIRE_EXPOSE_ALIAS(SireBase::PackedArray2D<QString>,
                   SireBase::PackedArray2D_QString_)
 
 SIRE_EXPOSE_ALIAS(SireBase::detail::PackedArray2D_Array<QString>,
                   SireBase::PackedArray2D_QString_Array)
-                  
+
 SIRE_EXPOSE_ALIAS(SireBase::PackedArray2D<QVariant>,
                   SireBase::PackedArray2D_QVariant_)
 
 SIRE_EXPOSE_ALIAS(SireBase::detail::PackedArray2D_Array<QVariant>,
                   SireBase::PackedArray2D_QVariant_Array)
+
+SIRE_EXPOSE_ALIAS(SireBase::PackedArray2D<SireBase::PropertyList>,
+                  SireBase::PackedArray2D_PropertyList)
+
+SIRE_EXPOSE_ALIAS(SireBase::detail::PackedArray2D_Array<SireBase::PropertyList>,
+                  SireBase::PackedArray2D_PropertyList_Array)
+
+SIRE_EXPOSE_ALIAS(SireBase::PackedArray2D<SireBase::DoubleArrayProperty>,
+                  SireBase::PackedArray2D_DoubleArrayProperty)
+
+SIRE_EXPOSE_ALIAS(SireBase::detail::PackedArray2D_Array<SireBase::DoubleArrayProperty>,
+                  SireBase::PackedArray2D_DoubleArrayProperty_Array)
+
+SIRE_EXPOSE_ALIAS(SireBase::PackedArray2D<SireBase::IntegerArrayProperty>,
+                  SireBase::PackedArray2D_IntegerArrayProperty)
+
+SIRE_EXPOSE_ALIAS(SireBase::detail::PackedArray2D_Array<SireBase::IntegerArrayProperty>,
+                  SireBase::PackedArray2D_IntegerArrayProperty_Array)
+
+SIRE_EXPOSE_ALIAS(SireBase::PackedArray2D<SireBase::StringArrayProperty>,
+                  SireBase::PackedArray2D_StringArrayProperty)
+
+SIRE_EXPOSE_ALIAS(SireBase::detail::PackedArray2D_Array<SireBase::StringArrayProperty>,
+                  SireBase::PackedArray2D_StringArrayProperty_Array)
+
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 template class
@@ -82,6 +108,30 @@ SireBase::PackedArray2D<QVariant>;
 
 template class
 SireBase::detail::PackedArray2D_Array<QVariant>;
+
+template class
+SireBase::PackedArray2D<PropertyList>;
+
+template class
+SireBase::detail::PackedArray2D_Array<PropertyList>;
+
+template class
+SireBase::PackedArray2D<DoubleArrayProperty>;
+
+template class
+SireBase::detail::PackedArray2D_Array<DoubleArrayProperty>;
+
+template class
+SireBase::PackedArray2D<IntegerArrayProperty>;
+
+template class
+SireBase::detail::PackedArray2D_Array<IntegerArrayProperty>;
+
+template class
+SireBase::PackedArray2D<StringArrayProperty>;
+
+template class
+SireBase::detail::PackedArray2D_Array<StringArrayProperty>;
 
 #endif
 
