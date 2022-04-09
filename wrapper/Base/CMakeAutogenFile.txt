@@ -7,6 +7,8 @@ set ( PYPP_SOURCES
        _Base_free_functions.pypp.cpp
        FlopsMark.pypp.cpp
        CombineProperties.pypp.cpp
+       PackedArray2D_IntegerArrayProperty_Array.pypp.cpp
+       PackedArray2D_StringArrayProperty.pypp.cpp
        IntegerArrayProperty.pypp.cpp
        SimpleRange.pypp.cpp
        Incremint.pypp.cpp
@@ -17,9 +19,11 @@ set ( PYPP_SOURCES
        BooleanProperty.pypp.cpp
        PropertyMap.pypp.cpp
        PackedArray2D_QString_.pypp.cpp
+       PackedArray2D_IntegerArrayProperty.pypp.cpp
        TrigArray2DBase.pypp.cpp
        Process.pypp.cpp
        ArrayProperty_double_.pypp.cpp
+       PackedArray2D_PropertyList.pypp.cpp
        Property.pypp.cpp
        Range.pypp.cpp
        PackedArray2D_QVariant_.pypp.cpp
@@ -27,6 +31,7 @@ set ( PYPP_SOURCES
        UpperCaseString.pypp.cpp
        PackedArray2D_int_Array.pypp.cpp
        VariantProperty.pypp.cpp
+       PackedArray2D_PropertyList_Array.pypp.cpp
        LowerCaseString.pypp.cpp
        MemInfo.pypp.cpp
        PropertyName.pypp.cpp
@@ -43,11 +48,14 @@ set ( PYPP_SOURCES
        NumberProperty.pypp.cpp
        LengthProperty.pypp.cpp
        TrimString.pypp.cpp
+       PackedArray2D_StringArrayProperty_Array.pypp.cpp
        StringArrayProperty.pypp.cpp
+       PackedArray2D_DoubleArrayProperty_Array.pypp.cpp
        Array2DBase.pypp.cpp
        Version.pypp.cpp
        Properties.pypp.cpp
        PackedArray2D_int_.pypp.cpp
+       PackedArray2D_DoubleArrayProperty.pypp.cpp
        PackedArray2D_QVariant_Array.pypp.cpp
        PackedArray2D_double_Array.pypp.cpp
        NoMangling.pypp.cpp

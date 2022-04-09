@@ -110,28 +110,28 @@ template class
 SireBase::detail::PackedArray2D_Array<QVariant>;
 
 template class
-SireBase::PackedArray2D<PropertyList>;
+SireBase::PackedArray2D<SireBase::PropertyList>;
 
 template class
-SireBase::detail::PackedArray2D_Array<PropertyList>;
+SireBase::detail::PackedArray2D_Array<SireBase::PropertyList>;
 
 template class
-SireBase::PackedArray2D<DoubleArrayProperty>;
+SireBase::PackedArray2D<SireBase::DoubleArrayProperty>;
 
 template class
-SireBase::detail::PackedArray2D_Array<DoubleArrayProperty>;
+SireBase::detail::PackedArray2D_Array<SireBase::DoubleArrayProperty>;
 
 template class
-SireBase::PackedArray2D<IntegerArrayProperty>;
+SireBase::PackedArray2D<SireBase::IntegerArrayProperty>;
 
 template class
-SireBase::detail::PackedArray2D_Array<IntegerArrayProperty>;
+SireBase::detail::PackedArray2D_Array<SireBase::IntegerArrayProperty>;
 
 template class
-SireBase::PackedArray2D<StringArrayProperty>;
+SireBase::PackedArray2D<SireBase::StringArrayProperty>;
 
 template class
-SireBase::detail::PackedArray2D_Array<StringArrayProperty>;
+SireBase::detail::PackedArray2D_Array<SireBase::StringArrayProperty>;
 
 #endif
 
