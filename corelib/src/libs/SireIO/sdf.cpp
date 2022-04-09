@@ -761,8 +761,17 @@ SDFMolecule parseMolecule(const Molecule &molecule,
         }
         else
         {
-            sdf_atom.name = atom.name().value().trimmed();
-            sdf_atom.name.truncate(3);
+            auto e = Element::biologicalElement(atom.name().value());
+
+            if (e.nProtons() > 0)
+            {
+                sdf_atom.name = e.symbol();
+            }
+            else
+            {
+                sdf_atom.name = atom.name().value().trimmed();
+                sdf_atom.name.truncate(3);
+            }
         }
 
         if (atom.hasProperty(map["mass"]))

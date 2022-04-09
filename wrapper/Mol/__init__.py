@@ -71,7 +71,7 @@ def _match_to_type(typename, property):
     else:
         return property
 
-def __set_property__(molview, key, property):
+def _set_property(molview, key, property):
     if molview.hasProperty(key):
         # get the type of the existing property
         typename = molview.propertyType(key)
@@ -80,6 +80,25 @@ def __set_property__(molview, key, property):
     (typename, property) = __get_typename__(property)
 
     return getattr(molview, "_set_property_%s" % typename)(key, property)
+
+def __set_property__(molview, key, property):
+    try:
+        return _set_property(molview, key, property)
+    except Exception as e:
+        if e.__class__.__name__ == "ArgumentError":
+            return _set_property(molview, key, Sire.Base.wrap(property))
+        else:
+            raise e
+
+def __set_bond_property__(connectivity, bond, key, property):
+    try:
+        return connectivity.__setProperty__(bond, key, property)
+    except Exception as e:
+        if e.__class__.__name__ == "ArgumentError":
+            return connectivity.__setProperty__(bond, key,
+                                                Sire.Base.wrap(property))
+        else:
+            raise e
 
 def __set_metadata__(molview, *args):
 
@@ -101,7 +120,6 @@ def __set_metadata__(molview, *args):
     else:
         raise AttributeError( "Only molview.setMetadata(metakey, property) " + \
                               "or molview.setMetadata(key, metakey, property) are valid!" )
-
 
 Atom.property = __get_property__
 AtomEditorBase.setProperty = __set_property__
@@ -127,6 +145,12 @@ Segment.property = __get_property__
 SegEditorBase.setProperty = __set_property__
 Segment.metadata = __get_metadata__
 SegEditorBase.setMetadata = __set_metadata__
+
+ConnectivityEditor.__setProperty__ = ConnectivityEditor.setProperty
+ConnectivityEditor.setProperty = __set_bond_property__
+
+MolEditor.__setProperty__ = MolEditor.setProperty
+MolEditor.setProperty = Sire.Base.__set_property__
 
 def get_molview(mol):
     """Convert the passed molecule into the most appropriate view,
