@@ -44,6 +44,7 @@ set ( SIREIO_HEADERS
       pdb2.h
       perturbationslibrary.h
       protoms.h
+      sdf.h
       supplementary.h
       tinker.h
       trajectorymonitor.h
@@ -75,9 +76,10 @@ set ( SIREIO_SOURCES
       pdb2.cpp
       perturbationslibrary.cpp
       protoms.cpp
+      sdf.cpp
       supplementary.cpp
       tinker.cpp
-      trajectorymonitor.cpp    
+      trajectorymonitor.cpp
       zmatrixmaker.cpp
 
       ${SIREIO_HEADERS}
@@ -106,5 +108,5 @@ install( TARGETS SireIO EXPORT SireLibraries
          ARCHIVE DESTINATION ${SIRE_ARCHIVES}
        )
 
-install( FILES ${SIREIO_HEADERS} 
+install( FILES ${SIREIO_HEADERS}
          DESTINATION ${SIRE_INCLUDES}/SireIO )
