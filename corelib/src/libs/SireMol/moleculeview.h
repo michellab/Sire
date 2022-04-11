@@ -125,6 +125,7 @@ public:
     virtual int nViews() const;
 
     virtual MolViewPtr operator[](int i) const;
+    virtual MolViewPtr operator[](const QString &name) const;
     virtual MolViewPtr operator[](const AtomID &atomid) const;
     virtual MolViewPtr operator[](const ResID &resid) const;
     virtual MolViewPtr operator[](const CGID &cgid) const;

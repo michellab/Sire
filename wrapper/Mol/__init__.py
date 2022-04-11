@@ -323,8 +323,8 @@ _fix_getitem(CutGroup)
 _fix_getitem(Residue)
 _fix_getitem(Chain)
 _fix_getitem(Segment)
-_fix_getitem(Molecule)
 _fix_getitem(MolEditor)
+_fix_getitem(Molecule)
 
 class IncompatibleError(Exception):
     pass
