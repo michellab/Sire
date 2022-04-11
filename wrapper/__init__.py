@@ -15,15 +15,15 @@ Functions
 .. autosummary::
     :toctree: generated/
 
-    try_import
-    try_import_from
+    load
+    save
 
 """
-
 
 __all__ = [ "try_import", "try_import_from" ]
 
 _module_to_package = {}
+
 
 def _install_package(name, package_registry):
     """Internal function used to install the module
@@ -87,6 +87,7 @@ def _install_package(name, package_registry):
 
     return
 
+
 def try_import(name, package_registry=_module_to_package):
     """Try to import the module called 'name', returning
        the loaded module as an argument. If the module
@@ -123,6 +124,7 @@ def try_import(name, package_registry=_module_to_package):
         return try_import(name, package_registry=None)
 
     raise ImportError("Failed to install module %s" % name)
+
 
 def try_import_from(name, fromlist, package_registry=_module_to_package):
     """Try to import from the module called 'name' the passed symbol
@@ -194,18 +196,64 @@ def try_import_from(name, fromlist, package_registry=_module_to_package):
 
         return ret
 
-#ensure that the SireQt and SireError libraries are loaded as
-#these are vital for the rest of the module
+
+# ensure that the SireQt and SireError libraries are loaded as
+# these are vital for the rest of the module
 from . import Qt
 from . import Error
 from . import Config
 from . import Base
+
+# all of the other modules can be lazy loaded
+_disable_lazy_import = True
+
+try:
+    if _disable_lazy_import:
+        raise AssertionError()
+
+    import lazy_import as _lazy_import
+    _lazy_import.logging.disable(_lazy_import.logging.DEBUG)
+except Exception:
+    class _lazy_import:
+        """This is not lazy_import, but instead a thin stub that matches the
+           API but DOES NOT lazy_import anything. This imports at call time.
+        """
+        @staticmethod
+        def lazy_module(m):
+            from importlib import import_module
+            return import_module(m, package="Sire")
+
+        @staticmethod
+        def lazy_function(f):
+            module_name, unit_name = f.rsplit('.', 1)
+            module = _lazy_import.lazy_module(module_name)
+            return getattr(module, unit_name)
+
+        @staticmethod
+        def lazy_class(c):
+            return _lazy_import.lazy_function(c)
+
+
+# Lazy import the main Sire modules
+CAS = _lazy_import.lazy_module(".CAS")
+FF = _lazy_import.lazy_module(".FF")
+ID = _lazy_import.lazy_module(".ID")
+IO = _lazy_import.lazy_module(".IO")
+MM = _lazy_import.lazy_module(".MM")
+Maths = _lazy_import.lazy_module(".Maths")
+Move = _lazy_import.lazy_module(".Move")
+Mol = _lazy_import.lazy_module(".Mol")
+Stream = _lazy_import.lazy_module(".Stream")
+System = _lazy_import.lazy_module(".System")
+Units = _lazy_import.lazy_module(".Units")
+Vol = _lazy_import.lazy_module(".Vol")
 
 __version__ = Config.__version__
 
 __branch__ = Config.sire_repository_branch
 __repository__ = Config.sire_repository_url
 __revisionid__ = Config.sire_repository_version[0:7]
+
 
 def _versionString():
     """Return a nicely formatted string that describes the current Sire version"""
@@ -217,9 +265,11 @@ def _versionString():
                Config.sire_repository_version[0:7],
                ["unclean", "clean"][Base.getRepositoryVersionIsClean()])
 
+
 Config.versionString = _versionString
 
 sent_usage_data = None
+
 
 def _getOSInfo():
     import platform as _pf
@@ -240,7 +290,7 @@ def _getOSInfo():
 
     data["OS"] = "%s : %s"
 
-# Now try to upload usage data to siremol.org
+
 def _uploadUsageData():
     try:
         global sent_usage_data
@@ -344,7 +394,7 @@ def _uploadUsageData():
         conn = _htc.HTTPSConnection("siremol.org")
         conn.request("POST", "/phonehome/postusagestats.php", params, headers)
 
-        # Next time this break, remember to uncomment the below lines so that
+        # Next time this breaks, remember to uncomment the below lines so that
         # we can inspect the response code and error from the server...
 
         #r1 = conn.getresponse()
@@ -356,7 +406,9 @@ def _uploadUsageData():
         # and cancel the phone home
         return
 
+
 _sent_usage_data = None
+
 
 if not _sent_usage_data:
     import threading as _threading
@@ -365,3 +417,116 @@ if not _sent_usage_data:
     _thread.daemon = True
     _thread.start()
 
+
+### Here are the functions and other data that form the public API
+### of Sire
+
+from typing import Union as _Union
+from typing import List as _List
+
+
+def load(path: _Union[str, _List[str]], *args, **kwargs):
+    """Load the molecular system at 'path'. This can be a filename
+       of a URL. If it is a URL, then the file will be downloaded
+       to the current directory and loaded from there.
+
+       Args:
+            path (str or list[str]):
+            The filename (or names) or the URL or URLS of the molecular
+            system to load. This allows multiple paths to be input
+            as some molecular file formats split molecular information
+            across multiple files. Multiple paths can also be passed
+            as multiple arguments to this function.
+
+            log (dict):
+            Optional dictionary that you can pass in that will be populated
+            with any error messages or warnings from the parsers as they
+            attempt to load in the molecular data. This can be helpful
+            in diagnosing why your file wasn't loaded.
+
+       Returns:
+            Sire.System.System:
+            The molecules that have been loaded are returned as
+            a Sire.System.System
+
+       Examples:
+            >>> mols = load("caffeine.pdb")
+
+            >>> mols = load(["ala.crd", "ala.top"])
+
+            >>> mols = load("ala.crd", "ala.top")
+
+            >>> mols = load("https://something")
+
+            >>> log = []
+            >>> mols = load("caffeine.pdb", log=log)
+            Exception
+            (look at 'log' to find out what went wrong in detail)
+    """
+    pass
+
+
+def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
+         log={}) -> _List[str]:
+    """Save the passed molecules to a file called 'filename'. If the format
+       is not specified, then the format will be guessed from the
+       filename. If the format is specified, and is a list, then multiple
+       files will be written, one for each specified format.
+
+       Args:
+            molecules (Sire.System.System, Sire.Mol.Molecule, List[Sire.Mol.Molecule] etc.)
+            The molecule (or molecules) that should be written to the file.
+            This can be anything that can be converted to a Sire.System.System,
+            i.e. a single Molecule (or MoleculeView), or a list of
+            Molecules (or MoleculeViews)
+
+            filename (str):
+            The name of the file to which to write the file. Extensions
+            will be automatically added if they are needed to match
+            the formats of the file (or files) that are written.
+
+            format (str or list(str)):
+            The format (or formats) that should be used to write the
+            file (or files). If the format isn't specified, then it
+            will be guessed from the extension used for `filename`.
+            If this doesn't have an extension, then it will be guessed
+            based on the formats used to load the molecule originally.
+            If it still isn't available, then PDB will be used.
+
+            log (dict):
+            Optional dictionary that you can pass in that will be populated
+            with any error messages or warnings from the parsers as they
+            attempt to write the molecular data. This can be helpful
+            in diagnosing why your file wasn't saved.
+
+       Returns:
+            list[str]:
+            The absolute paths/name(s) of the files that have been written.
+
+       Examples:
+            >>> save(molecules, "molecules.pdb")
+            ["/path/to/molecules.pdb"]
+
+            >>> save([mol1, mol2, mol3], "molecules.sdf")
+            ["/path/to/molecules.sdf"]
+
+            >>> save(mols, "ala", format=["top", "crd"])
+            ["/path/to/ala.top", "/path/to/ala.crd"]
+
+            >>> log = {}
+            >>> save(mols, "broken.top", log=log)
+            Exception
+            (look at `log` to find in detail what went wrong)
+    """
+    pass
+
+
+def create(args):
+    """Create a Molecule from the passed arguments
+    """
+    pass
+
+
+def smiles(args):
+    """Create a Molecule from the passed smiles string"""
+    pass
