@@ -125,6 +125,9 @@ public:
     const Vector& at(const CGAtomIdx &cgatomidx) const;
     const Vector& get(const CGAtomIdx &cgatomidx) const;
 
+    QVariant getAsVariant(const CGAtomIdx &cgatomidx) const;
+    PropertyPtr getAsProperty(const CGAtomIdx &cgatomidx) const;
+
     AtomProperty<Vector>& set(const CGAtomIdx &cgatomidx, const Vector &value);
 
     AtomProperty<Vector>& set(CGIdx cgidx, const QVector<Vector> &values);
@@ -132,21 +135,21 @@ public:
 
     void translate(const Vector &delta);
     void translate(CGIdx cgidx, const Vector &delta);
-    
+
     void rotate(const Quaternion &quat, const Vector &point);
     void rotate(const Matrix &rotmat, const Vector &point);
-    
+
     void rotate(CGIdx cgidx, const Quaternion &quat, const Vector &point);
     void rotate(CGIdx cgidx, const Matrix &rotmat, const Vector &point);
-    
+
     void transform(const Transform &t);
     void transform(CGIdx cgidx, const Transform &t);
-    
+
     void mapInto(const AxisSet &axes);
     void mapInto(CGIdx cgidx, const AxisSet &axes);
-    
+
     void changeFrame(const AxisSet &from_frame, const AxisSet &to_frame);
-    void changeFrame(CGIdx cgidx, const AxisSet &from_frame, 
+    void changeFrame(CGIdx cgidx, const AxisSet &from_frame,
                                   const AxisSet &to_frame);
 
     const CoordGroup* data() const;
@@ -167,7 +170,7 @@ public:
 
     QVector<Vector> toVector() const;
     QVector<Vector> toVector(const AtomSelection &selection) const;
-    
+
     void copyFrom(const QVector<Vector> &values);
     void copyFrom(const QVector<Vector> &values, const AtomSelection &selection);
 

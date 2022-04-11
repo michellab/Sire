@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "tostring.h"
 
+#include "variantproperty.h"
+
 #include "propertylist.h"
 
 SireBase::IntegerArrayProperty __copy__(const SireBase::IntegerArrayProperty &other){ return SireBase::IntegerArrayProperty(other); }
@@ -41,6 +43,9 @@ void register_IntegerArrayProperty_class(){
         bp::scope IntegerArrayProperty_scope( IntegerArrayProperty_exposer );
         IntegerArrayProperty_exposer.def( bp::init< QList< long long > const & >(( bp::arg("array") ), "") );
         IntegerArrayProperty_exposer.def( bp::init< QVector< long long > const & >(( bp::arg("array") ), "") );
+        IntegerArrayProperty_exposer.def( bp::init< SireBase::StringArrayProperty const & >(( bp::arg("array") ), "") );
+        IntegerArrayProperty_exposer.def( bp::init< SireBase::DoubleArrayProperty const & >(( bp::arg("array") ), "") );
+        IntegerArrayProperty_exposer.def( bp::init< SireBase::PropertyList const & >(( bp::arg("array") ), "") );
         IntegerArrayProperty_exposer.def( bp::init< SireBase::IntegerArrayProperty const & >(( bp::arg("other") ), "") );
         { //::SireBase::IntegerArrayProperty::asABoolean
         

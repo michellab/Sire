@@ -223,6 +223,32 @@ void register_AtomEnergies_class(){
                 , "" );
         
         }
+        { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > >::getAsProperty
+        
+            typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > >::*getAsProperty_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > >::getAsProperty );
+            
+            AtomEnergies_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > >::getAsVariant
+        
+            typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > exported_class_t;
+            typedef ::QVariant ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > >::*getAsVariant_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > >::getAsVariant );
+            
+            AtomEnergies_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > >::isCompatibleWith
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > exported_class_t;

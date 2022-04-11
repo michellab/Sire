@@ -64,8 +64,8 @@ using SireBase::PropertyMap;
 using boost::tuple;
 
 /** This class provides a generic ID for a bond between
-    two atoms 
-    
+    two atoms
+
     @author Christopher Woods
 */
 class SIREMOL_EXPORT BondID : public SireID::ID
@@ -79,41 +79,41 @@ public:
     BondID(const AtomID &atom0, const AtomID &atom1);
 
     BondID(const BondID &other);
-    
+
     ~BondID();
-    
+
     static const char* typeName();
-    
+
     const char* what() const
     {
         return BondID::typeName();
     }
-    
+
     BondID* clone() const;
-    
+
     uint hash() const;
 
     QString toString() const;
-    
+
     bool isNull() const;
-    
+
     BondID& operator=(const BondID &other);
-    
+
     bool operator==(const SireID::ID &other) const;
-    
+
     bool operator==(const BondID &other) const;
     bool operator!=(const BondID &other) const;
-    
+
     BondID mirror() const;
-    
+
     tuple<AtomIdx,AtomIdx> map(const MoleculeInfoData &molinfo) const;
     tuple<AtomIdx,AtomIdx> map(const MoleculeInfoData &mol0info,
                                const MoleculeInfoData &mol1info) const;
-                               
+
     Vector vector(const MoleculeData &moldata,
                   const PropertyMap &map = PropertyMap()) const;
-    
-    Vector vector(const MoleculeData &mol0data, 
+
+    Vector vector(const MoleculeData &mol0data,
                   const MoleculeData &mol1data,
                   const PropertyMap &map = PropertyMap()) const;
 
@@ -125,15 +125,15 @@ public:
     double size(const MoleculeData &moldata,
                 const PropertyMap &map = PropertyMap()) const;
 
-    double size(const MoleculeData &mol0data, 
+    double size(const MoleculeData &mol0data,
                 const MoleculeData &mol1data,
                 const PropertyMap &map = PropertyMap()) const;
-                
+
     double size(const MoleculeData &mol0data,
                 const PropertyMap &map0,
                 const MoleculeData &mol1data,
                 const PropertyMap &map1) const;
-                
+
     double length(const MoleculeData &moldata,
                   const PropertyMap &map = PropertyMap()) const;
 
