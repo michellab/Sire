@@ -12,6 +12,8 @@ exposed_decl.pypp.txt
 named_tuple.py
 wrapper/Py++/pyplusplus
 includes.tar.bz2
+doc/build/*
+doc/source/api/generated/*
 *.pyc
 *.data
 

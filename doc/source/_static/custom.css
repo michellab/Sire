@@ -1,0 +1,46 @@
+
+body {
+    background-color: black;
+}
+
+.wy-side-nav-search {
+    background-color: white;
+    border-color: #5c1b8e;
+    border-style: groove;
+    border-radius: 20px;
+    border-width: 5px;
+}
+
+.wy-side-scroll {
+    background-color: #280344;
+}
+
+.wy-nav-content-wrap {
+    background-color: #280344;
+}
+
+.wy-nav-side {
+    background-color: #280344;
+}
+
+.wy-nav-top {
+    background-color: #280344;
+}
+
+.wy-nav-content {
+    background-color: white;
+    border-color: #5c1b8e;
+    border-style: groove;
+    border-radius: 20px;
+    border-width: 5px;
+}
+
+.version_box label {
+    float:left;
+    align-content: center;
+    text-align: right;
+}
+
+.version input {
+    float: right;
+}

@@ -1,12 +1,27 @@
-#############################
-##
-## The Sire python module
-##
-## This contains the parts of the main Sire program
-## that are exposed to Python.
-##
-## (C) Christopher Woods
-##
+"""
+.. currentmodule:: Sire
+
+Classes
+=======
+
+.. autosummary::
+    :toctree: generated/
+
+    Molecule
+
+Functions
+=========
+
+.. autosummary::
+    :toctree: generated/
+
+    try_import
+    try_import_from
+
+"""
+
+
+__all__ = [ "try_import", "try_import_from" ]
 
 _module_to_package = {}
 
@@ -184,8 +199,13 @@ def try_import_from(name, fromlist, package_registry=_module_to_package):
 from . import Qt
 from . import Error
 from . import Config
+from . import Base
 
 __version__ = Config.__version__
+
+__branch__ = Config.sire_repository_branch
+__repository__ = Config.sire_repository_url
+__revisionid__ = Config.sire_repository_version[0:7]
 
 def _versionString():
     """Return a nicely formatted string that describes the current Sire version"""
@@ -336,11 +356,12 @@ def _uploadUsageData():
         # and cancel the phone home
         return
 
-sent_usage_data = None
+_sent_usage_data = None
 
-if not sent_usage_data:
+if not _sent_usage_data:
     import threading as _threading
 
     _thread = _threading.Thread(target=_uploadUsageData)
     _thread.daemon = True
     _thread.start()
+

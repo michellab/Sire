@@ -1,9 +1,27 @@
-#############################
-##
-## The SireMol module
-##
-## (C) Christopher Woods
-##
+"""
+.. currentmodule:: Sire.Mol
+
+Classes
+=======
+
+.. autosummary::
+    :toctree: generated/
+
+    Atom
+    Molecule
+    Residue
+    Segment
+
+
+Functions
+=========
+
+.. autosummary::
+    :toctree: generated/
+
+    get_molview
+
+"""
 
 import Sire.Maths
 import Sire.Base
