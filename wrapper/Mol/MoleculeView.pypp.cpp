@@ -571,6 +571,18 @@ void register_MoleculeView_class(){
         }
         { //::SireMol::MoleculeView::operator[]
         
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*__getitem___function_type)( ::QString const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::MoleculeView::operator[] );
+            
+            MoleculeView_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("name") )
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::operator[]
+        
             typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*__getitem___function_type)( ::SireMol::AtomID const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::MoleculeView::operator[] );
             

@@ -420,6 +420,110 @@ void register_AtomEditorBase_class(){
                 , "" );
         
         }
+        { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[]
+        
+            typedef SireMol::Editor< SireMol::AtomEditor, SireMol::Atom > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::*__getitem___function_type)( int ) ;
+            __getitem___function_type __getitem___function_value( &::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[] );
+            
+            AtomEditorBase_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[]
+        
+            typedef SireMol::Editor< SireMol::AtomEditor, SireMol::Atom > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::*__getitem___function_type)( ::QString const & ) ;
+            __getitem___function_type __getitem___function_value( &::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[] );
+            
+            AtomEditorBase_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("name") )
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[]
+        
+            typedef SireMol::Editor< SireMol::AtomEditor, SireMol::Atom > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::*__getitem___function_type)( ::SireMol::AtomID const & ) ;
+            __getitem___function_type __getitem___function_value( &::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[] );
+            
+            AtomEditorBase_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("atomid") )
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[]
+        
+            typedef SireMol::Editor< SireMol::AtomEditor, SireMol::Atom > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::*__getitem___function_type)( ::SireMol::ResID const & ) ;
+            __getitem___function_type __getitem___function_value( &::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[] );
+            
+            AtomEditorBase_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("resid") )
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[]
+        
+            typedef SireMol::Editor< SireMol::AtomEditor, SireMol::Atom > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::*__getitem___function_type)( ::SireMol::CGID const & ) ;
+            __getitem___function_type __getitem___function_value( &::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[] );
+            
+            AtomEditorBase_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("cgid") )
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[]
+        
+            typedef SireMol::Editor< SireMol::AtomEditor, SireMol::Atom > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::*__getitem___function_type)( ::SireMol::ChainID const & ) ;
+            __getitem___function_type __getitem___function_value( &::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[] );
+            
+            AtomEditorBase_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("chainid") )
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[]
+        
+            typedef SireMol::Editor< SireMol::AtomEditor, SireMol::Atom > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::*__getitem___function_type)( ::SireMol::SegID const & ) ;
+            __getitem___function_type __getitem___function_value( &::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[] );
+            
+            AtomEditorBase_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("segid") )
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[]
+        
+            typedef SireMol::Editor< SireMol::AtomEditor, SireMol::Atom > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::*__getitem___function_type)( ::SireID::Index const & ) ;
+            __getitem___function_type __getitem___function_value( &::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator[] );
+            
+            AtomEditorBase_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idx") )
+                , "" );
+        
+        }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::removeMetadata
         
             typedef SireMol::Editor< SireMol::AtomEditor, SireMol::Atom > exported_class_t;
