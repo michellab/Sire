@@ -25,6 +25,8 @@ Functions
 """
 
 from calendar import c
+from importlib.util import resolve_name
+from typing import ChainMap
 import Sire.Maths
 import Sire.Base
 import Sire.ID
@@ -189,6 +191,141 @@ def get_molview(mol):
        returned as an Atom etc."""
     return mol
 
+
+Atom._indexType = AtomIdx
+Atom._nameType = AtomName
+Atom._numberType = AtomNum
+
+CutGroup._indexType = CGIdx
+CutGroup._nameType = CGName
+CutGroup._childType = Atom
+
+Residue._indexType = ResIdx
+Residue._nameType = ResName
+Residue._numberType = ResNum
+Residue._childType = Atom
+
+Chain._indexType = ChainIdx
+Chain._nameType = ChainName
+Chain._childType = Residue
+
+Segment._indexType = SegIdx
+Segment._nameType = SegName
+Segment._childType = Atom
+
+Molecule._indexType = MolIdx
+Molecule._nameType = MolName
+Molecule._numberType = MolNum
+Molecule._childType = Atom
+
+
+def __getitem__view__(view, i):
+    """Return the object at the specified index."""
+    try:
+        idx = view._childType._indexType(int(i))
+    except Exception:
+        idx = None
+
+    if idx is not None:
+        return view.__orig_getitem__(idx)
+
+    try:
+        return view.__orig_getitem__(i)
+    except Exception:
+        pass
+
+    idx = view._childType._nameType(str(i))
+
+    try:
+        return view.__orig_getitem__(i)
+    except Exception:
+        pass
+
+    idx = str(i)
+
+    if idx.find(":") != -1:
+        (name, number) = idx.split(":")[0:2]
+        Name = view._childType._nameType
+        Number = view._childType._numberType
+        idx = Name(name) + Number(number)
+        return view.__orig_getitem__(idx)
+
+    # nothing worked - just use the original 'i' so that we
+    # get the right error message
+    if type(i) is str:
+        i = view._childType._nameType(i)
+
+    return view.__orig_getitem__(i)
+
+
+def _fix_atom(view, i):
+    try:
+        idx = int(i)
+    except Exception:
+        idx = None
+
+    if idx is not None:
+        return view._orig_atom(AtomIdx(idx))
+
+    try:
+        return view._orig_atom(AtomName(str(i)))
+    except Exception:
+        pass
+
+    if type(i) is str:
+        i = AtomName(i)
+
+    return view._orig_atom(i)
+
+
+def _fix_residue(view, i):
+    try:
+        idx = int(i)
+    except Exception:
+        idx = None
+
+    if idx is not None:
+        return view._orig_residue(ResIdx(idx))
+
+    try:
+        return view._orig_residue(ResName(str(i)))
+    except Exception:
+        pass
+
+    if type(i) is str:
+        i = ResName(i)
+
+    return view._orig_residue(i)
+
+
+def _fix_getitem(view):
+
+    if not hasattr(view, "__orig_getitem__"):
+        view.__orig_getitem__ = view.__getitem__
+
+    view.__getitem__ = __getitem__view__
+
+    if hasattr(view, "atom"):
+        if not hasattr(view, "_orig_atom"):
+            view._orig_atom = view.atom
+
+        view.atom = _fix_atom
+
+    if hasattr(view, "residue"):
+        if not hasattr(view, "_orig_residue"):
+            view._orig_residue = view.residue
+
+        view.residue = _fix_residue
+
+
+_fix_getitem(Atom)
+_fix_getitem(CutGroup)
+_fix_getitem(Residue)
+_fix_getitem(Chain)
+_fix_getitem(Segment)
+_fix_getitem(Molecule)
+_fix_getitem(MolEditor)
+
 class IncompatibleError(Exception):
     pass
 
@@ -296,6 +433,21 @@ class Cursor:
 
     def __repr__(self):
         return self.__str__()
+
+    def __delitem__(self, key):
+        if self._bond is None:
+            print("HERE")
+            self._molecule.removeProperty(key)
+            try:
+                print("HERE2")
+                self._view = self._molecule[self._view.index()]
+            except Exception:
+                print("HERE3")
+                self._view = self._molecule
+        else:
+            self._connectivity.removeProperty(bond, key)
+            self._molecule.setProperty(self._connectivity_property,
+                                       self._connectivity.commit())
 
     def __getitem__(self, key):
         if self._bond is None:

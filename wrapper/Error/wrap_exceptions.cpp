@@ -32,6 +32,8 @@
 
 #include "SireError/exception.h"
 #include "SireError/errors.h"
+#include "SireMol/errors.h"
+#include "SireBase/errors.h"
 
 using namespace boost::python;
 
@@ -40,20 +42,56 @@ using namespace boost::python;
 namespace SireError
 {
 
-void out_of_range( const SireError::invalid_index &ex )
+QString get_exception_string(const SireError::exception &e)
 {
-    PyErr_SetString(PyExc_StopIteration,ex.toString().toUtf8());
+    return QString("%1: %2").arg(e.what()).arg(e.why());
+}
+
+void index_error( const SireError::exception &ex )
+{
+    PyErr_SetString(PyExc_IndexError,
+                    get_exception_string(ex).toUtf8());
+}
+
+void key_error( const SireError::exception &ex )
+{
+    PyErr_SetString(PyExc_KeyError,
+                    get_exception_string(ex).toUtf8());
+}
+
+void assertion_error( const SireError::exception &ex )
+{
+    PyErr_SetString(PyExc_AssertionError,
+                    get_exception_string(ex).toUtf8());
+}
+
+void type_error( const SireError::exception &ex )
+{
+    PyErr_SetString(PyExc_TypeError,
+                    get_exception_string(ex).toUtf8());
 }
 
 void exception_translator( const SireError::exception &ex )
 {
-    PyErr_SetString(PyExc_UserWarning,ex.toString().toUtf8());
+    PyErr_SetString(PyExc_UserWarning,
+                    get_exception_string(ex).toUtf8());
 }
 
 void export_exceptions()
 {
     register_exception_translator<SireError::exception>(&exception_translator);
-    register_exception_translator<SireError::invalid_index>(&out_of_range);
+    register_exception_translator<SireError::invalid_index>(&index_error);
+    register_exception_translator<SireError::invalid_key>(&key_error);
+    register_exception_translator<SireMol::missing_atom>(&key_error);
+    register_exception_translator<SireMol::missing_cutgroup>(&key_error);
+    register_exception_translator<SireMol::missing_residue>(&key_error);
+    register_exception_translator<SireMol::missing_chain>(&key_error);
+    register_exception_translator<SireMol::missing_segment>(&key_error);
+    register_exception_translator<SireBase::missing_property>(&key_error);
+    register_exception_translator<SireError::assertation_failed>(&assertion_error);
+    register_exception_translator<SireError::invalid_cast>(&type_error);
+    register_exception_translator<SireError::unknown_type>(&type_error);
+
 }
 
 }
