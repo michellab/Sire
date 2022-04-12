@@ -38,13 +38,49 @@
 using namespace boost::python;
 
 #include <QDebug>
+#include <QMutex>
+#include <QHash>
 
 namespace SireError
 {
 
+typedef QHash<QString, QString> LastErrorType;
+
+Q_GLOBAL_STATIC( LastErrorType, lastError );
+
+Q_GLOBAL_STATIC( QMutex, lastErrorMutex );
+
+void set_last_error(const SireError::exception &e)
+{
+    LastErrorType d;
+
+    d["type"] = e.what();
+    d["from"] = e.from();
+    d["backtrace"] = e.trace().join("\n");
+    d["where"] = e.where();
+    d["why"] = e.why();
+    d["pid"] = e.pid();
+
+    QMutexLocker lkr( lastErrorMutex() );
+
+    lastError()->operator=(d);
+}
+
+LastErrorType get_last_error_details()
+{
+    QMutexLocker lkr( lastErrorMutex() );
+
+    LastErrorType d = *(lastError());
+
+    lkr.unlock();
+
+    return d;
+}
+
 QString get_exception_string(const SireError::exception &e)
 {
-    return QString("%1: %2").arg(e.what()).arg(e.why());
+    set_last_error(e);
+    return QString("%1: %2 (call Sire.Error.get_last_error_details() for more info)").arg(e.what()).arg(e.why());
 }
 
 void index_error( const SireError::exception &ex )

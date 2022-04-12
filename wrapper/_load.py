@@ -143,7 +143,56 @@ def load(path: _Union[str, _List[str]], *args, **kwargs):
         paths[i] = _resolve_path(paths[i])
 
     import Sire.IO
-    return Sire.IO.MoleculeParser.load(paths)
+    mols = Sire.IO.MoleculeParser.load(paths)
+
+    # This is an opinionated loader - we must have atom elements
+    # and a connectivity defined
+    from Sire.System import System
+    from Sire.Mol import MoleculeGroup
+
+    grp = MoleculeGroup("all")
+
+    for mol in mols:
+        c = None
+
+        if not mol.hasProperty("element"):
+            from Sire.Mol import Element
+            c = mol.cursor()
+
+            for i in range(0, mol.nAtoms()):
+                c.atom(i)["element"] = Element.biologicalElement(mol.atom(i).name())
+
+            mol = c.commit()
+
+        if not mol.hasProperty("connectivity"):
+            from Sire.Mol import CovalentBondHunter
+            hunter = CovalentBondHunter()
+
+            try:
+                connectivity = hunter(mol)
+                if c is None:
+                    c = mol.cursor()
+
+                c["connectivity"] = connectivity
+            except Exception:
+                pass
+
+        if c is not None:
+            mol = c.commit()
+
+        # we now want to break the molecule up into sub-molecules,
+        # based on the connectivity
+        grp.add(mol)
+
+    s = System()
+    s.add(grp)
+
+    for key in mols.propertyKeys():
+        s.setProperty(key, mols.property(key))
+
+    s.setProperty("filenames", paths)
+
+    return s
 
 
 def save(molecules, filename: str, format: _Union[str, _List[str]]=None,

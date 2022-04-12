@@ -71,9 +71,9 @@ SliceIterator::SliceIterator(const Slice &slice, int n)
     stop = slice.stop;
 
     if (stop == _unset)
-       stop = n - 1;
+       stop = n;
 
-    stop = _map(stop, n);
+    stop = _map(stop-1, n);
 
     step = slice.step;
 
@@ -133,6 +133,26 @@ Slice::Slice(const Slice &other)
 
 Slice::~Slice()
 {}
+
+Slice Slice::fromStartStop(int _start, int _stop, int _step)
+{
+    Slice s;
+    s.start = _start;
+    s.stop = _stop;
+    s.step = _step;
+
+    return s;
+}
+
+Slice Slice::fromStart(int _start, int _step)
+{
+    Slice s;
+    s.start = _start;
+    s.stop = _unset;
+    s.step = _step;
+
+    return s;
+}
 
 Slice& Slice::operator=(const Slice &other)
 {

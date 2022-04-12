@@ -93,10 +93,14 @@ void register_SireQt_containers()
 
     register_dict< QMap<QString,QVariant> >();
 
+    register_dict< QHash<QString,QString> >();
+
     #else
     register_set< QSet<QString>, QString >();
 
     register_dict< QMap<QString,QVariant>, QString, QVariant >();
+
+    register_dict< QHash<QString, QString>, QString, QString >();
 
     #endif
 }

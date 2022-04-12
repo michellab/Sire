@@ -32,6 +32,10 @@
 
 #include "SireBase/slice.h"
 
+#include "SireError/errors.h"
+
+#include <QDebug>
+
 using namespace boost::python;
 
 /** This function convert a python string or unicode to a QChar */
@@ -41,12 +45,29 @@ void Slice_from_python_slice(PyObject* obj_ptr,
     Py_ssize_t start, stop, step;
     int ok = PySlice_Unpack(obj_ptr, &start, &stop, &step);
 
-    if (not ok)
-        boost::python::throw_error_already_set();
+    if (ok != 0)
+        throw SireError::assertation_failed(
+            QObject::tr("Cannot unpack the slice! %1").arg(ok), CODELOC );
 
     void* storage = ((converter::rvalue_from_python_storage<SireBase::Slice>*) data)->storage.bytes;
 
-    new (storage) SireBase::Slice( SireBase::Slice::fromStartStop(start, stop, step));
+    qDebug() << start << stop << step;
+
+    if (stop == 9223372036854775807L)
+    {
+        // magic number used when the end value has not been set
+        new (storage) SireBase::Slice( SireBase::Slice::fromStart(start, step));
+    }
+    else
+    {
+        if (stop == -9223372036854775808L)
+        {
+            stop = 0;
+        }
+
+        new (storage) SireBase::Slice( SireBase::Slice::fromStartStop(start, stop, step));
+    }
+
     data->convertible = storage;
 }
 

@@ -10,6 +10,8 @@ namespace bp = boost::python;
 
 #include "SireBase/savestate.h"
 
+#include "SireBase/slice.h"
+
 #include "SireError/errors.h"
 
 #include "SireFF/energytable.h"
