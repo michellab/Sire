@@ -72,7 +72,7 @@ class MoleculeGroup;
 class MolGroupsBase;
 class MolNum;
 
-/** This is the base class of all identifiers that are used 
+/** This is the base class of all identifiers that are used
     to identify a chain within a molecule
 
     @author Christopher Woods
@@ -89,20 +89,20 @@ public:
     ChainID(const ChainID &other);
 
     virtual ~ChainID();
-    
+
     Specify<ChainID> operator[](qint64 i) const;
     Specify<ChainID> operator[](const SireBase::Range &range) const;
     Specify<ChainID> operator()(const SireBase::Range &range) const;
     Specify<ChainID> operator()(qint64 i) const;
     Specify<ChainID> operator()(qint64 start, qint64 end) const;
     Specify<ChainID> operator()(qint64 start, qint64 end, qint64 increment) const;
-    
+
     IDAndSet<ChainID> operator+(const ChainID &other) const;
     ChainResID operator+(const ResID &other) const;
     GroupAtomID<ChainID,AtomID> operator+(const AtomID &other) const;
     GroupGroupID<SegID,ChainID> operator+(const SegID &other) const;
     GroupGroupID<CGID,ChainID> operator+(const CGID &other) const;
-    
+
     IDAndSet<ChainID> operator-(const ChainID &other) const;
     ChainResID operator-(const ResID &other) const;
     GroupAtomID<ChainID,AtomID> operator-(const AtomID &other) const;
@@ -122,7 +122,7 @@ public:
     GroupAtomID<ChainID,AtomID> operator&(const AtomID &other) const;
     GroupGroupID<SegID,ChainID> operator&(const SegID &other) const;
     GroupGroupID<CGID,ChainID> operator&(const CGID &other) const;
-    
+
     IDOrSet<ChainID> operator*(const ChainID &other) const;
     IDOrSet<ChainID> operator||(const ChainID &other) const;
     IDOrSet<ChainID> operator|(const ChainID &other) const;
@@ -140,54 +140,56 @@ public:
     AtomsIn<ChainID> atoms() const;
     AtomsIn<ChainID> atom(int i) const;
     AtomsIn<ChainID> atoms(int i, int j) const;
-    
+
     ResIn<ChainID> residues() const;
     ResIn<ChainID> residue(int i) const;
     ResIn<ChainID> residues(int i, int j) const;
-    
+
+    static ChainIdentifier fromString(const QString &id);
+
     static SireID::MatchAll<ChainID> any();
-    
+
     SireID::InvertMatch<ChainID> invert() const;
     SireID::InvertMatch<ChainID> inverse() const;
-    
+
     static const char* typeName()
     {
         return "SireMol::ChainID";
     }
-    
+
     virtual ChainID* clone() const=0;
 
-    /** Map this ID back to the indicies of the chains in the molecule, 
+    /** Map this ID back to the indicies of the chains in the molecule,
         using the passed MoleculeInfo to do the mapping */
     virtual QList<ChainIdx> map(const MolInfo &molinfo) const=0;
 
 
     virtual QList<ChainIdx> map(const MoleculeView &molview,
                                 const PropertyMap &map = PropertyMap()) const;
-    
+
     virtual Chain selectFrom(const MoleculeView &molview,
                              const PropertyMap &map = PropertyMap()) const;
-    
+
     virtual Selector<Chain> selectAllFrom(const MoleculeView &molview,
                                           const PropertyMap &map = PropertyMap()) const;
-    
+
     virtual Chain selectFrom(const Molecules &molecules,
                              const PropertyMap &map = PropertyMap()) const;
-                            
+
     virtual QHash< MolNum,Selector<Chain> >
                 selectAllFrom(const Molecules &molecules,
                               const PropertyMap &map = PropertyMap()) const;
 
     virtual Chain selectFrom(const MoleculeGroup &molgroup,
                              const PropertyMap &map = PropertyMap()) const;
-                            
+
     virtual QHash< MolNum,Selector<Chain> >
                 selectAllFrom(const MoleculeGroup &molgroup,
                               const PropertyMap &map = PropertyMap()) const;
-    
+
     virtual Chain selectFrom(const MolGroupsBase &molgroups,
                              const PropertyMap &map = PropertyMap()) const;
-    virtual QHash< MolNum,Selector<Chain> > 
+    virtual QHash< MolNum,Selector<Chain> >
                 selectAllFrom(const MolGroupsBase &molgroups,
                               const PropertyMap &map = PropertyMap()) const;
 

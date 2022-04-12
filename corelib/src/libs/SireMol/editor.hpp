@@ -83,22 +83,42 @@ public:
                            const SireBase::PropertyName &metakey);
 
     AtomEditor atom();
+    AtomEditor atom(int i,
+                    const PropertyMap &map = PropertyMap());
+    AtomEditor atom(const QString &name,
+                    const PropertyMap &map = PropertyMap());
     AtomEditor atom(const AtomID &atomid,
                     const PropertyMap &map = PropertyMap());
 
     CGEditor cutGroup();
+    CGEditor cutGroup(int i,
+                      const PropertyMap &map = PropertyMap());
+    CGEditor cutGroup(const QString &name,
+                      const PropertyMap &map = PropertyMap());
     CGEditor cutGroup(const CGID &cgid,
                       const PropertyMap &map = PropertyMap());
 
     ResEditor residue();
+    ResEditor residue(int i,
+                      const PropertyMap &map = PropertyMap());
+    ResEditor residue(const QString &name,
+                      const PropertyMap &map = PropertyMap());
     ResEditor residue(const ResID &resid,
                       const PropertyMap &map = PropertyMap());
 
     ChainEditor chain();
+    ChainEditor chain(int i,
+                      const PropertyMap &map = PropertyMap());
+    ChainEditor chain(const QString &name,
+                      const PropertyMap &map = PropertyMap());
     ChainEditor chain(const ChainID &chainid,
                       const PropertyMap &map = PropertyMap());
 
     SegEditor segment();
+    SegEditor segment(int i,
+                      const PropertyMap &map = PropertyMap());
+    SegEditor segment(const QString &name,
+                      const PropertyMap &map = PropertyMap());
     SegEditor segment(const SegID &segid,
                       const PropertyMap &map = PropertyMap());
 
@@ -188,14 +208,14 @@ template<class Parent, class T>
 SIRE_OUTOFLINE_TEMPLATE
 MolViewPtr Editor<Parent, T>::operator[](int i)
 {
-    return this->atom(AtomIdx(i));
+    return this->atom(i);
 }
 
 template<class Parent, class T>
 SIRE_OUTOFLINE_TEMPLATE
 MolViewPtr Editor<Parent, T>::operator[](const QString &key)
 {
-    return this->atom(AtomName(key));
+    return this->atom(key);
 }
 
 template<class Parent, class T>
@@ -367,6 +387,20 @@ AtomEditor Editor<Parent, T>::atom()
     return AtomEditor( MoleculeView::atom() );
 }
 
+template<class Parent, class T>
+SIRE_OUTOFLINE_TEMPLATE
+AtomEditor Editor<Parent, T>::atom(int i, const PropertyMap &map)
+{
+    return AtomEditor( MoleculeView::atom(i, map) );
+}
+
+template<class Parent, class T>
+SIRE_OUTOFLINE_TEMPLATE
+AtomEditor Editor<Parent, T>::atom(const QString &name, const PropertyMap &map)
+{
+    return AtomEditor( MoleculeView::atom(name, map) );
+}
+
 /** Return the atom from this view that matches the ID 'atomid'
 
     \throw SireMol::missing_atom
@@ -391,6 +425,20 @@ SIRE_OUTOFLINE_TEMPLATE
 CGEditor Editor<Parent, T>::cutGroup()
 {
     return CGEditor( MoleculeView::cutGroup() );
+}
+
+template<class Parent, class T>
+SIRE_OUTOFLINE_TEMPLATE
+CGEditor Editor<Parent, T>::cutGroup(int i, const PropertyMap &map)
+{
+    return CGEditor( MoleculeView::cutGroup(i, map) );
+}
+
+template<class Parent, class T>
+SIRE_OUTOFLINE_TEMPLATE
+CGEditor Editor<Parent, T>::cutGroup(const QString &name, const PropertyMap &map)
+{
+    return CGEditor( MoleculeView::cutGroup(name, map) );
 }
 
 /** Return the CutGroups from this view that match the ID 'cgid'
@@ -419,6 +467,20 @@ ResEditor Editor<Parent, T>::residue()
     return ResEditor( MoleculeView::residue() );
 }
 
+template<class Parent, class T>
+SIRE_OUTOFLINE_TEMPLATE
+ResEditor Editor<Parent, T>::residue(int i, const PropertyMap &map)
+{
+    return ResEditor( MoleculeView::residue(i, map) );
+}
+
+template<class Parent, class T>
+SIRE_OUTOFLINE_TEMPLATE
+ResEditor Editor<Parent, T>::residue(const QString &name, const PropertyMap &map)
+{
+    return ResEditor( MoleculeView::residue(name, map) );
+}
+
 /** Return the residues from this view that match the ID 'resid'
 
     \throw SireMol::missing_residue
@@ -445,6 +507,20 @@ ChainEditor Editor<Parent, T>::chain()
     return ChainEditor( MoleculeView::chain() );
 }
 
+template<class Parent, class T>
+SIRE_OUTOFLINE_TEMPLATE
+ChainEditor Editor<Parent, T>::chain(int i, const PropertyMap &map)
+{
+    return ChainEditor( MoleculeView::chain(i, map) );
+}
+
+template<class Parent, class T>
+SIRE_OUTOFLINE_TEMPLATE
+ChainEditor Editor<Parent, T>::chain(const QString &name, const PropertyMap &map)
+{
+    return ChainEditor( MoleculeView::chain(name, map) );
+}
+
 /** Return the chains from this view that match the ID 'chainid'
 
     \throw SireMol::missing_chain
@@ -469,6 +545,20 @@ SIRE_OUTOFLINE_TEMPLATE
 SegEditor Editor<Parent, T>::segment()
 {
     return SegEditor( MoleculeView::segment() );
+}
+
+template<class Parent, class T>
+SIRE_OUTOFLINE_TEMPLATE
+SegEditor Editor<Parent, T>::segment(int i, const PropertyMap &map)
+{
+    return SegEditor( MoleculeView::segment(i, map) );
+}
+
+template<class Parent, class T>
+SIRE_OUTOFLINE_TEMPLATE
+SegEditor Editor<Parent, T>::segment(const QString &name, const PropertyMap &map)
+{
+    return SegEditor( MoleculeView::segment(name, map) );
 }
 
 /** Return the segments from this view that match the ID 'segid'

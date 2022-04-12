@@ -289,6 +289,26 @@ void MoleculeView::assertHasMetadata(const PropertyName &key,
                 .arg(key.toString()), CODELOC );
 }
 
+Atom MoleculeView::atom(int i, const PropertyMap &map) const
+{
+    auto s = this->selection();
+
+    if (s.selectedAllAtoms())
+    {
+        return this->atom(AtomIdx(i), map);
+    }
+    else
+    {
+        auto atomidxs = s.selectedAtoms();
+        return this->atom(atomidxs.at(Index(i).map(atomidxs.count())), map);
+    }
+}
+
+Atom MoleculeView::atom(const QString &name, const PropertyMap &map) const
+{
+    return this->atom(AtomID::fromString(name), map);
+}
+
 /** Return the atom in this view that matches the ID 'atomid'
 
     \throw SireMol::missing_atom
@@ -349,6 +369,26 @@ Selector<Atom> MoleculeView::atoms() const
                     .arg(this->toString()), CODELOC );
 
     return Selector<Atom>(this->data(), this->selection());
+}
+
+CutGroup MoleculeView::cutGroup(int i, const PropertyMap &map) const
+{
+    auto s = this->selection();
+
+    if (s.selectedAllCutGroups())
+    {
+        return this->cutGroup(AtomIdx(i), map);
+    }
+    else
+    {
+        auto cgidxs = s.selectedCutGroups();
+        return this->cutGroup(cgidxs.at(Index(i).map(cgidxs.count())), map);
+    }
+}
+
+CutGroup MoleculeView::cutGroup(const QString &name, const PropertyMap &map) const
+{
+    return this->cutGroup(CGID::fromString(name), map);
 }
 
 /** Return the CutGroup whose atoms are in this view that matches
@@ -414,6 +454,26 @@ Selector<CutGroup> MoleculeView::cutGroups() const
     return Selector<CutGroup>(this->data(), selected_cgs);
 }
 
+Residue MoleculeView::residue(int i, const PropertyMap &map) const
+{
+    auto s = this->selection();
+
+    if (s.selectedAllResidues())
+    {
+        return this->residue(ResIdx(i), map);
+    }
+    else
+    {
+        auto residxs = s.selectedResidues();
+        return this->residue(residxs.at(Index(i).map(residxs.count())), map);
+    }
+}
+
+Residue MoleculeView::residue(const QString &name, const PropertyMap &map) const
+{
+    return this->residue(ResID::fromString(name), map);
+}
+
 /** Return the residue from this view that matches the ID 'resid'
 
     \throw SireMol::missing_residue
@@ -473,6 +533,26 @@ Selector<Residue> MoleculeView::residues() const
                 "This view does not contain any residues."), CODELOC );
 
     return Selector<Residue>(this->data(), selected_res);
+}
+
+Chain MoleculeView::chain(int i, const PropertyMap &map) const
+{
+    auto s = this->selection();
+
+    if (s.selectedAllChains())
+    {
+        return this->chain(ChainIdx(i), map);
+    }
+    else
+    {
+        auto cidxs = s.selectedChains();
+        return this->chain(cidxs.at(Index(i).map(cidxs.count())), map);
+    }
+}
+
+Chain MoleculeView::chain(const QString &name, const PropertyMap &map) const
+{
+    return this->chain(ChainID::fromString(name), map);
 }
 
 /** Return the chain that is involved with this view that matches
@@ -537,6 +617,26 @@ Selector<Chain> MoleculeView::chains() const
                 "This view does not contain any chains."), CODELOC );
 
     return Selector<Chain>(this->data(), selected_chn);
+}
+
+Segment MoleculeView::segment(int i, const PropertyMap &map) const
+{
+    auto s = this->selection();
+
+    if (s.selectedAllSegments())
+    {
+        return this->segment(SegIdx(i), map);
+    }
+    else
+    {
+        auto segidxs = s.selectedSegments();
+        return this->segment(segidxs.at(Index(i).map(segidxs.count())), map);
+    }
+}
+
+Segment MoleculeView::segment(const QString &name, const PropertyMap &map) const
+{
+    return this->segment(SegID::fromString(name), map);
 }
 
 /** Return the segment that is involved with this view that matches
@@ -818,13 +918,13 @@ int MoleculeView::count() const
 /** Return the ith view in this MoleculeView. */
 MolViewPtr MoleculeView::operator[](int i) const
 {
-    return this->atom(AtomIdx(i));
+    return this->atom(i);
 }
 
 /** Return the child with the specified name from this MoleculeView */
 MolViewPtr MoleculeView::operator[](const QString &name) const
 {
-    return this->atom(AtomName(name));
+    return this->atom(name);
 }
 
 /** Return the atom(s) that match 'atomid' in this view of the molecule */
@@ -907,6 +1007,82 @@ MolViewPtr MoleculeView::operator[](const SegID &segid) const
 MolViewPtr MoleculeView::operator[](const SireID::Index &idx) const
 {
     return this->operator[](idx.value());
+}
+
+QList<MolViewPtr> MoleculeView::atRange(int start, int end, int step) const
+{
+    QList<MolViewPtr> views;
+
+    auto s = this->selection();
+
+    if (s.selectedAllAtoms())
+    {
+        int natoms = this->d.read().info().nAtoms();
+
+        if (end == std::numeric_limits<int>::max())
+        {
+            end = natoms;
+        }
+
+        start = Index(start).map(natoms);
+        end = Index(end-1).map(natoms);
+
+        if (end >= start)
+        {
+            if (step <= 0)
+                return views;
+
+            for (int i=start; i<=end; i+=step)
+            {
+                views.append(this->at(AtomIdx(i)));
+            }
+        }
+        else
+        {
+            if (step >= 0)
+                return views;
+
+            for (int i=end; i>=start; i+=step)
+            {
+                views.append(this->at(AtomIdx(i)));
+            }
+        }
+    }
+    else
+    {
+        const auto atomidxs = s.selectedAtoms();
+
+        if (end == std::numeric_limits<int>::max())
+        {
+            end = atomidxs.count();
+        }
+
+        start = Index(start).map(atomidxs.count());
+        end = Index(end-1).map(atomidxs.count());
+
+        if (end >= start)
+        {
+            if (step <= 0)
+                return views;
+
+            for (int i=start; i<=end; i+=step)
+            {
+                views.append(this->at(atomidxs[i]));
+            }
+        }
+        else
+        {
+            if (step >= 0)
+                return views;
+
+            for (int i=end; i>=start; i+=step)
+            {
+                views.append(this->at(atomidxs[i]));
+            }
+        }
+    }
+
+    return views;
 }
 
 MolViewPtr MoleculeView::at(int i) const

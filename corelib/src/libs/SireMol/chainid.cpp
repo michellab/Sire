@@ -71,6 +71,12 @@ ChainID::ChainID(const ChainID &other) : ID(other)
 ChainID::~ChainID()
 {}
 
+/** Return an AtomID constructed from the passed string */
+ChainIdentifier ChainID::fromString(const QString &id)
+{
+    return ChainName(id);
+}
+
 /** Combine with another ID object */
 IDAndSet<ChainID> ChainID::operator+(const ChainID &other) const
 {

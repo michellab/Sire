@@ -374,6 +374,12 @@ InvertMatch<AtomID> AtomID::operator!() const
     return InvertMatch<AtomID>(*this);
 }
 
+/** Return an AtomID constructed from the passed string */
+AtomIdentifier AtomID::fromString(const QString &id)
+{
+    return AtomName(id);
+}
+
 /** Return the invert (not) of this match */
 InvertMatch<AtomID> AtomID::invert() const
 {

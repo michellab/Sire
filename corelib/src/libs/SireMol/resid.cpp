@@ -75,6 +75,12 @@ ResID::ResID(const ResID &other) : ID(other)
 ResID::~ResID()
 {}
 
+/** Return an ResID constructed from the passed string */
+ResIdentifier ResID::fromString(const QString &id)
+{
+    return ResName(id);
+}
+
 /** Return a specific object that matches this ID */
 Specify<ResID> ResID::operator[](qint64 i) const
 {

@@ -35,6 +35,8 @@
 #include "moleculedata.h"
 #include "moleculeinfodata.h"
 
+#include <limits>
+
 SIRE_BEGIN_HEADER
 
 namespace SireMol
@@ -141,6 +143,12 @@ public:
     MolViewPtr at(const SegID &segid) const;
     MolViewPtr at(const SireID::Index &idx) const;
 
+    QList<MolViewPtr> atRange(int start=0,
+                              int end=std::numeric_limits<int>::max(),
+                              int step=1) const;
+
+    Atom atom(int i, const PropertyMap &map = PropertyMap()) const;
+    Atom atom(const QString &name, const PropertyMap &map = PropertyMap()) const;
     Atom atom(const AtomID &atomid, const PropertyMap &map = PropertyMap()) const;
 
     Selector<Atom> atoms(const AtomID &atomid,
@@ -149,6 +157,8 @@ public:
     Atom atom() const;
     Selector<Atom> atoms() const;
 
+    CutGroup cutGroup(int i, const PropertyMap &map = PropertyMap()) const;
+    CutGroup cutGroup(const QString &name, const PropertyMap &map = PropertyMap()) const;
     CutGroup cutGroup(const CGID &cgid, const PropertyMap &map = PropertyMap()) const;
 
     Selector<CutGroup> cutGroups(const CGID &cgid,
@@ -157,6 +167,8 @@ public:
     CutGroup cutGroup() const;
     Selector<CutGroup> cutGroups() const;
 
+    Residue residue(int i, const PropertyMap &map = PropertyMap()) const;
+    Residue residue(const QString &name, const PropertyMap &map = PropertyMap()) const;
     Residue residue(const ResID &resid, const PropertyMap &map = PropertyMap()) const;
 
     Selector<Residue> residues(const ResID &resid,
@@ -165,6 +177,8 @@ public:
     Residue residue() const;
     Selector<Residue> residues() const;
 
+    Chain chain(int i, const PropertyMap &map = PropertyMap()) const;
+    Chain chain(const QString &name, const PropertyMap &map = PropertyMap()) const;
     Chain chain(const ChainID &chainid, const PropertyMap &map = PropertyMap()) const;
 
     Selector<Chain> chains(const ChainID &chainid,
@@ -173,6 +187,8 @@ public:
     Chain chain() const;
     Selector<Chain> chains() const;
 
+    Segment segment(int i, const PropertyMap &map = PropertyMap()) const;
+    Segment segment(const QString &name, const PropertyMap &map = PropertyMap()) const;
     Segment segment(const SegID &segid, const PropertyMap &map = PropertyMap()) const;
 
     Selector<Segment> segments(const SegID &segid,
