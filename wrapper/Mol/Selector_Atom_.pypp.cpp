@@ -486,6 +486,32 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::operator[]
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Atom >::*__getitem___function_type)( ::QString const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Atom >::operator[] );
+            
+            Selector_Atom__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("name") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::operator[]
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Atom >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Atom >::operator[] );
+            
+            Selector_Atom__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::operator[]
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
             typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Atom >::*__getitem___function_type)( ::SireMol::AtomID const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Atom >::operator[] );
             
