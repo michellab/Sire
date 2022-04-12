@@ -203,6 +203,54 @@ ViewsOfMol MolGroupsBase::operator[](MolNum molnum) const
     return this->at(molnum);
 }
 
+ViewsOfMol MolGroupsBase::operator[](int i) const
+{
+    return this->at(MolIdx(i));
+}
+
+ViewsOfMol MolGroupsBase::operator[](const QString &name) const
+{
+    return this->at(MolName(name));
+}
+
+QList<MolViewPtr> MolGroupsBase::atRange(int start, int end, int step) const
+{
+    auto molnums = this->molNums();
+
+    QList<MolViewPtr> views;
+
+    if (end == std::numeric_limits<int>::max())
+    {
+        end = molnums.count();
+    }
+
+    start = Index(start).map(molnums.count());
+    end = Index(end-1).map(molnums.count());
+
+    if (end >= start)
+    {
+        if (step <= 0)
+            return views;
+
+        for (int i=start; i<=end; i+=step)
+        {
+            views.append(this->at(molnums[i]));
+        }
+    }
+    else
+    {
+        if (step >= 0)
+            return views;
+
+        for (int i=end; i>=start; i+=step)
+        {
+            views.append(this->at(molnums[i]));
+        }
+    }
+
+    return views;
+}
+
 /** Return all of the views of the molecule identified by 'molid'
     that are contained in this set of groups. Note that if the
     same view appears in multiple groups, then it will be returned

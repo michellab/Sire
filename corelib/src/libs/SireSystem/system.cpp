@@ -79,7 +79,7 @@ static VersionRegistry<QUuid>& systemRegistry()
         //need to make this thread-safe...
         system_registry = new VersionRegistry<QUuid>();
     }
-    
+
     return *system_registry;
 }
 
@@ -91,10 +91,10 @@ static VersionRegistry<QUuid>& systemRegistry()
 void System::reindex()
 {
     MolGroupsBase::clearIndex();
-    
+
     QList<MGNum> mgnums0 = molgroups[0]->mgNums();
     QList<MGNum> mgnums1 = molgroups[1]->mgNums();
-    
+
     foreach (MGNum mgnum, mgnums0)
     {
         MolGroupsBase::addToIndex(molgroups[0]->at(mgnum));
@@ -111,17 +111,17 @@ void System::rebuildIndex()
 {
     //rebuild our index...
     mgroups_by_num.clear();
-    
+
     QList<MGNum> mgnums0 = molgroups[0]->mgNums();
     QList<MGNum> mgnums1 = molgroups[1]->mgNums();
-    
+
     mgroups_by_num.reserve( mgnums0.count() + mgnums1.count() );
-    
+
     foreach (MGNum mgnum, mgnums0)
     {
         mgroups_by_num.insert( mgnum, 0 );
     }
-    
+
     foreach (MGNum mgnum, mgnums1)
     {
         if (mgroups_by_num.contains(mgnum))
@@ -129,13 +129,13 @@ void System::rebuildIndex()
                 "It should not be possible for a System to contain two molecule "
                 "groups that both contain the same number... (%1)")
                     .arg(mgnum), CODELOC );
-    
+
         mgroups_by_num.insert( mgnum, 1 );
     }
-    
+
     //now rebuild the index of molecules
     MolGroupsBase::clearIndex();
-    
+
     foreach (MGNum mgnum, mgnums0)
     {
         MolGroupsBase::addToIndex(molgroups[0]->at(mgnum));
@@ -156,28 +156,28 @@ QDataStream &operator<<(QDataStream &ds, const System &system)
         qDebug() << "SYSTEM NEEDS ACCEPTING";
 
     writeHeader(ds, r_system, 3);
-    
+
     if (system.subversion != 0)
         throw SireError::program_bug( QObject::tr(
                 "It is a mistake to try and save a system that is in a "
                 "temporarily invalid state (i.e. has non-zero subversion number). "
                 "The subversion number for %1 is %2.")
                     .arg(system.toString()).arg(system.subversion), CODELOC );
-    
-    
+
+
     SharedDataStream sds(ds);
-    
+
     //first try to save all of the loaded LJ parameter types. This will
     //help ensure that the LJID of parameters don't change too much between
     //save and loads, which will help with memory consumption...
     SireMM::LJDBIOLock dblock = SireMM::LJParameterDB::saveParameters(sds);
-    
+
     sds << system.uid << system.sysname
-        << system.molgroups[0] << system.molgroups[1] 
+        << system.molgroups[0] << system.molgroups[1]
         << system.sysmonitors
         << system.cons
         << static_cast<const MolGroupsBase&>(system);
-        
+
     return ds;
 }
 
@@ -185,56 +185,56 @@ QDataStream &operator<<(QDataStream &ds, const System &system)
 QDataStream &operator>>(QDataStream &ds, System &system)
 {
     VersionID v = readHeader(ds, r_system);
-    
+
     if (v == 3)
     {
         SharedDataStream sds(ds);
-        
+
         SireMM::LJDBIOLock dblock = SireMM::LJParameterDB::loadParameters(sds);
-        
+
         sds >> system.uid >> system.sysname
-            >> system.molgroups[0] >> system.molgroups[1] 
+            >> system.molgroups[0] >> system.molgroups[1]
             >> system.sysmonitors
             >> system.cons
             >> static_cast<MolGroupsBase&>(system);
 
         system.rebuildIndex();
-            
+
         system.sysversion = systemRegistry().registerObject(system.uid);
         system.subversion = 0;
     }
     else if (v == 2)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> system.uid >> system.sysname
-            >> system.molgroups[0] >> system.molgroups[1] 
+            >> system.molgroups[0] >> system.molgroups[1]
             >> system.sysmonitors
             >> system.cons
             >> static_cast<MolGroupsBase&>(system);
 
         system.rebuildIndex();
-            
+
         system.sysversion = systemRegistry().registerObject(system.uid);
         system.subversion = 0;
     }
     else if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> system.uid >> system.sysname
-            >> system.molgroups[0] >> system.molgroups[1] 
+            >> system.molgroups[0] >> system.molgroups[1]
             >> system.sysmonitors
             >> static_cast<MolGroupsBase&>(system);
 
         system.rebuildIndex();
-            
+
         system.sysversion = systemRegistry().registerObject(system.uid);
         system.subversion = 0;
     }
     else
         throw version_error(v, "1,2", r_system, CODELOC);
-        
+
     return ds;
 }
 
@@ -297,14 +297,14 @@ System& System::operator=(const System &other)
         cons = other.cons;
         mgroups_by_num = other.mgroups_by_num;
         subversion = other.subversion;
-        
+
         MolGroupsBase::operator=(other);
     }
-    
+
     return *this;
 }
 
-/** Comparison operator - two systems are equal if they have the 
+/** Comparison operator - two systems are equal if they have the
     same UID and version */
 bool System::operator==(const System &other) const
 {
@@ -312,7 +312,7 @@ bool System::operator==(const System &other) const
            subversion == other.subversion;
 }
 
-/** Comparison operator - two systems are equal if they have the 
+/** Comparison operator - two systems are equal if they have the
     same UID and version */
 bool System::operator!=(const System &other) const
 {
@@ -327,14 +327,14 @@ ForceFields& System::_pvt_forceFields()
     return molgroups[0].edit().asA<ForceFields>();
 }
 
-/** Return a reference to all of the forcefields in this system */ 
+/** Return a reference to all of the forcefields in this system */
 const ForceFields& System::_pvt_forceFields() const
 {
     BOOST_ASSERT( molgroups[0]->isA<ForceFields>() );
     return molgroups[0]->asA<ForceFields>();
 }
 
-/** Return a reference to all of the forcefields in this system */ 
+/** Return a reference to all of the forcefields in this system */
 const ForceFields& System::_pvt_constForceFields() const
 {
     return this->_pvt_forceFields();
@@ -374,37 +374,37 @@ void System::_pvt_throwMissingGroup(MGNum mgnum) const
 
 /** Return the set of molecule groups that contains the molecule group
     with number 'mgnum'
-    
+
     \throw SireMol::missing_group
 */
 MolGroupsBase& System::_pvt_moleculeGroups(MGNum mgnum)
 {
     int idx = mgroups_by_num.value(mgnum, -1);
-    
+
     if (idx == -1)
         this->_pvt_throwMissingGroup(mgnum);
-        
+
     return molgroups[idx].edit();
 }
 
 /** Return the set of molecule groups that contains the molecule group
     with number 'mgnum'
-    
+
     \throw SireMol::missing_group
 */
 const MolGroupsBase& System::_pvt_moleculeGroups(MGNum mgnum) const
 {
     int idx = mgroups_by_num.value(mgnum, -1);
-    
+
     if (idx == -1)
         this->_pvt_throwMissingGroup(mgnum);
-        
+
     return molgroups[idx].read();
 }
 
 /** Return the set of molecule groups that contains the molecule group
     with number 'mgnum'
-    
+
     \throw SireMol::missing_group
 */
 const MolGroupsBase& System::_pvt_constMoleculeGroups(MGNum mgnum) const
@@ -419,10 +419,10 @@ const MolGroupsBase& System::_pvt_constMoleculeGroups(MGNum mgnum) const
 const MoleculeGroup& System::_pvt_moleculeGroup(MGNum mgnum) const
 {
     int idx = mgroups_by_num.value(mgnum, -1);
-    
+
     if (idx == -1)
         this->_pvt_throwMissingGroup(mgnum);
-        
+
     return molgroups[idx]->at(mgnum);
 }
 
@@ -437,7 +437,7 @@ void System::getGroups(const QList<MGNum> &mgnums,
                        QVarLengthArray<const MoleculeGroup*,10> &groups) const
 {
     groups.clear();
-    
+
     foreach (MGNum mgnum, mgnums)
     {
         groups.append( &(this->_pvt_moleculeGroup(mgnum)) );
@@ -448,22 +448,22 @@ void System::getGroups(const QList<MGNum> &mgnums,
 QHash<MGNum,const MoleculeGroup*> System::getGroups() const
 {
     QHash<MGNum,const MoleculeGroup*> groups;
-    
+
     QList<MGNum> mgnums0 = molgroups[0]->mgNums();
     QList<MGNum> mgnums1 = molgroups[1]->mgNums();
 
     groups.reserve(mgnums0.count() + mgnums1.count());
-    
+
     foreach (MGNum mgnum, mgnums0)
     {
         groups.insert( mgnum, &(molgroups[0]->at(mgnum)) );
     }
-    
+
     foreach (MGNum mgnum, mgnums1)
     {
         groups.insert( mgnum, &(molgroups[1]->at(mgnum)) );
     }
-    
+
     return groups;
 }
 
@@ -519,6 +519,21 @@ ViewsOfMol System::operator[](MolNum molnum) const
 ViewsOfMol System::operator[](const MolID &molid) const
 {
     return MolGroupsBase::operator[](molid);
+}
+
+ViewsOfMol System::operator[](int i) const
+{
+    return MolGroupsBase::operator[](i);
+}
+
+ViewsOfMol System::operator[](const QString &name) const
+{
+    return MolGroupsBase::operator[](name);
+}
+
+QList<MolViewPtr> System::atRange(int start, int end, int step) const
+{
+    return MolGroupsBase::atRange(start, end, step);
 }
 
 /** Convienient syntax for System::add */
@@ -670,9 +685,9 @@ const FF& System::forceField(const FFID &ffid) const
     return this->_pvt_forceFields().forceField(ffid);
 }
 
-/** Return the forcefield that contains the molecule group 
+/** Return the forcefield that contains the molecule group
     identified by the ID 'mgid'
-    
+
     \throw SireMol::missing_group
     \throw SireMol::duplicate_group
     \throw SireError::invalid_index
@@ -759,7 +774,7 @@ MolarEnergy System::energy()
 
 /** Return the total energy of the energy component in this system
     that is identified by the energy component 'component'
-    
+
     \throw SireFF::missing_component
 */
 MolarEnergy System::energy(const Symbol &component)
@@ -767,7 +782,7 @@ MolarEnergy System::energy(const Symbol &component)
     return this->_pvt_forceFields().energy(component);
 }
 
-/** Return the total energytable in this system  
+/** Return the total energytable in this system
  */
 void System::energy(EnergyTable &energytable, double scale_energy)
 {
@@ -784,7 +799,7 @@ void System::energy(EnergyTable &energytable, const Symbol &component,
 
 /** Return the energies of the energy components of this system whose
     symbols are in 'components'
-    
+
     \throw SireFF::missing_component
 */
 Values System::energies(const QSet<Symbol> &components)
@@ -814,7 +829,7 @@ bool System::hasEnergyComponent(const Symbol &component) const
 }
 
 /** Set the energy component 'symbol' equal to the expression 'expression' */
-void System::setEnergyComponent(const Symbol &symbol, 
+void System::setEnergyComponent(const Symbol &symbol,
                                 const Expression &expression)
 {
     if (this->hasComponent(symbol))
@@ -824,7 +839,7 @@ void System::setEnergyComponent(const Symbol &symbol,
     }
 
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         this->_pvt_forceFields().setEnergyComponent(symbol, expression);
@@ -849,8 +864,8 @@ Values System::energyComponents()
 {
     return this->_pvt_forceFields().energyComponents();
 }
-                        
-/** Return the energy expression for the energy component 'component' 
+
+/** Return the energy expression for the energy component 'component'
 
     \throw SireFF::missing_component
 */
@@ -861,7 +876,7 @@ Expression System::energyExpression(const Symbol &component) const
 
 /** Return the energy expressions for the energy components whose
     symbols are in 'symbols'
-    
+
     \throw SireFF::missing_component
 */
 QHash<Symbol,Expression> System::energyExpressions(const QSet<Symbol> &symbols) const
@@ -874,7 +889,7 @@ QHash<Symbol,Expression> System::energyExpressions() const
 {
     return this->_pvt_forceFields().energyExpressions();
 }
-                        
+
 /** Return the constant value for the constant component 'component'
 
     \throw SireFF::missing_component
@@ -892,7 +907,7 @@ Values System::constants() const
 
 /** Return the values of the constant components whose symbols
     are in 'components'
-    
+
     \throw SireFF::missing_component
 */
 Values System::constants(const QSet<Symbol> &components) const
@@ -902,7 +917,7 @@ Values System::constants(const QSet<Symbol> &components) const
 
 /** Return whether or not the system component 'component'
     is a constant component
-    
+
     \throw SireFF::missing_component
 */
 bool System::isConstantComponent(const Symbol &component) const
@@ -938,13 +953,13 @@ void System::setConstantComponent(const Symbol &symbol,
     if (this->hasConstantComponent(symbol))
     {
         Expression ex = this->constantExpression(symbol);
-        
+
         if (ex == expression)
             return;
     }
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         this->_pvt_forceFields().setConstantComponent(symbol, expression);
@@ -980,9 +995,9 @@ Values System::constantComponents() const
     return this->_pvt_forceFields().constantComponents();
 }
 
-/** Return the expression that defines the constant component with 
+/** Return the expression that defines the constant component with
     symbol 'symbol'
-    
+
     \throw SireFF::missing_component
 */
 Expression System::constantExpression(const Symbol &symbol) const
@@ -992,7 +1007,7 @@ Expression System::constantExpression(const Symbol &symbol) const
 
 /** Return the expressions that define the constant components
     whose symbols are in 'symbols'
-    
+
     \throw SireFF::missing_component
 */
 QHash<Symbol,Expression> System::constantExpressions(const QSet<Symbol> &symbols) const
@@ -1037,7 +1052,7 @@ Values System::componentValues()
 }
 
 /** Return the value of the energy or constant component
-    with symbol 'symbol' 
+    with symbol 'symbol'
 
     \throw SireFF::missing_component
 */
@@ -1048,7 +1063,7 @@ double System::componentValue(const Symbol &symbol)
 
 /** Retunr the value of the energy or constant component values
     whose symbols are in 'symbols'
-    
+
     \throw SireFF::missing_component
 */
 Values System::componentValues(const QSet<Symbol> &symbols)
@@ -1065,7 +1080,7 @@ bool System::hasComponent(const Symbol &symbol) const
 
 /** Return the expression that defines the component represented
     by the symbol 'symbol'
-    
+
     \throw SireFF::missing_component
 */
 Expression System::componentExpression(const Symbol &symbol) const
@@ -1075,7 +1090,7 @@ Expression System::componentExpression(const Symbol &symbol) const
 
 /** Return the expressions that define the components whose
     symbols are in 'symbols'
-    
+
     \throw SireFF::missing_component
 */
 QHash<Symbol,Expression> System::componentExpressions(const QSet<Symbol> &symbols) const
@@ -1091,7 +1106,7 @@ QHash<Symbol,Expression> System::componentExpressions() const
 }
 
 /** Add the forces acting on the molecules in the forcetable 'forcetable'
-    from this system onto this forcetable, scaled by the optionally 
+    from this system onto this forcetable, scaled by the optionally
     supplied 'scale_force' */
 void System::force(ForceTable &forcetable, double scale_force)
 {
@@ -1099,7 +1114,7 @@ void System::force(ForceTable &forcetable, double scale_force)
 }
 
 /** Add the forces acting on the molecules in the forcetable 'forcetable'
-    from the component of this system identified by 'component' onto 
+    from the component of this system identified by 'component' onto
     this forcetable, scaled by the optionally supplied 'scale_force' */
 void System::force(ForceTable &forcetable, const Symbol &component,
                    double scale_force)
@@ -1108,7 +1123,7 @@ void System::force(ForceTable &forcetable, const Symbol &component,
 }
 
 /** Add the fields acting on the molecules in the fieldtable 'fieldtable'
-    from this system onto this fieldtable, scaled by the optionally 
+    from this system onto this fieldtable, scaled by the optionally
     supplied 'scale_field' */
 void System::field(FieldTable &fieldtable, double scale_field)
 {
@@ -1116,7 +1131,7 @@ void System::field(FieldTable &fieldtable, double scale_field)
 }
 
 /** Add the fields acting on the molecules in the fieldtable 'fieldtable'
-    from the component of this system identified by 'component' onto 
+    from the component of this system identified by 'component' onto
     this fieldtable, scaled by the optionally supplied 'scale_field' */
 void System::field(FieldTable &fieldtable, const Symbol &component,
                    double scale_field)
@@ -1125,7 +1140,7 @@ void System::field(FieldTable &fieldtable, const Symbol &component,
 }
 
 /** Add the fields acting on the molecules in the fieldtable 'fieldtable'
-    from this system onto this fieldtable, scaled by the optionally 
+    from this system onto this fieldtable, scaled by the optionally
     supplied 'scale_field' */
 void System::field(FieldTable &fieldtable, const Probe &probe, double scale_field)
 {
@@ -1133,7 +1148,7 @@ void System::field(FieldTable &fieldtable, const Probe &probe, double scale_fiel
 }
 
 /** Add the fields acting on the molecules in the fieldtable 'fieldtable'
-    from the component of this system identified by 'component' onto 
+    from the component of this system identified by 'component' onto
     this fieldtable, scaled by the optionally supplied 'scale_field' */
 void System::field(FieldTable &fieldtable, const Symbol &component,
                    const Probe &probe, double scale_field)
@@ -1142,7 +1157,7 @@ void System::field(FieldTable &fieldtable, const Symbol &component,
 }
 
 /** Add the potentials acting on the molecules in the potential table 'pottable'
-    from this system onto this potential table, scaled by the optionally 
+    from this system onto this potential table, scaled by the optionally
     supplied 'scale_potential' */
 void System::potential(PotentialTable &pottable, double scale_potential)
 {
@@ -1150,7 +1165,7 @@ void System::potential(PotentialTable &pottable, double scale_potential)
 }
 
 /** Add the potentials acting on the molecules in the potential table 'pottable'
-    from the component of this system identified by 'component' onto 
+    from the component of this system identified by 'component' onto
     this potential table, scaled by the optionally supplied 'scale_potential' */
 void System::potential(PotentialTable &pottable, const Symbol &component,
                        double scale_potential)
@@ -1159,7 +1174,7 @@ void System::potential(PotentialTable &pottable, const Symbol &component,
 }
 
 /** Add the potentials acting on the molecules in the potential table 'pottable'
-    from this system onto this potential table, scaled by the optionally 
+    from this system onto this potential table, scaled by the optionally
     supplied 'scale_potential' */
 void System::potential(PotentialTable &pottable, const Probe &probe,
                        double scale_potential)
@@ -1168,18 +1183,18 @@ void System::potential(PotentialTable &pottable, const Probe &probe,
 }
 
 /** Add the potentials acting on the molecules in the potential table 'pottable'
-    from the component of this system identified by 'component' onto 
+    from the component of this system identified by 'component' onto
     this potential table, scaled by the optionally supplied 'scale_potential' */
 void System::potential(PotentialTable &pottable, const Symbol &component,
                        const Probe &probe, double scale_potential)
 {
-    this->_pvt_forceFields().potential(pottable, component, 
+    this->_pvt_forceFields().potential(pottable, component,
                                        probe, scale_potential);
 }
 
-/** Set the value of the property called 'name' to the value 'value' in 
+/** Set the value of the property called 'name' to the value 'value' in
     all forcefields that have this property
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
@@ -1193,7 +1208,7 @@ void System::setProperty(const QString &name, const Property &value)
 
 /** Set the value of the property called 'name' in the forcefields identified
     by the ID 'ffid' to the value 'value'
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
@@ -1204,10 +1219,10 @@ void System::setProperty(const FFID &ffid, const QString &name, const Property &
     sysversion.incrementMajor();
     this->applyConstraints();
 }
-    
+
 /** Remove the property with name 'name'. Note that this can only
     remove user-level properties - it cannot remove built-in properties
-    of the system. This does nothing if there is no user-level 
+    of the system. This does nothing if there is no user-level
     property with this name */
 void System::removeProperty(const QString &name)
 {
@@ -1216,14 +1231,14 @@ void System::removeProperty(const QString &name)
     this->applyConstraints();
 }
 
-/** Return whether or not the property 'name' exists and is a compound 
+/** Return whether or not the property 'name' exists and is a compound
     property (either a link or a combined property) */
 bool System::isCompoundProperty(const QString &name) const
 {
     return this->_pvt_forceFields().isCompoundProperty(name);
 }
 
-/** Return whether or not the property 'name' exists and is a user 
+/** Return whether or not the property 'name' exists and is a user
     supplied property (either a compound property or an extra
     System property) */
 bool System::isUserProperty(const QString &name) const
@@ -1242,7 +1257,7 @@ bool System::isBuiltinProperty(const QString &name) const
     the property representing the link, or the combined property,
     and raises an exception if a compound property with this name
     does not exist
-    
+
     \throw SireBase::missing_property
 */
 const Property& System::compoundProperty(const QString &name) const
@@ -1252,7 +1267,7 @@ const Property& System::compoundProperty(const QString &name) const
 
 /** Return the user-supplied property at 'name'. This raises an
     exception if there is no user-supplied property with this name
-    
+
     \throw SireBase::missing_property
 */
 const Property& System::userProperty(const QString &name) const
@@ -1263,7 +1278,7 @@ const Property& System::userProperty(const QString &name) const
 /** Return the built-in property at 'name'. This will by-pass any
     user-supplied property with this name, and will raise an
     exception if there is no built-in property with this name
-    
+
     \throw SireBase::missing_property
 */
 const Property& System::builtinProperty(const QString &name) const
@@ -1290,9 +1305,9 @@ bool System::constraintsSatisfied() const
     return cons.areSatisfied(*this);
 }
 
-/** Return the values of the property called 'name' in all of the 
+/** Return the values of the property called 'name' in all of the
     forcefields that contain this property
-    
+
     \throw SireBase::missing_property
     \throw SireBase::duplicate_property
 */
@@ -1308,9 +1323,9 @@ const Property& System::property(const PropertyName &name) const
     }
 }
 
-/** Return the value of the property 'name' in the forcefield identified 
+/** Return the value of the property 'name' in the forcefield identified
     by the ID 'ffid'
-    
+
     \throw SireBase::duplicate_property
     \throw SireFF::missing_forcefield
     \throw SireBase::missing_property
@@ -1330,7 +1345,7 @@ QStringList System::propertyKeys() const
     return this->_pvt_forceFields().propertyKeys();
 }
 
-/** Return the names of all of the properties of the forcefields in 
+/** Return the names of all of the properties of the forcefields in
     this system that match the ID 'ffid'
 
     \throw SireFF::missing_forcefield
@@ -1339,7 +1354,7 @@ QStringList System::propertyKeys() const
 QStringList System::propertyKeys(const FFID &ffid) const
 {
     return this->_pvt_forceFields().propertyKeys(ffid);
-}    
+}
 
 /** Return whether or not any of the forcefields contain a property called 'name' */
 bool System::containsProperty(const QString &name) const
@@ -1368,7 +1383,7 @@ bool System::containsProperty(const FFID &ffid, const PropertyName &name) const
 }
 
 /** Return the values of all of the properties of this system
-    
+
     \throw SireBase::duplicate_property
 */
 Properties System::properties() const
@@ -1378,7 +1393,7 @@ Properties System::properties() const
 
 /** Return the values of all of the properties of this system that
     are in the forcefields that match the ID 'ffid'
-    
+
     \throw SireBase::duplicate_property
     \throw SireFF::missing_forcefield
     \throw SireError::invalid_index
@@ -1386,8 +1401,8 @@ Properties System::properties() const
 Properties System::properties(const FFID &ffid) const
 {
     return this->_pvt_forceFields().properties(ffid);
-} 
-    
+}
+
 /** Return the values of all user-level properties of this
     system */
 Properties System::userProperties() const
@@ -1477,7 +1492,7 @@ bool System::isClean() const
 
 /** Add a system monitor 'monitor', identified by the name 'name', which
     will be updated every 'frequency' steps.
-    
+
     \throw SireSystem::duplicate_monitor
 */
 void System::add(const QString &name, const SystemMonitor &monitor, int frequency)
@@ -1486,7 +1501,7 @@ void System::add(const QString &name, const SystemMonitor &monitor, int frequenc
     sysversion.incrementMajor();
 }
 
-/** Add the monitors in 'monitors' to this system 
+/** Add the monitors in 'monitors' to this system
 
     \throw SireSystem::duplicate_monitor
 */
@@ -1496,9 +1511,9 @@ void System::add(const SystemMonitors &monitors)
     sysversion.incrementMajor();
 }
 
-/** Add the monitors in 'monitors', setting the frequency of the 
+/** Add the monitors in 'monitors', setting the frequency of the
     new monitors to 'frequency'
-    
+
     \throw SireSystem::duplicate_monitor
 */
 void System::add(const SystemMonitors &monitors, int frequency)
@@ -1517,7 +1532,7 @@ void System::setMonitors(const SystemMonitors &monitors)
     }
 }
 
-/** Set the monitors of the system to 'monitors', and reset the 
+/** Set the monitors of the system to 'monitors', and reset the
     frequency of all of the monitors so that they are triggered
     every 'frequency' steps */
 void System::setMonitors(const SystemMonitors &monitors, int frequency)
@@ -1530,8 +1545,8 @@ void System::setMonitors(const SystemMonitors &monitors, int frequency)
 /** Add the forcefield 'forcefield' to this system. This will raise
     an exception if this forcefield (or one with the same name)
     is already present in this set. Note that if the added
-    forcefield will be updated to contain the versions of 
-    any molecules that are already present in any of the 
+    forcefield will be updated to contain the versions of
+    any molecules that are already present in any of the
     other forcefields.
 
     \throw SireFF::duplicate_forcefield
@@ -1543,7 +1558,7 @@ void System::add(const FF &forcefield)
     ff.edit().update( this->matchToExistingVersion(forcefield.molecules()) );
 
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         this->_pvt_forceFields().add(ff.read());
@@ -1559,14 +1574,14 @@ void System::add(const FF &forcefield)
     }
 }
 
-/** Add the molecule group 'molgroup' to this system. If this is 
+/** Add the molecule group 'molgroup' to this system. If this is
     a molecule group that is part of a forcefield, then the entire
     forcefield will be added to this system. This will raise
-    an exception if this molecule group is already present in 
-    this system. Note that the added molecule group will be 
+    an exception if this molecule group is already present in
+    this system. Note that the added molecule group will be
     updated to contain the version of the any molecules that
     are already present in this system
-    
+
     \throw SireFF::duplicate_forcefield
     \throw SireMol::duplicate_group
 */
@@ -1586,13 +1601,13 @@ void System::add(const MoleculeGroup &molgroup)
         mgroup.edit().update( this->matchToExistingVersion(molgroup.molecules()) );
 
         SaveState old_state = SaveState::save(*this);
-        
+
         try
         {
             this->_pvt_moleculeGroups().add(mgroup);
             this->rebuildIndex();
             sysversion.incrementMajor();
-            
+
             this->applyAllConstraints();
         }
         catch(...)
@@ -1607,13 +1622,13 @@ void System::add(const MoleculeGroup &molgroup)
 void System::add(const Constraints &constraints)
 {
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         int nconstraints = cons.count();
-    
+
         cons.add(constraints);
-    
+
         if (cons.count() != nconstraints)
         {
             sysversion.incrementMajor();
@@ -1640,12 +1655,12 @@ void System::setConstraints(const Constraints &constraints)
         return;
 
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         cons = constraints;
         sysversion.incrementMajor();
-    
+
         this->applyAllConstraints();
     }
     catch(...)
@@ -1673,7 +1688,7 @@ void System::remove(const MonitorID &monid)
 void System::remove(const FFID &ffid)
 {
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         this->_pvt_forceFields().remove(ffid);
@@ -1690,7 +1705,7 @@ void System::remove(const FFID &ffid)
 
 /** Remove the forcefield 'ff'. Note that this removes the forcefield
     in this system that has the same name as 'ff'
-    
+
     \throw SireFF::missing_forcefield
 */
 void System::remove(const FF &ff)
@@ -1698,10 +1713,10 @@ void System::remove(const FF &ff)
     this->remove(ff.name());
 }
 
-/** Remove the molecule group(s) that match the ID 'mgid'. 
+/** Remove the molecule group(s) that match the ID 'mgid'.
     Note that you can't remove molecule groups that are part
     of a forcefield
-    
+
     \throw SireMol::missing_group
     \throw SireError::invalid_index
     \throw SireError::invalid_arg
@@ -1709,22 +1724,22 @@ void System::remove(const FF &ff)
 bool System::remove(const MGID &mgid)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         bool removed = false;
-    
+
         foreach (MGNum mgnum, mgnums)
         {
             if (mgroups_by_num.value(mgnum) == 0)
             {
                 const MoleculeGroup &molgroup = this->_pvt_moleculeGroup(mgnum);
                 BOOST_ASSERT( molgroup.isA<SireFF::detail::FFMolGroupPvt>() );
-            
+
                 const FF &ff = molgroup.asA<SireFF::detail::FFMolGroupPvt>().forceField();
-            
+
                 throw SireError::invalid_arg( QObject::tr(
                     "You cannot remove the molecule group with number %1 "
                     "(that matches the ID %2) as it is part of the forcefield "
@@ -1732,24 +1747,27 @@ bool System::remove(const MGID &mgid)
                         .arg(mgnum).arg(mgid.toString())
                         .arg(ff.name()), CODELOC );
             }
-            
+
             this->_pvt_moleculeGroups().remove(mgnum);
             this->removeFromIndex(mgnum);
             mgroups_by_num.remove(mgnum);
             removed = true;
         }
-        
-        sysversion.incrementMajor();
-        this->applyAllConstraints();
-        
-        return true;
+
+        if (removed)
+        {
+            sysversion.incrementMajor();
+            this->applyAllConstraints();
+
+            return true;
+        }
     }
     catch(...)
     {
         old_state.restore(*this);
         throw;
     }
-    
+
     return false;
 }
 
@@ -1771,11 +1789,11 @@ bool System::remove(const MoleculeGroup &molgroup)
 bool System::remove(const MolID &molid)
 {
     QList<MolNum> molnums = molid.map(*this);
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     bool mols_removed = false;
-    
+
     try
     {
         foreach (MolNum molnum, molnums)
@@ -1785,10 +1803,10 @@ bool System::remove(const MolID &molid)
                 molgroups[mgroups_by_num.value(mgnum)].edit().remove(molnum, mgnum);
                 mols_removed = true;
             }
-            
+
             this->removeFromIndex(molnum);
         }
-        
+
         sysversion.incrementMinor();
         this->applyAllConstraints();
     }
@@ -1797,7 +1815,7 @@ bool System::remove(const MolID &molid)
         old_state.restore(*this);
         throw;
     }
-    
+
     return mols_removed;
 }
 
@@ -1807,7 +1825,7 @@ void System::remove(const Constraints &constraints)
 {
     int nconstraints = cons.count();
     cons.remove(constraints);
-    
+
     if (cons.count() != nconstraints)
     {
         sysversion.incrementMajor();
@@ -1832,24 +1850,24 @@ bool System::removeAllMolecules()
 void System::removeAllMoleculeGroups()
 {
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         QList<MGNum> mgnums = this->_pvt_constMoleculeGroups().mgNums();
-    
+
         if (not mgnums.isEmpty())
         {
             this->_pvt_moleculeGroups().remove( IDOrSet<MGID>(mgnums) );
-        
+
             foreach (MGNum mgnum, mgnums)
             {
                 this->removeFromIndex(mgnum);
                 mgroups_by_num.remove(mgnum);
             }
         }
-        
+
         sysversion.incrementMajor();
-        
+
         this->applyAllConstraints();
     }
     catch(...)
@@ -1877,7 +1895,7 @@ void System::removeAllForceFields()
         return;
 
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         QList<MGNum> mgnums = this->_pvt_forceFields().mgNums();
@@ -1888,9 +1906,9 @@ void System::removeAllForceFields()
             this->removeFromIndex(mgnum);
             mgroups_by_num.remove(mgnum);
         }
-        
+
         sysversion.incrementMajor();
-        
+
         this->applyAllConstraints();
     }
     catch(...)
@@ -1907,7 +1925,7 @@ void System::removeAllConstraints()
         return;
 
     cons = Constraints();
-    
+
     sysversion.incrementMajor();
 }
 
@@ -1925,7 +1943,7 @@ const MoleculeGroup& System::at(MGNum mgnum) const
     is used to find the properties required by any forcefields
     that this molecule may be added to. The version of the molecule
     already present in this system is used, if such a molecule exists.
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -1936,12 +1954,12 @@ void System::add(const MoleculeView &molview, const MGID &mgid,
                  const PropertyMap &map)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     PartialMolecule view(molview);
     view.update( this->matchToExistingVersion(molview.data()) );
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
@@ -1950,12 +1968,12 @@ void System::add(const MoleculeView &molview, const MGID &mgid,
                 this->_pvt_forceFields().add(view, mgnum, map);
             else
                 this->_pvt_moleculeGroups().add(view, mgnum);
-                
+
             this->addToIndex(mgnum, view.data().number());
         }
-        
+
         sysversion.incrementMinor();
-        
+
         this->applyAllConstraints();
     }
     catch(...)
@@ -1970,7 +1988,7 @@ void System::add(const MoleculeView &molview, const MGID &mgid,
     is used to find the properties required by any forcefields
     that this molecule may be added to. The version of the molecule
     already present in this system is used, if such a molecule exists.
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -1981,12 +1999,12 @@ void System::add(const ViewsOfMol &molviews, const MGID &mgid,
                  const PropertyMap &map)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     ViewsOfMol views(molviews);
     views.update( this->matchToExistingVersion(molviews.data()) );
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
@@ -1995,10 +2013,10 @@ void System::add(const ViewsOfMol &molviews, const MGID &mgid,
                 this->_pvt_forceFields().add(views, mgnum, map);
             else
                 this->_pvt_moleculeGroups().add(views, mgnum);
-                
+
             this->addToIndex(mgnum, views.number());
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2015,7 +2033,7 @@ void System::add(const ViewsOfMol &molviews, const MGID &mgid,
     is used to find the properties required by any forcefields
     that this molecule may be added to. The version of the molecule
     already present in this system is used, if such a molecule exists.
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -2026,11 +2044,11 @@ void System::add(const Molecules &molecules, const MGID &mgid,
                  const PropertyMap &map)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     Molecules mols = this->matchToExistingVersion(molecules);
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
@@ -2039,10 +2057,10 @@ void System::add(const Molecules &molecules, const MGID &mgid,
                 this->_pvt_forceFields().add(mols, mgnum, map);
             else
                 this->_pvt_moleculeGroups().add(mols, mgnum);
-                
+
             this->addToIndex(mgnum, mols.molNums());
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2059,7 +2077,7 @@ void System::add(const Molecules &molecules, const MGID &mgid,
     is used to find the properties required by any forcefields
     that this molecule may be added to. The version of the molecule
     already present in this system is used, if such a molecule exists.
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -2070,12 +2088,12 @@ void System::add(const MoleculeGroup &molgroup, const MGID &mgid,
                  const PropertyMap &map)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     MolGroupPtr group(molgroup);
     group.edit().update( this->matchToExistingVersion(molgroup.molecules()) );
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
@@ -2084,10 +2102,10 @@ void System::add(const MoleculeGroup &molgroup, const MGID &mgid,
                 this->_pvt_forceFields().add(group, mgnum, map);
             else
                 this->_pvt_moleculeGroups().add(group, mgnum);
-                
+
             this->addToIndex(mgnum, molgroup.molNums().toList());
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2102,11 +2120,11 @@ void System::add(const MoleculeGroup &molgroup, const MGID &mgid,
 /** Add the view of the molecule in 'molview' to the groups
     identified by 'mgid'. This only adds the view to a group
     if it doesn't already exist in the group. The version
-    of the molecule already present in this set is used if 
+    of the molecule already present in this set is used if
     such a molecule already exists. The supplied property map
     is used to find the properties required by any forcefields
     that this molecule may be added to.
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -2117,12 +2135,12 @@ void System::addIfUnique(const MoleculeView &molview, const MGID &mgid,
                          const PropertyMap &map)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     PartialMolecule view(molview);
     view.update( this->matchToExistingVersion(molview.data()) );
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
@@ -2131,10 +2149,10 @@ void System::addIfUnique(const MoleculeView &molview, const MGID &mgid,
                 this->_pvt_forceFields().addIfUnique(view, mgnum, map);
             else
                 this->_pvt_moleculeGroups().addIfUnique(view, mgnum);
-                
+
             this->addToIndex(mgnum, view.data().number());
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2149,11 +2167,11 @@ void System::addIfUnique(const MoleculeView &molview, const MGID &mgid,
 /** Add the views of the molecule in 'molviews' to the groups
     identified by 'mgid'. This only adds the view to a group
     if it doesn't already exist in the group. The version
-    of the molecule already present in this set is used if 
+    of the molecule already present in this set is used if
     such a molecule already exists. The supplied property map
     is used to find the properties required by any forcefields
     that this molecule may be added to.
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -2164,12 +2182,12 @@ void System::addIfUnique(const ViewsOfMol &molviews, const MGID &mgid,
                          const PropertyMap &map)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     ViewsOfMol views(molviews);
     views.update( this->matchToExistingVersion(molviews.data()) );
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
@@ -2178,10 +2196,10 @@ void System::addIfUnique(const ViewsOfMol &molviews, const MGID &mgid,
                 this->_pvt_forceFields().addIfUnique(views, mgnum, map);
             else
                 this->_pvt_moleculeGroups().addIfUnique(views, mgnum);
-                
+
             this->addToIndex(mgnum, views.number());
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2196,11 +2214,11 @@ void System::addIfUnique(const ViewsOfMol &molviews, const MGID &mgid,
 /** Add the views of the molecules in 'molecules' to the groups
     identified by 'mgid'. This only adds the view to a group
     if it doesn't already exist in the group. The version
-    of the molecule already present in this set is used if 
+    of the molecule already present in this set is used if
     such a molecule already exists. The supplied property map
     is used to find the properties required by any forcefields
     that this molecule may be added to.
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -2211,11 +2229,11 @@ void System::addIfUnique(const Molecules &molecules, const MGID &mgid,
                          const PropertyMap &map)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     Molecules mols = this->matchToExistingVersion(molecules);
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
@@ -2224,10 +2242,10 @@ void System::addIfUnique(const Molecules &molecules, const MGID &mgid,
                 this->_pvt_forceFields().addIfUnique(mols, mgnum, map);
             else
                 this->_pvt_moleculeGroups().addIfUnique(mols, mgnum);
-                
+
             this->addToIndex(mgnum, mols.molNums());
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2242,11 +2260,11 @@ void System::addIfUnique(const Molecules &molecules, const MGID &mgid,
 /** Add the view of the molecules in the group 'molgroup' to the groups
     identified by 'mgid'. This only adds the view to a group
     if it doesn't already exist in the group. The version
-    of the molecule already present in this set is used if 
+    of the molecule already present in this set is used if
     such a molecule already exists. The supplied property map
     is used to find the properties required by any forcefields
     that this molecule may be added to.
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -2257,12 +2275,12 @@ void System::addIfUnique(const MoleculeGroup &molgroup, const MGID &mgid,
                          const PropertyMap &map)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     MolGroupPtr group(molgroup);
     group.edit().update( this->matchToExistingVersion(molgroup.molecules()) );
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
@@ -2271,10 +2289,10 @@ void System::addIfUnique(const MoleculeGroup &molgroup, const MGID &mgid,
                 this->_pvt_forceFields().addIfUnique(group, mgnum, map);
             else
                 this->_pvt_moleculeGroups().addIfUnique(group, mgnum);
-                
+
             this->addToIndex(mgnum, molgroup.molNums().toList());
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2287,8 +2305,8 @@ void System::addIfUnique(const MoleculeGroup &molgroup, const MGID &mgid,
 }
 
 /** Convenient overload of System::add that uses the default locations
-    to find any necessary properties. 
-    
+    to find any necessary properties.
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -2301,8 +2319,8 @@ void System::add(const MoleculeView &molview, const MGID &mgid)
 }
 
 /** Convenient overload of System::add that uses the default locations
-    to find any necessary properties. 
-    
+    to find any necessary properties.
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -2315,8 +2333,8 @@ void System::add(const ViewsOfMol &molviews, const MGID &mgid)
 }
 
 /** Convenient overload of System::add that uses the default locations
-    to find any necessary properties. 
-    
+    to find any necessary properties.
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -2329,8 +2347,8 @@ void System::add(const Molecules &molecules, const MGID &mgid)
 }
 
 /** Convenient overload of System::add that uses the default locations
-    to find any necessary properties. 
-    
+    to find any necessary properties.
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -2343,8 +2361,8 @@ void System::add(const MoleculeGroup &molgroup, const MGID &mgid)
 }
 
 /** Convenient overload of System::addIfUnique that uses the default locations
-    to find any necessary properties. 
-    
+    to find any necessary properties.
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -2357,8 +2375,8 @@ void System::addIfUnique(const MoleculeView &molview, const MGID &mgid)
 }
 
 /** Convenient overload of System::addIfUnique that uses the default locations
-    to find any necessary properties. 
-    
+    to find any necessary properties.
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -2371,8 +2389,8 @@ void System::addIfUnique(const ViewsOfMol &molviews, const MGID &mgid)
 }
 
 /** Convenient overload of System::addIfUnique that uses the default locations
-    to find any necessary properties. 
-    
+    to find any necessary properties.
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -2385,8 +2403,8 @@ void System::addIfUnique(const Molecules &molecules, const MGID &mgid)
 }
 
 /** Convenient overload of System::addIfUnique that uses the default locations
-    to find any necessary properties. 
-    
+    to find any necessary properties.
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
@@ -2406,7 +2424,7 @@ void System::addIfUnique(const MoleculeGroup &molgroup, const MGID &mgid)
 bool System::removeAll(const MGID &mgid)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     SaveState old_state = SaveState::save(*this);
 
     bool mols_removed = false;
@@ -2421,7 +2439,7 @@ bool System::removeAll(const MGID &mgid)
                 mols_removed = true;
             }
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2431,41 +2449,41 @@ bool System::removeAll(const MGID &mgid)
         old_state.restore(*this);
         throw;
     }
-    
+
     return mols_removed;
 }
 
 /** Remove the view 'molview' from the specified groups in this
     forcefield. Note that this only removes the specific view
-    (and indeed only the first copy of this view if there 
+    (and indeed only the first copy of this view if there
     are duplicates) - it does not remove the atoms in this
     view from all of the other views
-    
+
     \throw SireMol::missing_group
     \throw SireError::invalid_index
 */
 bool System::remove(const MoleculeView &molview, const MGID &mgid)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     bool mols_removed = false;
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
         {
             MolGroupsBase &molgroups = this->_pvt_moleculeGroups(mgnum);
-            
+
             bool mol_removed = molgroups.remove(molview, mgnum);
-            
+
             mols_removed = mols_removed or mol_removed;
-            
+
             if (not molgroups.at(mgnum).contains(molview.data().number()))
                 this->removeFromIndex(mgnum, molview.data().number());
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2475,40 +2493,40 @@ bool System::remove(const MoleculeView &molview, const MGID &mgid)
         old_state.restore(*this);
         throw;
     }
-    
+
     return mols_removed;
 }
 
 /** Remove the views in 'molviews' from the specified groups in this
     forcefield. Note that this only removes the specific views
-    (and indeed only the first copy of this view if there 
+    (and indeed only the first copy of this view if there
     are duplicates) - it does not remove the atoms in this
     view from all of the other views
-    
+
     \throw SireMol::missing_group
     \throw SireError::invalid_index
 */
 bool System::remove(const ViewsOfMol &molviews, const MGID &mgid)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     bool mols_removed = false;
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
         {
             MolGroupsBase &molgroups = this->_pvt_moleculeGroups(mgnum);
-            
+
             bool mol_removed = molgroups.remove(molviews, mgnum);
             mols_removed = mols_removed or mol_removed;
-            
+
             if (not molgroups.at(mgnum).contains(molviews.number()))
                 this->removeFromIndex(mgnum, molviews.number());
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2518,38 +2536,38 @@ bool System::remove(const ViewsOfMol &molviews, const MGID &mgid)
         old_state.restore(*this);
         throw;
     }
-    
+
     return mols_removed;
 }
 
 /** Remove them molecules in 'molecules' from the specified groups in this
     forcefield. Note that this only removes the specific views
-    (and indeed only the first copy of this view if there 
+    (and indeed only the first copy of this view if there
     are duplicates) - it does not remove the atoms in this
     view from all of the other views
-    
+
     \throw SireMol::missing_group
     \throw SireError::invalid_index
 */
 bool System::remove(const Molecules &molecules, const MGID &mgid)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     bool mols_removed = false;
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
         {
             MolGroupsBase &molgroups = this->_pvt_moleculeGroups(mgnum);
-            
+
             bool mol_removed = molgroups.remove(molecules, mgnum);
             mols_removed = mols_removed or mol_removed;
-            
+
             const MoleculeGroup &molgroup = molgroups.at(mgnum);
-            
+
             for (Molecules::const_iterator it = molecules.constBegin();
                  it != molecules.constEnd();
                  ++it)
@@ -2558,7 +2576,7 @@ bool System::remove(const Molecules &molecules, const MGID &mgid)
                     this->removeFromIndex(mgnum, it->number());
             }
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2568,16 +2586,16 @@ bool System::remove(const Molecules &molecules, const MGID &mgid)
         old_state.restore(*this);
         throw;
     }
-    
+
     return mols_removed;
 }
 
-/** Remove the views in the molecule group 'molgroup' from the specified 
+/** Remove the views in the molecule group 'molgroup' from the specified
     groups in this forcefield. Note that this only removes the specific views
-    (and indeed only the first copy of this view if there 
+    (and indeed only the first copy of this view if there
     are duplicates) - it does not remove the atoms in this
     view from all of the other views
-    
+
     \throw SireMol::missing_group
     \throw SireError::invalid_index
 */
@@ -2586,34 +2604,34 @@ bool System::remove(const MoleculeGroup &molgroup, const MGID &mgid)
     return this->remove(molgroup.molecules(), mgid);
 }
 
-/** Remove the all copies of the view in 'molview' from the specified 
+/** Remove the all copies of the view in 'molview' from the specified
     groups in this forcefield. Note that this only removes the specific views
     - it does not remove the atoms in this view from all of the other views
-    
+
     \throw SireMol::missing_group
     \throw SireError::invalid_index
 */
 bool System::removeAll(const MoleculeView &molview, const MGID &mgid)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     bool mols_removed = false;
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
         {
             MolGroupsBase &molgroups = this->_pvt_moleculeGroups(mgnum);
-            
+
             bool mol_removed = molgroups.removeAll(molview, mgnum);
             mols_removed = mols_removed or mol_removed;
-            
+
             if (not molgroups.at(mgnum).contains(molview.data().number()))
                 this->removeFromIndex(mgnum, molview.data().number());
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2623,38 +2641,38 @@ bool System::removeAll(const MoleculeView &molview, const MGID &mgid)
         old_state.restore(*this);
         throw;
     }
-    
+
     return mols_removed;
 }
 
-/** Remove the all copies of the views in 'molviews' from the specified 
+/** Remove the all copies of the views in 'molviews' from the specified
     groups in this forcefield. Note that this only removes the specific views
     - it does not remove the atoms in this view from all of the other views
-    
+
     \throw SireMol::missing_group
     \throw SireError::invalid_index
 */
 bool System::removeAll(const ViewsOfMol &molviews, const MGID &mgid)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     bool mols_removed = false;
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
         {
             MolGroupsBase &molgroups = this->_pvt_moleculeGroups(mgnum);
-            
+
             bool mol_removed = molgroups.removeAll(molviews, mgnum);
             mols_removed = mols_removed or mol_removed;
-            
+
             if (not molgroups.at(mgnum).contains(molviews.number()))
                 this->removeFromIndex(mgnum, molviews.number());
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2664,36 +2682,36 @@ bool System::removeAll(const ViewsOfMol &molviews, const MGID &mgid)
         old_state.restore(*this);
         throw;
     }
-    
+
     return mols_removed;
 }
 
-/** Remove the all copies of the molecules in 'molecules' from the specified 
+/** Remove the all copies of the molecules in 'molecules' from the specified
     groups in this forcefield. Note that this only removes the specific views
     - it does not remove the atoms in this view from all of the other views
-    
+
     \throw SireMol::missing_group
     \throw SireError::invalid_index
 */
 bool System::removeAll(const Molecules &molecules, const MGID &mgid)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     bool mols_removed = false;
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
         {
             MolGroupsBase &molgroups = this->_pvt_moleculeGroups(mgnum);
-            
+
             bool mol_removed = molgroups.removeAll(molecules, mgnum);
             mols_removed = mols_removed or mol_removed;
-            
+
             const MoleculeGroup &molgroup = molgroups.at(mgnum);
-            
+
             for (Molecules::const_iterator it = molecules.constBegin();
                  it != molecules.constEnd();
                  ++it)
@@ -2702,7 +2720,7 @@ bool System::removeAll(const Molecules &molecules, const MGID &mgid)
                     this->removeFromIndex(mgnum, it->number());
             }
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2712,15 +2730,15 @@ bool System::removeAll(const Molecules &molecules, const MGID &mgid)
         old_state.restore(*this);
         throw;
     }
-    
+
     return mols_removed;
 }
 
-/** Remove the all copies of the molecules in the molecule group 'molgroup' 
+/** Remove the all copies of the molecules in the molecule group 'molgroup'
     from the specified groups in this forcefield. Note that this only removes
-    the specific views - it does not remove the atoms in this view from all 
+    the specific views - it does not remove the atoms in this view from all
     of the other views
-    
+
     \throw SireMol::missing_group
     \throw SireError::invalid_index
 */
@@ -2731,18 +2749,18 @@ bool System::removeAll(const MoleculeGroup &molgroup, const MGID &mgid)
 
 /** Remove all views of the molecule with number 'molnum' from the molecule
     groups identified by 'mgid'
-    
+
     \throw SireMol::missing_group
     \throw SireError::invalid_index
 */
 bool System::remove(MolNum molnum, const MGID &mgid)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     bool mols_removed = false;
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
@@ -2753,7 +2771,7 @@ bool System::remove(MolNum molnum, const MGID &mgid)
                 mols_removed = true;
             }
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2763,24 +2781,24 @@ bool System::remove(MolNum molnum, const MGID &mgid)
         old_state.restore(*this);
         throw;
     }
-    
+
     return mols_removed;
 }
 
 /** Remove all of the molecules whose numbers are in 'molnums' from
     all of the molecule groups identified by the ID 'mgid'
-    
+
     \throw SireMol::missing_group
     \throw SireError::invalid_index
 */
 bool System::remove(const QSet<MolNum> &molnums, const MGID &mgid)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     bool mols_removed = false;
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
@@ -2791,7 +2809,7 @@ bool System::remove(const QSet<MolNum> &molnums, const MGID &mgid)
                 mols_removed = true;
             }
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -2801,13 +2819,13 @@ bool System::remove(const QSet<MolNum> &molnums, const MGID &mgid)
         old_state.restore(*this);
         throw;
     }
-    
+
     return mols_removed;
 }
 
 /** Update this system so that it uses the version of the molecule
     available in 'moldata'
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
@@ -2815,13 +2833,13 @@ bool System::remove(const QSet<MolNum> &molnums, const MGID &mgid)
 void System::update(const MoleculeData &moldata, bool auto_commit)
 {
     Delta delta(*this, auto_commit);
-    
+
     //this ensures that only a single copy of System is used - prevents
     //unnecessary copying
     this->operator=( System() );
     delta.update(moldata);
     this->operator=( delta.apply() );
-    
+
     if (auto_commit and this->needsAccepting())
     {
         delta = Delta();
@@ -2831,7 +2849,7 @@ void System::update(const MoleculeData &moldata, bool auto_commit)
 
 /** Update this system so that it uses the same version of the molecules
     present in 'molecules'
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
@@ -2839,13 +2857,13 @@ void System::update(const MoleculeData &moldata, bool auto_commit)
 void System::update(const Molecules &molecules, bool auto_commit)
 {
     Delta delta(*this, auto_commit);
-    
+
     //this ensures that only a single copy of System is used - prevents
     //unnecessary copying
     this->operator=( System() );
     delta.update(molecules);
     this->operator=( delta.apply() );
-    
+
     if (auto_commit and this->needsAccepting())
     {
         delta = Delta();
@@ -2855,7 +2873,7 @@ void System::update(const Molecules &molecules, bool auto_commit)
 
 /** Update this system so that it uses the same version of the molecules
     present in the molecule group 'molgroup'
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
@@ -2867,27 +2885,27 @@ void System::update(const MoleculeGroup &molgroup, bool auto_commit)
 
 /** Set the contents of the molecule group(s) identified by the ID 'mgid'
     so that they contain just the view of the molecule in 'molview'.
-    The version of the molecule already present in this set is used if 
+    The version of the molecule already present in this set is used if
     such a molecule already exists. The supplied property map
     is used to find the properties required by any forcefields
     that this molecule may be added to.
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
-*/    
+*/
 void System::setContents(const MGID &mgid, const MoleculeView &molview,
                          const PropertyMap &map)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     PartialMolecule view(molview);
     view.update( this->matchToExistingVersion(molview.data()) );
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
@@ -2900,7 +2918,7 @@ void System::setContents(const MGID &mgid, const MoleculeView &molview,
             this->clearIndex(mgnum);
             this->addToIndex(mgnum, view.data().number());
         }
-        
+
         sysversion.incrementMinor();
         this->applyAllConstraints();
     }
@@ -2913,27 +2931,27 @@ void System::setContents(const MGID &mgid, const MoleculeView &molview,
 
 /** Set the contents of the molecule group(s) identified by the ID 'mgid'
     so that they contain just the views of the molecule in 'molviews'.
-    The version of the molecule already present in this set is used if 
+    The version of the molecule already present in this set is used if
     such a molecule already exists. The supplied property map
     is used to find the properties required by any forcefields
     that this molecule may be added to.
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
-*/    
+*/
 void System::setContents(const MGID &mgid, const ViewsOfMol &molviews,
                          const PropertyMap &map)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     ViewsOfMol views(molviews);
     views.update( this->matchToExistingVersion(molviews.data()) );
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
@@ -2946,9 +2964,9 @@ void System::setContents(const MGID &mgid, const ViewsOfMol &molviews,
             this->clearIndex(mgnum);
             this->addToIndex(mgnum, views.number());
         }
-        
+
         sysversion.incrementMinor();
-        
+
         this->applyAllConstraints();
     }
     catch(...)
@@ -2960,26 +2978,26 @@ void System::setContents(const MGID &mgid, const ViewsOfMol &molviews,
 
 /** Set the contents of the molecule group(s) identified by the ID 'mgid'
     so that they contain just the views of the molecules in 'molecules'.
-    The version of the molecule already present in this set is used if 
+    The version of the molecule already present in this set is used if
     such a molecule already exists. The supplied property map
     is used to find the properties required by any forcefields
     that this molecule may be added to.
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
-*/    
+*/
 void System::setContents(const MGID &mgid, const Molecules &molecules,
                          const PropertyMap &map)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     Molecules mols = this->matchToExistingVersion(molecules);
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
@@ -2992,7 +3010,7 @@ void System::setContents(const MGID &mgid, const Molecules &molecules,
             this->clearIndex(mgnum);
             this->addToIndex(mgnum, mols.molNums());
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -3006,27 +3024,27 @@ void System::setContents(const MGID &mgid, const Molecules &molecules,
 
 /** Set the contents of the molecule group(s) identified by the ID 'mgid'
     so that they contain just the molecules in the group 'molgroup'.
-    The version of the molecule already present in this set is used if 
+    The version of the molecule already present in this set is used if
     such a molecule already exists. The supplied property map
     is used to find the properties required by any forcefields
     that this molecule may be added to.
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
-*/    
+*/
 void System::setContents(const MGID &mgid, const MoleculeGroup &molgroup,
-                         const PropertyMap &map)                         
+                         const PropertyMap &map)
 {
     QList<MGNum> mgnums = mgid.map(*this);
-    
+
     MolGroupPtr group(molgroup);
     group.edit().update( this->matchToExistingVersion(molgroup.molecules()) );
-    
+
     SaveState old_state = SaveState::save(*this);
-    
+
     try
     {
         foreach (MGNum mgnum, mgnums)
@@ -3039,7 +3057,7 @@ void System::setContents(const MGID &mgid, const MoleculeGroup &molgroup,
             this->clearIndex(mgnum);
             this->addToIndex(mgnum, group->molNums().toList());
         }
-        
+
         sysversion.incrementMinor();
 
         this->applyAllConstraints();
@@ -3053,13 +3071,13 @@ void System::setContents(const MGID &mgid, const MoleculeGroup &molgroup,
 
 /** Convenient overload of System::setContents that uses the default
     property locations to find the properties required by the forcefields
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
-*/    
+*/
 void System::setContents(const MGID &mgid, const MoleculeView &molview)
 {
     this->setContents(mgid, molview, PropertyMap());
@@ -3067,13 +3085,13 @@ void System::setContents(const MGID &mgid, const MoleculeView &molview)
 
 /** Convenient overload of System::setContents that uses the default
     property locations to find the properties required by the forcefields
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
-*/    
+*/
 void System::setContents(const MGID &mgid, const ViewsOfMol &molviews)
 {
     this->setContents(mgid, molviews, PropertyMap());
@@ -3081,13 +3099,13 @@ void System::setContents(const MGID &mgid, const ViewsOfMol &molviews)
 
 /** Convenient overload of System::setContents that uses the default
     property locations to find the properties required by the forcefields
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
-*/    
+*/
 void System::setContents(const MGID &mgid, const Molecules &molecules)
 {
     this->setContents(mgid, molecules, PropertyMap());
@@ -3095,13 +3113,13 @@ void System::setContents(const MGID &mgid, const Molecules &molecules)
 
 /** Convenient overload of System::setContents that uses the default
     property locations to find the properties required by the forcefields
-    
+
     \throw SireMol::missing_group
     \throw SireBase::missing_property
     \throw SireError::invalid_index
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
-*/    
+*/
 void System::setContents(const MGID &mgid, const MoleculeGroup &molgroup)
 {
     this->setContents(mgid, molgroup, PropertyMap());
@@ -3134,7 +3152,7 @@ bool System::deltaUpdate(const QString &property, const QList<FFIdx> &ffidxs,
 {
     if (ffidxs.isEmpty())
         return false;
-    
+
     else if (ffidxs.count() == 1)
     {
         this->_pvt_forceFields().setProperty(ffidxs.at(0), property, value);
@@ -3144,7 +3162,7 @@ bool System::deltaUpdate(const QString &property, const QList<FFIdx> &ffidxs,
     else
     {
         SaveState old_state = SaveState::save(*this);
-        
+
         try
         {
             foreach (const FFIdx &ffidx, ffidxs)
@@ -3159,7 +3177,7 @@ bool System::deltaUpdate(const QString &property, const QList<FFIdx> &ffidxs,
             old_state.restore(*this);
             throw;
         }
-        
+
         return true;
     }
 }
@@ -3173,12 +3191,12 @@ bool System::deltaUpdate(const MoleculeData &moldata, bool auto_commit)
     {
         if (in_molgroup)
             this->_pvt_moleculeGroups().update(moldata, auto_commit);
-            
+
         if (in_ffields)
             this->_pvt_forceFields().update(moldata, auto_commit);
 
         ++subversion;
-        
+
         return true;
     }
     else
@@ -3193,15 +3211,15 @@ QList<MolNum> System::deltaUpdate(const Molecules &molecules, bool auto_commit)
     else if (molecules.count() == 1)
     {
         QList<MolNum> molnums;
-    
+
         if (this->deltaUpdate( molecules.constBegin()->data(), auto_commit ))
             molnums.append( molecules.constBegin()->data().number() );
-            
+
         return molnums;
     }
-    
+
     QList<MolNum> changed_mols;
-    
+
     for (Molecules::const_iterator it = molecules.constBegin();
          it != molecules.constEnd();
          ++it)
@@ -3212,30 +3230,30 @@ QList<MolNum> System::deltaUpdate(const Molecules &molecules, bool auto_commit)
             changed_mols.append(it.key());
         }
     }
-    
+
     if (changed_mols.isEmpty())
         return changed_mols;
-    
+
     bool in_molgroup = this->_pvt_constMoleculeGroups().contains(changed_mols);
     bool in_ffields = this->_pvt_constForceFields().contains(changed_mols);
-    
+
     if (in_molgroup or in_ffields)
     {
         if (in_ffields)
             this->_pvt_forceFields().update(molecules, auto_commit);
-        
+
         if (in_molgroup)
             this->_pvt_moleculeGroups().update(molecules, auto_commit);
 
         ++subversion;
-        
+
         return changed_mols;
     }
     else
         return QList<MolNum>();
 }
 
-void System::commitDelta(const Constraints &constraints, 
+void System::commitDelta(const Constraints &constraints,
                          bool is_minor_change,
                          bool is_major_change)
 {
@@ -3244,14 +3262,14 @@ void System::commitDelta(const Constraints &constraints,
     try
     {
         cons = constraints;
-    
+
         if (is_major_change)
             sysversion.incrementMajor();
         else if (is_minor_change)
             sysversion.incrementMinor();
-        
+
         subversion = 0;
-        
+
         cons.committed(*this);
     }
     catch(...)
