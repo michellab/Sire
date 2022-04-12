@@ -531,9 +531,9 @@ ViewsOfMol System::operator[](const QString &name) const
     return MolGroupsBase::operator[](name);
 }
 
-QList<MolViewPtr> System::atRange(int start, int end, int step) const
+QList<MolViewPtr> System::operator[](const SireBase::Slice &slice) const
 {
-    return MolGroupsBase::atRange(start, end, step);
+    return MolGroupsBase::operator[](slice);
 }
 
 /** Convienient syntax for System::add */

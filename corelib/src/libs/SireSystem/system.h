@@ -137,6 +137,7 @@ public:
 
     ViewsOfMol operator[](int i) const;
     ViewsOfMol operator[](const QString &name) const;
+    QList<SireMol::MolViewPtr> operator[](const SireBase::Slice &slice) const;
 
     ViewsOfMol operator[](MolNum molnum) const;
     ViewsOfMol operator[](const MolID &molid) const;
@@ -170,11 +171,6 @@ public:
 
     const FF& at(const FFID &ffid) const;
     const SystemMonitor& at(const MonitorID &monid) const;
-
-    QList<SireMol::MolViewPtr> atRange(
-                              int start=0,
-                              int end=std::numeric_limits<int>::max(),
-                              int step=1) const;
 
     const FF& forceField(const FFID &ffid) const;
     const FF& forceField(const MGID &mgid) const;
