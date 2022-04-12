@@ -112,6 +112,8 @@ void register_SireMol_containers()
     register_list< QList<CGIdentifier> >();
     register_list< QList<AtomIdentifier> >();
 
+    register_list< QList<MolViewPtr> >();
+
     register_list< QList<PerturbationPtr> >();
     register_list< QList<GeomPertPtr> >();
 

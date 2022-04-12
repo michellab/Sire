@@ -25,6 +25,35 @@ __all__ = [ "try_import", "try_import_from" ]
 _module_to_package = {}
 
 
+def _add_range_indexer(C):
+    if not hasattr(C, "atRange"):
+        return
+
+    if not hasattr(C, "_orig__getitem__"):
+        C._orig__getitem__ = C.__getitem__
+
+    def __getitem__(obj, i):
+        if type(i) is slice:
+            start = 0
+
+            if i.start is not None:
+                start = i.start
+
+            step = 1
+
+            if i.step is not None:
+                step = i.step
+
+            if i.stop is not None:
+                return obj.atRange(start, i.stop, step)
+            else:
+                return obj.atRange(start=start, step=step)
+        else:
+            return obj._orig__getitem__(i)
+
+    C.__getitem__ = __getitem__
+
+
 def _install_package(name, package_registry):
     """Internal function used to install the module
        called 'name', using the passed 'package_registry'

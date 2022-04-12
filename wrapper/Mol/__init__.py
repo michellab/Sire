@@ -152,6 +152,13 @@ def __set_metadata__(molview, *args):
                               "or molview.setMetadata(key, metakey, property) are valid!" )
 
 
+Sire._add_range_indexer(Atom)
+Sire._add_range_indexer(CutGroup)
+Sire._add_range_indexer(Residue)
+Sire._add_range_indexer(Chain)
+Sire._add_range_indexer(Segment)
+Sire._add_range_indexer(Molecule)
+
 Atom.property = __get_property__
 AtomEditorBase.setProperty = __set_property__
 Atom.metadata = __get_metadata__
