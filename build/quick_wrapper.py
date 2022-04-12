@@ -15,9 +15,10 @@ import glob
 import os
 import shutil
 
-inits = glob.glob("../wrapper/*/__init__.py")
+inits = glob.glob("../wrapper/*/_*.py")
 
-inits.append("../wrapper/__init__.py")
+inits = inits + glob.glob("../wrapper/_*.py")
+
 path = os.path.dirname(Sire.__file__)
 
 for init in inits:
