@@ -21,8 +21,9 @@ include(CMakeAutogenFile.txt)
 # Define the sources in SireBase
 set ( WRAPBASE_SOURCES
 
+      autoconvert_Slice.cpp
       _Base.main.cpp
-     
+
       ${PYPP_SOURCES}
 
     )
@@ -30,7 +31,7 @@ set ( WRAPBASE_SOURCES
 # Create the library that holds all of the class wrappers
 add_library (Base ${WRAPBASE_SOURCES})
 
-set_target_properties (Base  
+set_target_properties (Base
                        PROPERTIES
                          VERSION ${SIRE_VERSION}
                          SOVERSION ${SIRE_VERSION_MAJOR}
@@ -38,7 +39,7 @@ set_target_properties (Base
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
+
 target_link_libraries (Base
                        SirePython
                        SIRE_SireBase
@@ -59,6 +60,6 @@ install( TARGETS Base
         )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )
 

@@ -64,6 +64,7 @@ set ( SIREBASE_HEADERS
       shareddatapointer.hpp
       sharedpolypointer.hpp
       sharedpolypointer_cast.hpp
+      slice.h
       sparsematrix.hpp
       stringmangler.h
       stringproperty.h
@@ -109,11 +110,12 @@ set ( SIREBASE_SOURCES
       refcountdata.cpp
       savestate.cpp
       sharedpolypointer.cpp
-      stringmangler.cpp 
-      stringproperty.cpp    
+      slice.cpp
+      stringmangler.cpp
+      stringproperty.cpp
       tempdir.cpp
       timeproperty.cpp
-      trigarray2d.cpp 
+      trigarray2d.cpp
       unittest.cpp
       variantproperty.cpp
 
@@ -149,5 +151,5 @@ install( TARGETS SireBase EXPORT SireLibraries
          ARCHIVE DESTINATION ${SIRE_ARCHIVES}
        )
 
-install( FILES ${SIREBASE_HEADERS} 
+install( FILES ${SIREBASE_HEADERS}
          DESTINATION ${SIRE_INCLUDES}/SireBase )

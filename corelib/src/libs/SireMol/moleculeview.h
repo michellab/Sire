@@ -47,6 +47,11 @@ class MoleculeView;
 SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MoleculeView&);
 SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MoleculeView&);
 
+namespace SireBase
+{
+class Slice;
+}
+
 namespace SireMol
 {
 
@@ -134,6 +139,7 @@ public:
     virtual MolViewPtr operator[](const ChainID &chainid) const;
     virtual MolViewPtr operator[](const SegID &segid) const;
     virtual MolViewPtr operator[](const SireID::Index &idx) const;
+    virtual MolViewPtr operator[](const SireBase::Slice &slice) const;
 
     MolViewPtr at(int i) const;
     MolViewPtr at(const AtomID &atomid) const;
@@ -143,13 +149,12 @@ public:
     MolViewPtr at(const SegID &segid) const;
     MolViewPtr at(const SireID::Index &idx) const;
 
-    QList<MolViewPtr> atRange(int start=0,
-                              int end=std::numeric_limits<int>::max(),
-                              int step=1) const;
-
     Atom atom(int i, const PropertyMap &map = PropertyMap()) const;
     Atom atom(const QString &name, const PropertyMap &map = PropertyMap()) const;
     Atom atom(const AtomID &atomid, const PropertyMap &map = PropertyMap()) const;
+
+    Selector<Atom> atoms(const SireBase::Slice &slice,
+                         const PropertyMap &map = PropertyMap()) const;
 
     Selector<Atom> atoms(const AtomID &atomid,
                          const PropertyMap &map = PropertyMap()) const;
@@ -161,6 +166,9 @@ public:
     CutGroup cutGroup(const QString &name, const PropertyMap &map = PropertyMap()) const;
     CutGroup cutGroup(const CGID &cgid, const PropertyMap &map = PropertyMap()) const;
 
+    Selector<CutGroup> cutGroups(const SireBase::Slice &slice,
+                                 const PropertyMap &map = PropertyMap()) const;
+
     Selector<CutGroup> cutGroups(const CGID &cgid,
                                  const PropertyMap &map = PropertyMap()) const;
 
@@ -171,11 +179,17 @@ public:
     Residue residue(const QString &name, const PropertyMap &map = PropertyMap()) const;
     Residue residue(const ResID &resid, const PropertyMap &map = PropertyMap()) const;
 
+    Selector<Residue> residues(const SireBase::Slice &slice,
+                               const PropertyMap &map = PropertyMap()) const;
+
     Selector<Residue> residues(const ResID &resid,
                                const PropertyMap &map = PropertyMap()) const;
 
     Residue residue() const;
     Selector<Residue> residues() const;
+
+    Selector<Chain> chains(const SireBase::Slice &slice,
+                           const PropertyMap &map = PropertyMap()) const;
 
     Chain chain(int i, const PropertyMap &map = PropertyMap()) const;
     Chain chain(const QString &name, const PropertyMap &map = PropertyMap()) const;
@@ -186,6 +200,9 @@ public:
 
     Chain chain() const;
     Selector<Chain> chains() const;
+
+    Selector<Segment> segments(const SireBase::Slice &slice,
+                               const PropertyMap &map = PropertyMap()) const;
 
     Segment segment(int i, const PropertyMap &map = PropertyMap()) const;
     Segment segment(const QString &name, const PropertyMap &map = PropertyMap()) const;

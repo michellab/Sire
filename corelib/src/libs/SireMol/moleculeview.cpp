@@ -37,6 +37,8 @@
 #include "molecule.h"
 #include "select.h"
 
+#include "SireBase/slice.h"
+
 #include "SireBase/errors.h"
 #include "SireError/errors.h"
 #include "SireMol/errors.h"
@@ -320,6 +322,32 @@ Atom MoleculeView::atom(const AtomID &atomid, const PropertyMap &map) const
     return atomid.selectFrom(*this, map);
 }
 
+Selector<Atom> MoleculeView::atoms(const Slice &slice,
+                                   const PropertyMap &map) const
+{
+    const auto s = this->selection();
+    QList<AtomIdx> idxs;
+
+    if (s.selectedAllAtoms())
+    {
+        for (auto it = slice.begin(s.nAtoms()); not it.atEnd(); it.next())
+        {
+            idxs.append(AtomIdx(it.value()));
+        }
+    }
+    else
+    {
+        auto atomidxs = s.selectedAtoms();
+
+        for (auto it = slice.begin(atomidxs.count()); not it.atEnd(); it.next())
+        {
+            idxs.append(atomidxs.at(it.value()));
+        }
+    }
+
+    return Selector<Atom>(this->data(), idxs);
+}
+
 /** Return the atoms from this view that match the ID 'atomid'
 
     \throw SireMol::missing_atom
@@ -401,6 +429,33 @@ CutGroup MoleculeView::cutGroup(const QString &name, const PropertyMap &map) con
 CutGroup MoleculeView::cutGroup(const CGID &cgid, const PropertyMap &map) const
 {
     return cgid.selectFrom(*this, map);
+}
+
+Selector<CutGroup> MoleculeView::cutGroups(const Slice &slice,
+                                           const PropertyMap &map) const
+{
+    const auto s = this->selection();
+    QList<CGIdx> idxs;
+
+    if (s.selectedAllCutGroups())
+    {
+
+        for (auto it = slice.begin(s.nCutGroups()); not it.atEnd(); it.next())
+        {
+            idxs.append(CGIdx(it.value()));
+        }
+    }
+    else
+    {
+        auto cgidxs = s.selectedCutGroups();
+
+        for (auto it = slice.begin(cgidxs.count()); not it.atEnd(); it.next())
+        {
+            idxs.append(cgidxs.at(it.value()));
+        }
+    }
+
+    return Selector<CutGroup>(*this, idxs);
 }
 
 /** Return the CutGroups whose atoms are in this view that match
@@ -485,6 +540,33 @@ Residue MoleculeView::residue(const ResID &resid, const PropertyMap &map) const
     return resid.selectFrom(*this, map);
 }
 
+Selector<Residue> MoleculeView::residues(const Slice &slice,
+                                         const PropertyMap &map) const
+{
+    const auto s = this->selection();
+    QList<ResIdx> idxs;
+
+    if (s.selectedAllResidues())
+    {
+
+        for (auto it = slice.begin(s.nResidues()); not it.atEnd(); it.next())
+        {
+            idxs.append(ResIdx(it.value()));
+        }
+    }
+    else
+    {
+        auto residxs = s.selectedResidues();
+
+        for (auto it = slice.begin(residxs.count()); not it.atEnd(); it.next())
+        {
+            idxs.append(residxs.at(it.value()));
+        }
+    }
+
+    return Selector<Residue>(*this, idxs);
+}
+
 /** Return the residues from this view that match the ID 'resid'
 
     \throw SireMol::missing_residue
@@ -565,6 +647,33 @@ Chain MoleculeView::chain(const QString &name, const PropertyMap &map) const
 Chain MoleculeView::chain(const ChainID &chainid, const PropertyMap &map) const
 {
     return chainid.selectFrom(*this, map);
+}
+
+Selector<Chain> MoleculeView::chains(const Slice &slice,
+                                     const PropertyMap &map) const
+{
+    const auto s = this->selection();
+    QList<ChainIdx> idxs;
+
+    if (s.selectedAllChains())
+    {
+
+        for (auto it = slice.begin(s.nChains()); not it.atEnd(); it.next())
+        {
+            idxs.append(ChainIdx(it.value()));
+        }
+    }
+    else
+    {
+        auto cidxs = s.selectedChains();
+
+        for (auto it = slice.begin(cidxs.count()); not it.atEnd(); it.next())
+        {
+            idxs.append(cidxs.at(it.value()));
+        }
+    }
+
+    return Selector<Chain>(*this, idxs);
 }
 
 /** Return the chains that are involved with this view that match
@@ -649,6 +758,33 @@ Segment MoleculeView::segment(const QString &name, const PropertyMap &map) const
 Segment MoleculeView::segment(const SegID &segid, const PropertyMap &map) const
 {
     return segid.selectFrom(*this, map);
+}
+
+Selector<Segment> MoleculeView::segments(const Slice &slice,
+                                         const PropertyMap &map) const
+{
+    const auto s = this->selection();
+    QList<SegIdx> idxs;
+
+    if (s.selectedAllSegments())
+    {
+
+        for (auto it = slice.begin(s.nSegments()); not it.atEnd(); it.next())
+        {
+            idxs.append(SegIdx(it.value()));
+        }
+    }
+    else
+    {
+        auto segidxs = s.selectedSegments();
+
+        for (auto it = slice.begin(segidxs.count()); not it.atEnd(); it.next())
+        {
+            idxs.append(segidxs.at(it.value()));
+        }
+    }
+
+    return Selector<Segment>(*this, idxs);
 }
 
 /** Return the segments that are involved with this view that match
@@ -1009,80 +1145,9 @@ MolViewPtr MoleculeView::operator[](const SireID::Index &idx) const
     return this->operator[](idx.value());
 }
 
-QList<MolViewPtr> MoleculeView::atRange(int start, int end, int step) const
+MolViewPtr MoleculeView::operator[](const Slice &slice) const
 {
-    QList<MolViewPtr> views;
-
-    auto s = this->selection();
-
-    if (s.selectedAllAtoms())
-    {
-        int natoms = this->d.read().info().nAtoms();
-
-        if (end == std::numeric_limits<int>::max())
-        {
-            end = natoms;
-        }
-
-        start = Index(start).map(natoms);
-        end = Index(end-1).map(natoms);
-
-        if (end >= start)
-        {
-            if (step <= 0)
-                return views;
-
-            for (int i=start; i<=end; i+=step)
-            {
-                views.append(this->at(AtomIdx(i)));
-            }
-        }
-        else
-        {
-            if (step >= 0)
-                return views;
-
-            for (int i=end; i>=start; i+=step)
-            {
-                views.append(this->at(AtomIdx(i)));
-            }
-        }
-    }
-    else
-    {
-        const auto atomidxs = s.selectedAtoms();
-
-        if (end == std::numeric_limits<int>::max())
-        {
-            end = atomidxs.count();
-        }
-
-        start = Index(start).map(atomidxs.count());
-        end = Index(end-1).map(atomidxs.count());
-
-        if (end >= start)
-        {
-            if (step <= 0)
-                return views;
-
-            for (int i=start; i<=end; i+=step)
-            {
-                views.append(this->at(atomidxs[i]));
-            }
-        }
-        else
-        {
-            if (step >= 0)
-                return views;
-
-            for (int i=end; i>=start; i+=step)
-            {
-                views.append(this->at(atomidxs[i]));
-            }
-        }
-    }
-
-    return views;
+    return this->atoms(slice);
 }
 
 MolViewPtr MoleculeView::at(int i) const

@@ -15,7 +15,7 @@ implicitly_convertible = [ ("QString", "SireBase::PropertyName"),
                            ("SireBase::IntegerArrayProperty", "SireBase::StringArrayProperty"),
                            ("SireBase::IntegerArrayProperty", "SireBase::DoubleArrayProperty"),
                            ("SireBase::IntegerArrayProperty", "SireBase::PropertyList"),
-                           ("SireBase::StringArrayProperty", "SireBase::PropertyList") ] 
+                           ("SireBase::StringArrayProperty", "SireBase::PropertyList") ]
 
 def fixMB(mb):
     mb.add_declaration_code( "#include \"SireBase/propertymap.h\"" )
@@ -24,4 +24,7 @@ def fixMB(mb):
     mb.add_declaration_code( "#include \"SireBase/lengthproperty.h\"" )
     mb.add_declaration_code( "#include \"SireBase/propertylist.h\"" )
     mb.add_declaration_code( "#include <QString>" )
+    mb.add_declaration_code( "#include \"SireBase/slice.h\"" )
+    mb.add_declaration_code( "void autoconvert_Slice();")
+    mb.add_definition_code( "autoconvert_Slice();")
 

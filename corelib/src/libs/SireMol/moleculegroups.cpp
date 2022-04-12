@@ -62,6 +62,8 @@
 
 #include "tostring.h"
 
+#include "SireBase/slice.h"
+
 #include "SireMol/errors.h"
 #include "SireError/errors.h"
 
@@ -213,39 +215,15 @@ ViewsOfMol MolGroupsBase::operator[](const QString &name) const
     return this->at(MolName(name));
 }
 
-QList<MolViewPtr> MolGroupsBase::atRange(int start, int end, int step) const
+QList<MolViewPtr> MolGroupsBase::operator[](const SireBase::Slice &slice) const
 {
-    auto molnums = this->molNums();
+    const auto molnums = this->molNums();
 
     QList<MolViewPtr> views;
 
-    if (end == std::numeric_limits<int>::max())
+    for (auto it = slice.begin(molnums.count()); not it.atEnd(); it.next())
     {
-        end = molnums.count();
-    }
-
-    start = Index(start).map(molnums.count());
-    end = Index(end-1).map(molnums.count());
-
-    if (end >= start)
-    {
-        if (step <= 0)
-            return views;
-
-        for (int i=start; i<=end; i+=step)
-        {
-            views.append(this->at(molnums[i]));
-        }
-    }
-    else
-    {
-        if (step >= 0)
-            return views;
-
-        for (int i=end; i>=start; i+=step)
-        {
-            views.append(this->at(molnums[i]));
-        }
+        views.append(this->operator[](molnums.at(it.value())));
     }
 
     return views;

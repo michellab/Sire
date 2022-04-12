@@ -53,6 +53,11 @@ SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MolGroupsBase&);
 SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MoleculeGroups&);
 SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MoleculeGroups&);
 
+namespace SireBase
+{
+class Slice;
+}
+
 namespace SireMol
 {
 
@@ -123,10 +128,7 @@ public:
     Residue operator[](const ResID &resid) const;
     CutGroup operator[](const CGID &cgid) const;
     Atom operator[](const AtomID &atomid) const;
-
-    QList<MolViewPtr> atRange(int start=0,
-                              int end=std::numeric_limits<int>::max(),
-                              int step=1) const;
+    QList<MolViewPtr> operator[](const SireBase::Slice &slice) const;
 
     virtual MolGroupsBase* clone() const=0;
 

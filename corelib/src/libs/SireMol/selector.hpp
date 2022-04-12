@@ -38,6 +38,8 @@
 #include "chain.h"
 #include "segment.h"
 
+#include "SireBase/slice.h"
+
 #include "tostring.h"
 
 SIRE_BEGIN_HEADER
@@ -138,6 +140,8 @@ public:
     int nViews() const;
 
     MolViewPtr operator[](int i) const;
+    MolViewPtr operator[](const QString &name) const;
+    MolViewPtr operator[](const SireBase::Slice &slice) const;
     MolViewPtr operator[](const AtomID &atomid) const;
     MolViewPtr operator[](const ResID &resid) const;
     MolViewPtr operator[](const CGID &cgid) const;
@@ -629,6 +633,27 @@ SIRE_OUTOFLINE_TEMPLATE
 MolViewPtr Selector<T>::operator[](int i) const
 {
     return T( this->data(), idxs.at( SireID::Index(i).map(idxs.count()) ) );
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+MolViewPtr Selector<T>::operator[](const QString &name) const
+{
+    return this->operator[](AtomName(name));
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+MolViewPtr Selector<T>::operator[](const SireBase::Slice &slice) const
+{
+    QList<typename T::Index> new_idxs;
+
+    for (auto it = slice.begin(idxs.count()); not it.atEnd(); it.next())
+    {
+        new_idxs.append(idxs.at(it.value()));
+    }
+
+    return Selector<T>( this->data(), new_idxs );
 }
 
 /** Exposing MoleculeView::operator[] */
