@@ -103,6 +103,18 @@ void register_ChainID_class(){
                 , "Return a range of atoms in the matching residues" );
         
         }
+        { //::SireMol::ChainID::fromString
+        
+            typedef ::SireMol::ChainIdentifier ( *fromString_function_type )( ::QString const & );
+            fromString_function_type fromString_function_value( &::SireMol::ChainID::fromString );
+            
+            ChainID_exposer.def( 
+                "fromString"
+                , fromString_function_value
+                , ( bp::arg("id") )
+                , "" );
+        
+        }
         { //::SireMol::ChainID::inverse
         
             typedef ::SireID::InvertMatch< SireMol::ChainID > ( ::SireMol::ChainID::*inverse_function_type)(  ) const;
@@ -387,6 +399,7 @@ void register_ChainID_class(){
         
         }
         ChainID_exposer.staticmethod( "any" );
+        ChainID_exposer.staticmethod( "fromString" );
         ChainID_exposer.staticmethod( "typeName" );
         ChainID_exposer.def( "__str__", &__str__< ::SireMol::ChainID > );
         ChainID_exposer.def( "__repr__", &__str__< ::SireMol::ChainID > );

@@ -118,6 +118,18 @@ void register_ResID_class(){
                 , "Return a Chain ID that matches chains that contain residues\nthat match this Residue ID" );
         
         }
+        { //::SireMol::ResID::fromString
+        
+            typedef ::SireMol::ResIdentifier ( *fromString_function_type )( ::QString const & );
+            fromString_function_type fromString_function_value( &::SireMol::ResID::fromString );
+            
+            ResID_exposer.def( 
+                "fromString"
+                , fromString_function_value
+                , ( bp::arg("id") )
+                , "" );
+        
+        }
         { //::SireMol::ResID::inverse
         
             typedef ::SireID::InvertMatch< SireMol::ResID > ( ::SireMol::ResID::*inverse_function_type)(  ) const;
@@ -367,6 +379,7 @@ void register_ResID_class(){
         
         }
         ResID_exposer.staticmethod( "any" );
+        ResID_exposer.staticmethod( "fromString" );
         ResID_exposer.staticmethod( "typeName" );
         ResID_exposer.def( "__str__", &__str__< ::SireMol::ResID > );
         ResID_exposer.def( "__repr__", &__str__< ::SireMol::ResID > );

@@ -94,6 +94,18 @@ void register_AtomID_class(){
                 , "Return a CutGroup ID that matches CutGroups that contain atoms\nthat match this Atom ID" );
         
         }
+        { //::SireMol::AtomID::fromString
+        
+            typedef ::SireMol::AtomIdentifier ( *fromString_function_type )( ::QString const & );
+            fromString_function_type fromString_function_value( &::SireMol::AtomID::fromString );
+            
+            AtomID_exposer.def( 
+                "fromString"
+                , fromString_function_value
+                , ( bp::arg("id") )
+                , "" );
+        
+        }
         { //::SireMol::AtomID::inverse
         
             typedef ::SireID::InvertMatch< SireMol::AtomID > ( ::SireMol::AtomID::*inverse_function_type)(  ) const;
@@ -373,6 +385,7 @@ void register_AtomID_class(){
         
         }
         AtomID_exposer.staticmethod( "any" );
+        AtomID_exposer.staticmethod( "fromString" );
         AtomID_exposer.staticmethod( "typeName" );
         AtomID_exposer.def( "__str__", &__str__< ::SireMol::AtomID > );
         AtomID_exposer.def( "__repr__", &__str__< ::SireMol::AtomID > );

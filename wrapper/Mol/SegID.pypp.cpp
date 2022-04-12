@@ -103,6 +103,18 @@ void register_SegID_class(){
                 , "Return a range of atoms in the matching residues" );
         
         }
+        { //::SireMol::SegID::fromString
+        
+            typedef ::SireMol::SegIdentifier ( *fromString_function_type )( ::QString const & );
+            fromString_function_type fromString_function_value( &::SireMol::SegID::fromString );
+            
+            SegID_exposer.def( 
+                "fromString"
+                , fromString_function_value
+                , ( bp::arg("id") )
+                , "" );
+        
+        }
         { //::SireMol::SegID::inverse
         
             typedef ::SireID::InvertMatch< SireMol::SegID > ( ::SireMol::SegID::*inverse_function_type)(  ) const;
@@ -350,6 +362,7 @@ void register_SegID_class(){
         
         }
         SegID_exposer.staticmethod( "any" );
+        SegID_exposer.staticmethod( "fromString" );
         SegID_exposer.staticmethod( "typeName" );
         SegID_exposer.def( "__str__", &__str__< ::SireMol::SegID > );
         SegID_exposer.def( "__repr__", &__str__< ::SireMol::SegID > );

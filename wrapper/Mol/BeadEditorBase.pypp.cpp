@@ -82,6 +82,32 @@ void register_BeadEditorBase_class(){
         { //::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::atom
         
             typedef SireMol::Editor< SireMol::BeadEditor, SireMol::Bead > exported_class_t;
+            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::*atom_function_type)( int,::SireBase::PropertyMap const & ) ;
+            atom_function_type atom_function_value( &::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::atom );
+            
+            BeadEditorBase_exposer.def( 
+                "atom"
+                , atom_function_value
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::atom
+        
+            typedef SireMol::Editor< SireMol::BeadEditor, SireMol::Bead > exported_class_t;
+            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::*atom_function_type)( ::QString const &,::SireBase::PropertyMap const & ) ;
+            atom_function_type atom_function_value( &::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::atom );
+            
+            BeadEditorBase_exposer.def( 
+                "atom"
+                , atom_function_value
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::atom
+        
+            typedef SireMol::Editor< SireMol::BeadEditor, SireMol::Bead > exported_class_t;
             typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::*atom_function_type)( ::SireMol::AtomID const &,::SireBase::PropertyMap const & ) ;
             atom_function_type atom_function_value( &::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::atom );
             
@@ -107,6 +133,32 @@ void register_BeadEditorBase_class(){
         { //::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::chain
         
             typedef SireMol::Editor< SireMol::BeadEditor, SireMol::Bead > exported_class_t;
+            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::*chain_function_type)( int,::SireBase::PropertyMap const & ) ;
+            chain_function_type chain_function_value( &::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::chain );
+            
+            BeadEditorBase_exposer.def( 
+                "chain"
+                , chain_function_value
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::chain
+        
+            typedef SireMol::Editor< SireMol::BeadEditor, SireMol::Bead > exported_class_t;
+            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::*chain_function_type)( ::QString const &,::SireBase::PropertyMap const & ) ;
+            chain_function_type chain_function_value( &::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::chain );
+            
+            BeadEditorBase_exposer.def( 
+                "chain"
+                , chain_function_value
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::chain
+        
+            typedef SireMol::Editor< SireMol::BeadEditor, SireMol::Bead > exported_class_t;
             typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::*chain_function_type)( ::SireMol::ChainID const &,::SireBase::PropertyMap const & ) ;
             chain_function_type chain_function_value( &::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::chain );
             
@@ -126,6 +178,32 @@ void register_BeadEditorBase_class(){
             BeadEditorBase_exposer.def( 
                 "cutGroup"
                 , cutGroup_function_value
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::cutGroup
+        
+            typedef SireMol::Editor< SireMol::BeadEditor, SireMol::Bead > exported_class_t;
+            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::*cutGroup_function_type)( int,::SireBase::PropertyMap const & ) ;
+            cutGroup_function_type cutGroup_function_value( &::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::cutGroup );
+            
+            BeadEditorBase_exposer.def( 
+                "cutGroup"
+                , cutGroup_function_value
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::cutGroup
+        
+            typedef SireMol::Editor< SireMol::BeadEditor, SireMol::Bead > exported_class_t;
+            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::*cutGroup_function_type)( ::QString const &,::SireBase::PropertyMap const & ) ;
+            cutGroup_function_type cutGroup_function_value( &::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::cutGroup );
+            
+            BeadEditorBase_exposer.def( 
+                "cutGroup"
+                , cutGroup_function_value
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
@@ -343,6 +421,32 @@ void register_BeadEditorBase_class(){
         { //::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::residue
         
             typedef SireMol::Editor< SireMol::BeadEditor, SireMol::Bead > exported_class_t;
+            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::*residue_function_type)( int,::SireBase::PropertyMap const & ) ;
+            residue_function_type residue_function_value( &::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::residue );
+            
+            BeadEditorBase_exposer.def( 
+                "residue"
+                , residue_function_value
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::residue
+        
+            typedef SireMol::Editor< SireMol::BeadEditor, SireMol::Bead > exported_class_t;
+            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::*residue_function_type)( ::QString const &,::SireBase::PropertyMap const & ) ;
+            residue_function_type residue_function_value( &::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::residue );
+            
+            BeadEditorBase_exposer.def( 
+                "residue"
+                , residue_function_value
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::residue
+        
+            typedef SireMol::Editor< SireMol::BeadEditor, SireMol::Bead > exported_class_t;
             typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::*residue_function_type)( ::SireMol::ResID const &,::SireBase::PropertyMap const & ) ;
             residue_function_type residue_function_value( &::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::residue );
             
@@ -362,6 +466,32 @@ void register_BeadEditorBase_class(){
             BeadEditorBase_exposer.def( 
                 "segment"
                 , segment_function_value
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::segment
+        
+            typedef SireMol::Editor< SireMol::BeadEditor, SireMol::Bead > exported_class_t;
+            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::*segment_function_type)( int,::SireBase::PropertyMap const & ) ;
+            segment_function_type segment_function_value( &::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::segment );
+            
+            BeadEditorBase_exposer.def( 
+                "segment"
+                , segment_function_value
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::segment
+        
+            typedef SireMol::Editor< SireMol::BeadEditor, SireMol::Bead > exported_class_t;
+            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::*segment_function_type)( ::QString const &,::SireBase::PropertyMap const & ) ;
+            segment_function_type segment_function_value( &::SireMol::Editor< SireMol::BeadEditor, SireMol::Bead >::segment );
+            
+            BeadEditorBase_exposer.def( 
+                "segment"
+                , segment_function_value
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }

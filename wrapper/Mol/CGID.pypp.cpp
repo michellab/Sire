@@ -103,6 +103,18 @@ void register_CGID_class(){
                 , "Return a range of atoms in the matching residues" );
         
         }
+        { //::SireMol::CGID::fromString
+        
+            typedef ::SireMol::CGIdentifier ( *fromString_function_type )( ::QString const & );
+            fromString_function_type fromString_function_value( &::SireMol::CGID::fromString );
+            
+            CGID_exposer.def( 
+                "fromString"
+                , fromString_function_value
+                , ( bp::arg("id") )
+                , "" );
+        
+        }
         { //::SireMol::CGID::inverse
         
             typedef ::SireID::InvertMatch< SireMol::CGID > ( ::SireMol::CGID::*inverse_function_type)(  ) const;
@@ -350,6 +362,7 @@ void register_CGID_class(){
         
         }
         CGID_exposer.staticmethod( "any" );
+        CGID_exposer.staticmethod( "fromString" );
         CGID_exposer.staticmethod( "typeName" );
         CGID_exposer.def( "__str__", &__str__< ::SireMol::CGID > );
         CGID_exposer.def( "__repr__", &__str__< ::SireMol::CGID > );
