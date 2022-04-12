@@ -377,6 +377,18 @@ void register_MolGroupsBase_class(){
                 , "Return the atom from this set that matches the ID atomid.\nThis atom must be contained in one of the groups in this set.\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
+        { //::SireMol::MolGroupsBase::atRange
+        
+            typedef ::QList< SireBase::PropPtr< SireMol::MoleculeView > > ( ::SireMol::MolGroupsBase::*atRange_function_type)( int,int,int ) const;
+            atRange_function_type atRange_function_value( &::SireMol::MolGroupsBase::atRange );
+            
+            MolGroupsBase_exposer.def( 
+                "atRange"
+                , atRange_function_value
+                , ( bp::arg("start")=(int)(0), bp::arg("end")=(int)(std::numeric_limits<int>::max()), bp::arg("step")=(int)(1) )
+                , "" );
+        
+        }
         { //::SireMol::MolGroupsBase::atom
         
             typedef ::SireMol::Atom ( ::SireMol::MolGroupsBase::*atom_function_type)( ::SireMol::AtomID const & ) const;
@@ -1173,6 +1185,30 @@ void register_MolGroupsBase_class(){
                 , __getitem___function_value
                 , ( bp::arg("mgid") )
                 , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
+        
+        }
+        { //::SireMol::MolGroupsBase::operator[]
+        
+            typedef ::SireMol::ViewsOfMol ( ::SireMol::MolGroupsBase::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::MolGroupsBase::operator[] );
+            
+            MolGroupsBase_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMol::MolGroupsBase::operator[]
+        
+            typedef ::SireMol::ViewsOfMol ( ::SireMol::MolGroupsBase::*__getitem___function_type)( ::QString const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::MolGroupsBase::operator[] );
+            
+            MolGroupsBase_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("name") )
                 , "" );
         
         }

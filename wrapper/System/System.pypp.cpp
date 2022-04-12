@@ -429,6 +429,18 @@ void register_System_class(){
                 , "overloading MolGroupsBase virtual functions" );
         
         }
+        { //::SireSystem::System::atRange
+        
+            typedef ::QList< SireBase::PropPtr< SireMol::MoleculeView > > ( ::SireSystem::System::*atRange_function_type)( int,int,int ) const;
+            atRange_function_type atRange_function_value( &::SireSystem::System::atRange );
+            
+            System_exposer.def( 
+                "atRange"
+                , atRange_function_value
+                , ( bp::arg("start")=(int)(0), bp::arg("end")=(int)(std::numeric_limits<int>::max()), bp::arg("step")=(int)(1) )
+                , "" );
+        
+        }
         { //::SireSystem::System::builtinProperties
         
             typedef ::SireBase::Properties ( ::SireSystem::System::*builtinProperties_function_type)(  ) const;
@@ -1315,6 +1327,30 @@ void register_System_class(){
                 , __getitem___function_value
                 , ( bp::arg("mgid") )
                 , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
+        
+        }
+        { //::SireSystem::System::operator[]
+        
+            typedef ::SireMol::ViewsOfMol ( ::SireSystem::System::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireSystem::System::operator[] );
+            
+            System_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireSystem::System::operator[]
+        
+            typedef ::SireMol::ViewsOfMol ( ::SireSystem::System::*__getitem___function_type)( ::QString const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireSystem::System::operator[] );
+            
+            System_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("name") )
                 , "" );
         
         }

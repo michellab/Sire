@@ -127,7 +127,7 @@ void register_ResID_class(){
                 "fromString"
                 , fromString_function_value
                 , ( bp::arg("id") )
-                , "" );
+                , "Return an ResID constructed from the passed string" );
         
         }
         { //::SireMol::ResID::inverse

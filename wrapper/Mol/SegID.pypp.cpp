@@ -112,7 +112,7 @@ void register_SegID_class(){
                 "fromString"
                 , fromString_function_value
                 , ( bp::arg("id") )
-                , "" );
+                , "Return an AtomID constructed from the passed string" );
         
         }
         { //::SireMol::SegID::inverse

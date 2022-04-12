@@ -112,7 +112,7 @@ void register_CGID_class(){
                 "fromString"
                 , fromString_function_value
                 , ( bp::arg("id") )
-                , "" );
+                , "Return an CGID constructed from the passed string" );
         
         }
         { //::SireMol::CGID::inverse
