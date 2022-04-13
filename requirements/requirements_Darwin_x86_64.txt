@@ -11,7 +11,5 @@ clang_osx-64
 clangxx_osx-64
 make
 libtool
-autoconf
-automake
 cmake
 openmm=7.7.0

@@ -113,6 +113,9 @@ message( STATUS "Using SIRE_APP = ${SIRE_APP}" )
 
 set( SIRE_INCLUDE_DIR "${SIRE_APP}/include/Sire" )
 
+set( CONDA_INCLUDE_DIR "${ANACONDA_BASE}/include" )
+message( STATUS "Using CONDA_INCLUDE_DIR = ${CONDA_INCLUDE_DIR}" )
+
 set ( SIRE_COMP_CMAKE "${SIRE_INCLUDE_DIR}/cmake/SireCompileVariables.cmake" )
 
 # Look for the "SireCompileVariables.cmake" file in the install directory
@@ -265,6 +268,8 @@ if (DEFINED SIRE_APP)
   # unset(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES)
   include_directories( "${SIRE_APP}/include" "${SIRE_APP}/Library/include" )
 endif()
+
+include_directories (${CONDA_INCLUDE_DIR})
 
 # MUST build shared libraries
 set (BUILD_SHARED_LIBS ON)
