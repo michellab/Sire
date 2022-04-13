@@ -364,6 +364,54 @@ void register_Chain_class(){
         
         }
         Chain_exposer.def( bp::self == bp::self );
+        { //::SireMol::Chain::operator[]
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Chain::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Chain::operator[] );
+            
+            Chain_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMol::Chain::operator[]
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Chain::*__getitem___function_type)( ::QString const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Chain::operator[] );
+            
+            Chain_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("name") )
+                , "" );
+        
+        }
+        { //::SireMol::Chain::operator[]
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Chain::*__getitem___function_type)( ::SireID::Index const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Chain::operator[] );
+            
+            Chain_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idx") )
+                , "" );
+        
+        }
+        { //::SireMol::Chain::operator[]
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Chain::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Chain::operator[] );
+            
+            Chain_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
+                , "" );
+        
+        }
         { //::SireMol::Chain::propertyKeys
         
             typedef ::QStringList ( ::SireMol::Chain::*propertyKeys_function_type)(  ) const;
