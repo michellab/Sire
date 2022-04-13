@@ -98,7 +98,7 @@ SIREMOL_EXPORT bool has_metadata(const Segment*, const MoleculeData &moldata,
     @author Christopher Woods
 */
 template<class T>
-class Selector : public SireBase::ConcreteProperty<Selector<T>,MoleculeView>
+class SIREMOL_EXPORT Selector : public SireBase::ConcreteProperty<Selector<T>,MoleculeView>
 {
 public:
     Selector();

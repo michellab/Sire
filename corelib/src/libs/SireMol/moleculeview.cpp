@@ -548,7 +548,6 @@ Selector<Residue> MoleculeView::residues(const Slice &slice,
 
     if (s.selectedAllResidues())
     {
-
         for (auto it = slice.begin(s.nResidues()); not it.atEnd(); it.next())
         {
             idxs.append(ResIdx(it.value()));

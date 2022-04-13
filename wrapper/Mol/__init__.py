@@ -249,6 +249,27 @@ __props = [ AtomCharges, AtomElements,
 for __prop in __props:
     _pvt_property_cludge_fix(__prop)
 
+
+def __fixed__getitem__(obj, key):
+    if type(key) is slice:
+        if obj.what() == "SireMol::Chain":
+            return [residue for residue in obj.residues(key)]
+        else:
+            return [atom for atom in obj.atoms(key)]
+    else:
+        return obj.__orig__getitem__(key)
+
+
+def __fix_getitem(C):
+    if not hasattr(C, "__orig__getitem__"):
+        C.__orig__getitem__ = C.__getitem__
+
+    C.__getitem__ = __fixed__getitem__
+
+
+for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule]:
+    __fix_getitem(C)
+
 ##########
 ########## END OF CLUDGY WORKAROUND
 ##########
