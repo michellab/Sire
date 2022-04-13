@@ -70,12 +70,7 @@ class Cursor:
         self._view = self._d.update(self._view)
 
     def __str__(self):
-        self._update()
-
-        if self._bond is None:
-            return f"Cursor({self._view})"
-        else:
-            return f"Cursor(bond:{self._bond})"
+        return f"Cursor({self.type()}:{self.ID()})"
 
     def __repr__(self):
         return self.__str__()
@@ -91,6 +86,14 @@ class Cursor:
                                          self._connectivity.commit())
 
         self._update()
+
+    def __contains__(self, key):
+        self._update()
+
+        if self._bond is None:
+            return self._view.hasProperty(key)
+        else:
+            return self._connectivity.hasProperty(self._bond, key)
 
     def __getitem__(self, key):
         self._update()
@@ -131,6 +134,94 @@ class Cursor:
 
         self._update()
 
+    def atoms(self, id=None):
+        """Return cursors for all of atoms in this view,
+           of, if 'id' is supplied, the atoms in this view
+           that match 'id'
+        """
+        self._update()
+
+        cursors = []
+
+        if id is None:
+            atoms = self._view.atoms()
+        else:
+            atoms = self._view.atoms(id)
+
+        for atom in atoms:
+            c = Cursor()
+            c._d = self._d
+            c._view = self._d.molecule.atom(atom.index())
+            cursors.append(c)
+
+        return cursors
+
+    def residues(self, id=None):
+        """Return cursors for all of residues in this view,
+           of, if 'id' is supplied, the residues in this view
+           that match 'id'
+        """
+        self._update()
+
+        cursors = []
+
+        if id is None:
+            residues = self._view.residues()
+        else:
+            residues = self._view.residues(id)
+
+        for residue in residues:
+            c = Cursor()
+            c._d = self._d
+            c._view = self._d.molecule.residue(residue.index())
+            cursors.append(c)
+
+        return cursors
+
+    def chains(self, id=None):
+        """Return cursors for all of chains in this view,
+           of, if 'id' is supplied, the chains in this view
+           that match 'id'
+        """
+        self._update()
+
+        cursors = []
+
+        if id is None:
+            chains = self._view.chains()
+        else:
+            chains = self._view.chains(id)
+
+        for chain in chains:
+            c = Cursor()
+            c._d = self._d
+            c._view = self._d.molecule.chain(chain.index())
+            cursors.append(c)
+
+        return cursors
+
+    def segments(self, id=None):
+        """Return cursors for all of segments in this view,
+           of, if 'id' is supplied, the segments in this view
+           that match 'id'
+        """
+        self._update()
+
+        cursors = []
+
+        if id is None:
+            segments = self._view.segments()
+        else:
+            segments = self._view.segments(id)
+
+        for segment in segments:
+            c = Cursor()
+            c._d = self._d
+            c._view = self._d.molecule.segment(segment.index())
+            cursors.append(c)
+
+        return cursors
+
     def atom(self, i):
         """Return the atom in the molecule that matches the passed ID"""
         self._update()
@@ -141,8 +232,23 @@ class Cursor:
 
         return c
 
-    def residue(self, i):
-        """Return the atom in the molecule that matches the passed ID"""
+    def residue(self, i=None):
+        """Return the atom in the molecule that matches the passed ID.
+           If 'i' is None, then this returns the residue that contains
+           this atom (if this is an atom)
+        """
+        if i is None:
+            try:
+                c = Cursor()
+                c._d = self._d
+                c._view = self._view.residue()
+                c._update()
+                return c
+            except Exception:
+                raise TypeError(
+                    f"There is no residue that contains {self.type()}:{self.ID()}"
+                )
+
         self._update()
 
         c = Cursor()
@@ -150,8 +256,22 @@ class Cursor:
         c._view = self._d.molecule.residue(i)
         return c
 
-    def chain(self, i):
-        """Return the chain in the molecule that matches the passed ID"""
+    def chain(self, i=None):
+        """Return the chain in the molecule that matches the passed ID.
+           If 'i' is None, then this returns the residue that contains
+           this atom (if this is an atom)"""
+        if i is None:
+            try:
+                c = Cursor()
+                c._d = self._d
+                c._view = self._view.chain()
+                c._update()
+                return c
+            except Exception:
+                raise TypeError(
+                    f"There is no chain that contains {self.type()}:{self.ID()}"
+                )
+
         self._update()
 
         c = Cursor()
@@ -159,8 +279,22 @@ class Cursor:
         c._view = self._d.molecule.chain(i)
         return c
 
-    def segment(self, i):
-        """Return the segment in the molecule that matches the passed ID"""
+    def segment(self, i=None):
+        """Return the segment in the molecule that matches the passed ID.
+           If 'i' is None, then this returns the residue that contains
+           this atom (if this is an atom)"""
+        if i is None:
+            try:
+                c = Cursor()
+                c._d = self._d
+                c._view = self._view.segment()
+                c._update()
+                return c
+            except Exception:
+                raise TypeError(
+                    f"There is no segment that contains {self.type()}:{self.ID()}"
+                )
+
         self._update()
 
         c = Cursor()
@@ -199,93 +333,118 @@ class Cursor:
            of the bond etc. This will return the Cursor for the whole
            molecule if there isn't a suitable parent
         """
-        self._update()
+        t = self.type()
 
         c = Cursor()
         c._d = self._d
 
-        try:
-            c._view = self._view.parent()
-        except Exception:
-            c._view = self._molecule
+        c._view = c._d.molecule
 
-        c._connectivity = None
-        c._connectivity_property = None
+        # The parent of an Atom is a Residue (if it is in one), and
+        # the parent of a Residue is a Chain (if it is in one).
+        # If this fails, then the parent is the Molecule
+        try:
+            if t == "atom":
+                c._view = self._view.residue()
+            elif t == "residue":
+                c._view = self._view.chain()
+        except Exception:
+            pass
 
         c._update()
 
         return c
 
-    def next(self):
-        """Return the cursor to the next logical view (or bond)
-           This will go to the next AtomIdx, or next ResIdx,
-           or the next bond. This will raise an exception
-           (StopIteration) if there is no next view.
-        """
+    def name(self):
+        """Return the name of the current view"""
         self._update()
 
-        if self._connectivity is None:
-            try:
-                idx = self._view.index()
-                idx += 1
+        if self._bond is not None:
+            raise TypeError("A bond does not have a name!")
 
-                c = Cursor()
-                c._d = self._d
-                c._view = self._d.molecule[idx]
-                return c
-            except Exception:
-                raise StopIteration()
-        else:
-            try:
-                bonds = self._connectivity.bonds()
-                # find index of current bond...
-                raise ValueError()
+        return self._view.name()
 
-                c = Cursor()
-                c._d = self._d
-                c._connectivity_property = self._connectivity_property
-                c._bond = next_bond
-                c._update()
-                return c
-            except Exception:
-                raise StopIteration()
-
-    def prev(self):
-        """Return the cursor to the previous logical view (or bond)
-           This will go to the previous AtomIdx, or previous ResIdx,
-           or the previous bond. This will raise an exception
-           (StopIteration) if there is no previous view.
-        """
+    def number(self):
+        """Return the number of the current view"""
         self._update()
 
-        if self._connectivity is None:
-            try:
-                idx = self._view.index()
-                idx -= 1
+        if self._bond is not None:
+            raise TypeError("A bond does not have a number!")
 
-                if idx.value() < 0:
-                    raise StopIteration()
+        try:
+            return self._view.number()
+        except Exception:
+            raise TypeError(f"A {self._view.what()} does not have a number!")
 
-                c = Cursor()
-                c._d = self._d
-                c._view = self._d.molecule[idx]
-                return c
-            except Exception:
-                raise StopIteration()
+    def index(self):
+        """Return the index of the current view (e.g. AtomIdx, ResIdx etc)"""
+        self._update()
+
+        if self._bond is not None:
+            raise TypeError("A bond does not have an index!")
+
+        return self._view.index()
+
+    def ID(self):
+        """Return the ID of this view (e.g. AtomIdx, MolNum, BondID)"""
+        self._update()
+
+        if self._bond is not None:
+            return self._bond
+
+        try:
+            return self._view.index()
+        except Exception:
+            # objects without an index (e.g. molecule) use a number for their ID
+            return self._view.number()
+
+    def type(self):
+        """Return the type of this Cursor (e.g. 'atom', 'bond',
+           'residue', 'chain', 'segment' or 'molecule')
+        """
+        if self.isBond():
+            return "bond"
+
+        w = self._view.what()
+
+        if w.find("Atom") != -1:
+            return "atom"
+        elif w.find("Res") != -1:
+            return "residue"
+        elif w.find("Chain") != -1:
+            return "chain"
+        elif w.find("Seg") != -1:
+            return "segment"
+        elif w.find("Mol") != -1:
+            return "molecule"
         else:
-            try:
-                bonds = self._connectivity.bonds()
-                # find index of current bond...
-                raise ValueError()
+            raise TypeError(f"Cannot identify cursor type {w}")
 
-                c = Cursor()
-                c._d = self._d
-                c._connectivity_property = self._connectivity_property
-                c._bond = next_bond
-                c._update()
-                return c
-            except Exception:
-                raise StopIteration()
+    def isMolecule(self):
+        """Return whether this is pointing to a Molecule"""
+        return self.type() == "molecule"
+
+    def isBond(self):
+        """Return whether this is pointing to a Bond"""
+        self._update()
+
+        return self._bond is not None
+
+    def isAtom(self):
+        """Return whether this is pointing to an Atom"""
+        return self.type() == "atom"
+
+    def isResidue(self):
+        """Return whether this is pointing to a Residue"""
+        return self.type() == "residue"
+
+    def isChain(self):
+        """Return whether this is pointing to a Chain"""
+        return self.type() == "chain"
+
+    def isSegment(self):
+        """Return whether this is pointing to a Segment"""
+        return self.type() == "segment"
 
     def commit(self):
         """Commit all of the changes and return the newly

@@ -113,7 +113,7 @@ def __set_property__(molview, key, property):
     try:
         return _set_property(molview, key, property)
     except Exception as e:
-        if e.__class__.__name__ == "ArgumentError":
+        if e.__class__.__name__ == "ArgumentError" or e.__class__.__name__ == "AttributeError":
             return _set_property(molview, key, Sire.Base.wrap(property))
         else:
             raise e

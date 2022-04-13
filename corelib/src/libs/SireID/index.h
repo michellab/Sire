@@ -54,10 +54,10 @@ namespace SireID
     provides the index of an object in an indexable list or array (or indeed
     any container that holds objects in a linear, numerical indexed
     manner (e.g. atoms in a Molecule, Molecules in a group)
-    
-    This class cannot be instantiated on its own - it must be 
+
+    This class cannot be instantiated on its own - it must be
     inherited by a derived class to be used.
-    
+
     @author Christopher Woods
 */
 class SIREID_EXPORT IndexBase
@@ -83,20 +83,20 @@ public:
 
 protected:
     explicit IndexBase(qint32 idx = IndexBase::null());
-    
+
     IndexBase(const IndexBase &other);
-    
+
     IndexBase& operator=(const IndexBase &other);
-    
+
     void throwInvalidIndex(qint32 n) const;
-    
+
     /** The actual index value */
     qint32 _idx;
 };
 
 /** This derived version of index provides all of the
     standard operators that you would expect.
-    
+
     @author Christopher Woods
 */
 template<class T>
@@ -104,15 +104,15 @@ class Index_T_ : public IndexBase
 {
 public:
     explicit Index_T_(qint32 idx=IndexBase::null());
-    
+
     explicit Index_T_(const Index_T_<T> &other);
 
     ~Index_T_();
 
     const char* what() const;
-    
+
     IndexBase* clone() const;
-    
+
     uint hash() const;
 
     bool operator==(const T &other) const;
@@ -120,13 +120,13 @@ public:
     bool operator==(qint32 val) const;
     bool operator!=(const T &other) const;
     bool operator!=(qint32 val) const;
-    
+
     T& operator=(qint32 idx);
-    
+
     T& operator+=(qint32 val);
     T& operator++();
     T operator++(qint32);
-    
+
     T& operator-=(qint32 val);
     T& operator--();
     T operator--(qint32);
@@ -136,17 +136,17 @@ class SIREID_EXPORT Index : public Index_T_<Index>
 {
 public:
     explicit Index(qint32 idx = IndexBase::null());
-    
+
     Index(const Index &other);
-    
+
     ~Index();
-    
+
     static const char* typeName();
-    
+
     Index* clone() const;
-    
+
     static Index null();
-    
+
     QString toString() const;
 };
 
@@ -268,7 +268,7 @@ T Index_T_<T>::operator++(qint32)
 {
     T orig(*this);
     ++_idx;
-    
+
     return orig;
 }
 

@@ -58,7 +58,7 @@ QDataStream &operator<<(QDataStream &ds,
 {
     writeHeader(ds, r_mol, 1);
     ds << static_cast<const MoleculeView&>(mol);
-    
+
     return ds;
 }
 
@@ -67,14 +67,14 @@ QDataStream &operator>>(QDataStream &ds,
                                        Molecule &mol)
 {
     VersionID v = readHeader(ds, r_mol);
-    
+
     if (v == 1)
     {
         ds >> static_cast<MoleculeView&>(mol);
     }
     else
         throw version_error(v, "1", r_mol, CODELOC);
-        
+
     return ds;
 }
 
@@ -168,57 +168,81 @@ MolNum Molecule::number() const
 {
     return d->number();
 }
- 
+
 /** Return the version number of this molecule - all molecules
     with the same ID number and version number must be identical */
 quint64 Molecule::version() const
 {
     return d->version();
 }
- 
+
 /** Return the version number of the property at key 'key'.
     All molecules with the same ID number and same property version
     number must have the same value of this property
     (although this says nothing about any metadata associated
     with this property)
-    
-    \throw SireBase::missing_property 
+
+    \throw SireBase::missing_property
 */
 quint64 Molecule::version(const PropertyName &key) const
 {
     return d->version(key);
 }
- 
+
 /** Return the number of atoms in this molecule */
 int Molecule::nAtoms() const
 {
     return d->info().nAtoms();
 }
- 
+
+/** Return the number of atoms in the identified residue(s) */
+int Molecule::nAtoms(const ResID &id) const
+{
+    return this->residues(id).selection().nSelectedAtoms();
+}
+
+/** Return the number of atoms in the identified cutgroups(s) */
+int Molecule::nAtoms(const CGID &id) const
+{
+    return this->cutGroups(id).selection().nSelectedAtoms();
+}
+
+/** Return the number of atoms in the identified chain(s) */
+int Molecule::nAtoms(const ChainID &id) const
+{
+    return this->chains(id).selection().nSelectedAtoms();
+}
+
+/** Return the number of atoms in the identified segment(s) */
+int Molecule::nAtoms(const SegID &id) const
+{
+    return this->segments(id).selection().nSelectedAtoms();
+}
+
 /** Return the number of CutGroups in this molecule */
 int Molecule::nCutGroups() const
 {
     return d->info().nCutGroups();
 }
- 
+
 /** Return the number of residues in this molecule */
 int Molecule::nResidues() const
 {
     return d->info().nResidues();
 }
- 
+
 /** Return the number of chains in this molecule */
 int Molecule::nChains() const
 {
     return d->info().nChains();
 }
- 
+
 /** Return the number of segments in this molecule */
 int Molecule::nSegments() const
 {
     return d->info().nSegments();
 }
- 
+
 /** Return a Mover that moves all of the atoms in
     this molecule */
 Mover<Molecule> Molecule::move() const
@@ -256,7 +280,7 @@ void Molecule::update(const MoleculeData &moldata)
                 .arg(d->number()).arg(moldata.number()),
                     CODELOC );
     }
-    
+
     d = moldata;
 }
 
@@ -266,7 +290,7 @@ const Properties& Molecule::properties() const
     return d->properties();
 }
 
-/** Return the property associated with the key 'key' 
+/** Return the property associated with the key 'key'
 
     \throw SireMol::missing_property
 */
@@ -284,9 +308,9 @@ const Property& Molecule::metadata(const PropertyName &metakey) const
     return d->metadata(metakey);
 }
 
-/** Return the metadata for the metakey 'metakey' for 
+/** Return the metadata for the metakey 'metakey' for
     the property at key 'key'
-    
+
     \throw SireBase::missing_property
 */
 const Property& Molecule::metadata(const PropertyName &key,
@@ -296,9 +320,9 @@ const Property& Molecule::metadata(const PropertyName &key,
 }
 
 /** Set the property at key 'key' to the value 'value'. If this
-    is a property derived from MolViewProperty then this 
+    is a property derived from MolViewProperty then this
     property is checked to ensure it is compatible with this molecule
-    
+
     \throw SireError::incompatible_error
 */
 void Molecule::setProperty(const QString &key, const Property &value)
@@ -312,28 +336,28 @@ void Molecule::setProperty(const QString &key, const Property &value)
             return;
         }
     }
-        
+
     d->setProperty(key, value);
 }
 
 /** Set the metadata at metakey 'metakey' to the value 'value'.
-    If this is a property derived from MolViewProperty then this 
+    If this is a property derived from MolViewProperty then this
     property is checked to ensure it is compatible with this molecule
-    
+
     \throw SireError::incompatible_error
 */
 void Molecule::setMetadata(const QString &metakey, const Property &value)
 {
     if (value.isA<MolViewProperty>())
         value.asA<MolViewProperty>().assertCompatibleWith(d->info());
-        
+
     d->setMetadata(metakey, value);
 }
 
 /** Set the metadata at metakey 'metakey' to the value 'value'.
-    If this is a property derived from MolViewProperty then this 
+    If this is a property derived from MolViewProperty then this
     property is checked to ensure it is compatible with this molecule
-    
+
     \throw SireError::incompatible_error
 */
 void Molecule::setMetadata(const QString &key, const QString &metakey,
@@ -341,7 +365,7 @@ void Molecule::setMetadata(const QString &key, const QString &metakey,
 {
     if (value.isA<MolViewProperty>())
         value.asA<MolViewProperty>().assertCompatibleWith(d->info());
-        
+
     d->setMetadata(key, metakey, value);
 }
 
@@ -360,7 +384,7 @@ bool Molecule::hasMetadata(const PropertyName &metakey) const
 
 /** Return whether or not the property of this molecule at
     key 'key' has metadata at metakey 'metakey'
-    
+
     \throw SireBase::missing_property
 */
 bool Molecule::hasMetadata(const PropertyName &key,
@@ -389,7 +413,7 @@ void Molecule::assertContainsMetadata(const PropertyName &metakey) const
 
 /** Assert that this molecule contains some metadata at metakey 'metakey'
     associated with the property at key 'key'
-    
+
     \throw SireBase::missing_property
 */
 void Molecule::assertContainsMetadata(const PropertyName &key,
@@ -412,7 +436,7 @@ QStringList Molecule::metadataKeys() const
 
 /** Return the metakeys for all of the metadata for the property
     at key 'key'
-    
+
     \throw SireBase::missing_property
 */
 QStringList Molecule::metadataKeys(const PropertyName &key) const
