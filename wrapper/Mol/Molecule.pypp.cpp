@@ -244,6 +244,54 @@ void register_Molecule_class(){
                 , "Return the number of atoms in this molecule" );
         
         }
+        { //::SireMol::Molecule::nAtoms
+        
+            typedef int ( ::SireMol::Molecule::*nAtoms_function_type)( ::SireMol::ResID const & ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireMol::Molecule::nAtoms );
+            
+            Molecule_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , ( bp::arg("id") )
+                , "" );
+        
+        }
+        { //::SireMol::Molecule::nAtoms
+        
+            typedef int ( ::SireMol::Molecule::*nAtoms_function_type)( ::SireMol::ChainID const & ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireMol::Molecule::nAtoms );
+            
+            Molecule_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , ( bp::arg("id") )
+                , "" );
+        
+        }
+        { //::SireMol::Molecule::nAtoms
+        
+            typedef int ( ::SireMol::Molecule::*nAtoms_function_type)( ::SireMol::SegID const & ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireMol::Molecule::nAtoms );
+            
+            Molecule_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , ( bp::arg("seg") )
+                , "" );
+        
+        }
+        { //::SireMol::Molecule::nAtoms
+        
+            typedef int ( ::SireMol::Molecule::*nAtoms_function_type)( ::SireMol::CGID const & ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireMol::Molecule::nAtoms );
+            
+            Molecule_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , ( bp::arg("id") )
+                , "" );
+        
+        }
         { //::SireMol::Molecule::nChains
         
             typedef int ( ::SireMol::Molecule::*nChains_function_type)(  ) const;
@@ -275,6 +323,18 @@ void register_Molecule_class(){
                 "nResidues"
                 , nResidues_function_value
                 , "Return the number of residues in this molecule" );
+        
+        }
+        { //::SireMol::Molecule::nResidues
+        
+            typedef int ( ::SireMol::Molecule::*nResidues_function_type)( ::SireMol::ChainID const & ) const;
+            nResidues_function_type nResidues_function_value( &::SireMol::Molecule::nResidues );
+            
+            Molecule_exposer.def( 
+                "nResidues"
+                , nResidues_function_value
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Molecule::nSegments
