@@ -225,6 +225,12 @@ int Molecule::nCutGroups() const
     return d->info().nCutGroups();
 }
 
+/** Return the number of residues in the identified chain(s) */
+int Molecule::nResidues(const ChainID &id) const
+{
+    return this->chains(id).selection().nSelectedResidues();
+}
+
 /** Return the number of residues in this molecule */
 int Molecule::nResidues() const
 {

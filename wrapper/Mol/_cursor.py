@@ -228,7 +228,8 @@ class Cursor:
 
         c = Cursor()
         c._d = self._d
-        c._view = self._d.molecule.atom(i)
+        c._view = self._view.atom(i)
+        c._update()
 
         return c
 
@@ -253,7 +254,9 @@ class Cursor:
 
         c = Cursor()
         c._d = self._d
-        c._view = self._d.molecule.residue(i)
+        c._view = c._view.residue(i)
+        c._update()
+
         return c
 
     def chain(self, i=None):
@@ -276,7 +279,9 @@ class Cursor:
 
         c = Cursor()
         c._d = self._d
-        c._view = self._d.molecule.chain(i)
+        c._view = self._view.chain(i)
+        c._update()
+
         return c
 
     def segment(self, i=None):
@@ -299,7 +304,9 @@ class Cursor:
 
         c = Cursor()
         c._d = self._d
-        c._view = self._d.molecule.segment(i)
+        c._view = self._view.segment(i)
+        c._update()
+
         return c
 
     def molecule(self):
