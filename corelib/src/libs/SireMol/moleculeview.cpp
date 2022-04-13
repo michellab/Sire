@@ -322,6 +322,12 @@ Atom MoleculeView::atom(const AtomID &atomid, const PropertyMap &map) const
     return atomid.selectFrom(*this, map);
 }
 
+Selector<Atom> MoleculeView::atoms(const QString &name,
+                                   const PropertyMap &map) const
+{
+    return this->atoms(AtomName(name), map);
+}
+
 Selector<Atom> MoleculeView::atoms(const Slice &slice,
                                    const PropertyMap &map) const
 {
@@ -429,6 +435,12 @@ CutGroup MoleculeView::cutGroup(const QString &name, const PropertyMap &map) con
 CutGroup MoleculeView::cutGroup(const CGID &cgid, const PropertyMap &map) const
 {
     return cgid.selectFrom(*this, map);
+}
+
+Selector<CutGroup> MoleculeView::cutGroups(const QString &name,
+                                           const PropertyMap &map) const
+{
+    return this->cutGroups(CGName(name), map);
 }
 
 Selector<CutGroup> MoleculeView::cutGroups(const Slice &slice,
@@ -540,6 +552,12 @@ Residue MoleculeView::residue(const ResID &resid, const PropertyMap &map) const
     return resid.selectFrom(*this, map);
 }
 
+Selector<Residue> MoleculeView::residues(const QString &name,
+                                         const PropertyMap &map) const
+{
+    return this->residues(ResName(name), map);
+}
+
 Selector<Residue> MoleculeView::residues(const Slice &slice,
                                          const PropertyMap &map) const
 {
@@ -646,6 +664,12 @@ Chain MoleculeView::chain(const QString &name, const PropertyMap &map) const
 Chain MoleculeView::chain(const ChainID &chainid, const PropertyMap &map) const
 {
     return chainid.selectFrom(*this, map);
+}
+
+Selector<Chain> MoleculeView::chains(const QString &name,
+                                     const PropertyMap &map) const
+{
+    return this->chains(ChainName(name), map);
 }
 
 Selector<Chain> MoleculeView::chains(const Slice &slice,
@@ -757,6 +781,12 @@ Segment MoleculeView::segment(const QString &name, const PropertyMap &map) const
 Segment MoleculeView::segment(const SegID &segid, const PropertyMap &map) const
 {
     return segid.selectFrom(*this, map);
+}
+
+Selector<Segment> MoleculeView::segments(const QString &name,
+                                         const PropertyMap &map) const
+{
+    return this->segments(name, map);
 }
 
 Selector<Segment> MoleculeView::segments(const Slice &slice,

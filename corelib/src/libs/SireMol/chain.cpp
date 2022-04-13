@@ -182,17 +182,17 @@ bool Chain::operator!=(const Chain &other) const
 
 MolViewPtr Chain::operator[](int i) const
 {
-    return this->operator[](ResIdx(i));
+    return this->residue(i);
 }
 
 MolViewPtr Chain::operator[](const QString &name) const
 {
-    return this->operator[](ResName(name));
+    return this->residue(name);
 }
 
 MolViewPtr Chain::operator[](const SireID::Index &idx) const
 {
-    return this->operator[](idx.value());
+    return this->residue(idx.value());
 }
 
 MolViewPtr Chain::operator[](const SireBase::Slice &slice) const

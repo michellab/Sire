@@ -389,7 +389,7 @@ QList<ResIdx> ResID::map(const MoleculeView &molview, const PropertyMap&) const
 
         if (residxs.isEmpty())
             throw SireMol::missing_residue( QObject::tr(
-                    "No atoms matching %1 can be found in the passed molecule.")
+                    "No residues matching %1 can be found in the passed molecule.")
                         .arg(this->toString()), CODELOC );
 
         return residxs;
@@ -408,7 +408,7 @@ Residue ResID::selectFrom(const MoleculeView &molview, const PropertyMap &map) c
 
     if (residxs.count() > 1)
         throw SireMol::duplicate_residue( QObject::tr(
-                "More than one atom matches the ID %1 (atoms %2).")
+                "More than one residue matches the ID %1 (residues %2).")
                     .arg(this->toString()).arg(Sire::toString(residxs)),
                         CODELOC );
 

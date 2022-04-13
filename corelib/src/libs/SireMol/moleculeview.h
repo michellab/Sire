@@ -153,6 +153,9 @@ public:
     Atom atom(const QString &name, const PropertyMap &map = PropertyMap()) const;
     Atom atom(const AtomID &atomid, const PropertyMap &map = PropertyMap()) const;
 
+    Selector<Atom> atoms(const QString &name,
+                         const PropertyMap &map = PropertyMap()) const;
+
     Selector<Atom> atoms(const SireBase::Slice &slice,
                          const PropertyMap &map = PropertyMap()) const;
 
@@ -165,6 +168,9 @@ public:
     CutGroup cutGroup(int i, const PropertyMap &map = PropertyMap()) const;
     CutGroup cutGroup(const QString &name, const PropertyMap &map = PropertyMap()) const;
     CutGroup cutGroup(const CGID &cgid, const PropertyMap &map = PropertyMap()) const;
+
+    Selector<CutGroup> cutGroups(const QString &name,
+                                 const PropertyMap &map = PropertyMap()) const;
 
     Selector<CutGroup> cutGroups(const SireBase::Slice &slice,
                                  const PropertyMap &map = PropertyMap()) const;
@@ -179,6 +185,9 @@ public:
     Residue residue(const QString &name, const PropertyMap &map = PropertyMap()) const;
     Residue residue(const ResID &resid, const PropertyMap &map = PropertyMap()) const;
 
+    Selector<Residue> residues(const QString &name,
+                               const PropertyMap &map = PropertyMap()) const;
+
     Selector<Residue> residues(const SireBase::Slice &slice,
                                const PropertyMap &map = PropertyMap()) const;
 
@@ -187,6 +196,9 @@ public:
 
     Residue residue() const;
     Selector<Residue> residues() const;
+
+    Selector<Chain> chains(const QString &name,
+                           const PropertyMap &map = PropertyMap()) const;
 
     Selector<Chain> chains(const SireBase::Slice &slice,
                            const PropertyMap &map = PropertyMap()) const;
@@ -200,6 +212,9 @@ public:
 
     Chain chain() const;
     Selector<Chain> chains() const;
+
+    Selector<Segment> segments(const QString &name,
+                               const PropertyMap &map = PropertyMap()) const;
 
     Selector<Segment> segments(const SireBase::Slice &slice,
                                const PropertyMap &map = PropertyMap()) const;

@@ -1,13 +1,36 @@
 
 __all__ = ["Cursor"]
 
+
+class _CursorData:
+    """This is the shared data class that holds all of the data
+       for a Cursor. This is held by all Cursors that are derived
+       from the same object, meaning that multiple Cursors
+       can share the same molecule editor. Note that the
+       Cursor is not thread-safe (unlike the underlying
+       system used by Sire)
+    """
+    def __init__(self, molecule = None):
+        if molecule is None:
+            self.molecule = None
+        else:
+            self.molecule = molecule.molecule().edit()
+
+    def update(self, view):
+        try:
+            return self.molecule[view.index()]
+        except Exception:
+            return self.molecule
+
+
 class Cursor:
     """This class provides a cursor that can be used to navigate through
        and edit the properties of Molecules. This makes the whole
        getting and setting of properties more pythonic in writing
        style, while also saving some typing.
     """
-    def __init__(self, molecule = None):
+    def __init__(self, molecule = None, bond = None,
+                 connectivity_property: str="connectivity"):
         """Construct the Cursor to explore and edit the
            properties of the passed MoleculeView.
 
@@ -21,22 +44,34 @@ class Cursor:
                >>> cursor["cat"] = "meow"
                >>> mol = cursor.commit()
         """
-        if molecule is None:
-            self._molecule = None
-            self._view = None
-        else:
-            self._molecule = molecule.molecule().edit()
-
-            try:
-                self._view = self._molecule[molecule.index()]
-            except Exception:
-                self._view = self._molecule
-
+        self._d = _CursorData(molecule)
+        self._view = self._d.update(molecule)
         self._connectivity = None
-        self._bond = None
-        self._connectivity_property = "connectivity"
+        self._bond = bond
+        self._connectivity_property = connectivity_property
+
+    def _update(self):
+        if self._bond is not None:
+            try:
+                self._connectivity = self._d.molecule.getProperty(
+                                        self._connectivity_property).edit()
+            except Exception:
+                # the molecule doesn't have a connectivity. Create one for it
+                from Sire.Mol import CovalentBondHunter
+                hunter = CovalentBondHunter()
+
+                try:
+                    connectivity = hunter(self._d.molecule)
+                    self._d.molecule.setProperty(self._connectivity_property,
+                                                 connectivity)
+                except Exception:
+                    pass
+
+        self._view = self._d.update(self._view)
 
     def __str__(self):
+        self._update()
+
         if self._bond is None:
             return f"Cursor({self._view})"
         else:
@@ -46,80 +81,100 @@ class Cursor:
         return self.__str__()
 
     def __delitem__(self, key):
+        self._update()
+
         if self._bond is None:
-            print("HERE")
-            self._molecule.removeProperty(key)
-            try:
-                print("HERE2")
-                self._view = self._molecule[self._view.index()]
-            except Exception:
-                print("HERE3")
-                self._view = self._molecule
+            self._d.molecule.removeProperty(key)
         else:
-            self._connectivity.removeProperty(bond, key)
-            self._molecule.setProperty(self._connectivity_property,
-                                       self._connectivity.commit())
+            self._connectivity.removeProperty(self._bond, key)
+            self._d.molecule.setProperty(self._connectivity_property,
+                                         self._connectivity.commit())
+
+        self._update()
 
     def __getitem__(self, key):
+        self._update()
+
         if self._bond is None:
             return self._view.property(key)
         else:
-            return self._connectivity.property(bond, key)
+            return self._connectivity.property(self._bond, key)
 
     def __setitem__(self, key, value):
+        self._update()
+
         if self._bond is None:
             self._view.setProperty(key, value)
-            self._molecule = self._view.molecule()
+            self._d.molecule = self._view.molecule()
         else:
-            self._connectivity.setProperty(bond, key, value)
+            self._connectivity.setProperty(self._bond, key, value)
             self._molecule.setProperty(self._connectivity_property,
                                        self._connectivity.commit())
 
+        self._update()
+
     def set(self, values):
         """Set all of the properties from the passed dictionary of values"""
+        self._update()
+
         if self._bond is None:
             for key in values.keys():
                 self._view.setProperty(key, values[key])
+
+            self._d.molecule = self._view.molecule()
         else:
             for key in values.keys():
-                self._connectivity.setProperty(bond, key, values[key])
+                self._connectivity.setProperty(self._bond, key, values[key])
 
-        self._molecule.setProperty(self._connectivity_property,
-                                   self._connectivity.commit())
+                self._molecule.setProperty(self._connectivity_property,
+                                           self._connectivity.commit())
+
+        self._update()
 
     def atom(self, i):
         """Return the atom in the molecule that matches the passed ID"""
+        self._update()
+
         c = Cursor()
-        c._molecule = self._molecule
-        c._view = self._molecule.atom(i)
+        c._d = self._d
+        c._view = self._d.molecule.atom(i)
+
         return c
 
     def residue(self, i):
         """Return the atom in the molecule that matches the passed ID"""
+        self._update()
+
         c = Cursor()
-        c._molecule = self._molecule
-        c._view = self._molecule.residue(i)
+        c._d = self._d
+        c._view = self._d.molecule.residue(i)
         return c
 
     def chain(self, i):
         """Return the chain in the molecule that matches the passed ID"""
+        self._update()
+
         c = Cursor()
-        c._molecule = self._molecule
-        c._view = self._molecule.chain(i)
+        c._d = self._d
+        c._view = self._d.molecule.chain(i)
         return c
 
     def segment(self, i):
         """Return the segment in the molecule that matches the passed ID"""
+        self._update()
+
         c = Cursor()
-        c._molecule = self._molecule
-        c._view = self._molecule.segment(i)
+        c._d = self._d
+        c._view = self._d.molecule.segment(i)
         return c
 
     def molecule(self):
         """Return the molecule"""
+        self._update()
+
         c = Cursor()
-        c._molecule = self._molecule
-        c._view = self._molecule
+        c._d = self._d
+        c._view = self._d.molecule
         return c
 
     def bond(self, bond, connectivity_property="connectivity"):
@@ -127,11 +182,15 @@ class Cursor:
            use the specified connectivity property to locate
            the connectivity that defines the bonds in this molecule
         """
+        self._update()
+
         c = Cursor()
-        c._molecule = self._molecule
-        c._view = self._molecule
-        c._connectivity = c._molecule.property(connectivity_property).edit()
+        c._d = self._d
+        c._view = self._d.molecule
         c._connectivity_property = connectivity_property
+        c._bond = bond
+        c._update()
+
         return c
 
     def parent(self):
@@ -140,8 +199,10 @@ class Cursor:
            of the bond etc. This will return the Cursor for the whole
            molecule if there isn't a suitable parent
         """
+        self._update()
+
         c = Cursor()
-        c._molecule = self._molecule
+        c._d = self._d
 
         try:
             c._view = self._view.parent()
@@ -151,6 +212,8 @@ class Cursor:
         c._connectivity = None
         c._connectivity_property = None
 
+        c._update()
+
         return c
 
     def next(self):
@@ -159,14 +222,16 @@ class Cursor:
            or the next bond. This will raise an exception
            (StopIteration) if there is no next view.
         """
+        self._update()
+
         if self._connectivity is None:
             try:
                 idx = self._view.index()
                 idx += 1
 
                 c = Cursor()
-                c._molecule = self._molecule
-                c._view = self._molecule[idx]
+                c._d = self._d
+                c._view = self._d.molecule[idx]
                 return c
             except Exception:
                 raise StopIteration()
@@ -177,11 +242,10 @@ class Cursor:
                 raise ValueError()
 
                 c = Cursor()
-                c._molecule = self._molecule
-                c._view = self._molecule
-                c._connectivity = self._connectivity
+                c._d = self._d
                 c._connectivity_property = self._connectivity_property
                 c._bond = next_bond
+                c._update()
                 return c
             except Exception:
                 raise StopIteration()
@@ -192,6 +256,8 @@ class Cursor:
            or the previous bond. This will raise an exception
            (StopIteration) if there is no previous view.
         """
+        self._update()
+
         if self._connectivity is None:
             try:
                 idx = self._view.index()
@@ -201,8 +267,8 @@ class Cursor:
                     raise StopIteration()
 
                 c = Cursor()
-                c._molecule = self._molecule
-                c._view = self._molecule[idx]
+                c._d = self._d
+                c._view = self._d.molecule[idx]
                 return c
             except Exception:
                 raise StopIteration()
@@ -213,11 +279,10 @@ class Cursor:
                 raise ValueError()
 
                 c = Cursor()
-                c._molecule = self._molecule
-                c._view = self._molecule
-                c._connectivity = self._connectivity
+                c._d = self._d
                 c._connectivity_property = self._connectivity_property
                 c._bond = next_bond
+                c._update()
                 return c
             except Exception:
                 raise StopIteration()
@@ -226,11 +291,14 @@ class Cursor:
         """Commit all of the changes and return the newly
            edited molecule (or MoleculeView)
         """
+        self._update()
+
         if self._connectivity is not None:
             self._molecule.setProperty(self._connectivity_property,
                                        self._connectivity.commit())
+            self._update()
 
-        mol = self._molecule.commit()
+        mol = self._d.molecule.commit()
 
         try:
             return mol[self._view.index()]
@@ -238,17 +306,21 @@ class Cursor:
             return mol
 
     def keys(self):
+        self._update()
+
         if self._bond is None:
             return self._view.propertyKeys()
         else:
-            return self._connectivity.propertyKeys(bond)
+            return self._connectivity.propertyKeys(self._bond)
 
     def values(self):
+        self._update()
+
         try:
             if self._bond is None:
                 return self._view.propertyValues()
             else:
-                return self._connectivity.propertyValues(bond)
+                return self._connectivity.propertyValues(self._bond)
         except Exception:
             vals = []
 
@@ -258,6 +330,8 @@ class Cursor:
             return vals
 
     def items(self):
+        self._update()
+
         if self._bond is None:
             keys = self._view.propertyKeys()
             items = []
