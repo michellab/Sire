@@ -11,7 +11,7 @@
 set -e
 
 cd corelib
-/Users/chzcjw/sire.app/bin/cmake --build . --target install -- VERBOSE=1 -j 8
+$HOME/sire.app/bin/cmake --build . --target install -- VERBOSE=1 -j 8
 cd ../wrapper
-/Users/chzcjw/sire.app/bin/cmake --build . --target install -- VERBOSE=1 -j 8
+$HOME/sire.app/bin/cmake --build . --target install -- VERBOSE=1 -j 8
 cd ..
