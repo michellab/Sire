@@ -70,7 +70,10 @@ class Cursor:
         self._view = self._d.update(self._view)
 
     def __str__(self):
-        return f"Cursor({self.type()}:{self.ID()})"
+        if self._d.molecule is None:
+            return "Cursor::null"
+        else:
+            return f"Cursor({self.type()}:{self.ID()})"
 
     def __repr__(self):
         return self.__str__()

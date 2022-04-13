@@ -159,8 +159,9 @@ def load(path: _Union[str, _List[str]], *args, **kwargs):
             from Sire.Mol import Element
             c = mol.cursor()
 
-            for i in range(0, mol.nAtoms()):
-                c.atom(i)["element"] = Element.biologicalElement(mol.atom(i).name())
+            for atom in c.atoms():
+                atom["element"] = Element.biologicalElement(atom.name().value())
+                print(f"guess {atom.name()} is a {atom['element']}")
 
             mol = c.commit()
 
@@ -175,6 +176,7 @@ def load(path: _Union[str, _List[str]], *args, **kwargs):
 
                 c["connectivity"] = connectivity
             except Exception:
+                print("Failed to auto-generate the connectivity")
                 pass
 
         if c is not None:
