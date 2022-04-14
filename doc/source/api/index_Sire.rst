@@ -14,6 +14,6 @@ The package centers around a few core functions:
     Save a molecule or molecules to a file.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
    index_api_Sire

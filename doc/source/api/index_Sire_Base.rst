@@ -17,6 +17,6 @@ really just a collection of properties, keyed as `coordinates`,
     keyed by :class:`~Sire.Base.PropertyName`.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
    index_api_Sire_Base

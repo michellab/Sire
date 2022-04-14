@@ -1,5 +1,5 @@
 """
-.. currentmodule:: Sire
+.. currentmodule:: Sire.CAS
 
 This module provides a basic CAS (computer algebra system)
 This can be used to provide user-defined functions which
@@ -11,13 +11,76 @@ Classes
 .. autosummary::
     :toctree: generated/
 
+    Abs
+    AlwaysFalse
+    AlwaysTrue
+    ArcCos
+    ArcCot
+    ArcCoth
+    ArcCsc
+    ArcCsch
+    ArcSec
+    ArcSech
+    ArcSin
+    ArcSinh
+    ArcTan
+    ArcTanh
+    ComplexPower
+    ComplexValues
+    Condition
+    Conditional
+    Constant
+    Cos
+    Cosh
+    Cot
+    Coth
+    Csc
+    Csch
+    DoubleFunc
+    EqualTo
+    Exp
+    Expression
+    Factor
+    GreaterOrEqualThan
+    GreaterThan
+    I
+    Identities
+    IntegerPower
+    IntegrationConstant
+    LessOrEqualThan
+    LessThan
+    Ln
+    Max
+    Min
+    NotEqualTo
+    Power
+    PowerConstant
+    PowerFunction
+    Product
+    RationalPower
+    RealPower
+    Sec
+    Sech
+    Sin
+    Sinh
+    Sum
     Symbol
+    SymbolComplex
+    SymbolExpression
+    SymbolValue
+    Tan
+    Tanh
+    Values
 
 Functions
 =========
 
 .. autosummary::
     :toctree: generated/
+
+    cbrt
+    pow
+    sqrt
 
 """
 
@@ -30,6 +93,23 @@ import Sire.Base
 
 # Import all of the classes and functions from the C++ library
 from Sire.CAS._CAS import *
+
+__all__ = [ "Abs", "AlwaysFalse", "AlwaysTrue", "ArcCos",
+            "ArcCot", "ArcCoth", "ArcCsc", "ArcCsch",
+            "ArcSec", "ArcSech", "ArcSin", "ArcSinh",
+            "ArcTan", "ArcTanh", "ComplexPower", "ComplexValues",
+            "Condition", "Conditional", "Constant", "Cos",
+            "Cosh", "Cot", "Coth", "Csc",
+            "Csch", "DoubleFunc", "EqualTo", "Exp",
+            "Expression", "Factor", "GreaterOrEqualThan", "GreaterThan",
+            "I", "Identities", "IntegerPower", "IntegrationConstant",
+            "LessOrEqualThan", "LessThan", "Ln", "Max",
+            "Min", "NotEqualTo", "Power", "PowerConstant",
+            "PowerFunction", "Product", "RationalPower", "RealPower",
+            "Sec", "Sech", "Sin", "Sinh",
+            "Sum", "Symbol", "SymbolComplex", "SymbolExpression",
+            "SymbolValue", "Tan", "Tanh", "Values",
+            "cbrt", "pow", "sqrt" ]
 
 # Now define some pure Python functions and classes that are part of
 # this library...
@@ -59,12 +139,12 @@ def create_symbols(symbols: _Union[str,_List[str]], *args) -> _List[Symbol]:
     """Create symbols for each of the passed strings
 
        Args:
-            symbols (str or list[str]):
+        symbols (str or list[str]):
             The list of symbols to create. This can be passed in
             as a single string, list, or several arguments.
 
        Returns:
-            Symbol or list(Symbol):
+        Symbol or list(Symbol):
             The list of created symbols, or a single Symbol if only
             a single name is passed.
 

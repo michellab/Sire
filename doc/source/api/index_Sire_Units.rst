@@ -1,19 +1,26 @@
-====
-Sire
-====
+==========
+Sire.Units
+==========
 
-This is the top-level Python package that provides the core objects
-and functions used in Sire.
+This module implements the dimensionally-consistent units system
+that is used throughout Sire. Most of Sire takes dimensioned values.
+These support type checking (e.g. making sure that we don't pass
+in a length to a function that expects a time), plus automatic
+unit conversion between a range of commonly-used units.
 
-The package centers around a few core functions:
+For example;
 
-:func:`~Sire.load`
-    Load one or more molecules from the specified file(s) or URL(s).
+.. code-block:: python
 
-:func:`~Sire.save`
-    Save a molecule or molecules to a file.
+    >>> from Sire.Units import meter, second, kilogram, joule, kcal, mole
+    >>> energy = 5000 * kilogram * (meter / second)**2 / mole
+    >>> print(energy.to(joule / mole))
+    5000.000000000001
+
+    >>> print(energy.to(kcal / mole))
+    1.1950286806883368
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
-   index_api_Sire
+   index_api_Sire_Units

@@ -1,19 +1,12 @@
-====
-Sire
-====
+=========
+Sire.Move
+=========
 
-This is the top-level Python package that provides the core objects
-and functions used in Sire.
-
-The package centers around a few core functions:
-
-:func:`~Sire.load`
-    Load one or more molecules from the specified file(s) or URL(s).
-
-:func:`~Sire.save`
-    Save a molecule or molecules to a file.
+This module provides classes that are used to move molecules
+as part of molecular simulations. This is where the bulk of the
+Monte Carlo code is located.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
-   index_api_Sire
+   index_api_Sire_Move

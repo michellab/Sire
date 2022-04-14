@@ -1,19 +1,21 @@
-====
-Sire
-====
+=======
+Sire.ID
+=======
 
-This is the top-level Python package that provides the core objects
-and functions used in Sire.
+This module holds the base classes of all of the objects used
+to identify things in Sire. The core identifier types are;
 
-The package centers around a few core functions:
+:class:`~Sire.ID.Index`
+    Identify by index (the 0-indexed position in the container)
 
-:func:`~Sire.load`
-    Load one or more molecules from the specified file(s) or URL(s).
+:class:`~Sire.ID.Number`
+    Identify by a user-assigned number, e.g. the residue number
 
-:func:`~Sire.save`
-    Save a molecule or molecules to a file.
+:class:`~Sire.ID.Name`
+    Identify by a user-assigned name, e.g. the residue name
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
-   index_api_Sire
+   index_api_Sire_ID
+

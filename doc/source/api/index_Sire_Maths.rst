@@ -1,19 +1,12 @@
-====
-Sire
-====
+==========
+Sire.Maths
+==========
 
-This is the top-level Python package that provides the core objects
-and functions used in Sire.
-
-The package centers around a few core functions:
-
-:func:`~Sire.load`
-    Load one or more molecules from the specified file(s) or URL(s).
-
-:func:`~Sire.save`
-    Save a molecule or molecules to a file.
+This module provides some useful maths functions that are needed
+by Sire. In particular, it provides the :class:`~Sire.Maths.Vector`
+class which is used to store 3D coordinates.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
-   index_api_Sire
+   index_api_Sire_Maths

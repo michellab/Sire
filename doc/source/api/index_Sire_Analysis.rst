@@ -23,6 +23,6 @@ The package centers around a few core classes:
     Represents a data point in the :class:`~Sire.Analysis.PMF`.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
    index_api_Sire_Analysis

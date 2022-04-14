@@ -1,12 +1,32 @@
-#############################
-##
-## The SireVol module
-##
-## This contains all of the classes that provide
-## volumes in which the simulation is set up and 
-## run (e.g. infinite boxes - 'Cartesian', and 
-## periodic boxes - 'PeriodicBox')
-##
+"""
+.. currentmodule:: Sire.Vol
+
+Classes
+=======
+
+.. autosummary::
+    :toctree: generated/
+
+    AABox
+    BoxPatching
+    Cartesian
+    CombinedSpace
+    CombineSpaces
+    CoordGroup
+    CoordGroupArray
+    CoordGroupArrayArray
+    CoordGroupBase
+    CoordGroupEditor
+    Grid
+    GridIndex
+    GridInfo
+    Patching
+    PeriodicBox
+    RegularGrid
+    Space
+    TriclinicBox
+
+"""
 
 import Sire.Base
 import Sire.Maths
@@ -15,7 +35,13 @@ import Sire.Units
 # Import all of the classes and functions from the C++ library
 from Sire.Vol._Vol import *
 
-# Now define some pure Python functions and classes that are part of 
+__all__ = [ "AABox", "BoxPatching", "Cartesian", "CombinedSpace",
+            "CombineSpaces", "CoordGroup", "CoordGroupArray", "CoordGroupArrayArray",
+            "CoordGroupBase", "CoordGroupEditor", "Grid", "GridIndex",
+            "GridInfo", "Patching", "PeriodicBox", "RegularGrid",
+            "Space", "TriclinicBox" ]
+
+# Now define some pure Python functions and classes that are part of
 # this library...
 
 

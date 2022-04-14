@@ -1,19 +1,21 @@
-====
-Sire
-====
+===========
+Sire.Stream
+===========
 
-This is the top-level Python package that provides the core objects
-and functions used in Sire.
+Nearly all Sire objects can be streamed (marshalled) to and from a portable, versioned
+and compact binary format. This is interfaced to
+`Python's pickle module <https://docs.python.org/3/library/pickle.html>`__,
+meaning that nearly all Sire objects can be safely pickled, e.g.
 
-The package centers around a few core functions:
+.. code-block:: python
 
-:func:`~Sire.load`
-    Load one or more molecules from the specified file(s) or URL(s).
+    >>> s = pickle.dumps(mol)
+    >>> new_mol = pickle.loads(s)
 
-:func:`~Sire.save`
-    Save a molecule or molecules to a file.
+You wouldn't normally need to use any of the functionality in this module
+directly.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
-   index_api_Sire
+   index_api_Sire_Stream

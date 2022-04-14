@@ -1,19 +1,15 @@
-====
-Sire
-====
+=======
+Sire.FF
+=======
 
-This is the top-level Python package that provides the core objects
-and functions used in Sire.
+This is the base module for all forcefields. Forcefields provide
+an interface to different functions for calculating energies
+and forces on molecules.
 
-The package centers around a few core functions:
-
-:func:`~Sire.load`
-    Load one or more molecules from the specified file(s) or URL(s).
-
-:func:`~Sire.save`
-    Save a molecule or molecules to a file.
+:class:`~Sire.FF.FF`
+    The base class of all forcefields
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
-   index_api_Sire
+   index_api_Sire_FF

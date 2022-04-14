@@ -4,8 +4,8 @@ Documentation
 
 Sire is composed of several modules:
 
-Sire
-----
+Sire Module
+-----------
 
 * The :doc:`Sire <index_Sire>` top-level Python module. This has top-level
   functions that should make it easy to use Sire without knowing about
@@ -14,12 +14,13 @@ Sire
   the alias ``sr``.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 4
 
    index_Sire
 
-Sire Submodules
----------------
+There are also a number of submodules. These provide additional functionality,
+going all the way up to letting you construct complete molecular simulation
+programs.
 
 * The :doc:`Sire.Mol <index_Sire_Mol>` module. This contains all of the
   classes and functions used to represent and manipulate molecules.
@@ -71,12 +72,16 @@ Sire Submodules
   :doc:`Sire.Vol <index_Sire_Vol>` (classes that represent different
   simulation spaces, e.g. :class:`Sire.Vol.PeriodicBox`).
 
+Sire Submodules
+---------------
+
 .. toctree::
    :maxdepth: 1
 
    index_Sire_Analysis
    index_Sire_Base
    index_Sire_CAS
+   index_Sire_Error
    index_Sire_FF
    index_Sire_ID
    index_Sire_IO

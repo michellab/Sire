@@ -1,19 +1,21 @@
-====
-Sire
-====
+===========
+Sire.Squire
+===========
 
-This is the top-level Python package that provides the core objects
-and functions used in Sire.
+This is an experimental module that provided interfaces to various
+quantum chemical packages. This enabled Sire to use those programs
+to calculate QM and QM/MM energies, so that QM and QM/MM simulations
+could be performed.
 
-The package centers around a few core functions:
+.. warning::
 
-:func:`~Sire.load`
-    Load one or more molecules from the specified file(s) or URL(s).
-
-:func:`~Sire.save`
-    Save a molecule or molecules to a file.
+   These classes have not been developed or used in a while. It
+   is likely that the interfaces to the QM programs is now out
+   of date. If you are interested in this functionality then
+   please get in touch and we can work out how to
+   resurrect this code.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
-   index_api_Sire
+   index_api_Sire_Squire

@@ -1,18 +1,35 @@
-#############################
-##
-## The SireStream module
-##
-## (C) Christopher Woods
-##
+"""
+.. currentmodule:: Sire.Stream
 
+Classes
+=======
+
+.. autosummary::
+    :toctree: generated/
+
+    FileHeader
+    MD5Sum
+
+Functions
+=========
+
+.. autosummary::
+    :toctree: generated/
+
+    load
+    save
+
+"""
 from Sire.Stream._Stream import *
+
+__all__ = ["FileHeader", "MD5Sum", "load", "save"]
 
 import sys
 
 _pvt_load = load
 
 _pvt_modules = { "SireAnalysis" : "Sire.Analysis",
-                 "SireBase"     : "Sire.Base", 
+                 "SireBase"     : "Sire.Base",
                  "SireCAS"      : "Sire.CAS",
                  "SireCluster"  : "Sire.Cluster",
                  "SireError"    : "Sire.Error",
@@ -27,7 +44,7 @@ _pvt_modules = { "SireAnalysis" : "Sire.Analysis",
                  "SireUnits"    : "Sire.Units",
                  "SireVol"      : "Sire.Vol",
                  "Squire"       : "Sire.Squire",
-                 "Soiree"       : "Sire.Analysis"  # Soiree was renamed as Analysis 
+                 "Soiree"       : "Sire.Analysis"  # Soiree was renamed as Analysis
                 }
 
 def _pvt_loadLibrary(lib):
@@ -35,7 +52,7 @@ def _pvt_loadLibrary(lib):
     lib = str(lib)
 
     if lib in _pvt_modules:
-        __import__( _pvt_modules[lib] ) 
+        __import__( _pvt_modules[lib] )
 
 def load(data):
     header = getDataHeader(data)

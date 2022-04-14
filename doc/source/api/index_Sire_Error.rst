@@ -1,19 +1,21 @@
-====
-Sire
-====
+==========
+Sire.Error
+==========
 
-This is the top-level Python package that provides the core objects
-and functions used in Sire.
+This module is used to convert between Sire's C++ and Python exceptions.
+There are some key functions that are useful if you want more detail
+about an error or issue that has occurred.
 
-The package centers around a few core functions:
+:func:`~Sire.Error.get_last_error_details`
+    Get more information about the last C++ Sire exception that was
+    raised. This includes information like the C++ backtrace from
+    where the exception was raised, and the line of C++ code that
+    triggered the issue.
 
-:func:`~Sire.load`
-    Load one or more molecules from the specified file(s) or URL(s).
-
-:func:`~Sire.save`
-    Save a molecule or molecules to a file.
+:func:`~Sire.Error.get_back_trace`
+    Get the full current backtrace.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
-   index_api_Sire
+   index_api_Sire_Error

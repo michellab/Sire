@@ -1,11 +1,45 @@
-#############################
-##
-## The SireIO library.
-##
-## This contains all of the classes that are used to read
-## and write molecule files.
-##
+"""
+.. currentmodule:: Sire.IO
 
+Classes
+=======
+
+.. autosummary::
+    :toctree: generated/
+
+    Amber
+    AmberPrm
+    AmberRst
+    AmberRst7
+    CharmmPSF
+    Cube
+    Gro87
+    Mol2
+    MoleculeParser
+    PDB
+    PDB2
+    SDF
+    Tinker
+    TrajectoryMonitor
+    ZmatrixMaker
+
+Functions
+=========
+
+.. autosummary::
+    :toctree: generated/
+
+    isAmberWater
+    isGromacsWater
+    isWater
+    renumberConstituents
+    repartitionHydrogenMass
+    setAmberWater
+    setGromacsWater
+    updateAndPreserveOrder
+    updateCoordinatesAndVelocities
+
+"""
 import Sire.Mol
 import Sire.System
 import Sire.Units
@@ -14,6 +48,14 @@ import Sire.Qt
 
 # Import all of the classes and functions from the C++ library
 from Sire.IO._IO import *
+
+__all__ = [ "Amber", "AmberPrm", "AmberRst", "AmberRst7",
+            "CharmmPSF", "Cube", "Gro87", "Mol2",
+            "MoleculeParser", "PDB", "PDB2", "SDF",
+            "Tinker", "TrajectoryMonitor", "ZmatrixMaker", "isAmberWater",
+            "isGromacsWater", "isWater", "renumberConstituents", "repartitionHydrogenMass",
+            "setAmberWater", "setGromacsWater", "updateAndPreserveOrder", "updateCoordinatesAndVelocities",
+             ]
 
 # This is now a hack that is used to fix the AtomProperty
 # wrapping issues on Mac. For some reason, some AtomProperty
