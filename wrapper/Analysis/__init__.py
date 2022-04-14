@@ -1,9 +1,29 @@
-#############################
-##
-## The Soiree module
-##
-## (C) Christopher Woods
-##
+"""
+.. currentmodule:: Sire.Analysis
+
+Classes
+=========
+
+.. autosummary::
+    :toctree: generated/
+
+    Bennetts
+    ComponentGradients
+    DataPoint
+    FEP
+    FEPDeltas
+    Gradients
+    PMF
+    TI
+    TIComponents
+    TIPMF
+
+"""
+
+__all__ = ["Bennetts", "FEP", "Gradients",
+           "ComponentGradients", "DataPoint",
+           "FEP", "FEPDeltas", "PMF", "TI",
+           "TIComponents", "TIPMF"]
 
 import Sire.Maths
 import Sire.CAS

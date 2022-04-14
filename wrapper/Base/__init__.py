@@ -1,25 +1,73 @@
-#############################
-##
-## The SireBase module
-##
-## This contains some base classes
-## that don't fit anywhere else.
-##
-## This module may be removed
-## as I find homes for some of
-## these classes
-##
-## (C) Christopher Woods
-##
+"""
+.. currentmodule:: Sire.Base
+
+Classes
+=======
+
+.. autosummary::
+    :toctree: generated/
+
+    Property
+    Propeties
+    PropertyList
+    PropertyMap
+    PropertyName
+    Range
+    SimpleRange
+    TempDir
+    TimeProperty
+    TrimString
+    UpperCaseString
+    VariantProperty
+    Version
+
+Functions
+=========
+
+.. autosummary::
+    :toctree: generated/
+
+    findExe
+    getBinDir
+    getBundledLibDir
+    getInstallDir
+    getLibDir
+    getReleaseVersion
+    getRepositoryBranch
+    getRepositoryURL
+    getRepositoryVersion
+    getRepositoryVersionIsClean
+    getShareDir
+    getSireDir
+    increment
+    wrap
+"""
 
 from Sire.Base._Base import *
+
+__all__ = ["Property", "Properties", "PropertyList", "PropertyMap",
+           "PropertyName", "Range", "SimpleRange", "TempDir",
+           "TimeProperty", "TrimString", "UpperCaseString",
+           "VariantProperty", "Version", "findExe",
+           "getBinDir", "getBundledLibDir", "getInstallDir",
+           "getLibDir", "getReleaseVersion", "getRepositoryBranch",
+           "getRepositoryURL", "getRepositoryVersion",
+           "getRepositoryVersionIsClean", "getShareDir",
+           "getSireDir", "increment", "wrap"]
 
 _wrap_functions = []
 
 _base_wrap = wrap
 
 def wrap(value):
-    # First, try to wrap the python concrete classes
+    """Wrap the passed value into a :class:`~Sire.Base.Property`
+       object. This works recursively, wrapping all items in
+       a container, such that the returned value is derived
+       from :class:`~Sire.Base.Property` and can be passed to
+       the C++ code in Sire. Note that you normally don't
+       need to call this yourself, as wrapping is handled
+       automatically.
+    """
     if isinstance(value, bool):
         return BooleanProperty(value)
 

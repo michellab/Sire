@@ -93,14 +93,14 @@ def load(path: _Union[str, _List[str]], *args, **kwargs):
        to the current directory and loaded from there.
 
        Args:
-            path (str or list[str]):
+        path (str or list[str]):
             The filename (or names) or the URL or URLS of the molecular
             system to load. This allows multiple paths to be input
             as some molecular file formats split molecular information
             across multiple files. Multiple paths can also be passed
             as multiple arguments to this function.
 
-            log (dict):
+        log (dict):
             Optional dictionary that you can pass in that will be populated
             with any error messages or warnings from the parsers as they
             attempt to load in the molecular data. This can be helpful
@@ -205,18 +205,18 @@ def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
        files will be written, one for each specified format.
 
        Args:
-            molecules (Sire.System.System, Sire.Mol.Molecule, List[Sire.Mol.Molecule] etc.)
+        molecules (:class:`Sire.System.System`, :class:`Sire.Mol.Molecule`, List[:class:`Sire.Mol.Molecule`] etc.)
             The molecule (or molecules) that should be written to the file.
-            This can be anything that can be converted to a Sire.System.System,
-            i.e. a single Molecule (or MoleculeView), or a list of
+            This can be anything that can be converted to a :class:`Sire.System.System`,
+            i.e. a single :class:`~Sire.Mol.Molecule` (or :class:`~Sire.Mol.MoleculeView`), or a list of
             Molecules (or MoleculeViews)
 
-            filename (str):
+        filename (str):
             The name of the file to which to write the file. Extensions
             will be automatically added if they are needed to match
             the formats of the file (or files) that are written.
 
-            format (str or list(str)):
+        format (str or list(str)):
             The format (or formats) that should be used to write the
             file (or files). If the format isn't specified, then it
             will be guessed from the extension used for `filename`.
@@ -224,7 +224,7 @@ def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
             based on the formats used to load the molecule originally.
             If it still isn't available, then PDB will be used.
 
-            log (dict):
+        log (dict):
             Optional dictionary that you can pass in that will be populated
             with any error messages or warnings from the parsers as they
             attempt to write the molecular data. This can be helpful

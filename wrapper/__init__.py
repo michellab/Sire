@@ -1,13 +1,7 @@
 """
 .. currentmodule:: Sire
 
-Classes
-=======
-
-.. autosummary::
-    :toctree: generated/
-
-    Molecule
+This is the Sire module.
 
 Functions
 =========
@@ -17,10 +11,12 @@ Functions
 
     load
     save
+    try_import
+    try_import_from
 
 """
 
-__all__ = [ "try_import", "try_import_from" ]
+__all__ = [ "load", "save", "try_import", "try_import_from" ]
 
 _module_to_package = {}
 
