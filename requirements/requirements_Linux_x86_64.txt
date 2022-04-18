@@ -7,12 +7,11 @@ gsl=2.7
 tbb=2021.5.0
 tbb-devel=2021.5.0
 pyqt=5.12.3
+pymbar=3.0.5
 gcc_linux-64
 gxx_linux-64
 sysroot_linux-64==2.17
 make
 libtool
-autoconf
-automake
 cmake
 openmm=7.7.0

@@ -151,8 +151,12 @@ if [ "$(uname)" == "Darwin" ]; then
     PLATFORM="MacOS"
 
     if [ ${BIT_TYPE} == "arm64" ]; then
-      echo "Compiling an x86_64 executable as Sire does not yet support arm64"
-      BIT_TYPE="x86_64"
+      echo "Compiling a native M1 version of Sire"
+      echo "Using an older conda as the newer one isn't available"
+      MINICONDA_VERSION="4.10.1"
+    else
+      echo "Compiling an X64-64 version of Sire."
+      echo "This version should work on M1 Macs as well as older Intel Macs"
     fi
 
     MINICONDA="${REPO}/Miniconda3-${PYTHON_VERSION}_${MINICONDA_VERSION}-MacOSX-${BIT_TYPE}.sh"

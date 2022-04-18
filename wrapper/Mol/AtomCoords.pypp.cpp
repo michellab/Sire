@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/align.h"
 
+#include "SireMaths/vectorproperty.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -259,6 +261,32 @@ void register_AtomCoords_class(){
                 , get_function_value
                 , ( bp::arg("cgatomidx") )
                 , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMaths::Vector >::getAsProperty
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMaths::Vector >::*getAsProperty_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::getAsProperty );
+            
+            AtomCoords_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMaths::Vector >::getAsVariant
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
+            typedef ::QVariant ( ::SireMol::AtomProperty< SireMaths::Vector >::*getAsVariant_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::getAsVariant );
+            
+            AtomCoords_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("cgatomidx") )
                 , "" );
         
         }

@@ -84,6 +84,41 @@ DoubleArrayProperty::DoubleArrayProperty(const QVector<double> &array)
                     : ConcreteProperty<DoubleArrayProperty, ArrayProperty<double> >(array)
 {}
 
+DoubleArrayProperty::DoubleArrayProperty(const StringArrayProperty &array)
+                    : ConcreteProperty<DoubleArrayProperty, ArrayProperty<double> >()
+{
+    for (const auto &value : array.toVector())
+    {
+        bool ok;
+        a.append(value.toDouble(&ok));
+
+        if (!ok)
+        {
+            throw SireError::invalid_arg(QObject::tr(
+                "Cannot convert the string '%1' to a double!").arg(value),
+                    CODELOC);
+        }
+    }
+}
+
+DoubleArrayProperty::DoubleArrayProperty(const IntegerArrayProperty &array)
+                    : ConcreteProperty<DoubleArrayProperty, ArrayProperty<double> >()
+{
+    for (const auto &value : array.toVector())
+    {
+        a.append(value);
+    }
+}
+
+DoubleArrayProperty::DoubleArrayProperty(const PropertyList &array)
+                    : ConcreteProperty<DoubleArrayProperty, ArrayProperty<double> >()
+{
+    for (const auto &value : array.toVector())
+    {
+        a.append(value.asADouble());
+    }
+}
+
 DoubleArrayProperty::DoubleArrayProperty(const DoubleArrayProperty &other)
                     : ConcreteProperty<DoubleArrayProperty, ArrayProperty<double> >(other)
 {}
@@ -234,6 +269,42 @@ IntegerArrayProperty::IntegerArrayProperty(const QVector<qint64> &array)
                     : ConcreteProperty<IntegerArrayProperty, ArrayProperty<qint64> >(array)
 {}
 
+
+IntegerArrayProperty::IntegerArrayProperty(const StringArrayProperty &array)
+                    : ConcreteProperty<IntegerArrayProperty, ArrayProperty<qint64> >()
+{
+    for (const auto &value : array.toVector())
+    {
+        bool ok;
+        a.append(value.toLong(&ok));
+
+        if (!ok)
+        {
+            throw SireError::invalid_arg(QObject::tr(
+                "Cannot convert the string '%1' to an integer!").arg(value),
+                    CODELOC);
+        }
+    }
+}
+
+IntegerArrayProperty::IntegerArrayProperty(const DoubleArrayProperty &array)
+                    : ConcreteProperty<IntegerArrayProperty, ArrayProperty<qint64> >()
+{
+    for (const auto &value : array.toVector())
+    {
+        a.append(value);
+    }
+}
+
+IntegerArrayProperty::IntegerArrayProperty(const PropertyList &array)
+                    : ConcreteProperty<IntegerArrayProperty, ArrayProperty<qint64> >()
+{
+    for (const auto &value : array.toVector())
+    {
+        a.append(value.asAnInteger());
+    }
+}
+
 IntegerArrayProperty::IntegerArrayProperty(const IntegerArrayProperty &other)
                     : ConcreteProperty<IntegerArrayProperty, ArrayProperty<qint64> >(other)
 {}
@@ -378,6 +449,33 @@ StringArrayProperty::StringArrayProperty(const QList<QString> &array)
 StringArrayProperty::StringArrayProperty(const QVector<QString> &array)
                     : ConcreteProperty<StringArrayProperty, ArrayProperty<QString> >(array)
 {}
+
+StringArrayProperty::StringArrayProperty(const DoubleArrayProperty &array)
+                    : ConcreteProperty<StringArrayProperty, ArrayProperty<QString> >()
+{
+    for (const auto &value : array.toVector())
+    {
+        a.append(QString::number(value));
+    }
+}
+
+StringArrayProperty::StringArrayProperty(const IntegerArrayProperty &array)
+                    : ConcreteProperty<StringArrayProperty, ArrayProperty<QString> >()
+{
+    for (const auto &value : array.toVector())
+    {
+        a.append(QString::number(value));
+    }
+}
+
+StringArrayProperty::StringArrayProperty(const PropertyList &array)
+                    : ConcreteProperty<StringArrayProperty, ArrayProperty<QString> >()
+{
+    for (const auto &value : array.toVector())
+    {
+        a.append(value.asAString());
+    }
+}
 
 StringArrayProperty::StringArrayProperty(const StringArrayProperty &other)
                     : ConcreteProperty<StringArrayProperty, ArrayProperty<QString> >(other)

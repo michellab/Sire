@@ -23,14 +23,15 @@ fi
 TAG=$(git --git-dir="$SRC_DIR"/.git --work-tree="$SRC_DIR" tag --contains)
 
 # If the tag is not empty, then set the label to main.
-if [ ! -e "$TAG" ]; then
+if [ ! -z "$TAG" ]; then
     LABEL=main
 fi
 
 # Upload the packages to the michellab channel on Anaconda Cloud.
 
-# Label release packages with main and dev so that dev is at least as new as main.
-# Uncomment the libcpuid package upload as and when there are new releases.
+# Label release packages with main and dev so that dev is at least as new as
+# main. Only need to uncomment the libcpuid and fkcombu package uploads when
+# there new versions are released.
 if [ "$LABEL" = "main" ]; then
     anaconda \
         --token "$ANACONDA_TOKEN" upload \
@@ -39,7 +40,8 @@ if [ "$LABEL" = "main" ]; then
         --label dev \
         --force \
         "$CONDA_BLD"/"$OS"/sire-* \
-        "$CONDA_BLD"/"$OS"/libcpuid-*
+        "$CONDA_BLD"/"$OS"/libcpuid-* \
+        "$CONDA_BLD"/"$OS"/fkcombu-*
 else
     anaconda \
         --token "$ANACONDA_TOKEN" upload \
@@ -47,7 +49,8 @@ else
         --label dev \
         --force \
         "$CONDA_BLD"/"$OS"/sire-* \
-        "$CONDA_BLD"/"$OS"/libcpuid-*
+        "$CONDA_BLD"/"$OS"/libcpuid-* \
+        "$CONDA_BLD"/"$OS"/fkcombu-*
 fi
 
 echo "Package uploaded!"

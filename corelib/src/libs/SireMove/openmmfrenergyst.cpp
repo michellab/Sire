@@ -405,8 +405,7 @@ void OpenMMFrEnergyST::initialise()
     //if ( solute.isEmpty() ){
     //    throw SireError::program_bug(QObject::tr("Cannot initialise OpenMMFrEnergyST because solute group has not been defined"), CODELOC);
     //}
-
-
+    
     const MoleculeGroup solutehard = this->solutehard.read();
 
     const MoleculeGroup solutetodummy = this->solutetodummy.read();
@@ -528,7 +527,8 @@ void OpenMMFrEnergyST::initialise()
               "LJ=((sigma_avg * sigma_avg)/soft)^3;"
               "soft=(diff_lj*delta*sigma_avg + r*r);"
               "diff_lj=(1.0-lambda) * 0.1;"
-              "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+              //"lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+              "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * 0 + Logic_hard;"
               "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
               "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
               "B_om_lam = max(isHD1*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), C_om_lam);"
@@ -656,9 +656,9 @@ void OpenMMFrEnergyST::initialise()
                 "soft=(diff_lj*deltaftd*sigma_avg+r*r);"
                 "diff_lj=(1.0-lamFTD)*0.1;"
                 "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
-                "sigma_avg = lamftd*saend + (1-lamftd)*sastart;"
                 "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-                "lamFTD = max(lamftd,1-lamftd);""";
+                //"lamFTD = max(lamftd,1-lamftd);""";
+                "lamFTD = 0.0;""";
 
             if (flag_combRules == ARITHMETIC)
             {
@@ -703,7 +703,8 @@ void OpenMMFrEnergyST::initialise()
               "LJ=((sigma_avg * sigma_avg)/soft)^3;"
               "soft=(diff_lj*delta*sigma_avg + r*r);"
               "diff_lj=(1.0-lambda) * 0.1;"
-              "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+              //"lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+              "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * 0 + Logic_hard;"
               "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
               "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
               "B_om_lam = max(isHD1*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), C_om_lam);"
@@ -830,7 +831,8 @@ void OpenMMFrEnergyST::initialise()
               "diff_lj=(1.0-lamFTD)*0.1;"
               "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
               "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-              "lamFTD = max(lamftd,1-lamftd);""";
+              //"lamFTD = max(lamftd,1-lamftd);""";
+              "lamFTD = 0.0;""";
 
             if (flag_combRules == ARITHMETIC)
             {
@@ -929,7 +931,8 @@ void OpenMMFrEnergyST::initialise()
              "LJ=((sigma_avg * sigma_avg)/soft)^3;"
              "soft=(diff_lj*delta*sigma_avg + r*r);"
              "diff_lj=(1.0-lambda) * 0.1;"
-             "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+             //"lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+             "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * 0 + Logic_hard;"
              "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
              "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
              "B_om_lam = max(isHD1*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), C_om_lam);"
@@ -1078,7 +1081,8 @@ void OpenMMFrEnergyST::initialise()
             "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
             "sigma_avg = lamftd*saend + (1-lamftd)*sastart;"
             "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-            "lamFTD = max(lamftd,1-lamftd);""";
+            //"lamFTD = max(lamftd,1-lamftd);""";
+            "lamFTD = 0.0;""";
 
             if (flag_combRules == ARITHMETIC)
             {
@@ -1129,7 +1133,8 @@ void OpenMMFrEnergyST::initialise()
              "LJ=((sigma_avg * sigma_avg)/soft)^3;"
              "soft=(diff_lj*delta*sigma_avg + r*r);"
              "diff_lj=(1.0-lambda) * 0.1;"
-             "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+             //"lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+             "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * 0 + Logic_hard;"
              "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
              "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
              "B_om_lam = max(isHD1*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), C_om_lam);"
@@ -1282,7 +1287,8 @@ void OpenMMFrEnergyST::initialise()
                 "diff_lj=(1.0-lamFTD)*0.1;"
                 "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
                 "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-                "lamFTD = max(lamftd,1-lamftd);""";
+                //"lamFTD = max(lamftd,1-lamftd);""";
+                "lamFTD = 0;""";
 
             if (flag_combRules == ARITHMETIC)
             {
@@ -3441,49 +3447,53 @@ void OpenMMFrEnergyST::initialise()
 
     if (UseLink_flag == true)
     {
-        Molecule molecule = moleculegroup.moleculeAt(0).molecule();
-
-        bool haslinkinfo = molecule.hasProperty("linkbonds");
-
-        if (haslinkinfo)
+        for (int i = 0; i < nmols; i++)
         {
-            std::vector<double> custom_bond_link_par(3);
+            Molecule molecule = moleculegroup.moleculeAt(i).molecule();
 
-            Properties linkprop = molecule.property("linkbonds").asA<Properties>();
-
-            int nlinks = linkprop.property(QString("nbondlinks")).asA<VariantProperty>().toInt();
-
-            if (Debug)
-                qDebug() << "Number of constraint links = " << nlinks;
-
-            for (int i = 0; i < nlinks; i++)
+            if (molecule.hasProperty("linkbonds"))
             {
-                int atomnum0 = linkprop.property(QString("AtomNum0(%1)").arg(i)).asA<VariantProperty>().toInt();
-                int atomnum1 = linkprop.property(QString("AtomNum1(%1)").arg(i)).asA<VariantProperty>().toInt();
-                double reql = linkprop.property(QString("reql(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                double kl = linkprop.property(QString("kl(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                double dl = linkprop.property(QString("dl(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                std::vector<double> custom_bond_link_par(3);
 
-                int openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
-                int openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
+                const auto linkprop = molecule.property("linkbonds").asA<Properties>();
 
-                custom_bond_link_par[0] = reql * OpenMM::NmPerAngstrom; //req
-                custom_bond_link_par[1] = kl * (OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); //k
-                custom_bond_link_par[2] = dl * OpenMM::NmPerAngstrom; //dl
+                const auto nlinks = linkprop.property(QString("nbondlinks")).asA<VariantProperty>().toInt();
 
                 if (Debug)
+                    qDebug() << "Number of constraint links = " << nlinks;
+
+                for (int i = 0; i < nlinks; i++)
                 {
-                    qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
-                    qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
-                    qDebug() << "Req = " << reql << " kl = " << kl << " dl = " << dl;
+                    const auto atomnum0 = linkprop.property(QString("AtomNum0(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    const auto atomnum1 = linkprop.property(QString("AtomNum1(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    const auto reql = linkprop.property(QString("reql(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    const auto kl = linkprop.property(QString("kl(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    const auto dl = linkprop.property(QString("dl(%1)").arg(i)).asA<VariantProperty>().toDouble();
+
+                    const int openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
+                    const int openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
+
+                    custom_bond_link_par[0] = reql * OpenMM::NmPerAngstrom; //req
+                    custom_bond_link_par[1] = kl * (OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); //k
+                    custom_bond_link_par[2] = dl * OpenMM::NmPerAngstrom; //dl
+
+                    if (Debug)
+                    {
+                        qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
+                        qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
+                        qDebug() << "Req = " << reql << " kl = " << kl << " dl = " << dl;
+                    }
+
+                    custom_link_bond->addBond(openmmindex0, openmmindex1, custom_bond_link_par);
                 }
 
-                custom_link_bond->addBond(openmmindex0, openmmindex1, custom_bond_link_par);
+                system_openmm->addForce(custom_link_bond);
+
+                // We've found the molecule, exit the outer loop.
+                break;
+
             }
-
-            system_openmm->addForce(custom_link_bond);
-        }
-
+        }//end of loop over molecules in system
     }//end of bond link flag
 
     this->openmm_system = system_openmm;
