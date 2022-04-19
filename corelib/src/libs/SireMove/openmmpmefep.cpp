@@ -440,6 +440,22 @@ void OpenMMPMEFEP::addMCBarostat(OpenMM::System &system)
     }
 }
 
+void OpenMMPMEFEP:OpenMMPMEFEP:::energyBeforeSetup()
+{
+    const double converted_cutoff_distance =
+        convertTo(cutoff_distance.value(), nanometer);
+    auto system = new OpenMM::System();
+
+    auto nb_force = new OpenMM::NonbondedForce();
+    nb_force->setNonbondedMethod(OpenMM::NonbondedForce::PME);
+    nb_force->setCutoffDistance(converted_cutoff_distance);
+    nb_force->setIncludeDirectSpace(true);
+    nb_force->setUseDispersionCorrection(false);
+
+    system.addForce(nb_force);
+}
+
+
 // General force field
 // HHL
 // FIXME: disable SPOnOff and see if it works with PME
@@ -1027,7 +1043,7 @@ void OpenMMPMEFEP::initialise()
     addPerParticleParameters(*direct_space, {"qstart", "qend", "epstart", "epend",
                              "sigmastart", "sigmaend", "isHD", "isTD",
                              "isFD", "isSolvent"});
-    addPerBondParameters(*custom_corr_recip, {"qcstart", "qcend", "qcmix"});
+    addPerBondParameters(*custom_corr_recip, {"qcstart", "qcend"});
 
     std::vector<std::string> paramList = {"qpstart", "qpend", "qmix", "eastart",
                                           "eaend", "emix", "sastart", "saend",
@@ -2192,7 +2208,7 @@ void OpenMMPMEFEP::initialise()
 
     std::vector<double> p1_params(10);
     std::vector<double> p2_params(10);
-    std::vector<double> corr_recip_params(3);
+    std::vector<double> corr_recip_params(2);
     double qprod_diff, qprod_start, qprod_end, qprod_mix;
     double Qstart_p1, Qend_p1, Qstart_p2, Qend_p2;
 
@@ -2383,7 +2399,7 @@ void OpenMMPMEFEP::initialise()
 	}
 
 	// FIXME: add only affected bonds?
-	corr_recip_params = {qprod_start, qprod_end, qprod_mix};
+	corr_recip_params = {qprod_start, qprod_end};
 	custom_corr_recip->addBond(p1, p2, corr_recip_params);
 
         direct_space->addExclusion(p1, p2);
