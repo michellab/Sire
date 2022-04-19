@@ -221,6 +221,32 @@ void register_AtomLJs_class(){
                 , "" );
         
         }
+        { //::SireMol::AtomProperty< SireMM::LJParameter >::getAsProperty
+        
+            typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMM::LJParameter >::*getAsProperty_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::getAsProperty );
+            
+            AtomLJs_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMM::LJParameter >::getAsVariant
+        
+            typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
+            typedef ::QVariant ( ::SireMol::AtomProperty< SireMM::LJParameter >::*getAsVariant_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::getAsVariant );
+            
+            AtomLJs_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::isCompatibleWith
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;

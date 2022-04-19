@@ -46,6 +46,8 @@
 
 #include "SireMol/errors.h"
 
+#include "SireBase/errors.h"
+
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
@@ -57,6 +59,58 @@ using namespace SireStream;
 using namespace SireMol;
 using namespace SireBase;
 
+//////
+////// Implementation of detail::IDPair
+//////
+
+SIRE_ALWAYS_INLINE QDataStream& operator<<(QDataStream &ds,
+                                           const SireMol::detail::IDPair &idpair)
+{
+    ds << idpair.atom0 << idpair.atom1;
+    return ds;
+}
+
+SIRE_ALWAYS_INLINE QDataStream& operator>>(QDataStream &ds,
+                                           SireMol::detail::IDPair &idpair)
+{
+    ds >> idpair.atom0 >> idpair.atom1;
+    return ds;
+}
+
+SireMol::detail::IDPair::IDPair(quint32 atm0, quint32 atm1)
+       : atom0(atm0), atom1(atm1)
+{
+    if (atm0 > atm1)
+    {
+        qSwap(atom0,atom1);
+    }
+}
+
+SireMol::detail::IDPair::IDPair(const SireMol::detail::IDPair &other)
+       : atom0(other.atom0), atom1(other.atom1)
+{}
+
+SireMol::detail::IDPair::~IDPair()
+{}
+
+SireMol::detail::IDPair& SireMol::detail::IDPair::operator=(
+                                    const SireMol::detail::IDPair &other)
+{
+    atom0 = other.atom0;
+    atom1 = other.atom1;
+    return *this;
+}
+
+bool SireMol::detail::IDPair::operator==(const SireMol::detail::IDPair &other) const
+{
+    return atom0 == other.atom0 and atom1 == other.atom1;
+}
+
+bool SireMol::detail::IDPair::operator!=(const SireMol::detail::IDPair &other) const
+{
+    return atom0 != other.atom0 or atom1 != other.atom1;
+}
+
 /////////
 ///////// Implementation of ConnectivityBase
 /////////
@@ -66,15 +120,16 @@ static const RegisterMetaType<ConnectivityBase> r_conbase(MAGIC_ONLY,
 
 /** Serialise ConnectivityBase */
 QDataStream &operator<<(QDataStream &ds,
-                                       const ConnectivityBase &conbase)
+                        const ConnectivityBase &conbase)
 {
-    writeHeader(ds, r_conbase, 2);
+    writeHeader(ds, r_conbase, 3);
 
     SharedDataStream sds(ds);
 
     SharedDataPointer<MoleculeInfoData> d( conbase.minfo );
 
     sds << conbase.connected_atoms << conbase.connected_res
+        << conbase.bond_props
         << d << static_cast<const MolViewProperty&>(conbase);
 
     return ds;
@@ -86,11 +141,26 @@ QDataStream &operator>>(QDataStream &ds,
 {
     VersionID v = readHeader(ds, r_conbase);
 
-    if (v == 2)
+    if (v == 3)
     {
         SharedDataStream sds(ds);
 
         SharedDataPointer<MoleculeInfoData> d;
+
+        sds >> conbase.connected_atoms >> conbase.connected_res
+            >> conbase.bond_props
+            >> d
+            >> static_cast<MolViewProperty&>(conbase);
+
+        conbase.minfo = d;
+    }
+    else if (v == 2)
+    {
+        SharedDataStream sds(ds);
+
+        SharedDataPointer<MoleculeInfoData> d;
+
+        conbase.bond_props.clear();
 
         sds >> conbase.connected_atoms >> conbase.connected_res
             >> d
@@ -103,6 +173,8 @@ QDataStream &operator>>(QDataStream &ds,
         SharedDataStream sds(ds);
 
         SharedDataPointer<MoleculeInfoData> d;
+
+        conbase.bond_props.clear();
 
         sds >> conbase.connected_atoms >> conbase.connected_res
             >> d
@@ -168,6 +240,7 @@ ConnectivityBase::ConnectivityBase(const ConnectivityBase &other)
                  : MolViewProperty(other),
                    connected_atoms(other.connected_atoms),
                    connected_res(other.connected_res),
+                   bond_props(other.bond_props),
                    minfo(other.minfo)
 {}
 
@@ -182,6 +255,7 @@ ConnectivityBase& ConnectivityBase::operator=(const ConnectivityBase &other)
     {
         connected_atoms = other.connected_atoms;
         connected_res = other.connected_res;
+        bond_props = other.bond_props;
         minfo = other.minfo;
     }
 
@@ -192,7 +266,8 @@ ConnectivityBase& ConnectivityBase::operator=(const ConnectivityBase &other)
 bool ConnectivityBase::operator==(const ConnectivityBase &other) const
 {
     return minfo == other.minfo and
-           connected_atoms == other.connected_atoms;
+           connected_atoms == other.connected_atoms and
+           bond_props == other.bond_props;
 }
 
 /** Comparison operator */
@@ -258,7 +333,16 @@ PropertyPtr ConnectivityBase::_pvt_makeCompatibleWith(const MoleculeInfoData &mo
                     if (new_bond != -1)
                     {
                         if (new_bond > new_idx)
+                        {
                             editor.connect(new_idx, new_bond);
+                            Properties props = bond_props.value(
+                                                SireMol::detail::IDPair(old_idx, old_bond));
+
+                            if (not props.isEmpty())
+                            {
+                                editor.bond_props[SireMol::detail::IDPair(new_idx, new_bond)] = props;
+                            }
+                        }
                     }
                 }
             }
@@ -2644,6 +2728,84 @@ QVector< QVector<bool> > ConnectivityBase::getBondMatrix(int order) const
         return getBondMatrix(1,order);
 }
 
+/** Return the properties of the passed bond */
+Properties ConnectivityBase::properties(const BondID &bond) const
+{
+    auto id = SireMol::detail::IDPair(this->minfo.atomIdx(bond.atom0()),
+                                      this->minfo.atomIdx(bond.atom1()));
+
+    return this->bond_props.value(id);
+}
+
+/** Return whether the specified bond has a property at key 'key' */
+bool ConnectivityBase::hasProperty(const BondID &bond,
+                                   const PropertyName &key) const
+{
+    return this->properties(bond).hasProperty(key);
+}
+
+/** Return the type of the property for the specified bond at key 'key' */
+const char* ConnectivityBase::propertyType(const BondID &bond,
+                                           const PropertyName &key) const
+{
+    return this->properties(bond).propertyType(key);
+}
+
+/** Return all of the property keys for all of the bonds */
+QStringList ConnectivityBase::propertyKeys() const
+{
+    QSet<QString> keys;
+
+    for (const auto &key : this->bond_props.keys())
+    {
+        const auto &props = this->bond_props[key];
+
+        for (const auto &k : props.propertyKeys())
+        {
+            keys.insert(k);
+        }
+    }
+
+    QStringList ret = keys.values();
+    ret.sort();
+
+    return ret;
+}
+
+/** Return the property keys for the specified bond */
+QStringList ConnectivityBase::propertyKeys(const BondID &bond) const
+{
+    return this->properties(bond).propertyKeys();
+}
+
+/** Return the specified property of the specified bond */
+const Property& ConnectivityBase::property(const BondID &bond,
+                                           const PropertyName &key) const
+{
+    return this->properties(bond).property(key);
+}
+
+/** Return the specified property of the specified bond, or
+    'default_value' if such a property is not defined
+ */
+const Property& ConnectivityBase::property(const BondID &bond,
+                                           const PropertyName &key,
+                                           const Property &default_value) const
+{
+    return this->properties(bond).property(key, default_value);
+}
+
+/** Assert that the specified bond has the specified property */
+void ConnectivityBase::assertHasProperty(const BondID &bond,
+                                         const PropertyName &key) const
+{
+    if (not this->hasProperty(bond, key))
+        throw SireBase::missing_property( QObject::tr(
+            "Bond %1 "
+            "does not have a valid property at key \"%2\".")
+                .arg(bond.toString()).arg(key.toString()), CODELOC );
+}
+
 /////////
 ///////// Implementation of Connectivity
 /////////
@@ -2916,6 +3078,9 @@ ConnectivityEditor& ConnectivityEditor::disconnect(AtomIdx atom0, AtomIdx atom1)
         connected_atoms[atomidx0].remove(atomidx1);
         connected_atoms[atomidx1].remove(atomidx0);
 
+        //remove any properties associated with this bond
+        this->bond_props.remove(SireMol::detail::IDPair(atomidx0, atomidx1));
+
         //now check to see if the residues are still connected
         ResIdx residx0 = info().parentResidue(atomidx0);
         ResIdx residx1 = info().parentResidue(atomidx1);
@@ -2962,6 +3127,7 @@ ConnectivityEditor& ConnectivityEditor::disconnectAll(AtomIdx atomidx)
 /** Remove all bonds from this molecule */
 ConnectivityEditor& ConnectivityEditor::disconnectAll()
 {
+    bond_props.clear();
     connected_atoms.clear();
     connected_res.clear();
 
@@ -3016,6 +3182,87 @@ ConnectivityEditor& ConnectivityEditor::disconnectAll(ResIdx residx)
 ConnectivityEditor& ConnectivityEditor::disconnectAll(const ResID &resid)
 {
     return this->disconnectAll( info().resIdx(resid) );
+}
+
+SireMol::detail::IDPair _get_id(const BondID &bond,
+                                const MoleculeInfo &minfo)
+{
+    return SireMol::detail::IDPair(minfo.atomIdx(bond.atom0()),
+                                   minfo.atomIdx(bond.atom1()));
+}
+
+/** Set the property for the specified bond, at the specified key, to 'value' */
+ConnectivityEditor& ConnectivityEditor::setProperty(const BondID &bond,
+                                                    const QString &key,
+                                                    const Property &value)
+{
+    auto atom0 = this->minfo.atomIdx(bond.atom0());
+    auto atom1 = this->minfo.atomIdx(bond.atom1());
+
+    if (not this->areConnected(atom0, atom1))
+    {
+        throw SireMol::missing_bond( QObject::tr(
+            "You cannot set the property %1 as the atoms in %2 "
+            "are not connected.").arg(key).arg(bond.toString()), CODELOC);
+    }
+
+    auto id = SireMol::detail::IDPair(atom0, atom1);
+
+    if (not this->bond_props.contains(id))
+    {
+        this->bond_props.insert(id, Properties());
+    }
+
+    this->bond_props[id].setProperty(key, value);
+
+    return *this;
+}
+
+/** Remove the specified property from all bonds */
+ConnectivityEditor& ConnectivityEditor::removeProperty(const QString &key)
+{
+    for (const auto &id : this->bond_props.keys())
+    {
+        this->bond_props[id].removeProperty(key);
+    }
+
+    return *this;
+}
+
+/** Remove the specified property from the specified bond */
+ConnectivityEditor& ConnectivityEditor::removeProperty(const BondID &bond,
+                                                       const QString &key)
+{
+    auto id = _get_id(bond, this->minfo);
+
+    if (this->bond_props.contains(id))
+    {
+        this->bond_props[id].removeProperty(key);
+    }
+
+    return *this;
+}
+
+/** Take the specified property from the specified bond - this removes
+    and returns the property if it exists. If it doesn't, then
+    a NullProperty is returned
+*/
+PropertyPtr ConnectivityEditor::takeProperty(const BondID &bond,
+                                             const QString &key)
+{
+    auto id = _get_id(bond, this->minfo);
+
+    if (this->bond_props.contains(id))
+    {
+        PropertyPtr value = this->bond_props[id].property(key);
+        this->bond_props[id].removeProperty(key);
+
+        return value;
+    }
+    else
+    {
+        return NullProperty();
+    }
 }
 
 /** Return the editied connectivity */

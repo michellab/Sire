@@ -3,9 +3,12 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "ConnectivityBase.pypp.hpp"
 
 namespace bp = boost::python;
+
+#include "SireBase/errors.h"
 
 #include "SireMol/errors.h"
 
@@ -199,6 +202,18 @@ void register_ConnectivityBase_class(){
                 , areDihedraled_function_value
                 , ( bp::arg("atom0"), bp::arg("atom3") )
                 , "Return whether or not the two atoms are bonded together" );
+        
+        }
+        { //::SireMol::ConnectivityBase::assertHasProperty
+        
+            typedef void ( ::SireMol::ConnectivityBase::*assertHasProperty_function_type)( ::SireMol::BondID const &,::SireBase::PropertyName const & ) const;
+            assertHasProperty_function_type assertHasProperty_function_value( &::SireMol::ConnectivityBase::assertHasProperty );
+            
+            ConnectivityBase_exposer.def( 
+                "assertHasProperty"
+                , assertHasProperty_function_value
+                , ( bp::arg("bond"), bp::arg("key") )
+                , "Assert that the specified bond has the specified property" );
         
         }
         { //::SireMol::ConnectivityBase::connectionType
@@ -502,6 +517,18 @@ void register_ConnectivityBase_class(){
                 , "Return a list of dihedrals defined by the connectivity that involve atom0, atom1 and atom2" );
         
         }
+        { //::SireMol::ConnectivityBase::hasProperty
+        
+            typedef bool ( ::SireMol::ConnectivityBase::*hasProperty_function_type)( ::SireMol::BondID const &,::SireBase::PropertyName const & ) const;
+            hasProperty_function_type hasProperty_function_value( &::SireMol::ConnectivityBase::hasProperty );
+            
+            ConnectivityBase_exposer.def( 
+                "hasProperty"
+                , hasProperty_function_value
+                , ( bp::arg("bond"), bp::arg("key") )
+                , "Return whether the specified bond has a property at key key" );
+        
+        }
         { //::SireMol::ConnectivityBase::inRing
         
             typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::AtomIdx ) const;
@@ -738,6 +765,79 @@ void register_ConnectivityBase_class(){
                 , nConnections_function_value
                 , ( bp::arg("res0"), bp::arg("res1") )
                 , "Return the number of atom connections between the residues\nidentified by res0 and res1\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
+        
+        }
+        { //::SireMol::ConnectivityBase::properties
+        
+            typedef ::SireBase::Properties ( ::SireMol::ConnectivityBase::*properties_function_type)( ::SireMol::BondID const & ) const;
+            properties_function_type properties_function_value( &::SireMol::ConnectivityBase::properties );
+            
+            ConnectivityBase_exposer.def( 
+                "properties"
+                , properties_function_value
+                , ( bp::arg("bond") )
+                , "Return the properties of the passed bond" );
+        
+        }
+        { //::SireMol::ConnectivityBase::property
+        
+            typedef ::SireBase::Property const & ( ::SireMol::ConnectivityBase::*property_function_type)( ::SireMol::BondID const &,::SireBase::PropertyName const & ) const;
+            property_function_type property_function_value( &::SireMol::ConnectivityBase::property );
+            
+            ConnectivityBase_exposer.def( 
+                "property"
+                , property_function_value
+                , ( bp::arg("bond"), bp::arg("key") )
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the specified property of the specified bond" );
+        
+        }
+        { //::SireMol::ConnectivityBase::property
+        
+            typedef ::SireBase::Property const & ( ::SireMol::ConnectivityBase::*property_function_type)( ::SireMol::BondID const &,::SireBase::PropertyName const &,::SireBase::Property const & ) const;
+            property_function_type property_function_value( &::SireMol::ConnectivityBase::property );
+            
+            ConnectivityBase_exposer.def( 
+                "property"
+                , property_function_value
+                , ( bp::arg("bond"), bp::arg("key"), bp::arg("default_value") )
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the specified property of the specified bond, or\ndefault_value if such a property is not defined\n" );
+        
+        }
+        { //::SireMol::ConnectivityBase::propertyKeys
+        
+            typedef ::QStringList ( ::SireMol::ConnectivityBase::*propertyKeys_function_type)(  ) const;
+            propertyKeys_function_type propertyKeys_function_value( &::SireMol::ConnectivityBase::propertyKeys );
+            
+            ConnectivityBase_exposer.def( 
+                "propertyKeys"
+                , propertyKeys_function_value
+                , "Return all of the property keys for all of the bonds" );
+        
+        }
+        { //::SireMol::ConnectivityBase::propertyKeys
+        
+            typedef ::QStringList ( ::SireMol::ConnectivityBase::*propertyKeys_function_type)( ::SireMol::BondID const & ) const;
+            propertyKeys_function_type propertyKeys_function_value( &::SireMol::ConnectivityBase::propertyKeys );
+            
+            ConnectivityBase_exposer.def( 
+                "propertyKeys"
+                , propertyKeys_function_value
+                , ( bp::arg("bond") )
+                , "Return the property keys for the specified bond" );
+        
+        }
+        { //::SireMol::ConnectivityBase::propertyType
+        
+            typedef char const * ( ::SireMol::ConnectivityBase::*propertyType_function_type)( ::SireMol::BondID const &,::SireBase::PropertyName const & ) const;
+            propertyType_function_type propertyType_function_value( &::SireMol::ConnectivityBase::propertyType );
+            
+            ConnectivityBase_exposer.def( 
+                "propertyType"
+                , propertyType_function_value
+                , ( bp::arg("bond"), bp::arg("key") )
+                , "Return the type of the property for the specified bond at key key" );
         
         }
         { //::SireMol::ConnectivityBase::split

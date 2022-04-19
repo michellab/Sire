@@ -223,6 +223,32 @@ void register_AtomElements_class(){
                 , "" );
         
         }
+        { //::SireMol::AtomProperty< SireMol::Element >::getAsProperty
+        
+            typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMol::Element >::*getAsProperty_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::AtomProperty< SireMol::Element >::getAsProperty );
+            
+            AtomElements_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMol::Element >::getAsVariant
+        
+            typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
+            typedef ::QVariant ( ::SireMol::AtomProperty< SireMol::Element >::*getAsVariant_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::AtomProperty< SireMol::Element >::getAsVariant );
+            
+            AtomElements_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
         { //::SireMol::AtomProperty< SireMol::Element >::isCompatibleWith
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;

@@ -5,16 +5,16 @@
 
 #include "Helpers/version_error_impl.h"
 
-#include "magic_error.h"
 #include "version_error.h"
+#include "magic_error.h"
 
 #include "Helpers/objectregistry.hpp"
 
 void register_SireStream_objects()
 {
 
-    ObjectRegistry::registerConverterFor< SireStream::magic_error >();
     ObjectRegistry::registerConverterFor< SireStream::version_error >();
+    ObjectRegistry::registerConverterFor< SireStream::magic_error >();
 
 }
 

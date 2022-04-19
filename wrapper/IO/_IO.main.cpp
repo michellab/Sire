@@ -57,6 +57,8 @@
 
 #include "ProtoMSParameters.pypp.hpp"
 
+#include "SDF.pypp.hpp"
+
 #include "Supplementary.pypp.hpp"
 
 #include "Tinker.pypp.hpp"
@@ -133,6 +135,8 @@ BOOST_PYTHON_MODULE(_IO){
     register_ProtoMS_class();
 
     register_ProtoMSParameters_class();
+
+    register_SDF_class();
 
     register_Supplementary_class();
 
