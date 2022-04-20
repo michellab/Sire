@@ -531,7 +531,19 @@ namespace bp = boost::python;
 
 #include "SireMol/moleculeinfo.h"
 
+#include "Helpers/release_gil_policy.hpp"
+
+#include "SireMol/errors.h"
+
+void test_exception()
+{
+    throw SireMol::missing_atom("TEST", CODELOC);
+}
+
 BOOST_PYTHON_MODULE(_Mol){
+
+    bp::def("test_exception", &test_exception, bp::release_gil_policy());
+
     register_SireMol_objects();
 
     register_SireMol_containers();

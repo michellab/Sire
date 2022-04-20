@@ -34,6 +34,8 @@
 #include <boost/python.hpp>
 #include <boost/tuple/tuple.hpp>
 
+#include "Helpers/release_gil_policy.hpp"
+
 namespace bp = boost::python;
 
 SIRE_BEGIN_HEADER
@@ -60,33 +62,29 @@ struct from_py_dict
         //is this a dict type?
         if ( PyDict_Check(obj_ptr) )
         {
-            PyGILState_STATE gstate;
-            gstate = PyGILState_Ensure();
+            boost::python::release_gil_policy::restore_gil();
+
+            //check the tuple elements... - convert to a boost::tuple object
+            bp::dict d( bp::handle<>(bp::borrowed(obj_ptr)) );
+
+            //check the items in the dict (items is a list of 2-tuples key-value
+            bp::list items = d.items();
+
+            int nitems = bp::extract<int>(items.attr("__len__")())();
+
+            for (int i=0; i<nitems; ++i)
             {
-                //check the tuple elements... - convert to a boost::tuple object
-                bp::dict d( bp::handle<>(bp::borrowed(obj_ptr)) );
+                bp::tuple item = bp::extract<bp::tuple>(items[i])();
 
-                //check the items in the dict (items is a list of 2-tuples key-value
-                bp::list items = d.items();
-
-                int nitems = bp::extract<int>(items.attr("__len__")())();
-
-                for (int i=0; i<nitems; ++i)
+                if ( not (bp::extract<key_type>(item[0]).check() and
+                        bp::extract<mapped_type>(item[1]).check()) )
                 {
-                    bp::tuple item = bp::extract<bp::tuple>(items[i])();
-
-                    if ( not (bp::extract<key_type>(item[0]).check() and
-                            bp::extract<mapped_type>(item[1]).check()) )
-                    {
-                        //either the key of value is wrong
-                        obj_ptr = 0;
-                        break;
-                    }
+                    //either the key of value is wrong
+                    return 0;
                 }
             }
 
             //the tuple is ok!
-            PyGILState_Release(gstate);
             return obj_ptr;
         }
         else
@@ -100,40 +98,35 @@ struct from_py_dict
         PyObject* obj_ptr,
         bp::converter::rvalue_from_python_stage1_data* data)
     {
-        // need to re-acquire the GIL when creating new dict objects
-        PyGILState_STATE gstate;
-        gstate = PyGILState_Ensure();
+        boost::python::release_gil_policy::restore_gil();
+
+        //convert the PyObject to a boost::python::dict
+        bp::dict d( bp::handle<>(bp::borrowed(obj_ptr)) );
+
+        //locate the storage space for the result
+        void* storage =
+            ( (bp::converter::rvalue_from_python_storage<C>*)data )->storage.bytes;
+
+        //create the container
+        new (storage) C();
+
+        C *container = static_cast<C*>(storage);
+
+        //add all of the elements from the dict - do this by converting
+        //to a list and then extracting each item
+        bp::list items = d.items();
+
+        int nitems = bp::extract<int>(items.attr("__len__")())();
+
+        for (int i=0; i<nitems; ++i)
         {
-            //convert the PyObject to a boost::python::dict
-            bp::dict d( bp::handle<>(bp::borrowed(obj_ptr)) );
+            bp::tuple item = bp::extract<bp::tuple>(items[i])();
 
-            //locate the storage space for the result
-            void* storage =
-                ( (bp::converter::rvalue_from_python_storage<C>*)data )->storage.bytes;
-
-            //create the container
-            new (storage) C();
-
-            C *container = static_cast<C*>(storage);
-
-            //add all of the elements from the dict - do this by converting
-            //to a list and then extracting each item
-            bp::list items = d.items();
-
-            int nitems = bp::extract<int>(items.attr("__len__")())();
-
-            for (int i=0; i<nitems; ++i)
-            {
-                bp::tuple item = bp::extract<bp::tuple>(items[i])();
-
-                container->insert( bp::extract<key_type>(item[0])(),
-                                bp::extract<mapped_type>(item[1])() );
-            }
-
-            data->convertible = storage;
+            container->insert( bp::extract<key_type>(item[0])(),
+                            bp::extract<mapped_type>(item[1])() );
         }
 
-        PyGILState_Release(gstate);
+        data->convertible = storage;
     }
 };
 
@@ -142,6 +135,8 @@ struct to_py_dict
 {
     static PyObject* convert(const C &cpp_dict)
     {
+        boost::python::release_gil_policy::restore_gil();
+
         bp::dict python_dict;
 
         //add all items to the python dictionary

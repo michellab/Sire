@@ -34,6 +34,8 @@
 #include <boost/python.hpp>
 #include <utility>
 
+#include "Helpers/release_gil_policy.hpp"
+
 namespace bp = boost::python;
 
 SIRE_BEGIN_HEADER
@@ -110,9 +112,7 @@ struct from_py_pair
         PyObject* obj_ptr,
         bp::converter::rvalue_from_python_stage1_data* data)
     {
-        // need to re-acquire the GIL when creating new objects
-        PyGILState_STATE gstate;
-        gstate = PyGILState_Ensure();
+        boost::python::release_gil_policy::restore_gil();
 
         if (PyTuple_Check(obj_ptr))
         {
@@ -154,8 +154,6 @@ struct from_py_pair
 
             data->convertible = storage;
         }
-
-        PyGILState_Release(gstate);
     }
 };
 
@@ -164,6 +162,8 @@ struct to_py_pair
 {
     static PyObject* convert(const std::pair<S,T> &cpp_pair)
     {
+        boost::python::release_gil_policy::restore_gil();
+
         bp::tuple python_tuple = bp::make_tuple( cpp_pair.first, cpp_pair.second );
 
         return bp::incref( python_tuple.ptr() );

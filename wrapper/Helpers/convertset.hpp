@@ -34,6 +34,8 @@
 #include <boost/python.hpp>
 #include <boost/tuple/tuple.hpp>
 
+#include "Helpers/release_gil_policy.hpp"
+
 namespace bp = boost::python;
 
 SIRE_BEGIN_HEADER
@@ -57,6 +59,8 @@ struct from_py_set
         to a QVector where all of the elements are of type 'T' */
     static void* convertible(PyObject* obj_ptr)
     {
+        boost::python::release_gil_policy::restore_gil();
+
         //is this a tuple type?
         if ( PyTuple_Check(obj_ptr) )
         {
@@ -106,9 +110,7 @@ struct from_py_set
         PyObject* obj_ptr,
         bp::converter::rvalue_from_python_stage1_data* data)
     {
-        // need to re-acquire the GIL when creating new list objects
-        PyGILState_STATE gstate;
-        gstate = PyGILState_Ensure();
+        boost::python::release_gil_policy::restore_gil();
 
         if (PyTuple_Check(obj_ptr))
         {
@@ -158,8 +160,6 @@ struct from_py_set
 
             data->convertible = storage;
         }
-
-        PyGILState_Release(gstate);
     }
 };
 
@@ -168,6 +168,8 @@ struct to_py_set
 {
     static PyObject* convert(const C &cpp_set)
     {
+        boost::python::release_gil_policy::restore_gil();
+
         bp::list python_set;
 
         //add all items to the python dictionary

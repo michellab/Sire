@@ -15,7 +15,6 @@ namespace boost {
             public:
                 GilHolder() : thread_state(0)
                 {
-                    qDebug() << "release gil";
                     thread_state = PyEval_SaveThread();
                 }
 
@@ -23,8 +22,14 @@ namespace boost {
                 {
                     if (thread_state)
                     {
-                        qDebug() << "acquire gil";
-                        PyEval_RestoreThread(thread_state);
+                        if (_Py_IsFinalizing())
+                        {
+                            qDebug() << "FINALIZING!";
+                        }
+                        else
+                        {
+                            PyEval_RestoreThread(thread_state);
+                        }
                     }
                 }
 
@@ -51,6 +56,17 @@ namespace boost {
                 }
 
                 return result;
+            }
+
+            /** Call this function to restore the GIL - needed
+             *  when an exception is raised
+             */
+            static void restore_gil()
+            {
+                if (gil.hasLocalData())
+                {
+                    gil.setLocalData(0);
+                }
             }
 
             typedef default_result_converter result_converter;

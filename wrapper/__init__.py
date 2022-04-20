@@ -9,8 +9,11 @@ Functions
 .. autosummary::
     :toctree: generated/
 
+    disable_thumbs_up
+    get_thumbs_up_info
     load
     save
+    thumbs_up
     try_import
     try_import_from
 
@@ -264,157 +267,8 @@ def _versionString():
 
 Config.versionString = _versionString
 
-sent_usage_data = None
-
-
-def _getOSInfo():
-    import platform as _pf
-
-    data = {}
-    data["platform"] = _pf.system()
-
-    if _pf.system().startswith("Darwin"):
-        data["OS"] = _pf.mac_ver()[0]
-    elif _pf.system().startswith("Linux"):
-        ld = _pf.linux_distribution()
-        data["OS"] = "%s (%s %s)" % (ld[0],ld[1],ld[2])
-    else:
-        data["OS"] = "unknown"
-
-    u = _pf.uname()
-    data["uname"] = "%s | %s | %s | %s" % (u.system,u.release,u.machine,u.processor)
-
-    data["OS"] = "%s : %s"
-
-
-def _uploadUsageData():
-    try:
-        global sent_usage_data
-
-        if not sent_usage_data is None:
-            # don't send data twice
-            return
-
-        import time as _time
-        # wait a couple of seconds before uploading. This
-        # stops annoying uploads when people print help
-        _time.sleep(2)
-
-        import os as _os
-
-        if "SIRE_DONT_PHONEHOME" in _os.environ:
-            # respect user wish to not phone home
-            if not "SIRE_SILENT_PHONEHOME" in _os.environ:
-                print("\n=======================================================")
-                print("Respecting your privacy - not sending usage statistics.")
-                print("Please see http://siremol.org/analytics for more information.")
-                print("=======================================================\n")
-                return
-        else:
-            if not "SIRE_SILENT_PHONEHOME" in _os.environ:
-                print("\n==============================================================")
-                print("Sending anonymous Sire usage statistics to http://siremol.org.")
-                print("For more information, see http://siremol.org/analytics")
-                print("To disable, set the environment variable 'SIRE_DONT_PHONEHOME' to 1")
-                print("To see the information sent, set the environment variable ")
-                print("SIRE_VERBOSE_PHONEHOME equal to 1. To silence this message, set")
-                print("the environment variable SIRE_SILENT_PHONEHOME to 1.")
-                print("==============================================================\n")
-
-        from Sire.Base import CPUID as _CPUID
-
-        id = _CPUID()
-
-        data = {}
-
-        # get information about the processor
-        data["processor"] = id.brand()
-        data["vendor"] = id.vendor()
-        data["clockspeed"] = id.clockSpeed()
-        data["numcores"] = id.numCores()
-
-        # get information about the operating system
-        import platform as _pf
-
-        data["platform"] = _pf.system()
-
-        if _pf.system().startswith("Darwin"):
-            data["OS"] = _pf.mac_ver()[0]
-        elif _pf.system().startswith("Linux"):
-            ld = _pf.linux_distribution()
-            data["OS"] = "%s (%s %s)" % (ld[0],ld[1],ld[2])
-        elif _pf.system().startswith("Windows"):
-            ld = _pf.win32_ver()
-            data["OS"] = "%s (%s %s)" % (ld[0],ld[1],ld[2])
-        else:
-            data["OS"] = "unknown"
-
-        u = _pf.uname()
-        data["uname"] = "%s | %s | %s | %s" % (u.system,u.release,u.machine,u.processor)
-
-        # get information about the version of Sire
-        data["version"] = __version__
-        data["repository"] = Config.sire_repository_url
-        data["repository_version"] = Config.sire_repository_version
-
-        # now get information about which Sire app is running
-        import sys as _sys
-        # get the executable name, but make sure we don't get the path
-        # (as it may contain sensitive user information)
-        data["executable"] = _os.path.basename( _sys.executable )
-
-        # Was Sire was imported as part of BioSimSpace?
-        # If so, then rename the executable.
-        if "BioSimSpace" in _sys.modules:
-            data["executable"] = "BioSimSpace"
-
-        import json as _json
-
-        import http.client as _htc
-        import urllib.parse as _parse
-
-        params = _parse.urlencode({'data' : _json.dumps(data)})
-        headers = {"Content-type": "application/x-www-form-urlencoded",
-                   "Accept": "text/plain"}
-
-        if "SIRE_VERBOSE_PHONEHOME" in _os.environ:
-            print("Information sent to http://siremol.org is...")
-            keys = list(data.keys())
-            keys.sort()
-            for key in keys:
-                print(" -- %s == %s" % (key,data[key]))
-            print("\n")
-
-        sent_usage_data = data
-
-        conn = _htc.HTTPSConnection("siremol.org")
-        conn.request("POST", "/phonehome/postusagestats.php", params, headers)
-
-        # Next time this breaks, remember to uncomment the below lines so that
-        # we can inspect the response code and error from the server...
-
-        #r1 = conn.getresponse()
-        #print(r1.status, r1.reason)
-        #print(r1.read())
-
-    except:
-        # something went wrong - just ignore the error
-        # and cancel the phone home
-        return
-
-
-_sent_usage_data = None
-
-
-if not _sent_usage_data:
-    import threading as _threading
-
-    _thread = _threading.Thread(target=_uploadUsageData)
-    _thread.daemon = True
-    _thread.start()
-
-
 ### Here are the functions and other data that form the public API
 ### of Sire
 
 from ._load import *
+from ._thumbsup import *

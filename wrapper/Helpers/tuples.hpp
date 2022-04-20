@@ -95,6 +95,8 @@
  *
  **/
 
+#include "Helpers/release_gil_policy.hpp"
+
 namespace boost{ namespace python{
 
 namespace details{
@@ -115,22 +117,13 @@ struct to_py_tuple{
 
     static PyObject* convert(const TTuple& c_tuple){
         // need to re-acquire the GIL when creating new objects
-        PyGILState_STATE gstate;
-        gstate = PyGILState_Ensure();
+        release_gil_policy::restore_gil();
 
-        PyObject *result;
-
-        // use a scope so that 'values' is deallocated before reaquiring the GIL
-        {
-            list values;
-            //add all c_tuple items to "values" list
-            convert_impl( c_tuple, values, mpl::int_< 0 >(), length_type() );
-            //create Python tuple from the list
-            result = incref( python::tuple( values ).ptr() );
-        }
-
-        PyGILState_Release(gstate);
-        return result;
+        list values;
+        //add all c_tuple items to "values" list
+        convert_impl( c_tuple, values, mpl::int_< 0 >(), length_type() );
+        //create Python tuple from the list
+        return incref( python::tuple( values ).ptr() );
     }
 
 private:
@@ -191,8 +184,7 @@ struct from_py_sequence{
     static void
     construct( PyObject* py_obj, converter::rvalue_from_python_stage1_data* data){
         // need to re-acquire the GIL when creating new objects
-        PyGILState_STATE gstate;
-        gstate = PyGILState_Ensure();
+        release_gil_policy::restore_gil();
 
         typedef converter::rvalue_from_python_storage<TTuple> storage_t;
         storage_t* the_storage = reinterpret_cast<storage_t*>( data );
@@ -202,7 +194,6 @@ struct from_py_sequence{
 
         python::object py_sequence( handle<>( borrowed( py_obj ) ) );
         construct_impl( py_sequence, *c_tuple, mpl::int_< 0 >(), length_type() );
-        PyGILState_Release(gstate);
     }
 
     static TTuple to_c_tuple( PyObject* py_obj ){

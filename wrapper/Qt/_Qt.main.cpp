@@ -44,9 +44,9 @@ BOOST_PYTHON_MODULE(_Qt){
     register_SireQt_containers();
 
     register_QByteArray_class();
-   
+
     register_QDate_class();
- 
+
    /* register_QDateTime_class(); */
 
    /* register_QDir_class(); */
@@ -58,9 +58,9 @@ BOOST_PYTHON_MODULE(_Qt){
     register_QElapsedTimer_class();
 
     autoconvert_QChar();
-    
+
     autoconvert_QString();
 
-    register_QUuid_class(); 
+    register_QUuid_class();
 }
 

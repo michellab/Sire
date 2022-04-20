@@ -35,6 +35,8 @@
 #include "SireMol/errors.h"
 #include "SireBase/errors.h"
 
+#include "Helpers/release_gil_policy.hpp"
+
 using namespace boost::python;
 
 #include <QDebug>
@@ -85,61 +87,73 @@ QString get_exception_string(const SireError::exception &e)
 
 void index_error( const SireError::exception &ex )
 {
-    PyGILState_STATE gstate;
-    gstate = PyGILState_Ensure();
+    qDebug() << CODELOC;
+    // we need to re-aquire the GIL
+    boost::python::release_gil_policy::restore_gil();
+    qDebug() << CODELOC;
 
     PyErr_SetString(PyExc_IndexError,
                     get_exception_string(ex).toUtf8());
-
-    PyGILState_Release(gstate);
+    qDebug() << CODELOC;
 }
 
 void key_error( const SireError::exception &ex )
 {
-    PyGILState_STATE gstate;
-    gstate = PyGILState_Ensure();
+    qDebug() << CODELOC;
+    // we need to re-aquire the GIL
+    boost::python::release_gil_policy::restore_gil();
+
+    qDebug() << CODELOC;
 
     PyErr_SetString(PyExc_KeyError,
                     get_exception_string(ex).toUtf8());
 
-    PyGILState_Release(gstate);
+    qDebug() << CODELOC;
 }
 
 void assertion_error( const SireError::exception &ex )
 {
-    PyGILState_STATE gstate;
-    gstate = PyGILState_Ensure();
+    qDebug() << CODELOC;
+    // we need to re-aquire the GIL
+    boost::python::release_gil_policy::restore_gil();
 
     PyErr_SetString(PyExc_AssertionError,
                     get_exception_string(ex).toUtf8());
-
-    PyGILState_Release(gstate);
 }
 
 void type_error( const SireError::exception &ex )
 {
-    PyGILState_STATE gstate;
-    gstate = PyGILState_Ensure();
+    qDebug() << CODELOC;
+    // we need to re-aquire the GIL
+    boost::python::release_gil_policy::restore_gil();
 
     PyErr_SetString(PyExc_TypeError,
                     get_exception_string(ex).toUtf8());
-
-    PyGILState_Release(gstate);
 }
 
 void exception_translator( const SireError::exception &ex )
 {
-    PyGILState_STATE gstate;
-    gstate = PyGILState_Ensure();
+    qDebug() << CODELOC;
+    // we need to re-aquire the GIL
+    boost::python::release_gil_policy::restore_gil();
 
     PyErr_SetString(PyExc_UserWarning,
                     get_exception_string(ex).toUtf8());
+}
 
-    PyGILState_Release(gstate);
+void std_exception_translator( const std::exception &ex )
+{
+    qDebug() << CODELOC;
+    // we need to re-aquire the GIL
+    boost::python::release_gil_policy::restore_gil();
+
+    PyErr_SetString(PyExc_UserWarning,
+                    QString("%1").arg(ex.what()).toUtf8());
 }
 
 void export_exceptions()
 {
+    register_exception_translator<std::exception>(&std_exception_translator);
     register_exception_translator<SireError::exception>(&exception_translator);
     register_exception_translator<SireError::invalid_index>(&index_error);
     register_exception_translator<SireError::invalid_key>(&key_error);
