@@ -440,21 +440,6 @@ void OpenMMPMEFEP::addMCBarostat(OpenMM::System &system)
     }
 }
 
-void OpenMMPMEFEP:OpenMMPMEFEP:::energyBeforeSetup()
-{
-    const double converted_cutoff_distance =
-        convertTo(cutoff_distance.value(), nanometer);
-    auto system = new OpenMM::System();
-
-    auto nb_force = new OpenMM::NonbondedForce();
-    nb_force->setNonbondedMethod(OpenMM::NonbondedForce::PME);
-    nb_force->setCutoffDistance(converted_cutoff_distance);
-    nb_force->setIncludeDirectSpace(true);
-    nb_force->setUseDispersionCorrection(false);
-
-    system.addForce(nb_force);
-}
-
 
 // General force field
 // HHL
@@ -465,9 +450,6 @@ void OpenMMPMEFEP:OpenMMPMEFEP:::energyBeforeSetup()
 //       global lambdas below because they need to be changed during MD.
 //       Cutoff, delta and n could use a single name each as they are constant
 //       throughout the simulation.
-//
-// JM 9/10/20 multiply Logix_mix_lam * 0 instead of max(lam,1.0-lam)
-// JM 9/10/10 setting Logix_mix_lam output to 0 for lambda
 
 #define COULOMB_SHIFT "rCoul = lam_diff + r;" // can we shift?
 //#define COULOMB_SHIFT "rCoul = r;"
@@ -486,7 +468,7 @@ tmpl_str OpenMMPMEFEP::GENERAL =
     "rLJ = delta*sigma_avg*lam_diff + r*r;"
 
     "lam_diff = (1.0 - lambda) * 0.1;"	// 0.1 to convert to nm
-    "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+    "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_hard;"
 
     "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
     "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
@@ -499,7 +481,6 @@ tmpl_str OpenMMPMEFEP::GENERAL =
     "C_lam = max(isHD1*(1.0-isHD2)*(1.0-isTD1)*(1.0-isTD2)*(1.0-isFD1)*isFD2, D_lam);"
     "D_lam = max((1.0-isHD1)*isHD2*(1.0-isTD1)*(1.0-isTD2)*isFD1*(1.0-isFD2), E_lam);"
     "E_lam = (1.0-isHD1)*isHD2*(1.0-isTD1)*(1.0-isTD2)*(1.0-isFD1)*isFD2;"
-    "Logic_mix_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*(1.0-isTD2)*isFD1*(1.0-isFD2), B_mix);"
     "B_mix = max((1.0-isHD1)*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*isFD2, C_mix);"
     "C_mix = max((1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*isFD1*(1.0-isFD2), D_mix);"
     "D_mix= (1.0-isHD1)*(1.0-isHD2)*(1.0-isTD1)*isTD2*(1.0-isFD1)*isFD2;"
@@ -560,15 +541,13 @@ tmpl_str OpenMMPMEFEP::FROMTODUMMY =
     "withinCutoff*(U_direct + U_LJ);"
     "withinCutoff = step(cutoffftd - r);"
 
-    "U_direct = %1 138.935456 * q_prod * erfc(alpha_pme*rCoul) / rCoul;"
+    "U_direct = 138.935456 * q_prod * erfc(alpha_pme*rCoul) / rCoul;"
     COULOMB_SHIFT
 
     "U_LJ = 4.0 * eps_avg * (TWSIX3*TWSIX3 - TWSIX3);"
     "TWSIX3 = ((sigma_avg * sigma_avg) / rLJ)^3;"
-    "rLJ = deltaftd*sigma_avg*lam_diff + r*r;"
+    "rLJ = deltaftd*sigma_avg*0.1 + r*r;"
 
-    "lam_diff = (1.0 - lamFTD) * 0.1;"
-    "lamFTD = max(lamftd,1-lamftd);"
     "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
     "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
     "sigma_avg=";
@@ -790,11 +769,7 @@ void OpenMMPMEFEP::initialise()
     custom_intra_14_fromdummy->addGlobalParameter("cutofffd", converted_cutoff_distance);
     custom_intra_14_fromdummy->addGlobalParameter("alpha_pme", alpha_PME);
 
-    //JM 9/10/20 set lamFTD to 0
-    if (coulomb_power > 0)
-       lam_pre = "(lamFTD^nftd) *";
-
-    QString intra_14_fromdummy_todummy = FROMTODUMMY.arg(lam_pre);
+    auto intra_14_fromdummy_todummy = QString(FROMTODUMMY);
     intra_14_fromdummy_todummy.append(FROMTODUMMY_SIGMA[flag_combRules]);
 
     if (Debug)
@@ -3228,7 +3203,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
             //       biases (reduced energies)
             openmm_context->setParameter("SPOnOff", 1.0);
         }
- 
+
         // get new state as SPOnOff was set above
         state_openmm = openmm_context->getState(stateTypes, false, 0x01);
 
