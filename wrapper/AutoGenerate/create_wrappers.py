@@ -290,11 +290,18 @@ def call_with_released_gil(c, func_name):
     for f in funs:
         if f.return_type.decl_string.endswith("&"):
             if has_clone_function(f.return_type):
+               print("Replacing with clone gill policy", f)
                f.call_policies = call_policies.custom_call_policies( \
                    "bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>", \
                    "Helpers/clone_const_reference.hpp" )
         else:
-            print(f, f.call_policies)
+            if f.call_policies.is_default():
+                print("Replacing with gil policy", f)
+                f.call_policies = call_policies.custom_call_policies( \
+                   "bp::release_gil_policy", \
+                   "Helpers/release_gil_policy.hpp" )
+            else:
+                print("Skipping as non default call policy", f, f.call_policies)
 
 
 def export_class(mb, classname, aliases, includes, special_code, auto_str_function=True):
