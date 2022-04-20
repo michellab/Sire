@@ -283,6 +283,20 @@ def is_copy_constructor(f):
     return False
 
 
+def call_with_released_gil(c, func_name):
+    """Make sure that the gil is released when calling this function"""
+    funs = c.member_functions(func_name)
+
+    for f in funs:
+        if f.return_type.decl_string.endswith("&"):
+            if has_clone_function(f.return_type):
+               f.call_policies = call_policies.custom_call_policies( \
+                   "bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>", \
+                   "Helpers/clone_const_reference.hpp" )
+        else:
+            print(f, f.call_policies)
+
+
 def export_class(mb, classname, aliases, includes, special_code, auto_str_function=True):
    """Do all the work necessary to allow the class called 'classname'
       to be exported, using the supplied aliases, and using the

@@ -9,11 +9,17 @@
 
 #include "SireError/errors.h"
 
+#include "release_gil_policy.hpp"
+
 using boost::python::object;
 using boost::python::extract;
 
 using boost::tuples::tuple;
 using boost::shared_ptr;
+
+// define here so that we have a single copy of this object in
+// the libraries
+QThreadStorage<boost::python::detail::GilHolder*> SIRE_EXPORT boost::python::release_gil_policy::gil;
 
 ObjectRegistry::ObjectRegistry()
 {}
@@ -21,7 +27,7 @@ ObjectRegistry::ObjectRegistry()
 ObjectRegistry::~ObjectRegistry()
 {}
 
-void ObjectRegistry::throwExtractionError(const object &obj, 
+void ObjectRegistry::throwExtractionError(const object &obj,
                                           const QString &type_name) const
 {
     throw SireError::program_bug( QObject::tr(
@@ -30,7 +36,7 @@ void ObjectRegistry::throwExtractionError(const object &obj,
                            .arg(type_name), CODELOC );
 }
 
-object ObjectRegistry::getObjects( 
+object ObjectRegistry::getObjects(
                 const QList< boost::tuple<shared_ptr<void>,QString> > &objects )
 {
     if (objects.isEmpty())
@@ -41,18 +47,18 @@ object ObjectRegistry::getObjects(
     else if (objects.count() == 1)
     {
         const boost::tuple<shared_ptr<void>,QString> &obj = objects[0];
-    
+
         if (obj.get<0>().get() == 0 or obj.get<1>().isEmpty())
             //again, nothing
             return object();
-            
+
         return getConverter(obj.get<1>()).convertFromVoid(obj.get<0>().get());
     }
     else
     {
         //place the objects into a list
         boost::python::list l;
-        
+
         for (int i=0; i<objects.count(); ++i)
         {
             const tuple<shared_ptr<void>,QString> &obj = objects[i];
@@ -61,10 +67,10 @@ object ObjectRegistry::getObjects(
                 //nothing
                 l.append( object() );
             else
-                l.append( 
+                l.append(
                      getConverter(obj.get<1>()).convertFromVoid(obj.get<0>().get()) );
         }
-        
+
         //return the tuple version of this list
         return boost::python::tuple( l );
     }
@@ -82,7 +88,7 @@ object ObjectRegistry::load(const QString &filename)
 
 namespace bp = boost::python;
 
-boost::tuple<shared_ptr<void>,QString> 
+boost::tuple<shared_ptr<void>,QString>
 ObjectRegistry::getObjectFromPython(const object &obj)
 {
     object result = obj.attr("what")();
@@ -104,7 +110,7 @@ ObjectRegistry::getObjectFromPython(const object &obj)
                                                    type_name );
 }
 
-QList< boost::tuple<shared_ptr<void>,QString> > 
+QList< boost::tuple<shared_ptr<void>,QString> >
 ObjectRegistry::getObjectsFromPython(const object &obj)
 {
     PyObject *obj_ptr = obj.ptr();
@@ -114,9 +120,9 @@ ObjectRegistry::getObjectsFromPython(const object &obj)
     if ( PyTuple_Check(obj_ptr) )
     {
         bp::tuple t( bp::handle<>(bp::borrowed(obj_ptr)) );
-        
+
         int n = PyTuple_Size(obj_ptr);
-        
+
         for (int i=0; i<n; ++i)
         {
             objects_to_save.append( getObjectFromPython(t[i]) );
@@ -125,9 +131,9 @@ ObjectRegistry::getObjectsFromPython(const object &obj)
     else if ( PyList_Check(obj_ptr) )
     {
         bp::list l( bp::handle<>(bp::borrowed(obj_ptr)) );
-        
+
         int n = PyList_Size(obj_ptr);
-        
+
         for (int i=0; i<n; ++i)
         {
             objects_to_save.append( getObjectFromPython(l[i]) );
@@ -143,30 +149,30 @@ ObjectRegistry::getObjectsFromPython(const object &obj)
 
 QByteArray ObjectRegistry::save(const object &obj)
 {
-    QList< boost::tuple<shared_ptr<void>,QString> > 
+    QList< boost::tuple<shared_ptr<void>,QString> >
                                     objects_t = getObjectsFromPython(obj);
-    
+
     return SireStream::detail::streamDataSave(objects_t);
 }
 
 void ObjectRegistry::save(const object &obj, const QString &filename)
 {
-    QList< boost::tuple<shared_ptr<void>,QString> > 
+    QList< boost::tuple<shared_ptr<void>,QString> >
                                     objects_t = getObjectsFromPython(obj);
-    
+
     SireStream::detail::streamDataSave(objects_t, filename);
 }
 
 Q_GLOBAL_STATIC( QMutex, registryMutex );
- 
+
 typedef QHash< QString,ObjectRegistry* > ObjectRegistryType;
 
 Q_GLOBAL_STATIC( ObjectRegistryType, objectRegistry );
 
 static ObjectRegistryType& getRegistry()
-{ 
+{
     ObjectRegistryType *registry = objectRegistry();
-    
+
     if (registry == 0)
         std::abort();
 
@@ -177,7 +183,7 @@ void ObjectRegistry::registerConverter(const char *type_name,
                                        const ObjectRegistry &converter)
 {
     QMutexLocker lkr( registryMutex() );
-    getRegistry().insert( type_name, converter.clone() );   
+    getRegistry().insert( type_name, converter.clone() );
 }
 
 const ObjectRegistry& ObjectRegistry::getConverter(const QString &type_name)
@@ -194,10 +200,10 @@ const ObjectRegistry& ObjectRegistry::getConverter(const QString &type_name)
     }
 
     const ObjectRegistry *registry = *(getRegistry().constFind(type_name));
-    
+
     if (registry == 0)
         throw SireError::program_bug( QObject::tr(
-                "How did the registry become null for %1?").arg(type_name), 
+                "How did the registry become null for %1?").arg(type_name),
                     CODELOC );
 
     return *registry;
