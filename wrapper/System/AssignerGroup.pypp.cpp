@@ -48,6 +48,8 @@ SireSystem::AssignerGroup __copy__(const SireSystem::AssignerGroup &other){ retu
 
 const char* pvt_get_name(const SireSystem::AssignerGroup&){ return "SireSystem::AssignerGroup";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AssignerGroup_class(){
 
     { //::SireSystem::AssignerGroup
@@ -65,7 +67,7 @@ void register_AssignerGroup_class(){
             AssignerGroup_exposer.def( 
                 "assigner"
                 , assigner_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the IDAssigner" );
         
         }
@@ -77,7 +79,7 @@ void register_AssignerGroup_class(){
             AssignerGroup_exposer.def( 
                 "group"
                 , group_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group" );
         
         }
@@ -89,6 +91,7 @@ void register_AssignerGroup_class(){
             AssignerGroup_exposer.def( 
                 "isAssigner"
                 , isAssigner_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is holding an IDAssigner" );
         
         }
@@ -101,6 +104,7 @@ void register_AssignerGroup_class(){
                 "isCompatible"
                 , isCompatible_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return whether or not this group is compatible with other.\nCompatible means is the same type, refers to the same MoleculeGroup etc." );
         
         }
@@ -112,6 +116,7 @@ void register_AssignerGroup_class(){
             AssignerGroup_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is empty" );
         
         }
@@ -123,6 +128,7 @@ void register_AssignerGroup_class(){
             AssignerGroup_exposer.def( 
                 "isMoleculeGroup"
                 , isMoleculeGroup_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a holding a MoleculeGroup" );
         
         }
@@ -149,6 +155,7 @@ void register_AssignerGroup_class(){
             AssignerGroup_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -161,6 +168,7 @@ void register_AssignerGroup_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Update the contained group or assigner to match the version\nin the passed system" );
         
         }
@@ -172,6 +180,7 @@ void register_AssignerGroup_class(){
             AssignerGroup_exposer.def( 
                 "views"
                 , views_function_value
+                , bp::release_gil_policy()
                 , "Return the molecule views contained in this group" );
         
         }
@@ -183,6 +192,7 @@ void register_AssignerGroup_class(){
             AssignerGroup_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

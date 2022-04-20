@@ -34,6 +34,8 @@ SireSystem::SpaceWrapper __copy__(const SireSystem::SpaceWrapper &other){ return
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SpaceWrapper_class(){
 
     { //::SireSystem::SpaceWrapper
@@ -50,7 +52,7 @@ void register_SpaceWrapper_class(){
             SpaceWrapper_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group containing the molecules being wrapped" );
         
         }
@@ -77,7 +79,7 @@ void register_SpaceWrapper_class(){
             SpaceWrapper_exposer.def( 
                 "point"
                 , point_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the point that defines the center of the periodic box\n(the molecules will be wrapped so that they are in the same\nbox as this point)" );
         
         }
@@ -101,6 +103,7 @@ void register_SpaceWrapper_class(){
             SpaceWrapper_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

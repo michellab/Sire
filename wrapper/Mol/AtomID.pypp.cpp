@@ -55,6 +55,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AtomID_class(){
 
     { //::SireMol::AtomID
@@ -69,6 +71,7 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "any"
                 , any_function_value
+                , bp::release_gil_policy()
                 , "Return an AtomID that matches everything" );
         
         }
@@ -80,6 +83,7 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "chains"
                 , chains_function_value
+                , bp::release_gil_policy()
                 , "Return a Chain ID that matches chains that contain atoms\nthat match this Atom ID" );
         
         }
@@ -91,6 +95,7 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "cutGroups"
                 , cutGroups_function_value
+                , bp::release_gil_policy()
                 , "Return a CutGroup ID that matches CutGroups that contain atoms\nthat match this Atom ID" );
         
         }
@@ -103,6 +108,7 @@ void register_AtomID_class(){
                 "fromString"
                 , fromString_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
                 , "Return an AtomID constructed from the passed string" );
         
         }
@@ -114,6 +120,7 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "inverse"
                 , inverse_function_value
+                , bp::release_gil_policy()
                 , "Syntactic sugar for AtomID::invert()" );
         
         }
@@ -125,6 +132,7 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "invert"
                 , invert_function_value
+                , bp::release_gil_policy()
                 , "Return the invert (not) of this match" );
         
         }
@@ -137,6 +145,7 @@ void register_AtomID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Map this ID back to the indicies of the matching atoms in the molecule,\nusing the passed MoleculeInfo to do the mapping" );
         
         }
@@ -149,6 +158,7 @@ void register_AtomID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Map this AtomID to the atoms in the passed molecule view\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -263,6 +273,7 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "residues"
                 , residues_function_value
+                , bp::release_gil_policy()
                 , "Return a Residue ID that matches residues that contain atoms\nthat match this Atom ID" );
         
         }
@@ -274,6 +285,7 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "segments"
                 , segments_function_value
+                , bp::release_gil_policy()
                 , "Return a Segment ID that matches segments that contain atoms\nthat match this Atom ID" );
         
         }
@@ -286,6 +298,7 @@ void register_AtomID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Select all the atoms from the passed view that match this ID\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_atom\n" );
         
         }
@@ -298,6 +311,7 @@ void register_AtomID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return all of the atoms from the molecules that match\nthis ID\nThrow: SireMol::missing_atom\n" );
         
         }
@@ -310,6 +324,7 @@ void register_AtomID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the atoms from the molecule group molgroup that match\nthis ID\nThrow: SireMol::missing_atom\n" );
         
         }
@@ -322,6 +337,7 @@ void register_AtomID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the set of atoms that match this ID in the molecule groups\nset molgroups\nThrow: SireMol::missing_atom\n" );
         
         }
@@ -334,6 +350,7 @@ void register_AtomID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Select the atom from the passed view that matches this ID\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_atom\n" );
         
         }
@@ -346,6 +363,7 @@ void register_AtomID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the atom from the molecules molecules that matches\nthis ID\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\n" );
         
         }
@@ -358,6 +376,7 @@ void register_AtomID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the atom from the molecule group molgroup that matches\nthis ID\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\n" );
         
         }
@@ -370,6 +389,7 @@ void register_AtomID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the atom from the molecule groups molgroups that matches\nthis ID\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\n" );
         
         }
@@ -381,6 +401,7 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

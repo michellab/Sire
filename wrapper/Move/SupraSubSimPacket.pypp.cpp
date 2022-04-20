@@ -24,6 +24,8 @@ SireMove::SupraSubSimPacket __copy__(const SireMove::SupraSubSimPacket &other){ 
 
 const char* pvt_get_name(const SireMove::SupraSubSimPacket&){ return "SireMove::SupraSubSimPacket";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SupraSubSimPacket_class(){
 
     { //::SireMove::SupraSubSimPacket
@@ -40,6 +42,7 @@ void register_SupraSubSimPacket_class(){
             SupraSubSimPacket_exposer.def( 
                 "approximatePacketSize"
                 , approximatePacketSize_function_value
+                , bp::release_gil_policy()
                 , "This is likely to be large" );
         
         }
@@ -51,6 +54,7 @@ void register_SupraSubSimPacket_class(){
             SupraSubSimPacket_exposer.def( 
                 "hasFinished"
                 , hasFinished_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this work packet has finished" );
         
         }
@@ -62,6 +66,7 @@ void register_SupraSubSimPacket_class(){
             SupraSubSimPacket_exposer.def( 
                 "nSubCompleted"
                 , nSubCompleted_function_value
+                , bp::release_gil_policy()
                 , "Return the number of completed sub-moves" );
         
         }
@@ -73,6 +78,7 @@ void register_SupraSubSimPacket_class(){
             SupraSubSimPacket_exposer.def( 
                 "nSubMoves"
                 , nSubMoves_function_value
+                , bp::release_gil_policy()
                 , "Return the number of sub-moves to be applied to the sub-system" );
         
         }
@@ -99,6 +105,7 @@ void register_SupraSubSimPacket_class(){
             SupraSubSimPacket_exposer.def( 
                 "recordingSubStatistics"
                 , recordingSubStatistics_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not we are recording statistics during the sub-moves" );
         
         }
@@ -110,6 +117,7 @@ void register_SupraSubSimPacket_class(){
             SupraSubSimPacket_exposer.def( 
                 "shouldPack"
                 , shouldPack_function_value
+                , bp::release_gil_policy()
                 , "We probably shouldnt pack this workpacket as it is already\nheavily packed, and if it is large, then it is likely already\npacked to disk" );
         
         }
@@ -121,7 +129,7 @@ void register_SupraSubSimPacket_class(){
             SupraSubSimPacket_exposer.def( 
                 "subMoves"
                 , subMoves_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the moves" );
         
         }
@@ -133,7 +141,7 @@ void register_SupraSubSimPacket_class(){
             SupraSubSimPacket_exposer.def( 
                 "subSystem"
                 , subSystem_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the sub-system" );
         
         }
@@ -145,6 +153,7 @@ void register_SupraSubSimPacket_class(){
             SupraSubSimPacket_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -156,6 +165,7 @@ void register_SupraSubSimPacket_class(){
             SupraSubSimPacket_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

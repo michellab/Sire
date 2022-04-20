@@ -27,6 +27,8 @@ SireMol::MGIdx __copy__(const SireMol::MGIdx &other){ return SireMol::MGIdx(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MGIdx_class(){
 
     { //::SireMol::MGIdx
@@ -43,6 +45,7 @@ void register_MGIdx_class(){
             MGIdx_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -54,6 +57,7 @@ void register_MGIdx_class(){
             MGIdx_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -66,6 +70,7 @@ void register_MGIdx_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molgroups") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -77,6 +82,7 @@ void register_MGIdx_class(){
             MGIdx_exposer.def( 
                 "null"
                 , null_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -101,6 +107,7 @@ void register_MGIdx_class(){
             MGIdx_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -112,6 +119,7 @@ void register_MGIdx_class(){
             MGIdx_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -123,6 +131,7 @@ void register_MGIdx_class(){
             MGIdx_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -36,6 +36,8 @@ SireMol::MolResNum __copy__(const SireMol::MolResNum &other){ return SireMol::Mo
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MolResNum_class(){
 
     { //::SireMol::MolResNum
@@ -53,6 +55,7 @@ void register_MolResNum_class(){
             MolResNum_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash of this ID" );
         
         }
@@ -64,6 +67,7 @@ void register_MolResNum_class(){
             MolResNum_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is null" );
         
         }
@@ -76,6 +80,7 @@ void register_MolResNum_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Map this ID to the indicies of the matching residues\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -87,7 +92,7 @@ void register_MolResNum_class(){
             MolResNum_exposer.def( 
                 "molNum"
                 , molNum_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the MolNum part of this match" );
         
         }
@@ -115,7 +120,7 @@ void register_MolResNum_class(){
             MolResNum_exposer.def( 
                 "resNum"
                 , resNum_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ResNum part of this match" );
         
         }
@@ -128,6 +133,7 @@ void register_MolResNum_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -140,6 +146,7 @@ void register_MolResNum_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -152,6 +159,7 @@ void register_MolResNum_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -163,6 +171,7 @@ void register_MolResNum_class(){
             MolResNum_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this ID" );
         
         }
@@ -174,6 +183,7 @@ void register_MolResNum_class(){
             MolResNum_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -185,6 +195,7 @@ void register_MolResNum_class(){
             MolResNum_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

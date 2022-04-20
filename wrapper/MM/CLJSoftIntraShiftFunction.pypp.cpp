@@ -37,6 +37,8 @@ SireMM::CLJSoftIntraShiftFunction __copy__(const SireMM::CLJSoftIntraShiftFuncti
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJSoftIntraShiftFunction_class(){
 
     { //::SireMM::CLJSoftIntraShiftFunction
@@ -61,6 +63,7 @@ void register_CLJSoftIntraShiftFunction_class(){
             CLJSoftIntraShiftFunction_exposer.def( 
                 "defaultShiftFunction"
                 , defaultShiftFunction_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -87,6 +90,7 @@ void register_CLJSoftIntraShiftFunction_class(){
             CLJSoftIntraShiftFunction_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -98,6 +102,7 @@ void register_CLJSoftIntraShiftFunction_class(){
             CLJSoftIntraShiftFunction_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

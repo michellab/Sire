@@ -39,6 +39,8 @@ SireFF::VectorPoint __copy__(const SireFF::VectorPoint &other){ return SireFF::V
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_VectorPoint_class(){
 
     { //::SireFF::VectorPoint
@@ -56,6 +58,7 @@ void register_VectorPoint_class(){
                 "addForce"
                 , addForce_function_value
                 , ( bp::arg("molforces"), bp::arg("force") )
+                , bp::release_gil_policy()
                 , "No forces on a point" );
         
         }
@@ -68,6 +71,7 @@ void register_VectorPoint_class(){
                 "addForce"
                 , addForce_function_value
                 , ( bp::arg("forces"), bp::arg("force") )
+                , bp::release_gil_policy()
                 , "No forces on a point" );
         
         }
@@ -80,6 +84,7 @@ void register_VectorPoint_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "No molecules are needed to create this point" );
         
         }
@@ -92,6 +97,7 @@ void register_VectorPoint_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molid") )
+                , bp::release_gil_policy()
                 , "No molecules are needed to create this point" );
         
         }
@@ -103,6 +109,7 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "isExtraMoleculePoint"
                 , isExtraMoleculePoint_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is an extramolecular point (it is independent\nof the coordinates of atoms in any molecule, i.e. it is just a point in space)" );
         
         }
@@ -114,6 +121,7 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "isInterMoleculePoint"
                 , isInterMoleculePoint_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is an intermolecular point (it depends on\ncoordinates of atoms from than one molecule)" );
         
         }
@@ -125,6 +133,7 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "isIntraMoleculePoint"
                 , isIntraMoleculePoint_function_value
+                , bp::release_gil_policy()
                 , "Return whether this is an intramolecular point (it depends on coordinates\nof atoms in just one molecule)" );
         
         }
@@ -136,6 +145,7 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "molecules"
                 , molecules_function_value
+                , bp::release_gil_policy()
                 , "No molecules are needed to create this point" );
         
         }
@@ -147,6 +157,7 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "nMolecules"
                 , nMolecules_function_value
+                , bp::release_gil_policy()
                 , "No molecules are needed to create this point" );
         
         }
@@ -173,6 +184,7 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation" );
         
         }
@@ -184,6 +196,7 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -196,6 +209,7 @@ void register_VectorPoint_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "A VectorPoint is not updatable" );
         
         }
@@ -208,6 +222,7 @@ void register_VectorPoint_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "A VectorPoint is not updatable" );
         
         }
@@ -220,6 +235,7 @@ void register_VectorPoint_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "A VectorPoint is not updatable" );
         
         }
@@ -232,6 +248,7 @@ void register_VectorPoint_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroups") )
+                , bp::release_gil_policy()
                 , "A VectorPoint is not updatable" );
         
         }
@@ -244,6 +261,7 @@ void register_VectorPoint_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("forcetable") )
+                , bp::release_gil_policy()
                 , "No molecules are needed to create this point" );
         
         }
@@ -256,6 +274,7 @@ void register_VectorPoint_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "No molecules are needed to create this point" );
         
         }
@@ -268,6 +287,7 @@ void register_VectorPoint_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "No molecules are needed to create this point" );
         
         }
@@ -280,6 +300,7 @@ void register_VectorPoint_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("molgroups") )
+                , bp::release_gil_policy()
                 , "No molecules are needed to create this point" );
         
         }
@@ -292,6 +313,7 @@ void register_VectorPoint_class(){
                 "wouldUpdate"
                 , wouldUpdate_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "A VectorPoint is not updatable" );
         
         }
@@ -304,6 +326,7 @@ void register_VectorPoint_class(){
                 "wouldUpdate"
                 , wouldUpdate_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "A VectorPoint is not updatable" );
         
         }
@@ -316,6 +339,7 @@ void register_VectorPoint_class(){
                 "wouldUpdate"
                 , wouldUpdate_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "A VectorPoint is not updatable" );
         
         }
@@ -328,6 +352,7 @@ void register_VectorPoint_class(){
                 "wouldUpdate"
                 , wouldUpdate_function_value
                 , ( bp::arg("molgroups") )
+                , bp::release_gil_policy()
                 , "A VectorPoint is not updatable" );
         
         }

@@ -40,6 +40,8 @@ Squire::QMChargeConstraint __copy__(const Squire::QMChargeConstraint &other){ re
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_QMChargeConstraint_class(){
 
     { //::Squire::QMChargeConstraint
@@ -57,7 +59,7 @@ void register_QMChargeConstraint_class(){
             QMChargeConstraint_exposer.def( 
                 "chargeCalculator"
                 , chargeCalculator_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the calculator used to calculate atomic partial charges\nfrom an underlying QM calculation" );
         
         }
@@ -85,6 +87,7 @@ void register_QMChargeConstraint_class(){
                 "setChargeCalculator"
                 , setChargeCalculator_function_value
                 , ( bp::arg("chargecalculator") )
+                , bp::release_gil_policy()
                 , "Set the charge calculator used to calculate atomic partial charges\nfrom an underlying QM calculation" );
         
         }
@@ -96,6 +99,7 @@ void register_QMChargeConstraint_class(){
             QMChargeConstraint_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this constraint" );
         
         }
@@ -107,6 +111,7 @@ void register_QMChargeConstraint_class(){
             QMChargeConstraint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

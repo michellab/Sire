@@ -37,6 +37,8 @@ SireUnits::Dimension::GeneralUnit __copy__(const SireUnits::Dimension::GeneralUn
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_GeneralUnit_class(){
 
     { //::SireUnits::Dimension::GeneralUnit
@@ -52,6 +54,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "ANGLE"
                 , ANGLE_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -63,6 +66,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "CHARGE"
                 , CHARGE_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -74,6 +78,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "LENGTH"
                 , LENGTH_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -85,6 +90,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "MASS"
                 , MASS_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -96,6 +102,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "QUANTITY"
                 , QUANTITY_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -107,6 +114,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "TEMPERATURE"
                 , TEMPERATURE_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -118,6 +126,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "TIME"
                 , TIME_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -129,6 +138,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "invert"
                 , invert_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -167,6 +177,7 @@ void register_GeneralUnit_class(){
                 "to"
                 , to_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -179,6 +190,7 @@ void register_GeneralUnit_class(){
                 "to"
                 , to_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -190,6 +202,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "toProperty"
                 , toProperty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -201,6 +214,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -212,6 +226,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -223,6 +238,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

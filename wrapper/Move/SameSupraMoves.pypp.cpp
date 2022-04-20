@@ -27,6 +27,8 @@ SireMove::SameSupraMoves __copy__(const SireMove::SameSupraMoves &other){ return
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_SameSupraMoves_class(){
@@ -45,6 +47,7 @@ void register_SameSupraMoves_class(){
             SameSupraMoves_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Clear all move statistics" );
         
         }
@@ -57,6 +60,7 @@ void register_SameSupraMoves_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Perform the moves nmoves times" );
         
         }
@@ -68,6 +72,7 @@ void register_SameSupraMoves_class(){
             SameSupraMoves_exposer.def( 
                 "moves"
                 , moves_function_value
+                , bp::release_gil_policy()
                 , "Return a list of all of the moves" );
         
         }
@@ -79,6 +84,7 @@ void register_SameSupraMoves_class(){
             SameSupraMoves_exposer.def( 
                 "nMoves"
                 , nMoves_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of moves that have been performed" );
         
         }
@@ -105,6 +111,7 @@ void register_SameSupraMoves_class(){
             SameSupraMoves_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this moves set" );
         
         }
@@ -116,6 +123,7 @@ void register_SameSupraMoves_class(){
             SameSupraMoves_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

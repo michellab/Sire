@@ -23,6 +23,8 @@ SireCAS::Values __copy__(const SireCAS::Values &other){ return SireCAS::Values(o
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Values_class(){
@@ -53,6 +55,7 @@ void register_Values_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -65,6 +68,7 @@ void register_Values_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -77,6 +81,7 @@ void register_Values_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -89,6 +94,7 @@ void register_Values_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -101,6 +107,7 @@ void register_Values_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -113,6 +120,7 @@ void register_Values_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -125,6 +133,7 @@ void register_Values_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -137,6 +146,7 @@ void register_Values_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -149,6 +159,7 @@ void register_Values_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -161,6 +172,7 @@ void register_Values_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8"), bp::arg("symval9") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -173,6 +185,7 @@ void register_Values_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -184,6 +197,7 @@ void register_Values_class(){
             Values_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -195,6 +209,7 @@ void register_Values_class(){
             Values_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -206,6 +221,7 @@ void register_Values_class(){
             Values_exposer.def( 
                 "keys"
                 , keys_function_value
+                , bp::release_gil_policy()
                 , "Return a list of the symbols that are present in this set" );
         
         }
@@ -244,6 +260,7 @@ void register_Values_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Remove the value for the symbol symbol" );
         
         }
@@ -256,6 +273,7 @@ void register_Values_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("symbolid") )
+                , bp::release_gil_policy()
                 , "Remove the value for the symbol with ID symbolid" );
         
         }
@@ -268,6 +286,7 @@ void register_Values_class(){
                 "reserve"
                 , reserve_function_value
                 , ( bp::arg("n") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -280,6 +299,7 @@ void register_Values_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("symbol"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -292,6 +312,7 @@ void register_Values_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("it") )
+                , bp::release_gil_policy()
                 , "Set the value of the symbolvalue pair pointed to by the\niterator it in this set" );
         
         }
@@ -303,6 +324,7 @@ void register_Values_class(){
             Values_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return a list of the symbols that are present in this set" );
         
         }
@@ -314,6 +336,7 @@ void register_Values_class(){
             Values_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of these values" );
         
         }
@@ -325,6 +348,7 @@ void register_Values_class(){
             Values_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -337,6 +361,7 @@ void register_Values_class(){
                 "value"
                 , value_function_value
                 , ( bp::arg("sym") )
+                , bp::release_gil_policy()
                 , "Return the value of the Symbol with ID id, or 0.0 if there is no such symbol" );
         
         }
@@ -360,6 +385,7 @@ void register_Values_class(){
             Values_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_TempDir_class(){
 
     { //::SireBase::TempDir
@@ -37,6 +39,7 @@ void register_TempDir_class(){
             TempDir_exposer.def( 
                 "doNotDelete"
                 , doNotDelete_function_value
+                , bp::release_gil_policy()
                 , "Tell the TempDir not to delete the directory when this object\nis deleted - this can be used when you are debugging to prevent\nthe directory from disappearing" );
         
         }
@@ -48,6 +51,7 @@ void register_TempDir_class(){
             TempDir_exposer.def( 
                 "path"
                 , path_function_value
+                , bp::release_gil_policy()
                 , "This returns the complete path to the temporary directory" );
         
         }
@@ -59,6 +63,7 @@ void register_TempDir_class(){
             TempDir_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this TempDir" );
         
         }
@@ -70,6 +75,7 @@ void register_TempDir_class(){
             TempDir_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -81,6 +87,7 @@ void register_TempDir_class(){
             TempDir_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

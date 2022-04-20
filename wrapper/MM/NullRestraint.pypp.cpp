@@ -41,6 +41,8 @@ SireMM::NullRestraint __copy__(const SireMM::NullRestraint &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullRestraint_class(){
 
     { //::SireMM::NullRestraint
@@ -56,6 +58,7 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "builtinSymbols"
                 , builtinSymbols_function_value
+                , bp::release_gil_policy()
                 , "Return the symbols that are built into this restraint" );
         
         }
@@ -67,6 +70,7 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "builtinValues"
                 , builtinValues_function_value
+                , bp::release_gil_policy()
                 , "Return the values that are built into this restraint" );
         
         }
@@ -79,6 +83,7 @@ void register_NullRestraint_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "There are no molecules in the NullRestraint" );
         
         }
@@ -91,6 +96,7 @@ void register_NullRestraint_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molid") )
+                , bp::release_gil_policy()
                 , "There are no molecules in the NullRestraint" );
         
         }
@@ -103,6 +109,7 @@ void register_NullRestraint_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the differential of this restraint with respect to the\nsymbol symbol\nThrow: SireCAS::unavailable_differential\n" );
         
         }
@@ -114,6 +121,7 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "energy"
                 , energy_function_value
+                , bp::release_gil_policy()
                 , "The null restraint has no energy" );
         
         }
@@ -126,6 +134,7 @@ void register_NullRestraint_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , bp::release_gil_policy()
                 , "The null restraint will not change the force" );
         
         }
@@ -138,6 +147,7 @@ void register_NullRestraint_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , bp::release_gil_policy()
                 , "The null restraint will not change the force" );
         
         }
@@ -150,6 +160,7 @@ void register_NullRestraint_class(){
                 "getValue"
                 , getValue_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the value of the symbol symbol in this restraint. This\nraises an exception if this symbol is not used\nThrow: SireCAS::missing_symbol\n" );
         
         }
@@ -162,6 +173,7 @@ void register_NullRestraint_class(){
                 "hasValue"
                 , hasValue_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return whether or not this restraint has a value for the symbol symbol" );
         
         }
@@ -173,6 +185,7 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "molecules"
                 , molecules_function_value
+                , bp::release_gil_policy()
                 , "There are no molecules in the NullRestraint" );
         
         }
@@ -200,6 +213,7 @@ void register_NullRestraint_class(){
                 "setValue"
                 , setValue_function_value
                 , ( bp::arg("symbol"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the value of the symbol symbol in this restraint to value.\nThis does nothing if this symbol is not used in this restraint" );
         
         }
@@ -211,6 +225,7 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return all of the symbols uses by this restraint" );
         
         }
@@ -222,6 +237,7 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this restraint" );
         
         }
@@ -233,6 +249,7 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -245,6 +262,7 @@ void register_NullRestraint_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "The null restraint cannot be updated" );
         
         }
@@ -257,6 +275,7 @@ void register_NullRestraint_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "The null restraint cannot be updated" );
         
         }
@@ -268,6 +287,7 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "userSymbols"
                 , userSymbols_function_value
+                , bp::release_gil_policy()
                 , "Return the symbols that can be set by the user" );
         
         }
@@ -279,6 +299,7 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "userValues"
                 , userValues_function_value
+                , bp::release_gil_policy()
                 , "Return the values that have been supplied by the user" );
         
         }
@@ -291,6 +312,7 @@ void register_NullRestraint_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("forcetable") )
+                , bp::release_gil_policy()
                 , "There are no molecules in the NullRestraint" );
         
         }
@@ -303,6 +325,7 @@ void register_NullRestraint_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "There are no molecules in the NullRestraint" );
         
         }
@@ -314,6 +337,7 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "values"
                 , values_function_value
+                , bp::release_gil_policy()
                 , "Return all of the values of all of the symbols used in this restraint" );
         
         }

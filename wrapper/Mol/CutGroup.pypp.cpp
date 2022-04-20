@@ -74,6 +74,8 @@ SireMol::CutGroup __copy__(const SireMol::CutGroup &other){ return SireMol::CutG
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_CutGroup_class(){
@@ -93,6 +95,7 @@ void register_CutGroup_class(){
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Assert that this CutGroup has an CGProperty piece of metadata\nat metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
@@ -105,6 +108,7 @@ void register_CutGroup_class(){
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Assert that the property at key key has an CGProperty\npiece of metadata at metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
@@ -117,6 +121,7 @@ void register_CutGroup_class(){
                 "assertContainsProperty"
                 , assertContainsProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Assert that this CutGroup has an CGProperty at key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -141,6 +146,7 @@ void register_CutGroup_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this CutGroup contains all of\nthe atoms that match the ID atomid" );
         
         }
@@ -153,6 +159,7 @@ void register_CutGroup_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return whether or not this CutGroup contains the atom\nat index atomidx in the molecule" );
         
         }
@@ -164,6 +171,7 @@ void register_CutGroup_class(){
             CutGroup_exposer.def( 
                 "edit"
                 , edit_function_value
+                , bp::release_gil_policy()
                 , "Return an editor that can edit this CutGroup" );
         
         }
@@ -175,6 +183,7 @@ void register_CutGroup_class(){
             CutGroup_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
+                , bp::release_gil_policy()
                 , "Return an evaluator that can evaluate properties\nof this CutGroup" );
         
         }
@@ -187,6 +196,7 @@ void register_CutGroup_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return whether or not there is a CGProperty at metakey metakey" );
         
         }
@@ -199,6 +209,7 @@ void register_CutGroup_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return whether the metadata at metakey metakey for the property\nat key key is a CGProperty\nThrow: SireBase::missing_property\n" );
         
         }
@@ -211,6 +222,7 @@ void register_CutGroup_class(){
                 "hasProperty"
                 , hasProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return whether or not there is a CGProperty at key key" );
         
         }
@@ -222,6 +234,7 @@ void register_CutGroup_class(){
             CutGroup_exposer.def( 
                 "index"
                 , index_function_value
+                , bp::release_gil_policy()
                 , "Return the index of this CutGroup in the molecule" );
         
         }
@@ -234,6 +247,7 @@ void register_CutGroup_class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this CutGroup contains some of\nthe atoms that match the ID atomid" );
         
         }
@@ -245,6 +259,7 @@ void register_CutGroup_class(){
             CutGroup_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Is this CutGroup empty?" );
         
         }
@@ -256,6 +271,7 @@ void register_CutGroup_class(){
             CutGroup_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the metakeys of all CGProperty metadata" );
         
         }
@@ -268,6 +284,7 @@ void register_CutGroup_class(){
                 "metadataKeys"
                 , metadataKeys_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return the metakeys of all CGProperty metadata for\nthe property at key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -279,6 +296,7 @@ void register_CutGroup_class(){
             CutGroup_exposer.def( 
                 "move"
                 , move_function_value
+                , bp::release_gil_policy()
                 , "Return an object that can move a copy of this CutGroup" );
         
         }
@@ -290,6 +308,7 @@ void register_CutGroup_class(){
             CutGroup_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in this CutGroup" );
         
         }
@@ -301,7 +320,7 @@ void register_CutGroup_class(){
             CutGroup_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of this CutGroup" );
         
         }
@@ -328,6 +347,7 @@ void register_CutGroup_class(){
             CutGroup_exposer.def( 
                 "propertyKeys"
                 , propertyKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the keys of all CGProperty properties" );
         
         }
@@ -339,6 +359,7 @@ void register_CutGroup_class(){
             CutGroup_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "Is this CutGroup the whole molecule?" );
         
         }
@@ -350,6 +371,7 @@ void register_CutGroup_class(){
             CutGroup_exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
                 , "Return the atoms that are in this CutGroup" );
         
         }
@@ -361,6 +383,7 @@ void register_CutGroup_class(){
             CutGroup_exposer.def( 
                 "selector"
                 , selector_function_value
+                , bp::release_gil_policy()
                 , "Return a selector that can change the selection of CutGroups" );
         
         }
@@ -372,6 +395,7 @@ void register_CutGroup_class(){
             CutGroup_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this CutGroup" );
         
         }
@@ -383,6 +407,7 @@ void register_CutGroup_class(){
             CutGroup_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -395,6 +420,7 @@ void register_CutGroup_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "Update this CutGroup with the passed molecule data.\nThrow: SireError::incompatible_error\n" );
         
         }

@@ -47,6 +47,8 @@ Squire::Mopac __copy__(const Squire::Mopac &other){ return Squire::Mopac(other);
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Mopac_class(){
 
     { //::Squire::Mopac
@@ -64,6 +66,7 @@ void register_Mopac_class(){
                 "calculateCharges"
                 , calculateCharges_function_value
                 , ( bp::arg("molecule"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Use Mopac to calculate the partial charges for the passed molecule\n(using the total charge set in this program)" );
         
         }
@@ -112,6 +115,7 @@ void register_Mopac_class(){
                 "environment"
                 , environment_function_value
                 , ( bp::arg("variable") )
+                , bp::release_gil_policy()
                 , "Return the value of the explicitly set environmental variable variable.\nA null string is returned if this variable has not been set\nexplicitly (this does not mean the variable doesnt exist - merely\nthat a specific value has not been set)" );
         
         }
@@ -123,6 +127,7 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "executable"
                 , executable_function_value
+                , bp::release_gil_policy()
                 , "Return the executable (full path and also arguments) to be used. This\nis null if the executable is searched for in the path" );
         
         }
@@ -198,6 +203,7 @@ void register_Mopac_class(){
                 "setChargeTemplate"
                 , setChargeTemplate_function_value
                 , ( bp::arg("charge_template") )
+                , bp::release_gil_policy()
                 , "Set the template for the command file to be used to get\nMopac to calculate atomic partial charges. The following tags will\n" );
         
         }
@@ -210,6 +216,7 @@ void register_Mopac_class(){
                 "setEnergyTemplate"
                 , setEnergyTemplate_function_value
                 , ( bp::arg("energy_template") )
+                , bp::release_gil_policy()
                 , "Set the template for the command file to be used to get\nMopac to calculate an energy. The following tags will\n" );
         
         }
@@ -222,6 +229,7 @@ void register_Mopac_class(){
                 "setEnvironment"
                 , setEnvironment_function_value
                 , ( bp::arg("variable"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the environmental variable variable to have the value value\nwhen the Mopac executable is run. This replaces any existing\nvalue of this environmental variable" );
         
         }
@@ -234,6 +242,7 @@ void register_Mopac_class(){
                 "setExecutable"
                 , setExecutable_function_value
                 , ( bp::arg("mopac_exe") )
+                , bp::release_gil_policy()
                 , "Set the Mopac executable (full path and also arguments) to be used" );
         
         }
@@ -246,6 +255,7 @@ void register_Mopac_class(){
                 "setForceTemplate"
                 , setForceTemplate_function_value
                 , ( bp::arg("force_template") )
+                , bp::release_gil_policy()
                 , "Set the template for the command file to be used to get\nMopac to calculate the forces. The following tags will\n" );
         
         }
@@ -258,6 +268,7 @@ void register_Mopac_class(){
                 "setMethod"
                 , setMethod_function_value
                 , ( bp::arg("method") )
+                , bp::release_gil_policy()
                 , "Set the QM method to be used to calculate the energy or\nforce (e.g. AM1, PM3). This will substitute for\n@QM_METHOD@ in the energy and force command file templates" );
         
         }
@@ -270,6 +281,7 @@ void register_Mopac_class(){
                 "setMopacInputFilename"
                 , setMopacInputFilename_function_value
                 , ( bp::arg("filename") )
+                , bp::release_gil_policy()
                 , "Tell this interface which name Mopac uses for the input file. This\nis hardcoded into Mopac and depends on the system on which this\nprogram is running, e.g. FOR005 is the name for the Mopac\nI am using on OS X" );
         
         }
@@ -282,6 +294,7 @@ void register_Mopac_class(){
                 "setMopacOutputFilename"
                 , setMopacOutputFilename_function_value
                 , ( bp::arg("filename") )
+                , bp::release_gil_policy()
                 , "Tell this interface which name Mopac uses for the output file. This\nis hardcoded into Mopac and depends on the system on which this\nprogram is running, e.g. FOR006 is the name for the Mopac\nI am using on OS X" );
         
         }
@@ -294,6 +307,7 @@ void register_Mopac_class(){
                 "setTotalCharge"
                 , setTotalCharge_function_value
                 , ( bp::arg("charge") )
+                , bp::release_gil_policy()
                 , "Set the total charge of the system (in unit charges)" );
         
         }
@@ -305,6 +319,7 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "totalCharge"
                 , totalCharge_function_value
+                , bp::release_gil_policy()
                 , "Return the total charge of the system" );
         
         }
@@ -316,6 +331,7 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

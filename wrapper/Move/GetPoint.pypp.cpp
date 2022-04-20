@@ -37,6 +37,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_GetPoint_class(){
 
     { //::SireMove::GetPoint
@@ -52,6 +54,7 @@ void register_GetPoint_class(){
                 "getPoint"
                 , getPoint_function_value
                 , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -63,6 +66,7 @@ void register_GetPoint_class(){
             GetPoint_exposer.def( 
                 "null"
                 , null_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -98,6 +102,7 @@ void register_GetPoint_class(){
             GetPoint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -69,6 +69,8 @@ SireMM::AmberDihedral __copy__(const SireMM::AmberDihedral &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AmberDihedral_class(){
 
     { //::SireMM::AmberDihedral
@@ -87,6 +89,7 @@ void register_AmberDihedral_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("phi") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -98,6 +101,7 @@ void register_AmberDihedral_class(){
             AmberDihedral_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -137,6 +141,7 @@ void register_AmberDihedral_class(){
             AmberDihedral_exposer.def( 
                 "terms"
                 , terms_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -149,6 +154,7 @@ void register_AmberDihedral_class(){
                 "toExpression"
                 , toExpression_function_value
                 , ( bp::arg("PHI") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -160,6 +166,7 @@ void register_AmberDihedral_class(){
             AmberDihedral_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -171,6 +178,7 @@ void register_AmberDihedral_class(){
             AmberDihedral_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -182,6 +190,7 @@ void register_AmberDihedral_class(){
             AmberDihedral_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

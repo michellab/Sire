@@ -41,6 +41,8 @@ SireBase::Array2D<SireMaths::Vector> __copy__(const SireBase::Array2D<SireMaths:
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Array2D_Vector__class(){
 
     { //::SireBase::Array2D< SireMaths::Vector >
@@ -118,6 +120,7 @@ void register_Array2D_Vector__class(){
                 "redimension"
                 , redimension_function_value
                 , ( bp::arg("nrows"), bp::arg("ncolumns") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -131,6 +134,7 @@ void register_Array2D_Vector__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -144,6 +148,7 @@ void register_Array2D_Vector__class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -156,6 +161,7 @@ void register_Array2D_Vector__class(){
             Array2D_Vector__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -168,6 +174,7 @@ void register_Array2D_Vector__class(){
             Array2D_Vector__exposer.def( 
                 "transpose"
                 , transpose_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

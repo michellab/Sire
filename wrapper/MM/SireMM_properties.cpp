@@ -4,6 +4,16 @@
 #include "Base/convertproperty.hpp"
 #include "SireMM_properties.h"
 
+#include "SireFF/errors.h"
+#include "SireMaths/maths.h"
+#include "SireStream/datastream.h"
+#include "SireStream/shareddatastream.h"
+#include "SireUnits/units.h"
+#include "switchingfunction.h"
+#include <QMutex>
+#include <cmath>
+#include <numeric>
+#include "switchingfunction.h"
 #include "SireBase/errors.h"
 #include "SireBase/lengthproperty.h"
 #include "SireBase/numberproperty.h"
@@ -25,16 +35,6 @@
 #include "tostring.h"
 #include <QElapsedTimer>
 #include "cljfunction.h"
-#include "SireFF/errors.h"
-#include "SireMaths/maths.h"
-#include "SireStream/datastream.h"
-#include "SireStream/shareddatastream.h"
-#include "SireUnits/units.h"
-#include "switchingfunction.h"
-#include <QMutex>
-#include <cmath>
-#include <numeric>
-#include "switchingfunction.h"
 #include "SireCAS/errors.h"
 #include "SireCAS/expression.h"
 #include "SireCAS/symbols.h"
@@ -51,8 +51,8 @@
 #include "restraint.h"
 void register_SireMM_properties()
 {
-    register_property_container< SireMM::CLJFunctionPtr, SireMM::CLJFunction >();
     register_property_container< SireMM::SwitchFuncPtr, SireMM::SwitchingFunction >();
+    register_property_container< SireMM::CLJFunctionPtr, SireMM::CLJFunction >();
     register_property_container< SireMM::RestraintPtr, SireMM::Restraint >();
     register_property_container< SireMM::Restraint3DPtr, SireMM::Restraint3D >();
 }

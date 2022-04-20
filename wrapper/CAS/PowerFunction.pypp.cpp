@@ -37,6 +37,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PowerFunction_class(){
 
     { //::SireCAS::PowerFunction
@@ -51,6 +53,7 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "children"
                 , children_function_value
+                , bp::release_gil_policy()
                 , "Return the child expressions of this Power - this contains the core() and the power()" );
         
         }
@@ -62,6 +65,7 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "core"
                 , core_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -74,6 +78,7 @@ void register_PowerFunction_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the differential of this expression with respect to symbol" );
         
         }
@@ -86,6 +91,7 @@ void register_PowerFunction_class(){
                 "expand"
                 , expand_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -97,6 +103,7 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "functions"
                 , functions_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -109,6 +116,7 @@ void register_PowerFunction_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the integral of this power with respect to symbol" );
         
         }
@@ -120,6 +128,7 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "isCompound"
                 , isCompound_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -131,6 +140,7 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "isConstant"
                 , isConstant_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a constant" );
         
         }
@@ -143,6 +153,7 @@ void register_PowerFunction_class(){
                 "isFunction"
                 , isFunction_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return whether this is a function of symbol" );
         
         }
@@ -154,6 +165,7 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "power"
                 , power_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -165,6 +177,7 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "reduce"
                 , reduce_function_value
+                , bp::release_gil_policy()
                 , "Reduce this Power to a simplified expression (if possible)" );
         
         }
@@ -177,6 +190,7 @@ void register_PowerFunction_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "Return this expression with the supplied substitutions" );
         
         }
@@ -188,6 +202,7 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -199,6 +214,7 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "toOpenMMString"
                 , toOpenMMString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this power in the OpenMM syntax" );
         
         }
@@ -210,6 +226,7 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this power" );
         
         }
@@ -221,6 +238,7 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

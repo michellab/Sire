@@ -85,6 +85,8 @@ SireMol::Mover<SireMol::CutGroup> __copy__(const SireMol::Mover<SireMol::CutGrou
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Mover_CutGroup__class(){
@@ -301,6 +303,7 @@ void register_Mover_CutGroup__class(){
             Mover_CutGroup__exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -453,6 +456,7 @@ void register_Mover_CutGroup__class(){
             Mover_CutGroup__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -493,6 +497,7 @@ void register_Mover_CutGroup__class(){
             Mover_CutGroup__exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

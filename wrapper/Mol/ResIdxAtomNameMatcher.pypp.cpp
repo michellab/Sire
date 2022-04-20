@@ -49,6 +49,8 @@ SireMol::ResIdxAtomNameMatcher __copy__(const SireMol::ResIdxAtomNameMatcher &ot
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ResIdxAtomNameMatcher_class(){
 
     { //::SireMol::ResIdxAtomNameMatcher
@@ -79,6 +81,7 @@ void register_ResIdxAtomNameMatcher_class(){
             ResIdxAtomNameMatcher_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -90,6 +93,7 @@ void register_ResIdxAtomNameMatcher_class(){
             ResIdxAtomNameMatcher_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -101,6 +105,7 @@ void register_ResIdxAtomNameMatcher_class(){
             ResIdxAtomNameMatcher_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

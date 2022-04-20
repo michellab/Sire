@@ -22,6 +22,8 @@ SireMM::Intra14CoulombComponent __copy__(const SireMM::Intra14CoulombComponent &
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Intra14CoulombComponent_class(){
 
     { //::SireMM::Intra14CoulombComponent
@@ -39,6 +41,7 @@ void register_Intra14CoulombComponent_class(){
                 "changeEnergy"
                 , changeEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("nrg") )
+                , bp::release_gil_policy()
                 , "Change the component of the energy in the forcefield ff\nby delta" );
         
         }
@@ -51,6 +54,7 @@ void register_Intra14CoulombComponent_class(){
                 "setEnergy"
                 , setEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("nrg") )
+                , bp::release_gil_policy()
                 , "Set the component of the energy in the forcefield ff\nto be equal to the passed energy" );
         
         }
@@ -62,6 +66,7 @@ void register_Intra14CoulombComponent_class(){
             Intra14CoulombComponent_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -73,7 +78,7 @@ void register_Intra14CoulombComponent_class(){
             Intra14CoulombComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -85,6 +90,7 @@ void register_Intra14CoulombComponent_class(){
             Intra14CoulombComponent_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -96,6 +102,7 @@ void register_Intra14CoulombComponent_class(){
             Intra14CoulombComponent_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

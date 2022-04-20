@@ -39,6 +39,8 @@ SireMol::MoleculeBeading __copy__(const SireMol::MoleculeBeading &other){ return
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MoleculeBeading_class(){
 
     { //::SireMol::MoleculeBeading
@@ -69,6 +71,7 @@ void register_MoleculeBeading_class(){
             MoleculeBeading_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

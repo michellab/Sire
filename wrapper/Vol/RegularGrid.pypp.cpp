@@ -27,6 +27,8 @@ SireVol::RegularGrid __copy__(const SireVol::RegularGrid &other){ return SireVol
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_RegularGrid_class(){
@@ -62,6 +64,7 @@ void register_RegularGrid_class(){
             RegularGrid_exposer.def( 
                 "dimX"
                 , dimX_function_value
+                , bp::release_gil_policy()
                 , "Return the number of points in the x dimension" );
         
         }
@@ -73,6 +76,7 @@ void register_RegularGrid_class(){
             RegularGrid_exposer.def( 
                 "dimY"
                 , dimY_function_value
+                , bp::release_gil_policy()
                 , "Return the number of points in the y dimension" );
         
         }
@@ -84,6 +88,7 @@ void register_RegularGrid_class(){
             RegularGrid_exposer.def( 
                 "dimZ"
                 , dimZ_function_value
+                , bp::release_gil_policy()
                 , "Return the number of points in the z dimension" );
         
         }
@@ -95,6 +100,7 @@ void register_RegularGrid_class(){
             RegularGrid_exposer.def( 
                 "gridSpacing"
                 , gridSpacing_function_value
+                , bp::release_gil_policy()
                 , "Return the grid spacing (this is a cubic grid)" );
         
         }
@@ -122,6 +128,7 @@ void register_RegularGrid_class(){
                 "recenter"
                 , recenter_function_value
                 , ( bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Return a copy of this grid that has been recentered to center" );
         
         }
@@ -134,6 +141,7 @@ void register_RegularGrid_class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0) )
+                , bp::release_gil_policy()
                 , "Return a copy of this grid that has been rotated using the passed rotation\nmatrix about center" );
         
         }
@@ -146,6 +154,7 @@ void register_RegularGrid_class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0) )
+                , bp::release_gil_policy()
                 , "Return a copy of this grid that has been rotated using the passed rotation\nquaternion about center" );
         
         }
@@ -158,6 +167,7 @@ void register_RegularGrid_class(){
                 "scale"
                 , scale_function_value
                 , ( bp::arg("scalefactor") )
+                , bp::release_gil_policy()
                 , "Return a copy of this grid that has been scaled uniformly by scalefactor" );
         
         }
@@ -169,6 +179,7 @@ void register_RegularGrid_class(){
             RegularGrid_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of the grid" );
         
         }
@@ -181,6 +192,7 @@ void register_RegularGrid_class(){
                 "translate"
                 , translate_function_value
                 , ( bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Return a copy of this grid that has been translated by delta" );
         
         }

@@ -54,6 +54,8 @@ SireMM::InternalFF __copy__(const SireMM::InternalFF &other){ return SireMM::Int
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_InternalFF_class(){
@@ -72,6 +74,7 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "combiningRules"
                 , combiningRules_function_value
+                , bp::release_gil_policy()
                 , "Return the type of combining rules used when calculating the 1-4\nnonbonded energy" );
         
         }
@@ -83,7 +86,7 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -96,6 +99,7 @@ void register_InternalFF_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether this forcefield contains the property called name" );
         
         }
@@ -107,6 +111,7 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "disable14Calculation"
                 , disable14Calculation_function_value
+                , bp::release_gil_policy()
                 , "Disable calculation of the 1-4 nonbonded terms" );
         
         }
@@ -118,6 +123,7 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "enable14Calculation"
                 , enable14Calculation_function_value
+                , bp::release_gil_policy()
                 , "Turn on the calculate of 1-4 nonbonded terms" );
         
         }
@@ -129,6 +135,7 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "energy"
                 , energy_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -141,6 +148,7 @@ void register_InternalFF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -153,6 +161,7 @@ void register_InternalFF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("scale_energy")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the energies in molecules in the passed energy table\ncaused by this potential, and add them onto the energies already\nin the energy table (optionally scaled by scale_energy)" );
         
         }
@@ -165,6 +174,7 @@ void register_InternalFF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("symbol"), bp::arg("scale_energy")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the energies of molecules in the passed energies table\ncaused by the component of this potential represented by\nsymbol, and add them onto the energies already\nin the energy table (optionally scaled by scale_energy)" );
         
         }
@@ -177,6 +187,7 @@ void register_InternalFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -189,6 +200,7 @@ void register_InternalFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -201,6 +213,7 @@ void register_InternalFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -213,6 +226,7 @@ void register_InternalFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -225,6 +239,7 @@ void register_InternalFF_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the forces acting on molecules in the passed force table\ncaused by this potential, and add them onto the forces already\nin the force table (optionally scaled by scale_force)" );
         
         }
@@ -237,6 +252,7 @@ void register_InternalFF_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("symbol"), bp::arg("scale_force")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the forces acting on molecules in the passed force table\ncaused by the component of this potential represented by\nsymbol, and add them onto the forces already\nin the force table (optionally scaled by scale_force)" );
         
         }
@@ -248,6 +264,7 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "isStrict"
                 , isStrict_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -259,6 +276,7 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "mustNowRecalculateFromScratch"
                 , mustNowRecalculateFromScratch_function_value
+                , bp::release_gil_policy()
                 , "Set it that the forcefield must now be recalculate from scratch" );
         
         }
@@ -298,6 +316,7 @@ void register_InternalFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -310,6 +329,7 @@ void register_InternalFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -322,6 +342,7 @@ void register_InternalFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -334,6 +355,7 @@ void register_InternalFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -358,7 +380,7 @@ void register_InternalFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the property with name name\nThrow: SireBase::missing_property\n" );
         
         }
@@ -371,6 +393,7 @@ void register_InternalFF_class(){
                 "setArithmeticCombiningRules"
                 , setArithmeticCombiningRules_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Turn on or off use of arithmetic combining rules when calculating\nthe 1-4 nonbonded energy" );
         
         }
@@ -383,6 +406,7 @@ void register_InternalFF_class(){
                 "setCombiningRules"
                 , setCombiningRules_function_value
                 , ( bp::arg("rules") )
+                , bp::release_gil_policy()
                 , "Set the combining rules used when calculating the 1-4 nonbonded energy,\nreturning whether or not this changes the forcefield" );
         
         }
@@ -395,6 +419,7 @@ void register_InternalFF_class(){
                 "setGeometricCombiningRules"
                 , setGeometricCombiningRules_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Turn on or off use of geometric combining rules when calculating\nthe 1-4 nonbonded energy" );
         
         }
@@ -407,6 +432,7 @@ void register_InternalFF_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("property") )
+                , bp::release_gil_policy()
                 , "Set the property name to the value value\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\n" );
         
         }
@@ -419,6 +445,7 @@ void register_InternalFF_class(){
                 "setStrict"
                 , setStrict_function_value
                 , ( bp::arg("isstrict") )
+                , bp::release_gil_policy()
                 , "Set whether or not this strictly include terms that\ninvolve only selected atoms. Otherwise this includes\nterms that involve at least one selected atom" );
         
         }
@@ -431,6 +458,7 @@ void register_InternalFF_class(){
                 "setUse14Calculation"
                 , setUse14Calculation_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Turn on or off the calculation of the 1-4 terms, returning whether\nor not this changes the forcefield" );
         
         }
@@ -454,6 +482,7 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -465,6 +494,7 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "uses14Calculation"
                 , uses14Calculation_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield also calculates the\n1-4 nonbonded terms" );
         
         }
@@ -476,6 +506,7 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "usingArithmeticCombiningRules"
                 , usingArithmeticCombiningRules_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not arithmetic combining rules are used for the 1-4\nnonbonded energy calculation" );
         
         }
@@ -487,6 +518,7 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "usingGeometricCombiningRules"
                 , usingGeometricCombiningRules_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not geometric combining rules are used for the 1-4\nnonbonded energy calculation" );
         
         }

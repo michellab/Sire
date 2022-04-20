@@ -21,6 +21,8 @@ SireFF::FFIdx __copy__(const SireFF::FFIdx &other){ return SireFF::FFIdx(other);
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FFIdx_class(){
 
     { //::SireFF::FFIdx
@@ -37,6 +39,7 @@ void register_FFIdx_class(){
             FFIdx_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -48,6 +51,7 @@ void register_FFIdx_class(){
             FFIdx_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -60,6 +64,7 @@ void register_FFIdx_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("ffields") )
+                , bp::release_gil_policy()
                 , "Short cut function to map this index to the index of the\nmatching forcefield in the passed ForceFields object\nThrow: SireError::invalid_index\n" );
         
         }
@@ -71,6 +76,7 @@ void register_FFIdx_class(){
             FFIdx_exposer.def( 
                 "null"
                 , null_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +101,7 @@ void register_FFIdx_class(){
             FFIdx_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -106,6 +113,7 @@ void register_FFIdx_class(){
             FFIdx_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -117,6 +125,7 @@ void register_FFIdx_class(){
             FFIdx_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

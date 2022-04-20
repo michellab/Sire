@@ -31,6 +31,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_GeometryPerturbation_class(){
 
     { //::SireMol::GeometryPerturbation
@@ -57,6 +59,7 @@ void register_GeometryPerturbation_class(){
             GeometryPerturbation_exposer.def( 
                 "requiredProperties"
                 , requiredProperties_function_value
+                , bp::release_gil_policy()
                 , "Return the properties required or affected by this perturbation" );
         
         }
@@ -68,6 +71,7 @@ void register_GeometryPerturbation_class(){
             GeometryPerturbation_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

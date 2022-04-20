@@ -21,6 +21,8 @@ SireMol::ResProperty<QVariant> __copy__(const SireMol::ResProperty<QVariant> &ot
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_ResVariantProperty_class(){
@@ -55,6 +57,7 @@ void register_ResVariantProperty_class(){
                 "assertCanConvert"
                 , assertCanConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -68,6 +71,7 @@ void register_ResVariantProperty_class(){
                 "assignFrom"
                 , assignFrom_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +99,7 @@ void register_ResVariantProperty_class(){
                 "canConvert"
                 , canConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -107,6 +112,7 @@ void register_ResVariantProperty_class(){
             ResVariantProperty_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -120,6 +126,7 @@ void register_ResVariantProperty_class(){
                 "fromVariant"
                 , fromVariant_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -147,6 +154,7 @@ void register_ResVariantProperty_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -159,6 +167,7 @@ void register_ResVariantProperty_class(){
             ResVariantProperty_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -171,6 +180,7 @@ void register_ResVariantProperty_class(){
             ResVariantProperty_exposer.def( 
                 "nResidues"
                 , nResidues_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -227,6 +237,7 @@ void register_ResVariantProperty_class(){
             ResVariantProperty_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -239,6 +250,7 @@ void register_ResVariantProperty_class(){
             ResVariantProperty_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -251,6 +263,7 @@ void register_ResVariantProperty_class(){
             ResVariantProperty_exposer.def( 
                 "toVariant"
                 , toVariant_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -263,6 +276,7 @@ void register_ResVariantProperty_class(){
             ResVariantProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

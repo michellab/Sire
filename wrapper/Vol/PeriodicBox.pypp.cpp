@@ -35,6 +35,8 @@ SireVol::PeriodicBox __copy__(const SireVol::PeriodicBox &other){ return SireVol
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PeriodicBox_class(){
 
     { //::SireVol::PeriodicBox
@@ -53,6 +55,7 @@ void register_PeriodicBox_class(){
                 "beyond"
                 , beyond_function_value
                 , ( bp::arg("dist"), bp::arg("aabox0"), bp::arg("aabox1") )
+                , bp::release_gil_policy()
                 , "Return whether or not two groups enclosed by the AABoxes aabox0 and\naabox1 are definitely beyond the cutoff distance dist" );
         
         }
@@ -65,6 +68,7 @@ void register_PeriodicBox_class(){
                 "beyond"
                 , beyond_function_value
                 , ( bp::arg("dist"), bp::arg("group0"), bp::arg("group1") )
+                , bp::release_gil_policy()
                 , "Return whether or not these two groups are definitely beyond the cutoff distance." );
         
         }
@@ -77,6 +81,7 @@ void register_PeriodicBox_class(){
                 "calcAngle"
                 , calcAngle_function_value
                 , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2") )
+                , bp::release_gil_policy()
                 , "Calculate the angle between the passed three points. This should return\nthe acute angle between the points, which should lie between 0 and 180 degrees" );
         
         }
@@ -89,6 +94,7 @@ void register_PeriodicBox_class(){
                 "calcDihedral"
                 , calcDihedral_function_value
                 , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3") )
+                , bp::release_gil_policy()
                 , "Calculate the torsion angle between the passed four points. This should\nreturn the torsion angle measured clockwise when looking down the\ntorsion from point0-point1-point2-point3. This will lie between 0 and 360\ndegrees" );
         
         }
@@ -101,6 +107,7 @@ void register_PeriodicBox_class(){
                 "calcDist"
                 , calcDist_function_value
                 , ( bp::arg("point0"), bp::arg("point1") )
+                , bp::release_gil_policy()
                 , "Calculate the distance between two points" );
         
         }
@@ -113,6 +120,7 @@ void register_PeriodicBox_class(){
                 "calcDist"
                 , calcDist_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances between all of the\natoms of the two CoordGroups. Return the shortest distance^2 between the two\nCoordGroups." );
         
         }
@@ -125,6 +133,7 @@ void register_PeriodicBox_class(){
                 "calcDist"
                 , calcDist_function_value
                 , ( bp::arg("group"), bp::arg("point"), bp::arg("mat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances between all of the\natoms of the passed CoordGroup to the passed point. Return the shortest\ndistance." );
         
         }
@@ -137,6 +146,7 @@ void register_PeriodicBox_class(){
                 "calcDist2"
                 , calcDist2_function_value
                 , ( bp::arg("point0"), bp::arg("point1") )
+                , bp::release_gil_policy()
                 , "Calculate the distance squared between two points" );
         
         }
@@ -149,6 +159,7 @@ void register_PeriodicBox_class(){
                 "calcDist2"
                 , calcDist2_function_value
                 , ( bp::arg("group"), bp::arg("point"), bp::arg("mat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances squared between all of the\natoms of the passed CoordGroup to the passed point. Return the shortest\ndistance." );
         
         }
@@ -161,6 +172,7 @@ void register_PeriodicBox_class(){
                 "calcDist2"
                 , calcDist2_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances^2 between all of the\natoms of the two CoordGroups. Return the shortest distance between the\ntwo CoordGroups." );
         
         }
@@ -173,6 +185,7 @@ void register_PeriodicBox_class(){
                 "calcDistVector"
                 , calcDistVector_function_value
                 , ( bp::arg("point0"), bp::arg("point1") )
+                , bp::release_gil_policy()
                 , "Calculate the distance vector between two points" );
         
         }
@@ -185,6 +198,7 @@ void register_PeriodicBox_class(){
                 "calcDistVectors"
                 , calcDistVectors_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix distmat between all the points of the two CoordGroups\ngroup1 and group2 - the returned matrix has the vectors pointing\nfrom each point in group1 to each point in group2. This returns\nthe shortest distance between two points in the group" );
         
         }
@@ -197,6 +211,7 @@ void register_PeriodicBox_class(){
                 "calcDistVectors"
                 , calcDistVectors_function_value
                 , ( bp::arg("group"), bp::arg("point"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix distmat between all the points passed CoordGroup\nto the point point - the returned matrix has the vectors pointing\nfrom the point to each point in group. This returns\nthe shortest distance." );
         
         }
@@ -209,6 +224,7 @@ void register_PeriodicBox_class(){
                 "calcInvDist"
                 , calcInvDist_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the inverse distances between all of the\natoms of the two CoordGroups. Return the shortest distance between the two CoordGroups." );
         
         }
@@ -221,6 +237,7 @@ void register_PeriodicBox_class(){
                 "calcInvDist2"
                 , calcInvDist2_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the inverse distances^2 between all of the\natoms of the two CoordGroups. Return the shortest distance between the two CoordGroups." );
         
         }
@@ -245,6 +262,7 @@ void register_PeriodicBox_class(){
                 "getBoxCenter"
                 , getBoxCenter_function_value
                 , ( bp::arg("p") )
+                , bp::release_gil_policy()
                 , "Return the center of the box that contains the point p assuming\nthat the center for the central box is located at the origin" );
         
         }
@@ -257,6 +275,7 @@ void register_PeriodicBox_class(){
                 "getBoxCenter"
                 , getBoxCenter_function_value
                 , ( bp::arg("p"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Return the center of the box that contains the point p assuming\nthat the center for the central box is located at center" );
         
         }
@@ -269,6 +288,7 @@ void register_PeriodicBox_class(){
                 "getCopiesWithin"
                 , getCopiesWithin_function_value
                 , ( bp::arg("group"), bp::arg("center"), bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return a list of copies of CoordGroup group that are within\ndistance of the CoordGroup center, translating group so that\nit has the right coordinates to be around center. Note that multiple\ncopies of group may be returned in this is a periodic space and\nthere are multiple periodic replicas of group within dist of\ncenter. The copies of group are returned together with the\nminimum distance between that periodic replica and center.\nIf there are no periodic replicas of group that are within\ndist of center, then an empty list is returned." );
         
         }
@@ -281,6 +301,7 @@ void register_PeriodicBox_class(){
                 "getImagesWithin"
                 , getImagesWithin_function_value
                 , ( bp::arg("point"), bp::arg("center"), bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return all periodic images of point with respect to center within\ndist distance of center" );
         
         }
@@ -293,6 +314,7 @@ void register_PeriodicBox_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("group"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Return the closest periodic copy of group to the point point,\naccording to the minimum image convention. The effect of this is\nto move group into the box which is now centered on point" );
         
         }
@@ -305,6 +327,7 @@ void register_PeriodicBox_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("groups"), bp::arg("center"), bp::arg("translate_as_one")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Return the closest periodic copy of each group in groups to the\npoint point, according to the minimum image convention.\nThe effect of this is to move each group into the box which is\nnow centered on point. If translate_as_one is true,\nthen this treats all groups as being part of one larger\ngroup, and so it translates it together. This is useful\nto get the minimum image of a molecule as a whole, rather\nthan breaking the molecule across a box boundary" );
         
         }
@@ -317,6 +340,7 @@ void register_PeriodicBox_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("aabox"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Return the copy of the periodic box which is the closest minimum image\nto center" );
         
         }
@@ -329,6 +353,7 @@ void register_PeriodicBox_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("point"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Return the copy of the point point which is the closest minimum image\nto center" );
         
         }
@@ -341,6 +366,7 @@ void register_PeriodicBox_class(){
                 "getRandomPoint"
                 , getRandomPoint_function_value
                 , ( bp::arg("center"), bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Return a random point within the box (placing the center of the box\nis at the center center)" );
         
         }
@@ -352,6 +378,7 @@ void register_PeriodicBox_class(){
             PeriodicBox_exposer.def( 
                 "isCartesian"
                 , isCartesian_function_value
+                , bp::release_gil_policy()
                 , "A Periodic box is cartesian" );
         
         }
@@ -363,6 +390,7 @@ void register_PeriodicBox_class(){
             PeriodicBox_exposer.def( 
                 "isPeriodic"
                 , isPeriodic_function_value
+                , bp::release_gil_policy()
                 , "A Periodic box is periodic" );
         
         }
@@ -375,6 +403,7 @@ void register_PeriodicBox_class(){
                 "maxCoords"
                 , maxCoords_function_value
                 , ( bp::arg("center")=SireMaths::Vector(0) )
+                , bp::release_gil_policy()
                 , "Return the maximum coordinates of the box that has its center at center" );
         
         }
@@ -387,6 +416,7 @@ void register_PeriodicBox_class(){
                 "minCoords"
                 , minCoords_function_value
                 , ( bp::arg("center")=SireMaths::Vector(0) )
+                , bp::release_gil_policy()
                 , "Return the minimum coordinates of the box that has its center at center" );
         
         }
@@ -399,6 +429,7 @@ void register_PeriodicBox_class(){
                 "minimumDistance"
                 , minimumDistance_function_value
                 , ( bp::arg("group0"), bp::arg("group1") )
+                , bp::release_gil_policy()
                 , "Return the minimum distance between the points in group0 and group1.\nIf this is a periodic space then this uses the minimum image convention\n(i.e. the minimum distance between the closest periodic replicas are\nused)" );
         
         }
@@ -411,6 +442,7 @@ void register_PeriodicBox_class(){
                 "minimumDistance"
                 , minimumDistance_function_value
                 , ( bp::arg("box0"), bp::arg("box1") )
+                , bp::release_gil_policy()
                 , "Return the minimum distance between the two boxes" );
         
         }
@@ -438,6 +470,7 @@ void register_PeriodicBox_class(){
                 "setDimensions"
                 , setDimensions_function_value
                 , ( bp::arg("dimensions") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -450,6 +483,7 @@ void register_PeriodicBox_class(){
                 "setDimensions"
                 , setDimensions_function_value
                 , ( bp::arg("mincoords"), bp::arg("maxcoords") )
+                , bp::release_gil_policy()
                 , "Set the dimensions of the box so that they span from mincoords\nto maxcoords" );
         
         }
@@ -462,6 +496,7 @@ void register_PeriodicBox_class(){
                 "setVolume"
                 , setVolume_function_value
                 , ( bp::arg("volume") )
+                , bp::release_gil_policy()
                 , "Return a copy of this space with the volume of set to volume\n- this will scale the space uniformly, keeping the center at\nthe same location, to achieve this volume" );
         
         }
@@ -473,6 +508,7 @@ void register_PeriodicBox_class(){
             PeriodicBox_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this space" );
         
         }
@@ -484,6 +520,7 @@ void register_PeriodicBox_class(){
             PeriodicBox_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -495,6 +532,7 @@ void register_PeriodicBox_class(){
             PeriodicBox_exposer.def( 
                 "volume"
                 , volume_function_value
+                , bp::release_gil_policy()
                 , "Return the volume of the central box of this space." );
         
         }

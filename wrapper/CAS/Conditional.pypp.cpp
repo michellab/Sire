@@ -40,6 +40,8 @@ SireCAS::Conditional __copy__(const SireCAS::Conditional &other){ return SireCAS
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Conditional_class(){
 
     { //::SireCAS::Conditional
@@ -56,6 +58,7 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "children"
                 , children_function_value
+                , bp::release_gil_policy()
                 , "Return the children of this expression" );
         
         }
@@ -67,7 +70,7 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "condition"
                 , condition_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the condition" );
         
         }
@@ -79,6 +82,7 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "conjugate"
                 , conjugate_function_value
+                , bp::release_gil_policy()
                 , "Return the complex conjugate of this expression" );
         
         }
@@ -91,6 +95,7 @@ void register_Conditional_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the differential of this expression" );
         
         }
@@ -103,6 +108,7 @@ void register_Conditional_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this expression for the passed values" );
         
         }
@@ -115,6 +121,7 @@ void register_Conditional_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this expresion for the passed values" );
         
         }
@@ -127,6 +134,7 @@ void register_Conditional_class(){
                 "expand"
                 , expand_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Expand this expression in terms of symbol" );
         
         }
@@ -150,6 +158,7 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "functions"
                 , functions_function_value
+                , bp::release_gil_policy()
                 , "Return the functions used in this expression" );
         
         }
@@ -161,6 +170,7 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Hash this conditional" );
         
         }
@@ -173,6 +183,7 @@ void register_Conditional_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the integral of this expression" );
         
         }
@@ -184,6 +195,7 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "isComplex"
                 , isComplex_function_value
+                , bp::release_gil_policy()
                 , "Is this a complex expression?" );
         
         }
@@ -195,6 +207,7 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "isCompound"
                 , isCompound_function_value
+                , bp::release_gil_policy()
                 , "Is this a compound expression?" );
         
         }
@@ -206,6 +219,7 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "isConstant"
                 , isConstant_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is constant" );
         
         }
@@ -218,6 +232,7 @@ void register_Conditional_class(){
                 "isFunction"
                 , isFunction_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Return whether or not this is a function of symbol" );
         
         }
@@ -229,6 +244,7 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is null" );
         
         }
@@ -256,6 +272,7 @@ void register_Conditional_class(){
                 "series"
                 , series_function_value
                 , ( bp::arg("symbol"), bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Return the series expansion of this product with respect to symbol, to order n" );
         
         }
@@ -268,6 +285,7 @@ void register_Conditional_class(){
                 "simplify"
                 , simplify_function_value
                 , ( bp::arg("options")=(int)(0) )
+                , bp::release_gil_policy()
                 , "Try to simplify this condition" );
         
         }
@@ -280,6 +298,7 @@ void register_Conditional_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "Substitute identities into this expression" );
         
         }
@@ -291,6 +310,7 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return the symbols used in this expression" );
         
         }
@@ -302,6 +322,7 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this conditional" );
         
         }
@@ -325,6 +346,7 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -336,6 +358,7 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

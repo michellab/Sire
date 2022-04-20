@@ -39,6 +39,8 @@ SireMM::CLJExtractor __copy__(const SireMM::CLJExtractor &other){ return SireMM:
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJExtractor_class(){
 
     { //::SireMM::CLJExtractor
@@ -65,6 +67,7 @@ void register_CLJExtractor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("new_molecule"), bp::arg("boxes"), bp::arg("workspace") )
+                , bp::release_gil_policy()
                 , "Add the extra atoms in new_molecule to the molecule" );
         
         }
@@ -77,6 +80,7 @@ void register_CLJExtractor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("new_selection"), bp::arg("boxes"), bp::arg("workspace") )
+                , bp::release_gil_policy()
                 , "Add the extra atoms in new_selection to the molecule" );
         
         }
@@ -88,6 +92,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "changed"
                 , changed_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this molecule has been changed during the move" );
         
         }
@@ -99,6 +104,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "chargeProperty"
                 , chargeProperty_function_value
+                , bp::release_gil_policy()
                 , "Return the property used to find the charges" );
         
         }
@@ -111,6 +117,7 @@ void register_CLJExtractor_class(){
                 "commit"
                 , commit_function_value
                 , ( bp::arg("boxes"), bp::arg("workspace") )
+                , bp::release_gil_policy()
                 , "Commit the changes" );
         
         }
@@ -122,6 +129,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "coordinatesProperty"
                 , coordinatesProperty_function_value
+                , bp::release_gil_policy()
                 , "Return the property used to find the coordinates" );
         
         }
@@ -133,6 +141,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "extractingByCutGroup"
                 , extractingByCutGroup_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not atoms are extracted by cutgroup" );
         
         }
@@ -144,6 +153,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "extractingByMolecule"
                 , extractingByMolecule_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not atoms are extracted by molecule" );
         
         }
@@ -155,6 +165,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "extractingByResidue"
                 , extractingByResidue_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not atoms are extracted by residue" );
         
         }
@@ -166,6 +177,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "hasChangedAtoms"
                 , hasChangedAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not there are any changes to the coordinates, charges\nor LJ properties of the atoms" );
         
         }
@@ -177,6 +189,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "idSource"
                 , idSource_function_value
+                , bp::release_gil_policy()
                 , "Return the source of the ID property for each CLJAtom" );
         
         }
@@ -188,6 +201,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this extractor is empty (contains no atoms)" );
         
         }
@@ -199,6 +213,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this extractor is null (contains no molecule information)" );
         
         }
@@ -210,6 +225,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "ljProperty"
                 , ljProperty_function_value
+                , bp::release_gil_policy()
                 , "Return the property used to find the LJ parameters" );
         
         }
@@ -221,6 +237,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "needsCommitting"
                 , needsCommitting_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this extractor needs to be committed (i.e. whether\nor not the molecule has changed in any way)" );
         
         }
@@ -232,6 +249,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "newMolecule"
                 , newMolecule_function_value
+                , bp::release_gil_policy()
                 , "Return the molecule as it exists after the changes have been made" );
         
         }
@@ -243,6 +261,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "oldMolecule"
                 , oldMolecule_function_value
+                , bp::release_gil_policy()
                 , "Return the molecule as it exists before any changes were made" );
         
         }
@@ -269,6 +288,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "propertyMap"
                 , propertyMap_function_value
+                , bp::release_gil_policy()
                 , "Return the property map used to get the names of the coordinates,\ncharge and LJ properties from the molecule" );
         
         }
@@ -281,6 +301,7 @@ void register_CLJExtractor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("new_selection"), bp::arg("boxes"), bp::arg("workspace") )
+                , bp::release_gil_policy()
                 , "Remove the atoms in new_selection from the molecule" );
         
         }
@@ -293,6 +314,7 @@ void register_CLJExtractor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("new_molecule"), bp::arg("boxes"), bp::arg("workspace") )
+                , bp::release_gil_policy()
                 , "Remove the atoms in new_molecule from the molecule" );
         
         }
@@ -305,6 +327,7 @@ void register_CLJExtractor_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("boxes"), bp::arg("workspace") )
+                , bp::release_gil_policy()
                 , "Remove all of the atoms in this view from the molecule" );
         
         }
@@ -317,6 +340,7 @@ void register_CLJExtractor_class(){
                 "revert"
                 , revert_function_value
                 , ( bp::arg("boxes"), bp::arg("workspace") )
+                , bp::release_gil_policy()
                 , "Revert the changes" );
         
         }
@@ -328,6 +352,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -339,6 +364,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -351,6 +377,7 @@ void register_CLJExtractor_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("new_molecule"), bp::arg("boxes"), bp::arg("workspace") )
+                , bp::release_gil_policy()
                 , "Update the molecule, calculating the change in CLJAtoms as a CLJDelta that is\nadded to the passed CLJWorkspace. Any atoms that have changed are removed\nfrom the passed CLJBoxes" );
         
         }
@@ -363,6 +390,7 @@ void register_CLJExtractor_class(){
                 "updateSelection"
                 , updateSelection_function_value
                 , ( bp::arg("selection"), bp::arg("boxes"), bp::arg("workspace") )
+                , bp::release_gil_policy()
                 , "This function is used to update the molecule to use only the passed\nselection as the selected atoms" );
         
         }
@@ -374,6 +402,7 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

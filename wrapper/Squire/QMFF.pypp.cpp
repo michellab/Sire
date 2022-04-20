@@ -40,6 +40,8 @@ Squire::QMFF __copy__(const Squire::QMFF &other){ return Squire::QMFF(other); }
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_QMFF_class(){
@@ -58,7 +60,7 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the energy components available to this forcefield" );
         
         }
@@ -71,6 +73,7 @@ void register_QMFF_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield contains a property\ncalled name" );
         
         }
@@ -83,6 +86,7 @@ void register_QMFF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("scale_energy")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +99,7 @@ void register_QMFF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("symbol"), bp::arg("scale_energy")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -106,6 +111,7 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "energyCommandFile"
                 , energyCommandFile_function_value
+                , bp::release_gil_policy()
                 , "Return the command file that would be used to calculate the energy\nof the molecules in this forcefield" );
         
         }
@@ -118,6 +124,7 @@ void register_QMFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the field from this forcefield in the passed fieldtable" );
         
         }
@@ -130,6 +137,7 @@ void register_QMFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the field from this forcefield in the passed fieldtable" );
         
         }
@@ -142,6 +150,7 @@ void register_QMFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the field from this forcefield in the passed fieldtable" );
         
         }
@@ -154,6 +163,7 @@ void register_QMFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the field from this forcefield in the passed fieldtable" );
         
         }
@@ -166,6 +176,7 @@ void register_QMFF_class(){
                 "fieldCommandFile"
                 , fieldCommandFile_function_value
                 , ( bp::arg("fieldtable") )
+                , bp::release_gil_policy()
                 , "Return the command file that would be used to calculate the fields\nof the molecules in this forcefield" );
         
         }
@@ -178,6 +189,7 @@ void register_QMFF_class(){
                 "fieldCommandFile"
                 , fieldCommandFile_function_value
                 , ( bp::arg("fieldtable"), bp::arg("probe") )
+                , bp::release_gil_policy()
                 , "Return the command file that would be used to calculate the fields\nof the molecules in this forcefield" );
         
         }
@@ -190,6 +202,7 @@ void register_QMFF_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the QM forces on the molecules in this forcefield\nand add the results to the forces for the molecules contained\nin the table forcetable - this scales the forces by\nthe optional scale_force" );
         
         }
@@ -202,6 +215,7 @@ void register_QMFF_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("symbol"), bp::arg("scale_force")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the QM forces on the molecules in this forcefield\nand add the results to the forces for the molecules contained\nin the table forcetable - this scales the forces by\nthe optional scale_force" );
         
         }
@@ -214,6 +228,7 @@ void register_QMFF_class(){
                 "forceCommandFile"
                 , forceCommandFile_function_value
                 , ( bp::arg("forcetable") )
+                , bp::release_gil_policy()
                 , "Return the command file that would be used to calculate the forces\non the molecules in this forcefield" );
         
         }
@@ -225,6 +240,7 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "mustNowRecalculateFromScratch"
                 , mustNowRecalculateFromScratch_function_value
+                , bp::release_gil_policy()
                 , "Trigger a complete recalculation of the QM energy" );
         
         }
@@ -251,6 +267,7 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "parameters"
                 , parameters_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -263,6 +280,7 @@ void register_QMFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the potential from this forcefield in the passed potentialtable" );
         
         }
@@ -275,6 +293,7 @@ void register_QMFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the potential from this forcefield in the passed potentialtable" );
         
         }
@@ -287,6 +306,7 @@ void register_QMFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the potential from this forcefield in the passed potentialtable" );
         
         }
@@ -299,6 +319,7 @@ void register_QMFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the potential from this forcefield in the passed potentialtable" );
         
         }
@@ -311,6 +332,7 @@ void register_QMFF_class(){
                 "potentialCommandFile"
                 , potentialCommandFile_function_value
                 , ( bp::arg("pottable") )
+                , bp::release_gil_policy()
                 , "Return the command file that would be used to calculate the potential\nof the molecules in this forcefield" );
         
         }
@@ -323,6 +345,7 @@ void register_QMFF_class(){
                 "potentialCommandFile"
                 , potentialCommandFile_function_value
                 , ( bp::arg("pottable"), bp::arg("probe") )
+                , bp::release_gil_policy()
                 , "Return the command file that would be used to calculate the potential\nof the molecules in this forcefield" );
         
         }
@@ -347,7 +370,7 @@ void register_QMFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the value of the property with name name\nThrow: SireBase::missing_property\n" );
         
         }
@@ -359,7 +382,7 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "quantumProgram"
                 , quantumProgram_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the QM program that will be used to calculate the\nenergies and forces on the molecules" );
         
         }
@@ -372,6 +395,7 @@ void register_QMFF_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("property") )
+                , bp::release_gil_policy()
                 , "Set the property name to the value value\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -384,6 +408,7 @@ void register_QMFF_class(){
                 "setQuantumProgram"
                 , setQuantumProgram_function_value
                 , ( bp::arg("qmprog") )
+                , bp::release_gil_policy()
                 , "Set the QM program that will be used to calculate the\nenergies and forces" );
         
         }
@@ -396,6 +421,7 @@ void register_QMFF_class(){
                 "setSpace"
                 , setSpace_function_value
                 , ( bp::arg("space") )
+                , bp::release_gil_policy()
                 , "Set the space within which the QM molecules exist" );
         
         }
@@ -408,6 +434,7 @@ void register_QMFF_class(){
                 "setZeroEnergy"
                 , setZeroEnergy_function_value
                 , ( bp::arg("zero_energy") )
+                , bp::release_gil_policy()
                 , "Set the absolute value of the energy which is considered\nas zero (on the relative energy scale used by this potential).\nA relative scale is used so that the QM energy can be shifted\nso that it is comparable to an MM energy" );
         
         }
@@ -419,7 +446,7 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the space within which the QM molecules exist" );
         
         }
@@ -431,6 +458,7 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -442,6 +470,7 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -453,6 +482,7 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "zeroEnergy"
                 , zeroEnergy_function_value
+                , bp::release_gil_policy()
                 , "Return the absolute value of the energy which is considered\nas zero (on the relative energy scale used by this potential).\nA relative scale is used so that the QM energy can be shifted\nso that it is comparable to an MM energy" );
         
         }

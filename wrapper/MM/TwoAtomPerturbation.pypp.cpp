@@ -36,6 +36,8 @@ SireMM::TwoAtomPerturbation __copy__(const SireMM::TwoAtomPerturbation &other){ 
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_TwoAtomPerturbation_class(){
 
     { //::SireMM::TwoAtomPerturbation
@@ -55,7 +57,7 @@ void register_TwoAtomPerturbation_class(){
             TwoAtomPerturbation_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the first of the two atoms whose potential is being changed" );
         
         }
@@ -67,7 +69,7 @@ void register_TwoAtomPerturbation_class(){
             TwoAtomPerturbation_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the second of the two atoms whose potential is being changed" );
         
         }
@@ -94,6 +96,7 @@ void register_TwoAtomPerturbation_class(){
             TwoAtomPerturbation_exposer.def( 
                 "requiredProperties"
                 , requiredProperties_function_value
+                , bp::release_gil_policy()
                 , "Return the properties required or changed by this perturbation" );
         
         }
@@ -105,6 +108,7 @@ void register_TwoAtomPerturbation_class(){
             TwoAtomPerturbation_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this perturbation" );
         
         }
@@ -116,6 +120,7 @@ void register_TwoAtomPerturbation_class(){
             TwoAtomPerturbation_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -128,6 +133,7 @@ void register_TwoAtomPerturbation_class(){
                 "wouldChange"
                 , wouldChange_function_value
                 , ( bp::arg("molecule"), bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Return whether or not this perturbation with the passed values would\nchange the molecule molecule" );
         
         }

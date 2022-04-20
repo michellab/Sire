@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MoleculeProperty_class(){
 
     { //::SireMol::MoleculeProperty
@@ -37,6 +39,7 @@ void register_MoleculeProperty_class(){
             MoleculeProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

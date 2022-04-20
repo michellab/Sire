@@ -37,6 +37,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Condition_class(){
 
     { //::SireCAS::Condition
@@ -51,6 +53,7 @@ void register_Condition_class(){
             Condition_exposer.def( 
                 "alwaysFalse"
                 , alwaysFalse_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -62,6 +65,7 @@ void register_Condition_class(){
             Condition_exposer.def( 
                 "alwaysTrue"
                 , alwaysTrue_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -73,6 +77,7 @@ void register_Condition_class(){
             Condition_exposer.def( 
                 "children"
                 , children_function_value
+                , bp::release_gil_policy()
                 , "Return all of the child expressions in this condition" );
         
         }
@@ -84,6 +89,7 @@ void register_Condition_class(){
             Condition_exposer.def( 
                 "conjugate"
                 , conjugate_function_value
+                , bp::release_gil_policy()
                 , "The complex conjugate of a condition is the condition" );
         
         }
@@ -96,6 +102,7 @@ void register_Condition_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Differentiate this expression" );
         
         }
@@ -108,6 +115,7 @@ void register_Condition_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this expression - this returns 1 if it is true, else it\nreturns 0 if it is false" );
         
         }
@@ -120,6 +128,7 @@ void register_Condition_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this expression - this returns 1 if it is true, else\nit returns 0 if it is false" );
         
         }
@@ -132,6 +141,7 @@ void register_Condition_class(){
                 "evaluateCondition"
                 , evaluateCondition_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evalute this condition, returning whether or not it is true or false" );
         
         }
@@ -144,6 +154,7 @@ void register_Condition_class(){
                 "evaluateCondition"
                 , evaluateCondition_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evalute this condition, returning whether or not it is true or false" );
         
         }
@@ -156,6 +167,7 @@ void register_Condition_class(){
                 "expand"
                 , expand_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Expand this condition into factors of the passed symbol" );
         
         }
@@ -167,6 +179,7 @@ void register_Condition_class(){
             Condition_exposer.def( 
                 "functions"
                 , functions_function_value
+                , bp::release_gil_policy()
                 , "Return the functions in this expression" );
         
         }
@@ -178,6 +191,7 @@ void register_Condition_class(){
             Condition_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Hash this condition" );
         
         }
@@ -190,6 +204,7 @@ void register_Condition_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Integrate this expression" );
         
         }
@@ -201,6 +216,7 @@ void register_Condition_class(){
             Condition_exposer.def( 
                 "isComplex"
                 , isComplex_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a complex condition" );
         
         }
@@ -212,6 +228,7 @@ void register_Condition_class(){
             Condition_exposer.def( 
                 "isCompound"
                 , isCompound_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a compound expression" );
         
         }
@@ -223,6 +240,7 @@ void register_Condition_class(){
             Condition_exposer.def( 
                 "isConstant"
                 , isConstant_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a constant" );
         
         }
@@ -235,6 +253,7 @@ void register_Condition_class(){
                 "isFunction"
                 , isFunction_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Return whether or not this function is a function of symbol" );
         
         }
@@ -246,6 +265,7 @@ void register_Condition_class(){
             Condition_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is null" );
         
         }
@@ -282,6 +302,7 @@ void register_Condition_class(){
                 "simplify"
                 , simplify_function_value
                 , ( bp::arg("options")=(int)(0) )
+                , bp::release_gil_policy()
                 , "Simplify this condition" );
         
         }
@@ -294,6 +315,7 @@ void register_Condition_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "Substitute in the passed identities" );
         
         }
@@ -305,6 +327,7 @@ void register_Condition_class(){
             Condition_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return the symbols used in this expression" );
         
         }
@@ -316,6 +339,7 @@ void register_Condition_class(){
             Condition_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this expression" );
         
         }
@@ -327,6 +351,7 @@ void register_Condition_class(){
             Condition_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

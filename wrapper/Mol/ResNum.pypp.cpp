@@ -63,6 +63,8 @@ SireMol::ResNum __copy__(const SireMol::ResNum &other){ return SireMol::ResNum(o
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ResNum_class(){
 
     { //::SireMol::ResNum
@@ -79,6 +81,7 @@ void register_ResNum_class(){
             ResNum_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -90,6 +93,7 @@ void register_ResNum_class(){
             ResNum_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -102,6 +106,7 @@ void register_ResNum_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -133,6 +138,7 @@ void register_ResNum_class(){
             ResNum_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -144,6 +150,7 @@ void register_ResNum_class(){
             ResNum_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -155,6 +162,7 @@ void register_ResNum_class(){
             ResNum_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

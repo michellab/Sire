@@ -21,6 +21,8 @@ SireBase::UnitTest __copy__(const SireBase::UnitTest &other){ return SireBase::U
 
 const char* pvt_get_name(const SireBase::UnitTest&){ return "SireBase::UnitTest";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_UnitTest_class(){
 
     { //::SireBase::UnitTest
@@ -36,6 +38,7 @@ void register_UnitTest_class(){
             UnitTest_exposer.def( 
                 "errorString"
                 , errorString_function_value
+                , bp::release_gil_policy()
                 , "Return the error string" );
         
         }
@@ -47,6 +50,7 @@ void register_UnitTest_class(){
             UnitTest_exposer.def( 
                 "name"
                 , name_function_value
+                , bp::release_gil_policy()
                 , "Return the name of the test" );
         
         }
@@ -59,6 +63,7 @@ void register_UnitTest_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("nrepeats")=(int)(1), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Run this test a total of nrepeats times, printing out information\nif verbose is true" );
         
         }
@@ -71,6 +76,7 @@ void register_UnitTest_class(){
                 "runAll"
                 , runAll_function_value
                 , ( bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Run all of the tests one after another, printing out the results to the\nscreen and returning the number of tests that failed" );
         
         }
@@ -82,6 +88,7 @@ void register_UnitTest_class(){
             UnitTest_exposer.def( 
                 "runTime"
                 , runTime_function_value
+                , bp::release_gil_policy()
                 , "Return the time taken to run the test, in nanoseconds" );
         
         }
@@ -93,6 +100,7 @@ void register_UnitTest_class(){
             UnitTest_exposer.def( 
                 "tests"
                 , tests_function_value
+                , bp::release_gil_policy()
                 , "Return all of the tests that have been registered" );
         
         }
@@ -104,6 +112,7 @@ void register_UnitTest_class(){
             UnitTest_exposer.def( 
                 "wasError"
                 , wasError_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the test was an error" );
         
         }
@@ -115,6 +124,7 @@ void register_UnitTest_class(){
             UnitTest_exposer.def( 
                 "wasSuccessful"
                 , wasSuccessful_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the test was successful" );
         
         }

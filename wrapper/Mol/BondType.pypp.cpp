@@ -25,6 +25,8 @@ SireMol::BondType __copy__(const SireMol::BondType &other){ return SireMol::Bond
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_BondType_class(){
 
     { //::SireMol::BondType
@@ -42,6 +44,7 @@ void register_BondType_class(){
             BondType_exposer.def( 
                 "aromaticBond"
                 , aromaticBond_function_value
+                , bp::release_gil_policy()
                 , "Return an aromatic bond" );
         
         }
@@ -53,6 +56,7 @@ void register_BondType_class(){
             BondType_exposer.def( 
                 "doubleBond"
                 , doubleBond_function_value
+                , bp::release_gil_policy()
                 , "Return a double bond" );
         
         }
@@ -64,6 +68,7 @@ void register_BondType_class(){
             BondType_exposer.def( 
                 "isAromatic"
                 , isAromatic_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is an aromatic bond" );
         
         }
@@ -75,6 +80,7 @@ void register_BondType_class(){
             BondType_exposer.def( 
                 "isDefined"
                 , isDefined_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the bond type is defined" );
         
         }
@@ -86,6 +92,7 @@ void register_BondType_class(){
             BondType_exposer.def( 
                 "isDouble"
                 , isDouble_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a double bond" );
         
         }
@@ -97,6 +104,7 @@ void register_BondType_class(){
             BondType_exposer.def( 
                 "isSingle"
                 , isSingle_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a single bond" );
         
         }
@@ -108,6 +116,7 @@ void register_BondType_class(){
             BondType_exposer.def( 
                 "isTriple"
                 , isTriple_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a triple bond" );
         
         }
@@ -134,6 +143,7 @@ void register_BondType_class(){
             BondType_exposer.def( 
                 "sdfValue"
                 , sdfValue_function_value
+                , bp::release_gil_policy()
                 , "Return the SDF-format value for this bond" );
         
         }
@@ -145,6 +155,7 @@ void register_BondType_class(){
             BondType_exposer.def( 
                 "singleBond"
                 , singleBond_function_value
+                , bp::release_gil_policy()
                 , "Return a single bond" );
         
         }
@@ -156,6 +167,7 @@ void register_BondType_class(){
             BondType_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -167,6 +179,7 @@ void register_BondType_class(){
             BondType_exposer.def( 
                 "tripleBond"
                 , tripleBond_function_value
+                , bp::release_gil_policy()
                 , "Return a triple bond" );
         
         }
@@ -178,6 +191,7 @@ void register_BondType_class(){
             BondType_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -189,6 +203,7 @@ void register_BondType_class(){
             BondType_exposer.def( 
                 "undefinedBond"
                 , undefinedBond_function_value
+                , bp::release_gil_policy()
                 , "Return an undefined bond" );
         
         }
@@ -200,6 +215,7 @@ void register_BondType_class(){
             BondType_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "Return the bond type (uses SDF values, e.g. 0 is undefined,\n1 is single, 2 is double, 3 is triple and 4 is aromatic)\n" );
         
         }

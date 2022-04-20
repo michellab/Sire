@@ -34,6 +34,8 @@ SireMove::MolecularDynamics __copy__(const SireMove::MolecularDynamics &other){ 
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MolecularDynamics_class(){
 
     { //::SireMove::MolecularDynamics
@@ -53,6 +55,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Completely clear any move statistics - this clears all existing\nvelocities" );
         
         }
@@ -64,6 +67,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "coordinatesProperty"
                 , coordinatesProperty_function_value
+                , bp::release_gil_policy()
                 , "Return the property used to find the molecular coordinates" );
         
         }
@@ -75,6 +79,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "elementsProperty"
                 , elementsProperty_function_value
+                , bp::release_gil_policy()
                 , "Return the property used to find the atomic elements" );
         
         }
@@ -86,7 +91,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "integrator"
                 , integrator_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the integrator used to advance the coordinates\nfrom one timestep to the next" );
         
         }
@@ -98,6 +103,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "kineticEnergy"
                 , kineticEnergy_function_value
+                , bp::release_gil_policy()
                 , "Return the kinetic energy of the system at the last move." );
         
         }
@@ -109,6 +115,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "massesProperty"
                 , massesProperty_function_value
+                , bp::release_gil_policy()
                 , "Return the property used to find the molecular masses" );
         
         }
@@ -120,7 +127,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group on which this move operates" );
         
         }
@@ -133,6 +140,7 @@ void register_MolecularDynamics_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Perform this move on the System system - perform the move\nnmoves times, optionally recording simulation statistics\nif record_stats is true" );
         
         }
@@ -144,6 +152,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "nMoves"
                 , nMoves_function_value
+                , bp::release_gil_policy()
                 , "Return the number of moves completed using this object" );
         
         }
@@ -171,6 +180,7 @@ void register_MolecularDynamics_class(){
                 "regenerateVelocities"
                 , regenerateVelocities_function_value
                 , ( bp::arg("system"), bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Regenerate all of the velocities using the passed velocity generator" );
         
         }
@@ -183,6 +193,7 @@ void register_MolecularDynamics_class(){
                 "setCoordinatesProperty"
                 , setCoordinatesProperty_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the property used to find the coordinates of the molecules" );
         
         }
@@ -195,6 +206,7 @@ void register_MolecularDynamics_class(){
                 "setElementsProperty"
                 , setElementsProperty_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the property used to find the elements of the atoms" );
         
         }
@@ -207,6 +219,7 @@ void register_MolecularDynamics_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator used by this move\n(this move may be completely deterministic, so may not\nuse a generator)" );
         
         }
@@ -219,6 +232,7 @@ void register_MolecularDynamics_class(){
                 "setIntegrator"
                 , setIntegrator_function_value
                 , ( bp::arg("integrator") )
+                , bp::release_gil_policy()
                 , "Set the integrator to be used to advance the coordinates from\none timestep to the next." );
         
         }
@@ -231,6 +245,7 @@ void register_MolecularDynamics_class(){
                 "setMassesProperty"
                 , setMassesProperty_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the property used to find the molecular masses" );
         
         }
@@ -243,6 +258,7 @@ void register_MolecularDynamics_class(){
                 "setMoleculeGroup"
                 , setMoleculeGroup_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Set the molecule group containing the molecules to be moved" );
         
         }
@@ -255,6 +271,7 @@ void register_MolecularDynamics_class(){
                 "setMoleculeGroup"
                 , setMoleculeGroup_function_value
                 , ( bp::arg("molgroup"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Set the molecule group containing the molecules to be moved" );
         
         }
@@ -267,6 +284,7 @@ void register_MolecularDynamics_class(){
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the property used to find the system space" );
         
         }
@@ -279,6 +297,7 @@ void register_MolecularDynamics_class(){
                 "setTimeStep"
                 , setTimeStep_function_value
                 , ( bp::arg("timestep") )
+                , bp::release_gil_policy()
                 , "Set the timestep for the dynamics integration" );
         
         }
@@ -291,6 +310,7 @@ void register_MolecularDynamics_class(){
                 "setVelocitiesProperty"
                 , setVelocitiesProperty_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the property used to find the molecular velocities" );
         
         }
@@ -303,6 +323,7 @@ void register_MolecularDynamics_class(){
                 "setVelocityGeneratorProperty"
                 , setVelocityGeneratorProperty_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the property used to find the generator used to\ngenerate velocities when they are missing" );
         
         }
@@ -314,6 +335,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "spaceProperty"
                 , spaceProperty_function_value
+                , bp::release_gil_policy()
                 , "Return the property used to find the system space" );
         
         }
@@ -325,6 +347,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "temperature"
                 , temperature_function_value
+                , bp::release_gil_policy()
                 , "Return the temperature of the system at the last move" );
         
         }
@@ -336,6 +359,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "timeStep"
                 , timeStep_function_value
+                , bp::release_gil_policy()
                 , "Return the timestep for the integration" );
         
         }
@@ -347,6 +371,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this move" );
         
         }
@@ -358,6 +383,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "totalTime"
                 , totalTime_function_value
+                , bp::release_gil_policy()
                 , "Return the total amount of time simulated using these moves" );
         
         }
@@ -369,6 +395,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -380,6 +407,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "velocitiesProperty"
                 , velocitiesProperty_function_value
+                , bp::release_gil_policy()
                 , "Return the property used to find the molecular velocities" );
         
         }
@@ -391,6 +419,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "velocityGeneratorProperty"
                 , velocityGeneratorProperty_function_value
+                , bp::release_gil_policy()
                 , "Return the property used to find the generator for\nmissing velocities" );
         
         }

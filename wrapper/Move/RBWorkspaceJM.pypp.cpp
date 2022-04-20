@@ -39,6 +39,8 @@ SireMove::RBWorkspaceJM __copy__(const SireMove::RBWorkspaceJM &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_RBWorkspaceJM_class(){
 
     { //::SireMove::RBWorkspaceJM
@@ -55,6 +57,7 @@ void register_RBWorkspaceJM_class(){
             RBWorkspaceJM_exposer.def( 
                 "beadAtomIntCoords"
                 , beadAtomIntCoords_function_value
+                , bp::release_gil_policy()
                 , "Return the array of bead orientations" );
         
         }
@@ -66,6 +69,7 @@ void register_RBWorkspaceJM_class(){
             RBWorkspaceJM_exposer.def( 
                 "beadCoordinatesArray"
                 , beadCoordinatesArray_function_value
+                , bp::release_gil_policy()
                 , "Return the array of bead coordinates" );
         
         }
@@ -77,6 +81,7 @@ void register_RBWorkspaceJM_class(){
             RBWorkspaceJM_exposer.def( 
                 "beadEnergiesArray"
                 , beadEnergiesArray_function_value
+                , bp::release_gil_policy()
                 , "Return the array of bead energies" );
         
         }
@@ -88,6 +93,7 @@ void register_RBWorkspaceJM_class(){
             RBWorkspaceJM_exposer.def( 
                 "beadForcesArray"
                 , beadForcesArray_function_value
+                , bp::release_gil_policy()
                 , "const Vector beadForcesArray() const;" );
         
         }
@@ -99,6 +105,7 @@ void register_RBWorkspaceJM_class(){
             RBWorkspaceJM_exposer.def( 
                 "beadOrientationArray"
                 , beadOrientationArray_function_value
+                , bp::release_gil_policy()
                 , "Return the array of orientations of the beads (this is the rotation\nto be applied to the matrix that maps from the cartesian frame\nto the internal principle inertia frame)" );
         
         }
@@ -110,6 +117,7 @@ void register_RBWorkspaceJM_class(){
             RBWorkspaceJM_exposer.def( 
                 "beadToWorldMatrix"
                 , beadToWorldMatrix_function_value
+                , bp::release_gil_policy()
                 , "Return the Matrix beadtoworld" );
         
         }
@@ -121,6 +129,7 @@ void register_RBWorkspaceJM_class(){
             RBWorkspaceJM_exposer.def( 
                 "beadTorquesArray"
                 , beadTorquesArray_function_value
+                , bp::release_gil_policy()
                 , "const Vector beadTorquesArray() const;" );
         
         }
@@ -132,6 +141,7 @@ void register_RBWorkspaceJM_class(){
             RBWorkspaceJM_exposer.def( 
                 "beadingProperty"
                 , beadingProperty_function_value
+                , bp::release_gil_policy()
                 , "Return the property used to bead up a molecule" );
         
         }
@@ -144,6 +154,7 @@ void register_RBWorkspaceJM_class(){
                 "calculateForces"
                 , calculateForces_function_value
                 , ( bp::arg("nrg_component") )
+                , bp::release_gil_policy()
                 , "Calculate the forces and torques and energies" );
         
         }
@@ -155,6 +166,7 @@ void register_RBWorkspaceJM_class(){
             RBWorkspaceJM_exposer.def( 
                 "calculateRBForces"
                 , calculateRBForces_function_value
+                , bp::release_gil_policy()
                 , "Calculate the RB forces and torques using the available atomic forces" );
         
         }
@@ -166,6 +178,7 @@ void register_RBWorkspaceJM_class(){
             RBWorkspaceJM_exposer.def( 
                 "commitCoordinates"
                 , commitCoordinates_function_value
+                , bp::release_gil_policy()
                 , "Commit the coordinates back to the system. This maps the bead coordinates\nand orientations back to atomic coordinates and position and\nupdates the system with these" );
         
         }
@@ -177,6 +190,7 @@ void register_RBWorkspaceJM_class(){
             RBWorkspaceJM_exposer.def( 
                 "commitCoordinatesAndVelocities"
                 , commitCoordinatesAndVelocities_function_value
+                , bp::release_gil_policy()
                 , "Commit both the coordinates and velocities - this performs the\nequivalent of commitCoordinates() and commitVelocities() in\na single call" );
         
         }
@@ -188,6 +202,7 @@ void register_RBWorkspaceJM_class(){
             RBWorkspaceJM_exposer.def( 
                 "commitVelocities"
                 , commitVelocities_function_value
+                , bp::release_gil_policy()
                 , "Commit the linear and angular velocities back to the system. This saves\nthe velocities as bead properties" );
         
         }
@@ -199,6 +214,7 @@ void register_RBWorkspaceJM_class(){
             RBWorkspaceJM_exposer.def( 
                 "kineticEnergy"
                 , kineticEnergy_function_value
+                , bp::release_gil_policy()
                 , "Return the kinetic energy of all of the molecules being integrated" );
         
         }
@@ -211,6 +227,7 @@ void register_RBWorkspaceJM_class(){
                 "kineticEnergy"
                 , kineticEnergy_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Return the kinetic energy of the molecule with number molnum\nThrow: SireMol::missing_molecule\n" );
         
         }
@@ -223,6 +240,7 @@ void register_RBWorkspaceJM_class(){
                 "kineticEnergy"
                 , kineticEnergy_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "Return the kinetic energy of the atoms in the view molview\nThrow: SireMol::missing_molecule\n" );
         
         }
@@ -235,6 +253,7 @@ void register_RBWorkspaceJM_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("ibead") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the ith bead" );
         
         }
@@ -246,6 +265,7 @@ void register_RBWorkspaceJM_class(){
             RBWorkspaceJM_exposer.def( 
                 "nBeads"
                 , nBeads_function_value
+                , bp::release_gil_policy()
                 , "Return the number of rigid body beads to be integrated" );
         
         }
@@ -273,6 +293,7 @@ void register_RBWorkspaceJM_class(){
                 "regenerateVelocities"
                 , regenerateVelocities_function_value
                 , ( bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Regenerate all of the linear and angular velocities using the passed generator" );
         
         }
@@ -285,6 +306,7 @@ void register_RBWorkspaceJM_class(){
                 "setForceTable"
                 , setForceTable_function_value
                 , ( bp::arg("forces") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -297,6 +319,7 @@ void register_RBWorkspaceJM_class(){
                 "setSystem"
                 , setSystem_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Set the system to be integrated" );
         
         }
@@ -308,6 +331,7 @@ void register_RBWorkspaceJM_class(){
             RBWorkspaceJM_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

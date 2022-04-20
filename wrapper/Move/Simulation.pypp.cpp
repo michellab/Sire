@@ -19,6 +19,8 @@ SireMove::Simulation __copy__(const SireMove::Simulation &other){ return SireMov
 
 const char* pvt_get_name(const SireMove::Simulation&){ return "SireMove::Simulation";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Simulation_class(){
 
     { //::SireMove::Simulation
@@ -34,6 +36,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "abort"
                 , abort_function_value
+                , bp::release_gil_policy()
                 , "Abort the simulation" );
         
         }
@@ -45,6 +48,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "hasFinished"
                 , hasFinished_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the simulation has finished\n(completed all of the moves)" );
         
         }
@@ -56,6 +60,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "initialMoves"
                 , initialMoves_function_value
+                , bp::release_gil_policy()
                 , "Return the Moves in the state they were in before the simulation started" );
         
         }
@@ -67,6 +72,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "initialSystem"
                 , initialSystem_function_value
+                , bp::release_gil_policy()
                 , "Return the System in the state it was in before the simulation started" );
         
         }
@@ -78,6 +84,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "input"
                 , input_function_value
+                , bp::release_gil_policy()
                 , "Return the initial input simulation WorkPacket" );
         
         }
@@ -89,6 +96,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "interimMoves"
                 , interimMoves_function_value
+                , bp::release_gil_policy()
                 , "Return the current state of the moves (updated while the simulation\nis running). This will throw an exception if the system hits an\nerror state" );
         
         }
@@ -100,6 +108,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "interimResult"
                 , interimResult_function_value
+                , bp::release_gil_policy()
                 , "Return the simulation WorkPacket from an intermediate point along\nthe simulation. This will throw an error if the simulation is in an\nerror state, and the initial packet if the simulation\nwas aborted" );
         
         }
@@ -111,6 +120,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "interimSystem"
                 , interimSystem_function_value
+                , bp::release_gil_policy()
                 , "Return the current state of the System (updated while the simulation\nis running). This will throw an exception if the system hits an\nerror state" );
         
         }
@@ -122,6 +132,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "isError"
                 , isError_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this simulation is in an error state" );
         
         }
@@ -133,6 +144,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "isRunning"
                 , isRunning_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this simulation is running" );
         
         }
@@ -144,6 +156,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "moves"
                 , moves_function_value
+                , bp::release_gil_policy()
                 , "Return the final state of the moves after the simulation. This\nblocks until the simulation has finished and will throw an\nexception if the system hits an error state" );
         
         }
@@ -170,6 +183,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "progress"
                 , progress_function_value
+                , bp::release_gil_policy()
                 , "Return the progress of the simulation (as a percentage)" );
         
         }
@@ -181,6 +195,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "result"
                 , result_function_value
+                , bp::release_gil_policy()
                 , "Return the final result of the simulation. This blocks until\nthe simulation has stopped, and will throw an exception if the\nsimulation is in an error state. This returns the initial\nsimulation WorkPacket if the simulation was aborted" );
         
         }
@@ -193,6 +208,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread" );
         
         }
@@ -205,6 +221,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
@@ -217,6 +234,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread" );
         
         }
@@ -229,6 +247,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
@@ -241,6 +260,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("simstore"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Run a simulation consisting of nmoves moves of the system\nin simstore (which also contains the moves) optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread" );
         
         }
@@ -253,6 +273,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("simstore"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Run a simulation consisting of nmoves moves of the system\nin simstore (which also contains the moves) optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
@@ -265,6 +286,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("simpacket") )
+                , bp::release_gil_policy()
                 , "Run the simulation contained in the simulation WorkPacket simpacket\nin the current thread" );
         
         }
@@ -277,6 +299,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("node"), bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
@@ -289,6 +312,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("node"), bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
@@ -301,6 +325,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("node"), bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
@@ -313,6 +338,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("node"), bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
@@ -325,6 +351,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("node"), bp::arg("simstore"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Run a simulation consisting of nmoves moves of the system\nin simstore (which also contains the moves) optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
@@ -337,6 +364,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("node"), bp::arg("simstore"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Run a simulation consisting of nmoves moves  of the system\nin simstore (which also contains the moves) optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
@@ -349,6 +377,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("node"), bp::arg("simpacket") )
+                , bp::release_gil_policy()
                 , "Run the simulation contained in the simulation WorkPacket simpacket\non the node node" );
         
         }
@@ -360,6 +389,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "stop"
                 , stop_function_value
+                , bp::release_gil_policy()
                 , "Stop the simulation" );
         
         }
@@ -371,6 +401,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "system"
                 , system_function_value
+                , bp::release_gil_policy()
                 , "Return the final state of the system after the simulation. This\nblocks until the simulation has finished and will throw an\nexception if the system hits an error state" );
         
         }
@@ -382,6 +413,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "throwError"
                 , throwError_function_value
+                , bp::release_gil_policy()
                 , "Throw any error associated with this simulation - this does\nnothing if we are not in an error state" );
         
         }
@@ -393,6 +425,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "wait"
                 , wait_function_value
+                , bp::release_gil_policy()
                 , "Wait for the simulation to stop running\n(which can be either because it finished, was stopped,\nwas aborted or ended in error)" );
         
         }
@@ -405,6 +438,7 @@ void register_Simulation_class(){
                 "wait"
                 , wait_function_value
                 , ( bp::arg("timeout") )
+                , bp::release_gil_policy()
                 , "Wait for the simulation to stop running, or for timeout\nmilliseconds to pass, whichever comes soonest. This returns\nwhether or not the simulation has stopped" );
         
         }
@@ -416,6 +450,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "wasAborted"
                 , wasAborted_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the simulation was aborted" );
         
         }
@@ -427,6 +462,7 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "wasStopped"
                 , wasStopped_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the simulation was stopped" );
         
         }

@@ -29,6 +29,8 @@ SireMol::SelectResult __copy__(const SireMol::SelectResult &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_SelectResult_class(){
@@ -51,6 +53,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "atoms"
                 , atoms_function_value
+                , bp::release_gil_policy()
                 , "Return a copy of this result with all views split into individual atoms" );
         
         }
@@ -62,6 +65,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "chains"
                 , chains_function_value
+                , bp::release_gil_policy()
                 , "Return a copy of this result with all views split into individual chains" );
         
         }
@@ -74,6 +78,7 @@ void register_SelectResult_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Return whether or not this set contains views of the molecule with\nnumber molnum" );
         
         }
@@ -85,6 +90,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of views in this result" );
         
         }
@@ -96,6 +102,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "cutGroups"
                 , cutGroups_function_value
+                , bp::release_gil_policy()
                 , "Return a copy of this result with all views split into individual cutgroups" );
         
         }
@@ -107,6 +114,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is empty" );
         
         }
@@ -118,6 +126,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "join"
                 , join_function_value
+                , bp::release_gil_policy()
                 , "Return a copy of this result with all views joined into single views" );
         
         }
@@ -129,6 +138,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "molNums"
                 , molNums_function_value
+                , bp::release_gil_policy()
                 , "Return the numbers of all molecules whose views are in this set,\nin the order they appear in this set" );
         
         }
@@ -140,6 +150,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "molecules"
                 , molecules_function_value
+                , bp::release_gil_policy()
                 , "Return a copy of this result with all views split into individual molecules" );
         
         }
@@ -151,6 +162,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "move"
                 , move_function_value
+                , bp::release_gil_policy()
                 , "Return a object that can be used to move all of the views in this result" );
         
         }
@@ -201,6 +213,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "residues"
                 , residues_function_value
+                , bp::release_gil_policy()
                 , "Return a copy of this result with all views split into individual residues" );
         
         }
@@ -213,6 +226,7 @@ void register_SelectResult_class(){
                 "search"
                 , search_function_value
                 , ( bp::arg("search_term") )
+                , bp::release_gil_policy()
                 , "Return the result of searching this result with search_term" );
         
         }
@@ -224,6 +238,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "segments"
                 , segments_function_value
+                , bp::release_gil_policy()
                 , "Return a copy of this result with all views split into individual segments" );
         
         }
@@ -235,6 +250,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of views in this result" );
         
         }
@@ -246,6 +262,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "toGroup"
                 , toGroup_function_value
+                , bp::release_gil_policy()
                 , "Return this result as a new molecule group" );
         
         }
@@ -258,6 +275,7 @@ void register_SelectResult_class(){
                 "toGroup"
                 , toGroup_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return this result as a new molecule group called name" );
         
         }
@@ -269,6 +287,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "toMolecules"
                 , toMolecules_function_value
+                , bp::release_gil_policy()
                 , "Return this result as a set of Molecules" );
         
         }
@@ -280,6 +299,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -291,6 +311,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -302,6 +323,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "views"
                 , views_function_value
+                , bp::release_gil_policy()
                 , "Return all of the views in this result, grouped by molecule" );
         
         }
@@ -314,6 +336,7 @@ void register_SelectResult_class(){
                 "views"
                 , views_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Return all of the views of the molecule with number molnum. This\nreturns an empty set of views if the molecule is not in this set" );
         
         }
@@ -325,6 +348,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -40,6 +40,8 @@ SireMove::PrefSampler __copy__(const SireMove::PrefSampler &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PrefSampler_class(){
 
     { //::SireMove::PrefSampler
@@ -74,6 +76,7 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "biasingFunction"
                 , biasingFunction_function_value
+                , bp::release_gil_policy()
                 , "Return the preferential sampling biasing expression" );
         
         }
@@ -97,7 +100,7 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "focalMolecule"
                 , focalMolecule_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the current focal molecule (this will be an empty molecule\nif a focal point is being used)" );
         
         }
@@ -121,6 +124,7 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "isBiased"
                 , isBiased_function_value
+                , bp::release_gil_policy()
                 , "The preferential sampler is definitely biased" );
         
         }
@@ -132,6 +136,7 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "k"
                 , k_function_value
+                , bp::release_gil_policy()
                 , "Return the symbol used to represent the preferential sampling constant (k)" );
         
         }
@@ -159,6 +164,7 @@ void register_PrefSampler_class(){
                 "probabilityOf"
                 , probabilityOf_function_value
                 , ( bp::arg("molecule") )
+                , bp::release_gil_policy()
                 , "Return the probability with which the molecule molecule was\nsampled from this sampler\nThrow: SireMol::missing_molecule\nThrow: SireError::invalid_index\n" );
         
         }
@@ -171,6 +177,7 @@ void register_PrefSampler_class(){
                 "probabilityOfMolecule"
                 , probabilityOfMolecule_function_value
                 , ( bp::arg("molecule") )
+                , bp::release_gil_policy()
                 , "Return the probability that the molecule mol would have been picked\nby this sampler" );
         
         }
@@ -182,6 +189,7 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "r"
                 , r_function_value
+                , bp::release_gil_policy()
                 , "Return the symbol used to represent the distance between molecules (r)" );
         
         }
@@ -193,6 +201,7 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "sample"
                 , sample_function_value
+                , bp::release_gil_policy()
                 , "Sample a molecule from the group, and return it, together\nwith the probability with which it was chosen" );
         
         }
@@ -204,6 +213,7 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "sampleMolecule"
                 , sampleMolecule_function_value
+                , bp::release_gil_policy()
                 , "Sample a whole molecule from the group, and return it and the\nprobability with which it was chosen. This returns the whole\nmolecule, even if only part of the molecule was in the group" );
         
         }
@@ -215,6 +225,7 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "samplingConstant"
                 , samplingConstant_function_value
+                , bp::release_gil_policy()
                 , "Return the preferential sampling constant (k)" );
         
         }
@@ -227,6 +238,7 @@ void register_PrefSampler_class(){
                 "setBiasingFunction"
                 , setBiasingFunction_function_value
                 , ( bp::arg("f") )
+                , bp::release_gil_policy()
                 , "Set the preferential sampling biasing expression - this\nshould use the symbols k and r, which are the biasing\nconstant and distance between molecules respectively.\nThe default biasing expression is  1.0  (r^2 + k)\n" );
         
         }
@@ -239,6 +251,7 @@ void register_PrefSampler_class(){
                 "setCoordinatesProperty"
                 , setCoordinatesProperty_function_value
                 , ( bp::arg("coords_property") )
+                , bp::release_gil_policy()
                 , "Set the property name used to find the coordinates property of\nthe molecules" );
         
         }
@@ -251,6 +264,7 @@ void register_PrefSampler_class(){
                 "setFocalMolecule"
                 , setFocalMolecule_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "Set the focal molecule of this sampler" );
         
         }
@@ -263,6 +277,7 @@ void register_PrefSampler_class(){
                 "setFocalPoint"
                 , setFocalPoint_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Set the focal point of this sampler" );
         
         }
@@ -275,6 +290,7 @@ void register_PrefSampler_class(){
                 "setGroup"
                 , setGroup_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Set the molecule group from which molecule view will be sampled" );
         
         }
@@ -287,6 +303,7 @@ void register_PrefSampler_class(){
                 "setSamplingConstant"
                 , setSamplingConstant_function_value
                 , ( bp::arg("k") )
+                , bp::release_gil_policy()
                 , "Set the preferential sampling constant - this is the value\nof k in the biasing algorithm" );
         
         }
@@ -299,6 +316,7 @@ void register_PrefSampler_class(){
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
                 , ( bp::arg("space_property") )
+                , bp::release_gil_policy()
                 , "Set the property used to find the space property of the system" );
         
         }
@@ -322,6 +340,7 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -334,6 +353,7 @@ void register_PrefSampler_class(){
                 "updateFrom"
                 , updateFrom_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Update this sampler so that the molecules match the versions\nin the system system" );
         
         }
@@ -345,6 +365,7 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "usingFocalMolecule"
                 , usingFocalMolecule_function_value
+                , bp::release_gil_policy()
                 , "Return whether we are using a focal molecule (rather\nthan a focal point)" );
         
         }
@@ -356,6 +377,7 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "usingFocalPoint"
                 , usingFocalPoint_function_value
+                , bp::release_gil_policy()
                 , "Return whether we are using a focal point (rather\nthan a focal molecule)" );
         
         }

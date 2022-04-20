@@ -55,6 +55,8 @@ SireMol::ConnectivityEditor __copy__(const SireMol::ConnectivityEditor &other){ 
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ConnectivityEditor_class(){
 
     { //::SireMol::ConnectivityEditor
@@ -71,6 +73,7 @@ void register_ConnectivityEditor_class(){
             ConnectivityEditor_exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "Return the editied connectivity" );
         
         }
@@ -253,6 +256,7 @@ void register_ConnectivityEditor_class(){
                 "takeProperty"
                 , takeProperty_function_value
                 , ( bp::arg("bond"), bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Take the specified property from the specified bond - this removes\nand returns the property if it exists. If it doesnt, then\na NullProperty is returned\n" );
         
         }
@@ -264,6 +268,7 @@ void register_ConnectivityEditor_class(){
             ConnectivityEditor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

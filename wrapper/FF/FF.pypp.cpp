@@ -52,6 +52,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_FF_class(){
@@ -81,6 +83,7 @@ void register_FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molview"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add the molecule viewed in molview to the forcefield groups\nidentified by mgid using the supplied map to find the properties\nof the molecule that contain the forcefield parameters\nNote that if this molecule exists already in this forcefield, then\nthe version of the molecule that is in this forcefield will be used,\nnot the version of molview\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -93,6 +96,7 @@ void register_FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add the views of the molecule viewed in molviews to the forcefield groups\nidentified by mgid using the supplied map to find the properties\nof the molecule that contain the forcefield parameters\nNote that if this molecule exists already in this forcefield, then\nthe version of the molecule that is in this forcefield will be used,\nnot the version of molview\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -105,6 +109,7 @@ void register_FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add all of the molecules in molecules to the forcefield groups\nidentified by mgid using the supplied map to find the properties\nof the molecule that contain the forcefield parameters\nNote that if a molecule exists already in this forcefield, then\nthe version of the molecule that is in this forcefield will be used,\nnot the version in molecules\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -117,6 +122,7 @@ void register_FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add all of the molecules in the group molgroup to the forcefield groups\nidentified by mgid using the supplied map to find the properties\nof the molecule that contain the forcefield parameters\nNote that if a molecule exists already in this forcefield, then\nthe version of the molecule that is in this forcefield will be used,\nnot the version in molecules\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -129,6 +135,7 @@ void register_FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molview"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Add the passed view of the molecule to the molecule groups\nidentified by mgid using the default properties to\nfind the parameters needed by this forcefield\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -141,6 +148,7 @@ void register_FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Add the passed views of the molecule to the molecule groups\nidentified by mgid using the default properties to\nfind the parameters needed by this forcefield\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -153,6 +161,7 @@ void register_FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Add the passed molecules to the molecule groups\nidentified by mgid using the default properties to\nfind the parameters needed by this forcefield\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -165,6 +174,7 @@ void register_FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Add the molecules in the passed MoleculeGroup to the molecule groups\nidentified by mgid using the default properties to\nfind the parameters needed by this forcefield\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -177,6 +187,7 @@ void register_FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molview"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add the molecule viewed in molview to the forcefield groups\nidentified by mgid using the supplied map to find the properties\nof the molecule that contain the forcefield parameters\nThis only adds the view to groups that dont already contain it.\nNote that if this molecule exists already in this forcefield, then\nthe version of the molecule that is in this forcefield will be used,\nnot the version of molview\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -189,6 +200,7 @@ void register_FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add the views of the molecule viewed in molviews to the forcefield groups\nidentified by mgid using the supplied map to find the properties\nof the molecule that contain the forcefield parameters\nThis only adds views to groups that dont already contain them.\nNote that if this molecule exists already in this forcefield, then\nthe version of the molecule that is in this forcefield will be used,\nnot the version of molview\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -201,6 +213,7 @@ void register_FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add all of the molecules in molecules to the forcefield groups\nidentified by mgid using the supplied map to find the properties\nof the molecule that contain the forcefield parameters\nThis only adds molecules to groups that dont already contain them.\nNote that if a molecule exists already in this forcefield, then\nthe version of the molecule that is in this forcefield will be used,\nnot the version in molecules\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -213,6 +226,7 @@ void register_FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add all of the molecules in the group molgroup to the forcefield groups\nidentified by mgid using the supplied map to find the properties\nof the molecule that contain the forcefield parameters\nThis only adds molecules to groups that dont already contain them.\nNote that if a molecule exists already in this forcefield, then\nthe version of the molecule that is in this forcefield will be used,\nnot the version in molecules\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -225,6 +239,7 @@ void register_FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molview"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Add the passed view of the molecule to the molecule groups\nidentified by mgid using the default properties to\nfind the parameters needed by this forcefield\nOnly add this view to groups that dont already contain\nthis view (the whole view, not part of it)\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -237,6 +252,7 @@ void register_FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Add the passed views of the molecule to the molecule groups\nidentified by mgid using the default properties to\nfind the parameters needed by this forcefield\nOnly add views to groups that dont already contain\nthem (the whole view, not part of it, and can add some views)\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -249,6 +265,7 @@ void register_FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Add the passed molecules to the molecule groups\nidentified by mgid using the default properties to\nfind the parameters needed by this forcefield\nOnly add the views of molecules to groups that dont already contain\nthem (the whole view, not part of it)\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -261,6 +278,7 @@ void register_FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Add the molecules in the passed MoleculeGroup to the molecule groups\nidentified by mgid using the default properties to\nfind the parameters needed by this forcefield\nOnly add the views of molecules to groups that dont already contain\nthem (the whole view, not part of it)\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -272,7 +290,7 @@ void register_FF_class(){
             FF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return an object that describes all of the components\nof this forcefield (complete with SireCAS::Symbols to\nuniquely ID each component)" );
         
         }
@@ -285,6 +303,7 @@ void register_FF_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield contains a property\ncalled name" );
         
         }
@@ -297,6 +316,7 @@ void register_FF_class(){
                 "energies"
                 , energies_function_value
                 , ( bp::arg("components") )
+                , bp::release_gil_policy()
                 , "Return the values of the specified energy components" );
         
         }
@@ -308,6 +328,7 @@ void register_FF_class(){
             FF_exposer.def( 
                 "energies"
                 , energies_function_value
+                , bp::release_gil_policy()
                 , "Return the values of all of the energy components of this forcefield" );
         
         }
@@ -319,6 +340,7 @@ void register_FF_class(){
             FF_exposer.def( 
                 "energy"
                 , energy_function_value
+                , bp::release_gil_policy()
                 , "Return the energy of this forcefield in its current state" );
         
         }
@@ -331,6 +353,7 @@ void register_FF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "Return the energy of the forcefield component represented\nby the passed symbol\nThrow: SireFF::missing_component\n" );
         
         }
@@ -342,6 +365,7 @@ void register_FF_class(){
             FF_exposer.def( 
                 "isClean"
                 , isClean_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -353,6 +377,7 @@ void register_FF_class(){
             FF_exposer.def( 
                 "isDirty"
                 , isDirty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -364,6 +389,7 @@ void register_FF_class(){
             FF_exposer.def( 
                 "mustNowRecalculateFromScratch"
                 , mustNowRecalculateFromScratch_function_value
+                , bp::release_gil_policy()
                 , "Tell the forcefield that it has to recalculate everything from\nscratch" );
         
         }
@@ -375,7 +401,7 @@ void register_FF_class(){
             FF_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of this forcefield" );
         
         }
@@ -414,7 +440,7 @@ void register_FF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the property that has the name name\n\nThrow: SireBase::missing_property\n" );
         
         }
@@ -426,6 +452,7 @@ void register_FF_class(){
             FF_exposer.def( 
                 "propertyKeys"
                 , propertyKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the names of all of the properties available to this forcefield" );
         
         }
@@ -438,6 +465,7 @@ void register_FF_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molview"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the view molview from the specified groups in this\nforcefield. Note that this only removes the specific view\n(and indeed only the first copy of this view if there\nare duplicates) - it does not remove the atoms in this\nview from all of the other views\nThrow: SireMol::missing_group\n" );
         
         }
@@ -450,6 +478,7 @@ void register_FF_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the views of the molecule in molviews from the specified\ngroups in this forcefield. Note that this only removes the specific view\n(and indeed only the first copy of this view if there\nare duplicates) - it does not remove the atoms in these\nviews from all of the other views\nThrow: SireMol::missing_group\n" );
         
         }
@@ -462,6 +491,7 @@ void register_FF_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the views of the molecules in molecules from the specified\ngroups in this forcefield. Note that this only removes the specific view\n(and indeed only the first copy of this view if there\nare duplicates) - it does not remove the atoms in these\nviews from all of the other views\nThrow: SireMol::missing_group\n" );
         
         }
@@ -474,6 +504,7 @@ void register_FF_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the views of the molecules in the molecule group molgroup f\nfrom the specified groups in this forcefield. Note that this only\nremoves the specific view (and indeed only the first copy of this view\nif there are duplicates) - it does not remove the atoms in these\nviews from all of the other views\nThrow: SireMol::missing_group\n" );
         
         }
@@ -486,6 +517,7 @@ void register_FF_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molnum"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Completely remove the molecule with number molnum from the\nforcefield groups identified by mgid\nThrow: SireMol::missing_group\n" );
         
         }
@@ -498,6 +530,7 @@ void register_FF_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molnums"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove all of the molecules whose numbers are in molnums\nfrom all of the forcefield groups identified by mgid\nThrow: SireMol::missing_group\n" );
         
         }
@@ -510,6 +543,7 @@ void register_FF_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Completely remove all of the molecules from the groups identified\nby mgid\nThrow: SireMol::missing_group\n" );
         
         }
@@ -522,6 +556,7 @@ void register_FF_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molview"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the view molview from the specified groups in this\nforcefield. Note that this only removes the specific view\n(and indeed all copies of this view if there\nare duplicates) - it does not remove the atoms in this\nview from all of the other views\nThrow: SireMol::missing_group\n" );
         
         }
@@ -534,6 +569,7 @@ void register_FF_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the views of the molecule in molviews from the specified\ngroups in this forcefield. Note that this only removes the specific view\n(and indeed all copies of this view if there\nare duplicates) - it does not remove the atoms in these\nviews from all of the other views\nThrow: SireMol::missing_group\n" );
         
         }
@@ -546,6 +582,7 @@ void register_FF_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the views of the molecules in molecules from the specified\ngroups in this forcefield. Note that this only removes the specific view\n(and indeed all copies of this view if there\nare duplicates) - it does not remove the atoms in these\nviews from all of the other views\nThrow: SireMol::missing_group\n" );
         
         }
@@ -558,6 +595,7 @@ void register_FF_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the views of the molecules in the molecule group molgroup f\nfrom the specified groups in this forcefield. Note that this only\nremoves the specific view (and indeed all copies of this view\nif there are duplicates) - it does not remove the atoms in these\nviews from all of the other views\nThrow: SireMol::missing_group\n" );
         
         }
@@ -570,6 +608,7 @@ void register_FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "Set the contents of this forcefield to just contain molview,\nusing the default locations to find the properties that contain\nthe forcefield parameters for this molecule\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -582,6 +621,7 @@ void register_FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "Set the contents of this forcefield to the molecule views in molviews,\nusing the default locations to find the properties that contain\nthe forcefield parameters for this molecule\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -594,6 +634,7 @@ void register_FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Set the contents of this forcefield to the molecules molecules,\nusing the default locations to find the properties that contain\nthe forcefield parameters for this molecule\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -606,6 +647,7 @@ void register_FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Set the contents of this forcefield to contains the molecules in molgroup,\nusing the default locations to find the properties that contain\nthe forcefield parameters for this molecule\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -618,6 +660,7 @@ void register_FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molview"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Set the contents of the forcefield groups identified by mgid\nso that they only contain the molecule viewed in molview.\nThis will use the version of the molecule that exists already\nin this forcefield, not the version in molview\nThis will use the supplied map to find the property names\nof the parameters required by this forcefield\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -630,6 +673,7 @@ void register_FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molviews"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Set the contents of the forcefield groups identified by mgid\nso that they only contain the molecule views in molviews.\nThis will use the version of the molecule that exists already\nin this forcefield, not the version in molview\nThis will use the supplied map to find the property names\nof the parameters required by this forcefield\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -642,6 +686,7 @@ void register_FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molecules"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Set the contents of the forcefield groups identified by mgid\nso that they only contain the molecules in molecules.\nThis will use the version of the molecule that exists already\nin this forcefield, not the version in molview\nThis will use the supplied map to find the property names\nof the parameters required by this forcefield\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -654,6 +699,7 @@ void register_FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molgroup"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Set the contents of the forcefield groups identified by mgid\nso that they only contain the molecules contained in molgroup.\nThis will use the version of the molecule that exists already\nin this forcefield, not the version in molview\nThis will use the supplied map to find the property names\nof the parameters required by this forcefield\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -666,6 +712,7 @@ void register_FF_class(){
                 "setName"
                 , setName_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Set the name of this forcefield" );
         
         }
@@ -678,6 +725,7 @@ void register_FF_class(){
                 "setName"
                 , setName_function_value
                 , ( bp::arg("mgid"), bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Set the name of the forcefield groups identified by mgid\nThrow: SireMol::missing_group\n" );
         
         }
@@ -690,6 +738,7 @@ void register_FF_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the property with name name to have the value value\n\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -701,6 +750,7 @@ void register_FF_class(){
             FF_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this forcefield" );
         
         }
@@ -712,6 +762,7 @@ void register_FF_class(){
             FF_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -724,6 +775,7 @@ void register_FF_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Update this forcefield so that it uses the version of the molecule\nthat is present in moldata - this does nothing if this molecule\nis not in this forcefield. This uses the existing property names\nto find the updated properties that contain the forcefield parameters\nfor this molecule. If you want to change the property names, then you\nmust remove the molecule, then re-add it with the new names.\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -736,6 +788,7 @@ void register_FF_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molview"), bp::arg("auto_commit")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Update the data of the molecule that is view in molview. This\nupdates all atoms, even those that are not part of the view" );
         
         }
@@ -748,6 +801,7 @@ void register_FF_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Update the molecules in this forcefield so that they have the\nsame version as in molecules. The molecules will use the existing\nproperty names to find the properties that contain the forcefield\nparameters. If you want to change the property names, then you\nmust remove the molecule, then re-add it with the new names\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -760,6 +814,7 @@ void register_FF_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Update this forcefield so that it has the same version molecules\nas those contained in molgroup.\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -771,6 +826,7 @@ void register_FF_class(){
             FF_exposer.def( 
                 "version"
                 , version_function_value
+                , bp::release_gil_policy()
                 , "Return the version number of this copy of the forcefield" );
         
         }
@@ -782,6 +838,7 @@ void register_FF_class(){
             FF_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "Return the class name of the forcefield" );
         
         }

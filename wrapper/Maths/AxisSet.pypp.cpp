@@ -21,6 +21,8 @@ SireMaths::AxisSet __copy__(const SireMaths::AxisSet &other){ return SireMaths::
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AxisSet_class(){
 
     { //::SireMaths::AxisSet
@@ -38,6 +40,7 @@ void register_AxisSet_class(){
                 "fromFrame"
                 , fromFrame_function_value
                 , ( bp::arg("frame"), bp::arg("vec") )
+                , bp::release_gil_policy()
                 , "Convert a vector from the frame frame to this coordinate frame" );
         
         }
@@ -50,6 +53,7 @@ void register_AxisSet_class(){
                 "fromIdentity"
                 , fromIdentity_function_value
                 , ( bp::arg("vec") )
+                , bp::release_gil_policy()
                 , "Convert a vector from the cartesian frame to this coordinate frame" );
         
         }
@@ -62,6 +66,7 @@ void register_AxisSet_class(){
                 "fromIdentity"
                 , fromIdentity_function_value
                 , ( bp::arg("vec") )
+                , bp::release_gil_policy()
                 , "Convert the array of vectors from the cartesian frame to this coordinate frame" );
         
         }
@@ -74,6 +79,7 @@ void register_AxisSet_class(){
                 "fromIdentity"
                 , fromIdentity_function_value
                 , ( bp::arg("vec"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Convert a vector from the cartesian frame with origin delta to this coordinate frame" );
         
         }
@@ -86,6 +92,7 @@ void register_AxisSet_class(){
                 "fromIdentity"
                 , fromIdentity_function_value
                 , ( bp::arg("vecs"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Convert the array of vectors from the cartesian frame offset by delta\nto this coordinate frame" );
         
         }
@@ -134,6 +141,7 @@ void register_AxisSet_class(){
                 "toFrame"
                 , toFrame_function_value
                 , ( bp::arg("frame"), bp::arg("vec") )
+                , bp::release_gil_policy()
                 , "Convert a vector to the frame frame from this coordinate frame" );
         
         }
@@ -146,6 +154,7 @@ void register_AxisSet_class(){
                 "toIdentity"
                 , toIdentity_function_value
                 , ( bp::arg("vec") )
+                , bp::release_gil_policy()
                 , "Convert a vector to the cartesian frame from this coordinate frame" );
         
         }
@@ -157,6 +166,7 @@ void register_AxisSet_class(){
             AxisSet_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of the AxisSet" );
         
         }
@@ -168,6 +178,7 @@ void register_AxisSet_class(){
             AxisSet_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -179,6 +190,7 @@ void register_AxisSet_class(){
             AxisSet_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

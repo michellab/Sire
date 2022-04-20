@@ -30,6 +30,8 @@ SireSystem::TripleDistanceComponent __copy__(const SireSystem::TripleDistanceCom
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_TripleDistanceComponent_class(){
 
     { //::SireSystem::TripleDistanceComponent
@@ -47,6 +49,7 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "nPoints"
                 , nPoints_function_value
+                , bp::release_gil_policy()
                 , "Return the number of points (6)" );
         
         }
@@ -74,7 +77,7 @@ void register_TripleDistanceComponent_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ith point\nThrow: SireError::invalid_index\n" );
         
         }
@@ -86,7 +89,7 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the first point between which the first distance is calculated" );
         
         }
@@ -98,7 +101,7 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the second point between which the first distance is calculated" );
         
         }
@@ -110,7 +113,7 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the first point between which the second distance is calculated" );
         
         }
@@ -122,7 +125,7 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "point3"
                 , point3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the second point between which the second distance is calculated" );
         
         }
@@ -134,7 +137,7 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "point4"
                 , point4_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the first point between which the third distance is calculated" );
         
         }
@@ -146,7 +149,7 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "point5"
                 , point5_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the second point between which the third distance is calculated" );
         
         }
@@ -158,7 +161,7 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol that represents the distance between the\npoints .point0() and .point1() (r01)" );
         
         }
@@ -170,7 +173,7 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "r23"
                 , r23_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol that represents the distance between the\npoints .point2() and .point3() (r23)" );
         
         }
@@ -182,7 +185,7 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "r45"
                 , r45_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol that represents the distance between the\npoints .point4() and .point5() (r45)" );
         
         }
@@ -194,6 +197,7 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -205,6 +209,7 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

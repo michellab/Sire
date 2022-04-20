@@ -55,6 +55,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ResID_class(){
 
     { //::SireMol::ResID
@@ -69,6 +71,7 @@ void register_ResID_class(){
             ResID_exposer.def( 
                 "any"
                 , any_function_value
+                , bp::release_gil_policy()
                 , "Return a match for all residues" );
         
         }
@@ -81,6 +84,7 @@ void register_ResID_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return a specific atom in the matching residues" );
         
         }
@@ -92,6 +96,7 @@ void register_ResID_class(){
             ResID_exposer.def( 
                 "atoms"
                 , atoms_function_value
+                , bp::release_gil_policy()
                 , "Return the atoms in the matching residues" );
         
         }
@@ -104,6 +109,7 @@ void register_ResID_class(){
                 "atoms"
                 , atoms_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Return a range of atoms in the matching residues" );
         
         }
@@ -115,6 +121,7 @@ void register_ResID_class(){
             ResID_exposer.def( 
                 "chains"
                 , chains_function_value
+                , bp::release_gil_policy()
                 , "Return a Chain ID that matches chains that contain residues\nthat match this Residue ID" );
         
         }
@@ -127,6 +134,7 @@ void register_ResID_class(){
                 "fromString"
                 , fromString_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
                 , "Return an ResID constructed from the passed string" );
         
         }
@@ -138,6 +146,7 @@ void register_ResID_class(){
             ResID_exposer.def( 
                 "inverse"
                 , inverse_function_value
+                , bp::release_gil_policy()
                 , "Invert this match" );
         
         }
@@ -149,6 +158,7 @@ void register_ResID_class(){
             ResID_exposer.def( 
                 "invert"
                 , invert_function_value
+                , bp::release_gil_policy()
                 , "Invert this match" );
         
         }
@@ -161,6 +171,7 @@ void register_ResID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Map this ID back to the indicies of the residues in the molecule,\nusing the passed MoleculeInfo to do the mapping" );
         
         }
@@ -173,6 +184,7 @@ void register_ResID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Map this ResID to the atoms in the passed molecule view\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -280,6 +292,7 @@ void register_ResID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Select all the atoms from the passed view that match this ID\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_residue\n" );
         
         }
@@ -292,6 +305,7 @@ void register_ResID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return all of the atoms from the molecules that match\nthis ID\nThrow: SireMol::missing_residue\n" );
         
         }
@@ -304,6 +318,7 @@ void register_ResID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the atoms from the molecule group molgroup that match\nthis ID\nThrow: SireMol::missing_residue\n" );
         
         }
@@ -316,6 +331,7 @@ void register_ResID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the set of atoms that match this ID in the molecule groups\nset molgroups\nThrow: SireMol::missing_residue\n" );
         
         }
@@ -328,6 +344,7 @@ void register_ResID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Select the atom from the passed view that matches this ID\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_residue\n" );
         
         }
@@ -340,6 +357,7 @@ void register_ResID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the atom from the molecules molecules that matches\nthis ID\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\n" );
         
         }
@@ -352,6 +370,7 @@ void register_ResID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the atom from the molecule group molgroup that matches\nthis ID\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\n" );
         
         }
@@ -364,6 +383,7 @@ void register_ResID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the atom from the molecule groups molgroups that matches\nthis ID\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\n" );
         
         }
@@ -375,6 +395,7 @@ void register_ResID_class(){
             ResID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

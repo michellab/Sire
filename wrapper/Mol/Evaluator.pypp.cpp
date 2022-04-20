@@ -73,6 +73,8 @@ SireMol::Evaluator __copy__(const SireMol::Evaluator &other){ return SireMol::Ev
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Evaluator_class(){
@@ -95,6 +97,7 @@ void register_Evaluator_class(){
                 "aaBox"
                 , aaBox_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the axis-aligned box that just contains all of the\natoms in this view\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\n" );
         
         }
@@ -107,6 +110,7 @@ void register_Evaluator_class(){
                 "alignmentAxes"
                 , alignmentAxes_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -119,6 +123,7 @@ void register_Evaluator_class(){
                 "alignmentAxes"
                 , alignmentAxes_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -131,6 +136,7 @@ void register_Evaluator_class(){
                 "boundingSphere"
                 , boundingSphere_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the sphere that just encloses all of the atoms in this view\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\n" );
         
         }
@@ -143,6 +149,7 @@ void register_Evaluator_class(){
                 "center"
                 , center_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the center of the selected atoms,\nusing the passed property map to find the coordinates\nproperty of the molecule (the center is the point\nthat is exactly in the middle of the atoms - i.e.\nhalfway between the maximum and minimum coordinates\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\n" );
         
         }
@@ -155,6 +162,7 @@ void register_Evaluator_class(){
                 "centerOfGeometry"
                 , centerOfGeometry_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the center of geometry of this part of the molecule.\nThis is the mid-point between the maximum coordinates and\nminimum coordinates\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\n" );
         
         }
@@ -167,6 +175,7 @@ void register_Evaluator_class(){
                 "centerOfMass"
                 , centerOfMass_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the center of mass of this part of the molecule\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\n" );
         
         }
@@ -179,6 +188,7 @@ void register_Evaluator_class(){
                 "centroid"
                 , centroid_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the centroid of these atoms - this is the average\nof the coordinates\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\n" );
         
         }
@@ -191,6 +201,7 @@ void register_Evaluator_class(){
                 "charge"
                 , charge_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the total charge of the selected part of the molecule, using\nthe supplied map to find the charge property\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\n" );
         
         }
@@ -203,6 +214,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules" );
         
         }
@@ -215,6 +227,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts)" );
         
         }
@@ -227,6 +240,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("map0"), bp::arg("map1"), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing map0 and map1 to find the elements, masses,\nconnectivity and coordinates of the two molecules respectively" );
         
         }
@@ -239,6 +253,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("map0"), bp::arg("map1"), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts)" );
         
         }
@@ -251,6 +266,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("timeout"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules. Terminate the calculation\nreturning the best match found within timeout." );
         
         }
@@ -263,6 +279,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("timeout"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts). Terminate the calculation\nreturning the best match found within timeout." );
         
         }
@@ -275,6 +292,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("timeout"), bp::arg("map0"), bp::arg("map1"), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing map0 and map1 to find the elements, masses,\nconnectivity and coordinates of the two molecules respectively. Terminate the calculation\nreturning the best match found within timeout." );
         
         }
@@ -287,6 +305,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("timeout"), bp::arg("map0"), bp::arg("map1"), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts)" );
         
         }
@@ -299,6 +318,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("match_light_atoms"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\n" );
         
         }
@@ -311,6 +331,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("match_light_atoms"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts)\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\n" );
         
         }
@@ -323,6 +344,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("match_light_atoms"), bp::arg("map0"), bp::arg("map1"), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing map0 and map1 to find the elements, masses,\nconnectivity and coordinates of the two molecules respectively\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\n" );
         
         }
@@ -335,6 +357,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("match_light_atoms"), bp::arg("map0"), bp::arg("map1"), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts).\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\n" );
         
         }
@@ -347,6 +370,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("timeout"), bp::arg("match_light_atoms"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules. Terminate the calculation\nreturning the best match found within timeout.\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\n" );
         
         }
@@ -359,6 +383,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("timeout"), bp::arg("match_light_atoms"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts). Terminate the calculation\nreturning the best match found within timeout.\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\n" );
         
         }
@@ -371,6 +396,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("timeout"), bp::arg("match_light_atoms"), bp::arg("map0"), bp::arg("map1"), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing map0 and map1 to find the elements, masses,\nconnectivity and coordinates of the two molecules respectively. Terminate the calculation\nreturning the best match found within timeout.\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\n" );
         
         }
@@ -383,6 +409,7 @@ void register_Evaluator_class(){
                 "findMCS"
                 , findMCS_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("timeout"), bp::arg("match_light_atoms"), bp::arg("map0"), bp::arg("map1"), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns the mapping from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts)\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\nThe argument min_heavy_protons specifies the number of protons above which an\natom is considered as being heaviy, e.g. 6 means that heavy atoms\nare the elements including Carbon and above. By setting min_heavy_protons to\nzero allows the user to match heavy atoms against light atoms.\nThe verbose flag can be used to print status messages.\n" );
         
         }
@@ -395,6 +422,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules" );
         
         }
@@ -407,6 +435,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts)" );
         
         }
@@ -419,6 +448,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("map0"), bp::arg("map1"), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing map0 and map1 to find the elements, masses,\nconnectivity and coordinates of the two molecules respectively" );
         
         }
@@ -431,6 +461,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("map0"), bp::arg("map1"), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts)" );
         
         }
@@ -443,6 +474,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("timeout"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules. Terminate the calculation\nreturning the best match found within timeout." );
         
         }
@@ -455,6 +487,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("timeout"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts). Terminate the calculation\nreturning the best match found within timeout." );
         
         }
@@ -467,6 +500,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("timeout"), bp::arg("map0"), bp::arg("map1"), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing map0 and map1 to find the elements, masses,\nconnectivity and coordinates of the two molecules respectively. Terminate the calculation\nreturning the best match found within timeout." );
         
         }
@@ -479,6 +513,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("timeout"), bp::arg("map0"), bp::arg("map1"), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts)" );
         
         }
@@ -491,6 +526,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("match_light_atoms"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\n" );
         
         }
@@ -503,6 +539,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("match_light_atoms"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts)\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\n" );
         
         }
@@ -515,6 +552,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("match_light_atoms"), bp::arg("map0"), bp::arg("map1"), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing map0 and map1 to find the elements, masses,\nconnectivity and coordinates of the two molecules respectively\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\n" );
         
         }
@@ -527,6 +565,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("match_light_atoms"), bp::arg("map0"), bp::arg("map1"), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts).\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\n" );
         
         }
@@ -539,6 +578,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("timeout"), bp::arg("match_light_atoms"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules. Terminate the calculation\nreturning the best match found within timeout.\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\n" );
         
         }
@@ -551,6 +591,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("timeout"), bp::arg("match_light_atoms"), bp::arg("map")=SireBase::PropertyMap(), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts). Terminate the calculation\nreturning the best match found within timeout.\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\n" );
         
         }
@@ -563,6 +604,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("timeout"), bp::arg("match_light_atoms"), bp::arg("map0"), bp::arg("map1"), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing map0 and map1 to find the elements, masses,\nconnectivity and coordinates of the two molecules respectively. Terminate the calculation\nreturning the best match found within timeout.\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\n" );
         
         }
@@ -575,6 +617,7 @@ void register_Evaluator_class(){
                 "findMCSmatches"
                 , findMCSmatches_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("timeout"), bp::arg("match_light_atoms"), bp::arg("map0"), bp::arg("map1"), bp::arg("min_heavy_protons")=(int)(6), bp::arg("verbose")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Find the maximum common substructure of this molecule view with other. This\nreturns all mappings from this structure to other for the matching parts,\nusing the optionally supplied propertymap to find the elements, masses,\nconnectivity and coordinates of the two molecules, with the passed atommatcher\nused to pre-match atoms before the common substructure search (useful to speed\nup the search and to enforce matching sub-parts)\nIf match_light_atoms is true, then include light atoms (e.g. hydrogen)\nin the match. This may make things slower...\nThe argument min_heavy_protons specifies the number of protons above which an\natom is considered as being heaviy, e.g. 6 means that heavy atoms\nare the elements including Carbon and above. By setting min_heavy_protons to\nzero allows the user to match heavy atoms against light atoms.\nThe verbose flag can be used to print status messages.\n" );
         
         }
@@ -587,6 +630,7 @@ void register_Evaluator_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -599,6 +643,7 @@ void register_Evaluator_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("arg0"), bp::arg("arg1") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -611,6 +656,7 @@ void register_Evaluator_class(){
                 "hasProperty"
                 , hasProperty_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -622,6 +668,7 @@ void register_Evaluator_class(){
             Evaluator_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is empty" );
         
         }
@@ -634,6 +681,7 @@ void register_Evaluator_class(){
                 "mass"
                 , mass_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the mass of the selected part of this molecule, using\nthe supplied map to find either the mass property, or if that\ndoes not exist, using the element property\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\n" );
         
         }
@@ -646,6 +694,7 @@ void register_Evaluator_class(){
                 "measure"
                 , measure_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Measure the distance between the atoms atom0 and atom1\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -658,6 +707,7 @@ void register_Evaluator_class(){
                 "measure"
                 , measure_function_value
                 , ( bp::arg("bond"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Measure the length of the bond bond\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -670,6 +720,7 @@ void register_Evaluator_class(){
                 "measure"
                 , measure_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Measure the angle between the atoms atom0, atom1 and atom2\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -682,6 +733,7 @@ void register_Evaluator_class(){
                 "measure"
                 , measure_function_value
                 , ( bp::arg("angle"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Measure the size of the angle angle\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -694,6 +746,7 @@ void register_Evaluator_class(){
                 "measure"
                 , measure_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Measure the dihedral between the atoms atom0, atom1, atom2 and atom3\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -706,6 +759,7 @@ void register_Evaluator_class(){
                 "measure"
                 , measure_function_value
                 , ( bp::arg("dihedral"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Measure the size of the dihedral dihedral\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -717,6 +771,7 @@ void register_Evaluator_class(){
             Evaluator_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -729,6 +784,7 @@ void register_Evaluator_class(){
                 "metadataKeys"
                 , metadataKeys_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -767,6 +823,7 @@ void register_Evaluator_class(){
                 "principalAxes"
                 , principalAxes_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the principal axes of this view - this uses\nthe coordinates, and mass or element properties\nto find the moment of inertia tensor for this view, and\nthen diagonalises that to obtain the principal axes. These\naxes are constructed to follow the right-hand-rule.\n" );
         
         }
@@ -779,6 +836,7 @@ void register_Evaluator_class(){
                 "principalAxes"
                 , principalAxes_function_value
                 , ( bp::arg("principal_moments"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the principal axes of this view - this uses\nthe coordinates, and mass or element properties\nto find the moment of inertia tensor for this view, and\nthen diagonalises that to obtain the principal axes. These\naxes are constructed to follow the right-hand-rule.\nThis returns the principal moments of inertia in\nprincipal_moments" );
         
         }
@@ -790,6 +848,7 @@ void register_Evaluator_class(){
             Evaluator_exposer.def( 
                 "propertyKeys"
                 , propertyKeys_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -802,6 +861,7 @@ void register_Evaluator_class(){
                 "rmsd"
                 , rmsd_function_value
                 , ( bp::arg("other"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the root mean square deviation (RMSD) of the atoms in this view against\nthe atoms in other, using the passed property map to find the required\nproperties" );
         
         }
@@ -814,6 +874,7 @@ void register_Evaluator_class(){
                 "rmsd"
                 , rmsd_function_value
                 , ( bp::arg("other"), bp::arg("map0"), bp::arg("map1") )
+                , bp::release_gil_policy()
                 , "Return the root mean square deviation (RMSD) of the atoms in this view against\nthe atoms in other, using the passed property maps to find the required\nproperties" );
         
         }
@@ -826,6 +887,7 @@ void register_Evaluator_class(){
                 "rmsd"
                 , rmsd_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the root mean square deviation (RMSD) of the atoms in this view against\nthe atoms in other, using the passed AtomMatcher to match atoms in this\nview against other, and using the passed property map to find the required\nproperties" );
         
         }
@@ -838,6 +900,7 @@ void register_Evaluator_class(){
                 "rmsd"
                 , rmsd_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("map0"), bp::arg("map1") )
+                , bp::release_gil_policy()
                 , "Return the root mean square deviation (RMSD) of the atoms in this view against\nthe atoms in other, using the passed AtomMatcher to match atoms in this\nview against other, and using the passed property maps to find the required\nproperties" );
         
         }
@@ -849,6 +912,7 @@ void register_Evaluator_class(){
             Evaluator_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this contains the whole molecule" );
         
         }
@@ -860,6 +924,7 @@ void register_Evaluator_class(){
             Evaluator_exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
                 , "Return the selected atoms over which the properties\nwill be evaluated" );
         
         }
@@ -871,6 +936,7 @@ void register_Evaluator_class(){
             Evaluator_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this evaluator" );
         
         }
@@ -882,6 +948,7 @@ void register_Evaluator_class(){
             Evaluator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

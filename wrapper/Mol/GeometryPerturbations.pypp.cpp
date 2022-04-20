@@ -33,6 +33,8 @@ SireMol::GeometryPerturbations __copy__(const SireMol::GeometryPerturbations &ot
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_GeometryPerturbations_class(){
 
     { //::SireMol::GeometryPerturbations
@@ -50,6 +52,7 @@ void register_GeometryPerturbations_class(){
             GeometryPerturbations_exposer.def( 
                 "children"
                 , children_function_value
+                , bp::release_gil_policy()
                 , "Return the list of all child perturbations (and children of children)" );
         
         }
@@ -76,6 +79,7 @@ void register_GeometryPerturbations_class(){
             GeometryPerturbations_exposer.def( 
                 "perturbations"
                 , perturbations_function_value
+                , bp::release_gil_policy()
                 , "Return the geometry perturbations in this collection" );
         
         }
@@ -88,6 +92,7 @@ void register_GeometryPerturbations_class(){
                 "recreate"
                 , recreate_function_value
                 , ( bp::arg("mapping_function") )
+                , bp::release_gil_policy()
                 , "Return a re-created version of this set of perturbations where all child\nperturbations are changed to use the passed mapping function" );
         
         }
@@ -100,6 +105,7 @@ void register_GeometryPerturbations_class(){
                 "recreate"
                 , recreate_function_value
                 , ( bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return a re-created version of this set of perturbations where all child\nperturbations are changed to use the passed property map" );
         
         }
@@ -112,6 +118,7 @@ void register_GeometryPerturbations_class(){
                 "recreate"
                 , recreate_function_value
                 , ( bp::arg("mapping_function"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return a re-created version of this set of perturbations where all child\nperturbations are changed to use the passed mapping function and property map" );
         
         }
@@ -123,6 +130,7 @@ void register_GeometryPerturbations_class(){
             GeometryPerturbations_exposer.def( 
                 "requiredProperties"
                 , requiredProperties_function_value
+                , bp::release_gil_policy()
                 , "Return all of the properties that are needed or affected by\nthese perturbations" );
         
         }
@@ -134,6 +142,7 @@ void register_GeometryPerturbations_class(){
             GeometryPerturbations_exposer.def( 
                 "requiredSymbols"
                 , requiredSymbols_function_value
+                , bp::release_gil_policy()
                 , "Return all of the symbols that need to be input to these perturbations" );
         
         }
@@ -146,6 +155,7 @@ void register_GeometryPerturbations_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "Substitute the identities in identities in all of the mapping functions\nused by this perturbation. This is useful if, for example, you want to\nswitch from using lambda to control the perturbation to using alpha, e.g.\n" );
         
         }
@@ -158,6 +168,7 @@ void register_GeometryPerturbations_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("old_symbol"), bp::arg("new_symbol") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -169,6 +180,7 @@ void register_GeometryPerturbations_class(){
             GeometryPerturbations_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -180,6 +192,7 @@ void register_GeometryPerturbations_class(){
             GeometryPerturbations_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -192,6 +205,7 @@ void register_GeometryPerturbations_class(){
                 "wouldChange"
                 , wouldChange_function_value
                 , ( bp::arg("molecule"), bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Return whether or not these perturbations with the passed values would\nchange the molecule molecule" );
         
         }

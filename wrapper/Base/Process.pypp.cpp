@@ -15,6 +15,8 @@ SireBase::Process __copy__(const SireBase::Process &other){ return SireBase::Pro
 
 const char* pvt_get_name(const SireBase::Process&){ return "SireBase::Process";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Process_class(){
 
     { //::SireBase::Process
@@ -30,6 +32,7 @@ void register_Process_class(){
             Process_exposer.def( 
                 "hasFinished"
                 , hasFinished_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this process has finished running" );
         
         }
@@ -41,6 +44,7 @@ void register_Process_class(){
             Process_exposer.def( 
                 "isError"
                 , isError_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the process exited in error" );
         
         }
@@ -52,6 +56,7 @@ void register_Process_class(){
             Process_exposer.def( 
                 "isRunning"
                 , isRunning_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the job is running" );
         
         }
@@ -63,6 +68,7 @@ void register_Process_class(){
             Process_exposer.def( 
                 "kill"
                 , kill_function_value
+                , bp::release_gil_policy()
                 , "Kill this process" );
         
         }
@@ -74,6 +80,7 @@ void register_Process_class(){
             Process_exposer.def( 
                 "killAll"
                 , killAll_function_value
+                , bp::release_gil_policy()
                 , "Use this function to kill all of the jobs that are currently running" );
         
         }
@@ -101,6 +108,7 @@ void register_Process_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("command") )
+                , bp::release_gil_policy()
                 , "Run the command command and return a Process object that can be\nused to monitor the command" );
         
         }
@@ -113,6 +121,7 @@ void register_Process_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("command"), bp::arg("stdout_file"), bp::arg("stderr_file") )
+                , bp::release_gil_policy()
                 , "Run the command command and return a Process object that can be\nused to monitor the command. Stdout and stderr of the running\nprocess are redirected to the user specified files." );
         
         }
@@ -125,6 +134,7 @@ void register_Process_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("command"), bp::arg("arg") )
+                , bp::release_gil_policy()
                 , "Run the command command with the solitary argument arg" );
         
         }
@@ -137,6 +147,7 @@ void register_Process_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("command"), bp::arg("arg"), bp::arg("stdout_file"), bp::arg("stderr_file") )
+                , bp::release_gil_policy()
                 , "Run the command command with the solitary argument arg.\nStdout and stderr of the running process are redirected to\nthe user specified files." );
         
         }
@@ -149,6 +160,7 @@ void register_Process_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("command"), bp::arg("arguments") )
+                , bp::release_gil_policy()
                 , "Run the command command with the arguments arguments, and\nreturn a Process object that can be used to query and control the\njob" );
         
         }
@@ -161,6 +173,7 @@ void register_Process_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("command"), bp::arg("arguments"), bp::arg("stdout_file"), bp::arg("stderr_file") )
+                , bp::release_gil_policy()
                 , "Run the command command with the arguments arguments, and\nreturn a Process object that can be used to query and control the\njob. Stdout and stderr of the running process are redirected to\nthe user specified files." );
         
         }
@@ -172,6 +185,7 @@ void register_Process_class(){
             Process_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -183,6 +197,7 @@ void register_Process_class(){
             Process_exposer.def( 
                 "wait"
                 , wait_function_value
+                , bp::release_gil_policy()
                 , "Wait until the process has finished" );
         
         }
@@ -195,6 +210,7 @@ void register_Process_class(){
                 "wait"
                 , wait_function_value
                 , ( bp::arg("ms") )
+                , bp::release_gil_policy()
                 , "Wait until the process has finished, or until ms milliseconds have passed.\nThis returns whether or not the process has finished" );
         
         }
@@ -206,6 +222,7 @@ void register_Process_class(){
             Process_exposer.def( 
                 "wasKilled"
                 , wasKilled_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the process was killed" );
         
         }
@@ -217,6 +234,7 @@ void register_Process_class(){
             Process_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

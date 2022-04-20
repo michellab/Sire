@@ -31,6 +31,8 @@ SireCAS::ArcTan __copy__(const SireCAS::ArcTan &other){ return SireCAS::ArcTan(o
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ArcTan_class(){
 
     { //::SireCAS::ArcTan
@@ -48,6 +50,7 @@ void register_ArcTan_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this function" );
         
         }
@@ -60,6 +63,7 @@ void register_ArcTan_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Complex evaluation" );
         
         }
@@ -72,6 +76,7 @@ void register_ArcTan_class(){
             ArcTan_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -83,6 +88,7 @@ void register_ArcTan_class(){
             ArcTan_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

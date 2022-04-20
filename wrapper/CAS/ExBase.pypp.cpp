@@ -31,6 +31,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ExBase_class(){
 
     { //::SireCAS::ExBase
@@ -45,6 +47,7 @@ void register_ExBase_class(){
             ExBase_exposer.def( 
                 "children"
                 , children_function_value
+                , bp::release_gil_policy()
                 , "Return the child expressions of this Expression" );
         
         }
@@ -56,6 +59,7 @@ void register_ExBase_class(){
             ExBase_exposer.def( 
                 "conjugate"
                 , conjugate_function_value
+                , bp::release_gil_policy()
                 , "Return the complex conjugate of this expression" );
         
         }
@@ -68,6 +72,7 @@ void register_ExBase_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return an expression that the differential of this ExBase\nwith respect to symbol. Note an exception may\nbe thrown if this ExBase cannot be differentiated.\nThrow: SireCAS::unavailable_differential\n" );
         
         }
@@ -80,6 +85,7 @@ void register_ExBase_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this ExBase using values values. Any\nmissing symbols are assumed to equal zero.\n\nNote that an exception will be thrown if the result of the\nevaluation of this, or one of its children, is complex.\n\nThrow: SireMaths::domain_error\n" );
         
         }
@@ -92,6 +98,7 @@ void register_ExBase_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this ExBase using the complex values values.\nAny missing symbols are assumed to equal zero." );
         
         }
@@ -104,6 +111,7 @@ void register_ExBase_class(){
                 "expand"
                 , expand_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Rearrange this expression into the form\nm x^i + n x^j + ... + constant\nand return the factors and powers of x\n\nThrow: SireCAS::rearrangement_error\n" );
         
         }
@@ -115,6 +123,7 @@ void register_ExBase_class(){
             ExBase_exposer.def( 
                 "functions"
                 , functions_function_value
+                , bp::release_gil_policy()
                 , "Return the set of Functions that appear in this ExBase" );
         
         }
@@ -126,6 +135,7 @@ void register_ExBase_class(){
             ExBase_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash of this object - return a combination of the\nidentifying magic for the class and a hash for its contents." );
         
         }
@@ -138,6 +148,7 @@ void register_ExBase_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the indefinite integral of this ExBase with respect to\nsymbol. This is not guaranteed to work() and will return an\nexpression of the form Sum( integral(exbase) + integral_constant ).\nIf it doesnt work then an exception will be throw.\nThrow: SireCAS::unavailable_integral\n" );
         
         }
@@ -149,6 +160,7 @@ void register_ExBase_class(){
             ExBase_exposer.def( 
                 "isComplex"
                 , isComplex_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this expression contains any complex (imaginary)\nparts" );
         
         }
@@ -160,6 +172,7 @@ void register_ExBase_class(){
             ExBase_exposer.def( 
                 "isCompound"
                 , isCompound_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a compound expression, and thus as such\nrequires brackets placed around it when it is printed. Examples include\nSum, Product and Power. For most other functions it is safe to leave\nthis as false." );
         
         }
@@ -171,6 +184,7 @@ void register_ExBase_class(){
             ExBase_exposer.def( 
                 "isConstant"
                 , isConstant_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a constant expression (does not\ndepend on any symbols)" );
         
         }
@@ -183,6 +197,7 @@ void register_ExBase_class(){
                 "isFunction"
                 , isFunction_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Return whether or not this is a function of the passed Symbol" );
         
         }
@@ -211,6 +226,7 @@ void register_ExBase_class(){
                 "series"
                 , series_function_value
                 , ( bp::arg("symbol"), bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Return a series expansion of this expression with respect to\nsymbol, if possible, to order\nn. This is not guaranteed to work, and will return this expression\nunchanged if it doesnt work. If it is expanded, then a series\nwill be returned, together with an estimate of the error (e.g. O(x^2))" );
         
         }
@@ -223,6 +239,7 @@ void register_ExBase_class(){
                 "simplify"
                 , simplify_function_value
                 , ( bp::arg("options")=(int)(0) )
+                , bp::release_gil_policy()
                 , "Try to simplify this expression. This will try to use known mathematical\nidentities to convert complex expressions down to more simple ones.\nIf SireCAS::UNSAFE_COMPLEX_SIMPLIFICATIONS is true, then identities\nthat are not safe for complex math are used, e.g. z = sin(arcsin(z))." );
         
         }
@@ -235,6 +252,7 @@ void register_ExBase_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "Return an expression that has the identities in identities\nsubstituted into this expression" );
         
         }
@@ -246,6 +264,7 @@ void register_ExBase_class(){
             ExBase_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return the set of Symbols that appear in this ExBase" );
         
         }
@@ -257,6 +276,7 @@ void register_ExBase_class(){
             ExBase_exposer.def( 
                 "toOpenMMString"
                 , toOpenMMString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this object in the OpenMM syntax" );
         
         }
@@ -268,6 +288,7 @@ void register_ExBase_class(){
             ExBase_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this object" );
         
         }
@@ -279,6 +300,7 @@ void register_ExBase_class(){
             ExBase_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "Return the name of this class type" );
         
         }
@@ -290,6 +312,7 @@ void register_ExBase_class(){
             ExBase_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "Return the name of the type of this ExBase object" );
         
         }

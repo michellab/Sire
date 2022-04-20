@@ -36,6 +36,8 @@ SireMM::StretchBendTorsionSymbols __copy__(const SireMM::StretchBendTorsionSymbo
 
 const char* pvt_get_name(const SireMM::StretchBendTorsionSymbols&){ return "SireMM::StretchBendTorsionSymbols";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_StretchBendTorsionSymbols_class(){
 
     { //::SireMM::StretchBendTorsionSymbols
@@ -50,7 +52,7 @@ void register_StretchBendTorsionSymbols_class(){
             StretchBendTorsionSymbols_exposer.def( 
                 "phi"
                 , phi_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the torsion, phi" );
         
         }
@@ -62,7 +64,7 @@ void register_StretchBendTorsionSymbols_class(){
             StretchBendTorsionSymbols_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the bond between atoms 0-1, r_\n{01}" );
         
         }
@@ -74,7 +76,7 @@ void register_StretchBendTorsionSymbols_class(){
             StretchBendTorsionSymbols_exposer.def( 
                 "r03"
                 , r03_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the distance from atom 0 to 3, r_\n{03}" );
         
         }
@@ -86,7 +88,7 @@ void register_StretchBendTorsionSymbols_class(){
             StretchBendTorsionSymbols_exposer.def( 
                 "r12"
                 , r12_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the bond between atoms 1-2, r_\n{12}" );
         
         }
@@ -98,7 +100,7 @@ void register_StretchBendTorsionSymbols_class(){
             StretchBendTorsionSymbols_exposer.def( 
                 "r32"
                 , r32_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the bond between atoms 3-2, r_\n{32}" );
         
         }
@@ -110,7 +112,7 @@ void register_StretchBendTorsionSymbols_class(){
             StretchBendTorsionSymbols_exposer.def( 
                 "theta012"
                 , theta012_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the angle between atoms 0-1-2, theta_\n{012}" );
         
         }
@@ -122,7 +124,7 @@ void register_StretchBendTorsionSymbols_class(){
             StretchBendTorsionSymbols_exposer.def( 
                 "theta321"
                 , theta321_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the angle between atoms 3-2-1, theta_\n{321}" );
         
         }

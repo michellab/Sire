@@ -39,6 +39,8 @@ SireCAS::Sum __copy__(const SireCAS::Sum &other){ return SireCAS::Sum(other); }
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Sum_class(){
 
     { //::SireCAS::Sum
@@ -56,6 +58,7 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "children"
                 , children_function_value
+                , bp::release_gil_policy()
                 , "Return all of the child expressions in this Sum" );
         
         }
@@ -67,6 +70,7 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "conjugate"
                 , conjugate_function_value
+                , bp::release_gil_policy()
                 , "Return the conjugate of this sum" );
         
         }
@@ -79,6 +83,7 @@ void register_Sum_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the differential of this Sum with respect to symbol." );
         
         }
@@ -91,6 +96,7 @@ void register_Sum_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate the Sum for the values values. Any missing values are assumed to be\nequal to zero." );
         
         }
@@ -103,6 +109,7 @@ void register_Sum_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate the Sum for the values values. Any missing values are assumed to be\nequal to zero." );
         
         }
@@ -115,6 +122,7 @@ void register_Sum_class(){
                 "expand"
                 , expand_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -126,6 +134,7 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "functions"
                 , functions_function_value
+                , bp::release_gil_policy()
                 , "Return all of the functions involved in this sum (and all expressions in this sum)" );
         
         }
@@ -137,6 +146,7 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash for the Sum" );
         
         }
@@ -149,6 +159,7 @@ void register_Sum_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the integral of this Sum with respect to symbol. The integral of\na sum is the sum of the integrals" );
         
         }
@@ -160,6 +171,7 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "isComplex"
                 , isComplex_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this function contains any complex parts" );
         
         }
@@ -171,6 +183,7 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "isCompound"
                 , isCompound_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is compound (needs brakets when printed)" );
         
         }
@@ -182,6 +195,7 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "isConstant"
                 , isConstant_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is constant" );
         
         }
@@ -194,6 +208,7 @@ void register_Sum_class(){
                 "isFunction"
                 , isFunction_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Return whether or not this is a function of symbol" );
         
         }
@@ -206,6 +221,7 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "reduce"
                 , reduce_function_value
+                , bp::release_gil_policy()
                 , "Reduce a Sum down to a simple form. This replaces the Sum with a single expression\nor a constant if this is no longer a Sum. It does not collapse together common\nfactors - use collapse() if you want to do this" );
         
         }
@@ -218,6 +234,7 @@ void register_Sum_class(){
                 "series"
                 , series_function_value
                 , ( bp::arg("symbol"), bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Return a series expansion of this sum about symbol to order n" );
         
         }
@@ -230,6 +247,7 @@ void register_Sum_class(){
                 "simplify"
                 , simplify_function_value
                 , ( bp::arg("options")=(int)(0) )
+                , bp::release_gil_policy()
                 , "Simplify this sum" );
         
         }
@@ -242,6 +260,7 @@ void register_Sum_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "Return an expression that is this expression with identities substituted in" );
         
         }
@@ -253,6 +272,7 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return all of the symbols involved in this sum (and all expressions in this sum)" );
         
         }
@@ -264,6 +284,7 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "toOpenMMString"
                 , toOpenMMString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of the sum" );
         
         }
@@ -275,6 +296,7 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of the sum" );
         
         }
@@ -286,6 +308,7 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -297,6 +320,7 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

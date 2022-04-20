@@ -27,6 +27,8 @@ SireStream::MD5Sum __copy__(const SireStream::MD5Sum &other){ return SireStream:
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MD5Sum_class(){
 
     { //::SireStream::MD5Sum
@@ -60,6 +62,7 @@ void register_MD5Sum_class(){
             MD5Sum_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of the digest" );
         
         }

@@ -39,6 +39,8 @@ SireSystem::NullConstraint __copy__(const SireSystem::NullConstraint &other){ re
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullConstraint_class(){
 
     { //::SireSystem::NullConstraint
@@ -69,6 +71,7 @@ void register_NullConstraint_class(){
             NullConstraint_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation" );
         
         }
@@ -80,6 +83,7 @@ void register_NullConstraint_class(){
             NullConstraint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

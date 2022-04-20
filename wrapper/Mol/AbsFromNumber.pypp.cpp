@@ -35,6 +35,8 @@ SireMol::AbsFromNumber __copy__(const SireMol::AbsFromNumber &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AbsFromNumber_class(){
 
     { //::SireMol::AbsFromNumber
@@ -89,6 +91,7 @@ void register_AbsFromNumber_class(){
             AbsFromNumber_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

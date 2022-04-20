@@ -49,6 +49,8 @@ SireMol::AtomIDMatcher __copy__(const SireMol::AtomIDMatcher &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AtomIDMatcher_class(){
 
     { //::SireMol::AtomIDMatcher
@@ -74,6 +76,7 @@ void register_AtomIDMatcher_class(){
             AtomIDMatcher_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this matcher is null (cannot be used for matching)" );
         
         }
@@ -100,6 +103,7 @@ void register_AtomIDMatcher_class(){
             AtomIDMatcher_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -111,6 +115,7 @@ void register_AtomIDMatcher_class(){
             AtomIDMatcher_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -122,6 +127,7 @@ void register_AtomIDMatcher_class(){
             AtomIDMatcher_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

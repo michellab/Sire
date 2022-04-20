@@ -35,6 +35,8 @@ SireMol::RelFromMass __copy__(const SireMol::RelFromMass &other){ return SireMol
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_RelFromMass_class(){
 
     { //::SireMol::RelFromMass
@@ -89,6 +91,7 @@ void register_RelFromMass_class(){
             RelFromMass_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

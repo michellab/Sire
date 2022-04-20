@@ -44,6 +44,8 @@ SireMove::VolumeMove __copy__(const SireMove::VolumeMove &other){ return SireMov
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_VolumeMove_class(){
 
     { //::SireMove::VolumeMove
@@ -62,7 +64,7 @@ void register_VolumeMove_class(){
             VolumeMove_exposer.def( 
                 "groupID"
                 , groupID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ID that matches the molecule groups that\nwill be affected by this move" );
         
         }
@@ -87,6 +89,7 @@ void register_VolumeMove_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Perform nmoves volume moves on the passed system, optionally\nrecording simulation statistics if record_stats is true" );
         
         }
@@ -114,6 +117,7 @@ void register_VolumeMove_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("rangenerator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator used by this move" );
         
         }
@@ -126,6 +130,7 @@ void register_VolumeMove_class(){
                 "setMaximumVolumeChange"
                 , setMaximumVolumeChange_function_value
                 , ( bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Set the maximum change in volume" );
         
         }
@@ -138,6 +143,7 @@ void register_VolumeMove_class(){
                 "setVolumeChanger"
                 , setVolumeChanger_function_value
                 , ( bp::arg("volchanger") )
+                , bp::release_gil_policy()
                 , "Set the volume changer used to change the volume to volchanger" );
         
         }
@@ -150,6 +156,7 @@ void register_VolumeMove_class(){
                 "setVolumeChanger"
                 , setVolumeChanger_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Set the volume changer used to change the volume to a\nScaleVolumeFromCenter that scales the molecules in molgroup\nfrom the center of a box centered at (0,0,0)" );
         
         }
@@ -161,6 +168,7 @@ void register_VolumeMove_class(){
             VolumeMove_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this move" );
         
         }
@@ -172,6 +180,7 @@ void register_VolumeMove_class(){
             VolumeMove_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -183,7 +192,7 @@ void register_VolumeMove_class(){
             VolumeMove_exposer.def( 
                 "volumeChanger"
                 , volumeChanger_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the volume changer used to change the volume" );
         
         }

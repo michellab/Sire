@@ -37,6 +37,8 @@ SireMM::GromacsBond __copy__(const SireMM::GromacsBond &other){ return SireMM::G
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_GromacsBond_class(){
@@ -58,6 +60,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "assertResolved"
                 , assertResolved_function_value
+                , bp::release_gil_policy()
                 , "Assert that the parameters for this bond have been resolved" );
         
         }
@@ -70,6 +73,7 @@ void register_GromacsBond_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith parameter for this bond" );
         
         }
@@ -81,6 +85,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "atomsAreBonded"
                 , atomsAreBonded_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this GromacsBond implies that the atoms are actually\nbonded together" );
         
         }
@@ -92,6 +97,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of parameters associated with this bond type" );
         
         }
@@ -103,6 +109,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "equilibriumLength"
                 , equilibriumLength_function_value
+                , bp::release_gil_policy()
                 , "Return the equilibrium length of this bond" );
         
         }
@@ -114,6 +121,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "functionType"
                 , functionType_function_value
+                , bp::release_gil_policy()
                 , "Return the Gromacs ID number for the function type for this bond. See table\n5.5 in the Gromacs manual for information" );
         
         }
@@ -125,6 +133,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "functionTypeString"
                 , functionTypeString_function_value
+                , bp::release_gil_policy()
                 , "Return the string description of the function type for this bond" );
         
         }
@@ -136,6 +145,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash for this bond" );
         
         }
@@ -147,6 +157,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "isHarmonic"
                 , isHarmonic_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a harmonic bond" );
         
         }
@@ -158,6 +169,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "isResolved"
                 , isResolved_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the parameters for this bond are resolved" );
         
         }
@@ -169,6 +181,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "isSimple"
                 , isSimple_function_value
+                , bp::release_gil_policy()
                 , "All Gromacs bonds are simple (just a function of the bond length)" );
         
         }
@@ -180,6 +193,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "needsResolving"
                 , needsResolving_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this parameter needs resolving" );
         
         }
@@ -222,6 +236,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "parameters"
                 , parameters_function_value
+                , bp::release_gil_policy()
                 , "Return all of the parameters for this bond" );
         
         }
@@ -233,6 +248,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of parameters associated with this bond type" );
         
         }
@@ -245,6 +261,7 @@ void register_GromacsBond_class(){
                 "toExpression"
                 , toExpression_function_value
                 , ( bp::arg("R") )
+                , bp::release_gil_policy()
                 , "Return this function converted to a SireCAS::Expression using the passed symbol\nto represent the bond length" );
         
         }
@@ -256,6 +273,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this bond" );
         
         }
@@ -267,6 +285,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -278,6 +297,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

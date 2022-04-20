@@ -39,6 +39,8 @@ SireMM::GridFF __copy__(const SireMM::GridFF &other){ return SireMM::GridFF(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_GridFF_class(){
@@ -58,6 +60,7 @@ void register_GridFF_class(){
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
                 , ( bp::arg("fixed_atoms"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Add fixed atoms to the grid. These are atoms that will never change\nposition or charge during the simulation, and that you wish to be\nincluded in the energy expression. The atoms can be placed here, and\nthen do not need to be added to the simulation System. This is useful\nif you are simulating a small cutout of the system and do not want to\nhave all of the atoms loaded into the system during the simulation" );
         
         }
@@ -70,6 +73,7 @@ void register_GridFF_class(){
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
                 , ( bp::arg("fixed_atoms"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Add fixed atoms to the grid. These are atoms that will never change\nposition or charge during the simulation, and that you wish to be\nincluded in the energy expression. The atoms can be placed here, and\nthen do not need to be added to the simulation System. This is useful\nif you are simulating a small cutout of the system and do not want to\nhave all of the atoms loaded into the system during the simulation" );
         
         }
@@ -82,6 +86,7 @@ void register_GridFF_class(){
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
                 , ( bp::arg("fixed_atoms"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Add fixed atoms to the grid. These are atoms that will never change\nposition or charge during the simulation, and that you wish to be\nincluded in the energy expression. The atoms can be placed here, and\nthen do not need to be added to the simulation System. This is useful\nif you are simulating a small cutout of the system and do not want to\nhave all of the atoms loaded into the system during the simulation" );
         
         }
@@ -94,6 +99,7 @@ void register_GridFF_class(){
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Add fixed atoms to the grid. This will copy the fixed atoms from\nthe passed GridFF. This allows multiple grid forcefields to share the\nmemory cost of a shared set of fixed atoms" );
         
         }
@@ -105,6 +111,7 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "buffer"
                 , buffer_function_value
+                , bp::release_gil_policy()
                 , "Return the buffer size used when building grids" );
         
         }
@@ -116,6 +123,7 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "coulombCutoff"
                 , coulombCutoff_function_value
+                , bp::release_gil_policy()
                 , "Return the cutoff for the coulomb energy" );
         
         }
@@ -127,6 +135,7 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "ljCutoff"
                 , ljCutoff_function_value
+                , bp::release_gil_policy()
                 , "Return the cutoff for the LJ energy" );
         
         }
@@ -138,6 +147,7 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "mustNowRecalculateFromScratch"
                 , mustNowRecalculateFromScratch_function_value
+                , bp::release_gil_policy()
                 , "Ensure that the next energy evaluation is from scratch" );
         
         }
@@ -165,6 +175,7 @@ void register_GridFF_class(){
                 "setBuffer"
                 , setBuffer_function_value
                 , ( bp::arg("buffer") )
+                , bp::release_gil_policy()
                 , "Set the buffer when building the grid. This adds a buffer space\naround the grid when it is built, to try to reduce the number of\ntimes it needs to be rebuilt" );
         
         }
@@ -177,6 +188,7 @@ void register_GridFF_class(){
                 "setCoulombCutoff"
                 , setCoulombCutoff_function_value
                 , ( bp::arg("cutoff") )
+                , bp::release_gil_policy()
                 , "Set the cutoff for the coulomb energy - this can be greater\nthan the box size as multiple periodic images can be used" );
         
         }
@@ -189,6 +201,7 @@ void register_GridFF_class(){
                 "setGridSpacing"
                 , setGridSpacing_function_value
                 , ( bp::arg("spacing") )
+                , bp::release_gil_policy()
                 , "Set the grid spacing (the distance between grid points). The\nsmaller the spacing the more memory is required to hold the grid,\nbut the more accurate the energy" );
         
         }
@@ -201,6 +214,7 @@ void register_GridFF_class(){
                 "setLJCutoff"
                 , setLJCutoff_function_value
                 , ( bp::arg("cutoff") )
+                , bp::release_gil_policy()
                 , "Set the cutoff for the LJ energy - this can be greater than\nthe box size as multiple periodic images can be used" );
         
         }
@@ -213,6 +227,7 @@ void register_GridFF_class(){
                 "setReactionFieldDielectric"
                 , setReactionFieldDielectric_function_value
                 , ( bp::arg("dielectric") )
+                , bp::release_gil_policy()
                 , "Set the dielectric constant to use with the reaction field potential" );
         
         }
@@ -225,6 +240,7 @@ void register_GridFF_class(){
                 "setShiftElectrostatics"
                 , setShiftElectrostatics_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Turn on or off use of the force shifted potential" );
         
         }
@@ -237,6 +253,7 @@ void register_GridFF_class(){
                 "setUseReactionField"
                 , setUseReactionField_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Turn on or off the use of the reaction field" );
         
         }
@@ -248,6 +265,7 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "spacing"
                 , spacing_function_value
+                , bp::release_gil_policy()
                 , "Return the spacing between grid points" );
         
         }
@@ -259,6 +277,7 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -270,6 +289,7 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

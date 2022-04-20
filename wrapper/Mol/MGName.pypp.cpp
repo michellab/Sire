@@ -27,6 +27,8 @@ SireMol::MGName __copy__(const SireMol::MGName &other){ return SireMol::MGName(o
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MGName_class(){
 
     { //::SireMol::MGName
@@ -44,6 +46,7 @@ void register_MGName_class(){
             MGName_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -55,6 +58,7 @@ void register_MGName_class(){
             MGName_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -67,6 +71,7 @@ void register_MGName_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molgroups") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -94,6 +99,7 @@ void register_MGName_class(){
             MGName_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -105,6 +111,7 @@ void register_MGName_class(){
             MGName_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -116,6 +123,7 @@ void register_MGName_class(){
             MGName_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

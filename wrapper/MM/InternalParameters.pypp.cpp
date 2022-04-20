@@ -37,6 +37,8 @@ SireMM::InternalParameters __copy__(const SireMM::InternalParameters &other){ re
 
 const char* pvt_get_name(const SireMM::InternalParameters&){ return "SireMM::InternalParameters";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_InternalParameters_class(){
 
     { //::SireMM::InternalParameters
@@ -54,6 +56,7 @@ void register_InternalParameters_class(){
                 "addChangedGroups"
                 , addChangedGroups_function_value
                 , ( bp::arg("other"), bp::arg("changed_groups") )
+                , bp::release_gil_policy()
                 , "Add the indicies of CutGroups that have changed on to changed_groups" );
         
         }
@@ -66,6 +69,7 @@ void register_InternalParameters_class(){
                 "applyMask"
                 , applyMask_function_value
                 , ( bp::arg("cgidxs") )
+                , bp::release_gil_policy()
                 , "Mask this set so that only the parameters for the specified CutGroups are\nincluded in the returned group." );
         
         }
@@ -78,6 +82,7 @@ void register_InternalParameters_class(){
                 "changedAllGroups"
                 , changedAllGroups_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return whether all of the parameters for all CutGroups have changed\ncompared to other" );
         
         }
@@ -90,6 +95,7 @@ void register_InternalParameters_class(){
                 "getChangedGroups"
                 , getChangedGroups_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return the CGIdxs of the CutGroups that have changed from this group\ncompared to the paramters held in other" );
         
         }
@@ -114,6 +120,7 @@ void register_InternalParameters_class(){
                 "groupParameters"
                 , groupParameters_function_value
                 , ( bp::arg("cgidx") )
+                , bp::release_gil_policy()
                 , "Return the array of all of the parameters that involve the CutGroup with index\ncgidx. This returns an empty array if there are no parameters for this CutGroup" );
         
         }
@@ -126,6 +133,7 @@ void register_InternalParameters_class(){
                 "groupParameters"
                 , groupParameters_function_value
                 , ( bp::arg("cgidxs") )
+                , bp::release_gil_policy()
                 , "Return all of the parameters that involve any of the CutGroups whose\nindicies are in cgidxs" );
         
         }
@@ -137,6 +145,7 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "hasAngleParameters"
                 , hasAngleParameters_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -148,6 +157,7 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "hasBendBendParameters"
                 , hasBendBendParameters_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -159,6 +169,7 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "hasBondParameters"
                 , hasBondParameters_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -170,6 +181,7 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "hasCrossTerms"
                 , hasCrossTerms_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -181,6 +193,7 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "hasDihedralParameters"
                 , hasDihedralParameters_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -192,6 +205,7 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "hasImproperParameters"
                 , hasImproperParameters_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -203,6 +217,7 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "hasNonPhysicalParameters"
                 , hasNonPhysicalParameters_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -214,6 +229,7 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "hasPhysicalParameters"
                 , hasPhysicalParameters_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -225,6 +241,7 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "hasStretchBendParameters"
                 , hasStretchBendParameters_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -236,6 +253,7 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "hasStretchBendTorsionParameters"
                 , hasStretchBendTorsionParameters_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -247,6 +265,7 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "hasStretchStretchParameters"
                 , hasStretchStretchParameters_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -258,6 +277,7 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "hasUreyBradleyParameters"
                 , hasUreyBradleyParameters_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -269,6 +289,7 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -307,6 +328,7 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -318,6 +340,7 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

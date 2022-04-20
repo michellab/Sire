@@ -26,6 +26,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_GeometryComponent_class(){
 
     { //::SireSystem::GeometryComponent
@@ -40,7 +42,7 @@ void register_GeometryComponent_class(){
             GeometryComponent_exposer.def( 
                 "component"
                 , component_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the constrained component" );
         
         }
@@ -64,6 +66,7 @@ void register_GeometryComponent_class(){
             GeometryComponent_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

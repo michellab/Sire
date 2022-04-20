@@ -44,6 +44,8 @@ SireFF::FFMolGroup __copy__(const SireFF::FFMolGroup &other){ return SireFF::FFM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FFMolGroup_class(){
 
     { //::SireFF::FFMolGroup
@@ -61,6 +63,7 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "accept"
                 , accept_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -73,6 +76,7 @@ void register_FFMolGroup_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -85,6 +89,7 @@ void register_FFMolGroup_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molviews") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -97,6 +102,7 @@ void register_FFMolGroup_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -109,6 +115,7 @@ void register_FFMolGroup_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -121,6 +128,7 @@ void register_FFMolGroup_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molview"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -133,6 +141,7 @@ void register_FFMolGroup_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molviews"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -145,6 +154,7 @@ void register_FFMolGroup_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -157,6 +167,7 @@ void register_FFMolGroup_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molgroup"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -169,6 +180,7 @@ void register_FFMolGroup_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -181,6 +193,7 @@ void register_FFMolGroup_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molviews") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -193,6 +206,7 @@ void register_FFMolGroup_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -205,6 +219,7 @@ void register_FFMolGroup_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -217,6 +232,7 @@ void register_FFMolGroup_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molview"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -229,6 +245,7 @@ void register_FFMolGroup_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molviews"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -241,6 +258,7 @@ void register_FFMolGroup_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molecules"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -253,6 +271,7 @@ void register_FFMolGroup_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molgroup"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -264,7 +283,7 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "forceField"
                 , forceField_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the forcefield that contains this molecule group" );
         
         }
@@ -276,6 +295,7 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "index"
                 , index_function_value
+                , bp::release_gil_policy()
                 , "Return the index of this group in the parent forcefield" );
         
         }
@@ -287,6 +307,7 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "needsAccepting"
                 , needsAccepting_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -325,6 +346,7 @@ void register_FFMolGroup_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -337,6 +359,7 @@ void register_FFMolGroup_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molviews") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -349,6 +372,7 @@ void register_FFMolGroup_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -361,6 +385,7 @@ void register_FFMolGroup_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -373,6 +398,7 @@ void register_FFMolGroup_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -385,6 +411,7 @@ void register_FFMolGroup_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molnums") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -397,6 +424,7 @@ void register_FFMolGroup_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -409,6 +437,7 @@ void register_FFMolGroup_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molviews") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -421,6 +450,7 @@ void register_FFMolGroup_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -433,6 +463,7 @@ void register_FFMolGroup_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -444,6 +475,7 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -456,6 +488,7 @@ void register_FFMolGroup_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -468,6 +501,7 @@ void register_FFMolGroup_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molviews") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -480,6 +514,7 @@ void register_FFMolGroup_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -492,6 +527,7 @@ void register_FFMolGroup_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -504,6 +540,7 @@ void register_FFMolGroup_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molview"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -516,6 +553,7 @@ void register_FFMolGroup_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molviews"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -528,6 +566,7 @@ void register_FFMolGroup_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molecules"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -540,6 +579,7 @@ void register_FFMolGroup_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molgroup"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -552,6 +592,7 @@ void register_FFMolGroup_class(){
                 "setName"
                 , setName_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Set the name of this molecule group" );
         
         }
@@ -563,6 +604,7 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -575,6 +617,7 @@ void register_FFMolGroup_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -587,6 +630,7 @@ void register_FFMolGroup_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -599,6 +643,7 @@ void register_FFMolGroup_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -610,6 +655,7 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

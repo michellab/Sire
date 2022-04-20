@@ -35,6 +35,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Integrator_class(){
 
     { //::SireMove::Integrator
@@ -50,6 +52,7 @@ void register_Integrator_class(){
                 "createWorkspace"
                 , createWorkspace_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -62,6 +65,7 @@ void register_Integrator_class(){
                 "createWorkspace"
                 , createWorkspace_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -73,6 +77,7 @@ void register_Integrator_class(){
             Integrator_exposer.def( 
                 "ensemble"
                 , ensemble_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -85,6 +90,7 @@ void register_Integrator_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("workspace"), bp::arg("nrg_component"), bp::arg("timestep"), bp::arg("nmoves"), bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -96,6 +102,7 @@ void register_Integrator_class(){
             Integrator_exposer.def( 
                 "isTimeReversible"
                 , isTimeReversible_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -119,6 +126,7 @@ void register_Integrator_class(){
             Integrator_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -130,6 +138,7 @@ void register_Integrator_class(){
             Integrator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

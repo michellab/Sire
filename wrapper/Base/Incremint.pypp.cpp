@@ -15,6 +15,8 @@ SireBase::Incremint __copy__(const SireBase::Incremint &other){ return SireBase:
 
 const char* pvt_get_name(const SireBase::Incremint&){ return "SireBase::Incremint";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Incremint_class(){
 
     { //::SireBase::Incremint
@@ -30,6 +32,7 @@ void register_Incremint_class(){
             Incremint_exposer.def( 
                 "increment"
                 , increment_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

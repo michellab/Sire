@@ -25,6 +25,8 @@ SireMM::CLJDelta __copy__(const SireMM::CLJDelta &other){ return SireMM::CLJDelt
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJDelta_class(){
 
     { //::SireMM::CLJDelta
@@ -41,6 +43,7 @@ void register_CLJDelta_class(){
             CLJDelta_exposer.def( 
                 "ID"
                 , ID_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -53,6 +56,7 @@ void register_CLJDelta_class(){
                 "assertIdenticalTo"
                 , assertIdenticalTo_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Assert that this CLJDelta is equal to other" );
         
         }
@@ -64,6 +68,7 @@ void register_CLJDelta_class(){
             CLJDelta_exposer.def( 
                 "changedAtoms"
                 , changedAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return difference between the old and new atoms. This returns the change,\nreturning only non-dummy atoms, with the parameters of the old atoms\nnegated so that a delta energy can be calculated easily" );
         
         }
@@ -75,6 +80,7 @@ void register_CLJDelta_class(){
             CLJDelta_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this change is empty (has no atoms or no change)" );
         
         }
@@ -86,6 +92,7 @@ void register_CLJDelta_class(){
             CLJDelta_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -98,6 +105,7 @@ void register_CLJDelta_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("deltas"), bp::arg("count") )
+                , bp::release_gil_policy()
                 , "Merge together the changed atoms from the n deltas from the passed array\ninto a tuple of the changed, old and new atoms. The resulting set of changed atoms will\nthus be able to be used to calculate energy changes from a lot of changed\natoms" );
         
         }
@@ -110,6 +118,7 @@ void register_CLJDelta_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("deltas") )
+                , bp::release_gil_policy()
                 , "Merge together the changed atoms from the passed deltas\ninto a tuple of changed, old and new atoms. The resulting set of changed atoms will\nthus be able to be used to calculate energy changes from a lot of changed\natoms" );
         
         }
@@ -122,6 +131,7 @@ void register_CLJDelta_class(){
                 "mergeChanged"
                 , mergeChanged_function_value
                 , ( bp::arg("deltas"), bp::arg("count") )
+                , bp::release_gil_policy()
                 , "Merge together the changed atoms from the n deltas from the passed array\ninto a single changed atoms object. The resulting set of changed atoms will\nthus be able to be used to calculate energy changes from a lot of changed\natoms" );
         
         }
@@ -134,6 +144,7 @@ void register_CLJDelta_class(){
                 "mergeChanged"
                 , mergeChanged_function_value
                 , ( bp::arg("deltas") )
+                , bp::release_gil_policy()
                 , "Merge together the changed atoms from the passed deltas\ninto a single changed atoms object. The resulting set of changed atoms will\nthus be able to be used to calculate energy changes from a lot of changed\natoms" );
         
         }
@@ -146,6 +157,7 @@ void register_CLJDelta_class(){
                 "mergeNew"
                 , mergeNew_function_value
                 , ( bp::arg("deltas"), bp::arg("count") )
+                , bp::release_gil_policy()
                 , "Merge together the new atoms from the n deltas from the passed array\ninto a single new atoms object. The resulting set of new atoms will\nthus be able to be used to calculate energy changes from a lot of changed\natoms" );
         
         }
@@ -158,6 +170,7 @@ void register_CLJDelta_class(){
                 "mergeNew"
                 , mergeNew_function_value
                 , ( bp::arg("deltas") )
+                , bp::release_gil_policy()
                 , "Merge together the new atoms from deltas\ninto a single new atoms object. The resulting set of new atoms will\nthus be able to be used to calculate energy changes from a lot of changed\natoms" );
         
         }
@@ -170,6 +183,7 @@ void register_CLJDelta_class(){
                 "mergeOld"
                 , mergeOld_function_value
                 , ( bp::arg("deltas"), bp::arg("count") )
+                , bp::release_gil_policy()
                 , "Merge together the old atoms from the n deltas from the passed array\ninto a single old atoms object. The resulting set of old atoms will\nthus be able to be used to calculate energy changes from a lot of changed\natoms" );
         
         }
@@ -182,6 +196,7 @@ void register_CLJDelta_class(){
                 "mergeOld"
                 , mergeOld_function_value
                 , ( bp::arg("deltas") )
+                , bp::release_gil_policy()
                 , "Merge together the old atoms from deltas\ninto a single old atoms object. The resulting set of old atoms will\nthus be able to be used to calculate energy changes from a lot of changed\natoms" );
         
         }
@@ -193,6 +208,7 @@ void register_CLJDelta_class(){
             CLJDelta_exposer.def( 
                 "newAtoms"
                 , newAtoms_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -204,6 +220,7 @@ void register_CLJDelta_class(){
             CLJDelta_exposer.def( 
                 "oldAtoms"
                 , oldAtoms_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -230,6 +247,7 @@ void register_CLJDelta_class(){
             CLJDelta_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -241,6 +259,7 @@ void register_CLJDelta_class(){
             CLJDelta_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -252,6 +271,7 @@ void register_CLJDelta_class(){
             CLJDelta_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

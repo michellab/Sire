@@ -28,6 +28,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Sampler_class(){
 
     { //::SireMove::Sampler
@@ -54,7 +56,7 @@ void register_Sampler_class(){
             Sampler_exposer.def( 
                 "group"
                 , group_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -66,6 +68,7 @@ void register_Sampler_class(){
             Sampler_exposer.def( 
                 "isBiased"
                 , isBiased_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this sampler is biased, i.e. picks some\nmolecules  views with a higher probability than others. If this\nis a biased sampler, then this will need to be accounted for in the\nMC acceptance test. If this is not a biased sampler, then every\nmolecule or view is chosen with equal probability" );
         
         }
@@ -77,7 +80,7 @@ void register_Sampler_class(){
             Sampler_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -90,6 +93,7 @@ void register_Sampler_class(){
                 "probabilityOf"
                 , probabilityOf_function_value
                 , ( bp::arg("molecule") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -102,6 +106,7 @@ void register_Sampler_class(){
                 "probabilityOfMolecule"
                 , probabilityOfMolecule_function_value
                 , ( bp::arg("molecule") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -113,6 +118,7 @@ void register_Sampler_class(){
             Sampler_exposer.def( 
                 "sample"
                 , sample_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -124,6 +130,7 @@ void register_Sampler_class(){
             Sampler_exposer.def( 
                 "sampleMolecule"
                 , sampleMolecule_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -136,6 +143,7 @@ void register_Sampler_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator used by this sampler" );
         
         }
@@ -148,6 +156,7 @@ void register_Sampler_class(){
                 "setGroup"
                 , setGroup_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Set the molecule group from which random molecules will be sampled" );
         
         }
@@ -159,6 +168,7 @@ void register_Sampler_class(){
             Sampler_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -171,6 +181,7 @@ void register_Sampler_class(){
                 "updateFrom"
                 , updateFrom_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Update this sampler so that it matches the state of the molecules\nin the System system" );
         
         }

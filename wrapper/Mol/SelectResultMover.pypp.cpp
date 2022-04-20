@@ -27,6 +27,8 @@ SireMol::SelectResultMover __copy__(const SireMol::SelectResultMover &other){ re
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SelectResultMover_class(){
 
     { //::SireMol::SelectResultMover
@@ -43,6 +45,7 @@ void register_SelectResultMover_class(){
             SelectResultMover_exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "Commit all of the moves" );
         
         }
@@ -69,6 +72,7 @@ void register_SelectResultMover_class(){
             SelectResultMover_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -93,6 +97,7 @@ void register_SelectResultMover_class(){
             SelectResultMover_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -104,6 +109,7 @@ void register_SelectResultMover_class(){
             SelectResultMover_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

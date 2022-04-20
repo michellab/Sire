@@ -36,6 +36,8 @@ SireMM::ImproperSymbols __copy__(const SireMM::ImproperSymbols &other){ return S
 
 const char* pvt_get_name(const SireMM::ImproperSymbols&){ return "SireMM::ImproperSymbols";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ImproperSymbols_class(){
 
     { //::SireMM::ImproperSymbols
@@ -50,7 +52,7 @@ void register_ImproperSymbols_class(){
             ImproperSymbols_exposer.def( 
                 "phi"
                 , phi_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the torsion 0-1-2-3" );
         
         }
@@ -62,7 +64,7 @@ void register_ImproperSymbols_class(){
             ImproperSymbols_exposer.def( 
                 "theta"
                 , theta_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the angle between the improper\nand the plane formed by atoms 1-3" );
         
         }

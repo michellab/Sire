@@ -39,6 +39,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_VelocityGenerator_class(){
 
     { //::SireMove::VelocityGenerator
@@ -54,6 +56,7 @@ void register_VelocityGenerator_class(){
                 "generate"
                 , generate_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -78,6 +81,7 @@ void register_VelocityGenerator_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator that may be used to help\ngenerate the initial velocities" );
         
         }
@@ -89,6 +93,7 @@ void register_VelocityGenerator_class(){
             VelocityGenerator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

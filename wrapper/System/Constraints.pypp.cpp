@@ -40,6 +40,8 @@ SireSystem::Constraints __copy__(const SireSystem::Constraints &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Constraints_class(){
@@ -61,6 +63,7 @@ void register_Constraints_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("constraint") )
+                , bp::release_gil_policy()
                 , "Add the passed constraint to this set - this is only added\nif it does not exist in this set" );
         
         }
@@ -73,6 +76,7 @@ void register_Constraints_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("constraints") )
+                , bp::release_gil_policy()
                 , "Add all of the passed constraints to this set. This only\nadds the constraints that are not already part of this set" );
         
         }
@@ -85,6 +89,7 @@ void register_Constraints_class(){
                 "apply"
                 , apply_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Apply all of the constraints to the passed system. This\nreturns a system that satisfies all of the constraints" );
         
         }
@@ -97,6 +102,7 @@ void register_Constraints_class(){
                 "areSatisfied"
                 , areSatisfied_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Return whether or not all of the constraints in this set are\nsatisfied in the passed system" );
         
         }
@@ -109,6 +115,7 @@ void register_Constraints_class(){
                 "assertSatisfied"
                 , assertSatisfied_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Assert that all of the constraints in this set are satisfied\nin the passed system\nThrow: SireSystem::constraint_error\n" );
         
         }
@@ -120,6 +127,7 @@ void register_Constraints_class(){
             Constraints_exposer.def( 
                 "constraints"
                 , constraints_function_value
+                , bp::release_gil_policy()
                 , "Return the list of all of the constraints in this set" );
         
         }
@@ -131,6 +139,7 @@ void register_Constraints_class(){
             Constraints_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of constraints in this set" );
         
         }
@@ -142,6 +151,7 @@ void register_Constraints_class(){
             Constraints_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether this is empty (contains no constraints)" );
         
         }
@@ -153,6 +163,7 @@ void register_Constraints_class(){
             Constraints_exposer.def( 
                 "nConstraints"
                 , nConstraints_function_value
+                , bp::release_gil_policy()
                 , "Return the number of constraints in this set" );
         
         }
@@ -180,7 +191,7 @@ void register_Constraints_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -193,6 +204,7 @@ void register_Constraints_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("constraint") )
+                , bp::release_gil_policy()
                 , "Remove the constraint constraint from this set - this\ndoes nothing if this constraint is not part of this set" );
         
         }
@@ -205,6 +217,7 @@ void register_Constraints_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("constraints") )
+                , bp::release_gil_policy()
                 , "Remove all of the constraints in constraints from this\nset - this ignores constraints that are not in this set" );
         
         }
@@ -217,6 +230,7 @@ void register_Constraints_class(){
                 "removeAt"
                 , removeAt_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Remove the constraint at index i" );
         
         }
@@ -228,6 +242,7 @@ void register_Constraints_class(){
             Constraints_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of constraints in this set" );
         
         }
@@ -239,6 +254,7 @@ void register_Constraints_class(){
             Constraints_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -250,6 +266,7 @@ void register_Constraints_class(){
             Constraints_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -15,6 +15,8 @@ SireUnits::Fahrenheit __copy__(const SireUnits::Fahrenheit &other){ return SireU
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Fahrenheit_class(){
 
     { //::SireUnits::Fahrenheit
@@ -34,6 +36,7 @@ void register_Fahrenheit_class(){
                 "convertFromInternal"
                 , convertFromInternal_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -45,6 +48,7 @@ void register_Fahrenheit_class(){
             Fahrenheit_exposer.def( 
                 "convertFromInternal"
                 , convertFromInternal_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -57,6 +61,7 @@ void register_Fahrenheit_class(){
                 "convertToInternal"
                 , convertToInternal_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }

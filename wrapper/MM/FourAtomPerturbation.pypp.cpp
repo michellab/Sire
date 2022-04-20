@@ -36,6 +36,8 @@ SireMM::FourAtomPerturbation __copy__(const SireMM::FourAtomPerturbation &other)
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FourAtomPerturbation_class(){
 
     { //::SireMM::FourAtomPerturbation
@@ -55,7 +57,7 @@ void register_FourAtomPerturbation_class(){
             FourAtomPerturbation_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the first of the four atoms whose potential is being changed" );
         
         }
@@ -67,7 +69,7 @@ void register_FourAtomPerturbation_class(){
             FourAtomPerturbation_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the second of the four atoms whose potential is being changed" );
         
         }
@@ -79,7 +81,7 @@ void register_FourAtomPerturbation_class(){
             FourAtomPerturbation_exposer.def( 
                 "atom2"
                 , atom2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the third of the four atoms whose potential is being changed" );
         
         }
@@ -91,7 +93,7 @@ void register_FourAtomPerturbation_class(){
             FourAtomPerturbation_exposer.def( 
                 "atom3"
                 , atom3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the fourth of the four atoms whose potential is being changed" );
         
         }
@@ -118,6 +120,7 @@ void register_FourAtomPerturbation_class(){
             FourAtomPerturbation_exposer.def( 
                 "requiredProperties"
                 , requiredProperties_function_value
+                , bp::release_gil_policy()
                 , "Return the properties required or changed by this perturbation" );
         
         }
@@ -129,6 +132,7 @@ void register_FourAtomPerturbation_class(){
             FourAtomPerturbation_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this perturbation" );
         
         }
@@ -140,6 +144,7 @@ void register_FourAtomPerturbation_class(){
             FourAtomPerturbation_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -152,6 +157,7 @@ void register_FourAtomPerturbation_class(){
                 "wouldChange"
                 , wouldChange_function_value
                 , ( bp::arg("molecule"), bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Return whether or not this perturbation with the passed values would\nchange the molecule molecule" );
         
         }

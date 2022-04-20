@@ -31,6 +31,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Accumulator_class(){
 
     { //::SireMaths::Accumulator
@@ -46,6 +48,7 @@ void register_Accumulator_class(){
                 "accumulate"
                 , accumulate_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Accumulate the value value onto the sample" );
         
         }
@@ -58,6 +61,7 @@ void register_Accumulator_class(){
                 "accumulate"
                 , accumulate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Accumulate many values" );
         
         }
@@ -70,6 +74,7 @@ void register_Accumulator_class(){
                 "accumulate"
                 , accumulate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Accumulate many values" );
         
         }
@@ -81,6 +86,7 @@ void register_Accumulator_class(){
             Accumulator_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Completely clear the statistics in this accumulator" );
         
         }
@@ -92,6 +98,7 @@ void register_Accumulator_class(){
             Accumulator_exposer.def( 
                 "nSamples"
                 , nSamples_function_value
+                , bp::release_gil_policy()
                 , "Return the number of values that have been sampled" );
         
         }
@@ -115,6 +122,7 @@ void register_Accumulator_class(){
             Accumulator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

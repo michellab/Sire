@@ -35,6 +35,8 @@ SireVol::CoordGroupEditor __copy__(const SireVol::CoordGroupEditor &other){ retu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_CoordGroupEditor_class(){
@@ -79,6 +81,7 @@ void register_CoordGroupEditor_class(){
             CoordGroupEditor_exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "Return a CoordGroup which is a copy of this group." );
         
         }
@@ -298,6 +301,7 @@ void register_CoordGroupEditor_class(){
             CoordGroupEditor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -309,6 +313,7 @@ void register_CoordGroupEditor_class(){
             CoordGroupEditor_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

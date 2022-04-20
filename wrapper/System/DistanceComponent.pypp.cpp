@@ -30,6 +30,8 @@ SireSystem::DistanceComponent __copy__(const SireSystem::DistanceComponent &othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_DistanceComponent_class(){
 
     { //::SireSystem::DistanceComponent
@@ -47,6 +49,7 @@ void register_DistanceComponent_class(){
             DistanceComponent_exposer.def( 
                 "nPoints"
                 , nPoints_function_value
+                , bp::release_gil_policy()
                 , "Return the number of points (2)" );
         
         }
@@ -74,7 +77,7 @@ void register_DistanceComponent_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ith point\nThrow: SireError::invalid_index\n" );
         
         }
@@ -86,7 +89,7 @@ void register_DistanceComponent_class(){
             DistanceComponent_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the first point between which the distance is calculated" );
         
         }
@@ -98,7 +101,7 @@ void register_DistanceComponent_class(){
             DistanceComponent_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the second point between which the distance is calculated" );
         
         }
@@ -110,7 +113,7 @@ void register_DistanceComponent_class(){
             DistanceComponent_exposer.def( 
                 "r"
                 , r_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol that represents the distance between the\ntwo points (r)" );
         
         }
@@ -122,6 +125,7 @@ void register_DistanceComponent_class(){
             DistanceComponent_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -133,6 +137,7 @@ void register_DistanceComponent_class(){
             DistanceComponent_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

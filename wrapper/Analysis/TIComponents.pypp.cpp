@@ -25,6 +25,8 @@ SireAnalysis::TIComponents __copy__(const SireAnalysis::TIComponents &other){ re
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_TIComponents_class(){
@@ -45,6 +47,7 @@ void register_TIComponents_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("gradients") )
+                , bp::release_gil_policy()
                 , "Add the passed set of component gradients. Note that these must be compatible\nwith any that are already in this set" );
         
         }
@@ -57,6 +60,7 @@ void register_TIComponents_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("gradients") )
+                , bp::release_gil_policy()
                 , "Add the passed set of component gradients. Note that these must be compatible\nwith any that are already in this set" );
         
         }
@@ -69,6 +73,7 @@ void register_TIComponents_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith set of ComponentGradients" );
         
         }
@@ -80,6 +85,7 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Remove all values from the histogram" );
         
         }
@@ -91,6 +97,7 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "conserveMemory"
                 , conserveMemory_function_value
+                , bp::release_gil_policy()
                 , "Conserve memory by sharing as much data as possible between the different iterations" );
         
         }
@@ -102,6 +109,7 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "conservesMemory"
                 , conservesMemory_function_value
+                , bp::release_gil_policy()
                 , "Whether or not this object conserves memory" );
         
         }
@@ -113,6 +121,7 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of iterations" );
         
         }
@@ -124,6 +133,7 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "gradients"
                 , gradients_function_value
+                , bp::release_gil_policy()
                 , "Return the raw list of component gradients" );
         
         }
@@ -135,6 +145,7 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "lambdaValues"
                 , lambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return a list of all lambda values that contain data" );
         
         }
@@ -147,6 +158,7 @@ void register_TIComponents_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("start"), bp::arg("end") )
+                , bp::release_gil_policy()
                 , "Merge (average) together the gradients from iteration start to iteration\nend inclusive" );
         
         }
@@ -159,6 +171,7 @@ void register_TIComponents_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("indicies") )
+                , bp::release_gil_policy()
                 , "Merge together the gradients from the iterations with the passed indicies" );
         
         }
@@ -170,6 +183,7 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "nComponents"
                 , nComponents_function_value
+                , bp::release_gil_policy()
                 , "Return the number of components in this collection (number of views)" );
         
         }
@@ -181,6 +195,7 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "nIterations"
                 , nIterations_function_value
+                , bp::release_gil_policy()
                 , "Return the number of iterations" );
         
         }
@@ -192,6 +207,7 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "nLambdaValues"
                 , nLambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return the number of lambda values" );
         
         }
@@ -203,6 +219,7 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "nSamples"
                 , nSamples_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of samples" );
         
         }
@@ -242,6 +259,7 @@ void register_TIComponents_class(){
                 "removeAt"
                 , removeAt_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Remove the data for iteration i. This sets the data equal to ComponentGradients()" );
         
         }
@@ -254,6 +272,7 @@ void register_TIComponents_class(){
                 "removeRange"
                 , removeRange_function_value
                 , ( bp::arg("start"), bp::arg("end") )
+                , bp::release_gil_policy()
                 , "Remove every iteration from start to end (inclusively). This sets\nthe data equal to ComponentGradients()" );
         
         }
@@ -266,6 +285,7 @@ void register_TIComponents_class(){
                 "rollingAverage"
                 , rollingAverage_function_value
                 , ( bp::arg("niterations") )
+                , bp::release_gil_policy()
                 , "Return a list of Gradients that represents the rolling average over niterations\niterations over this TI data set. If this data set contains 100 iterations, and\nwe calculate the rolling average over 50 iterations, then the returned Gradients\nwill be the average from 1-50, then 2-51, 3-52.....51-100" );
         
         }
@@ -278,6 +298,7 @@ void register_TIComponents_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("gradients") )
+                , bp::release_gil_policy()
                 , "Set the gradients for the ith iteration. Note that these must be compatible\nwith the gradients of the other iterations" );
         
         }
@@ -290,6 +311,7 @@ void register_TIComponents_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("gradients") )
+                , bp::release_gil_policy()
                 , "Set the gradients for the ith iteration. Note that these must be compatible\nwith the gradients of the other iterations" );
         
         }
@@ -301,6 +323,7 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of iterations" );
         
         }
@@ -312,6 +335,7 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -323,6 +347,7 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -334,6 +359,7 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

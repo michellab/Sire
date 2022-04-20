@@ -35,6 +35,8 @@ SireMol::RelFromNumber __copy__(const SireMol::RelFromNumber &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_RelFromNumber_class(){
 
     { //::SireMol::RelFromNumber
@@ -89,6 +91,7 @@ void register_RelFromNumber_class(){
             RelFromNumber_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

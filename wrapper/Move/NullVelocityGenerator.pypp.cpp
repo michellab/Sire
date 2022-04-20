@@ -41,6 +41,8 @@ SireMove::NullVelocityGenerator __copy__(const SireMove::NullVelocityGenerator &
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullVelocityGenerator_class(){
 
     { //::SireMove::NullVelocityGenerator
@@ -57,6 +59,7 @@ void register_NullVelocityGenerator_class(){
                 "generate"
                 , generate_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Zero velocities are generated" );
         
         }
@@ -83,6 +86,7 @@ void register_NullVelocityGenerator_class(){
             NullVelocityGenerator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -41,6 +41,8 @@ SireMove::MaxwellBoltzmann __copy__(const SireMove::MaxwellBoltzmann &other){ re
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MaxwellBoltzmann_class(){
 
     { //::SireMove::MaxwellBoltzmann
@@ -58,6 +60,7 @@ void register_MaxwellBoltzmann_class(){
                 "generate"
                 , generate_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Generate completely random velocities" );
         
         }
@@ -97,6 +100,7 @@ void register_MaxwellBoltzmann_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("rangenerator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator used to generate the random velocities" );
         
         }
@@ -109,6 +113,7 @@ void register_MaxwellBoltzmann_class(){
                 "setTemperature"
                 , setTemperature_function_value
                 , ( bp::arg("temperature") )
+                , bp::release_gil_policy()
                 , "Set the temperature at which the velocities will be generated" );
         
         }
@@ -120,6 +125,7 @@ void register_MaxwellBoltzmann_class(){
             MaxwellBoltzmann_exposer.def( 
                 "temperature"
                 , temperature_function_value
+                , bp::release_gil_policy()
                 , "Return the temperature for which the velocities will be generated" );
         
         }
@@ -131,6 +137,7 @@ void register_MaxwellBoltzmann_class(){
             MaxwellBoltzmann_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

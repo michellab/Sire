@@ -24,6 +24,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FFComponent_class(){
 
     { //::SireFF::FFComponent
@@ -38,6 +40,7 @@ void register_FFComponent_class(){
             FFComponent_exposer.def( 
                 "componentName"
                 , componentName_function_value
+                , bp::release_gil_policy()
                 , "Return the name of the component of the potential energy\nsurface that this symbol represents" );
         
         }
@@ -49,6 +52,7 @@ void register_FFComponent_class(){
             FFComponent_exposer.def( 
                 "forceFieldName"
                 , forceFieldName_function_value
+                , bp::release_gil_policy()
                 , "Return the name of the forcefield that owns this component" );
         
         }
@@ -60,6 +64,7 @@ void register_FFComponent_class(){
             FFComponent_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -71,7 +76,7 @@ void register_FFComponent_class(){
             FFComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -83,6 +88,7 @@ void register_FFComponent_class(){
             FFComponent_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -94,6 +100,7 @@ void register_FFComponent_class(){
             FFComponent_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

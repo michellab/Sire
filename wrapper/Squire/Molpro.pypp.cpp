@@ -51,6 +51,8 @@ Squire::Molpro __copy__(const Squire::Molpro &other){ return Squire::Molpro(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Molpro_class(){
 
     { //::Squire::Molpro
@@ -104,6 +106,7 @@ void register_Molpro_class(){
                 "environment"
                 , environment_function_value
                 , ( bp::arg("variable") )
+                , bp::release_gil_policy()
                 , "Return the value of the explicitly set environmental variable variable.\nA null string is returned if this variable has not been set\nexplicitly (this does not mean the variable doesnt exist - merely\nthat a specific value has not been set)" );
         
         }
@@ -115,6 +118,7 @@ void register_Molpro_class(){
             Molpro_exposer.def( 
                 "executable"
                 , executable_function_value
+                , bp::release_gil_policy()
                 , "Return the executable (full path and also arguments) to be used. This\nis null if the executable is searched for in the path" );
         
         }
@@ -138,6 +142,7 @@ void register_Molpro_class(){
             Molpro_exposer.def( 
                 "latticeInBohrRadii"
                 , latticeInBohrRadii_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not Sire will write the lattice charge coordinates in units\nof bohr radii (otherwise they will be in angstroms)" );
         
         }
@@ -149,6 +154,7 @@ void register_Molpro_class(){
             Molpro_exposer.def( 
                 "maximumRunTime"
                 , maximumRunTime_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum runtime allowed for a molpro job, in milliseconds" );
         
         }
@@ -160,6 +166,7 @@ void register_Molpro_class(){
             Molpro_exposer.def( 
                 "memoryRequirement"
                 , memoryRequirement_function_value
+                , bp::release_gil_policy()
                 , "Return the memory requirement that has been set for this job (in bytes)" );
         
         }
@@ -199,6 +206,7 @@ void register_Molpro_class(){
                 "setBasisSet"
                 , setBasisSet_function_value
                 , ( bp::arg("basis_set") )
+                , bp::release_gil_policy()
                 , "Set the string representation of the basis set to be used\nduring the calculation. This will substitute for @BASIS_SET@ in\nthe energy and force command file templates." );
         
         }
@@ -211,6 +219,7 @@ void register_Molpro_class(){
                 "setEnergyTemplate"
                 , setEnergyTemplate_function_value
                 , ( bp::arg("energy_template") )
+                , bp::release_gil_policy()
                 , "Set the template for the command file to be used to get\nMolpro to calculate an energy. The following tags will\n" );
         
         }
@@ -223,6 +232,7 @@ void register_Molpro_class(){
                 "setEnvironment"
                 , setEnvironment_function_value
                 , ( bp::arg("variable"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the environmental variable variable to have the value value\nwhen the Molpro executable is run. This replaces any existing\nvalue of this environmental variable" );
         
         }
@@ -235,6 +245,7 @@ void register_Molpro_class(){
                 "setExecutable"
                 , setExecutable_function_value
                 , ( bp::arg("molpro_exe") )
+                , bp::release_gil_policy()
                 , "Set the Molpro executable (full path and also arguments) to be used" );
         
         }
@@ -247,6 +258,7 @@ void register_Molpro_class(){
                 "setForceTemplate"
                 , setForceTemplate_function_value
                 , ( bp::arg("force_template") )
+                , bp::release_gil_policy()
                 , "Set the template for the command file to be used to get\nMolpro to calculate the forces. The following tags will\n" );
         
         }
@@ -259,6 +271,7 @@ void register_Molpro_class(){
                 "setLatticeInBohrRadii"
                 , setLatticeInBohrRadii_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Tell Sire that Molpro requires lattice charges to be in units of bohr radii\nin the command file (otherwise they are in angstroms)" );
         
         }
@@ -271,6 +284,7 @@ void register_Molpro_class(){
                 "setMaximumRunTime"
                 , setMaximumRunTime_function_value
                 , ( bp::arg("max_runtime") )
+                , bp::release_gil_policy()
                 , "Set the maximum allowed runtime for the molpro job - this is used\nto detect hangs - if the molpro job takes longer than this\ntime then it is killed and an exception raised. The maximum\nruntime is measured in milliseconds" );
         
         }
@@ -283,6 +297,7 @@ void register_Molpro_class(){
                 "setMemoryRequirement"
                 , setMemoryRequirement_function_value
                 , ( bp::arg("nbytes") )
+                , bp::release_gil_policy()
                 , "Set the memory requirement (in bytes) that will be reserved for use\nby molpro. You will need to set this if the default amount\n(8000000 floating point words ~ 32MB) is not enough. Be careful\nnot to allocate too much though or you will be swapping all of the time" );
         
         }
@@ -295,6 +310,7 @@ void register_Molpro_class(){
                 "setMethod"
                 , setMethod_function_value
                 , ( bp::arg("method") )
+                , bp::release_gil_policy()
                 , "Set the QM method to be used to calculate the energy or\nforce (e.g. HF, df-ks,b3lyp). This will substitute for\n@QM_METHOD@ in the energy and force command file templates" );
         
         }
@@ -307,6 +323,7 @@ void register_Molpro_class(){
                 "setTotalCharge"
                 , setTotalCharge_function_value
                 , ( bp::arg("charge") )
+                , bp::release_gil_policy()
                 , "Set the total charge of the system (in unit charges)" );
         
         }
@@ -318,6 +335,7 @@ void register_Molpro_class(){
             Molpro_exposer.def( 
                 "supportsLatticeCharges"
                 , supportsLatticeCharges_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -329,6 +347,7 @@ void register_Molpro_class(){
             Molpro_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -340,6 +359,7 @@ void register_Molpro_class(){
             Molpro_exposer.def( 
                 "totalCharge"
                 , totalCharge_function_value
+                , bp::release_gil_policy()
                 , "Return the total charge of the system" );
         
         }
@@ -351,6 +371,7 @@ void register_Molpro_class(){
             Molpro_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

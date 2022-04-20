@@ -36,6 +36,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_VolumeChanger_class(){
 
     { //::SireMove::VolumeChanger
@@ -51,6 +53,7 @@ void register_VolumeChanger_class(){
                 "changeVolume"
                 , changeVolume_function_value
                 , ( bp::arg("system"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Change the volume of the passed system system by delta, using\nthe optionally supplied property map to find the names of the\nnecessary properties\nThis returns the number of molecules which were involved in\nthe volume change\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::unsupported\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -74,7 +77,7 @@ void register_VolumeChanger_class(){
             VolumeChanger_exposer.def( 
                 "groupID"
                 , groupID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ID of the molecule group(s) that will be affected\nby this volume changer" );
         
         }
@@ -99,6 +102,7 @@ void register_VolumeChanger_class(){
                 "randomChangeVolume"
                 , randomChangeVolume_function_value
                 , ( bp::arg("system"), bp::arg("maxvolchange"), bp::arg("new_bias"), bp::arg("old_bias"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Change the volume of the passed system system by a random\namount between -maxvolchange and maxvolchange, using\nthe optionally supplied property map to find the names of the\nnecessary properties.\nIf this move is biased, then this sets old_bias to the\nbias before the move, and new_bias to the bias afterwards.\nThis returns the number of molecules which were involved in\nthe volume change\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::unsupported\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -111,6 +115,7 @@ void register_VolumeChanger_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator that may be used to generate\nnew volumes" );
         
         }
@@ -123,6 +128,7 @@ void register_VolumeChanger_class(){
                 "setGroup"
                 , setGroup_function_value
                 , ( bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Set the ID of the molecule group(s) that will be affected by\nthis volume changer" );
         
         }
@@ -135,6 +141,7 @@ void register_VolumeChanger_class(){
                 "setGroup"
                 , setGroup_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Set the molecule group that is affected by this volume changer\n- this will match the group based on its molecule group number" );
         
         }
@@ -147,6 +154,7 @@ void register_VolumeChanger_class(){
                 "setVolume"
                 , setVolume_function_value
                 , ( bp::arg("system"), bp::arg("volume"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -158,6 +166,7 @@ void register_VolumeChanger_class(){
             VolumeChanger_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

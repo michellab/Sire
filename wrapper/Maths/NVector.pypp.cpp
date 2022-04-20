@@ -29,6 +29,8 @@ SireMaths::NVector __copy__(const SireMaths::NVector &other){ return SireMaths::
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_NVector_class(){
@@ -51,6 +53,7 @@ void register_NVector_class(){
                 "assertNColumns"
                 , assertNColumns_function_value
                 , ( bp::arg("ncolumns") )
+                , bp::release_gil_policy()
                 , "Assert that this column vector has ncolumns columns - note\nthat this is a column vector, so only has 1 column\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -63,6 +66,7 @@ void register_NVector_class(){
                 "assertNRows"
                 , assertNRows_function_value
                 , ( bp::arg("nrows") )
+                , bp::release_gil_policy()
                 , "Assert that this column vector has nrows rows\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -75,6 +79,7 @@ void register_NVector_class(){
                 "assertValidIndex"
                 , assertValidIndex_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Assert that the index i is valid\nThrow: SireError::invalid_index\n" );
         
         }
@@ -87,6 +92,7 @@ void register_NVector_class(){
                 "assertValidIndex"
                 , assertValidIndex_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Assert that the index [i,j] is valid\nThrow: SireError::invalid_index\n" );
         
         }
@@ -98,6 +104,7 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of values in this vector" );
         
         }
@@ -110,6 +117,7 @@ void register_NVector_class(){
                 "cross"
                 , cross_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return the cross product of this vector with other\nThrow: SireError::incompatible_error\nThrow: SireMaths::domain_error\n" );
         
         }
@@ -122,6 +130,7 @@ void register_NVector_class(){
                 "dot"
                 , dot_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return the dot product of this vector with other\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -133,6 +142,7 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "isZero"
                 , isZero_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a zero vector" );
         
         }
@@ -144,6 +154,7 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "length"
                 , length_function_value
+                , bp::release_gil_policy()
                 , "Return the length of this vector" );
         
         }
@@ -155,6 +166,7 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "length2"
                 , length2_function_value
+                , bp::release_gil_policy()
                 , "Return the length squared of this vector" );
         
         }
@@ -166,6 +178,7 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "nColumns"
                 , nColumns_function_value
+                , bp::release_gil_policy()
                 , "Return the number of columns in this column vector (0 or 1)" );
         
         }
@@ -177,6 +190,7 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "nRows"
                 , nRows_function_value
+                , bp::release_gil_policy()
                 , "Return the number of rows in this column vector" );
         
         }
@@ -188,6 +202,7 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "normalise"
                 , normalise_function_value
+                , bp::release_gil_policy()
                 , "Normalise this vector\nThrow: SireMaths::domain_error\n" );
         
         }
@@ -272,6 +287,7 @@ void register_NVector_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the value at [i,0] to value\nThrow: SireError::invalid_index\n" );
         
         }
@@ -284,6 +300,7 @@ void register_NVector_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the value at [i,j] to value\nThrow: SireError::invalid_index\n" );
         
         }
@@ -296,6 +313,7 @@ void register_NVector_class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set all values in this vector to value" );
         
         }
@@ -307,6 +325,7 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of values in this vector" );
         
         }
@@ -318,6 +337,7 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "sum"
                 , sum_function_value
+                , bp::release_gil_policy()
                 , "Return the sum of the elements of this vector" );
         
         }
@@ -329,6 +349,7 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this vector" );
         
         }
@@ -340,6 +361,7 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "transpose"
                 , transpose_function_value
+                , bp::release_gil_policy()
                 , "Return the transpose of this column vector (a row vector, which\nis implemented in this code as a NMatrix)" );
         
         }
@@ -351,6 +373,7 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -362,6 +385,7 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -19,6 +19,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_ArrayProperty_Vector__class(){
@@ -37,6 +39,7 @@ void register_ArrayProperty_Vector__class(){
                 "append"
                 , append_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -50,6 +53,7 @@ void register_ArrayProperty_Vector__class(){
                 "append"
                 , append_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -62,6 +66,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "array"
                 , array_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -75,6 +80,7 @@ void register_ArrayProperty_Vector__class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -87,6 +93,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -99,6 +106,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -111,6 +119,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "empty"
                 , empty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -124,6 +133,7 @@ void register_ArrayProperty_Vector__class(){
                 "getitem"
                 , getitem_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -137,6 +147,7 @@ void register_ArrayProperty_Vector__class(){
                 "insert"
                 , insert_function_value
                 , ( bp::arg("i"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -149,6 +160,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -162,6 +174,7 @@ void register_ArrayProperty_Vector__class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("from"), bp::arg("to") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -187,6 +200,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "pop_back"
                 , pop_back_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -199,6 +213,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "pop_front"
                 , pop_front_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -212,6 +227,7 @@ void register_ArrayProperty_Vector__class(){
                 "prepend"
                 , prepend_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -225,6 +241,7 @@ void register_ArrayProperty_Vector__class(){
                 "push_back"
                 , push_back_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -238,6 +255,7 @@ void register_ArrayProperty_Vector__class(){
                 "push_front"
                 , push_front_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -251,6 +269,7 @@ void register_ArrayProperty_Vector__class(){
                 "removeAt"
                 , removeAt_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -263,6 +282,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "removeFirst"
                 , removeFirst_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -275,6 +295,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "removeLast"
                 , removeLast_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -288,6 +309,7 @@ void register_ArrayProperty_Vector__class(){
                 "replace"
                 , replace_function_value
                 , ( bp::arg("i"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -300,6 +322,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -313,6 +336,7 @@ void register_ArrayProperty_Vector__class(){
                 "swap"
                 , swap_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -326,6 +350,7 @@ void register_ArrayProperty_Vector__class(){
                 "swap"
                 , swap_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -339,6 +364,7 @@ void register_ArrayProperty_Vector__class(){
                 "takeAt"
                 , takeAt_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -351,6 +377,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "takeFirst"
                 , takeFirst_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -363,6 +390,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "takeLast"
                 , takeLast_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -375,6 +403,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "toList"
                 , toList_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -387,6 +416,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -399,6 +429,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "toVector"
                 , toVector_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -411,6 +442,7 @@ void register_ArrayProperty_Vector__class(){
             ArrayProperty_Vector__exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

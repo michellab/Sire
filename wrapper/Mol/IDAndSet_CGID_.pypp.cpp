@@ -55,6 +55,8 @@ SireID::IDAndSet<SireMol::CGID> __copy__(const SireID::IDAndSet<SireMol::CGID> &
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_IDAndSet_CGID__class(){
 
     { //::SireID::IDAndSet< SireMol::CGID >
@@ -88,6 +90,7 @@ void register_IDAndSet_CGID__class(){
             IDAndSet_CGID__exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -100,6 +103,7 @@ void register_IDAndSet_CGID__class(){
             IDAndSet_CGID__exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -113,6 +117,7 @@ void register_IDAndSet_CGID__class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("obj") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -159,6 +164,7 @@ void register_IDAndSet_CGID__class(){
             IDAndSet_CGID__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -171,6 +177,7 @@ void register_IDAndSet_CGID__class(){
             IDAndSet_CGID__exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -183,6 +190,7 @@ void register_IDAndSet_CGID__class(){
             IDAndSet_CGID__exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

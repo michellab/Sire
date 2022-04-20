@@ -10,8 +10,6 @@ namespace bp = boost::python;
 
 #include "SireBase/savestate.h"
 
-#include "SireBase/slice.h"
-
 #include "SireError/errors.h"
 
 #include "SireFF/energytable.h"
@@ -66,11 +64,15 @@ namespace bp = boost::python;
 
 #include "system.h"
 
+#include "SireBase/slice.h"
+
 SireSystem::System __copy__(const SireSystem::System &other){ return SireSystem::System(other); }
 
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 #include "Helpers/len.hpp"
 
@@ -102,6 +104,7 @@ void register_System_class(){
             System_exposer.def( 
                 "accept"
                 , accept_function_value
+                , bp::release_gil_policy()
                 , "Tell all of the forcefields that the last move was accepted. This allows\nany cacheing or use of temporary workspaces to be committed" );
         
         }
@@ -114,6 +117,7 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("name"), bp::arg("monitor"), bp::arg("frequency")=(int)(1) )
+                , bp::release_gil_policy()
                 , "Add a system monitor monitor, identified by the name name, which\nwill be updated every frequency steps.\nThrow: SireSystem::duplicate_monitor\n" );
         
         }
@@ -126,6 +130,7 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("monitors") )
+                , bp::release_gil_policy()
                 , "Add the monitors in monitors to this system\nThrow: SireSystem::duplicate_monitor\n" );
         
         }
@@ -138,6 +143,7 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("monitors"), bp::arg("frequency") )
+                , bp::release_gil_policy()
                 , "Add the monitors in monitors, setting the frequency of the\nnew monitors to frequency\nThrow: SireSystem::duplicate_monitor\n" );
         
         }
@@ -150,6 +156,7 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("forcefield") )
+                , bp::release_gil_policy()
                 , "Add the forcefield forcefield to this system. This will raise\nan exception if this forcefield (or one with the same name)\nis already present in this set. Note that if the added\nforcefield will be updated to contain the versions of\nany molecules that are already present in any of the\nother forcefields.\nThrow: SireFF::duplicate_forcefield\nThrow: SireMol::duplicate_group\n" );
         
         }
@@ -162,6 +169,7 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Add the molecule group molgroup to this system. If this is\na molecule group that is part of a forcefield, then the entire\nforcefield will be added to this system. This will raise\nan exception if this molecule group is already present in\nthis system. Note that the added molecule group will be\nupdated to contain the version of the any molecules that\nare already present in this system\nThrow: SireFF::duplicate_forcefield\nThrow: SireMol::duplicate_group\n" );
         
         }
@@ -174,6 +182,7 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("constraint") )
+                , bp::release_gil_policy()
                 , "Add the passed constraint to the system" );
         
         }
@@ -186,6 +195,7 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("constraints") )
+                , bp::release_gil_policy()
                 , "Add the passed constraint to the system" );
         
         }
@@ -198,6 +208,7 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molview"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add the molecule viewed in molview to the molecule groups\nidentified by the ID mgid. The supplied property map\nis used to find the properties required by any forcefields\nthat this molecule may be added to. The version of the molecule\nalready present in this system is used, if such a molecule exists.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -210,6 +221,7 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add the views of the molecule in molviews to the molecule groups\nidentified by the ID mgid. The supplied property map\nis used to find the properties required by any forcefields\nthat this molecule may be added to. The version of the molecule\nalready present in this system is used, if such a molecule exists.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -222,6 +234,7 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add the molecules viewed in molecules to the molecule groups\nidentified by the ID mgid. The supplied property map\nis used to find the properties required by any forcefields\nthat this molecule may be added to. The version of the molecule\nalready present in this system is used, if such a molecule exists.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -234,6 +247,7 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add the molecules in the molecule group molgroup to the molecule groups\nidentified by the ID mgid. The supplied property map\nis used to find the properties required by any forcefields\nthat this molecule may be added to. The version of the molecule\nalready present in this system is used, if such a molecule exists.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -246,6 +260,7 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molview"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Convenient overload of System::add that uses the default locations\nto find any necessary properties.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -258,6 +273,7 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Convenient overload of System::add that uses the default locations\nto find any necessary properties.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -270,6 +286,7 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Convenient overload of System::add that uses the default locations\nto find any necessary properties.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -282,6 +299,7 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Convenient overload of System::add that uses the default locations\nto find any necessary properties.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -294,6 +312,7 @@ void register_System_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molview"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add the view of the molecule in molview to the groups\nidentified by mgid. This only adds the view to a group\nif it doesnt already exist in the group. The version\nof the molecule already present in this set is used if\nsuch a molecule already exists. The supplied property map\nis used to find the properties required by any forcefields\nthat this molecule may be added to.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -306,6 +325,7 @@ void register_System_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add the views of the molecule in molviews to the groups\nidentified by mgid. This only adds the view to a group\nif it doesnt already exist in the group. The version\nof the molecule already present in this set is used if\nsuch a molecule already exists. The supplied property map\nis used to find the properties required by any forcefields\nthat this molecule may be added to.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -318,6 +338,7 @@ void register_System_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add the views of the molecules in molecules to the groups\nidentified by mgid. This only adds the view to a group\nif it doesnt already exist in the group. The version\nof the molecule already present in this set is used if\nsuch a molecule already exists. The supplied property map\nis used to find the properties required by any forcefields\nthat this molecule may be added to.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -330,6 +351,7 @@ void register_System_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Add the view of the molecules in the group molgroup to the groups\nidentified by mgid. This only adds the view to a group\nif it doesnt already exist in the group. The version\nof the molecule already present in this set is used if\nsuch a molecule already exists. The supplied property map\nis used to find the properties required by any forcefields\nthat this molecule may be added to.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -342,6 +364,7 @@ void register_System_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molview"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Convenient overload of System::addIfUnique that uses the default locations\nto find any necessary properties.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -354,6 +377,7 @@ void register_System_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Convenient overload of System::addIfUnique that uses the default locations\nto find any necessary properties.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -366,6 +390,7 @@ void register_System_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Convenient overload of System::addIfUnique that uses the default locations\nto find any necessary properties.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -378,6 +403,7 @@ void register_System_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Convenient overload of System::addIfUnique that uses the default locations\nto find any necessary properties.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -389,6 +415,7 @@ void register_System_class(){
             System_exposer.def( 
                 "applyConstraints"
                 , applyConstraints_function_value
+                , bp::release_gil_policy()
                 , "Apply the system (and molecule) constraints" );
         
         }
@@ -401,7 +428,7 @@ void register_System_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the forcefield with ID ffid in this system\nThrow: SireFF::missing_forcefield\nThrow: SireFF::duplicate_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
@@ -414,7 +441,7 @@ void register_System_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("monid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the monitor at ID monid\nThrow: SireSystem::missing_monitor\nThrow: SireSystem::duplicate_monitor\nThrow: SireError::invalid_index\n" );
         
         }
@@ -427,7 +454,7 @@ void register_System_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "overloading MolGroupsBase virtual functions" );
         
         }
@@ -439,6 +466,7 @@ void register_System_class(){
             System_exposer.def( 
                 "builtinProperties"
                 , builtinProperties_function_value
+                , bp::release_gil_policy()
                 , "Return the values of all built-in properties of this system" );
         
         }
@@ -451,7 +479,7 @@ void register_System_class(){
                 "builtinProperty"
                 , builtinProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the built-in property at name. This will by-pass any\nuser-supplied property with this name, and will raise an\nexception if there is no built-in property with this name\nThrow: SireBase::missing_property\n" );
         
         }
@@ -463,6 +491,7 @@ void register_System_class(){
             System_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Completely clear all statistics held in the monitors" );
         
         }
@@ -475,6 +504,7 @@ void register_System_class(){
                 "clearStatistics"
                 , clearStatistics_function_value
                 , ( bp::arg("monid") )
+                , bp::release_gil_policy()
                 , "Clear the statistics of the monitors that match the ID monid.\nThis does nothing if there are no matching monitors" );
         
         }
@@ -486,6 +516,7 @@ void register_System_class(){
             System_exposer.def( 
                 "collectStats"
                 , collectStats_function_value
+                , bp::release_gil_policy()
                 , "Collect statistics about the current configuration" );
         
         }
@@ -498,6 +529,7 @@ void register_System_class(){
                 "componentExpression"
                 , componentExpression_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the expression that defines the component represented\nby the symbol symbol\nThrow: SireFF::missing_component\n" );
         
         }
@@ -510,6 +542,7 @@ void register_System_class(){
                 "componentExpressions"
                 , componentExpressions_function_value
                 , ( bp::arg("symbols") )
+                , bp::release_gil_policy()
                 , "Return the expressions that define the components whose\nsymbols are in symbols\nThrow: SireFF::missing_component\n" );
         
         }
@@ -521,6 +554,7 @@ void register_System_class(){
             System_exposer.def( 
                 "componentExpressions"
                 , componentExpressions_function_value
+                , bp::release_gil_policy()
                 , "Return all of the expressions that define all of the components\nof this system" );
         
         }
@@ -532,6 +566,7 @@ void register_System_class(){
             System_exposer.def( 
                 "componentSymbols"
                 , componentSymbols_function_value
+                , bp::release_gil_policy()
                 , "Return all of the symbols that represent the constant and\nenergy components of this system" );
         
         }
@@ -544,6 +579,7 @@ void register_System_class(){
                 "componentValue"
                 , componentValue_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the value of the energy or constant component\nwith symbol symbol\nThrow: SireFF::missing_component\n" );
         
         }
@@ -555,6 +591,7 @@ void register_System_class(){
             System_exposer.def( 
                 "componentValues"
                 , componentValues_function_value
+                , bp::release_gil_policy()
                 , "Return the values of all components of this system\n(constant components and energies)" );
         
         }
@@ -567,6 +604,7 @@ void register_System_class(){
                 "componentValues"
                 , componentValues_function_value
                 , ( bp::arg("symbols") )
+                , bp::release_gil_policy()
                 , "Retunr the value of the energy or constant component values\nwhose symbols are in symbols\nThrow: SireFF::missing_component\n" );
         
         }
@@ -579,7 +617,7 @@ void register_System_class(){
                 "compoundProperty"
                 , compoundProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the raw compound property with name name - this returns\nthe property representing the link, or the combined property,\nand raises an exception if a compound property with this name\ndoes not exist\nThrow: SireBase::missing_property\n" );
         
         }
@@ -592,6 +630,7 @@ void register_System_class(){
                 "constant"
                 , constant_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "Return the constant value for the constant component component\nThrow: SireFF::missing_component\n" );
         
         }
@@ -603,6 +642,7 @@ void register_System_class(){
             System_exposer.def( 
                 "constantComponents"
                 , constantComponents_function_value
+                , bp::release_gil_policy()
                 , "Return the values of all constant components of this system" );
         
         }
@@ -615,6 +655,7 @@ void register_System_class(){
                 "constantExpression"
                 , constantExpression_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the expression that defines the constant component with\nsymbol symbol\nThrow: SireFF::missing_component\n" );
         
         }
@@ -627,6 +668,7 @@ void register_System_class(){
                 "constantExpressions"
                 , constantExpressions_function_value
                 , ( bp::arg("symbols") )
+                , bp::release_gil_policy()
                 , "Return the expressions that define the constant components\nwhose symbols are in symbols\nThrow: SireFF::missing_component\n" );
         
         }
@@ -638,6 +680,7 @@ void register_System_class(){
             System_exposer.def( 
                 "constantExpressions"
                 , constantExpressions_function_value
+                , bp::release_gil_policy()
                 , "Return all of the expressions that define the constant components\nof this system" );
         
         }
@@ -649,6 +692,7 @@ void register_System_class(){
             System_exposer.def( 
                 "constantSymbols"
                 , constantSymbols_function_value
+                , bp::release_gil_policy()
                 , "Return the symbols that represent constant components of this system" );
         
         }
@@ -660,6 +704,7 @@ void register_System_class(){
             System_exposer.def( 
                 "constants"
                 , constants_function_value
+                , bp::release_gil_policy()
                 , "Return the values of all constant components in this system" );
         
         }
@@ -672,6 +717,7 @@ void register_System_class(){
                 "constants"
                 , constants_function_value
                 , ( bp::arg("components") )
+                , bp::release_gil_policy()
                 , "Return the values of the constant components whose symbols\nare in components\nThrow: SireFF::missing_component\n" );
         
         }
@@ -695,6 +741,7 @@ void register_System_class(){
             System_exposer.def( 
                 "constraintsSatisfied"
                 , constraintsSatisfied_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the constraints are satisfied" );
         
         }
@@ -707,6 +754,7 @@ void register_System_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not any of the forcefields contain a property called name" );
         
         }
@@ -719,6 +767,7 @@ void register_System_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("ffid"), bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not any of the forcefields identified by the ID ffid\ncontain a property called name" );
         
         }
@@ -731,6 +780,7 @@ void register_System_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not any of the forcefields contain a property called name" );
         
         }
@@ -743,6 +793,7 @@ void register_System_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("ffid"), bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not any of the forcefields identified by the ID ffid\ncontain a property called name" );
         
         }
@@ -754,6 +805,7 @@ void register_System_class(){
             System_exposer.def( 
                 "energies"
                 , energies_function_value
+                , bp::release_gil_policy()
                 , "Return the energies of all energy components in this system" );
         
         }
@@ -766,6 +818,7 @@ void register_System_class(){
                 "energies"
                 , energies_function_value
                 , ( bp::arg("components") )
+                , bp::release_gil_policy()
                 , "Return the energies of the energy components of this system whose\nsymbols are in components\nThrow: SireFF::missing_component\n" );
         
         }
@@ -777,6 +830,7 @@ void register_System_class(){
             System_exposer.def( 
                 "energy"
                 , energy_function_value
+                , bp::release_gil_policy()
                 , "Return the total energy of this system." );
         
         }
@@ -789,6 +843,7 @@ void register_System_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "Return the total energy of the energy component in this system\nthat is identified by the energy component component\nThrow: SireFF::missing_component\n" );
         
         }
@@ -801,6 +856,7 @@ void register_System_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("scale_energy")=1 )
+                , bp::release_gil_policy()
                 , "Return the total energytable in this system\n" );
         
         }
@@ -813,6 +869,7 @@ void register_System_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("component"), bp::arg("scale_energy")=1 )
+                , bp::release_gil_policy()
                 , "Return the total energytable of the energy component in this system\nthat is identified by the energy component component\n" );
         
         }
@@ -824,6 +881,7 @@ void register_System_class(){
             System_exposer.def( 
                 "energyComponents"
                 , energyComponents_function_value
+                , bp::release_gil_policy()
                 , "Return all of the energy components of this system" );
         
         }
@@ -836,6 +894,7 @@ void register_System_class(){
                 "energyExpression"
                 , energyExpression_function_value
                 , ( bp::arg("expression") )
+                , bp::release_gil_policy()
                 , "Return the energy expression for the energy component component\nThrow: SireFF::missing_component\n" );
         
         }
@@ -848,6 +907,7 @@ void register_System_class(){
                 "energyExpressions"
                 , energyExpressions_function_value
                 , ( bp::arg("symbols") )
+                , bp::release_gil_policy()
                 , "Return the energy expressions for the energy components whose\nsymbols are in symbols\nThrow: SireFF::missing_component\n" );
         
         }
@@ -859,6 +919,7 @@ void register_System_class(){
             System_exposer.def( 
                 "energyExpressions"
                 , energyExpressions_function_value
+                , bp::release_gil_policy()
                 , "Return all of the energy expressions in this system" );
         
         }
@@ -870,6 +931,7 @@ void register_System_class(){
             System_exposer.def( 
                 "energySymbols"
                 , energySymbols_function_value
+                , bp::release_gil_policy()
                 , "Return the symbols that represent the energy expressions of this system" );
         
         }
@@ -881,7 +943,7 @@ void register_System_class(){
             System_exposer.def( 
                 "extraGroups"
                 , extraGroups_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return all of the extra non-forcefield molecule groups in this system" );
         
         }
@@ -894,6 +956,7 @@ void register_System_class(){
                 "ffIdx"
                 , ffIdx_function_value
                 , ( bp::arg("ffid") )
+                , bp::release_gil_policy()
                 , "Return the index of the forcefield with ID ffid\nThrow: SireFF::missing_forcefield\nThrow: SireFF::duplicate_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
@@ -906,7 +969,7 @@ void register_System_class(){
                 "ffName"
                 , ffName_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of the forcefield with ID ffid\nThrow: SireFF::missing_forcefield\nThrow: SireFF::duplicate_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
@@ -919,6 +982,7 @@ void register_System_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "Add the fields acting on the molecules in the fieldtable fieldtable\nfrom this system onto this fieldtable, scaled by the optionally\nsupplied scale_field" );
         
         }
@@ -931,6 +995,7 @@ void register_System_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "Add the fields acting on the molecules in the fieldtable fieldtable\nfrom the component of this system identified by component onto\nthis fieldtable, scaled by the optionally supplied scale_field" );
         
         }
@@ -943,6 +1008,7 @@ void register_System_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "Add the fields acting on the molecules in the fieldtable fieldtable\nfrom this system onto this fieldtable, scaled by the optionally\nsupplied scale_field" );
         
         }
@@ -955,6 +1021,7 @@ void register_System_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "Add the fields acting on the molecules in the fieldtable fieldtable\nfrom the component of this system identified by component onto\nthis fieldtable, scaled by the optionally supplied scale_field" );
         
         }
@@ -967,6 +1034,7 @@ void register_System_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , bp::release_gil_policy()
                 , "Add the forces acting on the molecules in the forcetable forcetable\nfrom this system onto this forcetable, scaled by the optionally\nsupplied scale_force" );
         
         }
@@ -979,6 +1047,7 @@ void register_System_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("component"), bp::arg("scale_force")=1 )
+                , bp::release_gil_policy()
                 , "Add the forces acting on the molecules in the forcetable forcetable\nfrom the component of this system identified by component onto\nthis forcetable, scaled by the optionally supplied scale_force" );
         
         }
@@ -991,7 +1060,7 @@ void register_System_class(){
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the forcefield with ID ffid in this system\nThrow: SireFF::missing_forcefield\nThrow: SireFF::duplicate_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1004,7 +1073,7 @@ void register_System_class(){
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("mgid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the forcefield that contains the molecule group\nidentified by the ID mgid\nThrow: SireMol::missing_group\nThrow: SireMol::duplicate_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1029,6 +1098,7 @@ void register_System_class(){
                 "hasComponent"
                 , hasComponent_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return whether or not this system has a constant or energy\ncomponent represented by the symbol symbol" );
         
         }
@@ -1041,6 +1111,7 @@ void register_System_class(){
                 "hasConstantComponent"
                 , hasConstantComponent_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "Return whether or not this system has a constant\ncomponent with symbol component" );
         
         }
@@ -1053,6 +1124,7 @@ void register_System_class(){
                 "hasEnergyComponent"
                 , hasEnergyComponent_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "Return whether or not this system has an energy component component" );
         
         }
@@ -1065,6 +1137,7 @@ void register_System_class(){
                 "isBuiltinProperty"
                 , isBuiltinProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not the property name exists and is a builtin\nproperty of one of the forcefields in this System" );
         
         }
@@ -1076,6 +1149,7 @@ void register_System_class(){
             System_exposer.def( 
                 "isClean"
                 , isClean_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not all of the forcefields are clean" );
         
         }
@@ -1088,6 +1162,7 @@ void register_System_class(){
                 "isCompoundProperty"
                 , isCompoundProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not the property name exists and is a compound\nproperty (either a link or a combined property)" );
         
         }
@@ -1100,6 +1175,7 @@ void register_System_class(){
                 "isConstantComponent"
                 , isConstantComponent_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "Return whether or not the system component component\nis a constant component\nThrow: SireFF::missing_component\n" );
         
         }
@@ -1111,6 +1187,7 @@ void register_System_class(){
             System_exposer.def( 
                 "isDirty"
                 , isDirty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not any of the forcefields are dirty" );
         
         }
@@ -1123,6 +1200,7 @@ void register_System_class(){
                 "isEnergyComponent"
                 , isEnergyComponent_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "Return whether or not the component component is an energy component\nThrow: SireFF::missing_component\n" );
         
         }
@@ -1135,6 +1213,7 @@ void register_System_class(){
                 "isUserProperty"
                 , isUserProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not the property name exists and is a user\nsupplied property (either a compound property or an extra\nSystem property)" );
         
         }
@@ -1147,7 +1226,7 @@ void register_System_class(){
                 "monitor"
                 , monitor_function_value
                 , ( bp::arg("monid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the monitor at ID monid\nThrow: SireSystem::missing_monitor\nThrow: SireSystem::duplicate_monitor\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1160,6 +1239,7 @@ void register_System_class(){
                 "monitorName"
                 , monitorName_function_value
                 , ( bp::arg("monid") )
+                , bp::release_gil_policy()
                 , "Return the name of the monitor at ID monid\nThrow: SireSystem::missing_monitor\nThrow: SireSystem::duplicate_monitor\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1172,6 +1252,7 @@ void register_System_class(){
                 "monitors"
                 , monitors_function_value
                 , ( bp::arg("monid") )
+                , bp::release_gil_policy()
                 , "Return the monitors with ID monid\nThrow: SireSystem::missing_monitor\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1195,6 +1276,7 @@ void register_System_class(){
             System_exposer.def( 
                 "mustNowRecalculateFromScratch"
                 , mustNowRecalculateFromScratch_function_value
+                , bp::release_gil_policy()
                 , "Tell all of the forcefields that they will need to recalculate\ntheir energies from scratch. This can speed up calculations where\nyou know that the majority (or all) of the molecules will be\nchanging" );
         
         }
@@ -1206,6 +1288,7 @@ void register_System_class(){
             System_exposer.def( 
                 "nConstraints"
                 , nConstraints_function_value
+                , bp::release_gil_policy()
                 , "Return the number of constraints on the system" );
         
         }
@@ -1217,6 +1300,7 @@ void register_System_class(){
             System_exposer.def( 
                 "nForceFields"
                 , nForceFields_function_value
+                , bp::release_gil_policy()
                 , "Return the number of forcefields in this system" );
         
         }
@@ -1228,6 +1312,7 @@ void register_System_class(){
             System_exposer.def( 
                 "nMonitors"
                 , nMonitors_function_value
+                , bp::release_gil_policy()
                 , "Return the number of monitors in this system" );
         
         }
@@ -1239,7 +1324,7 @@ void register_System_class(){
             System_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -1251,6 +1336,7 @@ void register_System_class(){
             System_exposer.def( 
                 "needsAccepting"
                 , needsAccepting_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not any part of the forcefield is using temporary\nworkspaces that need to be accepted" );
         
         }
@@ -1290,7 +1376,7 @@ void register_System_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -1303,7 +1389,7 @@ void register_System_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("monid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -1316,7 +1402,7 @@ void register_System_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("mgid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -1389,6 +1475,7 @@ void register_System_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("pottable"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "Add the potentials acting on the molecules in the potential table pottable\nfrom this system onto this potential table, scaled by the optionally\nsupplied scale_potential" );
         
         }
@@ -1401,6 +1488,7 @@ void register_System_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("pottable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "Add the potentials acting on the molecules in the potential table pottable\nfrom the component of this system identified by component onto\nthis potential table, scaled by the optionally supplied scale_potential" );
         
         }
@@ -1413,6 +1501,7 @@ void register_System_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("pottable"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "Add the potentials acting on the molecules in the potential table pottable\nfrom this system onto this potential table, scaled by the optionally\nsupplied scale_potential" );
         
         }
@@ -1425,6 +1514,7 @@ void register_System_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("pottable"), bp::arg("component"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "Add the potentials acting on the molecules in the potential table pottable\nfrom the component of this system identified by component onto\nthis potential table, scaled by the optionally supplied scale_potential" );
         
         }
@@ -1436,6 +1526,7 @@ void register_System_class(){
             System_exposer.def( 
                 "properties"
                 , properties_function_value
+                , bp::release_gil_policy()
                 , "Return the values of all of the properties of this system\nThrow: SireBase::duplicate_property\n" );
         
         }
@@ -1448,6 +1539,7 @@ void register_System_class(){
                 "properties"
                 , properties_function_value
                 , ( bp::arg("ffid") )
+                , bp::release_gil_policy()
                 , "Return the values of all of the properties of this system that\nare in the forcefields that match the ID ffid\nThrow: SireBase::duplicate_property\nThrow: SireFF::missing_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1460,7 +1552,7 @@ void register_System_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the values of the property called name in all of the\nforcefields that contain this property\nThrow: SireBase::missing_property\nThrow: SireBase::duplicate_property\n" );
         
         }
@@ -1473,7 +1565,7 @@ void register_System_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("ffid"), bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the value of the property name in the forcefield identified\nby the ID ffid\nThrow: SireBase::duplicate_property\nThrow: SireFF::missing_forcefield\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1485,6 +1577,7 @@ void register_System_class(){
             System_exposer.def( 
                 "propertyKeys"
                 , propertyKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the names of all of the properties of this system" );
         
         }
@@ -1497,6 +1590,7 @@ void register_System_class(){
                 "propertyKeys"
                 , propertyKeys_function_value
                 , ( bp::arg("ffid") )
+                , bp::release_gil_policy()
                 , "Return the names of all of the properties of the forcefields in\nthis system that match the ID ffid\nThrow: SireFF::missing_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1509,6 +1603,7 @@ void register_System_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("monid") )
+                , bp::release_gil_policy()
                 , "Remove all monitors that match the ID monid\nThrow: SireSystem::missing_monitor\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1521,6 +1616,7 @@ void register_System_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("ffid") )
+                , bp::release_gil_policy()
                 , "Remove the forcefield(s) that match the ID ffid\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1533,6 +1629,7 @@ void register_System_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("ff") )
+                , bp::release_gil_policy()
                 , "Remove the forcefield ff. Note that this removes the forcefield\nin this system that has the same name as ff\nThrow: SireFF::missing_forcefield\n" );
         
         }
@@ -1545,6 +1642,7 @@ void register_System_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the molecule group(s) that match the ID mgid.\nNote that you cant remove molecule groups that are part\nof a forcefield\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\nThrow: SireError::invalid_arg\n" );
         
         }
@@ -1557,6 +1655,7 @@ void register_System_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Remove the molecules contained in the molecule group molgroup.\nThis doesnt remove the molecule group itself though. If you\nwant to remove the molecule group, use System::remove(molgroup.number())\nThrow: SireMol::missing_group\n" );
         
         }
@@ -1569,6 +1668,7 @@ void register_System_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molid") )
+                , bp::release_gil_policy()
                 , "Remove all molecules from this system that match the ID molid\nThrow: SireMol::missing_molecule\n" );
         
         }
@@ -1581,6 +1681,7 @@ void register_System_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("constraint") )
+                , bp::release_gil_policy()
                 , "Remove the constraints in constraints from the list of constraints\nthat are applied to this system" );
         
         }
@@ -1593,6 +1694,7 @@ void register_System_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("constraints") )
+                , bp::release_gil_policy()
                 , "Remove the constraints in constraints from the list of constraints\nthat are applied to this system" );
         
         }
@@ -1605,6 +1707,7 @@ void register_System_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molview"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the view molview from the specified groups in this\nforcefield. Note that this only removes the specific view\n(and indeed only the first copy of this view if there\nare duplicates) - it does not remove the atoms in this\nview from all of the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1617,6 +1720,7 @@ void register_System_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the views in molviews from the specified groups in this\nforcefield. Note that this only removes the specific views\n(and indeed only the first copy of this view if there\nare duplicates) - it does not remove the atoms in this\nview from all of the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1629,6 +1733,7 @@ void register_System_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove them molecules in molecules from the specified groups in this\nforcefield. Note that this only removes the specific views\n(and indeed only the first copy of this view if there\nare duplicates) - it does not remove the atoms in this\nview from all of the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1641,6 +1746,7 @@ void register_System_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the views in the molecule group molgroup from the specified\ngroups in this forcefield. Note that this only removes the specific views\n(and indeed only the first copy of this view if there\nare duplicates) - it does not remove the atoms in this\nview from all of the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1653,6 +1759,7 @@ void register_System_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molnum"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove all views of the molecule with number molnum from the molecule\ngroups identified by mgid\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1665,6 +1772,7 @@ void register_System_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molnums"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove all of the molecules whose numbers are in molnums from\nall of the molecule groups identified by the ID mgid\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1677,6 +1785,7 @@ void register_System_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove all molecules from the molecule groups identified by the ID mgid\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1689,6 +1798,7 @@ void register_System_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molview"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the all copies of the view in molview from the specified\ngroups in this forcefield. Note that this only removes the specific views\n- it does not remove the atoms in this view from all of the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1701,6 +1811,7 @@ void register_System_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the all copies of the views in molviews from the specified\ngroups in this forcefield. Note that this only removes the specific views\n- it does not remove the atoms in this view from all of the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1713,6 +1824,7 @@ void register_System_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the all copies of the molecules in molecules from the specified\ngroups in this forcefield. Note that this only removes the specific views\n- it does not remove the atoms in this view from all of the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1725,6 +1837,7 @@ void register_System_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the all copies of the molecules in the molecule group molgroup\nfrom the specified groups in this forcefield. Note that this only removes\nthe specific views - it does not remove the atoms in this view from all\nof the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1736,6 +1849,7 @@ void register_System_class(){
             System_exposer.def( 
                 "removeAllConstraints"
                 , removeAllConstraints_function_value
+                , bp::release_gil_policy()
                 , "Remove all constraints from this system" );
         
         }
@@ -1747,6 +1861,7 @@ void register_System_class(){
             System_exposer.def( 
                 "removeAllForceFields"
                 , removeAllForceFields_function_value
+                , bp::release_gil_policy()
                 , "Completely remove all of the forcefields (and their contained\nmolecule groups) from this system" );
         
         }
@@ -1758,6 +1873,7 @@ void register_System_class(){
             System_exposer.def( 
                 "removeAllMoleculeGroups"
                 , removeAllMoleculeGroups_function_value
+                , bp::release_gil_policy()
                 , "Completely remove all non-forcefield molecule groups\nfrom this system" );
         
         }
@@ -1769,6 +1885,7 @@ void register_System_class(){
             System_exposer.def( 
                 "removeAllMolecules"
                 , removeAllMolecules_function_value
+                , bp::release_gil_policy()
                 , "Completely remove all molecules from this system" );
         
         }
@@ -1780,6 +1897,7 @@ void register_System_class(){
             System_exposer.def( 
                 "removeAllMonitors"
                 , removeAllMonitors_function_value
+                , bp::release_gil_policy()
                 , "Completely remove all monitors from this system" );
         
         }
@@ -1792,6 +1910,7 @@ void register_System_class(){
                 "removeProperty"
                 , removeProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Remove the property with name name. Note that this can only\nremove user-level properties - it cannot remove built-in properties\nof the system. This does nothing if there is no user-level\nproperty with this name" );
         
         }
@@ -1804,6 +1923,7 @@ void register_System_class(){
                 "setComponent"
                 , setComponent_function_value
                 , ( bp::arg("symbol"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Synonym for System::setConstantComponent(symbol, value)" );
         
         }
@@ -1816,6 +1936,7 @@ void register_System_class(){
                 "setComponent"
                 , setComponent_function_value
                 , ( bp::arg("symbol"), bp::arg("expression") )
+                , bp::release_gil_policy()
                 , "Synonym for System::setEnergyComponent(symbol, expression)" );
         
         }
@@ -1828,6 +1949,7 @@ void register_System_class(){
                 "setConstant"
                 , setConstant_function_value
                 , ( bp::arg("symbol"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -1840,6 +1962,7 @@ void register_System_class(){
                 "setConstant"
                 , setConstant_function_value
                 , ( bp::arg("symbol"), bp::arg("expression") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -1852,6 +1975,7 @@ void register_System_class(){
                 "setConstantComponent"
                 , setConstantComponent_function_value
                 , ( bp::arg("symbol"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the constant component symbol to the value value\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -1864,6 +1988,7 @@ void register_System_class(){
                 "setConstantComponent"
                 , setConstantComponent_function_value
                 , ( bp::arg("symbol"), bp::arg("expression") )
+                , bp::release_gil_policy()
                 , "Set the constant component symbol to the expression\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -1876,6 +2001,7 @@ void register_System_class(){
                 "setConstraints"
                 , setConstraints_function_value
                 , ( bp::arg("constraints") )
+                , bp::release_gil_policy()
                 , "Set the constraints for the system equal to constraints" );
         
         }
@@ -1888,6 +2014,7 @@ void register_System_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molview"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Set the contents of the molecule group(s) identified by the ID mgid\nso that they contain just the view of the molecule in molview.\nThe version of the molecule already present in this set is used if\nsuch a molecule already exists. The supplied property map\nis used to find the properties required by any forcefields\nthat this molecule may be added to.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -1900,6 +2027,7 @@ void register_System_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molviews"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Set the contents of the molecule group(s) identified by the ID mgid\nso that they contain just the views of the molecule in molviews.\nThe version of the molecule already present in this set is used if\nsuch a molecule already exists. The supplied property map\nis used to find the properties required by any forcefields\nthat this molecule may be added to.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -1912,6 +2040,7 @@ void register_System_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molecules"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Set the contents of the molecule group(s) identified by the ID mgid\nso that they contain just the views of the molecules in molecules.\nThe version of the molecule already present in this set is used if\nsuch a molecule already exists. The supplied property map\nis used to find the properties required by any forcefields\nthat this molecule may be added to.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -1924,6 +2053,7 @@ void register_System_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molgroup"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Set the contents of the molecule group(s) identified by the ID mgid\nso that they contain just the molecules in the group molgroup.\nThe version of the molecule already present in this set is used if\nsuch a molecule already exists. The supplied property map\nis used to find the properties required by any forcefields\nthat this molecule may be added to.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -1936,6 +2066,7 @@ void register_System_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "Convenient overload of System::setContents that uses the default\nproperty locations to find the properties required by the forcefields\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -1948,6 +2079,7 @@ void register_System_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molviews") )
+                , bp::release_gil_policy()
                 , "Convenient overload of System::setContents that uses the default\nproperty locations to find the properties required by the forcefields\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -1960,6 +2092,7 @@ void register_System_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Convenient overload of System::setContents that uses the default\nproperty locations to find the properties required by the forcefields\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -1972,6 +2105,7 @@ void register_System_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Convenient overload of System::setContents that uses the default\nproperty locations to find the properties required by the forcefields\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -1984,6 +2118,7 @@ void register_System_class(){
                 "setEnergyComponent"
                 , setEnergyComponent_function_value
                 , ( bp::arg("symbol"), bp::arg("expression") )
+                , bp::release_gil_policy()
                 , "Set the energy component symbol equal to the expression expression" );
         
         }
@@ -1996,6 +2131,7 @@ void register_System_class(){
                 "setMonitors"
                 , setMonitors_function_value
                 , ( bp::arg("monitors") )
+                , bp::release_gil_policy()
                 , "Set the monitors of this system to monitors" );
         
         }
@@ -2008,6 +2144,7 @@ void register_System_class(){
                 "setMonitors"
                 , setMonitors_function_value
                 , ( bp::arg("monitors"), bp::arg("frequency") )
+                , bp::release_gil_policy()
                 , "Set the monitors of the system to monitors, and reset the\nfrequency of all of the monitors so that they are triggered\nevery frequency steps" );
         
         }
@@ -2020,6 +2157,7 @@ void register_System_class(){
                 "setName"
                 , setName_function_value
                 , ( bp::arg("newname") )
+                , bp::release_gil_policy()
                 , "Set the name of this system" );
         
         }
@@ -2032,6 +2170,7 @@ void register_System_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the value of the property called name to the value value in\nall forcefields that have this property\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -2044,6 +2183,7 @@ void register_System_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("ffid"), bp::arg("name"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the value of the property called name in the forcefields identified\nby the ID ffid to the value value\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -2055,6 +2195,7 @@ void register_System_class(){
             System_exposer.def( 
                 "subVersion"
                 , subVersion_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -2066,6 +2207,7 @@ void register_System_class(){
             System_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this system" );
         
         }
@@ -2077,7 +2219,7 @@ void register_System_class(){
             System_exposer.def( 
                 "totalComponent"
                 , totalComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol that represents the total energy component\nof the system" );
         
         }
@@ -2089,6 +2231,7 @@ void register_System_class(){
             System_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -2101,6 +2244,7 @@ void register_System_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Update this system so that it uses the version of the molecule\navailable in moldata\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -2113,6 +2257,7 @@ void register_System_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Update this system so that it uses the same version of the molecules\npresent in molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -2125,6 +2270,7 @@ void register_System_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Update this system so that it uses the same version of the molecules\npresent in the molecule group molgroup\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -2136,6 +2282,7 @@ void register_System_class(){
             System_exposer.def( 
                 "userProperties"
                 , userProperties_function_value
+                , bp::release_gil_policy()
                 , "Return the values of all user-level properties of this\nsystem" );
         
         }
@@ -2148,7 +2295,7 @@ void register_System_class(){
                 "userProperty"
                 , userProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the user-supplied property at name. This raises an\nexception if there is no user-supplied property with this name\nThrow: SireBase::missing_property\n" );
         
         }
@@ -2160,7 +2307,7 @@ void register_System_class(){
             System_exposer.def( 
                 "version"
                 , version_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }

@@ -32,6 +32,8 @@ SireSystem::CloseMols __copy__(const SireSystem::CloseMols &other){ return SireS
 
 const char* pvt_get_name(const SireSystem::CloseMols&){ return "SireSystem::CloseMols";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CloseMols_class(){
 
     { //::SireSystem::CloseMols
@@ -62,6 +64,7 @@ void register_CloseMols_class(){
                 "isClose"
                 , isClose_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -73,7 +76,7 @@ void register_CloseMols_class(){
             CloseMols_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group that contains the molecules" );
         
         }
@@ -85,6 +88,7 @@ void register_CloseMols_class(){
             CloseMols_exposer.def( 
                 "nClosest"
                 , nClosest_function_value
+                , bp::release_gil_policy()
                 , "Return the number of molecules to record" );
         
         }
@@ -111,7 +115,7 @@ void register_CloseMols_class(){
             CloseMols_exposer.def( 
                 "point"
                 , point_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the point used to find the closest molecules" );
         
         }
@@ -135,7 +139,7 @@ void register_CloseMols_class(){
             CloseMols_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the space used to calculate the distances between the\nmolecules and the point" );
         
         }
@@ -147,6 +151,7 @@ void register_CloseMols_class(){
             CloseMols_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -159,6 +164,7 @@ void register_CloseMols_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Update from the passed system - this returns whether or not this\nupdate changes the identity of the close molecules" );
         
         }
@@ -171,6 +177,7 @@ void register_CloseMols_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("system"), bp::arg("changed_mol") )
+                , bp::release_gil_policy()
                 , "Update from the passed system, providing the hint that only the\nmolecule with number molnum has changed since the last update.\nIt is a bad idea to provide an incorrect hint This returns whether\nor not this changes the identity of the close molecules" );
         
         }
@@ -183,6 +190,7 @@ void register_CloseMols_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("system"), bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Update from the passed system, providing the hint that only the\nmolecules in changed_mols have changed since the last update.\nIt is a bad idea to provide an incorrect hint This returns whether\nor not this changes the identity of the close molecules" );
         
         }
@@ -194,6 +202,7 @@ void register_CloseMols_class(){
             CloseMols_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

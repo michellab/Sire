@@ -31,6 +31,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Perturbation_class(){
 
     { //::SireMol::Perturbation
@@ -45,6 +47,7 @@ void register_Perturbation_class(){
             Perturbation_exposer.def( 
                 "children"
                 , children_function_value
+                , bp::release_gil_policy()
                 , "Return all of the child perturbations that make up\nthis perturbation" );
         
         }
@@ -93,6 +96,7 @@ void register_Perturbation_class(){
                 "perturb"
                 , perturb_function_value
                 , ( bp::arg("molecule"), bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Perturb the passed molecule, returning the result\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError:incompatible_error\n" );
         
         }
@@ -116,6 +120,7 @@ void register_Perturbation_class(){
             Perturbation_exposer.def( 
                 "recreate"
                 , recreate_function_value
+                , bp::release_gil_policy()
                 , "Recreate this perturbation - this has the same effect as .clone()" );
         
         }
@@ -128,6 +133,7 @@ void register_Perturbation_class(){
                 "recreate"
                 , recreate_function_value
                 , ( bp::arg("mapping_function") )
+                , bp::release_gil_policy()
                 , "Recreate this perturbation, replacing its current mapping function\nwith mapping_function" );
         
         }
@@ -140,6 +146,7 @@ void register_Perturbation_class(){
                 "recreate"
                 , recreate_function_value
                 , ( bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Recreate this perturbation, replacing the current property map with map" );
         
         }
@@ -152,6 +159,7 @@ void register_Perturbation_class(){
                 "recreate"
                 , recreate_function_value
                 , ( bp::arg("mapping_function"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Recreate this perturbation, replacing both the mapping function and\nthe property map" );
         
         }
@@ -163,6 +171,7 @@ void register_Perturbation_class(){
             Perturbation_exposer.def( 
                 "requiredProperties"
                 , requiredProperties_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -174,6 +183,7 @@ void register_Perturbation_class(){
             Perturbation_exposer.def( 
                 "requiredSymbols"
                 , requiredSymbols_function_value
+                , bp::release_gil_policy()
                 , "Return all of the symbols that need to be supplied\nto the mapping function (i.e. ignoring symbols().initial()\nand symbols().final() )" );
         
         }
@@ -186,6 +196,7 @@ void register_Perturbation_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("old_symbol"), bp::arg("new_symbol") )
+                , bp::release_gil_policy()
                 , "Substitute the symbol old_symbol with the symbol new_symbol\nin all of the mapping functions used by this perturbation. This is\nuseful if, for example, you want to switch from using\nlambda to control the perturbation to using alpha, e.g.\n" );
         
         }
@@ -198,6 +209,7 @@ void register_Perturbation_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "Substitute the identities in identities in all of the mapping functions\nused by this perturbation. This is useful if, for example, you want to\nswitch from using lambda to control the perturbation to using alpha, e.g.\n" );
         
         }
@@ -221,6 +233,7 @@ void register_Perturbation_class(){
             Perturbation_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -233,6 +246,7 @@ void register_Perturbation_class(){
                 "wouldChange"
                 , wouldChange_function_value
                 , ( bp::arg("molecule"), bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }

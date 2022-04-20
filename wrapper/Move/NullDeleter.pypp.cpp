@@ -29,6 +29,8 @@ SireMove::NullDeleter __copy__(const SireMove::NullDeleter &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullDeleter_class(){
 
     { //::SireMove::NullDeleter
@@ -45,6 +47,7 @@ void register_NullDeleter_class(){
                 "deleteFrom"
                 , deleteFrom_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Delete a molecule from the system - well this does nothing too" );
         
         }
@@ -84,6 +87,7 @@ void register_NullDeleter_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Set the generator used to select random molecules\n(this does nothing)" );
         
         }
@@ -95,6 +99,7 @@ void register_NullDeleter_class(){
             NullDeleter_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

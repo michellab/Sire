@@ -46,6 +46,8 @@ SireMove::ZMatMove __copy__(const SireMove::ZMatMove &other){ return SireMove::Z
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ZMatMove_class(){
 
     { //::SireMove::ZMatMove
@@ -63,7 +65,7 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group that is sampled for this move" );
         
         }
@@ -76,6 +78,7 @@ void register_ZMatMove_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Actually perform nmoves moves of the molecules in the\nsystem system, optionally recording simulation statistics\nif record_stats is true" );
         
         }
@@ -102,7 +105,7 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "sampler"
                 , sampler_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the sampler used to sample molecules to move" );
         
         }
@@ -115,6 +118,7 @@ void register_ZMatMove_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("rangenerator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator used to generate the random\nnumber used for this move" );
         
         }
@@ -127,6 +131,7 @@ void register_ZMatMove_class(){
                 "setSampler"
                 , setSampler_function_value
                 , ( bp::arg("sampler") )
+                , bp::release_gil_policy()
                 , "Set the sampler used to sample molecules for this move" );
         
         }
@@ -139,6 +144,7 @@ void register_ZMatMove_class(){
                 "setSampler"
                 , setSampler_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Set the sampler so that it draws molecules uniformly from the\nmolecule group molgroup" );
         
         }
@@ -151,6 +157,7 @@ void register_ZMatMove_class(){
                 "setSynchronisedAngles"
                 , setSynchronisedAngles_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Set whether or not to synchronise all angle moves for all molecules" );
         
         }
@@ -163,6 +170,7 @@ void register_ZMatMove_class(){
                 "setSynchronisedBonds"
                 , setSynchronisedBonds_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Set whether or not to synchronise all bond moves for all molecules" );
         
         }
@@ -175,6 +183,7 @@ void register_ZMatMove_class(){
                 "setSynchronisedDihedrals"
                 , setSynchronisedDihedrals_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Set whether or not to synchronise all dihedral moves for all molecules" );
         
         }
@@ -187,6 +196,7 @@ void register_ZMatMove_class(){
                 "setSynchronisedMotion"
                 , setSynchronisedMotion_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Set whether or not to synchronise all motion for all molecules\nin the group" );
         
         }
@@ -199,6 +209,7 @@ void register_ZMatMove_class(){
                 "setZMatrixProperty"
                 , setZMatrixProperty_function_value
                 , ( bp::arg("property") )
+                , bp::release_gil_policy()
                 , "Set the name of the property used to find the z-matrix of each molecule" );
         
         }
@@ -210,6 +221,7 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "synchronisedAngles"
                 , synchronisedAngles_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not all angle moves for all molecules\nare synchronised" );
         
         }
@@ -221,6 +233,7 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "synchronisedBonds"
                 , synchronisedBonds_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not all bond moves for all molecules\nare synchronised" );
         
         }
@@ -232,6 +245,7 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "synchronisedDihedrals"
                 , synchronisedDihedrals_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not all dihedral moves for all molecules\nare synchronised" );
         
         }
@@ -243,6 +257,7 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "synchronisedMotion"
                 , synchronisedMotion_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not all moves for all molecules are synchronised" );
         
         }
@@ -254,6 +269,7 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this move" );
         
         }
@@ -265,6 +281,7 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

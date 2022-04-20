@@ -33,6 +33,8 @@ SireMove::HMCGenerator __copy__(const SireMove::HMCGenerator &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_HMCGenerator_class(){
 
     { //::SireMove::HMCGenerator
@@ -49,6 +51,7 @@ void register_HMCGenerator_class(){
                 "generate"
                 , generate_function_value
                 , ( bp::arg("system"), bp::arg("md") )
+                , bp::release_gil_policy()
                 , "Generate the velocities for the passed MD move, returning\nthe biasing factor" );
         
         }
@@ -61,6 +64,7 @@ void register_HMCGenerator_class(){
                 "generate"
                 , generate_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Generate the velocities for the passed molecule view" );
         
         }
@@ -73,6 +77,7 @@ void register_HMCGenerator_class(){
                 "getBias"
                 , getBias_function_value
                 , ( bp::arg("md") )
+                , bp::release_gil_policy()
                 , "Return the bias of the current state of the passed MD move" );
         
         }
@@ -99,6 +104,7 @@ void register_HMCGenerator_class(){
             HMCGenerator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

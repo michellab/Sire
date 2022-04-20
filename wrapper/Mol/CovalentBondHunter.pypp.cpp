@@ -49,6 +49,8 @@ SireMol::CovalentBondHunter __copy__(const SireMol::CovalentBondHunter &other){ 
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CovalentBondHunter_class(){
 
     { //::SireMol::CovalentBondHunter
@@ -103,6 +105,7 @@ void register_CovalentBondHunter_class(){
             CovalentBondHunter_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

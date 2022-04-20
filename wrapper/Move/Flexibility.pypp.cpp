@@ -47,6 +47,8 @@ SireMove::Flexibility __copy__(const SireMove::Flexibility &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Flexibility_class(){
 
     { //::SireMove::Flexibility
@@ -64,6 +66,7 @@ void register_Flexibility_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("bond"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Add bond with delta to this flexibility" );
         
         }
@@ -76,6 +79,7 @@ void register_Flexibility_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("angle"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Add angle with delta to this flexibility" );
         
         }
@@ -88,6 +92,7 @@ void register_Flexibility_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("dihedral"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Add dihedral with delta to this flexibility" );
         
         }
@@ -100,6 +105,7 @@ void register_Flexibility_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "Check if bond is present in this flexibility" );
         
         }
@@ -112,6 +118,7 @@ void register_Flexibility_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "Check if angle is present in this flexibility" );
         
         }
@@ -124,6 +131,7 @@ void register_Flexibility_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Check if angle is present in this flexibility" );
         
         }
@@ -136,6 +144,7 @@ void register_Flexibility_class(){
                 "delta"
                 , delta_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "Return the delta value of bond in this flexibility" );
         
         }
@@ -148,6 +157,7 @@ void register_Flexibility_class(){
                 "delta"
                 , delta_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "Return the delta value of angle in this flexibility" );
         
         }
@@ -160,6 +170,7 @@ void register_Flexibility_class(){
                 "delta"
                 , delta_function_value
                 , ( bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Return the delta value of angle in this flexibility" );
         
         }
@@ -171,6 +182,7 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "flexibleAngles"
                 , flexibleAngles_function_value
+                , bp::release_gil_policy()
                 , "Return the list of all flexible angles" );
         
         }
@@ -182,6 +194,7 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "flexibleBonds"
                 , flexibleBonds_function_value
+                , bp::release_gil_policy()
                 , "Return the list of all flexible bonds" );
         
         }
@@ -193,6 +206,7 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "flexibleDihedrals"
                 , flexibleDihedrals_function_value
+                , bp::release_gil_policy()
                 , "Return the list of all flexible dihedrals" );
         
         }
@@ -217,6 +231,7 @@ void register_Flexibility_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Return whether or not this flexibility is compatible with the molecule\nwhose info is in molinfo" );
         
         }
@@ -228,6 +243,7 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "maximumAngleVar"
                 , maximumAngleVar_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -239,6 +255,7 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "maximumBondVar"
                 , maximumBondVar_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum number of dofs that will be sampled in one move" );
         
         }
@@ -250,6 +267,7 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "maximumDihedralVar"
                 , maximumDihedralVar_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -277,6 +295,7 @@ void register_Flexibility_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "Remove bond from this flexibility" );
         
         }
@@ -289,6 +308,7 @@ void register_Flexibility_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "Remove angle from this flexibility" );
         
         }
@@ -301,6 +321,7 @@ void register_Flexibility_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Remove dihedral from this flexibility" );
         
         }
@@ -312,6 +333,7 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "rotation"
                 , rotation_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum rotation of this flexibility" );
         
         }
@@ -324,6 +346,7 @@ void register_Flexibility_class(){
                 "setDelta"
                 , setDelta_function_value
                 , ( bp::arg("bond"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "set the delta value of bond to delta" );
         
         }
@@ -336,6 +359,7 @@ void register_Flexibility_class(){
                 "setDelta"
                 , setDelta_function_value
                 , ( bp::arg("angle"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "set the delta value of bond to delta" );
         
         }
@@ -348,6 +372,7 @@ void register_Flexibility_class(){
                 "setDelta"
                 , setDelta_function_value
                 , ( bp::arg("dihedral"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "set the delta value of bond to delta" );
         
         }
@@ -360,6 +385,7 @@ void register_Flexibility_class(){
                 "setMaximumAngleVar"
                 , setMaximumAngleVar_function_value
                 , ( bp::arg("maxvar") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -372,6 +398,7 @@ void register_Flexibility_class(){
                 "setMaximumBondVar"
                 , setMaximumBondVar_function_value
                 , ( bp::arg("maxvar") )
+                , bp::release_gil_policy()
                 , "Set the maximum number of degrees of freedom that will be sampled in one move" );
         
         }
@@ -384,6 +411,7 @@ void register_Flexibility_class(){
                 "setMaximumDihedralVar"
                 , setMaximumDihedralVar_function_value
                 , ( bp::arg("maxvar") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -396,6 +424,7 @@ void register_Flexibility_class(){
                 "setRotation"
                 , setRotation_function_value
                 , ( bp::arg("rotation") )
+                , bp::release_gil_policy()
                 , "Set the maximum rotation of this flexibility" );
         
         }
@@ -408,6 +437,7 @@ void register_Flexibility_class(){
                 "setTranslation"
                 , setTranslation_function_value
                 , ( bp::arg("translation") )
+                , bp::release_gil_policy()
                 , "Set the maximum translation of this flexibility" );
         
         }
@@ -419,6 +449,7 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this flexibility" );
         
         }
@@ -430,6 +461,7 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "translation"
                 , translation_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum translation of this flexibility" );
         
         }
@@ -441,6 +473,7 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

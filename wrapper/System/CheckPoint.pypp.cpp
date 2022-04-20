@@ -21,6 +21,8 @@ SireSystem::CheckPoint __copy__(const SireSystem::CheckPoint &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CheckPoint_class(){
 
     { //::SireSystem::CheckPoint
@@ -65,6 +67,7 @@ void register_CheckPoint_class(){
             CheckPoint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

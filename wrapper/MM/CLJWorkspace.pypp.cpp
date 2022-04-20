@@ -27,6 +27,8 @@ SireMM::CLJWorkspace __copy__(const SireMM::CLJWorkspace &other){ return SireMM:
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_CLJWorkspace_class(){
@@ -45,6 +47,7 @@ void register_CLJWorkspace_class(){
                 "accept"
                 , accept_function_value
                 , ( bp::arg("boxes") )
+                , bp::release_gil_policy()
                 , "Accept this workspace - this clears the recalc_from_scratch flag as it\nsignals that we have put the CLJBoxes into a sane state" );
         
         }
@@ -69,6 +72,7 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "changedAtoms"
                 , changedAtoms_function_value
+                , bp::release_gil_policy()
                 , "Merge all of the deltas together into a single set of changed CLJAtoms that\ncan be used for the change in energy calculation" );
         
         }
@@ -80,6 +84,7 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Clear this workspace" );
         
         }
@@ -92,6 +97,7 @@ void register_CLJWorkspace_class(){
                 "commit"
                 , commit_function_value
                 , ( bp::arg("boxes"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Commit the changes in the passed delta into the passed CLJBoxes" );
         
         }
@@ -103,6 +109,7 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of deltas" );
         
         }
@@ -115,6 +122,7 @@ void register_CLJWorkspace_class(){
                 "getitem"
                 , getitem_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith delta" );
         
         }
@@ -126,6 +134,7 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this workspace is empty" );
         
         }
@@ -137,6 +146,7 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "isSingleID"
                 , isSingleID_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this workspace contains deltas with a single\nID (a single CLJAtoms ID)" );
         
         }
@@ -148,6 +158,7 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "merge"
                 , merge_function_value
+                , bp::release_gil_policy()
                 , "Merge all of the deltas together to return the tuple of the\nchanged, old and new atoms. This is equivalent to calling\nchangedAtoms(), oldAtoms() and newAtoms() and placing them\ninto a tuple. This is more efficient than three separate calls" );
         
         }
@@ -160,6 +171,7 @@ void register_CLJWorkspace_class(){
                 "mustRecalculateFromScratch"
                 , mustRecalculateFromScratch_function_value
                 , ( bp::arg("boxes") )
+                , bp::release_gil_policy()
                 , "Tell the workspace that we are now recalculating everything from scratch" );
         
         }
@@ -171,6 +183,7 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "nDeltas"
                 , nDeltas_function_value
+                , bp::release_gil_policy()
                 , "Return the number of deltas in this workspace" );
         
         }
@@ -182,6 +195,7 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "needsAccepting"
                 , needsAccepting_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this workspace needs accepting" );
         
         }
@@ -193,6 +207,7 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "newAtoms"
                 , newAtoms_function_value
+                , bp::release_gil_policy()
                 , "Merge all of the new atoms from the deltas together into a single\nset of new CLJAtoms that can be used for the change in energy calculation" );
         
         }
@@ -204,6 +219,7 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "oldAtoms"
                 , oldAtoms_function_value
+                , bp::release_gil_policy()
                 , "Merge all of the old atoms from the deltas together into a single\nset of old CLJAtoms that can be used for the change in energy calculation" );
         
         }
@@ -244,6 +260,7 @@ void register_CLJWorkspace_class(){
                 "push"
                 , push_function_value
                 , ( bp::arg("boxes"), bp::arg("old_atoms"), bp::arg("new_atoms"), bp::arg("old_delta") )
+                , bp::release_gil_policy()
                 , "Push the passed change onto the workspace. This changes the atoms in the\npassed CLJBoxes from their values in old_atoms to their values in the\npassed new_atoms. The last CLJDelta used for these atoms is supplied as\nold_delta, and this returns the new CLJDelta for these atoms." );
         
         }
@@ -255,6 +272,7 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "recalculatingFromScratch"
                 , recalculatingFromScratch_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not we are recalculating everything from scratch" );
         
         }
@@ -267,6 +285,7 @@ void register_CLJWorkspace_class(){
                 "removeSameIDAtoms"
                 , removeSameIDAtoms_function_value
                 , ( bp::arg("boxes") )
+                , bp::release_gil_policy()
                 , "Internal function used to fully remove atoms that have not been\nremoved because they all have the same ID. This is used when the\noptimisation of not removing same ID atoms would break the energy\ncalculation, e.g. if we have multiple CLJGroups and have multiple\nchanged IDs across these groups" );
         
         }
@@ -279,6 +298,7 @@ void register_CLJWorkspace_class(){
                 "revert"
                 , revert_function_value
                 , ( bp::arg("boxes"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Revert the changes supplied in the passed delta" );
         
         }
@@ -290,6 +310,7 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of deltas" );
         
         }
@@ -301,6 +322,7 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -312,6 +334,7 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -323,6 +346,7 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

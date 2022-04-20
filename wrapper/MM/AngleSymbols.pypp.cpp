@@ -36,6 +36,8 @@ SireMM::AngleSymbols __copy__(const SireMM::AngleSymbols &other){ return SireMM:
 
 const char* pvt_get_name(const SireMM::AngleSymbols&){ return "SireMM::AngleSymbols";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AngleSymbols_class(){
 
     { //::SireMM::AngleSymbols
@@ -50,7 +52,7 @@ void register_AngleSymbols_class(){
             AngleSymbols_exposer.def( 
                 "theta"
                 , theta_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbols representing the angle (theta)" );
         
         }

@@ -21,6 +21,8 @@ SireMaths::Torsion __copy__(const SireMaths::Torsion &other){ return SireMaths::
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Torsion_class(){
@@ -38,6 +40,7 @@ void register_Torsion_class(){
             Torsion_exposer.def( 
                 "angle"
                 , angle_function_value
+                , bp::release_gil_policy()
                 , "Return the torsion angle of this torsion (the torsion angle 0-1-2-3\naround the 1-2 line)" );
         
         }
@@ -62,6 +65,7 @@ void register_Torsion_class(){
             Torsion_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of points in a torsion (4)" );
         
         }
@@ -73,6 +77,7 @@ void register_Torsion_class(){
             Torsion_exposer.def( 
                 "improperAngle"
                 , improperAngle_function_value
+                , bp::release_gil_policy()
                 , "Return the improper angle of this torsion (the acute angle between the\nvector 0-1 and the plane formed by 1-2-3)" );
         
         }
@@ -84,6 +89,7 @@ void register_Torsion_class(){
             Torsion_exposer.def( 
                 "line03"
                 , line03_function_value
+                , bp::release_gil_policy()
                 , "Return the line from point 0 to point 3" );
         
         }
@@ -95,6 +101,7 @@ void register_Torsion_class(){
             Torsion_exposer.def( 
                 "line12"
                 , line12_function_value
+                , bp::release_gil_policy()
                 , "Return the line from point 1 to point 2" );
         
         }
@@ -132,6 +139,7 @@ void register_Torsion_class(){
             Torsion_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this torsion" );
         
         }
@@ -143,6 +151,7 @@ void register_Torsion_class(){
             Torsion_exposer.def( 
                 "triangle1"
                 , triangle1_function_value
+                , bp::release_gil_policy()
                 , "Return the triangle around point 1, i.e. point0-point1-point2" );
         
         }
@@ -154,6 +163,7 @@ void register_Torsion_class(){
             Torsion_exposer.def( 
                 "triangle2"
                 , triangle2_function_value
+                , bp::release_gil_policy()
                 , "Return the triangle around point 2, i.e. point1-point2-point3" );
         
         }
@@ -165,6 +175,7 @@ void register_Torsion_class(){
             Torsion_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -176,6 +187,7 @@ void register_Torsion_class(){
             Torsion_exposer.def( 
                 "vector03"
                 , vector03_function_value
+                , bp::release_gil_policy()
                 , "Return the vector from point 0 to point 3" );
         
         }
@@ -187,6 +199,7 @@ void register_Torsion_class(){
             Torsion_exposer.def( 
                 "vector12"
                 , vector12_function_value
+                , bp::release_gil_policy()
                 , "Return the vector from point 1 to point 2" );
         
         }
@@ -198,6 +211,7 @@ void register_Torsion_class(){
             Torsion_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

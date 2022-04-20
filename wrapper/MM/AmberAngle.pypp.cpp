@@ -69,6 +69,8 @@ SireMM::AmberAngle __copy__(const SireMM::AmberAngle &other){ return SireMM::Amb
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AmberAngle_class(){
 
     { //::SireMM::AmberAngle
@@ -86,6 +88,7 @@ void register_AmberAngle_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("theta") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -97,6 +100,7 @@ void register_AmberAngle_class(){
             AmberAngle_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -108,6 +112,7 @@ void register_AmberAngle_class(){
             AmberAngle_exposer.def( 
                 "k"
                 , k_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -150,6 +155,7 @@ void register_AmberAngle_class(){
             AmberAngle_exposer.def( 
                 "theta0"
                 , theta0_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -162,6 +168,7 @@ void register_AmberAngle_class(){
                 "toExpression"
                 , toExpression_function_value
                 , ( bp::arg("THETA") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -173,6 +180,7 @@ void register_AmberAngle_class(){
             AmberAngle_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -184,6 +192,7 @@ void register_AmberAngle_class(){
             AmberAngle_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -195,6 +204,7 @@ void register_AmberAngle_class(){
             AmberAngle_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -35,6 +35,8 @@ SireMove::UniformInserter __copy__(const SireMove::UniformInserter &other){ retu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_UniformInserter_class(){
 
     { //::SireMove::UniformInserter
@@ -52,6 +54,7 @@ void register_UniformInserter_class(){
                 "insert"
                 , insert_function_value
                 , ( bp::arg("molecule"), bp::arg("system"), bp::arg("space") )
+                , bp::release_gil_policy()
                 , "This funciton inserts the molecule molecule into system at\na random orientation and position within the space space" );
         
         }
@@ -64,6 +67,7 @@ void register_UniformInserter_class(){
                 "insert"
                 , insert_function_value
                 , ( bp::arg("molecule"), bp::arg("system"), bp::arg("space") )
+                , bp::release_gil_policy()
                 , "This funciton inserts the molecule molecule into system at\na random orientation and position within the space space" );
         
         }
@@ -90,6 +94,7 @@ void register_UniformInserter_class(){
             UniformInserter_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -29,6 +29,8 @@ Squire::PS_GTOs __copy__(const Squire::PS_GTOs &other){ return Squire::PS_GTOs(o
 
 const char* pvt_get_name(const Squire::PS_GTOs&){ return "Squire::PS_GTOs";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PS_GTOs_class(){
 
     { //::Squire::PS_GTOs
@@ -46,6 +48,7 @@ void register_PS_GTOs_class(){
             PS_GTOs_exposer.def( 
                 "kinetic_integral"
                 , kinetic_integral_function_value
+                , bp::release_gil_policy()
                 , "Return the kinetic energy integrals for each pair of orbitals" );
         
         }
@@ -72,6 +75,7 @@ void register_PS_GTOs_class(){
             PS_GTOs_exposer.def( 
                 "overlap_integral"
                 , overlap_integral_function_value
+                , bp::release_gil_policy()
                 , "Return the overlap integrals for each pair of orbitals" );
         
         }
@@ -84,6 +88,7 @@ void register_PS_GTOs_class(){
                 "potential_integral"
                 , potential_integral_function_value
                 , ( bp::arg("C") )
+                , bp::release_gil_policy()
                 , "Return the potential energy integral for each pair of orbitals\ninteracting with the point charges in C" );
         
         }
@@ -96,6 +101,7 @@ void register_PS_GTOs_class(){
                 "potential_integral"
                 , potential_integral_function_value
                 , ( bp::arg("C"), bp::arg("m") )
+                , bp::release_gil_policy()
                 , "Return the mth auxillary potential energy integral for each pair of orbitals\ninteracting with the point charges in C" );
         
         }

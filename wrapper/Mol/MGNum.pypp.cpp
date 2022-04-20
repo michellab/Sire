@@ -27,6 +27,8 @@ SireMol::MGNum __copy__(const SireMol::MGNum &other){ return SireMol::MGNum(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MGNum_class(){
 
     { //::SireMol::MGNum
@@ -43,6 +45,7 @@ void register_MGNum_class(){
             MGNum_exposer.def( 
                 "getUniqueNumber"
                 , getUniqueNumber_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -54,6 +57,7 @@ void register_MGNum_class(){
             MGNum_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -65,6 +69,7 @@ void register_MGNum_class(){
             MGNum_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -77,6 +82,7 @@ void register_MGNum_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -108,6 +114,7 @@ void register_MGNum_class(){
             MGNum_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -119,6 +126,7 @@ void register_MGNum_class(){
             MGNum_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -130,6 +138,7 @@ void register_MGNum_class(){
             MGNum_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

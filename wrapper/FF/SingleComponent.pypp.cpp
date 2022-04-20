@@ -26,6 +26,8 @@ SireFF::SingleComponent __copy__(const SireFF::SingleComponent &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SingleComponent_class(){
 
     { //::SireFF::SingleComponent
@@ -44,6 +46,7 @@ void register_SingleComponent_class(){
                 "changeEnergy"
                 , changeEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("nrg") )
+                , bp::release_gil_policy()
                 , "Change the energy in the forcefield ff by delta" );
         
         }
@@ -56,6 +59,7 @@ void register_SingleComponent_class(){
                 "setEnergy"
                 , setEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("nrg") )
+                , bp::release_gil_policy()
                 , "Set the energy in the forcefield ff to equal to the passed SingleEnergy" );
         
         }
@@ -67,6 +71,7 @@ void register_SingleComponent_class(){
             SingleComponent_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -78,7 +83,7 @@ void register_SingleComponent_class(){
             SingleComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -90,6 +95,7 @@ void register_SingleComponent_class(){
             SingleComponent_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -101,6 +107,7 @@ void register_SingleComponent_class(){
             SingleComponent_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

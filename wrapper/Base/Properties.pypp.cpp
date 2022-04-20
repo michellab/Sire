@@ -32,6 +32,8 @@ SireBase::Properties __copy__(const SireBase::Properties &other){ return SireBas
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Properties_class(){
@@ -75,6 +77,7 @@ void register_Properties_class(){
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Assert that this contains the metadata at metakey metakey" );
         
         }
@@ -87,6 +90,7 @@ void register_Properties_class(){
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Assert that this set contains the metadata property for the\nproperty key with metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
@@ -99,6 +103,7 @@ void register_Properties_class(){
                 "assertContainsProperty"
                 , assertContainsProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Assert that this set contains a property with key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -110,6 +115,7 @@ void register_Properties_class(){
             Properties_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Completely clear this object of all properties and metadata" );
         
         }
@@ -121,6 +127,7 @@ void register_Properties_class(){
             Properties_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of properties in this set" );
         
         }
@@ -133,6 +140,7 @@ void register_Properties_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return whether or not this contains the metadata with metakey metakey" );
         
         }
@@ -145,6 +153,7 @@ void register_Properties_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return whether or not the property with key key contains some\nmetadata with the metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
@@ -157,6 +166,7 @@ void register_Properties_class(){
                 "hasProperty"
                 , hasProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return whether or not this contains a property with key key" );
         
         }
@@ -168,6 +178,7 @@ void register_Properties_class(){
             Properties_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether this is empty (has no values)" );
         
         }
@@ -180,7 +191,7 @@ void register_Properties_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("metakey") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the metadata at metakey metakey - note that if metakey\nspecifies a value rather than a source, then the value contained\nin the metakey is returned.\nThrow: SireBase::missing_property\n" );
         
         }
@@ -193,7 +204,7 @@ void register_Properties_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("metakey"), bp::arg("default_value") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the metadata at metakey metakey - note that if metakey\nspecifies a value rather than a source, then the value contained\nin the metakey is returned. If there is no such metadata, and no\nvalue is contained in the metakey, then default_value is\nreturned" );
         
         }
@@ -206,7 +217,7 @@ void register_Properties_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the metadata at metakey metakey that is associated with\nthe property at key key.\nThrow: SireBase::missing_property\n" );
         
         }
@@ -219,7 +230,7 @@ void register_Properties_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey"), bp::arg("default_value") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the metadata at metakey metakey that is associated with\nthe property at key key, or default_value if there is no\nsuch metadata.\n" );
         
         }
@@ -231,6 +242,7 @@ void register_Properties_class(){
             Properties_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the list of metadata keys" );
         
         }
@@ -243,6 +255,7 @@ void register_Properties_class(){
                 "metadataKeys"
                 , metadataKeys_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return the list of metadata keys for the property with key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -255,6 +268,7 @@ void register_Properties_class(){
                 "metadataType"
                 , metadataType_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return the type name of the metadata at metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
@@ -267,6 +281,7 @@ void register_Properties_class(){
                 "metadataType"
                 , metadataType_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return the type name of the metadata at metakey metakey\nfor the property at key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -278,6 +293,7 @@ void register_Properties_class(){
             Properties_exposer.def( 
                 "nProperties"
                 , nProperties_function_value
+                , bp::release_gil_policy()
                 , "Return the number of properties in this set" );
         
         }
@@ -305,7 +321,7 @@ void register_Properties_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -318,7 +334,7 @@ void register_Properties_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the property with key key - note that if\nkey specifies a value rather than a source, then the\nvalue contained in the key is returned\nThrow: SireBase::missing_property\n" );
         
         }
@@ -331,7 +347,7 @@ void register_Properties_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("key"), bp::arg("default_value") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the property with key key - note that if\nkey specifies a value rather than a source, then the\nvalue contained in the key is returned. If no such source\nexists, and there is no value in the key, then\ndefault_value is returned" );
         
         }
@@ -343,6 +359,7 @@ void register_Properties_class(){
             Properties_exposer.def( 
                 "propertyKeys"
                 , propertyKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the keys for all of the properties in this set" );
         
         }
@@ -355,6 +372,7 @@ void register_Properties_class(){
                 "propertyType"
                 , propertyType_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return the type name of the property at key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -366,6 +384,7 @@ void register_Properties_class(){
             Properties_exposer.def( 
                 "removeAllMetadata"
                 , removeAllMetadata_function_value
+                , bp::release_gil_policy()
                 , "Remove all of the top-level metadata" );
         
         }
@@ -378,6 +397,7 @@ void register_Properties_class(){
                 "removeAllMetadata"
                 , removeAllMetadata_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Remove all of the metadata associated with the property at\nkey key" );
         
         }
@@ -390,6 +410,7 @@ void register_Properties_class(){
                 "removeMetadata"
                 , removeMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Remove the metadata at metakey metakey" );
         
         }
@@ -402,6 +423,7 @@ void register_Properties_class(){
                 "removeMetadata"
                 , removeMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Remove the metadata at metakey metakey for the\nproperty at key key" );
         
         }
@@ -414,6 +436,7 @@ void register_Properties_class(){
                 "removeProperty"
                 , removeProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Remove the property with key key and all of its metadata" );
         
         }
@@ -426,6 +449,7 @@ void register_Properties_class(){
                 "setMetadata"
                 , setMetadata_function_value
                 , ( bp::arg("metakey"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the metadata at metakey metakey to have the value value.\nThis replaces any existing metadata with this metakey" );
         
         }
@@ -438,6 +462,7 @@ void register_Properties_class(){
                 "setMetadata"
                 , setMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the metadata at metakey metakey for the property at key key.\nThis replaces any existing metadata for this keymetakey pair" );
         
         }
@@ -450,6 +475,7 @@ void register_Properties_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("key"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -462,6 +488,7 @@ void register_Properties_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("key"), bp::arg("value"), bp::arg("clear_metadata") )
+                , bp::release_gil_policy()
                 , "Set the property at key key to have the value value. This\nreplaces any existing property at this key, and removes any\nexisting metadata is clear_metadata is true" );
         
         }
@@ -473,6 +500,7 @@ void register_Properties_class(){
             Properties_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of properties in this set" );
         
         }
@@ -484,6 +512,7 @@ void register_Properties_class(){
             Properties_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this set of properties" );
         
         }
@@ -495,6 +524,7 @@ void register_Properties_class(){
             Properties_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

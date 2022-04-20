@@ -23,6 +23,8 @@ SireMaths::VectorProperty __copy__(const SireMaths::VectorProperty &other){ retu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_VectorProperty_class(){
@@ -69,6 +71,7 @@ void register_VectorProperty_class(){
             VectorProperty_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -80,6 +83,7 @@ void register_VectorProperty_class(){
             VectorProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -91,6 +95,7 @@ void register_VectorProperty_class(){
             VectorProperty_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "Return the actual value of the vector" );
         
         }
@@ -102,6 +107,7 @@ void register_VectorProperty_class(){
             VectorProperty_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

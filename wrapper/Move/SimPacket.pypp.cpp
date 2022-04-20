@@ -21,6 +21,8 @@ SireMove::SimPacket __copy__(const SireMove::SimPacket &other){ return SireMove:
 
 const char* pvt_get_name(const SireMove::SimPacket&){ return "SireMove::SimPacket";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SimPacket_class(){
 
     { //::SireMove::SimPacket
@@ -40,6 +42,7 @@ void register_SimPacket_class(){
             SimPacket_exposer.def( 
                 "approximatePacketSize"
                 , approximatePacketSize_function_value
+                , bp::release_gil_policy()
                 , "Because it takes too long to calculate the size of this\npacket, we say that it will be 32 MB - this is enough for\nmost cases" );
         
         }
@@ -51,6 +54,7 @@ void register_SimPacket_class(){
             SimPacket_exposer.def( 
                 "hasFinished"
                 , hasFinished_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this simulation has finished" );
         
         }
@@ -62,6 +66,7 @@ void register_SimPacket_class(){
             SimPacket_exposer.def( 
                 "moves"
                 , moves_function_value
+                , bp::release_gil_policy()
                 , "Return the moves being applied to the system" );
         
         }
@@ -73,6 +78,7 @@ void register_SimPacket_class(){
             SimPacket_exposer.def( 
                 "nCompleted"
                 , nCompleted_function_value
+                , bp::release_gil_policy()
                 , "Return the number of moves already run on the system" );
         
         }
@@ -84,6 +90,7 @@ void register_SimPacket_class(){
             SimPacket_exposer.def( 
                 "nMoves"
                 , nMoves_function_value
+                , bp::release_gil_policy()
                 , "Return the number of moves being applied to the system" );
         
         }
@@ -95,6 +102,7 @@ void register_SimPacket_class(){
             SimPacket_exposer.def( 
                 "nMovesPerChunk"
                 , nMovesPerChunk_function_value
+                , bp::release_gil_policy()
                 , "Return the number of moves to apply for each chunk" );
         
         }
@@ -121,6 +129,7 @@ void register_SimPacket_class(){
             SimPacket_exposer.def( 
                 "recordingStatistics"
                 , recordingStatistics_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not simulation statistics will be recorded\nduring the moves" );
         
         }
@@ -132,6 +141,7 @@ void register_SimPacket_class(){
             SimPacket_exposer.def( 
                 "shouldPack"
                 , shouldPack_function_value
+                , bp::release_gil_policy()
                 , "Only compress this workpacket if the SimStore is not already packed" );
         
         }
@@ -143,6 +153,7 @@ void register_SimPacket_class(){
             SimPacket_exposer.def( 
                 "system"
                 , system_function_value
+                , bp::release_gil_policy()
                 , "Return the system being simulated" );
         
         }
@@ -154,6 +165,7 @@ void register_SimPacket_class(){
             SimPacket_exposer.def( 
                 "systemAndMoves"
                 , systemAndMoves_function_value
+                , bp::release_gil_policy()
                 , "Return both the system and moves together" );
         
         }
@@ -165,6 +177,7 @@ void register_SimPacket_class(){
             SimPacket_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -176,6 +189,7 @@ void register_SimPacket_class(){
             SimPacket_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

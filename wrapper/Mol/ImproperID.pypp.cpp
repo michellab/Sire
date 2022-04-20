@@ -34,6 +34,8 @@ SireMol::ImproperID __copy__(const SireMol::ImproperID &other){ return SireMol::
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ImproperID_class(){
 
     { //::SireMol::ImproperID
@@ -50,7 +52,7 @@ void register_ImproperID_class(){
             ImproperID_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ID of the first atom of the improper" );
         
         }
@@ -62,7 +64,7 @@ void register_ImproperID_class(){
             ImproperID_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ID of the second atom of the improper" );
         
         }
@@ -74,7 +76,7 @@ void register_ImproperID_class(){
             ImproperID_exposer.def( 
                 "atom2"
                 , atom2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ID of the third atom of the improper" );
         
         }
@@ -86,7 +88,7 @@ void register_ImproperID_class(){
             ImproperID_exposer.def( 
                 "atom3"
                 , atom3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ID of the fourth atom of the improper" );
         
         }
@@ -99,6 +101,7 @@ void register_ImproperID_class(){
                 "equivalent"
                 , equivalent_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Are these impropers generally equivalent, i.e. do they contain the same\natom indices. This is useful since the ordering of improper atoms is\ninconsistent between different molecular topology formats.\n" );
         
         }
@@ -110,6 +113,7 @@ void register_ImproperID_class(){
             ImproperID_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash for this ID" );
         
         }
@@ -121,6 +125,7 @@ void register_ImproperID_class(){
             ImproperID_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether this is a null ID" );
         
         }
@@ -133,6 +138,7 @@ void register_ImproperID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the four atoms in this improper - this returns\nthem in the order\ntuple(improper.atom0(),improper.atom1(),improper.atom2(),improper.atom3())\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -145,6 +151,7 @@ void register_ImproperID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("mol0info"), bp::arg("mol1info"), bp::arg("mol2info"), bp::arg("mol3info") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the four atoms of this improper, between the\ntwo molecules whose data is in mol0info (containing improper.atom0()),\nmol1info (containing improper.atom1()), mol2info (containing\nimproper.atom2()) and mol3info (containing improper.atom3())\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -173,6 +180,7 @@ void register_ImproperID_class(){
                 "size"
                 , size_function_value
                 , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the size of this improper in the molecule whose data\nis in moldata, using map to find the coordinates property\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -185,6 +193,7 @@ void register_ImproperID_class(){
                 "size"
                 , size_function_value
                 , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("mol2data"), bp::arg("mol3data"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the size of the improper between atom0() in the\nmolecule whose data is in mol0data, atom1() in the\nmolecule whose data is in mol1data, atom2() in\nthe molecule whose data is in mol2data, and\natom3() in the molecule whose data is in mol3data,\nusing map to find the coordinates property of the\nmolecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -197,6 +206,7 @@ void register_ImproperID_class(){
                 "size"
                 , size_function_value
                 , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1"), bp::arg("mol2data"), bp::arg("map2"), bp::arg("mol3data"), bp::arg("map3") )
+                , bp::release_gil_policy()
                 , "Return the size of the improper between atom0() in the\nmolecule whose data is in mol0data, atom1() in the\nmolecule whose data is in mol1data, atom2() in\nthe molecule whose data is in mol2data, and\natom3() in the molecule whose data is in mol3data, using map0\nto the find the coordinates property of mol0,\nmap1 to find the coordinates property of mol1,\nmap2 to find the coordinates property of mol2 and\nmap3 to find the coordinates property of mol3\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -208,6 +218,7 @@ void register_ImproperID_class(){
             ImproperID_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this ID" );
         
         }
@@ -220,6 +231,7 @@ void register_ImproperID_class(){
                 "torsion"
                 , torsion_function_value
                 , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the geometric torsion formed by the four atoms\nof this improper in the molecule whose data is in moldata,\nusing map to find the coordinates property.\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -232,6 +244,7 @@ void register_ImproperID_class(){
                 "torsion"
                 , torsion_function_value
                 , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("mol2data"), bp::arg("mol3data"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the geometric torsion formed by the four atoms,\natom0() in the molecule whose data is in mol0data,\natom1() from mol1data, atom2() from mol2data, and\natom3() from mol3data,\nusing map to find the coordinates property of\nthe molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -244,6 +257,7 @@ void register_ImproperID_class(){
                 "torsion"
                 , torsion_function_value
                 , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1"), bp::arg("mol2data"), bp::arg("map2"), bp::arg("mol3data"), bp::arg("map3") )
+                , bp::release_gil_policy()
                 , "Return the geometric torsion formed by the four atoms,\natom0() in the molecule whose data is in mol0data,\natom1() from mol1data, atom2() from mol2data, and\natom3() from mol3data,\nusing map0 to find the coordinates property of mol0,\nmap1 to find the coordinates property of mol1,\nmap2 to find the coordinates property of mol2 and\nmap3 to find the coordinates property of mol3.\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -255,6 +269,7 @@ void register_ImproperID_class(){
             ImproperID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -266,6 +281,7 @@ void register_ImproperID_class(){
             ImproperID_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

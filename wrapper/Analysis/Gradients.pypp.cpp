@@ -31,6 +31,8 @@ SireAnalysis::Gradients __copy__(const SireAnalysis::Gradients &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Gradients_class(){
 
     { //::SireAnalysis::Gradients
@@ -50,6 +52,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "analyticData"
                 , analyticData_function_value
+                , bp::release_gil_policy()
                 , "Return the raw data for the analytic gradients" );
         
         }
@@ -62,6 +65,7 @@ void register_Gradients_class(){
                 "backwards"
                 , backwards_function_value
                 , ( bp::arg("lam") )
+                , bp::release_gil_policy()
                 , "Return the backwards gradient for the passed lambda value" );
         
         }
@@ -73,6 +77,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "backwardsData"
                 , backwardsData_function_value
+                , bp::release_gil_policy()
                 , "Return the raw data for the backwards free energy gradients" );
         
         }
@@ -84,6 +89,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "backwardsValues"
                 , backwardsValues_function_value
+                , bp::release_gil_policy()
                 , "Return the values of the backwards gradients as data points. This returns the\naverage backwards gradient for each lambda value, together with the\nstandard error at the 90% confidence level" );
         
         }
@@ -95,6 +101,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "deltaLambda"
                 , deltaLambda_function_value
+                , bp::release_gil_policy()
                 , "Return the value of delta lambda. This will be zero if these are\npure TI gradients" );
         
         }
@@ -107,6 +114,7 @@ void register_Gradients_class(){
                 "forwards"
                 , forwards_function_value
                 , ( bp::arg("lam") )
+                , bp::release_gil_policy()
                 , "Return the forwards gradient for the passed lambda value" );
         
         }
@@ -118,6 +126,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "forwardsData"
                 , forwardsData_function_value
+                , bp::release_gil_policy()
                 , "Return the raw data for the forwards free energy gradients" );
         
         }
@@ -129,6 +138,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "forwardsValues"
                 , forwardsValues_function_value
+                , bp::release_gil_policy()
                 , "Return the values of the forwards gradients as data points. This returns the\naverage forwards gradient for each lambda value, together with the\nstandard error at the 90% confidence level" );
         
         }
@@ -141,6 +151,7 @@ void register_Gradients_class(){
                 "gradient"
                 , gradient_function_value
                 , ( bp::arg("lam") )
+                , bp::release_gil_policy()
                 , "Return the gradient at the passed lambda value. This is the\naverage of the forwards and backwards gradient if finite difference\nis used" );
         
         }
@@ -152,6 +163,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "integrate"
                 , integrate_function_value
+                , bp::release_gil_policy()
                 , "Integrate these gradients between 0 and 1 using a polynomial of\norder ngradients-2 and return them as a potential of mean force (PMF)" );
         
         }
@@ -164,6 +176,7 @@ void register_Gradients_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("order") )
+                , bp::release_gil_policy()
                 , "Integrate these gradients between 0 and 1 using a polynomial\nof passed order and return them as a potential of mean force (PMF)" );
         
         }
@@ -176,6 +189,7 @@ void register_Gradients_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("range_min"), bp::arg("range_max") )
+                , bp::release_gil_policy()
                 , "Integrate these gradients between range_min to range_max using\na polynomial of order 10 and return them as a potential of mean force (PMF)" );
         
         }
@@ -188,6 +202,7 @@ void register_Gradients_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("range_min"), bp::arg("range_max"), bp::arg("order") )
+                , bp::release_gil_policy()
                 , "Integrate these gradients between range_min to range_max using\na polynomial of passed order and return them as a potential of mean force (PMF)" );
         
         }
@@ -199,6 +214,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is empty" );
         
         }
@@ -210,6 +226,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "keys"
                 , keys_function_value
+                , bp::release_gil_policy()
                 , "Return the (sorted) list of all lambda values" );
         
         }
@@ -221,6 +238,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "lambdaValues"
                 , lambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return the (sorted) list of the lambda values" );
         
         }
@@ -233,6 +251,7 @@ void register_Gradients_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("gradients") )
+                , bp::release_gil_policy()
                 , "Merge together the passed list of Gradients into a single object.\nNote that all of the passed gradients must be compatible, e.g.\nhave the same temperature and delta lambda values" );
         
         }
@@ -244,6 +263,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "nLambdaValues"
                 , nLambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of lambda values" );
         
         }
@@ -255,6 +275,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "nSamples"
                 , nSamples_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of samples used to calculate these gradients" );
         
         }
@@ -294,6 +315,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "temperature"
                 , temperature_function_value
+                , bp::release_gil_policy()
                 , "Return the temperature at which the gradients were collected" );
         
         }
@@ -305,6 +327,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -316,6 +339,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -327,6 +351,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "values"
                 , values_function_value
+                , bp::release_gil_policy()
                 , "Return the values of the gradients as data points. This returns the\naverage of the forwards and backwards gradients, with errors calculated\nbased on both the difference between the forwards and backwards values,\nand the 90% confidence level of the average of gradients" );
         
         }
@@ -338,6 +363,7 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -29,6 +29,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CuttingFunction_class(){
 
     { //::SireMol::CuttingFunction
@@ -79,6 +81,7 @@ void register_CuttingFunction_class(){
             CuttingFunction_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

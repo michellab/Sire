@@ -47,6 +47,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_BondHunter_class(){
 
     { //::SireMol::BondHunter
@@ -85,6 +87,7 @@ void register_BondHunter_class(){
             BondHunter_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

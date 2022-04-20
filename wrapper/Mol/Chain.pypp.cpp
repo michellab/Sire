@@ -73,6 +73,8 @@ SireMol::Chain __copy__(const SireMol::Chain &other){ return SireMol::Chain(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Chain_class(){
@@ -92,6 +94,7 @@ void register_Chain_class(){
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Assert that this chain has an ChainProperty piece of metadata\nat metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
@@ -104,6 +107,7 @@ void register_Chain_class(){
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Assert that the property at key key has an ChainProperty\npiece of metadata at metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
@@ -116,6 +120,7 @@ void register_Chain_class(){
                 "assertContainsProperty"
                 , assertContainsProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Assert that this chain has an ChainProperty at key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -127,6 +132,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "atomIdxs"
                 , atomIdxs_function_value
+                , bp::release_gil_policy()
                 , "Return the indicies of the atoms in this chain, in the\norder that they appear in this chain" );
         
         }
@@ -139,6 +145,7 @@ void register_Chain_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return whether or not this chain contains the atom\nat index atomidx" );
         
         }
@@ -151,6 +158,7 @@ void register_Chain_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this chain contains all of\nthe atoms identified by the ID atomid" );
         
         }
@@ -163,6 +171,7 @@ void register_Chain_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("residx") )
+                , bp::release_gil_policy()
                 , "Return whether or not this chain contains the\nresidue at index residx" );
         
         }
@@ -175,6 +184,7 @@ void register_Chain_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this chain contains all\nof the residues identified by the ID resid" );
         
         }
@@ -186,6 +196,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "edit"
                 , edit_function_value
+                , bp::release_gil_policy()
                 , "Return an editor that can edit this chain" );
         
         }
@@ -197,6 +208,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
+                , bp::release_gil_policy()
                 , "Return an evaluator that can evaluate properties\nof this chain" );
         
         }
@@ -209,6 +221,7 @@ void register_Chain_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return whether or not there is a ChainProperty at metakey metakey" );
         
         }
@@ -221,6 +234,7 @@ void register_Chain_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return whether the metadata at metakey metakey for the property\nat key key is a ChainProperty\nThrow: SireBase::missing_property\n" );
         
         }
@@ -233,6 +247,7 @@ void register_Chain_class(){
                 "hasProperty"
                 , hasProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return whether or not there is a ChainProperty at key key" );
         
         }
@@ -244,6 +259,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "index"
                 , index_function_value
+                , bp::release_gil_policy()
                 , "Return the index of this chain in the molecule" );
         
         }
@@ -256,6 +272,7 @@ void register_Chain_class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this chain contains some of\nthe atoms identified by the ID atomid" );
         
         }
@@ -268,6 +285,7 @@ void register_Chain_class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this chain contains some\nof the residues identified by the ID resid" );
         
         }
@@ -279,6 +297,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Is this chain empty?" );
         
         }
@@ -290,6 +309,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the metakeys of all ChainProperty metadata" );
         
         }
@@ -302,6 +322,7 @@ void register_Chain_class(){
                 "metadataKeys"
                 , metadataKeys_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return the metakeys of all ChainProperty metadata for\nthe property at key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -313,6 +334,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "move"
                 , move_function_value
+                , bp::release_gil_policy()
                 , "Return an object that can move a copy of this chain" );
         
         }
@@ -324,6 +346,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in this Chain" );
         
         }
@@ -335,6 +358,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "nResidues"
                 , nResidues_function_value
+                , bp::release_gil_policy()
                 , "Return the number of residues in this chain" );
         
         }
@@ -346,6 +370,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "name"
                 , name_function_value
+                , bp::release_gil_policy()
                 , "Return the name of this chain" );
         
         }
@@ -420,6 +445,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "propertyKeys"
                 , propertyKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the keys of all ChainProperty properties" );
         
         }
@@ -443,6 +469,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "Is this chain the entire molecule?" );
         
         }
@@ -454,6 +481,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
                 , "Return the atoms that are in this chain" );
         
         }
@@ -465,6 +493,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "selector"
                 , selector_function_value
+                , bp::release_gil_policy()
                 , "Return a selector that change the selection of chains" );
         
         }
@@ -476,6 +505,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this chain" );
         
         }
@@ -487,6 +517,7 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -499,6 +530,7 @@ void register_Chain_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "Update this chain with the passed molecule data.\nThrow: SireError::incompatible_error\n" );
         
         }

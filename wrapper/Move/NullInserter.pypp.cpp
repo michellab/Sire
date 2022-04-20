@@ -35,6 +35,8 @@ SireMove::NullInserter __copy__(const SireMove::NullInserter &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullInserter_class(){
 
     { //::SireMove::NullInserter
@@ -51,6 +53,7 @@ void register_NullInserter_class(){
                 "insert"
                 , insert_function_value
                 , ( bp::arg("molecule"), bp::arg("system"), bp::arg("space") )
+                , bp::release_gil_policy()
                 , "This does nothing" );
         
         }
@@ -63,6 +66,7 @@ void register_NullInserter_class(){
                 "insert"
                 , insert_function_value
                 , ( bp::arg("molecule"), bp::arg("system"), bp::arg("space") )
+                , bp::release_gil_policy()
                 , "This does nothing" );
         
         }
@@ -89,6 +93,7 @@ void register_NullInserter_class(){
             NullInserter_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

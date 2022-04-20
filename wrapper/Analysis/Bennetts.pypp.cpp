@@ -33,6 +33,8 @@ SireAnalysis::Bennetts __copy__(const SireAnalysis::Bennetts &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Bennetts_class(){
@@ -53,6 +55,7 @@ void register_Bennetts_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("windows"), bp::arg("forwards_ratios"), bp::arg("backwards_ratios") )
+                , bp::release_gil_policy()
                 , "Add the data for the next iteration, which contains the ratios for the passed windows,\nwith forwards_ratios containing the free energy from each window to the next window,\nand backwards_ratios containing the free energy from the previous window to each window" );
         
         }
@@ -65,6 +68,7 @@ void register_Bennetts_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("ratios") )
+                , bp::release_gil_policy()
                 , "Add the data for the next iteration" );
         
         }
@@ -77,6 +81,7 @@ void register_Bennetts_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the deltas for the ith iteration" );
         
         }
@@ -88,6 +93,7 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Remove all values from the histogram" );
         
         }
@@ -99,6 +105,7 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of iterations" );
         
         }
@@ -110,6 +117,7 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "lambdaValues"
                 , lambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return the values of all windows" );
         
         }
@@ -122,6 +130,7 @@ void register_Bennetts_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("start"), bp::arg("end") )
+                , bp::release_gil_policy()
                 , "Merge the deltas for iterations start->end" );
         
         }
@@ -134,6 +143,7 @@ void register_Bennetts_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("indicies") )
+                , bp::release_gil_policy()
                 , "Merge the deltas at the passed indicies" );
         
         }
@@ -145,6 +155,7 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "nIterations"
                 , nIterations_function_value
+                , bp::release_gil_policy()
                 , "Return the number of iterations" );
         
         }
@@ -156,6 +167,7 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "nLambdaValues"
                 , nLambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return the number of lambda values (windows)" );
         
         }
@@ -167,6 +179,7 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "nSamples"
                 , nSamples_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of samples in the simulation" );
         
         }
@@ -178,6 +191,7 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "nWindows"
                 , nWindows_function_value
+                , bp::release_gil_policy()
                 , "Return the number of windows" );
         
         }
@@ -216,6 +230,7 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "ratios"
                 , ratios_function_value
+                , bp::release_gil_policy()
                 , "Return the deltas for all iterations" );
         
         }
@@ -228,6 +243,7 @@ void register_Bennetts_class(){
                 "removeAt"
                 , removeAt_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Remove the data for iteration i" );
         
         }
@@ -240,6 +256,7 @@ void register_Bennetts_class(){
                 "removeRange"
                 , removeRange_function_value
                 , ( bp::arg("start"), bp::arg("end") )
+                , bp::release_gil_policy()
                 , "Remove every iteration from start to end (inclusively)" );
         
         }
@@ -252,6 +269,7 @@ void register_Bennetts_class(){
                 "rollingAverage"
                 , rollingAverage_function_value
                 , ( bp::arg("niterations") )
+                , bp::release_gil_policy()
                 , "Return a list of Gradients that represents the rolling average over niterations\niterations over this TI data set. If this data set contains 100 iterations, and\nwe calculate the rolling average over 50 iterations, then the returned Gradients\nwill be the average from 1-50, then 2-51, 3-52.....51-100" );
         
         }
@@ -264,6 +282,7 @@ void register_Bennetts_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("windows"), bp::arg("forwards_ratios"), bp::arg("backwards_ratios") )
+                , bp::release_gil_policy()
                 , "Set the deltas for the ith iteration" );
         
         }
@@ -276,6 +295,7 @@ void register_Bennetts_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("ratios") )
+                , bp::release_gil_policy()
                 , "Set the deltas for the ith iteration" );
         
         }
@@ -287,6 +307,7 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of iterations" );
         
         }
@@ -298,6 +319,7 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -309,6 +331,7 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -320,6 +343,7 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -331,6 +355,7 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "windows"
                 , windows_function_value
+                , bp::release_gil_policy()
                 , "Return the value of all windows" );
         
         }

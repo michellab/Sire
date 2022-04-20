@@ -31,6 +31,8 @@ SireMaths::MultiFixed __copy__(const SireMaths::MultiFixed &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_MultiFixed_class(){
@@ -53,6 +55,7 @@ void register_MultiFixed_class(){
                 "compareEqual"
                 , compareEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Compare each element of the two vectors. Return 0x00000000000000000 if\nthe element is not equal, 0x1111111111111111 if they are" );
         
         }
@@ -65,6 +68,7 @@ void register_MultiFixed_class(){
                 "compareGreater"
                 , compareGreater_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Compare each element for greater" );
         
         }
@@ -77,6 +81,7 @@ void register_MultiFixed_class(){
                 "compareGreaterEqual"
                 , compareGreaterEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Compare each element for greater or equal" );
         
         }
@@ -89,6 +94,7 @@ void register_MultiFixed_class(){
                 "compareLess"
                 , compareLess_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Compare each element for less" );
         
         }
@@ -101,6 +107,7 @@ void register_MultiFixed_class(){
                 "compareLessEqual"
                 , compareLessEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Compare each element for less or equal" );
         
         }
@@ -113,6 +120,7 @@ void register_MultiFixed_class(){
                 "compareNotEqual"
                 , compareNotEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Compare each element for inequality" );
         
         }
@@ -124,6 +132,7 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of elements in the vector" );
         
         }
@@ -136,6 +145,7 @@ void register_MultiFixed_class(){
                 "fromArray"
                 , fromArray_function_value
                 , ( bp::arg("array") )
+                , bp::release_gil_policy()
                 , "Convert the passed array of doubles to an array of MultiFixed values.\nNote that the array may be returned padded with zeroes" );
         
         }
@@ -148,6 +158,7 @@ void register_MultiFixed_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the value of the ith element of the vector" );
         
         }
@@ -160,6 +171,7 @@ void register_MultiFixed_class(){
                 "logicalAnd"
                 , logicalAnd_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Logical bitwise and operator" );
         
         }
@@ -172,6 +184,7 @@ void register_MultiFixed_class(){
                 "logicalAndNot"
                 , logicalAndNot_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Logical bitwise and not" );
         
         }
@@ -183,6 +196,7 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "logicalNot"
                 , logicalNot_function_value
+                , bp::release_gil_policy()
                 , "Logical bitwise not operator" );
         
         }
@@ -195,6 +209,7 @@ void register_MultiFixed_class(){
                 "logicalOr"
                 , logicalOr_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Logical bitwise or" );
         
         }
@@ -207,6 +222,7 @@ void register_MultiFixed_class(){
                 "logicalXor"
                 , logicalXor_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Logical bitwise xor" );
         
         }
@@ -219,6 +235,7 @@ void register_MultiFixed_class(){
                 "max"
                 , max_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return the max of this vector with other" );
         
         }
@@ -231,6 +248,7 @@ void register_MultiFixed_class(){
                 "min"
                 , min_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return the min of this vector with other" );
         
         }
@@ -295,6 +313,7 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "reciprocal"
                 , reciprocal_function_value
+                , bp::release_gil_policy()
                 , "Return the reciprocal of this number" );
         
         }
@@ -306,6 +325,7 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "rotate"
                 , rotate_function_value
+                , bp::release_gil_policy()
                 , "Rotate this vector in the same direction as MultiFloat::rotate()" );
         
         }
@@ -317,6 +337,7 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "rsqrt"
                 , rsqrt_function_value
+                , bp::release_gil_policy()
                 , "Return the reciprocal square root of this number" );
         
         }
@@ -329,6 +350,7 @@ void register_MultiFixed_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the ith element of this vector to value" );
         
         }
@@ -340,6 +362,7 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of elements in the vector" );
         
         }
@@ -351,6 +374,7 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "sqrt"
                 , sqrt_function_value
+                , bp::release_gil_policy()
                 , "Return the square root of this number" );
         
         }
@@ -362,6 +386,7 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "sum"
                 , sum_function_value
+                , bp::release_gil_policy()
                 , "Return the sum of all of the elements of this vector" );
         
         }
@@ -374,6 +399,7 @@ void register_MultiFixed_class(){
                 "toArray"
                 , toArray_function_value
                 , ( bp::arg("array") )
+                , bp::release_gil_policy()
                 , "Return convert the passed MultiFixed array back into an array of doubles" );
         
         }
@@ -385,6 +411,7 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "toBinaryString"
                 , toBinaryString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -396,6 +423,7 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -407,6 +435,7 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -418,6 +447,7 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

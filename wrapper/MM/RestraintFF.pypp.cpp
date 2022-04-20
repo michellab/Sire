@@ -44,6 +44,8 @@ SireMM::RestraintFF __copy__(const SireMM::RestraintFF &other){ return SireMM::R
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_RestraintFF_class(){
@@ -63,6 +65,7 @@ void register_RestraintFF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("restraint") )
+                , bp::release_gil_policy()
                 , "Add the passed restraint to this forcefield. This does nothing\nif this restraint is already part of this forcefield. This returns\nwhether or not this changes this forcefield" );
         
         }
@@ -74,6 +77,7 @@ void register_RestraintFF_class(){
             RestraintFF_exposer.def( 
                 "builtinSymbols"
                 , builtinSymbols_function_value
+                , bp::release_gil_policy()
                 , "Return all of the built-in symbols used by the restraints\nin this forcefield" );
         
         }
@@ -85,7 +89,7 @@ void register_RestraintFF_class(){
             RestraintFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the components of this forcefield" );
         
         }
@@ -98,6 +102,7 @@ void register_RestraintFF_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("restraint") )
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield contains the restraint\nrestraint" );
         
         }
@@ -110,6 +115,7 @@ void register_RestraintFF_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield contains a property called name" );
         
         }
@@ -122,6 +128,7 @@ void register_RestraintFF_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return a copy of this forcefield where all of the restraints\nhave been differentiated with respect to symbol. The returned\nforcefield will contain the same molecules in the same state\nas they are in this forcefield, and will be called\nd(forcefield_name)d(symbol)\n" );
         
         }
@@ -134,6 +141,7 @@ void register_RestraintFF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("scale_energy")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -146,6 +154,7 @@ void register_RestraintFF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("symbol"), bp::arg("scale_energy")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -158,6 +167,7 @@ void register_RestraintFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -170,6 +180,7 @@ void register_RestraintFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -182,6 +193,7 @@ void register_RestraintFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -194,6 +206,7 @@ void register_RestraintFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -206,6 +219,7 @@ void register_RestraintFF_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the forces on the molecules in forcetable caused\nby the restraints in this forcefield and add them onto the\nforcetable, optionally scaled by scale_force" );
         
         }
@@ -218,6 +232,7 @@ void register_RestraintFF_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("symbol"), bp::arg("scale_force")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the forces on the molecules in forcetable caused by\nthe energy component symbol in this forcefield, and add them\nonto the forcetable, optionally scaled by scale_force\nThrow: SireFF::missing_component\n" );
         
         }
@@ -230,6 +245,7 @@ void register_RestraintFF_class(){
                 "getValue"
                 , getValue_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the value of the user-supplied symbol symbol" );
         
         }
@@ -242,6 +258,7 @@ void register_RestraintFF_class(){
                 "hasValue"
                 , hasValue_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return whether or not there is a user-supplied value with the\nsymbol symbol" );
         
         }
@@ -253,6 +270,7 @@ void register_RestraintFF_class(){
             RestraintFF_exposer.def( 
                 "mustNowRecalculateFromScratch"
                 , mustNowRecalculateFromScratch_function_value
+                , bp::release_gil_policy()
                 , "Force recalculation of the restraint energy from scratch" );
         
         }
@@ -264,6 +282,7 @@ void register_RestraintFF_class(){
             RestraintFF_exposer.def( 
                 "nRestraints"
                 , nRestraints_function_value
+                , bp::release_gil_policy()
                 , "Return the number of restraints in this forcefield" );
         
         }
@@ -291,6 +310,7 @@ void register_RestraintFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -303,6 +323,7 @@ void register_RestraintFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -315,6 +336,7 @@ void register_RestraintFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -327,6 +349,7 @@ void register_RestraintFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -351,7 +374,7 @@ void register_RestraintFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the property called name\nThrow: SireBase::missing_property\n" );
         
         }
@@ -364,6 +387,7 @@ void register_RestraintFF_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("restraint") )
+                , bp::release_gil_policy()
                 , "Remove the restraint restraint from this forcefield. This does\nnothing if this restraint is not in this forcefield. This returns\nwhether or not the restraint was removed." );
         
         }
@@ -376,6 +400,7 @@ void register_RestraintFF_class(){
                 "removeRestraintAt"
                 , removeRestraintAt_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Remove the ith restraint\nThrow: SireError::invalid_index\n" );
         
         }
@@ -388,7 +413,7 @@ void register_RestraintFF_class(){
                 "restraintAt"
                 , restraintAt_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ith restraint\nThrow: SireError::index_error\n" );
         
         }
@@ -400,6 +425,7 @@ void register_RestraintFF_class(){
             RestraintFF_exposer.def( 
                 "restraints"
                 , restraints_function_value
+                , bp::release_gil_policy()
                 , "Return the array of all restraints" );
         
         }
@@ -412,6 +438,7 @@ void register_RestraintFF_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("property") )
+                , bp::release_gil_policy()
                 , "Set the property name to the value property\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -424,6 +451,7 @@ void register_RestraintFF_class(){
                 "setSpace"
                 , setSpace_function_value
                 , ( bp::arg("space") )
+                , bp::release_gil_policy()
                 , "Set the space used by all of the restraints in this forcefield.\nThrow: SireVol::incompatible_space\n" );
         
         }
@@ -436,6 +464,7 @@ void register_RestraintFF_class(){
                 "setValue"
                 , setValue_function_value
                 , ( bp::arg("symbol"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the value of the user symbol symbol to the value value.\nThis will only work if there is a restraint in this forcefield\nthat has this symbol. This returns whether or not this\nchanges the forcefield. This raises an exception if you\nare trying to set the value of a built-in symbol\nThrow: SireError::invalid_arg\n" );
         
         }
@@ -447,7 +476,7 @@ void register_RestraintFF_class(){
             RestraintFF_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the space used by this forcefield" );
         
         }
@@ -459,6 +488,7 @@ void register_RestraintFF_class(){
             RestraintFF_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return all of the symbols used in this forcefield - this includes\nboth the user-supplied symbols and the built-in symbols" );
         
         }
@@ -470,6 +500,7 @@ void register_RestraintFF_class(){
             RestraintFF_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -481,6 +512,7 @@ void register_RestraintFF_class(){
             RestraintFF_exposer.def( 
                 "userSymbols"
                 , userSymbols_function_value
+                , bp::release_gil_policy()
                 , "Return all of the user-supplied symbols for the restraints\nin this forcefield" );
         
         }
@@ -492,6 +524,7 @@ void register_RestraintFF_class(){
             RestraintFF_exposer.def( 
                 "userValues"
                 , userValues_function_value
+                , bp::release_gil_policy()
                 , "Return all of the values for the user-supplied values in the\nrestraints in this forcefield" );
         
         }

@@ -238,6 +238,8 @@ SireMol::Atom __copy__(const SireMol::Atom &other){ return SireMol::Atom(other);
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Atom_class(){
@@ -258,6 +260,7 @@ void register_Atom_class(){
                 "assertContains"
                 , assertContains_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Assert that this atom is the atom at index atomidx\nThrow: SireMol::missing_atom\n" );
         
         }
@@ -270,6 +273,7 @@ void register_Atom_class(){
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Assert that this atom has an AtomProperty piece of metadata\nat metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
@@ -282,6 +286,7 @@ void register_Atom_class(){
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Assert that the property at key key has an AtomProperty\npiece of metadata at metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
@@ -294,6 +299,7 @@ void register_Atom_class(){
                 "assertContainsProperty"
                 , assertContainsProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Assert that this atom has an AtomProperty at key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -305,7 +311,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "cgAtomIdx"
                 , cgAtomIdx_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the CGAtomIdx of this atom" );
         
         }
@@ -317,6 +323,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "chain"
                 , chain_function_value
+                , bp::release_gil_policy()
                 , "Return the chain this atom is in\nThrow: SireMol::missing_chain\n" );
         
         }
@@ -328,6 +335,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "cutGroup"
                 , cutGroup_function_value
+                , bp::release_gil_policy()
                 , "Return the CutGroup this atom is in" );
         
         }
@@ -339,6 +347,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "edit"
                 , edit_function_value
+                , bp::release_gil_policy()
                 , "Return an editor that can be used to edit this atom" );
         
         }
@@ -350,6 +359,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
+                , bp::release_gil_policy()
                 , "Return an evaluator that can be used to evaluate properties\nof this atom" );
         
         }
@@ -362,6 +372,7 @@ void register_Atom_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return whether or not there is an AtomProperty at metakey metakey" );
         
         }
@@ -374,6 +385,7 @@ void register_Atom_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return whether the metadata at metakey metakey for the property\nat key key is an AtomProperty\nThrow: SireBase::missing_property\n" );
         
         }
@@ -386,6 +398,7 @@ void register_Atom_class(){
                 "hasProperty"
                 , hasProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return whether or not there is an AtomProperty at key key" );
         
         }
@@ -397,6 +410,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "index"
                 , index_function_value
+                , bp::release_gil_policy()
                 , "Return the index number of this atom in the molecule" );
         
         }
@@ -408,6 +422,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Is this atom empty?" );
         
         }
@@ -419,6 +434,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "isWithinChain"
                 , isWithinChain_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this atom is part of a chain" );
         
         }
@@ -430,6 +446,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "isWithinResidue"
                 , isWithinResidue_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this atom is part of a residue" );
         
         }
@@ -441,6 +458,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "isWithinSegment"
                 , isWithinSegment_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this atom is part of a segment" );
         
         }
@@ -452,6 +470,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the metakeys of all AtomProperty metadata" );
         
         }
@@ -464,6 +483,7 @@ void register_Atom_class(){
                 "metadataKeys"
                 , metadataKeys_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return the metakeys of all AtomProperty metadata for\nthe property at key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -475,6 +495,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "molecule"
                 , molecule_function_value
+                , bp::release_gil_policy()
                 , "Return the molecule that contains this atom" );
         
         }
@@ -486,6 +507,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "move"
                 , move_function_value
+                , bp::release_gil_policy()
                 , "Return a Mover that can be used to move this atom" );
         
         }
@@ -497,6 +519,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "name"
                 , name_function_value
+                , bp::release_gil_policy()
                 , "Return the name of the atom" );
         
         }
@@ -508,6 +531,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "number"
                 , number_function_value
+                , bp::release_gil_policy()
                 , "Return the number of the atom" );
         
         }
@@ -535,6 +559,7 @@ void register_Atom_class(){
                 "propertyAsProperty"
                 , propertyAsProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return the specified property as a PropertyPtr" );
         
         }
@@ -547,6 +572,7 @@ void register_Atom_class(){
                 "propertyAsVariant"
                 , propertyAsVariant_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return the specified property as a QVariant" );
         
         }
@@ -558,6 +584,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "propertyKeys"
                 , propertyKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the keys of all AtomProperty properties" );
         
         }
@@ -569,6 +596,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "residue"
                 , residue_function_value
+                , bp::release_gil_policy()
                 , "Return the residue that this atom is in\nThrow: SireMol::missing_residue\n" );
         
         }
@@ -580,6 +608,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "segment"
                 , segment_function_value
+                , bp::release_gil_policy()
                 , "Return the segment this atom is in\nThrow: SireMol::missing_segment\n" );
         
         }
@@ -591,6 +620,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "Is this atom a view of the whole (1 atom) molecule?" );
         
         }
@@ -602,6 +632,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
                 , "Return the selected atom" );
         
         }
@@ -613,6 +644,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "selector"
                 , selector_function_value
+                , bp::release_gil_policy()
                 , "Return a selector that can change the atom selection" );
         
         }
@@ -624,6 +656,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this atom" );
         
         }
@@ -635,6 +668,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -647,6 +681,7 @@ void register_Atom_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Update this atom with the passed molecule data.\nThrow: SireError::incompatible_error\n" );
         
         }

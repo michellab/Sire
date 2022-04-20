@@ -17,6 +17,8 @@ SireSystem::SysName __copy__(const SireSystem::SysName &other){ return SireSyste
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SysName_class(){
 
     { //::SireSystem::SysName
@@ -33,6 +35,7 @@ void register_SysName_class(){
             SysName_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -44,6 +47,7 @@ void register_SysName_class(){
             SysName_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -56,6 +60,7 @@ void register_SysName_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("systems") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -83,6 +88,7 @@ void register_SysName_class(){
             SysName_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -94,6 +100,7 @@ void register_SysName_class(){
             SysName_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -105,6 +112,7 @@ void register_SysName_class(){
             SysName_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

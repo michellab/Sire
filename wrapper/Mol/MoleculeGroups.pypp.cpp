@@ -82,6 +82,8 @@ SireMol::MoleculeGroups __copy__(const SireMol::MoleculeGroups &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_MoleculeGroups_class(){
@@ -101,6 +103,7 @@ void register_MoleculeGroups_class(){
             MoleculeGroups_exposer.def( 
                 "accept"
                 , accept_function_value
+                , bp::release_gil_policy()
                 , "Tell the molecule group that the last move was accepted. This tells the\ngroup to make permanent any temporary changes that were used a workspace\nto avoid memory allocation during a move" );
         
         }
@@ -113,6 +116,7 @@ void register_MoleculeGroups_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Add the molecule group molgroup to this set. This does\nnothing if this group is already in this set. This updates\nthe molecules in molgroup so that they are at the\nsame version as any existing copies of the molecules\nin this set." );
         
         }
@@ -125,6 +129,7 @@ void register_MoleculeGroups_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molview"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Add the view of the molecule in molview to the groups\nidentified by mgid. This adds the view as a duplicate\nif it already exists in the group. The version\nof the molecule added is the version already present\nin this set, if it exists.\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -137,6 +142,7 @@ void register_MoleculeGroups_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Add the views of the molecule in molviews to the groups\nidentified by mgid. This adds the view as a duplicate if\nit already exists in a group.\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -149,6 +155,7 @@ void register_MoleculeGroups_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Add each of the molecules in molecules to the groups\nidentified by mgid. This adds the views as duplicates\nif they exist already in a group. Any molecules that\nalready exist in any of the groups in this set are\nupdated to the versions that are already present\nin this set.\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -161,6 +168,7 @@ void register_MoleculeGroups_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Add the molecules in the group molgroup to the groups\nidentified by mgid. This adds the views as duplicates\nif they already exist, and adds the views in the same\norder as they appear in molgroup. This is slightly less\nefficient than MoleculeGroups::add(const Molecules&), so use\nthat function if you dont care about the order.\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -173,6 +181,7 @@ void register_MoleculeGroups_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molview"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Add the view of the molecule in molview to the groups\nidentified by mgid. This only adds the view to a group\nif it doesnt already exist in the group. The version\nof the molecule already present in this set is used if\nsuch a molecule already exists.\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -185,6 +194,7 @@ void register_MoleculeGroups_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Add the views of the molecule in molviews ot the groups\nidentified by mgid. This only adds views to groups that\ndont already exist in that group, and uses the existing\nversion of the molecule is it already exists in one\nof the groups of this set.\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -197,6 +207,7 @@ void register_MoleculeGroups_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Add all of the views of the molecules in molecules to the groups\nidentified by mgid. This only adds views that dont already\nexist in the group, and uses the version of the molecules that already\nexists in one of the groups of this set (if one exists)\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -209,6 +220,7 @@ void register_MoleculeGroups_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "This adds all of the views of the molecules in the group\nmolgroup, in the same order as they exist in this group,\nto all of the groups identified by mgid. This only\nadds views to a group that dont already exist in that\ngroup and uses the existing version of the molecule if\nit exists anywhere in this set.\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -221,7 +233,7 @@ void register_MoleculeGroups_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group with number mgnum\nThrow: SireMol::missing_group\n" );
         
         }
@@ -233,6 +245,7 @@ void register_MoleculeGroups_class(){
             MoleculeGroups_exposer.def( 
                 "needsAccepting"
                 , needsAccepting_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this set of molecule groups is using a temporary\nworkspace and needs accepting" );
         
         }
@@ -260,6 +273,7 @@ void register_MoleculeGroups_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the groups that match the ID mgid from this set. This\ndoes nothing if there are no such groups." );
         
         }
@@ -272,6 +286,7 @@ void register_MoleculeGroups_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Remove the molecules contained in molgroup from this set.\nNote that this does not remove this molecule group itself\n- if you want to remove the molecule group, use\nMoleculeGroups::remove(molgroup.number())" );
         
         }
@@ -284,6 +299,7 @@ void register_MoleculeGroups_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molid") )
+                , bp::release_gil_policy()
                 , "Remove the molecules that match the ID molid from this set.\nThis does nothing if there are no molecules that match this\nID in this set" );
         
         }
@@ -296,6 +312,7 @@ void register_MoleculeGroups_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molview"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the view of the molecule in molview from the groups\nidentified by mgid. This only removes the first copy\nof the view from each group, if multiple copies exist.\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -308,6 +325,7 @@ void register_MoleculeGroups_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the views of the molecule in molviews from the groups\nidentified by mgid. This only removes the first copy of the\nviews from each group if they exist multiple times.\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -320,6 +338,7 @@ void register_MoleculeGroups_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove all of the views of the molecules in molecules from\nthe groups identified by mgid. This removes only the first\ncopies of the views in each group.\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -332,6 +351,7 @@ void register_MoleculeGroups_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove all of the views of the molecules in the group molgroup from\nthe groups identified by mgid. This removes only the first\ncopies of the views in each group.\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -344,6 +364,7 @@ void register_MoleculeGroups_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molnum"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove all views of the molecule with number molnum from the\ngroups identified by mgid. This does nothing to any groups\nthat dont contain this molecule\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -356,6 +377,7 @@ void register_MoleculeGroups_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molnums"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove the molecules whose numbers are in molnums from the\ngroups identified by mgid\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -368,6 +390,7 @@ void register_MoleculeGroups_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molview"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove all copies of the view of the molecule in molview from\nthe groups identified by mgid\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -380,6 +403,7 @@ void register_MoleculeGroups_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molviews"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove all copies of the views of the molecule in molviews from\nthe groups identified by mgid\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -392,6 +416,7 @@ void register_MoleculeGroups_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molecules"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove all copies of the views of the molecules in molecules\nfrom the groups identified by mgid\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -404,6 +429,7 @@ void register_MoleculeGroups_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove all of the views of the molecules in the group molgroup\nfrom the groups identified by mgid\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -416,6 +442,7 @@ void register_MoleculeGroups_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Remove all of the molecules from all of the groups identified by\nthe ID mgid\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -428,6 +455,7 @@ void register_MoleculeGroups_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "Set the contents of the groups identified by mgid so that\nthey only contain the view in molview\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -440,6 +468,7 @@ void register_MoleculeGroups_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molviews") )
+                , bp::release_gil_policy()
                 , "Set the contents of the groups identified by mgid so that\nthey only contain the views of the molecule in molviews\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -452,6 +481,7 @@ void register_MoleculeGroups_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Set the contents of the groups identified by mgid so that\nthey contain only the views of the molecules contained in molecules\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -464,6 +494,7 @@ void register_MoleculeGroups_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("mgid"), bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Set the contents of the groups identified by mgid so that\nthey contain the same views of the same molecules in the\nsame order as in the group molgroup\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -475,6 +506,7 @@ void register_MoleculeGroups_class(){
             MoleculeGroups_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -487,6 +519,7 @@ void register_MoleculeGroups_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Update all of the groups to use the version of the molecule\npresent in moldata" );
         
         }
@@ -499,6 +532,7 @@ void register_MoleculeGroups_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Update all of the groups to use the versions of the molecules\nheld in molecules" );
         
         }
@@ -511,6 +545,7 @@ void register_MoleculeGroups_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Update the group molgroup. If this group is in this set,\nthen it updates the group to the same version. Then, regardless\nof whether the group is in this set, it then updates all\nmolecules in all of the groups so that they have the same\nversion number as molgroup. This does nothing if\nmolgroup and none of its molecules are in this set" );
         
         }

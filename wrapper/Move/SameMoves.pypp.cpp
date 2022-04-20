@@ -48,6 +48,8 @@ SireMove::SameMoves __copy__(const SireMove::SameMoves &other){ return SireMove:
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_SameMoves_class(){
@@ -66,6 +68,7 @@ void register_SameMoves_class(){
             SameMoves_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Clear the move statistics" );
         
         }
@@ -77,6 +80,7 @@ void register_SameMoves_class(){
             SameMoves_exposer.def( 
                 "clearTiming"
                 , clearTiming_function_value
+                , bp::release_gil_policy()
                 , "Clear all of the timing statistics" );
         
         }
@@ -88,7 +92,7 @@ void register_SameMoves_class(){
             SameMoves_exposer.def( 
                 "energyComponent"
                 , energyComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the energy component used to calculate the system energy" );
         
         }
@@ -101,6 +105,7 @@ void register_SameMoves_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves")=(int)(1), bp::arg("record_stats")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Apply the move nmoves times to the system system, returning\nthe result" );
         
         }
@@ -112,6 +117,7 @@ void register_SameMoves_class(){
             SameMoves_exposer.def( 
                 "moves"
                 , moves_function_value
+                , bp::release_gil_policy()
                 , "Return the moves used by this object" );
         
         }
@@ -139,6 +145,7 @@ void register_SameMoves_class(){
                 "setEnergyComponent"
                 , setEnergyComponent_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "Set the energy component of all of the moves to component" );
         
         }
@@ -151,6 +158,7 @@ void register_SameMoves_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("rangenerator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator used at all points in all of the moves" );
         
         }
@@ -163,6 +171,7 @@ void register_SameMoves_class(){
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
                 , ( bp::arg("spaceproperty") )
+                , bp::release_gil_policy()
                 , "Set the name of the property that all of the moves will use to\nfind the simulation space (simulation box) to spaceproperty" );
         
         }
@@ -186,6 +195,7 @@ void register_SameMoves_class(){
             SameMoves_exposer.def( 
                 "timing"
                 , timing_function_value
+                , bp::release_gil_policy()
                 , "Return the list of average times for the move" );
         
         }
@@ -197,6 +207,7 @@ void register_SameMoves_class(){
             SameMoves_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of these moves" );
         
         }
@@ -208,6 +219,7 @@ void register_SameMoves_class(){
             SameMoves_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -47,6 +47,8 @@ SireCAS::Product __copy__(const SireCAS::Product &other){ return SireCAS::Produc
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Product_class(){
 
     { //::SireCAS::Product
@@ -64,6 +66,7 @@ void register_Product_class(){
             Product_exposer.def( 
                 "children"
                 , children_function_value
+                , bp::release_gil_policy()
                 , "Return the child expressions of this product" );
         
         }
@@ -75,6 +78,7 @@ void register_Product_class(){
             Product_exposer.def( 
                 "conjugate"
                 , conjugate_function_value
+                , bp::release_gil_policy()
                 , "Return the complex conjugate of this product" );
         
         }
@@ -86,6 +90,7 @@ void register_Product_class(){
             Product_exposer.def( 
                 "denominator"
                 , denominator_function_value
+                , bp::release_gil_policy()
                 , "Return the Product of expressions on the denominator of this Product" );
         
         }
@@ -98,6 +103,7 @@ void register_Product_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the differential of this product..." );
         
         }
@@ -110,6 +116,7 @@ void register_Product_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this product" );
         
         }
@@ -122,6 +129,7 @@ void register_Product_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this product" );
         
         }
@@ -134,6 +142,7 @@ void register_Product_class(){
                 "expand"
                 , expand_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -145,6 +154,7 @@ void register_Product_class(){
             Product_exposer.def( 
                 "functions"
                 , functions_function_value
+                , bp::release_gil_policy()
                 , "Return all of the functions used in this product" );
         
         }
@@ -156,6 +166,7 @@ void register_Product_class(){
             Product_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash for this product" );
         
         }
@@ -168,6 +179,7 @@ void register_Product_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Need to write integral of a product..." );
         
         }
@@ -179,6 +191,7 @@ void register_Product_class(){
             Product_exposer.def( 
                 "isComplex"
                 , isComplex_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this Product contains any complex terms" );
         
         }
@@ -190,6 +203,7 @@ void register_Product_class(){
             Product_exposer.def( 
                 "isCompound"
                 , isCompound_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is compound (requires brackets when printing)" );
         
         }
@@ -201,6 +215,7 @@ void register_Product_class(){
             Product_exposer.def( 
                 "isConstant"
                 , isConstant_function_value
+                , bp::release_gil_policy()
                 , "Return whether this is a constant" );
         
         }
@@ -213,6 +228,7 @@ void register_Product_class(){
                 "isFunction"
                 , isFunction_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Return whether or not this is a function of symbol" );
         
         }
@@ -224,6 +240,7 @@ void register_Product_class(){
             Product_exposer.def( 
                 "numerator"
                 , numerator_function_value
+                , bp::release_gil_policy()
                 , "Return the Product of expressions on the numerator of this Product" );
         
         }
@@ -236,6 +253,7 @@ void register_Product_class(){
             Product_exposer.def( 
                 "reduce"
                 , reduce_function_value
+                , bp::release_gil_policy()
                 , "Reduce a Product down to a simple form. This will not attempt to collapse\ncommon factors - if you want to do this then call the collapse function." );
         
         }
@@ -248,6 +266,7 @@ void register_Product_class(){
                 "series"
                 , series_function_value
                 , ( bp::arg("symbol"), bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Return the series expansion of this product with respect to symbol, to order n" );
         
         }
@@ -260,6 +279,7 @@ void register_Product_class(){
                 "simplify"
                 , simplify_function_value
                 , ( bp::arg("options")=(int)(0) )
+                , bp::release_gil_policy()
                 , "Try to simplify this product" );
         
         }
@@ -272,6 +292,7 @@ void register_Product_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "Return the product with the identities in identities substituted in" );
         
         }
@@ -283,6 +304,7 @@ void register_Product_class(){
             Product_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return all of the symbols used in this product" );
         
         }
@@ -294,6 +316,7 @@ void register_Product_class(){
             Product_exposer.def( 
                 "toOpenMMString"
                 , toOpenMMString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this Product in the OpenMM syntax" );
         
         }
@@ -305,6 +328,7 @@ void register_Product_class(){
             Product_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this Product" );
         
         }
@@ -316,6 +340,7 @@ void register_Product_class(){
             Product_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -327,6 +352,7 @@ void register_Product_class(){
             Product_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

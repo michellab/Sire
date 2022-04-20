@@ -34,6 +34,8 @@ SireMol::BondPerturbation __copy__(const SireMol::BondPerturbation &other){ retu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_BondPerturbation_class(){
 
     { //::SireMol::BondPerturbation
@@ -53,7 +55,7 @@ void register_BondPerturbation_class(){
             BondPerturbation_exposer.def( 
                 "bond"
                 , bond_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ID that identifies that bond that will be perturbed" );
         
         }
@@ -104,6 +106,7 @@ void register_BondPerturbation_class(){
             BondPerturbation_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -115,6 +118,7 @@ void register_BondPerturbation_class(){
             BondPerturbation_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -127,6 +131,7 @@ void register_BondPerturbation_class(){
                 "wouldChange"
                 , wouldChange_function_value
                 , ( bp::arg("molecule"), bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Return whether or not this perturbation with the passed values would\nchange the molecule molecule" );
         
         }

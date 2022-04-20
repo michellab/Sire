@@ -31,6 +31,8 @@ SireCluster::Node __copy__(const SireCluster::Node &other){ return SireCluster::
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Node_class(){
 
     { //::SireCluster::Node
@@ -46,6 +48,7 @@ void register_Node_class(){
             Node_exposer.def( 
                 "UID"
                 , UID_function_value
+                , bp::release_gil_policy()
                 , "Return the unique ID of the Node" );
         
         }
@@ -57,6 +60,7 @@ void register_Node_class(){
             Node_exposer.def( 
                 "abortJob"
                 , abortJob_function_value
+                , bp::release_gil_policy()
                 , "Abort any running job on this node - this does not block" );
         
         }
@@ -68,6 +72,7 @@ void register_Node_class(){
             Node_exposer.def( 
                 "forceRelease"
                 , forceRelease_function_value
+                , bp::release_gil_policy()
                 , "Force the release of this node. This aborts any running\njobs on this node and returns it to the Nodes home, or\nback to the Cluster pool if this is homeless. This will\nrelease the node even if there are other references to it,\nwho may be querying or waiting for it. This is not thread-safe,\nbut may be necessary if you have lost a reference and\nyou need to send this node back" );
         
         }
@@ -79,6 +84,7 @@ void register_Node_class(){
             Node_exposer.def( 
                 "isHomeless"
                 , isHomeless_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this Node object is homeless\n(is not part of any Nodes set). A homeless node can\nfinish any job that has started, but it is not allowed\nto start any more jobs" );
         
         }
@@ -90,6 +96,7 @@ void register_Node_class(){
             Node_exposer.def( 
                 "isLocal"
                 , isLocal_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this node is local to this process" );
         
         }
@@ -101,6 +108,7 @@ void register_Node_class(){
             Node_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this node is null" );
         
         }
@@ -112,6 +120,7 @@ void register_Node_class(){
             Node_exposer.def( 
                 "nodes"
                 , nodes_function_value
+                , bp::release_gil_policy()
                 , "Return the nodes object that this node belongs to. In some rare\ncircumstances this node may be homeless, in which case\nan empty set of nodes will be returned" );
         
         }
@@ -138,6 +147,7 @@ void register_Node_class(){
             Node_exposer.def( 
                 "progress"
                 , progress_function_value
+                , bp::release_gil_policy()
                 , "Return the progress of the Node on the current WorkPacket" );
         
         }
@@ -149,6 +159,7 @@ void register_Node_class(){
             Node_exposer.def( 
                 "release"
                 , release_function_value
+                , bp::release_gil_policy()
                 , "Release this node - this returns the node to its parent\nNodes object, or back to the Cluster pool if this node\nis homeless. Note that this will only return the node if this\nis the only reference to this node. This returns whether\nor not this node was returned" );
         
         }
@@ -161,6 +172,7 @@ void register_Node_class(){
                 "startJob"
                 , startJob_function_value
                 , ( bp::arg("workpacket") )
+                , bp::release_gil_policy()
                 , "Start the job in the WorkPacket workpacket on this node\nand return a Promise that will contain the calculated\nresult. This will autodelete the node.\nThis is useful if this is the only workpacket\nthat you want to run on the node, as this will allow\nthe node to automatically be returned to the free-queue\nonce if has finished.\nThrow: SireError::unavailable_resource\n" );
         
         }
@@ -173,6 +185,7 @@ void register_Node_class(){
                 "startJob"
                 , startJob_function_value
                 , ( bp::arg("workpacket"), bp::arg("autodelete") )
+                , bp::release_gil_policy()
                 , "Start the job in the WorkPacket workpacket on this node\nand return a Promise that will contain the calculated\nresult. This will autodelete the node if autodelete\nis true. This is useful if this is the only workpacket\nthat you want to run on the node, as this will allow\nthe node to automatically be returned to the free-queue\nonce if has finished.\nThrow: SireError::unavailable_resource\n" );
         
         }
@@ -184,6 +197,7 @@ void register_Node_class(){
             Node_exposer.def( 
                 "stopJob"
                 , stopJob_function_value
+                , bp::release_gil_policy()
                 , "Stop any running job on this node - this does not block" );
         
         }
@@ -195,6 +209,7 @@ void register_Node_class(){
             Node_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this node" );
         
         }
@@ -206,6 +221,7 @@ void register_Node_class(){
             Node_exposer.def( 
                 "wait"
                 , wait_function_value
+                , bp::release_gil_policy()
                 , "Wait for the Node to stop work" );
         
         }
@@ -218,6 +234,7 @@ void register_Node_class(){
                 "wait"
                 , wait_function_value
                 , ( bp::arg("timeout") )
+                , bp::release_gil_policy()
                 , "Wait for the Node to stop work (or until timeout milliseconds\nhave passed) - this returns whether or not the Node has stopped\nwork" );
         
         }

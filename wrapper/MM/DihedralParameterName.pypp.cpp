@@ -51,6 +51,8 @@ SireMM::DihedralParameterName __copy__(const SireMM::DihedralParameterName &othe
 
 const char* pvt_get_name(const SireMM::DihedralParameterName&){ return "SireMM::DihedralParameterName";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_DihedralParameterName_class(){
 
     { //::SireMM::DihedralParameterName

@@ -38,6 +38,8 @@ SireCAS::Factor __copy__(const SireCAS::Factor &other){ return SireCAS::Factor(o
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Factor_class(){
 
     { //::SireCAS::Factor
@@ -94,7 +96,7 @@ void register_Factor_class(){
             Factor_exposer.def( 
                 "symbol"
                 , symbol_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -106,6 +108,7 @@ void register_Factor_class(){
             Factor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

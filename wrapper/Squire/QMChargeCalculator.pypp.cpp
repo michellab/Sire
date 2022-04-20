@@ -27,6 +27,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_QMChargeCalculator_class(){
 
     { //::Squire::QMChargeCalculator
@@ -42,6 +44,7 @@ void register_QMChargeCalculator_class(){
                 "calculate"
                 , calculate_function_value
                 , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the partial charges on the molecule molecule" );
         
         }
@@ -54,6 +57,7 @@ void register_QMChargeCalculator_class(){
                 "mayChangeCharges"
                 , mayChangeCharges_function_value
                 , ( bp::arg("oldmol"), bp::arg("newmol"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -89,6 +93,7 @@ void register_QMChargeCalculator_class(){
             QMChargeCalculator_exposer.def( 
                 "scaleFactor"
                 , scaleFactor_function_value
+                , bp::release_gil_policy()
                 , "Return the scale factor for the charges" );
         
         }
@@ -101,6 +106,7 @@ void register_QMChargeCalculator_class(){
                 "setScaleFactor"
                 , setScaleFactor_function_value
                 , ( bp::arg("sclfactor") )
+                , bp::release_gil_policy()
                 , "Set the scale factor for the charges" );
         
         }
@@ -112,6 +118,7 @@ void register_QMChargeCalculator_class(){
             QMChargeCalculator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

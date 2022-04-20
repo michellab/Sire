@@ -31,6 +31,8 @@ SireMaths::MultiVector __copy__(const SireMaths::MultiVector &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_MultiVector_class(){
@@ -53,6 +55,7 @@ void register_MultiVector_class(){
                 "angle"
                 , angle_function_value
                 , ( bp::arg("v0"), bp::arg("v1") )
+                , bp::release_gil_policy()
                 , "Return the angle between vectors v0 and v1 - this is the smallest\nangle, and will always lie between 0 and 180 degrees" );
         
         }
@@ -65,6 +68,7 @@ void register_MultiVector_class(){
                 "angle"
                 , angle_function_value
                 , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2") )
+                , bp::release_gil_policy()
                 , "Return the angle between v0-v1-v2 (treating the vectors as points in space)" );
         
         }
@@ -77,6 +81,7 @@ void register_MultiVector_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Access the ith vector in the MultiVector" );
         
         }
@@ -88,6 +93,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "b"
                 , b_function_value
+                , bp::release_gil_policy()
                 , "Return the components via rgb (limited between 0 and 1)" );
         
         }
@@ -99,6 +105,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "bearing"
                 , bearing_function_value
+                , bp::release_gil_policy()
                 , "Return the bearing of this vector against (0,1,0) (north) on the xy plane" );
         
         }
@@ -111,6 +118,7 @@ void register_MultiVector_class(){
                 "bearingXY"
                 , bearingXY_function_value
                 , ( bp::arg("v") )
+                , bp::release_gil_policy()
                 , "Return the bearing of this vector against v on the xy plane" );
         
         }
@@ -123,6 +131,7 @@ void register_MultiVector_class(){
                 "bearingXZ"
                 , bearingXZ_function_value
                 , ( bp::arg("v") )
+                , bp::release_gil_policy()
                 , "Return the bearing of this vector against v on the xz plane" );
         
         }
@@ -135,6 +144,7 @@ void register_MultiVector_class(){
                 "bearingYZ"
                 , bearingYZ_function_value
                 , ( bp::arg("v") )
+                , bp::release_gil_policy()
                 , "Return the bearing of this vector against v on the yz plane" );
         
         }
@@ -146,6 +156,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of vectors in this MultiVector" );
         
         }
@@ -158,6 +169,7 @@ void register_MultiVector_class(){
                 "cross"
                 , cross_function_value
                 , ( bp::arg("v0"), bp::arg("v1") )
+                , bp::release_gil_policy()
                 , "Return the cross product of v0 and v1" );
         
         }
@@ -170,6 +182,7 @@ void register_MultiVector_class(){
                 "dihedral"
                 , dihedral_function_value
                 , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2"), bp::arg("v3") )
+                , bp::release_gil_policy()
                 , "Return the dihedral angle between v0-v1-v2-v3 (treating the vectors as points)" );
         
         }
@@ -181,6 +194,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "direction"
                 , direction_function_value
+                , bp::release_gil_policy()
                 , "Return the unit vector pointing in the direction of this vector" );
         
         }
@@ -193,6 +207,7 @@ void register_MultiVector_class(){
                 "distance"
                 , distance_function_value
                 , ( bp::arg("v1"), bp::arg("v2") )
+                , bp::release_gil_policy()
                 , "Return the distance between two vectors" );
         
         }
@@ -205,6 +220,7 @@ void register_MultiVector_class(){
                 "distance2"
                 , distance2_function_value
                 , ( bp::arg("v1"), bp::arg("v2") )
+                , bp::release_gil_policy()
                 , "Return the distance squared between two vectors" );
         
         }
@@ -217,6 +233,7 @@ void register_MultiVector_class(){
                 "dot"
                 , dot_function_value
                 , ( bp::arg("v0"), bp::arg("v1") )
+                , bp::release_gil_policy()
                 , "Return the dot product of v0 and v1" );
         
         }
@@ -229,6 +246,7 @@ void register_MultiVector_class(){
                 "fromArray"
                 , fromArray_function_value
                 , ( bp::arg("array"), bp::arg("size") )
+                , bp::release_gil_policy()
                 , "Convert the passed array of vectors into an array of MultiVectors" );
         
         }
@@ -241,6 +259,7 @@ void register_MultiVector_class(){
                 "fromArray"
                 , fromArray_function_value
                 , ( bp::arg("array") )
+                , bp::release_gil_policy()
                 , "Convert the passed array of vectors into an array of MultiVectors" );
         
         }
@@ -252,6 +271,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "g"
                 , g_function_value
+                , bp::release_gil_policy()
                 , "Return the components via rgb (limited between 0 and 1)" );
         
         }
@@ -264,6 +284,7 @@ void register_MultiVector_class(){
                 "generate"
                 , generate_function_value
                 , ( bp::arg("dst"), bp::arg("v1"), bp::arg("ang"), bp::arg("v2"), bp::arg("dih"), bp::arg("v3") )
+                , bp::release_gil_policy()
                 , "Generate a vector, v0, that has distance dst v0-v1, angle ang v0-v1-v2,\nand dihedral dih v0-v1-v2-v3" );
         
         }
@@ -276,6 +297,7 @@ void register_MultiVector_class(){
                 "getitem"
                 , getitem_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Access the ith vector in the MultiVector" );
         
         }
@@ -288,6 +310,7 @@ void register_MultiVector_class(){
                 "invDistance"
                 , invDistance_function_value
                 , ( bp::arg("v1"), bp::arg("v2") )
+                , bp::release_gil_policy()
                 , "Return the 1  distance between two vectors" );
         
         }
@@ -300,6 +323,7 @@ void register_MultiVector_class(){
                 "invDistance2"
                 , invDistance2_function_value
                 , ( bp::arg("v1"), bp::arg("v2") )
+                , bp::release_gil_policy()
                 , "Return 1  distance2 between two vectors" );
         
         }
@@ -311,6 +335,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "invLength"
                 , invLength_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -322,6 +347,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "invLength2"
                 , invLength2_function_value
+                , bp::release_gil_policy()
                 , "Return the inverse length squared" );
         
         }
@@ -333,6 +359,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "length"
                 , length_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -344,6 +371,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "length2"
                 , length2_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -355,6 +383,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "magnitude"
                 , magnitude_function_value
+                , bp::release_gil_policy()
                 , "Return the length of this vector" );
         
         }
@@ -366,6 +395,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "manhattanLength"
                 , manhattanLength_function_value
+                , bp::release_gil_policy()
                 , "Return the manhattan length of the vector" );
         
         }
@@ -378,6 +408,7 @@ void register_MultiVector_class(){
                 "max"
                 , max_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return a vector that has the maximum xyz components out of this\nand other" );
         
         }
@@ -390,6 +421,7 @@ void register_MultiVector_class(){
                 "min"
                 , min_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return a vector that has the minimum components" );
         
         }
@@ -401,6 +433,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "normalise"
                 , normalise_function_value
+                , bp::release_gil_policy()
                 , "Return a normalised form of the vector" );
         
         }
@@ -441,6 +474,7 @@ void register_MultiVector_class(){
                 "quickSet"
                 , quickSet_function_value
                 , ( bp::arg("i"), bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Quickly set the values of the vector, without checking the index is valid" );
         
         }
@@ -452,6 +486,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "r"
                 , r_function_value
+                , bp::release_gil_policy()
                 , "Return the components via rgb (limited between 0 and 1)" );
         
         }
@@ -464,6 +499,7 @@ void register_MultiVector_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("x"), bp::arg("y"), bp::arg("z") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -476,6 +512,7 @@ void register_MultiVector_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -488,6 +525,7 @@ void register_MultiVector_class(){
                 "setB"
                 , setB_function_value
                 , ( bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -500,6 +538,7 @@ void register_MultiVector_class(){
                 "setG"
                 , setG_function_value
                 , ( bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -512,6 +551,7 @@ void register_MultiVector_class(){
                 "setMax"
                 , setMax_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Set this Vector so that it has the maximum xyz components out of\nthis and other (e.g. this->x = max(this->x(),other.x() etc.)" );
         
         }
@@ -524,6 +564,7 @@ void register_MultiVector_class(){
                 "setMin"
                 , setMin_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Set this Vector so that it has the minimum xyz components" );
         
         }
@@ -536,6 +577,7 @@ void register_MultiVector_class(){
                 "setR"
                 , setR_function_value
                 , ( bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -548,6 +590,7 @@ void register_MultiVector_class(){
                 "setX"
                 , setX_function_value
                 , ( bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -560,6 +603,7 @@ void register_MultiVector_class(){
                 "setY"
                 , setY_function_value
                 , ( bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -572,6 +616,7 @@ void register_MultiVector_class(){
                 "setZ"
                 , setZ_function_value
                 , ( bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -583,6 +628,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of vectors in this MultiVector" );
         
         }
@@ -595,6 +641,7 @@ void register_MultiVector_class(){
                 "swap"
                 , swap_function_value
                 , ( bp::arg("v0"), bp::arg("idx0"), bp::arg("v1"), bp::arg("idx1") )
+                , bp::release_gil_policy()
                 , "Swap the values of the value at index idx0 in f0 with the value at index idx in f1" );
         
         }
@@ -606,6 +653,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a QString representation of the vector" );
         
         }
@@ -617,6 +665,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -628,6 +677,7 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

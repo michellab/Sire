@@ -35,6 +35,8 @@ SireCluster::Cluster __copy__(const SireCluster::Cluster &other){ return SireClu
 
 const char* pvt_get_name(const SireCluster::Cluster&){ return "SireCluster::Cluster";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Cluster_class(){
 
     { //::SireCluster::Cluster
@@ -49,6 +51,7 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "UIDs"
                 , UIDs_function_value
+                , bp::release_gil_policy()
                 , "Return the list of all of the UIDs of all of the nodes\nin this entire cluster" );
         
         }
@@ -60,6 +63,7 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "getAllNodes"
                 , getAllNodes_function_value
+                , bp::release_gil_policy()
                 , "Try to get hold of all of the nodes that are available on this\ncluster" );
         
         }
@@ -72,6 +76,7 @@ void register_Cluster_class(){
                 "getAllNodes"
                 , getAllNodes_function_value
                 , ( bp::arg("timeout") )
+                , bp::release_gil_policy()
                 , "Try to get hold of all of the nodes that are available on this\ncluster (within the specified timeout)" );
         
         }
@@ -83,6 +88,7 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "getCount"
                 , getCount_function_value
+                , bp::release_gil_policy()
                 , "Return the number of processes - this is either the\nsize of the MPI group, or it is 1" );
         
         }
@@ -94,6 +100,7 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "getNode"
                 , getNode_function_value
+                , bp::release_gil_policy()
                 , "Return a Nodes object that contains just a single node.\nThis doesnt block - it just grabs the first available\nnode, and if there are none available then it returns\nimmediately, returning an empty Nodes object" );
         
         }
@@ -106,6 +113,7 @@ void register_Cluster_class(){
                 "getNode"
                 , getNode_function_value
                 , ( bp::arg("timeout") )
+                , bp::release_gil_policy()
                 , "Return a Nodes object that contains just a single node.\nThis blocks until a Node is available, or until timeout\nmilliseconds has passed (use negative timeout to wait forever).\nThere are some cases where a Node is just not available, in which\ncase an empty Nodes object will be returned\n" );
         
         }
@@ -118,6 +126,7 @@ void register_Cluster_class(){
                 "getNode"
                 , getNode_function_value
                 , ( bp::arg("uid") )
+                , bp::release_gil_policy()
                 , "Return a Nodes object that contains the node with UID uid.\nThere are some cases where a Node is just not available, in which\ncase an empty Nodes object will be returned.\nThrow: SireError::unavailable_resource\n" );
         
         }
@@ -130,6 +139,7 @@ void register_Cluster_class(){
                 "getNode"
                 , getNode_function_value
                 , ( bp::arg("uid"), bp::arg("timeout") )
+                , bp::release_gil_policy()
                 , "Return a Nodes object that contains the node with UID uid.\nThis blocks until the Node is available, or until timeout\nmilliseconds has passed (use negative timeout to wait forever).\nThere are some cases where a Node is just not available, in which\ncase an empty Nodes object will be returned.\nThrow: SireError::unavailable_resource\n" );
         
         }
@@ -142,6 +152,7 @@ void register_Cluster_class(){
                 "getNodes"
                 , getNodes_function_value
                 , ( bp::arg("nnodes") )
+                , bp::release_gil_policy()
                 , "Return a Nodes object containing up to nnodes nodes. This function\nwill do its best, but you may end with less than you asked for\n(or even none at all)." );
         
         }
@@ -154,6 +165,7 @@ void register_Cluster_class(){
                 "getNodes"
                 , getNodes_function_value
                 , ( bp::arg("nnodes"), bp::arg("timeout") )
+                , bp::release_gil_policy()
                 , "Return a Nodes object containing up to nnodes nodes. This function\nwill do its best, but you may end with less than you asked for\n(or even none at all). It is a bad idea to ask for more nodes\nthan there are backends using an infinite timeout..." );
         
         }
@@ -166,6 +178,7 @@ void register_Cluster_class(){
                 "getNodes"
                 , getNodes_function_value
                 , ( bp::arg("uids") )
+                , bp::release_gil_policy()
                 , "Return a Nodes object that contains as many of the nodes with\nUIDs from uids as possible, within the time allowed. Note that\nthis may not give you all of the nodes (it may give you none).\nThrow: SireError::unavailable_resource\n" );
         
         }
@@ -178,6 +191,7 @@ void register_Cluster_class(){
                 "getNodes"
                 , getNodes_function_value
                 , ( bp::arg("uids"), bp::arg("timeout") )
+                , bp::release_gil_policy()
                 , "Return a Nodes object that contains as many of the nodes with\nUIDs from uids as possible, within the time allowed. Note that\nthis may not give you all of the nodes (it may give you none).\nThrow: SireError::unavailable_resource\n" );
         
         }
@@ -189,6 +203,7 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "getRank"
                 , getRank_function_value
+                , bp::release_gil_policy()
                 , "Return the rank of the process - this is either the\nrank of this process in the MPI group, or it is 0" );
         
         }
@@ -201,6 +216,7 @@ void register_Cluster_class(){
                 "isLocal"
                 , isLocal_function_value
                 , ( bp::arg("uid") )
+                , bp::release_gil_policy()
                 , "Return whether or not the backend with unique ID uid\nis local to this process" );
         
         }
@@ -212,6 +228,7 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "isRunning"
                 , isRunning_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the cluster is running" );
         
         }
@@ -223,6 +240,7 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "localUIDs"
                 , localUIDs_function_value
+                , bp::release_gil_policy()
                 , "Return the list of all of the UIDs of the local nodes\n(the nodes that exist in this address space)" );
         
         }
@@ -234,6 +252,7 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "shutdown"
                 , shutdown_function_value
+                , bp::release_gil_policy()
                 , "Shutdown this cluster" );
         
         }
@@ -246,6 +265,7 @@ void register_Cluster_class(){
                 "start"
                 , start_function_value
                 , ( bp::arg("ppn")=(int)(1) )
+                , bp::release_gil_policy()
                 , "Start the cluster - this is like exec, but it doesnt\nblock until the cluster has been shutdown" );
         
         }
@@ -257,6 +277,7 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "supportsMPI"
                 , supportsMPI_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this cluster supports MPI\n(this is true if MPI is available, and there is more than\none MPI process)" );
         
         }
@@ -268,6 +289,7 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "wait"
                 , wait_function_value
+                , bp::release_gil_policy()
                 , "Wait for the global cluster to stop running" );
         
         }

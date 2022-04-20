@@ -41,6 +41,8 @@ SireMove::VelocitiesFromProperty __copy__(const SireMove::VelocitiesFromProperty
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_VelocitiesFromProperty_class(){
 
     { //::SireMove::VelocitiesFromProperty
@@ -58,6 +60,7 @@ void register_VelocitiesFromProperty_class(){
                 "generate"
                 , generate_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the velocities from the specified property" );
         
         }
@@ -84,6 +87,7 @@ void register_VelocitiesFromProperty_class(){
             VelocitiesFromProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

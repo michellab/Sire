@@ -45,6 +45,8 @@ SireMove::Titrator __copy__(const SireMove::Titrator &other){ return SireMove::T
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Titrator_class(){
 
     { //::SireMove::Titrator
@@ -62,6 +64,7 @@ void register_Titrator_class(){
                 "applyTo"
                 , applyTo_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Apply the set of charges to the passed system" );
         
         }
@@ -74,6 +77,7 @@ void register_Titrator_class(){
                 "getCharge"
                 , getCharge_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the charge of the ith molecule" );
         
         }
@@ -86,6 +90,7 @@ void register_Titrator_class(){
                 "getIonIndex"
                 , getIonIndex_function_value
                 , ( bp::arg("ion_index") )
+                , bp::release_gil_policy()
                 , "Return the index of the molecule at ion_index ion_index" );
         
         }
@@ -98,6 +103,7 @@ void register_Titrator_class(){
                 "getNegativeIonIndex"
                 , getNegativeIonIndex_function_value
                 , ( bp::arg("ion_index") )
+                , bp::release_gil_policy()
                 , "Return the index of the molecule at negative ion_index ion_index" );
         
         }
@@ -110,6 +116,7 @@ void register_Titrator_class(){
                 "getNeutralIndex"
                 , getNeutralIndex_function_value
                 , ( bp::arg("neutral_index") )
+                , bp::release_gil_policy()
                 , "Return the index of the molecule at neutral ion_index" );
         
         }
@@ -122,6 +129,7 @@ void register_Titrator_class(){
                 "getPositiveIonIndex"
                 , getPositiveIonIndex_function_value
                 , ( bp::arg("ion_index") )
+                , bp::release_gil_policy()
                 , "Return the index of the molecule at positive ion_index ion_index" );
         
         }
@@ -133,6 +141,7 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "nIons"
                 , nIons_function_value
+                , bp::release_gil_policy()
                 , "Return the number of ions" );
         
         }
@@ -144,6 +153,7 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "nNegativeIons"
                 , nNegativeIons_function_value
+                , bp::release_gil_policy()
                 , "Return the number of negative ions" );
         
         }
@@ -155,6 +165,7 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "nNeutrals"
                 , nNeutrals_function_value
+                , bp::release_gil_policy()
                 , "Return the number of neutral molecules" );
         
         }
@@ -166,6 +177,7 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "nPositiveIons"
                 , nPositiveIons_function_value
+                , bp::release_gil_policy()
                 , "Return the number of positive ions" );
         
         }
@@ -193,6 +205,7 @@ void register_Titrator_class(){
                 "randomiseCharge"
                 , randomiseCharge_function_value
                 , ( bp::arg("ncharges") )
+                , bp::release_gil_policy()
                 , "Randomise all of the charges - this ensures that there are 2ncharges charges\nin the system (ncharges positive, and ncharges negative, with the rest neutral)" );
         
         }
@@ -205,6 +218,7 @@ void register_Titrator_class(){
                 "randomiseCharge"
                 , randomiseCharge_function_value
                 , ( bp::arg("npositive"), bp::arg("nnegative") )
+                , bp::release_gil_policy()
                 , "Randomise all of the charges, ensuring there are npositive positive charges\nand nnegative negative charges" );
         
         }
@@ -217,6 +231,7 @@ void register_Titrator_class(){
                 "setMoleculeGroup"
                 , setMoleculeGroup_function_value
                 , ( bp::arg("group") )
+                , bp::release_gil_policy()
                 , "Set the molecule group containing the molecules whose charge\nstate will be changed" );
         
         }
@@ -229,6 +244,7 @@ void register_Titrator_class(){
                 "setNegativeTemplate"
                 , setNegativeTemplate_function_value
                 , ( bp::arg("negative_ion"), bp::arg("properties"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Set the template for the negative ion state. The collection of properties\nlisted in properties are copied from negative_ion (once mapped by\nmap) to the molecule to put it into the negative_ion state" );
         
         }
@@ -241,6 +257,7 @@ void register_Titrator_class(){
                 "setNegativeTemplate"
                 , setNegativeTemplate_function_value
                 , ( bp::arg("negative_ion"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Set the template for the negative ion state, where all properties except\nmap[coordinates] will be copied to the molecule" );
         
         }
@@ -253,6 +270,7 @@ void register_Titrator_class(){
                 "setNeutralTemplate"
                 , setNeutralTemplate_function_value
                 , ( bp::arg("neutral_mol"), bp::arg("properties"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Set the template for the neutral state. The collection of properties\nlisted in properties are copied from neutral_mol (once mapped by\nmap) to the molecule to put it into the neutral state" );
         
         }
@@ -265,6 +283,7 @@ void register_Titrator_class(){
                 "setNeutralTemplate"
                 , setNeutralTemplate_function_value
                 , ( bp::arg("neutral_mol"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Set the template for the neutral state, where all properties except\nmap[coordinates] will be copied to the molecule" );
         
         }
@@ -277,6 +296,7 @@ void register_Titrator_class(){
                 "setPositiveTemplate"
                 , setPositiveTemplate_function_value
                 , ( bp::arg("positive_ion"), bp::arg("properties"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Set the template for the positive ion state. The collection of properties\nlisted in properties are copied from positive_ion (once mapped by\nmap) to the molecule to put it into the positive_ion state" );
         
         }
@@ -289,6 +309,7 @@ void register_Titrator_class(){
                 "setPositiveTemplate"
                 , setPositiveTemplate_function_value
                 , ( bp::arg("positive_ion"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Set the template for the positive ion state, where all properties except\nmap[coordinates] will be copied to the molecule" );
         
         }
@@ -301,6 +322,7 @@ void register_Titrator_class(){
                 "swapCharge"
                 , swapCharge_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Swap the charge of the ith and jth molecules" );
         
         }
@@ -312,6 +334,7 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -323,6 +346,7 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

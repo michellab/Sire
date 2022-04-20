@@ -32,6 +32,8 @@ SireMol::PerturbationSymbols __copy__(const SireMol::PerturbationSymbols &other)
 
 const char* pvt_get_name(const SireMol::PerturbationSymbols&){ return "SireMol::PerturbationSymbols";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PerturbationSymbols_class(){
 
     { //::SireMol::PerturbationSymbols
@@ -46,7 +48,7 @@ void register_PerturbationSymbols_class(){
             PerturbationSymbols_exposer.def( 
                 "final"
                 , final_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol used to represent the final state" );
         
         }
@@ -58,7 +60,7 @@ void register_PerturbationSymbols_class(){
             PerturbationSymbols_exposer.def( 
                 "initial"
                 , initial_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol used to represent the initial state" );
         
         }
@@ -70,7 +72,7 @@ void register_PerturbationSymbols_class(){
             PerturbationSymbols_exposer.def( 
                 "Lambda"
                 , Lambda_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol used to represent the driving (reaction)\ncoordinate" );
         
         }

@@ -51,6 +51,8 @@ SireMM::ImproperParameterName __copy__(const SireMM::ImproperParameterName &othe
 
 const char* pvt_get_name(const SireMM::ImproperParameterName&){ return "SireMM::ImproperParameterName";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ImproperParameterName_class(){
 
     { //::SireMM::ImproperParameterName

@@ -26,6 +26,8 @@ SireMM::SoftCLJComponent __copy__(const SireMM::SoftCLJComponent &other){ return
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SoftCLJComponent_class(){
 
     { //::SireMM::SoftCLJComponent
@@ -44,6 +46,7 @@ void register_SoftCLJComponent_class(){
                 "changeEnergy"
                 , changeEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Change the energy in the forcefield ff of all of these components by the\nvalues held in delta" );
         
         }
@@ -56,6 +59,7 @@ void register_SoftCLJComponent_class(){
                 "changeEnergy"
                 , changeEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Change the energy in the forcefield ff of all of these components by the\nvalues held in delta" );
         
         }
@@ -67,7 +71,7 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the component representing the total coulomb energy\nof all of the alpha values" );
         
         }
@@ -80,7 +84,7 @@ void register_SoftCLJComponent_class(){
                 "coulomb"
                 , coulomb_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the component representing the coulomb energy of\nthe ith alpha component\nThrow: SireError::invalid_index\n" );
         
         }
@@ -92,7 +96,7 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the component representing the total LJ energy\nof all of the alpha values" );
         
         }
@@ -105,7 +109,7 @@ void register_SoftCLJComponent_class(){
                 "lj"
                 , lj_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the component representing the LJ energy of\nthe ith alpha component\nThrow: SireError::invalid_index\n" );
         
         }
@@ -117,6 +121,7 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "nAlphaValues"
                 , nAlphaValues_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -142,6 +147,7 @@ void register_SoftCLJComponent_class(){
                 "setEnergy"
                 , setEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the energy in the forcefield ff of all of these components to the\nvalues held in value" );
         
         }
@@ -154,6 +160,7 @@ void register_SoftCLJComponent_class(){
                 "setEnergy"
                 , setEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the energy in the forcefield ff of all of these components to the\nvalues held in value" );
         
         }
@@ -165,6 +172,7 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return all of the symbols associated with these components" );
         
         }
@@ -176,7 +184,7 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the component representing the total energy of\nall of the alpha values" );
         
         }
@@ -189,7 +197,7 @@ void register_SoftCLJComponent_class(){
                 "total"
                 , total_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the component representing the total energy of\nthe ith alpha component\nThrow: SireError::invalid_index\n" );
         
         }
@@ -201,6 +209,7 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -212,6 +221,7 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

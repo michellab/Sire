@@ -47,6 +47,8 @@ SireMol::ChainEditor __copy__(const SireMol::ChainEditor &other){ return SireMol
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_ChainEditor_class(){
@@ -66,6 +68,7 @@ void register_ChainEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("resname") )
+                , bp::release_gil_policy()
                 , "Add a residue called resname to this Chain and return\nan editor for that residue" );
         
         }
@@ -78,6 +81,7 @@ void register_ChainEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atomnum") )
+                , bp::release_gil_policy()
                 , "Add a residue with number resnum to this Chain and return\nan editor for that residue" );
         
         }
@@ -89,6 +93,7 @@ void register_ChainEditor_class(){
             ChainEditor_exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "Commit the changes made by this editor and return the\nupdated Chain" );
         
         }
@@ -127,6 +132,7 @@ void register_ChainEditor_class(){
                 "reindex"
                 , reindex_function_value
                 , ( bp::arg("index") )
+                , bp::release_gil_policy()
                 , "Move this Chain to index newidx - this will move it\nto the start or end if this index is out of range" );
         
         }
@@ -138,6 +144,7 @@ void register_ChainEditor_class(){
             ChainEditor_exposer.def( 
                 "remove"
                 , remove_function_value
+                , bp::release_gil_policy()
                 , "Complete remove this Chain, and return an editor\nfor the molecule that contained it" );
         
         }
@@ -150,6 +157,7 @@ void register_ChainEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Remove the atom that matches the ID atomid from this chain\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -162,6 +170,7 @@ void register_ChainEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Completely remove all residues that match the ID resid from\nthis Chain\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -174,6 +183,7 @@ void register_ChainEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Remove the ith residue from this Chain\nThrow: SireError::invalid_index\n" );
         
         }
@@ -198,6 +208,7 @@ void register_ChainEditor_class(){
             ChainEditor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this chain" );
         
         }
@@ -210,6 +221,7 @@ void register_ChainEditor_class(){
                 "transfer"
                 , transfer_function_value
                 , ( bp::arg("resid"), bp::arg("chainid") )
+                , bp::release_gil_policy()
                 , "Transfer all residues that match the ID resid in this Chain\nto the Chain that matches the ID cgid\nThrow: SireMol::missing_residue\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\nThrow: SireError::invalid_index\n" );
         
         }
@@ -222,6 +234,7 @@ void register_ChainEditor_class(){
                 "transfer"
                 , transfer_function_value
                 , ( bp::arg("i"), bp::arg("chainid") )
+                , bp::release_gil_policy()
                 , "Transfer the ith residue of this Chain into the Chain identified\nby the ID cgid\nThrow: SireError::invalid_index\n" );
         
         }
@@ -234,6 +247,7 @@ void register_ChainEditor_class(){
                 "transferAll"
                 , transferAll_function_value
                 , ( bp::arg("chainid") )
+                , bp::release_gil_policy()
                 , "Completely transfer all of the residues in this Chain to\nthe Chain that matches the ID cgid\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\nThrow: SireError::invalid_index\n" );
         
         }
@@ -245,6 +259,7 @@ void register_ChainEditor_class(){
             ChainEditor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

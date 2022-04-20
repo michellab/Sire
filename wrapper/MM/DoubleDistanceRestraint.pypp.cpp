@@ -36,6 +36,8 @@ SireMM::DoubleDistanceRestraint __copy__(const SireMM::DoubleDistanceRestraint &
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_DoubleDistanceRestraint_class(){
 
     { //::SireMM::DoubleDistanceRestraint
@@ -53,6 +55,7 @@ void register_DoubleDistanceRestraint_class(){
             DoubleDistanceRestraint_exposer.def( 
                 "builtinSymbols"
                 , builtinSymbols_function_value
+                , bp::release_gil_policy()
                 , "Return the built in symbols for this restraint" );
         
         }
@@ -64,6 +67,7 @@ void register_DoubleDistanceRestraint_class(){
             DoubleDistanceRestraint_exposer.def( 
                 "builtinValues"
                 , builtinValues_function_value
+                , bp::release_gil_policy()
                 , "Return the built in values for this restraint" );
         
         }
@@ -76,6 +80,7 @@ void register_DoubleDistanceRestraint_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Return whether or not this restraint affects the molecule\nwith number molnum" );
         
         }
@@ -88,6 +93,7 @@ void register_DoubleDistanceRestraint_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this restraint affects the molecule\nwith ID molid" );
         
         }
@@ -124,6 +130,7 @@ void register_DoubleDistanceRestraint_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the differential of this restraint with respect to the\nsymbol symbol\nThrow: SireCAS::unavailable_differential\n" );
         
         }
@@ -136,6 +143,7 @@ void register_DoubleDistanceRestraint_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the force acting on the molecule in the forcetable forcetable\ncaused by this restraint, and add it on to the forcetable scaled by\nscale_force" );
         
         }
@@ -148,6 +156,7 @@ void register_DoubleDistanceRestraint_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , bp::release_gil_policy()
                 , "Calculate the force acting on the molecules in the forcetable forcetable\ncaused by this restraint, and add it on to the forcetable scaled by\nscale_force" );
         
         }
@@ -159,6 +168,7 @@ void register_DoubleDistanceRestraint_class(){
             DoubleDistanceRestraint_exposer.def( 
                 "molecules"
                 , molecules_function_value
+                , bp::release_gil_policy()
                 , "Return the molecules used in this restraint" );
         
         }
@@ -170,6 +180,7 @@ void register_DoubleDistanceRestraint_class(){
             DoubleDistanceRestraint_exposer.def( 
                 "nPoints"
                 , nPoints_function_value
+                , bp::release_gil_policy()
                 , "This restraint involves four points" );
         
         }
@@ -197,7 +208,7 @@ void register_DoubleDistanceRestraint_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ith point" );
         
         }
@@ -209,7 +220,7 @@ void register_DoubleDistanceRestraint_class(){
             DoubleDistanceRestraint_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the first point" );
         
         }
@@ -221,7 +232,7 @@ void register_DoubleDistanceRestraint_class(){
             DoubleDistanceRestraint_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the second point" );
         
         }
@@ -233,7 +244,7 @@ void register_DoubleDistanceRestraint_class(){
             DoubleDistanceRestraint_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the third point" );
         
         }
@@ -245,7 +256,7 @@ void register_DoubleDistanceRestraint_class(){
             DoubleDistanceRestraint_exposer.def( 
                 "point3"
                 , point3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the fourth point" );
         
         }
@@ -257,7 +268,7 @@ void register_DoubleDistanceRestraint_class(){
             DoubleDistanceRestraint_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol that represents the distance between the\npoints 0 and 1 (r01)" );
         
         }
@@ -269,7 +280,7 @@ void register_DoubleDistanceRestraint_class(){
             DoubleDistanceRestraint_exposer.def( 
                 "r23"
                 , r23_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol that represents the distance between the\npoints 2 and 3 (r23)" );
         
         }
@@ -282,6 +293,7 @@ void register_DoubleDistanceRestraint_class(){
                 "setSpace"
                 , setSpace_function_value
                 , ( bp::arg("space") )
+                , bp::release_gil_policy()
                 , "Set the space used to evaluate the energy of this restraint\nThrow: SireVol::incompatible_space\n" );
         
         }
@@ -293,6 +305,7 @@ void register_DoubleDistanceRestraint_class(){
             DoubleDistanceRestraint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -305,6 +318,7 @@ void register_DoubleDistanceRestraint_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "Update the points of this restraint using new molecule data from moldata\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -317,6 +331,7 @@ void register_DoubleDistanceRestraint_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Update the points of this restraint using new molecule data from molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -329,6 +344,7 @@ void register_DoubleDistanceRestraint_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("forcetable") )
+                , bp::release_gil_policy()
                 , "Return whether or not this restraint involves any of the molecules\nthat are in the forcetable forcetable" );
         
         }
@@ -341,6 +357,7 @@ void register_DoubleDistanceRestraint_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Return whether or not this restraint involves any of the molecules\nin molecules" );
         
         }

@@ -145,11 +145,11 @@ namespace bp = boost::python;
 
 #include "SireBase/propertylist.h"
 
+#include <QString>
+
 #include "SireBase/slice.h"
 
 void autoconvert_Slice();
-
-#include <QString>
 
 BOOST_PYTHON_MODULE(_Base){
     register_SireBase_objects();

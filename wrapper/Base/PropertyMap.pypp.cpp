@@ -23,6 +23,8 @@ SireBase::PropertyMap __copy__(const SireBase::PropertyMap &other){ return SireB
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PropertyMap_class(){
 
     { //::SireBase::PropertyMap
@@ -40,6 +42,7 @@ void register_PropertyMap_class(){
             PropertyMap_exposer.def( 
                 "isDefault"
                 , isDefault_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this map is default - if it is,\nthen it doesnt specify any properties" );
         
         }
@@ -104,6 +107,7 @@ void register_PropertyMap_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("name"), bp::arg("source") )
+                , bp::release_gil_policy()
                 , "Set the property called name to have the source or value\nin source. This replaces any existing source or value\nfor any existing property of this name in this map" );
         
         }
@@ -116,6 +120,7 @@ void register_PropertyMap_class(){
                 "specified"
                 , specified_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not this map specifies the source or value\nof the property called name" );
         
         }
@@ -128,6 +133,7 @@ void register_PropertyMap_class(){
                 "specified"
                 , specified_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not this map specifies the source or value\nof the property called name" );
         
         }
@@ -140,6 +146,7 @@ void register_PropertyMap_class(){
                 "specified"
                 , specified_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not this map specifies the source or value\nof the property called name" );
         
         }
@@ -151,6 +158,7 @@ void register_PropertyMap_class(){
             PropertyMap_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this PropertyMap" );
         
         }
@@ -162,6 +170,7 @@ void register_PropertyMap_class(){
             PropertyMap_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -173,6 +182,7 @@ void register_PropertyMap_class(){
             PropertyMap_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

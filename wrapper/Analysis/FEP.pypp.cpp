@@ -29,6 +29,8 @@ SireAnalysis::FEP __copy__(const SireAnalysis::FEP &other){ return SireAnalysis:
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_FEP_class(){
@@ -50,6 +52,7 @@ void register_FEP_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("windows"), bp::arg("deltas") )
+                , bp::release_gil_policy()
                 , "Add the data for the next iteration, which contains the deltas for the passed windows,\nwith the free energy being for each window to the next window" );
         
         }
@@ -62,6 +65,7 @@ void register_FEP_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("windows"), bp::arg("forwards_deltas"), bp::arg("backwards_deltas") )
+                , bp::release_gil_policy()
                 , "Add the data for the next iteration, which contains the deltas for the passed windows,\nwith forwards_deltas containing the free energy from each window to the next window,\nand backwards_deltas containing the free energy from the previous window to each window" );
         
         }
@@ -74,6 +78,7 @@ void register_FEP_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("deltas") )
+                , bp::release_gil_policy()
                 , "Add the data for the next iteration" );
         
         }
@@ -86,6 +91,7 @@ void register_FEP_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the deltas for the ith iteration" );
         
         }
@@ -97,6 +103,7 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Remove all values from the histogram" );
         
         }
@@ -108,6 +115,7 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of iterations" );
         
         }
@@ -119,6 +127,7 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "deltas"
                 , deltas_function_value
+                , bp::release_gil_policy()
                 , "Return the deltas for all iterations" );
         
         }
@@ -130,6 +139,7 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "lambdaValues"
                 , lambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return the values of all windows" );
         
         }
@@ -142,6 +152,7 @@ void register_FEP_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("start"), bp::arg("end") )
+                , bp::release_gil_policy()
                 , "Merge the deltas for iterations start->end" );
         
         }
@@ -154,6 +165,7 @@ void register_FEP_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("indicies") )
+                , bp::release_gil_policy()
                 , "Merge the deltas at the passed indicies" );
         
         }
@@ -165,6 +177,7 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "nIterations"
                 , nIterations_function_value
+                , bp::release_gil_policy()
                 , "Return the number of iterations" );
         
         }
@@ -176,6 +189,7 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "nLambdaValues"
                 , nLambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return the number of lambda values (windows)" );
         
         }
@@ -187,6 +201,7 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "nSamples"
                 , nSamples_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of samples in the simulation" );
         
         }
@@ -198,6 +213,7 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "nWindows"
                 , nWindows_function_value
+                , bp::release_gil_policy()
                 , "Return the number of windows" );
         
         }
@@ -237,6 +253,7 @@ void register_FEP_class(){
                 "removeAt"
                 , removeAt_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Remove the data for iteration i" );
         
         }
@@ -249,6 +266,7 @@ void register_FEP_class(){
                 "removeRange"
                 , removeRange_function_value
                 , ( bp::arg("start"), bp::arg("end") )
+                , bp::release_gil_policy()
                 , "Remove every iteration from start to end (inclusively)" );
         
         }
@@ -261,6 +279,7 @@ void register_FEP_class(){
                 "rollingAverage"
                 , rollingAverage_function_value
                 , ( bp::arg("niterations") )
+                , bp::release_gil_policy()
                 , "Return a list of Gradients that represents the rolling average over niterations\niterations over this TI data set. If this data set contains 100 iterations, and\nwe calculate the rolling average over 50 iterations, then the returned Gradients\nwill be the average from 1-50, then 2-51, 3-52.....51-100" );
         
         }
@@ -273,6 +292,7 @@ void register_FEP_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("windows"), bp::arg("deltas") )
+                , bp::release_gil_policy()
                 , "Set the deltas for the ith iteration" );
         
         }
@@ -285,6 +305,7 @@ void register_FEP_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("windows"), bp::arg("forwards_deltas"), bp::arg("backwards_deltas") )
+                , bp::release_gil_policy()
                 , "Set the deltas for the ith iteration" );
         
         }
@@ -297,6 +318,7 @@ void register_FEP_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("deltas") )
+                , bp::release_gil_policy()
                 , "Set the deltas for the ith iteration" );
         
         }
@@ -308,6 +330,7 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of iterations" );
         
         }
@@ -319,6 +342,7 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -330,6 +354,7 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -341,6 +366,7 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -352,6 +378,7 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "windows"
                 , windows_function_value
+                , bp::release_gil_policy()
                 , "Return the value of all windows" );
         
         }

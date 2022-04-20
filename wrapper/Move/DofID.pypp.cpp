@@ -47,6 +47,8 @@ SireMove::DofID __copy__(const SireMove::DofID &other){ return SireMove::DofID(o
 
 const char* pvt_get_name(const SireMove::DofID&){ return "SireMove::DofID";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_DofID_class(){
 
     { //::SireMove::DofID
@@ -65,6 +67,7 @@ void register_DofID_class(){
             DofID_exposer.def( 
                 "atom0"
                 , atom0_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -76,6 +79,7 @@ void register_DofID_class(){
             DofID_exposer.def( 
                 "atom1"
                 , atom1_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -87,6 +91,7 @@ void register_DofID_class(){
             DofID_exposer.def( 
                 "atom2"
                 , atom2_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -98,6 +103,7 @@ void register_DofID_class(){
             DofID_exposer.def( 
                 "atom3"
                 , atom3_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -109,6 +115,7 @@ void register_DofID_class(){
             DofID_exposer.def( 
                 "isAngle"
                 , isAngle_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -120,6 +127,7 @@ void register_DofID_class(){
             DofID_exposer.def( 
                 "isBond"
                 , isBond_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -131,6 +139,7 @@ void register_DofID_class(){
             DofID_exposer.def( 
                 "isDihedral"
                 , isDihedral_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -142,6 +151,7 @@ void register_DofID_class(){
             DofID_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -168,6 +178,7 @@ void register_DofID_class(){
             DofID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

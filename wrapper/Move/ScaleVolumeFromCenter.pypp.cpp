@@ -38,6 +38,8 @@ SireMove::ScaleVolumeFromCenter __copy__(const SireMove::ScaleVolumeFromCenter &
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ScaleVolumeFromCenter_class(){
 
     { //::SireMove::ScaleVolumeFromCenter
@@ -57,7 +59,7 @@ void register_ScaleVolumeFromCenter_class(){
             ScaleVolumeFromCenter_exposer.def( 
                 "center"
                 , center_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the center point from which the molecules are scaled" );
         
         }
@@ -85,6 +87,7 @@ void register_ScaleVolumeFromCenter_class(){
                 "setCenter"
                 , setCenter_function_value
                 , ( bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Set the center point from which the molecules will be scaled" );
         
         }
@@ -97,6 +100,7 @@ void register_ScaleVolumeFromCenter_class(){
                 "setVolume"
                 , setVolume_function_value
                 , ( bp::arg("system"), bp::arg("volume"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Set the volume of the system system to volume, using the\noptionally supplied property map to find the names of the\nproperties needed to change the system volume.\nThis returns the number of molecules involved in the volume change\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireVol::incompatible_space\nThrow: SireError::invalid_cast\nThrow: SireError::invalid_state\nThrow: SireError::unsupported\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -108,6 +112,7 @@ void register_ScaleVolumeFromCenter_class(){
             ScaleVolumeFromCenter_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

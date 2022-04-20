@@ -43,6 +43,8 @@ SireMove::RepExMove __copy__(const SireMove::RepExMove &other){ return SireMove:
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_RepExMove_class(){
 
     { //::SireMove::RepExMove
@@ -58,6 +60,7 @@ void register_RepExMove_class(){
             RepExMove_exposer.def( 
                 "acceptanceRatio"
                 , acceptanceRatio_function_value
+                , bp::release_gil_policy()
                 , "Return the average acceptance ratio of the replica exchange\ntests over all replicas" );
         
         }
@@ -69,6 +72,7 @@ void register_RepExMove_class(){
             RepExMove_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Clear the move statistics" );
         
         }
@@ -93,6 +97,7 @@ void register_RepExMove_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "Perform nmoves replica exchange moves (block of sampling for all\nreplicas, then replica exchange test between all pairs),\nof the system system (which must be a Replicas object), optionally\nrecording statistics if record_stats is true\nThrow: SireError::invalid_cast\n" );
         
         }
@@ -104,6 +109,7 @@ void register_RepExMove_class(){
             RepExMove_exposer.def( 
                 "nAccepted"
                 , nAccepted_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of accepted replica exchange tests" );
         
         }
@@ -115,6 +121,7 @@ void register_RepExMove_class(){
             RepExMove_exposer.def( 
                 "nAttempted"
                 , nAttempted_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of accepted replica exchange tests" );
         
         }
@@ -126,6 +133,7 @@ void register_RepExMove_class(){
             RepExMove_exposer.def( 
                 "nRejected"
                 , nRejected_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of rejected replica exchange tests" );
         
         }
@@ -153,6 +161,7 @@ void register_RepExMove_class(){
                 "setDisableSwaps"
                 , setDisableSwaps_function_value
                 , ( bp::arg("disable") )
+                , bp::release_gil_policy()
                 , "Set disabling of swap moves" );
         
         }
@@ -165,6 +174,7 @@ void register_RepExMove_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator used for the replica exchange tests" );
         
         }
@@ -177,6 +187,7 @@ void register_RepExMove_class(){
                 "setSwapMonitors"
                 , setSwapMonitors_function_value
                 , ( bp::arg("swap_monitors") )
+                , bp::release_gil_policy()
                 , "Set whether or not to swap the system monitors when we swap the systems" );
         
         }
@@ -188,6 +199,7 @@ void register_RepExMove_class(){
             RepExMove_exposer.def( 
                 "swapMovesDisabled"
                 , swapMovesDisabled_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not swap moves are disabled" );
         
         }
@@ -199,6 +211,7 @@ void register_RepExMove_class(){
             RepExMove_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this move" );
         
         }
@@ -210,6 +223,7 @@ void register_RepExMove_class(){
             RepExMove_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

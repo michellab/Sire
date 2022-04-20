@@ -45,6 +45,8 @@ SireMol::SegEditor __copy__(const SireMol::SegEditor &other){ return SireMol::Se
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_SegEditor_class(){
@@ -64,6 +66,7 @@ void register_SegEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atomname") )
+                , bp::release_gil_policy()
                 , "Add an atom called atomname to this Segment and return\nan editor for that atom" );
         
         }
@@ -76,6 +79,7 @@ void register_SegEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atomnum") )
+                , bp::release_gil_policy()
                 , "Add an atom with number atomnum to this Segment and return\nan editor for that atom" );
         
         }
@@ -87,6 +91,7 @@ void register_SegEditor_class(){
             SegEditor_exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "Commit the changes made by this editor and return the\nupdated Segment" );
         
         }
@@ -125,6 +130,7 @@ void register_SegEditor_class(){
                 "reindex"
                 , reindex_function_value
                 , ( bp::arg("index") )
+                , bp::release_gil_policy()
                 , "Move this Segment to index newidx - this will move it\nto the start or end if this index is out of range" );
         
         }
@@ -136,6 +142,7 @@ void register_SegEditor_class(){
             SegEditor_exposer.def( 
                 "remove"
                 , remove_function_value
+                , bp::release_gil_policy()
                 , "Complete remove this Segment, and return an editor\nfor the molecule that contained it" );
         
         }
@@ -148,6 +155,7 @@ void register_SegEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Completely remove all atoms that match the ID atomid from\nthis Segment\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -160,6 +168,7 @@ void register_SegEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Remove the ith atom from this Segment\nThrow: SireError::invalid_index\n" );
         
         }
@@ -184,6 +193,7 @@ void register_SegEditor_class(){
             SegEditor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this editor" );
         
         }
@@ -196,6 +206,7 @@ void register_SegEditor_class(){
                 "transfer"
                 , transfer_function_value
                 , ( bp::arg("atomid"), bp::arg("segid") )
+                , bp::release_gil_policy()
                 , "Transfer all atoms that match the ID atomid in this Segment\nto the Segment that matches the ID cgid\nThrow: SireMol::missing_atom\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\nThrow: SireError::invalid_index\n" );
         
         }
@@ -208,6 +219,7 @@ void register_SegEditor_class(){
                 "transfer"
                 , transfer_function_value
                 , ( bp::arg("i"), bp::arg("segid") )
+                , bp::release_gil_policy()
                 , "Transfer the ith atom of this Segment into the Segment identified\nby the ID cgid\nThrow: SireError::invalid_index\n" );
         
         }
@@ -220,6 +232,7 @@ void register_SegEditor_class(){
                 "transferAll"
                 , transferAll_function_value
                 , ( bp::arg("segid") )
+                , bp::release_gil_policy()
                 , "Completely transfer all of the atoms in this Segment to\nthe Segment that matches the ID cgid\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\nThrow: SireError::invalid_index\n" );
         
         }
@@ -231,6 +244,7 @@ void register_SegEditor_class(){
             SegEditor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

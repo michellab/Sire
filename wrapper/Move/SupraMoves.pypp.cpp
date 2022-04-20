@@ -26,6 +26,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_SupraMoves_class(){
@@ -42,6 +44,7 @@ void register_SupraMoves_class(){
             SupraMoves_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -53,6 +56,7 @@ void register_SupraMoves_class(){
             SupraMoves_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of different types of move in this set" );
         
         }
@@ -65,6 +69,7 @@ void register_SupraMoves_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -76,6 +81,7 @@ void register_SupraMoves_class(){
             SupraMoves_exposer.def( 
                 "moves"
                 , moves_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -87,6 +93,7 @@ void register_SupraMoves_class(){
             SupraMoves_exposer.def( 
                 "nMoves"
                 , nMoves_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -98,6 +105,7 @@ void register_SupraMoves_class(){
             SupraMoves_exposer.def( 
                 "nSubMoveTypes"
                 , nSubMoveTypes_function_value
+                , bp::release_gil_policy()
                 , "Return the number of different types of move in this set" );
         
         }
@@ -122,7 +130,7 @@ void register_SupraMoves_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -134,6 +142,7 @@ void register_SupraMoves_class(){
             SupraMoves_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of different types of move in this set" );
         
         }
@@ -145,6 +154,7 @@ void register_SupraMoves_class(){
             SupraMoves_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -156,6 +166,7 @@ void register_SupraMoves_class(){
             SupraMoves_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

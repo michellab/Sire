@@ -19,6 +19,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_BeadID_class(){
 
     { //::SireMol::BeadID
@@ -33,6 +35,7 @@ void register_BeadID_class(){
             BeadID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

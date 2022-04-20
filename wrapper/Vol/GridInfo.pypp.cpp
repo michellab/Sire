@@ -29,6 +29,8 @@ SireVol::GridInfo __copy__(const SireVol::GridInfo &other){ return SireVol::Grid
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_GridInfo_class(){
@@ -48,6 +50,7 @@ void register_GridInfo_class(){
                 "arrayToGridIndex"
                 , arrayToGridIndex_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -60,6 +63,7 @@ void register_GridInfo_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -72,6 +76,7 @@ void register_GridInfo_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("idx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -84,6 +89,7 @@ void register_GridInfo_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("k") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -96,6 +102,7 @@ void register_GridInfo_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -108,6 +115,7 @@ void register_GridInfo_class(){
                 "box"
                 , box_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the AABox that encompasses the grid box at point i. This\nreturns an empty box if there is no such point in the grid" );
         
         }
@@ -120,6 +128,7 @@ void register_GridInfo_class(){
                 "box"
                 , box_function_value
                 , ( bp::arg("idx") )
+                , bp::release_gil_policy()
                 , "Return the AABox that encompasses the grid box at point idx.\nThis returns an empty box if the point is not in the grid" );
         
         }
@@ -132,6 +141,7 @@ void register_GridInfo_class(){
                 "box"
                 , box_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Return the AABox that encompasses the grid box that contains the\npoint p. Note that returns a null AABox if the point is not in the grid" );
         
         }
@@ -144,6 +154,7 @@ void register_GridInfo_class(){
                 "closestIndexTo"
                 , closestIndexTo_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Return the grid index that is closest to the point point. Note that\nif point lies outside the grid, then the closest grid index will\nstill be returned (it may just lie a long way from the point)" );
         
         }
@@ -156,6 +167,7 @@ void register_GridInfo_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Return whether or not this grid contains the point point" );
         
         }
@@ -167,6 +179,7 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -178,6 +191,7 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "dimX"
                 , dimX_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -189,6 +203,7 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "dimY"
                 , dimY_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -200,6 +215,7 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "dimZ"
                 , dimZ_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -211,6 +227,7 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "dimensions"
                 , dimensions_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -223,6 +240,7 @@ void register_GridInfo_class(){
                 "getitem"
                 , getitem_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -235,6 +253,7 @@ void register_GridInfo_class(){
                 "gridToArrayIndex"
                 , gridToArrayIndex_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("k") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -247,6 +266,7 @@ void register_GridInfo_class(){
                 "gridToArrayIndex"
                 , gridToArrayIndex_function_value
                 , ( bp::arg("idx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -259,6 +279,7 @@ void register_GridInfo_class(){
                 "indexOf"
                 , indexOf_function_value
                 , ( bp::arg("i"), bp::arg("grid") )
+                , bp::release_gil_policy()
                 , "Return the index in grid grid of point i in this grid. This returns\na null index if this index does not exist in either grid. Note that this\nreturns the index of the closest grid point if the grids do not exactly\nline up" );
         
         }
@@ -271,6 +292,7 @@ void register_GridInfo_class(){
                 "indexOf"
                 , indexOf_function_value
                 , ( bp::arg("idx"), bp::arg("grid") )
+                , bp::release_gil_policy()
                 , "Return the index in grid grid of point idx in this grid. This returns\na null index if this index does not exist in either grid. Note that this\nreturns the index of the closest grid point if the grids do not exactly\nline up" );
         
         }
@@ -282,6 +304,7 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -293,6 +316,7 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "nPoints"
                 , nPoints_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -356,6 +380,7 @@ void register_GridInfo_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the point at the bottom, left, back (lowest i, j, k indicies) of the\nith box. This returns a zero vector if the point is invalid." );
         
         }
@@ -368,6 +393,7 @@ void register_GridInfo_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("idx") )
+                , bp::release_gil_policy()
                 , "Return the point at the bottom, left, back (lowest i, j, k indicies) of the\nbox at grid index idx. This returns a zero vector if the point is invalid." );
         
         }
@@ -380,6 +406,7 @@ void register_GridInfo_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Return the point at the bottom, left, back (lowest i, j, k indicies) of the\nbox containing the point point. This returns a zero vector if the point is invalid." );
         
         }
@@ -392,6 +419,7 @@ void register_GridInfo_class(){
                 "pointToArrayIndex"
                 , pointToArrayIndex_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Return the array index of the grid box that contains the point point.\nNote that this returns -1 if the point is not in the grid" );
         
         }
@@ -404,6 +432,7 @@ void register_GridInfo_class(){
                 "pointToGridCorners"
                 , pointToGridCorners_function_value
                 , ( bp::arg("point"), bp::arg("indicies") )
+                , bp::release_gil_policy()
                 , "Return array indicies of the eight grid points that are on the corners of the\nbox that contains the point point. This returns eight -1 values if the\npoint does not lie in the grid" );
         
         }
@@ -416,6 +445,7 @@ void register_GridInfo_class(){
                 "pointToGridCorners"
                 , pointToGridCorners_function_value
                 , ( bp::arg("point"), bp::arg("indicies"), bp::arg("weights") )
+                , bp::release_gil_policy()
                 , "Return array indicies of the eight grid points that are on the corners of the\nbox that contains the point point. This returns eight -1 values if the\npoint does not lie in the grid. This also returns the weights of the eight\npoints, using tri-linear interpolation based on the distance between the\npoint and each corner of the box" );
         
         }
@@ -428,6 +458,7 @@ void register_GridInfo_class(){
                 "pointToGridCorners"
                 , pointToGridCorners_function_value
                 , ( bp::arg("x"), bp::arg("y"), bp::arg("z"), bp::arg("indicies") )
+                , bp::release_gil_policy()
                 , "Return array indicies of the eight grid points that are on the corners of the\nbox that contains the point point. This returns eight -1 values if the\npoint does not lie in the grid. The return value is the number of points\nthat are in the box" );
         
         }
@@ -440,6 +471,7 @@ void register_GridInfo_class(){
                 "pointToGridCorners"
                 , pointToGridCorners_function_value
                 , ( bp::arg("x"), bp::arg("y"), bp::arg("z"), bp::arg("indicies"), bp::arg("weights") )
+                , bp::release_gil_policy()
                 , "Return array indicies of the eight grid points that are on the corners of the\nbox that contains the point point. This returns eight -1 values if the\npoint does not lie in the grid. This also returns the weights of the eight\npoints, using tri-linear interpolation based on the distance between the\npoint and each corner of the box" );
         
         }
@@ -452,6 +484,7 @@ void register_GridInfo_class(){
                 "pointToGridIndex"
                 , pointToGridIndex_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Return the index of the grid box that contains the point point. Note\nthat this returns a null index if the point is not in the grid" );
         
         }
@@ -464,6 +497,7 @@ void register_GridInfo_class(){
                 "redimension"
                 , redimension_function_value
                 , ( bp::arg("values"), bp::arg("new_grid") )
+                , bp::release_gil_policy()
                 , "Return the values values that map to this grid, redimensioned to map to\nthe grid new_grid" );
         
         }
@@ -475,6 +509,7 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -486,6 +521,7 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "spacing"
                 , spacing_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -497,6 +533,7 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -508,6 +545,7 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -519,6 +557,7 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

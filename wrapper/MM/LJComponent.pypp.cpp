@@ -20,6 +20,8 @@ SireMM::LJComponent __copy__(const SireMM::LJComponent &other){ return SireMM::L
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_LJComponent_class(){
 
     { //::SireMM::LJComponent
@@ -38,6 +40,7 @@ void register_LJComponent_class(){
                 "changeEnergy"
                 , changeEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("ljnrg") )
+                , bp::release_gil_policy()
                 , "Change the LJ component of the energy in the forcefield ff\nby delta" );
         
         }
@@ -50,6 +53,7 @@ void register_LJComponent_class(){
                 "setEnergy"
                 , setEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("ljnrg") )
+                , bp::release_gil_policy()
                 , "Set the LJ component of the energy in the forcefield ff\nto equal to the passed LJEnergy" );
         
         }
@@ -61,6 +65,7 @@ void register_LJComponent_class(){
             LJComponent_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -72,7 +77,7 @@ void register_LJComponent_class(){
             LJComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -84,6 +89,7 @@ void register_LJComponent_class(){
             LJComponent_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +101,7 @@ void register_LJComponent_class(){
             LJComponent_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

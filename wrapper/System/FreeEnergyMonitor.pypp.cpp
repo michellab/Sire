@@ -47,6 +47,8 @@ SireSystem::FreeEnergyMonitor __copy__(const SireSystem::FreeEnergyMonitor &othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FreeEnergyMonitor_class(){
 
     { //::SireSystem::FreeEnergyMonitor
@@ -63,6 +65,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "binWidth"
                 , binWidth_function_value
+                , bp::release_gil_policy()
                 , "Return the width of the histogram bins used to record the free energies" );
         
         }
@@ -74,6 +77,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Clear all statistics" );
         
         }
@@ -86,6 +90,7 @@ void register_FreeEnergyMonitor_class(){
                 "conserveMemory"
                 , conserveMemory_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Conserve memory by copying the molecule data etc. from other into this monitor" );
         
         }
@@ -97,6 +102,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "coulombFreeEnergies"
                 , coulombFreeEnergies_function_value
+                , bp::release_gil_policy()
                 , "Return the array of all accumulated coulomb free energies" );
         
         }
@@ -108,6 +114,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "coulombPower"
                 , coulombPower_function_value
+                , bp::release_gil_policy()
                 , "Return the coulomb power, if extra coulomb softening is used.\nThis returns 0 if coulomb softening is not used" );
         
         }
@@ -119,6 +126,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "deltaLambda"
                 , deltaLambda_function_value
+                , bp::release_gil_policy()
                 , "Return the value of delta lambda used to calculate the free energy gradients" );
         
         }
@@ -130,6 +138,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "freeEnergies"
                 , freeEnergies_function_value
+                , bp::release_gil_policy()
                 , "Return the array of all accumulated total free energies" );
         
         }
@@ -166,6 +175,7 @@ void register_FreeEnergyMonitor_class(){
                 "isCompatible"
                 , isCompatible_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return whether or not this monitor is compatible with other\n(have the same groups, soft-core parameters, delta lambda, temperature etc.)" );
         
         }
@@ -178,6 +188,7 @@ void register_FreeEnergyMonitor_class(){
                 "isCompatibleExceptLambda"
                 , isCompatibleExceptLambda_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return whether or not this monitor is compatible with other, ignoring that\nthe monitors have different lambda values. This will let you know if it is sensible\nto construct PMFs from a combination of these monitors" );
         
         }
@@ -189,6 +200,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether this is empty (has no group data)" );
         
         }
@@ -200,6 +212,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "lambdaComponent"
                 , lambdaComponent_function_value
+                , bp::release_gil_policy()
                 , "Return the symbol used to find the value of lambda from the system" );
         
         }
@@ -211,6 +224,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "lambdaValue"
                 , lambdaValue_function_value
+                , bp::release_gil_policy()
                 , "Return the lambda value at which the free energy components were collected" );
         
         }
@@ -222,6 +236,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "ljFreeEnergies"
                 , ljFreeEnergies_function_value
+                , bp::release_gil_policy()
                 , "Return the array of all accumulated LJ free energies" );
         
         }
@@ -234,6 +249,7 @@ void register_FreeEnergyMonitor_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("monitors") )
+                , bp::release_gil_policy()
                 , "Merge a whole set of free energy monitors together. Note that you can\nonly merge them if they have the same groups, soft-core parameters, delta lambda,\ntemperature etc.\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -246,6 +262,7 @@ void register_FreeEnergyMonitor_class(){
                 "monitor"
                 , monitor_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Accumulate energies from the passed system" );
         
         }
@@ -257,6 +274,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "nSamples"
                 , nSamples_function_value
+                , bp::release_gil_policy()
                 , "Return the number of samples used to form all of the free energy averages\nin this monitor" );
         
         }
@@ -296,6 +314,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "referenceViews"
                 , referenceViews_function_value
+                , bp::release_gil_policy()
                 , "Return the array of the reference group molecule views in the same order as they\nappear in the arrays of free energies" );
         
         }
@@ -308,6 +327,7 @@ void register_FreeEnergyMonitor_class(){
                 "setBinWidth"
                 , setBinWidth_function_value
                 , ( bp::arg("binwidth") )
+                , bp::release_gil_policy()
                 , "Set the bin width for the histogram of recorded free energies.\nBy default, we dont collect a histogram of each of the components energies\nas this is too memory hungry." );
         
         }
@@ -320,6 +340,7 @@ void register_FreeEnergyMonitor_class(){
                 "setCoulombPower"
                 , setCoulombPower_function_value
                 , ( bp::arg("power") )
+                , bp::release_gil_policy()
                 , "Set the coulomb power parameter used by the soft-core potential" );
         
         }
@@ -332,6 +353,7 @@ void register_FreeEnergyMonitor_class(){
                 "setDeltaLambda"
                 , setDeltaLambda_function_value
                 , ( bp::arg("delta_lam") )
+                , bp::release_gil_policy()
                 , "Set the value of delta lambda to use to calculate the free energy gradients" );
         
         }
@@ -344,6 +366,7 @@ void register_FreeEnergyMonitor_class(){
                 "setLambdaComponent"
                 , setLambdaComponent_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "Set the system component symbol used to get the value of lambda" );
         
         }
@@ -356,6 +379,7 @@ void register_FreeEnergyMonitor_class(){
                 "setShiftDelta"
                 , setShiftDelta_function_value
                 , ( bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Set the shift delta parameter used by the soft-core potential" );
         
         }
@@ -368,6 +392,7 @@ void register_FreeEnergyMonitor_class(){
                 "setTemperature"
                 , setTemperature_function_value
                 , ( bp::arg("temperature") )
+                , bp::release_gil_policy()
                 , "Set the temperature at which the free energies are accumulated" );
         
         }
@@ -379,6 +404,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "shiftDelta"
                 , shiftDelta_function_value
+                , bp::release_gil_policy()
                 , "Return the shift delta parameter if a soft-core potential is used.\nThis returns 0 if a LJ shifting term is not used" );
         
         }
@@ -390,6 +416,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "temperature"
                 , temperature_function_value
+                , bp::release_gil_policy()
                 , "Return the temperature at which the free energies are calculated" );
         
         }
@@ -401,6 +428,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "Return the typename of the class" );
         
         }
@@ -412,6 +440,7 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "usesSoftCore"
                 , usesSoftCore_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this monitor uses a soft-core potential to\ncalculate the CLJ energy between the molecules in views0() and the\nmolecules in views1()" );
         
         }

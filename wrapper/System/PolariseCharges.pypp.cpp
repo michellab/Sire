@@ -66,6 +66,8 @@ SireSystem::PolariseCharges __copy__(const SireSystem::PolariseCharges &other){ 
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PolariseCharges_class(){
 
     { //::SireSystem::PolariseCharges
@@ -85,6 +87,7 @@ void register_PolariseCharges_class(){
             PolariseCharges_exposer.def( 
                 "convergenceLimit"
                 , convergenceLimit_function_value
+                , bp::release_gil_policy()
                 , "Return the convergence limit of the calculation" );
         
         }
@@ -96,7 +99,7 @@ void register_PolariseCharges_class(){
             PolariseCharges_exposer.def( 
                 "fieldComponent"
                 , fieldComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the component of the forcefield that is used to\ncalculate the electrostatic field on the atoms to be\npolarised" );
         
         }
@@ -135,6 +138,7 @@ void register_PolariseCharges_class(){
             PolariseCharges_exposer.def( 
                 "selfEnergyFF"
                 , selfEnergyFF_function_value
+                , bp::release_gil_policy()
                 , "Return the forcefield that is used to calculate the self-energy of\npolarising the charges. This must be added to any system to which\nthis constraint is applied, as maintaining the constraint\n(by polarising the charges) costs energy, which must be part\nof the system Hamiltonian" );
         
         }
@@ -147,6 +151,7 @@ void register_PolariseCharges_class(){
                 "setConvergenceLimit"
                 , setConvergenceLimit_function_value
                 , ( bp::arg("limit") )
+                , bp::release_gil_policy()
                 , "Set the convergence limit of the calculation" );
         
         }
@@ -158,6 +163,7 @@ void register_PolariseCharges_class(){
             PolariseCharges_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this constraint" );
         
         }
@@ -169,6 +175,7 @@ void register_PolariseCharges_class(){
             PolariseCharges_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -33,6 +33,8 @@ SireMol::NullPerturbation __copy__(const SireMol::NullPerturbation &other){ retu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullPerturbation_class(){
 
     { //::SireMol::NullPerturbation
@@ -63,6 +65,7 @@ void register_NullPerturbation_class(){
             NullPerturbation_exposer.def( 
                 "requiredProperties"
                 , requiredProperties_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -74,6 +77,7 @@ void register_NullPerturbation_class(){
             NullPerturbation_exposer.def( 
                 "requiredSymbols"
                 , requiredSymbols_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -85,6 +89,7 @@ void register_NullPerturbation_class(){
             NullPerturbation_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -97,6 +102,7 @@ void register_NullPerturbation_class(){
                 "wouldChange"
                 , wouldChange_function_value
                 , ( bp::arg("molecule"), bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }

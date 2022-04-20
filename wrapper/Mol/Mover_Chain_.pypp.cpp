@@ -85,6 +85,8 @@ SireMol::Mover<SireMol::Chain> __copy__(const SireMol::Mover<SireMol::Chain> &ot
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Mover_Chain__class(){
@@ -301,6 +303,7 @@ void register_Mover_Chain__class(){
             Mover_Chain__exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -453,6 +456,7 @@ void register_Mover_Chain__class(){
             Mover_Chain__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -493,6 +497,7 @@ void register_Mover_Chain__class(){
             Mover_Chain__exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

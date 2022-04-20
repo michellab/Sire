@@ -37,6 +37,8 @@ SireMol::Within __copy__(const SireMol::Within &other){ return SireMol::Within(o
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Within_class(){
 
     { //::SireMol::Within
@@ -54,6 +56,7 @@ void register_Within_class(){
             Within_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash of this identifier" );
         
         }
@@ -65,6 +68,7 @@ void register_Within_class(){
             Within_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Is this selection null?" );
         
         }
@@ -77,6 +81,7 @@ void register_Within_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Map this ID to the list of indicies of atoms that match this ID\nNote that this function is not valid for this ID class, as\nwe need to have access to the molecular coordinates\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -89,6 +94,7 @@ void register_Within_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molview"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Map this ID to the list of atomidxs of specified atoms\nin the passed molecule\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -116,6 +122,7 @@ void register_Within_class(){
             Within_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representatio of this ID" );
         
         }
@@ -127,6 +134,7 @@ void register_Within_class(){
             Within_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -138,6 +146,7 @@ void register_Within_class(){
             Within_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

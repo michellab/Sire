@@ -58,6 +58,8 @@ SireSystem::IdentityConstraint __copy__(const SireSystem::IdentityConstraint &ot
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_IdentityConstraint_class(){
 
     { //::SireSystem::IdentityConstraint
@@ -78,6 +80,7 @@ void register_IdentityConstraint_class(){
                 "constrain"
                 , constrain_function_value
                 , ( bp::arg("molgroup"), bp::arg("point"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Static function used to constrain the identities of the molecules\nin molgroup against the point point. This makes the first molecule\nin the group have the identity that matches this point" );
         
         }
@@ -90,6 +93,7 @@ void register_IdentityConstraint_class(){
                 "constrain"
                 , constrain_function_value
                 , ( bp::arg("molgroup"), bp::arg("points"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Static function used to constrain the identities of the molecules\nin molgroup against the identity points in points - the\nfirst npoints molecules in the group are constrained in order\nagainst the points" );
         
         }
@@ -102,6 +106,7 @@ void register_IdentityConstraint_class(){
                 "constrain"
                 , constrain_function_value
                 , ( bp::arg("molgroup"), bp::arg("points"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Static function used to constrain the identities of the molecules\nin molgroup against the identity points in points - the\nfirst npoints molecules in the group are constrained in order\nagainst the points" );
         
         }
@@ -113,7 +118,7 @@ void register_IdentityConstraint_class(){
             IdentityConstraint_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group acted on by this constraint" );
         
         }
@@ -140,6 +145,7 @@ void register_IdentityConstraint_class(){
             IdentityConstraint_exposer.def( 
                 "points"
                 , points_function_value
+                , bp::release_gil_policy()
                 , "Return the points used to identify the molecules" );
         
         }
@@ -163,6 +169,7 @@ void register_IdentityConstraint_class(){
             IdentityConstraint_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this constraint" );
         
         }
@@ -174,6 +181,7 @@ void register_IdentityConstraint_class(){
             IdentityConstraint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -185,6 +193,7 @@ void register_IdentityConstraint_class(){
             IdentityConstraint_exposer.def( 
                 "useFewPointsAlgorithm"
                 , useFewPointsAlgorithm_function_value
+                , bp::release_gil_policy()
                 , "Function used for debugging that switches this object over\nto using the few points algorithm to apply the constraint" );
         
         }
@@ -196,6 +205,7 @@ void register_IdentityConstraint_class(){
             IdentityConstraint_exposer.def( 
                 "useManyPointsAlgorithm"
                 , useManyPointsAlgorithm_function_value
+                , bp::release_gil_policy()
                 , "Function used for debugging that switches this object over\nto using the many points algorithm to apply the constraint" );
         
         }
@@ -207,6 +217,7 @@ void register_IdentityConstraint_class(){
             IdentityConstraint_exposer.def( 
                 "useSinglePointAlgorithm"
                 , useSinglePointAlgorithm_function_value
+                , bp::release_gil_policy()
                 , "Function used for debugging that switches this object over\nto using the single point algorithm to apply the constraint\nThrow: SireError::invalid_state\n" );
         
         }

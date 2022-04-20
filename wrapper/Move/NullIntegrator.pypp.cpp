@@ -37,6 +37,8 @@ SireMove::NullIntegrator __copy__(const SireMove::NullIntegrator &other){ return
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullIntegrator_class(){
 
     { //::SireMove::NullIntegrator
@@ -53,6 +55,7 @@ void register_NullIntegrator_class(){
                 "createWorkspace"
                 , createWorkspace_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "This returns a null workspace" );
         
         }
@@ -65,6 +68,7 @@ void register_NullIntegrator_class(){
                 "createWorkspace"
                 , createWorkspace_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "This returns a null workspace" );
         
         }
@@ -76,6 +80,7 @@ void register_NullIntegrator_class(){
             NullIntegrator_exposer.def( 
                 "ensemble"
                 , ensemble_function_value
+                , bp::release_gil_policy()
                 , "Return the ensemble of this integrator" );
         
         }
@@ -88,6 +93,7 @@ void register_NullIntegrator_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("workspace"), bp::arg("nrg_component"), bp::arg("timestep"), bp::arg("nmoves"), bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "The null integrator does nothing" );
         
         }
@@ -99,6 +105,7 @@ void register_NullIntegrator_class(){
             NullIntegrator_exposer.def( 
                 "isTimeReversible"
                 , isTimeReversible_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this integrator is time-reversible" );
         
         }
@@ -125,6 +132,7 @@ void register_NullIntegrator_class(){
             NullIntegrator_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this integrator" );
         
         }
@@ -136,6 +144,7 @@ void register_NullIntegrator_class(){
             NullIntegrator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

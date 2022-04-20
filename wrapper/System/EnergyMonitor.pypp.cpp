@@ -44,6 +44,8 @@ SireSystem::EnergyMonitor __copy__(const SireSystem::EnergyMonitor &other){ retu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_EnergyMonitor_class(){
 
     { //::SireSystem::EnergyMonitor
@@ -67,6 +69,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "alpha"
                 , alpha_function_value
+                , bp::release_gil_policy()
                 , "Return the value of alpha (either the explicitly set value, or\nthe last value used when calculating the energy if an alpha\ncomponent is used)" );
         
         }
@@ -78,7 +81,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "assigner0"
                 , assigner0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the assigner used to select views0. Note that this will\nraise an exception if an assigner is not used to choose these views\nThrow: SireError::unavailable_resource\n" );
         
         }
@@ -90,7 +93,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "assigner1"
                 , assigner1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the assigner used to select views1. Note that this will\nraise an exception if an assigner is not used to choose these views\nThrow: SireError::unavailable_resource\n" );
         
         }
@@ -102,6 +105,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Clear all statistics" );
         
         }
@@ -113,6 +117,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "coulombEnergies"
                 , coulombEnergies_function_value
+                , bp::release_gil_policy()
                 , "Return the array of all accumulated coulomb energies" );
         
         }
@@ -124,6 +129,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "coulombPower"
                 , coulombPower_function_value
+                , bp::release_gil_policy()
                 , "Return the coulomb power, if extra coulomb softening is used.\nThis returns 0 if coulomb softening is not used" );
         
         }
@@ -135,7 +141,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "group0"
                 , group0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group from which views0 are drawn. Note that this\nwill return the molecule group used by assigner0 if an assigner is\nused to choose views" );
         
         }
@@ -147,7 +153,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "group1"
                 , group1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group from which views1 are drawn. Note that this\nwill return the molecule group used by assigner1 if an assigner is\nused to choose views" );
         
         }
@@ -159,6 +165,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "ljEnergies"
                 , ljEnergies_function_value
+                , bp::release_gil_policy()
                 , "Return the array of all accumulated LJ energies" );
         
         }
@@ -171,6 +178,7 @@ void register_EnergyMonitor_class(){
                 "monitor"
                 , monitor_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Accumulate energies from the passed system" );
         
         }
@@ -198,6 +206,7 @@ void register_EnergyMonitor_class(){
                 "setAlpha"
                 , setAlpha_function_value
                 , ( bp::arg("alpha") )
+                , bp::release_gil_policy()
                 , "Explicitly set the value of alpha used if a soft-core potential is used.\nThis clears any set alpha component symbol." );
         
         }
@@ -210,6 +219,7 @@ void register_EnergyMonitor_class(){
                 "setAlphaComponent"
                 , setAlphaComponent_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "Set the system component symbol used to get the value of alpha\nif using a soft-core potential. Note that this will overwrite\nany explicitly-set value of alpha" );
         
         }
@@ -222,6 +232,7 @@ void register_EnergyMonitor_class(){
                 "setCoulombPower"
                 , setCoulombPower_function_value
                 , ( bp::arg("power") )
+                , bp::release_gil_policy()
                 , "Set the coulomb power parameter used by the soft-core potential" );
         
         }
@@ -234,6 +245,7 @@ void register_EnergyMonitor_class(){
                 "setShiftDelta"
                 , setShiftDelta_function_value
                 , ( bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Set the shift delta parameter used by the soft-core potential" );
         
         }
@@ -245,6 +257,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "shiftDelta"
                 , shiftDelta_function_value
+                , bp::release_gil_policy()
                 , "Return the shift delta parameter if a soft-core potential is used.\nThis returns 0 if a LJ shifting term is not used" );
         
         }
@@ -256,6 +269,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "Return the typename of the class" );
         
         }
@@ -267,6 +281,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "usesSoftCore"
                 , usesSoftCore_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this monitor uses a soft-core potential to\ncalculate the CLJ energy between the molecules in views0() and the\nmolecules in views1()" );
         
         }
@@ -278,6 +293,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "views0"
                 , views0_function_value
+                , bp::release_gil_policy()
                 , "Return the array of the first group of molecule views in the same order as they\nappear in the arrays of energies" );
         
         }
@@ -289,6 +305,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "views1"
                 , views1_function_value
+                , bp::release_gil_policy()
                 , "Return the array of the second group of molecule views in the same order as they\nappear in the arrays of energies" );
         
         }

@@ -33,6 +33,8 @@ SireMM::NoCutoff __copy__(const SireMM::NoCutoff &other){ return SireMM::NoCutof
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NoCutoff_class(){
 
     { //::SireMM::NoCutoff
@@ -49,6 +51,7 @@ void register_NoCutoff_class(){
                 "dElectrostaticScaleFactor"
                 , dElectrostaticScaleFactor_function_value
                 , ( bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return the derivative of the electrostatic scale factor - this\nwill always be 0 as there is no cutoff" );
         
         }
@@ -61,6 +64,7 @@ void register_NoCutoff_class(){
                 "dVDWScaleFactor"
                 , dVDWScaleFactor_function_value
                 , ( bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return the derivative of the VDW scale factor - this will\nalways be 0 as there is no cutoff" );
         
         }
@@ -73,6 +77,7 @@ void register_NoCutoff_class(){
                 "electrostaticScaleFactor"
                 , electrostaticScaleFactor_function_value
                 , ( bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return the scale factor for the electrostatic energies - this\nwill always be 1.0, as there are no cutoffs" );
         
         }
@@ -99,6 +104,7 @@ void register_NoCutoff_class(){
             NoCutoff_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this switching function" );
         
         }
@@ -110,6 +116,7 @@ void register_NoCutoff_class(){
             NoCutoff_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -122,6 +129,7 @@ void register_NoCutoff_class(){
                 "vdwScaleFactor"
                 , vdwScaleFactor_function_value
                 , ( bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return the scale factor for the vdw energies - this\nwill always be 1.0, as there are no cutoffs" );
         
         }

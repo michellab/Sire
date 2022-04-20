@@ -21,6 +21,8 @@ SireMol::BeadEditor __copy__(const SireMol::BeadEditor &other){ return SireMol::
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_BeadEditor_class(){
@@ -39,6 +41,7 @@ void register_BeadEditor_class(){
             BeadEditor_exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "Commit the changes" );
         
         }
@@ -76,6 +79,7 @@ void register_BeadEditor_class(){
             BeadEditor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this editor" );
         
         }
@@ -87,6 +91,7 @@ void register_BeadEditor_class(){
             BeadEditor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

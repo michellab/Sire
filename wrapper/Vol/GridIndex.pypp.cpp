@@ -29,6 +29,8 @@ SireVol::GridIndex __copy__(const SireVol::GridIndex &other){ return SireVol::Gr
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_GridIndex_class(){
 
     { //::SireVol::GridIndex
@@ -44,6 +46,7 @@ void register_GridIndex_class(){
             GridIndex_exposer.def( 
                 "i"
                 , i_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -55,6 +58,7 @@ void register_GridIndex_class(){
             GridIndex_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -66,6 +70,7 @@ void register_GridIndex_class(){
             GridIndex_exposer.def( 
                 "j"
                 , j_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -77,6 +82,7 @@ void register_GridIndex_class(){
             GridIndex_exposer.def( 
                 "k"
                 , k_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -88,6 +94,7 @@ void register_GridIndex_class(){
             GridIndex_exposer.def( 
                 "null"
                 , null_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -114,6 +121,7 @@ void register_GridIndex_class(){
             GridIndex_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -125,6 +133,7 @@ void register_GridIndex_class(){
             GridIndex_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -136,6 +145,7 @@ void register_GridIndex_class(){
             GridIndex_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

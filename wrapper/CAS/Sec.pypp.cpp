@@ -27,6 +27,8 @@ SireCAS::Sec __copy__(const SireCAS::Sec &other){ return SireCAS::Sec(other); }
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Sec_class(){
 
     { //::SireCAS::Sec
@@ -44,6 +46,7 @@ void register_Sec_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this function" );
         
         }
@@ -56,6 +59,7 @@ void register_Sec_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Complex evaluation" );
         
         }
@@ -68,6 +72,7 @@ void register_Sec_class(){
             Sec_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -79,6 +84,7 @@ void register_Sec_class(){
             Sec_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

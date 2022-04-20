@@ -31,6 +31,8 @@ Squire::SS_GTOs __copy__(const Squire::SS_GTOs &other){ return Squire::SS_GTOs(o
 
 const char* pvt_get_name(const Squire::SS_GTOs&){ return "Squire::SS_GTOs";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SS_GTOs_class(){
 
     { //::Squire::SS_GTOs
@@ -48,6 +50,7 @@ void register_SS_GTOs_class(){
                 "coulomb_integral"
                 , coulomb_integral_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return the coulomb integral between this set of pair of\nS orbitals and the pairs other S orbitals in other" );
         
         }
@@ -60,6 +63,7 @@ void register_SS_GTOs_class(){
                 "exchange_integral"
                 , exchange_integral_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return the exchange integral between this set of pair of\norbitals and the other set of pairs in other" );
         
         }
@@ -71,6 +75,7 @@ void register_SS_GTOs_class(){
             SS_GTOs_exposer.def( 
                 "kinetic_integral"
                 , kinetic_integral_function_value
+                , bp::release_gil_policy()
                 , "Return the kinetic energy integral between all pairs of S orbitals in this set" );
         
         }
@@ -95,6 +100,7 @@ void register_SS_GTOs_class(){
             SS_GTOs_exposer.def( 
                 "overlap_integral"
                 , overlap_integral_function_value
+                , bp::release_gil_policy()
                 , "Return the overlap integrals between all pairs of S orbitals in this set" );
         
         }
@@ -107,6 +113,7 @@ void register_SS_GTOs_class(){
                 "potential_integral"
                 , potential_integral_function_value
                 , ( bp::arg("C") )
+                , bp::release_gil_policy()
                 , "Return the potential energy integral of all pairs of S orbitals in this\nset with the array of point charges in C" );
         
         }
@@ -119,6 +126,7 @@ void register_SS_GTOs_class(){
                 "potential_integral"
                 , potential_integral_function_value
                 , ( bp::arg("C"), bp::arg("m") )
+                , bp::release_gil_policy()
                 , "Return the mth auxilliary potential energy integral of all pairs of S\norbitals in this set with the array of point charges in C" );
         
         }

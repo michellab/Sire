@@ -29,6 +29,8 @@ SireBase::MemInfo __copy__(const SireBase::MemInfo &other){ return SireBase::Mem
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MemInfo_class(){
 
     { //::SireBase::MemInfo
@@ -44,6 +46,7 @@ void register_MemInfo_class(){
             MemInfo_exposer.def( 
                 "allocatedBytes"
                 , allocatedBytes_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of bytes allocated to this process by\nmemory subsystem (only on the heap - this ignores the stack and\nany memory allocated within libraries). Note that fragmentation\nmay mean that not all of this memory is in use." );
         
         }
@@ -55,6 +58,7 @@ void register_MemInfo_class(){
             MemInfo_exposer.def( 
                 "mMappedBytes"
                 , mMappedBytes_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of bytes that have been allocated via\nmmap to this process by the memory subsystem. This total is included\nwithin allocatedBytes, therefore allocatedBytes() - mMappedBytes()\nwill return the number of bytes that have not been allocated\nvia mmap" );
         
         }
@@ -80,6 +84,7 @@ void register_MemInfo_class(){
                 "startMonitoring"
                 , startMonitoring_function_value
                 , ( bp::arg("ms")=(int)(1000) )
+                , bp::release_gil_policy()
                 , "Start a monitor that prints the memory usage of the program\nout to the screen every ms milliseconds" );
         
         }
@@ -92,6 +97,7 @@ void register_MemInfo_class(){
                 "startMonitoring"
                 , startMonitoring_function_value
                 , ( bp::arg("filename"), bp::arg("ms")=(int)(1000) )
+                , bp::release_gil_policy()
                 , "Start a monitor that prints the memory usage of the program\nout to the file filename every ms milliseconds" );
         
         }
@@ -103,6 +109,7 @@ void register_MemInfo_class(){
             MemInfo_exposer.def( 
                 "stopMonitoring"
                 , stopMonitoring_function_value
+                , bp::release_gil_policy()
                 , "Stop monitoring the memory of this process" );
         
         }
@@ -114,6 +121,7 @@ void register_MemInfo_class(){
             MemInfo_exposer.def( 
                 "takeMeasurement"
                 , takeMeasurement_function_value
+                , bp::release_gil_policy()
                 , "Take a measurement of the current memory usage of the process" );
         
         }
@@ -125,6 +133,7 @@ void register_MemInfo_class(){
             MemInfo_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string containing details of the memory usage. This is\na platform dependent string, but can be useful to print to the user" );
         
         }
@@ -136,6 +145,7 @@ void register_MemInfo_class(){
             MemInfo_exposer.def( 
                 "totalSystemMemory"
                 , totalSystemMemory_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of bytes of system memory\n(actual memory, not virtual memory). To ensure we dont page,\nwe have to ensure that this processes memory usage is below\nthe total system memory" );
         
         }
@@ -147,6 +157,7 @@ void register_MemInfo_class(){
             MemInfo_exposer.def( 
                 "totalVirtualMemory"
                 , totalVirtualMemory_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of bytes of virtual memory available on this system\n(this includes system memory)" );
         
         }
@@ -158,6 +169,7 @@ void register_MemInfo_class(){
             MemInfo_exposer.def( 
                 "usedBytes"
                 , usedBytes_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of bytes in use by the program. This number\nwill be less than or equal to the number of bytes returned by allocatedBytes.\nThis will be less if memory fragmentation means that pages of memory are\nnot able to be returned to the operating system when they are freed\nby the program" );
         
         }
@@ -169,6 +181,7 @@ void register_MemInfo_class(){
             MemInfo_exposer.def( 
                 "usedSystemMemory"
                 , usedSystemMemory_function_value
+                , bp::release_gil_policy()
                 , "Return the total amount of system memory in use.\n(actual memory, not virtual memory)" );
         
         }
@@ -180,6 +193,7 @@ void register_MemInfo_class(){
             MemInfo_exposer.def( 
                 "usedVirtualMemory"
                 , usedVirtualMemory_function_value
+                , bp::release_gil_policy()
                 , "Return the total amount of virtual memory in use.\n(includes system memory)" );
         
         }

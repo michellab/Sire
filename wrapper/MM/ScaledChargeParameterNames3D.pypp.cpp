@@ -43,6 +43,8 @@ SireMM::ScaledChargeParameterNames3D __copy__(const SireMM::ScaledChargeParamete
 
 const char* pvt_get_name(const SireMM::ScaledChargeParameterNames3D&){ return "SireMM::ScaledChargeParameterNames3D";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ScaledChargeParameterNames3D_class(){
 
     { //::SireMM::ScaledChargeParameterNames3D

@@ -33,6 +33,8 @@ SireMM::LJPerturbation __copy__(const SireMM::LJPerturbation &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_LJPerturbation_class(){
 
     { //::SireMM::LJPerturbation
@@ -95,6 +97,7 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "mapAB"
                 , mapAB_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this maps A and B" );
         
         }
@@ -106,6 +109,7 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "mapRMinEpsilon"
                 , mapRMinEpsilon_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this maps r_min and epsilon" );
         
         }
@@ -117,6 +121,7 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "mapSigmaEpsilon"
                 , mapSigmaEpsilon_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this maps sigma and epsilon" );
         
         }
@@ -168,6 +173,7 @@ void register_LJPerturbation_class(){
                 "recreate"
                 , recreate_function_value
                 , ( bp::arg("mapping_function") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -180,6 +186,7 @@ void register_LJPerturbation_class(){
                 "recreate"
                 , recreate_function_value
                 , ( bp::arg("mapping_function"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -191,6 +198,7 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "requiredProperties"
                 , requiredProperties_function_value
+                , bp::release_gil_policy()
                 , "Return the properties required or changed by this perturbation" );
         
         }
@@ -215,6 +223,7 @@ void register_LJPerturbation_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "Substitute the identities in identities in all of the mapping functions\nused by this perturbation. This is useful if, for example, you want to\nswitch from using lambda to control the perturbation to using alpha, e.g.\n" );
         
         }
@@ -226,6 +235,7 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this perturbation" );
         
         }
@@ -237,6 +247,7 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -249,6 +260,7 @@ void register_LJPerturbation_class(){
                 "wouldChange"
                 , wouldChange_function_value
                 , ( bp::arg("molecule"), bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Return whether or not this perturbation with the passed values would\nchange the molecule molecule" );
         
         }

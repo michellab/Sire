@@ -31,6 +31,8 @@ SireMove::TitrationMove __copy__(const SireMove::TitrationMove &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_TitrationMove_class(){
 
     { //::SireMove::TitrationMove
@@ -47,6 +49,7 @@ void register_TitrationMove_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , bp::release_gil_policy()
                 , "Actually perform the move" );
         
         }
@@ -73,6 +76,7 @@ void register_TitrationMove_class(){
             TitrationMove_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of the move" );
         
         }
@@ -84,6 +88,7 @@ void register_TitrationMove_class(){
             TitrationMove_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +100,7 @@ void register_TitrationMove_class(){
             TitrationMove_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

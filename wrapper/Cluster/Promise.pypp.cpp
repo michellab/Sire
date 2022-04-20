@@ -31,6 +31,8 @@ SireCluster::Promise __copy__(const SireCluster::Promise &other){ return SireClu
 
 const char* pvt_get_name(const SireCluster::Promise&){ return "SireCluster::Promise";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Promise_class(){
 
     { //::SireCluster::Promise
@@ -46,6 +48,7 @@ void register_Promise_class(){
             Promise_exposer.def( 
                 "abort"
                 , abort_function_value
+                , bp::release_gil_policy()
                 , "Abort this job" );
         
         }
@@ -57,6 +60,7 @@ void register_Promise_class(){
             Promise_exposer.def( 
                 "input"
                 , input_function_value
+                , bp::release_gil_policy()
                 , "Return the WorkPacket in the state it was in at the\nstart of the job. You can use this to restart jobs that\nfailed in error, or were aborted, or if you just want\nto try to run the job again" );
         
         }
@@ -68,6 +72,7 @@ void register_Promise_class(){
             Promise_exposer.def( 
                 "interimResult"
                 , interimResult_function_value
+                , bp::release_gil_policy()
                 , "Return an interim result of the calculation" );
         
         }
@@ -79,6 +84,7 @@ void register_Promise_class(){
             Promise_exposer.def( 
                 "isError"
                 , isError_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the result is an error.\nThis blocks until the result is available" );
         
         }
@@ -90,6 +96,7 @@ void register_Promise_class(){
             Promise_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this promise is null" );
         
         }
@@ -101,6 +108,7 @@ void register_Promise_class(){
             Promise_exposer.def( 
                 "isRunning"
                 , isRunning_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the calculation is still in progress" );
         
         }
@@ -127,6 +135,7 @@ void register_Promise_class(){
             Promise_exposer.def( 
                 "progress"
                 , progress_function_value
+                , bp::release_gil_policy()
                 , "Return the progress of the calculation" );
         
         }
@@ -138,6 +147,7 @@ void register_Promise_class(){
             Promise_exposer.def( 
                 "result"
                 , result_function_value
+                , bp::release_gil_policy()
                 , "Return the result of the work - this blocks until\nthe work has completed" );
         
         }
@@ -149,6 +159,7 @@ void register_Promise_class(){
             Promise_exposer.def( 
                 "stop"
                 , stop_function_value
+                , bp::release_gil_policy()
                 , "Stop this job" );
         
         }
@@ -160,6 +171,7 @@ void register_Promise_class(){
             Promise_exposer.def( 
                 "throwError"
                 , throwError_function_value
+                , bp::release_gil_policy()
                 , "Throw any errors associated with this promise - does\nnothing if there is no error" );
         
         }
@@ -171,6 +183,7 @@ void register_Promise_class(){
             Promise_exposer.def( 
                 "wait"
                 , wait_function_value
+                , bp::release_gil_policy()
                 , "Wait for the job to have completed" );
         
         }
@@ -183,6 +196,7 @@ void register_Promise_class(){
                 "wait"
                 , wait_function_value
                 , ( bp::arg("timeout") )
+                , bp::release_gil_policy()
                 , "Wait until the job has completed, or until timeout milliseconds\nhas passed. This returns whether or not the job has finished" );
         
         }
@@ -194,6 +208,7 @@ void register_Promise_class(){
             Promise_exposer.def( 
                 "wasAborted"
                 , wasAborted_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the job was aborted.\nIf it was, then you can rerun the job using\nthe initial state of the WorkPacket stored in\nthis Promise. This blocks until a result is available" );
         
         }
@@ -205,6 +220,7 @@ void register_Promise_class(){
             Promise_exposer.def( 
                 "wasStopped"
                 , wasStopped_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the job was stopped.\nThis blocks until a result is available" );
         
         }

@@ -49,6 +49,8 @@ SireMol::Selector<SireMol::Atom> __copy__(const SireMol::Selector<SireMol::Atom>
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Selector_Atom__class(){
@@ -73,6 +75,7 @@ void register_Selector_Atom__class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -86,6 +89,7 @@ void register_Selector_Atom__class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("view") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -99,6 +103,7 @@ void register_Selector_Atom__class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -112,6 +117,7 @@ void register_Selector_Atom__class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -125,6 +131,7 @@ void register_Selector_Atom__class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("view") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -138,6 +145,7 @@ void register_Selector_Atom__class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -150,6 +158,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "evaluate"
                 , evaluate_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -163,6 +172,7 @@ void register_Selector_Atom__class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -176,6 +186,7 @@ void register_Selector_Atom__class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -189,6 +200,7 @@ void register_Selector_Atom__class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -202,6 +214,7 @@ void register_Selector_Atom__class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -215,6 +228,7 @@ void register_Selector_Atom__class(){
                 "hasProperty"
                 , hasProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -228,6 +242,7 @@ void register_Selector_Atom__class(){
                 "index"
                 , index_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -241,6 +256,7 @@ void register_Selector_Atom__class(){
                 "intersection"
                 , intersection_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -254,6 +270,7 @@ void register_Selector_Atom__class(){
                 "intersection"
                 , intersection_function_value
                 , ( bp::arg("view") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -267,6 +284,7 @@ void register_Selector_Atom__class(){
                 "intersection"
                 , intersection_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -280,6 +298,7 @@ void register_Selector_Atom__class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -293,6 +312,7 @@ void register_Selector_Atom__class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("view") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -306,6 +326,7 @@ void register_Selector_Atom__class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -318,6 +339,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "invert"
                 , invert_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -330,6 +352,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -342,6 +365,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -355,6 +379,7 @@ void register_Selector_Atom__class(){
                 "metadataKeys"
                 , metadataKeys_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -367,6 +392,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "move"
                 , move_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -380,6 +406,7 @@ void register_Selector_Atom__class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -393,6 +420,7 @@ void register_Selector_Atom__class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -405,6 +433,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "nViews"
                 , nViews_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -596,6 +625,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "propertyKeys"
                 , propertyKeys_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -608,6 +638,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -620,6 +651,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -633,6 +665,7 @@ void register_Selector_Atom__class(){
                 "selection"
                 , selection_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -646,6 +679,7 @@ void register_Selector_Atom__class(){
                 "selection"
                 , selection_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -658,6 +692,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "selector"
                 , selector_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -671,6 +706,7 @@ void register_Selector_Atom__class(){
                 "selector"
                 , selector_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -684,6 +720,7 @@ void register_Selector_Atom__class(){
                 "selector"
                 , selector_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -697,6 +734,7 @@ void register_Selector_Atom__class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -710,6 +748,7 @@ void register_Selector_Atom__class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("view") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -723,6 +762,7 @@ void register_Selector_Atom__class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -735,6 +775,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -747,6 +788,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

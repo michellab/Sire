@@ -23,6 +23,8 @@ SireBase::NoMangling __copy__(const SireBase::NoMangling &other){ return SireBas
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NoMangling_class(){
 
     { //::SireBase::NoMangling
@@ -39,6 +41,7 @@ void register_NoMangling_class(){
                 "mangle"
                 , mangle_function_value
                 , ( bp::arg("input") )
+                , bp::release_gil_policy()
                 , "Mangle the string - remove all initial and trailing spaces" );
         
         }
@@ -65,6 +68,7 @@ void register_NoMangling_class(){
             NoMangling_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

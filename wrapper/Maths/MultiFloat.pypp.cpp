@@ -41,6 +41,8 @@ SireMaths::MultiFloat __copy__(const SireMaths::MultiFloat &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_MultiFloat_class(){
@@ -67,6 +69,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "abs"
                 , abs_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -79,6 +82,7 @@ void register_MultiFloat_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -91,6 +95,7 @@ void register_MultiFloat_class(){
                 "compareEqual"
                 , compareEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -103,6 +108,7 @@ void register_MultiFloat_class(){
                 "compareGreater"
                 , compareGreater_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -115,6 +121,7 @@ void register_MultiFloat_class(){
                 "compareGreaterEqual"
                 , compareGreaterEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -127,6 +134,7 @@ void register_MultiFloat_class(){
                 "compareLess"
                 , compareLess_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -139,6 +147,7 @@ void register_MultiFloat_class(){
                 "compareLessEqual"
                 , compareLessEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -151,6 +160,7 @@ void register_MultiFloat_class(){
                 "compareNotEqual"
                 , compareNotEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -162,6 +172,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -173,6 +184,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "doubleSum"
                 , doubleSum_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -185,6 +197,7 @@ void register_MultiFloat_class(){
                 "fromArray"
                 , fromArray_function_value
                 , ( bp::arg("array") )
+                , bp::release_gil_policy()
                 , "Create an array of MultiFloats from the passed array of doubles. This\nwill pad the end of the array with zeroes if necessary" );
         
         }
@@ -197,6 +210,7 @@ void register_MultiFloat_class(){
                 "fromArray"
                 , fromArray_function_value
                 , ( bp::arg("array") )
+                , bp::release_gil_policy()
                 , "Create an array of MultiFloats from the passed array of floats. This will\npad the end of the array with zeroes if necessary" );
         
         }
@@ -209,6 +223,7 @@ void register_MultiFloat_class(){
                 "fromArray"
                 , fromArray_function_value
                 , ( bp::arg("array"), bp::arg("size") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -221,6 +236,7 @@ void register_MultiFloat_class(){
                 "fromArray"
                 , fromArray_function_value
                 , ( bp::arg("array"), bp::arg("size") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -233,6 +249,7 @@ void register_MultiFloat_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith value in the multifloat" );
         
         }
@@ -245,6 +262,7 @@ void register_MultiFloat_class(){
                 "getitem"
                 , getitem_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -256,6 +274,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "hasBinaryOne"
                 , hasBinaryOne_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not at least one of the elements of this vector\nis binary one (the float is equal to 0xFFFFFFFF)" );
         
         }
@@ -267,6 +286,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "hasBinaryZero"
                 , hasBinaryZero_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not at least one of the elements of this vector\nis binary zero (the float is equal to 0x00000000)" );
         
         }
@@ -278,6 +298,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "isAligned"
                 , isAligned_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this MultiFloat is correctly aligned. If it is not,\nthen any SSE operations will fail" );
         
         }
@@ -289,6 +310,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "isBinaryOne"
                 , isBinaryOne_function_value
+                , bp::release_gil_policy()
                 , "Return whether all of the elements of this MultiFloat are\nequal to 0xFFFFFFFF (e.g. every bit in the entire vector is 1)" );
         
         }
@@ -300,6 +322,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "isBinaryZero"
                 , isBinaryZero_function_value
+                , bp::release_gil_policy()
                 , "Return whether all of the elements of this MultiFloat are\nequal to 0x00000000 (e.g. every bit in the entire vector is 0)" );
         
         }
@@ -311,6 +334,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "isNotBinaryOne"
                 , isNotBinaryOne_function_value
+                , bp::release_gil_policy()
                 , "Return whether all of the elements of this MultiFloat are\nnot equal to 0xFFFFFFFF (e.g. at least one bit in the entire vector is 0)" );
         
         }
@@ -322,6 +346,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "isNotBinaryZero"
                 , isNotBinaryZero_function_value
+                , bp::release_gil_policy()
                 , "Return whether all of the elements of this MultiFloat are\nnot equal to 0x00000000 (e.g. at least one bit in the entire vector is 1)" );
         
         }
@@ -334,6 +359,7 @@ void register_MultiFloat_class(){
                 "logicalAnd"
                 , logicalAnd_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -346,6 +372,7 @@ void register_MultiFloat_class(){
                 "logicalAnd"
                 , logicalAnd_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -358,6 +385,7 @@ void register_MultiFloat_class(){
                 "logicalAnd"
                 , logicalAnd_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -370,6 +398,7 @@ void register_MultiFloat_class(){
                 "logicalAndNot"
                 , logicalAndNot_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -382,6 +411,7 @@ void register_MultiFloat_class(){
                 "logicalAndNot"
                 , logicalAndNot_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -394,6 +424,7 @@ void register_MultiFloat_class(){
                 "logicalAndNot"
                 , logicalAndNot_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -405,6 +436,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "logicalNot"
                 , logicalNot_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -417,6 +449,7 @@ void register_MultiFloat_class(){
                 "logicalOr"
                 , logicalOr_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -429,6 +462,7 @@ void register_MultiFloat_class(){
                 "logicalXor"
                 , logicalXor_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -441,6 +475,7 @@ void register_MultiFloat_class(){
                 "max"
                 , max_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -452,6 +487,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "max"
                 , max_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum value in the vector" );
         
         }
@@ -464,6 +500,7 @@ void register_MultiFloat_class(){
                 "min"
                 , min_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -475,6 +512,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "min"
                 , min_function_value
+                , bp::release_gil_policy()
                 , "Return the minimum value in the vector" );
         
         }
@@ -579,6 +617,7 @@ void register_MultiFloat_class(){
                 "quickSet"
                 , quickSet_function_value
                 , ( bp::arg("i"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -590,6 +629,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "reciprocal"
                 , reciprocal_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -601,6 +641,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "reciprocal_approx"
                 , reciprocal_approx_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -612,6 +653,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "reciprocal_approx_nr"
                 , reciprocal_approx_nr_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -623,6 +665,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "rotate"
                 , rotate_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -634,6 +677,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "rsqrt"
                 , rsqrt_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -645,6 +689,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "rsqrt_approx"
                 , rsqrt_approx_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -656,6 +701,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "rsqrt_approx_nr"
                 , rsqrt_approx_nr_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -668,6 +714,7 @@ void register_MultiFloat_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the ith value of the multifloat to value" );
         
         }
@@ -679,6 +726,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -690,6 +738,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "sqrt"
                 , sqrt_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -701,6 +750,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "sqrt_approx"
                 , sqrt_approx_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -712,6 +762,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "sqrt_approx_nr"
                 , sqrt_approx_nr_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -723,6 +774,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "sum"
                 , sum_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -735,6 +787,7 @@ void register_MultiFloat_class(){
                 "swap"
                 , swap_function_value
                 , ( bp::arg("f0"), bp::arg("idx0"), bp::arg("f1"), bp::arg("idx1") )
+                , bp::release_gil_policy()
                 , "Swap the values of the value at index idx0 in f0 with the value at index idx in f1" );
         
         }
@@ -747,6 +800,7 @@ void register_MultiFloat_class(){
                 "toArray"
                 , toArray_function_value
                 , ( bp::arg("array") )
+                , bp::release_gil_policy()
                 , "Return the passed MultiFloat converted back into a normal array" );
         
         }
@@ -758,6 +812,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "toBinaryString"
                 , toBinaryString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -770,6 +825,7 @@ void register_MultiFloat_class(){
                 "toDoubleArray"
                 , toDoubleArray_function_value
                 , ( bp::arg("array") )
+                , bp::release_gil_policy()
                 , "Return the passed MultiFloat converted back into a normal array of doubles" );
         
         }
@@ -781,6 +837,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -792,6 +849,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -803,6 +861,7 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

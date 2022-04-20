@@ -35,6 +35,8 @@ SireMol::AbsFromMass __copy__(const SireMol::AbsFromMass &other){ return SireMol
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AbsFromMass_class(){
 
     { //::SireMol::AbsFromMass
@@ -89,6 +91,7 @@ void register_AbsFromMass_class(){
             AbsFromMass_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

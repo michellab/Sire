@@ -24,6 +24,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_CombineProperties_class(){
@@ -53,7 +55,7 @@ void register_CombineProperties_class(){
             CombineProperties_exposer.def( 
                 "combinedProperty"
                 , combinedProperty_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the combined property. This will be null if this property\nhas not been updated, or if there are no properties to combine" );
         
         }
@@ -65,6 +67,7 @@ void register_CombineProperties_class(){
             CombineProperties_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of properties that are combined together\nto form this property" );
         
         }
@@ -76,6 +79,7 @@ void register_CombineProperties_class(){
             CombineProperties_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is empty (has no properties)" );
         
         }
@@ -87,6 +91,7 @@ void register_CombineProperties_class(){
             CombineProperties_exposer.def( 
                 "nSources"
                 , nSources_function_value
+                , bp::release_gil_policy()
                 , "Return the number of properties that are combined together\nto form this property" );
         
         }
@@ -111,6 +116,7 @@ void register_CombineProperties_class(){
             CombineProperties_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of properties that are combined together\nto form this property" );
         
         }
@@ -122,6 +128,7 @@ void register_CombineProperties_class(){
             CombineProperties_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this combination" );
         
         }
@@ -133,6 +140,7 @@ void register_CombineProperties_class(){
             CombineProperties_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -145,6 +153,7 @@ void register_CombineProperties_class(){
                 "updateFrom"
                 , updateFrom_function_value
                 , ( bp::arg("properties") )
+                , bp::release_gil_policy()
                 , "Update this combined property by fetching the necessary\nproperties to combine from properties\n\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }

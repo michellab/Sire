@@ -27,6 +27,8 @@ SireCAS::Abs __copy__(const SireCAS::Abs &other){ return SireCAS::Abs(other); }
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Abs_class(){
 
     { //::SireCAS::Abs
@@ -44,6 +46,7 @@ void register_Abs_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this function" );
         
         }
@@ -56,6 +59,7 @@ void register_Abs_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Complex evaluation" );
         
         }
@@ -68,6 +72,7 @@ void register_Abs_class(){
             Abs_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -79,6 +84,7 @@ void register_Abs_class(){
             Abs_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

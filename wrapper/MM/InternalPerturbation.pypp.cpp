@@ -33,6 +33,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_InternalPerturbation_class(){
 
     { //::SireMM::InternalPerturbation
@@ -96,6 +98,7 @@ void register_InternalPerturbation_class(){
                 "recreate"
                 , recreate_function_value
                 , ( bp::arg("expression") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -108,6 +111,7 @@ void register_InternalPerturbation_class(){
                 "recreate"
                 , recreate_function_value
                 , ( bp::arg("expression"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -120,6 +124,7 @@ void register_InternalPerturbation_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -131,6 +136,7 @@ void register_InternalPerturbation_class(){
             InternalPerturbation_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

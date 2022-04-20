@@ -51,6 +51,8 @@ SireMM::BendBendParameterName __copy__(const SireMM::BendBendParameterName &othe
 
 const char* pvt_get_name(const SireMM::BendBendParameterName&){ return "SireMM::BendBendParameterName";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_BendBendParameterName_class(){
 
     { //::SireMM::BendBendParameterName

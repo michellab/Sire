@@ -46,6 +46,8 @@ SireMol::Molecule __copy__(const SireMol::Molecule &other){ return SireMol::Mole
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Molecule_class(){
@@ -66,6 +68,7 @@ void register_Molecule_class(){
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Assert that this molecule contains some metadata at metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
@@ -78,6 +81,7 @@ void register_Molecule_class(){
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Assert that this molecule contains some metadata at metakey metakey\nassociated with the property at key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -90,6 +94,7 @@ void register_Molecule_class(){
                 "assertContainsProperty"
                 , assertContainsProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Assert that this molecule contains a property at key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -101,6 +106,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "edit"
                 , edit_function_value
+                , bp::release_gil_policy()
                 , "Return an Editor that can edit any part of this molecule" );
         
         }
@@ -112,6 +118,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
+                , bp::release_gil_policy()
                 , "Return an Evaluator that evaluates values using\nall of the atoms in this molecule" );
         
         }
@@ -124,6 +131,7 @@ void register_Molecule_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return whether or not this molecule posseses metadata with\nmetakey metakey" );
         
         }
@@ -136,6 +144,7 @@ void register_Molecule_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return whether or not the property of this molecule at\nkey key has metadata at metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
@@ -148,6 +157,7 @@ void register_Molecule_class(){
                 "hasProperty"
                 , hasProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return whether or not this molecule posseses a property at key key" );
         
         }
@@ -159,6 +169,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "info"
                 , info_function_value
+                , bp::release_gil_policy()
                 , "Return the MoleculeInfo object that holds information about the layout\nof the atoms, residues, chains and segments in the molecule" );
         
         }
@@ -170,6 +181,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is empty" );
         
         }
@@ -182,7 +194,7 @@ void register_Molecule_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("metakey") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the metadata for the metakey metakey\nThrow: SireMol::missing_property\n" );
         
         }
@@ -195,7 +207,7 @@ void register_Molecule_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the metadata for the metakey metakey for\nthe property at key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -207,6 +219,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the metakeys of all the metadata in this molecule" );
         
         }
@@ -219,6 +232,7 @@ void register_Molecule_class(){
                 "metadataKeys"
                 , metadataKeys_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return the metakeys for all of the metadata for the property\nat key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -230,6 +244,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "move"
                 , move_function_value
+                , bp::release_gil_policy()
                 , "Return a Mover that moves all of the atoms in\nthis molecule" );
         
         }
@@ -241,6 +256,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in this molecule" );
         
         }
@@ -253,6 +269,7 @@ void register_Molecule_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the identified residue(s)" );
         
         }
@@ -265,6 +282,7 @@ void register_Molecule_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the identified chain(s)" );
         
         }
@@ -277,6 +295,7 @@ void register_Molecule_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("seg") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the identified segment(s)" );
         
         }
@@ -289,6 +308,7 @@ void register_Molecule_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the identified cutgroups(s)" );
         
         }
@@ -300,6 +320,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "nChains"
                 , nChains_function_value
+                , bp::release_gil_policy()
                 , "Return the number of chains in this molecule" );
         
         }
@@ -311,6 +332,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "nCutGroups"
                 , nCutGroups_function_value
+                , bp::release_gil_policy()
                 , "Return the number of CutGroups in this molecule" );
         
         }
@@ -322,6 +344,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "nResidues"
                 , nResidues_function_value
+                , bp::release_gil_policy()
                 , "Return the number of residues in this molecule" );
         
         }
@@ -334,6 +357,7 @@ void register_Molecule_class(){
                 "nResidues"
                 , nResidues_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
                 , "Return the number of residues in the identified chain(s)" );
         
         }
@@ -345,6 +369,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "nSegments"
                 , nSegments_function_value
+                , bp::release_gil_policy()
                 , "Return the number of segments in this molecule" );
         
         }
@@ -356,7 +381,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of this molecule" );
         
         }
@@ -368,6 +393,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "number"
                 , number_function_value
+                , bp::release_gil_policy()
                 , "Return the number of this molecule - this is used\nto identify the molecule" );
         
         }
@@ -407,7 +433,7 @@ void register_Molecule_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the property associated with the key key\nThrow: SireMol::missing_property\n" );
         
         }
@@ -419,6 +445,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "propertyKeys"
                 , propertyKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the keys of all of the properties in this molecule" );
         
         }
@@ -430,6 +457,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a complete molecule" );
         
         }
@@ -441,6 +469,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
                 , "Return which atoms are selected in this view" );
         
         }
@@ -452,6 +481,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this molecule" );
         
         }
@@ -463,6 +493,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -475,6 +506,7 @@ void register_Molecule_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "Update this molecule with the passed molecule data.\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -486,6 +518,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "version"
                 , version_function_value
+                , bp::release_gil_policy()
                 , "Return the version number of this molecule - all molecules\nwith the same ID number and version number must be identical" );
         
         }
@@ -498,6 +531,7 @@ void register_Molecule_class(){
                 "version"
                 , version_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return the version number of the property at key key.\nAll molecules with the same ID number and same property version\nnumber must have the same value of this property\n(although this says nothing about any metadata associated\nwith this property)\nThrow: SireBase::missing_property\n" );
         
         }
