@@ -77,6 +77,8 @@ SireIO::GroAtom __copy__(const SireIO::GroAtom &other){ return SireIO::GroAtom(o
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_GroAtom_class(){
 
     { //::SireIO::GroAtom
@@ -92,6 +94,7 @@ void register_GroAtom_class(){
             GroAtom_exposer.def( 
                 "atomType"
                 , atomType_function_value
+                , bp::release_gil_policy()
                 , "Return the atom type of this atom" );
         
         }
@@ -103,6 +106,7 @@ void register_GroAtom_class(){
             GroAtom_exposer.def( 
                 "bondType"
                 , bondType_function_value
+                , bp::release_gil_policy()
                 , "Return the bond type of this atom. This is normally the same as the atom type" );
         
         }
@@ -114,6 +118,7 @@ void register_GroAtom_class(){
             GroAtom_exposer.def( 
                 "charge"
                 , charge_function_value
+                , bp::release_gil_policy()
                 , "Return the charge on this atom" );
         
         }
@@ -125,6 +130,7 @@ void register_GroAtom_class(){
             GroAtom_exposer.def( 
                 "chargeGroup"
                 , chargeGroup_function_value
+                , bp::release_gil_policy()
                 , "Return the charge group of this atom" );
         
         }
@@ -136,6 +142,7 @@ void register_GroAtom_class(){
             GroAtom_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this atom is null" );
         
         }
@@ -147,6 +154,7 @@ void register_GroAtom_class(){
             GroAtom_exposer.def( 
                 "mass"
                 , mass_function_value
+                , bp::release_gil_policy()
                 , "Return the mass of this atom" );
         
         }
@@ -158,6 +166,7 @@ void register_GroAtom_class(){
             GroAtom_exposer.def( 
                 "name"
                 , name_function_value
+                , bp::release_gil_policy()
                 , "Return the name of the atom" );
         
         }
@@ -169,6 +178,7 @@ void register_GroAtom_class(){
             GroAtom_exposer.def( 
                 "number"
                 , number_function_value
+                , bp::release_gil_policy()
                 , "Return the number of the atom" );
         
         }
@@ -195,6 +205,7 @@ void register_GroAtom_class(){
             GroAtom_exposer.def( 
                 "residueName"
                 , residueName_function_value
+                , bp::release_gil_policy()
                 , "Return the name of the residue that contains this atom" );
         
         }
@@ -206,6 +217,7 @@ void register_GroAtom_class(){
             GroAtom_exposer.def( 
                 "residueNumber"
                 , residueNumber_function_value
+                , bp::release_gil_policy()
                 , "Return the number of the residue that contains this atom" );
         
         }
@@ -218,6 +230,7 @@ void register_GroAtom_class(){
                 "setAtomType"
                 , setAtomType_function_value
                 , ( bp::arg("atomtype") )
+                , bp::release_gil_policy()
                 , "Set the atom type and bond type of this atom. To set\nthe bond type separately, you need to set it after calling\nthis function" );
         
         }
@@ -230,6 +243,7 @@ void register_GroAtom_class(){
                 "setBondType"
                 , setBondType_function_value
                 , ( bp::arg("bondtype") )
+                , bp::release_gil_policy()
                 , "Set the bond type of this atom" );
         
         }
@@ -242,6 +256,7 @@ void register_GroAtom_class(){
                 "setCharge"
                 , setCharge_function_value
                 , ( bp::arg("charge") )
+                , bp::release_gil_policy()
                 , "Set the charge on this atom" );
         
         }
@@ -254,6 +269,7 @@ void register_GroAtom_class(){
                 "setChargeGroup"
                 , setChargeGroup_function_value
                 , ( bp::arg("grp") )
+                , bp::release_gil_policy()
                 , "Set the charge group of this atom" );
         
         }
@@ -266,6 +282,7 @@ void register_GroAtom_class(){
                 "setMass"
                 , setMass_function_value
                 , ( bp::arg("mass") )
+                , bp::release_gil_policy()
                 , "Set the mass of this atom" );
         
         }
@@ -278,6 +295,7 @@ void register_GroAtom_class(){
                 "setName"
                 , setName_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Set the name of this atom" );
         
         }
@@ -290,6 +308,7 @@ void register_GroAtom_class(){
                 "setNumber"
                 , setNumber_function_value
                 , ( bp::arg("number") )
+                , bp::release_gil_policy()
                 , "Set the number of this atom" );
         
         }
@@ -302,6 +321,7 @@ void register_GroAtom_class(){
                 "setResidueName"
                 , setResidueName_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Set the name of the residue containing this atom" );
         
         }
@@ -314,6 +334,7 @@ void register_GroAtom_class(){
                 "setResidueNumber"
                 , setResidueNumber_function_value
                 , ( bp::arg("number") )
+                , bp::release_gil_policy()
                 , "Set the number of the residue containing this atom" );
         
         }
@@ -325,6 +346,7 @@ void register_GroAtom_class(){
             GroAtom_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -336,6 +358,7 @@ void register_GroAtom_class(){
             GroAtom_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -347,6 +370,7 @@ void register_GroAtom_class(){
             GroAtom_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

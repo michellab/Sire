@@ -71,6 +71,8 @@ SireIO::SDF __copy__(const SireIO::SDF &other){ return SireIO::SDF(other); }
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SDF_class(){
 
     { //::SireIO::SDF
@@ -89,6 +91,7 @@ void register_SDF_class(){
             SDF_exposer.def( 
                 "canFollow"
                 , canFollow_function_value
+                , bp::release_gil_policy()
                 , "The SDF cannot follow another lead parsers." );
         
         }
@@ -101,6 +104,7 @@ void register_SDF_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("filename"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by reading in the passed\nfile using the passed properties" );
         
         }
@@ -113,6 +117,7 @@ void register_SDF_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("lines"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by reading in the passed\ntext lines using the passed properties" );
         
         }
@@ -125,6 +130,7 @@ void register_SDF_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by extract all necessary\ndata from the passed SireSystem::System using the specified properties" );
         
         }
@@ -136,6 +142,7 @@ void register_SDF_class(){
             SDF_exposer.def( 
                 "formatDescription"
                 , formatDescription_function_value
+                , bp::release_gil_policy()
                 , "Return a description of the file format" );
         
         }
@@ -147,6 +154,7 @@ void register_SDF_class(){
             SDF_exposer.def( 
                 "formatName"
                 , formatName_function_value
+                , bp::release_gil_policy()
                 , "Return the format name that is used to identify this file format within Sire" );
         
         }
@@ -158,6 +166,7 @@ void register_SDF_class(){
             SDF_exposer.def( 
                 "formatSuffix"
                 , formatSuffix_function_value
+                , bp::release_gil_policy()
                 , "Return the suffixes that these files are normally associated with" );
         
         }
@@ -169,6 +178,7 @@ void register_SDF_class(){
             SDF_exposer.def( 
                 "isLead"
                 , isLead_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
         
         }
@@ -180,6 +190,7 @@ void register_SDF_class(){
             SDF_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of atoms." );
         
         }
@@ -192,6 +203,7 @@ void register_SDF_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in molecule i." );
         
         }
@@ -203,6 +215,7 @@ void register_SDF_class(){
             SDF_exposer.def( 
                 "nMolecules"
                 , nMolecules_function_value
+                , bp::release_gil_policy()
                 , "Return the number of molecules loaded in this file" );
         
         }
@@ -229,6 +242,7 @@ void register_SDF_class(){
             SDF_exposer.def( 
                 "parseWarnings"
                 , parseWarnings_function_value
+                , bp::release_gil_policy()
                 , "Return any warnings raised when parsing this file" );
         
         }
@@ -240,6 +254,7 @@ void register_SDF_class(){
             SDF_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this parser" );
         
         }
@@ -251,6 +266,7 @@ void register_SDF_class(){
             SDF_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "Return the C++ name for this class" );
         
         }
@@ -262,6 +278,7 @@ void register_SDF_class(){
             SDF_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "Return the C++ name for this class" );
         
         }

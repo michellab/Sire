@@ -49,6 +49,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MoleculeParser_class(){
 
     { //::SireIO::MoleculeParser
@@ -63,6 +65,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "canFollow"
                 , canFollow_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this parser can follow a lead parser and add data\nto an existing molecular system. By default, all parsers can follow." );
         
         }
@@ -75,6 +78,7 @@ void register_MoleculeParser_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("filename"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -87,6 +91,7 @@ void register_MoleculeParser_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("lines"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -99,6 +104,7 @@ void register_MoleculeParser_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -110,6 +116,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "disableParallel"
                 , disableParallel_function_value
+                , bp::release_gil_policy()
                 , "Disable code to parse files in parallel - parsing will happen in serial" );
         
         }
@@ -121,6 +128,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "enableParallel"
                 , enableParallel_function_value
+                , bp::release_gil_policy()
                 , "Enable code to parse files in parallel" );
         
         }
@@ -132,6 +140,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "formatDescription"
                 , formatDescription_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -143,6 +152,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "formatName"
                 , formatName_function_value
+                , bp::release_gil_policy()
                 , "Return the unique name of this format. This should be a short\nstring in capital letters that will identify the format within\nthe program, e.g. PRM7, RST7, PDB3 etc." );
         
         }
@@ -154,6 +164,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "formatSuffix"
                 , formatSuffix_function_value
+                , bp::release_gil_policy()
                 , "Return the suffix (or suffixes) given to files that support this format.\nThe first suffix is the preferred on to use" );
         
         }
@@ -165,6 +176,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "isBinaryFile"
                 , isBinaryFile_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -176,6 +188,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -187,6 +200,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "isLead"
                 , isLead_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
         
         }
@@ -198,6 +212,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "isTextFile"
                 , isTextFile_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -222,6 +237,7 @@ void register_MoleculeParser_class(){
                 "load"
                 , load_function_value
                 , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Synonym for MoleculeParser::read" );
         
         }
@@ -234,6 +250,7 @@ void register_MoleculeParser_class(){
                 "load"
                 , load_function_value
                 , ( bp::arg("file1"), bp::arg("file2"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Synonym for MoleculeParser::read" );
         
         }
@@ -246,6 +263,7 @@ void register_MoleculeParser_class(){
                 "load"
                 , load_function_value
                 , ( bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Synonym for MoleculeParser::read" );
         
         }
@@ -270,6 +288,7 @@ void register_MoleculeParser_class(){
                 "parse"
                 , parse_function_value
                 , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Parse the passed set of files, returning the resulting Parsers" );
         
         }
@@ -282,6 +301,7 @@ void register_MoleculeParser_class(){
                 "parse"
                 , parse_function_value
                 , ( bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Parse the passed set of files, returning the resulting Parsers" );
         
         }
@@ -294,6 +314,7 @@ void register_MoleculeParser_class(){
                 "read"
                 , read_function_value
                 , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Read the files with passed filenames, returning the System contained therein.\nNote that all of the files must be connected to the same system\n(i.e. it could be the Amber Parm and Rst file)" );
         
         }
@@ -306,6 +327,7 @@ void register_MoleculeParser_class(){
                 "read"
                 , read_function_value
                 , ( bp::arg("file1"), bp::arg("file2"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Read the two passed files, returning the System contained therein. The two\nfiles must refer to the same System, i.e. they could be a parameter + coordinate file" );
         
         }
@@ -318,6 +340,7 @@ void register_MoleculeParser_class(){
                 "read"
                 , read_function_value
                 , ( bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Read the files with passed filenames, returning the System contained therein.\nNote that all of the files must be connected to the same system\n(i.e. it could be the Amber Parm and Rst file)" );
         
         }
@@ -330,6 +353,7 @@ void register_MoleculeParser_class(){
                 "save"
                 , save_function_value
                 , ( bp::arg("system"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Synonym of MoleculeParser::write" );
         
         }
@@ -342,6 +366,7 @@ void register_MoleculeParser_class(){
                 "save"
                 , save_function_value
                 , ( bp::arg("system"), bp::arg("file1"), bp::arg("file2"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Synonym of MoleculeParser::write" );
         
         }
@@ -354,6 +379,7 @@ void register_MoleculeParser_class(){
                 "save"
                 , save_function_value
                 , ( bp::arg("system"), bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Synonym of MoleculeParser::write" );
         
         }
@@ -365,6 +391,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "score"
                 , score_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -377,6 +404,7 @@ void register_MoleculeParser_class(){
                 "setUseParallel"
                 , setUseParallel_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Set whether or not to parse files in parallel or serial" );
         
         }
@@ -388,6 +416,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "supportedFormats"
                 , supportedFormats_function_value
+                , bp::release_gil_policy()
                 , "This returns a human readable set of lines describing the formats supported\nby MoleculeParser. Each line is formatted as extension : description where\nextension is the unique extension of the file used by MoleculeParser, and\ndescription is a description of the file format" );
         
         }
@@ -400,6 +429,7 @@ void register_MoleculeParser_class(){
                 "toSystem"
                 , toSystem_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the System that is constructed from the data in this parser" );
         
         }
@@ -412,6 +442,7 @@ void register_MoleculeParser_class(){
                 "toSystem"
                 , toSystem_function_value
                 , ( bp::arg("other"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the System that is constructed from the data in the two\npassed parsers (i.e. representing a topology and a coordinate file)" );
         
         }
@@ -424,6 +455,7 @@ void register_MoleculeParser_class(){
                 "toSystem"
                 , toSystem_function_value
                 , ( bp::arg("others"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Return the System that is constructed from the information in the passed\nparsers. This will parse the information in order, meaning that data contained\nin earlier parsers may be overwritten by data from later parsers" );
         
         }
@@ -435,6 +467,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -446,6 +479,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "usesParallel"
                 , usesParallel_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -458,6 +492,7 @@ void register_MoleculeParser_class(){
                 "write"
                 , write_function_value
                 , ( bp::arg("system"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Save the passed System to the file called filename. First, the fileformat\nproperty is looked at in map. This is used to set the format(s) of\nthe files that are written (comma-separated list).\nIf this does not exist, then the extension of the\nfile is used to work out which format to use. If no extension is given,\nthen the System will be queried to find out its preferred format (normally\nthe format it was loaded with), via its fileformat property\n(again, comma separated list).\nIf their preferred format results in multiple files, then\nmultiple files will be written. This returns the full pathnames to\nall of the files that are written\n" );
         
         }
@@ -470,6 +505,7 @@ void register_MoleculeParser_class(){
                 "write"
                 , write_function_value
                 , ( bp::arg("system"), bp::arg("file1"), bp::arg("file2"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Extension of MoleculeParser::write which allows you to specify two filenames.\nThe same rules to locate the fileformats are now used, except now only two\nfiles are permitted to be written" );
         
         }
@@ -482,6 +518,7 @@ void register_MoleculeParser_class(){
                 "write"
                 , write_function_value
                 , ( bp::arg("system"), bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "Extension of MoleculeParser::write which allows many filenames.\nThe same rules to locate the fileformats are now used, except that now only\nthe number of files written must match the number of filenames" );
         
         }
@@ -494,6 +531,7 @@ void register_MoleculeParser_class(){
                 "writeToFile"
                 , writeToFile_function_value
                 , ( bp::arg("filename") )
+                , bp::release_gil_policy()
                 , "Write the parsed data back to the file called filename. This will\noverwrite the file if it exists already, so be careful" );
         
         }

@@ -27,6 +27,8 @@ SireIO::Supplementary __copy__(const SireIO::Supplementary &other){ return SireI
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Supplementary_class(){
 
     { //::SireIO::Supplementary
@@ -44,6 +46,7 @@ void register_Supplementary_class(){
             Supplementary_exposer.def( 
                 "canFollow"
                 , canFollow_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this parser can follow another lead parser, and add\ndata to an existing molecular system. The Supplementary parser cannot follow." );
         
         }
@@ -56,6 +59,7 @@ void register_Supplementary_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("filename"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by reading in the passed\nfile using the passed properties" );
         
         }
@@ -68,6 +72,7 @@ void register_Supplementary_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("lines"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by reading in the passed\ntext lines using the passed properties" );
         
         }
@@ -80,6 +85,7 @@ void register_Supplementary_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return this parser constructed from the passed SireSystem::System" );
         
         }
@@ -91,6 +97,7 @@ void register_Supplementary_class(){
             Supplementary_exposer.def( 
                 "formatDescription"
                 , formatDescription_function_value
+                , bp::release_gil_policy()
                 , "Return a description of the file format" );
         
         }
@@ -102,6 +109,7 @@ void register_Supplementary_class(){
             Supplementary_exposer.def( 
                 "formatName"
                 , formatName_function_value
+                , bp::release_gil_policy()
                 , "Return the format name that is used to identify this file format within Sire" );
         
         }
@@ -113,6 +121,7 @@ void register_Supplementary_class(){
             Supplementary_exposer.def( 
                 "formatSuffix"
                 , formatSuffix_function_value
+                , bp::release_gil_policy()
                 , "Return the suffixes that these files are normally associated with" );
         
         }
@@ -139,6 +148,7 @@ void register_Supplementary_class(){
             Supplementary_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this parser" );
         
         }
@@ -150,6 +160,7 @@ void register_Supplementary_class(){
             Supplementary_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "Return the C++ name for this class" );
         
         }
@@ -161,6 +172,7 @@ void register_Supplementary_class(){
             Supplementary_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "Return the C++ name for this class" );
         
         }

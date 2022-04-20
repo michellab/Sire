@@ -63,6 +63,8 @@ SireIO::AmberRst __copy__(const SireIO::AmberRst &other){ return SireIO::AmberRs
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_AmberRst_class(){
@@ -83,6 +85,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "boxAngles"
                 , boxAngles_function_value
+                , bp::release_gil_policy()
                 , "Return the parsed box angles, or Vector(0) if there is no space information.\nIf there are multiple frames, then only the first frame is returned" );
         
         }
@@ -95,6 +98,7 @@ void register_AmberRst_class(){
                 "boxAngles"
                 , boxAngles_function_value
                 , ( bp::arg("frame") )
+                , bp::release_gil_policy()
                 , "Return the box angles of the ith frame from the file" );
         
         }
@@ -106,6 +110,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "boxDimensions"
                 , boxDimensions_function_value
+                , bp::release_gil_policy()
                 , "Return the parsed box dimensions, or Vector(0) if there is no space information.\nIf there are multiple frames, then only the first frame is returned" );
         
         }
@@ -118,6 +123,7 @@ void register_AmberRst_class(){
                 "boxDimensions"
                 , boxDimensions_function_value
                 , ( bp::arg("frame") )
+                , bp::release_gil_policy()
                 , "Return the box dimensions of the ith\n frame from the file" );
         
         }
@@ -130,6 +136,7 @@ void register_AmberRst_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("filename"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return this parser constructed from the passed filename" );
         
         }
@@ -142,6 +149,7 @@ void register_AmberRst_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("lines"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return this parser constructed from the passed set of lines" );
         
         }
@@ -154,6 +162,7 @@ void register_AmberRst_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return this parser constructed from the passed SireSystem::System" );
         
         }
@@ -165,6 +174,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "coordinates"
                 , coordinates_function_value
+                , bp::release_gil_policy()
                 , "Return the parsed coordinate data. If there are multiple frames,\nthen only the first frame is returned" );
         
         }
@@ -177,6 +187,7 @@ void register_AmberRst_class(){
                 "coordinates"
                 , coordinates_function_value
                 , ( bp::arg("frame") )
+                , bp::release_gil_policy()
                 , "Return the coordinates of the ith frame from the file" );
         
         }
@@ -188,6 +199,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of frames in the file" );
         
         }
@@ -199,6 +211,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "createdFromRestart"
                 , createdFromRestart_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this was created from a restart (.rst) file" );
         
         }
@@ -210,6 +223,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "createdFromTrajectory"
                 , createdFromTrajectory_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this was created from a trajectory (.trj) file" );
         
         }
@@ -221,6 +235,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "creatorApplication"
                 , creatorApplication_function_value
+                , bp::release_gil_policy()
                 , "Return the application that created the file that has been parsed" );
         
         }
@@ -232,6 +247,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "forces"
                 , forces_function_value
+                , bp::release_gil_policy()
                 , "Return the parsed force data. If there are multiple frames,\nthen only the first frame is returned" );
         
         }
@@ -244,6 +260,7 @@ void register_AmberRst_class(){
                 "forces"
                 , forces_function_value
                 , ( bp::arg("frame") )
+                , bp::release_gil_policy()
                 , "Return the forces of the ith frame from the file" );
         
         }
@@ -255,6 +272,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "formatDescription"
                 , formatDescription_function_value
+                , bp::release_gil_policy()
                 , "Return a description of the file format" );
         
         }
@@ -266,6 +284,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "formatName"
                 , formatName_function_value
+                , bp::release_gil_policy()
                 , "Return the format name that is used to identify this file format within Sire" );
         
         }
@@ -277,6 +296,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "formatSuffix"
                 , formatSuffix_function_value
+                , bp::release_gil_policy()
                 , "Return the suffixes that AmberRst files will typically use" );
         
         }
@@ -288,6 +308,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "formatVersion"
                 , formatVersion_function_value
+                , bp::release_gil_policy()
                 , "Return the version of the file format that was parsed" );
         
         }
@@ -299,6 +320,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "hasCoordinates"
                 , hasCoordinates_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this restart file provides coordinates" );
         
         }
@@ -310,6 +332,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "hasForces"
                 , hasForces_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this restart file also provides forces" );
         
         }
@@ -321,6 +344,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "hasVelocities"
                 , hasVelocities_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this restart file also provides velocities" );
         
         }
@@ -332,6 +356,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "isTextFile"
                 , isTextFile_function_value
+                , bp::release_gil_policy()
                 , "This is not a text file" );
         
         }
@@ -343,6 +368,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms whose data are contained in this restart file" );
         
         }
@@ -354,6 +380,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "nFrames"
                 , nFrames_function_value
+                , bp::release_gil_policy()
                 , "Return the number of frames that have been loaded from the file" );
         
         }
@@ -393,6 +420,7 @@ void register_AmberRst_class(){
                 "parse"
                 , parse_function_value
                 , ( bp::arg("filename") )
+                , bp::release_gil_policy()
                 , "Parse from the passed file" );
         
         }
@@ -404,6 +432,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of frames in the file" );
         
         }
@@ -415,6 +444,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "time"
                 , time_function_value
+                , bp::release_gil_policy()
                 , "Return the current time of the simulation from which this restart\nfile was written. Returns 0 if there is no time set. If there are\nmultiple frames, then the time of the first frame is returned" );
         
         }
@@ -427,6 +457,7 @@ void register_AmberRst_class(){
                 "time"
                 , time_function_value
                 , ( bp::arg("frame") )
+                , bp::release_gil_policy()
                 , "Return the time of the ith frame from the file" );
         
         }
@@ -438,6 +469,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "title"
                 , title_function_value
+                , bp::release_gil_policy()
                 , "Return the title of the file" );
         
         }
@@ -449,6 +481,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -460,6 +493,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -471,6 +505,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "velocities"
                 , velocities_function_value
+                , bp::release_gil_policy()
                 , "Return the parsed coordinate data. If there are multiple frames,\nthen only the first frame is returned" );
         
         }
@@ -483,6 +518,7 @@ void register_AmberRst_class(){
                 "velocities"
                 , velocities_function_value
                 , ( bp::arg("frame") )
+                , bp::release_gil_policy()
                 , "Return the velocities of the ith frame from the file" );
         
         }
@@ -494,6 +530,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "warnings"
                 , warnings_function_value
+                , bp::release_gil_policy()
                 , "Return any warnings that were triggered during parsing" );
         
         }
@@ -505,6 +542,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -517,6 +555,7 @@ void register_AmberRst_class(){
                 "writeToFile"
                 , writeToFile_function_value
                 , ( bp::arg("filename") )
+                , bp::release_gil_policy()
                 , "Write this AmberRst to a file called filename. This will write out\nthe data in this object to the Amber NetCDF format" );
         
         }

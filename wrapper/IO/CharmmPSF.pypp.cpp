@@ -73,6 +73,8 @@ SireIO::CharmmPSF __copy__(const SireIO::CharmmPSF &other){ return SireIO::Charm
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CharmmPSF_class(){
 
     { //::SireIO::CharmmPSF
@@ -91,6 +93,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "canFollow"
                 , canFollow_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this parser can follow another lead parser, and add\ndata to an existing molecular system. The CharmmPSF parser cannot follow." );
         
         }
@@ -103,6 +106,7 @@ void register_CharmmPSF_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("filename"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by reading in the passed\nfile using the passed properties" );
         
         }
@@ -115,6 +119,7 @@ void register_CharmmPSF_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("lines"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by reading in the passed\ntext lines using the passed properties" );
         
         }
@@ -127,6 +132,7 @@ void register_CharmmPSF_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by extract all necessary\ndata from the passed SireSystem::System using the specified properties" );
         
         }
@@ -138,6 +144,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "formatDescription"
                 , formatDescription_function_value
+                , bp::release_gil_policy()
                 , "Return a description of the file format" );
         
         }
@@ -149,6 +156,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "formatName"
                 , formatName_function_value
+                , bp::release_gil_policy()
                 , "Return the format name that is used to identify this file format within Sire" );
         
         }
@@ -160,6 +168,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "formatSuffix"
                 , formatSuffix_function_value
+                , bp::release_gil_policy()
                 , "Return the suffixes that these files are normally associated with" );
         
         }
@@ -171,6 +180,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "isLead"
                 , isLead_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
         
         }
@@ -182,6 +192,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nAngles"
                 , nAngles_function_value
+                , bp::release_gil_policy()
                 , "Return the number of angle records." );
         
         }
@@ -194,6 +205,7 @@ void register_CharmmPSF_class(){
                 "nAngles"
                 , nAngles_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the number of angles in molecule i." );
         
         }
@@ -205,6 +217,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atom records." );
         
         }
@@ -217,6 +230,7 @@ void register_CharmmPSF_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in molecule i." );
         
         }
@@ -228,6 +242,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nBonds"
                 , nBonds_function_value
+                , bp::release_gil_policy()
                 , "Return the number of bond records." );
         
         }
@@ -240,6 +255,7 @@ void register_CharmmPSF_class(){
                 "nBonds"
                 , nBonds_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the number of bonds in molecule i." );
         
         }
@@ -251,6 +267,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nCrossTerms"
                 , nCrossTerms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of cross-term records." );
         
         }
@@ -263,6 +280,7 @@ void register_CharmmPSF_class(){
                 "nCrossTerms"
                 , nCrossTerms_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the number of cross-terms in molecule i." );
         
         }
@@ -274,6 +292,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nDihedrals"
                 , nDihedrals_function_value
+                , bp::release_gil_policy()
                 , "Return the number of dihedral records." );
         
         }
@@ -286,6 +305,7 @@ void register_CharmmPSF_class(){
                 "nDihedrals"
                 , nDihedrals_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the number of dihedrals in molecule i." );
         
         }
@@ -297,6 +317,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nImpropers"
                 , nImpropers_function_value
+                , bp::release_gil_policy()
                 , "Return the number of improper records." );
         
         }
@@ -309,6 +330,7 @@ void register_CharmmPSF_class(){
                 "nImpropers"
                 , nImpropers_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the number of impropers in molecule i." );
         
         }
@@ -320,6 +342,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nMolecules"
                 , nMolecules_function_value
+                , bp::release_gil_policy()
                 , "Return the number of molecules." );
         
         }
@@ -331,6 +354,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nNonBondedExclusions"
                 , nNonBondedExclusions_function_value
+                , bp::release_gil_policy()
                 , "Return the number of non-bonded exclusion records." );
         
         }
@@ -343,6 +367,7 @@ void register_CharmmPSF_class(){
                 "nNonBondedExclusions"
                 , nNonBondedExclusions_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the number of non-bonded exclusions in molecule i." );
         
         }
@@ -369,6 +394,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "toLines"
                 , toLines_function_value
+                , bp::release_gil_policy()
                 , "Convert the parsed data to a collection of PSF record lines." );
         
         }
@@ -380,6 +406,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this parser" );
         
         }
@@ -391,6 +418,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "Return the C++ name for this class" );
         
         }
@@ -402,6 +430,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "Return the C++ name for this class" );
         
         }

@@ -253,7 +253,7 @@ void register_Molecule_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("id") )
-                , "" );
+                , "Return the number of atoms in the identified residue(s)" );
         
         }
         { //::SireMol::Molecule::nAtoms
@@ -265,7 +265,7 @@ void register_Molecule_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("id") )
-                , "" );
+                , "Return the number of atoms in the identified chain(s)" );
         
         }
         { //::SireMol::Molecule::nAtoms
@@ -277,7 +277,7 @@ void register_Molecule_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("seg") )
-                , "" );
+                , "Return the number of atoms in the identified segment(s)" );
         
         }
         { //::SireMol::Molecule::nAtoms
@@ -289,7 +289,7 @@ void register_Molecule_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("id") )
-                , "" );
+                , "Return the number of atoms in the identified cutgroups(s)" );
         
         }
         { //::SireMol::Molecule::nChains
@@ -334,7 +334,7 @@ void register_Molecule_class(){
                 "nResidues"
                 , nResidues_function_value
                 , ( bp::arg("id") )
-                , "" );
+                , "Return the number of residues in the identified chain(s)" );
         
         }
         { //::SireMol::Molecule::nSegments

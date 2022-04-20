@@ -33,6 +33,8 @@ SireIO::Cube __copy__(const SireIO::Cube &other){ return SireIO::Cube(other); }
 
 const char* pvt_get_name(const SireIO::Cube&){ return "SireIO::Cube";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Cube_class(){
 
     { //::SireIO::Cube
@@ -65,6 +67,7 @@ void register_Cube_class(){
                 "write"
                 , write_function_value
                 , ( bp::arg("table"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -77,6 +80,7 @@ void register_Cube_class(){
                 "write"
                 , write_function_value
                 , ( bp::arg("table"), bp::arg("molgroup"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -89,6 +93,7 @@ void register_Cube_class(){
                 "write"
                 , write_function_value
                 , ( bp::arg("table"), bp::arg("molecules"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::release_gil_policy()
                 , "" );
         
         }

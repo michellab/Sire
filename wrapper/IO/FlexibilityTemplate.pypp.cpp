@@ -53,6 +53,8 @@ SireIO::FlexibilityTemplate __copy__(const SireIO::FlexibilityTemplate &other){ 
 
 const char* pvt_get_name(const SireIO::FlexibilityTemplate&){ return "SireIO::FlexibilityTemplate";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FlexibilityTemplate_class(){
 
     { //::SireIO::FlexibilityTemplate
@@ -94,6 +96,7 @@ void register_FlexibilityTemplate_class(){
                 "getDelta"
                 , getDelta_function_value
                 , ( bp::arg("bondid") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -106,6 +109,7 @@ void register_FlexibilityTemplate_class(){
                 "getDelta"
                 , getDelta_function_value
                 , ( bp::arg("angleid") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -118,6 +122,7 @@ void register_FlexibilityTemplate_class(){
                 "getDelta"
                 , getDelta_function_value
                 , ( bp::arg("dihedralid") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -141,6 +146,7 @@ void register_FlexibilityTemplate_class(){
             FlexibilityTemplate_exposer.def( 
                 "getMaximumAngleVar"
                 , getMaximumAngleVar_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -152,6 +158,7 @@ void register_FlexibilityTemplate_class(){
             FlexibilityTemplate_exposer.def( 
                 "getMaximumBondVar"
                 , getMaximumBondVar_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -163,6 +170,7 @@ void register_FlexibilityTemplate_class(){
             FlexibilityTemplate_exposer.def( 
                 "getMaximumDihedralVar"
                 , getMaximumDihedralVar_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -174,6 +182,7 @@ void register_FlexibilityTemplate_class(){
             FlexibilityTemplate_exposer.def( 
                 "getName"
                 , getName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -185,6 +194,7 @@ void register_FlexibilityTemplate_class(){
             FlexibilityTemplate_exposer.def( 
                 "getRotation"
                 , getRotation_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -196,6 +206,7 @@ void register_FlexibilityTemplate_class(){
             FlexibilityTemplate_exposer.def( 
                 "getTranslation"
                 , getTranslation_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -223,6 +234,7 @@ void register_FlexibilityTemplate_class(){
                 "setAngleDelta"
                 , setAngleDelta_function_value
                 , ( bp::arg("angleid"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -235,6 +247,7 @@ void register_FlexibilityTemplate_class(){
                 "setBondDelta"
                 , setBondDelta_function_value
                 , ( bp::arg("bondid"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -247,6 +260,7 @@ void register_FlexibilityTemplate_class(){
                 "setDihedralDelta"
                 , setDihedralDelta_function_value
                 , ( bp::arg("dihedralid"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -259,6 +273,7 @@ void register_FlexibilityTemplate_class(){
                 "setMaximumAngleVar"
                 , setMaximumAngleVar_function_value
                 , ( bp::arg("maxvar") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -271,6 +286,7 @@ void register_FlexibilityTemplate_class(){
                 "setMaximumBondVar"
                 , setMaximumBondVar_function_value
                 , ( bp::arg("maxvar") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -283,6 +299,7 @@ void register_FlexibilityTemplate_class(){
                 "setMaximumDihedralVar"
                 , setMaximumDihedralVar_function_value
                 , ( bp::arg("maxvar") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -295,6 +312,7 @@ void register_FlexibilityTemplate_class(){
                 "setRotation"
                 , setRotation_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -307,6 +325,7 @@ void register_FlexibilityTemplate_class(){
                 "setTranslation"
                 , setTranslation_function_value
                 , ( bp::arg("distance") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -318,6 +337,7 @@ void register_FlexibilityTemplate_class(){
             FlexibilityTemplate_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

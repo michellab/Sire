@@ -53,6 +53,8 @@ SireIO::AmberRst7 __copy__(const SireIO::AmberRst7 &other){ return SireIO::Amber
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AmberRst7_class(){
 
     { //::SireIO::AmberRst7
@@ -71,6 +73,7 @@ void register_AmberRst7_class(){
             AmberRst7_exposer.def( 
                 "boxAngles"
                 , boxAngles_function_value
+                , bp::release_gil_policy()
                 , "Return the parsed box angles" );
         
         }
@@ -82,6 +85,7 @@ void register_AmberRst7_class(){
             AmberRst7_exposer.def( 
                 "boxDimensions"
                 , boxDimensions_function_value
+                , bp::release_gil_policy()
                 , "Return the parsed box dimensions" );
         
         }
@@ -94,6 +98,7 @@ void register_AmberRst7_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("filename"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return this parser constructed from the passed filename" );
         
         }
@@ -106,6 +111,7 @@ void register_AmberRst7_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("lines"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return this parser constructed from the passed set of lines" );
         
         }
@@ -118,6 +124,7 @@ void register_AmberRst7_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return this parser constructed from the passed SireSystem::System" );
         
         }
@@ -129,6 +136,7 @@ void register_AmberRst7_class(){
             AmberRst7_exposer.def( 
                 "coordinates"
                 , coordinates_function_value
+                , bp::release_gil_policy()
                 , "Return the parsed coordinate data" );
         
         }
@@ -140,6 +148,7 @@ void register_AmberRst7_class(){
             AmberRst7_exposer.def( 
                 "formatDescription"
                 , formatDescription_function_value
+                , bp::release_gil_policy()
                 , "Return a description of the file format" );
         
         }
@@ -151,6 +160,7 @@ void register_AmberRst7_class(){
             AmberRst7_exposer.def( 
                 "formatName"
                 , formatName_function_value
+                , bp::release_gil_policy()
                 , "Return the format name that is used to identify this file format within Sire" );
         
         }
@@ -162,6 +172,7 @@ void register_AmberRst7_class(){
             AmberRst7_exposer.def( 
                 "formatSuffix"
                 , formatSuffix_function_value
+                , bp::release_gil_policy()
                 , "Return the suffixes that RST7 files will typically have" );
         
         }
@@ -173,6 +184,7 @@ void register_AmberRst7_class(){
             AmberRst7_exposer.def( 
                 "hasVelocities"
                 , hasVelocities_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this restart file also provides velocities" );
         
         }
@@ -184,6 +196,7 @@ void register_AmberRst7_class(){
             AmberRst7_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms whose coordinates are contained in this restart file" );
         
         }
@@ -211,6 +224,7 @@ void register_AmberRst7_class(){
                 "parse"
                 , parse_function_value
                 , ( bp::arg("filename") )
+                , bp::release_gil_policy()
                 , "Parse from the passed file" );
         
         }
@@ -222,6 +236,7 @@ void register_AmberRst7_class(){
             AmberRst7_exposer.def( 
                 "time"
                 , time_function_value
+                , bp::release_gil_policy()
                 , "Return the current time of the simulation from which this restart\nfile was written in picoseconds.\nThis is a negative number if the time has not been set" );
         
         }
@@ -233,6 +248,7 @@ void register_AmberRst7_class(){
             AmberRst7_exposer.def( 
                 "title"
                 , title_function_value
+                , bp::release_gil_policy()
                 , "Return the title of the file" );
         
         }
@@ -244,6 +260,7 @@ void register_AmberRst7_class(){
             AmberRst7_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -255,6 +272,7 @@ void register_AmberRst7_class(){
             AmberRst7_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -266,6 +284,7 @@ void register_AmberRst7_class(){
             AmberRst7_exposer.def( 
                 "velocities"
                 , velocities_function_value
+                , bp::release_gil_policy()
                 , "Return the parsed coordinate data" );
         
         }
@@ -277,6 +296,7 @@ void register_AmberRst7_class(){
             AmberRst7_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

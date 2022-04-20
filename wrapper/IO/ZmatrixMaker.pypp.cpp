@@ -53,6 +53,8 @@ SireIO::ZmatrixMaker __copy__(const SireIO::ZmatrixMaker &other){ return SireIO:
 
 const char* pvt_get_name(const SireIO::ZmatrixMaker&){ return "SireIO::ZmatrixMaker";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ZmatrixMaker_class(){
 
     { //::SireIO::ZmatrixMaker
@@ -68,6 +70,7 @@ void register_ZmatrixMaker_class(){
                 "applyTemplates"
                 , applyTemplates_function_value
                 , ( bp::arg("molecule") )
+                , bp::release_gil_policy()
                 , "Add the property z-matrix to molecule" );
         
         }
@@ -80,6 +83,7 @@ void register_ZmatrixMaker_class(){
                 "loadTemplates"
                 , loadTemplates_function_value
                 , ( bp::arg("templatesfile") )
+                , bp::release_gil_policy()
                 , "Read the contents of an input file to create a set of ZmatrixResidues" );
         
         }
@@ -91,6 +95,7 @@ void register_ZmatrixMaker_class(){
             ZmatrixMaker_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -102,6 +107,7 @@ void register_ZmatrixMaker_class(){
             ZmatrixMaker_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -51,6 +51,8 @@ SireIO::PDB2 __copy__(const SireIO::PDB2 &other){ return SireIO::PDB2(other); }
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PDB2_class(){
 
     { //::SireIO::PDB2
@@ -70,6 +72,7 @@ void register_PDB2_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("filename"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by reading in the passed\nfile using the passed properties" );
         
         }
@@ -82,6 +85,7 @@ void register_PDB2_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("lines"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by reading in the passed\ntext lines using the passed properties" );
         
         }
@@ -94,6 +98,7 @@ void register_PDB2_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by extract all necessary\ndata from the passed SireSystem::System using the specified properties" );
         
         }
@@ -105,6 +110,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "formatDescription"
                 , formatDescription_function_value
+                , bp::release_gil_policy()
                 , "Return a description of the file format" );
         
         }
@@ -116,6 +122,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "formatName"
                 , formatName_function_value
+                , bp::release_gil_policy()
                 , "Return the format name that is used to identify this file format within Sire" );
         
         }
@@ -127,6 +134,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "formatSuffix"
                 , formatSuffix_function_value
+                , bp::release_gil_policy()
                 , "Return the suffixes that these files are normally associated with" );
         
         }
@@ -138,6 +146,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "isLead"
                 , isLead_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
         
         }
@@ -149,6 +158,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of atoms." );
         
         }
@@ -161,6 +171,7 @@ void register_PDB2_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in molecule i." );
         
         }
@@ -172,6 +183,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "nChains"
                 , nChains_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of chains." );
         
         }
@@ -184,6 +196,7 @@ void register_PDB2_class(){
                 "nChains"
                 , nChains_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the number of chains in molecule i." );
         
         }
@@ -195,6 +208,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "nMolecules"
                 , nMolecules_function_value
+                , bp::release_gil_policy()
                 , "Return the number of models (molecules)." );
         
         }
@@ -206,6 +220,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "nResidues"
                 , nResidues_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of residues." );
         
         }
@@ -218,6 +233,7 @@ void register_PDB2_class(){
                 "nResidues"
                 , nResidues_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the number of residues in molecule i." );
         
         }
@@ -245,6 +261,7 @@ void register_PDB2_class(){
                 "toLines"
                 , toLines_function_value
                 , ( bp::arg("is_velocity")=(bool)(false) )
+                , bp::release_gil_policy()
                 , "Convert the parsed data to a collection of PDB record lines." );
         
         }
@@ -256,6 +273,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this parser" );
         
         }
@@ -267,6 +285,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "Return the C++ name for this class" );
         
         }
@@ -278,6 +297,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "Return the C++ name for this class" );
         
         }
@@ -290,6 +310,7 @@ void register_PDB2_class(){
                 "writeVelocityFile"
                 , writeVelocityFile_function_value
                 , ( bp::arg("filename") )
+                , bp::release_gil_policy()
                 , "Write a velocity file in PDB format. This can be used as a restart for NAMD simulations." );
         
         }
