@@ -21,8 +21,6 @@ import Sire.Qt
 
 from Sire.Error._Error import *
 
-__all__ = ["get_back_trace", "print_error", "get_last_error_details"]
-
 __old_printError = printError
 
 def printError(e):

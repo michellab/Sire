@@ -20,11 +20,6 @@ Classes
 
 """
 
-__all__ = ["Bennetts", "FEP", "Gradients",
-           "ComponentGradients", "DataPoint",
-           "FEP", "FEPDeltas", "PMF", "TI",
-           "TIComponents", "TIPMF"]
-
 import Sire.Maths
 import Sire.CAS
 import Sire.Units

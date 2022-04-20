@@ -45,14 +45,6 @@ Functions
 
 from Sire.Base._Base import *
 
-__all__ = [ "Property", "Properties", "PropertyList", "PropertyMap",
-            "PropertyName", "Range", "SimpleRange", "TempDir",
-            "TimeProperty", "TrimString", "UpperCaseString", "VariantProperty",
-            "Version", "findExe", "getBinDir", "getBundledLibDir",
-            "getInstallDir", "getLibDir", "getReleaseVersion", "getRepositoryBranch",
-            "getRepositoryURL", "getRepositoryVersion", "getRepositoryVersionIsClean", "getShareDir",
-            "getSireDir", "increment", "wrap" ]
-
 _wrap_functions = []
 
 _base_wrap = wrap

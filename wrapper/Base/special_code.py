@@ -26,5 +26,5 @@ def fixMB(mb):
     mb.add_declaration_code( "#include <QString>" )
     mb.add_declaration_code( "#include \"SireBase/slice.h\"" )
     mb.add_declaration_code( "void autoconvert_Slice();")
-    mb.add_definition_code( "autoconvert_Slice();")
+    mb.add_registration_code( "autoconvert_Slice();")
 

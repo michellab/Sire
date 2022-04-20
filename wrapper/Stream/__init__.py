@@ -22,8 +22,6 @@ Functions
 """
 from Sire.Stream._Stream import *
 
-__all__ = ["FileHeader", "MD5Sum", "load", "save"]
-
 import sys
 
 _pvt_load = load

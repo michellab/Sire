@@ -94,23 +94,6 @@ import Sire.Base
 # Import all of the classes and functions from the C++ library
 from Sire.CAS._CAS import *
 
-__all__ = [ "Abs", "AlwaysFalse", "AlwaysTrue", "ArcCos",
-            "ArcCot", "ArcCoth", "ArcCsc", "ArcCsch",
-            "ArcSec", "ArcSech", "ArcSin", "ArcSinh",
-            "ArcTan", "ArcTanh", "ComplexPower", "ComplexValues",
-            "Condition", "Conditional", "Constant", "Cos",
-            "Cosh", "Cot", "Coth", "Csc",
-            "Csch", "DoubleFunc", "EqualTo", "Exp",
-            "Expression", "Factor", "GreaterOrEqualThan", "GreaterThan",
-            "I", "Identities", "IntegerPower", "IntegrationConstant",
-            "LessOrEqualThan", "LessThan", "Ln", "Max",
-            "Min", "NotEqualTo", "Power", "PowerConstant",
-            "PowerFunction", "Product", "RationalPower", "RealPower",
-            "Sec", "Sech", "Sin", "Sinh",
-            "Sum", "Symbol", "SymbolComplex", "SymbolExpression",
-            "SymbolValue", "Tan", "Tanh", "Values",
-            "cbrt", "pow", "sqrt" ]
-
 # Now define some pure Python functions and classes that are part of
 # this library...
 

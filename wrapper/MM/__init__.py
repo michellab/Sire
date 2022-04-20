@@ -157,43 +157,6 @@ import Sire.CAS
 # Import all of the classes and functions from the C++ library
 from Sire.MM._MM import *
 
-__all__ = [ "AmberAngle", "AmberBond", "AmberDihedral", "AmberDihPart",
-            "AmberNB14", "AngleComponent", "AngleParameterName", "AngleRestraint",
-            "AngleSymbols", "AtomFunction", "AtomFunctions", "AtomLJs",
-            "BendBendComponent", "BendBendParameterName", "BendBendSymbols", "BondComponent",
-            "BondParameterName", "BondSymbols", "ChargeParameterName", "ChargeParameterName3D",
-            "CHARMMSwitchingFunction", "CLJ14Group", "CLJAtom", "CLJAtoms",
-            "CLJBox", "CLJBoxDistance", "CLJBoxes", "CLJBoxIndex",
-            "CLJCalculator", "CLJComponent", "CLJCutoffFunction", "CLJDelta",
-            "CLJExtractor", "CLJFunction", "CLJGrid", "CLJIntraFunction",
-            "CLJIntraRFFunction", "CLJIntraShiftFunction", "CLJNBPairs", "CLJParameterNames",
-            "CLJParameterNames3D", "CLJProbe", "CLJRFFunction", "CLJScaleFactor",
-            "CLJShiftFunction", "CLJSoftFunction", "CLJSoftIntraFunction", "CLJSoftIntraRFFunction",
-            "CLJSoftIntraShiftFunction", "CLJSoftRFFunction", "CLJSoftShiftFunction", "CLJWorkspace",
-            "CoulombComponent", "CoulombNBPairs", "CoulombProbe", "CoulombScaleFactor",
-            "DihedralComponent", "DihedralParameterName", "DihedralRestraint", "DihedralSymbols",
-            "DistanceRestraint", "DoubleDistanceRestraint", "FourAtomFunction", "FourAtomFunctions",
-            "FourAtomPerturbation", "GridFF", "GridFF2", "GromacsAngle",
-            "GromacsAtomType", "GromacsBond", "GromacsDihedral", "GroupInternalParameters",
-            "HarmonicSwitchingFunction", "ImproperComponent", "ImproperParameterName", "ImproperSymbols",
-            "InterCLJFF", "InterCoulombFF", "InterFF", "InterGroupCLJFF",
-            "InterGroupCoulombFF", "InterGroupFF", "InterGroupLJFF", "InterGroupSoftCLJFF",
-            "InterLJFF", "InternalComponent", "InternalFF", "InternalParameterNames",
-            "InternalParameters", "InternalParameters3D", "InternalPerturbation", "InternalSymbols",
-            "InterSoftCLJFF", "Intra14Component", "Intra14CoulombComponent", "Intra14LJComponent",
-            "IntraCLJFF", "IntraCoulombFF", "IntraFF", "IntraGroupCLJFF",
-            "IntraGroupCoulombFF", "IntraGroupFF", "IntraGroupLJFF", "IntraGroupSoftCLJFF",
-            "IntraLJFF", "IntraSoftCLJFF", "LJComponent", "LJNBPairs",
-            "LJParameter", "LJParameterName", "LJParameterName3D", "LJPerturbation",
-            "LJProbe", "LJScaleFactor", "MultiCLJComponent", "NoCutoff",
-            "Restraint", "Restraint3D", "RestraintComponent", "RestraintFF",
-            "ScaledChargeParameterNames3D", "ScaledCLJParameterNames3D", "ScaledLJParameterNames3D", "SoftCLJComponent",
-            "StretchBendComponent", "StretchBendParameterName", "StretchBendSymbols", "StretchBendTorsionComponent",
-            "StretchBendTorsionParameterName", "StretchBendTorsionSymbols", "StretchStretchComponent", "StretchStretchParameterName",
-            "StretchStretchSymbols", "SwitchingFunction", "TestFF", "ThreeAtomFunction",
-            "ThreeAtomFunctions", "ThreeAtomPerturbation", "TripleDistanceRestraint", "TwoAtomFunction",
-            "TwoAtomFunctions" ]
-
 # Now define some pure Python functions and classes that are part of
 # this library...
 
