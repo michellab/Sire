@@ -110,6 +110,10 @@ struct from_py_pair
         PyObject* obj_ptr,
         bp::converter::rvalue_from_python_stage1_data* data)
     {
+        // need to re-acquire the GIL when creating new objects
+        PyGILState_STATE gstate;
+        gstate = PyGILState_Ensure();
+
         if (PyTuple_Check(obj_ptr))
         {
             //convert the PyObject to a boost::python::object
@@ -150,6 +154,8 @@ struct from_py_pair
 
             data->convertible = storage;
         }
+
+        PyGILState_Release(gstate);
     }
 };
 

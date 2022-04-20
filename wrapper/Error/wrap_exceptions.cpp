@@ -85,32 +85,57 @@ QString get_exception_string(const SireError::exception &e)
 
 void index_error( const SireError::exception &ex )
 {
+    PyGILState_STATE gstate;
+    gstate = PyGILState_Ensure();
+
     PyErr_SetString(PyExc_IndexError,
                     get_exception_string(ex).toUtf8());
+
+    PyGILState_Release(gstate);
 }
 
 void key_error( const SireError::exception &ex )
 {
+    PyGILState_STATE gstate;
+    gstate = PyGILState_Ensure();
+
     PyErr_SetString(PyExc_KeyError,
                     get_exception_string(ex).toUtf8());
+
+    PyGILState_Release(gstate);
 }
 
 void assertion_error( const SireError::exception &ex )
 {
+    PyGILState_STATE gstate;
+    gstate = PyGILState_Ensure();
+
     PyErr_SetString(PyExc_AssertionError,
                     get_exception_string(ex).toUtf8());
+
+    PyGILState_Release(gstate);
 }
 
 void type_error( const SireError::exception &ex )
 {
+    PyGILState_STATE gstate;
+    gstate = PyGILState_Ensure();
+
     PyErr_SetString(PyExc_TypeError,
                     get_exception_string(ex).toUtf8());
+
+    PyGILState_Release(gstate);
 }
 
 void exception_translator( const SireError::exception &ex )
 {
+    PyGILState_STATE gstate;
+    gstate = PyGILState_Ensure();
+
     PyErr_SetString(PyExc_UserWarning,
                     get_exception_string(ex).toUtf8());
+
+    PyGILState_Release(gstate);
 }
 
 void export_exceptions()

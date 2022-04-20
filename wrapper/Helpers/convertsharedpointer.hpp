@@ -42,7 +42,13 @@ struct to_base_object
 {
     static PyObject* convert(const P &object_container)
     {
-        return bp::incref( object( SireBase::SharedPolyPointer<Base>(object_container.base()) ).ptr() );
+        // need to re-acquire the GIL when creating new objects
+        PyGILState_STATE gstate;
+        gstate = PyGILState_Ensure();
+        PyObject *ptr = bp::incref( object( SireBase::SharedPolyPointer<Base>(object_container.base()) ).ptr() );
+        PyGILState_Release(gstate);
+
+        return ptr;
     }
 };
 

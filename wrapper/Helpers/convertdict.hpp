@@ -60,27 +60,33 @@ struct from_py_dict
         //is this a dict type?
         if ( PyDict_Check(obj_ptr) )
         {
-            //check the tuple elements... - convert to a boost::tuple object
-            bp::dict d( bp::handle<>(bp::borrowed(obj_ptr)) );
-
-            //check the items in the dict (items is a list of 2-tuples key-value
-            bp::list items = d.items();
-
-            int nitems = bp::extract<int>(items.attr("__len__")())();
-
-            for (int i=0; i<nitems; ++i)
+            PyGILState_STATE gstate;
+            gstate = PyGILState_Ensure();
             {
-                bp::tuple item = bp::extract<bp::tuple>(items[i])();
+                //check the tuple elements... - convert to a boost::tuple object
+                bp::dict d( bp::handle<>(bp::borrowed(obj_ptr)) );
 
-                if ( not (bp::extract<key_type>(item[0]).check() and
-                          bp::extract<mapped_type>(item[1]).check()) )
+                //check the items in the dict (items is a list of 2-tuples key-value
+                bp::list items = d.items();
+
+                int nitems = bp::extract<int>(items.attr("__len__")())();
+
+                for (int i=0; i<nitems; ++i)
                 {
-                    //either the key of value is wrong
-                    return 0;
+                    bp::tuple item = bp::extract<bp::tuple>(items[i])();
+
+                    if ( not (bp::extract<key_type>(item[0]).check() and
+                            bp::extract<mapped_type>(item[1]).check()) )
+                    {
+                        //either the key of value is wrong
+                        obj_ptr = 0;
+                        break;
+                    }
                 }
             }
 
             //the tuple is ok!
+            PyGILState_Release(gstate);
             return obj_ptr;
         }
         else
@@ -94,33 +100,40 @@ struct from_py_dict
         PyObject* obj_ptr,
         bp::converter::rvalue_from_python_stage1_data* data)
     {
-        //convert the PyObject to a boost::python::dict
-        bp::dict d( bp::handle<>(bp::borrowed(obj_ptr)) );
-
-        //locate the storage space for the result
-        void* storage =
-            ( (bp::converter::rvalue_from_python_storage<C>*)data )->storage.bytes;
-
-        //create the container
-        new (storage) C();
-
-        C *container = static_cast<C*>(storage);
-
-        //add all of the elements from the dict - do this by converting
-        //to a list and then extracting each item
-        bp::list items = d.items();
-
-        int nitems = bp::extract<int>(items.attr("__len__")())();
-
-        for (int i=0; i<nitems; ++i)
+        // need to re-acquire the GIL when creating new dict objects
+        PyGILState_STATE gstate;
+        gstate = PyGILState_Ensure();
         {
-            bp::tuple item = bp::extract<bp::tuple>(items[i])();
+            //convert the PyObject to a boost::python::dict
+            bp::dict d( bp::handle<>(bp::borrowed(obj_ptr)) );
 
-            container->insert( bp::extract<key_type>(item[0])(),
-                               bp::extract<mapped_type>(item[1])() );
+            //locate the storage space for the result
+            void* storage =
+                ( (bp::converter::rvalue_from_python_storage<C>*)data )->storage.bytes;
+
+            //create the container
+            new (storage) C();
+
+            C *container = static_cast<C*>(storage);
+
+            //add all of the elements from the dict - do this by converting
+            //to a list and then extracting each item
+            bp::list items = d.items();
+
+            int nitems = bp::extract<int>(items.attr("__len__")())();
+
+            for (int i=0; i<nitems; ++i)
+            {
+                bp::tuple item = bp::extract<bp::tuple>(items[i])();
+
+                container->insert( bp::extract<key_type>(item[0])(),
+                                bp::extract<mapped_type>(item[1])() );
+            }
+
+            data->convertible = storage;
         }
 
-        data->convertible = storage;
+        PyGILState_Release(gstate);
     }
 };
 

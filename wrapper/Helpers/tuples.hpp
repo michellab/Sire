@@ -114,11 +114,23 @@ struct to_py_tuple{
     typedef mpl::int_< tuples::length< TTuple >::value > length_type;
 
     static PyObject* convert(const TTuple& c_tuple){
-        list values;
-        //add all c_tuple items to "values" list
-        convert_impl( c_tuple, values, mpl::int_< 0 >(), length_type() );
-        //create Python tuple from the list
-        return incref( python::tuple( values ).ptr() );
+        // need to re-acquire the GIL when creating new objects
+        PyGILState_STATE gstate;
+        gstate = PyGILState_Ensure();
+
+        PyObject *result;
+
+        // use a scope so that 'values' is deallocated before reaquiring the GIL
+        {
+            list values;
+            //add all c_tuple items to "values" list
+            convert_impl( c_tuple, values, mpl::int_< 0 >(), length_type() );
+            //create Python tuple from the list
+            result = incref( python::tuple( values ).ptr() );
+        }
+
+        PyGILState_Release(gstate);
+        return result;
     }
 
 private:
@@ -154,7 +166,6 @@ struct from_py_sequence{
 
     static void*
     convertible(PyObject* py_obj){
-
         if( !PySequence_Check( py_obj ) ){
             return 0;
         }
@@ -179,6 +190,10 @@ struct from_py_sequence{
 
     static void
     construct( PyObject* py_obj, converter::rvalue_from_python_stage1_data* data){
+        // need to re-acquire the GIL when creating new objects
+        PyGILState_STATE gstate;
+        gstate = PyGILState_Ensure();
+
         typedef converter::rvalue_from_python_storage<TTuple> storage_t;
         storage_t* the_storage = reinterpret_cast<storage_t*>( data );
         void* memory_chunk = the_storage->storage.bytes;
@@ -187,6 +202,7 @@ struct from_py_sequence{
 
         python::object py_sequence( handle<>( borrowed( py_obj ) ) );
         construct_impl( py_sequence, *c_tuple, mpl::int_< 0 >(), length_type() );
+        PyGILState_Release(gstate);
     }
 
     static TTuple to_c_tuple( PyObject* py_obj ){

@@ -15,7 +15,7 @@ namespace boost {
             public:
                 GilHolder() : thread_state(0)
                 {
-                    //qDebug() << "release gil";
+                    qDebug() << "release gil";
                     thread_state = PyEval_SaveThread();
                 }
 
@@ -23,7 +23,7 @@ namespace boost {
                 {
                     if (thread_state)
                     {
-                        //qDebug() << "acquire gil";
+                        qDebug() << "acquire gil";
                         PyEval_RestoreThread(thread_state);
                     }
                 }

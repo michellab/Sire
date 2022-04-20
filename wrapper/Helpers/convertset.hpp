@@ -106,6 +106,10 @@ struct from_py_set
         PyObject* obj_ptr,
         bp::converter::rvalue_from_python_stage1_data* data)
     {
+        // need to re-acquire the GIL when creating new list objects
+        PyGILState_STATE gstate;
+        gstate = PyGILState_Ensure();
+
         if (PyTuple_Check(obj_ptr))
         {
             //convert the PyObject to a boost::python::object
@@ -154,6 +158,8 @@ struct from_py_set
 
             data->convertible = storage;
         }
+
+        PyGILState_Release(gstate);
     }
 };
 
@@ -182,7 +188,7 @@ void register_set()
     bp::to_python_converter< C, to_py_set<C> >();
 
     typedef typename C::value_type value_type;
-    
+
     bp::converter::registry::push_back( &from_py_set<C,value_type>::convertible,
                                         &from_py_set<C,value_type>::construct,
                                         bp::type_id<C>() );
@@ -192,7 +198,7 @@ template<class C, class value_type>
 void register_set()
 {
     bp::to_python_converter< C, to_py_set<C> >();
-    
+
     bp::converter::registry::push_back( &from_py_set<C,value_type>::convertible,
                                         &from_py_set<C,value_type>::construct,
                                         bp::type_id<C>() );
