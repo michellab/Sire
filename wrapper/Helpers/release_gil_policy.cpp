@@ -5,26 +5,32 @@
 
 #include <QDebug>
 
+//#define SIRE_DISABLE_GIL_POLICY 1
+
 boost::python::detail::GilHolder::GilHolder() : thread_state(0)
 {
-    qDebug() << "RELEASE GIL";
-    thread_state = PyEval_SaveThread();
+    #ifndef SIRE_DISABLE_GIL_POLICY
+        qDebug() << "RELEASE GIL";
+        thread_state = PyEval_SaveThread();
+    #endif
 }
 
 boost::python::detail::GilHolder::~GilHolder()
 {
-    if (thread_state)
-    {
-        if (_Py_IsFinalizing())
+    #ifndef SIRE_DISABLE_GIL_POLICY
+        if (thread_state)
         {
-            qDebug() << "FINALIZING!";
+            if (_Py_IsFinalizing())
+            {
+                qDebug() << "FINALIZING!";
+            }
+            else
+            {
+                qDebug() << "ACQUIRE GIL";
+                PyEval_RestoreThread(thread_state);
+            }
         }
-        else
-        {
-            qDebug() << "ACQUIRE GIL";
-            PyEval_RestoreThread(thread_state);
-        }
-    }
+    #endif
 }
 
 boost::python::detail::GilRaiiData::GilRaiiData()
@@ -32,20 +38,24 @@ boost::python::detail::GilRaiiData::GilRaiiData()
 
 boost::python::detail::GilRaiiData::~GilRaiiData()
 {
-    if (boost::python::release_gil_policy::gil.hasLocalData())
-    {
-        qDebug() << "WARNING - DOUBLE HOLD GIL - POTENTIAL FOR DEADLOCK!";
-    }
+    #ifndef SIRE_DISABLE_GIL_POLICY
+        if (boost::python::release_gil_policy::gil.hasLocalData())
+        {
+            qDebug() << "WARNING - DOUBLE HOLD GIL - POTENTIAL FOR DEADLOCK!";
+        }
 
-    boost::python::release_gil_policy::gil.setLocalData(new boost::python::detail::GilHolder());
+        boost::python::release_gil_policy::gil.setLocalData(new boost::python::detail::GilHolder());
+    #endif
 }
 
 boost::python::GilRaii::GilRaii(bool acquired)
 {
-    if (acquired)
-    {
-        d.reset(new boost::python::detail::GilRaiiData());
-    }
+    #ifndef SIRE_DISABLE_GIL_POLICY
+        if (acquired)
+        {
+            d.reset(new boost::python::detail::GilRaiiData());
+        }
+    #endif
 }
 
 boost::python::GilRaii::~GilRaii()
@@ -56,15 +66,19 @@ boost::python::GilRaii::~GilRaii()
  */
 boost::python::GilRaii boost::python::release_gil_policy::acquire_gil()
 {
-    if (gil.hasLocalData())
-    {
-        gil.setLocalData(0);
-        return GilRaii(true);
-    }
-    else
-    {
-        return GilRaii(false);
-    }
+    #ifdef SIRE_DISABLE_GIL_POLICY
+        return boost::python::GilRaii(false);
+    #else
+        if (gil.hasLocalData())
+        {
+            gil.setLocalData(0);
+            return GilRaii(true);
+        }
+        else
+        {
+            return GilRaii(false);
+        }
+    #endif
 }
 
 QThreadStorage<boost::python::detail::GilHolder*> boost::python::release_gil_policy::gil;

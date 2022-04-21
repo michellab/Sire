@@ -385,6 +385,8 @@ QString Select::objectType() const
     case SireMol::parser::SelectEngine::MOLECULE:
         return QObject::tr("molecules");
     }
+
+    return QObject::tr("nothing");
 }
 
 QString Select::toString() const

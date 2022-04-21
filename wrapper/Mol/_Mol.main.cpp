@@ -533,16 +533,17 @@ namespace bp = boost::python;
 
 #include "Helpers/release_gil_policy.hpp"
 
-#include "SireMol/errors.h"
-
-void test_exception()
+void exception_translator( const std::exception &ex )
 {
-    throw SireMol::missing_atom("TEST", CODELOC);
+    qDebug() << CODELOC;
+    auto raii = boost::python::release_gil_policy::acquire_gil();
+    PyErr_SetString(PyExc_UserWarning,
+                    "SIREMOL HANDLER");
 }
 
 BOOST_PYTHON_MODULE(_Mol){
 
-    bp::def("test_exception", &test_exception, bp::release_gil_policy());
+    bp::register_exception_translator<std::exception>(exception_translator);
 
     register_SireMol_objects();
 
