@@ -9,17 +9,11 @@
 
 #include "SireError/errors.h"
 
-#include "release_gil_policy.hpp"
-
 using boost::python::object;
 using boost::python::extract;
 
 using boost::tuples::tuple;
 using boost::shared_ptr;
-
-// define here so that we have a single copy of this object in
-// the libraries
-QThreadStorage<boost::python::detail::GilHolder*> SIRE_EXPORT boost::python::release_gil_policy::gil;
 
 ObjectRegistry::ObjectRegistry()
 {}

@@ -61,6 +61,8 @@ struct from_py_list
         to a QVector where all of the elements are of type 'T' */
     static void* convertible(PyObject* obj_ptr)
     {
+        auto raii = boost::python::release_gil_policy::acquire_gil();
+
         //is this a tuple type?
         if ( PyTuple_Check(obj_ptr) )
         {
@@ -110,7 +112,7 @@ struct from_py_list
         PyObject* obj_ptr,
         bp::converter::rvalue_from_python_stage1_data* data)
     {
-        boost::python::release_gil_policy::restore_gil();
+        auto raii = boost::python::release_gil_policy::acquire_gil();
 
         if (PyTuple_Check(obj_ptr))
         {
@@ -168,19 +170,20 @@ struct to_py_list
 {
     static PyObject* convert(const C &cpp_list)
     {
-        boost::python::release_gil_policy::restore_gil();
-
-        bp::list python_list;
-
-        //add all items to the python dictionary
-        for (typename C::const_iterator it = cpp_list.begin();
-             it != cpp_list.end();
-             ++it)
+        auto raii = boost::python::release_gil_policy::acquire_gil();
         {
-            python_list.append(*it);
-        }
+            bp::list python_list;
 
-        return bp::incref( python_list.ptr() );
+            //add all items to the python dictionary
+            for (typename C::const_iterator it = cpp_list.begin();
+                it != cpp_list.end();
+                ++it)
+            {
+                python_list.append(*it);
+            }
+
+            return bp::incref( python_list.ptr() );
+        }
     }
 };
 

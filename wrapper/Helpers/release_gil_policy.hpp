@@ -6,40 +6,47 @@
 #include <QThreadStorage>
 #include <QDebug>
 
+#include <memory>
+
+#include "sireglobal.h"
+
 namespace boost {
     namespace python {
 
         namespace detail {
-            class GilHolder
+            class SIRE_EXPORT GilHolder
             {
             public:
-                GilHolder() : thread_state(0)
-                {
-                    thread_state = PyEval_SaveThread();
-                }
+                GilHolder();
 
-                ~GilHolder()
-                {
-                    if (thread_state)
-                    {
-                        if (_Py_IsFinalizing())
-                        {
-                            qDebug() << "FINALIZING!";
-                        }
-                        else
-                        {
-                            PyEval_RestoreThread(thread_state);
-                        }
-                    }
-                }
+                ~GilHolder();
 
             private:
                 PyThreadState *thread_state;
             };
+
+            class SIRE_EXPORT GilRaiiData
+            {
+            public:
+                GilRaiiData();
+                ~GilRaiiData();
+            };
         }
 
-        struct release_gil_policy
+        class SIRE_EXPORT GilRaii
         {
+        public:
+            GilRaii(bool acquired=true);
+            ~GilRaii();
+        private:
+            std::shared_ptr<detail::GilRaiiData> d;
+        };
+
+        class SIRE_EXPORT release_gil_policy
+        {
+        friend class detail::GilRaiiData;
+
+        public:
             template <class ArgumentPackage>
             static bool precall(ArgumentPackage const&)
             {
@@ -58,16 +65,7 @@ namespace boost {
                 return result;
             }
 
-            /** Call this function to restore the GIL - needed
-             *  when an exception is raised
-             */
-            static void restore_gil()
-            {
-                if (gil.hasLocalData())
-                {
-                    gil.setLocalData(0);
-                }
-            }
+            static GilRaii acquire_gil();
 
             typedef default_result_converter result_converter;
             typedef PyObject* argument_package;

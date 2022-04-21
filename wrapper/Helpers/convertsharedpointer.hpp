@@ -44,7 +44,7 @@ struct to_base_object
 {
     static PyObject* convert(const P &object_container)
     {
-        boost::python::release_gil_policy::restore_gil();
+        auto raii = boost::python::release_gil_policy::acquire_gil();
         return bp::incref( object( SireBase::SharedPolyPointer<Base>(object_container.base()) ).ptr() );
     }
 };

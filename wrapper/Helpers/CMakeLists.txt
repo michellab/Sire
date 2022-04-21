@@ -21,17 +21,20 @@ set ( WRAPHELPERS_SOURCES
       objectregistry.hpp
       objectregistry.cpp
 
+      release_gil_policy.hpp
+      release_gil_policy.cpp
+
     )
 
 # Create the library that holds all of the class wrappers
 add_library (SirePython ${WRAPHELPERS_SOURCES})
 
-set_target_properties (SirePython  
+set_target_properties (SirePython
                        PROPERTIES
                        VERSION ${SIRE_VERSION}
                        SOVERSION ${SIRE_VERSION_MAJOR}
 		       )
-		       
+
 target_link_libraries (SirePython
                        SIRE_SireCluster
                        SIRE_SireStream

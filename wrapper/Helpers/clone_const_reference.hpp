@@ -16,6 +16,8 @@
 #include <boost/mpl/if.hpp>
 #include <boost/python/to_python_indirect.hpp>
 
+#include "release_gil_policy.hpp"
+
 namespace boost
 {
 namespace python
@@ -29,6 +31,8 @@ struct make_clone_reference_holder
     template <class T>
     static PyObject* execute(T* p)
     {
+        auto raii = boost::python::release_gil_policy::acquire_gil();
+
         if (p == 0)
             return python::detail::none();
         else

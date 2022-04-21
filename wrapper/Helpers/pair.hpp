@@ -59,6 +59,8 @@ struct from_py_pair
         to a QVector where all of the elements are of type 'T' */
     static void* convertible(PyObject* obj_ptr)
     {
+        auto raii = boost::python::release_gil_policy::acquire_gil();
+
         //is this a tuple type?
         if ( PyTuple_Check(obj_ptr) )
         {
@@ -112,7 +114,7 @@ struct from_py_pair
         PyObject* obj_ptr,
         bp::converter::rvalue_from_python_stage1_data* data)
     {
-        boost::python::release_gil_policy::restore_gil();
+        auto raii = boost::python::release_gil_policy::acquire_gil();
 
         if (PyTuple_Check(obj_ptr))
         {
@@ -162,11 +164,12 @@ struct to_py_pair
 {
     static PyObject* convert(const std::pair<S,T> &cpp_pair)
     {
-        boost::python::release_gil_policy::restore_gil();
+        auto raii = boost::python::release_gil_policy::acquire_gil();
+        {
+            bp::tuple python_tuple = bp::make_tuple( cpp_pair.first, cpp_pair.second );
 
-        bp::tuple python_tuple = bp::make_tuple( cpp_pair.first, cpp_pair.second );
-
-        return bp::incref( python_tuple.ptr() );
+            return bp::incref( python_tuple.ptr() );
+        }
     }
 };
 
