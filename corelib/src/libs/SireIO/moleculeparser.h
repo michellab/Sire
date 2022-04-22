@@ -159,48 +159,78 @@ public:
     static QString supportedFormats();
 
     static MoleculeParserPtr parse(const QString &filename,
-                                   const PropertyMap &map = PropertyMap());
+                                   const PropertyMap &map);
 
     static QList<MoleculeParserPtr> parse(const QStringList &filenames,
-                                          const PropertyMap &map = PropertyMap());
+                                          const PropertyMap &map);
 
     static SireSystem::System read(const QString &filename,
-                                   const PropertyMap &map = PropertyMap());
+                                   const PropertyMap &map);
     static SireSystem::System read(const QString &file1, const QString &file2,
-                                   const PropertyMap &map = PropertyMap());
+                                   const PropertyMap &map);
     static SireSystem::System read(const QStringList &filenames,
-                                   const PropertyMap &map = PropertyMap());
+                                   const PropertyMap &map);
 
     static SireSystem::System load(const QString &filename,
-                                   const PropertyMap &map = PropertyMap());
+                                   const PropertyMap &map);
     static SireSystem::System load(const QString &file1, const QString &file2,
-                                   const PropertyMap &map = PropertyMap());
+                                   const PropertyMap &map);
     static SireSystem::System load(const QStringList &filenames,
-                                   const PropertyMap &map = PropertyMap());
+                                   const PropertyMap &map);
 
     static QStringList write(const SireSystem::System &system,
                              const QString &filename,
-                             const PropertyMap &map = PropertyMap());
+                             const PropertyMap &map);
 
     static QStringList write(const SireSystem::System &system,
                              const QString &file1, const QString &file2,
-                             const PropertyMap &map = PropertyMap());
+                             const PropertyMap &map);
 
     static QStringList write(const SireSystem::System &system,
                              const QStringList &filenames,
-                             const PropertyMap &map = PropertyMap());
+                             const PropertyMap &map);
 
     static QStringList save(const SireSystem::System &system,
                             const QString &filename,
-                            const PropertyMap &map = PropertyMap());
+                            const PropertyMap &map);
 
     static QStringList save(const SireSystem::System &system,
                             const QString &file1, const QString &file2,
-                            const PropertyMap &map = PropertyMap());
+                            const PropertyMap &map);
 
     static QStringList save(const SireSystem::System &system,
                             const QStringList &filenames,
-                            const PropertyMap &map = PropertyMap());
+                            const PropertyMap &map);
+
+    static MoleculeParserPtr parse(const QString &filename);
+
+    static QList<MoleculeParserPtr> parse(const QStringList &filenames);
+
+    static SireSystem::System read(const QString &filename);
+    static SireSystem::System read(const QString &file1, const QString &file2);
+    static SireSystem::System read(const QStringList &filenames);
+
+    static SireSystem::System load(const QString &filename);
+    static SireSystem::System load(const QString &file1, const QString &file2);
+    static SireSystem::System load(const QStringList &filenames);
+
+    static QStringList write(const SireSystem::System &system,
+                             const QString &filename);
+
+    static QStringList write(const SireSystem::System &system,
+                             const QString &file1, const QString &file2);
+
+    static QStringList write(const SireSystem::System &system,
+                             const QStringList &filenames);
+
+    static QStringList save(const SireSystem::System &system,
+                            const QString &filename);
+
+    static QStringList save(const SireSystem::System &system,
+                            const QString &file1, const QString &file2);
+
+    static QStringList save(const SireSystem::System &system,
+                            const QStringList &filenames);
 
     virtual bool isLead() const;
     virtual bool canFollow() const;
@@ -220,13 +250,19 @@ public:
     void setUseParallel(bool on);
     bool usesParallel() const;
 
-    SireSystem::System toSystem(const PropertyMap &map = PropertyMap()) const;
+    SireSystem::System toSystem(const PropertyMap &map) const;
 
     SireSystem::System toSystem(const MoleculeParser &other,
-                                const PropertyMap &map = PropertyMap()) const;
+                                const PropertyMap &map) const;
 
     SireSystem::System toSystem(const QList<MoleculeParserPtr> &others,
-                                const PropertyMap &map = PropertyMap()) const;
+                                const PropertyMap &map) const;
+
+    SireSystem::System toSystem() const;
+
+    SireSystem::System toSystem(const MoleculeParser &other) const;
+
+    SireSystem::System toSystem(const QList<MoleculeParserPtr> &others) const;
 
     virtual void writeToFile(const QString &filename) const;
 

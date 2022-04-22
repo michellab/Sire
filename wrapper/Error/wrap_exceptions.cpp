@@ -87,11 +87,9 @@ QString get_exception_string(const SireError::exception &e)
 
 void index_error( const SireError::exception &ex )
 {
-    qDebug() << CODELOC;
     boost::python::release_gil_policy::acquire_gil_no_raii();
     PyErr_SetString(PyExc_IndexError,
                     get_exception_string(ex).toUtf8());
-    qDebug() << CODELOC;
 }
 
 void key_error( const SireError::exception &ex )
@@ -112,6 +110,13 @@ void type_error( const SireError::exception &ex )
 {
     boost::python::release_gil_policy::acquire_gil_no_raii();
     PyErr_SetString(PyExc_TypeError,
+                    get_exception_string(ex).toUtf8());
+}
+
+void io_error( const SireError::exception &ex )
+{
+    boost::python::release_gil_policy::acquire_gil_no_raii();
+    PyErr_SetString(PyExc_IOError,
                     get_exception_string(ex).toUtf8());
 }
 
@@ -144,7 +149,8 @@ void export_exceptions()
     register_exception_translator<SireError::assertation_failed>(&assertion_error);
     register_exception_translator<SireError::invalid_cast>(&type_error);
     register_exception_translator<SireError::unknown_type>(&type_error);
-
+    register_exception_translator<SireError::io_error>(&io_error);
+    register_exception_translator<SireError::file_error>(&io_error);
 }
 
 }
