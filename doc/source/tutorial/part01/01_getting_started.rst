@@ -53,8 +53,12 @@ For example, let's load a cholesterol molecule from
 .. code-block:: python
 
    >>> mols = sr.load("https://siremol.org/m/cholesterol.sdf")
+
+   Downloading from 'https://siremol.org/m/cholesterol.sdf'...
+
    >>> print(mols)
-   XXXX
+
+   System( name=cholesterol nMolecules=1 nResidues=1 nAtoms=74 )
 
 Molecules are loaded into a :class:`~Sire.System.System`. You can see how
 many molecules have been loaded using the `.nMolecules()` function;
@@ -62,6 +66,7 @@ many molecules have been loaded using the `.nMolecules()` function;
 .. code-block:: python
 
    >>> print(mols.nMolecules())
+
    1
 
 In this case, one molecule has been loaded. You can access this molecule via;
@@ -70,7 +75,15 @@ In this case, one molecule has been loaded. You can access this molecule via;
 
    >>> mol = mols[0]
    >>> print(mol)
-   XXXX
+
+   Molecule( 2.11 : nAtoms=74, nResidues=1 )
+
+.. note::
+
+   The `2.11` is a number that Sire uses to identify this molecule.
+   We will explain what this number is and how it is formed in a
+   later chapter. Note that your molecule may have a different
+   identifier.
 
 There are many ways to view the atoms in the molecule. One is to use
 the index, e.g.
@@ -79,7 +92,8 @@ the index, e.g.
 
    >>> atom = mol[0]
    >>> print(atom)
-   XXXX
+
+   Atom( C : 1 )
 
 or
 
@@ -87,7 +101,8 @@ or
 
    >>> atom = mol.atom(0)
    >>> print(atom)
-   XXXX
+
+   Atom( C : 1 )
 
 would access the first atom in the molecule. The `.nAtoms()`
 function returns the total number of atoms.
@@ -95,7 +110,8 @@ function returns the total number of atoms.
 .. code-block:: python
 
    >>> print(mol.nAtoms())
-   XXXX
+
+   74
 
 You can loop over all of the atoms via the `.atoms()` function e.g.
 
@@ -103,7 +119,33 @@ You can loop over all of the atoms via the `.atoms()` function e.g.
 
    >>> for atom in mol.atoms():
    ...     print(atom)
-   XXXX
+
+   Atom( C : 1 )
+   Atom( C : 2 )
+   Atom( C : 3 )
+   Atom( C : 4 )
+   Atom( C : 5 )
+   Atom( C : 6 )
+   Atom( C : 7 )
+   Atom( C : 8 )
+   Atom( C : 9 )
+   Atom( C : 10 )
+   etc.
+
+You can also loop over a slice of atoms, e.g.
+
+.. code-block:: python
+
+   >>> for atom in mol[0:5]:
+   ...     print(atom)
+
+   Atom( C : 1 )
+   Atom( C : 2 )
+   Atom( C : 3 )
+   Atom( C : 4 )
+   Atom( C : 5 )
+
+
 
 Molecules can be divided into residues, chains and segments. A residue
 is a collection of atoms, a chain is a collection of residues, and a segment
@@ -182,6 +224,29 @@ whichever you find easiest.
    ...                 "https://siremol.org/m/urea.gro"])
 
 
+If the files or URLs have a common base, then you can save some typing
+by using :func:`Sire.expand`, e.g.
+
+.. code-block:: python
+
+   >>> mols = sr.load(sr.expand("https://siremol.org/m",
+   ...                          ["urea.top", "urea.gro"]))
+
+If you are loading files, you can also make use of glob expressions
+(wildcard expansions), e.g.
+
+.. code-block:: python
+
+   >>> mols = sr.load("urea.*")
+
+.. note::
+
+   This line loads the `urea.top` and `urea.gro` files that
+   were downloaded by the above lines. This is because Sire downloads
+   files at URLs to the current directory. You can tell it to use
+   a different directory by passing that in via the `directory`
+   argument, e.g. `sr.load("cholesterol.sdf", directory="tmp")`.
+   The directory will be created automatically if it doesn't exist.
 
 
 Saving to multiple files

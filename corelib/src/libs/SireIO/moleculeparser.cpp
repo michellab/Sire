@@ -991,7 +991,7 @@ System MoleculeParser::read(const QStringList &filenames, const PropertyMap &map
     if (system.name().isEmpty())
     {
         QSet<QString> parts;
-        for (const auto filename : filenames)
+        for (const auto &filename : filenames)
         {
             parts.insert(QFileInfo(filename).baseName());
         }

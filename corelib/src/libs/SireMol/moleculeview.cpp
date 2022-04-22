@@ -328,6 +328,53 @@ Selector<Atom> MoleculeView::atoms(const QString &name,
     return this->atoms(AtomName(name), map);
 }
 
+Selector<Atom> MoleculeView::atoms(const QStringList &names,
+                                   const PropertyMap &map) const
+{
+    if (names.count() == 0)
+        throw SireMol::missing_atom(QObject::tr(
+            "You must specify some names.."), CODELOC);
+
+    auto s = this->atoms(names[0], map);
+
+    for (int i=1; i<names.count(); ++i)
+    {
+        s = s + this->atoms(names[i], map);
+    }
+
+    return s;
+}
+
+Selector<Atom> MoleculeView::atoms(const QList<qint64> &values,
+                                   const PropertyMap &map) const
+{
+    if (values.count() == 0)
+        throw SireError::invalid_index(QObject::tr(
+            "You must specify some indexes.."), CODELOC);
+
+    const auto s = this->selection();
+    QList<AtomIdx> idxs;
+
+    if (s.selectedAllAtoms())
+    {
+        for (auto value : values)
+        {
+            idxs.append(AtomIdx(value));
+        }
+    }
+    else
+    {
+        auto atomidxs = s.selectedAtoms();
+
+        for (auto value : values)
+        {
+            idxs.append(atomidxs.at(Index(atomidxs.count()).map(value)));
+        }
+    }
+
+    return Selector<Atom>(this->data(), idxs);
+}
+
 Selector<Atom> MoleculeView::atoms(const Slice &slice,
                                    const PropertyMap &map) const
 {
@@ -347,7 +394,7 @@ Selector<Atom> MoleculeView::atoms(const Slice &slice,
 
         for (auto it = slice.begin(atomidxs.count()); not it.atEnd(); it.next())
         {
-            idxs.append(atomidxs.at(it.value()));
+            idxs.append(atomidxs.at(Index(atomidxs.count()).map(it.value())));
         }
     }
 
@@ -558,6 +605,53 @@ Selector<Residue> MoleculeView::residues(const QString &name,
     return this->residues(ResName(name), map);
 }
 
+Selector<Residue> MoleculeView::residues(const QStringList &names,
+                                         const PropertyMap &map) const
+{
+    if (names.count() == 0)
+        throw SireMol::missing_residue(QObject::tr(
+            "You must specify some names.."), CODELOC);
+
+    auto s = this->residues(names[0], map);
+
+    for (int i=1; i<names.count(); ++i)
+    {
+        s = s + this->residues(names[i], map);
+    }
+
+    return s;
+}
+
+Selector<Residue> MoleculeView::residues(const QList<qint64> &values,
+                                         const PropertyMap &map) const
+{
+    if (values.count() == 0)
+        throw SireError::invalid_index(QObject::tr(
+            "You must specify some indexes.."), CODELOC);
+
+    const auto s = this->selection();
+    QList<ResIdx> idxs;
+
+    if (s.selectedAllResidues())
+    {
+        for (auto value : values)
+        {
+            idxs.append(ResIdx(value));
+        }
+    }
+    else
+    {
+        auto residxs = s.selectedResidues();
+
+        for (auto value : values)
+        {
+            idxs.append(residxs.at(Index(residxs.count()).map(value)));
+        }
+    }
+
+    return Selector<Residue>(this->data(), idxs);
+}
+
 Selector<Residue> MoleculeView::residues(const Slice &slice,
                                          const PropertyMap &map) const
 {
@@ -577,7 +671,7 @@ Selector<Residue> MoleculeView::residues(const Slice &slice,
 
         for (auto it = slice.begin(residxs.count()); not it.atEnd(); it.next())
         {
-            idxs.append(residxs.at(it.value()));
+            idxs.append(residxs.at(Index(residxs.count()).map(it.value())));
         }
     }
 
@@ -670,6 +764,53 @@ Selector<Chain> MoleculeView::chains(const QString &name,
                                      const PropertyMap &map) const
 {
     return this->chains(ChainName(name), map);
+}
+
+Selector<Chain> MoleculeView::chains(const QStringList &names,
+                                     const PropertyMap &map) const
+{
+    if (names.count() == 0)
+        throw SireMol::missing_atom(QObject::tr(
+            "You must specify some names.."), CODELOC);
+
+    auto s = this->chains(names[0], map);
+
+    for (int i=1; i<names.count(); ++i)
+    {
+        s = s + this->chains(names[i], map);
+    }
+
+    return s;
+}
+
+Selector<Chain> MoleculeView::chains(const QList<qint64> &values,
+                                     const PropertyMap &map) const
+{
+    if (values.count() == 0)
+        throw SireError::invalid_index(QObject::tr(
+            "You must specify some indexes.."), CODELOC);
+
+    const auto s = this->selection();
+    QList<ChainIdx> idxs;
+
+    if (s.selectedAllChains())
+    {
+        for (auto value : values)
+        {
+            idxs.append(ChainIdx(value));
+        }
+    }
+    else
+    {
+        auto chainidxs = s.selectedChains();
+
+        for (auto value : values)
+        {
+            idxs.append(chainidxs.at(Index(chainidxs.count()).map(value)));
+        }
+    }
+
+    return Selector<Chain>(this->data(), idxs);
 }
 
 Selector<Chain> MoleculeView::chains(const Slice &slice,
@@ -787,6 +928,53 @@ Selector<Segment> MoleculeView::segments(const QString &name,
                                          const PropertyMap &map) const
 {
     return this->segments(SegName(name), map);
+}
+
+Selector<Segment> MoleculeView::segments(const QStringList &names,
+                                         const PropertyMap &map) const
+{
+    if (names.count() == 0)
+        throw SireMol::missing_atom(QObject::tr(
+            "You must specify some names.."), CODELOC);
+
+    auto s = this->segments(names[0], map);
+
+    for (int i=1; i<names.count(); ++i)
+    {
+        s = s + this->segments(names[i], map);
+    }
+
+    return s;
+}
+
+Selector<Segment> MoleculeView::segments(const QList<qint64> &values,
+                                         const PropertyMap &map) const
+{
+    if (values.count() == 0)
+        throw SireError::invalid_index(QObject::tr(
+            "You must specify some indexes.."), CODELOC);
+
+    const auto s = this->selection();
+    QList<SegIdx> idxs;
+
+    if (s.selectedAllSegments())
+    {
+        for (auto value : values)
+        {
+            idxs.append(SegIdx(value));
+        }
+    }
+    else
+    {
+        auto segidxs = s.selectedSegments();
+
+        for (auto value : values)
+        {
+            idxs.append(segidxs.at(Index(segidxs.count()).map(value)));
+        }
+    }
+
+    return Selector<Segment>(this->data(), idxs);
 }
 
 Selector<Segment> MoleculeView::segments(const Slice &slice,
