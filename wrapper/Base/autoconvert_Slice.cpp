@@ -34,6 +34,8 @@
 
 #include "SireError/errors.h"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include <QDebug>
 
 using namespace boost::python;
@@ -42,33 +44,35 @@ using namespace boost::python;
 void Slice_from_python_slice(PyObject* obj_ptr,
                              converter::rvalue_from_python_stage1_data* data)
 {
-    Py_ssize_t start, stop, step;
-    int ok = PySlice_Unpack(obj_ptr, &start, &stop, &step);
-
-    if (ok != 0)
-        throw SireError::assertation_failed(
-            QObject::tr("Cannot unpack the slice! %1").arg(ok), CODELOC );
-
-    void* storage = ((converter::rvalue_from_python_storage<SireBase::Slice>*) data)->storage.bytes;
-
-    qDebug() << start << stop << step;
-
-    if (stop == 9223372036854775807L)
+    auto raii = boost::python::release_gil_policy::acquire_gil();
+    if ( PySlice_Check(obj_ptr) )
     {
-        // magic number used when the end value has not been set
-        new (storage) SireBase::Slice( SireBase::Slice::fromStart(start, step));
-    }
-    else
-    {
-        if (stop == -9223372036854775808L)
+        Py_ssize_t start, stop, step;
+        int ok = PySlice_Unpack(obj_ptr, &start, &stop, &step);
+
+        if (ok != 0)
+            throw SireError::assertation_failed(
+                QObject::tr("Cannot unpack the slice! %1").arg(ok), CODELOC );
+
+        void* storage = ((converter::rvalue_from_python_storage<SireBase::Slice>*) data)->storage.bytes;
+
+        if (stop == 9223372036854775807L)
         {
-            stop = 0;
+            // magic number used when the end value has not been set
+            new (storage) SireBase::Slice( SireBase::Slice::fromStart(start, step));
+        }
+        else
+        {
+            if (stop == -9223372036854775808L)
+            {
+                stop = 0;
+            }
+
+            new (storage) SireBase::Slice( SireBase::Slice::fromStartStop(start, stop, step));
         }
 
-        new (storage) SireBase::Slice( SireBase::Slice::fromStartStop(start, stop, step));
+        data->convertible = storage;
     }
-
-    data->convertible = storage;
 }
 
 /** The actual struct used to control the conversion */
@@ -86,6 +90,7 @@ struct Slice_from_python
     */
     static void* convertible(PyObject* obj_ptr)
     {
+        auto raii = boost::python::release_gil_policy::acquire_gil();
         if ( PySlice_Check(obj_ptr) )
         {
              return obj_ptr;
