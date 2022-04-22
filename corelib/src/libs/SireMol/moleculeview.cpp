@@ -786,7 +786,7 @@ Segment MoleculeView::segment(const SegID &segid, const PropertyMap &map) const
 Selector<Segment> MoleculeView::segments(const QString &name,
                                          const PropertyMap &map) const
 {
-    return this->segments(name, map);
+    return this->segments(SegName(name), map);
 }
 
 Selector<Segment> MoleculeView::segments(const Slice &slice,

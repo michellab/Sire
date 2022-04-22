@@ -531,19 +531,7 @@ namespace bp = boost::python;
 
 #include "SireMol/moleculeinfo.h"
 
-#include "Helpers/release_gil_policy.hpp"
-
-void exception_translator( const std::exception &ex )
-{
-    qDebug() << CODELOC;
-    auto raii = boost::python::release_gil_policy::acquire_gil();
-    PyErr_SetString(PyExc_UserWarning,
-                    "SIREMOL HANDLER");
-}
-
 BOOST_PYTHON_MODULE(_Mol){
-
-    bp::register_exception_translator<std::exception>(exception_translator);
 
     register_SireMol_objects();
 

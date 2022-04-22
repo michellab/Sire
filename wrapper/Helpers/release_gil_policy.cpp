@@ -10,7 +10,6 @@
 boost::python::detail::GilHolder::GilHolder() : thread_state(0)
 {
     #ifndef SIRE_DISABLE_GIL_POLICY
-        qDebug() << "RELEASE GIL";
         thread_state = PyEval_SaveThread();
     #endif
 }
@@ -26,7 +25,6 @@ boost::python::detail::GilHolder::~GilHolder()
             }
             else
             {
-                qDebug() << "ACQUIRE GIL";
                 PyEval_RestoreThread(thread_state);
             }
         }
@@ -43,8 +41,10 @@ boost::python::detail::GilRaiiData::~GilRaiiData()
         {
             qDebug() << "WARNING - DOUBLE HOLD GIL - POTENTIAL FOR DEADLOCK!";
         }
-
-        boost::python::release_gil_policy::gil.setLocalData(new boost::python::detail::GilHolder());
+        else
+        {
+            boost::python::release_gil_policy::gil.setLocalData(new boost::python::detail::GilHolder());
+        }
     #endif
 }
 
@@ -78,6 +78,34 @@ boost::python::GilRaii boost::python::release_gil_policy::acquire_gil()
         {
             return GilRaii(false);
         }
+    #endif
+}
+
+/** Acquire the GIL without handling via a RAII object */
+void boost::python::release_gil_policy::acquire_gil_no_raii()
+{
+    #ifndef SIRE_DISABLE_GIL_POLICY
+        if (gil.hasLocalData())
+        {
+            gil.setLocalData(0);
+        }
+    #endif
+}
+
+/** Release the GIL without handling via a RAII object. You will
+    need to match this with a call to re-acquire the GIL before
+    you go back to Python
+*/
+void boost::python::release_gil_policy::release_gil_no_raii()
+{
+    #ifndef SIRE_DISABLE_GIL_POLICY
+        if (boost::python::release_gil_policy::gil.hasLocalData())
+        {
+            qDebug() << "WARNING - DOUBLE HOLD GIL - POTENTIAL FOR DEADLOCK!";
+            return;
+        }
+
+        boost::python::release_gil_policy::gil.setLocalData(new boost::python::detail::GilHolder());
     #endif
 }
 

@@ -66,6 +66,8 @@ namespace boost {
             }
 
             static GilRaii acquire_gil();
+            static void acquire_gil_no_raii();
+            static void release_gil_no_raii();
 
             typedef default_result_converter result_converter;
             typedef PyObject* argument_package;
