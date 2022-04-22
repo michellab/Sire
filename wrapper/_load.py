@@ -36,6 +36,51 @@ def _create_dir(directory):
         raise IOError(f"{directory} is not a directory!")
 
 
+def _get_gromacs_dir():
+    import os
+
+    if "GROMACS_HOME" in os.environ:
+        gromacs_dir = os.environ["GROMACS_HOME"]
+        if os.path.exists(gromacs_dir) and os.path.isdir(gromacs_dir):
+            return gromacs_dir
+
+    import Sire.Config
+
+    gromacs_dir = os.path.join(Sire.Config.share_directory, "gromacs")
+
+    if os.path.exists(gromacs_dir):
+        return gromacs_dir
+
+    # it doesn't exist, so we need to download it
+    gromacs_tbz2 = os.path.join(Sire.Config.share_directory, "gromacs.tar.bz2")
+
+    if not os.path.exists(gromacs_tbz2):
+        try:
+            import urllib.request
+            urllib.request.urlretrieve(f"{tutorial_url}/gromacs.tar.bz2",
+                                       gromacs_tbz2)
+        except Exception:
+            # we cannot download - just give up
+            return None
+
+    if not os.path.exists(gromacs_tbz2):
+        return None
+
+    try:
+        import tarfile
+    except Exception:
+        return None
+
+    t = tarfile.open(gromacs_tbz2, "r|bz2")
+
+    t.extractall(path=Sire.Config.share_directory)
+
+    if os.path.exists(gromacs_dir):
+        return gromacs_dir
+    else:
+        return None
+
+
 def _resolve_path(path, directory):
     import os
 
