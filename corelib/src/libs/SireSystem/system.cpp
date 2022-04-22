@@ -614,13 +614,19 @@ System& System::operator-=(const Constraints &constraints)
 }
 
 /** Set the name of this system */
-void System::setName(const QString &newname)
+void System::setName(const SysName &newname)
 {
-    if (sysname != SysName(newname))
+    if (sysname != newname)
     {
-        sysname = SysName(newname);
+        sysname = newname;
         sysversion.incrementMajor();
     }
+}
+
+/** Set the name of this system */
+void System::setName(const QString &newname)
+{
+    this->setName(SysName(newname));
 }
 
 /** Collect statistics about the current configuration */

@@ -160,6 +160,7 @@ public:
     const Version& version() const;
     quint32 subVersion() const;
 
+    void setName(const SysName &newname);
     void setName(const QString &newname);
 
     void collectStats();

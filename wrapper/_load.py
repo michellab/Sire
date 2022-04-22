@@ -187,6 +187,7 @@ def load(path: _Union[str, _List[str]], *args, **kwargs):
         grp.add(mol)
 
     s = System()
+    s.setName(mols.name())
     s.add(grp)
 
     for key in mols.propertyKeys():
