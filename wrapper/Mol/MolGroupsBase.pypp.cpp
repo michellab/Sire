@@ -1132,6 +1132,30 @@ void register_MolGroupsBase_class(){
                 , "Return the complete set of all molecules in the group(s) that\nmatch the ID mgid. If a view of a molecule appears multiple times\nin this set then multiple copies of that view will be placed into the\nreturned molecules object.\nNote that this is potentially a very slow function\n" );
         
         }
+        { //::SireMol::MolGroupsBase::nAtoms
+        
+            typedef int ( ::SireMol::MolGroupsBase::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireMol::MolGroupsBase::nAtoms );
+            
+            MolGroupsBase_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MolGroupsBase::nChains
+        
+            typedef int ( ::SireMol::MolGroupsBase::*nChains_function_type)(  ) const;
+            nChains_function_type nChains_function_value( &::SireMol::MolGroupsBase::nChains );
+            
+            MolGroupsBase_exposer.def( 
+                "nChains"
+                , nChains_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::MolGroupsBase::nGroups
         
             typedef int ( ::SireMol::MolGroupsBase::*nGroups_function_type)(  ) const;
@@ -1154,6 +1178,30 @@ void register_MolGroupsBase_class(){
                 , nMolecules_function_value
                 , bp::release_gil_policy()
                 , "Return the total number of molecules in the groups in this set" );
+        
+        }
+        { //::SireMol::MolGroupsBase::nResidues
+        
+            typedef int ( ::SireMol::MolGroupsBase::*nResidues_function_type)(  ) const;
+            nResidues_function_type nResidues_function_value( &::SireMol::MolGroupsBase::nResidues );
+            
+            MolGroupsBase_exposer.def( 
+                "nResidues"
+                , nResidues_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MolGroupsBase::nSegments
+        
+            typedef int ( ::SireMol::MolGroupsBase::*nSegments_function_type)(  ) const;
+            nSegments_function_type nSegments_function_value( &::SireMol::MolGroupsBase::nSegments );
+            
+            MolGroupsBase_exposer.def( 
+                "nSegments"
+                , nSegments_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::MolGroupsBase::nViews

@@ -715,6 +715,54 @@ void register_MoleculeView_class(){
                 , "Return the molecule involved with this view" );
         
         }
+        { //::SireMol::MoleculeView::nAtoms
+        
+            typedef int ( ::SireMol::MoleculeView::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireMol::MoleculeView::nAtoms );
+            
+            MoleculeView_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::nChains
+        
+            typedef int ( ::SireMol::MoleculeView::*nChains_function_type)(  ) const;
+            nChains_function_type nChains_function_value( &::SireMol::MoleculeView::nChains );
+            
+            MoleculeView_exposer.def( 
+                "nChains"
+                , nChains_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::nResidues
+        
+            typedef int ( ::SireMol::MoleculeView::*nResidues_function_type)(  ) const;
+            nResidues_function_type nResidues_function_value( &::SireMol::MoleculeView::nResidues );
+            
+            MoleculeView_exposer.def( 
+                "nResidues"
+                , nResidues_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::nSegments
+        
+            typedef int ( ::SireMol::MoleculeView::*nSegments_function_type)(  ) const;
+            nSegments_function_type nSegments_function_value( &::SireMol::MoleculeView::nSegments );
+            
+            MoleculeView_exposer.def( 
+                "nSegments"
+                , nSegments_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::MoleculeView::nViews
         
             typedef int ( ::SireMol::MoleculeView::*nViews_function_type)(  ) const;

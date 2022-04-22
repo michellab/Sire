@@ -863,6 +863,30 @@ void register_MoleculeGroup_class(){
                 , "Return all views of all of the molecules in this group" );
         
         }
+        { //::SireMol::MoleculeGroup::nAtoms
+        
+            typedef int ( ::SireMol::MoleculeGroup::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireMol::MoleculeGroup::nAtoms );
+            
+            MoleculeGroup_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeGroup::nChains
+        
+            typedef int ( ::SireMol::MoleculeGroup::*nChains_function_type)(  ) const;
+            nChains_function_type nChains_function_value( &::SireMol::MoleculeGroup::nChains );
+            
+            MoleculeGroup_exposer.def( 
+                "nChains"
+                , nChains_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::MoleculeGroup::nMolecules
         
             typedef int ( ::SireMol::MoleculeGroup::*nMolecules_function_type)(  ) const;
@@ -873,6 +897,30 @@ void register_MoleculeGroup_class(){
                 , nMolecules_function_value
                 , bp::release_gil_policy()
                 , "Return the number of molecules in this group" );
+        
+        }
+        { //::SireMol::MoleculeGroup::nResidues
+        
+            typedef int ( ::SireMol::MoleculeGroup::*nResidues_function_type)(  ) const;
+            nResidues_function_type nResidues_function_value( &::SireMol::MoleculeGroup::nResidues );
+            
+            MoleculeGroup_exposer.def( 
+                "nResidues"
+                , nResidues_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeGroup::nSegments
+        
+            typedef int ( ::SireMol::MoleculeGroup::*nSegments_function_type)(  ) const;
+            nSegments_function_type nSegments_function_value( &::SireMol::MoleculeGroup::nSegments );
+            
+            MoleculeGroup_exposer.def( 
+                "nSegments"
+                , nSegments_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::MoleculeGroup::nViews
