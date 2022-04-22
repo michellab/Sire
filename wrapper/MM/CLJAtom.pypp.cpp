@@ -80,7 +80,6 @@ void register_CLJAtom_class(){
                 "buildFrom"
                 , buildFrom_function_value
                 , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Construct an array of CLJAtom atoms from the passed molecule view" );
         
         }

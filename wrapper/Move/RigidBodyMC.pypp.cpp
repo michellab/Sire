@@ -182,7 +182,6 @@ void register_RigidBodyMC_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Attempt n rigid body moves of the views of the system system" );
         
         }
@@ -450,7 +449,6 @@ void register_RigidBodyMC_class(){
                 "setReflectionVolume"
                 , setReflectionVolume_function_value
                 , ( bp::arg("molecule"), bp::arg("radius"), bp::arg("heavy_atoms_only"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Turn on and specify the reflection volume by using the coordinates of\nall of the atoms in the passed molecule view (excluding light atoms\nif heavy_atoms_only is true)" );
         
         }
@@ -463,7 +461,6 @@ void register_RigidBodyMC_class(){
                 "setReflectionVolume"
                 , setReflectionVolume_function_value
                 , ( bp::arg("molecule"), bp::arg("radius"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Turn on and specify the reflection volume by using the coordinates of\nall of the heavy atoms in the passed molecule view" );
         
         }

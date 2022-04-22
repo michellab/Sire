@@ -100,7 +100,6 @@ void register_InternalMoveSingle_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Actually perform nmoves moves of the molecules in the\nsystem system, optionally recording simulation statistics\nif record_stats is true" );
         
         }

@@ -236,7 +236,6 @@ void register_MoleculeView_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the atom in this view that matches the ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_atom\n" );
         
         }
@@ -249,7 +248,6 @@ void register_MoleculeView_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the atom in this view that matches the ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_atom\n" );
         
         }
@@ -262,7 +260,6 @@ void register_MoleculeView_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the atom in this view that matches the ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_atom\n" );
         
         }
@@ -287,7 +284,6 @@ void register_MoleculeView_class(){
                 "atoms"
                 , atoms_function_value
                 , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the atoms from this view that match the ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -300,7 +296,6 @@ void register_MoleculeView_class(){
                 "atoms"
                 , atoms_function_value
                 , ( bp::arg("slice"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the atoms from this view that match the ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -313,7 +308,6 @@ void register_MoleculeView_class(){
                 "atoms"
                 , atoms_function_value
                 , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the atoms from this view that match the ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -338,7 +332,6 @@ void register_MoleculeView_class(){
                 "chain"
                 , chain_function_value
                 , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the chain that is involved with this view that matches\nthe ID chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
@@ -351,7 +344,6 @@ void register_MoleculeView_class(){
                 "chain"
                 , chain_function_value
                 , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the chain that is involved with this view that matches\nthe ID chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
@@ -364,7 +356,6 @@ void register_MoleculeView_class(){
                 "chain"
                 , chain_function_value
                 , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the chain that is involved with this view that matches\nthe ID chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
@@ -389,7 +380,6 @@ void register_MoleculeView_class(){
                 "chains"
                 , chains_function_value
                 , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the chains that are involved with this view that match\nthe ID chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
@@ -402,7 +392,6 @@ void register_MoleculeView_class(){
                 "chains"
                 , chains_function_value
                 , ( bp::arg("slice"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the chains that are involved with this view that match\nthe ID chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
@@ -415,7 +404,6 @@ void register_MoleculeView_class(){
                 "chains"
                 , chains_function_value
                 , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the chains that are involved with this view that match\nthe ID chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
@@ -464,7 +452,6 @@ void register_MoleculeView_class(){
                 "cutGroup"
                 , cutGroup_function_value
                 , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the CutGroup whose atoms are in this view that matches\nthe ID in cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_cutgroup\n" );
         
         }
@@ -477,7 +464,6 @@ void register_MoleculeView_class(){
                 "cutGroup"
                 , cutGroup_function_value
                 , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the CutGroup whose atoms are in this view that matches\nthe ID in cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_cutgroup\n" );
         
         }
@@ -490,7 +476,6 @@ void register_MoleculeView_class(){
                 "cutGroup"
                 , cutGroup_function_value
                 , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the CutGroup whose atoms are in this view that matches\nthe ID in cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_cutgroup\n" );
         
         }
@@ -515,7 +500,6 @@ void register_MoleculeView_class(){
                 "cutGroups"
                 , cutGroups_function_value
                 , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the CutGroups whose atoms are in this view that match\nthe ID in cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
@@ -528,7 +512,6 @@ void register_MoleculeView_class(){
                 "cutGroups"
                 , cutGroups_function_value
                 , ( bp::arg("slice"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the CutGroups whose atoms are in this view that match\nthe ID in cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
@@ -541,7 +524,6 @@ void register_MoleculeView_class(){
                 "cutGroups"
                 , cutGroups_function_value
                 , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the CutGroups whose atoms are in this view that match\nthe ID in cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
@@ -899,7 +881,6 @@ void register_MoleculeView_class(){
                 "residue"
                 , residue_function_value
                 , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the residue from this view that matches the ID resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_residue\n" );
         
         }
@@ -912,7 +893,6 @@ void register_MoleculeView_class(){
                 "residue"
                 , residue_function_value
                 , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the residue from this view that matches the ID resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_residue\n" );
         
         }
@@ -925,7 +905,6 @@ void register_MoleculeView_class(){
                 "residue"
                 , residue_function_value
                 , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the residue from this view that matches the ID resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_residue\n" );
         
         }
@@ -950,7 +929,6 @@ void register_MoleculeView_class(){
                 "residues"
                 , residues_function_value
                 , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the residues from this view that match the ID resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -963,7 +941,6 @@ void register_MoleculeView_class(){
                 "residues"
                 , residues_function_value
                 , ( bp::arg("slice"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the residues from this view that match the ID resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -976,7 +953,6 @@ void register_MoleculeView_class(){
                 "residues"
                 , residues_function_value
                 , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the residues from this view that match the ID resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1014,7 +990,6 @@ void register_MoleculeView_class(){
                 "segment"
                 , segment_function_value
                 , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the segment that is involved with this view that matches\nthe ID segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_segment\n" );
         
         }
@@ -1027,7 +1002,6 @@ void register_MoleculeView_class(){
                 "segment"
                 , segment_function_value
                 , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the segment that is involved with this view that matches\nthe ID segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_segment\n" );
         
         }
@@ -1040,7 +1014,6 @@ void register_MoleculeView_class(){
                 "segment"
                 , segment_function_value
                 , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the segment that is involved with this view that matches\nthe ID segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_segment\n" );
         
         }
@@ -1065,7 +1038,6 @@ void register_MoleculeView_class(){
                 "segments"
                 , segments_function_value
                 , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the segments that are involved with this view that match\nthe ID segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1078,7 +1050,6 @@ void register_MoleculeView_class(){
                 "segments"
                 , segments_function_value
                 , ( bp::arg("slice"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the segments that are involved with this view that match\nthe ID segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1091,7 +1062,6 @@ void register_MoleculeView_class(){
                 "segments"
                 , segments_function_value
                 , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the segments that are involved with this view that match\nthe ID segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1116,7 +1086,6 @@ void register_MoleculeView_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the CutGroup whose atoms are in this view that matches\nthe ID in cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_cutgroup\n" );
         
         }
@@ -1129,7 +1098,6 @@ void register_MoleculeView_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the residue from this view that matches the ID resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_residue\n" );
         
         }
@@ -1142,7 +1110,6 @@ void register_MoleculeView_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the chain that is involved with this view that matches\nthe ID chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
@@ -1155,7 +1122,6 @@ void register_MoleculeView_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the segment that is involved with this view that matches\nthe ID segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_segment\n" );
         
         }
@@ -1168,7 +1134,6 @@ void register_MoleculeView_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the atom in this view that matches the ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_atom\n" );
         
         }
@@ -1181,7 +1146,6 @@ void register_MoleculeView_class(){
                 "selectAll"
                 , selectAll_function_value
                 , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the atoms from this view that match the ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1206,7 +1170,6 @@ void register_MoleculeView_class(){
                 "selectAll"
                 , selectAll_function_value
                 , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the CutGroups whose atoms are in this view that match\nthe ID in cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1219,7 +1182,6 @@ void register_MoleculeView_class(){
                 "selectAll"
                 , selectAll_function_value
                 , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the residues from this view that match the ID resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -1232,7 +1194,6 @@ void register_MoleculeView_class(){
                 "selectAll"
                 , selectAll_function_value
                 , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the chains that are involved with this view that match\nthe ID chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
@@ -1245,7 +1206,6 @@ void register_MoleculeView_class(){
                 "selectAll"
                 , selectAll_function_value
                 , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the segments that are involved with this view that match\nthe ID segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }

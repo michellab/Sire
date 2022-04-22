@@ -105,7 +105,6 @@ void register_MTSMC_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Perform the move - this will perform nfastmoves using fastmoves,\nand will then accept or reject the result based on the difference\nin the difference in energy between the fast and slow energies\nbefore and after the moves" );
         
         }

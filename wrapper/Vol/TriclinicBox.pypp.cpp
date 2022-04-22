@@ -389,7 +389,6 @@ void register_TriclinicBox_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("groups"), bp::arg("center"), bp::arg("translate_as_one")=(bool)(false) )
-                , bp::release_gil_policy()
                 , "Return the closest periodic copy of each group in groups to the\npoint point, according to the minimum image convention.\nThe effect of this is to move each group into the box which is\nnow centered on point. If translate_as_one is true,\nthen this treats all groups as being part of one larger\ngroup, and so it translates it together. This is useful\nto get the minimum image of a molecule as a whole, rather\nthan breaking the molecule across a box boundary" );
         
         }

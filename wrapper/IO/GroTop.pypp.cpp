@@ -384,7 +384,6 @@ void register_GroTop_class(){
                 "includePath"
                 , includePath_function_value
                 , ( bp::arg("absolute_paths")=(bool)(false) )
-                , bp::release_gil_policy()
                 , "Return the list of names of directories in which to search for\ninclude files. The directories are either absolute, or relative\nto the current directory. If absolute_paths is true then\nthe full absolute paths for directories that exist on this\nmachine will be returned" );
         
         }
@@ -397,7 +396,6 @@ void register_GroTop_class(){
                 "includedFiles"
                 , includedFiles_function_value
                 , ( bp::arg("absolute_paths")=(bool)(false) )
-                , bp::release_gil_policy()
                 , "Return the list of names of files that were included when reading or\nwriting this file. The files are relative. If absolute_paths\nis true then the full absolute paths for the files will be\nused" );
         
         }

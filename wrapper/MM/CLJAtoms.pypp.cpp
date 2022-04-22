@@ -123,7 +123,6 @@ void register_CLJAtoms_class(){
                 "append"
                 , append_function_value
                 , ( bp::arg("atoms"), bp::arg("n")=(int)(-1) )
-                , bp::release_gil_policy()
                 , "Append the passed set of atoms onto the end of this set. If n is greater than or\nequal to zero, then only n of the passed atoms will be added onto this set" );
         
         }
@@ -435,7 +434,6 @@ void register_CLJAtoms_class(){
                 "reconstruct"
                 , reconstruct_function_value
                 , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -448,7 +446,6 @@ void register_CLJAtoms_class(){
                 "reconstruct"
                 , reconstruct_function_value
                 , ( bp::arg("molecule"), bp::arg("id_source"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }

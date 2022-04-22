@@ -147,7 +147,6 @@ void register_NullParser_class(){
                 "toSystem"
                 , toSystem_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -160,7 +159,6 @@ void register_NullParser_class(){
                 "toSystem"
                 , toSystem_function_value
                 , ( bp::arg("other"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -173,7 +171,6 @@ void register_NullParser_class(){
                 "toSystem"
                 , toSystem_function_value
                 , ( bp::arg("others"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -248,7 +248,6 @@ void register_SupraSubSystem_class(){
                 "subMove"
                 , subMove_function_value
                 , ( bp::arg("record_stats")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Perform the sub-system moves on this sub-system. This performs\nthe moves in this->subMoves() on this->subSystem(), collecting\nstatistics both during the block of sub-moves, and then after\nthe block of sub-moves if recording_statistics is true,\nand if sysmon.recordingSubStatistics() and\nsysmon.recordingStatistics() are true respectively.\nThrow: SireError::invalid_state\n" );
         
         }

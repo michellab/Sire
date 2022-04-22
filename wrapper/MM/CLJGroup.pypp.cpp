@@ -58,7 +58,6 @@ void register_CLJGroup_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add the passed molecule to this group" );
         
         }
@@ -71,7 +70,6 @@ void register_CLJGroup_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add all of the passed molecules to this group" );
         
         }
@@ -84,7 +82,6 @@ void register_CLJGroup_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add all of the passed molecules to this group" );
         
         }

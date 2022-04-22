@@ -2111,7 +2111,6 @@ void register_MolGroupsBase_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update the copies in this set of the molecule viewed in molview\nto use the same version as molview" );
         
         }
@@ -2124,7 +2123,6 @@ void register_MolGroupsBase_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molview"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update the copies in this set of the molecule viewed in molview\nto use the same version as molview" );
         
         }
@@ -2137,7 +2135,6 @@ void register_MolGroupsBase_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update the copies in this set of the molecule viewed in molview\nto use the same version as molview" );
         
         }
@@ -2150,7 +2147,6 @@ void register_MolGroupsBase_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update the copies in this set of the molecule viewed in molview\nto use the same version as molview" );
         
         }

@@ -88,7 +88,6 @@ void register_AM1BCC_class(){
                 "mayChangeCharges"
                 , mayChangeCharges_function_value
                 , ( bp::arg("oldmol"), bp::arg("newmol"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "This returns whether or not the charges will change when going\nfrom oldmol to newmol - note that this assumes that the\ncharges in oldmol are already AM1BCC charges If they are\nnot, then this will give the wrong answer" );
         
         }

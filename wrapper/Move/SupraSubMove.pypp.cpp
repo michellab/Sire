@@ -50,7 +50,6 @@ void register_SupraSubMove_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("n_supra_moves"), bp::arg("n_supra_moves_per_block"), bp::arg("record_stats")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -179,7 +179,6 @@ void register_DihedralID_class(){
                 "size"
                 , size_function_value
                 , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the size of this dihedral in the molecule whose data\nis in moldata, using map to find the coordinates property\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -192,7 +191,6 @@ void register_DihedralID_class(){
                 "size"
                 , size_function_value
                 , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("mol2data"), bp::arg("mol3data"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the size of the dihedral between atom0() in the\nmolecule whose data is in mol0data, atom1() in the\nmolecule whose data is in mol1data, atom2() in\nthe molecule whose data is in mol2data, and\natom3() in the molecule whose data is in mol3data,\nusing map to find the coordinates property of the\nmolecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -230,7 +228,6 @@ void register_DihedralID_class(){
                 "torsion"
                 , torsion_function_value
                 , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the geometric torsion formed by the four atoms\nof this dihedral in the molecule whose data is in moldata,\nusing map to find the coordinates property.\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -243,7 +240,6 @@ void register_DihedralID_class(){
                 "torsion"
                 , torsion_function_value
                 , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("mol2data"), bp::arg("mol3data"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the geometric torsion formed by the four atoms,\natom0() in the molecule whose data is in mol0data,\natom1() from mol1data, atom2() from mol2data, and\natom3() from mol3data,\nusing map to find the coordinates property of\nthe molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }

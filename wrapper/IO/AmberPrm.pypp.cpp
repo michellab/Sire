@@ -304,7 +304,6 @@ void register_AmberPrm_class(){
                 "getMolecule"
                 , getMolecule_function_value
                 , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the ith molecule that is described by this AmberPrm file. Note\nthat this molecule wont have any coordinate data, as this is not\nprovided in this file" );
         
         }
@@ -317,7 +316,6 @@ void register_AmberPrm_class(){
                 "getMolecule"
                 , getMolecule_function_value
                 , ( bp::arg("i"), bp::arg("rst"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the ith molecule that is described by this AmberPrm file, getting\nthe coordinate (and possibly velocity) data from the passed AmberRst file" );
         
         }
@@ -564,7 +562,6 @@ void register_AmberPrm_class(){
                 "parse"
                 , parse_function_value
                 , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return an AmberPrm object parsed from the passed file" );
         
         }

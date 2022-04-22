@@ -271,7 +271,6 @@ void register_Moves_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves")=(int)(1), bp::arg("record_stats")=(bool)(false) )
-                , bp::release_gil_policy()
                 , "" );
         
         }

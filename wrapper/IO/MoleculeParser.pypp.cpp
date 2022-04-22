@@ -237,7 +237,6 @@ void register_MoleculeParser_class(){
                 "load"
                 , load_function_value
                 , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Synonym for MoleculeParser::read" );
         
         }
@@ -250,7 +249,6 @@ void register_MoleculeParser_class(){
                 "load"
                 , load_function_value
                 , ( bp::arg("file1"), bp::arg("file2"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Synonym for MoleculeParser::read" );
         
         }
@@ -263,7 +261,6 @@ void register_MoleculeParser_class(){
                 "load"
                 , load_function_value
                 , ( bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Synonym for MoleculeParser::read" );
         
         }
@@ -288,7 +285,6 @@ void register_MoleculeParser_class(){
                 "parse"
                 , parse_function_value
                 , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Parse the passed set of files, returning the resulting Parsers" );
         
         }
@@ -301,7 +297,6 @@ void register_MoleculeParser_class(){
                 "parse"
                 , parse_function_value
                 , ( bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Parse the passed set of files, returning the resulting Parsers" );
         
         }
@@ -314,7 +309,6 @@ void register_MoleculeParser_class(){
                 "read"
                 , read_function_value
                 , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Read the files with passed filenames, returning the System contained therein.\nNote that all of the files must be connected to the same system\n(i.e. it could be the Amber Parm and Rst file)" );
         
         }
@@ -327,7 +321,6 @@ void register_MoleculeParser_class(){
                 "read"
                 , read_function_value
                 , ( bp::arg("file1"), bp::arg("file2"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Read the two passed files, returning the System contained therein. The two\nfiles must refer to the same System, i.e. they could be a parameter + coordinate file" );
         
         }
@@ -340,7 +333,6 @@ void register_MoleculeParser_class(){
                 "read"
                 , read_function_value
                 , ( bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Read the files with passed filenames, returning the System contained therein.\nNote that all of the files must be connected to the same system\n(i.e. it could be the Amber Parm and Rst file)" );
         
         }
@@ -353,7 +345,6 @@ void register_MoleculeParser_class(){
                 "save"
                 , save_function_value
                 , ( bp::arg("system"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Synonym of MoleculeParser::write" );
         
         }
@@ -366,7 +357,6 @@ void register_MoleculeParser_class(){
                 "save"
                 , save_function_value
                 , ( bp::arg("system"), bp::arg("file1"), bp::arg("file2"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Synonym of MoleculeParser::write" );
         
         }
@@ -379,7 +369,6 @@ void register_MoleculeParser_class(){
                 "save"
                 , save_function_value
                 , ( bp::arg("system"), bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Synonym of MoleculeParser::write" );
         
         }
@@ -429,7 +418,6 @@ void register_MoleculeParser_class(){
                 "toSystem"
                 , toSystem_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the System that is constructed from the data in this parser" );
         
         }
@@ -442,7 +430,6 @@ void register_MoleculeParser_class(){
                 "toSystem"
                 , toSystem_function_value
                 , ( bp::arg("other"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the System that is constructed from the data in the two\npassed parsers (i.e. representing a topology and a coordinate file)" );
         
         }
@@ -455,7 +442,6 @@ void register_MoleculeParser_class(){
                 "toSystem"
                 , toSystem_function_value
                 , ( bp::arg("others"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the System that is constructed from the information in the passed\nparsers. This will parse the information in order, meaning that data contained\nin earlier parsers may be overwritten by data from later parsers" );
         
         }
@@ -492,7 +478,6 @@ void register_MoleculeParser_class(){
                 "write"
                 , write_function_value
                 , ( bp::arg("system"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Save the passed System to the file called filename. First, the fileformat\nproperty is looked at in map. This is used to set the format(s) of\nthe files that are written (comma-separated list).\nIf this does not exist, then the extension of the\nfile is used to work out which format to use. If no extension is given,\nthen the System will be queried to find out its preferred format (normally\nthe format it was loaded with), via its fileformat property\n(again, comma separated list).\nIf their preferred format results in multiple files, then\nmultiple files will be written. This returns the full pathnames to\nall of the files that are written\n" );
         
         }
@@ -505,7 +490,6 @@ void register_MoleculeParser_class(){
                 "write"
                 , write_function_value
                 , ( bp::arg("system"), bp::arg("file1"), bp::arg("file2"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Extension of MoleculeParser::write which allows you to specify two filenames.\nThe same rules to locate the fileformats are now used, except now only two\nfiles are permitted to be written" );
         
         }
@@ -518,7 +502,6 @@ void register_MoleculeParser_class(){
                 "write"
                 , write_function_value
                 , ( bp::arg("system"), bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Extension of MoleculeParser::write which allows many filenames.\nThe same rules to locate the fileformats are now used, except that now only\nthe number of files written must match the number of filenames" );
         
         }

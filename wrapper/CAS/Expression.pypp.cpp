@@ -160,7 +160,6 @@ void register_Expression_class(){
                 "diff"
                 , diff_function_value
                 , ( bp::arg("symbol"), bp::arg("level")=(int)(1) )
-                , bp::release_gil_policy()
                 , "Synonym for differentiate" );
         
         }
@@ -173,7 +172,6 @@ void register_Expression_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol"), bp::arg("level")=(int)(1) )
-                , bp::release_gil_policy()
                 , "Differentiate this expression with respect to symbol and return\nthe resulting expression.\nThrow: SireCAS::unavailable_differential\n" );
         
         }
@@ -581,7 +579,6 @@ void register_Expression_class(){
                 "simplify"
                 , simplify_function_value
                 , ( bp::arg("options")=(int)(0) )
-                , bp::release_gil_policy()
                 , "Try to simplify this expression by using built-in identities. If\nSireCAS::UNSAFE_COMPLEX_SIMPLIFICATIONS is passed, then allow the use\nof identities that are not necessarily true in the complex domain,\ne.g. z = sin(arcsin(z))" );
         
         }

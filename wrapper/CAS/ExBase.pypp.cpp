@@ -239,7 +239,6 @@ void register_ExBase_class(){
                 "simplify"
                 , simplify_function_value
                 , ( bp::arg("options")=(int)(0) )
-                , bp::release_gil_policy()
                 , "Try to simplify this expression. This will try to use known mathematical\nidentities to convert complex expressions down to more simple ones.\nIf SireCAS::UNSAFE_COMPLEX_SIMPLIFICATIONS is true, then identities\nthat are not safe for complex math are used, e.g. z = sin(arcsin(z))." );
         
         }

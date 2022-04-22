@@ -41,7 +41,6 @@ void register_NullSupraMove_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Perform the null move - this does nothing" );
         
         }

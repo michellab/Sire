@@ -141,7 +141,6 @@ void register_RestraintFF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("scale_energy")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -154,7 +153,6 @@ void register_RestraintFF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("symbol"), bp::arg("scale_energy")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -167,7 +165,6 @@ void register_RestraintFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -180,7 +177,6 @@ void register_RestraintFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -193,7 +189,6 @@ void register_RestraintFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -206,7 +201,6 @@ void register_RestraintFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -219,7 +213,6 @@ void register_RestraintFF_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the forces on the molecules in forcetable caused\nby the restraints in this forcefield and add them onto the\nforcetable, optionally scaled by scale_force" );
         
         }
@@ -232,7 +225,6 @@ void register_RestraintFF_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("symbol"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the forces on the molecules in forcetable caused by\nthe energy component symbol in this forcefield, and add them\nonto the forcetable, optionally scaled by scale_force\nThrow: SireFF::missing_component\n" );
         
         }
@@ -310,7 +302,6 @@ void register_RestraintFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -323,7 +314,6 @@ void register_RestraintFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -336,7 +326,6 @@ void register_RestraintFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("probe"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -349,7 +338,6 @@ void register_RestraintFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }

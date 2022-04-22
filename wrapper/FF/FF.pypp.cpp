@@ -775,7 +775,6 @@ void register_FF_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update this forcefield so that it uses the version of the molecule\nthat is present in moldata - this does nothing if this molecule\nis not in this forcefield. This uses the existing property names\nto find the updated properties that contain the forcefield parameters\nfor this molecule. If you want to change the property names, then you\nmust remove the molecule, then re-add it with the new names.\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -788,7 +787,6 @@ void register_FF_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molview"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update the data of the molecule that is view in molview. This\nupdates all atoms, even those that are not part of the view" );
         
         }
@@ -801,7 +799,6 @@ void register_FF_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update the molecules in this forcefield so that they have the\nsame version as in molecules. The molecules will use the existing\nproperty names to find the properties that contain the forcefield\nparameters. If you want to change the property names, then you\nmust remove the molecule, then re-add it with the new names\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -814,7 +811,6 @@ void register_FF_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update this forcefield so that it has the same version molecules\nas those contained in molgroup.\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }

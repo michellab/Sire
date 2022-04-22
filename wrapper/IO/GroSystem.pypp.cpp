@@ -98,7 +98,6 @@ void register_GroSystem_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("moltype"), bp::arg("ncopies")=(int)(1) )
-                , bp::release_gil_policy()
                 , "Add (optionally ncopies) copies of the molecule with type moltype\nto the system" );
         
         }

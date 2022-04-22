@@ -519,7 +519,6 @@ void register_MoleculeGroups_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update all of the groups to use the version of the molecule\npresent in moldata" );
         
         }
@@ -532,7 +531,6 @@ void register_MoleculeGroups_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update all of the groups to use the versions of the molecules\nheld in molecules" );
         
         }
@@ -545,7 +543,6 @@ void register_MoleculeGroups_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update the group molgroup. If this group is in this set,\nthen it updates the group to the same version. Then, regardless\nof whether the group is in this set, it then updates all\nmolecules in all of the groups so that they have the same\nversion number as molgroup. This does nothing if\nmolgroup and none of its molecules are in this set" );
         
         }

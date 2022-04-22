@@ -302,7 +302,6 @@ void register_Condition_class(){
                 "simplify"
                 , simplify_function_value
                 , ( bp::arg("options")=(int)(0) )
-                , bp::release_gil_policy()
                 , "Simplify this condition" );
         
         }

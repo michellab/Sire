@@ -99,7 +99,6 @@ void register_BondID_class(){
                 "length"
                 , length_function_value
                 , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the length of this bond in the molecule whose data\nis in moldata, using map to find the coordinates property\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -112,7 +111,6 @@ void register_BondID_class(){
                 "length"
                 , length_function_value
                 , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the length of the bond from atom0() in the\nmolecule whose data is in mol0data to atom1() in the\nmolecule whose data is in mol1data, using map\nto the find the coordinates properties both molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -192,7 +190,6 @@ void register_BondID_class(){
                 "size"
                 , size_function_value
                 , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Synonym for BondID::length(const MoleculeData&, const PropertyMap&)\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -205,7 +202,6 @@ void register_BondID_class(){
                 "size"
                 , size_function_value
                 , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Synonym for BondID::length(const MoleculeData&, const MoleculeData&,\nconst PropertyMap&)\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -255,7 +251,6 @@ void register_BondID_class(){
                 "vector"
                 , vector_function_value
                 , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the vector that goes from atom0() to atom1() in the\nmolecule whose data is in moldata, using the supplied\nproperty map to find the property that contains the\ncoordinates to be used\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -268,7 +263,6 @@ void register_BondID_class(){
                 "vector"
                 , vector_function_value
                 , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the vector that goes from atom0() in the molecule\nwhose data is in mol0data to atom1() in the molecule\nwhose data is in mol1data, using the supplied map\nto find the coordinates property in both molecules.\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }

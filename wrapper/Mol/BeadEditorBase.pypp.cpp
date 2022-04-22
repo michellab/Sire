@@ -92,7 +92,6 @@ void register_BeadEditorBase_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -106,7 +105,6 @@ void register_BeadEditorBase_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -120,7 +118,6 @@ void register_BeadEditorBase_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -147,7 +144,6 @@ void register_BeadEditorBase_class(){
                 "chain"
                 , chain_function_value
                 , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -161,7 +157,6 @@ void register_BeadEditorBase_class(){
                 "chain"
                 , chain_function_value
                 , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -175,7 +170,6 @@ void register_BeadEditorBase_class(){
                 "chain"
                 , chain_function_value
                 , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -202,7 +196,6 @@ void register_BeadEditorBase_class(){
                 "cutGroup"
                 , cutGroup_function_value
                 , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -216,7 +209,6 @@ void register_BeadEditorBase_class(){
                 "cutGroup"
                 , cutGroup_function_value
                 , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -230,7 +222,6 @@ void register_BeadEditorBase_class(){
                 "cutGroup"
                 , cutGroup_function_value
                 , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -444,7 +435,6 @@ void register_BeadEditorBase_class(){
                 "residue"
                 , residue_function_value
                 , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -458,7 +448,6 @@ void register_BeadEditorBase_class(){
                 "residue"
                 , residue_function_value
                 , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -472,7 +461,6 @@ void register_BeadEditorBase_class(){
                 "residue"
                 , residue_function_value
                 , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -499,7 +487,6 @@ void register_BeadEditorBase_class(){
                 "segment"
                 , segment_function_value
                 , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -513,7 +500,6 @@ void register_BeadEditorBase_class(){
                 "segment"
                 , segment_function_value
                 , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -527,7 +513,6 @@ void register_BeadEditorBase_class(){
                 "segment"
                 , segment_function_value
                 , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -541,7 +526,6 @@ void register_BeadEditorBase_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -555,7 +539,6 @@ void register_BeadEditorBase_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -569,7 +552,6 @@ void register_BeadEditorBase_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -583,7 +565,6 @@ void register_BeadEditorBase_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -597,7 +578,6 @@ void register_BeadEditorBase_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }

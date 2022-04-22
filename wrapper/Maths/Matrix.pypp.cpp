@@ -135,7 +135,6 @@ void register_Matrix_class(){
                 "covariance"
                 , covariance_function_value
                 , ( bp::arg("p"), bp::arg("q"), bp::arg("n")=(int)(-1) )
-                , bp::release_gil_policy()
                 , "Return the covariance matrix of the passed arrays of points. This\nmatches point p[i] against point q[i], and only calculates up to either\nthe specified number of points, if n > 0, or to min(len(p),len(q))" );
         
         }

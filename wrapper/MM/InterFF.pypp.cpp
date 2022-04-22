@@ -89,7 +89,6 @@ void register_InterFF_class(){
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
                 , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add the passed atoms as fixed atoms to the forcefield" );
         
         }
@@ -102,7 +101,6 @@ void register_InterFF_class(){
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add the passed molecules as fixed atoms to the forcefield" );
         
         }
@@ -449,7 +447,6 @@ void register_InterFF_class(){
                 "setFixedAtoms"
                 , setFixedAtoms_function_value
                 , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Set the fixed atoms equal to molecule" );
         
         }
@@ -462,7 +459,6 @@ void register_InterFF_class(){
                 "setFixedAtoms"
                 , setFixedAtoms_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Set the fixed atoms equal to molecules" );
         
         }

@@ -72,7 +72,6 @@ void register_HybridMC_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Perform nmoves hybrid MC moves on the passed system, recording\nstatistics is record_stats is true" );
         
         }

@@ -55,7 +55,6 @@ void register_NullIntegrator_class(){
                 "createWorkspace"
                 , createWorkspace_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "This returns a null workspace" );
         
         }
@@ -68,7 +67,6 @@ void register_NullIntegrator_class(){
                 "createWorkspace"
                 , createWorkspace_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "This returns a null workspace" );
         
         }

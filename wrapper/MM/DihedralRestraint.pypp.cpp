@@ -135,7 +135,6 @@ void register_DihedralRestraint_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the force acting on the molecule in the forcetable forcetable\ncaused by this restraint, and add it on to the forcetable scaled by\nscale_force" );
         
         }
@@ -148,7 +147,6 @@ void register_DihedralRestraint_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the force acting on the molecules in the forcetable forcetable\ncaused by this restraint, and add it on to the forcetable scaled by\nscale_force" );
         
         }

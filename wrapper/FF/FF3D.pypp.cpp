@@ -32,7 +32,6 @@ void register_FF3D_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("scale_energy")=1 )
-                , bp::release_gil_policy()
                 , "Calculate all of the energies of the\nmolecules in the forcetable forcetable due to the\nmolecules interactions in this forcefield" );
         
         }
@@ -45,7 +44,6 @@ void register_FF3D_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("component"), bp::arg("scale_energy")=1 )
-                , bp::release_gil_policy()
                 , "Calculate all of the energies acting on all of the\nmolecules in the energytable energytable due to the\nspecified component of the molecules interactions in\nthis forcefield" );
         
         }
@@ -58,7 +56,6 @@ void register_FF3D_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the fields acting at all of the points\nin fieldtable due to the molecules in this forcefield" );
         
         }
@@ -71,7 +68,6 @@ void register_FF3D_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the fields acting at all of the points\nin fieldtable due to the specified component component\nfrom the molecules in this forcefield" );
         
         }
@@ -84,7 +80,6 @@ void register_FF3D_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the fields acting at all of the points\nin fieldtable due to the molecules in this forcefield" );
         
         }
@@ -97,7 +92,6 @@ void register_FF3D_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the fields acting at all of the points\nin fieldtable due to the specified component component\nfrom the molecules in this forcefield" );
         
         }
@@ -110,7 +104,6 @@ void register_FF3D_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "Calculate all of the forces acting on all of the\nmolecules in the forcetable forcetable due to the\nmolecules interactions in this forcefield" );
         
         }
@@ -123,7 +116,6 @@ void register_FF3D_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("component"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "Calculate all of the forces acting on all of the\nmolecules in the forcetable forcetable due to the\nspecified component of the molecules interactions in\nthis forcefield" );
         
         }
@@ -136,7 +128,6 @@ void register_FF3D_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the potential acting at the points in potentialtable\ndue to the molecules in this forcefield" );
         
         }
@@ -149,7 +140,6 @@ void register_FF3D_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("probe"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the potential acting at the points in potentialtable\ndue to the molecules in this forcefield" );
         
         }
@@ -162,7 +152,6 @@ void register_FF3D_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the potential acting at the points in potentialtable\ndue to the specified component component from the molecules in\nthis table" );
         
         }
@@ -175,7 +164,6 @@ void register_FF3D_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the potential acting at the points in potentialtable\ndue to the specified component component from the molecules in\nthis table" );
         
         }

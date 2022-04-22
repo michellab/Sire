@@ -52,7 +52,6 @@ void register_SystemMonitors_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("name"), bp::arg("monitor"), bp::arg("frequency")=(int)(1) )
-                , bp::release_gil_policy()
                 , "Add a system monitor monitor, identified by the name name, which\nwill be updated every frequency steps.\nThrow: SireSystem::duplicate_monitor\n" );
         
         }

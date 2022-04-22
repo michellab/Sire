@@ -89,7 +89,6 @@ void register_VolumeMove_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Perform nmoves volume moves on the passed system, optionally\nrecording simulation statistics if record_stats is true" );
         
         }

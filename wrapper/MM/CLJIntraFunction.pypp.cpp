@@ -133,7 +133,6 @@ void register_CLJIntraFunction_class(){
                 "setConnectivity"
                 , setConnectivity_function_value
                 , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Set the connectivity by copying the specified property from the passed molecule" );
         
         }

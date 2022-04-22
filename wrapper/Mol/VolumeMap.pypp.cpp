@@ -74,7 +74,6 @@ void register_VolumeMap_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add a single molecule to the map" );
         
         }
@@ -87,7 +86,6 @@ void register_VolumeMap_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("mol0"), bp::arg("mol1"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add two molecules to the map" );
         
         }
@@ -100,7 +98,6 @@ void register_VolumeMap_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add a whole list of molecules to the map" );
         
         }
@@ -113,7 +110,6 @@ void register_VolumeMap_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add a set of molecules to the map" );
         
         }
@@ -126,7 +122,6 @@ void register_VolumeMap_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("mols0"), bp::arg("mols1"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add two sets of molecules to the map" );
         
         }
@@ -139,7 +134,6 @@ void register_VolumeMap_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add a whole list of sets of molecules to the map" );
         
         }
@@ -152,7 +146,6 @@ void register_VolumeMap_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add a moleculegroup to the map" );
         
         }
@@ -165,7 +158,6 @@ void register_VolumeMap_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("mols0"), bp::arg("mols1"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add two moleculegroups to the map" );
         
         }
@@ -178,7 +170,6 @@ void register_VolumeMap_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add a whole list of molecule groups to the map" );
         
         }
@@ -439,7 +430,6 @@ void register_VolumeMap_class(){
                 "setMaskWithinDistance"
                 , setMaskWithinDistance_function_value
                 , ( bp::arg("dist"), bp::arg("point"), bp::arg("clear_points")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Set the mask such that grid points are only evaluated if they are within\ndist distance of point point. If clear_points is true (default), then this\nwill clear any points that are outside this mask" );
         
         }
@@ -452,7 +442,6 @@ void register_VolumeMap_class(){
                 "setMaskWithinDistance"
                 , setMaskWithinDistance_function_value
                 , ( bp::arg("dist"), bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Set the mask such that grid points are only evaluated if they are within\ndistance dist of any atom in the view molecule. If clear_points is true\n(default) then this will clear any points that are outside the mask" );
         
         }
@@ -465,7 +454,6 @@ void register_VolumeMap_class(){
                 "setMaskWithinDistance"
                 , setMaskWithinDistance_function_value
                 , ( bp::arg("dist"), bp::arg("molecule"), bp::arg("clear_points"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Set the mask such that grid points are only evaluated if they are within\ndistance dist of any atom in the view molecule. If clear_points is true\n(default) then this will clear any points that are outside the mask" );
         
         }

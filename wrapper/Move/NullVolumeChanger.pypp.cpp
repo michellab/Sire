@@ -70,7 +70,6 @@ void register_NullVolumeChanger_class(){
                 "setVolume"
                 , setVolume_function_value
                 , ( bp::arg("system"), bp::arg("volume"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "The null volume changer doesnt change anything" );
         
         }

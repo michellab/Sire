@@ -617,7 +617,6 @@ void register_FFMolGroup_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -630,7 +629,6 @@ void register_FFMolGroup_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -643,7 +641,6 @@ void register_FFMolGroup_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "" );
         
         }

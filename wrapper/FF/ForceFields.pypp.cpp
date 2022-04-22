@@ -720,7 +720,6 @@ void register_ForceFields_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("scale_energy")=1 )
-                , bp::release_gil_policy()
                 , "Add the energies due to the forcefields in this set to the molecules\nin the energy table energytable, scaled by scale_energy" );
         
         }
@@ -733,7 +732,6 @@ void register_ForceFields_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("component"), bp::arg("scale_energy")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -911,7 +909,6 @@ void register_ForceFields_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Add the fields due to the forcefields in this set to the molecules\nin the field table fieldtable, scaled by scale_field" );
         
         }
@@ -924,7 +921,6 @@ void register_ForceFields_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Add the field due to the component component to the molecules\nin the field table fieldtable, scaled by scale_field\nThrow: SireFF::missing_component\n" );
         
         }
@@ -937,7 +933,6 @@ void register_ForceFields_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Add the fields due to the forcefields in this set to the molecules\nin the field table fieldtable, scaled by scale_field" );
         
         }
@@ -950,7 +945,6 @@ void register_ForceFields_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Add the field due to the component component to the molecules\nin the field table fieldtable, scaled by scale_field\nThrow: SireFF::missing_component\n" );
         
         }
@@ -963,7 +957,6 @@ void register_ForceFields_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "Add the forces due to the forcefields in this set to the molecules\nin the force table forcetable, scaled by scale_force" );
         
         }
@@ -976,7 +969,6 @@ void register_ForceFields_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("component"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "Add the force due to the component component to the molecules\nin the force table forcetable, scaled by scale_force\nThrow: SireFF::missing_component\n" );
         
         }
@@ -1373,7 +1365,6 @@ void register_ForceFields_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("pottable"), bp::arg("probe"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Add the potential due to the forcefields in this set to the molecules\nin the potential table pottable, scaled by scale_potential" );
         
         }
@@ -1386,7 +1377,6 @@ void register_ForceFields_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("pottable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Add the potential due to the component component to the molecules\nin the potential table pottable, scaled by scale_potential\nThrow: SireFF::missing_component\n" );
         
         }
@@ -1399,7 +1389,6 @@ void register_ForceFields_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("pottable"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Add the potential due to the forcefields in this set to the molecules\nin the potential table pottable, scaled by scale_potential" );
         
         }
@@ -1412,7 +1401,6 @@ void register_ForceFields_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("pottable"), bp::arg("component"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Add the potential due to the component component to the molecules\nin the potential table pottable, scaled by scale_potential\nThrow: SireFF::missing_component\n" );
         
         }
@@ -1939,7 +1927,6 @@ void register_ForceFields_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update all of the forcefields so that they use the version of the data\nof the molecule held in moldata\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -1952,7 +1939,6 @@ void register_ForceFields_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update all of the forcefields in this group so that they have the\nsame version of the molecules that are present in molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -1965,7 +1951,6 @@ void register_ForceFields_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update all of the forcefields in this group so that they have the\nsame version of the molecules that are present in the molecule\ngroup molgroup\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }

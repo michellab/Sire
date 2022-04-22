@@ -80,7 +80,6 @@ void register_IdentityConstraint_class(){
                 "constrain"
                 , constrain_function_value
                 , ( bp::arg("molgroup"), bp::arg("point"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Static function used to constrain the identities of the molecules\nin molgroup against the point point. This makes the first molecule\nin the group have the identity that matches this point" );
         
         }
@@ -93,7 +92,6 @@ void register_IdentityConstraint_class(){
                 "constrain"
                 , constrain_function_value
                 , ( bp::arg("molgroup"), bp::arg("points"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Static function used to constrain the identities of the molecules\nin molgroup against the identity points in points - the\nfirst npoints molecules in the group are constrained in order\nagainst the points" );
         
         }
@@ -106,7 +104,6 @@ void register_IdentityConstraint_class(){
                 "constrain"
                 , constrain_function_value
                 , ( bp::arg("molgroup"), bp::arg("points"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Static function used to constrain the identities of the molecules\nin molgroup against the identity points in points - the\nfirst npoints molecules in the group are constrained in order\nagainst the points" );
         
         }

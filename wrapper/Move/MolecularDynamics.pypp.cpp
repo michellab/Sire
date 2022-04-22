@@ -140,7 +140,6 @@ void register_MolecularDynamics_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Perform this move on the System system - perform the move\nnmoves times, optionally recording simulation statistics\nif record_stats is true" );
         
         }

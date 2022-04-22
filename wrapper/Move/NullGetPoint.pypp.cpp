@@ -57,7 +57,6 @@ void register_NullGetPoint_class(){
                 "getPoint"
                 , getPoint_function_value
                 , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }

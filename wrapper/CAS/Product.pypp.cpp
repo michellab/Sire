@@ -279,7 +279,6 @@ void register_Product_class(){
                 "simplify"
                 , simplify_function_value
                 , ( bp::arg("options")=(int)(0) )
-                , bp::release_gil_policy()
                 , "Try to simplify this product" );
         
         }

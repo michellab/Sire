@@ -44,7 +44,6 @@ void register_QMChargeCalculator_class(){
                 "calculate"
                 , calculate_function_value
                 , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the partial charges on the molecule molecule" );
         
         }
@@ -57,7 +56,6 @@ void register_QMChargeCalculator_class(){
                 "mayChangeCharges"
                 , mayChangeCharges_function_value
                 , ( bp::arg("oldmol"), bp::arg("newmol"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -192,7 +192,6 @@ void register_VolMapMonitor_class(){
                 "setGroup"
                 , setGroup_function_value
                 , ( bp::arg("group"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Set the molecule group being monitored (together with the property map\nused to get the required properties from that group)" );
         
         }

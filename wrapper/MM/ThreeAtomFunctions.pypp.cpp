@@ -184,7 +184,6 @@ void register_ThreeAtomFunctions_class(){
                 "includeOnly"
                 , includeOnly_function_value
                 , ( bp::arg("selected_atoms"), bp::arg("isstrict")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Return the set of functions where only functions that involve the\natoms in selected_atoms are included. If isstrict is true, then\nonly include functions where all of the atoms are in selected_atoms,\nwhile if isstrict is false, include functions where at least one\natom is in selected_atoms" );
         
         }

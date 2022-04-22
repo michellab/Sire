@@ -47,7 +47,6 @@ void register_DLMRigidBody_class(){
                 "createWorkspace"
                 , createWorkspace_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Create an empty workspace for this integrator" );
         
         }
@@ -60,7 +59,6 @@ void register_DLMRigidBody_class(){
                 "createWorkspace"
                 , createWorkspace_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Create a workspace to integrate the molecules in the passed molecule group" );
         
         }

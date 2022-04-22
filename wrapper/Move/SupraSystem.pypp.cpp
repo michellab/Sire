@@ -58,7 +58,6 @@ void register_SupraSystem_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("name"), bp::arg("monitor"), bp::arg("frequency")=(int)(1) )
-                , bp::release_gil_policy()
                 , "Add the monitor monitor to all of the sub-systems, with the name name,\nset to update with a frequency frequency" );
         
         }
@@ -71,7 +70,6 @@ void register_SupraSystem_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("i"), bp::arg("name"), bp::arg("monitor"), bp::arg("frequency")=(int)(1) )
-                , bp::release_gil_policy()
                 , "Add the monitor monitor to the ith sub-system, with the name name,\nset to update with a frequency of frequency\nThrow: SireError::invalid_index\n" );
         
         }
@@ -84,7 +82,6 @@ void register_SupraSystem_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("monitors"), bp::arg("frequency")=(int)(1) )
-                , bp::release_gil_policy()
                 , "Add the monitors monitors to all of the sub-systems, set to update\nwith a frequency of frequency" );
         
         }
@@ -97,7 +94,6 @@ void register_SupraSystem_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("i"), bp::arg("monitors"), bp::arg("frequency")=(int)(1) )
-                , bp::release_gil_policy()
                 , "Add the monitors monitors to the ith system, set to update with\na frequency of frequency\nThrow: SireError::invalid_index\n" );
         
         }
@@ -536,7 +532,6 @@ void register_SupraSystem_class(){
                 "setSubMonitors"
                 , setSubMonitors_function_value
                 , ( bp::arg("monitors"), bp::arg("frequency")=(int)(1) )
-                , bp::release_gil_policy()
                 , "Set the monitors used for all sub-systems to monitors, and set\nthem all to update with a frequency of frequency" );
         
         }
@@ -549,7 +544,6 @@ void register_SupraSystem_class(){
                 "setSubMonitors"
                 , setSubMonitors_function_value
                 , ( bp::arg("i"), bp::arg("monitors"), bp::arg("frequency")=(int)(1) )
-                , bp::release_gil_policy()
                 , "Set the monitors used for the ith sub-system to monitors, and set\nthem to update with a frequency of frequency\nThrow: SireError::invalid_index\n" );
         
         }

@@ -105,7 +105,6 @@ void register_SameMoves_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves")=(int)(1), bp::arg("record_stats")=(bool)(false) )
-                , bp::release_gil_policy()
                 , "Apply the move nmoves times to the system system, returning\nthe result" );
         
         }

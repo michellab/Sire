@@ -261,7 +261,6 @@ void register_PDB2_class(){
                 "toLines"
                 , toLines_function_value
                 , ( bp::arg("is_velocity")=(bool)(false) )
-                , bp::release_gil_policy()
                 , "Convert the parsed data to a collection of PDB record lines." );
         
         }

@@ -168,7 +168,6 @@ void register_SegID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Map this SegID to the atoms in the passed molecule view\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
@@ -274,7 +273,6 @@ void register_SegID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Select all the atoms from the passed view that match this ID\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_segment\n" );
         
         }
@@ -287,7 +285,6 @@ void register_SegID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return all of the atoms from the molecules that match\nthis ID\nThrow: SireMol::missing_segment\n" );
         
         }
@@ -300,7 +297,6 @@ void register_SegID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the atoms from the molecule group molgroup that match\nthis ID\nThrow: SireMol::missing_segment\n" );
         
         }
@@ -313,7 +309,6 @@ void register_SegID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the set of atoms that match this ID in the molecule groups\nset molgroups\nThrow: SireMol::missing_segment\n" );
         
         }
@@ -326,7 +321,6 @@ void register_SegID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Select the atom from the passed view that matches this ID\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_segment\n" );
         
         }
@@ -339,7 +333,6 @@ void register_SegID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the atom from the molecules molecules that matches\nthis ID\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\n" );
         
         }
@@ -352,7 +345,6 @@ void register_SegID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the atom from the molecule group molgroup that matches\nthis ID\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\n" );
         
         }
@@ -365,7 +357,6 @@ void register_SegID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the atom from the molecule groups molgroups that matches\nthis ID\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\n" );
         
         }

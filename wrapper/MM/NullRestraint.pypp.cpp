@@ -134,7 +134,6 @@ void register_NullRestraint_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "The null restraint will not change the force" );
         
         }
@@ -147,7 +146,6 @@ void register_NullRestraint_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "The null restraint will not change the force" );
         
         }

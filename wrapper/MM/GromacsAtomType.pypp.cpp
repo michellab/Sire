@@ -225,7 +225,6 @@ void register_GromacsAtomType_class(){
                 "toParticleType"
                 , toParticleType_function_value
                 , ( bp::arg("word"), bp::arg("ok")=bp::object() )
-                , bp::release_gil_policy()
                 , "Convert the passed string to a Gromacs particle type. Use ok to see if this\nworked correctly" );
         
         }

@@ -210,7 +210,6 @@ void register_SupraSubSim_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Run the sub-system simulation consisting of nmoves moves from moves\non the sub-system system, recording statistics if record_stats\nis true. Run the simulation in the current thread" );
         
         }
@@ -223,7 +222,6 @@ void register_SupraSubSim_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Run the sub-system simulation consisting of nmoves moves from moves\non the sub-system system, recording statistics if record_stats\nis true. Run the simulation in the current thread" );
         
         }
@@ -249,7 +247,6 @@ void register_SupraSubSim_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("node"), bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Run the sub-system simulation consisting of nmoves moves from moves\non the sub-system system, recording statistics if record_stats\nis true. Run the simulation on the node node, returning a handle to\nthe running simulation" );
         
         }
@@ -262,7 +259,6 @@ void register_SupraSubSim_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("node"), bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Run the sub-system simulation consisting of nmoves moves from moves\non the sub-system system, recording statistics if record_stats\nis true. Run the simulation on the node node, returning a handle to\nthe running simulation" );
         
         }

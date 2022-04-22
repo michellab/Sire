@@ -285,6 +285,15 @@ def is_copy_constructor(f):
 
 def _call_with_release_gil(f):
     if f.call_policies is None or f.call_policies.is_default():
+        # we cannot hold the GIL for a function that has default arguments.
+        # This is because the default arguments will be deleted by python
+        # before the GIL is restored, leading to a crash
+
+        for arg in f.arguments:
+            if arg.default_value:
+                print(f"Skipping GIL for {f} as argument {arg} is not default. {arg.default_value}")
+                return
+
         f.call_policies = call_policies.custom_call_policies( "bp::release_gil_policy" )
 
 def call_all_with_released_gil(c):

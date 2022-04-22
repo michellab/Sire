@@ -168,7 +168,6 @@ void register_ChainID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Map this ChainID to the chains in the passed molecule view\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\n" );
         
         }
@@ -314,7 +313,6 @@ void register_ChainID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Select all the chains from the passed view that match this ID\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
@@ -327,7 +325,6 @@ void register_ChainID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return all of the chains from the molecules that match\nthis ID\nThrow: SireMol::missing_chain\n" );
         
         }
@@ -340,7 +337,6 @@ void register_ChainID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the chains from the molecule group molgroup that match\nthis ID\nThrow: SireMol::missing_chain\n" );
         
         }
@@ -353,7 +349,6 @@ void register_ChainID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the set of chains that match this ID in the molecule groups\nset molgroups\nThrow: SireMol::missing_chain\n" );
         
         }
@@ -366,7 +361,6 @@ void register_ChainID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Select the chain from the passed view that matches this ID\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
@@ -379,7 +373,6 @@ void register_ChainID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the chain from the molecules molecules that matches\nthis ID\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\n" );
         
         }
@@ -392,7 +385,6 @@ void register_ChainID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the chain from the molecule group molgroup that matches\nthis ID\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\n" );
         
         }
@@ -405,7 +397,6 @@ void register_ChainID_class(){
                 "selectFrom"
                 , selectFrom_function_value
                 , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the chain from the molecule groups molgroups that matches\nthis ID\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\n" );
         
         }

@@ -141,7 +141,6 @@ void register_RegularGrid_class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0) )
-                , bp::release_gil_policy()
                 , "Return a copy of this grid that has been rotated using the passed rotation\nmatrix about center" );
         
         }
@@ -154,7 +153,6 @@ void register_RegularGrid_class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0) )
-                , bp::release_gil_policy()
                 , "Return a copy of this grid that has been rotated using the passed rotation\nquaternion about center" );
         
         }

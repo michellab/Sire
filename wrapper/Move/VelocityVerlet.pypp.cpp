@@ -65,7 +65,6 @@ void register_VelocityVerlet_class(){
                 "createWorkspace"
                 , createWorkspace_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Create an empty workspace" );
         
         }
@@ -78,7 +77,6 @@ void register_VelocityVerlet_class(){
                 "createWorkspace"
                 , createWorkspace_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Create a workspace for this integrator for the molecule group molgroup" );
         
         }

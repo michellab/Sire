@@ -117,7 +117,6 @@ void register_System_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("name"), bp::arg("monitor"), bp::arg("frequency")=(int)(1) )
-                , bp::release_gil_policy()
                 , "Add a system monitor monitor, identified by the name name, which\nwill be updated every frequency steps.\nThrow: SireSystem::duplicate_monitor\n" );
         
         }
@@ -856,7 +855,6 @@ void register_System_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("scale_energy")=1 )
-                , bp::release_gil_policy()
                 , "Return the total energytable in this system\n" );
         
         }
@@ -869,7 +867,6 @@ void register_System_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("component"), bp::arg("scale_energy")=1 )
-                , bp::release_gil_policy()
                 , "Return the total energytable of the energy component in this system\nthat is identified by the energy component component\n" );
         
         }
@@ -982,7 +979,6 @@ void register_System_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Add the fields acting on the molecules in the fieldtable fieldtable\nfrom this system onto this fieldtable, scaled by the optionally\nsupplied scale_field" );
         
         }
@@ -995,7 +991,6 @@ void register_System_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Add the fields acting on the molecules in the fieldtable fieldtable\nfrom the component of this system identified by component onto\nthis fieldtable, scaled by the optionally supplied scale_field" );
         
         }
@@ -1008,7 +1003,6 @@ void register_System_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Add the fields acting on the molecules in the fieldtable fieldtable\nfrom this system onto this fieldtable, scaled by the optionally\nsupplied scale_field" );
         
         }
@@ -1021,7 +1015,6 @@ void register_System_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Add the fields acting on the molecules in the fieldtable fieldtable\nfrom the component of this system identified by component onto\nthis fieldtable, scaled by the optionally supplied scale_field" );
         
         }
@@ -1034,7 +1027,6 @@ void register_System_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "Add the forces acting on the molecules in the forcetable forcetable\nfrom this system onto this forcetable, scaled by the optionally\nsupplied scale_force" );
         
         }
@@ -1047,7 +1039,6 @@ void register_System_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("component"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "Add the forces acting on the molecules in the forcetable forcetable\nfrom the component of this system identified by component onto\nthis forcetable, scaled by the optionally supplied scale_force" );
         
         }
@@ -1475,7 +1466,6 @@ void register_System_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("pottable"), bp::arg("probe"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Add the potentials acting on the molecules in the potential table pottable\nfrom this system onto this potential table, scaled by the optionally\nsupplied scale_potential" );
         
         }
@@ -1488,7 +1478,6 @@ void register_System_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("pottable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Add the potentials acting on the molecules in the potential table pottable\nfrom the component of this system identified by component onto\nthis potential table, scaled by the optionally supplied scale_potential" );
         
         }
@@ -1501,7 +1490,6 @@ void register_System_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("pottable"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Add the potentials acting on the molecules in the potential table pottable\nfrom this system onto this potential table, scaled by the optionally\nsupplied scale_potential" );
         
         }
@@ -1514,7 +1502,6 @@ void register_System_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("pottable"), bp::arg("component"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Add the potentials acting on the molecules in the potential table pottable\nfrom the component of this system identified by component onto\nthis potential table, scaled by the optionally supplied scale_potential" );
         
         }
@@ -2244,7 +2231,6 @@ void register_System_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update this system so that it uses the version of the molecule\navailable in moldata\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -2257,7 +2243,6 @@ void register_System_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update this system so that it uses the same version of the molecules\npresent in molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -2270,7 +2255,6 @@ void register_System_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update this system so that it uses the same version of the molecules\npresent in the molecule group molgroup\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }

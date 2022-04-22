@@ -67,7 +67,6 @@ void register_Cube_class(){
                 "write"
                 , write_function_value
                 , ( bp::arg("table"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -80,7 +79,6 @@ void register_Cube_class(){
                 "write"
                 , write_function_value
                 , ( bp::arg("table"), bp::arg("molgroup"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -93,7 +91,6 @@ void register_Cube_class(){
                 "write"
                 , write_function_value
                 , ( bp::arg("table"), bp::arg("molecules"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }

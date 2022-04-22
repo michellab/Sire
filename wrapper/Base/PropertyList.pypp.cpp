@@ -269,7 +269,6 @@ void register_PropertyList_class(){
                 "mid"
                 , mid_function_value
                 , ( bp::arg("pos"), bp::arg("length")=(int)(-1) )
-                , bp::release_gil_policy()
                 , "Return the sub-set of this list from list[pos] to list[pos+length]. If\nlength is -1 then the whole rest of the list is returned" );
         
         }

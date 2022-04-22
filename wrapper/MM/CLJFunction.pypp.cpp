@@ -91,7 +91,6 @@ void register_CLJFunction_class(){
                 "calculate"
                 , calculate_function_value
                 , ( bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("min_distance")=0 )
-                , bp::release_gil_policy()
                 , "Return the total energy between atoms0 and atoms1, returning the coulomb part as the first\nelement of the tuple and the LJ part as the second" );
         
         }
@@ -194,7 +193,6 @@ void register_CLJFunction_class(){
                 "coulomb"
                 , coulomb_function_value
                 , ( bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("min_distance")=0 )
-                , bp::release_gil_policy()
                 , "Return the coulomb energy between the atoms in atoms0 and in atoms1" );
         
         }
@@ -294,7 +292,6 @@ void register_CLJFunction_class(){
                 "lj"
                 , lj_function_value
                 , ( bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("min_distance")=0 )
-                , bp::release_gil_policy()
                 , "Return the LJ energy between the atoms in atoms0 and in atoms1" );
         
         }
@@ -358,7 +355,6 @@ void register_CLJFunction_class(){
                 "multiCalculate"
                 , multiCalculate_function_value
                 , ( bp::arg("funcs"), bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("min_distance")=0 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -661,7 +657,6 @@ void register_CLJFunction_class(){
                 "total"
                 , total_function_value
                 , ( bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("cnrg"), bp::arg("ljnrg"), bp::arg("min_distance")=0 )
-                , bp::release_gil_policy()
                 , "Return the total energy between atoms0 and atoms1, returning the coulomb part in cnrg\nand the LJ part in ljnrg" );
         
         }

@@ -63,7 +63,6 @@ void register_UnitTest_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("nrepeats")=(int)(1), bp::arg("verbose")=(bool)(false) )
-                , bp::release_gil_policy()
                 , "Run this test a total of nrepeats times, printing out information\nif verbose is true" );
         
         }
@@ -76,7 +75,6 @@ void register_UnitTest_class(){
                 "runAll"
                 , runAll_function_value
                 , ( bp::arg("verbose")=(bool)(false) )
-                , bp::release_gil_policy()
                 , "Run all of the tests one after another, printing out the results to the\nscreen and returning the number of tests that failed" );
         
         }

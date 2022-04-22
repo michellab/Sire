@@ -167,7 +167,6 @@ void register_AngleID_class(){
                 "size"
                 , size_function_value
                 , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the size of this angle in the molecule whose data\nis in moldata, using map to find the coordinates property\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -180,7 +179,6 @@ void register_AngleID_class(){
                 "size"
                 , size_function_value
                 , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("mol2data"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the size of the angle between atom0() in the\nmolecule whose data is in mol0data, atom1() in the\nmolecule whose data is in mol1data and atom2() in\nthe molecule whose data is in mol2data, using map\nto the find the coordinates property the molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -218,7 +216,6 @@ void register_AngleID_class(){
                 "triangle"
                 , triangle_function_value
                 , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the geometric triangle formed by the three atoms\nof this angle in the molecule whose data is in moldata,\nusing map to find the coordinates property.\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -231,7 +228,6 @@ void register_AngleID_class(){
                 "triangle"
                 , triangle_function_value
                 , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("mol2data"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the geometric triangle formed by the three atoms,\natom0() in the molecule whose data is in mol0data,\natom1() from mol1data and atom2() from mol2data,\nusing map to find the coordinates property of the\nmolecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -269,7 +265,6 @@ void register_AngleID_class(){
                 "vector"
                 , vector_function_value
                 , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the vector that is perpendicular to the plane\nformed by atoms atom0(), atom1() and atom2() in the\nmolecule whose data is in moldata, using the supplied\nproperty map to find the property that contains the\ncoordinates to be used\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -282,7 +277,6 @@ void register_AngleID_class(){
                 "vector"
                 , vector_function_value
                 , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("mol2data"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Return the vector that is perpendicular to the plane\nformed by the atoms atom0() in mol0data, atom1() in\nmol1data and atom2() in mol2data, using map to find the\ncoordinates property of the molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }

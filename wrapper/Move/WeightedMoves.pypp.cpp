@@ -54,7 +54,6 @@ void register_WeightedMoves_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("move"), bp::arg("weight")=1 )
-                , bp::release_gil_policy()
                 , "Add the move move to the list of moves, with the weight weight" );
         
         }

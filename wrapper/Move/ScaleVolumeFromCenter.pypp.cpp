@@ -100,7 +100,6 @@ void register_ScaleVolumeFromCenter_class(){
                 "setVolume"
                 , setVolume_function_value
                 , ( bp::arg("system"), bp::arg("volume"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Set the volume of the system system to volume, using the\noptionally supplied property map to find the names of the\nproperties needed to change the system volume.\nThis returns the number of molecules involved in the volume change\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireVol::incompatible_space\nThrow: SireError::invalid_cast\nThrow: SireError::invalid_state\nThrow: SireError::unsupported\nThrow: SireError::incompatible_error\n" );
         
         }

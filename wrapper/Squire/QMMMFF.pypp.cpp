@@ -100,7 +100,6 @@ void register_QMMMFF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("scale_energy")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -113,7 +112,6 @@ void register_QMMMFF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("symbol"), bp::arg("scale_energy")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -138,7 +136,6 @@ void register_QMMMFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the field from this forcefield in the passed fieldtable" );
         
         }
@@ -151,7 +148,6 @@ void register_QMMMFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the field from this forcefield in the passed fieldtable" );
         
         }
@@ -164,7 +160,6 @@ void register_QMMMFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the field from this forcefield in the passed fieldtable" );
         
         }
@@ -177,7 +172,6 @@ void register_QMMMFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the field from this forcefield in the passed fieldtable" );
         
         }
@@ -216,7 +210,6 @@ void register_QMMMFF_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the QMMM forces on the molecules in this forcefield\nand add the results to the forces for the molecules contained\nin the table forcetable - this scales the forces by\nthe optional scale_force" );
         
         }
@@ -229,7 +222,6 @@ void register_QMMMFF_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("symbol"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the QMMM forces on the molecules in this forcefield\nand add the results to the forces for the molecules contained\nin the table forcetable - this scales the forces by\nthe optional scale_force" );
         
         }
@@ -306,7 +298,6 @@ void register_QMMMFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the potential from this forcefield in the passed potentialtable" );
         
         }
@@ -319,7 +310,6 @@ void register_QMMMFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the potential from this forcefield in the passed potentialtable" );
         
         }
@@ -332,7 +322,6 @@ void register_QMMMFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("probe"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the potential from this forcefield in the passed potentialtable" );
         
         }
@@ -345,7 +334,6 @@ void register_QMMMFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "Calculate the potential from this forcefield in the passed potentialtable" );
         
         }

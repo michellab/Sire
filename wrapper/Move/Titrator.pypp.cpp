@@ -244,7 +244,6 @@ void register_Titrator_class(){
                 "setNegativeTemplate"
                 , setNegativeTemplate_function_value
                 , ( bp::arg("negative_ion"), bp::arg("properties"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Set the template for the negative ion state. The collection of properties\nlisted in properties are copied from negative_ion (once mapped by\nmap) to the molecule to put it into the negative_ion state" );
         
         }
@@ -257,7 +256,6 @@ void register_Titrator_class(){
                 "setNegativeTemplate"
                 , setNegativeTemplate_function_value
                 , ( bp::arg("negative_ion"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Set the template for the negative ion state, where all properties except\nmap[coordinates] will be copied to the molecule" );
         
         }
@@ -270,7 +268,6 @@ void register_Titrator_class(){
                 "setNeutralTemplate"
                 , setNeutralTemplate_function_value
                 , ( bp::arg("neutral_mol"), bp::arg("properties"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Set the template for the neutral state. The collection of properties\nlisted in properties are copied from neutral_mol (once mapped by\nmap) to the molecule to put it into the neutral state" );
         
         }
@@ -283,7 +280,6 @@ void register_Titrator_class(){
                 "setNeutralTemplate"
                 , setNeutralTemplate_function_value
                 , ( bp::arg("neutral_mol"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Set the template for the neutral state, where all properties except\nmap[coordinates] will be copied to the molecule" );
         
         }
@@ -296,7 +292,6 @@ void register_Titrator_class(){
                 "setPositiveTemplate"
                 , setPositiveTemplate_function_value
                 , ( bp::arg("positive_ion"), bp::arg("properties"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Set the template for the positive ion state. The collection of properties\nlisted in properties are copied from positive_ion (once mapped by\nmap) to the molecule to put it into the positive_ion state" );
         
         }
@@ -309,7 +304,6 @@ void register_Titrator_class(){
                 "setPositiveTemplate"
                 , setPositiveTemplate_function_value
                 , ( bp::arg("positive_ion"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Set the template for the positive ion state, where all properties except\nmap[coordinates] will be copied to the molecule" );
         
         }

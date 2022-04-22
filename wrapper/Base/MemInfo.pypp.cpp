@@ -84,7 +84,6 @@ void register_MemInfo_class(){
                 "startMonitoring"
                 , startMonitoring_function_value
                 , ( bp::arg("ms")=(int)(1000) )
-                , bp::release_gil_policy()
                 , "Start a monitor that prints the memory usage of the program\nout to the screen every ms milliseconds" );
         
         }
@@ -97,7 +96,6 @@ void register_MemInfo_class(){
                 "startMonitoring"
                 , startMonitoring_function_value
                 , ( bp::arg("filename"), bp::arg("ms")=(int)(1000) )
-                , bp::release_gil_policy()
                 , "Start a monitor that prints the memory usage of the program\nout to the file filename every ms milliseconds" );
         
         }

@@ -1170,7 +1170,6 @@ void register_ConnectivityBase_class(){
                 "toCONECT"
                 , toCONECT_function_value
                 , ( bp::arg("offset")=(int)(0) )
-                , bp::release_gil_policy()
                 , "Return a PDB format CONECT record for this connectivity object." );
         
         }

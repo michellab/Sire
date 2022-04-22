@@ -66,7 +66,6 @@ void register_GridFF2_class(){
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
                 , ( bp::arg("fixed_atoms"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add fixed atoms to the grid. These are atoms that will never change\nposition or charge during the simulation, and that you wish to be\nincluded in the energy expression. The atoms can be placed here, and\nthen do not need to be added to the simulation System. This is useful\nif you are simulating a small cutout of the system and do not want to\nhave all of the atoms loaded into the system during the simulation" );
         
         }
@@ -79,7 +78,6 @@ void register_GridFF2_class(){
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
                 , ( bp::arg("fixed_atoms"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add fixed atoms to the grid. These are atoms that will never change\nposition or charge during the simulation, and that you wish to be\nincluded in the energy expression. The atoms can be placed here, and\nthen do not need to be added to the simulation System. This is useful\nif you are simulating a small cutout of the system and do not want to\nhave all of the atoms loaded into the system during the simulation" );
         
         }
@@ -92,7 +90,6 @@ void register_GridFF2_class(){
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
                 , ( bp::arg("fixed_atoms"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Add fixed atoms to the grid. These are atoms that will never change\nposition or charge during the simulation, and that you wish to be\nincluded in the energy expression. The atoms can be placed here, and\nthen do not need to be added to the simulation System. This is useful\nif you are simulating a small cutout of the system and do not want to\nhave all of the atoms loaded into the system during the simulation" );
         
         }

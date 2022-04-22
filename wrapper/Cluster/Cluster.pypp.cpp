@@ -265,7 +265,6 @@ void register_Cluster_class(){
                 "start"
                 , start_function_value
                 , ( bp::arg("ppn")=(int)(1) )
-                , bp::release_gil_policy()
                 , "Start the cluster - this is like exec, but it doesnt\nblock until the cluster has been shutdown" );
         
         }

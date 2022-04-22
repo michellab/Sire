@@ -408,7 +408,6 @@ void register_CombinedSpace_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("groups"), bp::arg("center"), bp::arg("translate_as_one")=(bool)(false) )
-                , bp::release_gil_policy()
                 , "Return the minimum image copy of groups with respect to center.\nIn this case, as this is not a periodic space, this just returns\ngroups" );
         
         }

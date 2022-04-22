@@ -382,7 +382,6 @@ void register_Space_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("groups"), bp::arg("center"), bp::arg("translate_as_one")=(bool)(false) )
-                , bp::release_gil_policy()
                 , "Return the minimum image copy of groups with respect to center.\nFor periodic spaces, this translates groups into the box that\nhas its center at center (i.e. returns the closest copy of\neach group to center according to the minimum image convention)" );
         
         }

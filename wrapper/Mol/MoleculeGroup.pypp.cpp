@@ -1395,7 +1395,6 @@ void register_MoleculeGroup_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update this group so that the molecule in this group whose\ndata is in moldata is also at the same version as moldata.\nThis does nothing if there is no such molecule in this\ngroup, or if it is already at this version, and this returns\nwhether or not this changes the group." );
         
         }
@@ -1408,7 +1407,6 @@ void register_MoleculeGroup_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molview"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update this group so that the molecule in this group that\nis also viewed in molview is updated to the same\nversion as molview.\nThis does nothing if there is no such molecule in this\ngroup, or if it is already at this version, and this returns\nwhether or not this changes the group." );
         
         }
@@ -1421,7 +1419,6 @@ void register_MoleculeGroup_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update this group so that the contained molecules have the\nsame versions as the molecules in molecules. This does\nnothing if none of these molecules are in this group, or\nif they are already at the same versions. This returns\nthe list of molecules that were changed by this update." );
         
         }
@@ -1434,7 +1431,6 @@ void register_MoleculeGroup_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("MoleculeGroup"), bp::arg("auto_commit")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Update this group so that it has the same version of molecules\nas those in MoleculeGroup. This does nothing if this group\ndoesnt contain any of the molecules in MoleculeGroup, or\nif it already has the molecules at the same version. This\nreturns the list of molecules that were changed by this\nupdate\n" );
         
         }

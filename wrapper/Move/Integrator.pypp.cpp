@@ -52,7 +52,6 @@ void register_Integrator_class(){
                 "createWorkspace"
                 , createWorkspace_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -65,7 +64,6 @@ void register_Integrator_class(){
                 "createWorkspace"
                 , createWorkspace_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -177,7 +177,6 @@ void register_Grid_class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0) )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -190,7 +189,6 @@ void register_Grid_class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0) )
-                , bp::release_gil_policy()
                 , "" );
         
         }

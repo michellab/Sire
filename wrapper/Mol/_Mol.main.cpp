@@ -532,7 +532,6 @@ namespace bp = boost::python;
 #include "SireMol/moleculeinfo.h"
 
 BOOST_PYTHON_MODULE(_Mol){
-
     register_SireMol_objects();
 
     register_SireMol_containers();

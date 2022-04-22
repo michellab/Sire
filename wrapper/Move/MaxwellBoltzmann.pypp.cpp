@@ -60,7 +60,6 @@ void register_MaxwellBoltzmann_class(){
                 "generate"
                 , generate_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Generate completely random velocities" );
         
         }

@@ -68,7 +68,6 @@ void register_InterCoulombFF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("scale_energy")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -82,7 +81,6 @@ void register_InterCoulombFF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("energytable"), bp::arg("symbol"), bp::arg("scale_energy")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -96,7 +94,6 @@ void register_InterCoulombFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -110,7 +107,6 @@ void register_InterCoulombFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -124,7 +120,6 @@ void register_InterCoulombFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -138,7 +133,6 @@ void register_InterCoulombFF_class(){
                 "field"
                 , field_function_value
                 , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -152,7 +146,6 @@ void register_InterCoulombFF_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -166,7 +159,6 @@ void register_InterCoulombFF_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("forcetable"), bp::arg("symbol"), bp::arg("scale_force")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -209,7 +201,6 @@ void register_InterCoulombFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -223,7 +214,6 @@ void register_InterCoulombFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -237,7 +227,6 @@ void register_InterCoulombFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("probe"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -251,7 +240,6 @@ void register_InterCoulombFF_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 )
-                , bp::release_gil_policy()
                 , "" );
         
         }

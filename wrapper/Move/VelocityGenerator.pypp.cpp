@@ -56,7 +56,6 @@ void register_VelocityGenerator_class(){
                 "generate"
                 , generate_function_value
                 , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }

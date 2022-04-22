@@ -148,7 +148,6 @@ void register_Amber_class(){
                 "readCrdTop"
                 , readCrdTop_function_value
                 , ( bp::arg("crdfile"), bp::arg("topfile"), bp::arg("flag_cutting")="perresidue" )
-                , bp::release_gil_policy()
                 , "Reads the contents of a topfile and associated crdfile and returns a molecule group" );
         
         }
@@ -198,7 +197,6 @@ void register_Amber_class(){
                 "writeCrd"
                 , writeCrd_function_value
                 , ( bp::arg("mols"), bp::arg("space"), bp::arg("crdfile"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }

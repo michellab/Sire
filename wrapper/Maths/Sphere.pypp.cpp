@@ -72,7 +72,6 @@ void register_Sphere_class(){
                 "combinedVolumeMC"
                 , combinedVolumeMC_function_value
                 , ( bp::arg("spheres"), bp::arg("nsamples")=(::qint64)(-1) )
-                , bp::release_gil_policy()
                 , "Return an approximation of the combined volume of the set of passed spheres using\nMonte Carlo sampling. If nsamples is greater than zero, then the set number of\nsamples will be used. Otherwise, enough samples will be used to converge the volume\nto within a good approximation" );
         
         }

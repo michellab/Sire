@@ -136,7 +136,6 @@ void register_MolResID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -149,7 +148,6 @@ void register_MolResID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -162,7 +160,6 @@ void register_MolResID_class(){
                 "selectAllFrom"
                 , selectAllFrom_function_value
                 , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "" );
         
         }

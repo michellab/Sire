@@ -154,7 +154,6 @@ void register_ProtoMS_class(){
                 "parameterise"
                 , parameterise_function_value
                 , ( bp::arg("molecule"), bp::arg("type"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Parameterise the molecules molecules as type type of\nmolecules (PROTEIN, SOLUTE or SOLVENT)" );
         
         }
@@ -167,7 +166,6 @@ void register_ProtoMS_class(){
                 "parameterise"
                 , parameterise_function_value
                 , ( bp::arg("molecules"), bp::arg("type"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::release_gil_policy()
                 , "Parameterise the molecules molecules as type type of\nmolecules (PROTEIN, SOLUTE or SOLVENT)" );
         
         }

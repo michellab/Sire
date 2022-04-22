@@ -505,7 +505,6 @@ void register_Replicas_class(){
                 "swapSystems"
                 , swapSystems_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("swap_monitors")=(bool)(true) )
-                , bp::release_gil_policy()
                 , "Swap the systems between replicas i and j. If swap_monitors is\ntrue then the monitors are swapped as well\nThrow: SireError::invalid_index\n" );
         
         }
