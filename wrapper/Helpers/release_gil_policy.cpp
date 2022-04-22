@@ -10,6 +10,9 @@
 boost::python::detail::GilHolder::GilHolder() : thread_state(0)
 {
     #ifndef SIRE_DISABLE_GIL_POLICY
+        #ifdef SIRE_PRINT_GIL_STATUS
+            qDebug() << "--RELEASE GIL";
+        #endif
         thread_state = PyEval_SaveThread();
     #endif
 }
@@ -25,6 +28,9 @@ boost::python::detail::GilHolder::~GilHolder()
             }
             else
             {
+                #ifdef SIRE_PRINT_GIL_STATUS
+                    qDebug() << "--ACQUIRE GIL";
+                #endif
                 PyEval_RestoreThread(thread_state);
             }
         }

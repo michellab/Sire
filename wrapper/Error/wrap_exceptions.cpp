@@ -113,7 +113,7 @@ void type_error( const SireError::exception &ex )
                     get_exception_string(ex).toUtf8());
 }
 
-void io_error( const SireError::exception &ex )
+void input_output_error( const SireError::exception &ex )
 {
     boost::python::release_gil_policy::acquire_gil_no_raii();
     PyErr_SetString(PyExc_IOError,
@@ -149,8 +149,8 @@ void export_exceptions()
     register_exception_translator<SireError::assertation_failed>(&assertion_error);
     register_exception_translator<SireError::invalid_cast>(&type_error);
     register_exception_translator<SireError::unknown_type>(&type_error);
-    register_exception_translator<SireError::io_error>(&io_error);
-    register_exception_translator<SireError::file_error>(&io_error);
+    register_exception_translator<SireError::io_error>(&input_output_error);
+    register_exception_translator<SireError::file_error>(&input_output_error);
 }
 
 }
