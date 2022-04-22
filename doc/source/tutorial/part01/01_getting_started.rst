@@ -41,7 +41,6 @@ mean :mod:`Sire`.
 
    >>> import Sire as sr
 
-
 Loading a molecule
 ------------------
 

@@ -1558,6 +1558,58 @@ int MolGroupsBase::nMolecules() const
     return molnum_to_mgnum.count();
 }
 
+/** Return the total number of atoms in this groups in this set */
+int MolGroupsBase::nAtoms() const
+{
+    int n = 0;
+
+    for (const auto &mol : this->molecules())
+    {
+        n += mol.nAtoms();
+    }
+
+    return n;
+}
+
+/** Return the total number of residues in this groups in this set */
+int MolGroupsBase::nResidues() const
+{
+    int n = 0;
+
+    for (const auto &mol : this->molecules())
+    {
+        n += mol.nResidues();
+    }
+
+    return n;
+}
+
+/** Return the total number of chains in this groups in this set */
+int MolGroupsBase::nChains() const
+{
+    int n = 0;
+
+    for (const auto &mol : this->molecules())
+    {
+        n += mol.nChains();
+    }
+
+    return n;
+}
+
+/** Return the total number of segments in this groups in this set */
+int MolGroupsBase::nSegments() const
+{
+    int n = 0;
+
+    for (const auto &mol : this->molecules())
+    {
+        n += mol.nSegments();
+    }
+
+    return n;
+}
+
 /** Return the total number of views of molecules in the groups in this set.
     Note that if a view appears multiple times, then it will be counted
     multiple times */

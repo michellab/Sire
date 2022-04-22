@@ -131,6 +131,11 @@ public:
     int count() const;
     virtual int nViews() const;
 
+    virtual int nAtoms() const;
+    virtual int nResidues() const;
+    virtual int nChains() const;
+    virtual int nSegments() const;
+
     virtual MolViewPtr operator[](int i) const;
     virtual MolViewPtr operator[](const QString &name) const;
     virtual MolViewPtr operator[](const AtomID &atomid) const;

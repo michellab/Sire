@@ -751,12 +751,28 @@ const FFName& System::ffName(const FFID &ffid) const
 /** Return a string representation of this system */
 QString System::toString() const
 {
-    return QString("System( name=%1, nForceFields=%2, nMolecules=%3 "
-                           "nMonitors()=%4 )")
-                .arg(this->name())
-                .arg(this->nForceFields())
-                .arg(this->nMolecules())
-                .arg(this->nMonitors());
+    QStringList parts;
+
+    parts.append(QString("name=%1").arg(this->name()));
+    parts.append(QString("nMolecules=%1").arg(this->nMolecules()));
+
+    if (this->nForceFields() > 0)
+        parts.append(QString("nForceFields=%1").arg(this->nForceFields()));
+
+    if (this->nMonitors() > 0)
+        parts.append(QString("nMonitors=%1").arg(this->nMonitors()));
+
+    if (parts.count() < 4)
+    {
+        parts.insert(2, QString("nAtoms=%1").arg(this->nAtoms()));
+    }
+
+    if (parts.count() < 5)
+    {
+        parts.insert(2, QString("nResidues=%1").arg(this->nResidues()));
+    }
+
+    return QString("System( %1 )").arg(parts.join(" "));
 }
 
 /** Return the symbol that represents the total energy component

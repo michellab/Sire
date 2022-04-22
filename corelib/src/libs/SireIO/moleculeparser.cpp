@@ -919,7 +919,14 @@ QList<MoleculeParserPtr> MoleculeParser::parse(const QStringList &filenames,
 System MoleculeParser::read(const QString &filename, const PropertyMap &map)
 {
     MoleculeParserPtr parser = MoleculeParser::parse(filename, map);
-    return parser.read().toSystem(map);
+    auto system = parser.read().toSystem(map);
+
+    if (system.name().isEmpty())
+    {
+        system.setName(QFileInfo(filename).baseName());
+    }
+
+    return system;
 }
 
 /** Read the two passed files, returning the System contained therein. The two
@@ -947,7 +954,24 @@ System MoleculeParser::read(const QString &file1, const QString &file2,
         parser2 = MoleculeParser::parse(file2,map);
     }
 
-    return parser1.read().toSystem(parser2.read(),map);
+    auto system = parser1.read().toSystem(parser2.read(),map);
+
+    if (system.name().isEmpty())
+    {
+        auto p1 = QFileInfo(file1).baseName();
+        auto p2 = QFileInfo(file2).baseName();
+
+        if (p1 == p2)
+        {
+            system.setName(p1);
+        }
+        else
+        {
+            system.setName(QString("%1:%2").arg(p1).arg(p2));
+        }
+    }
+
+    return system;
 }
 
 /** Read the files with passed filenames, returning the System contained therein.
@@ -962,7 +986,22 @@ System MoleculeParser::read(const QStringList &filenames, const PropertyMap &map
 
     MoleculeParserPtr parser = parsers.takeFirst();
 
-    return parser.read().toSystem(parsers, map);
+    auto system = parser.read().toSystem(parsers, map);
+
+    if (system.name().isEmpty())
+    {
+        QSet<QString> parts;
+        for (const auto filename : filenames)
+        {
+            parts.insert(QFileInfo(filename).baseName());
+        }
+
+        QStringList names(parts.constBegin(), parts.constEnd());
+
+        system.setName(names.join(":"));
+    }
+
+    return system;
 }
 
 /** Synonym for MoleculeParser::read */
@@ -982,10 +1021,6 @@ System MoleculeParser::load(const QStringList &filenames, const PropertyMap &map
 {
     return MoleculeParser::read(filenames, map);
 }
-
-
-
-
 
 /** Parse the passed file, returning the resulting Parser. This employs a lot
     of magic to automatically work out the format of the file and whether or
@@ -1502,10 +1537,6 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
 
     return system;
 }
-
-
-
-
 
 /** Save the passed System to the file called 'filename'. First, the 'fileformat'
     property is looked at in 'map'. This is used to set the format(s) of

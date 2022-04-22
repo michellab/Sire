@@ -1056,6 +1056,30 @@ const MoleculeView& MoleculeView::null()
     return *(create_shared_null<Molecule>());
 }
 
+/** Return the number of atoms in this view */
+int MoleculeView::nAtoms() const
+{
+    return this->selection().nSelectedAtoms();
+}
+
+/** Return the number of residues in this view */
+int MoleculeView::nResidues() const
+{
+    return this->selection().nSelectedResidues();
+}
+
+/** Return the number of chains in this view */
+int MoleculeView::nChains() const
+{
+    return this->selection().nSelectedChains();
+}
+
+/** Return the number of segments in this view */
+int MoleculeView::nSegments() const
+{
+    return this->selection().nSelectedSegments();
+}
+
 /** Return the number of sub-views in this view. Most MoleculeViews are
     just a single view, but some (e.g. ViewsOfMol or Selector<T>) have
     multiple views */

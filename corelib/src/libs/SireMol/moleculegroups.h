@@ -255,6 +255,10 @@ public:
     int nGroups() const;
     int count() const;
 
+    int nAtoms() const;
+    int nResidues() const;
+    int nChains() const;
+    int nSegments() const;
     int nMolecules() const;
 
     int nViews() const;
