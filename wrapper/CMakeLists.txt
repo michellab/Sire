@@ -261,15 +261,31 @@ endif()
 if (SIRE_GSL_INCLUDE_PATH)
   include_directories (${SIRE_GSL_INCLUDE_PATH})
 endif()
-if (DEFINED SIRE_APP)
-  # For some reason, when using the conda GNU compilers,  CMake stripped
-  # "${SIRE_APP}/include" from the directories searched for header files
-  # If this happens, uncomment the following line
-  # unset(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES)
-  include_directories( "${SIRE_APP}/include" "${SIRE_APP}/Library/include" )
-endif()
 
-include_directories (${CONDA_INCLUDE_DIR})
+if (DEFINED SIRE_APP)
+  include_directories( "${SIRE_APP}/include" "${SIRE_APP}/Library/include" )
+  include_directories(BEFORE ${CONDA_INCLUDE_DIR})
+
+  message(STATUS "Checking if conda/include is a hidden include...")
+  include(CheckCXXSourceRuns)
+  get_property(CMAKE_REQUIRED_INCLUDES DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+  message(STATUS "${CMAKE_REQUIRED_INCLUDES}")
+  check_cxx_source_runs("
+
+  #include \"tbb/tbb.h\"
+
+  int main()
+  {
+    return 0;
+  }" IS_CONDA_INCLUDE_WORKING)
+
+  if (IS_CONDA_INCLUDE_WORKING)
+    message(STATUS "-Iconda/include is used correctly.")
+  else()
+    unset(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES)
+    message(STATUS "Unsetting CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES so that conda/include is not hidden.")
+  endif()
+endif()
 
 # MUST build shared libraries
 set (BUILD_SHARED_LIBS ON)
