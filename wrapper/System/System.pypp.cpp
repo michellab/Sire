@@ -2137,6 +2137,19 @@ void register_System_class(){
         }
         { //::SireSystem::System::setName
         
+            typedef void ( ::SireSystem::System::*setName_function_type)( ::SireSystem::SysName const & ) ;
+            setName_function_type setName_function_value( &::SireSystem::System::setName );
+            
+            System_exposer.def( 
+                "setName"
+                , setName_function_value
+                , ( bp::arg("newname") )
+                , bp::release_gil_policy()
+                , "Set the name of this system" );
+        
+        }
+        { //::SireSystem::System::setName
+        
             typedef void ( ::SireSystem::System::*setName_function_type)( ::QString const & ) ;
             setName_function_type setName_function_value( &::SireSystem::System::setName );
             
