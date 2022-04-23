@@ -2,7 +2,7 @@
 from typing import Union as _Union
 from typing import List as _List
 
-__all__ = ["load", "save", "create", "smiles", "expand", "range",
+__all__ = ["load", "save", "create", "smiles", "expand",
            "tutorial_url", "supported_formats"]
 
 
@@ -17,13 +17,6 @@ def supported_formats():
     """
     from Sire.IO import MoleculeParser
     return MoleculeParser.supportedFormats()
-
-
-def range(*args, **kwargs):
-    """This is the standard python range, except that it
-       returns a list of values, rather than an iterator
-    """
-    return list(_range(*args, **kwargs))
 
 
 def _create_dir(directory):

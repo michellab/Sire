@@ -118,18 +118,14 @@ mathjax_path = ("https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js
 # -- Options for HTML output ---------------------------------------------
 
 # theme
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'furo'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    'logo_only': True,
-    'display_version': False,
-    'prev_next_buttons_location': 'both',
-    'style_external_links': False,
-    'style_nav_header_background': ''
 }
+
 # pngmath_latex_preamble = r"""
 # \usepackage{color}
 # \definecolor{textgray}{RGB}{51,51,51}
@@ -140,14 +136,14 @@ html_theme_options = {
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "Sire Documentation"
+html_title = "Sire : Simulator's Research Environment"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 html_short_title = "Sire"
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = 'images/logo.jpg'
+html_logo = None
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -159,8 +155,8 @@ html_favicon = 'favicons/favicon.ico'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-html_css_files = ['custom.css']
-html_js_files = ['custom.js']
+html_css_files = []
+html_js_files = []
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
@@ -172,7 +168,6 @@ html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
 #html_sidebars = {'**': ['sourcelink.html', 'globaltoc.html']}
-
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.

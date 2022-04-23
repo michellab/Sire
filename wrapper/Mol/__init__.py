@@ -413,11 +413,63 @@ def __fixed__getitem__(obj, key):
         return obj.__orig__getitem__(key)
 
 
+def __fixed__atoms__(obj, idx=None):
+    if idx is None:
+        return obj.__orig__atoms()
+    elif type(idx) is range:
+        return obj.__orig__atoms(list(idx))
+    else:
+        return obj.__orig__atoms(idx)
+
+
+def __fixed__residues__(obj, idx=None):
+    if idx is None:
+        return obj.__orig__residues()
+    elif type(idx) is range:
+        return obj.__orig__residues(list(idx))
+    else:
+        return obj.__orig__residues(idx)
+
+
+def __fixed__chains__(obj, idx=None):
+    if idx is None:
+        return obj.__orig__chains()
+    elif type(idx) is range:
+        return obj.__orig__chains(list(idx))
+    else:
+        return obj.__orig__chains(idx)
+
+
+def __fixed__segments__(obj, idx=None):
+    if idx is None:
+        return obj.__orig__segments()
+    elif type(idx) is range:
+        return obj.__orig__segments(list(idx))
+    else:
+        return obj.__orig__segments(idx)
+
+
 def __fix_getitem(C):
     if not hasattr(C, "__orig__getitem__"):
         C.__orig__getitem__ = C.__getitem__
 
+    if not hasattr(C, "__orig__atoms"):
+        C.__orig__atoms = C.atoms
+
+    if not hasattr(C, "__orig__residues"):
+        C.__orig__residues = C.residues
+
+    if not hasattr(C, "__orig__chains"):
+        C.__orig__chains = C.chains
+
+    if not hasattr(C, "__orig__segments"):
+        C.__orig__segments = C.segments
+
     C.__getitem__ = __fixed__getitem__
+    C.atoms = __fixed__atoms__
+    C.residues = __fixed__residues__
+    C.chains = __fixed__chains__
+    C.segments = __fixed__segments__
 
 
 for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule]:
