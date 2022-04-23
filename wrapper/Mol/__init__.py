@@ -396,6 +396,12 @@ __props = [ AtomCharges, AtomElements,
 for __prop in __props:
     _pvt_property_cludge_fix(__prop)
 
+##########
+########## END OF CLUDGY WORKAROUND
+##########
+
+# Here I will define some functions that make accessing
+# things from moleculeviews more convenient
 
 def __fixed__getitem__(obj, key):
     if type(key) is slice:
@@ -417,9 +423,27 @@ def __fix_getitem(C):
 for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule]:
     __fix_getitem(C)
 
-##########
-########## END OF CLUDGY WORKAROUND
-##########
+
+MoleculeView.coordinates = lambda x : x.property("coordinates")
+Atom.element = lambda x : x.property("element")
+
+MoleculeView.mass = lambda x : x.evaluate().mass()
+MoleculeView.charge = lambda x : x.evaluate().charge()
+
+Atom.mass = lambda x : x.property("mass")
+
+def _get_atom_charge(x):
+    if x.hasProperty("charge"):
+        return x.property("charge")
+    elif x.hasProperty("formal_charge"):
+        return x.property("formal_charge")
+    else:
+        # this will generate a missing_property exception
+        return x.property("charge")
+
+Atom.charge = _get_atom_charge
+
+Molecule.connectivity = lambda x : x.property("connectivity")
 
 #### Here are some extra classes / functions defined as part of the
 #### public API

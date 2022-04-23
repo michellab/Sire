@@ -158,8 +158,26 @@ bool Atom::operator!=(const Atom &other) const
 /** Return a string representation of this atom */
 QString Atom::toString() const
 {
-    return QObject::tr( "Atom( %1 : %2 )" ).arg(this->name())
+    if (this->hasProperty("coordinates"))
+    {
+        try
+        {
+            QString name = QString("%1:%2").arg(this->name())
                                            .arg(this->number());
+
+            Vector c = this->property<Vector>("coordinates");
+            return QObject::tr("Atom( %1 [%2, %3, %4] )")
+                        .arg(name, -7)
+                        .arg(c.x(), 7, 'f', 2)
+                        .arg(c.y(), 7, 'f', 2)
+                        .arg(c.z(), 7, 'f', 2);
+        }
+        catch(SireError::exception&)
+        {}
+    }
+
+    return QObject::tr( "Atom( %1:%2 )" ).arg(this->name())
+                                          .arg(this->number());
 }
 
 /** Is this atom empty? */

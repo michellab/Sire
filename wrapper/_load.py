@@ -68,12 +68,10 @@ def _get_gromacs_dir():
 
     try:
         import tarfile
+        t = tarfile.open(gromacs_tbz2, "r|bz2")
+        t.extractall(path=Sire.Config.share_directory)
     except Exception:
         return None
-
-    t = tarfile.open(gromacs_tbz2, "r|bz2")
-
-    t.extractall(path=Sire.Config.share_directory)
 
     if os.path.exists(gromacs_dir):
         return gromacs_dir
@@ -300,7 +298,12 @@ def load(path: _Union[str, _List[str]], *args, **kwargs):
     paths = p
 
     import Sire.IO
-    mols = Sire.IO.MoleculeParser.load(paths)
+    from Sire.Base import PropertyMap, StringProperty
+
+    map = PropertyMap()
+    map.set("GROMACS_PATH", StringProperty(_get_gromacs_dir()))
+
+    mols = Sire.IO.MoleculeParser.load(paths, map=map)
 
     # This is an opinionated loader - we must have atom elements
     # and a connectivity defined
