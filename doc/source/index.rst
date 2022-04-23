@@ -1,17 +1,16 @@
-====
-Sire
-====
+========================
+Sire Molecular Modelling
+========================
 
-Citation
-========
-
-Citation instructions...
+Sire is a complete molecular modelling and prototyping package.
+It can be used for loading, editing, simulating and generally
+manipulating molecules.
 
 Features
 ========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    features
 
@@ -19,7 +18,7 @@ Installation
 ============
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    install
 
@@ -27,7 +26,7 @@ Quick Start Guide
 =================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    quickstart/index
 
@@ -35,7 +34,7 @@ Tutorial
 ========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    tutorial/index
 
@@ -43,7 +42,7 @@ Getting help
 ============
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    support
 
@@ -51,7 +50,7 @@ Contributing
 ============
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    contributing
    roadmap
@@ -63,7 +62,7 @@ Documentation
 =============
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    api/index
 
@@ -79,9 +78,14 @@ Changelog
 Acknowledgements
 ================
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    acknowledgements
+
+Citation
+========
+
+Citation instructions...
 
 Indices and tables
 ==================

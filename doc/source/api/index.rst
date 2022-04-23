@@ -4,19 +4,11 @@ Documentation
 
 Sire is composed of several modules:
 
-Sire Module
------------
-
 * The :doc:`Sire <index_Sire>` top-level Python module. This has top-level
   functions that should make it easy to use Sire without knowing about
   or directly loading the other modules.
   By convention, we normally import `Sire` under
   the alias ``sr``.
-
-.. toctree::
-   :maxdepth: 4
-
-   index_Sire
 
 There are also a number of submodules. These provide additional functionality,
 going all the way up to letting you construct complete molecular simulation
@@ -72,12 +64,13 @@ programs.
   :doc:`Sire.Vol <index_Sire_Vol>` (classes that represent different
   simulation spaces, e.g. :class:`Sire.Vol.PeriodicBox`).
 
-Sire Submodules
----------------
+Detail
+------
 
 .. toctree::
    :maxdepth: 1
 
+   index_Sire
    index_Sire_Analysis
    index_Sire_Base
    index_Sire_CAS
