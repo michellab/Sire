@@ -6,7 +6,7 @@
 
 # Third Party dependencies of this module
 include_directories( ${BOOST_INCLUDE_DIR}
-                     ${PYTHON_INCLUDE_DIR} 
+                     ${PYTHON_INCLUDE_DIR}
                      ${SIRE_GSL_INCLUDE_PATH} )
 
 # Sire include paths
@@ -23,7 +23,8 @@ include(CMakeAutogenFile.txt)
 set ( WRAPIO_SOURCES
 
       _IO.main.cpp
-     
+      _IO_load.cpp
+
       ${PYPP_SOURCES}
 
     )
@@ -39,7 +40,7 @@ set_target_properties (IO
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
+
 target_link_libraries (IO
                        SirePython
                        SIRE_SireIO
@@ -59,6 +60,6 @@ install( TARGETS IO
         )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )
 

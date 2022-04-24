@@ -32,6 +32,8 @@
 
 #include <limits>
 
+#include <QDebug>
+
 using namespace SireBase;
 
 const int _unset = std::numeric_limits<int>::max();
@@ -67,31 +69,41 @@ SliceIterator::SliceIterator(const Slice &slice, int n)
         start = 0;
 
     start = _map(start, n);
-
     stop = slice.stop;
-
-    if (stop == _unset)
-       stop = n;
-
-    stop = _map(stop-1, n);
-
     step = slice.step;
 
     if (step == _unset)
     {
-        if (start <= stop)
-            step = 1;
+        step = 1;
+    }
+
+    if (stop == _unset)
+    {
+        if (step >= 0)
+            stop = n-1;
         else
-            step = -1;
+            stop = 0;
+    }
+    else
+    {
+        if (step >= 0)
+        {
+            if (stop != 0)
+                stop = _map(stop-1, n);
+        }
+        else
+            stop = _map(stop+1, n);
     }
 
     if (start <= stop and step <= 0)
         throw SireError::invalid_index(QObject::tr(
-            "You cannot have a negative step for a positive slice!"),
+            "You cannot have a negative step for a positive slice! "
+            "%1:%2:%3").arg(start).arg(stop).arg(step),
                 CODELOC);
     else if (start > stop and step >= 0)
         throw SireError::invalid_index(QObject::tr(
-            "You cannot have a positive step for a negative slice!"),
+            "You cannot have a positive step for a negative slice! "
+            "%1:%2:%3").arg(start).arg(stop).arg(step),
                 CODELOC);
 
     i = start;

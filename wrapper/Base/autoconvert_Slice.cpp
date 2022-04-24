@@ -65,7 +65,7 @@ void Slice_from_python_slice(PyObject* obj_ptr,
         {
             if (stop == -9223372036854775808L)
             {
-                stop = 0;
+                stop = 9223372036854775807L;
             }
 
             new (storage) SireBase::Slice( SireBase::Slice::fromStartStop(start, stop, step));

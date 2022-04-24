@@ -6,12 +6,17 @@
 #include <QDebug>
 
 //#define SIRE_DISABLE_GIL_POLICY 1
+//#define SIRE_PRINT_GIL_STATUS 1
 
 boost::python::detail::GilHolder::GilHolder() : thread_state(0)
 {
     #ifndef SIRE_DISABLE_GIL_POLICY
         #ifdef SIRE_PRINT_GIL_STATUS
             qDebug() << "--RELEASE GIL";
+            //for (const auto &bt : SireError::getBackTrace())
+            //{
+            //    qDebug() << bt;
+            //}
         #endif
         thread_state = PyEval_SaveThread();
     #endif

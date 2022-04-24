@@ -152,6 +152,7 @@ namespace bp = boost::python;
 void autoconvert_Slice();
 
 BOOST_PYTHON_MODULE(_Base){
+
     register_SireBase_objects();
 
     register_SireBase_containers();

@@ -1,6 +1,6 @@
-=========================
-Identifying and Searching
-=========================
+======================
+Indexing and Searching
+======================
 
 Name, Number, Index
 

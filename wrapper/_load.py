@@ -85,7 +85,8 @@ def _resolve_path(path, directory):
                 return [os.path.abspath(unzipped)]
 
             _create_dir(directory)
-            unzipped = os.path.join(directory, os.path.basename(path))
+            print(os.path.basename(path))
+            unzipped = os.path.join(directory, os.path.basename(path)[0:-3])
             if os.path.exists(unzipped) and os.path.isfile(unzipped):
                 print(f"Using cached unzipped file '{unzipped}'...")
                 return [os.path.abspath(unzipped)]
@@ -109,7 +110,7 @@ def _resolve_path(path, directory):
                 return [os.path.abspath(unzipped)]
 
             _create_dir(directory)
-            unzipped = os.path.join(directory, os.path.basename(path))
+            unzipped = os.path.join(directory, os.path.basename(path)[0:-4])
             if os.path.exists(unzipped) and os.path.isfile(unzipped):
                 print(f"Using cached unzipped file '{unzipped}'...")
                 return [os.path.abspath(unzipped)]
@@ -290,65 +291,11 @@ def load(path: _Union[str, _List[str]], *args, **kwargs):
 
     paths = p
 
-    import Sire.IO
-    from Sire.Base import PropertyMap, StringProperty
+    if len(paths) == 0:
+        raise IOError("No valid files specified. Nothing to load?")
 
-    map = PropertyMap()
-    map.set("GROMACS_PATH", StringProperty(_get_gromacs_dir()))
-
-    mols = Sire.IO.MoleculeParser.load(paths, map=map)
-
-    # This is an opinionated loader - we must have atom elements
-    # and a connectivity defined
-    from Sire.System import System
-    from Sire.Mol import MoleculeGroup
-
-    grp = MoleculeGroup("all")
-
-    for mol in mols:
-        c = None
-
-        if not mol.hasProperty("element"):
-            from Sire.Mol import Element
-            c = mol.cursor()
-
-            for atom in c.atoms():
-                atom["element"] = Element.biologicalElement(atom.name().value())
-                print(f"guess {atom.name()} is a {atom['element']}")
-
-            mol = c.commit()
-
-        if not mol.hasProperty("connectivity"):
-            from Sire.Mol import CovalentBondHunter
-            hunter = CovalentBondHunter()
-
-            try:
-                connectivity = hunter(mol)
-                if c is None:
-                    c = mol.cursor()
-
-                c["connectivity"] = connectivity
-            except Exception:
-                print("Failed to auto-generate the connectivity")
-                pass
-
-        if c is not None:
-            mol = c.commit()
-
-        # we now want to break the molecule up into sub-molecules,
-        # based on the connectivity
-        grp.add(mol)
-
-    s = System()
-    s.setName(mols.name())
-    s.add(grp)
-
-    for key in mols.propertyKeys():
-        s.setProperty(key, mols.property(key))
-
-    s.setProperty("filenames", paths)
-
-    return s
+    from Sire.IO import load_molecules
+    return load_molecules(paths, map={"GROMACS_PATH":_get_gromacs_dir()})
 
 
 def save(molecules, filename: str, format: _Union[str, _List[str]]=None,

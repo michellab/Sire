@@ -482,7 +482,15 @@ Atom.element = lambda x : x.property("element")
 MoleculeView.mass = lambda x : x.evaluate().mass()
 MoleculeView.charge = lambda x : x.evaluate().charge()
 
-Atom.mass = lambda x : x.property("mass")
+def _get_atom_mass(x):
+    if x.hasProperty("mass"):
+        return x.property("mass")
+    elif x.hasProperty("element"):
+        return x.property("element").mass()
+    else:
+        return 0
+
+Atom.mass = _get_atom_mass
 
 def _get_atom_charge(x):
     if x.hasProperty("charge"):
@@ -490,8 +498,7 @@ def _get_atom_charge(x):
     elif x.hasProperty("formal_charge"):
         return x.property("formal_charge")
     else:
-        # this will generate a missing_property exception
-        return x.property("charge")
+        return 0
 
 Atom.charge = _get_atom_charge
 
