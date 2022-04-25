@@ -65,6 +65,19 @@ void register_Selector_Atom__class(){
         Selector_Atom__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::Atom::ID const & >(( bp::arg("moldata"), bp::arg("viewid") ), "") );
         Selector_Atom__exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::AtomIdx > const & >(( bp::arg("moldata"), bp::arg("idxs") ), "") );
         Selector_Atom__exposer.def( bp::init< SireMol::Selector< SireMol::Atom > const & >(( bp::arg("other") ), "") );
+        { //::SireMol::Selector< SireMol::Atom >::IDs
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::Selector< SireMol::Atom >::*IDs_function_type)(  ) const;
+            IDs_function_type IDs_function_value( &::SireMol::Selector< SireMol::Atom >::IDs );
+            
+            Selector_Atom__exposer.def( 
+                "IDs"
+                , IDs_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::Atom >::add
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;

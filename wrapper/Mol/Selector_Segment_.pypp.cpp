@@ -53,6 +53,19 @@ void register_Selector_Segment__class(){
         Selector_Segment__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::Segment::ID const & >(( bp::arg("moldata"), bp::arg("viewid") ), "") );
         Selector_Segment__exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::SegIdx > const & >(( bp::arg("moldata"), bp::arg("idxs") ), "") );
         Selector_Segment__exposer.def( bp::init< SireMol::Selector< SireMol::Segment > const & >(( bp::arg("other") ), "") );
+        { //::SireMol::Selector< SireMol::Segment >::IDs
+        
+            typedef SireMol::Selector< SireMol::Segment > exported_class_t;
+            typedef ::QList< SireMol::SegIdx > ( ::SireMol::Selector< SireMol::Segment >::*IDs_function_type)(  ) const;
+            IDs_function_type IDs_function_value( &::SireMol::Selector< SireMol::Segment >::IDs );
+            
+            Selector_Segment__exposer.def( 
+                "IDs"
+                , IDs_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::Segment >::add
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;

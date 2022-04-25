@@ -57,6 +57,19 @@ void register_Selector_Chain__class(){
         Selector_Chain__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::Chain::ID const & >(( bp::arg("moldata"), bp::arg("viewid") ), "") );
         Selector_Chain__exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::ChainIdx > const & >(( bp::arg("moldata"), bp::arg("idxs") ), "") );
         Selector_Chain__exposer.def( bp::init< SireMol::Selector< SireMol::Chain > const & >(( bp::arg("other") ), "") );
+        { //::SireMol::Selector< SireMol::Chain >::IDs
+        
+            typedef SireMol::Selector< SireMol::Chain > exported_class_t;
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::Selector< SireMol::Chain >::*IDs_function_type)(  ) const;
+            IDs_function_type IDs_function_value( &::SireMol::Selector< SireMol::Chain >::IDs );
+            
+            Selector_Chain__exposer.def( 
+                "IDs"
+                , IDs_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::Chain >::add
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;

@@ -57,6 +57,19 @@ void register_Selector_CutGroup__class(){
         Selector_CutGroup__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::CutGroup::ID const & >(( bp::arg("moldata"), bp::arg("viewid") ), "") );
         Selector_CutGroup__exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::CGIdx > const & >(( bp::arg("moldata"), bp::arg("idxs") ), "") );
         Selector_CutGroup__exposer.def( bp::init< SireMol::Selector< SireMol::CutGroup > const & >(( bp::arg("other") ), "") );
+        { //::SireMol::Selector< SireMol::CutGroup >::IDs
+        
+            typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
+            typedef ::QList< SireMol::CGIdx > ( ::SireMol::Selector< SireMol::CutGroup >::*IDs_function_type)(  ) const;
+            IDs_function_type IDs_function_value( &::SireMol::Selector< SireMol::CutGroup >::IDs );
+            
+            Selector_CutGroup__exposer.def( 
+                "IDs"
+                , IDs_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::CutGroup >::add
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;

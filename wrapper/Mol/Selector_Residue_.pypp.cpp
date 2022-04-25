@@ -59,6 +59,19 @@ void register_Selector_Residue__class(){
         Selector_Residue__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::Residue::ID const & >(( bp::arg("moldata"), bp::arg("viewid") ), "") );
         Selector_Residue__exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::ResIdx > const & >(( bp::arg("moldata"), bp::arg("idxs") ), "") );
         Selector_Residue__exposer.def( bp::init< SireMol::Selector< SireMol::Residue > const & >(( bp::arg("other") ), "") );
+        { //::SireMol::Selector< SireMol::Residue >::IDs
+        
+            typedef SireMol::Selector< SireMol::Residue > exported_class_t;
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::Selector< SireMol::Residue >::*IDs_function_type)(  ) const;
+            IDs_function_type IDs_function_value( &::SireMol::Selector< SireMol::Residue >::IDs );
+            
+            Selector_Residue__exposer.def( 
+                "IDs"
+                , IDs_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::Residue >::add
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
