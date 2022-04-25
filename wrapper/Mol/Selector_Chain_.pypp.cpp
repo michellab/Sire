@@ -251,6 +251,19 @@ void register_Selector_Chain__class(){
                 , "" );
         
         }
+        { //::SireMol::Selector< SireMol::Chain >::indexes
+        
+            typedef SireMol::Selector< SireMol::Chain > exported_class_t;
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::Selector< SireMol::Chain >::*indexes_function_type)(  ) const;
+            indexes_function_type indexes_function_value( &::SireMol::Selector< SireMol::Chain >::indexes );
+            
+            Selector_Chain__exposer.def( 
+                "indexes"
+                , indexes_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::Chain >::intersection
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
@@ -438,6 +451,32 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "nViews"
                 , nViews_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Chain >::names
+        
+            typedef SireMol::Selector< SireMol::Chain > exported_class_t;
+            typedef ::QList< SireMol::ChainName > ( ::SireMol::Selector< SireMol::Chain >::*names_function_type)(  ) const;
+            names_function_type names_function_value( &::SireMol::Selector< SireMol::Chain >::names );
+            
+            Selector_Chain__exposer.def( 
+                "names"
+                , names_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Chain >::numbers
+        
+            typedef SireMol::Selector< SireMol::Chain > exported_class_t;
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::Selector< SireMol::Chain >::*numbers_function_type)(  ) const;
+            numbers_function_type numbers_function_value( &::SireMol::Selector< SireMol::Chain >::numbers );
+            
+            Selector_Chain__exposer.def( 
+                "numbers"
+                , numbers_function_value
                 , bp::release_gil_policy()
                 , "" );
         

@@ -253,6 +253,19 @@ void register_Selector_Residue__class(){
                 , "" );
         
         }
+        { //::SireMol::Selector< SireMol::Residue >::indexes
+        
+            typedef SireMol::Selector< SireMol::Residue > exported_class_t;
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::Selector< SireMol::Residue >::*indexes_function_type)(  ) const;
+            indexes_function_type indexes_function_value( &::SireMol::Selector< SireMol::Residue >::indexes );
+            
+            Selector_Residue__exposer.def( 
+                "indexes"
+                , indexes_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::Residue >::intersection
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
@@ -440,6 +453,32 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "nViews"
                 , nViews_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Residue >::names
+        
+            typedef SireMol::Selector< SireMol::Residue > exported_class_t;
+            typedef ::QList< SireMol::ResName > ( ::SireMol::Selector< SireMol::Residue >::*names_function_type)(  ) const;
+            names_function_type names_function_value( &::SireMol::Selector< SireMol::Residue >::names );
+            
+            Selector_Residue__exposer.def( 
+                "names"
+                , names_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Residue >::numbers
+        
+            typedef SireMol::Selector< SireMol::Residue > exported_class_t;
+            typedef ::QList< SireMol::ResNum > ( ::SireMol::Selector< SireMol::Residue >::*numbers_function_type)(  ) const;
+            numbers_function_type numbers_function_value( &::SireMol::Selector< SireMol::Residue >::numbers );
+            
+            Selector_Residue__exposer.def( 
+                "numbers"
+                , numbers_function_value
                 , bp::release_gil_policy()
                 , "" );
         

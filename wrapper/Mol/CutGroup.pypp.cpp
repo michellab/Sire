@@ -324,6 +324,18 @@ void register_CutGroup_class(){
                 , "Return the name of this CutGroup" );
         
         }
+        { //::SireMol::CutGroup::number
+        
+            typedef ::SireMol::CGIdx ( ::SireMol::CutGroup::*number_function_type)(  ) const;
+            number_function_type number_function_value( &::SireMol::CutGroup::number );
+            
+            CutGroup_exposer.def( 
+                "number"
+                , number_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         CutGroup_exposer.def( bp::self != bp::self );
         { //::SireMol::CutGroup::operator=
         

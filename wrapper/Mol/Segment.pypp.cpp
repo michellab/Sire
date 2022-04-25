@@ -320,6 +320,18 @@ void register_Segment_class(){
                 , "Return the name of this Segment" );
         
         }
+        { //::SireMol::Segment::number
+        
+            typedef ::SireMol::SegIdx ( ::SireMol::Segment::*number_function_type)(  ) const;
+            number_function_type number_function_value( &::SireMol::Segment::number );
+            
+            Segment_exposer.def( 
+                "number"
+                , number_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         Segment_exposer.def( bp::self != bp::self );
         { //::SireMol::Segment::operator=
         

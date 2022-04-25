@@ -247,6 +247,19 @@ void register_Selector_Segment__class(){
                 , "" );
         
         }
+        { //::SireMol::Selector< SireMol::Segment >::indexes
+        
+            typedef SireMol::Selector< SireMol::Segment > exported_class_t;
+            typedef ::QList< SireMol::SegIdx > ( ::SireMol::Selector< SireMol::Segment >::*indexes_function_type)(  ) const;
+            indexes_function_type indexes_function_value( &::SireMol::Selector< SireMol::Segment >::indexes );
+            
+            Selector_Segment__exposer.def( 
+                "indexes"
+                , indexes_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::Segment >::intersection
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
@@ -434,6 +447,32 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "nViews"
                 , nViews_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Segment >::names
+        
+            typedef SireMol::Selector< SireMol::Segment > exported_class_t;
+            typedef ::QList< SireMol::SegName > ( ::SireMol::Selector< SireMol::Segment >::*names_function_type)(  ) const;
+            names_function_type names_function_value( &::SireMol::Selector< SireMol::Segment >::names );
+            
+            Selector_Segment__exposer.def( 
+                "names"
+                , names_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Segment >::numbers
+        
+            typedef SireMol::Selector< SireMol::Segment > exported_class_t;
+            typedef ::QList< SireMol::SegIdx > ( ::SireMol::Selector< SireMol::Segment >::*numbers_function_type)(  ) const;
+            numbers_function_type numbers_function_value( &::SireMol::Selector< SireMol::Segment >::numbers );
+            
+            Selector_Segment__exposer.def( 
+                "numbers"
+                , numbers_function_value
                 , bp::release_gil_policy()
                 , "" );
         

@@ -259,6 +259,19 @@ void register_Selector_Atom__class(){
                 , "" );
         
         }
+        { //::SireMol::Selector< SireMol::Atom >::indexes
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::Selector< SireMol::Atom >::*indexes_function_type)(  ) const;
+            indexes_function_type indexes_function_value( &::SireMol::Selector< SireMol::Atom >::indexes );
+            
+            Selector_Atom__exposer.def( 
+                "indexes"
+                , indexes_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::Atom >::intersection
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
@@ -446,6 +459,32 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "nViews"
                 , nViews_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::names
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::QList< SireMol::AtomName > ( ::SireMol::Selector< SireMol::Atom >::*names_function_type)(  ) const;
+            names_function_type names_function_value( &::SireMol::Selector< SireMol::Atom >::names );
+            
+            Selector_Atom__exposer.def( 
+                "names"
+                , names_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::numbers
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::QList< SireMol::AtomNum > ( ::SireMol::Selector< SireMol::Atom >::*numbers_function_type)(  ) const;
+            numbers_function_type numbers_function_value( &::SireMol::Selector< SireMol::Atom >::numbers );
+            
+            Selector_Atom__exposer.def( 
+                "numbers"
+                , numbers_function_value
                 , bp::release_gil_policy()
                 , "" );
         

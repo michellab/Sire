@@ -374,6 +374,18 @@ void register_Chain_class(){
                 , "Return the name of this chain" );
         
         }
+        { //::SireMol::Chain::number
+        
+            typedef ::SireMol::ChainIdx ( ::SireMol::Chain::*number_function_type)(  ) const;
+            number_function_type number_function_value( &::SireMol::Chain::number );
+            
+            Chain_exposer.def( 
+                "number"
+                , number_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         Chain_exposer.def( bp::self != bp::self );
         { //::SireMol::Chain::operator=
         

@@ -251,6 +251,19 @@ void register_Selector_CutGroup__class(){
                 , "" );
         
         }
+        { //::SireMol::Selector< SireMol::CutGroup >::indexes
+        
+            typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
+            typedef ::QList< SireMol::CGIdx > ( ::SireMol::Selector< SireMol::CutGroup >::*indexes_function_type)(  ) const;
+            indexes_function_type indexes_function_value( &::SireMol::Selector< SireMol::CutGroup >::indexes );
+            
+            Selector_CutGroup__exposer.def( 
+                "indexes"
+                , indexes_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::CutGroup >::intersection
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
@@ -438,6 +451,32 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "nViews"
                 , nViews_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::CutGroup >::names
+        
+            typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
+            typedef ::QList< SireMol::CGName > ( ::SireMol::Selector< SireMol::CutGroup >::*names_function_type)(  ) const;
+            names_function_type names_function_value( &::SireMol::Selector< SireMol::CutGroup >::names );
+            
+            Selector_CutGroup__exposer.def( 
+                "names"
+                , names_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::CutGroup >::numbers
+        
+            typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
+            typedef ::QList< SireMol::CGIdx > ( ::SireMol::Selector< SireMol::CutGroup >::*numbers_function_type)(  ) const;
+            numbers_function_type numbers_function_value( &::SireMol::Selector< SireMol::CutGroup >::numbers );
+            
+            Selector_CutGroup__exposer.def( 
+                "numbers"
+                , numbers_function_value
                 , bp::release_gil_policy()
                 , "" );
         
