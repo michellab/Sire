@@ -56,3 +56,4 @@ The number of segments is 0
    :maxdepth: 1
 
    part02/01_indexing_atoms
+   part02/02_indexing_residues

@@ -407,6 +407,9 @@ def __is_chain_class(obj):
     return obj.what() in ["SireMol::Chain", "SireMol::Selector<SireMol::Chain>"]
 
 
+def __is_selector_class(obj):
+    return obj.what().find("SireMol::Selector") != -1
+
 def __from_select_result(obj):
     """Convert the passed SelectResult from a search into the
        most appropriate MoleculeView-derived class (or MultiMolView)
@@ -457,7 +460,9 @@ def __from_select_result(obj):
 
 def __fixed__getitem__(obj, key):
     if type(key) is int:
-        if __is_chain_class(obj):
+        if __is_selector_class(obj):
+            return obj.__orig__getitem__(key)
+        elif __is_chain_class(obj):
             return obj.residue(key)
         else:
             return obj.atom(key)
@@ -469,7 +474,9 @@ def __fixed__getitem__(obj, key):
         except SyntaxError:
             pass
 
-    if __is_chain_class(obj):
+    if __is_selector_class(obj):
+        return obj.__orig__getitem__(key)
+    elif __is_chain_class(obj):
         return obj.residues(key)
     else:
         return obj.atoms(key)
@@ -534,7 +541,9 @@ def __fix_getitem(C):
     C.segments = __fixed__segments__
 
 
-for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule]:
+for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule,
+          Selector_Atom_, Selector_Residue_,
+          Selector_Chain_, Selector_Segment_]:
     __fix_getitem(C)
 
 

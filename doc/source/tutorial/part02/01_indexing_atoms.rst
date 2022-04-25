@@ -266,6 +266,16 @@ Selector<SireMol::Atom>( size=5
 4:  Atom( N:9     [ -55.50,    9.04,   43.36] )
 )
 
+and can also search for multiple atom numbers
+
+>>> print(mol["atomnum 1, 3, 5, 7"])
+Selector<SireMol::Atom>( size=4
+0:  Atom( N:1     [ -54.07,   11.27,   41.93] )
+1:  Atom( C:3     [ -56.06,    9.95,   42.55] )
+2:  Atom( CB:5    [ -56.32,   12.33,   41.76] )
+3:  Atom( CG2:7   [ -57.70,   12.40,   42.39] )
+)
+
 You can include atom names (``atomname``) in the search string.
 
 >>> print(mol["atomname CA"])
@@ -281,6 +291,23 @@ Selector<SireMol::Atom>( size=1494
 1491:  Atom( CA:11636 [  27.51,   -3.84,   32.59] )
 1492:  Atom( CA:11645 [  28.74,   -0.85,   30.58] )
 1493:  Atom( CA:11653 [  31.65,   -0.00,   32.91] )
+)
+
+can search for multiple atom names
+
+>>> print(mol["atomname CA, C, N"])
+Selector<SireMol::Atom>( size=4482
+0:  Atom( N:1     [ -54.07,   11.27,   41.93] )
+1:  Atom( CA:2    [ -55.43,   11.35,   42.54] )
+2:  Atom( C:3     [ -56.06,    9.95,   42.55] )
+3:  Atom( N:9     [ -55.50,    9.04,   43.36] )
+4:  Atom( CA:10   [ -56.02,    7.64,   43.47] )
+...
+4477:  Atom( CA:11645 [  28.74,   -0.85,   30.58] )
+4478:  Atom( C:11646 [  30.02,   -0.22,   31.11] )
+4479:  Atom( N:11652 [  30.40,   -0.51,   32.35] )
+4480:  Atom( CA:11653 [  31.65,   -0.00,   32.91] )
+4481:  Atom( C:11654 [  32.09,   -0.82,   34.12] )
 )
 
 and can use mixtures of any identifiers, e.g.
@@ -328,3 +355,21 @@ AtomIdx(0)
     of the atom in a container. So ``mol[5:10]["atomidx 0"]`` would
     raise a KeyError as the first atom in the molecule is not
     contained in the slice of atoms 5 to 9.
+
+Iterating over atoms
+--------------------
+
+The :class:`~Sire.Mol.Selector_Atom_` class is iterable, meaning that
+it can be used in loops.
+
+>>> for atom in mol["atomnum < 10"]:
+...     print(atom)
+Atom( N:1     [ -54.07,   11.27,   41.93] )
+Atom( CA:2    [ -55.43,   11.35,   42.54] )
+Atom( C:3     [ -56.06,    9.95,   42.55] )
+Atom( O:4     [ -57.04,    9.73,   41.82] )
+Atom( CB:5    [ -56.32,   12.33,   41.76] )
+Atom( CG1:6   [ -55.68,   13.72,   41.72] )
+Atom( CG2:7   [ -57.70,   12.40,   42.39] )
+Atom( CD1:8   [ -55.42,   14.31,   43.09] )
+Atom( N:9     [ -55.50,    9.04,   43.36] )

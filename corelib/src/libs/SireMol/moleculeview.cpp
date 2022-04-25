@@ -372,8 +372,14 @@ Selector<Atom> MoleculeView::atoms(const QString &name,
     {
         try
         {
-            auto a = this->search(name).views().at(0).atoms();
-            return this->atoms(_toIndicies(a.IDs()), map);
+            const auto a = this->search(name).views();
+
+            if (a.count() == 0)
+                throw SireMol::missing_atom(QObject::tr(
+                    "No atom matches '%1'").arg(name), CODELOC);
+
+            return this->molecule().atoms(
+                        _toIndicies(a[0].atoms().IDs()), map);
         }
         catch(...)
         {
@@ -429,7 +435,7 @@ Selector<Atom> MoleculeView::atoms(const QList<qint64> &values,
 
         for (auto value : values)
         {
-            idxs.append(atomidxs.at(Index(atomidxs.count()).map(value)));
+            idxs.append(atomidxs.at(Index(value).map(atomidxs.count())));
         }
     }
 
@@ -455,7 +461,7 @@ Selector<Atom> MoleculeView::atoms(const Slice &slice,
 
         for (auto it = slice.begin(atomidxs.count()); not it.atEnd(); it.next())
         {
-            idxs.append(atomidxs.at(Index(atomidxs.count()).map(it.value())));
+            idxs.append(atomidxs.at(Index(it.value()).map(atomidxs.count())));
         }
     }
 
@@ -697,8 +703,14 @@ Selector<Residue> MoleculeView::residues(const QString &name,
     {
         try
         {
-            auto a = this->search(name).views().at(0).residues();
-            return this->residues(_toIndicies(a.IDs()), map);
+            const auto a = this->search(name).views();
+
+            if (a.count() == 0)
+                throw SireMol::missing_residue(QObject::tr(
+                    "No residue matches '%1'").arg(name), CODELOC);
+
+            return this->molecule().residues(
+                        _toIndicies(a[0].residues().IDs()), map);
         }
         catch(...)
         {
@@ -754,7 +766,7 @@ Selector<Residue> MoleculeView::residues(const QList<qint64> &values,
 
         for (auto value : values)
         {
-            idxs.append(residxs.at(Index(residxs.count()).map(value)));
+            idxs.append(residxs.at(Index(value).map(residxs.count())));
         }
     }
 
@@ -780,7 +792,7 @@ Selector<Residue> MoleculeView::residues(const Slice &slice,
 
         for (auto it = slice.begin(residxs.count()); not it.atEnd(); it.next())
         {
-            idxs.append(residxs.at(Index(residxs.count()).map(it.value())));
+            idxs.append(residxs.at(Index(it.value()).map(residxs.count())));
         }
     }
 
@@ -831,8 +843,10 @@ Selector<Residue> MoleculeView::residues() const
     QList<ResIdx> selected_res = this->selection().selectedResidues();
 
     if (selected_res.isEmpty())
+    {
         throw SireMol::missing_residue( QObject::tr(
                 "This view does not contain any residues."), CODELOC );
+    }
 
     return Selector<Residue>(this->data(), selected_res);
 }
@@ -906,8 +920,14 @@ Selector<Chain> MoleculeView::chains(const QString &name,
     {
         try
         {
-            auto a = this->search(name).views().at(0).chains();
-            return this->chains(_toIndicies(a.IDs()), map);
+            const auto a = this->search(name).views();
+
+            if (a.count() == 0)
+                throw SireMol::missing_chain(QObject::tr(
+                    "No chain matches '%1'").arg(name), CODELOC);
+
+            return this->molecule().chains(
+                        _toIndicies(a[0].chains().IDs()), map);
         }
         catch(...)
         {
@@ -963,7 +983,7 @@ Selector<Chain> MoleculeView::chains(const QList<qint64> &values,
 
         for (auto value : values)
         {
-            idxs.append(chainidxs.at(Index(chainidxs.count()).map(value)));
+            idxs.append(chainidxs.at(Index(value).map(chainidxs.count())));
         }
     }
 
@@ -1118,8 +1138,14 @@ Selector<Segment> MoleculeView::segments(const QString &name,
     {
         try
         {
-            auto a = this->search(name).views().at(0).segments();
-            return this->segments(_toIndicies(a.IDs()), map);
+            const auto a = this->search(name).views();
+
+            if (a.count() == 0)
+                throw SireMol::missing_segment(QObject::tr(
+                    "No segment matches '%1'").arg(name), CODELOC);
+
+            return this->molecule().segments(
+                        _toIndicies(a[0].segments().IDs()), map);
         }
         catch(...)
         {
@@ -1175,7 +1201,7 @@ Selector<Segment> MoleculeView::segments(const QList<qint64> &values,
 
         for (auto value : values)
         {
-            idxs.append(segidxs.at(Index(segidxs.count()).map(value)));
+            idxs.append(segidxs.at(Index(value).map(segidxs.count())));
         }
     }
 

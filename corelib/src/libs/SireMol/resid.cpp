@@ -408,8 +408,8 @@ Residue ResID::selectFrom(const MoleculeView &molview, const PropertyMap &map) c
 
     if (residxs.count() > 1)
         throw SireMol::duplicate_residue( QObject::tr(
-                "More than one residue matches the ID %1 (residues %2).")
-                    .arg(this->toString()).arg(Sire::toString(residxs)),
+                "More than one residue matches the ID %1 (number of matches is %2).")
+                    .arg(this->toString()).arg(residxs.count()),
                         CODELOC );
 
     return Residue(molview.data(), residxs.at(0));
