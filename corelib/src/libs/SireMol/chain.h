@@ -77,6 +77,7 @@ public:
     typedef ChainID ID;
     typedef ChainIdx Index;
     typedef ChainName Name;
+    typedef ChainIdx Number;
 
     Chain();
 
@@ -111,6 +112,7 @@ public:
 
     ChainName name() const;
     ChainIdx index() const;
+    ChainIdx number() const;
 
     bool hasProperty(const PropertyName &key) const;
     bool hasMetadata(const PropertyName &metakey) const;

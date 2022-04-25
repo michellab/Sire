@@ -126,6 +126,9 @@ public:
     Selector<T>* clone() const;
 
     QList<typename T::Index> IDs() const;
+    QList<typename T::Index> indexes() const;
+    QList<typename T::Name> names() const;
+    QList<typename T::Number> numbers() const;
 
     bool operator==(const Selector<T> &other) const;
     bool operator!=(const Selector<T> &other) const;
@@ -416,6 +419,50 @@ SIRE_OUTOFLINE_TEMPLATE
 QList<typename T::Index> Selector<T>::IDs() const
 {
     return idxs;
+}
+
+/** Return the indexes of all of the items in this selector, in the
+ *  order they appear in the selector
+ */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<typename T::Index> Selector<T>::indexes() const
+{
+    return idxs;
+}
+
+/** Return the names of all of the items in this selector, in the
+ *  order they appear in the selector
+ */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<typename T::Name> Selector<T>::names() const
+{
+    QList<typename T::Name> n;
+
+    for (const auto &idx : this->indexes())
+    {
+        n.append( this->operator()(idx).name() );
+    }
+
+    return n;
+}
+
+/** Return the numbers of all of the items in this selector, in the
+ *  order they appear in the selector
+ */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<typename T::Number> Selector<T>::numbers() const
+{
+    QList<typename T::Number> n;
+
+    for (const auto &idx : this->indexes())
+    {
+        n.append( this->operator()(idx).number() );
+    }
+
+    return n;
 }
 
 /** Return whether this set is empty */

@@ -261,6 +261,12 @@ ChainIdx Chain::index() const
     return chainidx;
 }
 
+/** Return the number of this chain (same as its index) */
+ChainIdx Chain::number() const
+{
+    return chainidx;
+}
+
 /** Return an object that can move a copy of this chain */
 Mover<Chain> Chain::move() const
 {

@@ -57,13 +57,13 @@ using namespace SireStream;
 
 static const RegisterMetaType<CGProp> r_cgprop(MAGIC_ONLY,
                                                "SireMol::CGProp");
-                                                   
+
 /** Serialise to a binary datastream */
 QDataStream &operator<<(QDataStream &ds, const CGProp &cgprop)
 {
     writeHeader(ds, r_cgprop, 1)
          << static_cast<const MolViewProperty&>(cgprop);
-         
+
     return ds;
 }
 
@@ -71,14 +71,14 @@ QDataStream &operator<<(QDataStream &ds, const CGProp &cgprop)
 QDataStream &operator>>(QDataStream &ds, CGProp &cgprop)
 {
     VersionID v = readHeader(ds, r_cgprop);
-    
+
     if (v == 1)
     {
         ds >> static_cast<MolViewProperty&>(cgprop);
     }
     else
         throw version_error(v, "1", r_cgprop, CODELOC);
-        
+
     return ds;
 }
 
@@ -103,7 +103,7 @@ QDataStream &operator<<(QDataStream &ds, const CutGroup &cg)
     writeHeader(ds, r_cg, 1);
 
     SharedDataStream sds(ds);
-    
+
     sds << cg.cgidx << static_cast<const MoleculeView&>(cg);
 
     return ds;
@@ -117,7 +117,7 @@ QDataStream &operator>>(QDataStream &ds, CutGroup &cg)
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> cg.cgidx >> static_cast<MoleculeView&>(cg);
     }
     else
@@ -132,13 +132,13 @@ CutGroup::CutGroup() : ConcreteProperty<CutGroup,MoleculeView>(), cgidx( CGIdx::
 
 /** Construct the CutGroup at ID 'cgid' in the molecule whose data
     is in 'moldata'
-    
+
     \throw SireMol::missing_CutGroup
     \throw SireMol::duplicate_CutGroup
     \throw SireError::invalid_index
 */
 CutGroup::CutGroup(const MoleculeData &moldata, const CGID &cgid)
-         : ConcreteProperty<CutGroup,MoleculeView>(moldata), 
+         : ConcreteProperty<CutGroup,MoleculeView>(moldata),
            cgidx( moldata.info().cgIdx(cgid) )
 {}
 
@@ -162,7 +162,7 @@ CutGroup& CutGroup::operator=(const CutGroup &other)
 /** Comparison operator */
 bool CutGroup::operator==(const CutGroup &other) const
 {
-    return cgidx == other.cgidx and 
+    return cgidx == other.cgidx and
            MoleculeView::operator==(other);
 }
 
@@ -196,7 +196,7 @@ AtomSelection CutGroup::selection() const
 {
     AtomSelection selected_atoms(this->data());
     selected_atoms.selectOnly(cgidx);
-    
+
     return selected_atoms;
 }
 
@@ -221,7 +221,7 @@ void CutGroup::update(const MoleculeData &moldata)
                 .arg(moldata.number()).arg(moldata.info().UID().toString()),
                     CODELOC );
     }
-    
+
     d = moldata;
 }
 
@@ -237,13 +237,19 @@ CGIdx CutGroup::index() const
     return cgidx;
 }
 
+/** Return the number of this CutGroup (same as the index) */
+CGIdx CutGroup::number() const
+{
+    return cgidx;
+}
+
 /** Return an object that can move a copy of this CutGroup */
 Mover<CutGroup> CutGroup::move() const
 {
     return Mover<CutGroup>(*this);
 }
 
-/** Return an evaluator that can evaluate properties 
+/** Return an evaluator that can evaluate properties
     of this CutGroup */
 Evaluator CutGroup::evaluate() const
 {
@@ -275,14 +281,14 @@ const QList<AtomIdx>& CutGroup::atomIdxs() const
     return d->info().getAtomsIn(cgidx);
 }
 
-/** Return whether or not this CutGroup contains the atom 
+/** Return whether or not this CutGroup contains the atom
     at index 'atomidx' in the molecule */
 bool CutGroup::contains(AtomIdx atomidx) const
 {
     return d->info().contains(cgidx, atomidx);
 }
 
-/** Return whether or not this CutGroup contains all of 
+/** Return whether or not this CutGroup contains all of
     the atoms that match the ID 'atomid' */
 bool CutGroup::contains(const AtomID &atomid) const
 {
@@ -320,9 +326,9 @@ QStringList CutGroup::metadataKeys() const
     return d->properties().metadataKeysOfType<CGProp>();
 }
 
-/** Return the metakeys of all CGProperty metadata for 
+/** Return the metakeys of all CGProperty metadata for
     the property at key 'key'
-    
+
     \throw SireBase::missing_property
 */
 QStringList CutGroup::metadataKeys(const PropertyName &key) const
@@ -332,7 +338,7 @@ QStringList CutGroup::metadataKeys(const PropertyName &key) const
 
 /** Return whether the metadata at metakey 'metakey' for the property
     at key 'key' is a CGProperty
-    
+
     \throw SireBase::missing_property
 */
 bool CutGroup::hasMetadata(const PropertyName &key,
@@ -355,7 +361,7 @@ void CutGroup::assertContainsProperty(const PropertyName &key) const
 
 /** Assert that this CutGroup has an CGProperty piece of metadata
     at metakey 'metakey'
-    
+
     \throw SireBase::missing_property
 */
 void CutGroup::assertContainsMetadata(const PropertyName &metakey) const
@@ -369,7 +375,7 @@ void CutGroup::assertContainsMetadata(const PropertyName &metakey) const
 
 /** Assert that the property at key 'key' has an CGProperty
     piece of metadata at metakey 'metakey'
-    
+
     \throw SireBase::missing_property
 */
 void CutGroup::assertContainsMetadata(const PropertyName &key,
