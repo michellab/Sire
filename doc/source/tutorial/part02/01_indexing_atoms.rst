@@ -373,3 +373,87 @@ Atom( CG1:6   [ -55.68,   13.72,   41.72] )
 Atom( CG2:7   [ -57.70,   12.40,   42.39] )
 Atom( CD1:8   [ -55.42,   14.31,   43.09] )
 Atom( N:9     [ -55.50,    9.04,   43.36] )
+
+Counting atoms
+--------------
+
+You can find all of the names of the atoms using
+
+>>> print(mol.atoms().names())
+[AtomName('N'), AtomName('CA'), AtomName('C'), AtomName('O'),
+ AtomName('CB'), AtomName('CG1'), AtomName('CG2'), AtomName('CD1'),
+ AtomName('N'), AtomName('CA')....]
+
+The set of names used can be found via a Python set, e.g.
+
+>>> print(set(mol.atoms().names()))
+{AtomName('CE1'), AtomName('CE2'), AtomName('CE3'), AtomName('OE1'),
+ AtomName('OE2'), AtomName('CZ2'), AtomName('CZ3'), AtomName('NE'),
+ AtomName('NH1'), AtomName('NH2'), AtomName('ND1'), AtomName('ND2'),
+ AtomName('O1'), AtomName('C'), AtomName('O2'), AtomName('O4'),
+ AtomName('O3'), AtomName('O5'), AtomName('O7'), AtomName('O6'),
+ AtomName('NZ'), AtomName('CG1'), AtomName('N'), AtomName('O'),
+ AtomName('CG2'), AtomName('SD'), AtomName('C1'), AtomName('C2'),
+ AtomName('SG'), AtomName('C3'), AtomName('C4'), AtomName('C5'),
+ AtomName('OG'), AtomName('OG1'), AtomName('OH'), AtomName('NE2'),
+ AtomName('NE1'), AtomName('CA'), AtomName('CB'), AtomName('CD'),
+ AtomName('CE'), AtomName('C6'), AtomName('CG'), AtomName('CH2'),
+ AtomName('CD1'), AtomName('CD2'), AtomName('CZ'), AtomName('OD1'),
+ AtomName('OD2')}
+
+You can use this to count the number of atoms that have each name.
+
+>>> for name in set(mol.atoms().names()):
+...     print(name, len(mol.atoms(name)))
+AtomName('CE1') 128
+AtomName('CE2') 110
+AtomName('CE3') 24
+AtomName('OE1') 139
+AtomName('OE2') 107
+AtomName('CZ2') 24
+AtomName('CZ3') 24
+AtomName('NE') 100
+AtomName('NH1') 100
+AtomName('NH2') 100
+AtomName('ND1') 42
+AtomName('ND2') 38
+AtomName('O1') 6
+AtomName('C') 1494
+AtomName('O2') 6
+AtomName('O4') 6
+AtomName('O3') 2
+AtomName('O5') 2
+AtomName('O7') 2
+AtomName('O6') 2
+AtomName('NZ') 46
+AtomName('CG1') 138
+AtomName('N') 1494
+AtomName('O') 1512
+AtomName('CG2') 226
+AtomName('SD') 20
+AtomName('C1') 6
+AtomName('C2') 6
+AtomName('SG') 48
+AtomName('C3') 6
+AtomName('C4') 6
+AtomName('C5') 2
+AtomName('OG') 102
+AtomName('OG1') 88
+AtomName('OH') 22
+AtomName('NE2') 74
+AtomName('NE1') 24
+AtomName('CA') 1494
+AtomName('CB') 1426
+AtomName('CD') 375
+AtomName('CE') 66
+AtomName('C6') 2
+AtomName('CG') 895
+AtomName('CH2') 24
+AtomName('CD1') 400
+AtomName('CD2') 378
+AtomName('CZ') 186
+AtomName('OD1') 122
+AtomName('OD2') 84
+
+You could do something similar using the :func:`~Sire.Mol.Selector_Atom_.numbers`
+function to get the numbers of all of the atoms.

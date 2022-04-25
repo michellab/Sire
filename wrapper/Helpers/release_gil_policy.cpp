@@ -5,7 +5,7 @@
 
 #include <QDebug>
 
-//#define SIRE_DISABLE_GIL_POLICY 1
+#define SIRE_DISABLE_GIL_POLICY 1
 //#define SIRE_PRINT_GIL_STATUS 1
 
 boost::python::detail::GilHolder::GilHolder() : thread_state(0)

@@ -16,7 +16,7 @@ Residue( ILE:6   nAtoms=8 )
 
 gives the molecule at index 0, while
 
->>> print(mol.residue("ALA"))
+>>> print(mol.residues("ALA"))
 Selector<SireMol::Residue>( size=155
 0:  Residue( ALA:23  nAtoms=5 )
 1:  Residue( ALA:30  nAtoms=5 )
@@ -176,7 +176,8 @@ Selector<SireMol::Atom>( size=155
 You can get all of the atoms in a residue by calling the
 :func:`~Sire.Mol.Residue.atoms` function without any arguments.
 
->>> Selector<SireMol::Atom>( size=8
+>>> mol["residx 0"].atoms()
+Selector<SireMol::Atom>( size=8
 0:  Atom( N:1     [ -54.07,   11.27,   41.93] )
 1:  Atom( CA:2    [ -55.43,   11.35,   42.54] )
 2:  Atom( C:3     [ -56.06,    9.95,   42.55] )
@@ -223,3 +224,81 @@ Residue( VAL:7   nAtoms=7 ) Atom( CA:10   [ -56.02,    7.64,   43.47] )
 Residue( VAL:7   nAtoms=7 ) Atom( C:11    [ -56.14,    7.05,   42.06] )
 Residue( LEU:8   nAtoms=8 ) Atom( CA:17   [ -54.99,    6.39,   39.98] )
 Residue( LEU:8   nAtoms=8 ) Atom( C:18    [ -54.61,    4.90,   40.03] )
+
+Counting residues
+-----------------
+
+Similar to how you did for atom, you can find the set of residue names
+via
+
+>>> print(set(mol.residues().names()))
+{ResName('ALA'),
+ ResName('ARG'),
+ ResName('ASN'),
+ ResName('ASP'),
+ ResName('CIT'),
+ ResName('CYS'),
+ ResName('GLN'),
+ ResName('GLU'),
+ ResName('GLY'),
+ ResName('HIS'),
+ ResName('HOH'),
+ ResName('ILE'),
+ ResName('LEU'),
+ ResName('LYS'),
+ ResName('MET'),
+ ResName('PEG'),
+ ResName('PHE'),
+ ResName('PRO'),
+ ResName('SER'),
+ ResName('THR'),
+ ResName('TRP'),
+ ResName('TYR'),
+ ResName('VAL')}
+
+And you can count how many of each residue using;
+
+>>> for name in set(mol.residues().names()):
+...     print(name, len(mol.residues(name)))
+ResName('VAL') 74
+ResName('ILE') 64
+ResName('GLN') 32
+ResName('PRO') 90
+ResName('GLU') 107
+ResName('TRP') 24
+ResName('GLY') 68
+ResName('CYS') 48
+ResName('HOH') 18
+ResName('CIT') 2
+ResName('ARG') 100
+ResName('MET') 20
+ResName('SER') 102
+ResName('PHE') 64
+ResName('ASN') 38
+ResName('THR') 88
+ResName('ASP') 84
+ResName('LYS') 46
+ResName('TYR') 22
+ResName('HIS') 42
+ResName('PEG') 4
+ResName('ALA') 155
+ResName('LEU') 226
+
+This can be a convenient way of finding the residue names of different
+ligands or cofactors that are bound to the molecule.
+
+You could do a similar thing for residue numbers, e.g.
+
+>>> for number in set(mol.residues().numbers()):
+...     print(number, len(mol.residues(number)))
+ResNum(5) 2
+ResNum(6) 4
+ResNum(7) 4
+ResNum(8) 4
+ResNum(9) 4
+ResNum(10) 4
+ResNum(11) 4
+ResNum(12) 4
+ResNum(13) 4
+ResNum(14) 2
+...

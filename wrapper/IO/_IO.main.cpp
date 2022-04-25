@@ -79,7 +79,7 @@ namespace bp = boost::python;
 
 #include "SireIO_properties.h"
 
-#include "_IO_load.h
+#include "_IO_load.h"
 
 BOOST_PYTHON_MODULE(_IO){
     register_SireIO_objects();
