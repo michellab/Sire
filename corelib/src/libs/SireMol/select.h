@@ -99,56 +99,56 @@ public:
                    MOLECULE = 6 };
 
     virtual ~SelectEngine();
-    
+
     SelectResult operator()(const SelectResult &result,
                             const PropertyMap &map = PropertyMap()) const;
-    
+
     SelectResult operator()(const MolGroupsBase &molgroups,
                             const PropertyMap &map = PropertyMap()) const;
-    
+
     SelectResult operator()(const MoleculeGroup &molgroup,
                             const PropertyMap &map = PropertyMap()) const;
-    
+
     SelectResult operator()(const Molecules &molecules,
                             const PropertyMap &map = PropertyMap()) const;
-    
+
     SelectResult operator()(const MoleculeView &molecule,
                             const PropertyMap &map = PropertyMap()) const;
-    
+
     virtual SelectEnginePtr simplify();
-    
+
     virtual bool usesCoordinates() const;
-    
+
     bool hasParent() const;
-    
+
     SelectEnginePtr self();
-    
+
     void setParent(SelectEnginePtr parent) const;
-    
+
     virtual ObjType objectType() const=0;
-    
+
 protected:
     SelectEngine();
 
     virtual SelectResult select(const SelectResult &result, const PropertyMap &map) const=0;
 
     static SelectEnginePtr makePtr(SelectEngine *ptr);
-    
+
     virtual ViewsOfMol expandMol(const ViewsOfMol &mol) const;
     virtual SelectResult expand(const SelectResult &result) const;
-    
+
     /** The parent engine */
     SelectEngineWeakPtr parent;
-    
+
     /** Weak pointer to self */
     SelectEngineWeakPtr selfptr;
 };
 
 } //end of namespace parser
 
-/** This is the only publicly visible selector class. This provides a 
+/** This is the only publicly visible selector class. This provides a
     front-end interface to selecting atoms and molecules
-    
+
     @author Christopher Woods
 */
 class SIREMOL_EXPORT Select : public SireBase::ConcreteProperty<Select,SireBase::Property>
@@ -160,34 +160,34 @@ friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Select&);
 public:
     Select();
     Select(const QString &str);
-    
+
     Select(const Select &other);
-    
+
     ~Select();
-    
+
     Select& operator=(const Select &other);
-    
+
     bool operator==(const Select &other) const;
     bool operator!=(const Select &other) const;
 
     Select* clone() const;
-    
+
     const char* what() const;
     static const char* typeName();
-    
+
     QString toString() const;
 
     QString objectType() const;
 
     SelectResult operator()(const MolGroupsBase &molgroups,
                             const PropertyMap &map = PropertyMap()) const;
-    
+
     SelectResult operator()(const MoleculeGroup &molgroup,
                             const PropertyMap &map = PropertyMap()) const;
-    
+
     SelectResult operator()(const Molecules &molecules,
                             const PropertyMap &map = PropertyMap()) const;
-    
+
     SelectResult operator()(const MoleculeView &molecule,
                             const PropertyMap &map = PropertyMap()) const;
 
@@ -205,7 +205,7 @@ private:
     parser::SelectEnginePtr e;
 };
 
-/** This class holds the result of a Select 
+/** This class holds the result of a Select
 
     @author Christopher Woods
 */
@@ -222,33 +222,33 @@ public:
     typedef const_iterator iterator;
 
     SelectResult();
-    
+
     SelectResult(const MolGroupsBase &molgroups);
     SelectResult(const MoleculeGroup &molgroup);
     SelectResult(const Molecules &molecules);
     SelectResult(const MoleculeView &molview);
-    
+
     SelectResult(const QList<ViewsOfMol> molviews);
-    
+
     SelectResult(const SelectResult &other);
 
     ~SelectResult();
 
     SelectResult& operator=(const SelectResult &other);
-    
+
     bool operator==(const SelectResult &other) const;
     bool operator!=(const SelectResult &other) const;
-    
+
     static const char* typeName();
-    
+
     const char* what() const;
-    
+
     const_iterator begin() const;
     const_iterator end() const;
-    
+
     const_iterator constBegin() const;
     const_iterator constEnd() const;
-    
+
     SelectResult* clone() const;
 
     QString toString() const;
@@ -257,9 +257,9 @@ public:
     MolViewPtr operator[](MolNum molnum) const;
 
     SelectResultMover move() const;
-    
+
     bool isEmpty() const;
-    
+
     int count() const;
     int size() const;
 
@@ -267,18 +267,18 @@ public:
 
     QList<ViewsOfMol> views() const;
     ViewsOfMol views(MolNum molnum) const;
-    
+
     QList<MolNum> molNums() const;
 
     MoleculeGroup toGroup() const;
     MoleculeGroup toGroup(const QString &name) const;
-    
+
     Molecules toMolecules() const;
 
     SelectResult search(const QString &search_term) const;
 
     SelectResult join() const;
-    
+
     SelectResult atoms() const;
     SelectResult cutGroups() const;
     SelectResult residues() const;
@@ -291,9 +291,9 @@ private:
     QList<ViewsOfMol> molviews;
 };
 
-/** This class provides a simple "move" interface to move all 
-    views in a SelectResult 
-    
+/** This class provides a simple "move" interface to move all
+    views in a SelectResult
+
     @author Christopher Woods
 */
 class SIREMOL_EXPORT SelectResultMover
@@ -302,26 +302,26 @@ class SIREMOL_EXPORT SelectResultMover
 public:
     SelectResultMover();
     SelectResultMover(const SelectResult &other);
-    
+
     SelectResultMover(const SelectResultMover &other);
-    
+
     ~SelectResultMover();
 
     SelectResultMover& operator=(const SelectResultMover &other);
-    
+
     bool operator==(const SelectResultMover &other) const;
     bool operator!=(const SelectResultMover &other) const;
-    
+
     static const char* typeName();
-    
+
     const char* what() const;
-    
+
     SelectResultMover* clone() const;
 
     QString toString() const;
-    
+
     SelectResultMover& translate(const Vector &delta);
-    
+
     SelectResult commit() const;
 
 private:

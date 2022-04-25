@@ -125,6 +125,8 @@ public:
 
     Selector<T>* clone() const;
 
+    QList<typename T::Index> IDs() const;
+
     bool operator==(const Selector<T> &other) const;
     bool operator!=(const Selector<T> &other) const;
 
@@ -406,6 +408,16 @@ Selector<T>* Selector<T>::clone() const
     return new Selector<T>(*this);
 }
 
+/** Return the IDs of all of the items in this selector, in the
+ *  order they appear in the selector
+ */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<typename T::Index> Selector<T>::IDs() const
+{
+    return idxs;
+}
+
 /** Return whether this set is empty */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -428,9 +440,40 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 QString Selector<T>::toString() const
 {
-    return QObject::tr( "Selector<%1>( %2 )" )
-                .arg( T::typeName() )
-                .arg( Sire::toString(idxs) );
+    if (this->isEmpty())
+    {
+        return QObject::tr("Selector<%1>::empty").arg(T::typeName());
+    }
+    else
+    {
+        QStringList parts;
+
+        if (this->size() <= 10)
+        {
+            for (int i=0; i<this->size(); ++i)
+            {
+                parts.append(QString("%1:  %2").arg(i).arg(this->at(i).read().toString()));
+            }
+        }
+        else
+        {
+            for (int i=0; i<5; ++i)
+            {
+                parts.append(QString("%1:  %2").arg(i).arg(this->at(i).read().toString()));
+            }
+
+            parts.append("...");
+
+            for (int i=this->size()-5; i<this->size(); ++i)
+            {
+                parts.append(QString("%1:  %3").arg(i).arg(this->at(i).read().toString()));
+            }
+        }
+
+        return QObject::tr( "Selector<%1>( size=%2\n%3\n)")
+                        .arg(T::typeName()).arg(this->count())
+                        .arg(parts.join("\n"));
+    }
 }
 
 template<class T>

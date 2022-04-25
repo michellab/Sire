@@ -33,6 +33,7 @@
 #include "SireError/exception.h"
 #include "SireError/errors.h"
 #include "SireMol/errors.h"
+#include "SireMol/parser.h"
 #include "SireBase/errors.h"
 
 #include "Helpers/release_gil_policy.hpp"
@@ -120,6 +121,13 @@ void input_output_error( const SireError::exception &ex )
                     get_exception_string(ex).toUtf8());
 }
 
+void syntax_error( const SireError::exception &ex )
+{
+    boost::python::release_gil_policy::acquire_gil_no_raii();
+    PyErr_SetString(PyExc_SyntaxError,
+                    get_exception_string(ex).toUtf8());
+}
+
 void exception_translator( const SireError::exception &ex )
 {
     boost::python::release_gil_policy::acquire_gil_no_raii();
@@ -146,10 +154,16 @@ void export_exceptions()
     register_exception_translator<SireMol::missing_chain>(&key_error);
     register_exception_translator<SireMol::missing_segment>(&key_error);
     register_exception_translator<SireBase::missing_property>(&key_error);
+    register_exception_translator<SireMol::duplicate_atom>(&key_error);
+    register_exception_translator<SireMol::duplicate_cutgroup>(&key_error);
+    register_exception_translator<SireMol::duplicate_residue>(&key_error);
+    register_exception_translator<SireMol::duplicate_chain>(&key_error);
+    register_exception_translator<SireMol::duplicate_segment>(&key_error);
     register_exception_translator<SireError::assertation_failed>(&assertion_error);
     register_exception_translator<SireError::invalid_cast>(&type_error);
     register_exception_translator<SireError::unknown_type>(&type_error);
     register_exception_translator<SireError::io_error>(&input_output_error);
+    register_exception_translator<SireMol::parse_error>(&syntax_error);
     register_exception_translator<SireError::file_error>(&input_output_error);
 }
 

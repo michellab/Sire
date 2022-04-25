@@ -308,7 +308,33 @@ Atom MoleculeView::atom(int i, const PropertyMap &map) const
 
 Atom MoleculeView::atom(const QString &name, const PropertyMap &map) const
 {
-    return this->atom(AtomID::fromString(name), map);
+    try
+    {
+        return this->atom(AtomID::fromString(name), map);
+    }
+    catch(const SireMol::duplicate_atom &e)
+    {
+        throw e;
+    }
+    catch(const SireError::exception &e)
+    {
+        try
+        {
+            auto a = this->search(name).views().at(0).atom();
+            return this->atom(a.index(), map);
+        }
+        catch(...)
+        {
+            if (name.length() < 5)
+                //likely a name error
+                e.throwSelf();
+            else
+                //likely a syntax error
+                throw;
+        }
+    }
+
+    return Selector<Atom>();
 }
 
 /** Return the atom in this view that matches the ID 'atomid'
@@ -322,10 +348,45 @@ Atom MoleculeView::atom(const AtomID &atomid, const PropertyMap &map) const
     return atomid.selectFrom(*this, map);
 }
 
+template<class T>
+QList<qint64> _toIndicies(const QList<T> &ids)
+{
+    QList<qint64> idxs;
+
+    for (const auto &id : ids)
+    {
+        idxs.append(id.value());
+    }
+
+    return idxs;
+}
+
 Selector<Atom> MoleculeView::atoms(const QString &name,
                                    const PropertyMap &map) const
 {
-    return this->atoms(AtomName(name), map);
+    try
+    {
+        return this->atoms(AtomID::fromString(name), map);
+    }
+    catch(const SireError::exception &e)
+    {
+        try
+        {
+            auto a = this->search(name).views().at(0).atoms();
+            return this->atoms(_toIndicies(a.IDs()), map);
+        }
+        catch(...)
+        {
+            if (name.length() < 5)
+                //likely a name error
+                e.throwSelf();
+            else
+                //likely a syntax error
+                throw;
+        }
+    }
+
+    return Selector<Atom>();
 }
 
 Selector<Atom> MoleculeView::atoms(const QStringList &names,
@@ -429,8 +490,8 @@ Atom MoleculeView::atom() const
         throw SireMol::duplicate_atom( QObject::tr(
                 "Cannot convert this view (%1) into an Atom as "
                 "we can only do this is just one atom is selected. "
-                "These atoms are selected ; %2.")
-                    .arg(this->toString(), Sire::toString(selected_atoms)),
+                "The number of matching atoms is %2.")
+                    .arg(this->toString(), selected_atoms.count()),
                         CODELOC );
 
     return Atom(this->data(), selected_atoms.at(0));

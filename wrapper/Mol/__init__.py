@@ -403,14 +403,20 @@ for __prop in __props:
 # Here I will define some functions that make accessing
 # things from moleculeviews more convenient
 
+def __is_chain_class(obj):
+    return obj.what() in ["SireMol::Chain", "SireMol::Selector<SireMol::Chain>"]
+
 def __fixed__getitem__(obj, key):
-    if type(key) is slice:
-        if obj.what() == "SireMol::Chain":
-            return [residue for residue in obj.residues(key)]
+    if type(key) is int:
+        if __is_chain_class(obj):
+            return obj.residue(key)
         else:
-            return [atom for atom in obj.atoms(key)]
+            return obj.atom(key)
     else:
-        return obj.__orig__getitem__(key)
+        if __is_chain_class(obj):
+            return obj.residues(key)
+        else:
+            return obj.atoms(key)
 
 
 def __fixed__atoms__(obj, idx=None):
