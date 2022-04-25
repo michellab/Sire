@@ -406,17 +406,73 @@ for __prop in __props:
 def __is_chain_class(obj):
     return obj.what() in ["SireMol::Chain", "SireMol::Selector<SireMol::Chain>"]
 
+
+def __from_select_result(obj):
+    """Convert the passed SelectResult from a search into the
+       most appropriate MoleculeView-derived class (or MultiMolView)
+    """
+    views = []
+
+    molnums = obj.molNums()
+
+    if len(molnums) == 0:
+        raise KeyError("Nothing matched the search.")
+
+    for molnum in molnums:
+        v = obj[molnum]
+
+        if len(v) == 1:
+            views.append(v[0])
+        else:
+            # check all views are the same type
+            c = v[0].what()
+            all_same = True
+
+            for i in range(1, len(v)):
+                if v[i].what() != c:
+                    all_same = False
+                    break
+
+            if all_same:
+                if c == "SireMol::Atom":
+                    views.append(v.atoms())
+                elif c == "SireMol::Residue":
+                    views.append(v.residues())
+                elif c == "SireMol::Chain":
+                    views.append(v.chains())
+                elif c == "SireMol::Segment":
+                    views.append(v.segments())
+                else:
+                    views.append(v)
+            else:
+                views.append(v)
+
+    if len(views) == 0:
+        return None
+    elif len(views) == 1:
+        return views[0]
+    else:
+        return views
+
+
 def __fixed__getitem__(obj, key):
     if type(key) is int:
         if __is_chain_class(obj):
             return obj.residue(key)
         else:
             return obj.atom(key)
+    elif type(key) is str:
+        # is this a search object - if so, then return whatever is
+        # most relevant from the search
+        try:
+            return __from_select_result(obj.search(key))
+        except SyntaxError:
+            pass
+
+    if __is_chain_class(obj):
+        return obj.residues(key)
     else:
-        if __is_chain_class(obj):
-            return obj.residues(key)
-        else:
-            return obj.atoms(key)
+        return obj.atoms(key)
 
 
 def __fixed__atoms__(obj, idx=None):

@@ -334,7 +334,7 @@ Atom MoleculeView::atom(const QString &name, const PropertyMap &map) const
         }
     }
 
-    return Selector<Atom>();
+    return Atom();
 }
 
 /** Return the atom in this view that matches the ID 'atomid'
@@ -646,7 +646,33 @@ Residue MoleculeView::residue(int i, const PropertyMap &map) const
 
 Residue MoleculeView::residue(const QString &name, const PropertyMap &map) const
 {
-    return this->residue(ResID::fromString(name), map);
+    try
+    {
+        return this->residue(ResID::fromString(name), map);
+    }
+    catch(const SireMol::duplicate_residue &e)
+    {
+        throw e;
+    }
+    catch(const SireError::exception &e)
+    {
+        try
+        {
+            auto a = this->search(name).views().at(0).residue();
+            return this->residue(a.index(), map);
+        }
+        catch(...)
+        {
+            if (name.length() < 5)
+                //likely a name error
+                e.throwSelf();
+            else
+                //likely a syntax error
+                throw;
+        }
+    }
+
+    return Residue();
 }
 
 /** Return the residue from this view that matches the ID 'resid'
@@ -663,7 +689,29 @@ Residue MoleculeView::residue(const ResID &resid, const PropertyMap &map) const
 Selector<Residue> MoleculeView::residues(const QString &name,
                                          const PropertyMap &map) const
 {
-    return this->residues(ResName(name), map);
+    try
+    {
+        return this->residues(ResID::fromString(name), map);
+    }
+    catch(const SireError::exception &e)
+    {
+        try
+        {
+            auto a = this->search(name).views().at(0).residues();
+            return this->residues(_toIndicies(a.IDs()), map);
+        }
+        catch(...)
+        {
+            if (name.length() < 5)
+                //likely a name error
+                e.throwSelf();
+            else
+                //likely a syntax error
+                throw;
+        }
+    }
+
+    return Selector<Residue>();
 }
 
 Selector<Residue> MoleculeView::residues(const QStringList &names,
@@ -806,7 +854,33 @@ Chain MoleculeView::chain(int i, const PropertyMap &map) const
 
 Chain MoleculeView::chain(const QString &name, const PropertyMap &map) const
 {
-    return this->chain(ChainID::fromString(name), map);
+    try
+    {
+        return this->chain(ChainID::fromString(name), map);
+    }
+    catch(const SireMol::duplicate_chain &e)
+    {
+        throw e;
+    }
+    catch(const SireError::exception &e)
+    {
+        try
+        {
+            auto a = this->search(name).views().at(0).chain();
+            return this->chain(a.index(), map);
+        }
+        catch(...)
+        {
+            if (name.length() < 5)
+                //likely a name error
+                e.throwSelf();
+            else
+                //likely a syntax error
+                throw;
+        }
+    }
+
+    return Chain();
 }
 
 /** Return the chain that is involved with this view that matches
@@ -824,7 +898,29 @@ Chain MoleculeView::chain(const ChainID &chainid, const PropertyMap &map) const
 Selector<Chain> MoleculeView::chains(const QString &name,
                                      const PropertyMap &map) const
 {
-    return this->chains(ChainName(name), map);
+    try
+    {
+        return this->chains(ChainID::fromString(name), map);
+    }
+    catch(const SireError::exception &e)
+    {
+        try
+        {
+            auto a = this->search(name).views().at(0).chains();
+            return this->chains(_toIndicies(a.IDs()), map);
+        }
+        catch(...)
+        {
+            if (name.length() < 5)
+                //likely a name error
+                e.throwSelf();
+            else
+                //likely a syntax error
+                throw;
+        }
+    }
+
+    return Selector<Chain>();
 }
 
 Selector<Chain> MoleculeView::chains(const QStringList &names,
@@ -970,7 +1066,33 @@ Segment MoleculeView::segment(int i, const PropertyMap &map) const
 
 Segment MoleculeView::segment(const QString &name, const PropertyMap &map) const
 {
-    return this->segment(SegID::fromString(name), map);
+    try
+    {
+        return this->segment(SegID::fromString(name), map);
+    }
+    catch(const SireMol::duplicate_segment &e)
+    {
+        throw e;
+    }
+    catch(const SireError::exception &e)
+    {
+        try
+        {
+            auto a = this->search(name).views().at(0).segment();
+            return this->segment(a.index(), map);
+        }
+        catch(...)
+        {
+            if (name.length() < 5)
+                //likely a name error
+                e.throwSelf();
+            else
+                //likely a syntax error
+                throw;
+        }
+    }
+
+    return Segment();
 }
 
 /** Return the segment that is involved with this view that matches
@@ -988,7 +1110,29 @@ Segment MoleculeView::segment(const SegID &segid, const PropertyMap &map) const
 Selector<Segment> MoleculeView::segments(const QString &name,
                                          const PropertyMap &map) const
 {
-    return this->segments(SegName(name), map);
+    try
+    {
+        return this->segments(SegID::fromString(name), map);
+    }
+    catch(const SireError::exception &e)
+    {
+        try
+        {
+            auto a = this->search(name).views().at(0).segments();
+            return this->segments(_toIndicies(a.IDs()), map);
+        }
+        catch(...)
+        {
+            if (name.length() < 5)
+                //likely a name error
+                e.throwSelf();
+            else
+                //likely a syntax error
+                throw;
+        }
+    }
+
+    return Selector<Segment>();
 }
 
 Selector<Segment> MoleculeView::segments(const QStringList &names,

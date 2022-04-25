@@ -25,6 +25,7 @@ Getting Started
    :maxdepth: 2
 
    index_part01
+   index_part02
 
 Intermediate Topics
 -------------------

@@ -23,14 +23,14 @@ Passing in an index of an atom that doesn't exist results in an
 IndexError                                Traceback (most recent call last)
 Input In [32], in <cell line: 1>()
 ----> 1 print(mol[100000])
-
+<BLANKLINE>
 File ~/sire.app/lib/python3.8/site-packages/Sire/Mol/__init__.py:414, in __fixed__getitem__(obj, key)
     412         return obj.residue(key)
     413     else:
 --> 414         return obj.atom(key)
     415 else:
     416     if __is_chain_class(obj):
-
+<BLANKLINE>
 IndexError: SireError::invalid_index: No item at index 100000. Index range is from -11728 to 11727. (call Sire.Error.get_last_error_details() for more info)
 
 You can request multiple atoms by using a slice, e.g.
@@ -150,12 +150,12 @@ the shorthand :func:`~Sire.Mol.Atom.atom` function with this name,
 KeyError                                  Traceback (most recent call last)
 Input In [10], in <cell line: 1>()
 ----> 1 mol.atom("C")
-
+<BLANKLINE>
 KeyError: "SireMol::duplicate_atom: More than one atom matches the ID
 AtomName('C') (number of matches is 1494).
 (call Sire.Error.get_last_error_details() for more info)"
 
-In this case, a ``KeyError`` exception has been raised because there are multiple
+A ``KeyError`` exception has been raised because there are multiple
 atoms in this protein that are called "C" and Sire does not know which
 one you want.
 
@@ -206,22 +206,125 @@ exception being raised.
 KeyError                                  Traceback (most recent call last)
 Input In [24], in <cell line: 1>()
 ----> 1 print(mol["X"])
-
+<BLANKLINE>
 File ~/sire.app/lib/python3.8/site-packages/Sire/Mol/__init__.py:419, in __fixed__getitem__(obj, key)
     417     return obj.residues(key)
     418 else:
 --> 419     return obj.atoms(key)
-
+<BLANKLINE>
 File ~/sire.app/lib/python3.8/site-packages/Sire/Mol/__init__.py:428, in __fixed__atoms__(obj, idx)
     426     return obj.__orig__atoms(list(idx))
     427 else:
 --> 428     return obj.__orig__atoms(idx)
-
+<BLANKLINE>
 KeyError: 'SireMol::missing_atom: There is no atom called "X" in the layout "{c4d51f89-f4f7-4e0c-854d-da27affe1baf}". (call Sire.Error.get_last_error_details() for more info)'
 
-Index, Name or Number
----------------------
+Searching by Name and Number
+---------------------------
 
-So far, we have accessed atoms by their index, or by
+So far, we have identified atoms by their index or by their name. There is
+a third way to identify atoms. This is by their atom number. The atom number
+is an identifying number that is assigned to atoms, typically via an
+atom number column in the input file. We can look up atoms by number
+using a search string.
 
+>>> print(mol["atomnum 1"])
+Atom( N:1     [ -54.07,   11.27,   41.93] )
 
+Here, ``atomnum 1`` is a search string that looks for atoms with number 1.
+
+.. note::
+
+   Note how the name ``N`` and number ``1`` of the atom are printed
+   out, along with its coordinates.
+
+This search string is very powerful. For example, you can search for
+atoms that have a number that is less than 10.
+
+>>> print(mol["atomnum < 10"])
+Selector<SireMol::Atom>( size=9
+0:  Atom( N:1     [ -54.07,   11.27,   41.93] )
+1:  Atom( CA:2    [ -55.43,   11.35,   42.54] )
+2:  Atom( C:3     [ -56.06,    9.95,   42.55] )
+3:  Atom( O:4     [ -57.04,    9.73,   41.82] )
+4:  Atom( CB:5    [ -56.32,   12.33,   41.76] )
+5:  Atom( CG1:6   [ -55.68,   13.72,   41.72] )
+6:  Atom( CG2:7   [ -57.70,   12.40,   42.39] )
+7:  Atom( CD1:8   [ -55.42,   14.31,   43.09] )
+8:  Atom( N:9     [ -55.50,    9.04,   43.36] )
+)
+
+You can combine search strings with logical operators (e.g. ``and``,
+``or`` and ``not``).
+
+>>> print(mol["atomnum >= 5 and atomnum < 10"])
+Selector<SireMol::Atom>( size=5
+0:  Atom( CB:5    [ -56.32,   12.33,   41.76] )
+1:  Atom( CG1:6   [ -55.68,   13.72,   41.72] )
+2:  Atom( CG2:7   [ -57.70,   12.40,   42.39] )
+3:  Atom( CD1:8   [ -55.42,   14.31,   43.09] )
+4:  Atom( N:9     [ -55.50,    9.04,   43.36] )
+)
+
+You can include atom names (``atomname``) in the search string.
+
+>>> print(mol["atomname CA"])
+Selector<SireMol::Atom>( size=1494
+0:  Atom( CA:2    [ -55.43,   11.35,   42.54] )
+1:  Atom( CA:10   [ -56.02,    7.64,   43.47] )
+2:  Atom( CA:17   [ -54.99,    6.39,   39.98] )
+3:  Atom( CA:25   [ -55.33,    2.58,   39.80] )
+4:  Atom( CA:34   [ -52.97,    1.03,   37.19] )
+...
+1489:  Atom( CA:11624 [  22.43,   -6.30,   32.21] )
+1490:  Atom( CA:11629 [  25.36,   -5.51,   29.89] )
+1491:  Atom( CA:11636 [  27.51,   -3.84,   32.59] )
+1492:  Atom( CA:11645 [  28.74,   -0.85,   30.58] )
+1493:  Atom( CA:11653 [  31.65,   -0.00,   32.91] )
+)
+
+and can use mixtures of any identifiers, e.g.
+
+>>> print(mol["atomnum > 1000 and atomname N"])
+Selector<SireMol::Atom>( size=1369
+0:  Atom( N:1005  [ -30.70,  -11.17,   28.73] )
+1:  Atom( N:1014  [ -32.11,  -10.01,   25.69] )
+2:  Atom( N:1023  [ -32.43,  -11.41,   22.41] )
+3:  Atom( N:1027  [ -32.33,  -11.69,   18.84] )
+4:  Atom( N:1038  [ -35.13,  -10.12,   17.49] )
+...
+1364:  Atom( N:11623 [  22.09,   -7.64,   32.65] )
+1365:  Atom( N:11628 [  24.07,   -5.44,   30.61] )
+1366:  Atom( N:11635 [  26.39,   -4.38,   31.81] )
+1367:  Atom( N:11644 [  28.07,   -1.72,   31.54] )
+1368:  Atom( N:11652 [  30.40,   -0.51,   32.35] )
+)
+
+Uniquely identifying atoms
+--------------------------
+
+It is often useful to have a unique identifier for an atom in a molecule.
+The name and number can't do this, as it is possible that many atoms
+could have the same name, and/or the same number.
+
+To solve this, Sire uses the index of the atom in the molecule as its
+unique identifier. This index is called ``atomidx``, and can also be
+used in searches.
+
+>>> print(mol["atomidx 0"])
+Atom( N:1     [ -54.07,   11.27,   41.93] )
+
+This has printed the first atom in the molecule.
+
+You can get an atom's index using the :func:`~Sire.Mol.Atom.index` function.
+
+>>> print(mol["atomidx 0"].index())
+AtomIdx(0)
+
+.. warning::
+
+    Be careful searching with ``atomidx``. This is the unique
+    index of the atom within its parent molecule, not the index
+    of the atom in a container. So ``mol[5:10]["atomidx 0"]`` would
+    raise a KeyError as the first atom in the molecule is not
+    contained in the slice of atoms 5 to 9.
