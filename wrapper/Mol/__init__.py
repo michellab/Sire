@@ -427,16 +427,10 @@ def __from_select_result(obj):
         if len(v) == 1:
             views.append(v[0])
         else:
-            # check all views are the same type
-            c = v[0].what()
-            all_same = True
+            try:
+                c = v.getCommonType()
 
-            for i in range(1, len(v)):
-                if v[i].what() != c:
-                    all_same = False
-                    break
-
-            if all_same:
+                # we have the common type, so add the appropriate Selector
                 if c == "SireMol::Atom":
                     views.append(v.atoms())
                 elif c == "SireMol::Residue":
@@ -447,8 +441,12 @@ def __from_select_result(obj):
                     views.append(v.segments())
                 else:
                     views.append(v)
-            else:
+
+            except Exception:
+                # there is no common type, so just add the ViewsOfMol
                 views.append(v)
+
+            print("DONE")
 
     if len(views) == 0:
         return None
@@ -473,6 +471,14 @@ def __fixed__getitem__(obj, key):
             return __from_select_result(obj.search(key))
         except SyntaxError:
             pass
+    elif Sire.Mol.AtomID in type(key).mro():
+        return obj.atoms(key)
+    elif Sire.Mol.ResID in type(key).mro():
+        return obj.residues(key)
+    elif Sire.Mol.ChainID in type(key).mro():
+        return obj.chains(key)
+    elif Sire.Mol.SegID in type(key).mro():
+        return obj.segments(key)
 
     if __is_selector_class(obj):
         return obj.__orig__getitem__(key)
@@ -484,38 +490,58 @@ def __fixed__getitem__(obj, key):
 
 def __fixed__atoms__(obj, idx=None):
     if idx is None:
-        return obj.__orig__atoms()
+        result = obj.__orig__atoms()
     elif type(idx) is range:
-        return obj.__orig__atoms(list(idx))
+        result = obj.__orig__atoms(list(idx))
     else:
-        return obj.__orig__atoms(idx)
+        result = obj.__orig__atoms(idx)
+
+    if len(result) == 1:
+        return result[0]
+    else:
+        return result
 
 
 def __fixed__residues__(obj, idx=None):
     if idx is None:
-        return obj.__orig__residues()
+        result = obj.__orig__residues()
     elif type(idx) is range:
-        return obj.__orig__residues(list(idx))
+        result = obj.__orig__residues(list(idx))
     else:
-        return obj.__orig__residues(idx)
+        result = obj.__orig__residues(idx)
+
+    if len(result) == 1:
+        return result[0]
+    else:
+        return result
 
 
 def __fixed__chains__(obj, idx=None):
     if idx is None:
-        return obj.__orig__chains()
+        result = obj.__orig__chains()
     elif type(idx) is range:
-        return obj.__orig__chains(list(idx))
+        result = obj.__orig__chains(list(idx))
     else:
-        return obj.__orig__chains(idx)
+        result = obj.__orig__chains(idx)
+
+    if len(result) == 1:
+        return result[0]
+    else:
+        return result
 
 
 def __fixed__segments__(obj, idx=None):
     if idx is None:
-        return obj.__orig__segments()
+        result = obj.__orig__segments()
     elif type(idx) is range:
-        return obj.__orig__segments(list(idx))
+        result = obj.__orig__segments(list(idx))
     else:
-        return obj.__orig__segments(idx)
+        result = obj.__orig__segments(idx)
+
+    if len(result) == 1:
+        return result[0]
+    else:
+        return result
 
 
 def __fix_getitem(C):

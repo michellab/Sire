@@ -56,13 +56,13 @@ using namespace SireStream;
 RegisterMetaType<ViewsOfMol> r_molviews;
 
 /** Serialise to a binary datastream */
-QDataStream &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds,
                                        const ViewsOfMol &molviews)
 {
     writeHeader(ds, r_molviews, 1);
 
     SharedDataStream sds(ds);
-    
+
     sds << molviews.selected_atoms << molviews.views
         << static_cast<const MoleculeView&>(molviews);
 
@@ -70,7 +70,7 @@ QDataStream &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds,
                                        ViewsOfMol &molviews)
 {
     VersionID v = readHeader(ds, r_molviews);
@@ -95,14 +95,14 @@ ViewsOfMol::ViewsOfMol() : ConcreteProperty<ViewsOfMol,MoleculeView>()
 /** Construct an empty view of the molecule whose data
     is in 'moldata' */
 ViewsOfMol::ViewsOfMol(const MoleculeData &moldata)
-           : ConcreteProperty<ViewsOfMol,MoleculeView>(moldata), 
+           : ConcreteProperty<ViewsOfMol,MoleculeView>(moldata),
              selected_atoms(moldata)
 {}
 
 /** Construct the view of the passed molecule */
 ViewsOfMol::ViewsOfMol(const MoleculeData &moldata,
                        const AtomSelection &molview)
-           : ConcreteProperty<ViewsOfMol,MoleculeView>(moldata), 
+           : ConcreteProperty<ViewsOfMol,MoleculeView>(moldata),
              selected_atoms(molview)
 {
     selected_atoms.assertCompatibleWith(moldata);
@@ -126,7 +126,7 @@ ViewsOfMol::ViewsOfMol(const MoleculeData &moldata,
     {
         views = molviews;
         views.at(0).assertCompatibleWith(moldata);
-        
+
         selected_atoms = views.at(0);
         selected_atoms.unite(views);
     }
@@ -134,7 +134,7 @@ ViewsOfMol::ViewsOfMol(const MoleculeData &moldata,
 
 /** Construct just a single view of a molecule */
 ViewsOfMol::ViewsOfMol(const MoleculeView &view)
-           : ConcreteProperty<ViewsOfMol,MoleculeView>(view), 
+           : ConcreteProperty<ViewsOfMol,MoleculeView>(view),
              selected_atoms(view.selection())
 {}
 
@@ -147,9 +147,9 @@ void ViewsOfMol::setEqualTo(const Selector<T> &selection)
     views.clear();
 
     int nviews = selection.count();
-    
+
     if (nviews == 1)
-    { 
+    {
         selected_atoms = selection(0).selection();
     }
     else if (nviews > 1)
@@ -158,7 +158,7 @@ void ViewsOfMol::setEqualTo(const Selector<T> &selection)
         {
             views.append( selection(i).selection() );
         }
-        
+
         selected_atoms = views.at(0);
         selected_atoms.unite(views);
     }
@@ -201,7 +201,7 @@ ViewsOfMol::ViewsOfMol(const Selector<Segment> &segments)
 
 /** Copy constructor */
 ViewsOfMol::ViewsOfMol(const ViewsOfMol &other)
-           : ConcreteProperty<ViewsOfMol,MoleculeView>(other), 
+           : ConcreteProperty<ViewsOfMol,MoleculeView>(other),
              selected_atoms(other.selected_atoms),
              views(other.views)
 {}
@@ -216,7 +216,7 @@ ViewsOfMol& ViewsOfMol::operator=(const ViewsOfMol &other)
     MoleculeView::operator=(other);
     selected_atoms = other.selected_atoms;
     views = other.views;
-    
+
     return *this;
 }
 
@@ -226,7 +226,7 @@ ViewsOfMol& ViewsOfMol::operator=(const MoleculeView &view)
     MoleculeView::operator=(view);
     selected_atoms = view.selection();
     views.clear();
-    
+
     return *this;
 }
 
@@ -323,11 +323,34 @@ int ViewsOfMol::nViews() const
 MolViewPtr ViewsOfMol::operator[](int i) const
 {
     i = Index(i).map( this->nViews() );
-    
+
     if ( i == 0 and views.isEmpty() )
         return PartialMolecule(*d, selected_atoms).toUnit();
     else
         return PartialMolecule(*d, views.at(i)).toUnit();
+}
+
+/** Get the common type of all of the views */
+QString ViewsOfMol::getCommonType() const
+{
+    if (this->isEmpty())
+        return this->what();
+
+    QString typ = this->valueAt(0).toUnit().read().what();
+
+    for (int i=1; i<this->nViews(); ++i)
+    {
+        QString t(this->valueAt(i).toUnit().read().what());
+
+        if (typ != t)
+        {
+            throw SireError::incompatible_error(
+                QObject::tr("There are on common types: %1 vs %2")
+                    .arg(typ).arg(t), CODELOC);
+        }
+    }
+
+    return typ;
 }
 
 /** Return the name of the molecule being viewed */
@@ -371,7 +394,7 @@ PartialMolecule ViewsOfMol::valueAt(int i) const
     return PartialMolecule(*this, this->viewAt(i));
 }
 
-/** Add the view 'view' to this set - this adds the 
+/** Add the view 'view' to this set - this adds the
     view even if it already exists in this set
 
     \throw SireError::incompatible_error
@@ -379,34 +402,34 @@ PartialMolecule ViewsOfMol::valueAt(int i) const
 void ViewsOfMol::add(const AtomSelection &view)
 {
     int nviews = this->nViews();
-    
+
     if (nviews == 0)
         this->operator=(ViewsOfMol(*d, view));
     else if (nviews == 1)
     {
         view.assertCompatibleWith(*d);
-    
+
         views.append(selected_atoms);
         views.append(view);
-        
+
         if (not selected_atoms.selectedAll())
             selected_atoms = selected_atoms.unite(view);
     }
     else
     {
         view.assertCompatibleWith(*d);
-        
+
         views.append(view);
-        
+
         if (not selected_atoms.selectedAll())
             selected_atoms = selected_atoms.unite(view);
     }
 }
 
-/** Return the views where 'views' have been added to 
+/** Return the views where 'views' have been added to
     the set - this duplicates any views that already
     exist
-    
+
     \throw SireError::incompatible_error
 */
 void ViewsOfMol::add(const QList<AtomSelection> &views)
@@ -420,19 +443,19 @@ void ViewsOfMol::add(const QList<AtomSelection> &views)
     }
 
     ViewsOfMol new_views(*this);
-    
+
     foreach (const AtomSelection &view, views)
     {
         new_views.add(view);
     }
-    
+
     this->operator=(new_views);
 }
 
 /** Add the view 'view' to this set, only if it doesn't
     already exist - this returns whether the view has
     been added
-    
+
     \throw SireError::incompatible_error
 */
 bool ViewsOfMol::addIfUnique(const AtomSelection &view)
@@ -449,7 +472,7 @@ bool ViewsOfMol::addIfUnique(const AtomSelection &view)
 /** Add the views in 'views' that don't already exist
     in this set - this returns the views that were added
     (or an empty list if nothing was added)
-    
+
     \throw SireError::incompatible_error
 */
 QList<AtomSelection> ViewsOfMol::addIfUnique(const QList<AtomSelection> &views)
@@ -463,23 +486,23 @@ QList<AtomSelection> ViewsOfMol::addIfUnique(const QList<AtomSelection> &views)
         else
             return QList<AtomSelection>();
     }
-    
+
     QList<AtomSelection> added_views;
     ViewsOfMol new_views(*this);
-    
+
     foreach (const AtomSelection &view, views)
     {
         if (new_views.addIfUnique(view))
             added_views.append(view);
     }
-    
+
     this->operator=(new_views);
-    
+
     return added_views;
 }
 
 /** Synonym for ViewsOfMol::addIfUnique(view)
-      
+
     \throw SireError::incompatible_error
 */
 bool ViewsOfMol::unite(const AtomSelection &view)
@@ -487,8 +510,8 @@ bool ViewsOfMol::unite(const AtomSelection &view)
     return this->addIfUnique(view);
 }
 
-/** Synonym for ViewsOfMol:addIfUnique(views) 
-      
+/** Synonym for ViewsOfMol:addIfUnique(views)
+
     \throw SireError::incompatible_error
 */
 QList<AtomSelection> ViewsOfMol::unite(const QList<AtomSelection> &views)
@@ -517,7 +540,7 @@ AtomSelection ViewsOfMol::removeAt(int i)
     else
     {
         removed_view = views.takeAt(i);
-        
+
         if (views.count() < 2)
         {
             selected_atoms = views.first();
@@ -533,19 +556,19 @@ AtomSelection ViewsOfMol::removeAt(int i)
     return removed_view;
 }
 
-/** Remove the view 'view' from this set, if 
+/** Remove the view 'view' from this set, if
     any copies exist. This only removes the first
     copy of this view from this set, if multiple
-    copies of this view exist. This returns whether 
+    copies of this view exist. This returns whether
     any copies were removed from this set.
-    
+
     \throw SireError::incompatible_error
 */
 bool ViewsOfMol::remove(const AtomSelection &view)
 {
     if (not selected_atoms.contains(view))
         return false;
-        
+
     if (views.count() == 0)
     {
         if (selected_atoms == view)
@@ -559,11 +582,11 @@ bool ViewsOfMol::remove(const AtomSelection &view)
     else
     {
         int i = views.indexOf(view);
-        
+
         if (i >= 0)
         {
             views.removeAt(i);
-            
+
             if (views.count() < 2)
             {
                 selected_atoms = views.first();
@@ -574,7 +597,7 @@ bool ViewsOfMol::remove(const AtomSelection &view)
                 selected_atoms = views.at(0);
                 selected_atoms.unite(views);
             }
-            
+
             return true;
         }
         else
@@ -599,13 +622,13 @@ QList<AtomSelection> ViewsOfMol::remove(const QList<AtomSelection> &views)
 
     ViewsOfMol new_views(*this);
     QList<AtomSelection> removed_views;
-    
+
     foreach (const AtomSelection &view, views)
     {
         if (new_views.remove(view))
             removed_views.append(view);
     }
-    
+
     this->operator=(new_views);
     return removed_views;
 }
@@ -620,7 +643,7 @@ bool ViewsOfMol::removeAll(const AtomSelection &view)
 {
     if (not selected_atoms.contains(view))
         return false;
-    
+
     if (views.isEmpty())
     {
         if (selected_atoms == view)
@@ -637,7 +660,7 @@ bool ViewsOfMol::removeAll(const AtomSelection &view)
         {
             if (views.isEmpty())
                 this->removeAll();
-            
+
             else if (views.count() == 1)
             {
                 selected_atoms = views.first();
@@ -648,7 +671,7 @@ bool ViewsOfMol::removeAll(const AtomSelection &view)
                 selected_atoms = views.first();
                 selected_atoms.unite(views);
             }
-            
+
             return true;
         }
         else
@@ -670,18 +693,18 @@ QList<AtomSelection> ViewsOfMol::removeAll(const QList<AtomSelection> &views)
         else
             return QList<AtomSelection>();
     }
-    
+
     ViewsOfMol new_views;
     QList<AtomSelection> removed_views;
-    
+
     foreach (const AtomSelection &view, views)
     {
         if (new_views.removeAll(view))
             removed_views.append(view);
     }
-    
+
     this->operator=(new_views);
-    
+
     return removed_views;
 }
 
@@ -692,33 +715,33 @@ QList<AtomSelection> ViewsOfMol::removeDuplicates()
 {
     if (views.isEmpty())
         return views;
-        
+
     QList<AtomSelection> removed_views;
 
     int nviews = views.count();
-    
+
     //compare all pairs of views
     int i = 0;
-    
+
     while (i < nviews-1)
     {
         //need to take a pointer as removing views would
         //screw up the reference
         const AtomSelection *view0 = &(views.at(i));
-        
+
         int j = i+1;
-        
+
         while (j < nviews)
         {
             const AtomSelection &view1 = views.at(j);
-            
+
             if (*view0 == view1)
             {
                 //this is a duplicate view - remove the later view
                 removed_views.append(view1);
                 views.removeAt(j);
                 --nviews;
-                
+
                 //need to retake the pointer to view0 as removing the
                 //item may have moved view0 in memory
                 view0 = &(views.at(i));
@@ -726,10 +749,10 @@ QList<AtomSelection> ViewsOfMol::removeDuplicates()
             else
                 ++j;
         }
-        
+
         ++i;
     }
-    
+
     return removed_views;
 }
 
@@ -764,7 +787,7 @@ ViewsOfMol ViewsOfMol::operator-(const ViewsOfMol &other) const
 
 /** Synonym for ViewsOfMol::add(views), except that this
     set is returned
-    
+
     \throw SireError::incompatible_error
 */
 ViewsOfMol& ViewsOfMol::operator+=(const ViewsOfMol &other)
@@ -774,8 +797,8 @@ ViewsOfMol& ViewsOfMol::operator+=(const ViewsOfMol &other)
 }
 
 /** Synonym for ViewsOfMol::remove(views), except that this
-    set is returned 
-    
+    set is returned
+
     \throw SireError::incompatible_error
 */
 ViewsOfMol& ViewsOfMol::operator-=(const ViewsOfMol &other)
@@ -804,14 +827,14 @@ Molecule ViewsOfMol::molecule() const
     return Molecule(*d);
 }
 
-/** Return the mover that can move all of the atoms 
+/** Return the mover that can move all of the atoms
     in all of the views */
 Mover<ViewsOfMol> ViewsOfMol::move() const
 {
     return Mover<ViewsOfMol>(*this);
 }
 
-/** Return all of the atoms selected across all of the 
+/** Return all of the atoms selected across all of the
     views in this set */
 AtomSelection ViewsOfMol::selection() const
 {
@@ -819,13 +842,13 @@ AtomSelection ViewsOfMol::selection() const
 }
 
 /** Return the atoms selected in the ith view in this set
-    
+
     \throw SireError:invalid_index
 */
 const AtomSelection& ViewsOfMol::selection(int i) const
 {
     i = Index(i).map( this->nViews() );
-    
+
     if (views.isEmpty())
         return selected_atoms;
     else
@@ -851,8 +874,8 @@ QList<AtomSelection> ViewsOfMol::selections() const
 }
 
 /** Return the mover that can move all of the atoms
-    in the ith view in this set 
-    
+    in the ith view in this set
+
     \throw SireError::invalid_index
 */
 Mover<ViewsOfMol> ViewsOfMol::move(int i) const
@@ -868,8 +891,8 @@ Evaluator ViewsOfMol::evaluate() const
 }
 
 /** Return an evaluator that can evaluate properties
-    over the atoms in the ith view of this set 
-    
+    over the atoms in the ith view of this set
+
     \throw SireError::invalid_index
 */
 Evaluator ViewsOfMol::evaluate(int i) const
@@ -878,8 +901,8 @@ Evaluator ViewsOfMol::evaluate(int i) const
 }
 
 /** Return whether or not any of the views contains
-    the atom at index 'atomidx' 
-    
+    the atom at index 'atomidx'
+
     \throw SireError::invalid_index
 */
 bool ViewsOfMol::contains(AtomIdx atomidx) const
@@ -889,7 +912,7 @@ bool ViewsOfMol::contains(AtomIdx atomidx) const
 
 /** Return whether or not the views between them contain
     all of the atoms identified by 'atomid'
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
@@ -900,7 +923,7 @@ bool ViewsOfMol::contains(const AtomID &atomid) const
 
 /** Return whether or not the views between them contain
     all of the atoms in the selection 'selection'
-    
+
     \throw SireError::incompatible_error
 */
 bool ViewsOfMol::contains(const AtomSelection &selection) const
@@ -910,7 +933,7 @@ bool ViewsOfMol::contains(const AtomSelection &selection) const
 
 /** Return whether or not the views between them contain
     all of the atoms in all of the selections in 'selections'
-    
+
     \throw SireError::incompatible_error
 */
 bool ViewsOfMol::contains(const QList<AtomSelection> &selections) const
@@ -920,13 +943,13 @@ bool ViewsOfMol::contains(const QList<AtomSelection> &selections) const
         if (not selected_atoms.contains(selection))
             return false;
     }
-    
+
     return true;
 }
 
 /** Return whether or not any of the views contains any
     of the atoms identified by 'atomid'
-    
+
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
 */
@@ -937,7 +960,7 @@ bool ViewsOfMol::intersects(const AtomID &atomid) const
 
 /** Return whether or not any of the views contains any
     of the atoms in 'selection'
-    
+
     \throw SireError::incompatible_error
 */
 bool ViewsOfMol::intersects(const AtomSelection &selection) const
@@ -945,10 +968,10 @@ bool ViewsOfMol::intersects(const AtomSelection &selection) const
     return selected_atoms.intersects(selection);
 }
 
-/** Return the index of the view 'selection' in this set, 
+/** Return the index of the view 'selection' in this set,
     searching forward from the index position 'from'. This
     returns -1 if this view is not present in this set
-    
+
     \throw SireError::incompatible_error
 */
 int ViewsOfMol::indexOf(const AtomSelection &selection, int from) const
@@ -960,7 +983,7 @@ int ViewsOfMol::indexOf(const AtomSelection &selection, int from) const
         from = Index(from).map(this->nViews());
 
     selected_atoms.assertCompatibleWith(selection);
-    
+
     if (views.isEmpty())
     {
         return (selection == selected_atoms) - 1;
@@ -973,7 +996,7 @@ int ViewsOfMol::indexOf(const AtomSelection &selection, int from) const
 
 /** Assert that none of the views contain the same atoms
     (i.e. there is no overlap between each view)
-    
+
     \throw SireMol::duplicate_atom
 */
 void ViewsOfMol::assertNoOverlap() const
@@ -982,16 +1005,16 @@ void ViewsOfMol::assertNoOverlap() const
 
     if (nviews < 2)
         return;
-        
+
     //compare each pair of views...
     for (int i=0; i<nviews-1; ++i)
     {
         const AtomSelection &view0 = views.at(i);
-    
+
         for (int j=i+1; j<nviews; ++j)
         {
             const AtomSelection &view1 = views.at(j);
-            
+
             if (view0.intersects(view1))
                 //there are some common atoms...!
                 throw SireMol::duplicate_atom( QObject::tr(

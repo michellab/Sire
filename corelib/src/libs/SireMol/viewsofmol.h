@@ -64,12 +64,12 @@ class Segment;
 class Molecule;
 class PartialMolecule;
 
-/** This class holds multiple arbitrary views of the  
+/** This class holds multiple arbitrary views of the
     same molecule.
-    
+
     @author Christopher Woods
 */
-class SIREMOL_EXPORT ViewsOfMol 
+class SIREMOL_EXPORT ViewsOfMol
         : public SireBase::ConcreteProperty<ViewsOfMol,MoleculeView>
 {
 
@@ -78,12 +78,12 @@ friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ViewsOfMol&);
 
 public:
     ViewsOfMol();
-    
+
     ViewsOfMol(const MoleculeData &moldata);
 
     ViewsOfMol(const MoleculeData &moldata,
                const AtomSelection &selected_atoms);
-    
+
     ViewsOfMol(const MoleculeData &moldata,
                const QList<AtomSelection> &views);
 
@@ -92,105 +92,107 @@ public:
     ViewsOfMol(const Selector<CutGroup> &cgroups);
     ViewsOfMol(const Selector<Residue> &residue);
     ViewsOfMol(const Selector<Atom> &atoms);
-    
+
     ViewsOfMol(const MoleculeView &view);
-    
+
     ViewsOfMol(const ViewsOfMol &other);
-    
+
     ~ViewsOfMol();
-   
+
     static const char* typeName();
-    
+
     ViewsOfMol* clone() const;
-   
+
     ViewsOfMol& operator=(const ViewsOfMol &other);
-    
+
     ViewsOfMol& operator=(const Selector<Atom> &atoms);
     ViewsOfMol& operator=(const Selector<CutGroup> &cgroups);
     ViewsOfMol& operator=(const Selector<Residue> &residues);
     ViewsOfMol& operator=(const Selector<Chain> &chains);
     ViewsOfMol& operator=(const Selector<Segment> &segments);
-    
+
     ViewsOfMol& operator=(const MoleculeView &view);
-    
+
     ViewsOfMol operator+(const ViewsOfMol &views) const;
     ViewsOfMol operator-(const ViewsOfMol &views) const;
-    
+
     ViewsOfMol& operator+=(const ViewsOfMol &views);
     ViewsOfMol& operator-=(const ViewsOfMol &views);
-    
+
     bool operator==(const ViewsOfMol &other) const;
     bool operator!=(const ViewsOfMol &other) const;
+
+    QString getCommonType() const;
 
     MolViewPtr operator[](int i) const;
     int nViews() const;
 
     QString toString() const;
-    
+
     bool isEmpty() const;
     bool selectedAll() const;
-    
+
     PartialMolecule valueAt(int i) const;
     const AtomSelection& viewAt(int i) const;
-    
+
     MolNum number() const;
     const MolName& name() const;
-    
+
     quint64 version() const;
     quint64 version(const PropertyName &key) const;
-    
+
     PartialMolecule join() const;
     PartialMolecule all() const;
-    
+
     Molecule molecule() const;
 
     Mover<ViewsOfMol> move() const;
     Mover<ViewsOfMol> move(int i) const;
-    
+
     Evaluator evaluate() const;
     Evaluator evaluate(int i) const;
 
     AtomSelection selection() const;
     const AtomSelection& selection(int i) const;
-    
+
     QList<AtomSelection> selections() const;
-    
+
     bool contains(AtomIdx atomidx) const;
     bool contains(const AtomID &atomid) const;
     bool intersects(const AtomID &atomid) const;
-    
+
     bool contains(const AtomSelection &selection) const;
     bool intersects(const AtomSelection &selection) const;
-    
+
     int indexOf(const AtomSelection &selection, int from=0) const;
-    
+
     bool contains(const QList<AtomSelection> &selections) const;
-    
+
     bool hasProperty(const PropertyName&) const
     {
         return false;
     }
-    
+
     bool hasMetadata(const PropertyName&) const
     {
         return false;
     }
-    
+
     bool hasMetadata(const PropertyName&, const PropertyName&) const
     {
         return false;
     }
-    
+
     QStringList propertyKeys() const
     {
         return QStringList();
     }
-    
+
     QStringList metadataKeys() const
     {
         return QStringList();
     }
-    
+
     QStringList metadataKeys(const PropertyName&) const
     {
         return QStringList();
@@ -198,27 +200,27 @@ public:
 
     void add(const AtomSelection &view);
     void add(const QList<AtomSelection> &views);
-    
+
     bool addIfUnique(const AtomSelection &view);
     QList<AtomSelection> addIfUnique(const QList<AtomSelection> &views);
-    
+
     bool unite(const AtomSelection &view);
     QList<AtomSelection> unite(const QList<AtomSelection> &views);
-    
+
     bool remove(const AtomSelection &view);
     QList<AtomSelection> remove(const QList<AtomSelection> &views);
-    
+
     AtomSelection removeAt(int i);
-    
+
     bool removeAll(const AtomSelection &view);
     QList<AtomSelection> removeAll(const QList<AtomSelection> &views);
-    
+
     QList<AtomSelection> removeDuplicates();
-   
+
     void removeAll();
-   
+
     void assertNoOverlap() const;
-   
+
 private:
     template<class T>
     void setEqualTo(const Selector<T> &selection);
@@ -226,7 +228,7 @@ private:
     /** The union of all of the views of the molecule
         (and the first view, if there is only one view) */
     AtomSelection selected_atoms;
-    
+
     /** The array of views of the molecule */
     QList<AtomSelection> views;
 };

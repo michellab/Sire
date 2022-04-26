@@ -80,7 +80,7 @@ Selector<SireMol::Atom>( size=5
 4:  Atom( CG1:6   [ -55.68,   13.72,   41.72] )
 )
 
-gets the 5th to 9th atoms in reverse order.
+gets the 6th to 10th atoms in reverse order.
 
 You can also pass in a list of indicies of atoms.
 
