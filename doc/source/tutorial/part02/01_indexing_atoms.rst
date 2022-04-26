@@ -356,6 +356,18 @@ AtomIdx(0)
     raise a KeyError as the first atom in the molecule is not
     contained in the slice of atoms 5 to 9.
 
+Atom identifying types
+----------------------
+
+Another way to index atoms is to use the atom indexing types, i.e.
+:class:`~Sire.Mol.AtomIdx`, :class:`~Sire.Mol.AtomName` and
+:class:`~Sire.Mol.AtomNum`. The easiest way to create these is
+by using the function :func:`Sire.atomid`.
+
+>>> print(mol[sr.atomid("CA")])
+
+
+
 Iterating over atoms
 --------------------
 

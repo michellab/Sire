@@ -4163,7 +4163,7 @@ bool AtomSelection::isMolecule() const
 /** Return whether or not this selection represents a single atom */
 bool AtomSelection::isAtom() const
 {
-    return this->nAtoms() == 1;
+    return this->nSelected() == 1;
 }
 
 /** Return whether or not this selection represents a single CutGroup */

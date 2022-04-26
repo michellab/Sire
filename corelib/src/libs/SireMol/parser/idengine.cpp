@@ -1323,7 +1323,6 @@ SelectResult IDNotEngine::select(const SelectResult &mols, const PropertyMap &ma
     {
         for (const auto &mol : mols.views())
         {
-
             auto inverted = invert(mol, selected.views(mol.data().number()));
 
             if (not inverted.isEmpty())

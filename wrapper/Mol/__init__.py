@@ -410,6 +410,16 @@ def __is_chain_class(obj):
 def __is_selector_class(obj):
     return obj.what().find("SireMol::Selector") != -1
 
+
+def __is_list_class(obj):
+    if type(obj) is list:
+        return True
+    else:
+        try:
+            return obj.what().find("::Selector") != -1
+        except Exception:
+            return False
+
 def __from_select_result(obj):
     """Convert the passed SelectResult from a search into the
        most appropriate MoleculeView-derived class (or MultiMolView)
@@ -424,7 +434,7 @@ def __from_select_result(obj):
     for molnum in molnums:
         v = obj.views(molnum)
 
-        if v.what().find("::Select") != -1 and len(v) == 1:
+        if __is_list_class(v) and len(v) == 1:
             views.append(v[0])
         else:
             views.append(v)
