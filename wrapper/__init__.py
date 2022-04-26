@@ -11,37 +11,20 @@ Functions
 
     load
     save
+    atomid
+    chainid
+    molid
+    resid
+    segid
     thumbs_up
     disable_thumbs_up
     get_thumbs_up_info
 
-Classes
-=======
-
-.. autosummary::
-    :toctree: generated/
-
-    atomidx
-    atomname
-    atomnum
-    chainidx
-    chainname
-    molidx
-    molnum
-    residx
-    resname
-    resnum
-    segidx
-    segname
-
 """
 
 __all__ = [ "load", "save",
-            "atomname", "atomnum", "atomidx",
-            "resname", "resnum", "residx",
-            "chainname","chainidx",
-            "segname", "segidx",
-            "molnum", "molidx" ]
+            "atomid", "resid", "chainid",
+            "segid", "molid" ]
 
 from ._try_import import *
 
