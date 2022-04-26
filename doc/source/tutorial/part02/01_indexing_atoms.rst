@@ -365,8 +365,40 @@ Another way to index atoms is to use the atom indexing types, i.e.
 by using the function :func:`Sire.atomid`.
 
 >>> print(mol[sr.atomid("CA")])
+Selector<SireMol::Atom>( size=1494
+0:  Atom( CA:2    [ -55.43,   11.35,   42.54] )
+1:  Atom( CA:10   [ -56.02,    7.64,   43.47] )
+2:  Atom( CA:17   [ -54.99,    6.39,   39.98] )
+3:  Atom( CA:25   [ -55.33,    2.58,   39.80] )
+4:  Atom( CA:34   [ -52.97,    1.03,   37.19] )
+...
+1489:  Atom( CA:11624 [  22.43,   -6.30,   32.21] )
+1490:  Atom( CA:11629 [  25.36,   -5.51,   29.89] )
+1491:  Atom( CA:11636 [  27.51,   -3.84,   32.59] )
+1492:  Atom( CA:11645 [  28.74,   -0.85,   30.58] )
+1493:  Atom( CA:11653 [  31.65,   -0.00,   32.91] )
+)
 
+This returns the atoms called "CA", as ``sr.atomid("CA")`` has created
+an :class:`~Sire.Mol.AtomName` object.
 
+>>> print(sr.atomid("CA"))
+AtomName('CA')
+
+This function will create an :class:`~Sire.Mol.AtomNum` if it is passed
+an integer, e.g.
+
+>>> print(sr.atomid(1))
+AtomNum(1)
+>>> print(mol[sr.atomid(1)])
+Atom( N:1     [ -54.07,   11.27,   41.93] )
+
+You can set both a name and a number by passing in two arguments, e.g.
+
+>>> print(mol[sr.atomid("CA", 10)])
+Atom( CA:10   [ -56.02,    7.64,   43.47] )
+>>> print(mol[sr.atomid(name="CA", num=10)])
+Atom( CA:10   [ -56.02,    7.64,   43.47] )
 
 Iterating over atoms
 --------------------

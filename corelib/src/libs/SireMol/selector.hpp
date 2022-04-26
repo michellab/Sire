@@ -440,9 +440,9 @@ QList<typename T::Name> Selector<T>::names() const
 {
     QList<typename T::Name> n;
 
-    for (const auto &idx : this->indexes())
+    for (int i=0; i<this->count(); ++i)
     {
-        n.append( this->operator()(idx).name() );
+        n.append( this->operator()(i).name() );
     }
 
     return n;
@@ -457,9 +457,9 @@ QList<typename T::Number> Selector<T>::numbers() const
 {
     QList<typename T::Number> n;
 
-    for (const auto &idx : this->indexes())
+    for (int i=0; i<this->count(); ++i)
     {
-        n.append( this->operator()(idx).number() );
+        n.append( this->operator()(i).number() );
     }
 
     return n;
