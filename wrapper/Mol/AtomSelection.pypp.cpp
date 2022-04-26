@@ -991,6 +991,30 @@ void register_AtomSelection_class(){
                 , "Invert this selection" );
         
         }
+        { //::SireMol::AtomSelection::isAtom
+        
+            typedef bool ( ::SireMol::AtomSelection::*isAtom_function_type)(  ) const;
+            isAtom_function_type isAtom_function_value( &::SireMol::AtomSelection::isAtom );
+            
+            AtomSelection_exposer.def( 
+                "isAtom"
+                , isAtom_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::AtomSelection::isChain
+        
+            typedef bool ( ::SireMol::AtomSelection::*isChain_function_type)(  ) const;
+            isChain_function_type isChain_function_value( &::SireMol::AtomSelection::isChain );
+            
+            AtomSelection_exposer.def( 
+                "isChain"
+                , isChain_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::AtomSelection::isCompatibleWith
         
             typedef bool ( ::SireMol::AtomSelection::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
@@ -1002,6 +1026,18 @@ void register_AtomSelection_class(){
                 , ( bp::arg("molinfo") )
                 , bp::release_gil_policy()
                 , "Return whether or not this selection is compatible with the molecule info\nin molinfo" );
+        
+        }
+        { //::SireMol::AtomSelection::isCutGroup
+        
+            typedef bool ( ::SireMol::AtomSelection::*isCutGroup_function_type)(  ) const;
+            isCutGroup_function_type isCutGroup_function_value( &::SireMol::AtomSelection::isCutGroup );
+            
+            AtomSelection_exposer.def( 
+                "isCutGroup"
+                , isCutGroup_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::AtomSelection::isEmpty
@@ -1016,6 +1052,18 @@ void register_AtomSelection_class(){
                 , "Return wheter no atoms are selected" );
         
         }
+        { //::SireMol::AtomSelection::isMolecule
+        
+            typedef bool ( ::SireMol::AtomSelection::*isMolecule_function_type)(  ) const;
+            isMolecule_function_type isMolecule_function_value( &::SireMol::AtomSelection::isMolecule );
+            
+            AtomSelection_exposer.def( 
+                "isMolecule"
+                , isMolecule_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::AtomSelection::isNull
         
             typedef bool ( ::SireMol::AtomSelection::*isNull_function_type)(  ) const;
@@ -1026,6 +1074,30 @@ void register_AtomSelection_class(){
                 , isNull_function_value
                 , bp::release_gil_policy()
                 , "Return whether or not this is a null selection" );
+        
+        }
+        { //::SireMol::AtomSelection::isResidue
+        
+            typedef bool ( ::SireMol::AtomSelection::*isResidue_function_type)(  ) const;
+            isResidue_function_type isResidue_function_value( &::SireMol::AtomSelection::isResidue );
+            
+            AtomSelection_exposer.def( 
+                "isResidue"
+                , isResidue_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::AtomSelection::isSegment
+        
+            typedef bool ( ::SireMol::AtomSelection::*isSegment_function_type)(  ) const;
+            isSegment_function_type isSegment_function_value( &::SireMol::AtomSelection::isSegment );
+            
+            AtomSelection_exposer.def( 
+                "isSegment"
+                , isSegment_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::AtomSelection::mask
