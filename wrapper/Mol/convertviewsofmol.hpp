@@ -278,8 +278,6 @@ struct viewsofmol_to_py_list
     //Atom, Residue, Molecule etc. views
     static PyObject* convert(const SireMol::ViewsOfMol &views)
     {
-        qDebug() << CODELOC;
-
         auto raii = bp::release_gil_policy::acquire_gil();
 
         if (views.nViews() == 0)
@@ -311,7 +309,6 @@ struct viewsofmol_to_py_list
             }
             else if (typ == "SireMol::Residue")
             {
-                qDebug() << CODELOC;
                 return bp::incref(bp::object(views.residues()).ptr());
             }
             else if (typ == "SireMol::Chain")
