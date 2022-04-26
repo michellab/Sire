@@ -330,24 +330,66 @@ MolViewPtr ViewsOfMol::operator[](int i) const
         return PartialMolecule(*d, views.at(i)).toUnit();
 }
 
+QString _type_of_view(const AtomSelection &s)
+{
+    if (s.isMolecule())
+        return Molecule::typeName();
+    else if (s.isAtom())
+        return Atom::typeName();
+    else if (s.isResidue())
+        return Residue::typeName();
+    else if (s.isChain())
+        return Chain::typeName();
+    else if (s.isSegment())
+        return Segment::typeName();
+    else if (s.isCutGroup())
+        return CutGroup::typeName();
+    else
+        return PartialMolecule::typeName();
+}
+
+void _throw_incompatible(const QString &typ1, const QString &typ2)
+{
+    throw SireError::incompatible_error(QObject::tr(
+        "The views of this molecule are of different types: %1 and %2")
+            .arg(typ1).arg(typ2), CODELOC);
+}
+
+void _assert_same_type(const QString &typ, const AtomSelection &s)
+{
+    if (typ == Molecule::typeName() and not s.isMolecule())
+        _throw_incompatible(typ, _type_of_view(s));
+
+    else if (typ == Atom::typeName() and not s.isAtom())
+        _throw_incompatible(typ, _type_of_view(s));
+
+    else if (typ == Residue::typeName() and not s.isResidue())
+        _throw_incompatible(typ, _type_of_view(s));
+
+    else if (typ == Chain::typeName() and not s.isChain())
+        _throw_incompatible(typ, _type_of_view(s));
+
+    else if (typ == Segment::typeName() and not s.isSegment())
+        _throw_incompatible(typ, _type_of_view(s));
+
+    else if (typ == CutGroup::typeName() and not s.isCutGroup())
+        _throw_incompatible(typ, _type_of_view(s));
+
+    else if (typ != _type_of_view(s))
+        _throw_incompatible(typ, _type_of_view(s));
+}
+
 /** Get the common type of all of the views */
 QString ViewsOfMol::getCommonType() const
 {
     if (this->isEmpty())
         return this->what();
 
-    QString typ = this->valueAt(0).toUnit().read().what();
+    auto typ = _type_of_view(views.at(0));
 
-    for (int i=1; i<this->nViews(); ++i)
+    for (const auto &view : views)
     {
-        QString t(this->valueAt(i).toUnit().read().what());
-
-        if (typ != t)
-        {
-            throw SireError::incompatible_error(
-                QObject::tr("There are on common types: %1 vs %2")
-                    .arg(typ).arg(t), CODELOC);
-        }
+        _assert_same_type(typ, view);
     }
 
     return typ;

@@ -365,56 +365,36 @@ const char* PartialMolecule::typeName()
     residue, this returns the Residue etc. */
 MolViewPtr PartialMolecule::toUnit() const
 {
-    if (this->selectedAll())
+    const auto s = this->selection();
+
+    if (s.isMolecule())
     {
         return this->molecule();
     }
-    else if (this->nAtoms() == 1)
+    else if (s.isAtom())
     {
         return this->atom();
     }
-
-    if (this->nResidues() == 1)
+    else if (s.isResidue())
     {
-        const auto res = this->residue();
-
-        if (this->selection().selectedAll(res.index()))
-        {
-            return res;
-        }
+        return this->residue();
     }
-
-    if (this->nCutGroups() == 1)
+    else if (s.isChain())
     {
-        const auto cg = this->cutGroup();
-
-        if (this->selection().selectedAll(cg.index()))
-        {
-            return cg;
-        }
+        return this->chain();
     }
-
-    if (this->nChains() == 1)
+    else if (s.isSegment())
     {
-        const auto chain = this->chain();
-
-        if (this->selection().selectedAll(chain.index()))
-        {
-            return chain;
-        }
+        return this->segment();
     }
-
-    if (this->nSegments() == 1)
+    else if (s.isCutGroup())
     {
-        const auto segment = this->segment();
-
-        if (this->selection().selectedAll(segment.index()))
-        {
-            return segment;
-        }
+        return this->cutGroup();
     }
-
-    return *this;
+    else
+    {
+        return *this;
+    }
 }
 
 namespace SireMol

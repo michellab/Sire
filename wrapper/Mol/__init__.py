@@ -422,31 +422,12 @@ def __from_select_result(obj):
         raise KeyError("Nothing matched the search.")
 
     for molnum in molnums:
-        v = obj[molnum]
+        v = obj.views(molnum)
 
-        if len(v) == 1:
+        if v.what().find("::Select") != -1 and len(v) == 1:
             views.append(v[0])
         else:
-            try:
-                c = v.getCommonType()
-
-                # we have the common type, so add the appropriate Selector
-                if c == "SireMol::Atom":
-                    views.append(v.atoms())
-                elif c == "SireMol::Residue":
-                    views.append(v.residues())
-                elif c == "SireMol::Chain":
-                    views.append(v.chains())
-                elif c == "SireMol::Segment":
-                    views.append(v.segments())
-                else:
-                    views.append(v)
-
-            except Exception:
-                # there is no common type, so just add the ViewsOfMol
-                views.append(v)
-
-            print("DONE")
+            views.append(v)
 
     if len(views) == 0:
         return None
