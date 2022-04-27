@@ -23,7 +23,9 @@ Downloading from 'https://siremol.org/m/alanin.psf'...
 This molecule contains only a single segment called "MAIN".
 
 >>> print(mol.segments())
-Segment( MAIN nAtoms=66 )
+Selector<SireMol::Segment>( size=1
+0:  Segment( MAIN nAtoms=66 )
+)
 >>> print(mol.segment(0))
 Segment( MAIN nAtoms=66 )
 >>> print(mol.segment("MAIN"))
@@ -36,8 +38,10 @@ You can search for segments using their name (``segname``) or their
 index (``segidx``).
 
 >>> print(mol.segments("segname MAIN"))
-Segment( MAIN nAtoms=66 )
->>> print(mol.segments("segidx 0"))
+Selector<SireMol::Segment>( size=1
+0:  Segment( MAIN nAtoms=66 )
+)
+>>> print(mol.segment("segidx 0"))
 Segment( MAIN nAtoms=66 )
 
 .. note::

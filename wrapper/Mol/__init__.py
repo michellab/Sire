@@ -599,7 +599,7 @@ Molecule.connectivity = lambda x : x.property("connectivity")
 #### public API
 
 from ._cursor import *
-
+from ._multimolview import *
 
 def _cursor(view):
     """Return a Cursor that can be used to edit the properties

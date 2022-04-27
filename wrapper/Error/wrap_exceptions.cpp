@@ -153,6 +153,7 @@ void export_exceptions()
     register_exception_translator<SireMol::missing_residue>(&key_error);
     register_exception_translator<SireMol::missing_chain>(&key_error);
     register_exception_translator<SireMol::missing_segment>(&key_error);
+    register_exception_translator<SireMol::missing_molecule>(&key_error);
     register_exception_translator<SireBase::missing_property>(&key_error);
     register_exception_translator<SireMol::duplicate_atom>(&key_error);
     register_exception_translator<SireMol::duplicate_cutgroup>(&key_error);

@@ -59,10 +59,10 @@ Search for chains
 You can also search for chains, using their name (``chainname``),
 and/or their index in their parent molecule (``chainidx``).
 
->>> print(mol.chains("chainname A"))
+>>> print(mol.chain("chainname A"))
 Chain( A nResidues=123 nAtoms=985)
 
->>> print(mol.chains("chainidx 1"))
+>>> print(mol.chain("chainidx 1"))
 Chain( B nResidues=638 nAtoms=4881)
 
 .. note::
