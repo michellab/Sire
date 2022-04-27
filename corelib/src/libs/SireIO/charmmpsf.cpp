@@ -3742,6 +3742,10 @@ MolStructureEditor CharmmPSF::getMolStructure(int imol, const PropertyName &cutt
     // There will be multiple atoms per residue.
     QMultiMap<int, int> res_to_atom;
 
+    // Mapping between segments and atoms.
+    // There will be multiple atoms per segment
+    QMultiMap<QString, int> seg_to_atom;
+
     // Mapping between residue number and name.
     QMap<int, QString> num_to_name;
 
@@ -3759,6 +3763,10 @@ MolStructureEditor CharmmPSF::getMolStructure(int imol, const PropertyName &cutt
 
         // Map the atom to its residue.
         res_to_atom.insert(res_num, atom_id);
+
+        const auto seg = atom.getSegment();
+
+        seg_to_atom.insert(seg, atom_id);
 
         // Make sure the residue number doesn't already exist
         // in the map. Residue numbers must be unique.
@@ -3813,6 +3821,20 @@ MolStructureEditor CharmmPSF::getMolStructure(int imol, const PropertyName &cutt
         }
 
         ires++;
+    }
+
+    for (auto seg : seg_to_atom.uniqueKeys())
+    {
+        auto segment = mol.add(SegName(seg));
+
+        QList<int> seg_atoms = seg_to_atom.values(seg);
+        std::sort(seg_atoms.begin(), seg_atoms.end());
+
+        for (auto seg_atom : seg_atoms)
+        {
+            auto atom = mol.atom(AtomIdx(seg_atom));
+            atom.reparent(SegName(seg));
+        }
     }
 
     if (cutting.hasValue())

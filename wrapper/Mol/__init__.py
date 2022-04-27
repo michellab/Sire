@@ -463,23 +463,23 @@ def __fixed__getitem__(obj, key):
         except SyntaxError:
             pass
     elif Sire.Mol.AtomID in type(key).mro():
-        return obj.atoms(key)
+        return obj.atoms(key, auto_reduce=True)
     elif Sire.Mol.ResID in type(key).mro():
-        return obj.residues(key)
+        return obj.residues(key, auto_reduce=True)
     elif Sire.Mol.ChainID in type(key).mro():
-        return obj.chains(key)
+        return obj.chains(key, auto_reduce=True)
     elif Sire.Mol.SegID in type(key).mro():
-        return obj.segments(key)
+        return obj.segments(key, auto_reduce=True)
 
     if __is_selector_class(obj):
         return obj.__orig__getitem__(key)
     elif __is_chain_class(obj):
-        return obj.residues(key)
+        return obj.residues(key, auto_reduce=True)
     else:
-        return obj.atoms(key)
+        return obj.atoms(key, auto_reduce=True)
 
 
-def __fixed__atoms__(obj, idx=None):
+def __fixed__atoms__(obj, idx=None, auto_reduce=False):
     if idx is None:
         result = obj.__orig__atoms()
     elif type(idx) is range:
@@ -487,13 +487,13 @@ def __fixed__atoms__(obj, idx=None):
     else:
         result = obj.__orig__atoms(idx)
 
-    if len(result) == 1:
+    if auto_reduce and len(result) == 1:
         return result[0]
     else:
         return result
 
 
-def __fixed__residues__(obj, idx=None):
+def __fixed__residues__(obj, idx=None, auto_reduce=False):
     if idx is None:
         result = obj.__orig__residues()
     elif type(idx) is range:
@@ -501,13 +501,13 @@ def __fixed__residues__(obj, idx=None):
     else:
         result = obj.__orig__residues(idx)
 
-    if len(result) == 1:
+    if auto_reduce and len(result) == 1:
         return result[0]
     else:
         return result
 
 
-def __fixed__chains__(obj, idx=None):
+def __fixed__chains__(obj, idx=None, auto_reduce=False):
     if idx is None:
         result = obj.__orig__chains()
     elif type(idx) is range:
@@ -515,13 +515,13 @@ def __fixed__chains__(obj, idx=None):
     else:
         result = obj.__orig__chains(idx)
 
-    if len(result) == 1:
+    if auto_reduce and len(result) == 1:
         return result[0]
     else:
         return result
 
 
-def __fixed__segments__(obj, idx=None):
+def __fixed__segments__(obj, idx=None, auto_reduce=False):
     if idx is None:
         result = obj.__orig__segments()
     elif type(idx) is range:
@@ -529,7 +529,7 @@ def __fixed__segments__(obj, idx=None):
     else:
         result = obj.__orig__segments(idx)
 
-    if len(result) == 1:
+    if auto_reduce and len(result) == 1:
         return result[0]
     else:
         return result
@@ -566,6 +566,9 @@ for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule,
 
 MoleculeView.coordinates = lambda x : x.property("coordinates")
 Atom.element = lambda x : x.property("element")
+Atom.x = lambda x : x.property("coordinates").x()
+Atom.y = lambda x : x.property("coordinates").y()
+Atom.z = lambda x : x.property("coordinates").z()
 
 MoleculeView.mass = lambda x : x.evaluate().mass()
 MoleculeView.charge = lambda x : x.evaluate().charge()

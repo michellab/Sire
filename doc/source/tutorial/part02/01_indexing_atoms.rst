@@ -96,7 +96,9 @@ Selector<SireMol::Atom>( size=5
 This gives the atoms at indicies 0, 2, 4, 6, and 8.
 
 This indexing is a shorthand for calling the :func:`~Sire.Mol.Atom.atom`
-(for single) and :func:`~Sire.Mol.Atom.atoms` (for multiple) atom functions.
+(for single) and :func:`~Sire.Mol.Atom.atoms` (for multiple) atom functions,
+which are available on all of the molecular container types.
+
 You can call these directly, e.g.
 
 >>> print(mol.atom(0))
@@ -455,7 +457,7 @@ Selector<SireMol::Atom>( size=7440
 7439:  Atom( C6:11712 [   8.10,   23.00,   29.56] )
 )
 
-You can use either the element's symbol, or its full name.
+You can use either the element's symbol, or its full name
 
 >>> print(mol["element nitrogen"])
 Selector<SireMol::Atom>( size=2018
@@ -470,6 +472,23 @@ Selector<SireMol::Atom>( size=2018
 2015:  Atom( N:11644 [  28.07,   -1.72,   31.54] )
 2016:  Atom( ND2:11651 [  25.41,    0.07,   29.66] )
 2017:  Atom( N:11652 [  30.40,   -0.51,   32.35] )
+)
+
+or search for multiple elements at a time
+
+>>> print(mol["element C, O, N"])
+Selector<SireMol::Atom>( size=11660
+0:  Atom( N:1     [ -54.07,   11.27,   41.93] )
+1:  Atom( CA:2    [ -55.43,   11.35,   42.54] )
+2:  Atom( C:3     [ -56.06,    9.95,   42.55] )
+3:  Atom( O:4     [ -57.04,    9.73,   41.82] )
+4:  Atom( CB:5    [ -56.32,   12.33,   41.76] )
+...
+11655:  Atom( O:11728 [  -4.73,   43.02,   37.18] )
+11656:  Atom( O:11729 [  28.91,  -18.15,   61.95] )
+11657:  Atom( O:11730 [   5.57,    7.38,   35.58] )
+11658:  Atom( O:11731 [  24.49,  -20.60,   42.83] )
+11659:  Atom( O:11732 [   4.73,    5.03,   46.82] )
 )
 
 Uniquely identifying atoms

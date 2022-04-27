@@ -181,8 +181,8 @@ bool Segment::operator!=(const Segment &other) const
 /** Return a string representation of this segment */
 QString Segment::toString() const
 {
-    return QObject::tr( "Segment( %1 )" )
-                .arg( this->name() );
+    return QObject::tr( "Segment( %1 nAtoms=%2 )" )
+                .arg( this->name() ).arg(this->nAtoms());
 }
 
 /** Return whether or not this segment is empty */

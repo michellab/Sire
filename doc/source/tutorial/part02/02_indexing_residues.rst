@@ -5,11 +5,12 @@ Indexing Residues
 Residues are collections of atoms. They typically represent an amino
 acid residue in a protein. Residues are implemented via the
 :class:`~Sire.Mol.Residue` class, which itself is a molecular container
-for :class:`~Sire.Mol.Atom` objects.
+for :class:`~Sire.Mol.Atom` objects. An atom can only belong to one
+residue at a time (and they don't need to be assigned to a residue).
 
 You can access residues in a molecule container using the
 :func:`~Sire.Mol.Residue.residue` and :func:`~Sire.Mol.Residue.residues`
-functions.
+functions, which are available on all of the molecular container types.
 
 >>> print(mol.residue(0))
 Residue( ILE:6   nAtoms=8 )
@@ -303,7 +304,7 @@ calling its :func:`~Sire.Mol.Residue.index` function.
 >>> print(mol.residue(0).index())
 ResIdx(0)
 
-.. warning:
+.. warning::
 
     Be careful indexing by residue index. This is the index of the residue
     that uniquely identifies it within its parent molecule. It is not the

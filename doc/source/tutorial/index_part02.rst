@@ -57,3 +57,5 @@ The number of segments is 0
 
    part02/01_indexing_atoms
    part02/02_indexing_residues
+   part02/03_indexing_chains
+   part02/04_indexing_segments
