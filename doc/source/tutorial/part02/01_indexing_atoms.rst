@@ -219,8 +219,8 @@ File ~/sire.app/lib/python3.8/site-packages/Sire/Mol/__init__.py:428, in __fixed
 <BLANKLINE>
 KeyError: 'SireMol::missing_atom: There is no atom called "X" in the layout "{c4d51f89-f4f7-4e0c-854d-da27affe1baf}". (call Sire.Error.get_last_error_details() for more info)'
 
-Searching by Name and Number
----------------------------
+Searching by number
+-------------------
 
 So far, we have identified atoms by their index or by their name. There is
 a third way to identify atoms. This is by their atom number. The atom number
@@ -276,6 +276,59 @@ Selector<SireMol::Atom>( size=4
 3:  Atom( CG2:7   [ -57.70,   12.40,   42.39] )
 )
 
+or ranges of atom numbers
+
+>>> print(mol["atomnum 1:5"])
+Selector<SireMol::Atom>( size=5
+0:  Atom( N:1     [ -54.07,   11.27,   41.93] )
+1:  Atom( CA:2    [ -55.43,   11.35,   42.54] )
+2:  Atom( C:3     [ -56.06,    9.95,   42.55] )
+3:  Atom( O:4     [ -57.04,    9.73,   41.82] )
+4:  Atom( CB:5    [ -56.32,   12.33,   41.76] )
+)
+
+or ranges with steps, e.g.
+
+>>> print(mol["atomnum 1:91:10"])
+Selector<SireMol::Atom>( size=10
+0:  Atom( N:1     [ -54.07,   11.27,   41.93] )
+1:  Atom( C:11    [ -56.14,    7.05,   42.06] )
+2:  Atom( CG:21   [ -54.57,    8.40,   38.40] )
+3:  Atom( CE:31   [ -58.18,    0.27,   42.14] )
+4:  Atom( C:41    [ -52.69,   -3.63,   36.40] )
+5:  Atom( OD1:51  [ -47.78,   -5.70,   36.23] )
+6:  Atom( CB:61   [ -52.91,   17.54,   38.36] )
+7:  Atom( C:71    [ -56.03,   16.00,   33.41] )
+8:  Atom( CB:81   [ -52.48,   16.28,   32.24] )
+9:  Atom( OG:91   [ -55.67,   10.80,   30.06] )
+)
+
+.. note::
+
+    Search number ranges are inclusive of both ends. Also note
+    that the results appear in the order the atoms match from their
+    molecular container, not the order of the numbers (range) in the search
+    string. So ``mol["atomnum 10:1:-1"]`` would not reverse the atoms.
+    The search string asks for any atoms that have a number between 10 and 1.
+
+You can even mix combinations of multiple atom numbers and ranges!
+
+>>> print(mol["atomnum 1:3, 7:10, 20, 30"])
+Selector<SireMol::Atom>( size=9
+0:  Atom( N:1     [ -54.07,   11.27,   41.93] )
+1:  Atom( CA:2    [ -55.43,   11.35,   42.54] )
+2:  Atom( C:3     [ -56.06,    9.95,   42.55] )
+3:  Atom( CG2:7   [ -57.70,   12.40,   42.39] )
+4:  Atom( CD1:8   [ -55.42,   14.31,   43.09] )
+5:  Atom( N:9     [ -55.50,    9.04,   43.36] )
+6:  Atom( CA:10   [ -56.02,    7.64,   43.47] )
+7:  Atom( CB:20   [ -53.99,    7.18,   39.13] )
+8:  Atom( CD:30   [ -57.70,   -0.34,   40.83] )
+)
+
+Searching by name
+-----------------
+
 You can include atom names (``atomname``) in the search string.
 
 >>> print(mol["atomname CA"])
@@ -310,6 +363,12 @@ Selector<SireMol::Atom>( size=4482
 4481:  Atom( C:11654 [  32.09,   -0.82,   34.12] )
 )
 
+.. note::
+
+    The atoms will appear in the order they match from their
+    molecular container, not the order the atom names appear
+    in the search string.
+
 and can use mixtures of any identifiers, e.g.
 
 >>> print(mol["atomnum > 1000 and atomname N"])
@@ -325,6 +384,92 @@ Selector<SireMol::Atom>( size=1369
 1366:  Atom( N:11635 [  26.39,   -4.38,   31.81] )
 1367:  Atom( N:11644 [  28.07,   -1.72,   31.54] )
 1368:  Atom( N:11652 [  30.40,   -0.51,   32.35] )
+)
+
+Searching by wildcards (glob matching)
+--------------------------------------
+
+You can use wildcards (`glob matching <https://en.wikipedia.org/wiki/Glob_(programming)>`__)
+when searching for atom names.
+
+>>> print(mol["atomname /c*/i"])
+Selector<SireMol::Atom>( size=7440
+0:  Atom( CA:2    [ -55.43,   11.35,   42.54] )
+1:  Atom( C:3     [ -56.06,    9.95,   42.55] )
+2:  Atom( CB:5    [ -56.32,   12.33,   41.76] )
+3:  Atom( CG1:6   [ -55.68,   13.72,   41.72] )
+4:  Atom( CG2:7   [ -57.70,   12.40,   42.39] )
+...
+7435:  Atom( C2:11705 [  10.05,   21.52,   30.16] )
+7436:  Atom( C3:11706 [   9.26,   22.77,   30.56] )
+7437:  Atom( C4:11708 [   8.69,   22.56,   31.97] )
+7438:  Atom( C5:11709 [   7.74,   23.65,   32.46] )
+7439:  Atom( C6:11712 [   8.10,   23.00,   29.56] )
+)
+
+The wildcard search must be placed between backslashes (``/``). The
+``i`` at the end instructs Sire to do a case-insensitive search.
+
+Wildcard searching is very powerful. For example, here we search for
+all atoms that are called ``N`` something number.
+
+>>> print(mol["atomname /N?[0-9]/"])
+Selector<SireMol::Atom>( size=378
+0:  Atom( NE2:100 [ -58.70,   18.42,   26.32] )
+1:  Atom( ND2:157 [ -56.54,    0.31,   26.32] )
+2:  Atom( NH1:277 [ -41.15,   21.58,   37.21] )
+3:  Atom( NH2:278 [ -39.20,   22.44,   36.34] )
+4:  Atom( ND1:285 [ -44.10,   18.72,   31.40] )
+...
+373:  Atom( NH2:11530 [  11.73,   18.45,   35.06] )
+374:  Atom( NE2:11555 [  18.10,    6.67,   34.31] )
+375:  Atom( NH1:11573 [  11.37,    5.05,   33.21] )
+376:  Atom( NH2:11574 [  12.54,    6.84,   34.03] )
+377:  Atom( ND2:11651 [  25.41,    0.07,   29.66] )
+)
+
+More information about the glob matching syntax can be found
+on its `wikipedia page <https://en.wikipedia.org/wiki/Glob_(programming)>`__.
+
+This is implemented by `QRegularExpression's wildCardToRegularExpression function <https://doc.qt.io/qt-5/qregularexpression.html#wildcardToRegularExpression>`__.
+
+Searching by element
+--------------------
+
+The search strings are very powerful, and are described in more detail in a
+:doc:`later chapter <search strings>`. One cool feature is that you can
+search for atoms by their element.
+
+>>> print(mol["element C"])
+Selector<SireMol::Atom>( size=7440
+0:  Atom( CA:2    [ -55.43,   11.35,   42.54] )
+1:  Atom( C:3     [ -56.06,    9.95,   42.55] )
+2:  Atom( CB:5    [ -56.32,   12.33,   41.76] )
+3:  Atom( CG1:6   [ -55.68,   13.72,   41.72] )
+4:  Atom( CG2:7   [ -57.70,   12.40,   42.39] )
+...
+7435:  Atom( C2:11705 [  10.05,   21.52,   30.16] )
+7436:  Atom( C3:11706 [   9.26,   22.77,   30.56] )
+7437:  Atom( C4:11708 [   8.69,   22.56,   31.97] )
+7438:  Atom( C5:11709 [   7.74,   23.65,   32.46] )
+7439:  Atom( C6:11712 [   8.10,   23.00,   29.56] )
+)
+
+You can use either the element's symbol, or its full name.
+
+>>> print(mol["element nitrogen"])
+Selector<SireMol::Atom>( size=2018
+0:  Atom( N:1     [ -54.07,   11.27,   41.93] )
+1:  Atom( N:9     [ -55.50,    9.04,   43.36] )
+2:  Atom( N:16    [ -55.01,    6.94,   41.35] )
+3:  Atom( N:24    [ -55.57,    4.01,   39.78] )
+4:  Atom( NZ:32   [ -59.38,   -0.44,   42.67] )
+...
+2013:  Atom( N:11628 [  24.07,   -5.44,   30.61] )
+2014:  Atom( N:11635 [  26.39,   -4.38,   31.81] )
+2015:  Atom( N:11644 [  28.07,   -1.72,   31.54] )
+2016:  Atom( ND2:11651 [  25.41,    0.07,   29.66] )
+2017:  Atom( N:11652 [  30.40,   -0.51,   32.35] )
 )
 
 Uniquely identifying atoms

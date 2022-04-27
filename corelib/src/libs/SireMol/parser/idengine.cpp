@@ -51,6 +51,85 @@ using namespace parser_idengine;
 IDNameEngine::IDNameEngine() : SelectEngine()
 {}
 
+// backport of Qt5 wildcardToRegularExpression
+QString _wildcardToRegularExpression(const QString &pattern)
+{
+    const int wclen = pattern.length();
+    QString rx;
+    rx.reserve(wclen + wclen / 16);
+    int i = 0;
+    const QChar *wc = pattern.unicode();
+
+#ifdef Q_OS_WIN
+    const QLatin1Char nativePathSeparator('\\');
+    const QLatin1String starEscape("[^/\\\\]*");
+    const QLatin1String questionMarkEscape("[^/\\\\]");
+#else
+    const QLatin1Char nativePathSeparator('/');
+    const QLatin1String starEscape("[^/]*");
+    const QLatin1String questionMarkEscape("[^/]");
+#endif
+
+    while (i < wclen) {
+        const QChar c = wc[i++];
+        switch (c.unicode()) {
+        case '*':
+            rx += starEscape;
+            break;
+        case '?':
+            rx += questionMarkEscape;
+            break;
+        case '\\':
+#ifdef Q_OS_WIN
+        case '/':
+            rx += QLatin1String("[/\\\\]");
+            break;
+#endif
+        case '$':
+        case '(':
+        case ')':
+        case '+':
+        case '.':
+        case '^':
+        case '{':
+        case '|':
+        case '}':
+            rx += QLatin1Char('\\');
+            rx += c;
+            break;
+        case '[':
+            rx += c;
+            // Support for the [!abc] or [!a-c] syntax
+            if (i < wclen) {
+                if (wc[i] == QLatin1Char('!')) {
+                    rx += QLatin1Char('^');
+                    ++i;
+                }
+
+                if (i < wclen && wc[i] == QLatin1Char(']'))
+                    rx += wc[i++];
+
+                while (i < wclen && wc[i] != QLatin1Char(']')) {
+                    // The '/' appearing in a character class invalidates the
+                    // regular expression parsing. It also concerns '\\' on
+                    // Windows OS types.
+                    if (wc[i] == QLatin1Char('/') || wc[i] == nativePathSeparator)
+                        return rx;
+                    if (wc[i] == QLatin1Char('\\'))
+                        rx += QLatin1Char('\\');
+                    rx += wc[i++];
+                }
+            }
+            break;
+        default:
+            rx += c;
+            break;
+        }
+    }
+
+    return QRegularExpression::anchoredPattern(rx);
+}
+
 SelectEnginePtr IDNameEngine::construct(IDObject o, NameValues vals)
 {
     IDNameEngine *ptr = new IDNameEngine();
@@ -68,9 +147,10 @@ SelectEnginePtr IDNameEngine::construct(IDObject o, NameValues vals)
                 QRegularExpression regexp;
 
                 if (v.is_case_sensitive)
-                    regexp = QRegularExpression(r);
+                    regexp = QRegularExpression(_wildcardToRegularExpression(r));
                 else
-                    regexp = QRegularExpression(r, QRegularExpression::CaseInsensitiveOption);
+                    regexp = QRegularExpression(_wildcardToRegularExpression(r),
+                                                QRegularExpression::CaseInsensitiveOption);
 
                 if (not regexp.isValid())
                 {
@@ -318,8 +398,9 @@ bool IDNameEngine::match(const QString &val) const
 
         if (match.hasMatch())
         {
-            //we have a regexp match :-)
-            return true;
+            //we have a regexp match. Make sure we have matched the
+            //entire string
+            return match.captured(0).length() == val.length();
         }
     }
 
@@ -507,6 +588,12 @@ bool IDNumberEngine::match(const int idx) const
         if (val.which() == 0)
         {
             auto v = boost::get<RangeValue>(val);
+
+            if (v.step == 0)
+                v.step = 1;
+
+            if (v.step < 0)
+                v.step *= -1;
 
             if (v.start <= v.end)
             {

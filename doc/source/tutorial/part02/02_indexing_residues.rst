@@ -150,6 +150,55 @@ Selector<SireMol::Residue>( size=10
 9:  Residue( GLU:9   nAtoms=9 )
 )
 
+>>> print(mol["resnum 201:204"])
+Selector<SireMol::Residue>( size=9
+0:  Residue( LEU:201 nAtoms=8 )
+1:  Residue( ARG:202 nAtoms=11 )
+2:  Residue( GLU:203 nAtoms=9 )
+3:  Residue( LEU:204 nAtoms=8 )
+4:  Residue( LEU:201 nAtoms=8 )
+5:  Residue( ARG:202 nAtoms=11 )
+6:  Residue( GLU:203 nAtoms=9 )
+7:  Residue( LEU:204 nAtoms=8 )
+8:  Residue( PEG:201 nAtoms=7 )
+)
+
+Wildcard (glob) searching is also supported for residue names.
+
+>>> print(mol["resname /ala/i"])
+Selector<SireMol::Residue>( size=155
+0:  Residue( ALA:23  nAtoms=5 )
+1:  Residue( ALA:30  nAtoms=5 )
+2:  Residue( ALA:53  nAtoms=5 )
+3:  Residue( ALA:65  nAtoms=5 )
+4:  Residue( ALA:85  nAtoms=5 )
+...
+150:  Residue( ALA:578 nAtoms=5 )
+151:  Residue( ALA:584 nAtoms=5 )
+152:  Residue( ALA:593 nAtoms=5 )
+153:  Residue( ALA:646 nAtoms=5 )
+154:  Residue( ALA:691 nAtoms=5 )
+)
+
+>>> print(mol["resname /HI?/"])
+Selector<SireMol::Residue>( size=42
+0:  Residue( HIS:62  nAtoms=10 )
+1:  Residue( HIS:27  nAtoms=10 )
+2:  Residue( HIS:39  nAtoms=10 )
+3:  Residue( HIS:75  nAtoms=10 )
+4:  Residue( HIS:84  nAtoms=10 )
+...
+37:  Residue( HIS:638 nAtoms=10 )
+38:  Residue( HIS:639 nAtoms=10 )
+39:  Residue( HIS:662 nAtoms=10 )
+40:  Residue( HIS:666 nAtoms=10 )
+41:  Residue( HIS:668 nAtoms=10 )
+)
+
+This last search is particularly useful for proteins, as it is common
+for histidine residues to have different names depending on protonation
+state (e.g. "HIS", "HIP", "HIE" or "HID").
+
 Finding the atoms in a residue
 ------------------------------
 
@@ -188,6 +237,62 @@ Selector<SireMol::Atom>( size=8
 7:  Atom( CD1:8   [ -55.42,   14.31,   43.09] )
 )
 
+Another route is to use the ``atoms in`` phrase in a search string, e.g.
+
+>>> print(mol["atoms in resname ALA"])
+Selector<SireMol::Atom>( size=775
+0:  Atom( N:64    [ -54.11,   14.36,   38.13] )
+1:  Atom( CA:65   [ -54.77,   13.35,   37.26] )
+2:  Atom( C:66    [ -55.92,   14.01,   36.49] )
+3:  Atom( O:67    [ -57.09,   13.65,   36.74] )
+4:  Atom( CB:68   [ -55.25,   12.19,   38.09] )
+...
+770:  Atom( N:11623 [  22.09,   -7.64,   32.65] )
+771:  Atom( CA:11624 [  22.43,   -6.30,   32.21] )
+772:  Atom( C:11625 [  23.84,   -6.28,   31.63] )
+773:  Atom( O:11626 [  24.72,   -7.01,   32.08] )
+774:  Atom( CB:11627 [  22.32,   -5.30,   33.36] )
+)
+
+This has returned all of the atoms in residues that are called "ALA".
+
+You can get the residues that match atoms using ``residues with``, e.g.
+
+>>> print(mol["residues with atomname CA"])
+Selector<SireMol::Residue>( size=1494
+0:  Residue( ILE:6   nAtoms=8 )
+1:  Residue( VAL:7   nAtoms=7 )
+2:  Residue( LEU:8   nAtoms=8 )
+3:  Residue( LYS:9   nAtoms=9 )
+4:  Residue( SER:10  nAtoms=6 )
+...
+1489:  Residue( ALA:691 nAtoms=5 )
+1490:  Residue( PRO:692 nAtoms=7 )
+1491:  Residue( GLU:693 nAtoms=9 )
+1492:  Residue( ASN:694 nAtoms=8 )
+1493:  Residue( ASP:695 nAtoms=8 )
+)
+
+This has returned all of the residues that contain an atom called "CA".
+
+Another way to do this would be to call the :func:`~Sire.Mol.Selected_Atom_.residues`
+function on the molecular container, e.g.
+
+>>> print(mol["CA"].residues())
+Selector<SireMol::Residue>( size=1494
+0:  Residue( ILE:6   nAtoms=8 )
+1:  Residue( VAL:7   nAtoms=7 )
+2:  Residue( LEU:8   nAtoms=8 )
+3:  Residue( LYS:9   nAtoms=9 )
+4:  Residue( SER:10  nAtoms=6 )
+...
+1489:  Residue( ALA:691 nAtoms=5 )
+1490:  Residue( PRO:692 nAtoms=7 )
+1491:  Residue( GLU:693 nAtoms=9 )
+1492:  Residue( ASN:694 nAtoms=8 )
+1493:  Residue( ASP:695 nAtoms=8 )
+)
+
 Uniquely identifying a residue
 ------------------------------
 
@@ -197,6 +302,65 @@ calling its :func:`~Sire.Mol.Residue.index` function.
 
 >>> print(mol.residue(0).index())
 ResIdx(0)
+
+.. warning:
+
+    Be careful indexing by residue index. This is the index of the residue
+    that uniquely identifies it within its parent molecule. It is not the
+    index of the residue in an arbitrary molecular container.
+
+Residue identifying types
+-------------------------
+
+Another way to index residues is to use the residue indexing types, i.e.
+:class:`~Sire.Mol.ResIdx`, :class:`~Sire.Mol.ResName` and
+:class:`~Sire.Mol.ResNum`. The easiest way to create these is
+by using the function :func:`Sire.resid`.
+
+>>> print(mol[sr.resid("ALA")])
+Selector<SireMol::Residue>( size=155
+0:  Residue( ALA:23  nAtoms=5 )
+1:  Residue( ALA:30  nAtoms=5 )
+2:  Residue( ALA:53  nAtoms=5 )
+3:  Residue( ALA:65  nAtoms=5 )
+4:  Residue( ALA:85  nAtoms=5 )
+...
+150:  Residue( ALA:578 nAtoms=5 )
+151:  Residue( ALA:584 nAtoms=5 )
+152:  Residue( ALA:593 nAtoms=5 )
+153:  Residue( ALA:646 nAtoms=5 )
+154:  Residue( ALA:691 nAtoms=5 )
+)
+
+This returns the residues called "ALA", as ``sr.resid("ALA")`` has created
+an :class:`~Sire.Mol.ResName` object.
+
+>>> print(sr.resid("ALA"))
+ResName('ALA')
+
+This function will create an :class:`~Sire.Mol.ResNum` if it is passed
+an integer, e.g.
+
+>>> print(sr.resid(5))
+ResNum(5)
+>>> print(mol[sr.resid(5)])
+Selector<SireMol::Residue>( size=2
+0:  Residue( GLU:5   nAtoms=9 )
+1:  Residue( GLU:5   nAtoms=9 )
+)
+
+You can set both a name and a number by passing in two arguments, e.g.
+
+>>> print(mol[sr.resid("ALA", 23)])
+Selector<SireMol::Residue>( size=2
+0:  Residue( ALA:23  nAtoms=5 )
+1:  Residue( ALA:23  nAtoms=5 )
+)
+>>> print(mol[sr.resid(name="ALA", num=23)])
+Selector<SireMol::Residue>( size=2
+0:  Residue( ALA:23  nAtoms=5 )
+1:  Residue( ALA:23  nAtoms=5 )
+)
 
 Iterating over residues
 -----------------------
