@@ -16,6 +16,7 @@ doc/build/*
 doc/source/api/generated/*
 *.pyc
 *.data
+.vscode
 
 # Compiled Object files
 *.slo

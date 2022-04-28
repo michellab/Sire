@@ -142,6 +142,8 @@ set ( SIREMOL_HEADERS
       segproperty.hpp
       select.h
       selector.hpp
+      selectorm.hpp
+      selectormol.h
       specifymol.h
       stereoscopy.h
       structureeditor.h
@@ -244,6 +246,7 @@ set ( SIREMOL_SOURCES
       segment.cpp
       segproperty.cpp
       select.cpp
+      selectormol.cpp
       specifymol.cpp
       stereoscopy.cpp
       structureeditor.cpp

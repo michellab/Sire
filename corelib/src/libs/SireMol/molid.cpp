@@ -40,6 +40,7 @@
 #include "molecules.h"
 #include "moleculegroup.h"
 #include "moleculegroups.h"
+#include "selectormol.h"
 
 #include "mgidx.h"
 
@@ -270,6 +271,14 @@ QList<MolNum> MolIdx::map(const Molecules &molecules) const
     return molnums;
 }
 
+QList<MolNum> MolIdx::map(const SelectorMol &molecules) const
+{
+    auto mol = molecules.molecule(this->value());
+    QList<MolNum> molnums;
+    molnums.append(mol.number());
+    return molnums;
+}
+
 QList<MolNum> MolIdx::map(const MoleculeGroup &molgroup) const
 {
     return molgroup.map(*this);
@@ -383,6 +392,19 @@ bool MolNum::operator>(const MolNum &other) const
 bool MolNum::operator>=(const MolNum &other) const
 {
     return _num >= other._num;
+}
+
+QList<MolNum> MolNum::map(const SelectorMol &molecules) const
+{
+    if (not molecules.contains(*this))
+        throw SireMol::missing_molecule( QObject::tr(
+            "There is no molecule with number %1 in the set of molecules.")
+                .arg(this->toString()), CODELOC );
+
+    QList<MolNum> molnums;
+    molnums.append(*this);
+
+    return molnums;
 }
 
 QList<MolNum> MolNum::map(const Molecules &molecules) const
