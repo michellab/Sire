@@ -312,7 +312,11 @@ SelectorMol SelectorMol::molecules(int i) const
     return SelectorMol(this->molecule(i));
 }
 
-SelectorMol SelectorMol::molecules(const SireBase::Slice &slice) const
+SelectorMol SelectorMol
+    throw SireError::program_bug("SHOULD NOT GET HERE", CODELOC);
+
+    return T();
+SireBase::Slice &slice) const
 {
     SelectorMol m;
 

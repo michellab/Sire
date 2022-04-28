@@ -62,6 +62,9 @@ friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const SelectorM<
 friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, SelectorM<T>&);
 
 public:
+    typedef QList< Selector<T> >::const_iterator iterator;
+    typedef QList< Selector<T> >::const_iterator const_iterator;
+
     SelectorM();
     SelectorM(const T &view);
 
@@ -192,9 +195,1302 @@ public:
     const_iterator constEnd() const;
 
     virtual QString toString() const;
+
+protected:
+    void _append(const T &view);
+
+    /** The actual views */
+    QList< Selector<T> > vws;
 };
 
+#ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::SelectorM()
+             : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
+{}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::SelectorM(const T &view)
+             : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
+{
+    this->vws.append(Selector<T>(view));
 }
+
+template<class T>
+Selector<T> _get_selector(const MoleculeView &view);
+
+SIRE_OUTOFLINE_TEMPLATE
+Selector<Atom> _get_selector<Atom>(const MoleculeView &view)
+{
+    return view.atoms();
+}
+
+template<class T>
+struct _get_view
+{
+    template<class C>
+    static int count(const C &mols)
+    {
+        return mols.nAtoms();
+    }
+
+    template<class C>
+    static T at(const C &mols, int idx)
+    {
+        return mols.atom(idx);
+    }
+
+    static Selector<T> get(const MoleculeView &view)
+    {
+        return view.atoms();
+    }
+
+    template<class ID>
+    static Selector<T> get(const MoleculeView &view, const ID &id)
+    {
+        return view.atoms(id);
+    }
+
+    static void raise_duplicate(const QString &id, int n)
+    {
+        throw SireMol::duplicate_atom(QObject::tr(
+            "Multiple atoms matched %1. Number of matches is %2.")
+                .arg(id).arg(n), CODELOC);
+    }
+
+    static void raise_missing(const QString &id)
+    {
+        throw SireMol::missing_atom(QObject::tr(
+            "No atom matches %1.").arg(id), CODELOC);
+    }
+};
+
+template<>
+struct _get_view<Residue>
+{
+    template<class C>
+    static int count(const C &mols)
+    {
+        return mols.nResidues();
+    }
+
+    template<class C>
+    static Residue at(const C &mols, int idx)
+    {
+        return mols.residue(idx);
+    }
+
+    static Selector<Residue> get(const MoleculeView &view)
+    {
+        return view.residues();
+    }
+
+    template<class ID>
+    static Selector<Residue> get(const MoleculeView &view, const ID &id)
+    {
+        return view.residues(id);
+    }
+
+    static void raise_duplicate(const QString &id, int n)
+    {
+        throw SireMol::duplicate_residue(QObject::tr(
+            "Multiple residues matched %1. Number of matches is %2.")
+                .arg(id).arg(n), CODELOC);
+    }
+
+    static void raise_missing(const QString &id)
+    {
+        throw SireMol::missing_residue(QObject::tr(
+            "No residue matches %1.").arg(id), CODELOC);
+    }
+}
+
+template<>
+struct _get_view<Chain>
+{
+    template<class C>
+    static int count(const C &mols)
+    {
+        return mols.nChains();
+    }
+
+    template<class C>
+    static Chain at(const C &mols, int idx)
+    {
+        return mols.chain(idx);
+    }
+
+    static Selector<Chain> get(const MoleculeView &view)
+    {
+        return view.chains();
+    }
+
+    template<class ID>
+    static Selector<Chain> get(const MoleculeView &view, const ID &id)
+    {
+        return view.chains(id);
+    }
+
+    static void raise_duplicate(const QString &id, int n)
+    {
+        throw SireMol::duplicate_chain(QObject::tr(
+            "Multiple chains matched %1. Number of matches is %2.")
+                .arg(id).arg(n), CODELOC);
+    }
+
+    static void raise_missing(const QString &id)
+    {
+        throw SireMol::missing_chain(QObject::tr(
+            "No chain matches %1.").arg(id), CODELOC);
+    }
+};
+
+template<>
+struct _get_view<CutGroup>
+{
+    template<class C>
+    static int count(const C &mols)
+    {
+        return mols.nCutGroups();
+    }
+
+    template<class C>
+    static CutGroup at(const C &mols, int idx)
+    {
+        return mols.cutGroup(idx);
+    }
+
+    static Selector<CutGroup> get(const MoleculeView &view)
+    {
+        return view.cutGroups();
+    }
+
+    template<class ID>
+    static Selector<CutGroup> get(const MoleculeView &view, const ID &id)
+    {
+        return view.cutGroups(id);
+    }
+
+    static void raise_duplicate(const QString &id, int n)
+    {
+        throw SireMol::duplicate_cutgroup(QObject::tr(
+            "Multiple CutGroups matched %1. Number of matches is %2.")
+                .arg(id).arg(n), CODELOC);
+    }
+
+    static void raise_missing(const QString &id)
+    {
+        throw SireMol::missing_cutgroup(QObject::tr(
+            "No CutGroup matches %1.").arg(id), CODELOC);
+    }
+};
+
+template<>
+struct _get_view<Segment>
+{
+    template<class C>
+    static int count(const C &mols)
+    {
+        return mol.nSegments();
+    }
+
+    template<class C>
+    static Segment at(const C &mols, int idx)
+    {
+        return mols.segment(idx);
+    }
+
+    static Selector<Segment> get(const MoleculeView &view)
+    {
+        return view.segments();
+    }
+
+    template<class ID>
+    static Selector<Segment> get(const MoleculeView &view, const ID &id)
+    {
+        return view.segments(id);
+    }
+
+    static void raise_duplicate(const QString &id, int n)
+    {
+        throw SireMol::duplicate_segment(QObject::tr(
+            "Multiple segments matched %1. Number of matches is %2.")
+                .arg(id).arg(n), CODELOC);
+    }
+
+    static void raise_missing(const QString &id)
+    {
+        throw SireMol::missing_segment(QObject::tr(
+            "No segment matches %1.").arg(id), CODELOC);
+    }
+};
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::SelectorM(const SelectorMol &mols)
+             : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
+{
+    for (const auto &mol : mols)
+    {
+        this->vws += _get_view<T>::get(mols);
+    }
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+void SelectorM<T>::_append(const T &view)
+{
+    if (this->vws.isEmpty())
+    {
+        this->vws.append(Selector<T>(view));
+    }
+    else if (this->vws.last().data().number() != view.data().number())
+    {
+        // new molecule
+        this->vws.append(Selector<T>(view));
+    }
+    else
+    {
+        // a new view in the current molecule
+        this->vws.last() = this->vws.last().add(view);
+    }
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::SelectorM(const SelectorMol &mols, const SireBase::Slice &slice)
+             : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
+{
+    for (auto it = slice.begin(_get_view<T>::count(mols)),
+         not it.atEnd(); ++it)
+    {
+        this->_append(_get_view<T>::at(mols, it.value()));
+    }
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::SelectorM(const SelectorMol &mols, const QList<qint64> &idxs)
+             : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
+{
+    for (const auto &idx : idxs)
+    {
+        this->_append(_get_view<T>::at(mols, idx));
+    }
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::SelectorM(const SelectorMol &mols, const QString &name)
+             : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
+{
+    for (const auto &mol : mols)
+    {
+        try
+        {
+            this->vws.append(_get_view<T>::get(mols, name));
+        }
+        catch(...)
+        {}
+    }
+
+    if (this->vws.isEmpty())
+        _get_view<T>::raise_missing(name);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::SelectorM(const SelectorMol &mols, const T::ID &id)
+             : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
+{
+    for (const auto &mol : mols)
+    {
+        try
+        {
+            this->vws.append(_get_view<T>::get(mols, id));
+        }
+        catch(...)
+        {}
+    }
+
+    if (this->vws.isEmpty())
+        _get_view<T>::raise_missing(id.toString());
+}
+
+template<class T>
+template<class U>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::SelectorM(const SelectorM<U> &other)
+             : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
+{
+    for (const auto &o : other)
+    {
+        this->vws.append(_get_view<T>::get(other));
+    }
+}
+
+template<class T>
+template<class U>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::SelectorM(const SelectorM<U> &other, const SireBase::Slice &slice)
+             : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
+{
+    for (auto it = slice.begin(_get_view<T>::count(other)),
+         not it.atEnd(); ++it)
+    {
+        this->_append(_get_view<T>::at(other, it.value()));
+    }
+}
+
+template<class T>
+template<class U>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::SelectorM(const SelectorM<U> &other, const QList<qint64> &idxs)
+             : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
+{
+    for (const auto &idx : idxs)
+    {
+        this->_append(_get_view<T>::at(other, idx));
+    }
+}
+
+template<class T>
+template<class U>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::SelectorM(const SelectorM<U> &other, const QString &name)
+             : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
+{
+    for (const auto &mol : mols)
+    {
+        try
+        {
+            this->vws.append(_get_view<T>::get(mols, name));
+        }
+        catch(...)
+        {}
+    }
+
+    if (this->vws.isEmpty())
+        _get_view<T>::raise_missing(name);
+}
+
+template<class T>
+template<class U>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::SelectorM(const SelectorM<U> &other, const T::ID &id)
+             : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
+{
+    for (const auto &mol : mols)
+    {
+        try
+        {
+            this->vws.append(_get_view<T>::get(mols, id));
+        }
+        catch(...)
+        {}
+    }
+
+    if (this->vws.isEmpty())
+        _get_view<T>::raise_missing(id.toString());
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::SelectorM(const SelectorM<T> &other)
+             : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>(),
+               vws(other.vws)
+{}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::~SelectorM()
+             : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
+{}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const char* SelectorM<T>::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId< SelectorM<T> >() );
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>& SelectorM<T>::operator=(const SelectorM<T> &other)
+{
+    if (this != &other)
+    {
+        this->vws = other.vws;
+        Property::operator=(other);
+    }
+
+    return *this;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+bool SelectorM<T>::operator==(const SelectorM<T> &other) const
+{
+    return vws == other.vws;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+bool SelectorM<T>::operator!=(const SelectorM<T> &other) const
+{
+    return not this->operator==(other);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+T SelectorM<T>::operator[](int i) const
+{
+    i = SireID::Index(i).map(this->count());
+
+    for (const auto &v : vws)
+    {
+        if (i < v.count())
+        {
+            return v[i];
+        }
+        else
+        {
+            i -= v.count();
+        }
+    }
+
+    throw SireError::program_bug(QObject::tr("Should not get here!"), CODELOC);
+
+    return T();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+T SelectorM<T>::operator[](const QString &name) const
+{
+    auto all = _get_view<T>::get(*this, name);
+
+    if (all.count() > 1)
+    {
+        _get_view<T>::raise_duplicate(name, all.count());
+    }
+
+    BOOST_ASSERT( not all.isEmpty() );
+
+    return all[0];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+T SelectorM<T>::operator[](const T::ID &id) const
+{
+    auto all = _get_view<T>::get(*this, id);
+
+    if (all.count() > 1)
+    {
+        _get_view<T>::raise_duplicate(id.toString(), all.count());
+    }
+
+    BOOST_ASSERT( not all.isEmpty() );
+
+    return all[0];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+int SelectorM<T>::count() const
+{
+    int n = 0;
+
+    for (const auto &v : this->vws)
+    {
+        n += v.count();
+    }
+
+    return n;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+int SelectorM<T>::size() const
+{
+    return this->count();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Molecule SelectorM<T>::molecule(int i) const
+{
+    i = SireID::Index(i).map(this->vws.count());
+
+    return this->vws.at(i).molecule();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Molecule SelectorM<T>::molecule(const QString &name) const
+{
+    auto mols = this->molecules(name);
+
+    if (mols.count() > 1)
+        throw SireMol::duplicate_molecule(QObject::tr(
+            "More than one molecule matches '%1'. Number of matches is %2.")
+                .arg(name).arg(mols.count()), CODELOC);
+
+    BOOST_ASSERT(not mols.isEmpty());
+
+    return mols[0];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Molecule SelectorM<T>::molecule(const MolID &molid)
+{
+    auto mols = this->molecules(molid);
+
+    if (mols.count() > 1)
+        throw SireMol::duplicate_molecule(QObject::tr(
+            "More than one molecule matches '%1'. Number of matches is %2.")
+                .arg(molid.toString()).arg(mols.count()), CODELOC);
+
+    BOOST_ASSERT(not mols.isEmpty());
+
+    return mols[0];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorMol SelectorM<T>::molecules() const
+{
+    return SelectorMol(*this);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorMol SelectorM<T>::molecules(int i) const
+{
+    return SelectorMol(this->molecule(i));
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorMol SelectorM<T>::molecules(const SireBase::Slice &slice) const
+{
+    return SelectorMol(*this, slice);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorMol SelectorM<T>::molecules(const QList<qint64> &idxs) const
+{
+    return SelectorMol(*this, idxs);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorMol SelectorM<T>::molecules(const QString &name) const
+{
+    return SelectorMol(*this, name);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorMol SelectorM<T>::molecules(const MolID &molid) const
+{
+    return SelectorMol(*this, molid);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Atom SelectorM<T>::atom(int i) const
+{
+    i = SireID::Index(i).map(this->nAtoms());
+
+    for (const auto &v : this->vws)
+    {
+        if (i < v.nAtoms())
+        {
+            return v.atom(i);
+        }
+        else
+        {
+            i -= v.nAtoms();
+        }
+    }
+
+    throw SireError::program_bug(QObject::tr("Should not get here!"), CODELOC);
+
+    return Atom();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Atom SelectorM<T>::atom(const QString &name) const
+{
+    auto all = this->atoms(name);
+
+    if (all.count() > 1)
+        throw _get_view<Atom>::raise_duplicate(name, all.count());
+
+    BOOST_ASSERT( not all.isEmpty() );
+
+    return all[0];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Atom SelectorM<T>::atom(const AtomID &atomid) const
+{
+    auto all = this->atoms(atomid);
+
+    if (all.count() > 1)
+        throw _get_view<Atom>::raise_duplicate(atomid.toString(), all.count());
+
+    BOOST_ASSERT( not all.isEmpty() );
+
+    return all[0];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Residue SelectorM<T>::residue(int i) const
+{
+    i = SireID::Index(i).map(this->nResidues());
+
+    for (const auto &v : this->vws)
+    {
+        if (i < v.nResidues())
+        {
+            return v.residue(i);
+        }
+        else
+        {
+            i -= v.nResidues();
+        }
+    }
+
+    throw SireError::program_bug(QObject::tr("Should not get here!"), CODELOC);
+
+    return Residue();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Residue SelectorM<T>::residue(const QString &name) const
+{
+    auto all = this->residues(name);
+
+    if (all.count() > 1)
+        throw _get_view<Residue>::raise_duplicate(name, all.count());
+
+    BOOST_ASSERT( not all.isEmpty() );
+
+    return all[0];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Residue SelectorM<T>::residue(const ResID &resid) const
+{
+    auto all = this->residues(resid);
+
+    if (all.count() > 1)
+        throw _get_view<Residue>::raise_duplicate(resid.toString(), all.count());
+
+    BOOST_ASSERT( not all.isEmpty() );
+
+    return all[0];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Chain SelectorM<T>::chain(int i) const
+{
+    i = SireID::Index(i).map(this->nChains());
+
+    for (const auto &v : this->vws)
+    {
+        if (i < v.nChains())
+        {
+            return v.chain(i);
+        }
+        else
+        {
+            i -= v.nChains();
+        }
+    }
+
+    throw SireError::program_bug(QObject::tr("Should not get here!"), CODELOC);
+
+    return Chain();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Chain SelectorM<T>::chain(const QString &name) const
+{
+    auto all = this->chains(name);
+
+    if (all.count() > 1)
+        throw _get_view<Chain>::raise_duplicate(name, all.count());
+
+    BOOST_ASSERT( not all.isEmpty() );
+
+    return all[0];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Chain SelectorM<T>::chain(const ChainID &chainid) const
+{
+    auto all = this->chains(chainid);
+
+    if (all.count() > 1)
+        throw _get_view<Chain>::raise_duplicate(chainid.toString(), all.count());
+
+    BOOST_ASSERT( not all.isEmpty() );
+
+    return all[0];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Segment SelectorM<T>::segment(int i) const
+{
+    i = SireID::Index(i).map(this->nSegments());
+
+    for (const auto &v : this->vws)
+    {
+        if (i < v.nSegments())
+        {
+            return v.segment(i);
+        }
+        else
+        {
+            i -= v.nSegments();
+        }
+    }
+
+    throw SireError::program_bug(QObject::tr("Should not get here!"), CODELOC);
+
+    return Segment();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Segment SelectorM<T>::segment(const QString &name) const
+{
+    auto all = this->segments(name);
+
+    if (all.count() > 1)
+        throw _get_view<Segment>::raise_duplicate(name, all.count());
+
+    BOOST_ASSERT( not all.isEmpty() );
+
+    return all[0];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Segment SelectorM<T>::segment(const SegID &segid) const
+{
+    auto all = this->segments(segid);
+
+    if (all.count() > 1)
+        throw _get_view<Segment>::raise_duplicate(segid.toString(), all.count());
+
+    BOOST_ASSERT( not all.isEmpty() );
+
+    return all[0];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+CutGroup SelectorM<T>::cutGroup(int i) const
+{
+    i = SireID::Index(i).map(this->nCutGroups());
+
+    for (const auto &v : this->vws)
+    {
+        if (i < v.nCutGroups())
+        {
+            return v.cutGroup(i);
+        }
+        else
+        {
+            i -= v.nCutGroups();
+        }
+    }
+
+    throw SireError::program_bug(QObject::tr("Should not get here!"), CODELOC);
+
+    return CutGroup();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+CutGroup SelectorM<T>::cutGroup(const QString &name) const
+{
+    auto all = this->cutGroups(name);
+
+    if (all.count() > 1)
+        throw _get_view<CutGroup>::raise_duplicate(name, all.count());
+
+    BOOST_ASSERT( not all.isEmpty() );
+
+    return all[0];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+CutGroup SelectorM<T>::cutGroup(const CGID &cgid) const
+{
+    auto all = this->cutGroups(cgid);
+
+    if (all.count() > 1)
+        throw _get_view<CutGroup>::raise_duplicate(cgid.toString(), all.count());
+
+    BOOST_ASSERT( not all.isEmpty() );
+
+    return all[0];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Atom> SelectorM<T>::atoms() const
+{
+    return SelectorM<Atom>(*this);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Atom> SelectorM<T>::atoms(int i) const
+{
+    return SelectorM<Atom>(this->atom(i));
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Atom> SelectorM<T>::atoms(const SireBase::Slice &slice) const
+{
+    return SelectorM<Atom>(*this, slice);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Atom> SelectorM<T>::atoms(const QList<qint64> &idxs) const
+{
+    return SelectorM<Atom>(*this, idxs);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Atom> SelectorM<T>::atoms(const QString &name) const
+{
+    return SelectorM<Atom>(*this, name);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Atom> SelectorM<T>::atoms(const AtomID &atomid) const
+{
+    return SelectorM<Atom>(*this, atomid);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Residue> SelectorM<T>::residues() const
+{
+    return SelectorM<Residue>(*this);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Residue> SelectorM<T>::residues(int i) const
+{
+    return SelectorM<Residue>(this->residue(i));
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Residue> SelectorM<T>::residues(const SireBase::Slice &slice) const
+{
+    return SelectorM<Residue>(*this, slice);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Residue> SelectorM<T>::residues(const QList<qint64> &idxs) const
+{
+    return SelectorM<Residue>(*this, idxs);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Residue> SelectorM<T>::residues(const QString &name) const
+{
+    return SelectorM<Residue>(*this, name);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Residue> SelectorM<T>::residues(const ResID &resid) const
+{
+    return SelectorM<Residue>(*this, resid);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Chain> SelectorM<T>::chains() const
+{
+    return SelectorM<Chain>(*this);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Chain> SelectorM<T>::chains(int i) const
+{
+    return SelectorM<Chain>(this->chain(i));
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Chain> SelectorM<T>::chains(const SireBase::Slice &slice) const
+{
+    return SelectorM<Chain>(*this, slice);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Chain> SelectorM<T>::chains(const QList<qint64> &idxs) const
+{
+    return SelectorM<Chain>(*this, idxs);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Chain> SelectorM<T>::chains(const QString &name) const
+{
+    return SelectorM<Chain>(*this, name);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Chain> SelectorM<T>::chains(const ChainID &chainid) const
+{
+    return SelectorM<Chain>(*this, chainid);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Segment> SelectorM<T>::segments() const
+{
+    return SelectorM<Segment>(*this);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Segment> SelectorM<T>::segments(int i) const
+{
+    return SelectorM<Segment>(this->segment(i));
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Segment> SelectorM<T>::segments(const SireBase::Slice &slice) const
+{
+    return SelectorM<Segment>(*this, slice);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Segment> SelectorM<T>::segments(const QList<qint64> &idxs) const
+{
+    return SelectorM<Segment>(*this, idxs);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Segment> SelectorM<T>::segments(const QString &name) const
+{
+    return SelectorM<Segment>(*this, name);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<Segment> SelectorM<T>::segments(const SegID &segid) const
+{
+    return SelectorM<Segment>(*this, segid);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<CutGroup> SelectorM<T>::cutGroups() const
+{
+    return SelectorM<CutGroup>(*this);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<CutGroup> SelectorM<T>::cutGroups(int i) const
+{
+    return SelectorM<CutGroup>(this->cutGroup(i));
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<CutGroup> SelectorM<T>::cutGroups(const SireBase::Slice &slice) const
+{
+    return SelectorM<CutGroup>(*this, slice);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<CutGroup> SelectorM<T>::cutGroups(const QList<qint64> &idxs) const
+{
+    return SelectorM<CutGroup>(*this, idxs);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<CutGroup> SelectorM<T>::cutGroups(const QString &name) const
+{
+    return SelectorM<CutGroup>(*this, name);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<CutGroup> SelectorM<T>::cutGroups(const CGID &cgid) const
+{
+    return SelectorM<CutGroup>(*this, cgid);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T::ID> SelectorM<T>::IDs() const
+{
+    QList<T::ID> ids;
+
+    for (const auto &v : this->vws)
+    {
+        ids += v.IDs();
+    }
+
+    return ids;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T::Index> SelectorM<T>::indexes() const
+{
+    QList<T::Index> idxs;
+
+    for (const auto &v : this->vws)
+    {
+        idxs += v.indexes();
+    }
+
+    return idxs;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T::Number> SelectorM<T>::numbers() const
+{
+    QList<T::Number> nums;
+
+    for (const auto &v : this->vws)
+    {
+        nums += v.numbers();
+    }
+
+    return nums;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T::Name> SelectorM<T>::names() const
+{
+    QList<T::Name> nmes;
+
+    for (const auto &v : this->vws)
+    {
+        nmes += v.names();
+    }
+
+    return nmes;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+int SelectorM<T>::nAtoms() const
+{
+    int n = 0;
+
+    for (const auto &v : this->vws)
+    {
+        n += v.nAtoms();
+    }
+
+    return n;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+int SelectorM<T>::nResidues() const
+{
+    int n = 0;
+
+    for (const auto &v : this->vws)
+    {
+        n += v.nResidues();
+    }
+
+    return n;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+int SelectorM<T>::nChains() const
+{
+    int n = 0;
+
+    for (const auto &v : this->vws)
+    {
+        n += v.nChains();
+    }
+
+    return n;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+int SelectorM<T>::nSegments() const
+{
+    int n = 0;
+
+    for (const auto &v : this->vws)
+    {
+        n += v.nSegments();
+    }
+
+    return n;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+int SelectorM<T>::nCutGroups() const
+{
+    int n = 0;
+
+    for (const auto &v : this->vws)
+    {
+        n += v.nCutGroups();
+    }
+
+    return n;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+int SelectorM<T>::nMolecules() const
+{
+    return this->vws.count();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+bool SelectorM<T>::isEmpty() const
+{
+    return this->vws.isEmpty();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::const_iterator SelectorM<T>::begin() const
+{
+    return this->vws.constBegin();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::const_iterator SelectorM<T>::end() const
+{
+    return this->vws.constEnd();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::const_iterator SelectorM<T>::constBegin() const
+{
+    return this->vws.constBegin();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::const_iterator SelectorM<T>::constEnd() const
+{
+    return this->vws.constEnd();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QString SelectorM<T>::toString() const
+{
+    if (this->isEmpty())
+    {
+        return QObject::tr("%1::empty").arg(this->what());
+    }
+    else
+    {
+        QStringList parts;
+
+        if (this->count() < 10)
+        {
+            for (int i=0; i<10; ++i)
+            {
+                const auto view = this->operator[](i);
+
+                parts.append("%1: %2 %3")
+                    .arg(i).arg(view.data().number().toString())
+                    .arg(view.toString());
+            }
+        }
+        else
+        {
+            for (int i=0; i<5; ++i)
+            {
+                const auto view = this->operator[](i);
+
+                parts.append("%1: %2 %3")
+                    .arg(i).arg(view.data().number().toString())
+                    .arg(view.toString());
+            }
+
+            parts.append("...");
+
+            for (int i=this->count() - 5; i<this->count(); ++i)
+            {
+                const auto view = this->operator[](i);
+
+                parts.append("%1: %2 %3")
+                    .arg(i).arg(view.data().number().toString())
+                    .arg(view.toString());
+            }
+        }
+
+        return QObject::tr("%1( size=%2\n%3\n)")
+                    .arg(this->what()).arg(this->size())
+                    .arg(parts.join("\n"));
+    }
+}
+
+#endif // SIRE_SKIP_INLINE_FUNCTIONS
+
+} // end of namespace SireMol
 
 SIRE_END_HEADER
 

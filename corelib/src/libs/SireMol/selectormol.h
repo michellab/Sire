@@ -86,6 +86,16 @@ public:
     SelectorMol(const Molecules &mols);
     SelectorMol(const MoleculeGroup &mols);
     SelectorMol(const MolGroupsBase &mols);
+
+    template<class T>
+    SelectorMol(const SelectorM<T> &other);
+    template<class T>
+    SelectorMol(const SelectorM<T> &other, const SireBase::Slice &slice);
+    template<class T>
+    SelectorMol(const SelectorM<T> &other, const QList<qint64> &idxs);
+    template<class T>
+    SelectorMol(const SelectorM<T> &other, const MolID &molid);
+
     SelectorMol(const SelectorMol &other);
 
     virtual ~SelectorMol();
@@ -240,6 +250,57 @@ SIRE_EXPOSE_ALIAS( SireMol::SelectorM<SireMol::CutGroup>, SireMol::SelectorM_Cut
 // include this here so that SelectorM is always instantiatable if
 // SelectorMol has been included
 #include "selectorm.hpp"
+
+#ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorMol::SelectorMol(const SelectorM<T> &other)
+            : SireBase::ConcreteProperty<SelectorMol,SireBase::Property>()
+{
+    if (not other.isEmpty())
+    {
+        this->mols.reserve(other.nMolecules());
+
+        for (int i=0; i<other.nMolecules(); ++i)
+        {
+            this->mols.append(other.molecule(i));
+        }
+    }
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorMol::SelectorMol(const SelectorM<T> &other, const SireBase::Slice &slice)
+            : SireBase::ConcreteProperty<SelectorMol,SireBase::Property>()
+{
+    for (auto it = slice.begin(other.nMolecules());
+         not it.atEnd(); ++it)
+    {
+        this->mols.append(other.molecule(it.value()));
+    }
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorMol::SelectorMol(const SelectorM<T> &other, const QList<qint64> &idxs)
+            : SireBase::ConcreteProperty<SelectorMol,SireBase::Property>()
+{
+    for (const auto &idx : idxs)
+    {
+        this->mols.append(other.molecule(idx));
+    }
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorMol::SelectorMol(const SelectorM<T> &other, const MolID &molid)
+            : SireBase::ConcreteProperty<SelectorMol,SireBase::Property>()
+{
+    this->operator=(other.molecules().molecules(molid));
+}
+
+#endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 
