@@ -225,6 +225,8 @@
 
 #include "Evaluator.pypp.hpp"
 
+#include "EvaluatorM.pypp.hpp"
+
 #include "Force3D.pypp.hpp"
 
 #include "GeometryPerturbation.pypp.hpp"
@@ -853,6 +855,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_Element_class();
 
     register_Evaluator_class();
+
+    register_EvaluatorM_class();
 
     register_GeometryPerturbations_class();
 

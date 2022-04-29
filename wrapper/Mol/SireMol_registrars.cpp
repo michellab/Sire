@@ -94,6 +94,7 @@
 #include "radical.h"
 #include "residentifier.h"
 #include "atompropertylist.h"
+#include "evaluatorm.h"
 #include "residue.h"
 #include "molresid.h"
 #include "atomforces.h"
@@ -304,6 +305,7 @@ void register_SireMol_objects()
     ObjectRegistry::registerConverterFor< SireMol::AtomDoubleArrayProperty >();
     ObjectRegistry::registerConverterFor< SireMol::AtomIntegerArrayProperty >();
     ObjectRegistry::registerConverterFor< SireMol::AtomStringArrayProperty >();
+    ObjectRegistry::registerConverterFor< SireMol::EvaluatorM >();
     ObjectRegistry::registerConverterFor< SireMol::Residue >();
     ObjectRegistry::registerConverterFor< SireMol::Mover<SireMol::Residue> >();
     ObjectRegistry::registerConverterFor< SireMol::Selector<SireMol::Residue> >();

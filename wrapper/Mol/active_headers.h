@@ -62,6 +62,7 @@
 #include "dihedralid.h"
 #include "element.h"
 #include "evaluator.h"
+#include "evaluatorm.h"
 #include "geometryperturbation.h"
 #include "groupatomids.h"
 #include "groupgroupids.h"

@@ -121,7 +121,7 @@ void register_SelectResult_class(){
                 "getCommonType"
                 , getCommonType_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the highest common type (e.g. SireMol::Atom, SireMol::Residue etc)\n  that suits all of the views in this result\n" );
         
         }
         { //::SireMol::SelectResult::isEmpty

@@ -796,7 +796,7 @@ void register_MoleculeView_class(){
                 "nCutGroups"
                 , nCutGroups_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the number of CutGroups in this view" );
         
         }
         { //::SireMol::MoleculeView::nResidues

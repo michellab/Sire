@@ -59,6 +59,7 @@ set ( PYPP_SOURCES
        GroupAtomIDBase.pypp.cpp
        CGIdx.pypp.cpp
        ResFloatProperty.pypp.cpp
+       EvaluatorM.pypp.cpp
        AtomBeads.pypp.cpp
        ChainsWithAtoms.pypp.cpp
        AtomNum.pypp.cpp

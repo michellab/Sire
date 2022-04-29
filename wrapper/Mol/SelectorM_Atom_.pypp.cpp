@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "chainid.h"
 
+#include "evaluatorm.h"
+
 #include "moleculegroup.h"
 
 #include "moleculegroups.h"
@@ -472,6 +474,19 @@ void register_SelectorM_Atom__class(){
                 "cutGroups"
                 , cutGroups_function_value
                 , ( bp::arg("cgid") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Atom >::evaluate
+        
+            typedef SireMol::SelectorM< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::EvaluatorM ( ::SireMol::SelectorM< SireMol::Atom >::*evaluate_function_type)(  ) const;
+            evaluate_function_type evaluate_function_value( &::SireMol::SelectorM< SireMol::Atom >::evaluate );
+            
+            SelectorM_Atom__exposer.def( 
+                "evaluate"
+                , evaluate_function_value
                 , bp::release_gil_policy()
                 , "" );
         
