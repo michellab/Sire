@@ -44,6 +44,7 @@ SIRE_BEGIN_HEADER
 namespace SireMol
 {
     class SelectorMol;
+    class EvaluatorM;
 
     template<class T>
     class SelectorM;
@@ -133,6 +134,8 @@ public:
 
     int count() const;
     int size() const;
+
+    EvaluatorM evaluate() const;
 
     MoleculeGroup toMoleculeGroup() const;
     SelectResult toSelectResult() const;

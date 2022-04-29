@@ -31,6 +31,7 @@
 #include "molecules.h"
 #include "moleculegroup.h"
 #include "moleculegroups.h"
+#include "evaluatorm.h"
 
 #include "atomid.h"
 #include "resid.h"
@@ -387,6 +388,11 @@ Molecule SelectorMol::operator[](const MolID &molid) const
 SelectResult SelectorMol::toSelectResult() const
 {
     return SelectResult(this->mols);
+}
+
+EvaluatorM SelectorMol::evaluate() const
+{
+    return EvaluatorM(*this);
 }
 
 SelectResult SelectorMol::search(const QString &search_string) const

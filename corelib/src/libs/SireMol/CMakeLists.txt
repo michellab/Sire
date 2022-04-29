@@ -80,6 +80,7 @@ set ( SIREMOL_HEADERS
       elementdb.h
       errors.h
       evaluator.h
+      evaluatorm.h
       improperid.h
       geometryperturbation.h
       groupatomids.h
@@ -200,6 +201,7 @@ set ( SIREMOL_SOURCES
       elementdb.cpp
       errors.cpp
       evaluator.cpp
+      evaluatorm.cpp
       improperid.cpp
       findmcs.cpp
       geometryperturbation.cpp

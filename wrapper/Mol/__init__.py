@@ -486,19 +486,17 @@ def __from_select_result(obj):
     else:
         typ = obj.getCommonType()
 
-        print(typ)
-
-        if typ == Sire.Mol.typeName():
+        if typ == Sire.Mol.Molecule.typeName():
             return SelectorMol(obj)
-        elif typ == Sire.Atom.typeName():
+        elif typ == Sire.Mol.Atom.typeName():
             return SelectorM_Atom_(obj)
-        elif typ == Sire.Residue.typeName():
+        elif typ == Sire.Mol.Residue.typeName():
             return SelectorM_Residue_(obj)
-        elif typ == Sire.Chain.typeName():
+        elif typ == Sire.Mol.Chain.typeName():
             return SelectorM_Chain_(obj)
-        elif typ == Sire.Segment.typeName():
+        elif typ == Sire.Mol.Segment.typeName():
             return SelectorM_Segment_(obj)
-        elif typ == Sire.CutGroup.typeName():
+        elif typ == Sire.Mol.CutGroup.typeName():
             return SelectorM_CutGroup_(obj)
         else:
             print(f"Unrecognised type: {typ}. Returning as atoms.")

@@ -119,6 +119,8 @@ public:
     int count() const;
     int size() const;
 
+    EvaluatorM evaluate() const;
+
     MoleculeGroup toMoleculeGroup() const;
     SelectResult toSelectResult() const;
 
@@ -1735,6 +1737,37 @@ QString SelectorM<T>::toString() const
 #endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 } // end of namespace SireMol
+
+#include "evaluatorm.h"
+
+#ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+namespace SireMol
+{
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+EvaluatorM::EvaluatorM(const SelectorM<T> &views)
+           : SireBase::ConcreteProperty<EvaluatorM,SireBase::Property>()
+{
+    this->vws.reserve(views.count());
+
+    for (const auto &view : views)
+    {
+        this->vws.append(PartialMolecule(view));
+    }
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+EvaluatorM SelectorM<T>::evaluate() const
+{
+    return EvaluatorM(*this);
+}
+
+} // end of namespace SireMol
+
+#endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 SIRE_END_HEADER
 
