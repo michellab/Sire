@@ -488,6 +488,8 @@ add_subdirectory (python)
 
 add_subdirectory (Tools)
 
+add_subdirectory (ng)
+
 install( FILES __init__.py _load.py _thumbsup.py
          DESTINATION ${SIRE_PYTHON}/Sire
        )

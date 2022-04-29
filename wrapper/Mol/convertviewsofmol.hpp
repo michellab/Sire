@@ -328,8 +328,6 @@ struct viewsofmol_to_py_list
             // python list of views
             bp::list python_list;
 
-            qDebug() << typ;
-
             //add all items to the python list
             for (int i=0; i<views.nViews(); ++i)
             {

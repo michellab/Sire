@@ -898,6 +898,143 @@ SelectResult::const_iterator SelectResult::constEnd() const
     return end();
 }
 
+/** Return the highest common type (e.g. SireMol::Atom, SireMol::Residue etc)
+ *  that suits all of the views in this result
+ */
+QString SelectResult::getCommonType() const
+{
+    if (molviews.isEmpty())
+        return QString();
+    else if (molviews.count() == 1)
+        return molviews.at(0).getCommonType();
+
+    // we need to start from the largest type and work downwards
+    // (as some atoms may be whole residues)
+
+    bool is_molecule = true;
+
+    for (const auto &molview : molviews)
+    {
+        for (const auto &view : molview.selections())
+        {
+            if (not view.isMolecule())
+            {
+                is_molecule = false;
+                break;
+            }
+        }
+
+        if (not is_molecule)
+            break;
+    }
+
+    if (is_molecule)
+        return Molecule::typeName();
+
+    bool is_segment = true;
+
+    for (const auto &molview : molviews)
+    {
+        for (const auto &view : molview.selections())
+        {
+            if (not view.isSegment())
+            {
+                is_segment = false;
+                break;
+            }
+        }
+
+        if (not is_segment)
+            break;
+    }
+
+    if (is_segment)
+        return Segment::typeName();
+
+    bool is_chain = true;
+
+    for (const auto &molview : molviews)
+    {
+        for (const auto &view : molview.selections())
+        {
+            if (not view.isChain())
+            {
+                is_chain = false;
+                break;
+            }
+        }
+
+        if (not is_chain)
+            break;
+    }
+
+    if (is_chain)
+        return Chain::typeName();
+
+    bool is_residue = true;
+
+    for (const auto &molview : molviews)
+    {
+        for (const auto &view : molview.selections())
+        {
+            if (not view.isResidue())
+            {
+                is_residue = false;
+                break;
+            }
+        }
+
+        if (not is_residue)
+            break;
+    }
+
+    if (is_residue)
+        return Residue::typeName();
+
+    bool is_atom = true;
+
+    for (const auto &molview : molviews)
+    {
+        for (const auto &view : molview.selections())
+        {
+            if (not view.isAtom())
+            {
+                is_atom = false;
+                break;
+            }
+        }
+
+        if (not is_atom)
+            break;
+    }
+
+    if (is_atom)
+        return Atom::typeName();
+
+    bool is_cutgroup = true;
+
+    for (const auto &molview : molviews)
+    {
+        for (const auto &view : molview.selections())
+        {
+            if (not view.isCutGroup())
+            {
+                is_cutgroup = false;
+                break;
+            }
+        }
+
+        if (not is_cutgroup)
+            break;
+    }
+
+    if (is_cutgroup)
+        return CutGroup::typeName();
+
+    // ok, go with the default
+    return PartialMolecule::typeName();
+}
+
 ///////////
 /////////// Implementation of SelectResult
 ///////////

@@ -403,10 +403,51 @@ for __prop in __props:
 # Here I will define some functions that make accessing
 # things from moleculeviews more convenient
 
+def __is_molecule_class(obj):
+    mro = type(obj).mro()
+
+    return Sire.Mol.Molecule in mro or \
+            Sire.Mol.SelectorMol in mro
+
+
+def __is_atom_class(obj):
+    mro = type(obj).mro()
+
+    return Sire.Mol.Atom in mro or \
+            Sire.Mol.Selector_Atom_ in mro or \
+            Sire.Mol.SelectorM_Atom_ in mro
+
+
+def __is_residue_class(obj):
+    mro = type(obj).mro()
+
+    return Sire.Mol.Residue in mro or \
+            Sire.Mol.Selector_Residue_ in mro or \
+            Sire.Mol.SelectorM_Residue_ in mro
+
+
 def __is_chain_class(obj):
-    return obj.what() in ["SireMol::Chain",
-                          "SireMol::Selector<SireMol::Chain>",
-                          "SireMol::SelectorM<SireMol::Chain>"]
+    mro = type(obj).mro()
+
+    return Sire.Mol.Chain in mro or \
+            Sire.Mol.Selector_Chain_ in mro or \
+            Sire.Mol.SelectorM_Chain_ in mro
+
+
+def __is_segment_class(obj):
+    mro = type(obj).mro()
+
+    return Sire.Mol.Segment in mro or \
+            Sire.Mol.Selector_Segment_ in mro or \
+            Sire.Mol.SelectorM_Segment_ in mro
+
+
+def __is_cutgroup_class(obj):
+    mro = type(obj).mro()
+
+    return Sire.Mol.CutGroup in mro or \
+            Sire.Mol.Selector_CutGroup_ in mro or \
+            Sire.Mol.SelectorM_CutGroup_ in mro
 
 
 def __is_selector_class(obj):
@@ -422,6 +463,7 @@ def __is_list_class(obj):
         except Exception:
             return False
 
+
 def __from_select_result(obj):
     """Convert the passed SelectResult from a search into the
        most appropriate MoleculeView-derived class
@@ -433,20 +475,34 @@ def __from_select_result(obj):
     if len(molnums) == 0:
         raise KeyError("Nothing matched the search.")
 
-    for molnum in molnums:
-        v = obj.views(molnum)
+    elif len(molnums) == 1:
+        v = obj.views(molnums[0])
 
         if __is_list_class(v) and len(v) == 1:
-            views.append(v[0])
+            return v[0]
         else:
-            views.append(v)
+            return v
 
-    if len(views) == 0:
-        return None
-    elif len(views) == 1:
-        return views[0]
     else:
-        return views
+        typ = obj.getCommonType()
+
+        print(typ)
+
+        if typ == Sire.Mol.typeName():
+            return SelectorMol(obj)
+        elif typ == Sire.Atom.typeName():
+            return SelectorM_Atom_(obj)
+        elif typ == Sire.Residue.typeName():
+            return SelectorM_Residue_(obj)
+        elif typ == Sire.Chain.typeName():
+            return SelectorM_Chain_(obj)
+        elif typ == Sire.Segment.typeName():
+            return SelectorM_Segment_(obj)
+        elif typ == Sire.CutGroup.typeName():
+            return SelectorM_CutGroup_(obj)
+        else:
+            print(f"Unrecognised type: {typ}. Returning as atoms.")
+            return SelectorM_Atom_(obj)
 
 
 def __fixed__getitem__(obj, key):

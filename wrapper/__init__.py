@@ -48,6 +48,8 @@ from . import System
 from . import Units
 from . import Vol
 
+from . import ng
+
 qt = Qt
 error = Error
 config = Config

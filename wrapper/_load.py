@@ -295,7 +295,9 @@ def load(path: _Union[str, _List[str]], *args, **kwargs):
         raise IOError("No valid files specified. Nothing to load?")
 
     from Sire.IO import load_molecules
-    return load_molecules(paths, map={"GROMACS_PATH":_get_gromacs_dir()})
+    from Sire.ng import System
+    return System(load_molecules(paths,
+                                 map={"GROMACS_PATH":_get_gromacs_dir()}))
 
 
 def save(molecules, filename: str, format: _Union[str, _List[str]]=None,

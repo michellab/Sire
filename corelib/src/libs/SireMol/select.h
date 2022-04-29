@@ -272,6 +272,8 @@ public:
 
     bool contains(MolNum molnum) const;
 
+    QString getCommonType() const;
+
     QList<ViewsOfMol> views() const;
     ViewsOfMol views(MolNum molnum) const;
 
