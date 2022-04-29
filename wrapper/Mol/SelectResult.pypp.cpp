@@ -112,6 +112,18 @@ void register_SelectResult_class(){
                 , "Return a copy of this result with all views split into individual cutgroups" );
         
         }
+        { //::SireMol::SelectResult::getCommonType
+        
+            typedef ::QString ( ::SireMol::SelectResult::*getCommonType_function_type)(  ) const;
+            getCommonType_function_type getCommonType_function_value( &::SireMol::SelectResult::getCommonType );
+            
+            SelectResult_exposer.def( 
+                "getCommonType"
+                , getCommonType_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectResult::isEmpty
         
             typedef bool ( ::SireMol::SelectResult::*isEmpty_function_type)(  ) const;
