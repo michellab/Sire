@@ -630,8 +630,14 @@ Atom.x = lambda x : x.property("coordinates").x()
 Atom.y = lambda x : x.property("coordinates").y()
 Atom.z = lambda x : x.property("coordinates").z()
 
-MoleculeView.mass = lambda x : x.evaluate().mass()
-MoleculeView.charge = lambda x : x.evaluate().charge()
+def _add_evals(obj):
+    obj.mass = lambda x : x.evaluate().mass()
+    obj.charge = lambda x : x.evaluate().charge()
+
+for C in [MoleculeView, SelectorMol, SelectorM_Atom_,
+          SelectorM_Residue_, SelectorM_Chain_,
+          SelectorM_CutGroup_, SelectorM_Segment_]:
+    _add_evals(C)
 
 def _get_atom_mass(x):
     if x.hasProperty("mass"):
