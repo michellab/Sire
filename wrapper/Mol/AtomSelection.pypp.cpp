@@ -1000,7 +1000,7 @@ void register_AtomSelection_class(){
                 "isAtom"
                 , isAtom_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return whether or not this selection represents a single atom" );
         
         }
         { //::SireMol::AtomSelection::isChain
@@ -1012,7 +1012,7 @@ void register_AtomSelection_class(){
                 "isChain"
                 , isChain_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return whether or not this selection represents a single Chain" );
         
         }
         { //::SireMol::AtomSelection::isCompatibleWith
@@ -1037,7 +1037,7 @@ void register_AtomSelection_class(){
                 "isCutGroup"
                 , isCutGroup_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return whether or not this selection represents a single CutGroup" );
         
         }
         { //::SireMol::AtomSelection::isEmpty
@@ -1061,7 +1061,7 @@ void register_AtomSelection_class(){
                 "isMolecule"
                 , isMolecule_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return whether or not this selection represents the whole molecule" );
         
         }
         { //::SireMol::AtomSelection::isNull
@@ -1085,7 +1085,7 @@ void register_AtomSelection_class(){
                 "isResidue"
                 , isResidue_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return whether or not this selection represents a single Residue" );
         
         }
         { //::SireMol::AtomSelection::isSegment
@@ -1097,7 +1097,7 @@ void register_AtomSelection_class(){
                 "isSegment"
                 , isSegment_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return whether or not this selection represents a single Segment" );
         
         }
         { //::SireMol::AtomSelection::mask

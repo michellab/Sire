@@ -1141,7 +1141,7 @@ void register_MolGroupsBase_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the total number of atoms in this groups in this set" );
         
         }
         { //::SireMol::MolGroupsBase::nChains
@@ -1153,7 +1153,7 @@ void register_MolGroupsBase_class(){
                 "nChains"
                 , nChains_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the total number of chains in this groups in this set" );
         
         }
         { //::SireMol::MolGroupsBase::nGroups
@@ -1189,7 +1189,7 @@ void register_MolGroupsBase_class(){
                 "nResidues"
                 , nResidues_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the total number of residues in this groups in this set" );
         
         }
         { //::SireMol::MolGroupsBase::nSegments
@@ -1201,7 +1201,7 @@ void register_MolGroupsBase_class(){
                 "nSegments"
                 , nSegments_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the total number of segments in this groups in this set" );
         
         }
         { //::SireMol::MolGroupsBase::nViews

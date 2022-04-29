@@ -329,7 +329,7 @@ void register_Segment_class(){
                 "number"
                 , number_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the number of this segment (same as its index)" );
         
         }
         Segment_exposer.def( bp::self != bp::self );

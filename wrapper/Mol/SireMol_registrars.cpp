@@ -85,6 +85,7 @@
 #include "mgidentifier.h"
 #include "angleid.h"
 #include "groupatomids.h"
+#include "selectormol.h"
 #include "molatomid.h"
 #include "segidx.h"
 #include "geometryperturbation.h"
@@ -275,6 +276,12 @@ void register_SireMol_objects()
     ObjectRegistry::registerConverterFor< SireMol::ChainAtomID >();
     ObjectRegistry::registerConverterFor< SireMol::SegAtomID >();
     ObjectRegistry::registerConverterFor< SireMol::CGAtomID >();
+    ObjectRegistry::registerConverterFor< SireMol::SelectorMol >();
+    ObjectRegistry::registerConverterFor< SireMol::SelectorM<SireMol::Atom> >();
+    ObjectRegistry::registerConverterFor< SireMol::SelectorM<SireMol::Residue> >();
+    ObjectRegistry::registerConverterFor< SireMol::SelectorM<SireMol::Chain> >();
+    ObjectRegistry::registerConverterFor< SireMol::SelectorM<SireMol::Segment> >();
+    ObjectRegistry::registerConverterFor< SireMol::SelectorM<SireMol::CutGroup> >();
     ObjectRegistry::registerConverterFor< SireMol::MolAtomID >();
     ObjectRegistry::registerConverterFor< SireMol::SegIdx >();
     ObjectRegistry::registerConverterFor< SireMol::NullGeometryPerturbation >();

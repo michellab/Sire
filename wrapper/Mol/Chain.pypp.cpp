@@ -383,7 +383,7 @@ void register_Chain_class(){
                 "number"
                 , number_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the number of this chain (same as its index)" );
         
         }
         Chain_exposer.def( bp::self != bp::self );

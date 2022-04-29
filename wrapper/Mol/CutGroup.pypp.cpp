@@ -333,7 +333,7 @@ void register_CutGroup_class(){
                 "number"
                 , number_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the number of this CutGroup (same as the index)" );
         
         }
         CutGroup_exposer.def( bp::self != bp::self );

@@ -114,6 +114,7 @@
 #include "segname.h"
 #include "segproperty.hpp"
 #include "select.h"
+#include "selectormol.h"
 #include "specifymol.h"
 #include "stereoscopy.h"
 #include "viewsofmol.h"
