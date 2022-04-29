@@ -40,9 +40,26 @@
 
 #include "SireBase/slice.h"
 
+#include "SireStream/datastream.h"
+#include "SireStream/shareddatastream.h"
+#include "SireStream/errors.h"
+
+
 #include "tostring.h"
 
 SIRE_BEGIN_HEADER
+
+namespace SireMol
+{
+template<class T>
+class Selector;
+}
+
+template<class T>
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Selector<T>&);
+
+template<class T>
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Selector<T>&);
 
 namespace SireMol
 {
@@ -100,6 +117,10 @@ SIREMOL_EXPORT bool has_metadata(const Segment*, const MoleculeData &moldata,
 template<class T>
 class SIREMOL_EXPORT Selector : public SireBase::ConcreteProperty<Selector<T>,MoleculeView>
 {
+
+friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const Selector<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, Selector<T>&);
+
 public:
     Selector();
 
@@ -1451,7 +1472,64 @@ QStringList Selector<T>::metadataKeys(const PropertyName &key) const
 
 #endif //SIRE_SKIP_INLINE_FUNCTIONS
 
+} // end of namespace SireMol
+
+#ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+/** Extract from a binary datastream */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QDataStream &operator>>(QDataStream &ds, SireMol::Selector<T> &views)
+{
+    QString cls;
+    SireStream::VersionID version;
+
+    ds >> cls;
+
+    if (cls != QString(SireMol::Selector<T>::typeName()))
+    {
+        throw SireStream::corrupted_data(QObject::tr(
+            "Found the wrong class (%1) when trying to read a %2.")
+                .arg(cls).arg(SireMol::Selector<T>::typeName()), CODELOC);
+    }
+
+    ds >> version;
+
+    if (version == 1)
+    {
+        SireStream::SharedDataStream sds(ds);
+
+        QList<typename T::Index> idxs;
+        SireMol::MoleculeData moldata;
+        sds >> moldata >> idxs;
+
+        views = SireMol::Selector<T>(moldata, idxs);
+    }
+    else
+    {
+        throw SireStream::version_error(version, "1",
+                                        SireMol::Selector<T>::typeName(),
+                                        CODELOC);
+    }
+
+    return ds;
 }
+
+/** Serialise to a binary datastream */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QDataStream &operator<<(QDataStream &ds, const SireMol::Selector<T> &views)
+{
+    ds << QString(SireMol::Selector<T>::typeName()) << SireStream::VersionID(1);
+
+    SireStream::SharedDataStream sds(ds);
+
+    sds << SireMol::MoleculeData(views.data()) << views.idxs;
+
+    return ds;
+}
+
+#endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 SIRE_END_HEADER
 

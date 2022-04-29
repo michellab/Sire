@@ -55,7 +55,6 @@ class AtomID;
 class Molecules;
 class MoleculeGroup;
 class MolGroupsBase;
-class SelectorMol;
 
 /** This is the base class of all identifiers that are used
     to identify a Molecule
@@ -111,7 +110,6 @@ public:
 
     static SireID::MatchAll<MolID> any();*/
 
-    virtual QList<MolNum> map(const SelectorMol &molecules) const=0;
     virtual QList<MolNum> map(const Molecules &molecules) const=0;
     virtual QList<MolNum> map(const MoleculeGroup &molgroup) const=0;
     virtual QList<MolNum> map(const MolGroupsBase &molgroupsbase) const=0;
@@ -182,7 +180,6 @@ public:
     bool operator==(const MolID &other) const;
     bool operator!=(const MolID &other) const;
 
-    QList<MolNum> map(const SelectorMol &mols) const;
     QList<MolNum> map(const Molecules &mols) const;
     QList<MolNum> map(const MoleculeGroup &molgroup) const;
     QList<MolNum> map(const MolGroupsBase &molgroups) const;
@@ -243,7 +240,6 @@ public:
     bool operator==(const MolID &other) const;
     bool operator!=(const MolID &other) const;
 
-    QList<MolNum> map(const SelectorMol &mols) const;
     QList<MolNum> map(const Molecules &mols) const;
     QList<MolNum> map(const MoleculeGroup &molgroup) const;
     QList<MolNum> map(const MolGroupsBase &molgroups) const;

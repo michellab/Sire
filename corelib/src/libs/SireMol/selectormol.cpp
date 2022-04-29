@@ -38,6 +38,9 @@
 #include "segid.h"
 #include "cgid.h"
 #include "molid.h"
+#include "molidx.h"
+#include "molnum.h"
+#include "molname.h"
 
 #include "SireID/index.h"
 
@@ -53,9 +56,14 @@ using namespace SireMol;
 using namespace SireID;
 
 RegisterMetaType<SelectorMol> r_smol;
+RegisterMetaType< SelectorM<Atom> > r_satm;
+RegisterMetaType< SelectorM<Residue> > r_sres;
+RegisterMetaType< SelectorM<Chain> > r_schn;
+RegisterMetaType< SelectorM<Segment> > r_sseg;
+RegisterMetaType< SelectorM<CutGroup> > r_scg;
 
 /** Serialise to a binary datastream */
-QDataStream &operator<<(QDataStream &ds, const SelectorMol &mols)
+SIREMOL_EXPORT QDataStream &operator<<(QDataStream &ds, const SelectorMol &mols)
 {
     writeHeader(ds, r_smol, 1);
 
@@ -67,7 +75,7 @@ QDataStream &operator<<(QDataStream &ds, const SelectorMol &mols)
 }
 
 /** Extract from a binary datastream */
-QDataStream &operator>>(QDataStream &ds, SelectorMol &mols)
+SIREMOL_EXPORT QDataStream &operator>>(QDataStream &ds, SelectorMol &mols)
 {
     VersionID v = readHeader(ds, r_smol);
 
@@ -78,6 +86,152 @@ QDataStream &operator>>(QDataStream &ds, SelectorMol &mols)
     }
     else
         throw version_error(v, "1", r_smol, CODELOC);
+
+    return ds;
+}
+
+/** Serialise to a binary datastream */
+template<>
+SIREMOL_EXPORT QDataStream &operator<<(QDataStream &ds, const SelectorM<Atom> &mols)
+{
+    writeHeader(ds, r_satm, 1);
+
+    SharedDataStream sds(ds);
+
+    sds << mols.vws << static_cast<const Property&>(mols);
+
+    return ds;
+}
+
+/** Extract from a binary datastream */
+template<>
+SIREMOL_EXPORT QDataStream &operator>>(QDataStream &ds, SelectorM<Atom> &mols)
+{
+    VersionID v = readHeader(ds, r_satm);
+
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+        sds >> mols.vws >> static_cast<Property&>(mols);
+    }
+    else
+        throw version_error(v, "1", r_satm, CODELOC);
+
+    return ds;
+}
+/** Serialise to a binary datastream */
+template<>
+SIREMOL_EXPORT QDataStream &operator<<(QDataStream &ds, const SelectorM<Residue> &mols)
+{
+    writeHeader(ds, r_sres, 1);
+
+    SharedDataStream sds(ds);
+
+    sds << mols.vws << static_cast<const Property&>(mols);
+
+    return ds;
+}
+
+/** Extract from a binary datastream */
+template<>
+SIREMOL_EXPORT QDataStream &operator>>(QDataStream &ds, SelectorM<Residue> &mols)
+{
+    VersionID v = readHeader(ds, r_sres);
+
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+        sds >> mols.vws >> static_cast<Property&>(mols);
+    }
+    else
+        throw version_error(v, "1", r_sres, CODELOC);
+
+    return ds;
+}
+/** Serialise to a binary datastream */
+template<>
+SIREMOL_EXPORT QDataStream &operator<<(QDataStream &ds, const SelectorM<Chain> &mols)
+{
+    writeHeader(ds, r_schn, 1);
+
+    SharedDataStream sds(ds);
+
+    sds << mols.vws << static_cast<const Property&>(mols);
+
+    return ds;
+}
+
+/** Extract from a binary datastream */
+template<>
+SIREMOL_EXPORT QDataStream &operator>>(QDataStream &ds, SelectorM<Chain> &mols)
+{
+    VersionID v = readHeader(ds, r_schn);
+
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+        sds >> mols.vws >> static_cast<Property&>(mols);
+    }
+    else
+        throw version_error(v, "1", r_schn, CODELOC);
+
+    return ds;
+}
+/** Serialise to a binary datastream */
+template<>
+SIREMOL_EXPORT QDataStream &operator<<(QDataStream &ds, const SelectorM<Segment> &mols)
+{
+    writeHeader(ds, r_sseg, 1);
+
+    SharedDataStream sds(ds);
+
+    sds << mols.vws << static_cast<const Property&>(mols);
+
+    return ds;
+}
+
+/** Extract from a binary datastream */
+template<>
+SIREMOL_EXPORT QDataStream &operator>>(QDataStream &ds, SelectorM<Segment> &mols)
+{
+    VersionID v = readHeader(ds, r_sseg);
+
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+        sds >> mols.vws >> static_cast<Property&>(mols);
+    }
+    else
+        throw version_error(v, "1", r_sseg, CODELOC);
+
+    return ds;
+}
+/** Serialise to a binary datastream */
+template<>
+SIREMOL_EXPORT QDataStream &operator<<(QDataStream &ds, const SelectorM<CutGroup> &mols)
+{
+    writeHeader(ds, r_scg, 1);
+
+    SharedDataStream sds(ds);
+
+    sds << mols.vws << static_cast<const Property&>(mols);
+
+    return ds;
+}
+
+/** Extract from a binary datastream */
+template<>
+SIREMOL_EXPORT QDataStream &operator>>(QDataStream &ds, SelectorM<CutGroup> &mols)
+{
+    VersionID v = readHeader(ds, r_scg);
+
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+        sds >> mols.vws >> static_cast<Property&>(mols);
+    }
+    else
+        throw version_error(v, "1", r_scg, CODELOC);
 
     return ds;
 }
@@ -96,12 +250,17 @@ SelectorMol::SelectorMol(const Molecules &molecules)
 {
     if (not molecules.isEmpty())
     {
-        auto molnums = molecules.molNums();
+        auto toList = [](const QSet<MolNum> &molnums)
+        {
+            return QList<MolNum>(molnums.constBegin(), molnums.constEnd());
+        };
+
+        auto molnums = toList(molecules.molNums());
 
         //sort them, as this is also likely the order the molecules
         //were read in from a file, and so more likely to be the
         //order the user would expect
-        std::sort(molnums.begin(), molsnums.end());
+        std::sort(molnums.begin(), molnums.end());
 
         this->mols.reserve(molnums.count());
 
@@ -112,7 +271,7 @@ SelectorMol::SelectorMol(const Molecules &molecules)
     }
 }
 
-SelectorMol::SelectorMol(const MoleculeGroup &molecules);
+SelectorMol::SelectorMol(const MoleculeGroup &molecules)
             : ConcreteProperty<SelectorMol,Property>()
 {
     if (not molecules.isEmpty())
@@ -127,7 +286,7 @@ SelectorMol::SelectorMol(const MoleculeGroup &molecules);
     }
 }
 
-SelectorMol::SelectorMol(const MolGroupsBase &molecules);
+SelectorMol::SelectorMol(const MolGroupsBase &molecules)
             : ConcreteProperty<SelectorMol,Property>()
 {
     if (not molecules.isEmpty())
@@ -138,6 +297,20 @@ SelectorMol::SelectorMol(const MolGroupsBase &molecules);
         for (const auto &molnum : molnums)
         {
             this->mols.append(molecules.at(molnum).molecule());
+        }
+    }
+}
+
+SelectorMol::SelectorMol(const SelectResult &molecules)
+            : ConcreteProperty<SelectorMol,Property>()
+{
+    if (not molecules.isEmpty())
+    {
+        this->mols.reserve(molecules.count());
+
+        for (const auto &mol : molecules)
+        {
+            this->mols.append(mol.molecule());
         }
     }
 }
@@ -150,7 +323,7 @@ SelectorMol::SelectorMol(const SelectorMol &other)
 SelectorMol::~SelectorMol()
 {}
 
-static const char* SelectorMol::typeName()
+const char* SelectorMol::typeName()
 {
     return QMetaType::typeName(qMetaTypeId<SelectorMol>());
 }
@@ -206,6 +379,11 @@ Molecule SelectorMol::operator[](const MolID &molid) const
     return this->molecule(molid);
 }
 
+SelectResult SelectorMol::search(const QString &search_string) const
+{
+    return this->toMoleculeGroup().search(search_string);
+}
+
 int SelectorMol::count() const
 {
     return this->mols.count();
@@ -243,10 +421,10 @@ Molecule SelectorMol::molecule(const QString &name) const
 
     BOOST_ASSERT(m.count() != 0);
 
-    return m.at(0);
+    return m[0];
 }
 
-Molecule SelectorMol::molecule(const MolIdx &molid)
+Molecule SelectorMol::molecule(const MolIdx &molid) const
 {
     auto m = this->molecules(molid);
 
@@ -257,10 +435,10 @@ Molecule SelectorMol::molecule(const MolIdx &molid)
 
     BOOST_ASSERT(m.count() != 0);
 
-    return m.at(0);
+    return m[0];
 }
 
-Molecule SelectorMol::molecule(const MolName &molid)
+Molecule SelectorMol::molecule(const MolName &molid) const
 {
     auto m = this->molecules(molid);
 
@@ -271,10 +449,10 @@ Molecule SelectorMol::molecule(const MolName &molid)
 
     BOOST_ASSERT(m.count() != 0);
 
-    return m.at(0);
+    return m[0];
 }
 
-Molecule SelectorMol::molecule(const MolNum &molid)
+Molecule SelectorMol::molecule(const MolNum &molid) const
 {
     auto m = this->molecules(molid);
 
@@ -285,10 +463,10 @@ Molecule SelectorMol::molecule(const MolNum &molid)
 
     BOOST_ASSERT(m.count() != 0);
 
-    return m.at(0);
+    return m[0];
 }
 
-Molecule SelectorMol::molecule(const MolID &molid)
+Molecule SelectorMol::molecule(const MolID &molid) const
 {
     auto m = this->molecules(molid);
 
@@ -299,7 +477,7 @@ Molecule SelectorMol::molecule(const MolID &molid)
 
     BOOST_ASSERT(m.count() != 0);
 
-    return m.at(0);
+    return m[0];
 }
 
 SelectorMol SelectorMol::molecules() const
@@ -312,11 +490,7 @@ SelectorMol SelectorMol::molecules(int i) const
     return SelectorMol(this->molecule(i));
 }
 
-SelectorMol SelectorMol
-    throw SireError::program_bug("SHOULD NOT GET HERE", CODELOC);
-
-    return T();
-SireBase::Slice &slice) const
+SelectorMol SelectorMol::molecules(const SireBase::Slice &slice) const
 {
     SelectorMol m;
 
@@ -330,7 +504,7 @@ SireBase::Slice &slice) const
 
 SelectorMol SelectorMol::molecules(const QList<qint64> &idxs) const
 {
-    Selector m;
+    SelectorMol m;
 
     for (const auto &idx : idxs)
     {
@@ -392,9 +566,21 @@ SelectorMol SelectorMol::molecules(const MolNum &molnum) const
     return m;
 }
 
+MoleculeGroup SelectorMol::toMoleculeGroup() const
+{
+    MoleculeGroup grp;
+
+    for (const auto &mol : this->mols)
+    {
+        grp.add(mol);
+    }
+
+    return grp;
+}
+
 SelectorMol SelectorMol::molecules(const MolID &molid) const
 {
-    auto molnums = molid.map(*this);
+    auto molnums = molid.map(this->toMoleculeGroup());
 
     QHash<MolNum, Molecule> m;
 
@@ -471,7 +657,7 @@ Atom SelectorMol::atom(const AtomID &atomid) const
 
 Residue SelectorMol::residue(int i) const
 {
-    i = Index(i).map(this->nResidues()));
+    i = Index(i).map(this->nResidues());
 
     for (const auto &mol : this->mols)
     {
@@ -507,7 +693,7 @@ Residue SelectorMol::residue(const ResID &resid) const
     if (res.count() > 1)
         throw SireMol::duplicate_residue(QObject::tr(
             "More than one residue matches '%1'. Number of matches is %2.")
-                .arg(resid.toString()).arg(atms.count()), CODELOC);
+                .arg(resid.toString()).arg(res.count()), CODELOC);
 
     BOOST_ASSERT(not res.isEmpty());
 
@@ -552,7 +738,7 @@ Chain SelectorMol::chain(const ChainID &chainid) const
     if (cs.count() > 1)
         throw SireMol::duplicate_chain(QObject::tr(
             "More than one chain matches '%1'. Number of matches is %2.")
-                .arg(chainid.toString()).arg(atms.count()), CODELOC);
+                .arg(chainid.toString()).arg(cs.count()), CODELOC);
 
     BOOST_ASSERT(not cs.isEmpty());
 
@@ -597,7 +783,7 @@ Segment SelectorMol::segment(const SegID &segid) const
     if (segs.count() > 1)
         throw SireMol::duplicate_segment(QObject::tr(
             "More than one segment matches '%1'. Number of matches is %2.")
-                .arg(segid.toString()).arg(atms.count()), CODELOC);
+                .arg(segid.toString()).arg(segs.count()), CODELOC);
 
     BOOST_ASSERT(not segs.isEmpty());
 
@@ -635,14 +821,14 @@ CutGroup SelectorMol::cutGroup(const QString &name) const
     return cgs[0];
 }
 
-CutGroup SelectorMol::cutGroup(const CGID &atomid) const
+CutGroup SelectorMol::cutGroup(const CGID &cgid) const
 {
     auto cgs = this->cutGroups(cgid);
 
     if (cgs.count() > 1)
         throw SireMol::duplicate_cutgroup(QObject::tr(
             "More than one CutGroup matches '%1'. Number of matches is %2.")
-                .arg(cgid.toString()).arg(atms.count()), CODELOC);
+                .arg(cgid.toString()).arg(cgs.count()), CODELOC);
 
     BOOST_ASSERT(not cgs.isEmpty());
 
@@ -938,22 +1124,22 @@ bool SelectorMol::isEmpty() const
     return this->mols.isEmpty();
 }
 
-const_iterator SelectorMol::begin() const
+SelectorMol::const_iterator SelectorMol::begin() const
 {
     return this->mols.begin();
 }
 
-const_iterator SelectorMol::end() const
+SelectorMol::const_iterator SelectorMol::end() const
 {
     return this->mols.end();
 }
 
-const_iterator SelectorMol::constBegin() const
+SelectorMol::const_iterator SelectorMol::constBegin() const
 {
     return this->mols.constBegin();
 }
 
-const_iterator SelectorMol::constEnd() const
+SelectorMol::const_iterator SelectorMol::constEnd() const
 {
     return this->mols.constEnd();
 }

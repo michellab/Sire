@@ -35,6 +35,9 @@
 #include "chain.h"
 #include "segment.h"
 #include "cutgroup.h"
+#include "moleculegroup.h"
+#include "moleculegroups.h"
+#include "select.h"
 
 SIRE_BEGIN_HEADER
 
@@ -86,6 +89,7 @@ public:
     SelectorMol(const Molecules &mols);
     SelectorMol(const MoleculeGroup &mols);
     SelectorMol(const MolGroupsBase &mols);
+    SelectorMol(const SelectResult &mols);
 
     template<class T>
     SelectorMol(const SelectorM<T> &other);
@@ -127,12 +131,14 @@ public:
     int count() const;
     int size() const;
 
+    MoleculeGroup toMoleculeGroup() const;
+
     Molecule molecule(int i) const;
     Molecule molecule(const QString &name) const;
     Molecule molecule(const MolIdx &molidx) const;
     Molecule molecule(const MolName &molname) const;
     Molecule molecule(const MolNum &molnum) const;
-    Molecule molecule(const MolID &molid);
+    Molecule molecule(const MolID &molid) const;
 
     SelectorMol molecules() const;
     SelectorMol molecules(int i) const;
@@ -201,6 +207,8 @@ public:
     SelectorM<CutGroup> cutGroups(const QString &name) const;
     SelectorM<CutGroup> cutGroups(const CGID &cgid) const;
 
+    SelectResult search(const QString &search_string) const;
+
     QVector<MolNum> molNums() const;
 
     QList<MolNum> IDs() const;
@@ -253,6 +261,9 @@ SIRE_EXPOSE_ALIAS( SireMol::SelectorM<SireMol::CutGroup>, SireMol::SelectorM_Cut
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
+namespace SireMol
+{
+
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 SelectorMol::SelectorMol(const SelectorM<T> &other)
@@ -299,6 +310,8 @@ SelectorMol::SelectorMol(const SelectorM<T> &other, const MolID &molid)
 {
     this->operator=(other.molecules().molecules(molid));
 }
+
+} // end of namespace SireMol
 
 #endif // SIRE_SKIP_INLINE_FUNCTIONS
 
