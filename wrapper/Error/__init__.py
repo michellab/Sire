@@ -33,3 +33,9 @@ def get_back_trace():
 def print_error(e):
     """Print the passed error"""
     printError(e)
+
+# we are going to start by disabling the exception backtraces.
+# These are only really needed by developers, and slow some things
+# down. If you are a developer, than call
+# enable_backtrace_exceptions() anywhere to re-enable them
+disable_backtrace_exceptions()

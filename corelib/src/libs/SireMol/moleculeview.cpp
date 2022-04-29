@@ -1488,7 +1488,7 @@ int MoleculeView::nResidues() const
 }
 
 /** Return the number of CutGroups in this view */
-int MoleculeView::nCutGroup() const
+int MoleculeView::nCutGroups() const
 {
     return this->selection().nSelectedCutGroups();
 }

@@ -637,9 +637,11 @@ SelectorM<T>::SelectorM(const SelectorMol &mols, const QString &name)
 {
     for (const auto &mol : mols)
     {
+        auto flag = SireError::exception::enableFastExceptions();
+
         try
         {
-            this->vws.append(_get_view<T>::get(mol, name));
+            this->vws.append(_get_view<T>::get(mol, typename T::Name(name)));
         }
         catch(...)
         {}
@@ -656,6 +658,8 @@ SelectorM<T>::SelectorM(const SelectorMol &mols, const typename T::ID &id)
 {
     for (const auto &mol : mols)
     {
+        auto flag = SireError::exception::enableFastExceptions();
+
         try
         {
             this->vws.append(_get_view<T>::get(mol, id));
@@ -713,6 +717,8 @@ SelectorM<T>::SelectorM(const SelectorM<U> &other, const QString &name)
 {
     for (const auto &view : other)
     {
+        auto flag = SireError::exception::enableFastExceptions();
+
         try
         {
             this->vws.append(_get_view<T>::get(view, name));
@@ -733,6 +739,8 @@ SelectorM<T>::SelectorM(const SelectorM<U> &other, const typename T::ID &id)
 {
     for (const auto &view : other)
     {
+        auto flag = SireError::exception::enableFastExceptions();
+
         try
         {
             this->vws.append(_get_view<T>::get(view, id));
@@ -1644,9 +1652,11 @@ QString SelectorM<T>::toString() const
     {
         QStringList parts;
 
-        if (this->count() < 10)
+        const auto n = this->count();
+
+        if (n < 10)
         {
-            for (int i=0; i<10; ++i)
+            for (int i=0; i<n; ++i)
             {
                 const auto view = this->operator[](i);
 
@@ -1668,7 +1678,7 @@ QString SelectorM<T>::toString() const
 
             parts.append("...");
 
-            for (int i=this->count() - 5; i<this->count(); ++i)
+            for (int i=n-5; i<n; ++i)
             {
                 const auto view = this->operator[](i);
 
@@ -1679,7 +1689,7 @@ QString SelectorM<T>::toString() const
         }
 
         return QObject::tr("%1( size=%2\n%3\n)")
-                    .arg(this->what()).arg(this->size())
+                    .arg(this->what()).arg(n)
                     .arg(parts.join("\n"));
     }
 }

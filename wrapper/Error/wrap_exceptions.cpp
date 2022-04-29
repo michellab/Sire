@@ -57,9 +57,16 @@ void set_last_error(const SireError::exception &e)
 {
     LastErrorType d;
 
+    QString bt;
+
+    if (e.trace().isEmpty())
+        bt = QObject::tr("Backtrace disabled. Call Sire.Error.enable_backtrace_exceptions() to re-enable.");
+    else
+        bt = e.trace().join("\n");
+
     d["type"] = e.what();
     d["from"] = e.from();
-    d["backtrace"] = e.trace().join("\n");
+    d["backtrace"] = bt;
     d["where"] = e.where();
     d["why"] = e.why();
     d["pid"] = e.pid();
@@ -142,8 +149,33 @@ void std_exception_translator( const std::exception &ex )
                     QString("%1").arg(ex.what()).toUtf8());
 }
 
+SireError::FastExceptionFlag *fast_exception_flag(0);
+
+void enable_backtrace_exceptions()
+{
+    // python will hold the GIL when calling this function
+    // so it should be safe
+    if (fast_exception_flag)
+    {
+        delete fast_exception_flag;
+        fast_exception_flag = 0;
+    }
+}
+
+void disable_backtrace_exceptions()
+{
+    if (fast_exception_flag)
+        return;
+
+    fast_exception_flag = new SireError::FastExceptionFlag(
+                                SireError::exception::enableFastExceptions());
+}
+
 void export_exceptions()
 {
+    def("enable_backtrace_exceptions", &enable_backtrace_exceptions);
+    def("disable_backtrace_exceptions", &disable_backtrace_exceptions);
+
     register_exception_translator<std::exception>(&std_exception_translator);
     register_exception_translator<SireError::exception>(&exception_translator);
     register_exception_translator<SireError::invalid_index>(&index_error);

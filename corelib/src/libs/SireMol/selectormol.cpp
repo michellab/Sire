@@ -1159,9 +1159,11 @@ QString SelectorMol::toString() const
     {
         QStringList parts;
 
-        if (this->count() < 10)
+        const auto n = this->count();
+
+        if (n < 10)
         {
-            for (int i=0; i<10; ++i)
+            for (int i=0; i<n; ++i)
             {
                 parts.append(QObject::tr("%1: %2").arg(i)
                                         .arg(this->mols[i].toString()));
@@ -1177,15 +1179,15 @@ QString SelectorMol::toString() const
 
             parts.append("...");
 
-            for (int i=this->count()-5; i<this->count(); ++i)
+            for (int i=n-5; i<n; ++i)
             {
                 parts.append(QObject::tr("%1: %2").arg(i)
                                         .arg(this->mols[i].toString()));
             }
         }
 
-        return QObject::tr("SelectorMol( size=%1\n%2\n)").arg(this->count())
-                        .arg(parts.join("\n"));
+        return QObject::tr("SelectorMol( size=%1\n%2\n)")
+                        .arg(n).arg(parts.join("\n"));
     }
 }
 
