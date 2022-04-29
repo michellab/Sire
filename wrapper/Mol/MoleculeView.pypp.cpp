@@ -787,6 +787,18 @@ void register_MoleculeView_class(){
                 , "Return the number of chains in this view" );
         
         }
+        { //::SireMol::MoleculeView::nCutGroups
+        
+            typedef int ( ::SireMol::MoleculeView::*nCutGroups_function_type)(  ) const;
+            nCutGroups_function_type nCutGroups_function_value( &::SireMol::MoleculeView::nCutGroups );
+            
+            MoleculeView_exposer.def( 
+                "nCutGroups"
+                , nCutGroups_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::MoleculeView::nResidues
         
             typedef int ( ::SireMol::MoleculeView::*nResidues_function_type)(  ) const;

@@ -78,7 +78,7 @@ void register_SelectorM_Residue__class(){
         { //::SireMol::SelectorM< SireMol::Residue >::IDs
         
             typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
-            typedef ::QList< SireMol::ResID > ( ::SireMol::SelectorM< SireMol::Residue >::*IDs_function_type)(  ) const;
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::SelectorM< SireMol::Residue >::*IDs_function_type)(  ) const;
             IDs_function_type IDs_function_value( &::SireMol::SelectorM< SireMol::Residue >::IDs );
             
             SelectorM_Residue__exposer.def( 
@@ -732,6 +732,45 @@ void register_SelectorM_Residue__class(){
         
         }
         SelectorM_Residue__exposer.def( bp::self != bp::self );
+        { //::SireMol::SelectorM< SireMol::Residue >::operator()
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::Residue ( ::SireMol::SelectorM< SireMol::Residue >::*__call___function_type)( int ) const;
+            __call___function_type __call___function_value( &::SireMol::SelectorM< SireMol::Residue >::operator() );
+            
+            SelectorM_Residue__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::operator()
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::Residue ( ::SireMol::SelectorM< SireMol::Residue >::*__call___function_type)( ::QString const & ) const;
+            __call___function_type __call___function_value( &::SireMol::SelectorM< SireMol::Residue >::operator() );
+            
+            SelectorM_Residue__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("name") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::operator()
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::Residue ( ::SireMol::SelectorM< SireMol::Residue >::*__call___function_type)( ::SireMol::Residue::ID const & ) const;
+            __call___function_type __call___function_value( &::SireMol::SelectorM< SireMol::Residue >::operator() );
+            
+            SelectorM_Residue__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("id") )
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::Residue >::operator=
         
             typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;

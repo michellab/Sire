@@ -78,7 +78,7 @@ void register_SelectorM_Atom__class(){
         { //::SireMol::SelectorM< SireMol::Atom >::IDs
         
             typedef SireMol::SelectorM< SireMol::Atom > exported_class_t;
-            typedef ::QList< SireMol::AtomID > ( ::SireMol::SelectorM< SireMol::Atom >::*IDs_function_type)(  ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::SelectorM< SireMol::Atom >::*IDs_function_type)(  ) const;
             IDs_function_type IDs_function_value( &::SireMol::SelectorM< SireMol::Atom >::IDs );
             
             SelectorM_Atom__exposer.def( 
@@ -732,6 +732,45 @@ void register_SelectorM_Atom__class(){
         
         }
         SelectorM_Atom__exposer.def( bp::self != bp::self );
+        { //::SireMol::SelectorM< SireMol::Atom >::operator()
+        
+            typedef SireMol::SelectorM< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Atom ( ::SireMol::SelectorM< SireMol::Atom >::*__call___function_type)( int ) const;
+            __call___function_type __call___function_value( &::SireMol::SelectorM< SireMol::Atom >::operator() );
+            
+            SelectorM_Atom__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Atom >::operator()
+        
+            typedef SireMol::SelectorM< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Atom ( ::SireMol::SelectorM< SireMol::Atom >::*__call___function_type)( ::QString const & ) const;
+            __call___function_type __call___function_value( &::SireMol::SelectorM< SireMol::Atom >::operator() );
+            
+            SelectorM_Atom__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("name") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Atom >::operator()
+        
+            typedef SireMol::SelectorM< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Atom ( ::SireMol::SelectorM< SireMol::Atom >::*__call___function_type)( ::SireMol::Atom::ID const & ) const;
+            __call___function_type __call___function_value( &::SireMol::SelectorM< SireMol::Atom >::operator() );
+            
+            SelectorM_Atom__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("id") )
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::Atom >::operator=
         
             typedef SireMol::SelectorM< SireMol::Atom > exported_class_t;

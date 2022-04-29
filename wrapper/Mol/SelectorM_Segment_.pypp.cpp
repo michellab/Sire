@@ -78,7 +78,7 @@ void register_SelectorM_Segment__class(){
         { //::SireMol::SelectorM< SireMol::Segment >::IDs
         
             typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
-            typedef ::QList< SireMol::SegID > ( ::SireMol::SelectorM< SireMol::Segment >::*IDs_function_type)(  ) const;
+            typedef ::QList< SireMol::SegIdx > ( ::SireMol::SelectorM< SireMol::Segment >::*IDs_function_type)(  ) const;
             IDs_function_type IDs_function_value( &::SireMol::SelectorM< SireMol::Segment >::IDs );
             
             SelectorM_Segment__exposer.def( 
@@ -732,6 +732,45 @@ void register_SelectorM_Segment__class(){
         
         }
         SelectorM_Segment__exposer.def( bp::self != bp::self );
+        { //::SireMol::SelectorM< SireMol::Segment >::operator()
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Segment ( ::SireMol::SelectorM< SireMol::Segment >::*__call___function_type)( int ) const;
+            __call___function_type __call___function_value( &::SireMol::SelectorM< SireMol::Segment >::operator() );
+            
+            SelectorM_Segment__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::operator()
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Segment ( ::SireMol::SelectorM< SireMol::Segment >::*__call___function_type)( ::QString const & ) const;
+            __call___function_type __call___function_value( &::SireMol::SelectorM< SireMol::Segment >::operator() );
+            
+            SelectorM_Segment__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("name") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::operator()
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Segment ( ::SireMol::SelectorM< SireMol::Segment >::*__call___function_type)( ::SireMol::Segment::ID const & ) const;
+            __call___function_type __call___function_value( &::SireMol::SelectorM< SireMol::Segment >::operator() );
+            
+            SelectorM_Segment__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("id") )
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::Segment >::operator=
         
             typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;

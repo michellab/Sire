@@ -78,7 +78,7 @@ void register_SelectorM_Chain__class(){
         { //::SireMol::SelectorM< SireMol::Chain >::IDs
         
             typedef SireMol::SelectorM< SireMol::Chain > exported_class_t;
-            typedef ::QList< SireMol::ChainID > ( ::SireMol::SelectorM< SireMol::Chain >::*IDs_function_type)(  ) const;
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::SelectorM< SireMol::Chain >::*IDs_function_type)(  ) const;
             IDs_function_type IDs_function_value( &::SireMol::SelectorM< SireMol::Chain >::IDs );
             
             SelectorM_Chain__exposer.def( 
@@ -732,6 +732,45 @@ void register_SelectorM_Chain__class(){
         
         }
         SelectorM_Chain__exposer.def( bp::self != bp::self );
+        { //::SireMol::SelectorM< SireMol::Chain >::operator()
+        
+            typedef SireMol::SelectorM< SireMol::Chain > exported_class_t;
+            typedef ::SireMol::Chain ( ::SireMol::SelectorM< SireMol::Chain >::*__call___function_type)( int ) const;
+            __call___function_type __call___function_value( &::SireMol::SelectorM< SireMol::Chain >::operator() );
+            
+            SelectorM_Chain__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Chain >::operator()
+        
+            typedef SireMol::SelectorM< SireMol::Chain > exported_class_t;
+            typedef ::SireMol::Chain ( ::SireMol::SelectorM< SireMol::Chain >::*__call___function_type)( ::QString const & ) const;
+            __call___function_type __call___function_value( &::SireMol::SelectorM< SireMol::Chain >::operator() );
+            
+            SelectorM_Chain__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("name") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Chain >::operator()
+        
+            typedef SireMol::SelectorM< SireMol::Chain > exported_class_t;
+            typedef ::SireMol::Chain ( ::SireMol::SelectorM< SireMol::Chain >::*__call___function_type)( ::SireMol::Chain::ID const & ) const;
+            __call___function_type __call___function_value( &::SireMol::SelectorM< SireMol::Chain >::operator() );
+            
+            SelectorM_Chain__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("id") )
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::Chain >::operator=
         
             typedef SireMol::SelectorM< SireMol::Chain > exported_class_t;
