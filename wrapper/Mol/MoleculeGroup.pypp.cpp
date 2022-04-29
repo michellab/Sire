@@ -872,7 +872,7 @@ void register_MoleculeGroup_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the number of atoms in this group" );
         
         }
         { //::SireMol::MoleculeGroup::nChains
@@ -884,7 +884,7 @@ void register_MoleculeGroup_class(){
                 "nChains"
                 , nChains_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the total number of chains in this group" );
         
         }
         { //::SireMol::MoleculeGroup::nMolecules
@@ -908,7 +908,7 @@ void register_MoleculeGroup_class(){
                 "nResidues"
                 , nResidues_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the total number of residues in this group" );
         
         }
         { //::SireMol::MoleculeGroup::nSegments
@@ -920,7 +920,7 @@ void register_MoleculeGroup_class(){
                 "nSegments"
                 , nSegments_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the total number of segments in this group" );
         
         }
         { //::SireMol::MoleculeGroup::nViews

@@ -32,6 +32,7 @@ set ( PYPP_SOURCES
        IDAndSet_CGID_.pypp.cpp
        AtomVelocities.pypp.cpp
        AtomIntegerArrayProperty.pypp.cpp
+       SelectorM_CutGroup_.pypp.cpp
        BeadNum.pypp.cpp
        NullBeading.pypp.cpp
        ChemicalBondHunter.pypp.cpp
@@ -44,6 +45,7 @@ set ( PYPP_SOURCES
        ResIdxAtomNameMatcher.pypp.cpp
        ChainProp.pypp.cpp
        MolStructureEditor.pypp.cpp
+       SelectorM_Atom_.pypp.cpp
        MolIdx.pypp.cpp
        MoleculeBeading.pypp.cpp
        BondType.pypp.cpp
@@ -63,6 +65,7 @@ set ( PYPP_SOURCES
        Beading.pypp.cpp
        Selector_Atom_.pypp.cpp
        AtomStructureEditor.pypp.cpp
+       SelectorM_Segment_.pypp.cpp
        AtomMatcher.pypp.cpp
        ResIdxAtomMCSMatcher.pypp.cpp
        IDAndSet_MolID_.pypp.cpp
@@ -109,9 +112,11 @@ set ( PYPP_SOURCES
        Force3D.pypp.cpp
        Mover_Chain_.pypp.cpp
        MGID.pypp.cpp
+       SelectorMol.pypp.cpp
        AtomName.pypp.cpp
        ResIdxAtomCoordMatcher.pypp.cpp
        Evaluator.pypp.cpp
+       SelectorM_Chain_.pypp.cpp
        Within.pypp.cpp
        ChainVariantProperty.pypp.cpp
        IDOrSet_ChainID_.pypp.cpp
@@ -159,6 +164,7 @@ set ( PYPP_SOURCES
        Molecule.pypp.cpp
        BeadStringProperty.pypp.cpp
        MoleculeProperty.pypp.cpp
+       SelectorM_Residue_.pypp.cpp
        AtomIdxMatcher.pypp.cpp
        IDOrSet_MolID_.pypp.cpp
        ConnectivityEditor.pypp.cpp

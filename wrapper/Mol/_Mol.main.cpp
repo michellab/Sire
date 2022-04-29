@@ -473,6 +473,18 @@
 
 #include "SelectResultMover.pypp.hpp"
 
+#include "SelectorM_Atom_.pypp.hpp"
+
+#include "SelectorM_Chain_.pypp.hpp"
+
+#include "SelectorM_CutGroup_.pypp.hpp"
+
+#include "SelectorM_Residue_.pypp.hpp"
+
+#include "SelectorM_Segment_.pypp.hpp"
+
+#include "SelectorMol.pypp.hpp"
+
 #include "Selector_Atom_.pypp.hpp"
 
 #include "Selector_Chain_.pypp.hpp"
@@ -1027,6 +1039,18 @@ BOOST_PYTHON_MODULE(_Mol){
     register_SelectResult_class();
 
     register_SelectResultMover_class();
+
+    register_SelectorM_Atom__class();
+
+    register_SelectorM_Chain__class();
+
+    register_SelectorM_CutGroup__class();
+
+    register_SelectorM_Residue__class();
+
+    register_SelectorM_Segment__class();
+
+    register_SelectorMol_class();
 
     register_SpecifyMol_class();
 
