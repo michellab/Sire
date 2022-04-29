@@ -1188,3 +1188,13 @@ QString SelectorMol::toString() const
                         .arg(parts.join("\n"));
     }
 }
+
+
+namespace SireMol
+{
+    template class SelectorM<Atom>;
+    template class SelectorM<Residue>;
+    template class SelectorM<Chain>;
+    template class SelectorM<Segment>;
+    template class SelectorM<CutGroup>;
+}

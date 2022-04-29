@@ -1487,6 +1487,12 @@ int MoleculeView::nResidues() const
     return this->selection().nSelectedResidues();
 }
 
+/** Return the number of CutGroups in this view */
+int MoleculeView::nCutGroup() const
+{
+    return this->selection().nSelectedCutGroups();
+}
+
 /** Return the number of chains in this view */
 int MoleculeView::nChains() const
 {

@@ -135,6 +135,7 @@ public:
     virtual int nResidues() const;
     virtual int nChains() const;
     virtual int nSegments() const;
+    virtual int nCutGroups() const;
 
     virtual MolViewPtr operator[](int i) const;
     virtual MolViewPtr operator[](const QString &name) const;

@@ -462,7 +462,7 @@ SelectResult::SelectResult(const QList<Molecule> &views)
     }
 }
 
-SelectResult::SelectResult(const QList<Atom> &views)
+SelectResult::SelectResult(const QList< Selector<Atom> > &views)
              : ConcreteProperty<SelectResult,Property>()
 {
     molviews.reserve(views.count());
@@ -473,7 +473,7 @@ SelectResult::SelectResult(const QList<Atom> &views)
     }
 }
 
-SelectResult::SelectResult(const QList<Residue> &views)
+SelectResult::SelectResult(const QList< Selector<Residue> > &views)
              : ConcreteProperty<SelectResult,Property>()
 {
     molviews.reserve(views.count());
@@ -484,7 +484,7 @@ SelectResult::SelectResult(const QList<Residue> &views)
     }
 }
 
-SelectResult::SelectResult(const QList<Chain> &views)
+SelectResult::SelectResult(const QList< Selector<Chain> > &views)
              : ConcreteProperty<SelectResult,Property>()
 {
     molviews.reserve(views.count());
@@ -495,7 +495,7 @@ SelectResult::SelectResult(const QList<Chain> &views)
     }
 }
 
-SelectResult::SelectResult(const QList<Segment> &views)
+SelectResult::SelectResult(const QList< Selector<Segment> > &views)
              : ConcreteProperty<SelectResult,Property>()
 {
     molviews.reserve(views.count());
@@ -506,7 +506,7 @@ SelectResult::SelectResult(const QList<Segment> &views)
     }
 }
 
-SelectResult::SelectResult(const QList<CutGroup> &views)
+SelectResult::SelectResult(const QList< Selector<CutGroup> > &views)
              : ConcreteProperty<SelectResult,Property>()
 {
     molviews.reserve(views.count());

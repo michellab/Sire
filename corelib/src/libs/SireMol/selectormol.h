@@ -94,6 +94,8 @@ public:
     template<class T>
     SelectorMol(const SelectorM<T> &other);
     template<class T>
+    SelectorMol(const SelectorM<T> &other, const QString &name);
+    template<class T>
     SelectorMol(const SelectorM<T> &other, const SireBase::Slice &slice);
     template<class T>
     SelectorMol(const SelectorM<T> &other, const QList<qint64> &idxs);
@@ -283,11 +285,19 @@ SelectorMol::SelectorMol(const SelectorM<T> &other)
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
+SelectorMol::SelectorMol(const SelectorM<T> &other, const QString &name)
+            : SireBase::ConcreteProperty<SelectorMol,SireBase::Property>()
+{
+    this->operator=(SelectorMol(other).molecules(name));
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
 SelectorMol::SelectorMol(const SelectorM<T> &other, const SireBase::Slice &slice)
             : SireBase::ConcreteProperty<SelectorMol,SireBase::Property>()
 {
     for (auto it = slice.begin(other.nMolecules());
-         not it.atEnd(); ++it)
+         not it.atEnd(); it.next())
     {
         this->mols.append(other.molecule(it.value()));
     }

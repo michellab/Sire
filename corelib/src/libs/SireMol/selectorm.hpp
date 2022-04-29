@@ -111,6 +111,10 @@ public:
     T operator[](const QString &name) const;
     T operator[](const typename T::ID &id) const;
 
+    T operator()(int i) const;
+    T operator()(const QString &name) const;
+    T operator()(const typename T::ID &id) const;
+
     int count() const;
     int size() const;
 
@@ -185,7 +189,7 @@ public:
 
     SelectResult search(const QString &search_string) const;
 
-    QList<typename T::ID> IDs() const;
+    QList<typename T::Index> IDs() const;
     QList<typename T::Index> indexes() const;
     QList<typename T::Number> numbers() const;
     QList<typename T::Name> names() const;
@@ -245,13 +249,25 @@ struct _get_view
         return mols.atom(idx);
     }
 
-    static Selector<T> get(const MoleculeView &view)
+    template<class C>
+    static Selector<T> get(const C &view)
     {
         return view.atoms();
     }
 
-    template<class ID>
-    static Selector<T> get(const MoleculeView &view, const ID &id)
+    static SelectorM<T> getName(const SelectorM<T> &view, const QString &name)
+    {
+        return view.atoms(name);
+    }
+
+    static SelectorM<T> getID(const SelectorM<T> &view,
+                              const typename T::ID &id)
+    {
+        return view.atoms(id);
+    }
+
+    template<class C, class ID>
+    static Selector<T> get(const C &view, const ID &id)
     {
         return view.atoms(id);
     }
@@ -285,13 +301,26 @@ struct _get_view<Residue>
         return mols.residue(idx);
     }
 
-    static Selector<Residue> get(const MoleculeView &view)
+    static SelectorM<Residue> getName(const SelectorM<Residue> &view,
+                                      const QString &name)
+    {
+        return view.residues(name);
+    }
+
+    static SelectorM<Residue> getID(const SelectorM<Residue> &view,
+                                    const Residue::ID &id)
+    {
+        return view.residues(id);
+    }
+
+    template<class C>
+    static Selector<Residue> get(const C &view)
     {
         return view.residues();
     }
 
-    template<class ID>
-    static Selector<Residue> get(const MoleculeView &view, const ID &id)
+    template<class C, class ID>
+    static Selector<Residue> get(const C &view, const ID &id)
     {
         return view.residues(id);
     }
@@ -325,13 +354,26 @@ struct _get_view<Chain>
         return mols.chain(idx);
     }
 
-    static Selector<Chain> get(const MoleculeView &view)
+    static SelectorM<Chain> getName(const SelectorM<Chain> &view,
+                                    const QString &name)
+    {
+        return view.chains(name);
+    }
+
+    static SelectorM<Chain> getID(const SelectorM<Chain> &view,
+                                  const Chain::ID &id)
+    {
+        return view.chains(id);
+    }
+
+    template<class C>
+    static Selector<Chain> get(const C &view)
     {
         return view.chains();
     }
 
-    template<class ID>
-    static Selector<Chain> get(const MoleculeView &view, const ID &id)
+    template<class C, class ID>
+    static Selector<Chain> get(const C &view, const ID &id)
     {
         return view.chains(id);
     }
@@ -365,13 +407,26 @@ struct _get_view<CutGroup>
         return mols.cutGroup(idx);
     }
 
-    static Selector<CutGroup> get(const MoleculeView &view)
+    static SelectorM<CutGroup> getName(const SelectorM<CutGroup> &view,
+                                       const QString &name)
+    {
+        return view.cutGroup(name);
+    }
+
+    static SelectorM<CutGroup> getID(const SelectorM<Residue> &view,
+                                     const CutGroup::ID &id)
+    {
+        return view.cutGroups(id);
+    }
+
+    template<class C>
+    static Selector<CutGroup> get(const C &view)
     {
         return view.cutGroups();
     }
 
-    template<class ID>
-    static Selector<CutGroup> get(const MoleculeView &view, const ID &id)
+    template<class C, class ID>
+    static Selector<CutGroup> get(const C &view, const ID &id)
     {
         return view.cutGroups(id);
     }
@@ -405,13 +460,26 @@ struct _get_view<Segment>
         return mols.segment(idx);
     }
 
-    static Selector<Segment> get(const MoleculeView &view)
+    static SelectorM<Segment> getName(const SelectorM<Segment> &view,
+                                      const QString &name)
+    {
+        return view.segments(name);
+    }
+
+    static SelectorM<Segment> getID(const SelectorM<Segment> &view,
+                                    const Segment::ID &id)
+    {
+        return view.segments(id);
+    }
+
+    template<class C>
+    static Selector<Segment> get(const C &view)
     {
         return view.segments();
     }
 
-    template<class ID>
-    static Selector<Segment> get(const MoleculeView &view, const ID &id)
+    template<class C, class ID>
+    static Selector<Segment> get(const C &view, const ID &id)
     {
         return view.segments(id);
     }
@@ -501,7 +569,7 @@ SelectorM<T>::SelectorM(const MoleculeGroup &molecules)
 
         for (const auto &molnum : molnums)
         {
-            this->mols.append(_get_view<T>::get(molecules.at(molnum)));
+            this->vws.append(_get_view<T>::get(molecules.at(molnum)));
         }
     }
 }
@@ -518,7 +586,7 @@ SelectorM<T>::SelectorM(const MolGroupsBase &molecules)
 
         for (const auto &molnum : molnums)
         {
-            this->mols.append(_get_view<T>::get(molecules.at(molnum)));
+            this->vws.append(_get_view<T>::get(molecules.at(molnum)));
         }
     }
 }
@@ -534,7 +602,7 @@ SelectorM<T>::SelectorM(const SelectResult &molecules)
 
         for (const auto &mol : molecules)
         {
-            this->mols.append(_get_view<T>::get(mol));
+            this->vws.append(_get_view<T>::get(mol));
         }
     }
 }
@@ -608,7 +676,7 @@ SelectorM<T>::SelectorM(const SelectorM<U> &other)
 {
     for (const auto &o : other)
     {
-        this->vws.append(_get_view<T>::get(other));
+        this->vws.append(_get_view<T>::get(o));
     }
 }
 
@@ -643,7 +711,7 @@ SIRE_OUTOFLINE_TEMPLATE
 SelectorM<T>::SelectorM(const SelectorM<U> &other, const QString &name)
              : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
 {
-    for (const auto &view : other.vws)
+    for (const auto &view : other)
     {
         try
         {
@@ -663,7 +731,7 @@ SIRE_OUTOFLINE_TEMPLATE
 SelectorM<T>::SelectorM(const SelectorM<U> &other, const typename T::ID &id)
              : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
 {
-    for (const auto &view : other.vws)
+    for (const auto &view : other)
     {
         try
         {
@@ -750,7 +818,7 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 T SelectorM<T>::operator[](const QString &name) const
 {
-    auto all = _get_view<T>::get(*this, name);
+    auto all = _get_view<T>::getName(*this, name);
 
     if (all.count() > 1)
     {
@@ -759,14 +827,14 @@ T SelectorM<T>::operator[](const QString &name) const
 
     BOOST_ASSERT( not all.isEmpty() );
 
-    return all[0];
+    return all(0);
 }
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 T SelectorM<T>::operator[](const typename T::ID &id) const
 {
-    auto all = _get_view<T>::get(*this, id);
+    auto all = _get_view<T>::getID(*this, id);
 
     if (all.count() > 1)
     {
@@ -775,7 +843,28 @@ T SelectorM<T>::operator[](const typename T::ID &id) const
 
     BOOST_ASSERT( not all.isEmpty() );
 
-    return all[0];
+    return all(0);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+T SelectorM<T>::operator()(int i) const
+{
+    return this->operator[](i);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+T SelectorM<T>::operator()(const QString &name) const
+{
+    return this->operator[](name);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+T SelectorM<T>::operator()(const typename T::ID &id) const
+{
+    return this->operator[](id);
 }
 
 template<class T>
@@ -940,7 +1029,7 @@ Atom SelectorM<T>::atom(const QString &name) const
     auto all = this->atoms(name);
 
     if (all.count() > 1)
-        throw _get_view<Atom>::raise_duplicate(name, all.count());
+        _get_view<Atom>::raise_duplicate(name, all.count());
 
     BOOST_ASSERT( not all.isEmpty() );
 
@@ -954,7 +1043,7 @@ Atom SelectorM<T>::atom(const AtomID &atomid) const
     auto all = this->atoms(atomid);
 
     if (all.count() > 1)
-        throw _get_view<Atom>::raise_duplicate(atomid.toString(), all.count());
+        _get_view<Atom>::raise_duplicate(atomid.toString(), all.count());
 
     BOOST_ASSERT( not all.isEmpty() );
 
@@ -991,7 +1080,7 @@ Residue SelectorM<T>::residue(const QString &name) const
     auto all = this->residues(name);
 
     if (all.count() > 1)
-        throw _get_view<Residue>::raise_duplicate(name, all.count());
+        _get_view<Residue>::raise_duplicate(name, all.count());
 
     BOOST_ASSERT( not all.isEmpty() );
 
@@ -1005,7 +1094,7 @@ Residue SelectorM<T>::residue(const ResID &resid) const
     auto all = this->residues(resid);
 
     if (all.count() > 1)
-        throw _get_view<Residue>::raise_duplicate(resid.toString(), all.count());
+        _get_view<Residue>::raise_duplicate(resid.toString(), all.count());
 
     BOOST_ASSERT( not all.isEmpty() );
 
@@ -1042,7 +1131,7 @@ Chain SelectorM<T>::chain(const QString &name) const
     auto all = this->chains(name);
 
     if (all.count() > 1)
-        throw _get_view<Chain>::raise_duplicate(name, all.count());
+        _get_view<Chain>::raise_duplicate(name, all.count());
 
     BOOST_ASSERT( not all.isEmpty() );
 
@@ -1056,7 +1145,7 @@ Chain SelectorM<T>::chain(const ChainID &chainid) const
     auto all = this->chains(chainid);
 
     if (all.count() > 1)
-        throw _get_view<Chain>::raise_duplicate(chainid.toString(), all.count());
+        _get_view<Chain>::raise_duplicate(chainid.toString(), all.count());
 
     BOOST_ASSERT( not all.isEmpty() );
 
@@ -1093,7 +1182,7 @@ Segment SelectorM<T>::segment(const QString &name) const
     auto all = this->segments(name);
 
     if (all.count() > 1)
-        throw _get_view<Segment>::raise_duplicate(name, all.count());
+        _get_view<Segment>::raise_duplicate(name, all.count());
 
     BOOST_ASSERT( not all.isEmpty() );
 
@@ -1107,7 +1196,7 @@ Segment SelectorM<T>::segment(const SegID &segid) const
     auto all = this->segments(segid);
 
     if (all.count() > 1)
-        throw _get_view<Segment>::raise_duplicate(segid.toString(), all.count());
+        _get_view<Segment>::raise_duplicate(segid.toString(), all.count());
 
     BOOST_ASSERT( not all.isEmpty() );
 
@@ -1144,7 +1233,7 @@ CutGroup SelectorM<T>::cutGroup(const QString &name) const
     auto all = this->cutGroups(name);
 
     if (all.count() > 1)
-        throw _get_view<CutGroup>::raise_duplicate(name, all.count());
+        _get_view<CutGroup>::raise_duplicate(name, all.count());
 
     BOOST_ASSERT( not all.isEmpty() );
 
@@ -1158,7 +1247,7 @@ CutGroup SelectorM<T>::cutGroup(const CGID &cgid) const
     auto all = this->cutGroups(cgid);
 
     if (all.count() > 1)
-        throw _get_view<CutGroup>::raise_duplicate(cgid.toString(), all.count());
+        _get_view<CutGroup>::raise_duplicate(cgid.toString(), all.count());
 
     BOOST_ASSERT( not all.isEmpty() );
 
@@ -1377,9 +1466,9 @@ SelectorM<CutGroup> SelectorM<T>::cutGroups(const CGID &cgid) const
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-QList<typename T::ID> SelectorM<T>::IDs() const
+QList<typename T::Index> SelectorM<T>::IDs() const
 {
-    QList<typename T::ID> ids;
+    QList<typename T::Index> ids;
 
     for (const auto &v : this->vws)
     {
