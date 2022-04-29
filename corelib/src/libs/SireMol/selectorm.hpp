@@ -108,6 +108,7 @@ public:
     bool operator!=(const SelectorM<T> &other) const;
 
     T operator[](int i) const;
+    SelectorM<T> operator[](const SireBase::Slice &slice) const;
     T operator[](const QString &name) const;
     T operator[](const typename T::ID &id) const;
 
@@ -648,7 +649,22 @@ SelectorM<T>::SelectorM(const SelectorMol &mols, const QString &name)
     }
 
     if (this->vws.isEmpty())
-        _get_view<T>::raise_missing(name);
+    {
+        // try a search
+        try
+        {
+            this->operator=(SelectorM<T>(mols.search(name)));
+        }
+        catch(...)
+        {
+            if (name.length() < 5)
+                //likely a name error
+                _get_view<T>::raise_missing(name);
+            else
+                //likely a syntax error
+                throw;
+        }
+    }
 }
 
 template<class T>
@@ -728,7 +744,22 @@ SelectorM<T>::SelectorM(const SelectorM<U> &other, const QString &name)
     }
 
     if (this->vws.isEmpty())
-        _get_view<T>::raise_missing(name);
+    {
+        // try a search
+        try
+        {
+            this->operator=(SelectorM<T>(other.search(name)));
+        }
+        catch(...)
+        {
+            if (name.length() < 5)
+                //likely a name error
+                _get_view<T>::raise_missing(name);
+            else
+                //likely a syntax error
+                throw;
+        }
+    }
 }
 
 template<class T>
@@ -820,6 +851,13 @@ T SelectorM<T>::operator[](int i) const
     throw SireError::program_bug(QObject::tr("Should not get here!"), CODELOC);
 
     return T();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T> SelectorM<T>::operator[](const SireBase::Slice &slice) const
+{
+    return SelectorM<T>(*this, slice);
 }
 
 template<class T>

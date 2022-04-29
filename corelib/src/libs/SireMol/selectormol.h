@@ -124,6 +124,7 @@ public:
     bool operator!=(const SelectorMol &other) const;
 
     Molecule operator[](int i) const;
+    SelectorMol operator[](const SireBase::Slice &slice) const;
     Molecule operator[](const QString &name) const;
     Molecule operator[](const MolIdx &molidx) const;
     Molecule operator[](const MolName &molname) const;

@@ -404,7 +404,9 @@ for __prop in __props:
 # things from moleculeviews more convenient
 
 def __is_chain_class(obj):
-    return obj.what() in ["SireMol::Chain", "SireMol::Selector<SireMol::Chain>"]
+    return obj.what() in ["SireMol::Chain",
+                          "SireMol::Selector<SireMol::Chain>",
+                          "SireMol::SelectorM<SireMol::Chain>"]
 
 
 def __is_selector_class(obj):
@@ -422,7 +424,7 @@ def __is_list_class(obj):
 
 def __from_select_result(obj):
     """Convert the passed SelectResult from a search into the
-       most appropriate MoleculeView-derived class (or MultiMolView)
+       most appropriate MoleculeView-derived class
     """
     views = []
 
@@ -560,7 +562,11 @@ def __fix_getitem(C):
 
 for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule,
           Selector_Atom_, Selector_Residue_,
-          Selector_Chain_, Selector_Segment_]:
+          Selector_Chain_, Selector_Segment_,
+          Selector_CutGroup_,
+          SelectorMol, SelectorM_Atom_, SelectorM_Residue_,
+          SelectorM_Chain_, SelectorM_Segment_,
+          SelectorM_CutGroup_]:
     __fix_getitem(C)
 
 

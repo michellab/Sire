@@ -354,6 +354,11 @@ Molecule SelectorMol::operator[](int i) const
     return this->molecule(i);
 }
 
+SelectorMol SelectorMol::operator[](const Slice &slice) const
+{
+    return this->molecules(slice);
+}
+
 Molecule SelectorMol::operator[](const QString &name) const
 {
     return this->molecule(name);
@@ -521,7 +526,34 @@ SelectorMol SelectorMol::molecules(const QList<qint64> &idxs) const
 
 SelectorMol SelectorMol::molecules(const QString &name) const
 {
-    return this->molecules(MolName(name));
+    try
+    {
+        return this->molecules(MolName(name));
+    }
+    catch(const SireError::exception &e)
+    {
+        try
+        {
+            SelectorMol ret(this->search(name));
+
+            if (ret.count() == 0)
+                throw SireMol::missing_molecule(QObject::tr(
+                    "No molecule matches '%1'").arg(name), CODELOC);
+
+            return ret;
+        }
+        catch(...)
+        {
+            if (name.length() < 5)
+                //likely a name error
+                e.throwSelf();
+            else
+                //likely a syntax error
+                throw;
+        }
+    }
+
+    return SelectorMol();
 }
 
 SelectorMol SelectorMol::molecules(const MolIdx &molid) const
