@@ -43,7 +43,13 @@ void register_SelectResult_class(){
         SelectResult_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") ), "Construct from the passed molecules") );
         SelectResult_exposer.def( bp::init< SireMol::Molecules const & >(( bp::arg("molecules") ), "Construct from the passed molecules") );
         SelectResult_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "Construct from the passed molecules") );
-        SelectResult_exposer.def( bp::init< QList< SireMol::ViewsOfMol > >(( bp::arg("molviews") ), "Construct from the passed molecules") );
+        SelectResult_exposer.def( bp::init< QList< SireMol::Molecule > const & >(( bp::arg("views") ), "Construct from the passed molecules") );
+        SelectResult_exposer.def( bp::init< QList< SireMol::Atom > const & >(( bp::arg("views") ), "Construct from the passed molecules") );
+        SelectResult_exposer.def( bp::init< QList< SireMol::Residue > const & >(( bp::arg("views") ), "Construct from the passed molecules") );
+        SelectResult_exposer.def( bp::init< QList< SireMol::Chain > const & >(( bp::arg("views") ), "Construct from the passed molecules") );
+        SelectResult_exposer.def( bp::init< QList< SireMol::Segment > const & >(( bp::arg("views") ), "Construct from the passed molecules") );
+        SelectResult_exposer.def( bp::init< QList< SireMol::CutGroup > const & >(( bp::arg("views") ), "Construct from the passed molecules") );
+        SelectResult_exposer.def( bp::init< QList< SireMol::ViewsOfMol > const & >(( bp::arg("molviews") ), "Construct from the passed molecules") );
         SelectResult_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::SelectResult::atoms
         

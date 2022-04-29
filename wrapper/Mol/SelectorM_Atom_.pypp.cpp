@@ -1076,6 +1076,19 @@ void register_SelectorM_Atom__class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorM< SireMol::Atom >::toSelectResult
+        
+            typedef SireMol::SelectorM< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::SelectResult ( ::SireMol::SelectorM< SireMol::Atom >::*toSelectResult_function_type)(  ) const;
+            toSelectResult_function_type toSelectResult_function_value( &::SireMol::SelectorM< SireMol::Atom >::toSelectResult );
+            
+            SelectorM_Atom__exposer.def( 
+                "toSelectResult"
+                , toSelectResult_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::Atom >::toString
         
             typedef SireMol::SelectorM< SireMol::Atom > exported_class_t;

@@ -1076,6 +1076,19 @@ void register_SelectorM_Segment__class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorM< SireMol::Segment >::toSelectResult
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::SelectResult ( ::SireMol::SelectorM< SireMol::Segment >::*toSelectResult_function_type)(  ) const;
+            toSelectResult_function_type toSelectResult_function_value( &::SireMol::SelectorM< SireMol::Segment >::toSelectResult );
+            
+            SelectorM_Segment__exposer.def( 
+                "toSelectResult"
+                , toSelectResult_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::Segment >::toString
         
             typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;

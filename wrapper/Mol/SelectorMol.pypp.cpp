@@ -1141,6 +1141,18 @@ void register_SelectorMol_class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorMol::toSelectResult
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::SelectorMol::*toSelectResult_function_type)(  ) const;
+            toSelectResult_function_type toSelectResult_function_value( &::SireMol::SelectorMol::toSelectResult );
+            
+            SelectorMol_exposer.def( 
+                "toSelectResult"
+                , toSelectResult_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorMol::toString
         
             typedef ::QString ( ::SireMol::SelectorMol::*toString_function_type)(  ) const;
