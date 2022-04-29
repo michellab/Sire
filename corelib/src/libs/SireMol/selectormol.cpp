@@ -379,9 +379,14 @@ Molecule SelectorMol::operator[](const MolID &molid) const
     return this->molecule(molid);
 }
 
+SelectResult SelectorMol::toSelectResult() const
+{
+    return SelectResult(this->mols);
+}
+
 SelectResult SelectorMol::search(const QString &search_string) const
 {
-    return this->toMoleculeGroup().search(search_string);
+    return this->toSelectResult().search(search_string);
 }
 
 int SelectorMol::count() const

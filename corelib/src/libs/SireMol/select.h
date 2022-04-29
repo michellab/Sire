@@ -228,7 +228,14 @@ public:
     SelectResult(const Molecules &molecules);
     SelectResult(const MoleculeView &molview);
 
-    SelectResult(const QList<ViewsOfMol> molviews);
+    SelectResult(const QList<Molecule> &views);
+    SelectResult(const QList<Atom> &views);
+    SelectResult(const QList<Residue> &views);
+    SelectResult(const QList<Chain> &views);
+    SelectResult(const QList<Segment> &views);
+    SelectResult(const QList<CutGroup> &views);
+
+    SelectResult(const QList<ViewsOfMol> &molviews);
 
     SelectResult(const SelectResult &other);
 

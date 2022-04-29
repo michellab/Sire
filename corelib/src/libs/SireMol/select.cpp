@@ -451,6 +451,72 @@ SelectResult::SelectResult(const Molecules &molecules)
     }
 }
 
+SelectResult::SelectResult(const QList<Molecule> &views)
+             : ConcreteProperty<SelectResult,Property>()
+{
+    molviews.reserve(views.count());
+
+    for (const auto &view : views)
+    {
+        molviews.append(view);
+    }
+}
+
+SelectResult::SelectResult(const QList<Atom> &views)
+             : ConcreteProperty<SelectResult,Property>()
+{
+    molviews.reserve(views.count());
+
+    for (const auto &view : views)
+    {
+        molviews.append(view);
+    }
+}
+
+SelectResult::SelectResult(const QList<Residue> &views)
+             : ConcreteProperty<SelectResult,Property>()
+{
+    molviews.reserve(views.count());
+
+    for (const auto &view : views)
+    {
+        molviews.append(view);
+    }
+}
+
+SelectResult::SelectResult(const QList<Chain> &views)
+             : ConcreteProperty<SelectResult,Property>()
+{
+    molviews.reserve(views.count());
+
+    for (const auto &view : views)
+    {
+        molviews.append(view);
+    }
+}
+
+SelectResult::SelectResult(const QList<Segment> &views)
+             : ConcreteProperty<SelectResult,Property>()
+{
+    molviews.reserve(views.count());
+
+    for (const auto &view : views)
+    {
+        molviews.append(view);
+    }
+}
+
+SelectResult::SelectResult(const QList<CutGroup> &views)
+             : ConcreteProperty<SelectResult,Property>()
+{
+    molviews.reserve(views.count());
+
+    for (const auto &view : views)
+    {
+        molviews.append(view);
+    }
+}
+
 /** Construct from the passed molecules */
 SelectResult::SelectResult(const MolGroupsBase &molgroups)
              : ConcreteProperty<SelectResult,Property>()
@@ -485,7 +551,7 @@ SelectResult::SelectResult(const MoleculeView &molview)
 }
 
 /** Construct from the passed molecules */
-SelectResult::SelectResult(const QList<ViewsOfMol> views)
+SelectResult::SelectResult(const QList<ViewsOfMol> &views)
              : ConcreteProperty<SelectResult,Property>()
 {
     molviews = views;

@@ -132,6 +132,7 @@ public:
     int size() const;
 
     MoleculeGroup toMoleculeGroup() const;
+    SelectResult toSelectResult() const;
 
     Molecule molecule(int i) const;
     Molecule molecule(const QString &name) const;

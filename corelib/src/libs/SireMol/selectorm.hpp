@@ -115,6 +115,7 @@ public:
     int size() const;
 
     MoleculeGroup toMoleculeGroup() const;
+    SelectResult toSelectResult() const;
 
     Molecule molecule(int i) const;
     Molecule molecule(const QString &name) const;
@@ -779,9 +780,16 @@ T SelectorM<T>::operator[](const typename T::ID &id) const
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
+SelectResult SelectorM<T>::toSelectResult() const
+{
+    return SelectResult(this->vws);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
 SelectResult SelectorM<T>::search(const QString &search_term) const
 {
-    return this->toMoleculeGroup().search(search_term);
+    return this->toSelectResult().search(search_term);
 }
 
 template<class T>
