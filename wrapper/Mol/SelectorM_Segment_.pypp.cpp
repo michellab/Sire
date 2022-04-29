@@ -802,6 +802,19 @@ void register_SelectorM_Segment__class(){
         { //::SireMol::SelectorM< SireMol::Segment >::operator[]
         
             typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorM< SireMol::Segment >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::SelectorM< SireMol::Segment >::operator[] );
+            
+            SelectorM_Segment__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::operator[]
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
             typedef ::SireMol::Segment ( ::SireMol::SelectorM< SireMol::Segment >::*__getitem___function_type)( ::QString const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::SelectorM< SireMol::Segment >::operator[] );
             

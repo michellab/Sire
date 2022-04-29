@@ -802,6 +802,19 @@ void register_SelectorM_Chain__class(){
         { //::SireMol::SelectorM< SireMol::Chain >::operator[]
         
             typedef SireMol::SelectorM< SireMol::Chain > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Chain > ( ::SireMol::SelectorM< SireMol::Chain >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::SelectorM< SireMol::Chain >::operator[] );
+            
+            SelectorM_Chain__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Chain >::operator[]
+        
+            typedef SireMol::SelectorM< SireMol::Chain > exported_class_t;
             typedef ::SireMol::Chain ( ::SireMol::SelectorM< SireMol::Chain >::*__getitem___function_type)( ::QString const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::SelectorM< SireMol::Chain >::operator[] );
             

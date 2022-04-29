@@ -814,6 +814,18 @@ void register_SelectorMol_class(){
         }
         { //::SireMol::SelectorMol::operator[]
         
+            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::SelectorMol::operator[] );
+            
+            SelectorMol_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::operator[]
+        
             typedef ::SireMol::Molecule ( ::SireMol::SelectorMol::*__getitem___function_type)( ::QString const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::SelectorMol::operator[] );
             
