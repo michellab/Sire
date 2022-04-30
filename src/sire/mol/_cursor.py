@@ -57,7 +57,7 @@ class Cursor:
                                         self._connectivity_property).edit()
             except Exception:
                 # the molecule doesn't have a connectivity. Create one for it
-                from Sire.Mol import CovalentBondHunter
+                from ..legacy.Mol import CovalentBondHunter
                 hunter = CovalentBondHunter()
 
                 try:
@@ -518,10 +518,10 @@ class Cursor:
         return items
 
     def properties(self):
-        """Return the Sire.Base.Properties object for the properties
+        """Return the sire.base.Properties object for the properties
            of the current view
         """
-        from Sire.Base import Properties
+        from ..Base import Properties
         p = Properties()
 
         for key in self.keys():

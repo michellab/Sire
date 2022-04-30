@@ -1,5 +1,5 @@
 """
-.. currentmodule:: Sire.FF
+.. currentmodule:: sire.legacy.FF
 
 Classes
 =======
@@ -37,11 +37,11 @@ Classes
 
 """
 
-import Sire.Mol
-import Sire.CAS
+from .. import Mol as _Mol
+from .. import CAS as _CAS
 
 # Import all of the classes and functions from the C++ library
-from Sire.FF._FF import *
+from ._FF import *
 
 # Now define some pure Python functions and classes that are part of
 # the module

@@ -51,7 +51,7 @@ include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_IO" "_init_IO" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/IO )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/IO )
 
 install( TARGETS IO
          LIBRARY DESTINATION ${INSTALLDIR}

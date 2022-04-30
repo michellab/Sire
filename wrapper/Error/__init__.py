@@ -1,5 +1,5 @@
 """
-.. currentmodule:: Sire.Error
+.. currentmodule:: sire.legacy.Error
 
 This module is used to map between Sire's C++ exceptions and
 standard Python exceptions.
@@ -17,9 +17,9 @@ Functions
 
 """
 
-import Sire.Qt
+from .. import Qt as _Qt
 
-from Sire.Error._Error import *
+from ._Error import *
 
 __old_printError = printError
 

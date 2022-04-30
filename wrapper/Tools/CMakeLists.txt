@@ -34,7 +34,7 @@ set ( CONFIGDIRS
     )
 
 # installation
-install( FILES ${SCRIPTS} DESTINATION ${SIRE_PYTHON}/Sire/Tools )
+install( FILES ${SCRIPTS} DESTINATION ${SIRE_PYTHON}/sire/legacy/Tools )
 
 install( DIRECTORY ${CONFIGDIRS} DESTINATION ${SIRE_SHARE}/Tools
          PATTERN .svn EXCLUDE )

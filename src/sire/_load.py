@@ -15,7 +15,7 @@ def supported_formats():
     """Return a string that describes all of the molecular file formats
        that are supported by Sire
     """
-    from Sire.IO import MoleculeParser
+    from .io import MoleculeParser
     return MoleculeParser.supportedFormats()
 
 
@@ -37,15 +37,15 @@ def _get_gromacs_dir():
         if os.path.exists(gromacs_dir) and os.path.isdir(gromacs_dir):
             return gromacs_dir
 
-    import Sire.Config
+    from .config import share_directory
 
-    gromacs_dir = os.path.join(Sire.Config.share_directory, "gromacs")
+    gromacs_dir = os.path.join(share_directory, "gromacs")
 
     if os.path.exists(gromacs_dir):
         return gromacs_dir
 
     # it doesn't exist, so we need to download it
-    gromacs_tbz2 = os.path.join(Sire.Config.share_directory, "gromacs.tar.bz2")
+    gromacs_tbz2 = os.path.join(share_directory, "gromacs.tar.bz2")
 
     if not os.path.exists(gromacs_tbz2):
         try:
@@ -62,7 +62,7 @@ def _get_gromacs_dir():
     try:
         import tarfile
         t = tarfile.open(gromacs_tbz2, "r|bz2")
-        t.extractall(path=Sire.Config.share_directory)
+        t.extractall(path=share_directory)
     except Exception:
         return None
 
@@ -85,7 +85,6 @@ def _resolve_path(path, directory):
                 return [os.path.abspath(unzipped)]
 
             _create_dir(directory)
-            print(os.path.basename(path))
             unzipped = os.path.join(directory, os.path.basename(path)[0:-3])
             if os.path.exists(unzipped) and os.path.isfile(unzipped):
                 print(f"Using cached unzipped file '{unzipped}'...")
@@ -247,9 +246,9 @@ def load(path: _Union[str, _List[str]], *args, **kwargs):
             files (e.g. as a download from a URL or which unzipping files)
 
        Returns:
-            Sire.System.System:
+            sire.system.System:
             The molecules that have been loaded are returned as
-            a Sire.System.System
+            a sire.system.System
 
        Examples:
             >>> mols = load("caffeine.pdb")
@@ -294,10 +293,8 @@ def load(path: _Union[str, _List[str]], *args, **kwargs):
     if len(paths) == 0:
         raise IOError("No valid files specified. Nothing to load?")
 
-    from Sire.IO import load_molecules
-    from Sire.ng import System
-    return System(load_molecules(paths,
-                                 map={"GROMACS_PATH":_get_gromacs_dir()}))
+    from .io import load_molecules
+    return load_molecules(paths, map={"GROMACS_PATH":_get_gromacs_dir()})
 
 
 def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
@@ -308,10 +305,10 @@ def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
        files will be written, one for each specified format.
 
        Args:
-        molecules (:class:`Sire.System.System`, :class:`Sire.Mol.Molecule`, List[:class:`Sire.Mol.Molecule`] etc.)
+        molecules (:class:`sire.system.System`, :class:`sire.mol.Molecule`, List[:class:`sire.mol.Molecule`] etc.)
             The molecule (or molecules) that should be written to the file.
-            This can be anything that can be converted to a :class:`Sire.System.System`,
-            i.e. a single :class:`~Sire.Mol.Molecule` (or :class:`~Sire.Mol.MoleculeView`), or a list of
+            This can be anything that can be converted to a :class:`sire.system.System`,
+            i.e. a single :class:`~sire.mol.Molecule` (or :class:`~sire.mol.MoleculeView`), or a list of
             Molecules (or MoleculeViews)
 
         filename (str):
@@ -352,8 +349,8 @@ def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
             Exception
             (look at `log` to find in detail what went wrong)
     """
-    from Sire.IO import MoleculeParser
-    from Sire.Base import PropertyMap, StringProperty
+    from .io import MoleculeParser
+    from .base import PropertyMap, StringProperty
 
     p = PropertyMap()
 
@@ -364,8 +361,8 @@ def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
         p.set("fileformat", StringProperty(",".join(format)))
 
     if molecules.what() != "SireSystem::System":
-        from Sire.System import System
-        from Sire.Mol import MoleculeGroup
+        from .system import System
+        from .mol import MoleculeGroup
         s = System()
         m = MoleculeGroup("all")
         m.add(molecules)

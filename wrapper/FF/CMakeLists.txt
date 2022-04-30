@@ -6,7 +6,7 @@
 
 # Third Party dependencies of this module
 include_directories( ${BOOST_INCLUDE_DIR}
-                     ${PYTHON_INCLUDE_DIR} 
+                     ${PYTHON_INCLUDE_DIR}
                      ${SIRE_GSL_INCLUDE_PATH} )
 
 # Sire include paths
@@ -23,7 +23,7 @@ include(CMakeAutogenFile.txt)
 set ( WRAPFF_SOURCES
 
       _FF.main.cpp
-     
+
       ${PYPP_SOURCES}
 
     )
@@ -31,7 +31,7 @@ set ( WRAPFF_SOURCES
 # Create the library that holds all of the class wrappers
 add_library (FF ${WRAPFF_SOURCES})
 
-set_target_properties (FF  
+set_target_properties (FF
                        PROPERTIES
                          VERSION ${SIRE_VERSION}
                          SOVERSION ${SIRE_VERSION_MAJOR}
@@ -39,7 +39,7 @@ set_target_properties (FF
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
+
 target_link_libraries (FF
                        SirePython
                        SIRE_SireFF
@@ -50,7 +50,7 @@ include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_FF" "_init_FF" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/FF )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/FF )
 
 install( TARGETS FF
          LIBRARY DESTINATION ${INSTALLDIR}
@@ -59,6 +59,6 @@ install( TARGETS FF
         )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )
 

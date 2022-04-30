@@ -1,5 +1,5 @@
 """
-.. currentmodule:: Sire.System
+.. currentmodule:: sire.legacy.System
 
 Classes
 =======
@@ -55,9 +55,11 @@ Functions
     create_test_molecule
 
 """
-import Sire.FF
 
-from Sire.System._System import *
+from .. import FF as _FF
+from .. import Base as _Base
+
+from ._System import *
 
 System.__setProperty__ = System.setProperty
-System.setProperty = Sire.Base.__set_property__
+System.setProperty = _Base.__set_property__

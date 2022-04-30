@@ -491,5 +491,51 @@ if __name__ == "__main__":
         print("SOMETHING WENT WRONG WHEN COMPILING WRAPPER!")
         sys.exit(-1)
 
+    moduledir = os.path.join(build_dir, "module")
+
+    if not os.path.exists(moduledir):
+        os.makedirs(moduledir)
+
+    if not os.path.isdir(moduledir):
+        print("SOMETHING IS WRONG. %s is not a directory?" % moduledir)
+        sys.exit(-1)
+
+    os.chdir(moduledir)
+
+    if os.path.exists("CMakeCache.txt"):
+        # we have run cmake in this directory before. Run it again.
+        status = subprocess.run([cmake, "."])
+    else:
+        # this is the first time we are running cmake
+        sourcedir = os.path.join(os.path.dirname(os.path.dirname(
+            os.getcwd())), "src", "sire")
+
+        if not os.path.exists(os.path.join(sourcedir, "CMakeLists.txt")):
+            print("SOMETHING IS WRONG. There is no file %s" % os.path.join(sourcedir, "CMakeLists.txt"))
+            sys.exit(-1)
+
+        add_default_cmake_defs(args.wrapper)
+        cmake_cmd = [cmake, *sum([["-D", d[0]] for d in args.wrapper], []),
+                     *sum([["-G", g[0]] for g in args.generator], []),
+                     sourcedir]
+        print(" ".join(cmake_cmd))
+        sys.stdout.flush()
+        status = subprocess.run(cmake_cmd)
+
+    if status.returncode != 0:
+        print("SOMETHING WENT WRONG WHEN USING CMAKE ON MODULE!")
+        sys.exit(-1)
+
+    make_args = make_cmd(NPYCORES, True)
+
+    # Now that cmake has run, we can compile and install wrapper
+    print("NOW RUNNING \"%s\" --build . --target %s" % (cmake, " ".join(make_args)))
+    sys.stdout.flush()
+    status = subprocess.run([cmake, "--build", ".", "--target", *make_args])
+
+    if status.returncode != 0:
+        print("SOMETHING WENT WRONG WHEN COMPILING WRAPPER!")
+        sys.exit(-1)
+
     print("\n\n=================================")
     print("Congratulations. Everything has installed :-)")

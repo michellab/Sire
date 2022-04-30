@@ -24,7 +24,7 @@ include(CMakeAutogenFile.txt)
 set ( WRAPMM_SOURCES
 
       _MM.main.cpp
-     
+
       ${PYPP_SOURCES}
 
     )
@@ -32,7 +32,7 @@ set ( WRAPMM_SOURCES
 # Create the library that holds all of the class wrappers
 add_library (MM ${WRAPMM_SOURCES})
 
-set_target_properties (MM  
+set_target_properties (MM
                        PROPERTIES
                          VERSION ${SIRE_VERSION}
                          SOVERSION ${SIRE_VERSION_MAJOR}
@@ -40,7 +40,7 @@ set_target_properties (MM
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
+
 target_link_libraries (MM
                        SirePython
                        SIRE_SireMM
@@ -51,7 +51,7 @@ include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_MM" "_init_MM" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/MM )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/MM )
 
 install( TARGETS MM
          LIBRARY DESTINATION ${INSTALLDIR}
@@ -60,6 +60,6 @@ install( TARGETS MM
         )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )
 

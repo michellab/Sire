@@ -23,7 +23,7 @@ include(CMakeAutogenFile.txt)
 set ( WRAPCAS_SOURCES
 
       _CAS.main.cpp
-     
+
       ${PYPP_SOURCES}
 
     )
@@ -31,7 +31,7 @@ set ( WRAPCAS_SOURCES
 # Create the library that holds all of the class wrappers
 add_library (CAS ${WRAPCAS_SOURCES})
 
-set_target_properties (CAS  
+set_target_properties (CAS
                        PROPERTIES
                          VERSION ${SIRE_VERSION}
                          SOVERSION ${SIRE_VERSION_MAJOR}
@@ -39,7 +39,7 @@ set_target_properties (CAS
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
+
 target_link_libraries (CAS
                        SirePython
                        SIRE_SireCAS
@@ -47,7 +47,7 @@ target_link_libraries (CAS
                       )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/CAS )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/CAS )
 
 install( TARGETS CAS
          LIBRARY DESTINATION ${INSTALLDIR}
@@ -56,6 +56,6 @@ install( TARGETS CAS
         )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )
 

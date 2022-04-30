@@ -4,6 +4,7 @@ xcode
 build/miniconda.sh
 build/corelib/*
 build/wrapper/*
+build/module/*
 build/downloads/*
 #files for wrapper
 module_info

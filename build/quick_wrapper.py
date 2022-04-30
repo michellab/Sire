@@ -9,7 +9,7 @@
 ## Only use this if you know what you are doing ;-)
 ##
 
-import Sire
+import sire.legacy
 
 import glob
 import os
@@ -19,7 +19,7 @@ inits = glob.glob("../wrapper/*/_*.py")
 
 inits = inits + glob.glob("../wrapper/_*.py")
 
-path = os.path.dirname(Sire.__file__)
+path = os.path.join(os.path.dirname(sire.legacy.__file__))
 
 for init in inits:
     dest = f"{path}/{init.replace('../wrapper/', '')}"

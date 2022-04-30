@@ -1,5 +1,5 @@
 """
-.. currentmodule:: Sire.Base
+.. currentmodule:: sire.legacy.Base
 
 Classes
 =======
@@ -43,18 +43,18 @@ Functions
     wrap
 """
 
-from Sire.Base._Base import *
+from ._Base import *
 
 _wrap_functions = []
 
 _base_wrap = wrap
 
 def wrap(value):
-    """Wrap the passed value into a :class:`~Sire.Base.Property`
+    """Wrap the passed value into a :class:`~sire.base.Property`
        object. This works recursively, wrapping all items in
        a container, such that the returned value is derived
-       from :class:`~Sire.Base.Property` and can be passed to
-       the C++ code in Sire. Note that you normally don't
+       from :class:`~sire.base.Property` and can be passed to
+       the C++ code in sire. Note that you normally don't
        need to call this yourself, as wrapping is handled
        automatically.
     """

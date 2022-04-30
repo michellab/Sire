@@ -1,5 +1,5 @@
 """
-.. currentmodule:: Sire.Vol
+.. currentmodule:: sire.legacy.Vol
 
 Classes
 =======
@@ -28,12 +28,12 @@ Classes
 
 """
 
-import Sire.Base
-import Sire.Maths
-import Sire.Units
+from .. import Base as _Base
+from .. import Maths as _Maths
+from .. import Units as _Units
 
 # Import all of the classes and functions from the C++ library
-from Sire.Vol._Vol import *
+from ._Vol import *
 
 # Now define some pure Python functions and classes that are part of
 # this library...

@@ -1,5 +1,5 @@
 """
-.. currentmodule:: Sire.Squire
+.. currentmodule:: sire.legacy.Squire
 
 Classes
 =======
@@ -21,7 +21,8 @@ Classes
     SQM
 
 """
-import Sire.MM
-import Sire.System
 
-from Sire.Squire._Squire import *
+from .. import MM as _MM
+from .. import System as _System
+
+from ._Squire import *

@@ -119,7 +119,7 @@ void GeneralUnit::assertCompatible(const GeneralUnit &other) const
         throw "Unit conversion error!!!";
     }
 }
-    
+
 QString GeneralUnit::toString() const
 {
     return SireUnits::Dimension::getUnitString(value(), Mass, Length,
@@ -140,9 +140,9 @@ double GeneralUnit::to(const TempBase &other) const
     GeneralUnit general_temp;
     general_temp.temperature = 1;
     general_temp.setScale(other);
-    
+
     this->assertCompatible(general_temp);
-    
+
     return other.convertFromInternal(value()) / other.convertFromInternal();
 }
 
@@ -184,14 +184,14 @@ int GeneralUnit::ANGLE() const
 GeneralUnit& GeneralUnit::operator=(const GeneralUnit &other)
 {
     setScale(other.value());
-    
+
     Mass = other.MASS();
     Length = other.LENGTH();
     Time = other.TIME();
     Charge = other.CHARGE();
     temperature = other.TEMPERATURE();
     Quantity = other.QUANTITY();
-    Angle = other.ANGLE();    
+    Angle = other.ANGLE();
 
     return *this;
 }
@@ -253,7 +253,7 @@ GeneralUnit GeneralUnit::operator*=(const GeneralUnit &other)
      temperature += other.temperature;
      Quantity += other.Quantity;
      Angle += other.Angle;
-     
+
      return *this;
 }
 
@@ -267,7 +267,7 @@ GeneralUnit GeneralUnit::operator/=(const GeneralUnit &other)
     temperature -= other.temperature;
     Quantity -= other.Quantity;
     Angle -= other.Angle;
-    
+
     return *this;
 }
 
@@ -340,9 +340,9 @@ GeneralUnit GeneralUnit::operator/(int val) const
 GeneralUnit GeneralUnit::invert() const
 {
     GeneralUnit ret;
-    
+
     ret.setScale( 1.0 / value() );
-    
+
     ret.Mass = -Mass;
     ret.Length = -Length;
     ret.Time = -Time;
@@ -350,7 +350,7 @@ GeneralUnit GeneralUnit::invert() const
     ret.temperature = -temperature;
     ret.Quantity = -Quantity;
     ret.Angle = -Angle;
-    
+
     return ret;
 }
 
@@ -366,9 +366,13 @@ PropertyPtr GeneralUnit::toProperty() const
     }
     else
     {
+        qDebug() << QObject::tr(
+                "Tell the programmers that they need to add in automatic "
+                "wrapping of units of type '%1'").arg(this->toString());
+
         throw SireError::incomplete_code( QObject::tr(
                 "Tell the programmers that they need to add in automatic "
-                "wrapping of units of type '%s'").arg(this->toString()),
+                "wrapping of units of type '%1'").arg(this->toString()),
                    CODELOC );
         return PropertyPtr();
     }

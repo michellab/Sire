@@ -53,7 +53,7 @@ include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_Mol" "_init_Mol" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/Mol )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/Mol )
 
 install( TARGETS Mol
          LIBRARY DESTINATION ${INSTALLDIR}
@@ -61,7 +61,7 @@ install( TARGETS Mol
          RUNTIME DESTINATION ${INSTALLDIR}
         )
 
-install( FILES __init__.py _cursor.py
+install( FILES __init__.py
          DESTINATION ${INSTALLDIR}
        )
 

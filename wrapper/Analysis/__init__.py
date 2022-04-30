@@ -1,5 +1,5 @@
 """
-.. currentmodule:: Sire.Analysis
+.. currentmodule:: sire.legacy.Analysis
 
 Classes
 =========
@@ -20,8 +20,8 @@ Classes
 
 """
 
-import Sire.Maths
-import Sire.CAS
-import Sire.Units
+from .. import Maths as _Maths
+from .. import CAS as _CAS
+from .. import Units as _Units
 
-from Sire.Analysis._Analysis import *
+from ._Analysis import *

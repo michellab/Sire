@@ -1,5 +1,5 @@
 """
-.. currentmodule:: Sire.CAS
+.. currentmodule:: sire.legacy.CAS
 
 This module provides a basic CAS (computer algebra system)
 This can be used to provide user-defined functions which
@@ -85,19 +85,19 @@ Functions
 """
 
 from lib2to3.pygram import Symbols
-import Sire.Maths
+from .. import Maths
 
 # Import all of the Qt classes
-import Sire.Qt
-import Sire.Base
+from .. import Qt as _Qt
+from .. import Base as _Base
 
 # Import all of the classes and functions from the C++ library
-from Sire.CAS._CAS import *
+from ._CAS import *
 
 # Now define some pure Python functions and classes that are part of
 # this library...
 
-wrap = Sire.Base._add_wrap_function(wrap)
+wrap = _Base._add_wrap_function(wrap)
 
 #enable ** operator for exbase types
 ExBase.__pow__ = pow
@@ -105,7 +105,7 @@ Expression.__pow__ = pow
 
 
 # Define some oft-used Symbols, so that they can be
-# accessed as Sire.CAS.x, or "from Sire.CAS import r, theta, lam"
+# accessed as sire.cas.x, or "from sire.cas import r, theta, lam"
 x = Symbol("x")
 y = Symbol("y")
 z = Symbol("z")

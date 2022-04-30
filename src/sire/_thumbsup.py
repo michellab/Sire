@@ -47,8 +47,9 @@ def get_thumbs_up_info():
     if _thumbs_up_data is not None:
         return _thumbs_up_data
 
-    import Sire
-    from Sire.Base import CPUID
+    import sire
+    import sire.legacy
+    from sire.legacy.Base import CPUID
     import os
     import sys
     import platform
@@ -81,9 +82,9 @@ def get_thumbs_up_info():
     data["uname"] = "%s | %s | %s | %s" % (u.system,u.release,u.machine,u.processor)
 
     # get information about the version of Sire
-    data["version"] = Sire.__version__
-    data["repository"] = Sire.Config.sire_repository_url
-    data["repository_version"] = Sire.Config.sire_repository_version
+    data["version"] = sire.__version__
+    data["repository"] = sire.config.sire_repository_url
+    data["repository_version"] = sire.config.sire_repository_version
 
     # now get information about which Sire app is running
     import sys as _sys

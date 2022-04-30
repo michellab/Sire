@@ -1,7 +1,7 @@
 ####################################################
 #
 # This script uses Py++ to create the Python
-# wrappers for Sire. This script should be run
+# wrappers for sire. This script should be run
 # in a directory that contains the results
 # of scanheaders.py
 #
@@ -297,7 +297,7 @@ def _call_with_release_gil(f):
         f.call_policies = call_policies.custom_call_policies( "bp::release_gil_policy" )
 
 def call_all_with_released_gil(c):
-    """Make sure that all functions in this class are called with 
+    """Make sure that all functions in this class are called with
        the gil released
     """
     try:

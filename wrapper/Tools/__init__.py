@@ -10,10 +10,9 @@
 
 #ensure that the SireQt and SireError libraries are loaded as
 #these are vital for the rest of the module
-import Sire.Qt
-import Sire.Error
-
-from Sire.Units import *
+from .. import Qt as _Qt
+from .. import Error as _Error
+from ..Units import *
 
 import sys
 
@@ -54,7 +53,7 @@ class Parameter:
        my_val = Parameter("my value", default_value, "A test variable")
 
        When you run the script call resolve to set all of the user variables;
-       
+
        Parameter.push( user_params )
 
        Now you can get the user-supplied value using

@@ -51,7 +51,7 @@ include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_Base" "_init_Base" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/Base )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/Base )
 
 install( TARGETS Base
          LIBRARY DESTINATION ${INSTALLDIR}

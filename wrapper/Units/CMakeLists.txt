@@ -23,7 +23,7 @@ include(CMakeAutogenFile.txt)
 set ( WRAPUNITS_SOURCES
 
       _Units.main.cpp
-     
+
       generalunit.cpp
       sireunits_dimensions.cpp
       _Units_global_variables.pyman.cpp
@@ -43,7 +43,7 @@ set_target_properties (Units
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
+
 target_link_libraries (Units
                        SirePython
                        SIRE_SireUnits
@@ -57,7 +57,7 @@ include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_Units" "_init_Units" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/Units )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/Units )
 
 install( TARGETS Units
          LIBRARY DESTINATION ${INSTALLDIR}
@@ -66,6 +66,5 @@ install( TARGETS Units
         )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )
-

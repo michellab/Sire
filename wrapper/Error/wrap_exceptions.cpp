@@ -60,7 +60,7 @@ void set_last_error(const SireError::exception &e)
     QString bt;
 
     if (e.trace().isEmpty())
-        bt = QObject::tr("Backtrace disabled. Call Sire.Error.enable_backtrace_exceptions() to re-enable.");
+        bt = QObject::tr("Backtrace disabled. Call sire.error.enable_backtrace_exceptions() to re-enable.");
     else
         bt = e.trace().join("\n");
 
@@ -90,7 +90,7 @@ LastErrorType get_last_error_details()
 QString get_exception_string(const SireError::exception &e)
 {
     set_last_error(e);
-    return QString("%1: %2 (call Sire.Error.get_last_error_details() for more info)").arg(e.what()).arg(e.why());
+    return QString("%1: %2 (call sire.error.get_last_error_details() for more info)").arg(e.what()).arg(e.why());
 }
 
 void index_error( const SireError::exception &ex )

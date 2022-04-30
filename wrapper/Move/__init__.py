@@ -1,5 +1,5 @@
 """
-.. currentmodule:: Sire.Move
+.. currentmodule:: sire.legacy.Move
 
 Classes
 =======
@@ -79,9 +79,9 @@ Classes
 
 """
 
-import Sire.Units
-import Sire.Mol
-import Sire.System
-import Sire.Cluster
+from .. import Units as _Units
+from .. import Mol as _Mol
+from .. import System as _System
+from .. import Cluster as _Cluster
 
-from Sire.Move._Move import *
+from ._Move import *

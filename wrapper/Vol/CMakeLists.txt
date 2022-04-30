@@ -23,17 +23,17 @@ include(CMakeAutogenFile.txt)
 set ( WRAPVOL_SOURCES
 
       _Vol.main.cpp
-     
+
       ${PYPP_SOURCES}
 
       #SireVol_containers.cpp
-      
+
     )
 
 # Create the library that holds all of the class wrappers
 add_library (Vol ${WRAPVOL_SOURCES})
 
-set_target_properties (Vol  
+set_target_properties (Vol
                        PROPERTIES
                          VERSION ${SIRE_VERSION}
                          SOVERSION ${SIRE_VERSION_MAJOR}
@@ -41,7 +41,7 @@ set_target_properties (Vol
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
+
 target_link_libraries (Vol
                        SirePython
                        SIRE_SireVol
@@ -52,7 +52,7 @@ include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_Vol" "_init_Vol" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/Vol )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/Vol )
 
 install( TARGETS Vol
          LIBRARY DESTINATION ${INSTALLDIR}
@@ -61,6 +61,6 @@ install( TARGETS Vol
         )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )
 

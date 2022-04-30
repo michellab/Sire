@@ -74,7 +74,7 @@ include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_Move" "_init_Move" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/Move )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/Move )
 
 install( TARGETS Move
          LIBRARY DESTINATION ${INSTALLDIR}

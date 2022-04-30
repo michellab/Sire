@@ -4,18 +4,18 @@
 # where Sire is installed etc.
 #
 
-import Sire.Base
+import sire.legacy.Base as _Base
 
-binary_directory = Sire.Base.getBinDir()
-library_directory = Sire.Base.getLibDir()
-include_directory = "%s/include" % Sire.Base.getInstallDir()
-share_directory = Sire.Base.getShareDir()
+binary_directory = _Base.getBinDir()
+library_directory = _Base.getLibDir()
+include_directory = "%s/include" % _Base.getInstallDir()
+share_directory = _Base.getShareDir()
 parameter_directory = "%s/parameters" % share_directory
-test_directory = "%s/test" % Sire.Base.getInstallDir()
+test_directory = "%s/test" % _Base.getInstallDir()
 
-sire_repository_url = Sire.Base.getRepositoryURL()
-sire_repository_version = Sire.Base.getRepositoryVersion()
-sire_repository_branch = Sire.Base.getRepositoryBranch()
+sire_repository_url = _Base.getRepositoryURL()
+sire_repository_version = _Base.getRepositoryVersion()
+sire_repository_branch = _Base.getRepositoryBranch()
 sire_python_repository_url = "@SVN_REPOSITORY_URL@"
 sire_python_repository_version = "@SVN_VERSION_NUMBER@"
 

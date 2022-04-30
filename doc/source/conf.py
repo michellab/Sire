@@ -6,7 +6,7 @@
 # serve to show the default.
 from __future__ import print_function
 
-import Sire
+import sire
 import sys
 import glob
 import os
@@ -54,12 +54,12 @@ copyright = u'2006-2022'
 branch = os.getenv("SIRE_BRANCH", None)
 
 if branch is None:
-    version = Sire.__version__.split("+")[0]
+    version = sire.__version__.split("+")[0]
     # The full version, including alpha/beta/rc tags.
-    release = Sire.__version__
-    branch = Sire.__branch__
-    revisionid = Sire.__revisionid__
-    repository = Sire.__repository__
+    release = sire.__version__
+    branch = sire.__branch__
+    revisionid = sire.__revisionid__
+    repository = sire.__repository__
 else:
     version = os.getenv("SIRE_VERSION")
     release = os.getenv("SIRE_RELEASE")
@@ -220,7 +220,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-    ('index', 'Sire.tex', u'Sire Documentation',
+    ('index', 'sire.tex', u'Sire Documentation',
      u'Michel Lab', 'manual'),
 ]
 

@@ -1,5 +1,5 @@
 """
-.. currentmodule:: Sire.Units
+.. currentmodule:: sire.legacy.Units
 
 Classes
 =======
@@ -24,9 +24,8 @@ Functions
     convertTo
 
 """
-from  Sire.Units._Units import *
+from ._Units import *
 
-import Sire.Base
+from .. import Base as _Base
 
-wrap = Sire.Base._add_wrap_function(wrap)
-
+wrap = _Base._add_wrap_function(wrap)
