@@ -75,7 +75,55 @@ QDataStream &operator>>(QDataStream &ds, CPUID &cpuid)
 
 static QHash<QString,QString> getCPUInfo()
 {
-    return QHash<QString,QString>();
+    QHash<QString,QString> info;
+
+    #if defined(__APPLE__) || defined(__FreeBSD__)
+        char buffer[1024];
+        size_t size=sizeof(buffer);
+        int err = 0;
+
+        err = sysctlbyname("machdep.cpu.brand_string", &buffer, &size, NULL, 0);
+        if (err == 0)
+        {
+            info["CPU"] = QString(buffer);
+        }
+
+        uint64_t val = 0;
+        size = sizeof(val);
+
+        err = sysctlbyname("hw.cpufrequency", &val, &size, NULL, 0);
+        if (err == 0)
+        {
+            info["CPU.frequency"] = QString("%1 GHz").arg(val / 1000000000);
+        }
+
+        err = sysctlbyname("hw.ncpu", &val, &size, NULL, 0);
+        if (err == 0)
+        {
+            info["CPU.num_cores"] = QString("%1").arg(val);
+        }
+
+        err = sysctlbyname("hw.optional.arm64", &val, &size, NULL, 0);
+        if (err == 0)
+        {
+            if (val == 1)
+            {
+                info["CPU.architecture"] = "ARM64";
+            }
+            else
+            {
+                info["CPU.architecture"] = "x86-64";
+            }
+        }
+
+        err = sysctlbyname("hw.memsize", &val, &size, NULL, 0);
+        if (err == 0)
+        {
+            info["memory"] = QString("%1 GB").arg(val / (1024*1024*1024));
+        }
+    #endif
+
+    return info;
 }
 
 /** Return the list of all searchable supportable features */
@@ -86,17 +134,15 @@ QStringList CPUID::supportableFeatures() const
 
 QHash<QString,QString>* CPUID::global_props = 0;
 
+Q_GLOBAL_STATIC( QMutex, globalMutex )
+
 QHash<QString,QString>* CPUID::getCPUID()
 {
-    //NOT THREAD SAFE - COULD END UP CREATING TWO CPUIDs IN WORST CASE
     if (not global_props)
     {
-        QHash<QString,QString> *p = new QHash<QString,QString>(getCPUInfo());
+        QMutexLocker lkr( globalMutex() );
 
-        if (not global_props)
-            global_props = p;
-        else
-            delete p;
+        global_props = new QHash<QString,QString>(getCPUInfo());
     }
 
     return global_props;
