@@ -5,5 +5,5 @@
 
 from ..legacy import Base as _Base
 
-from ..utils import pythonize_module as _pythonize_module
-_pythonize_module(_Base)
+from .. import use_new_api as _use_new_api
+_use_new_api()

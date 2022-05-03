@@ -4,4 +4,6 @@
 """
 
 from ._try_import import *
-from ._pythonize import *
+
+from .. import use_new_api as _use_new_api
+_use_new_api()

@@ -8,7 +8,6 @@
 set ( SCRIPTS
         __init__.py
         _try_import.py
-        _pythonize.py
     )
 
 # installation

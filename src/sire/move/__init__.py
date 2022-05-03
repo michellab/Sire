@@ -5,5 +5,5 @@
 
 from ..legacy import Move as _Move
 
-from ..utils import pythonize_module as _pythonize_module
-_pythonize_module(_Move)
+from .. import use_new_api as _use_new_api
+_use_new_api()

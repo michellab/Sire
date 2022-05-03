@@ -10,8 +10,8 @@ _mol_version = _mol.__file__
 
 from ..legacy import IO as _IO
 
-from ..utils import pythonize_module as _pythonize_module
-_pythonize_module(_IO)
+from .. import use_new_api as _use_new_api
+_use_new_api()
 
 
 def load_molecules(*args, **kwargs):

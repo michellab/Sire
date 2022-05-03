@@ -325,5 +325,6 @@ config.version_string = _version_string
 ### Here are the functions and other data that form the public API
 ### of Sire
 
+from ._pythonize import *
 from ._load import *
 from ._thumbsup import *

@@ -128,7 +128,7 @@ add_subdirectory (system)
 add_subdirectory (units)
 add_subdirectory (vol)
 
-install( FILES __init__.py _load.py _thumbsup.py
+install( FILES __init__.py _load.py _thumbsup.py _pythonize.py
          DESTINATION ${SIRE_PYTHON}/sire
        )
 
