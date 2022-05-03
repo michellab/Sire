@@ -4,12 +4,12 @@ Indexing Residues
 
 Residues are collections of atoms. They typically represent an amino
 acid residue in a protein. Residues are implemented via the
-:class:`~Sire.Mol.Residue` class, which itself is a molecular container
-for :class:`~Sire.Mol.Atom` objects. An atom can only belong to one
+:class:`~sire.mol.Residue` class, which itself is a molecular container
+for :class:`~sire.mol.Atom` objects. An atom can only belong to one
 residue at a time (and they don't need to be assigned to a residue).
 
 You can access residues in a molecule container using the
-:func:`~Sire.Mol.Residue.residue` and :func:`~Sire.Mol.Residue.residues`
+:func:`~sire.mol.Residue.residue` and :func:`~sire.mol.Residue.residues`
 functions, which are available on all of the molecular container types.
 
 >>> print(mol.residue(0))
@@ -34,7 +34,7 @@ Selector<SireMol::Residue>( size=155
 
 returns all residues that are named "ALA".
 
-The :func:`~Sire.Mol.Residue.residue` will raise a KeyError if more than
+The :func:`~sire.mol.Residue.residue` will raise a KeyError if more than
 one residue matches the search.
 
 >>> print(mol.residue("ALA"))
@@ -61,8 +61,8 @@ Selector<SireMol::Residue>( size=10
 9:  Residue( ALA:23  num_atoms=5 )
 )
 
-The result, a :class:`~Sire.Mol.Selector_Residue_` is also a molecular
-container, and can be used like :class:`~Sire.Mol.Selector_Atom_`.
+The result, a :class:`~sire.mol.Selector_Residue_` is also a molecular
+container, and can be used like :class:`~sire.mol.Selector_Atom_`.
 
 >>> print(mol.residues("ALA")[0:5])
 Selector<SireMol::Residue>( size=5
@@ -203,9 +203,9 @@ state (e.g. "HIS", "HIP", "HIE" or "HID").
 Finding the atoms in a residue
 ------------------------------
 
-Because both :class:`~Sire.Mol.Residue` and :class:`~Sire.Mol.Selector_Residue_`
+Because both :class:`~sire.mol.Residue` and :class:`~sire.mol.Selector_Residue_`
 are molecular containers, they also have their own
-:func:`~Sire.Mol.Residue.atom` and :func:`~Sire.Mol.Residue.atoms` functions,
+:func:`~sire.mol.Residue.atom` and :func:`~sire.mol.Residue.atoms` functions,
 which behave as you would expect.
 
 >>> print(mol["resname ALA"].atoms("CA"))
@@ -224,7 +224,7 @@ Selector<SireMol::Atom>( size=155
 )
 
 You can get all of the atoms in a residue by calling the
-:func:`~Sire.Mol.Residue.atoms` function without any arguments.
+:func:`~sire.mol.Residue.atoms` function without any arguments.
 
 >>> mol["residx 0"].atoms()
 Selector<SireMol::Atom>( size=8
@@ -276,7 +276,7 @@ Selector<SireMol::Residue>( size=1494
 
 This has returned all of the residues that contain an atom called "CA".
 
-Another way to do this would be to call the :func:`~Sire.Mol.Selected_Atom_.residues`
+Another way to do this would be to call the :func:`~sire.mol.Selected_Atom_.residues`
 function on the molecular container, e.g.
 
 >>> print(mol["CA"].residues())
@@ -299,7 +299,7 @@ Uniquely identifying a residue
 
 You uniquely identify a residue in a molecule using its residue index
 (``residx``). You can get the index of a residue in a molecule by
-calling its :func:`~Sire.Mol.Residue.index` function.
+calling its :func:`~sire.mol.Residue.index` function.
 
 >>> print(mol.residue(0).index())
 ResIdx(0)
@@ -314,9 +314,9 @@ Residue identifying types
 -------------------------
 
 Another way to index residues is to use the residue indexing types, i.e.
-:class:`~Sire.Mol.ResIdx`, :class:`~Sire.Mol.ResName` and
-:class:`~Sire.Mol.ResNum`. The easiest way to create these is
-by using the function :func:`Sire.resid`.
+:class:`~sire.mol.ResIdx`, :class:`~sire.mol.ResName` and
+:class:`~sire.mol.ResNum`. The easiest way to create these is
+by using the function :func:`sire.resid`.
 
 >>> print(mol[sr.resid("ALA")])
 Selector<SireMol::Residue>( size=155
@@ -334,12 +334,12 @@ Selector<SireMol::Residue>( size=155
 )
 
 This returns the residues called "ALA", as ``sr.resid("ALA")`` has created
-an :class:`~Sire.Mol.ResName` object.
+an :class:`~sire.mol.ResName` object.
 
 >>> print(sr.resid("ALA"))
 ResName('ALA')
 
-This function will create an :class:`~Sire.Mol.ResNum` if it is passed
+This function will create an :class:`~sire.mol.ResNum` if it is passed
 an integer, e.g.
 
 >>> print(sr.resid(5))
@@ -366,7 +366,7 @@ Selector<SireMol::Residue>( size=2
 Iterating over residues
 -----------------------
 
-The :class:`~Sire.Mol.Selector_Residue_` class is iterable, meaning that
+The :class:`~sire.mol.Selector_Residue_` class is iterable, meaning that
 it can be used in loops.
 
 >>> for res in mol["resname ALA and resnum < 30"]:

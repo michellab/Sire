@@ -13,17 +13,17 @@ arbitrary energy expressions that involve user-defined parameters
 
 The module is built from some core classes.
 
-:class:`~Sire.CAS.Symbol`
+:class:`~sire.cas.Symbol`
     This represents an algebraic symbol.
 
-:class:`~Sire.CAS.Expression`
+:class:`~sire.cas.Expression`
     This represents a complete algebraic expression.
 
-:func:`~Sire.CAS.create_symbols`
+:func:`~sire.cas.create_symbols`
     Create symbols from the passed strings.
 
-There are also lots of functions defined, e.g. `~Sire.CAS.Cos`,
-`~Sire.CAS.Sin`, `~Sire.CAS.Coth` etc.
+There are also lots of functions defined, e.g. `~sire.cas.Cos`,
+`~sire.cas.Sin`, `~sire.cas.Coth` etc.
 
 Example
 -------

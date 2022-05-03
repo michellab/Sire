@@ -6,11 +6,11 @@ Segments are collections of atoms, sometimes non-contiguously collections
 of atoms. They typically represent a user-defined segment within a molecule
 or protein. An atom can only belong to one segment at a time. Atoms do
 not need to be assigned to segments. Segments are implemented via the
-:class:`~Sire.Mol.Segment` class, which is itself a molecular container
-for :class:`~Sire.Mol.Atom` objects.
+:class:`~sire.mol.Segment` class, which is itself a molecular container
+for :class:`~sire.mol.Atom` objects.
 
 You can access the segments in a molecule container using the
-:func:`~Sire.Mol.Segment.segment` and :func:`~Sire.Mol.Segment.segments` functions,
+:func:`~sire.mol.Segment.segment` and :func:`~sire.mol.Segment.segments` functions,
 which are available on all of the molecular container types.
 
 Not many molecules have named segments, so first let's load a molecule
@@ -93,9 +93,9 @@ Segment( MAIN num_atoms=66 )
 Finding the atoms in a segment
 ------------------------------
 
-Because both :class:`~Sire.Mol.Segment` and :class:`~Sire.Mol.Selector_Segment_`
+Because both :class:`~sire.mol.Segment` and :class:`~sire.mol.Selector_Segment_`
 are molecular containers, they also have their own
-:func:`~Sire.Mol.Segment.atom` and :func:`~Sire.Mol.Segment.atoms` functions,
+:func:`~sire.mol.Segment.atom` and :func:`~sire.mol.Segment.atoms` functions,
 which behave as you would expect.
 
 >>> print(mol["segname MAIN"].atoms("C"))
@@ -212,7 +212,7 @@ Uniquely identifying a segment
 
 You uniquely identify a segment in a molecule using its segment index
 (``segidx``). You can get the index of a segment in a molecule by
-calling its :func:`~Sire.Mol.Segment.index` function.
+calling its :func:`~sire.mol.Segment.index` function.
 
 >>> print(mol.segment(0).index())
 SegIdx(0)
@@ -227,18 +227,18 @@ Segment identifying types
 -------------------------
 
 Another way to index segments is to use the segment identifying types, i.e.
-:class:`~Sire.Mol.SegName` and :class:`~Sire.Mol.SegIdx`. The
+:class:`~sire.mol.SegName` and :class:`~sire.mol.SegIdx`. The
 easiest way to create these is by using the function
-:func:`Sire.segid`.
+:func:`sire.segid`.
 
-Use strings to create :class:`~Sire.Mol.SegName` objects,
+Use strings to create :class:`~sire.mol.SegName` objects,
 
 >>> print(sr.segid("MAIN"))
 SegName('MAIN')
 >>> print(mol[sr.segid("MAIN")])
 Segment( MAIN num_atoms=66 )
 
-and integers to create :class:`~Sire.Mol.SegIdx` objects.
+and integers to create :class:`~sire.mol.SegIdx` objects.
 
 >>> print(sr.segid(0))
 SegIdx(0)
@@ -264,7 +264,7 @@ Segment( MAIN num_atoms=66 )
 Iterating over segments
 -----------------------
 
-The :class:`~Sire.Mol.Selector_Segment_` class is iterable, meaning that
+The :class:`~sire.mol.Selector_Segment_` class is iterable, meaning that
 it can be used in loops.
 
 >>> for segment in mol.segments():
@@ -291,7 +291,7 @@ Segment( MAIN num_atoms=66 ) Residue( CBX:12  num_atoms=3 ) Atom( CA:66 )
 Finding all segment names
 -------------------------
 
-You can find the names of all segments using the :class:`~Sire.Mol.Select_Segment_.names`
+You can find the names of all segments using the :class:`~sire.mol.Select_Segment_.names`
 function.
 
 >>> print(mol.segments().names())

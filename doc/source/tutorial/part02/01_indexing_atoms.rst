@@ -24,7 +24,7 @@ IndexError                                Traceback (most recent call last)
 Input In [32], in <cell line: 1>()
 ----> 1 print(mol[100000])
 <BLANKLINE>
-File ~/sire.app/lib/python3.8/site-packages/Sire/Mol/__init__.py:414, in __fixed__getitem__(obj, key)
+File ~/sire.app/lib/python3.8/site-packages/sire/mol/__init__.py:414, in __fixed__getitem__(obj, key)
     412         return obj.residue(key)
     413     else:
 --> 414         return obj.atom(key)
@@ -67,9 +67,9 @@ Selector<SireMol::Atom>( size=10
 
 gives the first 10 atoms in reverse order.
 
-The returned :class:`~Sire.Mol.Selector_Atom_` is itself a
+The returned :class:`~sire.mol.Selector_Atom_` is itself a
 molecular container, which has all of the same indexing and
-other functions as :class:`~Sire.Mol.Atom` et al.
+other functions as :class:`~sire.mol.Atom` et al.
 
 >>> print(mol[0:10][-1:4:-1])
 Selector<SireMol::Atom>( size=5
@@ -95,8 +95,8 @@ Selector<SireMol::Atom>( size=5
 
 This gives the atoms at indicies 0, 2, 4, 6, and 8.
 
-This indexing is a shorthand for calling the :func:`~Sire.Mol.Atom.atom`
-(for single) and :func:`~Sire.Mol.Atom.atoms` (for multiple) atom functions,
+This indexing is a shorthand for calling the :func:`~sire.mol.Atom.atom`
+(for single) and :func:`~sire.mol.Atom.atoms` (for multiple) atom functions,
 which are available on all of the molecular container types.
 
 You can call these directly, e.g.
@@ -113,10 +113,10 @@ Selector<SireMol::Atom>( size=5
 4:  Atom( N:9     [ -55.50,    9.04,   43.36] )
 )
 
-The :func:`~Sire.Mol.Atom.atom` function is guaranteed to always return
+The :func:`~sire.mol.Atom.atom` function is guaranteed to always return
 either a single atom, or raise an exception if this is not possible.
 
-The :func:`~Sire.Mol.Atom.atoms` function will return either a single
+The :func:`~sire.mol.Atom.atoms` function will return either a single
 atom or a selector of atoms, or raise an exception if this is not possible.
 
 Accessing by name
@@ -145,7 +145,7 @@ Selector<SireMol::Atom>( size=1494
 
 Note that there are multiple atoms in this molecule called "C", hence
 several are returned. This would raise an exception if you called
-the shorthand :func:`~Sire.Mol.Atom.atom` function with this name,
+the shorthand :func:`~sire.mol.Atom.atom` function with this name,
 
 >>> print(mol.atom("C"))
 ---------------------------------------------------------------------------
@@ -162,7 +162,7 @@ atoms in this protein that are called "C" and Sire does not know which
 one you want.
 
 In this case, you would have to use the shorthand
-:func:`~Sire.Mol.Atom.atoms` function.
+:func:`~sire.mol.Atom.atoms` function.
 
 >>> print(mol.atoms("C"))
 Selector<SireMol::Atom>( size=1494
@@ -182,11 +182,11 @@ Selector<SireMol::Atom>( size=1494
 .. note::
 
     Using the index operator (``mol["C"]``) is easiest, as it will always
-    do the right thing. Use the :func:`~Sire.Mol.Atom.atom` and
-    :func:`~Sire.Mol.Atom.atoms` functions only when you want to
+    do the right thing. Use the :func:`~sire.mol.Atom.atom` and
+    :func:`~sire.mol.Atom.atoms` functions only when you want to
     ensure that the container will return atoms.
 
-As before, the returned :class:`~Sire.Mol.Selector_Atom_` is itself a container,
+As before, the returned :class:`~sire.mol.Selector_Atom_` is itself a container,
 and so also has its own ``.atom()``, ``.atoms()`` and indexing functions, e.g.
 
 >>> print(mol["C"][0])
@@ -507,7 +507,7 @@ Atom( N:1     [ -54.07,   11.27,   41.93] )
 
 This has printed the first atom in the molecule.
 
-You can get an atom's index using the :func:`~Sire.Mol.Atom.index` function.
+You can get an atom's index using the :func:`~sire.mol.Atom.index` function.
 
 >>> print(mol["atomidx 0"].index())
 AtomIdx(0)
@@ -524,9 +524,9 @@ Atom identifying types
 ----------------------
 
 Another way to index atoms is to use the atom indexing types, i.e.
-:class:`~Sire.Mol.AtomIdx`, :class:`~Sire.Mol.AtomName` and
-:class:`~Sire.Mol.AtomNum`. The easiest way to create these is
-by using the function :func:`Sire.atomid`.
+:class:`~sire.mol.AtomIdx`, :class:`~sire.mol.AtomName` and
+:class:`~sire.mol.AtomNum`. The easiest way to create these is
+by using the function :func:`sire.atomid`.
 
 >>> print(mol[sr.atomid("CA")])
 Selector<SireMol::Atom>( size=1494
@@ -544,12 +544,12 @@ Selector<SireMol::Atom>( size=1494
 )
 
 This returns the atoms called "CA", as ``sr.atomid("CA")`` has created
-an :class:`~Sire.Mol.AtomName` object.
+an :class:`~sire.mol.AtomName` object.
 
 >>> print(sr.atomid("CA"))
 AtomName('CA')
 
-This function will create an :class:`~Sire.Mol.AtomNum` if it is passed
+This function will create an :class:`~sire.mol.AtomNum` if it is passed
 an integer, e.g.
 
 >>> print(sr.atomid(1))
@@ -567,7 +567,7 @@ Atom( CA:10   [ -56.02,    7.64,   43.47] )
 Iterating over atoms
 --------------------
 
-The :class:`~Sire.Mol.Selector_Atom_` class is iterable, meaning that
+The :class:`~sire.mol.Selector_Atom_` class is iterable, meaning that
 it can be used in loops.
 
 >>> for atom in mol["atomnum < 10"]:
@@ -663,5 +663,5 @@ AtomName('CZ') 186
 AtomName('OD1') 122
 AtomName('OD2') 84
 
-You could do something similar using the :func:`~Sire.Mol.Selector_Atom_.numbers`
+You could do something similar using the :func:`~sire.mol.Selector_Atom_.numbers`
 function to get the numbers of all of the atoms.

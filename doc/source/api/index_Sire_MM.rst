@@ -14,28 +14,28 @@ The useful classes are those that implement complete molecular
 mechanics forcefields. Sire does this by using forcefield classes
 that represent different forcefield components:
 
-:class:`~Sire.MM.InterCLJFF`
+:class:`~sire.mm.InterCLJFF`
     Calculates the intermolecular coulomb and Lennard Jones (CLJ)
     energy of all contained molecules.
 
-:class:`~Sire.MM.InterGroupCLJFF`
+:class:`~sire.mm.InterGroupCLJFF`
     Calculates the intermolecular coulomb and Lennard Jones (CLJ)
     energy between the two groups of molecules contained within.
 
-:class:`~Sire.MM.IntraCLJFF`
+:class:`~sire.mm.IntraCLJFF`
     Calculates the intramolecular coulomb and Lennard Jones (CLJ)
     energy within all contained molecules.
 
-:class:`~Sire.MM.IntraGroupCLJFF`
+:class:`~sire.mm.IntraGroupCLJFF`
     Calculates the intramolecular coulomb and Lennard Jones (CLJ)
     energy between groups within a molecule.
 
-:class:`~Sire.MM.InternalFF`
+:class:`~sire.mm.InternalFF`
     Calculates the intramolecular bond, angle and dihedral energy
     of contained molecules. These energies are calculated via
     algebraic expressions.
 
-Each forcefield exposes its energy components as :mod:`Sire.CAS`
+Each forcefield exposes its energy components as :mod:`sire.cas`
 algebraic symbols. You can then assemble a total energy by combining
 these symbols in whatever way you need.
 

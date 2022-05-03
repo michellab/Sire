@@ -3,14 +3,14 @@ Sire
 ====
 
 This is the top-level Python package that provides the core objects
-and functions used in Sire.
+and functions used in ``sire``.
 
 The package centers around a few core functions:
 
-:func:`~Sire.load`
+:func:`~sire.load`
     Load one or more molecules from the specified file(s) or URL(s).
 
-:func:`~Sire.save`
+:func:`~sire.save`
     Save a molecule or molecules to a file.
 
 .. toctree::

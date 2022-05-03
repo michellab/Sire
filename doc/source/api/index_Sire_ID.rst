@@ -5,13 +5,13 @@ Sire.ID
 This module holds the base classes of all of the objects used
 to identify things in Sire. The core identifier types are;
 
-:class:`~Sire.ID.Index`
+:class:`~sire.id.Index`
     Identify by index (the 0-indexed position in the container)
 
-:class:`~Sire.ID.Number`
+:class:`~sire.id.Number`
     Identify by a user-assigned number, e.g. the residue number
 
-:class:`~Sire.ID.Name`
+:class:`~sire.id.Name`
     Identify by a user-assigned name, e.g. the residue name
 
 .. toctree::

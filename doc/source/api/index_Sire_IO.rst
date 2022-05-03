@@ -20,12 +20,12 @@ the same file format.
 
 .. note::
     Note that you rarely need to use any of the functions or classes
-    from this module directly. The :func:`Sire.load` and :func:`Sire.save`
+    from this module directly. The :func:`sire.load` and :func:`sire.save`
     functions will do nearly everything you need.
 
 The package centers around a few core classes
 
-:class:`~Sire.IO.MoleculeParser`
+:class:`~sire.io.MoleculeParser`
     Load one or more molecules from the specified file(s) or URL(s).
 
 .. toctree::

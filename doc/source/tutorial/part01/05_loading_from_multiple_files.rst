@@ -23,7 +23,7 @@ whichever you find easiest.
 ...                 "https://siremol.org/m/ala.crd"])
 
 If the files or URLs have a common base, then you can save some typing
-by using :func:`Sire.expand`, e.g.
+by using :func:`sire.expand`, e.g.
 
 >>> mols = sr.load(sr.expand("https://siremol.org/m",
 ...                          "ala.top", "ala.crd"))

@@ -3,11 +3,11 @@ Sire.Mol
 ========
 
 This module provides all of the molecular classes in Sire. The molecular
-model in Sire is based on :class:`Sire.Base.Property` combined with
-:class:`Sire.Mol.MoleculeInfo`.
+model in Sire is based on :class:`sire.base.Property` combined with
+:class:`sire.mol.MoleculeInfo`.
 
 A molecule is simply a collection of arbitrary properties, which are
-indexed via the identities held in the attached :class:`~Sire.Mol.MoleculeInfo`.
+indexed via the identities held in the attached :class:`~sire.mol.MoleculeInfo`.
 
 This core data type (called ``MoleculeData`` in C++) is not exposed
 directly. Instead, you interact with this via a series of types of
@@ -24,12 +24,12 @@ View Classes
 ------------
 
 You can view the data using one of the view classes. These include
-:class:`~Sire.Mol.Atom`, :class:`~Sire.Mol.Residue`, :class:`~Sire.Mol.Chain`, :class:`~Sire.Mol.Segment` and :class:`~Sire.Mol.Molecule`, which provide views of atoms, residues,
+:class:`~sire.mol.Atom`, :class:`~sire.mol.Residue`, :class:`~sire.mol.Chain`, :class:`~sire.mol.Segment` and :class:`~sire.mol.Molecule`, which provide views of atoms, residues,
 chains, segments or whole molecules.
 
-There are other view classes, e.g. :class:`~Sire.Mol.PartialMolecule`,
+There are other view classes, e.g. :class:`~sire.mol.PartialMolecule`,
 which can view an arbitrary selection of atoms. The atoms selected
-are held in the :class:`~Sire.Mol.AtomSelection` class.
+are held in the :class:`~sire.mol.AtomSelection` class.
 
 Edit Classes
 ------------
@@ -47,7 +47,7 @@ back to the molecule, e.g.
     "My Molecule"
 
 We also provide a simpler interface to editing molecules via
-the :class:`Sire.Cursor` interface. This creates a cursor that automatically
+the :class:`sire.Cursor` interface. This creates a cursor that automatically
 handles the change to the underlying edit classes, e.g.
 
 .. code-block:: python
@@ -88,7 +88,7 @@ Selector Classes
 
 These provide views that hold selections within molecules. These selections
 could be a set of Atoms, or Residues etc. You can index within molecules
-using the ID classes, e.g. :class:`~Sire.Mol.AtomName` to locate by
+using the ID classes, e.g. :class:`~sire.mol.AtomName` to locate by
 atom name. Sire will do its best to work out what you mean if you just
 pass in a string (likely a name) or a number (likely an index).
 

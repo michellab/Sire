@@ -3,13 +3,13 @@ Indexing Chains
 ===============
 
 Chains are collections of residues. They typically represent a single
-chain in a protein. Chains are implemented via the :class:`~Sire.Mol.Chain`
+chain in a protein. Chains are implemented via the :class:`~sire.mol.Chain`
 class, which itself is a molecular container for
-:class:`~Sire.Mol.Residue` objects. A residue can only belong to one
+:class:`~sire.mol.Residue` objects. A residue can only belong to one
 chain at a time (and residues do not need to be assigned to chains).
 
 You can access the chains in a molecule container using the
-:func:`~Sire.Mol.Chain.chain` and :func:`~Sire.Mol.Chain.chains` functions,
+:func:`~sire.mol.Chain.chain` and :func:`~sire.mol.Chain.chains` functions,
 which are available on all of the molecular container types.
 
 >>> print(mol.chain(0))
@@ -128,16 +128,16 @@ Selector<SireMol::Chain>( size=2
 Finding the residues in a chain
 -------------------------------
 
-Because both :class:`~Sire.Mol.Chain` and :class:`~Sire.Mol.Selector_Chain_`
+Because both :class:`~sire.mol.Chain` and :class:`~sire.mol.Selector_Chain_`
 are molecular containers, they also have their own
-:func:`~Sire.Mol.Residue.residue` and :func:`~Sire.Mol.Residue.residues` functions,
+:func:`~sire.mol.Residue.residue` and :func:`~sire.mol.Residue.residues` functions,
 which behave as you would expect.
 
 >>> print(mol["chainname A"].residue(sr.resid("ALA", 25)))
 print(mol["chainname A"].residue(sr.resid("ALA", 23)))
 
 You can get all of the residues in a chain by calling the
-:func:`~Sire.Mol.Chain.residues` function without any arguments,
+:func:`~sire.mol.Chain.residues` function without any arguments,
 
 >>> print(mol["chainname A"].residues())
 Selector<SireMol::Residue>( size=123
@@ -211,7 +211,7 @@ Finding the atoms in a chain
 ----------------------------
 
 You can still get the atoms in a chain by calling the
-:func:`~Sire.Mol.Chain.atom` and :func:`~Sire.Mol.Chain.atoms` functions.
+:func:`~sire.mol.Chain.atom` and :func:`~sire.mol.Chain.atoms` functions.
 
 >>> print(mol["chainidx 0"].atoms("CA"))
 Selector<SireMol::Atom>( size=122
@@ -231,7 +231,7 @@ Selector<SireMol::Atom>( size=122
 >>> print(mol["chainname B"].atom(0))
 Atom( N:980   [ -31.52,  -13.85,   36.51] )
 
-Calling the :func:`~Sire.Mol.Chain.atoms` function without any arguments
+Calling the :func:`~sire.mol.Chain.atoms` function without any arguments
 returns all of the atoms in the chain.
 
 >>> print(mol["chainname C"].atoms())
@@ -281,7 +281,7 @@ Uniquely identifying a chain
 
 You uniquely identify a chain in a molecule using its chain index
 (``chainidx``). You can get the index of a chain in a molecule by
-calling its :func:`~Sire.Mol.Chain.index` function.
+calling its :func:`~sire.mol.Chain.index` function.
 
 >>> print(mol.chain(0).index())
 ChainIdx(0)
@@ -296,18 +296,18 @@ Chain identifying types
 -----------------------
 
 Another way to index chains is to use the chain identifying types, i.e.
-:class:`~Sire.Mol.ChainName` and :class:`~Sire.Mol.ChainIdx`. The
+:class:`~sire.mol.ChainName` and :class:`~sire.mol.ChainIdx`. The
 easiest way to create these is by using the function
-:func:`Sire.chainid`.
+:func:`sire.chainid`.
 
-Use strings to create :class:`~Sire.Mol.ChainName` objects,
+Use strings to create :class:`~sire.mol.ChainName` objects,
 
 >>> print(sr.chainid("A"))
 ChainName('A')
 >>> print(mol[sr.chainid("A")])
 Chain( A num_residues=123 num_atoms=985)
 
-and integers to create :class:`~Sire.Mol.ChainIdx` objects.
+and integers to create :class:`~sire.mol.ChainIdx` objects.
 
 >>> print(sr.chainid(0))
 ChainIdx(0)
@@ -324,7 +324,7 @@ Chain( A num_residues=123 num_atoms=985)
 Iterating over chains
 ---------------------
 
-The :class:`~Sire.Mol.Selector_Chain_` class is iterable, meaning that
+The :class:`~sire.mol.Selector_Chain_` class is iterable, meaning that
 it can be used in loops.
 
 >>> for chain in mol.chains():
@@ -369,7 +369,7 @@ Chain( B num_residues=638 num_atoms=4881) Residue( CIT:803 num_atoms=13 ) Atom( 
 Finding all chain names
 -----------------------
 
-You can find the names of all chains using the :class:`~Sire.Mol.Select_Chain_.names`
+You can find the names of all chains using the :class:`~sire.mol.Select_Chain_.names`
 function.
 
 >>> print(mol.chains().names())
