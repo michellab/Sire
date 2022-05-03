@@ -106,20 +106,18 @@ def _pythonize(C, delete_old: bool=True) -> None:
             #        pass
 
 
-_pythonized = {}
-
-
 def _pythonize_modules(modules):
     """Pythonize all classes in the passed module"""
 
     for MOD in modules:
-        if MOD not in _pythonized:
-            import inspect
+        import inspect
 
+        try:
             for (key, cls) in inspect.getmembers(MOD, inspect.isclass):
                 _pythonize(cls)
-
-            _pythonized[MOD] = 1
+        except Exception as e:
+            print(e)
+            print(f"Failed to pythonize {MOD}")
 
 
 _is_using_old_api = None
@@ -148,8 +146,9 @@ def use_new_api():
     _is_using_new_api = True
 
     # call Pythonize on all of the new modules
-    from . import analysis, base, cas, cluster, error, ff, id, io, \
-        maths, mm, mol, move, qt, squire, stream, system, units, vol
+    from . import move, io, system, squire, mm, ff, mol, \
+        analysis, base, cas, cluster, error, \
+        id, maths, qt, stream, units, vol
 
     _pythonize_modules([analysis._Analysis,
                         base._Base,
