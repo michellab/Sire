@@ -830,6 +830,19 @@ void register_SelectorM_Residue__class(){
         { //::SireMol::SelectorM< SireMol::Residue >::operator[]
         
             typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorM< SireMol::Residue >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::SelectorM< SireMol::Residue >::operator[] );
+            
+            SelectorM_Residue__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::operator[]
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
             typedef ::SireMol::Residue ( ::SireMol::SelectorM< SireMol::Residue >::*__getitem___function_type)( ::QString const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::SelectorM< SireMol::Residue >::operator[] );
             

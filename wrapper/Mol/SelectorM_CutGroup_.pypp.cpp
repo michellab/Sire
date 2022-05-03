@@ -830,6 +830,19 @@ void register_SelectorM_CutGroup__class(){
         { //::SireMol::SelectorM< SireMol::CutGroup >::operator[]
         
             typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::CutGroup > ( ::SireMol::SelectorM< SireMol::CutGroup >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::SelectorM< SireMol::CutGroup >::operator[] );
+            
+            SelectorM_CutGroup__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::CutGroup >::operator[]
+        
+            typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
             typedef ::SireMol::CutGroup ( ::SireMol::SelectorM< SireMol::CutGroup >::*__getitem___function_type)( ::QString const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::SelectorM< SireMol::CutGroup >::operator[] );
             

@@ -830,6 +830,19 @@ void register_SelectorM_Atom__class(){
         { //::SireMol::SelectorM< SireMol::Atom >::operator[]
         
             typedef SireMol::SelectorM< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Atom > ( ::SireMol::SelectorM< SireMol::Atom >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::SelectorM< SireMol::Atom >::operator[] );
+            
+            SelectorM_Atom__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Atom >::operator[]
+        
+            typedef SireMol::SelectorM< SireMol::Atom > exported_class_t;
             typedef ::SireMol::Atom ( ::SireMol::SelectorM< SireMol::Atom >::*__getitem___function_type)( ::QString const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::SelectorM< SireMol::Atom >::operator[] );
             
