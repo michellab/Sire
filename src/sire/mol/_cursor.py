@@ -62,8 +62,8 @@ class Cursor:
 
                 try:
                     connectivity = hunter(self._d.molecule)
-                    self._d.molecule.setProperty(self._connectivity_property,
-                                                 connectivity)
+                    self._d.molecule.set_property(self._connectivity_property,
+                                                  connectivity)
                 except Exception:
                     pass
 
@@ -82,11 +82,11 @@ class Cursor:
         self._update()
 
         if self._bond is None:
-            self._d.molecule.removeProperty(key)
+            self._d.molecule.remove_property(key)
         else:
-            self._connectivity.removeProperty(self._bond, key)
-            self._d.molecule.setProperty(self._connectivity_property,
-                                         self._connectivity.commit())
+            self._connectivity.remove_property(self._bond, key)
+            self._d.molecule.set_property(self._connectivity_property,
+                                          self._connectivity.commit())
 
         self._update()
 
@@ -94,9 +94,9 @@ class Cursor:
         self._update()
 
         if self._bond is None:
-            return self._view.hasProperty(key)
+            return self._view.has_property(key)
         else:
-            return self._connectivity.hasProperty(self._bond, key)
+            return self._connectivity.has_property(self._bond, key)
 
     def __getitem__(self, key):
         self._update()
@@ -110,12 +110,12 @@ class Cursor:
         self._update()
 
         if self._bond is None:
-            self._view.setProperty(key, value)
+            self._view.set_property(key, value)
             self._d.molecule = self._view.molecule()
         else:
-            self._connectivity.setProperty(self._bond, key, value)
-            self._molecule.setProperty(self._connectivity_property,
-                                       self._connectivity.commit())
+            self._connectivity.set_property(self._bond, key, value)
+            self._molecule.set_property(self._connectivity_property,
+                                        self._connectivity.commit())
 
         self._update()
 
@@ -125,15 +125,15 @@ class Cursor:
 
         if self._bond is None:
             for key in values.keys():
-                self._view.setProperty(key, values[key])
+                self._view.set_property(key, values[key])
 
             self._d.molecule = self._view.molecule()
         else:
             for key in values.keys():
-                self._connectivity.setProperty(self._bond, key, values[key])
+                self._connectivity.set_property(self._bond, key, values[key])
 
-                self._molecule.setProperty(self._connectivity_property,
-                                           self._connectivity.commit())
+                self._molecule.set_property(self._connectivity_property,
+                                            self._connectivity.commit())
 
         self._update()
 
@@ -412,7 +412,7 @@ class Cursor:
         """Return the type of this Cursor (e.g. 'atom', 'bond',
            'residue', 'chain', 'segment' or 'molecule')
         """
-        if self.isBond():
+        if self.is_bond():
             return "bond"
 
         w = self._view.what()
@@ -430,29 +430,29 @@ class Cursor:
         else:
             raise TypeError(f"Cannot identify cursor type {w}")
 
-    def isMolecule(self):
+    def is_molecule(self):
         """Return whether this is pointing to a Molecule"""
         return self.type() == "molecule"
 
-    def isBond(self):
+    def is_bond(self):
         """Return whether this is pointing to a Bond"""
         self._update()
 
         return self._bond is not None
 
-    def isAtom(self):
+    def is_atom(self):
         """Return whether this is pointing to an Atom"""
         return self.type() == "atom"
 
-    def isResidue(self):
+    def is_residue(self):
         """Return whether this is pointing to a Residue"""
         return self.type() == "residue"
 
-    def isChain(self):
+    def is_chain(self):
         """Return whether this is pointing to a Chain"""
         return self.type() == "chain"
 
-    def isSegment(self):
+    def is_segment(self):
         """Return whether this is pointing to a Segment"""
         return self.type() == "segment"
 
@@ -463,8 +463,8 @@ class Cursor:
         self._update()
 
         if self._connectivity is not None:
-            self._molecule.setProperty(self._connectivity_property,
-                                       self._connectivity.commit())
+            self._molecule.set_property(self._connectivity_property,
+                                        self._connectivity.commit())
             self._update()
 
         mol = self._d.molecule.commit()
@@ -478,18 +478,18 @@ class Cursor:
         self._update()
 
         if self._bond is None:
-            return self._view.propertyKeys()
+            return self._view.property_keys()
         else:
-            return self._connectivity.propertyKeys(self._bond)
+            return self._connectivity.property_keys(self._bond)
 
     def values(self):
         self._update()
 
         try:
             if self._bond is None:
-                return self._view.propertyValues()
+                return self._view.property_values()
             else:
-                return self._connectivity.propertyValues(self._bond)
+                return self._connectivity.property_values(self._bond)
         except Exception:
             vals = []
 
@@ -502,13 +502,13 @@ class Cursor:
         self._update()
 
         if self._bond is None:
-            keys = self._view.propertyKeys()
+            keys = self._view.property_keys()
             items = []
 
             for key in keys:
                 items.append((key, self._view.property(key)))
         else:
-            keys = self._connectivity.propertyKeys(self._bond)
+            keys = self._connectivity.property_keys(self._bond)
             items = []
 
             for key in keys:
@@ -521,7 +521,7 @@ class Cursor:
         """Return the sire.base.Properties object for the properties
            of the current view
         """
-        from ..Base import Properties
+        from ..base import Properties
         p = Properties()
 
         for key in self.keys():

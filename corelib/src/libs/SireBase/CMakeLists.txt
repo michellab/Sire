@@ -15,12 +15,6 @@ include_directories(${CMAKE_SOURCE_DIR}/src/libs)
 # This library uses Intel Threaded Building blocks
 include_directories(${TBB_INCLUDE_DIR})
 
-if (SIRE_FOUND_CPUID)
-  add_definitions( "-DSIRE_FOUND_CPUID" )
-  add_definitions( "${CPUID_DEFINITIONS}" )
-  include_directories( ${CPUID_INCLUDE_DIR} )
-endif()
-
 # Define the header files for SireBase
 set ( SIREBASE_HEADERS
 
@@ -139,10 +133,6 @@ target_link_libraries (SireBase
                        ${TBB_LIBRARY}
                        ${TBB_MALLOC_LIBRARY}
                        )
-
-if (SIRE_FOUND_CPUID)
-  target_link_libraries( SireBase ${CPUID_LIBRARY} )
-endif()
 
 # installation
 install( TARGETS SireBase EXPORT SireLibraries
