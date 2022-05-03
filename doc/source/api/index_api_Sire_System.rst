@@ -1,8 +1,8 @@
 ======================
-Sire.System API Detail
+sire.system API Detail
 ======================
 
-.. automodule:: Sire.System
+.. automodule:: sire.system
 
 .. toctree::
    :maxdepth: 1

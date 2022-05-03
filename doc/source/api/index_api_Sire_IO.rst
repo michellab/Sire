@@ -1,8 +1,8 @@
 ==================
-Sire.IO API Detail
+sire.io API Detail
 ==================
 
-.. automodule:: Sire.IO
+.. automodule:: sire.io
 
 .. toctree::
    :maxdepth: 1

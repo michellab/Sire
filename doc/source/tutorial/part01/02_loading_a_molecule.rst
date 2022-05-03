@@ -2,7 +2,7 @@
 Loading a molecule
 ==================
 
-We load molecules using the :func:`Sire.load` function. This accepts either
+We load molecules using the :func:`sire.load` function. This accepts either
 a filename, a URL, or a `PDB code <https://www.rcsb.org>`__.
 
 For example, let's load a cholesterol molecule from
@@ -12,20 +12,20 @@ For example, let's load a cholesterol molecule from
 Downloading from 'https://siremol.org/m/cholesterol.sdf'...
 
 >>> print(mols)
-System( name=cholesterol nMolecules=1 nResidues=1 nAtoms=74 )
+System( name=cholesterol num_molecules=1 num_residues=1 num_atoms=74 )
 
-Molecules are loaded into a :class:`~Sire.System.System`. You can see how
-many molecules have been loaded using the :func:`~Sire.Mol.Molecule.nMolecules`
+Molecules are loaded into a :class:`~sire.system.System`. You can see how
+many molecules have been loaded using the :func:`~sire.mol.Molecule.num_molecules`
 function;
 
->>> print(mols.nMolecules())
+>>> print(mols.num_molecules())
 1
 
 In this case, one molecule has been loaded. You can access this molecule via;
 
 >>> mol = mols[0]
 >>> print(mol)
-Molecule( 2.11 : nAtoms=74, nResidues=1 )
+Molecule( 2.11 : num_atoms=74, num_residues=1 )
 
 .. note::
 

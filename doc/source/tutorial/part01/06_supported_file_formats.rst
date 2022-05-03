@@ -2,7 +2,7 @@
 Supported file formats
 ======================
 
-Sire supports reading and writing to many common molecular file formats.
+``sire`` supports reading and writing to many common molecular file formats.
 You can print the list of supported formats using
 
 .. code-block:: python
@@ -62,10 +62,10 @@ You can print the list of supported formats using
 Symmetric Input / Output
 ------------------------
 
-One of Sire's design principles is that molecular file input and output
-is symmetrical. This means that Sire can read in and write out the same
+One of our design principles is that molecular file input and output
+is symmetrical. This means that ``sire`` can read in and write out the same
 amount of information from a file (i.e. it can always read what it writes).
 
 Another design principle is that information should not be lost. As much
-as possible, Sire will load and preserve all information it can
+as possible, ``sire`` will load and preserve all information it can
 read from a molecular file.

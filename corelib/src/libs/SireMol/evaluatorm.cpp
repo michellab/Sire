@@ -165,7 +165,7 @@ bool EvaluatorM::isEmpty() const
 
 QString EvaluatorM::toString() const
 {
-    return QObject::tr("EvaluatorM( nMolecules=%1 nAtoms=%2 )")
+    return QObject::tr("EvaluatorM( num_molecules=%1 num_atoms=%2 )")
             .arg(this->nMolecules())
             .arg(this->nAtoms());
 }

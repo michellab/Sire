@@ -13,23 +13,23 @@ You can access residues in a molecule container using the
 functions, which are available on all of the molecular container types.
 
 >>> print(mol.residue(0))
-Residue( ILE:6   nAtoms=8 )
+Residue( ILE:6   num_atoms=8 )
 
 gives the molecule at index 0, while
 
 >>> print(mol.residues("ALA"))
 Selector<SireMol::Residue>( size=155
-0:  Residue( ALA:23  nAtoms=5 )
-1:  Residue( ALA:30  nAtoms=5 )
-2:  Residue( ALA:53  nAtoms=5 )
-3:  Residue( ALA:65  nAtoms=5 )
-4:  Residue( ALA:85  nAtoms=5 )
+0:  Residue( ALA:23  num_atoms=5 )
+1:  Residue( ALA:30  num_atoms=5 )
+2:  Residue( ALA:53  num_atoms=5 )
+3:  Residue( ALA:65  num_atoms=5 )
+4:  Residue( ALA:85  num_atoms=5 )
 ...
-150:  Residue( ALA:578 nAtoms=5 )
-151:  Residue( ALA:584 nAtoms=5 )
-152:  Residue( ALA:593 nAtoms=5 )
-153:  Residue( ALA:646 nAtoms=5 )
-154:  Residue( ALA:691 nAtoms=5 )
+150:  Residue( ALA:578 num_atoms=5 )
+151:  Residue( ALA:584 num_atoms=5 )
+152:  Residue( ALA:593 num_atoms=5 )
+153:  Residue( ALA:646 num_atoms=5 )
+154:  Residue( ALA:691 num_atoms=5 )
 )
 
 returns all residues that are named "ALA".
@@ -49,16 +49,16 @@ You can slice residues using the ``range`` function, e.g.
 
 >>> print(mol.residues(range(0, 10)))
 Selector<SireMol::Residue>( size=10
-0:  Residue( ILE:6   nAtoms=8 )
-1:  Residue( VAL:7   nAtoms=7 )
-2:  Residue( LEU:8   nAtoms=8 )
-3:  Residue( LYS:9   nAtoms=9 )
-4:  Residue( SER:10  nAtoms=6 )
-5:  Residue( SER:11  nAtoms=6 )
-6:  Residue( ASP:12  nAtoms=8 )
-7:  Residue( GLY:13  nAtoms=4 )
-8:  Residue( VAL:22  nAtoms=7 )
-9:  Residue( ALA:23  nAtoms=5 )
+0:  Residue( ILE:6   num_atoms=8 )
+1:  Residue( VAL:7   num_atoms=7 )
+2:  Residue( LEU:8   num_atoms=8 )
+3:  Residue( LYS:9   num_atoms=9 )
+4:  Residue( SER:10  num_atoms=6 )
+5:  Residue( SER:11  num_atoms=6 )
+6:  Residue( ASP:12  num_atoms=8 )
+7:  Residue( GLY:13  num_atoms=4 )
+8:  Residue( VAL:22  num_atoms=7 )
+9:  Residue( ALA:23  num_atoms=5 )
 )
 
 The result, a :class:`~Sire.Mol.Selector_Residue_` is also a molecular
@@ -66,11 +66,11 @@ container, and can be used like :class:`~Sire.Mol.Selector_Atom_`.
 
 >>> print(mol.residues("ALA")[0:5])
 Selector<SireMol::Residue>( size=5
-0:  Residue( ALA:23  nAtoms=5 )
-1:  Residue( ALA:30  nAtoms=5 )
-2:  Residue( ALA:53  nAtoms=5 )
-3:  Residue( ALA:65  nAtoms=5 )
-4:  Residue( ALA:85  nAtoms=5 )
+0:  Residue( ALA:23  num_atoms=5 )
+1:  Residue( ALA:30  num_atoms=5 )
+2:  Residue( ALA:53  num_atoms=5 )
+3:  Residue( ALA:65  num_atoms=5 )
+4:  Residue( ALA:85  num_atoms=5 )
 )
 
 gives the first 5 residues named "ALA".
@@ -84,8 +84,8 @@ molecule (``residx``).
 
 >>> print(mol.residues("resnum 5"))
 Selector<SireMol::Residue>( size=2
-0:  Residue( GLU:5   nAtoms=9 )
-1:  Residue( GLU:5   nAtoms=9 )
+0:  Residue( GLU:5   num_atoms=9 )
+1:  Residue( GLU:5   num_atoms=9 )
 )
 
 .. note::
@@ -99,8 +99,8 @@ operator too!
 
 >>> print(mol["resnum 5"])
 Selector<SireMol::Residue>( size=2
-0:  Residue( GLU:5   nAtoms=9 )
-1:  Residue( GLU:5   nAtoms=9 )
+0:  Residue( GLU:5   num_atoms=9 )
+1:  Residue( GLU:5   num_atoms=9 )
 )
 
 and you can combine it with atom identifiers, e.g.
@@ -124,76 +124,76 @@ You can also search for multiple residue names or numbers.
 
 >>> print(mol["resname ALA, ARG"])
 Selector<SireMol::Residue>( size=255
-0:  Residue( ALA:23  nAtoms=5 )
-1:  Residue( ALA:30  nAtoms=5 )
-2:  Residue( ALA:53  nAtoms=5 )
-3:  Residue( ARG:61  nAtoms=11 )
-4:  Residue( ALA:65  nAtoms=5 )
+0:  Residue( ALA:23  num_atoms=5 )
+1:  Residue( ALA:30  num_atoms=5 )
+2:  Residue( ALA:53  num_atoms=5 )
+3:  Residue( ARG:61  num_atoms=11 )
+4:  Residue( ALA:65  num_atoms=5 )
 ...
-250:  Residue( ARG:652 nAtoms=11 )
-251:  Residue( ARG:657 nAtoms=11 )
-252:  Residue( ARG:680 nAtoms=11 )
-253:  Residue( ARG:685 nAtoms=11 )
-254:  Residue( ALA:691 nAtoms=5 )
+250:  Residue( ARG:652 num_atoms=11 )
+251:  Residue( ARG:657 num_atoms=11 )
+252:  Residue( ARG:680 num_atoms=11 )
+253:  Residue( ARG:685 num_atoms=11 )
+254:  Residue( ALA:691 num_atoms=5 )
 )
 
 >>> print(mol["resnum 5, 7, 9"])
 Selector<SireMol::Residue>( size=10
-0:  Residue( VAL:7   nAtoms=7 )
-1:  Residue( LYS:9   nAtoms=9 )
-2:  Residue( GLU:5   nAtoms=9 )
-3:  Residue( VAL:7   nAtoms=7 )
-4:  Residue( GLU:9   nAtoms=9 )
-5:  Residue( VAL:7   nAtoms=7 )
-6:  Residue( LYS:9   nAtoms=9 )
-7:  Residue( GLU:5   nAtoms=9 )
-8:  Residue( VAL:7   nAtoms=7 )
-9:  Residue( GLU:9   nAtoms=9 )
+0:  Residue( VAL:7   num_atoms=7 )
+1:  Residue( LYS:9   num_atoms=9 )
+2:  Residue( GLU:5   num_atoms=9 )
+3:  Residue( VAL:7   num_atoms=7 )
+4:  Residue( GLU:9   num_atoms=9 )
+5:  Residue( VAL:7   num_atoms=7 )
+6:  Residue( LYS:9   num_atoms=9 )
+7:  Residue( GLU:5   num_atoms=9 )
+8:  Residue( VAL:7   num_atoms=7 )
+9:  Residue( GLU:9   num_atoms=9 )
 )
 
 >>> print(mol["resnum 201:204"])
 Selector<SireMol::Residue>( size=9
-0:  Residue( LEU:201 nAtoms=8 )
-1:  Residue( ARG:202 nAtoms=11 )
-2:  Residue( GLU:203 nAtoms=9 )
-3:  Residue( LEU:204 nAtoms=8 )
-4:  Residue( LEU:201 nAtoms=8 )
-5:  Residue( ARG:202 nAtoms=11 )
-6:  Residue( GLU:203 nAtoms=9 )
-7:  Residue( LEU:204 nAtoms=8 )
-8:  Residue( PEG:201 nAtoms=7 )
+0:  Residue( LEU:201 num_atoms=8 )
+1:  Residue( ARG:202 num_atoms=11 )
+2:  Residue( GLU:203 num_atoms=9 )
+3:  Residue( LEU:204 num_atoms=8 )
+4:  Residue( LEU:201 num_atoms=8 )
+5:  Residue( ARG:202 num_atoms=11 )
+6:  Residue( GLU:203 num_atoms=9 )
+7:  Residue( LEU:204 num_atoms=8 )
+8:  Residue( PEG:201 num_atoms=7 )
 )
 
 Wildcard (glob) searching is also supported for residue names.
 
 >>> print(mol["resname /ala/i"])
 Selector<SireMol::Residue>( size=155
-0:  Residue( ALA:23  nAtoms=5 )
-1:  Residue( ALA:30  nAtoms=5 )
-2:  Residue( ALA:53  nAtoms=5 )
-3:  Residue( ALA:65  nAtoms=5 )
-4:  Residue( ALA:85  nAtoms=5 )
+0:  Residue( ALA:23  num_atoms=5 )
+1:  Residue( ALA:30  num_atoms=5 )
+2:  Residue( ALA:53  num_atoms=5 )
+3:  Residue( ALA:65  num_atoms=5 )
+4:  Residue( ALA:85  num_atoms=5 )
 ...
-150:  Residue( ALA:578 nAtoms=5 )
-151:  Residue( ALA:584 nAtoms=5 )
-152:  Residue( ALA:593 nAtoms=5 )
-153:  Residue( ALA:646 nAtoms=5 )
-154:  Residue( ALA:691 nAtoms=5 )
+150:  Residue( ALA:578 num_atoms=5 )
+151:  Residue( ALA:584 num_atoms=5 )
+152:  Residue( ALA:593 num_atoms=5 )
+153:  Residue( ALA:646 num_atoms=5 )
+154:  Residue( ALA:691 num_atoms=5 )
 )
 
 >>> print(mol["resname /HI?/"])
 Selector<SireMol::Residue>( size=42
-0:  Residue( HIS:62  nAtoms=10 )
-1:  Residue( HIS:27  nAtoms=10 )
-2:  Residue( HIS:39  nAtoms=10 )
-3:  Residue( HIS:75  nAtoms=10 )
-4:  Residue( HIS:84  nAtoms=10 )
+0:  Residue( HIS:62  num_atoms=10 )
+1:  Residue( HIS:27  num_atoms=10 )
+2:  Residue( HIS:39  num_atoms=10 )
+3:  Residue( HIS:75  num_atoms=10 )
+4:  Residue( HIS:84  num_atoms=10 )
 ...
-37:  Residue( HIS:638 nAtoms=10 )
-38:  Residue( HIS:639 nAtoms=10 )
-39:  Residue( HIS:662 nAtoms=10 )
-40:  Residue( HIS:666 nAtoms=10 )
-41:  Residue( HIS:668 nAtoms=10 )
+37:  Residue( HIS:638 num_atoms=10 )
+38:  Residue( HIS:639 num_atoms=10 )
+39:  Residue( HIS:662 num_atoms=10 )
+40:  Residue( HIS:666 num_atoms=10 )
+41:  Residue( HIS:668 num_atoms=10 )
 )
 
 This last search is particularly useful for proteins, as it is common
@@ -261,17 +261,17 @@ You can get the residues that match atoms using ``residues with``, e.g.
 
 >>> print(mol["residues with atomname CA"])
 Selector<SireMol::Residue>( size=1494
-0:  Residue( ILE:6   nAtoms=8 )
-1:  Residue( VAL:7   nAtoms=7 )
-2:  Residue( LEU:8   nAtoms=8 )
-3:  Residue( LYS:9   nAtoms=9 )
-4:  Residue( SER:10  nAtoms=6 )
+0:  Residue( ILE:6   num_atoms=8 )
+1:  Residue( VAL:7   num_atoms=7 )
+2:  Residue( LEU:8   num_atoms=8 )
+3:  Residue( LYS:9   num_atoms=9 )
+4:  Residue( SER:10  num_atoms=6 )
 ...
-1489:  Residue( ALA:691 nAtoms=5 )
-1490:  Residue( PRO:692 nAtoms=7 )
-1491:  Residue( GLU:693 nAtoms=9 )
-1492:  Residue( ASN:694 nAtoms=8 )
-1493:  Residue( ASP:695 nAtoms=8 )
+1489:  Residue( ALA:691 num_atoms=5 )
+1490:  Residue( PRO:692 num_atoms=7 )
+1491:  Residue( GLU:693 num_atoms=9 )
+1492:  Residue( ASN:694 num_atoms=8 )
+1493:  Residue( ASP:695 num_atoms=8 )
 )
 
 This has returned all of the residues that contain an atom called "CA".
@@ -281,17 +281,17 @@ function on the molecular container, e.g.
 
 >>> print(mol["CA"].residues())
 Selector<SireMol::Residue>( size=1494
-0:  Residue( ILE:6   nAtoms=8 )
-1:  Residue( VAL:7   nAtoms=7 )
-2:  Residue( LEU:8   nAtoms=8 )
-3:  Residue( LYS:9   nAtoms=9 )
-4:  Residue( SER:10  nAtoms=6 )
+0:  Residue( ILE:6   num_atoms=8 )
+1:  Residue( VAL:7   num_atoms=7 )
+2:  Residue( LEU:8   num_atoms=8 )
+3:  Residue( LYS:9   num_atoms=9 )
+4:  Residue( SER:10  num_atoms=6 )
 ...
-1489:  Residue( ALA:691 nAtoms=5 )
-1490:  Residue( PRO:692 nAtoms=7 )
-1491:  Residue( GLU:693 nAtoms=9 )
-1492:  Residue( ASN:694 nAtoms=8 )
-1493:  Residue( ASP:695 nAtoms=8 )
+1489:  Residue( ALA:691 num_atoms=5 )
+1490:  Residue( PRO:692 num_atoms=7 )
+1491:  Residue( GLU:693 num_atoms=9 )
+1492:  Residue( ASN:694 num_atoms=8 )
+1493:  Residue( ASP:695 num_atoms=8 )
 )
 
 Uniquely identifying a residue
@@ -320,17 +320,17 @@ by using the function :func:`Sire.resid`.
 
 >>> print(mol[sr.resid("ALA")])
 Selector<SireMol::Residue>( size=155
-0:  Residue( ALA:23  nAtoms=5 )
-1:  Residue( ALA:30  nAtoms=5 )
-2:  Residue( ALA:53  nAtoms=5 )
-3:  Residue( ALA:65  nAtoms=5 )
-4:  Residue( ALA:85  nAtoms=5 )
+0:  Residue( ALA:23  num_atoms=5 )
+1:  Residue( ALA:30  num_atoms=5 )
+2:  Residue( ALA:53  num_atoms=5 )
+3:  Residue( ALA:65  num_atoms=5 )
+4:  Residue( ALA:85  num_atoms=5 )
 ...
-150:  Residue( ALA:578 nAtoms=5 )
-151:  Residue( ALA:584 nAtoms=5 )
-152:  Residue( ALA:593 nAtoms=5 )
-153:  Residue( ALA:646 nAtoms=5 )
-154:  Residue( ALA:691 nAtoms=5 )
+150:  Residue( ALA:578 num_atoms=5 )
+151:  Residue( ALA:584 num_atoms=5 )
+152:  Residue( ALA:593 num_atoms=5 )
+153:  Residue( ALA:646 num_atoms=5 )
+154:  Residue( ALA:691 num_atoms=5 )
 )
 
 This returns the residues called "ALA", as ``sr.resid("ALA")`` has created
@@ -346,21 +346,21 @@ an integer, e.g.
 ResNum(5)
 >>> print(mol[sr.resid(5)])
 Selector<SireMol::Residue>( size=2
-0:  Residue( GLU:5   nAtoms=9 )
-1:  Residue( GLU:5   nAtoms=9 )
+0:  Residue( GLU:5   num_atoms=9 )
+1:  Residue( GLU:5   num_atoms=9 )
 )
 
 You can set both a name and a number by passing in two arguments, e.g.
 
 >>> print(mol[sr.resid("ALA", 23)])
 Selector<SireMol::Residue>( size=2
-0:  Residue( ALA:23  nAtoms=5 )
-1:  Residue( ALA:23  nAtoms=5 )
+0:  Residue( ALA:23  num_atoms=5 )
+1:  Residue( ALA:23  num_atoms=5 )
 )
 >>> print(mol[sr.resid(name="ALA", num=23)])
 Selector<SireMol::Residue>( size=2
-0:  Residue( ALA:23  nAtoms=5 )
-1:  Residue( ALA:23  nAtoms=5 )
+0:  Residue( ALA:23  num_atoms=5 )
+1:  Residue( ALA:23  num_atoms=5 )
 )
 
 Iterating over residues
@@ -371,11 +371,11 @@ it can be used in loops.
 
 >>> for res in mol["resname ALA and resnum < 30"]:
 ...     print(res)
-Residue( ALA:23  nAtoms=5 )
-Residue( ALA:16  nAtoms=5 )
-Residue( ALA:21  nAtoms=5 )
-Residue( ALA:23  nAtoms=5 )
-Residue( ALA:16  nAtoms=5 )
+Residue( ALA:23  num_atoms=5 )
+Residue( ALA:16  num_atoms=5 )
+Residue( ALA:21  num_atoms=5 )
+Residue( ALA:23  num_atoms=5 )
+Residue( ALA:16  num_atoms=5 )
 
 This is particulary useful when combined with looping over the
 atoms in the residues.
@@ -383,12 +383,12 @@ atoms in the residues.
 >>> for res in mol["residx < 3"]:
 ...     for atom in res["atomname C, CA"]:
 ...         print(res, atom)
-Residue( ILE:6   nAtoms=8 ) Atom( CA:2    [ -55.43,   11.35,   42.54] )
-Residue( ILE:6   nAtoms=8 ) Atom( C:3     [ -56.06,    9.95,   42.55] )
-Residue( VAL:7   nAtoms=7 ) Atom( CA:10   [ -56.02,    7.64,   43.47] )
-Residue( VAL:7   nAtoms=7 ) Atom( C:11    [ -56.14,    7.05,   42.06] )
-Residue( LEU:8   nAtoms=8 ) Atom( CA:17   [ -54.99,    6.39,   39.98] )
-Residue( LEU:8   nAtoms=8 ) Atom( C:18    [ -54.61,    4.90,   40.03] )
+Residue( ILE:6   num_atoms=8 ) Atom( CA:2    [ -55.43,   11.35,   42.54] )
+Residue( ILE:6   num_atoms=8 ) Atom( C:3     [ -56.06,    9.95,   42.55] )
+Residue( VAL:7   num_atoms=7 ) Atom( CA:10   [ -56.02,    7.64,   43.47] )
+Residue( VAL:7   num_atoms=7 ) Atom( C:11    [ -56.14,    7.05,   42.06] )
+Residue( LEU:8   num_atoms=8 ) Atom( CA:17   [ -54.99,    6.39,   39.98] )
+Residue( LEU:8   num_atoms=8 ) Atom( C:18    [ -54.61,    4.90,   40.03] )
 
 Counting residues
 -----------------

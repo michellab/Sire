@@ -11,11 +11,11 @@ This tutorial assumes that you have installed Sire following
 the Anaconda / miniconda Python environment into which Sire was
 installed. You can test this by starting python and typing
 
->>> import Sire as sr
+>>> import sire as sr
 
-If Sire imports without error, then everything is working.
+If ``sire`` imports without error, then everything is working.
 
-If you can't import Sire, or have any other problems, then
+If you can't import ``sire``, or have any other problems, then
 please :doc:`ask for support. <../support>`
 
 Getting Started

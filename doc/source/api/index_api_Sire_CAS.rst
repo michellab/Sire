@@ -1,8 +1,8 @@
 ===================
-Sire.CAS API Detail
+sire.cas API Detail
 ===================
 
-.. automodule:: Sire.CAS
+.. automodule:: sire.cas
 
 .. toctree::
    :maxdepth: 1

@@ -13,21 +13,21 @@ You can access the chains in a molecule container using the
 which are available on all of the molecular container types.
 
 >>> print(mol.chain(0))
-Chain( A nResidues=123 nAtoms=985)
+Chain( A num_residues=123 num_atoms=985)
 
 gives the chain at index 0, while
 
 >>> print(mol.chain("B"))
-Chain( B nResidues=638 nAtoms=4881)
+Chain( B num_residues=638 num_atoms=4881)
 
 gives the chain called "B", and
 
 >>> print(mol.chains())
 Selector<SireMol::Chain>( size=4
-0:  Chain( A nResidues=123 nAtoms=985)
-1:  Chain( B nResidues=638 nAtoms=4881)
-2:  Chain( C nResidues=126 nAtoms=1000)
-3:  Chain( D nResidues=631 nAtoms=4862)
+0:  Chain( A num_residues=123 num_atoms=985)
+1:  Chain( B num_residues=638 num_atoms=4881)
+2:  Chain( C num_residues=126 num_atoms=1000)
+3:  Chain( D num_residues=631 num_atoms=4862)
 )
 
 returns all of the chains.
@@ -37,18 +37,18 @@ so both
 
 >>> print(mol.chains(range(3,-1,-1)))
 Selector<SireMol::Chain>( size=4
-0:  Chain( D nResidues=631 nAtoms=4862)
-1:  Chain( C nResidues=126 nAtoms=1000)
-2:  Chain( B nResidues=638 nAtoms=4881)
-3:  Chain( A nResidues=123 nAtoms=985)
+0:  Chain( D num_residues=631 num_atoms=4862)
+1:  Chain( C num_residues=126 num_atoms=1000)
+2:  Chain( B num_residues=638 num_atoms=4881)
+3:  Chain( A num_residues=123 num_atoms=985)
 )
 
 >>> print(mol.chains()[3:-1:-1])
 Selector<SireMol::Chain>( size=4
-0:  Chain( D nResidues=631 nAtoms=4862)
-1:  Chain( C nResidues=126 nAtoms=1000)
-2:  Chain( B nResidues=638 nAtoms=4881)
-3:  Chain( A nResidues=123 nAtoms=985)
+0:  Chain( D num_residues=631 num_atoms=4862)
+1:  Chain( C num_residues=126 num_atoms=1000)
+2:  Chain( B num_residues=638 num_atoms=4881)
+3:  Chain( A num_residues=123 num_atoms=985)
 )
 
 slice to get the four chains in reverse order.
@@ -60,10 +60,10 @@ You can also search for chains, using their name (``chainname``),
 and/or their index in their parent molecule (``chainidx``).
 
 >>> print(mol.chain("chainname A"))
-Chain( A nResidues=123 nAtoms=985)
+Chain( A num_residues=123 num_atoms=985)
 
 >>> print(mol.chain("chainidx 1"))
-Chain( B nResidues=638 nAtoms=4881)
+Chain( B num_residues=638 num_atoms=4881)
 
 .. note::
 
@@ -75,23 +75,23 @@ You can use the chain search string in a molecular container's index
 operator too!
 
 >>> print(mol["chainname A"])
-Chain( A nResidues=123 nAtoms=985)
+Chain( A num_residues=123 num_atoms=985)
 
 and you can combine it with residue and/or atom identifiers, e.g.
 
 >>> print(mol["chainname A and resname ALA"])
 Selector<SireMol::Residue>( size=11
-0:  Residue( ALA:23  nAtoms=5 )
-1:  Residue( ALA:30  nAtoms=5 )
-2:  Residue( ALA:53  nAtoms=5 )
-3:  Residue( ALA:65  nAtoms=5 )
-4:  Residue( ALA:85  nAtoms=5 )
+0:  Residue( ALA:23  num_atoms=5 )
+1:  Residue( ALA:30  num_atoms=5 )
+2:  Residue( ALA:53  num_atoms=5 )
+3:  Residue( ALA:65  num_atoms=5 )
+4:  Residue( ALA:85  num_atoms=5 )
 ...
-6:  Residue( ALA:96  nAtoms=5 )
-7:  Residue( ALA:104 nAtoms=5 )
-8:  Residue( ALA:105 nAtoms=5 )
-9:  Residue( ALA:122 nAtoms=5 )
-10:  Residue( ALA:158 nAtoms=5 )
+6:  Residue( ALA:96  num_atoms=5 )
+7:  Residue( ALA:104 num_atoms=5 )
+8:  Residue( ALA:105 num_atoms=5 )
+9:  Residue( ALA:122 num_atoms=5 )
+10:  Residue( ALA:158 num_atoms=5 )
 )
 
 >>> print(mol["chainname A and element O"])
@@ -113,16 +113,16 @@ You can also search for multiple chain names
 
 >>> print(mol["chainname A, B"])
 Selector<SireMol::Chain>( size=2
-0:  Chain( A nResidues=123 nAtoms=985)
-1:  Chain( B nResidues=638 nAtoms=4881)
+0:  Chain( A num_residues=123 num_atoms=985)
+1:  Chain( B num_residues=638 num_atoms=4881)
 )
 
 Wildcard (glob) searching is also supported for chain names
 
 >>> print(mol["chainname /[cd]/i"])
 Selector<SireMol::Chain>( size=2
-0:  Chain( C nResidues=126 nAtoms=1000)
-1:  Chain( D nResidues=631 nAtoms=4862)
+0:  Chain( C num_residues=126 num_atoms=1000)
+1:  Chain( D num_residues=631 num_atoms=4862)
 )
 
 Finding the residues in a chain
@@ -141,40 +141,40 @@ You can get all of the residues in a chain by calling the
 
 >>> print(mol["chainname A"].residues())
 Selector<SireMol::Residue>( size=123
-0:  Residue( ILE:6   nAtoms=8 )
-1:  Residue( VAL:7   nAtoms=7 )
-2:  Residue( LEU:8   nAtoms=8 )
-3:  Residue( LYS:9   nAtoms=9 )
-4:  Residue( SER:10  nAtoms=6 )
+0:  Residue( ILE:6   num_atoms=8 )
+1:  Residue( VAL:7   num_atoms=7 )
+2:  Residue( LEU:8   num_atoms=8 )
+3:  Residue( LYS:9   num_atoms=9 )
+4:  Residue( SER:10  num_atoms=6 )
 ...
-118:  Residue( TRP:157 nAtoms=14 )
-119:  Residue( ALA:158 nAtoms=5 )
-120:  Residue( PHE:159 nAtoms=11 )
-121:  Residue( GLU:160 nAtoms=9 )
-122:  Residue( PEG:801 nAtoms=7 )
+118:  Residue( TRP:157 num_atoms=14 )
+119:  Residue( ALA:158 num_atoms=5 )
+120:  Residue( PHE:159 num_atoms=11 )
+121:  Residue( GLU:160 num_atoms=9 )
+122:  Residue( PEG:801 num_atoms=7 )
 )
 
 In addition, the index operator for chains searches by default for residues,
 not for atoms. Thus
 
 >>> print(mol["chainname A"][0])
-Residue( ILE:6   nAtoms=8 )
+Residue( ILE:6   num_atoms=8 )
 
 gives the first *residue* in chain "A", not the first atom. Similarly
 
 >>> print(mol["chainname A"]["ALA"])
 Selector<SireMol::Residue>( size=11
-0:  Residue( ALA:23  nAtoms=5 )
-1:  Residue( ALA:30  nAtoms=5 )
-2:  Residue( ALA:53  nAtoms=5 )
-3:  Residue( ALA:65  nAtoms=5 )
-4:  Residue( ALA:85  nAtoms=5 )
+0:  Residue( ALA:23  num_atoms=5 )
+1:  Residue( ALA:30  num_atoms=5 )
+2:  Residue( ALA:53  num_atoms=5 )
+3:  Residue( ALA:65  num_atoms=5 )
+4:  Residue( ALA:85  num_atoms=5 )
 ...
-6:  Residue( ALA:96  nAtoms=5 )
-7:  Residue( ALA:104 nAtoms=5 )
-8:  Residue( ALA:105 nAtoms=5 )
-9:  Residue( ALA:122 nAtoms=5 )
-10:  Residue( ALA:158 nAtoms=5 )
+6:  Residue( ALA:96  num_atoms=5 )
+7:  Residue( ALA:104 num_atoms=5 )
+8:  Residue( ALA:105 num_atoms=5 )
+9:  Residue( ALA:122 num_atoms=5 )
+10:  Residue( ALA:158 num_atoms=5 )
 )
 
 searches for the *residues* called "ALA", not the atoms called "ALA".
@@ -184,27 +184,27 @@ Another route is to use ``residues in`` in the search string.
 
 >>> print(mol["residues in chainname B"])
 Selector<SireMol::Residue>( size=123
-0:  Residue( ILE:6   nAtoms=8 )
-1:  Residue( VAL:7   nAtoms=7 )
-2:  Residue( LEU:8   nAtoms=8 )
-3:  Residue( LYS:9   nAtoms=9 )
-4:  Residue( SER:10  nAtoms=6 )
+0:  Residue( ILE:6   num_atoms=8 )
+1:  Residue( VAL:7   num_atoms=7 )
+2:  Residue( LEU:8   num_atoms=8 )
+3:  Residue( LYS:9   num_atoms=9 )
+4:  Residue( SER:10  num_atoms=6 )
 ...
-118:  Residue( TRP:157 nAtoms=14 )
-119:  Residue( ALA:158 nAtoms=5 )
-120:  Residue( PHE:159 nAtoms=11 )
-121:  Residue( GLU:160 nAtoms=9 )
-122:  Residue( PEG:801 nAtoms=7 )
+118:  Residue( TRP:157 num_atoms=14 )
+119:  Residue( ALA:158 num_atoms=5 )
+120:  Residue( PHE:159 num_atoms=11 )
+121:  Residue( GLU:160 num_atoms=9 )
+122:  Residue( PEG:801 num_atoms=7 )
 )
 
 or, go from residues to chains using ``chains with``
 
 >>> print(mol["chains with resname ALA"])
 Selector<SireMol::Chain>( size=4
-0:  Chain( A nResidues=123 nAtoms=985)
-1:  Chain( B nResidues=638 nAtoms=4881)
-2:  Chain( C nResidues=126 nAtoms=1000)
-3:  Chain( D nResidues=631 nAtoms=4862)
+0:  Chain( A num_residues=123 num_atoms=985)
+1:  Chain( B num_residues=638 num_atoms=4881)
+2:  Chain( C num_residues=126 num_atoms=1000)
+3:  Chain( D num_residues=631 num_atoms=4862)
 )
 
 Finding the atoms in a chain
@@ -270,10 +270,10 @@ and to use ``chains with`` to go from atoms to chains.
 
 >>> print(mol["chains with atomname CA"])
 Selector<SireMol::Chain>( size=4
-0:  Chain( A nResidues=123 nAtoms=985)
-1:  Chain( B nResidues=638 nAtoms=4881)
-2:  Chain( C nResidues=126 nAtoms=1000)
-3:  Chain( D nResidues=631 nAtoms=4862)
+0:  Chain( A num_residues=123 num_atoms=985)
+1:  Chain( B num_residues=638 num_atoms=4881)
+2:  Chain( C num_residues=126 num_atoms=1000)
+3:  Chain( D num_residues=631 num_atoms=4862)
 )
 
 Uniquely identifying a chain
@@ -305,21 +305,21 @@ Use strings to create :class:`~Sire.Mol.ChainName` objects,
 >>> print(sr.chainid("A"))
 ChainName('A')
 >>> print(mol[sr.chainid("A")])
-Chain( A nResidues=123 nAtoms=985)
+Chain( A num_residues=123 num_atoms=985)
 
 and integers to create :class:`~Sire.Mol.ChainIdx` objects.
 
 >>> print(sr.chainid(0))
 ChainIdx(0)
 >>> print(mol[sr.chainid(0)])
-Chain( A nResidues=123 nAtoms=985)
+Chain( A num_residues=123 num_atoms=985)
 
 You can set both a name and an index by passing in two arguments.
 
 >>> print(mol[sr.chainid("A", 0)])
-Chain( A nResidues=123 nAtoms=985)
+Chain( A num_residues=123 num_atoms=985)
 >>> print(mol[sr.chainid(name="A", idx=0)])
-Chain( A nResidues=123 nAtoms=985)
+Chain( A num_residues=123 num_atoms=985)
 
 Iterating over chains
 ---------------------
@@ -329,10 +329,10 @@ it can be used in loops.
 
 >>> for chain in mol.chains():
 ...     print(chain)
-Chain( A nResidues=123 nAtoms=985)
-Chain( B nResidues=638 nAtoms=4881)
-Chain( C nResidues=126 nAtoms=1000)
-Chain( D nResidues=631 nAtoms=4862)
+Chain( A num_residues=123 num_atoms=985)
+Chain( B num_residues=638 num_atoms=4881)
+Chain( C num_residues=126 num_atoms=1000)
+Chain( D num_residues=631 num_atoms=4862)
 
 This is particulary useful when combined with looping over the
 residues and/or atoms in the residues.
@@ -340,31 +340,31 @@ residues and/or atoms in the residues.
 >>> for chain in mol.chains():
 ...     for residue in chain.residues():
 ...         print(chain, residue)
-Chain( A nResidues=123 nAtoms=985) Residue( ILE:6   nAtoms=8 )
-Chain( A nResidues=123 nAtoms=985) Residue( VAL:7   nAtoms=7 )
-Chain( A nResidues=123 nAtoms=985) Residue( LEU:8   nAtoms=8 )
-Chain( A nResidues=123 nAtoms=985) Residue( LYS:9   nAtoms=9 )
-Chain( A nResidues=123 nAtoms=985) Residue( SER:10  nAtoms=6 )
-Chain( A nResidues=123 nAtoms=985) Residue( SER:11  nAtoms=6 )
-Chain( A nResidues=123 nAtoms=985) Residue( ASP:12  nAtoms=8 )
-Chain( A nResidues=123 nAtoms=985) Residue( GLY:13  nAtoms=4 )
+Chain( A num_residues=123 num_atoms=985) Residue( ILE:6   num_atoms=8 )
+Chain( A num_residues=123 num_atoms=985) Residue( VAL:7   num_atoms=7 )
+Chain( A num_residues=123 num_atoms=985) Residue( LEU:8   num_atoms=8 )
+Chain( A num_residues=123 num_atoms=985) Residue( LYS:9   num_atoms=9 )
+Chain( A num_residues=123 num_atoms=985) Residue( SER:10  num_atoms=6 )
+Chain( A num_residues=123 num_atoms=985) Residue( SER:11  num_atoms=6 )
+Chain( A num_residues=123 num_atoms=985) Residue( ASP:12  num_atoms=8 )
+Chain( A num_residues=123 num_atoms=985) Residue( GLY:13  num_atoms=4 )
 ...
-Chain( D nResidues=631 nAtoms=4862) Residue( HOH:905 nAtoms=1 )
-Chain( D nResidues=631 nAtoms=4862) Residue( HOH:906 nAtoms=1 )
+Chain( D num_residues=631 num_atoms=4862) Residue( HOH:905 num_atoms=1 )
+Chain( D num_residues=631 num_atoms=4862) Residue( HOH:906 num_atoms=1 )
 
 >>> for chain in mol["chainname A, B"]:
 ...     for atom in chain["element C"]:
 ...         print(chain, atom.residue(), atom)
-Chain( A nResidues=123 nAtoms=985) Residue( ILE:6   nAtoms=8 ) Atom( CA:2    [ -55.43,   11.35,   42.54] )
-Chain( A nResidues=123 nAtoms=985) Residue( ILE:6   nAtoms=8 ) Atom( C:3     [ -56.06,    9.95,   42.55] )
-Chain( A nResidues=123 nAtoms=985) Residue( ILE:6   nAtoms=8 ) Atom( CB:5    [ -56.32,   12.33,   41.76] )
-Chain( A nResidues=123 nAtoms=985) Residue( ILE:6   nAtoms=8 ) Atom( CG1:6   [ -55.68,   13.72,   41.72] )
-Chain( A nResidues=123 nAtoms=985) Residue( ILE:6   nAtoms=8 ) Atom( CG2:7   [ -57.70,   12.40,   42.39] )
-Chain( A nResidues=123 nAtoms=985) Residue( ILE:6   nAtoms=8 ) Atom( CD1:8   [ -55.42,   14.31,   43.09] )
+Chain( A num_residues=123 num_atoms=985) Residue( ILE:6   num_atoms=8 ) Atom( CA:2    [ -55.43,   11.35,   42.54] )
+Chain( A num_residues=123 num_atoms=985) Residue( ILE:6   num_atoms=8 ) Atom( C:3     [ -56.06,    9.95,   42.55] )
+Chain( A num_residues=123 num_atoms=985) Residue( ILE:6   num_atoms=8 ) Atom( CB:5    [ -56.32,   12.33,   41.76] )
+Chain( A num_residues=123 num_atoms=985) Residue( ILE:6   num_atoms=8 ) Atom( CG1:6   [ -55.68,   13.72,   41.72] )
+Chain( A num_residues=123 num_atoms=985) Residue( ILE:6   num_atoms=8 ) Atom( CG2:7   [ -57.70,   12.40,   42.39] )
+Chain( A num_residues=123 num_atoms=985) Residue( ILE:6   num_atoms=8 ) Atom( CD1:8   [ -55.42,   14.31,   43.09] )
 ...
-Chain( B nResidues=638 nAtoms=4881) Residue( CIT:803 nAtoms=13 ) Atom( C4:11688 [ -28.14,   10.72,   -2.13] )
-Chain( B nResidues=638 nAtoms=4881) Residue( CIT:803 nAtoms=13 ) Atom( C5:11689 [ -28.94,   10.62,   -3.43] )
-Chain( B nResidues=638 nAtoms=4881) Residue( CIT:803 nAtoms=13 ) Atom( C6:11692 [ -27.91,    9.78,    0.15] )
+Chain( B num_residues=638 num_atoms=4881) Residue( CIT:803 num_atoms=13 ) Atom( C4:11688 [ -28.14,   10.72,   -2.13] )
+Chain( B num_residues=638 num_atoms=4881) Residue( CIT:803 num_atoms=13 ) Atom( C5:11689 [ -28.94,   10.62,   -3.43] )
+Chain( B num_residues=638 num_atoms=4881) Residue( CIT:803 num_atoms=13 ) Atom( C6:11692 [ -27.91,    9.78,    0.15] )
 
 Finding all chain names
 -----------------------

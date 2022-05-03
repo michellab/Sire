@@ -194,7 +194,7 @@ QString Residue::toString() const
 {
     QString n = QString("%1:%2").arg(this->name()).arg(this->number());
 
-    return QObject::tr( "Residue( %1 nAtoms=%2 )" )
+    return QObject::tr( "Residue( %1 num_atoms=%2 )" )
                 .arg( n, -7 )
                 .arg( this->nAtoms() );
 }

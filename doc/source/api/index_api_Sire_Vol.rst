@@ -1,8 +1,8 @@
 ===================
-Sire.Vol API Detail
+sire.vol API Detail
 ===================
 
-.. automodule:: Sire.Vol
+.. automodule:: sire.vol
 
 .. toctree::
    :maxdepth: 1

@@ -760,22 +760,22 @@ QString System::toString() const
     QStringList parts;
 
     parts.append(QString("name=%1").arg(this->name()));
-    parts.append(QString("nMolecules=%1").arg(this->nMolecules()));
+    parts.append(QString("num_molecules=%1").arg(this->nMolecules()));
 
     if (this->nForceFields() > 0)
-        parts.append(QString("nForceFields=%1").arg(this->nForceFields()));
+        parts.append(QString("num_force_fields=%1").arg(this->nForceFields()));
 
     if (this->nMonitors() > 0)
-        parts.append(QString("nMonitors=%1").arg(this->nMonitors()));
+        parts.append(QString("num_monitors=%1").arg(this->nMonitors()));
 
     if (parts.count() < 4)
     {
-        parts.insert(2, QString("nAtoms=%1").arg(this->nAtoms()));
+        parts.insert(2, QString("num_atoms=%1").arg(this->nAtoms()));
     }
 
     if (parts.count() < 5)
     {
-        parts.insert(2, QString("nResidues=%1").arg(this->nResidues()));
+        parts.insert(2, QString("num_residues=%1").arg(this->nResidues()));
     }
 
     return QString("System( %1 )").arg(parts.join(" "));

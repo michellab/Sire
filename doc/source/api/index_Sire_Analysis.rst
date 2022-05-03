@@ -7,20 +7,20 @@ For example, calculating free energies using FEP or TI.
 
 The package centers around a few core classes:
 
-:class:`~Sire.Analysis.Bennetts`
+:class:`~sire.analysis.Bennetts`
     Use Bennetts to calculate free energies.
 
-:class:`~Sire.Analysis.FEP`
+:class:`~sire.analysis.FEP`
     Use FEP (free energy perturbation) to calculate free energies.
 
-:class:`~Sire.Analysis.TI`
+:class:`~sire.analysis.TI`
     Use TI (thermodynamic integration) to calculate free energies.
 
-:class:`~Sire.Analysis.PMF`
+:class:`~sire.analysis.PMF`
     Holds a PMF (potential of mean force)
 
-:class:`~Sire.Analysis.DataPoint`
-    Represents a data point in the :class:`~Sire.Analysis.PMF`.
+:class:`~sire.analysis.DataPoint`
+    Represents a data point in the :class:`~sire.analysis.PMF`.
 
 .. toctree::
    :maxdepth: 3

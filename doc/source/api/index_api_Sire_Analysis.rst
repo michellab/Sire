@@ -1,8 +1,8 @@
 ========================
-Sire.Analysis API Detail
+sire.analysis API Detail
 ========================
 
-.. automodule:: Sire.Analysis
+.. automodule:: sire.analysis
 
 .. toctree::
    :maxdepth: 1

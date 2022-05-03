@@ -181,7 +181,7 @@ bool Segment::operator!=(const Segment &other) const
 /** Return a string representation of this segment */
 QString Segment::toString() const
 {
-    return QObject::tr( "Segment( %1 nAtoms=%2 )" )
+    return QObject::tr( "Segment( %1 num_atoms=%2 )" )
                 .arg( this->name() ).arg(this->nAtoms());
 }
 

@@ -203,7 +203,7 @@ MolViewPtr Chain::operator[](const SireBase::Slice &slice) const
 /** Return a string representation of this chain */
 QString Chain::toString() const
 {
-    return QObject::tr( "Chain( %1 nResidues=%2 nAtoms=%3)" )
+    return QObject::tr( "Chain( %1 num_residues=%2 num_atoms=%3)" )
                 .arg( this->name() )
                 .arg( this->nResidues() )
                 .arg( this->nAtoms() );

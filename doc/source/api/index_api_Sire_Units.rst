@@ -1,8 +1,8 @@
 =====================
-Sire.Units API Detail
+sire.units API Detail
 =====================
 
-.. automodule:: Sire.Units
+.. automodule:: sire.units
 
 .. toctree::
    :maxdepth: 1

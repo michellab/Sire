@@ -1,8 +1,8 @@
 ===================
-Sire.Mol API Detail
+sire.mol API Detail
 ===================
 
-.. automodule:: Sire.Mol
+.. automodule:: sire.mol
 
 .. toctree::
    :maxdepth: 1

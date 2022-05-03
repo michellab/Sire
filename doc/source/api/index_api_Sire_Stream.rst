@@ -1,8 +1,8 @@
 ======================
-Sire.Stream API Detail
+sire.stream API Detail
 ======================
 
-.. automodule:: Sire.Stream
+.. automodule:: sire.stream
 
 .. toctree::
    :maxdepth: 1

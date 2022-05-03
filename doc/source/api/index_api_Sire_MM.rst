@@ -1,8 +1,8 @@
 ==================
-Sire.MM API Detail
+sire.mm API Detail
 ==================
 
-.. automodule:: Sire.MM
+.. automodule:: sire.mm
 
 .. toctree::
    :maxdepth: 1

@@ -15,10 +15,10 @@ or
 >>> print(atom)
 Atom( C : 1 )
 
-would access the first atom in the molecule. The :func:`~Sire.Mol.Molecule.nAtoms`
+would access the first atom in the molecule. The :func:`~sire.mol.Molecule.num_atoms`
 function returns the total number of atoms.
 
->>> print(mol.nAtoms())
+>>> print(mol.num_atoms())
 74
 
 You can loop over all of the atoms via the `.atoms()` function e.g.
@@ -73,11 +73,11 @@ atoms, e.g.
 
 >>> res = mol.residue(0)
 >>> print(res)
-Residue( MOL:1   nAtoms=74 )
+Residue( MOL:1   num_atoms=74 )
 
 >>> for res in mol.residues():
 ...     print(res)
-Residue( MOL:1   nAtoms=74 )
+Residue( MOL:1   num_atoms=74 )
 
 You access atoms in a residue, chain or segment in a similar way, e.g.
 

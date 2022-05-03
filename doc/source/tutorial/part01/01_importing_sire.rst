@@ -1,13 +1,13 @@
 ==============
-Importing Sire
+Importing sire
 ==============
 
 Start a Python session (e.g. an interactive python console or a
 Jupyter notebook).
 
-You import Sire by typing
+You import ``sire`` by typing
 
->>> import Sire
+>>> import sire
 
 .. note::
 
@@ -15,8 +15,8 @@ You import Sire by typing
    type into an interactive Python session, such as an ipython console or
    Jupyter notebook
 
-As a convention, we will import the :mod:`Sire` Python module under the alias
-`sr` to reduce the amount of typing. We will use `sr` throughout this tutorial to
-mean :mod:`Sire`.
+As a convention, we will import the :mod:`sire` Python module under the alias
+``sr`` to reduce the amount of typing. We will use ``sr`` throughout this tutorial to
+mean :mod:`sire`.
 
->>> import Sire as sr
+>>> import sire as sr

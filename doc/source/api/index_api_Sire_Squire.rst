@@ -1,8 +1,8 @@
 ======================
-Sire.Squire API Detail
+sire.squire API Detail
 ======================
 
-.. automodule:: Sire.Squire
+.. automodule:: sire.squire
 
 .. toctree::
    :maxdepth: 1

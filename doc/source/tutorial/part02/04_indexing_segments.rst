@@ -16,7 +16,7 @@ which are available on all of the molecular container types.
 Not many molecules have named segments, so first let's load a molecule
 that does.
 
->>> mols = sr.load(sr.expand(sr.tutorial_url, "alanin.psf"]))
+>>> mols = sr.load(sr.expand(sr.tutorial_url, "alanin.psf"))
 Downloading from 'https://siremol.org/m/alanin.psf'...
 >>> mol = mols[0]
 
@@ -24,12 +24,12 @@ This molecule contains only a single segment called "MAIN".
 
 >>> print(mol.segments())
 Selector<SireMol::Segment>( size=1
-0:  Segment( MAIN nAtoms=66 )
+0:  Segment( MAIN num_atoms=66 )
 )
 >>> print(mol.segment(0))
-Segment( MAIN nAtoms=66 )
+Segment( MAIN num_atoms=66 )
 >>> print(mol.segment("MAIN"))
-Segment( MAIN nAtoms=66 )
+Segment( MAIN num_atoms=66 )
 
 Search for segments
 -------------------
@@ -39,10 +39,10 @@ index (``segidx``).
 
 >>> print(mol.segments("segname MAIN"))
 Selector<SireMol::Segment>( size=1
-0:  Segment( MAIN nAtoms=66 )
+0:  Segment( MAIN num_atoms=66 )
 )
 >>> print(mol.segment("segidx 0"))
-Segment( MAIN nAtoms=66 )
+Segment( MAIN num_atoms=66 )
 
 .. note::
 
@@ -53,7 +53,7 @@ Segment( MAIN nAtoms=66 )
 You can do a segment search via the containers index operator too!
 
 >>> print(mol["segname MAIN"])
-Molecule( 2.137 : nAtoms=66, nResidues=12 )
+Molecule( 2.137 : num_atoms=66, num_residues=12 )
 
 .. note::
 
@@ -82,13 +82,13 @@ Selector<SireMol::Atom>( size=11
 )
 
 >>> print(mol["segname MAIN and resname ACE"])
-Residue( ACE:1   nAtoms=3 )
+Residue( ACE:1   num_atoms=3 )
 
 As for other types, you can search for multiple segment names using
 a comma, and can do wildcard (glob) searching too!
 
 >>> print(mol.segment("segname /M*/"))
-Segment( MAIN nAtoms=66 )
+Segment( MAIN num_atoms=66 )
 
 Finding the atoms in a segment
 ------------------------------
@@ -118,17 +118,17 @@ atoms, residues or chains in a segment.
 
 >>> print(mol["residues in segname MAIN"])
 Selector<SireMol::Residue>( size=12
-0:  Residue( ACE:1   nAtoms=3 )
-1:  Residue( ALA:2   nAtoms=6 )
-2:  Residue( ALA:3   nAtoms=6 )
-3:  Residue( ALA:4   nAtoms=6 )
-4:  Residue( ALA:5   nAtoms=6 )
+0:  Residue( ACE:1   num_atoms=3 )
+1:  Residue( ALA:2   num_atoms=6 )
+2:  Residue( ALA:3   num_atoms=6 )
+3:  Residue( ALA:4   num_atoms=6 )
+4:  Residue( ALA:5   num_atoms=6 )
 ...
-7:  Residue( ALA:8   nAtoms=6 )
-8:  Residue( ALA:9   nAtoms=6 )
-9:  Residue( ALA:10  nAtoms=6 )
-10:  Residue( ALA:11  nAtoms=6 )
-11:  Residue( CBX:12  nAtoms=3 )
+7:  Residue( ALA:8   num_atoms=6 )
+8:  Residue( ALA:9   num_atoms=6 )
+9:  Residue( ALA:10  num_atoms=6 )
+10:  Residue( ALA:11  num_atoms=6 )
+11:  Residue( CBX:12  num_atoms=3 )
 )
 
 >>> print(mol["atoms in segname MAIN"])
@@ -169,7 +169,7 @@ KeyError: 'SireMol::missing_chain: This view does not contain any chains. (call 
 You can go to segments from atoms or residues using ``segments with``, e.g.
 
 >>> print(mol["segments with atomname C"])
-Molecule( 2.137 : nAtoms=66, nResidues=12 )
+Molecule( 2.137 : num_atoms=66, num_residues=12 )
 
 Finding the atoms, residues or chains in a segment
 --------------------------------------------------
@@ -194,17 +194,17 @@ Selector<SireMol::Atom>( size=66
 
 >>> print(mol["segidx 0"].residues())
 Selector<SireMol::Residue>( size=12
-0:  Residue( ACE:1   nAtoms=3 )
-1:  Residue( ALA:2   nAtoms=6 )
-2:  Residue( ALA:3   nAtoms=6 )
-3:  Residue( ALA:4   nAtoms=6 )
-4:  Residue( ALA:5   nAtoms=6 )
+0:  Residue( ACE:1   num_atoms=3 )
+1:  Residue( ALA:2   num_atoms=6 )
+2:  Residue( ALA:3   num_atoms=6 )
+3:  Residue( ALA:4   num_atoms=6 )
+4:  Residue( ALA:5   num_atoms=6 )
 ...
-7:  Residue( ALA:8   nAtoms=6 )
-8:  Residue( ALA:9   nAtoms=6 )
-9:  Residue( ALA:10  nAtoms=6 )
-10:  Residue( ALA:11  nAtoms=6 )
-11:  Residue( CBX:12  nAtoms=3 )
+7:  Residue( ALA:8   num_atoms=6 )
+8:  Residue( ALA:9   num_atoms=6 )
+9:  Residue( ALA:10  num_atoms=6 )
+10:  Residue( ALA:11  num_atoms=6 )
+11:  Residue( CBX:12  num_atoms=3 )
 )
 
 Uniquely identifying a segment
@@ -236,21 +236,21 @@ Use strings to create :class:`~Sire.Mol.SegName` objects,
 >>> print(sr.segid("MAIN"))
 SegName('MAIN')
 >>> print(mol[sr.segid("MAIN")])
-Segment( MAIN nAtoms=66 )
+Segment( MAIN num_atoms=66 )
 
 and integers to create :class:`~Sire.Mol.SegIdx` objects.
 
 >>> print(sr.segid(0))
 SegIdx(0)
 >>> print(mol[sr.segid(0)])
-Segment( MAIN nAtoms=66 )
+Segment( MAIN num_atoms=66 )
 
 You can set both a name and an index by passing in two arguments.
 
 >>> print(mol[sr.segid("MAIN", 0)])
-Segment( MAIN nAtoms=66 )
+Segment( MAIN num_atoms=66 )
 >>> print(mol[sr.segid(name="MAIN", idx=0)])
-Segment( MAIN nAtoms=66 )
+Segment( MAIN num_atoms=66 )
 
 .. note::
 
@@ -269,7 +269,7 @@ it can be used in loops.
 
 >>> for segment in mol.segments():
 ...     print(segment)
-Segment( MAIN nAtoms=66 )
+Segment( MAIN num_atoms=66 )
 
 This is particularly helpful when combined with loops over the atoms in
 a segment.
@@ -277,16 +277,16 @@ a segment.
 >>> for segment in mol.segments():
 ...    for atom in segment.atoms("element carbon"):
 ...        print(segment, atom.residue(), atom)
-Segment( MAIN nAtoms=66 ) Residue( ACE:1   nAtoms=3 ) Atom( CA:1 )
-Segment( MAIN nAtoms=66 ) Residue( ACE:1   nAtoms=3 ) Atom( C:2 )
-Segment( MAIN nAtoms=66 ) Residue( ALA:2   nAtoms=6 ) Atom( CA:6 )
-Segment( MAIN nAtoms=66 ) Residue( ALA:2   nAtoms=6 ) Atom( CB:7 )
-Segment( MAIN nAtoms=66 ) Residue( ALA:2   nAtoms=6 ) Atom( C:8 )
-Segment( MAIN nAtoms=66 ) Residue( ALA:3   nAtoms=6 ) Atom( CA:12 )
-Segment( MAIN nAtoms=66 ) Residue( ALA:3   nAtoms=6 ) Atom( CB:13 )
+Segment( MAIN num_atoms=66 ) Residue( ACE:1   num_atoms=3 ) Atom( CA:1 )
+Segment( MAIN num_atoms=66 ) Residue( ACE:1   num_atoms=3 ) Atom( C:2 )
+Segment( MAIN num_atoms=66 ) Residue( ALA:2   num_atoms=6 ) Atom( CA:6 )
+Segment( MAIN num_atoms=66 ) Residue( ALA:2   num_atoms=6 ) Atom( CB:7 )
+Segment( MAIN num_atoms=66 ) Residue( ALA:2   num_atoms=6 ) Atom( C:8 )
+Segment( MAIN num_atoms=66 ) Residue( ALA:3   num_atoms=6 ) Atom( CA:12 )
+Segment( MAIN num_atoms=66 ) Residue( ALA:3   num_atoms=6 ) Atom( CB:13 )
 ...
-Segment( MAIN nAtoms=66 ) Residue( ALA:11  nAtoms=6 ) Atom( C:62 )
-Segment( MAIN nAtoms=66 ) Residue( CBX:12  nAtoms=3 ) Atom( CA:66 )
+Segment( MAIN num_atoms=66 ) Residue( ALA:11  num_atoms=6 ) Atom( C:62 )
+Segment( MAIN num_atoms=66 ) Residue( CBX:12  num_atoms=3 ) Atom( CA:66 )
 
 Finding all segment names
 -------------------------

@@ -1,8 +1,8 @@
 ==================
-Sire.FF API Detail
+sire.ff API Detail
 ==================
 
-.. automodule:: Sire.FF
+.. automodule:: sire.ff
 
 .. toctree::
    :maxdepth: 1

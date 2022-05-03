@@ -1,8 +1,8 @@
 =====================
-Sire.Maths API Detail
+sire.maths API Detail
 =====================
 
-.. automodule:: Sire.Maths
+.. automodule:: sire.maths
 
 .. toctree::
    :maxdepth: 1

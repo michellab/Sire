@@ -1,8 +1,8 @@
 ====================
-Sire.Move API Detail
+sire.move API Detail
 ====================
 
-.. automodule:: Sire.Move
+.. automodule:: sire.move
 
 .. toctree::
    :maxdepth: 1

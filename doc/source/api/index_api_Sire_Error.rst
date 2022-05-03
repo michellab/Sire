@@ -1,8 +1,8 @@
 =====================
-Sire.Error API Detail
+sire.error API Detail
 =====================
 
-.. automodule:: Sire.Error
+.. automodule:: sire.error
 
 .. toctree::
    :maxdepth: 1

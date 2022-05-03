@@ -6,7 +6,7 @@ It is often the case that molecular information needs to be read from
 multiple files, e.g. a separate topology and coordinate file.
 
 You load from multiple files simply by passing multiple filenames and/or
-URLs to :func:`Sire.load`.
+URLs to :func:`sire.load`.
 
 >>> mols = sr.load("https://siremol.org/m/ala.top",
 ...                "https://siremol.org/m/ala.crd")
@@ -14,7 +14,7 @@ Downloading from 'https://siremol.org/m/ala.top'...
 Downloading from 'https://siremol.org/m/ala.crd'...
 
 >>> print(mols)
-System( name=ACE nMolecules=631 nResidues=633 nAtoms=1912 )
+System( name=ACE num_molecules=631 num_residues=633 num_atoms=1912 )
 
 You can pass in the filenames as multiple arguments or as a list,
 whichever you find easiest.
