@@ -109,6 +109,7 @@ public:
 
     T operator[](int i) const;
     SelectorM<T> operator[](const SireBase::Slice &slice) const;
+    SelectorM<T> operator[](const QList<qint64> &idxs) const;
     T operator[](const QString &name) const;
     T operator[](const typename T::ID &id) const;
 
@@ -861,6 +862,14 @@ SelectorM<T> SelectorM<T>::operator[](const SireBase::Slice &slice) const
 {
     return SelectorM<T>(*this, slice);
 }
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T> SelectorM<T>::operator[](const QList<qint64> &idxs) const
+{
+    return SelectorM<T>(*this,idxs);
+}
+
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -1694,7 +1703,7 @@ QString SelectorM<T>::toString() const
 
         const auto n = this->count();
 
-        if (n < 10)
+        if (n <= 10)
         {
             for (int i=0; i<n; ++i)
             {

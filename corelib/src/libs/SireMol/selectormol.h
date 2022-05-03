@@ -126,6 +126,7 @@ public:
 
     Molecule operator[](int i) const;
     SelectorMol operator[](const SireBase::Slice &slice) const;
+    SelectorMol operator[](const QList<qint64> &idxs) const;
     Molecule operator[](const QString &name) const;
     Molecule operator[](const MolIdx &molidx) const;
     Molecule operator[](const MolName &molname) const;

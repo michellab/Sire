@@ -360,6 +360,11 @@ SelectorMol SelectorMol::operator[](const Slice &slice) const
     return this->molecules(slice);
 }
 
+SelectorMol SelectorMol::operator[](const QList<qint64> &idxs) const
+{
+    return this->molecules(idxs);
+}
+
 Molecule SelectorMol::operator[](const QString &name) const
 {
     return this->molecule(name);
@@ -1199,7 +1204,7 @@ QString SelectorMol::toString() const
 
         const auto n = this->count();
 
-        if (n < 10)
+        if (n <= 10)
         {
             for (int i=0; i<n; ++i)
             {
