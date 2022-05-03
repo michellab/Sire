@@ -56,8 +56,8 @@ class System:
             else:
                 return self._molecules.molecules(key)
 
-        from ..mol import SelectorMol
-        self._molecules = SelectorMol(self._system)
+        import sire.mol
+        self._molecules = sire.mol.SelectorMol(self._system)
 
         if self._molecules.num_atoms() != self._system.num_atoms():
             # oh dear - this is an edge case where the System does

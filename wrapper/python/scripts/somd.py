@@ -1,3 +1,9 @@
+try:
+    import sire
+    sire.use_old_api()
+except ImportError:
+    pass
+
 import Sire.Config
 
 import argparse

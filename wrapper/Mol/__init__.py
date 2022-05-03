@@ -187,7 +187,10 @@ from ._Mol import *
 
 
 def __get_property__(molview, key):
-    property_type = molview.propertyType(key).replace("::","_")
+    if hasattr(molview, "property_type"):
+        property_type = molview.property_type(key).replace("::","_")
+    else:
+        property_type = molview.propertyType(key).replace("::","_")
 
     return getattr(molview, "_get_property_%s" % property_type)(key)
 
@@ -196,13 +199,19 @@ def __get_metadata__(molview, *args):
 
     if len(args) == 1:
         metakey = args[0]
-        property_type = molview.metadataType(metakey).replace("::","_")
+        if hasattr(molview, "metadata_type"):
+            property_type = molview.metadata_type(metakey).replace("::","_")
+        else:
+            property_type = molview.metadataType(metakey).replace("::","_")
         return getattr(molview, "_get_metadata_%s" % property_type)(metakey)
 
     elif len(args) == 2:
-         (key, metakey) = args
-         property_type = molview.metadataType(key, metakey).replace("::","_")
-         return getattr(molview, "_get_metadata_%s" % property_type)(key, metakey)
+        (key, metakey) = args
+        if hasattr(molview, "metadata_type"):
+            property_type = molview.metadata_type(key, metakey).replace("::","_")
+        else:
+            property_type = molview.metadataType(key, metakey).replace("::","_")
+        return getattr(molview, "_get_metadata_%s" % property_type)(key, metakey)
 
     else:
         raise AttributeError( "Only molview.metadata(metakey) or molview.metadata(key, metakey) are valid!" )
@@ -212,7 +221,10 @@ _typename_mapping = {"SireMol_Velocity3D" : "SireMaths_Vector3D_SireUnits_Dimens
 
 def __get_typename__(obj):
     try:
-        typename = obj.typeName().replace("::","_")
+        if hasattr(obj, "typename"):
+            typename = obj.typename().replace("::","_")
+        else:
+            typename = obj.typeName().replace("::","_")
         return (_typename_mapping.get(typename, typename), obj)
     except:
         if isinstance(obj, float):
@@ -247,10 +259,15 @@ def _match_to_type(typename, property):
 
 
 def _set_property(molview, key, property):
-    if molview.hasProperty(key):
-        # get the type of the existing property
-        typename = molview.propertyType(key)
-        property = _match_to_type(typename, property)
+    if hasattr(molview, "has_property"):
+        if molview.has_property(key):
+            typename = molview.property_type(key)
+            property = _match_to_type(typename, property)
+    else:
+        if molview.hasProperty(key):
+            # get the type of the existing property
+            typename = molview.propertyType(key)
+            property = _match_to_type(typename, property)
 
     (typename, property) = __get_typename__(property)
 

@@ -28,3 +28,7 @@ for init in inits:
         cmd = f"cp {init} {dest}"
         print(cmd)
         shutil.copy(init, dest)
+
+os.chdir("module")
+os.system("make install")
+
