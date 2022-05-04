@@ -31,6 +31,8 @@ namespace bp = boost::python;
 
 #include "twoatomfunctions.h"
 
+#include <QDebug>
+
 #include "selectorbond.h"
 
 SireMM::SelectorBond __copy__(const SireMM::SelectorBond &other){ return SireMM::SelectorBond(other); }
@@ -56,6 +58,8 @@ void register_SelectorBond_class(){
         SelectorBond_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomID const &, SireMol::AtomID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("atom0"), bp::arg("atom1"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorBond_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::AtomID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("atom"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorBond_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::AtomID const &, SireMol::AtomID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("atom0"), bp::arg("atom1"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorBond_exposer.def( bp::init< SireMol::Selector< SireMol::Atom > const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atoms"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorBond_exposer.def( bp::init< SireMol::Selector< SireMol::Atom > const &, SireMol::Selector< SireMol::Atom > const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorBond_exposer.def( bp::init< SireMM::SelectorBond const & >(( bp::arg("other") ), "") );
         { //::SireMM::SelectorBond::IDs
         

@@ -14,6 +14,8 @@ namespace bp = boost::python;
 
 #include "SireCAS/values.h"
 
+#include "SireMol/errors.h"
+
 #include "SireMol/molecule.h"
 
 #include "SireMol/mover.hpp"
@@ -29,6 +31,8 @@ namespace bp = boost::python;
 #include "bond.h"
 
 #include "twoatomfunctions.h"
+
+#include <QDebug>
 
 #include "bond.h"
 
