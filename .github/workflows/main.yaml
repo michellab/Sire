@@ -28,9 +28,6 @@ jobs:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
           activate-environment: sire_build
-          miniforge-version: latest
-          miniforge-variant: Mambaforge
-          use-mamba: true
       - name: Clone the repository
         run: git clone https://github.com/michellab/Sire
       - name: Checkout the head branch if a pull request
