@@ -61,6 +61,22 @@ public:
     SelectorBond(const SireMol::MoleculeView &molecule,
                  const QList<SireMol::BondID> &bonds);
 
+    SelectorBond(const SireMol::MoleculeData &molecule,
+                 const SireMol::AtomID &atom,
+                 const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorBond(const SireMol::MoleculeData &molecule,
+                 const SireMol::AtomID &atom0, const SireMol::AtomID &atom1,
+                 const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorBond(const SireMol::MoleculeView &molecule,
+                 const SireMol::AtomID &atom,
+                 const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorBond(const SireMol::MoleculeView &molecule,
+                 const SireMol::AtomID &atom0, const SireMol::AtomID &atom1,
+                 const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
     SelectorBond(const SelectorBond &other);
 
     virtual ~SelectorBond();
