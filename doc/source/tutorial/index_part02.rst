@@ -24,7 +24,7 @@ Downloading from 'https://files.rcsb.org/download/7SA1.pdb.gz'...
 Unzipping './7SA1.pdb.gz'...
 >>> mol = mols[0]
 >>> print(mol)
-Molecule( 2.10 : num_atoms=11728, num_residues=1518 )
+Molecule( 7SA1:2  num_atoms=11728 num_residues=1518 )
 
 .. note::
 

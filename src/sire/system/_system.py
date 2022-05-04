@@ -49,6 +49,12 @@ class System:
     def num_molecules(self):
         return self._system.num_molecules()
 
+    def names(self):
+        return self.molecules().names()
+
+    def numbers(self):
+        return self.molecules().numbers()
+
     def molecules(self, key=None):
         if self._molecules is not None:
             if key is None:

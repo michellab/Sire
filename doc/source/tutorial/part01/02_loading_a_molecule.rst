@@ -25,11 +25,7 @@ In this case, one molecule has been loaded. You can access this molecule via;
 
 >>> mol = mols[0]
 >>> print(mol)
-Molecule( 2.11 : num_atoms=74, num_residues=1 )
+Molecule( MOL:2   num_atoms=74 num_residues=1 )
 
-.. note::
-
-   The ``2.11`` is a number that Sire uses to identify this molecule.
-   We will explain what this number is and how it is formed in a
-   later chapter. Note that your molecule may have a different
-   identifier.
+This shows that the molecule is called ``MOL`` and has molecule number 2.
+It contains 74 atoms in 1 residue.

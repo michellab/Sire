@@ -124,9 +124,10 @@ bool Molecule::operator!=(const Molecule &other) const
 /** Return a string representation of this molecule */
 QString Molecule::toString() const
 {
-    return QObject::tr( "Molecule( %1.%2 : num_atoms=%3, num_residues=%4 )" )
-                .arg(this->number())
-                .arg(this->version())
+    QString n = QString("%1:%2").arg(this->name()).arg(this->number());
+
+    return QObject::tr( "Molecule( %1 num_atoms=%2 num_residues=%3 )" )
+                .arg(n, -7)
                 .arg(this->nAtoms())
                 .arg(this->nResidues());
 }

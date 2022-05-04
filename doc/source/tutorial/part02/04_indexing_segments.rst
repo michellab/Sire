@@ -53,7 +53,7 @@ Segment( MAIN num_atoms=66 )
 You can do a segment search via the containers index operator too!
 
 >>> print(mol["segname MAIN"])
-Molecule( 2.137 : num_atoms=66, num_residues=12 )
+Molecule( alanin:2 num_atoms=66 num_residues=12 )
 
 .. note::
 

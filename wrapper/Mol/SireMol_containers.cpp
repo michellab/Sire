@@ -54,6 +54,8 @@
 #include "SireMol/moleculegroups.h"
 #include "SireMol/mgnum.h"
 #include "SireMol/mgname.h"
+#include "SireMol/molname.h"
+#include "SireMol/molidx.h"
 #include "SireMol/mgidsandmaps.h"
 #include "SireMol/partialmolecule.h"
 #include "SireMol/perturbation.h"
@@ -101,6 +103,8 @@ void register_SireMol_containers()
     register_list< QList<ChainIdx> >();
     register_list< QList<SegIdx> >();
 
+    register_list< QList<MolIdx> >();
+    register_list< QList<MolName> >();
     register_list< QList<MolNum> >();
     register_list< QVector<MolNum> >();
     register_list< QList<MGNum> >();

@@ -214,6 +214,20 @@ def __fixed__segments__(obj, idx=None, auto_reduce=False):
         return result
 
 
+def __fixed__molecules__(obj, idx=None, auto_reduce=False):
+    if idx is None:
+        result = obj.__orig__molecules()
+    elif type(idx) is range:
+        result = obj.__orig__molecules(list(idx))
+    else:
+        result = obj.__orig__molecules(idx)
+
+    if auto_reduce and len(result) == 1:
+        return result[0]
+    else:
+        return result
+
+
 def __fix_getitem(C):
     if not hasattr(C, "__orig__getitem__"):
         C.__orig__getitem__ = C.__getitem__
@@ -235,6 +249,12 @@ def __fix_getitem(C):
     C.residues = __fixed__residues__
     C.chains = __fixed__chains__
     C.segments = __fixed__segments__
+
+    if hasattr(C, "molecules"):
+        if not hasattr(C, "__orig__molecules"):
+            C.__orig__molecules = C.molecules
+
+        C.molecules = __fixed__molecules__
 
 
 for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule,

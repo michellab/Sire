@@ -19,6 +19,8 @@
 
 #include "Helpers/release_gil_policy.hpp"
 
+#include <QFileInfo>
+
 #include <QDebug>
 
 using namespace SireBase;
@@ -35,9 +37,21 @@ System load_molecules(const QStringList &files,
     {
         auto mols = MoleculeParser::load(files, map);
 
+        // get the name of this system - if it doesn't exist, then
+        // infer it from the filename
+        auto name = mols.name().value();
+
+        if (name == "")
+        {
+            // get the name from the first file
+            name = QFileInfo(files[0]).baseName();
+        }
+
         // This is an opinionated loader - we must have atom elements
         // and a connectivity defined
         auto grp = MoleculeGroup("all");
+
+        int n = 0;
 
         for (const auto &molnum : mols.molNums())
         {
@@ -72,6 +86,35 @@ System load_molecules(const QStringList &files,
                 }
             }
 
+            if (mol.name().isEmpty())
+            {
+                // if the molecule has one residue, then use the residue
+                // name
+                QString molname;
+
+                if (mol.nResidues() == 1)
+                {
+                    molname = mol.residue(0).name().value();
+                }
+
+                if (molname.isEmpty())
+                {
+                    //use the system name. The first molecule with this name
+                    //is named after the system. Otherwise, we add a suffix
+                    if (n == 0)
+                    {
+                        molname = name;
+                    }
+                    else
+                    {
+                        molname = QString("%1_%2").arg(name).arg(n+1);
+                        n++;
+                    }
+                }
+
+                mol = mol.edit().rename(molname).commit();
+            }
+
             // we now want to break the molecule up into sub-molecules,
             // based on the connectivity
             // NOT IMPLEMENTED YET
@@ -80,7 +123,7 @@ System load_molecules(const QStringList &files,
         }
 
         auto s = System();
-        s.setName(mols.name());
+        s.setName(name);
         s.add(grp);
 
         for (const auto &key : mols.propertyKeys())
