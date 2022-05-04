@@ -278,10 +278,6 @@ def use_old_api():
 
     injector = DependencyInjector()
 
-    # ignore warnings, as a lot are printed from the frozenlib
-    import warnings
-    warnings.filterwarnings('ignore')
-
     # Use 'legacy' as a stand-in for Sire
     injector.provide("Sire", legacy)
     injector.install()

@@ -38,11 +38,14 @@
 #include "SireCAS/values.h"
 
 #include "SireBase/errors.h"
+#include "SireMol/errors.h"
 
 #include "SireUnits/units.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
+
+#include <QDebug>
 
 using namespace SireMM;
 using namespace SireMol;
@@ -92,6 +95,12 @@ Bond::Bond(const Atom &atom0, const Atom &atom1)
                 .arg(atom0.molecule().toString())
                 .arg(atom1.molecule().toString()), CODELOC);
     }
+    else if (atom0.index() == atom1.index())
+    {
+        throw SireMol::duplicate_atom(QObject::tr(
+            "You cannot create a bond from two identical atoms. %1")
+                .arg(atom0.toString()), CODELOC);
+    }
 
     bnd = BondID(atom0.index(), atom1.index());
 }
@@ -104,17 +113,30 @@ Bond::Bond(const MoleculeView &molview,
 }
 
 Bond::Bond(const MoleculeData &moldata,
-           const AtomID &atom0, const AtomID &atom1)
+           const AtomID &atm0, const AtomID &atm1)
      : ConcreteProperty<Bond, MoleculeView>()
 {
-    this->operator=(Bond(Atom(moldata, atom0), Atom(moldata, atom1)));
+    this->operator=(Bond(Atom(moldata, atm0), Atom(moldata, atm1)));
 }
 
 Bond::Bond(const MoleculeData &moldata, const BondID &bond)
      : ConcreteProperty<Bond, MoleculeView>(moldata)
 {
-    bnd = BondID(moldata.info().atomIdx(bond.atom0()),
-                 moldata.info().atomIdx(bond.atom1()));
+    auto atomidx0 = moldata.info().atomIdx(bond.atom0());
+    auto atomidx1 = moldata.info().atomIdx(bond.atom1());
+
+    if (atomidx0 > atomidx1)
+    {
+        qSwap(atomidx0, atomidx1);
+    }
+    else if (atomidx0 == atomidx1)
+    {
+        throw SireMol::duplicate_atom(QObject::tr(
+            "You cannot make a bond out of two identical atoms. %1")
+                .arg(atomidx0.toString()), CODELOC);
+    }
+
+    bnd = BondID(atomidx0, atomidx1);
 }
 
 Bond::Bond(const Bond &other)
@@ -165,12 +187,12 @@ QString Bond::toString() const
 
 Atom Bond::atom0() const
 {
-    return this->atom(bnd.atom0());
+    return Atom(*this, bnd.atom0());
 }
 
 Atom Bond::atom1() const
 {
-    return this->atom(bnd.atom1());
+    return Atom(*this, bnd.atom1());
 }
 
 BondID Bond::ID() const
@@ -185,7 +207,7 @@ bool Bond::isEmpty() const
 
 bool Bond::selectedAll() const
 {
-    return this->selection().selectedAll();
+    return this->data().info().nAtoms() == 2;
 }
 
 AtomSelection Bond::selection() const
@@ -193,8 +215,9 @@ AtomSelection Bond::selection() const
     if (this->isNull())
         return AtomSelection();
 
-    auto s = this->atom0().selection();
+    auto s = AtomSelection(this->data());
 
+    s = s.select(bnd.atom0());
     s = s.select(bnd.atom1());
 
     return s;

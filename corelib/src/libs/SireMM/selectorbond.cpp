@@ -46,6 +46,8 @@
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
+#include <QDebug>
+
 using namespace SireMM;
 using namespace SireMol;
 using namespace SireBase;
@@ -163,7 +165,7 @@ SelectorBond::SelectorBond(const MoleculeView &mol,
                     qSwap(atomidx0, atomidx1);
                 }
 
-                if (not ce.areConnected(atomidx0, atomidx1))
+                if (atomidx0 != atomidx1 and not ce.areConnected(atomidx0, atomidx1))
                 {
                     ce = ce.connect(atomidx0, atomidx1);
                     bonds.append(BondID(atomidx0, atomidx1));
@@ -207,7 +209,7 @@ SelectorBond::SelectorBond(const MoleculeView &mol,
         {
             for (const auto &atomidx1 : mol.data().info().map(atom1))
             {
-                if (c.areConnected(atomidx0, atomidx1))
+                if (atomidx0 != atomidx1 and c.areConnected(atomidx0, atomidx1))
                 {
                     if (not (ce.areConnected(atomidx0, atomidx1)))
                     {
@@ -256,6 +258,85 @@ SelectorBond::SelectorBond(const MoleculeData &mol,
              : ConcreteProperty<SelectorBond, MoleculeView>()
 {
     this->operator=(SelectorBond(Molecule(mol), atom0, atom1, map));
+}
+
+SelectorBond::SelectorBond(const Selector<Atom> &atoms,
+                           const PropertyMap &map)
+             : ConcreteProperty<SelectorBond, MoleculeView>(atoms)
+{
+    if (atoms.data().hasProperty(map["connectivity"]))
+    {
+        auto c = atoms.data().property(map["connectivity"]).asA<Connectivity>();
+
+        auto ce = c.edit();
+        ce.disconnectAll();
+
+        QList<BondID> bonds;
+
+        for (int i=0; i<atoms.count(); ++i)
+        {
+            for (const auto &b : c.getBonds(atoms(i).index()))
+            {
+                auto atomidx0 = atoms.data().info().atomIdx(b.atom0());
+                auto atomidx1 = atoms.data().info().atomIdx(b.atom1());
+
+                if (atomidx0 > atomidx1)
+                {
+                    qSwap(atomidx0, atomidx1);
+                }
+
+                if (atomidx0 != atomidx1 and not ce.areConnected(atomidx0, atomidx1))
+                {
+                    ce = ce.connect(atomidx0, atomidx1);
+                    bonds.append(BondID(atomidx0, atomidx1));
+                }
+            }
+        }
+    }
+}
+
+SelectorBond::SelectorBond(const Selector<Atom> &atoms0,
+                           const Selector<Atom> &atoms1,
+                           const PropertyMap &map)
+             : ConcreteProperty<SelectorBond, MoleculeView>(atoms0)
+{
+    if (not atoms0.isSameMolecule(atoms1))
+        throw SireError::incompatible_error(QObject::tr(
+            "You can only create a bond from two atoms in the same molecule. "
+            "%1 and %2 are from different molecules (%3 and %4)")
+                .arg(atoms0.toString()).arg(atoms1.toString())
+                .arg(atoms0.molecule().toString())
+                .arg(atoms1.molecule().toString()), CODELOC);
+
+    if (atoms0.data().hasProperty(map["connectivity"]))
+    {
+        auto c = atoms0.data().property(map["connectivity"]).asA<Connectivity>();
+
+        auto ce = c.edit();
+        ce.disconnectAll();
+
+        QList<BondID> bonds;
+
+        for (int i=0; i<atoms0.count(); ++i)
+        {
+            for (int j=0; j<atoms1.count(); ++j)
+            {
+                auto atomidx0 = atoms0(i).index();
+                auto atomidx1 = atoms1(j).index();
+
+                if (atomidx0 > atomidx1)
+                {
+                    qSwap(atomidx0, atomidx1);
+                }
+
+                if (atomidx0 != atomidx1 and not ce.areConnected(atomidx0, atomidx1))
+                {
+                    ce = ce.connect(atomidx0, atomidx1);
+                    bonds.append(BondID(atomidx0, atomidx1));
+                }
+            }
+        }
+    }
 }
 
 SelectorBond::SelectorBond(const SelectorBond &other)
@@ -310,32 +391,37 @@ QString SelectorBond::toString() const
 {
     if (this->isNull())
         return QObject::tr("SelectorBond::null");
+    else if (this->isEmpty())
+        return QObject::tr("SelectorBond::empty");
 
     QStringList parts;
 
     if (this->count() <= 10)
     {
-        for (int i=0; i<10; ++i)
+        for (int i=0; i<this->count(); ++i)
         {
-            parts.append(this->operator()(i).toString());
+            parts.append(QObject::tr("%1: %2").arg(i)
+                            .arg(this->operator()(i).toString()));
         }
     }
     else
     {
         for (int i=0; i<5; ++i)
         {
-            parts.append(this->operator()(i).toString());
+            parts.append(QObject::tr("%1: %2").arg(i)
+                            .arg(this->operator()(i).toString()));
         }
 
         parts.append("...");
 
         for (int i=this->count()-5; i<this->count(); ++i)
         {
-            parts.append(this->operator()(i).toString());
+            parts.append(QObject::tr("%1: %2").arg(i)
+                            .arg(this->operator()(i).toString()));
         }
     }
 
-    return QObject::tr("SelectorMol( size=%1\n%2\n)")
+    return QObject::tr("SelectorBond( size=%1\n%2\n)")
                 .arg(this->count()).arg(parts.join("\n"));
 }
 

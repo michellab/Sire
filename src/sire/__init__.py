@@ -257,55 +257,39 @@ __branch__ = config.sire_repository_branch
 __repository__ = config.sire_repository_url
 __revisionid__ = config.sire_repository_version[0:7]
 
-_disable_lazy_import = False
+_can_lazy_import = True
 
 try:
-    if _disable_lazy_import:
-        raise AssertionError()
-
     import lazy_import as _lazy_import
     _lazy_import.logging.disable(_lazy_import.logging.DEBUG)
+
+    # ignore warnings, as a lot are printed from the frozenlib
+    import warnings
+    warnings.filterwarnings('ignore')
+
 except Exception:
-    class _lazy_import:
-        """This is not lazy_import, but instead a thin stub that matches the
-           API but DOES NOT lazy_import anything. This imports at call time.
-        """
-        @staticmethod
-        def lazy_module(m):
-            from importlib import import_module
-            return import_module(m, package="sire")
-
-        @staticmethod
-        def lazy_function(f):
-            module_name, unit_name = f.rsplit('.', 1)
-            module = _lazy_import.lazy_module(module_name)
-            return getattr(module, unit_name)
-
-        @staticmethod
-        def lazy_class(c):
-            return _lazy_import.lazy_function(c)
-
+    _can_lazy_import = False
 
 # Lazy import the modules for speed, and also to prevent pythonizing them
 # if the users wants to run in legacy mode
-
-analysis = _lazy_import.lazy_module("sire.analysis")
-base = _lazy_import.lazy_module("sire.base")
-cas = _lazy_import.lazy_module("sire.cas")
-cluster = _lazy_import.lazy_module("sire.cluster")
-error = _lazy_import.lazy_module("sire.error")
-ff = _lazy_import.lazy_module("sire.ff")
-id = _lazy_import.lazy_module("sire.id")
-io = _lazy_import.lazy_module("sire.io")
-maths = _lazy_import.lazy_module("sire.maths")
-mm = _lazy_import.lazy_module("sire.mm")
-mol = _lazy_import.lazy_module("sire.mol")
-move = _lazy_import.lazy_module("sire.move")
-qt = _lazy_import.lazy_module("sire.qt")
-squire = _lazy_import.lazy_module("sire.squire")
-stream = _lazy_import.lazy_module("sire.stream")
-units = _lazy_import.lazy_module("sire.units")
-vol = _lazy_import.lazy_module("sire.vol")
+if _can_lazy_import:
+    analysis = _lazy_import.lazy_module("sire.analysis")
+    base = _lazy_import.lazy_module("sire.base")
+    cas = _lazy_import.lazy_module("sire.cas")
+    cluster = _lazy_import.lazy_module("sire.cluster")
+    error = _lazy_import.lazy_module("sire.error")
+    ff = _lazy_import.lazy_module("sire.ff")
+    id = _lazy_import.lazy_module("sire.id")
+    io = _lazy_import.lazy_module("sire.io")
+    maths = _lazy_import.lazy_module("sire.maths")
+    mm = _lazy_import.lazy_module("sire.mm")
+    mol = _lazy_import.lazy_module("sire.mol")
+    move = _lazy_import.lazy_module("sire.move")
+    qt = _lazy_import.lazy_module("sire.qt")
+    squire = _lazy_import.lazy_module("sire.squire")
+    stream = _lazy_import.lazy_module("sire.stream")
+    units = _lazy_import.lazy_module("sire.units")
+    vol = _lazy_import.lazy_module("sire.vol")
 
 def _version_string():
     """Return a nicely formatted string that describes the current Sire version"""

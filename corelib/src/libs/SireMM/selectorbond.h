@@ -31,6 +31,8 @@
 
 #include "bond.h"
 
+#include "SireMol/selector.hpp"
+
 SIRE_BEGIN_HEADER
 
 namespace SireMM
@@ -75,6 +77,12 @@ public:
 
     SelectorBond(const SireMol::MoleculeView &molecule,
                  const SireMol::AtomID &atom0, const SireMol::AtomID &atom1,
+                 const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorBond(const SireMol::Selector<SireMol::Atom> &atoms,
+                 const SireBase::PropertyMap &map = SireBase::PropertyMap());
+    SelectorBond(const SireMol::Selector<SireMol::Atom> &atoms0,
+                 const SireMol::Selector<SireMol::Atom> &atoms1,
                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SelectorBond(const SelectorBond &other);

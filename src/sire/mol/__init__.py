@@ -15,6 +15,7 @@ from ..legacy.Mol import AtomName, AtomNum, AtomIdx, AtomID, \
                          SegName, SegIdx, SegID, \
                          CGName, CGIdx, CGID, \
                          MolName, MolNum, MolIdx, MolID, \
+                         BondID, AngleID, DihedralID, ImproperID, \
                          Atom, Selector_Atom_, SelectorM_Atom_, \
                          CutGroup, Selector_CutGroup_, SelectorM_CutGroup_, \
                          Residue, Selector_Residue_, SelectorM_Residue_, \
@@ -30,6 +31,15 @@ def __is_molecule_class(obj):
 
     return Molecule in mro or \
             SelectorMol in mro
+
+
+def __is_bond_class(obj):
+    mro = type(obj).mro()
+
+    from sire.mm import Bond, SelectorBond
+
+    return Bond in mro or \
+        SelectorBond in mro
 
 
 def __is_atom_class(obj):
@@ -73,7 +83,9 @@ def __is_cutgroup_class(obj):
 
 
 def __is_selector_class(obj):
-    return obj.what().find("SireMol::Selector") != -1
+    t = obj.what()
+    return t.find("SireMol::Selector") != -1 or \
+                t.find("SireMM::Selector") != -1
 
 
 def __is_list_class(obj):
@@ -149,6 +161,8 @@ def __fixed__getitem__(obj, key):
         return obj.chains(key, auto_reduce=True)
     elif SegID in type(key).mro():
         return obj.segments(key, auto_reduce=True)
+    elif BondID in type(key).mro():
+        return obj.bonds(key, auto_reduce=True)
 
     if __is_selector_class(obj):
         return obj.__orig__getitem__(key)
@@ -170,6 +184,39 @@ def __fixed__atoms__(obj, idx=None, auto_reduce=False):
         return result[0]
     else:
         return result
+
+
+def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False):
+    if idx is None and idx1 is not None:
+        idx = idx1
+        idx1 = None
+
+    if idx is None:
+        from ..mm import SelectorBond
+        result = SelectorBond(obj)
+    elif idx1 is None:
+        from ..mm import SelectorBond
+        result = SelectorBond(obj.atoms(idx))
+    else:
+        from ..mm import SelectorBond
+        result = SelectorBond(obj.atoms(idx), obj.atoms(idx1))
+
+    if auto_reduce and len(result) == 1:
+        return result[0]
+    else:
+        return result
+
+
+def __fixed__bond__(obj, idx=None, idx1=None):
+    bonds = __fixed__bonds__(obj, idx, idx1, auto_reduce=False)
+
+    if len(bonds) == 0:
+        raise KeyError("There is no matching bond in this view.")
+    elif len(bonds) > 1:
+        raise KeyError(
+            f"More than one bond matchs. Number of matches is {len(bonds)}.")
+
+    return bonds[0]
 
 
 def __fixed__residues__(obj, idx=None, auto_reduce=False):
@@ -255,6 +302,10 @@ def __fix_getitem(C):
             C.__orig__molecules = C.molecules
 
         C.molecules = __fixed__molecules__
+    else:
+        # currently don't have this on multi-molecule containers
+        C.bonds = __fixed__bonds__
+        C.bond = __fixed__bond__
 
 
 for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule,
