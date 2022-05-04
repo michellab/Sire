@@ -196,10 +196,10 @@ def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False):
         result = SelectorBond(obj)
     elif idx1 is None:
         from ..mm import SelectorBond
-        result = SelectorBond(obj.atoms(idx))
+        result = SelectorBond.fromAtoms(obj.atoms(idx))
     else:
         from ..mm import SelectorBond
-        result = SelectorBond(obj.atoms(idx), obj.atoms(idx1))
+        result = SelectorBond.fromAtoms(obj.atoms(idx), obj.atoms(idx1))
 
     if auto_reduce and len(result) == 1:
         return result[0]

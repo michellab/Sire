@@ -292,6 +292,8 @@ SelectorBond::SelectorBond(const Selector<Atom> &atoms,
                 }
             }
         }
+
+        bnds = bonds;
     }
 }
 
@@ -336,6 +338,8 @@ SelectorBond::SelectorBond(const Selector<Atom> &atoms0,
                 }
             }
         }
+
+        bnds = bonds;
     }
 }
 
