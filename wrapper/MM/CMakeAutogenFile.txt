@@ -148,6 +148,7 @@ set ( PYPP_SOURCES
        CLJIntraFunction.pypp.cpp
        InternalComponent.pypp.cpp
        AngleRestraint.pypp.cpp
+       SelectorBond.pypp.cpp
        StretchBendTorsionParameterName.pypp.cpp
        ImproperParameterName.pypp.cpp
        AtomPairs_LJScaleFactor_.pypp.cpp
@@ -172,6 +173,7 @@ set ( PYPP_SOURCES
        InternalParameters3D.pypp.cpp
        InterGroupFF.pypp.cpp
        FourAtomPerturbation.pypp.cpp
+       Bond.pypp.cpp
        StretchBendTorsionSymbols.pypp.cpp
        CLJ14Group.pypp.cpp
        LJScaleFactor.pypp.cpp

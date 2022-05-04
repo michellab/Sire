@@ -45,6 +45,8 @@
 
 #include "BendBendSymbols.pypp.hpp"
 
+#include "Bond.pypp.hpp"
+
 #include "BondComponent.pypp.hpp"
 
 #include "BondParameterName.pypp.hpp"
@@ -321,6 +323,8 @@
 
 #include "ScaledLJParameterNames3D.pypp.hpp"
 
+#include "SelectorBond.pypp.hpp"
+
 #include "SoftCLJComponent.pypp.hpp"
 
 #include "SoftCLJPotentialInterface_InterSoftCLJPotential_.pypp.hpp"
@@ -511,6 +515,8 @@ BOOST_PYTHON_MODULE(_MM){
     register_BendBendParameterName_class();
 
     register_BendBendSymbols_class();
+
+    register_Bond_class();
 
     register_BondComponent_class();
 
@@ -705,6 +711,8 @@ BOOST_PYTHON_MODULE(_MM){
     register_ScaledChargeParameterNames3D_class();
 
     register_ScaledLJParameterNames3D_class();
+
+    register_SelectorBond_class();
 
     register_SoftCLJComponent_class();
 

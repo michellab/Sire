@@ -5,6 +5,7 @@
 
 #include "Helpers/version_error_impl.h"
 
+#include "selectorbond.h"
 #include "intraff.h"
 #include "cljworkspace.h"
 #include "intraljff.h"
@@ -21,6 +22,7 @@
 #include "cljrffunction.h"
 #include "cljgrid.h"
 #include "cljcomponent.h"
+#include "bond.h"
 #include "softcljcomponent.h"
 #include "anglerestraint.h"
 #include "cljprobe.h"
@@ -64,6 +66,7 @@
 void register_SireMM_objects()
 {
 
+    ObjectRegistry::registerConverterFor< SireMM::SelectorBond >();
     ObjectRegistry::registerConverterFor< SireMM::IntraFF >();
     ObjectRegistry::registerConverterFor< SireMM::CLJWorkspace >();
     ObjectRegistry::registerConverterFor< SireMM::IntraLJFFBase >();
@@ -111,6 +114,7 @@ void register_SireMM_objects()
     ObjectRegistry::registerConverterFor< SireMM::CoulombComponent >();
     ObjectRegistry::registerConverterFor< SireMM::LJComponent >();
     ObjectRegistry::registerConverterFor< SireMM::CLJComponent >();
+    ObjectRegistry::registerConverterFor< SireMM::Bond >();
     ObjectRegistry::registerConverterFor< SireMM::SoftCLJComponent >();
     ObjectRegistry::registerConverterFor< SireMM::AngleRestraint >();
     ObjectRegistry::registerConverterFor< SireMM::CoulombProbe >();
