@@ -115,12 +115,7 @@ set ( SIREMOL_HEADERS
       mover.h
       mover.hpp
       mover_metaid.h
-
       parser.h
-      parser/ast.h
-      parser/idengine.h
-      parser/grammar.h
-
       partialmolecule.h
       perturbation.h
       radical.h
@@ -228,11 +223,7 @@ set ( SIREMOL_SOURCES
       molwithresid.cpp
       molviewproperty.cpp
       mover.cpp
-
       parser.cpp
-      parser/ast.cpp
-      parser/idengine.cpp
-
       partialmolecule.cpp
       perturbation.cpp
       radical.cpp

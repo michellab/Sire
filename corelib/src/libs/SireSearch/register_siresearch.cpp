@@ -2,7 +2,7 @@
   *
   *  Sire - Molecular Simulation Framework
   *
-  *  Copyright (C) 2018  Christopher Woods
+  *  Copyright (C) 2008  Christopher Woods
   *
   *  This program is free software; you can redistribute it and/or modify
   *  it under the terms of the GNU General Public License as published by
@@ -26,49 +26,9 @@
   *
 \*********************************************/
 
-#ifndef SIREMOL_PARSER_H
-#define SIREMOL_PARSER_H
+#include "SireStream/streamdata.hpp"
+#include "SireStream/version_error_impl.h"
 
-#include "select.h"
+using namespace SireStream;
 
-SIRE_BEGIN_HEADER
-
-namespace SireMol
-{
-
-namespace parser
-{
-    class SIREMOL_EXPORT Parser
-    {
-    public:
-        Parser()
-        {}
-
-        virtual ~Parser()
-        {}
-
-        static void install_parser(Parser *parser);
-
-        virtual void set_token(const QString &token, const QString &selection)=0;
-
-        virtual void reset_tokens()=0;
-
-        virtual SireMol::parser::SelectEnginePtr parse(const QString &str)=0;
-
-        static Parser& globalParser();
-
-    private:
-        static Parser* global_parser;
-    };
-
-    void set_token(const QString &token, const QString &selection);
-    void reset_tokens();
-
-    SireMol::parser::SelectEnginePtr parse(const QString &str);
-}
-
-}
-
-SIRE_END_HEADER
-
-#endif
+static const RegisterLibrary *registry = new RegisterLibrary( QString("SireSearch"), 1, 1 );

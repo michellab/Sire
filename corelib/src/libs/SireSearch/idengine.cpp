@@ -40,6 +40,7 @@
 
 #include <QRegExp>
 
+using namespace SireSearch;
 using namespace SireMol;
 using namespace SireBase;
 using namespace parser_idengine;
@@ -1647,6 +1648,12 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
     auto selected = part->operator()(mols, map);
 
     const auto objtype = this->objectType();
+
+    if (objtype == SelectEngine::BOND)
+    {
+        qDebug() << "BONDS!";
+        return selected;
+    }
 
     if (objtype == SelectEngine::COMPLEX)
         return selected;

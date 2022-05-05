@@ -109,9 +109,11 @@ public:
     QString toString() const;
 
     SireMol::MolViewPtr operator[](int i) const;
+    SireMol::MolViewPtr operator[](const SireBase::Slice &slice) const;
 
     Bond operator()(int i) const;
     SelectorBond operator()(int i, int j) const;
+    SelectorBond operator()(const SireBase::Slice &slice) const;
 
     QList<SireMol::BondID> IDs() const;
 

@@ -406,6 +406,18 @@
 #define SIREMOVE_EXPORT SIRE_EXPORT
 #endif
 // SIREMOVE_EXPORT end definitions
+// SIRESEARCH_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIRESEARCH_BUILD
+#define SIRESEARCH_EXPORT SIRE_EXPORT
+#else
+#define SIRESEARCH_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIRESEARCH_EXPORT
+#define SIRESEARCH_EXPORT SIRE_EXPORT
+#endif
+// SIRESEARCH_EXPORT end definitions
 // SIRESTREAM_EXPORT definitions
 #ifdef _WIN32
 #ifdef SIRESTREAM_BUILD

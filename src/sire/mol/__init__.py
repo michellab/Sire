@@ -7,6 +7,9 @@ from ..legacy import Mol as _Mol
 from .. import use_new_api as _use_new_api
 _use_new_api()
 
+from ..legacy import Search as _Search
+_Search.install_search_parser()
+
 from ..legacy import Base as _Base
 
 from ..legacy.Mol import AtomName, AtomNum, AtomIdx, AtomID, \
@@ -196,10 +199,10 @@ def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False):
         result = SelectorBond(obj)
     elif idx1 is None:
         from ..mm import SelectorBond
-        result = SelectorBond.fromAtoms(obj.atoms(idx))
+        result = SelectorBond(obj.atoms(idx))
     else:
         from ..mm import SelectorBond
-        result = SelectorBond.fromAtoms(obj.atoms(idx), obj.atoms(idx1))
+        result = SelectorBond(obj.atoms(idx), obj.atoms(idx1))
 
     if auto_reduce and len(result) == 1:
         return result[0]

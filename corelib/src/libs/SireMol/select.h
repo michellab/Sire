@@ -45,6 +45,8 @@
 #include "SireMol/moleculegroup.h"
 #include "SireMol/moleculegroups.h"
 
+#include "SireMol/errors.h"
+
 #include <boost/shared_ptr.hpp>
 
 #include <QList>
@@ -73,6 +75,39 @@ class Molecules;
 class MoleculeView;
 class ViewsOfMol;
 
+/** This exception is thrown when there was an error parsing a selection
+
+    @author Christopher Woods
+*/
+class SIREMOL_EXPORT parse_error : public siremol_error
+{
+public:
+    parse_error() : siremol_error()
+    {}
+
+    parse_error(QString err, QString place = QString())
+              : siremol_error(err,place)
+    {}
+
+    parse_error(const parse_error &other) : siremol_error(other)
+    {}
+
+    ~parse_error() throw()
+    {}
+
+    static const char* typeName();
+
+    const char* what() const throw()
+    {
+        return parse_error::typeName();
+    }
+
+    void throwSelf() const
+    {
+        throw parse_error(*this);
+    }
+};
+
 namespace parser
 {
 
@@ -86,7 +121,7 @@ using SelectEngineWeakPtr = boost::weak_ptr<SelectEngine>;
 
     @author Christopher Woods
 */
-class SelectEngine
+class SIREMOL_EXPORT SelectEngine
 {
 
 public:
@@ -96,7 +131,8 @@ public:
                    RESIDUE = 3,
                    CHAIN = 4,
                    SEGMENT = 5,
-                   MOLECULE = 6 };
+                   MOLECULE = 6,
+                   BOND = 7 };
 
     virtual ~SelectEngine();
 
@@ -340,6 +376,7 @@ private:
 
 } //end of namespace SireMol
 
+Q_DECLARE_METATYPE( SireMol::parse_error )
 Q_DECLARE_METATYPE( SireMol::Select )
 Q_DECLARE_METATYPE( SireMol::SelectResult )
 Q_DECLARE_METATYPE( SireMol::SelectResultMover )

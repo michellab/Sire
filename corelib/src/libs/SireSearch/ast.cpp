@@ -53,6 +53,8 @@ namespace AST
             return "segment";
         case MOLECULE:
             return "molecule";
+        case BOND:
+            return "bond";
         default:
             return "unknown";
         }

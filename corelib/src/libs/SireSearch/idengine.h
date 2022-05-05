@@ -26,8 +26,8 @@
   *
 \*********************************************/
 
-#ifndef SIREMOL_PARSER_IDENGINE_H
-#define SIREMOL_PARSER_IDENGINE_H
+#ifndef SIRESEARCH_IDENGINE_H
+#define SIRESEARCH_IDENGINE_H
 
 #include "SireMol/select.h"
 

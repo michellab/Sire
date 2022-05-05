@@ -39,6 +39,7 @@
 
 #include "SireID/index.h"
 
+#include "SireBase/slice.h"
 #include "SireBase/errors.h"
 
 #include "SireUnits/units.h"
@@ -331,7 +332,8 @@ SelectorBond::SelectorBond(const Selector<Atom> &atoms0,
                     qSwap(atomidx0, atomidx1);
                 }
 
-                if (atomidx0 != atomidx1 and not ce.areConnected(atomidx0, atomidx1))
+                if (atomidx0 != atomidx1 and c.areConnected(atomidx0, atomidx1)
+                        and not ce.areConnected(atomidx0, atomidx1))
                 {
                     ce = ce.connect(atomidx0, atomidx1);
                     bonds.append(BondID(atomidx0, atomidx1));
@@ -434,10 +436,28 @@ MolViewPtr SelectorBond::operator[](int i) const
     return this->operator()(i);
 }
 
+MolViewPtr SelectorBond::operator[](const SireBase::Slice &slice) const
+{
+    return this->operator()(slice);
+}
+
 Bond SelectorBond::operator()(int i) const
 {
     auto bnd = bnds.at(Index(i).map(bnds.count()));
     return Bond(this->data(), bnd);
+}
+
+SelectorBond SelectorBond::operator()(const SireBase::Slice &slice) const
+{
+    SelectorBond ret(*this);
+    ret.bnds.clear();
+
+    for (auto it = slice.begin(bnds.count()); not it.atEnd(); it.next())
+    {
+        ret.bnds.append(this->bnds.at(it.value()));
+    }
+
+    return ret;
 }
 
 SelectorBond SelectorBond::operator()(int i, int j) const

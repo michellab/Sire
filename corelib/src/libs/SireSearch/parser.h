@@ -26,45 +26,36 @@
   *
 \*********************************************/
 
-#ifndef SIREMOL_PARSER_H
-#define SIREMOL_PARSER_H
+#ifndef SIRESEARCH_PARSER_H
+#define SIRESEARCH_PARSER_H
 
-#include "select.h"
+#include "SireMol/select.h"
+#include "SireMol/parser.h"
 
 SIRE_BEGIN_HEADER
 
-namespace SireMol
+namespace SireSearch
 {
 
 namespace parser
 {
-    class SIREMOL_EXPORT Parser
-    {
-    public:
-        Parser()
-        {}
-
-        virtual ~Parser()
-        {}
-
-        static void install_parser(Parser *parser);
-
-        virtual void set_token(const QString &token, const QString &selection)=0;
-
-        virtual void reset_tokens()=0;
-
-        virtual SireMol::parser::SelectEnginePtr parse(const QString &str)=0;
-
-        static Parser& globalParser();
-
-    private:
-        static Parser* global_parser;
-    };
-
     void set_token(const QString &token, const QString &selection);
     void reset_tokens();
 
     SireMol::parser::SelectEnginePtr parse(const QString &str);
+
+    class SIRESEARCH_EXPORT SearchParser : public SireMol::parser::Parser
+    {
+    public:
+        SearchParser();
+        ~SearchParser();
+
+        static void install();
+
+        void set_token(const QString &token, const QString &selection);
+        void reset_tokens();
+        SireMol::parser::SelectEnginePtr parse(const QString &str);
+    };
 }
 
 }

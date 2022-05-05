@@ -15,13 +15,14 @@ dirs = [ "Analysis", \
          "Maths", \
          "Mol", \
          "Move", \
+         "Search", \
          "Squire", \
          "Stream", \
          "System", \
          "Units", \
          "Vol" ]
 
-def create_wrappers(dir): 
+def create_wrappers(dir):
     os.chdir(dir)
     os.system("%s ../AutoGenerate/create_wrappers.py" % sys.executable)
     os.chdir("..")

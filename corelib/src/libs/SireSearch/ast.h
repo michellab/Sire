@@ -26,8 +26,8 @@
   *
 \*********************************************/
 
-#ifndef SIREMOL_PARSER_AST_H
-#define SIREMOL_PARSER_AST_H
+#ifndef SIRESEARCH_PARSER_AST_H
+#define SIRESEARCH_PARSER_AST_H
 
 #include "SireUnits/dimensions.h"
 #include "SireUnits/units.h"
@@ -64,7 +64,8 @@ namespace AST
 
     /** The different objects that can be identified */
     enum IDObject { ID_UNKNOWN = 0, ATOM = 1, CUTGROUP = 2,
-                    RESIDUE = 3, CHAIN = 4, SEGMENT = 5, MOLECULE = 6 };
+                    RESIDUE = 3, CHAIN = 4, SEGMENT = 5, MOLECULE = 6,
+                    BOND = 7 };
 
     QString idobject_to_string(IDObject obj);
 

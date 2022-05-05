@@ -38,6 +38,17 @@ using namespace SireBase;
 using namespace SireStream;
 using namespace SireMol;
 
+////////
+//////// implementation of parse_error
+////////
+
+const char* parse_error::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<parse_error>() );
+}
+
+static const RegisterMetaType<parse_error> r_parse;
+
 ///////////
 /////////// Implementation of SelectEngine
 ///////////
@@ -374,6 +385,8 @@ QString Select::objectType() const
         return QObject::tr("complex view");
     case SireMol::parser::SelectEngine::ATOM:
         return QObject::tr("atoms");
+    case SireMol::parser::SelectEngine::BOND:
+        return QObject::tr("bonds");
     case SireMol::parser::SelectEngine::CUTGROUP:
         return QObject::tr("cutgroups");
     case SireMol::parser::SelectEngine::RESIDUE:

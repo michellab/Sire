@@ -26,6 +26,8 @@
   *
 \*********************************************/
 
+#ifndef SIRESEARCH_GRAMMAR_H
+
 using qi::lit;
 using qi::lexeme;
 using qi::eps;
@@ -208,6 +210,8 @@ public:
                      ( "molecule", AST::MOLECULE )
                      ( "mol", AST::MOLECULE )
                      ( "mols", AST::MOLECULE )
+                     ( "bond", AST::BOND )
+                     ( "bonds", AST::BOND )
                     ;
 
         //all of the different length unit tokens
@@ -501,3 +505,4 @@ public:
     qi::rule<IteratorT, AST::RegExpValue(), SkipperT> regExpRule;
 };
 
+#endif
