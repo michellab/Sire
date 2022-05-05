@@ -120,8 +120,15 @@ enum CombinationRules {
 
 enum ForceGroups {
     NONBONDED_FCG = 0,
-    BOND_FCG = 1
+    RECIP_FCG = 1,
+    DIRECT_FCG = 2,
+    CORR_FCG = 3,
+    BOND_FCG = 4
 };
+
+// force group selection mask
+const int group_mask = 1 << NONBONDED_FCG | 1 << RECIP_FCG
+    | 1 << DIRECT_FCG | 1 << CORR_FCG;
 
 static const RegisterMetaType<OpenMMPMEFEP> r_openmmint;
 
@@ -142,7 +149,7 @@ QDataStream &operator<<(QDataStream &ds, const OpenMMPMEFEP &velver)
         << velver.platform_type << velver.Restraint_flag
         << velver.CMMremoval_frequency << velver.buffer_frequency
         << velver.energy_frequency
-        << velver.device_index << velver.precision << velver.Alchemical_value
+        << velver.device_index << velver.precision << velver.current_lambda
         << velver.coulomb_power << velver.shift_delta << velver.delta_alchemical
         << velver.alchemical_array
         << velver.Integrator_type
@@ -171,7 +178,7 @@ QDataStream &operator>>(QDataStream &ds, OpenMMPMEFEP &velver)
             >> velver.Pressure >> velver.Temperature >> velver.platform_type
             >> velver.Restraint_flag >> velver.CMMremoval_frequency
             >> velver.buffer_frequency >> velver.energy_frequency
-            >> velver.device_index >> velver.precision >> velver.Alchemical_value
+            >> velver.device_index >> velver.precision >> velver.current_lambda
             >> velver.coulomb_power >> velver.shift_delta >> velver.delta_alchemical
             >> velver.alchemical_array
             >> velver.Integrator_type >> velver.friction >> velver.integration_tol
@@ -207,7 +214,7 @@ OpenMMPMEFEP::OpenMMPMEFEP(bool frequent_save)
       Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"),
       Restraint_flag(false),
       CMMremoval_frequency(0), buffer_frequency(0), energy_frequency(100),
-      device_index("0"), precision("single"), Alchemical_value(0.5), coulomb_power(0),
+      device_index("0"), precision("single"), current_lambda(0.5), coulomb_power(0),
       shift_delta(2.0), delta_alchemical(0.001), alchemical_array(),
       finite_diff_gradients(), pot_energies(), perturbed_energies(),
       reduced_perturbed_energies(),
@@ -236,7 +243,7 @@ OpenMMPMEFEP::OpenMMPMEFEP(const MoleculeGroup &molecule_group,
       Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"),
       Restraint_flag(false),
       CMMremoval_frequency(0), buffer_frequency(0), energy_frequency(100),
-      device_index("0"), precision("single"), Alchemical_value(0.5), coulomb_power(0),
+      device_index("0"), precision("single"), current_lambda(0.5), coulomb_power(0),
       shift_delta(2.0), delta_alchemical(0.001), alchemical_array(),
       finite_diff_gradients(), pot_energies(), perturbed_energies(),
       reduced_perturbed_energies(), forward_Metropolis(), backward_Metropolis(),
@@ -268,7 +275,7 @@ OpenMMPMEFEP::OpenMMPMEFEP(const OpenMMPMEFEP &other)
       CMMremoval_frequency(other.CMMremoval_frequency),
       buffer_frequency(other.buffer_frequency),
       energy_frequency(other.energy_frequency), device_index(other.device_index),
-      precision(other.precision), Alchemical_value(other.Alchemical_value),
+      precision(other.precision), current_lambda(other.current_lambda),
       coulomb_power(other.coulomb_power), shift_delta(other.shift_delta),
       delta_alchemical(other.delta_alchemical),
       alchemical_array(other.alchemical_array),
@@ -322,7 +329,7 @@ OpenMMPMEFEP& OpenMMPMEFEP::operator=(const OpenMMPMEFEP &other)
     energy_frequency = other.energy_frequency;
     device_index = other.device_index;
     precision = other.precision;
-    Alchemical_value = other.Alchemical_value;
+    current_lambda = other.current_lambda;
     coulomb_power = other.coulomb_power;
     shift_delta = other.shift_delta;
     delta_alchemical = other.delta_alchemical;
@@ -370,7 +377,7 @@ bool OpenMMPMEFEP::operator==(const OpenMMPMEFEP &other) const
            and energy_frequency == other.energy_frequency
            and device_index == other.device_index
            and precision == other.precision
-           and Alchemical_value == other.Alchemical_value
+           and current_lambda == other.current_lambda
            and coulomb_power == other.coulomb_power
            and shift_delta == other.shift_delta
            and delta_alchemical == other.delta_alchemical
@@ -617,9 +624,9 @@ void OpenMMPMEFEP::initialise()
     if (Debug) {
         qDebug() << "Initialising OpenMMPMEFEP";
         const std::string version = OpenMM::Platform::getOpenMMVersion();
-        qDebug() << "OpenMM Version: " << QString::fromUtf8(version.data(),
+        qDebug() << "OpenMM Version:" << QString::fromUtf8(version.data(),
                  version.size());
-        qDebug() << "fullPME = " << fullPME;
+        qDebug() << "fullPME =" << fullPME;
     }
 
     // Create a workspace using the stored molgroup
@@ -647,8 +654,8 @@ void OpenMMPMEFEP::initialise()
     }
 
     if (Debug)
-        qDebug() << "There are " << nats << " atoms " << "There are " << nmols <<
-                 " molecules" << "\n";
+        qDebug() << "There are" << nats << "atoms. " << "There are" << nmols
+		 << "molecules";
 
     int flag_combRules;
 
@@ -662,7 +669,7 @@ void OpenMMPMEFEP::initialise()
             CODELOC);
 
     if (Debug)
-        qDebug() << "\ncombiningRules = " << combiningRules << "\n";
+        qDebug() << "combiningRules =" << combiningRules;
 
     bool flag_noperturbedconstraints = false;
     int flag_constraint;
@@ -691,7 +698,7 @@ void OpenMMPMEFEP::initialise()
             CODELOC);
 
     if (Debug)
-        qDebug() << "\nConstraint Type = " << ConstraintType << "\n";
+        qDebug() << "Constraint Type =" << ConstraintType;
 
     // Load Plugins from the OpenMM standard Plugin Directory
     OpenMM::Platform::loadPluginsFromDirectory(
@@ -714,8 +721,8 @@ void OpenMMPMEFEP::initialise()
         system_openmm->addForce(cmmotionremover);
 
         if (Debug)
-            qDebug() << "\n\nWill remove Center of Mass motion every " <<
-		CMMremoval_frequency << " steps\n\n";
+            qDebug() << "\nWill remove Center of Mass motion every" <<
+		CMMremoval_frequency << "steps\n";
     }
 
     system_openmm->setDefaultPeriodicBoxVectors(OpenMM::Vec3(6, 0, 0),
@@ -734,9 +741,10 @@ void OpenMMPMEFEP::initialise()
     recip_space->setCutoffDistance(converted_cutoff_distance);
     recip_space->setIncludeDirectSpace(fullPME);
     recip_space->setUseDispersionCorrection(false);
+    recip_space->setForceGroup(RECIP_FCG);
 
     // scale the charges in the reciprocal space
-    recip_space->addGlobalParameter("lambda_offset", 0.0);
+    recip_space->addGlobalParameter("lambda_offset", current_lambda);
 
     // use default tolerance for the moment
     double tolerance_PME = recip_space->getEwaldErrorTolerance();
@@ -771,7 +779,7 @@ void OpenMMPMEFEP::initialise()
     direct_space->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
     direct_space->setCutoffDistance(converted_cutoff_distance);
 
-    direct_space->addGlobalParameter("lam", Alchemical_value);
+    direct_space->addGlobalParameter("lam", current_lambda);
     direct_space->addGlobalParameter("delta", shift_delta);
     direct_space->addGlobalParameter("n", coulomb_power);
     direct_space->addGlobalParameter("SPOnOff", 0.0);
@@ -786,7 +794,7 @@ void OpenMMPMEFEP::initialise()
 
     auto custom_corr_recip = new OpenMM::CustomBondForce(CORR_RECIP.toStdString());
 
-    custom_corr_recip->addGlobalParameter("lam_corr", Alchemical_value);
+    custom_corr_recip->addGlobalParameter("lam_corr", current_lambda);
     custom_corr_recip->addGlobalParameter("n_corr", coulomb_power);
     custom_corr_recip->addGlobalParameter("alpha_pme", alpha_PME);
     custom_corr_recip->addGlobalParameter("cutoff", converted_cutoff_distance);
@@ -803,7 +811,7 @@ void OpenMMPMEFEP::initialise()
 
     auto custom_intra_14_todummy =
         new OpenMM::CustomBondForce(intra_14_todummy.toStdString());
-    custom_intra_14_todummy->addGlobalParameter("lamtd", 1.0-Alchemical_value);
+    custom_intra_14_todummy->addGlobalParameter("lamtd", 1.0-current_lambda);
     custom_intra_14_todummy->addGlobalParameter("deltatd", shift_delta);
     custom_intra_14_todummy->addGlobalParameter("ntd", coulomb_power);
     custom_intra_14_todummy->addGlobalParameter("cutofftd",
@@ -820,7 +828,7 @@ void OpenMMPMEFEP::initialise()
 
     auto custom_intra_14_fromdummy =
         new OpenMM::CustomBondForce(intra_14_fromdummy.toStdString());
-    custom_intra_14_fromdummy->addGlobalParameter("lamfd", Alchemical_value);
+    custom_intra_14_fromdummy->addGlobalParameter("lamfd", current_lambda);
     custom_intra_14_fromdummy->addGlobalParameter("deltafd", shift_delta);
     custom_intra_14_fromdummy->addGlobalParameter("nfd", coulomb_power);
     custom_intra_14_fromdummy->addGlobalParameter("cutofffd",
@@ -836,7 +844,7 @@ void OpenMMPMEFEP::initialise()
         new OpenMM::CustomBondForce(intra_14_fromdummy_todummy.toStdString());
 
     custom_intra_14_fromdummy_todummy->addGlobalParameter("lamftd",
-            Alchemical_value);
+            current_lambda);
     custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
     custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
     custom_intra_14_fromdummy_todummy->addGlobalParameter("cutoffftd",
@@ -851,7 +859,7 @@ void OpenMMPMEFEP::initialise()
     auto custom_intra_14_clj =
         new OpenMM::CustomBondForce(intra_14_clj.toStdString());
 
-    custom_intra_14_clj->addGlobalParameter("lamhd", Alchemical_value);
+    custom_intra_14_clj->addGlobalParameter("lamhd", current_lambda);
     custom_intra_14_clj->addGlobalParameter("cutoffhd", converted_cutoff_distance);
     custom_intra_14_clj->addGlobalParameter("alpha_pme", alpha_PME);
 
@@ -865,17 +873,10 @@ void OpenMMPMEFEP::initialise()
     addPerBondParameters(*custom_intra_14_clj, paramList);
 
     if (Debug) {
-        qDebug() << "direct space (PME, LJ):" << general_ff;
-        qDebug() << "corr_recip:" << CORR_RECIP;
-        qDebug() << "intra_14_fromdummy:" << intra_14_fromdummy;
-        qDebug() << "intra_14_todummy:" << intra_14_todummy;
-        qDebug() << "intra_14_fromtodummy:" << intra_14_fromdummy_todummy;
-        qDebug() << "custom_intra_14_clj:" << intra_14_clj;
-
         qDebug() << "\nCutoff type = " << CutoffType;
         qDebug() << "CutOff distance = " << converted_cutoff_distance << " Nm";
         qDebug() << "Dielectric constant = " << field_dielectric;
-        qDebug() << "Lambda = " << Alchemical_value << " Coulomb Power = " <<
+        qDebug() << "Lambda = " << current_lambda << " Coulomb Power = " <<
                  coulomb_power << " Delta Shift = " << shift_delta;
     }
 
@@ -891,7 +892,7 @@ void OpenMMPMEFEP::initialise()
         "B=bend*lambond+(1.0-lambond)*bstart;"
         "req=rend*lambond+(1.0-lambond)*rstart");
 
-    solute_bond_perturbation->addGlobalParameter("lambond", Alchemical_value);
+    solute_bond_perturbation->addGlobalParameter("lambond", current_lambda);
     addPerBondParameters(*solute_bond_perturbation,
 			 {"bstart", "bend", "rstart", "rend"});
 
@@ -901,7 +902,7 @@ void OpenMMPMEFEP::initialise()
         "A=aend*lamangle+(1.0-lamangle)*astart;"
         "thetaeq=thetaend*lamangle+(1.0-lamangle)*thetastart");
 
-    solute_angle_perturbation->addGlobalParameter("lamangle", Alchemical_value);
+    solute_angle_perturbation->addGlobalParameter("lamangle", current_lambda);
     addPerAngleParameters(*solute_angle_perturbation,
 			  {"astart", "aend", "thetastart", "thetaend"});
 
@@ -941,13 +942,15 @@ void OpenMMPMEFEP::initialise()
     custom_link_bond->addPerBondParameter("dl");
 
 
-    /*** build OpenMM System ***/
+    /*** BUILD OpenMM SYSTEM ***/
 
     int system_index = 0;
 
     // To avoid possible mismatch between the index in which atoms are added to the openmm system arrays and
     // their atomic numbers in sire, one array is populated while filling up the openmm global arrays
     QHash<int, int> AtomNumToOpenMMIndex;
+
+    /* add all atoms to the system */
 
     for (int i = 0; i < nmols; ++i) {
         const int nats_mol = ws.nAtoms(i);
@@ -1062,10 +1065,8 @@ void OpenMMPMEFEP::initialise()
     // Molecule solutemol = solute.moleculeAt(0).molecule();
     int nions = 0;
 
-    QVector<bool> perturbed_energies_tmp(9);
-
-    for (int i = 0; i < perturbed_energies_tmp.size(); i++)
-        perturbed_energies_tmp[i] = false;
+    QVector<bool> perturbed_energies_tmp{false, false, false, false, false,
+	false, false, false, false};
 
     // the default AMBER 1-4 scaling factors
     double const Coulomb14Scale = 1.0 / 1.2;
@@ -1125,6 +1126,9 @@ void OpenMMPMEFEP::initialise()
 
         int nonbond_idx = 0;
         double charge_start = 0.0, charge_final = 0.0;
+
+	/* add non-bonded parameters to direct and reciprocal spaces
+	   and restraints if applicable */
 
         // Iterate over all atoms in the molecules:
         // ljparameters.size() is used here as the number of atoms
@@ -1372,9 +1376,9 @@ void OpenMMPMEFEP::initialise()
 
             if (Debug) {
                 qDebug() << "\nAtoms = " << num_atoms_molecule << " Num atoms till i =" <<
-                         num_atoms_till_i << "\n";
+                         num_atoms_till_i;
                 qDebug() <<
-                         "\n*********************MONOATOMIC MOLECULE DETECTED**************************\n";
+                         "*********************MONOATOMIC MOLECULE DETECTED**************************\n";
             }
 
             nions = nions + 1;
@@ -1433,8 +1437,8 @@ void OpenMMPMEFEP::initialise()
                         }
                         else if (flag_constraint == ALLBONDS || flag_constraint == HANGLES) {
                             /* JM 10/16 ALLBONDS and HANGLES may be unwise with current free energy implementation !*/
-                            double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value
-                                                      + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
+                            double pert_eq_distance = solute_bond_perturbation_params[3] * current_lambda
+                                                      + (1.0 - current_lambda) * solute_bond_perturbation_params[2];
                             system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
                             bond_pert_eq_list.insert(BondID(two.atom0(), two.atom1()),
                                                      pert_eq_distance * OpenMM::AngstromsPerNm);
@@ -1466,8 +1470,8 @@ void OpenMMPMEFEP::initialise()
                                 qDebug() << " deltar " << deltar << " " << " deltak " << deltak;
                             }
                             /* bonds that do not change parameters are constrained*/
-                            double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value
-                                                      + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
+                            double pert_eq_distance = solute_bond_perturbation_params[3] * current_lambda
+                                                      + (1.0 - current_lambda) * solute_bond_perturbation_params[2];
                             if (deltar < SMALL and deltak < SMALL) {
                                 system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
                                 if (Debug) {
@@ -1507,8 +1511,8 @@ void OpenMMPMEFEP::initialise()
                                     || final_type_atom0.startsWith("h", Qt::CaseInsensitive) ||
                                     initial_type_atom1.startsWith("h", Qt::CaseInsensitive)
                                     || final_type_atom1.startsWith("h", Qt::CaseInsensitive)) {
-                                double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value
-                                                          + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
+                                double pert_eq_distance = solute_bond_perturbation_params[3] * current_lambda
+                                                          + (1.0 - current_lambda) * solute_bond_perturbation_params[2];
                                 system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
 
                                 if (Debug) {
@@ -1748,8 +1752,8 @@ void OpenMMPMEFEP::initialise()
 
                                 double constraint_distance;
 
-                                double eq_angle = solute_angle_perturbation_params[3] * Alchemical_value +
-                                                  (1.0 - Alchemical_value) * solute_angle_perturbation_params[2];
+                                double eq_angle = solute_angle_perturbation_params[3] * current_lambda +
+                                                  (1.0 - current_lambda) * solute_angle_perturbation_params[2];
 
                                 if (first_alchemical_distance == -1.0 && second_alchemical_distance != -1.0) {
                                     //Carnot's theorem a^2 = c^2 + b^2 - a*b*c*cos(bc)
@@ -1857,7 +1861,7 @@ void OpenMMPMEFEP::initialise()
                         auto solute_torsion_perturbation = new OpenMM::CustomTorsionForce(openmm_str);
                         solute_torsion_perturbation->addPerTorsionParameter("KJPerKcal");
                         solute_torsion_perturbation_params[0] = 4.184;
-                        solute_torsion_perturbation->addGlobalParameter("lamdih", Alchemical_value);
+                        solute_torsion_perturbation->addGlobalParameter("lamdih", current_lambda);
                         solute_torsion_perturbation->addTorsion(idx0, idx1, idx2, idx3,
                                                                 solute_torsion_perturbation_params);
 
@@ -2077,7 +2081,6 @@ void OpenMMPMEFEP::initialise()
             }
         } // end of dihedrals
 
-
         // Improper Dihedrals
 
         QList<ImproperID> impropers_ff = amber_params.getAllImpropers();
@@ -2129,7 +2132,6 @@ void OpenMMPMEFEP::initialise()
             }
         } // end of impropers
 
-
         // Variable 1,4 scaling factors
         QList<BondID> pairs14_ff = amber_params.getAll14Pairs();
         QVector<BondID> pairs14 = pairs14_ff.toVector();
@@ -2166,7 +2168,6 @@ void OpenMMPMEFEP::initialise()
 
     } // end of loop over molecules
 
-
     if (Debug) {
         if (nions != 0)
             qDebug() << "\nNumber of ions = " << nions << "\n";
@@ -2175,7 +2176,8 @@ void OpenMMPMEFEP::initialise()
 
     /*** EXCEPTION HANDLING ***/
 
-    // Exclude the 1-2, 1-3 bonded atoms from nonbonded forces, and scale down 1-4 bonded atoms
+    // Exclude the 1-2, 1-3 bonded atoms from nonbonded forces, and scale
+    // down 1-4 bonded atoms
     recip_space->createExceptionsFromBonds(bondPairs, Coulomb14Scale,
                                            LennardJones14Scale);
 
@@ -2405,20 +2407,20 @@ void OpenMMPMEFEP::initialise()
 
     if (!fullPME) {
         if (npairs != num_exceptions) {
-            direct_space->setForceGroup(NONBONDED_FCG);
+            direct_space->setForceGroup(DIRECT_FCG);
             system_openmm->addForce(direct_space);
             perturbed_energies_tmp[0] = true; //Custom non bonded 1-5 is added to the system
             if (Debug)
-                qDebug() << "Added 1-5 general force field";
+                qDebug() << "Added 1-5 direct space (PME, LJ):" << general_ff;
         }
 
         if (custom_corr_recip->getNumBonds() != 0) {
-            custom_corr_recip->setForceGroup(NONBONDED_FCG);
+            custom_corr_recip->setForceGroup(CORR_FCG);
             system_openmm->addForce(custom_corr_recip);
             perturbed_energies_tmp[8] = true;
 
             if (Debug)
-                qDebug() << "Added reciprocal correction term";
+                qDebug() << "Added reciprocal correction term:" << CORR_RECIP;
         }
 
         if (custom_intra_14_clj->getNumBonds() != 0) {
@@ -2426,15 +2428,16 @@ void OpenMMPMEFEP::initialise()
             system_openmm->addForce(custom_intra_14_clj);
             perturbed_energies_tmp[1] = true; //Custom non bonded 1-4 is added to the system
             if (Debug)
-                qDebug() << "Added 1-4 CLJ";
+                qDebug() << "Added 1-4 CLJ:" << intra_14_clj;
         }
+
 
         if (custom_intra_14_todummy->getNumBonds() != 0) {
             custom_intra_14_todummy->setForceGroup(NONBONDED_FCG);
             system_openmm->addForce(custom_intra_14_todummy);
             perturbed_energies_tmp[2] = true; //Custom non bonded 1-4 is added to the system
             if (Debug)
-                qDebug() << "Added 1-4 To Dummy";
+                qDebug() << "Added 1-4 To Dummy:" << intra_14_todummy;
         }
 
 
@@ -2443,7 +2446,7 @@ void OpenMMPMEFEP::initialise()
             system_openmm->addForce(custom_intra_14_fromdummy);
             perturbed_energies_tmp[3] = true; //Custom non bonded 1-4 is added to the system
             if (Debug)
-                qDebug() << "Added 1-4 From Dummy";
+                qDebug() << "Added 1-4 From Dummy:" << intra_14_fromdummy;
         }
 
         if (custom_intra_14_fromdummy_todummy->getNumBonds() != 0) {
@@ -2451,7 +2454,7 @@ void OpenMMPMEFEP::initialise()
             system_openmm->addForce(custom_intra_14_fromdummy_todummy);
             perturbed_energies_tmp[4] = true; //Custom non bonded 1-4 is added to the system
             if (Debug)
-                qDebug() << "Added 1-4 From Dummy To Dummy";
+                qDebug() << "Added 1-4 From Dummy To Dummy:" << intra_14_fromdummy_todummy;
         }
     } // if (!fullPME)
 
@@ -2556,6 +2559,43 @@ void OpenMMPMEFEP::initialise()
 
     this->openmm_system = system_openmm;
     this->isSystemInitialised = true;
+
+    // xXx
+    if (Debug) {
+	auto integrator = *new OpenMM::VerletIntegrator(2.0 * OpenMM::PsPerFs);
+
+	OpenMM::Platform::loadPluginsFromDirectory
+	    (OpenMM::Platform::getDefaultPluginsDirectory());
+
+	OpenMM::Platform &platform =
+	    OpenMM::Platform::getPlatformByName("CUDA");
+
+	platform.setPropertyDefaultValue("CudaDeviceIndex", "0");
+	platform.setPropertyDefaultValue("CudaPrecision", "mixed");
+
+	auto context = *new OpenMM::Context(*system_openmm, integrator,
+					    platform);
+
+	context.setPositions(pos);
+	context.setVelocities(vel);
+
+	const OpenMM::State state = context.getState(OpenMM::State::Energy);
+	const OpenMM::State state1 = context.getState
+	    (OpenMM::State::Energy, false, 1 << BOND_FCG | 1 << RECIP_FCG);
+	const OpenMM::State state2 = context.getState
+	    (OpenMM::State::Energy, false, 1 << DIRECT_FCG);
+	const OpenMM::State state4 = context.getState
+	    (OpenMM::State::Energy, false, 1 << CORR_FCG);
+
+	qDebug() << "Total energy ="
+		 << state.getPotentialEnergy() * kJ_per_mol;
+	qDebug() << "Reciprocal energy ="
+                 << state1.getPotentialEnergy() * kJ_per_mol;
+	qDebug() << "Direct energy ="
+                 << state2.getPotentialEnergy() * kJ_per_mol;
+	qDebug() << "Correction energy ="
+                 << state4.getPotentialEnergy() * kJ_per_mol;
+    }
 } // OpenMMPMEFEP::initialise END
 
 /**
@@ -2888,7 +2928,7 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10,
         MolarEnergy Epot = state_openmm.getPotentialEnergy() * kJ_per_mol;
 
         qDebug() << "Energy before minimisation:" << Epot
-                 << "kcal/mol at lambda =" << Alchemical_value;
+                 << "kcal/mol at lambda =" << current_lambda;
     }
 
     // Step 2 minimise
@@ -2932,7 +2972,7 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10,
         MolarEnergy Epot = state_openmm.getPotentialEnergy() * kJ_per_mol;
 
         qDebug() << "Energy after minimisation:" << Epot
-                 << "kcal/mol at lambda =" << Alchemical_value;
+                 << "kcal/mol at lambda =" << current_lambda;
     }
 
     // Step 4 delete the context
@@ -2974,7 +3014,7 @@ System OpenMMPMEFEP::annealSystemToLambda(System &system,
     //SireUnits::Dimension::Time timestep = stepSize * picosecond;
     createContext(workspace.edit(), anneal_step_size);
 
-    int max = ceil(Alchemical_value / 0.1);
+    int max = ceil(current_lambda / 0.1);
 
     double lam = 0.0;
 
@@ -2983,7 +3023,7 @@ System OpenMMPMEFEP::annealSystemToLambda(System &system,
         (openmm_context->getIntegrator()).step(annealing_steps);
 
         if (i == max - 1)
-            lam = Alchemical_value;
+            lam = current_lambda;
         else
             lam = lam + 0.1;
     }
@@ -3158,8 +3198,8 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
 
     bool IsFiniteNumber = true;
     double increment = delta_alchemical;
-    double incr_plus = Alchemical_value + increment;
-    double incr_minus = Alchemical_value - increment;
+    double incr_plus = current_lambda + increment;
+    double incr_minus = current_lambda - increment;
     double actual_gradient = 0.0;
 
     emptyContainers();
@@ -3168,11 +3208,11 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
         //*********************MD STEPS****************************
         (openmm_context->getIntegrator()).step(energy_frequency);
 
-        state_openmm = openmm_context->getState(stateTypes, false, 0x01);
+        state_openmm = openmm_context->getState(stateTypes, false, group_mask);
         double p_energy_lambda = state_openmm.getPotentialEnergy();
 
         if (Debug) {
-            qDebug() << "Lambda =" << Alchemical_value << "Potential energy ="
+            qDebug() << "Lambda =" << current_lambda << "Potential energy ="
                      << p_energy_lambda * OpenMM::KcalPerKJ << "kcal/mol";
         }
 
@@ -3193,7 +3233,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
         }
 
         // get new state as SPOnOff was set above
-        state_openmm = openmm_context->getState(stateTypes, false, 0x01);
+        state_openmm = openmm_context->getState(stateTypes, false, group_mask);
 
         if (Debug)
             qDebug() << "Total Time = " << state_openmm.getTime() << " ps";
@@ -3255,10 +3295,10 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
             openmm_context->setParameter("SPOnOff", 0.0);
         }
 
-        updateOpenMMContextLambda(Alchemical_value);
+        updateOpenMMContextLambda(current_lambda);
         sample_count = sample_count + 1.0;
+    } // end while (sample_count <= n_samples)
 
-    }//end while
     if (time_skip != 0) {
         timeskip = SireUnits::Dimension::Time(0.0);
     }
@@ -3341,7 +3381,7 @@ double OpenMMPMEFEP::getPotentialEnergyAtLambda(double lambda)
     updateOpenMMContextLambda(lambda);
 
     OpenMM::State state_openmm =
-        openmm_context->getState(OpenMM::State::Energy, false, 0x01);
+        openmm_context->getState(OpenMM::State::Energy, false, group_mask);
     curr_potential_energy = state_openmm.getPotentialEnergy();
 
     return curr_potential_energy;
@@ -3733,13 +3773,13 @@ void OpenMMPMEFEP::setEnergyFrequency(int frequency)
 /** Get the alchemical value used to calculate the free energy change via TI method*/
 double OpenMMPMEFEP::getAlchemicalValue(void)
 {
-    return Alchemical_value;
+    return current_lambda;
 }
 
 /** Set the alchemical value used to calculate the free energy change via TI method*/
 void OpenMMPMEFEP::setAlchemicalValue(double lambda_value)
 {
-    Alchemical_value = max(0.0, min(1.0, lambda_value));
+    current_lambda = max(0.0, min(1.0, lambda_value));
 }
 
 void OpenMMPMEFEP::setAlchemicalArray(QVector<double> lambda_array)
