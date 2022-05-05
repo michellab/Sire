@@ -2559,50 +2559,6 @@ void OpenMMPMEFEP::initialise()
 
     this->openmm_system = system_openmm;
     this->isSystemInitialised = true;
-
-    // xXx
-    if (Debug) {
-	auto integrator = *new OpenMM::VerletIntegrator(2.0 * OpenMM::PsPerFs);
-
-	OpenMM::Platform::loadPluginsFromDirectory
-	    (OpenMM::Platform::getDefaultPluginsDirectory());
-
-	OpenMM::Platform &platform =
-	    OpenMM::Platform::getPlatformByName("CUDA");
-
-	platform.setPropertyDefaultValue("CudaDeviceIndex", "0");
-	platform.setPropertyDefaultValue("CudaPrecision", "mixed");
-
-	const double boxl = 3.2;
-	system_openmm->setDefaultPeriodicBoxVectors
-	    (OpenMM::Vec3(boxl, 0.0, 0.0),
-	     OpenMM::Vec3(0.0, boxl, 0.0),
-	     OpenMM::Vec3(0.0, 0.0, boxl));
-
-	auto context = *new OpenMM::Context(*system_openmm, integrator,
-					    platform);
-
-
-	context.setPositions(pos);
-	context.setVelocities(vel);
-
-	const OpenMM::State state = context.getState(OpenMM::State::Energy);
-	const OpenMM::State state1 = context.getState
-	    (OpenMM::State::Energy, false, 1 << BOND_FCG | 1 << RECIP_FCG);
-	const OpenMM::State state2 = context.getState
-	    (OpenMM::State::Energy, false, 1 << DIRECT_FCG);
-	const OpenMM::State state4 = context.getState
-	    (OpenMM::State::Energy, false, 1 << CORR_FCG);
-
-	qDebug() << "Total energy ="
-		 << state.getPotentialEnergy() * kJ_per_mol;
-	qDebug() << "Reciprocal energy ="
-                 << state1.getPotentialEnergy() * kJ_per_mol;
-	qDebug() << "Direct energy ="
-                 << state2.getPotentialEnergy() * kJ_per_mol;
-	qDebug() << "Correction energy ="
-                 << state4.getPotentialEnergy() * kJ_per_mol;
-    }
 } // OpenMMPMEFEP::initialise END
 
 /**
@@ -2934,7 +2890,7 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10,
     if (Debug) {
         MolarEnergy Epot = state_openmm.getPotentialEnergy() * kJ_per_mol;
 
-        qDebug() << "Energy before minimisation:" << Epot
+        qDebug() << "Total energy before minimisation:" << Epot
                  << "kcal/mol at lambda =" << current_lambda;
 
 	const OpenMM::State state1 = openmm_context->getState
@@ -2993,7 +2949,7 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10,
     if (Debug) {
         MolarEnergy Epot = state_openmm.getPotentialEnergy() * kJ_per_mol;
 
-        qDebug() << "Energy after minimisation:" << Epot
+        qDebug() << "Total energy after minimisation:" << Epot
                  << "kcal/mol at lambda =" << current_lambda;
     }
 
