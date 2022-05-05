@@ -90,6 +90,12 @@ namespace AST
 
     QString idtoken_to_string(IDToken token);
 
+    /** The different bond tokens */
+    enum IDBondToken { ID_BOND_UNKNOWN = 0, ID_BOND_WITHIN = 1,
+                       ID_BOND_FROM = 2, ID_BOND_TO = 3 };
+
+    QString idbondtoken_to_string(IDBondToken token);
+
     /** The different types of coordinate */
     enum IDCoordType { ID_COORD_UNKNOWN = 0, ID_COORD_CENTER = 1, ID_COORD_CENTER_X = 2,
                        ID_COORD_CENTER_Y = 3, ID_COORD_CENTER_Z = 4, ID_COORD_MAX = 5,
@@ -121,6 +127,7 @@ namespace AST
     struct IDAll;
     struct IDWater;
     struct IDPerturbable;
+    struct IDBond;
 
     struct IDWhereCompare;
     struct IDWhereWithin;
@@ -145,6 +152,7 @@ namespace AST
                                              boost::recursive_wrapper<IDUser>,
                                              boost::recursive_wrapper<IDJoin>,
                                              boost::recursive_wrapper<IDAll>,
+                                             boost::recursive_wrapper<IDBond>,
                                              boost::recursive_wrapper<IDWater>,
                                              boost::recursive_wrapper<IDPerturbable>,
                                              boost::recursive_wrapper<ExpressionPart> >;
@@ -485,6 +493,22 @@ namespace AST
         SelectEnginePtr toEngine() const;
     };
 
+    /** Struct that holds an ID token that represents a Bond expression,
+     *  e.g. bonds within resnum 1, bonds in resnum 1,
+     *  bonds from atomnum 1 to atomnum 2
+    */
+    struct IDBond
+    {
+        IDBondToken from_token;
+        Expression from_value;
+        IDBondToken to_token;
+        Expression to_value;
+
+        QString toString() const;
+
+        SelectEnginePtr toEngine() const;
+    };
+
     /** Struct that holds a "with" expression, e.g. molecules with resname ala */
     struct IDWith
     {
@@ -678,6 +702,13 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDWith,
                            (AST::IDObject,name)
                            (AST::IDToken,token)
                            (AST::Expression,value)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDBond,
+                           (AST::IDBondToken,from_token)
+                           (AST::Expression,from_value)
+                           (AST::IDBondToken,to_token)
+                           (AST::Expression,to_value)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::Expression,

@@ -210,8 +210,6 @@ public:
                      ( "molecule", AST::MOLECULE )
                      ( "mol", AST::MOLECULE )
                      ( "mols", AST::MOLECULE )
-                     ( "bond", AST::BOND )
-                     ( "bonds", AST::BOND )
                     ;
 
         //all of the different length unit tokens
@@ -231,6 +229,13 @@ public:
         //all of the different "with" and "in" expression tokens
         with_token.add( "with", AST::ID_WITH )
                       ( "in", AST::ID_IN )
+                    ;
+
+        //all of the different bond tokens
+        bond_token.add( "in", AST::ID_BOND_WITHIN )
+                      ( "within", AST::ID_BOND_WITHIN )
+                      ( "to", AST::ID_BOND_TO )
+                      ( "from", AST::ID_BOND_FROM )
                     ;
 
         //all of the different types of coordinates tokens
@@ -306,7 +311,7 @@ public:
         //or user-identified expression, optionally surrounded by parenthesis '( )'
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
                               all_token | water_token | pert_token | withRule | withinRule |
-                              withinVectorRule | whereRule | notRule | joinRule | user_token |
+                              withinVectorRule | whereRule | notRule | joinRule | bondRule | user_token |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
 
         //grammar that specifies a list of names (comma-separated)
@@ -378,6 +383,11 @@ public:
         //grammar for selecting by chemical element
         idElementRule %= qi::lit("element") >> ( element_token % qi::lit(",") );
 
+        //allow looking for bonds
+        bondRule %= (qi::lit("bonds") >> bond_token >> expressionRule) |
+                    (qi::lit("bonds") >> bond_token >> expressionRule
+                                      >> bond_token >> expressionRule);
+
         //grammar for a "with" expression
         withRule %= obj_token >> with_token >> expressionRule;
 
@@ -440,6 +450,7 @@ public:
         vectorValueRule.name( "Vector Value" );
         stringRule.name( "String" );
         regExpRule.name( "RegExp" );
+        bondRule.name( "Bond" );
 
         //action on failure to parse the string using the grammar
         on_error<fail>
@@ -461,6 +472,7 @@ public:
     qi::rule<IteratorT, AST::IDElement(), SkipperT> idElementRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
+    qi::rule<IteratorT, AST::IDBond(), SkipperT> bondRule;
     qi::rule<IteratorT, AST::IDWith(), SkipperT> withRule;
     qi::rule<IteratorT, AST::IDWithin(), SkipperT> withinRule;
     qi::rule<IteratorT, AST::IDWithinVector(), SkipperT> withinVectorRule;
@@ -492,6 +504,7 @@ public:
     qi::symbols<char,AST::IDOperation> op_token;
     qi::symbols<char,AST::IDObject> obj_token;
     qi::symbols<char,AST::IDToken> with_token;
+    qi::symbols<char,AST::IDBondToken> bond_token;
     qi::symbols<char,SireUnits::Dimension::Length> length_token;
     qi::symbols<char,AST::IDComparison> cmp_token;
     qi::symbols<char,AST::IDCoordType> coord_token;

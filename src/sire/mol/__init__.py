@@ -107,6 +107,14 @@ def __from_select_result(obj):
     """
     views = []
 
+    from ..mm import SelectorBond
+
+    print("WHAT IS THIS?")
+    print(obj)
+
+    if SelectorBond in type(obj).mro():
+        return obj
+
     molnums = obj.mol_nums()
 
     if len(molnums) == 0:

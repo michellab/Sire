@@ -277,6 +277,33 @@ private:
 };
 
 /** Internal class providing the SelectEngine for objects
+ *  in a "bonds" expression
+*/
+class IDBondEngine : public SelectEngine
+{
+public:
+    static SelectEnginePtr construct( IDBondToken from_token,
+                                      SelectEnginePtr from_value,
+                                      IDBondToken to_token,
+                                      SelectEnginePtr to_value);
+    ~IDBondEngine();
+
+    ObjType objectType() const;
+
+    SelectEnginePtr simplify();
+
+protected:
+    IDBondEngine();
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+
+private:
+    IDBondToken from_token;
+    SelectEnginePtr from_value;
+    IDBondToken to_token;
+    SelectEnginePtr to_value;
+};
+
+/** Internal class providing the SelectEngine for objects
     in a "with" expression
 
     @author Christopher Woods

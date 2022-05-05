@@ -107,6 +107,21 @@ namespace AST
         }
     }
 
+    QString idbondtoken_to_string(IDBondToken token)
+    {
+        switch(token)
+        {
+        case ID_BOND_WITHIN:
+            return "within";
+        case ID_BOND_FROM:
+            return "from";
+        case ID_BOND_TO:
+            return "to";
+        default:
+            return "unknown";
+        }
+    }
+
     QString idtoken_to_string(IDToken token)
     {
         switch(token)
@@ -295,6 +310,20 @@ namespace AST
                     .arg(part1.toString());
     }
 
+    QString IDBond::toString() const
+    {
+        if (to_token != ID_BOND_UNKNOWN)
+            return QObject::tr("bonds %1 %2 %3 %4")
+                .arg(idbondtoken_to_string(from_token))
+                .arg(from_value.toString())
+                .arg(idbondtoken_to_string(to_token))
+                .arg(to_value.toString());
+        else
+            return QObject::tr("bonds %1 %2")
+                .arg(idbondtoken_to_string(from_token))
+                .arg(from_value.toString());
+    }
+
     QString IDWith::toString() const
     {
         return QObject::tr("%1s %2 %3")
@@ -444,6 +473,12 @@ namespace AST
     SelectEnginePtr IDWith::toEngine() const
     {
         return IDWithEngine::construct(name, token, value.toEngine());
+    }
+
+    SelectEnginePtr IDBond::toEngine() const
+    {
+        return IDBondEngine::construct(from_token, from_value.toEngine(),
+                                       to_token, to_value.toEngine());
     }
 
     SelectEnginePtr IDWhereWithin::toEngine(IDObject name, IDCoordType typ) const

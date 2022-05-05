@@ -1615,6 +1615,88 @@ SelectEngine::ObjType IDSubScriptEngine::objectType() const
 }
 
 ////////
+//////// Implementation of the IDBondEngine
+////////
+
+IDBondEngine::IDBondEngine()
+{}
+
+SelectEnginePtr IDBondEngine::construct( IDBondToken from_token,
+                                         SelectEnginePtr from_value,
+                                         IDBondToken to_token,
+                                         SelectEnginePtr to_value )
+{
+    IDBondEngine *ptr = new IDBondEngine();
+    auto p = makePtr(ptr);
+
+    if (from_value)
+        from_value->setParent(p);
+
+    if (to_value)
+        to_value->setParent(p);
+
+    ptr->from_token = from_token;
+    ptr->from_value = from_value;
+    ptr->to_token = to_token;
+    ptr->to_value = to_value;
+
+    return p;
+}
+
+IDBondEngine::~IDBondEngine()
+{}
+
+#include "SireMM/selectorbond.h"
+using namespace SireMM;
+
+SelectResult IDBondEngine::select(const SelectResult &mols, const PropertyMap &map) const
+{
+    if (not from_value.get() or from_token == ID_BOND_UNKNOWN)
+        return SelectResult();
+
+    auto result = from_value->operator()(mols, map);
+
+    if (result.count() == 0)
+        return SelectResult();
+
+    if (result.count() > 1)
+        throw SireMol::parse_error(QObject::tr(
+            "Can only extract bonds from matches that return a single molecule."),
+                CODELOC);
+
+    auto mol = result[0];
+
+    if (from_token == ID_BOND_WITHIN)
+    {
+        /*if (to_value.get() or to_token != ID_BOND_UNKNOWN)
+            throw SireMol::parse_error(QObject::tr(
+                "'bonds in value' cannot be followed by any other terms."),
+                    CODELOC);*/
+        auto result = SelectorBond(*mol, map);
+
+        return SelectResult(result);
+    }
+
+    return SelectResult();
+}
+
+SelectEnginePtr IDBondEngine::simplify()
+{
+    if (from_value.get())
+        from_value = from_value->simplify();
+
+    if (to_value.get())
+        to_value = to_value->simplify();
+
+    return selfptr.lock();
+}
+
+SelectEngine::ObjType IDBondEngine::objectType() const
+{
+    return SelectEngine::COMPLEX;
+}
+
+////////
 //////// Implementation of the IDWithEngine
 ////////
 
@@ -1648,12 +1730,6 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
     auto selected = part->operator()(mols, map);
 
     const auto objtype = this->objectType();
-
-    if (objtype == SelectEngine::BOND)
-    {
-        qDebug() << "BONDS!";
-        return selected;
-    }
 
     if (objtype == SelectEngine::COMPLEX)
         return selected;
