@@ -729,7 +729,7 @@ void OpenMMPMEFEP::initialise()
             OpenMM::Vec3(0, 6, 0),
             OpenMM::Vec3(0, 0, 6));
 
-    const double converted_cutoff_distance = convertTo(cutoff_distance.value(),
+   const double converted_cutoff_distance = convertTo(cutoff_distance.value(),
             nanometer);
 
     // HHL
@@ -2573,8 +2573,15 @@ void OpenMMPMEFEP::initialise()
 	platform.setPropertyDefaultValue("CudaDeviceIndex", "0");
 	platform.setPropertyDefaultValue("CudaPrecision", "mixed");
 
+	const double boxl = 3.2;
+	system_openmm->setDefaultPeriodicBoxVectors
+	    (OpenMM::Vec3(boxl, 0.0, 0.0),
+	     OpenMM::Vec3(0.0, boxl, 0.0),
+	     OpenMM::Vec3(0.0, 0.0, boxl));
+
 	auto context = *new OpenMM::Context(*system_openmm, integrator,
 					    platform);
+
 
 	context.setPositions(pos);
 	context.setVelocities(vel);
@@ -2929,6 +2936,21 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10,
 
         qDebug() << "Energy before minimisation:" << Epot
                  << "kcal/mol at lambda =" << current_lambda;
+
+	const OpenMM::State state1 = openmm_context->getState
+	    (OpenMM::State::Energy, false, 1 << BOND_FCG | 1 << RECIP_FCG);
+	const OpenMM::State state2 = openmm_context->getState
+	    (OpenMM::State::Energy, false, 1 << DIRECT_FCG);
+	const OpenMM::State state4 = openmm_context->getState
+	    (OpenMM::State::Energy, false, 1 << CORR_FCG);
+
+	qDebug() << "Reciprocal energy ="
+                 << state1.getPotentialEnergy() * kJ_per_mol;
+	qDebug() << "Direct energy ="
+                 << state2.getPotentialEnergy() * kJ_per_mol;
+	qDebug() << "Correction energy ="
+                 << state4.getPotentialEnergy() * kJ_per_mol;
+
     }
 
     // Step 2 minimise
