@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "SireBase/errors.h"
 
+#include "SireBase/slice.h"
+
 #include "SireCAS/symbol.h"
 
 #include "SireCAS/values.h"
@@ -273,6 +275,18 @@ void register_SelectorBond_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorBond::operator()
+        
+            typedef ::SireMM::SelectorBond ( ::SireMM::SelectorBond::*__call___function_type)( ::SireBase::Slice const & ) const;
+            __call___function_type __call___function_value( &::SireMM::SelectorBond::operator() );
+            
+            SelectorBond_exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("slice") )
+                , "" );
+        
+        }
         { //::SireMM::SelectorBond::operator=
         
             typedef ::SireMM::SelectorBond & ( ::SireMM::SelectorBond::*assign_function_type)( ::SireMM::SelectorBond const & ) ;
@@ -296,6 +310,18 @@ void register_SelectorBond_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMM::SelectorBond::operator[]
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMM::SelectorBond::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMM::SelectorBond::operator[] );
+            
+            SelectorBond_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
                 , "" );
         
         }
