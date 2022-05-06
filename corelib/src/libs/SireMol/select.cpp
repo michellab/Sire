@@ -732,7 +732,7 @@ QList<MolNum> SelectResult::molNums() const
 MolViewPtr SelectResult::listAt(int i) const
 {
     i = Index(i).map(molviews.count());
-    return molviews.at(i);
+    return MolViewPtr(molviews.at(i)->clone());
 }
 
 /** Return the number of items in the list */

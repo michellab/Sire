@@ -101,30 +101,44 @@ def __is_list_class(obj):
             return False
 
 
+def __fix_obj(obj):
+    """This is needed because MolViewPtr objects that hold Selector_T_ types
+       do not convert properly.
+    """
+    w = obj.what()
+
+    if w == Selector_Atom_.typename():
+        return obj.atoms()
+    elif w == Selector_Residue_.typename():
+        return obj.residues()
+    elif w == Selector_Chain_.typename():
+        return obj.chains()
+    elif w == Selector_Segment_.typename():
+        return obj.segments()
+    elif w == Selector_CutGroup_.typename():
+        return obj.cutgroups()
+    else:
+        return obj
+
+
 def __from_select_result(obj):
     """Convert the passed SelectResult from a search into the
        most appropriate MoleculeView-derived class
     """
-    views = []
-
-    molnums = obj.mol_nums()
-
-    if len(molnums) == 0:
+    if obj.list_count() == 0:
         raise KeyError("Nothing matched the search.")
 
+    if obj.list_count() == 1:
+        return __fix_obj(obj.list_at(0))
+
     typ = obj.get_common_type()
-    print(typ)
+
+    from ..mm import SelectorBond
 
     if typ == Molecule.typename():
-        if len(molnums) == 1:
-            return obj.views(molnums[0]).molecule()
-        else:
-            return SelectorMol(obj)
+        return SelectorMol(obj)
     elif typ == Atom.typename():
-        if len(molnums) == 1:
-            return obj.views(molnums[0]).atom()
-        else:
-            return SelectorM_Atom_(obj)
+        return SelectorM_Atom_(obj)
     elif typ == Residue.typename():
         return SelectorM_Residue_(obj)
     elif typ == Chain.typename():
@@ -133,6 +147,9 @@ def __from_select_result(obj):
         return SelectorM_Segment_(obj)
     elif typ == CutGroup.typename():
         return SelectorM_CutGroup_(obj)
+    elif typ == SelectorBond.typename():
+        # Eventually want a SelectorMBond
+        return [obj.list_at(i) for i in range(0, obj.list_count())]
     else:
         print(Atom.typename())
         print(f"Unrecognised type: {typ}. Returning as atoms.")
