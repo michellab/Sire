@@ -56,7 +56,6 @@
 #include "beadnum.h"
 #include "atommatcher.h"
 #include "mgidx.h"
-#include "parser.h"
 #include "atom.h"
 #include "bondtype.h"
 #include "element.h"
@@ -166,6 +165,7 @@ void register_SireMol_objects()
     ObjectRegistry::registerConverterFor< SireMol::RelFromNumber >();
     ObjectRegistry::registerConverterFor< SireMol::AbsFromMass >();
     ObjectRegistry::registerConverterFor< SireMol::AbsFromNumber >();
+    ObjectRegistry::registerConverterFor< SireMol::parse_error >();
     ObjectRegistry::registerConverterFor< SireMol::Select >();
     ObjectRegistry::registerConverterFor< SireMol::SelectResult >();
     ObjectRegistry::registerConverterFor< SireMol::SelectResultMover >();
@@ -205,7 +205,6 @@ void register_SireMol_objects()
     ObjectRegistry::registerConverterFor< SireMol::AtomResultMatcher >();
     ObjectRegistry::registerConverterFor< SireMol::AtomMatchInverter >();
     ObjectRegistry::registerConverterFor< SireMol::MGIdx >();
-    ObjectRegistry::registerConverterFor< SireMol::parse_error >();
     ObjectRegistry::registerConverterFor< SireMol::Atom >();
     ObjectRegistry::registerConverterFor< SireMol::Mover<SireMol::Atom> >();
     ObjectRegistry::registerConverterFor< SireMol::Selector<SireMol::Atom> >();

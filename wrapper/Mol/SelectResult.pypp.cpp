@@ -44,6 +44,7 @@ void register_SelectResult_class(){
         SelectResult_exposer.def( bp::init< SireMol::Molecules const & >(( bp::arg("molecules") ), "Construct from the passed molecules") );
         SelectResult_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "Construct from the passed molecules") );
         SelectResult_exposer.def( bp::init< QList< SireMol::Molecule > const & >(( bp::arg("views") ), "Construct from the passed molecules") );
+        SelectResult_exposer.def( bp::init< QList< SireBase::PropPtr< SireMol::MoleculeView > > const & >(( bp::arg("views") ), "Construct from the passed molecules") );
         SelectResult_exposer.def( bp::init< QList< SireMol::Selector< SireMol::Atom > > const & >(( bp::arg("views") ), "Construct from the passed molecules") );
         SelectResult_exposer.def( bp::init< QList< SireMol::Selector< SireMol::Residue > > const & >(( bp::arg("views") ), "Construct from the passed molecules") );
         SelectResult_exposer.def( bp::init< QList< SireMol::Selector< SireMol::Chain > > const & >(( bp::arg("views") ), "Construct from the passed molecules") );
@@ -295,6 +296,18 @@ void register_SelectResult_class(){
                 , ( bp::arg("name") )
                 , bp::release_gil_policy()
                 , "Return this result as a new molecule group called name" );
+        
+        }
+        { //::SireMol::SelectResult::toList
+        
+            typedef ::QList< SireBase::PropPtr< SireMol::MoleculeView > > ( ::SireMol::SelectResult::*toList_function_type)(  ) const;
+            toList_function_type toList_function_value( &::SireMol::SelectResult::toList );
+            
+            SelectResult_exposer.def( 
+                "toList"
+                , toList_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::SelectResult::toMolecules
