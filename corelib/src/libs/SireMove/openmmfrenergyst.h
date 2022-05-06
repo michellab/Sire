@@ -209,6 +209,7 @@ namespace SireMove {
         AtomicVelocityWorkspace &ws);
         
         double getPotentialEnergyAtLambda(double lambda);
+        QVector<double> printEnergyAtLambda(double lambda);
         void updateOpenMMContextLambda(double lambda);
         boost::tuples::tuple<double, double, double> calculateGradient(double increment_plus, 
         double increment_minus, double potential_energy_lambda, double beta);
