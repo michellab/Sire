@@ -311,7 +311,7 @@ SelectorMol::SelectorMol(const SelectResult &molecules)
 
         for (const auto &mol : molecules)
         {
-            this->mols.append(mol.molecule());
+            this->mols.append(mol->molecule());
         }
     }
 }

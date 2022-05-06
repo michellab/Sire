@@ -606,7 +606,7 @@ SelectorM<T>::SelectorM(const SelectResult &molecules)
 
         for (const auto &mol : molecules)
         {
-            this->vws.append(_get_view<T>::get(mol));
+            this->vws.append(_get_view<T>::get(*mol));
         }
     }
 }

@@ -253,7 +253,7 @@ friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream &ds, const SelectRes
 friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream &ds, SelectResult&);
 
 public:
-    typedef QList<ViewsOfMol> Container;
+    typedef QList<MolViewPtr> Container;
     typedef Container::const_iterator const_iterator;
     typedef const_iterator iterator;
 
@@ -265,6 +265,7 @@ public:
     SelectResult(const MoleculeView &molview);
 
     SelectResult(const QList<Molecule> &views);
+    SelectResult(const QList<MolViewPtr> &views);
     SelectResult(const QList< Selector<Atom> > &views);
     SelectResult(const QList< Selector<Residue> > &views);
     SelectResult(const QList< Selector<Chain> > &views);
@@ -299,6 +300,8 @@ public:
     MolViewPtr operator[](int i) const;
     MolViewPtr operator[](MolNum molnum) const;
 
+    QList<MolViewPtr> toList() const;
+
     SelectResultMover move() const;
 
     bool isEmpty() const;
@@ -332,8 +335,8 @@ public:
     SelectResult molecules() const;
 
 private:
-    /** The list of all ViewsOfMol views */
-    QList<ViewsOfMol> molviews;
+    /** The list of all views */
+    QList<MolViewPtr> molviews;
 };
 
 /** This class provides a simple "move" interface to move all

@@ -107,13 +107,7 @@ def __from_select_result(obj):
     """
     views = []
 
-    from ..mm import SelectorBond
-
-    print("WHAT IS THIS?")
-    print(obj)
-
-    if SelectorBond in type(obj).mro():
-        return obj
+    views = obj.toList()
 
     molnums = obj.mol_nums()
 
@@ -307,6 +301,14 @@ def __fix_getitem(C):
     C.residues = __fixed__residues__
     C.chains = __fixed__chains__
     C.segments = __fixed__segments__
+
+    if C is Chain:
+        C.__len__ = C.num_residues
+    else:
+        C.__len__ = C.num_atoms
+
+    C.count = C.__len__
+    C.size = C.__len__
 
     if hasattr(C, "molecules"):
         if not hasattr(C, "__orig__molecules"):

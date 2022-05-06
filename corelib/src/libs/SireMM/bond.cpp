@@ -216,6 +216,7 @@ AtomSelection Bond::selection() const
         return AtomSelection();
 
     auto s = AtomSelection(this->data());
+    s = s.deselectAll();
 
     s = s.select(bnd.atom0());
     s = s.select(bnd.atom1());

@@ -2087,7 +2087,7 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
     //distance of the atoms in the passed molecule - this could
     //be made significantly more efficient if we use the rapid distance
     //calculation abilities of Space and CoordGroup better...
-    auto isWithin = [&](const Vector &point, const ViewsOfMol &mol)
+    auto isWithin = [&](const Vector &point, const MoleculeView &mol)
     {
         const auto &moldata = mol.data();
 
@@ -2167,7 +2167,7 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
                     //are within the distance
                     for (const auto &refmol : refmols)
                     {
-                        bool is_within = isWithin(point, refmol);
+                        bool is_within = isWithin(point, *refmol);
 
                         if (is_within)
                         {
