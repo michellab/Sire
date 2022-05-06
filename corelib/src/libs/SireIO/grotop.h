@@ -222,6 +222,7 @@ public:
     GroAtom atom(const SireMol::AtomName &atomnam, bool is_lambda1=false) const;
 
     QVector<GroAtom> atoms(bool is_lambda1=false) const;
+    void setAtoms(const QVector<GroAtom> &atoms, bool is_lambda1=false);
 
     QVector<GroAtom> atoms(const SireMol::AtomName &atomnam, bool is_lambda1=false) const;
 
