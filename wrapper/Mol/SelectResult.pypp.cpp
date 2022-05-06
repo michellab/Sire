@@ -149,6 +149,31 @@ void register_SelectResult_class(){
                 , "Return a copy of this result with all views joined into single views" );
         
         }
+        { //::SireMol::SelectResult::listAt
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::SelectResult::*listAt_function_type)( int ) const;
+            listAt_function_type listAt_function_value( &::SireMol::SelectResult::listAt );
+            
+            SelectResult_exposer.def( 
+                "listAt"
+                , listAt_function_value
+                , ( bp::arg("i") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectResult::listCount
+        
+            typedef int ( ::SireMol::SelectResult::*listCount_function_type)(  ) const;
+            listCount_function_type listCount_function_value( &::SireMol::SelectResult::listCount );
+            
+            SelectResult_exposer.def( 
+                "listCount"
+                , listCount_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectResult::molNums
         
             typedef ::QList< SireMol::MolNum > ( ::SireMol::SelectResult::*molNums_function_type)(  ) const;
