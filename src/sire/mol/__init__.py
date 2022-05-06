@@ -107,40 +107,36 @@ def __from_select_result(obj):
     """
     views = []
 
-    views = obj.toList()
-
     molnums = obj.mol_nums()
 
     if len(molnums) == 0:
         raise KeyError("Nothing matched the search.")
 
-    elif len(molnums) == 1:
-        v = obj.views(molnums[0])
+    typ = obj.get_common_type()
+    print(typ)
 
-        if __is_list_class(v) and len(v) == 1:
-            return v[0]
+    if typ == Molecule.typename():
+        if len(molnums) == 1:
+            return obj.views(molnums[0]).molecule()
         else:
-            return v
-
-    else:
-        typ = obj.get_common_type()
-
-        if typ == Molecule.typename():
             return SelectorMol(obj)
-        elif typ == Atom.typename():
-            return SelectorM_Atom_(obj)
-        elif typ == Residue.typename():
-            return SelectorM_Residue_(obj)
-        elif typ == Chain.typename():
-            return SelectorM_Chain_(obj)
-        elif typ == Segment.typename():
-            return SelectorM_Segment_(obj)
-        elif typ == CutGroup.typename():
-            return SelectorM_CutGroup_(obj)
+    elif typ == Atom.typename():
+        if len(molnums) == 1:
+            return obj.views(molnums[0]).atom()
         else:
-            print(Atom.typename())
-            print(f"Unrecognised type: {typ}. Returning as atoms.")
             return SelectorM_Atom_(obj)
+    elif typ == Residue.typename():
+        return SelectorM_Residue_(obj)
+    elif typ == Chain.typename():
+        return SelectorM_Chain_(obj)
+    elif typ == Segment.typename():
+        return SelectorM_Segment_(obj)
+    elif typ == CutGroup.typename():
+        return SelectorM_CutGroup_(obj)
+    else:
+        print(Atom.typename())
+        print(f"Unrecognised type: {typ}. Returning as atoms.")
+        return SelectorM_Atom_(obj)
 
 
 def __fixed__getitem__(obj, key):
@@ -303,8 +299,13 @@ def __fix_getitem(C):
     C.segments = __fixed__segments__
 
     if C is Chain:
-        C.__len__ = C.num_residues
-    else:
+        if hasattr(C, "nResidues"):
+            C.__len__ = C.nResidues
+        else:
+            C.__len__ = C.num_residues
+    elif hasattr(C, "nAtoms"):
+        C.__len__ = C.nAtoms
+    elif hasattr(C, "num_atoms"):
         C.__len__ = C.num_atoms
 
     C.count = C.__len__

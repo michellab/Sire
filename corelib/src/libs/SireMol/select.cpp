@@ -728,6 +728,19 @@ QList<MolNum> SelectResult::molNums() const
     return molnums;
 }
 
+/** Return the ith MolViewPtr in the underlying list */
+MolViewPtr SelectResult::listAt(int i) const
+{
+    i = Index(i).map(molviews.count());
+    return molviews.at(i);
+}
+
+/** Return the number of items in the list */
+int SelectResult::listCount() const
+{
+    return molviews.count();
+}
+
 /** Return the ith view in the result. This is automatically converted to
     the right molecule view type */
 MolViewPtr SelectResult::operator[](int i) const

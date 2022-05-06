@@ -302,6 +302,9 @@ public:
 
     QList<MolViewPtr> toList() const;
 
+    MolViewPtr listAt(int i) const;
+    int listCount() const;
+
     SelectResultMover move() const;
 
     bool isEmpty() const;
