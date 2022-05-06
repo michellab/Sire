@@ -128,10 +128,24 @@ def __from_select_result(obj):
     if obj.list_count() == 0:
         raise KeyError("Nothing matched the search.")
 
-    if obj.list_count() == 1:
-        return __fix_obj(obj.list_at(0))
-
     typ = obj.get_common_type()
+
+    if obj.list_count() == 1:
+        obj = __fix_obj(obj.list_at(0))
+
+        if obj.what() != typ:
+            if typ == Molecule.typename():
+                return obj.molecule()
+            elif typ == Segment.typename():
+                return obj.segments(auto_reduce=True)
+            elif typ == Chain.typename():
+                return obj.chains(auto_reduce=True)
+            elif typ == Residue.typename():
+                return obj.residues(auto_reduce=True)
+            elif typ == Atom.typename():
+                return obj.atoms(auto_reduce=True)
+
+        return obj
 
     from ..mm import SelectorBond
 
@@ -151,7 +165,6 @@ def __from_select_result(obj):
         # Eventually want a SelectorMBond
         return [obj.list_at(i) for i in range(0, obj.list_count())]
     else:
-        print(Atom.typename())
         print(f"Unrecognised type: {typ}. Returning as atoms.")
         return SelectorM_Atom_(obj)
 
@@ -315,16 +328,6 @@ def __fix_getitem(C):
     C.chains = __fixed__chains__
     C.segments = __fixed__segments__
 
-    if C is Chain:
-        if hasattr(C, "nResidues"):
-            C.__len__ = C.nResidues
-        else:
-            C.__len__ = C.num_residues
-    elif hasattr(C, "nAtoms"):
-        C.__len__ = C.nAtoms
-    elif hasattr(C, "num_atoms"):
-        C.__len__ = C.num_atoms
-
     C.count = C.__len__
     C.size = C.__len__
 
@@ -339,6 +342,13 @@ def __fix_getitem(C):
         C.bond = __fixed__bond__
 
 
+Residue.__len__ = Residue.nAtoms
+Chain.__len__ = Chain.nResidues
+Segment.__len__ = Segment.nAtoms
+CutGroup.__len__ = CutGroup.nAtoms
+Molecule.__len__ = Molecule.nAtoms
+
+
 for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule,
           Selector_Atom_, Selector_Residue_,
           Selector_Chain_, Selector_Segment_,
@@ -347,7 +357,6 @@ for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule,
           SelectorM_Chain_, SelectorM_Segment_,
           SelectorM_CutGroup_]:
     __fix_getitem(C)
-
 
 MoleculeView.coordinates = lambda x : x.property("coordinates")
 Atom.element = lambda x : x.property("element")

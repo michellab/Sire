@@ -915,8 +915,6 @@ QString SelectResult::getCommonType() const
 {
     if (molviews.isEmpty())
         return QString();
-    else if (molviews.count() == 1)
-        return QString(molviews.at(0)->what());
 
     // we need to start from the largest type and work downwards
     // (as some atoms may be whole residues)

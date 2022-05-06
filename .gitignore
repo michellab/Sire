@@ -15,6 +15,7 @@ wrapper/Py++/pyplusplus
 includes.tar.bz2
 doc/build/*
 doc/source/api/generated/*
+tests/cache/*
 *.pyc
 *.data
 .vscode

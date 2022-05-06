@@ -3,7 +3,7 @@ from typing import Union as _Union
 from typing import List as _List
 
 __all__ = ["load", "save", "create", "smiles", "expand",
-           "tutorial_url", "supported_formats"]
+           "tutorial_url", "load_test_files", "supported_formats"]
 
 
 tutorial_url = "https://siremol.org/m"
@@ -72,7 +72,7 @@ def _get_gromacs_dir():
         return None
 
 
-def _resolve_path(path, directory):
+def _resolve_path(path, directory, silent=False):
     import os
 
     if os.path.exists(path) and os.path.isfile(path):
@@ -81,16 +81,19 @@ def _resolve_path(path, directory):
             unzipped = path[0:-3]
 
             if os.path.exists(unzipped) and os.path.isfile(unzipped):
-                print(f"Using cached unzipped file '{unzipped}'...")
+                if not silent:
+                    print(f"Using cached unzipped file '{unzipped}'...")
                 return [os.path.abspath(unzipped)]
 
             _create_dir(directory)
             unzipped = os.path.join(directory, os.path.basename(path)[0:-3])
             if os.path.exists(unzipped) and os.path.isfile(unzipped):
-                print(f"Using cached unzipped file '{unzipped}'...")
+                if not silent:
+                    print(f"Using cached unzipped file '{unzipped}'...")
                 return [os.path.abspath(unzipped)]
 
-            print(f"Unzipping '{path}'...")
+            if not silent:
+                print(f"Unzipping '{path}'...")
 
             import gzip
             import shutil
@@ -105,16 +108,20 @@ def _resolve_path(path, directory):
             unzipped = path[0:-4]
 
             if os.path.exists(unzipped) and os.path.isfile(unzipped):
-                print(f"Using cached unzipped file '{unzipped}'...")
+                if not silent:
+                    print(f"Using cached unzipped file '{unzipped}'...")
                 return [os.path.abspath(unzipped)]
 
             _create_dir(directory)
             unzipped = os.path.join(directory, os.path.basename(path)[0:-4])
             if os.path.exists(unzipped) and os.path.isfile(unzipped):
-                print(f"Using cached unzipped file '{unzipped}'...")
+                if not silent:
+                    print(f"Using cached unzipped file '{unzipped}'...")
                 return [os.path.abspath(unzipped)]
 
-            print(f"Unzipping '{path}'...")
+            if not silent:
+                print(f"Unzipping '{path}'...")
+
             import bz2
             import shutil
             with bz2.open(path, 'rb') as f_in:
@@ -133,14 +140,16 @@ def _resolve_path(path, directory):
 
         if os.path.exists(filename):
             if os.path.isfile(filename):
-                print(f"Using cached download of '{path}'...")
-                return _resolve_path(filename, directory=directory)
+                if not silent:
+                    print(f"Using cached download of '{path}'...")
+                return _resolve_path(filename, directory=directory, silent=silent)
             else:
                 raise IOError(
                     f"Cannot overwrite {filename} as it is an "
                     "existing directory!")
 
-        print(f"Downloading from '{path}'...")
+        if not silent:
+            print(f"Downloading from '{path}'...")
 
         try:
             import urllib.request
@@ -149,7 +158,7 @@ def _resolve_path(path, directory):
             raise IOError(f"Unable to download '{path}': {e}")
 
         if os.path.exists(filename) and os.path.isfile(filename):
-            return _resolve_path(filename, directory=directory)
+            return _resolve_path(filename, directory=directory, silent=silent)
         else:
             raise IOError(f"Downloaded file does not exist? {filename}")
     else:
@@ -165,7 +174,7 @@ def _resolve_path(path, directory):
                 code = path.lower()
                 # https://files.rcsb.org/download/4hhb.pdb.gz
                 return _resolve_path(f"https://files.rcsb.org/download/{path}.pdb.gz",
-                                     directory=directory)
+                                     directory=directory, silent=silent)
 
     # this may be a globbed path
     import glob
@@ -175,14 +184,14 @@ def _resolve_path(path, directory):
     if len(matches) > 0:
         paths = []
         for match in matches:
-            paths += _resolve_path(match, directory=directory)
+            paths += _resolve_path(match, directory=directory, silent=silent)
 
         return paths
 
     raise IOError(f"Cannot find file '{path}'")
 
 
-def expand(base: str, path: _Union[str, _List[str]], *args):
+def expand(base: str, path: _Union[str, _List[str]], *args, **kwargs):
     """Expand the set of paths with the supplied base.
 
        Args:
@@ -192,6 +201,9 @@ def expand(base: str, path: _Union[str, _List[str]], *args):
         path (str or list[str]):
             The filename (or names) that will be prepended
             with the base.
+
+        suffix (str):
+            A suffix to attach to all files, e.g. ".bz2"
 
         Returns:
             list[str]:
@@ -204,7 +216,10 @@ def expand(base: str, path: _Union[str, _List[str]], *args):
             >>> expand("input", ["ala.top", "ala.crd"])
             ["input/ala.top", "input/ala.crd"]
     """
-    import os
+    if "suffix" in kwargs:
+        suffix = kwargs["suffix"]
+    else:
+        suffix = None
 
     if type(path) is not list:
         paths = [path]
@@ -216,8 +231,17 @@ def expand(base: str, path: _Union[str, _List[str]], *args):
 
     expanded = []
 
+    if base.startswith("http"):
+        join = lambda x, y: f"{x}/{y}"
+    else:
+        import os
+        join = os.path.join
+
     for path in paths:
-        expanded.append(os.path.join(base, path))
+        if suffix is None:
+            expanded.append(join(base, path))
+        else:
+            expanded.append(join(base, f"{path}{suffix}"))
 
     return expanded
 
@@ -282,11 +306,16 @@ def load(path: _Union[str, _List[str]], *args, **kwargs):
     else:
         directory = "."
 
+    if "silent" in kwargs:
+        silent = kwargs["silent"]
+    else:
+        silent = False
+
     p = []
 
     for i in range(0, len(paths)):
         # resolve the paths, downloading as needed
-        p += _resolve_path(paths[i], directory=directory)
+        p += _resolve_path(paths[i], directory=directory, silent=silent)
 
     paths = p
 
@@ -370,6 +399,32 @@ def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
         molecules = s
 
     return MoleculeParser.save(molecules, filename, map=p)
+
+
+def load_test_files(files: _Union[_List[str], str], *args):
+    """Load the passed files that are part of the unit testing
+       and return the resulting molecules. This will cache the files
+       into a directory called "../cache" so that downloads can be shared
+       between tests. You should only need this function if you
+       are writing unit tests.
+
+       Args:
+        files (str or list[str])
+            The list of files to load from the tutorial website. This
+            will automatically add on the tutorial URL and compression suffix
+
+       Returns:
+        sire.system.System
+            The loaded molecules
+    """
+    if not type(files) is list:
+        files = [files]
+
+    for arg in args:
+        files.append(arg)
+
+    files = expand(tutorial_url, files, suffix=".bz2")
+    return load(files, directory="../cache", silent=True)
 
 
 def create(args):

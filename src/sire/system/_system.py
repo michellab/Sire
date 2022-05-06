@@ -29,7 +29,10 @@ class System:
         return self.molecules()[key]
 
     def count(self):
-        return self.molecules().count()
+        return self.__len__()
+
+    def size(self):
+        return self.__len__()
 
     def __len__(self):
         return len(self.molecules())
