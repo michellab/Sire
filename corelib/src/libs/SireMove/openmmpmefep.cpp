@@ -614,15 +614,16 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
 };
 
 
+// NOTE: only for debugging with simple non-dummy systems like ions
+const bool fullPME = true;   // use false for production
+const bool useOffset = false; // use true for production
+
 /**
  * initialises the openMM Free energy single topology calculation
  * Initialise must be called before anything else happens.
  */
 void OpenMMPMEFEP::initialise()
 {
-    // NOTE: only for debugging with simple non-dummy systems like ions
-    const bool fullPME = true;   // use false for production
-
     if (Debug) {
         qDebug() << "Initialising OpenMMPMEFEP";
         const std::string version = OpenMM::Platform::getOpenMMVersion();
@@ -745,7 +746,8 @@ void OpenMMPMEFEP::initialise()
     recip_space->setUseDispersionCorrection(false);
 
     // scale the charges in the reciprocal space
-    recip_space->addGlobalParameter("lambda_offset", current_lambda);
+    if (useOffset)
+	recip_space->addGlobalParameter("lambda_offset", current_lambda);
 
     // use default tolerance for the moment
     double tolerance_PME = recip_space->getEwaldErrorTolerance();
@@ -1168,7 +1170,7 @@ void OpenMMPMEFEP::initialise()
                 if (abs(charge_diff) < 0.00001)
                     charge_diff = 0.0;
 
-                if (charge_diff != 0.0) {
+                if (useOffset && charge_diff != 0.0) {
 		    // charge = charge_start + lambda_offset * charge_diff
 		    recip_space->addParticleParameterOffset("lambda_offset",
 							    nonbond_idx,
@@ -2379,7 +2381,7 @@ void OpenMMPMEFEP::initialise()
 
         qprod_diff = qprod_end - qprod_start;
 
-        if (qprod_diff != 0.0) {
+        if (useOffset && qprod_diff != 0.0) {
             recip_space->addExceptionParameterOffset("lambda_offset", i,
                     qprod_diff, 0.0, 0.0);
 
@@ -3413,7 +3415,8 @@ void OpenMMPMEFEP::updateOpenMMContextLambda(double lambda)
 
     // lambda for the offsets (linear scaling) of the charges in
     // reciprocal space
-    openmm_context->setParameter("lambda_offset", lambda);
+    if (useOffset)
+	openmm_context->setParameter("lambda_offset", lambda);
 }
 
 boost::tuples::tuple<double, double, double> OpenMMPMEFEP::calculateGradient(
