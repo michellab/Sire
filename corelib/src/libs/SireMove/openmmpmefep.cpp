@@ -432,10 +432,11 @@ static void addPerAngleParameters(OpenMM::CustomAngleForce &force,
 
 void OpenMMPMEFEP::addAndersenThermostat(OpenMM::System &system)
 {
-    const double converted_Temperature = convertTo(Temperature.value(), kelvin);
+    const double converted_Temperature =
+	convertTo(Temperature.value(), kelvin);
 
     auto thermostat = new OpenMM::AndersenThermostat(converted_Temperature,
-            Andersen_frequency);
+						     Andersen_frequency);
 
     thermostat->setRandomNumberSeed(random_seed);
     system.addForce(thermostat);
@@ -449,12 +450,13 @@ void OpenMMPMEFEP::addAndersenThermostat(OpenMM::System &system)
 
 void OpenMMPMEFEP::addMCBarostat(OpenMM::System &system)
 {
-    const double converted_Temperature = convertTo(Temperature.value(), kelvin);
+    const double converted_Temperature =
+	convertTo(Temperature.value(), kelvin);
     const double converted_Pressure = convertTo(Pressure.value(), bar);
 
     auto barostat = new OpenMM::MonteCarloBarostat(converted_Pressure,
-            converted_Temperature,
-            MCBarostat_frequency);
+						   converted_Temperature,
+						   MCBarostat_frequency);
 
     barostat->setRandomNumberSeed(random_seed);
     system.addForce(barostat);
@@ -619,7 +621,7 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
 void OpenMMPMEFEP::initialise()
 {
     // NOTE: only for debugging with simple non-dummy systems like ions
-    const bool fullPME = false;   // use false for production
+    const bool fullPME = true;   // use false for production
 
     if (Debug) {
         qDebug() << "Initialising OpenMMPMEFEP";
@@ -642,8 +644,8 @@ void OpenMMPMEFEP::initialise()
     const MoleculeGroup solutetodummy = this->solutetodummy.read();
     const MoleculeGroup solutefromdummy = this->solutefromdummy.read();
 
-    AtomicVelocityWorkspace ws = this->createWorkspace(
-                                     moleculegroup).read().asA<AtomicVelocityWorkspace>();
+    AtomicVelocityWorkspace ws =
+	this->createWorkspace(moleculegroup).read().asA<AtomicVelocityWorkspace>();
 
     const int nmols = ws.nMolecules();
 
@@ -726,11 +728,11 @@ void OpenMMPMEFEP::initialise()
     }
 
     system_openmm->setDefaultPeriodicBoxVectors(OpenMM::Vec3(6, 0, 0),
-            OpenMM::Vec3(0, 6, 0),
-            OpenMM::Vec3(0, 0, 6));
+						OpenMM::Vec3(0, 6, 0),
+						OpenMM::Vec3(0, 0, 6));
 
-   const double converted_cutoff_distance = convertTo(cutoff_distance.value(),
-            nanometer);
+    const double converted_cutoff_distance = convertTo(cutoff_distance.value(),
+						       nanometer);
 
     // HHL
     // Use NonbondedForce to compute Ewald reciprocal and self terms
@@ -741,7 +743,6 @@ void OpenMMPMEFEP::initialise()
     recip_space->setCutoffDistance(converted_cutoff_distance);
     recip_space->setIncludeDirectSpace(fullPME);
     recip_space->setUseDispersionCorrection(false);
-    recip_space->setForceGroup(RECIP_FCG);
 
     // scale the charges in the reciprocal space
     recip_space->addGlobalParameter("lambda_offset", current_lambda);
@@ -758,7 +759,6 @@ void OpenMMPMEFEP::initialise()
                  << "computed from PME error tolerance =" << tolerance_PME;
     }
 
-
     /*** NON-BONDED FORCE FIELDS ***/
 
     QString lam_pre = "";
@@ -773,8 +773,14 @@ void OpenMMPMEFEP::initialise()
     QString general_ff = GENERAL.arg(lam_pre);
     general_ff.append(GENERAL_SIGMA[flag_combRules]);
 
-    auto direct_space = new OpenMM::CustomNonbondedForce(general_ff.toStdString());
+    auto direct_space =
+	new OpenMM::CustomNonbondedForce(general_ff.toStdString());
 
+    /* correction term for 1-2, 1-3, 1-4 exceptions in reciprocal space */
+    auto custom_corr_recip =
+	new OpenMM::CustomBondForce(CORR_RECIP.toStdString());
+
+    if (!fullPME) {
     // This ensures that also the direct space is subject to PBC
     direct_space->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
     direct_space->setCutoffDistance(converted_cutoff_distance);
@@ -790,16 +796,13 @@ void OpenMMPMEFEP::initialise()
 			      "sigmastart", "sigmaend", "isHD", "isTD",
 			      "isFD", "isSolvent"});
 
-    /* correction term for 1-2, 1-3, 1-4 exceptions in reciprocal space */
-
-    auto custom_corr_recip = new OpenMM::CustomBondForce(CORR_RECIP.toStdString());
-
     custom_corr_recip->addGlobalParameter("lam_corr", current_lambda);
     custom_corr_recip->addGlobalParameter("n_corr", coulomb_power);
     custom_corr_recip->addGlobalParameter("alpha_pme", alpha_PME);
     custom_corr_recip->addGlobalParameter("cutoff", converted_cutoff_distance);
 
     addPerBondParameters(*custom_corr_recip, {"qcstart", "qcend"});
+    }
 
     if (coulomb_power > 0)
         lam_pre = "(lamtd^ntd) *";
@@ -1166,11 +1169,11 @@ void OpenMMPMEFEP::initialise()
                     charge_diff = 0.0;
 
                 if (charge_diff != 0.0) {
-                    // charge = charge_start + lambda_offset * charge_diff
-                    recip_space->addParticleParameterOffset("lambda_offset",
-                                                            nonbond_idx,
-                                                            charge_diff,
-                                                            0.0, 0.0); // sigma, epsilon not needed
+		    // charge = charge_start + lambda_offset * charge_diff
+		    recip_space->addParticleParameterOffset("lambda_offset",
+							    nonbond_idx,
+							    charge_diff,
+							    0.0, 0.0); // sigma, epsilon not needed
 
                     if (Debug)
                         qDebug() << "Adding offset for atom idx" << nonbond_idx
@@ -1315,7 +1318,8 @@ void OpenMMPMEFEP::initialise()
 
             // Adds the custom parmaters to _all_ atoms
             // Must be in the same order as in the System
-            direct_space->addParticle(custom_non_bonded_params);
+	    if (!fullPME)
+		direct_space->addParticle(custom_non_bonded_params);
         }
 
         if (Restraint_flag) {
@@ -2199,10 +2203,12 @@ void OpenMMPMEFEP::initialise()
         recip_space->getExceptionParameters(i, p1, p2, charge_prod, sigma_avg,
                                             epsilon_avg);
 
-        direct_space->addExclusion(p1, p2);
+	if (!fullPME) {
+	    direct_space->addExclusion(p1, p2);
 
-        direct_space->getParticleParameters(p1, p1_params);
-        direct_space->getParticleParameters(p2, p2_params);
+	    direct_space->getParticleParameters(p1, p1_params);
+	    direct_space->getParticleParameters(p2, p2_params);
+	}
 
         Qstart_p1 = p1_params[0];
         Qend_p1 = p1_params[1];
@@ -2383,14 +2389,21 @@ void OpenMMPMEFEP::initialise()
 
         }
 
-        custom_corr_recip->addBond(p1, p2, {qprod_start, qprod_end});
+	if (!fullPME)
+	    custom_corr_recip->addBond(p1, p2, {qprod_start, qprod_end});
+
+	if (Debug)
+                qDebug() << "Adding qprod_start =" << qprod_start
+			 << "and qprod_end =" << qprod_end
+                         << "to correction term for bond"
+			 << p1 << "-" << p2;
     } // end of loop over exceptions
 
 
     /*** add non-bonded force fields to System ***/
 
-    int npairs = (direct_space->getNumParticles() * (direct_space->getNumParticles()
-                  - 1)) / 2;
+    unsigned int nAtoms = recip_space->getNumParticles();
+    unsigned int npairs = (nAtoms * (nAtoms - 1)) / 2;
 
     if (Debug) {
         qDebug() << "Num pairs  = " << npairs;
@@ -2404,12 +2417,14 @@ void OpenMMPMEFEP::initialise()
     }
 
     system_openmm->addForce(recip_space);
+    recip_space->setForceGroup(RECIP_FCG);
 
     if (!fullPME) {
         if (npairs != num_exceptions) {
             direct_space->setForceGroup(DIRECT_FCG);
             system_openmm->addForce(direct_space);
-            perturbed_energies_tmp[0] = true; //Custom non bonded 1-5 is added to the system
+            perturbed_energies_tmp[0] = true;
+
             if (Debug)
                 qDebug() << "Added 1-5 direct space (PME, LJ):" << general_ff;
         }
@@ -2426,35 +2441,38 @@ void OpenMMPMEFEP::initialise()
         if (custom_intra_14_clj->getNumBonds() != 0) {
             custom_intra_14_clj->setForceGroup(NONBONDED_FCG);
             system_openmm->addForce(custom_intra_14_clj);
-            perturbed_energies_tmp[1] = true; //Custom non bonded 1-4 is added to the system
-            if (Debug)
+            perturbed_energies_tmp[1] = true;
+
+	    if (Debug)
                 qDebug() << "Added 1-4 CLJ:" << intra_14_clj;
         }
-
 
         if (custom_intra_14_todummy->getNumBonds() != 0) {
             custom_intra_14_todummy->setForceGroup(NONBONDED_FCG);
             system_openmm->addForce(custom_intra_14_todummy);
-            perturbed_energies_tmp[2] = true; //Custom non bonded 1-4 is added to the system
-            if (Debug)
+            perturbed_energies_tmp[2] = true;
+
+	    if (Debug)
                 qDebug() << "Added 1-4 To Dummy:" << intra_14_todummy;
         }
-
 
         if (custom_intra_14_fromdummy->getNumBonds() != 0) {
             custom_intra_14_fromdummy->setForceGroup(NONBONDED_FCG);
             system_openmm->addForce(custom_intra_14_fromdummy);
-            perturbed_energies_tmp[3] = true; //Custom non bonded 1-4 is added to the system
-            if (Debug)
+            perturbed_energies_tmp[3] = true;
+
+	    if (Debug)
                 qDebug() << "Added 1-4 From Dummy:" << intra_14_fromdummy;
         }
 
         if (custom_intra_14_fromdummy_todummy->getNumBonds() != 0) {
             custom_intra_14_fromdummy_todummy->setForceGroup(NONBONDED_FCG);
             system_openmm->addForce(custom_intra_14_fromdummy_todummy);
-            perturbed_energies_tmp[4] = true; //Custom non bonded 1-4 is added to the system
-            if (Debug)
-                qDebug() << "Added 1-4 From Dummy To Dummy:" << intra_14_fromdummy_todummy;
+            perturbed_energies_tmp[4] = true;
+
+	    if (Debug)
+                qDebug() << "Added 1-4 From Dummy To Dummy:"
+			 << intra_14_fromdummy_todummy;
         }
     } // if (!fullPME)
 
@@ -2888,13 +2906,13 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10,
     std::vector<OpenMM::Vec3> old_positions_openmm = state_openmm.getPositions();
 
     if (Debug) {
-        MolarEnergy Epot = state_openmm.getPotentialEnergy() * kJ_per_mol;
+	MolarEnergy Epot = state_openmm.getPotentialEnergy() * kJ_per_mol;
 
         qDebug() << "Total energy before minimisation:" << Epot
                  << "kcal/mol at lambda =" << current_lambda;
 
 	const OpenMM::State state1 = openmm_context->getState
-	    (OpenMM::State::Energy, false, 1 << BOND_FCG | 1 << RECIP_FCG);
+	    (OpenMM::State::Energy, false, 1 << RECIP_FCG);
 	const OpenMM::State state2 = openmm_context->getState
 	    (OpenMM::State::Energy, false, 1 << DIRECT_FCG);
 	const OpenMM::State state4 = openmm_context->getState
