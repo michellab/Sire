@@ -69,6 +69,7 @@ test:
   requires:
     - git
     - nose
+    - pytest
   imports:
     - Sire
     - Sire.Analysis
