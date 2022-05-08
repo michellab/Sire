@@ -50,18 +50,14 @@ namespace boost {
             template <class ArgumentPackage>
             static bool precall(ArgumentPackage const&)
             {
-                gil.setLocalData(new detail::GilHolder());
+                _precall();
                 return true;
             }
 
             template <class ArgumentPackage>
             static PyObject* postcall(ArgumentPackage const&, PyObject* result)
             {
-                if (gil.hasLocalData())
-                {
-                    gil.setLocalData(0);
-                }
-
+                _postcall();
                 return result;
             }
 
@@ -77,6 +73,9 @@ namespace boost {
             {};
 
         private:
+            static void _precall();
+            static void _postcall();
+
             static QThreadStorage<detail::GilHolder*> gil;
         };
     }

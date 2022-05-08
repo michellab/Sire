@@ -120,4 +120,17 @@ void boost::python::release_gil_policy::release_gil_no_raii()
     #endif
 }
 
+void boost::python::release_gil_policy::_precall()
+{
+    gil.setLocalData(new detail::GilHolder());
+}
+
+void boost::python::release_gil_policy::_postcall()
+{
+    if (gil.hasLocalData())
+    {
+        gil.setLocalData(0);
+    }
+}
+
 QThreadStorage<boost::python::detail::GilHolder*> boost::python::release_gil_policy::gil;
