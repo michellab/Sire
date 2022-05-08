@@ -44,6 +44,7 @@ set_target_properties (SireSearch PROPERTIES
 target_link_libraries (SireSearch
                        SireMM
                        SireMol
+                       SireCAS
                        SireStream
                        )
 

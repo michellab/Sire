@@ -262,6 +262,31 @@ if (SIRE_GSL_INCLUDE_PATH)
   include_directories (${SIRE_GSL_INCLUDE_PATH})
 endif()
 
+# Thanks to this project who have a solution to the tbb12 link
+# issue on Windows
+# https://fossies.org/linux/opencv/cmake/OpenCVFindLAPACK.cmake
+if(CMAKE_GENERATOR MATCHES "Visual Studio")  # MSBuild
+  # workaround DEFAULTLIB:tbb12.lib issue
+  get_target_property(_tbb_lib tbb IMPORTED_LOCATION)
+  if(NOT _tbb_lib)
+    get_target_property(_tbb_lib tbb IMPORTED_LOCATION_RELEASE)
+  endif()
+
+  if(_tbb_lib)
+    # MSBuild drops content of 'LIB' environment variable,
+    # so pass TBB library directory through `link_directories()`
+    get_filename_component(_tbb_lib_dir "${_tbb_lib}" DIRECTORY)
+    message(STATUS "MKL: adding '${_tbb_lib_dir}' to link directories (workaround DEFAULTLIB issue)")
+    link_directories("${_tbb_lib_dir}")
+  elseif(NOT OPENCV_SKIP_WORKAROUND_MKL_DEFAULTLIB)
+    # We may have tbb.lib for 'tbb' target, but not 'tbb12.lib'
+    message(STATUS "Adding tbb12 to ignore list")
+    set(SIRE_IGNORE_DEFAULTLIB_TBB "tbb12.lib")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:${SIRE_IGNORE_DEFAULTLIB_TBB}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:${SIRE_IGNORE_DEFAULTLIB_TBB}")
+  endif()
+endif()
+
 if (DEFINED SIRE_APP)
   include_directories( "${SIRE_APP}/include" "${SIRE_APP}/Library/include" )
   include_directories(BEFORE ${CONDA_INCLUDE_DIR})

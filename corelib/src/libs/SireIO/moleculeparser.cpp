@@ -996,7 +996,8 @@ System MoleculeParser::read(const QStringList &filenames, const PropertyMap &map
             parts.insert(QFileInfo(filename).baseName());
         }
 
-        QStringList names(parts.constBegin(), parts.constEnd());
+        //QStringList names(parts.constBegin(), parts.constEnd());
+        QStringList names = parts.values();
 
         system.setName(names.join(":"));
     }

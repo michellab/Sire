@@ -36,6 +36,7 @@
 
 #include "SireCAS/symbol.h"
 #include "SireCAS/values.h"
+#include "SireCAS/expression.h"
 
 #include "SireBase/errors.h"
 #include "SireMol/errors.h"

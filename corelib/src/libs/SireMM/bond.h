@@ -33,8 +33,6 @@
 #include "SireMol/bondid.h"
 #include "SireMol/connectivity.h"
 
-#include "SireCAS/expression.h"
-
 #include "SireUnits/dimensions.h"
 
 SIRE_BEGIN_HEADER
@@ -46,6 +44,11 @@ class Bond;
 
 SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::Bond&);
 SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::Bond&);
+
+namespace SireCAS
+{
+class Expression;
+}
 
 namespace SireMM
 {
