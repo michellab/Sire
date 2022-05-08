@@ -542,7 +542,8 @@ SelectorM<T>::SelectorM(const Molecules &molecules)
     {
         auto toList = [](const QSet<MolNum> &molnums)
         {
-            return QList<MolNum>(molnums.constBegin(), molnums.constEnd());
+            //return QList<MolNum>(molnums.constBegin(), molnums.constEnd());
+            return molnums.toList();
         };
 
         auto molnums = toList(molecules.molNums());

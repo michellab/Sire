@@ -552,7 +552,9 @@ QStringList SelectorBond::propertyKeys() const
         }
     }
 
-    QStringList ret(keys.constBegin(), keys.constEnd());
+    //QStringList ret(keys.constBegin(), keys.constEnd());
+    QStringList ret = keys.values();
+
     return ret;
 }
 

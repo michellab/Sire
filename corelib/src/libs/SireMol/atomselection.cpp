@@ -892,9 +892,7 @@ QList<ResIdx> AtomSelection::selectedResidues() const
     }
     else
     {
-        QList<ResIdx> residxs(selected_residues.constBegin(),
-                              selected_residues.constEnd());
-
+        QList<ResIdx> residxs = selected_residues.values();
         std::sort(residxs.begin(), residxs.end());
         return residxs;
     }

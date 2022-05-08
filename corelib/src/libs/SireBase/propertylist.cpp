@@ -31,6 +31,7 @@
 #include "numberproperty.h"
 #include "arrayproperty.hpp"
 #include "variantproperty.h"
+#include "booleanproperty.h"
 
 #include "SireError/errors.h"
 
@@ -91,6 +92,31 @@ namespace SireBase
     PropertyPtr wrap(double value)
     {
         return NumberProperty(value);
+    }
+
+    PropertyPtr wrap(qint32 value)
+    {
+        return NumberProperty(qint64(value));
+    }
+
+    PropertyPtr wrap(quint32 value)
+    {
+        return NumberProperty(qint64(value));
+    }
+
+    PropertyPtr wrap(qint64 value)
+    {
+        return NumberProperty(qint64(value));
+    }
+
+    PropertyPtr wrap(quint64 value)
+    {
+        return NumberProperty(qint64(value));
+    }
+
+    PropertyPtr wrap(bool value)
+    {
+        return BooleanProperty(value);
     }
 
     PropertyPtr wrap(const QList<int> &values)

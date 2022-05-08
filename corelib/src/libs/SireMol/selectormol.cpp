@@ -253,7 +253,7 @@ SelectorMol::SelectorMol(const Molecules &molecules)
     {
         auto toList = [](const QSet<MolNum> &molnums)
         {
-            return QList<MolNum>(molnums.constBegin(), molnums.constEnd());
+            return molnums.values();
         };
 
         auto molnums = toList(molecules.molNums());
@@ -632,7 +632,8 @@ SelectorMol SelectorMol::molecules(const MolID &molid) const
 
     QHash<MolNum, Molecule> m;
 
-    QSet<MolNum> molnums_set(molnums.constBegin(), molnums.constEnd());
+    //QSet<MolNum> molnums_set(molnums.constBegin(), molnums.constEnd());
+    QSet<MolNum> molnums_set = molnums.toSet();
 
     for (const auto &mol : this->mols)
     {
