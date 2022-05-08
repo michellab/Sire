@@ -285,6 +285,10 @@ if(CMAKE_GENERATOR MATCHES "Visual Studio")  # MSBuild
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:${SIRE_IGNORE_DEFAULTLIB_TBB}")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:${SIRE_IGNORE_DEFAULTLIB_TBB}")
   endif()
+
+  # need to link to the static boost python library
+  message(STATUS "Linking to static boost python library")
+  add_compile_options("/DBOOST_PYTHON_STATIC_LIB")
 endif()
 
 if (DEFINED SIRE_APP)
