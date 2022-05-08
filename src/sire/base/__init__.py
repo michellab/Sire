@@ -11,3 +11,4 @@ _use_new_api()
 Property = _Base.Property
 Properties = _Base.Properties
 
+wrap = _Base.wrap

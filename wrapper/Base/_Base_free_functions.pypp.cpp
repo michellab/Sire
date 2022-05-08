@@ -517,6 +517,106 @@ namespace bp = boost::python;
 
 #include "propertylist.h"
 
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
 void register_free_functions(){
 
     { //::SireBase::findExe
@@ -746,6 +846,71 @@ void register_free_functions(){
     { //::SireBase::wrap
     
         typedef ::SireBase::PropertyPtr ( *wrap_function_type )( char const * );
+        wrap_function_type wrap_function_value( &::SireBase::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("value") )
+            , "" );
+    
+    }
+
+    { //::SireBase::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::qint32 );
+        wrap_function_type wrap_function_value( &::SireBase::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("value") )
+            , "" );
+    
+    }
+
+    { //::SireBase::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::qint64 );
+        wrap_function_type wrap_function_value( &::SireBase::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("value") )
+            , "" );
+    
+    }
+
+    { //::SireBase::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::quint32 );
+        wrap_function_type wrap_function_value( &::SireBase::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("value") )
+            , "" );
+    
+    }
+
+    { //::SireBase::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::quint64 );
+        wrap_function_type wrap_function_value( &::SireBase::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("value") )
+            , "" );
+    
+    }
+
+    { //::SireBase::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( bool );
         wrap_function_type wrap_function_value( &::SireBase::wrap );
         
         bp::def( 

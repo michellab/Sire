@@ -10,7 +10,6 @@ class System:
             self._system = _System()
         else:
             if _System not in type(system).mro():
-                print(type(system).mro())
                 raise TypeError(
                     "You can only construct from a sire.legacy.System.System, "
                     f"not a {type(system)}")
