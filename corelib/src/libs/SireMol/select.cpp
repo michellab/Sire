@@ -780,8 +780,6 @@ MolViewPtr SelectResult::operator[](MolNum molnum) const
 /** Return the results as a list of MolViewPtrs */
 QList<MolViewPtr> SelectResult::toList() const
 {
-    qDebug() << molviews.at(0)->toString();
-
     return molviews;
 }
 
@@ -1016,6 +1014,9 @@ QString SelectResult::getCommonType() const
             break;
         }
     }
+
+    if (is_cutgroup)
+        return CutGroup::typeName();
 
     if (is_cutgroup)
         return CutGroup::typeName();

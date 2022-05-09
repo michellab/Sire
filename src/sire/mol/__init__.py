@@ -147,8 +147,6 @@ def __from_select_result(obj):
 
         return obj
 
-    from ..mm import SelectorBond
-
     if typ == Molecule.typename():
         return SelectorMol(obj)
     elif typ == Atom.typename():
@@ -161,12 +159,15 @@ def __from_select_result(obj):
         return SelectorM_Segment_(obj)
     elif typ == CutGroup.typename():
         return SelectorM_CutGroup_(obj)
-    elif typ == SelectorBond.typename():
-        # Eventually want a SelectorMBond
-        return [obj.list_at(i) for i in range(0, obj.list_count())]
     else:
-        print(f"Unrecognised type: {typ}. Returning as atoms.")
-        return SelectorM_Atom_(obj)
+        try:
+            from ..mm import SelectorMBond
+            return SelectorMBond(obj)
+        except Exception:
+            pass
+
+        # return this as a raw list
+        return obj.to_list()
 
 
 def __fixed__getitem__(obj, key):

@@ -10,7 +10,10 @@ _use_new_api()
 
 Bond = _MM.Bond
 SelectorBond = _MM.SelectorBond
+SelectorMBond = _MM.SelectorMBond
 
 from ..mol import __fix_getitem
 
+__fix_getitem(Bond)
 __fix_getitem(SelectorBond)
+__fix_getitem(SelectorMBond)

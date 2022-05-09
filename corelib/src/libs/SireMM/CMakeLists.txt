@@ -74,6 +74,7 @@ set ( SIREMM_HEADERS
       restraintcomponent.h
       restraintff.h
       selectorbond.h
+      selectormbond.h
       softcljcomponent.h
       softcljpotential.h
       switchingfunction.h
@@ -148,6 +149,7 @@ set ( SIREMM_SOURCES
       restraintcomponent.cpp
       restraintff.cpp
       selectorbond.cpp
+      selectormbond.cpp
       softcljcomponent.cpp
       softcljpotential.cpp
       switchingfunction.cpp

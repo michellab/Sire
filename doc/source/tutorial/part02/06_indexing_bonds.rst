@@ -278,7 +278,66 @@ SelectorBond( size=19
 18: Bond( CH3:19 => HH33:22 )
 )
 
+You can find bonds to something using ``bonds to X``, e.g.
 
+>>> print(mol["bonds to resnum 1"])
+SelectorBond( size=1
+0: Bond( C:5 => N:7 )
+)
+
+>>> print(mol["bonds to atomnum 2"])
+SelectorBond( size=4
+0: Bond( HH31:1 => CH3:2 )
+1: Bond( CH3:2 => HH32:3 )
+2: Bond( CH3:2 => HH33:4 )
+3: Bond( CH3:2 => C:5 )
+)
+
+>>> print(mol["bonds to element carbon"])
+SelectorBond( size=16
+0: Bond( HH31:1 => CH3:2 )
+1: Bond( CH3:2 => HH32:3 )
+2: Bond( CH3:2 => HH33:4 )
+3: Bond( C:5 => O:6 )
+4: Bond( C:5 => N:7 )
+...
+11: Bond( C:15 => N:17 )
+12: Bond( N:17 => CH3:19 )
+13: Bond( CH3:19 => HH31:20 )
+14: Bond( CH3:19 => HH32:21 )
+15: Bond( CH3:19 => HH33:22 )
+)
+
+.. note::
+
+    Note that ``bonds to`` excludes bonds that are in the selection. This means
+    that ``bonds to element carbon`` excludes carbon-carbon bonds. If you want
+    all bonds involving carbon, then use ``bonds involving element carbon``.
+
+You can search for bonds between two groups, using
+``bond from X to Y``,
+
+>>> print(mol["bonds from resnum 1 to resnum 2"])
+SelectorBond( size=1
+0: Bond( C:5 => N:7 )
+)
+
+>>> print(mol["bonds from element carbon to element carbon"])
+SelectorBond( size=3
+0: Bond( CH3:2 => C:5 )
+1: Bond( CA:9 => CB:11 )
+2: Bond( CA:9 => C:15 )
+)
+
+>> print(mol["bonds from atomnum 1 to atomnum 2"])
+SelectorBond( size=1
+0: Bond( HH31:1 => CH3:2 )
+)
+
+And, like all molecule containers, you can perform searches in any
+container across any number of molecules, e.g.
+
+>>> print(mols["bonds from element O to element H"])
 
 
 
