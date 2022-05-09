@@ -51,3 +51,5 @@ The number of segments is 0
    part02/03_indexing_chains
    part02/04_indexing_segments
    part02/05_indexing_molecules
+   part02/06_indexing_bonds
+

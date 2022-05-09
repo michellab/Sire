@@ -423,8 +423,22 @@ def load_test_files(files: _Union[_List[str], str], *args):
     for arg in args:
         files.append(arg)
 
+    import os
+    d = os.path.abspath(os.path.curdir)
+
+    if (d.endswith("tests")):
+        # we are running in the tests directory, so cache downloads here
+        cache_dir = os.path.join(d, "cache")
+    else:
+        d2 = os.path.split(d)[0]
+        if d2.endswith("tests"):
+            # we are a subdirectory of the parent directory
+            cache_dir = os.path.join(d2, "cache")
+        else:
+            cache_dir = os.path.join(d, "cache")
+
     files = expand(tutorial_url, files, suffix=".bz2")
-    return load(files, directory="../cache", silent=True)
+    return load(files, directory=cache_dir, silent=True)
 
 
 def create(args):

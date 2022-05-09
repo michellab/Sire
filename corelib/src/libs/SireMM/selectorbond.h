@@ -110,10 +110,12 @@ public:
 
     SireMol::MolViewPtr operator[](int i) const;
     SireMol::MolViewPtr operator[](const SireBase::Slice &slice) const;
+    SireMol::MolViewPtr operator[](const QList<qint64> &idxs) const;
 
     Bond operator()(int i) const;
     SelectorBond operator()(int i, int j) const;
     SelectorBond operator()(const SireBase::Slice &slice) const;
+    SelectorBond operator()(const QList<qint64> &idxs) const;
 
     QList<SireMol::BondID> IDs() const;
 

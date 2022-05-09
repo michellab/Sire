@@ -441,6 +441,11 @@ MolViewPtr SelectorBond::operator[](const SireBase::Slice &slice) const
     return this->operator()(slice);
 }
 
+MolViewPtr SelectorBond::operator[](const QList<qint64> &idxs) const
+{
+    return this->operator()(idxs);
+}
+
 Bond SelectorBond::operator()(int i) const
 {
     auto bnd = bnds.at(Index(i).map(bnds.count()));
@@ -455,6 +460,19 @@ SelectorBond SelectorBond::operator()(const SireBase::Slice &slice) const
     for (auto it = slice.begin(bnds.count()); not it.atEnd(); it.next())
     {
         ret.bnds.append(this->bnds.at(it.value()));
+    }
+
+    return ret;
+}
+
+SelectorBond SelectorBond::operator()(const QList<qint64> &idxs) const
+{
+    SelectorBond ret(*this);
+    ret.bnds.clear();
+
+    for (const auto &idx : idxs)
+    {
+        ret.bnds.append(this->bnds.at(Index(idx).map(this->bnds.count())));
     }
 
     return ret;
