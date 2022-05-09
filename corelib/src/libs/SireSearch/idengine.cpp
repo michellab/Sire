@@ -131,6 +131,21 @@ QString _wildcardToRegularExpression(const QString &pattern)
     return QRegularExpression::anchoredPattern(rx);
 }
 
+QString IDNameEngine::toString() const
+{
+    if (names.count() > 0)
+       return QObject::tr("IDNameEngine(%1 from %2)")
+                    .arg(idobject_to_string(obj))
+                    .arg(names.join(", "));
+    else if (regexps.count() > 0)
+        return QObject::tr("IDNameEngine(%1 from %2)")
+                    .arg(idobject_to_string(obj))
+                    .arg("regexps");
+    else
+        return QObject::tr("IDNameEngine(%1 from *)")
+                    .arg(idobject_to_string(obj));
+}
+
 SelectEnginePtr IDNameEngine::construct(IDObject o, NameValues vals)
 {
     IDNameEngine *ptr = new IDNameEngine();
@@ -1629,16 +1644,59 @@ SelectEnginePtr IDBondEngine::construct( IDBondToken from_token,
     IDBondEngine *ptr = new IDBondEngine();
     auto p = makePtr(ptr);
 
+    if (to_token == ID_BOND_TO)
+    {
+        if (from_token != ID_BOND_FROM)
+        {
+            throw SireMol::parse_error(QObject::tr(
+                "Invalid syntax: Should be 'bonds from X to Y', not "
+                "'bonds %1 X %2 Y'")
+                    .arg(AST::idbondtoken_to_string(from_token))
+                    .arg(AST::idbondtoken_to_string(to_token)), CODELOC);
+        }
+    }
+    else if (to_token != ID_BOND_UNKNOWN)
+    {
+        throw SireMol::parse_error(QObject::tr(
+            "Invalid 'to' token, %1. Should only be 'to'.")
+                .arg(AST::idbondtoken_to_string(to_token)),
+                    CODELOC);
+    }
+
+    if (from_token == ID_BOND_FROM and to_token != ID_BOND_TO)
+    {
+        throw SireMol::parse_error(QObject::tr(
+            "Invalid syntax: Should be 'bonds from X to Y', not "
+            "'bonds %1 X %2 Y'")
+                .arg(AST::idbondtoken_to_string(from_token))
+                .arg(AST::idbondtoken_to_string(to_token)), CODELOC);
+    }
+
     if (from_value)
         from_value->setParent(p);
+    else
+        throw SireMol::parse_error(QObject::tr(
+            "Missing first (from) group to search..."), CODELOC);
 
     if (to_value)
+    {
+        if (to_token != ID_BOND_TO)
+            throw SireMol::parse_error(QObject::tr(
+                "Should not have a 'to' group if not running a 'to' match!"),
+                    CODELOC);
+
+        ptr->to_token = ID_BOND_TO;
+        ptr->to_value = to_value;
         to_value->setParent(p);
+    }
+    else if (to_token != ID_BOND_UNKNOWN)
+    {
+        throw SireMol::parse_error(QObject::tr(
+            "Missing 'to' group when running a 'to' search!"), CODELOC);
+    }
 
     ptr->from_token = from_token;
     ptr->from_value = from_value;
-    ptr->to_token = to_token;
-    ptr->to_value = to_value;
 
     return p;
 }
@@ -1654,30 +1712,56 @@ SelectResult IDBondEngine::select(const SelectResult &mols, const PropertyMap &m
     if (not from_value.get() or from_token == ID_BOND_UNKNOWN)
         return SelectResult();
 
-    auto result = from_value->operator()(mols, map);
+    SelectResult result = from_value->operator()(mols, map);
 
     if (result.count() == 0)
         return SelectResult();
 
-    if (result.count() > 1)
-        throw SireMol::parse_error(QObject::tr(
-            "Can only extract bonds from matches that return a single molecule."),
-                CODELOC);
+    SelectResult to_result;
 
-    auto mol = result[0];
-
-    if (from_token == ID_BOND_WITHIN)
+    if (from_token == ID_BOND_FROM and to_token == ID_BOND_TO)
     {
-        /*if (to_value.get() or to_token != ID_BOND_UNKNOWN)
-            throw SireMol::parse_error(QObject::tr(
-                "'bonds in value' cannot be followed by any other terms."),
-                    CODELOC);*/
-        auto result = SelectorBond(*mol, map);
+        to_result = to_value->operator()(mols, map);
 
-        return SelectResult(result);
+        if (to_result.count() == 0)
+            return SelectResult();
     }
 
-    return SelectResult();
+    QList<MolViewPtr> ret;
+
+    for (const auto &mol : result)
+    {
+        if (from_token == ID_BOND_WITHIN)
+        {
+            auto result = SelectorBond(*mol, map);
+            ret.append(result);
+        }
+        else if (from_token == ID_BOND_INVOLVING)
+        {
+            auto result = SelectorBond(mol->molecule().atoms(),
+                                       mol->atoms(), map);
+            ret.append(result);
+        }
+        else if (from_token == ID_BOND_TO)
+        {
+            // only bonds to this object, not wholly contained in this object
+            auto from = mol->atoms();
+            auto to = from.invert();
+            auto result = SelectorBond(from, to, map);
+
+            ret.append(result);
+        }
+        else if (from_token == ID_BOND_FROM and to_token == ID_BOND_TO)
+        {
+            for (const auto &to_mol : to_result)
+            {
+                if (mol->data().number() == to_mol->data().number())
+                    ret.append(SelectorBond(mol->atoms(), to_mol->atoms(), map));
+            }
+        }
+    }
+
+    return SelectResult(ret);
 }
 
 SelectEnginePtr IDBondEngine::simplify()

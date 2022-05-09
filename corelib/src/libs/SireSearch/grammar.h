@@ -234,6 +234,7 @@ public:
         //all of the different bond tokens
         bond_token.add( "in", AST::ID_BOND_WITHIN )
                       ( "within", AST::ID_BOND_WITHIN )
+                      ( "involving", AST::ID_BOND_INVOLVING )
                       ( "to", AST::ID_BOND_TO )
                       ( "from", AST::ID_BOND_FROM )
                     ;
@@ -384,9 +385,9 @@ public:
         idElementRule %= qi::lit("element") >> ( element_token % qi::lit(",") );
 
         //allow looking for bonds
-        bondRule %= (qi::lit("bonds") >> bond_token >> expressionRule) |
-                    (qi::lit("bonds") >> bond_token >> expressionRule
-                                      >> bond_token >> expressionRule);
+        bondRule %= (qi::lit("bonds") >> bond_token >> expressionRule
+                                      >> bond_token >> expressionRule) |
+                    (qi::lit("bonds") >> bond_token >> expressionRule);
 
         //grammar for a "with" expression
         withRule %= obj_token >> with_token >> expressionRule;

@@ -153,6 +153,8 @@ public:
 
     virtual SelectEnginePtr simplify();
 
+    virtual QString toString() const;
+
     virtual bool usesCoordinates() const;
 
     bool hasParent() const;

@@ -112,11 +112,13 @@ namespace AST
         switch(token)
         {
         case ID_BOND_WITHIN:
-            return "within";
+            return "in";
         case ID_BOND_FROM:
             return "from";
         case ID_BOND_TO:
             return "to";
+        case ID_BOND_INVOLVING:
+            return "involving";
         default:
             return "unknown";
         }
@@ -246,6 +248,11 @@ namespace AST
         }
 
         return lines.join("; ");
+    }
+
+    QString IDNull::toString() const
+    {
+        return QObject::tr("null");
     }
 
     QString IDName::toString() const
@@ -422,6 +429,11 @@ namespace AST
     SelectEnginePtr IDName::toEngine() const
     {
         return IDNameEngine::construct(name,values);
+    }
+
+    SelectEnginePtr IDNull::toEngine() const
+    {
+        return SelectEnginePtr();
     }
 
     SelectEnginePtr IDElement::toEngine() const

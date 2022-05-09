@@ -108,6 +108,11 @@ void SireMol::parser::SelectEngine::setParent(SireMol::parser::SelectEnginePtr p
     const_cast<SireMol::parser::SelectEngine*>(this)->parent = ptr;
 }
 
+QString SireMol::parser::SelectEngine::toString() const
+{
+    return QObject::tr("%1").arg(typeid(*this).name());
+}
+
 /** Internal function used to make a shared pointer out of the passed pointer */
 SireMol::parser::SelectEnginePtr SireMol::parser::SelectEngine::makePtr(SelectEngine *ptr)
 {
@@ -775,6 +780,8 @@ MolViewPtr SelectResult::operator[](MolNum molnum) const
 /** Return the results as a list of MolViewPtrs */
 QList<MolViewPtr> SelectResult::toList() const
 {
+    qDebug() << molviews.at(0)->toString();
+
     return molviews;
 }
 

@@ -92,7 +92,8 @@ namespace AST
 
     /** The different bond tokens */
     enum IDBondToken { ID_BOND_UNKNOWN = 0, ID_BOND_WITHIN = 1,
-                       ID_BOND_FROM = 2, ID_BOND_TO = 3 };
+                       ID_BOND_INVOLVING = 2,
+                       ID_BOND_FROM = 3, ID_BOND_TO = 4 };
 
     QString idbondtoken_to_string(IDBondToken token);
 
@@ -113,6 +114,7 @@ namespace AST
     struct LengthValue;
     struct VectorValue;
 
+    struct IDNull;
     struct IDName;
     struct IDNumber;
     struct IDBinary;
@@ -139,7 +141,8 @@ namespace AST
     struct Node;
 
     /** Base holder for all of the different ID expressions */
-    using ExpressionVariant = boost::variant<boost::recursive_wrapper<IDName>,
+    using ExpressionVariant = boost::variant<boost::recursive_wrapper<IDNull>,
+                                             boost::recursive_wrapper<IDName>,
                                              boost::recursive_wrapper<IDNumber>,
                                              boost::recursive_wrapper<IDElement>,
                                              boost::recursive_wrapper<IDBinary>,
@@ -361,10 +364,20 @@ namespace AST
         int _c;
     };
 
+    /** Null struct for empty values */
+    struct IDNull
+    {
+        IDObject name;
+        NameValues values;
+
+        QString toString() const;
+        SelectEnginePtr toEngine() const;
+    };
+
     /** Struct that holds a general selection expression */
     struct Expression
     {
-        ExpressionVariant value;
+        ExpressionVariant value = IDNull();
 
         QString toString() const;
 
@@ -431,7 +444,6 @@ namespace AST
 
         SelectEnginePtr toEngine() const;
     };
-
     /** Struct that holds a name and associated values */
     struct IDName
     {
@@ -675,6 +687,11 @@ BOOST_FUSION_ADAPT_STRUCT( AST::RegExpValue,
 
 BOOST_FUSION_ADAPT_STRUCT( AST::Node,
                            (AST::Expressions,values)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDNull,
+                           (AST::IDObject, name),
+                           (AST::NameValues, values)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDName,

@@ -245,7 +245,7 @@ def __fixed__bond__(obj, idx=None, idx1=None):
         raise KeyError("There is no matching bond in this view.")
     elif len(bonds) > 1:
         raise KeyError(
-            f"More than one bond matchs. Number of matches is {len(bonds)}.")
+            f"More than one bond matches. Number of matches is {len(bonds)}.")
 
     return bonds[0]
 

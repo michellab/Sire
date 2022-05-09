@@ -61,6 +61,8 @@ public:
 
     ObjType objectType() const;
 
+    QString toString() const;
+
 protected:
     IDNameEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
