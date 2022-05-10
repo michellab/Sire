@@ -46,6 +46,7 @@ void register_SelectorMBond_class(){
         SelectorMBond_exposer.def( bp::init< SireMol::SelectorMol const & >(( bp::arg("mols") ), "") );
         SelectorMBond_exposer.def( bp::init< SireMM::SelectorMBond const &, SireBase::Slice const & >(( bp::arg("bonds"), bp::arg("slice") ), "") );
         SelectorMBond_exposer.def( bp::init< SireMM::SelectorMBond const &, QList< long long > const & >(( bp::arg("bonds"), bp::arg("idxs") ), "") );
+        SelectorMBond_exposer.def( bp::init< SireMol::SelectResult const &, SireMol::BondID const & >(( bp::arg("mols"), bp::arg("bond") ), "") );
         SelectorMBond_exposer.def( bp::init< SireMM::SelectorMBond const & >(( bp::arg("other") ), "") );
         { //::SireMM::SelectorMBond::IDs
         
