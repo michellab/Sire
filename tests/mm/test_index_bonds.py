@@ -43,6 +43,20 @@ def test_index_bonds():
     _assert_same_bonds(ccx["bonds from element C to element C"], cc)
 
 
+def test_index_mols_bonds():
+    mols = sr.load_test_files("ala.top", "ala.crd")
+
+    bnds = mols["bonds from element O to element H"]
+
+    assert len(bnds) == 2 * (mols.num_molecules() - 1)
+    assert len(bnds) == 1260  # just in case something else failed!
+
+    assert bnds.num_molecules() == mols.num_molecules() - 1
+    assert bnds.num_atoms() == bnds.num_molecules() * 3
+
+
 if __name__ == "__main__":
     test_index_bonds()
+    test_index_mols_bonds()
+
 

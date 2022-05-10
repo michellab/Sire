@@ -249,6 +249,43 @@ def segid(idx: int = None, name: str = None):
         return ID
 
 
+def bondid(atom0, atom1):
+    """Construct an identifier for a Bond from the passed
+       identifiers for the two atoms.
+
+       The atom identifiers can be:
+
+       * integers - in this case they are treated as Atom indexes
+       * strings - in this case they are treated as Atom names
+       * AtomIDs - these are AtomIDs created via, e.g. the atomid function.
+
+    Args:
+        atom0 (int, str, AtomID): The identifier for the first atom.
+        atom1 (int, str, AtomID): The identifier for the second atom.
+
+    Returns:
+        BondID: The returned bond identifier
+    """
+
+    def _convert(id):
+        if type(id) is int:
+            from .mol import AtomIdx
+            return AtomIdx(id)
+        elif type(id) is str:
+            from .mol import AtomName
+            return AtomName(id)
+        else:
+            from .mol import AtomID
+
+            if AtomID in type(id).mro():
+                return id
+            else:
+                return atomid(id)
+
+    from .mol import BondID
+    return BondID(_convert(atom0), _convert(atom1))
+
+
 from . import config
 
 __version__ = config.__version__
@@ -270,7 +307,7 @@ try:
 except Exception:
     _can_lazy_import = False
 
-_can_lazy_import = False
+#_can_lazy_import = False
 
 # Lazy import the modules for speed, and also to prevent pythonizing them
 # if the users wants to run in legacy mode

@@ -160,14 +160,12 @@ def __from_select_result(obj):
     elif typ == CutGroup.typename():
         return SelectorM_CutGroup_(obj)
     else:
-        try:
-            from ..mm import SelectorMBond
+        from ..mm import SelectorBond, SelectorMBond
+        if SelectorBond in type(obj.list_at(0)).mro():
             return SelectorMBond(obj)
-        except Exception:
-            pass
-
-        # return this as a raw list
-        return obj.to_list()
+        else:
+            # return this as a raw list
+            return obj.to_list()
 
 
 def __fixed__getitem__(obj, key):
@@ -223,15 +221,23 @@ def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False):
         idx = idx1
         idx1 = None
 
-    if idx is None:
-        from ..mm import SelectorBond
-        result = SelectorBond(obj)
-    elif idx1 is None:
-        from ..mm import SelectorBond
-        result = SelectorBond(obj.atoms(idx))
+    if hasattr(obj, "molecules"):
+        # this is a multi-molecule container
+        from ..mm import SelectorMBond
+        C = SelectorMBond
     else:
         from ..mm import SelectorBond
-        result = SelectorBond(obj.atoms(idx), obj.atoms(idx1))
+        C = SelectorBond
+
+    if idx is None:
+        result = C(obj)
+    elif idx1 is None:
+        if BondID in type(idx).mro():
+            result = C(obj, idx)
+        else:
+            result = C(obj.atoms(idx))
+    else:
+        result = C(obj.atoms(idx), obj.atoms(idx1))
 
     if auto_reduce and len(result) == 1:
         return result[0]
@@ -337,10 +343,9 @@ def __fix_getitem(C):
             C.__orig__molecules = C.molecules
 
         C.molecules = __fixed__molecules__
-    else:
-        # currently don't have this on multi-molecule containers
-        C.bonds = __fixed__bonds__
-        C.bond = __fixed__bond__
+
+    C.bonds = __fixed__bonds__
+    C.bond = __fixed__bond__
 
 
 Residue.__len__ = Residue.nAtoms

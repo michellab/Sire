@@ -93,6 +93,8 @@ public:
     SelectorMBond(const SelectorMBond &bonds, const SireBase::Slice &slice);
     SelectorMBond(const SelectorMBond &bonds, const QList<qint64> &idxs);
 
+    SelectorMBond(const SireMol::SelectResult &mols, const SireMol::BondID &bond);
+
     SelectorMBond(const SelectorMBond &other);
 
     virtual ~SelectorMBond();

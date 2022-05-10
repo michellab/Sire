@@ -338,6 +338,38 @@ And, like all molecule containers, you can perform searches in any
 container across any number of molecules, e.g.
 
 >>> print(mols["bonds from element O to element H"])
+SelectorMBond( size=1260
+0: MolNum(3) Bond( O:23 => H1:24 )
+1: MolNum(3) Bond( O:23 => H2:25 )
+2: MolNum(4) Bond( O:26 => H1:27 )
+3: MolNum(4) Bond( O:26 => H2:28 )
+4: MolNum(5) Bond( O:29 => H1:30 )
+...
+1255: MolNum(630) Bond( O:1904 => H2:1906 )
+1256: MolNum(631) Bond( O:1907 => H1:1908 )
+1257: MolNum(631) Bond( O:1907 => H2:1909 )
+1258: MolNum(632) Bond( O:1910 => H1:1911 )
+1259: MolNum(632) Bond( O:1910 => H2:1912 )
+)
 
+.. note::
 
+    This has returned a :class:`~sire.mm.SelectorMBond`, which is the
+    multi-molecule version of the :class:`~sire.mm.SelectorBond`
+    container.
 
+Uniquely identifying a bond
+---------------------------
+
+Bonds are identified by their :class:`~sire.mol.BondID`. This is a pair
+of :class:`~sire.mol.AtomID` identifiers, one for each of the two
+atoms to be identified. While the atom identifier can be any type,
+it is best to use atom indexes, as these uniquely identify atoms in
+a molecule. A :class:`~sire.mol.BondID` comprised of two
+:class:`~sire.mol.AtomIdx` identifiers will uniquely identify a single
+bond.
+
+You can easily construct a :class:`~sire.mol.BondID` using the
+:func:`sire.bondid` function, e.g.
+
+>>> print(sr.bondid(0, 1))

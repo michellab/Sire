@@ -76,6 +76,10 @@ public:
                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SelectorBond(const SireMol::MoleculeView &molecule,
+                 const SireMol::BondID &atom,
+                 const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorBond(const SireMol::MoleculeView &molecule,
                  const SireMol::AtomID &atom0, const SireMol::AtomID &atom1,
                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
