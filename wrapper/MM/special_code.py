@@ -49,4 +49,4 @@ special_code = { "AtomLJs" : fix_AtomLJs,
                  "SireMM::ThreeAtomFunctions" : fix_AtomFunctions,
                  "SireMM::TwoAtomFunctions" : fix_AtomFunctions,
                  "SireMol::Mover<SireMM::Bond>" : fix_Mover,
-                 "SireMol::Mover<SireMM::SelectorBond" : fix_Mover }
+                 "SireMol::Mover<SireMM::SelectorBond>" : fix_Mover }

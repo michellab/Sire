@@ -37,6 +37,50 @@ namespace bp = boost::python;
 
 #include "selectorbond.h"
 
+#include "SireMaths/align.h"
+
+#include "SireMaths/axisset.h"
+
+#include "SireMaths/matrix.h"
+
+#include "SireMaths/quaternion.h"
+
+#include "SireMaths/rotate.h"
+
+#include "SireMaths/vectorproperty.h"
+
+#include "SireMol/errors.h"
+
+#include "SireUnits/units.h"
+
+#include "SireVol/coordgroup.h"
+
+#include "SireVol/space.h"
+
+#include "angleid.h"
+
+#include "atomcoords.h"
+
+#include "atommatcher.h"
+
+#include "atommatchers.h"
+
+#include "bondid.h"
+
+#include "connectivity.h"
+
+#include "dihedralid.h"
+
+#include "improperid.h"
+
+#include "mover.h"
+
+#include "tostring.h"
+
+#include "weightfunction.h"
+
+#include "mover.h"
+
 SireMol::Mover<SireMM::SelectorBond> __copy__(const SireMol::Mover<SireMM::SelectorBond> &other){ return SireMol::Mover<SireMM::SelectorBond>(other); }
 
 #include "Helpers/str.hpp"
@@ -64,7 +108,7 @@ void register_Mover_SelectorBond__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -78,7 +122,7 @@ void register_Mover_SelectorBond__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("map0"), bp::arg("map1") )
-                , bp::release_gil_policy()
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -92,7 +136,7 @@ void register_Mover_SelectorBond__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -106,7 +150,7 @@ void register_Mover_SelectorBond__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::release_gil_policy()
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -120,7 +164,7 @@ void register_Mover_SelectorBond__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -134,7 +178,7 @@ void register_Mover_SelectorBond__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::release_gil_policy()
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -148,7 +192,7 @@ void register_Mover_SelectorBond__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("aligning_atoms"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -162,7 +206,7 @@ void register_Mover_SelectorBond__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("aligning_atoms"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::release_gil_policy()
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -176,7 +220,7 @@ void register_Mover_SelectorBond__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("bond"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -190,7 +234,7 @@ void register_Mover_SelectorBond__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("angle"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -204,7 +248,7 @@ void register_Mover_SelectorBond__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("dihedral"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -218,7 +262,7 @@ void register_Mover_SelectorBond__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("bond"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -232,7 +276,7 @@ void register_Mover_SelectorBond__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("improper"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -246,7 +290,7 @@ void register_Mover_SelectorBond__class(){
                 "changeFrame"
                 , changeFrame_function_value
                 , ( bp::arg("from_frame"), bp::arg("to_frame"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -273,7 +317,7 @@ void register_Mover_SelectorBond__class(){
                 "mapInto"
                 , mapInto_function_value
                 , ( bp::arg("axes"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -315,7 +359,7 @@ void register_Mover_SelectorBond__class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("quat"), bp::arg("point"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -329,7 +373,7 @@ void register_Mover_SelectorBond__class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("rotmat"), bp::arg("point"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -343,7 +387,7 @@ void register_Mover_SelectorBond__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("bond"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -357,7 +401,7 @@ void register_Mover_SelectorBond__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("angle"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -371,7 +415,7 @@ void register_Mover_SelectorBond__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("dihedral"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -385,7 +429,7 @@ void register_Mover_SelectorBond__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("improper"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -399,7 +443,7 @@ void register_Mover_SelectorBond__class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("dihedral"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -426,7 +470,7 @@ void register_Mover_SelectorBond__class(){
                 "transform"
                 , transform_function_value
                 , ( bp::arg("transform"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
@@ -440,7 +484,7 @@ void register_Mover_SelectorBond__class(){
                 "translate"
                 , translate_function_value
                 , ( bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                    /* undefined call policies */
+                , bp::return_self< >()
                 , "" );
         
         }
