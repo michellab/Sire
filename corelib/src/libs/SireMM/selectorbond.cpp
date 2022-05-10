@@ -431,6 +431,43 @@ QString SelectorBond::toString() const
                 .arg(this->count()).arg(parts.join("\n"));
 }
 
+SelectorBond SelectorBond::add(const Bond &bond) const
+{
+    if (bond.isNull())
+        return *this;
+
+    if (this->isEmpty())
+    {
+        return SelectorBond(bond);
+    }
+
+    if (bond.data().number() != this->data().number())
+    {
+        throw SireError::incompatible_error(QObject::tr(
+            "You cannot add bonds from a different molecule (%1) to "
+            "a set of bonds from molecule %2.")
+                .arg(bond.data().number())
+                .arg(this->data().number()),
+                    CODELOC);
+    }
+
+    auto atom0 = this->data().info().atomIdx(bond.ID().atom0());
+    auto atom1 = this->data().info().atomIdx(bond.ID().atom1());
+
+    if (atom0 > atom1)
+        qSwap(atom0, atom1);
+
+    if (atom0 == atom1)
+        // cannot add bonds to the same atom
+        return *this;
+
+    SelectorBond ret(*this);
+
+    ret.bnds.append(BondID(atom0, atom1));
+
+    return ret;
+}
+
 MolViewPtr SelectorBond::operator[](int i) const
 {
     return this->operator()(i);
@@ -444,6 +481,11 @@ MolViewPtr SelectorBond::operator[](const SireBase::Slice &slice) const
 MolViewPtr SelectorBond::operator[](const QList<qint64> &idxs) const
 {
     return this->operator()(idxs);
+}
+
+MolViewPtr SelectorBond::operator[](const BondID &bond) const
+{
+    return this->operator()(bond);
 }
 
 Bond SelectorBond::operator()(int i) const
@@ -498,6 +540,37 @@ SelectorBond SelectorBond::operator()(int i, int j) const
         for ( ; i >= j; --i)
         {
             ret.bnds.append(this->bnds.at(i));
+        }
+    }
+
+    return ret;
+}
+
+SelectorBond SelectorBond::operator()(const BondID &bond) const
+{
+    auto atom0s = this->data().info().map(bond.atom0());
+    auto atom1s = this->data().info().map(bond.atom1());
+
+    SelectorBond ret(*this);
+    ret.bnds.clear();
+
+    for (const auto &atom0 : atom0s)
+    {
+        for (const auto &atom1 : atom1s)
+        {
+            auto a0 = atom0;
+            auto a1 = atom1;
+
+            if (a0 > a1)
+                qSwap(a0, a1);
+
+            BondID bond(a0, a1);
+
+            for (const auto &b : bnds)
+            {
+                if (b == bond)
+                    ret.bnds.append(b);
+            }
         }
     }
 

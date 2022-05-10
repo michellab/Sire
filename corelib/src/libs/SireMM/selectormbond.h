@@ -33,6 +33,25 @@
 
 SIRE_BEGIN_HEADER
 
+namespace SireMol
+{
+class Atom;
+class Residue;
+class Chain;
+class Segment;
+class CutGroup;
+class Molecule;
+class MoleculeGroup;
+class Molecules;
+class SelectResult;
+
+class SelectorMol;
+class EvaluatorM;
+
+template<class T>
+class SelectorM;
+}
+
 namespace SireMM
 {
 class SelectorMBond;
@@ -58,16 +77,19 @@ public:
 
     SelectorMBond();
     SelectorMBond(const Bond &view);
-    SelectorMBond(const Molecules &mols);
-    SelectorMBond(const MoleculeGroup &mols);
-    SelectorMBond(const MolGroupsBase &mols);
-    SelectorMBond(const SelectResult &mols);
+    SelectorMBond(const SireMol::Molecules &mols);
+    SelectorMBond(const SireMol::MoleculeGroup &mols);
+    SelectorMBond(const SireMol::MolGroupsBase &mols);
+    SelectorMBond(const SireMol::SelectResult &mols);
     SelectorMBond(const SelectorBond &bonds);
 
-    SelectorMBond(const SelectorMol &mols);
+    SelectorMBond(const SireMol::SelectorMol &mols);
 
     template<class U>
-    SelectorMBond(const SelectorM<U> &other);
+    SelectorMBond(const SireMol::SelectorM<U> &other);
+
+    SelectorMBond(const SelectorMBond &bonds, const SireBase::Slice &slice);
+    SelectorMBond(const SelectorMBond &bonds, const QList<qint64> &idxs);
 
     SelectorMBond(const SelectorMBond &other);
 
@@ -88,88 +110,88 @@ public:
     Bond operator[](int i) const;
     SelectorMBond operator[](const SireBase::Slice &slice) const;
     SelectorMBond operator[](const QList<qint64> &idxs) const;
-    Bond operator[](const QString &name) const;
-    Bond operator[](const typename T::ID &id) const;
+    SelectorMBond operator[](const SireMol::BondID &id) const;
 
     Bond operator()(int i) const;
-    Bond operator()(const QString &name) const;
-    Bond operator()(const typename T::ID &id) const;
+    SelectorMBond operator()(const SireBase::Slice &slice) const;
+    SelectorMBond operator()(const QList<qint64> &idxs) const;
+    SelectorMBond operator()(const SireMol::BondID &id) const;
 
     int count() const;
     int size() const;
 
-    EvaluatorM evaluate() const;
+    SireMol::EvaluatorM evaluate() const;
 
-    MoleculeGroup toMoleculeGroup() const;
-    SelectResult toSelectResult() const;
+    SireMol::MoleculeGroup toMoleculeGroup() const;
+    SireMol::SelectResult toSelectResult() const;
 
-    Molecule molecule(int i) const;
-    Molecule molecule(const QString &name) const;
-    Molecule molecule(const MolID &molid);
+    SireMol::Molecule molecule(int i) const;
+    SireMol::Molecule molecule(const QString &name) const;
+    SireMol::Molecule molecule(const SireMol::MolID &molid);
 
-    SelectorMol molecules() const;
-    SelectorMol molecules(int i) const;
-    SelectorMol molecules(const SireBase::Slice &slice) const;
-    SelectorMol molecules(const QList<qint64> &idxs) const;
-    SelectorMol molecules(const QString &name) const;
-    SelectorMol molecules(const MolID &molid) const;
+    SireMol::SelectorMol molecules() const;
+    SireMol::SelectorMol molecules(int i) const;
+    SireMol::SelectorMol molecules(const SireBase::Slice &slice) const;
+    SireMol::SelectorMol molecules(const QList<qint64> &idxs) const;
+    SireMol::SelectorMol molecules(const QString &name) const;
+    SireMol::SelectorMol molecules(const SireMol::MolID &molid) const;
 
-    Atom atom(int i) const;
-    Atom atom(const QString &name) const;
-    Atom atom(const AtomID &atomid) const;
+    SireMol::Atom atom(int i) const;
+    SireMol::Atom atom(const QString &name) const;
+    SireMol::Atom atom(const SireMol::AtomID &atomid) const;
 
-    Residue residue(int i) const;
-    Residue residue(const QString &name) const;
-    Residue residue(const ResID &resid) const;
+    SireMol::Residue residue(int i) const;
+    SireMol::Residue residue(const QString &name) const;
+    SireMol::Residue residue(const SireMol::ResID &resid) const;
 
-    Chain chain(int i) const;
-    Chain chain(const QString &name) const;
-    Chain chain(const ChainID &chainid) const;
+    SireMol::Chain chain(int i) const;
+    SireMol::Chain chain(const QString &name) const;
+    SireMol::Chain chain(const SireMol::ChainID &chainid) const;
 
-    Segment segment(int i) const;
-    Segment segment(const QString &name) const;
-    Segment segment(const SegID &segid) const;
+    SireMol::Segment segment(int i) const;
+    SireMol::Segment segment(const QString &name) const;
+    SireMol::Segment segment(const SireMol::SegID &segid) const;
 
-    CutGroup cutGroup(int i) const;
-    CutGroup cutGroup(const QString &name) const;
-    CutGroup cutGroup(const CGID &cgid) const;
+    SireMol::CutGroup cutGroup(int i) const;
+    SireMol::CutGroup cutGroup(const QString &name) const;
+    SireMol::CutGroup cutGroup(const SireMol::CGID &cgid) const;
 
-    SelectorM<Atom> atoms() const;
-    SelectorM<Atom> atoms(int i) const;
-    SelectorM<Atom> atoms(const SireBase::Slice &slice) const;
-    SelectorM<Atom> atoms(const QList<qint64> &idxs) const;
-    SelectorM<Atom> atoms(const QString &name) const;
-    SelectorM<Atom> atoms(const AtomID &atomid) const;
+    SireMol::SelectorM<SireMol::Atom> atoms() const;
+    SireMol::SelectorM<SireMol::Atom> atoms(int i) const;
+    SireMol::SelectorM<SireMol::Atom> atoms(const SireBase::Slice &slice) const;
+    SireMol::SelectorM<SireMol::Atom> atoms(const QList<qint64> &idxs) const;
+    SireMol::SelectorM<SireMol::Atom> atoms(const QString &name) const;
+    SireMol::SelectorM<SireMol::Atom> atoms(const SireMol::AtomID &atomid) const;
 
-    SelectorM<Residue> residues() const;
-    SelectorM<Residue> residues(int i) const;
-    SelectorM<Residue> residues(const SireBase::Slice &slice) const;
-    SelectorM<Residue> residues(const QList<qint64> &idxs) const;
-    SelectorM<Residue> residues(const QString &name) const;
-    SelectorM<Residue> residues(const ResID &resid) const;
+    SireMol::SelectorM<SireMol::Residue> residues() const;
+    SireMol::SelectorM<SireMol::Residue> residues(int i) const;
+    SireMol::SelectorM<SireMol::Residue> residues(const SireBase::Slice &slice) const;
+    SireMol::SelectorM<SireMol::Residue> residues(const QList<qint64> &idxs) const;
+    SireMol::SelectorM<SireMol::Residue> residues(const QString &name) const;
+    SireMol::SelectorM<SireMol::Residue> residues(const SireMol::ResID &resid) const;
 
-    SelectorM<Chain> chains() const;
-    SelectorM<Chain> chains(int i) const;
-    SelectorM<Chain> chains(const SireBase::Slice &slice) const;
-    SelectorM<Chain> chains(const QList<qint64> &idxs) const;
-    SelectorM<Chain> chains(const QString &name) const;
-    SelectorM<Chain> chains(const ChainID &chainid) const;
+    SireMol::SelectorM<SireMol::Chain> chains() const;
+    SireMol::SelectorM<SireMol::Chain> chains(int i) const;
+    SireMol::SelectorM<SireMol::Chain> chains(const SireBase::Slice &slice) const;
+    SireMol::SelectorM<SireMol::Chain> chains(const QList<qint64> &idxs) const;
+    SireMol::SelectorM<SireMol::Chain> chains(const QString &name) const;
+    SireMol::SelectorM<SireMol::Chain> chains(const SireMol::ChainID &chainid) const;
 
-    SelectorM<Segment> segments() const;
-    SelectorM<Segment> segments(int i) const;
-    SelectorM<Segment> segments(const SireBase::Slice &slice) const;
-    SelectorM<Segment> segments(const QList<qint64> &idxs) const;
-    SelectorM<Segment> segments(const QString &name) const;
-    SelectorM<Segment> segments(const SegID &segid) const;
+    SireMol::SelectorM<SireMol::Segment> segments() const;
+    SireMol::SelectorM<SireMol::Segment> segments(int i) const;
+    SireMol::SelectorM<SireMol::Segment> segments(const SireBase::Slice &slice) const;
+    SireMol::SelectorM<SireMol::Segment> segments(const QList<qint64> &idxs) const;
+    SireMol::SelectorM<SireMol::Segment> segments(const QString &name) const;
+    SireMol::SelectorM<SireMol::Segment> segments(const SireMol::SegID &segid) const;
 
-    SelectorM<CutGroup> cutGroups() const;
-    SelectorM<CutGroup> cutGroups(int i) const;
-    SelectorM<CutGroup> cutGroups(const SireBase::Slice &slice) const;
-    SelectorM<CutGroup> cutGroups(const QList<qint64> &idxs) const;
-    SelectorM<CutGroup> cutGroups(const QString &name) const;
-    SelectorM<CutGroup> cutGroups(const CGID &cgid) const;
+    SireMol::SelectorM<SireMol::CutGroup> cutGroups() const;
+    SireMol::SelectorM<SireMol::CutGroup> cutGroups(int i) const;
+    SireMol::SelectorM<SireMol::CutGroup> cutGroups(const SireBase::Slice &slice) const;
+    SireMol::SelectorM<SireMol::CutGroup> cutGroups(const QList<qint64> &idxs) const;
+    SireMol::SelectorM<SireMol::CutGroup> cutGroups(const QString &name) const;
+    SireMol::SelectorM<SireMol::CutGroup> cutGroups(const SireMol::CGID &cgid) const;
 
-    SelectResult search(const QString &search_string) const;
+    SireMol::SelectResult search(const QString &search_string) const;
 
     QList<SireMol::BondID> IDs() const;
 
@@ -208,7 +230,7 @@ namespace SireMM
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-SelectorMBond::SelectorMBond(const SelectorM<T> &other)
+SelectorMBond::SelectorMBond(const SireMol::SelectorM<T> &other)
               : SireBase::ConcreteProperty<SelectorMBond,SireBase::Property>()
 {
     if (not other.isEmpty())
