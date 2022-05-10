@@ -28,13 +28,7 @@ if (ANACONDA_BUILD)
     set(PYTHON_ABIFLAGS "")
   endif()
 
-  # Find the python library that comes with anaconda
-  if (MSYS)
-    message( STATUS "Find python${PYTHON_VERSION} in ${ANACONDA_BASE}")
-    set( PYTHON_LIBRARY "${ANACONDA_BASE}/lib/python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}.lib" )
-    set( PYTHON_INCLUDE_DIR "${ANACONDA_BASE}/include" )
-    find_package(PythonLibs ${PYTHON_VERSION} REQUIRED)
-  elseif (MSVC)
+  if (MSVC)
     find_library( PYTHON_LIBRARY
                   NAMES python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}.lib
                   PATHS ${ANACONDA_BASE}/libs NO_DEFAULT_PATH )
@@ -49,29 +43,6 @@ if (ANACONDA_BUILD)
                          "It cannot be found. Please check that your anaconda "
                          "installation is complete." )
   endif()
-
-elseif (MSYS)
-  # use the python that comes with msys
-  unset(PYTHON_LIBRARY CACHE)
-
-
-  if ( PYTHON_EXECUTABLE )
-    message( STATUS "Found Python executable ${PYTHON_EXECUTABLE}" )
-  else()
-    message( FATAL_ERROR "Where is the python executable?" )
-  endif()
-
-  find_package( PythonLibs 3.3  )
-
-  if ( PYTHON_LIBRARIES )
-    message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR} | ${PYTHON_VERSION}" )
-  else()
-    message( FATAL_ERROR "Cannot find the msys installation of Python!" )
-  endif()
-
-  find_package( PythonInterp 3.3 )
-
-  set( SIRE_FOUND_PYTHON TRUE )
 
 else()
   # Need to set the version of Python bundled with Sire
@@ -188,13 +159,13 @@ endif()
 
 if ( ANACONDA_BUILD )
   set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
-  if (MSVC)
+  if (CMAKE_GENERATOR MATCHES "Visual Studio")  # MSBuild
     set( PYTHON_SITE_DIR "../../lib/site-packages" )
   else()
     set( PYTHON_SITE_DIR "../../lib/python${PYTHON_VERSION}/site-packages" )
   endif()
 
-  if (WIN32)
+  if(CMAKE_GENERATOR MATCHES "Visual Studio")  # MSBuild
     set( PYTHON_MODULE_EXTENSION ".pyd" )
   else()
     set( PYTHON_MODULE_EXTENSION ".so" )

@@ -106,10 +106,12 @@ namespace SireBase
         QDir d(dir);
 
         if (not d.exists())
+        {
             throw SireError::file_error( QObject::tr(
                 "You cannot set the installation directory of Sire to a value "
                 "that doesn't exist (%1).")
                     .arg(dir), CODELOC );
+        }
 
         install_dir = d.absolutePath();
     }
@@ -121,12 +123,13 @@ namespace SireBase
     {
         if (not install_dir.isEmpty())
             return install_dir;
+
         QString sire_root_env = qgetenv("SIRE_ROOT");
         if (!sire_root_env.isEmpty())
             return sire_root_env;
 
         //first, find the full path to the running executable. We assume that
-        //we are using a Sire executable
+        //we are using a Sire executable or a Python executable
 
         //we follow the instructions from a stackoverflow answer by mark40
         //<http://stackoverflow.com/questions/1023306/finding-current-executables-path-without-proc-self-exe/1024937#1024937>
@@ -192,7 +195,7 @@ namespace SireBase
                     "For some reason we cannot find the executable file? %1")
                         .arg(buf), CODELOC );
 
-            setInstallDir( stripDir(SIRE_BIN_DIR,f.canonicalPath()) );
+            setInstallDir( f.canonicalPath() );
             return install_dir;
         #else
             throw SireError::incomplete_code( QObject::tr(
@@ -229,7 +232,11 @@ namespace SireBase
     /** This returns the directory containing the Sire executables */
     QString getBinDir()
     {
-        return getSireDir(SIRE_BIN_DIR);
+        #ifdef Q_OS_WIN
+            return getInstallDir();
+        #else
+            return getSireDir(SIRE_BIN_DIR);
+        #endif
     }
 
     /** This returns the directory containing the Sire libraries */

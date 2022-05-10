@@ -89,17 +89,6 @@ if ( ANACONDA_BUILD )
 
   set( SIRE_APP "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
           "Install directory for Sire within the Anaconda/Miniconda distribution" )
-#elseif( WIN32 OR WIN64 )
-#  # This should be MSYS2/MINGW64, so use the location of cmake to find the location
-#  # of the Sire installation
-#  message(STATUS "Compiling on windows using MSYS2/MINGW64...")
-#  set( MINGW_BASE "C:/msys64/mingw64" CACHE PATH "MSYS MINGW64 root directory" )
-#  get_filename_component(MINGW_CMAKE_BIN ${CMAKE_COMMAND} DIRECTORY)
-#  get_filename_component(MINGW_CMAKE_ROOT ${MINGW_CMAKE_BIN} DIRECTORY)
-#  message(STATUS "Using cmake ${CMAKE_COMMAND} from MING64 base ${MINGW_CMAKE_ROOT}")
-#
-#  set( MINGW_BASE "${MINGW_CMAKE_ROOT}")
-#  set( SIRE_APP "${MINGW_BASE}" )
 
 else()
   #�Option to set the install directory of Sire
@@ -278,7 +267,7 @@ if(CMAKE_GENERATOR MATCHES "Visual Studio")  # MSBuild
     get_filename_component(_tbb_lib_dir "${_tbb_lib}" DIRECTORY)
     message(STATUS "MKL: adding '${_tbb_lib_dir}' to link directories (workaround DEFAULTLIB issue)")
     link_directories("${_tbb_lib_dir}")
-  elseif(NOT OPENCV_SKIP_WORKAROUND_MKL_DEFAULTLIB)
+  else()
     # We may have tbb.lib for 'tbb' target, but not 'tbb12.lib'
     message(STATUS "Adding tbb12 to ignore list")
     set(SIRE_IGNORE_DEFAULTLIB_TBB "tbb12.lib")
@@ -289,6 +278,8 @@ if(CMAKE_GENERATOR MATCHES "Visual Studio")  # MSBuild
   # need to link to the static boost python library
   message(STATUS "Linking to static boost python library")
   add_compile_options("/DBOOST_PYTHON_STATIC_LIB")
+  message(STATUS "Turning on bigobj")
+  add_compile_options("/bigobj")
 endif()
 
 if (DEFINED SIRE_APP)

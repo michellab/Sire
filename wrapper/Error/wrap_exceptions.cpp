@@ -196,8 +196,8 @@ void export_exceptions()
     register_exception_translator<SireError::invalid_cast>(&type_error);
     register_exception_translator<SireError::unknown_type>(&type_error);
     register_exception_translator<SireError::io_error>(&input_output_error);
-    register_exception_translator<SireMol::parse_error>(&syntax_error);
     register_exception_translator<SireError::file_error>(&input_output_error);
+    register_exception_translator<SireMol::parse_error>(&syntax_error);
 }
 
 }
