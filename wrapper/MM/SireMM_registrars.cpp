@@ -68,6 +68,7 @@ void register_SireMM_objects()
 {
 
     ObjectRegistry::registerConverterFor< SireMM::SelectorBond >();
+    ObjectRegistry::registerConverterFor< SireMol::Mover<SireMM::SelectorBond> >();
     ObjectRegistry::registerConverterFor< SireMM::IntraFF >();
     ObjectRegistry::registerConverterFor< SireMM::CLJWorkspace >();
     ObjectRegistry::registerConverterFor< SireMM::IntraLJFFBase >();
@@ -117,6 +118,7 @@ void register_SireMM_objects()
     ObjectRegistry::registerConverterFor< SireMM::LJComponent >();
     ObjectRegistry::registerConverterFor< SireMM::CLJComponent >();
     ObjectRegistry::registerConverterFor< SireMM::Bond >();
+    ObjectRegistry::registerConverterFor< SireMol::Mover<SireMM::Bond> >();
     ObjectRegistry::registerConverterFor< SireMM::SoftCLJComponent >();
     ObjectRegistry::registerConverterFor< SireMM::AngleRestraint >();
     ObjectRegistry::registerConverterFor< SireMM::CoulombProbe >();

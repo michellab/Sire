@@ -301,6 +301,10 @@
 
 #include "MMDetail.pypp.hpp"
 
+#include "Mover_Bond_.pypp.hpp"
+
+#include "Mover_SelectorBond_.pypp.hpp"
+
 #include "MultiCLJComponent.pypp.hpp"
 
 #include "NoCutoff.pypp.hpp"
@@ -750,8 +754,12 @@ BOOST_PYTHON_MODULE(_MM){
 
     register_UreyBradleyComponent_class();
 
+    register_AtomLJs_class();
+
+    register_Mover_Bond__class();
+
     register_SireMM_properties();
 
-    register_AtomLJs_class();
+    register_Mover_SelectorBond__class();
 }
 

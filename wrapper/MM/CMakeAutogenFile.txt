@@ -18,6 +18,7 @@ set ( PYPP_SOURCES
        CoulombNBPairs.pypp.cpp
        InternalPerturbation.pypp.cpp
        CoulombComponent.pypp.cpp
+       Mover_SelectorBond_.pypp.cpp
        ChargeParameterName.pypp.cpp
        CLJBoxes.pypp.cpp
        TwoAtomFunction.pypp.cpp
@@ -117,6 +118,7 @@ set ( PYPP_SOURCES
        CLJProbe.pypp.cpp
        CLJIntraShiftFunction.pypp.cpp
        AmberNB14.pypp.cpp
+       Mover_Bond_.pypp.cpp
        DoubleDistanceRestraint.pypp.cpp
        InternalSymbols.pypp.cpp
        InternalFF.pypp.cpp

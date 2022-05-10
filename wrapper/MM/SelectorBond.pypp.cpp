@@ -151,6 +151,18 @@ void register_SelectorBond_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorBond::evaluate
+        
+            typedef ::SireMol::Evaluator ( ::SireMM::SelectorBond::*evaluate_function_type)(  ) const;
+            evaluate_function_type evaluate_function_value( &::SireMM::SelectorBond::evaluate );
+            
+            SelectorBond_exposer.def( 
+                "evaluate"
+                , evaluate_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorBond::hasMetadata
         
             typedef bool ( ::SireMM::SelectorBond::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
@@ -248,6 +260,18 @@ void register_SelectorBond_class(){
                 "metadataKeys"
                 , metadataKeys_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorBond::move
+        
+            typedef ::SireMol::Mover< SireMM::SelectorBond > ( ::SireMM::SelectorBond::*move_function_type)(  ) const;
+            move_function_type move_function_value( &::SireMM::SelectorBond::move );
+            
+            SelectorBond_exposer.def( 
+                "move"
+                , move_function_value
                 , bp::release_gil_policy()
                 , "" );
         

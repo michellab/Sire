@@ -120,6 +120,18 @@ void register_Bond_class(){
                 , "" );
         
         }
+        { //::SireMM::Bond::evaluate
+        
+            typedef ::SireMol::Evaluator ( ::SireMM::Bond::*evaluate_function_type)(  ) const;
+            evaluate_function_type evaluate_function_value( &::SireMM::Bond::evaluate );
+            
+            Bond_exposer.def( 
+                "evaluate"
+                , evaluate_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::Bond::hasMetadata
         
             typedef bool ( ::SireMM::Bond::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
@@ -217,6 +229,18 @@ void register_Bond_class(){
                 "metadataKeys"
                 , metadataKeys_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Bond::move
+        
+            typedef ::SireMol::Mover< SireMM::Bond > ( ::SireMM::Bond::*move_function_type)(  ) const;
+            move_function_type move_function_value( &::SireMM::Bond::move );
+            
+            Bond_exposer.def( 
+                "move"
+                , move_function_value
                 , bp::release_gil_policy()
                 , "" );
         
