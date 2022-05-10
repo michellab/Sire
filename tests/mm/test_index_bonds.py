@@ -54,7 +54,18 @@ def test_index_mols_bonds():
     assert bnds.num_molecules() == mols.num_molecules() - 1
     assert bnds.num_atoms() == bnds.num_molecules() * 3
 
+    assert len(mols[sr.bondid(0, 1)]) == mols.num_molecules()
 
+    for bond in mols[sr.bondid(0, 1)]:
+        assert bond.atom0().index().value() == 0
+        assert bond.atom1().index().value() == 1
+
+    assert len(mols[sr.bondid("O", "H1")]) == mols.num_molecules() - 1
+
+    for bond in mols[sr.bondid("O", "H1")]:
+        assert bond.atom0().name().value() in ["O", "H1"]
+        assert bond.atom1().name().value() in ["O", "H1"]
+    
 if __name__ == "__main__":
     test_index_bonds()
     test_index_mols_bonds()

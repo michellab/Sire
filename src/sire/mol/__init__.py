@@ -225,15 +225,19 @@ def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False):
         # this is a multi-molecule container
         from ..mm import SelectorMBond
         C = SelectorMBond
+        def _fromBondID(obj, bondid):
+            return SelectorMBond(obj.to_select_result(), bondid)
     else:
         from ..mm import SelectorBond
         C = SelectorBond
+        def _fromBondID(obj, bondid):
+            return SelectorBond(obj, bondid)
 
     if idx is None:
         result = C(obj)
     elif idx1 is None:
         if BondID in type(idx).mro():
-            result = C(obj, idx)
+            result = _fromBondID(obj, idx)
         else:
             result = C(obj.atoms(idx))
     else:

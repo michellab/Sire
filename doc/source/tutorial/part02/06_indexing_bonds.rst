@@ -373,3 +373,61 @@ You can easily construct a :class:`~sire.mol.BondID` using the
 :func:`sire.bondid` function, e.g.
 
 >>> print(sr.bondid(0, 1))
+Bond( AtomIdx(0), AtomIdx(1) )
+
+constructs a :class:`~sire.mol.BondID` from atom indexes,
+
+>>> print(sr.bondid("O", "H1"))
+Bond( AtomName('O'), AtomName('H1') )
+
+constructs one from atom names, and
+
+>>> print(sr.bondid(sr.atomid(1), sr.atomid(2)))
+Bond( AtomNum(1), AtomNum(2) )
+
+constructs one from atom numbers.
+
+You can mix and match the IDs if you want.
+
+You can then use the :class:`~sire.mol.BondID` to index, just like
+any other identifier class.
+
+>>> print(mols[sr.bondid("O", "H1")])
+SelectorMBond( size=630
+0: MolNum(3) Bond( O:23 => H1:24 )
+1: MolNum(4) Bond( O:26 => H1:27 )
+2: MolNum(5) Bond( O:29 => H1:30 )
+3: MolNum(6) Bond( O:32 => H1:33 )
+4: MolNum(7) Bond( O:35 => H1:36 )
+...
+625: MolNum(628) Bond( O:1898 => H1:1899 )
+626: MolNum(629) Bond( O:1901 => H1:1902 )
+627: MolNum(630) Bond( O:1904 => H1:1905 )
+628: MolNum(631) Bond( O:1907 => H1:1908 )
+629: MolNum(632) Bond( O:1910 => H1:1911 )
+)
+
+gives all of the bonds between the atoms called ``O`` and ``H1`` in
+all molecules, while
+
+>>> print(mols[0][sr.bondid(0, 1)])
+Bond( HH31:1 => CH3:2 )
+
+gives just the bond between the first and second atoms in the first molecule, and
+
+>>> print(mols[sr.bondid(0, 1)])
+SelectorMBond( size=631
+0: MolNum(2) Bond( HH31:1 => CH3:2 )
+1: MolNum(3) Bond( O:23 => H1:24 )
+2: MolNum(4) Bond( O:26 => H1:27 )
+3: MolNum(5) Bond( O:29 => H1:30 )
+4: MolNum(6) Bond( O:32 => H1:33 )
+...
+626: MolNum(628) Bond( O:1898 => H1:1899 )
+627: MolNum(629) Bond( O:1901 => H1:1902 )
+628: MolNum(630) Bond( O:1904 => H1:1905 )
+629: MolNum(631) Bond( O:1907 => H1:1908 )
+630: MolNum(632) Bond( O:1910 => H1:1911 )
+)
+
+gives the bond between the first and second atoms in each molecule.
