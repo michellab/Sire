@@ -159,7 +159,7 @@ void register_SelectResult_class(){
                 , listAt_function_value
                 , ( bp::arg("i") )
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the ith MolViewPtr in the underlying list" );
         
         }
         { //::SireMol::SelectResult::listCount
@@ -171,7 +171,7 @@ void register_SelectResult_class(){
                 "listCount"
                 , listCount_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the number of items in the list" );
         
         }
         { //::SireMol::SelectResult::molNums
@@ -332,7 +332,7 @@ void register_SelectResult_class(){
                 "toList"
                 , toList_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the results as a list of MolViewPtrs" );
         
         }
         { //::SireMol::SelectResult::toMolecules

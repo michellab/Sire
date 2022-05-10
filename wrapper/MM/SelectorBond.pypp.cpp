@@ -75,6 +75,19 @@ void register_SelectorBond_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorBond::add
+        
+            typedef ::SireMM::SelectorBond ( ::SireMM::SelectorBond::*add_function_type)( ::SireMM::Bond const & ) const;
+            add_function_type add_function_value( &::SireMM::SelectorBond::add );
+            
+            SelectorBond_exposer.def( 
+                "add"
+                , add_function_value
+                , ( bp::arg("bond") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorBond::count
         
             typedef int ( ::SireMM::SelectorBond::*count_function_type)(  ) const;
@@ -299,6 +312,18 @@ void register_SelectorBond_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorBond::operator()
+        
+            typedef ::SireMM::SelectorBond ( ::SireMM::SelectorBond::*__call___function_type)( ::SireMol::BondID const & ) const;
+            __call___function_type __call___function_value( &::SireMM::SelectorBond::operator() );
+            
+            SelectorBond_exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("bond") )
+                , "" );
+        
+        }
         { //::SireMM::SelectorBond::operator=
         
             typedef ::SireMM::SelectorBond & ( ::SireMM::SelectorBond::*assign_function_type)( ::SireMM::SelectorBond const & ) ;
@@ -346,6 +371,18 @@ void register_SelectorBond_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMM::SelectorBond::operator[]
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMM::SelectorBond::*__getitem___function_type)( ::SireMol::BondID const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMM::SelectorBond::operator[] );
+            
+            SelectorBond_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("bond") )
                 , "" );
         
         }

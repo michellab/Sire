@@ -10,6 +10,7 @@
 #include "cljworkspace.h"
 #include "intraljff.h"
 #include "cljnbpairs.h"
+#include "selectormbond.h"
 #include "switchingfunction.h"
 #include "internalparameters.h"
 #include "cljshiftfunction.h"
@@ -79,6 +80,7 @@ void register_SireMM_objects()
     ObjectRegistry::registerConverterFor< SireMM::CLJNBPairs >();
     ObjectRegistry::registerConverterFor< SireMM::CoulombNBPairs >();
     ObjectRegistry::registerConverterFor< SireMM::LJNBPairs >();
+    ObjectRegistry::registerConverterFor< SireMM::SelectorMBond >();
     ObjectRegistry::registerConverterFor< SireMM::NoCutoff >();
     ObjectRegistry::registerConverterFor< SireMM::HarmonicSwitchingFunction >();
     ObjectRegistry::registerConverterFor< SireMM::CHARMMSwitchingFunction >();

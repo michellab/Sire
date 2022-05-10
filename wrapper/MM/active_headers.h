@@ -58,6 +58,7 @@
 #include "restraintcomponent.h"
 #include "restraintff.h"
 #include "selectorbond.h"
+#include "selectormbond.h"
 #include "softcljcomponent.h"
 #include "switchingfunction.h"
 #include "testff.h"

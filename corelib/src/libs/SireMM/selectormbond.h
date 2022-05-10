@@ -29,7 +29,11 @@
 #ifndef SIREMM_SELECTORMBOND_H
 #define SIREMM_SELECTORMBOND_H
 
+#include "SireMol/selectormol.h"
+#include "SireMol/selectorm.hpp"
+
 #include "selectorbond.h"
+
 
 SIRE_BEGIN_HEADER
 
@@ -48,8 +52,6 @@ class SelectResult;
 class SelectorMol;
 class EvaluatorM;
 
-template<class T>
-class SelectorM;
 }
 
 namespace SireMM
@@ -222,6 +224,11 @@ protected:
 } // end of namespace SireMM
 
 #include "SireMol/selectorm.hpp"
+#include "SireMol/atom.h"
+#include "SireMol/residue.h"
+#include "SireMol/chain.h"
+#include "SireMol/segment.h"
+#include "SireMol/cutgroup.h"
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 

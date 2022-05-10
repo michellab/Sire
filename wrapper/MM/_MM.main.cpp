@@ -325,6 +325,8 @@
 
 #include "SelectorBond.pypp.hpp"
 
+#include "SelectorMBond.pypp.hpp"
+
 #include "SoftCLJComponent.pypp.hpp"
 
 #include "SoftCLJPotentialInterface_InterSoftCLJPotential_.pypp.hpp"
@@ -713,6 +715,8 @@ BOOST_PYTHON_MODULE(_MM){
     register_ScaledLJParameterNames3D_class();
 
     register_SelectorBond_class();
+
+    register_SelectorMBond_class();
 
     register_SoftCLJComponent_class();
 

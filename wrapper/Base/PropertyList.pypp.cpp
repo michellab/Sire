@@ -16,6 +16,8 @@ namespace bp = boost::python;
 
 #include "arrayproperty.hpp"
 
+#include "booleanproperty.h"
+
 #include "numberproperty.h"
 
 #include "propertylist.h"
