@@ -1,5 +1,6 @@
 
 import sire as sr
+import pytest
 
 def _assert_same_bonds(b0, b1):
     assert len(b0) == len(b1)
@@ -65,6 +66,10 @@ def test_index_mols_bonds():
     for bond in mols[sr.bondid("O", "H1")]:
         assert bond.atom0().name().value() in ["O", "H1"]
         assert bond.atom1().name().value() in ["O", "H1"]
+
+    # mols[1:] are the water molecules
+    assert mols["bonds from element O to element H"].mass().value() == \
+	pytest.approx((mols[1:]["element O"].mass() + mols[1:]["element H"].mass()).value(), 0.0001)
     
 if __name__ == "__main__":
     test_index_bonds()

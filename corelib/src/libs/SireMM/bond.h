@@ -31,6 +31,9 @@
 
 #include "SireMol/atom.h"
 #include "SireMol/bondid.h"
+#include "SireMol/angleid.h"
+#include "SireMol/dihedralid.h"
+#include "SireMol/improperid.h"
 #include "SireMol/connectivity.h"
 #include "SireMol/mover.hpp"
 #include "SireMol/evaluator.h"
