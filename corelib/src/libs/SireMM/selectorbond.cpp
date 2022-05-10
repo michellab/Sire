@@ -727,6 +727,16 @@ QList<Properties> SelectorBond::properties() const
     return props;
 }
 
+Mover<SelectorBond> SelectorBond::move() const
+{
+    return Mover<SelectorBond>(*this);
+}
+
+Evaluator SelectorBond::evaluate() const
+{
+    return Evaluator(*this);
+}
+
 QList<PropertyPtr> SelectorBond::property(const PropertyName &key) const
 {
     bool has_prop = false;
@@ -833,4 +843,9 @@ MolarEnergy SelectorBond::energy(const PropertyMap &map) const
     }
 
     return nrg;
+}
+
+namespace SireMol
+{
+    template class Mover<SelectorBond>;
 }

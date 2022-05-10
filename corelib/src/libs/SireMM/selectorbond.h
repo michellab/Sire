@@ -147,6 +147,9 @@ public:
 
     QList<SireBase::Properties> properties() const;
 
+    SireMol::Mover<SelectorBond> move() const;
+    SireMol::Evaluator evaluate() const;
+
     QList<SireBase::PropertyPtr> property(const SireBase::PropertyName &key) const;
     QList<SireBase::PropertyPtr> property(const SireBase::PropertyName &key,
                                           const Property &default_value) const;
@@ -173,8 +176,22 @@ protected:
 } // end of namespace SireMM
 
 Q_DECLARE_METATYPE( SireMM::SelectorBond )
+Q_DECLARE_METATYPE( SireMol::Mover<SireMM::SelectorBond> )
 
 SIRE_EXPOSE_CLASS( SireMM::SelectorBond )
+
+SIRE_EXPOSE_ALIAS( SireMol::Mover<SireMM::SelectorBond>, SireMol::Mover_SelectorBond_ )
+
+#ifdef SIRE_INSTANTIATE_TEMPLATES
+
+#include "SireMol/mover.hpp"
+
+namespace SireMol
+{
+    template class SireMol::Mover<SireMM::SelectorBond>;
+}
+
+#endif
 
 SIRE_END_HEADER
 

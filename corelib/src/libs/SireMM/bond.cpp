@@ -196,6 +196,16 @@ Atom Bond::atom1() const
     return Atom(*this, bnd.atom1());
 }
 
+Evaluator Bond::evaluate() const
+{
+    return Evaluator(*this);
+}
+
+Mover<Bond> Bond::move() const
+{
+    return Mover<Bond>(*this);
+}
+
 BondID Bond::ID() const
 {
     return bnd;
@@ -358,4 +368,9 @@ SireUnits::Dimension::MolarEnergy Bond::energy(const PropertyMap &map) const
 
     Values vals(Symbol("r")==l.to(angstrom));
     return pot.evaluate(vals) * kcal_per_mol;
+}
+
+namespace SireMol
+{
+    template class Mover<Bond>;
 }

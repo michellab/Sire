@@ -32,6 +32,8 @@
 #include "SireMol/atom.h"
 #include "SireMol/bondid.h"
 #include "SireMol/connectivity.h"
+#include "SireMol/mover.hpp"
+#include "SireMol/evaluator.h"
 
 #include "SireUnits/dimensions.h"
 
@@ -113,6 +115,9 @@ public:
 
     SireBase::Properties properties() const;
 
+    SireMol::Evaluator evaluate() const;
+    SireMol::Mover<Bond> move() const;
+
     const Property& property(const SireBase::PropertyName &key) const;
     const Property& property(const SireBase::PropertyName &key,
                              const Property &default_value) const;
@@ -138,8 +143,21 @@ protected:
 }
 
 Q_DECLARE_METATYPE( SireMM::Bond )
+Q_DECLARE_METATYPE(SireMol::Mover<SireMM::Bond>);
 
 SIRE_EXPOSE_CLASS( SireMM::Bond )
+SIRE_EXPOSE_ALIAS( SireMol::Mover<SireMM::Bond>, SireMol::Mover_Bond_ )
+
+#ifdef SIRE_INSTANTIATE_TEMPLATES
+
+#include "SireMol/mover.hpp"
+
+namespace SireMol
+{
+    template class SireMol::Mover<SireMM::Bond>;
+}
+
+#endif //SIRE_INSTANTIATE_TEMPLATES
 
 SIRE_END_HEADER
 

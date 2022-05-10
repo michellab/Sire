@@ -294,7 +294,7 @@ __branch__ = config.sire_repository_branch
 __repository__ = config.sire_repository_url
 __revisionid__ = config.sire_repository_version[0:7]
 
-_can_lazy_import = True
+_can_lazy_import = False
 
 try:
     import lazy_import as _lazy_import

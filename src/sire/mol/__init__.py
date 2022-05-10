@@ -351,13 +351,24 @@ def __fix_getitem(C):
     C.bonds = __fixed__bonds__
     C.bond = __fixed__bond__
 
+from ..mm import Bond as _Bond
+from ..mm import SelectorBond as _SelectorBond
+from ..mm import SelectorMBond as _SelectorMBond
 
-Residue.__len__ = Residue.nAtoms
-Chain.__len__ = Chain.nResidues
-Segment.__len__ = Segment.nAtoms
-CutGroup.__len__ = CutGroup.nAtoms
-Molecule.__len__ = Molecule.nAtoms
-
+try:
+    _Bond.__len__ = _Bond.nAtoms
+    Residue.__len__ = Residue.nAtoms
+    Chain.__len__ = Chain.nResidues
+    Segment.__len__ = Segment.nAtoms
+    CutGroup.__len__ = CutGroup.nAtoms
+    Molecule.__len__ = Molecule.nAtoms
+except AttributeError:
+    _Bond.__len__ = _Bond.num_atoms
+    Residue.__len__ = Residue.num_atoms
+    Chain.__len__ = Chain.num_residues
+    Segment.__len__ = Segment.num_atoms
+    CutGroup.__len__ = CutGroup.num_atoms
+    Molecule.__len__ = Molecule.num_atoms
 
 for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule,
           Selector_Atom_, Selector_Residue_,
@@ -365,7 +376,8 @@ for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule,
           Selector_CutGroup_,
           SelectorMol, SelectorM_Atom_, SelectorM_Residue_,
           SelectorM_Chain_, SelectorM_Segment_,
-          SelectorM_CutGroup_]:
+          SelectorM_CutGroup_,
+          _Bond, _SelectorBond, _SelectorMBond]:
     __fix_getitem(C)
 
 MoleculeView.coordinates = lambda x : x.property("coordinates")
@@ -380,7 +392,8 @@ def _add_evals(obj):
 
 for C in [MoleculeView, SelectorMol, SelectorM_Atom_,
           SelectorM_Residue_, SelectorM_Chain_,
-          SelectorM_CutGroup_, SelectorM_Segment_]:
+          SelectorM_CutGroup_, SelectorM_Segment_,
+          _Bond, _SelectorBond, _SelectorMBond]:
     _add_evals(C)
 
 def _get_atom_mass(x):
