@@ -42,7 +42,7 @@ set_target_properties (ID
 target_link_libraries (ID
                        SirePython
                        SIRE_SireID
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )

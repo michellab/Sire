@@ -44,7 +44,7 @@ target_link_libraries (Squire
                        SirePython
                        SIRE_Squire
                        SIRE_SireSystem
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )

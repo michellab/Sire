@@ -43,7 +43,7 @@ set_target_properties (CAS
 target_link_libraries (CAS
                        SirePython
                        SIRE_SireCAS
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 # installation

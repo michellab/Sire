@@ -30,7 +30,7 @@ target_link_libraries (Search
                        SIRE_SireMol
                        SIRE_SireMM
                        SIRE_SireSearch
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                        ${PYTHON_LIBRARIES}
                       )
 

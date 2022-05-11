@@ -275,10 +275,7 @@ if(CMAKE_GENERATOR MATCHES "Visual Studio")  # MSBuild
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:${SIRE_IGNORE_DEFAULTLIB_TBB}")
   endif()
 
-  # need to link to the static boost python library
-  message(STATUS "Linking to static boost python library")
-  add_compile_options("/DBOOST_PYTHON_STATIC_LIB")
-  message(STATUS "Turning on bigobj")
+  message(STATUS "Turning on bigobj")  # needed to link _Mol.pyd
   add_compile_options("/bigobj")
 endif()
 
@@ -363,66 +360,7 @@ message( STATUS  "Shared library flags   == ${CMAKE_SHARED_LINKER_FLAGS}" )
 message( STATUS  "Static library flags   == ${CMAKE_STATIC_LINKER_FLAGS}" )
 message( STATUS  "Executable link flags  == ${CMAKE_EXE_LINKER_FLAGS}" )
 
-# Option to disable all bundles
-option( SIRE_PYTHON_ENABLE_BUNDLING "Allow Sire Python to use bundled libraries and python interpreter" ON )
-
-# Fine-grain control of bundling each dependency
-option( SIRE_BUNDLE_PYTHON "Whether Sire should use its bundled copy of Python 3" ON )
-option( SIRE_BUNDLE_BOOST_PYTHON "Whether Sire should use its bundled copy of boost::python" ON )
-
-if ( SIRE_PYTHON_ENABLE_BUNDLING )
-  if (MSYS)
-    message( STATUS "Building a bundled msys Sire (using msys python)" )
-  else()
-    message( STATUS "Sire Python will be compiled to use its own copy of bundled libraries." )
-  endif()
-
-  set( BUNDLE_BUILDDIR "${CMAKE_BINARY_DIR}/build_bundled" )
-
-  # We want to install the bundled libs directly into the sire.app directory
-  set( BUNDLE_STAGEDIR "${SIRE_APP}/${SIRE_BUNDLED_DIR}" )
-
-  if (NOT EXISTS "${BUNDLE_BUILDDIR}")
-    file(MAKE_DIRECTORY ${BUNDLE_BUILDDIR})
-  endif()
-
-  if (NOT EXISTS "${BUNDLE_STAGEDIR}")
-   file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR})
-  endif()
-
-  if (NOT EXISTS "${BUNDLE_STAGEDIR}/lib")
-    file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/lib)
-  endif()
-
-  if (NOT EXISTS "${BUNDLE_STAGEDIR}/include")
-    file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/include)
-  endif()
-
-  if ( SIRE_BUNDLE_PYTHON )
-    include( "bundled/install_python.cmake" )
-  endif()
-
-  if (NOT SIRE_FOUND_PYTHON)
-    # Need to find python before we compile the boost python wrappers
-    find_package( PythonLibs 3.2 REQUIRED )
-  endif()
-
-  if ( SIRE_BUNDLE_BOOST_PYTHON )
-    include( "bundled/install_boost_python.cmake" )
-  endif()
-
-  if ( NOT ${BUNDLE_STAGEDIR} STREQUAL ${CMAKE_INSTALL_PREFIX} )
-    # All of the bundled objects are built into the directory ${CMAKE_BINARY_DIR}/bundled
-    # This directory must be installed into the sire.app/ directory
-    install( DIRECTORY ${BUNDLE_STAGEDIR}
-             DESTINATION ${CMAKE_INSTALL_PREFIX}
-             USE_SOURCE_PERMISSIONS )
-  endif()
-endif()
-
-if (NOT ${SIRE_FOUND_PYTHON})
-  find_package( PythonLibs 3.2 REQUIRED )
-endif()
+find_package( PythonLibs 3.7 REQUIRED )
 
 if (NOT PYTHON_MODULE_EXTENSION)
   if (WIN32)
@@ -436,27 +374,30 @@ if (NOT PYTHON_LIBRARIES)
   set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
 endif()
 
+if (WIN32)
+  set( PYTHON_SITE_DIR "../../lib/site-packages" )
+else()
+  set( PYTHON_SITE_DIR "../../lib/python${PYTHON_VERSION}/site-packages" )
+endif()
+
 # Don't link against libPython on macOS! Since the conda-forge Python interpreter
 # statically links libPython you'll end up with duplicate symbols.
 if (APPLE)
   set( PYTHON_LIBRARIES "" )
 endif()
 
-if (NOT ${SIRE_FOUND_BOOST_PYTHON})
-  # Sire depends on >= boost 1.31 - all libraries must be dynamically linked
-  # (else we could end up with multiple boost::python libraries linked, which
-  #  causes problems for RTTI and exceptions)
-  set (BOOST_ALL_DYN_LINK "YES")
-  find_package( Boost 1.31 COMPONENTS python REQUIRED )
-  set ( BOOST_PYTHON_LIBRARY "${Boost_PYTHON_LIBRARY}" )
-  set ( BOOST_PYTHON_HEADERS "${Boost_INCLUDE_DIR}" )
-endif()
+# All boost python libraries must be dynamically linked
+# (else we could end up with multiple boost::python libraries linked, which
+#  causes problems for RTTI, implicit converters and exceptions)
+set (Boost_USE_STATIC_LIBS OFF)
+set (Boost_USE_STATIC_RUNTIME OFF)
+set (Boost_DEBUG ON)  # this gives a nice print out in the cmake list to debug how boost is found and linked
+find_package( Boost 1.7 COMPONENTS python REQUIRED )
 
 message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR} | ${PYTHON_SITE_DIR}" )
 include_directories( ${PYTHON_INCLUDE_DIR} )
-include_directories( "${BOOST_PYTHON_HEADERS}" )
 
-message( STATUS "boost::python library ${BOOST_PYTHON_LIBRARY} | ${BOOST_PYTHON_HEADERS}" )
+message( STATUS "boost::python library ${Boost_LIBRARIES}" )
 
 # set the location to install the python modules
 set (SIRE_PYTHON "${PYTHON_SITE_DIR}")
@@ -476,8 +417,9 @@ get_target_property(QT5_LOCATION Qt5::Core LOCATION)
 message( STATUS "Using Qt5Core in ${QT5_LOCATION}" )
 
 if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
-    add_compile_options("/EHsc")
-    add_compile_options("/permissive-")
+  message( STATUS "Adding useful MSVC compiler options" )
+  add_compile_options("/EHsc")  # exceptions are only thrown from C++ throw calls
+  add_compile_options("/permissive-")  # disable MSVC's permissive mode - ensures code is standards conforming
 endif()
 
 # Add the helper library

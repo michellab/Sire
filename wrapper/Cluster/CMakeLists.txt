@@ -47,7 +47,7 @@ set_target_properties (Cluster
 target_link_libraries (Cluster
                        SirePython
                        SIRE_SireCluster
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )

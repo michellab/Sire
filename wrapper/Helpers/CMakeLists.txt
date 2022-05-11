@@ -39,7 +39,7 @@ target_link_libraries (SirePython
                        SIRE_SireCluster
                        SIRE_SireStream
                        SIRE_SireError
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                        ${PYTHON_LIBRARIES}
                       )
 

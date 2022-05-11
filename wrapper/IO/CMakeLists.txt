@@ -44,7 +44,7 @@ set_target_properties (IO
 target_link_libraries (IO
                        SirePython
                        SIRE_SireIO
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )

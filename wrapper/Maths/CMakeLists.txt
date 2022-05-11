@@ -47,7 +47,7 @@ set_target_properties (Maths
 target_link_libraries (Maths
                        SirePython
                        SIRE_SireMaths
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )

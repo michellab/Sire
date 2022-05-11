@@ -36,7 +36,7 @@ set_target_properties (Error
 target_link_libraries (Error
                        SirePython
                        SIRE_SireError
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 

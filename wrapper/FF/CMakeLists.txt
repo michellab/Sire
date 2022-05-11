@@ -43,7 +43,7 @@ set_target_properties (FF
 target_link_libraries (FF
                        SirePython
                        SIRE_SireFF
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )

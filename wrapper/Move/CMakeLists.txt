@@ -64,9 +64,8 @@ set_target_properties (Move
 
 target_link_libraries (Move
                        SirePython
-                       SIRE_SireIO
                        SIRE_SireMove
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                        ${SIRE_OPENMM_LIBRARIES}
                       )
 

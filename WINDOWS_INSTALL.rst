@@ -1,140 +1,169 @@
 == Instructions for compiling and installing on windows ==
 
-== All of this is EXPERIMENTAL == 
-This will be updated and replaced by instructions to compile against the
-acaconda that is available as part of the WSL (Windows subsystem for Linux)
-that is available as part of Windows 10
- 
-== MSYS2 BUILD ==
+We have updated our builds so that it is now possible to compile and link Sire on Windows.
 
-First, install msys2 by following the instructions on http://msys2.github.io
-(follow the 64bit instructions as we should target 64bit windows)
+=== Setting up the environment ===
 
-Then ensure that you have fully updated, e.g. via
+To do this, you first need to install Visual Studio 2017 Build Tools (free as the community edition)
 
-  # pacman -Syuu
+Download this from https://visualstudio.microsoft.com/vs/older-downloads
 
-Then install
+From here, download **Build Tools for Visual Studio 2017**. Run the installer, and 
+select only **Visual Studio C++ build tools** (the top box in the left panel). Then
+click the "Install" button on the bottom right. This will now download and install 
+all of the Visual Studio build tools needed to compile Python modules that are compatible
+from Python 3.7+
 
-  # pacman -S git
-  # pacman -S mingw-w64-x86_64-cmake
-  # pacman -S mingw-w64-x86_64-make
-  # pacman -S mingw-w64-x86_64-toolchain
+Next, download and install a conda environment. We recommend mambaforge, downloaded 
+from here: https://github.com/conda-forge/miniforge
 
-You need to ensure that you are using the mingw build tools. These are installed
-into /mingw64, so you need to add /mingw64/bin to you PATH. We also need to 
-install the complete mingw64 build toolchain (compilers, make, linkers etc.)
+We use `Mambaforge-Windows-x86_64 <https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Windows-x86_64.exe>`__.
 
-Do this by typing;
+Install this using "Just for you" into a directory. We use `C:/Users/{username}/sire_app` (replace
+`{username}` with your Windows user name)
 
-  # pacman -S mingw-w64-x86_64-gcc
+Once it has installed, go to the start menu and look for **Visual Studio 2017 / Developer Command Prompt for VS2017**.
+This will launch a command prompt.
 
-Also install nano if you like this editor ;-)
+In this prompt, change directory into your conda install, e.g.
 
-  # pacman -S nano
+.. code-block::
 
-Now install the dependencies of Sire - I gave up getting these compiled
-manually!
-
-  # pacman -Sy mingw-w64-x86_64-intel-tbb
-  # pacman -Sy mingw-w64-x86_64-qt5
-  # pacman -Sy mingw-w64-x86_64-gsl
-  # pacman -Sy mingw-w64-x86_64-boost
-  # pacman -Sy mingw-w64-x86_64-python3
-  # pacman -Sy mingw-w64-x86_64-pkg-config
-
-If this has worked, then typing "which gcc" and "which g++" should return
-
-  # /mingw64/bin/gcc
-  # /mingw64/bin/g++
-
-Then clone the Sire repository using
-
-  # git clone https://github.com/michellab/Sire.git
-
-If this fails with a "child_info_fork" error, then you need to fix
-your msys2 installation. Do this by exiting from msys2 and then running
-autorebase.bat which is in the C:\msys2 directory. Then go back into
-msys2 and try again.
-
-Next switch to the c++15 branch that holds the development code needed
-to support windows
-
-  # git checkout c++15
-
-Change into the corelib build directory using
-
-   # mkdir build/corelib
-   # cd build/corelib
-
-Now we need to link mingw32-make to make
-
-   # ln -s /mingw64/bin/mingw32-make.exe /mingw64/bin/make
-
-Run cmake using
-
-   # cmake -G "MSYS Makefiles" ../../corelib
-
-Then build using 
-
-   # mingw32-make install
-
- (note that you may have to copy sire.app/bundled/bin/libcpuid-10.dll to sire.app/bundled/lib/libcpuid.dll)
+   cd C:\Users\{username}\sire_app
 
 
-This works, and builds corelib
+Now tell the CMD prompt about conda.
 
-For the wrappers, change into the wrapper build directory
+.. code-block::
 
-   # cd ../wrapper
+   conda init cmd.exe
 
-Then run cmake again, using
 
-   # cmake -G "MSYS Makefiles" -DCMAKE_NEED_RESPONSE=1 ../../wrapper
+You only need to do this once, after you have installed your conda.
 
-Then build using
+Now you can activate conda by typing 
 
-   # mingw32-make install
+.. code-block::
 
-While Sire compiles within the MSYS shell, I haven't got it to run from there
-yet. You need to run from the standard windows cmd shell.
+   conda activate
 
-First, you need to set the windows PATH. Can do this in a standard CMD shell, e.g.
 
-   # PATH=C:\msys64\home\chzcjw\sire.app\bin;C:\msys64\home\chzcjw\sire.app\lib;C:\msys64\mingw64\lib;C:\msys64\mingw64\bin;%PATH%
-   # set PYTHONPATH=C:\msys64\mingw64\lib\python3.5;C:\msys64\home\chzcjw\sire.app\lib\python\site-packages
+You should see your prompt change to include `(base)` at the start. Type 
 
-(note that you will need to update the above based on where you compiled Sire, and
- where msys64 is located on your machine)
+.. code-block::
 
-Now you can run Sire. Try
+   python -V
 
-    # sire_python
 
-This should start up the Sire python shell. Into this, type
+and you should see that the version of Python you downloaded has been run, e.g. I see
 
-    # import Sire.Mol
+.. code-block::
 
-If this runs, then Sire has successfully imported the Sire.Mol module,
-meaning that all of the libraries have been found correctly.
+   Python 3.9.7
 
-To run waterswap or ligandswap, you need to run the associated python script
-using the sire_python executable. For example
 
-    # sire_python C:\msys64\home\chzcjw\sire.app\share\Sire\scripts\waterswap.py --help
+Next, you need to install git (if you don't have it already). You can do this either by installing git 
+by `following the instructions here <https://git-scm.com/download/win>`__ or by installing through
+conda via `conda install git`.
 
-** At the moment, this is failing because my MSYS python can't find the _struct
-   module. This will need to be fixed... **
+Now you can change back to your home directory and download Sire.
 
-** FIX IS TO COPY SIRE_PYTHON AND ALL LIBRARIES INTO MSYS/BIN. NEED TO 
-   INSTALL SIRE WITHIN MSYS!!! **
+.. code-block::
 
-## Running tests - still not fully working
+   cd C:\Users\{username}
 
-Install nose. (quite difficult as python easy_install breaks with error
-VC 6.0 is not supported. I am afraid that I didn't record how I got nose installed!)
+   git clone https://github.com/michellab/Sire
 
-Then run within the 
+=== Compiling Sire ===
 
-cd \path\to\test_directory
-\path\to\sire.app\bin\sire_python -m nose
+Change into the Sire directory.
+
+.. code-block::
+
+   cd Sire
+
+Now run the `compile_sire.bat` script by typing
+
+.. code-block::
+
+   compile_sire
+
+Sire will now compile and install itself into your conda directory. This will take a VERY long time (hours).
+
+If everything works, you will see printed out at the end;
+
+.. code-block::
+
+   XXX
+
+== Running Sire ==
+
+You should now (hopefully) be able to import Sire into your script. To test, start 
+`ipython` and then type in
+
+>>> import sire as sr
+
+If this imports ok then Sire is working. You are then able to go on to tutorial.
+
+== Diagnosing problems ==
+
+There are lots of things that can go wrong on Windows. If you see "_Qt.pyd cannot be found"
+or similar errors then this is likely because Windows can't find the required libraries.
+
+To debug, list the dependent libraries of `_Qt.pyd` via
+
+.. code-block::
+
+   dumpbin /dependents C:\Users\{username}\sire_app\lib\site-packages\sire\legacy\Qt\_Qt.pyd
+
+You should see a list of libraries, e.g.
+
+.. code-block::
+
+   Microsoft (R) COFF/PE Dumper Version 14.16.27048.0
+   Copyright (C) Microsoft Corporation.  All rights reserved.
+
+   Dump of file C:\Users\{username}\sire_app\lib\site-packages\sire\legacy\Qt\_Qt.pyd
+
+   File Type: DLL
+
+   Image has the following dependencies:
+
+    SirePython.dll
+    boost_python39.dll
+    python39.dll
+    SireStream.dll
+    Qt5Core_conda.dll
+    VCRUNTIME140.dll
+    api-ms-win-crt-heap-l1-1-0.dll
+    api-ms-win-crt-runtime-l1-1-0.dll
+    KERNEL32.dll
+
+   Summary
+
+       12000 .data
+        5000 .pdata
+       22000 .rdata
+        1000 .reloc
+        1000 .rsrc
+       4C000 .text
+
+If you see 
+
+.. code-block::
+
+   LINK : fatal error LNK1181: cannot open input file 'C:\Users\{username}\sire_app\lib\site-packages\sire\legacy\Qt\_Qt.pyd'
+
+Then `_Qt.pyd` has not been installed by the Sire installation, which implies something big has gone wrong.
+Please raise an issue about this on our repo.
+
+Assuming you do see the shared libraries, then you should see the same libraries as we show above, e.g.
+`SirePython.dll`, `boost_python39.dll` and `python39.dll` at a minimum. This shows that both Python and 
+boost python have been dynamically linked to the `_Qy.pyd` module. This is very important, as Sire will not
+work if boost python or Python are statically linked.
+
+Next, check to see if the libaries are in their expected location. The Sire libraries (e.g. `SireStream.dll` and `SirePython.dll`)
+should be in `C:\Users\{username}\sire_app\Library\bin`, along with the other DLLs that are imported by packages in conda.
+
+If the libraries aren't there, then something has gone wrong with the install. Please get in touch with us and we can try to debug.
+

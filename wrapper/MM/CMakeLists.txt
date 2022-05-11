@@ -44,7 +44,7 @@ set_target_properties (MM
 target_link_libraries (MM
                        SirePython
                        SIRE_SireMM
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )

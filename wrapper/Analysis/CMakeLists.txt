@@ -43,7 +43,7 @@ set_target_properties (Analysis
 target_link_libraries (Analysis
                        SirePython
                        SIRE_SireAnalysis
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )
