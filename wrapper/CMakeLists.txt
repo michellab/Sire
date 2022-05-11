@@ -374,6 +374,9 @@ if (NOT PYTHON_LIBRARIES)
   set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
 endif()
 
+find_package( PythonInterp REQUIRED )  # needed to get the python version
+set( PYTHON_VERSION "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}" )
+
 if (WIN32)
   set( PYTHON_SITE_DIR "../../lib/site-packages" )
 else()

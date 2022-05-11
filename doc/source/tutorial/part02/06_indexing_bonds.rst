@@ -329,7 +329,7 @@ SelectorBond( size=3
 2: Bond( CA:9 => C:15 )
 )
 
->> print(mol["bonds from atomnum 1 to atomnum 2"])
+>>> print(mol["bonds from atomnum 1 to atomnum 2"])
 SelectorBond( size=1
 0: Bond( HH31:1 => CH3:2 )
 )
