@@ -330,6 +330,42 @@ private:
     SelectEnginePtr part;
 };
 
+/** Internal class used to find atoms by their mass */
+class IDMassEngine : public SelectEngine
+{
+public:
+    static SelectEnginePtr construct(IDComparison compare, SireUnits::Dimension::MolarMass mass);
+    ~IDMassEngine();
+
+    ObjType objectType() const;
+
+protected:
+    IDMassEngine();
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+
+private:
+    IDComparison compare;
+    SireUnits::Dimension::MolarMass value;
+};
+
+/** Internal class used to find atoms by their charge */
+class IDChargeEngine : public SelectEngine
+{
+public:
+    static SelectEnginePtr construct(IDComparison compare, SireUnits::Dimension::Charge mass);
+    ~IDChargeEngine();
+
+    ObjType objectType() const;
+
+protected:
+    IDChargeEngine();
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+
+private:
+    IDComparison compare;
+    SireUnits::Dimension::Charge value;
+};
+
 /** Internal class used to select objects that are within a certain
     distance of other objects
 

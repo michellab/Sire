@@ -123,7 +123,40 @@ def test_sizes_correct():
             assert len(res) == res.num_atoms()
 
 
+def test_search_terms():
+    mols = sr.load_test_files("ala.top", "ala.crd")
+
+    for atom in mols["mass >= 16 g_per_mol"]:
+        assert atom.mass().value() >= 16.0
+
+    for atom in mols["charge < 0"]:
+        assert atom.charge().value() < 0
+
+    for atom in mols["mass >= 16 and charge < 0"]:
+        assert atom.charge().value() < 0
+        assert atom.mass().value() >= 16
+
+    check_mass = mols[0][0].mass().value()
+
+    atoms = mols[0][f"mass >= {check_mass-0.001} and mass <= {check_mass+0.001}"]
+
+    assert len(atoms) > 0
+
+    for atom in atoms:
+        assert atom.mass().value() == pytest.approx(check_mass)
+
+    check_charge = mols[0][1].charge().value()
+
+    atoms = mols[0][f"charge >= {check_charge-0.001} and charge <= {check_charge+0.001}"]
+
+    assert len(atoms) > 0
+
+    for atom in atoms:
+        assert atom.charge().value() == pytest.approx(check_charge)
+
+
 if __name__ == "__main__":
     test_complex_indexing()
     test_single_select_is_right()
     test_sizes_correct()
+    test_search_terms()

@@ -226,6 +226,17 @@ public:
                         ( "nm", SireUnits::nanometer )
                         ;
 
+        //all of the different mass tokens
+        mass_token.add( "g_per_mol", SireUnits::g_per_mol )
+                      ( "mg_per_mol", SireUnits::mg_per_mol )
+                      ( "kg_per_mol", SireUnits::kg_per_mol )
+                      ;
+
+        //all of the different charge tokens
+        charge_token.add( "e", SireUnits::mod_electron )
+                        ( "coulomb", SireUnits::coulomb )
+                        ;
+
         //all of the different "with" and "in" expression tokens
         with_token.add( "with", AST::ID_WITH )
                       ( "in", AST::ID_IN )
@@ -312,7 +323,8 @@ public:
         //or user-identified expression, optionally surrounded by parenthesis '( )'
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
                               all_token | water_token | pert_token | withRule | withinRule |
-                              withinVectorRule | whereRule | notRule | joinRule | bondRule | user_token |
+                              withinVectorRule | whereRule | notRule | joinRule | bondRule |
+                              massRule | massCmpRule | chargeRule | chargeCmpRule | user_token |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
 
         //grammar that specifies a list of names (comma-separated)
@@ -332,9 +344,6 @@ public:
         //grammar for a set of integers (either as ranges or comparisons)
         rangeValuesRule %= ( (rangeValueRule | compareValueRule) % qi::lit( ',' ) );
 
-        //grammar for a comparison (e.g. x > 5)
-        compareValueRule %= cmp_token >> int_;
-
         //grammar for an integer or range (e.g. 0:10, or 5)
         rangeValueRule = eps [ _val = AST::RangeValue() ] >>
                             (
@@ -342,6 +351,39 @@ public:
                                 qi::repeat(0,2)[( ':' >> int_[ _val += _1 ] )]
                             )
                             ;
+
+        massValueRule = eps [ _val = AST::IDMass() ] >>
+                            (
+                                double_[ _val += _1 ] >>
+                                mass_token[ _val += _1 ]
+                            )
+                            |
+                            (
+                                double_[ _val += _1 ]
+                            )
+                            ;
+
+        chargeValueRule = eps [ _val = AST::IDCharge() ] >>
+                              (
+                                  double_[ _val += _1 ] >>
+                                  charge_token[ _val += _1 ]
+                              )
+                              |
+                              (
+                                  double_[ _val += _1 ]
+                              )
+                              ;
+
+        //allow looking for mass
+        massRule %= qi::lit("mass") >> massValueRule;
+        massCmpRule %= qi::lit("mass") >> cmp_token >> massValueRule;
+
+        //allow looking for charge
+        chargeRule %= qi::lit("charge") >> chargeValueRule;
+        chargeCmpRule %= qi::lit("charge") >> cmp_token >> chargeValueRule;
+
+        //grammar for a comparison (e.g. x > 5)
+        compareValueRule %= cmp_token >> int_;
 
         //grammar for a length/distance (with optional unit)
         lengthValueRule = eps [ _val = AST::LengthValue() ] >>
@@ -449,6 +491,12 @@ public:
         rangeValueRule.name( "Range Value" );
         lengthValueRule.name( "Length Value" );
         vectorValueRule.name( "Vector Value" );
+        massValueRule.name( "Mass Value" );
+        chargeValueRule.name( "Charge Value" );
+        massRule.name( "Mass Rule" );
+        massCmpRule.name( "Mass Compare Rule" );
+        chargeRule.name( "Charge Rule" );
+        chargeCmpRule.name( "Charge Compare Rule" );
         stringRule.name( "String" );
         regExpRule.name( "RegExp" );
         bondRule.name( "Bond" );
@@ -480,6 +528,10 @@ public:
     qi::rule<IteratorT, AST::IDNot(), SkipperT> notRule;
     qi::rule<IteratorT, AST::IDJoin(), SkipperT> joinRule;
     qi::rule<IteratorT, AST::IDSubscript(), SkipperT> subscriptRule;
+    qi::rule<IteratorT, AST::IDMass(), SkipperT> massRule;
+    qi::rule<IteratorT, AST::IDCmpMass(), SkipperT> massCmpRule;
+    qi::rule<IteratorT, AST::IDCharge(), SkipperT> chargeRule;
+    qi::rule<IteratorT, AST::IDCmpCharge(), SkipperT> chargeCmpRule;
 
     qi::rule<IteratorT, AST::IDWhere(), SkipperT> whereRule;
     qi::rule<IteratorT, AST::IDWhereWithin(), SkipperT> whereWithinRule;
@@ -497,6 +549,9 @@ public:
     qi::rule<IteratorT, AST::CompareValue(), SkipperT> compareValueRule;
     qi::rule<IteratorT, AST::RangeValue(), SkipperT> rangeValueRule;
 
+    qi::rule<IteratorT, AST::IDMass(), SkipperT> massValueRule;
+    qi::rule<IteratorT, AST::IDCharge(), SkipperT> chargeValueRule;
+
     qi::rule<IteratorT, AST::LengthValue(), SkipperT> lengthValueRule;
     qi::rule<IteratorT, AST::VectorValue(), SkipperT> vectorValueRule;
 
@@ -507,6 +562,8 @@ public:
     qi::symbols<char,AST::IDToken> with_token;
     qi::symbols<char,AST::IDBondToken> bond_token;
     qi::symbols<char,SireUnits::Dimension::Length> length_token;
+    qi::symbols<char,SireUnits::Dimension::MolarMass> mass_token;
+    qi::symbols<char,SireUnits::Dimension::Charge> charge_token;
     qi::symbols<char,AST::IDComparison> cmp_token;
     qi::symbols<char,AST::IDCoordType> coord_token;
     qi::symbols<char,SireMol::Element> element_token;

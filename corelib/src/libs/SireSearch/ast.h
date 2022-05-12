@@ -40,6 +40,12 @@
 
 SIRE_BEGIN_HEADER
 
+// need to use this to increase the number of variants that can be
+// held in ExpressionVariant from the default of 20. This is
+// not a long term solution!
+#define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
+#define BOOST_MPL_LIMIT_LIST_SIZE 30
+
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/support_line_pos_iterator.hpp>
 
@@ -130,6 +136,10 @@ namespace AST
     struct IDWater;
     struct IDPerturbable;
     struct IDBond;
+    struct IDMass;
+    struct IDCharge;
+    struct IDCmpMass;
+    struct IDCmpCharge;
 
     struct IDWhereCompare;
     struct IDWhereWithin;
@@ -158,6 +168,10 @@ namespace AST
                                              boost::recursive_wrapper<IDBond>,
                                              boost::recursive_wrapper<IDWater>,
                                              boost::recursive_wrapper<IDPerturbable>,
+                                             boost::recursive_wrapper<IDMass>,
+                                             boost::recursive_wrapper<IDCharge>,
+                                             boost::recursive_wrapper<IDCmpMass>,
+                                             boost::recursive_wrapper<IDCmpCharge>,
                                              boost::recursive_wrapper<ExpressionPart> >;
 
     /** Base holder for strings or regular expressions */
@@ -533,6 +547,86 @@ namespace AST
         SelectEnginePtr toEngine() const;
     };
 
+    /** Struct that holds a "mass" expression, e.g. 1 g_per_mol */
+    struct IDMass
+    {
+        double value;
+        SireUnits::Dimension::MolarMass units;
+
+        IDMass() : value(0.0), units(1.0)
+        {}
+
+        IDMass(const IDMass &other) : value(other.value), units(other.units)
+        {}
+
+        IDMass& operator+=(double v)
+        {
+            value = v;
+            return *this;
+        }
+
+        IDMass& operator+=(SireUnits::Dimension::MolarMass u)
+        {
+            units = u;
+            return *this;
+        }
+
+        QString toString() const;
+
+        SelectEnginePtr toEngine() const;
+    };
+
+    /** Struct that holds a mass comparison, e.g. mass > 1 g_per_mol */
+    struct IDCmpMass
+    {
+        IDComparison compare;
+        IDMass value;
+
+        QString toString() const;
+
+        SelectEnginePtr toEngine() const;
+    };
+
+    /** Struct that holds a "charge" expression, e.g. 1 e */
+    struct IDCharge
+    {
+        double value;
+        SireUnits::Dimension::Charge units;
+
+        IDCharge() : value(0.0), units(1.0)
+        {}
+
+        IDCharge(const IDCharge &other) : value(other.value), units(other.units)
+        {}
+
+        IDCharge& operator+=(double v)
+        {
+            value = v;
+            return *this;
+        }
+
+        IDCharge& operator+=(SireUnits::Dimension::Charge u)
+        {
+            units = u;
+            return *this;
+        }
+
+        QString toString() const;
+
+        SelectEnginePtr toEngine() const;
+    };
+
+    /** Struct that holds a charge comparison, e.g. charge > 1 e */
+    struct IDCmpCharge
+    {
+        IDComparison compare;
+        IDCharge value;
+
+        QString toString() const;
+
+        SelectEnginePtr toEngine() const;
+    };
+
     /** Struct that holds a "where within"
         expression, e.g. residues where center is within 5 A of resname /lig/i */
     struct IDWhereWithin
@@ -629,6 +723,28 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDWithin,
                            (AST::IDObject,name)
                            (AST::LengthValue,distance)
                            (AST::Expression,value)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDCharge,
+                           (double,value)
+                           (SireUnits::Dimension::Charge,units)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDMass,
+                           (double,value)
+                           (SireUnits::Dimension::MolarMass,units)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDCmpCharge,
+                           (AST::IDComparison,compare)
+                           (AST::IDCharge,value)
+                           (SireUnits::Dimension::Charge,units)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDCmpMass,
+                           (AST::IDComparison,compare)
+                           (AST::IDMass,value)
+                           (SireUnits::Dimension::MolarMass,units)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWithinVector,

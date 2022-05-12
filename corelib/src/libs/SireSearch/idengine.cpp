@@ -1630,6 +1630,229 @@ SelectEngine::ObjType IDSubScriptEngine::objectType() const
 }
 
 ////////
+//////// Implementation of the IDMass
+////////
+
+QString IDMass::toString() const
+{
+    return QObject::tr("IDMass( %1 )")
+            .arg((value * units).toString());
+}
+
+SelectEnginePtr IDMass::toEngine() const
+{
+    IDCmpMass m;
+    m.compare = ID_CMP_EQ;
+    m.value = *this;
+
+    return m.toEngine();
+}
+
+QString IDCmpMass::toString() const
+{
+    return QObject::tr("mass %1 %2")
+            .arg(idcomparison_to_string(compare))
+            .arg((value.value * value.units).toString());
+}
+
+SelectEnginePtr IDCmpMass::toEngine() const
+{
+    return IDMassEngine::construct(compare, value.value * value.units);
+}
+
+////////
+//////// Implementation of the IDCharge
+////////
+
+QString IDCharge::toString() const
+{
+    return QObject::tr("IDCharge( %1 )")
+            .arg((value * units).toString());
+}
+
+SelectEnginePtr IDCharge::toEngine() const
+{
+    IDCmpCharge c;
+    c.compare = ID_CMP_EQ;
+    c.value = *this;
+
+    return c.toEngine();
+}
+
+QString IDCmpCharge::toString() const
+{
+    return QObject::tr("charge %1 %2")
+            .arg(idcomparison_to_string(compare))
+            .arg((value.value * value.units).toString());
+}
+
+SelectEnginePtr IDCmpCharge::toEngine() const
+{
+    return IDChargeEngine::construct(compare, value.value * value.units);
+}
+
+////////
+//////// Implementation of the IDMassEngine
+////////
+
+IDMassEngine::IDMassEngine()
+{}
+
+SelectEngine::ObjType IDMassEngine::objectType() const
+{
+    return SelectEngine::ATOM;
+}
+
+SelectEnginePtr IDMassEngine::construct(IDComparison compare,
+                                        SireUnits::Dimension::MolarMass value)
+{
+    IDMassEngine *ptr = new IDMassEngine();
+    auto p = makePtr(ptr);
+
+    ptr->compare = compare;
+    ptr->value = value;
+
+    return p;
+}
+
+IDMassEngine::~IDMassEngine()
+{}
+
+#include <functional>
+
+std::function<bool (double, double)> _get_compare(IDComparison compare)
+{
+    switch(compare)
+    {
+    case ID_CMP_LT:
+        return std::less<double>();
+    case ID_CMP_LE:
+        return std::less_equal<double>();
+    case ID_CMP_EQ:
+        return std::equal_to<double>();
+    case ID_CMP_NE:
+        return std::not_equal_to<double>();
+    case ID_CMP_GE:
+        return std::greater_equal<double>();
+    case ID_CMP_GT:
+        return std::greater<double>();
+    default:
+        return std::equal_to<double>();
+    }
+}
+
+SelectResult IDMassEngine::select(const SelectResult &mols, const PropertyMap &map) const
+{
+    if (mols.count() == 0)
+        return SelectResult();
+
+    QList<MolViewPtr> ret;
+
+    auto compare_func = _get_compare(compare);
+
+    for (const auto &mol : mols)
+    {
+        auto atoms = mol->atoms();
+
+        if (atoms.isEmpty())
+            continue;
+
+        QList<qint64> idxs;
+
+        for (qint64 i=0; i<atoms.nViews(); ++i)
+        {
+            if (compare_func(atoms(i).evaluate().mass(map).value(), value.value()))
+            {
+                idxs.append(i);
+            }
+        }
+
+        if (idxs.count() > 0)
+        {
+            if (idxs.count() == atoms.nViews())
+            {
+                ret.append(atoms);
+            }
+            else
+            {
+                ret.append(mol->atoms(idxs));
+            }
+        }
+    }
+
+    return SelectResult(ret);
+}
+
+////////
+//////// Implementation of the IDChargeEngine
+////////
+
+IDChargeEngine::IDChargeEngine()
+{}
+
+SelectEngine::ObjType IDChargeEngine::objectType() const
+{
+    return SelectEngine::ATOM;
+}
+
+SelectEnginePtr IDChargeEngine::construct(IDComparison compare,
+                                          SireUnits::Dimension::Charge value)
+{
+    IDChargeEngine *ptr = new IDChargeEngine();
+    auto p = makePtr(ptr);
+
+    ptr->compare = compare;
+    ptr->value = value;
+
+    return p;
+}
+
+IDChargeEngine::~IDChargeEngine()
+{}
+
+SelectResult IDChargeEngine::select(const SelectResult &mols, const PropertyMap &map) const
+{
+    if (mols.count() == 0)
+        return SelectResult();
+
+    QList<MolViewPtr> ret;
+
+    auto compare_func = _get_compare(compare);
+
+    for (const auto &mol : mols)
+    {
+        auto atoms = mol->atoms();
+
+        if (atoms.isEmpty())
+            continue;
+
+        QList<qint64> idxs;
+
+        for (qint64 i=0; i<atoms.nViews(); ++i)
+        {
+            if (compare_func(atoms(i).evaluate().charge(map).value(), value.value()))
+            {
+                idxs.append(i);
+            }
+        }
+
+        if (idxs.count() > 0)
+        {
+            if (idxs.count() == atoms.nViews())
+            {
+                ret.append(atoms);
+            }
+            else
+            {
+                ret.append(mol->atoms(idxs));
+            }
+        }
+    }
+
+    return SelectResult(ret);
+}
+
+////////
 //////// Implementation of the IDBondEngine
 ////////
 
