@@ -225,25 +225,11 @@ if(CMAKE_GENERATOR MATCHES "Visual Studio")  # MSBuild
   # issue on Windows
   # https://fossies.org/linux/opencv/cmake/OpenCVFindLAPACK.cmake
 
-  # workaround DEFAULTLIB:tbb12.lib issue
-  get_target_property(_tbb_lib tbb IMPORTED_LOCATION)
-  if(NOT _tbb_lib)
-    get_target_property(_tbb_lib tbb IMPORTED_LOCATION_RELEASE)
-  endif()
-
-  if(_tbb_lib)
-    # MSBuild drops content of 'LIB' environment variable,
-    # so pass TBB library directory through `link_directories()`
-    get_filename_component(_tbb_lib_dir "${_tbb_lib}" DIRECTORY)
-    message(STATUS "MKL: adding '${_tbb_lib_dir}' to link directories (workaround DEFAULTLIB issue)")
-    link_directories("${_tbb_lib_dir}")
-  else()
-    # We may have tbb.lib for 'tbb' target, but not 'tbb12.lib'
-    message(STATUS "Adding tbb12 to ignore list")
-    set(SIRE_IGNORE_DEFAULTLIB_TBB "tbb12.lib")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:${SIRE_IGNORE_DEFAULTLIB_TBB}")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:${SIRE_IGNORE_DEFAULTLIB_TBB}")
-  endif()
+  # We may have tbb.lib for 'tbb' target, but not 'tbb12.lib'
+  message(STATUS "Adding tbb12 to ignore list")
+  set(SIRE_IGNORE_DEFAULTLIB_TBB "tbb12.lib")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:${SIRE_IGNORE_DEFAULTLIB_TBB}")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:${SIRE_IGNORE_DEFAULTLIB_TBB}")
 
   message(STATUS "Turning on bigobj")  # needed to link _Mol.pyd
   add_compile_options("/bigobj")

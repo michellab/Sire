@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 cmake_policy(VERSION 3.3)
 
 ## Read the version number (so we can set it once in one place)
-file (STRINGS "../version.txt" SIRE_VERSION)
+file (STRINGS "../../version.txt" SIRE_VERSION)
 
 string(REGEX MATCH "([0-9]*).([0-9]*).([0-9]*)" _ ${SIRE_VERSION})
 
