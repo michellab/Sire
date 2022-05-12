@@ -36,8 +36,7 @@ set ( CONFIGDIRS
 # installation
 install( FILES ${SCRIPTS} DESTINATION ${SIRE_PYTHON}/sire/legacy/Tools )
 
-install( DIRECTORY ${CONFIGDIRS} DESTINATION ${SIRE_SHARE}/Tools
-         PATTERN .svn EXCLUDE )
+install( DIRECTORY ${CONFIGDIRS} DESTINATION ${SIRE_SHARE}/Tools )
 
 # If this is an anaconda build, then make sure that all of the
 # necessary files are copied from the pkgs directory into the

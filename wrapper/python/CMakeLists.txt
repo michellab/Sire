@@ -66,7 +66,6 @@ endif()
 
 install (DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts
          DESTINATION ${SIRE_SHARE}
-         PATTERN ".svn" EXCLUDE
         )
 
 if (NOT WIN32)

@@ -451,3 +451,18 @@ configure_file(
 
 add_custom_target(uninstall
   "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+
+if (WIN32)
+  # OpenMM.dll is installed in conda/Library/lib when it should be
+  # in conda/Library/bin. Check if it is missing and then copy
+  # the file across
+  file( GLOB files "${ANACONDA_BASE}/Library/lib/OpenMM*.dll" )
+
+  foreach(file ${files})
+    get_filename_component(OMMDLL, "${file}")
+    set( BINDLL "${ANACONDA_BASE}/Library/bin/${OMMDLL}" )
+    if (NOT EXISTS "${BINDLL}")
+      message( STATUS "OpenMM DLL in the wrong place? Should be ${BINDLL} but is ${OMMDLL}" )
+    endif()
+  endforeach()
+endif()
