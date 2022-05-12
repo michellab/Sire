@@ -151,11 +151,24 @@ def _resolve_path(path, directory, silent=False):
         if not silent:
             print(f"Downloading from '{path}'...")
 
-        try:
-            import urllib.request
-            urllib.request.urlretrieve(path, filename)
-        except Exception as e:
-            raise IOError(f"Unable to download '{path}': {e}")
+        if not filename.endswith(".bz2"):
+            # try the bz2 file first
+            try:
+                import urllib.request
+                urllib.request.urlretrieve(f"{path}.bz2", f"{filename}.bz2")
+                have_downloaded_file = True
+                filename = f"{filename}.bz2"
+            except Exception as e:
+                have_downloaded_file = False
+        else:
+            have_downloaded_file = False
+
+        if not have_downloaded_file:
+            try:
+                import urllib.request
+                urllib.request.urlretrieve(path, filename)
+            except Exception as e:
+                raise IOError(f"Unable to download '{path}': {e}")
 
         if os.path.exists(filename) and os.path.isfile(filename):
             return _resolve_path(filename, directory=directory, silent=silent)
