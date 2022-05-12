@@ -209,7 +209,8 @@ if __name__ == "__main__":
             try:
                 import pymbar
                 print("pymbar is already installed...")
-            except ImportError:
+            except Exception:
+                # (this can sometimes fail with AssertionError as well as ImportError)
                 conda_pkgs.append("pymbar=3.0.5")
 
         # compilers (so we keep binary compatibility)
