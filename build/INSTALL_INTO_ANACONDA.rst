@@ -45,7 +45,7 @@ mkdir build/wrapper
 Do this by typing
 
 cd build/corelib
-cmake -D ANACONDA_BUILD=on -D ANACONDA_BASE=$HOME/sire.app $HOME/Sire/corelib
+cmake -D -D ANACONDA_BASE=$HOME/sire.app $HOME/Sire/corelib
 
 (this assumes that you have installed anaconda into $HOME/sire.app and
  you have the corelib source in $HOME/Sire/corelib. Note that this will
@@ -67,7 +67,7 @@ nice make -j 8
 
 This will also take a long time. You can have more coffee.
 
-Once this has finished, you can install corelib into 
+Once this has finished, you can install corelib into
 the anaconda distribution by typing
 
 make -j 8 install/strip
@@ -83,7 +83,7 @@ should show all of the SireMol libraries.
     into the anaconda directory
 
 cd ../wrapper
-cmake -D ANACONDA_BUILD=on -D ANACONDA_BASE=$HOME/sire.app $HOME/Sire/wrapper
+cmake -D -D ANACONDA_BASE=$HOME/sire.app $HOME/Sire/wrapper
 
 (again, this assumes that you have put anaconda into $HOME/sire.app
  and that the Sire source is in $HOME/Sire)

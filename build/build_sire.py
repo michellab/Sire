@@ -370,7 +370,7 @@ if __name__ == "__main__":
     os.chdir(coredir)
 
     def add_default_cmake_defs(cmake_defs):
-        for a in ("ANACONDA_BUILD=ON", "ANACONDA_BASE=%s" % conda_base.replace("\\", "/"), "BUILD_NCORES=%s" % NCORES):
+        for a in ("ANACONDA_BASE=%s" % conda_base.replace("\\", "/"), "BUILD_NCORES=%s" % NCORES):
             if (args.noconda and a.startswith("ANACONDA")):
                 continue
             found = False
