@@ -167,3 +167,11 @@ should be in `C:\Users\{username}\sire_app\Library\bin`, along with the other DL
 
 If the libraries aren't there, then something has gone wrong with the install. Please get in touch with us and we can try to debug.
 
+You can look to see what is missing (e.g. a missing depedent library) by downloading (the free) Dependency Walker and 
+following the instructions in this excellent blog post - https://vxlabs.com/2017/12/06/how-to-debug-pyinstaller-dll-pyd-load-failed-issues-on-windows/
+
+Dependency Walker can be downloaded from here: https://github.com/lucasg/Dependencies
+
+Remember to drill down into every dependency, as they won't pop up to the top level. For example, we originally
+saw that OpenMM.dll was missing from _Move.pyd. This is only visible in Dependency Walker by clicking on _Move.pyd and 
+then drilling down through its dependencies (e.g. SireMove.dll).

@@ -459,10 +459,15 @@ if (WIN32)
   file( GLOB files "${ANACONDA_BASE}/Library/lib/OpenMM*.dll" )
 
   foreach(file ${files})
-    get_filename_component(OMMDLL, "${file}")
+    get_filename_component(OMMDLL "${file}" NAME)
     set( BINDLL "${ANACONDA_BASE}/Library/bin/${OMMDLL}" )
     if (NOT EXISTS "${BINDLL}")
-      message( STATUS "OpenMM DLL in the wrong place? Should be ${BINDLL} but is ${OMMDLL}" )
+      message( STATUS "OpenMM DLL in the wrong place? Should be ${BINDLL} but is ${file}" )
+      message( STATUS "Copying the file into ${ANACONDA_BASE}/Library/bin...")
+
+      # Copy the file to the bin directory or Sire won't be able to load its
+      # libraries that depend on OpenMM, e.g. SireMove.dll
+      file( COPY "${file}" DESTINATION "${ANACONDA_BASE}/Library/bin" )
     endif()
   endforeach()
 endif()
