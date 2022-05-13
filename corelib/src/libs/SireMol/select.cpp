@@ -789,7 +789,7 @@ QString SelectResult::toString() const
 {
     QStringList lines;
 
-    const int nviews = this->count();
+    const int nviews = this->listCount();
 
     if (nviews == 0)
         return QObject::tr("SelectResult::empty");
@@ -798,24 +798,21 @@ QString SelectResult::toString() const
     {
         for (int i=0; i<nviews; ++i)
         {
-            lines.append( QString("%1 : %2").arg(i).arg(this->operator[](i).read().toString()) );
+            lines.append( QString("%1 : %2").arg(i).arg(this->listAt(i).read().toString()) );
         }
     }
     else
     {
         for (int i=0; i<5; ++i)
         {
-            lines.append( QString("%1 : %2").arg(i).arg(this->operator[](i).read().toString()) );
+            lines.append( QString("%1 : %2").arg(i).arg(this->listAt(i).read().toString()) );
         }
 
         lines.append( "..." );
 
-        for (int i=-5; i<0; ++i)
+        for (int i=nviews-5; i<nviews; ++i)
         {
-            int idx = Index(i).map(nviews);
-
-            lines.append( QString("%1 : %2").arg(idx)
-                                            .arg(this->operator[](idx).read().toString()) );
+            lines.append( QString("%1 : %2").arg(i).arg(this->listAt(i).read().toString()) );
         }
     }
 
@@ -930,9 +927,24 @@ QString SelectResult::getCommonType() const
 
     for (const auto &molview : molviews)
     {
-        for (int i=0; i<molview->nViews(); ++i)
+        const auto typ = molview->what();
+
+        if (typ == Molecule::typeName() or
+            typ == Atom::typeName() or
+            typ == Residue::typeName() or
+            typ == Chain::typeName() or
+            typ == Segment::typeName() or
+            typ == CutGroup::typeName())
         {
-            selections.append(molview->at(i)->selection());
+            selections.append(molview->selection());
+        }
+        else
+        {
+            //this is a composite container
+            for (int i=0; i<molview->nViews(); ++i)
+            {
+                selections.append(molview->at(i)->selection());
+            }
         }
     }
 

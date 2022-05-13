@@ -107,7 +107,9 @@ def __fix_obj(obj):
     """
     w = obj.what()
 
-    if w == Selector_Atom_.typename():
+    if w == Molecule.typename():
+        return obj
+    elif w == Selector_Atom_.typename():
         return obj.atoms()
     elif w == Selector_Residue_.typename():
         return obj.residues()

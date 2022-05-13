@@ -16,6 +16,7 @@
 #include "SireMol/moleditor.h"
 #include "SireMol/element.h"
 #include "SireMol/atomelements.h"
+#include "SireMol/core.h"
 
 #include "Helpers/release_gil_policy.hpp"
 

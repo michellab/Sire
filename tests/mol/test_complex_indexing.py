@@ -3,9 +3,19 @@ import sire as sr
 
 import pytest
 
+def test_basic_indexing():
+    mols = sr.load_test_files("ala.top", "ala.crd")
+
+    assert len(mols["atomname CH3"]) == 3
+
+
 def test_complex_indexing():
     mols = sr.load_test_files("p38.pdb")
     mol = mols[0]
+
+    assert mols[f"molname {mol.name().value()}"] == mol
+    assert mols["molidx 0"] == mol
+    assert mols[f"molnum {mol.number().value()}"] == mol
 
     assert mol.atom(0).index() == sr.mol.AtomIdx(0)
     assert mol[0] == mol.atom(0)
@@ -155,8 +165,18 @@ def test_search_terms():
         assert atom.charge().value() == pytest.approx(check_charge)
 
 
+def test_in_searches():
+    mols = sr.load_test_files("ala.top", "ala.crd")
+
+    assert len(mols["atoms in *"]) == mols.num_atoms()
+    assert len(mols["residues in *"]) == mols.num_residues()
+
+
 if __name__ == "__main__":
+    test_basic_indexing()
     test_complex_indexing()
     test_single_select_is_right()
     test_sizes_correct()
     test_search_terms()
+    test_in_searches()
+

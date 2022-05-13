@@ -491,6 +491,69 @@ Selector<SireMol::Atom>( size=11660
 11659:  Atom( O:11732 [   4.73,    5.03,   46.82] )
 )
 
+Searching by property
+---------------------
+
+You can search for atoms by some of their properties. Currently supported
+properties are mass, coordinates and charge.
+
+For example;
+
+>>> print(mol["mass < 2"])
+XXX
+
+will find all atoms that have a mass of less than `2 g mol-1`. You can
+add the units, e.g.
+
+>>> print(mol["mass < 2 g_per_mol"])
+XXX
+
+and you can use any comparison you want, e.g.
+
+>>> print(mol["mass >= 16"])
+XXX
+
+Writing
+
+>>> print(mol["mass 5"])
+XXX
+
+is equivalent to writing
+
+>>> print(mol["mass == 5"])
+XXX
+
+You can also do the same thing with atomic charge, e.g.
+
+>>> print(mol["charge > 0"])
+XXX
+
+gives all of the positively charged atoms, while
+
+>>> print(mol["charge < -0.5"])
+XXX
+
+gives all of the atoms whose charges are less than -0.5.
+
+The units are unit electron charges, which you can specify,
+
+>>> print(mol["charge > 0.5 e"])
+XXX
+
+To search by coordinates, you can look for atoms that are within
+specified distances of points or other atoms. For example,
+
+>>> print(mol["atoms within 5.0 of element C"])
+XXX
+
+gives all atoms that are within 5 angstroms of any atom that matches
+`element C`. You can also specify a point in space, e.g.
+
+>>> print(mol["atoms within 3.0 of (0, 0, 0)"])
+XXX
+
+gives all atoms within 3 angstroms of the point `(0, 0, 0)`.
+
 Uniquely identifying atoms
 --------------------------
 

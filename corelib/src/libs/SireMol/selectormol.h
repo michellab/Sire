@@ -39,6 +39,8 @@
 #include "moleculegroups.h"
 #include "select.h"
 
+#include "SireBase/slice.h"
+
 SIRE_BEGIN_HEADER
 
 namespace SireMol

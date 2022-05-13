@@ -61,6 +61,7 @@
 #include "SireMol/perturbation.h"
 #include "SireMol/geometryperturbation.h"
 #include "SireMol/improperid.h"
+#include "SireMol/core.h"
 
 #include "Base/convertpackedarray.hpp"
 #include "SireBase/packedarray2d.hpp"

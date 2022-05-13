@@ -34,6 +34,7 @@
 #include "SireError/errors.h"
 #include "SireMol/errors.h"
 #include "SireMol/parser.h"
+#include "SireMol/core.h"
 #include "SireBase/errors.h"
 
 #include "Helpers/release_gil_policy.hpp"

@@ -71,6 +71,7 @@ set ( SIREMOL_HEADERS
       chainresid.h
       chargeperturbation.h
       connectivity.h
+      core.h
       cutgroup.h
       cuttingfunction.h
       dihedralid.h

@@ -202,108 +202,6 @@ SelectEnginePtr IDNameEngine::construct(IDObject o, NameValues vals)
 IDNameEngine::~IDNameEngine()
 {}
 
-/** Internal function used by nearly all of the ID selections to return a ViewsOfMol
-    with the parts selected from 'mol' that match 'selectFunc'. The passed 'countFunc'
-    and 'getSelectedFunc' are used to get the number of items from the molecule and
-    see what is selected, while 'uses_parallel' sets whether or not parallel selection
-    should be performed */
-template<class IDX, class OBJ, class T, class U, class V>
-ViewsOfMol genericSelect(const ViewsOfMol &mol, const T &selectFunc,
-                         const U &countFunc, const V &getSelectedFunc,
-                         bool uses_parallel)
-{
-    const auto molinfo = mol.data().info();
-
-    QList<IDX> selected;
-
-    if (mol.selectedAll())
-    {
-        const int count = countFunc(molinfo);
-
-        if (uses_parallel)
-        {
-            QMutex mutex;
-
-            tbb::parallel_for( tbb::blocked_range<int>(0,count),
-                               [&](const tbb::blocked_range<int> &r)
-            {
-                QList<IDX> thread_selected;
-
-                for (int i=r.begin(); i<r.end(); ++i)
-                {
-                    const IDX idx(i);
-
-                    if (selectFunc(molinfo, idx))
-                        thread_selected.append(idx);
-                }
-
-                QMutexLocker lkr(&mutex);
-                selected += thread_selected;
-            });
-        }
-        else
-        {
-            for (int i=0; i<count; ++i)
-            {
-                const IDX idx(i);
-
-                if (selectFunc(molinfo, idx))
-                    selected.append(idx);
-            }
-        }
-    }
-    else
-    {
-        const auto viewed = getSelectedFunc(mol);
-
-        if (uses_parallel)
-        {
-            QMutex mutex;
-
-            tbb::parallel_for( tbb::blocked_range<int>(0,viewed.count()),
-                               [&](const tbb::blocked_range<int> &r)
-            {
-                QList<IDX> thread_selected;
-
-                for (int i=r.begin(); i<r.end(); ++i)
-                {
-                    const auto idx = viewed[i];
-
-                    if (selectFunc(molinfo, idx))
-                        thread_selected.append(idx);
-                }
-
-                QMutexLocker lkr(&mutex);
-                selected += thread_selected;
-            });
-        }
-        else
-        {
-            for (const auto &idx : viewed)
-            {
-                if (selectFunc(molinfo, idx))
-                    selected.append(idx);
-            }
-        }
-    }
-
-    if (selected.isEmpty())
-        //nothing matched
-        return ViewsOfMol();
-    else if (selected.count() == 1)
-        //only a single object matched
-        return ViewsOfMol( OBJ(mol.data(),selected[0]) );
-    else if (selected.count() == countFunc(molinfo))
-        //the entire molecule matched
-        return ViewsOfMol( mol.molecule() );
-    else
-    {
-        //a subset of the molecule matches
-        return ViewsOfMol( mol.data(),
-                           Selector<OBJ>(mol.data(),selected).selection() );
-    }
-}
-
 /** Internal function used to see if the passed string matches */
 bool IDNameEngine::match(const QString &val) const
 {
@@ -370,7 +268,7 @@ template<class T>
 SelectResult IDNameEngine::searchName(const SelectResult &mols,
                                       bool uses_parallel) const
 {
-    QList<MolViewPtr> matches;
+    QList< Selector<T> > matches;
 
     for (const auto &mol : mols)
     {
@@ -385,38 +283,7 @@ SelectResult IDNameEngine::searchName(const SelectResult &mols,
 
         for (qint64 i=0; i<names.count(); ++i)
         {
-            const auto &viewname = names[i];
-
-            bool has_match = false;
-
-            //try all of the fixed names
-            for (const auto &name : names)
-            {
-                if (name == viewname)
-                {
-                    //name matches exactly
-                    has_match = true;
-                    break;
-                }
-            }
-
-            //now try all of the regexps
-            if (not has_match)
-            {
-                for (const auto &regexp : regexps)
-                {
-                    auto match = regexp.match(viewname);
-
-                    if (match.hasMatch())
-                    {
-                        //we have a regexp match :-)
-                        has_match = true;
-                        break;
-                    }
-                }
-            }
-
-            if (has_match)
+            if (match(names[i]))
             {
                 idxs.append(i);
             }
@@ -442,45 +309,21 @@ SelectResult IDNameEngine::searchName(const SelectResult &mols,
     return SelectResult(matches);
 }
 
+#include "tostring.h"
+
 SelectResult IDNameEngine::searchMolName(const SelectResult &mols,
                                          bool uses_parallel) const
 {
-    QList<MolViewPtr> matches;
+    QList<Molecule> matches;
 
     for (const auto &mol : mols)
     {
         const auto molname = mol->data().name().value();
 
-        bool has_match = false;
-
-        //try all of the fixed names
-        for (const auto &name : names)
+        if (match(molname))
         {
-            if (name == molname)
-            {
-                //name matches exactly
-                has_match = true;
-                break;
-            }
+            matches.append(mol->molecule());
         }
-
-        //now try all of the regexps
-        if (not has_match)
-        {
-            for (const auto &regexp : regexps)
-            {
-                auto match = regexp.match(molname);
-
-                if (match.hasMatch())
-                {
-                    //we have a regexp match :-)
-                    has_match = true;
-                    break;
-                }
-            }
-        }
-
-        matches.append(mol->molecule());
     };
 
     return SelectResult(matches);
@@ -615,7 +458,7 @@ template<class T>
 SelectResult IDNumberEngine::searchNum(const SelectResult &mols,
                                        bool uses_parallel) const
 {
-    QList<MolViewPtr> matches;
+    QList< Selector<T> > matches;
 
     for (const auto &mol : mols)
     {
@@ -661,7 +504,7 @@ SelectResult IDNumberEngine::searchNum(const SelectResult &mols,
 SelectResult IDNumberEngine::searchMolNum(const SelectResult &mols,
                                           bool uses_parallel) const
 {
-    QList<MolViewPtr> matches;
+    QList<Molecule> matches;
 
     for (const auto &mol : mols)
     {
@@ -836,7 +679,7 @@ template<class T>
 SelectResult IDIndexEngine::searchIdx(const SelectResult &mols,
                                       bool uses_parallel) const
 {
-    QList<MolViewPtr> matches;
+    QList< Selector<T> > matches;
 
     for (const auto &mol : mols)
     {
@@ -880,7 +723,7 @@ SelectResult IDIndexEngine::searchIdx(const SelectResult &mols,
 SelectResult IDIndexEngine::searchMolIdx(const SelectResult &mols,
                                          bool uses_parallel) const
 {
-    QList<MolViewPtr> matches;
+    QList<Molecule> matches;
 
     int idx = 0;
     int count = mols.listCount();
@@ -1915,6 +1758,30 @@ SelectEnginePtr IDWithEngine::construct( IDObject obj, IDToken token, SelectEngi
 IDWithEngine::~IDWithEngine()
 {}
 
+template<class T>
+MolViewPtr _select_in(const AtomSelection &selection, const Selector<T> &views)
+{
+    QList<typename T::Index> idxs;
+
+    for (const auto &idx : views.IDs())
+    {
+        if (selection.selectedAll(idx))
+        {
+            idxs.append(idx);
+        }
+    }
+
+    if (idxs.count() == 0)
+        return MolViewPtr();
+
+    auto s = Selector<T>(views.data(), idxs);
+
+    if (idxs.count() == 1)
+        return s(0);
+    else
+        return s;
+}
+
 SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
     if (not part.get())
@@ -1928,72 +1795,79 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
     if (objtype == SelectEngine::COMPLEX)
         return selected;
 
-    QList<ViewsOfMol> result;
+    QList<MolViewPtr> result;
 
-    if (objtype == SelectEngine::ATOM or token == AST::ID_WITH)
+    if (token == AST::ID_WITH or objtype == SelectEngine::ATOM)
     {
-        //we just need to expand and then re-join the parts
-        selected = this->expand(selected);
-
-        for (const auto &mol : selected.views())
+        for (const auto &mol : selected)
         {
-            result.append( mol.join() );
+            switch(objtype)
+            {
+            case SelectEngine::ATOM:
+                result.append( mol->atoms() );
+                break;
+            case SelectEngine::RESIDUE:
+                result.append( mol->residues() );
+                break;
+            case SelectEngine::CHAIN:
+                result.append( mol->chains() );
+                break;
+            case SelectEngine::SEGMENT:
+                result.append( mol->segments() );
+                break;
+            case SelectEngine::CUTGROUP:
+                result.append( mol->cutGroups() );
+                break;
+            case SelectEngine::MOLECULE:
+                result.append( mol->molecule() );
+                break;
+            default:
+                result.append( *mol );
+                break;
+            }
         }
     }
     else if (token == AST::ID_IN)
     {
         // 'in' will not include partially selected parts, so only completely
         // selected molecules, chains, residues etc.
-        for (auto mol : selected.views())
+        for (auto mol : selected)
         {
             //get the original molecule
-            auto selected = mols.views(mol.data().number()).selection();
+            auto selection = mol->selection();
 
             //is the whole molecule selected?
-            if (selected.selectedAll())
+            if (selection.selectedAll())
             {
                 //yes - by definition it will contain all parts
-                result.append( mol.join() );
+                result.append(*mol);
             }
             else
             {
-                auto in_selected = selected;
-                in_selected = in_selected.selectNone();
-
-                if (objtype == SelectEngine::CUTGROUP)
+                if (objtype == SelectEngine::RESIDUE)
                 {
-                    for (auto cgidx : mol.selection().selectedCutGroups())
-                    {
-                        if (selected.selectedAll(cgidx))
-                            in_selected = in_selected.select(cgidx);
-                    }
-                }
-                else if (objtype == SelectEngine::RESIDUE)
-                {
-                    for (auto residx : mol.selection().selectedResidues())
-                    {
-                        if (selected.selectedAll(residx))
-                            in_selected = in_selected.select(residx);
-                    }
+                    auto res = _select_in(selection, mol->residues());
+                    if (not res.isNull())
+                        result.append( res );
                 }
                 else if (objtype == SelectEngine::CHAIN)
                 {
-                    for (auto chainidx : mol.selection().selectedChains())
-                    {
-                        if (selected.selectedAll(chainidx))
-                            in_selected = in_selected.select(chainidx);
-                    }
+                    auto chain = _select_in(selection, mol->chains());
+                    if (not chain.isNull())
+                        result.append( chain );
                 }
                 else if (objtype == SelectEngine::SEGMENT)
                 {
-                    for (auto segidx : mol.selection().selectedSegments())
-                    {
-                        if (selected.selectedAll(segidx))
-                            in_selected = in_selected.select(segidx);
-                    }
+                    auto seg = _select_in(selection, mol->segments());
+                    if (not seg.isNull())
+                        result.append( seg );
                 }
-
-                result.append( ViewsOfMol(mol.data(),in_selected) );
+                else if (objtype == SelectEngine::CUTGROUP)
+                {
+                    auto cg = _select_in(selection, mol->cutGroups());
+                    if (not cg.isNull())
+                        result.append( cg );
+                }
             }
         }
     }

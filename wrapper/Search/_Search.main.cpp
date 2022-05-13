@@ -6,6 +6,7 @@
 #include "boost/python.hpp"
 
 #include "SireSearch/parser.h"
+#include "SireMol/core.h"
 
 #include <QDebug>
 
