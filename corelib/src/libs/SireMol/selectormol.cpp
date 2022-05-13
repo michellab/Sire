@@ -633,7 +633,7 @@ SelectorMol SelectorMol::molecules(const MolID &molid) const
     QHash<MolNum, Molecule> m;
 
     //QSet<MolNum> molnums_set(molnums.constBegin(), molnums.constEnd());
-    QSet<MolNum> molnums_set = molnums.toSet();
+    QSet<MolNum> molnums_set = _list_to_set(molnums);
 
     for (const auto &mol : this->mols)
     {

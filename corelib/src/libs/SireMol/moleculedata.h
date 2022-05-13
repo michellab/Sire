@@ -117,7 +117,7 @@ public:
     ~MoleculeData();
 
     static const char* typeName();
-    
+
     const char* what() const
     {
         return MoleculeData::typeName();
@@ -165,17 +165,17 @@ public:
     bool hasMetadata(const PropertyName &metakey) const;
     bool hasMetadata(const PropertyName &key,
                      const PropertyName &metakey) const;
-                     
+
     template<class T>
     bool hasPropertyOfType(const PropertyName &key) const;
-                     
+
     template<class T>
     bool hasMetadataOfType(const PropertyName &metakey) const;
-    
+
     template<class T>
     bool hasMetadataOfType(const PropertyName &key,
                            const PropertyName &metakey) const;
-                     
+
     const char* propertyType(const PropertyName &key) const;
     const char* metadataType(const PropertyName &metakey) const;
     const char* metadataType(const PropertyName &key,
@@ -193,15 +193,15 @@ public:
     MoleculeData extract(const AtomSelection &selected_atoms) const;
 
     QStringList propertyKeys() const;
-    
+
     QStringList metadataKeys() const;
     QStringList metadataKeys(const PropertyName &key) const;
 
     const Property& property(const PropertyName &key) const;
-    
+
     const Property& property(const PropertyName &key,
                              const Property &default_value) const;
-    
+
     const Property& metadata(const PropertyName &metakey) const;
 
     const Property& metadata(const PropertyName &key,
@@ -209,10 +209,12 @@ public:
 
     const Property& metadata(const PropertyName &metakey,
                              const Property &default_value) const;
-                             
+
     const Property& metadata(const PropertyName &key,
                              const PropertyName &metakey,
                              const Property &default_value) const;
+
+    bool isEmpty() const;
 
     void rename(const MolName &newname);
 
@@ -224,19 +226,19 @@ public:
 
     void rename(CGIdx cgidx, const CGName &newname);
     void rename(const CGID &cgid, const CGName &newname);
-    
+
     void rename(ResIdx residx, const ResName &newname);
     void rename(const ResID &resid, const ResName &newname);
-    
+
     void rename(ChainIdx chainidx, const ChainName &newname);
     void rename(const ChainID &chainid, const ChainName &newname);
-    
+
     void rename(SegIdx segix, const SegName &newname);
     void rename(const SegID &segid, const SegName &newname);
-    
+
     void renumber(AtomIdx atomidx, AtomNum newnum);
     void renumber(const AtomID &atomid, AtomNum newnum);
-    
+
     void renumber(ResIdx residx, ResNum newnum);
     void renumber(const ResID &resid, ResNum newnum);
 
@@ -245,13 +247,13 @@ public:
     void renumber(const QHash<AtomNum,AtomNum> &atomnums,
                   const QHash<ResNum,ResNum> &resnums);
 
-    void setProperty(const QString &key, 
+    void setProperty(const QString &key,
                      const Property &value, bool clear_metadata=false);
 
     void removeProperty(const QString &key);
 
     void setMetadata(const QString &metakey, const Property &value);
-    void setMetadata(const QString &key, const QString &metakey, 
+    void setMetadata(const QString &key, const QString &metakey,
                      const Property &value);
 
     void removeMetadata(const QString &metakey);
@@ -287,7 +289,7 @@ private:
         as a metadata property "version" with each property) */
     Properties props;
 
-    /** The version number of this molecule - this changes 
+    /** The version number of this molecule - this changes
         whenever the molecule is changed in any way. If two molecules
         have the same molecule number and version then they must be the same */
     quint64 vrsn;
@@ -307,28 +309,28 @@ private:
     public:
         PropVersions() : version(0)
         {}
-        
+
         ~PropVersions()
         {}
-        
+
         quint64 increment();
         quint64 increment(const QString &key, quint64 &mol);
-        
+
         void incrementAll(MoleculeData &moldata);
-        
+
         quint64 reset(QHash<QString,quint64> &prop_vrsns);
-        
+
     private:
         quint64 increment(const QString &key);
-    
+
         /** Mutex used to serialise access to the last version
             number */
         QMutex mutex;
-        
-        /** The last version number assigned to 
-            this molecule */ 
+
+        /** The last version number assigned to
+            this molecule */
         quint64 version;
-        
+
         /** The last version number assigned to
             each property of the molecule */
         QHash<QString,quint64> property_version;
@@ -339,7 +341,7 @@ private:
 
     static boost::shared_ptr<PropVersions> registerMolecule(MolNum molnum);
 
-    /** The version number of each of the properties in 
+    /** The version number of each of the properties in
         this molecule */
     QHash<QString,quint64> prop_vrsns;
 
@@ -358,7 +360,7 @@ bool MoleculeData::hasPropertyOfType(const PropertyName &key) const
 {
     return props.hasPropertyOfType<T>(key);
 }
-                 
+
 /** Return whether or not this molecule has some metadata at metakey
     'metakey' that is of type 'T' */
 template<class T>
@@ -370,7 +372,7 @@ bool MoleculeData::hasMetadataOfType(const PropertyName &metakey) const
 
 /** Return whether or not the property at key 'key' has some metadata
     at metakey 'metakey' that is of type 'T'
-    
+
     \throw SireBase::missing_property
 */
 template<class T>

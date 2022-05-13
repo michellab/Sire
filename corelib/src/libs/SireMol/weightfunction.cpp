@@ -37,6 +37,8 @@
 #include "mover.hpp"
 #include "editor.hpp"
 
+#include "core.h"
+
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 

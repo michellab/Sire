@@ -265,6 +265,12 @@ namespace detail
 void assertSameSize(CutGroup*, int nres, int nprops);
 
 template<>
+SIRE_ALWAYS_INLINE int getCount<CutGroup>(const MolInfo &molinfo)
+{
+    return molinfo.nCutGroups();
+}
+
+template<>
 SIRE_ALWAYS_INLINE QList<CGIdx> getAll<CutGroup>(const MolInfo &molinfo)
 {
     return molinfo.getCutGroups();

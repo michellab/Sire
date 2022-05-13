@@ -39,6 +39,7 @@
 #include "SireMol/mgname.h"
 #include "SireMol/moleditor.h"
 #include "SireMol/molidx.h"
+#include "SireMol/core.h"
 
 #include "SireVol/periodicbox.h"
 #include "SireVol/triclinicbox.h"

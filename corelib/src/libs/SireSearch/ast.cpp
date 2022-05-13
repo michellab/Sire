@@ -29,6 +29,8 @@
 #include "ast.h"
 #include "idengine.h"
 
+#include "SireMol/core.h"
+
 #include "SireError/errors.h"
 
 using namespace parser_idengine;

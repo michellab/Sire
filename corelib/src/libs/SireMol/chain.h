@@ -279,6 +279,12 @@ namespace detail
 void assertSameSize(Chain*, int nres, int nprops);
 
 template<>
+SIRE_ALWAYS_INLINE int getCount<Chain>(const MolInfo &molinfo)
+{
+    return molinfo.nChains();
+}
+
+template<>
 SIRE_ALWAYS_INLINE QList<ChainIdx> getAll<Chain>(const MolInfo &molinfo)
 {
     return molinfo.getChains();

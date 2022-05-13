@@ -68,12 +68,10 @@ protected:
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
 
 private:
-    SelectResult selectAtoms(const SelectResult &mols, bool use_parallel) const;
-    SelectResult selectCutGroups(const SelectResult &mols, bool use_parallel) const;
-    SelectResult selectResidues(const SelectResult &mols, bool use_parallel) const;
-    SelectResult selectChains(const SelectResult &mols, bool use_parallel) const;
-    SelectResult selectSegments(const SelectResult &mols, bool use_parallel) const;
-    SelectResult selectMolecules(const SelectResult &mols, bool use_parallel) const;
+    template<class T>
+    SelectResult searchName(const SelectResult &mols, bool use_parallel) const;
+
+    SelectResult searchMolName(const SelectResult &mols, bool use_parallel) const;
 
     bool match(const QString &name) const;
 
@@ -100,9 +98,10 @@ protected:
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
 
 private:
-    SelectResult selectAtoms(const SelectResult &mols, bool use_parallel) const;
-    SelectResult selectResidues(const SelectResult &mols, bool use_parallel) const;
-    SelectResult selectMolecules(const SelectResult &mols, bool use_parallel) const;
+    template<class T>
+    SelectResult searchNum(const SelectResult &mols, bool use_parallel) const;
+
+    SelectResult searchMolNum(const SelectResult &mols, bool use_parallel) const;
 
     bool match(int val) const;
 
@@ -128,12 +127,10 @@ protected:
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
 
 private:
-    SelectResult selectAtoms(const SelectResult &mols, bool use_parallel) const;
-    SelectResult selectCutGroups(const SelectResult &mols, bool use_parallel) const;
-    SelectResult selectResidues(const SelectResult &mols, bool use_parallel) const;
-    SelectResult selectChains(const SelectResult &mols, bool use_parallel) const;
-    SelectResult selectSegments(const SelectResult &mols, bool use_parallel) const;
-    SelectResult selectMolecules(const SelectResult &mols, bool use_parallel) const;
+    template<class T>
+    SelectResult searchIdx(const SelectResult &mols, bool use_parallel) const;
+
+    SelectResult searchMolIdx(const SelectResult &mols, bool use_parallel) const;
 
     bool match(int val, int count) const;
 

@@ -146,6 +146,7 @@ public:
     virtual MolViewPtr operator[](const SegID &segid) const;
     virtual MolViewPtr operator[](const SireID::Index &idx) const;
     virtual MolViewPtr operator[](const SireBase::Slice &slice) const;
+    virtual MolViewPtr operator[](const QList<qint64> &idxs) const;
 
     MolViewPtr at(int i) const;
     MolViewPtr at(const AtomID &atomid) const;

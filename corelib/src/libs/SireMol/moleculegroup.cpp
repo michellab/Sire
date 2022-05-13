@@ -30,6 +30,9 @@
 
 #include "molnum.h"
 #include "select.h"
+
+#include "core.h"
+
 #include "SireID/index.h"
 
 namespace SireMol

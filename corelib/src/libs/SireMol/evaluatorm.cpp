@@ -41,6 +41,7 @@
 #include "mover.hpp"
 #include "editor.hpp"
 #include "selectormol.h"
+#include "core.h"
 
 #include "SireVol/coordgroup.h"
 

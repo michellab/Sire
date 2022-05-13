@@ -30,6 +30,12 @@
 #include "beadeditor.h"
 #include "beads.h"
 #include "mover.hpp"
+#include "selector.hpp"
+#include "atom.h"
+#include "residue.h"
+#include "chain.h"
+#include "cutgroup.h"
+#include "segment.h"
 
 #include "SireBase/errors.h"
 
@@ -47,31 +53,31 @@ static const RegisterMetaType<Bead> r_bead;
 QDataStream &operator<<(QDataStream &ds, const Bead &bead)
 {
     writeHeader(ds, r_bead, 1);
-    
+
     SharedDataStream sds(ds);
-    
-    sds << bead.beadidx << bead.bdng 
+
+    sds << bead.beadidx << bead.bdng
         << bead.beading_property << bead.selected_atoms
         << static_cast<const MoleculeView&>(bead);
-        
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, Bead &bead)
 {
     VersionID v = readHeader(ds, r_bead);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
-        sds >> bead.beadidx >> bead.bdng 
+
+        sds >> bead.beadidx >> bead.bdng
             >> bead.beading_property >> bead.selected_atoms
             >> static_cast<MoleculeView&>(bead);
     }
     else
         throw version_error(v, "1", r_bead, CODELOC);
-        
+
     return ds;
 }
 
@@ -86,7 +92,7 @@ Bead::Bead(const MoleculeData &moldata, const BeadIdx &bead,
      : ConcreteProperty<Bead,MoleculeView>(moldata), beadidx(bead)
 {
     beading_property = map["beading"];
-    
+
     if (not moldata.hasProperty(beading_property))
     {
         bdng = ResidueBeading();
@@ -95,12 +101,12 @@ Bead::Bead(const MoleculeData &moldata, const BeadIdx &bead,
     {
         bdng = moldata.property(beading_property).asA<Beading>();
     }
-    
+
     beadidx = BeadIdx( beadidx.map(bdng.read().nBeads(moldata.info())) );
     selected_atoms = bdng.read().selection(moldata.info(), beadidx);
 }
 
-/** Internal constructor */ 
+/** Internal constructor */
 Bead::Bead(const MoleculeData &moldata, BeadIdx idx,
            const Beading &beading, const PropertyName &prop)
      : ConcreteProperty<Bead,MoleculeView>(moldata),
@@ -113,7 +119,7 @@ Bead::Bead(const MoleculeData &moldata, BeadIdx idx,
 /** Copy constructor */
 Bead::Bead(const Bead &other)
      : ConcreteProperty<Bead,MoleculeView>(other),
-       beadidx(other.beadidx), bdng(other.bdng), 
+       beadidx(other.beadidx), bdng(other.bdng),
        beading_property(other.beading_property),
        selected_atoms(other.selected_atoms)
 {}
@@ -133,7 +139,7 @@ Bead& Bead::operator=(const Bead &other)
         selected_atoms = other.selected_atoms;
         MoleculeView::operator=(other);
     }
-    
+
     return *this;
 }
 
@@ -193,7 +199,7 @@ AtomSelection Bead::selection() const
 void Bead::update(const MoleculeData &moldata)
 {
     BeadingPtr new_beading;
-    
+
     if (moldata.hasProperty(beading_property))
     {
         new_beading = moldata.property(beading_property).asA<Beading>();
@@ -204,9 +210,9 @@ void Bead::update(const MoleculeData &moldata)
     }
 
     new_beading.read().assertValidIndex(beadidx, moldata.info());
-    
+
     MoleculeView::update(moldata);
-    
+
     if (not new_beading.read().equals(bdng.read()))
     {
         bdng = new_beading;
@@ -232,14 +238,14 @@ bool Bead::hasProperty(const PropertyName &key) const
     if (this->data().hasProperty(key))
     {
         const Property &prop = this->data().property(key);
-        
+
         if (prop.isA<BeadProp>())
         {
             if (prop.asA<BeadProp>().beading().equals(bdng.read()))
                 return true;
         }
     }
-    
+
     return false;
 }
 
@@ -249,14 +255,14 @@ bool Bead::hasMetadata(const PropertyName &metakey) const
     if (this->data().hasMetadata(metakey))
     {
         const Property &prop = this->data().metadata(metakey);
-        
+
         if (prop.isA<BeadProp>())
         {
             if (prop.asA<BeadProp>().beading().equals(bdng.read()))
                 return true;
         }
     }
-    
+
     return false;
 }
 
@@ -267,14 +273,14 @@ bool Bead::hasMetadata(const PropertyName &key,
     if (this->data().hasMetadata(key,metakey))
     {
         const Property &prop = this->data().metadata(key,metakey);
-        
+
         if (prop.isA<BeadProp>())
         {
             if (prop.asA<BeadProp>().beading().equals(bdng.read()))
                 return true;
         }
     }
-    
+
     return false;
 }
 
@@ -282,20 +288,20 @@ bool Bead::hasMetadata(const PropertyName &key,
 QStringList Bead::propertyKeys() const
 {
     QStringList beadprops = d->properties().propertyKeysOfType<BeadProp>();
-    
+
     QMutableStringListIterator it(beadprops);
-    
+
     while (it.hasNext())
     {
         const QString &key = it.next();
-    
+
         if (not this->data().property(key).asA<BeadProp>().beading()
                             .equals(bdng.read()))
         {
             it.remove();
         }
     }
-    
+
     return beadprops;
 }
 
@@ -303,20 +309,20 @@ QStringList Bead::propertyKeys() const
 QStringList Bead::metadataKeys() const
 {
     QStringList beadprops = d->properties().metadataKeysOfType<BeadProp>();
-    
+
     QMutableStringListIterator it(beadprops);
-    
+
     while (it.hasNext())
     {
         const QString &metakey = it.next();
-    
+
         if (not this->data().metadata(metakey).asA<BeadProp>().beading()
                             .equals(bdng.read()))
         {
             it.remove();
         }
     }
-    
+
     return beadprops;
 }
 
@@ -325,20 +331,20 @@ QStringList Bead::metadataKeys() const
 QStringList Bead::metadataKeys(const PropertyName &key) const
 {
     QStringList beadprops = d->properties().metadataKeysOfType<BeadProp>(key);
-    
+
     QMutableStringListIterator it(beadprops);
-    
+
     while (it.hasNext())
     {
         const QString &metakey = it.next();
-    
+
         if (not this->data().metadata(key, metakey).asA<BeadProp>().beading()
                             .equals(bdng.read()))
         {
             it.remove();
         }
     }
-    
+
     return beadprops;
 }
 
@@ -419,7 +425,7 @@ bool Bead::intersects(const AtomID &atomid) const
     return selected_atoms.selected(atomid);
 }
 
-/** Assert that this bead contains the property with key 'key' 
+/** Assert that this bead contains the property with key 'key'
 
     \throw SireBase::missing_property
 */
@@ -433,7 +439,7 @@ void Bead::assertContainsProperty(const PropertyName &key) const
                          Sire::toString(this->propertyKeys())), CODELOC );
 }
 
-/** Assert that this bead contains the metadata with key 'metakey' 
+/** Assert that this bead contains the metadata with key 'metakey'
 
     \throw SireBase::missing_property
 */
@@ -447,7 +453,7 @@ void Bead::assertContainsMetadata(const PropertyName &metakey) const
                          Sire::toString(this->metadataKeys())), CODELOC );
 }
 
-/** Assert that this bead contains the metadata property with key 'key':'metakey' 
+/** Assert that this bead contains the metadata property with key 'key':'metakey'
 
     \throw SireBase::missing_property
 */

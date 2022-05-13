@@ -31,6 +31,8 @@
 
 #include "selectormol.h"
 
+#include "core.h"
+
 #include "SireMol/errors.h"
 
 SIRE_BEGIN_HEADER

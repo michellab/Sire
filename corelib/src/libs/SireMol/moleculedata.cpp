@@ -36,6 +36,8 @@
 #include "atommatchers.h"
 #include "moleditor.h"
 
+#include "core.h"
+
 #include "SireBase/incremint.h"
 #include "SireBase/unittest.h"
 
@@ -604,6 +606,12 @@ void MoleculeData::updatePropertyMolInfo(const AtomMatcher &matcher)
 void MoleculeData::updatePropertyMolInfo()
 {
     this->updatePropertyMolInfo( AtomIdxMatcher() );
+}
+
+/** Return if this is empty (has now atoms) */
+bool MoleculeData::isEmpty() const
+{
+    return this->info().isEmpty();
 }
 
 /** Rename this molecule to 'newname'. This changes the info().UID()

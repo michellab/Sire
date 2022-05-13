@@ -28,6 +28,8 @@
 
 #include "parser.h"
 
+#include "core.h"
+
 #include "SireError/errors.h"
 
 namespace SireMol

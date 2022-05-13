@@ -31,6 +31,8 @@
 
 #include "SireError/errors.h"
 
+#include "SireMol/core.h"
+
 #include <QMutex>
 #include <QHash>
 #include <QDebug>

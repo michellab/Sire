@@ -33,9 +33,6 @@
 #include "segproperty.hpp"
 #include "atomselection.h"
 
-#include "mover.hpp"
-#include "selector.hpp"
-
 SIRE_BEGIN_HEADER
 
 namespace SireMol
@@ -266,6 +263,12 @@ namespace detail
 {
 
 void assertSameSize(Segment*, int nres, int nprops);
+
+template<>
+SIRE_ALWAYS_INLINE int getCount<Segment>(const MolInfo &molinfo)
+{
+    return molinfo.nSegments();
+}
 
 template<>
 SIRE_ALWAYS_INLINE QList<SegIdx> getAll<Segment>(const MolInfo &molinfo)

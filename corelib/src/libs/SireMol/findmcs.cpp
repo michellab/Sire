@@ -49,6 +49,8 @@
 #include "dihedralid.h"
 #include "improperid.h"
 
+#include "core.h"
+
 #include "SireUnits/dimensions.h"
 #include "SireUnits/units.h"
 

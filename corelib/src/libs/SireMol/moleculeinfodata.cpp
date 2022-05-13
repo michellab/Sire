@@ -1159,6 +1159,36 @@ ResNum MoleculeInfoData::number(ResIdx residx) const
     return res_by_index[residx].number;
 }
 
+CGIdx MoleculeInfoData::number(CGIdx cgidx) const
+{
+    return CGIdx(cgidx.map(this->nCutGroups()));
+}
+
+CGIdx MoleculeInfoData::number(const CGID &cgid) const
+{
+    return this->cgIdx(cgid);
+}
+
+ChainIdx MoleculeInfoData::number(ChainIdx chainidx) const
+{
+    return ChainIdx(chainidx.map(this->nChains()));
+}
+
+ChainIdx MoleculeInfoData::number(const ChainID &chainid) const
+{
+    return this->chainIdx(chainid);
+}
+
+SegIdx MoleculeInfoData::number(SegIdx segidx) const
+{
+    return SegIdx(segidx.map(this->nSegments()));
+}
+
+SegIdx MoleculeInfoData::number(const SegID &segid) const
+{
+    return this->segIdx(segid);
+}
+
 /** Return the number of the atom with ID 'atomid' */
 AtomNum MoleculeInfoData::number(const AtomID &atomid) const
 {
@@ -2749,6 +2779,12 @@ bool MoleculeInfoData::intersects(ChainIdx chainidx, const ResID &resid) const
     {
         return false;
     }
+}
+
+/** Return whether or not this is empty (has no atoms) */
+bool MoleculeInfoData::isEmpty() const
+{
+    return atoms_by_index.isEmpty();
 }
 
 /** Return the number of atoms in the molecule */

@@ -52,6 +52,7 @@
 #include "SireMol/connectivity.h"
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/core.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"

@@ -1628,6 +1628,11 @@ MolViewPtr MoleculeView::operator[](const Slice &slice) const
     return this->atoms(slice);
 }
 
+MolViewPtr MoleculeView::operator[](const QList<qint64> &idxs) const
+{
+    return this->atoms(idxs);
+}
+
 MolViewPtr MoleculeView::at(int i) const
 {
     return this->operator[](i);

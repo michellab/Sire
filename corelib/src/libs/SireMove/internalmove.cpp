@@ -41,6 +41,7 @@
 #include "SireMol/bondid.h"
 #include "SireMol/angleid.h"
 #include "SireMol/dihedralid.h"
+#include "SireMol/core.h"
 
 #include "SireMaths/vectorproperty.h"
 
@@ -69,14 +70,14 @@ static const RegisterMetaType<InternalMove> r_internalmove;
 QDataStream &operator<<(QDataStream &ds, const InternalMove &internalmove)
 {
     writeHeader(ds, r_internalmove, 2);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << internalmove.smplr
         << internalmove.center_function
         << internalmove.flexibility_property
         << static_cast<const MonteCarlo&>(internalmove);
-    
+
     return ds;
 }
 
@@ -88,7 +89,7 @@ QDataStream &operator>>(QDataStream &ds, InternalMove &internalmove)
     if (v == 2)
     {
         SharedDataStream sds(ds);
-    
+
         sds >> internalmove.smplr
             >> internalmove.center_function
             >> internalmove.flexibility_property
@@ -97,10 +98,10 @@ QDataStream &operator>>(QDataStream &ds, InternalMove &internalmove)
     else if (v == 1)
     {
         SharedDataStream sds(ds);
-    
+
         internalmove.center_function = GetCOMPoint();
-    
-        sds >> internalmove.smplr 
+
+        sds >> internalmove.smplr
             >> internalmove.flexibility_property
             >> static_cast<MonteCarlo&>(internalmove);
     }
@@ -111,7 +112,7 @@ QDataStream &operator>>(QDataStream &ds, InternalMove &internalmove)
 }
 
 /** Null constructor */
-InternalMove::InternalMove(const PropertyMap &map) 
+InternalMove::InternalMove(const PropertyMap &map)
              : ConcreteProperty<InternalMove,MonteCarlo>(map)
 {
     flexibility_property = map["flexibility"];
@@ -163,7 +164,7 @@ InternalMove& InternalMove::operator=(const InternalMove &other)
         center_function = other.center_function;
         flexibility_property = other.flexibility_property;
     }
-    
+
     return *this;
 }
 
@@ -263,7 +264,7 @@ double clipDouble(double value)
     return (std::min)(maxdbl, (std::max)(mindbl, value));
 }
 
-/** Actually perform 'nmoves' moves of the molecules in the 
+/** Actually perform 'nmoves' moves of the molecules in the
     system 'system', optionally recording simulation statistics
     if 'record_stats' is true */
 void InternalMove::move(System &system, int nmoves, bool record_stats)
@@ -284,29 +285,29 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
             double old_nrg = system.energy( this->energyComponent() );
             System old_system(system);
             SamplerPtr old_sampler(smplr);
-      
+
             double old_bias = 1;
             double new_bias = 1;
-      
+
             //move one molecule
             //update the sampler with the latest version of the molecules
             smplr.edit().updateFrom(system);
 
             //this will randomly select one molecule
             tuple<PartialMolecule,double> mol_and_bias = smplr.read().sample();
-	  
+
             const PartialMolecule &oldmol = mol_and_bias.get<0>();
-            
+
             if (smplr.read().isBiased())
                 old_bias = mol_and_bias.get<1>();
-	
+
             Flexibility flex = oldmol.property(flexibility_property).asA<Flexibility>();
 
-            // Select the dofs to move. 
+            // Select the dofs to move.
             QList<BondID> moved_bonds;
             QList<AngleID> moved_angles;
             QList<DihedralID> moved_dihedrals;
-    
+
             QList<BondID> flex_bonds = flex.flexibleBonds();
             QList<AngleID> flex_angs = flex.flexibleAngles();
             QList<DihedralID> flex_dihs = flex.flexibleDihedrals();
@@ -338,7 +339,7 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
                     }
                 }
             }
-            
+
             // Select angles
             if ( nangles == 0  || maxanglevar < 0  || maxanglevar >= nangles )
             {
@@ -358,7 +359,7 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
                     }
                 }
             }
-            
+
             // Select dihedrals
             if ( ndihedrals == 0  || maxdihedralvar < 0  || maxdihedralvar >= ndihedrals )
             {
@@ -385,9 +386,9 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
             //  of the molecule)
             const bool has_center_property = (oldmol.selectedAll() and
                                               oldmol.hasProperty(center_property));
-    
+
             Vector old_center;
-            
+
             if (has_center_property)
             {
                 old_center = oldmol.property(center_property).asA<VectorProperty>();
@@ -402,7 +403,7 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
 
             // move the bonds of this molecule
             Length bond_delta;
-            
+
             foreach (const BondID &bond, moved_bonds)
             {
                 //const Length bond_delta_value = flex.bond_deltas[bond];
@@ -415,7 +416,7 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
 
             // and the angles
             Angle angle_delta;
-            
+
             foreach (const AngleID &angle, moved_angles)
             {
                 //const Angle angle_delta_value = flex.angle_deltas[angle];
@@ -425,10 +426,10 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
 
                 mol_mover.change(angle, angle_delta, map);
             }
-	  
+
             // and the torsions
             Angle dihedral_delta;
-            
+
             foreach (const DihedralID &dihedral, moved_dihedrals)
             {
                 double angle_delta_value = clipDouble(flex.delta(dihedral));
@@ -437,7 +438,7 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
 
                 // 50% chance to either rotate around central bond or to just change that dihedral
                 if (this->generator().randBool())
-                {                                 
+                {
                     //move only this specific dihedral
                     mol_mover.change(dihedral, dihedral_delta, map);
                 }
@@ -455,7 +456,7 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
             //evaluate the new center of geometry, and translate the molecule
             //to correct for any motion
             Vector new_center;
-            
+
             if (has_center_property)
             {
                 new_center = newmol.property(center_property).asA<VectorProperty>();
@@ -464,7 +465,7 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
             {
                 new_center = center_function.read()(newmol,map);
             }
-            
+
             if (old_center != new_center)
             {
                 newmol = newmol.move().translate( old_center-new_center, map ).commit();
@@ -475,14 +476,14 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
 
             //get the new bias on this molecule
             smplr.edit().updateFrom(system);
-	  
+
             if (smplr.read().isBiased())
                 new_bias = smplr.read().probabilityOf( PartialMolecule(newmol,
                                                                        oldmol.selection()) );
 
             //calculate the energy of the system
             double new_nrg = system.energy( this->energyComponent() );
-    
+
             //accept or reject the move based on the change of energy
             //and the biasing factors
             if (not this->test(new_nrg, old_nrg, new_bias, old_bias))

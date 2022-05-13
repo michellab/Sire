@@ -31,6 +31,8 @@
 #include "SireMol/molecules.h"
 #include "SireMol/moleculegroup.h"
 
+#include "SireMol/core.h"
+
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 

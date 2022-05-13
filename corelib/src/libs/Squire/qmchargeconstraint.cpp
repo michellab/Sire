@@ -35,6 +35,7 @@
 #include "SireMol/mgname.h"
 #include "SireMol/moleculegroup.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/core.h"
 
 #include "SireSystem/system.h"
 #include "SireSystem/delta.h"
@@ -55,12 +56,12 @@ QDataStream &operator<<(QDataStream &ds,
                                       const QMChargeConstraint &qmchgconstraint)
 {
     writeHeader(ds, r_qmchgconstraint, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << qmchgconstraint.charge_calculator
         << static_cast<const ChargeConstraint&>(qmchgconstraint);
-        
+
     return ds;
 }
 
@@ -69,19 +70,19 @@ QDataStream &operator>>(QDataStream &ds,
                                       QMChargeConstraint &qmchgconstraint)
 {
     VersionID v = readHeader(ds, r_qmchgconstraint);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> qmchgconstraint.charge_calculator
             >> static_cast<ChargeConstraint&>(qmchgconstraint);
-            
+
         qmchgconstraint.must_recalc_from_scratch = true;
     }
     else
         throw version_error(v, "1", r_qmchgconstraint, CODELOC);
-        
+
     return ds;
 }
 
@@ -91,7 +92,7 @@ QMChargeConstraint::QMChargeConstraint()
                      must_recalc_from_scratch(true)
 {}
 
-/** Construct to constrain the charges for the molecules in the 
+/** Construct to constrain the charges for the molecules in the
     molecule group 'molgroup' using the optionally supplied property
     map to find the necessary properteis */
 QMChargeConstraint::QMChargeConstraint(const MoleculeGroup &molgroup,
@@ -101,8 +102,8 @@ QMChargeConstraint::QMChargeConstraint(const MoleculeGroup &molgroup,
                      must_recalc_from_scratch(true)
 {}
 
-/** Construct to constrain the charges for the molecules in the     
-    molecule group 'molgroup' to those calculated using the 
+/** Construct to constrain the charges for the molecules in the
+    molecule group 'molgroup' to those calculated using the
     QM charge calculator 'chargecalculator', using the optionally
     supplied property map to find the necessary properties */
 QMChargeConstraint::QMChargeConstraint(const MoleculeGroup &molgroup,
@@ -113,7 +114,7 @@ QMChargeConstraint::QMChargeConstraint(const MoleculeGroup &molgroup,
                      charge_calculator(chargecalculator),
                      must_recalc_from_scratch(true)
 {}
-                                                                           
+
 /** Copy constructor */
 QMChargeConstraint::QMChargeConstraint(const QMChargeConstraint &other)
                    : ConcreteProperty<QMChargeConstraint,ChargeConstraint>(other),
@@ -137,10 +138,10 @@ QMChargeConstraint& QMChargeConstraint::operator=(const QMChargeConstraint &othe
     {
         charge_calculator = other.charge_calculator;
         must_recalc_from_scratch = other.must_recalc_from_scratch;
-        
+
         ChargeConstraint::operator=(other);
     }
-    
+
     return *this;
 }
 
@@ -189,21 +190,21 @@ Molecule QMChargeConstraint::_pvt_calculateCharges(const PartialMolecule &molecu
 {
     AtomCharges new_chgs = charge_calculator.read().calculate(molecule,
                                                               this->propertyMap());
-    
+
     const PropertyName &charge_property = this->propertyMap()["charge"];
 
     if (molecule.hasProperty(charge_property))
     {
         const Property &old_chgs = molecule.property(charge_property);
-        
+
         if (old_chgs.isA<AtomCharges>())
-        {  
+        {
             if (old_chgs.asA<AtomCharges>() == new_chgs)
                 //the charges haven't changed
                 return Molecule();
         }
     }
-    
+
     return molecule.molecule().edit()
                               .setProperty(charge_property, new_chgs)
                               .commit();
@@ -222,17 +223,17 @@ void QMChargeConstraint::setSystem(const System &system)
     mols_to_change = Molecules();
 
     const Molecules &mols = this->moleculeGroup().molecules();
-        
+
     for (Molecules::const_iterator it = mols.constBegin();
          it != mols.constEnd();
          ++it)
     {
         Molecule new_mol = this->_pvt_calculateCharges(*it);
-           
+
         if (not new_mol.isEmpty())
             mols_to_change.add(new_mol);
     }
-        
+
     must_recalc_from_scratch = false;
 
     Constraint::setSatisfied(system, mols_to_change.isEmpty());
@@ -247,18 +248,18 @@ bool QMChargeConstraint::fullApply(Delta &delta)
 {
     if (must_recalc_from_scratch)
         this->setSystem(delta.deltaSystem());
-        
+
     if (mols_to_change.isEmpty())
         return false;
-    
+
     else
     {
         bool changed = delta.update(mols_to_change);
         mols_to_change = Molecules();
-        
+
         if (changed)
             this->updateGroup(delta.deltaSystem());
-        
+
         return changed;
     }
 }
@@ -267,22 +268,22 @@ bool QMChargeConstraint::deltaApply(Delta &delta, quint32 last_subversion)
 {
     if ( must_recalc_from_scratch or (not mols_to_change.isEmpty()) )
         return this->fullApply(delta);
-        
+
     QList<MolNum> changed_mols = delta.changedMoleculesSince(last_subversion);
-    
+
     if (changed_mols.isEmpty())
         return false;
-        
+
     this->updateGroup(delta.deltaSystem());
-    
+
     const Molecules &mols = moleculeGroup().molecules();
-    
+
     foreach (MolNum changed_mol, changed_mols)
     {
         mols_to_change.remove(changed_mol);
 
         Molecules::const_iterator it = mols.constFind(changed_mol);
-        
+
         if (it != mols.constEnd())
         {
             Molecule new_mol = this->_pvt_calculateCharges(*it);
@@ -291,7 +292,7 @@ bool QMChargeConstraint::deltaApply(Delta &delta, quint32 last_subversion)
                 mols_to_change.add(new_mol);
         }
     }
-    
+
     if (mols_to_change.isEmpty())
         return false;
 
@@ -299,10 +300,10 @@ bool QMChargeConstraint::deltaApply(Delta &delta, quint32 last_subversion)
     {
         bool changed = delta.update(mols_to_change);
         mols_to_change = Molecules();
-        
+
         if (changed)
             this->updateGroup(delta.deltaSystem());
-            
+
         return changed;
     }
 }

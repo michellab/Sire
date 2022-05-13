@@ -40,6 +40,7 @@
 #include "molecule.h"
 #include "mover.hpp"
 #include "editor.hpp"
+#include "core.h"
 
 #include "SireVol/coordgroup.h"
 

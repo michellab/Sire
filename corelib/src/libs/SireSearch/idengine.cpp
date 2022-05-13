@@ -32,6 +32,7 @@
 #include "SireBase/booleanproperty.h"
 
 #include "SireMol/atomelements.h"
+#include "SireMol/core.h"
 
 #include "SireVol/space.h"
 #include "SireVol/cartesian.h"
@@ -201,47 +202,6 @@ SelectEnginePtr IDNameEngine::construct(IDObject o, NameValues vals)
 IDNameEngine::~IDNameEngine()
 {}
 
-/** Function used to find the matching parts in mols using 'searchFunction' */
-template<class T>
-SelectResult searchForMatch(const SelectResult &mols, const T &searchFunction, bool uses_parallel)
-{
-    //now loop through all of the molecules and find the matching atoms
-    SelectResult::Container result;
-
-    if (uses_parallel)
-    {
-        const auto molviews = mols.views();
-        QVector<ViewsOfMol> tmpresult(molviews.count());
-
-        tbb::parallel_for( tbb::blocked_range<int>(0,molviews.count()),
-                           [&](const tbb::blocked_range<int> &r)
-        {
-            for (int i=r.begin(); i<r.end(); ++i)
-            {
-                tmpresult[i] = searchFunction(molviews[i]);
-            }
-        });
-
-        for (const auto &r : tmpresult)
-        {
-            if (not r.isEmpty())
-                result.append(r);
-        }
-    }
-    else
-    {
-        for (const auto &mol : mols.views())
-        {
-            auto match = searchFunction(mol);
-
-            if (not match.isEmpty())
-                result.append(match);
-        }
-    }
-
-    return result;
-}
-
 /** Internal function used by nearly all of the ID selections to return a ViewsOfMol
     with the parts selected from 'mol' that match 'selectFunc'. The passed 'countFunc'
     and 'getSelectedFunc' are used to get the number of items from the molecule and
@@ -344,56 +304,6 @@ ViewsOfMol genericSelect(const ViewsOfMol &mol, const T &selectFunc,
     }
 }
 
-static auto countAtoms = [](const MoleculeInfoData &molinfo)
-{
-    return molinfo.nAtoms();
-};
-
-static auto getSelectedAtoms = [](const ViewsOfMol &mol)
-{
-    return mol.selection().selectedAtoms();
-};
-
-static auto countCutGroups = [](const MoleculeInfoData &molinfo)
-{
-    return molinfo.nCutGroups();
-};
-
-static auto getSelectedCutGroups = [](const ViewsOfMol &mol)
-{
-    return mol.selection().selectedCutGroups();
-};
-
-static auto countResidues = [](const MoleculeInfoData &molinfo)
-{
-    return molinfo.nResidues();
-};
-
-static auto getSelectedResidues = [](const ViewsOfMol &mol)
-{
-    return mol.selection().selectedResidues();
-};
-
-static auto countChains = [](const MoleculeInfoData &molinfo)
-{
-    return molinfo.nChains();
-};
-
-static auto getSelectedChains = [](const ViewsOfMol &mol)
-{
-    return mol.selection().selectedChains();
-};
-
-static auto countSegments = [](const MoleculeInfoData &molinfo)
-{
-    return molinfo.nSegments();
-};
-
-static auto getSelectedSegments = [](const ViewsOfMol &mol)
-{
-    return mol.selection().selectedSegments();
-};
-
 /** Internal function used to see if the passed string matches */
 bool IDNameEngine::match(const QString &val) const
 {
@@ -423,93 +333,125 @@ bool IDNameEngine::match(const QString &val) const
     return false;
 }
 
-/** Function used to find all of the atoms that match by name */
-SelectResult IDNameEngine::selectAtoms(const SelectResult &mols, bool uses_parallel) const
+template<class T>
+Selector<T> get_views(const MolViewPtr &mol);
+
+template<>
+Selector<Atom> get_views<Atom>(const MolViewPtr &mol)
 {
-    auto matchAtom = [&](const MoleculeInfoData &molinfo, const AtomIdx &idx)
-    {
-        return this->match(molinfo.name(idx).value());
-    };
-
-    auto selectFromMol = [&](const ViewsOfMol &mol)
-    {
-        return ::genericSelect<AtomIdx,Atom>(mol, matchAtom, countAtoms,
-                                             getSelectedAtoms, uses_parallel);
-    };
-
-    return searchForMatch(mols, selectFromMol, uses_parallel);
+    return mol->atoms();
 }
 
-SelectResult IDNameEngine::selectCutGroups(const SelectResult &mols, bool uses_parallel) const
+template<>
+Selector<Residue> get_views<Residue>(const MolViewPtr &mol)
 {
-    auto matchCutGroup = [&](const MoleculeInfoData &molinfo, const CGIdx &idx)
-    {
-        return this->match(molinfo.name(idx).value());
-    };
-
-    auto selectFromMol = [&](const ViewsOfMol &mol)
-    {
-        return ::genericSelect<CGIdx,CutGroup>(mol, matchCutGroup, countCutGroups,
-                                               getSelectedCutGroups, uses_parallel);
-    };
-
-    return searchForMatch(mols, selectFromMol, uses_parallel);
+    return mol->residues();
 }
 
-SelectResult IDNameEngine::selectResidues(const SelectResult &mols, bool uses_parallel) const
+template<>
+Selector<Chain> get_views<Chain>(const MolViewPtr &mol)
 {
-    auto matchResidue = [&](const MoleculeInfoData &molinfo, const ResIdx &idx)
-    {
-        return this->match(molinfo.name(idx).value());
-    };
-
-    auto selectFromMol = [&](const ViewsOfMol &mol)
-    {
-        return ::genericSelect<ResIdx,Residue>(mol, matchResidue, countResidues,
-                                               getSelectedResidues, uses_parallel);
-    };
-
-    return searchForMatch(mols, selectFromMol, uses_parallel);
+    return mol->chains();
 }
 
-SelectResult IDNameEngine::selectChains(const SelectResult &mols, bool uses_parallel) const
+template<>
+Selector<CutGroup> get_views<CutGroup>(const MolViewPtr &mol)
 {
-    auto matchChain = [&](const MoleculeInfoData &molinfo, const ChainIdx &idx)
-    {
-        return this->match(molinfo.name(idx).value());
-    };
-
-    auto selectFromMol = [&](const ViewsOfMol &mol)
-    {
-        return ::genericSelect<ChainIdx,Chain>(mol, matchChain, countChains,
-                                               getSelectedChains, uses_parallel);
-    };
-
-    return searchForMatch(mols, selectFromMol, uses_parallel);
+    return mol->cutGroups();
 }
 
-SelectResult IDNameEngine::selectSegments(const SelectResult &mols, bool uses_parallel) const
+template<>
+Selector<Segment> get_views<Segment>(const MolViewPtr &mol)
 {
-    auto matchSegment = [&](const MoleculeInfoData &molinfo, const SegIdx &idx)
-    {
-        return this->match(molinfo.name(idx).value());
-    };
-
-    auto selectFromMol = [&](const ViewsOfMol &mol)
-    {
-        return ::genericSelect<SegIdx,Segment>(mol, matchSegment, countSegments,
-                                               getSelectedSegments, uses_parallel);
-    };
-
-    return searchForMatch(mols, selectFromMol, uses_parallel);
+    return mol->segments();
 }
 
-SelectResult IDNameEngine::selectMolecules(const SelectResult &mols, bool uses_parallel) const
+template<class T>
+SelectResult IDNameEngine::searchName(const SelectResult &mols,
+                                      bool uses_parallel) const
 {
-    // function that finds all of the molecules that have been selected
-    auto selectFromMol = [&](const ViewsOfMol &mol)
+    QList<MolViewPtr> matches;
+
+    for (const auto &mol : mols)
     {
-        const auto molname = mol.data().name().value();
+        QList<qint64> idxs;
+
+        auto views = get_views<T>(mol);
+
+        if (views.nViews() == 0)
+            continue;
+
+        const auto names = views.names();
+
+        for (qint64 i=0; i<names.count(); ++i)
+        {
+            const auto &viewname = names[i];
+
+            bool has_match = false;
+
+            //try all of the fixed names
+            for (const auto &name : names)
+            {
+                if (name == viewname)
+                {
+                    //name matches exactly
+                    has_match = true;
+                    break;
+                }
+            }
+
+            //now try all of the regexps
+            if (not has_match)
+            {
+                for (const auto &regexp : regexps)
+                {
+                    auto match = regexp.match(viewname);
+
+                    if (match.hasMatch())
+                    {
+                        //we have a regexp match :-)
+                        has_match = true;
+                        break;
+                    }
+                }
+            }
+
+            if (has_match)
+            {
+                idxs.append(i);
+            }
+        }
+
+        if (idxs.count() == views.nViews())
+        {
+            if (idxs.count() == 1)
+                matches.append(views(0));
+            else
+                matches.append(views);
+        }
+        else if (idxs.count() == 1)
+        {
+            matches.append(views(idxs.at(0)));
+        }
+        else
+        {
+            matches.append(views(idxs));
+        }
+    }
+
+    return SelectResult(matches);
+}
+
+SelectResult IDNameEngine::searchMolName(const SelectResult &mols,
+                                         bool uses_parallel) const
+{
+    QList<MolViewPtr> matches;
+
+    for (const auto &mol : mols)
+    {
+        const auto molname = mol->data().name().value();
+
+        bool has_match = false;
 
         //try all of the fixed names
         for (const auto &name : names)
@@ -517,54 +459,56 @@ SelectResult IDNameEngine::selectMolecules(const SelectResult &mols, bool uses_p
             if (name == molname)
             {
                 //name matches exactly
-                return ViewsOfMol(mol.molecule());
+                has_match = true;
+                break;
             }
         }
 
         //now try all of the regexps
-        for (const auto &regexp : regexps)
+        if (not has_match)
         {
-            auto match = regexp.match(molname);
-
-            if (match.hasMatch())
+            for (const auto &regexp : regexps)
             {
-                //we have a regexp match :-)
-                return ViewsOfMol(mol.molecule());
+                auto match = regexp.match(molname);
+
+                if (match.hasMatch())
+                {
+                    //we have a regexp match :-)
+                    has_match = true;
+                    break;
+                }
             }
         }
 
-        //no match
-        return ViewsOfMol();
+        matches.append(mol->molecule());
     };
 
-    return searchForMatch(mols, selectFromMol, uses_parallel);
+    return SelectResult(matches);
 }
 
 SelectResult IDNameEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    SelectResult::Container result;
-
-    bool uses_parallel = true;
+    bool use_parallel = true;
 
     if (map["parallel"].hasValue())
     {
-        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+        use_parallel = map["parallel"].value().asA<BooleanProperty>().value();
     }
 
     switch(obj)
     {
     case AST::ATOM:
-        return selectAtoms(mols, uses_parallel);
+        return searchName<Atom>(mols, use_parallel);
     case AST::CUTGROUP:
-        return selectCutGroups(mols, uses_parallel);
+        return searchName<CutGroup>(mols, use_parallel);
     case AST::RESIDUE:
-        return selectResidues(mols, uses_parallel);
+        return searchName<Residue>(mols, use_parallel);
     case AST::CHAIN:
-        return selectChains(mols, uses_parallel);
+        return searchName<Chain>(mols, use_parallel);
     case AST::SEGMENT:
-        return selectSegments(mols, uses_parallel);
+        return searchName<Segment>(mols, use_parallel);
     case AST::MOLECULE:
-        return selectMolecules(mols, uses_parallel);
+        return searchMolName(mols, use_parallel);
     default:
         return SelectResult();
     }
@@ -667,6 +611,69 @@ bool IDNumberEngine::match(const int idx) const
     return false;
 }
 
+template<class T>
+SelectResult IDNumberEngine::searchNum(const SelectResult &mols,
+                                       bool uses_parallel) const
+{
+    QList<MolViewPtr> matches;
+
+    for (const auto &mol : mols)
+    {
+        QList<qint64> idxs;
+
+        auto views = get_views<T>(mol);
+
+        if (views.nViews() == 0)
+            continue;
+
+        const auto numbers = views.numbers();
+
+        for (qint64 i=0; i<numbers.count(); ++i)
+        {
+            const auto &viewnum = numbers[i];
+
+            if (this->match(viewnum))
+            {
+                idxs.append(i);
+            }
+        }
+
+        if (idxs.count() == views.nViews())
+        {
+            if (idxs.count() == 1)
+                matches.append(views(0));
+            else
+                matches.append(views);
+        }
+        else if (idxs.count() == 1)
+        {
+            matches.append(views(idxs.at(0)));
+        }
+        else
+        {
+            matches.append(views(idxs));
+        }
+    }
+
+    return SelectResult(matches);
+}
+
+SelectResult IDNumberEngine::searchMolNum(const SelectResult &mols,
+                                          bool uses_parallel) const
+{
+    QList<MolViewPtr> matches;
+
+    for (const auto &mol : mols)
+    {
+        const auto molnum = mol->data().number().value();
+
+        if (this->match(molnum))
+            matches.append(mol->molecule());
+    };
+
+    return SelectResult(matches);
+}
+
 IDNumberEngine::IDNumberEngine()
 {}
 
@@ -682,78 +689,29 @@ SelectEnginePtr IDNumberEngine::construct( IDObject o, RangeValues v )
 IDNumberEngine::~IDNumberEngine()
 {}
 
-/** Function used to find all of the atoms that match by number */
-SelectResult IDNumberEngine::selectAtoms(const SelectResult &mols, bool uses_parallel) const
-{
-    auto matchAtom = [&](const MoleculeInfoData &molinfo, const AtomIdx &idx)
-    {
-        const auto number = molinfo.number(idx).value();
-        return match(number);
-    };
-
-    auto selectFromMol = [&](const ViewsOfMol &mol)
-    {
-        return ::genericSelect<AtomIdx,Atom>(mol, matchAtom, countAtoms,
-                                             getSelectedAtoms, uses_parallel);
-    };
-
-    return searchForMatch(mols, selectFromMol, uses_parallel);
-}
-
-/** Function used to find all of the residues that match by number */
-SelectResult IDNumberEngine::selectResidues(const SelectResult &mols, bool uses_parallel) const
-{
-    auto matchResidue = [&](const MoleculeInfoData &molinfo, const ResIdx &idx)
-    {
-        const auto number = molinfo.number(idx).value();
-        return match(number);
-    };
-
-    auto selectFromMol = [&](const ViewsOfMol &mol)
-    {
-        return ::genericSelect<ResIdx,Residue>(mol, matchResidue, countResidues,
-                                               getSelectedResidues, uses_parallel);
-    };
-
-    return searchForMatch(mols, selectFromMol, uses_parallel);
-}
-
-/** Function used to find all of the molecules that match by number */
-SelectResult IDNumberEngine::selectMolecules(const SelectResult &mols, bool uses_parallel) const
-{
-    // function that finds all of the molecules that have been selected
-    auto selectFromMol = [&](const ViewsOfMol &mol)
-    {
-        const auto molnum = mol.data().number().value();
-
-        if (match(molnum))
-            return ViewsOfMol(mol.molecule());
-        else
-            return ViewsOfMol();
-    };
-
-    return searchForMatch(mols, selectFromMol, uses_parallel);
-}
-
 SelectResult IDNumberEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    SelectResult::Container result;
-
-    bool uses_parallel = true;
+    bool use_parallel = true;
 
     if (map["parallel"].hasValue())
     {
-        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+        use_parallel = map["parallel"].value().asA<BooleanProperty>().value();
     }
 
     switch(obj)
     {
     case AST::ATOM:
-        return selectAtoms(mols, uses_parallel);
+        return searchNum<Atom>(mols, use_parallel);
     case AST::RESIDUE:
-        return selectResidues(mols, uses_parallel);
+        return searchNum<Residue>(mols, use_parallel);
+    case AST::CHAIN:
+        return searchNum<Chain>(mols, use_parallel);
+    case AST::CUTGROUP:
+        return searchNum<CutGroup>(mols, use_parallel);
+    case AST::SEGMENT:
+        return searchNum<Segment>(mols, use_parallel);
     case AST::MOLECULE:
-        return selectMolecules(mols, uses_parallel);
+        return searchMolNum(mols, use_parallel);
     default:
         return SelectResult();
     }
@@ -874,6 +832,70 @@ bool IDIndexEngine::match(int idx, const int count) const
     return false;
 }
 
+template<class T>
+SelectResult IDIndexEngine::searchIdx(const SelectResult &mols,
+                                      bool uses_parallel) const
+{
+    QList<MolViewPtr> matches;
+
+    for (const auto &mol : mols)
+    {
+        QList<qint64> idxs;
+
+        auto views = get_views<T>(mol);
+
+        const int count = views.nViews();
+
+        if (views.nViews() == 0)
+            continue;
+
+        for (qint64 i=0; i<count; ++i)
+        {
+            if (this->match(i, count))
+            {
+                idxs.append(i);
+            }
+        }
+
+        if (idxs.count() == views.nViews())
+        {
+            if (idxs.count() == 1)
+                matches.append(views(0));
+            else
+                matches.append(views);
+        }
+        else if (idxs.count() == 1)
+        {
+            matches.append(views(idxs.at(0)));
+        }
+        else
+        {
+            matches.append(views(idxs));
+        }
+    }
+
+    return SelectResult(matches);
+}
+
+SelectResult IDIndexEngine::searchMolIdx(const SelectResult &mols,
+                                         bool uses_parallel) const
+{
+    QList<MolViewPtr> matches;
+
+    int idx = 0;
+    int count = mols.listCount();
+
+    for (const auto &mol : mols)
+    {
+        if (this->match(idx, count))
+            matches.append(mol->molecule());
+
+        idx += 1;
+    };
+
+    return SelectResult(matches);
+}
+
 IDIndexEngine::IDIndexEngine()
 {}
 
@@ -889,127 +911,31 @@ SelectEnginePtr IDIndexEngine::construct( IDObject o, RangeValues v )
 IDIndexEngine::~IDIndexEngine()
 {}
 
-SelectResult IDIndexEngine::selectAtoms(const SelectResult &mols, bool uses_parallel) const
-{
-    auto matchAtom = [&](const MoleculeInfoData &molinfo, const AtomIdx &idx)
-    {
-        return match(idx.value(), countAtoms(molinfo));
-    };
-
-    auto selectFromMol = [&](const ViewsOfMol &mol)
-    {
-        return ::genericSelect<AtomIdx,Atom>(mol, matchAtom, countAtoms,
-                                             getSelectedAtoms, uses_parallel);
-    };
-
-    return searchForMatch(mols, selectFromMol, uses_parallel);
-}
-
-SelectResult IDIndexEngine::selectCutGroups(const SelectResult &mols, bool uses_parallel) const
-{
-    auto matchCutGroup = [&](const MoleculeInfoData &molinfo, const CGIdx &idx)
-    {
-        return match(idx.value(), countCutGroups(molinfo));
-    };
-
-    auto selectFromMol = [&](const ViewsOfMol &mol)
-    {
-        return ::genericSelect<CGIdx,CutGroup>(mol, matchCutGroup, countCutGroups,
-                                               getSelectedCutGroups, uses_parallel);
-    };
-
-    return searchForMatch(mols, selectFromMol, uses_parallel);
-}
-
-SelectResult IDIndexEngine::selectResidues(const SelectResult &mols, bool uses_parallel) const
-{
-    auto matchResidue = [&](const MoleculeInfoData &molinfo, const ResIdx &idx)
-    {
-        return match(idx.value(), countResidues(molinfo));
-    };
-
-    auto selectFromMol = [&](const ViewsOfMol &mol)
-    {
-        return ::genericSelect<ResIdx,Residue>(mol, matchResidue, countResidues,
-                                               getSelectedResidues, uses_parallel);
-    };
-
-    return searchForMatch(mols, selectFromMol, uses_parallel);
-}
-
-SelectResult IDIndexEngine::selectChains(const SelectResult &mols, bool uses_parallel) const
-{
-    auto matchChain = [&](const MoleculeInfoData &molinfo, const ChainIdx &idx)
-    {
-        return match(idx.value(), countChains(molinfo));
-    };
-
-    auto selectFromMol = [&](const ViewsOfMol &mol)
-    {
-        return ::genericSelect<ChainIdx,Chain>(mol, matchChain, countChains,
-                                               getSelectedChains, uses_parallel);
-    };
-
-    return searchForMatch(mols, selectFromMol, uses_parallel);
-}
-
-SelectResult IDIndexEngine::selectSegments(const SelectResult &mols, bool uses_parallel) const
-{
-    auto matchSegment = [&](const MoleculeInfoData &molinfo, const SegIdx &idx)
-    {
-        return match(idx.value(), countSegments(molinfo));
-    };
-
-    auto selectFromMol = [&](const ViewsOfMol &mol)
-    {
-        return ::genericSelect<SegIdx,Segment>(mol, matchSegment, countSegments,
-                                               getSelectedSegments, uses_parallel);
-    };
-
-    return searchForMatch(mols, selectFromMol, uses_parallel);
-}
-
-SelectResult IDIndexEngine::selectMolecules(const SelectResult &mols, bool uses_parallel) const
-{
-    //have to use the index order from 'mols'
-    SelectResult::Container result;
-
-    const auto m = mols.views();
-
-    for (int i=0; i<m.count(); ++i)
-    {
-        if (match(i,m.count()))
-            result.append( ViewsOfMol(m[i].molecule()) );
-    }
-
-    return result;
-}
-
 SelectResult IDIndexEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
     SelectResult::Container result;
 
-    bool uses_parallel = true;
+    bool use_parallel = true;
 
     if (map["parallel"].hasValue())
     {
-        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+        use_parallel = map["parallel"].value().asA<BooleanProperty>().value();
     }
 
     switch(obj)
     {
     case AST::ATOM:
-        return selectAtoms(mols, uses_parallel);
+        return searchIdx<Atom>(mols, use_parallel);
     case AST::CUTGROUP:
-        return selectCutGroups(mols, uses_parallel);
+        return searchIdx<CutGroup>(mols, use_parallel);
     case AST::RESIDUE:
-        return selectResidues(mols, uses_parallel);
+        return searchIdx<Residue>(mols, use_parallel);
     case AST::CHAIN:
-        return selectChains(mols, uses_parallel);
+        return searchIdx<Chain>(mols, use_parallel);
     case AST::SEGMENT:
-        return selectSegments(mols, uses_parallel);
+        return searchIdx<Segment>(mols, use_parallel);
     case AST::MOLECULE:
-        return selectMolecules(mols, uses_parallel);
+        return searchMolIdx(mols, use_parallel);
     default:
         return SelectResult();
     }
@@ -1073,50 +999,11 @@ SelectResult IDAndEngine::select(const SelectResult &mols, const PropertyMap &ma
     else if (part1.get() == 0)
         return part0->operator()(mols, map);
 
-    SelectResult::Container result;
+    // perform the search from left to right, so search the left hand side first...
+    auto result = part0->operator()(mols, map);
 
-    bool uses_parallel = true;
-
-    if (map["parallel"].hasValue())
-    {
-        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
-    }
-
-    SelectResult result0, result1;
-
-    //first get the results of both sub-matches
-    if (uses_parallel)
-    {
-        tbb::parallel_invoke( [&](){ result0 = part0->operator()(mols, map); },
-                              [&](){ result1 = part1->operator()(mols, map); } );
-    }
-    else
-    {
-        result0 = part0->operator()(mols, map);
-        result1 = part1->operator()(mols, map);
-    }
-
-    //match up the results
-    for (const auto &mol0 : result0.views())
-    {
-        const auto molnum = mol0.data().number();
-
-        //is this molecule in the other match?
-        for (const auto &mol1 : result1.views())
-        {
-            if (mol1.data().number() == molnum)
-            {
-                //yes - unite these two views
-                auto selected_atoms = mol0.selection();
-                selected_atoms = selected_atoms.intersect(mol1.selection());
-
-                if (not selected_atoms.isEmpty())
-                    result.append( ViewsOfMol(mol0.data(),selected_atoms) );
-            }
-        }
-    }
-
-    return result;
+    // now perform the right hand side on the result of the left hand side
+    return part1->operator()(result, map);
 }
 
 SelectEnginePtr IDAndEngine::simplify()

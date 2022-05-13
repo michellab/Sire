@@ -42,6 +42,8 @@
 #include "mover.hpp"
 #include "selector.hpp"
 
+#include "core.h"
+
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 

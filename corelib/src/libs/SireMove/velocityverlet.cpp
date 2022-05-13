@@ -35,6 +35,7 @@
 #include "SireMol/atommasses.h"
 #include "SireMol/atomcoords.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/core.h"
 
 #include "SireSystem/system.h"
 
@@ -66,11 +67,11 @@ static const RegisterMetaType<VelocityVerlet> r_velver;
 QDataStream &operator<<(QDataStream &ds, const VelocityVerlet &velver)
 {
     writeHeader(ds, r_velver, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << velver.frequent_save_velocities << static_cast<const Integrator&>(velver);
-        
+
     return ds;
 }
 
@@ -78,21 +79,21 @@ QDataStream &operator<<(QDataStream &ds, const VelocityVerlet &velver)
 QDataStream &operator>>(QDataStream &ds, VelocityVerlet &velver)
 {
     VersionID v = readHeader(ds, r_velver);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> velver.frequent_save_velocities >> static_cast<Integrator&>(velver);
     }
     else
         throw version_error(v, "1", r_velver, CODELOC);
-        
+
     return ds;
 }
 
 /** Constructor */
-VelocityVerlet::VelocityVerlet(bool frequent_save) 
+VelocityVerlet::VelocityVerlet(bool frequent_save)
                : ConcreteProperty<VelocityVerlet,Integrator>(),
                  frequent_save_velocities(frequent_save)
 {}
@@ -112,7 +113,7 @@ VelocityVerlet& VelocityVerlet::operator=(const VelocityVerlet &other)
 {
     Integrator::operator=(other);
     frequent_save_velocities = other.frequent_save_velocities;
-    
+
     return *this;
 }
 
@@ -134,11 +135,11 @@ QString VelocityVerlet::toString() const
 {
     return QObject::tr("VelocityVerlet()");
 }
-                                                       
+
 /** Integrate the coordinates of the atoms in the molecules in 'molgroup'
-    using the forces in 'forcetable', using the optionally supplied 
-    property map to find the necessary molecular properties 
-    
+    using the forces in 'forcetable', using the optionally supplied
+    property map to find the necessary molecular properties
+
     \throw SireMol::missing_molecule
     \throw SireBase::missing_property
     \throw SireError:invalid_cast
@@ -150,20 +151,20 @@ void VelocityVerlet::integrate(IntegratorWorkspace &workspace,
                                int nmoves, bool record_stats)
 {
     AtomicVelocityWorkspace &ws = workspace.asA<AtomicVelocityWorkspace>();
-    
+
     const double dt = timestep.value();
 
     const int nmols = ws.nMolecules();
-    
+
     for (int imove=0; imove<nmoves; ++imove)
     {
         ws.calculateForces(nrg_component);
-        
+
         //first integrate the coordinates - loop over all molecules
         for (int i=0; i<nmols; ++i)
         {
             const int nats = ws.nAtoms(i);
-        
+
             Vector *x = ws.coordsArray(i);
             const Vector *f = ws.forceArray(i);
             Vector *p = ws.momentaArray(i);
@@ -184,12 +185,12 @@ void VelocityVerlet::integrate(IntegratorWorkspace &workspace,
 
         ws.commitCoordinates();
         ws.calculateForces(nrg_component);
-        
+
         //now need to integrate the velocities
         for (int i=0; i<nmols; ++i)
         {
             const int nats = ws.nAtoms(i);
-        
+
             const Vector *f = ws.forceArray(i);
             Vector *p = ws.momentaArray(i);
             const double *m = ws.massArray(i);
@@ -200,14 +201,14 @@ void VelocityVerlet::integrate(IntegratorWorkspace &workspace,
                     p[j] += ((0.5*dt) * f[j]);
             }
         }
-        
+
         if (frequent_save_velocities)
             ws.commitVelocities();
-        
+
         if (record_stats)
             ws.collectStatistics();
     }
-    
+
     if (not frequent_save_velocities)
         ws.commitVelocities();
 }

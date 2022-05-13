@@ -81,7 +81,7 @@ public:
     typedef ResNum Number;
 
     Residue();
-    
+
     Residue(const MoleculeData &moldata, const ResID &resid);
 
     Residue(const Residue &other);
@@ -89,16 +89,16 @@ public:
     ~Residue();
 
     Residue& operator=(const Residue &other);
-    
+
     bool operator==(const Residue &other) const;
     bool operator!=(const Residue &other) const;
-    
+
     static const char* typeName();
-    
+
     Residue* clone() const;
 
     QString toString() const;
-    
+
     bool isEmpty() const;
     bool selectedAll() const;
 
@@ -109,43 +109,43 @@ public:
     ResName name() const;
     ResNum number() const;
     ResIdx index() const;
-    
+
     bool hasProperty(const PropertyName &key) const;
     bool hasMetadata(const PropertyName &metakey) const;
     bool hasMetadata(const PropertyName &key,
                      const PropertyName &metakey) const;
-                     
+
     QStringList propertyKeys() const;
     QStringList metadataKeys() const;
     QStringList metadataKeys(const PropertyName &key) const;
-    
+
     template<class T>
     const T& property(const PropertyName &key) const;
-    
+
     template<class T>
     const T& metadata(const PropertyName &metakey) const;
-    
+
     template<class T>
     const T& metadata(const PropertyName &key,
                       const PropertyName &metakey) const;
-    
+
     Mover<Residue> move() const;
     Evaluator evaluate() const;
     ResEditor edit() const;
     Selector<Residue> selector() const;
-    
+
     int nAtoms() const;
-    
+
     const QList<AtomIdx>& atomIdxs() const;
-    
+
     bool contains(AtomIdx atomidx) const;
     bool contains(const AtomID &atomid) const;
     bool intersects(const AtomID &atomid) const;
-    
+
     bool isWithinChain() const;
 
     void assertContainsProperty(const PropertyName &key) const;
-    
+
     void assertContainsMetadata(const PropertyName &metakey) const;
     void assertContainsMetadata(const PropertyName &key,
                                 const PropertyName &metakey) const;
@@ -156,7 +156,7 @@ protected:
 
     template<class T>
     void setMetadata(const QString &metakey, const T &value);
-    
+
     template<class T>
     void setMetadata(const QString &key, const QString &metakey,
                      const T &value);
@@ -164,19 +164,19 @@ protected:
 private:
     /** The index of the residue in the molecule */
     ResIdx residx;
-    
+
     /** The atoms that are selected as part of this residue */
     AtomSelection selected_atoms;
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
-/** Return the property (of type T) at key 'key' that is 
+/** Return the property (of type T) at key 'key' that is
     specifically assigned to this residue. This will only work
     if the property at this key is a residue property (i.e.
     has one value for every residue) and that it can be
     cast to type T
-    
+
     \throw SireMol::missing_property
     \throw SireError::invalid_cast
 */
@@ -205,13 +205,13 @@ const T& Residue::metadata(const PropertyName &metakey) const
 
 /** Return the metadata at metakey 'metakey' for the property
     at key 'key'
-    
+
     \throw SireMol::missing_property
     \throw SireError::invalid_cast
 */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-const T& Residue::metadata(const PropertyName &key, 
+const T& Residue::metadata(const PropertyName &key,
                            const PropertyName &metakey) const
 {
     const Property &property = d->metadata(key, metakey);
@@ -223,9 +223,9 @@ const T& Residue::metadata(const PropertyName &key,
     residue to be equal to 'value'. This works by creating
     a ResProperty<T> for this molecule, and assigning
     the value for this residue to 'value'. If there is already
-    a property at key 'key', then it must be of type 
+    a property at key 'key', then it must be of type
     ResProperty<T> for this to work
-    
+
     \throw SireMol::invalid_cast
 */
 template<class T>
@@ -236,9 +236,9 @@ void Residue::setProperty(const QString &key, const T &value)
                                                        value);
 }
 
-/** Set the metadata at metakey 'metakey' to the value 'value' 
+/** Set the metadata at metakey 'metakey' to the value 'value'
     for this residue
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -251,7 +251,7 @@ void Residue::setMetadata(const QString &metakey, const T &value)
 
 /** Set the metadata at metakey 'metakey' for the property at key
     'key' to the value 'value'
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -265,6 +265,12 @@ void Residue::setMetadata(const QString &key, const QString &metakey,
 
 namespace detail
 {
+
+template<>
+SIRE_ALWAYS_INLINE int getCount<Residue>(const MolInfo &molinfo)
+{
+    return molinfo.nResidues();
+}
 
 template<>
 SIRE_ALWAYS_INLINE QList<Residue::Index> getAll<Residue>(const MolInfo &molinfo)
@@ -281,7 +287,7 @@ SIRE_ALWAYS_INLINE QList<ResIdx> getAll<Residue>(const MolInfo &molinfo,
 }
 
 void assertSameSize(Residue*, int nres, int nprops);
-    
+
 template<class V>
 SIRE_OUTOFLINE_TEMPLATE
 QList<V> get_property(Residue*, const MoleculeData &moldata,
@@ -340,7 +346,7 @@ void set_metadata(Residue *ptr, MoleculeData &moldata,
                   const QList<V> &values)
 {
     assertSameSize(ptr, idxs.count(), values.count());
-    
+
     set_metadata<ResProperty<V>,Residue::Index,V>(moldata,idxs,key,metakey,values);
 }
 
@@ -376,12 +382,12 @@ void set_metadata(Residue*, MoleculeData &moldata,
 
 SIREMOL_EXPORT bool has_property(const Residue*, const MoleculeData &moldata,
                   const PropertyName &key);
-                  
+
 SIREMOL_EXPORT bool has_metadata(const Residue*, const MoleculeData &moldata,
                   const PropertyName &metakey);
-                  
+
 SIREMOL_EXPORT bool has_metadata(const Residue*, const MoleculeData &moldata,
-                  const PropertyName &key, const PropertyName &metakey);                 
+                  const PropertyName &key, const PropertyName &metakey);
 
 
 } //end of namespace detail

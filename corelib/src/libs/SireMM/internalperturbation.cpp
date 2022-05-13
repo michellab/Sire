@@ -35,6 +35,7 @@
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
 #include "SireMol/mover.hpp"
+#include "SireMol/core.h"
 
 #include "SireCAS/values.h"
 
@@ -58,12 +59,12 @@ QDataStream &operator<<(QDataStream &ds,
                                       const InternalPerturbation &intpert)
 {
     writeHeader(ds, r_intpert, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << intpert.base_expression << intpert.initial_forms
         << intpert.final_forms << static_cast<const Perturbation&>(intpert);
-        
+
     return ds;
 }
 
@@ -71,31 +72,31 @@ QDataStream &operator>>(QDataStream &ds,
                                       InternalPerturbation &intpert)
 {
     VersionID v = readHeader(ds, r_intpert);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> intpert.base_expression >> intpert.initial_forms
             >> intpert.final_forms >> static_cast<Perturbation&>(intpert);
-            
+
         intpert.buildPerturbExpression();
     }
     else
         throw version_error(v, "1", r_intpert, CODELOC);
-        
+
     return ds;
 }
 
-/** Internal function used to rebuild the perturb expression from 
+/** Internal function used to rebuild the perturb expression from
     the mapping function, base expression and initial and final forms */
 void InternalPerturbation::buildPerturbExpression()
 {
     //build all of the perturbed identities
     Identities perturbed_idents;
-    
+
     const Expression &mapfunc = mappingFunction();
-    
+
     foreach (Symbol symbol, initial_forms.symbols())
     {
         if (final_forms.contains(symbol))
@@ -103,7 +104,7 @@ void InternalPerturbation::buildPerturbExpression()
             Identities ident;
             ident.set( symbols().initial(), initial_forms[symbol] );
             ident.set( symbols().final(), final_forms[symbol] );
-    
+
             perturbed_idents.set(symbol, mapfunc.substitute(ident));
         }
         else
@@ -111,11 +112,11 @@ void InternalPerturbation::buildPerturbExpression()
             Identities ident;
             ident.set( symbols().initial(), initial_forms[symbol] );
             ident.set( symbols().final(), Expression(0) );
-    
+
             perturbed_idents.set(symbol, mapfunc.substitute(ident));
         }
     }
-    
+
     foreach (Symbol symbol, final_forms.symbols())
     {
         if (not initial_forms.contains(symbol))
@@ -123,19 +124,19 @@ void InternalPerturbation::buildPerturbExpression()
             Identities ident;
             ident.set( symbols().initial(), Expression(0) );
             ident.set( symbols().final(), final_forms[symbol] );
-                               
+
             perturbed_idents.set(symbol, mapfunc.substitute(ident));
         }
     }
-    
+
     perturb_expression = base_expression.substitute(perturbed_idents);
 }
 
 /** Null constructor */
 InternalPerturbation::InternalPerturbation() : Perturbation()
 {}
-                     
-/** Construct to map from one function to another (from initial_function to 
+
+/** Construct to map from one function to another (from initial_function to
     final_function) using the passed mapping function */
 InternalPerturbation::InternalPerturbation(const Expression &initial_function,
                                            const Expression &final_function,
@@ -148,7 +149,7 @@ InternalPerturbation::InternalPerturbation(const Expression &initial_function,
     initial_forms = (f == initial_function);
     final_forms = (f == final_function);
     base_expression = f;
-    
+
     this->buildPerturbExpression();
 }
 
@@ -176,7 +177,7 @@ InternalPerturbation::InternalPerturbation(const InternalPerturbation &other)
                        initial_forms(other.initial_forms),
                        final_forms(other.final_forms)
 {}
- 
+
 /** Destructor */
 InternalPerturbation::~InternalPerturbation()
 {}
@@ -192,14 +193,14 @@ InternalPerturbation& InternalPerturbation::operator=(const InternalPerturbation
         initial_forms = other.initial_forms;
         final_forms = other.final_forms;
     }
-    
+
     return *this;
 }
 
 /** Comparison operator */
 bool InternalPerturbation::operator==(const InternalPerturbation &other) const
 {
-    return base_expression == other.base_expression and 
+    return base_expression == other.base_expression and
            initial_forms == other.initial_forms and
            final_forms == other.final_forms and
            Perturbation::operator==(other);
@@ -216,7 +217,7 @@ const char* InternalPerturbation::typeName()
     return "SireMM::InternalPerturbation";
 }
 
-/** Return the base expression - this is the expression into which 
+/** Return the base expression - this is the expression into which
     the mapped identites are substituted */
 const Expression& InternalPerturbation::baseExpression() const
 {
@@ -230,14 +231,14 @@ const Expression& InternalPerturbation::perturbExpression() const
     return perturb_expression;
 }
 
-/** Return the initial forms - these are the identities that 
+/** Return the initial forms - these are the identities that
     are substituted into the base expression at the initial state */
 const Identities& InternalPerturbation::initialForms() const
 {
     return initial_forms;
 }
 
-/** Return the final forms - these are the identities that 
+/** Return the final forms - these are the identities that
     are substituted into the base expression at the final state */
 const Identities& InternalPerturbation::finalForms() const
 {
@@ -247,9 +248,9 @@ const Identities& InternalPerturbation::finalForms() const
 PerturbationPtr InternalPerturbation::recreate(const Expression &expression) const
 {
     PerturbationPtr ret = Perturbation::recreate(expression);
-    
+
     ret.edit().asA<InternalPerturbation>().buildPerturbExpression();
-    
+
     return ret;
 }
 
@@ -257,18 +258,18 @@ PerturbationPtr InternalPerturbation::recreate(const Expression &expression,
                                                const PropertyMap &map) const
 {
     PerturbationPtr ret = Perturbation::recreate(expression, map);
-    
+
     ret.edit().asA<InternalPerturbation>().buildPerturbExpression();
-    
+
     return ret;
 }
 
 PerturbationPtr InternalPerturbation::substitute(const Identities &identities) const
 {
     PerturbationPtr ret = Perturbation::substitute(identities);
-    
+
     ret.edit().asA<InternalPerturbation>().buildPerturbExpression();
-    
+
     return ret;
 }
 
@@ -278,16 +279,16 @@ PerturbationPtr InternalPerturbation::substitute(const Identities &identities) c
 
 static const RegisterMetaType<TwoAtomPerturbation> r_twoatom;
 
-QDataStream &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds,
                                       const TwoAtomPerturbation &twoatom)
 {
     writeHeader(ds, r_twoatom, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << twoatom.atm0 << twoatom.atm1
         << static_cast<const InternalPerturbation&>(twoatom);
-        
+
     return ds;
 }
 
@@ -295,11 +296,11 @@ QDataStream &operator>>(QDataStream &ds,
                                       TwoAtomPerturbation &twoatom)
 {
     VersionID v = readHeader(ds, r_twoatom);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> twoatom.atm0 >> twoatom.atm1
             >> static_cast<InternalPerturbation&>(twoatom);
     }
@@ -315,7 +316,7 @@ TwoAtomPerturbation::TwoAtomPerturbation()
 {}
 
 /** Construct to perturb the function between the atoms 'atom0' and 'atom1'
-    to use 'initial_form' at the initial state and 'final_form' at the 
+    to use 'initial_form' at the initial state and 'final_form' at the
     final state, where the functions are mapped between these two states
     using the default mapping function */
 TwoAtomPerturbation::TwoAtomPerturbation(const AtomID &atom0, const AtomID &atom1,
@@ -330,7 +331,7 @@ TwoAtomPerturbation::TwoAtomPerturbation(const AtomID &atom0, const AtomID &atom
 {}
 
 /** Construct to perturb the function between the atoms 'atom0' and 'atom1'
-    to use 'initial_form' at the initial state and 'final_form' at the 
+    to use 'initial_form' at the initial state and 'final_form' at the
     final state, where the functions are mapped between these two states
     using 'mapping_function' */
 TwoAtomPerturbation::TwoAtomPerturbation(const AtomID &atom0, const AtomID &atom1,
@@ -382,7 +383,7 @@ TwoAtomPerturbation::TwoAtomPerturbation(const AtomID &atom0, const AtomID &atom
                                                                   map),
        atm0(atom0), atm1(atom1)
 {}
-                    
+
 /** Copy constructor */
 TwoAtomPerturbation::TwoAtomPerturbation(const TwoAtomPerturbation &other)
                     : ConcreteProperty<TwoAtomPerturbation,InternalPerturbation>(other),
@@ -402,7 +403,7 @@ TwoAtomPerturbation& TwoAtomPerturbation::operator=(const TwoAtomPerturbation &o
         atm1 = other.atm1;
         InternalPerturbation::operator=(other);
     }
-    
+
     return *this;
 }
 
@@ -449,56 +450,56 @@ QString TwoAtomPerturbation::toString() const
 QSet<QString> TwoAtomPerturbation::requiredProperties() const
 {
     QSet<QString> props;
-    
+
     const PropertyName &param_property = propertyMap()["parameters"];
-    
+
     if (param_property.hasSource())
         props.insert(param_property.source());
-        
+
     return props;
 }
 
 /** Return whether or not this perturbation with the passed values would
     change the molecule 'molecule' */
-bool TwoAtomPerturbation::wouldChange(const Molecule &molecule, 
+bool TwoAtomPerturbation::wouldChange(const Molecule &molecule,
                                       const Values &values) const
 {
     const PropertyName &param_property = propertyMap()["parameters"];
-    
+
     if (not molecule.hasProperty(param_property))
         return true;
-        
+
     const TwoAtomFunctions &funcs = molecule.property(param_property)
                                             .asA<TwoAtomFunctions>();
-                                      
+
     Identities idents;
-    
+
     foreach (Symbol symbol, values.symbols())
     {
         idents.set(symbol, Expression(values[symbol]));
     }
-                                            
+
     Expression new_function = perturbExpression().substitute(idents);
-    
+
     return new_function != funcs.potential(atm0, atm1);
 }
 
 /** Perturb the two atom function in passed molecule using the reaction
-    coordinate(s) in 'values' 
-    
+    coordinate(s) in 'values'
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
 */
-void TwoAtomPerturbation::perturbMolecule(MolEditor &molecule, 
+void TwoAtomPerturbation::perturbMolecule(MolEditor &molecule,
                                           const Values &values) const
 {
     const PropertyName &param_property = propertyMap()["parameters"];
-    
+
     TwoAtomFunctions funcs;
-    
+
     bool new_property = false;
-    
+
     if (molecule.hasProperty(param_property))
     {
         funcs = molecule.property(param_property).asA<TwoAtomFunctions>();
@@ -508,17 +509,17 @@ void TwoAtomPerturbation::perturbMolecule(MolEditor &molecule,
         funcs = TwoAtomFunctions(molecule.data());
         new_property = true;
     }
-    
+
     //calculate the perturbed function
     Identities idents;
-    
+
     foreach (Symbol symbol, values.symbols())
     {
         idents.set(symbol, Expression(values[symbol]));
     }
 
     Expression new_function = perturbExpression().substitute(idents);
-    
+
     Expression old_function = funcs.potential(atm0, atm1);
 
     if (new_property or (new_function != old_function))
@@ -535,16 +536,16 @@ void TwoAtomPerturbation::perturbMolecule(MolEditor &molecule,
 
 static const RegisterMetaType<ThreeAtomPerturbation> r_threeatom;
 
-QDataStream &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds,
                                       const ThreeAtomPerturbation &threeatom)
 {
     writeHeader(ds, r_threeatom, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << threeatom.atm0 << threeatom.atm1 << threeatom.atm2
         << static_cast<const InternalPerturbation&>(threeatom);
-        
+
     return ds;
 }
 
@@ -552,11 +553,11 @@ QDataStream &operator>>(QDataStream &ds,
                                       ThreeAtomPerturbation &threeatom)
 {
     VersionID v = readHeader(ds, r_threeatom);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> threeatom.atm0 >> threeatom.atm1 >> threeatom.atm2
             >> static_cast<InternalPerturbation&>(threeatom);
     }
@@ -572,7 +573,7 @@ ThreeAtomPerturbation::ThreeAtomPerturbation()
 {}
 
 /** Construct to perturb the function between the atoms 'atom0', 'atom1' and 'atom2'
-    to use 'initial_form' at the initial state and 'final_form' at the 
+    to use 'initial_form' at the initial state and 'final_form' at the
     final state, where the functions are mapped between these two states
     using the default mapping function */
 ThreeAtomPerturbation::ThreeAtomPerturbation(const AtomID &atom0, const AtomID &atom1,
@@ -588,7 +589,7 @@ ThreeAtomPerturbation::ThreeAtomPerturbation(const AtomID &atom0, const AtomID &
 {}
 
 /** Construct to perturb the function between the atoms 'atom0', 'atom1' and 'atom2'
-    to use 'initial_form' at the initial state and 'final_form' at the 
+    to use 'initial_form' at the initial state and 'final_form' at the
     final state, where the functions are mapped between these two states
     using 'mapping_function' */
 ThreeAtomPerturbation::ThreeAtomPerturbation(const AtomID &atom0, const AtomID &atom1,
@@ -642,7 +643,7 @@ ThreeAtomPerturbation::ThreeAtomPerturbation(const AtomID &atom0, const AtomID &
                                                                     map),
        atm0(atom0), atm1(atom1), atm2(atom2)
 {}
-                    
+
 /** Copy constructor */
 ThreeAtomPerturbation::ThreeAtomPerturbation(const ThreeAtomPerturbation &other)
              : ConcreteProperty<ThreeAtomPerturbation,InternalPerturbation>(other),
@@ -663,7 +664,7 @@ ThreeAtomPerturbation& ThreeAtomPerturbation::operator=(const ThreeAtomPerturbat
         atm2 = other.atm2;
         InternalPerturbation::operator=(other);
     }
-    
+
     return *this;
 }
 
@@ -672,7 +673,7 @@ bool ThreeAtomPerturbation::operator==(const ThreeAtomPerturbation &other) const
 {
     return ( (atm0 == other.atm0 and atm2 == other.atm2) or
              (atm0 == other.atm2 and atm2 == other.atm0) ) and
-             atm1 == other.atm1 and 
+             atm1 == other.atm1 and
            InternalPerturbation::operator==(other);
 }
 
@@ -717,56 +718,56 @@ QString ThreeAtomPerturbation::toString() const
 QSet<QString> ThreeAtomPerturbation::requiredProperties() const
 {
     QSet<QString> props;
-    
+
     const PropertyName &param_property = propertyMap()["parameters"];
-    
+
     if (param_property.hasSource())
         props.insert(param_property.source());
-        
+
     return props;
 }
 
 /** Return whether or not this perturbation with the passed values would
     change the molecule 'molecule' */
-bool ThreeAtomPerturbation::wouldChange(const Molecule &molecule, 
+bool ThreeAtomPerturbation::wouldChange(const Molecule &molecule,
                                         const Values &values) const
 {
     const PropertyName &param_property = propertyMap()["parameters"];
-    
+
     if (not molecule.hasProperty(param_property))
         return true;
-        
+
     const ThreeAtomFunctions &funcs = molecule.property(param_property)
                                               .asA<ThreeAtomFunctions>();
-                                      
+
     Identities idents;
-    
+
     foreach (Symbol symbol, values.symbols())
     {
         idents.set(symbol, Expression(values[symbol]));
     }
-                                            
+
     Expression new_function = perturbExpression().substitute(idents);
-    
+
     return new_function != funcs.potential(atm0, atm1, atm2);
 }
 
 /** Perturb the three atom function in passed molecule using the reaction
-    coordinate(s) in 'values' 
-    
+    coordinate(s) in 'values'
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
 */
-void ThreeAtomPerturbation::perturbMolecule(MolEditor &molecule, 
+void ThreeAtomPerturbation::perturbMolecule(MolEditor &molecule,
                                             const Values &values) const
 {
     const PropertyName &param_property = propertyMap()["parameters"];
-    
+
     ThreeAtomFunctions funcs;
-    
+
     bool new_property = false;
-    
+
     if (molecule.hasProperty(param_property))
     {
         funcs = molecule.property(param_property).asA<ThreeAtomFunctions>();
@@ -776,17 +777,17 @@ void ThreeAtomPerturbation::perturbMolecule(MolEditor &molecule,
         funcs = ThreeAtomFunctions(molecule.data());
         new_property = true;
     }
-    
+
     //calculate the perturbed function
     Identities idents;
-    
+
     foreach (Symbol symbol, values.symbols())
     {
         idents.set(symbol, Expression(values[symbol]));
     }
 
     Expression new_function = perturbExpression().substitute(idents);
-    
+
     Expression old_function = funcs.potential(atm0, atm1, atm2);
 
     if (new_property or (new_function != old_function))
@@ -803,16 +804,16 @@ void ThreeAtomPerturbation::perturbMolecule(MolEditor &molecule,
 
 static const RegisterMetaType<FourAtomPerturbation> r_fouratom;
 
-QDataStream &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds,
                                       const FourAtomPerturbation &fouratom)
 {
     writeHeader(ds, r_fouratom, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << fouratom.atm0 << fouratom.atm1 << fouratom.atm2 << fouratom.atm3
         << static_cast<const InternalPerturbation&>(fouratom);
-        
+
     return ds;
 }
 
@@ -820,11 +821,11 @@ QDataStream &operator>>(QDataStream &ds,
                                       FourAtomPerturbation &fouratom)
 {
     VersionID v = readHeader(ds, r_fouratom);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> fouratom.atm0 >> fouratom.atm1 >> fouratom.atm2 >> fouratom.atm3
             >> static_cast<InternalPerturbation&>(fouratom);
     }
@@ -840,7 +841,7 @@ FourAtomPerturbation::FourAtomPerturbation()
 {}
 
 /** Construct to perturb the function between the atoms
-    to use 'initial_form' at the initial state and 'final_form' at the 
+    to use 'initial_form' at the initial state and 'final_form' at the
     final state, where the functions are mapped between these two states
     using the default mapping function */
 FourAtomPerturbation::FourAtomPerturbation(const AtomID &atom0, const AtomID &atom1,
@@ -856,7 +857,7 @@ FourAtomPerturbation::FourAtomPerturbation(const AtomID &atom0, const AtomID &at
 {}
 
 /** Construct to perturb the function between the atoms
-    to use 'initial_form' at the initial state and 'final_form' at the 
+    to use 'initial_form' at the initial state and 'final_form' at the
     final state, where the functions are mapped between these two states
     using 'mapping_function' */
 FourAtomPerturbation::FourAtomPerturbation(const AtomID &atom0, const AtomID &atom1,
@@ -910,7 +911,7 @@ FourAtomPerturbation::FourAtomPerturbation(const AtomID &atom0, const AtomID &at
                                                                    map),
        atm0(atom0), atm1(atom1), atm2(atom2), atm3(atom3)
 {}
-                    
+
 /** Copy constructor */
 FourAtomPerturbation::FourAtomPerturbation(const FourAtomPerturbation &other)
              : ConcreteProperty<FourAtomPerturbation,InternalPerturbation>(other),
@@ -932,7 +933,7 @@ FourAtomPerturbation& FourAtomPerturbation::operator=(const FourAtomPerturbation
         atm3 = other.atm3;
         InternalPerturbation::operator=(other);
     }
-    
+
     return *this;
 }
 
@@ -993,58 +994,58 @@ QString FourAtomPerturbation::toString() const
 QSet<QString> FourAtomPerturbation::requiredProperties() const
 {
     QSet<QString> props;
-    
+
     const PropertyName &param_property = propertyMap()["parameters"];
-    
+
     if (param_property.hasSource())
         props.insert(param_property.source());
-        
+
     return props;
 }
 
 /** Return whether or not this perturbation with the passed values would
     change the molecule 'molecule' */
-bool FourAtomPerturbation::wouldChange(const Molecule &molecule, 
+bool FourAtomPerturbation::wouldChange(const Molecule &molecule,
                                        const Values &values) const
 {
     const PropertyName &param_property = propertyMap()["parameters"];
-    
+
     if (not molecule.hasProperty(param_property))
         return true;
-        
+
     const FourAtomFunctions &funcs = molecule.property(param_property)
                                              .asA<FourAtomFunctions>();
-                                      
+
     Identities idents;
-    
+
     foreach (Symbol symbol, values.symbols())
     {
         idents.set(symbol, Expression(values[symbol]));
     }
-                                            
+
     Expression new_function = perturbExpression().substitute(idents);
-    
+
     // Use DihedralID as this looks up both atm0-atm1-atm2-atm3
     //                                  and atm3-atm2-atm1-atm0
     return new_function != funcs.potential( DihedralID(atm0, atm1, atm2, atm3) );
 }
 
 /** Perturb the four atom function in passed molecule using the reaction
-    coordinate(s) in 'values' 
-    
+    coordinate(s) in 'values'
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
 */
-void FourAtomPerturbation::perturbMolecule(MolEditor &molecule, 
+void FourAtomPerturbation::perturbMolecule(MolEditor &molecule,
                                            const Values &values) const
 {
     const PropertyName &param_property = propertyMap()["parameters"];
-    
+
     FourAtomFunctions funcs;
-    
+
     bool new_property = false;
-    
+
     if (molecule.hasProperty(param_property))
     {
         funcs = molecule.property(param_property).asA<FourAtomFunctions>();
@@ -1054,18 +1055,18 @@ void FourAtomPerturbation::perturbMolecule(MolEditor &molecule,
         funcs = FourAtomFunctions(molecule.data());
         new_property = true;
     }
-    
+
     //calculate the perturbed function
     Identities idents;
-    
+
     foreach (Symbol symbol, values.symbols())
     {
         idents.set(symbol, Expression(values[symbol]));
     }
 
     Expression new_function = perturbExpression().substitute(idents);
-    
-    // Use DihedralID as this looks up both atm0-atm1-atm2-atm3 and 
+
+    // Use DihedralID as this looks up both atm0-atm1-atm2-atm3 and
     //                                      atm3-atm2-atm1-atm0
     Expression old_function = funcs.potential( DihedralID(atm0, atm1, atm2, atm3) );
 
