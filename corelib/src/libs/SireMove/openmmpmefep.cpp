@@ -630,6 +630,7 @@ void OpenMMPMEFEP::initialise()
         qDebug() << "OpenMM Version:" << QString::fromUtf8(version.data(),
                  version.size());
         qDebug() << "fullPME =" << fullPME;
+	qDebug() << "useOffset =" << useOffset;
     }
 
     // Create a workspace using the stored molgroup
