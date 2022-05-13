@@ -18,6 +18,8 @@ namespace bp = boost::python;
 
 #include "SireUnits/units.h"
 
+#include "core.h"
+
 #include "geometryperturbation.h"
 
 #include "molecule.h"

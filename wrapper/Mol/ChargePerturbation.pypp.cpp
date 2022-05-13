@@ -21,6 +21,8 @@ namespace bp = boost::python;
 
 #include "mover.hpp"
 
+#include "selector.hpp"
+
 #include "chargeperturbation.h"
 
 SireMol::ChargePerturbation __copy__(const SireMol::ChargePerturbation &other){ return SireMol::ChargePerturbation(other); }

@@ -16,6 +16,8 @@ namespace bp = boost::python;
 
 #include "SireMol/connectivity.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/dihedralid.h"
 
 #include "SireMol/molecule.h"

@@ -13,13 +13,25 @@ namespace bp = boost::python;
 
 #include "SireStream/shareddatastream.h"
 
+#include "atom.h"
+
 #include "bead.h"
 
 #include "beadeditor.h"
 
 #include "beads.h"
 
+#include "chain.h"
+
+#include "cutgroup.h"
+
 #include "mover.hpp"
+
+#include "residue.h"
+
+#include "segment.h"
+
+#include "selector.hpp"
 
 #include "tostring.h"
 

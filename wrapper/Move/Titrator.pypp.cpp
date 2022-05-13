@@ -17,6 +17,8 @@ namespace bp = boost::python;
 
 #include "SireMol/atomcharges.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/editor.hpp"
 
 #include "SireMol/evaluator.h"

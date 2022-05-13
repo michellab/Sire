@@ -955,6 +955,18 @@ void register_MoleculeView_class(){
                 , "" );
         
         }
+        { //::SireMol::MoleculeView::operator[]
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::MoleculeView::operator[] );
+            
+            MoleculeView_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
         { //::SireMol::MoleculeView::propertyKeys
         
             typedef ::QStringList ( ::SireMol::MoleculeView::*propertyKeys_function_type)(  ) const;

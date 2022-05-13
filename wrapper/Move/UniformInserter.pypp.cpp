@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/quaternion.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/molecule.h"
 
 #include "SireMol/partialmolecule.h"

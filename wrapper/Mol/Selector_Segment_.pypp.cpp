@@ -496,6 +496,19 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::operator()
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Segment ( ::SireMol::Selector< SireMol::Segment >::*__call___function_type)( ::SireID::Index const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Segment >::operator() );
+            
+            Selector_Segment__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("idx") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Segment >::operator()
+        
+            typedef SireMol::Selector< SireMol::Segment > exported_class_t;
             typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Segment >::operator() );
             
@@ -503,6 +516,97 @@ void register_Selector_Segment__class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Segment >::operator()
+        
+            typedef SireMol::Selector< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*__call___function_type)( ::SireBase::Slice const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Segment >::operator() );
+            
+            Selector_Segment__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("slice") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Segment >::operator()
+        
+            typedef SireMol::Selector< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*__call___function_type)( ::QList< long long > const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Segment >::operator() );
+            
+            Selector_Segment__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Segment >::operator()
+        
+            typedef SireMol::Selector< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Segment >::*__call___function_type)( ::SireMol::AtomID const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Segment >::operator() );
+            
+            Selector_Segment__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("atomid") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Segment >::operator()
+        
+            typedef SireMol::Selector< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Selector< SireMol::Segment >::*__call___function_type)( ::SireMol::ResID const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Segment >::operator() );
+            
+            Selector_Segment__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("resid") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Segment >::operator()
+        
+            typedef SireMol::Selector< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::Segment >::*__call___function_type)( ::SireMol::CGID const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Segment >::operator() );
+            
+            Selector_Segment__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("cgid") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Segment >::operator()
+        
+            typedef SireMol::Selector< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Segment >::*__call___function_type)( ::SireMol::ChainID const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Segment >::operator() );
+            
+            Selector_Segment__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("chainid") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Segment >::operator()
+        
+            typedef SireMol::Selector< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*__call___function_type)( ::SireMol::SegID const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Segment >::operator() );
+            
+            Selector_Segment__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("segid") )
                 , "" );
         
         }
@@ -577,6 +681,19 @@ void register_Selector_Segment__class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("slice") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Segment >::operator[]
+        
+            typedef SireMol::Selector< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Segment >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Segment >::operator[] );
+            
+            Selector_Segment__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
                 , "" );
         
         }

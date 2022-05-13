@@ -928,6 +928,18 @@ void register_MoleculeInfo_class(){
                 , "Return whether or not atom-based cutting is used for the entire\nmolecule (meaning that there is exactly one cutgroup per atom). This\nis highly unusual, except for single-atom molecules" );
         
         }
+        { //::SireMol::MoleculeInfo::isEmpty
+        
+            typedef bool ( ::SireMol::MoleculeInfo::*isEmpty_function_type)(  ) const;
+            isEmpty_function_type isEmpty_function_value( &::SireMol::MoleculeInfo::isEmpty );
+            
+            MoleculeInfo_exposer.def( 
+                "isEmpty"
+                , isEmpty_function_value
+                , bp::release_gil_policy()
+                , "Return whether or not this is empty (contains no atoms)" );
+        
+        }
         { //::SireMol::MoleculeInfo::isMoleculeCutting
         
             typedef bool ( ::SireMol::MoleculeInfo::*isMoleculeCutting_function_type)(  ) const;

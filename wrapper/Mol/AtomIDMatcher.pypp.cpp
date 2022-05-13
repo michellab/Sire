@@ -37,6 +37,8 @@ namespace bp = boost::python;
 
 #include "mover.h"
 
+#include "mover.hpp"
+
 #include "selector.hpp"
 
 #include "tostring.h"

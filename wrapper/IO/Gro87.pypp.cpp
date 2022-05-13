@@ -27,6 +27,8 @@ namespace bp = boost::python;
 
 #include "SireMol/atomvelocities.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/errors.h"
 
 #include "SireMol/mgname.h"

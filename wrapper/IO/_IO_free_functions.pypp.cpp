@@ -17,35 +17,7 @@ namespace bp = boost::python;
 
 #include "SireMol/connectivity.h"
 
-#include "SireMol/mgname.h"
-
-#include "SireMol/moleditor.h"
-
-#include "SireMol/molidx.h"
-
-#include "SireSystem/system.h"
-
-#include "SireUnits/units.h"
-
-#include "SireVol/periodicbox.h"
-
-#include "SireVol/triclinicbox.h"
-
-#include "biosimspace.h"
-
-#include "moleculeparser.h"
-
-#include "biosimspace.h"
-
-#include "SireBase/getinstalldir.h"
-
-#include "SireError/errors.h"
-
-#include "SireMol/atomelements.h"
-
-#include "SireMol/atommasses.h"
-
-#include "SireMol/connectivity.h"
+#include "SireMol/core.h"
 
 #include "SireMol/mgname.h"
 
@@ -77,35 +49,7 @@ namespace bp = boost::python;
 
 #include "SireMol/connectivity.h"
 
-#include "SireMol/mgname.h"
-
-#include "SireMol/moleditor.h"
-
-#include "SireMol/molidx.h"
-
-#include "SireSystem/system.h"
-
-#include "SireUnits/units.h"
-
-#include "SireVol/periodicbox.h"
-
-#include "SireVol/triclinicbox.h"
-
-#include "biosimspace.h"
-
-#include "moleculeparser.h"
-
-#include "biosimspace.h"
-
-#include "SireBase/getinstalldir.h"
-
-#include "SireError/errors.h"
-
-#include "SireMol/atomelements.h"
-
-#include "SireMol/atommasses.h"
-
-#include "SireMol/connectivity.h"
+#include "SireMol/core.h"
 
 #include "SireMol/mgname.h"
 
@@ -137,35 +81,7 @@ namespace bp = boost::python;
 
 #include "SireMol/connectivity.h"
 
-#include "SireMol/mgname.h"
-
-#include "SireMol/moleditor.h"
-
-#include "SireMol/molidx.h"
-
-#include "SireSystem/system.h"
-
-#include "SireUnits/units.h"
-
-#include "SireVol/periodicbox.h"
-
-#include "SireVol/triclinicbox.h"
-
-#include "biosimspace.h"
-
-#include "moleculeparser.h"
-
-#include "biosimspace.h"
-
-#include "SireBase/getinstalldir.h"
-
-#include "SireError/errors.h"
-
-#include "SireMol/atomelements.h"
-
-#include "SireMol/atommasses.h"
-
-#include "SireMol/connectivity.h"
+#include "SireMol/core.h"
 
 #include "SireMol/mgname.h"
 
@@ -197,35 +113,7 @@ namespace bp = boost::python;
 
 #include "SireMol/connectivity.h"
 
-#include "SireMol/mgname.h"
-
-#include "SireMol/moleditor.h"
-
-#include "SireMol/molidx.h"
-
-#include "SireSystem/system.h"
-
-#include "SireUnits/units.h"
-
-#include "SireVol/periodicbox.h"
-
-#include "SireVol/triclinicbox.h"
-
-#include "biosimspace.h"
-
-#include "moleculeparser.h"
-
-#include "biosimspace.h"
-
-#include "SireBase/getinstalldir.h"
-
-#include "SireError/errors.h"
-
-#include "SireMol/atomelements.h"
-
-#include "SireMol/atommasses.h"
-
-#include "SireMol/connectivity.h"
+#include "SireMol/core.h"
 
 #include "SireMol/mgname.h"
 
@@ -257,35 +145,7 @@ namespace bp = boost::python;
 
 #include "SireMol/connectivity.h"
 
-#include "SireMol/mgname.h"
-
-#include "SireMol/moleditor.h"
-
-#include "SireMol/molidx.h"
-
-#include "SireSystem/system.h"
-
-#include "SireUnits/units.h"
-
-#include "SireVol/periodicbox.h"
-
-#include "SireVol/triclinicbox.h"
-
-#include "biosimspace.h"
-
-#include "moleculeparser.h"
-
-#include "biosimspace.h"
-
-#include "SireBase/getinstalldir.h"
-
-#include "SireError/errors.h"
-
-#include "SireMol/atomelements.h"
-
-#include "SireMol/atommasses.h"
-
-#include "SireMol/connectivity.h"
+#include "SireMol/core.h"
 
 #include "SireMol/mgname.h"
 
@@ -317,6 +177,8 @@ namespace bp = boost::python;
 
 #include "SireMol/connectivity.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/mgname.h"
 
 #include "SireMol/moleditor.h"
@@ -346,6 +208,168 @@ namespace bp = boost::python;
 #include "SireMol/atommasses.h"
 
 #include "SireMol/connectivity.h"
+
+#include "SireMol/core.h"
+
+#include "SireMol/mgname.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
+
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
+#include "moleculeparser.h"
+
+#include "biosimspace.h"
+
+#include "SireBase/getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/core.h"
+
+#include "SireMol/mgname.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
+
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
+#include "moleculeparser.h"
+
+#include "biosimspace.h"
+
+#include "SireBase/getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/core.h"
+
+#include "SireMol/mgname.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
+
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
+#include "moleculeparser.h"
+
+#include "biosimspace.h"
+
+#include "SireBase/getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/core.h"
+
+#include "SireMol/mgname.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
+
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
+#include "moleculeparser.h"
+
+#include "biosimspace.h"
+
+#include "SireBase/getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/core.h"
+
+#include "SireMol/mgname.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
+
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
+#include "moleculeparser.h"
+
+#include "biosimspace.h"
+
+#include "SireBase/getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/core.h"
 
 #include "SireMol/mgname.h"
 

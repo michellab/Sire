@@ -13,6 +13,8 @@ namespace bp = boost::python;
 
 #include "atomselection.h"
 
+#include "core.h"
+
 #include "editor.hpp"
 
 #include "evaluator.h"

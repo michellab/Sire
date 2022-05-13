@@ -15,6 +15,8 @@ namespace bp = boost::python;
 
 #include "SireStream/shareddatastream.h"
 
+#include "core.h"
+
 #include "geometryperturbation.h"
 
 #include "molecule.h"

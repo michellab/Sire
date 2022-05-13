@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireMol/core.h"
+
 #include "SireMol/moleculegroup.h"
 
 #include "SireMol/molecules.h"

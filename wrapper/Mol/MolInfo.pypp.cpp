@@ -566,6 +566,66 @@ void register_MolInfo_class(){
                 , "" );
         
         }
+        { //::SireMol::MolInfo::nAtoms
+        
+            typedef int ( ::SireMol::MolInfo::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireMol::MolInfo::nAtoms );
+            
+            MolInfo_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MolInfo::nChains
+        
+            typedef int ( ::SireMol::MolInfo::*nChains_function_type)(  ) const;
+            nChains_function_type nChains_function_value( &::SireMol::MolInfo::nChains );
+            
+            MolInfo_exposer.def( 
+                "nChains"
+                , nChains_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MolInfo::nCutGroups
+        
+            typedef int ( ::SireMol::MolInfo::*nCutGroups_function_type)(  ) const;
+            nCutGroups_function_type nCutGroups_function_value( &::SireMol::MolInfo::nCutGroups );
+            
+            MolInfo_exposer.def( 
+                "nCutGroups"
+                , nCutGroups_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MolInfo::nResidues
+        
+            typedef int ( ::SireMol::MolInfo::*nResidues_function_type)(  ) const;
+            nResidues_function_type nResidues_function_value( &::SireMol::MolInfo::nResidues );
+            
+            MolInfo_exposer.def( 
+                "nResidues"
+                , nResidues_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MolInfo::nSegments
+        
+            typedef int ( ::SireMol::MolInfo::*nSegments_function_type)(  ) const;
+            nSegments_function_type nSegments_function_value( &::SireMol::MolInfo::nSegments );
+            
+            MolInfo_exposer.def( 
+                "nSegments"
+                , nSegments_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::MolInfo::parentChain
         
             typedef ::SireMol::ChainIdx ( ::SireMol::MolInfo::*parentChain_function_type)( ::SireMol::ResIdx ) const;

@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "SireMol/atomelements.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/molecule.h"
 
 #include "SireMol/moleditor.h"

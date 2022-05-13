@@ -110,6 +110,7 @@
 #include "supramoves.h"
 #include "SireError/errors.h"
 #include "SireMaths/rangenerator.h"
+#include "SireMol/core.h"
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 #include "SireSystem/system.h"
@@ -120,6 +121,7 @@
 #include <QMutex>
 #include "move.h"
 #include "SireMaths/quaternion.h"
+#include "SireMol/core.h"
 #include "SireMol/molecule.h"
 #include "SireMol/partialmolecule.h"
 #include "SireStream/datastream.h"

@@ -51,6 +51,8 @@ namespace bp = boost::python;
 
 #include "connectivity.h"
 
+#include "core.h"
+
 #include "dihedralid.h"
 
 #include "editor.hpp"

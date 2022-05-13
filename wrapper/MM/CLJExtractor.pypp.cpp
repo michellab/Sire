@@ -15,6 +15,8 @@ namespace bp = boost::python;
 
 #include "SireMol/atomcoords.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/editor.hpp"
 
 #include "SireMol/mover.hpp"

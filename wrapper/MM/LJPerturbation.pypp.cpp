@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireCAS/values.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/molecule.h"
 
 #include "SireMol/moleditor.h"

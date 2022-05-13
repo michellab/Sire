@@ -21,6 +21,8 @@ namespace bp = boost::python;
 
 #include "residuecutting.h"
 
+#include "selector.hpp"
+
 #include <QMutex>
 
 #include "cuttingfunction.h"

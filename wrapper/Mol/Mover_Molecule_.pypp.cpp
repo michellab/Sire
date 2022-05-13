@@ -15,6 +15,8 @@ namespace bp = boost::python;
 
 #include "chain.h"
 
+#include "core.h"
+
 #include "cutgroup.h"
 
 #include "evaluator.h"

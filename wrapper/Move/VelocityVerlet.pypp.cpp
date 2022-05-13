@@ -15,6 +15,8 @@ namespace bp = boost::python;
 
 #include "SireMol/atommasses.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/molecule.h"
 
 #include "SireMol/moleculegroup.h"
