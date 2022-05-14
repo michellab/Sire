@@ -273,11 +273,11 @@ SelectResult IDNameEngine::searchName(const SelectResult &mols,
     if (this->names.count() == 1 and this->regexps.isEmpty())
     {
         //this is a simple name match
-        const auto id = T::Name(this->names.at(i));
+        const auto id = typename T::Name(this->names.at(0));
 
         for (const auto &mol : mols)
         {
-            auto idxs = mol.data().info().mapNoThrow(id);
+            auto idxs = mol->data().info().mapNoThrow(id);
 
             if (not idxs.isEmpty())
             {
@@ -301,6 +301,8 @@ SelectResult IDNameEngine::searchName(const SelectResult &mols,
                 }
             }
         }
+
+        return SelectResult(matches);
     }
 
     for (const auto &mol : mols)
@@ -487,11 +489,90 @@ bool IDNumberEngine::match(const int idx) const
     return false;
 }
 
+bool _is_single_value(const RangeValues &vals)
+{
+    if (vals.size() == 1)
+    {
+        if (vals[0].which() == 0)
+        {
+            auto v = boost::get<RangeValue>(vals[0]);
+
+            if (v.start < v.end)
+            {
+                return v.end == v.start + 1;
+            }
+            else
+            {
+                return v.start == v.end + 1;
+            }
+        }
+    }
+
+    return false;
+}
+
+int _to_single_value(const RangeValues &vals)
+{
+    if (vals.size() == 1)
+    {
+        if (vals[0].which() == 0)
+        {
+            auto v = boost::get<RangeValue>(vals[0]);
+
+            if (v.start < v.end)
+            {
+                return v.start;
+            }
+            else if (v.end < v.start)
+            {
+                return v.end;
+            }
+        }
+    }
+
+    return 0;
+}
+
 template<class T>
 SelectResult IDNumberEngine::searchNum(const SelectResult &mols,
                                        bool uses_parallel) const
 {
     QList< Selector<T> > matches;
+
+    if (_is_single_value(this->vals))
+    {
+        //this is a simple name match
+        const auto id = typename T::Number(_to_single_value(this->vals));
+
+        for (const auto &mol : mols)
+        {
+            auto idxs = mol->data().info().mapNoThrow(id);
+
+            if (not idxs.isEmpty())
+            {
+                if (mol->selectedAll())
+                    matches.append(Selector<T>(mol->data(), idxs));
+                else
+                {
+                    // need to filter out all of the non-matching idxs
+                    auto s = mol->selection();
+
+                    QList<typename T::Index> selected_idxs;
+
+                    for (const auto &idx : idxs)
+                    {
+                        if (s.selected(idx))
+                            selected_idxs.append(idx);
+                    }
+
+                    if (not selected_idxs.isEmpty())
+                        matches.append(Selector<T>(mol->data(), selected_idxs));
+                }
+            }
+        }
+
+        return SelectResult(matches);
+    }
 
     for (const auto &mol : mols)
     {
@@ -713,6 +794,41 @@ SelectResult IDIndexEngine::searchIdx(const SelectResult &mols,
                                       bool uses_parallel) const
 {
     QList< Selector<T> > matches;
+
+    if (_is_single_value(this->vals))
+    {
+        //this is a simple name match
+        const auto id = typename T::Index(_to_single_value(this->vals));
+
+        for (const auto &mol : mols)
+        {
+            auto idxs = mol->data().info().mapNoThrow(id);
+
+            if (not idxs.isEmpty())
+            {
+                if (mol->selectedAll())
+                    matches.append(Selector<T>(mol->data(), idxs));
+                else
+                {
+                    // need to filter out all of the non-matching idxs
+                    auto s = mol->selection();
+
+                    QList<typename T::Index> selected_idxs;
+
+                    for (const auto &idx : idxs)
+                    {
+                        if (s.selected(idx))
+                            selected_idxs.append(idx);
+                    }
+
+                    if (not selected_idxs.isEmpty())
+                        matches.append(Selector<T>(mol->data(), selected_idxs));
+                }
+            }
+        }
+
+        return SelectResult(matches);
+    }
 
     for (const auto &mol : mols)
     {
