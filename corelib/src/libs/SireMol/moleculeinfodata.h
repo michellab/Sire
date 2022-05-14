@@ -333,6 +333,28 @@ public:
     int nCutGroups() const;
     int nSegments() const;
 
+    QList<AtomIdx> mapNoThrow(const AtomName &name) const;
+    QList<AtomIdx> mapNoThrow(const AtomNum &num) const;
+    QList<AtomIdx> mapNoThrow(const AtomIdx &idx) const;
+    QList<AtomIdx> mapNoThrow(const AtomID &atomid) const;
+
+    QList<ResIdx> mapNoThrow(const ResName &name) const;
+    QList<ResIdx> mapNoThrow(const ResNum &num) const;
+    QList<ResIdx> mapNoThrow(const ResIdx &idx) const;
+    QList<ResIdx> mapNoThrow(const ResID &resid) const;
+
+    QList<ChainIdx> mapNoThrow(const ChainName &name) const;
+    QList<ChainIdx> mapNoThrow(const ChainIdx &idx) const;
+    QList<ChainIdx> mapNoThrow(const ChainID &chainid) const;
+
+    QList<SegIdx> mapNoThrow(const SegName &name) const;
+    QList<SegIdx> mapNoThrow(const SegIdx &idx) const;
+    QList<SegIdx> mapNoThrow(const SegID &segid) const;
+
+    QList<CGIdx> mapNoThrow(const CGName &name) const;
+    QList<CGIdx> mapNoThrow(const CGIdx &idx) const;
+    QList<CGIdx> mapNoThrow(const CGID &cgid) const;
+
     QList<ResIdx> map(const ResName &name) const;
     QList<ResIdx> map(ResNum num) const;
     QList<ResIdx> map(ResIdx idx) const;

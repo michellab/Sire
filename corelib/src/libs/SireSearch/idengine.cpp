@@ -270,6 +270,39 @@ SelectResult IDNameEngine::searchName(const SelectResult &mols,
 {
     QList< Selector<T> > matches;
 
+    if (this->names.count() == 1 and this->regexps.isEmpty())
+    {
+        //this is a simple name match
+        const auto id = T::Name(this->names.at(i));
+
+        for (const auto &mol : mols)
+        {
+            auto idxs = mol.data().info().mapNoThrow(id);
+
+            if (not idxs.isEmpty())
+            {
+                if (mol->selectedAll())
+                    matches.append(Selector<T>(mol->data(), idxs));
+                else
+                {
+                    // need to filter out all of the non-matching idxs
+                    auto s = mol->selection();
+
+                    QList<typename T::Index> selected_idxs;
+
+                    for (const auto &idx : idxs)
+                    {
+                        if (s.selected(idx))
+                            selected_idxs.append(idx);
+                    }
+
+                    if (not selected_idxs.isEmpty())
+                        matches.append(Selector<T>(mol->data(), selected_idxs));
+                }
+            }
+        }
+    }
+
     for (const auto &mol : mols)
     {
         QList<qint64> idxs;
@@ -279,11 +312,11 @@ SelectResult IDNameEngine::searchName(const SelectResult &mols,
         if (views.nViews() == 0)
             continue;
 
-        const auto names = views.names();
+        const auto n = views.names();
 
-        for (qint64 i=0; i<names.count(); ++i)
+        for (qint64 i=0; i<n.count(); ++i)
         {
-            if (match(names[i]))
+            if (match(n[i]))
             {
                 idxs.append(i);
             }

@@ -854,6 +854,91 @@ int MoleculeInfo::nSegments() const
     return d->nSegments();
 }
 
+QList<AtomIdx> MoleculeInfo::mapNoThrow(const AtomName &name) const
+{
+    return d->mapNoThrow(name);
+}
+
+QList<AtomIdx> MoleculeInfo::mapNoThrow(const AtomNum &num) const
+{
+    return d->mapNoThrow(num);
+}
+
+QList<AtomIdx> MoleculeInfo::mapNoThrow(const AtomIdx &idx) const
+{
+    return d->mapNoThrow(idx);
+}
+
+QList<AtomIdx> MoleculeInfo::mapNoThrow(const AtomID &id) const
+{
+    return d->mapNoThrow(id);
+}
+
+QList<ResIdx> MoleculeInfo::mapNoThrow(const ResName &name) const
+{
+    return d->mapNoThrow(name);
+}
+
+QList<ResIdx> MoleculeInfo::mapNoThrow(const ResNum &num) const
+{
+    return d->mapNoThrow(num);
+}
+
+QList<ResIdx> MoleculeInfo::mapNoThrow(const ResIdx &idx) const
+{
+    return d->mapNoThrow(idx);
+}
+
+QList<ResIdx> MoleculeInfo::mapNoThrow(const ResID &id) const
+{
+    return d->mapNoThrow(id);
+}
+
+QList<ChainIdx> MoleculeInfo::mapNoThrow(const ChainName &name) const
+{
+    return d->mapNoThrow(name);
+}
+
+QList<ChainIdx> MoleculeInfo::mapNoThrow(const ChainIdx &idx) const
+{
+    return d->mapNoThrow(idx);
+}
+
+QList<ChainIdx> MoleculeInfo::mapNoThrow(const ChainID &id) const
+{
+    return d->mapNoThrow(id);
+}
+
+QList<SegIdx> MoleculeInfo::mapNoThrow(const SegName &name) const
+{
+    return d->mapNoThrow(name);
+}
+
+QList<SegIdx> MoleculeInfo::mapNoThrow(const SegIdx &idx) const
+{
+    return d->mapNoThrow(idx);
+}
+
+QList<SegIdx> MoleculeInfo::mapNoThrow(const SegID &id) const
+{
+    return d->mapNoThrow(id);
+}
+
+QList<CGIdx> MoleculeInfo::mapNoThrow(const CGName &name) const
+{
+    return d->mapNoThrow(name);
+}
+
+QList<CGIdx> MoleculeInfo::mapNoThrow(const CGIdx &idx) const
+{
+    return d->mapNoThrow(idx);
+}
+
+QList<CGIdx> MoleculeInfo::mapNoThrow(const CGID &id) const
+{
+    return d->mapNoThrow(id);
+}
+
 /** Return the indicies of the matching residue(s) */
 QList<ResIdx> MoleculeInfo::map(const ResName &name) const
 {
