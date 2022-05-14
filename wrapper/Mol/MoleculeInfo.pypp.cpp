@@ -1315,6 +1315,227 @@ void register_MoleculeInfo_class(){
                 , "Return the indicies of the matching atom(s)" );
         
         }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::AtomName const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("name") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::AtomNum const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("num") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::AtomIdx const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::AtomID const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::ResName const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("name") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::ResNum const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("num") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::ResIdx const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::ResID const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("resid") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::ChainName const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("name") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::ChainIdx const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::ChainID const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("chainid") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::SegIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::SegName const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("name") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::SegIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::SegIdx const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::SegIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::SegID const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("segid") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::CGIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::CGName const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("name") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::CGIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::CGIdx const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::CGIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::CGID const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("cgid") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::MoleculeInfo::nAtoms
         
             typedef int ( ::SireMol::MoleculeInfo::*nAtoms_function_type)(  ) const;
