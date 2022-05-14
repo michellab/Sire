@@ -6,7 +6,26 @@ import pytest
 def test_basic_indexing():
     mols = sr.load_test_files("ala.top", "ala.crd")
 
-    assert len(mols["atomname CH3"]) == 3
+    assert len(mols["atomname CH3"]) == 2
+    assert len(mols[sr.atomid("CH3")]) == 2
+
+    with pytest.raises(KeyError):
+        mols[sr.atomid("ch3")]
+
+    assert len(mols[sr.atomid("ch3", case_sensitive=False)]) == 2
+
+    with pytest.raises(KeyError):
+        mols["atomname ch3"]
+
+    assert len(mols["atomname /ch3/i"]) == 2
+    assert len(mols["atomname /CH*/"]) == 2
+
+    assert len(mols["atomidx 0"]) == mols.num_molecules()
+    assert len(mols["atomidx 0,1"]) == 2 * mols.num_molecules()
+    assert len(mols["atomidx 1:3"]) == 3 * mols.num_molecules()
+
+    assert len(mols["atomnum 1"]) == 1
+    assert len(mols["atomnum 1,2"]) == 2
 
 
 def test_complex_indexing():

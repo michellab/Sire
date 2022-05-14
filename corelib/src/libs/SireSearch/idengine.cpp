@@ -335,7 +335,7 @@ SelectResult IDNameEngine::searchName(const SelectResult &mols,
         {
             matches.append(views(idxs.at(0)));
         }
-        else
+        else if (not idxs.isEmpty())
         {
             matches.append(views(idxs));
         }
@@ -606,7 +606,7 @@ SelectResult IDNumberEngine::searchNum(const SelectResult &mols,
         {
             matches.append(views(idxs.at(0)));
         }
-        else
+        else if (not idxs.isEmpty())
         {
             matches.append(views(idxs));
         }
@@ -702,11 +702,9 @@ SelectEngine::ObjType IDNumberEngine::objectType() const
 static int map(int idx, int n)
 {
     if (idx >= 0)
-        return idx;
-    else if (idx < 0 and idx >= -n)
-        return n + idx;
+        return qMin(idx, n-1);
     else
-        return -1;
+        return n - qMin(abs(idx), n);
 }
 
 /** Internal function used to see if the passed integer matches any of the
@@ -723,13 +721,14 @@ bool IDIndexEngine::match(int idx, const int count) const
 
             int start = map(v.start,count);
             int end = map(v.end,count);
+            int step = abs(v.step);
 
             //only loop if the range is valid
             if (start < count and end < count and start >= 0 and end >= 0)
             {
                 if (start <= end)
                 {
-                    for (int i=start; i<=end; i+=v.step)
+                    for (int i=start; i<=end; i+=step)
                     {
                         if (i == idx)
                             return true;
@@ -737,7 +736,7 @@ bool IDIndexEngine::match(int idx, const int count) const
                 }
                 else
                 {
-                    for (int i=start; i>=end; i-=v.step)
+                    for (int i=start; i>=end; i-=step)
                     {
                         if (i == idx)
                             return true;
@@ -860,7 +859,7 @@ SelectResult IDIndexEngine::searchIdx(const SelectResult &mols,
         {
             matches.append(views(idxs.at(0)));
         }
-        else
+        else if (not idxs.isEmpty())
         {
             matches.append(views(idxs));
         }

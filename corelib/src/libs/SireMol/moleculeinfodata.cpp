@@ -3409,7 +3409,7 @@ QList<ResIdx> MoleculeInfoData::map(ResIdx idx) const
     auto idxs = this->mapNoThrow(idx);
 
     if (idxs.isEmpty())
-        throw SireMol::missing_residue( QObject::tr(
+        throw SireError::invalid_index( QObject::tr(
             "There is no residue with the index \"%1\" in the layout \"%2\".")
                 .arg(idx).arg(uid.toString()), CODELOC );
 
@@ -3460,7 +3460,7 @@ QList<ChainIdx> MoleculeInfoData::map(ChainIdx idx) const
     auto idxs = this->mapNoThrow(idx);
 
     if (idxs.isEmpty())
-        throw SireMol::missing_chain( QObject::tr(
+        throw SireError::invalid_index( QObject::tr(
             "There is no chain with the index \"%1\" in the layout \"%2\".")
                 .arg(idx).arg(uid.toString()), CODELOC );
 
@@ -3507,7 +3507,7 @@ QList<SegIdx> MoleculeInfoData::map(SegIdx idx) const
     auto idxs = this->mapNoThrow(idx);
 
     if (idxs.isEmpty())
-        throw SireMol::missing_segment( QObject::tr(
+        throw SireError::invalid_index(QObject::tr(
             "There is no segment with the index \"%1\" in the layout \"%2\".")
                 .arg(idx).arg(uid.toString()), CODELOC );
 
@@ -3554,7 +3554,7 @@ QList<CGIdx> MoleculeInfoData::map(CGIdx idx) const
     auto idxs = this->mapNoThrow(idx);
 
     if (idxs.isEmpty())
-        throw SireMol::missing_cutgroup( QObject::tr(
+        throw SireError::invalid_index( QObject::tr(
             "There is no CutGroup with the index \"%1\" in the layout \"%2\".")
                 .arg(idx).arg(uid.toString()), CODELOC );
 
@@ -3616,7 +3616,7 @@ QList<AtomIdx> MoleculeInfoData::map(AtomIdx idx) const
     auto atomidxs = this->mapNoThrow(idx);
 
     if (atomidxs.isEmpty())
-        throw SireMol::missing_atom( QObject::tr(
+        throw SireError::invalid_index( QObject::tr(
             "There is no atom with the index \"%1\" in the layout \"%2\".")
                 .arg(idx).arg(uid.toString()), CODELOC );
 

@@ -28,7 +28,8 @@ __all__ = [ "load", "save",
             "get_thumbs_up_info", "disable_thumbs_up" ]
 
 
-def molid(num: int = None, name: str = None, idx: int = None):
+def molid(num: int = None, name: str = None, idx: int = None,
+          case_sensitive: bool = True):
     """Construct an identifer for a Molecule from the passed
        name, number and index.
 
@@ -36,6 +37,7 @@ def molid(num: int = None, name: str = None, idx: int = None):
         name (str, optional): The molecule name. Defaults to None.
         num (int, optional): The molecule number. Defaults to None.
         idx (int, optional): The molecule index. Defaults to None.
+        case_sensitive (bool): Whether or not the name is case sensitive
 
     Returns:
         MolID : The returned molecule identifier
@@ -55,7 +57,14 @@ def molid(num: int = None, name: str = None, idx: int = None):
     from .mol import MolName, MolNum, MolIdx
 
     if name is not None:
-        ID = MolName(name)
+        if case_sensitive:
+            from .id import CaseSensitive
+            cs = CaseSensitive
+        else:
+            from .id import CaseInsensitive
+            cs = CaseInsensitive
+
+        ID = MolName(name, cs)
 
     if num is not None:
         if ID is None:
@@ -75,7 +84,8 @@ def molid(num: int = None, name: str = None, idx: int = None):
         return ID
 
 
-def atomid(num: int = None, name: str = None, idx: int = None):
+def atomid(num: int = None, name: str = None, idx: int = None,
+           case_sensitive=True):
     """Construct an identifer for an Atom from the passed
        name, number and index.
 
@@ -83,6 +93,7 @@ def atomid(num: int = None, name: str = None, idx: int = None):
         name (str, optional): The atom name. Defaults to None.
         num (int, optional): The atom number. Defaults to None.
         idx (int, optional): The atom index. Defaults to None.
+        case_sensitive (bool): Whether the name is case sensitive or not
 
     Returns:
         AtomID : The returned atom identifier
@@ -102,7 +113,14 @@ def atomid(num: int = None, name: str = None, idx: int = None):
     from .mol import AtomName, AtomNum, AtomIdx
 
     if name is not None:
-        ID = AtomName(name)
+        if case_sensitive:
+            from .id import CaseSensitive
+            cs = CaseSensitive
+        else:
+            from .id import CaseInsensitive
+            cs = CaseInsensitive
+
+        ID = AtomName(name, cs)
 
     if num is not None:
         if ID is None:
@@ -122,7 +140,8 @@ def atomid(num: int = None, name: str = None, idx: int = None):
         return ID
 
 
-def resid(num: int = None, name: str = None, idx: int = None):
+def resid(num: int = None, name: str = None, idx: int = None,
+          case_sensitive=True):
     """Construct an identifer for a Residue from the passed
        name, number and index.
 
@@ -130,6 +149,7 @@ def resid(num: int = None, name: str = None, idx: int = None):
         name (str, optional): The residue name. Defaults to None.
         number (int, optional): The residue number. Defaults to None.
         index (int, optional): The residue index. Defaults to None.
+        case_sensitive (bool): Whether or not the name is case sensitive
 
     Returns:
         ResID : The returned atom identifier
@@ -149,7 +169,14 @@ def resid(num: int = None, name: str = None, idx: int = None):
     from .mol import ResName, ResNum, ResIdx
 
     if name is not None:
-        ID = ResName(name)
+        if case_sensitive:
+            from .id import CaseSensitive
+            cs = CaseSensitive
+        else:
+            from .id import CaseInsensitive
+            cs = CaseInsensitive
+
+        ID = ResName(name, cs)
 
     if num is not None:
         if ID is None:
@@ -169,13 +196,15 @@ def resid(num: int = None, name: str = None, idx: int = None):
         return ID
 
 
-def chainid(idx: int = None, name: str = None):
+def chainid(idx: int = None, name: str = None,
+            case_sensitive:bool = True):
     """Construct an identifer for a Chain from the passed
        name and index.
 
     Args:
         name (str, optional): The chain name. Defaults to None.
         index (int, optional): The chain index. Defaults to None.
+        case_sensitive (bool): Whether or not the name is case sensitive
 
     Returns:
         ChainID : The returned chain identifier
@@ -195,7 +224,14 @@ def chainid(idx: int = None, name: str = None):
     from .mol import ChainName, ChainIdx
 
     if name is not None:
-        ID = ChainName(name)
+        if case_sensitive:
+            from .id import CaseSensitive
+            cs = CaseSensitive
+        else:
+            from .id import CaseInsensitive
+            cs = CaseInsensitive
+
+        ID = ChainName(name, cs)
 
     if idx is not None:
         if ID is None:
@@ -209,13 +245,15 @@ def chainid(idx: int = None, name: str = None):
         return ID
 
 
-def segid(idx: int = None, name: str = None):
+def segid(idx: int = None, name: str = None,
+          case_sensitive: bool = True):
     """Construct an identifer for a Segment from the passed
        name and index.
 
     Args:
         name (str, optional): The segment name. Defaults to None.
         index (int, optional): The segment index. Defaults to None.
+        case_sensitive (bool): Whether or not the name is case sensitive
 
     Returns:
         SegID : The returned chain identifier
@@ -235,7 +273,14 @@ def segid(idx: int = None, name: str = None):
     from .mol import SegName, SegIdx
 
     if name is not None:
-        ID = SegName(name)
+        if case_sensitive:
+            from .id import CaseSensitive
+            cs = CaseSensitive
+        else:
+            from .id import CaseInsensitive
+            cs = CaseInsensitive
+
+        ID = SegName(name, cs)
 
     if idx is not None:
         if ID is None:
@@ -249,7 +294,7 @@ def segid(idx: int = None, name: str = None):
         return ID
 
 
-def bondid(atom0, atom1):
+def bondid(atom0, atom1, case_sensitive: bool = True):
     """Construct an identifier for a Bond from the passed
        identifiers for the two atoms.
 
@@ -262,6 +307,7 @@ def bondid(atom0, atom1):
     Args:
         atom0 (int, str, AtomID): The identifier for the first atom.
         atom1 (int, str, AtomID): The identifier for the second atom.
+        case_sensitive: Whether or not the name is case sensitive
 
     Returns:
         BondID: The returned bond identifier
@@ -272,8 +318,15 @@ def bondid(atom0, atom1):
             from .mol import AtomIdx
             return AtomIdx(id)
         elif type(id) is str:
+            if case_sensitive:
+                from .id import CaseSensitive
+                cs = CaseSensitive
+            else:
+                from .id import CaseInsensitive
+                cs = CaseInsensitive
+
             from .mol import AtomName
-            return AtomName(id)
+            return AtomName(id, cs)
         else:
             from .mol import AtomID
 
