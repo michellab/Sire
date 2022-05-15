@@ -11,7 +11,10 @@ include_directories( ${BOOST_INCLUDE_DIR}
 # Other Sire libraries
 include_directories( ${CMAKE_SOURCE_DIR} )
 
-include_directories( BEFORE ${SIRE_INCLUDE_DIR} )
+include_directories( BEFORE ${SIRE_INCLUDE_DIR}/SireSearch
+                            ${SIRE_INCLUDE_DIR} )
+
+include(CMakeAutogenFile.txt)
 
 # Define the sources in SireSearch
 set ( WRAPSEARCH_SOURCES

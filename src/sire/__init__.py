@@ -378,6 +378,7 @@ if _can_lazy_import:
     mol = _lazy_import.lazy_module("sire.mol")
     move = _lazy_import.lazy_module("sire.move")
     qt = _lazy_import.lazy_module("sire.qt")
+    search = _lazy_import.lazy_module("sire.search")
     squire = _lazy_import.lazy_module("sire.squire")
     stream = _lazy_import.lazy_module("sire.stream")
     units = _lazy_import.lazy_module("sire.units")
