@@ -15,6 +15,7 @@ include_directories(${TBB_INCLUDE_DIR})
 
 # Define the headers in SireSearch
 set ( SIRESEARCH_HEADERS
+      approx_equal.h
       ast.h
       grammar.h
       idengine.h
@@ -26,6 +27,7 @@ set ( SIRESEARCH_SOURCES
 
       register_siresearch.cpp
 
+      approx_equal.cpp
       ast.cpp
       idengine.cpp
       parser.cpp

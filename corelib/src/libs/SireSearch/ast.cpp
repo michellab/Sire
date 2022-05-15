@@ -96,6 +96,8 @@ namespace AST
             return "<";
         case ID_CMP_LE:
             return "<=";
+        case ID_CMP_AE:
+            return "=~";
         case ID_CMP_EQ:
             return "==";
         case ID_CMP_NE:

@@ -126,9 +126,15 @@ AST::Node parse(const IteratorT & begin, const IteratorT & end)
         QString line = toString( LinePosIteratorT(begin), LinePosIteratorT(end) );
         QString left = toString( posIterBegin, posIterEnd );
 
-        throw SireMol::parse_error( QObject::tr("Failed to parse the selection '%1'. "
-          "Successfully parsed the beginning, but failed to parse '%2'")
-            .arg(line).arg(left), CODELOC );
+        if (line == left)
+            throw SireMol::parse_error( QObject::tr(
+                "Failed to parse any of the selection '%1'."
+            ).arg(line), CODELOC);
+        else
+            throw SireMol::parse_error( QObject::tr(
+              "Failed to parse the selection '%1'. "
+              "Successfully parsed the beginning, but failed to parse '%2'.")
+                .arg(line).arg(left), CODELOC );
     }
 
     return result;

@@ -22,10 +22,13 @@ def test_basic_indexing():
 
     assert len(mols["atomidx 0"]) == mols.num_molecules()
     assert len(mols["atomidx 0,1"]) == 2 * mols.num_molecules()
-    assert len(mols["atomidx 1:3"]) == 3 * mols.num_molecules()
+    assert len(mols["atomidx 0:3"]) == 4 + (3 * (mols.num_molecules()-1))
 
     assert len(mols["atomnum 1"]) == 1
     assert len(mols["atomnum 1,2"]) == 2
+    
+    assert len(mols["atoms in *"]) == mols.num_atoms()
+    assert len(mols["residues in *"]) == mols.num_residues()
 
 
 def test_complex_indexing():
@@ -174,9 +177,23 @@ def test_search_terms():
     for atom in atoms:
         assert atom.mass().value() == pytest.approx(check_mass)
 
+    atoms = mols[0][f"mass =~ {check_mass}"]
+
+    assert len(atoms) > 0
+
+    for atom in atoms:
+        assert atom.mass().value() == pytest.approx(check_mass)
+
     check_charge = mols[0][1].charge().value()
 
     atoms = mols[0][f"charge >= {check_charge-0.001} and charge <= {check_charge+0.001}"]
+
+    assert len(atoms) > 0
+
+    for atom in atoms:
+        assert atom.charge().value() == pytest.approx(check_charge)
+
+    atoms = mols[0][f"charge =~ {check_charge}"]
 
     assert len(atoms) > 0
 

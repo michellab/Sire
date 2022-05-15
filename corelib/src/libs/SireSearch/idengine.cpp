@@ -27,6 +27,7 @@
 \*********************************************/
 
 #include "idengine.h"
+#include "approx_equal.h"
 
 #include "SireBase/parallel.h"
 #include "SireBase/booleanproperty.h"
@@ -464,6 +465,10 @@ bool IDNumberEngine::match(const int idx) const
                 if (idx <= v.value)
                     return true;
                 break;
+            case ID_CMP_AE:
+                if (approx_equal(idx, v.value))
+                    return true;
+                break;
             case ID_CMP_EQ:
                 if (idx == v.value)
                     return true;
@@ -764,6 +769,10 @@ bool IDIndexEngine::match(int idx, const int count) const
                     break;
                 case ID_CMP_EQ:
                     if (idx == value)
+                        return true;
+                    break;
+                case ID_CMP_AE:
+                    if (approx_equal(idx, value))
                         return true;
                     break;
                 case ID_CMP_NE:
@@ -1520,7 +1529,7 @@ QString IDMass::toString() const
 SelectEnginePtr IDMass::toEngine() const
 {
     IDCmpMass m;
-    m.compare = ID_CMP_EQ;
+    m.compare = ID_CMP_AE;
     m.value = *this;
 
     return m.toEngine();
@@ -1551,7 +1560,7 @@ QString IDCharge::toString() const
 SelectEnginePtr IDCharge::toEngine() const
 {
     IDCmpCharge c;
-    c.compare = ID_CMP_EQ;
+    c.compare = ID_CMP_AE;
     c.value = *this;
 
     return c.toEngine();
@@ -1608,6 +1617,8 @@ std::function<bool (double, double)> _get_compare(IDComparison compare)
         return std::less_equal<double>();
     case ID_CMP_EQ:
         return std::equal_to<double>();
+    case ID_CMP_AE:
+        return SireSearch::approx_equal;
     case ID_CMP_NE:
         return std::not_equal_to<double>();
     case ID_CMP_GE:

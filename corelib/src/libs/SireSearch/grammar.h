@@ -188,7 +188,8 @@ public:
                      ( "==", AST::ID_CMP_EQ )
                      ( "!=", AST::ID_CMP_NE )
                      ( ">=", AST::ID_CMP_GE )
-                     ( ">", AST::ID_CMP_GT );
+                     ( ">", AST::ID_CMP_GT )
+                     ( "=~", AST::ID_CMP_AE );
 
         //all of the different object identification tokens
         obj_token.add( "atoms",  AST::ATOM )
