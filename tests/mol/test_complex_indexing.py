@@ -200,6 +200,18 @@ def test_search_terms():
     for atom in atoms:
         assert atom.charge().value() == pytest.approx(check_charge)
 
+    import sire.search
+    old_eps = sire.search.get_approx_epsilon()
+
+    sire.search.set_approx_epsilon(1e-20)
+
+    with pytest.raises(KeyError):
+        mols[0][f"charge =~ {check_charge}"]
+
+    sire.search.set_approx_epsilon(old_eps)
+
+    assert sire.search.get_approx_epsilon() == old_eps
+
 
 def test_in_searches():
     mols = sr.load_test_files("ala.top", "ala.crd")
