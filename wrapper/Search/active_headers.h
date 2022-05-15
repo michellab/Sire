@@ -3,6 +3,7 @@
 
 #ifdef GCCXML_PARSE
 
+#include "approx_equal.h"
 
 #endif
 
