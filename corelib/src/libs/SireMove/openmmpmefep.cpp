@@ -615,8 +615,8 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
 
 
 // NOTE: only for debugging with simple non-dummy systems like ions
-const bool fullPME = true;   // use false for production
-const bool useOffset = false; // use true for production
+const bool fullPME = false;   // use false for production
+const bool useOffset = true; // use true for production
 
 /**
  * initialises the openMM Free energy single topology calculation
@@ -747,8 +747,12 @@ void OpenMMPMEFEP::initialise()
     recip_space->setUseDispersionCorrection(false);
 
     // scale the charges in the reciprocal space
-    if (useOffset)
+    if (useOffset) {
 	recip_space->addGlobalParameter("lambda_offset", current_lambda);
+
+	if (Debug)
+	    qDebug() << "Adding lambda offset to reciprocal space";
+    }
 
     // use default tolerance for the moment
     double tolerance_PME = recip_space->getEwaldErrorTolerance();
@@ -1179,7 +1183,7 @@ void OpenMMPMEFEP::initialise()
 							    0.0, 0.0); // sigma, epsilon not needed
 
                     if (Debug)
-                        qDebug() << "Adding offset for atom idx" << nonbond_idx
+                        qDebug() << "Adding offset to atom idx" << nonbond_idx
                                  << "; charge_diff =" << charge_diff;
                 }
 
@@ -3151,10 +3155,11 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
     const double beta = 1.0 / (0.0083144621 * convertTo(Temperature.value(),
                                kelvin)); //mol/kJ
 
-    int stateTypes = OpenMM::State::Positions |  OpenMM::State::Velocities
-                     | OpenMM::State::Energy;
+    int stateTypes = OpenMM::State::Energy | OpenMM::State::Positions
+	| OpenMM::State::Velocities;
 
     OpenMM::State state_openmm;
+    OpenMM::Integrator &integrator = openmm_context->getIntegrator();
 
     int sample_count = 1;
 
@@ -3187,7 +3192,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
             exit(-1);
         }
 
-        (openmm_context->getIntegrator()).step(new_nmoves);
+        integrator.step(new_nmoves);
 
         n_samples = (nmoves - new_nmoves) / energy_frequency;
 
@@ -3204,8 +3209,8 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
     emptyContainers();
 
     while (sample_count <= n_samples) {
-        //*********************MD STEPS****************************
-        (openmm_context->getIntegrator()).step(energy_frequency);
+	//*********************MD STEPS****************************
+        integrator.step(energy_frequency);
 
         state_openmm = openmm_context->getState(stateTypes, false, group_mask);
         double p_energy_lambda = state_openmm.getPotentialEnergy();
@@ -3295,6 +3300,7 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
         }
 
         updateOpenMMContextLambda(current_lambda);
+
         sample_count = sample_count + 1.0;
     } // end while (sample_count <= n_samples)
 
@@ -3389,8 +3395,19 @@ double OpenMMPMEFEP::getPotentialEnergyAtLambda(double lambda)
 void OpenMMPMEFEP::updateOpenMMContextLambda(double lambda)
 {
     // nonbonded terms
-    if (perturbed_energies[0])
+    if (perturbed_energies[0]) {
         openmm_context->setParameter("lam", lambda); // 1-5 HD
+
+	if (Debug)                                                                          qDebug() << "Updating direct space lambda tp" << lambda;
+    }
+
+    // reciprocal space corrections for 1-2, 1-3 and scaled 1-4
+    if (perturbed_energies[8]) {
+        openmm_context->setParameter("lam_corr", lambda);
+
+	if (Debug)
+	    qDebug() << "Updating correction lambda to" << lambda;
+    }
 
     // 1-4 Interactions
     if (perturbed_energies[1])
@@ -3402,10 +3419,6 @@ void OpenMMPMEFEP::updateOpenMMContextLambda(double lambda)
     if (perturbed_energies[4])
         openmm_context->setParameter("lamftd", lambda); // 1-4 From Dummy to Dummy
 
-    // reciprocal space corrections for 1-2, 1-3 and scaled 1-4
-    if (perturbed_energies[8])
-        openmm_context->setParameter("lam_corr", lambda);
-
     // bonded perturbed terms
     if (perturbed_energies[5])
         openmm_context->setParameter("lambond", lambda); // Bonds
@@ -3416,8 +3429,12 @@ void OpenMMPMEFEP::updateOpenMMContextLambda(double lambda)
 
     // lambda for the offsets (linear scaling) of the charges in
     // reciprocal space
-    if (useOffset)
+    if (useOffset) {
 	openmm_context->setParameter("lambda_offset", lambda);
+
+	if (Debug)
+	    qDebug() << "Updating lambda_offset to" << lambda;
+    }
 }
 
 boost::tuples::tuple<double, double, double> OpenMMPMEFEP::calculateGradient(
