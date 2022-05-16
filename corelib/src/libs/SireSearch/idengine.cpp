@@ -35,6 +35,8 @@
 #include "SireMol/atomelements.h"
 #include "SireMol/core.h"
 
+#include "SireMM/selectorbond.h"
+
 #include "SireVol/space.h"
 #include "SireVol/cartesian.h"
 
@@ -44,6 +46,7 @@
 
 using namespace SireSearch;
 using namespace SireMol;
+using namespace SireMM;
 using namespace SireBase;
 using namespace parser_idengine;
 
@@ -1522,7 +1525,7 @@ SelectEngine::ObjType IDSubScriptEngine::objectType() const
 
 QString IDMass::toString() const
 {
-    return QObject::tr("IDMass( %1 )")
+    return QObject::tr("%1")
             .arg((value * units).toString());
 }
 
@@ -1544,7 +1547,37 @@ QString IDCmpMass::toString() const
 
 SelectEnginePtr IDCmpMass::toEngine() const
 {
-    return IDMassEngine::construct(compare, value.value * value.units);
+    return IDMassEngine::construct(ATOM, compare, value.value * value.units);
+}
+
+QString IDObjMass::toString() const
+{
+    return QObject::tr("%1 mass %2")
+            .arg(idobject_to_string(name))
+            .arg((value.value * value.units).toString());
+}
+
+QString IDObjCmpMass::toString() const
+{
+    return QObject::tr("%1 mass %2 %3")
+            .arg(idobject_to_string(name))
+            .arg(idcomparison_to_string(compare))
+            .arg((value.value * value.units).toString());
+}
+
+SelectEnginePtr IDObjMass::toEngine() const
+{
+    IDObjCmpMass m;
+    m.name = name;
+    m.compare = ID_CMP_AE;
+    m.value = value;
+
+    return m.toEngine();
+}
+
+SelectEnginePtr IDObjCmpMass::toEngine() const
+{
+    return IDMassEngine::construct(name, compare, value.value * value.units);
 }
 
 ////////
@@ -1575,7 +1608,37 @@ QString IDCmpCharge::toString() const
 
 SelectEnginePtr IDCmpCharge::toEngine() const
 {
-    return IDChargeEngine::construct(compare, value.value * value.units);
+    return IDChargeEngine::construct(ATOM, compare, value.value * value.units);
+}
+
+QString IDObjCharge::toString() const
+{
+    return QObject::tr("%1 charge %2")
+            .arg(idobject_to_string(name))
+            .arg((value.value * value.units).toString());
+}
+
+QString IDObjCmpCharge::toString() const
+{
+    return QObject::tr("%1 charge %2 %3")
+            .arg(idobject_to_string(name))
+            .arg(idcomparison_to_string(compare))
+            .arg((value.value * value.units).toString());
+}
+
+SelectEnginePtr IDObjCharge::toEngine() const
+{
+    IDObjCmpCharge c;
+    c.name = name;
+    c.compare = ID_CMP_AE;
+    c.value = value;
+
+    return c.toEngine();
+}
+
+SelectEnginePtr IDObjCmpCharge::toEngine() const
+{
+    return IDChargeEngine::construct(name, compare, value.value * value.units);
 }
 
 ////////
@@ -1587,15 +1650,34 @@ IDMassEngine::IDMassEngine()
 
 SelectEngine::ObjType IDMassEngine::objectType() const
 {
-    return SelectEngine::ATOM;
+    switch(obj)
+    {
+    case AST::ATOM:
+        return SelectEngine::ATOM;
+    case AST::CUTGROUP:
+        return SelectEngine::CUTGROUP;
+    case AST::RESIDUE:
+        return SelectEngine::RESIDUE;
+    case AST::CHAIN:
+        return SelectEngine::CHAIN;
+    case AST::SEGMENT:
+        return SelectEngine::SEGMENT;
+    case AST::MOLECULE:
+        return SelectEngine::MOLECULE;
+    case AST::BOND:
+        return SelectEngine::BOND;
+    default:
+        return SelectEngine::COMPLEX;
+    }
 }
 
-SelectEnginePtr IDMassEngine::construct(IDComparison compare,
+SelectEnginePtr IDMassEngine::construct(IDObject obj, IDComparison compare,
                                         SireUnits::Dimension::MolarMass value)
 {
     IDMassEngine *ptr = new IDMassEngine();
     auto p = makePtr(ptr);
 
+    ptr->obj = obj;
     ptr->compare = compare;
     ptr->value = value;
 
@@ -1630,7 +1712,9 @@ std::function<bool (double, double)> _get_compare(IDComparison compare)
     }
 }
 
-SelectResult IDMassEngine::select(const SelectResult &mols, const PropertyMap &map) const
+template<class T>
+SelectResult IDMassEngine::select_t(const SelectResult &mols,
+                                    const PropertyMap &map) const
 {
     if (mols.count() == 0)
         return SelectResult();
@@ -1641,16 +1725,16 @@ SelectResult IDMassEngine::select(const SelectResult &mols, const PropertyMap &m
 
     for (const auto &mol : mols)
     {
-        auto atoms = mol->atoms();
+        auto views = get_views<T>(mol);
 
-        if (atoms.isEmpty())
+        if (views.isEmpty())
             continue;
 
         QList<qint64> idxs;
 
-        for (qint64 i=0; i<atoms.nViews(); ++i)
+        for (qint64 i=0; i<views.nViews(); ++i)
         {
-            if (compare_func(atoms(i).evaluate().mass(map).value(), value.value()))
+            if (compare_func(views(i).evaluate().mass(map).value(), value.value()))
             {
                 idxs.append(i);
             }
@@ -1658,18 +1742,110 @@ SelectResult IDMassEngine::select(const SelectResult &mols, const PropertyMap &m
 
         if (idxs.count() > 0)
         {
-            if (idxs.count() == atoms.nViews())
+            if (idxs.count() == views.nViews())
             {
-                ret.append(atoms);
+                ret.append(views);
             }
             else
             {
-                ret.append(mol->atoms(idxs));
+                ret.append(views(idxs));
             }
         }
     }
 
     return SelectResult(ret);
+}
+
+SelectResult IDMassEngine::select_bonds(const SelectResult &mols,
+                                        const PropertyMap &map) const
+{
+    if (mols.count() == 0)
+        return SelectResult();
+
+    QList<MolViewPtr> ret;
+
+    auto compare_func = _get_compare(compare);
+
+    for (const auto &mol : mols)
+    {
+        auto bonds = SelectorBond(*mol, map);
+
+        if (bonds.isEmpty())
+            continue;
+
+        QList<qint64> idxs;
+
+        for (qint64 i=0; i<bonds.nViews(); ++i)
+        {
+            if (compare_func(bonds(i).evaluate().mass(map).value(), value.value()))
+            {
+                idxs.append(i);
+            }
+        }
+
+        if (idxs.count() > 0)
+        {
+            if (idxs.count() == bonds.nViews())
+            {
+                ret.append(bonds);
+            }
+            else
+            {
+                ret.append(bonds(idxs));
+            }
+        }
+    }
+
+    return SelectResult(ret);
+}
+
+SelectResult IDMassEngine::select_mols(const SelectResult &mols,
+                                       const PropertyMap &map) const
+{
+    if (mols.count() == 0)
+        return SelectResult();
+
+    QList<MolViewPtr> ret;
+
+    auto compare_func = _get_compare(compare);
+
+    for (const auto &mol : mols)
+    {
+        auto molecule = mol->molecule();
+
+        if (compare_func(molecule.evaluate().mass(map).value(), value.value()))
+        {
+            ret.append(molecule);
+        }
+    }
+
+    return SelectResult(ret);
+}
+
+SelectResult IDMassEngine::select(const SelectResult &mols,
+                                  const PropertyMap &map) const
+{
+    switch (obj)
+    {
+    case AST::ATOM:
+        return this->select_t<Atom>(mols, map);
+    case AST::RESIDUE:
+        return this->select_t<Residue>(mols, map);
+    case AST::CHAIN:
+        return this->select_t<Chain>(mols, map);
+    case AST::SEGMENT:
+        return this->select_t<Segment>(mols, map);
+    case AST::CUTGROUP:
+        return this->select_t<CutGroup>(mols, map);
+    case AST::MOLECULE:
+        return this->select_mols(mols, map);
+    case AST::BOND:
+        return this->select_bonds(mols, map);
+    default:
+        throw SireError::invalid_key(QObject::tr("Unsupported search object!"));
+    }
+
+    return SelectResult();
 }
 
 ////////
@@ -1681,15 +1857,34 @@ IDChargeEngine::IDChargeEngine()
 
 SelectEngine::ObjType IDChargeEngine::objectType() const
 {
-    return SelectEngine::ATOM;
+    switch(obj)
+    {
+    case AST::ATOM:
+        return SelectEngine::ATOM;
+    case AST::CUTGROUP:
+        return SelectEngine::CUTGROUP;
+    case AST::RESIDUE:
+        return SelectEngine::RESIDUE;
+    case AST::CHAIN:
+        return SelectEngine::CHAIN;
+    case AST::SEGMENT:
+        return SelectEngine::SEGMENT;
+    case AST::MOLECULE:
+        return SelectEngine::MOLECULE;
+    case AST::BOND:
+        return SelectEngine::BOND;
+    default:
+        return SelectEngine::COMPLEX;
+    }
 }
 
-SelectEnginePtr IDChargeEngine::construct(IDComparison compare,
+SelectEnginePtr IDChargeEngine::construct(IDObject obj, IDComparison compare,
                                           SireUnits::Dimension::Charge value)
 {
     IDChargeEngine *ptr = new IDChargeEngine();
     auto p = makePtr(ptr);
 
+    ptr->obj = obj;
     ptr->compare = compare;
     ptr->value = value;
 
@@ -1699,7 +1894,9 @@ SelectEnginePtr IDChargeEngine::construct(IDComparison compare,
 IDChargeEngine::~IDChargeEngine()
 {}
 
-SelectResult IDChargeEngine::select(const SelectResult &mols, const PropertyMap &map) const
+template<class T>
+SelectResult IDChargeEngine::select_t(const SelectResult &mols,
+                                      const PropertyMap &map) const
 {
     if (mols.count() == 0)
         return SelectResult();
@@ -1710,16 +1907,16 @@ SelectResult IDChargeEngine::select(const SelectResult &mols, const PropertyMap 
 
     for (const auto &mol : mols)
     {
-        auto atoms = mol->atoms();
+        auto views = get_views<T>(mol);
 
-        if (atoms.isEmpty())
+        if (views.isEmpty())
             continue;
 
         QList<qint64> idxs;
 
-        for (qint64 i=0; i<atoms.nViews(); ++i)
+        for (qint64 i=0; i<views.nViews(); ++i)
         {
-            if (compare_func(atoms(i).evaluate().charge(map).value(), value.value()))
+            if (compare_func(views(i).evaluate().charge(map).value(), value.value()))
             {
                 idxs.append(i);
             }
@@ -1727,18 +1924,110 @@ SelectResult IDChargeEngine::select(const SelectResult &mols, const PropertyMap 
 
         if (idxs.count() > 0)
         {
-            if (idxs.count() == atoms.nViews())
+            if (idxs.count() == views.nViews())
             {
-                ret.append(atoms);
+                ret.append(views);
             }
             else
             {
-                ret.append(mol->atoms(idxs));
+                ret.append(views(idxs));
             }
         }
     }
 
     return SelectResult(ret);
+}
+
+SelectResult IDChargeEngine::select_bonds(const SelectResult &mols,
+                                          const PropertyMap &map) const
+{
+    if (mols.count() == 0)
+        return SelectResult();
+
+    QList<MolViewPtr> ret;
+
+    auto compare_func = _get_compare(compare);
+
+    for (const auto &mol : mols)
+    {
+        auto bonds = SelectorBond(*mol, map);
+
+        if (bonds.isEmpty())
+            continue;
+
+        QList<qint64> idxs;
+
+        for (qint64 i=0; i<bonds.nViews(); ++i)
+        {
+            if (compare_func(bonds(i).evaluate().charge(map).value(), value.value()))
+            {
+                idxs.append(i);
+            }
+        }
+
+        if (idxs.count() > 0)
+        {
+            if (idxs.count() == bonds.nViews())
+            {
+                ret.append(bonds);
+            }
+            else
+            {
+                ret.append(bonds(idxs));
+            }
+        }
+    }
+
+    return SelectResult(ret);
+}
+
+SelectResult IDChargeEngine::select_mols(const SelectResult &mols,
+                                         const PropertyMap &map) const
+{
+    if (mols.count() == 0)
+        return SelectResult();
+
+    QList<MolViewPtr> ret;
+
+    auto compare_func = _get_compare(compare);
+
+    for (const auto &mol : mols)
+    {
+        auto molecule = mol->molecule();
+
+        if (compare_func(molecule.evaluate().charge(map).value(), value.value()))
+        {
+            ret.append(molecule);
+        }
+    }
+
+    return SelectResult(ret);
+}
+
+SelectResult IDChargeEngine::select(const SelectResult &mols,
+                                    const PropertyMap &map) const
+{
+    switch (obj)
+    {
+    case AST::ATOM:
+        return this->select_t<Atom>(mols, map);
+    case AST::RESIDUE:
+        return this->select_t<Residue>(mols, map);
+    case AST::CHAIN:
+        return this->select_t<Chain>(mols, map);
+    case AST::SEGMENT:
+        return this->select_t<Segment>(mols, map);
+    case AST::CUTGROUP:
+        return this->select_t<CutGroup>(mols, map);
+    case AST::MOLECULE:
+        return this->select_mols(mols, map);
+    case AST::BOND:
+        return this->select_bonds(mols, map);
+    default:
+        throw SireError::invalid_key(QObject::tr("Unsupported search object!"));
+    }
+
+    return SelectResult();
 }
 
 ////////

@@ -331,7 +331,7 @@ private:
 class IDMassEngine : public SelectEngine
 {
 public:
-    static SelectEnginePtr construct(IDComparison compare, SireUnits::Dimension::MolarMass mass);
+    static SelectEnginePtr construct(IDObject obj, IDComparison compare, SireUnits::Dimension::MolarMass mass);
     ~IDMassEngine();
 
     ObjType objectType() const;
@@ -340,7 +340,15 @@ protected:
     IDMassEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
 
+    template<class T>
+    SelectResult select_t(const SelectResult &mols, const PropertyMap &map) const;
+
+    SelectResult select_mols(const SelectResult &mols, const PropertyMap &map) const;
+
+    SelectResult select_bonds(const SelectResult &mols, const PropertyMap &map) const;
+
 private:
+    IDObject obj;
     IDComparison compare;
     SireUnits::Dimension::MolarMass value;
 };
@@ -349,7 +357,7 @@ private:
 class IDChargeEngine : public SelectEngine
 {
 public:
-    static SelectEnginePtr construct(IDComparison compare, SireUnits::Dimension::Charge mass);
+    static SelectEnginePtr construct(IDObject obj, IDComparison compare, SireUnits::Dimension::Charge mass);
     ~IDChargeEngine();
 
     ObjType objectType() const;
@@ -358,7 +366,15 @@ protected:
     IDChargeEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
 
+    template<class T>
+    SelectResult select_t(const SelectResult &mols, const PropertyMap &map) const;
+
+    SelectResult select_mols(const SelectResult &mols, const PropertyMap &map) const;
+
+    SelectResult select_bonds(const SelectResult &mols, const PropertyMap &map) const;
+
 private:
+    IDObject obj;
     IDComparison compare;
     SireUnits::Dimension::Charge value;
 };

@@ -211,6 +211,8 @@ public:
                      ( "molecule", AST::MOLECULE )
                      ( "mol", AST::MOLECULE )
                      ( "mols", AST::MOLECULE )
+                     ( "bond", AST::BOND )
+                     ( "bonds", AST::BOND )
                     ;
 
         //all of the different length unit tokens
@@ -325,7 +327,9 @@ public:
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
                               all_token | water_token | pert_token | withRule | withinRule |
                               withinVectorRule | whereRule | notRule | joinRule | bondRule |
-                              massRule | massCmpRule | chargeRule | chargeCmpRule | user_token |
+                              massRule | massCmpRule | chargeRule | chargeCmpRule |
+                              massObjRule | massObjCmpRule | chargeObjRule | chargeObjCmpRule |
+                              user_token |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
 
         //grammar that specifies a list of names (comma-separated)
@@ -378,10 +382,14 @@ public:
         //allow looking for mass
         massRule %= qi::lit("mass") >> massValueRule;
         massCmpRule %= qi::lit("mass") >> cmp_token >> massValueRule;
+        massObjRule %= obj_token >> qi::lit("mass") >> massValueRule;
+        massObjCmpRule %= obj_token >> qi::lit("mass") >> cmp_token >> massValueRule;
 
         //allow looking for charge
         chargeRule %= qi::lit("charge") >> chargeValueRule;
         chargeCmpRule %= qi::lit("charge") >> cmp_token >> chargeValueRule;
+        chargeObjRule %= obj_token >> qi::lit("charge") >> chargeValueRule;
+        chargeObjCmpRule %= obj_token >> qi::lit("charge") >> cmp_token >> chargeValueRule;
 
         //grammar for a comparison (e.g. x > 5)
         compareValueRule %= cmp_token >> int_;
@@ -496,8 +504,12 @@ public:
         chargeValueRule.name( "Charge Value" );
         massRule.name( "Mass Rule" );
         massCmpRule.name( "Mass Compare Rule" );
+        massObjRule.name( "Mass Object Rule" );
+        massObjCmpRule.name( "Mass Object Compare Rule" );
         chargeRule.name( "Charge Rule" );
         chargeCmpRule.name( "Charge Compare Rule" );
+        chargeObjRule.name( "Charge Object Rule" );
+        chargeObjCmpRule.name( "Charge Object Compare Rule" );
         stringRule.name( "String" );
         regExpRule.name( "RegExp" );
         bondRule.name( "Bond" );
@@ -531,8 +543,12 @@ public:
     qi::rule<IteratorT, AST::IDSubscript(), SkipperT> subscriptRule;
     qi::rule<IteratorT, AST::IDMass(), SkipperT> massRule;
     qi::rule<IteratorT, AST::IDCmpMass(), SkipperT> massCmpRule;
+    qi::rule<IteratorT, AST::IDObjMass(), SkipperT> massObjRule;
+    qi::rule<IteratorT, AST::IDObjCmpMass(), SkipperT> massObjCmpRule;
     qi::rule<IteratorT, AST::IDCharge(), SkipperT> chargeRule;
     qi::rule<IteratorT, AST::IDCmpCharge(), SkipperT> chargeCmpRule;
+    qi::rule<IteratorT, AST::IDObjCharge(), SkipperT> chargeObjRule;
+    qi::rule<IteratorT, AST::IDObjCmpCharge(), SkipperT> chargeObjCmpRule;
 
     qi::rule<IteratorT, AST::IDWhere(), SkipperT> whereRule;
     qi::rule<IteratorT, AST::IDWhereWithin(), SkipperT> whereWithinRule;

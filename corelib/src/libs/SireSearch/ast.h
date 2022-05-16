@@ -141,6 +141,10 @@ namespace AST
     struct IDCharge;
     struct IDCmpMass;
     struct IDCmpCharge;
+    struct IDObjMass;
+    struct IDObjCmpMass;
+    struct IDObjCharge;
+    struct IDObjCmpCharge;
 
     struct IDWhereCompare;
     struct IDWhereWithin;
@@ -173,6 +177,10 @@ namespace AST
                                              boost::recursive_wrapper<IDCharge>,
                                              boost::recursive_wrapper<IDCmpMass>,
                                              boost::recursive_wrapper<IDCmpCharge>,
+                                             boost::recursive_wrapper<IDObjMass>,
+                                             boost::recursive_wrapper<IDObjCharge>,
+                                             boost::recursive_wrapper<IDObjCmpMass>,
+                                             boost::recursive_wrapper<IDObjCmpCharge>,
                                              boost::recursive_wrapper<ExpressionPart> >;
 
     /** Base holder for strings or regular expressions */
@@ -588,6 +596,29 @@ namespace AST
         SelectEnginePtr toEngine() const;
     };
 
+    /** Struct that holds an object mass, e.g. atom mass 1 g_per_mol */
+    struct IDObjMass
+    {
+        IDObject name;
+        IDMass value;
+
+        QString toString() const;
+
+        SelectEnginePtr toEngine() const;
+    };
+
+    /** Struct that holds an object mass comparison, e.g. atom mass > 1 g_per_mol */
+    struct IDObjCmpMass
+    {
+        IDObject name;
+        IDComparison compare;
+        IDMass value;
+
+        QString toString() const;
+
+        SelectEnginePtr toEngine() const;
+    };
+
     /** Struct that holds a "charge" expression, e.g. 1 e */
     struct IDCharge
     {
@@ -620,6 +651,29 @@ namespace AST
     /** Struct that holds a charge comparison, e.g. charge > 1 e */
     struct IDCmpCharge
     {
+        IDComparison compare;
+        IDCharge value;
+
+        QString toString() const;
+
+        SelectEnginePtr toEngine() const;
+    };
+
+    /** Struct that holds an object charge, e.g. atom char 1 e */
+    struct IDObjCharge
+    {
+        IDObject name;
+        IDCharge value;
+
+        QString toString() const;
+
+        SelectEnginePtr toEngine() const;
+    };
+
+    /** Struct that holds an object charge comparison, e.g. atom charge > 1 e */
+    struct IDObjCmpCharge
+    {
+        IDObject name;
         IDComparison compare;
         IDCharge value;
 
@@ -739,13 +793,33 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDMass,
 BOOST_FUSION_ADAPT_STRUCT( AST::IDCmpCharge,
                            (AST::IDComparison,compare)
                            (AST::IDCharge,value)
-                           (SireUnits::Dimension::Charge,units)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDCmpMass,
                            (AST::IDComparison,compare)
                            (AST::IDMass,value)
-                           (SireUnits::Dimension::MolarMass,units)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDObjCharge,
+                           (AST::IDObject, name)
+                           (AST::IDCharge,value)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDObjMass,
+                           (AST::IDObject, name)
+                           (AST::IDMass,value)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDObjCmpCharge,
+                           (AST::IDObject, name)
+                           (AST::IDComparison,compare)
+                           (AST::IDCharge,value)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDObjCmpMass,
+                           (AST::IDObject, name)
+                           (AST::IDComparison,compare)
+                           (AST::IDMass,value)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWithinVector,
