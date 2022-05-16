@@ -325,8 +325,8 @@ public:
         //an expression is either a subscript, name, number, with, within, where, not
         //or user-identified expression, optionally surrounded by parenthesis '( )'
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
-                              all_token | water_token | pert_token | withRule | withinRule |
-                              withinVectorRule | whereRule | notRule | joinRule | bondRule |
+                              all_token | water_token | pert_token | bondRule | withRule | withinRule |
+                              withinVectorRule | whereRule | notRule | joinRule |
                               massRule | massCmpRule | chargeRule | chargeCmpRule |
                               massObjRule | massObjCmpRule | chargeObjRule | chargeObjCmpRule |
                               user_token |

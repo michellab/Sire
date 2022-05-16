@@ -2269,6 +2269,9 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
             case SelectEngine::MOLECULE:
                 result.append( mol->molecule() );
                 break;
+            case SelectEngine::BOND:
+                result.append( SelectorBond(mol->atoms(), map) );
+                break;
             default:
                 result.append( *mol );
                 break;
@@ -2285,7 +2288,14 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
             auto selection = mol->selection();
 
             //is the whole molecule selected?
-            if (selection.selectedAll())
+            if (objtype == SelectEngine::BOND)
+            {
+                SelectorBond bonds(*mol, map);
+
+                if (not bonds.isEmpty())
+                    result.append(bonds);
+            }
+            else if (selection.selectedAll())
             {
                 //yes - by definition it will contain all parts
                 result.append(*mol);
@@ -2352,6 +2362,8 @@ SelectEngine::ObjType IDWithEngine::objectType() const
         return SelectEngine::SEGMENT;
     case AST::MOLECULE:
         return SelectEngine::MOLECULE;
+    case AST::BOND:
+        return SelectEngine::BOND;
     default:
         return SelectEngine::COMPLEX;
     }
