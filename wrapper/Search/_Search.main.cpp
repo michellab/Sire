@@ -5,19 +5,11 @@
 
 #include "boost/python.hpp"
 
-#include "SireSearch/parser.h"
-#include "SireMol/core.h"
-
 #include "_Search_free_functions.pypp.hpp"
 
 namespace bp = boost::python;
 
-void install_search_parser()
-{
-    SireSearch::parser::SearchParser::install();
-}
-
 BOOST_PYTHON_MODULE(_Search){
     register_free_functions();
-    boost::python::def("install_search_parser", &install_search_parser);
 }
+

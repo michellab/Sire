@@ -49,6 +49,7 @@ namespace SireSearch
     SIRESEARCH_EXPORT void delete_all_tokens();
 }
 
+SIRE_EXPOSE_FUNCTION( SireSearch::install_search_parser )
 SIRE_EXPOSE_FUNCTION( SireSearch::get_min_protein_residues )
 SIRE_EXPOSE_FUNCTION( SireSearch::set_min_protein_residues )
 SIRE_EXPOSE_FUNCTION( SireSearch::get_protein_residue_names )

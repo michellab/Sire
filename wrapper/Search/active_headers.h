@@ -4,6 +4,7 @@
 #ifdef GCCXML_PARSE
 
 #include "approx_equal.h"
+#include "helper_funcs.h"
 
 #endif
 
