@@ -60,6 +60,21 @@ namespace SireMol
             Parser::globalParser().set_token(token, selection);
         }
 
+        QString get_token(const QString &token)
+        {
+            return Parser::globalParser().get_token(token);
+        }
+
+        void delete_token(const QString &token)
+        {
+            Parser::globalParser().delete_token(token);
+        }
+
+        void delete_all_tokens()
+        {
+            Parser::globalParser().delete_all_tokens();
+        }
+
         void reset_tokens()
         {
             Parser::globalParser().reset_tokens();

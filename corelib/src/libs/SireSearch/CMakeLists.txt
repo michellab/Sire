@@ -18,6 +18,7 @@ set ( SIRESEARCH_HEADERS
       approx_equal.h
       ast.h
       grammar.h
+      helper_funcs.h
       idengine.h
       parser.h
     )
@@ -29,6 +30,7 @@ set ( SIRESEARCH_SOURCES
 
       approx_equal.cpp
       ast.cpp
+      helper_funcs.cpp
       idengine.cpp
       parser.cpp
 

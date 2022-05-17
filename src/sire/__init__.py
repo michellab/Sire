@@ -356,8 +356,11 @@ try:
     # ignore warnings, as a lot are printed from the frozenlib
     import warnings
     warnings.filterwarnings('ignore')
+    _can_lazy_import = True
 
-except Exception:
+except Exception as e:
+    print("Lazy import disabled")
+    print(e)
     _can_lazy_import = False
 
 #_can_lazy_import = False

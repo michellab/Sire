@@ -135,6 +135,7 @@ namespace AST
     struct IDJoin;
     struct IDAll;
     struct IDWater;
+    struct IDProtein;
     struct IDPerturbable;
     struct IDBond;
     struct IDMass;
@@ -172,6 +173,7 @@ namespace AST
                                              boost::recursive_wrapper<IDAll>,
                                              boost::recursive_wrapper<IDBond>,
                                              boost::recursive_wrapper<IDWater>,
+                                             boost::recursive_wrapper<IDProtein>,
                                              boost::recursive_wrapper<IDPerturbable>,
                                              boost::recursive_wrapper<IDMass>,
                                              boost::recursive_wrapper<IDCharge>,
@@ -182,6 +184,8 @@ namespace AST
                                              boost::recursive_wrapper<IDObjCmpMass>,
                                              boost::recursive_wrapper<IDObjCmpCharge>,
                                              boost::recursive_wrapper<ExpressionPart> >;
+
+    QString expression_to_string(const ExpressionVariant &expression);
 
     /** Base holder for strings or regular expressions */
     using NameVariant = boost::variant<boost::recursive_wrapper<RegExpValue>,
@@ -426,6 +430,14 @@ namespace AST
 
     /** Struct to hold an ID token that matches water molecules */
     struct IDWater
+    {
+        QString toString() const;
+
+        SelectEnginePtr toEngine() const;
+    };
+
+    /** Struct to hold an ID token that matches protein molecules */
+    struct IDProtein
     {
         QString toString() const;
 

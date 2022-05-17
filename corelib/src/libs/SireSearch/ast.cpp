@@ -37,6 +37,11 @@ using namespace parser_idengine;
 
 namespace AST
 {
+    QString expression_to_string(const ExpressionVariant &expression)
+    {
+        return boost::apply_visitor( qstring_visitor(), expression );
+    }
+
     QString idobject_to_string(IDObject obj)
     {
         switch(obj)

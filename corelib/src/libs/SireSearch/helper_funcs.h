@@ -2,7 +2,7 @@
   *
   *  Sire - Molecular Simulation Framework
   *
-  *  Copyright (C) 2018  Christopher Woods
+  *  Copyright (C) 2022  Christopher Woods
   *
   *  This program is free software; you can redistribute it and/or modify
   *  it under the terms of the GNU General Public License as published by
@@ -26,44 +26,37 @@
   *
 \*********************************************/
 
-#ifndef SIRESEARCH_PARSER_H
-#define SIRESEARCH_PARSER_H
+#ifndef SIRESEARCH_HELPER_FUNCS
+#define SIRESEARCH_HELPER_FUNCS
 
-#include "SireMol/select.h"
-#include "SireMol/parser.h"
+#include "sireglobal.h"
 
 SIRE_BEGIN_HEADER
 
 namespace SireSearch
 {
+    SIRESEARCH_EXPORT void install_search_parser();
 
-namespace parser
-{
-    void set_token(const QString &token, const QString &selection);
-    void reset_tokens();
+    SIRESEARCH_EXPORT int get_min_protein_residues();
+    SIRESEARCH_EXPORT void set_min_protein_residues(int nres);
 
-    SireMol::parser::SelectEnginePtr parse(const QString &str);
+    SIRESEARCH_EXPORT QSet<QString> get_protein_residue_names();
+    SIRESEARCH_EXPORT void set_protein_residue_names(const QSet<QString> &names);
 
-    class SIRESEARCH_EXPORT SearchParser : public SireMol::parser::Parser
-    {
-    public:
-        SearchParser();
-        ~SearchParser();
-
-        static void install();
-
-        void set_token(const QString &token, const QString &selection);
-        QString get_token(const QString &token);
-        void delete_token(const QString &token);
-        void delete_all_tokens();
-
-        void reset_tokens();
-
-        SireMol::parser::SelectEnginePtr parse(const QString &str);
-    };
+    SIRESEARCH_EXPORT void set_token(const QString &token, const QString &search);
+    SIRESEARCH_EXPORT QString get_token(const QString &token);
+    SIRESEARCH_EXPORT void delete_token(const QString &token);
+    SIRESEARCH_EXPORT void delete_all_tokens();
 }
 
-}
+SIRE_EXPOSE_FUNCTION( SireSearch::get_min_protein_residues )
+SIRE_EXPOSE_FUNCTION( SireSearch::set_min_protein_residues )
+SIRE_EXPOSE_FUNCTION( SireSearch::get_protein_residue_names )
+SIRE_EXPOSE_FUNCTION( SireSearch::set_protein_residue_names )
+SIRE_EXPOSE_FUNCTION( SireSearch::set_token )
+SIRE_EXPOSE_FUNCTION( SireSearch::get_token )
+SIRE_EXPOSE_FUNCTION( SireSearch::delete_token )
+SIRE_EXPOSE_FUNCTION( SireSearch::delete_all_tokens )
 
 SIRE_END_HEADER
 

@@ -33,6 +33,8 @@
 
 #include "SireMol/core.h"
 
+#include "SireSearch/ast.h"
+
 #include <QMutex>
 #include <QHash>
 #include <QDebug>
@@ -158,6 +160,36 @@ static void set_token(const std::string &token, const std::string &str)
     _user_tokens->add(token, AST::IDUser(token,node.values[0].value));
 }
 
+static QString get_token(const std::string &token)
+{
+    QMutexLocker lkr(tokensMutex());
+
+    if (_user_tokens == 0)
+        throw SireError::invalid_key( QObject::tr(
+            "There is no user token '%1'").arg(QString::fromStdString(token)), CODELOC);
+
+    auto p = _user_tokens->find(token);
+
+    if (p == 0)
+        throw SireError::invalid_key( QObject::tr(
+            "There is no user token '%1'").arg(QString::fromStdString(token)), CODELOC);
+
+    return expression_to_string(p->value);
+}
+
+static void delete_token(const std::string &token)
+{
+    QMutexLocker lkr(tokensMutex());
+
+    if (_user_tokens == 0)
+        return;
+
+    auto p = _user_tokens->find(token);
+
+    if (p)
+        _user_tokens->remove(token);
+}
+
 /** Function used internally to parse a string into an AST::Node */
 static AST::Node parse_main(const std::string &str)
 {
@@ -183,6 +215,21 @@ namespace SireSearch
         void SearchParser::set_token(const QString &token, const QString &selection)
         {
             ::set_token(token.toStdString(), selection.toStdString());
+        }
+
+        QString SearchParser::get_token(const QString &token)
+        {
+            return ::get_token(token.toStdString());
+        }
+
+        void SearchParser::delete_token(const QString &token)
+        {
+            ::delete_token(token.toStdString());
+        }
+
+        void SearchParser::delete_all_tokens()
+        {
+            ::reset_tokens();
         }
 
         void SearchParser::reset_tokens()

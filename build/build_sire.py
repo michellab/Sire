@@ -151,12 +151,12 @@ if __name__ == "__main__":
     except ImportError:
         conda_pkgs.append("pytest")
 
-    # nose
+    # lazy_import
     try:
-        import nose
-        print("nose is already installed...")
+        import lazy_import
+        print("lazy_import is already installed...")
     except ImportError:
-        conda_pkgs.append("nose")
+        conda_pkgs.append("lazy_import")
 
     # libnetcdf
     try:

@@ -140,6 +140,12 @@ public:
                        ( "waters", AST::IDWater() )
                        ( "WATERS", AST::IDWater() );
 
+        // all of the different tokens to match "protein"
+        protein_token.add( "protein", AST::IDProtein() )
+                         ( "proteins", AST::IDProtein() )
+                         ( "PROTEIN", AST::IDProtein() )
+                         ( "PROTEINS", AST::IDProtein() );
+
         // all of the different tokens to match "perturbable"
         pert_token.add( "perturbable", AST::IDPerturbable() )
                       ( "PERTURBABLE", AST::IDPerturbable() )
@@ -325,7 +331,7 @@ public:
         //an expression is either a subscript, name, number, with, within, where, not
         //or user-identified expression, optionally surrounded by parenthesis '( )'
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
-                              all_token | water_token | pert_token | bondRule | withRule | withinRule |
+                              all_token | water_token | pert_token | protein_token | bondRule | withRule | withinRule |
                               withinVectorRule | whereRule | notRule | joinRule |
                               massRule | massCmpRule | chargeRule | chargeCmpRule |
                               massObjRule | massObjCmpRule | chargeObjRule | chargeObjCmpRule |
@@ -587,6 +593,7 @@ public:
     qi::symbols<char,AST::IDAll> all_token;
     qi::symbols<char,AST::IDWater> water_token;
     qi::symbols<char,AST::IDPerturbable> pert_token;
+    qi::symbols<char,AST::IDProtein> protein_token;
     UserTokens user_token;
 
     ValueGrammar<IteratorT, SkipperT> stringRule;

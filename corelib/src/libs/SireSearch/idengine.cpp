@@ -40,6 +40,8 @@
 #include "SireVol/space.h"
 #include "SireVol/cartesian.h"
 
+#include "SireSearch/helper_funcs.h"
+
 #include "tostring.h"
 
 #include <QRegExp>
@@ -3099,9 +3101,9 @@ IDWaterEngine::~IDWaterEngine()
 
 SelectResult IDWaterEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    QList<ViewsOfMol> result;
+    QList<MolViewPtr> result;
 
-    for (const auto &molview : mols.views())
+    for (const auto &molview : mols)
     {
         // Counters for the number of hydrogens, oxygens, and protons in the molecule.
         int num_hydrogen = 0;
@@ -3109,7 +3111,7 @@ SelectResult IDWaterEngine::select(const SelectResult &mols, const PropertyMap &
         int num_protons = 0;
 
         // Convert to a molecule.
-        auto molecule = molview.molecule();
+        auto molecule = molview->molecule();
 
         // Skip if there is no element property.
         if (not molecule.hasProperty(map["element"]))
@@ -3149,8 +3151,7 @@ SelectResult IDWaterEngine::select(const SelectResult &mols, const PropertyMap &
                 // Not a water molecule, abort!
                 if (num_oxygen > 1 or
                     num_hydrogen > 2 or
-                    num_protons > 10 or
-                    num_protons == 0)
+                    num_protons > 10)
                 {
                     is_water = false;
                     break;
@@ -3163,7 +3164,7 @@ SelectResult IDWaterEngine::select(const SelectResult &mols, const PropertyMap &
         }
 
         // If this is a water molecule, append the result.
-        if (is_water)
+        if (is_water and num_oxygen == 1 and num_hydrogen == 2 and num_protons == 10)
             result.append(molecule);
     }
 
@@ -3172,7 +3173,82 @@ SelectResult IDWaterEngine::select(const SelectResult &mols, const PropertyMap &
 
 SelectEngine::ObjType IDWaterEngine::objectType() const
 {
-    return SelectEngine::COMPLEX;
+    return SelectEngine::MOLECULE;
+}
+
+
+////////
+//////// Implementation of the IDProteinEngine
+////////
+
+QString IDProtein::toString() const
+{
+    return QString("protein");
+}
+
+SelectEnginePtr IDProtein::toEngine() const
+{
+    return IDProteinEngine::construct();
+}
+
+IDProteinEngine::IDProteinEngine()
+{}
+
+SelectEnginePtr IDProteinEngine::construct()
+{
+    IDProteinEngine *ptr = new IDProteinEngine();
+    auto p = makePtr(ptr);
+
+    return p;
+}
+
+IDProteinEngine::~IDProteinEngine()
+{}
+
+
+SelectResult IDProteinEngine::select(const SelectResult &mols, const PropertyMap &map) const
+{
+    QList<MolViewPtr> result;
+
+    auto min_res = get_min_protein_residues();
+    auto resnames = get_protein_residue_names();
+
+    for (const auto &mol : mols)
+    {
+        auto molinfo = mol->data().info();
+
+        if (molinfo.nResidues() < min_res)
+            continue;
+
+        int nres = 0;
+        bool is_protein = false;
+
+        for (int i=0; i<molinfo.nResidues(); ++i)
+        {
+            auto name = molinfo.name(ResIdx(i)).value().toLower();
+
+            if (resnames.contains(name))
+            {
+                nres += 1;
+
+                if (nres >= min_res)
+                {
+                    is_protein = true;
+                    break;
+                }
+            }
+        }
+
+        if (is_protein)
+            result.append(mol->molecule());
+    }
+
+    return SelectResult(result);
+}
+
+SelectEngine::ObjType IDProteinEngine::objectType() const
+{
+    return SelectEngine::MOLECULE;
 }
 
 ////////
@@ -3195,12 +3271,12 @@ IDPerturbableEngine::~IDPerturbableEngine()
 
 SelectResult IDPerturbableEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    QList<ViewsOfMol> result;
+    QList<MolViewPtr> result;
 
-    for (const auto &molview : mols.views())
+    for (const auto &molview : mols)
     {
         // Convert to a molecule.
-        auto molecule = molview.molecule();
+        auto molecule = molview->molecule();
 
         // Check whether this molecule is flagged as being perturbable.
         if (molecule.hasProperty(map["is_perturbable"]))
@@ -3212,5 +3288,5 @@ SelectResult IDPerturbableEngine::select(const SelectResult &mols, const Propert
 
 SelectEngine::ObjType IDPerturbableEngine::objectType() const
 {
-    return SelectEngine::COMPLEX;
+    return SelectEngine::MOLECULE;
 }

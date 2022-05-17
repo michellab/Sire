@@ -49,7 +49,13 @@ namespace parser
 
         static void install_parser(Parser *parser);
 
+        virtual QString get_token(const QString &token)=0;
+
         virtual void set_token(const QString &token, const QString &selection)=0;
+
+        virtual void delete_token(const QString &token)=0;
+
+        virtual void delete_all_tokens()=0;
 
         virtual void reset_tokens()=0;
 

@@ -479,6 +479,21 @@ protected:
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
 };
 
+/** Internal class used to select all protein molecules */
+class IDProteinEngine : public SelectEngine
+{
+public:
+    static SelectEnginePtr construct();
+
+    ~IDProteinEngine();
+
+    ObjType objectType() const;
+
+protected:
+    IDProteinEngine();
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+};
+
 /** Internal class used to select all perturbable molecules.
 
     @author Lester Hedges
