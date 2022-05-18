@@ -685,7 +685,6 @@ void OpenMMPMEFEP::initialise_ion()
     auto recip_space = new OpenMM::NonbondedForce();
     std::vector<std::pair<int,int> > pairs;
 
-
     const double cutoff = convertTo(cutoff_distance.value(), nanometer);
 
     system->addForce(recip_space);
@@ -755,16 +754,10 @@ void OpenMMPMEFEP::initialise_ion()
         direct_space->addGlobalParameter("alpha_pme", alpha_PME);
 	direct_space->addGlobalParameter("SPOnOff", 0.0); // not needed
 
-        direct_space->addPerParticleParameter("qstart");
-        direct_space->addPerParticleParameter("qend");
-        direct_space->addPerParticleParameter("sigmastart");
-        direct_space->addPerParticleParameter("sigmaend");
-        direct_space->addPerParticleParameter("epstart");
-        direct_space->addPerParticleParameter("epend");
-        direct_space->addPerParticleParameter("isHD");
-        direct_space->addPerParticleParameter("isTD");
-        direct_space->addPerParticleParameter("isFD");
-        direct_space->addPerParticleParameter("isSolvent");
+	addPerParticleParameters(*direct_space,
+                             {"qstart", "qend", "sigmastart", "sigmaend",
+			      "epstart", "epend", "isHD", "isTD",
+                              "isFD", "isSolvent"});
 
 	if (doCharge) {
             params = {
@@ -791,8 +784,7 @@ void OpenMMPMEFEP::initialise_ion()
         corr_recip->addGlobalParameter("lam_corr", current_lambda);
         corr_recip->addGlobalParameter("alpha_pme", alpha_PME);
 
-        corr_recip->addPerBondParameter("qcstart");
-        corr_recip->addPerBondParameter("qcend");
+	addPerBondParameters(*corr_recip, {"qcstart", "qcend"});
     }
 
     for (int i = 0; i < nwater_ion; i++) {
@@ -964,7 +956,7 @@ void OpenMMPMEFEP::initialise()
     OpenMM::Platform::loadPluginsFromDirectory(
         OpenMM::Platform::getDefaultPluginsDirectory());
 
-    // the system will hold all
+    // the system will hold all atoms
     auto system_openmm = new OpenMM::System();
 
     // Andersen thermostat
