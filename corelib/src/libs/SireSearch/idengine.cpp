@@ -1477,9 +1477,13 @@ SelectResult IDSubScriptEngine::select(const SelectResult &mols, const PropertyM
     //only loop if the range is valid
     if (start < nviews and end < nviews and start >= 0 and end >= 0)
     {
-        if (start <= end)
+        if (start == end )
         {
-            for (int i=start; i<=end; i+=step)
+            addView( selected[start], result );
+        }
+        else if (start < end)
+        {
+            for (int i=start; i<end; i+=step)
             {
                 addView( selected[i], result );
             }

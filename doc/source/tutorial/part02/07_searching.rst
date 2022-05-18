@@ -425,13 +425,156 @@ names that are in a set of protein residue names.
 You can get the set of protein residue names using;
 
 >>> print(sr.search.get_protein_residue_names())
+['hip', 'his', 'tyr', 'ile', 'trp', 'ala', 'pro', 'glh', 'ash',
+ 'lys', 'ser', 'gln', 'arg', 'asn', 'asp', 'cys', 'met', 'phe',
+ 'leu', 'glu', 'hid', 'hie', 'cyx', 'gly', 'val', 'thr']
 
+Names are matched ignoring case, so `ALA` will be identified as a
+protein residue. You can set protein residue names using
 
-You can get the minimum number of residues to match
+>>> sr.search.set_protein_residue_names(["ala", "ash"])
+>>> print(sr.search.get_protein_residue_names())
+['ala', 'ash']
 
+You can reset the names using
 
+>>> sr.search.set_protein_residue_names(
+...     ['hip', 'his', 'tyr', 'ile', 'trp', 'ala', 'pro', 'glh', 'ash',
+...      'lys', 'ser', 'gln', 'arg', 'asn', 'asp', 'cys', 'met', 'phe',
+...      'leu', 'glu', 'hid', 'hie', 'cyx', 'gly', 'val', 'thr']
 
+Similarly, you can get the minimum number of protein residues to match
+using
 
+>>> print(sr.search.get_min_protein_residues())
+5
 
+and can set it via
 
+>>> sr.search.set_min_protein_residues(5)
 
+Searching by custom tokens
+--------------------------
+
+It is common when searching that you will have a term that you will
+want to repeat. For example, you can match proteins using `protein`,
+and water molecules using `water`. You could thus match all
+other molecules using
+
+>>> print(mols["not (protein or water)"])
+SelectorMol( size=21
+0: Molecule( NA:3606 num_atoms=1 num_residues=1 )
+1: Molecule( NA:3607 num_atoms=1 num_residues=1 )
+2: Molecule( NA:3608 num_atoms=1 num_residues=1 )
+3: Molecule( NA:3609 num_atoms=1 num_residues=1 )
+4: Molecule( NA:3610 num_atoms=1 num_residues=1 )
+...
+16: Molecule( CL:3622 num_atoms=1 num_residues=1 )
+17: Molecule( CL:3623 num_atoms=1 num_residues=1 )
+18: Molecule( CL:3624 num_atoms=1 num_residues=1 )
+19: Molecule( CL:3625 num_atoms=1 num_residues=1 )
+20: Molecule( CL:3626 num_atoms=1 num_residues=1 )
+)
+
+You can create your own search token that represents this search
+using :func:`sire.search.set_token`, e.g.
+
+>>> sr.search.set_token("other", "not (protein or water)")
+
+This creates the token `other` that represents the search
+`not (protein or water)`. You can now use `other` as a search term, e.g.
+
+>>> print(mols["other"])
+SelectorMol( size=21
+0: Molecule( NA:3606 num_atoms=1 num_residues=1 )
+1: Molecule( NA:3607 num_atoms=1 num_residues=1 )
+2: Molecule( NA:3608 num_atoms=1 num_residues=1 )
+3: Molecule( NA:3609 num_atoms=1 num_residues=1 )
+4: Molecule( NA:3610 num_atoms=1 num_residues=1 )
+...
+16: Molecule( CL:3622 num_atoms=1 num_residues=1 )
+17: Molecule( CL:3623 num_atoms=1 num_residues=1 )
+18: Molecule( CL:3624 num_atoms=1 num_residues=1 )
+19: Molecule( CL:3625 num_atoms=1 num_residues=1 )
+20: Molecule( CL:3626 num_atoms=1 num_residues=1 )
+)
+
+This enables you to more easily find all of the positive and negative ions,
+e.g.
+
+>>> print(mols["other and charge > 0"])
+SelectorMol( size=7
+0: Molecule( NA:3606 num_atoms=1 num_residues=1 )
+1: Molecule( NA:3607 num_atoms=1 num_residues=1 )
+2: Molecule( NA:3608 num_atoms=1 num_residues=1 )
+3: Molecule( NA:3609 num_atoms=1 num_residues=1 )
+4: Molecule( NA:3610 num_atoms=1 num_residues=1 )
+5: Molecule( NA:3611 num_atoms=1 num_residues=1 )
+6: Molecule( NA:3612 num_atoms=1 num_residues=1 )
+)
+
+Tokens can build on one another, e.g.
+
+>>> sr.search.set_token("positive_ions", "other and charge > 0")
+>>> print(mols["positive_ions"])
+SelectorMol( size=7
+0: Molecule( NA:3606 num_atoms=1 num_residues=1 )
+1: Molecule( NA:3607 num_atoms=1 num_residues=1 )
+2: Molecule( NA:3608 num_atoms=1 num_residues=1 )
+3: Molecule( NA:3609 num_atoms=1 num_residues=1 )
+4: Molecule( NA:3610 num_atoms=1 num_residues=1 )
+5: Molecule( NA:3611 num_atoms=1 num_residues=1 )
+6: Molecule( NA:3612 num_atoms=1 num_residues=1 )
+)
+
+You can find out what a token refers to via
+:func:`sire.search.get_token`, e.g.
+
+>>> print(sr.search.get_token("positive_ions"))
+({ other => not ((protein or water)) } and charge > 0 |e|)
+
+Note how the `other` token has been expanded into its parts.
+This is because the token is expanded when it is created.
+This means that the token is unaffected by what you do to
+the `other` token, e.g. deleting it via
+
+>>> sr.search.delete_token("other")
+
+will not affect `positive_ions`
+
+>>> print(mols["positive_ions"])
+SelectorMol( size=7
+0: Molecule( NA:3606 num_atoms=1 num_residues=1 )
+1: Molecule( NA:3607 num_atoms=1 num_residues=1 )
+2: Molecule( NA:3608 num_atoms=1 num_residues=1 )
+3: Molecule( NA:3609 num_atoms=1 num_residues=1 )
+4: Molecule( NA:3610 num_atoms=1 num_residues=1 )
+5: Molecule( NA:3611 num_atoms=1 num_residues=1 )
+6: Molecule( NA:3612 num_atoms=1 num_residues=1 )
+)
+
+Indexing within searches
+------------------------
+
+It is often the case that multiple items will match your search. You
+can request only a sub-set by indexing your search, e.g.
+
+>>> print(mols["{positive_ions}[0]"])
+Molecule( NA:3606 num_atoms=1 num_residues=1 )
+
+returns the first item that matched the custom `positive_ions` token
+you created above.
+
+Indexing can be used with any search term. The general format is
+`{search_term}[index]`. The index behaves like a python index, so can
+be negative indexed or sliced, e.g.
+
+>>> print(mols["{positive_ions}[-1]"])
+Molecule( NA:3612 num_atoms=1 num_residues=1 )
+
+>>> print(mols["{positive_ions}[0:6:2]"])
+SelectorMol( size=3
+0: Molecule( NA:3606 num_atoms=1 num_residues=1 )
+1: Molecule( NA:3608 num_atoms=1 num_residues=1 )
+2: Molecule( NA:3610 num_atoms=1 num_residues=1 )
+)
