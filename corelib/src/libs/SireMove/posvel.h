@@ -86,7 +86,7 @@ const std::string GENERAL_ION =
 const std::string CORR_ION =
     "-U_corr;"
     "U_corr = 138.935456 * q_prod * erf(alpha_pme*r) / r;"
-    "q_prod = lambda_corr*qcend + (1-lambda_corr)*qcstart;";
+    "q_prod = lam_corr*qcend + (1-lam_corr)*qcstart;";
 
 // converted from XML state file
 const std::vector<OpenMM::Vec3> pos_ion = {

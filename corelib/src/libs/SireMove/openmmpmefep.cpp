@@ -615,7 +615,7 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
 
 
 // NOTE: only for debugging with simple non-dummy systems like ions
-const bool fullPME = true;   // use false for production
+const bool fullPME = false;   // use false for production
 const bool useOffset = true; // use true for production
 const bool doCharge = true;
 
@@ -644,13 +644,9 @@ void OpenMMPMEFEP::initialise_ion()
 
     if (moleculegroup.isEmpty())
         throw SireError::program_bug(
-            QObject::tr("Cannot initialise OpenMMPMEFEP because molgroup has not been defined"),
+            QObject::tr("Cannot initialise OpenMMPMEFEP because molgroup "
+			"has not been defined"),
             CODELOC);
-
-    const MoleculeGroup solute = this->solute.read();
-    const MoleculeGroup solutehard = this->solutehard.read();
-    const MoleculeGroup solutetodummy = this->solutetodummy.read();
-    const MoleculeGroup solutefromdummy = this->solutefromdummy.read();
 
     AtomicVelocityWorkspace ws =
         this->createWorkspace(moleculegroup).read().asA<AtomicVelocityWorkspace>();
@@ -667,66 +663,17 @@ void OpenMMPMEFEP::initialise_ion()
         qDebug() << "There are" << nats << "atoms. " << "There are" << nmols
                  << "molecules";
 
-    int flag_combRules;
-
-    if (combiningRules == "arithmetic")
-        flag_combRules = ARITHMETIC;
-    else if (combiningRules == "geometric")
-        flag_combRules = GEOMETRIC;
-    else
-        throw SireError::program_bug(
-            QObject::tr("The combining rules have not been specified. Possible choises: arithmetic, geometric"),
-            CODELOC);
-
-    if (Debug)
-        qDebug() << "combiningRules =" << combiningRules;
-
-    bool flag_noperturbedconstraints = false;
-    int flag_constraint;
-    bool flag_constraint_water = false;
-
-    if (ConstraintType == "none")
-        flag_constraint = NONE;
-    else if (ConstraintType == "hbonds")
-        flag_constraint = HBONDS;
-    else if (ConstraintType == "allbonds")
-        flag_constraint = ALLBONDS;
-    else if (ConstraintType == "hangles")
-        flag_constraint = HANGLES;
-    else if (ConstraintType == "hbonds-notperturbed") {
-        flag_constraint = HBONDS;
-        flag_noperturbedconstraints = true;
-    }
-    else if (ConstraintType == "none-notwater") {
-        flag_constraint = NONE;
-        flag_constraint_water = true;
-    }
-    else
-        throw SireError::program_bug(
-            QObject::tr("The Constraints method has not been specified."
-                        "Possible choises: none, hbonds, allbonds, hangles, hbonds-notperturbed, none-notwater"),
-            CODELOC);
-
-    if (Debug)
-        qDebug() << "Constraint Type =" << ConstraintType;
-
-    // Load Plugins from the OpenMM standard Plugin Directory
-    OpenMM::Platform::loadPluginsFromDirectory(
-        OpenMM::Platform::getDefaultPluginsDirectory());
-
-    // the system will hold all
     auto system = new OpenMM::System();
 
-    // Andersen thermostat
     if (Andersen_flag)
         addAndersenThermostat(*system);
 
-    // Monte Carlo Barostat
     if (MCBarostat_flag)
         addMCBarostat(*system);
 
     if (CMMremoval_frequency > 0) {
-        auto cmmotionremover = new OpenMM::CMMotionRemover(CMMremoval_frequency);
+        auto cmmotionremover =
+	    new OpenMM::CMMotionRemover(CMMremoval_frequency);
 
         system->addForce(cmmotionremover);
 
@@ -737,6 +684,7 @@ void OpenMMPMEFEP::initialise_ion()
 
     auto recip_space = new OpenMM::NonbondedForce();
     std::vector<std::pair<int,int> > pairs;
+
 
     const double cutoff = convertTo(cutoff_distance.value(), nanometer);
 
@@ -782,6 +730,8 @@ void OpenMMPMEFEP::initialise_ion()
     auto direct_space = new OpenMM::CustomNonbondedForce(GENERAL_ION);
     std::vector<double> params(10);
     auto corr_recip = new OpenMM::CustomBondForce(CORR_ION);
+    QVector<bool> perturbed_energies_tmp{false, false, false, false, false,
+	false, false, false, false};
 
     /*
      * Direct space and reciprocal correction setup through explict energy
@@ -794,6 +744,7 @@ void OpenMMPMEFEP::initialise_ion()
             * std::sqrt(-log(2.0 * tolerance_PME));
 
         system->addForce(direct_space);
+	perturbed_energies_tmp[0] = true;
 
         direct_space->setForceGroup(DIRECT_FCG);
         direct_space->setNonbondedMethod
@@ -802,6 +753,7 @@ void OpenMMPMEFEP::initialise_ion()
 
         direct_space->addGlobalParameter("lam", current_lambda);
         direct_space->addGlobalParameter("alpha_pme", alpha_PME);
+	direct_space->addGlobalParameter("SPOnOff", 0.0); // not needed
 
         direct_space->addPerParticleParameter("qstart");
         direct_space->addPerParticleParameter("qend");
@@ -834,8 +786,9 @@ void OpenMMPMEFEP::initialise_ion()
 
         system->addForce(corr_recip);
         corr_recip->setForceGroup(CORR_FCG);
+	perturbed_energies_tmp[8] = true;
 
-        corr_recip->addGlobalParameter("lambda_corr", current_lambda);
+        corr_recip->addGlobalParameter("lam_corr", current_lambda);
         corr_recip->addGlobalParameter("alpha_pme", alpha_PME);
 
         corr_recip->addPerBondParameter("qcstart");
@@ -916,6 +869,7 @@ void OpenMMPMEFEP::initialise_ion()
         }
     }
 
+    perturbed_energies = perturbed_energies_tmp;
     this->openmm_system = system;
     this->isSystemInitialised = true;
 } // OpenMMPMEFEP::initialise_ion END
