@@ -615,8 +615,310 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
 
 
 // NOTE: only for debugging with simple non-dummy systems like ions
-const bool fullPME = false;   // use false for production
+const bool fullPME = true;   // use false for production
 const bool useOffset = true; // use true for production
+const bool doCharge = true;
+
+
+/*
+  A simple system of an ion in a water box.  This is really for debugging
+  purposes only and assumes that the parm7 and rst7 file are describing
+  such a system exactly as in the code below.
+ */
+
+#include "posvel.h"
+void OpenMMPMEFEP::initialise_ion()
+{
+    if (Debug) {
+        qDebug() << "Initialising OpenMMPMEFEP";
+        const std::string version = OpenMM::Platform::getOpenMMVersion();
+        qDebug() << "OpenMM Version:" << QString::fromUtf8(version.data(),
+                 version.size());
+	qDebug() << "Running single ion debug system";
+	qDebug() << "fullPME =" << fullPME;
+	qDebug() << "doCharge =" << doCharge;
+    }
+
+    // Create a workspace using the stored molgroup
+    const MoleculeGroup moleculegroup = this->molgroup.read();
+
+    if (moleculegroup.isEmpty())
+        throw SireError::program_bug(
+            QObject::tr("Cannot initialise OpenMMPMEFEP because molgroup has not been defined"),
+            CODELOC);
+
+    const MoleculeGroup solute = this->solute.read();
+    const MoleculeGroup solutehard = this->solutehard.read();
+    const MoleculeGroup solutetodummy = this->solutetodummy.read();
+    const MoleculeGroup solutefromdummy = this->solutefromdummy.read();
+
+    AtomicVelocityWorkspace ws =
+        this->createWorkspace(moleculegroup).read().asA<AtomicVelocityWorkspace>();
+
+    const int nmols = ws.nMolecules();
+
+    int nats = 0;
+
+    for (int i = 0; i < nmols; ++i) {
+        nats = nats + ws.nAtoms(i);
+    }
+
+    if (Debug)
+        qDebug() << "There are" << nats << "atoms. " << "There are" << nmols
+                 << "molecules";
+
+    int flag_combRules;
+
+    if (combiningRules == "arithmetic")
+        flag_combRules = ARITHMETIC;
+    else if (combiningRules == "geometric")
+        flag_combRules = GEOMETRIC;
+    else
+        throw SireError::program_bug(
+            QObject::tr("The combining rules have not been specified. Possible choises: arithmetic, geometric"),
+            CODELOC);
+
+    if (Debug)
+        qDebug() << "combiningRules =" << combiningRules;
+
+    bool flag_noperturbedconstraints = false;
+    int flag_constraint;
+    bool flag_constraint_water = false;
+
+    if (ConstraintType == "none")
+        flag_constraint = NONE;
+    else if (ConstraintType == "hbonds")
+        flag_constraint = HBONDS;
+    else if (ConstraintType == "allbonds")
+        flag_constraint = ALLBONDS;
+    else if (ConstraintType == "hangles")
+        flag_constraint = HANGLES;
+    else if (ConstraintType == "hbonds-notperturbed") {
+        flag_constraint = HBONDS;
+        flag_noperturbedconstraints = true;
+    }
+    else if (ConstraintType == "none-notwater") {
+        flag_constraint = NONE;
+        flag_constraint_water = true;
+    }
+    else
+        throw SireError::program_bug(
+            QObject::tr("The Constraints method has not been specified."
+                        "Possible choises: none, hbonds, allbonds, hangles, hbonds-notperturbed, none-notwater"),
+            CODELOC);
+
+    if (Debug)
+        qDebug() << "Constraint Type =" << ConstraintType;
+
+    // Load Plugins from the OpenMM standard Plugin Directory
+    OpenMM::Platform::loadPluginsFromDirectory(
+        OpenMM::Platform::getDefaultPluginsDirectory());
+
+    // the system will hold all
+    auto system = new OpenMM::System();
+
+    // Andersen thermostat
+    if (Andersen_flag)
+        addAndersenThermostat(*system);
+
+    // Monte Carlo Barostat
+    if (MCBarostat_flag)
+        addMCBarostat(*system);
+
+    if (CMMremoval_frequency > 0) {
+        auto cmmotionremover = new OpenMM::CMMotionRemover(CMMremoval_frequency);
+
+        system->addForce(cmmotionremover);
+
+        if (Debug)
+            qDebug() << "\nWill remove Center of Mass motion every" <<
+                CMMremoval_frequency << "steps\n";
+    }
+
+    auto recip_space = new OpenMM::NonbondedForce();
+    std::vector<std::pair<int,int> > pairs;
+
+    const double cutoff = convertTo(cutoff_distance.value(), nanometer);
+
+    system->addForce(recip_space);
+    system->setDefaultPeriodicBoxVectors(OpenMM::Vec3(boxl_ion, 0.0, 0.0),
+                                        OpenMM::Vec3(0.0, boxl_ion, 0.0),
+                                        OpenMM::Vec3(0.0, 0.0, boxl_ion));
+
+    recip_space->setForceGroup(RECIP_FCG);
+    recip_space->setNonbondedMethod(OpenMM::NonbondedForce::PME);
+    recip_space->setCutoffDistance(cutoff);
+    recip_space->setIncludeDirectSpace(fullPME);
+    recip_space->setUseDispersionCorrection(false);
+
+    // sodium assumed to come first
+    system->addParticle(atom_Na.mass);
+    const unsigned int idx =
+        recip_space->addParticle(atom_Na.charge, atom_Na.sigma,
+                                 atom_Na.epsilon);
+
+    double charge_scale = 0.0;
+    double sigma_scale = 0.0;
+    double epsilon_scale = 0.0;
+
+    if (doCharge) {            // discharge
+        charge_scale = -atom_Na.charge;
+    } else {                    // shrink
+        sigma_scale = -atom_Na.sigma;
+        epsilon_scale = -atom_Na.epsilon;
+
+        // make sure the charge is zero before attempting to shrink
+        recip_space->setParticleParameters(idx, 0.0,
+                                           atom_Na.sigma, atom_Na.epsilon);
+    }
+
+    // linear scaling of the charges
+    recip_space->addGlobalParameter("lambda_offset", current_lambda);
+    recip_space->addParticleParameterOffset("lambda_offset", idx,
+                                            charge_scale,
+                                            sigma_scale, epsilon_scale);
+
+    // NOTE: can't be *new for some reason
+    auto direct_space = new OpenMM::CustomNonbondedForce(GENERAL_ION);
+    std::vector<double> params(10);
+    auto corr_recip = new OpenMM::CustomBondForce(CORR_ION);
+
+    /*
+     * Direct space and reciprocal correction setup through explict energy
+     * expressions
+     */
+
+    if (!fullPME) {
+        double tolerance_PME = recip_space->getEwaldErrorTolerance();
+        double alpha_PME = (1.0 / cutoff)
+            * std::sqrt(-log(2.0 * tolerance_PME));
+
+        system->addForce(direct_space);
+
+        direct_space->setForceGroup(DIRECT_FCG);
+        direct_space->setNonbondedMethod
+            (OpenMM::CustomNonbondedForce::CutoffPeriodic);
+        direct_space->setCutoffDistance(cutoff);
+
+        direct_space->addGlobalParameter("lam", current_lambda);
+        direct_space->addGlobalParameter("alpha_pme", alpha_PME);
+
+        direct_space->addPerParticleParameter("qstart");
+        direct_space->addPerParticleParameter("qend");
+        direct_space->addPerParticleParameter("sigmastart");
+        direct_space->addPerParticleParameter("sigmaend");
+        direct_space->addPerParticleParameter("epstart");
+        direct_space->addPerParticleParameter("epend");
+        direct_space->addPerParticleParameter("isHD");
+        direct_space->addPerParticleParameter("isTD");
+        direct_space->addPerParticleParameter("isFD");
+        direct_space->addPerParticleParameter("isSolvent");
+
+	if (doCharge) {
+            params = {
+                atom_Na.charge, 0.0,
+                atom_Na.sigma, atom_Na.sigma,
+                atom_Na.epsilon, atom_Na.epsilon,
+                1.0, 0.0, 0.0, 0.0
+            };
+        } else {
+            params = {
+                0.0, 0.0,
+                atom_Na.sigma, 0.0,
+                atom_Na.epsilon, 0.0,
+                1.0, 0.0, 0.0, 0.0
+            };
+        }
+
+        direct_space->addParticle(params);
+
+        system->addForce(corr_recip);
+        corr_recip->setForceGroup(CORR_FCG);
+
+        corr_recip->addGlobalParameter("lambda_corr", current_lambda);
+        corr_recip->addGlobalParameter("alpha_pme", alpha_PME);
+
+        corr_recip->addPerBondParameter("qcstart");
+        corr_recip->addPerBondParameter("qcend");
+    }
+
+    for (int i = 0; i < nwater_ion; i++) {
+        int idx_O = system->addParticle(water[0].mass);
+        int idx_H1 = system->addParticle(water[1].mass);
+        int idx_H2 = system->addParticle(water[2].mass);
+
+        recip_space->addParticle(water[0].charge, water[0].sigma,
+                                water[0].epsilon);
+        recip_space->addParticle(water[1].charge, water[1].sigma,
+                                water[1].epsilon);
+        recip_space->addParticle(water[2].charge, water[2].sigma,
+                                water[2].epsilon);
+
+        if (!fullPME) {
+            direct_space->addParticle({water[0].charge, water[0].charge,
+                    water[0].sigma, water[0].sigma,
+                    water[0].epsilon, water[0].epsilon,
+                    1.0, 0.0, 0.0, 1.0});
+            direct_space->addParticle({water[1].charge, water[1].charge,
+                    water[1].sigma, water[1].sigma,
+                    water[1].epsilon, water[1].epsilon,
+                    1.0, 0.0, 0.0, 1.0});
+            direct_space->addParticle({water[2].charge, water[2].charge,
+                    water[2].sigma, water[2].sigma,
+                    water[2].epsilon, water[2].epsilon,
+                    1.0, 0.0, 0.0, 1.0});
+        }
+
+        pairs.push_back(std::make_pair(idx_O, idx_H1));
+        pairs.push_back(std::make_pair(idx_O, idx_H2));
+
+        system->addConstraint(idx_O, idx_H1, r_OH);
+        system->addConstraint(idx_O, idx_H2, r_OH);
+        system->addConstraint(idx_H1, idx_H2, r_HH);
+    }
+
+    recip_space->createExceptionsFromBonds(pairs, Coul14_scale_ion,
+					   LJ14_scale_ion);
+
+    /*
+     * Setup of exclusions for direct space and reciprocal space corrections
+     * which are custom bond forces
+     */
+
+    if (!fullPME) {
+        int p1, p2;
+        std::vector<double> p1_params(6);
+        std::vector<double> p2_params(6);
+
+        double charge_prod, sigma_avg, epsilon_avg;
+        double qprod_start, qprod_end;
+        double Qstart_p1, Qend_p1, Qstart_p2, Qend_p2;
+
+        for (unsigned int i = 0; i < recip_space->getNumExceptions(); i++) {
+            recip_space->getExceptionParameters
+                (i, p1, p2, charge_prod, sigma_avg, epsilon_avg);
+
+            direct_space->addExclusion(p1, p2);
+
+            direct_space->getParticleParameters(p1, p1_params);
+            direct_space->getParticleParameters(p2, p2_params);
+
+            // NOTE: these are just the TIP3P atom charges
+            Qstart_p1 = p1_params[0];
+            Qend_p1 = p1_params[1];
+            Qstart_p2 = p2_params[0];
+            Qend_p2 = p2_params[1];
+
+            qprod_start = Qstart_p1 * Qstart_p2;
+            qprod_end = Qend_p1 * Qend_p2;
+
+            corr_recip->addBond(p1, p2, {qprod_start, qprod_end});
+        }
+    }
+
+    this->openmm_system = system;
+    this->isSystemInitialised = true;
+} // OpenMMPMEFEP::initialise_ion END
 
 /**
  * initialises the openMM Free energy single topology calculation

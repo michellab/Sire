@@ -508,6 +508,17 @@ void register_OpenMMPMEFEP_class(){
                 , "" );
         
         }
+        { //::SireMove::OpenMMPMEFEP::initialise_ion
+        
+            typedef void ( ::SireMove::OpenMMPMEFEP::*initialise_ion_function_type)(  ) ;
+            initialise_ion_function_type initialise_ion_function_value( &::SireMove::OpenMMPMEFEP::initialise_ion );
+            
+            OpenMMPMEFEP_exposer.def( 
+                "initialise_ion"
+                , initialise_ion_function_value
+                , "" );
+        
+        }
         { //::SireMove::OpenMMPMEFEP::initialise
         
             typedef void ( ::SireMove::OpenMMPMEFEP::*initialise_function_type)(  ) ;
