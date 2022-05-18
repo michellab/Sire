@@ -617,7 +617,7 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
 // NOTE: only for debugging with simple non-dummy systems like ions
 const bool fullPME = false;   // use false for production
 const bool useOffset = true; // use true for production
-const bool doCharge = true;
+const bool doCharge = true;  // for the ion debug system only
 
 
 /*
@@ -637,6 +637,7 @@ void OpenMMPMEFEP::initialise_ion()
 	qDebug() << "Running single ion debug system";
 	qDebug() << "fullPME =" << fullPME;
 	qDebug() << "doCharge =" << doCharge;
+	qDebug() << "useOffset =" << useOffset;
     }
 
     // Create a workspace using the stored molgroup
@@ -689,8 +690,8 @@ void OpenMMPMEFEP::initialise_ion()
 
     system->addForce(recip_space);
     system->setDefaultPeriodicBoxVectors(OpenMM::Vec3(boxl_ion, 0.0, 0.0),
-                                        OpenMM::Vec3(0.0, boxl_ion, 0.0),
-                                        OpenMM::Vec3(0.0, 0.0, boxl_ion));
+					 OpenMM::Vec3(0.0, boxl_ion, 0.0),
+					 OpenMM::Vec3(0.0, 0.0, boxl_ion));
 
     recip_space->setForceGroup(RECIP_FCG);
     recip_space->setNonbondedMethod(OpenMM::NonbondedForce::PME);
@@ -720,10 +721,12 @@ void OpenMMPMEFEP::initialise_ion()
     }
 
     // linear scaling of the charges
-    recip_space->addGlobalParameter("lambda_offset", current_lambda);
-    recip_space->addParticleParameterOffset("lambda_offset", idx,
-                                            charge_scale,
-                                            sigma_scale, epsilon_scale);
+    if (useOffset) {
+	recip_space->addGlobalParameter("lambda_offset", current_lambda);
+	recip_space->addParticleParameterOffset("lambda_offset", idx,
+						charge_scale,
+						sigma_scale, epsilon_scale);
+    }
 
     // NOTE: can't be *new for some reason
     auto direct_space = new OpenMM::CustomNonbondedForce(GENERAL_ION);
@@ -816,6 +819,7 @@ void OpenMMPMEFEP::initialise_ion()
 
         pairs.push_back(std::make_pair(idx_O, idx_H1));
         pairs.push_back(std::make_pair(idx_O, idx_H2));
+	pairs.push_back(std::make_pair(idx_H1, idx_H2));
 
         system->addConstraint(idx_O, idx_H1, r_OH);
         system->addConstraint(idx_O, idx_H2, r_OH);
@@ -839,7 +843,12 @@ void OpenMMPMEFEP::initialise_ion()
         double qprod_start, qprod_end;
         double Qstart_p1, Qend_p1, Qstart_p2, Qend_p2;
 
-        for (unsigned int i = 0; i < recip_space->getNumExceptions(); i++) {
+	unsigned int num_exceptions = recip_space->getNumExceptions();
+
+	if (Debug)
+	    qDebug() << "Number of exceptions =" << num_exceptions;
+
+        for (unsigned int i = 0; i < num_exceptions; i++) {
             recip_space->getExceptionParameters
                 (i, p1, p2, charge_prod, sigma_avg, epsilon_avg);
 
@@ -1225,15 +1234,17 @@ void OpenMMPMEFEP::initialise()
 
         for (int j = 0; j < nats_mol; ++j) {
             // This adds each atom to the system via its mass
-            // JM 10/16 make sure that perturbed atoms have mass of heaviest end-state
+            // JM 10/16 make sure that perturbed atoms have mass of heaviest
+	    // end-state
             system_openmm->addParticle(m[j]);
 
             Atom at = molatoms(j);
             AtomNum atnum = at.number();
 
             if (Debug)
-                qDebug() << " openMM_index " << system_index << " Sire Atom Number "
-                         << atnum.toString() << " Mass particle = " << m[j];
+                qDebug() << "openMM_index" << system_index
+			 << "Sire Atom Number" << atnum.toString()
+			 << "Mass particle =" << m[j];
 
             AtomNumToOpenMMIndex[atnum.value()] = system_index;
 
@@ -1243,83 +1254,82 @@ void OpenMMPMEFEP::initialise()
             // This is very AMBER specific.
 
             AtomName atname = at.name();
+	    ResName resname = at.residue().name();
 
             if (Debug)
                 qDebug() << " atname " << atname.value() << " mol " << i;
 
-            if (atname == AtomName("EPW")) {
-                ResName resname = at.residue().name();
+            if (atname == AtomName("EPW") && resname == ResName("WAT")) {
+		Atom oatom = molatoms.select(AtomName("O"));
+		Atom h1atom = molatoms.select(AtomName("H1"));
+		Atom h2atom = molatoms.select(AtomName("H2"));
 
-                if (resname == ResName("WAT")) {
-                    Atom oatom = molatoms.select(AtomName("O"));
-                    Atom h1atom = molatoms.select(AtomName("H1"));
-                    Atom h2atom = molatoms.select(AtomName("H2"));
+		AmberParameters amber_params =
+		    mol.property("amberparameters").asA<AmberParameters>();
+		QList<BondID> bonds_ff = amber_params.getAllBonds();
 
-                    AmberParameters amber_params =
-                        mol.property("amberparameters").asA<AmberParameters>();
-                    QList<BondID> bonds_ff = amber_params.getAllBonds();
+		double distoh = -1.0;
+		double disthh = -1.0;
+		double distoe = -1.0;
 
-                    double distoh = -1.0;
-                    double disthh = -1.0;
-                    double distoe = -1.0;
+		for (int k = 0; k < bonds_ff.length(); k++) {
+		    BondID bond_ff = bonds_ff[k];
+		    QList<double> bond_params = amber_params.getParams(bond_ff);
 
-                    for (int k = 0; k < bonds_ff.length(); k++) {
-                        BondID bond_ff = bonds_ff[k];
-                        QList<double> bond_params = amber_params.getParams(bond_ff);
+		    double r0 = bond_params[1];
 
-                        double r0 = bond_params[1];
+		    AtomName at0name = mol.select(bond_ff.atom0()).name();
+		    AtomName at1name = mol.select(bond_ff.atom1()).name();
 
-                        AtomName at0name = mol.select(bond_ff.atom0()).name();
-                        AtomName at1name = mol.select(bond_ff.atom1()).name();
+		    if ((at0name == AtomName("O") and at1name == AtomName("H1"))
+			or ( at0name == AtomName("H1") and at1name == AtomName("O"))) {
+			distoh = r0;
+		    }
+		    else if ((at0name == AtomName("H1") and at1name == AtomName("H2"))
+			     or ( at0name == AtomName("H2") and at1name == AtomName("H1"))) {
+			disthh = r0;
+		    }
+		    else if ((at0name == AtomName("EPW") and at1name == AtomName("O"))
+			     or ( at0name == AtomName("O") and at1name == AtomName("EPW"))) {
+			distoe = r0;
+		    }
+		}
 
-                        if ((at0name == AtomName("O") and at1name == AtomName("H1"))
-                                or ( at0name == AtomName("H1") and at1name == AtomName("O"))) {
-                            distoh = r0;
-                        }
-                        else if ((at0name == AtomName("H1") and at1name == AtomName("H2"))
-                                 or ( at0name == AtomName("H2") and at1name == AtomName("H1"))) {
-                            disthh = r0;
-                        }
-                        else if ((at0name == AtomName("EPW") and at1name == AtomName("O"))
-                                 or ( at0name == AtomName("O") and at1name == AtomName("EPW"))) {
-                            distoe = r0;
-                        }
-                    }
+		if (distoh < 0.0 or disthh < 0.0 or distoe < 0.0)
+		    throw SireError::program_bug
+			(QObject::tr("Could not find expected atoms in "
+				     "TIP4P water molecule."), CODELOC);
 
-                    if (distoh < 0.0 or disthh < 0.0 or distoe < 0.0)
-                        throw SireError::program_bug(
-                            QObject::tr("Could not find expected atoms in TIP4P water molecule."), CODELOC);
+		double weightH = distoe / sqrt((distoh * distoh) -
+					       (0.25 * disthh * disthh));
 
-                    double weightH = distoe / sqrt((distoh * distoh) - (0.25 * disthh * disthh));
+		int o_index = AtomNumToOpenMMIndex[oatom.number().value()];
+		int h1_index = AtomNumToOpenMMIndex[h1atom.number().value()];
+		int h2_index = AtomNumToOpenMMIndex[h2atom.number().value()];
 
-                    int o_index = AtomNumToOpenMMIndex[oatom.number().value()];
-                    int h1_index = AtomNumToOpenMMIndex[h1atom.number().value()];
-                    int h2_index = AtomNumToOpenMMIndex[h2atom.number().value()];
+		if (Debug)
+		    qDebug() << "virtual site " << system_index << " o "
+			     << o_index << " h1 " << h1_index << " h2 "
+			     << h2_index << " 1 - weightH " << 1 - weightH
+			     << " weightH/2 " << weightH / 2;
 
-                    if (Debug)
-                        qDebug() << "virtual site " << system_index << " o "
-                                 << o_index << " h1 " << h1_index << " h2 "
-                                 << h2_index << " 1 - weightH " << 1 - weightH
-                                 << " weightH/2 " << weightH / 2;
+		auto vsite =
+		    new OpenMM::ThreeParticleAverageSite
+		    (o_index, h1_index, h2_index, 1 - weightH,
+		     weightH / 2, weightH / 2);
 
-                    auto vsite =
-                        new OpenMM::ThreeParticleAverageSite(o_index, h1_index,
-                                h2_index, 1 - weightH,
-                                weightH / 2, weightH / 2);
-
-                    system_openmm->setVirtualSite(system_index, vsite);
-                }
-            }
+		system_openmm->setVirtualSite(system_index, vsite);
+            } // EPW
 
             system_index = system_index + 1;
 
         } // end of loop on atoms in molecule
-
     } // end of loop on molecules in workspace
 
     int num_atoms_till_i = 0;
 
-    // JM July 13. This also needs to be changed because there could be more than one perturbed molecule
+    // JM July 13. This also needs to be changed because there could be more
+    // than one perturbed molecule
     // Molecule solutemol = solute.moleculeAt(0).molecule();
     int nions = 0;
 
@@ -1333,7 +1343,8 @@ void OpenMMPMEFEP::initialise()
     std::vector<std::pair<int, int> > bondPairs;
 
     // A list of 1,4 atom pairs with non default scale factors
-    // for each entry, first pair has pair of indices, second has pair of scale factors
+    // for each entry, first pair has pair of indices, second has pair of
+    // scale factors
     QHash< QPair<int, int>, QPair<double, double> > custom14pairs;
 
     bool special_14 = false;
@@ -1627,17 +1638,15 @@ void OpenMMPMEFEP::initialise()
         } // end of restraint flag
 
         // single atoms like ions
-
         bool hasConnectivity = molecule.hasProperty("connectivity");
 
         if (!hasConnectivity) {
             num_atoms_till_i = num_atoms_till_i + num_atoms_molecule;
 
             if (Debug) {
-                qDebug() << "\nAtoms = " << num_atoms_molecule << " Num atoms till i =" <<
-                         num_atoms_till_i;
-                qDebug() <<
-                         "*********************MONOATOMIC MOLECULE DETECTED**************************\n";
+                qDebug() << "Number of atoms = " << num_atoms_molecule
+			 << "Number of atoms till i =" << num_atoms_till_i;
+                qDebug() << "***** MONOATOMIC MOLECULE DETECTED *****\n";
             }
 
             nions = nions + 1;
@@ -1645,7 +1654,6 @@ void OpenMMPMEFEP::initialise()
         }
 
         // bonded terms
-
         QList< BondID > bond_pert_list;
         QList< BondID > bond_pert_swap_list;
         QList< AngleID > angle_pert_list;
@@ -1812,6 +1820,7 @@ void OpenMMPMEFEP::initialise()
                                      "bend = " << bend << " kcal/A A" << "\n";
                         }
                     }
+
                     if (str == "SireMM::ThreeAtomPerturbation") {
                         const ThreeAtomPerturbation &three = pert.asA<ThreeAtomPerturbation>();
                         int idx0 = three.atom0().asA<AtomIdx>().value() + num_atoms_till_i;
@@ -2151,7 +2160,7 @@ void OpenMMPMEFEP::initialise()
                         }
                     }
 
-                }
+                } // end if (pert.isA<InternalPerturbation>())
             } // end for perturbations
 
         } // end solute molecule perturbation
@@ -2164,7 +2173,6 @@ void OpenMMPMEFEP::initialise()
         ResName molfirstresname = molecule.residues()(0).name();
 
         // Bonds
-
         for (int j = 0; j < bonds_ff.length(); j++) {
             BondID bond_ff = bonds_ff[j];
             QList<double> bond_params = amber_params.getParams(bond_ff);
@@ -2207,13 +2215,13 @@ void OpenMMPMEFEP::initialise()
                 system_openmm->addConstraint(idx0, idx1, r0 * OpenMM::NmPerAngstrom);
             }
             else if (flag_constraint == HBONDS) {
-                if ((atom0[6] == 'H') || (atom1[6] == 'H')) {
+                if ((atom0[6] == 'H') || (atom1[6] == 'H')) { // will add constraint between all TIP3P atoms
                     system_openmm->addConstraint(idx0, idx1, r0 * OpenMM::NmPerAngstrom);
                 }
                 else {
                     bondStretch_openmm->addBond(idx0, idx1, r0 * OpenMM::NmPerAngstrom,
                                                 k * 2.0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-                }
+		}
             }
 
             // Bond exclusion List
@@ -2221,7 +2229,6 @@ void OpenMMPMEFEP::initialise()
         }
 
         // Angles
-
         QList<AngleID> angles_ff = amber_params.getAllAngles();
         QVector<AngleID> angles = angles_ff.toVector();
 
@@ -2257,6 +2264,7 @@ void OpenMMPMEFEP::initialise()
                     continue;
                 }
             }
+
             if (Debug)
                 qDebug() << "Angle - Atom0 = " << idx0 << "Atom1 = " << idx1 << "Atom2 = " <<
                          idx2 << "\n";
@@ -2291,7 +2299,6 @@ void OpenMMPMEFEP::initialise()
         } // end of angles
 
         // Dihedrals
-
         QList<DihedralID> dihedrals_ff = amber_params.getAllDihedrals();
         QVector<DihedralID> dihedrals = dihedrals_ff.toVector();
 
@@ -2341,7 +2348,6 @@ void OpenMMPMEFEP::initialise()
         } // end of dihedrals
 
         // Improper Dihedrals
-
         QList<ImproperID> impropers_ff = amber_params.getAllImpropers();
         QVector<ImproperID> impropers = impropers_ff.toVector();
 
@@ -2429,7 +2435,7 @@ void OpenMMPMEFEP::initialise()
 
     if (Debug) {
         if (nions != 0)
-            qDebug() << "\nNumber of ions = " << nions << "\n";
+            qDebug() << "\nNumber of ions = " << nions;
     }
 
 
@@ -2443,7 +2449,7 @@ void OpenMMPMEFEP::initialise()
     int num_exceptions = recip_space->getNumExceptions();
 
     if (Debug)
-        qDebug() << "num exceptions =" << num_exceptions << "\n";
+        qDebug() << "Number of exceptions =" << num_exceptions;
 
     for (int i = 0; i < num_exceptions; i++) {
         int p1, p2;
