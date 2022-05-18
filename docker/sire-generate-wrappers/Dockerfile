@@ -36,6 +36,7 @@ COPY scanner.py /opt/conda/lib/python3.9/site-packages/pygccxml/parser
 
 COPY includes.tar.bz2 /opt/conda
 COPY generate_wrappers /usr/bin
+COPY unpack_headers /usr/bin
 RUN chmod a+x /usr/bin/generate_wrappers
 COPY bashrc /root/.bashrc
 COPY push_wrappers /usr/bin
