@@ -3294,3 +3294,106 @@ SelectEngine::ObjType IDPerturbableEngine::objectType() const
 {
     return SelectEngine::MOLECULE;
 }
+
+////////
+//////// Implementation of the IDCountEngine
+////////
+
+IDCountEngine::IDCountEngine()
+{}
+
+SelectEnginePtr IDCount::toEngine() const
+{
+    return IDCountEngine::construct(object.toEngine(), compare, value);
+}
+
+QString IDCount::toString() const
+{
+    return QObject::tr("count( %1 ) %2 %3")
+            .arg(object.toString())
+            .arg(idcomparison_to_string(compare))
+            .arg(value);
+}
+
+SelectEnginePtr IDCountEngine::construct(SelectEnginePtr object,
+                                         IDComparison compare, int value)
+{
+    IDCountEngine *ptr = new IDCountEngine();
+    auto p = makePtr(ptr);
+
+    if (object)
+        object->setParent(p);
+
+    ptr->object = object;
+    ptr->compare = compare;
+    ptr->value = value;
+
+    return p;
+}
+
+IDCountEngine::~IDCountEngine()
+{}
+
+std::function<int (const MoleculeView&)> _get_count(SelectEngine::ObjType obj)
+{
+    switch(obj)
+    {
+    case SelectEngine::ATOM:
+        return [](const MoleculeView &view){ return view.nAtoms(); };
+    case SelectEngine::RESIDUE:
+        return [](const MoleculeView &view){ return view.nResidues(); };
+    case SelectEngine::CHAIN:
+        return [](const MoleculeView &view){ return view.nChains(); };
+    case SelectEngine::SEGMENT:
+        return [](const MoleculeView &view){ return view.nSegments(); };
+    case SelectEngine::CUTGROUP:
+        return [](const MoleculeView &view){ return view.nCutGroups(); };
+    case SelectEngine::BOND:
+        return [](const MoleculeView &view){ return SelectorBond(view).count(); };
+    default:
+        return [](const MoleculeView&){ return 0; };
+    }
+}
+
+SelectResult IDCountEngine::select(const SelectResult &mols, const PropertyMap &map) const
+{
+    QList<MolViewPtr> result;
+
+    // first select our expression from mols
+    if (not object)
+        return result;
+
+    auto compare_func = _get_compare(compare);
+    auto count_func = _get_count(object->objectType());
+
+    auto items = object->operator()(mols, map);
+
+    if (items.isEmpty())
+        return SelectResult();
+
+    for (const auto &molview : mols)
+    {
+        if (compare_func(count_func(*molview), value))
+        {
+            result.append(molview);
+        }
+    }
+
+    return SelectResult(result);
+}
+
+SelectEngine::ObjType IDCountEngine::objectType() const
+{
+    if (object)
+        return object->objectType();
+    else
+        return SelectEngine::COMPLEX;
+}
+
+SelectEnginePtr IDCountEngine::simplify()
+{
+    if (object.get())
+        object = object->simplify();
+
+    return selfptr.lock();
+}

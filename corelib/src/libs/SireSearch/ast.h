@@ -127,6 +127,7 @@ namespace AST
     struct IDBinary;
     struct IDWith;
     struct IDWhere;
+    struct IDCount;
     struct IDNot;
     struct IDSubscript;
     struct IDWithin;
@@ -164,6 +165,7 @@ namespace AST
                                              boost::recursive_wrapper<IDBinary>,
                                              boost::recursive_wrapper<IDWith>,
                                              boost::recursive_wrapper<IDWhere>,
+                                             boost::recursive_wrapper<IDCount>,
                                              boost::recursive_wrapper<IDNot>,
                                              boost::recursive_wrapper<IDSubscript>,
                                              boost::recursive_wrapper<IDWithin>,
@@ -694,6 +696,36 @@ namespace AST
         SelectEnginePtr toEngine() const;
     };
 
+    /** Struct that holds "count(*) < X" expressions */
+    struct IDCount
+    {
+        Expression object;
+        IDComparison compare;
+        int value;
+
+        IDCount& operator+=(const Expression &o)
+        {
+            object = o;
+            return *this;
+        }
+
+        IDCount& operator+=(const IDComparison &c)
+        {
+            compare = c;
+            return *this;
+        }
+
+        IDCount& operator+=(int v)
+        {
+            value = v;
+            return *this;
+        }
+
+        QString toString() const;
+
+        SelectEnginePtr toEngine() const;
+    };
+
     /** Struct that holds a "where within"
         expression, e.g. residues where center is within 5 A of resname /lig/i */
     struct IDWhereWithin
@@ -843,6 +875,12 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDWithinVector,
 BOOST_FUSION_ADAPT_STRUCT( AST::LengthValue,
                            (double,value)
                            (SireUnits::Dimension::Length,unit)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDCount,
+                           (AST::Expression,object)
+                           (AST::IDComparison,compare)
+                           (int,value)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWhereWithin,

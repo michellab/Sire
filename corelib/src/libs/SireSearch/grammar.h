@@ -335,7 +335,7 @@ public:
                               withinVectorRule | whereRule | notRule | joinRule |
                               massRule | massCmpRule | chargeRule | chargeCmpRule |
                               massObjRule | massObjCmpRule | chargeObjRule | chargeObjCmpRule |
-                              user_token |
+                              countRule | user_token |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
 
         //grammar that specifies a list of names (comma-separated)
@@ -478,6 +478,17 @@ public:
         //sub-grammar for a "where comparison" expression
         whereCompareRule %= cmp_token >> vectorValueRule;
 
+        //grammar for a count expression e.g. count(atoms) < 5
+        countRule = eps [ _val = AST::IDCount() ] >>
+                            (
+                                qi::lit("count(") >>
+                                expressionRule[ _val += _1 ] >>
+                                qi::lit(")") >>
+                                cmp_token[ _val += _1 ] >>
+                                qi::int_[ _val += _1 ]
+                            )
+                            ;
+
         /////
         ///// name all of the rules to simplify error messages
         /////
@@ -496,6 +507,7 @@ public:
         whereRule.name( "Where" );
         whereWithinRule.name( "Where Within" );
         whereCompareRule.name( "Where Compare" );
+        countRule.name( "Count Rule" );
         expressionsRule.name( "Expressions" );
         expressionRule.name( "Expression" );
         expressionPartRule.name( "Expression Part" );
@@ -559,6 +571,7 @@ public:
     qi::rule<IteratorT, AST::IDWhere(), SkipperT> whereRule;
     qi::rule<IteratorT, AST::IDWhereWithin(), SkipperT> whereWithinRule;
     qi::rule<IteratorT, AST::IDWhereCompare(), SkipperT> whereCompareRule;
+    qi::rule<IteratorT, AST::IDCount(), SkipperT> countRule;
 
     qi::rule<IteratorT, AST::Expressions(), SkipperT> expressionsRule;
     qi::rule<IteratorT, AST::Expression(), SkipperT> expressionRule;

@@ -160,6 +160,16 @@ static void set_token(const std::string &token, const std::string &str)
     _user_tokens->add(token, AST::IDUser(token,node.values[0].value));
 }
 
+static bool has_token(const std::string &token)
+{
+    QMutexLocker lkr(tokensMutex());
+
+    if (_user_tokens == 0)
+        return false;
+
+    return _user_tokens->find(token) != 0;
+}
+
 static QString get_token(const std::string &token)
 {
     QMutexLocker lkr(tokensMutex());
@@ -193,6 +203,17 @@ static void delete_token(const std::string &token)
 /** Function used internally to parse a string into an AST::Node */
 static AST::Node parse_main(const std::string &str)
 {
+    if (not has_token("atoms"))
+    {
+        // add all of the base tokens
+        set_token("atoms", "atoms in *");
+        set_token("residues", "residues in *");
+        set_token("chains", "chains in *");
+        set_token("cutgroups", "cutgroups in *");
+        set_token("segments", "segments in *");
+        set_token("molecules", "molecules in *");
+    }
+
     // Read file contents.
     return parse( str.begin(), str.end() );
 }
@@ -215,6 +236,11 @@ namespace SireSearch
         void SearchParser::set_token(const QString &token, const QString &selection)
         {
             ::set_token(token.toStdString(), selection.toStdString());
+        }
+
+        bool SearchParser::has_token(const QString &token)
+        {
+            return ::has_token(token.toStdString());
         }
 
         QString SearchParser::get_token(const QString &token)

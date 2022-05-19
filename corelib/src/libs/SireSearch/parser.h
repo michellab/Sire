@@ -53,6 +53,7 @@ namespace parser
         static void install();
 
         void set_token(const QString &token, const QString &selection);
+        bool has_token(const QString &token);
         QString get_token(const QString &token);
         void delete_token(const QString &token);
         void delete_all_tokens();

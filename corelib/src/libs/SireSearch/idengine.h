@@ -461,6 +461,29 @@ protected:
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
 };
 
+/** Internal class used to select objects based on counts,
+ *   e.g. count(atoms) < 5
+ */
+class IDCountEngine : public SelectEngine
+{
+public:
+    static SelectEnginePtr construct(SelectEnginePtr object, IDComparison compare, int value);
+
+    ~IDCountEngine();
+
+    ObjType objectType() const;
+    SelectEnginePtr simplify();
+
+protected:
+    IDCountEngine();
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+
+private:
+    SelectEnginePtr object;
+    IDComparison compare;
+    int value;
+};
+
 /** Internal class used to select all water molecules.
 
     @author Lester Hedges

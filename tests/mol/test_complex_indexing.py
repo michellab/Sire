@@ -220,6 +220,29 @@ def test_in_searches():
     assert len(mols["residues in *"]) == mols.num_residues()
 
 
+def test_all_searches():
+    mols = sr.load_test_files("ala.top", "ala.crd")
+
+    assert len(mols["atoms"]) == 1912
+    assert len(mols["residues"]) == 633
+
+    assert len(mols["atoms in *"]) == 1912
+    assert len(mols["residues in *"]) == 633
+
+    assert len(mols["atoms in molidx 0"]) == 22
+    assert len(mols["residues in molidx 0"]) == 3
+
+
+def test_count_searches():
+    mols = sr.load_test_files("ala.top", "ala.crd")
+
+    for mol in mols["molecules with count(atoms) == 3"]:
+        assert mol.num_atoms() == 3
+
+    mol = mols["molecules with count(residues) == 3"]
+    assert mol.num_residues() == 3
+
+
 if __name__ == "__main__":
     test_basic_indexing()
     test_complex_indexing()
@@ -227,4 +250,6 @@ if __name__ == "__main__":
     test_sizes_correct()
     test_search_terms()
     test_in_searches()
+    test_count_searches()
+    test_all_searches()
 

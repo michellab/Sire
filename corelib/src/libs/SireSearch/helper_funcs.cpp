@@ -99,6 +99,11 @@ namespace SireSearch
         parser::SearchParser::globalParser().set_token(token, search);
     }
 
+    SIRESEARCH_EXPORT bool has_token(const QString &token)
+    {
+        return parser::SearchParser::globalParser().has_token(token);
+    }
+
     SIRESEARCH_EXPORT QString get_token(const QString &token)
     {
         return parser::SearchParser::globalParser().get_token(token);

@@ -83,6 +83,16 @@ namespace bp = boost::python;
 
 #include "helper_funcs.h"
 
+#include "SireMol/core.h"
+
+#include "SireSearch/parser.h"
+
+#include "helper_funcs.h"
+
+#include <QReadWriteLock>
+
+#include "helper_funcs.h"
+
 #include "approx_equal.h"
 
 #include <QDebug>
@@ -205,6 +215,19 @@ void register_free_functions(){
         bp::def( 
             "get_token"
             , get_token_function_value
+            , ( bp::arg("token") )
+            , "" );
+    
+    }
+
+    { //::SireSearch::has_token
+    
+        typedef bool ( *has_token_function_type )( ::QString const & );
+        has_token_function_type has_token_function_value( &::SireSearch::has_token );
+        
+        bp::def( 
+            "has_token"
+            , has_token_function_value
             , ( bp::arg("token") )
             , "" );
     

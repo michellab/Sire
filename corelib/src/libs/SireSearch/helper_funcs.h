@@ -44,6 +44,7 @@ namespace SireSearch
     SIRESEARCH_EXPORT void set_protein_residue_names(const QSet<QString> &names);
 
     SIRESEARCH_EXPORT void set_token(const QString &token, const QString &search);
+    SIRESEARCH_EXPORT bool has_token(const QString &token);
     SIRESEARCH_EXPORT QString get_token(const QString &token);
     SIRESEARCH_EXPORT void delete_token(const QString &token);
     SIRESEARCH_EXPORT void delete_all_tokens();
@@ -55,6 +56,7 @@ SIRE_EXPOSE_FUNCTION( SireSearch::set_min_protein_residues )
 SIRE_EXPOSE_FUNCTION( SireSearch::get_protein_residue_names )
 SIRE_EXPOSE_FUNCTION( SireSearch::set_protein_residue_names )
 SIRE_EXPOSE_FUNCTION( SireSearch::set_token )
+SIRE_EXPOSE_FUNCTION( SireSearch::has_token )
 SIRE_EXPOSE_FUNCTION( SireSearch::get_token )
 SIRE_EXPOSE_FUNCTION( SireSearch::delete_token )
 SIRE_EXPOSE_FUNCTION( SireSearch::delete_all_tokens )
