@@ -115,7 +115,7 @@ void register_OpenMMFrEnergyST_class(){
             OpenMMFrEnergyST_exposer.def( 
                 "createWorkspace"
                 , createWorkspace_function_value
-                , ( bp::arg("map")=(SireBase::PropertyMap()) )
+                , ( bp::arg("map")=SireBase::PropertyMap() )
                 , "Create an empty workspace" );
         
         }
@@ -127,7 +127,7 @@ void register_OpenMMFrEnergyST_class(){
             OpenMMFrEnergyST_exposer.def( 
                 "createWorkspace"
                 , createWorkspace_function_value
-                , ( bp::arg("molgroup"), bp::arg("map")=(SireBase::PropertyMap()) )
+                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
                 , "Create a workspace for this integrator for the molecule group molgroup" );
         
         }

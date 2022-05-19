@@ -94,9 +94,8 @@ namespace SireMove {
 
         bool isTimeReversible() const;
 
-        void initialise();
-	void initialise_ion();
-
+        void initialise(bool fullPME = false);
+	void initialise_ion(bool fullPME = false, bool doCharge = true);
 
         SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);
 

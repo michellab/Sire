@@ -7,19 +7,19 @@
 
 #include "cpuid.h"
 #include "propertylist.h"
-#include "stringproperty.h"
-#include "linktoproperty.h"
-#include "stringmangler.h"
+#include "majorminorversion.h"
 #include "lengthproperty.h"
+#include "stringproperty.h"
+#include "ranges.h"
+#include "stringmangler.h"
+#include "properties.h"
+#include "propertymap.h"
+#include "property.h"
 #include "booleanproperty.h"
 #include "timeproperty.h"
-#include "property.h"
-#include "variantproperty.h"
+#include "linktoproperty.h"
 #include "numberproperty.h"
-#include "majorminorversion.h"
-#include "propertymap.h"
-#include "ranges.h"
-#include "properties.h"
+#include "variantproperty.h"
 
 #include "Helpers/objectregistry.hpp"
 
@@ -31,24 +31,24 @@ void register_SireBase_objects()
     ObjectRegistry::registerConverterFor< SireBase::IntegerArrayProperty >();
     ObjectRegistry::registerConverterFor< SireBase::StringArrayProperty >();
     ObjectRegistry::registerConverterFor< SireBase::PropertyList >();
+    ObjectRegistry::registerConverterFor< SireBase::MajorMinorVersion >();
+    ObjectRegistry::registerConverterFor< SireBase::Version >();
+    ObjectRegistry::registerConverterFor< SireBase::LengthProperty >();
     ObjectRegistry::registerConverterFor< SireBase::StringProperty >();
-    ObjectRegistry::registerConverterFor< SireBase::LinkToProperty >();
+    ObjectRegistry::registerConverterFor< SireBase::SimpleRange >();
     ObjectRegistry::registerConverterFor< SireBase::NoMangling >();
     ObjectRegistry::registerConverterFor< SireBase::TrimString >();
     ObjectRegistry::registerConverterFor< SireBase::UpperCaseString >();
     ObjectRegistry::registerConverterFor< SireBase::LowerCaseString >();
-    ObjectRegistry::registerConverterFor< SireBase::LengthProperty >();
-    ObjectRegistry::registerConverterFor< SireBase::BooleanProperty >();
-    ObjectRegistry::registerConverterFor< SireBase::TimeProperty >();
-    ObjectRegistry::registerConverterFor< SireBase::NullProperty >();
-    ObjectRegistry::registerConverterFor< SireBase::VariantProperty >();
-    ObjectRegistry::registerConverterFor< SireBase::NumberProperty >();
-    ObjectRegistry::registerConverterFor< SireBase::MajorMinorVersion >();
-    ObjectRegistry::registerConverterFor< SireBase::Version >();
+    ObjectRegistry::registerConverterFor< SireBase::Properties >();
     ObjectRegistry::registerConverterFor< SireBase::PropertyName >();
     ObjectRegistry::registerConverterFor< SireBase::PropertyMap >();
-    ObjectRegistry::registerConverterFor< SireBase::SimpleRange >();
-    ObjectRegistry::registerConverterFor< SireBase::Properties >();
+    ObjectRegistry::registerConverterFor< SireBase::NullProperty >();
+    ObjectRegistry::registerConverterFor< SireBase::BooleanProperty >();
+    ObjectRegistry::registerConverterFor< SireBase::TimeProperty >();
+    ObjectRegistry::registerConverterFor< SireBase::LinkToProperty >();
+    ObjectRegistry::registerConverterFor< SireBase::NumberProperty >();
+    ObjectRegistry::registerConverterFor< SireBase::VariantProperty >();
 
 }
 

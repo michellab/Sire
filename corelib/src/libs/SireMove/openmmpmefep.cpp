@@ -615,9 +615,7 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
 
 
 // NOTE: only for debugging with simple non-dummy systems like ions
-const bool fullPME = false;   // use false for production
 const bool useOffset = true; // use true for production
-const bool doCharge = true;  // for the ion debug system only
 
 
 /*
@@ -627,7 +625,7 @@ const bool doCharge = true;  // for the ion debug system only
  */
 
 #include "posvel.h"
-void OpenMMPMEFEP::initialise_ion()
+void OpenMMPMEFEP::initialise_ion(bool fullPME, bool doCharge)
 {
     if (Debug) {
         qDebug() << "Initialising OpenMMPMEFEP";
@@ -636,8 +634,8 @@ void OpenMMPMEFEP::initialise_ion()
                  version.size());
 	qDebug() << "Running single ion debug system";
 	qDebug() << "fullPME =" << fullPME;
-	qDebug() << "doCharge =" << doCharge;
 	qDebug() << "useOffset =" << useOffset;
+	qDebug() << "doCharge =" << doCharge;
     }
 
     // Create a workspace using the stored molgroup
@@ -879,7 +877,7 @@ void OpenMMPMEFEP::initialise_ion()
  * initialises the openMM Free energy single topology calculation
  * Initialise must be called before anything else happens.
  */
-void OpenMMPMEFEP::initialise()
+void OpenMMPMEFEP::initialise(bool fullPME)
 {
     if (Debug) {
         qDebug() << "Initialising OpenMMPMEFEP";

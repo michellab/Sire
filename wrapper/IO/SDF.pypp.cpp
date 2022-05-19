@@ -29,6 +29,8 @@ namespace bp = boost::python;
 
 #include "SireMol/atompropertylist.h"
 
+#include "SireMol/atomradicals.h"
+
 #include "SireMol/bondid.h"
 
 #include "SireMol/bondtype.h"
@@ -40,6 +42,8 @@ namespace bp = boost::python;
 #include "SireMol/molecule.h"
 
 #include "SireMol/moleditor.h"
+
+#include "SireMol/radical.h"
 
 #include "SireMol/stereoscopy.h"
 

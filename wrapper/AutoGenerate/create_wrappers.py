@@ -613,10 +613,10 @@ if __name__ == "__main__":
     # All of the headers must be installed in the sire.app/include directory
     dir = os.path.dirname(sys.executable)
 
-    qtdir = "%s/../include/qt" % os.path.abspath(dir)
+    qtdir = "/usr/include/x86_64-linux-gnu/qt5" #"%s/../include/qt" % os.path.abspath(dir)
     boostdir = "%s/../include" % os.path.abspath(dir)
     gsldir = boostdir
-    openmm_include_dir = boostdir
+    openmm_include_dir = "/usr/local/openmm/include"
 
     need_input = False
 
@@ -669,7 +669,7 @@ if __name__ == "__main__":
                                 cflags = "-m64 -fPIC -std=c++14",
                                 include_paths = sire_include_dirs + qt_include_dirs +
                                            boost_include_dirs + gsl_include_dirs,
-                                define_symbols = ["GCCXML_PARSE", "__PIC__",
+                                define_symbols = ["GCCXML_PARSE",
                                                   "SIRE_ALWAYS_INLINE=inline",
                                                   "SIRE_SKIP_INLINE_FUNCTIONS",
                                                   "SIREN_SKIP_INLINE_FUNCTIONS",
@@ -689,7 +689,7 @@ if __name__ == "__main__":
                                 include_paths = sire_include_dirs + qt_include_dirs +
                                            boost_include_dirs + gsl_include_dirs +
                                            openmm_include_dirs,
-                                define_symbols = ["GCCXML_PARSE", "__PIC__",
+                                define_symbols = ["GCCXML_PARSE",
                                                   "SIRE_USE_OPENMM",
                                                   "SIRE_ALWAYS_INLINE=inline",
                                                   "SIRE_SKIP_INLINE_FUNCTIONS",
