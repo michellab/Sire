@@ -12,6 +12,97 @@ To explore this, let's load up the ``kigaki`` system.
 >>> import sire as sr
 >>> mols = sr.load(sr.expand(sr.tutorial_url, ["kigaki.gro", "kigaki.top"]))
 
+Searching by count
+------------------
+
+You can search for all atoms in the loaded molecules using
+
+>>> print(mols["atoms"])
+SireMol::SelectorM<SireMol::Atom>( size=11120
+0: MolNum(6) Atom( N:1     [  23.28,   13.14,   22.39] )
+1: MolNum(6) Atom( H1:2    [  22.66,   13.10,   21.60] )
+2: MolNum(6) Atom( H2:3    [  23.57,   14.09,   22.53] )
+3: MolNum(6) Atom( H3:4    [  24.08,   12.57,   22.21] )
+4: MolNum(6) Atom( CA:5    [  22.58,   12.65,   23.60] )
+...
+11115: MolNum(3622) Atom( CL:11116 [  30.22,   39.31,   33.39] )
+11116: MolNum(3623) Atom( CL:11117 [  40.21,    0.35,   38.95] )
+11117: MolNum(3624) Atom( CL:11118 [  42.28,   19.12,   17.40] )
+11118: MolNum(3625) Atom( CL:11119 [  47.26,   45.20,   12.38] )
+11119: MolNum(3626) Atom( CL:11120 [  42.51,   39.80,   21.90] )
+)
+
+or all bonds
+
+>>> print(mols["bonds"])
+SelectorBond( size=301
+0: Bond( N:1 => CA:5 )
+1: Bond( N:1 => H1:2 )
+2: Bond( N:1 => H2:3 )
+3: Bond( N:1 => H3:4 )
+4: Bond( CA:5 => HA:6 )
+...
+296: Bond( CD:294 => HD2:296 )
+297: Bond( C:298 => O:299 )
+298: Bond( C:298 => N:300 )
+299: Bond( N:300 => H2:302 )
+300: Bond( N:300 => H1:301 )
+)
+
+(and you could do the same for `residues`, `chains`, `segments` or
+`molecules`).
+
+You can search for things that match specified numbers of atoms, residues
+etc using `count( X )`. This counts the number of things within the
+contained search, e.g.
+
+>>> print(mols["count(atoms) == 3"])
+SireMol::SelectorM<SireMol::Atom>( size=10797
+0: MolNum(7) Atom( OW:303  [   2.30,    6.28,    1.13] )
+1: MolNum(7) Atom( HW1:304 [   1.37,    6.26,    1.50] )
+2: MolNum(7) Atom( HW2:305 [   2.31,    5.89,    0.21] )
+3: MolNum(8) Atom( OW:306  [   2.25,    2.75,    9.96] )
+4: MolNum(8) Atom( HW1:307 [   2.60,    2.58,   10.88] )
+...
+10792: MolNum(3604) Atom( HW1:11095 [  41.82,   40.76,   41.82] )
+10793: MolNum(3604) Atom( HW2:11096 [  41.13,   41.08,   43.27] )
+10794: MolNum(3605) Atom( OW:11097 [  37.63,   48.01,   40.24] )
+10795: MolNum(3605) Atom( HW1:11098 [  38.62,   47.90,   40.15] )
+10796: MolNum(3605) Atom( HW2:11099 [  37.23,   47.15,   40.56] )
+)
+
+This has given all of the atoms in all of the molecules where the number
+of atoms was equal to 3. Typically you would want the molecules which
+had this number of atoms. You can search for them using
+
+>>> print(mols["molecules with count(atoms) == 3"])
+SelectorMol( size=3599
+0: Molecule( SOL:7   num_atoms=3 num_residues=1 )
+1: Molecule( SOL:8   num_atoms=3 num_residues=1 )
+2: Molecule( SOL:9   num_atoms=3 num_residues=1 )
+3: Molecule( SOL:10  num_atoms=3 num_residues=1 )
+4: Molecule( SOL:11  num_atoms=3 num_residues=1 )
+...
+3594: Molecule( SOL:3601 num_atoms=3 num_residues=1 )
+3595: Molecule( SOL:3602 num_atoms=3 num_residues=1 )
+3596: Molecule( SOL:3603 num_atoms=3 num_residues=1 )
+3597: Molecule( SOL:3604 num_atoms=3 num_residues=1 )
+3598: Molecule( SOL:3605 num_atoms=3 num_residues=1 )
+)
+
+Any comparison operator and any type of search is allowed, e.g. you can find all
+molecules with more than 5 residues using
+
+>>> print(mols["molecules with count(residues) > 5"])
+Molecule( Protein:6 num_atoms=302 num_residues=19 )
+
+or all residues with more than 10 atoms
+
+THIS DOESN'T WORK, BUT IT SHOULD
+
+>>> print(mols["count(atoms in residues) > 10"])
+XXX
+
 Searching by property
 ---------------------
 

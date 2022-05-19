@@ -212,6 +212,7 @@ static AST::Node parse_main(const std::string &str)
         set_token("cutgroups", "cutgroups in *");
         set_token("segments", "segments in *");
         set_token("molecules", "molecules in *");
+        set_token("bonds", "bonds in *");
     }
 
     // Read file contents.
