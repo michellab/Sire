@@ -774,42 +774,6 @@ void OpenMMPMEFEP::initialise(bool fullPME)
         qDebug() << "There are" << nats << "atoms. " << "There are" << nmols
 		 << "molecules";
 
-    int flag_combRules;
-
-    if (combiningRules == "arithmetic")
-        flag_combRules = ARITHMETIC;
-    else if (combiningRules == "geometric")
-        flag_combRules = GEOMETRIC;
-    else
-        throw SireError::program_bug(
-            QObject::tr("The combining rules have not been specified. Possible choises: arithmetic, geometric"),
-            CODELOC);
-
-    bool flag_noperturbedconstraints = false;
-    int flag_constraint;
-    bool flag_constraint_water = false;
-
-    if (ConstraintType == "none")
-        flag_constraint = NONE;
-    else if (ConstraintType == "hbonds")
-        flag_constraint = HBONDS;
-    else if (ConstraintType == "allbonds")
-        flag_constraint = ALLBONDS;
-    else if (ConstraintType == "hangles")
-        flag_constraint = HANGLES;
-    else if (ConstraintType == "hbonds-notperturbed") {
-        flag_constraint = HBONDS;
-        flag_noperturbedconstraints = true;
-    }
-    else if (ConstraintType == "none-notwater") {
-        flag_constraint = NONE;
-        flag_constraint_water = true;
-    }
-    else
-        throw SireError::program_bug(
-            QObject::tr("The Constraints method has not been specified."
-                        "Possible choises: none, hbonds, allbonds, hangles, hbonds-notperturbed, none-notwater"),
-            CODELOC);
 
     // Load Plugins from the OpenMM standard Plugin Directory
     OpenMM::Platform::loadPluginsFromDirectory(
@@ -832,24 +796,23 @@ void OpenMMPMEFEP::initialise(bool fullPME)
         system_openmm->addForce(cmmotionremover);
     }
 
-    system_openmm->setDefaultPeriodicBoxVectors(OpenMM::Vec3(6, 0, 0),
-						OpenMM::Vec3(0, 6, 0),
-						OpenMM::Vec3(0, 0, 6));
+    auto recip_space = new OpenMM::NonbondedForce();
+    std::vector<std::pair<int, int> > bondPairs;
 
     const double converted_cutoff_distance = convertTo(cutoff_distance.value(),
 						       nanometer);
 
-    // HHL
-    // Use NonbondedForce to compute Ewald reciprocal and self terms
-    // Direct space and LJ need to be implemented via expressions to
-    // custom forces, see above
-    auto recip_space = new OpenMM::NonbondedForce();
+    system_openmm->addForce(recip_space);
+    system_openmm->setDefaultPeriodicBoxVectors(OpenMM::Vec3(6, 0, 0),
+						OpenMM::Vec3(0, 6, 0),
+						OpenMM::Vec3(0, 0, 6));
+
+    recip_space->setForceGroup(RECIP_FCG);
     recip_space->setNonbondedMethod(OpenMM::NonbondedForce::PME);
     recip_space->setCutoffDistance(converted_cutoff_distance);
     recip_space->setIncludeDirectSpace(fullPME);
     recip_space->setUseDispersionCorrection(false);
 
-    // scale the charges in the reciprocal space
     if (useOffset) {
 	recip_space->addGlobalParameter("lambda_offset", current_lambda);
 
@@ -857,310 +820,123 @@ void OpenMMPMEFEP::initialise(bool fullPME)
 	    qDebug() << "Adding lambda offset to reciprocal space";
     }
 
-    // use default tolerance for the moment
-    double tolerance_PME = recip_space->getEwaldErrorTolerance();
-
-    // from NonbondedForceImpl.cpp
-    double alpha_PME = (1.0 / converted_cutoff_distance)
-                       * std::sqrt(-log(2.0 * tolerance_PME));
-
-
-    /*** NON-BONDED FORCE FIELDS ***/
-
-    /* general force field: direct space Coulomb and LJ */
-    auto direct_space =
-	new OpenMM::CustomNonbondedForce(GENERAL_ION);
-
-    /* correction term for 1-2, 1-3, 1-4 exceptions in reciprocal space */
-    auto custom_corr_recip =
-	new OpenMM::CustomBondForce(CORR_ION);
+    auto direct_space = new OpenMM::CustomNonbondedForce(GENERAL_ION);
+    auto custom_corr_recip = new OpenMM::CustomBondForce(CORR_ION);
+    QVector<bool> perturbed_energies_tmp{false, false, false, false, false,
+	false, false, false, false};
 
     if (!fullPME) {
-	// This ensures that also the direct space is subject to PBC
+	double tolerance_PME = recip_space->getEwaldErrorTolerance();
+	double alpha_PME = (1.0 / converted_cutoff_distance)
+	    * std::sqrt(-log(2.0 * tolerance_PME));
+
+	system_openmm->addForce(direct_space);
+        perturbed_energies_tmp[0] = true;
+
+        direct_space->setForceGroup(DIRECT_FCG);
 	direct_space->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
 	direct_space->setCutoffDistance(converted_cutoff_distance);
 
 	direct_space->addGlobalParameter("lam", current_lambda);
-	direct_space->addGlobalParameter("delta", shift_delta);
-	direct_space->addGlobalParameter("n", coulomb_power);
 	direct_space->addGlobalParameter("SPOnOff", 0.0);
 	direct_space->addGlobalParameter("alpha_pme", alpha_PME);
 
 	addPerParticleParameters(*direct_space,
-				 {"qstart", "qend", "epstart", "epend",
-				  "sigmastart", "sigmaend", "isHD", "isTD",
+				 {"qstart", "qend", "sigmastart", "sigmaend",
+				  "epstart", "epend", "isHD", "isTD",
 				  "isFD", "isSolvent"});
 
+	system_openmm->addForce(custom_corr_recip);
+	custom_corr_recip->setForceGroup(CORR_FCG);
+	perturbed_energies_tmp[8] = true;
+
 	custom_corr_recip->addGlobalParameter("lam_corr", current_lambda);
-	custom_corr_recip->addGlobalParameter("n_corr", coulomb_power);
 	custom_corr_recip->addGlobalParameter("alpha_pme", alpha_PME);
-	custom_corr_recip->addGlobalParameter("cutoff", converted_cutoff_distance);
 
 	addPerBondParameters(*custom_corr_recip, {"qcstart", "qcend"});
     }
 
-    /*** BUILD OpenMM SYSTEM ***/
-
-    /* add all atoms to the system */
-    for (int i = 0; i < nmols; ++i) {
-        const int nats_mol = ws.nAtoms(i);
-        const double *m = ws.massArray(i);
-
-        for (int j = 0; j < nats_mol; ++j) {
-            system_openmm->addParticle(m[j]);
-        }
-    }
-
     int num_atoms_till_i = 0;
 
-    QVector<bool> perturbed_energies_tmp{false, false, false, false, false,
-	false, false, false, false};
-
-    // the default AMBER 1-4 scaling factors
-    double const Coulomb14Scale = 1.0 / 1.2;
-    double const LennardJones14Scale = 1.0 / 2.0;
-
-    std::vector<std::pair<int, int> > bondPairs;
-
-    // A list of 1,4 atom pairs with non default scale factors
-    // for each entry, first pair has pair of indices, second has pair of
-    // scale factors
-    QHash< QPair<int, int>, QPair<double, double> > custom14pairs;
+    recip_space->addGlobalParameter("lambda_offset", current_lambda);
 
     for (int i = 0; i < nmols; i++) {
-        const Vector *c = ws.coordsArray(i);
+        const double *m = ws.massArray(i);
 
         Molecule molecule = moleculegroup.moleculeAt(i).molecule();
 
         int num_atoms_molecule = molecule.nAtoms();
 
-        std::vector<double> custom_non_bonded_params(10);
-
-        if (Debug)
-            qDebug() << "Molecule number = " << i << "name =" << molecule.name();
-
-        // NON BONDED TERMS
-
-        // The atomic parameters
-        AtomLJs atomvdws = molecule.property("LJ").asA<AtomLJs>();
+	AtomLJs atomvdws = molecule.property("LJ").asA<AtomLJs>();
         AtomCharges atomcharges = molecule.property("charge").asA<AtomCharges>();
         QVector<SireMM::LJParameter> ljparameters = atomvdws.toVector();
         QVector<SireUnits::Dimension::Charge> charges = atomcharges.toVector();
 
-        QVector<SireUnits::Dimension::Charge> start_charges;
-        QVector<SireUnits::Dimension::Charge> final_charges;
-        QVector<SireMM::LJParameter> start_LJs;
-        QVector<SireMM::LJParameter> final_LJs;
+        if (Debug)
+            qDebug() << "Molecule number = " << i << "name =" << molecule.name();
 
-        if (molecule.hasProperty("perturbations")) {
-            if (Debug)
-                qDebug() << "  ... molecule is perturbed";
+	if (i == 0) {		// ion
+	    recip_space->addParticleParameterOffset("lambda_offset", 0,
+						    -1.0, 0.0, 0.0);
 
             AtomCharges atomcharges_start =
                 molecule.property("initial_charge").asA<AtomCharges>();
-            AtomCharges atomcharges_final =
+            AtomCharges atomcharges_end =
                 molecule.property("final_charge").asA<AtomCharges>();
 
-            start_charges = atomcharges_start.toVector();
-            final_charges = atomcharges_final.toVector();
+            QVector<SireUnits::Dimension::Charge> start_charges = atomcharges_start.toVector();
+            QVector<SireUnits::Dimension::Charge> final_charges = atomcharges_end.toVector();
 
-            AtomLJs atomvdws_start = molecule.property("initial_LJ").asA<AtomLJs>();
-            AtomLJs atomvdws_final = molecule.property("final_LJ").asA<AtomLJs>();
+	    AtomLJs atomvdws_start = molecule.property("initial_LJ").asA<AtomLJs>();
+            AtomLJs atomvdws_end = molecule.property("final_LJ").asA<AtomLJs>();
 
-            start_LJs = atomvdws_start.toVector();
-            final_LJs = atomvdws_final.toVector();
-        }
+            QVector<SireMM::LJParameter> start_LJs = atomvdws_start.toVector();
+            QVector<SireMM::LJParameter> final_LJs = atomvdws_end.toVector();
 
-        int nonbond_idx = 0;
-        double charge_start = 0.0, charge_final = 0.0;
+	    double charge_start = start_charges[0].value();
+	    double charge_end = final_charges[0].value();
 
-	/* add non-bonded parameters to direct and reciprocal spaces
-	   and restraints if applicable */
+	    double sigma_start = start_LJs[0].sigma() * OpenMM::NmPerAngstrom;
+	    double sigma_end = final_LJs[0].sigma() * OpenMM::NmPerAngstrom;
+	    double epsilon_start = start_LJs[0].epsilon() * OpenMM::KJPerKcal;
+	    double epsilon_end = final_LJs[0].epsilon() * OpenMM::KJPerKcal;
 
-        // Iterate over all atoms in the molecules:
-        // ljparameters.size() is used here as the number of atoms
+            double charge = charges[0].value();
+            double sigma = ljparameters[0].sigma() * OpenMM::NmPerAngstrom;
+            double epsilon = ljparameters[0].epsilon() * OpenMM::KJPerKcal;
+
+	    system_openmm->addParticle(m[0]);
+	    recip_space->addParticle(charge, sigma, epsilon);
+
+	    if (!fullPME) {
+		direct_space->addParticle({charge_start, charge_end,
+			sigma_start, sigma_end, epsilon_start, epsilon_end,
+			1.0, 0.0, 0.0, 0.0});
+
+		qDebug() << charge << sigma << epsilon << charge_start
+			 << charge_end << sigma_start << sigma_end
+			 << epsilon_start << epsilon_end;
+	    }
+
+	    num_atoms_till_i = num_atoms_till_i + num_atoms_molecule;
+
+	    continue;
+	}
+
+	// TIP3P water atoms
         for (int j = 0; j < ljparameters.size(); j++) {
             double charge = charges[j].value();
             double sigma = ljparameters[j].sigma() * OpenMM::NmPerAngstrom;
             double epsilon = ljparameters[j].epsilon() * OpenMM::KJPerKcal;
-            double charge_diff = 0.0;
 
-            nonbond_idx = recip_space->addParticle(charge, sigma, epsilon);
+            system_openmm->addParticle(m[j]);
+            recip_space->addParticle(charge, sigma, epsilon);
 
-            Atom atom = molecule.molecule().atoms()(j);
-
-            if (molecule.hasProperty("perturbations")) {
-                // Is atom a hard (changing charge and LJ), from dummy or to dummy type?
-                bool ishard = false;
-                bool istodummy = false;
-                bool isfromdummy = false;
-
-                charge_start = start_charges[j].value();
-                charge_final = final_charges[j].value();
-
-                charge_diff = charge_final - charge_start;
-
-                if (abs(charge_diff) < 0.00001)
-                    charge_diff = 0.0;
-
-                if (useOffset && charge_diff != 0.0) {
-		    // charge = charge_start + lambda_offset * charge_diff
-		    recip_space->addParticleParameterOffset("lambda_offset",
-							    nonbond_idx,
-							    charge_diff,
-							    0.0, 0.0); // sigma, epsilon not needed
-
-                    if (Debug)
-                        qDebug() << "Adding offset to atom idx" << nonbond_idx
-                                 << "; charge_diff =" << charge_diff;
-                }
-
-                double sigma_start = start_LJs[j].sigma() * OpenMM::NmPerAngstrom;
-                double sigma_final = final_LJs[j].sigma() * OpenMM::NmPerAngstrom;
-                double epsilon_start = start_LJs[j].epsilon() * OpenMM::KJPerKcal;
-                double epsilon_final = final_LJs[j].epsilon() * OpenMM::KJPerKcal;
-
-                for (int l = 0; l < solutehard.nViews(); l++) {
-                    Selector<Atom> view_atoms = solutehard.viewAt(l).atoms();
-
-                    for (int m = 0; m < view_atoms.count(); m++) {
-                        Atom view_atom = view_atoms(m);
-
-                        if (atom == view_atom) {
-                            ishard = true;
-                            break;
-                        }
-                    }
-
-                    if (ishard)
-                        break;
-                }
-
-                // if not hard check if to_dummy
-                if (!ishard) {
-                    for (int l = 0; l < solutetodummy.nViews(); l++) {
-                        Selector<Atom> view_atoms = solutetodummy.viewAt(l).atoms();
-
-                        for (int m = 0; m < view_atoms.count(); m++) {
-                            Atom view_atom = view_atoms(m);
-
-                            if (atom == view_atom) {
-                                istodummy = true;
-                                break;
-                            }
-                        }//end for
-                        if (istodummy)
-                            break;
-                    }//end for
-                }
-
-                // if not todummy, check if fromdummy
-                if (!istodummy && !ishard) {
-                    for (int l = 0; l < solutefromdummy.nViews(); l++) {
-                        Selector<Atom> view_atoms = solutefromdummy.viewAt(l).atoms();
-
-                        for (int m = 0; m < view_atoms.count(); m++) {
-                            Atom view_atom = view_atoms(m);
-
-                            if (atom == view_atom) {
-                                isfromdummy = true;
-                                break;
-                            }
-                        }//end for
-                        if (isfromdummy)
-                            break;
-                    }//end for
-                }
-
-                if (ishard || istodummy || isfromdummy) {
-                    custom_non_bonded_params[0] = charge_start;
-                    custom_non_bonded_params[1] = charge_final;
-                    custom_non_bonded_params[2] = epsilon_start;
-                    custom_non_bonded_params[3] = epsilon_final;
-                    custom_non_bonded_params[4] = sigma_start;
-                    custom_non_bonded_params[5] = sigma_final;
-                }
-                else {
-                    // unperturbed atoms
-                    custom_non_bonded_params[0] = charge;
-                    custom_non_bonded_params[1] = charge;
-                    custom_non_bonded_params[2] = epsilon;
-                    custom_non_bonded_params[3] = epsilon;
-                    custom_non_bonded_params[4] = sigma;
-                    custom_non_bonded_params[5] = sigma;
-                }
-
-                custom_non_bonded_params[6] = 0.0; // isHard
-                custom_non_bonded_params[7] = 0.0; // isTodummy
-                custom_non_bonded_params[8] = 0.0; // isFromdummy
-                custom_non_bonded_params[9] = 0.0; // isSolventProtein
-
-                if (ishard) {
-                    custom_non_bonded_params[6] = 1.0;
-
-                    if (Debug)
-                        qDebug() << "hard solute = " << atom.index();
-                }
-                // JM July 13 THIS NEEDS FIXING TO DEAL WITH GROUPS THAT CONTAIN MORE THAN ONE MOLECULE
-                else if (istodummy) {
-                    custom_non_bonded_params[7] = 1.0;
-
-                    if (Debug)
-                        qDebug() << "to dummy solute = " << atom.index();
-                }
-                else if (isfromdummy) {
-                    custom_non_bonded_params[8] = 1.0;
-
-                    if (Debug)
-                        qDebug() << "from dummy solute = " << atom.index();
-                }
-                else {
-                    custom_non_bonded_params[6] = 1.0; // isHard
-
-                    if (Debug)
-                        qDebug() << " unperturbed solute atom " << atom.index();
-                }
-            }
-            else {
-                // solvent atom like hard
-                custom_non_bonded_params[0] = charge;
-                custom_non_bonded_params[1] = charge;
-                custom_non_bonded_params[2] = epsilon;
-                custom_non_bonded_params[3] = epsilon;
-                custom_non_bonded_params[4] = sigma;
-                custom_non_bonded_params[5] = sigma;
-                custom_non_bonded_params[6] = 1.0; // isHard
-                custom_non_bonded_params[7] = 0.0; // isTodummy
-                custom_non_bonded_params[8] = 0.0; // isFromdummy
-                custom_non_bonded_params[9] = 1.0; // isSolventProtein
-
-                if (Debug)
-                    qDebug() << "Solvent = " << atom.index();
-            } // end if perturbations
-
-            if (Debug) {
-                qDebug() << "Charge start = " << custom_non_bonded_params[0];
-                qDebug() << "Charge end = " << custom_non_bonded_params[1];
-                qDebug() << "Eps start = " << custom_non_bonded_params[2];
-                qDebug() << "Eps end = " << custom_non_bonded_params[3];
-                qDebug() << "Sig start = " << custom_non_bonded_params[4];
-                qDebug() << "Sig end = " << custom_non_bonded_params[5];
-                qDebug() << "is Hard = " << custom_non_bonded_params[6];
-                qDebug() << "is To dummy = " << custom_non_bonded_params[7];
-                qDebug() << "is From dummy = " << custom_non_bonded_params[8];
-                qDebug() << "is Solvent = " << custom_non_bonded_params[9] << "\n";
-            }
-
-            // Adds the custom parmaters to _all_ atoms
-            // Must be in the same order as in the System
-	    if (!fullPME)
-		direct_space->addParticle(custom_non_bonded_params);
-        }
-
-        // single atoms like ions
-        if (!molecule.hasProperty("connectivity")) {
-            num_atoms_till_i = num_atoms_till_i + num_atoms_molecule;
-            continue;
+	    if (!fullPME) {
+		direct_space->addParticle({charge, charge, sigma, sigma,
+			epsilon, epsilon, 1.0, 0.0, 0.0, 1.0});
+		qDebug() << charge << sigma << epsilon;
+	    }
         }
 
         // The bonded parameters are stored in "amberparameters"
@@ -1168,9 +944,8 @@ void OpenMMPMEFEP::initialise(bool fullPME)
             molecule.property("amberparameters").asA<AmberParameters>();
         QList<BondID> bonds_ff = amber_params.getAllBonds();
         QVector<BondID> bonds = bonds_ff.toVector();
-        ResName molfirstresname = molecule.residues()(0).name();
 
-        // Bonds
+        // TIP3P water bonds
         for (int j = 0; j < bonds_ff.length(); j++) {
             BondID bond_ff = bonds_ff[j];
             QList<double> bond_params = amber_params.getParams(bond_ff);
@@ -1179,7 +954,6 @@ void OpenMMPMEFEP::initialise(bool fullPME)
             int idx0 = bonds[j].atom0().asA<AtomIdx>().value();
             int idx1 = bonds[j].atom1().asA<AtomIdx>().value();
 
-            //Select the atom type
             QString atom0 = molecule.atom(AtomIdx(idx0)).toString();
             QString atom1 = molecule.atom(AtomIdx(idx1)).toString();
 
@@ -1192,100 +966,62 @@ void OpenMMPMEFEP::initialise(bool fullPME)
 		qDebug() << "Adding constraint to atoms" << idx0 << "and"
 			 << idx1 << "with distance" << r0;
 
-            // Bond exclusion List
             bondPairs.push_back(std::make_pair(idx0, idx1));
         }
 
         num_atoms_till_i = num_atoms_till_i + num_atoms_molecule;
     } // end of loop over molecules
 
-    /*** EXCEPTION HANDLING ***/
+    recip_space->createExceptionsFromBonds(bondPairs, 1.0 / 1.2, 0.5);
 
-    // Exclude the 1-2, 1-3 bonded atoms from nonbonded forces, and scale
-    // down 1-4 bonded atoms
-    recip_space->createExceptionsFromBonds(bondPairs, Coulomb14Scale,
-                                           LennardJones14Scale);
-
-    int num_exceptions = recip_space->getNumExceptions();
-
-    if (Debug)
-        qDebug() << "Number of exceptions =" << num_exceptions;
-
-    for (int i = 0; i < num_exceptions; i++) {
-        int p1, p2;
-
-	double qprod_start, qprod_end;
-	double Qstart_p1, Qend_p1, Qstart_p2, Qend_p2;
-        double charge_prod, sigma_avg, epsilon_avg;
-
+    if (!fullPME) {
+	int p1, p2;
 	std::vector<double> p1_params(10);
 	std::vector<double> p2_params(10);
 
-        recip_space->getExceptionParameters(i, p1, p2, charge_prod, sigma_avg,
-                                            epsilon_avg);
+	double charge_prod, sigma_avg, epsilon_avg;
+	double qprod_start, qprod_end;
+	double Qstart_p1, Qend_p1, Qstart_p2, Qend_p2;
 
-	if (!fullPME) {
+	int num_exceptions = recip_space->getNumExceptions();
+
+	if (Debug)
+	    qDebug() << "Number of exceptions =" << num_exceptions;
+
+	for (int i = 0; i < num_exceptions; i++) {
+	    recip_space->getExceptionParameters(i, p1, p2, charge_prod, sigma_avg,
+						epsilon_avg);
+
 	    direct_space->addExclusion(p1, p2);
 
 	    direct_space->getParticleParameters(p1, p1_params);
 	    direct_space->getParticleParameters(p2, p2_params);
-	}
 
-        Qstart_p1 = p1_params[0];
-        Qend_p1 = p1_params[1];
-        Qstart_p2 = p2_params[0];
-        Qend_p2 = p2_params[1];
+	    Qstart_p1 = p1_params[0];
+	    Qend_p1 = p1_params[1];
+	    Qstart_p2 = p2_params[0];
+	    Qend_p2 = p2_params[1];
 
-        qprod_start = Qstart_p1 * Qstart_p2;
-        qprod_end = Qend_p1 * Qend_p2;
+	    qprod_start = Qstart_p1 * Qstart_p2;
+	    qprod_end = Qend_p1 * Qend_p2;
 
-        if (Debug)
-            qDebug() << "Exception =" << i << ", p1 =" << p1 << ", p2 ="
-                     << p2 << ", charge prod =" << charge_prod
-                     << ", sigma avg =" << sigma_avg << ", epsilon_avg ="
-                     << epsilon_avg;
+	    if (Debug)
+		qDebug() << "Exception =" << i << ", p1 =" << p1 << ", p2 ="
+			 << p2 << ", charge prod =" << charge_prod
+			 << ", sigma avg =" << sigma_avg << ", epsilon_avg ="
+			 << epsilon_avg;
 
-	if (!fullPME)
 	    custom_corr_recip->addBond(p1, p2, {qprod_start, qprod_end});
 
-	if (Debug)
-	    qDebug() << "Adding qprod_start =" << qprod_start
-		     << "and qprod_end =" << qprod_end
-		     << "to correction term for bond"
-		     << p1 << "-" << p2;
+	    if (Debug)
+		qDebug() << "Adding qprod_start =" << qprod_start
+			 << "and qprod_end =" << qprod_end
+			 << "to correction term for bond"
+			 << p1 << "-" << p2;
+	}
     } // end of loop over exceptions
 
-    /*** add non-bonded force fields to System ***/
-
-    unsigned int nAtoms = recip_space->getNumParticles();
-    unsigned int npairs = (nAtoms * (nAtoms - 1)) / 2;
-
-    if (Debug)
-        qDebug() << "Num pairs  = " << npairs;
-
-    system_openmm->addForce(recip_space);
-    recip_space->setForceGroup(RECIP_FCG);
-
-    if (!fullPME) {
-        if (npairs != num_exceptions) {
-            direct_space->setForceGroup(DIRECT_FCG);
-            system_openmm->addForce(direct_space);
-            perturbed_energies_tmp[0] = true;
-
-	    qDebug() << "Number of atoms in GENERAL" << direct_space->getNumParticles();
-        }
-
-        if (custom_corr_recip->getNumBonds() != 0) {
-            custom_corr_recip->setForceGroup(CORR_FCG);
-            system_openmm->addForce(custom_corr_recip);
-            perturbed_energies_tmp[8] = true;
-
-	    qDebug() << "Number of bonds in CORR" << custom_corr_recip->getNumBonds();
-        }
-    } // if (!fullPME)
-
     perturbed_energies = perturbed_energies_tmp;
-
     this->openmm_system = system_openmm;
     this->isSystemInitialised = true;
 } // OpenMMPMEFEP::initialise END
