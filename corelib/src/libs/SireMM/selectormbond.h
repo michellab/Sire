@@ -95,6 +95,9 @@ public:
 
     SelectorMBond(const SireMol::SelectResult &mols, const SireMol::BondID &bond);
 
+    SelectorMBond(const SireMol::SelectResult &mols,
+                  const SireBase::PropertyMap &map);
+
     SelectorMBond(const SelectorMBond &other);
 
     virtual ~SelectorMBond();

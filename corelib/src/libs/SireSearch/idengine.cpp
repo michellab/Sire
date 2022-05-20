@@ -52,6 +52,27 @@ using namespace SireMM;
 using namespace SireBase;
 using namespace parser_idengine;
 
+SelectEngine::ObjType _to_obj_type(AST::IDObject obj)
+{
+    switch(obj)
+    {
+    case AST::ATOM:
+        return SelectEngine::ATOM;
+    case AST::CUTGROUP:
+        return SelectEngine::CUTGROUP;
+    case AST::RESIDUE:
+        return SelectEngine::RESIDUE;
+    case AST::CHAIN:
+        return SelectEngine::CHAIN;
+    case AST::SEGMENT:
+        return SelectEngine::SEGMENT;
+    case AST::MOLECULE:
+        return SelectEngine::MOLECULE;
+    default:
+        return SelectEngine::COMPLEX;
+    }
+}
+
 ////////
 //////// Implementation of the IDNameEngine
 ////////
@@ -400,23 +421,7 @@ SelectResult IDNameEngine::select(const SelectResult &mols, const PropertyMap &m
 
 SelectEngine::ObjType IDNameEngine::objectType() const
 {
-    switch(obj)
-    {
-    case AST::ATOM:
-        return SelectEngine::ATOM;
-    case AST::CUTGROUP:
-        return SelectEngine::CUTGROUP;
-    case AST::RESIDUE:
-        return SelectEngine::RESIDUE;
-    case AST::CHAIN:
-        return SelectEngine::CHAIN;
-    case AST::SEGMENT:
-        return SelectEngine::SEGMENT;
-    case AST::MOLECULE:
-        return SelectEngine::MOLECULE;
-    default:
-        return SelectEngine::COMPLEX;
-    }
+    return _to_obj_type(obj);
 }
 
 ////////
@@ -686,23 +691,7 @@ SelectResult IDNumberEngine::select(const SelectResult &mols, const PropertyMap 
 
 SelectEngine::ObjType IDNumberEngine::objectType() const
 {
-    switch(obj)
-    {
-    case AST::ATOM:
-        return SelectEngine::ATOM;
-    case AST::CUTGROUP:
-        return SelectEngine::CUTGROUP;
-    case AST::RESIDUE:
-        return SelectEngine::RESIDUE;
-    case AST::CHAIN:
-        return SelectEngine::CHAIN;
-    case AST::SEGMENT:
-        return SelectEngine::SEGMENT;
-    case AST::MOLECULE:
-        return SelectEngine::MOLECULE;
-    default:
-        return SelectEngine::COMPLEX;
-    }
+    return _to_obj_type(obj);
 }
 
 ////////
@@ -948,23 +937,7 @@ SelectResult IDIndexEngine::select(const SelectResult &mols, const PropertyMap &
 
 SelectEngine::ObjType IDIndexEngine::objectType() const
 {
-    switch(obj)
-    {
-    case AST::ATOM:
-        return SelectEngine::ATOM;
-    case AST::CUTGROUP:
-        return SelectEngine::CUTGROUP;
-    case AST::RESIDUE:
-        return SelectEngine::RESIDUE;
-    case AST::CHAIN:
-        return SelectEngine::CHAIN;
-    case AST::SEGMENT:
-        return SelectEngine::SEGMENT;
-    case AST::MOLECULE:
-        return SelectEngine::MOLECULE;
-    default:
-        return SelectEngine::COMPLEX;
-    }
+    return _to_obj_type(obj);
 }
 
 ////////
@@ -1656,25 +1629,7 @@ IDMassEngine::IDMassEngine()
 
 SelectEngine::ObjType IDMassEngine::objectType() const
 {
-    switch(obj)
-    {
-    case AST::ATOM:
-        return SelectEngine::ATOM;
-    case AST::CUTGROUP:
-        return SelectEngine::CUTGROUP;
-    case AST::RESIDUE:
-        return SelectEngine::RESIDUE;
-    case AST::CHAIN:
-        return SelectEngine::CHAIN;
-    case AST::SEGMENT:
-        return SelectEngine::SEGMENT;
-    case AST::MOLECULE:
-        return SelectEngine::MOLECULE;
-    case AST::BOND:
-        return SelectEngine::BOND;
-    default:
-        return SelectEngine::COMPLEX;
-    }
+    return _to_obj_type(obj);
 }
 
 SelectEnginePtr IDMassEngine::construct(IDObject obj, IDComparison compare,
@@ -1863,25 +1818,7 @@ IDChargeEngine::IDChargeEngine()
 
 SelectEngine::ObjType IDChargeEngine::objectType() const
 {
-    switch(obj)
-    {
-    case AST::ATOM:
-        return SelectEngine::ATOM;
-    case AST::CUTGROUP:
-        return SelectEngine::CUTGROUP;
-    case AST::RESIDUE:
-        return SelectEngine::RESIDUE;
-    case AST::CHAIN:
-        return SelectEngine::CHAIN;
-    case AST::SEGMENT:
-        return SelectEngine::SEGMENT;
-    case AST::MOLECULE:
-        return SelectEngine::MOLECULE;
-    case AST::BOND:
-        return SelectEngine::BOND;
-    default:
-        return SelectEngine::COMPLEX;
-    }
+    return _to_obj_type(obj);
 }
 
 SelectEnginePtr IDChargeEngine::construct(IDObject obj, IDComparison compare,
@@ -2194,17 +2131,25 @@ SelectEngine::ObjType IDBondEngine::objectType() const
 IDWithEngine::IDWithEngine()
 {}
 
-SelectEnginePtr IDWithEngine::construct( IDObject obj, IDToken token, SelectEnginePtr part)
+SelectEnginePtr IDWithEngine::construct( SelectEnginePtr part0,
+                                         IDToken token,
+                                         SelectEnginePtr part1)
 {
     IDWithEngine *ptr = new IDWithEngine();
     auto p = makePtr(ptr);
 
-    if (part)
-        part->setParent(p);
+    if (part0.get() == 0)
+        part0 = IDAllEngine::construct();
 
-    ptr->part = part;
-    ptr->obj = obj;
+    if (part1.get() == 0)
+        part1 = IDAllEngine::construct();
+
+    part0->setParent(p);
+    part1->setParent(p);
+
+    ptr->part0 = part0;
     ptr->token = token;
+    ptr->part1 = part1;
 
     return p;
 }
@@ -2212,133 +2157,30 @@ SelectEnginePtr IDWithEngine::construct( IDObject obj, IDToken token, SelectEngi
 IDWithEngine::~IDWithEngine()
 {}
 
-template<class T>
-MolViewPtr _select_in(const AtomSelection &selection, const Selector<T> &views)
-{
-    QList<typename T::Index> idxs;
-
-    for (const auto &idx : views.IDs())
-    {
-        if (selection.selectedAll(idx))
-        {
-            idxs.append(idx);
-        }
-    }
-
-    if (idxs.count() == 0)
-        return MolViewPtr();
-
-    auto s = Selector<T>(views.data(), idxs);
-
-    if (idxs.count() == 1)
-        return s(0);
-    else
-        return s;
-}
-
 SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    if (not part.get())
-        return SelectResult();
-
-    //first, select the parts...
-    auto selected = part->operator()(mols, map);
-
-    const auto objtype = this->objectType();
-
-    if (objtype == SelectEngine::COMPLEX)
-        return selected;
-
     QList<MolViewPtr> result;
 
-    if (token == AST::ID_WITH or objtype == SelectEngine::ATOM)
-    {
-        for (const auto &mol : selected)
-        {
-            switch(objtype)
-            {
-            case SelectEngine::ATOM:
-                result.append( mol->atoms() );
-                break;
-            case SelectEngine::RESIDUE:
-                result.append( mol->residues() );
-                break;
-            case SelectEngine::CHAIN:
-                result.append( mol->chains() );
-                break;
-            case SelectEngine::SEGMENT:
-                result.append( mol->segments() );
-                break;
-            case SelectEngine::CUTGROUP:
-                result.append( mol->cutGroups() );
-                break;
-            case SelectEngine::MOLECULE:
-                result.append( mol->molecule() );
-                break;
-            case SelectEngine::BOND:
-                result.append( SelectorBond(mol->atoms(), map) );
-                break;
-            default:
-                result.append( *mol );
-                break;
-            }
-        }
-    }
-    else if (token == AST::ID_IN)
-    {
-        // 'in' will not include partially selected parts, so only completely
-        // selected molecules, chains, residues etc.
-        for (auto mol : selected)
-        {
-            //get the original molecule
-            auto selection = mol->selection();
+    // "with" means search part0 first, and then check whether any match
+    // the selection in part1
 
-            //is the whole molecule selected?
-            if (objtype == SelectEngine::BOND)
-            {
-                SelectorBond bonds(*mol, map);
+    auto first = part0;
+    auto second = part1;
 
-                if (not bonds.isEmpty())
-                    result.append(bonds);
-            }
-            else if (selection.selectedAll())
-            {
-                //yes - by definition it will contain all parts
-                result.append(*mol);
-            }
-            else
-            {
-                if (objtype == SelectEngine::RESIDUE)
-                {
-                    auto res = _select_in(selection, mol->residues());
-                    if (not res.isNull())
-                        result.append( res );
-                }
-                else if (objtype == SelectEngine::CHAIN)
-                {
-                    auto chain = _select_in(selection, mol->chains());
-                    if (not chain.isNull())
-                        result.append( chain );
-                }
-                else if (objtype == SelectEngine::SEGMENT)
-                {
-                    auto seg = _select_in(selection, mol->segments());
-                    if (not seg.isNull())
-                        result.append( seg );
-                }
-                else if (objtype == SelectEngine::CUTGROUP)
-                {
-                    auto cg = _select_in(selection, mol->cutGroups());
-                    if (not cg.isNull())
-                        result.append( cg );
-                }
-            }
-        }
-    }
-    else
+    if (token == AST::ID_IN)
     {
-        throw SireError::program_bug( QObject::tr(
-                "Invalid 'with' token? %1").arg(AST::idtoken_to_string(token)), CODELOC );
+        // "in" means search part1 first, then check whether any match
+        // the selection in part0
+        first = part1;
+        second = part0;
+    }
+
+    for (const auto &mol : first->operator()(mols, map))
+    {
+        if (second->matches(*mol, map))
+        {
+            result.append(mol);
+        }
     }
 
     return SelectResult(result);
@@ -2346,33 +2188,23 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
 
 SelectEnginePtr IDWithEngine::simplify()
 {
-    if (part.get())
-        part = part->simplify();
+    if (part0.get())
+        part0 = part0->simplify();
+
+    if (part1.get())
+        part1 = part1->simplify();
 
     return selfptr.lock();
 }
 
 SelectEngine::ObjType IDWithEngine::objectType() const
 {
-    switch(obj)
-    {
-    case AST::ATOM:
+    if (part0.get())
+        return part0->objectType();
+    else if (part1.get())
+        return part1->objectType();
+    else
         return SelectEngine::ATOM;
-    case AST::CUTGROUP:
-        return SelectEngine::CUTGROUP;
-    case AST::RESIDUE:
-        return SelectEngine::RESIDUE;
-    case AST::CHAIN:
-        return SelectEngine::CHAIN;
-    case AST::SEGMENT:
-        return SelectEngine::SEGMENT;
-    case AST::MOLECULE:
-        return SelectEngine::MOLECULE;
-    case AST::BOND:
-        return SelectEngine::BOND;
-    default:
-        return SelectEngine::COMPLEX;
-    }
 }
 
 ////////
@@ -2535,277 +2367,13 @@ SelectEnginePtr IDDistanceEngine::simplify()
 
 SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    //first, get the objects against where the distance is calculated
-    if (part.get() == 0)
-        return SelectResult();
-
-    const auto refmols = part->operator()(mols, map);
-
-    if (refmols.isEmpty())
-        //nothing against which to compare
-        return SelectResult();
-
-    const auto coords_property = map["coordinates"];
-
-    bool uses_parallel = true;
-
-    if (map["parallel"].hasValue())
-    {
-        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
-    }
-
-    SireVol::SpacePtr space = SireVol::Cartesian();
-
-    if (map["space"].hasValue())
-    {
-        space = map["space"].value().asA<SireVol::Space>();
-    }
-
-    //function that gets the reference coordinates of the passed view
-    auto getCoords = [&](const AtomSelection &selection, const MoleculeInfoData &molinfo,
-                         const AtomCoords &coords)
-    {
-        Vector minval(0), maxval(0), center(0);
-
-        auto atoms = selection.selectedAtoms();
-
-        if (atoms.isEmpty())
-            return Vector(0);
-
-        minval = coords[ molinfo.cgAtomIdx(atoms.at(0)) ];
-        maxval = minval;
-        center = minval;
-
-        //now find the maximum and minimum of all other coordinates
-        for (int i=1; i<atoms.count(); ++i)
-        {
-            const auto c = coords[ molinfo.cgAtomIdx(atoms.at(i)) ];
-            minval.setMin(c);
-            maxval.setMax(c);
-        }
-
-        center = minval + 0.5*(maxval-minval);
-
-        switch (typ)
-        {
-        case ID_COORD_MAX:
-            return maxval;
-        case ID_COORD_MIN:
-            return minval;
-        case ID_COORD_MAX_X:
-            center.setX(maxval.x());
-            return center;
-        case ID_COORD_MAX_Y:
-            center.setY(maxval.y());
-            return center;
-        case ID_COORD_MAX_Z:
-            center.setZ(maxval.z());
-            return center;
-        case ID_COORD_MIN_X:
-            center.setX(minval.x());
-            return center;
-        case ID_COORD_MIN_Y:
-            center.setY(minval.y());
-            return center;
-        case ID_COORD_MIN_Z:
-            center.setZ(minval.z());
-            return center;
-        default:
-            return center;
-        }
-    };
-
-    const double dist2 = distance*distance;
-
-    //function that tests whether the passed point is within the
-    //distance of the atoms in the passed molecule - this could
-    //be made significantly more efficient if we use the rapid distance
-    //calculation abilities of Space and CoordGroup better...
-    auto isWithin = [&](const Vector &point, const MoleculeView &mol)
-    {
-        const auto &moldata = mol.data();
-
-        if (not moldata.hasProperty(coords_property))
-            return false;
-
-        const auto &prop = moldata.property(coords_property);
-
-        if (not prop.isA<AtomCoords>())
-            return false;
-
-        const auto &coords = prop.asA<AtomCoords>();
-        const auto &molinfo = moldata.info();
-
-        if (mol.selectedAll())
-        {
-            //loop over all coordinates
-            for (int i=0; i<molinfo.nAtoms(); ++i)
-            {
-                if (space.read().calcDist2(point, coords[molinfo.cgAtomIdx(AtomIdx(i))]) < dist2)
-                {
-                    return true;
-                }
-            }
-        }
-        else
-        {
-            for (const auto &atom : mol.selection().selectedAtoms())
-            {
-                if (space.read().calcDist2(point, coords[molinfo.cgAtomIdx(atom)]) < dist2)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    };
-
-    //function that gets the views within the specified distance
-    auto getWithin = [&](const ViewsOfMol &searchmol)
-    {
-        const auto &moldata = searchmol.data();
-        const auto &molinfo = moldata.info();
-
-        //get the atoms that are to be selected
-        auto selected_atoms = searchmol.selection();
-        selected_atoms = selected_atoms.selectNone();
-
-        //now get the coordinates of the atoms
-        if (not moldata.hasProperty(coords_property))
-            return ViewsOfMol();
-
-        const auto &prop = moldata.property(coords_property);
-
-        if (not prop.isA<AtomCoords>())
-            return ViewsOfMol();
-
-        const auto &coords = prop.asA<AtomCoords>();
-
-        //we need to loop over the expanded molecule
-        ViewsOfMol mol = this->expandMol(searchmol);
-
-        //loop over each view in 'mol'
-        for (int i=0; i<mol.nViews(); ++i)
-        {
-            bool within_distance = false;
-
-            if (typ == ID_COORD_CLOSEST)
-            {
-                //need to compare all atoms in this view...
-                for (const auto &atom : mol.viewAt(i).selectedAtoms())
-                {
-                    const auto point = coords[ molinfo.cgAtomIdx(atom) ];
-
-                    //now loop over all atoms in selected molecules and see if they
-                    //are within the distance
-                    for (const auto &refmol : refmols)
-                    {
-                        bool is_within = isWithin(point, *refmol);
-
-                        if (is_within)
-                        {
-                            within_distance = true;
-                            break;
-                        }
-                    }
-
-                    if (within_distance)
-                        break;
-                }
-            }
-            else
-            {
-                //get the comparison coordinates for this view
-                const auto point = getCoords(mol.viewAt(i), molinfo, coords);
-
-                //now loop over all atoms in selected molecules and see if they
-                //are within the distance
-                for (const auto &refmol : refmols)
-                {
-                    bool is_within = isWithin(point, refmol);
-
-                    if (is_within)
-                    {
-                        within_distance = true;
-                        break;
-                    }
-                }
-            }
-
-            if (within_distance)
-            {
-                selected_atoms = selected_atoms.select(mol.viewAt(i));
-
-                if (selected_atoms.selectedAll())
-                    break;
-            }
-        }
-
-        if (selected_atoms.isEmpty())
-            return ViewsOfMol();
-        else
-            return ViewsOfMol(moldata, selected_atoms);
-    };
-
-    QList<ViewsOfMol> result;
-
-    if (uses_parallel)
-    {
-        const auto molviews = mols.views();
-        QVector<ViewsOfMol> matched(molviews.count());
-
-        tbb::parallel_for( tbb::blocked_range<int>(0,molviews.count()),
-                           [&](const tbb::blocked_range<int> &r)
-        {
-            for (int i=r.begin(); i<r.end(); ++i)
-            {
-                auto match = getWithin(molviews.at(i));
-
-                if (not match.isEmpty())
-                    matched[i] = match;
-            }
-        });
-
-        for (const auto &match : matched)
-        {
-            if (not match.isEmpty())
-                result.append(match);
-        }
-    }
-    else
-    {
-        for (const auto &mol : mols.views())
-        {
-            auto match = getWithin(mol);
-
-            if (not match.isEmpty())
-                result.append(match);
-        }
-    }
-
-    return SelectResult(result);
+    //this needs completely rewriting
+    return SelectResult();
 }
 
 SelectEngine::ObjType IDDistanceEngine::objectType() const
 {
-    switch(obj)
-    {
-    case AST::ATOM:
-        return SelectEngine::ATOM;
-    case AST::CUTGROUP:
-        return SelectEngine::CUTGROUP;
-    case AST::RESIDUE:
-        return SelectEngine::RESIDUE;
-    case AST::CHAIN:
-        return SelectEngine::CHAIN;
-    case AST::SEGMENT:
-        return SelectEngine::SEGMENT;
-    case AST::MOLECULE:
-        return SelectEngine::MOLECULE;
-    default:
-        return SelectEngine::COMPLEX;
-    }
+    return _to_obj_type(obj);
 }
 
 ////////
@@ -2847,214 +2415,13 @@ SelectEnginePtr IDDistanceVectorEngine::simplify()
 
 SelectResult IDDistanceVectorEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    // Extract the x,y,z components of the position (implicitly converted to Angstrom).
-    double x = position.x.value * position.x.unit;
-    double y = position.y.value * position.y.unit;
-    double z = position.z.value * position.z.unit;
-
-    // Create a reference point using the vector components.
-    Vector ref_point(x, y, z);
-
-    const auto coords_property = map["coordinates"];
-
-    bool uses_parallel = true;
-
-    if (map["parallel"].hasValue())
-    {
-        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
-    }
-
-    SireVol::SpacePtr space = SireVol::Cartesian();
-
-    if (map["space"].hasValue())
-    {
-        space = map["space"].value().asA<SireVol::Space>();
-    }
-
-    //function that gets the reference coordinates of the passed view
-    auto getCoords = [&](const AtomSelection &selection, const MoleculeInfoData &molinfo,
-                         const AtomCoords &coords)
-    {
-        Vector minval(0), maxval(0), center(0);
-
-        auto atoms = selection.selectedAtoms();
-
-        if (atoms.isEmpty())
-            return Vector(0);
-
-        minval = coords[ molinfo.cgAtomIdx(atoms.at(0)) ];
-        maxval = minval;
-        center = minval;
-
-        //now find the maximum and minimum of all other coordinates
-        for (int i=1; i<atoms.count(); ++i)
-        {
-            const auto c = coords[ molinfo.cgAtomIdx(atoms.at(i)) ];
-            minval.setMin(c);
-            maxval.setMax(c);
-        }
-
-        center = minval + 0.5*(maxval-minval);
-
-        switch (typ)
-        {
-        case ID_COORD_MAX:
-            return maxval;
-        case ID_COORD_MIN:
-            return minval;
-        case ID_COORD_MAX_X:
-            center.setX(maxval.x());
-            return center;
-        case ID_COORD_MAX_Y:
-            center.setY(maxval.y());
-            return center;
-        case ID_COORD_MAX_Z:
-            center.setZ(maxval.z());
-            return center;
-        case ID_COORD_MIN_X:
-            center.setX(minval.x());
-            return center;
-        case ID_COORD_MIN_Y:
-            center.setY(minval.y());
-            return center;
-        case ID_COORD_MIN_Z:
-            center.setZ(minval.z());
-            return center;
-        default:
-            return center;
-        }
-    };
-
-    const double dist2 = distance*distance;
-
-    //function that gets the views within the specified distance
-    auto getWithin = [&](const ViewsOfMol &searchmol)
-    {
-        const auto &moldata = searchmol.data();
-        const auto &molinfo = moldata.info();
-
-        //get the atoms that are to be selected
-        auto selected_atoms = searchmol.selection();
-        selected_atoms = selected_atoms.selectNone();
-
-        //now get the coordinates of the atoms
-        if (not moldata.hasProperty(coords_property))
-            return ViewsOfMol();
-
-        const auto &prop = moldata.property(coords_property);
-
-        if (not prop.isA<AtomCoords>())
-            return ViewsOfMol();
-
-        const auto &coords = prop.asA<AtomCoords>();
-
-        //we need to loop over the expanded molecule
-        ViewsOfMol mol = this->expandMol(searchmol);
-
-        //loop over each view in 'mol'
-        for (int i=0; i<mol.nViews(); ++i)
-        {
-            bool within_distance = false;
-
-            if (typ == ID_COORD_CLOSEST)
-            {
-                //need to compare all atoms in this view...
-                for (const auto &atom : mol.viewAt(i).selectedAtoms())
-                {
-                    const auto point = coords[ molinfo.cgAtomIdx(atom) ];
-
-                    if (space.read().calcDist2(point, ref_point) < dist2)
-                    {
-                        within_distance = true;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                //get the comparison coordinates for this view
-                const auto point = getCoords(mol.viewAt(i), molinfo, coords);
-
-                if (space.read().calcDist2(point, ref_point) < dist2)
-                {
-                    within_distance = true;
-                    break;
-                }
-            }
-
-            if (within_distance)
-            {
-                selected_atoms = selected_atoms.select(mol.viewAt(i));
-
-                if (selected_atoms.selectedAll())
-                    break;
-            }
-        }
-
-        if (selected_atoms.isEmpty())
-            return ViewsOfMol();
-        else
-            return ViewsOfMol(moldata, selected_atoms);
-    };
-
-    QList<ViewsOfMol> result;
-
-    if (uses_parallel)
-    {
-        const auto molviews = mols.views();
-        QVector<ViewsOfMol> matched(molviews.count());
-
-        tbb::parallel_for( tbb::blocked_range<int>(0,molviews.count()),
-                           [&](const tbb::blocked_range<int> &r)
-        {
-            for (int i=r.begin(); i<r.end(); ++i)
-            {
-                auto match = getWithin(molviews.at(i));
-
-                if (not match.isEmpty())
-                    matched[i] = match;
-            }
-        });
-
-        for (const auto &match : matched)
-        {
-            if (not match.isEmpty())
-                result.append(match);
-        }
-    }
-    else
-    {
-        for (const auto &mol : mols.views())
-        {
-            auto match = getWithin(mol);
-
-            if (not match.isEmpty())
-                result.append(match);
-        }
-    }
-
-    return SelectResult(result);
+    // this needs completely rewriting
+    return SelectResult();
 }
 
 SelectEngine::ObjType IDDistanceVectorEngine::objectType() const
 {
-    switch(obj)
-    {
-    case AST::ATOM:
-        return SelectEngine::ATOM;
-    case AST::CUTGROUP:
-        return SelectEngine::CUTGROUP;
-    case AST::RESIDUE:
-        return SelectEngine::RESIDUE;
-    case AST::CHAIN:
-        return SelectEngine::CHAIN;
-    case AST::SEGMENT:
-        return SelectEngine::SEGMENT;
-    case AST::MOLECULE:
-        return SelectEngine::MOLECULE;
-    default:
-        return SelectEngine::COMPLEX;
-    }
+    return _to_obj_type(obj);
 }
 
 ////////
@@ -3064,10 +2431,12 @@ SelectEngine::ObjType IDDistanceVectorEngine::objectType() const
 IDAllEngine::IDAllEngine()
 {}
 
-SelectEnginePtr IDAllEngine::construct()
+SelectEnginePtr IDAllEngine::construct(IDObject obj)
 {
     IDAllEngine *ptr = new IDAllEngine();
     auto p = makePtr(ptr);
+
+    ptr->obj = obj;
 
     return p;
 }
@@ -3075,14 +2444,49 @@ SelectEnginePtr IDAllEngine::construct()
 IDAllEngine::~IDAllEngine()
 {}
 
-SelectResult IDAllEngine::select(const SelectResult &mols, const PropertyMap&) const
+SelectResult _get_bonds(const SelectResult &mols,
+                        const PropertyMap &map)
 {
-    return mols;
+    QList<MolViewPtr> result;
+
+    for (const auto &mol : mols)
+    {
+        SelectorBond b(*mol, map);
+
+        if (not b.isEmpty())
+            result.append(b);
+    }
+
+    return result;
+}
+
+SelectResult IDAllEngine::select(const SelectResult &mols,
+                                 const PropertyMap &map) const
+{
+    switch (obj)
+    {
+    case AST::ATOM:
+        return mols.atoms();
+    case AST::RESIDUE:
+        return mols.residues();
+    case AST::CHAIN:
+        return mols.chains();
+    case AST::SEGMENT:
+        return mols.segments();
+    case AST::CUTGROUP:
+        return mols.cutGroups();
+    case AST::MOLECULE:
+        return mols.molecules();
+    case AST::BOND:
+        return _get_bonds(mols, map);
+    default:
+        return mols.molecules();
+    }
 }
 
 SelectEngine::ObjType IDAllEngine::objectType() const
 {
-    return SelectEngine::COMPLEX;
+    return _to_obj_type(obj);
 }
 
 ////////

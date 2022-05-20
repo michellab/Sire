@@ -310,7 +310,9 @@ private:
 class IDWithEngine : public SelectEngine
 {
 public:
-    static SelectEnginePtr construct( IDObject obj, IDToken token, SelectEnginePtr part);
+    static SelectEnginePtr construct( SelectEnginePtr part0,
+                                      IDToken token,
+                                      SelectEnginePtr part1);
     ~IDWithEngine();
 
     ObjType objectType() const;
@@ -322,9 +324,9 @@ protected:
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
 
 private:
-    IDObject obj;
+    SelectEnginePtr part0;
     IDToken token;
-    SelectEnginePtr part;
+    SelectEnginePtr part1;
 };
 
 /** Internal class used to find atoms by their mass */
@@ -450,7 +452,7 @@ private:
 class IDAllEngine : public SelectEngine
 {
 public:
-    static SelectEnginePtr construct();
+    static SelectEnginePtr construct(IDObject object=AST::MOLECULE);
 
     ~IDAllEngine();
 
@@ -459,6 +461,10 @@ public:
 protected:
     IDAllEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+
+private:
+    /** All as what (atoms, residues etc.) */
+    IDObject obj;
 };
 
 /** Internal class used to select objects based on counts,

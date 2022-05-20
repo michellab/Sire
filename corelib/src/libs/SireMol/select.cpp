@@ -69,6 +69,14 @@ SireMol::parser::SelectEnginePtr SireMol::parser::SelectEngine::self()
     return selfptr.lock();
 }
 
+bool SireMol::parser::SelectEngine::matches(const MoleculeView &molecule,
+                                            const PropertyMap &map) const
+{
+    auto r = this->operator()(molecule, map);
+
+    return not r.isEmpty();
+}
+
 SelectResult SireMol::parser::SelectEngine::operator()(const SelectResult &result,
                                                        const PropertyMap &map) const
 {
@@ -142,22 +150,22 @@ bool SireMol::parser::SelectEngine::hasParent() const
 }
 
 /** Expand the passed molecule based on the selection type of this SelectEngine */
-ViewsOfMol SireMol::parser::SelectEngine::expandMol(const ViewsOfMol &mol) const
+MolViewPtr SireMol::parser::SelectEngine::expandMol(const MoleculeView &mol) const
 {
     switch(this->objectType())
     {
     case SelectEngine::ATOM:
-        return ViewsOfMol( mol.atoms() );
+        return mol.atoms();
     case SelectEngine::CUTGROUP:
-        return ViewsOfMol( mol.cutGroups() );
+        return mol.cutGroups();
     case SelectEngine::RESIDUE:
-        return ViewsOfMol( mol.residues() );
+        return mol.residues();
     case SelectEngine::CHAIN:
-        return ViewsOfMol( mol.chains() );
+        return mol.chains();
     case SelectEngine::SEGMENT:
-        return ViewsOfMol( mol.segments() );
+        return mol.segments();
     case SelectEngine::MOLECULE:
-        return ViewsOfMol( mol.molecule() );
+        return mol.molecule();
     default:
         return mol;
     }
@@ -853,43 +861,99 @@ SelectResult SelectResult::search(const QString &search_term) const
 /** Return a copy of this result with all views joined into single views */
 SelectResult SelectResult::join() const
 {
-    return Select("join all")(*this);
+    QList<MolViewPtr> result;
+    result.reserve(molviews.count());
+
+    for (const auto &mol : molviews)
+    {
+        result.append( PartialMolecule(*mol).toUnit() );
+    }
+
+    return SelectResult(result);
 }
 
 /** Return a copy of this result with all views split into individual atoms */
 SelectResult SelectResult::atoms() const
 {
-    return Select("atoms with *")(*this);
+    QList<MolViewPtr> result;
+    result.reserve(molviews.count());
+
+    for (const auto &mol : molviews)
+    {
+        result.append(mol->atoms());
+    }
+
+    return SelectResult(result);
 }
 
 /** Return a copy of this result with all views split into individual cutgroups */
 SelectResult SelectResult::cutGroups() const
 {
-    return Select("cutgroups with *")(*this);
+    QList<MolViewPtr> result;
+    result.reserve(molviews.count());
+
+    for (const auto &mol : molviews)
+    {
+        result.append(mol->cutGroups());
+    }
+
+    return SelectResult(result);
 }
 
 /** Return a copy of this result with all views split into individual residues */
 SelectResult SelectResult::residues() const
 {
-    return Select("residues with *")(*this);
+    QList<MolViewPtr> result;
+    result.reserve(molviews.count());
+
+    for (const auto &mol : molviews)
+    {
+        result.append(mol->residues());
+    }
+
+    return SelectResult(result);
 }
 
 /** Return a copy of this result with all views split into individual chains */
 SelectResult SelectResult::chains() const
 {
-    return Select("chains with *")(*this);
+    QList<MolViewPtr> result;
+    result.reserve(molviews.count());
+
+    for (const auto &mol : molviews)
+    {
+        result.append(mol->chains());
+    }
+
+    return SelectResult(result);
 }
 
 /** Return a copy of this result with all views split into individual segments */
 SelectResult SelectResult::segments() const
 {
-    return Select("segments with *")(*this);
+    QList<MolViewPtr> result;
+    result.reserve(molviews.count());
+
+    for (const auto &mol : molviews)
+    {
+        result.append(mol->segments());
+    }
+
+    return SelectResult(result);
 }
 
 /** Return a copy of this result with all views split into individual molecules */
 SelectResult SelectResult::molecules() const
 {
-    return Select("molecules with *")(*this);
+    QList<MolViewPtr> result;
+    result.reserve(molviews.count());
+
+    for (const auto &mol : molviews)
+    {
+        result.append(mol->molecule());
+    }
+
+    return SelectResult(result);
 }
 
 SelectResult::const_iterator SelectResult::begin() const

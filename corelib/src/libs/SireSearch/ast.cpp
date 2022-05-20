@@ -279,7 +279,7 @@ namespace AST
 
     QString IDAll::toString() const
     {
-        return "all";
+        return QString("all %1").arg( idobject_to_string(name) );
     }
 
     QString IDWater::toString() const
@@ -342,10 +342,10 @@ namespace AST
 
     QString IDWith::toString() const
     {
-        return QObject::tr("%1s %2 %3")
-                    .arg(idobject_to_string(name))
+        return QObject::tr("%1 %2 %3")
+                    .arg(value0.toString())
                     .arg(idtoken_to_string(token))
-                    .arg(value.toString());
+                    .arg(value1.toString());
     }
 
     QString IDWhereWithin::toString() const
@@ -465,7 +465,7 @@ namespace AST
 
     SelectEnginePtr IDAll::toEngine() const
     {
-        return IDAllEngine::construct();
+        return IDAllEngine::construct(name);
     }
 
     SelectEnginePtr IDWater::toEngine() const
@@ -493,7 +493,9 @@ namespace AST
 
     SelectEnginePtr IDWith::toEngine() const
     {
-        return IDWithEngine::construct(name, token, value.toEngine());
+        qDebug() << this->toString();
+        return IDWithEngine::construct(value0.toEngine(),
+                                       token, value1.toEngine());
     }
 
     SelectEnginePtr IDBond::toEngine() const

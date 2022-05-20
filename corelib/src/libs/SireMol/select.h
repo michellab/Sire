@@ -136,6 +136,9 @@ public:
 
     virtual ~SelectEngine();
 
+    virtual bool matches(const MoleculeView &molecule,
+                         const PropertyMap &map) const;
+
     SelectResult operator()(const SelectResult &result,
                             const PropertyMap &map = PropertyMap()) const;
 
@@ -172,7 +175,7 @@ protected:
 
     static SelectEnginePtr makePtr(SelectEngine *ptr);
 
-    virtual ViewsOfMol expandMol(const ViewsOfMol &mol) const;
+    virtual MolViewPtr expandMol(const MoleculeView &mol) const;
     virtual SelectResult expand(const SelectResult &result) const;
 
     /** The parent engine */

@@ -100,7 +100,7 @@ or all residues with more than 10 atoms
 
 THIS DOESN'T WORK, BUT IT SHOULD
 
->>> print(mols["count(atoms in residues) > 10"])
+>>> print(mols["residues with count(atoms) > 10"])
 XXX
 
 Searching by property

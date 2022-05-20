@@ -169,6 +169,23 @@ SelectorMBond::SelectorMBond(const SelectResult &mols)
     }
 }
 
+SelectorMBond::SelectorMBond(const SelectResult &mols, const PropertyMap &map)
+              : ConcreteProperty<SelectorMBond, Property>()
+{
+    if (not mols.isEmpty())
+    {
+        this->bnds.reserve(mols.count());
+
+        for (const auto &mol : mols)
+        {
+            SelectorBond b(*mol, map);
+
+            if (not b.isEmpty())
+                this->bnds.append(b);
+        }
+    }
+}
+
 SelectorMBond::SelectorMBond(const SelectResult &mols, const BondID &bond)
               : ConcreteProperty<SelectorMBond, Property>()
 {

@@ -127,10 +127,15 @@ public:
         /////
 
         //all of the different words to match "all"
-        all_token.add( "all", AST::IDAll() )
-                     ( "ALL", AST::IDAll() )
-                     ( "everything", AST::IDAll() )
-                     ( "*", AST::IDAll() );
+        all_token.add( "*", AST::IDAll() )
+                     ( "atoms", AST::IDAll(AST::ATOM) )
+                     ( "bonds", AST::IDAll(AST::BOND) )
+                     ( "residues", AST::IDAll(AST::RESIDUE) )
+                     ( "chains", AST::IDAll(AST::CHAIN) )
+                     ( "segments", AST::IDAll(AST::SEGMENT) )
+                     ( "molecules", AST::IDAll(AST::MOLECULE) )
+                     ( "cutgroups", AST::IDAll(AST::CUTGROUP) )
+                     ;
 
         // all of the different tokens to match "water"
         water_token.add( "water", AST::IDWater() )
@@ -317,7 +322,7 @@ public:
         expressionsRule %= ( expressionRule % qi::lit( ';' ) );
 
         //an expression is either a binary or a expression
-        expressionRule %= binaryRule2 | binaryRule | expressionPartRule;
+        expressionRule %= binaryRule2 | binaryRule | withRule | expressionPartRule;
 
         //a binary is two expressions separated by an op_token (and/or)
         binaryRule %= (expressionPartRule >> op_token >> expressionPartRule) |
@@ -328,10 +333,13 @@ public:
                        binaryRule >> op_token >> expressionPartRule |
                        (qi::lit('(') >> binaryRule2 >> qi::lit(')') );
 
-        //an expression is either a subscript, name, number, with, within, where, not
+        withRule %= (expressionPartRule >> with_token >> expressionPartRule) |
+                    ( qi::lit('(') >> withRule >> qi::lit(')') );
+
+        //an expression is either a subscript, name, number, within, where, not
         //or user-identified expression, optionally surrounded by parenthesis '( )'
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
-                              all_token | water_token | pert_token | protein_token | bondRule | withRule | withinRule |
+                              all_token | water_token | pert_token | protein_token | bondRule | withinRule |
                               withinVectorRule | whereRule | notRule | joinRule |
                               massRule | massCmpRule | chargeRule | chargeCmpRule |
                               massObjRule | massObjCmpRule | chargeObjRule | chargeObjCmpRule |
@@ -445,9 +453,6 @@ public:
         bondRule %= (qi::lit("bonds") >> bond_token >> expressionRule
                                       >> bond_token >> expressionRule) |
                     (qi::lit("bonds") >> bond_token >> expressionRule);
-
-        //grammar for a "with" expression
-        withRule %= obj_token >> with_token >> expressionRule;
 
         //grammar for a "not" expression
         notRule %= qi::lit("not") >> expressionRule;

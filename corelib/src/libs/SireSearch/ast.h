@@ -426,6 +426,11 @@ namespace AST
     /** Struct that holds an ID token that matches everything */
     struct IDAll
     {
+        IDAll(IDObject object = MOLECULE) : name(object)
+        {}
+
+        IDObject name;
+
         QString toString() const;
         SelectEnginePtr toEngine() const;
     };
@@ -561,9 +566,30 @@ namespace AST
     /** Struct that holds a "with" expression, e.g. molecules with resname ala */
     struct IDWith
     {
-        IDObject name;
+        IDWith()
+        {}
+
+        Expression value0;
         IDToken token;
-        Expression value;
+        Expression value1;
+
+        IDWith& operator+=(const Expression &v)
+        {
+            value0 = v;
+            return *this;
+        }
+
+        IDWith& operator+=(const IDToken &t)
+        {
+            token = t;
+            return *this;
+        }
+
+        IDWith& operator*=(const Expression &v)
+        {
+            value1 = v;
+            return *this;
+        }
 
         QString toString() const;
 
@@ -957,9 +983,9 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDBinary,
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWith,
-                           (AST::IDObject,name)
+                           (AST::Expression,value0)
                            (AST::IDToken,token)
-                           (AST::Expression,value)
+                           (AST::Expression,value1)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDBond,
