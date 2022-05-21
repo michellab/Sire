@@ -2177,9 +2177,27 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
 
     for (const auto &mol : first->operator()(mols, map))
     {
-        if (second->matches(*mol, map))
+        const auto units = mol->toList();
+
+        QList<qint64> matches;
+        matches.reserve(units.count());
+
+        for (int i=0; i<units.count(); ++i)
+        {
+            if (second->matches(*(units[i]), map))
+            {
+                matches.append(i);
+            }
+        }
+
+        if (matches.count() == units.count())
         {
             result.append(mol);
+        }
+        else
+        {
+            //rejoin the matches into the appropriate Selector
+            result.append(mol->operator[](matches));
         }
     }
 

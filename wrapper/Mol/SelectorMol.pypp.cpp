@@ -1167,6 +1167,18 @@ void register_SelectorMol_class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorMol::toList
+        
+            typedef ::QList< SireBase::PropPtr< SireMol::MoleculeView > > ( ::SireMol::SelectorMol::*toList_function_type)(  ) const;
+            toList_function_type toList_function_value( &::SireMol::SelectorMol::toList );
+            
+            SelectorMol_exposer.def( 
+                "toList"
+                , toList_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorMol::toMoleculeGroup
         
             typedef ::SireMol::MoleculeGroup ( ::SireMol::SelectorMol::*toMoleculeGroup_function_type)(  ) const;

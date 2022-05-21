@@ -1143,6 +1143,19 @@ void register_SelectorM_Chain__class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorM< SireMol::Chain >::toList
+        
+            typedef SireMol::SelectorM< SireMol::Chain > exported_class_t;
+            typedef ::QList< SireBase::PropPtr< SireMol::MoleculeView > > ( ::SireMol::SelectorM< SireMol::Chain >::*toList_function_type)(  ) const;
+            toList_function_type toList_function_value( &::SireMol::SelectorM< SireMol::Chain >::toList );
+            
+            SelectorM_Chain__exposer.def( 
+                "toList"
+                , toList_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::Chain >::toMoleculeGroup
         
             typedef SireMol::SelectorM< SireMol::Chain > exported_class_t;

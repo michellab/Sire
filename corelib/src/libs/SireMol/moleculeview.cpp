@@ -1529,6 +1529,16 @@ int MoleculeView::count() const
     return this->nViews();
 }
 
+/** Expand this into a list of unit classes. This will return the view itself if
+ *  this is a unit class, e.g. Atom, Residue, Molecule etc.
+ *  This will return a list of unit classes if this is a Selector<T> or
+ *  equivalent type class.
+*/
+QList<MolViewPtr> MoleculeView::toList() const
+{
+    return QList<MolViewPtr>({MolViewPtr(this->clone())});
+}
+
 /** Return the ith view in this MoleculeView. */
 MolViewPtr MoleculeView::operator[](int i) const
 {

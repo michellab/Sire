@@ -190,6 +190,8 @@ public:
 
     typename T::Index index(int i) const;
 
+    QList<MolViewPtr> toList() const;
+
     QString toString() const;
 
     bool isEmpty() const;
@@ -1146,6 +1148,24 @@ SIRE_OUTOFLINE_TEMPLATE
 Selector<Segment> Selector<T>::operator()(const SegID &segid) const
 {
     return this->segments(segid);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<MolViewPtr> Selector<T>::toList() const
+{
+    QList<MolViewPtr> l;
+
+    l.reserve(idxs.count());
+
+    auto d = this->data();
+
+    for (const auto &idx : idxs)
+    {
+        l.append(MolViewPtr(new T(d, idx)));
+    }
+
+    return l;
 }
 
 template<class T>

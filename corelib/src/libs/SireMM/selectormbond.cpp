@@ -377,6 +377,19 @@ SelectorMBond SelectorMBond::operator()(const BondID &id) const
     return this->operator[](id);
 }
 
+QList<MolViewPtr> SelectorMBond::toList() const
+{
+    QList<MolViewPtr> l;
+    l.reserve(bnds.count());
+
+    for (const auto &bnd : bnds)
+    {
+        l.append(MolViewPtr(bnd.clone()));
+    }
+
+    return l;
+}
+
 int SelectorMBond::count() const
 {
     int n = 0;

@@ -119,6 +119,8 @@ public:
     T operator()(const QString &name) const;
     T operator()(const typename T::ID &id) const;
 
+    QList<MolViewPtr> toList() const;
+
     int count() const;
     int size() const;
 
@@ -925,6 +927,21 @@ SIRE_OUTOFLINE_TEMPLATE
 T SelectorM<T>::operator()(const typename T::ID &id) const
 {
     return this->operator[](id);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<MolViewPtr> SelectorM<T>::toList() const
+{
+    QList<MolViewPtr> l;
+    l.reserve(vws.count());
+
+    for (const auto &v : vws)
+    {
+        l.append(MolViewPtr(v.clone()));
+    }
+
+    return l;
 }
 
 template<class T>

@@ -931,6 +931,19 @@ void register_Selector_Residue__class(){
                 , "" );
         
         }
+        { //::SireMol::Selector< SireMol::Residue >::toList
+        
+            typedef SireMol::Selector< SireMol::Residue > exported_class_t;
+            typedef ::QList< SireBase::PropPtr< SireMol::MoleculeView > > ( ::SireMol::Selector< SireMol::Residue >::*toList_function_type)(  ) const;
+            toList_function_type toList_function_value( &::SireMol::Selector< SireMol::Residue >::toList );
+            
+            Selector_Residue__exposer.def( 
+                "toList"
+                , toList_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::Residue >::toString
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;

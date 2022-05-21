@@ -123,6 +123,8 @@ public:
     SelectorBond operator()(const QList<qint64> &idxs) const;
     SelectorBond operator()(const SireMol::BondID &bond) const;
 
+    QList<SireMol::MolViewPtr> toList() const;
+
     QList<SireMol::BondID> IDs() const;
 
     SelectorBond add(const Bond &bond) const;

@@ -522,6 +522,18 @@ void register_SelectorBond_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorBond::toList
+        
+            typedef ::QList< SireBase::PropPtr< SireMol::MoleculeView > > ( ::SireMM::SelectorBond::*toList_function_type)(  ) const;
+            toList_function_type toList_function_value( &::SireMM::SelectorBond::toList );
+            
+            SelectorBond_exposer.def( 
+                "toList"
+                , toList_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorBond::toString
         
             typedef ::QString ( ::SireMM::SelectorBond::*toString_function_type)(  ) const;

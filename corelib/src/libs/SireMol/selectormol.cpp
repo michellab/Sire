@@ -390,6 +390,19 @@ Molecule SelectorMol::operator[](const MolID &molid) const
     return this->molecule(molid);
 }
 
+QList<MolViewPtr> SelectorMol::toList() const
+{
+    QList<MolViewPtr> l;
+    l.reserve(mols.count());
+
+    for (const auto &mol : mols)
+    {
+        l.append(MolViewPtr(mol.clone()));
+    }
+
+    return l;
+}
+
 SelectResult SelectorMol::toSelectResult() const
 {
     return SelectResult(this->mols);

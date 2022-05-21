@@ -47,6 +47,7 @@ void register_SelectorMBond_class(){
         SelectorMBond_exposer.def( bp::init< SireMM::SelectorMBond const &, SireBase::Slice const & >(( bp::arg("bonds"), bp::arg("slice") ), "") );
         SelectorMBond_exposer.def( bp::init< SireMM::SelectorMBond const &, QList< long long > const & >(( bp::arg("bonds"), bp::arg("idxs") ), "") );
         SelectorMBond_exposer.def( bp::init< SireMol::SelectResult const &, SireMol::BondID const & >(( bp::arg("mols"), bp::arg("bond") ), "") );
+        SelectorMBond_exposer.def( bp::init< SireMol::SelectResult const &, SireBase::PropertyMap const & >(( bp::arg("mols"), bp::arg("map") ), "") );
         SelectorMBond_exposer.def( bp::init< SireMM::SelectorMBond const & >(( bp::arg("other") ), "") );
         { //::SireMM::SelectorMBond::IDs
         
@@ -996,6 +997,18 @@ void register_SelectorMBond_class(){
             SelectorMBond_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::toList
+        
+            typedef ::QList< SireBase::PropPtr< SireMol::MoleculeView > > ( ::SireMM::SelectorMBond::*toList_function_type)(  ) const;
+            toList_function_type toList_function_value( &::SireMM::SelectorMBond::toList );
+            
+            SelectorMBond_exposer.def( 
+                "toList"
+                , toList_function_value
                 , bp::release_gil_policy()
                 , "" );
         

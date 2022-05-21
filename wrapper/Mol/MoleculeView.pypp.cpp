@@ -1473,6 +1473,18 @@ void register_MoleculeView_class(){
                 , "Return the number of sub-views in this view. Most MoleculeViews are\njust a single view, but some (e.g. ViewsOfMol or Selector<T>) have\nmultiple views" );
         
         }
+        { //::SireMol::MoleculeView::toList
+        
+            typedef ::QList< SireBase::PropPtr< SireMol::MoleculeView > > ( ::SireMol::MoleculeView::*toList_function_type)(  ) const;
+            toList_function_type toList_function_value( &::SireMol::MoleculeView::toList );
+            
+            MoleculeView_exposer.def( 
+                "toList"
+                , toList_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::MoleculeView::toString
         
             typedef ::QString ( ::SireMol::MoleculeView::*toString_function_type)(  ) const;

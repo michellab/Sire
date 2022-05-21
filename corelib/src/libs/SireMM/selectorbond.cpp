@@ -633,6 +633,21 @@ SelectorBond SelectorBond::operator()(const BondID &bond) const
     return ret;
 }
 
+QList<MolViewPtr> SelectorBond::toList() const
+{
+    QList<MolViewPtr> l;
+    l.reserve(bnds.count());
+
+    auto d = this->data();
+
+    for (const auto &bnd : bnds)
+    {
+        l.append(MolViewPtr(new Bond(d, bnd)));
+    }
+
+    return l;
+}
+
 QList<BondID> SelectorBond::IDs() const
 {
     return bnds;

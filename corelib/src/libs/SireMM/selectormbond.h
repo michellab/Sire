@@ -124,6 +124,8 @@ public:
     SelectorMBond operator()(const QList<qint64> &idxs) const;
     SelectorMBond operator()(const SireMol::BondID &id) const;
 
+    QList<SireMol::MolViewPtr> toList() const;
+
     int count() const;
     int size() const;
 

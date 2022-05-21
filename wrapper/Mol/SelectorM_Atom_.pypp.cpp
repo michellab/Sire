@@ -1143,6 +1143,19 @@ void register_SelectorM_Atom__class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorM< SireMol::Atom >::toList
+        
+            typedef SireMol::SelectorM< SireMol::Atom > exported_class_t;
+            typedef ::QList< SireBase::PropPtr< SireMol::MoleculeView > > ( ::SireMol::SelectorM< SireMol::Atom >::*toList_function_type)(  ) const;
+            toList_function_type toList_function_value( &::SireMol::SelectorM< SireMol::Atom >::toList );
+            
+            SelectorM_Atom__exposer.def( 
+                "toList"
+                , toList_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::Atom >::toMoleculeGroup
         
             typedef SireMol::SelectorM< SireMol::Atom > exported_class_t;
