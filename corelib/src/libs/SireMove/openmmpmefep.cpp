@@ -905,6 +905,8 @@ void OpenMMPMEFEP::initialise(bool fullPME)
             double charge = 1.0; //charges[0].value();
 	    qDebug() << "Ion charge: hardcoded =" << charge
 		     << "Sire =" << charges[0].value();
+	    qDebug() << "'charges[0].value()' is of type"
+		     << typeid(charges[0].value()).name();
 
             double sigma = ljparameters[0].sigma() * OpenMM::NmPerAngstrom;
             double epsilon = ljparameters[0].epsilon() * OpenMM::KJPerKcal;
