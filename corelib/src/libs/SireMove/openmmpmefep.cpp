@@ -814,7 +814,11 @@ void OpenMMPMEFEP::initialise(bool fullPME)
     recip_space->setUseDispersionCorrection(false);
 
     if (useOffset) {
+	// NOTE: without offset and if lambda_offset is set to 0.0 here then
+	//       the same starting energies as in initialise_ion result
 	recip_space->addGlobalParameter("lambda_offset", current_lambda);
+	recip_space->addParticleParameterOffset("lambda_offset", 0,
+						-1.0, 0.0, 0.0);
 
 	if (Debug)
 	    qDebug() << "Adding lambda offset to reciprocal space";
@@ -858,8 +862,6 @@ void OpenMMPMEFEP::initialise(bool fullPME)
 
     int num_atoms_till_i = 0;
 
-    recip_space->addGlobalParameter("lambda_offset", current_lambda);
-
     for (int i = 0; i < nmols; i++) {
         const double *m = ws.massArray(i);
 
@@ -876,9 +878,6 @@ void OpenMMPMEFEP::initialise(bool fullPME)
             qDebug() << "Molecule number = " << i << "name =" << molecule.name();
 
 	if (i == 0) {		// ion
-	    recip_space->addParticleParameterOffset("lambda_offset", 0,
-						    -1.0, 0.0, 0.0);
-
             AtomCharges atomcharges_start =
                 molecule.property("initial_charge").asA<AtomCharges>();
             AtomCharges atomcharges_end =
@@ -912,10 +911,6 @@ void OpenMMPMEFEP::initialise(bool fullPME)
 		direct_space->addParticle({charge_start, charge_end,
 			sigma_start, sigma_end, epsilon_start, epsilon_end,
 			1.0, 0.0, 0.0, 0.0});
-
-		qDebug() << charge << sigma << epsilon << charge_start
-			 << charge_end << sigma_start << sigma_end
-			 << epsilon_start << epsilon_end;
 	    }
 
 	    num_atoms_till_i = num_atoms_till_i + num_atoms_molecule;
@@ -935,7 +930,6 @@ void OpenMMPMEFEP::initialise(bool fullPME)
 	    if (!fullPME) {
 		direct_space->addParticle({charge, charge, sigma, sigma,
 			epsilon, epsilon, 1.0, 0.0, 0.0, 1.0});
-		qDebug() << charge << sigma << epsilon;
 	    }
         }
 
@@ -1356,7 +1350,8 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10,
 	MolarEnergy Epot = state_openmm.getPotentialEnergy() * kJ_per_mol;
 
         qDebug() << "Total energy before minimisation:" << Epot
-                 << "kcal/mol at lambda =" << current_lambda;
+                 << "kcal/mol at lambda ="
+		 << openmm_context->getParameter("lambda_offset");
 
 	const OpenMM::State state1 = openmm_context->getState
 	    (OpenMM::State::Energy, false, 1 << RECIP_FCG);
@@ -1415,7 +1410,8 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10,
         MolarEnergy Epot = state_openmm.getPotentialEnergy() * kJ_per_mol;
 
         qDebug() << "Total energy after minimisation:" << Epot
-                 << "kcal/mol at lambda =" << current_lambda;
+                 << "kcal/mol at lambda ="
+		 << openmm_context->getParameter("lambda_offset");
     }
 
     // Step 4 delete the context
@@ -1838,7 +1834,8 @@ void OpenMMPMEFEP::updateOpenMMContextLambda(double lambda)
     if (perturbed_energies[0]) {
         openmm_context->setParameter("lam", lambda); // 1-5 HD
 
-	if (Debug)                                                                          qDebug() << "Updating direct space lambda tp" << lambda;
+	if (Debug)
+	    qDebug() << "Updating direct space lambda tp" << lambda;
     }
 
     // reciprocal space corrections for 1-2, 1-3 and scaled 1-4
@@ -1873,7 +1870,8 @@ void OpenMMPMEFEP::updateOpenMMContextLambda(double lambda)
 	openmm_context->setParameter("lambda_offset", lambda);
 
 	if (Debug)
-	    qDebug() << "Updating lambda_offset to" << lambda;
+	    qDebug() << "Updating lambda_offset to" << lambda
+		     << openmm_context->getParameter("lambda_offset");
     }
 }
 
