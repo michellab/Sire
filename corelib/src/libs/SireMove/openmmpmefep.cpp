@@ -900,7 +900,12 @@ void OpenMMPMEFEP::initialise(bool fullPME)
 	    double epsilon_start = start_LJs[0].epsilon() * OpenMM::KJPerKcal;
 	    double epsilon_end = final_LJs[0].epsilon() * OpenMM::KJPerKcal;
 
-            double charge = charges[0].value();
+	    // FIXME: this is the offending line
+	    //        for some reason we cannot use charges[0].value() directly
+            double charge = 1.0; //charges[0].value();
+	    qDebug() << "Ion charge: hardcoded =" << charge
+		     << "Sire =" << charges[0].value();
+
             double sigma = ljparameters[0].sigma() * OpenMM::NmPerAngstrom;
             double epsilon = ljparameters[0].epsilon() * OpenMM::KJPerKcal;
 
