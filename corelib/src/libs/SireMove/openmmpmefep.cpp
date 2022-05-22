@@ -902,17 +902,11 @@ void OpenMMPMEFEP::initialise(bool fullPME)
 
 	    // FIXME: this is the offending line
 	    //        for some reason we cannot use charges[0].value() directly
-            double charge = 1.0; //charges[0].value();
-	    qDebug() << "Ion charge: hardcoded =" << charge
-		     << "Sire =" << charges[0].value();
-	    qDebug() << "'charges[0].value()' is of type"
-		     << typeid(charges[0].value()).name();
-
             double sigma = ljparameters[0].sigma() * OpenMM::NmPerAngstrom;
             double epsilon = ljparameters[0].epsilon() * OpenMM::KJPerKcal;
 
 	    system_openmm->addParticle(m[0]);
-	    recip_space->addParticle(charge, sigma, epsilon);
+	    recip_space->addParticle(charge_start, sigma, epsilon);
 
 	    if (!fullPME) {
 		direct_space->addParticle({charge_start, charge_end,
