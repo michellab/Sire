@@ -405,7 +405,7 @@ bool OpenMMPMEFEP::operator==(const OpenMMPMEFEP &other) const
            and Integrator::operator==(other);
 }
 
-/** Comparison operator */
+/* Comparison operator */
 bool OpenMMPMEFEP::operator!=(const OpenMMPMEFEP &other) const
 {
     return not OpenMMPMEFEP::operator==(other);
@@ -417,6 +417,8 @@ QString OpenMMPMEFEP::toString() const
     return QObject::tr("OpenMMPMEFEP()");
 }
 
+
+/* various helper functions */
 static void addPerParticleParameters(OpenMM::CustomNonbondedForce &force,
                                      std::vector<std::string> params)
 {
@@ -594,8 +596,9 @@ tmpl_str OpenMMPMEFEP::FROMTODUMMY =
 
     "U_LJ = 4.0 * eps_avg * (TWSIX3*TWSIX3 - TWSIX3);"
     "TWSIX3 = ((sigma_avg * sigma_avg) / rLJ)^3;"
-    "rLJ = deltaftd*sigma_avg*0.1 + r*r;"
+    "rLJ = deltaftd*sigma_avg*lam_diff + r*r;"
 
+    "lam_diff = 0.1;"
     "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
     "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
     "sigma_avg=";

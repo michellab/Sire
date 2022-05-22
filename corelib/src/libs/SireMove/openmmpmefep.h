@@ -56,7 +56,7 @@ SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::OpenMMPMEFEP&);
 namespace SireMove {
     using tmpl_str = const QString;
 
-    /** This class implements single topology a free energy method using
+    /** This class implements the single topology free energy method using
 	OpenMM.
 
         @author Julien Michel, Gaetano Calabro, Antonia Mey, Hannes H Loeffler
