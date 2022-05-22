@@ -203,22 +203,26 @@ QDataStream &operator>>(QDataStream &ds, OpenMMPMEFEP &velver)
 OpenMMPMEFEP::OpenMMPMEFEP(bool frequent_save)
     : ConcreteProperty<OpenMMPMEFEP, Integrator>(),
       frequent_save_velocities(frequent_save),
-      molgroup(MoleculeGroup()), solute(MoleculeGroup()), solutehard(MoleculeGroup()),
-      solutetodummy(MoleculeGroup()), solutefromdummy(MoleculeGroup()),
+      molgroup(MoleculeGroup()), solute(MoleculeGroup()),
+      solutehard(MoleculeGroup()), solutetodummy(MoleculeGroup()),
+      solutefromdummy(MoleculeGroup()),
       openmm_system(0), openmm_context(0), isSystemInitialised(false),
       isContextInitialised(false),
       combiningRules("arithmetic"),
-      CutoffType("PME"), cutoff_distance(1.0 * nanometer), field_dielectric(78.3),
+      CutoffType("PME"), cutoff_distance(1.0 * nanometer),
+      field_dielectric(78.3),
       Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
       MCBarostat_frequency(25), ConstraintType("none"),
-      Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"),
+      Pressure(1.0 * bar), Temperature(300.0 * kelvin),
+      platform_type("Reference"),
       Restraint_flag(false),
       CMMremoval_frequency(0), buffer_frequency(0), energy_frequency(100),
-      device_index("0"), precision("single"), current_lambda(0.5), coulomb_power(0),
+      device_index("0"), precision("single"), current_lambda(0.5),
+      coulomb_power(0),
       shift_delta(2.0), delta_alchemical(0.001), alchemical_array(),
-      finite_diff_gradients(), pot_energies(), perturbed_energies(),
-      reduced_perturbed_energies(),
+      finite_diff_gradients(), pot_energies(),
       forward_Metropolis(), backward_Metropolis(),
+      reduced_perturbed_energies(), perturbed_energies(),
       Integrator_type("leapfrogverlet"), friction(1.0 / picosecond),
       integration_tol(0.001), timeskip(0.0 * picosecond),
       reinitialise_context(false), Debug(false)
@@ -245,8 +249,9 @@ OpenMMPMEFEP::OpenMMPMEFEP(const MoleculeGroup &molecule_group,
       CMMremoval_frequency(0), buffer_frequency(0), energy_frequency(100),
       device_index("0"), precision("single"), current_lambda(0.5), coulomb_power(0),
       shift_delta(2.0), delta_alchemical(0.001), alchemical_array(),
-      finite_diff_gradients(), pot_energies(), perturbed_energies(),
-      reduced_perturbed_energies(), forward_Metropolis(), backward_Metropolis(),
+      finite_diff_gradients(), pot_energies(),
+      forward_Metropolis(), backward_Metropolis(),
+      reduced_perturbed_energies(), perturbed_energies(),
       Integrator_type("leapfrogverlet"), friction(1.0 / picosecond),
       integration_tol(0.001), timeskip(0.0 * picosecond),
       reinitialise_context(false), Debug(false)
@@ -257,14 +262,16 @@ OpenMMPMEFEP::OpenMMPMEFEP(const MoleculeGroup &molecule_group,
 OpenMMPMEFEP::OpenMMPMEFEP(const OpenMMPMEFEP &other)
     : ConcreteProperty<OpenMMPMEFEP, Integrator>(other),
       frequent_save_velocities(other.frequent_save_velocities),
-      molgroup(other.molgroup), solute(other.solute), solutehard(other.solutehard),
-      solutetodummy(other.solutetodummy), solutefromdummy(other.solutefromdummy),
+      molgroup(other.molgroup), solute(other.solute),
+      solutehard(other.solutehard), solutetodummy(other.solutetodummy),
+      solutefromdummy(other.solutefromdummy),
       openmm_system(other.openmm_system), openmm_context(other.openmm_context),
       isSystemInitialised(other.isSystemInitialised),
       isContextInitialised(other.isContextInitialised),
       combiningRules(other.combiningRules),
       CutoffType(other.CutoffType), cutoff_distance(other.cutoff_distance),
-      field_dielectric(other.field_dielectric), Andersen_flag(other.Andersen_flag),
+      field_dielectric(other.field_dielectric),
+      Andersen_flag(other.Andersen_flag),
       Andersen_frequency(other.Andersen_frequency),
       MCBarostat_flag(other.MCBarostat_flag),
       MCBarostat_frequency(other.MCBarostat_frequency),
@@ -274,17 +281,18 @@ OpenMMPMEFEP::OpenMMPMEFEP(const OpenMMPMEFEP &other)
       Restraint_flag(other.Restraint_flag),
       CMMremoval_frequency(other.CMMremoval_frequency),
       buffer_frequency(other.buffer_frequency),
-      energy_frequency(other.energy_frequency), device_index(other.device_index),
+      energy_frequency(other.energy_frequency),
+      device_index(other.device_index),
       precision(other.precision), current_lambda(other.current_lambda),
       coulomb_power(other.coulomb_power), shift_delta(other.shift_delta),
       delta_alchemical(other.delta_alchemical),
       alchemical_array(other.alchemical_array),
       finite_diff_gradients(other.finite_diff_gradients),
       pot_energies(other.pot_energies),
-      perturbed_energies(other.perturbed_energies),
-      reduced_perturbed_energies(other.reduced_perturbed_energies),
       forward_Metropolis(other.forward_Metropolis),
       backward_Metropolis(other.backward_Metropolis),
+      reduced_perturbed_energies(other.reduced_perturbed_energies),
+      perturbed_energies(other.perturbed_energies),
       Integrator_type(other.Integrator_type), friction(other.friction),
       integration_tol(other.integration_tol), timeskip(other.timeskip),
       reinitialise_context(other.reinitialise_context), Debug(other.Debug)
@@ -336,9 +344,9 @@ OpenMMPMEFEP& OpenMMPMEFEP::operator=(const OpenMMPMEFEP &other)
     alchemical_array = other.alchemical_array;
     finite_diff_gradients = other.finite_diff_gradients;
     pot_energies = other.pot_energies;
-    reduced_perturbed_energies = other. reduced_perturbed_energies;
     forward_Metropolis = other.forward_Metropolis;
     backward_Metropolis = other.backward_Metropolis;
+    reduced_perturbed_energies = other. reduced_perturbed_energies;
     perturbed_energies = other.perturbed_energies;
     Integrator_type = other.Integrator_type;
     friction = other.friction;
@@ -384,9 +392,9 @@ bool OpenMMPMEFEP::operator==(const OpenMMPMEFEP &other) const
            and alchemical_array == other.alchemical_array
            and finite_diff_gradients == other.finite_diff_gradients
            and pot_energies == other.pot_energies
-           and reduced_perturbed_energies == other.reduced_perturbed_energies
            and forward_Metropolis == other.forward_Metropolis
            and backward_Metropolis == other. backward_Metropolis
+           and reduced_perturbed_energies == other.reduced_perturbed_energies
            and perturbed_energies == other.perturbed_energies
            and Integrator_type == other.Integrator_type
            and friction == other.friction
