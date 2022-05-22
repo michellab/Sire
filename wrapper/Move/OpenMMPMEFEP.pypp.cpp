@@ -521,18 +521,6 @@ void register_OpenMMPMEFEP_class(){
                 , "\n initialises the openMM Free energy single topology calculation\n Initialise must be called before anything else happens.\n" );
         
         }
-        { //::SireMove::OpenMMPMEFEP::initialise_ion
-        
-            typedef void ( ::SireMove::OpenMMPMEFEP::*initialise_ion_function_type)( bool,bool ) ;
-            initialise_ion_function_type initialise_ion_function_value( &::SireMove::OpenMMPMEFEP::initialise_ion );
-            
-            OpenMMPMEFEP_exposer.def( 
-                "initialise_ion"
-                , initialise_ion_function_value
-                , ( bp::arg("fullPME")=(bool)(false), bp::arg("doCharge")=(bool)(true) )
-                , "\nA simple system of an ion in a water box.  This is really for debugging\npurposes only and assumes that the parm7 and rst7 file are describing\nsuch a system exactly as in the code below.\n" );
-        
-        }
         { //::SireMove::OpenMMPMEFEP::integrate
         
             typedef void ( ::SireMove::OpenMMPMEFEP::*integrate_function_type)( ::SireMove::IntegratorWorkspace &,::SireCAS::Symbol const &,::SireUnits::Dimension::Time,int,bool ) ;
