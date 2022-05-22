@@ -1389,10 +1389,11 @@ void OpenMMPMEFEP::initialise(bool fullPME)
 
             start_LJs = atomvdws_start.toVector();
             final_LJs = atomvdws_final.toVector();
+
+	    // make sure we have the unscaled charge to be used in the offset
         }
 
-        int nonbond_idx = 0;
-        double charge_start = 0.0, charge_final = 0.0;
+	double charge = 0.0;	// depends if perturbed atom or not
 
 	/* add non-bonded parameters to direct and reciprocal spaces
 	   and restraints if applicable */
@@ -1400,33 +1401,33 @@ void OpenMMPMEFEP::initialise(bool fullPME)
         // Iterate over all atoms in the molecules:
         // ljparameters.size() is used here as the number of atoms
         for (int j = 0; j < ljparameters.size(); j++) {
-            double charge = charges[j].value();
-            double sigma = ljparameters[j].sigma() * OpenMM::NmPerAngstrom;
-            double epsilon = ljparameters[j].epsilon() * OpenMM::KJPerKcal;
-            double charge_diff = 0.0;
-
-            // This really only adds the nonbonded parameters
-            // The parameters need to be added in the same order as they
-            // appear in the System
-            nonbond_idx = recip_space->addParticle(charge, sigma, epsilon);
-
             Atom atom = molecule.molecule().atoms()(j);
 
+	    double sigma = ljparameters[j].sigma() * OpenMM::NmPerAngstrom;
+	    double epsilon = ljparameters[j].epsilon() * OpenMM::KJPerKcal;
+
             if (molecule.hasProperty("perturbations")) {
+		charge = start_charges[j].value();
+
+		// This really only adds the nonbonded parameters
+		// The parameters need to be added in the same order as they
+		// appear in the System
+		int nonbond_idx = recip_space->addParticle(charge, sigma, epsilon);
+
                 // Is atom a hard (changing charge and LJ), from dummy or to dummy type?
                 bool ishard = false;
                 bool istodummy = false;
                 bool isfromdummy = false;
 
-                charge_start = start_charges[j].value();
-                charge_final = final_charges[j].value();
+                double charge_start = start_charges[j].value();
+                double charge_final = final_charges[j].value();
 
                 // HHL
                 // Lambda scaling for 1-5+ (see exceptions below) in reciprocal
                 // space complimentary to scaling in direct space
                 // need to provide the parameter (lambda) and the chargeScale for
                 // reciprocal PME
-                charge_diff = charge_final - charge_start;
+                double charge_diff = charge_final - charge_start;
 
                 // FIXME: really needed? const for small value
                 if (abs(charge_diff) < 0.00001)
@@ -1550,7 +1551,10 @@ void OpenMMPMEFEP::initialise(bool fullPME)
                         qDebug() << " unperturbed solute atom " << atom.index();
                 }
             }
-            else {
+            else {		// unperturbed atom
+		charge = charges[j].value();
+		recip_space->addParticle(charge, sigma, epsilon);
+
                 // solvent atom like hard
                 custom_non_bonded_params[0] = charge;
                 custom_non_bonded_params[1] = charge;
@@ -2151,10 +2155,10 @@ void OpenMMPMEFEP::initialise(bool fullPME)
                                                        four.atom3(), four.atom2()));
 
                         if (Debug) {
-                            qDebug() << "Atom0 = " << four.atom0().asA<AtomIdx>().value() <<
-                                     "Atom1 = " << four.atom1().asA<AtomIdx>().value() <<
-                                     "Atom2 = " << four.atom2().asA<AtomIdx>().value() <<
-                                     "Atom3 = " << four.atom3().asA<AtomIdx>().value() << "\n";
+                            qDebug() << "Atom0 = " << four.atom0().asA<AtomIdx>().value()
+				     << "Atom1 = " << four.atom1().asA<AtomIdx>().value()
+                                     << "Atom2 = " << four.atom2().asA<AtomIdx>().value()
+                                     << "Atom3 = " << four.atom3().asA<AtomIdx>().value();
                         }
                     }
 
@@ -2444,12 +2448,12 @@ void OpenMMPMEFEP::initialise(bool fullPME)
     recip_space->createExceptionsFromBonds(bondPairs, Coulomb14Scale,
                                            LennardJones14Scale);
 
-    int num_exceptions = recip_space->getNumExceptions();
+    unsigned int num_exceptions = recip_space->getNumExceptions();
 
     if (Debug)
         qDebug() << "Number of exceptions =" << num_exceptions;
 
-    for (int i = 0; i < num_exceptions; i++) {
+    for (unsigned int i = 0; i < num_exceptions; i++) {
         int p1, p2;
 
 	double qprod_diff, qprod_start, qprod_end, qprod_mix;
