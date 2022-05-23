@@ -117,7 +117,6 @@ enum CombinationRules {
     GEOMETRIC = 1
 };
 
-
 enum ForceGroups {
     NONBONDED_FCG = 0,
     RECIP_FCG = 1,
@@ -126,9 +125,11 @@ enum ForceGroups {
     BOND_FCG = 4
 };
 
+#define SELECT(arg) (1 << (arg))
+
 // force group selection mask
-const int group_mask = 1 << NONBONDED_FCG | 1 << RECIP_FCG
-    | 1 << DIRECT_FCG | 1 << CORR_FCG;
+const int group_mask = SELECT(NONBONDED_FCG) | SELECT(RECIP_FCG)
+    | SELECT(DIRECT_FCG) | SELECT(CORR_FCG);
 
 static const RegisterMetaType<OpenMMPMEFEP> r_openmmint;
 
@@ -358,7 +359,7 @@ OpenMMPMEFEP& OpenMMPMEFEP::operator=(const OpenMMPMEFEP &other)
 }
 
 /**
- * <Compariton operator>
+ * <Comparison operator>
  * @param other
  * @return boolean
  */
@@ -485,13 +486,12 @@ void OpenMMPMEFEP::addMCBarostat(OpenMM::System &system)
 // FIXME: disable SPOnOff and see if it works with PME
 //
 // NOTE: There is one single namespace for global parameters but each parameter
-//       must added to the force it is used in.  This is relevant for all
+//       must be added to the force it is used in.  This is relevant for all
 //       global lambdas below because they need to be changed during MD.
 //       Cutoff, delta and n could use a single name each as they are constant
 //       throughout the simulation.
 
-#define COULOMB_SHIFT "rCoul = lam_diff + r;" // can we shift?
-//#define COULOMB_SHIFT "rCoul = r;"
+#define COULOMB_SHIFT "rCoul = lam_diff + r;" // very unstable MD if without
 
 // Direct space PME and LJ
 tmpl_str OpenMMPMEFEP::GENERAL =
@@ -532,9 +532,11 @@ tmpl_str OpenMMPMEFEP::GENERAL_SIGMA[2] = {
     "sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));"
 };
 
-// subtract 1-2, 1-3 and 1-4 interactions that have been calculated in reciprocal space
+// subtract 1-2, 1-3 and 1-4 interactions that have been calculated in
+// reciprocal space and so avoid double counting
 tmpl_str OpenMMPMEFEP::CORR_RECIP =
-    // cutoff shouldn't be needed because 1-4 should be shorter than cutoff
+    // cutoff shouldn't be needed because 1-4 should always be shorter than
+    // the cutoff
     "-U_corr * withinCutoff;"
     "withinCutoff = step(cutoff - r);"
 
@@ -628,7 +630,7 @@ tmpl_str OpenMMPMEFEP::INTRA_14_CLJ_SIGMA[2] = {
 /*
  * Initialise the OpenMM Free energy single topology calculation.
  * Parameter fullPME is only useful for debugging of e.g. single ion systems.
- * Initialise() must be called before anything else happens.
+ * initialise() must be called before anything else happens.
  */
 void OpenMMPMEFEP::initialise(bool fullPME)
 {
@@ -2928,11 +2930,11 @@ System OpenMMPMEFEP::minimiseEnergy(System &system, double tolerance = 1.0e-10,
                  << "kcal/mol at lambda =" << current_lambda;
 
 	const OpenMM::State state1 = openmm_context->getState
-	    (OpenMM::State::Energy, false, 1 << RECIP_FCG);
+	    (OpenMM::State::Energy, false, SELECT(RECIP_FCG));
 	const OpenMM::State state2 = openmm_context->getState
-	    (OpenMM::State::Energy, false, 1 << DIRECT_FCG);
+	    (OpenMM::State::Energy, false, SELECT(DIRECT_FCG));
 	const OpenMM::State state4 = openmm_context->getState
-	    (OpenMM::State::Energy, false, 1 << CORR_FCG);
+	    (OpenMM::State::Energy, false, SELECT(CORR_FCG));
 
 	qDebug() << "Reciprocal energy ="
                  << state1.getPotentialEnergy() * kJ_per_mol;

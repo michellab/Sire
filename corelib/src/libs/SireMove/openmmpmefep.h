@@ -29,19 +29,20 @@
 #ifndef SIREMOVE_OPENMMPMEFEP_H
 #define SIREMOVE_OPENMMPMEFEP_H
 
+#include <cstdio>
 #include <list>
 #include <utility>
 
-#include "integrator.h"
+#include <boost/tuple/tuple.hpp>
 
 #ifdef SIRE_USE_OPENMM
-    #include <OpenMM.h>   // CONDITIONAL_INCLUDE
+    #include <OpenMM.h>
 #endif
 
-#include <cstdio>
+#include "integrator.h"
 #include "SireUnits/temperature.h"
 #include "SireSystem/system.h"
-#include <boost/tuple/tuple.hpp>
+
 SIRE_BEGIN_HEADER
 
 #ifdef SIRE_USE_OPENMM
@@ -95,7 +96,6 @@ namespace SireMove {
         bool isTimeReversible() const;
 
         void initialise(bool fullPME = false);
-	void initialise_ion(bool fullPME = false, bool doCharge = true);
 
         SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);
 
@@ -308,7 +308,6 @@ namespace SireMove {
 
         SireUnits::Dimension::Time timeskip;
 
-
         bool reinitialise_context;
 
         bool Debug;
@@ -339,7 +338,7 @@ namespace SireMove {
            OpenMMMD.py) larger than HMASS.  In this way hydrogens and heavier
            atoms (assuming no elements between H and C) should be cleanly
            separated by mass. */
-        const double HMASS = 5.0;     // g/mol
+        const double HMASS = 5.0; // g/mol
         const double SMALL = 0.0001;
     };
 }
