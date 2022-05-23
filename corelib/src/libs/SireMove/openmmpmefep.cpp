@@ -882,7 +882,7 @@ void OpenMMPMEFEP::initialise(bool fullPME)
     custom_intra_14_clj->addGlobalParameter("cutoffhd", converted_cutoff_distance);
     custom_intra_14_clj->addGlobalParameter("alpha_pme", alpha_PME);
 
-    std::vector<std::string> paramList = {
+    const std::vector<std::string> paramList = {
 	"qpstart", "qpend", "qmix", "eastart", "eaend", "emix",
 	"sastart", "saend", "samix"
     };
