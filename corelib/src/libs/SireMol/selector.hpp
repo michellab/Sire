@@ -1156,13 +1156,33 @@ QList<MolViewPtr> Selector<T>::toList() const
 {
     QList<MolViewPtr> l;
 
-    l.reserve(idxs.count());
-
-    auto d = this->data();
-
-    for (const auto &idx : idxs)
+    if (not this->isEmpty())
     {
-        l.append(MolViewPtr(new T(d, idx)));
+        if (idxs.isEmpty())
+        {
+            //return the entire molecule
+            const auto& d = this->data();
+
+            const int n = detail::getCount<T>(d.info());
+            l.reserve(n);
+
+            for (int i=0; i<n; ++i)
+            {
+                l.append(MolViewPtr(new T(d, typename T::Index(i))));
+            }
+        }
+        else
+        {
+            //return the selected part of the molecule
+            l.reserve(idxs.count());
+
+            const auto& d = this->data();
+
+            for (const auto &idx : idxs)
+            {
+                l.append(MolViewPtr(new T(d, idx)));
+            }
+        }
     }
 
     return l;

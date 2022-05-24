@@ -322,7 +322,7 @@ public:
         expressionsRule %= ( expressionRule % qi::lit( ';' ) );
 
         //an expression is either a binary or a expression
-        expressionRule %= binaryRule2 | binaryRule | withRule | expressionPartRule;
+        expressionRule %= binaryRule2 | binaryRule | withRule2 | withRule | expressionPartRule;
 
         //a binary is two expressions separated by an op_token (and/or)
         binaryRule %= (expressionPartRule >> op_token >> expressionPartRule) |
@@ -331,10 +331,18 @@ public:
         //allow multiple op_tokens, e.g. a and b and c
         binaryRule2 %= binaryRule >> op_token >> binaryRule |
                        binaryRule >> op_token >> expressionPartRule |
+                       expressionPartRule >> op_token >> binaryRule |
                        (qi::lit('(') >> binaryRule2 >> qi::lit(')') );
 
+        //a withRule is two expressions separated by a "with" or "in"
         withRule %= (expressionPartRule >> with_token >> expressionPartRule) |
                     ( qi::lit('(') >> withRule >> qi::lit(')') );
+
+        //allow multiple with_tokens, e.g. atoms in molecules with resname ALA
+        withRule2 %= withRule >> with_token >> withRule |
+                     withRule >> with_token >> expressionPartRule |
+                     expressionPartRule >> with_token >> withRule |
+                     (qi::lit('(') >> withRule2 >> qi::lit(')') );
 
         //an expression is either a subscript, name, number, within, where, not
         //or user-identified expression, optionally surrounded by parenthesis '( )'
@@ -504,6 +512,7 @@ public:
         binaryRule.name( "Binary" );
         binaryRule2.name( "Binary2" );
         withRule.name( "With" );
+        withRule2.name( "With2" );
         withinRule.name( "Within" );
         withinVectorRule.name( "Within Vector" );
         notRule.name( "Not" );
@@ -559,6 +568,7 @@ public:
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
     qi::rule<IteratorT, AST::IDBond(), SkipperT> bondRule;
     qi::rule<IteratorT, AST::IDWith(), SkipperT> withRule;
+    qi::rule<IteratorT, AST::IDWith(), SkipperT> withRule2;
     qi::rule<IteratorT, AST::IDWithin(), SkipperT> withinRule;
     qi::rule<IteratorT, AST::IDWithinVector(), SkipperT> withinVectorRule;
     qi::rule<IteratorT, AST::IDNot(), SkipperT> notRule;

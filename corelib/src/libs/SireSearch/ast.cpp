@@ -342,7 +342,7 @@ namespace AST
 
     QString IDWith::toString() const
     {
-        return QObject::tr("%1 %2 %3")
+        return QObject::tr("(%1) %2 (%3)")
                     .arg(value0.toString())
                     .arg(idtoken_to_string(token))
                     .arg(value1.toString());
@@ -493,7 +493,6 @@ namespace AST
 
     SelectEnginePtr IDWith::toEngine() const
     {
-        qDebug() << this->toString();
         return IDWithEngine::construct(value0.toEngine(),
                                        token, value1.toEngine());
     }

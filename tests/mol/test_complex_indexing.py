@@ -1,10 +1,27 @@
 
-import sire as sr
-
 import pytest
 
-def test_basic_indexing():
-    mols = sr.load_test_files("ala.top", "ala.crd")
+@pytest.fixture(scope="session")
+def ala_mols():
+    import sire as sr
+    return sr.load_test_files("ala.top", "ala.crd")
+
+
+@pytest.fixture(scope="session")
+def p38_mols():
+    import sire as sr
+    return sr.load_test_files("p38.pdb")
+
+
+@pytest.fixture(scope="session")
+def alanin_mols():
+    import sire as sr
+    return sr.load_test_files("alanin.psf")
+
+
+def test_basic_indexing(ala_mols):
+    mols = ala_mols
+    import sire as sr
 
     assert len(mols["atomname CH3"]) == 2
     assert len(mols[sr.atomid("CH3")]) == 2
@@ -31,8 +48,10 @@ def test_basic_indexing():
     assert len(mols["residues in *"]) == mols.num_residues()
 
 
-def test_complex_indexing():
-    mols = sr.load_test_files("p38.pdb")
+def test_complex_indexing(p38_mols):
+    import sire as sr
+
+    mols = p38_mols
     mol = mols[0]
 
     assert mols[f"molname {mol.name().value()}"] == mol
@@ -124,8 +143,9 @@ def test_complex_indexing():
     assert count == 6
 
 
-def test_single_select_is_right():
-    mols = sr.load_test_files("alanin.psf")
+def test_single_select_is_right(alanin_mols):
+    import sire as sr
+    mols = alanin_mols
 
     mol = mols[0]
 
@@ -137,8 +157,8 @@ def test_single_select_is_right():
     assert mol["segname MAIN"].what() == sr.mol.Molecule.typename()
 
 
-def test_sizes_correct():
-    mols = sr.load_test_files("ala.top", "ala.crd")
+def test_sizes_correct(ala_mols):
+    mols = ala_mols
 
     assert len(mols) == mols.count()
     assert len(mols) == mols.size()
@@ -155,8 +175,8 @@ def test_sizes_correct():
             assert len(res) == res.num_atoms()
 
 
-def test_search_terms():
-    mols = sr.load_test_files("ala.top", "ala.crd")
+def test_search_terms(ala_mols):
+    mols = ala_mols
 
     for atom in mols["mass >= 16 g_per_mol"]:
         assert atom.mass().value() >= 16.0
@@ -213,15 +233,53 @@ def test_search_terms():
     assert sire.search.get_approx_epsilon() == old_eps
 
 
-def test_in_searches():
-    mols = sr.load_test_files("ala.top", "ala.crd")
+def test_in_searches(ala_mols):
+    mols = ala_mols
 
     assert len(mols["atoms in *"]) == mols.num_atoms()
     assert len(mols["residues in *"]) == mols.num_residues()
 
+    assert len(mols["atoms in resname ACE"]) == mols["resname ACE"].num_atoms()
+    assert len(mols["atoms in (molecules with count(element O) > 1)"]) == mols[0].num_atoms()
+    assert len(mols["atoms in (molecules with resname ALA)"]) == mols[0].num_atoms()
+    assert len(mols["(atoms in molecules) with resname ALA"]) == mols["resname ALA"].num_atoms()
 
-def test_all_searches():
-    mols = sr.load_test_files("ala.top", "ala.crd")
+
+def test_with_searches(ala_mols):
+    mols = ala_mols
+
+    import sire as sr
+
+    for mol in mols["molecules with count(atoms) >= 3"]:
+        assert(mol.num_atoms() >= 3)
+
+    for res in mols["residues with count(atoms) >= 3"]:
+        assert(res.num_atoms() >= 3)
+
+    # single residue match
+    res = mols["residues with count(atoms) > 6"]
+
+    assert res.name().value() == "ALA"
+    assert res.num_atoms() > 6
+
+    for atom in mols["atoms with resname ALA"]:
+        assert atom.residue().name().value() == "ALA"
+
+    assert len(mols["residues with element C"]) == 3
+
+    # find the one molecule with two oxygens
+    assert len(mols["molecules with count(element O) > 1"]["element O"]) == 2
+
+    # there are no residues that contain more than one oxygen
+    with pytest.raises(KeyError):
+        mols["residues with count(element O) > 1"]
+
+    # all but one molecule contains at one oxygen
+    assert len(mols["molecules with count(element O) == 1"]) == len(mols)-1
+
+
+def test_all_searches(ala_mols):
+    mols = ala_mols
 
     assert len(mols["atoms"]) == 1912
     assert len(mols["residues"]) == 633
@@ -233,23 +291,12 @@ def test_all_searches():
     assert len(mols["residues in molidx 0"]) == 3
 
 
-def test_count_searches():
-    mols = sr.load_test_files("ala.top", "ala.crd")
+def test_count_searches(ala_mols):
+    mols = ala_mols
 
     for mol in mols["molecules with count(atoms) == 3"]:
         assert mol.num_atoms() == 3
 
     mol = mols["molecules with count(residues) == 3"]
     assert mol.num_residues() == 3
-
-
-if __name__ == "__main__":
-    test_basic_indexing()
-    test_complex_indexing()
-    test_single_select_is_right()
-    test_sizes_correct()
-    test_search_terms()
-    test_in_searches()
-    test_count_searches()
-    test_all_searches()
 

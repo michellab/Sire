@@ -2175,7 +2175,9 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
         second = part0;
     }
 
-    for (const auto &mol : first->operator()(mols, map))
+    // need to expand the result so that we have the right type of unit
+    // when we try to match the second part
+    for (const auto &mol : first->expand(first->operator()(mols, map)))
     {
         const auto units = mol->toList();
 
@@ -2190,14 +2192,17 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
             }
         }
 
-        if (matches.count() == units.count())
+        if (not matches.isEmpty())
         {
-            result.append(mol);
-        }
-        else
-        {
-            //rejoin the matches into the appropriate Selector
-            result.append(mol->operator[](matches));
+            if (matches.count() == units.count())
+            {
+                result.append(mol);
+            }
+            else
+            {
+                //rejoin the matches into the appropriate Selector
+                result.append(mol->operator[](matches));
+            }
         }
     }
 
@@ -2250,85 +2255,48 @@ IDElementEngine::~IDElementEngine()
 
 SelectResult IDElementEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
+    QList<MolViewPtr> result;
+
     const auto element_property = map["element"];
 
-    bool uses_parallel = true;
-
-    if (map["parallel"].hasValue())
+    for (const auto &mol : mols)
     {
-        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
-    }
+        const auto atoms = mol->atoms();
 
-    QList<ViewsOfMol> result;
+        QList<qint64> matches;
+        matches.reserve(atoms.count());
 
-    //function that extracts all of the atoms with matching elements
-    auto getAtomsWithElement = [&](const ViewsOfMol &mol)
-    {
-        const auto &moldata = mol.data();
-        const auto &molinfo = moldata.info();
-
-        if (not moldata.hasProperty(element_property))
-            return ViewsOfMol();
-
-        const auto &prop = moldata.property(element_property);
-
-        if (not prop.isA<AtomElements>())
-            return ViewsOfMol();
-
-        const auto &elms = prop.asA<AtomElements>();
-
-        auto selected = mol.selection();
-
-        //deselect any atoms that are not the right element
-        for (const auto &atomidx : selected.selectedAtoms())
+        try
         {
-            const auto element = elms[ molinfo.cgAtomIdx(atomidx) ];
-
-            if (not elements.contains(element))
+            for (int i=0; i<atoms.count(); ++i)
             {
-                selected = selected.deselect(atomidx);
+                const Atom &atom = atoms(i);
+
+                const Element &element = atom.property<Element>(element_property);
+
+                if (this->elements.contains(element))
+                {
+                    matches.append(i);
+                }
             }
         }
-
-        if (not selected.selectedNone())
+        catch(...)
         {
-            return ViewsOfMol(moldata,selected);
+            // no matching element property - this would be the same
+            // for all atoms
         }
-        else
-            return ViewsOfMol();
-    };
 
-    if (uses_parallel)
-    {
-        const auto molviews = mols.views();
-        QVector<ViewsOfMol> matches(molviews.count());
-
-        tbb::parallel_for( tbb::blocked_range<int>(0,molviews.count()),
-                           [&](const tbb::blocked_range<int> &r)
+        if (not matches.isEmpty())
         {
-            for (int i=r.begin(); i<r.end(); ++i)
+            if (matches.count() == atoms.count())
             {
-                auto match = getAtomsWithElement(molviews.at(i));
-
-                if (not match.isEmpty())
-                    matches[i] = match;
+                // all atoms matched
+                result.append(atoms);
             }
-        });
-
-        for (const auto &match : matches)
-        {
-            if (not match.isEmpty())
-                result.append(match);
-        }
-    }
-    else
-    {
-        for (const auto &mol : mols.views())
-        {
-            auto match = getAtomsWithElement(mol);
-
-            if (not match.isEmpty())
-                result.append(match);
+            else
+            {
+                result.append(atoms(matches));
+            }
         }
     }
 
@@ -2793,7 +2761,7 @@ SelectResult IDCountEngine::select(const SelectResult &mols, const PropertyMap &
     if (items.isEmpty())
         return SelectResult();
 
-    for (const auto &molview : mols)
+    for (const auto &molview : items.toList())
     {
         if (compare_func(count_func(*molview), value))
         {

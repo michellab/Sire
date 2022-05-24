@@ -168,6 +168,8 @@ public:
 
     virtual ObjType objectType() const=0;
 
+    virtual SelectResult expand(const SelectResult &result) const;
+
 protected:
     SelectEngine();
 
@@ -176,7 +178,6 @@ protected:
     static SelectEnginePtr makePtr(SelectEngine *ptr);
 
     virtual MolViewPtr expandMol(const MoleculeView &mol) const;
-    virtual SelectResult expand(const SelectResult &result) const;
 
     /** The parent engine */
     SelectEngineWeakPtr parent;
