@@ -340,8 +340,8 @@ public:
 
         //allow multiple with_tokens, e.g. atoms in molecules with resname ALA
         withRule2 %= withRule >> with_token >> withRule |
-                     withRule >> with_token >> expressionPartRule |
                      expressionPartRule >> with_token >> withRule |
+                     withRule >> with_token >> expressionPartRule |
                      (qi::lit('(') >> withRule2 >> qi::lit(')') );
 
         //an expression is either a subscript, name, number, within, where, not

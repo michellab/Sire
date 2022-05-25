@@ -2161,47 +2161,72 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
 {
     QList<MolViewPtr> result;
 
-    // "with" means search part0 first, and then check whether any match
-    // the selection in part1
-
     auto first = part0;
     auto second = part1;
 
     if (token == AST::ID_IN)
     {
-        // "in" means search part1 first, then check whether any match
-        // the selection in part0
-        first = part1;
-        second = part0;
-    }
-
-    // need to expand the result so that we have the right type of unit
-    // when we try to match the second part
-    for (const auto &mol : first->expand(first->operator()(mols, map)))
-    {
-        const auto units = mol->toList();
-
-        QList<qint64> matches;
-        matches.reserve(units.count());
-
-        for (int i=0; i<units.count(); ++i)
+        // need to expand the result so that we have the right type of unit
+        // when we try to match the second part
+        for (const auto &mol : part1->expand(part1->operator()(mols, map)))
         {
-            if (second->matches(*(units[i]), map))
+            const auto units = mol->toList();
+
+            QList<qint64> matches;
+            matches.reserve(units.count());
+
+            for (int i=0; i<units.count(); ++i)
             {
-                matches.append(i);
+                if (part0->matches(*(units[i]), map))
+                {
+                    matches.append(i);
+                }
+            }
+
+            if (not matches.isEmpty())
+            {
+                if (matches.count() == units.count())
+                {
+                    result.append(mol);
+                }
+                else
+                {
+                    //rejoin the matches into the appropriate Selector
+                    result.append(mol->operator[](matches));
+                }
             }
         }
-
-        if (not matches.isEmpty())
+    }
+    else
+    {
+        // need to expand the result so that we have the right type of unit
+        // when we try to match the second part
+        for (const auto &mol : part0->expand(part0->operator()(mols, map)))
         {
-            if (matches.count() == units.count())
+            const auto units = mol->toList();
+
+            QList<qint64> matches;
+            matches.reserve(units.count());
+
+            for (int i=0; i<units.count(); ++i)
             {
-                result.append(mol);
+                if (part1->matches(*(units[i]), map))
+                {
+                    matches.append(i);
+                }
             }
-            else
+
+            if (not matches.isEmpty())
             {
-                //rejoin the matches into the appropriate Selector
-                result.append(mol->operator[](matches));
+                if (matches.count() == units.count())
+                {
+                    result.append(mol);
+                }
+                else
+                {
+                    //rejoin the matches into the appropriate Selector
+                    result.append(mol->operator[](matches));
+                }
             }
         }
     }

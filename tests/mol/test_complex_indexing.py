@@ -244,6 +244,10 @@ def test_in_searches(ala_mols):
     assert len(mols["atoms in (molecules with resname ALA)"]) == mols[0].num_atoms()
     assert len(mols["(atoms in molecules) with resname ALA"]) == mols["resname ALA"].num_atoms()
 
+    # check precedence - want "atoms in molecules with resname ALA" to 
+    # be "atoms in (molecules with resname ALA)"
+    assert mols["atoms in molecules with resname ALA"] == mols["atoms in (molecules with resname ALA)"]
+
 
 def test_with_searches(ala_mols):
     mols = ala_mols

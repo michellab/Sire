@@ -69,12 +69,32 @@ SireMol::parser::SelectEnginePtr SireMol::parser::SelectEngine::self()
     return selfptr.lock();
 }
 
+/** Return if any of the parts in 'molecule' match this engine */
 bool SireMol::parser::SelectEngine::matches(const MoleculeView &molecule,
                                             const PropertyMap &map) const
 {
     auto r = this->operator()(molecule, map);
 
     return not r.isEmpty();
+}
+
+/** Return if all of the parts in 'molecule' match this engine */
+bool SireMol::parser::SelectEngine::matchesAll(const MoleculeView &molecule,
+                                               const PropertyMap &map) const
+{
+    auto r = this->operator()(molecule, map);
+
+    if (r.isEmpty())
+        return false;
+
+    if (molecule.nAtoms() > 1)
+    {
+        return r.contains(molecule);
+    }
+    else
+    {
+        return true;
+    }
 }
 
 SelectResult SireMol::parser::SelectEngine::operator()(const SelectResult &result,
@@ -687,6 +707,45 @@ bool SelectResult::contains(MolNum molnum) const
     }
 
     return false;
+}
+
+/** Return whether or not this set contains all of the atoms in the
+    passed molecule */
+bool SelectResult::contains(const MoleculeView &mol) const
+{
+    AtomSelection s;
+
+    QList<AtomSelection> selections;
+
+    for (const auto &molview : molviews)
+    {
+        if (molview->data().number() == mol.data().number())
+        {
+            if (s.isNull())
+            {
+                s = mol.selection();
+            }
+
+            auto selection = molview->selection();
+
+            if (selection.contains(s))
+            {
+                return true;
+            }
+
+            // maybe we will see another view of this molecule?
+            selections.append(selection);
+        }
+    }
+
+    if (selections.count() < 2)
+        // nope
+        return false;
+
+    auto selection = selections.takeFirst();
+    selection.unite(selections);
+
+    return selection.contains(s);
 }
 
 /** Return all of the views in this result, grouped by molecule */

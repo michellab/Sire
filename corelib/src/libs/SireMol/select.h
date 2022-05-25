@@ -139,6 +139,9 @@ public:
     virtual bool matches(const MoleculeView &molecule,
                          const PropertyMap &map) const;
 
+    virtual bool matchesAll(const MoleculeView &molecule,
+                            const PropertyMap &map) const;
+
     SelectResult operator()(const SelectResult &result,
                             const PropertyMap &map = PropertyMap()) const;
 
@@ -319,6 +322,7 @@ public:
     int size() const;
 
     bool contains(MolNum molnum) const;
+    bool contains(const MoleculeView &mol) const;
 
     QString getCommonType() const;
 
