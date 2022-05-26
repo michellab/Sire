@@ -40,6 +40,8 @@
 #include "atompolarisabilities.h"
 #include "atomradii.h"
 
+#include "SireBase/propertylist.h"
+
 #include "SireError/errors.h"
 
 using namespace SireMol;
@@ -51,7 +53,7 @@ using namespace SireBase;
 
 static const RegisterMetaType<AtomProp> r_atomprop(MAGIC_ONLY,
                                                    "SireMol::AtomProp");
-                                                   
+
 /** Serialise to a binary datastream */
 QDataStream &operator<<(QDataStream &ds, const AtomProp &atomprop)
 {
@@ -112,7 +114,7 @@ namespace SireMol
     template class AtomProperty<qint64>;
     template class AtomProperty<double>;
     template class AtomProperty<QVariant>;
-    
+
     template class AtomProperty<BeadNum>;
     template class AtomProperty<SireUnits::Dimension::MolarMass>;
     template class AtomProperty<SireUnits::Dimension::MolarEnergy>;
@@ -122,9 +124,9 @@ namespace SireMol
     template class AtomProperty<SireMol::Velocity3D>;
 
     template class AtomProperty<SireMol::Force3D>;
-    
+
     template class AtomProperty<SireUnits::Dimension::Volume>;
-    
+
     template class AtomProperty<SireUnits::Dimension::Length>;
 }
 

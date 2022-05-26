@@ -23,7 +23,7 @@ fi
 TAG=$(git --git-dir="$SRC_DIR"/.git --work-tree="$SRC_DIR" tag --contains)
 
 # If the tag is not empty, then set the label to main.
-if [ ! -e "$TAG" ]; then
+if [ ! -z "$TAG" ]; then
     LABEL=main
 fi
 

@@ -51,6 +51,18 @@
 
 #include "NumberProperty.pypp.hpp"
 
+#include "PackedArray2D_DoubleArrayProperty.pypp.hpp"
+
+#include "PackedArray2D_DoubleArrayProperty_Array.pypp.hpp"
+
+#include "PackedArray2D_IntegerArrayProperty.pypp.hpp"
+
+#include "PackedArray2D_IntegerArrayProperty_Array.pypp.hpp"
+
+#include "PackedArray2D_PropertyList.pypp.hpp"
+
+#include "PackedArray2D_PropertyList_Array.pypp.hpp"
+
 #include "PackedArray2D_QString_.pypp.hpp"
 
 #include "PackedArray2D_QString_Array.pypp.hpp"
@@ -58,6 +70,10 @@
 #include "PackedArray2D_QVariant_.pypp.hpp"
 
 #include "PackedArray2D_QVariant_Array.pypp.hpp"
+
+#include "PackedArray2D_StringArrayProperty.pypp.hpp"
+
+#include "PackedArray2D_StringArrayProperty_Array.pypp.hpp"
 
 #include "PackedArray2D_double_.pypp.hpp"
 
@@ -127,6 +143,8 @@ namespace bp = boost::python;
 
 #include "SireBase/lengthproperty.h"
 
+#include "SireBase/propertylist.h"
+
 #include <QString>
 
 BOOST_PYTHON_MODULE(_Base){
@@ -186,6 +204,14 @@ BOOST_PYTHON_MODULE(_Base){
 
     register_PackedArray2D_QVariant__class();
 
+    register_PackedArray2D_DoubleArrayProperty_class();
+
+    register_PackedArray2D_IntegerArrayProperty_class();
+
+    register_PackedArray2D_PropertyList_class();
+
+    register_PackedArray2D_StringArrayProperty_class();
+
     register_PackedArray2D_double__class();
 
     register_PackedArray2D_int__class();
@@ -230,6 +256,14 @@ BOOST_PYTHON_MODULE(_Base){
 
     register_PackedArray2D_QVariant_Array_class();
 
+    register_PackedArray2D_DoubleArrayProperty_Array_class();
+
+    register_PackedArray2D_IntegerArrayProperty_Array_class();
+
+    register_PackedArray2D_PropertyList_Array_class();
+
+    register_PackedArray2D_StringArrayProperty_Array_class();
+
     register_PackedArray2D_double_Array_class();
 
     register_PackedArray2D_int_Array_class();
@@ -241,6 +275,20 @@ BOOST_PYTHON_MODULE(_Base){
     bp::implicitly_convertible< SireBase::Property, SireBase::PropertyName >();
 
     bp::implicitly_convertible< QHash<QString,SireBase::PropertyName>, SireBase::PropertyMap >();
+
+    bp::implicitly_convertible< SireBase::DoubleArrayProperty, SireBase::StringArrayProperty >();
+
+    bp::implicitly_convertible< SireBase::DoubleArrayProperty, SireBase::IntegerArrayProperty >();
+
+    bp::implicitly_convertible< SireBase::DoubleArrayProperty, SireBase::PropertyList >();
+
+    bp::implicitly_convertible< SireBase::IntegerArrayProperty, SireBase::StringArrayProperty >();
+
+    bp::implicitly_convertible< SireBase::IntegerArrayProperty, SireBase::DoubleArrayProperty >();
+
+    bp::implicitly_convertible< SireBase::IntegerArrayProperty, SireBase::PropertyList >();
+
+    bp::implicitly_convertible< SireBase::StringArrayProperty, SireBase::PropertyList >();
 
     register_free_functions();
 }

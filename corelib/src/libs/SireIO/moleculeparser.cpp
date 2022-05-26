@@ -284,7 +284,28 @@ namespace detail
 
             for (const auto &name : parser_names)
             {
-                helpers.append( helpers_by_id.value(name) );
+                auto helper = helpers_by_id.value(name);
+
+                if (not helper.isValid())
+                {
+                    // search for the helped in the secondary suffixes...
+                    for (auto h : helpers_by_id.values())
+                    {
+                        for (auto suffix : h.suffixes())
+                        {
+                            if (name.toLower() == suffix.toLower())
+                            {
+                                helper = h;
+                                break;
+                            }
+                        }
+
+                        if (helper.isValid())
+                            break;
+                    }
+                }
+
+                helpers.append(helper);
 
                 if (not helpers.last().isValid())
                 {

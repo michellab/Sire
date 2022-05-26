@@ -34,6 +34,10 @@ Installation
 ============
 
 The easiest way to install Sire is using our `conda channel <https://anaconda.org/michellab/repo>`__.
+Sire is built using dependencies from `conda-forge <https://conda-forge.org/>`__,
+so please ensure that the channel takes strict priority. We recommend using
+`Miniforge <https://github.com/conda-forge/miniforge>`__.
+
 To create a new environment:
 
 .. code-block:: bash

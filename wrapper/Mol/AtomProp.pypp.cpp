@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/propertylist.h"
+
 #include "SireError/errors.h"
 
 #include "SireMaths/vector.h"
@@ -100,6 +102,30 @@ void register_AtomProp_class(){
                 "divideByResidue"
                 , divideByResidue_function_value
                 , ( bp::arg("molinfo") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProp::getAsProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProp::*getAsProperty_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::AtomProp::getAsProperty );
+            
+            AtomProp_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("cgatomidx") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProp::getAsVariant
+        
+            typedef ::QVariant ( ::SireMol::AtomProp::*getAsVariant_function_type)( ::SireMol::CGAtomIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::AtomProp::getAsVariant );
+            
+            AtomProp_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("cgatomidx") )
                 , "" );
         
         }

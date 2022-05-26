@@ -7,24 +7,6 @@
 
 namespace bp = boost::python;
 
-#include "SireBase/array2d.hpp"
-
-#include "SireError/errors.h"
-
-#include "SireMaths/boys.h"
-
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "pgto.h"
-
-#include "pointcharge.h"
-
-#include "pointdipole.h"
-
-#include "pgto.h"
-
 #include "SireBase/trigarray2d.h"
 
 #include "SireError/errors.h"
@@ -2058,6 +2040,24 @@ namespace bp = boost::python;
 #include "sgto.h"
 
 #include "sgto.h"
+
+#include "SireBase/array2d.hpp"
+
+#include "SireError/errors.h"
+
+#include "SireMaths/boys.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "pgto.h"
+
+#include "pointcharge.h"
+
+#include "pointdipole.h"
+
+#include "pgto.h"
 
 void register_free_functions(){
 

@@ -36,7 +36,9 @@ set ( SIREMOL_HEADERS
       atomnum.h
       atompolarisabilities.h
       atomproperty.hpp
+      atompropertylist.h
       atomradii.h
+      atomradicals.h
       atomselection.h
       atomsin.hpp
       atomvelocities.h
@@ -50,6 +52,7 @@ set ( SIREMOL_HEADERS
       beads.h
       bondhunter.h
       bondid.h
+      bondtype.h
       calculateaxes.hpp
       cgatomidx.h
       cgeditor.h
@@ -119,6 +122,7 @@ set ( SIREMOL_HEADERS
 
       partialmolecule.h
       perturbation.h
+      radical.h
       reseditor.h
       resid.h
       residentifier.h
@@ -139,6 +143,7 @@ set ( SIREMOL_HEADERS
       select.h
       selector.hpp
       specifymol.h
+      stereoscopy.h
       structureeditor.h
       viewsofmol.h
       volumemap.h
@@ -173,6 +178,7 @@ set ( SIREMOL_SOURCES
       beads.cpp
       bondhunter.cpp
       bondid.cpp
+      bondtype.cpp
       cgatomidx.cpp
       cgeditor.cpp
       cgid.cpp
@@ -225,6 +231,7 @@ set ( SIREMOL_SOURCES
 
       partialmolecule.cpp
       perturbation.cpp
+      radical.cpp
       reseditor.cpp
       resid.cpp
       residentifier.cpp
@@ -238,13 +245,14 @@ set ( SIREMOL_SOURCES
       segproperty.cpp
       select.cpp
       specifymol.cpp
+      stereoscopy.cpp
       structureeditor.cpp
       viewsofmol.cpp
       volumemap.cpp
       weightfunction.cpp
       withatoms.cpp
       within.cpp
-      withres.cpp    
+      withres.cpp
 
       ${SIREMOL_HEADERS}
     )

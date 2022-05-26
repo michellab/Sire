@@ -299,6 +299,16 @@ GromacsAtomType::PARTICLE_TYPE GromacsAtomType::toParticleType(const QString &wo
     }
 }
 
+/** Set the atom type to the passed value. This is useful if there are duplicate
+    atom types with different parameters, as is the case for molecules parameterised
+    using OpenFF, i.e. an atom of type "h1" will, in general, be different to an
+    atom of type "h1" in a different molecule.
+ */
+void GromacsAtomType::setAtomType(const QString& atom_type)
+{
+    this->_typ = atom_type;
+}
+
 /** Set the element to the passed value. This is useful if the "atomtype" section has
     invalid mass informtion, as is the case for many topology files generted by acpype.
     This allows us to update the element of the type using the mass from the "atoms"
