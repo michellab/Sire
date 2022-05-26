@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser(description="Perform molecular dynamics single 
                                         "http://siremol.org",
                                  prog="somd-freenrg")
 
-parser.add_argument('-C', '--config', nargs="?", 
+parser.add_argument('-C', '--config', nargs="?",
                     help='Supply an optional CONFIG file to control the calculation.')
 
 parser.add_argument('-H', '--help-config', action="store_true",
@@ -44,6 +44,12 @@ parser.add_argument('-m', '--morph_file', nargs="?",
                     help="The morph file describing the single topology "
                          "calculation to be performed.")
 
+parser.add_argument('-q', '--charge_diff', default=0, type=int,
+                    help="The difference in net charge between the two end "
+                    "states.  This will trigger the selection of waters "
+                    "which will be transformed to ions to compensate for the "
+                    "change in charge along the lambda coordinate.")
+
 parser.add_argument('-d', '--device', nargs="?",
                     help="The device ID of the GPU on which you want to run the simulation.")
 
@@ -53,7 +59,7 @@ parser.add_argument('-n', '--nmoves', nargs="?",
 parser.add_argument('-p', '--platform', nargs="?",
                     help="The OpenMM platform on which you want to run the simulation.")
 
-parser.add_argument('-l', '--lambda_val', nargs="?", 
+parser.add_argument('-l', '--lambda_val', nargs="?",
                     help="The lambda value at which you want to run the simulation.")
 
 sys.stdout.write("\n")
@@ -128,6 +134,8 @@ if args.nmoves:
 if args.lambda_val:
     lambda_val = float(args.lambda_val)
     params["lambda_val"] = lambda_val
+
+params['charge difference'] = args.charge_diff
 
 if not (os.path.exists(coord_file) and os.path.exists(top_file) and os.path.exists(morph_file)):
     parser.print_help()

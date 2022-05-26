@@ -415,7 +415,10 @@ perturbed_resnum = Parameter(
     """The residue number of the molecule to morph.""",
 )
 
-verbose = Parameter("verbose", False, """Print debug output""")
+charge_diff = Parameter('charge difference', 0,
+                       'The difference in net charge between the two states')
+
+verbose = Parameter('verbose', False, 'Print debug output')
 
 ###############################################################################
 #

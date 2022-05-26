@@ -1,4 +1,4 @@
-/********************************************   \
+/********************************************
  *
  *  Sire - Molecular Simulation Framework
  *
@@ -24,7 +24,7 @@
  *  You can contact the authors via the developer's mailing list
  *  at http://siremol.org
  *
-\*********************************************/
+\********************************************/
 
 #include <iostream>
 #include <cmath>
@@ -128,7 +128,7 @@ enum ForceGroups {
 #define SELECT(arg) (1 << (arg))
 
 // force group selection mask
-const int group_mask = SELECT(NONBONDED_FCG) | SELECT(RECIP_FCG)
+constexpr int group_mask = SELECT(NONBONDED_FCG) | SELECT(RECIP_FCG)
     | SELECT(DIRECT_FCG) | SELECT(CORR_FCG);
 
 static const RegisterMetaType<OpenMMPMEFEP> r_openmmint;
