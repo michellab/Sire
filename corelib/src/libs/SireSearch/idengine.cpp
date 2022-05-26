@@ -68,6 +68,8 @@ SelectEngine::ObjType _to_obj_type(AST::IDObject obj)
         return SelectEngine::SEGMENT;
     case AST::MOLECULE:
         return SelectEngine::MOLECULE;
+    case AST::BOND:
+        return SelectEngine::BOND;
     default:
         return SelectEngine::COMPLEX;
     }
@@ -2166,67 +2168,55 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
 
     if (token == AST::ID_IN)
     {
-        // need to expand the result so that we have the right type of unit
-        // when we try to match the second part
-        for (const auto &mol : part1->expand(part1->operator()(mols, map)))
+        // an "in" search is an inverted "with" search
+        first = part1;
+        second = part0;
+    }
+
+    // we need to expand bonds manually
+    const bool is_bond = part0->objectType() == SelectEngine::BOND;
+
+    // need to expand the result so that we have the right type of unit
+    // when we try to match the second part
+    for (const auto &mol : first->expand(first->operator()(mols, map)))
+    {
+        const auto units = mol->toList();
+
+        QList<qint64> matches;
+        matches.reserve(units.count());
+
+        for (int i=0; i<units.count(); ++i)
         {
-            const auto units = mol->toList();
-
-            QList<qint64> matches;
-            matches.reserve(units.count());
-
-            for (int i=0; i<units.count(); ++i)
+            if (second->matches(*(units[i]), map))
             {
-                if (part0->matches(*(units[i]), map))
-                {
-                    matches.append(i);
-                }
-            }
-
-            if (not matches.isEmpty())
-            {
-                if (matches.count() == units.count())
-                {
-                    result.append(mol);
-                }
-                else
-                {
-                    //rejoin the matches into the appropriate Selector
-                    result.append(mol->operator[](matches));
-                }
+                matches.append(i);
             }
         }
-    }
-    else
-    {
-        // need to expand the result so that we have the right type of unit
-        // when we try to match the second part
-        for (const auto &mol : part0->expand(part0->operator()(mols, map)))
+
+        if (not matches.isEmpty())
         {
-            const auto units = mol->toList();
-
-            QList<qint64> matches;
-            matches.reserve(units.count());
-
-            for (int i=0; i<units.count(); ++i)
+            if (matches.count() == units.count())
             {
-                if (part1->matches(*(units[i]), map))
+                if (is_bond)
                 {
-                    matches.append(i);
-                }
-            }
-
-            if (not matches.isEmpty())
-            {
-                if (matches.count() == units.count())
-                {
-                    result.append(mol);
+                    auto bonds = SelectorBond(mol, map);
+                    if (not bonds.isEmpty())
+                        result.append(bonds);
                 }
                 else
+                    result.append(mol);
+            }
+            else
+            {
+                //rejoin the matches into the appropriate Selector
+                if (is_bond)
                 {
-                    //rejoin the matches into the appropriate Selector
-                    result.append(mol->operator[](matches));
+                    auto bonds = SelectorBond(mol->operator[](matches), map);
+                    if (not bonds.isEmpty())
+                        result.append(bonds);
                 }
+                else
+                    result.append(mol->operator[](matches));
             }
         }
     }
