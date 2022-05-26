@@ -98,9 +98,7 @@ namespace AST
     QString idtoken_to_string(IDToken token);
 
     /** The different bond tokens */
-    enum IDBondToken { ID_BOND_UNKNOWN = 0, ID_BOND_WITHIN = 1,
-                       ID_BOND_INVOLVING = 2,
-                       ID_BOND_FROM = 3, ID_BOND_TO = 4 };
+    enum IDBondToken { ID_BOND_UNKNOWN = 0, ID_BOND_FROM = 1, ID_BOND_TO = 2 };
 
     QString idbondtoken_to_string(IDBondToken token);
 

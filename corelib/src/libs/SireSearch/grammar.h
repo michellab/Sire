@@ -257,10 +257,7 @@ public:
                     ;
 
         //all of the different bond tokens
-        bond_token.add( "in", AST::ID_BOND_WITHIN )
-                      ( "within", AST::ID_BOND_WITHIN )
-                      ( "involving", AST::ID_BOND_INVOLVING )
-                      ( "to", AST::ID_BOND_TO )
+        bond_token.add( "to", AST::ID_BOND_TO )
                       ( "from", AST::ID_BOND_FROM )
                     ;
 
@@ -347,7 +344,7 @@ public:
         //an expression is either a subscript, name, number, within, where, not
         //or user-identified expression, optionally surrounded by parenthesis '( )'
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
-                              all_token | water_token | pert_token | protein_token | bondRule | withinRule |
+                              bondRule | all_token | water_token | pert_token | protein_token | withinRule |
                               withinVectorRule | whereRule | notRule | joinRule |
                               massRule | massCmpRule | chargeRule | chargeCmpRule |
                               massObjRule | massObjCmpRule | chargeObjRule | chargeObjCmpRule |

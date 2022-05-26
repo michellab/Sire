@@ -24,15 +24,13 @@ def test_index_bonds():
     mol = mols[0]
 
     assert len(mol["bonds in resnum 1"]) == 5
-    assert len(mol["bonds involving resnum 1"]) == 6
+    assert len(mol["bonds with resnum 1"]) == 6
 
     _assert_same_bonds(mol["bonds in resnum 1"], mol["resnum 1"].bonds())
-    _assert_same_bonds(mol["bonds involving resnum 1"], mol.bonds("resnum 1"))
-    _assert_same_bonds(mol["bonds in resnum 2"], mol["bonds within resnum 2"])
-
+    _assert_same_bonds(mol["bonds with resnum 1"], mol.bonds("resnum 1"))
 
     cx = mol["bonds to element C"]
-    ccx = mol["bonds involving element C"]
+    ccx = mol["bonds with element C"]
     cc = mol["bonds from element C to element C"]
 
     assert len(cc) + len(cx) == len(ccx)

@@ -2077,18 +2077,7 @@ SelectResult IDBondEngine::select(const SelectResult &mols, const PropertyMap &m
 
     for (const auto &mol : result)
     {
-        if (from_token == ID_BOND_WITHIN)
-        {
-            auto result = SelectorBond(*mol, map);
-            ret.append(result);
-        }
-        else if (from_token == ID_BOND_INVOLVING)
-        {
-            auto result = SelectorBond(mol->molecule().atoms(),
-                                       mol->atoms(), map);
-            ret.append(result);
-        }
-        else if (from_token == ID_BOND_TO)
+        if (from_token == ID_BOND_TO)
         {
             // only bonds to this object, not wholly contained in this object
             auto from = mol->atoms();

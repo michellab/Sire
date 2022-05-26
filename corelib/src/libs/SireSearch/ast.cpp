@@ -120,14 +120,10 @@ namespace AST
     {
         switch(token)
         {
-        case ID_BOND_WITHIN:
-            return "in";
         case ID_BOND_FROM:
             return "from";
         case ID_BOND_TO:
             return "to";
-        case ID_BOND_INVOLVING:
-            return "involving";
         default:
             return "unknown";
         }

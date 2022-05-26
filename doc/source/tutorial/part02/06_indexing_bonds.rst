@@ -235,13 +235,12 @@ SelectorBond( size=5
     ``bonds in`` returns only those bonds whose atoms are wholly
     contained within whatever matches. So, in this case, these are only
     the bonds within the first residue. It doesn't include the bond
-    from this residue to another residue. Note also that you could
-    use ``bonds within X`` to achieve the same thing.
+    from this residue to another residue.
 
 If you want bonds that involve any atom in ``X`` then use
-``bonds involving X``, e.g.
+``bonds with X``, e.g.
 
->>> print(mol["bonds involving residx 0"])
+>>> print(mol["bonds with residx 0"])
 SelectorBond( size=6
 0: Bond( HH31:1 => CH3:2 )
 1: Bond( CH3:2 => HH32:3 )
@@ -253,7 +252,7 @@ SelectorBond( size=6
 
 or
 
->>> print(mol["bonds involving atomnum 2"])
+>>> print(mol["bonds with atomnum 2"])
 SelectorBond( size=4
 0: Bond( HH31:1 => CH3:2 )
 1: Bond( CH3:2 => HH32:3 )
@@ -263,7 +262,7 @@ SelectorBond( size=4
 
 or
 
->>> print(mol["bonds involving element C"])
+>>> print(mol["bonds with element C"])
 SelectorBond( size=19
 0: Bond( HH31:1 => CH3:2 )
 1: Bond( CH3:2 => C:5 )
@@ -312,7 +311,7 @@ SelectorBond( size=16
 
     Note that ``bonds to`` excludes bonds that are in the selection. This means
     that ``bonds to element carbon`` excludes carbon-carbon bonds. If you want
-    all bonds involving carbon, then use ``bonds involving element carbon``.
+    all bonds involving carbon, then use ``bonds with element carbon``.
 
 You can search for bonds between two groups, using
 ``bond from X to Y``,
