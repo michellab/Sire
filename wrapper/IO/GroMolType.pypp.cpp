@@ -445,6 +445,18 @@ void register_GroMolType_class(){
                 , "Sanitise this moleculetype. This assumes that the moleculetype has\nbeen fully specified, so it collects everything together and checks that the\nmolecule makes sense. Any warnings generated can be retrieved using the\nwarnings function. It also uses the passed defaults from the top file,\ntogether with the information in the molecule to guess the forcefield for\nthe molecule" );
         
         }
+        { //::SireIO::GroMolType::setAtoms
+        
+            typedef void ( ::SireIO::GroMolType::*setAtoms_function_type)( ::QVector< SireIO::GroAtom > const &,bool ) ;
+            setAtoms_function_type setAtoms_function_value( &::SireIO::GroMolType::setAtoms );
+            
+            GroMolType_exposer.def( 
+                "setAtoms"
+                , setAtoms_function_value
+                , ( bp::arg("atoms"), bp::arg("is_lambda1")=(bool)(false) )
+                , "Set the atoms to the passed vector" );
+        
+        }
         { //::SireIO::GroMolType::setNExcludedAtoms
         
             typedef void ( ::SireIO::GroMolType::*setNExcludedAtoms_function_type)( ::qint64,bool ) ;
