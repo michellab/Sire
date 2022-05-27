@@ -115,6 +115,8 @@ public:
 
     void update(const MoleculeData &other);
 
+    MolViewPtr toSelector() const;
+
     AtomName name() const;
     AtomNum number() const;
     AtomIdx index() const;

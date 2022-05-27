@@ -179,6 +179,11 @@ quint64 Molecule::version() const
     return d->version();
 }
 
+MolViewPtr Molecule::toSelector() const
+{
+    return MolViewPtr(*this);
+}
+
 /** Return the version number of the property at key 'key'.
     All molecules with the same ID number and same property version
     number must have the same value of this property

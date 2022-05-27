@@ -13,6 +13,8 @@ namespace bp = boost::python;
 
 #include "mover.hpp"
 
+#include "partialmolecule.h"
+
 #include "beads.h"
 
 #include "SireMaths/align.h"

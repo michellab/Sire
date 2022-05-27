@@ -31,6 +31,8 @@ namespace bp = boost::python;
 
 #include "bond.h"
 
+#include "selectorbond.h"
+
 #include "twoatomfunctions.h"
 
 #include <QDebug>

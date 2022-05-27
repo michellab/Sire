@@ -362,6 +362,18 @@ void register_PartialMolecule_class(){
                 , "Return the atoms that are part of this view" );
         
         }
+        { //::SireMol::PartialMolecule::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::PartialMolecule::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::PartialMolecule::toSelector );
+            
+            PartialMolecule_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::PartialMolecule::toString
         
             typedef ::QString ( ::SireMol::PartialMolecule::*toString_function_type)(  ) const;

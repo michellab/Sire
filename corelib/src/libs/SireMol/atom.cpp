@@ -180,6 +180,11 @@ QString Atom::toString() const
                                           .arg(this->number());
 }
 
+MolViewPtr Atom::toSelector() const
+{
+    return MolViewPtr( Selector<Atom>(*this) );
+}
+
 /** Is this atom empty? */
 bool Atom::isEmpty() const
 {

@@ -879,6 +879,18 @@ void register_Evaluator_class(){
                 , "Return the selected atoms over which the properties\nwill be evaluated" );
         
         }
+        { //::SireMol::Evaluator::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Evaluator::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::Evaluator::toSelector );
+            
+            Evaluator_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Evaluator::toString
         
             typedef ::QString ( ::SireMol::Evaluator::*toString_function_type)(  ) const;

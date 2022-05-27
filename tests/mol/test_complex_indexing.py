@@ -47,6 +47,28 @@ def test_basic_indexing(ala_mols):
     assert len(mols["atoms in *"]) == mols.num_atoms()
     assert len(mols["residues in *"]) == mols.num_residues()
 
+def test_logical_indexing(ala_mols):
+    mols = ala_mols
+
+    assert len(mols["element C or element O"]) == len(mols["element C"]) + len(mols["element O"])
+
+    assert len(mols["resname ALA or resname ACE"]) == len(mols["resname ALA,ACE"])
+
+    assert len(mols["not resname ALA"]) == mols.num_residues() - 1
+
+    assert len(mols["resname ALA and element C"]) == len(mols["resname ALA"]["element C"])
+
+    assert mols["resname ALA and element C"] == mols["element C and resname ALA"]
+
+    assert len(mols["not molidx 0"]) == mols.num_molecules() - 1
+
+    assert mols["atomname HH31 or atomname HH32 or atomname HH33"] == mols["atomname HH31, HH32, HH33"]
+
+    assert len(mols["(element C or element O) and (element O or element H)"]) == len(mols["element O"])
+
+    assert len(mols["not element C"]) == len(mols["element H or element O or element N"])
+
+    assert len(mols["(not element C) and (not element O) and (not element H)"]) == len(mols["element N"])
 
 def test_complex_indexing(p38_mols):
     import sire as sr

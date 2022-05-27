@@ -149,6 +149,7 @@ public:
     virtual MolViewPtr operator[](const QList<qint64> &idxs) const;
 
     virtual QList<MolViewPtr> toList() const;
+    virtual MolViewPtr toSelector() const=0;
 
     MolViewPtr at(int i) const;
     MolViewPtr at(const AtomID &atomid) const;

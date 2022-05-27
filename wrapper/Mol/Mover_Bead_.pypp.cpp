@@ -27,6 +27,8 @@ namespace bp = boost::python;
 
 #include "mover.hpp"
 
+#include "partialmolecule.h"
+
 #include "residue.h"
 
 #include "segment.h"

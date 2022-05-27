@@ -28,6 +28,8 @@ namespace bp = boost::python;
 
 #include "mover.hpp"
 
+#include "partialmolecule.h"
+
 #include "residue.h"
 
 #include "segment.h"
@@ -422,6 +424,18 @@ void register_Bead_class(){
                 , selection_function_value
                 , bp::release_gil_policy()
                 , "Return the selection of atoms that are part of this bead" );
+        
+        }
+        { //::SireMol::Bead::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Bead::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::Bead::toSelector );
+            
+            Bead_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::Bead::toString

@@ -197,6 +197,11 @@ bool Segment::selectedAll() const
     return selected_atoms.selectedAll();
 }
 
+MolViewPtr Segment::toSelector() const
+{
+    return MolViewPtr( Selector<Segment>(*this) );
+}
+
 /** Return the atoms that are in this Segment */
 AtomSelection Segment::selection() const
 {

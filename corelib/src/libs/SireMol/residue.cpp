@@ -199,6 +199,11 @@ QString Residue::toString() const
                 .arg( this->nAtoms() );
 }
 
+MolViewPtr Residue::toSelector() const
+{
+    return MolViewPtr( Selector<Residue>(*this) );
+}
+
 /** Is this residue empty? */
 bool Residue::isEmpty() const
 {

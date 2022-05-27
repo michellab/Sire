@@ -185,6 +185,11 @@ bool CutGroup::isEmpty() const
     return cgidx.isNull();
 }
 
+MolViewPtr CutGroup::toSelector() const
+{
+    return MolViewPtr( Selector<CutGroup>(*this) );
+}
+
 /** Is this CutGroup the whole molecule? */
 bool CutGroup::selectedAll() const
 {

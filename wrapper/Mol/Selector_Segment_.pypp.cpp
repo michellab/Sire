@@ -938,6 +938,19 @@ void register_Selector_Segment__class(){
                 , "" );
         
         }
+        { //::SireMol::Selector< SireMol::Segment >::toSelector
+        
+            typedef SireMol::Selector< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Segment >::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::Selector< SireMol::Segment >::toSelector );
+            
+            Selector_Segment__exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::Segment >::toString
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;

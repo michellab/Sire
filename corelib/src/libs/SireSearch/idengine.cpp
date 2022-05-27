@@ -75,6 +75,180 @@ SelectEngine::ObjType _to_obj_type(AST::IDObject obj)
     }
 }
 
+MolViewPtr _expand(const MoleculeView &mol, SelectEngine::ObjType typ,
+                   const PropertyMap &map)
+{
+    switch(typ)
+    {
+    case SelectEngine::ATOM:
+        if (mol.isA< Selector<Atom> >())
+            return mol;
+        else
+            return mol.atoms();
+    case SelectEngine::CUTGROUP:
+        if (mol.isA< Selector<CutGroup> >())
+            return mol;
+        else
+            return mol.cutGroups();
+    case SelectEngine::RESIDUE:
+        if (mol.isA< Selector<Residue> >())
+            return mol;
+        else
+            return mol.residues();
+    case SelectEngine::CHAIN:
+        if (mol.isA< Selector<Chain> >())
+            return mol;
+        else
+            return mol.chains();
+    case SelectEngine::SEGMENT:
+        if (mol.isA< Selector<Segment> >())
+            return mol;
+        else
+            return mol.segments();
+    case SelectEngine::BOND:
+        if (mol.isA<SelectorBond>())
+            return mol;
+        else
+            return SelectorBond(mol, map);
+    case SelectEngine::MOLECULE:
+        return mol.molecule();
+    default:
+        return mol.atoms();
+    }
+}
+
+MolViewPtr _invert(const MoleculeView &mol, SelectEngine::ObjType typ,
+                   const PropertyMap &map)
+{
+    switch(typ)
+    {
+    case SelectEngine::ATOM:
+        if (mol.isA< Selector<Atom> >())
+            return mol.asA< Selector<Atom> >().invert();
+        else
+            return mol.atoms().invert();
+    case SelectEngine::CUTGROUP:
+        if (mol.isA< Selector<CutGroup> >())
+            return mol.asA< Selector<CutGroup> >().invert();
+        else
+            return mol.cutGroups().invert();
+    case SelectEngine::RESIDUE:
+        if (mol.isA< Selector<Residue> >())
+            return mol.asA< Selector<Residue> >().invert();
+        else
+            return mol.residues().invert();
+    case SelectEngine::CHAIN:
+        if (mol.isA< Selector<Chain> >())
+            return mol.asA< Selector<Chain> >().invert();
+        else
+            return mol.chains().invert();
+    case SelectEngine::SEGMENT:
+        if (mol.isA< Selector<Segment> >())
+            return mol.asA< Selector<Segment> >().invert();
+        else
+            return mol.segments().invert();
+    case SelectEngine::BOND:
+        if (mol.isA<SelectorBond>())
+            return mol.asA<SelectorBond>().invert(map);
+        else
+            return SelectorBond(mol, map).invert(map);
+    default:
+        return mol.atoms().invert();
+    }
+}
+
+MolViewPtr _invert_and_intersect(const MoleculeView &mol, SelectEngine::ObjType typ,
+                                 const MoleculeView &view, const PropertyMap &map)
+{
+    auto s = _expand(view, typ, map);
+
+    switch(typ)
+    {
+    case SelectEngine::ATOM:
+        if (mol.isA< Selector<Atom> >())
+            return mol.asA< Selector<Atom> >().invert().intersection(s->asA< Selector<Atom> >());
+        else
+            return mol.atoms().invert().intersection(s->asA< Selector<Atom> >());
+    case SelectEngine::CUTGROUP:
+        if (mol.isA< Selector<Atom> >())
+            return mol.asA< Selector<Atom> >().invert().intersection(s->asA< Selector<Atom> >());
+        else
+            return mol.atoms().invert().intersection(s->asA< Selector<Atom> >());
+    case SelectEngine::RESIDUE:
+        if (mol.isA< Selector<Atom> >())
+            return mol.asA< Selector<Atom> >().invert().intersection(s->asA< Selector<Atom> >());
+        else
+            return mol.atoms().invert().intersection(s->asA< Selector<Atom> >());
+    case SelectEngine::CHAIN:
+        if (mol.isA< Selector<Atom> >())
+            return mol.asA< Selector<Atom> >().invert().intersection(s->asA< Selector<Atom> >());
+        else
+            return mol.atoms().invert().intersection(s->asA< Selector<Atom> >());
+    case SelectEngine::SEGMENT:
+        if (mol.isA< Selector<Atom> >())
+            return mol.asA< Selector<Atom> >().invert().intersection(s->asA< Selector<Atom> >());
+        else
+            return mol.atoms().invert().intersection(s->asA< Selector<Atom> >());
+    case SelectEngine::BOND:
+        if (mol.isA<SelectorBond>())
+            return mol.asA<SelectorBond>().invert(map).intersection(s->asA<SelectorBond>());
+        else
+            return SelectorBond(mol, map).invert(map).intersection(s->asA<SelectorBond>());
+    default:
+        return mol.atoms().invert().intersection(s->asA< Selector<Atom> >());
+    }
+}
+
+MolViewPtr _intersection(const MoleculeView &mol0, const MoleculeView &mol1,
+                         SelectEngine::ObjType obj, const PropertyMap &map)
+{
+    auto s0 = _expand(mol0, obj, map);
+    auto s1 = _expand(mol1, obj, map);
+
+    switch(obj)
+    {
+    case SelectEngine::ATOM:
+        return s0->asA< Selector<Atom> >().intersection(s1->asA< Selector<Atom> >());
+    case SelectEngine::CUTGROUP:
+        return s0->asA< Selector<CutGroup> >().intersection(s1->asA< Selector<CutGroup> >());
+    case SelectEngine::RESIDUE:
+        return s0->asA< Selector<Residue> >().intersection(s1->asA< Selector<Residue> >());
+    case SelectEngine::CHAIN:
+        return s0->asA< Selector<Chain> >().intersection(s1->asA< Selector<Chain> >());
+    case SelectEngine::SEGMENT:
+        return s0->asA< Selector<Segment> >().intersection(s1->asA< Selector<Segment> >());
+    case SelectEngine::BOND:
+        return s0->asA< SelectorBond >().intersection(s1->asA< SelectorBond >());
+    default:
+        return s0->molecule();
+    }
+}
+
+MolViewPtr _unite(const MoleculeView &mol0, const MoleculeView &mol1,
+                  SelectEngine::ObjType obj, const PropertyMap &map)
+{
+    auto s0 = _expand(mol0, obj, map);
+    auto s1 = _expand(mol1, obj, map);
+
+    switch(obj)
+    {
+    case SelectEngine::ATOM:
+        return s0->asA< Selector<Atom> >().add(s1->asA< Selector<Atom> >());
+    case SelectEngine::CUTGROUP:
+        return s0->asA< Selector<CutGroup> >().add(s1->asA< Selector<CutGroup> >());
+    case SelectEngine::RESIDUE:
+        return s0->asA< Selector<Residue> >().add(s1->asA< Selector<Residue> >());
+    case SelectEngine::CHAIN:
+        return s0->asA< Selector<Chain> >().add(s1->asA< Selector<Chain> >());
+    case SelectEngine::SEGMENT:
+        return s0->asA< Selector<Segment> >().add(s1->asA< Selector<Segment> >());
+    case SelectEngine::BOND:
+        return s0->asA< SelectorBond >().add(s1->asA< SelectorBond >());
+    default:
+        return s0->molecule();
+    }
+}
+
 ////////
 //////// Implementation of the IDNameEngine
 ////////
@@ -979,11 +1153,64 @@ SelectResult IDAndEngine::select(const SelectResult &mols, const PropertyMap &ma
     else if (part1.get() == 0)
         return part0->operator()(mols, map);
 
+    // need to get the object type - this is the smallest of the two parts
+    auto obj = qMin(part0->objectType(), part1->objectType());
+
     // perform the search from left to right, so search the left hand side first...
-    auto result = part0->operator()(mols, map);
+    QList<MolViewPtr> left = part0->operator()(mols, map).toList();
+
+    QHash<MolNum, int> molnum_to_idx;
+    molnum_to_idx.reserve(left.count());
+
+    for (int i=0; i<left.count(); ++i)
+    {
+        auto molnum = left[i]->data().number();
+
+        if (molnum_to_idx.contains(molnum))
+        {
+            auto idx = molnum_to_idx[molnum];
+            left[i] = _intersection(*(left[idx]), *(left[i]), obj, map);
+        }
+        else
+        {
+            molnum_to_idx[molnum] = i;
+        }
+    }
 
     // now perform the right hand side on the result of the left hand side
-    return part1->operator()(result, map);
+    QList<MolNum> molnums;
+    QSet<MolNum> seen;
+
+    for (const auto &mol : part1->operator()(SelectResult(left), map))
+    {
+        auto molnum = mol->data().number();
+
+        if (molnum_to_idx.contains(molnum))
+        {
+            auto idx = molnum_to_idx[molnum];
+
+            if (not left[idx]->isEmpty())
+                left[idx] = _intersection(*(left[idx]), *mol, obj, map);
+
+            if (not (seen.contains(molnum) or left[idx]->isEmpty()))
+            {
+                molnums.append(molnum);
+                seen.insert(molnum);
+            }
+        }
+    }
+
+    QList<MolViewPtr> result;
+
+    for (const auto &molnum : seen)
+    {
+        auto idx = molnum_to_idx[molnum];
+
+        if (not left[idx]->isEmpty())
+            result.append(left[idx]);
+    }
+
+    return SelectResult(result);
 }
 
 SelectEnginePtr IDAndEngine::simplify()
@@ -1074,28 +1301,6 @@ SelectEnginePtr IDOrEngine::construct(QList<SelectEnginePtr> parts)
 IDOrEngine::~IDOrEngine()
 {}
 
-/** Simple internal function that expands a mol into the specified type of views */
-static ViewsOfMol expand(const ViewsOfMol &mol, SelectEngine::ObjType obj)
-{
-    switch(obj)
-    {
-    case SelectEngine::ATOM:
-        return ViewsOfMol(mol.atoms());
-    case SelectEngine::CUTGROUP:
-        return ViewsOfMol(mol.cutGroups());
-    case SelectEngine::RESIDUE:
-        return ViewsOfMol(mol.residues());
-    case SelectEngine::CHAIN:
-        return ViewsOfMol(mol.chains());
-    case SelectEngine::SEGMENT:
-        return ViewsOfMol(mol.segments());
-    case SelectEngine::MOLECULE:
-        return ViewsOfMol(mol.molecule());
-    default:
-        return mol;
-    }
-}
-
 SelectResult IDOrEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
     if (parts.isEmpty())
@@ -1103,77 +1308,50 @@ SelectResult IDOrEngine::select(const SelectResult &mols, const PropertyMap &map
     else if (parts.count() == 1)
         return parts[0]->operator()(mols, map);
 
-    bool uses_parallel = true;
+    QList<MolViewPtr> result;
 
-    if (map["parallel"].hasValue())
+    QHash<MolNum, int> molnum_to_idx;
+
+    ObjType obj = parts[0]->objectType();
+
+    for (const auto &mol : parts[0]->operator()(mols, map))
     {
-        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
-    }
+        auto molnum = mol->data().number();
 
-    QVector<SelectResult> results(parts.count());
-
-    //first get the results of the sub-matches
-    if (uses_parallel)
-    {
-        tbb::parallel_for( tbb::blocked_range<int>(0,parts.count(),1),
-                           [&](const tbb::blocked_range<int> &r)
+        if (molnum_to_idx.contains(molnum))
         {
-            for (int i=r.begin(); i<r.end(); ++i)
-            {
-                auto r = parts.at(i)->operator()(mols, map);
-                results[i] = r;
-            }
-        });
-    }
-    else
-    {
-        for (int i=0; i<parts.count(); ++i)
+            int idx = molnum_to_idx[molnum];
+            result[idx] = _unite(*(result[idx]), *mol, obj, map);
+        }
+        else
         {
-            results[i] = parts.at(i)->operator()(mols, map);
+            molnum_to_idx[molnum] = result.count();
+            result.append(mol);
         }
     }
-
-    //see if all parts use the same object type
-    bool same_type = true;
 
     for (int i=1; i<parts.count(); ++i)
     {
-        if (parts.at(i)->objectType() != parts.at(0)->objectType())
+        obj = qMin(obj, parts[i]->objectType());
+
+        for (const auto &mol : parts[i]->operator()(mols, map))
         {
-            same_type = false;
-            break;
-        }
-    }
+            auto molnum = mol->data().number();
 
-    //combine all of the results
-    QMap<MolNum,ViewsOfMol> result;
-
-    for (int i=0; i<results.count(); ++i)
-    {
-        for (const auto &mol : results[i].views())
-        {
-            const auto molnum = mol.data().number();
-
-            auto it = result.find(molnum);
-
-            if (it == result.end())
+            if (molnum_to_idx.contains(molnum))
             {
-                if (same_type)
-                    result.insert(molnum, mol);
-                else
-                    result.insert(molnum, ::expand(mol,parts.at(i)->objectType()));
+                int idx = molnum_to_idx[molnum];
+                result[idx] = _unite(*(result[idx]), *mol, obj, map);
             }
             else
             {
-                if (same_type)
-                    it.value() = ViewsOfMol((it.value() + mol).join());
-                else
-                    it.value().add( ::expand(mol,parts.at(i)->objectType()).selections() );
+                molnum_to_idx[molnum] = result.count();
+                result.append(mol);
             }
         }
     }
 
-    return SelectResult( result.values() );
+    return SelectResult(result);
 }
 
 SelectEnginePtr IDOrEngine::simplify()
@@ -1202,7 +1380,8 @@ SelectEngine::ObjType IDOrEngine::objectType() const
             }
             else if (o != part->objectType())
             {
-                return SelectEngine::COMPLEX;
+                //the object type is always the smallest, e.g. atom or residue == atom
+                o = qMin(o, part->objectType());
             }
         }
     }
@@ -1238,65 +1417,61 @@ SelectResult IDNotEngine::select(const SelectResult &mols, const PropertyMap &ma
     if (not part.get())
         return SelectResult();
 
-    bool uses_parallel = true;
+    QList<MolViewPtr> result;
 
-    if (map["parallel"].hasValue())
+    // first, make the selection
+    auto selected = part->operator()(mols, map).toList();
+
+    // now index the selection by molecule number
+    QHash<MolNum, int> molnum_to_idx;
+    molnum_to_idx.reserve(selected.count());
+
+    for (int i=0; i<selected.count(); ++i)
     {
-        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
-    }
+        const auto molnum = selected[i]->data().number();
 
-    //first, select the parts...
-    auto selected = part->operator()(mols, map);
-
-    //function that returns the parts of 'original' that are not in 'selected'
-    auto invert = [&](const ViewsOfMol &original, const ViewsOfMol &selected)
-    {
-        if (selected.selectedAll())
-            return ViewsOfMol();
-        else if (selected.isEmpty())
-            return original;
-
-        auto inverted = original.selection() - selected.selection();
-
-        return ViewsOfMol(original.data(),inverted);
-    };
-
-    //now go through and find from 'mols' what is not in 'selected'
-    QList<ViewsOfMol> result;
-
-    if (uses_parallel)
-    {
-        QVector<ViewsOfMol> resultmols(mols.count());
-        const auto molviews = mols.views();
-
-        tbb::parallel_for( tbb::blocked_range<int>(0,molviews.count()),
-                           [&](const tbb::blocked_range<int> &r)
+        if (molnum_to_idx.contains(molnum))
         {
-            for (int i=r.begin(); i<r.end(); ++i)
-            {
-                const auto mol = molviews.at(i);
-
-                //find the molecule in the set of selected
-                const auto selectmol = selected.views(mol.data().number());
-
-                resultmols[i] = invert(mol, selectmol);
-            }
-        });
-
-        for (const auto &mol : resultmols)
+            selected[molnum_to_idx[molnum]] =
+                    MolViewPtr(
+                        PartialMolecule(selected[i]->data(),
+                                        selected[molnum_to_idx[molnum]]->selection() +
+                                        selected[i]->selection()) );
+        }
+        else
         {
-            if (not mol.isEmpty())
-                result.append(mol);
+            molnum_to_idx.insert(molnum, i);
         }
     }
-    else
-    {
-        for (const auto &mol : mols.views())
-        {
-            auto inverted = invert(mol, selected.views(mol.data().number()));
 
-            if (not inverted.isEmpty())
-                result.append(inverted);
+    auto typ = part->objectType();
+
+    // now go through the views and see if they have made it into the
+    // selection
+    for (const auto &mol : mols)
+    {
+        const auto molnum = mol->data().number();
+
+        if (molnum_to_idx.contains(molnum))
+        {
+            auto s = selected[molnum_to_idx[molnum]];
+
+            if (not s->selectedAll())
+            {
+                if (mol->selectedAll())
+                {
+                    result.append(_invert(*s, typ, map));
+                }
+                else
+                {
+                    result.append(_invert_and_intersect(*s, typ, *mol, map));
+                }
+            }
+        }
+        else
+        {
+            // this wasn't selected, so need to add the whole view
+            result.append(_expand(*mol, typ, map));
         }
     }
 
@@ -1350,29 +1525,12 @@ SelectResult IDJoinEngine::select(const SelectResult &mols, const PropertyMap &m
     //first, select the parts...
     auto selected = part->operator()(mols, map);
 
-    //do we need to do anything?
-    bool needs_joining = false;
+    QList<MolViewPtr> result;
+    result.reserve(selected.count());
 
-    for (const auto &molview : selected.views())
+    for (const auto &mol : selected)
     {
-        if (molview.nViews() > 1)
-        {
-            needs_joining = true;
-            break;
-        }
-    }
-
-    if (not needs_joining)
-        return selected;
-
-    QList<ViewsOfMol> result;
-
-    for (const auto &molview : selected.views())
-    {
-        if (molview.nViews() > 1)
-            result.append( molview.join() );
-        else
-            result.append( molview );
+        result.append( PartialMolecule(*mol).toUnit() );
     }
 
     return SelectResult(result);
@@ -1421,63 +1579,61 @@ SelectResult IDSubScriptEngine::select(const SelectResult &mols, const PropertyM
         return SelectResult();
 
     //first, select the parts...
-    auto selected = this->expand( part->operator()(mols, map) );
+    QList<MolViewPtr> all;
+    auto obj = part->objectType();
 
-    //how many views are there?
-    const int nviews = selected.count();
+    for (auto &mol : part->operator()(mols, map).toList())
+    {
+        all += _expand(*mol, obj, map)->toList();
+    }
+
+    const int nviews = all.count();
 
     //now get the range of views to return
-    const int start = ::map(val.start,nviews);
-    const int end = ::map(val.end,nviews);
+    const int start = ::map(val.start, nviews);
+    const int end = ::map(val.end, nviews);
     const int step = val.step;
 
-    auto addView = [](const MoleculeView &view, QList<ViewsOfMol> &result)
+    auto addView = [](const MoleculeView &view, QList<MolViewPtr> &result,
+                      SelectEngine::ObjType obj,
+                      const PropertyMap &map)
     {
         const int molnum = view.data().number();
 
-        for (auto mol : result)
+        for (int i=0; i<result.count(); ++i)
         {
-            if (mol.data().number() == molnum)
+            if (result[i]->data().number() == molnum)
             {
-                mol += view;
+                result[i] = _unite(*(result[i]), view, obj, map);
                 return;
             }
         }
 
-        result.append( ViewsOfMol(view) );
+        result.append(view);
     };
 
-    QList<ViewsOfMol> result;
+    QList<MolViewPtr> result;
 
     //only loop if the range is valid
     if (start < nviews and end < nviews and start >= 0 and end >= 0)
     {
         if (start == end )
         {
-            addView( selected[start], result );
+            addView( *(all[start]), result, obj, map );
         }
         else if (start < end)
         {
             for (int i=start; i<end; i+=step)
             {
-                addView( selected[i], result );
+                addView( *(all[i]), result, obj, map );
             }
         }
         else
         {
             for (int i=start; i>=end; i-=step)
             {
-                addView( selected[i], result );
+                addView( *(all[i]), result, obj, map );
             }
-        }
-    }
-
-    //re-join the views if this is a simple view type
-    if (this->objectType() != SelectEngine::COMPLEX)
-    {
-        for (auto &mol : result)
-        {
-            mol = mol.join();
         }
     }
 

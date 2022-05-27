@@ -89,6 +89,19 @@ void register_SelectorBond_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorBond::add
+        
+            typedef ::SireMM::SelectorBond ( ::SireMM::SelectorBond::*add_function_type)( ::SireMM::SelectorBond const & ) const;
+            add_function_type add_function_value( &::SireMM::SelectorBond::add );
+            
+            SelectorBond_exposer.def( 
+                "add"
+                , add_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorBond::count
         
             typedef int ( ::SireMM::SelectorBond::*count_function_type)(  ) const;
@@ -198,6 +211,44 @@ void register_SelectorBond_class(){
                 "hasProperty"
                 , hasProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorBond::intersection
+        
+            typedef ::SireMM::SelectorBond ( ::SireMM::SelectorBond::*intersection_function_type)( ::SireMM::SelectorBond const & ) const;
+            intersection_function_type intersection_function_value( &::SireMM::SelectorBond::intersection );
+            
+            SelectorBond_exposer.def( 
+                "intersection"
+                , intersection_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorBond::invert
+        
+            typedef ::SireMM::SelectorBond ( ::SireMM::SelectorBond::*invert_function_type)( ::SireBase::PropertyMap const & ) const;
+            invert_function_type invert_function_value( &::SireMM::SelectorBond::invert );
+            
+            SelectorBond_exposer.def( 
+                "invert"
+                , invert_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorBond::invert
+        
+            typedef ::SireMM::SelectorBond ( ::SireMM::SelectorBond::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMM::SelectorBond::invert );
+            
+            SelectorBond_exposer.def( 
+                "invert"
+                , invert_function_value
                 , bp::release_gil_policy()
                 , "" );
         
@@ -530,6 +581,18 @@ void register_SelectorBond_class(){
             SelectorBond_exposer.def( 
                 "toList"
                 , toList_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorBond::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMM::SelectorBond::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMM::SelectorBond::toSelector );
+            
+            SelectorBond_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
                 , bp::release_gil_policy()
                 , "" );
         

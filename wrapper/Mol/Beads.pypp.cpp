@@ -14,6 +14,8 @@ namespace bp = boost::python;
 
 #include "mover.hpp"
 
+#include "partialmolecule.h"
+
 #include "beads.h"
 
 SireMol::Beads __copy__(const SireMol::Beads &other){ return SireMol::Beads(other); }
@@ -345,6 +347,18 @@ void register_Beads_class(){
                 , size_function_value
                 , bp::release_gil_policy()
                 , "Return the number of beads" );
+        
+        }
+        { //::SireMol::Beads::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Beads::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::Beads::toSelector );
+            
+            Beads_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::Beads::toString

@@ -427,6 +427,26 @@ QString ViewsOfMol::getCommonType() const
     return PartialMolecule::typeName();
 }
 
+MolViewPtr ViewsOfMol::toSelector() const
+{
+    auto typ = this->getCommonType();
+
+    if (typ == Atom::typeName())
+        return this->atoms().toSelector();
+    else if (typ == Residue::typeName())
+        return this->residues().toSelector();
+    else if (typ == Chain::typeName())
+        return this->chains().toSelector();
+    else if (typ == CutGroup::typeName())
+        return this->cutGroups().toSelector();
+    else if (typ == Segment::typeName())
+        return this->segments().toSelector();
+    else if (typ == Molecule::typeName())
+        return this->molecule().toSelector();
+
+    return this->join().toSelector();
+}
+
 /** Return the name of the molecule being viewed */
 const MolName& ViewsOfMol::name() const
 {

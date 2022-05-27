@@ -136,7 +136,16 @@ public:
     bool isEmpty() const;
     bool selectedAll() const;
 
+    SireMol::MolViewPtr toSelector() const;
+
     SireMol::AtomSelection selection() const;
+
+    SelectorBond add(const SelectorBond &other) const;
+
+    SelectorBond intersection(const SelectorBond &other) const;
+
+    SelectorBond invert(const SireBase::PropertyMap &map) const;
+    SelectorBond invert() const;
 
     bool hasProperty(const SireBase::PropertyName &key) const;
     bool hasMetadata(const SireBase::PropertyName &key) const;

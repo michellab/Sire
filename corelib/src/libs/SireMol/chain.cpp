@@ -215,6 +215,11 @@ bool Chain::isEmpty() const
     return chainidx.isNull();
 }
 
+MolViewPtr Chain::toSelector() const
+{
+    return MolViewPtr( Selector<Chain>(*this) );
+}
+
 /** Is this chain the entire molecule? */
 bool Chain::selectedAll() const
 {

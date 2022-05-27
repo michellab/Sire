@@ -395,6 +395,18 @@ void register_Segment_class(){
                 , "Return a selector that can be used to change the selection\nof segments from the molecule" );
         
         }
+        { //::SireMol::Segment::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Segment::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::Segment::toSelector );
+            
+            Segment_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Segment::toString
         
             typedef ::QString ( ::SireMol::Segment::*toString_function_type)(  ) const;

@@ -5,38 +5,38 @@
 
 #include "Helpers/version_error_impl.h"
 
-#include "gridinfo.h"
-#include "periodicbox.h"
-#include "patching.h"
-#include "combinedspace.h"
-#include "grid.h"
-#include "triclinicbox.h"
-#include "coordgroup.h"
-#include "cartesian.h"
-#include "combinespaces.h"
 #include "aabox.h"
+#include "cartesian.h"
+#include "combinedspace.h"
+#include "combinespaces.h"
+#include "coordgroup.h"
+#include "grid.h"
+#include "gridinfo.h"
+#include "patching.h"
+#include "periodicbox.h"
+#include "triclinicbox.h"
 
 #include "Helpers/objectregistry.hpp"
 
 void register_SireVol_objects()
 {
 
-    ObjectRegistry::registerConverterFor< SireVol::GridIndex >();
-    ObjectRegistry::registerConverterFor< SireVol::GridInfo >();
-    ObjectRegistry::registerConverterFor< SireVol::PeriodicBox >();
-    ObjectRegistry::registerConverterFor< SireVol::NullPatching >();
-    ObjectRegistry::registerConverterFor< SireVol::BoxPatching >();
+    ObjectRegistry::registerConverterFor< SireVol::AABox >();
+    ObjectRegistry::registerConverterFor< SireVol::Cartesian >();
     ObjectRegistry::registerConverterFor< SireVol::CombinedSpace >();
-    ObjectRegistry::registerConverterFor< SireVol::NullGrid >();
-    ObjectRegistry::registerConverterFor< SireVol::RegularGrid >();
-    ObjectRegistry::registerConverterFor< SireVol::TriclinicBox >();
+    ObjectRegistry::registerConverterFor< SireVol::CombineSpaces >();
     ObjectRegistry::registerConverterFor< SireVol::CoordGroup >();
     ObjectRegistry::registerConverterFor< SireVol::CoordGroupEditor >();
     ObjectRegistry::registerConverterFor< SireVol::CoordGroupArray >();
     ObjectRegistry::registerConverterFor< SireVol::CoordGroupArrayArray >();
-    ObjectRegistry::registerConverterFor< SireVol::Cartesian >();
-    ObjectRegistry::registerConverterFor< SireVol::CombineSpaces >();
-    ObjectRegistry::registerConverterFor< SireVol::AABox >();
+    ObjectRegistry::registerConverterFor< SireVol::NullGrid >();
+    ObjectRegistry::registerConverterFor< SireVol::RegularGrid >();
+    ObjectRegistry::registerConverterFor< SireVol::GridIndex >();
+    ObjectRegistry::registerConverterFor< SireVol::GridInfo >();
+    ObjectRegistry::registerConverterFor< SireVol::NullPatching >();
+    ObjectRegistry::registerConverterFor< SireVol::BoxPatching >();
+    ObjectRegistry::registerConverterFor< SireVol::PeriodicBox >();
+    ObjectRegistry::registerConverterFor< SireVol::TriclinicBox >();
 
 }
 

@@ -97,6 +97,8 @@ public:
 
     QString toString() const;
 
+    MolViewPtr toSelector() const;
+
     bool isEmpty() const;
     bool selectedAll() const;
 

@@ -190,6 +190,7 @@ public:
 
     typename T::Index index(int i) const;
 
+    MolViewPtr toSelector() const;
     QList<MolViewPtr> toList() const;
 
     QString toString() const;
@@ -1152,6 +1153,13 @@ Selector<Segment> Selector<T>::operator()(const SegID &segid) const
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
+MolViewPtr Selector<T>::toSelector() const
+{
+    return MolViewPtr(*this);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
 QList<MolViewPtr> Selector<T>::toList() const
 {
     QList<MolViewPtr> l;
@@ -1249,6 +1257,7 @@ Selector<T> Selector<T>::intersection(const Selector<T> &other) const
         MoleculeView::assertSameMolecule(other);
 
         Selector<T> ret(*this);
+        ret.idxs.clear();
 
         auto seen = _list_to_set(other.idxs);
 

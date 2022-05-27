@@ -412,6 +412,18 @@ void register_Residue_class(){
                 , "Return a selector that can change the selection of residues" );
         
         }
+        { //::SireMol::Residue::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Residue::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::Residue::toSelector );
+            
+            Residue_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Residue::toString
         
             typedef ::QString ( ::SireMol::Residue::*toString_function_type)(  ) const;

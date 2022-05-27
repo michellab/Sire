@@ -194,6 +194,11 @@ AtomSelection Evaluator::selection() const
     return selected_atoms;
 }
 
+MolViewPtr Evaluator::toSelector() const
+{
+    return PartialMolecule(*this).toSelector();
+}
+
 static void getMinMax(const CoordGroup &cgroup, Vector &min, Vector &max)
 {
     //we can cheat by using the CoordGroup's aabox!

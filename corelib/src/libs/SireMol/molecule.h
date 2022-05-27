@@ -125,6 +125,8 @@ public:
     bool isEmpty() const;
     bool selectedAll() const;
 
+    MolViewPtr toSelector() const;
+
     AtomSelection selection() const;
 
     const MolName& name() const;

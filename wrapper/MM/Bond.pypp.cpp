@@ -32,6 +32,8 @@ namespace bp = boost::python;
 
 #include "bond.h"
 
+#include "selectorbond.h"
+
 #include "twoatomfunctions.h"
 
 #include <QDebug>
@@ -355,6 +357,18 @@ void register_Bond_class(){
             Bond_exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Bond::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMM::Bond::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMM::Bond::toSelector );
+            
+            Bond_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
                 , bp::release_gil_policy()
                 , "" );
         

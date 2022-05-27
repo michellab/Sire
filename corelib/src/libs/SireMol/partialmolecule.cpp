@@ -360,6 +360,20 @@ const char* PartialMolecule::typeName()
     return QMetaType::typeName( qMetaTypeId<PartialMolecule>() );
 }
 
+MolViewPtr PartialMolecule::toSelector() const
+{
+    const auto unit = this->toUnit();
+
+    if (unit.data() == this)
+    {
+        return MolViewPtr(this->atoms());
+    }
+    else
+    {
+        return unit->toSelector();
+    }
+}
+
 /** Return a copy of this PartialMolecule that has been reduced to its unit
     type, i.e. if this is a single Atom, this returns the Atom, if this is a single
     residue, this returns the Residue etc. */

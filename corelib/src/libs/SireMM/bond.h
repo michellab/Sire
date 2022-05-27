@@ -95,6 +95,8 @@ public:
     bool operator==(const Bond &other) const;
     bool operator!=(const Bond &other) const;
 
+    SireMol::MolViewPtr toSelector() const;
+
     QString toString() const;
 
     SireMol::Atom atom0() const;

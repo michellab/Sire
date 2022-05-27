@@ -27,6 +27,7 @@
 \*********************************************/
 
 #include "bond.h"
+#include "selectorbond.h"
 
 #include "twoatomfunctions.h"
 
@@ -171,6 +172,11 @@ bool Bond::operator==(const Bond &other) const
 bool Bond::operator!=(const Bond &other) const
 {
     return not operator==(other);
+}
+
+MolViewPtr Bond::toSelector() const
+{
+    return SelectorBond(*this);
 }
 
 QString Bond::toString() const

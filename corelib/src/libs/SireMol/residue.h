@@ -104,6 +104,8 @@ public:
 
     AtomSelection selection() const;
 
+    MolViewPtr toSelector() const;
+
     void update(const MoleculeData &moldata);
 
     ResName name() const;

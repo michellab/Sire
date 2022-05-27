@@ -648,6 +648,18 @@ void register_Atom_class(){
                 , "Return a selector that can change the atom selection" );
         
         }
+        { //::SireMol::Atom::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Atom::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::Atom::toSelector );
+            
+            Atom_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Atom::toString
         
             typedef ::QString ( ::SireMol::Atom::*toString_function_type)(  ) const;

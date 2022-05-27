@@ -475,6 +475,18 @@ void register_Molecule_class(){
                 , "Return which atoms are selected in this view" );
         
         }
+        { //::SireMol::Molecule::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Molecule::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::Molecule::toSelector );
+            
+            Molecule_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Molecule::toString
         
             typedef ::QString ( ::SireMol::Molecule::*toString_function_type)(  ) const;

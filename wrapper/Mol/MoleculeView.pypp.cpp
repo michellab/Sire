@@ -1482,6 +1482,18 @@ void register_MoleculeView_class(){
                 "toList"
                 , toList_function_value
                 , bp::release_gil_policy()
+                , "Expand this into a list of unit classes. This will return the view itself if\n  this is a unit class, e.g. Atom, Residue, Molecule etc.\n  This will return a list of unit classes if this is a Selector<T> or\n  equivalent type class.\n" );
+        
+        }
+        { //::SireMol::MoleculeView::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::MoleculeView::toSelector );
+            
+            MoleculeView_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

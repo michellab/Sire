@@ -91,6 +91,19 @@ void register_SelectResult_class(){
                 , "Return whether or not this set contains views of the molecule with\nnumber molnum" );
         
         }
+        { //::SireMol::SelectResult::contains
+        
+            typedef bool ( ::SireMol::SelectResult::*contains_function_type)( ::SireMol::MoleculeView const & ) const;
+            contains_function_type contains_function_value( &::SireMol::SelectResult::contains );
+            
+            SelectResult_exposer.def( 
+                "contains"
+                , contains_function_value
+                , ( bp::arg("mol") )
+                , bp::release_gil_policy()
+                , "Return whether or not this set contains all of the atoms in the\npassed molecule" );
+        
+        }
         { //::SireMol::SelectResult::count
         
             typedef int ( ::SireMol::SelectResult::*count_function_type)(  ) const;

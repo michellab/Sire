@@ -633,6 +633,11 @@ SelectorBond SelectorBond::operator()(const BondID &bond) const
     return ret;
 }
 
+MolViewPtr SelectorBond::toSelector() const
+{
+    return MolViewPtr(*this);
+}
+
 QList<MolViewPtr> SelectorBond::toList() const
 {
     QList<MolViewPtr> l;
@@ -646,6 +651,74 @@ QList<MolViewPtr> SelectorBond::toList() const
     }
 
     return l;
+}
+
+SelectorBond SelectorBond::add(const SelectorBond &other) const
+{
+    if (this->isEmpty())
+        return other;
+    else if (other.isEmpty())
+        return *this;
+
+    MoleculeView::assertSameMolecule(other);
+
+    SelectorBond ret(*this);
+
+    for (const auto &bond : other.bnds)
+    {
+        if (not this->bnds.contains(bond))
+        {
+            ret.bnds.append(bond);
+        }
+    }
+
+    return ret;
+}
+
+SelectorBond SelectorBond::intersection(const SelectorBond &other) const
+{
+    if (this->isEmpty() or other.isEmpty())
+    {
+        return SelectorBond();
+    }
+
+    MoleculeView::assertSameMolecule(other);
+
+    SelectorBond ret(*this);
+    ret.bnds.clear();
+
+    for (const auto &bond : this->bnds)
+    {
+        if (ret.bnds.contains(bond))
+        {
+            ret.bnds.append(bond);
+        }
+    }
+
+    return ret;
+}
+
+SelectorBond SelectorBond::invert(const PropertyMap &map) const
+{
+    auto s = SelectorBond(this->molecule(), map);
+
+    SelectorBond ret(*this);
+    ret.bnds.clear();
+
+    for (const auto &bond : s.bnds)
+    {
+        if (not this->bnds.contains(bond))
+        {
+            ret.bnds.append(bond);
+        }
+    }
+
+    return ret;
+}
+
+SelectorBond SelectorBond::invert() const
+{
+    return this->invert(PropertyMap());
 }
 
 QList<BondID> SelectorBond::IDs() const

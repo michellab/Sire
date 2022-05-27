@@ -36,6 +36,7 @@
 #include "chain.h"
 #include "cutgroup.h"
 #include "segment.h"
+#include "partialmolecule.h"
 
 #include "SireBase/errors.h"
 
@@ -164,6 +165,11 @@ const char* Bead::typeName()
 Bead* Bead::clone() const
 {
     return new Bead(*this);
+}
+
+MolViewPtr Bead::toSelector() const
+{
+    return PartialMolecule(*this).toSelector();
 }
 
 /** Return a string representation of this bead */

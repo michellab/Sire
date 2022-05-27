@@ -509,6 +509,18 @@ void register_Chain_class(){
                 , "Return a selector that change the selection of chains" );
         
         }
+        { //::SireMol::Chain::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Chain::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::Chain::toSelector );
+            
+            Chain_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Chain::toString
         
             typedef ::QString ( ::SireMol::Chain::*toString_function_type)(  ) const;

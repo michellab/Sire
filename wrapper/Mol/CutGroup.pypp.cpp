@@ -399,6 +399,18 @@ void register_CutGroup_class(){
                 , "Return a selector that can change the selection of CutGroups" );
         
         }
+        { //::SireMol::CutGroup::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::CutGroup::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::CutGroup::toSelector );
+            
+            CutGroup_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::CutGroup::toString
         
             typedef ::QString ( ::SireMol::CutGroup::*toString_function_type)(  ) const;

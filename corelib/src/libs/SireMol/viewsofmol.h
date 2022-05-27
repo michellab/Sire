@@ -132,6 +132,8 @@ public:
     bool isEmpty() const;
     bool selectedAll() const;
 
+    MolViewPtr toSelector() const;
+
     PartialMolecule valueAt(int i) const;
     const AtomSelection& viewAt(int i) const;
 
