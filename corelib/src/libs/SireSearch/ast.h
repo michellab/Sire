@@ -38,6 +38,11 @@
 
 #include "parser.h"
 
+namespace SireBase
+{
+class Slice;
+}
+
 SIRE_BEGIN_HEADER
 
 // need to use this to increase the number of variants that can be
@@ -351,41 +356,44 @@ namespace AST
     /** Struct that holds a range of integers */
     struct RangeValue
     {
-        RangeValue() : start(0), end(0), step(1), _c(0)
+        RangeValue() : _c(0)
         {}
 
-        int start;
-        int end;
-        int step;
+        std::shared_ptr<int> start;
+        std::shared_ptr<int> stop;
+        std::shared_ptr<int> step;
+
+        RangeValue& operator*=(const int val)
+        {
+            _c += 1;
+            return *this;
+        }
 
         RangeValue& operator+=(const int val)
         {
             if (_c == 0)
             {
-                start = val;
-                end = val;
-                step = 1;
-                _c += 1;
+                start.reset(new int(val));
             }
             else if (_c == 1)
             {
-                end = val;
-                step = 1;
-                _c += 1;
+                stop.reset(new int(val));
             }
             else if (_c == 2)
             {
-                step = val;
-                _c += 1;
+                step.reset(new int(val));
             }
             else
-                throw SireError::program_bug( QObject::tr(
-                    "Should not add more than three values to a range..."), CODELOC );
+            {
+                qDebug() << "extra +=" << val;
+            }
 
             return *this;
         }
 
         QString toString() const;
+
+        SireBase::Slice toSlice() const;
 
     private:
         int _c;

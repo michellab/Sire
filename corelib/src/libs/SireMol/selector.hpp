@@ -541,7 +541,21 @@ SIRE_OUTOFLINE_TEMPLATE
 bool Selector<T>::selectedAll() const
 {
     // have no indexes if we have selected all of the molecule
-    return (not this->isEmpty()) and idxs.isEmpty();
+    if (not this->isEmpty())
+    {
+        if (idxs.isEmpty())
+            return true;
+
+        const int n = detail::getCount<T>(this->data().info());
+
+        if (idxs.count() >= n)
+        {
+            auto s = _list_to_set(idxs);
+            return s.count() == n;
+        }
+    }
+
+    return false;
 }
 
 /** Return a string representation of this selector */
@@ -621,20 +635,35 @@ Selector<T> Selector<T>::add(const Selector<T> &other) const
 
     Selector<T> ret(*this);
 
-    QSet<typename T::Index> seen_idxs = _list_to_set(this->idxs);
-
-    const int n = detail::getCount<T>(this->data().info());
-
-    foreach (typename T::Index idx, other.idxs)
+    if (ret.idxs.isEmpty())
     {
-        if (not seen_idxs.contains(idx))
+        //expand the indexes
+        const int n = detail::getCount<T>(this->data().info());
+        ret.idxs.reserve(n);
+
+        for (int i=0; i<n; ++i)
+        {
+            ret.idxs.append(typename T::Index(i));
+        }
+    }
+
+    if (other.idxs.isEmpty())
+    {
+        const int n = detail::getCount<T>(this->data().info());
+        ret.idxs.reserve(ret.idxs.count() + n);
+
+        for (int i=0; i<n; ++i)
+        {
+            ret.idxs.append(typename T::Index(i));
+        }
+    }
+    else
+    {
+        ret.idxs.reserve(ret.idxs.count() + other.idxs.count());
+
+        for (typename T::Index idx : other.idxs)
         {
             ret.idxs.append(idx);
-            if (ret.idxs.count() == n)
-            {
-                ret.idxs.clear();
-                break;
-            }
         }
     }
 
@@ -701,12 +730,6 @@ Selector<T> Selector<T>::subtract(const Selector<T> &other) const
 
         if (ret.idxs.isEmpty())
             return Selector<T>();
-    }
-
-    if (ret.idxs.count() == n)
-    {
-        // nothing was removed?
-        ret.idxs.clear();
     }
 
     return ret;
@@ -947,7 +970,7 @@ Selector<T> Selector<T>::operator()(int i, int j) const
         // raise an index exception
         i = SireID::Index(i).map(0);
 
-    if (this->selectedAll())
+    if (this->idxs.isEmpty())
     {
         const int n = detail::getCount<T>(this->data().info());
 
@@ -979,9 +1002,6 @@ Selector<T> Selector<T>::operator()(int i, int j) const
                 ret.idxs.append(typename T::Index(i));
             }
         }
-
-        if (ret.idxs.count() == n)
-            ret.idxs.clear();
 
         return ret;
     }
@@ -1020,7 +1040,7 @@ Selector<T> Selector<T>::operator()(const SireBase::Slice &slice) const
         //raise an exception
         slice.begin(0);
 
-    if (this->selectedAll())
+    if (this->idxs.isEmpty())
     {
         const int n = detail::getCount<T>(this->data().info());
 
@@ -1031,9 +1051,6 @@ Selector<T> Selector<T>::operator()(const SireBase::Slice &slice) const
         {
             ret.idxs.append(typename T::Index(it.value()));
         }
-
-        if (ret.idxs.count() == n)
-            ret.idxs.clear();
 
         return ret;
     }
@@ -1069,7 +1086,7 @@ Selector<T> Selector<T>::operator()(const QList<qint64> &idxs) const
         SireID::Index(idxs.at(0)).map(0);
         return Selector<T>();
     }
-    else if (this->selectedAll())
+    else if (this->idxs.isEmpty())
     {
         Selector<T> ret(*this);
         ret.idxs.clear();
@@ -1099,17 +1116,10 @@ Selector<T> Selector<T>::operator()(const QList<qint64> &idxs) const
         Selector<T> ret(*this);
         ret.idxs.clear();
 
-        QSet<typename T::Index> seen;
-
         for (const auto &idx : idxs)
         {
             auto index = this->idxs.at(SireID::Index(idx).map(this->idxs.count()));
-
-            if (not seen.contains(index))
-            {
-                ret.idxs.append(index);
-                seen.insert(index);
-            }
+            ret.idxs.append(index);
         }
 
         return ret;
@@ -1259,12 +1269,40 @@ Selector<T> Selector<T>::intersection(const Selector<T> &other) const
         Selector<T> ret(*this);
         ret.idxs.clear();
 
-        auto seen = _list_to_set(other.idxs);
+        auto this_idxs = this->idxs;
+        auto other_idxs = other.idxs;
 
-        for (const auto &idx : this->idxs)
+        const int n = detail::getCount<T>(this->data().info());
+
+        if (this_idxs.isEmpty())
+        {
+            this_idxs.reserve(n);
+            for (int i=0; i<n; ++i)
+            {
+                this_idxs.append(typename T::Index(i));
+            }
+        }
+
+        if (other_idxs.isEmpty())
+        {
+            other_idxs.reserve(n);
+            for (int i=0; i<n; ++i)
+            {
+                other_idxs.append(typename T::Index(i));
+            }
+        }
+
+        auto seen = _list_to_set(other_idxs);
+
+        for (const auto &idx : this_idxs)
         {
             if (seen.contains(idx))
                 ret.idxs.append(idx);
+        }
+
+        if (ret.idxs.isEmpty())
+        {
+            return Selector<T>();
         }
 
         return ret;

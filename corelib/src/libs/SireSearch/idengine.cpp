@@ -614,27 +614,13 @@ bool IDNumberEngine::match(const int idx) const
         {
             auto v = boost::get<RangeValue>(val);
 
-            if (v.step == 0)
-                v.step = 1;
+            auto slice = v.toSlice();
 
-            if (v.step < 0)
-                v.step *= -1;
-
-            if (v.start <= v.end)
+            for (auto it = slice.begin(std::numeric_limits<int>::max());
+                 not it.atEnd(); it.next())
             {
-                for (int i=v.start; i<=v.end; i+=v.step)
-                {
-                    if (i == idx)
-                        return true;
-                }
-            }
-            else
-            {
-                for (int i=v.start; i>=v.end; i-=v.step)
-                {
-                    if (i == idx)
-                        return true;
-                }
+                if (it.value() == idx)
+                    return true;
             }
         }
         else
@@ -688,14 +674,13 @@ bool _is_single_value(const RangeValues &vals)
         {
             auto v = boost::get<RangeValue>(vals[0]);
 
-            if (v.start < v.end)
-            {
-                return v.end == v.start + 1;
-            }
-            else
-            {
-                return v.start == v.end + 1;
-            }
+            auto slice = v.toSlice();
+
+            auto it = slice.begin(std::numeric_limits<int>::max());
+            it.next();
+
+            if (it.atEnd())
+                return true;
         }
     }
 
@@ -710,14 +695,15 @@ int _to_single_value(const RangeValues &vals)
         {
             auto v = boost::get<RangeValue>(vals[0]);
 
-            if (v.start < v.end)
-            {
-                return v.start;
-            }
-            else if (v.end < v.start)
-            {
-                return v.end;
-            }
+            auto slice = v.toSlice();
+
+            auto it = slice.begin(std::numeric_limits<int>::max());
+
+            int first = it.value();
+            it.next();
+
+            if (it.atEnd())
+                return first;
         }
     }
 
@@ -894,29 +880,12 @@ bool IDIndexEngine::match(int idx, const int count) const
         {
             auto v = boost::get<RangeValue>(val);
 
-            int start = map(v.start,count);
-            int end = map(v.end,count);
-            int step = abs(v.step);
+            auto slice = v.toSlice();
 
-            //only loop if the range is valid
-            if (start < count and end < count and start >= 0 and end >= 0)
+            for (auto it = slice.begin(count, true); not it.atEnd(); it.next())
             {
-                if (start <= end)
-                {
-                    for (int i=start; i<=end; i+=step)
-                    {
-                        if (i == idx)
-                            return true;
-                    }
-                }
-                else
-                {
-                    for (int i=start; i>=end; i-=step)
-                    {
-                        if (i == idx)
-                            return true;
-                    }
-                }
+                if (idx == it.value())
+                    return true;
             }
         }
         else
@@ -1181,7 +1150,7 @@ SelectResult IDAndEngine::select(const SelectResult &mols, const PropertyMap &ma
     QList<MolNum> molnums;
     QSet<MolNum> seen;
 
-    for (const auto &mol : part1->operator()(SelectResult(left), map))
+    for (const auto &mol : part1->operator()(mols, map))
     {
         auto molnum = mol->data().number();
 
@@ -1589,11 +1558,6 @@ SelectResult IDSubScriptEngine::select(const SelectResult &mols, const PropertyM
 
     const int nviews = all.count();
 
-    //now get the range of views to return
-    const int start = ::map(val.start, nviews);
-    const int end = ::map(val.end, nviews);
-    const int step = val.step;
-
     auto addView = [](const MoleculeView &view, QList<MolViewPtr> &result,
                       SelectEngine::ObjType obj,
                       const PropertyMap &map)
@@ -1614,28 +1578,15 @@ SelectResult IDSubScriptEngine::select(const SelectResult &mols, const PropertyM
 
     QList<MolViewPtr> result;
 
-    //only loop if the range is valid
-    if (start < nviews and end < nviews and start >= 0 and end >= 0)
+    //now get the range of views to return
+    auto slice = val.toSlice();
+
+    for (auto it = slice.begin(nviews, true); not it.atEnd(); it.next())
     {
-        if (start == end )
-        {
-            addView( *(all[start]), result, obj, map );
-        }
-        else if (start < end)
-        {
-            for (int i=start; i<end; i+=step)
-            {
-                addView( *(all[i]), result, obj, map );
-            }
-        }
-        else
-        {
-            for (int i=start; i>=end; i-=step)
-            {
-                addView( *(all[i]), result, obj, map );
-            }
-        }
+        addView( *(all[it.value()]), result, obj, map );
     }
+
+    qDebug() << result[0]->toString();
 
     return SelectResult(result);
 }

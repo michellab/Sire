@@ -258,9 +258,12 @@ struct _get_view
     }
 
     template<class C>
-    static Selector<T> get(const C &view)
+    static Selector<Atom> get(const C &view)
     {
-        return view.atoms();
+        if (view.template isA< Selector<Atom> >())
+            return view.template asA< Selector<Atom> >();
+        else
+            return view.atoms();
     }
 
     static SelectorM<T> getName(const SelectorM<T> &view, const QString &name)
@@ -324,7 +327,10 @@ struct _get_view<Residue>
     template<class C>
     static Selector<Residue> get(const C &view)
     {
-        return view.residues();
+        if (view.template isA< Selector<Residue> >())
+            return view.template asA< Selector<Residue> >();
+        else
+            return view.residues();
     }
 
     template<class C, class ID>
@@ -377,7 +383,10 @@ struct _get_view<Chain>
     template<class C>
     static Selector<Chain> get(const C &view)
     {
-        return view.chains();
+        if (view.template isA< Selector<Chain> >())
+            return view.template asA< Selector<Chain> >();
+        else
+            return view.chains();
     }
 
     template<class C, class ID>
@@ -430,7 +439,10 @@ struct _get_view<CutGroup>
     template<class C>
     static Selector<CutGroup> get(const C &view)
     {
-        return view.cutGroups();
+        if (view.template isA< Selector<CutGroup> >())
+            return view.template asA< Selector<CutGroup> >();
+        else
+            return view.cutGroups();
     }
 
     template<class C, class ID>
@@ -483,7 +495,10 @@ struct _get_view<Segment>
     template<class C>
     static Selector<Segment> get(const C &view)
     {
-        return view.segments();
+        if (view.template isA< Selector<Segment> >())
+            return view.template asA< Selector<Segment> >();
+        else
+            return view.segments();
     }
 
     template<class C, class ID>

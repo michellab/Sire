@@ -38,12 +38,20 @@ using namespace SireBase;
 
 const int _unset = std::numeric_limits<int>::max();
 
-int _map(int val, int n)
+int _map(int val, int n, bool auto_fix)
 {
     if (val < 0)
         val = n + val;
 
-    if (val < 0 or val >= n)
+    if (auto_fix)
+    {
+        if (val >= n)
+            val = n-1;
+
+        if (val < 0)
+            val = 0;
+    }
+    else if (val < 0 or val >= n)
         throw SireError::invalid_index(QObject::tr(
             "Invalid index for a container with count == %1"
                     ).arg(n), CODELOC);
@@ -55,7 +63,7 @@ SliceIterator::SliceIterator()
               : i(0), start(0), stop(0), step(0)
 {}
 
-SliceIterator::SliceIterator(const Slice &slice, int n)
+SliceIterator::SliceIterator(const Slice &slice, int n, bool auto_fix)
               : i(slice.start), start(slice.start),
                 stop(slice.stop), step(slice.step)
 {
@@ -68,7 +76,7 @@ SliceIterator::SliceIterator(const Slice &slice, int n)
     if (start == _unset)
         start = 0;
 
-    start = _map(start, n);
+    start = _map(start, n, auto_fix);
     stop = slice.stop;
     step = slice.step;
 
@@ -88,23 +96,37 @@ SliceIterator::SliceIterator(const Slice &slice, int n)
     {
         if (step >= 0)
         {
-            if (stop != 0)
-                stop = _map(stop-1, n);
+            if (slice.start == slice.stop)
+            {
+                // this is a single-value slice
+                stop = start;
+            }
+            else if (stop != 0)
+                stop = _map(stop-1, n, auto_fix);
         }
         else
-            stop = _map(stop+1, n);
+        {
+            if (slice.start == slice.stop)
+            {
+                // this is a single-value slice
+                stop = start;
+            }
+            else
+                stop = _map(stop+1, n, auto_fix);
+        }
     }
 
+    if (step == 0)
+        step = 1;
+
     if (start <= stop and step <= 0)
-        throw SireError::invalid_index(QObject::tr(
-            "You cannot have a negative step for a positive slice! "
-            "%1:%2:%3").arg(start).arg(stop).arg(step),
-                CODELOC);
+    {
+        step *= -1;
+    }
     else if (start > stop and step >= 0)
-        throw SireError::invalid_index(QObject::tr(
-            "You cannot have a positive step for a negative slice! "
-            "%1:%2:%3").arg(start).arg(stop).arg(step),
-                CODELOC);
+    {
+        step *= -1;
+    }
 
     i = start;
 }
@@ -194,6 +216,11 @@ const char* Slice::typeName()
     return "SireBase::Slice";
 }
 
+int Slice::unset()
+{
+    return _unset;
+}
+
 QString Slice::toString() const
 {
     if (start == _unset)
@@ -219,7 +246,7 @@ QString Slice::toString() const
         if (step == _unset)
             return QObject::tr("slice[%1:]").arg(start);
         else
-            return QObject::tr("slice[%1:%2]").arg(start).arg(step);
+            return QObject::tr("slice[%1::%2]").arg(start).arg(step);
     }
     else
     {
@@ -230,7 +257,7 @@ QString Slice::toString() const
     }
 }
 
-SliceIterator Slice::begin(int n) const
+SliceIterator Slice::begin(int n, bool auto_fix) const
 {
-    return SliceIterator(*this, n);
+    return SliceIterator(*this, n, auto_fix);
 }

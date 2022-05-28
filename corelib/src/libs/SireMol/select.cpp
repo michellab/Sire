@@ -175,15 +175,30 @@ MolViewPtr SireMol::parser::SelectEngine::expandMol(const MoleculeView &mol) con
     switch(this->objectType())
     {
     case SelectEngine::ATOM:
-        return mol.atoms();
+        if (mol.isA< Selector<Atom> >())
+            return mol;
+        else
+            return mol.atoms();
     case SelectEngine::CUTGROUP:
-        return mol.cutGroups();
+        if (mol.isA< Selector<CutGroup> >())
+            return mol;
+        else
+            return mol.cutGroups();
     case SelectEngine::RESIDUE:
-        return mol.residues();
+        if (mol.isA< Selector<Residue> >())
+            return mol;
+        else
+            return mol.residues();
     case SelectEngine::CHAIN:
-        return mol.chains();
+        if (mol.isA< Selector<Chain> >())
+            return mol;
+        else
+            return mol.chains();
     case SelectEngine::SEGMENT:
-        return mol.segments();
+        if (mol.isA< Selector<Segment> >())
+            return mol;
+        else
+            return mol.segments();
     case SelectEngine::MOLECULE:
         return mol.molecule();
     default:

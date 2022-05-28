@@ -55,6 +55,8 @@ public:
     static Slice fromStartStop(int start, int stop, int step=1);
     static Slice fromStart(int start, int step=1);
 
+    static int unset();
+
     Slice& operator=(const Slice &other);
 
     bool operator==(const Slice &other) const;
@@ -65,7 +67,7 @@ public:
 
     QString toString() const;
 
-    SliceIterator begin(int n) const;
+    SliceIterator begin(int n, bool auto_fix=false) const;
 
 private:
     int start;
@@ -78,7 +80,7 @@ class SIREBASE_EXPORT SliceIterator
 {
 public:
     SliceIterator();
-    SliceIterator(const Slice &slice, int n);
+    SliceIterator(const Slice &slice, int n, bool auto_fix=false);
     SliceIterator(const SliceIterator &other);
 
     ~SliceIterator();

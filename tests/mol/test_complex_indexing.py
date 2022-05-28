@@ -39,13 +39,24 @@ def test_basic_indexing(ala_mols):
 
     assert len(mols["atomidx 0"]) == mols.num_molecules()
     assert len(mols["atomidx 0,1"]) == 2 * mols.num_molecules()
-    assert len(mols["atomidx 0:3"]) == 4 + (3 * (mols.num_molecules()-1))
+    assert len(mols["atomidx 0:3"]) == 3 * mols.num_molecules()
+    assert len(mols["atomidx 0:4"]) == 4 + (3 * (mols.num_molecules()-1))
 
     assert len(mols["atomnum 1"]) == 1
     assert len(mols["atomnum 1,2"]) == 2
     
     assert len(mols["atoms in *"]) == mols.num_atoms()
     assert len(mols["residues in *"]) == mols.num_residues()
+
+
+def test_search_indexing(ala_mols):
+    mols = ala_mols
+
+    assert mols["{element C}[0]"] == mols["element C"][0]
+    assert mols["{element C}[-1]"] == mols["element C"][-1]
+    assert mols["{element C}[0:2]"] == mols["element C"][0:2]
+    assert mols["{element C}[2:0:-1]"] == mols["element C"][2:0:-1]
+
 
 def test_logical_indexing(ala_mols):
     mols = ala_mols

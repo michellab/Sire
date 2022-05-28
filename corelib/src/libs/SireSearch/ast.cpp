@@ -217,14 +217,60 @@ namespace AST
                                .arg(value);
     }
 
+    SireBase::Slice RangeValue::toSlice() const
+    {
+        int _start = 0;
+
+        if (start.get() != 0)
+            _start = *start;
+
+        if (stop.get() == 0)
+        {
+            if (_c == 0)
+                // single value
+                return SireBase::Slice::fromStartStop(_start, _start);
+            else if (step.get() == 0)
+                return SireBase::Slice::fromStart(_start);
+            else
+                return SireBase::Slice::fromStart(_start, *step);
+        }
+        else
+        {
+            if (step.get() == 0)
+                return SireBase::Slice::fromStartStop(_start, *stop);
+            else
+                return SireBase::Slice::fromStartStop(_start, *stop, *step);
+        }
+    }
+
     QString RangeValue::toString() const
     {
-        if (start == end)
-            return QString::number(start);
-        else if (step == 1)
-            return QString("%1:%2").arg(start).arg(end);
+        if (_c == 0)
+        {
+            if (start.get() != 0)
+                return QString::number(*start);
+            else
+                return "0";
+        }
+
+        QStringList parts;
+
+        if (start.get() != 0)
+            parts.append(QString::number(*start));
         else
-            return QString("%1:%2:%3").arg(start).arg(end).arg(step);
+            parts.append("");
+
+        if (stop.get() != 0)
+            parts.append(QString::number(*stop));
+        else
+            parts.append("");
+
+        if (step.get() != 0)
+            parts.append(QString::number(*step));
+        else
+            parts.append("");
+
+        return parts.join(":");
     }
 
     QString Expression::toString() const

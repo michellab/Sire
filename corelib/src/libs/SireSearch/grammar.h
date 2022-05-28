@@ -366,13 +366,16 @@ public:
                      ;
 
         //grammar for a set of integers (either as ranges or comparisons)
-        rangeValuesRule %= ( (rangeValueRule | compareValueRule) % qi::lit( ',' ) );
+        rangeValuesRule %= ( (compareValueRule | rangeValueRule) % qi::lit( ',' ) );
 
         //grammar for an integer or range (e.g. 0:10, or 5)
         rangeValueRule = eps [ _val = AST::RangeValue() ] >>
                             (
-                                int_[ _val += _1 ] >>
-                                qi::repeat(0,2)[( ':' >> int_[ _val += _1 ] )]
+                                -(int_[ _val += _1 ]) >>
+                                -(qi::lit(":")[ _val *= 1 ]) >>
+                                -(int_[ _val += _1 ]) >>
+                                -(qi::lit(":")[ _val *= 1 ]) >>
+                                -(int_[ _val += _1 ])
                             )
                             ;
 
