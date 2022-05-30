@@ -105,7 +105,9 @@ SelectResult SireMol::parser::SelectEngine::operator()(const SelectResult &resul
     if (hasParent())
         return r;
     else
+    {
         return this->expand(r);
+    }
 }
 
 SelectResult SireMol::parser::SelectEngine::operator()(const MolGroupsBase &molgroups,
@@ -175,30 +177,15 @@ MolViewPtr SireMol::parser::SelectEngine::expandMol(const MoleculeView &mol) con
     switch(this->objectType())
     {
     case SelectEngine::ATOM:
-        if (mol.isA< Selector<Atom> >())
-            return mol;
-        else
-            return mol.atoms();
+        return mol.atoms();
     case SelectEngine::CUTGROUP:
-        if (mol.isA< Selector<CutGroup> >())
-            return mol;
-        else
-            return mol.cutGroups();
+        return mol.cutGroups();
     case SelectEngine::RESIDUE:
-        if (mol.isA< Selector<Residue> >())
-            return mol;
-        else
-            return mol.residues();
+        return mol.residues();
     case SelectEngine::CHAIN:
-        if (mol.isA< Selector<Chain> >())
-            return mol;
-        else
-            return mol.chains();
+        return mol.chains();
     case SelectEngine::SEGMENT:
-        if (mol.isA< Selector<Segment> >())
-            return mol;
-        else
-            return mol.segments();
+        return mol.segments();
     case SelectEngine::MOLECULE:
         return mol.molecule();
     default:

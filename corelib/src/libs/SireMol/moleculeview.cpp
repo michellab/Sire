@@ -419,6 +419,21 @@ Selector<Atom> MoleculeView::atoms(const QList<qint64> &values,
         throw SireError::invalid_index(QObject::tr(
             "You must specify some indexes.."), CODELOC);
 
+    if (this->isA< Selector<Atom> >())
+    {
+        auto IDs = this->asA< Selector<Atom> >().indexes();
+
+        QList<AtomIdx> ret;
+        ret.reserve(values.count());
+
+        for (const auto &value : values)
+        {
+            ret.append(IDs.at(SireID::Index(value).map(IDs.count())));
+        }
+
+        return Selector<Atom>(this->data(), ret);
+    }
+
     const auto s = this->selection();
     QList<AtomIdx> idxs;
 
@@ -445,6 +460,20 @@ Selector<Atom> MoleculeView::atoms(const QList<qint64> &values,
 Selector<Atom> MoleculeView::atoms(const Slice &slice,
                                    const PropertyMap &map) const
 {
+    if (this->isA< Selector<Atom> >())
+    {
+        auto IDs = this->asA< Selector<Atom> >().indexes();
+
+        QList<AtomIdx> ret;
+
+        for (auto it = slice.begin(IDs.count()); not it.atEnd(); it.next())
+        {
+            ret.append(IDs.at(it.value()));
+        }
+
+        return Selector<Atom>(this->data(), ret);
+    }
+
     const auto s = this->selection();
     QList<AtomIdx> idxs;
 
@@ -509,6 +538,9 @@ Atom MoleculeView::atom() const
 */
 Selector<Atom> MoleculeView::atoms() const
 {
+    if (this->isA< Selector<Atom> >())
+        return this->asA< Selector<Atom> >();
+
     AtomSelection selected_atoms = this->selection();
 
     if (selected_atoms.selectedNone())
@@ -560,6 +592,20 @@ Selector<CutGroup> MoleculeView::cutGroups(const QString &name,
 Selector<CutGroup> MoleculeView::cutGroups(const Slice &slice,
                                            const PropertyMap &map) const
 {
+    if (this->isA< Selector<CutGroup> >())
+    {
+        auto IDs = this->asA< Selector<CutGroup> >().indexes();
+
+        QList<CGIdx> ret;
+
+        for (auto it = slice.begin(IDs.count()); not it.atEnd(); it.next())
+        {
+            ret.append(IDs.at(it.value()));
+        }
+
+        return Selector<CutGroup>(this->data(), ret);
+    }
+
     const auto s = this->selection();
     QList<CGIdx> idxs;
 
@@ -626,6 +672,9 @@ CutGroup MoleculeView::cutGroup() const
 */
 Selector<CutGroup> MoleculeView::cutGroups() const
 {
+    if (this->isA< Selector<CutGroup> >())
+        return this->asA< Selector<CutGroup> >();
+
     QList<CGIdx> selected_cgs = this->selection().selectedCutGroups();
 
     if (selected_cgs.isEmpty())
@@ -750,6 +799,21 @@ Selector<Residue> MoleculeView::residues(const QList<qint64> &values,
         throw SireError::invalid_index(QObject::tr(
             "You must specify some indexes.."), CODELOC);
 
+    if (this->isA< Selector<Residue> >())
+    {
+        auto IDs = this->asA< Selector<Residue> >().indexes();
+
+        QList<ResIdx> ret;
+        ret.reserve(values.count());
+
+        for (const auto &value : values)
+        {
+            ret.append(IDs.at(SireID::Index(value).map(IDs.count())));
+        }
+
+        return Selector<Residue>(this->data(), ret);
+    }
+
     const auto s = this->selection();
     QList<ResIdx> idxs;
 
@@ -776,6 +840,20 @@ Selector<Residue> MoleculeView::residues(const QList<qint64> &values,
 Selector<Residue> MoleculeView::residues(const Slice &slice,
                                          const PropertyMap &map) const
 {
+    if (this->isA< Selector<Residue> >())
+    {
+        auto IDs = this->asA< Selector<Residue> >().indexes();
+
+        QList<ResIdx> ret;
+
+        for (auto it = slice.begin(IDs.count()); not it.atEnd(); it.next())
+        {
+            ret.append(IDs.at(it.value()));
+        }
+
+        return Selector<Residue>(this->data(), ret);
+    }
+
     const auto s = this->selection();
     QList<ResIdx> idxs;
 
@@ -840,6 +918,9 @@ Residue MoleculeView::residue() const
 */
 Selector<Residue> MoleculeView::residues() const
 {
+    if (this->isA< Selector<Residue> >())
+        return this->asA< Selector<Residue> >();
+
     QList<ResIdx> selected_res = this->selection().selectedResidues();
 
     if (selected_res.isEmpty())
@@ -967,6 +1048,21 @@ Selector<Chain> MoleculeView::chains(const QList<qint64> &values,
         throw SireError::invalid_index(QObject::tr(
             "You must specify some indexes.."), CODELOC);
 
+    if (this->isA< Selector<Chain> >())
+    {
+        auto IDs = this->asA< Selector<Chain> >().indexes();
+
+        QList<ChainIdx> ret;
+        ret.reserve(values.count());
+
+        for (const auto &value : values)
+        {
+            ret.append(IDs.at(SireID::Index(value).map(IDs.count())));
+        }
+
+        return Selector<Chain>(this->data(), ret);
+    }
+
     const auto s = this->selection();
     QList<ChainIdx> idxs;
 
@@ -993,6 +1089,20 @@ Selector<Chain> MoleculeView::chains(const QList<qint64> &values,
 Selector<Chain> MoleculeView::chains(const Slice &slice,
                                      const PropertyMap &map) const
 {
+    if (this->isA< Selector<Chain> >())
+    {
+        auto IDs = this->asA< Selector<Chain> >().indexes();
+
+        QList<ChainIdx> ret;
+
+        for (auto it = slice.begin(IDs.count()); not it.atEnd(); it.next())
+        {
+            ret.append(IDs.at(it.value()));
+        }
+
+        return Selector<Chain>(this->data(), ret);
+    }
+
     const auto s = this->selection();
     QList<ChainIdx> idxs;
 
@@ -1060,6 +1170,9 @@ Chain MoleculeView::chain() const
 */
 Selector<Chain> MoleculeView::chains() const
 {
+    if (this->isA< Selector<Chain> >())
+        return this->asA< Selector<Chain> >();
+
     QList<ChainIdx> selected_chn = this->selection().selectedChains();
 
     if (selected_chn.isEmpty())
@@ -1185,6 +1298,21 @@ Selector<Segment> MoleculeView::segments(const QList<qint64> &values,
         throw SireError::invalid_index(QObject::tr(
             "You must specify some indexes.."), CODELOC);
 
+    if (this->isA< Selector<Segment> >())
+    {
+        auto IDs = this->asA< Selector<Segment> >().indexes();
+
+        QList<SegIdx> ret;
+        ret.reserve(values.count());
+
+        for (const auto &value : values)
+        {
+            ret.append(IDs.at(SireID::Index(value).map(IDs.count())));
+        }
+
+        return Selector<Segment>(this->data(), ret);
+    }
+
     const auto s = this->selection();
     QList<SegIdx> idxs;
 
@@ -1211,6 +1339,20 @@ Selector<Segment> MoleculeView::segments(const QList<qint64> &values,
 Selector<Segment> MoleculeView::segments(const Slice &slice,
                                          const PropertyMap &map) const
 {
+    if (this->isA< Selector<Segment> >())
+    {
+        auto IDs = this->asA< Selector<Segment> >().indexes();
+
+        QList<SegIdx> ret;
+
+        for (auto it = slice.begin(IDs.count()); not it.atEnd(); it.next())
+        {
+            ret.append(IDs.at(it.value()));
+        }
+
+        return Selector<Segment>(this->data(), ret);
+    }
+
     const auto s = this->selection();
     QList<SegIdx> idxs;
 
@@ -1276,6 +1418,9 @@ Segment MoleculeView::segment() const
 */
 Selector<Segment> MoleculeView::segments() const
 {
+    if (this->isA< Selector<Segment> >())
+        return this->asA< Selector<Segment> >();
+
     QList<SegIdx> selected_seg = this->selection().selectedSegments();
 
     if (selected_seg.isEmpty())

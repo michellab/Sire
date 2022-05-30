@@ -73,7 +73,7 @@ def test_logical_indexing(ala_mols):
 
     assert len(mols["not molidx 0"]) == mols.num_molecules() - 1
 
-    assert mols["atomname HH31 or atomname HH32 or atomname HH33"] == mols["atomname HH31, HH32, HH33"]
+    assert len(mols["atomname HH31 or atomname HH32 or atomname HH33"]) == len(mols["atomname HH31, HH32, HH33"])
 
     assert len(mols["(element C or element O) and (element O or element H)"]) == len(mols["element O"])
 

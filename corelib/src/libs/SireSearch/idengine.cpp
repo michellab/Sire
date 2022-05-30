@@ -1586,8 +1586,6 @@ SelectResult IDSubScriptEngine::select(const SelectResult &mols, const PropertyM
         addView( *(all[it.value()]), result, obj, map );
     }
 
-    qDebug() << result[0]->toString();
-
     return SelectResult(result);
 }
 
