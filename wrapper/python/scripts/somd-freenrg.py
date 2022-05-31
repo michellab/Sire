@@ -150,5 +150,5 @@ if not (os.path.exists(coord_file) and os.path.exists(top_file) and os.path.exis
 
 print("\nRunning a somd-freenrg calculation using files %s, %s and %s." % (top_file, coord_file, morph_file))
 
-# Now lets run the OpenMMMD free energy calculation
+# Now lets run the OpenMMMD free energy calculation
 OpenMMMD.runFreeNrg(params)

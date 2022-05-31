@@ -5,6 +5,7 @@
 import os
 import sys
 import re
+import math
 import time
 import platform as pf
 import warnings
@@ -416,7 +417,7 @@ perturbed_resnum = Parameter(
 )
 
 charge_diff = Parameter('charge difference', 0,
-                       'The difference in net charge between the two states')
+                        'The difference in net charge between the two states')
 
 verbose = Parameter('verbose', False, 'Print debug output')
 
@@ -1887,6 +1888,49 @@ def computeOpenMMEnergy(prmtop_filename, inpcrd_filename, cutoff):
     return state.getPotentialEnergy().value_in_unit(
         units.kilocalorie / units.mole)
 
+def selectWatersForPerturbation(system, charge_diff):
+    """
+    Select the waters that need to be transformed to ions.  This can be used in
+    transformations where the net charges changes and is done such that the
+    total charge of the system stays zero.
+
+    :param int charge_diff: the difference in net charge of the end states and
+                            so in extenion the number of water molecules that
+                            need to be transformed into ions
+    """
+
+    if charge_diff == 0:
+        return
+
+    mols = system[MGName("all")].molecules()
+    molnums = mols.molNums()
+
+    nions = abs(charge_diff)
+
+    if charge_diff < 0:
+        ionname = 'Cl-'
+    else:                       # should never be 0!
+        ionname = 'Na+'
+
+    lig_coords = []
+
+    for molnum in molnums:
+        mol = mols.molecule(molnum)[0].molecule()
+        resname = mol.residues()[0].name()
+
+        if resname != ResName('LIG'):
+            for atom in mol.atoms():
+                coords = atom.property('coordinates')
+                lig_coords.append(coords)
+
+    distant_waters = set()
+    MIN_DIST = 6.0
+
+    # Select waters here
+    for molnum in molnums:
+        pass
+
+
 
 ##############
 # MAIN METHODS
@@ -2323,6 +2367,11 @@ def runFreeNrg():
     energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
     print(f'Raw OpenMM {openmm.__version__} energy '
           f'({cutoff_type}): {energy:.2f} kcal mol-1\n')
+
+    if charge_diff.val != 0:
+        print('The difference in charge is', charge_diff.val)
+        selectWatersForPerturbation(system, charge_diff.val)
+    exit(0)
 
     if minimise.val:
         print(
