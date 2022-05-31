@@ -344,7 +344,7 @@ public:
         //an expression is either a subscript, name, number, within, where, not
         //or user-identified expression, optionally surrounded by parenthesis '( )'
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
-                              bondRule | all_token | water_token | pert_token | protein_token | withinRule |
+                              propertyRule | bondRule | all_token | water_token | pert_token | protein_token | withinRule |
                               withinVectorRule | whereRule | notRule | joinRule |
                               massRule | massCmpRule | chargeRule | chargeCmpRule |
                               massObjRule | massObjCmpRule | chargeObjRule | chargeObjCmpRule |
@@ -457,6 +457,9 @@ public:
         //grammar for selecting by chemical element
         idElementRule %= qi::lit("element") >> ( element_token % qi::lit(",") );
 
+        //allow searching by molecular property
+        propertyRule %= (qi::lit("property") >> +qi::char_("a-zA-Z_0-9"));
+
         //allow looking for bonds
         bondRule %= (qi::lit("bonds") >> bond_token >> expressionRule
                                       >> bond_token >> expressionRule) |
@@ -545,6 +548,7 @@ public:
         stringRule.name( "String" );
         regExpRule.name( "RegExp" );
         bondRule.name( "Bond" );
+        propertyRule.name( "Property" );
 
         //action on failure to parse the string using the grammar
         on_error<fail>
@@ -567,6 +571,7 @@ public:
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
     qi::rule<IteratorT, AST::IDBond(), SkipperT> bondRule;
+    qi::rule<IteratorT, AST::IDProperty(), SkipperT> propertyRule;
     qi::rule<IteratorT, AST::IDWith(), SkipperT> withRule;
     qi::rule<IteratorT, AST::IDWith(), SkipperT> withRule2;
     qi::rule<IteratorT, AST::IDWithin(), SkipperT> withinRule;

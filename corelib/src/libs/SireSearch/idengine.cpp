@@ -2116,6 +2116,55 @@ SelectResult IDChargeEngine::select(const SelectResult &mols,
 }
 
 ////////
+//////// Implementation of the IDPropertyEngine
+////////
+
+IDPropertyEngine::IDPropertyEngine()
+{}
+
+SelectEnginePtr IDPropertyEngine::construct(const QString &name)
+{
+    IDPropertyEngine *ptr = new IDPropertyEngine();
+    auto p = makePtr(ptr);
+
+    ptr->name = name;
+
+    return p;
+}
+
+IDPropertyEngine::~IDPropertyEngine()
+{}
+
+SelectResult IDPropertyEngine::select(const SelectResult &mols, const PropertyMap &map) const
+{
+    QList<MolViewPtr> ret;
+
+    const auto p = map[this->name];
+
+    for (const auto &mol : mols)
+    {
+        auto m = mol->molecule();
+
+        if (m.hasProperty(p))
+        {
+            ret.append(m);
+        }
+    }
+
+    return SelectResult(ret);
+}
+
+SelectEnginePtr IDPropertyEngine::simplify()
+{
+    return selfptr.lock();
+}
+
+SelectEngine::ObjType IDPropertyEngine::objectType() const
+{
+    return SelectEngine::MOLECULE;
+}
+
+////////
 //////// Implementation of the IDBondEngine
 ////////
 

@@ -368,6 +368,11 @@ namespace AST
                     .arg(part1.toString());
     }
 
+    QString IDProperty::toString() const
+    {
+        return QObject::tr("property %1").arg(QString::fromStdString(name));
+    }
+
     QString IDBond::toString() const
     {
         if (to_token != ID_BOND_UNKNOWN)
@@ -537,6 +542,11 @@ namespace AST
     {
         return IDWithEngine::construct(value0.toEngine(),
                                        token, value1.toEngine());
+    }
+
+    SelectEnginePtr IDProperty::toEngine() const
+    {
+        return IDPropertyEngine::construct(QString::fromStdString(this->name));
     }
 
     SelectEnginePtr IDBond::toEngine() const

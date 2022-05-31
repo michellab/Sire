@@ -278,6 +278,28 @@ private:
 };
 
 /** Internal class providing the SelectEngine for objects
+ *  in a "property" expression
+ */
+class IDPropertyEngine : public SelectEngine
+{
+public:
+    static SelectEnginePtr construct( const QString &name );
+
+    ~IDPropertyEngine();
+
+    ObjType objectType() const;
+
+    SelectEnginePtr simplify();
+
+protected:
+    IDPropertyEngine();
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+
+private:
+    QString name;
+};
+
+/** Internal class providing the SelectEngine for objects
  *  in a "bonds" expression
 */
 class IDBondEngine : public SelectEngine

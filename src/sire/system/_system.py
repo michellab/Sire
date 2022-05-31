@@ -117,3 +117,7 @@ class System:
 
     def atom(self, key):
         return self.molecules().atom(key)
+
+    def update(self, value):
+        self._molecules = None
+        self._system.update(value)

@@ -142,6 +142,7 @@ namespace AST
     struct IDProtein;
     struct IDPerturbable;
     struct IDBond;
+    struct IDProperty;
     struct IDMass;
     struct IDCharge;
     struct IDCmpMass;
@@ -177,6 +178,7 @@ namespace AST
                                              boost::recursive_wrapper<IDJoin>,
                                              boost::recursive_wrapper<IDAll>,
                                              boost::recursive_wrapper<IDBond>,
+                                             boost::recursive_wrapper<IDProperty>,
                                              boost::recursive_wrapper<IDWater>,
                                              boost::recursive_wrapper<IDProtein>,
                                              boost::recursive_wrapper<IDPerturbable>,
@@ -547,6 +549,18 @@ namespace AST
         Expression part0;
         IDOperation operation;
         Expression part1;
+
+        QString toString() const;
+
+        SelectEnginePtr toEngine() const;
+    };
+
+    /** Struct that holds an ID token that represents a Property expression,
+     * e.g. property charge, property charge > 0, property perturbable == True
+     */
+    struct IDProperty
+    {
+        std::string name;
 
         QString toString() const;
 
@@ -992,6 +1006,10 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDWith,
                            (AST::Expression,value0)
                            (AST::IDToken,token)
                            (AST::Expression,value1)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDProperty,
+                           (std::string, name)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDBond,
