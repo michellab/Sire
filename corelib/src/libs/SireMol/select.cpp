@@ -100,12 +100,19 @@ bool SireMol::parser::SelectEngine::matchesAll(const MoleculeView &molecule,
 SelectResult SireMol::parser::SelectEngine::operator()(const SelectResult &result,
                                                        const PropertyMap &map) const
 {
-    SelectResult r = this->select(result, map);
-
     if (hasParent())
-        return r;
+    {
+        return this->select(result, map);
+    }
     else
     {
+        // need to pass in the context so that, e.g. a MolIdx search can
+        // know which molecule was referred to
+        PropertyMap m(map);
+        m.set("_context", result);
+
+        auto r = this->select(result, m);
+
         return this->expand(r);
     }
 }

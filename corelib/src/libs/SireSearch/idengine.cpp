@@ -1017,17 +1017,42 @@ SelectResult IDIndexEngine::searchIdx(const SelectResult &mols,
 }
 
 SelectResult IDIndexEngine::searchMolIdx(const SelectResult &mols,
+                                         const SelectResult &context,
                                          bool uses_parallel) const
 {
     QList<Molecule> matches;
 
     int idx = 0;
-    int count = mols.listCount();
+    int count = context.listCount();
 
-    for (const auto &mol : mols)
+    for (const auto &mol : context)
     {
         if (this->match(idx, count))
-            matches.append(mol->molecule());
+        {
+            // we have found the molecule in the context - need to see how
+            // much of this molecule remains in 'mols'
+            if (&mols == &context)
+            {
+                // parent search
+                matches.append(mol->molecule());
+            }
+            else
+            {
+                // child search - need to see if this molecule is still
+                // in the child
+                const auto molnum = mol->data().number();
+
+                for (const auto &m : mols)
+                {
+                    if (m->data().number() == molnum)
+                    {
+                        // assume we are talking about this molecule
+                        matches.append(m->molecule());
+                        break;
+                    }
+                }
+            }
+        }
 
         idx += 1;
     };
@@ -1074,7 +1099,17 @@ SelectResult IDIndexEngine::select(const SelectResult &mols, const PropertyMap &
     case AST::SEGMENT:
         return searchIdx<Segment>(mols, use_parallel);
     case AST::MOLECULE:
-        return searchMolIdx(mols, use_parallel);
+    {
+        if (this->hasParent())
+        {
+            auto context = map["_context"].value().asA<SelectResult>();
+            return searchMolIdx(mols, context, use_parallel);
+        }
+        else
+        {
+            return searchMolIdx(mols, mols, use_parallel);
+        }
+    }
     default:
         return SelectResult();
     }

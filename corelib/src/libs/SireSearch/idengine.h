@@ -130,7 +130,9 @@ private:
     template<class T>
     SelectResult searchIdx(const SelectResult &mols, bool use_parallel) const;
 
-    SelectResult searchMolIdx(const SelectResult &mols, bool use_parallel) const;
+    SelectResult searchMolIdx(const SelectResult &mols,
+                              const SelectResult &context,
+                              bool use_parallel) const;
 
     bool match(int val, int count) const;
 
