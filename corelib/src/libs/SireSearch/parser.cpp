@@ -26,6 +26,9 @@
   *
 \*********************************************/
 
+#define BOOST_SPIRIT_USE_PHOENIX_V3
+#define BOOST_SPIRIT_UNICODE
+
 #include "parser.h"
 #include "ast.h"
 
@@ -56,6 +59,7 @@ using namespace SireMol;
 
 namespace spirit  = boost::spirit;
 namespace qi      = spirit::qi;
+namespace unicode = boost::spirit::unicode;
 namespace phoenix = boost::phoenix;
 
 ////////

@@ -370,7 +370,19 @@ namespace AST
 
     QString IDProperty::toString() const
     {
-        return QObject::tr("property %1").arg(QString::fromStdString(name));
+        auto p = QString(this->property.data(), this->property.count());
+        auto v = QString("True");
+
+        if (not this->value.isEmpty())
+        {
+            v = QString(this->value.data(), this->value.count());
+        }
+
+        return QObject::tr("%1 property %2 %3 %4")
+                    .arg(idobject_to_string(name))
+                    .arg(p)
+                    .arg(idcomparison_to_string(compare))
+                    .arg(v);
     }
 
     QString IDBond::toString() const
@@ -546,7 +558,8 @@ namespace AST
 
     SelectEnginePtr IDProperty::toEngine() const
     {
-        return IDPropertyEngine::construct(QString::fromStdString(this->name));
+        return IDPropertyEngine::construct(this->name,
+                                           QString(this->property.data(), this->property.count()));
     }
 
     SelectEnginePtr IDBond::toEngine() const

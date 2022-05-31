@@ -2122,12 +2122,14 @@ SelectResult IDChargeEngine::select(const SelectResult &mols,
 IDPropertyEngine::IDPropertyEngine()
 {}
 
-SelectEnginePtr IDPropertyEngine::construct(const QString &name)
+SelectEnginePtr IDPropertyEngine::construct(const IDObject &name,
+                                            const QString &property)
 {
     IDPropertyEngine *ptr = new IDPropertyEngine();
     auto p = makePtr(ptr);
 
     ptr->name = name;
+    ptr->property = property;
 
     return p;
 }
@@ -2139,15 +2141,18 @@ SelectResult IDPropertyEngine::select(const SelectResult &mols, const PropertyMa
 {
     QList<MolViewPtr> ret;
 
-    const auto p = map[this->name];
+    const auto p = map[this->property];
 
-    for (const auto &mol : mols)
+    if (name == AST::MOLECULE)
     {
-        auto m = mol->molecule();
-
-        if (m.hasProperty(p))
+        for (const auto &mol : mols)
         {
-            ret.append(m);
+            auto m = mol->molecule();
+
+            if (m.hasProperty(p))
+            {
+                ret.append(m);
+            }
         }
     }
 
@@ -2161,7 +2166,7 @@ SelectEnginePtr IDPropertyEngine::simplify()
 
 SelectEngine::ObjType IDPropertyEngine::objectType() const
 {
-    return SelectEngine::MOLECULE;
+    return _to_obj_type(name);
 }
 
 ////////

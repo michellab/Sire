@@ -560,7 +560,45 @@ namespace AST
      */
     struct IDProperty
     {
-        std::string name;
+        IDObject name;
+        QVector<QChar> property;
+        IDComparison compare;
+        QVector<QChar> value;
+
+        IDProperty& operator/=(int)
+        {
+            //reset the search
+            property.clear();
+            value.clear();
+            name = AST::MOLECULE;
+            compare = AST::ID_CMP_EQ;
+            return *this;
+        }
+
+        IDProperty& operator+=(unsigned int p)
+        {
+            property.append(QChar(p));
+            return *this;
+        }
+
+        IDProperty& operator+=(const IDObject &n)
+        {
+            this->operator/=(1);
+            name = n;
+            return *this;
+        }
+
+        IDProperty& operator+=(const IDComparison &c)
+        {
+            compare = c;
+            return *this;
+        }
+
+        IDProperty& operator*=(unsigned int v)
+        {
+            value.append(QChar(v));
+            return *this;
+        }
 
         QString toString() const;
 
@@ -1006,10 +1044,6 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDWith,
                            (AST::Expression,value0)
                            (AST::IDToken,token)
                            (AST::Expression,value1)
-                         )
-
-BOOST_FUSION_ADAPT_STRUCT( AST::IDProperty,
-                           (std::string, name)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDBond,
