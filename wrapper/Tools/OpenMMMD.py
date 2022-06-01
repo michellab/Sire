@@ -1974,31 +1974,32 @@ def selectWatersForPerturbation(system, charge_diff):
     nions = abs(charge_diff)
     cnt = 0
     final_charge = math.copysign(1.0, charge_diff)
-    water_name = ResName('WAT')
+    water_resname = ResName('WAT')
     changedmols = MoleculeGroup("changedmols")
 
     if charge_diff < 0:
-        pertfile = 'minus.pert'
+        water_name = 'WATM'
     else:
-        pertfile = 'plus.pert'
+        water_name = 'WATP'
 
-    # this really needs to be able to read from string...
-    water_pert = Sire.IO.PerturbationsLibrary(pertfile)
+    # FIXME: read this only once, see createSystemFreeEnergy()
+    water_pert = Sire.IO.PerturbationsLibrary(morphfile.val)
 
     for molnum in molnums:
         mol = mols.molecule(molnum)[0].molecule()
 
         # FIXME: select waters according to distance criterion
-        if mol.residue().name() == water_name and cnt < nions:
+        if mol.residue().name() == water_resname and cnt < nions:
             cnt += 1
 
             perturbed_water = mol.edit()
 
             perturbed_water.setProperty("water2ion", True)
-            perturbed_water.rename('WAT')
+            perturbed_water.rename(water_name)
 
             mol = perturbed_water.commit()
             mol = water_pert.applyTemplate(mol)
+            mol = mol.edit().rename('WAT').commit()
 
             changedmols.add(mol)
 
