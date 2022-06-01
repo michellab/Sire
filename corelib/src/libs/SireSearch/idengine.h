@@ -284,7 +284,9 @@ class IDPropertyEngine : public SelectEngine
 {
 public:
     static SelectEnginePtr construct(const IDObject &name,
-                                     const QString &property);
+                                     const QString &property,
+                                     const IDComparison &compare,
+                                     const QString &value);
 
     ~IDPropertyEngine();
 
@@ -299,6 +301,8 @@ protected:
 private:
     IDObject name;
     QString property;
+    IDComparison compare;
+    QString value;
 };
 
 /** Internal class providing the SelectEngine for objects

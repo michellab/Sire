@@ -1230,7 +1230,7 @@ template<class T>
 SIRE_INLINE_TEMPLATE
 QSet<T> _list_to_set(const QList<T> &vals)
 {
-    #if QT_VERSION >= QT_VERSION_CHECK(5, 1, 4)
+    #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
         return QSet<T>(vals.constBegin(), vals.constEnd());
     #else
         return vals.toSet();

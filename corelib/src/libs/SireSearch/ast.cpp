@@ -558,8 +558,21 @@ namespace AST
 
     SelectEnginePtr IDProperty::toEngine() const
     {
+        QString v;
+
+        if (not this->value.isEmpty())
+        {
+            v = QString(this->value.data(), this->value.count());
+        }
+        else
+        {
+            v = "True";
+        }
+
         return IDPropertyEngine::construct(this->name,
-                                           QString(this->property.data(), this->property.count()));
+                                           QString(this->property.data(), this->property.count()),
+                                           this->compare,
+                                           v);
     }
 
     SelectEnginePtr IDBond::toEngine() const

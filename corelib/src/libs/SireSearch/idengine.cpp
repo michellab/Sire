@@ -2123,19 +2123,103 @@ IDPropertyEngine::IDPropertyEngine()
 {}
 
 SelectEnginePtr IDPropertyEngine::construct(const IDObject &name,
-                                            const QString &property)
+                                            const QString &property,
+                                            const IDComparison &compare,
+                                            const QString &value)
 {
     IDPropertyEngine *ptr = new IDPropertyEngine();
     auto p = makePtr(ptr);
 
     ptr->name = name;
     ptr->property = property;
+    ptr->compare = compare;
+    ptr->value = value;
 
     return p;
 }
 
 IDPropertyEngine::~IDPropertyEngine()
 {}
+
+
+bool _compare_equal(const QString &left,
+                    const IDComparison &compare,
+                    const QString &right)
+{
+    // if they are strings, then this should be ok
+    if (left == right)
+        return true;
+
+    // could they both be numbers?
+    {
+        bool left_ok;
+        double left_num = left.toDouble(&left_ok);
+
+        bool right_ok;
+        double right_num = right.toDouble(&right_ok);
+
+        if (left_ok and right_ok)
+        {
+            auto compare_func = _get_compare(compare);
+            return compare_func(left_num, right_num);
+        }
+    }
+
+    // could they both be booleans?
+    try
+    {
+        BooleanProperty left_bool(left);
+        BooleanProperty right_bool(right);
+
+        return left_bool.value() == right_bool.value();
+    }
+    catch(...)
+    {
+        // not bools - this is ok.
+    }
+
+    if (compare == ID_CMP_AE)
+    {
+        // allow simplified, case-insensitive comparison
+        return left.toLower().simplified() == right.toLower().simplified();
+    }
+
+    return false;
+}
+
+bool _compare(const QString &left,
+              const IDComparison &compare,
+              const QString &right)
+{
+    if (compare == ID_CMP_NE)
+    {
+        return not _compare(left, ID_CMP_EQ, right);
+    }
+    else if (compare == ID_CMP_EQ or compare == ID_CMP_AE)
+    {
+        return _compare_equal(left, compare, right);
+    }
+    else
+    {
+        // all other comparisons must be numeric. Check if these are both
+        // numbers
+        bool ok;
+
+        double left_num = left.toDouble(&ok);
+
+        if (!ok)
+            return false;
+
+        double right_num = right.toDouble(&ok);
+
+        if (!ok)
+            return false;
+
+        auto compare_func = _get_compare(compare);
+
+        return compare_func(left_num, right_num);
+    }
+}
 
 SelectResult IDPropertyEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
@@ -2151,9 +2235,24 @@ SelectResult IDPropertyEngine::select(const SelectResult &mols, const PropertyMa
 
             if (m.hasProperty(p))
             {
-                ret.append(m);
+                try
+                {
+                    if (_compare(m.property(p).asAString(), this->compare, this->value))
+                    {
+                        ret.append(m);
+                    }
+                }
+                catch(...)
+                {
+                    // the property isn't compatible, so this molecule
+                    // can't match
+                }
             }
         }
+    }
+    else
+    {
+        qDebug() << "NEED TO IMPLEMENT ATOM/RESIDUE ETC";
     }
 
     return SelectResult(ret);
