@@ -1225,13 +1225,9 @@ void OpenMMPMEFEP::initialise(bool fullPME)
 		if (molecule.hasProperty("water2ion")) {
 		    ishard = true;
 
-		    qDebug() << "Charge transformation of" << atom.name()
-			     << "charge_start =" << charge_start
-			     << "charge_final =" << charge_final
-			     << "epsilon_start =" << epsilon_start
-			     << "epsilon_final =" << epsilon_final
-			     << "sigma_start =" << sigma_start
-			     << "sigma_final =" << sigma_final;
+		    if (Debug) {
+			qDebug() << "Charge transformation of" << atom.name();
+		    }
 		}
 
                 // if not hard check if to_dummy
