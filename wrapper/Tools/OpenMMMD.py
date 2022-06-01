@@ -1966,7 +1966,7 @@ def selectWatersForPerturbation(system, charge_diff):
     """
 
     if charge_diff == 0:
-        return
+        return system
 
     mols = system[MGName("all")].molecules()
     molnums = mols.molNums()
