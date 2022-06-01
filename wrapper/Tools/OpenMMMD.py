@@ -35,7 +35,7 @@ finally:
     print(f'OPENMM_PLUGIN_DIR = {openmm_dir}')
 
 import Sire.IO
-# import Sire.Mol
+#import Sire.Mol
 import Sire.CAS
 import Sire.System
 import Sire.Move
@@ -1888,6 +1888,72 @@ def computeOpenMMEnergy(prmtop_filename, inpcrd_filename, cutoff):
     return state.getPotentialEnergy().value_in_unit(
         units.kilocalorie / units.mole)
 
+### This is how a TIP3P specific template for Cl- looks like
+#
+# version 1
+# molecule WAT
+#     atom
+#         name           O
+#         initial_type   OW
+#         final_type     Cl
+#         initial_LJ     3.15075 0.152
+#         final_LJ       3.47094 0.265
+#         initial_charge -0.834
+#         final_charge   -1.0
+#     endatom
+#     atom
+#         name           H1
+#         initial_type   HW
+#         final_type     du
+#         initial_LJ     0.0000 0.0000
+#         final_LJ       0.0000 0.0000
+#         initial_charge 0.417
+#         final_charge   0.0
+#     endatom
+#     atom
+#         name           H2
+#         initial_type   HW
+#         final_type     du
+#         initial_LJ     0.0000 0.0000
+#         final_LJ       0.0000 0.0000
+#         initial_charge 0.417
+#         final_charge   0.0
+#     endatom
+# endmolecule
+#
+### and for Na+
+#
+# version 1
+# molecule WAT
+#     atom
+#         name           O
+#         initial_type   OW
+#         final_type     Na
+#         initial_LJ     3.15075 0.152
+#         final_LJ       3.32840 0.00277
+#         initial_charge -0.834
+#         final_charge   1.0
+#     endatom
+#     atom
+#         name           H1
+#         initial_type   HW
+#         final_type     du
+#         initial_LJ     0.0000 0.0000
+#         final_LJ       0.0000 0.0000
+#         initial_charge 0.417
+#         final_charge   0.0
+#     endatom
+#     atom
+#         name           H2
+#         initial_type   HW
+#         final_type     du
+#         initial_LJ     0.0000 0.0000
+#         final_LJ       0.0000 0.0000
+#         initial_charge 0.417
+#         final_charge   0.0
+#     endatom
+# endmolecule
+
 def selectWatersForPerturbation(system, charge_diff):
     """
     Select the waters that need to be transformed to ions.  This can be used in
@@ -1906,30 +1972,39 @@ def selectWatersForPerturbation(system, charge_diff):
     molnums = mols.molNums()
 
     nions = abs(charge_diff)
+    cnt = 0
+    final_charge = math.copysign(1.0, charge_diff)
+    water_name = ResName('WAT')
+    changedmols = MoleculeGroup("changedmols")
 
     if charge_diff < 0:
-        ionname = 'Cl-'
-    else:                       # should never be 0!
-        ionname = 'Na+'
+        pertfile = 'minus.pert'
+    else:
+        pertfile = 'plus.pert'
 
-    lig_coords = []
+    # this really needs to be able to read from string...
+    water_pert = Sire.IO.PerturbationsLibrary(pertfile)
 
     for molnum in molnums:
         mol = mols.molecule(molnum)[0].molecule()
-        resname = mol.residues()[0].name()
 
-        if resname != ResName('LIG'):
-            for atom in mol.atoms():
-                coords = atom.property('coordinates')
-                lig_coords.append(coords)
+        # FIXME: select waters according to distance criterion
+        if mol.residue().name() == water_name and cnt < nions:
+            cnt += 1
 
-    distant_waters = set()
-    MIN_DIST = 6.0
+            perturbed_water = mol.edit()
 
-    # Select waters here
-    for molnum in molnums:
-        pass
+            perturbed_water.setProperty("water2ion", True)
+            perturbed_water.rename('WAT')
 
+            mol = perturbed_water.commit()
+            mol = water_pert.applyTemplate(mol)
+
+            changedmols.add(mol)
+
+    system.update(changedmols)
+
+    return system
 
 
 ##############
@@ -2237,6 +2312,10 @@ def runFreeNrg():
                 % debug_seed.val
             )
 
+        if charge_diff.val != 0:
+            print('The difference in charge is', charge_diff.val)
+            system = selectWatersForPerturbation(system, charge_diff.val)
+
         moves = setupMovesFreeEnergy(
             system, debug_seed.val, gpu.val, lambda_val.val
         )
@@ -2367,11 +2446,6 @@ def runFreeNrg():
     energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
     print(f'Raw OpenMM {openmm.__version__} energy '
           f'({cutoff_type}): {energy:.2f} kcal mol-1\n')
-
-    if charge_diff.val != 0:
-        print('The difference in charge is', charge_diff.val)
-        selectWatersForPerturbation(system, charge_diff.val)
-    exit(0)
 
     if minimise.val:
         print(

@@ -1221,6 +1221,19 @@ void OpenMMPMEFEP::initialise(bool fullPME)
                         break;
                 }
 
+		// force water atoms in charge transformations to be hard
+		if (molecule.hasProperty("water2ion")) {
+		    ishard = true;
+
+		    qDebug() << "Charge transformation of" << atom.name()
+			     << "charge_start =" << charge_start
+			     << "charge_final =" << charge_final
+			     << "epsilon_start =" << epsilon_start
+			     << "epsilon_final =" << epsilon_final
+			     << "sigma_start =" << sigma_start
+			     << "sigma_final =" << sigma_final;
+		}
+
                 // if not hard check if to_dummy
                 if (!ishard) {
                     for (int l = 0; l < solutetodummy.nViews(); l++) {
@@ -1307,7 +1320,7 @@ void OpenMMPMEFEP::initialise(bool fullPME)
                 }
             }
             else {		// unperturbed atom
-		charge = charges[j].value();
+		charge = charges[j].value(); // unscaled charge
 		recip_space->addParticle(charge, sigma, epsilon);
 
                 // solvent atom like hard
