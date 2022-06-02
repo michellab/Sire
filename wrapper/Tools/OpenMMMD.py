@@ -1891,7 +1891,7 @@ def computeOpenMMEnergy(prmtop_filename, inpcrd_filename, cutoff):
 ### This is how a TIP3P specific template for Cl- looks like
 #
 # version 1
-# molecule WAT
+# molecule WATM
 #     atom
 #         name           O
 #         initial_type   OW
@@ -1924,7 +1924,7 @@ def computeOpenMMEnergy(prmtop_filename, inpcrd_filename, cutoff):
 ### and for Na+
 #
 # version 1
-# molecule WAT
+# molecule WATP
 #     atom
 #         name           O
 #         initial_type   OW
@@ -1954,6 +1954,10 @@ def computeOpenMMEnergy(prmtop_filename, inpcrd_filename, cutoff):
 #     endatom
 # endmolecule
 
+WATER_NAME = 'WAT'
+WATER_MINUS_NAME = 'WATM'
+WATER_PLUS_NAME = 'WATP'
+
 def selectWatersForPerturbation(system, charge_diff):
     """
     Select the waters that need to be transformed to ions.  This can be used in
@@ -1968,19 +1972,19 @@ def selectWatersForPerturbation(system, charge_diff):
     if charge_diff == 0:
         return system
 
-    mols = system[MGName("all")].molecules()
+    mols = system[MGName("solvent")].molecules()
     molnums = mols.molNums()
 
     nions = abs(charge_diff)
     cnt = 0
-    final_charge = math.copysign(1.0, charge_diff)
-    water_resname = ResName('WAT')
+
+    water_resname = ResName(WATER_NAME)
     changedmols = MoleculeGroup("changedmols")
 
     if charge_diff < 0:
-        water_name = 'WATM'
+        water_name = WATER_MINUS_NAME
     else:
-        water_name = 'WATP'
+        water_name = WATER_PLUS_NAME
 
     # FIXME: read this only once, see createSystemFreeEnergy()
     water_pert = Sire.IO.PerturbationsLibrary(morphfile.val)
@@ -1999,7 +2003,7 @@ def selectWatersForPerturbation(system, charge_diff):
 
             mol = perturbed_water.commit()
             mol = water_pert.applyTemplate(mol)
-            mol = mol.edit().rename('WAT').commit()
+            mol = mol.edit().rename(WATER_NAME).commit()
 
             changedmols.add(mol)
 

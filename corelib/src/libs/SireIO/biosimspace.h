@@ -292,11 +292,37 @@ namespace SireIO
 
     //! Update the coordinates and velocities of system0 with those from
     /*! system1.
-
         \param system0
             The reference system.
-
         \param system1
+            The updated system, where molecules may not be in the same order.
+        \param map0
+            A dictionary of user-defined molecular property names for system0.
+        \param map1
+            A dictionary of user-defined molecular property names for system1.
+        \retval system, mapping
+            The system with updated coordinates and velocities and a mapping
+            between the molecule indices in both systems.
+     */
+    SIREIO_EXPORT boost::tuple<System, QHash<MolIdx, MolIdx> > updateCoordinatesAndVelocities(
+            const System& system0,
+            const System& system1,
+            const QHash<MolIdx, MolIdx>& molecule_mapping,
+            const bool is_lambda1=false,
+            const PropertyMap& map0 = PropertyMap(),
+            const PropertyMap& map1 = PropertyMap());
+
+    //! Update the coordinates and velocities of original_system with those from
+    /*! updated_system.
+
+        \param system_original
+            The original system.
+
+        \param system_renumbered
+            The original system, atoms and residues have been renumbered to be
+            unique and in ascending order.
+
+        \param system_updated
             The updated system, where molecules may not be in the same order.
 
         \param map0
@@ -310,8 +336,9 @@ namespace SireIO
             between the molecule indices in both systems.
      */
     SIREIO_EXPORT boost::tuple<System, QHash<MolIdx, MolIdx> > updateCoordinatesAndVelocities(
-            const System& system0,
-            const System& system1,
+            const System& original_system,
+            const System& renumbered_system,
+            const System& updated_system,
             const QHash<MolIdx, MolIdx>& molecule_mapping,
             const bool is_lambda1=false,
             const PropertyMap& map0 = PropertyMap(),
