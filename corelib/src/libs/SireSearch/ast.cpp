@@ -370,12 +370,12 @@ namespace AST
 
     QString IDProperty::toString() const
     {
-        auto p = QString(this->property.data(), this->property.count());
+        auto p = QString::fromStdString(this->property);
         auto v = QString("True");
 
-        if (not this->value.isEmpty())
+        if (not this->value.empty())
         {
-            v = QString(this->value.data(), this->value.count());
+            v = QString::fromStdString(this->value);
         }
 
         return QObject::tr("%1 property %2 %3 %4")
@@ -560,9 +560,9 @@ namespace AST
     {
         QString v;
 
-        if (not this->value.isEmpty())
+        if (not this->value.empty())
         {
-            v = QString(this->value.data(), this->value.count());
+            v = QString::fromStdString(this->value);
         }
         else
         {
@@ -570,7 +570,7 @@ namespace AST
         }
 
         return IDPropertyEngine::construct(this->name,
-                                           QString(this->property.data(), this->property.count()),
+                                           QString::fromStdString(this->property),
                                            this->compare,
                                            v);
     }

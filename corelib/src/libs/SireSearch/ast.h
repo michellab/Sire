@@ -561,9 +561,9 @@ namespace AST
     struct IDProperty
     {
         IDObject name;
-        QVector<QChar> property;
+        std::string property;
         IDComparison compare;
-        QVector<QChar> value;
+        std::string value;
 
         IDProperty& operator/=(int)
         {
@@ -575,9 +575,9 @@ namespace AST
             return *this;
         }
 
-        IDProperty& operator+=(unsigned int p)
+        IDProperty& operator+=(const std::string &p)
         {
-            property.append(QChar(p));
+            property = p;
             return *this;
         }
 
@@ -594,9 +594,9 @@ namespace AST
             return *this;
         }
 
-        IDProperty& operator*=(unsigned int v)
+        IDProperty& operator*=(const std::string &v)
         {
-            value.append(QChar(v));
+            value = v;
             return *this;
         }
 

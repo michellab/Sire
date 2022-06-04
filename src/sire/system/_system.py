@@ -18,6 +18,16 @@ class System:
 
         self._molecules = None
 
+    def __copy__(self, other):
+        if type(other) is not System:
+            raise TypeError(f"Cannot copy a {type(other)} to a System")
+
+        self._system = other._system.clone()
+        self._molecules = None
+
+    def __deepcopy__(self, other):
+        self.__copy__(other)
+
     def __str__(self):
         return str(self._system)
 
@@ -26,6 +36,11 @@ class System:
 
     def __getitem__(self, key):
         return self.molecules()[key]
+
+    def clone(self):
+        s = System()
+        s._system = self._system.clone()
+        return s
 
     def count(self):
         return self.__len__()

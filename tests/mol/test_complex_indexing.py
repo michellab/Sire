@@ -19,6 +19,40 @@ def alanin_mols():
     return sr.load_test_files("alanin.psf")
 
 
+def test_property_searching(ala_mols):
+    mols = ala_mols.clone()
+
+    mols.update(mols[0].edit()
+                       .set_property("test property", "cat goes meow")
+                       .set_property("is_perturbable", True)
+                       .set_property("false_property", False)
+                       .set_property("number", 5.4)
+                       .set_property("val", -42)
+                       .commit())
+   
+    assert mols["property 'test property' == 'cat goes meow'"] == mols[0]
+
+    assert mols["property is_perturbable"] == mols[0]
+    assert mols["property is_perturbable == true"] == mols[0]
+    assert mols["property false_property == off"] == mols[0]
+    assert mols["property number == 5.4"] == mols[0]
+    assert mols["property number =~ 5.4"] == mols[0]
+    assert mols["property number > 3"] == mols[0]
+    assert mols["property number < 6"] == mols[0]
+    assert mols["property val == -42"] == mols[0]
+    assert mols["property val < 0"] == mols[0]
+    assert mols["property val >= -42"] == mols[0]
+
+    with pytest.raises(KeyError):
+        mols["property number > 5.4"]
+
+    with pytest.raises(KeyError):
+        mols["property false_property == True"]
+
+    with pytest.raises(KeyError):
+        mols["property val > 0"]
+
+
 def test_basic_indexing(ala_mols):
     mols = ala_mols
     import sire as sr

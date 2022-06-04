@@ -457,34 +457,32 @@ public:
         //grammar for selecting by chemical element
         idElementRule %= qi::lit("element") >> ( element_token % qi::lit(",") );
 
-        auto property_char = qi::char_("a-zA-Z0-9.-");
-
         //allow searching by molecular property
         propertyRule = eps [ _val = AST::IDProperty() ] >>
                             (
                                 qi::lit("property")[ _val /= 1 ] >>
-                                +property_char[ _val += _1 ] >>
+                                stringRule[ _val += _1 ] >>
                                 cmp_token[ _val += _1 ] >>
-                                +property_char[ _val *= _1 ]
+                                stringRule[ _val *= _1 ]
                             )
                             |
                             (
                                 qi::lit("property")[ _val /= 1 ] >>
-                                +property_char[ _val += _1 ]
+                                stringRule[ _val += _1 ]
                             )
                             |
                             (
                                 obj_token[ _val += _1 ] >>
                                 qi::lit("property") >>
-                                +property_char[ _val += _1 ] >>
+                                stringRule[ _val += _1 ] >>
                                 cmp_token[ _val += _1 ] >>
-                                +property_char[ _val *= _1 ]
+                                stringRule[ _val *= _1 ]
                             )
                             |
                             (
                                 obj_token[ _val += _1 ] >>
                                 qi::lit("property") >>
-                                +property_char[ _val += _1 ]
+                                stringRule[ _val += _1 ]
                             )
                             ;
 
