@@ -10,11 +10,47 @@ class _CursorData:
        Cursor is not thread-safe (unlike the underlying
        system used by Sire)
     """
-    def __init__(self, molecule = None):
+    def __init__(self, molecule = None,
+                 connectivity_property: str="connectivity"):
         if molecule is None:
             self.molecule = None
         else:
             self.molecule = molecule.molecule().edit()
+
+        self.connectivity_property = connectivity_property
+
+        try:
+            self.connectivity = self.molecule.property(
+                                    self.connectivity_property).edit()
+        except Exception:
+            # the molecule doesn't have a connectivity. Create one for it
+            from ..legacy.Mol import CovalentBondHunter
+            hunter = CovalentBondHunter()
+
+            try:
+                self.connectivity = hunter(self.molecule)
+                self.molecule.set_property(self.connectivity_property,
+                                           self.connectivity)
+                self.connectivity = self.connectivity.edit()
+            except Exception:
+                pass
+
+    def remove_bond_property(self, bond, key):
+        self.connectivity.remove_property(bond, key)
+        self.molecule.set_property(self.connectivity_property,
+                                   self.connectivity.commit())
+
+    def set_bond_property(self, bond, key, value):
+        self.connectivity.set_property(bond, key, value)
+        self.molecule.set_property(self.connectivity_property,
+                                   self.connectivity.commit())
+
+    def set_bond_properties(self, bond, values):
+        for key in values.keys():
+            self.connectivity.set_property(bond, key, values[key])
+
+        self.molecule.set_property(self.connectivity_property,
+                                   self.connectivity.commit())
 
     def update(self, view):
         try:
@@ -44,36 +80,19 @@ class Cursor:
                >>> cursor["cat"] = "meow"
                >>> mol = cursor.commit()
         """
-        self._d = _CursorData(molecule)
+        self._d = _CursorData(molecule=molecule,
+                              connectivity_property=connectivity_property)
         self._view = self._d.update(molecule)
-        self._connectivity = None
         self._bond = bond
-        self._connectivity_property = connectivity_property
 
     def _update(self):
-        if self._bond is not None:
-            try:
-                self._connectivity = self._d.molecule.getProperty(
-                                        self._connectivity_property).edit()
-            except Exception:
-                # the molecule doesn't have a connectivity. Create one for it
-                from ..legacy.Mol import CovalentBondHunter
-                hunter = CovalentBondHunter()
-
-                try:
-                    connectivity = hunter(self._d.molecule)
-                    self._d.molecule.set_property(self._connectivity_property,
-                                                  connectivity)
-                except Exception:
-                    pass
-
         self._view = self._d.update(self._view)
 
     def __str__(self):
         if self._d.molecule is None:
             return "Cursor::null"
         else:
-            return f"Cursor({self.type()}:{self.ID()})"
+            return f"Cursor({self.type()}:{self.id()})"
 
     def __repr__(self):
         return self.__str__()
@@ -84,9 +103,7 @@ class Cursor:
         if self._bond is None:
             self._d.molecule.remove_property(key)
         else:
-            self._connectivity.remove_property(self._bond, key)
-            self._d.molecule.set_property(self._connectivity_property,
-                                          self._connectivity.commit())
+            self._d.remove_bond_property(self._bond, key)
 
         self._update()
 
@@ -96,7 +113,7 @@ class Cursor:
         if self._bond is None:
             return self._view.has_property(key)
         else:
-            return self._connectivity.has_property(self._bond, key)
+            return self._d.connectivity.has_property(self._bond, key)
 
     def __getitem__(self, key):
         self._update()
@@ -104,7 +121,7 @@ class Cursor:
         if self._bond is None:
             return self._view.property(key)
         else:
-            return self._connectivity.property(self._bond, key)
+            return self._d.connectivity.property(self._bond, key)
 
     def __setitem__(self, key, value):
         self._update()
@@ -113,9 +130,7 @@ class Cursor:
             self._view.set_property(key, value)
             self._d.molecule = self._view.molecule()
         else:
-            self._connectivity.set_property(self._bond, key, value)
-            self._molecule.set_property(self._connectivity_property,
-                                        self._connectivity.commit())
+            self._d.set_bond_property(self._bond, key, value)
 
         self._update()
 
@@ -124,10 +139,7 @@ class Cursor:
         self._update()
 
         if self._bond is None:
-            for key in values.keys():
-                self._view.set_property(key, values[key])
-
-            self._d.molecule = self._view.molecule()
+            self._d.set_bond_properties(self._bond, values)
         else:
             for key in values.keys():
                 self._connectivity.set_property(self._bond, key, values[key])
@@ -136,6 +148,27 @@ class Cursor:
                                             self._connectivity.commit())
 
         self._update()
+
+    def bonds(self):
+        """Return cursors for all of the bonds in this
+           view or, if 'id' is supplied, the bonds in this
+           view that match 'id'
+        """
+        self._update()
+
+        cursors = []
+
+        from ..mm import SelectorBond
+        bonds = SelectorBond(self._view, {"connectivity": self._d.connectivity_property})
+
+        for bond in bonds:
+            c = Cursor()
+            c._d = self._d
+            c._view = self._d.molecule
+            c._bond = bond.id()
+            cursors.append(c)
+
+        return cursors
 
     def atoms(self, id=None):
         """Return cursors for all of atoms in this view,
@@ -250,7 +283,7 @@ class Cursor:
                 return c
             except Exception:
                 raise TypeError(
-                    f"There is no residue that contains {self.type()}:{self.ID()}"
+                    f"There is no residue that contains {self.type()}:{self.id()}"
                 )
 
         self._update()
@@ -275,7 +308,7 @@ class Cursor:
                 return c
             except Exception:
                 raise TypeError(
-                    f"There is no chain that contains {self.type()}:{self.ID()}"
+                    f"There is no chain that contains {self.type()}:{self.id()}"
                 )
 
         self._update()
@@ -300,7 +333,7 @@ class Cursor:
                 return c
             except Exception:
                 raise TypeError(
-                    f"There is no segment that contains {self.type()}:{self.ID()}"
+                    f"There is no segment that contains {self.type()}:{self.id()}"
                 )
 
         self._update()
@@ -331,9 +364,7 @@ class Cursor:
         c = Cursor()
         c._d = self._d
         c._view = self._d.molecule
-        c._connectivity_property = connectivity_property
         c._bond = bond
-        c._update()
 
         return c
 
@@ -395,7 +426,7 @@ class Cursor:
 
         return self._view.index()
 
-    def ID(self):
+    def id(self):
         """Return the ID of this view (e.g. AtomIdx, MolNum, BondID)"""
         self._update()
 
@@ -462,17 +493,16 @@ class Cursor:
         """
         self._update()
 
-        if self._connectivity is not None:
-            self._molecule.set_property(self._connectivity_property,
-                                        self._connectivity.commit())
-            self._update()
-
         mol = self._d.molecule.commit()
 
-        try:
-            return mol[self._view.index()]
-        except Exception:
-            return mol
+        if self._bond is None:
+            try:
+                return mol[self._view.index()]
+            except Exception:
+                return mol
+        else:
+            from ..mm import Bond
+            return Bond(self._d.molecule, self._bond.atom0(), self._bond.atom1())
 
     def keys(self):
         self._update()
@@ -480,7 +510,7 @@ class Cursor:
         if self._bond is None:
             return self._view.property_keys()
         else:
-            return self._connectivity.property_keys(self._bond)
+            return self._d.connectivity.property_keys(self._bond)
 
     def values(self):
         self._update()
@@ -489,7 +519,7 @@ class Cursor:
             if self._bond is None:
                 return self._view.property_values()
             else:
-                return self._connectivity.property_values(self._bond)
+                return self._d.connectivity.property_values(self._bond)
         except Exception:
             vals = []
 
@@ -508,12 +538,12 @@ class Cursor:
             for key in keys:
                 items.append((key, self._view.property(key)))
         else:
-            keys = self._connectivity.property_keys(self._bond)
+            keys = self._d.connectivity.property_keys(self._bond)
             items = []
 
             for key in keys:
-                items.append((key, self._connectivity.property(self._bond,
-                                                               key)))
+                items.append((key, self._d.connectivity.property(self._bond,
+                                                                 key)))
 
         return items
 
@@ -524,7 +554,10 @@ class Cursor:
         from ..base import Properties
         p = Properties()
 
-        for key in self.keys():
-            p[key] = self.__getitem__(key)
+        if self._bond is None:
+            for key in self.keys():
+                p[key] = self.__getitem__(key)
+        else:
+            return self._d.connectivity.properties(self._bond)
 
         return p

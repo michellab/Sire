@@ -135,7 +135,10 @@ def __from_select_result(obj):
     if obj.list_count() == 1:
         obj = __fix_obj(obj.list_at(0))
 
-        if obj.what() != typ:
+        if obj.what() == "SireMM::SelectorBond":
+            if obj.count() == 1:
+                obj = obj[0]
+        elif obj.what() != typ:
             if typ == Molecule.typename():
                 return obj.molecule()
             elif typ == Segment.typename():

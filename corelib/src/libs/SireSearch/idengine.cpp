@@ -2249,23 +2249,46 @@ MolViewPtr _select_property_(const MolViewPtr &mol,
     if (idxs.count() == views.count())
         //everything has been selected
         return views;
+    else if (not idxs.isEmpty())
+        return views(idxs);
     else
-    return views(idxs);
+        return Selector<T>();
 }
 
-MolViewPtr _select_property_bond(const MolViewPtr &mol,
+MolViewPtr _select_property_bond(const SelectorBond &bonds,
                                  const PropertyName &property,
                                  const IDComparison &compare,
                                  const QString &value)
 {
-    return MolViewPtr();
+    QList<qint64> idxs;
+
+    for (int i=0; i<bonds.count(); ++i)
+    {
+        auto bond = bonds(i);
+
+        if (bond.hasProperty(property))
+        {
+            if (_compare(bond.property(property).asAString(), compare, value))
+            {
+                idxs.append(i);
+            }
+        }
+    }
+
+    if (idxs.count() == bonds.count())
+        return bonds;
+    else if (not idxs.isEmpty())
+        return bonds(idxs);
+    else
+        return SelectorBond();
 }
 
 MolViewPtr _select_property(const MolViewPtr &mol,
                             const IDObject &name,
                             const PropertyName &property,
                             const IDComparison &compare,
-                            const QString &value)
+                            const QString &value,
+                            const PropertyMap &map)
 {
     switch(name)
     {
@@ -2280,7 +2303,12 @@ MolViewPtr _select_property(const MolViewPtr &mol,
     case AST::CUTGROUP:
         return _select_property_<CutGroup>(mol, property, compare, value);
     case AST::BOND:
-        return _select_property_bond(mol, property, compare, value);
+    {
+        if (mol->isA<SelectorBond>())
+            return _select_property_bond(mol->asA<SelectorBond>(), property, compare, value);
+        else
+            return _select_property_bond(SelectorBond(*mol, map), property, compare, value);
+    }
     default:
         qDebug() << "UNRECOGNISED" << name;
         return MolViewPtr();
@@ -2322,7 +2350,7 @@ SelectResult IDPropertyEngine::select(const SelectResult &mols, const PropertyMa
         {
             try
             {
-                auto selected = _select_property(mol, this->name, p, this->compare, this->value);
+                auto selected = _select_property(mol, this->name, p, this->compare, this->value, map);
 
                 if (not selected->isEmpty())
                     ret.append(selected);

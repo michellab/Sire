@@ -75,6 +75,10 @@ def _pythonize(C, delete_old: bool=True) -> None:
         elif new_attr.startswith("isA"):
             new_attr = new_attr.replace("isA", "is")
 
+        # change 'ID()' into 'id()'
+        if new_attr == "ID":
+            new_attr = "id"
+
         # change nSomething into num_somthing
         m = re.match("^n([A-Z])[a-z]", new_attr)
 

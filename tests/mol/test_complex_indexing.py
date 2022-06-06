@@ -19,6 +19,26 @@ def alanin_mols():
     return sr.load_test_files("alanin.psf")
 
 
+def test_bond_property_searching(ala_mols):
+    mols = ala_mols.clone()
+
+    cursor = mols[0].cursor()
+
+    b = cursor.bonds()[0]
+
+    b["is_perturbable"] = True
+    b["test property"] = "cat goes meow"
+    b["number"] = 312.1
+
+    mols.update(cursor.commit())
+
+    bond = mols[0].bond(b.id())
+
+    assert mols["bond property is_perturbable"] == bond
+    assert mols["bond property 'test property' == 'cat goes meow'"] == bond
+    assert mols["bond property number > 312"] == bond
+
+
 def test_res_property_searching(ala_mols):
     mols = ala_mols.clone()
 
