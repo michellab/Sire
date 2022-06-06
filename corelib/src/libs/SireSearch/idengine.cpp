@@ -2221,6 +2221,72 @@ bool _compare(const QString &left,
     }
 }
 
+template<class T>
+MolViewPtr _select_property_(const MolViewPtr &mol,
+                             const PropertyName &property,
+                             const IDComparison &compare,
+                             const QString &value)
+{
+    auto views = get_views<T>(mol);
+
+    QList<qint64> idxs;
+
+    for (int i=0; i<views.count(); ++i)
+    {
+        const auto &view = views(i);
+
+        if (view.hasProperty(property))
+        {
+            auto p = view.propertyAsProperty(property)->asAString();
+
+            if (_compare(p, compare, value))
+            {
+                idxs.append(i);
+            }
+        }
+    }
+
+    if (idxs.count() == views.count())
+        //everything has been selected
+        return views;
+    else
+    return views(idxs);
+}
+
+MolViewPtr _select_property_bond(const MolViewPtr &mol,
+                                 const PropertyName &property,
+                                 const IDComparison &compare,
+                                 const QString &value)
+{
+    return MolViewPtr();
+}
+
+MolViewPtr _select_property(const MolViewPtr &mol,
+                            const IDObject &name,
+                            const PropertyName &property,
+                            const IDComparison &compare,
+                            const QString &value)
+{
+    switch(name)
+    {
+    case AST::ATOM:
+        return _select_property_<Atom>(mol, property, compare, value);
+    case AST::RESIDUE:
+        //return _select_property_<Residue>(mol, property, compare, value);
+    case AST::CHAIN:
+        //return _select_property_<Chain>(mol, property, compare, value);
+    case AST::SEGMENT:
+        //return _select_property_<Segment>(mol, property, compare, value);
+    case AST::CUTGROUP:
+        //return _select_property_<CutGroup>(mol, property, compare, value);
+    case AST::BOND:
+        //return _select_property_bond(mol, property, compare, value);
+    default:
+        qDebug() << "UNRECOGNISED" << name;
+        return MolViewPtr();
+    }
+}
+
 SelectResult IDPropertyEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
     QList<MolViewPtr> ret;
@@ -2252,7 +2318,20 @@ SelectResult IDPropertyEngine::select(const SelectResult &mols, const PropertyMa
     }
     else
     {
-        qDebug() << "NEED TO IMPLEMENT ATOM/RESIDUE ETC";
+        for (const auto &mol : mols)
+        {
+            try
+            {
+                auto selected = _select_property(mol, this->name, p, this->compare, this->value);
+
+                if (not selected->isEmpty())
+                    ret.append(selected);
+            }
+            catch(...)
+            {
+                // the property isn't compatible, so this can't match
+            }
+        }
     }
 
     return SelectResult(ret);

@@ -19,6 +19,20 @@ def alanin_mols():
     return sr.load_test_files("alanin.psf")
 
 
+def test_view_property_searching(ala_mols):
+    mols = ala_mols.clone()
+
+    mols.update(mols[0][0].edit().set_property("is_perturbable", True).molecule().commit())
+    mols.update(mols[0][1].edit().set_property("test property", "cat goes meow").molecule().commit())
+    mols.update(mols[0][2].edit().set_property("is_perturbable", True).molecule().commit())
+    mols.update(mols[0][3].edit().set_property("number", 5.4).molecule().commit())
+
+    assert mols["atom property is_perturbable"] == mols[0][ [0,2] ]
+    assert mols["atom property 'test property' == 'cat goes meow'"] == mols[0][1]
+    assert mols["atom property number > 5.3"] == mols[0][3]
+    assert len(mols["atom property number < 5.4"]) == mols[0].num_atoms() - 1
+
+
 def test_property_searching(ala_mols):
     mols = ala_mols.clone()
 
