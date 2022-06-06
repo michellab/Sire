@@ -115,6 +115,9 @@ if __name__ == "__main__":
             sys.exit(-1)
         py_module_install = [conda_exe, "install", "--yes"]
 
+        # Make sure that the Python in conda is used
+        args.wrapper.append([f"PYTHON_EXECUTABLE={python_exe}"])
+
     print("Continuing the Sire install using %s %s" \
               % (python_exe, sys.argv[0]))
 
