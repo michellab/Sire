@@ -3415,19 +3415,12 @@ double OpenMMPMEFEP::getPotentialEnergyAtLambda(double lambda)
 void OpenMMPMEFEP::updateOpenMMContextLambda(double lambda)
 {
     // nonbonded terms
-    if (perturbed_energies[0]) {
+    if (perturbed_energies[0])
         openmm_context->setParameter("lam", lambda); // 1-5 HD
 
-	if (Debug)                                                                          qDebug() << "Updating direct space lambda tp" << lambda;
-    }
-
     // reciprocal space corrections for 1-2, 1-3 and scaled 1-4
-    if (perturbed_energies[8]) {
+    if (perturbed_energies[8])
         openmm_context->setParameter("lam_corr", lambda);
-
-	if (Debug)
-	    qDebug() << "Updating correction lambda to" << lambda;
-    }
 
     // 1-4 Interactions
     if (perturbed_energies[1])
