@@ -68,7 +68,7 @@ if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
 endif ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
 
 if (NOT SIRE_FOUND_PYTHON)
-  # Need to find python before we compile the boost python wrappers
+  # Need to find python before we can install the Python module
   find_package( PythonLibs 3.7 REQUIRED )
 endif()
 
