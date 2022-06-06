@@ -144,6 +144,34 @@ void register_CGFloatProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::CGProperty< double >::getAsProperty
+        
+            typedef SireMol::CGProperty< double > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::CGProperty< double >::*getAsProperty_function_type)( ::SireMol::CGIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::CGProperty< double >::getAsProperty );
+            
+            CGFloatProperty_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::CGProperty< double >::getAsVariant
+        
+            typedef SireMol::CGProperty< double > exported_class_t;
+            typedef ::QVariant ( ::SireMol::CGProperty< double >::*getAsVariant_function_type)( ::SireMol::CGIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::CGProperty< double >::getAsVariant );
+            
+            CGFloatProperty_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::CGProperty< double >::isCompatibleWith
         
             typedef SireMol::CGProperty< double > exported_class_t;

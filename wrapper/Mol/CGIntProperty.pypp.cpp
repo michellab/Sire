@@ -144,6 +144,34 @@ void register_CGIntProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::CGProperty< long long >::getAsProperty
+        
+            typedef SireMol::CGProperty< long long > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::CGProperty< long long >::*getAsProperty_function_type)( ::SireMol::CGIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::CGProperty< long long >::getAsProperty );
+            
+            CGIntProperty_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::CGProperty< long long >::getAsVariant
+        
+            typedef SireMol::CGProperty< long long > exported_class_t;
+            typedef ::QVariant ( ::SireMol::CGProperty< long long >::*getAsVariant_function_type)( ::SireMol::CGIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::CGProperty< long long >::getAsVariant );
+            
+            CGIntProperty_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::CGProperty< long long >::isCompatibleWith
         
             typedef SireMol::CGProperty< long long > exported_class_t;

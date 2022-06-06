@@ -351,6 +351,32 @@ void register_CutGroup_class(){
         
         }
         CutGroup_exposer.def( bp::self == bp::self );
+        { //::SireMol::CutGroup::propertyAsProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::CutGroup::*propertyAsProperty_function_type)( ::SireBase::PropertyName const & ) const;
+            propertyAsProperty_function_type propertyAsProperty_function_value( &::SireMol::CutGroup::propertyAsProperty );
+            
+            CutGroup_exposer.def( 
+                "propertyAsProperty"
+                , propertyAsProperty_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return the specified property as a PropertyPtr" );
+        
+        }
+        { //::SireMol::CutGroup::propertyAsVariant
+        
+            typedef ::QVariant ( ::SireMol::CutGroup::*propertyAsVariant_function_type)( ::SireBase::PropertyName const & ) const;
+            propertyAsVariant_function_type propertyAsVariant_function_value( &::SireMol::CutGroup::propertyAsVariant );
+            
+            CutGroup_exposer.def( 
+                "propertyAsVariant"
+                , propertyAsVariant_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return the specified property as a QVariant" );
+        
+        }
         { //::SireMol::CutGroup::propertyKeys
         
             typedef ::QStringList ( ::SireMol::CutGroup::*propertyKeys_function_type)(  ) const;

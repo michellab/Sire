@@ -25,6 +25,7 @@ set ( SIREBASE_HEADERS
       chunkedhash.hpp
       chunkedvector.hpp
       combineproperties.h
+      convert_property.hpp
       countflops.h
       cpuid.h
       errors.h

@@ -122,6 +122,9 @@ public:
     QStringList metadataKeys() const;
     QStringList metadataKeys(const PropertyName &key) const;
 
+    QVariant propertyAsVariant(const PropertyName &key) const;
+    SireBase::PropertyPtr propertyAsProperty(const PropertyName &key) const;
+
     template<class T>
     const T& property(const PropertyName &key) const;
 

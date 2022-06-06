@@ -144,6 +144,34 @@ void register_ResStringProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::ResProperty< QString >::getAsProperty
+        
+            typedef SireMol::ResProperty< QString > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::ResProperty< QString >::*getAsProperty_function_type)( ::SireMol::ResIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::ResProperty< QString >::getAsProperty );
+            
+            ResStringProperty_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::ResProperty< QString >::getAsVariant
+        
+            typedef SireMol::ResProperty< QString > exported_class_t;
+            typedef ::QVariant ( ::SireMol::ResProperty< QString >::*getAsVariant_function_type)( ::SireMol::ResIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::ResProperty< QString >::getAsVariant );
+            
+            ResStringProperty_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::ResProperty< QString >::isCompatibleWith
         
             typedef SireMol::ResProperty< QString > exported_class_t;

@@ -62,6 +62,32 @@ void register_SegProp_class(){
                 , "" );
         
         }
+        { //::SireMol::SegProp::getAsProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::SegProp::*getAsProperty_function_type)( ::SireMol::SegIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::SegProp::getAsProperty );
+            
+            SegProp_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("segidx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SegProp::getAsVariant
+        
+            typedef ::QVariant ( ::SireMol::SegProp::*getAsVariant_function_type)( ::SireMol::SegIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::SegProp::getAsVariant );
+            
+            SegProp_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("segidx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SegProp::toVariant
         
             typedef ::SireMol::SegProperty< QVariant > ( ::SireMol::SegProp::*toVariant_function_type)(  ) const;

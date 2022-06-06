@@ -364,6 +364,32 @@ void register_Residue_class(){
         
         }
         Residue_exposer.def( bp::self == bp::self );
+        { //::SireMol::Residue::propertyAsProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::Residue::*propertyAsProperty_function_type)( ::SireBase::PropertyName const & ) const;
+            propertyAsProperty_function_type propertyAsProperty_function_value( &::SireMol::Residue::propertyAsProperty );
+            
+            Residue_exposer.def( 
+                "propertyAsProperty"
+                , propertyAsProperty_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return the specified property as a PropertyPtr" );
+        
+        }
+        { //::SireMol::Residue::propertyAsVariant
+        
+            typedef ::QVariant ( ::SireMol::Residue::*propertyAsVariant_function_type)( ::SireBase::PropertyName const & ) const;
+            propertyAsVariant_function_type propertyAsVariant_function_value( &::SireMol::Residue::propertyAsVariant );
+            
+            Residue_exposer.def( 
+                "propertyAsVariant"
+                , propertyAsVariant_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return the specified property as a QVariant" );
+        
+        }
         { //::SireMol::Residue::propertyKeys
         
             typedef ::QStringList ( ::SireMol::Residue::*propertyKeys_function_type)(  ) const;

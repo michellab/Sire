@@ -307,6 +307,20 @@ bool CutGroup::intersects(const AtomID &atomid) const
     return d->info().intersects(cgidx, atomid);
 }
 
+/** Return the specified property as a QVariant */
+QVariant CutGroup::propertyAsVariant(const PropertyName &key) const
+{
+    const Property &property = d->property(key);
+    return property.asA<CGProp>().getAsVariant(cgidx);
+}
+
+/** Return the specified property as a PropertyPtr */
+PropertyPtr CutGroup::propertyAsProperty(const PropertyName &key) const
+{
+    const Property &property = d->property(key);
+    return property.asA<CGProp>().getAsProperty(cgidx);
+}
+
 /** Return whether or not there is a CGProperty at key 'key' */
 bool CutGroup::hasProperty(const PropertyName &key) const
 {

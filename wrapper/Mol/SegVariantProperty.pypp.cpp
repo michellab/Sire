@@ -144,6 +144,34 @@ void register_SegVariantProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::SegProperty< QVariant >::getAsProperty
+        
+            typedef SireMol::SegProperty< QVariant > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::SegProperty< QVariant >::*getAsProperty_function_type)( ::SireMol::SegIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::SegProperty< QVariant >::getAsProperty );
+            
+            SegVariantProperty_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SegProperty< QVariant >::getAsVariant
+        
+            typedef SireMol::SegProperty< QVariant > exported_class_t;
+            typedef ::QVariant ( ::SireMol::SegProperty< QVariant >::*getAsVariant_function_type)( ::SireMol::SegIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::SegProperty< QVariant >::getAsVariant );
+            
+            SegVariantProperty_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SegProperty< QVariant >::isCompatibleWith
         
             typedef SireMol::SegProperty< QVariant > exported_class_t;

@@ -449,6 +449,32 @@ void register_Chain_class(){
                 , "" );
         
         }
+        { //::SireMol::Chain::propertyAsProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::Chain::*propertyAsProperty_function_type)( ::SireBase::PropertyName const & ) const;
+            propertyAsProperty_function_type propertyAsProperty_function_value( &::SireMol::Chain::propertyAsProperty );
+            
+            Chain_exposer.def( 
+                "propertyAsProperty"
+                , propertyAsProperty_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return the specified property as a PropertyPtr" );
+        
+        }
+        { //::SireMol::Chain::propertyAsVariant
+        
+            typedef ::QVariant ( ::SireMol::Chain::*propertyAsVariant_function_type)( ::SireBase::PropertyName const & ) const;
+            propertyAsVariant_function_type propertyAsVariant_function_value( &::SireMol::Chain::propertyAsVariant );
+            
+            Chain_exposer.def( 
+                "propertyAsVariant"
+                , propertyAsVariant_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return the specified property as a QVariant" );
+        
+        }
         { //::SireMol::Chain::propertyKeys
         
             typedef ::QStringList ( ::SireMol::Chain::*propertyKeys_function_type)(  ) const;

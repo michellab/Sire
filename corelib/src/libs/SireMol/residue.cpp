@@ -332,6 +332,20 @@ bool Residue::isWithinChain() const
     return d->info().isWithinChain(residx);
 }
 
+/** Return the specified property as a QVariant */
+QVariant Residue::propertyAsVariant(const PropertyName &key) const
+{
+    const Property &property = d->property(key);
+    return property.asA<ResProp>().getAsVariant(residx);
+}
+
+/** Return the specified property as a PropertyPtr */
+PropertyPtr Residue::propertyAsProperty(const PropertyName &key) const
+{
+    const Property &property = d->property(key);
+    return property.asA<ResProp>().getAsProperty(residx);
+}
+
 /** Return whether or not there is a ResProperty at key 'key' */
 bool Residue::hasProperty(const PropertyName &key) const
 {

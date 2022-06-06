@@ -311,6 +311,20 @@ bool Segment::intersects(const AtomID &atomid) const
     return d->info().intersects(segidx, atomid);
 }
 
+/** Return the specified property as a QVariant */
+QVariant Segment::propertyAsVariant(const PropertyName &key) const
+{
+    const Property &property = d->property(key);
+    return property.asA<SegProp>().getAsVariant(segidx);
+}
+
+/** Return the specified property as a PropertyPtr */
+PropertyPtr Segment::propertyAsProperty(const PropertyName &key) const
+{
+    const Property &property = d->property(key);
+    return property.asA<SegProp>().getAsProperty(segidx);
+}
+
 /** Return whether or not there is a SegProperty at key 'key' */
 bool Segment::hasProperty(const PropertyName &key) const
 {

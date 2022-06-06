@@ -144,6 +144,34 @@ void register_ResFloatProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::ResProperty< double >::getAsProperty
+        
+            typedef SireMol::ResProperty< double > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::ResProperty< double >::*getAsProperty_function_type)( ::SireMol::ResIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::ResProperty< double >::getAsProperty );
+            
+            ResFloatProperty_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::ResProperty< double >::getAsVariant
+        
+            typedef SireMol::ResProperty< double > exported_class_t;
+            typedef ::QVariant ( ::SireMol::ResProperty< double >::*getAsVariant_function_type)( ::SireMol::ResIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::ResProperty< double >::getAsVariant );
+            
+            ResFloatProperty_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::ResProperty< double >::isCompatibleWith
         
             typedef SireMol::ResProperty< double > exported_class_t;

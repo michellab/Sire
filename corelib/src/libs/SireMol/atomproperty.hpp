@@ -29,11 +29,10 @@
 #ifndef SIREMOL_ATOMPROPERTY_HPP
 #define SIREMOL_ATOMPROPERTY_HPP
 
-#include <boost/type_traits.hpp>
-
 #include <QVector>
 
 #include "SireBase/qvariant_metatype.h"
+#include "SireBase/convert_property.hpp"
 
 #include "molviewproperty.h"
 #include "moleculeinfo.h"
@@ -544,33 +543,6 @@ QVariant AtomProperty<T>::getAsVariant(const CGAtomIdx &cgatomidx) const
     return QVariant::fromValue(value);
 }
 
-template<int T>
-struct PvtConvert
-{
-    template<class V>
-    static SireBase::PropertyPtr convert(const V &value);
-};
-
-template<>
-struct PvtConvert<true>
-{
-    template<class V>
-    static SireBase::PropertyPtr convert(const V &value)
-    {
-        return SireBase::PropertyPtr(value);
-    }
-};
-
-template<>
-struct PvtConvert<false>
-{
-    template<class V>
-    static SireBase::PropertyPtr convert(const V &value)
-    {
-        return SireBase::PropertyPtr(SireBase::VariantProperty(QVariant::fromValue(value)));
-    }
-};
-
 /** Return the value for the atom at index 'cgatomidx' as a
     Property. This lets you get the value without knowing the
     actual type of this AtomProperty<T>
@@ -582,9 +554,7 @@ SIRE_OUTOFLINE_TEMPLATE
 SireBase::PropertyPtr AtomProperty<T>::getAsProperty(
                                 const CGAtomIdx &cgatomidx) const
 {
-    const T &value = this->get(cgatomidx);
-
-    return PvtConvert<boost::is_base_of<SireBase::Property, T>::value>::convert(value);
+    return SireBase::convert_property(this->get(cgatomidx));
 }
 
 /** Set the value of the property for the atom at index 'cgatomidx'

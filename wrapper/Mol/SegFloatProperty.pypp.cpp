@@ -144,6 +144,34 @@ void register_SegFloatProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::SegProperty< double >::getAsProperty
+        
+            typedef SireMol::SegProperty< double > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::SegProperty< double >::*getAsProperty_function_type)( ::SireMol::SegIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::SegProperty< double >::getAsProperty );
+            
+            SegFloatProperty_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SegProperty< double >::getAsVariant
+        
+            typedef SireMol::SegProperty< double > exported_class_t;
+            typedef ::QVariant ( ::SireMol::SegProperty< double >::*getAsVariant_function_type)( ::SireMol::SegIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::SegProperty< double >::getAsVariant );
+            
+            SegFloatProperty_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SegProperty< double >::isCompatibleWith
         
             typedef SireMol::SegProperty< double > exported_class_t;

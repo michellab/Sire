@@ -144,6 +144,34 @@ void register_CGStringProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::CGProperty< QString >::getAsProperty
+        
+            typedef SireMol::CGProperty< QString > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::CGProperty< QString >::*getAsProperty_function_type)( ::SireMol::CGIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::CGProperty< QString >::getAsProperty );
+            
+            CGStringProperty_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::CGProperty< QString >::getAsVariant
+        
+            typedef SireMol::CGProperty< QString > exported_class_t;
+            typedef ::QVariant ( ::SireMol::CGProperty< QString >::*getAsVariant_function_type)( ::SireMol::CGIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::CGProperty< QString >::getAsVariant );
+            
+            CGStringProperty_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::CGProperty< QString >::isCompatibleWith
         
             typedef SireMol::CGProperty< QString > exported_class_t;

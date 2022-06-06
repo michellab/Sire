@@ -62,6 +62,32 @@ void register_ChainProp_class(){
                 , "" );
         
         }
+        { //::SireMol::ChainProp::getAsProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::ChainProp::*getAsProperty_function_type)( ::SireMol::ChainIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::ChainProp::getAsProperty );
+            
+            ChainProp_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("chainidx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::ChainProp::getAsVariant
+        
+            typedef ::QVariant ( ::SireMol::ChainProp::*getAsVariant_function_type)( ::SireMol::ChainIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::ChainProp::getAsVariant );
+            
+            ChainProp_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("chainidx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::ChainProp::toVariant
         
             typedef ::SireMol::ChainProperty< QVariant > ( ::SireMol::ChainProp::*toVariant_function_type)(  ) const;

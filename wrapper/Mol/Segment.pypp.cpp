@@ -347,6 +347,32 @@ void register_Segment_class(){
         
         }
         Segment_exposer.def( bp::self == bp::self );
+        { //::SireMol::Segment::propertyAsProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::Segment::*propertyAsProperty_function_type)( ::SireBase::PropertyName const & ) const;
+            propertyAsProperty_function_type propertyAsProperty_function_value( &::SireMol::Segment::propertyAsProperty );
+            
+            Segment_exposer.def( 
+                "propertyAsProperty"
+                , propertyAsProperty_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return the specified property as a PropertyPtr" );
+        
+        }
+        { //::SireMol::Segment::propertyAsVariant
+        
+            typedef ::QVariant ( ::SireMol::Segment::*propertyAsVariant_function_type)( ::SireBase::PropertyName const & ) const;
+            propertyAsVariant_function_type propertyAsVariant_function_value( &::SireMol::Segment::propertyAsVariant );
+            
+            Segment_exposer.def( 
+                "propertyAsVariant"
+                , propertyAsVariant_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return the specified property as a QVariant" );
+        
+        }
         { //::SireMol::Segment::propertyKeys
         
             typedef ::QStringList ( ::SireMol::Segment::*propertyKeys_function_type)(  ) const;

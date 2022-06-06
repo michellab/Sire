@@ -144,6 +144,34 @@ void register_ChainVariantProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::ChainProperty< QVariant >::getAsProperty
+        
+            typedef SireMol::ChainProperty< QVariant > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::ChainProperty< QVariant >::*getAsProperty_function_type)( ::SireMol::ChainIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::ChainProperty< QVariant >::getAsProperty );
+            
+            ChainVariantProperty_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::ChainProperty< QVariant >::getAsVariant
+        
+            typedef SireMol::ChainProperty< QVariant > exported_class_t;
+            typedef ::QVariant ( ::SireMol::ChainProperty< QVariant >::*getAsVariant_function_type)( ::SireMol::ChainIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::ChainProperty< QVariant >::getAsVariant );
+            
+            ChainVariantProperty_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::ChainProperty< QVariant >::isCompatibleWith
         
             typedef SireMol::ChainProperty< QVariant > exported_class_t;

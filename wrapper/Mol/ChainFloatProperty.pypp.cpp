@@ -144,6 +144,34 @@ void register_ChainFloatProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::ChainProperty< double >::getAsProperty
+        
+            typedef SireMol::ChainProperty< double > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::ChainProperty< double >::*getAsProperty_function_type)( ::SireMol::ChainIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::ChainProperty< double >::getAsProperty );
+            
+            ChainFloatProperty_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::ChainProperty< double >::getAsVariant
+        
+            typedef SireMol::ChainProperty< double > exported_class_t;
+            typedef ::QVariant ( ::SireMol::ChainProperty< double >::*getAsVariant_function_type)( ::SireMol::ChainIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::ChainProperty< double >::getAsVariant );
+            
+            ChainFloatProperty_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::ChainProperty< double >::isCompatibleWith
         
             typedef SireMol::ChainProperty< double > exported_class_t;

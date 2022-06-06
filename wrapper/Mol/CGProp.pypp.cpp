@@ -62,6 +62,32 @@ void register_CGProp_class(){
                 , "" );
         
         }
+        { //::SireMol::CGProp::getAsProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::CGProp::*getAsProperty_function_type)( ::SireMol::CGIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::CGProp::getAsProperty );
+            
+            CGProp_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("cgidx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::CGProp::getAsVariant
+        
+            typedef ::QVariant ( ::SireMol::CGProp::*getAsVariant_function_type)( ::SireMol::CGIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::CGProp::getAsVariant );
+            
+            CGProp_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("cgidx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::CGProp::toVariant
         
             typedef ::SireMol::CGProperty< QVariant > ( ::SireMol::CGProp::*toVariant_function_type)(  ) const;

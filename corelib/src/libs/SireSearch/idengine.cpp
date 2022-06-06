@@ -2272,15 +2272,15 @@ MolViewPtr _select_property(const MolViewPtr &mol,
     case AST::ATOM:
         return _select_property_<Atom>(mol, property, compare, value);
     case AST::RESIDUE:
-        //return _select_property_<Residue>(mol, property, compare, value);
+        return _select_property_<Residue>(mol, property, compare, value);
     case AST::CHAIN:
-        //return _select_property_<Chain>(mol, property, compare, value);
+        return _select_property_<Chain>(mol, property, compare, value);
     case AST::SEGMENT:
-        //return _select_property_<Segment>(mol, property, compare, value);
+        return _select_property_<Segment>(mol, property, compare, value);
     case AST::CUTGROUP:
-        //return _select_property_<CutGroup>(mol, property, compare, value);
+        return _select_property_<CutGroup>(mol, property, compare, value);
     case AST::BOND:
-        //return _select_property_bond(mol, property, compare, value);
+        return _select_property_bond(mol, property, compare, value);
     default:
         qDebug() << "UNRECOGNISED" << name;
         return MolViewPtr();

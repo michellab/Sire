@@ -62,6 +62,32 @@ void register_ResProp_class(){
                 , "" );
         
         }
+        { //::SireMol::ResProp::getAsProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::ResProp::*getAsProperty_function_type)( ::SireMol::ResIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::ResProp::getAsProperty );
+            
+            ResProp_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("residx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::ResProp::getAsVariant
+        
+            typedef ::QVariant ( ::SireMol::ResProp::*getAsVariant_function_type)( ::SireMol::ResIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::ResProp::getAsVariant );
+            
+            ResProp_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("residx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::ResProp::toVariant
         
             typedef ::SireMol::ResProperty< QVariant > ( ::SireMol::ResProp::*toVariant_function_type)(  ) const;

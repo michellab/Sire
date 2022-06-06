@@ -368,6 +368,20 @@ bool Chain::intersects(const ResID &resid) const
     return d->info().intersects(chainidx, resid);
 }
 
+/** Return the specified property as a QVariant */
+QVariant Chain::propertyAsVariant(const PropertyName &key) const
+{
+    const Property &property = d->property(key);
+    return property.asA<ChainProp>().getAsVariant(chainidx);
+}
+
+/** Return the specified property as a PropertyPtr */
+PropertyPtr Chain::propertyAsProperty(const PropertyName &key) const
+{
+    const Property &property = d->property(key);
+    return property.asA<ChainProp>().getAsProperty(chainidx);
+}
+
 /** Return whether or not there is a ChainProperty at key 'key' */
 bool Chain::hasProperty(const PropertyName &key) const
 {
