@@ -19,6 +19,13 @@ def alanin_mols():
     return sr.load_test_files("alanin.psf")
 
 
+def test_distance_searching(ala_mols):
+    mols = ala_mols
+
+    print(mols["atoms within 2.0 angstrom of element C"])
+
+
+
 def test_bond_property_searching(ala_mols):
     mols = ala_mols.clone()
 

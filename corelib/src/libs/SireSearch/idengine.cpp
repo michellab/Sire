@@ -2775,11 +2775,72 @@ QVector<Vector> _get_coords(const Selector<Atom> &atoms,
     return coords;
 }
 
+Vector _get_point(const AABox &box, const IDCoordType &typ)
+{
+    Vector center = box.center();
+
+    switch(typ)
+    {
+        case ID_COORD_CENTER:
+        case ID_COORD_CENTER_X:
+        case ID_COORD_CENTER_Y:
+        case ID_COORD_CENTER_Z:
+        case ID_COORD_X:
+        case ID_COORD_Y:
+        case ID_COORD_Z:
+            return center;
+        case ID_COORD_MAX:
+            return box.maxCoords();
+        case ID_COORD_MIN:
+            return box.minCoords();
+        case ID_COORD_MAX_X:
+            center.setX(box.maxCoords().x());
+            return center;
+        case ID_COORD_MAX_Y:
+            center.setY(box.maxCoords().y());
+            return center;
+        case ID_COORD_MAX_Z:
+            center.setZ(box.maxCoords().z());
+            return center;
+        case ID_COORD_MIN_X:
+            center.setX(box.minCoords().x());
+            return center;
+        case ID_COORD_MIN_Y:
+            center.setY(box.minCoords().y());
+            return center;
+        case ID_COORD_MIN_Z:
+            center.setZ(box.minCoords().z());
+            return center;
+        default:
+            qDebug() << "UNRECOGNISED ID TYP" << typ;
+            return center;
+    }
+}
+
+bool _is_within(const QVector<Vector> &coords,
+                const CoordGroup &ref_group,
+                double distance,
+                const IDCoordType &typ, const Space &space)
+{
+    CoordGroup group(coords);
+
+    if (typ == ID_COORD_CLOSEST)
+    {
+        return space.minimumDistance(group, ref_group) < distance;
+    }
+
+    Vector point = _get_point(group.aaBox(), typ);
+
+    return space.minimumDistance(CoordGroup(1, point), ref_group) < distance;
+}
+
 SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
     //first, get the objects against where the distance is calculated
     if (part.get() == 0)
         return SelectResult();
+
+    QList<MolViewPtr> ret;
 
     const auto refmols = part->operator()(mols, map);
 
@@ -2797,26 +2858,47 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
     }
 
     // merge all atoms in 'refmols' into a single array of coordinates
-    QVector<Vector> coords;
+    QVector<Vector> ref_coords;
 
     for (const auto &mol : refmols)
     {
-        coords += _get_coords(mol->atoms(), coords_property, *space);
+        ref_coords += _get_coords(mol->atoms(), coords_property, *space);
     }
 
-    // we do all comparisons using the squared distance, as this is quicker
-    const double dist2 = distance*distance;
+    CoordGroup ref_group(ref_coords);
 
     for (const auto &mol : mols)
     {
         // expand this molecule into the views that are requested
-        auto expanded = _expand(*mol, this->objectType(), map);
+        const auto expanded = _expand(*mol, this->objectType(), map);
 
         QList<qint64> idxs;
         idxs.reserve(expanded->count());
 
-        //for ...
+        for (int i=0; i<expanded->count(); ++i)
+        {
+            const auto view = expanded->operator[](i);
+
+            QVector<Vector> coords = _get_coords(view->atoms(),
+                                                 coords_property, *space);
+
+            if (_is_within(coords, ref_group, distance, typ, *space))
+            {
+                idxs.append(i);
+            }
+        }
+
+        if (idxs.count() == expanded->count())
+        {
+            ret.append(expanded);
+        }
+        else if (not idxs.isEmpty())
+        {
+            ret.append(expanded->operator[](idxs));
+        }
     }
+
+    return SelectResult(ret);
 }
 
 SelectEngine::ObjType IDDistanceEngine::objectType() const
