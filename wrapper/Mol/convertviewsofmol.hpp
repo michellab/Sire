@@ -323,6 +323,12 @@ struct viewsofmol_to_py_list
             {
                 return bp::incref(bp::object(views.segments()).ptr());
             }
+            else if (typ == "SireMol::Molecule")
+            {
+                // we only return a single molecule if there are multiple views
+                bp::object obj = get_molview(views.valueAt(0));
+                return bp::incref( obj.ptr() );
+            }
 
             // this is a mixture of types, so return this as a
             // python list of views

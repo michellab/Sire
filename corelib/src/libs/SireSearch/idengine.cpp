@@ -2755,10 +2755,68 @@ SelectEnginePtr IDDistanceEngine::simplify()
     return selfptr.lock();
 }
 
+QVector<Vector> _get_coords(const Selector<Atom> &atoms,
+                            const PropertyName &coords_property,
+                            const Space &space)
+{
+    QVector<Vector> coords;
+
+    coords.reserve(atoms.count());
+
+    for (int i=0; i<atoms.count(); ++i)
+    {
+        const Atom &atom = atoms(i);
+
+        coords.append(space.getMinimumImage(
+                            atom.property<Vector>(coords_property),
+                            Vector(0)));
+    }
+
+    return coords;
+}
+
 SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    //this needs completely rewriting
-    return SelectResult();
+    //first, get the objects against where the distance is calculated
+    if (part.get() == 0)
+        return SelectResult();
+
+    const auto refmols = part->operator()(mols, map);
+
+    if (refmols.isEmpty())
+        //nothing against which to compare
+        return SelectResult();
+
+    const auto coords_property = map["coordinates"];
+
+    SireVol::SpacePtr space = SireVol::Cartesian();
+
+    if (map["space"].hasValue())
+    {
+        space = map["space"].value().asA<SireVol::Space>();
+    }
+
+    // merge all atoms in 'refmols' into a single array of coordinates
+    QVector<Vector> coords;
+
+    for (const auto &mol : refmols)
+    {
+        coords += _get_coords(mol->atoms(), coords_property, *space);
+    }
+
+    // we do all comparisons using the squared distance, as this is quicker
+    const double dist2 = distance*distance;
+
+    for (const auto &mol : mols)
+    {
+        // expand this molecule into the views that are requested
+        auto expanded = _expand(*mol, this->objectType(), map);
+
+        QList<qint64> idxs;
+        idxs.reserve(expanded->count());
+
+        //for ...
+    }
 }
 
 SelectEngine::ObjType IDDistanceEngine::objectType() const
