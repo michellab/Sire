@@ -529,6 +529,124 @@ void TwoAtomPerturbation::perturbMolecule(MolEditor &molecule,
     }
 }
 
+static const RegisterMetaType<ScalePerturbation> r_scale;
+
+QDataStream &operator<<(QDataStream &ds,
+                                      const ScalePerturbation &twoatom)
+{
+    writeHeader(ds, r_scale, 1);
+
+    SharedDataStream sds(ds);
+
+    sds << twoatom.atm0 << twoatom.atm1
+        << static_cast<const InternalPerturbation&>(twoatom);
+
+    return ds;
+}
+
+QDataStream &operator>>(QDataStream &ds,
+                                      ScalePerturbation &twoatom)
+{
+    VersionID v = readHeader(ds, r_scale);
+
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+
+        sds >> twoatom.atm0 >> twoatom.atm1
+            >> static_cast<InternalPerturbation&>(twoatom);
+    }
+    else
+        throw version_error(v, "1", r_scale, CODELOC);
+
+    return ds;
+}
+
+/** Null constructor */
+ScalePerturbation::ScalePerturbation()
+                      : ConcreteProperty<ScalePerturbation,InternalPerturbation>()
+{}
+
+ScalePerturbation::ScalePerturbation(const AtomID &atom0, const AtomID &atom1,
+                                     const double &csci, const double &ljsci,
+                                     const double &cscf, const double &ljscf,
+                                         const PropertyMap &map)
+     : atm0(atom0), atm1(atom1), ci(csci), lji(ljsci), cf(cscf), ljf(ljscf)
+{}
+
+ScalePerturbation& ScalePerturbation::operator=(const ScalePerturbation &other)
+{
+    if (this != &other)
+    {
+        atm0 = other.atm0;
+        atm1 = other.atm1;
+        ci = other.ci;
+        lji = other.lji;
+        cf = other.cf;
+        ljf = other.ljf;
+        InternalPerturbation::operator=(other);
+    }
+    return *this;
+}
+
+ScalePerturbation::~ScalePerturbation()
+{}
+
+QSet<QString> ScalePerturbation::requiredProperties() const
+{
+    QSet<QString> props;
+
+    const PropertyName &param_property = propertyMap()["parameters"];
+
+    if (param_property.hasSource())
+        props.insert(param_property.source());
+
+    return props;
+}
+
+bool ScalePerturbation::wouldChange(const SireMol::Molecule &molecule, const SireCAS::Values &values) const
+{
+    return false;
+}
+
+void ScalePerturbation::perturbMolecule(SireMol::MolEditor &molecule, const SireCAS::Values &values) const
+{}
+
+const char* ScalePerturbation::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<ScalePerturbation>() );
+}
+
+const AtomID& ScalePerturbation::atom0() const
+{
+    return atm0.base();
+}
+
+const AtomID& ScalePerturbation::atom1() const
+{
+    return atm1.base();
+}
+
+const double& ScalePerturbation::getcsci() const
+{
+    return ci;
+}
+
+const double& ScalePerturbation::getljsci() const
+{
+    return lji;
+}
+
+const double& ScalePerturbation::getcscf() const
+{
+    return cf;
+}
+
+const double& ScalePerturbation::getljscf() const
+{
+    return ljf;
+}
+
 ////////////
 //////////// Implementation of ThreeAtomPerturbation
 ////////////

@@ -77,6 +77,7 @@
 #include <QDebug>
 #include <QTime>
 #include <boost/tuple/tuple.hpp>
+#include <boost/algorithm/string.hpp>
 
 
 
@@ -94,6 +95,8 @@ using namespace SireMM;
 using namespace SireIO;
 using namespace std;
 using boost::tuples::tuple;
+using boost::replace_all;
+
 
 /** TYPES OF CUTOFF IMPLEMENTED**/
 enum
@@ -380,7 +383,7 @@ QString OpenMMFrEnergyST::toString() const
 void OpenMMFrEnergyST::initialise()
 {
 
-    bool Debug = false;
+    bool Debug = true;
     if (Debug)
     {
         qDebug() << "Initialising OpenMMFrEnergyST";
@@ -402,7 +405,8 @@ void OpenMMFrEnergyST::initialise()
     //if ( solute.isEmpty() ){
     //    throw SireError::program_bug(QObject::tr("Cannot initialise OpenMMFrEnergyST because solute group has not been defined"), CODELOC);
     //}
-    
+
+
     const MoleculeGroup solutehard = this->solutehard.read();
 
     const MoleculeGroup solutetodummy = this->solutetodummy.read();
@@ -501,6 +505,16 @@ void OpenMMFrEnergyST::initialise()
     OpenMM::CustomBondForce * custom_intra_14_fromdummy = NULL;
     OpenMM::CustomBondForce * custom_intra_14_fromdummy_todummy = NULL;
 
+    // Unscaled 1-4 interactions, allow for custom scale paramter interpolated by lambda
+    OpenMM::CustomBondForce * custom_intra_14_clj_unscaled = NULL;
+    OpenMM::CustomBondForce * custom_intra_14_todummy_unscaled = NULL;
+    OpenMM::CustomBondForce * custom_intra_14_fromdummy_unscaled = NULL;
+    OpenMM::CustomBondForce * custom_intra_14_fromdummy_todummy_unscaled = NULL;
+
+    // The default 1,4 scaling factors
+    double const Coulomb14Scale = 1.0 / 1.2;
+    double const LennardJones14Scale = 1.0 / 2.0;
+
     if (flag_cutoff == NOCUTOFF)
     {
         if (coulomb_power > 0)
@@ -514,7 +528,7 @@ void OpenMMFrEnergyST::initialise()
               "LJ=((sigma_avg * sigma_avg)/soft)^3;"
               "soft=(diff_lj*delta*sigma_avg + r*r);"
               "diff_lj=(1.0-lambda) * 0.1;"
-              //"lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+            //   "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
               "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * 0 + Logic_hard;"
               "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
               "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
@@ -575,6 +589,23 @@ void OpenMMFrEnergyST::initialise()
             custom_intra_14_todummy->addGlobalParameter("deltatd", shift_delta);
             custom_intra_14_todummy->addGlobalParameter("ntd", coulomb_power);
 
+
+            std::string intra_14_todummy_unscaled (intra_14_todummy);
+            intra_14_todummy_unscaled.append("qpstart=qpstart_unscaled*coulomb_scale;");
+            intra_14_todummy_unscaled.append("qpend=qpend_unscaled*coulomb_scale;");
+            intra_14_todummy_unscaled.append("qmix=qmix_unscaled*coulomb_scale;");
+            intra_14_todummy_unscaled.append("eastart=eastart_unscaled*lj_scale*lj_scale;");
+            intra_14_todummy_unscaled.append("eaend=eaend_unscaled*lj_scale*lj_scale;");
+            intra_14_todummy_unscaled.append("emix=emix_unscaled*lj_scale*lj_scale;");
+            intra_14_todummy_unscaled.append("coulomb_scale=lamtd*csci + (1-lamtd)*cscf;");
+            intra_14_todummy_unscaled.append("lj_scale=lamtd*ljsci + (1-lamtd)*ljscf;");
+            replace_all(intra_14_todummy_unscaled, "lamtd", "lamtds");
+
+            custom_intra_14_todummy_unscaled = new OpenMM::CustomBondForce(intra_14_todummy_unscaled);
+            custom_intra_14_todummy_unscaled->addGlobalParameter("lamtds",1.0 - Alchemical_value);
+            custom_intra_14_todummy_unscaled->addGlobalParameter("deltatd", shift_delta);
+            custom_intra_14_todummy_unscaled->addGlobalParameter("ntd", coulomb_power);
+
             std::string intra_14_fromdummy = """Hcs + Hls;"
                 "Hcs=(lamfd^nfd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
                 "diff_cl=(1.0-lamfd)*0.01;"
@@ -599,6 +630,23 @@ void OpenMMFrEnergyST::initialise()
             custom_intra_14_fromdummy->addGlobalParameter("deltafd", shift_delta);
             custom_intra_14_fromdummy->addGlobalParameter("nfd", coulomb_power);
 
+            // inherit functional form with custom scale paramter.
+            std::string intra_14_fromdummy_unscaled (intra_14_fromdummy);
+            intra_14_fromdummy_unscaled.append("qpstart=qpstart_unscaled*coulomb_scale;");
+            intra_14_fromdummy_unscaled.append("qpend=qpend_unscaled*coulomb_scale;");
+            intra_14_fromdummy_unscaled.append("qmix=qmix_unscaled*coulomb_scale;");
+            intra_14_fromdummy_unscaled.append("eastart=eastart_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_unscaled.append("eaend=eaend_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_unscaled.append("emix=emix_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_unscaled.append("coulomb_scale=(1-lamfd)*csci + lamfd*cscf;");
+            intra_14_fromdummy_unscaled.append("lj_scale=(1-lamfd)*ljsci + lamfd*ljscf;");
+            replace_all(intra_14_fromdummy_unscaled, "lamfd", "lamfds");
+
+            custom_intra_14_fromdummy_unscaled = new OpenMM::CustomBondForce(intra_14_fromdummy_unscaled);
+            custom_intra_14_fromdummy_unscaled->addGlobalParameter("lamfds", Alchemical_value);
+            custom_intra_14_fromdummy_unscaled->addGlobalParameter("deltafd", shift_delta);
+            custom_intra_14_fromdummy_unscaled->addGlobalParameter("nfd", coulomb_power);
+
             //JM 9/10/20 set lamFTD to 0 instead of max(lamftd,1-lamftd)
 
             std::string intra_14_fromdummy_todummy = """Hcs + Hls;"
@@ -609,8 +657,8 @@ void OpenMMFrEnergyST::initialise()
                 "soft=(diff_lj*deltaftd*sigma_avg+r*r);"
                 "diff_lj=(1.0-lamFTD)*0.1;"
                 "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
+                "sigma_avg = lamftd*saend + (1-lamftd)*sastart;"
                 "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-                //"lamFTD = max(lamftd,1-lamftd);""";
                 "lamFTD = 0.0;""";
 
             if (flag_combRules == ARITHMETIC)
@@ -627,6 +675,22 @@ void OpenMMFrEnergyST::initialise()
             custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
 
+            std::string intra_14_fromdummy_todummy_unscaled (intra_14_fromdummy_todummy);
+            intra_14_fromdummy_todummy_unscaled.append("qpstart=qpstart_unscaled*coulomb_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("qpend=qpend_unscaled*coulomb_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("qmix=qmix_unscaled*coulomb_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("eastart=eastart_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("eaend=eaend_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("emix=emix_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("coulomb_scale=(1-lamftd)*csci + lamftd*cscf;");
+            intra_14_fromdummy_todummy_unscaled.append("lj_scale=(1-lamftd)*ljsci + lamftd*ljscf;");
+            replace_all(intra_14_fromdummy_todummy_unscaled, "lamftd", "lamftds");
+
+            custom_intra_14_fromdummy_todummy_unscaled = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy_unscaled);
+            custom_intra_14_fromdummy_todummy_unscaled->addGlobalParameter("lamftds", Alchemical_value);
+            custom_intra_14_fromdummy_todummy_unscaled->addGlobalParameter("deltaftd", shift_delta);
+            custom_intra_14_fromdummy_todummy_unscaled->addGlobalParameter("nftd", coulomb_power);
+
         }
         else
         {
@@ -640,7 +704,7 @@ void OpenMMFrEnergyST::initialise()
               "LJ=((sigma_avg * sigma_avg)/soft)^3;"
               "soft=(diff_lj*delta*sigma_avg + r*r);"
               "diff_lj=(1.0-lambda) * 0.1;"
-              //"lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+            //   "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
               "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * 0 + Logic_hard;"
               "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
               "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
@@ -701,6 +765,22 @@ void OpenMMFrEnergyST::initialise()
             custom_intra_14_todummy->addGlobalParameter("deltatd", shift_delta);
             custom_intra_14_todummy->addGlobalParameter("ntd", coulomb_power);
 
+            std::string intra_14_todummy_unscaled (intra_14_todummy);
+            intra_14_todummy_unscaled.append("qpstart=qpstart_unscaled*coulomb_scale;");
+            intra_14_todummy_unscaled.append("qpend=qpend_unscaled*coulomb_scale;");
+            intra_14_todummy_unscaled.append("qmix=qmix_unscaled*coulomb_scale;");
+            intra_14_todummy_unscaled.append("eastart=eastart_unscaled*lj_scale*lj_scale;");
+            intra_14_todummy_unscaled.append("eaend=eaend_unscaled*lj_scale*lj_scale;");
+            intra_14_todummy_unscaled.append("emix=emix_unscaled*lj_scale*lj_scale;");
+            intra_14_todummy_unscaled.append("coulomb_scale=lamtd*csci + (1-lamtd)*cscf;");
+            intra_14_todummy_unscaled.append("lj_scale=lamtd*ljsci + (1-lamtd)*ljscf;");
+            replace_all(intra_14_todummy_unscaled, "lamtd", "lamtds");
+
+            custom_intra_14_todummy_unscaled = new OpenMM::CustomBondForce(intra_14_todummy_unscaled);
+            custom_intra_14_todummy_unscaled->addGlobalParameter("lamtds",1.0 - Alchemical_value);
+            custom_intra_14_todummy_unscaled->addGlobalParameter("deltatd", shift_delta);
+            custom_intra_14_todummy_unscaled->addGlobalParameter("ntd", coulomb_power);
+
             std::string intra_14_fromdummy = """Hcs + Hls;"
               "Hcs=(lamfd^nfd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
               "diff_cl=(1.0-lamfd)*0.01;"
@@ -725,6 +805,22 @@ void OpenMMFrEnergyST::initialise()
             custom_intra_14_fromdummy->addGlobalParameter("deltafd", shift_delta);
             custom_intra_14_fromdummy->addGlobalParameter("nfd", coulomb_power);
 
+            std::string intra_14_fromdummy_unscaled (intra_14_fromdummy);
+            intra_14_fromdummy_unscaled.append("qpstart=qpstart_unscaled*coulomb_scale;");
+            intra_14_fromdummy_unscaled.append("qpend=qpend_unscaled*coulomb_scale;");
+            intra_14_fromdummy_unscaled.append("qmix=qmix_unscaled*coulomb_scale;");
+            intra_14_fromdummy_unscaled.append("eastart=eastart_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_unscaled.append("eaend=eaend_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_unscaled.append("emix=emix_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_unscaled.append("coulomb_scale=(1-lamfd)*csci + lamfd*cscf;");
+            intra_14_fromdummy_unscaled.append("lj_scale=(1-lamfd)*ljsci + lamfd*ljscf;");
+            replace_all(intra_14_fromdummy_unscaled, "lamfd", "lamfds");
+
+            custom_intra_14_fromdummy_unscaled = new OpenMM::CustomBondForce(intra_14_fromdummy_unscaled);
+            custom_intra_14_fromdummy_unscaled->addGlobalParameter("lamfds", Alchemical_value);
+            custom_intra_14_fromdummy_unscaled->addGlobalParameter("deltafd", shift_delta);
+            custom_intra_14_fromdummy_unscaled->addGlobalParameter("nfd", coulomb_power);
+
             // JM 9/10/20 set lamFTD to 0.0
 
             std::string intra_14_fromdummy_todummy = """Hcs + Hls;"
@@ -736,7 +832,6 @@ void OpenMMFrEnergyST::initialise()
               "diff_lj=(1.0-lamFTD)*0.1;"
               "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
               "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-              //"lamFTD = max(lamftd,1-lamftd);""";
               "lamFTD = 0.0;""";
 
             if (flag_combRules == ARITHMETIC)
@@ -752,6 +847,23 @@ void OpenMMFrEnergyST::initialise()
             custom_intra_14_fromdummy_todummy->addGlobalParameter("lamftd", Alchemical_value);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
+
+            std::string intra_14_fromdummy_todummy_unscaled (intra_14_fromdummy_todummy);
+            intra_14_fromdummy_todummy_unscaled.append("qpstart=qpstart_unscaled*coulomb_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("qpend=qpend_unscaled*coulomb_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("qmix=qmix_unscaled*coulomb_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("eastart=eastart_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("eaend=eaend_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("emix=emix_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("coulomb_scale=(1-lamftd)*csci + lamftd*cscf;");
+            intra_14_fromdummy_todummy_unscaled.append("lj_scale=(1-lamftd)*ljsci + lamftd*ljscf;");
+            replace_all(intra_14_fromdummy_todummy_unscaled, "lamftd", "lamftds");
+
+            custom_intra_14_fromdummy_todummy_unscaled = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy_unscaled);
+            custom_intra_14_fromdummy_todummy_unscaled->addGlobalParameter("lamftds", Alchemical_value);
+            custom_intra_14_fromdummy_todummy_unscaled->addGlobalParameter("deltaftd", shift_delta);
+            custom_intra_14_fromdummy_todummy_unscaled->addGlobalParameter("nftd", coulomb_power);
+
         }
 
         std::string intra_14_clj = """Hl+Hc;"
@@ -771,6 +883,22 @@ void OpenMMFrEnergyST::initialise()
 
         custom_intra_14_clj = new OpenMM::CustomBondForce(intra_14_clj) ;
         custom_intra_14_clj->addGlobalParameter("lamhd", Alchemical_value);
+
+        // Unscale intra 14 function using coulomb scale and lj scale as parameter
+        std::string intra_14_clj_unscaled (intra_14_clj);
+        intra_14_clj_unscaled.append("qpstart=qpstart_unscaled*coulomb_scale;");
+        intra_14_clj_unscaled.append("qpend=qpend_unscaled*coulomb_scale;");
+        intra_14_clj_unscaled.append("qmix=qmix_unscaled*coulomb_scale;");
+        intra_14_clj_unscaled.append("eastart=eastart_unscaled*lj_scale*lj_scale;");
+        intra_14_clj_unscaled.append("eaend=eaend_unscaled*lj_scale*lj_scale;");
+        intra_14_clj_unscaled.append("emix=emix_unscaled*lj_scale*lj_scale;");
+        intra_14_clj_unscaled.append("coulomb_scale=(1-lamhd)*csci + lamhd*cscf;");
+        intra_14_clj_unscaled.append("lj_scale=(1-lamhd)*ljsci + lamhd*ljscf;");
+        replace_all(intra_14_clj_unscaled, "lamhd", "lamhds");
+
+        custom_intra_14_clj_unscaled = new OpenMM::CustomBondForce(intra_14_clj_unscaled); 
+        custom_intra_14_clj_unscaled->addGlobalParameter("lamhds", Alchemical_value);
+
 
         if (Debug)
         {
@@ -803,7 +931,7 @@ void OpenMMFrEnergyST::initialise()
              "LJ=((sigma_avg * sigma_avg)/soft)^3;"
              "soft=(diff_lj*delta*sigma_avg + r*r);"
              "diff_lj=(1.0-lambda) * 0.1;"
-             //"lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+            //  "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
              "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * 0 + Logic_hard;"
              "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
              "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
@@ -881,6 +1009,23 @@ void OpenMMFrEnergyST::initialise()
             custom_intra_14_todummy->addGlobalParameter("ntd", coulomb_power);
             custom_intra_14_todummy->addGlobalParameter("cutofftd", converted_cutoff_distance);
 
+            std::string intra_14_todummy_unscaled (intra_14_todummy);
+            intra_14_todummy_unscaled.append("qpstart=qpstart_unscaled*coulomb_scale;");
+            intra_14_todummy_unscaled.append("qpend=qpend_unscaled*coulomb_scale;");
+            intra_14_todummy_unscaled.append("qmix=qmix_unscaled*coulomb_scale;");
+            intra_14_todummy_unscaled.append("eastart=eastart_unscaled*lj_scale*lj_scale;");
+            intra_14_todummy_unscaled.append("eaend=eaend_unscaled*lj_scale*lj_scale;");
+            intra_14_todummy_unscaled.append("emix=emix_unscaled*lj_scale*lj_scale;");
+            intra_14_todummy_unscaled.append("coulomb_scale=lamtd*csci + (1-lamtd)*cscf;");
+            intra_14_todummy_unscaled.append("lj_scale=lamtd*ljsci + (1-lamtd)*ljscf;");
+            replace_all(intra_14_todummy_unscaled, "lamtd", "lamtds");
+
+            custom_intra_14_todummy_unscaled = new OpenMM::CustomBondForce(intra_14_todummy_unscaled);
+            custom_intra_14_todummy_unscaled->addGlobalParameter("lamtds",1.0 - Alchemical_value);
+            custom_intra_14_todummy_unscaled->addGlobalParameter("deltatd", shift_delta);
+            custom_intra_14_todummy_unscaled->addGlobalParameter("ntd", coulomb_power);
+            custom_intra_14_todummy_unscaled->addGlobalParameter("cutofftd", converted_cutoff_distance);
+
             std::string intra_14_fromdummy = """withinCutoff*(Hcs + Hls);"
               "withinCutoff=step(cutofffd-r);"
               "Hcs=(lamfd^nfd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
@@ -907,6 +1052,23 @@ void OpenMMFrEnergyST::initialise()
             custom_intra_14_fromdummy->addGlobalParameter("nfd", coulomb_power);
             custom_intra_14_fromdummy->addGlobalParameter("cutofffd", converted_cutoff_distance);
 
+            std::string intra_14_fromdummy_unscaled (intra_14_fromdummy);
+            intra_14_fromdummy_unscaled.append("qpstart=qpstart_unscaled*coulomb_scale;");
+            intra_14_fromdummy_unscaled.append("qpend=qpend_unscaled*coulomb_scale;");
+            intra_14_fromdummy_unscaled.append("qmix=qmix_unscaled*coulomb_scale;");
+            intra_14_fromdummy_unscaled.append("eastart=eastart_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_unscaled.append("eaend=eaend_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_unscaled.append("emix=emix_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_unscaled.append("coulomb_scale=(1-lamfd)*csci + lamfd*cscf;");
+            intra_14_fromdummy_unscaled.append("lj_scale=(1-lamfd)*ljsci + lamfd*ljscf;");
+            replace_all(intra_14_fromdummy_unscaled, "lamfd", "lamfds");
+
+            custom_intra_14_fromdummy_unscaled = new OpenMM::CustomBondForce(intra_14_fromdummy_unscaled);
+            custom_intra_14_fromdummy_unscaled->addGlobalParameter("lamfds", Alchemical_value);
+            custom_intra_14_fromdummy_unscaled->addGlobalParameter("deltafd", shift_delta);
+            custom_intra_14_fromdummy_unscaled->addGlobalParameter("nfd", coulomb_power);
+            custom_intra_14_fromdummy_unscaled->addGlobalParameter("cutofffd", converted_cutoff_distance);
+
             //JM 9/10/20 set lamFTD to 0
             std::string intra_14_fromdummy_todummy = """withinCutoff*(Hcs + Hls);"
             "withinCutoff=step(cutoffftd-r);"
@@ -919,7 +1081,6 @@ void OpenMMFrEnergyST::initialise()
             "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
             "sigma_avg = lamftd*saend + (1-lamftd)*sastart;"
             "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-            //"lamFTD = max(lamftd,1-lamftd);""";
             "lamFTD = 0.0;""";
 
             if (flag_combRules == ARITHMETIC)
@@ -936,6 +1097,24 @@ void OpenMMFrEnergyST::initialise()
             custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("cutoffftd", converted_cutoff_distance);
+
+            std::string intra_14_fromdummy_todummy_unscaled (intra_14_fromdummy_todummy);
+            intra_14_fromdummy_todummy_unscaled.append("qpstart=qpstart_unscaled*coulomb_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("qpend=qpend_unscaled*coulomb_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("qmix=qmix_unscaled*coulomb_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("eastart=eastart_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("eaend=eaend_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("emix=emix_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("coulomb_scale=(1-lamftd)*csci + lamftd*cscf;");
+            intra_14_fromdummy_todummy_unscaled.append("lj_scale=(1-lamftd)*ljsci + lamftd*ljscf;");
+            replace_all(intra_14_fromdummy_todummy_unscaled, "lamftd", "lamftds");
+
+            custom_intra_14_fromdummy_todummy_unscaled = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy_unscaled);
+            custom_intra_14_fromdummy_todummy_unscaled->addGlobalParameter("lamftds", Alchemical_value);
+            custom_intra_14_fromdummy_todummy_unscaled->addGlobalParameter("deltaftd", shift_delta);
+            custom_intra_14_fromdummy_todummy_unscaled->addGlobalParameter("nftd", coulomb_power);
+            custom_intra_14_fromdummy_todummy_unscaled->addGlobalParameter("cutoffftd", converted_cutoff_distance);
+
         }
         else
         {
@@ -953,7 +1132,7 @@ void OpenMMFrEnergyST::initialise()
              "LJ=((sigma_avg * sigma_avg)/soft)^3;"
              "soft=(diff_lj*delta*sigma_avg + r*r);"
              "diff_lj=(1.0-lambda) * 0.1;"
-             //"lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+            //  "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
              "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * 0 + Logic_hard;"
              "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
              "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
@@ -1033,6 +1212,23 @@ void OpenMMFrEnergyST::initialise()
             custom_intra_14_todummy->addGlobalParameter("ntd", coulomb_power);
             custom_intra_14_todummy->addGlobalParameter("cutofftd", converted_cutoff_distance);
 
+            std::string intra_14_todummy_unscaled (intra_14_todummy);
+            intra_14_todummy_unscaled.append("qpstart=qpstart_unscaled*coulomb_scale;");
+            intra_14_todummy_unscaled.append("qpend=qpend_unscaled*coulomb_scale;");
+            intra_14_todummy_unscaled.append("qmix=qmix_unscaled*coulomb_scale;");
+            intra_14_todummy_unscaled.append("eastart=eastart_unscaled*lj_scale*lj_scale;");
+            intra_14_todummy_unscaled.append("eaend=eaend_unscaled*lj_scale*lj_scale;");
+            intra_14_todummy_unscaled.append("emix=emix_unscaled*lj_scale*lj_scale;");
+            intra_14_todummy_unscaled.append("coulomb_scale=lamtd*csci + (1-lamtd)*cscf;");
+            intra_14_todummy_unscaled.append("lj_scale=lamtd*ljsci + (1-lamtd)*ljscf;");
+            replace_all(intra_14_todummy_unscaled, "lamtd", "lamtds");
+
+            custom_intra_14_todummy_unscaled = new OpenMM::CustomBondForce(intra_14_todummy_unscaled);
+            custom_intra_14_todummy_unscaled->addGlobalParameter("lamtds",1.0 - Alchemical_value);
+            custom_intra_14_todummy_unscaled->addGlobalParameter("deltatd", shift_delta);
+            custom_intra_14_todummy_unscaled->addGlobalParameter("ntd", coulomb_power);
+            custom_intra_14_todummy_unscaled->addGlobalParameter("cutofftd", converted_cutoff_distance);
+
 
             std::string intra_14_fromdummy = """withinCutoff*(Hcs + Hls);"
                 "withinCutoff=step(cutofffd-r);"
@@ -1060,6 +1256,24 @@ void OpenMMFrEnergyST::initialise()
             custom_intra_14_fromdummy->addGlobalParameter("nfd", coulomb_power);
             custom_intra_14_fromdummy->addGlobalParameter("cutofffd", converted_cutoff_distance);
 
+            std::string intra_14_fromdummy_unscaled (intra_14_fromdummy);
+            intra_14_fromdummy_unscaled.append("qpstart=qpstart_unscaled*coulomb_scale;");
+            intra_14_fromdummy_unscaled.append("qpend=qpend_unscaled*coulomb_scale;");
+            intra_14_fromdummy_unscaled.append("qmix=qmix_unscaled*coulomb_scale;");
+            intra_14_fromdummy_unscaled.append("eastart=eastart_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_unscaled.append("eaend=eaend_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_unscaled.append("emix=emix_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_unscaled.append("coulomb_scale=(1-lamfd)*csci + lamfd*cscf;");
+            intra_14_fromdummy_unscaled.append("lj_scale=(1-lamfd)*ljsci + lamfd*ljscf;");
+            replace_all(intra_14_fromdummy_unscaled, "lamfd", "lamfds");
+
+            custom_intra_14_fromdummy_unscaled = new OpenMM::CustomBondForce(intra_14_fromdummy_unscaled);
+            custom_intra_14_fromdummy_unscaled->addGlobalParameter("lamfds", Alchemical_value);
+            custom_intra_14_fromdummy_unscaled->addGlobalParameter("deltafd", shift_delta);
+            custom_intra_14_fromdummy_unscaled->addGlobalParameter("nfd", coulomb_power);
+            custom_intra_14_fromdummy_unscaled->addGlobalParameter("cutofffd", converted_cutoff_distance);
+
+
             //JM 9/10/20 always set lamFTD to 0.0
 
             std::string intra_14_fromdummy_todummy = """withinCutoff*(Hcs + Hls);"
@@ -1072,8 +1286,7 @@ void OpenMMFrEnergyST::initialise()
                 "diff_lj=(1.0-lamFTD)*0.1;"
                 "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
                 "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-                //"lamFTD = max(lamftd,1-lamftd);""";
-                "lamFTD = 0;""";
+                "lamFTD = 0.0;""";
 
             if (flag_combRules == ARITHMETIC)
             {
@@ -1089,6 +1302,23 @@ void OpenMMFrEnergyST::initialise()
             custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("cutoffftd", converted_cutoff_distance);
+
+            std::string intra_14_fromdummy_todummy_unscaled (intra_14_fromdummy_todummy);
+            intra_14_fromdummy_todummy_unscaled.append("qpstart=qpstart_unscaled*coulomb_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("qpend=qpend_unscaled*coulomb_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("qmix=qmix_unscaled*coulomb_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("eastart=eastart_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("eaend=eaend_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("emix=emix_unscaled*lj_scale*lj_scale;");
+            intra_14_fromdummy_todummy_unscaled.append("coulomb_scale=(1-lamftd)*csci + lamftd*cscf;");
+            intra_14_fromdummy_todummy_unscaled.append("lj_scale=(1-lamftd)*ljsci + lamftd*ljscf;");
+            replace_all(intra_14_fromdummy_todummy_unscaled, "lamftd", "lamftds");
+
+            custom_intra_14_fromdummy_todummy_unscaled = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy_unscaled);
+            custom_intra_14_fromdummy_todummy_unscaled->addGlobalParameter("lamftds", Alchemical_value);
+            custom_intra_14_fromdummy_todummy_unscaled->addGlobalParameter("deltaftd", shift_delta);
+            custom_intra_14_fromdummy_todummy_unscaled->addGlobalParameter("nftd", coulomb_power);
+            custom_intra_14_fromdummy_todummy_unscaled->addGlobalParameter("cutoffftd", converted_cutoff_distance);
         }
 
         std::string intra_14_clj = """withinCutoff*(Hl+Hc);"
@@ -1111,6 +1341,22 @@ void OpenMMFrEnergyST::initialise()
         custom_intra_14_clj = new OpenMM::CustomBondForce(intra_14_clj) ;
         custom_intra_14_clj->addGlobalParameter("lamhd", Alchemical_value);
         custom_intra_14_clj->addGlobalParameter("cutoffhd", converted_cutoff_distance);
+
+        // Unscale intra 14 function using coulomb scale and lj scale as parameter
+        std::string intra_14_clj_unscaled (intra_14_clj);
+        intra_14_clj_unscaled.append("qpstart=qpstart_unscaled*coulomb_scale;");
+        intra_14_clj_unscaled.append("qpend=qpend_unscaled*coulomb_scale;");
+        intra_14_clj_unscaled.append("qmix=qmix_unscaled*coulomb_scale;");
+        intra_14_clj_unscaled.append("eastart=eastart_unscaled*lj_scale*lj_scale;");
+        intra_14_clj_unscaled.append("eaend=eaend_unscaled*lj_scale*lj_scale;");
+        intra_14_clj_unscaled.append("emix=emix_unscaled*lj_scale*lj_scale;");
+        intra_14_clj_unscaled.append("coulomb_scale=(1-lamhd)*csci + lamhd*cscf;");
+        intra_14_clj_unscaled.append("lj_scale=(1-lamhd)*ljsci + lamhd*ljscf;");
+        replace_all(intra_14_clj_unscaled, "lamhd", "lamhds");
+
+        custom_intra_14_clj_unscaled = new OpenMM::CustomBondForce(intra_14_clj_unscaled);
+        custom_intra_14_clj_unscaled->addGlobalParameter("lamhds", Alchemical_value);
+        custom_intra_14_clj_unscaled->addGlobalParameter("cutoffhd", converted_cutoff_distance);
 
         //REACTION FIELD 14 IMPLEMENTATION FOR FUTURE USE
 
@@ -1174,13 +1420,31 @@ void OpenMMFrEnergyST::initialise()
 
     OpenMM::CustomBondForce* solute_bond_perturbation = NULL;
 
+    // Custom soft bond potential, ref: https://pubs.acs.org/doi/10.1021/acs.jctc.6b00991
+    // Sperate by annihilation and grow
+    OpenMM::CustomBondForce* solute_bond_perturbation_grow = NULL;
+    OpenMM::CustomBondForce* solute_bond_perturbation_anni = NULL;
+
     OpenMM::CustomAngleForce* solute_angle_perturbation = NULL;
 
     solute_bond_perturbation = new OpenMM::CustomBondForce("0.5*B*(r-req)^2;"
                                                            "B=bend*lambond+(1.0-lambond)*bstart;"
                                                            "req=rend*lambond+(1.0-lambond)*rstart");
 
+    // Soft bond potential in direction grow, use angstrom as unit of length
+    solute_bond_perturbation_grow = new OpenMM::CustomBondForce("0.5*lambondg*bend*(r-rend)^2*100/deno;"
+                                                                "deno=1.0 + alpha*(1.0 - lambondg)*(r-rend)^2*100;"
+                                                                "alpha=2.0");
+
+    // Soft bond potential in direction annihilation, use angstrom as unit of length
+    solute_bond_perturbation_anni = new OpenMM::CustomBondForce("0.5*(1.0-lambonda)*bstart*(r-rstart)^2*100/deno;"
+                                                                "deno=1.0+alpha*lambonda*(r-rstart)^2*100;"
+                                                                "alpha=2.0");
+
     solute_bond_perturbation->addGlobalParameter("lambond", Alchemical_value);
+    solute_bond_perturbation_grow->addGlobalParameter("lambondg", Alchemical_value);
+    solute_bond_perturbation_anni->addGlobalParameter("lambonda", Alchemical_value);
+
 
     solute_angle_perturbation = new OpenMM::CustomAngleForce("0.5*A*(theta-thetaeq)^2;"
                                                              "A=aend*lamangle+(1.0-lamangle)*astart;"
@@ -1257,8 +1521,8 @@ void OpenMMFrEnergyST::initialise()
             Atom at = molatoms(j);
             AtomNum atnum = at.number();
 
-            if (Debug)
-                qDebug() << " openMM_index " << system_index << " Sire Atom Number " << atnum.toString() << " Mass particle = " << m[j];
+//            if (Debug)
+//                qDebug() << " openMM_index " << system_index << " Sire Atom Number " << atnum.toString() << " Mass particle = " << m[j];
 
             AtomNumToOpenMMIndex[atnum.value()] = system_index;
 
@@ -1268,8 +1532,8 @@ void OpenMMFrEnergyST::initialise()
 
             AtomName atname = at.name();
 
-            if (Debug)
-                qDebug() << " atname " << atname.value() << " mol " << i;
+//            if (Debug)
+//                qDebug() << " atname " << atname.value() << " mol " << i;
 
             if (atname == AtomName("EPW"))
             {
@@ -1367,6 +1631,21 @@ void OpenMMFrEnergyST::initialise()
     custom_intra_14_clj->addPerBondParameter("saend");
     custom_intra_14_clj->addPerBondParameter("samix");
 
+    // Unscaled parameter
+    custom_intra_14_clj_unscaled->addPerBondParameter("qpstart_unscaled");
+    custom_intra_14_clj_unscaled->addPerBondParameter("qpend_unscaled");
+    custom_intra_14_clj_unscaled->addPerBondParameter("qmix_unscaled");
+    custom_intra_14_clj_unscaled->addPerBondParameter("eastart_unscaled");
+    custom_intra_14_clj_unscaled->addPerBondParameter("eaend_unscaled");
+    custom_intra_14_clj_unscaled->addPerBondParameter("emix_unscaled");
+    custom_intra_14_clj_unscaled->addPerBondParameter("sastart");
+    custom_intra_14_clj_unscaled->addPerBondParameter("saend");
+    custom_intra_14_clj_unscaled->addPerBondParameter("samix");
+    custom_intra_14_clj_unscaled->addPerBondParameter("csci");
+    custom_intra_14_clj_unscaled->addPerBondParameter("cscf");
+    custom_intra_14_clj_unscaled->addPerBondParameter("ljsci");
+    custom_intra_14_clj_unscaled->addPerBondParameter("ljscf");
+
     custom_intra_14_todummy->addPerBondParameter("qpstart");
     custom_intra_14_todummy->addPerBondParameter("qpend");
     custom_intra_14_todummy->addPerBondParameter("qmix");
@@ -1376,6 +1655,20 @@ void OpenMMFrEnergyST::initialise()
     custom_intra_14_todummy->addPerBondParameter("sastart");
     custom_intra_14_todummy->addPerBondParameter("saend");
     custom_intra_14_todummy->addPerBondParameter("samix");
+
+    custom_intra_14_todummy_unscaled->addPerBondParameter("qpstart_unscaled");
+    custom_intra_14_todummy_unscaled->addPerBondParameter("qpend_unscaled");
+    custom_intra_14_todummy_unscaled->addPerBondParameter("qmix_unscaled");
+    custom_intra_14_todummy_unscaled->addPerBondParameter("eastart_unscaled");
+    custom_intra_14_todummy_unscaled->addPerBondParameter("eaend_unscaled");
+    custom_intra_14_todummy_unscaled->addPerBondParameter("emix_unscaled");
+    custom_intra_14_todummy_unscaled->addPerBondParameter("sastart");
+    custom_intra_14_todummy_unscaled->addPerBondParameter("saend");
+    custom_intra_14_todummy_unscaled->addPerBondParameter("samix");
+    custom_intra_14_todummy_unscaled->addPerBondParameter("csci");
+    custom_intra_14_todummy_unscaled->addPerBondParameter("cscf");
+    custom_intra_14_todummy_unscaled->addPerBondParameter("ljsci");
+    custom_intra_14_todummy_unscaled->addPerBondParameter("ljscf");
 
     custom_intra_14_fromdummy->addPerBondParameter("qpstart");
     custom_intra_14_fromdummy->addPerBondParameter("qpend");
@@ -1387,6 +1680,20 @@ void OpenMMFrEnergyST::initialise()
     custom_intra_14_fromdummy->addPerBondParameter("saend");
     custom_intra_14_fromdummy->addPerBondParameter("samix");
 
+    custom_intra_14_fromdummy_unscaled->addPerBondParameter("qpstart_unscaled");
+    custom_intra_14_fromdummy_unscaled->addPerBondParameter("qpend_unscaled");
+    custom_intra_14_fromdummy_unscaled->addPerBondParameter("qmix_unscaled");
+    custom_intra_14_fromdummy_unscaled->addPerBondParameter("eastart_unscaled");
+    custom_intra_14_fromdummy_unscaled->addPerBondParameter("eaend_unscaled");
+    custom_intra_14_fromdummy_unscaled->addPerBondParameter("emix_unscaled");
+    custom_intra_14_fromdummy_unscaled->addPerBondParameter("sastart");
+    custom_intra_14_fromdummy_unscaled->addPerBondParameter("saend");
+    custom_intra_14_fromdummy_unscaled->addPerBondParameter("samix");
+    custom_intra_14_fromdummy_unscaled->addPerBondParameter("csci");
+    custom_intra_14_fromdummy_unscaled->addPerBondParameter("cscf");
+    custom_intra_14_fromdummy_unscaled->addPerBondParameter("ljsci");
+    custom_intra_14_fromdummy_unscaled->addPerBondParameter("ljscf");
+
     custom_intra_14_fromdummy_todummy->addPerBondParameter("qpstart");
     custom_intra_14_fromdummy_todummy->addPerBondParameter("qpend");
     custom_intra_14_fromdummy_todummy->addPerBondParameter("qmix");
@@ -1397,12 +1704,32 @@ void OpenMMFrEnergyST::initialise()
     custom_intra_14_fromdummy_todummy->addPerBondParameter("saend");
     custom_intra_14_fromdummy_todummy->addPerBondParameter("samix");
 
+    custom_intra_14_fromdummy_todummy_unscaled->addPerBondParameter("qpstart_unscaled");
+    custom_intra_14_fromdummy_todummy_unscaled->addPerBondParameter("qpend_unscaled");
+    custom_intra_14_fromdummy_todummy_unscaled->addPerBondParameter("qmix_unscaled");
+    custom_intra_14_fromdummy_todummy_unscaled->addPerBondParameter("eastart_unscaled");
+    custom_intra_14_fromdummy_todummy_unscaled->addPerBondParameter("eaend_unscaled");
+    custom_intra_14_fromdummy_todummy_unscaled->addPerBondParameter("emix_unscaled");
+    custom_intra_14_fromdummy_todummy_unscaled->addPerBondParameter("sastart");
+    custom_intra_14_fromdummy_todummy_unscaled->addPerBondParameter("saend");
+    custom_intra_14_fromdummy_todummy_unscaled->addPerBondParameter("samix");
+    custom_intra_14_fromdummy_todummy_unscaled->addPerBondParameter("csci");
+    custom_intra_14_fromdummy_todummy_unscaled->addPerBondParameter("cscf");
+    custom_intra_14_fromdummy_todummy_unscaled->addPerBondParameter("ljsci");
+    custom_intra_14_fromdummy_todummy_unscaled->addPerBondParameter("ljscf");
+
     /*BONDED PER PARTICLE PARAMETERS*/
 
     solute_bond_perturbation->addPerBondParameter("bstart");
     solute_bond_perturbation->addPerBondParameter("bend");
     solute_bond_perturbation->addPerBondParameter("rstart");
     solute_bond_perturbation->addPerBondParameter("rend");
+
+    solute_bond_perturbation_grow->addPerBondParameter("bend");
+    solute_bond_perturbation_grow->addPerBondParameter("rend");
+
+    solute_bond_perturbation_anni->addPerBondParameter("bstart");
+    solute_bond_perturbation_anni->addPerBondParameter("rstart");
 
     solute_angle_perturbation->addPerAngleParameter("astart");
     solute_angle_perturbation->addPerAngleParameter("aend");
@@ -1414,20 +1741,19 @@ void OpenMMFrEnergyST::initialise()
 
     int nions = 0;
 
-    QVector<bool> perturbed_energies_tmp(8);
+    QVector<bool> perturbed_energies_tmp(14);
 
     for (int i = 0; i < perturbed_energies_tmp.size(); i++)
         perturbed_energies_tmp[i] = false;
 
 
-    // The default 1,4 scaling factors
-    double const Coulomb14Scale = 1.0 / 1.2;
-    double const LennardJones14Scale = 1.0 / 2.0;
 
     // A list of 1,4 atom pairs with non default scale factors
     // for each entry, first pair has pair of indices, second has pair of scale factors
     //QList< QPair< QPair<int,int>, QPair<double, double > > > custom14pairs;
     QHash< QPair<int, int>, QPair<double, double> > custom14pairs;
+
+    QHash< QPair<int, int>, QPair< QPair<double, double>, QPair<double, double> > > scaleperts;
 
     bool special_14 = false;
 
@@ -1774,6 +2100,9 @@ void OpenMMFrEnergyST::initialise()
             QList< PropPtr<Perturbation> > perturbation_list = pert_params.perturbations();
 
             std::vector<double> solute_bond_perturbation_params(4);
+            std::vector<double> solute_bond_perturbation_params_grow(2);
+            std::vector<double> solute_bond_perturbation_params_anni(2);
+
             std::vector<double> solute_angle_perturbation_params(4);
             std::vector<double> solute_torsion_perturbation_params(1);
 
@@ -1786,7 +2115,6 @@ void OpenMMFrEnergyST::initialise()
                 if (pert.isA<InternalPerturbation>())
                 {
                     QString str = pert.what();
-
                     if (str == "SireMM::TwoAtomPerturbation")
                     {
                         const TwoAtomPerturbation &two = pert.asA<TwoAtomPerturbation>();
@@ -1802,10 +2130,30 @@ void OpenMMFrEnergyST::initialise()
                         solute_bond_perturbation_params[2] = rstart * OpenMM::NmPerAngstrom;
                         solute_bond_perturbation_params[3] = rend * OpenMM::NmPerAngstrom;
 
+                        solute_bond_perturbation_params_grow[0] = bend * 2.0 * OpenMM::KJPerKcal;
+                        solute_bond_perturbation_params_grow[1] = rend * OpenMM::NmPerAngstrom;
+
+                        solute_bond_perturbation_params_anni[0] = bstart * 2.0 * OpenMM::KJPerKcal;
+                        solute_bond_perturbation_params_anni[1] = rstart * OpenMM::NmPerAngstrom; 
+
                         /* JM 10/16 Also apply this if 'no solute constraints' flag is on*/
                         if (flag_constraint == NONE)
                         {
-                            solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
+                            if (abs(bstart) < SMALL)
+                            {
+                                // When the initial force constant of the bond is zero
+                                solute_bond_perturbation_grow->addBond(idx0, idx1, solute_bond_perturbation_params_grow);
+
+                            }
+                            else if (abs(bend) < SMALL)
+                            {
+                                // When the final force constant of the bond is zero
+                                solute_bond_perturbation_anni->addBond(idx0, idx1, solute_bond_perturbation_params_anni);
+                            }
+                            else
+                            {
+                                solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
+                            }
                         }
                         else if (flag_constraint == ALLBONDS || flag_constraint == HANGLES)
                         {
@@ -1865,12 +2213,35 @@ void OpenMMFrEnergyST::initialise()
                           /* other bonds are flexible */
                           else
                           {
-                              solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
+                            if (abs(bstart) < SMALL)
+                            {
+                                // When the initial force constant of the bond is zero
+                                solute_bond_perturbation_grow->addBond(idx0, idx1, solute_bond_perturbation_params_grow);
+                               if (Debug)
+                               {
+                                   qDebug() << "add soft grow bond" << atom0.name().toString()
+                                            << "- " << atom1.name().toString() << "\n";
+                               }
+                            }
+                            else if (abs(bend) < SMALL)
+                            {
+                                // When the final force constant of the bond is zero
+                                solute_bond_perturbation_anni->addBond(idx0, idx1, solute_bond_perturbation_params_anni);
+                               if (Debug)
+                               {
+                                   qDebug() << "add soft anni bond " << atom0.name().toString()
+                                            << "- " << atom1.name().toString() << "\n";
+                               }
+                            }
+                            else
+                            {
+                                solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
                                if (Debug)
                                {
                                    qDebug() << "perturbed bond flexible " << atom0.name().toString()
                                             << "- " << atom1.name().toString() << "\n";
                                }
+                            }
                           }
                         }
                         else if (flag_constraint == HBONDS)
@@ -1899,7 +2270,20 @@ void OpenMMFrEnergyST::initialise()
                             }
                             else
                             {
-                                solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
+                                if (abs(bstart) < SMALL)
+                                {
+                                    // When the initial force constant of the bond is zero
+                                    solute_bond_perturbation_grow->addBond(idx0, idx1, solute_bond_perturbation_params_grow);
+                                }
+                                else if (abs(bend) < SMALL)
+                                {
+                                    // When the final force constant of the bond is zero
+                                    solute_bond_perturbation_anni->addBond(idx0, idx1, solute_bond_perturbation_params_anni);
+                                }
+                                else
+                                {
+                                    solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
+                                }
                             }
 
                             if (Debug)
@@ -2224,7 +2608,7 @@ void OpenMMFrEnergyST::initialise()
                         solute_torsion_perturbation->addTorsion(idx0, idx1, idx2, idx3, solute_torsion_perturbation_params);
 
                         //********************************BONDED ENERGY TORSIONS ARE ADDED TO THE SYSTEM*****************************
-                        solute_torsion_perturbation->setForceGroup(0);
+                        solute_torsion_perturbation->setForceGroup(17);
                         system_openmm->addForce(solute_torsion_perturbation);
 
                         perturbed_energies_tmp[7] = true; //Torsions are added to the system
@@ -2244,6 +2628,36 @@ void OpenMMFrEnergyST::initialise()
                         }
                     }
 
+                    if (str == "SireMM::ScalePerturbation")
+                    {
+                        const ScalePerturbation &scale = pert.asA<ScalePerturbation>();
+
+                        const SireMol::Atom atom0 = molecule.select(scale.atom0());
+                        const SireMol::Atom atom1 = molecule.select(scale.atom1());
+
+                        int idx0 = scale.atom0().asA<AtomIdx>().value() + num_atoms_till_i;
+                        int idx1 = scale.atom1().asA<AtomIdx>().value() + num_atoms_till_i;
+                        double csci = scale.getcsci();
+                        double cscf = scale.getcscf();
+                        double ljsci = scale.getljsci();
+                        double ljscf = scale.getljscf();
+                        if (Debug)
+                        {
+                            qDebug() << "Atom0 = " << atom0.name().toString() << "Atom1 = " << atom1.name().toString()
+                                    << "Idx0 = " << idx0 << "Idx1 = " << idx1
+                                    << "csci = " << csci 
+                                    << "ljsci = " << ljsci 
+                                    << "cscf = " << cscf
+                                    << "ljscf = " << ljscf
+                                    << "\n";
+                        }
+
+                        QPair<int, int> indices_pair(idx0, idx1);
+                        QPair<double, double> charge_scale(csci, cscf);
+                        QPair<double, double> lj_scale(ljsci, ljscf);
+                        QPair<QPair<double, double>, QPair<double, double>> scale_pair(charge_scale, lj_scale);
+                        scaleperts.insert(indices_pair, scale_pair);
+                    }
                 }
             }//end for perturbations
 
@@ -2509,8 +2923,8 @@ void OpenMMFrEnergyST::initialise()
             double cscl = pair14_params[0];
             double ljscl = pair14_params[1];
 
-            if (Debug)
-                qDebug() << " cscl@ " << cscl << " ljscl " << ljscl;
+            // if (Debug)
+                // qDebug() << " cscl@ " << cscl << " ljscl " << ljscl;
 
             // Add to custom pairs if scale factor differs from default
             if (abs(cscl - Coulomb14Scale) > 0.0001 or abs(ljscl - LennardJones14Scale) > 0.0001)
@@ -2571,43 +2985,202 @@ void OpenMMFrEnergyST::initialise()
         if (Debug)
             qDebug() << "Exception = " << i << " p1 = " << p1 << " p2 = " << p2 << " charge prod = " << charge_prod << " sigma avg = " << sigma_avg << " epsilon_avg = " << epsilon_avg << "\n";
 
-        if (!(charge_prod == 0 && sigma_avg == 1 && epsilon_avg == 0))
+        // Find pairs which lj and charge scale parameter changed during perturbation
+        bool is_pert = false;
+        QPair<int, int> idx_pair(p1, p2);
+        QHash<QPair<int, int>, QPair<QPair<double, double>, QPair<double, double>>>::const_iterator pert_pair = scaleperts.find(idx_pair);
+        QPair<int, int> idx_swap_pair(p2, p1);
+        QHash<QPair<int, int>, QPair<QPair<double, double>, QPair<double, double>>>::const_iterator pert_swap_pair = scaleperts.find(idx_swap_pair);
+
+        QPair<QPair<double, double>, QPair<double, double>> scale_parameter;
+        QPair<double, double> charge_scale_parameter;
+        QPair<double, double> lj_scale_parameter;
+        double csci, cscf, ljsci, ljscf;
+
+        if (pert_pair != scaleperts.end())
+        {
+            is_pert = true;
+            scale_parameter = pert_pair.value();
+            charge_scale_parameter = scale_parameter.first;
+            lj_scale_parameter = scale_parameter.second;
+            csci = charge_scale_parameter.first;
+            cscf = charge_scale_parameter.second;
+            ljsci = lj_scale_parameter.first;
+            ljscf = lj_scale_parameter.second;
+        }
+
+        if (pert_swap_pair != scaleperts.end())
+        {
+            is_pert = true;
+            scale_parameter = pert_swap_pair.value();
+            charge_scale_parameter = scale_parameter.first;
+            lj_scale_parameter = scale_parameter.second;
+            csci = charge_scale_parameter.first;
+            cscf = charge_scale_parameter.second;
+            ljsci = lj_scale_parameter.first;
+            ljscf = lj_scale_parameter.second;
+        }
+
+        std::vector<double> perturbed_14_tmp(13);
+
+        std::vector<double> p1_params(10);
+        std::vector<double> p2_params(10);
+
+        custom_force_field->getParticleParameters(p1, p1_params);
+        custom_force_field->getParticleParameters(p2, p2_params);
+
+        double Qstart_p1 = p1_params[0];
+        double Qend_p1 = p1_params[1];
+        double Epstart_p1 = p1_params[2];
+        double Epend_p1 = p1_params[3];
+        double Sigstart_p1 = p1_params[4];
+        double Sigend_p1 = p1_params[5];
+        double isHard_p1 = p1_params[6];
+        double isTodummy_p1 = p1_params[7];
+        double isFromdummy_p1 = p1_params[8];
+
+        double Qstart_p2 = p2_params[0];
+        double Qend_p2 = p2_params[1];
+        double Epstart_p2 = p2_params[2];
+        double Epend_p2 = p2_params[3];
+        double Sigstart_p2 = p2_params[4];
+        double Sigend_p2 = p2_params[5];
+        double isHard_p2 = p2_params[6];
+        double isTodummy_p2 = p2_params[7];
+        double isFromdummy_p2 = p2_params[8];
+
+        double charge_prod_start, charge_prod_end, charge_prod_mix;
+        double sigma_avg_start, sigma_avg_end, sigma_avg_mix;
+        double epsilon_avg_start, epsilon_avg_end, epsilon_avg_mix;
+
+        double charge_prod_start_unscaled, charge_prod_end_unscaled, charge_prod_mix_unscaled;
+        double epsilon_avg_start_unscaled, epsilon_avg_end_unscaled, epsilon_avg_mix_unscaled;
+
+        double Coulomb14Scale_tmp = Coulomb14Scale;
+        double LennardJones14Scale_tmp = LennardJones14Scale;
+        double SMALL = 0.0001;
+        // When scale paramters changed during perturbation
+        if (is_pert)
+        {
+            charge_prod_start_unscaled = Qstart_p1 * Qstart_p2;
+            charge_prod_end_unscaled = Qend_p1 * Qend_p2;
+            charge_prod_mix_unscaled =Qend_p1 * Qstart_p2 + Qstart_p1 * Qend_p2;
+            epsilon_avg_start_unscaled = Epstart_p1 * Epstart_p2;
+            epsilon_avg_end_unscaled = Epend_p1 * Epend_p2;
+            epsilon_avg_mix_unscaled = Epend_p1 * Epstart_p2 + Epstart_p1 * Epend_p2;
+
+            if (flag_combRules == ARITHMETIC)
+            {
+                sigma_avg_start = (Sigstart_p1 + Sigstart_p2) / 2.0;
+                sigma_avg_end = (Sigend_p1 + Sigend_p2) / 2.0;
+                sigma_avg_mix = (Sigend_p1 * Sigstart_p2 + Sigstart_p1 * Sigend_p2) / 2.0;
+            }
+            else if (flag_combRules == GEOMETRIC)
+            {
+                sigma_avg_start = Sigstart_p1 * Sigstart_p2 ;
+                sigma_avg_end = Sigend_p1 * Sigend_p2 ;
+                sigma_avg_mix = Sigend_p1 * Sigstart_p2 + Sigstart_p1 * Sigend_p2 ;
+            }
+            perturbed_14_tmp[0] = charge_prod_start_unscaled;
+            perturbed_14_tmp[1] = charge_prod_end_unscaled;
+            perturbed_14_tmp[2] = charge_prod_mix_unscaled;
+            perturbed_14_tmp[3] = epsilon_avg_start_unscaled;
+            perturbed_14_tmp[4] = epsilon_avg_end_unscaled;
+            perturbed_14_tmp[5] = epsilon_avg_mix_unscaled;
+            perturbed_14_tmp[6] = sigma_avg_start;
+            perturbed_14_tmp[7] = sigma_avg_end;
+            perturbed_14_tmp[8] = sigma_avg_mix;
+            perturbed_14_tmp[9] = csci;
+            perturbed_14_tmp[10] = cscf;
+            perturbed_14_tmp[11] = ljsci;
+            perturbed_14_tmp[12] = ljscf;
+
+            if (Debug)
+            {
+
+                qDebug() << "Particle p1 = " << p1 << "\nQstart = " << Qstart_p1 << "\nQend = " << Qend_p1
+                    << "\nEpstart = " << Epstart_p1 << "\nEpend = " << Epend_p1
+                    << "\nSgstart = " << Sigstart_p1 << "\nSgend = " << Sigend_p1
+                    << "\nisHard = " << isHard_p1 << "\nisTodummy = " << isTodummy_p1 << "\nisFromdummy = " << isFromdummy_p1 << "\n";
+                qDebug() << "Particle p2 = " << p2 << "\nQstart = " << Qstart_p2 << "\nQend = " << Qend_p2
+                    << "\nEpstart = " << Epstart_p2 << "\nEpend = " << Epend_p2
+                    << "\nSgstart = " << Sigstart_p2 << "\nSgend = " << Sigend_p2
+                    << "\nisHard = " << isHard_p2 << "\nisTodummy = " << isTodummy_p2 << "\nisFromdummy = " << isFromdummy_p2 << "\n";
+
+                qDebug() << "Product Charge start = " << charge_prod_start_unscaled
+                         << "\nProduct Charge end = " << charge_prod_end_unscaled
+                         << "\nProduct Chrage mixed = " << charge_prod_mix_unscaled
+                    << "\nEpsilon average start = " << epsilon_avg_start_unscaled
+                    << "\nEpsilon average end = " << epsilon_avg_end_unscaled
+                    << "\nEpsilon average mixed = " << charge_prod_mix_unscaled
+                    << "\nSigma average start = " << sigma_avg_start << "\nSigma average end = " << sigma_avg_end;
+                qDebug() << "Columbic Scale Factor = " << csci <<"\t" << cscf <<
+                            " Lennard-Jones Scale Factor = " << ljsci << "\t" << ljscf << "\n";
+            }
+
+            // When the atom is alwasy hard and scale parameter is not zero
+            if ((isHard_p1 == 1.0 && isHard_p2 == 1.0 && csci > SMALL && ljsci > SMALL && cscf > SMALL && ljscf > SMALL))
+            {
+                custom_intra_14_clj_unscaled->addBond(p1, p2, perturbed_14_tmp);
+                if (Debug)
+                    qDebug() << "Added pert clj hard 1-4 \n";
+            }
+
+            // else if ((isFromdummy_p1 == 1.0 && isTodummy_p2 == 1.0) || (isFromdummy_p2 == 1.0 && isTodummy_p1 == 1.0) || ((isFromdummy_p1 == 1.0 || isFromdummy_p2 == 1.0) && ljscf < SMALL) || ((isTodummy_p1 == 1.0 || isTodummy_p2==1.0) && ljsci < SMALL))
+            // {
+            //     custom_intra_14_fromdummy_todummy_unscaled->addBond(p1, p2, perturbed_14_tmp);
+
+            //     if (Debug)
+            //         qDebug() << "Added pert soft FROM dummy TO dummy 1-4\n";
+            // }
+
+            else if (ljscf < SMALL)
+            {
+                custom_intra_14_todummy_unscaled->addBond(p1, p2, perturbed_14_tmp);
+
+                if (Debug)
+                    qDebug() << "Added pert soft TO dummy 1-4\n";
+
+            }
+            else if (ljsci < SMALL)
+            {
+                custom_intra_14_fromdummy_unscaled->addBond(p1, p2, perturbed_14_tmp);
+
+                if (Debug)
+                    qDebug() << "Added pert soft FROM dummy 1-4\n";
+
+            }
+
+            // When there is todummy atom in the pair or the final scale parameter is zero
+            else if ((isTodummy_p1 == 1.0 && isTodummy_p2 == 1.0) || (isHard_p1 == 1.0 && isTodummy_p2 == 1.0) || (isHard_p2 == 1.0 && isTodummy_p1 == 1.0))
+            {
+                custom_intra_14_todummy_unscaled->addBond(p1, p2, perturbed_14_tmp);
+
+                if (Debug)
+                    qDebug() << "Added pert soft TO dummy 1-4\n";
+            }
+
+            // When there is fromdummy atom in the pair or the initial scale parameter is zero
+            else if ((isFromdummy_p1 == 1.0 && isFromdummy_p2 == 1.0) || (isHard_p1 == 1.0 && isFromdummy_p2 == 1.0) || (isHard_p2 == 1.0 && isFromdummy_p1 == 1.0))
+            {
+                custom_intra_14_fromdummy_unscaled->addBond(p1, p2, perturbed_14_tmp);
+
+                if (Debug)
+                    qDebug() << "Added pert soft FROM dummy 1-4\n";
+            }
+
+            else if ((isFromdummy_p1 == 1.0 && isTodummy_p2 == 1.0) || (isFromdummy_p2 == 1.0 && isTodummy_p1 == 1.0))
+            {
+                custom_intra_14_fromdummy_todummy_unscaled->addBond(p1, p2, perturbed_14_tmp);
+
+                if (Debug)
+                    qDebug() << "Added pert soft FROM dummy TO dummy 1-4\n";
+            }
+        }
+        // No scale parameter changed during perturbation
+        else if (!(charge_prod == 0 && sigma_avg == 1 && epsilon_avg == 0))
         {//1-4 interactions
 
-            QVector<double> perturbed_14_tmp(13);
-
-            std::vector<double> p1_params(10);
-            std::vector<double> p2_params(10);
-
-            custom_force_field->getParticleParameters(p1, p1_params);
-            custom_force_field->getParticleParameters(p2, p2_params);
-
-            double Qstart_p1 = p1_params[0];
-            double Qend_p1 = p1_params[1];
-            double Epstart_p1 = p1_params[2];
-            double Epend_p1 = p1_params[3];
-            double Sigstart_p1 = p1_params[4];
-            double Sigend_p1 = p1_params[5];
-            double isHard_p1 = p1_params[6];
-            double isTodummy_p1 = p1_params[7];
-            double isFromdummy_p1 = p1_params[8];
-
-            double Qstart_p2 = p2_params[0];
-            double Qend_p2 = p2_params[1];
-            double Epstart_p2 = p2_params[2];
-            double Epend_p2 = p2_params[3];
-            double Sigstart_p2 = p2_params[4];
-            double Sigend_p2 = p2_params[5];
-            double isHard_p2 = p2_params[6];
-            double isTodummy_p2 = p2_params[7];
-            double isFromdummy_p2 = p2_params[8];
-
-            double charge_prod_start, charge_prod_end, charge_prod_mix;
-            double sigma_avg_start, sigma_avg_end, sigma_avg_mix;
-            double epsilon_avg_start, epsilon_avg_end, epsilon_avg_mix;
-
-            double Coulomb14Scale_tmp = Coulomb14Scale;
-            double LennardJones14Scale_tmp = LennardJones14Scale;
 
             if (special_14)
             {
@@ -2745,7 +3318,7 @@ void OpenMMFrEnergyST::initialise()
 
     if (npairs != num_exceptions)
     {
-        custom_force_field->setForceGroup(0);
+        custom_force_field->setForceGroup(1);
         system_openmm->addForce(custom_force_field);
         perturbed_energies_tmp[0] = true; //Custom non bonded 1-5 is added to the system
         if (Debug)
@@ -2754,45 +3327,81 @@ void OpenMMFrEnergyST::initialise()
 
     if (custom_intra_14_clj->getNumBonds() != 0)
     {
-        custom_intra_14_clj->setForceGroup(0);
+        custom_intra_14_clj->setForceGroup(2);
         system_openmm->addForce(custom_intra_14_clj);
         perturbed_energies_tmp[1] = true; //Custom non bonded 1-4 is added to the system
         if (Debug)
             qDebug() << "Added 1-4 CLJ";
     }
 
+    if (custom_intra_14_clj_unscaled->getNumBonds() != 0)
+    {
+        custom_intra_14_clj_unscaled->setForceGroup(3);
+        system_openmm->addForce(custom_intra_14_clj_unscaled);
+        perturbed_energies_tmp[8] = true; // Custom unscaled non bonded 1-4 is added to the system
+        if (Debug)
+            qDebug() << "Added pert 1-4 clj";
+    }
+
     if (custom_intra_14_todummy->getNumBonds() != 0)
     {
-        custom_intra_14_todummy->setForceGroup(0);
+        custom_intra_14_todummy->setForceGroup(4);
         system_openmm->addForce(custom_intra_14_todummy);
         perturbed_energies_tmp[2] = true; //Custom non bonded 1-4 is added to the system
         if (Debug)
             qDebug() << "Added 1-4 To Dummy";
     }
 
+    if (custom_intra_14_todummy_unscaled->getNumBonds() !=0)
+    {
+        custom_intra_14_todummy_unscaled->setForceGroup(5);
+        system_openmm->addForce(custom_intra_14_todummy_unscaled);
+        perturbed_energies_tmp[9] = true; // Custom unscaled non bonded to dummy 1-4 is added to the system
+        if (Debug)
+            qDebug() << "Added pert 1-4 to dummy";
+    }
 
     if (custom_intra_14_fromdummy->getNumBonds() != 0)
     {
-        custom_intra_14_fromdummy->setForceGroup(0);
+        custom_intra_14_fromdummy->setForceGroup(6);
         system_openmm->addForce(custom_intra_14_fromdummy);
         perturbed_energies_tmp[3] = true; //Custom non bonded 1-4 is added to the system
         if (Debug)
             qDebug() << "Added 1-4 From Dummy";
     }
+
+    if (custom_intra_14_fromdummy_unscaled->getNumBonds() != 0)
+    {
+        custom_intra_14_fromdummy_unscaled->setForceGroup(7);
+        system_openmm->addForce(custom_intra_14_fromdummy_unscaled);
+        perturbed_energies_tmp[10] = true; // Custom unscaled non bonded from dummy 1-4 is added to the system
+        if (Debug)
+            qDebug() << "Added pert 1-4 from dummy";
+    }
+
     if (custom_intra_14_fromdummy_todummy->getNumBonds() != 0)
     {
-        custom_intra_14_fromdummy_todummy->setForceGroup(0);
+        custom_intra_14_fromdummy_todummy->setForceGroup(8);
         system_openmm->addForce(custom_intra_14_fromdummy_todummy);
         perturbed_energies_tmp[4] = true; //Custom non bonded 1-4 is added to the system
         if (Debug)
             qDebug() << "Added 1-4 From Dummy To Dummy";
     }
 
+    if (custom_intra_14_fromdummy_todummy_unscaled->getNumBonds() != 0)
+    {
+        custom_intra_14_fromdummy_todummy_unscaled->setForceGroup(9);
+        system_openmm->addForce(custom_intra_14_fromdummy_todummy_unscaled);
+        perturbed_energies_tmp[11] = true; // Custom unscaled non bonded  1-4 from dummy to dummy
+        if (Debug)
+            qDebug() << "Added pert 1-4 from dummy to dummy";
+    }
+
     /*****************************************BONDED INTERACTIONS***********************************************/
 
     if (bondStretch_openmm->getNumBonds() != 0)
     {
-        bondStretch_openmm->setForceGroup(1);
+        bondStretch_openmm->setForceGroup(10);
         system_openmm->addForce(bondStretch_openmm);
         if (Debug)
             qDebug() << "Added Internal Bond energy term";
@@ -2800,7 +3409,7 @@ void OpenMMFrEnergyST::initialise()
 
     if (bondBend_openmm->getNumAngles() != 0)
     {
-        bondBend_openmm->setForceGroup(1);
+        bondBend_openmm->setForceGroup(11);
         system_openmm->addForce(bondBend_openmm);
         if (Debug)
             qDebug() << "Added Internal Angle energy term";
@@ -2808,7 +3417,7 @@ void OpenMMFrEnergyST::initialise()
 
     if (bondTorsion_openmm->getNumTorsions() != 0)
     {
-        bondTorsion_openmm->setForceGroup(1);
+        bondTorsion_openmm->setForceGroup(12);
         system_openmm->addForce(bondTorsion_openmm);
         if (Debug)
             qDebug() << "Added Internal Torsion energy term";
@@ -2816,16 +3425,35 @@ void OpenMMFrEnergyST::initialise()
 
     if (solute_bond_perturbation->getNumBonds() != 0)
     {
-        solute_bond_perturbation->setForceGroup(0);
+        solute_bond_perturbation->setForceGroup(13);
         system_openmm->addForce(solute_bond_perturbation);
         perturbed_energies_tmp[5] = true; //Custom bonded is added to the system
         if (Debug)
             qDebug() << "Added Perturbed Internal Bond energy term";
     }
 
+    if (solute_bond_perturbation_anni->getNumBonds() != 0)
+    {
+        solute_bond_perturbation_anni->setForceGroup(14);
+        system_openmm->addForce(solute_bond_perturbation_anni);
+        perturbed_energies_tmp[12] = true; // Custom soft bond annihilation potential
+        if (Debug)
+            qDebug() << "Added perturbed soft anni energy term";
+
+    }
+
+    if (solute_bond_perturbation_grow->getNumBonds() !=0)
+    {
+        solute_bond_perturbation_grow->setForceGroup(15);
+        system_openmm->addForce(solute_bond_perturbation_grow);
+        perturbed_energies_tmp[13] = true; // Custom soft bond grow potential
+        if (Debug)
+            qDebug() << "Added perturbed soft grow energy term";
+    }
+
     if (solute_angle_perturbation->getNumAngles() != 0)
     {
-        solute_angle_perturbation->setForceGroup(0);
+        solute_angle_perturbation->setForceGroup(16);
         system_openmm->addForce(solute_angle_perturbation);
         perturbed_energies_tmp[6] = true; //Custom bonded is added to the system
         if (Debug)
@@ -2841,53 +3469,49 @@ void OpenMMFrEnergyST::initialise()
 
     if (UseLink_flag == true)
     {
-        for (int i = 0; i < nmols; i++)
+        Molecule molecule = moleculegroup.moleculeAt(0).molecule();
+
+        bool haslinkinfo = molecule.hasProperty("linkbonds");
+
+        if (haslinkinfo)
         {
-            Molecule molecule = moleculegroup.moleculeAt(i).molecule();
+            std::vector<double> custom_bond_link_par(3);
 
-            if (molecule.hasProperty("linkbonds"))
+            Properties linkprop = molecule.property("linkbonds").asA<Properties>();
+
+            int nlinks = linkprop.property(QString("nbondlinks")).asA<VariantProperty>().toInt();
+
+            if (Debug)
+                qDebug() << "Number of constraint links = " << nlinks;
+
+            for (int i = 0; i < nlinks; i++)
             {
-                std::vector<double> custom_bond_link_par(3);
+                int atomnum0 = linkprop.property(QString("AtomNum0(%1)").arg(i)).asA<VariantProperty>().toInt();
+                int atomnum1 = linkprop.property(QString("AtomNum1(%1)").arg(i)).asA<VariantProperty>().toInt();
+                double reql = linkprop.property(QString("reql(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double kl = linkprop.property(QString("kl(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double dl = linkprop.property(QString("dl(%1)").arg(i)).asA<VariantProperty>().toDouble();
 
-                const auto linkprop = molecule.property("linkbonds").asA<Properties>();
+                int openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
+                int openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
 
-                const auto nlinks = linkprop.property(QString("nbondlinks")).asA<VariantProperty>().toInt();
+                custom_bond_link_par[0] = reql * OpenMM::NmPerAngstrom; //req
+                custom_bond_link_par[1] = kl * (OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); //k
+                custom_bond_link_par[2] = dl * OpenMM::NmPerAngstrom; //dl
 
                 if (Debug)
-                    qDebug() << "Number of constraint links = " << nlinks;
-
-                for (int i = 0; i < nlinks; i++)
                 {
-                    const auto atomnum0 = linkprop.property(QString("AtomNum0(%1)").arg(i)).asA<VariantProperty>().toInt();
-                    const auto atomnum1 = linkprop.property(QString("AtomNum1(%1)").arg(i)).asA<VariantProperty>().toInt();
-                    const auto reql = linkprop.property(QString("reql(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    const auto kl = linkprop.property(QString("kl(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    const auto dl = linkprop.property(QString("dl(%1)").arg(i)).asA<VariantProperty>().toDouble();
-
-                    const int openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
-                    const int openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
-
-                    custom_bond_link_par[0] = reql * OpenMM::NmPerAngstrom; //req
-                    custom_bond_link_par[1] = kl * (OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); //k
-                    custom_bond_link_par[2] = dl * OpenMM::NmPerAngstrom; //dl
-
-                    if (Debug)
-                    {
-                        qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
-                        qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
-                        qDebug() << "Req = " << reql << " kl = " << kl << " dl = " << dl;
-                    }
-
-                    custom_link_bond->addBond(openmmindex0, openmmindex1, custom_bond_link_par);
+                    qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
+                    qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
+                    qDebug() << "Req = " << reql << " kl = " << kl << " dl = " << dl;
                 }
 
-                system_openmm->addForce(custom_link_bond);
-
-                // We've found the molecule, exit the outer loop.
-                break;
-
+                custom_link_bond->addBond(openmmindex0, openmmindex1, custom_bond_link_par);
             }
-        }//end of loop over molecules in system
+
+            system_openmm->addForce(custom_link_bond);
+        }
+
     }//end of bond link flag
 
     this->openmm_system = system_openmm;
@@ -2942,8 +3566,6 @@ void OpenMMFrEnergyST::createContext(IntegratorWorkspace &workspace, SireUnits::
             integrator_openmm = new OpenMM::VariableVerletIntegrator(integration_tol); //integration tolerance error unitless
         else if (Integrator_type == "langevin")
             integrator_openmm = new OpenMM::LangevinIntegrator(converted_Temperature, converted_friction, dt);
-        else if (Integrator_type == "langevinmiddle")
-            integrator_openmm = new OpenMM::LangevinMiddleIntegrator(converted_Temperature, converted_friction, dt);
         else if (Integrator_type == "variablelangevin")
             integrator_openmm = new OpenMM::VariableLangevinIntegrator(converted_Temperature, converted_friction, integration_tol);
         else if (Integrator_type == "brownian")
@@ -3470,7 +4092,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
     {
         //*********************MD STEPS****************************
         (openmm_context->getIntegrator()).step(energy_frequency);
-        state_openmm = openmm_context->getState(infoMask, false, 0x01);
+        state_openmm = openmm_context->getState(infoMask, false, 0b111110001111111111);
         double p_energy_lambda = state_openmm.getPotentialEnergy();
         if (Debug)
         {
@@ -3490,7 +4112,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
         {
             openmm_context->setParameter("SPOnOff", 1.0); //Solvent-Solvent and Protein Protein Non Bonded OFF
         }
-        state_openmm = openmm_context->getState(infoMask, false, 0x01);
+        state_openmm = openmm_context->getState(infoMask, false, 0b111110001111111111);
 
         if (Debug)
             qDebug() << "Total Time = " << state_openmm.getTime() << " ps";
@@ -3641,10 +4263,28 @@ double OpenMMFrEnergyST::getPotentialEnergyAtLambda(double lambda)
     infoMask = infoMask + OpenMM::State::Energy;
     updateOpenMMContextLambda(lambda);
     OpenMM::State state_openmm = openmm_context->getState(infoMask);
-    state_openmm = openmm_context->getState(infoMask, false, 0x01);
+    state_openmm = openmm_context->getState(infoMask, false, 0b111110001111111111);
     curr_potential_energy = state_openmm.getPotentialEnergy();
     return curr_potential_energy;
 }
+
+QVector<double> OpenMMFrEnergyST::printEnergyAtLambda(double lambda)
+{
+
+    int infoMask = OpenMM::State::Energy;
+    updateOpenMMContextLambda(lambda);
+    OpenMM::State state_openmm = openmm_context->getState(infoMask);
+    QVector<double> energies(19, 0.0); 
+    for (int i = 0; i<=18; i++)
+    {
+        state_openmm = openmm_context->getState(infoMask, false, 1<<i);
+        energies[i] =  state_openmm.getPotentialEnergy();
+    }
+    qDebug() << lambda << energies << endl;
+    return energies;
+
+}
+
 
 void OpenMMFrEnergyST::updateOpenMMContextLambda(double lambda)
 {
@@ -3660,6 +4300,20 @@ void OpenMMFrEnergyST::updateOpenMMContextLambda(double lambda)
         openmm_context->setParameter("lamfd", lambda); //1-4 From Dummy
     if (perturbed_energies[4])
         openmm_context->setParameter("lamftd", lambda); //1-4 From Dummy to Dummy
+    
+    if (perturbed_energies[8])
+        openmm_context->setParameter("lamhds", lambda);
+    if (perturbed_energies[9])
+        openmm_context->setParameter("lamtds", 1.0 - lambda);
+    if (perturbed_energies[10])
+        openmm_context->setParameter("lamfds", lambda);
+    if (perturbed_energies[11])
+        openmm_context->setParameter("lamftds", lambda);
+    if (perturbed_energies[12])
+        openmm_context->setParameter("lambonda", lambda);
+    if (perturbed_energies[13])
+        openmm_context->setParameter("lambondg", lambda);
+        
 
     //BONDED PERTURBED TERMS
     if (perturbed_energies[5])
@@ -3679,6 +4333,9 @@ boost::tuples::tuple<double, double, double> OpenMMFrEnergyST::calculateGradient
     double potential_energy_lambda_minus_delta;
     double forward_m;
     double backward_m;
+
+    bool Debug = true;
+
     if (incr_plus < 1.0)
     {
         potential_energy_lambda_plus_delta = getPotentialEnergyAtLambda(incr_plus);
@@ -3692,12 +4349,38 @@ boost::tuples::tuple<double, double, double> OpenMMFrEnergyST::calculateGradient
         gradient = (potential_energy_lambda_plus_delta-p_energy_lambda)*2/double_increment;
         backward_m = exp(beta * (potential_energy_lambda_plus_delta - p_energy_lambda));
         forward_m = exp(-beta * (potential_energy_lambda_plus_delta - p_energy_lambda));
+
+        if (Debug && (gradient > 10000 || gradient < -10000))
+        {
+            qDebug() << "-----------------" << endl;
+            QVector<double> incr_energies = printEnergyAtLambda(incr_plus);
+            QVector<double> curr_energies = printEnergyAtLambda(0.0);
+            QVector<double> diffe(19, 0.0);
+            for (int i = 0; i<=18; i++)
+            {
+                diffe[i] = incr_energies[i] - curr_energies[i];
+            }
+            qDebug() << diffe << endl;
+        }
     }
     else if(incr_plus > 1.0)
     {
         gradient = -(potential_energy_lambda_minus_delta-p_energy_lambda)*2/double_increment;
         backward_m = exp(-beta * (potential_energy_lambda_minus_delta - p_energy_lambda));
         forward_m = exp(beta * (potential_energy_lambda_minus_delta - p_energy_lambda));
+
+        if (Debug && (gradient > 10000 || gradient < -10000))
+        {
+            qDebug() << "-----------------" << endl;
+            QVector<double> incr_energies = printEnergyAtLambda(incr_minus);
+            QVector<double> curr_energies = printEnergyAtLambda(1.0);
+            QVector<double> diffe(19, 0.0);
+            for (int i = 0; i<=18; i++)
+            {
+                diffe[i] = incr_energies[i] - curr_energies[i];
+            }
+            qDebug() << diffe << endl;
+        }
     }
     else
     {
@@ -3706,6 +4389,7 @@ boost::tuples::tuple<double, double, double> OpenMMFrEnergyST::calculateGradient
         backward_m = exp(-beta * (potential_energy_lambda_minus_delta - p_energy_lambda));
         forward_m = exp(-beta * (potential_energy_lambda_plus_delta - p_energy_lambda));
     }
+
     return boost::tuples::make_tuple(gradient, forward_m, backward_m);
 }
 

@@ -115,6 +115,11 @@ public:
     void setFinalBondK(const BondID &bond, const double &k);
     void setFinalBondR(const BondID &bond, const double &r);
 
+    void setInitScaleC(const BondID &bond, const double &sc);
+    void setInitScaleLJ(const BondID &bond, const double &sc);
+    void setFinalScaleC(const BondID &bond, const double &sc);
+    void setFinalScaleLJ(const BondID &bond, const double &sc);
+
     void setInitAngleK(const AngleID &angle, const double &k);
     void setInitAngleT(const AngleID &angle, const double &r);
     void setFinalAngleK(const AngleID &angle, const double &k);
@@ -158,6 +163,12 @@ public:
     double getInitBondR(const BondID &bond) const;
     double getFinalBondK(const BondID &bond) const;
     double getFinalBondR(const BondID &bond) const;
+
+    QList<BondID> getScaledBonds() const;
+    double getInitScaleC(const BondID &bond) const;
+    double getInitScaleLJ(const BondID &bond) const;
+    double getFinalScaleC(const BondID &bond) const;
+    double getFinalScaleLJ(const BondID &bond) const;
 
     QList<AngleID> getAngles() const;
     double getInitAngleK(const AngleID &angle) const;
@@ -238,6 +249,12 @@ private:
     //QHash<ImproperID,double> finalimpropersk0;
     //QHash<ImproperID,double> finalimpropersn;    
     //QHash<ImproperID,double> finalimpropersphase;
+
+    // clj scale parameters
+    QHash<BondID, double> initscalec;
+    QHash<BondID, double> initscalelj;
+    QHash<BondID, double> finalscalec;
+    QHash<BondID, double> finalscalelj;
 
 };
 
