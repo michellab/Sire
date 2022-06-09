@@ -15,8 +15,10 @@ build:
 
 requirements:
   build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
+    - {{ compiler('c') }} # [not osx]
+    - {{ compiler('cxx') }} # [not osx]
+    - clang 13.0.1 # [osx]
+    - clangxx 13.0.1 # [osx]
     - cmake
     - git
     - make
