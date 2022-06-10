@@ -1686,9 +1686,22 @@ QVector<GroAtom> GroMolType::atoms(bool is_lambda1) const
     }
 
     if (is_lambda1)
-        return atms1;
+        return this->atms1;
     else
-        return atms0;
+        return this->atms0;
+}
+
+/** Set the atoms to the passed vector */
+void GroMolType::setAtoms(const QVector<GroAtom> &atoms, bool is_lambda1)
+{
+    // The molecule is not perturbable!
+    if (is_lambda1 and not this->is_perturbable)
+        throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
+
+    if (is_lambda1)
+        this->atms1 = atoms;
+    else
+        this->atms0 = atoms;
 }
 
 /** Return all of the atoms in the specified residue */
@@ -2734,13 +2747,14 @@ static QStringList writeDefaults(const MMDetail &ffield)
 /** Internal function used to write all of the atom types. This function requires
     that the atom types for all molecules are all consistent, i.e. atom type
     X has the same mass, vdw parameters, element type etc. for all molecules */
-static QStringList writeAtomTypes(const QMap<QPair<int,QString>,GroMolType> &moltyps,
+static QStringList writeAtomTypes(QMap<QPair<int,QString>,GroMolType> &moltyps,
                                   const QMap<QPair<int,QString>,Molecule> &molecules,
                                   const MMDetail &ffield,
                                   const PropertyMap &map)
 {
     //first, build up a dictionary of all of the unique atom types
     QHash<QString,QString> atomtypes;
+    QHash<QString,QString> param_hash;
 
     auto elemprop = map["element"];
     auto massprop = map["mass"];
@@ -2749,9 +2763,9 @@ static QStringList writeAtomTypes(const QMap<QPair<int,QString>,GroMolType> &mol
     //get the combining rules - these determine the format of the LJ parameter in the file
     const int combining_rules = _getCombiningRulesFromFF(ffield);
 
-    for (auto it = moltyps.constBegin(); it != moltyps.constEnd(); ++it)
+    for (auto it = moltyps.begin(); it != moltyps.end(); ++it)
     {
-        const auto moltyp = it.value();
+        auto moltyp = it.value();
 
         // Store whether the molecule is perturbable.
         const auto is_perturbable = moltyp.isPerturbable();
@@ -2770,11 +2784,15 @@ static QStringList writeAtomTypes(const QMap<QPair<int,QString>,GroMolType> &mol
             ljprop = map["LJ"];
         }
 
-        const auto &atoms = moltyp.atoms();
+        // Whether we need to update the atoms.
+        bool update_atoms0 = false;
+        bool update_atoms1 = false;
+
+        auto atoms = moltyp.atoms();
 
         for (int i=0; i<atoms.count(); ++i)
         {
-            const auto &atom = atoms[i];
+            auto atom = atoms[i];
             auto atomtype = atom.atomType();
 
             // Get the corresponding atom in the molecule.
@@ -2825,17 +2843,111 @@ static QStringList writeAtomTypes(const QMap<QPair<int,QString>,GroMolType> &mol
                          .arg(particle_type, 6)
                          .arg(std::get<0>(ljparams), 10, 'f', 6)
                          .arg(std::get<1>(ljparams), 10, 'f', 6) );
+
+                // Hash the atom type against its parameter string, minus the type.
+                param_hash.insert(atomtypes[atomtype].mid(6), atomtype);
             }
+            // This type has been seen before.
+            else
+            {
+                // Create the type string.
+                auto type_string = QString(" %1        %2  %3  %4  %5  %6  %7")
+                            .arg(atomtype, 5)
+                            .arg(elem.nProtons(), 4)
+                            .arg(elem.mass().to(g_per_mol), 10, 'f', 6)
+                            .arg(chg, 10, 'f', 6)
+                            .arg(particle_type, 6)
+                            .arg(std::get<0>(ljparams), 10, 'f', 6)
+                            .arg(std::get<1>(ljparams), 10, 'f', 6);
+
+                // The parameters for this type differ.
+                if (atomtypes[atomtype] != type_string)
+                {
+                    // First check the values to see if there's an existing type
+                    // with these parameters.
+                    const auto params = param_hash.keys();
+                    const auto param_string = type_string.mid(6);
+
+                    // A type already exists with these parameters.
+                    if (params.contains(type_string.mid(6)))
+                    {
+                        // Use the existing type.
+                        atomtype = param_hash[param_string];
+
+                        // Set the type.
+                        atom.setAtomType(atomtype);
+
+                        // Update the atoms in the vector.
+                        atoms[i] = atom;
+
+                        // Flag that the atoms need to be updated.
+                        update_atoms0 = true;
+                    }
+
+                    // Create a new type.
+                    else
+                    {
+                        // Whether this type has already been added.
+                        bool is_added = false;
+
+                        // Append "x" until we have a new type.
+                        while (atomtypes.contains(atomtype))
+                        {
+                            atomtype += "x";
+
+                            // Recreate the type string.
+                            type_string = QString(" %1        %2  %3  %4  %5  %6  %7")
+                                        .arg(atomtype, 5)
+                                        .arg(elem.nProtons(), 4)
+                                        .arg(elem.mass().to(g_per_mol), 10, 'f', 6)
+                                        .arg(chg, 10, 'f', 6)
+                                        .arg(particle_type, 6)
+                                        .arg(std::get<0>(ljparams), 10, 'f', 6)
+                                        .arg(std::get<1>(ljparams), 10, 'f', 6);
+
+                            // Make sure we haven't already added this type.
+                            if (atomtypes.contains(atomtype) and
+                                atomtypes[atomtype] == type_string)
+                            {
+                                is_added = true;
+                                break;
+                            }
+                        }
+
+                        // Set the type.
+                        atom.setAtomType(atomtype);
+
+                        // Add the new type.
+                        if (not is_added)
+                        {
+                            atomtypes.insert(atomtype, type_string);
+                            param_hash.insert(type_string.mid(6), atomtype);
+                        }
+
+                        // Update the atoms in the vector.
+                        atoms[i] = atom;
+
+                        // Flag that the atoms need to be updated.
+                        update_atoms0 = true;
+                    }
+                }
+            }
+        }
+
+        // Update the atoms.
+        if (update_atoms0)
+        {
+            moltyp.setAtoms(atoms);
         }
 
         // Add additional atom types from lambda = 1.
         if (is_perturbable)
         {
-            const auto &atoms = moltyp.atoms(true);
+            auto atoms = moltyp.atoms(true);
 
             for (int i=0; i<atoms.count(); ++i)
             {
-                const auto &atom = atoms[i];
+                auto atom = atoms[i];
                 auto atomtype = atom.atomType();
 
                 // Get the corresponding atom in the molecule.
@@ -2876,8 +2988,109 @@ static QStringList writeAtomTypes(const QMap<QPair<int,QString>,GroMolType> &mol
                              .arg(particle_type, 6)
                              .arg(std::get<0>(ljparams), 10, 'f', 6)
                              .arg(std::get<1>(ljparams), 10, 'f', 6) );
+
+                    // Hash the atom type against its parameter string, minus the type.
+                    param_hash.insert(atomtypes[atomtype].mid(6), atomtype);
+                }
+
+                // This type has been seen before.
+                else
+                {
+                    // Create the type string.
+                    auto type_string = QString(" %1        %2  %3  %4  %5  %6  %7")
+                             .arg(atomtype, 5)
+                             .arg(elem.nProtons(), 4)
+                             .arg(elem.mass().to(g_per_mol), 10, 'f', 6)
+                             .arg(chg, 10, 'f', 6)
+                             .arg(particle_type, 6)
+                             .arg(std::get<0>(ljparams), 10, 'f', 6)
+                             .arg(std::get<1>(ljparams), 10, 'f', 6);
+
+                    // The parameters for this type differ.
+                    if (atomtypes[atomtype] != type_string)
+                    {
+                        // First check the values to see if there's an existing type
+                        // with these parameters.
+                        const auto params = param_hash.keys();
+                        const auto param_string = type_string.mid(6);
+
+                        // A type already exists with these parameters.
+                        if (params.contains(type_string.mid(6)))
+                        {
+                            // Use the existing type.
+                            atomtype = param_hash[param_string];
+
+                            // Set the type.
+                            atom.setAtomType(atomtype);
+
+                            // Update the atoms in the vector.
+                            atoms[i] = atom;
+
+                            // Flag that the atoms need to be updated.
+                            update_atoms1 = true;
+                        }
+
+                        // Create a new type.
+                        else
+                        {
+                            // Whether this type has already been added.
+                            bool is_added = false;
+
+                            // Append "x" until we have a new type.
+                            while (atomtypes.contains(atomtype))
+                            {
+                                atomtype += "x";
+
+                                // Recreate the type string.
+                                type_string = QString(" %1        %2  %3  %4  %5  %6  %7")
+                                            .arg(atomtype, 5)
+                                            .arg(elem.nProtons(), 4)
+                                            .arg(elem.mass().to(g_per_mol), 10, 'f', 6)
+                                            .arg(chg, 10, 'f', 6)
+                                            .arg(particle_type, 6)
+                                            .arg(std::get<0>(ljparams), 10, 'f', 6)
+                                            .arg(std::get<1>(ljparams), 10, 'f', 6);
+
+                                // Make sure we haven't already added this type.
+                                if (atomtypes.contains(atomtype) and
+                                    atomtypes[atomtype] == type_string)
+                                {
+                                    is_added = true;
+                                    break;
+                                }
+                            }
+
+                            // Set the type.
+                            atom.setAtomType(atomtype);
+
+                            // Add the new type.
+                            if (not is_added)
+                            {
+                                atomtypes.insert(atomtype, type_string);
+                                param_hash.insert(type_string.mid(6), atomtype);
+                            }
+
+                            // Update the atoms in the vector.
+                            atoms[i] = atom;
+
+                            // Flag that the atoms need to be updated.
+                            update_atoms1 = true;
+                        }
+                    }
                 }
             }
+
+            // Update the atoms.
+            if (update_atoms1)
+            {
+                moltyp.setAtoms(atoms, true);
+            }
+        }
+
+        // Update the map.
+        if (update_atoms0 or update_atoms1)
+        {
+            moltyps[it.key()] = moltyp;
         }
     }
 
