@@ -1,5 +1,5 @@
 
-__all__ = ["use_old_api", "use_new_api"]
+__all__ = ["use_old_api", "use_new_api", "use_mixed_api"]
 
 
 def _upper_split(data):
@@ -110,7 +110,7 @@ def _pythonize(C, delete_old: bool=True) -> None:
             #        pass
 
 
-def _pythonize_modules(modules):
+def _pythonize_modules(modules, delete_old: bool = True):
     """Pythonize all classes in the passed module"""
 
     for MOD in modules:
@@ -118,7 +118,7 @@ def _pythonize_modules(modules):
 
         try:
             for (key, cls) in inspect.getmembers(MOD, inspect.isclass):
-                _pythonize(cls)
+                _pythonize(cls, delete_old=delete_old)
         except Exception as e:
             print(e)
             print(f"Failed to pythonize {MOD}")
@@ -128,12 +128,65 @@ _is_using_old_api = None
 _is_using_new_api = None
 
 
+def use_mixed_api():
+    """Load Sire using both the new (python-style) and old APIs. This
+       is useful for migrating old scripts as a temporary porting option.
+       You can start writing functions using the new API, safe in the
+       knowledge that the old API functions will still work.
+
+       Do aim to finish your port though, else you will forever have
+       a duplicated API (e.g. have both X.nAtoms() and X.num_atoms() etc.)
+    """
+    global _is_using_new_api, _is_using_old_api
+
+    if _is_using_old_api or _is_using_new_api:
+        msg = "Cannot import sire using the mixed API as either the old " \
+              "or new APIs have already been activated."
+        print(msg)
+
+        raise ImportError(msg)
+
+    # First, bring in the old API
+    use_old_api()
+
+    # Now, bring in the new API
+    _is_using_new_api = True
+
+    # call Pythonize on all of the new modules
+    from . import move, io, system, squire, mm, ff, mol, \
+        analysis, base, cas, cluster, error, \
+        id, maths, qt, stream, units, vol
+
+    _pythonize_modules([analysis._Analysis,
+                        base._Base,
+                        cas._CAS,
+                        cluster._Cluster,
+                        error._Error,
+                        ff._FF,
+                        id._ID,
+                        io._IO,
+                        maths._Maths,
+                        mm._MM,
+                        mol._Mol,
+                        move._Move,
+                        qt._Qt,
+                        squire._Squire,
+                        stream._Stream,
+                        system._System,
+                        units._Units,
+                        vol._Vol], delete_old=False)
+
+
 def use_new_api():
     """Load Sire using the new (python-style) API. This will be called
        automatically when you load any of the new Python modules, so you
        shouldn't need to call this yourself.
     """
     global _is_using_new_api, _is_using_old_api
+
+    if _is_using_new_api:
+        # already done
+        return
 
     if _is_using_old_api:
         msg = "Cannot import sire using the new API as the old API has " \
@@ -142,10 +195,6 @@ def use_new_api():
         print(msg)
 
         raise ImportError(msg)
-
-    if _is_using_new_api:
-        # already done
-        return
 
     _is_using_new_api = True
 
