@@ -2945,8 +2945,57 @@ SelectEnginePtr IDDistanceVectorEngine::simplify()
 
 SelectResult IDDistanceVectorEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    // this needs completely rewriting
-    return SelectResult();
+    QList<MolViewPtr> ret;
+
+    const auto coords_property = map["coordinates"];
+
+    SireVol::SpacePtr space = SireVol::Cartesian();
+
+    if (map["space"].hasValue())
+    {
+        space = map["space"].value().asA<SireVol::Space>();
+    }
+
+    // turn the reference point into a single-point CoordGroup
+    Vector point((position.x.value * position.x.unit).to(SireUnits::angstrom),
+                 (position.y.value * position.y.unit).to(SireUnits::angstrom),
+                 (position.z.value * position.z.unit).to(SireUnits::angstrom));
+
+    QVector<Vector> ref_coords(1, point);
+    CoordGroup ref_group(ref_coords);
+
+    for (const auto &mol : mols)
+    {
+        // expand this molecule into the views that are requested
+        const auto expanded = _expand(*mol, this->objectType(), map);
+
+        QList<qint64> idxs;
+        idxs.reserve(expanded->count());
+
+        for (int i=0; i<expanded->count(); ++i)
+        {
+            const auto view = expanded->operator[](i);
+
+            QVector<Vector> coords = _get_coords(view->atoms(),
+                                                 coords_property, *space);
+
+            if (_is_within(coords, ref_group, distance, typ, *space))
+            {
+                idxs.append(i);
+            }
+        }
+
+        if (idxs.count() == expanded->count())
+        {
+            ret.append(expanded);
+        }
+        else if (not idxs.isEmpty())
+        {
+            ret.append(expanded->operator[](idxs));
+        }
+    }
+
+    return SelectResult(ret);
 }
 
 SelectEngine::ObjType IDDistanceVectorEngine::objectType() const
