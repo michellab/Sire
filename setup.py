@@ -188,9 +188,10 @@ _is_conda_prepped = False
 
 def conda_install(dependencies):
     """Install the passed list of dependencies using conda"""
-    if mamba is None:
-        conda_exe = conda
-    else:
+
+    conda_exe = conda
+
+    if (not is_windows) and (mamba is not None):
         conda_exe = mamba
 
     global _is_conda_prepped
@@ -422,14 +423,18 @@ def build(ncores: int = 1, npycores: int = 1,
                     v = args.corelib.pop(i)[0]
                     if (not a in os.environ):
                         os.environ[a] = v.split("=")[-1]
+
         add_default_cmake_defs(args.corelib, ncores)
+
         cmake_cmd = [cmake, *sum([["-D", d[0]] for d in args.corelib], []),
                      *sum([["-G", g[0]] for g in args.generator], []),
                      sourcedir]
+
         if (CC):
             os.environ["CC"] = CC
         if (CXX):
             os.environ["CXX"] = CXX
+
         print(" ".join(cmake_cmd))
         sys.stdout.flush()
         status = subprocess.run(cmake_cmd)
@@ -486,9 +491,11 @@ def build(ncores: int = 1, npycores: int = 1,
             sys.exit(-1)
 
         add_default_cmake_defs(args.wrapper, npycores)
+
         cmake_cmd = [cmake, *sum([["-D", d[0]] for d in args.wrapper], []),
                      *sum([["-G", g[0]] for g in args.generator], []),
                      sourcedir]
+
         print(" ".join(cmake_cmd))
         sys.stdout.flush()
         status = subprocess.run(cmake_cmd)
@@ -625,6 +632,9 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     action = args.action[0]
+
+    if is_windows and (args.generator is None or len(args.generator) == 0):
+        args.generator = [["Visual Studio 15 2017 Win64"]]
 
     if action == "install":
         if not (args.skip_deps or args.skip_build):
