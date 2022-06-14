@@ -2,6 +2,9 @@ build_core
 build_wrapper
 xcode
 build/miniconda.sh
+build/*_corelib/*
+build/*_wrapper/*
+build/*_module/*
 build/corelib/*
 build/wrapper/*
 build/module/*
