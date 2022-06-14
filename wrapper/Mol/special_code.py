@@ -219,6 +219,8 @@ def fix_ConnectivityEditor(c):
     c.decls( "connect" ).call_policies = call_policies.return_self()
     c.decls( "disconnect" ).call_policies = call_policies.return_self()
     c.decls( "disconnectAll" ).call_policies = call_policies.return_self()
+    c.decls( "setProperty" ).call_policies = call_policies.return_self()
+    c.decls( "removeProperty" ).call_policies = call_policies.return_self()
 
 def fix_MGNum(c):
     c.add_declaration_code( "#include \"mgid.h\"" )
@@ -390,6 +392,10 @@ special_code = { "SireMol::Atom" : fix_Atom,
                  "AtomIntProperty" : fix_MolViewProperty,
                  "AtomFloatProperty" : fix_MolViewProperty,
                  "AtomVariantProperty" : fix_MolViewProperty,
+                 "AtomPropertyList" : fix_MolViewProperty,
+                 "AtomDoubleArrayProperty" : fix_MolViewProperty,
+                 "AtomIntegerArrayProperty" : fix_MolViewProperty,
+                 "AtomStringArrayProperty" : fix_MolViewProperty,
                  "BeadStringProperty" : fix_MolViewProperty,
                  "BeadIntProperty" : fix_MolViewProperty,
                  "BeadFloatProperty" : fix_MolViewProperty,
@@ -418,6 +424,7 @@ special_code = { "SireMol::Atom" : fix_Atom,
                  "AtomEnergies" : fix_MolViewProperty,
                  "AtomForces" : fix_MolViewProperty,
                  "AtomMasses"  : fix_MolViewProperty,
+                 "AtomRadicals" : fix_MolViewProperty,
                  "AtomVelocities" : fix_MolViewProperty,
                  "AtomPolarisabilities" : fix_MolViewProperty,
                  "AtomRadii" : fix_MolViewProperty,

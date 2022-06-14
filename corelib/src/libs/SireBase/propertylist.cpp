@@ -30,6 +30,7 @@
 #include "stringproperty.h"
 #include "numberproperty.h"
 #include "arrayproperty.hpp"
+#include "variantproperty.h"
 
 #include "SireError/errors.h"
 
@@ -80,6 +81,11 @@ namespace SireBase
     PropertyPtr wrap(const QString &value)
     {
         return StringProperty(value);
+    }
+
+    PropertyPtr wrap(const char *value)
+    {
+        return wrap(QString(value));
     }
 
     PropertyPtr wrap(double value)
@@ -136,6 +142,57 @@ namespace SireBase
     PropertyPtr wrap(const QStringList &values)
     {
         return StringArrayProperty(values);
+    }
+
+    PropertyPtr wrap(const QVariant &value)
+    {
+        qDebug() << "WRAP" << value.toString();
+        //qDebug() << value.canConvert<SireBase::Property>();
+        return PropertyPtr(VariantProperty(value));
+    }
+
+    PropertyPtr wrap(const QVector<QVariant> &values)
+    {
+        if (values.count() == 0)
+        {
+            return PropertyPtr();
+        }
+        else if (values.count() == 1)
+        {
+            return wrap(values.at(0));
+        }
+        else
+        {
+            PropertyList vals;
+            for (const auto &value : values)
+            {
+                vals.append(wrap(value));
+            }
+
+            return vals;
+        }
+    }
+
+    PropertyPtr wrap(const QList<QVariant> &values)
+    {
+        if (values.count() == 0)
+        {
+            return PropertyPtr();
+        }
+        else if (values.count() == 1)
+        {
+            return wrap(values.at(0));
+        }
+        else
+        {
+            PropertyList vals;
+            for (const auto &value : values)
+            {
+                vals.append(wrap(value));
+            }
+
+            return vals;
+        }
     }
 }
 

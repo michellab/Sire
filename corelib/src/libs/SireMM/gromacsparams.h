@@ -123,6 +123,7 @@ public:
     QString toString() const;
 
     QString atomType() const;
+    void setAtomType(const QString& atom_type);
     QString bondType() const;
     SireUnits::Dimension::MolarMass mass() const;
     SireUnits::Dimension::Charge charge() const;

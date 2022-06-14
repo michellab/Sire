@@ -514,7 +514,8 @@ void OpenMMFrEnergyST::initialise()
               "LJ=((sigma_avg * sigma_avg)/soft)^3;"
               "soft=(diff_lj*delta*sigma_avg + r*r);"
               "diff_lj=(1.0-lambda) * 0.1;"
-              "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+              //"lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+              "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * 0 + Logic_hard;"
               "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
               "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
               "B_om_lam = max(isHD1*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), C_om_lam);"
@@ -609,7 +610,8 @@ void OpenMMFrEnergyST::initialise()
                 "diff_lj=(1.0-lamFTD)*0.1;"
                 "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
                 "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-                "lamFTD = max(lamftd,1-lamftd);""";
+                //"lamFTD = max(lamftd,1-lamftd);""";
+                "lamFTD = 0.0;""";
 
             if (flag_combRules == ARITHMETIC)
             {
@@ -638,7 +640,8 @@ void OpenMMFrEnergyST::initialise()
               "LJ=((sigma_avg * sigma_avg)/soft)^3;"
               "soft=(diff_lj*delta*sigma_avg + r*r);"
               "diff_lj=(1.0-lambda) * 0.1;"
-              "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+              //"lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+              "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * 0 + Logic_hard;"
               "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
               "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
               "B_om_lam = max(isHD1*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), C_om_lam);"
@@ -733,7 +736,8 @@ void OpenMMFrEnergyST::initialise()
               "diff_lj=(1.0-lamFTD)*0.1;"
               "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
               "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-              "lamFTD = max(lamftd,1-lamftd);""";
+              //"lamFTD = max(lamftd,1-lamftd);""";
+              "lamFTD = 0.0;""";
 
             if (flag_combRules == ARITHMETIC)
             {
@@ -799,7 +803,8 @@ void OpenMMFrEnergyST::initialise()
              "LJ=((sigma_avg * sigma_avg)/soft)^3;"
              "soft=(diff_lj*delta*sigma_avg + r*r);"
              "diff_lj=(1.0-lambda) * 0.1;"
-             "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+             //"lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+             "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * 0 + Logic_hard;"
              "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
              "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
              "B_om_lam = max(isHD1*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), C_om_lam);"
@@ -914,7 +919,8 @@ void OpenMMFrEnergyST::initialise()
             "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
             "sigma_avg = lamftd*saend + (1-lamftd)*sastart;"
             "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-            "lamFTD = max(lamftd,1-lamftd);""";
+            //"lamFTD = max(lamftd,1-lamftd);""";
+            "lamFTD = 0.0;""";
 
             if (flag_combRules == ARITHMETIC)
             {
@@ -947,7 +953,8 @@ void OpenMMFrEnergyST::initialise()
              "LJ=((sigma_avg * sigma_avg)/soft)^3;"
              "soft=(diff_lj*delta*sigma_avg + r*r);"
              "diff_lj=(1.0-lambda) * 0.1;"
-             "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+             //"lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * max(lam,1.0-lam) + Logic_hard;"
+             "lambda = Logic_lam * lam + Logic_om_lam * (1.0-lam) + Logic_mix_lam * 0 + Logic_hard;"
              "Logic_hard = isHD1 * isHD2 * (1.0-isTD1) * (1.0-isTD2) * (1.0-isFD1) * (1.0-isFD2);"
              "Logic_om_lam = max((1.0-isHD1)*(1.0-isHD2)*isTD1*isTD2*(1.0-isFD1)*(1.0-isFD2), B_om_lam);"
              "B_om_lam = max(isHD1*(1.0-isHD2)*isTD1*(1.0-isTD2)*(1.0-isFD1)*(1.0-isFD2), C_om_lam);"
@@ -1065,7 +1072,8 @@ void OpenMMFrEnergyST::initialise()
                 "diff_lj=(1.0-lamFTD)*0.1;"
                 "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
                 "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-                "lamFTD = max(lamftd,1-lamftd);""";
+                //"lamFTD = max(lamftd,1-lamftd);""";
+                "lamFTD = 0;""";
 
             if (flag_combRules == ARITHMETIC)
             {

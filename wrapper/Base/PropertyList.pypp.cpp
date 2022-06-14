@@ -24,6 +24,8 @@ namespace bp = boost::python;
 
 #include "tostring.h"
 
+#include "variantproperty.h"
+
 #include "propertylist.h"
 
 SireBase::PropertyList __copy__(const SireBase::PropertyList &other){ return SireBase::PropertyList(other); }

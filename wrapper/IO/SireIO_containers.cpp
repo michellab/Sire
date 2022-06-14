@@ -41,7 +41,7 @@
 #include "SireIO/moleculeparser.h"
 #include "SireIO/grotop.h"
 
-#include "SireMol/molnum.h"
+#include "SireMol/molidx.h"
 
 #include "SireSystem/system.h"
 
@@ -58,7 +58,7 @@ void register_SireIO_containers()
     register_list< QVector<GroMolType> >();
     register_list< QVector<GroAtom> >();
 
-    register_dict< QHash<MolNum,MolNum> >();
+    register_dict< QHash<MolIdx,MolIdx> >();
 
-    register_tuple< boost::tuple<System,QHash<MolNum,MolNum>> >();
+    register_tuple< boost::tuple<System,QHash<MolIdx,MolIdx>> >();
 }

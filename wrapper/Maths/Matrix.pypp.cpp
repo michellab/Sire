@@ -33,6 +33,8 @@ namespace bp = boost::python;
 
 #include <gsl/gsl_eigen.h>
 
+#include <gsl/gsl_errno.h>
+
 #include <gsl/gsl_linalg.h>
 
 #include <gsl/gsl_matrix.h>
