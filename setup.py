@@ -143,7 +143,7 @@ def parse_args():
         help="Skip the build of the C++ code (only use if you know that "
              "the C++ code is already built)")
     parser.add_argument("action", nargs="*",
-        help="Should be one of 'install_requires', 'build', 'install' or 'install_module.\n"
+        help="Should be one of 'install_requires', 'build', 'install' or 'install_module'.\n"
              "\n [install_requires] : Just install the conda dependencies.\n"
              " [build] : 'install_requires' plus compile and install corelib, and just compile the wrappers.\n"
              " [install] : 'build' plus install the wrappers and install the module.\n"
@@ -658,3 +658,7 @@ if __name__ == "__main__":
 
     elif action == "install_module":
         install_module(ncores=args.ncores)
+
+    else:
+        print(f"Unrecognised action '{action}'. Please use 'install_requires', "
+              "'build', 'install' or 'install_module'")
