@@ -1233,9 +1233,9 @@ void OpenMMFrEnergyST::initialise()
     custom_boresch_dist_rest->addPerBondParameter("equil_val");
     custom_boresch_dist_rest->setUsesPeriodicBoundaryConditions(true);
     if (perturbed_energies[8])
-        custom_link_bond->addGlobalParameter("lamrest", lambda);
+        custom_boresch_dist_rest->addGlobalParameter("lamrest", lambda);
     // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
-    else custom_link_bond->addGlobalParameter("lamrest", 1);
+    else custom_boresch_dist_rest->addGlobalParameter("lamrest", 1);
 
     /****************************************BORESCH ANGLE POTENTIAL*****************************/
 
@@ -1244,9 +1244,9 @@ void OpenMMFrEnergyST::initialise()
     custom_boresch_angle_rest->addPerAngleParameter("equil_val");
     custom_boresch_angle_rest->setUsesPeriodicBoundaryConditions(true);
     if (perturbed_energies[8])
-        custom_link_bond->addGlobalParameter("lamrest", lambda);
+        custom_boresch_angle_rest->addGlobalParameter("lamrest", lambda);
     // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
-    else custom_link_bond->addGlobalParameter("lamrest", 1);
+    else custom_boresch_angle_rest->addGlobalParameter("lamrest", 1);
 
     /****************************************BORESCH DIHEDRAL POTENTIAL*****************************/
 
@@ -1256,9 +1256,9 @@ void OpenMMFrEnergyST::initialise()
     custom_boresch_dihedral_rest->addPerTorsionParameter("equil_val");
     custom_boresch_dihedral_rest->setUsesPeriodicBoundaryConditions(true);
     if (perturbed_energies[8])
-        custom_link_bond->addGlobalParameter("lamrest", lambda);
+        custom_boresch_dihedral_rest->addGlobalParameter("lamrest", lambda);
     // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
-    else custom_link_bond->addGlobalParameter("lamrest", 1);
+    else custom_boresch_dihedral_rest->addGlobalParameter("lamrest", 1);
 
     //OpenMM vector coordinate
     std::vector<OpenMM::Vec3> positions_openmm(nats);
