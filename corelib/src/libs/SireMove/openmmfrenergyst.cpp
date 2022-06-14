@@ -1222,7 +1222,7 @@ void OpenMMFrEnergyST::initialise()
     // If in turn on receptor-ligand restraints mode, default value of lamrest needs to be lambda, because
     // the default value is used for the first nrg_freq timesteps before being set by updateOpenMMContextLambda
     if (perturbed_energies[8])
-        custom_link_bond->addGlobalParameter("lamrest", lambda);
+        custom_link_bond->addGlobalParameter("lamrest", Alchemical_value);
     // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
     else custom_link_bond->addGlobalParameter("lamrest", 1);
 
@@ -1233,7 +1233,7 @@ void OpenMMFrEnergyST::initialise()
     custom_boresch_dist_rest->addPerBondParameter("equil_val");
     custom_boresch_dist_rest->setUsesPeriodicBoundaryConditions(true);
     if (perturbed_energies[8])
-        custom_boresch_dist_rest->addGlobalParameter("lamrest", lambda);
+        custom_boresch_dist_rest->addGlobalParameter("lamrest", Alchemical_value);
     // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
     else custom_boresch_dist_rest->addGlobalParameter("lamrest", 1);
 
@@ -1244,7 +1244,7 @@ void OpenMMFrEnergyST::initialise()
     custom_boresch_angle_rest->addPerAngleParameter("equil_val");
     custom_boresch_angle_rest->setUsesPeriodicBoundaryConditions(true);
     if (perturbed_energies[8])
-        custom_boresch_angle_rest->addGlobalParameter("lamrest", lambda);
+        custom_boresch_angle_rest->addGlobalParameter("lamrest", Alchemical_value);
     // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
     else custom_boresch_angle_rest->addGlobalParameter("lamrest", 1);
 
@@ -1256,7 +1256,7 @@ void OpenMMFrEnergyST::initialise()
     custom_boresch_dihedral_rest->addPerTorsionParameter("equil_val");
     custom_boresch_dihedral_rest->setUsesPeriodicBoundaryConditions(true);
     if (perturbed_energies[8])
-        custom_boresch_dihedral_rest->addGlobalParameter("lamrest", lambda);
+        custom_boresch_dihedral_rest->addGlobalParameter("lamrest", Alchemical_value);
     // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
     else custom_boresch_dihedral_rest->addGlobalParameter("lamrest", 1);
 
