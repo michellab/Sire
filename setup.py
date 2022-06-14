@@ -13,6 +13,11 @@ USAGE:
                                          compile sire (takes a long time!)
 
     python setup.py install            : Will build sire and will then install
+
+    python setup.py install_module     : Will only install the Python module
+
+You can use `--skip-deps` to skip the installation of the conda dependencies
+You can use `--skip-build` to skip the building of the corelib and wrappers
 """
 
 import sys
@@ -138,7 +143,12 @@ def parse_args():
         help="Skip the build of the C++ code (only use if you know that "
              "the C++ code is already built)")
     parser.add_argument("action", nargs="*",
-        help="Should be one of 'install_requires', 'build' or 'install'")
+        help="Should be one of 'install_requires', 'build', 'install' or 'install_module.\n"
+             "\n [install_requires] : Just install the conda dependencies.\n"
+             " [build] : 'install_requires' plus compile and install corelib, and just compile the wrappers.\n"
+             " [install] : 'build' plus install the wrappers and install the module.\n"
+             " [install_module] : Just install the module (no compilation or conda dependencies)."
+             )
     return parser.parse_args()
 
 
