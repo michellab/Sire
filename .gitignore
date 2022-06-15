@@ -9,6 +9,7 @@ build/corelib/*
 build/wrapper/*
 build/module/*
 build/downloads/*
+recipes/sire/meta.yaml
 #files for wrapper
 module_info
 active_headers.data

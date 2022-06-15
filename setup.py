@@ -45,25 +45,20 @@ if os.path.basename(conda_base) == "bin":
 python_exe = None
 conda = None
 
-if os.path.exists(os.path.join(conda_base, "bin", "conda")):
-    conda_bin = os.path.join(conda_base, "bin")
-    python_exe = os.path.join(conda_bin, "python")
-    conda = os.path.join(conda_bin, "conda")
-elif os.path.exists(os.path.join(conda_base, "python.exe")):
+if os.path.exists(os.path.join(conda_base, "python.exe")):
+    # Windows
     conda_bin = os.path.join(conda_base, "Library", "bin")
     python_exe = os.path.join(conda_base, "python.exe")
     conda = os.path.join(conda_base, "Scripts", "conda.exe")
+elif os.path.exists(os.path.join(conda_base, "bin", "python")):
+    # MacOS and Linux
+    conda_bin = os.path.join(conda_base, "bin")
+    python_exe = os.path.join(conda_bin, "python")
+    conda = os.path.join(conda_bin, "conda")
 else:
-    print("Cannot find a 'conda' binary in directory '%s'. "
+    print("Cannot find a 'python' binary in directory '%s'. "
           "Are you running this script using the python executable "
           "from a valid miniconda or anaconda installation?" % conda_base)
-    sys.exit(-1)
-
-if not os.path.exists(conda):
-    print("\nSire can only be installed into a conda or miniconda environment.")
-    print("Please install conda, miniconda, miniforge or similar, then "
-          "activate the conda environment, then rerun this installation "
-          "script.")
     sys.exit(-1)
 
 
@@ -266,6 +261,13 @@ def install_requires():
        installs taking too long
     """
     print(f"Installing requirements for {platform_string}")
+
+    if not os.path.exists(conda):
+        print("\nSire can only be installed into a conda or miniconda environment.")
+        print("Please install conda, miniconda, miniforge or similar, then "
+              "activate the conda environment, then rerun this installation "
+              "script.")
+        sys.exit(-1)
 
     dependencies = {}
 
