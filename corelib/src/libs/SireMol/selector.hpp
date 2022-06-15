@@ -1832,7 +1832,7 @@ QStringList Selector<T>::metadataKeys(const PropertyName &key) const
 /** Extract from a binary datastream */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-QDataStream &operator>>(QDataStream &ds, SireMol::Selector<T> &views)
+SIREMOL_EXPORT QDataStream &operator>>(QDataStream &ds, SireMol::Selector<T> &views)
 {
     QString cls;
     SireStream::VersionID version;
@@ -1876,7 +1876,7 @@ QDataStream &operator>>(QDataStream &ds, SireMol::Selector<T> &views)
 /** Serialise to a binary datastream */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-QDataStream &operator<<(QDataStream &ds, const SireMol::Selector<T> &views)
+SIREMOL_EXPORT QDataStream &operator<<(QDataStream &ds, const SireMol::Selector<T> &views)
 {
     ds << QString(SireMol::Selector<T>::typeName()) << SireStream::VersionID(2);
 
