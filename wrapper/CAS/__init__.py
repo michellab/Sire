@@ -84,7 +84,6 @@ Functions
 
 """
 
-from lib2to3.pygram import Symbols
 from .. import Maths
 
 # Import all of the Qt classes
