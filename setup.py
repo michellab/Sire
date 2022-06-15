@@ -305,7 +305,6 @@ def install_requires():
 
     dependencies = d
 
-    global conda
     global mamba
 
     if mamba is None:
