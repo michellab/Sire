@@ -677,7 +677,7 @@ endif()
 
 if (NOT ${SIRE_FOUND_GSL})
   # Sire depends on >= GSL 1.6
-  find_package(GSL 1.6 QUIET)
+  find_package(GSL 1.6 QUIET REQUIRED)
 
   message( STATUS "GSL paths ${GSL_LINK_DIRECTORIES} "
                   "${GSL_LIBRARIES} | ${GSL_INCLUDE_DIR}" )
@@ -695,8 +695,11 @@ save_sire_variable( "SIRE_USE_BLAS" "${SIRE_USE_BLAS}" )
 save_sire_variable( "SIRE_USE_LAPACK" "${SIRE_USE_LAPACK}" )
 
 if (NOT ${SIRE_FOUND_TBB})
-  find_library( TBB_LIBRARY "tbb" PATHS ${TBB_LIBRARY_DIR} )
+  message( STATUS "TBB LIBRARY DIR: ${TBB_LIBRARY_DIR}")
+  find_library( TBB_LIBRARY "tbb" PATHS ${TBB_LIBRARY_DIR} REQUIRED )
   find_library( TBB_MALLOC_LIBRARY "tbbmalloc" PATHS ${TBB_LIBRARY_DIR} )
+
+  message( STATUS "TBB paths ${TBB_LIBRARY} | ${TBB_MALLOC_LIBRARY} | ${TBB_INCLUDE_DIR}" )
 
   include_directories(${TBB_INCLUDE_DIR})
   save_sire_variable( "TBB_LIBRARY" "${TBB_LIBRARY}" )

@@ -345,7 +345,23 @@ def make_cmd(ncores, install = False):
 
 
 def _get_build_ext():
-    return os.path.basename(conda_base.replace(" ", "_"))
+    if os.environ["CONDA_BUILD"] == "1":
+        return "conda_build"
+    else:
+        return os.path.basename(conda_base.replace(" ", "_").replace(".", "_"))
+
+
+def _get_bin_dir():
+    if os.environ["CONDA_BUILD"] == "1":
+        bindir = os.environ["BUILD_PREFIX"]
+
+        if os.path.exists(os.path.join(bindir, "python.exe")):
+            return bindir
+
+        bindir = os.path.join(bindir, "bin")
+        return bindir
+    else:
+        return conda_bin
 
 
 def build(ncores: int = 1, npycores: int = 1,
@@ -360,20 +376,21 @@ def build(ncores: int = 1, npycores: int = 1,
     if is_windows:
         cmake = f"{cmake}.exe"
 
-    cmake = os.path.join(conda_bin, cmake)
+    bindir = _get_bin_dir()
+    cmake = os.path.join(bindir, cmake)
 
     # get the compilers
     if is_macos:
         try:
-            CXX = glob.glob(os.path.join(conda_bin, "clang++"))[0]
-            CC = glob.glob(os.path.join(conda_bin, "clang"))[0]
+            CXX = glob.glob(os.path.join(bindir, "clang++"))[0]
+            CC = glob.glob(os.path.join(bindir, "clang"))[0]
         except:
             print("Cannot find the conda clang++ binaries!")
             sys.exit(-1)
     elif is_linux:
         try:
-            CXX = glob.glob(os.path.join(conda_bin, "*-g++"))[0]
-            CC = glob.glob(os.path.join(conda_bin, "*-gcc"))[0]
+            CXX = glob.glob(os.path.join(bindir, "*-g++"))[0]
+            CC = glob.glob(os.path.join(bindir, "*-gcc"))[0]
         except:
             print("Cannot find the conda g++ binaries!")
             sys.exit(-1)
@@ -533,7 +550,8 @@ def install_module(ncores: int = 1):
     if is_windows:
         cmake = f"{cmake}.exe"
 
-    cmake = os.path.join(conda_bin, cmake)
+    bindir = _get_bin_dir()
+    cmake = os.path.join(bindir, cmake)
 
     moduledir = os.path.join(build_dir, f"{build_ext}_module")
 
@@ -598,7 +616,8 @@ def install(ncores: int = 1, npycores: int = 1):
     if is_windows:
         cmake = f"{cmake}.exe"
 
-    cmake = os.path.join(conda_bin, cmake)
+    bindir = _get_bin_dir()
+    cmake = os.path.join(bindir, cmake)
 
     if not os.path.exists(wrapperdir):
         os.makedirs(wrapperdir)
