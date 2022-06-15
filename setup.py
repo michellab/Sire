@@ -129,11 +129,11 @@ def parse_args():
         metavar=("GENERATOR",), default=[],
         help="pass CMake generator")
     parser.add_argument("-n", "--ncores", action="store", type=int, nargs=1,
-        metavar=("N_CORES",), default=multiprocessing.cpu_count(),
+        metavar=("N_CORES",), default=[multiprocessing.cpu_count()],
         help="Number of CPU cores used for compiling corelib "
         "(defaults to all available on the current system)")
     parser.add_argument("-N", "--npycores", action="store", type=int, nargs=1,
-        metavar=("N_PYTHON_CORES",), default=multiprocessing.cpu_count(),
+        metavar=("N_PYTHON_CORES",), default=[multiprocessing.cpu_count()],
         help="Number of CPU cores used for compiling Python wrappers "
         "(defaults to the number of CPU cores used for compiling corelib)")
     parser.add_argument("--skip-deps", action="store_true", default=False,
@@ -641,23 +641,23 @@ if __name__ == "__main__":
             install_requires()
 
         if not args.skip_build:
-            build(ncores=args.ncores, npycores=args.npycores,
+            build(ncores=args.ncores[0], npycores=args.npycores[0],
                   coredefs=args.corelib, pydefs=args.wrapper)
 
-        install(ncores=args.ncores, npycores=args.npycores)
+        install(ncores=args.ncores[0], npycores=args.npycores[0])
 
     elif action == "build":
         if not args.skip_deps:
             install_requires()
 
-        build(ncores=args.ncores, npycores=args.npycores,
+        build(ncores=args.ncores[0], npycores=args.npycores[0],
               coredefs=args.corelib, pydefs=args.wrapper)
 
     elif action == "install_requires":
         install_requires()
 
     elif action == "install_module":
-        install_module(ncores=args.ncores)
+        install_module(ncores=args.ncores[0])
 
     else:
         print(f"Unrecognised action '{action}'. Please use 'install_requires', "
