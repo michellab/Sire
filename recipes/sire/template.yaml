@@ -70,27 +70,27 @@ test:
     - nose
     - pytest
   imports:
-    - Sire
-    - Sire.Analysis
-    - Sire.Base
-    - Sire.CAS
-    - Sire.Cluster
-    - Sire.Error
-    - Sire.FF
-    - Sire.ID
-    - Sire.IO
-    - Sire.Maths
-    - Sire.MM
-    - Sire.Mol
-    - Sire.Move
-    - Sire.Qt
-    - Sire.Squire
-    - Sire.Stream
-    - Sire.System
-    - Sire.Units
-    - Sire.Vol
+    - sire
+    - sire.analysis
+    - sire.base
+    - sire.cas
+    - sire.cluster
+    - sire.error
+    - sire.ff
+    - sire.id
+    - sire.io
+    - sire.maths
+    - sire.mm
+    - sire.mol
+    - sire.move
+    - sire.qt
+    - sire.squire
+    - sire.stream
+    - sire.system
+    - sire.units
+    - sire.vol
   commands:
-    - sire_test
+    - pytest tests
 
 about:
   home: https://github.com/michellab/Sire
