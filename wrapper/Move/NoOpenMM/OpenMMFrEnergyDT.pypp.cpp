@@ -27,6 +27,8 @@ namespace bp = boost::python;
 
 #include "SireMol/atomcoords.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/atommasses.h"
 
 #include "SireMol/bondid.h"
@@ -82,14 +84,14 @@ void register_OpenMMFrEnergyDT_class(){
         OpenMMFrEnergyDT_exposer_t OpenMMFrEnergyDT_exposer = OpenMMFrEnergyDT_exposer_t( "OpenMMFrEnergyDT", bp::init< >() );
         bp::scope OpenMMFrEnergyDT_scope( OpenMMFrEnergyDT_exposer );
         { //::SireMove::OpenMMFrEnergyDT::typeName
-        
+
             typedef char const * ( *typeName_function_type )(  );
             typeName_function_type typeName_function_value( &::SireMove::OpenMMFrEnergyDT::typeName );
-            
-            OpenMMFrEnergyDT_exposer.def( 
+
+            OpenMMFrEnergyDT_exposer.def(
                 "typeName"
                 , typeName_function_value );
-        
+
         }
         OpenMMFrEnergyDT_exposer.staticmethod( "typeName" );
         OpenMMFrEnergyDT_exposer.def( "__copy__", &__copy__);
