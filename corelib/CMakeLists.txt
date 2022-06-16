@@ -695,9 +695,11 @@ save_sire_variable( "SIRE_USE_BLAS" "${SIRE_USE_BLAS}" )
 save_sire_variable( "SIRE_USE_LAPACK" "${SIRE_USE_LAPACK}" )
 
 if (NOT ${SIRE_FOUND_TBB})
+  set(TBB_LIBRARY_DIR "${ANACONDA_BASE}/lib")
+
   message( STATUS "TBB LIBRARY DIR: ${TBB_LIBRARY_DIR}")
   find_library( TBB_LIBRARY "tbb" PATHS ${TBB_LIBRARY_DIR} REQUIRED )
-  find_library( TBB_MALLOC_LIBRARY "tbbmalloc" PATHS ${TBB_LIBRARY_DIR} )
+  find_library( TBB_MALLOC_LIBRARY "tbbmalloc" PATHS ${TBB_LIBRARY_DIR} REQUIRED )
 
   message( STATUS "TBB paths ${TBB_LIBRARY} | ${TBB_MALLOC_LIBRARY} | ${TBB_INCLUDE_DIR}" )
 
