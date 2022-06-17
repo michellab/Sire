@@ -10,7 +10,6 @@ source:
 
 build:
   number: SIRE_BUILD
-  skip: true  # [win]
 
 requirements:
   build:
@@ -35,7 +34,6 @@ requirements:
 # Add BioSimSpace run dependencies so Sire dependencies
 # are resolved in a compatible way.
     - configargparse
-    - fkcombu
     - lomap2
     - mdtraj
     - mdanalysis

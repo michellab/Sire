@@ -44,9 +44,7 @@ jobs:
         shell: bash -l {0}
         run: mamba install -y -c conda-forge boa anaconda-client
       - name: Update Conda recipe
-        run: Sire/actions/update_recipe.sh
-        env:
-          SRC_DIR: ${{ github.workspace }}/Sire
+        run: python Sire/actions/update_recipe.py
       - name: Build Conda package
         shell: bash -l {0}
         run: conda mambabuild -c conda-forge -c michellab Sire/recipes/sire
