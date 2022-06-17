@@ -345,21 +345,22 @@ def make_cmd(ncores, install = False):
 
 
 def _get_build_ext():
-    if os.environ["CONDA_BUILD"] == "1":
+    if "CONDA_BUILD" in os.environ and os.environ["CONDA_BUILD"] == "1":
         return "conda_build"
     else:
         return os.path.basename(conda_base.replace(" ", "_").replace(".", "_"))
 
 
 def _get_bin_dir():
-    if os.environ["CONDA_BUILD"] == "1":
+    print(os.environ)
+    
+    if "CONDA_BUILD" in os.environ and os.environ["CONDA_BUILD"] == "1":
         bindir = os.environ["BUILD_PREFIX"]
 
-        if os.path.exists(os.path.join(bindir, "python.exe")):
-            return bindir
-
-        bindir = os.path.join(bindir, "bin")
-        return bindir
+        if is_windows:
+            return os.path.join(bindir, "Library", "bin")
+        else:
+            return os.path.join(bindir, "bin")
     else:
         return conda_bin
 
