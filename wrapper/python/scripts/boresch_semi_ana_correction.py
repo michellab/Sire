@@ -7,20 +7,25 @@ certain regimes."""
 
 from Sire.Tools import BoreschSemiAnaCorrection
 from Sire.Tools import readParams
+import Sire.Config
 
 import argparse
 import sys
 import os
 
-parser = argparse.ArgumentParser(description="""Calculates the semi-analytical correction for releasing Boresch restraints,
-                                             accounting for the standard state.""",
+parser = argparse.ArgumentParser(description="An app to calculate the correction for releasing Boresch restraints "
+                                             "semi-analytically (with numerical integration) - see Equation 12 in "
+                                             "J. Phys. Chem. B 2003, 107, 35, 9535–9551. This is more robust than "
+                                             "the analytical correction, which can result in substantial errors in "
+                                             "certain regimes.",
                                 epilog="boresch_semi_ana_correction is built using Sire and is distributed "
                                         "under the GPL. For more information please visit "
                                         "http://siremol.org",
                                  prog="boresch_semi_ana_correction")
 
 parser.add_argument('-C', '--config', nargs="?",
-                    help='A config file used for the simulation (all are suitable)')
+                    help='A config file used for the simulation (only the restraints '
+                         'dictionary and temperature are used to calculate the correction).')
 
 parser.add_argument('-H', '--help-config', action="store_true",
                     help="Get additional help regarding all of the parameters "
@@ -42,8 +47,8 @@ args = parser.parse_args()
 must_exit = False
 
 if args.author:
-    print("""\nboresch_semi_ana_correction was written by Finlay Clark (C) 2022, but is very closely
-     based on standardstatecorrection, written by Julien Michel and Stefano Bosisio (C) 2017""")
+    print("\nboresch_semi_ana_correction was written by Finlay Clark (C) 2022, but is very closely"
+          "\nbased on standardstatecorrection, written by Julien Michel and Stefano Bosisio (C) 2017")
     must_exit = True
 
 if args.version:
