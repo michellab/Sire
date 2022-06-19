@@ -2903,7 +2903,7 @@ void OpenMMFrEnergyST::initialise()
     //IMPORTANT: PERTURBED ENERGY TORSIONS ARE ADDED ABOVE
     bool UseLink_flag = true;
 
-    //Distance Restaint. All the information are stored in the solute.
+    //Distance Restaint. All the information is stored in the solute.
 
     if (UseLink_flag == true)
     {
@@ -2958,7 +2958,7 @@ void OpenMMFrEnergyST::initialise()
 
     bool UseBoresch_flag = true;
 
-    //Boresch Restaints. All the information is stored in the first molecule only.
+    //Boresch Restaints. All the information is stored in the solute only.
 
     if (UseBoresch_flag == true)
     {
@@ -2971,17 +2971,17 @@ void OpenMMFrEnergyST::initialise()
             bool has_boresch_angle = molecule.hasProperty("boresch_angle_restraints");
             bool has_boresch_dihedral = molecule.hasProperty("boresch_dihedral_restraints");
 
-            if (Debug)
-            {
-                qDebug() << "Boresch distance restraint properties stored = " << has_boresch_dist;
-                qDebug() << "Boresch angle restraint properties stored = " << has_boresch_angle;
-                qDebug() << "Boresch dihedral restraint properties stored = " << has_boresch_dihedral;
-            }
-
             if (has_boresch_dist)
             {
                 found_solute = true; // We have found the solute, but before breaking we must also check
                                     // if there are Boresch angle and torsion restraints.
+
+                if (Debug)
+                {
+                    qDebug() << "Boresch distance restraint properties stored = true";
+                    qDebug() << "Boresch angle restraint properties stored = " << has_boresch_angle;
+                    qDebug() << "Boresch dihedral restraint properties stored = " << has_boresch_dihedral;
+                }
 
                 std::vector<double> custom_boresch_dist_par(2);
 
