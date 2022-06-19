@@ -10,16 +10,13 @@
 import numpy as np
 import os
 from math import pi, sin, log
+from Sire.Units import gasr as R # kcal mol-1, the molar gas constant
 
 from Sire.Tools import Parameter, resolveParameters
 #from Sire.Units import *
 from Sire.Tools.OpenMMMD import *
 
-# Constants
 v0 = 1660.53907 # A^3, the standard state volume
-R = 0.00198720425864083 # kcal mol-1, the molar gas constant
-
-#temperature = Parameter("temperature", 25 * celsius, """Simulation temperature""")
 
 @resolveParameters
 def run():
