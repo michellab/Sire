@@ -1210,6 +1210,25 @@ void OpenMMFrEnergyST::initialise()
             qDebug() << "\n\nRestraint is ON\n\n";
     }
 
+    
+    /************************************RECEPTOR-lIGAND RESTRAINTS**************************/
+    // Check if we are in turn on receptor-ligand restraint mode
+
+    bool turn_on_restraints_mode{false};
+
+    for (int i = 0; i < nmols; i++)
+    {
+        Molecule molecule = moleculegroup.moleculeAt(i).molecule();
+
+        if (molecule.hasProperty("turn_on_restraints_mode"))
+        {
+            turn_on_restraints_mode = true; //Lambda will be used to turn on the receptor-ligand restraints
+            if (Debug)
+                qDebug() << "Lambda will be used to turn on the receptor-ligand restraints";
+            break; // We've found the solute - exit loop over molecules in system.
+        }
+    }
+
     /****************************************BOND LINK POTENTIAL*****************************/
     /* FC 12/21 CustomBondForce now (OpenMM 7.4.0) allows application of PBC checks*/
 
@@ -1221,7 +1240,7 @@ void OpenMMFrEnergyST::initialise()
     custom_link_bond->setUsesPeriodicBoundaryConditions(true);
     // If in turn on receptor-ligand restraints mode, default value of lamrest needs to be lambda, because
     // the default value is used for the first nrg_freq timesteps before being set by updateOpenMMContextLambda
-    if (perturbed_energies[8])
+    if (turn_on_restraints_mode)
         custom_link_bond->addGlobalParameter("lamrest", Alchemical_value);
     // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
     else custom_link_bond->addGlobalParameter("lamrest", 1);
@@ -1232,7 +1251,7 @@ void OpenMMFrEnergyST::initialise()
     custom_boresch_dist_rest->addPerBondParameter("force_const");
     custom_boresch_dist_rest->addPerBondParameter("equil_val");
     custom_boresch_dist_rest->setUsesPeriodicBoundaryConditions(true);
-    if (perturbed_energies[8])
+    if (turn_on_restraints_mode)
         custom_boresch_dist_rest->addGlobalParameter("lamrest", Alchemical_value);
     // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
     else custom_boresch_dist_rest->addGlobalParameter("lamrest", 1);
@@ -1243,7 +1262,7 @@ void OpenMMFrEnergyST::initialise()
     custom_boresch_angle_rest->addPerAngleParameter("force_const");
     custom_boresch_angle_rest->addPerAngleParameter("equil_val");
     custom_boresch_angle_rest->setUsesPeriodicBoundaryConditions(true);
-    if (perturbed_energies[8])
+    if (turn_on_restraints_mode)
         custom_boresch_angle_rest->addGlobalParameter("lamrest", Alchemical_value);
     // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
     else custom_boresch_angle_rest->addGlobalParameter("lamrest", 1);
@@ -1255,7 +1274,7 @@ void OpenMMFrEnergyST::initialise()
     custom_boresch_dihedral_rest->addPerTorsionParameter("force_const");
     custom_boresch_dihedral_rest->addPerTorsionParameter("equil_val");
     custom_boresch_dihedral_rest->setUsesPeriodicBoundaryConditions(true);
-    if (perturbed_energies[8])
+    if (turn_on_restraints_mode)
         custom_boresch_dihedral_rest->addGlobalParameter("lamrest", Alchemical_value);
     // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
     else custom_boresch_dihedral_rest->addGlobalParameter("lamrest", 1);
@@ -2872,17 +2891,11 @@ void OpenMMFrEnergyST::initialise()
             qDebug() << "Added Perturbed Internal Angle energy term";
     }
 
-    for (int i = 0; i < nmols; i++)
+    if (turn_on_restraints_mode)
     {
-        Molecule molecule = moleculegroup.moleculeAt(i).molecule();
-
-        if (molecule.hasProperty("turn_on_restraints_mode"))
-        {
-            perturbed_energies_tmp[8] = true; //Lambda will be used to turn on the receptor-ligand restraints
-            if (Debug)
-                qDebug() << "Lambda will be used to turn on the receptor-ligand restraints";
-            break; // We've found the solute - exit loop over molecules in system.
-        }
+        perturbed_energies_tmp[8] = true; //Lambda will be used to turn on the receptor-ligand restraints
+        if (Debug)
+            qDebug() << "Added Perturbed Receptor-Ligand Restraint energy term";
     }
 
     perturbed_energies = perturbed_energies_tmp;
@@ -2890,7 +2903,7 @@ void OpenMMFrEnergyST::initialise()
     //IMPORTANT: PERTURBED ENERGY TORSIONS ARE ADDED ABOVE
     bool UseLink_flag = true;
 
-    //Distance Restaint. All the information are stored in the first molecule only.
+    //Distance Restaint. All the information are stored in the solute.
 
     if (UseLink_flag == true)
     {
