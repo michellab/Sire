@@ -367,6 +367,36 @@ namespace bp = boost::python;
 
 #include "biosimspace.h"
 
+#include "SireBase/getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/mgname.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
+
+#include "SireVol/periodicbox.h"
+
+#include "SireVol/triclinicbox.h"
+
+#include "biosimspace.h"
+
+#include "moleculeparser.h"
+
+#include "biosimspace.h"
+
 void register_free_functions(){
 
     { //::SireIO::isAmberWater
@@ -521,7 +551,20 @@ void register_free_functions(){
             "updateCoordinatesAndVelocities"
             , updateCoordinatesAndVelocities_function_value
             , ( bp::arg("system0"), bp::arg("system1"), bp::arg("molecule_mapping"), bp::arg("is_lambda1")=(bool const)(false), bp::arg("map0")=SireBase::PropertyMap(), bp::arg("map1")=SireBase::PropertyMap() )
-            , "Update the coordinates and velocities of system0 with those from\nsystem1.\n\nPar:am system0\nThe reference system.\n\nPar:am system1\nThe updated system, where molecules may not be in the same order.\n\nPar:am map0\nA dictionary of user-defined molecular property names for system0.\n\nPar:am map1\nA dictionary of user-defined molecular property names for system1.\n\nRetval: system, mapping\nThe system with updated coordinates and velocities and a mapping\nbetween the molecule indices in both systems.\n" );
+            , "Update the coordinates and velocities of system0 with those from\nsystem1.\nPar:am system0\nThe reference system.\nPar:am system1\nThe updated system, where molecules may not be in the same order.\nPar:am map0\nA dictionary of user-defined molecular property names for system0.\nPar:am map1\nA dictionary of user-defined molecular property names for system1.\nRetval: system, mapping\nThe system with updated coordinates and velocities and a mapping\nbetween the molecule indices in both systems.\n" );
+    
+    }
+
+    { //::SireIO::updateCoordinatesAndVelocities
+    
+        typedef ::boost::tuples::tuple< SireSystem::System, QHash< SireMol::MolIdx, SireMol::MolIdx >, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( *updateCoordinatesAndVelocities_function_type )( ::SireSystem::System const &,::SireSystem::System const &,::SireSystem::System const &,::QHash< SireMol::MolIdx, SireMol::MolIdx > const &,bool const,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & );
+        updateCoordinatesAndVelocities_function_type updateCoordinatesAndVelocities_function_value( &::SireIO::updateCoordinatesAndVelocities );
+        
+        bp::def( 
+            "updateCoordinatesAndVelocities"
+            , updateCoordinatesAndVelocities_function_value
+            , ( bp::arg("original_system"), bp::arg("renumbered_system"), bp::arg("updated_system"), bp::arg("molecule_mapping"), bp::arg("is_lambda1")=(bool const)(false), bp::arg("map0")=SireBase::PropertyMap(), bp::arg("map1")=SireBase::PropertyMap() )
+            , "Update the coordinates and velocities of original_system with those from\nupdated_system.\n\nPar:am system_original\nThe original system.\n\nPar:am system_renumbered\nThe original system, atoms and residues have been renumbered to be\nunique and in ascending order.\n\nPar:am system_updated\nThe updated system, where molecules may not be in the same order.\n\nPar:am map0\nA dictionary of user-defined molecular property names for system0.\n\nPar:am map1\nA dictionary of user-defined molecular property names for system1.\n\nRetval: system, mapping\nThe system with updated coordinates and velocities and a mapping\nbetween the molecule indices in both systems.\n" );
     
     }
 
