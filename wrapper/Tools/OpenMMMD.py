@@ -206,10 +206,10 @@ boresch_restraints_dict = Parameter("boresch restraints dictionary", {},
                                     r1 - 3 and l1 - 3 are the anchor points in the receptor and ligand, respectively, 
                                     given by atomic indices. r is | l1 - r1 | (A). thetaA, and thetaB are the angles
                                     (r2, r1, l1) and (r1, l1, l2) (rad). phiA, phiB, and phiC are the dihedral angles
-                                    (r3, r2, r1, l1), (r2, r1, l1, l2), and (r1, l1, l2, l3), respectively. A first 
+                                    (r3, r2, r1, l1), (r2, r1, l1, l2), and (r1, l1, l2, l3), respectively (rad). A first 
                                     character of k indicates a force constant (kcal mol^-1 A^-2 for the distance and 
                                     kcal mol^-1 rad^-2 for the angles) and a final character of 0 indicates an
-                                    equillibrium value (A or rad). To use Boresch restraints, "use boresch restraints" 
+                                    equilibrium value (A or rad). To use Boresch restraints, "use boresch restraints" 
                                     must be set equal to True in the config file. 
                                     """)
 
@@ -861,6 +861,29 @@ def setupBoreschRestraints(system):
     # Get Boresch restraint dict in dict form
     boresch_dict = dict(boresch_restraints_dict.val)
     print(f"Boresch restraints dictionary = {boresch_dict}")
+
+    # Check that restraint dict has the correct format
+    template_dict = {'anchor_points': {'r1':0, 'r2':0, 'r3':0, 'l1':0, 'l2':0, 'l3':0}, 
+                     'equilibrium_values': {'r0':0, 'thetaA0':0, 'thetaB0':0, 'phiA0':0, 'phiB0':0, 'phiC0':0},
+                     'force_constants': {'kr':0, 'kthetaA':0, 'kthetaB':0, 'kphiA':0, 'kphiB':0, 'kphiC':0}}
+    for key in template_dict:
+        if key not in boresch_dict:
+            raise Exception(f"Boresch restraints dictionary incorrectly formatted: {key} subdictionary is missing")
+        for subkey in template_dict[key]:
+            if subkey not in boresch_dict[key]:
+                raise Exception(f"Boresch restraints dictionary incorrectly formatted: {subkey} is "
+                                f"is missing from the {key} subdictionary")
+            val = boresch_dict[key][subkey]
+            # ignore anchor points - these are checked later
+            if key == "force_constants" or subkey == "r0":
+                if val < 0:
+                    raise Exception(f"{subkey} must be positive")
+            if key == "equilibrium_values" and subkey[:5] == "theta":
+                if val < 0 or val > pi:
+                    raise Exception(f"{subkey} must be between 0 and pi")
+            if key == "equilibrium_values" and subkey[:4] == "phi":
+                if val < -pi or val > pi:
+                    raise Exception(f"{subkey} must be between -pi and pi")
 
     # Correct atom numbers by + 1
     for key in boresch_dict["anchor_points"].keys():
