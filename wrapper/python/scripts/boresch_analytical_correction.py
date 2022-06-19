@@ -54,10 +54,6 @@ if args.version:
           "https://github.com/michellab/Sire/releases/tag/v%s" %Sire.__version__)
     must_exit = True
 
-if args.help_config:
-    OpenMMMD.Parameter.printAll(True)
-    must_exit = True
-
 if must_exit:
     sys.exit(0)
 

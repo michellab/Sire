@@ -27,11 +27,6 @@ parser.add_argument('-C', '--config', nargs="?",
                     help='A config file used for the simulation (only the restraints '
                          'dictionary and temperature are used to calculate the correction).')
 
-parser.add_argument('-H', '--help-config', action="store_true",
-                    help="Get additional help regarding all of the parameters "
-                         "(and their default values) that can be "
-                         "set in the optionally-supplied CONFIG file")
-
 parser.add_argument('--author', action="store_true",
                     help="Get information about the authors of this script.")
 
@@ -55,10 +50,6 @@ if args.version:
     print("boresch_semi_ana_correction -- from Sire release version <%s>" %Sire.__version__)
     print("This particular release can be downloaded here: "
           "https://github.com/michellab/Sire/releases/tag/v%s" %Sire.__version__)
-    must_exit = True
-
-if args.help_config:
-    OpenMMMD.Parameter.printAll(True)
     must_exit = True
 
 if must_exit:
