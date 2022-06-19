@@ -20,7 +20,7 @@ from Sire.Tools.OpenMMMD import *
 
 # Constants
 v0 = ((Units.meter3/1000)/Units.mole.value()).value() # A^3, the standard state volume
-R = Units.gasr.value() # kcal mol-1, the molar gas constant
+R = Units.gasr # kcal mol-1, the molar gas constant
 
 @resolveParameters
 def run():

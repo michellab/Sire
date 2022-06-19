@@ -10,13 +10,14 @@
 import numpy as np
 import os
 from math import pi, sin, log
-from Sire.Units import gasr as R # kcal mol-1, the molar gas constant
+from Sire import Units
 
 from Sire.Tools import Parameter, resolveParameters
-#from Sire.Units import *
 from Sire.Tools.OpenMMMD import *
 
-v0 = 1660.53907 # A^3, the standard state volume
+# Constants
+v0 = ((Units.meter3/1000)/Units.mole.value()).value() # A^3, the standard state volume
+R = Units.gasr # kcal mol-1, the molar gas constant
 
 @resolveParameters
 def run():
@@ -74,5 +75,5 @@ def run():
 
     print(f"Analytical correction for releasing Boresch restraints = {dg:.2f} kcal mol-1")
     print("WARNING !!! The analytical correction is only reliable when restraints are "
-          "sufficiently strong, r is sufficiently far from zero, and r2, r1, l1, and" 
+          "sufficiently strong, r is sufficiently far from zero, and r2, r1, l1, and " 
           "r1, l1, l2 are sufficiently far from collinear")

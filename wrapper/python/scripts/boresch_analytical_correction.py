@@ -73,7 +73,7 @@ else:
 if args.verbose:
     params["verbose"] = True
 
-print("\nCalculating analytical correction for Boresch restraints using temperature and"
+print("\nCalculating analytical correction for Boresch restraints using temperature and "
       "restraint information from %s." % args.config)
 
 BoreschAnalyticalCorrection.run(params)
