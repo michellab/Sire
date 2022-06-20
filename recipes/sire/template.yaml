@@ -64,8 +64,6 @@ test:
     - SIRE_DONT_PHONEHOME
     - SIRE_SILENT_PHONEHOME
   requires:
-    - git
-    - nose
     - pytest
   imports:
     - sire
@@ -87,6 +85,8 @@ test:
     - sire.system
     - sire.units
     - sire.vol
+  source_files:
+    - tests
   commands:
     - pytest tests
 
