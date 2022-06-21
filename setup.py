@@ -119,6 +119,14 @@ def parse_args():
     import argparse
     import multiprocessing
     parser=argparse.ArgumentParser()
+
+    ncores = multiprocessing.cpu_count()
+
+    if ncores % 2 == 0:
+        npycores = ncores / 2
+    else:
+        npycores = (ncores + 1) / 2
+
     parser.add_argument("-C", "--corelib", action="append", nargs=1,
         metavar=("PARAMETER=VALUE",), default=[],
         help="pass CMake definitions for corelib")
@@ -129,11 +137,11 @@ def parse_args():
         metavar=("GENERATOR",), default=[],
         help="pass CMake generator")
     parser.add_argument("-n", "--ncores", action="store", type=int, nargs=1,
-        metavar=("N_CORES",), default=[multiprocessing.cpu_count()],
+        metavar=("N_CORES",), default=[ncores],
         help="Number of CPU cores used for compiling corelib "
         "(defaults to all available on the current system)")
     parser.add_argument("-N", "--npycores", action="store", type=int, nargs=1,
-        metavar=("N_PYTHON_CORES",), default=[multiprocessing.cpu_count()],
+        metavar=("N_PYTHON_CORES",), default=[npycores],
         help="Number of CPU cores used for compiling Python wrappers "
         "(defaults to the number of CPU cores used for compiling corelib)")
     parser.add_argument("--skip-deps", action="store_true", default=False,

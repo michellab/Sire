@@ -27,27 +27,6 @@ message( STATUS "Building Sire ${SIRE_VERSION}")
 # use loose loop syntax in CMakeLists files
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
 
-#if(COMMAND CMAKE_POLICY)
-#  if (POLICY CMP0025)
-#    cmake_policy(SET CMP0025 NEW)  # Anaconda clang is called Clang, not AppleClang
-#  endif()
-#  if (POLICY CMP0042)
-#    cmake_policy(SET CMP0042 OLD)  # managing OS X @rpath manually
-#  endif()
-#  if (POLICY CMP0048)
-#    cmake_policy(SET CMP0048 OLD)  # want to manage versions myself!
-##  endif()
-#  if (POLICY CMP0028)
-#    cmake_policy(SET CMP0028 OLD)  # Qt has colons in names, which new cmake hates
-#  endif()
-#  if (POLICY CMP0045)
-#    cmake_policy(SET CMP0045 OLD)  # Allow non-existant targets with -NOTFOUND
-#  endif()
-#  if (POLICY CMP0020)
-#    cmake_policy(SET CMP0020 NEW)  # Automatically link to qtmain on windows
-#  endif()
-#endif()
-
 # Get rid of install messages (too verbose!)
 set( CMAKE_INSTALL_MESSAGE "NEVER" )
 
@@ -118,6 +97,13 @@ unset(ENV{DEBUG_CFLAGS})
 
 # name the project
 project (SIRE CXX C)
+
+# make sure that libraries are not found in any system directories
+# This is because everything will be linked to from the conda directory
+set (CMAKE_IGNORE_PATH)
+foreach (_prefix, /usr /opt /usr/local )
+  list(APPEND CMAKE_IGNORE_PATH ${_prefix}/include ${_prefix}/lib ${_prefix}/lib64
+endforeach()
 
 # Create a file in which we can save the values of all useful variables.
 # This will mean that projects using Sire won't have to set these variables
