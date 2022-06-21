@@ -4,7 +4,13 @@ def parse_requirements(filename):
     """Parse the requirements and return (in conda notation)
        the requirements for this system
     """
-    from pip_requirements_parser import RequirementsFile
+    try:
+        from pip_requirements_parser import RequirementsFile
+    except ImportError as e:
+        print("\n\n[ERROR] ** You need to install pip-requirements-parser")
+        print("Run `conda install pip-requirements-parser\n\n")
+        raise e
+
     from pkg_resources import evaluate_marker
 
     reqs = RequirementsFile.from_file(filename).to_dict()["requirements"]
