@@ -11,7 +11,10 @@ def _is_thumbs_up_denied():
     """Return whether or not thumbs up are denied"""
     import os
 
-    if os.path.exists(_get_deny_filename()):
+    if "SIRE_DONT_PHONEHOME" in os.environ and \
+        os.environ["SIRE_DONT_PHONEHOME"] != "0":
+        return True
+    elif os.path.exists(_get_deny_filename()):
         return True
     else:
         return False
@@ -39,7 +42,7 @@ def get_thumbs_up_info():
        the thumbs_up() function. This will return nothing if you
        have disabled thumbs up using the 'disable_thumbs_up()' function.
     """
-    if disable_thumbs_up():
+    if _is_thumbs_up_denied():
         return None
 
     global _thumbs_up_data

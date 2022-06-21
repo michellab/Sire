@@ -13,56 +13,19 @@ build:
 
 requirements:
   build:
-    - {{ compiler('c') }} # [not osx]
-    - {{ compiler('cxx') }} # [not osx]
-    - clang 13.0.1 # [osx]
-    - clangxx 13.0.1 # [osx]
-    - cmake
-    - git
-    - make
-    - sysroot_linux-64 2.17 # [linux]
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    SIRE_BUILD_REQUIREMENTS
   host:
-    - boost
-    - gsl
-    - libcblas
-    - libnetcdf
-    - openmm
     - python
-    - qt
-    - tbb-devel
-    - tbb
-# Add BioSimSpace run dependencies so Sire dependencies
-# are resolved in a compatible way.
-    - configargparse
-    - lomap2
-    - mdtraj
-    - mdanalysis
-    - nglview
-    - openff-toolkit-base
-    - parmed
-    - py3dmol
-    - pydot
-    - pygtail
-    - pypdb
-    - pytest
-    - pyyaml
-    - rdkit
-    - watchdog
+    SIRE_RUN_REQUIREMENTS
+    SIRE_BSS_REQUIREMENTS
   run:
-    - boost
-    - gsl
-    - libcblas
-    - libnetcdf
-    - openmm
-    - pymbar
-    - pyqt
-    - python
-    - qt
+    SIRE_RUN_REQUIREMENTS
 
 test:
   script_env:
     - SIRE_DONT_PHONEHOME
-    - SIRE_SILENT_PHONEHOME
   requires:
     - pytest
   imports:

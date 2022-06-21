@@ -1,0 +1,13 @@
+cmake
+git
+
+clang_osx-64 ; sys_platform == "darwin"
+clangxx_osx-64 ; sys_platform == "darwin"
+make ; sys_platform == "darwin"
+libtool ; sys_platform == "darwin"
+
+gcc_linux-64 ; sys_platform == "linux"
+gxx_linux-64 ; sys_platform == "linux"
+make ; sys_platform == "linux"
+libtool ; sys_platform == "linux"
+sysroot_linux-64==2.17 ; sys_platform == "linux"

@@ -33,6 +33,11 @@ if os.path.abspath(os.path.dirname(sys.argv[0])) != curdir:
     print("You can only run this script from the sire directory")
     sys.exit(-1)
 
+# We need to import the 'parse_requirements' function to get the list
+# of requirements
+sys.path.insert(0, os.path.join(curdir, "actions"))
+from parse_requirements import parse_requirements
+
 # Next we need to verify that this is a Python that is part of a
 # conda installation
 
@@ -269,41 +274,14 @@ def install_requires():
               "script.")
         sys.exit(-1)
 
-    dependencies = {}
-
-    lines = open("requirements.txt", "r").readlines()
-    _add_to_dependencies(dependencies, lines)
-
-    # now read the platform-specific requirements (these may overload
-    # some of the above requirements)
-    try:
-        lines = open(f"requirements_{platform_name}.txt", "r").readlines()
-        _add_to_dependencies(dependencies, lines)
-    except IOError:
-        pass
-
-    try:
-        lines = open(f"requirements_{machine}.txt", "r").readlines()
-        _add_to_dependencies(dependencies, lines)
-    except IOError:
-        pass
-
-    try:
-        lines = open(f"requirements_{platform_string}.txt", "r").readlines()
-        _add_to_dependencies(dependencies, lines)
-    except IOError:
-        pass
-
-    deps = list(dependencies.keys())
-    deps.sort()
+    reqs = parse_requirements("requirements.txt")
+    build_reqs = parse_requirements("requirements_build.txt")
 
     print("\nUsing dependencies:")
-    d = []
-    for dep in deps:
-        d.append(dependencies[dep])
-        print(f"{dependencies[dep]}")
+    dependencies = build_reqs + reqs
 
-    dependencies = d
+    for dep in dependencies:
+        print(dep)
 
     global mamba
 
@@ -353,7 +331,7 @@ def _get_build_ext():
 
 def _get_bin_dir():
     print(os.environ)
-    
+
     if "CONDA_BUILD" in os.environ and os.environ["CONDA_BUILD"] == "1":
         bindir = os.environ["BUILD_PREFIX"]
 
