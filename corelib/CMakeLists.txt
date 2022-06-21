@@ -102,7 +102,7 @@ project (SIRE CXX C)
 # This is because everything will be linked to from the conda directory
 set (CMAKE_IGNORE_PATH)
 foreach (_prefix, /usr /opt /usr/local )
-  list(APPEND CMAKE_IGNORE_PATH ${_prefix}/include ${_prefix}/lib ${_prefix}/lib64
+  list(APPEND CMAKE_IGNORE_PATH ${_prefix}/include ${_prefix}/lib ${_prefix}/lib64)
 endforeach()
 
 # Create a file in which we can save the values of all useful variables.
