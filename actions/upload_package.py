@@ -38,8 +38,8 @@ else:
         sys.exit(-1)
 
 # Find the packages to upload
-sire_pkg = glob.glob(os.path.join(conda_bld, "*", "sire-*.tar.bz2"))
-fkcombu_pkg = glob.glob(os.path.join(conda_bld, "*", "fkcombu-*.tar.bz2"))
+sire_pkg = glob.glob(os.path.join(conda_bld, "*-*", "sire-*.tar.bz2"))
+fkcombu_pkg = glob.glob(os.path.join(conda_bld, "*-*", "fkcombu-*.tar.bz2"))
 
 if len(sire_pkg) == 0:
     print("No sire packages to upload?")
