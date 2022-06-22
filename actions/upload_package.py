@@ -51,7 +51,7 @@ if len(fkcombu_pkg) == 0:
     packages = packages + fkcombu_pkg
 
 print(f"Uploading packages:")
-print(" * ", "\n * ".join(packages))
+print(" * ", "\n *  ".join(packages))
 
 packages = " ".join(packages)
 
