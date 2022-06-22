@@ -123,9 +123,9 @@ def parse_args():
     ncores = multiprocessing.cpu_count()
 
     if ncores % 2 == 0:
-        npycores = ncores / 2
+        npycores = int(ncores / 2)
     else:
-        npycores = (ncores + 1) / 2
+        npycores = int((ncores + 1) / 2)
 
     parser.add_argument("-C", "--corelib", action="append", nargs=1,
         metavar=("PARAMETER=VALUE",), default=[],
