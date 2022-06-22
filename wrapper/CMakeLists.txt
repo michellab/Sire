@@ -332,6 +332,7 @@ set(Python3_USE_STATIC_LIBS False)
 
 find_package( Python3 COMPONENTS Interpreter Development REQUIRED )
 
+set( PYTHON_LIBRARY "${Python3_LIBRARIES}") # need this on MacOS
 set( PYTHON_LIBRARIES "${Python3_LIBRARIES}")
 set( PYTHON_SITE_DIR "${Python3_SITELIB}")
 set( PYTHON_VERSION "${Python3_VERSION}")

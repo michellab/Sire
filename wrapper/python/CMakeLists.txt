@@ -27,12 +27,6 @@ set ( SIREPYTHON_SOURCES
 
     )
 
-# Set the Python library. This may have been unset in the top-level
-# CMakeListst.txt if were running on macOS to avoid linking against libPython.
-if (NOT PYTHON_LIBRARIES)
-  set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
-endif()
-
 # Create the library that holds all of the class wrappers
 add_executable (sire_python ${SIREPYTHON_SOURCES})
 
