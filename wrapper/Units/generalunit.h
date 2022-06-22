@@ -19,6 +19,13 @@ SIRE_BEGIN_HEADER
 namespace bp = boost::python;
 #endif //SIRE_SKIP_INLINE_FUNCTIONS
 
+namespace SireUnits{ namespace Dimension {
+class GeneralUnit;
+}}
+
+SIREUNITS_EXPORT QDataStream& operator<<(QDataStream&, const SireUnits::Dimension::GeneralUnit&);
+SIREUNITS_EXPORT QDataStream& operator>>(QDataStream&, SireUnits::Dimension::GeneralUnit&);
+
 namespace SireUnits
 {
 
@@ -36,6 +43,10 @@ void registerTypeName(const GeneralUnit &unit, const char *typnam);
 
 class GeneralUnit : public Unit
 {
+
+friend QDataStream& ::operator<<(QDataStream&, const GeneralUnit&);
+friend QDataStream& ::operator>>(QDataStream&, GeneralUnit&);
+
 public:
     GeneralUnit();
 
@@ -51,7 +62,7 @@ public:
         Angle = D::ANGLE();
         detail::registerTypeName(*this, D::typeName());
     }
-    
+
     GeneralUnit(const GeneralUnit &other);
 
     ~GeneralUnit();
@@ -68,46 +79,46 @@ public:
     int ANGLE() const;
 
     GeneralUnit& operator=(const GeneralUnit &other);
-    
+
     bool operator==(const GeneralUnit &other) const;
-    
+
     bool operator!=(const GeneralUnit &other) const;
-    
+
     GeneralUnit operator-() const;
-    
+
     GeneralUnit& operator+=(const GeneralUnit &other);
-    
+
     GeneralUnit& operator-=(const GeneralUnit &other);
-    
+
     GeneralUnit operator+(const GeneralUnit &other) const;
-    
+
     GeneralUnit operator-(const GeneralUnit &other) const;
 
     GeneralUnit operator*=(const GeneralUnit &other);
 
     GeneralUnit operator/=(const GeneralUnit &other);
-    
+
     GeneralUnit operator*(const GeneralUnit &other) const;
-    
+
     GeneralUnit operator/(const GeneralUnit &other) const;
-    
+
     GeneralUnit& operator*=(double val);
     GeneralUnit& operator/=(double val);
-    
+
     GeneralUnit& operator*=(int val);
     GeneralUnit& operator/=(int val);
-    
+
     GeneralUnit operator*(double val) const;
     GeneralUnit operator/(double val) const;
-    
+
     GeneralUnit operator*(int val) const;
     GeneralUnit operator/(int val) const;
-    
+
     GeneralUnit invert() const;
-    
+
     double to(const TempBase &other) const;
     double to(const GeneralUnit &other) const;
-    
+
     QString toString() const;
 
     SireBase::PropertyPtr toProperty() const;
@@ -184,16 +195,16 @@ struct from_general_unit
     static void* convertible(PyObject* obj_ptr)
     {
         bp::object obj( bp::handle<>(bp::borrowed(obj_ptr)) );
-    
-        bp::extract<const Dimension::GeneralUnit&> x(obj); 
-    
+
+        bp::extract<const Dimension::GeneralUnit&> x(obj);
+
         //is this a GeneralUnit?
         if ( x.check() )
         {
             //it is ;-)  Get a reference to it and make sure
             //that it is of the right dimension
             const Dimension::GeneralUnit &gen_unit = x();
-            
+
             if ( gen_unit.MASS() == D::MASS() and
                  gen_unit.LENGTH() == D::LENGTH() and
                  gen_unit.TIME() == D::TIME() and
@@ -206,7 +217,7 @@ struct from_general_unit
                 return obj_ptr;
             }
         }
-  
+
         //could not recognise the type or the dimension was wrong
         return 0;
     }
@@ -217,16 +228,16 @@ struct from_general_unit
         boost::python::converter::rvalue_from_python_stage1_data* data)
     {
         bp::object obj( bp::handle<>(bp::borrowed(obj_ptr)) );
-    
-        bp::extract<const Dimension::GeneralUnit&> x(obj); 
-    
+
+        bp::extract<const Dimension::GeneralUnit&> x(obj);
+
         //is this a GeneralUnit?
         if ( x.check() )
         {
             //it is ;-)  Get a reference to it and make sure
             //that it is of the right dimension
             const Dimension::GeneralUnit &gen_unit = x();
-            
+
             if ( gen_unit.MASS() == D::MASS() and
                  gen_unit.LENGTH() == D::LENGTH() and
                  gen_unit.TIME() == D::TIME() and
@@ -241,12 +252,12 @@ struct from_general_unit
 
                 //create the T container
                 new (storage) D( gen_unit.scaleFactor() );
-                
+
                 data->convertible = storage;
             }
         }
     }
-};    
+};
 
 template<class D>
 struct to_general_unit
@@ -262,7 +273,7 @@ void register_dimension()
 {
     bp::to_python_converter< D, to_general_unit<D> >();
 
-    bp::converter::registry::push_back( 
+    bp::converter::registry::push_back(
           &from_general_unit<D>::convertible,
           &from_general_unit<D>::construct,
           bp::type_id<D>() );
