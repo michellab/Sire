@@ -103,6 +103,13 @@ unset(ENV{DEBUG_CFLAGS})
 # name the project
 project (SirePython CXX C)
 
+# make sure that libraries are not found in any system directories
+# This is because everything will be linked to from the conda directory
+set (CMAKE_IGNORE_PATH)
+foreach (_prefix, /usr /opt /usr/local )
+  list(APPEND CMAKE_IGNORE_PATH ${_prefix}/include ${_prefix}/lib ${_prefix}/lib64)
+endforeach()
+
 # Absolutely can't run cmake in the source directory!
 if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
   message( FATAL_ERROR "You must run CMake in a different directory to the source!" )
