@@ -35,6 +35,8 @@ namespace bp = boost::python;
 
 SireUnits::Dimension::GeneralUnit __copy__(const SireUnits::Dimension::GeneralUnit &other){ return SireUnits::Dimension::GeneralUnit(other); }
 
+#include "Qt/qdatastream.hpp"
+
 #include "Helpers/str.hpp"
 
 #include "Helpers/release_gil_policy.hpp"
@@ -247,6 +249,11 @@ void register_GeneralUnit_class(){
         GeneralUnit_exposer.def( "__copy__", &__copy__);
         GeneralUnit_exposer.def( "__deepcopy__", &__copy__);
         GeneralUnit_exposer.def( "clone", &__copy__);
+        GeneralUnit_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireUnits::Dimension::GeneralUnit >,
+                            bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        GeneralUnit_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireUnits::Dimension::GeneralUnit >,
+                            bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        GeneralUnit_exposer.def_pickle(sire_pickle_suite< ::SireUnits::Dimension::GeneralUnit >());
         GeneralUnit_exposer.def( "__str__", &__str__< ::SireUnits::Dimension::GeneralUnit > );
         GeneralUnit_exposer.def( "__repr__", &__str__< ::SireUnits::Dimension::GeneralUnit > );
     }

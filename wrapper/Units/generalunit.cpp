@@ -21,6 +21,40 @@ using namespace SireUnits;
 using namespace SireUnits::Dimension;
 using namespace SireBase;
 
+QDataStream& operator<<(QDataStream &ds, const SireUnits::Dimension::GeneralUnit &u)
+{
+    qint8 a = u.ANGLE();
+    qint8 c = u.CHARGE();
+    qint8 l = u.LENGTH();
+    qint8 m = u.MASS();
+    qint8 t1 = u.TEMPERATURE();
+    qint8 t2 = u.TIME();
+    qint8 q = u.QUANTITY();
+
+    ds << a << c << l << m << t1 << t2 << q
+       << static_cast<const Unit&>(u);
+
+    return ds;
+}
+
+QDataStream& operator>>(QDataStream &ds, SireUnits::Dimension::GeneralUnit &u)
+{
+    qint8 a, c, l, m, t1, t2, q;
+
+    ds >> a >> c >> l >> m >> t1 >> t2 >> q
+       >> static_cast<Unit&>(u);
+
+    u.Angle = a;
+    u.Charge = c;
+    u.Length = l;
+    u.Mass = m;
+    u.temperature = t1;
+    u.Time = t2;
+    u.Quantity = q;
+
+    return ds;
+}
+
 namespace SireUnits
 {
 namespace Dimension

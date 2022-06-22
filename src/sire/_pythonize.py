@@ -79,6 +79,10 @@ def _pythonize(C, delete_old: bool=True) -> None:
         if new_attr == "ID":
             new_attr = "id"
 
+        # change all caps into lowercase
+        if new_attr.isupper():
+            new_attr = new_attr.lower()
+
         # change nSomething into num_somthing
         m = re.match("^n([A-Z])[a-z]", new_attr)
 
