@@ -326,7 +326,16 @@ message( STATUS  "Static library flags   == ${CMAKE_STATIC_LINKER_FLAGS}" )
 message( STATUS  "Executable link flags  == ${CMAKE_EXE_LINKER_FLAGS}" )
 
 # Now lets find Python...
-find_package( PythonLibs 3.7 REQUIRED )
+set(Python3_ROOT_DIR "${ANACONDA_BASE}")
+set(Python3_FIND_STRATEGY "LOCATION")
+set(Python3_USE_STATIC_LIBS False)
+
+find_package( Python3 COMPONENTS Interpreter Development REQUIRED )
+
+set( PYTHON_LIBRARIES "${Python3_LIBRARIES}")
+set( PYTHON_SITE_DIR "${Python3_SITE_DIR}")
+set( PYTHON_VERSION "${Python3_VERSION}")
+set( PYTHON_INCLUDE_DIR "${Python3_INCLUDE_DIR}")
 
 if (NOT PYTHON_MODULE_EXTENSION)
   if (WIN32)
@@ -336,19 +345,7 @@ if (NOT PYTHON_MODULE_EXTENSION)
   endif()
 endif()
 
-if (NOT PYTHON_LIBRARIES)
-  set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
-endif()
-
-find_package( PythonInterp REQUIRED )  # needed to get the python version
-set( PYTHON_VERSION "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}" )
-
-# Where we should install our packages
-if (WIN32)
-  set( PYTHON_SITE_DIR "../../lib/site-packages" )
-else()
-  set( PYTHON_SITE_DIR "../../lib/python${PYTHON_VERSION}/site-packages" )
-endif()
+message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR} | ${PYTHON_SITE_DIR} | ${PYTHON_MODULE_EXTENSION}" )
 
 # Don't link against libPython on macOS! Since the conda-forge Python interpreter
 # statically links libPython you'll end up with duplicate symbols.
@@ -364,7 +361,6 @@ set (Boost_USE_STATIC_RUNTIME OFF)
 set (Boost_DEBUG ON)  # this gives a nice print out in the cmake list to debug how boost is found and linked
 find_package( Boost 1.7 COMPONENTS python REQUIRED )
 
-message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR} | ${PYTHON_SITE_DIR}" )
 include_directories( ${PYTHON_INCLUDE_DIR} )
 
 message( STATUS "boost::python library ${Boost_LIBRARIES}" )
