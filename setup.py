@@ -50,16 +50,30 @@ if os.path.basename(conda_base) == "bin":
 python_exe = None
 conda = None
 
+if "CONDA_EXE" in os.environ:
+    conda = os.environ["CONDA_EXE"]
+else:
+    conda = None
+
+if "CONDA_DEFAULT_ENV" in os.environ:
+    conda_env = os.environ["CONDA_DEFAULT_ENV"]
+else:
+    conda_env = None
+
 if os.path.exists(os.path.join(conda_base, "python.exe")):
     # Windows
     conda_bin = os.path.join(conda_base, "Library", "bin")
     python_exe = os.path.join(conda_base, "python.exe")
-    conda = os.path.join(conda_base, "Scripts", "conda.exe")
+
+    if conda is None:
+        conda = os.path.join(conda_base, "Scripts", "conda.exe")
 elif os.path.exists(os.path.join(conda_base, "bin", "python")):
     # MacOS and Linux
     conda_bin = os.path.join(conda_base, "bin")
     python_exe = os.path.join(conda_bin, "python")
-    conda = os.path.join(conda_bin, "conda")
+
+    if conda is None:
+        conda = os.path.join(conda_bin, "conda")
 else:
     print("Cannot find a 'python' binary in directory '%s'. "
           "Are you running this script using the python executable "
@@ -333,13 +347,13 @@ def make_cmd(ncores, install = False):
 def _get_build_ext():
     if "CONDA_BUILD" in os.environ and os.environ["CONDA_BUILD"] == "1":
         return "conda_build"
+    elif conda_env is not None:
+        return conda_env.replace(" ", "_").replace(".", "_")
     else:
         return os.path.basename(conda_base.replace(" ", "_").replace(".", "_"))
 
 
 def _get_bin_dir():
-    print(os.environ)
-
     if "CONDA_BUILD" in os.environ and os.environ["CONDA_BUILD"] == "1":
         bindir = os.environ["BUILD_PREFIX"]
 
