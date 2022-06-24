@@ -276,10 +276,52 @@ set (BUILD_SHARED_LIBS ON)
 # (or run 'make VERBOSE=1')
 # set (CMAKE_VERBOSE_MAKEFILE ON)
 
+# Now lets find Python...
+set(Python3_ROOT_DIR "${ANACONDA_BASE}")
+set(Python3_FIND_STRATEGY "LOCATION")
+set(Python3_USE_STATIC_LIBS False)
+
+find_package( Python3 COMPONENTS Interpreter Development REQUIRED )
+
+set( PYTHON_LIBRARY "${Python3_LIBRARIES}") # need this on MacOS
+set( PYTHON_LIBRARIES "${Python3_LIBRARIES}")
+set( PYTHON_SITE_DIR "${Python3_SITELIB}")
+set( PYTHON_VERSION "${Python3_VERSION}")
+set( PYTHON_INCLUDE_DIR "${Python3_INCLUDE_DIRS}")
+
+if (WIN32)
+  set( PYTHON_MODULE_EXTENSION ".pyd" )
+else()
+  set( PYTHON_MODULE_EXTENSION ".so" )
+endif()
+
+message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR} | ${PYTHON_SITE_DIR} | ${PYTHON_MODULE_EXTENSION}" )
+
+# Don't link against libPython on macOS! Since the conda-forge Python interpreter
+# statically links libPython you'll end up with duplicate symbols.
+if (APPLE)
+  set( PYTHON_LIBRARIES "" )
+endif()
+
 # We will use the small compiler flags (as the wrappers are too big and don't need optimising)
-message( STATUS "Compiling the python wrappers using a SMALL build." )
-set( CMAKE_C_FLAGS ${SIRE_C_FLAGS_SMALL} )
-set( CMAKE_CXX_FLAGS ${SIRE_CXX_FLAGS_SMALL} )
+set (USE_SMALL_FLAGS TRUE)
+
+if (APPLE)
+  if (Python3_VERSION_MINOR LESS 9)
+    message(STATUS "Disabling small as we get a crash on Python < 3.9, clang X86")
+    set (USE_SMALL_FLAGS FALSE)
+  endif()
+endif()
+
+if (USE_SMALL_FLAGS)
+  message( STATUS "Compiling the python wrappers using a SMALL build." )
+  set( CMAKE_C_FLAGS ${SIRE_C_FLAGS_SMALL} )
+  set( CMAKE_CXX_FLAGS ${SIRE_CXX_FLAGS_SMALL} )
+else()
+  message( STATUS "Not using small compile flags")
+  set( CMAKE_C_FLAGS ${SIRE_C_FLAGS_RELEASE})
+  set( CMAKE_CXX_FLAGS ${SIRE_CXX_FLAGS_RELEASE})
+endif()
 
 if (SIRE_HAS_CPP_LIB)
   message(STATUS "Using libc++ in place of libstdc++")
@@ -324,33 +366,6 @@ message( STATUS  "C++ compiler flags     == ${CMAKE_CXX_FLAGS}" )
 message( STATUS  "Shared library flags   == ${CMAKE_SHARED_LINKER_FLAGS}" )
 message( STATUS  "Static library flags   == ${CMAKE_STATIC_LINKER_FLAGS}" )
 message( STATUS  "Executable link flags  == ${CMAKE_EXE_LINKER_FLAGS}" )
-
-# Now lets find Python...
-set(Python3_ROOT_DIR "${ANACONDA_BASE}")
-set(Python3_FIND_STRATEGY "LOCATION")
-set(Python3_USE_STATIC_LIBS False)
-
-find_package( Python3 COMPONENTS Interpreter Development REQUIRED )
-
-set( PYTHON_LIBRARY "${Python3_LIBRARIES}") # need this on MacOS
-set( PYTHON_LIBRARIES "${Python3_LIBRARIES}")
-set( PYTHON_SITE_DIR "${Python3_SITELIB}")
-set( PYTHON_VERSION "${Python3_VERSION}")
-set( PYTHON_INCLUDE_DIR "${Python3_INCLUDE_DIRS}")
-
-if (WIN32)
-  set( PYTHON_MODULE_EXTENSION ".pyd" )
-else()
-  set( PYTHON_MODULE_EXTENSION ".so" )
-endif()
-
-message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR} | ${PYTHON_SITE_DIR} | ${PYTHON_MODULE_EXTENSION}" )
-
-# Don't link against libPython on macOS! Since the conda-forge Python interpreter
-# statically links libPython you'll end up with duplicate symbols.
-if (APPLE)
-  set( PYTHON_LIBRARIES "" )
-endif()
 
 # All boost python libraries must be dynamically linked
 # (else we could end up with multiple boost::python libraries linked, which
