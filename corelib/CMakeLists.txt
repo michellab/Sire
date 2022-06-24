@@ -540,7 +540,7 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
        endif()
     endif()
 
-    set ( SIRE_SMALL_FLAGS  "-Oz" )
+    set ( SIRE_SMALL_FLAGS  "-Os" )
     set ( SIRE_WARNALL_FLAGS  "-Wall" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
 
@@ -588,7 +588,7 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
     message( STATUS "Detected and using clang C and C++ compilers" )
     set( SIRE_COMPILER "CLANG" )
 
-    set ( SIRE_SMALL_FLAGS  "-Os" )
+    set ( SIRE_SMALL_FLAGS  "-Oz" )
     set ( SIRE_WARNALL_FLAGS  "-Wall" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
 
