@@ -387,6 +387,8 @@ def build(ncores: int = 1, npycores: int = 1,
             CC = glob.glob(os.path.join(bindir, "clang"))[0]
         except:
             print("Cannot find the conda clang++ binaries!")
+            print("Please install these, e.g. via")
+            print("conda install clang clangxx")
             sys.exit(-1)
     elif is_linux:
         try:
@@ -394,6 +396,8 @@ def build(ncores: int = 1, npycores: int = 1,
             CC = glob.glob(os.path.join(bindir, "*-gcc"))[0]
         except:
             print("Cannot find the conda g++ binaries!")
+            print("Please install these, e.g. via")
+            print("conda install gcc gxx")
             sys.exit(-1)
 
     print("Using compilers %s | %s" % (CC, CXX))

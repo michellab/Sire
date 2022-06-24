@@ -161,7 +161,7 @@ void MoleculeView::assertSameMolecule(const MoleculeData &other) const
     if (d->number() != other.number())
         //these are different molecules!
         throw SireError::incompatible_error( QObject::tr(
-            "The molecules \"%1\", number %2, and \"%3\", number %3, "
+            "The molecules \"%1\", number %2, and \"%3\", number %4, "
             "are different, and therefore incompatible.")
                 .arg(d->name()).arg(d->number())
                 .arg(other.name()).arg(other.number()),

@@ -183,7 +183,7 @@ static QVector<QString> toLines(const QVector<QString> &atmnams,
 
         if (has_velocities)
         {
-            Vector vel = 0.1 * vels.constData()[iatm]; // convert to nanometers per picosecond
+            Vector vel = vels.constData()[iatm];
 
             lines_data[iatm] = QString("%1%2%3%4%5%6%7%8%9%10")
                                     .arg(resnum, 5)
@@ -297,16 +297,16 @@ static QVector<Vector> getVelocities(const Molecule &mol, const PropertyName &ve
 
         QVector<Vector> vels( mol.nAtoms() );
 
-        const double units = 1.0 / (angstrom/picosecond).value();
+        const auto units = nanometer / picosecond;
 
         for (int i=0; i<mol.nAtoms(); ++i)
         {
             const auto atomvels = molvels.at( molinfo.cgAtomIdx( AtomIdx(i) ) );
 
-            //need to convert the velocities into units of Angstroms / picoseconds
-            vels[i] = Vector( atomvels.x().value() * units,
-                              atomvels.y().value() * units,
-                              atomvels.z().value() * units );
+            //need to convert the velocities into units of nanometers / picoseconds
+            vels[i] = Vector( atomvels.x().to(units),
+                              atomvels.y().to(units),
+                              atomvels.z().to(units) );
         }
 
         return vels;
@@ -1389,8 +1389,9 @@ void Gro87::parseLines(const PropertyMap &map)
 
             *has_vels = true;
 
-            //convert from nanometers per picosecond to angstroms per picosecond
-            frame_vels_data[iatm] = Vector( 10.0*x, 10.0*y, 10.0*z );
+            // Read in raw values. These will be converted to nanometers / picosecond
+            // later.
+            frame_vels_data[iatm] = Vector( x, y, z );
         };
 
         if (usesParallel())
@@ -1857,8 +1858,8 @@ System Gro87::startSystem(const PropertyMap &map) const
             {
                 auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(i));
 
-                //velocity is Angstroms per 1/20.455 ps
-                const auto vel_unit = (1.0 / 20.455) * angstrom / picosecond;
+                //velocity is nanometers per picosecond
+                const auto vel_unit = nanometer / picosecond;
 
                 const Vector &vel = vels_array[i];
                 vels.set(cgatomidx, Velocity3D(vel.x() * vel_unit,
@@ -2037,8 +2038,8 @@ void Gro87::addToSystem(System &system, const PropertyMap &map) const
 
                 const int atom_idx = idx_in_gro.constData()[j];
 
-                //velocity is Angstroms per 1/20.455 ps
-                const auto vel_unit = (1.0 / 20.455) * angstrom / picosecond;
+                //velocity is nanometers per picosecond
+                const auto vel_unit = nanometer / picosecond;
 
                 const Vector &vel = vels_array[atom_idx];
                 vels.set(cgatomidx, Velocity3D(vel.x() * vel_unit,

@@ -409,11 +409,11 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
 
     # First, we need at least GCC 7, (released 2018). GCC 11 comes with conda
     if ( GCC_MAJOR_VERSION LESS 7 )
-      message( FATAL_ERROR "Sire requires GCC >= 10.0. Please upgrade "
+      message( FATAL_ERROR "Sire requires GCC >= 7.0. Please upgrade "
                            "your version of GCC." )
     endif()
 
-    set ( SIRE_SMALL_FLAGS  "-Os" )
+    set ( SIRE_SMALL_FLAGS  "-Oz" )
     set ( SIRE_WARNALL_FLAGS  "-Wall" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
 
