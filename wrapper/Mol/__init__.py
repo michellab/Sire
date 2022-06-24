@@ -185,6 +185,9 @@ from .. import Units as _Units
 
 from ._Mol import *
 
+from ..Search._Search import install_search_parser as _install_search_parser
+_install_search_parser()
+
 
 def __get_property__(molview, key):
     if hasattr(molview, "property_type"):

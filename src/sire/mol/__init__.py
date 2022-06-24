@@ -7,9 +7,6 @@ from ..legacy import Mol as _Mol
 from .. import use_new_api as _use_new_api
 _use_new_api()
 
-from ..legacy import Search as _Search
-_Search.install_search_parser()
-
 from ..legacy import Base as _Base
 
 from ..legacy.Mol import AtomName, AtomNum, AtomIdx, AtomID, \

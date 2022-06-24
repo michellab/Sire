@@ -3833,7 +3833,7 @@ MolStructureEditor CharmmPSF::getMolStructure(int imol, const PropertyName &cutt
 
         for (auto seg_atom : seg_atoms)
         {
-            auto atom = mol.atom(AtomIdx(seg_atom));
+            auto atom = mol.atom(AtomNum(atoms[seg_atom].getNumber()));
             atom.reparent(SegName(seg));
         }
     }
