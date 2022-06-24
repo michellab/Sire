@@ -429,6 +429,8 @@ def test_all_searches(ala_mols):
     assert len(mols["atoms in molidx 0"]) == 22
     assert len(mols["residues in molidx 0"]) == 3
 
+    assert len(mols["all"]) == mols.num_molecules()
+
 
 def test_count_searches(ala_mols):
     mols = ala_mols

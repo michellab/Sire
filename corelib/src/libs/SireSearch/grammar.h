@@ -128,6 +128,7 @@ public:
 
         //all of the different words to match "all"
         all_token.add( "*", AST::IDAll() )
+                     ( "all", AST::IDAll() )
                      ( "atoms", AST::IDAll(AST::ATOM) )
                      ( "bonds", AST::IDAll(AST::BOND) )
                      ( "residues", AST::IDAll(AST::RESIDUE) )
