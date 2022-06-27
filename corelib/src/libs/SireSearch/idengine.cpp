@@ -1164,6 +1164,7 @@ SelectResult IDAndEngine::select(const SelectResult &mols, const PropertyMap &ma
     QList<MolViewPtr> left = part0->operator()(mols, map).toList();
 
     QHash<MolNum, int> molnum_to_idx;
+    QList<MolNum> ordered_molnums;
     molnum_to_idx.reserve(left.count());
 
     for (int i=0; i<left.count(); ++i)
@@ -1178,11 +1179,11 @@ SelectResult IDAndEngine::select(const SelectResult &mols, const PropertyMap &ma
         else
         {
             molnum_to_idx[molnum] = i;
+            ordered_molnums.append(molnum);
         }
     }
 
     // now perform the right hand side on the result of the left hand side
-    QList<MolNum> molnums;
     QSet<MolNum> seen;
 
     for (const auto &mol : part1->operator()(mols, map))
@@ -1198,7 +1199,6 @@ SelectResult IDAndEngine::select(const SelectResult &mols, const PropertyMap &ma
 
             if (not (seen.contains(molnum) or left[idx]->isEmpty()))
             {
-                molnums.append(molnum);
                 seen.insert(molnum);
             }
         }
@@ -1206,12 +1206,15 @@ SelectResult IDAndEngine::select(const SelectResult &mols, const PropertyMap &ma
 
     QList<MolViewPtr> result;
 
-    for (const auto &molnum : seen)
+    for (const auto &molnum : ordered_molnums)
     {
-        auto idx = molnum_to_idx[molnum];
+        if (seen.contains(molnum))
+        {
+            auto idx = molnum_to_idx[molnum];
 
-        if (not left[idx]->isEmpty())
-            result.append(left[idx]);
+            if (not left[idx]->isEmpty())
+                result.append(left[idx]);
+        }
     }
 
     return SelectResult(result);
