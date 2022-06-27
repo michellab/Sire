@@ -185,6 +185,13 @@ if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
   message( FATAL_ERROR "You must run CMake in a different directory to the source!" )
 endif()
 
+# Conda can set incorrect CXX flags (i.e. -mtune=haswell on MacOS M1!)
+# It is safer to completely unset these flags.
+unset(ENV{CXXFLAGS})
+unset(ENV{DEBUG_CXXFLAGS})
+unset(ENV{CFLAGS})
+unset(ENV{DEBUG_CFLAGS})
+
 # name the project
 project (SIRE CXX C)
 
@@ -540,7 +547,7 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
        endif()
     endif()
 
-    set ( SIRE_SMALL_FLAGS  "-Os" )
+    set ( SIRE_SMALL_FLAGS  "-Oz" )
     set ( SIRE_WARNALL_FLAGS  "-Wall" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
 
