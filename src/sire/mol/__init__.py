@@ -22,7 +22,7 @@ from ..legacy.Mol import AtomName, AtomNum, AtomIdx, AtomID, \
                          Chain, Selector_Chain_, SelectorM_Chain_, \
                          Segment, Selector_Segment_, SelectorM_Segment_, \
                          Molecule, SelectorMol, \
-                         MoleculeView
+                         MoleculeView, Select
 
 # Here I will define some functions that make accessing
 # things from moleculeviews more convenient

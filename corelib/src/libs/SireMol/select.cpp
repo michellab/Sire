@@ -839,7 +839,10 @@ MolViewPtr SelectResult::operator[](int i) const
         }
         else
         {
-            return view->at(i);
+            if (view->nViews() == 1)
+                return view;
+            else
+                return view->at(i);
         }
     }
 
