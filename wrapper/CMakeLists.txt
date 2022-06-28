@@ -312,21 +312,6 @@ else()
   endif()
 endif()
 
-if (APPLE)
-  # Also on MacOS need to add '-undefined dynamic_lookup' so that we can build
-  # modules that can be imported by a python that has statically linked libPython
-  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -undefined dynamic_lookup" )
-endif()
-
-message( STATUS  "CMAKE_SYSTEM_NAME      == ${CMAKE_SYSTEM_NAME}" )
-message( STATUS  "CMAKE_C_COMPILER       == ${CMAKE_C_COMPILER}" )
-message( STATUS  "CMAKE_CXX_COMPILER     == ${CMAKE_CXX_COMPILER}" )
-message( STATUS  "C compiler flags       == ${CMAKE_C_FLAGS}" )
-message( STATUS  "C++ compiler flags     == ${CMAKE_CXX_FLAGS}" )
-message( STATUS  "Shared library flags   == ${CMAKE_SHARED_LINKER_FLAGS}" )
-message( STATUS  "Static library flags   == ${CMAKE_STATIC_LINKER_FLAGS}" )
-message( STATUS  "Executable link flags  == ${CMAKE_EXE_LINKER_FLAGS}" )
-
 # Now lets find Python...
 set(Python3_ROOT_DIR "${ANACONDA_BASE}")
 set(Python3_FIND_STRATEGY "LOCATION")
@@ -353,6 +338,31 @@ message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR} | ${PY
 if (APPLE)
   set( PYTHON_LIBRARIES "" )
 endif()
+
+if (APPLE)
+  # Also on MacOS need to add '-undefined dynamic_lookup' so that we can build
+  # modules that can be imported by a python that has statically linked libPython
+  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -undefined dynamic_lookup" )
+
+  # Need to remove anything other than `-O1` or `-Oz` from Python < 3.9
+  # X86 builds on MacOS as these causes crashes with boost_python
+  if ((Python3_VERSION_MINOR LESS 9) AND NOT (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64"))
+    message( STATUS "Disabling '-O3' : ${CMAKE_SYSTEM_PROCESSOR}")
+    string( REPLACE "-O3" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+    string( REPLACE "-O3" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS} )
+  endif()
+
+endif()
+
+message( STATUS  "CMAKE_SYSTEM_NAME      == ${CMAKE_SYSTEM_NAME}" )
+message( STATUS  "CMAKE_SYSTEM_PROCESSOR == ${CMAKE_SYSTEM_PROCESSOR}")
+message( STATUS  "CMAKE_C_COMPILER       == ${CMAKE_C_COMPILER}" )
+message( STATUS  "CMAKE_CXX_COMPILER     == ${CMAKE_CXX_COMPILER}" )
+message( STATUS  "C compiler flags       == ${CMAKE_C_FLAGS}" )
+message( STATUS  "C++ compiler flags     == ${CMAKE_CXX_FLAGS}" )
+message( STATUS  "Shared library flags   == ${CMAKE_SHARED_LINKER_FLAGS}" )
+message( STATUS  "Static library flags   == ${CMAKE_STATIC_LINKER_FLAGS}" )
+message( STATUS  "Executable link flags  == ${CMAKE_EXE_LINKER_FLAGS}" )
 
 # All boost python libraries must be dynamically linked
 # (else we could end up with multiple boost::python libraries linked, which
