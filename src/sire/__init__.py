@@ -28,6 +28,41 @@ __all__ = [ "load", "save",
             "get_thumbs_up_info", "disable_thumbs_up" ]
 
 
+def _fix_openmm_path():
+    """We need to fix the OpenMM path on Windows, because the DLL
+       is not where we would expect it to be
+    """
+    import sys
+
+    if sys.platform != "win32":
+        return
+
+    import os
+    import glob
+
+    condadir = os.path.dirname(sys.executable)
+
+    # The DLL is put in libdir, but other DLLs are put in bindir
+    libdir = os.path.join(condadir, "Library", "lib")
+    bindir = os.path.join(condadir, "Library", "bin")
+    openmm_files = glob.glob(os.path.join(libdir, "OpenMM*.dll"))
+
+    need_path = False
+
+    for file in openmm_files:
+        binfile = os.path.join(bindir, os.path.basename(file))
+        
+        if not os.path.exists(binfile):
+            # We do need to add bindir to the PATH
+            need_path = True
+            break
+
+    if need_path:
+        os.path.add_dll_directory(libdir)
+
+_fix_openmm_path()
+
+
 def molid(num: int = None, name: str = None, idx: int = None,
           case_sensitive: bool = True):
     """Construct an identifer for a Molecule from the passed
