@@ -398,7 +398,7 @@ if (APPLE)
 
   # Need to remove anything other than `-O1` or `-Oz` from Python < 3.9
   # X86 builds on MacOS as these causes crashes with boost_python
-  if NOT (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
+  if (NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
     message( STATUS "Disabling '-O3' : ${CMAKE_SYSTEM_PROCESSOR}")
     string( REPLACE "-O3" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
     string( REPLACE "-O3" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS} )
