@@ -348,8 +348,12 @@ if (APPLE)
   # X86 builds on MacOS as these causes crashes with boost_python
   if ((Python3_VERSION_MINOR LESS 9) AND NOT (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64"))
     message( STATUS "Disabling '-O3' : ${CMAKE_SYSTEM_PROCESSOR}")
+    string( REPLACE "-O2" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+    string( REPLACE "-O2" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS} )
     string( REPLACE "-O3" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
     string( REPLACE "-O3" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS} )
+    string( REPLACE "-Os" "-Oz" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+    string( REPLACE "-Os" "-Oz" CMAKE_C_FLAGS ${CMAKE_C_FLAGS} )
   endif()
 
 endif()
@@ -465,23 +469,3 @@ configure_file(
 
 add_custom_target(uninstall
   "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
-
-if (WIN32)
-  # OpenMM.dll is installed in conda/Library/lib when it should be
-  # in conda/Library/bin. Check if it is missing and then copy
-  # the file across
-  file( GLOB files "${ANACONDA_BASE}/Library/lib/OpenMM*.dll" )
-
-  foreach(file ${files})
-    get_filename_component(OMMDLL "${file}" NAME)
-    set( BINDLL "${ANACONDA_BASE}/Library/bin/${OMMDLL}" )
-    if (NOT EXISTS "${BINDLL}")
-      message( STATUS "OpenMM DLL in the wrong place? Should be ${BINDLL} but is ${file}" )
-      message( STATUS "Copying the file into ${ANACONDA_BASE}/Library/bin...")
-
-      # Copy the file to the bin directory or Sire won't be able to load its
-      # libraries that depend on OpenMM, e.g. SireMove.dll
-      file( COPY "${file}" DESTINATION "${ANACONDA_BASE}/Library/bin" )
-    endif()
-  endforeach()
-endif()
