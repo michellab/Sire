@@ -58,7 +58,12 @@ def _fix_openmm_path():
             break
 
     if need_path:
-        os.path.add_dll_directory(libdir)
+        # importing openmm should add this path
+        import openmm
+
+        # also add it manually here
+        os.add_dll_directory(libdir)
+
 
 _fix_openmm_path()
 
