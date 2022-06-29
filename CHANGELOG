@@ -3,6 +3,18 @@ SIRE changelog
 
 devel branch:
 
+    [2022.3.0] June 2022 - Added support for parsing SDF files (@chryswoods).
+               Move conda build process to Miniforge and mambdabuild (boa) to
+               avoid timeouts and memory issues. Update GroTop parser to ensure
+               new atom types are created when names match but parameters
+               differ. Added additional BioSimSpace wrapper to update
+               coordinates and velocities in a system, without first requiring
+               that it is modified to have unique atom and residue numbers.
+               Use -Oz compiler flag rather than -Os for compiling Python
+               wrappers to avoid "illegal hardware instruction" error with
+               Clang 14 on macOS x86_64. Fixed issue reconstructing triclinic
+               box objects from a binary data stream.
+
     [2022.2.0] March 2022 - Fixed formatting of SOLVENT_POINTERS flag in
                AmberPrm7 parser. Removed duplicate definition of sigma_av
                in OpenMMFreEnergySt.cpp. Fixed SOMD issues related to
