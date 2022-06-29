@@ -124,6 +124,13 @@ def __from_select_result(obj):
     """Convert the passed SelectResult from a search into the
        most appropriate MoleculeView-derived class
     """
+    if not hasattr(obj, "list_count"):
+        # Sometimes the SelectResult hasn't been converted, i.e. because
+        # it has come from an old api or mixed version of Sire
+        obj.list_count = obj.listCount
+        obj.get_common_type = obj.getCommonType
+        obj.to_list = obj.toList
+
     if obj.list_count() == 0:
         raise KeyError("Nothing matched the search.")
 
@@ -168,6 +175,22 @@ def __from_select_result(obj):
         else:
             # return this as a raw list
             return obj.to_list()
+
+
+def __select_call__(obj, molecules, map={}):
+    """Search for the desired objects in the passed molecules,
+       optionally passing in a property map to identify the properties
+    """
+    from ..system import System
+    if type(molecules) is System:
+        molecules = molecules._system
+
+    return __from_select_result(obj.__orig_call__(molecules, map))
+
+
+if not hasattr(Select, "__orig_call__"):
+    Select.__orig_call__ = Select.__call__
+    Select.__call__ = __select_call__
 
 
 def __fixed__getitem__(obj, key):
