@@ -1240,7 +1240,7 @@ boost::tuple<System, QHash<MolIdx, MolIdx> > updateCoordinatesAndVelocities(
     else
     {
         // Loop over the mapping.
-        for (const auto &molIdx0 : molecule_mapping)
+        for (const auto &molIdx0 : molecule_mapping.keys())
         {
             // Get the molecule index in molecule1.
             const auto molIdx1 = molecule_mapping[molIdx0];
@@ -1440,7 +1440,7 @@ boost::tuple<System, QHash<MolIdx, MolIdx> > updateCoordinatesAndVelocities(
     else
     {
         // Loop over the mapping.
-        for (const auto &molIdx0 : molecule_mapping)
+        for (const auto &molIdx0 : molecule_mapping.keys())
         {
             // Get the molecule index in molecule1.
             const auto molIdx1 = molecule_mapping[molIdx0];
