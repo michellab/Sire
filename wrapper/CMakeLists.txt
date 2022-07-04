@@ -81,7 +81,7 @@ set ( SIRE_COMP_CMAKE "${SIRE_INCLUDE_DIR}/cmake/SireCompileVariables.cmake" )
 if (EXISTS "${SIRE_COMP_CMAKE}")
   include( "${SIRE_COMP_CMAKE}" )
 else()
-  message( FATAL_ERROR "You don't appear to have built corelib into this"
+  message( FATAL_ERROR "You don't appear to have built corelib into this "
              "conda directory. Please build corelib first."
              "(there should be a file called ${SIRE_COMP_CMAKE})" )
 endif()

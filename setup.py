@@ -216,9 +216,6 @@ def conda_install(dependencies):
 
     conda_exe = conda
 
-    if (not is_windows) and (mamba is not None):
-        conda_exe = mamba
-
     global _is_conda_prepped
 
     if not _is_conda_prepped:
@@ -236,30 +233,6 @@ def conda_install(dependencies):
         if status.returncode != 0:
             print("Failed to set channel priority!")
             sys.exit(-1)
-
-        if is_macos and machine == "arm64":
-            # Now update conda - this is needed to fix libffi compatibility
-            # errors that break conda
-            cmd = [conda_exe, "update", "-y", "-n", "base",
-                   "-c", "defaults", "conda"]
-            print("Updating conda base using: '%s'" % " ".join(cmd))
-            status = subprocess.run(cmd)
-
-            if status.returncode != 0:
-                print("Something went wrong with the update!")
-                sys.exit(-1)
-
-            # Need to run this command to prevent conda errors on
-            # some platforms - see
-            # https://github.com/ContinuumIO/anaconda-issues/issues/11246
-            # If we don't do this, then we can't resolve dependencies
-            # on MacOS M1
-            cmd = "%s config --set channel_priority false" % conda_exe
-            print("Setting channel priority to false using: '%s'" % cmd)
-            status = subprocess.run(cmd.split())
-            if status.returncode != 0:
-                print("Failed to set channel priority!")
-                sys.exit(-1)
 
         _is_conda_prepped = True
 
@@ -354,10 +327,13 @@ def make_cmd(ncores, install = False):
 def _get_build_ext():
     if "CONDA_BUILD" in os.environ and os.environ["CONDA_BUILD"] == "1":
         return "conda_build"
-    elif conda_env is not None:
-        return conda_env.replace(" ", "_").replace(".", "_")
     else:
-        return os.path.basename(conda_base.replace(" ", "_").replace(".", "_"))
+        if conda_env is not None:
+            ext = "_" + conda_env.replace(" ", "_").replace(".", "_")
+        else:
+            ext = ""
+
+        return os.path.basename(conda_base.replace(" ", "_").replace(".", "_")) + ext
 
 
 def _get_bin_dir():
