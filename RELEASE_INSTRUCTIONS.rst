@@ -6,9 +6,7 @@ The following instructions describe how to create a new Sire release:
 Step 1
 ======
 
-Update the version number in the CMakeLists.txt files
-`here <https://github.com/michellab/Sire/blob/devel/corelib/CMakeLists.txt>`_ and
-`here <https://github.com/michellab/Sire/blob/devel/wrapper/CMakeLists.txt>`_.
+Update the version number in `version.txt <https://github.com/michellab/Sire/blob/devel/version.txt>`_.
 
 Step 2
 ======

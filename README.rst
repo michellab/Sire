@@ -65,30 +65,58 @@ You can then replace all ``conda`` commands with ``mamba``, e.g.:
 
     mamba create -n sire -c conda-forge -c michellab sire
 
-There are also many `pre-built binary packages <http://siremol.org/pages/binaries.html>`__,
-which are available for Linux, Mac OS X and Windows, which are quick and easy to install.
-
 However, as you are here, it is likely you want to download the latest,
 greatest version of the code, which you will need to compile. To compile Sire,
 you need a Git client to download the source, and a working internet connection
 (needed by the Sire compilation scripts to download additional dependencies).
 
-The easy install option is::
+First, you need to create and activate a conda environment, e.g.
+
+.. code-block:: bash
+
+    conda create -n sire-dev
+    conda activate sire-dev
+
+We find that Conda is particularly slow to install or upgrade,
+so we advise installing `mamba <https://github.com/TheSnakePit/mamba>`__:
+
+.. code-block:: bash
+
+    conda install -c conda-forge mamba
+
+Next, you need to install the Sire build dependencies.
+
+.. code-block:: bash
+
+    mamba install cmake pip-requirements-parser
+
+You will also need to install compilers, e.g. on Linux use
+
+.. code-block:: bash
+
+    mamba install gcc gxx
+
+on MacOS use
+
+.. code-block:: bash
+
+    mamba install clang clangxx
+
+and on Windows use
+
+.. code-block:: bash
+
+    mamba install conda-build
+
+Next, you can clone the Sire source code and compile and install Sire::
 
     git clone git@github.com:michellab/Sire.git
     cd Sire
-    ./compile_sire.sh
+    python setup.py install
 
 A small word of warning, the compilation can easily take over an hour!
 
-The above will download and install a new Miniconda Python installation,
-into which Sire will be compiled and deployed (together with its
-dependencies). This is by far the easiest way to compile and install Sire,
-and is the route we strongly recommend. If you have any problems with
-compiling and installing Sire, then please get in touch using the links below.
-
-If you want to install Sire into an existing Miniconda or Anaconda
-Python installation, please follow the instructions in `build/INSTALL_INTO_ANACONDA.rst <build/INSTALL_INTO_ANACONDA.rst>`__.
+The above will compile Sire in your existing conda environment.
 
 Support and Development
 =======================

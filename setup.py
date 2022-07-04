@@ -158,6 +158,9 @@ def parse_args():
         metavar=("N_PYTHON_CORES",), default=[npycores],
         help="Number of CPU cores used for compiling Python wrappers "
         "(defaults to the number of CPU cores used for compiling corelib)")
+    parser.add_argument("--install-bss-deps", action="store_true", default=False,
+        help="Install BioSimSpace's dependencies too. This helps ensure "
+             "compatibility between Sire's and BioSimSpace's dependencies.")
     parser.add_argument("--skip-deps", action="store_true", default=False,
         help="Skip the installation of the dependencies (only use if you know "
              "that they are already installed)")
@@ -282,7 +285,7 @@ def conda_install(dependencies):
             sys.exit(-1)
 
 
-def install_requires():
+def install_requires(install_bss_reqs=False):
     """Installs all of the dependencies. This can safely be called
        multiple times, as it will cache the result to prevent future
        installs taking too long
@@ -298,6 +301,10 @@ def install_requires():
 
     reqs = parse_requirements("requirements.txt")
     build_reqs = parse_requirements("requirements_build.txt")
+
+    if install_bss_reqs:
+        bss_reqs = parse_requirements("requirements_bss.txt")
+        reqs = reqs + bss_reqs
 
     print("\nUsing dependencies:")
     dependencies = build_reqs + reqs
@@ -656,6 +663,8 @@ if __name__ == "__main__":
         print("Please use either 'install_requires', 'build' or 'install'")
         sys.exit(-1)
 
+    install_bss = args.install_bss_deps
+
     action = args.action[0]
 
     if is_windows and (args.generator is None or len(args.generator) == 0):
@@ -663,7 +672,7 @@ if __name__ == "__main__":
 
     if action == "install":
         if not (args.skip_deps or args.skip_build):
-            install_requires()
+            install_requires(install_bss_reqs=install_bss)
 
         if not args.skip_build:
             build(ncores=args.ncores[0], npycores=args.npycores[0],
@@ -673,13 +682,13 @@ if __name__ == "__main__":
 
     elif action == "build":
         if not args.skip_deps:
-            install_requires()
+            install_requires(install_bss_reqs=install_bss)
 
         build(ncores=args.ncores[0], npycores=args.npycores[0],
               coredefs=args.corelib, pydefs=args.wrapper)
 
     elif action == "install_requires":
-        install_requires()
+        install_requires(install_bss_reqs=install_bss)
 
     elif action == "install_module":
         install_module(ncores=args.ncores[0])
