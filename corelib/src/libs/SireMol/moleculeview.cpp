@@ -526,7 +526,7 @@ Atom MoleculeView::atom() const
                 "Cannot convert this view (%1) into an Atom as "
                 "we can only do this is just one atom is selected. "
                 "The number of matching atoms is %2.")
-                    .arg(this->toString(), selected_atoms.count()),
+                    .arg(this->toString()).arg(selected_atoms.count()),
                         CODELOC );
 
     return Atom(this->data(), selected_atoms.at(0));

@@ -124,12 +124,14 @@ def __from_select_result(obj):
     """Convert the passed SelectResult from a search into the
        most appropriate MoleculeView-derived class
     """
-    if not hasattr(obj, "list_count"):
+    if hasattr(obj, "listCount") and not hasattr(obj, "list_count"):
         # Sometimes the SelectResult hasn't been converted, i.e. because
-        # it has come from an old api or mixed version of Sire
-        obj.list_count = obj.listCount
-        obj.get_common_type = obj.getCommonType
-        obj.to_list = obj.toList
+        # it has come from an old api or mixed version of Sire, or
+        # BioSimSpace has done something weird...
+        raise SystemError(
+            "Something has gone wrong with sire. Despite being loaded "
+            "with the new or mixed API, it is being passed the object "
+            f"'{obj}' of type {type(obj)} which only has the old API active.")
 
     if obj.list_count() == 0:
         raise KeyError("Nothing matched the search.")
@@ -287,6 +289,7 @@ def __fixed__bond__(obj, idx=None, idx1=None):
 
 
 def __fixed__residues__(obj, idx=None, auto_reduce=False):
+
     if idx is None:
         result = obj.__orig__residues()
     elif type(idx) is range:
