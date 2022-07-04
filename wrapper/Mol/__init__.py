@@ -224,12 +224,15 @@ _typename_mapping = {"SireMol_Velocity3D" : "SireMaths_Vector3D_SireUnits_Dimens
 
 def __get_typename__(obj):
     try:
-        if hasattr(obj, "typename"):
+        if hasattr(obj, "what"):
+            typename = obj.what().replace("::","_")
+        elif hasattr(obj, "typename"):
             typename = obj.typename().replace("::","_")
         else:
             typename = obj.typeName().replace("::","_")
+
         return (_typename_mapping.get(typename, typename), obj)
-    except:
+    except Exception as e:
         if isinstance(obj, float):
             return ("double", obj)
         elif isinstance(obj, int):
@@ -237,7 +240,7 @@ def __get_typename__(obj):
         elif isinstance(obj, str):
             return ("QString", obj)
         else:
-            return ("QVariant", _Qt.QVariant(obj))
+            raise TypeError(f"Unable to wrap type {type(obj)}: {obj} : {e}")
 
 
 def _match_to_type(typename, property):

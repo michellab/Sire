@@ -131,7 +131,8 @@ def __from_select_result(obj):
         raise SystemError(
             "Something has gone wrong with sire. Despite being loaded "
             "with the new or mixed API, it is being passed the object "
-            f"'{obj}' of type {type(obj)} which only has the old API active.")
+            f"'{obj}' of type {type(obj)} which only has the old API active. "
+            "Has Sire been loaded with support for old module names?")
 
     if obj.list_count() == 0:
         raise KeyError("Nothing matched the search.")

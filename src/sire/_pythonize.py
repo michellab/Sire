@@ -132,7 +132,7 @@ _is_using_old_api = None
 _is_using_new_api = None
 
 
-def use_mixed_api():
+def use_mixed_api(support_old_module_names: bool = False):
     """Load Sire using both the new (python-style) and old APIs. This
        is useful for migrating old scripts as a temporary porting option.
        You can start writing functions using the new API, safe in the
@@ -143,6 +143,10 @@ def use_mixed_api():
     """
     global _is_using_new_api, _is_using_old_api
 
+    if _is_using_old_api and _is_using_new_api:
+        # don't need to do this twice
+        return
+
     if _is_using_old_api or _is_using_new_api:
         msg = "Cannot import sire using the mixed API as either the old " \
               "or new APIs have already been activated."
@@ -151,7 +155,12 @@ def use_mixed_api():
         raise ImportError(msg)
 
     # First, bring in the old API
-    use_old_api()
+    if support_old_module_names:
+        print("Loading Sire with support for old module names.")
+        print("Note that this can cause problems with classes importing twice.")
+        use_old_api()
+    else:
+        _is_using_old_api = True
 
     # Now, bring in the new API
     _is_using_new_api = True

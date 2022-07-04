@@ -2,7 +2,7 @@
 import sire as sr
 sr.use_mixed_api()
 
-import sire.legacy.Mol as _Mol
+import sire.legacy.Mol
 
 import pytest
 
