@@ -24,6 +24,7 @@
 #include "amberprm.h"
 #include "pdb.h"
 #include "amberrst.h"
+#include "sdf.h"
 
 #include "Helpers/objectregistry.hpp"
 
@@ -61,6 +62,7 @@ void register_SireIO_objects()
     ObjectRegistry::registerConverterFor< SireIO::AmberPrm >();
     ObjectRegistry::registerConverterFor< SireIO::PDB >();
     ObjectRegistry::registerConverterFor< SireIO::AmberRst >();
+    ObjectRegistry::registerConverterFor< SireIO::SDF >();
 
 }
 

@@ -49,12 +49,56 @@ def __get_typename__(obj):
         elif isinstance(obj, str):
             return ("QString", obj)
         else:
-            return ("QVariant", Sire.Qt.QVariant(obj)) 
+            return ("QVariant", Sire.Qt.QVariant(obj))
 
-def __set_property__(molview, key, property):
+def _match_to_type(typename, property):
+    """Match the passed type of the property to the typename
+       of the AtomProperty, CGProperty etc that is used to
+       hold that type.
+
+       This is useful to, e.g. allow a AtomStringArrayProperty
+       to be set on a per-atom basis from DoubleArrayProperty
+       values.
+    """
+    if typename.endswith("StringArrayProperty"):
+        return Sire.Base.StringArrayProperty(property)
+    elif typename.endswith("DoubleArrayProperty"):
+        return Sire.Base.DoubleArrayProperty(property)
+    elif typename.endswith("IntegerArrayProperty"):
+        return Sire.Base.IntegerArrayProperty(property)
+    elif typename.endswith("PropertyList"):
+        return Sire.Base.PropertyList(property)
+    else:
+        return property
+
+def _set_property(molview, key, property):
+    if molview.hasProperty(key):
+        # get the type of the existing property
+        typename = molview.propertyType(key)
+        property = _match_to_type(typename, property)
+
     (typename, property) = __get_typename__(property)
 
-    return getattr(molview, "_set_property_%s" % typename)(key, property)     
+    return getattr(molview, "_set_property_%s" % typename)(key, property)
+
+def __set_property__(molview, key, property):
+    try:
+        return _set_property(molview, key, property)
+    except Exception as e:
+        if e.__class__.__name__ == "ArgumentError":
+            return _set_property(molview, key, Sire.Base.wrap(property))
+        else:
+            raise e
+
+def __set_bond_property__(connectivity, bond, key, property):
+    try:
+        return connectivity.__setProperty__(bond, key, property)
+    except Exception as e:
+        if e.__class__.__name__ == "ArgumentError":
+            return connectivity.__setProperty__(bond, key,
+                                                Sire.Base.wrap(property))
+        else:
+            raise e
 
 def __set_metadata__(molview, *args):
 
@@ -69,14 +113,13 @@ def __set_metadata__(molview, *args):
     elif len(args) == 3:
          (key, metakey, property) = args
 
-         (typename, property) = __get_typename__(property)         
+         (typename, property) = __get_typename__(property)
 
          return getattr(molview, "_set_metadata_%s" % typename)(key, metakey, property)
 
     else:
         raise AttributeError( "Only molview.setMetadata(metakey, property) " + \
                               "or molview.setMetadata(key, metakey, property) are valid!" )
-
 
 Atom.property = __get_property__
 AtomEditorBase.setProperty = __set_property__
@@ -102,6 +145,12 @@ Segment.property = __get_property__
 SegEditorBase.setProperty = __set_property__
 Segment.metadata = __get_metadata__
 SegEditorBase.setMetadata = __set_metadata__
+
+ConnectivityEditor.__setProperty__ = ConnectivityEditor.setProperty
+ConnectivityEditor.setProperty = __set_bond_property__
+
+MolEditor.__setProperty__ = MolEditor.setProperty
+MolEditor.setProperty = Sire.Base.__set_property__
 
 def get_molview(mol):
     """Convert the passed molecule into the most appropriate view,
@@ -157,7 +206,11 @@ def _pvt_property_cludge_fix(C):
    __p.setProperty("c", C())
    t = __p.property("c").array()
 
-__props = [ AtomCharges, AtomElements ]
+__props = [ AtomCharges, AtomElements,
+            AtomStringArrayProperty,
+            AtomPropertyList,
+            AtomDoubleArrayProperty,
+            AtomIntegerArrayProperty ]
 
 for __prop in __props:
     _pvt_property_cludge_fix(__prop)

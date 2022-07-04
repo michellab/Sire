@@ -21,6 +21,40 @@ using namespace SireUnits;
 using namespace SireUnits::Dimension;
 using namespace SireBase;
 
+QDataStream& operator<<(QDataStream &ds, const SireUnits::Dimension::GeneralUnit &u)
+{
+    qint8 a = u.ANGLE();
+    qint8 c = u.CHARGE();
+    qint8 l = u.LENGTH();
+    qint8 m = u.MASS();
+    qint8 t1 = u.TEMPERATURE();
+    qint8 t2 = u.TIME();
+    qint8 q = u.QUANTITY();
+
+    ds << a << c << l << m << t1 << t2 << q
+       << static_cast<const Unit&>(u);
+
+    return ds;
+}
+
+QDataStream& operator>>(QDataStream &ds, SireUnits::Dimension::GeneralUnit &u)
+{
+    qint8 a, c, l, m, t1, t2, q;
+
+    ds >> a >> c >> l >> m >> t1 >> t2 >> q
+       >> static_cast<Unit&>(u);
+
+    u.Angle = a;
+    u.Charge = c;
+    u.Length = l;
+    u.Mass = m;
+    u.temperature = t1;
+    u.Time = t2;
+    u.Quantity = q;
+
+    return ds;
+}
+
 namespace SireUnits
 {
 namespace Dimension
@@ -119,7 +153,7 @@ void GeneralUnit::assertCompatible(const GeneralUnit &other) const
         throw "Unit conversion error!!!";
     }
 }
-    
+
 QString GeneralUnit::toString() const
 {
     return SireUnits::Dimension::getUnitString(value(), Mass, Length,
@@ -140,9 +174,9 @@ double GeneralUnit::to(const TempBase &other) const
     GeneralUnit general_temp;
     general_temp.temperature = 1;
     general_temp.setScale(other);
-    
+
     this->assertCompatible(general_temp);
-    
+
     return other.convertFromInternal(value()) / other.convertFromInternal();
 }
 
@@ -184,14 +218,14 @@ int GeneralUnit::ANGLE() const
 GeneralUnit& GeneralUnit::operator=(const GeneralUnit &other)
 {
     setScale(other.value());
-    
+
     Mass = other.MASS();
     Length = other.LENGTH();
     Time = other.TIME();
     Charge = other.CHARGE();
     temperature = other.TEMPERATURE();
     Quantity = other.QUANTITY();
-    Angle = other.ANGLE();    
+    Angle = other.ANGLE();
 
     return *this;
 }
@@ -253,7 +287,7 @@ GeneralUnit GeneralUnit::operator*=(const GeneralUnit &other)
      temperature += other.temperature;
      Quantity += other.Quantity;
      Angle += other.Angle;
-     
+
      return *this;
 }
 
@@ -267,7 +301,7 @@ GeneralUnit GeneralUnit::operator/=(const GeneralUnit &other)
     temperature -= other.temperature;
     Quantity -= other.Quantity;
     Angle -= other.Angle;
-    
+
     return *this;
 }
 
@@ -340,9 +374,9 @@ GeneralUnit GeneralUnit::operator/(int val) const
 GeneralUnit GeneralUnit::invert() const
 {
     GeneralUnit ret;
-    
+
     ret.setScale( 1.0 / value() );
-    
+
     ret.Mass = -Mass;
     ret.Length = -Length;
     ret.Time = -Time;
@@ -350,7 +384,7 @@ GeneralUnit GeneralUnit::invert() const
     ret.temperature = -temperature;
     ret.Quantity = -Quantity;
     ret.Angle = -Angle;
-    
+
     return ret;
 }
 

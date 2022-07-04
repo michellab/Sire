@@ -20,6 +20,7 @@
 #include "pdb2.h"
 #include "perturbationslibrary.h"
 #include "protoms.h"
+#include "sdf.h"
 #include "supplementary.h"
 #include "tinker.h"
 #include "trajectorymonitor.h"

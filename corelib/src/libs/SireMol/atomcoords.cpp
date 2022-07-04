@@ -33,6 +33,7 @@
 #include "SireVol/space.h"
 
 #include "SireBase/quickcopy.hpp"
+#include "SireMaths/vectorproperty.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -412,6 +413,19 @@ const Vector& AtomProperty<Vector>::at(const CGAtomIdx &cgatomidx) const
 const Vector& AtomProperty<Vector>::get(const CGAtomIdx &cgatomidx) const
 {
     return this->operator[](cgatomidx);
+}
+
+/** Return the coordinates as a QVariant */
+QVariant AtomProperty<Vector>::getAsVariant(const CGAtomIdx &cgatomidx) const
+{
+    const Vector &c = this->get(cgatomidx);
+    return QVariant::fromValue(c);
+}
+
+/** Retunr the coordinates as a Property */
+PropertyPtr AtomProperty<Vector>::getAsProperty(const CGAtomIdx &cgatomidx) const
+{
+    return PropertyPtr(VectorProperty(this->get(cgatomidx)));
 }
 
 /** Set the coordinates of the atom at index 'cgatomidx' to the value 'value' */

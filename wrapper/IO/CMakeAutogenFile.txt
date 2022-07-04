@@ -32,6 +32,7 @@ set ( PYPP_SOURCES
        MoleculeParser.pypp.cpp
        GroSystem.pypp.cpp
        Supplementary.pypp.cpp
+       SDF.pypp.cpp
        SireIO_containers.cpp
        SireIO_properties.cpp
        SireIO_registrars.cpp
