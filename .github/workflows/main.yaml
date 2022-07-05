@@ -34,15 +34,11 @@ jobs:
           miniforge-version: latest
           miniforge-variant: Mambaforge
           use-mamba: true
-      - name: Clone the repository
-        run: git clone https://github.com/michellab/Sire
-      - name: Checkout the head branch if a pull request
-        run: |
-          cd Sire
-          git checkout "$HEAD_BRANCH"
-          cd ..
-        env:
-          HEAD_BRANCH: ${{ github.head_ref }}
+      - name: Clone the devel branch
+        run: git clone --single-branch https://github.com/michellab/Sire
+        if: github.event_name != 'pull_request'
+      - name: Clone the repository branch
+        run: git clone -b ${{ github.head_ref }} --single-branch https://github.com/michellab/Sire
         if: github.event_name == 'pull_request'
       - name: Setup Conda
         run: mamba install -y -c conda-forge boa anaconda-client pip-requirements-parser
