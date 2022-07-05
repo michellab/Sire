@@ -49,6 +49,8 @@ jobs:
       - name: Where am I?
         run:
           Get-Location
+      - name: What is here?
+        run:
           ls
       - name: Update Conda recipe
         run:
