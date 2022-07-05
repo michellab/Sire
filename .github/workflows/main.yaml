@@ -15,13 +15,13 @@ jobs:
       max-parallel: 6
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
-        python-version: ["3.7", "3.8", "3.9"]
+        os: ["windows-latest"]
+        python-version: ["3.9"]
     environment:
       name: sire-build
     defaults:
       run:
-        shell: bash -l {0}
+        shell: pwsh
     env:
       SIRE_DONT_PHONEHOME: 1
       SIRE_SILENT_PHONEHOME: 1
