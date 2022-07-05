@@ -19,6 +19,9 @@ jobs:
         python-version: ["3.7", "3.8", "3.9"]
     environment:
       name: sire-build
+    defaults:
+      run:
+        shell: bash -l {0}
     env:
       SIRE_DONT_PHONEHOME: 1
       SIRE_SILENT_PHONEHOME: 1
@@ -37,20 +40,19 @@ jobs:
         run: |
           cd Sire
           git checkout "$HEAD_BRANCH"
+          cd ..
         env:
           HEAD_BRANCH: ${{ github.head_ref }}
         if: github.event_name == 'pull_request'
       - name: Setup Conda
-        shell: bash -l {0}
         run: mamba install -y -c conda-forge boa anaconda-client pip-requirements-parser
       - name: Update Conda recipe
-        run: python Sire/actions/update_recipe.py
+        run:
+          python Sire/actions/update_recipe.py
       - name: Build Conda package
-        shell: bash -l {0}
         run: conda mambabuild -c conda-forge -c michellab Sire/recipes/sire
       - name: Upload Conda package
-        shell: bash -l {0}
-        run: Sire/actions/upload_package.sh
+        run: python Sire/actions/upload_package.py
         env:
           SRC_DIR: ${{ github.workspace }}/Sire
           ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
