@@ -21,7 +21,7 @@ jobs:
       name: sire-build
     defaults:
       run:
-        shell: pwsh
+        shell: bash -l {0}
     env:
       SIRE_DONT_PHONEHOME: 1
       SIRE_SILENT_PHONEHOME: 1
@@ -42,12 +42,6 @@ jobs:
         if: github.event_name == 'pull_request'
       - name: Setup Conda
         run: mamba install -y -c conda-forge boa anaconda-client pip-requirements-parser
-      - name: Where am I?
-        run:
-          Get-Location
-      - name: What is here?
-        run:
-          ls ${{ github.workspace }}/Sire/actions
       - name: Update Conda recipe
         run:
           python ${{ github.workspace }}/Sire/actions/update_recipe.py

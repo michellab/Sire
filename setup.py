@@ -383,8 +383,6 @@ def build(ncores: int = 1, npycores: int = 1,
             print("conda install gcc gxx")
             sys.exit(-1)
 
-    print("Using compilers %s | %s" % (CC, CXX))
-
     # Make sure all of the above output is printed to the screen
     # before we start running any actual compilation
     sys.stdout.flush()

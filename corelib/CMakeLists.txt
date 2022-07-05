@@ -90,13 +90,17 @@ endif()
 
 # conda can set incorrect CXX flags (i.e. -mtune=haswell on MacOS M1!)
 # If is safer to completely unset these flags
-unset(ENV{CXXFLAGS})
-unset(ENV{DEBUG_CXXFLAGS})
-unset(ENV{CFLAGS})
-unset(ENV{DEBUG_CFLAGS})
+# unset(ENV{CXXFLAGS})
+# unset(ENV{DEBUG_CXXFLAGS})
+# unset(ENV{CFLAGS})
+# unset(ENV{DEBUG_CFLAGS})
+
+message( STATUS "ABOUT TO RUN PROJECT" )
 
 # name the project
 project (SIRE CXX C)
+
+message( STATUS "PROJECT COMPLETE" )
 
 # make sure that libraries are not found in any system directories
 # This is because everything will be linked to from the conda directory
