@@ -48,11 +48,11 @@ jobs:
         run: mamba install -y -c conda-forge boa anaconda-client pip-requirements-parser
       - name: Update Conda recipe
         run:
-          python Sire/actions/update_recipe.py
+          python ${{ github.workspace }}/Sire/actions/update_recipe.py
       - name: Build Conda package
-        run: conda mambabuild -c conda-forge -c michellab Sire/recipes/sire
+        run: conda mambabuild -c conda-forge -c michellab ${{ github.workspace }}/Sire/recipes/sire
       - name: Upload Conda package
-        run: python Sire/actions/upload_package.py
+        run: python ${{ github.workspace }}/Sire/actions/upload_package.py
         env:
           SRC_DIR: ${{ github.workspace }}/Sire
           ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
