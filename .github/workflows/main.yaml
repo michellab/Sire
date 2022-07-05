@@ -46,6 +46,10 @@ jobs:
         if: github.event_name == 'pull_request'
       - name: Setup Conda
         run: mamba install -y -c conda-forge boa anaconda-client pip-requirements-parser
+      - name: Where am I?
+        run:
+          Get-Location
+          ls
       - name: Update Conda recipe
         run:
           python ${{ github.workspace }}/Sire/actions/update_recipe.py
