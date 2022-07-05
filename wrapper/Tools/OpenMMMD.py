@@ -210,7 +210,9 @@ boresch_restraints_dict = Parameter("boresch restraints dictionary", {},
                                     character of k indicates a force constant (kcal mol^-1 A^-2 for the distance and 
                                     kcal mol^-1 rad^-2 for the angles) and a final character of 0 indicates an
                                     equilibrium value (A or rad). To use Boresch restraints, "use boresch restraints" 
-                                    must be set equal to True in the config file. 
+                                    must be set equal to True in the config file. Note that for consistency with the distance
+                                    restraints implementation, the force constants are defined as E = k*x**2, rather than 
+                                    E = 0.5*k*x**2 as in the original paper. 
                                     """)
 
 hydrogen_mass_repartitioning_factor = \
