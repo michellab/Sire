@@ -51,7 +51,7 @@ jobs:
           Get-Location
       - name: What is here?
         run:
-          ls ${{ github.workspace }}/Sire
+          ls ${{ github.workspace }}/Sire/actions
       - name: Update Conda recipe
         run:
           python ${{ github.workspace }}/Sire/actions/update_recipe.py
