@@ -65,7 +65,9 @@ def run():
             force_constants.append(val)
 
     n_nonzero_k = len(force_constants)
-    prod_force_constants = np.prod(force_constants)
+    # Force constants defined as E = kx**2, so need to multiply by two for use 
+    # by 2 to correct for original definition (E= 0.5*k*x**2)
+    prod_force_constants = np.prod(force_constants) * 2 
 
     # Calculation
     numerator = prefactor*np.sqrt(prod_force_constants)

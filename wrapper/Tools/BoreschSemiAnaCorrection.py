@@ -86,9 +86,12 @@ def run():
     boresch_dict = dict(boresch_restraints_dict.val)
     T = temperature.val.value() # K
 
+    # Force constants defined as E = k*x**2, so need to multiply all force constants
+    # by 2 to correct for original definition (E= 0.5*k*x**2)
+
     # Radial
     r0 = boresch_dict['equilibrium_values']['r0'] # A
-    kr = boresch_dict['force_constants']['kr'] # kcal mol-1 A-1
+    kr = boresch_dict['force_constants']['kr']*2 # kcal mol-1 A-1
     dist_at_8RT = 4*np.sqrt((R*T)/kr) # Dist. which gives restraint energy = 8 RT
     r_min = max(0, r0-dist_at_8RT)
     r_max = r0 + dist_at_8RT
@@ -98,14 +101,14 @@ def run():
     # Angular
     for angle in ["thetaA", "thetaB"]:
         theta0 = boresch_dict["equilibrium_values"][f"{angle}0"] # rad
-        ktheta = boresch_dict["force_constants"][f"k{angle}"] # kcal mol-1 rad-2
+        ktheta = boresch_dict["force_constants"][f"k{angle}"]*2 # kcal mol-1 rad-2
         integrand = lambda theta: numerical_angle_integrand(theta, theta0, ktheta)
         z_r *= scipy.integrate.quad(integrand, 0, pi)[0]
 
     # Dihedral
     for dihedral in ["phiA", "phiB", "phiC"]:
         phi0 = boresch_dict["equilibrium_values"][f"{dihedral}0"] # rad
-        kphi = boresch_dict["force_constants"][f"k{dihedral}"] # kcal mol-1 rad-2
+        kphi = boresch_dict["force_constants"][f"k{dihedral}"]*2 # kcal mol-1 rad-2
         integrand = lambda phi: numerical_dihedral_integrand(phi, phi0, kphi)
         z_r *= scipy.integrate.quad(integrand, -pi, pi)[0]
 
