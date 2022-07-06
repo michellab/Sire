@@ -17,25 +17,13 @@ if "ANACONDA_TOKEN" in os.environ:
 else:
     conda_token = "TEST"
 
-# get the root conda directory
-if "CONDA" in os.environ:
-    # This has been set as part of the pipeline, so conda-bld is in a specific location
-    conda = os.environ["CONDA"]
-    # Set the path to the conda-bld directory.
-    conda_bld = os.path.join(conda, "envs", "sire_build", "conda-bld")
+# get the build directory
+if "BUILD_DIR" in os.environ:
+    conda_bld = os.environ["BUILD_DIR"]
 else:
-    # find conda-bld from the conda for this python
-    conda = os.path.dirname(sys.executable)
+    conda_bld = os.path.join("..", "build")
 
-    conda_bld = os.path.join(conda, "conda-bld")
-
-    if not os.path.exists(conda_bld):
-        # go up a directory, as python was in conda/bin
-        conda_bld = os.path.join(os.path.dirname(conda), "conda-bld")
-
-    if not os.path.exists(conda_bld):
-        print(f"Cannot find the conda-bld directory in {conda_bld}")
-        sys.exit(-1)
+print(f"conda_bld = {conda_bld}")
 
 # Find the packages to upload
 sire_pkg = glob.glob(os.path.join(conda_bld, "*-*", "sire-*.tar.bz2"))
