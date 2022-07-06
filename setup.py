@@ -690,7 +690,7 @@ if __name__ == "__main__":
     action = args.action[0]
 
     if is_windows and (args.generator is None or len(args.generator) == 0):
-        args.generator = [["Visual Studio 17 2022 Win64"]]
+        args.generator = [["Visual Studio 17 2022"]]
 
     if action == "install":
         if not (args.skip_deps or args.skip_build):
