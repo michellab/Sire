@@ -49,8 +49,6 @@ jobs:
         run: mkdir build
       - name: Build Conda package
         run: conda mambabuild --croot ./build -c conda-forge -c michellab ${{ github.workspace }}/Sire/recipes/sire
-        env:
-          VSCMD_DEBUG: "5"
       - uses: actions/upload-artifact@v2
         with:
           name: build-${{ matrix.os }}-${{matrix.python-version}}-${{ github.sha }}
