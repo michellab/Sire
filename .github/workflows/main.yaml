@@ -22,18 +22,18 @@ jobs:
         python-version: ["3.7", "3.8", "3.9"]
         platform:
           - {
-              name: windows,
-              os: windows-2016,
-              shell: pwsh
+              name: "windows",
+              os: "windows-2016",
+              shell: "pwsh"
             }
           - {
-              name: linux,
-              os: ubuntu-latest,
+              name: "linux",
+              os: "ubuntu-latest",
               shell: "bash -l {0}"
             }
           - {
-              name: macos,
-              os: macos-latest,
+              name: "macos",
+              os: "macos-latest",
               shell: "bash -l {0}"
             }
     environment:
