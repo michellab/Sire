@@ -363,8 +363,18 @@ def build(ncores: int = 1, npycores: int = 1,
     bindir = _get_bin_dir()
     cmake = os.path.join(bindir, cmake)
 
+    if "CONDA_BUILD" in os.environ and os.environ["CONDA_BUILD"] == "1":
+        conda_build = True
+    else:
+        os.environ["CONDA_BUILD"] = "0"
+        conda_build = False
+
     # get the compilers
-    if is_macos:
+    if conda_build:
+        print("This is a conda build")
+        CXX = os.environ["CXX"]
+        CC = os.environ["CC"]
+    elif is_macos:
         try:
             CXX = glob.glob(os.path.join(bindir, "clang++"))[0]
             CC = glob.glob(os.path.join(bindir, "clang"))[0]
@@ -382,6 +392,8 @@ def build(ncores: int = 1, npycores: int = 1,
             print("Please install these, e.g. via")
             print("conda install gcc gxx")
             sys.exit(-1)
+
+    print(f"Using compilers {CC} | {CXX}")
 
     # Make sure all of the above output is printed to the screen
     # before we start running any actual compilation

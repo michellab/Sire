@@ -93,12 +93,16 @@ set(CMAKE_CXX_COMPILER "${SIRE_CXX_COMPILER}")
 
 message( STATUS "Setting C compiler to ${SIRE_C_COMPILER} and C++ compiler to ${SIRE_CXX_COMPILER}" )
 
-# conda can set incorrect CXX flags (i.e. -mtune=haswell on MacOS M1!)
-# If is safer to completely unset these flags
-unset(ENV{CXXFLAGS})
-unset(ENV{DEBUG_CXXFLAGS})
-unset(ENV{CFLAGS})
-unset(ENV{DEBUG_CFLAGS})
+if ($ENV{CONDA_BUILD} STREQUAL "1")
+  message( STATUS "Compiling as part of a conda-build")
+else()
+  # conda can set incorrect CXX flags (i.e. -mtune=haswell on MacOS M1!)
+  # If is safer to completely unset these flags, except for on a conda build
+  unset(ENV{CXXFLAGS})
+  unset(ENV{DEBUG_CXXFLAGS})
+  unset(ENV{CFLAGS})
+  unset(ENV{DEBUG_CFLAGS})
+endif()
 
 # name the project
 project (SirePython CXX C)

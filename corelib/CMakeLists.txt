@@ -88,12 +88,16 @@ if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
   message( FATAL_ERROR "You must run CMake in a different directory to the source!" )
 endif()
 
-# conda can set incorrect CXX flags (i.e. -mtune=haswell on MacOS M1!)
-# If is safer to completely unset these flags
-# unset(ENV{CXXFLAGS})
-# unset(ENV{DEBUG_CXXFLAGS})
-# unset(ENV{CFLAGS})
-# unset(ENV{DEBUG_CFLAGS})
+if ($ENV{CONDA_BUILD} STREQUAL "1")
+  message( STATUS "Compiling as part of a conda-build")
+else()
+  # conda can set incorrect CXX flags (i.e. -mtune=haswell on MacOS M1!)
+  # If is safer to completely unset these flags, except for on a conda build
+  unset(ENV{CXXFLAGS})
+  unset(ENV{DEBUG_CXXFLAGS})
+  unset(ENV{CFLAGS})
+  unset(ENV{DEBUG_CFLAGS})
+endif()
 
 message( STATUS "ABOUT TO RUN PROJECT" )
 
