@@ -24,6 +24,7 @@ import sys
 import os
 import platform
 import subprocess
+import shutil
 import glob
 
 # Debug - we need to print out all of the environment variables
@@ -378,6 +379,23 @@ def build(ncores: int = 1, npycores: int = 1,
         print("This is a conda build")
         CXX = os.environ["CXX"]
         CC = os.environ["CC"]
+
+        # make sure that these compilers are in the path
+        CXX_bin = shutil.which(CXX)
+        CC_bin = shutil.which(CC)
+
+        print(f"{CXX} => {CXX_bin}")
+        print(f"{CC} => {CC_bin}")
+
+        if CXX_bin is None or CC_bin is None:
+            print("Cannot find the compilers requested by conda-build in the PATH")
+            print("Please check that the compilers are installed and available.")
+            sys.exit(-1)
+
+        # use the full paths, in case CMake struggles
+        CXX = CXX_bin
+        CC = CC_bin
+
     elif is_macos:
         try:
             CXX = glob.glob(os.path.join(bindir, "clang++"))[0]
