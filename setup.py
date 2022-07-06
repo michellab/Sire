@@ -26,6 +26,10 @@ import platform
 import subprocess
 import glob
 
+# Debug - we need to print out all of the environment variables
+for key, value in os.environ.items():
+    print(f"{key}\n{value}\n")
+
 # We can only run this script from the sire directory
 curdir = os.path.abspath(".")
 
