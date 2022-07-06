@@ -48,7 +48,7 @@ jobs:
       - name: Set up Visual Studio 2017 Build Tools (required for Python modules)
         run: |
           choco install visualstudio2017-workload-vctools
-        if: matrix.platform.name == "windows"
+        if: matrix.platform.name == 'windows'
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
