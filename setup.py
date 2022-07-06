@@ -481,14 +481,14 @@ def build(ncores: int = 1, npycores: int = 1,
         print("SOMETHING WENT WRONG WHEN USING CMAKE ON CORELIB!")
         print("\n== OUTPUT LOG ==")
         try:
-            for line in open("build/conda_build_corelib/CMakeFiles/CMakeOutput.log").readlines():
+            for line in open("CMakeFiles/CMakeOutput.log").readlines():
                 print(line.strip())
         except Exception as e:
             print(e)
 
         print("\n== ERROR LOG ==")
         try:
-            for line in open("build/conda_build_corelib/CMakeFiles/CMakeError.log").readlines():
+            for line in open("CMakeFiles/CMakeError.log").readlines():
                 print(line.strip())
         except Exception as e:
             print(e)
