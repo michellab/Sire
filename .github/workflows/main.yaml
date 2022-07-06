@@ -19,23 +19,23 @@ jobs:
       max-parallel: 9
       fail-fast: false
       matrix:
-        python-version: ["3.9"]
+        python-version: ["3.7", "3.8", "3.9"]
         platform:
           - {
               name: windows,
               os: windows-2016,
               shell: pwsh
             }
-#          - {
-#              name: linux,
-#              os: ubuntu-latest,
-#              shell: "bash -l {0}"
-#            }
-#          - {
-#              name: macos,
-#              os: macos-latest,
-#              shell: "bash -l {0}"
-#            }
+          - {
+              name: linux,
+              os: ubuntu-latest,
+              shell: "bash -l {0}"
+            }
+          - {
+              name: macos,
+              os: macos-latest,
+              shell: "bash -l {0}"
+            }
     environment:
       name: sire-build
     defaults:
@@ -81,13 +81,13 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: build-${{ matrix.platform.name }}-${{matrix.python-version}}-${{ github.sha }}
-          path: ${{ github.workspace }}/build/*.tar.bz2
+          path: ${{ github.workspace }}/build/*/sire-*.tar.bz2
           retention-days: 10
         if: ${{ success() }}
       - uses: actions/upload-artifact@v2
         with:
           name: failed-${{ matrix.platform.name }}-${{matrix.python-version}}-${{ github.sha }}
-          path: ${{ github.workspace }}/failed.tar.bz2
+          path: ${{ github.workspace }}/build/failed.tar.bz2
           retention-days: 1
         if: ${{ failure() }}
       - name: Upload Conda package
