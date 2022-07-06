@@ -93,7 +93,7 @@ set(CMAKE_CXX_COMPILER "${SIRE_CXX_COMPILER}")
 
 message( STATUS "Setting C compiler to ${SIRE_C_COMPILER} and C++ compiler to ${SIRE_CXX_COMPILER}" )
 
-if ($ENV{CONDA_BUILD} STREQUAL "1")
+if ("$ENV{CONDA_BUILD}" STREQUAL "1")
   message( STATUS "Compiling as part of a conda-build")
 else()
   # conda can set incorrect CXX flags (i.e. -mtune=haswell on MacOS M1!)

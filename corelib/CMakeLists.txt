@@ -88,7 +88,7 @@ if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
   message( FATAL_ERROR "You must run CMake in a different directory to the source!" )
 endif()
 
-if ($ENV{CONDA_BUILD} STREQUAL "1")
+if ("$ENV{CONDA_BUILD}" STREQUAL "1")
   message( STATUS "Compiling as part of a conda-build")
 else()
   # conda can set incorrect CXX flags (i.e. -mtune=haswell on MacOS M1!)

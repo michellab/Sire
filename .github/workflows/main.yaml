@@ -45,8 +45,15 @@ jobs:
       - name: Update Conda recipe
         run:
           python ${{ github.workspace }}/Sire/actions/update_recipe.py
+      - name: Prepare build location
+        run: mkdir build
       - name: Build Conda package
-        run: conda mambabuild -c conda-forge -c michellab ${{ github.workspace }}/Sire/recipes/sire
+        run: conda mambabuild --croot ./build -c conda-forge -c michellab ${{ github.workspace }}/Sire/recipes/sire
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build-${{ matrix.os }}-${{matrix.python-version}}-${{ github.sha }}
+          path: build/*.tar.bz2
+          retention-days: 10
       - name: Upload Conda package
         run: python ${{ github.workspace }}/Sire/actions/upload_package.py
         env:
