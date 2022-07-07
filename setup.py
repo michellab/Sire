@@ -355,9 +355,6 @@ def _get_bin_dir():
 
 def build(ncores: int = 1, npycores: int = 1,
           coredefs=[], pydefs=[]):
-    print("\nChecking dependencies...")
-    import openmm
-
     print("\nCompiling the C++ code")
 
     CC=None
