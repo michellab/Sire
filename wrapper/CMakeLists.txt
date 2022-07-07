@@ -267,6 +267,13 @@ message(STATUS "${CMAKE_REQUIRED_INCLUDES}")
 
 if (IS_CONDA_INCLUDE_WORKING)
   message(STATUS "-Iconda/include is used correctly.")
+
+  if (APPLE)
+    message(STATUS "...but, MacOS still causes issues where conda/include is removed.")
+    message(STATUS "Unsetting CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES so that conda/include is not hidden.")
+    unset(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES)
+  endif()
+
 else()
   # Things don't work, so we need to switch off implicit include directories
   unset(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES)
