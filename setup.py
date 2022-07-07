@@ -28,8 +28,8 @@ import shutil
 import glob
 
 # Debug - we need to print out all of the environment variables
-for key, value in os.environ.items():
-    print(f"{key}\n{value}\n")
+# for key, value in os.environ.items():
+#     print(f"{key}\n{value}\n")
 
 # We can only run this script from the sire directory
 curdir = os.path.abspath(".")
@@ -355,6 +355,9 @@ def _get_bin_dir():
 
 def build(ncores: int = 1, npycores: int = 1,
           coredefs=[], pydefs=[]):
+    print("\nChecking dependencies...")
+    import openmm
+
     print("\nCompiling the C++ code")
 
     CC=None
