@@ -938,7 +938,6 @@ System repartitionHydrogenMass(
             // Lambda = 0 mappings.
             pmap.set("mass", "mass0");
             pmap.set("element", "element0");
-            pmap.set("connectivity", "connectivity0");
             pmap.set("coordinates", "coordinates0");
 
             molecule = repartitionHydrogenMass(
@@ -947,7 +946,6 @@ System repartitionHydrogenMass(
             // Lambda = 1 mappings.
             pmap.set("mass", "mass1");
             pmap.set("element", "element1");
-            pmap.set("connectivity", "connectivity1");
             pmap.set("coordinates", "coordinates1");
 
             molecule = repartitionHydrogenMass(
