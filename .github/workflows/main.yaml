@@ -23,19 +23,19 @@ jobs:
         platform:
           - {
               name: "windows",
-              os: "windows-2016",
+              os: "windows-latest",
               shell: "pwsh"
             }
-          - {
-              name: "linux",
-              os: "ubuntu-latest",
-              shell: "bash -l {0}"
-            }
-          - {
-              name: "macos",
-              os: "macos-latest",
-              shell: "bash -l {0}"
-            }
+#          - {
+#              name: "linux",
+#              os: "ubuntu-latest",
+#              shell: "bash -l {0}"
+#            }
+#          - {
+#              name: "macos",
+#              os: "macos-latest",
+#              shell: "bash -l {0}"
+#            }
     environment:
       name: sire-build
     defaults:
@@ -57,10 +57,10 @@ jobs:
           miniforge-version: latest
           miniforge-variant: Mambaforge
           use-mamba: true
-      - name: Clone the devel branch
+      - name: Clone the devel branch (push to devel)
         run: git clone https://github.com/michellab/Sire
         if: github.event_name != 'pull_request'
-      - name: Clone the repository branch
+      - name: Clone the feature branch (pull request to devel)
         run: git clone -b ${{ github.head_ref }} --single-branch https://github.com/michellab/Sire
         if: github.event_name == 'pull_request'
       - name: Setup Conda
@@ -70,8 +70,12 @@ jobs:
           python ${{ github.workspace }}/Sire/actions/update_recipe.py
       - name: Prepare build location
         run: mkdir ${{ github.workspace }}/build
-      - name: Build Conda package
+      - name: Build Conda package using mamba build
         run: conda mambabuild --croot ${{ github.workspace }}/build -c conda-forge -c michellab ${{ github.workspace }}/Sire/recipes/sire
+        if: matrix.platform.name != 'windows' or matrix.python-version != '3.7'
+      - name: Build Conda package using conda build
+        run: conda build --croot ${{ github.workspace }}/build -c conda-forge -c michellab ${{ github.workspace }}/Sire/recipes/sire
+        if: matrix.platform.name == 'windows' and matrix.python-version != '3.7'
       - name: Collect failed artifacts
         run:
           python ${{ github.workspace }}/Sire/actions/collect_failed.py

@@ -31,9 +31,9 @@ print(f"Zipping up {zipdirs} to {output_filename}")
 
 def filter_function(tarinfo):
     filename = tarinfo.name
-    print(filename)
+    #print(filename)
     if filename.find('.git') != -1:
-        print("excluded!")
+        #print("excluded!")
         return None
     else:
         return tarinfo
