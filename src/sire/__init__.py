@@ -59,10 +59,28 @@ def _fix_openmm_path():
 
     if need_path:
         # importing openmm should add this path
-        import openmm
+        try:
+            import openmm
+        except Exception:
+            print("OpenMM import failed!")
+            # Copy the files
+            try:
+                for file in openmm_files:
+                    binfile = os.path.join(bindir, os.path.basename(file))
+
+                    if not os.path.exists(binfile):
+                        # copy the file into the right place
+                        import shutil
+                        shutil.copy(file, binfile)
+            except Exception:
+                print("Could not resolve OpenMM library location. This may cause issues later.")
 
         # also add it manually here
-        os.add_dll_directory(libdir)
+        try:
+            os.add_dll_directory(libdir)
+        except Exception:
+            # os.add_dll_directory is not available on old Python (3.7)
+            pass
 
 
 _fix_openmm_path()
