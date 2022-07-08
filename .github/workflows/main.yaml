@@ -26,16 +26,16 @@ jobs:
               os: "windows-latest",
               shell: "pwsh"
             }
-#          - {
-#              name: "linux",
-#              os: "ubuntu-latest",
-#              shell: "bash -l {0}"
-#            }
-#          - {
-#              name: "macos",
-#              os: "macos-latest",
-#              shell: "bash -l {0}"
-#            }
+          - {
+              name: "linux",
+              os: "ubuntu-latest",
+              shell: "bash -l {0}"
+            }
+          - {
+              name: "macos",
+              os: "macos-latest",
+              shell: "bash -l {0}"
+            }
     environment:
       name: sire-build
     defaults:
