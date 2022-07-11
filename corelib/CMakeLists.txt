@@ -7,7 +7,7 @@
 ################################
 
 set (S_VERSION_MAJOR "2022")
-set (S_VERSION_MINOR "2")
+set (S_VERSION_MINOR "3")
 set (S_VERSION_PATCH "0")
 
 set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
@@ -184,6 +184,13 @@ if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
   message( STATUS "${CMAKE_BINARY_DIR} | ${CMAKE_SOURCE_DIR}" )
   message( FATAL_ERROR "You must run CMake in a different directory to the source!" )
 endif()
+
+# Conda can set incorrect CXX flags (i.e. -mtune=haswell on MacOS M1!)
+# It is safer to completely unset these flags.
+unset(ENV{CXXFLAGS})
+unset(ENV{DEBUG_CXXFLAGS})
+unset(ENV{CFLAGS})
+unset(ENV{DEBUG_CFLAGS})
 
 # name the project
 project (SIRE CXX C)
@@ -540,7 +547,7 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
        endif()
     endif()
 
-    set ( SIRE_SMALL_FLAGS  "-Os" )
+    set ( SIRE_SMALL_FLAGS  "-Oz" )
     set ( SIRE_WARNALL_FLAGS  "-Wall" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
 
@@ -588,7 +595,7 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
     message( STATUS "Detected and using clang C and C++ compilers" )
     set( SIRE_COMPILER "CLANG" )
 
-    set ( SIRE_SMALL_FLAGS  "-Os" )
+    set ( SIRE_SMALL_FLAGS  "-Oz" )
     set ( SIRE_WARNALL_FLAGS  "-Wall" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
 
@@ -1026,8 +1033,8 @@ set( CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${SIRE_C_FLAGS_RELEASE}" )
 set( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} ${SIRE_CXX_FLAGS_RELEASE}" )
 set( CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${SIRE_C_FLAGS_DEBUG}" )
 set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${SIRE_CXX_FLAGS_DEBUG}" )
-set( CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL} ${SIRE_C_FLAGS_SMALL}" )
-set( CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} ${SIRE_CXX_FLAGS_SMALL}" )
+set( CMAKE_C_FLAGS_MINSIZEREL "${SIRE_C_FLAGS_SMALL}" )
+set( CMAKE_CXX_FLAGS_MINSIZEREL "${SIRE_CXX_FLAGS_SMALL}" )
 
 if ( CMAKE_BUILD_TYPE STREQUAL "Debug" )
     message( STATUS "Compiling Sire using a DEBUG build" )

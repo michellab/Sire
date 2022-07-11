@@ -9,7 +9,7 @@
 
 # project version
 set (SIRE_VERSION_MAJOR "2022")
-set (SIRE_VERSION_MINOR "2")
+set (SIRE_VERSION_MINOR "3")
 set (SIRE_VERSION_PATCH "0")
 
 set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PATCH}")
@@ -141,6 +141,13 @@ set(CMAKE_C_COMPILER "${SIRE_C_COMPILER}")
 set(CMAKE_CXX_COMPILER "${SIRE_CXX_COMPILER}")
 
 message( STATUS "Setting C compiler to ${SIRE_C_COMPILER} and C++ compiler to ${SIRE_CXX_COMPILER}" )
+
+# Conda can set incorrect CXX flags (i.e. -mtune=haswell on MacOS M1!)
+# It is safer to completely unset these flags.
+unset(ENV{CXXFLAGS})
+unset(ENV{DEBUG_CXXFLAGS})
+unset(ENV{CFLAGS})
+unset(ENV{DEBUG_CFLAGS})
 
 # name the project
 project (SirePython CXX C)
@@ -307,21 +314,6 @@ else()
   endif()
 endif()
 
-if (APPLE)
-  # Also need to add '-undefined dynamic_lookup' so that we can build
-  # modules that can be imported by a python that has statically linked libPython
-  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -undefined dynamic_lookup" )
-endif()
-
-message( STATUS  "CMAKE_SYSTEM_NAME      == ${CMAKE_SYSTEM_NAME}" )
-message( STATUS  "CMAKE_C_COMPILER       == ${CMAKE_C_COMPILER}" )
-message( STATUS  "CMAKE_CXX_COMPILER     == ${CMAKE_CXX_COMPILER}" )
-message( STATUS  "C compiler flags       == ${CMAKE_C_FLAGS}" )
-message( STATUS  "C++ compiler flags     == ${CMAKE_CXX_FLAGS}" )
-message( STATUS  "Shared library flags   == ${CMAKE_SHARED_LINKER_FLAGS}" )
-message( STATUS  "Static library flags   == ${CMAKE_STATIC_LINKER_FLAGS}" )
-message( STATUS  "Executable link flags  == ${CMAKE_EXE_LINKER_FLAGS}" )
-
 # Option to disable all bundles
 option( SIRE_PYTHON_ENABLE_BUNDLING "Allow Sire Python to use bundled libraries and python interpreter" ON )
 
@@ -399,7 +391,28 @@ endif()
 # statically links libPython you'll end up with duplicate symbols.
 if (APPLE)
   set( PYTHON_LIBRARIES "" )
+
+  # Also need to add '-undefined dynamic_lookup' so that we can build
+  # modules that can be imported by a python that has statically linked libPython
+  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -undefined dynamic_lookup" )
+
+  # Need to remove anything other than `-O1` or `-Oz` from Python < 3.9
+  # X86 builds on MacOS as these causes crashes with boost_python
+  if (NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
+    message( STATUS "Disabling '-O3' : ${CMAKE_SYSTEM_PROCESSOR}")
+    string( REPLACE "-O3" "" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE} )
+  endif()
 endif()
+
+message( STATUS  "CMAKE_SYSTEM_NAME      == ${CMAKE_SYSTEM_NAME}" )
+message( STATUS  "CMAKE_C_COMPILER       == ${CMAKE_C_COMPILER}" )
+message( STATUS  "CMAKE_CXX_COMPILER     == ${CMAKE_CXX_COMPILER}" )
+message( STATUS  "C compiler flags       == ${CMAKE_C_FLAGS}" )
+message( STATUS  "C++ compiler flags     == ${CMAKE_CXX_FLAGS}" )
+message( STATUS  "CMake release flags    == ${CMAKE_CXX_FLAGS_RELEASE}" )
+message( STATUS  "Shared library flags   == ${CMAKE_SHARED_LINKER_FLAGS}" )
+message( STATUS  "Static library flags   == ${CMAKE_STATIC_LINKER_FLAGS}" )
+message( STATUS  "Executable link flags  == ${CMAKE_EXE_LINKER_FLAGS}" )
 
 if (NOT ${SIRE_FOUND_BOOST_PYTHON})
   # Sire depends on >= boost 1.31 - all libraries must be dynamically linked

@@ -152,13 +152,19 @@ TriclinicBox::TriclinicBox(double a, double b, double c,
 
 /** Construct a TriclinicBox with the specified lattice vectors */
 void TriclinicBox::construct(const Vector &v0,
-                        const Vector &v1,
-                        const Vector &v2)
+                             const Vector &v1,
+                             const Vector &v2)
 {
     // What follows was adapted from Appendex A from Chapter 3 of
     // "Molecular dynamics of sense and sensibility in processing and analysis of data"
     // by Tsjerk A. Wassenaar.
     // https://pure.rug.nl/ws/portalfiles/portal/2839530/03_c3.pdf
+
+    // Store the original lattice vectors. These are needed for streaming
+    // support.
+    this->v0_orig = v0;
+    this->v1_orig = v1;
+    this->v2_orig = v2;
 
     // Get the magnitudes of the lattice box vectors.
     auto m0 = v0.magnitude();
@@ -323,8 +329,6 @@ void TriclinicBox::construct(const Vector &v0,
                              1.0/this->v1.magnitude(),
                              1.0/this->v2.magnitude());
 }
-
-
 
 /** Copy constructor */
 TriclinicBox::TriclinicBox(const TriclinicBox &other)
