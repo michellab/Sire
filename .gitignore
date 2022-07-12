@@ -49,3 +49,6 @@ includes.tar.bz2
 
 #Atom
 .idea
+
+#VS Code
+.vscode
