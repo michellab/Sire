@@ -262,7 +262,7 @@ def setupDCD(system):
                                  interval= ncycles_per_snap.val * nmoves.val)
         else:
             Trajectory = DCDFile(dcd_filename, system[MGName("all")], system.property("space"), timestep.val,
-                            interval=buffered_coords_freq.val * ncycles_per_snap.val * nmoves.val)
+                            interval=buffered_coords_freq.val * ncycles_per_snap.val)
 
     return Trajectory
 
