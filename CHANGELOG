@@ -3,6 +3,24 @@ SIRE changelog
 
 devel branch:
 
+    [2023.0.0] July 2023 - Updated Sire's API to a more pythonic style.
+               Module names are in lower case, e.g. `import Sire` becomes
+               `import sire`, or `import sire as sr`. Functions are in
+               underscore_case. This change is not backwards compatible. To
+               support old code, a `sire.use_old_api()` function has been added.
+               New functions have been added that make it easier to load
+               and save molecules. These can load from URLs. Tests have been
+               updated to pytest and now load input data from the sire website.
+               The search system has been overhauled, optimised and updated.
+               This is described in the new tutorials that are in the process
+               of being written in the `doc` directory. This also contains
+               the new sphinx website. The `CMakeLists.txt` files and build
+               system have been completely reworked. These now use more
+               pythonic `setup.py` scripts. These have been updated to fully
+               support MacOS M1 and Windows. The conda recipe has been
+               updated to use these scripts. Conda packages are now built
+               and supported across Linux, MacOS and Windows.
+
     [2022.3.0] June 2022 - Added support for parsing SDF files (@chryswoods).
                Move conda build process to Miniforge and mambdabuild (boa) to
                avoid timeouts and memory issues. Update GroTop parser to ensure
