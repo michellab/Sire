@@ -21,6 +21,7 @@ requirements:
     SIRE_RUN_REQUIREMENTS
     SIRE_BSS_REQUIREMENTS
   run:
+    - python
     SIRE_RUN_REQUIREMENTS
 
 test:

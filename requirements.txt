@@ -1,8 +1,9 @@
-lazy_import
 boost
 gsl
-netcdf4
+lazy_import
+libcblas
+libnetcdf
 openmm
+qt
 tbb
 tbb-devel
-qt
