@@ -37,6 +37,8 @@ SireMM::CLJShiftFunction __copy__(const SireMM::CLJShiftFunction &other){ return
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJShiftFunction_class(){
 
     { //::SireMM::CLJShiftFunction
@@ -61,6 +63,7 @@ void register_CLJShiftFunction_class(){
             CLJShiftFunction_exposer.def( 
                 "defaultShiftFunction"
                 , defaultShiftFunction_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -87,6 +90,7 @@ void register_CLJShiftFunction_class(){
             CLJShiftFunction_exposer.def( 
                 "supportsGridCalculation"
                 , supportsGridCalculation_function_value
+                , bp::release_gil_policy()
                 , "This function does support calculations using a grid" );
         
         }
@@ -98,6 +102,7 @@ void register_CLJShiftFunction_class(){
             CLJShiftFunction_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -109,6 +114,7 @@ void register_CLJShiftFunction_class(){
             CLJShiftFunction_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -120,6 +126,7 @@ void register_CLJShiftFunction_class(){
             CLJShiftFunction_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

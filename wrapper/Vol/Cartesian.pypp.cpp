@@ -35,6 +35,8 @@ SireVol::Cartesian __copy__(const SireVol::Cartesian &other){ return SireVol::Ca
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Cartesian_class(){
 
     { //::SireVol::Cartesian
@@ -51,6 +53,7 @@ void register_Cartesian_class(){
                 "beyond"
                 , beyond_function_value
                 , ( bp::arg("dist"), bp::arg("aabox0"), bp::arg("aabox1") )
+                , bp::release_gil_policy()
                 , "Return whether or not two groups enclosed by the AABoxes aabox0\nand aabox1 are definitely beyond the cutoff distance" );
         
         }
@@ -63,6 +66,7 @@ void register_Cartesian_class(){
                 "beyond"
                 , beyond_function_value
                 , ( bp::arg("dist"), bp::arg("group0"), bp::arg("group1") )
+                , bp::release_gil_policy()
                 , "Return whether or not these two groups are definitely beyond the cutoff distance." );
         
         }
@@ -75,6 +79,7 @@ void register_Cartesian_class(){
                 "calcAngle"
                 , calcAngle_function_value
                 , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2") )
+                , bp::release_gil_policy()
                 , "Calculate the angle between the passed three points. This should return\nthe acute angle between the points, which should lie between 0 and 180 degrees" );
         
         }
@@ -87,6 +92,7 @@ void register_Cartesian_class(){
                 "calcDihedral"
                 , calcDihedral_function_value
                 , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3") )
+                , bp::release_gil_policy()
                 , "Calculate the torsion angle between the passed four points. This should\nreturn the torsion angle measured clockwise when looking down the\ntorsion from point0-point1-point2-point3. This will lie between 0 and 360\ndegrees" );
         
         }
@@ -99,6 +105,7 @@ void register_Cartesian_class(){
                 "calcDist"
                 , calcDist_function_value
                 , ( bp::arg("point0"), bp::arg("point1") )
+                , bp::release_gil_policy()
                 , "Calculate the distance between two points" );
         
         }
@@ -111,6 +118,7 @@ void register_Cartesian_class(){
                 "calcDist"
                 , calcDist_function_value
                 , ( bp::arg("group"), bp::arg("mat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances between all points in\nthe group group. Return the shortest distance between points." );
         
         }
@@ -123,6 +131,7 @@ void register_Cartesian_class(){
                 "calcDist"
                 , calcDist_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("mat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances between all of the\npoints of the two CoordGroups. Return the shortest distance between the two\nCoordGroups." );
         
         }
@@ -135,6 +144,7 @@ void register_Cartesian_class(){
                 "calcDist"
                 , calcDist_function_value
                 , ( bp::arg("group"), bp::arg("point"), bp::arg("mat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances between all of the\npoints of the passed CoordGroup and point. Returns the shortest distance." );
         
         }
@@ -147,6 +157,7 @@ void register_Cartesian_class(){
                 "calcDist2"
                 , calcDist2_function_value
                 , ( bp::arg("point0"), bp::arg("point1") )
+                , bp::release_gil_policy()
                 , "Calculate the distance squared between two points" );
         
         }
@@ -159,6 +170,7 @@ void register_Cartesian_class(){
                 "calcDist2"
                 , calcDist2_function_value
                 , ( bp::arg("group"), bp::arg("mat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances^2 between all points in\nthe group group. Return the shortest distance between points." );
         
         }
@@ -171,6 +183,7 @@ void register_Cartesian_class(){
                 "calcDist2"
                 , calcDist2_function_value
                 , ( bp::arg("group"), bp::arg("point"), bp::arg("mat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances squared between all of the\npoints of the passed CoordGroup and point. Returns the shortest distance." );
         
         }
@@ -183,6 +196,7 @@ void register_Cartesian_class(){
                 "calcDist2"
                 , calcDist2_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("mat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances^2 between all of the\npoints of the two CoordGroups. Return the shortest distance between the\ntwo CoordGroups." );
         
         }
@@ -195,6 +209,7 @@ void register_Cartesian_class(){
                 "calcDistVector"
                 , calcDistVector_function_value
                 , ( bp::arg("point0"), bp::arg("point1") )
+                , bp::release_gil_policy()
                 , "Calculate the distance vector between two points" );
         
         }
@@ -207,6 +222,7 @@ void register_Cartesian_class(){
                 "calcDistVectors"
                 , calcDistVectors_function_value
                 , ( bp::arg("group"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix distmat with all of the interpoint distance vectors\nbetween all points within the CoordGroup. This is not a symmetrical matrix,\nas the direction from point A to point B is the negative of the\ndirection from point B to point A. This returns the shortest distance\nbetween two points in the group (that is not the self-self distance)" );
         
         }
@@ -219,6 +235,7 @@ void register_Cartesian_class(){
                 "calcDistVectors"
                 , calcDistVectors_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix distmat between all the points of the two CoordGroups\ngroup1 and group2 - the returned matrix has the vectors pointing\nfrom each point in group1 to each point in group2. This returns\nthe shortest distance between two points in the group" );
         
         }
@@ -231,6 +248,7 @@ void register_Cartesian_class(){
                 "calcDistVectors"
                 , calcDistVectors_function_value
                 , ( bp::arg("group"), bp::arg("point"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix distmat between all the points of the passed\nCoordGroup with point - the returned matrix has the vectors pointing\nfrom the point, to each point in group. This returns the shortest distance." );
         
         }
@@ -243,6 +261,7 @@ void register_Cartesian_class(){
                 "calcInvDist"
                 , calcInvDist_function_value
                 , ( bp::arg("group"), bp::arg("mat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the inverse distances between all points in\nthe group group. Return the smallest distance between points." );
         
         }
@@ -255,6 +274,7 @@ void register_Cartesian_class(){
                 "calcInvDist"
                 , calcInvDist_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("mat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the inverse distances between all of the\npoints of the two CoordGroups. Return the shortest distance between\nthe two CoordGroups." );
         
         }
@@ -267,6 +287,7 @@ void register_Cartesian_class(){
                 "calcInvDist2"
                 , calcInvDist2_function_value
                 , ( bp::arg("group"), bp::arg("mat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the inverse distances^2 between all points in\nthe group group. Return the smallest distance between points." );
         
         }
@@ -279,6 +300,7 @@ void register_Cartesian_class(){
                 "calcInvDist2"
                 , calcInvDist2_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("mat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the inverse distances^2 between all of the\npoints of the two CoordGroups. Return the shortest distance between\nthe two CoordGroups." );
         
         }
@@ -291,6 +313,7 @@ void register_Cartesian_class(){
                 "getBoxCenter"
                 , getBoxCenter_function_value
                 , ( bp::arg("p") )
+                , bp::release_gil_policy()
                 , "Return the center of the box that contains the point p assuming\nthat the center for the central box is located at the origin" );
         
         }
@@ -303,6 +326,7 @@ void register_Cartesian_class(){
                 "getBoxCenter"
                 , getBoxCenter_function_value
                 , ( bp::arg("p"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Return the center of the box that contains the point p assuming\nthat the center for the central box is located at center" );
         
         }
@@ -315,6 +339,7 @@ void register_Cartesian_class(){
                 "getCopiesWithin"
                 , getCopiesWithin_function_value
                 , ( bp::arg("group"), bp::arg("center"), bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return a list of copies of CoordGroup group that are within\ndistance of the CoordGroup center, translating group so that\nit has the right coordinates to be around center. As this is not\na periodic space, this will merely return a copy of group if\nit is within the specified distance." );
         
         }
@@ -327,6 +352,7 @@ void register_Cartesian_class(){
                 "getImagesWithin"
                 , getImagesWithin_function_value
                 , ( bp::arg("point"), bp::arg("center"), bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return all periodic images of point with respect to center within\ndist distance of center" );
         
         }
@@ -339,6 +365,7 @@ void register_Cartesian_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("group"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Return the minimum image copy of group with respect to center.\nIn this case, as this is not a periodic space, this just returns\ngroup" );
         
         }
@@ -363,6 +390,7 @@ void register_Cartesian_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("aabox"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "A cartesian space is not periodic, so this just returns the input aabox" );
         
         }
@@ -375,6 +403,7 @@ void register_Cartesian_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("point"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "A cartesian space is not periodic, so this just returns the input point" );
         
         }
@@ -387,6 +416,7 @@ void register_Cartesian_class(){
                 "getRandomPoint"
                 , getRandomPoint_function_value
                 , ( bp::arg("center"), bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Return a random point in this space - this can be truly anywhere\n(well, it is limited to within -10^20 and 10^20 angstroms)\n" );
         
         }
@@ -398,6 +428,7 @@ void register_Cartesian_class(){
             Cartesian_exposer.def( 
                 "isCartesian"
                 , isCartesian_function_value
+                , bp::release_gil_policy()
                 , "A Cartesian space is cartesian" );
         
         }
@@ -409,6 +440,7 @@ void register_Cartesian_class(){
             Cartesian_exposer.def( 
                 "isPeriodic"
                 , isPeriodic_function_value
+                , bp::release_gil_policy()
                 , "A Cartesian space is not periodic" );
         
         }
@@ -421,6 +453,7 @@ void register_Cartesian_class(){
                 "minimumDistance"
                 , minimumDistance_function_value
                 , ( bp::arg("group0"), bp::arg("group1") )
+                , bp::release_gil_policy()
                 , "Return the minimum distance between the points in group0 and group1." );
         
         }
@@ -433,6 +466,7 @@ void register_Cartesian_class(){
                 "minimumDistance"
                 , minimumDistance_function_value
                 , ( bp::arg("group") )
+                , bp::release_gil_policy()
                 , "Return the minimum distance between points within the group group." );
         
         }
@@ -445,6 +479,7 @@ void register_Cartesian_class(){
                 "minimumDistance"
                 , minimumDistance_function_value
                 , ( bp::arg("box0"), bp::arg("box1") )
+                , bp::release_gil_policy()
                 , "Return the minimum distance between the two passed boxes" );
         
         }
@@ -457,6 +492,7 @@ void register_Cartesian_class(){
                 "minimumDistance"
                 , minimumDistance_function_value
                 , ( bp::arg("p"), bp::arg("box") )
+                , bp::release_gil_policy()
                 , "Return the minimum distance between a point and a box" );
         
         }
@@ -484,6 +520,7 @@ void register_Cartesian_class(){
                 "setVolume"
                 , setVolume_function_value
                 , ( bp::arg("volume") )
+                , bp::release_gil_policy()
                 , "Throw an exception as an infinite space doesnt have a volume" );
         
         }
@@ -495,6 +532,7 @@ void register_Cartesian_class(){
             Cartesian_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this space" );
         
         }
@@ -506,6 +544,7 @@ void register_Cartesian_class(){
             Cartesian_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -517,6 +556,7 @@ void register_Cartesian_class(){
             Cartesian_exposer.def( 
                 "volume"
                 , volume_function_value
+                , bp::release_gil_policy()
                 , "Throw an exception as an infinite space doesnt have a volume" );
         
         }

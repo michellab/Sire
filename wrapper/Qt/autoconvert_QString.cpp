@@ -34,6 +34,7 @@
 #include <wchar.h>
 
 #include "Helpers/str.hpp"
+#include "Helpers/release_gil_policy.hpp"
 
 using namespace boost::python;
 
@@ -44,6 +45,8 @@ struct qstring_to_python_string
 {
     static PyObject* convert(const QString &cpp_string)
     {
+        auto raii = boost::python::release_gil_policy::acquire_gil();
+
         //get Qt to encode the string as UTF8, which python can then decode
         // - this is probably not as efficient as it could be, but Sire
         //   is not a text processing app ;-)
@@ -71,7 +74,7 @@ PyObject* QString__str__(QString const& s)
     {
         Py_DECREF(str_object);
         boost::python::throw_error_already_set();
-    }    
+    }
 
     return str_object;
 }
@@ -163,6 +166,7 @@ struct QString_from_python
                             converter::rvalue_from_python_stage1_data* data)
     {
         //use python-qt conversion function
+        auto raii = boost::python::release_gil_policy::acquire_gil();
         QString_from_python_str_or_unicode(obj_ptr, data);
     }
 };

@@ -79,6 +79,8 @@ namespace bp = boost::python;
 
 #include "SireIO_properties.h"
 
+#include "_IO_load.h"
+
 BOOST_PYTHON_MODULE(_IO){
     register_SireIO_objects();
 
@@ -149,6 +151,8 @@ BOOST_PYTHON_MODULE(_IO){
     register_ZmatrixMaker_class();
 
     register_SireIO_properties();
+
+    register_SireIO_load_function();
 
     register_free_functions();
 }

@@ -45,6 +45,8 @@ SireMol::MolEditor __copy__(const SireMol::MolEditor &other){ return SireMol::Mo
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_MolEditor_class(){
@@ -64,6 +66,7 @@ void register_MolEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Add an atom called name and return an editor that can\nbe used to edit it" );
         
         }
@@ -76,6 +79,7 @@ void register_MolEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Add an atom called name and return an editor that can\nbe used to edit it" );
         
         }
@@ -88,6 +92,7 @@ void register_MolEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("residue") )
+                , bp::release_gil_policy()
                 , "Add a residue called name and return an editor that can\nbe used to edit it" );
         
         }
@@ -100,6 +105,7 @@ void register_MolEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("residue") )
+                , bp::release_gil_policy()
                 , "Add a residue with number number and return an editor that\ncan be used to edit it" );
         
         }
@@ -112,6 +118,7 @@ void register_MolEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("cutgroup") )
+                , bp::release_gil_policy()
                 , "Add a CutGroup called name and return an editor that can\nbe used to edit it" );
         
         }
@@ -124,6 +131,7 @@ void register_MolEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("chain") )
+                , bp::release_gil_policy()
                 , "Add a chain called name and return an editor that can\nbe used to edit it" );
         
         }
@@ -136,6 +144,7 @@ void register_MolEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("segment") )
+                , bp::release_gil_policy()
                 , "Add a segment called name and return an editor that can\nbe used to edit it" );
         
         }
@@ -147,6 +156,7 @@ void register_MolEditor_class(){
             MolEditor_exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "Commit these changes and return a copy of the\nedited molecule" );
         
         }
@@ -185,6 +195,7 @@ void register_MolEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Remove all atoms from this molecule that have the ID atomid.\nThis does nothing if there are no atoms with this ID.\nThis returns an editor that can be used to further edit\nthe molecule" );
         
         }
@@ -197,6 +208,7 @@ void register_MolEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("cgid") )
+                , bp::release_gil_policy()
                 , "Remove all CutGroups from this molecule that have the ID atomid.\nThis does nothing if there are no CutGroups with this ID.\nThis returns an editor that can be used to further edit\nthe molecule" );
         
         }
@@ -209,6 +221,7 @@ void register_MolEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Remove all residues from this molecule that have the ID atomid.\nThis does nothing if there are no residues with this ID.\nThis returns an editor that can be used to further edit\nthe molecule" );
         
         }
@@ -221,6 +234,7 @@ void register_MolEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("chainid") )
+                , bp::release_gil_policy()
                 , "Remove all chains from this molecule that have the ID atomid.\nThis does nothing if there are no chains with this ID.\nThis returns an editor that can be used to further edit\nthe molecule" );
         
         }
@@ -233,6 +247,7 @@ void register_MolEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("segid") )
+                , bp::release_gil_policy()
                 , "Remove all segments from this molecule that have the ID atomid.\nThis does nothing if there are no segments with this ID.\nThis returns an editor that can be used to further edit\nthe molecule" );
         
         }
@@ -244,6 +259,7 @@ void register_MolEditor_class(){
             MolEditor_exposer.def( 
                 "removeAllAtoms"
                 , removeAllAtoms_function_value
+                , bp::release_gil_policy()
                 , "Remove all atoms from this molecule. This returns an editor that\ncan be used to further edit the structure of this molecule" );
         
         }
@@ -255,6 +271,7 @@ void register_MolEditor_class(){
             MolEditor_exposer.def( 
                 "removeAllChains"
                 , removeAllChains_function_value
+                , bp::release_gil_policy()
                 , "Remove all chains from this molecule. This returns an editor that\ncan be used to further edit the structure of this molecule" );
         
         }
@@ -266,6 +283,7 @@ void register_MolEditor_class(){
             MolEditor_exposer.def( 
                 "removeAllCutGroups"
                 , removeAllCutGroups_function_value
+                , bp::release_gil_policy()
                 , "Remove all CutGroups from this molecule. This returns an editor that\ncan be used to further edit the structure of this molecule" );
         
         }
@@ -277,6 +295,7 @@ void register_MolEditor_class(){
             MolEditor_exposer.def( 
                 "removeAllResidues"
                 , removeAllResidues_function_value
+                , bp::release_gil_policy()
                 , "Remove all residues from this molecule. This returns an editor that\ncan be used to further edit the structure of this molecule" );
         
         }
@@ -288,6 +307,7 @@ void register_MolEditor_class(){
             MolEditor_exposer.def( 
                 "removeAllSegments"
                 , removeAllSegments_function_value
+                , bp::release_gil_policy()
                 , "Remove all segments from this molecule. This returns an editor that\ncan be used to further edit the structure of this molecule" );
         
         }
@@ -376,6 +396,7 @@ void register_MolEditor_class(){
             MolEditor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this editor" );
         
         }
@@ -387,6 +408,7 @@ void register_MolEditor_class(){
             MolEditor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

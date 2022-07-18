@@ -2161,6 +2161,31 @@ EditMolInfo* EditMolInfo::clone() const
     return new EditMolInfo(*this);
 }
 
+int EditMolInfo::nAtoms() const
+{
+    return d->atoms_by_index.count();
+}
+
+int EditMolInfo::nResidues() const
+{
+    return d->res_by_index.count();
+}
+
+int EditMolInfo::nChains() const
+{
+    return d->chains_by_index.count();
+}
+
+int EditMolInfo::nCutGroups() const
+{
+    return d->cg_by_index.count();
+}
+
+int EditMolInfo::nSegments() const
+{
+    return d->seg_by_index.count();
+}
+
 /** Is this the entire molecule */
 bool EditMolInfo::selectedAll() const
 {

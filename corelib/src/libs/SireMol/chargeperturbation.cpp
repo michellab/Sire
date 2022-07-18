@@ -31,6 +31,7 @@
 #include "molecule.h"
 #include "moleditor.h"
 #include "mover.hpp"
+#include "selector.hpp"
 
 #include "SireCAS/values.h"
 
@@ -48,9 +49,9 @@ QDataStream &operator<<(QDataStream &ds,
                                        const ChargePerturbation &chgpert)
 {
     writeHeader(ds, r_chgpert, 1);
-    
+
     ds << static_cast<const Perturbation&>(chgpert);
-    
+
     return ds;
 }
 
@@ -58,18 +59,18 @@ QDataStream &operator>>(QDataStream &ds,
                                        ChargePerturbation &chgpert)
 {
     VersionID v = readHeader(ds, r_chgpert);
-    
+
     if (v == 1)
     {
         ds >> static_cast<Perturbation&>(chgpert);
     }
     else
         throw version_error(v, "1", r_chgpert, CODELOC);
-        
+
     return ds;
 }
 
-/** Constructor - this creates a charge perturbation that 
+/** Constructor - this creates a charge perturbation that
     perturbs from charges in "initial_charge" to charges in
     "final_charge", placing the current charges in "charge",
     and using Perturbation::defaultEquation() to map the
@@ -137,48 +138,48 @@ bool ChargePerturbation::operator!=(const ChargePerturbation &other) const
 QSet<QString> ChargePerturbation::requiredProperties() const
 {
     QSet<QString> props;
-    
+
     PropertyName prop = propertyMap()["charge"];
-    
+
     if (prop.hasSource())
         props.insert( prop.source() );
-        
+
     prop = propertyMap()["initial_charge"];
-    
+
     if (prop.hasSource())
         props.insert( prop.source() );
-        
+
     prop = propertyMap()["final_charge"];
-    
+
     if (prop.hasSource())
         props.insert( prop.source() );
-        
+
     return props;
 }
 
 /** Return whether or not this perturbation with the passed values would
     change the molecule 'molecule' */
-bool ChargePerturbation::wouldChange(const Molecule &molecule, 
+bool ChargePerturbation::wouldChange(const Molecule &molecule,
                                      const Values &values) const
 {
     try
     {
-        const AtomCharges &initial_chgs = molecule.property( 
+        const AtomCharges &initial_chgs = molecule.property(
                                             propertyMap()["initial_charge"] )
                                                 .asA<AtomCharges>();
-                                           
-        const AtomCharges &final_chgs = molecule.property( 
+
+        const AtomCharges &final_chgs = molecule.property(
                                             propertyMap()["final_charge"] )
                                                 .asA<AtomCharges>();
 
-        const AtomCharges &chgs = molecule.property( 
+        const AtomCharges &chgs = molecule.property(
                                             propertyMap()["charge"] )
                                                 .asA<AtomCharges>();
-                                                
+
         const Expression &f = this->mappingFunction();
         const Symbol &initial = this->symbols().initial();
         const Symbol &final = this->symbols().final();
-    
+
         for (CGIdx i(0); i<initial_chgs.nCutGroups(); ++i)
         {
             for (Index j(0); j<initial_chgs.nAtoms(i); ++j)
@@ -193,7 +194,7 @@ bool ChargePerturbation::wouldChange(const Molecule &molecule,
                 {
                     Values atom_values = values + (initial == initial_chg) +
                                                   (final == final_chg);
-        
+
                     if (chg != f(atom_values))
                         return true;
                 }
@@ -203,7 +204,7 @@ bool ChargePerturbation::wouldChange(const Molecule &molecule,
                 }
             }
         }
-        
+
         return false;
     }
     catch(...)
@@ -213,8 +214,8 @@ bool ChargePerturbation::wouldChange(const Molecule &molecule,
 }
 
 /** Perturb the charges in the passed molecule using the reaction
-    coordinate(s) in 'values' 
-    
+    coordinate(s) in 'values'
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
@@ -223,16 +224,16 @@ void ChargePerturbation::perturbMolecule(MolEditor &molecule, const Values &valu
 {
     const AtomCharges &initial_chgs = molecule.property( propertyMap()["initial_charge"] )
                                               .asA<AtomCharges>();
-                                           
+
     const AtomCharges &final_chgs = molecule.property( propertyMap()["final_charge"] )
                                             .asA<AtomCharges>();
-                                            
+
     AtomCharges chgs(initial_chgs);
-    
+
     const Expression &f = this->mappingFunction();
     const Symbol &initial = this->symbols().initial();
     const Symbol &final = this->symbols().final();
-    
+
     for (CGIdx i(0); i<initial_chgs.nCutGroups(); ++i)
     {
         for (Index j(0); j<initial_chgs.nAtoms(i); ++j)
@@ -246,11 +247,11 @@ void ChargePerturbation::perturbMolecule(MolEditor &molecule, const Values &valu
             {
                 Values atom_values = values + (initial == initial_chg) +
                                               (final == final_chg);
-        
+
                 chgs.set( atomidx, Charge(f(atom_values)) );
             }
         }
     }
-    
+
     molecule.setProperty( propertyMap()["charge"].source(), chgs );
 }

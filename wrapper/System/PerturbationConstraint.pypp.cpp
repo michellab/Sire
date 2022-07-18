@@ -40,6 +40,8 @@ SireSystem::PerturbationConstraint __copy__(const SireSystem::PerturbationConstr
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PerturbationConstraint_class(){
 
     { //::SireSystem::PerturbationConstraint
@@ -56,7 +58,7 @@ void register_PerturbationConstraint_class(){
             PerturbationConstraint_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group that is acted on by this constraint" );
         
         }
@@ -83,6 +85,7 @@ void register_PerturbationConstraint_class(){
             PerturbationConstraint_exposer.def( 
                 "perturbationProperty"
                 , perturbationProperty_function_value
+                , bp::release_gil_policy()
                 , "Return the property used to find the perturbations to apply\nto the molecules in this constraint" );
         
         }
@@ -94,6 +97,7 @@ void register_PerturbationConstraint_class(){
             PerturbationConstraint_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this constraint" );
         
         }
@@ -105,6 +109,7 @@ void register_PerturbationConstraint_class(){
             PerturbationConstraint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

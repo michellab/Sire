@@ -20,6 +20,8 @@ SireMM::CoulombComponent __copy__(const SireMM::CoulombComponent &other){ return
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CoulombComponent_class(){
 
     { //::SireMM::CoulombComponent
@@ -38,6 +40,7 @@ void register_CoulombComponent_class(){
                 "changeEnergy"
                 , changeEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("ljnrg") )
+                , bp::release_gil_policy()
                 , "Change the coulomb component of the energy in the forcefield ff\nby delta" );
         
         }
@@ -50,6 +53,7 @@ void register_CoulombComponent_class(){
                 "setEnergy"
                 , setEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("ljnrg") )
+                , bp::release_gil_policy()
                 , "Set the coulomb component of the energy in the forcefield ff\nto equal to the passed CoulombEnergy" );
         
         }
@@ -61,6 +65,7 @@ void register_CoulombComponent_class(){
             CoulombComponent_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -72,7 +77,7 @@ void register_CoulombComponent_class(){
             CoulombComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -84,6 +89,7 @@ void register_CoulombComponent_class(){
             CoulombComponent_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +101,7 @@ void register_CoulombComponent_class(){
             CoulombComponent_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -16,6 +16,8 @@ namespace bp = boost::python;
 
 #include "SireMol/connectivity.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/dihedralid.h"
 
 #include "SireMol/molecule.h"
@@ -56,6 +58,8 @@ SireMove::InternalMoveSingle __copy__(const SireMove::InternalMoveSingle &other)
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_InternalMoveSingle_class(){
 
     { //::SireMove::InternalMoveSingle
@@ -85,7 +89,7 @@ void register_InternalMoveSingle_class(){
             InternalMoveSingle_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group that is sampled for this move" );
         
         }
@@ -124,7 +128,7 @@ void register_InternalMoveSingle_class(){
             InternalMoveSingle_exposer.def( 
                 "sampler"
                 , sampler_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the sampler used to sample molecules to move" );
         
         }
@@ -137,6 +141,7 @@ void register_InternalMoveSingle_class(){
                 "setFlexibilityProperty"
                 , setFlexibilityProperty_function_value
                 , ( bp::arg("property") )
+                , bp::release_gil_policy()
                 , "Set the name of the property used to find the flexibility of each molecule" );
         
         }
@@ -149,6 +154,7 @@ void register_InternalMoveSingle_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("rangenerator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator used to generate the random\nnumber used for this move" );
         
         }
@@ -161,6 +167,7 @@ void register_InternalMoveSingle_class(){
                 "setSampler"
                 , setSampler_function_value
                 , ( bp::arg("sampler") )
+                , bp::release_gil_policy()
                 , "Set the sampler used to sample molecules for this move" );
         
         }
@@ -173,6 +180,7 @@ void register_InternalMoveSingle_class(){
                 "setSampler"
                 , setSampler_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Set the sampler so that it draws molecules uniformly from the\nmolecule group molgroup" );
         
         }
@@ -185,6 +193,7 @@ void register_InternalMoveSingle_class(){
                 "setSynchronisedCoordinates"
                 , setSynchronisedCoordinates_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -196,7 +205,7 @@ void register_InternalMoveSingle_class(){
             InternalMoveSingle_exposer.def( 
                 "synchronisedMols"
                 , synchronisedMols_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -208,6 +217,7 @@ void register_InternalMoveSingle_class(){
             InternalMoveSingle_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this move" );
         
         }
@@ -219,6 +229,7 @@ void register_InternalMoveSingle_class(){
             InternalMoveSingle_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

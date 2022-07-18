@@ -17,6 +17,8 @@ namespace bp = boost::python;
 
 #include "SireUnits/units.h"
 
+#include "core.h"
+
 #include "geometryperturbation.h"
 
 #include "molecule.h"
@@ -32,6 +34,8 @@ SireMol::NullGeometryPerturbation __copy__(const SireMol::NullGeometryPerturbati
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 void register_NullGeometryPerturbation_class(){
 
@@ -64,6 +68,7 @@ void register_NullGeometryPerturbation_class(){
                 "perturbMolecule"
                 , perturbMolecule_function_value
                 , ( bp::arg("arg0"), bp::arg("arg1") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -75,6 +80,7 @@ void register_NullGeometryPerturbation_class(){
             NullGeometryPerturbation_exposer.def( 
                 "requiredProperties"
                 , requiredProperties_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -86,6 +92,7 @@ void register_NullGeometryPerturbation_class(){
             NullGeometryPerturbation_exposer.def( 
                 "requiredSymbols"
                 , requiredSymbols_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -97,6 +104,7 @@ void register_NullGeometryPerturbation_class(){
             NullGeometryPerturbation_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -109,6 +117,7 @@ void register_NullGeometryPerturbation_class(){
                 "wouldChange"
                 , wouldChange_function_value
                 , ( bp::arg("arg0"), bp::arg("arg1") )
+                , bp::release_gil_policy()
                 , "" );
         
         }

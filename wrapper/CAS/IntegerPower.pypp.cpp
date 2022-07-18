@@ -37,6 +37,8 @@ SireCAS::IntegerPower __copy__(const SireCAS::IntegerPower &other){ return SireC
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_IntegerPower_class(){
 
     { //::SireCAS::IntegerPower
@@ -54,6 +56,7 @@ void register_IntegerPower_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this power" );
         
         }
@@ -66,6 +69,7 @@ void register_IntegerPower_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this power" );
         
         }
@@ -77,6 +81,7 @@ void register_IntegerPower_class(){
             IntegerPower_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash of this power" );
         
         }
@@ -89,6 +94,7 @@ void register_IntegerPower_class(){
             IntegerPower_exposer.def( 
                 "power"
                 , power_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -100,6 +106,7 @@ void register_IntegerPower_class(){
             IntegerPower_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -111,6 +118,7 @@ void register_IntegerPower_class(){
             IntegerPower_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

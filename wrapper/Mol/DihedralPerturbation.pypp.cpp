@@ -18,6 +18,8 @@ namespace bp = boost::python;
 
 #include "SireUnits/units.h"
 
+#include "core.h"
+
 #include "geometryperturbation.h"
 
 #include "molecule.h"
@@ -33,6 +35,8 @@ SireMol::DihedralPerturbation __copy__(const SireMol::DihedralPerturbation &othe
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 void register_DihedralPerturbation_class(){
 
@@ -53,7 +57,7 @@ void register_DihedralPerturbation_class(){
             DihedralPerturbation_exposer.def( 
                 "dihedral"
                 , dihedral_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ID that identifies that dihedral that will be perturbed" );
         
         }
@@ -104,6 +108,7 @@ void register_DihedralPerturbation_class(){
             DihedralPerturbation_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -115,6 +120,7 @@ void register_DihedralPerturbation_class(){
             DihedralPerturbation_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -127,6 +133,7 @@ void register_DihedralPerturbation_class(){
                 "wouldChange"
                 , wouldChange_function_value
                 , ( bp::arg("molecule"), bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Return whether or not this perturbation with the passed values would\nchange the molecule molecule" );
         
         }

@@ -39,6 +39,8 @@ SireMol::ResidueBeading __copy__(const SireMol::ResidueBeading &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ResidueBeading_class(){
 
     { //::SireMol::ResidueBeading
@@ -69,6 +71,7 @@ void register_ResidueBeading_class(){
             ResidueBeading_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

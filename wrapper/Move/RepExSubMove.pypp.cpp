@@ -43,6 +43,8 @@ SireMove::RepExSubMove __copy__(const SireMove::RepExSubMove &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_RepExSubMove_class(){
 
     { //::SireMove::RepExSubMove
@@ -59,6 +61,7 @@ void register_RepExSubMove_class(){
             RepExSubMove_exposer.def( 
                 "energy_i"
                 , energy_i_function_value
+                , bp::release_gil_policy()
                 , "Return the energy of the replica in its normal state at the\nend of the block of moves" );
         
         }
@@ -70,6 +73,7 @@ void register_RepExSubMove_class(){
             RepExSubMove_exposer.def( 
                 "energy_j"
                 , energy_j_function_value
+                , bp::release_gil_policy()
                 , "Return the energy of the replica in its partner state\nat the end of the block of moves" );
         
         }
@@ -82,6 +86,7 @@ void register_RepExSubMove_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("n_supra_moves"), bp::arg("n_supra_moves_per_block"), bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "Perform the sub-moves on the passed sub-system" );
         
         }
@@ -108,6 +113,7 @@ void register_RepExSubMove_class(){
             RepExSubMove_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this move" );
         
         }
@@ -119,6 +125,7 @@ void register_RepExSubMove_class(){
             RepExSubMove_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -130,6 +137,7 @@ void register_RepExSubMove_class(){
             RepExSubMove_exposer.def( 
                 "volume_i"
                 , volume_i_function_value
+                , bp::release_gil_policy()
                 , "Return the volume of the replica in its normal state at\nthe end of the block of moves" );
         
         }
@@ -141,6 +149,7 @@ void register_RepExSubMove_class(){
             RepExSubMove_exposer.def( 
                 "volume_j"
                 , volume_j_function_value
+                , bp::release_gil_policy()
                 , "Return the volume of the replica in its partner state\nat the end of the block of moves" );
         
         }

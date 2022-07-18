@@ -76,6 +76,12 @@ public:
     MolInfo();
     virtual ~MolInfo();
 
+    virtual int nAtoms() const=0;
+    virtual int nResidues() const=0;
+    virtual int nChains() const=0;
+    virtual int nSegments() const=0;
+    virtual int nCutGroups() const=0;
+
     virtual QList<AtomIdx> map(const AtomName &name) const=0;
     virtual QList<AtomIdx> map(AtomNum num) const=0;
     virtual QList<AtomIdx> map(AtomIdx idx) const=0;
@@ -203,6 +209,9 @@ QList<typename T::Index> getAll(const MolInfo &molinfo);
 template<class T>
 QList<typename T::Index> getAll(const MolInfo &molinfo,
                                 const AtomSelection &selected_atoms);
+
+template<class T>
+int getCount(const MolInfo &molinfo);
 
 } //end of namespace detail
 

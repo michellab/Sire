@@ -3,13 +3,23 @@
 ### in the Sire bundle
 ###
 
-unset(BOOST_PYTHON_LIBRARY CACHE)
+# I am not using this now as it breaks the finding and linking of boost python 
+# in the windows Anaconda build, and we are now moving fully away from the bundled
+# dependencies. Please look in wrapper/CMakeLists.txt to see how we are now finding
+# and linking to boost python. The main difference is forcing the link to the 
+# dynamic library, and not including the fix for unwind_type.hpp below. If this
+# fix is still needed then please port it into wrapper/CMakeLists.txt.
+#
+# I hope this is ok. If there are any problems then please get in 
+# touch with me (Christopher Woods) and we can have a chat :-)
+
+unset(Boost_LIBRARIES CACHE)
 
 if ( ANACONDA_BUILD )
   if (MSVC)
     find_package( Boost 1.31 COMPONENTS
       python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR} REQUIRED )
-    set ( BOOST_PYTHON_LIBRARY "${Boost_LIBRARIES}" )
+    set ( Boost_LIBRARIES "${Boost_LIBRARIES}" )
     set ( BOOST_PYTHON_HEADERS "${Boost_INCLUDE_DIR}" )
     add_definitions("/DBOOST_PYTHON_NO_LIB")
     # unwind_type fails with MSVC >= 15.8.0
@@ -24,7 +34,7 @@ if ( ANACONDA_BUILD )
       file(WRITE "${Boost_INCLUDE_DIR}/boost/python/detail/unwind_type.hpp" "${UNWIND_TYPE_HPP_DATA}")
     endif()
   else()
-    find_library( BOOST_PYTHON_LIBRARY
+    find_library( Boost_LIBRARIES
                   NAMES boost_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}
                   PATHS ${SIRE_APP}/lib NO_DEFAULT_PATH )
   endif()
@@ -32,16 +42,16 @@ elseif ( MSYS )
   message( STATUS "Looking for MSYS version of boost::python..." )
   set (BOOST_ALL_DYN_LINK "YES")
   find_package( Boost 1.31 COMPONENTS python3 REQUIRED )
-  set ( BOOST_PYTHON_LIBRARY "${Boost_LIBRARIES}" )
+  set ( Boost_LIBRARIES "${Boost_LIBRARIES}" )
   set ( BOOST_PYTHON_HEADERS "${Boost_INCLUDE_DIR}" )
 
 else()
-  find_library( BOOST_PYTHON_LIBRARY
+  find_library( Boost_LIBRARIES
                 NAMES boost_python
                 PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
 endif()
 
-if ( BOOST_PYTHON_LIBRARY )
+if ( Boost_LIBRARIES )
   message( STATUS "Have already compiled a bundled version of boost::python")
 else()
   message( STATUS "Compiling and installing a bundled version of boost::python" )
@@ -97,30 +107,30 @@ else()
   )
 
   if (APPLE)
-    set( BOOST_PYTHON_LIBRARY "${BUNDLE_STAGEDIR}/lib/libboost_python.dylib" )
+    set( Boost_LIBRARIES "${BUNDLE_STAGEDIR}/lib/libboost_python.dylib" )
   else()
-    set( BOOST_PYTHON_LIBRARY "${BUNDLE_STAGEDIR}/lib/libboost_python.so" )
+    set( Boost_LIBRARIES "${BUNDLE_STAGEDIR}/lib/libboost_python.so" )
   endif()
 
 endif()
 
 if ( MSYS )
-  if ( BOOST_PYTHON_LIBRARY )
-    message( STATUS "Using boost::python in ${BOOST_PYTHON_LIBRARY} | ${BOOST_PYTHON_HEADERS}" )
+  if ( Boost_LIBRARIES )
+    message( STATUS "Using boost::python in ${Boost_LIBRARIES} | ${BOOST_PYTHON_HEADERS}" )
   else()
     message( FATAL_ERROR "Cannot find boost::python in MSYS!" )
   endif()
 else()
-  if ( BOOST_PYTHON_LIBRARY )
+  if ( Boost_LIBRARIES )
     set( BOOST_PYTHON_HEADERS "${SIRE_APP}/include" )
 
     if ( APPLE )
       message( STATUS "Not linking modules to libPython to prevent double-symbols" )
     else()
-      set( BOOST_PYTHON_LIBRARY "${PYTHON_LIBRARIES};${BOOST_PYTHON_LIBRARY}" )
+      set( Boost_LIBRARIES "${PYTHON_LIBRARIES};${Boost_LIBRARIES}" )
     endif()
 
-    message( STATUS "Using bundled boost::python in ${BOOST_PYTHON_LIBRARY} | ${BOOST_PYTHON_HEADERS}" )
+    message( STATUS "Using bundled boost::python in ${Boost_LIBRARIES} | ${BOOST_PYTHON_HEADERS}" )
     set( SIRE_FOUND_BOOST_PYTHON TRUE )
   else()
     message( STATUS "Strange? Cannot find the installed boost::python library. We cannot compile it, so will need to rely on the system version..." )

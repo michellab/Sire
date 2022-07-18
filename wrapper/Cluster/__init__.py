@@ -5,5 +5,5 @@
 ## (C) Christopher Woods
 ##
 
-from Sire.Cluster._Cluster import *
+from ._Cluster import *
 

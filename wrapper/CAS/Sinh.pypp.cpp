@@ -29,6 +29,8 @@ SireCAS::Sinh __copy__(const SireCAS::Sinh &other){ return SireCAS::Sinh(other);
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Sinh_class(){
 
     { //::SireCAS::Sinh
@@ -46,6 +48,7 @@ void register_Sinh_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this function" );
         
         }
@@ -58,6 +61,7 @@ void register_Sinh_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Complex evaluation" );
         
         }
@@ -70,6 +74,7 @@ void register_Sinh_class(){
             Sinh_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -81,6 +86,7 @@ void register_Sinh_class(){
             Sinh_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

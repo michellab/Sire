@@ -1,3 +1,9 @@
+try:
+    import sire
+    sire.use_old_api()
+except ImportError:
+    pass
+
 import Sire.Config
 
 import argparse
@@ -19,7 +25,7 @@ parser = argparse.ArgumentParser(description="Perform molecular dynamics single 
                                         "http://siremol.org",
                                  prog="somd-freenrg")
 
-parser.add_argument('-C', '--config', nargs="?", 
+parser.add_argument('-C', '--config', nargs="?",
                     help='Supply an optional CONFIG file to control the calculation.')
 
 parser.add_argument('-H', '--help-config', action="store_true",
@@ -53,7 +59,7 @@ parser.add_argument('-n', '--nmoves', nargs="?",
 parser.add_argument('-p', '--platform', nargs="?",
                     help="The OpenMM platform on which you want to run the simulation.")
 
-parser.add_argument('-l', '--lambda_val', nargs="?", 
+parser.add_argument('-l', '--lambda_val', nargs="?",
                     help="The lambda value at which you want to run the simulation.")
 
 sys.stdout.write("\n")

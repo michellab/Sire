@@ -22,6 +22,8 @@ SireFF::Inter2B2GFF<SireMM::SoftCLJPotentialInterface<SireMM::InterSoftCLJPotent
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_InterGroupSoftCLJFFBase_class(){
@@ -41,7 +43,7 @@ void register_InterGroupSoftCLJFFBase_class(){
             InterGroupSoftCLJFFBase_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -55,6 +57,7 @@ void register_InterGroupSoftCLJFFBase_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -67,6 +70,7 @@ void register_InterGroupSoftCLJFFBase_class(){
             InterGroupSoftCLJFFBase_exposer.def( 
                 "mustNowRecalculateFromScratch"
                 , mustNowRecalculateFromScratch_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -109,7 +113,7 @@ void register_InterGroupSoftCLJFFBase_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -123,6 +127,7 @@ void register_InterGroupSoftCLJFFBase_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("property") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -135,6 +140,7 @@ void register_InterGroupSoftCLJFFBase_class(){
             InterGroupSoftCLJFFBase_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -147,6 +153,7 @@ void register_InterGroupSoftCLJFFBase_class(){
             InterGroupSoftCLJFFBase_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

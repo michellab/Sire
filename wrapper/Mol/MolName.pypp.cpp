@@ -31,6 +31,8 @@ SireMol::MolName __copy__(const SireMol::MolName &other){ return SireMol::MolNam
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MolName_class(){
 
     { //::SireMol::MolName
@@ -48,6 +50,7 @@ void register_MolName_class(){
             MolName_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -59,6 +62,7 @@ void register_MolName_class(){
             MolName_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -71,6 +75,7 @@ void register_MolName_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -83,6 +88,7 @@ void register_MolName_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +101,7 @@ void register_MolName_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molgroups") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -122,6 +129,7 @@ void register_MolName_class(){
             MolName_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -133,6 +141,7 @@ void register_MolName_class(){
             MolName_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -144,6 +153,7 @@ void register_MolName_class(){
             MolName_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

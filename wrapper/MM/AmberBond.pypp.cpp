@@ -69,6 +69,8 @@ SireMM::AmberBond __copy__(const SireMM::AmberBond &other){ return SireMM::Amber
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AmberBond_class(){
 
     { //::SireMM::AmberBond
@@ -86,6 +88,7 @@ void register_AmberBond_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("r") )
+                , bp::release_gil_policy()
                 , "Return the energy evaluated from this bond for the passed bond length" );
         
         }
@@ -97,6 +100,7 @@ void register_AmberBond_class(){
             AmberBond_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -108,6 +112,7 @@ void register_AmberBond_class(){
             AmberBond_exposer.def( 
                 "k"
                 , k_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -150,6 +155,7 @@ void register_AmberBond_class(){
             AmberBond_exposer.def( 
                 "r0"
                 , r0_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -162,6 +168,7 @@ void register_AmberBond_class(){
                 "toExpression"
                 , toExpression_function_value
                 , ( bp::arg("R") )
+                , bp::release_gil_policy()
                 , "Return an expression to evaluate the energy of this bond, using the passed\nsymbol to represent the bond length" );
         
         }
@@ -173,6 +180,7 @@ void register_AmberBond_class(){
             AmberBond_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -184,6 +192,7 @@ void register_AmberBond_class(){
             AmberBond_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -195,6 +204,7 @@ void register_AmberBond_class(){
             AmberBond_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

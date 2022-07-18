@@ -21,6 +21,8 @@ SireMol::CGProperty<QVariant> __copy__(const SireMol::CGProperty<QVariant> &othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_CGVariantProperty_class(){
@@ -55,6 +57,7 @@ void register_CGVariantProperty_class(){
                 "assertCanConvert"
                 , assertCanConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -68,6 +71,7 @@ void register_CGVariantProperty_class(){
                 "assignFrom"
                 , assignFrom_function_value
                 , ( bp::arg("variant") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +99,7 @@ void register_CGVariantProperty_class(){
                 "canConvert"
                 , canConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -107,6 +112,7 @@ void register_CGVariantProperty_class(){
             CGVariantProperty_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -120,6 +126,7 @@ void register_CGVariantProperty_class(){
                 "fromVariant"
                 , fromVariant_function_value
                 , ( bp::arg("variant") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -137,6 +144,34 @@ void register_CGVariantProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::CGProperty< QVariant >::getAsProperty
+        
+            typedef SireMol::CGProperty< QVariant > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::CGProperty< QVariant >::*getAsProperty_function_type)( ::SireMol::CGIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::CGProperty< QVariant >::getAsProperty );
+            
+            CGVariantProperty_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::CGProperty< QVariant >::getAsVariant
+        
+            typedef SireMol::CGProperty< QVariant > exported_class_t;
+            typedef ::QVariant ( ::SireMol::CGProperty< QVariant >::*getAsVariant_function_type)( ::SireMol::CGIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::CGProperty< QVariant >::getAsVariant );
+            
+            CGVariantProperty_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::CGProperty< QVariant >::isCompatibleWith
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
@@ -147,6 +182,7 @@ void register_CGVariantProperty_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -159,6 +195,7 @@ void register_CGVariantProperty_class(){
             CGVariantProperty_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -171,6 +208,7 @@ void register_CGVariantProperty_class(){
             CGVariantProperty_exposer.def( 
                 "nCutGroups"
                 , nCutGroups_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -227,6 +265,7 @@ void register_CGVariantProperty_class(){
             CGVariantProperty_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -239,6 +278,7 @@ void register_CGVariantProperty_class(){
             CGVariantProperty_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -251,6 +291,7 @@ void register_CGVariantProperty_class(){
             CGVariantProperty_exposer.def( 
                 "toVariant"
                 , toVariant_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -263,6 +304,7 @@ void register_CGVariantProperty_class(){
             CGVariantProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

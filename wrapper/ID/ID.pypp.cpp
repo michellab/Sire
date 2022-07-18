@@ -19,6 +19,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ID_class(){
 
     { //::SireID::ID
@@ -33,6 +35,7 @@ void register_ID_class(){
             ID_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash for this ID object - this allows\nthis object to be used as a key in a dictionary" );
         
         }
@@ -44,6 +47,7 @@ void register_ID_class(){
             ID_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this ID is null" );
         
         }
@@ -57,6 +61,7 @@ void register_ID_class(){
             ID_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this ID" );
         
         }
@@ -68,6 +73,7 @@ void register_ID_class(){
             ID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -79,6 +85,7 @@ void register_ID_class(){
             ID_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "Return the type name of this ID object." );
         
         }

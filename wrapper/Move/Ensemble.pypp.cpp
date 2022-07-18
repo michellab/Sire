@@ -31,6 +31,8 @@ SireMove::Ensemble __copy__(const SireMove::Ensemble &other){ return SireMove::E
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Ensemble_class(){
 
     { //::SireMove::Ensemble
@@ -47,6 +49,7 @@ void register_Ensemble_class(){
                 "MuVT"
                 , MuVT_function_value
                 , ( bp::arg("temperature"), bp::arg("fugacity") )
+                , bp::release_gil_policy()
                 , "Return the MuVT ensemble for the temperature temperature and\nthe fugacity fugacity" );
         
         }
@@ -59,6 +62,7 @@ void register_Ensemble_class(){
                 "MuVT"
                 , MuVT_function_value
                 , ( bp::arg("temperature"), bp::arg("chemical_potential") )
+                , bp::release_gil_policy()
                 , "Return the MuVT ensemble for the temperature temperature and\nthe chemical potential chemical_potential" );
         
         }
@@ -71,6 +75,7 @@ void register_Ensemble_class(){
                 "NPT"
                 , NPT_function_value
                 , ( bp::arg("temperature"), bp::arg("pressure") )
+                , bp::release_gil_policy()
                 , "Return the NPT ensemble for the temperature temperature and\nthe pressure pressure" );
         
         }
@@ -82,6 +87,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "NVE"
                 , NVE_function_value
+                , bp::release_gil_policy()
                 , "Return the NVE ensemble" );
         
         }
@@ -94,6 +100,7 @@ void register_Ensemble_class(){
                 "NVT"
                 , NVT_function_value
                 , ( bp::arg("temperature") )
+                , bp::release_gil_policy()
                 , "Return the NVT ensemble for the temperature temperature" );
         
         }
@@ -106,6 +113,7 @@ void register_Ensemble_class(){
                 "canonical"
                 , canonical_function_value
                 , ( bp::arg("temperature") )
+                , bp::release_gil_policy()
                 , "Syntactic sugar to return the NVT ensemble" );
         
         }
@@ -117,6 +125,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "chemicalPotential"
                 , chemicalPotential_function_value
+                , bp::release_gil_policy()
                 , "Return the chemical potential of this ensemble\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -128,6 +137,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "fugacity"
                 , fugacity_function_value
+                , bp::release_gil_policy()
                 , "Return the fugacity of this ensemble\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -140,6 +150,7 @@ void register_Ensemble_class(){
                 "grandCanonical"
                 , grandCanonical_function_value
                 , ( bp::arg("temperature"), bp::arg("fugacity") )
+                , bp::release_gil_policy()
                 , "Syntactic sugar to return the MuVT ensemble" );
         
         }
@@ -152,6 +163,7 @@ void register_Ensemble_class(){
                 "grandCanonical"
                 , grandCanonical_function_value
                 , ( bp::arg("temperature"), bp::arg("chemical_potential") )
+                , bp::release_gil_policy()
                 , "Syntactic sugar to return the MuVT ensemble" );
         
         }
@@ -163,6 +175,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "isCanonical"
                 , isCanonical_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is the canonical (NVT) ensemble" );
         
         }
@@ -174,6 +187,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "isConstantChemicalPotential"
                 , isConstantChemicalPotential_function_value
+                , bp::release_gil_policy()
                 , "Return whether the chemical potential is constant in this ensemble" );
         
         }
@@ -185,6 +199,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "isConstantEnergy"
                 , isConstantEnergy_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not energy is a constant in this ensemble" );
         
         }
@@ -196,6 +211,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "isConstantFugacity"
                 , isConstantFugacity_function_value
+                , bp::release_gil_policy()
                 , "Return whether the chemical potential is constant in this ensemble" );
         
         }
@@ -207,6 +223,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "isConstantNParticles"
                 , isConstantNParticles_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the number of particles is constant in this ensemble" );
         
         }
@@ -218,6 +235,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "isConstantPressure"
                 , isConstantPressure_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not pressure is a constant in this ensemble" );
         
         }
@@ -229,6 +247,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "isConstantTemperature"
                 , isConstantTemperature_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not temperature is a constant in this ensemble" );
         
         }
@@ -240,6 +259,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "isConstantVolume"
                 , isConstantVolume_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not volume is a constant in this ensemble" );
         
         }
@@ -251,6 +271,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "isGrandCanonical"
                 , isGrandCanonical_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is the grand canonical (MuVT) ensemble" );
         
         }
@@ -262,6 +283,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "isIsothermalIsobaric"
                 , isIsothermalIsobaric_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is the isothermal-isobaric (NPT) ensemble" );
         
         }
@@ -273,6 +295,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "isMicroCanonical"
                 , isMicroCanonical_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is the microcanonical (NVE) ensemble" );
         
         }
@@ -284,6 +307,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "isMuVT"
                 , isMuVT_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is the MuVT ensemble" );
         
         }
@@ -295,6 +319,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "isNPT"
                 , isNPT_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is the NPT ensemble" );
         
         }
@@ -306,6 +331,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "isNVE"
                 , isNVE_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is the NVE ensemble" );
         
         }
@@ -317,6 +343,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "isNVT"
                 , isNVT_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is the NVT ensemble" );
         
         }
@@ -329,6 +356,7 @@ void register_Ensemble_class(){
                 "isothermalIsobaric"
                 , isothermalIsobaric_function_value
                 , ( bp::arg("temperature"), bp::arg("pressure") )
+                , bp::release_gil_policy()
                 , "Syntactic sugar to return the NPT ensemble" );
         
         }
@@ -341,6 +369,7 @@ void register_Ensemble_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Merge this ensemble with other. This tries to find an ensemble\nthat satisfies both, e.g. merging NVE with NVT will give NVT,\nwhile merging NVE with NPT would give NPT." );
         
         }
@@ -353,6 +382,7 @@ void register_Ensemble_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("e0"), bp::arg("e1") )
+                , bp::release_gil_policy()
                 , "Merge the two ensembles e0 and e1 together. This tries to find an ensemble\nthat satisfies both, e.g. merging NVE with NVT will give NVT,\nwhile merging NVE with NPT would give NPT." );
         
         }
@@ -364,6 +394,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "microcanonical"
                 , microcanonical_function_value
+                , bp::release_gil_policy()
                 , "Syntactic sugar to return the NVE ensemble" );
         
         }
@@ -375,6 +406,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "name"
                 , name_function_value
+                , bp::release_gil_policy()
                 , "Return the name of this ensemble (if it has a name)" );
         
         }
@@ -401,6 +433,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "pressure"
                 , pressure_function_value
+                , bp::release_gil_policy()
                 , "Return the pressure of this ensemble\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -412,6 +445,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "shortHand"
                 , shortHand_function_value
+                , bp::release_gil_policy()
                 , "Return the shorthand string for this ensemble (e.g. NVT)" );
         
         }
@@ -423,6 +457,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "temperature"
                 , temperature_function_value
+                , bp::release_gil_policy()
                 , "Return the temperature of this ensemble\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -434,6 +469,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this ensemble" );
         
         }
@@ -445,6 +481,7 @@ void register_Ensemble_class(){
             Ensemble_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

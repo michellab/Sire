@@ -985,7 +985,7 @@ static void assert_no_netcdf_error(int errnum)
     #else
         throw SireError::io_error( QObject::tr(
             "NetCDF experienced an error as it is not compiled and supported with "
-            "this version of Sire."), CODELOC );
+            "this version of sire."), CODELOC );
     #endif
 }
 

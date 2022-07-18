@@ -79,6 +79,8 @@ SireIO::PerturbationsLibrary __copy__(const SireIO::PerturbationsLibrary &other)
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PerturbationsLibrary_class(){
 
     { //::SireIO::PerturbationsLibrary
@@ -96,6 +98,7 @@ void register_PerturbationsLibrary_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Add the templates in other into this library" );
         
         }
@@ -108,6 +111,7 @@ void register_PerturbationsLibrary_class(){
                 "applyTemplate"
                 , applyTemplate_function_value
                 , ( bp::arg("molecule") )
+                , bp::release_gil_policy()
                 , "Generate the perturbations property and associated properties for the passed molecule" );
         
         }
@@ -133,6 +137,7 @@ void register_PerturbationsLibrary_class(){
                 "loadTemplates"
                 , loadTemplates_function_value
                 , ( bp::arg("file") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -161,6 +166,7 @@ void register_PerturbationsLibrary_class(){
                 "setTemplate"
                 , setTemplate_function_value
                 , ( bp::arg("key"), bp::arg("tmplate") )
+                , bp::release_gil_policy()
                 , "Set the template associated with the passed key" );
         
         }
@@ -172,6 +178,7 @@ void register_PerturbationsLibrary_class(){
             PerturbationsLibrary_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

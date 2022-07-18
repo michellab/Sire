@@ -25,6 +25,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Grid_class(){
@@ -53,6 +55,7 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "center"
                 , center_function_value
+                , bp::release_gil_policy()
                 , "Return the center of the grid" );
         
         }
@@ -64,6 +67,7 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of points in the grid" );
         
         }
@@ -75,6 +79,7 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "hasWeights"
                 , hasWeights_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the grid points have weights\n(i.e. they are not equally weighted)" );
         
         }
@@ -86,6 +91,7 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether this grid is empty" );
         
         }
@@ -97,6 +103,7 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "maxCoords"
                 , maxCoords_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum coordinates of the grid" );
         
         }
@@ -108,6 +115,7 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "minCoords"
                 , minCoords_function_value
+                , bp::release_gil_policy()
                 , "Return the minimum coordinates of the grid" );
         
         }
@@ -119,6 +127,7 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "nPoints"
                 , nPoints_function_value
+                , bp::release_gil_policy()
                 , "Return the number of points in the grid" );
         
         }
@@ -155,6 +164,7 @@ void register_Grid_class(){
                 "recenter"
                 , recenter_function_value
                 , ( bp::arg("center") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -191,6 +201,7 @@ void register_Grid_class(){
                 "scale"
                 , scale_function_value
                 , ( bp::arg("scalefactor") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -203,6 +214,7 @@ void register_Grid_class(){
                 "translate"
                 , translate_function_value
                 , ( bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -214,6 +226,7 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

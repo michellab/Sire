@@ -55,6 +55,8 @@ SireID::InvertMatch<SireMol::CGID> __copy__(const SireID::InvertMatch<SireMol::C
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_InvertMatch_CGID__class(){
 
     { //::SireID::InvertMatch< SireMol::CGID >
@@ -72,6 +74,7 @@ void register_InvertMatch_CGID__class(){
             InvertMatch_CGID__exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -84,6 +87,7 @@ void register_InvertMatch_CGID__class(){
             InvertMatch_CGID__exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -97,6 +101,7 @@ void register_InvertMatch_CGID__class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("obj") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -127,6 +132,7 @@ void register_InvertMatch_CGID__class(){
             InvertMatch_CGID__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -139,6 +145,7 @@ void register_InvertMatch_CGID__class(){
             InvertMatch_CGID__exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -151,6 +158,7 @@ void register_InvertMatch_CGID__class(){
             InvertMatch_CGID__exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

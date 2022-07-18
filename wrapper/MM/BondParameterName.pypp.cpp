@@ -51,6 +51,8 @@ SireMM::BondParameterName __copy__(const SireMM::BondParameterName &other){ retu
 
 const char* pvt_get_name(const SireMM::BondParameterName&){ return "SireMM::BondParameterName";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_BondParameterName_class(){
 
     { //::SireMM::BondParameterName

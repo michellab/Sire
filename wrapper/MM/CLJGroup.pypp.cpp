@@ -25,6 +25,8 @@ SireMM::CLJGroup __copy__(const SireMM::CLJGroup &other){ return SireMM::CLJGrou
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJGroup_class(){
 
     { //::SireMM::CLJGroup
@@ -43,6 +45,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "accept"
                 , accept_function_value
+                , bp::release_gil_policy()
                 , "Accept all of the changes in the group. This will ensure that\nall deltas have been removed and all of the atoms are correctly\nadded to the CLJBoxes boxes" );
         
         }
@@ -90,6 +93,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "boxLength"
                 , boxLength_function_value
+                , bp::release_gil_policy()
                 , "Return the size of the box used by CLJBoxes to partition space" );
         
         }
@@ -101,6 +105,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "changedAtoms"
                 , changedAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the set of all atoms that have changed since the last\ntime accept() was called. This will return an empty set if\nthe workspace was told to mustRecalculateFromScratch()" );
         
         }
@@ -112,6 +117,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "changedMolecules"
                 , changedMolecules_function_value
+                , bp::release_gil_policy()
                 , "Return all of the molecules that have changed since the last time\nthis CLJGroup was accepted" );
         
         }
@@ -135,6 +141,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -146,6 +153,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "isSingleIDChange"
                 , isSingleIDChange_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the changes since the last time accept()\nwas called all change parts of a molecule that all have the same\nID. If they do, then we only need to use changedAtoms() in the\ndelta energy calculation as the changed atoms dont interact with\neach other. Otherwise, we need mergeChanges() to get the changedAtoms\ntogether with oldAtoms and newAtoms, so that we can calculate the\nchange in energy within changedAtoms() itself as well" );
         
         }
@@ -158,6 +166,7 @@ void register_CLJGroup_class(){
                 "mapForMolecule"
                 , mapForMolecule_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Return the property map used for the molecule with number molnum" );
         
         }
@@ -169,6 +178,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "mergeChanges"
                 , mergeChanges_function_value
+                , bp::release_gil_policy()
                 , "Return a tuple of (changedAtoms(),oldAtoms(),newAtoms()). This is\nneeded if more than a single ID group has changed and thus we\nneed to calculate the change in interaction within changedAtoms" );
         
         }
@@ -180,6 +190,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "molecules"
                 , molecules_function_value
+                , bp::release_gil_policy()
                 , "Return the current version of all of the molecules in this group" );
         
         }
@@ -191,6 +202,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "mustReallyRecalculateFromScratch"
                 , mustReallyRecalculateFromScratch_function_value
+                , bp::release_gil_policy()
                 , "Tell the group that calculations will be made completely from scratch,\nand to also re-extract all of the molecules" );
         
         }
@@ -202,6 +214,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "mustRecalculateFromScratch"
                 , mustRecalculateFromScratch_function_value
+                , bp::release_gil_policy()
                 , "Tell the group that calculations will be made completely from scratch,\nso there is no need to maintain a delta" );
         
         }
@@ -213,6 +226,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "nChangedMolecules"
                 , nChangedMolecules_function_value
+                , bp::release_gil_policy()
                 , "Return the number of molecules that have changed since the\nlast time this CLJGroup was accepted" );
         
         }
@@ -224,6 +238,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "needsAccepting"
                 , needsAccepting_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this group needs to be accepted" );
         
         }
@@ -235,6 +250,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "newAtoms"
                 , newAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the set of all of the new atoms that have changed\nsince the last time accept() was called. This, plus the\nnegative of oldAtoms() will equal changedAtoms()" );
         
         }
@@ -246,6 +262,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "oldAtoms"
                 , oldAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the set of all of the old atoms that have changed\nsince the last time accept() was called. The negative\nof this plus newAtoms() will equal changedAtoms()" );
         
         }
@@ -272,6 +289,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "recalculatingFromScratch"
                 , recalculatingFromScratch_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -284,6 +302,7 @@ void register_CLJGroup_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "Remove the molecule view molview" );
         
         }
@@ -296,6 +315,7 @@ void register_CLJGroup_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Remove all of the molecules in molecules from this group" );
         
         }
@@ -308,6 +328,7 @@ void register_CLJGroup_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Remove all of the molecules in molecules from this group" );
         
         }
@@ -320,6 +341,7 @@ void register_CLJGroup_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Remove the molecule with number molnum from this group" );
         
         }
@@ -331,6 +353,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
+                , bp::release_gil_policy()
                 , "Remove all molecules from this group" );
         
         }
@@ -343,6 +366,7 @@ void register_CLJGroup_class(){
                 "setBoxLength"
                 , setBoxLength_function_value
                 , ( bp::arg("box_length") )
+                , bp::release_gil_policy()
                 , "Set the size of the box used by CLJBoxes to partition space" );
         
         }
@@ -354,6 +378,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -365,6 +390,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -377,6 +403,7 @@ void register_CLJGroup_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "Update the molecule in this group to match the version of the molecule molview" );
         
         }
@@ -389,6 +416,7 @@ void register_CLJGroup_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Update all of the molecules in this group that are in molecules to match\nthe version held in molecules" );
         
         }
@@ -401,6 +429,7 @@ void register_CLJGroup_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Update all of the molecules in this group that are in molecules to match\nthe version held in molecules" );
         
         }
@@ -412,6 +441,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "updatedConnectedGroup"
                 , updatedConnectedGroup_function_value
+                , bp::release_gil_policy()
                 , "Tell this CLJGroup that atoms in a connected group have been\nupdated. This tells the CLJGroup to remove some of the caching\nthat is used to improve performance, as this caching could cause\nenergy errors when using deltas generated from other CLJGroups" );
         
         }
@@ -423,6 +453,7 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

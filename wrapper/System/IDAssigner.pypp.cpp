@@ -56,6 +56,8 @@ SireSystem::IDAssigner __copy__(const SireSystem::IDAssigner &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_IDAssigner_class(){
 
     { //::SireSystem::IDAssigner
@@ -75,6 +77,7 @@ void register_IDAssigner_class(){
             IDAssigner_exposer.def( 
                 "identifiedMolecules"
                 , identifiedMolecules_function_value
+                , bp::release_gil_policy()
                 , "Returns the list of identified molecules from the system,\nwhich are returned in the same order as the list of identity points\n" );
         
         }
@@ -86,7 +89,7 @@ void register_IDAssigner_class(){
             IDAssigner_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group operated on by this constraint" );
         
         }
@@ -98,6 +101,7 @@ void register_IDAssigner_class(){
             IDAssigner_exposer.def( 
                 "nPoints"
                 , nPoints_function_value
+                , bp::release_gil_policy()
                 , "Return the number of identity points (and thus the number of\nidentified molecules)" );
         
         }
@@ -124,6 +128,7 @@ void register_IDAssigner_class(){
             IDAssigner_exposer.def( 
                 "points"
                 , points_function_value
+                , bp::release_gil_policy()
                 , "Return the points used to identify the molecules" );
         
         }
@@ -147,7 +152,7 @@ void register_IDAssigner_class(){
             IDAssigner_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the space used to calculate distances between the molecules\nand the identity points" );
         
         }
@@ -159,6 +164,7 @@ void register_IDAssigner_class(){
             IDAssigner_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this assigner" );
         
         }
@@ -170,6 +176,7 @@ void register_IDAssigner_class(){
             IDAssigner_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -182,6 +189,7 @@ void register_IDAssigner_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Update the assigner with the passed system." );
         
         }
@@ -193,6 +201,7 @@ void register_IDAssigner_class(){
             IDAssigner_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

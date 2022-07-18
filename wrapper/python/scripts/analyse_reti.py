@@ -21,6 +21,12 @@ If you need more help understanding or interpreting the results of an analyse_re
 in touch via the Sire users mailing list, or by creating a github issue.
 """
 
+try:
+    import sire
+    sire.use_old_api()
+except ImportError:
+    pass
+
 import Sire.Stream
 
 import argparse
@@ -132,7 +138,7 @@ input_file = os.path.realpath(input_file)
 
 FILE.write("Analysing the replica exchange moves contained in file \"%s\"\n" % input_file)
 
-(system, moves) = Sire.Stream.load(input_file)  
+(system, moves) = Sire.Stream.load(input_file)
 
 def getRepExMoves(moves):
     if moves.what() == "SireMove::RepExMove":
@@ -148,7 +154,7 @@ def getRepExMoves(moves):
         FILE.write("Cannot find any Replica Exchange moves (SireMove::RepExMove) objects to analyse!\n")
         sys.exit(0)
 
-# get the replica exchange move object and print out the acceptance ratio 
+# get the replica exchange move object and print out the acceptance ratio
 repex = getRepExMoves(moves)
 FILE.write("\nReplica exchange moves: %s accepted, %s attempted, acceptance ratio = %.1f %%\n" % \
               (repex.nAccepted(), repex.nAttempted(), 100 * repex.acceptanceRatio()) )

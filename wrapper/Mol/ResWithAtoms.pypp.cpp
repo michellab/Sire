@@ -22,6 +22,8 @@ SireMol::ResWithAtoms __copy__(const SireMol::ResWithAtoms &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ResWithAtoms_class(){
 
     { //::SireMol::ResWithAtoms
@@ -38,7 +40,7 @@ void register_ResWithAtoms_class(){
             ResWithAtoms_exposer.def( 
                 "atomID"
                 , atomID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the atom ID" );
         
         }
@@ -50,6 +52,7 @@ void register_ResWithAtoms_class(){
             ResWithAtoms_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash of this identifier" );
         
         }
@@ -61,6 +64,7 @@ void register_ResWithAtoms_class(){
             ResWithAtoms_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Is this selection null?" );
         
         }
@@ -73,6 +77,7 @@ void register_ResWithAtoms_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Map this ID to the list of indicies of residues that match this ID\nThrow: SireMol::missing_atom\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -100,6 +105,7 @@ void register_ResWithAtoms_class(){
             ResWithAtoms_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representatio of this ID" );
         
         }
@@ -111,6 +117,7 @@ void register_ResWithAtoms_class(){
             ResWithAtoms_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -122,6 +129,7 @@ void register_ResWithAtoms_class(){
             ResWithAtoms_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

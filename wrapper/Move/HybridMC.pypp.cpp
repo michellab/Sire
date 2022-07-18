@@ -34,6 +34,8 @@ SireMove::HybridMC __copy__(const SireMove::HybridMC &other){ return SireMove::H
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_HybridMC_class(){
 
     { //::SireMove::HybridMC
@@ -57,7 +59,7 @@ void register_HybridMC_class(){
             HybridMC_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group that is moved by this move" );
         
         }
@@ -81,6 +83,7 @@ void register_HybridMC_class(){
             HybridMC_exposer.def( 
                 "nDynamicsSteps"
                 , nDynamicsSteps_function_value
+                , bp::release_gil_policy()
                 , "Return the number of MD steps to perform per hybrid MC move" );
         
         }
@@ -108,6 +111,7 @@ void register_HybridMC_class(){
                 "setCoordinatesProperty"
                 , setCoordinatesProperty_function_value
                 , ( bp::arg("coords_property") )
+                , bp::release_gil_policy()
                 , "Set the location of the coordinates that are affected by this move" );
         
         }
@@ -120,6 +124,7 @@ void register_HybridMC_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("rangenerator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator that is used by this move" );
         
         }
@@ -132,6 +137,7 @@ void register_HybridMC_class(){
                 "setNDynamicsSteps"
                 , setNDynamicsSteps_function_value
                 , ( bp::arg("nsteps") )
+                , bp::release_gil_policy()
                 , "Set the number of MD steps to perform per hybrid MC move" );
         
         }
@@ -144,6 +150,7 @@ void register_HybridMC_class(){
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
                 , ( bp::arg("space_property") )
+                , bp::release_gil_policy()
                 , "Set the location of the space property used by this move" );
         
         }
@@ -156,6 +163,7 @@ void register_HybridMC_class(){
                 "setTimeStep"
                 , setTimeStep_function_value
                 , ( bp::arg("timestep") )
+                , bp::release_gil_policy()
                 , "Set the timestep of the dynamics part of the move" );
         
         }
@@ -168,6 +176,7 @@ void register_HybridMC_class(){
                 "setVelocityGenerator"
                 , setVelocityGenerator_function_value
                 , ( bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Set the velocity generator used to generate velocities that\nare compatible with the Hybrid MC move" );
         
         }
@@ -179,6 +188,7 @@ void register_HybridMC_class(){
             HybridMC_exposer.def( 
                 "timeStep"
                 , timeStep_function_value
+                , bp::release_gil_policy()
                 , "Return the timestep of the dynamics part of the move" );
         
         }
@@ -190,6 +200,7 @@ void register_HybridMC_class(){
             HybridMC_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -201,6 +212,7 @@ void register_HybridMC_class(){
             HybridMC_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

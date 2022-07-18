@@ -15,6 +15,8 @@ SireCAS::SymbolComplex __copy__(const SireCAS::SymbolComplex &other){ return Sir
 
 const char* pvt_get_name(const SireCAS::SymbolComplex&){ return "SireCAS::SymbolComplex";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SymbolComplex_class(){
 
     { //::SireCAS::SymbolComplex
@@ -31,6 +33,7 @@ void register_SymbolComplex_class(){
             SymbolComplex_exposer.def( 
                 "ID"
                 , ID_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -3,6 +3,12 @@ color_freenrg is used to extract the free energy component outputs from a waters
 and to use them to color-code residues in a protein structure file
 """
 
+try:
+    import sire
+    sire.use_old_api()
+except ImportError:
+    pass
+
 import Sire.IO
 import Sire.Mol
 import Sire.Maths
@@ -67,7 +73,7 @@ if outdir is None:
 
 if must_exit:
     sys.exit(0)
-    
+
 if args.range:
     range_start = int(args.range[0])
     range_end = int(args.range[1])
@@ -114,7 +120,7 @@ def getComponents(filenames):
        the average components as a pandas DataFrame"""
     avgs = {}
     resids = {}
-    
+
     # Loop over all of the files...
     for filename in filenames:
         has_started=False
@@ -122,7 +128,7 @@ def getComponents(filenames):
             # Read from the line "RESIDUE FREE ENERGY COMPONENTS" onwards...
             if line.find("RESIDUE FREE ENERGY COMPONENTS") != -1:
                 has_started = True
-            
+
             elif has_started:
                 words = line.split()
                 if len(words) == 8:
@@ -132,22 +138,22 @@ def getComponents(filenames):
                     coul = float(words[-2])
                     lj = float(words[-1])
                     key = "%s:%s" % (resname,resnum)
-                    
+
                     if not key in avgs:
                         avgs[key] = [Sire.Maths.Average(), Sire.Maths.Average(), Sire.Maths.Average()]
                         if not resnum in resids:
                             resids[resnum] = [resname]
                         else:
                             resids[resnum].append(resname)
-                    
+
                     # accumulate the average total, coulomb and LJ free energies
                     avgs[key][0].accumulate(total)
                     avgs[key][1].accumulate(coul)
                     avgs[key][2].accumulate(lj)
-                    
+
                 elif line.find("COMPONENTS") != -1:
                     break
-    
+
     # Now sort the data into a pandas DataFrame
     resnums = list(resids.keys())
     resnums.sort()
@@ -155,7 +161,7 @@ def getComponents(filenames):
     total = []
     coul = []
     lj = []
-    
+
     for resnum in resnums:
         for resname in resids[resnum]:
             key = "%s:%s" % (resname,resnum)
@@ -164,8 +170,8 @@ def getComponents(filenames):
             total.append(avg[0].average())
             coul.append(avg[1].average())
             lj.append(avg[2].average())
-    
-    # The data is in lists which can be put into pandas columns. We will index the 
+
+    # The data is in lists which can be put into pandas columns. We will index the
     # DataFrame using the residue number (assuming that they are all unique)
     return DataFrame( index = resnums,
                       data = {"name" : resnams, "total" : total, "coulomb" : coul, "LJ" : lj},
@@ -184,23 +190,23 @@ print("\n", end="")
 def colorProtein(protein, data, column):
     """Color-code the passed protein using the data contained in the passed dataframe, using the
        specified column"""
-    
+
     # first find the maximum absolute value - we will scale linearly from there
     vals = data[column]
     maxval = vals.abs().max()
-    
+
     # now create an AtomFloatProperty that will contain a number for each atom
-    # in each residue. This will be from 0-100, with 0 representing -maxval, 
+    # in each residue. This will be from 0-100, with 0 representing -maxval,
     # 50 representing 0 and 100 representing maxval
     betas = Sire.Mol.AtomFloatProperty(protein, 50.0)
-    
+
     for x in data.index:
         resnum = Sire.Mol.ResNum(int(x))
         resnam = Sire.Mol.ResName(data.name[x])
         value = vals[x]
-        
+
         scaled = 50.0 + 50.0*(value/maxval)
-        
+
         # issues with beta mean it must lie between 0 and 99.99
         if scaled < 0:
             scaled = 0.0
@@ -208,10 +214,10 @@ def colorProtein(protein, data, column):
             scaled = 99.99
 
         residue = protein[ resnam + resnum ]
-        
+
         for atom in residue.atoms():
             betas.set(atom.cgAtomIdx(), scaled)
-            
+
     # Set the 'beta-factor' property as this is the name used for the 'beta_factor'
     # value by the PDB writer
     protein = protein.edit().setProperty("beta_factor", betas).commit()
@@ -233,6 +239,6 @@ for filename in glob.glob("%s/bound_mobile*.pdb" % outdir):
         newname = filename.replace(".pdb", "_%s.pdb" % c)
         Sire.IO.PDB2(system).writeToFile(newname)
         print("%s written to %s..." % (c,newname), end="")
-    
+
     print("\n")
 

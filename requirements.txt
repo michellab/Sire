@@ -1,0 +1,8 @@
+lazy_import
+boost
+gsl
+netcdf4
+openmm
+tbb
+tbb-devel
+qt

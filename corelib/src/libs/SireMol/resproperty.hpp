@@ -32,6 +32,7 @@
 #include <QVector>
 
 #include "SireBase/qvariant_metatype.h"
+#include "SireBase/convert_property.hpp"
 
 #include "moleculeinfodata.h"
 #include "molviewproperty.h"
@@ -72,30 +73,33 @@ class SIREMOL_EXPORT ResProp : public MolViewProperty
 public:
     ResProp();
     ResProp(const ResProp &other);
-   
+
     virtual ~ResProp();
-    
+
     virtual bool canConvert(const QVariant &value) const=0;
-    
+
     virtual void assignFrom(const ResProperty<QVariant> &values)=0;
-    
+
+    virtual QVariant getAsVariant(const ResIdx &residx) const=0;
+    virtual SireBase::PropertyPtr getAsProperty(const ResIdx &residx) const=0;
+
     virtual ResProperty<QVariant> toVariant() const=0;
-    
+
     virtual void assertCanConvert(const QVariant &value) const=0;
 };
 
 /** This is a property that can hold one value for each
     residue in the molecule.
-    
+
     mol.setProperty( "charge", ResCharges( [....] ) )
     mol.setProperty( "lj", ResLJs( [....] ) )
 
     res.setProperty( "charge", 0.0 * mod_e )
-    
+
     @author Christopher Woods
 */
 template<class T>
-class SIREMOL_EXPORT ResProperty 
+class SIREMOL_EXPORT ResProperty
     : public SireBase::ConcreteProperty<ResProperty<T>, ResProp>
 {
 
@@ -106,25 +110,28 @@ public:
     ResProperty();
 
     ResProperty(const MoleculeInfoData &molinfo);
-    
+
     ResProperty(const QVector<T> &values);
-    
+
     ResProperty(const ResProperty<T> &other);
-    
+
     ~ResProperty();
-    
+
     ResProperty<T>& operator=(const ResProperty<T> &other);
-    
+
     static const char* typeName();
-    
+
     ResProperty<T>* clone() const;
-    
+
     bool operator==(const ResProperty<T> &other) const;
     bool operator!=(const ResProperty<T> &other) const;
 
     const T& operator[](const ResIdx &residx) const;
     const T& at(const ResIdx &residx) const;
     const T& get(const ResIdx &residx) const;
+
+    QVariant getAsVariant(const ResIdx &idx) const;
+    SireBase::PropertyPtr getAsProperty(const ResIdx &idx) const;
 
     ResProperty<T>& set(ResIdx residx, const T &value);
 
@@ -135,23 +142,23 @@ public:
 
     int size() const;
     int count() const;
-    
+
     int nResidues() const;
 
     QString toString() const;
-    
+
     const QVector<T>& array() const;
 
     void assignFrom(const ResProperty<QVariant> &values);
-    
+
     static ResProperty<T> fromVariant(const ResProperty<QVariant> &values);
-    
+
     ResProperty<QVariant> toVariant() const;
-    
+
     bool isCompatibleWith(const MoleculeInfoData &molinfo) const;
-    
+
     bool canConvert(const QVariant &value) const;
-    
+
     void assertCanConvert(const QVariant &value) const;
 
 private:
@@ -168,7 +175,7 @@ ResProperty<T>::ResProperty()
               : SireBase::ConcreteProperty<ResProperty<T>,ResProp>()
 {}
 
-/** Construct space for the values of the property for all of the 
+/** Construct space for the values of the property for all of the
     residues in the molecule described by 'molinfo' */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -194,7 +201,7 @@ ResProperty<T>::ResProperty(const QVector<T> &values)
 
 /** Assert that the variant can be converted to a value that can
     be held in this list of properties
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -251,7 +258,7 @@ bool ResProperty<T>::operator!=(const ResProperty<T> &other) const
     return props != other.props;
 }
 
-/** Return the property for the residue at index 'residx' 
+/** Return the property for the residue at index 'residx'
 
     \throw SireError::invalid_index
 */
@@ -261,7 +268,7 @@ const T& ResProperty<T>::operator[](const ResIdx &residx) const
 {
     return props.constData()[residx.map(props.count())];
 }
-    
+
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 const char* ResProperty<T>::typeName()
@@ -308,13 +315,13 @@ ResProperty<T> ResProperty<T>::fromVariant(const ResProperty<QVariant> &variant)
 {
     ResProperty<T> array;
     array.assignFrom(variant);
-    
+
     return array;
 }
 
 /** Assign the values of this property from the array of variants
     in 'values'
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -326,19 +333,19 @@ void ResProperty<T>::assignFrom(const ResProperty<QVariant> &variant)
         props.clear();
         return;
     }
-        
+
     int nvals = variant.count();
     const QVariant *variant_array = variant.constData();
-    
+
     props = QVector<T>(nvals);
     props.squeeze();
     T *props_array = props.data();
-    
+
     for (int i=0; i<nvals; ++i)
     {
         const QVariant &value = variant_array[i];
         ResProperty<T>::assertCanConvert(value);
-        
+
         if (value.isNull())
             props_array[i] = T();
         else
@@ -353,10 +360,10 @@ ResProperty<QVariant> ResProperty<T>::toVariant() const
 {
     if (props.isEmpty())
         return ResProperty<QVariant>();
-        
+
     int nvals = props.count();
     const T *props_array = props.constData();
-    
+
     QVector<QVariant> converted_vals(nvals);
     converted_vals.squeeze();
     QVariant *converted_vals_array = converted_vals.data();
@@ -365,11 +372,11 @@ ResProperty<QVariant> ResProperty<T>::toVariant() const
     {
         converted_vals_array[i].setValue<T>(props_array[i]);
     }
-    
+
     return ResProperty<QVariant>(converted_vals);
 }
 
-/** Return the property for the residue at index 'residx' 
+/** Return the property for the residue at index 'residx'
 
     \throw SireError::invalid_index
 */
@@ -380,7 +387,7 @@ const T& ResProperty<T>::at(const ResIdx &residx) const
     return this->operator[](residx);
 }
 
-/** Return the property for the residue at index 'residx' 
+/** Return the property for the residue at index 'residx'
 
     \throw SireError::invalid_index
 */
@@ -391,7 +398,35 @@ const T& ResProperty<T>::get(const ResIdx &residx) const
     return this->operator[](residx);
 }
 
-/** Set the value of the property for the residue at 
+/** Return the value for the passed index, as
+    a QVariant. This lets you get the value without knowing the
+    actual type of this property
+
+    \throw SireError::invalid_index
+*/
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QVariant ResProperty<T>::getAsVariant(const ResIdx &residx) const
+{
+    const T &value = this->get(residx);
+    return QVariant::fromValue(value);
+}
+
+/** Return the value for this index as a
+    Property. This lets you get the value without knowing the
+    actual type of this property
+
+   \throw SireError::invalid_index
+*/
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SireBase::PropertyPtr ResProperty<T>::getAsProperty(
+                                const ResIdx &residx) const
+{
+    return SireBase::convert_property(this->get(residx));
+}
+
+/** Set the value of the property for the residue at
     index 'residx' */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -470,7 +505,7 @@ QDataStream& operator<<(QDataStream &ds, const SireMol::ResProperty<T> &prop)
     //serialise the base class - this writes the header and version!
     ds << static_cast<const SireMol::ResProp&>(prop);
     ds << prop.props;
-    
+
     return ds;
 }
 
@@ -481,7 +516,7 @@ QDataStream& operator>>(QDataStream &ds, SireMol::ResProperty<T> &prop)
 {
     ds >> static_cast<SireMol::ResProp&>(prop);
     ds >> prop.props;
-        
+
     return ds;
 }
 

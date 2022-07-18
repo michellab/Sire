@@ -21,6 +21,8 @@ namespace bp = boost::python;
 
 const char* pvt_get_name(const SireID::IndexBase&){ return "SireID::IndexBase";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_IndexBase_class(){
 
     { //::SireID::IndexBase
@@ -35,6 +37,7 @@ void register_IndexBase_class(){
             IndexBase_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Hash this Index" );
         
         }
@@ -46,6 +49,7 @@ void register_IndexBase_class(){
             IndexBase_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether this is a null index - a null\nindex is one that equals std::numeric_limits<qint32>::min(),\nwhich should be -21474833648 for a 32bit integer" );
         
         }
@@ -58,6 +62,7 @@ void register_IndexBase_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Map this index into the container of n elements - this\nmaps the index (with negative indexing, e.g. -1 is the last\nelement), and throws an exception if the index is out\nof the bounds of the array\nThrow: SireError::invalid_index\n" );
         
         }
@@ -69,6 +74,7 @@ void register_IndexBase_class(){
             IndexBase_exposer.def( 
                 "null"
                 , null_function_value
+                , bp::release_gil_policy()
                 , "Return the null index" );
         
         }
@@ -80,6 +86,7 @@ void register_IndexBase_class(){
             IndexBase_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "Return the raw value of this index" );
         
         }

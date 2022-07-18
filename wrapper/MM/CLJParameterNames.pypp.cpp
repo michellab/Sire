@@ -45,6 +45,8 @@ SireMM::CLJParameterNames __copy__(const SireMM::CLJParameterNames &other){ retu
 
 const char* pvt_get_name(const SireMM::CLJParameterNames&){ return "SireMM::CLJParameterNames";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJParameterNames_class(){
 
     { //::SireMM::CLJParameterNames

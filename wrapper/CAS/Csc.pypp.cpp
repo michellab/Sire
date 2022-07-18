@@ -27,6 +27,8 @@ SireCAS::Csc __copy__(const SireCAS::Csc &other){ return SireCAS::Csc(other); }
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Csc_class(){
 
     { //::SireCAS::Csc
@@ -44,6 +46,7 @@ void register_Csc_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this function" );
         
         }
@@ -56,6 +59,7 @@ void register_Csc_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Complex evaluation" );
         
         }
@@ -68,6 +72,7 @@ void register_Csc_class(){
             Csc_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -79,6 +84,7 @@ void register_Csc_class(){
             Csc_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

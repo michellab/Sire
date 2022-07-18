@@ -31,6 +31,8 @@ SireBase::NullProperty __copy__(const SireBase::NullProperty &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullProperty_class(){
 
     { //::SireBase::NullProperty
@@ -46,6 +48,7 @@ void register_NullProperty_class(){
             NullProperty_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -57,6 +60,7 @@ void register_NullProperty_class(){
             NullProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

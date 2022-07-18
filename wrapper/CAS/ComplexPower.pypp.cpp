@@ -37,6 +37,8 @@ SireCAS::ComplexPower __copy__(const SireCAS::ComplexPower &other){ return SireC
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ComplexPower_class(){
 
     { //::SireCAS::ComplexPower
@@ -54,6 +56,7 @@ void register_ComplexPower_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this power" );
         
         }
@@ -66,6 +69,7 @@ void register_ComplexPower_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this power" );
         
         }
@@ -77,6 +81,7 @@ void register_ComplexPower_class(){
             ComplexPower_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash of this power" );
         
         }
@@ -88,6 +93,7 @@ void register_ComplexPower_class(){
             ComplexPower_exposer.def( 
                 "isComplex"
                 , isComplex_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -100,6 +106,7 @@ void register_ComplexPower_class(){
             ComplexPower_exposer.def( 
                 "power"
                 , power_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -111,6 +118,7 @@ void register_ComplexPower_class(){
             ComplexPower_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -122,6 +130,7 @@ void register_ComplexPower_class(){
             ComplexPower_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

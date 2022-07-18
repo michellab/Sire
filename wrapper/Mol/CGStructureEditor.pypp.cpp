@@ -50,6 +50,8 @@ SireMol::CGStructureEditor __copy__(const SireMol::CGStructureEditor &other){ re
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CGStructureEditor_class(){
 
     { //::SireMol::CGStructureEditor
@@ -68,6 +70,7 @@ void register_CGStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atomname") )
+                , bp::release_gil_policy()
                 , "Add an atom called atomname to this CutGroup and return\nan editor for that atom" );
         
         }
@@ -80,6 +83,7 @@ void register_CGStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atomnum") )
+                , bp::release_gil_policy()
                 , "Add an atom with number atomnum to this CutGroup and return\nan editor for that atom" );
         
         }
@@ -92,6 +96,7 @@ void register_CGStructureEditor_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return an editor for the ith atom of this CutGroup\nThrow: SireError::invalid_index\n" );
         
         }
@@ -104,6 +109,7 @@ void register_CGStructureEditor_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the atom that matches the ID atomid in\nthis CutGroup\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -115,6 +121,7 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "Commit the changes made by this editor and return the\nupdated CutGroup" );
         
         }
@@ -126,6 +133,7 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "index"
                 , index_function_value
+                , bp::release_gil_policy()
                 , "Return the index of this CutGroup in the molecule" );
         
         }
@@ -137,6 +145,7 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "molecule"
                 , molecule_function_value
+                , bp::release_gil_policy()
                 , "Return an editor for the molecule that contains this CutGroup" );
         
         }
@@ -148,6 +157,7 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in this CutGroup (could be zero)" );
         
         }
@@ -159,7 +169,7 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of this CutGroup" );
         
         }
@@ -262,6 +272,7 @@ void register_CGStructureEditor_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return an editor for the ith atom of this CutGroup\nThrow: SireError::invalid_index\n" );
         
         }
@@ -274,6 +285,7 @@ void register_CGStructureEditor_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the atom that matches the ID atomid in\nthis CutGroup\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -285,6 +297,7 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "Does this hold the entire molecule" );
         
         }
@@ -296,6 +309,7 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this editor" );
         
         }
@@ -346,6 +360,7 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -357,6 +372,7 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

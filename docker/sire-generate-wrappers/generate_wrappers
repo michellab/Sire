@@ -41,7 +41,7 @@ then
     rm -rf Sire
 fi
 
-echo "Checking out Sire..."
+echo "Checking out sire..."
 git clone --branch $BRANCH https://github.com/michellab/Sire
 
 echo "Changing into the wrapper directory..."

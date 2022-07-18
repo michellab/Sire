@@ -22,6 +22,8 @@ SireMM::Intra14Component __copy__(const SireMM::Intra14Component &other){ return
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Intra14Component_class(){
 
     { //::SireMM::Intra14Component
@@ -39,6 +41,7 @@ void register_Intra14Component_class(){
                 "changeEnergy"
                 , changeEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("nrg") )
+                , bp::release_gil_policy()
                 , "Change the internal components of the forcefield ff by delta" );
         
         }
@@ -50,7 +53,7 @@ void register_Intra14Component_class(){
             Intra14Component_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -62,7 +65,7 @@ void register_Intra14Component_class(){
             Intra14Component_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -75,6 +78,7 @@ void register_Intra14Component_class(){
                 "setEnergy"
                 , setEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("nrg") )
+                , bp::release_gil_policy()
                 , "Set the internal components of the forcefield ff to the passed values" );
         
         }
@@ -86,6 +90,7 @@ void register_Intra14Component_class(){
             Intra14Component_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return all of the components in this set" );
         
         }
@@ -97,7 +102,7 @@ void register_Intra14Component_class(){
             Intra14Component_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -109,6 +114,7 @@ void register_Intra14Component_class(){
             Intra14Component_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -120,6 +126,7 @@ void register_Intra14Component_class(){
             Intra14Component_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -25,6 +25,8 @@ SireVol::CombineSpaces __copy__(const SireVol::CombineSpaces &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_CombineSpaces_class(){
@@ -63,6 +65,7 @@ void register_CombineSpaces_class(){
             CombineSpaces_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -75,6 +78,7 @@ void register_CombineSpaces_class(){
                 "updateFrom"
                 , updateFrom_function_value
                 , ( bp::arg("properties") )
+                , bp::release_gil_policy()
                 , "Update this combined space by extracting the required space\nproperties from properties\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }

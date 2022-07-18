@@ -21,6 +21,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AtomPairs_CoulombScaleFactor__class(){
 
     { //::SireMM::AtomPairs< SireMM::CoulombScaleFactor >
@@ -162,6 +164,7 @@ void register_AtomPairs_CoulombScaleFactor__class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -174,6 +177,7 @@ void register_AtomPairs_CoulombScaleFactor__class(){
             AtomPairs_CoulombScaleFactor__exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -186,6 +190,7 @@ void register_AtomPairs_CoulombScaleFactor__class(){
             AtomPairs_CoulombScaleFactor__exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -198,6 +203,7 @@ void register_AtomPairs_CoulombScaleFactor__class(){
             AtomPairs_CoulombScaleFactor__exposer.def( 
                 "nGroups"
                 , nGroups_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -339,6 +345,7 @@ void register_AtomPairs_CoulombScaleFactor__class(){
                 "reserve"
                 , reserve_function_value
                 , ( bp::arg("dim_x"), bp::arg("dim_y") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -352,6 +359,7 @@ void register_AtomPairs_CoulombScaleFactor__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("atm0"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -365,6 +373,7 @@ void register_AtomPairs_CoulombScaleFactor__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -378,6 +387,7 @@ void register_AtomPairs_CoulombScaleFactor__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("atm0"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -391,6 +401,7 @@ void register_AtomPairs_CoulombScaleFactor__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -404,6 +415,7 @@ void register_AtomPairs_CoulombScaleFactor__class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -417,6 +429,7 @@ void register_AtomPairs_CoulombScaleFactor__class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("cgid0"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -430,6 +443,7 @@ void register_AtomPairs_CoulombScaleFactor__class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("cgid0"), bp::arg("cgid1"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -443,6 +457,7 @@ void register_AtomPairs_CoulombScaleFactor__class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("cgid0"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -456,6 +471,7 @@ void register_AtomPairs_CoulombScaleFactor__class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("cgid0"), bp::arg("cgid1"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -468,6 +484,7 @@ void register_AtomPairs_CoulombScaleFactor__class(){
             AtomPairs_CoulombScaleFactor__exposer.def( 
                 "squeeze"
                 , squeeze_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

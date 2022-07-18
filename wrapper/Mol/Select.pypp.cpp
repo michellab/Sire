@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireMol/core.h"
+
 #include "SireMol/moleculegroup.h"
 
 #include "SireMol/molecules.h"
@@ -29,6 +31,8 @@ SireMol::Select __copy__(const SireMol::Select &other){ return SireMol::Select(o
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Select_class(){
 
     { //::SireMol::Select
@@ -45,6 +49,7 @@ void register_Select_class(){
             Select_exposer.def( 
                 "objectType"
                 , objectType_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -131,6 +136,7 @@ void register_Select_class(){
             Select_exposer.def( 
                 "resetTokens"
                 , resetTokens_function_value
+                , bp::release_gil_policy()
                 , "Clear all user-set tokens" );
         
         }
@@ -143,6 +149,7 @@ void register_Select_class(){
                 "setToken"
                 , setToken_function_value
                 , ( bp::arg("token"), bp::arg("selection") )
+                , bp::release_gil_policy()
                 , "Set a user token that will be substituted for the passed selection, e.g.\nsetToken(protein, molecules with resname alai)\nwould allow you to use protein to refer to any molecules that contain\nresidues called alai\nNote that the token is set globally for all searches\n" );
         
         }
@@ -154,6 +161,7 @@ void register_Select_class(){
             Select_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -165,6 +173,7 @@ void register_Select_class(){
             Select_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -176,6 +185,7 @@ void register_Select_class(){
             Select_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

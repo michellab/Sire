@@ -83,7 +83,7 @@ class CGsWithAtoms;
 class ChainsWithAtoms;
 class SegsWithAtoms;
 
-/** This is the base class of all identifiers that are used 
+/** This is the base class of all identifiers that are used
     to identify an atom
 
     @author Christopher Woods
@@ -97,9 +97,9 @@ public:
 
     AtomID();
     AtomID(const AtomID &other);
-    
+
     virtual ~AtomID();
-    
+
     Specify<AtomID> operator[](qint64 i) const;
     Specify<AtomID> operator[](const SireBase::Range &range) const;
     Specify<AtomID> operator()(const SireBase::Range &range) const;
@@ -131,10 +131,10 @@ public:
     IDOrSet<AtomID> operator*(const ChainID &other) const;
     IDOrSet<AtomID> operator*(const SegID &other) const;
     IDOrSet<AtomID> operator*(const MolID &other) const;
-    
+
     IDAndSet<AtomID> operator&&(const AtomID &other) const;
     IDAndSet<AtomID> operator&(const AtomID &other) const;
-    
+
     GroupAtomID<CGID,AtomID> operator&&(const CGID &other) const;
     GroupAtomID<ResID,AtomID> operator&&(const ResID &other) const;
     GroupAtomID<ChainID,AtomID> operator&&(const ChainID &other) const;
@@ -176,36 +176,36 @@ public:
 
     virtual AtomID* clone() const=0;
 
-    /** Map this ID back to the indicies of the matching atoms in the molecule, 
+    /** Map this ID back to the indicies of the matching atoms in the molecule,
         using the passed MoleculeInfo to do the mapping */
     virtual QList<AtomIdx> map(const MolInfo &molinfo) const=0;
 
     virtual QList<AtomIdx> map(const MoleculeView &molview,
                                const PropertyMap &map = PropertyMap()) const;
-    
+
     virtual Atom selectFrom(const MoleculeView &molview,
                             const PropertyMap &map = PropertyMap()) const;
-    
+
     virtual Selector<Atom> selectAllFrom(const MoleculeView &molview,
                                          const PropertyMap &map = PropertyMap()) const;
-    
+
     virtual Atom selectFrom(const Molecules &molecules,
                             const PropertyMap &map = PropertyMap()) const;
-                            
+
     virtual QHash< MolNum,Selector<Atom> >
                 selectAllFrom(const Molecules &molecules,
                               const PropertyMap &map = PropertyMap()) const;
 
     virtual Atom selectFrom(const MoleculeGroup &molgroup,
                             const PropertyMap &map = PropertyMap()) const;
-                            
+
     virtual QHash< MolNum,Selector<Atom> >
                 selectAllFrom(const MoleculeGroup &molgroup,
                               const PropertyMap &map = PropertyMap()) const;
-    
+
     virtual Atom selectFrom(const MolGroupsBase &molgroups,
                             const PropertyMap &map = PropertyMap()) const;
-    virtual QHash< MolNum,Selector<Atom> > 
+    virtual QHash< MolNum,Selector<Atom> >
                 selectAllFrom(const MolGroupsBase &molgroups,
                               const PropertyMap &map = PropertyMap()) const;
 
@@ -214,9 +214,11 @@ public:
 
     static SireID::MatchAll<AtomID> any();
 
+    static AtomIdentifier fromString(const QString &id);
+
 protected:
     static QList<AtomIdx> matchAll(const MolInfo &molinfo);
-    
+
     void processMatches(QList<AtomIdx> &matches, const MolInfo &molinfo) const;
 };
 

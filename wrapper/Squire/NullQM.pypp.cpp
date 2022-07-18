@@ -29,6 +29,8 @@ Squire::NullQM __copy__(const Squire::NullQM &other){ return Squire::NullQM(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullQM_class(){
 
     { //::Squire::NullQM
@@ -59,6 +61,7 @@ void register_NullQM_class(){
             NullQM_exposer.def( 
                 "supportsLatticeCharges"
                 , supportsLatticeCharges_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -70,6 +73,7 @@ void register_NullQM_class(){
             NullQM_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -73,6 +73,12 @@ CGID::CGID(const CGID &other) : ID(other)
 CGID::~CGID()
 {}
 
+/** Return an CGID constructed from the passed string */
+CGIdentifier CGID::fromString(const QString &id)
+{
+    return CGName(id);
+}
+
 /** Return a specific object that matches this ID */
 Specify<CGID> CGID::operator[](qint64 i) const
 {

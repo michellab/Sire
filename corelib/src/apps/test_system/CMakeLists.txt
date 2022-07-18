@@ -20,17 +20,3 @@ if (HAVE_UTSNAME_H)
   add_executable( get_uname get_uname.c )
   install( TARGETS get_uname RUNTIME DESTINATION ${SIRE_TEST} )
 endif()
-
-if (SIRE_FOUND_CPUID)
-  add_definitions( "-DSIRE_FOUND_CPUID" )
-  add_definitions( "${CPUID_DEFINITIONS}" )
-  include_directories( ${CPUID_INCLUDE_DIR} )
-
-  add_executable( get_cpuid get_cpuid.c )
-
-  target_link_libraries( get_cpuid ${CPUID_LIBRARY} )
-
-  install( TARGETS get_cpuid RUNTIME DESTINATION ${SIRE_TEST} )
-
-endif()
-

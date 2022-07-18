@@ -37,6 +37,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Beading_class(){
 
     { //::SireMol::Beading
@@ -52,6 +54,7 @@ void register_Beading_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -63,6 +66,7 @@ void register_Beading_class(){
             Beading_exposer.def( 
                 "null"
                 , null_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -74,6 +78,7 @@ void register_Beading_class(){
             Beading_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -33,6 +33,8 @@ SireIO::NullIO __copy__(const SireIO::NullIO &other){ return SireIO::NullIO(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullIO_class(){
 
     { //::SireIO::NullIO
@@ -63,6 +65,7 @@ void register_NullIO_class(){
             NullIO_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

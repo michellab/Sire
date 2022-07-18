@@ -290,6 +290,11 @@ SIREBASE_EXPORT PropertyPtr wrap(const QString &value);
 SIREBASE_EXPORT PropertyPtr wrap(double value);
 SIREBASE_EXPORT PropertyPtr wrap(const QVariant &value);
 SIREBASE_EXPORT PropertyPtr wrap(const char *value);
+SIREBASE_EXPORT PropertyPtr wrap(qint32 value);
+SIREBASE_EXPORT PropertyPtr wrap(qint64 value);
+SIREBASE_EXPORT PropertyPtr wrap(quint32 value);
+SIREBASE_EXPORT PropertyPtr wrap(quint64 value);
+SIREBASE_EXPORT PropertyPtr wrap(bool value);
 
 SIREBASE_EXPORT PropertyPtr wrap(const QList<PropertyPtr> &value);
 SIREBASE_EXPORT PropertyPtr wrap(const QList<double> &values);

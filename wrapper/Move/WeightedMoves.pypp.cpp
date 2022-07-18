@@ -34,6 +34,8 @@ SireMove::WeightedMoves __copy__(const SireMove::WeightedMoves &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_WeightedMoves_class(){
@@ -63,6 +65,7 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Completely clear all of the move statistics" );
         
         }
@@ -74,6 +77,7 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "clearTiming"
                 , clearTiming_function_value
+                , bp::release_gil_policy()
                 , "Clear all of the timing information" );
         
         }
@@ -85,7 +89,7 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "energyComponent"
                 , energyComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the energy component used by these moves. An exception\nwill be raised if the component moves use different energy\ncomponents to one another\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -109,6 +113,7 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "hasCombinedSpaceProperty"
                 , hasCombinedSpaceProperty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not these moves use a combined space to\ncalculate the volume" );
         
         }
@@ -121,6 +126,7 @@ void register_WeightedMoves_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "Perform nmoves moves on the system system and return the result" );
         
         }
@@ -132,6 +138,7 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "moves"
                 , moves_function_value
+                , bp::release_gil_policy()
                 , "Return the moves available in this set" );
         
         }
@@ -159,6 +166,7 @@ void register_WeightedMoves_class(){
                 "setCombinedSpaceProperty"
                 , setCombinedSpaceProperty_function_value
                 , ( bp::arg("spaceproperty") )
+                , bp::release_gil_policy()
                 , "Set the combined space property - this tells this moves object\nto return a different space that represents the combined space\nof all of the sub-moves. Note that this does not change the\nspace used in the sub-moves" );
         
         }
@@ -171,6 +179,7 @@ void register_WeightedMoves_class(){
                 "setEnergyComponent"
                 , setEnergyComponent_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "Set the energy component of all of the moves to component" );
         
         }
@@ -183,6 +192,7 @@ void register_WeightedMoves_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("rangenerator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator used to pick moves, and also\nused by the moves themselves during the simulation" );
         
         }
@@ -195,6 +205,7 @@ void register_WeightedMoves_class(){
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
                 , ( bp::arg("spaceproperty") )
+                , bp::release_gil_policy()
                 , "Set the name of the property that all of the moves will use to\nfind the simulation space (simulation box) to spaceproperty" );
         
         }
@@ -218,6 +229,7 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "timing"
                 , timing_function_value
+                , bp::release_gil_policy()
                 , "Return the average time to perform each move" );
         
         }
@@ -229,6 +241,7 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation" );
         
         }
@@ -240,6 +253,7 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

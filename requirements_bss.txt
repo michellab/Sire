@@ -1,0 +1,18 @@
+configargparse
+lomap2
+mdtraj
+mdanalysis
+nglview
+openff-toolkit-base
+parmed
+py3dmol
+pydot
+pygtail
+pypdb
+pyyaml
+rdkit
+watchdog
+
+# fkcombu is currently only available on Linux or MacOS x86_64
+fkcombu; sys_platform == "linux"
+fkcombu; sys_platform == "darwin" and  platform_machine == "x86_64"

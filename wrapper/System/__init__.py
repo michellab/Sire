@@ -1,22 +1,65 @@
-#############################
-##
-## The SireSystem module
-##
-## (C) Christopher Woods
-##
+"""
+.. currentmodule:: sire.legacy.System
 
-import Sire.FF
+Classes
+=======
 
-from Sire.System._System import *
+.. autosummary::
+    :toctree: generated/
 
-def __system_getitem__(system, i):
-    try:
-        return system.__orig__getitem__(i)
-    except Exception as e:
-        if e.__class__.__name__ == "ArgumentError":
-            return system.__orig__getitem__(Sire.Mol.MolIdx(i))
-        else:
-            raise e
+    AngleComponent
+    AssignerGroup
+    ChargeConstraint
+    CheckPoint
+    CloseMols
+    ComponentConstraint
+    Constraint
+    Constraints
+    DihedralComponent
+    DistanceComponent
+    DoubleDistanceComponent
+    EnergyMonitor
+    FreeEnergyMonitor
+    GeometryComponent
+    IDAssigner
+    IdentityConstraint
+    MoleculeConstraint
+    MonitorComponent
+    MonitorComponents
+    MonitorID
+    MonitorIdx
+    MonitorMonitor
+    MonitorName
+    MonitorProperty
+    PerturbationConstraint
+    PolariseCharges
+    PolariseChargesFF
+    PropertyConstraint
+    SpaceWrapper
+    SysID
+    SysIdx
+    SysName
+    System
+    SystemMonitor
+    SystemMonitors
+    TripleDistanceComponent
+    VolMapMonitor
+    WindowedComponent
 
-System.__orig__getitem__ = System.__getitem__
-System.__getitem__ = __system_getitem__
+Functions
+=========
+
+.. autosummary::
+    :toctree: generated/
+
+    create_test_molecule
+
+"""
+
+from .. import FF as _FF
+from .. import Base as _Base
+
+from ._System import *
+
+System.__setProperty__ = System.setProperty
+System.setProperty = _Base.__set_property__

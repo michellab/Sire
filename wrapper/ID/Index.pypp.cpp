@@ -23,6 +23,8 @@ SireID::Index __copy__(const SireID::Index &other){ return SireID::Index(other);
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Index_class(){
 
     { //::SireID::Index
@@ -38,6 +40,7 @@ void register_Index_class(){
             Index_exposer.def( 
                 "null"
                 , null_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -49,6 +52,7 @@ void register_Index_class(){
             Index_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -60,6 +64,7 @@ void register_Index_class(){
             Index_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

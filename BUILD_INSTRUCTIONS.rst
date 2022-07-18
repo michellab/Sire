@@ -1,77 +1,110 @@
 Sire build instructions
 ***********************
 
-The following page details the Sire build process. Sire is built using
-`Miniconda <https://docs.conda.io/en/latest/miniconda.html>`__, creating
+You only need to build Sire if there isn't a package available for your
+computer and operating system on conda, or if you want to make changes
+to Sire.
+
+If you want to compile Sire from source, then first download it from
+Git, e.g. `git clone https://github.com/michellab/Sire` will download
+the (stable) development branch.
+
+Change into this directory (`cd Sire`) to continue with the build.
+
+Dependencies
+------------
+
+Sire is built using
+`Miniconda <https://docs.conda.io/en/latest/miniconda.html>`__,
+`Miniforge <https://github.com/conda-forge/miniforge>`__, or
+`Mambaforge <https://github.com/conda-forge/miniforge>`__ creating
 an isolated Conda environment into which Sire with be compiled and deployed.
 This avoids the need for external dependencies, since everything that is
 required is already available within the Conda ecosystem.
 
 The main script used to compile Sire is
-`compile_sire.sh <https://github.com/michellab/Sire/blob/devel/compile_sire.sh>`__
-on Linux and `compile_sire.sh <https://github.com/michellab/Sire/blob/devel/compile_sire.bat>`__
-on Windows. You shouldn't need to modify this file, other than updating
-the ``MINICONDA_VERSION`` variable if needed. (Note that since we use
-a specific Miniconda we only currently build Sire for Python version 3.7.)
+`setup.py <https://github.com/michellab/Sire/blob/devel/setup.py>`__.
 
-The `build_sire.py <https://github.com/michellab/Sire/blob/devel/build/build_sire.py>`__
-Python script is called by the above shell scripts to perform the build.
-It is within this file that external dependencies are installed, using Conda
-where possible, and pip if a package is not yet available via the Anaconda
-Cloud. Please use the `conda-forge <https://conda-forge.org>`__ channel
-as your first port of call, since this will help maximise compatibility between
-packages. (We plan on eventually migrating to the conda-forge build platform
-ourselves, so it is important that we can eventually depend on a single Conda
-channel.) When choosing / updating package versions please choose the most
-recent version that is supported on all operating systems that we build for,
-i.e. ``linux-64``, ``osx-64``, and ``win-64``. To check which versions are
-compatible use the Anaconda Cloud, e.g. for the `boost <https://anaconda.org/conda-forge/boost>`__.
-(Obviously you can use an older version of a package if the latest is broken,
-or if dependencies can't be resolved.) Note that versions aren't just
-important for Sire itself, but also any applications that are built on top
-of Sire, such as `BioSimSpace <https://github.com/michellab/biosimspace>`__.
-Please don't change version numbers without checking that applications that
-depend on them still work. (For example, `RDKit <https://www.rdkit.org>`__
-is used by BioSimSpace, which depends on some of the same packages used
-by Sire.)
+To compile, activate your conda environment and then install the build
+dependencies. These are;
 
-We use `Azure Pipelines <https://dev.azure.com/michellab/Sire/_build>`__ for
-continuous integration and deployment. On Linux this is manage using
-Docker containers, with details for each stage of the build available
-in the `docker <https://github.com/michellab/Sire/tree/devel/docker>`__
-directory. Note that the pipeline can be unreliable because of network
-timeouts, so if a build fails it is often worth trying to queue another
-build of the same commit from the online control panel. (Check any error
-messages first to see if it looks like a genuine issue.)
+* Mamba - this is an alternative to `conda` that significantly speeds
+  up installation of dependencies. Install using `conda install mamba`.
 
-The `sire-conda <https://github.com/michellab/Sire/tree/devel/docker/sire-conda>`__
-directory contains all of the files that are used to build and deploy
-the Sire `Conda package <https://anaconda.org/michellab/sire>`__ during
-the Azure Pipeline. The scripts will query the Sire Miniconda for the
-versions of any external dependencies, then add them to the *recipe*
-for our package. This means that any version changes that you make in the
-`build_sire.py <https://github.com/michellab/Sire/blob/devel/build/build_sire.py>`__
-file will automatically be updated in the Conda package, i.e. you only need to
-maintain dependency versions in a single location. The only thing that is
-needed is to update the list of external Conda dependences in
-`update_recipe.sh <https://github.com/michellab/Sire/blob/devel/docker/sire-conda/update_recipe.sh>`__
-if a new dependency is added. (Note that you'll also need to manage the
-versions of any dependencies of dependencies that are required at run time,
-since Conda doesn't do a good job of managing this for you. For example, the
-``netcdf4`` Conda package doesn't pin the version of ``libnetcdf`` that it
-pulls in, we need to manually pin the version of this package in the run time
-requirements of our Conda recipe. Currently we need to do this for ``libcblas``,
-``libnetcdf`` and ``qt``.) The Conda package version number is also
-automatically inferred from the git commit (we use the tag as the version
-and the number of commits since the tag as the build number). The Sire Conda
-package is created by extracting all of the compiled Sire binary and library
-files from the Miniconda installation, then uploading them to the Oracle Cloud
-as an archive. These are then downloaded and unpacked into the correct location
-during the Conda installation. See `this <https://github.com/michellab/Sire/blob/devel/docker/sire-conda/create_package_file.sh>`__
-script to see how the archive of files is created and `this <https://github.com/michellab/Sire/blob/devel/docker/sire-conda/recipe/build.sh>`__
-script to see how the same files are unpacked in place during the Conda install.
-Currently we pin the version of ``conda-build`` to 3.17 due to regular
-performance issues (hanging) with version 3.18, particularly on macOS. The
-Linux version is pinned in the `Dockerfile <https://github.com/michellab/Sire/blob/devel/docker/sire-conda/Dockerfile>`__
-whereas the macOS version is pinned in the Azure Pipeline
-`configuration <https://github.com/michellab/Sire/blob/devel/azure-pipelines-osx.yml>`__.
+* The conda C and C++ compilers (`mamba install gcc gxx` on Linux,
+  `mamba install clang clangxx` on MacOS, and `mamba install conda-build` on Windows).
+
+* Cmake - `mamba install cmake`
+
+* pip-requirements-parser - `mamba install pip-requirements-parser`
+
+Compiling Sire
+--------------
+
+With the dependencies installed, you can now compile and install Sire
+using the command
+
+::
+    python setup.py install
+
+
+This will download the rest of Sire's dependencies, will compile Sire
+and will install it into your current environment.
+
+Additional Options
+------------------
+
+There are some additional options that are useful to control compilation,
+or recompilation if you are editing Sire.
+
+* `--help` : Show instructions for all additional options
+* `--skip-deps` : Skip the testing and installation of conda dependencies.
+* `--skip-build` : Skip the build phase - just install the Python wrappers.
+* `--install-bss-deps` : Additionally install BioSimSpace's dependencies too.
+
+The available `setup.py` options are;
+
+* `install` : Compile and install Sire in full
+* `install_module` : Install only the pure Python module. Useful during
+   development if you have only made changes to the pure Python module.
+* `build` : Only compile Sire. This will build and install the core C++ library,
+  and will build (but not install) the C++ Python wrappers.
+* `install_requires` : Install all of Sire's dependencies using `conda` or `mamba`.
+
+Typically, as a developer, if you make any change to `corelib` you should
+re-run the compile using `python setup.py --skip-deps install`.
+
+If you only make changes to the wrappers, you can speed things up by
+re-running the installation using `python setup.py --skip-deps --skip-build install`.
+
+If you only make changes to the pure Python module, then you can get away
+with just running `python setup.py install_module`.
+
+Building the conda package
+--------------------------
+
+Alternatively, you can compile Sire using the conda recipe. To do this, first
+install the conda build dependencies, including `boa` (supports mamba builds)
+
+::
+
+  mamba install -y -c conda-forge boa anaconda-client pip-requirements-parser
+
+
+Next, update the recipe by typing
+
+::
+
+    python actions/update_recipe.py
+
+Finally, build the recipe via
+
+::
+
+    conda mambabuild -c conda-forge -c michellab recipes/sire
+
+This set of commands is used by Sire's CI/CD
+`GitHub Actions workflow <https://github.com/michellab/Sire/blob/devel/.github/workflows/main.yaml>`__.
+
+We have tested this on Windows, MacOS and Linux, building packages
+(currently) for Python 3.7, 3.8 and 3.9.

@@ -41,6 +41,8 @@ SireMM::CLJBoxDistance __copy__(const SireMM::CLJBoxDistance &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJBoxDistance_class(){
 
     { //::SireMM::CLJBoxDistance
@@ -57,6 +59,7 @@ void register_CLJBoxDistance_class(){
             CLJBoxDistance_exposer.def( 
                 "box0"
                 , box0_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -68,6 +71,7 @@ void register_CLJBoxDistance_class(){
             CLJBoxDistance_exposer.def( 
                 "box1"
                 , box1_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -79,6 +83,7 @@ void register_CLJBoxDistance_class(){
             CLJBoxDistance_exposer.def( 
                 "distance"
                 , distance_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -107,6 +112,7 @@ void register_CLJBoxDistance_class(){
             CLJBoxDistance_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -118,6 +124,7 @@ void register_CLJBoxDistance_class(){
             CLJBoxDistance_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -129,6 +136,7 @@ void register_CLJBoxDistance_class(){
             CLJBoxDistance_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

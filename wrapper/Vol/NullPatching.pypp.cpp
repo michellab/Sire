@@ -27,6 +27,8 @@ SireVol::NullPatching __copy__(const SireVol::NullPatching &other){ return SireV
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullPatching_class(){
 
     { //::SireVol::NullPatching
@@ -43,6 +45,7 @@ void register_NullPatching_class(){
             NullPatching_exposer.def( 
                 "nPatches"
                 , nPatches_function_value
+                , bp::release_gil_policy()
                 , "Return the number of patches" );
         
         }
@@ -70,6 +73,7 @@ void register_NullPatching_class(){
                 "patchIndex"
                 , patchIndex_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Return the patch index of the passed point" );
         
         }
@@ -82,6 +86,7 @@ void register_NullPatching_class(){
                 "patchIndexAndCenter"
                 , patchIndexAndCenter_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Return the patch index and the center of the patch" );
         
         }
@@ -94,6 +99,7 @@ void register_NullPatching_class(){
                 "repatch"
                 , repatch_function_value
                 , ( bp::arg("new_space") )
+                , bp::release_gil_policy()
                 , "Repatch this patching for the passed space" );
         
         }
@@ -105,6 +111,7 @@ void register_NullPatching_class(){
             NullPatching_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

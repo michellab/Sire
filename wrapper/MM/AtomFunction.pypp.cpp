@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 const char* pvt_get_name(const SireMM::AtomFunction&){ return "SireMM::AtomFunction";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AtomFunction_class(){
 
     { //::SireMM::AtomFunction

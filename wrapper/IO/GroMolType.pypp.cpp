@@ -39,6 +39,8 @@ namespace bp = boost::python;
 
 #include "SireMol/connectivity.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/errors.h"
 
 #include "SireMol/molecule.h"
@@ -76,6 +78,8 @@ SireIO::GroMolType __copy__(const SireIO::GroMolType &other){ return SireIO::Gro
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 void register_GroMolType_class(){
 
@@ -178,6 +182,7 @@ void register_GroMolType_class(){
                 "addWarning"
                 , addWarning_function_value
                 , ( bp::arg("warning") )
+                , bp::release_gil_policy()
                 , "Add a warning that has been generated while parsing or creatig this object" );
         
         }
@@ -333,6 +338,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this object is null" );
         
         }
@@ -344,6 +350,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "isPerturbable"
                 , isPerturbable_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this molecule is perturbable." );
         
         }
@@ -403,6 +410,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "name"
                 , name_function_value
+                , bp::release_gil_policy()
                 , "Return the name of this moleculetype" );
         
         }
@@ -454,7 +462,7 @@ void register_GroMolType_class(){
                 "setAtoms"
                 , setAtoms_function_value
                 , ( bp::arg("atoms"), bp::arg("is_lambda1")=(bool)(false) )
-                , "Set the atoms to the passed vector" );
+                , "" );
         
         }
         { //::SireIO::GroMolType::setNExcludedAtoms
@@ -478,6 +486,7 @@ void register_GroMolType_class(){
                 "setName"
                 , setName_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Set the name of this moleculetype" );
         
         }
@@ -501,6 +510,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string form for this object" );
         
         }
@@ -512,6 +522,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -523,6 +534,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "warnings"
                 , warnings_function_value
+                , bp::release_gil_policy()
                 , "Return any warnings associated with this moleculetype" );
         
         }
@@ -534,6 +546,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

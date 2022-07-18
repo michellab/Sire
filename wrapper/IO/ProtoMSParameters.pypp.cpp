@@ -93,6 +93,8 @@ SireIO::ProtoMSParameters __copy__(const SireIO::ProtoMSParameters &other){ retu
 
 const char* pvt_get_name(const SireIO::ProtoMSParameters&){ return "SireIO::ProtoMSParameters";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ProtoMSParameters_class(){
 
     { //::SireIO::ProtoMSParameters

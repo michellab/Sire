@@ -24,6 +24,8 @@ SireBase::PropertyName __copy__(const SireBase::PropertyName &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PropertyName_class(){
 
     { //::SireBase::PropertyName
@@ -43,6 +45,7 @@ void register_PropertyName_class(){
             PropertyName_exposer.def( 
                 "hasDefaultValue"
                 , hasDefaultValue_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this has a default value" );
         
         }
@@ -54,6 +57,7 @@ void register_PropertyName_class(){
             PropertyName_exposer.def( 
                 "hasSource"
                 , hasSource_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the source has been set" );
         
         }
@@ -65,6 +69,7 @@ void register_PropertyName_class(){
             PropertyName_exposer.def( 
                 "hasValue"
                 , hasValue_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the value has been set" );
         
         }
@@ -76,6 +81,7 @@ void register_PropertyName_class(){
             PropertyName_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether this property is null" );
         
         }
@@ -87,6 +93,7 @@ void register_PropertyName_class(){
             PropertyName_exposer.def( 
                 "none"
                 , none_function_value
+                , bp::release_gil_policy()
                 , "Return a PropertyName that says that this property is not set" );
         
         }
@@ -125,6 +132,7 @@ void register_PropertyName_class(){
             PropertyName_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this propertyname" );
         
         }
@@ -136,6 +144,7 @@ void register_PropertyName_class(){
             PropertyName_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -147,7 +156,7 @@ void register_PropertyName_class(){
             PropertyName_exposer.def( 
                 "value"
                 , value_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the value of the property - this is only valid\nif .hasValue() is true" );
         
         }
@@ -159,6 +168,7 @@ void register_PropertyName_class(){
             PropertyName_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

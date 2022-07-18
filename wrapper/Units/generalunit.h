@@ -43,6 +43,7 @@ void registerTypeName(const GeneralUnit &unit, const char *typnam);
 
 class GeneralUnit : public Unit
 {
+
 friend QDataStream& ::operator<<(QDataStream&, const GeneralUnit&);
 friend QDataStream& ::operator>>(QDataStream&, GeneralUnit&);
 

@@ -24,6 +24,8 @@ SireMM::MultiCLJComponent __copy__(const SireMM::MultiCLJComponent &other){ retu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_MultiCLJComponent_class(){
@@ -42,6 +44,7 @@ void register_MultiCLJComponent_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Add new CLJ components with the passed key. This returns the index\nof the new component" );
         
         }
@@ -54,6 +57,7 @@ void register_MultiCLJComponent_class(){
                 "changeEnergy"
                 , changeEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("cljnrg") )
+                , bp::release_gil_policy()
                 , "Change the energy in the forcefield from the passed cljnrg object" );
         
         }
@@ -65,7 +69,7 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the default coulomb component" );
         
         }
@@ -78,7 +82,7 @@ void register_MultiCLJComponent_class(){
                 "coulomb"
                 , coulomb_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the coulomb component for the key key" );
         
         }
@@ -90,6 +94,7 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of CLJComponents  number of keys" );
         
         }
@@ -102,6 +107,7 @@ void register_MultiCLJComponent_class(){
                 "hasKey"
                 , hasKey_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return whether or not there is a function with the associated key" );
         
         }
@@ -114,6 +120,7 @@ void register_MultiCLJComponent_class(){
                 "indexOf"
                 , indexOf_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return the index of the component with key key" );
         
         }
@@ -125,6 +132,7 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "keys"
                 , keys_function_value
+                , bp::release_gil_policy()
                 , "Return all of the keys for the different CLJComponents" );
         
         }
@@ -136,7 +144,7 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the default LJ component" );
         
         }
@@ -149,7 +157,7 @@ void register_MultiCLJComponent_class(){
                 "lj"
                 , lj_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the LJ component for the key key" );
         
         }
@@ -161,6 +169,7 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "nKeys"
                 , nKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the number of CLJComponents  number of keys" );
         
         }
@@ -188,6 +197,7 @@ void register_MultiCLJComponent_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Remove the component with key key. This returns the index of the component\nthat was removed, or -1 if there was no such component" );
         
         }
@@ -199,6 +209,7 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
+                , bp::release_gil_policy()
                 , "Remove all keys from the index (except default)" );
         
         }
@@ -211,6 +222,7 @@ void register_MultiCLJComponent_class(){
                 "rename"
                 , rename_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return a copy of this MultiCLJComponent that has been renamed for\nthe passed forcefield" );
         
         }
@@ -223,6 +235,7 @@ void register_MultiCLJComponent_class(){
                 "setEnergy"
                 , setEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("cljnrg") )
+                , bp::release_gil_policy()
                 , "Set the energy in the forcefield from the passed cljnrg object" );
         
         }
@@ -234,6 +247,7 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of CLJComponents  number of keys" );
         
         }
@@ -245,6 +259,7 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return all of the symbols used by these components" );
         
         }
@@ -256,6 +271,7 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of these components" );
         
         }
@@ -267,7 +283,7 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the default total component" );
         
         }
@@ -280,7 +296,7 @@ void register_MultiCLJComponent_class(){
                 "total"
                 , total_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the total component for the key key" );
         
         }
@@ -292,6 +308,7 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -303,6 +320,7 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

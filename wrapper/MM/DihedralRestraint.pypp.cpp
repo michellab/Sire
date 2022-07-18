@@ -40,6 +40,8 @@ SireMM::DihedralRestraint __copy__(const SireMM::DihedralRestraint &other){ retu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_DihedralRestraint_class(){
 
     { //::SireMM::DihedralRestraint
@@ -57,6 +59,7 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "builtinSymbols"
                 , builtinSymbols_function_value
+                , bp::release_gil_policy()
                 , "Return the built-in symbols for this restraint" );
         
         }
@@ -68,6 +71,7 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "builtinValues"
                 , builtinValues_function_value
+                , bp::release_gil_policy()
                 , "Return the values of the built-in symbols of this restraint" );
         
         }
@@ -80,6 +84,7 @@ void register_DihedralRestraint_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Return whether or not this restraint affects the molecule\nwith number molnum" );
         
         }
@@ -92,6 +97,7 @@ void register_DihedralRestraint_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this restraint affects the molecule\nwith ID molid" );
         
         }
@@ -116,6 +122,7 @@ void register_DihedralRestraint_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the differential of this restraint with respect to\nthe symbol symbol\nThrow: SireCAS::unavailable_differential\n" );
         
         }
@@ -152,6 +159,7 @@ void register_DihedralRestraint_class(){
                 "halfHarmonic"
                 , halfHarmonic_function_value
                 , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("angle"), bp::arg("force_constant") )
+                , bp::release_gil_policy()
                 , "Return a distance restraint that applied a half-harmonic potential\nbetween the points point0 and point1 above a distance distance\nusing a force constant force_constant" );
         
         }
@@ -164,6 +172,7 @@ void register_DihedralRestraint_class(){
                 "harmonic"
                 , harmonic_function_value
                 , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("force_constant") )
+                , bp::release_gil_policy()
                 , "Return a distance restraint that applies a harmonic potential between\nthe points point0 and point1 using a force constant force_constant" );
         
         }
@@ -175,6 +184,7 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "molecules"
                 , molecules_function_value
+                , bp::release_gil_policy()
                 , "Return the molecules used in this restraint" );
         
         }
@@ -186,6 +196,7 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "nPoints"
                 , nPoints_function_value
+                , bp::release_gil_policy()
                 , "This restraint involves four points" );
         
         }
@@ -212,7 +223,7 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "phi"
                 , phi_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol that represents the dihedral angle between the points (phi)" );
         
         }
@@ -225,7 +236,7 @@ void register_DihedralRestraint_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ith point" );
         
         }
@@ -237,7 +248,7 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the first point" );
         
         }
@@ -249,7 +260,7 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the second point" );
         
         }
@@ -261,7 +272,7 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the third point" );
         
         }
@@ -273,7 +284,7 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "point3"
                 , point3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the fourth point" );
         
         }
@@ -286,6 +297,7 @@ void register_DihedralRestraint_class(){
                 "setSpace"
                 , setSpace_function_value
                 , ( bp::arg("space") )
+                , bp::release_gil_policy()
                 , "Set the space used to evaluate the energy of this restraint\nThrow: SireVol::incompatible_space\n" );
         
         }
@@ -297,6 +309,7 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -309,6 +322,7 @@ void register_DihedralRestraint_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "Update the points of this restraint using new molecule data from moldata\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -321,6 +335,7 @@ void register_DihedralRestraint_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Update the points of this restraint using new molecule data from molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -333,6 +348,7 @@ void register_DihedralRestraint_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("forcetable") )
+                , bp::release_gil_policy()
                 , "Return whether or not this restraint involves any of the molecules\nthat are in the forcetable forcetable" );
         
         }
@@ -345,6 +361,7 @@ void register_DihedralRestraint_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Return whether or not this restraint involves any of the molecules\nin molecules" );
         
         }

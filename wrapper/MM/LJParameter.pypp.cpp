@@ -23,6 +23,8 @@ SireMM::LJParameter __copy__(const SireMM::LJParameter &other){ return SireMM::L
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_LJParameter_class(){
 
     { //::SireMM::LJParameter
@@ -45,6 +47,7 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "A"
                 , A_function_value
+                , bp::release_gil_policy()
                 , "Return the LJ A parameter" );
         
         }
@@ -56,6 +59,7 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "B"
                 , B_function_value
+                , bp::release_gil_policy()
                 , "Return the LJ B parameter" );
         
         }
@@ -68,6 +72,7 @@ void register_LJParameter_class(){
                 "combine"
                 , combine_function_value
                 , ( bp::arg("other"), bp::arg("rules") )
+                , bp::release_gil_policy()
                 , "Return the LJParameter that is this parameter combined with other according\nto the passed combining rules" );
         
         }
@@ -80,6 +85,7 @@ void register_LJParameter_class(){
                 "combineArithmetic"
                 , combineArithmetic_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return the LJParameter that is this parameter combined with other\nusing arithmetic combining rules" );
         
         }
@@ -92,6 +98,7 @@ void register_LJParameter_class(){
                 "combineGeometric"
                 , combineGeometric_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return the LJParameter that is this parameter combined with other\nusing geometric combining rules" );
         
         }
@@ -103,6 +110,7 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "dummy"
                 , dummy_function_value
+                , bp::release_gil_policy()
                 , "Return a dummy CLJParameter" );
         
         }
@@ -114,6 +122,7 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "epsilon"
                 , epsilon_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -126,6 +135,7 @@ void register_LJParameter_class(){
                 "fromAAndB"
                 , fromAAndB_function_value
                 , ( bp::arg("a"), bp::arg("b") )
+                , bp::release_gil_policy()
                 , "Return a LJ parameter that corresponds to the passed LJ parameters A and B,\nE(r) = A r-12  - B r-6\n" );
         
         }
@@ -138,6 +148,7 @@ void register_LJParameter_class(){
                 "fromRMinAndEpsilon"
                 , fromRMinAndEpsilon_function_value
                 , ( bp::arg("rmin"), bp::arg("epsilon") )
+                , bp::release_gil_policy()
                 , "Return a LJ parameter that corresponds to the curve that has a minimum at\nrmin, and a well-depth of epsilon.\nE(r) = 4 epilson [ (sigmar)^12 - (sigmar)^6 ], where\nrmin = 2^(16) sigma\n" );
         
         }
@@ -150,6 +161,7 @@ void register_LJParameter_class(){
                 "fromSigmaAndEpsilon"
                 , fromSigmaAndEpsilon_function_value
                 , ( bp::arg("sigma"), bp::arg("epsilon") )
+                , bp::release_gil_policy()
                 , "Return a LJ parameter that corresponds to the passed values of sigma and epsilon,\nE(r) = 4 epsilon [ (sigmar)^12 - (sigmar)^6 ]\n" );
         
         }
@@ -161,6 +173,7 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "isDummy"
                 , isDummy_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -174,6 +187,7 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "rmin"
                 , rmin_function_value
+                , bp::release_gil_policy()
                 , "Return the LJ rmin parameter - this is the location of the minimum.\nrmin = 2^(16)  sigma\n" );
         
         }
@@ -185,6 +199,7 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "sigma"
                 , sigma_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -196,6 +211,7 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "sqrtEpsilon"
                 , sqrtEpsilon_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -207,6 +223,7 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "sqrtSigma"
                 , sqrtSigma_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -218,6 +235,7 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of the CLJ parameter" );
         
         }
@@ -229,6 +247,7 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -240,6 +259,7 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -251,6 +271,7 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "zeroLJ"
                 , zeroLJ_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

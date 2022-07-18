@@ -25,6 +25,9 @@ import copy
 
 wsrc_tools_dir = "%s/Tools/WSRC" % Sire.Config.share_directory
 
+# Switch to use RepExMove while RepExMove2 is unavailable
+RepExMove2 = RepExMove
+
 ####################################################
 # ALL OF THE GLOBAL USER-AVAILABLE WSRC PARAMETERS #
 ####################################################

@@ -47,6 +47,8 @@ SireMol::ResEditor __copy__(const SireMol::ResEditor &other){ return SireMol::Re
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_ResEditor_class(){
@@ -66,6 +68,7 @@ void register_ResEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atomname") )
+                , bp::release_gil_policy()
                 , "Add a new atom called name to this residue - this returns\nan editor that can be used to further edit this atom" );
         
         }
@@ -78,6 +81,7 @@ void register_ResEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atomnum") )
+                , bp::release_gil_policy()
                 , "Add a new atom with the number number to this residue - this\nreturns an editor that can be used to further edit this atom" );
         
         }
@@ -89,6 +93,7 @@ void register_ResEditor_class(){
             ResEditor_exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "Commit the changes made by this editor and return the updated Residue" );
         
         }
@@ -127,6 +132,7 @@ void register_ResEditor_class(){
                 "reindex"
                 , reindex_function_value
                 , ( bp::arg("index") )
+                , bp::release_gil_policy()
                 , "Change the index of this residue to newidx. If this\nis larger than the number of residues in the molecule\nthen this residue is moved to the end" );
         
         }
@@ -138,6 +144,7 @@ void register_ResEditor_class(){
             ResEditor_exposer.def( 
                 "remove"
                 , remove_function_value
+                , bp::release_gil_policy()
                 , "Completely remove this residue from the molecule - this returns\na MolStructureEditor that can be used to further edit the molecule" );
         
         }
@@ -150,6 +157,7 @@ void register_ResEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Remove all atoms with ID atomid from this residue\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -162,6 +170,7 @@ void register_ResEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Remove the ith atom from this residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -200,6 +209,7 @@ void register_ResEditor_class(){
                 "reparent"
                 , reparent_function_value
                 , ( bp::arg("chainid") )
+                , bp::release_gil_policy()
                 , "Move this residue into the chain with ID chainid\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\nThrow: SireError::invalid_index\n" );
         
         }
@@ -211,6 +221,7 @@ void register_ResEditor_class(){
             ResEditor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this editor" );
         
         }
@@ -223,6 +234,7 @@ void register_ResEditor_class(){
                 "transfer"
                 , transfer_function_value
                 , ( bp::arg("atomid"), bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Transfer all atoms that match the ID atomid into the residue that\nmatches the ID resid\nThrow: SireMol::missing_atom\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -235,6 +247,7 @@ void register_ResEditor_class(){
                 "transfer"
                 , transfer_function_value
                 , ( bp::arg("i"), bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Transfer the ith atom from this residue into the residue that\nmatches the ID resid\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -247,6 +260,7 @@ void register_ResEditor_class(){
                 "transferAll"
                 , transferAll_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Transfer all atoms from this residue into the residue with ID resid\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -258,6 +272,7 @@ void register_ResEditor_class(){
             ResEditor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

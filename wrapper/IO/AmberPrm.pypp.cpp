@@ -127,6 +127,8 @@ SireIO::AmberPrm __copy__(const SireIO::AmberPrm &other){ return SireIO::AmberPr
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AmberPrm_class(){
 
     { //::SireIO::AmberPrm
@@ -152,6 +154,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "assertSane"
                 , assertSane_function_value
+                , bp::release_gil_policy()
                 , "Run through all of the data that has been read and perform a series\nof tests that will see if the prm7 data is sane. If any test fails,\nthen an exception will be thrown" );
         
         }
@@ -163,6 +166,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "canFollow"
                 , canFollow_function_value
+                , bp::release_gil_policy()
                 , "The AmberPrm cannot follow another lead parsers." );
         
         }
@@ -175,6 +179,7 @@ void register_AmberPrm_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("filename"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return this parser constructed from the passed filename" );
         
         }
@@ -187,6 +192,7 @@ void register_AmberPrm_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("lines"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return this parser constructed from the passed set of lines" );
         
         }
@@ -199,6 +205,7 @@ void register_AmberPrm_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return this parser constructed from the passed SireSystem::System" );
         
         }
@@ -211,6 +218,7 @@ void register_AmberPrm_class(){
                 "flagType"
                 , flagType_function_value
                 , ( bp::arg("flag") )
+                , bp::release_gil_policy()
                 , "Return the flag type for the data associated with the passed flag.\nThis returns UNKNOWN if this is not known" );
         
         }
@@ -222,6 +230,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "flags"
                 , flags_function_value
+                , bp::release_gil_policy()
                 , "Return all of the flags that are held in this file" );
         
         }
@@ -234,6 +243,7 @@ void register_AmberPrm_class(){
                 "floatData"
                 , floatData_function_value
                 , ( bp::arg("flag") )
+                , bp::release_gil_policy()
                 , "Return the float data for the passed flag. This returns an empty\nlist if there is no data associated with this flag. This raises\nan invalid_cast error if data exists, but it is the wrong type" );
         
         }
@@ -245,6 +255,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "forcefield"
                 , forcefield_function_value
+                , bp::release_gil_policy()
                 , "Return the forcefield for the molecules in this file" );
         
         }
@@ -256,6 +267,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "formatDescription"
                 , formatDescription_function_value
+                , bp::release_gil_policy()
                 , "Return a description of the file format" );
         
         }
@@ -267,6 +279,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "formatName"
                 , formatName_function_value
+                , bp::release_gil_policy()
                 , "Return the format name that is used to identify this file format within Sire" );
         
         }
@@ -278,6 +291,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "formatSuffix"
                 , formatSuffix_function_value
+                , bp::release_gil_policy()
                 , "Return the suffixes that AmberPrm files are normally associated with" );
         
         }
@@ -314,6 +328,7 @@ void register_AmberPrm_class(){
                 "intData"
                 , intData_function_value
                 , ( bp::arg("flag") )
+                , bp::release_gil_policy()
                 , "Return the integer data for the passed flag. This returns an empty\nlist if there is no data associated with this flag. This raises\nan invalid_cast error if data exists, but it is the wrong type" );
         
         }
@@ -325,6 +340,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "isLead"
                 , isLead_function_value
+                , bp::release_gil_policy()
                 , "The AmberPrm parser is a lead parser - it is capable alone\nof creating the System." );
         
         }
@@ -337,6 +353,7 @@ void register_AmberPrm_class(){
                 "linesForFlag"
                 , linesForFlag_function_value
                 , ( bp::arg("flag") )
+                , bp::release_gil_policy()
                 , "Return the lines that correspond to the passed flag. This returns an\nempty list of there are no lines associated with the passed flag" );
         
         }
@@ -348,6 +365,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "nAngles"
                 , nAngles_function_value
+                , bp::release_gil_policy()
                 , "Return the number of angles" );
         
         }
@@ -359,6 +377,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "nAnglesNoHydrogen"
                 , nAnglesNoHydrogen_function_value
+                , bp::release_gil_policy()
                 , "Return the number of angles without hydrogen" );
         
         }
@@ -370,6 +389,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "nAnglesWithHydrogen"
                 , nAnglesWithHydrogen_function_value
+                , bp::release_gil_policy()
                 , "Return the number of angles containing hydrogen" );
         
         }
@@ -381,6 +401,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of atoms in the file" );
         
         }
@@ -393,6 +414,7 @@ void register_AmberPrm_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("molidx") )
+                , bp::release_gil_policy()
                 , "Return the total number of atoms in the ith molecule in the file" );
         
         }
@@ -404,6 +426,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "nBonds"
                 , nBonds_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of bonds" );
         
         }
@@ -415,6 +438,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "nBondsNoHydrogen"
                 , nBondsNoHydrogen_function_value
+                , bp::release_gil_policy()
                 , "Return the number of bonds no containing hydrogen" );
         
         }
@@ -426,6 +450,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "nBondsWithHydrogen"
                 , nBondsWithHydrogen_function_value
+                , bp::release_gil_policy()
                 , "Return the number of bonds including hydrogen" );
         
         }
@@ -437,6 +462,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "nDihedrals"
                 , nDihedrals_function_value
+                , bp::release_gil_policy()
                 , "Return the number of dihedrals" );
         
         }
@@ -448,6 +474,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "nDihedralsNoHydrogen"
                 , nDihedralsNoHydrogen_function_value
+                , bp::release_gil_policy()
                 , "Return the number of dihedrals without hydrogen" );
         
         }
@@ -459,6 +486,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "nDihedralsWithHydrogen"
                 , nDihedralsWithHydrogen_function_value
+                , bp::release_gil_policy()
                 , "Return the number of dihedrals containing hydrogen" );
         
         }
@@ -470,6 +498,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "nExcluded"
                 , nExcluded_function_value
+                , bp::release_gil_policy()
                 , "Return the number of excluded atoms" );
         
         }
@@ -481,6 +510,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "nMolecules"
                 , nMolecules_function_value
+                , bp::release_gil_policy()
                 , "Return the number of molecules in the file" );
         
         }
@@ -492,6 +522,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "nResidues"
                 , nResidues_function_value
+                , bp::release_gil_policy()
                 , "Return the number of residues" );
         
         }
@@ -503,6 +534,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "nTypes"
                 , nTypes_function_value
+                , bp::release_gil_policy()
                 , "Return the number of distinct atom types" );
         
         }
@@ -542,6 +574,7 @@ void register_AmberPrm_class(){
                 "stringData"
                 , stringData_function_value
                 , ( bp::arg("flag") )
+                , bp::release_gil_policy()
                 , "Return the string data for the passed flag. This returns an empty\nlist if there is no data associated with this flag. This raises\nan invalid_cast error if data exists, but it is the wrong type" );
         
         }
@@ -553,6 +586,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "title"
                 , title_function_value
+                , bp::release_gil_policy()
                 , "Return the title of the parameter file" );
         
         }
@@ -564,6 +598,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this object" );
         
         }
@@ -575,6 +610,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -586,6 +622,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

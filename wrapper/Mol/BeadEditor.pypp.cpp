@@ -11,7 +11,21 @@ namespace bp = boost::python;
 
 #include "SireStream/shareddatastream.h"
 
+#include "atom.h"
+
 #include "beadeditor.h"
+
+#include "chain.h"
+
+#include "cutgroup.h"
+
+#include "mover.hpp"
+
+#include "residue.h"
+
+#include "segment.h"
+
+#include "selector.hpp"
 
 #include "beadeditor.h"
 
@@ -20,6 +34,8 @@ SireMol::BeadEditor __copy__(const SireMol::BeadEditor &other){ return SireMol::
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 #include "Helpers/len.hpp"
 
@@ -39,6 +55,7 @@ void register_BeadEditor_class(){
             BeadEditor_exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "Commit the changes" );
         
         }
@@ -76,6 +93,7 @@ void register_BeadEditor_class(){
             BeadEditor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this editor" );
         
         }
@@ -87,6 +105,7 @@ void register_BeadEditor_class(){
             BeadEditor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

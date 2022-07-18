@@ -57,13 +57,13 @@ using namespace SireStream;
 RegisterMetaType<PartialMolecule> r_partialmol;
 
 /** Serialise to a binary datastream */
-QDataStream &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds,
                                        const PartialMolecule &partialmol)
 {
     writeHeader(ds, r_partialmol, 1);
 
     SharedDataStream sds(ds);
-    
+
     sds << partialmol.selected_atoms
         << static_cast<const MoleculeView&>(partialmol);
 
@@ -71,7 +71,7 @@ QDataStream &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds,
                                        PartialMolecule &partialmol)
 {
     VersionID v = readHeader(ds, r_partialmol);
@@ -113,7 +113,7 @@ PartialMolecule::PartialMolecule(const MoleculeData &moldata,
 PartialMolecule::PartialMolecule(const PartialMolecule &other)
                 : ConcreteProperty<PartialMolecule,MoleculeView>(other),
                   selected_atoms(other.selected_atoms)
-{}           
+{}
 
 /** Destructor */
 PartialMolecule::~PartialMolecule()
@@ -181,21 +181,21 @@ MolNum PartialMolecule::number() const
 {
     return d->number();
 }
- 
+
 /** Return the version number of this molecule - all molecules
     with the same ID number and version number must be identical */
 quint64 PartialMolecule::version() const
 {
     return d->version();
 }
- 
+
 /** Return the version number of the property at key 'key'.
     All molecules with the same ID number and same property version
     number must have the same value of this property
     (although this says nothing about any metadata associated
     with this property)
-    
-    \throw SireBase::missing_property 
+
+    \throw SireBase::missing_property
 */
 quint64 PartialMolecule::version(const PropertyName &key) const
 {
@@ -238,7 +238,7 @@ Mover<PartialMolecule> PartialMolecule::move() const
     return Mover<PartialMolecule>(*this);
 }
 
-/** Return an evaluator that can evaluate properties 
+/** Return an evaluator that can evaluate properties
     over all of the atoms in this view */
 Evaluator PartialMolecule::evaluate() const
 {
@@ -266,10 +266,10 @@ bool PartialMolecule::hasMetadata(const PropertyName &metakey) const
 
 /** Return whether or not the property at key 'key' has
     some metadata at metakey 'metakey'
-    
+
     \throw SireBase::missing_property
 */
-bool PartialMolecule::hasMetadata(const PropertyName &key, 
+bool PartialMolecule::hasMetadata(const PropertyName &key,
                                   const PropertyName &metakey) const
 {
     return d->hasMetadata(key, metakey);
@@ -292,26 +292,26 @@ PartialMolecule PartialMolecule::extract() const
 
     else if (this->selectedAll())
         return *this;
-    
+
     else
     {
         PartialMolecule ret;
-    
+
         ret.d = d->extract(selected_atoms);
         ret.selected_atoms = AtomSelection( *(ret.d) );
-        
+
         return ret;
     }
 }
 
-/** Return the keys of all of the metadata contained directly by 
+/** Return the keys of all of the metadata contained directly by
     this molecule */
 QStringList PartialMolecule::metadataKeys() const
 {
     return d->metadataKeys();
 }
 
-/** Return the keys of all metadata for the property at key 'key' 
+/** Return the keys of all metadata for the property at key 'key'
 
     \throw SireBase::missing_property
 */
@@ -320,10 +320,10 @@ QStringList PartialMolecule::metadataKeys(const PropertyName &key) const
     return d->metadataKeys(key);
 }
 
-/** Return the property at key 'key'. Note that this returns the 
+/** Return the property at key 'key'. Note that this returns the
     property for the molecule - no attempt is made to mask this
     property to match the current selection
-    
+
     \throw SireBase::missing_property
 */
 const Property& PartialMolecule::property(const PropertyName &key) const
@@ -331,10 +331,10 @@ const Property& PartialMolecule::property(const PropertyName &key) const
     return d->property(key);
 }
 
-/** Return the metadata at metakey 'metakey'. Note that this returns the 
+/** Return the metadata at metakey 'metakey'. Note that this returns the
     metadata for the molecule - no attempt is made to mask this
     metadata to match the current selection
-    
+
     \throw SireBase::missing_property
 */
 const Property& PartialMolecule::metadata(const PropertyName &metakey) const
@@ -343,10 +343,10 @@ const Property& PartialMolecule::metadata(const PropertyName &metakey) const
 }
 
 /** Return the metadata at the metakey 'metakey' for the property
-    at key 'key'. Note that this returns the 
+    at key 'key'. Note that this returns the
     metadata for the molecule - no attempt is made to mask this
     metadata to match the current selection
-    
+
     \throw SireBase::missing_property
 */
 const Property& PartialMolecule::metadata(const PropertyName &key,
@@ -360,61 +360,55 @@ const char* PartialMolecule::typeName()
     return QMetaType::typeName( qMetaTypeId<PartialMolecule>() );
 }
 
+MolViewPtr PartialMolecule::toSelector() const
+{
+    const auto unit = this->toUnit();
+
+    if (unit.data() == this)
+    {
+        return MolViewPtr(this->atoms());
+    }
+    else
+    {
+        return unit->toSelector();
+    }
+}
+
 /** Return a copy of this PartialMolecule that has been reduced to its unit
     type, i.e. if this is a single Atom, this returns the Atom, if this is a single
     residue, this returns the Residue etc. */
 MolViewPtr PartialMolecule::toUnit() const
 {
-    if (this->selectedAll())
+    const auto s = this->selection();
+
+    if (s.isMolecule())
     {
         return this->molecule();
     }
-    else if (this->nAtoms() == 1)
+    else if (s.isAtom())
     {
         return this->atom();
     }
-
-    if (this->nResidues() == 1)
+    else if (s.isResidue())
     {
-        const auto res = this->residue();
-
-        if (this->selection().selectedAll(res.number()))
-        {
-            return res;
-        }
+        return this->residue();
     }
-
-    if (this->nCutGroups() == 1)
+    else if (s.isChain())
     {
-        const auto cg = this->cutGroup();
-
-        if (this->selection().selectedAll(cg.name()))
-        {
-            return cg;
-        }
+        return this->chain();
     }
-
-    if (this->nChains() == 1)
+    else if (s.isSegment())
     {
-        const auto chain = this->chain();
-        
-        if (this->selection().selectedAll(chain.name()))
-        {
-            return chain;
-        }
+        return this->segment();
     }
-
-    if (this->nSegments() == 1)
+    else if (s.isCutGroup())
     {
-        const auto segment = this->segment();
-        
-        if (this->selection().selectedAll(segment.name()))
-        {
-            return segment;
-        }
+        return this->cutGroup();
     }
-
-    return *this;
+    else
+    {
+        return *this;
+    }
 }
 
 namespace SireMol

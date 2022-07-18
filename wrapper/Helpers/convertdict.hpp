@@ -34,6 +34,8 @@
 #include <boost/python.hpp>
 #include <boost/tuple/tuple.hpp>
 
+#include "Helpers/release_gil_policy.hpp"
+
 namespace bp = boost::python;
 
 SIRE_BEGIN_HEADER
@@ -57,6 +59,8 @@ struct from_py_dict
         to a QVector where all of the elements are of type 'T' */
     static void* convertible(PyObject* obj_ptr)
     {
+        auto raii = boost::python::release_gil_policy::acquire_gil();
+
         //is this a dict type?
         if ( PyDict_Check(obj_ptr) )
         {
@@ -73,7 +77,7 @@ struct from_py_dict
                 bp::tuple item = bp::extract<bp::tuple>(items[i])();
 
                 if ( not (bp::extract<key_type>(item[0]).check() and
-                          bp::extract<mapped_type>(item[1]).check()) )
+                        bp::extract<mapped_type>(item[1]).check()) )
                 {
                     //either the key of value is wrong
                     return 0;
@@ -94,33 +98,36 @@ struct from_py_dict
         PyObject* obj_ptr,
         bp::converter::rvalue_from_python_stage1_data* data)
     {
-        //convert the PyObject to a boost::python::dict
-        bp::dict d( bp::handle<>(bp::borrowed(obj_ptr)) );
-
-        //locate the storage space for the result
-        void* storage =
-            ( (bp::converter::rvalue_from_python_storage<C>*)data )->storage.bytes;
-
-        //create the container
-        new (storage) C();
-
-        C *container = static_cast<C*>(storage);
-
-        //add all of the elements from the dict - do this by converting
-        //to a list and then extracting each item
-        bp::list items = d.items();
-
-        int nitems = bp::extract<int>(items.attr("__len__")())();
-
-        for (int i=0; i<nitems; ++i)
+        auto raii = boost::python::release_gil_policy::acquire_gil();
         {
-            bp::tuple item = bp::extract<bp::tuple>(items[i])();
+            //convert the PyObject to a boost::python::dict
+            bp::dict d( bp::handle<>(bp::borrowed(obj_ptr)) );
 
-            container->insert( bp::extract<key_type>(item[0])(),
-                               bp::extract<mapped_type>(item[1])() );
+            //locate the storage space for the result
+            void* storage =
+                ( (bp::converter::rvalue_from_python_storage<C>*)data )->storage.bytes;
+
+            //create the container
+            new (storage) C();
+
+            C *container = static_cast<C*>(storage);
+
+            //add all of the elements from the dict - do this by converting
+            //to a list and then extracting each item
+            bp::list items = d.items();
+
+            int nitems = bp::extract<int>(items.attr("__len__")())();
+
+            for (int i=0; i<nitems; ++i)
+            {
+                bp::tuple item = bp::extract<bp::tuple>(items[i])();
+
+                container->insert( bp::extract<key_type>(item[0])(),
+                                bp::extract<mapped_type>(item[1])() );
+            }
+
+            data->convertible = storage;
         }
-
-        data->convertible = storage;
     }
 };
 
@@ -129,17 +136,20 @@ struct to_py_dict
 {
     static PyObject* convert(const C &cpp_dict)
     {
-        bp::dict python_dict;
-
-        //add all items to the python dictionary
-        for (typename C::const_iterator it = cpp_dict.begin();
-             it != cpp_dict.end();
-             ++it)
+        auto raii = boost::python::release_gil_policy::acquire_gil();
         {
-            python_dict[it.key()] = it.value();
-        }
+            bp::dict python_dict;
 
-        return bp::incref( python_dict.ptr() );
+            //add all items to the python dictionary
+            for (typename C::const_iterator it = cpp_dict.begin();
+                it != cpp_dict.end();
+                ++it)
+            {
+                python_dict[it.key()] = it.value();
+            }
+
+            return bp::incref( python_dict.ptr() );
+        }
     }
 };
 

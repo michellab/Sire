@@ -37,6 +37,8 @@ SireVol::CoordGroup __copy__(const SireVol::CoordGroup &other){ return SireVol::
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_CoordGroup_class(){
@@ -60,6 +62,7 @@ void register_CoordGroup_class(){
             CoordGroup_exposer.def( 
                 "edit"
                 , edit_function_value
+                , bp::release_gil_policy()
                 , "Return an editor that can be used to edit the\ncoordinates in this group" );
         
         }
@@ -97,6 +100,7 @@ void register_CoordGroup_class(){
             CoordGroup_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -108,6 +112,7 @@ void register_CoordGroup_class(){
             CoordGroup_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

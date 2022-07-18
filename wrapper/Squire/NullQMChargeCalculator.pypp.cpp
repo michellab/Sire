@@ -29,6 +29,8 @@ Squire::NullQMChargeCalculator __copy__(const Squire::NullQMChargeCalculator &ot
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullQMChargeCalculator_class(){
 
     { //::Squire::NullQMChargeCalculator
@@ -45,6 +47,7 @@ void register_NullQMChargeCalculator_class(){
                 "mayChangeCharges"
                 , mayChangeCharges_function_value
                 , ( bp::arg("arg0"), bp::arg("arg1"), bp::arg("arg2") )
+                , bp::release_gil_policy()
                 , "Return whether or not the change from oldmol to newmol\nmay change the charges. Use this function to see if\na charge calculation is required" );
         
         }
@@ -83,6 +86,7 @@ void register_NullQMChargeCalculator_class(){
             NullQMChargeCalculator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

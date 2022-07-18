@@ -1,12 +1,27 @@
-#############################
-##
-## The Soiree module
-##
-## (C) Christopher Woods
-##
+"""
+.. currentmodule:: sire.legacy.Analysis
 
-import Sire.Maths
-import Sire.CAS
-import Sire.Units
+Classes
+=========
 
-from Sire.Analysis._Analysis import *
+.. autosummary::
+    :toctree: generated/
+
+    Bennetts
+    ComponentGradients
+    DataPoint
+    FEP
+    FEPDeltas
+    Gradients
+    PMF
+    TI
+    TIComponents
+    TIPMF
+
+"""
+
+from .. import Maths as _Maths
+from .. import CAS as _CAS
+from .. import Units as _Units
+
+from ._Analysis import *

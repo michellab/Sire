@@ -39,6 +39,8 @@ SireCAS::AlwaysTrue __copy__(const SireCAS::AlwaysTrue &other){ return SireCAS::
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AlwaysTrue_class(){
 
     { //::SireCAS::AlwaysTrue
@@ -54,6 +56,7 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "alwaysFalse"
                 , alwaysFalse_function_value
+                , bp::release_gil_policy()
                 , "AlwaysTrue is never false" );
         
         }
@@ -65,6 +68,7 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "alwaysTrue"
                 , alwaysTrue_function_value
+                , bp::release_gil_policy()
                 , "AlwaysTrue is always true" );
         
         }
@@ -76,6 +80,7 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "children"
                 , children_function_value
+                , bp::release_gil_policy()
                 , "The truth has no children" );
         
         }
@@ -88,6 +93,7 @@ void register_AlwaysTrue_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Truth is always true" );
         
         }
@@ -100,6 +106,7 @@ void register_AlwaysTrue_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Truth is always true" );
         
         }
@@ -112,6 +119,7 @@ void register_AlwaysTrue_class(){
                 "evaluateCondition"
                 , evaluateCondition_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Truth is always true" );
         
         }
@@ -124,6 +132,7 @@ void register_AlwaysTrue_class(){
                 "evaluateCondition"
                 , evaluateCondition_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Truth is always true" );
         
         }
@@ -136,6 +145,7 @@ void register_AlwaysTrue_class(){
                 "expand"
                 , expand_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "The truth cannot be expanded" );
         
         }
@@ -147,6 +157,7 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "functions"
                 , functions_function_value
+                , bp::release_gil_policy()
                 , "There are no functions in truth" );
         
         }
@@ -158,6 +169,7 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Hash truth" );
         
         }
@@ -169,6 +181,7 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "isComplex"
                 , isComplex_function_value
+                , bp::release_gil_policy()
                 , "Truth is never complex" );
         
         }
@@ -180,6 +193,7 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "isCompound"
                 , isCompound_function_value
+                , bp::release_gil_policy()
                 , "Truth is always simple" );
         
         }
@@ -191,6 +205,7 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "isConstant"
                 , isConstant_function_value
+                , bp::release_gil_policy()
                 , "Truth is always constant" );
         
         }
@@ -203,6 +218,7 @@ void register_AlwaysTrue_class(){
                 "isFunction"
                 , isFunction_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "This is not a function of anything" );
         
         }
@@ -214,6 +230,7 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Truth is never empty" );
         
         }
@@ -241,6 +258,7 @@ void register_AlwaysTrue_class(){
                 "simplify"
                 , simplify_function_value
                 , ( bp::arg("options") )
+                , bp::release_gil_policy()
                 , "This cannot be further simplified" );
         
         }
@@ -253,6 +271,7 @@ void register_AlwaysTrue_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "There is no substituting the truth" );
         
         }
@@ -264,6 +283,7 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "There are no symbols in truth" );
         
         }
@@ -275,6 +295,7 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of truth" );
         
         }
@@ -286,6 +307,7 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -297,6 +319,7 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

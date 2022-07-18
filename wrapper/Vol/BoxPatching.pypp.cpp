@@ -27,6 +27,8 @@ SireVol::BoxPatching __copy__(const SireVol::BoxPatching &other){ return SireVol
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_BoxPatching_class(){
 
     { //::SireVol::BoxPatching
@@ -46,6 +48,7 @@ void register_BoxPatching_class(){
             BoxPatching_exposer.def( 
                 "center"
                 , center_function_value
+                , bp::release_gil_policy()
                 , "Return the center of the patching grid" );
         
         }
@@ -57,6 +60,7 @@ void register_BoxPatching_class(){
             BoxPatching_exposer.def( 
                 "nPatches"
                 , nPatches_function_value
+                , bp::release_gil_policy()
                 , "Return the number of patches" );
         
         }
@@ -84,6 +88,7 @@ void register_BoxPatching_class(){
                 "patchBox"
                 , patchBox_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the AABox that completely encloses the ith patch box" );
         
         }
@@ -96,6 +101,7 @@ void register_BoxPatching_class(){
                 "patchBox"
                 , patchBox_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Return the AABox of that completely encloses the patch that contains the\npoint point" );
         
         }
@@ -107,6 +113,7 @@ void register_BoxPatching_class(){
             BoxPatching_exposer.def( 
                 "patchDimension"
                 , patchDimension_function_value
+                , bp::release_gil_policy()
                 , "Return the dimensions of each path (the lengths of each side of the box)" );
         
         }
@@ -119,6 +126,7 @@ void register_BoxPatching_class(){
                 "patchIndex"
                 , patchIndex_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Return the index of the patch that contains the passed point" );
         
         }
@@ -131,6 +139,7 @@ void register_BoxPatching_class(){
                 "patchIndexAndCenter"
                 , patchIndexAndCenter_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Return the index of the patch that contains the passed point, together\nwith the point mapped into that patch (if the space is periodic)" );
         
         }
@@ -142,6 +151,7 @@ void register_BoxPatching_class(){
             BoxPatching_exposer.def( 
                 "patchSize"
                 , patchSize_function_value
+                , bp::release_gil_policy()
                 , "Return the patch size used to control the rough size of the patches" );
         
         }
@@ -154,6 +164,7 @@ void register_BoxPatching_class(){
                 "repatch"
                 , repatch_function_value
                 , ( bp::arg("new_space") )
+                , bp::release_gil_policy()
                 , "Recreate the patching for the passed space" );
         
         }
@@ -165,6 +176,7 @@ void register_BoxPatching_class(){
             BoxPatching_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of the patching" );
         
         }
@@ -176,6 +188,7 @@ void register_BoxPatching_class(){
             BoxPatching_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

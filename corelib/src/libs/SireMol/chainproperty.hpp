@@ -32,6 +32,7 @@
 #include <QVector>
 
 #include "SireBase/qvariant_metatype.h"
+#include "SireBase/convert_property.hpp"
 
 #include "moleculeinfodata.h"
 #include "molviewproperty.h"
@@ -72,30 +73,33 @@ class SIREMOL_EXPORT ChainProp : public MolViewProperty
 public:
     ChainProp();
     ChainProp(const ChainProp &other);
-    
+
     virtual ~ChainProp();
 
     virtual bool canConvert(const QVariant &value) const=0;
-    
+
     virtual void assignFrom(const ChainProperty<QVariant> &values)=0;
-    
+
+    virtual QVariant getAsVariant(const ChainIdx &chainidx) const=0;
+    virtual SireBase::PropertyPtr getAsProperty(const ChainIdx &chainidx) const=0;
+
     virtual ChainProperty<QVariant> toVariant() const=0;
-    
+
     virtual void assertCanConvert(const QVariant &value) const=0;
 };
 
 /** This is a property that can hold one value for each
     chain in the molecule.
-    
+
     mol.setProperty( "charge", ChainCharges( [....] ) )
     mol.setProperty( "lj", ChainLJs( [....] ) )
 
     chain.setProperty( "charge", 0.0 * mod_e )
-    
+
     @author Christopher Woods
 */
 template<class T>
-class SIREMOL_EXPORT ChainProperty 
+class SIREMOL_EXPORT ChainProperty
     : public SireBase::ConcreteProperty<ChainProperty<T>, ChainProp>
 {
 
@@ -106,25 +110,28 @@ public:
     ChainProperty();
 
     ChainProperty(const MoleculeInfoData &molinfo);
-    
+
     ChainProperty(const QVector<T> &values);
-    
+
     ChainProperty(const ChainProperty<T> &other);
-    
+
     ~ChainProperty();
-    
+
     ChainProperty<T>& operator=(const ChainProperty<T> &other);
-    
+
     static const char* typeName();
-    
+
     ChainProperty<T>* clone() const;
-    
+
     bool operator==(const ChainProperty<T> &other) const;
     bool operator!=(const ChainProperty<T> &other) const;
 
     const T& operator[](const ChainIdx &chainidx) const;
     const T& at(const ChainIdx &chainidx) const;
     const T& get(const ChainIdx &chainidx) const;
+
+    QVariant getAsVariant(const ChainIdx &idx) const;
+    SireBase::PropertyPtr getAsProperty(const ChainIdx &idx) const;
 
     ChainProperty<T>& set(ChainIdx chainidx, const T &value);
 
@@ -137,21 +144,21 @@ public:
     int count() const;
 
     QString toString() const;
-    
+
     const QVector<T>& array() const;
-    
+
     int nChains() const;
 
     void assignFrom(const ChainProperty<QVariant> &values);
-    
+
     static ChainProperty<T> fromVariant(const ChainProperty<QVariant> &values);
-    
+
     ChainProperty<QVariant> toVariant() const;
-    
+
     bool isCompatibleWith(const MoleculeInfoData &molinfo) const;
-    
+
     bool canConvert(const QVariant &value) const;
-    
+
     void assertCanConvert(const QVariant &value) const;
 
 private:
@@ -168,7 +175,7 @@ ChainProperty<T>::ChainProperty()
               : SireBase::ConcreteProperty<ChainProperty<T>,ChainProp>()
 {}
 
-/** Construct space for the values of the property for all of the 
+/** Construct space for the values of the property for all of the
     chains in the molecule described by 'molinfo' */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -194,7 +201,7 @@ ChainProperty<T>::ChainProperty(const QVector<T> &values)
 
 /** Assert that the variant can be converted to a value that can
     be held in this list of properties
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -251,7 +258,7 @@ bool ChainProperty<T>::operator!=(const ChainProperty<T> &other) const
     return props != other.props;
 }
 
-/** Return the property for the chain at index 'chainidx' 
+/** Return the property for the chain at index 'chainidx'
 
     \throw SireError::invalid_index
 */
@@ -308,13 +315,13 @@ ChainProperty<T> ChainProperty<T>::fromVariant(const ChainProperty<QVariant> &va
 {
     ChainProperty<T> array;
     array.assignFrom(variant);
-    
+
     return array;
 }
 
 /** Assign the values of this property from the array of variants
     in 'values'
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -326,19 +333,19 @@ void ChainProperty<T>::assignFrom(const ChainProperty<QVariant> &variant)
         props.clear();
         return;
     }
-        
+
     int nvals = variant.count();
     const QVariant *variant_array = variant.constData();
-    
+
     props = QVector<T>(nvals);
     props.squeeze();
     T *props_array = props.data();
-    
+
     for (int i=0; i<nvals; ++i)
     {
         const QVariant &value = variant_array[i];
         ChainProperty<T>::assertCanConvert(value);
-        
+
         if (value.isNull())
             props_array[i] = T();
         else
@@ -353,10 +360,10 @@ ChainProperty<QVariant> ChainProperty<T>::toVariant() const
 {
     if (props.isEmpty())
         return ChainProperty<QVariant>();
-        
+
     int nvals = props.count();
     const T *props_array = props.constData();
-    
+
     QVector<QVariant> converted_vals(nvals);
     converted_vals.squeeze();
     QVariant *converted_vals_array = converted_vals.data();
@@ -365,11 +372,11 @@ ChainProperty<QVariant> ChainProperty<T>::toVariant() const
     {
         converted_vals_array[i].setValue<T>(props_array[i]);
     }
-    
+
     return ChainProperty<QVariant>(converted_vals);
 }
 
-/** Return the property for the chain at index 'chainidx' 
+/** Return the property for the chain at index 'chainidx'
 
     \throw SireError::invalid_index
 */
@@ -380,7 +387,7 @@ const T& ChainProperty<T>::at(const ChainIdx &chainidx) const
     return this->operator[](chainidx);
 }
 
-/** Return the property for the chain at index 'chainidx' 
+/** Return the property for the chain at index 'chainidx'
 
     \throw SireError::invalid_index
 */
@@ -391,7 +398,35 @@ const T& ChainProperty<T>::get(const ChainIdx &chainidx) const
     return this->operator[](chainidx);
 }
 
-/** Set the value of the property for the chain at 
+/** Return the value for the passed index, as
+    a QVariant. This lets you get the value without knowing the
+    actual type of this property
+
+    \throw SireError::invalid_index
+*/
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QVariant ChainProperty<T>::getAsVariant(const ChainIdx &chainidx) const
+{
+    const T &value = this->get(chainidx);
+    return QVariant::fromValue(value);
+}
+
+/** Return the value for this index as a
+    Property. This lets you get the value without knowing the
+    actual type of this property
+
+   \throw SireError::invalid_index
+*/
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SireBase::PropertyPtr ChainProperty<T>::getAsProperty(
+                                const ChainIdx &chainidx) const
+{
+    return SireBase::convert_property(this->get(chainidx));
+}
+
+/** Set the value of the property for the chain at
     index 'chainidx' */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -470,7 +505,7 @@ QDataStream& operator<<(QDataStream &ds, const SireMol::ChainProperty<T> &prop)
     //serialise the base class - this writes the header and version!
     ds << static_cast<const SireMol::ChainProp&>(prop);
     ds << prop.props;
-    
+
     return ds;
 }
 
@@ -481,7 +516,7 @@ QDataStream& operator>>(QDataStream &ds, SireMol::ChainProperty<T> &prop)
 {
     ds >> static_cast<SireMol::ChainProp&>(prop);
     ds >> prop.props;
-        
+
     return ds;
 }
 

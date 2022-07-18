@@ -33,6 +33,8 @@ SireFF::MolEnergyTable __copy__(const SireFF::MolEnergyTable &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_MolEnergyTable_class(){
@@ -52,6 +54,7 @@ void register_MolEnergyTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("cgatomidx"), bp::arg("force") )
+                , bp::release_gil_policy()
                 , "Add the force force onto this table. This ignores\nforces calculated for atoms that are in CutGroups that are\nnot in this table - this returns whether or not the\natom is in this table\nThrow: SireError::invalid_index\n" );
         
         }
@@ -64,6 +67,7 @@ void register_MolEnergyTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("selected_atoms"), bp::arg("force") )
+                , bp::release_gil_policy()
                 , "Add the force force onto this table for all of the atoms\nin selected_atoms. This ignores forces calculated for atoms\nthat are in CutGroups that are not in this table - this returns whether\nor not any selected atoms are in this table\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -76,6 +80,7 @@ void register_MolEnergyTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Add the forces contained in other onto this force table. This will only\nadd the forces for CutGroups that are in both tables" );
         
         }
@@ -88,6 +93,7 @@ void register_MolEnergyTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("force") )
+                , bp::release_gil_policy()
                 , "Add the force force onto all of the atom points in this table" );
         
         }
@@ -100,6 +106,7 @@ void register_MolEnergyTable_class(){
                 "divide"
                 , divide_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Divide the force at all atom points by value" );
         
         }
@@ -111,6 +118,7 @@ void register_MolEnergyTable_class(){
             MolEnergyTable_exposer.def( 
                 "initialise"
                 , initialise_function_value
+                , bp::release_gil_policy()
                 , "Initialise this table - this resets all of the forces back to zero" );
         
         }
@@ -123,6 +131,7 @@ void register_MolEnergyTable_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("cgidx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -134,6 +143,7 @@ void register_MolEnergyTable_class(){
             MolEnergyTable_exposer.def( 
                 "molNum"
                 , molNum_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -158,6 +168,7 @@ void register_MolEnergyTable_class(){
                 "multiply"
                 , multiply_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Multiply the force at all atom points by value" );
         
         }
@@ -169,6 +180,7 @@ void register_MolEnergyTable_class(){
             MolEnergyTable_exposer.def( 
                 "nCutGroups"
                 , nCutGroups_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -180,6 +192,7 @@ void register_MolEnergyTable_class(){
             MolEnergyTable_exposer.def( 
                 "nSelectedCutGroups"
                 , nSelectedCutGroups_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -227,6 +240,7 @@ void register_MolEnergyTable_class(){
                 "selected"
                 , selected_function_value
                 , ( bp::arg("cgidx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -238,6 +252,7 @@ void register_MolEnergyTable_class(){
             MolEnergyTable_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -250,6 +265,7 @@ void register_MolEnergyTable_class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("force") )
+                , bp::release_gil_policy()
                 , "Set all of the forces at the atom points equal to force" );
         
         }
@@ -262,6 +278,7 @@ void register_MolEnergyTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("cgatomidx"), bp::arg("force") )
+                , bp::release_gil_policy()
                 , "Subtract the force force from this table. This ignores\nforces calculated for atoms that are in CutGroups that are\nnot in this table - this returns whether or not the\natom is in this table\nThrow: SireError::invalid_index\n" );
         
         }
@@ -274,6 +291,7 @@ void register_MolEnergyTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("selected_atoms"), bp::arg("force") )
+                , bp::release_gil_policy()
                 , "Subtract the force force from this table for all of the atoms\nin selected_atoms. This ignores forces calculated for atoms\nthat are in CutGroups that are not in this table - this returns whether\nor not any selected atoms are in this table\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -286,6 +304,7 @@ void register_MolEnergyTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Subtract the forces contained in other from this force table. This will only\nsubtract the forces for CutGroups that are in both tables" );
         
         }
@@ -298,6 +317,7 @@ void register_MolEnergyTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("force") )
+                , bp::release_gil_policy()
                 , "Subtract the force force from all of the atom points in this table" );
         
         }
@@ -309,6 +329,7 @@ void register_MolEnergyTable_class(){
             MolEnergyTable_exposer.def( 
                 "toVector"
                 , toVector_function_value
+                , bp::release_gil_policy()
                 , "Return an array of all of the forces on the atoms, in CGAtomIdx order" );
         
         }
@@ -321,6 +342,7 @@ void register_MolEnergyTable_class(){
                 "toVector"
                 , toVector_function_value
                 , ( bp::arg("selection") )
+                , bp::release_gil_policy()
                 , "Return an array of all of the forces on the atoms selected in selection\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -332,6 +354,7 @@ void register_MolEnergyTable_class(){
             MolEnergyTable_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -343,6 +366,7 @@ void register_MolEnergyTable_class(){
             MolEnergyTable_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

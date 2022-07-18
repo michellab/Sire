@@ -29,6 +29,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Property_class(){
 
     { //::SireBase::Property
@@ -43,6 +45,7 @@ void register_Property_class(){
             Property_exposer.def( 
                 "asABoolean"
                 , asABoolean_function_value
+                , bp::release_gil_policy()
                 , "Return this property converted to a bool. This throws an invalid\ncast if this is not possible" );
         
         }
@@ -54,6 +57,7 @@ void register_Property_class(){
             Property_exposer.def( 
                 "asADouble"
                 , asADouble_function_value
+                , bp::release_gil_policy()
                 , "Return this property converted to a double. This throws an invalid\ncast if this is not possible" );
         
         }
@@ -65,6 +69,7 @@ void register_Property_class(){
             Property_exposer.def( 
                 "asAString"
                 , asAString_function_value
+                , bp::release_gil_policy()
                 , "Return this property converted to a string. This throws an invalid\ncast if this is not possible" );
         
         }
@@ -76,6 +81,7 @@ void register_Property_class(){
             Property_exposer.def( 
                 "asAnArray"
                 , asAnArray_function_value
+                , bp::release_gil_policy()
                 , "Return this property converted to an array property. By default, this\nautomatically puts this property into a PropertyList and returns that" );
         
         }
@@ -87,6 +93,7 @@ void register_Property_class(){
             Property_exposer.def( 
                 "asAnInteger"
                 , asAnInteger_function_value
+                , bp::release_gil_policy()
                 , "Return this property converted to an integer. This throws an invalid\ncast if this is not possible" );
         
         }
@@ -99,6 +106,7 @@ void register_Property_class(){
                 "copy"
                 , copy_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -111,6 +119,7 @@ void register_Property_class(){
                 "equals"
                 , equals_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -122,6 +131,7 @@ void register_Property_class(){
             Property_exposer.def( 
                 "isABoolean"
                 , isABoolean_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this property holds a bool (or can convert\nto a bool)" );
         
         }
@@ -133,6 +143,7 @@ void register_Property_class(){
             Property_exposer.def( 
                 "isADouble"
                 , isADouble_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this property holds a double (or can convert\nto a double)" );
         
         }
@@ -144,6 +155,7 @@ void register_Property_class(){
             Property_exposer.def( 
                 "isAString"
                 , isAString_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this property holds a string (or can convert\nto a string)" );
         
         }
@@ -155,6 +167,7 @@ void register_Property_class(){
             Property_exposer.def( 
                 "isAnArray"
                 , isAnArray_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is an array property (or can convert to an\narray property)" );
         
         }
@@ -166,6 +179,7 @@ void register_Property_class(){
             Property_exposer.def( 
                 "isAnInteger"
                 , isAnInteger_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this property holds an integer (or can convert\nto an integer)" );
         
         }
@@ -178,6 +192,7 @@ void register_Property_class(){
                 "load"
                 , load_function_value
                 , ( bp::arg("ds") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -202,6 +217,7 @@ void register_Property_class(){
                 "save"
                 , save_function_value
                 , ( bp::arg("ds") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -213,6 +229,7 @@ void register_Property_class(){
             Property_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Default toString() function for properties - it would\nhelp if all properties output something more sensible" );
         
         }
@@ -224,6 +241,7 @@ void register_Property_class(){
             Property_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -235,6 +253,7 @@ void register_Property_class(){
             Property_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

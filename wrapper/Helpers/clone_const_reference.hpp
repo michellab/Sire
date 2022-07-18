@@ -1,7 +1,7 @@
 #ifndef CLONE_CONST_REFERENCE_HPP
 #define CLONE_CONST_REFERENCE_HPP
 
-/** This return policy copies the returned pointer or reference using the 
+/** This return policy copies the returned pointer or reference using the
     object's .clone() function, and it then manages the new cloned object.
     This is a useful alternative to copy_const_reference if you are
     working with a polymorphic hierarchy of classes that span across
@@ -16,6 +16,8 @@
 #include <boost/mpl/if.hpp>
 #include <boost/python/to_python_indirect.hpp>
 
+#include "release_gil_policy.hpp"
+
 namespace boost
 {
 namespace python
@@ -29,6 +31,8 @@ struct make_clone_reference_holder
     template <class T>
     static PyObject* execute(T* p)
     {
+        auto raii = boost::python::release_gil_policy::acquire_gil();
+
         if (p == 0)
             return python::detail::none();
         else
@@ -42,7 +46,7 @@ struct make_clone_reference_holder
             {
                 PyErr_Clear();
 
-                //failed as the derived type is not wrapped. Instead, 
+                //failed as the derived type is not wrapped. Instead,
                 //return a python wrapper to the base type
                 boost::python::object obj( p->clone() );
                 return boost::python::incref( obj.ptr() );

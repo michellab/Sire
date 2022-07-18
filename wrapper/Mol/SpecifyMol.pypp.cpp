@@ -31,6 +31,8 @@ SireMol::SpecifyMol __copy__(const SireMol::SpecifyMol &other){ return SireMol::
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SpecifyMol_class(){
 
     { //::SireMol::SpecifyMol
@@ -49,6 +51,7 @@ void register_SpecifyMol_class(){
             SpecifyMol_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Hash this ID" );
         
         }
@@ -60,6 +63,7 @@ void register_SpecifyMol_class(){
             SpecifyMol_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this ID is null" );
         
         }
@@ -72,6 +76,7 @@ void register_SpecifyMol_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Map this ID to the list of molecule numbers that match" );
         
         }
@@ -84,6 +89,7 @@ void register_SpecifyMol_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Map this ID to the list of molecule numbers that match" );
         
         }
@@ -96,6 +102,7 @@ void register_SpecifyMol_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molgroups") )
+                , bp::release_gil_policy()
                 , "Map this ID to the list of molecule numbers that match" );
         
         }
@@ -124,6 +131,7 @@ void register_SpecifyMol_class(){
             SpecifyMol_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this ID" );
         
         }
@@ -135,6 +143,7 @@ void register_SpecifyMol_class(){
             SpecifyMol_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -146,6 +155,7 @@ void register_SpecifyMol_class(){
             SpecifyMol_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

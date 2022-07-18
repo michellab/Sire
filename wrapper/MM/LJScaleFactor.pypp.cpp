@@ -23,6 +23,8 @@ SireMM::LJScaleFactor __copy__(const SireMM::LJScaleFactor &other){ return SireM
 
 const char* pvt_get_name(const SireMM::LJScaleFactor&){ return "SireMM::LJScaleFactor";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_LJScaleFactor_class(){
 
     { //::SireMM::LJScaleFactor
@@ -38,6 +40,7 @@ void register_LJScaleFactor_class(){
             LJScaleFactor_exposer.def( 
                 "lj"
                 , lj_function_value
+                , bp::release_gil_policy()
                 , "Return the LJ parameter scaling factor" );
         
         }
@@ -64,6 +67,7 @@ void register_LJScaleFactor_class(){
             LJScaleFactor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -75,6 +79,7 @@ void register_LJScaleFactor_class(){
             LJScaleFactor_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

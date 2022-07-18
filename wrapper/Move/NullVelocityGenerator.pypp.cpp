@@ -41,6 +41,8 @@ SireMove::NullVelocityGenerator __copy__(const SireMove::NullVelocityGenerator &
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullVelocityGenerator_class(){
 
     { //::SireMove::NullVelocityGenerator
@@ -83,6 +85,7 @@ void register_NullVelocityGenerator_class(){
             NullVelocityGenerator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

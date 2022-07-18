@@ -23,6 +23,8 @@ SireCAS::ComplexValues __copy__(const SireCAS::ComplexValues &other){ return Sir
 
 const char* pvt_get_name(const SireCAS::ComplexValues&){ return "SireCAS::ComplexValues";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ComplexValues_class(){
 
     { //::SireCAS::ComplexValues
@@ -52,6 +54,7 @@ void register_ComplexValues_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -64,6 +67,7 @@ void register_ComplexValues_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -76,6 +80,7 @@ void register_ComplexValues_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -88,6 +93,7 @@ void register_ComplexValues_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -100,6 +106,7 @@ void register_ComplexValues_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -112,6 +119,7 @@ void register_ComplexValues_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -124,6 +132,7 @@ void register_ComplexValues_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -136,6 +145,7 @@ void register_ComplexValues_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -148,6 +158,7 @@ void register_ComplexValues_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -160,6 +171,7 @@ void register_ComplexValues_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8"), bp::arg("symval9") )
+                , bp::release_gil_policy()
                 , "Add the passed values" );
         
         }
@@ -172,6 +184,7 @@ void register_ComplexValues_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("symbol"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -183,6 +196,7 @@ void register_ComplexValues_class(){
             ComplexValues_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -195,6 +209,7 @@ void register_ComplexValues_class(){
                 "value"
                 , value_function_value
                 , ( bp::arg("sym") )
+                , bp::release_gil_policy()
                 , "Return the value of the Symbol with ID id, or 0.0 if there is no such symbol" );
         
         }
@@ -218,6 +233,7 @@ void register_ComplexValues_class(){
             ComplexValues_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

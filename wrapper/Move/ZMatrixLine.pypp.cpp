@@ -53,6 +53,8 @@ SireMove::ZMatrixLine __copy__(const SireMove::ZMatrixLine &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ZMatrixLine_class(){
 
     { //::SireMove::ZMatrixLine
@@ -69,6 +71,7 @@ void register_ZMatrixLine_class(){
             ZMatrixLine_exposer.def( 
                 "angle"
                 , angle_function_value
+                , bp::release_gil_policy()
                 , "Return the index of the angled atom" );
         
         }
@@ -80,6 +83,7 @@ void register_ZMatrixLine_class(){
             ZMatrixLine_exposer.def( 
                 "angleDelta"
                 , angleDelta_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum amount by which the angle should be changed" );
         
         }
@@ -91,6 +95,7 @@ void register_ZMatrixLine_class(){
             ZMatrixLine_exposer.def( 
                 "atom"
                 , atom_function_value
+                , bp::release_gil_policy()
                 , "Return the index of the atom whose coordinates\nare described in this line" );
         
         }
@@ -102,6 +107,7 @@ void register_ZMatrixLine_class(){
             ZMatrixLine_exposer.def( 
                 "bond"
                 , bond_function_value
+                , bp::release_gil_policy()
                 , "Return the index of the bonded atom" );
         
         }
@@ -113,6 +119,7 @@ void register_ZMatrixLine_class(){
             ZMatrixLine_exposer.def( 
                 "bondDelta"
                 , bondDelta_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum amount by which the bond should be changed" );
         
         }
@@ -124,6 +131,7 @@ void register_ZMatrixLine_class(){
             ZMatrixLine_exposer.def( 
                 "dihedral"
                 , dihedral_function_value
+                , bp::release_gil_policy()
                 , "Return the index of the dihedralled atom" );
         
         }
@@ -135,6 +143,7 @@ void register_ZMatrixLine_class(){
             ZMatrixLine_exposer.def( 
                 "dihedralDelta"
                 , dihedralDelta_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum amount by which the dihedral should be changed" );
         
         }
@@ -174,6 +183,7 @@ void register_ZMatrixLine_class(){
                 "setAngleDelta"
                 , setAngleDelta_function_value
                 , ( bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Set the maximum amount by which the angle should be changed" );
         
         }
@@ -186,6 +196,7 @@ void register_ZMatrixLine_class(){
                 "setBondDelta"
                 , setBondDelta_function_value
                 , ( bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Set the maximum amount by which the bond should be changed" );
         
         }
@@ -198,6 +209,7 @@ void register_ZMatrixLine_class(){
                 "setDihedralDelta"
                 , setDihedralDelta_function_value
                 , ( bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Set the maximum amount by which the dihedral should be changed" );
         
         }
@@ -209,6 +221,7 @@ void register_ZMatrixLine_class(){
             ZMatrixLine_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation" );
         
         }
@@ -220,6 +233,7 @@ void register_ZMatrixLine_class(){
             ZMatrixLine_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -231,6 +245,7 @@ void register_ZMatrixLine_class(){
             ZMatrixLine_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

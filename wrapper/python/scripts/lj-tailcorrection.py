@@ -1,8 +1,15 @@
 description="""
-lj-tailcorrection is a trajectory post-processing app that computes a correction 
-to computed free energy changes. This app evaluates the contributions of dispersion interactions 
+lj-tailcorrection is a trajectory post-processing app that computes a correction
+to computed free energy changes. This app evaluates the contributions of dispersion interactions
 from beyond the cutoff used in the original simulation.
 """
+
+try:
+    import sire
+    sire.use_old_api()
+except ImportError:
+    pass
+
 from Sire.Tools import LJcutoff
 from Sire.Tools import readParams
 from Sire.Units import *

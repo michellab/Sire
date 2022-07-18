@@ -69,6 +69,8 @@ SireMM::AmberDihPart __copy__(const SireMM::AmberDihPart &other){ return SireMM:
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AmberDihPart_class(){
 
     { //::SireMM::AmberDihPart
@@ -85,6 +87,7 @@ void register_AmberDihPart_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("phi") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -96,6 +99,7 @@ void register_AmberDihPart_class(){
             AmberDihPart_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -107,6 +111,7 @@ void register_AmberDihPart_class(){
             AmberDihPart_exposer.def( 
                 "k"
                 , k_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -149,6 +154,7 @@ void register_AmberDihPart_class(){
             AmberDihPart_exposer.def( 
                 "periodicity"
                 , periodicity_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -160,6 +166,7 @@ void register_AmberDihPart_class(){
             AmberDihPart_exposer.def( 
                 "phase"
                 , phase_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -171,6 +178,7 @@ void register_AmberDihPart_class(){
             AmberDihPart_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -182,6 +190,7 @@ void register_AmberDihPart_class(){
             AmberDihPart_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -193,6 +202,7 @@ void register_AmberDihPart_class(){
             AmberDihPart_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -14,6 +14,8 @@ namespace bp = boost::python;
 
 #include "atomselection.h"
 
+#include "core.h"
+
 #include "editor.hpp"
 
 #include "evaluator.h"
@@ -34,6 +36,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_WeightFunction_class(){
 
     { //::SireMol::WeightFunction
@@ -48,7 +52,7 @@ void register_WeightFunction_class(){
             WeightFunction_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -96,6 +100,7 @@ void register_WeightFunction_class(){
             WeightFunction_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

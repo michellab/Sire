@@ -33,6 +33,8 @@ SireMaths::RecordValues __copy__(const SireMaths::RecordValues &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_RecordValues_class(){
@@ -51,6 +53,7 @@ void register_RecordValues_class(){
                 "accumulate"
                 , accumulate_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Accumulate the passed value onto the average" );
         
         }
@@ -62,6 +65,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Completely clear the statistics in this accumulator" );
         
         }
@@ -73,6 +77,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of recorded values" );
         
         }
@@ -84,6 +89,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "max"
                 , max_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum value" );
         
         }
@@ -95,6 +101,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "maximum"
                 , maximum_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum value" );
         
         }
@@ -106,6 +113,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "mean"
                 , mean_function_value
+                , bp::release_gil_policy()
                 , "Return the mean value" );
         
         }
@@ -117,6 +125,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "meanOfSquares"
                 , meanOfSquares_function_value
+                , bp::release_gil_policy()
                 , "Return the mean of the square values" );
         
         }
@@ -128,6 +137,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "median"
                 , median_function_value
+                , bp::release_gil_policy()
                 , "Return the median value" );
         
         }
@@ -139,6 +149,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "min"
                 , min_function_value
+                , bp::release_gil_policy()
                 , "Return the minimum value" );
         
         }
@@ -150,6 +161,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "minimum"
                 , minimum_function_value
+                , bp::release_gil_policy()
                 , "Return the minimum value" );
         
         }
@@ -161,6 +173,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "nValues"
                 , nValues_function_value
+                , bp::release_gil_policy()
                 , "Return the number of recorded values" );
         
         }
@@ -187,6 +200,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of recorded values" );
         
         }
@@ -198,6 +212,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "standardDeviation"
                 , standardDeviation_function_value
+                , bp::release_gil_policy()
                 , "Return the standard deviation of the values" );
         
         }
@@ -209,6 +224,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "stddev"
                 , stddev_function_value
+                , bp::release_gil_policy()
                 , "Return the standard deviation of the values" );
         
         }
@@ -220,6 +236,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "sum"
                 , sum_function_value
+                , bp::release_gil_policy()
                 , "Return the sum of all of the values" );
         
         }
@@ -231,6 +248,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "sum2"
                 , sum2_function_value
+                , bp::release_gil_policy()
                 , "Return the sum of the square of all of the values" );
         
         }
@@ -242,6 +260,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -253,6 +272,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -264,6 +284,7 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "values"
                 , values_function_value
+                , bp::release_gil_policy()
                 , "Return the array of all accumulated values" );
         
         }

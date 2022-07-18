@@ -27,12 +27,6 @@ set ( SIREPYTHON_SOURCES
 
     )
 
-# Set the Python library. This may have been unset in the top-level
-# CMakeListst.txt if were running on macOS to avoid linking against libPython.
-if (NOT PYTHON_LIBRARIES)
-  set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
-endif()
-
 # Create the library that holds all of the class wrappers
 add_executable (sire_python ${SIREPYTHON_SOURCES})
 
@@ -46,7 +40,7 @@ target_link_libraries (sire_python
                        SIRE_SireAnalysis
                        SIRE_SireError
                        ${SIRECLUSTER_EXTRA_LIBRARIES}
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                        ${PYTHON_LIBRARY}
                       )
 
@@ -66,7 +60,6 @@ endif()
 
 install (DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts
          DESTINATION ${SIRE_SHARE}
-         PATTERN ".svn" EXCLUDE
         )
 
 if (NOT WIN32)

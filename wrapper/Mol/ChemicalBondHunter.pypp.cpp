@@ -49,6 +49,8 @@ SireMol::ChemicalBondHunter __copy__(const SireMol::ChemicalBondHunter &other){ 
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ChemicalBondHunter_class(){
 
     { //::SireMol::ChemicalBondHunter
@@ -77,6 +79,7 @@ void register_ChemicalBondHunter_class(){
             ChemicalBondHunter_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -25,6 +25,8 @@ SireMM::MMDetail __copy__(const SireMM::MMDetail &other){ return SireMM::MMDetai
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MMDetail_class(){
 
     { //::SireMM::MMDetail
@@ -41,6 +43,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "angleStyle"
                 , angleStyle_function_value
+                , bp::release_gil_policy()
                 , "Return the angle model used by this forcefield" );
         
         }
@@ -52,6 +55,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "bondStyle"
                 , bondStyle_function_value
+                , bp::release_gil_policy()
                 , "Return the bond model used by this forcefield" );
         
         }
@@ -63,6 +67,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "combiningRules"
                 , combiningRules_function_value
+                , bp::release_gil_policy()
                 , "Return the combining rules for this forcefield" );
         
         }
@@ -74,6 +79,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "dihedralStyle"
                 , dihedralStyle_function_value
+                , bp::release_gil_policy()
                 , "Return the dihedral model uses by this forcefield" );
         
         }
@@ -85,6 +91,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "electrostatic14ScaleFactor"
                 , electrostatic14ScaleFactor_function_value
+                , bp::release_gil_policy()
                 , "Return the electrostatic 1-4 scale factor" );
         
         }
@@ -96,6 +103,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "electrostaticStyle"
                 , electrostaticStyle_function_value
+                , bp::release_gil_policy()
                 , "Return the electrostatic model used by this forcefield" );
         
         }
@@ -108,6 +116,7 @@ void register_MMDetail_class(){
                 "guessFrom"
                 , guessFrom_function_value
                 , ( bp::arg("combrule"), bp::arg("elecstyle"), bp::arg("vdwstyle"), bp::arg("elec14"), bp::arg("vdw14"), bp::arg("bondstyle"), bp::arg("anglestyle"), bp::arg("dihedralstyle") )
+                , bp::release_gil_policy()
                 , "Function used to guess the forcefield from the passed set of conditions.\nThis returns a null MMDetail object if we cant guess" );
         
         }
@@ -119,6 +128,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "isAmberStyle"
                 , isAmberStyle_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is an Amber-style forcefield. An Amber-style\nforcefield is one that uses only coulombs law between point charges for electrostatics,\nLJ with arithmetic combining rules for vdw, harmonic bonds and angles and a\nset of cosine functions for dihedrals" );
         
         }
@@ -131,6 +141,7 @@ void register_MMDetail_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield is compatible with other" );
         
         }
@@ -142,6 +153,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "isOPLS"
                 , isOPLS_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a GROMACS OPLS force field." );
         
         }
@@ -168,6 +180,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string form of this forcefield" );
         
         }
@@ -179,6 +192,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -190,6 +204,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "usesArithmeticCombiningRules"
                 , usesArithmeticCombiningRules_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield uses arithmetic combining rules" );
         
         }
@@ -201,6 +216,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "usesBuckinghamTerm"
                 , usesBuckinghamTerm_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield uses the Buckingham vdw model" );
         
         }
@@ -212,6 +228,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "usesCosineDihedrals"
                 , usesCosineDihedrals_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield uses cosine-series dihedrals" );
         
         }
@@ -223,6 +240,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "usesCoulombCharges"
                 , usesCoulombCharges_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield uses coulomb charges" );
         
         }
@@ -234,6 +252,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "usesGeometricCombiningRules"
                 , usesGeometricCombiningRules_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield uses arithmetic combining rules" );
         
         }
@@ -245,6 +264,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "usesHarmonicAngles"
                 , usesHarmonicAngles_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield uses harmonic angles" );
         
         }
@@ -256,6 +276,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "usesHarmonicBonds"
                 , usesHarmonicBonds_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield uses harmonic bonds" );
         
         }
@@ -267,6 +288,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "usesLJTerm"
                 , usesLJTerm_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield uses the Lennard Jones vdw model" );
         
         }
@@ -278,6 +300,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "vdw14ScaleFactor"
                 , vdw14ScaleFactor_function_value
+                , bp::release_gil_policy()
                 , "Return the vdw 1-4 scale factor" );
         
         }
@@ -289,6 +312,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "vdwStyle"
                 , vdwStyle_function_value
+                , bp::release_gil_policy()
                 , "Return the vdw model used by this forcefield" );
         
         }
@@ -300,6 +324,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

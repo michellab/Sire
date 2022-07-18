@@ -13,6 +13,8 @@
 #include "SireMol/moleditor.h"
 #include "SireMol/atomnum.h"
 #include "SireMol/resnum.h"
+#include "SireMol/core.h"
+
 
 #include "create_test_molecule.h"
 

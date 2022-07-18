@@ -41,6 +41,8 @@ SireMol::AtomCutting __copy__(const SireMol::AtomCutting &other){ return SireMol
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AtomCutting_class(){
 
     { //::SireMol::AtomCutting
@@ -83,6 +85,7 @@ void register_AtomCutting_class(){
             AtomCutting_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

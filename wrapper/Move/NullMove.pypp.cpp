@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/rangenerator.h"
 
+#include "SireMol/core.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -35,6 +37,8 @@ SireMove::NullMove __copy__(const SireMove::NullMove &other){ return SireMove::N
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullMove_class(){
 
     { //::SireMove::NullMove
@@ -50,6 +54,7 @@ void register_NullMove_class(){
             NullMove_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "There are no statistics to clear" );
         
         }
@@ -61,6 +66,7 @@ void register_NullMove_class(){
             NullMove_exposer.def( 
                 "ensemble"
                 , ensemble_function_value
+                , bp::release_gil_policy()
                 , "NullMove doesnt change anything (so must be NVE)" );
         
         }
@@ -73,6 +79,7 @@ void register_NullMove_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "NullMove doesnt perform any moves - no matter how hard you try" );
         
         }
@@ -84,6 +91,7 @@ void register_NullMove_class(){
             NullMove_exposer.def( 
                 "nMoves"
                 , nMoves_function_value
+                , bp::release_gil_policy()
                 , "There have been and never will be any NullMove events" );
         
         }
@@ -111,6 +119,7 @@ void register_NullMove_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("rangenerator") )
+                , bp::release_gil_policy()
                 , "The NullMove does not use a random number generator" );
         
         }
@@ -122,6 +131,7 @@ void register_NullMove_class(){
             NullMove_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation" );
         
         }
@@ -133,6 +143,7 @@ void register_NullMove_class(){
             NullMove_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

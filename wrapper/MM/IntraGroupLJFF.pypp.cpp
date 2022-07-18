@@ -19,6 +19,8 @@ SireFF::Intra2B2G3DFF<SireMM::LJPotentialInterface<SireMM::IntraLJPotential> > _
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_IntraGroupLJFF_class(){
@@ -38,6 +40,7 @@ void register_IntraGroupLJFF_class(){
             IntraGroupLJFF_exposer.def( 
                 "energy"
                 , energy_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -51,6 +54,7 @@ void register_IntraGroupLJFF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -235,6 +239,7 @@ void register_IntraGroupLJFF_class(){
             IntraGroupLJFF_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -247,6 +252,7 @@ void register_IntraGroupLJFF_class(){
             IntraGroupLJFF_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

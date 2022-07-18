@@ -6,7 +6,7 @@
 
 # Third Party dependencies of this module
 include_directories( ${BOOST_INCLUDE_DIR}
-                     ${PYTHON_INCLUDE_DIR} 
+                     ${PYTHON_INCLUDE_DIR}
                      ${SIRE_GSL_INCLUDE_PATH} )
 
 # Sire include paths
@@ -32,7 +32,7 @@ set ( WRAPMOL_SOURCES
 # Create the library that holds all of the class wrappers
 add_library (Mol ${WRAPMOL_SOURCES})
 
-set_target_properties (Mol  
+set_target_properties (Mol
                        PROPERTIES
                          VERSION ${SIRE_VERSION}
                          SOVERSION ${SIRE_VERSION_MAJOR}
@@ -40,20 +40,20 @@ set_target_properties (Mol
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
+
 target_link_libraries (Mol
                        SirePython
                        SIRE_SireID
                        SIRE_SireMol
                        SIRE_SireMM
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_Mol" "_init_Mol" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/Mol )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/Mol )
 
 install( TARGETS Mol
          LIBRARY DESTINATION ${INSTALLDIR}
@@ -62,6 +62,6 @@ install( TARGETS Mol
         )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )
 

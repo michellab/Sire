@@ -21,6 +21,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_StringMangler_class(){
 
     { //::SireBase::StringMangler
@@ -36,6 +38,7 @@ void register_StringMangler_class(){
                 "mangle"
                 , mangle_function_value
                 , ( bp::arg("input") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -71,6 +74,7 @@ void register_StringMangler_class(){
             StringMangler_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

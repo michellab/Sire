@@ -55,6 +55,8 @@ SireMol::AtomEditor __copy__(const SireMol::AtomEditor &other){ return SireMol::
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_AtomEditor_class(){
@@ -100,6 +102,7 @@ void register_AtomEditor_class(){
                 "reindex"
                 , reindex_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Reindex this atom so that it lies at index newidx. Note\nthat if newidx is greater than the number of atoms, then\nthis will move this atom to be the last in the list" );
         
         }
@@ -111,6 +114,7 @@ void register_AtomEditor_class(){
             AtomEditor_exposer.def( 
                 "remove"
                 , remove_function_value
+                , bp::release_gil_policy()
                 , "Remove this atom from the molecule, returning an editor\nthat can further edit the structure of the molecule" );
         
         }
@@ -149,6 +153,7 @@ void register_AtomEditor_class(){
                 "reparent"
                 , reparent_function_value
                 , ( bp::arg("cgidx") )
+                , bp::release_gil_policy()
                 , "Reparent this atom so that it will be placed into the CutGroup\nwith index cgidx - this returns the updated atom in\nan AtomStructureEditor, which is optimised for further\nediting of the molecule structure\nThrow: SireError::invalid_index\n" );
         
         }
@@ -161,6 +166,7 @@ void register_AtomEditor_class(){
                 "reparent"
                 , reparent_function_value
                 , ( bp::arg("cgid") )
+                , bp::release_gil_policy()
                 , "Reparent this atom so that it will be placed into the CutGroup\nwith ID cgid - this returns the updated atom in\nan AtomStructureEditor, which is optimised for further\nediting of the molecule structure\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
@@ -173,6 +179,7 @@ void register_AtomEditor_class(){
                 "reparent"
                 , reparent_function_value
                 , ( bp::arg("residx") )
+                , bp::release_gil_policy()
                 , "Reparent this atom so that it will be placed into the residue\nwith index residx - this returns the updated atom in\nan AtomStructureEditor, which is optimised for further\nediting of the molecule structure\nThrow: SireError::invalid_index\n" );
         
         }
@@ -185,6 +192,7 @@ void register_AtomEditor_class(){
                 "reparent"
                 , reparent_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Reparent this atom so that it will be placed into the residue\nwith ID resid - this returns the updated atom in\nan AtomStructureEditor, which is optimised for further\nediting of the molecule structure\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -197,6 +205,7 @@ void register_AtomEditor_class(){
                 "reparent"
                 , reparent_function_value
                 , ( bp::arg("segidx") )
+                , bp::release_gil_policy()
                 , "Reparent this atom so that it will be placed into the segment\nwith index segidx - this returns the updated atom in\nan AtomStructureEditor, which is optimised for further\nediting of the molecule structure\nThrow: SireError::invalid_index\n" );
         
         }
@@ -209,6 +218,7 @@ void register_AtomEditor_class(){
                 "reparent"
                 , reparent_function_value
                 , ( bp::arg("segid") )
+                , bp::release_gil_policy()
                 , "Reparent this atom so that it will be placed into the segment\nwith ID segid - this returns the updated atom in\nan AtomStructureEditor, which is optimised for further\nediting of the molecule structure\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\nThrow: SireError::invalid_index\n" );
         
         }
@@ -220,6 +230,7 @@ void register_AtomEditor_class(){
             AtomEditor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this editor" );
         
         }
@@ -231,6 +242,7 @@ void register_AtomEditor_class(){
             AtomEditor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -242,6 +254,7 @@ void register_AtomEditor_class(){
             AtomEditor_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

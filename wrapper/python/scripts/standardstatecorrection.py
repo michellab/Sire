@@ -1,6 +1,12 @@
 description="""
-standardstatecorrection is a trajectory post-processing app that computes a the free energy 
+standardstatecorrection is a trajectory post-processing app that computes a the free energy
 cost for removing a set of distance restraints."""
+
+try:
+    import sire
+    sire.use_old_api()
+except ImportError:
+    pass
 
 from Sire.Tools import StandardState
 from Sire.Tools import readParams

@@ -27,6 +27,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MonitorID_class(){
 
     { //::SireSystem::MonitorID
@@ -42,6 +44,7 @@ void register_MonitorID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("monitors") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -93,6 +96,7 @@ void register_MonitorID_class(){
             MonitorID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

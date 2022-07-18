@@ -26,6 +26,8 @@ SireSystem::MonitorMonitor __copy__(const SireSystem::MonitorMonitor &other){ re
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_MonitorMonitor_class(){
@@ -45,7 +47,7 @@ void register_MonitorMonitor_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ith state monitored\nThrow: SireError::invalid_index\n" );
         
         }
@@ -57,6 +59,7 @@ void register_MonitorMonitor_class(){
             MonitorMonitor_exposer.def( 
                 "clearOriginal"
                 , clearOriginal_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this MonitorMonitor will clear the\noriginal monitor whenever it takes a copy" );
         
         }
@@ -68,6 +71,7 @@ void register_MonitorMonitor_class(){
             MonitorMonitor_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Completely clear statistics" );
         
         }
@@ -79,6 +83,7 @@ void register_MonitorMonitor_class(){
             MonitorMonitor_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of states monitored so far" );
         
         }
@@ -91,6 +96,7 @@ void register_MonitorMonitor_class(){
                 "monitor"
                 , monitor_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Monitor the passed system" );
         
         }
@@ -102,6 +108,7 @@ void register_MonitorMonitor_class(){
             MonitorMonitor_exposer.def( 
                 "nStates"
                 , nStates_function_value
+                , bp::release_gil_policy()
                 , "Return the number of states monitored so far" );
         
         }
@@ -129,7 +136,7 @@ void register_MonitorMonitor_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -141,6 +148,7 @@ void register_MonitorMonitor_class(){
             MonitorMonitor_exposer.def( 
                 "removeOriginal"
                 , removeOriginal_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this MonitorMonitor will remove\nthe original monitor from the system whenever it\ntakes a copy" );
         
         }
@@ -153,6 +161,7 @@ void register_MonitorMonitor_class(){
                 "setClearOriginal"
                 , setClearOriginal_function_value
                 , ( bp::arg("clear") )
+                , bp::release_gil_policy()
                 , "Set whether or not to clear the statistics of the original\nmonitor when this monitor takes the copy" );
         
         }
@@ -165,6 +174,7 @@ void register_MonitorMonitor_class(){
                 "setRemoveOriginal"
                 , setRemoveOriginal_function_value
                 , ( bp::arg("remove") )
+                , bp::release_gil_policy()
                 , "Set whether or not to remove the original monitor when\nthis monitor takes a copy (effectively thus moving\nthe monitor from the system to this MonitorMonitor)" );
         
         }
@@ -176,6 +186,7 @@ void register_MonitorMonitor_class(){
             MonitorMonitor_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of states monitored so far" );
         
         }
@@ -199,6 +210,7 @@ void register_MonitorMonitor_class(){
             MonitorMonitor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

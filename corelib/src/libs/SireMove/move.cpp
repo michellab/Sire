@@ -31,6 +31,8 @@
 #include "move.h"
 #include "ensemble.h"
 
+#include "SireMol/core.h"
+
 #include "SireUnits/units.h"
 #include "SireUnits/temperature.h"
 
@@ -60,14 +62,14 @@ static const RegisterMetaType<Move> r_move( MAGIC_ONLY, "SireMove::Move" );
 QDataStream &operator<<(QDataStream &ds, const Move &move)
 {
     writeHeader(ds, r_move, 2);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << move.nrgcomponent
         << move.coordsproperty << move.spaceproperty
         << move.map
         << static_cast<const Property&>(move);
-    
+
     return ds;
 }
 
@@ -75,11 +77,11 @@ QDataStream &operator<<(QDataStream &ds, const Move &move)
 QDataStream &operator>>(QDataStream &ds, Move &move)
 {
     VersionID v = readHeader(ds, r_move);
-    
+
     if (v == 2)
     {
         SharedDataStream sds(ds);
-    
+
         sds >> move.nrgcomponent
             >> move.coordsproperty >> move.spaceproperty
             >> move.map
@@ -88,21 +90,21 @@ QDataStream &operator>>(QDataStream &ds, Move &move)
     else if (v == 1)
     {
         SharedDataStream sds(ds);
-    
+
         sds >> move.nrgcomponent
             >> move.coordsproperty >> move.spaceproperty
             >> static_cast<Property&>(move);
-            
+
         move.map = PropertyMap();
     }
     else
         throw version_error(v, "1,2", r_move, CODELOC);
-        
+
     return ds;
 }
 
 /** Constructor */
-Move::Move(const PropertyMap &map) 
+Move::Move(const PropertyMap &map)
      : Property(), nrgcomponent(ForceFields::totalComponent())
 {
     coordsproperty = map["coordinates"];
@@ -110,7 +112,7 @@ Move::Move(const PropertyMap &map)
 }
 
 /** Copy constructor */
-Move::Move(const Move &other) 
+Move::Move(const Move &other)
      : Property(other), nrgcomponent(other.nrgcomponent),
        coordsproperty(other.coordsproperty), spaceproperty(other.spaceproperty),
        map(other.map)
@@ -127,9 +129,9 @@ Move& Move::operator=(const Move &other)
     coordsproperty = other.coordsproperty;
     spaceproperty = other.spaceproperty;
     map = other.map;
-    
+
     Property::operator=(other);
-    
+
     return *this;
 }
 
@@ -148,14 +150,14 @@ bool Move::operator!=(const Move &other) const
     return not Move::operator==(other);
 }
 
-/** Perform a single move on the system 'system' without 
+/** Perform a single move on the system 'system' without
     recording any statistics */
 void Move::move(System &system)
 {
     this->move(system, 1, false);
 }
 
-/** Perform 'n' moves on the system without recording any 
+/** Perform 'n' moves on the system without recording any
     statistics */
 void Move::move(System &system, int nmoves)
 {
@@ -169,7 +171,7 @@ void Move::setEnergyComponent(const Symbol &component)
     nrgcomponent = component;
 }
 
-/** Return the symbol that describes the Hamiltonian that this move 
+/** Return the symbol that describes the Hamiltonian that this move
     will sample */
 const Symbol& Move::energyComponent() const
 {
@@ -177,7 +179,7 @@ const Symbol& Move::energyComponent() const
 }
 
 /** Set the property used to find the simulation box for this move. This
-    property is only used when the move involves changing the 
+    property is only used when the move involves changing the
     simulation box, or when trying to find the volume using
     the 'volume' function */
 void Move::setSpaceProperty(const PropertyName &space_property)
@@ -186,8 +188,8 @@ void Move::setSpaceProperty(const PropertyName &space_property)
     map.set("space", spaceproperty);
 }
 
-/** Return the property used to find the simulation space (box) 
-    for this move. This property is only used when the move 
+/** Return the property used to find the simulation space (box)
+    for this move. This property is only used when the move
     involves changing the simulation box. */
 const PropertyName& Move::spaceProperty() const
 {
@@ -282,11 +284,11 @@ Temperature Move::temperature() const
             "samples from the %2")
                 .arg( this->what() ).arg(this->ensemble().toString()),
                     CODELOC );
-                    
+
     return this->ensemble().temperature();
 }
 
-/** Return the constant pressure that this move samples 
+/** Return the constant pressure that this move samples
 
     \throw SireError::incompatible_error
 */
@@ -298,11 +300,11 @@ Pressure Move::pressure() const
             "samples from the %2")
                 .arg( this->what() ).arg(this->ensemble().toString()),
                     CODELOC );
-                    
+
     return this->ensemble().pressure();
 }
 
-/** Return the constant fugacity that this move samples 
+/** Return the constant fugacity that this move samples
 
     \throw SireError::incompatible_error
 */
@@ -314,11 +316,11 @@ Pressure Move::fugacity() const
             "samples from the %2")
                 .arg( this->what() ).arg(this->ensemble().toString()),
                     CODELOC );
-                    
+
     return this->ensemble().fugacity();
 }
 
-/** Return the constant chemical potential that this move samples 
+/** Return the constant chemical potential that this move samples
 
     \throw SireError::incompatible_error
 */
@@ -330,7 +332,7 @@ MolarEnergy Move::chemicalPotential() const
             "samples from the %2")
                 .arg( this->what() ).arg(this->ensemble().toString()),
                     CODELOC );
-                    
+
     return this->ensemble().chemicalPotential();
 }
 
@@ -350,7 +352,7 @@ void Move::_pvt_setTemperature(const Temperature &temperature)
             .arg(this->what())
             .arg(this->ensemble().toString()), CODELOC );
 }
-                        
+
 /** Set the pressure - this should never be called! */
 void Move::_pvt_setPressure(const Pressure &pressure)
 {
@@ -361,7 +363,7 @@ void Move::_pvt_setPressure(const Pressure &pressure)
             .arg(this->what())
             .arg(this->ensemble().toString()), CODELOC );
 }
-                       
+
 /** Set the pressure - this should never be called! */
 void Move::_pvt_setFugacity(const Pressure &fugacity)
 {
@@ -373,9 +375,9 @@ void Move::_pvt_setFugacity(const Pressure &fugacity)
             .arg(this->ensemble().toString()), CODELOC );
 }
 
-/** Set the temperature that this constant temperature move samples 
+/** Set the temperature that this constant temperature move samples
     to 'temperature'
-    
+
     \throw SireError::incompatible_error
 */
 void Move::setTemperature(const Temperature &temperature)
@@ -392,9 +394,9 @@ void Move::setTemperature(const Temperature &temperature)
     this->_pvt_setTemperature(temperature);
 }
 
-/** Set the pressure that this constant pressure move samples 
+/** Set the pressure that this constant pressure move samples
     to 'pressure'
-    
+
     \throw SireError::incompatible_error
 */
 void Move::setPressure(const SireUnits::Dimension::Pressure &pressure)
@@ -411,9 +413,9 @@ void Move::setPressure(const SireUnits::Dimension::Pressure &pressure)
     this->_pvt_setPressure(pressure);
 }
 
-/** Set the chemical potential that this constant chemical potential move samples 
+/** Set the chemical potential that this constant chemical potential move samples
     to 'chemical_potential'
-    
+
     \throw SireError::incompatible_error
 */
 void Move::setChemicalPotential(const MolarEnergy &chemical_potential)
@@ -432,9 +434,9 @@ void Move::setChemicalPotential(const MolarEnergy &chemical_potential)
                                         .fugacity() );
 }
 
-/** Set the fugacity that this constant fugacity move samples 
+/** Set the fugacity that this constant fugacity move samples
     to 'fugacity'
-    
+
     \throw SireError::incompatible_error
 */
 void Move::setFugacity(const Pressure &fugacity)
@@ -463,7 +465,7 @@ QDataStream &operator<<(QDataStream &ds, const NullMove &nullmove)
 {
     writeHeader(ds, r_nullmove, 1);
     ds << static_cast<const Move&>(nullmove);
-    
+
     return ds;
 }
 
@@ -471,7 +473,7 @@ QDataStream &operator<<(QDataStream &ds, const NullMove &nullmove)
 QDataStream &operator>>(QDataStream &ds, NullMove &nullmove)
 {
     VersionID v = readHeader(ds, r_nullmove);
-    
+
     if (v == 1)
     {
         ds >> static_cast<Move&>(nullmove);

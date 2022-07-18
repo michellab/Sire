@@ -34,6 +34,8 @@ SireMove::SupraSystem __copy__(const SireMove::SupraSystem &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_SupraSystem_class(){
@@ -103,6 +105,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "anyPacked"
                 , anyPacked_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not any of the sub-systems are packed" );
         
         }
@@ -114,6 +117,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "anyPackedToDisk"
                 , anyPackedToDisk_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not any of the sub-systems are packed to disk" );
         
         }
@@ -125,6 +129,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "anyPackedToMemory"
                 , anyPackedToMemory_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not any of the sub-systems are packed to memory" );
         
         }
@@ -137,7 +142,7 @@ void register_SupraSystem_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ith sub-system in this supra-system\nThrow: SireError::invalid_index\n" );
         
         }
@@ -149,6 +154,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "clearAllStatistics"
                 , clearAllStatistics_function_value
+                , bp::release_gil_policy()
                 , "Clear all statistics collected during the moves" );
         
         }
@@ -160,6 +166,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Clear the statistics that are collected between blocks of\nsub-system moves" );
         
         }
@@ -171,6 +178,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "clearSubStatistics"
                 , clearSubStatistics_function_value
+                , bp::release_gil_policy()
                 , "Clear the statistics that are collected within blocks of\nsub-system moves" );
         
         }
@@ -182,6 +190,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "collectSupraStats"
                 , collectSupraStats_function_value
+                , bp::release_gil_policy()
                 , "This function is called after each SupraMove to collect any statistics\nabout the SupraSystem" );
         
         }
@@ -193,6 +202,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of sub-systems in this supra-system" );
         
         }
@@ -204,6 +214,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this SupraSystem contains no subsystems" );
         
         }
@@ -215,6 +226,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "isPacked"
                 , isPacked_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not all sub-systems are packed" );
         
         }
@@ -226,6 +238,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "isPackedToDisk"
                 , isPackedToDisk_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not all sub-systems are packed to disk" );
         
         }
@@ -237,6 +250,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "isPackedToMemory"
                 , isPackedToMemory_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not all sub-systems are packed to memory" );
         
         }
@@ -248,6 +262,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "mustNowRecalculateFromScratch"
                 , mustNowRecalculateFromScratch_function_value
+                , bp::release_gil_policy()
                 , "Tell all sub-systems that the next energy calculate must\nbe performed from scratch - this is useful for debugging" );
         
         }
@@ -259,6 +274,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "nSubSystems"
                 , nSubSystems_function_value
+                , bp::release_gil_policy()
                 , "Return the number of sub-systems in this supra-system" );
         
         }
@@ -270,7 +286,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the global null SupraSystem" );
         
         }
@@ -298,7 +314,7 @@ void register_SupraSystem_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -310,6 +326,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "pack"
                 , pack_function_value
+                , bp::release_gil_policy()
                 , "Pack all sub-systems" );
         
         }
@@ -322,6 +339,7 @@ void register_SupraSystem_class(){
                 "pack"
                 , pack_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Pack the ith sub-system\nThrow: SireError::invalid_index\n" );
         
         }
@@ -333,6 +351,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "packToDisk"
                 , packToDisk_function_value
+                , bp::release_gil_policy()
                 , "Pack all sub-systems to disk" );
         
         }
@@ -345,6 +364,7 @@ void register_SupraSystem_class(){
                 "packToDisk"
                 , packToDisk_function_value
                 , ( bp::arg("tempdir") )
+                , bp::release_gil_policy()
                 , "Pack all sub-systems to disk, in the directory tempdir. Note\nthat this will not move sub-systems that are already packed into\na different directory" );
         
         }
@@ -357,6 +377,7 @@ void register_SupraSystem_class(){
                 "packToDisk"
                 , packToDisk_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Pack the ith sub-system to disk\nThrow: SireError::invalid_index\n" );
         
         }
@@ -369,6 +390,7 @@ void register_SupraSystem_class(){
                 "packToDisk"
                 , packToDisk_function_value
                 , ( bp::arg("i"), bp::arg("tempdir") )
+                , bp::release_gil_policy()
                 , "Pack the ith sub-system to disk in the directory tempdir\nThrow: SireError::invalid_index\n" );
         
         }
@@ -380,6 +402,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "packToMemory"
                 , packToMemory_function_value
+                , bp::release_gil_policy()
                 , "Pack all sub-systems to memory" );
         
         }
@@ -392,6 +415,7 @@ void register_SupraSystem_class(){
                 "packToMemory"
                 , packToMemory_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Pack the ith sub-system to memory\nThrow: SireError::invalid_index\n" );
         
         }
@@ -404,6 +428,7 @@ void register_SupraSystem_class(){
                 "setNSubMoves"
                 , setNSubMoves_function_value
                 , ( bp::arg("i"), bp::arg("nmoves") )
+                , bp::release_gil_policy()
                 , "Set the number of moves to perform per block of sub-moves for\nthe ith sub-system\nThrow: SireError::invalid_index\n" );
         
         }
@@ -416,6 +441,7 @@ void register_SupraSystem_class(){
                 "setNSubMoves"
                 , setNSubMoves_function_value
                 , ( bp::arg("nmoves") )
+                , bp::release_gil_policy()
                 , "Set the number of moves to perform per block of sub-moves for\nevery sub-system in this supra-system" );
         
         }
@@ -428,6 +454,7 @@ void register_SupraSystem_class(){
                 "setRecordAllStatistics"
                 , setRecordAllStatistics_function_value
                 , ( bp::arg("i"), bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "Set whether or not to record all statistics (both within and\nbetween sub-moves) for the ith sub-system\nThrow: SireError::invalid_index\n" );
         
         }
@@ -440,6 +467,7 @@ void register_SupraSystem_class(){
                 "setRecordAllStatistics"
                 , setRecordAllStatistics_function_value
                 , ( bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "Set whether or not to record all statistics (both within and\nbetween sub-moves) for all sub-systems" );
         
         }
@@ -452,6 +480,7 @@ void register_SupraSystem_class(){
                 "setRecordStatistics"
                 , setRecordStatistics_function_value
                 , ( bp::arg("i"), bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "Set whether or not to record statistics between blocks of sub-moves\nat the ith sub-system\nThrow: SireError::invalid_index\n" );
         
         }
@@ -464,6 +493,7 @@ void register_SupraSystem_class(){
                 "setRecordStatistics"
                 , setRecordStatistics_function_value
                 , ( bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "Set whether or not to record statistics between blocks of sub-moves\nfor all sub-systems" );
         
         }
@@ -476,6 +506,7 @@ void register_SupraSystem_class(){
                 "setRecordSubStatistics"
                 , setRecordSubStatistics_function_value
                 , ( bp::arg("i"), bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "Set whether or not to record statistics within blocks of sub-moves\nfor the ith sub-system\nThrow: SireError::invalid_index\n" );
         
         }
@@ -488,6 +519,7 @@ void register_SupraSystem_class(){
                 "setRecordSubStatistics"
                 , setRecordSubStatistics_function_value
                 , ( bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "Set whether or not to record statistics within blocks of sub-moves\nfor all sub-systems" );
         
         }
@@ -524,6 +556,7 @@ void register_SupraSystem_class(){
                 "setSubMoves"
                 , setSubMoves_function_value
                 , ( bp::arg("i"), bp::arg("moves") )
+                , bp::release_gil_policy()
                 , "Set the moves that will be applied to the ith sub-system during\neach sub-move\nThrow: SireError::invalid_index\n" );
         
         }
@@ -536,6 +569,7 @@ void register_SupraSystem_class(){
                 "setSubMoves"
                 , setSubMoves_function_value
                 , ( bp::arg("moves") )
+                , bp::release_gil_policy()
                 , "Set the moves that will be applied to all sub-systems during\neach sub-move\nThrow: SireError::invalid_index\n" );
         
         }
@@ -548,6 +582,7 @@ void register_SupraSystem_class(){
                 "setSubSystem"
                 , setSubSystem_function_value
                 , ( bp::arg("i"), bp::arg("subsystem") )
+                , bp::release_gil_policy()
                 , "Set the ith sub-system equal to subsystem\nThrow: SireError::invalid_index\n" );
         
         }
@@ -560,6 +595,7 @@ void register_SupraSystem_class(){
                 "setSubSystem"
                 , setSubSystem_function_value
                 , ( bp::arg("subsystem") )
+                , bp::release_gil_policy()
                 , "Set all sub-systems equal to subsystem" );
         
         }
@@ -572,6 +608,7 @@ void register_SupraSystem_class(){
                 "setSubSystem"
                 , setSubSystem_function_value
                 , ( bp::arg("i"), bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Set the SireSystem::System used by the ith sub-system equal to system\nThrow: SireError::invalid_index\n" );
         
         }
@@ -584,6 +621,7 @@ void register_SupraSystem_class(){
                 "setSubSystem"
                 , setSubSystem_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Set the SireSystem::System used by all sub-systems equal to system" );
         
         }
@@ -596,6 +634,7 @@ void register_SupraSystem_class(){
                 "setSubSystemAndMoves"
                 , setSubSystemAndMoves_function_value
                 , ( bp::arg("i"), bp::arg("system"), bp::arg("moves") )
+                , bp::release_gil_policy()
                 , "Set the system and moves that will be applied to the ith sub-system\nto system and moves\nThrow: SireError::invalid_index\n" );
         
         }
@@ -608,6 +647,7 @@ void register_SupraSystem_class(){
                 "setSubSystemAndMoves"
                 , setSubSystemAndMoves_function_value
                 , ( bp::arg("system"), bp::arg("moves") )
+                , bp::release_gil_policy()
                 , "Set the system and moves used by all sub-systems to\nsystem and moves" );
         
         }
@@ -620,6 +660,7 @@ void register_SupraSystem_class(){
                 "setSubSystemAndMoves"
                 , setSubSystemAndMoves_function_value
                 , ( bp::arg("i"), bp::arg("simstore") )
+                , bp::release_gil_policy()
                 , "Set the system and moves used for the ith sub-system to those\ncontained in simstore\nThrow: SireError::invalid_index\n" );
         
         }
@@ -632,6 +673,7 @@ void register_SupraSystem_class(){
                 "setSubSystemAndMoves"
                 , setSubSystemAndMoves_function_value
                 , ( bp::arg("simstore") )
+                , bp::release_gil_policy()
                 , "Set the system and moves used for all sub-systems to those\ncontained in simstore" );
         
         }
@@ -644,6 +686,7 @@ void register_SupraSystem_class(){
                 "setSubSystems"
                 , setSubSystems_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Set all sub-systems equal to a copy of those in system. Note\nthat both this SupraSystem and other must have the same\nnumber of sub-systems\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -655,6 +698,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of sub-systems in this supra-system" );
         
         }
@@ -666,6 +710,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -677,6 +722,7 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "unpack"
                 , unpack_function_value
+                , bp::release_gil_policy()
                 , "Unpack all sub-systems" );
         
         }
@@ -689,6 +735,7 @@ void register_SupraSystem_class(){
                 "unpack"
                 , unpack_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Unpack the ith sub-system\nThrow: SireError::invalid_index\n" );
         
         }

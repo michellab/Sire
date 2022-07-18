@@ -25,6 +25,8 @@ SireBase::SimpleRange __copy__(const SireBase::SimpleRange &other){ return SireB
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SimpleRange_class(){
 
     { //::SireBase::SimpleRange
@@ -42,6 +44,7 @@ void register_SimpleRange_class(){
             SimpleRange_exposer.def( 
                 "atEnd"
                 , atEnd_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this range is at its end" );
         
         }
@@ -53,6 +56,7 @@ void register_SimpleRange_class(){
             SimpleRange_exposer.def( 
                 "next"
                 , next_function_value
+                , bp::release_gil_policy()
                 , "Return the next value in the range" );
         
         }
@@ -80,6 +84,7 @@ void register_SimpleRange_class(){
                 "populate"
                 , populate_function_value
                 , ( bp::arg("nvalues") )
+                , bp::release_gil_policy()
                 , "Return a copy of this range that is populate with passed number of values" );
         
         }
@@ -91,6 +96,7 @@ void register_SimpleRange_class(){
             SimpleRange_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation" );
         
         }
@@ -102,6 +108,7 @@ void register_SimpleRange_class(){
             SimpleRange_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -113,6 +120,7 @@ void register_SimpleRange_class(){
             SimpleRange_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

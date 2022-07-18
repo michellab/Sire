@@ -48,7 +48,7 @@ namespace SireMol
 
 /** This class is a view of all of the beads (for a specific "Beading")
     in a molecule
-    
+
     @author Christopher Woods
 */
 class SIREMOL_EXPORT Beads : public SireBase::ConcreteProperty<Beads,MoleculeView>
@@ -61,48 +61,50 @@ public:
     Beads();
     Beads(const MoleculeData &moldata,
           const PropertyMap &map = PropertyMap());
-          
+
     Beads(const Beads &other);
-    
+
     ~Beads();
-    
+
     Beads& operator=(const Beads &other);
-    
+
     bool operator==(const Beads &other) const;
     bool operator!=(const Beads &other) const;
-    
+
     static const char* typeName();
-    
+
     Beads* clone() const;
-    
+
     Bead operator[](BeadIdx beadidx) const;
-    
+
     Bead at(BeadIdx beadidx) const;
-    
+
     Bead bead(BeadIdx beadidx) const;
-    
+
     int count() const;
     int size() const;
-    
+
     QString toString() const;
-    
+
+    MolViewPtr toSelector() const;
+
     bool isEmpty() const;
     bool selectedAll() const;
-    
+
     AtomSelection selection() const;
-    
+
     int nBeads() const;
     int nAtoms() const;
-    
+
     void update(const MoleculeData &moldata);
 
     Mover<Beads> move() const;
     Evaluator evaluate() const;
 
     QList<AtomIdx> atomIdxs() const;
-    
+
     const Beading& beading() const;
-    
+
     bool contains(AtomIdx atomidx) const;
     bool contains(const AtomID &atomid) const;
     bool intersects(const AtomID &atomid) const;
@@ -113,7 +115,7 @@ public:
     bool hasMetadata(const PropertyName &metakey) const;
     bool hasMetadata(const PropertyName &key,
                      const PropertyName &metakey) const;
-                     
+
     QStringList propertyKeys() const;
     QStringList metadataKeys() const;
     QStringList metadataKeys(const PropertyName &key) const;
@@ -121,10 +123,10 @@ public:
 private:
     /** The beading used to divide the molecule into beads */
     BeadingPtr bdng;
-    
+
     /** The location of the beading property */
     PropertyName beading_property;
-    
+
     /** The atoms that are part of the beads */
     AtomSelection selected_atoms;
 };

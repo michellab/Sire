@@ -225,6 +225,8 @@
 
 #include "Evaluator.pypp.hpp"
 
+#include "EvaluatorM.pypp.hpp"
+
 #include "Force3D.pypp.hpp"
 
 #include "GeometryPerturbation.pypp.hpp"
@@ -472,6 +474,18 @@
 #include "SelectResult.pypp.hpp"
 
 #include "SelectResultMover.pypp.hpp"
+
+#include "SelectorM_Atom_.pypp.hpp"
+
+#include "SelectorM_Chain_.pypp.hpp"
+
+#include "SelectorM_CutGroup_.pypp.hpp"
+
+#include "SelectorM_Residue_.pypp.hpp"
+
+#include "SelectorM_Segment_.pypp.hpp"
+
+#include "SelectorMol.pypp.hpp"
 
 #include "Selector_Atom_.pypp.hpp"
 
@@ -842,6 +856,8 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_Evaluator_class();
 
+    register_EvaluatorM_class();
+
     register_GeometryPerturbations_class();
 
     register_GroupAtomIDBase_class();
@@ -1027,6 +1043,18 @@ BOOST_PYTHON_MODULE(_Mol){
     register_SelectResult_class();
 
     register_SelectResultMover_class();
+
+    register_SelectorM_Atom__class();
+
+    register_SelectorM_Chain__class();
+
+    register_SelectorM_CutGroup__class();
+
+    register_SelectorM_Residue__class();
+
+    register_SelectorM_Segment__class();
+
+    register_SelectorMol_class();
 
     register_SpecifyMol_class();
 

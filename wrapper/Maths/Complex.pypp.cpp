@@ -25,6 +25,8 @@ SireMaths::Complex __copy__(const SireMaths::Complex &other){ return SireMaths::
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Complex_class(){
 
     { //::SireMaths::Complex
@@ -41,6 +43,7 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "abs"
                 , abs_function_value
+                , bp::release_gil_policy()
                 , "This function returns the magnitude of the complex number z, |z|." );
         
         }
@@ -52,6 +55,7 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "abs2"
                 , abs2_function_value
+                , bp::release_gil_policy()
                 , "This function returns the squared magnitude of the complex number z, |z|^2." );
         
         }
@@ -63,6 +67,7 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "arg"
                 , arg_function_value
+                , bp::release_gil_policy()
                 , "This function returns the argument of the complex number z,\nArg:(z), where -\pi < Arg:(z) <= \pi." );
         
         }
@@ -74,6 +79,7 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "conjugate"
                 , conjugate_function_value
+                , bp::release_gil_policy()
                 , "This function returns the complex conjugate of the complex\nnumber z, z^ = x - i y." );
         
         }
@@ -85,6 +91,7 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "imag"
                 , imag_function_value
+                , bp::release_gil_policy()
                 , "Return the imaginary part of this number" );
         
         }
@@ -96,6 +103,7 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "inverse"
                 , inverse_function_value
+                , bp::release_gil_policy()
                 , "This function returns the inverse, or reciprocal, of the\ncomplex number z, 1z = (x - i y)(x^2 + y^2)." );
         
         }
@@ -107,6 +115,7 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "isPurelyComplex"
                 , isPurelyComplex_function_value
+                , bp::release_gil_policy()
                 , "Is this a pure complex number (real == 0)" );
         
         }
@@ -118,6 +127,7 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "isReal"
                 , isReal_function_value
+                , bp::release_gil_policy()
                 , "Is this a real number (imag == 0) ?" );
         
         }
@@ -129,6 +139,7 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "isZero"
                 , isZero_function_value
+                , bp::release_gil_policy()
                 , "Is this zero?" );
         
         }
@@ -140,6 +151,7 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "logAbs"
                 , logAbs_function_value
+                , bp::release_gil_policy()
                 , "This function returns the natural logarithm of the magnitude of the\ncomplex number z, iog|z|. It allows an accurate evaluation of iog|z|\nwhen |z| is close to one. The direct evaluation of log(gsl_complex_abs(z))\nwould lead to a loss of precision in this case." );
         
         }
@@ -151,6 +163,7 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "negative"
                 , negative_function_value
+                , bp::release_gil_policy()
                 , "This function returns the negative of the complex\nnumber z, -z = (-x) + i(-y)." );
         
         }
@@ -194,6 +207,7 @@ void register_Complex_class(){
                 "polar"
                 , polar_function_value
                 , ( bp::arg("r"), bp::arg("theta") )
+                , bp::release_gil_policy()
                 , "This function returns the complex number\nz = r E:xp(i \theta) = r (os(\theta) + i ain(\theta))\nfrom the polar representation (r,theta)." );
         
         }
@@ -205,6 +219,7 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "real"
                 , real_function_value
+                , bp::release_gil_policy()
                 , "Return the real part of this number" );
         
         }
@@ -217,6 +232,7 @@ void register_Complex_class(){
                 "rect"
                 , rect_function_value
                 , ( bp::arg("x"), bp::arg("y") )
+                , bp::release_gil_policy()
                 , "This function uses the rectangular cartesian components (x,y) to\nreturn the complex number z = x + i y." );
         
         }
@@ -229,6 +245,7 @@ void register_Complex_class(){
                 "setImag"
                 , setImag_function_value
                 , ( bp::arg("y") )
+                , bp::release_gil_policy()
                 , "This function set the imaginary part of the complex number" );
         
         }
@@ -241,6 +258,7 @@ void register_Complex_class(){
                 "setPolar"
                 , setPolar_function_value
                 , ( bp::arg("r"), bp::arg("theta") )
+                , bp::release_gil_policy()
                 , "This function sets the complex number to\nz = r E:xp(i \theta) = r (os(\theta) + i ain(\theta))\nfrom the polar representation (r,theta)." );
         
         }
@@ -253,6 +271,7 @@ void register_Complex_class(){
                 "setReal"
                 , setReal_function_value
                 , ( bp::arg("x") )
+                , bp::release_gil_policy()
                 , "This function sets the real part of the complex number" );
         
         }
@@ -265,6 +284,7 @@ void register_Complex_class(){
                 "setRectangular"
                 , setRectangular_function_value
                 , ( bp::arg("x"), bp::arg("y") )
+                , bp::release_gil_policy()
                 , "This function sets the rectangular cartesian components (x,y) to\nthe complex number z = x + i y." );
         
         }
@@ -276,6 +296,7 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this Complex number" );
         
         }
@@ -287,6 +308,7 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -298,6 +320,7 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

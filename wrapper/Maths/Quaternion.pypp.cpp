@@ -33,6 +33,8 @@ SireMaths::Quaternion __copy__(const SireMaths::Quaternion &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Quaternion_class(){
 
     { //::SireMaths::Quaternion
@@ -51,6 +53,7 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "conjugate"
                 , conjugate_function_value
+                , bp::release_gil_policy()
                 , "Return the conjugate of the quaternion" );
         
         }
@@ -63,6 +66,7 @@ void register_Quaternion_class(){
                 "dot"
                 , dot_function_value
                 , ( bp::arg("q") )
+                , bp::release_gil_policy()
                 , "Return the dot product of this with another quaternion" );
         
         }
@@ -75,6 +79,7 @@ void register_Quaternion_class(){
                 "fromMatrix"
                 , fromMatrix_function_value
                 , ( bp::arg("m") )
+                , bp::release_gil_policy()
                 , "Get from a matrix" );
         
         }
@@ -87,6 +92,7 @@ void register_Quaternion_class(){
                 "fromString"
                 , fromString_function_value
                 , ( bp::arg("str") )
+                , bp::release_gil_policy()
                 , "Construct a Vector from the QString representation returned by toString()" );
         
         }
@@ -98,6 +104,7 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "identity"
                 , identity_function_value
+                , bp::release_gil_policy()
                 , "Return a quaternion that represents the identity matrix" );
         
         }
@@ -109,6 +116,7 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "inverse"
                 , inverse_function_value
+                , bp::release_gil_policy()
                 , "Return the inverse of the quaternion\n- since the length=1 this is the same as the conjugate" );
         
         }
@@ -120,6 +128,7 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "isIdentity"
                 , isIdentity_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -147,6 +156,7 @@ void register_Quaternion_class(){
                 "pow"
                 , pow_function_value
                 , ( bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Return this quaternion raised to the power n" );
         
         }
@@ -158,6 +168,7 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "renormalise"
                 , renormalise_function_value
+                , bp::release_gil_policy()
                 , "Renormalise the quaternion" );
         
         }
@@ -170,6 +181,7 @@ void register_Quaternion_class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("p") )
+                , bp::release_gil_policy()
                 , "Use this quaternion to rotate p" );
         
         }
@@ -182,6 +194,7 @@ void register_Quaternion_class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("points") )
+                , bp::release_gil_policy()
                 , "Use the quaternion to rotate all of the points in p" );
         
         }
@@ -194,6 +207,7 @@ void register_Quaternion_class(){
                 "slerp"
                 , slerp_function_value
                 , ( bp::arg("q"), bp::arg("lambda") )
+                , bp::release_gil_policy()
                 , "Return the spherical linear interpolation (slerp) of this quaternion\nwith another for 0<=lambda<=1, with this quaternion returned\nat lambda=0 and the other returned at lambda=1" );
         
         }
@@ -205,6 +219,7 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "toMatrix"
                 , toMatrix_function_value
+                , bp::release_gil_policy()
                 , "Convert into a matrix" );
         
         }
@@ -216,6 +231,7 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this Quaternion" );
         
         }
@@ -227,6 +243,7 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -238,6 +255,7 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "w"
                 , w_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -249,6 +267,7 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -260,6 +279,7 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "x"
                 , x_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -271,6 +291,7 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "y"
                 , y_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -282,6 +303,7 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "z"
                 , z_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

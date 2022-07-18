@@ -48,6 +48,8 @@ SireMol::ResStructureEditor __copy__(const SireMol::ResStructureEditor &other){ 
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ResStructureEditor_class(){
 
     { //::SireMol::ResStructureEditor
@@ -66,6 +68,7 @@ void register_ResStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atomname") )
+                , bp::release_gil_policy()
                 , "Add a new atom called name to this residue - this returns\nan editor that can be used to further edit this atom" );
         
         }
@@ -78,6 +81,7 @@ void register_ResStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atomnum") )
+                , bp::release_gil_policy()
                 , "Add a new atom with the number number to this residue - this\nreturns an editor that can be used to further edit this atom" );
         
         }
@@ -90,6 +94,7 @@ void register_ResStructureEditor_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return an editor for the ith atom in this residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -102,6 +107,7 @@ void register_ResStructureEditor_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the atom with ID == atomid in\nthis residue\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -113,6 +119,7 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "chain"
                 , chain_function_value
+                , bp::release_gil_policy()
                 , "Return an editor for the chain that contains this residue" );
         
         }
@@ -124,6 +131,7 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "Commit the changes made by this editor and return the updated residue" );
         
         }
@@ -135,6 +143,7 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "index"
                 , index_function_value
+                , bp::release_gil_policy()
                 , "Return the index of this residue in the molecule" );
         
         }
@@ -146,6 +155,7 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "molecule"
                 , molecule_function_value
+                , bp::release_gil_policy()
                 , "Return an editor for the molecule that contains this residue" );
         
         }
@@ -157,6 +167,7 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in this residue - this may be zero" );
         
         }
@@ -168,7 +179,7 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of this residue" );
         
         }
@@ -180,6 +191,7 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "number"
                 , number_function_value
+                , bp::release_gil_policy()
                 , "Return the number of this residue" );
         
         }
@@ -308,6 +320,7 @@ void register_ResStructureEditor_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return an editor for the ith atom in this residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -320,6 +333,7 @@ void register_ResStructureEditor_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the atom with ID == atomid in\nthis residue\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -331,6 +345,7 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "Is this editor editing the entire molecule?" );
         
         }
@@ -342,6 +357,7 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this editor" );
         
         }
@@ -392,6 +408,7 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -403,6 +420,7 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

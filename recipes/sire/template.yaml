@@ -7,91 +7,51 @@ package:
 source:
   git_url: https://github.com/michellab/Sire.git
   git_tag: SIRE_BRANCH
-  patches: conda_build.patch
 
 build:
   number: SIRE_BUILD
-  skip: true  # [win]
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - cmake
-    - git
-    - make
-    - sysroot_linux-64 2.17 # [linux]
+    SIRE_BUILD_REQUIREMENTS
   host:
-    - boost
-    - gsl
-    - libcblas
-    - libcpuid
-    - libnetcdf
-    - openmm
     - python
-    - qt
-    - tbb-devel
-    - tbb
-# Add BioSimSpace run dependencies so Sire dependencies
-# are resolved in a compatible way.
-    - configargparse
-    - fkcombu
-    - lomap2
-    - mdtraj
-    - mdanalysis
-    - nglview
-    - openff-toolkit-base
-    - parmed
-    - py3dmol
-    - pydot
-    - pygtail
-    - pypdb
-    - pytest
-    - pyyaml
-    - rdkit
-    - watchdog
+    SIRE_RUN_REQUIREMENTS
+    SIRE_BSS_REQUIREMENTS
   run:
-    - boost
-    - gsl
-    - libcblas
-    - libcpuid
-    - libnetcdf
-    - openmm
-    - pymbar
-    - pyqt
-    - python
-    - qt
+    SIRE_RUN_REQUIREMENTS
 
 test:
   script_env:
     - SIRE_DONT_PHONEHOME
-    - SIRE_SILENT_PHONEHOME
   requires:
-    - git
-    - nose
     - pytest
   imports:
-    - Sire
-    - Sire.Analysis
-    - Sire.Base
-    - Sire.CAS
-    - Sire.Cluster
-    - Sire.Error
-    - Sire.FF
-    - Sire.ID
-    - Sire.IO
-    - Sire.Maths
-    - Sire.MM
-    - Sire.Mol
-    - Sire.Move
-    - Sire.Qt
-    - Sire.Squire
-    - Sire.Stream
-    - Sire.System
-    - Sire.Units
-    - Sire.Vol
+    - sire
+    - sire.analysis
+    - sire.base
+    - sire.cas
+    - sire.cluster
+    - sire.error
+    - sire.ff
+    - sire.id
+    - sire.io
+    - sire.maths
+    - sire.mm
+    - sire.mol
+    - sire.move
+    - sire.qt
+    - sire.squire
+    - sire.stream
+    - sire.system
+    - sire.units
+    - sire.vol
+  source_files:
+    - tests
   commands:
-    - sire_test
+    - pytest tests
 
 about:
   home: https://github.com/michellab/Sire

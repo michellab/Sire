@@ -39,6 +39,8 @@ SireCAS::LessThan __copy__(const SireCAS::LessThan &other){ return SireCAS::Less
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_LessThan_class(){
 
     { //::SireCAS::LessThan
@@ -55,6 +57,7 @@ void register_LessThan_class(){
             LessThan_exposer.def( 
                 "alwaysFalse"
                 , alwaysFalse_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not we can be absolutely sure that this\ncondition will always be false. Note that this doesnt try\ntoo hard, so some things that are always false may not\nbe reported here as being always false, e.g. x + 1 < x" );
         
         }
@@ -66,6 +69,7 @@ void register_LessThan_class(){
             LessThan_exposer.def( 
                 "alwaysTrue"
                 , alwaysTrue_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not we can be absolutely sure that this\ncondition will always be true. Note that this doesnt try\ntoo hard, so some things that are always true may not\nbe reported here as being always true, e.g. x < x + 1" );
         
         }
@@ -92,6 +96,7 @@ void register_LessThan_class(){
             LessThan_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -103,6 +108,7 @@ void register_LessThan_class(){
             LessThan_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

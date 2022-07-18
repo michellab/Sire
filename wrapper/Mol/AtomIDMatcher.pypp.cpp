@@ -37,6 +37,8 @@ namespace bp = boost::python;
 
 #include "mover.h"
 
+#include "mover.hpp"
+
 #include "selector.hpp"
 
 #include "tostring.h"
@@ -48,6 +50,8 @@ SireMol::AtomIDMatcher __copy__(const SireMol::AtomIDMatcher &other){ return Sir
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 void register_AtomIDMatcher_class(){
 
@@ -74,6 +78,7 @@ void register_AtomIDMatcher_class(){
             AtomIDMatcher_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this matcher is null (cannot be used for matching)" );
         
         }
@@ -100,6 +105,7 @@ void register_AtomIDMatcher_class(){
             AtomIDMatcher_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -111,6 +117,7 @@ void register_AtomIDMatcher_class(){
             AtomIDMatcher_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -122,6 +129,7 @@ void register_AtomIDMatcher_class(){
             AtomIDMatcher_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

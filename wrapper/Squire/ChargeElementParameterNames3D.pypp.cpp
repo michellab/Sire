@@ -39,6 +39,8 @@ Squire::ChargeElementParameterNames3D __copy__(const Squire::ChargeElementParame
 
 const char* pvt_get_name(const Squire::ChargeElementParameterNames3D&){ return "Squire::ChargeElementParameterNames3D";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ChargeElementParameterNames3D_class(){
 
     { //::Squire::ChargeElementParameterNames3D

@@ -1,16 +1,31 @@
-#########################
-#
-# This module contains a collection
-# of units.
-#
-# The units are copied from
-# SireUnits/units.h
-#
-########################
+"""
+.. currentmodule:: sire.legacy.Units
 
-from  Sire.Units._Units import *
+Classes
+=======
 
-import Sire.Base
+.. autosummary::
+    :toctree: generated/
 
-wrap = Sire.Base._add_wrap_function(wrap)
+    Celsius
+    Fahrenheit
+    GeneralUnit
+    Unit
 
+Functions
+=========
+
+.. autosummary::
+    :toctree: generated/
+
+    acute
+    convert
+    convertFrom
+    convertTo
+
+"""
+from ._Units import *
+
+from .. import Base as _Base
+
+wrap = _Base._add_wrap_function(wrap)

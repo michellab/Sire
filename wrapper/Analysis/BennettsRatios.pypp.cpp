@@ -33,6 +33,8 @@ SireAnalysis::BennettsRatios __copy__(const SireAnalysis::BennettsRatios &other)
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_BennettsRatios_class(){
 
     { //::SireAnalysis::BennettsRatios
@@ -49,6 +51,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "backwardsData"
                 , backwardsData_function_value
+                , bp::release_gil_policy()
                 , "Return the raw data for the backwards ratios" );
         
         }
@@ -60,6 +63,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "backwardsRatios"
                 , backwardsRatios_function_value
+                , bp::release_gil_policy()
                 , "Return the raw data for the backwards ratios" );
         
         }
@@ -71,6 +75,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "constants"
                 , constants_function_value
+                , bp::release_gil_policy()
                 , "Return the constants for each set of Bennetts acceptance ratios. This\nreturns the lambda value of the from window, together with the constant\nused for the numerator from this window to the next window (which must\nbe the same as the constant used for the denominator for the next window\nback to this window)" );
         
         }
@@ -82,6 +87,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "denominators"
                 , denominators_function_value
+                , bp::release_gil_policy()
                 , "Return the denominators for the Bennetts acceptance ratio. This returns the\nlambda value of the previous window, together with the Bennetts ratio for the\nenergy difference from this window to the previous window" );
         
         }
@@ -93,6 +99,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "forwardsData"
                 , forwardsData_function_value
+                , bp::release_gil_policy()
                 , "Return the raw data for the fowards ratios" );
         
         }
@@ -104,6 +111,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "forwardsRatios"
                 , forwardsRatios_function_value
+                , bp::release_gil_policy()
                 , "Return the raw data for the fowards ratios" );
         
         }
@@ -115,6 +123,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "integrate"
                 , integrate_function_value
+                , bp::release_gil_policy()
                 , "Integrate (sum) the deltas across the windows to return the PMF" );
         
         }
@@ -126,6 +135,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is empty" );
         
         }
@@ -137,6 +147,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "lambdaValues"
                 , lambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return the lambda values for all of the windows" );
         
         }
@@ -149,6 +160,7 @@ void register_BennettsRatios_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("deltas") )
+                , bp::release_gil_policy()
                 , "Merge together all of the passed BennettsRatios into a single object" );
         
         }
@@ -160,6 +172,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "nLambdaValues"
                 , nLambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return the number of lambda values (windows)" );
         
         }
@@ -171,6 +184,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "nSamples"
                 , nSamples_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of samples in the deltas" );
         
         }
@@ -182,6 +196,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "nWindows"
                 , nWindows_function_value
+                , bp::release_gil_policy()
                 , "Return the number of windows" );
         
         }
@@ -193,6 +208,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "numerators"
                 , numerators_function_value
+                , bp::release_gil_policy()
                 , "Return the numerators for the Bennetts acceptance ratio. This returns the\nlambda value of the from window, together with the Bennetts ratio for the\nenergy difference from this window to the next window" );
         
         }
@@ -220,6 +236,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "sum"
                 , sum_function_value
+                , bp::release_gil_policy()
                 , "Integrate (sum) the deltas across the windows to return the PMF" );
         
         }
@@ -231,6 +248,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "temperature"
                 , temperature_function_value
+                , bp::release_gil_policy()
                 , "Return the temperature at which the Bennetts deltas were all collected" );
         
         }
@@ -242,6 +260,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -253,6 +272,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -264,6 +284,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "values"
                 , values_function_value
+                , bp::release_gil_policy()
                 , "Return the values between windows. This returns the value of lambda of the from\nwindow, and the difference in free energy between this and the next window" );
         
         }
@@ -275,6 +296,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -286,6 +308,7 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "windows"
                 , windows_function_value
+                , bp::release_gil_policy()
                 , "Return the values of all of the windows" );
         
         }

@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SystemMonitor_class(){
 
     { //::SireSystem::SystemMonitor
@@ -37,6 +39,7 @@ void register_SystemMonitor_class(){
             SystemMonitor_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -49,6 +52,7 @@ void register_SystemMonitor_class(){
                 "monitor"
                 , monitor_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -72,6 +76,7 @@ void register_SystemMonitor_class(){
             SystemMonitor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

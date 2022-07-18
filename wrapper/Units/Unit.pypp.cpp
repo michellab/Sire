@@ -17,6 +17,8 @@ namespace bp = boost::python;
 
 const char* pvt_get_name(const SireUnits::Dimension::Unit&){ return "SireUnits::Dimension::Unit";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Unit_class(){
 
     { //::SireUnits::Dimension::Unit
@@ -32,6 +34,7 @@ void register_Unit_class(){
                 "convertFromInternal"
                 , convertFromInternal_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -44,6 +47,7 @@ void register_Unit_class(){
                 "convertToInternal"
                 , convertToInternal_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -55,6 +59,7 @@ void register_Unit_class(){
             Unit_exposer.def( 
                 "scaleFactor"
                 , scaleFactor_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -66,6 +71,7 @@ void register_Unit_class(){
             Unit_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

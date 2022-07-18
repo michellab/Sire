@@ -40,6 +40,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Restraint3D_class(){
 
     { //::SireMM::Restraint3D
@@ -79,6 +81,7 @@ void register_Restraint3D_class(){
                 "setSpace"
                 , setSpace_function_value
                 , ( bp::arg("space") )
+                , bp::release_gil_policy()
                 , "Set the 3D space in which this restraint operates" );
         
         }
@@ -90,7 +93,7 @@ void register_Restraint3D_class(){
             Restraint3D_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the 3D space in which this restraint operates" );
         
         }
@@ -102,6 +105,7 @@ void register_Restraint3D_class(){
             Restraint3D_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -114,6 +118,7 @@ void register_Restraint3D_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("forcetable") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -126,6 +131,7 @@ void register_Restraint3D_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }

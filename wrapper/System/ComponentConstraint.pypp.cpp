@@ -40,6 +40,8 @@ SireSystem::ComponentConstraint __copy__(const SireSystem::ComponentConstraint &
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ComponentConstraint_class(){
 
     { //::SireSystem::ComponentConstraint
@@ -56,7 +58,7 @@ void register_ComponentConstraint_class(){
             ComponentConstraint_exposer.def( 
                 "component"
                 , component_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the component being constrained" );
         
         }
@@ -95,6 +97,7 @@ void register_ComponentConstraint_class(){
             ComponentConstraint_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of the constraint" );
         
         }
@@ -106,6 +109,7 @@ void register_ComponentConstraint_class(){
             ComponentConstraint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

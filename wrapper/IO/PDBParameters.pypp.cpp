@@ -87,6 +87,8 @@ SireIO::PDBParameters __copy__(const SireIO::PDBParameters &other){ return SireI
 
 const char* pvt_get_name(const SireIO::PDBParameters&){ return "SireIO::PDBParameters";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PDBParameters_class(){
 
     { //::SireIO::PDBParameters

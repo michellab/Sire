@@ -38,6 +38,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Point_class(){
 
     { //::SireFF::Point
@@ -53,6 +55,7 @@ void register_Point_class(){
                 "addForce"
                 , addForce_function_value
                 , ( bp::arg("molforces"), bp::arg("force") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -65,6 +68,7 @@ void register_Point_class(){
                 "addForce"
                 , addForce_function_value
                 , ( bp::arg("forces"), bp::arg("force") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -77,6 +81,7 @@ void register_Point_class(){
                 "areIntraMoleculePoints"
                 , areIntraMoleculePoints_function_value
                 , ( bp::arg("point0"), bp::arg("point1") )
+                , bp::release_gil_policy()
                 , "Return whether or not the points point0 and point1 are\nboth within the same molecule (so together are intra-molecule points)" );
         
         }
@@ -89,6 +94,7 @@ void register_Point_class(){
                 "areIntraMoleculePoints"
                 , areIntraMoleculePoints_function_value
                 , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2") )
+                , bp::release_gil_policy()
                 , "Return whether or not the points point0, point1 and point2 are\nwithin the same molecule (so together are intra-molecule points)" );
         
         }
@@ -101,6 +107,7 @@ void register_Point_class(){
                 "areIntraMoleculePoints"
                 , areIntraMoleculePoints_function_value
                 , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3") )
+                , bp::release_gil_policy()
                 , "Return whether or not the points point0, point1, point2 and point3 are\nwithin the same molecule (so together are intra-molecule points)" );
         
         }
@@ -113,6 +120,7 @@ void register_Point_class(){
                 "areIntraMoleculePoints"
                 , areIntraMoleculePoints_function_value
                 , ( bp::arg("points") )
+                , bp::release_gil_policy()
                 , "Return whether or not the points in points are all\nwithin the same molecule (so together are intra-molecule points)" );
         
         }
@@ -125,6 +133,7 @@ void register_Point_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -137,6 +146,7 @@ void register_Point_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molid") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -148,6 +158,7 @@ void register_Point_class(){
             Point_exposer.def( 
                 "isExtraMoleculePoint"
                 , isExtraMoleculePoint_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -159,6 +170,7 @@ void register_Point_class(){
             Point_exposer.def( 
                 "isInterMoleculePoint"
                 , isInterMoleculePoint_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -170,6 +182,7 @@ void register_Point_class(){
             Point_exposer.def( 
                 "isIntraMoleculePoint"
                 , isIntraMoleculePoint_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -181,6 +194,7 @@ void register_Point_class(){
             Point_exposer.def( 
                 "molecules"
                 , molecules_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -192,6 +206,7 @@ void register_Point_class(){
             Point_exposer.def( 
                 "nMolecules"
                 , nMolecules_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -240,6 +255,7 @@ void register_Point_class(){
                 "setSpace"
                 , setSpace_function_value
                 , ( bp::arg("space") )
+                , bp::release_gil_policy()
                 , "Set the 3D space in which this point is calculated\n(although note that this 3D point, like the molecules,\nexists in the infinite cartesian space)" );
         
         }
@@ -251,7 +267,7 @@ void register_Point_class(){
             Point_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the 3D space in which this point is calculated\n(although note that this 3D point, like the molecules,\nexists in the infinite cartesian space)" );
         
         }
@@ -263,6 +279,7 @@ void register_Point_class(){
             Point_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -275,6 +292,7 @@ void register_Point_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -287,6 +305,7 @@ void register_Point_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -299,6 +318,7 @@ void register_Point_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -311,6 +331,7 @@ void register_Point_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroups") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -323,6 +344,7 @@ void register_Point_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("forcetable") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -335,6 +357,7 @@ void register_Point_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -347,6 +370,7 @@ void register_Point_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -359,6 +383,7 @@ void register_Point_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("molgroups") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -371,6 +396,7 @@ void register_Point_class(){
                 "wouldUpdate"
                 , wouldUpdate_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -383,6 +409,7 @@ void register_Point_class(){
                 "wouldUpdate"
                 , wouldUpdate_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -395,6 +422,7 @@ void register_Point_class(){
                 "wouldUpdate"
                 , wouldUpdate_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -407,6 +435,7 @@ void register_Point_class(){
                 "wouldUpdate"
                 , wouldUpdate_function_value
                 , ( bp::arg("molgroups") )
+                , bp::release_gil_policy()
                 , "" );
         
         }

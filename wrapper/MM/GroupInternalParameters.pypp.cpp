@@ -37,6 +37,8 @@ SireMM::GroupInternalParameters __copy__(const SireMM::GroupInternalParameters &
 
 const char* pvt_get_name(const SireMM::GroupInternalParameters&){ return "SireMM::GroupInternalParameters";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_GroupInternalParameters_class(){
 
     { //::SireMM::GroupInternalParameters
@@ -148,6 +150,7 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "cgIdx0"
                 , cgIdx0_function_value
+                , bp::release_gil_policy()
                 , "Return the index of the first group" );
         
         }
@@ -159,6 +162,7 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "cgIdx1"
                 , cgIdx1_function_value
+                , bp::release_gil_policy()
                 , "Return the index of the first group" );
         
         }
@@ -170,6 +174,7 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "cgIdx2"
                 , cgIdx2_function_value
+                , bp::release_gil_policy()
                 , "Return the index of the first group" );
         
         }
@@ -181,6 +186,7 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "cgIdx3"
                 , cgIdx3_function_value
+                , bp::release_gil_policy()
                 , "Return the index of the first group" );
         
         }
@@ -216,6 +222,7 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "hasCrossTerms"
                 , hasCrossTerms_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this has any cross terms\n(stretch-stretch, stretch-bend, bend-bend, stretch-bend-torsion)" );
         
         }
@@ -227,6 +234,7 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "hasNonPhysicalParameters"
                 , hasNonPhysicalParameters_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this has any non-physical parameters\n(Urey-Bradley or improper terms)" );
         
         }
@@ -238,6 +246,7 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "hasPhysicalParameters"
                 , hasPhysicalParameters_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this has any physical parameters\n(bond, angle or dihedral)" );
         
         }
@@ -285,6 +294,7 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "isDoubleCutGroup"
                 , isDoubleCutGroup_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this group contains parameters from only\ntwo CutGroups" );
         
         }
@@ -297,6 +307,7 @@ void register_GroupInternalParameters_class(){
                 "isDoubleCutGroup"
                 , isDoubleCutGroup_function_value
                 , ( bp::arg("cgidx0"), bp::arg("cgidx1") )
+                , bp::release_gil_policy()
                 , "Return whether or not this group contains parameters from\nonly two CutGroups, with indicies cgidx0 and cgidx1" );
         
         }
@@ -308,6 +319,7 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether this group is empty (contains no parameters)" );
         
         }
@@ -319,6 +331,7 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "isQuadrupleCutGroup"
                 , isQuadrupleCutGroup_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this group contains parameters from\nfour CutGroups" );
         
         }
@@ -331,6 +344,7 @@ void register_GroupInternalParameters_class(){
                 "isQuadrupleCutGroup"
                 , isQuadrupleCutGroup_function_value
                 , ( bp::arg("cgidx0"), bp::arg("cgidx1"), bp::arg("cgidx2"), bp::arg("cgidx3") )
+                , bp::release_gil_policy()
                 , "Return whether or not this group contains parameters from\nfour CutGroups, with indicies cgidx0, cgidx1, cgidx2 and cgidx3" );
         
         }
@@ -342,6 +356,7 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "isSingleCutGroup"
                 , isSingleCutGroup_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this group contains parameters from only\na single CutGroup" );
         
         }
@@ -354,6 +369,7 @@ void register_GroupInternalParameters_class(){
                 "isSingleCutGroup"
                 , isSingleCutGroup_function_value
                 , ( bp::arg("cgidx0") )
+                , bp::release_gil_policy()
                 , "Return whether or not this group contains parameters from\nonly a single CutGroup, with index cgidx0" );
         
         }
@@ -365,6 +381,7 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "isTripleCutGroup"
                 , isTripleCutGroup_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this group contains parameters from only\nthree CutGroups" );
         
         }
@@ -377,6 +394,7 @@ void register_GroupInternalParameters_class(){
                 "isTripleCutGroup"
                 , isTripleCutGroup_function_value
                 , ( bp::arg("cgidx0"), bp::arg("cgidx1"), bp::arg("cgidx2") )
+                , bp::release_gil_policy()
                 , "Return whether or not this group contains parameters from\nthree CutGroups, with indicies cgidx0, cgidx1 and cgidx2" );
         
         }
@@ -404,6 +422,7 @@ void register_GroupInternalParameters_class(){
                 "refersTo"
                 , refersTo_function_value
                 , ( bp::arg("cgidx") )
+                , bp::release_gil_policy()
                 , "Return whether or not this group contains parameters\nthat involve atoms in the CutGroup at index cgidx" );
         
         }
@@ -416,6 +435,7 @@ void register_GroupInternalParameters_class(){
                 "refersTo"
                 , refersTo_function_value
                 , ( bp::arg("cgidxs") )
+                , bp::release_gil_policy()
                 , "Return whether or not this group contains parameters\nthat involve atoms in any of the CutGroups whose indicies are\nin cgidxs" );
         
         }

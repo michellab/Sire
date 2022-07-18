@@ -31,6 +31,8 @@ namespace bp = boost::python;
 
 #include "moleculeview.h"
 
+#include "mover.hpp"
+
 #include "tostring.h"
 
 #include "atommatcher.h"
@@ -40,6 +42,8 @@ SireMol::AtomResultMatcher __copy__(const SireMol::AtomResultMatcher &other){ re
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 void register_AtomResultMatcher_class(){
 
@@ -57,6 +61,7 @@ void register_AtomResultMatcher_class(){
             AtomResultMatcher_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -83,6 +88,7 @@ void register_AtomResultMatcher_class(){
             AtomResultMatcher_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -94,6 +100,7 @@ void register_AtomResultMatcher_class(){
             AtomResultMatcher_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -105,6 +112,7 @@ void register_AtomResultMatcher_class(){
             AtomResultMatcher_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

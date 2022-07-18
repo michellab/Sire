@@ -27,6 +27,8 @@ SireCAS::Max __copy__(const SireCAS::Max &other){ return SireCAS::Max(other); }
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Max_class(){
 
     { //::SireCAS::Max
@@ -44,6 +46,7 @@ void register_Max_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this function" );
         
         }
@@ -56,6 +59,7 @@ void register_Max_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Complex evaluation" );
         
         }
@@ -68,6 +72,7 @@ void register_Max_class(){
             Max_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -79,6 +84,7 @@ void register_Max_class(){
             Max_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

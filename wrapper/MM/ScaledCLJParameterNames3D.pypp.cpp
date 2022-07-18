@@ -45,6 +45,8 @@ SireMM::ScaledCLJParameterNames3D __copy__(const SireMM::ScaledCLJParameterNames
 
 const char* pvt_get_name(const SireMM::ScaledCLJParameterNames3D&){ return "SireMM::ScaledCLJParameterNames3D";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ScaledCLJParameterNames3D_class(){
 
     { //::SireMM::ScaledCLJParameterNames3D

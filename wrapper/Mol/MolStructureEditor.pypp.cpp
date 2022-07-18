@@ -46,6 +46,8 @@ SireMol::MolStructureEditor __copy__(const SireMol::MolStructureEditor &other){ 
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MolStructureEditor_class(){
 
     { //::SireMol::MolStructureEditor
@@ -64,6 +66,7 @@ void register_MolStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Add an atom called name to this molecule and return an\neditor for this atom" );
         
         }
@@ -76,6 +79,7 @@ void register_MolStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Add an atom called name to this molecule and return an\neditor for this atom" );
         
         }
@@ -88,6 +92,7 @@ void register_MolStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("residue") )
+                , bp::release_gil_policy()
                 , "Add a residue called name to this molecule and return an\neditor for this residue" );
         
         }
@@ -100,6 +105,7 @@ void register_MolStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("residue") )
+                , bp::release_gil_policy()
                 , "Add a residue with number number to this molecule and\nreturn an editor for this residue" );
         
         }
@@ -112,6 +118,7 @@ void register_MolStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("cutgroup") )
+                , bp::release_gil_policy()
                 , "Add a CutGroup called name to this molecule and return an\neditor for this CutGroup" );
         
         }
@@ -124,6 +131,7 @@ void register_MolStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("chain") )
+                , bp::release_gil_policy()
                 , "Add a chain called name to this molecule and return an\neditor for this chain" );
         
         }
@@ -136,6 +144,7 @@ void register_MolStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("segment") )
+                , bp::release_gil_policy()
                 , "Add a segment called name to this molecule and return an\neditor for this segment" );
         
         }
@@ -148,6 +157,7 @@ void register_MolStructureEditor_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the atom at ID atomid\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -160,6 +170,7 @@ void register_MolStructureEditor_class(){
                 "chain"
                 , chain_function_value
                 , ( bp::arg("chainid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the chain at ID chainid\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\nThrow: SireError::invalid_index\n" );
         
         }
@@ -171,6 +182,7 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "Commit the changes and return a Molecule copy" );
         
         }
@@ -183,6 +195,7 @@ void register_MolStructureEditor_class(){
                 "cutGroup"
                 , cutGroup_function_value
                 , ( bp::arg("cgid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the CutGroup at ID cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
@@ -194,6 +207,7 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in this molecule (may be zero)" );
         
         }
@@ -205,6 +219,7 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "nChains"
                 , nChains_function_value
+                , bp::release_gil_policy()
                 , "Return the number of chains in this molecule (may be zero)" );
         
         }
@@ -216,6 +231,7 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "nCutGroups"
                 , nCutGroups_function_value
+                , bp::release_gil_policy()
                 , "Return the number of CutGroups in this molecule (may be zero)" );
         
         }
@@ -227,6 +243,7 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "nResidues"
                 , nResidues_function_value
+                , bp::release_gil_policy()
                 , "Return the number of residues in this molecule (may be zero)" );
         
         }
@@ -238,6 +255,7 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "nSegments"
                 , nSegments_function_value
+                , bp::release_gil_policy()
                 , "Return the number of segments in this molecule (may be zero)" );
         
         }
@@ -249,7 +267,7 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of this molecule" );
         
         }
@@ -261,6 +279,7 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "number"
                 , number_function_value
+                , bp::release_gil_policy()
                 , "Return this molecules ID number" );
         
         }
@@ -475,6 +494,7 @@ void register_MolStructureEditor_class(){
                 "residue"
                 , residue_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the residue at ID resid\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -487,6 +507,7 @@ void register_MolStructureEditor_class(){
                 "segment"
                 , segment_function_value
                 , ( bp::arg("segid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the segment at ID segid\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\nThrow: SireError::invalid_index\n" );
         
         }
@@ -499,6 +520,7 @@ void register_MolStructureEditor_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the atom at ID atomid\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -511,6 +533,7 @@ void register_MolStructureEditor_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("cgid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the CutGroup at ID cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
@@ -523,6 +546,7 @@ void register_MolStructureEditor_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the residue at ID resid\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -535,6 +559,7 @@ void register_MolStructureEditor_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("chainid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the chain at ID chainid\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\nThrow: SireError::invalid_index\n" );
         
         }
@@ -547,6 +572,7 @@ void register_MolStructureEditor_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("segid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the segment at ID segid\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\nThrow: SireError::invalid_index\n" );
         
         }
@@ -558,6 +584,7 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a complete molecule" );
         
         }
@@ -569,6 +596,7 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this editor" );
         
         }
@@ -580,6 +608,7 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -591,6 +620,7 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

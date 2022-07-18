@@ -31,6 +31,8 @@ SireBase::StringProperty __copy__(const SireBase::StringProperty &other){ return
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_StringProperty_class(){
 
     { //::SireBase::StringProperty
@@ -49,6 +51,7 @@ void register_StringProperty_class(){
             StringProperty_exposer.def( 
                 "asABoolean"
                 , asABoolean_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -60,6 +63,7 @@ void register_StringProperty_class(){
             StringProperty_exposer.def( 
                 "asADouble"
                 , asADouble_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -71,6 +75,7 @@ void register_StringProperty_class(){
             StringProperty_exposer.def( 
                 "asAString"
                 , asAString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -82,6 +87,7 @@ void register_StringProperty_class(){
             StringProperty_exposer.def( 
                 "asAnInteger"
                 , asAnInteger_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -93,6 +99,7 @@ void register_StringProperty_class(){
             StringProperty_exposer.def( 
                 "isABoolean"
                 , isABoolean_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -104,6 +111,7 @@ void register_StringProperty_class(){
             StringProperty_exposer.def( 
                 "isADouble"
                 , isADouble_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -115,6 +123,7 @@ void register_StringProperty_class(){
             StringProperty_exposer.def( 
                 "isAString"
                 , isAString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -126,6 +135,7 @@ void register_StringProperty_class(){
             StringProperty_exposer.def( 
                 "isAnInteger"
                 , isAnInteger_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -152,6 +162,7 @@ void register_StringProperty_class(){
             StringProperty_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -163,6 +174,7 @@ void register_StringProperty_class(){
             StringProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -174,6 +186,7 @@ void register_StringProperty_class(){
             StringProperty_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "Return the actual string" );
         
         }

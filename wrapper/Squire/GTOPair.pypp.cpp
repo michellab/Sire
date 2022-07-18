@@ -28,6 +28,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_GTOPair_class(){
 
     { //::Squire::GTOPair
@@ -42,6 +44,7 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "K"
                 , K_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -53,6 +56,7 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "K_AB"
                 , K_AB_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -64,6 +68,7 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "K_CD"
                 , K_CD_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -99,6 +104,7 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "Q_AB"
                 , Q_AB_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -110,6 +116,7 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "Q_CD"
                 , Q_CD_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -121,6 +128,7 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "R2"
                 , R2_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -133,6 +141,7 @@ void register_GTOPair_class(){
                 "T"
                 , T_function_value
                 , ( bp::arg("P"), bp::arg("Q") )
+                , bp::release_gil_policy()
                 , "Return the T value for the two passed GTOPair pairs\nT = rho (P-Q)^2\n" );
         
         }
@@ -145,6 +154,7 @@ void register_GTOPair_class(){
                 "W"
                 , W_function_value
                 , ( bp::arg("P"), bp::arg("Q") )
+                , bp::release_gil_policy()
                 , "Return the W value for the two passed GTOPair pairs\nW = (zeta(zeta+eta)) P + (eta(zeta+eta)) Q\n" );
         
         }
@@ -156,6 +166,7 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "eta"
                 , eta_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -167,6 +178,7 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this pair is null" );
         
         }
@@ -178,7 +190,7 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -191,6 +203,7 @@ void register_GTOPair_class(){
                 "preFac"
                 , preFac_function_value
                 , ( bp::arg("P"), bp::arg("Q") )
+                , bp::release_gil_policy()
                 , "Return the prefactor value for the two passed GTOPair pairs\npreFac = K_AB K_CD  Sqrt(zeta+eta)\n" );
         
         }
@@ -203,6 +216,7 @@ void register_GTOPair_class(){
                 "rho"
                 , rho_function_value
                 , ( bp::arg("P"), bp::arg("Q") )
+                , bp::release_gil_policy()
                 , "Return the rho value for the two passed GTOPair pairs\nrho = (zeta  eta)  (zeta + eta)\n" );
         
         }
@@ -214,6 +228,7 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "ss"
                 , ss_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -225,6 +240,7 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -236,6 +252,7 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "xi"
                 , xi_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -247,6 +264,7 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "zeta"
                 , zeta_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

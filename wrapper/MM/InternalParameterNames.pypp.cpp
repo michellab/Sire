@@ -51,6 +51,8 @@ SireMM::InternalParameterNames __copy__(const SireMM::InternalParameterNames &ot
 
 const char* pvt_get_name(const SireMM::InternalParameterNames&){ return "SireMM::InternalParameterNames";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_InternalParameterNames_class(){
 
     { //::SireMM::InternalParameterNames

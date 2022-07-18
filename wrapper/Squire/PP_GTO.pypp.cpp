@@ -31,6 +31,8 @@ Squire::PP_GTO __copy__(const Squire::PP_GTO &other){ return Squire::PP_GTO(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PP_GTO_class(){
 
     { //::Squire::PP_GTO
@@ -95,6 +97,7 @@ void register_PP_GTO_class(){
             PP_GTO_exposer.def( 
                 "angularMomentum0"
                 , angularMomentum0_function_value
+                , bp::release_gil_policy()
                 , "Return the angular momentum of the first GTO shell in this pair" );
         
         }
@@ -106,6 +109,7 @@ void register_PP_GTO_class(){
             PP_GTO_exposer.def( 
                 "angularMomentum1"
                 , angularMomentum1_function_value
+                , bp::release_gil_policy()
                 , "Return the angular momentum of the second GTO shell in this pair" );
         
         }
@@ -117,6 +121,7 @@ void register_PP_GTO_class(){
             PP_GTO_exposer.def( 
                 "nOrbitals0"
                 , nOrbitals0_function_value
+                , bp::release_gil_policy()
                 , "Return the number of orbitals in the first GTO shell in this pair" );
         
         }
@@ -128,6 +133,7 @@ void register_PP_GTO_class(){
             PP_GTO_exposer.def( 
                 "nOrbitals1"
                 , nOrbitals1_function_value
+                , bp::release_gil_policy()
                 , "Return the number of orbitals in the second GTO shell in this pair" );
         
         }
@@ -154,6 +160,7 @@ void register_PP_GTO_class(){
             PP_GTO_exposer.def( 
                 "scale"
                 , scale_function_value
+                , bp::release_gil_policy()
                 , "Return the additional scaling constant needed to normalise the\nintegrals involving this shell-pair" );
         
         }
@@ -165,6 +172,7 @@ void register_PP_GTO_class(){
             PP_GTO_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -27,6 +27,8 @@ SireCluster::ErrorPacket __copy__(const SireCluster::ErrorPacket &other){ return
 
 const char* pvt_get_name(const SireCluster::ErrorPacket&){ return "SireCluster::ErrorPacket";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ErrorPacket_class(){
 
     { //::SireCluster::ErrorPacket
@@ -43,6 +45,7 @@ void register_ErrorPacket_class(){
             ErrorPacket_exposer.def( 
                 "approximatePacketSize"
                 , approximatePacketSize_function_value
+                , bp::release_gil_policy()
                 , "Return the approximate maximum size (in bytes) of the WorkPacket. This\ndoesnt have to exact (or indeed accurate) - it is used\nto help the WorkPacket::pack() function reserve enough\nspace when serialising this packet to a binary array.\nThe only penalty of getting this wrong is that youll\neither allocate too much space, or be reallocating while\nthe packet is being written" );
         
         }
@@ -54,6 +57,7 @@ void register_ErrorPacket_class(){
             ErrorPacket_exposer.def( 
                 "hasFinished"
                 , hasFinished_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the work has finished" );
         
         }
@@ -65,6 +69,7 @@ void register_ErrorPacket_class(){
             ErrorPacket_exposer.def( 
                 "isError"
                 , isError_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is an error" );
         
         }
@@ -89,6 +94,7 @@ void register_ErrorPacket_class(){
             ErrorPacket_exposer.def( 
                 "throwError"
                 , throwError_function_value
+                , bp::release_gil_policy()
                 , "Throw the error associated with this packet" );
         
         }
@@ -100,6 +106,7 @@ void register_ErrorPacket_class(){
             ErrorPacket_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -111,6 +118,7 @@ void register_ErrorPacket_class(){
             ErrorPacket_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

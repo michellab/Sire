@@ -38,6 +38,8 @@ namespace bp = boost::python;
 
 #include "mover.h"
 
+#include "mover.hpp"
+
 #include "selector.hpp"
 
 #include "tostring.h"
@@ -49,6 +51,8 @@ SireMol::ResIdxAtomMCSMatcher __copy__(const SireMol::ResIdxAtomMCSMatcher &othe
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 void register_ResIdxAtomMCSMatcher_class(){
 
@@ -73,6 +77,7 @@ void register_ResIdxAtomMCSMatcher_class(){
             ResIdxAtomMCSMatcher_exposer.def( 
                 "isVerbose"
                 , isVerbose_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this report progress to stdout." );
         
         }
@@ -84,6 +89,7 @@ void register_ResIdxAtomMCSMatcher_class(){
             ResIdxAtomMCSMatcher_exposer.def( 
                 "matchingLightAtoms"
                 , matchingLightAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this will include light atoms (e.g. hydrogen)\nwhen searching for the maximum common substructure" );
         
         }
@@ -110,7 +116,7 @@ void register_ResIdxAtomMCSMatcher_class(){
             ResIdxAtomMCSMatcher_exposer.def( 
                 "preMatcher"
                 , preMatcher_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the prematcher (if any) that is used to pre-match atoms\nbefore the MCS match" );
         
         }
@@ -122,6 +128,7 @@ void register_ResIdxAtomMCSMatcher_class(){
             ResIdxAtomMCSMatcher_exposer.def( 
                 "timeout"
                 , timeout_function_value
+                , bp::release_gil_policy()
                 , "Return the timeout before the MCS match is abandoned" );
         
         }
@@ -133,6 +140,7 @@ void register_ResIdxAtomMCSMatcher_class(){
             ResIdxAtomMCSMatcher_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -144,6 +152,7 @@ void register_ResIdxAtomMCSMatcher_class(){
             ResIdxAtomMCSMatcher_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -155,6 +164,7 @@ void register_ResIdxAtomMCSMatcher_class(){
             ResIdxAtomMCSMatcher_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

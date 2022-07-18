@@ -20,6 +20,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Range_class(){
 
     { //::SireBase::Range
@@ -34,6 +36,7 @@ void register_Range_class(){
             Range_exposer.def( 
                 "atEnd"
                 , atEnd_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -46,6 +49,7 @@ void register_Range_class(){
                 "create"
                 , create_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the range that represents the single value i" );
         
         }
@@ -58,6 +62,7 @@ void register_Range_class(){
                 "create"
                 , create_function_value
                 , ( bp::arg("start"), bp::arg("end") )
+                , bp::release_gil_policy()
                 , "Return the range that represents the range from [start,end)" );
         
         }
@@ -70,6 +75,7 @@ void register_Range_class(){
                 "create"
                 , create_function_value
                 , ( bp::arg("start"), bp::arg("end"), bp::arg("increment") )
+                , bp::release_gil_policy()
                 , "Return the range that represents the range from [start,end,increment)" );
         
         }
@@ -81,6 +87,7 @@ void register_Range_class(){
             Range_exposer.def( 
                 "hasNext"
                 , hasNext_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -92,6 +99,7 @@ void register_Range_class(){
             Range_exposer.def( 
                 "next"
                 , next_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -103,7 +111,7 @@ void register_Range_class(){
             Range_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return a null simple range for null" );
         
         }
@@ -116,6 +124,7 @@ void register_Range_class(){
                 "populate"
                 , populate_function_value
                 , ( bp::arg("nitems") )
+                , bp::release_gil_policy()
                 , "" );
         
         }

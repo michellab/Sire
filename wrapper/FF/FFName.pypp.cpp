@@ -21,6 +21,8 @@ SireFF::FFName __copy__(const SireFF::FFName &other){ return SireFF::FFName(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FFName_class(){
 
     { //::SireFF::FFName
@@ -38,6 +40,7 @@ void register_FFName_class(){
             FFName_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -49,6 +52,7 @@ void register_FFName_class(){
             FFName_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -61,6 +65,7 @@ void register_FFName_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("ffields") )
+                , bp::release_gil_policy()
                 , "Map this name to the index of the matching forcefield in the\npassed ForceFields object\nThrow: SireFF::missing_forcefield\n" );
         
         }
@@ -88,6 +93,7 @@ void register_FFName_class(){
             FFName_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -99,6 +105,7 @@ void register_FFName_class(){
             FFName_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -110,6 +117,7 @@ void register_FFName_class(){
             FFName_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

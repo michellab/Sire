@@ -26,6 +26,8 @@ SireMove::SameSupraSubMoves __copy__(const SireMove::SameSupraSubMoves &other){ 
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_SameSupraSubMoves_class(){
@@ -44,6 +46,7 @@ void register_SameSupraSubMoves_class(){
             SameSupraSubMoves_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Clear all of the move statistics" );
         
         }
@@ -56,6 +59,7 @@ void register_SameSupraSubMoves_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nsubmoves"), bp::arg("nsubmoves_per_block"), bp::arg("record_substats") )
+                , bp::release_gil_policy()
                 , "Perform the moves" );
         
         }
@@ -83,7 +87,7 @@ void register_SameSupraSubMoves_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -95,6 +99,7 @@ void register_SameSupraSubMoves_class(){
             SameSupraSubMoves_exposer.def( 
                 "subMoves"
                 , subMoves_function_value
+                , bp::release_gil_policy()
                 , "Return a list of all of the types of submove in this set" );
         
         }
@@ -106,6 +111,7 @@ void register_SameSupraSubMoves_class(){
             SameSupraSubMoves_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this set of moves" );
         
         }
@@ -117,6 +123,7 @@ void register_SameSupraSubMoves_class(){
             SameSupraSubMoves_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

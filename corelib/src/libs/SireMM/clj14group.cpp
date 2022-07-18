@@ -34,6 +34,7 @@
 #include "SireMM/atomljs.h"
 #include "SireMol/mover.hpp"
 #include "SireMol/editor.hpp"
+#include "SireMol/core.h"
 
 #include "SireUnits/units.h"
 
@@ -56,25 +57,25 @@ namespace SireMM
         public:
             /** index of the two atoms, in sorted CGAtomIdx order */
             CGAtomIdx atom0, atom1;
-        
+
             /** The reduced charges of both atoms */
             double chg0, chg1;
-            
+
             /** The reduced sigma parameters of both atoms */
             double sig0, sig1;
-            
+
             /** The reduced epsilon parameters for both atoms */
             double eps0, eps1;
-            
+
             /** The 14 coulomb and LJ scale factors between these atoms */
             double coul14scl, lj14scl;
-        
+
             CLJ14PairData()
                 : atom0( CGAtomIdx::null() ), atom1( CGAtomIdx::null() ),
                   chg0(0), chg1(0), sig0(0), sig1(0),
                   eps0(0), eps1(0), coul14scl(0), lj14scl(0)
             {}
-            
+
             CLJ14PairData(const CGAtomIdx &idx0, const CGAtomIdx &idx1,
                           const Charge &charge0, const Charge &charge1,
                           const LJParameter &lj0, const LJParameter &lj1,
@@ -85,14 +86,14 @@ namespace SireMM
                 //store the reduced charge and reduced sigma and epsilon parameters
                 chg0 = charge0.value() * std::sqrt(SireUnits::one_over_four_pi_eps0);
                 chg1 = charge1.value() * std::sqrt(SireUnits::one_over_four_pi_eps0);
-                
+
                 sig0 = std::sqrt(lj0.sigma());
                 sig1 = std::sqrt(lj1.sigma());
-                
+
                 eps0 = std::sqrt(4.0 * lj0.epsilon());
                 eps1 = std::sqrt(4.0 * lj1.epsilon());
             }
-            
+
             CLJ14PairData(const CLJ14PairData &other)
                 : atom0(other.atom0), atom1(other.atom1),
                   chg0(other.chg0), chg1(other.chg1),
@@ -100,10 +101,10 @@ namespace SireMM
                   eps0(other.eps0), eps1(other.eps1),
                   coul14scl(other.coul14scl), lj14scl(other.lj14scl)
             {}
-            
+
             ~CLJ14PairData()
             {}
-            
+
             CLJ14PairData& operator=(const CLJ14PairData &other)
             {
                 if (this != &other)
@@ -119,10 +120,10 @@ namespace SireMM
                     coul14scl = other.coul14scl;
                     lj14scl = other.lj14scl;
                 }
-                
+
                 return *this;
             }
-            
+
             bool operator==(const CLJ14PairData &other) const
             {
                 return atom0 == other.atom0 and
@@ -143,23 +144,23 @@ namespace SireMM
 QDataStream& operator<<(QDataStream &ds, const SireMM::detail::CLJ14PairData &atom)
 {
     quint32 version = 1;
-    
+
     ds << version
        << atom.atom0 << atom.atom1
        << atom.chg0 << atom.chg1
        << atom.sig0 << atom.sig1
        << atom.eps0 << atom.eps1
        << atom.coul14scl << atom.lj14scl;
-    
+
     return ds;
 }
 
 QDataStream& operator>>(QDataStream &ds, SireMM::detail::CLJ14PairData &atom)
 {
     quint32 version;
-    
+
     ds >> version;
-    
+
     if (version == 1)
     {
         ds >> atom.atom0 >> atom.atom1
@@ -182,57 +183,57 @@ static const RegisterMetaType<CLJ14Group> r_group( NO_ROOT );
 QDataStream &operator<<(QDataStream &ds, const CLJ14Group &group)
 {
     writeHeader(ds, r_group, 2);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << group.mol << group.newmol << group.propmap
         << group.data_for_pair << group.cgidx_to_idx
         << qint32(group.combining_rules)
         << group.total_cnrg << group.total_ljnrg
         << group.needs_energy << group.is_strict;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, CLJ14Group &group)
 {
     VersionID v = readHeader(ds, r_group);
-    
+
     if (v == 2)
     {
         SharedDataStream sds(ds);
-        
+
         qint32 combining_rules;
-        
+
         sds >> group.mol >> group.newmol >> group.propmap
             >> group.data_for_pair >> group.cgidx_to_idx
             >> combining_rules
             >> group.total_cnrg >> group.total_ljnrg
             >> group.needs_energy >> group.is_strict;
-        
+
         group.is_strict = true;
-        
+
         group.combining_rules = CLJFunction::COMBINING_RULES(combining_rules);
     }
     else if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         qint32 combining_rules;
-        
+
         sds >> group.mol >> group.newmol >> group.propmap
             >> group.data_for_pair >> group.cgidx_to_idx
             >> combining_rules
             >> group.total_cnrg >> group.total_ljnrg
             >> group.needs_energy;
-        
+
         group.is_strict = true;
-        
+
         group.combining_rules = CLJFunction::COMBINING_RULES(combining_rules);
     }
     else
         throw version_error(v, "1,2", r_group, CODELOC );
-    
+
     return ds;
 }
 
@@ -294,7 +295,7 @@ CLJ14Group& CLJ14Group::operator=(const CLJ14Group &other)
         needs_energy = other.needs_energy;
         is_strict = other.is_strict;
     }
-    
+
     return *this;
 }
 
@@ -343,7 +344,7 @@ const MoleculeView& CLJ14Group::molecule() const
     return newmol;
 }
 
-/** Return the property map used to find the properties needed to 
+/** Return the property map used to find the properties needed to
     calculate the 14 energy ("coordinates", "charge", "LJ"
     and "intrascale") */
 PropertyMap CLJ14Group::propertyMap() const
@@ -490,7 +491,7 @@ void CLJ14Group::updateSelection(const AtomSelection &selection)
         propmap = map;
         return;
     }
-    
+
     if (newmol.selection() != selection)
     {
         newmol = PartialMolecule(newmol.data(), selection);
@@ -503,14 +504,14 @@ void CLJ14Group::update(const MoleculeView &new_molecule)
 {
     if (isNull())
         return;
-    
+
     if (new_molecule.data().number() != newmol.number())
         throw SireError::incompatible_error( QObject::tr(
                     "You cannot update the new molecule %1 as it is not the same "
                     "molecule as the old molecule %2.")
                         .arg(new_molecule.toString())
                         .arg(mol.toString()), CODELOC );
-    
+
     if (recalculatingFromScratch())
     {
         newmol = new_molecule;
@@ -555,10 +556,10 @@ void CLJ14Group::addCGData(CGIdx cg0, CGIdx cg1,
 
     if (cg1 < cg0)
         qSwap(cg0, cg1);
-    
+
     quint32 index = quint32( data_for_pair.count() );
     data_for_pair.append(pairdata);
-    
+
     cgidx_to_idx[cg0].insert(index);
 
     if (cg0 != cg1)
@@ -588,7 +589,7 @@ void CLJ14Group::reextract()
     total_cnrg = 0;
     total_ljnrg = 0;
     needs_energy = true;
-    
+
     const MoleculeInfoData &molinfo = newmol.data().info();
     const AtomSelection selected_atoms = newmol.selection();
 
@@ -600,14 +601,14 @@ void CLJ14Group::reextract()
     }
 
     const CLJNBPairs &pairs = newmol.data().property( propmap["intrascale"] ).asA<CLJNBPairs>();
-    
+
     if (pairs.isEmpty())
     {
         //there are no 1-4 pairs
         needs_energy = false;
         return;
     }
-    
+
     const AtomCharges &chgs = newmol.data().property( propmap["charge"] ).asA<AtomCharges>();
     const AtomLJs &ljs = newmol.data().property( propmap["LJ"] ).asA<AtomLJs>();
 
@@ -617,23 +618,23 @@ void CLJ14Group::reextract()
         for (CGIdx cg0(0); cg0<molinfo.nCutGroups(); ++cg0)
         {
             const int n0 = molinfo.nAtoms(cg0);
-        
+
             const Charge *chgs0 = chgs.constData(cg0);
             const LJParameter *ljs0 = ljs.constData(cg0);
-        
+
             //do the CutGroup with itself
             {
                 QVector<SireMM::detail::CLJ14PairData> cgpairdata;
                 cgpairdata.reserve(n0*n0);
-                
+
                 const CLJNBPairs::CGPairs &cgpairs = pairs.get(cg0,cg0);
-                
+
                 for (int i=0; i<n0-1; ++i)
                 {
                     for (int j=i+1; j<n0; ++j)
                     {
                         const CLJScaleFactor &scl = cgpairs.get(i,j);
-                        
+
                         if (scl != CLJScaleFactor(1,1) and scl != CLJScaleFactor(0))
                         {
                             cgpairdata.append( SireMM::detail::CLJ14PairData(
@@ -645,25 +646,25 @@ void CLJ14Group::reextract()
                         }
                     }
                 }
-                
+
                 cgpairdata.squeeze();
                 addCGData(cg0, cg0, cgpairdata);
-                
+
             } // end of cutgroup with itself
-        
+
             //now look at this cutgroup with all other pairs
             for (CGIdx cg1(cg0+1); cg1<molinfo.nCutGroups(); ++cg1)
             {
                 const int n1 = molinfo.nAtoms(cg1);
-                    
+
                 QVector<SireMM::detail::CLJ14PairData> cgpairdata;
                 cgpairdata.reserve(n0*n1);
-                
+
                 const CLJNBPairs::CGPairs &cgpairs = pairs.get(cg0,cg1);
-                    
+
                 const Charge *chgs1 = chgs.constData(cg1);
                 const LJParameter *ljs1 = ljs.constData(cg1);
-                    
+
                 if (cgpairs.isEmpty())
                 {
                     if (cgpairs.defaultValue() != CLJScaleFactor(1,1) and
@@ -690,7 +691,7 @@ void CLJ14Group::reextract()
                         for (int j=0; j<n1; ++j)
                         {
                             const CLJScaleFactor &scl = cgpairs.get(i,j);
-                            
+
                             if (scl != CLJScaleFactor(1,1) and
                                 scl != CLJScaleFactor(0))
                             {
@@ -703,31 +704,31 @@ void CLJ14Group::reextract()
                         }
                     }
                 }
-                
+
                 cgpairdata.squeeze();
                 addCGData(cg0, cg1, cgpairdata);
-                
+
             } // end of loop over j CutGroups
         } // end of loop over i CutGroups
     } // else if selected all
     else if (is_strict)
     {
         const QList<CGIdx> selected_cgroups = selected_atoms.selectedCutGroups();
-    
+
         foreach (CGIdx cg0, selected_cgroups)
         {
             const Charge *chgs0 = chgs.constData(cg0);
             const LJParameter *ljs0 = ljs.constData(cg0);
-        
+
             QSet<Index> atoms0 = selected_atoms.selectedAtoms(cg0);
-        
+
             //do the CutGroup with itself
             {
                 QVector<SireMM::detail::CLJ14PairData> cgpairdata;
                 cgpairdata.reserve(atoms0.count()*atoms0.count());
-                
+
                 const CLJNBPairs::CGPairs &cgpairs = pairs.get(cg0,cg0);
-                
+
                 foreach (Index i, atoms0)
                 {
                     foreach (Index j, atoms0)
@@ -735,7 +736,7 @@ void CLJ14Group::reextract()
                         if (i < j)
                         {
                             const CLJScaleFactor &scl = cgpairs.get(i,j);
-                        
+
                             if (scl != CLJScaleFactor(1,1) and scl != CLJScaleFactor(0))
                             {
                                 cgpairdata.append( SireMM::detail::CLJ14PairData(
@@ -748,27 +749,27 @@ void CLJ14Group::reextract()
                         }
                     }
                 }
-                
+
                 cgpairdata.squeeze();
                 addCGData(cg0, cg0, cgpairdata);
-                
+
             } // end of cutgroup with itself
-        
+
             //now look at this cutgroup with all other pairs
             foreach (CGIdx cg1, selected_cgroups)
             {
                 if (cg0 < cg1)
                 {
                     const QSet<Index> atoms1 = selected_atoms.selectedAtoms(cg1);
-                    
+
                     QVector<SireMM::detail::CLJ14PairData> cgpairdata;
                     cgpairdata.reserve(atoms0.count()*atoms1.count());
-                
+
                     const CLJNBPairs::CGPairs &cgpairs = pairs.get(cg0,cg1);
-                    
+
                     const Charge *chgs1 = chgs.constData(cg1);
                     const LJParameter *ljs1 = ljs.constData(cg1);
-                    
+
                     if (cgpairs.isEmpty())
                     {
                         if (cgpairs.defaultValue() != CLJScaleFactor(1,1) and
@@ -795,7 +796,7 @@ void CLJ14Group::reextract()
                             foreach (Index j, atoms1)
                             {
                                 const CLJScaleFactor &scl = cgpairs.get(i,j);
-                            
+
                                 if (scl != CLJScaleFactor(1,1) and
                                     scl != CLJScaleFactor(0))
                                 {
@@ -808,12 +809,12 @@ void CLJ14Group::reextract()
                             }
                         }
                     }
-                
+
                     cgpairdata.squeeze();
                     addCGData(cg0, cg1, cgpairdata);
                 }
             } // end of loop over j CutGroups
-        
+
         } // end of loop over i CutGroups
     } // end of if selected all else if is_strict
     else
@@ -832,16 +833,16 @@ static void calculateAriEnergy(const AtomCoords &coords,
 {
     cnrg = 0;
     ljnrg = 0;
-    
+
     for (int i=0; i<pairdata.count(); ++i)
     {
         const SireMM::detail::CLJ14PairData &pair = pairdata.constData()[i];
-        
+
         const Vector &atom0 = coords[pair.atom0];
         const Vector &atom1 = coords[pair.atom1];
-        
+
         const double one_over_r = Vector::invDistance(atom0, atom1);
-        
+
         cnrg += (pair.coul14scl * pair.chg0 * pair.chg1 * one_over_r);
 
         //arithmetic combining rules
@@ -850,7 +851,7 @@ static void calculateAriEnergy(const AtomCoords &coords,
         const double sig2_over_r2 = SireMaths::pow_2( sig * one_over_r );
         const double sig6_over_r6 = SireMaths::pow_3( sig2_over_r2 );
         const double sig12_over_r12 = SireMaths::pow_2( sig6_over_r6 );
-        
+
         ljnrg += (pair.lj14scl * pair.eps0 * pair.eps1) * (sig12_over_r12 - sig6_over_r6);
     }
 }
@@ -864,16 +865,16 @@ static void calculateGeoEnergy(const AtomCoords &coords,
 {
     cnrg = 0;
     ljnrg = 0;
-    
+
     for (int i=0; i<pairdata.count(); ++i)
     {
         const SireMM::detail::CLJ14PairData &pair = pairdata.constData()[i];
-        
+
         const Vector &atom0 = coords[pair.atom0];
         const Vector &atom1 = coords[pair.atom1];
-        
+
         const float one_over_r = Vector::invDistance(atom0, atom1);
-        
+
         cnrg += (pair.coul14scl * pair.chg0 * pair.chg1 * one_over_r);
 
         //geometric combining rules
@@ -882,7 +883,7 @@ static void calculateGeoEnergy(const AtomCoords &coords,
         const float sig2_over_r2 = SireMaths::pow_2( sig * one_over_r );
         const float sig6_over_r6 = SireMaths::pow_3( sig2_over_r2 );
         const float sig12_over_r12 = SireMaths::pow_2( sig6_over_r6 );
-        
+
         ljnrg += (pair.lj14scl * pair.eps0 * pair.eps1) * (sig12_over_r12 - sig6_over_r6);
     }
 
@@ -926,10 +927,10 @@ boost::tuple<double,double> CLJ14Group::energy()
         {
             this->reextract();
         }
-        
+
         total_cnrg = 0;
         total_ljnrg = 0;
-        
+
         for (int i=0; i<data_for_pair.count(); ++i)
         {
             double cnrg, ljnrg;
@@ -948,7 +949,7 @@ boost::tuple<double,double> CLJ14Group::energy()
         const PropertyName chg_property = propmap["charge"];
         const PropertyName lj_property = propmap["LJ"];
         const PropertyName scl_property = propmap["intrascale"];
-        
+
         if (newmol.version(chg_property) != mol.version(chg_property) or
             newmol.version(lj_property) != mol.version(lj_property) or
             newmol.version(scl_property) != mol.version(scl_property))
@@ -958,7 +959,7 @@ boost::tuple<double,double> CLJ14Group::energy()
         }
 
         const PropertyName coords_property = propmap["coordinates"];
-        
+
         if (newmol.version(coords_property) == mol.version(coords_property))
         {
             //nothing has changed
@@ -974,13 +975,13 @@ boost::tuple<double,double> CLJ14Group::energy()
         }
 
         QSet<quint32> changed_cgroups;
-        
+
         const AtomCoords &newcoords = newmol.property(coords_property).asA<AtomCoords>();
         const AtomCoords &oldcoords = mol.property(coords_property).asA<AtomCoords>();
-        
+
         const CoordGroup *newarray = newcoords.constData();
         const CoordGroup *oldarray = oldcoords.constData();
-        
+
         if (newarray != oldarray)
         {
             for (int i=0; i<newmol.data().info().nCutGroups(); ++i)
@@ -1001,38 +1002,38 @@ boost::tuple<double,double> CLJ14Group::energy()
                 }
             }
         }
-        
+
         if (changed_cgroups.count() >= int(0.4 * newmol.data().info().nCutGroups()))
         {
             this->mustNowRecalculateFromScratch();
             return this->energy();
         }
-        
+
         //calculate the change in energy as a delta
         double delta_cnrg = 0;
         double delta_ljnrg = 0;
-        
+
         QSet<quint32> changed_cgpairs;
-        
+
         foreach (quint32 cgroup, changed_cgroups)
         {
             changed_cgpairs += cgidx_to_idx.value(cgroup);
         }
-        
+
         foreach (quint32 changed_cgpair, changed_cgpairs)
         {
             double old_cnrg, old_ljnrg;
             ::calculateEnergy(combining_rules,
                               oldcoords, data_for_pair.at(changed_cgpair), old_cnrg, old_ljnrg);
-                        
+
             double new_cnrg, new_ljnrg;
             ::calculateEnergy(combining_rules,
                               newcoords, data_for_pair.at(changed_cgpair), new_cnrg, new_ljnrg);
-            
+
             delta_cnrg += (new_cnrg - old_cnrg);
             delta_ljnrg += (new_ljnrg - old_ljnrg);
         }
-        
+
         total_cnrg += delta_cnrg;
         total_ljnrg += delta_ljnrg;
     }

@@ -47,6 +47,8 @@ SireCluster::Nodes __copy__(const SireCluster::Nodes &other){ return SireCluster
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Nodes_class(){
@@ -65,6 +67,7 @@ void register_Nodes_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("node") )
+                , bp::release_gil_policy()
                 , "Add the node node to this set. This will be added as a busy\nNode (as obviously someone is holding onto it) This does\nnothing if this node is already part of this set" );
         
         }
@@ -77,6 +80,7 @@ void register_Nodes_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("nodes") )
+                , bp::release_gil_policy()
                 , "Add all of the nodes in nodes to this set" );
         
         }
@@ -88,6 +92,7 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "addNode"
                 , addNode_function_value
+                , bp::release_gil_policy()
                 , "Try to add one more node to this set by taking a node from the\npool - this only looks for immediately available nodes, and may\nnot work" );
         
         }
@@ -100,6 +105,7 @@ void register_Nodes_class(){
                 "addNode"
                 , addNode_function_value
                 , ( bp::arg("timeout") )
+                , bp::release_gil_policy()
                 , "Try to add one more node to this set by taking a node from the\npool - this only tries to find an available node for\ntimeout milliseconds, and so it may fail" );
         
         }
@@ -112,6 +118,7 @@ void register_Nodes_class(){
                 "addNodes"
                 , addNodes_function_value
                 , ( bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Try to add up to n nodes to this set, by taking the nodes\nfrom the pool - this only looks for immediately available\nnodes, so you may get less than n (you may even get zero)" );
         
         }
@@ -124,6 +131,7 @@ void register_Nodes_class(){
                 "addNodes"
                 , addNodes_function_value
                 , ( bp::arg("n"), bp::arg("timeout") )
+                , bp::release_gil_policy()
                 , "Try to add up to n nodes to this set, by taking the nodes\nfrom the pool - this only looks for available\nnodes for timeout milliseconds, so you may get less\nthan n (you may even get zero)" );
         
         }
@@ -135,6 +143,7 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "borrowThisThread"
                 , borrowThisThread_function_value
+                , bp::release_gil_policy()
                 , "Let this Nodes scheduler borrow this thread to run WorkPackets.\nTechnically, this doesnt use the current thread, but instead\ncreates a duplicate, so you are still able to use your thread.\nHowever, you should avoid doing anything compute intensive in\nyour thread while the Node has borrowed it, as otherwise you\nrisk using more CPU than is available.\nThis returns a ThisThread holder that is used to ask the Nodes\nobject to return this thread when the ThisThread object is\ndeleted, or when ThisThread::reclaim() is called.\n" );
         
         }
@@ -146,6 +155,7 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of nodes available" );
         
         }
@@ -157,6 +167,7 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "getAllNodes"
                 , getAllNodes_function_value
+                , bp::release_gil_policy()
                 , "Return all of the nodes - this blocks until all of the\nnodes are available. Remember that this will return an\nempty list if there are no nodes.\n" );
         
         }
@@ -169,6 +180,7 @@ void register_Nodes_class(){
                 "getAllNodes"
                 , getAllNodes_function_value
                 , ( bp::arg("timeout") )
+                , bp::release_gil_policy()
                 , "Try to get all the nodes, within the time timeout.\nIf this fails, then no nodes are returned" );
         
         }
@@ -180,6 +192,7 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "getNode"
                 , getNode_function_value
+                , bp::release_gil_policy()
                 , "Return a free node - this blocks until a free node\nis available. In certain circumstances this will fail\nand return a null Node (e.g. at program shutdown, or\nif all nodes are removed from this set)\n" );
         
         }
@@ -192,6 +205,7 @@ void register_Nodes_class(){
                 "getNode"
                 , getNode_function_value
                 , ( bp::arg("timeout") )
+                , bp::release_gil_policy()
                 , "Try to get a free node - giving only timeout milliseconds\nto get that node. This returns a null node if the call\nis unsuccessful" );
         
         }
@@ -204,6 +218,7 @@ void register_Nodes_class(){
                 "getNodes"
                 , getNodes_function_value
                 , ( bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Return n free nodes - this blocks until all of the\nnodes are available. In some circumstances this will fail,\ne.g. if there arent enough nodes to fulfill this request\n" );
         
         }
@@ -216,6 +231,7 @@ void register_Nodes_class(){
                 "getNodes"
                 , getNodes_function_value
                 , ( bp::arg("n"), bp::arg("timeout") )
+                , bp::release_gil_policy()
                 , "Try to get n free nodes, within the time timeout.\nIf this fails, then no nodes are returned" );
         
         }
@@ -227,6 +243,7 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is empty (contains no nodes)" );
         
         }
@@ -238,6 +255,7 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "nBusy"
                 , nBusy_function_value
+                , bp::release_gil_policy()
                 , "Return the number of busy nodes" );
         
         }
@@ -249,6 +267,7 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "nFree"
                 , nFree_function_value
+                , bp::release_gil_policy()
                 , "Return the number of free nodes" );
         
         }
@@ -260,6 +279,7 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "nNodes"
                 , nNodes_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of nodes available" );
         
         }
@@ -287,6 +307,7 @@ void register_Nodes_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("node") )
+                , bp::release_gil_policy()
                 , "Remove the node node from this set. This doesnt abort\nthe job running on the node, but the node will be automatically\nreturned to the Cluster pool once it is destroyed.\nThis does nothing if this node isnt in this set.\n" );
         
         }
@@ -298,6 +319,7 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
+                , bp::release_gil_policy()
                 , "Remove all nodes from this set - this aborts any running\njobs, then disconnects from all of the backends.\nNote that this does not block" );
         
         }
@@ -309,6 +331,7 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of these nodes" );
         
         }
@@ -320,6 +343,7 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "waitUntilAllFree"
                 , waitUntilAllFree_function_value
+                , bp::release_gil_policy()
                 , "Wait until all of the nodes are free" );
         
         }
@@ -332,6 +356,7 @@ void register_Nodes_class(){
                 "waitUntilAllFree"
                 , waitUntilAllFree_function_value
                 , ( bp::arg("timeout") )
+                , bp::release_gil_policy()
                 , "Wait until all of the nodes are free, or until\ntimeout milliseconds have passed - this returns\nwhether or not all of the nodes are free" );
         
         }

@@ -23,6 +23,8 @@ SireBase::CPUID __copy__(const SireBase::CPUID &other){ return SireBase::CPUID(o
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CPUID_class(){
 
     { //::SireBase::CPUID
@@ -38,6 +40,7 @@ void register_CPUID_class(){
             CPUID_exposer.def( 
                 "brand"
                 , brand_function_value
+                , bp::release_gil_policy()
                 , "Return the Brand string for this CPU" );
         
         }
@@ -49,6 +52,7 @@ void register_CPUID_class(){
             CPUID_exposer.def( 
                 "clockSpeed"
                 , clockSpeed_function_value
+                , bp::release_gil_policy()
                 , "Return the clockspeed of this processor. A value of -1 is returned\nif this is not known" );
         
         }
@@ -60,6 +64,7 @@ void register_CPUID_class(){
             CPUID_exposer.def( 
                 "numCores"
                 , numCores_function_value
+                , bp::release_gil_policy()
                 , "Return the number of cores of this processor. A value of 1 is returned\nif this is not known (as we must have at least 1 core)" );
         
         }
@@ -86,6 +91,7 @@ void register_CPUID_class(){
             CPUID_exposer.def( 
                 "supportableFeatures"
                 , supportableFeatures_function_value
+                , bp::release_gil_policy()
                 , "Return the list of all searchable supportable features" );
         
         }
@@ -97,6 +103,7 @@ void register_CPUID_class(){
             CPUID_exposer.def( 
                 "supportedFeatures"
                 , supportedFeatures_function_value
+                , bp::release_gil_policy()
                 , "Return the list of all features supported on this CPU" );
         
         }
@@ -109,6 +116,7 @@ void register_CPUID_class(){
                 "supports"
                 , supports_function_value
                 , ( bp::arg("feature") )
+                , bp::release_gil_policy()
                 , "Returns whether or not the CPU supports the passed feature.\nNote that the passed feature must be one of the strings\nas returned by supportableFeatures" );
         
         }
@@ -120,6 +128,7 @@ void register_CPUID_class(){
             CPUID_exposer.def( 
                 "supportsAVX"
                 , supportsAVX_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this processor supports AVX vector instructions" );
         
         }
@@ -131,6 +140,7 @@ void register_CPUID_class(){
             CPUID_exposer.def( 
                 "supportsSSE2"
                 , supportsSSE2_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this processor supports SSE2 vector instructions" );
         
         }
@@ -142,6 +152,7 @@ void register_CPUID_class(){
             CPUID_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -153,6 +164,7 @@ void register_CPUID_class(){
             CPUID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -164,6 +176,7 @@ void register_CPUID_class(){
             CPUID_exposer.def( 
                 "vendor"
                 , vendor_function_value
+                , bp::release_gil_policy()
                 , "Return the Vendor string for this CPU" );
         
         }
@@ -175,6 +188,7 @@ void register_CPUID_class(){
             CPUID_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -27,6 +27,13 @@
 \*********************************************/
 
 #include "beadeditor.h"
+#include "mover.hpp"
+#include "selector.hpp"
+#include "atom.h"
+#include "residue.h"
+#include "chain.h"
+#include "cutgroup.h"
+#include "segment.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -40,23 +47,23 @@ static const RegisterMetaType<BeadEditor> r_beadeditor;
 QDataStream &operator<<(QDataStream &ds, const BeadEditor &beadeditor)
 {
     writeHeader(ds, r_beadeditor, 1);
-    
+
     ds << static_cast<const Bead&>(beadeditor);
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, BeadEditor &beadeditor)
 {
     VersionID v = readHeader(ds, r_beadeditor);
-    
+
     if (v == 1)
     {
         ds >> static_cast<Bead&>(beadeditor);
     }
     else
         throw version_error(v, "1", r_beadeditor, CODELOC);
-        
+
     return ds;
 }
 

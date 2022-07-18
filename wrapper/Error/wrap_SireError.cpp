@@ -42,6 +42,8 @@ namespace SireError
 
 void export_exceptions();
 
+QHash<QString, QString> get_last_error_details();
+
 void export_SireError()
 {
     export_exceptions();
@@ -54,6 +56,8 @@ void export_SireError()
 
         boost::python::def( "printError", printError_value );
     }
+
+    boost::python::def( "get_last_error_details", &get_last_error_details );
 }
 
 }

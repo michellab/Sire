@@ -29,6 +29,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_IOBase_class(){
 
     { //::SireIO::IOBase
@@ -43,6 +45,7 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "null"
                 , null_function_value
+                , bp::release_gil_policy()
                 , "Return the global null IOBase object (a PDB writer)" );
         
         }
@@ -150,6 +153,7 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -23,6 +23,8 @@ SireMove::NullSupraSubMove __copy__(const SireMove::NullSupraSubMove &other){ re
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullSupraSubMove_class(){
 
     { //::SireMove::NullSupraSubMove
@@ -39,6 +41,7 @@ void register_NullSupraSubMove_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("n_supra_moves"), bp::arg("n_supra_moves_per_block"), bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "Null move, so doesnt do anything" );
         
         }
@@ -65,6 +68,7 @@ void register_NullSupraSubMove_class(){
             NullSupraSubMove_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this move" );
         
         }
@@ -76,6 +80,7 @@ void register_NullSupraSubMove_class(){
             NullSupraSubMove_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

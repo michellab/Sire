@@ -95,6 +95,8 @@ SireIO::ProtoMS __copy__(const SireIO::ProtoMS &other){ return SireIO::ProtoMS(o
 
 const char* pvt_get_name(const SireIO::ProtoMS&){ return "SireIO::ProtoMS";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ProtoMS_class(){
 
     { //::SireIO::ProtoMS
@@ -114,6 +116,7 @@ void register_ProtoMS_class(){
                 "addParameterFile"
                 , addParameterFile_function_value
                 , ( bp::arg("paramfile") )
+                , bp::release_gil_policy()
                 , "Add a parameter file to the list of files which will be used\nto parameterise the molecules" );
         
         }
@@ -125,6 +128,7 @@ void register_ProtoMS_class(){
             ProtoMS_exposer.def( 
                 "parameterFiles"
                 , parameterFiles_function_value
+                , bp::release_gil_policy()
                 , "Return the list of parameter files which will be used to\nparameterise the molecules, in the order that they will\nbe read" );
         
         }
@@ -137,6 +141,7 @@ void register_ProtoMS_class(){
                 "parameterisationCommandFile"
                 , parameterisationCommandFile_function_value
                 , ( bp::arg("molecule"), bp::arg("type") )
+                , bp::release_gil_policy()
                 , "Return the command file used to run ProtoMS on the passed molecule as the passed type" );
         
         }
@@ -185,6 +190,7 @@ void register_ProtoMS_class(){
                 "setExecutable"
                 , setExecutable_function_value
                 , ( bp::arg("protoms") )
+                , bp::release_gil_policy()
                 , "Set the path to the ProtoMS executable that will be used\nto parameterise the molecules" );
         
         }
@@ -196,6 +202,7 @@ void register_ProtoMS_class(){
             ProtoMS_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -207,6 +214,7 @@ void register_ProtoMS_class(){
             ProtoMS_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

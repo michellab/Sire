@@ -28,6 +28,7 @@
 
 #include "beads.h"
 #include "mover.hpp"
+#include "partialmolecule.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/datastream.h"
@@ -41,29 +42,29 @@ static const RegisterMetaType<Beads> r_beads;
 QDataStream &operator<<(QDataStream &ds, const Beads &beads)
 {
     writeHeader(ds, r_beads, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << beads.bdng << beads.beading_property << beads.selected_atoms
         << static_cast<const MoleculeView&>(beads);
-        
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, Beads &beads)
 {
     VersionID v = readHeader(ds, r_beads);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> beads.bdng >> beads.beading_property >> beads.selected_atoms
             >> static_cast<MoleculeView&>(beads);
     }
     else
         throw version_error(v, "1", r_beads, CODELOC);
-        
+
     return ds;
 }
 
@@ -77,7 +78,7 @@ Beads::Beads(const MoleculeData &moldata, const PropertyMap &map)
       : ConcreteProperty<Beads,MoleculeView>(moldata)
 {
     beading_property = map["beading"];
-    
+
     if (moldata.hasProperty(beading_property))
     {
         bdng = moldata.property(beading_property).asA<Beading>();
@@ -86,10 +87,10 @@ Beads::Beads(const MoleculeData &moldata, const PropertyMap &map)
     {
         bdng = ResidueBeading();
     }
-    
+
     selected_atoms = bdng.read().selection(moldata.info());
 }
-    
+
 /** Copy constructor */
 Beads::Beads(const Beads &other)
       : ConcreteProperty<Beads,MoleculeView>(other),
@@ -111,14 +112,14 @@ Beads& Beads::operator=(const Beads &other)
         beading_property = other.beading_property;
         selected_atoms = other.selected_atoms;
     }
-    
+
     return *this;
 }
 
 /** Comparison operator */
 bool Beads::operator==(const Beads &other) const
 {
-    return MoleculeView::operator==(other) and 
+    return MoleculeView::operator==(other) and
            beading_property == other.beading_property;
 }
 
@@ -138,16 +139,21 @@ Beads* Beads::clone() const
     return new Beads(*this);
 }
 
-/** Return the bead at index 'beadidx' 
+MolViewPtr Beads::toSelector() const
+{
+    return PartialMolecule(*this).toSelector();
+}
+
+/** Return the bead at index 'beadidx'
 
     \throw SireError::invalid_index
 */
 Bead Beads::operator[](BeadIdx beadidx) const
 {
-    return Bead(this->data(), beadidx, bdng.read(), beading_property); 
+    return Bead(this->data(), beadidx, bdng.read(), beading_property);
 }
 
-/** Return the bead at index 'beadidx' 
+/** Return the bead at index 'beadidx'
 
     \throw SireError::invalid_index
 */
@@ -156,7 +162,7 @@ Bead Beads::at(BeadIdx beadidx) const
     return this->operator[](beadidx);
 }
 
-/** Return the bead at index 'beadidx' 
+/** Return the bead at index 'beadidx'
 
     \throw SireError::invalid_index
 */
@@ -235,9 +241,9 @@ void Beads::update(const MoleculeData &moldata)
     {
         new_beading = ResidueBeading();
     }
-    
+
     MoleculeView::update(moldata);
-    
+
     if (not new_beading.read().equals(bdng.read()))
     {
         bdng = new_beading;
@@ -287,7 +293,7 @@ bool Beads::intersects(const AtomID &atomid) const
     return selected_atoms.selected(atomid);
 }
 
-/** Return the atom properties for all of the atoms in the beads, in 
+/** Return the atom properties for all of the atoms in the beads, in
     BeadIdx/Index order */
 PropertyPtr Beads::atomProperty(const PropertyName &key) const
 {
@@ -312,7 +318,7 @@ bool Beads::hasMetadata(const PropertyName &key,
 {
     return false;
 }
-                 
+
 /** At the moment, the "Beads" object has no properties or metadata */
 QStringList Beads::propertyKeys() const
 {

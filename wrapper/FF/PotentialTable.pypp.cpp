@@ -35,6 +35,8 @@ SireFF::PotentialTable __copy__(const SireFF::PotentialTable &other){ return Sir
 
 const char* pvt_get_name(const SireFF::PotentialTable&){ return "SireFF::PotentialTable";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PotentialTable_class(){
 
     { //::SireFF::PotentialTable
@@ -56,6 +58,7 @@ void register_PotentialTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Add the contents of the table other onto this table. This will only\nadd the potentials for the molecules  grids that are in both tables" );
         
         }
@@ -68,6 +71,7 @@ void register_PotentialTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("potential") )
+                , bp::release_gil_policy()
                 , "Add the potential potential onto all of the atom  grid points in this table" );
         
         }
@@ -80,6 +84,7 @@ void register_PotentialTable_class(){
                 "assertContainsTableFor"
                 , assertContainsTableFor_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Assert that this contains a table for the molecule with number molnum\nThrow: SireError::unavailable_resource\n" );
         
         }
@@ -92,6 +97,7 @@ void register_PotentialTable_class(){
                 "assertContainsTableFor"
                 , assertContainsTableFor_function_value
                 , ( bp::arg("grid") )
+                , bp::release_gil_policy()
                 , "Assert that this contains a table for the passed grid\nThrow: SireError::unavailable_resource\n" );
         
         }
@@ -130,6 +136,7 @@ void register_PotentialTable_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Return whether or not this contains a table for the passed grid" );
         
         }
@@ -142,6 +149,7 @@ void register_PotentialTable_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("grid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this contains a table for the passed grid" );
         
         }
@@ -154,6 +162,7 @@ void register_PotentialTable_class(){
                 "divide"
                 , divide_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Divide the potential at all atom and grid points by value" );
         
         }
@@ -204,6 +213,7 @@ void register_PotentialTable_class(){
                 "indexOf"
                 , indexOf_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Return the index of the molecule with number molnum in this table\nThrow: SireMol::missing_molecule\n" );
         
         }
@@ -216,6 +226,7 @@ void register_PotentialTable_class(){
                 "initialiseTable"
                 , initialiseTable_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Initialise the table for the molecule with number molnum" );
         
         }
@@ -228,6 +239,7 @@ void register_PotentialTable_class(){
                 "initialiseTable"
                 , initialiseTable_function_value
                 , ( bp::arg("grid") )
+                , bp::release_gil_policy()
                 , "Initialise the table for the grid grid" );
         
         }
@@ -239,6 +251,7 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "initialiseTables"
                 , initialiseTables_function_value
+                , bp::release_gil_policy()
                 , "Initialise all of the tables to have a zero potential" );
         
         }
@@ -250,6 +263,7 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this table is empty" );
         
         }
@@ -261,6 +275,7 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "molNums"
                 , molNums_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -273,6 +288,7 @@ void register_PotentialTable_class(){
                 "multiply"
                 , multiply_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Multiply the potential at all atom and grid points by value" );
         
         }
@@ -284,6 +300,7 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "nGrids"
                 , nGrids_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -295,6 +312,7 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "nMolecules"
                 , nMolecules_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -342,6 +360,7 @@ void register_PotentialTable_class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("potential") )
+                , bp::release_gil_policy()
                 , "Set the potential at all atom and grid points equal to potential" );
         
         }
@@ -354,6 +373,7 @@ void register_PotentialTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Subtract the contents of the table other from this table. This will only\nsubtract the potentials for the molecules  grids that are in both tables" );
         
         }
@@ -366,6 +386,7 @@ void register_PotentialTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("potential") )
+                , bp::release_gil_policy()
                 , "Subtract the potential potential from all of the atom  grid points in this table" );
         
         }
@@ -377,6 +398,7 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -388,6 +410,7 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

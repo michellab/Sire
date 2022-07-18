@@ -17,6 +17,8 @@ SireBase::detail::PackedArray2D_Array<SireBase::DoubleArrayProperty> __copy__(co
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_PackedArray2D_DoubleArrayProperty_Array_class(){
@@ -39,6 +41,7 @@ void register_PackedArray2D_DoubleArrayProperty_Array_class(){
                 "assertValidIndex"
                 , assertValidIndex_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -65,6 +68,7 @@ void register_PackedArray2D_DoubleArrayProperty_Array_class(){
             PackedArray2D_DoubleArrayProperty_Array_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -77,6 +81,7 @@ void register_PackedArray2D_DoubleArrayProperty_Array_class(){
             PackedArray2D_DoubleArrayProperty_Array_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -89,6 +94,7 @@ void register_PackedArray2D_DoubleArrayProperty_Array_class(){
             PackedArray2D_DoubleArrayProperty_Array_exposer.def( 
                 "nValues"
                 , nValues_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -145,6 +151,7 @@ void register_PackedArray2D_DoubleArrayProperty_Array_class(){
             PackedArray2D_DoubleArrayProperty_Array_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -157,6 +164,7 @@ void register_PackedArray2D_DoubleArrayProperty_Array_class(){
             PackedArray2D_DoubleArrayProperty_Array_exposer.def( 
                 "toQVector"
                 , toQVector_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -169,6 +177,7 @@ void register_PackedArray2D_DoubleArrayProperty_Array_class(){
             PackedArray2D_DoubleArrayProperty_Array_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -182,6 +191,7 @@ void register_PackedArray2D_DoubleArrayProperty_Array_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }

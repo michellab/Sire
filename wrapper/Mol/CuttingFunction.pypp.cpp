@@ -21,6 +21,8 @@ namespace bp = boost::python;
 
 #include "residuecutting.h"
 
+#include "selector.hpp"
+
 #include <QMutex>
 
 #include "cuttingfunction.h"
@@ -28,6 +30,8 @@ namespace bp = boost::python;
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 void register_CuttingFunction_class(){
 
@@ -79,6 +83,7 @@ void register_CuttingFunction_class(){
             CuttingFunction_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

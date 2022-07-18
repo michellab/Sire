@@ -15,6 +15,8 @@ namespace bp = boost::python;
 
 #include "arrayproperty.hpp"
 
+#include "booleanproperty.h"
+
 #include "numberproperty.h"
 
 #include "propertylist.h"
@@ -32,6 +34,8 @@ SireBase::IntegerArrayProperty __copy__(const SireBase::IntegerArrayProperty &ot
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 #include "Helpers/len.hpp"
 
@@ -55,6 +59,7 @@ void register_IntegerArrayProperty_class(){
             IntegerArrayProperty_exposer.def( 
                 "asABoolean"
                 , asABoolean_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -66,6 +71,7 @@ void register_IntegerArrayProperty_class(){
             IntegerArrayProperty_exposer.def( 
                 "asADouble"
                 , asADouble_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -77,6 +83,7 @@ void register_IntegerArrayProperty_class(){
             IntegerArrayProperty_exposer.def( 
                 "asAString"
                 , asAString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -88,6 +95,7 @@ void register_IntegerArrayProperty_class(){
             IntegerArrayProperty_exposer.def( 
                 "asAnArray"
                 , asAnArray_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -99,6 +107,7 @@ void register_IntegerArrayProperty_class(){
             IntegerArrayProperty_exposer.def( 
                 "asAnInteger"
                 , asAnInteger_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -110,6 +119,7 @@ void register_IntegerArrayProperty_class(){
             IntegerArrayProperty_exposer.def( 
                 "isABoolean"
                 , isABoolean_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -121,6 +131,7 @@ void register_IntegerArrayProperty_class(){
             IntegerArrayProperty_exposer.def( 
                 "isADouble"
                 , isADouble_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -132,6 +143,7 @@ void register_IntegerArrayProperty_class(){
             IntegerArrayProperty_exposer.def( 
                 "isAString"
                 , isAString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -143,6 +155,7 @@ void register_IntegerArrayProperty_class(){
             IntegerArrayProperty_exposer.def( 
                 "isAnInteger"
                 , isAnInteger_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -170,6 +183,7 @@ void register_IntegerArrayProperty_class(){
             IntegerArrayProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

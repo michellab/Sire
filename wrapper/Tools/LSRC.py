@@ -26,6 +26,9 @@ import copy
 # We will use the waterbox held in the WSRC tools directory
 wsrc_tools_dir = "%s/Tools/WSRC" % Sire.Config.share_directory
 
+# Switch to use RepExMove while RepExMove2 is unavailable
+RepExMove2 = RepExMove
+
 ####################################################
 # ALL OF THE GLOBAL USER-AVAILABLE LSRC PARAMETERS #
 ####################################################
@@ -38,7 +41,7 @@ mcs_prematch = Parameter("match atoms", None,
                          """The names of atoms that must match when aligning the two ligands.
                             The format is a comma-separated list of atom pairs, saying that
                             the atom called 'A' in ligand0 matches the atom called 'B' in
-                            ligand1. This is needed when the maximum common substructure 
+                            ligand1. This is needed when the maximum common substructure
                             algorithm fails to find a good match. For example, the string
                             'A1:B1,A2:B2,A3:B3' would match atom A1 in ligand0 to atom
                             B1 in ligand1, A2 to B2 and A3 to B3.""")
@@ -63,14 +66,14 @@ grid_buffer = Parameter("grid buffer", 2*angstrom,
 
 disable_grid = Parameter("disable grid", False, """Whether or not to disable use of the grid""")
 
-use_oldff = Parameter("use old forcefields", False, """For debugging, use the old forcefields rather than the 
+use_oldff = Parameter("use old forcefields", False, """For debugging, use the old forcefields rather than the
                                                        new forcefields""")
 
 temperature = Parameter("temperature", 25*celsius, """Simulation temperature""")
 random_seed = Parameter("random seed", None, """Random number seed. Set this if you
                          want to have reproducible simulations.""")
 
-vacuum_calc = Parameter("vacuum calculation", False, 
+vacuum_calc = Parameter("vacuum calculation", False,
                         """Whether or not to swap the ligand into vacuum. This is useful if you
                            want to calculate relative hydration free energies.""")
 
@@ -80,7 +83,7 @@ use_fixed_ligand = Parameter("fixed ligand", False,
 use_rot_trans_ligand = Parameter("ligand rot-trans", True,
                                  """Whether or not the ligand is free to translate and rotate.""")
 
-topology = Parameter("topology", "dual", 
+topology = Parameter("topology", "dual",
                      """Whether to use 'single' or 'dual' topology to morph between the two ligands.""")
 
 alpha_scale = Parameter("alpha_scale", 1.0,
@@ -96,7 +99,7 @@ water_monitor_distance = Parameter("water monitor distance", 5.0*angstrom,
                                    """The distance up to which the free energy of water molecules
                                       interacting with the ligand should be recorded.""")
 
-nrgmon_frequency = Parameter("energy monitor frequency", 1000, 
+nrgmon_frequency = Parameter("energy monitor frequency", 1000,
                              """The number of steps between each evaluation of the energy monitors.""")
 
 lambda_values = Parameter("lambda values", [ 0.005, 0.071, 0.137, 0.203, 0.269, 0.335, 0.401, 0.467, 0.533, 0.599, 0.665, 0.731, 0.797, 0.863, 0.929, 0.995 ],
@@ -106,12 +109,12 @@ nsubmoves = Parameter("nsubmoves", 50000,
 
 ligand_name0 = Parameter("ligand0", None,
                          """The name of ligand 0. This should be the name of one of the residues
-                            in the ligand, so that this program can find the correct molecule. If it is not set, then 
+                            in the ligand, so that this program can find the correct molecule. If it is not set, then
                             the first non-protein, non solvent molecule is used.""")
 
 ligand_name1 = Parameter("ligand1", None,
                          """The name of ligand 1. This should be the name of one of the residues
-                            in the ligand, so that this program can find the correct molecule. If it is not set, then 
+                            in the ligand, so that this program can find the correct molecule. If it is not set, then
                             the first non-protein, non solvent molecule is used.""")
 
 reflection_radius = Parameter("reflection radius", 15*angstrom,
@@ -126,22 +129,22 @@ topfile0 = Parameter("topfile0", "complex0.top",
                      """Name of the topology file containing the solvated protein-ligand0 complex.""")
 
 crdfile0 = Parameter("crdfile0", "complex0.crd",
-                     """Name of the coordinate file containing the coordinates of the 
+                     """Name of the coordinate file containing the coordinates of the
                         solvated protein-ligand0 complex.""")
 
 topfile1 = Parameter("topfile1", "complex1.top",
                      """Name of the topology file containing the solvated protein-ligand1 complex.""")
 
 crdfile1 = Parameter("crdfile1", "complex1.crd",
-                     """Name of the coordinate file containing the coordinates of the 
+                     """Name of the coordinate file containing the coordinates of the
                         solvated protein-ligand1 complex.""")
 
 s3file0 = Parameter("s3file0", "complex0.s3",
-                    """Name to use for the intermediate s3 file that will contain the 
+                    """Name to use for the intermediate s3 file that will contain the
                        solvated protein-ligand0 complex after it has been loaded from the top/crd files.""")
 
 s3file1 = Parameter("s3file1", "complex1.s3",
-                    """Name to use for the intermediate s3 file that will contain the 
+                    """Name to use for the intermediate s3 file that will contain the
                        solvated protein-ligand1 complex after it has been loaded from the top/crd files.""")
 
 water_topfile = Parameter("water topfile", "%s/waterbox.top" % wsrc_tools_dir,
@@ -151,14 +154,14 @@ water_crdfile = Parameter("water crdfile", "%s/waterbox.crd" % wsrc_tools_dir,
                           """Name of the coordinate file containing the coordinates of the water box.""")
 
 water_s3file = Parameter("water s3file", "waterbox.s3",
-                         """Name to use for the intermediate s3 file that will contain the 
+                         """Name to use for the intermediate s3 file that will contain the
                             water box after it has been loaded from the top/crd files.""")
 
 outdir = Parameter("output directory", "output",
                    """Name of the directory in which to place all of the output files.""")
 
 restart_file = Parameter("restart file", "lsrc_restart.s3",
-                         """Name of the restart file to use to save progress during the calculation of 
+                         """Name of the restart file to use to save progress during the calculation of
                             the relative binding free energy of ligand 0 to ligand 1.""")
 
 nmoves = Parameter("nmoves", 1000, """Number of RETI moves to perform during the simulation.""")
@@ -182,7 +185,7 @@ save_pdb = Parameter("save pdb", True,
                      """Whether or not to write a PDB of the system after each iteration.""")
 
 save_all_pdbs = Parameter("save all pdbs", False,
-                          """Whether or not to write all of the PDBs. If not, only PDBs at the two 
+                          """Whether or not to write all of the PDBs. If not, only PDBs at the two
                              end points of the simulation will be written.""")
 
 pdb_frequency = Parameter("pdb frequency", 50,
@@ -437,10 +440,10 @@ def createLSRCMoves(system):
         print("Using generated random number seed %d" % seed)
     else:
         print("Using supplied random number seed %d" % seed)
-    
+
     moves.setGenerator( RanGenerator(seed) )
 
-    return moves    
+    return moves
 
 
 def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, mapper, stage):
@@ -517,7 +520,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
         mobile_bound_solutes_group.remove(ligand_mol1)
         if mobile_bound_solutes_group.nMolecules() > 0:
             bound_leg.add(mobile_bound_solutes_group)
-    
+
     # create a group to hold all of the mobile solvent molecules in the bound leg
     mobile_bound_solvents_group = MoleculeGroup("mobile_bound_solvents")
     mobile_bound_water_group = MoleculeGroup("mobile_bound_water")
@@ -527,27 +530,27 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
             solvent_mol = mols[molnum][0].molecule()
 
             try:
-                # this is a water molecule if we can swap the coordinates with the 
+                # this is a water molecule if we can swap the coordinates with the
                 # water molecule from teh water box
                 water_mol.edit().setProperty("coordinates", \
                                      solvent_mol.property("coordinates"))
-                
+
                 for j in range(0,solvent_mol.nResidues()):
                     solvent_mol = solvent_mol.residue( ResIdx(j) ).edit() \
                                              .setProperty( PDB.parameters().pdbResidueName(), "BWT" ) \
                                              .commit().molecule()
-                
+
                 mobile_bound_solvents_group.add(solvent_mol)
                 mobile_bound_water_group.add(solvent_mol)
             except:
-                # the test molecule is not compatible, so it is not 
+                # the test molecule is not compatible, so it is not
                 # compatible with the water in the water box
                 mobile_bound_solvents_group.add(solvent_mol)
 
         print("The number of bound leg mobile solvent molecules is %d." % mobile_bound_solvents_group.nMolecules())
         print("The number of these which are compatible water molecules is %d." % mobile_bound_water_group.nMolecules())
 
-    # create the groups to hold all of the protein molecules. We will use "extract" to 
+    # create the groups to hold all of the protein molecules. We will use "extract" to
     # pull out only those protein atoms that are in the mobile region
     bound_protein_intra_group = MoleculeGroup("bound_protein_intra_group")
     mobile_bound_proteins_group = MoleculeGroup("mobile_bound_proteins")
@@ -579,12 +582,12 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
 
         for molnum in all_proteins.molNums():
             protein_mol = Molecule.join(all_proteins[molnum])
-            
+
             if protein_mol.selectedAll():
                 bound_protein_intra_group.add(protein_mol)
                 bound_leg.add(protein_mol)
 
-                mobile_protein = []                
+                mobile_protein = []
 
                 if protein_sidechains.contains(molnum):
                     sidechains = protein_sidechains[molnum]
@@ -673,7 +676,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     mobile_bound_mols.add( mobile_bound_solutes_group.molecules() )
     mobile_bound_mols.add( bound_protein_intra_group.molecules() )
 
-    # group holding all of the mobile atoms in the bound leg, excluding the 
+    # group holding all of the mobile atoms in the bound leg, excluding the
     # buffer atoms that are fixed, but bonded to mobile atoms
     mobile_buffered_bound_mols = mobile_bound_solvents_group.molecules()
     mobile_buffered_bound_mols.add( mobile_bound_solutes_group.molecules() )
@@ -694,7 +697,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     ###
     ### INTRA-ENERGY OF THE LIGAND AND CLUSTER
     ###
-    
+
     if use_oldff.val:
         # intramolecular energy of the ligands
         ligand_intraclj = IntraCLJFF("ligand:intraclj")
@@ -805,7 +808,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
 
         bound_ligand1_mobile.add(ligand_mol1, MGIdx(0))
         bound_ligand1_mobile.add(mobile_bound_mols, MGIdx(1))
- 
+
         bound_ligand1_fixed = InterGroupFF("bound:ligand1-fixed")
         bound_ligand1_fixed.setCLJFunction( getInterCLJFunction() )
         bound_ligand1_fixed = setNewGridProperties(bound_ligand1_fixed)
@@ -906,7 +909,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     bound_forcefields = []
 
     if use_oldff.val:
-        # forcefield holding the energy between the bound leg mobile atoms and  
+        # forcefield holding the energy between the bound leg mobile atoms and
         # the bound leg fixed atoms
         if disable_grid.val:
             bound_mobile_fixed = InterGroupCLJFF("bound:mobile-fixed")
@@ -1010,7 +1013,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
 
             bound_forcefields.append(solute_intraclj)
             bound_forcefields.append(solute_intraff)
-            
+
     ###
     ### FORCEFIELDS LOCAL ONLY TO THE FREE LEG
     ###
@@ -1269,7 +1272,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
 
     bound_bound_nrg_sym = Symbol("E_{bound-bound}")
     bound_bound_nrg = None
-    
+
     for bound_forcefield in bound_forcefields:
         if bound_bound_nrg is None:
             bound_bound_nrg = bound_forcefield.components().total()
@@ -1307,7 +1310,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
 
     bound_nrg_prev_sym = Symbol("E_{bound_{prev}}")
     bound_nrg_prev = ((1-lam_prev) * ligand0_bound_nrg_prev_sym) + (lam_prev * ligand1_bound_nrg_prev_sym)
-    
+
     free_nrg_sym = Symbol("E_{free}")
     free_nrg = (lam * ligand0_free_nrg_sym) + ((1-lam) * ligand1_free_nrg_sym)
 
@@ -1371,7 +1374,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     system.setComponent( Symbol("delta_free_nrg^{F}"), (free_nrg_f_sym - free_nrg_sym) )
     system.setComponent( Symbol("delta_free_nrg^{B}"), (free_nrg_b_sym - free_nrg_sym) )
 
-    # Now add constraints. These are used to keep 
+    # Now add constraints. These are used to keep
     # all lambda values between 0 and 1, and to
     # map the alpha values of the softcore forcefields to lambda
     print("\nCreating LSRC system constraints...\n")
@@ -1499,7 +1502,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     # All protein sidechains are moved together
     mobile_sidechains = MoleculeGroup("mobile_sidechains")
     mobile_sidechains.add(mobile_bound_protein_sidechains_group.molecules())
-    
+
     system.add( mobile_sidechains )
 
     # All protein backbones are moved together
@@ -1548,7 +1551,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
                                                     BennettsFreeEnergyAverage(0 * kcal_per_mol,
                                                                               temperature.val,
                                                                               0.1 * binwidth.val, False) ) )
-    
+
     system.add( "delta_bound_g^{F}", MonitorComponent( Symbol("delta_bound_nrg^{F}"),
                                                        FreeEnergyAverage(temperature.val,
                                                                          dlam * binwidth.val) ) )
@@ -1596,7 +1599,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
             if getMinimumDistance(ligand_mol0,water_mol) < dist:
                 # we should monitor this water
                 boundwater_points.append( VectorPoint(water_mol.evaluate().center()) )
-    
+
         for molnum in mobile_free_water_group.molNums():
             #this is a mobile water, so a candidate for monitoring
             water_mol = mobile_free_water_group[molnum][0].molecule()
@@ -1630,7 +1633,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
 
         system.add(key, nrgmons[key], nrgmon_frequency.val)
 
-    moves = createLSRCMoves(system)    
+    moves = createLSRCMoves(system)
 
     # now calculate the total energy of the system - this initialises grids etc.
     # ensuring that, when we make the replicas, the maximum amount of sharing between
@@ -1680,7 +1683,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
 
 
 def mergeLSRC(sys0, ligand0_mol, sys1, ligand1_mol, watersys):
-    
+
     if watersys:
         print("Merging the two ligand complexes with the water system to create the ligandswap system...")
     else:
@@ -1692,7 +1695,7 @@ def mergeLSRC(sys0, ligand0_mol, sys1, ligand1_mol, watersys):
                                   mcs_timeout.val, False ).match(ligand0_mol, PropertyMap(),
                                                                  ligand1_mol, PropertyMap())
     else:
-        mapping = AtomMCSMatcher(mcs_timeout.val, False).match(ligand0_mol, PropertyMap(), 
+        mapping = AtomMCSMatcher(mcs_timeout.val, False).match(ligand0_mol, PropertyMap(),
                                                                ligand1_mol, PropertyMap())
 
     lines = []
@@ -1834,16 +1837,16 @@ def makeRETI(system, moves):
     replicas.setSubMoves(moves)
     replicas.setNSubMoves(nsubmoves.val)
     replicas.setLambdaComponent(lam)
-    replicas.setRecordAllStatistics(True)        
+    replicas.setRecordAllStatistics(True)
 
     seed = random_seed.val
-    
+
     if seed is None:
         seed = RanGenerator().randInt(100000,1000000)
         print("RETI system using generated random number seed %d" % seed)
     else:
         print("RETI system using supplied random number seed %d" % seed)
-    
+
     replicas.setGenerator( RanGenerator(seed+5) )
 
     for i in range(0, len(lambda_values.val)):
@@ -1874,7 +1877,7 @@ def makeRETI(system, moves):
 
 
 def loadInput():
-    """This is a high level function that loads the LSRC system that calculates the 
+    """This is a high level function that loads the LSRC system that calculates the
        relative binding free energy of swapping bound ligand 0 with free ligand 1"""
 
     have_sys = False
@@ -1941,7 +1944,7 @@ def analyseLSRC(dirname, replicas, iteration, bennetts_freenrgs, fep_freenrgs, t
     print("===========================", file=FILE)
 
     print("\ndelta_lambda == %f" % delta_lambda, file=FILE)
-    print("temperature == %f K\n" % replicas[0].subMoves().temperature().to(kelvin), file=FILE) 
+    print("temperature == %f K\n" % replicas[0].subMoves().temperature().to(kelvin), file=FILE)
 
     nreplicas = replicas.nReplicas()
 
@@ -1956,7 +1959,7 @@ def analyseLSRC(dirname, replicas, iteration, bennetts_freenrgs, fep_freenrgs, t
 
     dg_bound_f = {}
     dg_bound_b = {}
-    
+
     dg_free_f = {}
     dg_free_b = {}
 
@@ -2108,9 +2111,9 @@ def run():
 
         ms = t.elapsed()
         print("...iteration complete. Took %d ms" % ms)
-   
+
         nmax = lsrc_moves.nMoves()
-        
+
         # we have successfully completed one iteration of each system
         iteration = nmax
 

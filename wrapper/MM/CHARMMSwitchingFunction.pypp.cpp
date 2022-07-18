@@ -33,6 +33,8 @@ SireMM::CHARMMSwitchingFunction __copy__(const SireMM::CHARMMSwitchingFunction &
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CHARMMSwitchingFunction_class(){
 
     { //::SireMM::CHARMMSwitchingFunction
@@ -53,6 +55,7 @@ void register_CHARMMSwitchingFunction_class(){
                 "dElectrostaticScaleFactor"
                 , dElectrostaticScaleFactor_function_value
                 , ( bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return the derivative of the electrostatic scaling factor as\n" );
         
         }
@@ -65,6 +68,7 @@ void register_CHARMMSwitchingFunction_class(){
                 "dVDWScaleFactor"
                 , dVDWScaleFactor_function_value
                 , ( bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return the derivative of the vdw scaling factor as\n" );
         
         }
@@ -77,6 +81,7 @@ void register_CHARMMSwitchingFunction_class(){
                 "electrostaticScaleFactor"
                 , electrostaticScaleFactor_function_value
                 , ( bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return the scale factor for the electrostatic interaction for the\n" );
         
         }
@@ -103,6 +108,7 @@ void register_CHARMMSwitchingFunction_class(){
             CHARMMSwitchingFunction_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this switching function" );
         
         }
@@ -114,6 +120,7 @@ void register_CHARMMSwitchingFunction_class(){
             CHARMMSwitchingFunction_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -126,6 +133,7 @@ void register_CHARMMSwitchingFunction_class(){
                 "vdwScaleFactor"
                 , vdwScaleFactor_function_value
                 , ( bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return the scale factor for the vdw interaction for the\n" );
         
         }

@@ -38,6 +38,7 @@
 #include "moleculeview.h"
 #include "mover.h"
 #include "selector.hpp"
+#include "mover.hpp"
 
 #include "tostring.h"
 

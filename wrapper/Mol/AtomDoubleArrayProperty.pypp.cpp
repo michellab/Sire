@@ -21,6 +21,8 @@ SireMol::AtomProperty<SireBase::DoubleArrayProperty> __copy__(const SireMol::Ato
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_AtomDoubleArrayProperty_class(){
@@ -61,6 +63,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "assertCanConvert"
                 , assertCanConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -74,6 +77,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "assignFrom"
                 , assignFrom_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -115,6 +119,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "canConvert"
                 , canConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -128,6 +133,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "copyFrom"
                 , copyFrom_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -141,6 +147,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "copyFrom"
                 , copyFrom_function_value
                 , ( bp::arg("values"), bp::arg("selection") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -153,6 +160,7 @@ void register_AtomDoubleArrayProperty_class(){
             AtomDoubleArrayProperty_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -166,6 +174,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "divide"
                 , divide_function_value
                 , ( bp::arg("beads") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -179,6 +188,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "divideByResidue"
                 , divideByResidue_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -192,6 +202,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "fromVariant"
                 , fromVariant_function_value
                 , ( bp::arg("variant") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -233,6 +244,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "getAsProperty"
                 , getAsProperty_function_value
                 , ( bp::arg("cgatomidx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -246,6 +258,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "getAsVariant"
                 , getAsVariant_function_value
                 , ( bp::arg("cgatomidx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -259,6 +272,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -272,6 +286,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -284,6 +299,7 @@ void register_AtomDoubleArrayProperty_class(){
             AtomDoubleArrayProperty_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -297,6 +313,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "matchToSelection"
                 , matchToSelection_function_value
                 , ( bp::arg("selection") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -310,6 +327,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -322,6 +340,7 @@ void register_AtomDoubleArrayProperty_class(){
             AtomDoubleArrayProperty_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -335,6 +354,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("cgidx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -347,6 +367,7 @@ void register_AtomDoubleArrayProperty_class(){
             AtomDoubleArrayProperty_exposer.def( 
                 "nCutGroups"
                 , nCutGroups_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -431,6 +452,7 @@ void register_AtomDoubleArrayProperty_class(){
             AtomDoubleArrayProperty_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -443,6 +465,7 @@ void register_AtomDoubleArrayProperty_class(){
             AtomDoubleArrayProperty_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -455,6 +478,7 @@ void register_AtomDoubleArrayProperty_class(){
             AtomDoubleArrayProperty_exposer.def( 
                 "toVariant"
                 , toVariant_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -467,6 +491,7 @@ void register_AtomDoubleArrayProperty_class(){
             AtomDoubleArrayProperty_exposer.def( 
                 "toVector"
                 , toVector_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -480,6 +505,7 @@ void register_AtomDoubleArrayProperty_class(){
                 "toVector"
                 , toVector_function_value
                 , ( bp::arg("selection") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -492,6 +518,7 @@ void register_AtomDoubleArrayProperty_class(){
             AtomDoubleArrayProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

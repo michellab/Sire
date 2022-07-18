@@ -49,6 +49,8 @@ SireMM::CLJAtom __copy__(const SireMM::CLJAtom &other){ return SireMM::CLJAtom(o
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJAtom_class(){
 
     { //::SireMM::CLJAtom
@@ -65,6 +67,7 @@ void register_CLJAtom_class(){
             CLJAtom_exposer.def( 
                 "ID"
                 , ID_function_value
+                , bp::release_gil_policy()
                 , "Return the ID number for the atom" );
         
         }
@@ -88,6 +91,7 @@ void register_CLJAtom_class(){
             CLJAtom_exposer.def( 
                 "charge"
                 , charge_function_value
+                , bp::release_gil_policy()
                 , "Return the partial charge of the atom" );
         
         }
@@ -99,6 +103,7 @@ void register_CLJAtom_class(){
             CLJAtom_exposer.def( 
                 "coordinates"
                 , coordinates_function_value
+                , bp::release_gil_policy()
                 , "Return the coordinates of the atom" );
         
         }
@@ -110,6 +115,7 @@ void register_CLJAtom_class(){
             CLJAtom_exposer.def( 
                 "isDummy"
                 , isDummy_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a dummy atom (has no ID number)" );
         
         }
@@ -121,6 +127,7 @@ void register_CLJAtom_class(){
             CLJAtom_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this atom is null (no information)" );
         
         }
@@ -132,6 +139,7 @@ void register_CLJAtom_class(){
             CLJAtom_exposer.def( 
                 "ljParameter"
                 , ljParameter_function_value
+                , bp::release_gil_policy()
                 , "Return the LJ parameters of the atom" );
         
         }
@@ -143,6 +151,7 @@ void register_CLJAtom_class(){
             CLJAtom_exposer.def( 
                 "negate"
                 , negate_function_value
+                , bp::release_gil_policy()
                 , "Return the negative of this atom - this returns a copy where\nthe reduced charge and reduced epsilon values have been negated" );
         
         }
@@ -169,6 +178,7 @@ void register_CLJAtom_class(){
             CLJAtom_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -180,6 +190,7 @@ void register_CLJAtom_class(){
             CLJAtom_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -191,6 +202,7 @@ void register_CLJAtom_class(){
             CLJAtom_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -53,6 +53,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJIntraFunction_class(){
 
     { //::SireMM::CLJIntraFunction
@@ -80,6 +82,7 @@ void register_CLJIntraFunction_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not this function contains a property called name" );
         
         }
@@ -91,6 +94,7 @@ void register_CLJIntraFunction_class(){
             CLJIntraFunction_exposer.def( 
                 "properties"
                 , properties_function_value
+                , bp::release_gil_policy()
                 , "Return the properties that can be set in this function" );
         
         }
@@ -103,6 +107,7 @@ void register_CLJIntraFunction_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return the value of the property with name name" );
         
         }
@@ -115,6 +120,7 @@ void register_CLJIntraFunction_class(){
                 "setConnectivity"
                 , setConnectivity_function_value
                 , ( bp::arg("connectivity") )
+                , bp::release_gil_policy()
                 , "Set the connectivity used to find the non-bonded pairs" );
         
         }
@@ -139,6 +145,7 @@ void register_CLJIntraFunction_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the property with name name to value value" );
         
         }
@@ -150,6 +157,7 @@ void register_CLJIntraFunction_class(){
             CLJIntraFunction_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

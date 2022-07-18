@@ -22,6 +22,8 @@ SireMove::SupraSimPacket __copy__(const SireMove::SupraSimPacket &other){ return
 
 const char* pvt_get_name(const SireMove::SupraSimPacket&){ return "SireMove::SupraSimPacket";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SupraSimPacket_class(){
 
     { //::SireMove::SupraSimPacket
@@ -38,6 +40,7 @@ void register_SupraSimPacket_class(){
             SupraSimPacket_exposer.def( 
                 "approximatePacketSize"
                 , approximatePacketSize_function_value
+                , bp::release_gil_policy()
                 , "This will be large..." );
         
         }
@@ -49,6 +52,7 @@ void register_SupraSimPacket_class(){
             SupraSimPacket_exposer.def( 
                 "hasFinished"
                 , hasFinished_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the simulation has finished" );
         
         }
@@ -60,7 +64,7 @@ void register_SupraSimPacket_class(){
             SupraSimPacket_exposer.def( 
                 "moves"
                 , moves_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the supra-moves being applied to the supra-system" );
         
         }
@@ -72,6 +76,7 @@ void register_SupraSimPacket_class(){
             SupraSimPacket_exposer.def( 
                 "nCompleted"
                 , nCompleted_function_value
+                , bp::release_gil_policy()
                 , "Return the number of supra-moves that have been completed so far" );
         
         }
@@ -83,6 +88,7 @@ void register_SupraSimPacket_class(){
             SupraSimPacket_exposer.def( 
                 "nMoves"
                 , nMoves_function_value
+                , bp::release_gil_policy()
                 , "Return the number of supra-moves to be applied to the supra-system" );
         
         }
@@ -109,6 +115,7 @@ void register_SupraSimPacket_class(){
             SupraSimPacket_exposer.def( 
                 "recordingStatistics"
                 , recordingStatistics_function_value
+                , bp::release_gil_policy()
                 , "Set whether or not statistics are being recorded during the moves" );
         
         }
@@ -120,6 +127,7 @@ void register_SupraSimPacket_class(){
             SupraSimPacket_exposer.def( 
                 "shouldPack"
                 , shouldPack_function_value
+                , bp::release_gil_policy()
                 , "This probably shouldnt be packed to disk, as there will be a lot\nof data sharing between this packet and other copies at different\nstages of the simulation (I think) - it is also already heavily\npacked (e.g. to disk) and I dont want that data to be pulled\ninto memory" );
         
         }
@@ -131,7 +139,7 @@ void register_SupraSimPacket_class(){
             SupraSimPacket_exposer.def( 
                 "system"
                 , system_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the supra-system being simulated" );
         
         }
@@ -143,6 +151,7 @@ void register_SupraSimPacket_class(){
             SupraSimPacket_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -154,6 +163,7 @@ void register_SupraSimPacket_class(){
             SupraSimPacket_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

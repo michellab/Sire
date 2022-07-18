@@ -27,6 +27,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_GroupAtomIDBase_class(){
 
     { //::SireMol::GroupAtomIDBase

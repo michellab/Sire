@@ -5,6 +5,12 @@ import os
 import sys
 import warnings
 
+try:
+    import sire
+    sire.use_old_api()
+except ImportError:
+    pass
+
 import Sire.Stream
 import argparse
 from Sire.Analysis import *
@@ -313,7 +319,7 @@ if __name__ == '__main__':
                     lamval = list(analytic_data.keys())[0]
                     grads[lamval] = analytic_data[lamval]
                 else:
-                    # finite difference gradients 
+                    # finite difference gradients
                     lamval = list(fwds_data.keys())[0]
                     fwds_grads[lamval] = fwds_data[lamval]
                     bwds_grads[lamval] = bwds_data[lamval]

@@ -64,7 +64,7 @@ class Atom;
 
     @author Christopher Woods
 */
-class SIREMOL_EXPORT PartialMolecule 
+class SIREMOL_EXPORT PartialMolecule
         : public SireBase::ConcreteProperty<PartialMolecule,MoleculeView>
 {
 
@@ -93,9 +93,11 @@ public:
     bool operator!=(const PartialMolecule &other) const;
 
     QString toString() const;
-    
+
     bool isEmpty() const;
     bool selectedAll() const;
+
+    MolViewPtr toSelector() const;
 
     const MolName& name() const;
     MolNum number() const;
@@ -110,20 +112,20 @@ public:
     int nSegments() const;
 
     Mover<PartialMolecule> move() const;
-    
+
     Evaluator evaluate() const;
 
     AtomSelection selection() const;
-    
+
     PartialMolecule extract() const;
-    
+
     bool hasProperty(const PropertyName &key) const;
-    
+
     bool hasMetadata(const PropertyName &metakey) const;
-    
-    bool hasMetadata(const PropertyName &key, 
+
+    bool hasMetadata(const PropertyName &key,
                      const PropertyName &metakey) const;
-    
+
     QStringList propertyKeys() const;
     QStringList metadataKeys() const;
     QStringList metadataKeys(const PropertyName &key) const;
@@ -148,7 +150,7 @@ Q_DECLARE_METATYPE(SireMol::Mover<SireMol::PartialMolecule>);
 
 SIRE_EXPOSE_CLASS( SireMol::PartialMolecule )
 
-SIRE_EXPOSE_ALIAS( SireMol::Mover<SireMol::PartialMolecule>, 
+SIRE_EXPOSE_ALIAS( SireMol::Mover<SireMol::PartialMolecule>,
                    SireMol::Mover_PartialMolecule_ )
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES

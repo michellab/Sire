@@ -59,6 +59,8 @@ SireMol::ChainIdx __copy__(const SireMol::ChainIdx &other){ return SireMol::Chai
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ChainIdx_class(){
 
     { //::SireMol::ChainIdx
@@ -75,6 +77,7 @@ void register_ChainIdx_class(){
             ChainIdx_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -86,6 +89,7 @@ void register_ChainIdx_class(){
             ChainIdx_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -98,6 +102,7 @@ void register_ChainIdx_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -109,6 +114,7 @@ void register_ChainIdx_class(){
             ChainIdx_exposer.def( 
                 "null"
                 , null_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -133,6 +139,7 @@ void register_ChainIdx_class(){
             ChainIdx_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -144,6 +151,7 @@ void register_ChainIdx_class(){
             ChainIdx_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -155,6 +163,7 @@ void register_ChainIdx_class(){
             ChainIdx_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -55,6 +55,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AtomID_class(){
 
     { //::SireMol::AtomID
@@ -69,6 +71,7 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "any"
                 , any_function_value
+                , bp::release_gil_policy()
                 , "Return an AtomID that matches everything" );
         
         }
@@ -80,6 +83,7 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "chains"
                 , chains_function_value
+                , bp::release_gil_policy()
                 , "Return a Chain ID that matches chains that contain atoms\nthat match this Atom ID" );
         
         }
@@ -91,7 +95,21 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "cutGroups"
                 , cutGroups_function_value
+                , bp::release_gil_policy()
                 , "Return a CutGroup ID that matches CutGroups that contain atoms\nthat match this Atom ID" );
+        
+        }
+        { //::SireMol::AtomID::fromString
+        
+            typedef ::SireMol::AtomIdentifier ( *fromString_function_type )( ::QString const & );
+            fromString_function_type fromString_function_value( &::SireMol::AtomID::fromString );
+            
+            AtomID_exposer.def( 
+                "fromString"
+                , fromString_function_value
+                , ( bp::arg("id") )
+                , bp::release_gil_policy()
+                , "Return an AtomID constructed from the passed string" );
         
         }
         { //::SireMol::AtomID::inverse
@@ -102,6 +120,7 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "inverse"
                 , inverse_function_value
+                , bp::release_gil_policy()
                 , "Syntactic sugar for AtomID::invert()" );
         
         }
@@ -113,6 +132,7 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "invert"
                 , invert_function_value
+                , bp::release_gil_policy()
                 , "Return the invert (not) of this match" );
         
         }
@@ -125,6 +145,7 @@ void register_AtomID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Map this ID back to the indicies of the matching atoms in the molecule,\nusing the passed MoleculeInfo to do the mapping" );
         
         }
@@ -251,6 +272,7 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "residues"
                 , residues_function_value
+                , bp::release_gil_policy()
                 , "Return a Residue ID that matches residues that contain atoms\nthat match this Atom ID" );
         
         }
@@ -262,6 +284,7 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "segments"
                 , segments_function_value
+                , bp::release_gil_policy()
                 , "Return a Segment ID that matches segments that contain atoms\nthat match this Atom ID" );
         
         }
@@ -369,10 +392,12 @@ void register_AtomID_class(){
             AtomID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
         AtomID_exposer.staticmethod( "any" );
+        AtomID_exposer.staticmethod( "fromString" );
         AtomID_exposer.staticmethod( "typeName" );
         AtomID_exposer.def( "__str__", &__str__< ::SireMol::AtomID > );
         AtomID_exposer.def( "__repr__", &__str__< ::SireMol::AtomID > );

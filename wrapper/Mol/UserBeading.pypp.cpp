@@ -40,6 +40,8 @@ SireMol::UserBeading __copy__(const SireMol::UserBeading &other){ return SireMol
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_UserBeading_class(){
 
     { //::SireMol::UserBeading
@@ -56,7 +58,7 @@ void register_UserBeading_class(){
             UserBeading_exposer.def( 
                 "atomBeads"
                 , atomBeads_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the bead specification for each atom" );
         
         }
@@ -69,6 +71,7 @@ void register_UserBeading_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Return whether or not this beading is compatible with the passed molecule info" );
         
         }
@@ -95,6 +98,7 @@ void register_UserBeading_class(){
             UserBeading_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

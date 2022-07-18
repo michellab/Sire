@@ -19,6 +19,8 @@ Squire::PointDipole __copy__(const Squire::PointDipole &other){ return Squire::P
 
 const char* pvt_get_name(const Squire::PointDipole&){ return "Squire::PointDipole";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PointDipole_class(){
 
     { //::Squire::PointDipole
@@ -74,6 +76,7 @@ void register_PointDipole_class(){
             PointDipole_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

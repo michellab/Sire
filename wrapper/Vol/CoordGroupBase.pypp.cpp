@@ -33,6 +33,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_CoordGroupBase_class(){
@@ -62,6 +64,7 @@ void register_CoordGroupBase_class(){
                 "assertSameSize"
                 , assertSameSize_function_value
                 , ( bp::arg("coordinates") )
+                , bp::release_gil_policy()
                 , "Assert that the array of coordinates contains the same number of\ncoordinates as are in this group\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -74,6 +77,7 @@ void register_CoordGroupBase_class(){
                 "assertSameSize"
                 , assertSameSize_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Assert that the CoordGroup other contains the same number of\ncoordinates as are in this group\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -86,6 +90,7 @@ void register_CoordGroupBase_class(){
                 "assertValidIndex"
                 , assertValidIndex_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Assert that i is a valid index in this group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -110,6 +115,7 @@ void register_CoordGroupBase_class(){
             CoordGroupBase_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of coordinates in this group" );
         
         }
@@ -121,6 +127,7 @@ void register_CoordGroupBase_class(){
             CoordGroupBase_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether this group is empty (has no coordinates)" );
         
         }
@@ -133,6 +140,7 @@ void register_CoordGroupBase_class(){
                 "maybeDifferent"
                 , maybeDifferent_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return whether other may be different to this group - this uses\na simple comparison of the memory addresses of the storage of\nthese two groups to see if they are definitely the same, or maybe\ndifferent" );
         
         }
@@ -159,6 +167,7 @@ void register_CoordGroupBase_class(){
             CoordGroupBase_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of coordinates in this group" );
         
         }
@@ -170,6 +179,7 @@ void register_CoordGroupBase_class(){
             CoordGroupBase_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this CoordGroup" );
         
         }
@@ -181,6 +191,7 @@ void register_CoordGroupBase_class(){
             CoordGroupBase_exposer.def( 
                 "toVector"
                 , toVector_function_value
+                , bp::release_gil_policy()
                 , "Return an array containing just the coordinates in this group" );
         
         }
@@ -192,6 +203,7 @@ void register_CoordGroupBase_class(){
             CoordGroupBase_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -203,6 +215,7 @@ void register_CoordGroupBase_class(){
             CoordGroupBase_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

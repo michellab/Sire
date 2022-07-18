@@ -13,6 +13,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_TempBase_class(){
 
     { //::SireUnits::Dimension::TempBase
@@ -28,6 +30,7 @@ void register_TempBase_class(){
                 "convertFromInternal"
                 , convertFromInternal_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -39,6 +42,7 @@ void register_TempBase_class(){
             TempBase_exposer.def( 
                 "convertFromInternal"
                 , convertFromInternal_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -51,6 +55,7 @@ void register_TempBase_class(){
                 "convertToInternal"
                 , convertToInternal_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -63,6 +68,7 @@ void register_TempBase_class(){
                 "in"
                 , in_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -75,6 +81,7 @@ void register_TempBase_class(){
                 "in"
                 , in_function_value
                 , ( bp::arg("temp") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -117,6 +124,7 @@ void register_TempBase_class(){
                 "to"
                 , to_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -128,6 +136,7 @@ void register_TempBase_class(){
             TempBase_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -139,6 +148,7 @@ void register_TempBase_class(){
             TempBase_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

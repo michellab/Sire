@@ -39,6 +39,7 @@
 #include "SireMol/mgname.h"
 #include "SireMol/moleditor.h"
 #include "SireMol/molidx.h"
+#include "SireMol/core.h"
 
 #include "SireVol/periodicbox.h"
 #include "SireVol/triclinicbox.h"
@@ -1080,7 +1081,7 @@ Molecule repartitionHydrogenMass(
                            .molecule();
 
         // Store the indices of the atoms that are connected to this hydrogen.
-        connections.append(connectivity.connectionsTo(idx).toList());
+        connections.append(connectivity.connectionsTo(idx).values());
     }
 
     // Commit the changes.

@@ -41,6 +41,8 @@ Squire::HF __copy__(const Squire::HF &other){ return Squire::HF(other); }
 
 const char* pvt_get_name(const Squire::HF&){ return "Squire::HF";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_HF_class(){
 
     { //::Squire::HF
@@ -56,6 +58,7 @@ void register_HF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("orbital") )
+                , bp::release_gil_policy()
                 , "Add an orbital that does not to be located at a particular\npoint in space" );
         
         }
@@ -68,6 +71,7 @@ void register_HF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("point"), bp::arg("orbital") )
+                , bp::release_gil_policy()
                 , "Add an orbital that needs to be placed at center" );
         
         }
@@ -80,6 +84,7 @@ void register_HF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("point"), bp::arg("charge") )
+                , bp::release_gil_policy()
                 , "Add an orbital that needs to be placed at center" );
         
         }
@@ -92,6 +97,7 @@ void register_HF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("point"), bp::arg("dipole") )
+                , bp::release_gil_policy()
                 , "Add an orbital that needs to be placed at center" );
         
         }
@@ -103,6 +109,7 @@ void register_HF_class(){
             HF_exposer.def( 
                 "solve"
                 , solve_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
