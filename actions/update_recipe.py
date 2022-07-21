@@ -39,24 +39,6 @@ def run_cmd(cmd):
 
 gitdir = os.path.join(srcdir, ".git")
 
-# Get the Sire version. (Latest tag.)
-sire_version = run_cmd(f"git --git-dir={gitdir} --work-tree={srcdir} describe --tags --abbrev=0")
-print(sire_version)
-
-# Return a list of commits messages since the most recent tag.
-sire_build = run_cmd(f"git --git-dir={gitdir} --work-tree={srcdir} log --oneline {sire_version}..").split("\n")
-# Get the build number. (Number of commits since last tag.)
-# If there are no commits, then we'll get a single item list containing an
-# empty string. The logic below makes sure the build number is zero indexed.
-if len(sire_build) == 1:
-    if sire_build[0]:
-        sire_build = 1
-    else:
-        sire_build = 0
-else:
-    sire_build = len(sire_build)
-print(sire_build)
-
 # Get the Sire branch.
 sire_branch = run_cmd(f"git --git-dir={gitdir} --work-tree={srcdir} rev-parse --abbrev-ref HEAD")
 print(sire_branch)
@@ -87,8 +69,6 @@ with open(recipe, "w") as FILE:
         elif line.find("SIRE_BSS_REQUIREMENTS") != -1:
             line = bss_reqs
         else:
-            line = line.replace("SIRE_VERSION", sire_version)
-            line = line.replace("SIRE_BUILD", str(sire_build))
             line = line.replace("SIRE_BRANCH", sire_branch)
 
         FILE.write(line)
