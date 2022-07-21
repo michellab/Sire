@@ -43,8 +43,18 @@ gitdir = os.path.join(srcdir, ".git")
 sire_version = run_cmd(f"git --git-dir={gitdir} --work-tree={srcdir} describe --tags --abbrev=0")
 print(sire_version)
 
+# Return a list of commits messages since the most recent tag.
+sire_build = run_cmd(f"git --git-dir={gitdir} --work-tree={srcdir} log --oneline {sire_version}..").split("\n")
 # Get the build number. (Number of commits since last tag.)
-sire_build = len(run_cmd(f"git --git-dir={gitdir} --work-tree={srcdir} log --oneline {sire_version}..").split("\n"))
+# If there are no commits, then we'll get a single item list containing an
+# empty string. The logic below makes sure the build number is zero indexed.
+if len(sire_build) == 1:
+    if sire_build[0]:
+        sire_build = 1
+    else:
+        sire_build = 0
+else:
+    sire_build = len(sire_build)
 print(sire_build)
 
 # Get the Sire branch.
