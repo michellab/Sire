@@ -15,7 +15,7 @@ def supported_formats():
     """Return a string that describes all of the molecular file formats
        that are supported by Sire
     """
-    from .io import MoleculeParser
+    from .legacy.IO import MoleculeParser
     return MoleculeParser.supportedFormats()
 
 
@@ -391,8 +391,8 @@ def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
             Exception
             (look at `log` to find in detail what went wrong)
     """
-    from .io import MoleculeParser
-    from .base import PropertyMap, StringProperty
+    from .legacy.IO import MoleculeParser
+    from .legacy.Base import PropertyMap, StringProperty
 
     p = PropertyMap()
 
@@ -403,8 +403,8 @@ def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
         p.set("fileformat", StringProperty(",".join(format)))
 
     if molecules.what() != "SireSystem::System":
-        from .system import System
-        from .mol import MoleculeGroup
+        from .legacy.System import System
+        from .legacy.Mol import MoleculeGroup
         s = System()
         m = MoleculeGroup("all")
         m.add(molecules)

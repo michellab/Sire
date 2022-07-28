@@ -11,7 +11,9 @@ URLs to :func:`sire.load`.
 >>> mols = sr.load("https://siremol.org/m/ala.top",
 ...                "https://siremol.org/m/ala.crd")
 Downloading from 'https://siremol.org/m/ala.top'...
+Unzipping './ala.top.bz2'...
 Downloading from 'https://siremol.org/m/ala.crd'...
+Unzipping './ala.crd.bz2'...
 
 >>> print(mols)
 System( name=ACE num_molecules=631 num_residues=633 num_atoms=1912 )
@@ -42,7 +44,7 @@ or
 If you are loading files, you can also make use of glob expressions
 (wildcard expansions), e.g.
 
->>> mols = sr.load("ala.*")
+>>> mols = sr.load("ala.???")
 
 .. note::
 
@@ -52,3 +54,10 @@ If you are loading files, you can also make use of glob expressions
    a different directory by passing that in via the `directory`
    argument, e.g. `sr.load(sr.expand(sr.tutorial_url,"cholesterol.sdf"), directory="tmp")`.
    The directory will be created automatically if it doesn't exist.
+
+.. note::
+
+   We couldn't use `ala.*` because the directory contains the compressed
+   input files, `ala.crd.bz2` and `ala.top.bz2`, which were downloaded
+   by `sr.load`. If you remove both these files, then you could
+   use `sr.load("ala.*")`.

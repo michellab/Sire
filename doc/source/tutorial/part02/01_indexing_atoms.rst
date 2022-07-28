@@ -195,7 +195,7 @@ Atom( C:3     [ -56.06,    9.95,   42.55] )
 gives the atom at the index 0 in the container of atoms that are called "C",
 and
 
->>> print(mol("C")[-1])
+>>> print(mol["C"][-1])
 Atom( C:11654 [  32.09,   -0.82,   34.12] )
 
 gives the last atom in the container of atoms that are called "C".
@@ -281,18 +281,17 @@ Selector<SireMol::Atom>( size=4
 or ranges of atom numbers
 
 >>> print(mol["atomnum 1:5"])
-Selector<SireMol::Atom>( size=5
+Selector<SireMol::Atom>( size=4
 0:  Atom( N:1     [ -54.07,   11.27,   41.93] )
 1:  Atom( CA:2    [ -55.43,   11.35,   42.54] )
 2:  Atom( C:3     [ -56.06,    9.95,   42.55] )
 3:  Atom( O:4     [ -57.04,    9.73,   41.82] )
-4:  Atom( CB:5    [ -56.32,   12.33,   41.76] )
 )
 
 or ranges with steps, e.g.
 
 >>> print(mol["atomnum 1:91:10"])
-Selector<SireMol::Atom>( size=10
+Selector<SireMol::Atom>( size=9
 0:  Atom( N:1     [ -54.07,   11.27,   41.93] )
 1:  Atom( C:11    [ -56.14,    7.05,   42.06] )
 2:  Atom( CG:21   [ -54.57,    8.40,   38.40] )
@@ -302,12 +301,11 @@ Selector<SireMol::Atom>( size=10
 6:  Atom( CB:61   [ -52.91,   17.54,   38.36] )
 7:  Atom( C:71    [ -56.03,   16.00,   33.41] )
 8:  Atom( CB:81   [ -52.48,   16.28,   32.24] )
-9:  Atom( OG:91   [ -55.67,   10.80,   30.06] )
 )
 
 .. note::
 
-    Search number ranges are inclusive of both ends. Also note
+    Search number ranges are half-open, like Python ranges. Also note
     that the results appear in the order the atoms match from their
     molecular container, not the order of the numbers (range) in the search
     string. So ``mol["atomnum 10:1:-1"]`` would not reverse the atoms.
@@ -315,7 +313,7 @@ Selector<SireMol::Atom>( size=10
 
 You can even mix combinations of multiple atom numbers and ranges!
 
->>> print(mol["atomnum 1:3, 7:10, 20, 30"])
+>>> print(mol["atomnum 1:4, 7:11, 20, 30"])
 Selector<SireMol::Atom>( size=9
 0:  Atom( N:1     [ -54.07,   11.27,   41.93] )
 1:  Atom( CA:2    [ -55.43,   11.35,   42.54] )
@@ -439,7 +437,7 @@ Searching by element
 --------------------
 
 The search strings are very powerful, and are described in more detail in a
-:doc:`later chapter <search strings>`. One cool feature is that you can
+:doc:`later chapter <07_searching>`. One cool feature is that you can
 search for atoms by their element.
 
 >>> print(mol["element C"])

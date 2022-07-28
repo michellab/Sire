@@ -10,6 +10,7 @@ For example, let's load a cholesterol molecule from
 
 >>> mols = sr.load("https://siremol.org/m/cholesterol.sdf")
 Downloading from 'https://siremol.org/m/cholesterol.sdf'...
+Unzipping './cholesterol.sdf.bz2'...
 
 >>> print(mols)
 System( name=cholesterol num_molecules=1 num_residues=1 num_atoms=74 )
