@@ -118,6 +118,15 @@ A small word of warning, the compilation can easily take over an hour!
 
 The above will compile Sire in your existing conda environment.
 
+If you plan to build `BioSimSpace <https://github.com/michellab/BioSimSpace>`__
+on top of Sire, then you will need to resolve BioSimSpace's dependencies at
+the time Sire is installed to ensure that it is built in a self-consistent way.
+This can be achieved as follows:
+
+.. code-block:: bash
+
+    python setup.py --install-bss-deps install
+
 Support and Development
 =======================
 

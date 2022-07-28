@@ -216,7 +216,7 @@ def _add_to_dependencies(dependencies, lines):
 
 _is_conda_prepped = False
 
-def conda_install(dependencies):
+def conda_install(dependencies, install_bss_reqs=False):
     """Install the passed list of dependencies using conda"""
 
     conda_exe = conda
@@ -224,6 +224,14 @@ def conda_install(dependencies):
     global _is_conda_prepped
 
     if not _is_conda_prepped:
+        if install_bss_reqs:
+            cmd = "%s config --prepend channels michellab/label/dev" % conda_exe
+            print("Activating michellab channel channel using: '%s'" % cmd)
+            status = subprocess.run(cmd.split())
+            if status.returncode != 0:
+                print("Failed to add michellab channel!")
+                sys.exit(-1)
+
         print("\nSetting channel priorities to favour conda-forge")
         cmd = "%s config --prepend channels conda-forge" % conda_exe
         print("Activating conda-forge channel using: '%s'" % cmd)
@@ -297,7 +305,7 @@ def install_requires(install_bss_reqs=False):
         conda_install(["mamba"])
         mamba = find_mamba()
 
-    conda_install(dependencies)
+    conda_install(dependencies, install_bss_reqs)
 
 
 def add_default_cmake_defs(cmake_defs, ncores):
