@@ -98,10 +98,20 @@ Molecule( Protein:6 num_atoms=302 num_residues=19 )
 
 or all residues with more than 10 atoms
 
-THIS DOESN'T WORK, BUT IT SHOULD
-
 >>> print(mols["residues with count(atoms) > 10"])
-XXX
+Selector<SireMol::Residue>( size=12
+0:  Residue( LYS:1   num_atoms=24 )
+1:  Residue( ILE:2   num_atoms=19 )
+2:  Residue( LYS:5   num_atoms=22 )
+3:  Residue( ILE:6   num_atoms=19 )
+4:  Residue( LYS:7   num_atoms=22 )
+...
+7:  Residue( ILE:12  num_atoms=19 )
+8:  Residue( LYS:13  num_atoms=22 )
+9:  Residue( ILE:14  num_atoms=19 )
+10:  Residue( LYS:17  num_atoms=22 )
+11:  Residue( ILE:18  num_atoms=19 )
+)
 
 Searching by property
 ---------------------
@@ -253,7 +263,7 @@ SireMol::SelectorM<SireMol::Atom>( size=7370
 
 is equivalent to writing
 
->>> print(mol["mass =~ 1.008"])
+>>> print(mols["mass =~ 1.008"])
 SireMol::SelectorM<SireMol::Atom>( size=7370
 0: MolNum(6) Atom( H1:2    [  22.66,   13.10,   21.60] )
 1: MolNum(6) Atom( H2:3    [  23.57,   14.09,   22.53] )
@@ -319,7 +329,7 @@ SireMol::SelectorM<SireMol::Atom>( size=3631
 
 gives all of the atoms whose charges are less than -0.5.
 
-The units are unit electron charges, which you can specify,
+The units are modulo electron charges, which you can specify,
 
 >>> print(mols["charge > 0.5 e"])
 SireMol::SelectorM<SireMol::Atom>( size=25
