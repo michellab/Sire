@@ -54,6 +54,8 @@ namespace bp = boost::python;
 
 #include "SireBase/quickcopy.hpp"
 
+#include "SireBase/slice.h"
+
 #include "SireMaths/align.h"
 
 #include "SireMaths/vectorproperty.h"

@@ -30,6 +30,8 @@
 
 #include "SireMaths/align.h"
 
+#include "SireBase/slice.h"
+
 #include "SireVol/space.h"
 
 #include "SireBase/quickcopy.hpp"
@@ -153,6 +155,54 @@ bool AtomProperty<Vector>::operator!=(const AtomProperty<Vector> &other) const
 const CoordGroup& AtomProperty<Vector>::operator[](CGIdx cgidx) const
 {
     return coords.constData()[cgidx.map(coords.count())];
+}
+
+/** Return whether or not this container is empty */
+bool AtomProperty<Vector>::isEmpty() const
+{
+    return this->nAtoms() == 0;
+}
+
+QString AtomProperty<Vector>::toString() const
+{
+    if (this->isEmpty())
+    {
+        return QObject::tr("AtomCoords::empty");
+    }
+    else
+    {
+        QStringList parts;
+
+        const auto n = this->count();
+
+        if (n <= 10)
+        {
+            for (int i=0; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(this->operator[](i).toString()));
+            }
+        }
+        else
+        {
+            for (int i=0; i<5; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(this->operator[](i).toString()));
+            }
+
+            parts.append("...");
+
+            for (int i=n-5; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(this->operator[](i).toString()));
+            }
+        }
+
+        return QObject::tr("AtomCoords( size=%1\n%2\n)")
+                        .arg(n).arg(parts.join("\n"));
+    }
 }
 
 /** Merge all of the atomic properties into a single array, with
@@ -397,6 +447,51 @@ const CoordGroup& AtomProperty<Vector>::get(CGIdx cgidx) const
     return this->operator[](cgidx);
 }
 
+/** Return the coordinates of the ith item */
+const Vector& AtomProperty<Vector>::operator[](int i) const
+{
+    i = Index(i).map(this->nAtoms());
+    return this->coords.constCoordsData()[i];
+}
+
+/** Return the coordinates of the ith item */
+const Vector& AtomProperty<Vector>::at(int i) const
+{
+    return this->operator[](i);
+}
+
+/** Return the coordinates of the ith item */
+const Vector& AtomProperty<Vector>::get(int i) const
+{
+    return this->operator[](i);
+}
+
+/** Return the coordinates at the specified indicies */
+QList<Vector> AtomProperty<Vector>::operator[](const QList<qint64> &idxs) const
+{
+    QList<Vector> ret;
+
+    for (auto idx : idxs)
+    {
+        ret.append(this->operator[](idx));
+    }
+
+    return ret;
+}
+
+/** Return the coordinates for the slice of indicies */
+QList<Vector> AtomProperty<Vector>::operator[](const SireBase::Slice &slice) const
+{
+    QList<Vector> ret;
+
+    for (auto it = slice.begin(this->count()); not it.atEnd(); it.next())
+    {
+        ret.append(this->operator[](it.value()));
+    }
+
+    return ret;
+}
+
 /** Return the coordinates of the atom at index 'cgatomidx' */
 const Vector& AtomProperty<Vector>::operator[](const CGAtomIdx &cgatomidx) const
 {
@@ -616,22 +711,22 @@ const Vector* AtomProperty<Vector>::constData(CGIdx cgidx) const
     return this->data(cgidx);
 }
 
-/** Return the number of CoordGroups in this set */
+/** Return the number of atoms in this set */
 int AtomProperty<Vector>::size() const
 {
-    return coords.count();
+    return this->nAtoms();
 }
 
-/** Return the number of CoordGroups in this set */
+/** Return the number of atoms in this set */
 int AtomProperty<Vector>::count() const
 {
-    return coords.count();
+    return this->nAtoms();
 }
 
-/** Return the number of CoordGroups in this set */
+/** Return the number of atoms in this set */
 int AtomProperty<Vector>::nCutGroups() const
 {
-    return coords.count();
+    return this->nAtoms();
 }
 
 /** Return the number of atoms in this set */
@@ -665,6 +760,26 @@ QVector<Vector> AtomProperty<Vector>::toVector() const
     QVector<Vector> vals(nats);
 
     quickCopy<Vector>( vals.data(), coords.constCoordsData(), nats );
+
+    return vals;
+}
+
+/** Convert this atom property to an array of values. The values
+    are written in CGAtomIdx order */
+QList<Vector> AtomProperty<Vector>::toList() const
+{
+    int nats = this->nAtoms();
+
+    if (nats == 0)
+        return QList<Vector>();
+
+    QList<Vector> vals;
+    vals.reserve(nats);
+
+    for (int i=0; i<nats; ++i)
+    {
+        vals.append(coords.constCoordsData()[i]);
+    }
 
     return vals;
 }
@@ -869,6 +984,16 @@ void AtomProperty<Vector>::copyFrom(const QVector<Vector> &values,
             }
         }
     }
+}
+
+/** Convert the properties of the atoms selected in 'selection' to an
+    array of values. The values are written in CGAtomIdx order
+
+    \throw SireError::incompatible_error
+*/
+QList<Vector> AtomProperty<Vector>::toList(const AtomSelection &selected_atoms) const
+{
+    return this->toVector().toList();
 }
 
 const char* AtomCoords::typeName()

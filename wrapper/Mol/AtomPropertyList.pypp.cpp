@@ -98,6 +98,20 @@ void register_AtomPropertyList_class(){
         { //::SireMol::AtomProperty< SireBase::PropertyList >::at
         
             typedef SireMol::AtomProperty< SireBase::PropertyList > exported_class_t;
+            typedef ::SireBase::PropertyList const & ( ::SireMol::AtomProperty< SireBase::PropertyList >::*at_function_type)( int ) const;
+            at_function_type at_function_value( &::SireMol::AtomProperty< SireBase::PropertyList >::at );
+            
+            AtomPropertyList_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireBase::PropertyList >::at
+        
+            typedef SireMol::AtomProperty< SireBase::PropertyList > exported_class_t;
             typedef ::SireBase::PropertyList const & ( ::SireMol::AtomProperty< SireBase::PropertyList >::*at_function_type)( ::SireMol::CGAtomIdx const & ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireBase::PropertyList >::at );
             
@@ -216,6 +230,20 @@ void register_AtomPropertyList_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireBase::PropertyList >::get
+        
+            typedef SireMol::AtomProperty< SireBase::PropertyList > exported_class_t;
+            typedef ::SireBase::PropertyList const & ( ::SireMol::AtomProperty< SireBase::PropertyList >::*get_function_type)( int ) const;
+            get_function_type get_function_value( &::SireMol::AtomProperty< SireBase::PropertyList >::get );
+            
+            AtomPropertyList_exposer.def( 
+                "get"
+                , get_function_value
+                , ( bp::arg("i") )
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
@@ -404,6 +432,20 @@ void register_AtomPropertyList_class(){
         { //::SireMol::AtomProperty< SireBase::PropertyList >::operator[]
         
             typedef SireMol::AtomProperty< SireBase::PropertyList > exported_class_t;
+            typedef ::SireBase::PropertyList const & ( ::SireMol::AtomProperty< SireBase::PropertyList >::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireBase::PropertyList >::operator[] );
+            
+            AtomPropertyList_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireBase::PropertyList >::operator[]
+        
+            typedef SireMol::AtomProperty< SireBase::PropertyList > exported_class_t;
             typedef ::SireBase::PropertyList const & ( ::SireMol::AtomProperty< SireBase::PropertyList >::*__getitem___function_type)( ::SireMol::CGAtomIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireBase::PropertyList >::operator[] );
             
@@ -412,6 +454,32 @@ void register_AtomPropertyList_class(){
                 , __getitem___function_value
                 , ( bp::arg("cgatomidx") )
                 , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireBase::PropertyList >::operator[]
+        
+            typedef SireMol::AtomProperty< SireBase::PropertyList > exported_class_t;
+            typedef ::QList< SireBase::PropertyList > ( ::SireMol::AtomProperty< SireBase::PropertyList >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireBase::PropertyList >::operator[] );
+            
+            AtomPropertyList_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireBase::PropertyList >::operator[]
+        
+            typedef SireMol::AtomProperty< SireBase::PropertyList > exported_class_t;
+            typedef ::QList< SireBase::PropertyList > ( ::SireMol::AtomProperty< SireBase::PropertyList >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireBase::PropertyList >::operator[] );
+            
+            AtomPropertyList_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
                 , "" );
         
         }
@@ -452,6 +520,33 @@ void register_AtomPropertyList_class(){
             AtomPropertyList_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireBase::PropertyList >::toList
+        
+            typedef SireMol::AtomProperty< SireBase::PropertyList > exported_class_t;
+            typedef ::QList< SireBase::PropertyList > ( ::SireMol::AtomProperty< SireBase::PropertyList >::*toList_function_type)(  ) const;
+            toList_function_type toList_function_value( &::SireMol::AtomProperty< SireBase::PropertyList >::toList );
+            
+            AtomPropertyList_exposer.def( 
+                "toList"
+                , toList_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireBase::PropertyList >::toList
+        
+            typedef SireMol::AtomProperty< SireBase::PropertyList > exported_class_t;
+            typedef ::QList< SireBase::PropertyList > ( ::SireMol::AtomProperty< SireBase::PropertyList >::*toList_function_type)( ::SireMol::AtomSelection const & ) const;
+            toList_function_type toList_function_value( &::SireMol::AtomProperty< SireBase::PropertyList >::toList );
+            
+            AtomPropertyList_exposer.def( 
+                "toList"
+                , toList_function_value
+                , ( bp::arg("selection") )
                 , bp::release_gil_policy()
                 , "" );
         
