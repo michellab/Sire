@@ -1216,7 +1216,7 @@ void OpenMMFrEnergyST::initialise()
        out of the box. */
 
     OpenMM::CustomBondForce * custom_link_bond = new OpenMM::CustomBondForce("delta(min(0, r_eff))*kl*r_eff^2;"
-                                                                             "r_eff=abs(r-reql)-dl;")
+                                                                             "r_eff=abs(r-reql)-dl");
     custom_link_bond->addPerBondParameter("reql");
     custom_link_bond->addPerBondParameter("kl");
     custom_link_bond->addPerBondParameter("dl");
