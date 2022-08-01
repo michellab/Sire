@@ -47,6 +47,7 @@ void register_GeneralUnit_class(){
         typedef bp::class_< SireUnits::Dimension::GeneralUnit, bp::bases< SireUnits::Dimension::Unit > > GeneralUnit_exposer_t;
         GeneralUnit_exposer_t GeneralUnit_exposer = GeneralUnit_exposer_t( "GeneralUnit", "", bp::init< >("") );
         bp::scope GeneralUnit_scope( GeneralUnit_exposer );
+        GeneralUnit_exposer.def( bp::init< double >(( bp::arg("value") ), "") );
         GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit const & >(( bp::arg("other") ), "") );
         { //::SireUnits::Dimension::GeneralUnit::ANGLE
         
@@ -144,18 +145,46 @@ void register_GeneralUnit_class(){
                 , "" );
         
         }
+        { //::SireUnits::Dimension::GeneralUnit::isDimensionless
+        
+            typedef bool ( ::SireUnits::Dimension::GeneralUnit::*isDimensionless_function_type)(  ) const;
+            isDimensionless_function_type isDimensionless_function_value( &::SireUnits::Dimension::GeneralUnit::isDimensionless );
+            
+            GeneralUnit_exposer.def( 
+                "isDimensionless"
+                , isDimensionless_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireUnits::Dimension::GeneralUnit::isZero
+        
+            typedef bool ( ::SireUnits::Dimension::GeneralUnit::*isZero_function_type)(  ) const;
+            isZero_function_type isZero_function_value( &::SireUnits::Dimension::GeneralUnit::isZero );
+            
+            GeneralUnit_exposer.def( 
+                "isZero"
+                , isZero_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         GeneralUnit_exposer.def( bp::self != bp::self );
         GeneralUnit_exposer.def( bp::self * bp::self );
         GeneralUnit_exposer.def( bp::self * bp::other< double >() );
         GeneralUnit_exposer.def( bp::self * bp::other< int >() );
         GeneralUnit_exposer.def( bp::self *= bp::self );
         GeneralUnit_exposer.def( bp::self + bp::self );
+        GeneralUnit_exposer.def( bp::self + bp::other< double >() );
         GeneralUnit_exposer.def( -bp::self );
         GeneralUnit_exposer.def( bp::self - bp::self );
+        GeneralUnit_exposer.def( bp::self - bp::other< double >() );
         GeneralUnit_exposer.def( bp::self / bp::self );
         GeneralUnit_exposer.def( bp::self / bp::other< double >() );
         GeneralUnit_exposer.def( bp::self / bp::other< int >() );
         GeneralUnit_exposer.def( bp::self /= bp::self );
+        GeneralUnit_exposer.def( bp::self < bp::self );
+        GeneralUnit_exposer.def( bp::self <= bp::self );
         { //::SireUnits::Dimension::GeneralUnit::operator=
         
             typedef ::SireUnits::Dimension::GeneralUnit & ( ::SireUnits::Dimension::GeneralUnit::*assign_function_type)( ::SireUnits::Dimension::GeneralUnit const & ) ;
@@ -170,6 +199,8 @@ void register_GeneralUnit_class(){
         
         }
         GeneralUnit_exposer.def( bp::self == bp::self );
+        GeneralUnit_exposer.def( bp::self > bp::self );
+        GeneralUnit_exposer.def( bp::self >= bp::self );
         { //::SireUnits::Dimension::GeneralUnit::to
         
             typedef double ( ::SireUnits::Dimension::GeneralUnit::*to_function_type)( ::SireUnits::Dimension::TempBase const & ) const;
@@ -244,6 +275,8 @@ void register_GeneralUnit_class(){
                 , "" );
         
         }
+        GeneralUnit_exposer.def( bp::other<double>() + bp::self );
+        GeneralUnit_exposer.def( bp::other<double>() - bp::self );
         GeneralUnit_exposer.def( bp::other<double>() * bp::self );
         GeneralUnit_exposer.def( bp::other<double>() / bp::self );
         GeneralUnit_exposer.def( "__copy__", &__copy__);

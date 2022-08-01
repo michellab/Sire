@@ -3,6 +3,7 @@
 
 """
 
+from multiprocessing import reduction
 from tkinter import E
 from ..legacy import Mol as _Mol
 from .. import use_new_api as _use_new_api
@@ -486,11 +487,52 @@ def _apply(objs, func, *args, **kwargs):
     return result
 
 
+def _apply_reduce(objs, func, reduction_func=None, *args, **kwargs):
+    """
+    Call the passed function on all views in the container,
+    reducing the result into a single value via the 'reduce' function.
+
+    This is equivalent to calling
+
+    ```
+    reduce(reduction_func, objs.apply(func, *args, **kwargs))
+
+    The function can be either;
+
+    1. a string containing the name of the function to call, or
+    2. an actual function (either a normal function or a lambda expression)
+
+    The reduction function should be a function that can be passed
+    to `reduce`. If this isn't passed, then it is assumed to
+    be operator.add.
+
+    You can optionally pass in positional and keyword arguments
+    here that will be passed to the applied function.
+
+    Args:
+        objs (self): The container itself (this is self)
+        func (str or function): The function to be called, or the name
+                                of the function to be called.
+        reduction_func: The function used to reduce the result. This
+                        is operator.add by default.
+
+    Returns:
+        result: The reduced result
+    """
+    if reduction_func is None:
+        from operator import add
+        reduction_func = add
+
+    from functools import reduce
+    return reduce(reduction_func, objs.apply(func, *args, **kwargs))
+
+
 def _add_apply_func(obj):
     if hasattr(obj, "apply"):
         return
 
     obj.apply = _apply
+    obj.apply_reduce = _apply_reduce
 
 
 def _add_property_func(obj):

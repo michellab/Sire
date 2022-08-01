@@ -53,6 +53,28 @@ def test_atomljs(ala_mols):
     assert ljs[0:3] == [ljs[0], ljs[1], ljs[2]]
 
 
+def test_atomelements(ala_mols):
+    mols = ala_mols
+
+    for e in mols["element C"].property("element"):
+        assert e.num_protons() == 6
+
+    for e in mols["element H"].apply("element"):
+        assert e.num_protons() == 1
+
+    for e in mols["element O"].apply("property", "element"):
+        assert e.num_protons() == 8
+
+    for e in mols["element N"].apply(lambda atom: atom.element()):
+        assert e.num_protons() == 7
+
+    for e in mols["element C"].apply(lambda atom, key : atom.property(key), "element"):
+        assert e.num_protons() == 6
+
+    with pytest.raises(AttributeError):
+        mols["element C"].element()
+
+
 def test_convenience_atom_funcs(ala_mols):
     mols = ala_mols
     mol = mols[0]

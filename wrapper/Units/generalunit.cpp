@@ -10,9 +10,12 @@
 
 #include "SireBase/lengthproperty.h"
 #include "SireBase/timeproperty.h"
+#include "SireBase/numberproperty.h"
 #include "SireBase/variantproperty.h"
 
 #include "SireError/errors.h"
+
+#include "SireMaths/maths.h"
 
 #include "SireUnits/dimensions.h"
 #include "SireUnits/temperature.h"
@@ -114,6 +117,17 @@ GeneralUnit::GeneralUnit() : Unit(0)
     Angle = 0;
 }
 
+GeneralUnit::GeneralUnit(double value) : Unit(value)
+{
+    Mass = 0;
+    Length = 0;
+    Time = 0;
+    Charge = 0;
+    temperature = 0;
+    Quantity = 0;
+    Angle = 0;
+}
+
 GeneralUnit::GeneralUnit(const GeneralUnit &other) : Unit(other)
 {
     Mass = other.Mass;
@@ -142,6 +156,9 @@ QString GeneralUnit::what() const
 
 void GeneralUnit::assertCompatible(const GeneralUnit &other) const
 {
+    if (this->isZero() or other.isZero())
+        return;
+
     if (Mass != other.Mass or
         Length != other.Length or
         Time != other.Time or
@@ -150,7 +167,9 @@ void GeneralUnit::assertCompatible(const GeneralUnit &other) const
         Quantity != other.Quantity or
         Angle != other.Angle)
     {
-        throw "Unit conversion error!!!";
+        throw SireError::incompatible_error( QObject::tr(
+            "Units for values %1 and %2 are incompatible.")
+                .arg(this->toString()).arg(other.toString()));
     }
 }
 
@@ -178,6 +197,22 @@ double GeneralUnit::to(const TempBase &other) const
     this->assertCompatible(general_temp);
 
     return other.convertFromInternal(value()) / other.convertFromInternal();
+}
+
+bool GeneralUnit::isDimensionless() const
+{
+    return Mass == 0 and
+           Length == 0 and
+           Time == 0 and
+           Charge == 0 and
+           temperature == 0 and
+           Quantity == 0 and
+           Angle == 0;
+}
+
+bool GeneralUnit::isZero() const
+{
+    return SireMaths::isZero(this->value());
 }
 
 int GeneralUnit::MASS() const
@@ -242,6 +277,30 @@ bool GeneralUnit::operator!=(const GeneralUnit &other) const
     return value() != other.value();
 }
 
+bool GeneralUnit::operator>(const GeneralUnit &other) const
+{
+    assertCompatible(other);
+    return value() > other.value();
+}
+
+bool GeneralUnit::operator>=(const GeneralUnit &other) const
+{
+    assertCompatible(other);
+    return value() >= other.value();
+}
+
+bool GeneralUnit::operator<(const GeneralUnit &other) const
+{
+    assertCompatible(other);
+    return value() < other.value();
+}
+
+bool GeneralUnit::operator<=(const GeneralUnit &other) const
+{
+    assertCompatible(other);
+    return value() <= other.value();
+}
+
 GeneralUnit GeneralUnit::operator-() const
 {
     GeneralUnit ret = *this;
@@ -253,6 +312,10 @@ GeneralUnit& GeneralUnit::operator+=(const GeneralUnit &other)
 {
     assertCompatible(other);
     setScale(value() + other.value());
+
+    if (this->isZero())
+        this->operator=(GeneralUnit());
+
     return *this;
 }
 
@@ -260,6 +323,10 @@ GeneralUnit& GeneralUnit::operator-=(const GeneralUnit &other)
 {
     assertCompatible(other);
     setScale(value() - other.value());
+
+    if (this->isZero())
+        this->operator=(GeneralUnit());
+
     return *this;
 }
 
@@ -277,18 +344,57 @@ GeneralUnit GeneralUnit::operator-(const GeneralUnit &other) const
     return ret;
 }
 
+GeneralUnit& GeneralUnit::operator+=(double val)
+{
+    assertCompatible(GeneralUnit(val));
+    setScale(value() + val);
+
+    if (this->isZero())
+        this->operator=(GeneralUnit());
+
+    return *this;
+}
+
+GeneralUnit& GeneralUnit::operator-=(double val)
+{
+    assertCompatible(GeneralUnit(val));
+    setScale(value() - val);
+
+    if (this->isZero())
+        this->operator=(GeneralUnit());
+
+    return *this;
+}
+
+GeneralUnit GeneralUnit::operator+(double val) const
+{
+    GeneralUnit ret = *this;
+    ret += val;
+    return ret;
+}
+
+GeneralUnit GeneralUnit::operator-(double val) const
+{
+    GeneralUnit ret = *this;
+    ret -= val;
+    return ret;
+}
+
 GeneralUnit GeneralUnit::operator*=(const GeneralUnit &other)
 {
-     setScale(value() * other.value());
-     Mass += other.Mass;
-     Length += other.Length;
-     Time += other.Time;
-     Charge += other.Charge;
-     temperature += other.temperature;
-     Quantity += other.Quantity;
-     Angle += other.Angle;
+    setScale(value() * other.value());
+    Mass += other.Mass;
+    Length += other.Length;
+    Time += other.Time;
+    Charge += other.Charge;
+    temperature += other.temperature;
+    Quantity += other.Quantity;
+    Angle += other.Angle;
 
-     return *this;
+    if (this->isZero())
+        this->operator=(GeneralUnit());
+
+    return *this;
 }
 
 GeneralUnit GeneralUnit::operator/=(const GeneralUnit &other)
@@ -302,6 +408,9 @@ GeneralUnit GeneralUnit::operator/=(const GeneralUnit &other)
     Quantity -= other.Quantity;
     Angle -= other.Angle;
 
+    if (this->isZero())
+        this->operator=(GeneralUnit());
+
     return *this;
 }
 
@@ -309,6 +418,7 @@ GeneralUnit GeneralUnit::operator*(const GeneralUnit &other) const
 {
     GeneralUnit ret = *this;
     ret *= other;
+
     return ret;
 }
 
@@ -322,24 +432,40 @@ GeneralUnit GeneralUnit::operator/(const GeneralUnit &other) const
 GeneralUnit& GeneralUnit::operator*=(double val)
 {
     setScale(value() * val);
+
+    if (this->isZero())
+        this->operator=(GeneralUnit());
+
     return *this;
 }
 
 GeneralUnit& GeneralUnit::operator/=(double val)
 {
     setScale(value() / val);
+
+    if (this->isZero())
+        this->operator=(GeneralUnit());
+
     return *this;
 }
 
 GeneralUnit& GeneralUnit::operator*=(int val)
 {
     setScale(value() * val);
+
+    if (this->isZero())
+        this->operator=(GeneralUnit());
+
     return *this;
 }
 
 GeneralUnit& GeneralUnit::operator/=(int val)
 {
     setScale(value() / val);
+
+    if (this->isZero())
+        this->operator=(GeneralUnit());
+
     return *this;
 }
 
@@ -390,7 +516,11 @@ GeneralUnit GeneralUnit::invert() const
 
 PropertyPtr GeneralUnit::toProperty() const
 {
-    if (this->isUnit<SireUnits::Dimension::Length>())
+    if (this->isDimensionless())
+    {
+        return NumberProperty(this->value());
+    }
+    else if (this->isUnit<SireUnits::Dimension::Length>())
     {
         return LengthProperty( SireUnits::Dimension::Length(this->value()) );
     }

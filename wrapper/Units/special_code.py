@@ -60,12 +60,15 @@ def findGlobals():
     print("}\n", file=FILE)
 
 def fix_GeneralUnit(c):
+    c.add_registration_code("def( bp::other<double>() + bp::self )")
+    c.add_registration_code("def( bp::other<double>() - bp::self )")
     c.add_registration_code("def( bp::other<double>() * bp::self )")
     c.add_registration_code("def( bp::other<double>() / bp::self )")
 
 def fixMB(mb):
    mb.add_declaration_code("#include \"SireUnits/temperature.h\"")
    mb.add_declaration_code("#include \"sireunits_dimensions.h\"")
+   mb.add_declaration_code("#include \"generalunit.h\"")
    mb.add_declaration_code("#include \"_Units_global_variables.pyman.hpp\"")
   
 
@@ -84,5 +87,6 @@ implicitly_convertible = [ ("SireUnits::Dimension::TempBase",
                             "SireUnits::Dimension::Temperature"),
                            ("SireUnits::Dimension::TempBase",
                             "double"),
+                           ("double", "SireUnits::Dimension::GeneralUnit"),
                          ]
  

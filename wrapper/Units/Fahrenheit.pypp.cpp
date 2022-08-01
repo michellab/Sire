@@ -100,6 +100,8 @@ void register_Fahrenheit_class(){
                 , "" );
         
         }
+        Fahrenheit_exposer.def( bp::other<double>() + bp::self );
+        Fahrenheit_exposer.def( bp::other<double>() - bp::self );
         Fahrenheit_exposer.def( bp::other<double>() * bp::self );
         Fahrenheit_exposer.def( bp::other<double>() / bp::self );
         Fahrenheit_exposer.def( "__copy__", &__copy__);

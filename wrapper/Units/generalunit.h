@@ -49,6 +49,7 @@ friend QDataStream& ::operator>>(QDataStream&, GeneralUnit&);
 
 public:
     GeneralUnit();
+    GeneralUnit(double value);
 
     template<class D>
     explicit GeneralUnit(const D &unit) : Unit(unit)
@@ -61,6 +62,9 @@ public:
         Quantity = D::QUANTITY();
         Angle = D::ANGLE();
         detail::registerTypeName(*this, D::typeName());
+
+        if (this->isZero())
+            this->operator=(GeneralUnit());
     }
 
     GeneralUnit(const GeneralUnit &other);
@@ -81,8 +85,12 @@ public:
     GeneralUnit& operator=(const GeneralUnit &other);
 
     bool operator==(const GeneralUnit &other) const;
-
     bool operator!=(const GeneralUnit &other) const;
+
+    bool operator>(const GeneralUnit &other) const;
+    bool operator>=(const GeneralUnit &other) const;
+    bool operator<(const GeneralUnit &other) const;
+    bool operator<=(const GeneralUnit &other) const;
 
     GeneralUnit operator-() const;
 
@@ -101,6 +109,12 @@ public:
     GeneralUnit operator*(const GeneralUnit &other) const;
 
     GeneralUnit operator/(const GeneralUnit &other) const;
+
+    GeneralUnit& operator+=(double val);
+    GeneralUnit& operator-=(double val);
+
+    GeneralUnit operator+(double val) const;
+    GeneralUnit operator-(double val) const;
 
     GeneralUnit& operator*=(double val);
     GeneralUnit& operator/=(double val);
@@ -125,6 +139,10 @@ public:
 
     template<class T>
     bool isUnit() const;
+
+    bool isDimensionless() const;
+
+    bool isZero() const;
 
 private:
     void assertCompatible(const GeneralUnit &other) const;
