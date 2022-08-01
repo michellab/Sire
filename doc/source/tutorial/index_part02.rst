@@ -28,8 +28,8 @@ Molecule( 7SA1:2  num_atoms=11728 num_residues=1518 )
 
 .. note::
 
-``sire`` automatically downloads and unpacks structures from the PDB. Just
-put in the PDB code as the argument to :func:`sire.load`.
+   ``sire`` automatically downloads and unpacks structures from the PDB. Just
+   put in the PDB code as the argument to :func:`sire.load`.
 
 Molecules are constructed as atoms, which be can be (optionally) arranged
 into residues, chains and segments. We can get the number of each using

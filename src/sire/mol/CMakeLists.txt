@@ -8,6 +8,7 @@
 set ( SCRIPTS
         __init__.py
         _cursor.py
+        _element.py
     )
 
 # installation

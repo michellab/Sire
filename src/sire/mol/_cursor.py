@@ -41,13 +41,21 @@ class _CursorData:
                                    self.connectivity.commit())
 
     def set_bond_property(self, bond, key, value):
-        self.connectivity.set_property(bond, key, value)
-        self.molecule.set_property(self.connectivity_property,
-                                   self.connectivity.commit())
+        if value is None:
+            self.remove_bond_property(bond, key)
+        else:
+            self.connectivity.set_property(bond, key, value)
+            self.molecule.set_property(self.connectivity_property,
+                                       self.connectivity.commit())
 
     def set_bond_properties(self, bond, values):
         for key in values.keys():
-            self.connectivity.set_property(bond, key, values[key])
+            value = values[key]
+
+            if value is None:
+                self.connectivity.remove_property(bond, key)
+            else:
+                self.connectivity.set_property(bond, key, value)
 
         self.molecule.set_property(self.connectivity_property,
                                    self.connectivity.commit())
@@ -101,7 +109,12 @@ class Cursor:
         self._update()
 
         if self._bond is None:
-            self._d.molecule.remove_property(key)
+            if self.is_molecule():
+                # remove the property entirely
+                self._d.molecule.remove_property(key)
+            else:
+                # replace the property with a default-constructed value
+                self.__setitem__(key, None)
         else:
             self._d.remove_bond_property(self._bond, key)
 
@@ -127,6 +140,15 @@ class Cursor:
         self._update()
 
         if self._bond is None:
+            if value is None:
+                # we need to create a default-constructed value
+                try:
+                    v = self._view.property(key)
+                    value = v.__class__()
+                except KeyError:
+                    # No existing property - assume this is Boolean False
+                    value = False
+
             self._view.set_property(key, value)
             self._d.molecule = self._view.molecule()
         else:
@@ -270,7 +292,7 @@ class Cursor:
         return c
 
     def residue(self, i=None):
-        """Return the atom in the molecule that matches the passed ID.
+        """Return the residue in the molecule that matches the passed ID.
            If 'i' is None, then this returns the residue that contains
            this atom (if this is an atom)
         """
@@ -297,7 +319,7 @@ class Cursor:
 
     def chain(self, i=None):
         """Return the chain in the molecule that matches the passed ID.
-           If 'i' is None, then this returns the residue that contains
+           If 'i' is None, then this returns the chain that contains
            this atom (if this is an atom)"""
         if i is None:
             try:
@@ -322,7 +344,7 @@ class Cursor:
 
     def segment(self, i=None):
         """Return the segment in the molecule that matches the passed ID.
-           If 'i' is None, then this returns the residue that contains
+           If 'i' is None, then this returns the segment that contains
            this atom (if this is an atom)"""
         if i is None:
             try:

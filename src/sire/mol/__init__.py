@@ -596,3 +596,5 @@ Residue.cursor = _cursor
 Chain.cursor = _cursor
 Segment.cursor = _cursor
 Molecule.cursor = _cursor
+
+from ._element import *

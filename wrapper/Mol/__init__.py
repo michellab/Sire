@@ -260,6 +260,8 @@ def _match_to_type(typename, property):
         return _Base.IntegerArrayProperty(property)
     elif typename.endswith("PropertyList"):
         return _Base.PropertyList(property)
+    elif typename.endswith("Coords"):
+        return _Maths.Vector(property)
     else:
         return property
 
