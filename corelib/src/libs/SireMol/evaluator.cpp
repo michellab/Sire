@@ -236,7 +236,7 @@ AABox Evaluator::aaBox(const PropertyMap &map) const
     const AtomCoords &coords = prop.asA<AtomCoords>();
 
     const CoordGroup *coords_array = coords.constData();
-    int ncg = coords.count();
+    int ncg = coords.nCutGroups();
 
     //now get the minimum and maximum coordinates...
     Vector mincoords( std::numeric_limits<double>::max() );

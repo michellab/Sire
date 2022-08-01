@@ -726,7 +726,7 @@ int AtomProperty<Vector>::count() const
 /** Return the number of atoms in this set */
 int AtomProperty<Vector>::nCutGroups() const
 {
-    return this->nAtoms();
+    return this->coords.nCoordGroups();
 }
 
 /** Return the number of atoms in this set */

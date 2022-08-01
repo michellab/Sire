@@ -455,7 +455,7 @@ Connectivity CovalentBondHunter::operator()(const MoleculeView &molview,
 
     if (selected_atoms.selectedAll())
     {
-        int ncgroups = coords.count();
+        int ncgroups = coords.nCutGroups();
 
         for (CGIdx i(0); i<ncgroups; ++i)
         {
@@ -472,7 +472,7 @@ Connectivity CovalentBondHunter::operator()(const MoleculeView &molview,
     }
     else if (selected_atoms.selectedAllCutGroups())
     {
-        int ncgroups = coords.count();
+        int ncgroups = coords.nCutGroups();
 
         for (CGIdx i(0); i<ncgroups; ++i)
         {
@@ -675,7 +675,7 @@ Connectivity ChemicalBondHunter::operator()(const MoleculeView &molview,
 
     if (selected_atoms.selectedAllCutGroups())
     {
-        int ngroups = elements.count();
+        int ngroups = elements.nCutGroups();
 
         for (CGIdx i(0); i<ngroups; ++i)
         {
