@@ -51,3 +51,27 @@ def test_atomljs(ala_mols):
         assert ljs[i] == mol.atom(i).property("LJ")
 
     assert ljs[0:3] == [ljs[0], ljs[1], ljs[2]]
+
+
+def test_convenience_atom_funcs(ala_mols):
+    mols = ala_mols
+    mol = mols[0]
+
+    from sire.units import g_per_mol, mod_electron
+
+    mass = 0 * g_per_mol
+
+    for i in range(0, 5):
+        mass += mol[i].mass()
+
+    assert mass == mol[0:5].mass()
+
+    charge = 0 * mod_electron
+
+    for atom in mol["resnum 1"].atoms():
+        charge += atom.charge()
+
+    assert charge == mol["resnum 1"].charge()
+
+    assert mol.coords() == mol.evaluate().center_of_mass()
+

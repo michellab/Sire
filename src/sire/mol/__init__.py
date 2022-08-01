@@ -409,15 +409,23 @@ for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule,
           _Bond, _SelectorBond, _SelectorMBond]:
     __fix_getitem(C)
 
-MoleculeView.coordinates = lambda x : x.property("coordinates")
 Atom.element = lambda x : x.property("element")
-Atom.x = lambda x : x.property("coordinates").x()
-Atom.y = lambda x : x.property("coordinates").y()
-Atom.z = lambda x : x.property("coordinates").z()
+Atom.lj = lambda x : x.property("LJ")
+Atom.coordinates = lambda x : x.property("coordinates")
+Atom.coords = Atom.coordinates
+Atom.x = lambda x : x.coordinates().x()
+Atom.y = lambda x : x.coordinates().y()
+Atom.z = lambda x : x.coordinates().z()
 
 def _add_evals(obj):
     obj.mass = lambda x : x.evaluate().mass()
     obj.charge = lambda x : x.evaluate().charge()
+    obj.coordinates = lambda x : x.evaluate().center_of_mass()
+    obj.coords = obj.coordinates
+    obj.x = lambda x : x.coordinates().x()
+    obj.y = lambda x : x.coordinates().y()
+    obj.z = lambda x : x.coordinates().z()
+
 
 for C in [MoleculeView, SelectorMol, SelectorM_Atom_,
           SelectorM_Residue_, SelectorM_Chain_,
