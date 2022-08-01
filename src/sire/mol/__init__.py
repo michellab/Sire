@@ -3,6 +3,7 @@
 
 """
 
+from tkinter import E
 from ..legacy import Mol as _Mol
 from .. import use_new_api as _use_new_api
 _use_new_api()
@@ -427,11 +428,92 @@ def _add_evals(obj):
     obj.z = lambda x : x.coordinates().z()
 
 
+def _get_property(x, key):
+    try:
+        return x.__orig__property(key)
+    except Exception as e:
+        saved_exception = e
+
+    mol = x.molecule()
+
+    prop = mol.property(key)
+
+    import sire
+
+    if issubclass(prop.__class__, sire.legacy.Mol.AtomProp):
+        vals = []
+        for atom in x.atoms():
+            vals.append(atom.property(key))
+
+        return vals
+    else:
+        raise saved_exception
+
+
+def _apply(objs, func, *args, **kwargs):
+    """
+    Call the passed function on all views in the container,
+    appending the result to a list of results, which
+    is returned.
+
+    The function can be either;
+
+    1. a string containing the name of the function to call, or
+    2. an actual function (either a normal function or a lambda expression)
+
+    You can optionally pass in positional and keyword arguments
+    here that will be passed to the function.
+
+    Args:
+        objs (self): The container itself (this is self)
+        func (str or function): The function to be called, or the name
+                                of the function to be called.
+
+    Returns:
+        list: A list of the results, with one result per view in the container.
+    """
+    result = []
+
+    if str(func) == func:
+        # we calling a named function
+        for obj in objs:
+            result.append(getattr(obj, func)(*args, **kwargs))
+    else:
+        # we have been passed the function to call
+        for obj in objs:
+            result.append(func(obj, *args, **kwargs))
+
+    return result
+
+
+def _add_apply_func(obj):
+    if hasattr(obj, "apply"):
+        return
+
+    obj.apply = _apply
+
+
+def _add_property_func(obj):
+    if hasattr(obj, "__orig__property"):
+        return
+
+    if hasattr(obj, "property"):
+        obj.__orig__property = obj.property
+
+    obj.property = _get_property
+
+
 for C in [MoleculeView, SelectorMol, SelectorM_Atom_,
           SelectorM_Residue_, SelectorM_Chain_,
           SelectorM_CutGroup_, SelectorM_Segment_,
           _Bond, _SelectorBond, _SelectorMBond]:
     _add_evals(C)
+    _add_property_func(C)
+    _add_apply_func(C)
+
+for C in [Residue, Chain, Segment]:
+    _add_property_func(C)
+
 
 def _get_atom_mass(x):
     if x.has_property("mass"):
@@ -454,6 +536,7 @@ def _get_atom_charge(x):
 Atom.charge = _get_atom_charge
 
 Molecule.connectivity = lambda x : x.property("connectivity")
+
 
 #### Here are some extra classes / functions defined as part of the
 #### public API
