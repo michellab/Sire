@@ -1215,8 +1215,8 @@ void OpenMMFrEnergyST::initialise()
     /* !! CustomBondForce does not (OpenMM 6.2) apply PBC checks so code will be buggy is restraints involve one atom that diffuses
        out of the box. */
 
-    OpenMM::CustomBondForce * custom_link_bond = new OpenMM::CustomBondForce("kl*max(0,d-dl*dl);"
-                                                                             "d=(r-reql)*(r-reql)");
+    OpenMM::CustomBondForce * custom_link_bond = new OpenMM::CustomBondForce("delta(min(0, r_eff))*kl*r_eff^2;"
+                                                                             "r_eff=abs(r-reql)-dl;")
     custom_link_bond->addPerBondParameter("reql");
     custom_link_bond->addPerBondParameter("kl");
     custom_link_bond->addPerBondParameter("dl");
