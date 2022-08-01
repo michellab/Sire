@@ -33,7 +33,7 @@ NM_TO_ANG = 10.0
 trajfile = Parameter("trajfile", "traj000000001.dcd",
                     """File name of the trajectory to process.""")
 
-stepframe = Parameter("step_frame",1,"""The number of frames to step to between two succcessive evaluations.""")
+stepframe = Parameter("step_frame",1,"""The number of frames to step to between two successive evaluations.""")
 simfile  = Parameter("simfile", "sim.cfg", """ Configuration file with distance restraints dictionary""")
 topfile = Parameter("topfile", "SYSTEM.top",
                     """File name of the topology file containing the system to be simulated.""")
@@ -149,7 +149,8 @@ def genOrientations(restr_dict, norientations=5):
                  where avgx,avgy and avgz are the average coordinates of the ligand and host atoms defined by lig_idx and host_idx
     Returns
     ----------
-    orientations : array of norient**3 * n_guest atom 3D coordinates
+    orientations : array of norient**3 * n_guest atom 3D coordinates. Each orientation object is a tuple containing the coordinate
+    (element 0) and the weight (element 1), where the weight is the value of sin(theta) for that orientation.
     """
 
     # First pass: work out COG of guest atoms
@@ -186,6 +187,7 @@ def genOrientations(restr_dict, norientations=5):
         phi = (x*TWOPI)/norientations
         for y in range(0,int(norientations/2)):
             theta = (y*PI)/(norientations/2)
+            weight = sin(theta)
             for z in range(0,norientations):
                 psi = (z*TWOPI)/norientations
                 rot00 = cos(phi)*cos(psi)-cos(theta)*sin(phi)*sin(psi)
@@ -203,7 +205,7 @@ def genOrientations(restr_dict, norientations=5):
                 rotvecs = []
                 #import pdb; pdb.set_trace()
                 for vec in body:
-                    rotvec = rotmat*vec
+                    rotvec = (rotmat*vec, weight)
                     rotvecs.append(rotvec)
                 orientations.append(rotvecs)
     return orientations
@@ -225,7 +227,6 @@ def run():
     delta_over_two = delta_trans.val/2.0
     deltavol = delta_trans.val*delta_trans.val*delta_trans.val
     ROT = 8 * pi**2
-    deltarot = ROT# To adjsut after number of orientations has been determined
     kb = Sire.Units.k_boltz
     T = temperature.val.value()
     kbT = kb*T
@@ -305,7 +306,7 @@ def run():
     align_indices = mdtraj_trajfile.topology.select(selection)
     #print (align_indices)
 
-    # FIXME: check whether alignment tolerates PBC artefacts
+    # FIXME: check whether alignment tolerates PBC artifacts
     print("Host: Aligning frames along first frame of trajectory")
     aligned_traj = mdtraj_trajfile.superpose(mdtraj_trajfile,0, atom_indices=align_indices)
 
@@ -355,9 +356,9 @@ def run():
     #restr_dict[pairs]=[[req,K,D],[avgx,avgy,avgz]]
 
     # Create N orientations of restrained guest atoms by
-    # rigib body rotations around COM
+    # rigid body rotations around COM
     guest_orientations = genOrientations(restr_dict, norientations=norient.val)
-    deltarot /= len(guest_orientations)
+    weight_norm_factor = ROT / sum([x[1] for x in guest_orientations])
     # FIXME: make sure space extends well into regions where restraint energy
     # is high
     space = defineIntegrationDomain(restr_dict)
@@ -392,7 +393,7 @@ def run():
                         k = restr_dict[pairs][0][1]
                         dtol = restr_dict[pairs][0][2]
                         host_coord = restr_dict[pairs][2]
-                        guest_coord = orientation[pos]
+                        guest_coord = orientation[pos][0] # Select coordinates, not weight
                         # Accumulate energy
                         d2 = ((guest_coord[0]+xgrid) - host_coord[0])**2+\
                              ((guest_coord[1]+ygrid) - host_coord[1])**2+\
@@ -406,6 +407,7 @@ def run():
                             U += 0.0
                         pos += 1
                         #print ("d %s U %s " % (d,U))
+                    deltarot = orientation[pos][1]*weight_norm_factor # Select weight and normalise to obtain a total of ROT
                     Boltz = math.exp(-beta*U)*deltavol*deltarot
                     Uavg += U*Boltz
                     Ztot += Boltz
