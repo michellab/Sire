@@ -37,13 +37,14 @@ namespace SireMol
     template class BeadProperty<qint64>;
     template class BeadProperty<double>;
     template class BeadProperty<QVariant>;
+    template class BeadProperty<SireBase::PropertyPtr>;
 }
 
 static const RegisterMetaType<BeadStringProperty> r_beadstring;
 static const RegisterMetaType<BeadIntProperty> r_beadint;
 static const RegisterMetaType<BeadFloatProperty> r_beadfloat;
 static const RegisterMetaType<BeadVariantProperty> r_beadvariant;
-
+static const RegisterMetaType<BeadPropertyProperty> r_beadproprop;
 
 ///////
 /////// Implementation of BeadProp
@@ -51,23 +52,23 @@ static const RegisterMetaType<BeadVariantProperty> r_beadvariant;
 
 static const RegisterMetaType<BeadProp> r_beadprop(MAGIC_ONLY,
                                                  "SireMol::BeadProp");
-                                                   
+
 /** Serialise to a binary datastream */
 QDataStream &operator<<(QDataStream &ds, const BeadProp &beadprop)
 {
     writeHeader(ds, r_beadprop, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << beadprop.bdng << static_cast<const MolViewProperty&>(beadprop);
-         
+
     return ds;
 }
 
 /** Extract from a binary datastream */QDataStream &operator>>(QDataStream &ds, BeadProp &beadprop)
 {
     VersionID v = readHeader(ds, r_beadprop);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
@@ -75,7 +76,7 @@ QDataStream &operator<<(QDataStream &ds, const BeadProp &beadprop)
     }
     else
         throw version_error(v, "1", r_beadprop, CODELOC);
-        
+
     return ds;
 }
 
@@ -120,7 +121,7 @@ void BeadProp::setBeading(const Beading &beading)
     bdng = beading;
 }
 
-/** Internal function used to get the number of beads when the 
+/** Internal function used to get the number of beads when the
     contained beading function is used on the passed molecule info */
 int BeadProp::getNBeads(const MoleculeInfoData &molinfo) const
 {

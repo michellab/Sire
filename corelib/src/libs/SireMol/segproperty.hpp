@@ -33,6 +33,7 @@
 
 #include "SireBase/qvariant_metatype.h"
 #include "SireBase/convert_property.hpp"
+#include "SireBase/slice.h"
 
 #include "moleculeinfodata.h"
 #include "molviewproperty.h"
@@ -66,6 +67,7 @@ typedef SegProperty<QString>  SegStringProperty;
 typedef SegProperty<qint64>   SegIntProperty;
 typedef SegProperty<double>   SegFloatProperty;
 typedef SegProperty<QVariant> SegVariantProperty;
+typedef SegProperty<SireBase::PropertyPtr> SegPropertyProperty;
 
 /** Small class used to provide a common base for all SegProperty types */
 class SIREMOL_EXPORT SegProp : public MolViewProperty
@@ -129,6 +131,13 @@ public:
     const T& operator[](const SegIdx &segidx) const;
     const T& at(const SegIdx &segidx) const;
     const T& get(const SegIdx &segidx) const;
+
+    const T& operator[](int i) const;
+    const T& at(int i) const;
+    const T& get(int i) const;
+
+    QList<T> operator[](const QList<qint64> &idxs) const;
+    QList<T> operator[](const SireBase::Slice &slice) const;
 
     QVariant getAsVariant(const SegIdx &idx) const;
     SireBase::PropertyPtr getAsProperty(const SegIdx &idx) const;
@@ -258,6 +267,55 @@ bool SegProperty<T>::operator!=(const SegProperty<T> &other) const
     return props != other.props;
 }
 
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& SegProperty<T>::operator[](int i) const
+{
+    return props.constData()[SireID::Index(i).map(props.count())];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& SegProperty<T>::at(int i) const
+{
+    return this->operator[](i);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& SegProperty<T>::get(int i) const
+{
+    return this->operator[](i);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T> SegProperty<T>::operator[](const QList<qint64> &idxs) const
+{
+    QList<T> ret;
+
+    for (auto idx : idxs)
+    {
+        ret.append(this->operator[](idx));
+    }
+
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T> SegProperty<T>::operator[](const SireBase::Slice &slice) const
+{
+    QList<T> ret;
+
+    for (auto it = slice.begin(this->count()); not it.atEnd(); it.next())
+    {
+        ret.append(this->operator[](it.value()));
+    }
+
+    return ret;
+}
+
 /** Return the property for the segment at index 'segidx'
 
     \throw SireError::invalid_index
@@ -296,9 +354,44 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 QString SegProperty<T>::toString() const
 {
-    return QString("SegProperty<%1>( %2 )")
-                .arg( QMetaType::typeName( qMetaTypeId<T>() ) )
-                .arg( Sire::toString(this->array()) );
+    if (this->isEmpty())
+    {
+        return QObject::tr("%1::empty").arg(this->what());
+    }
+    else
+    {
+        QStringList parts;
+
+        const auto n = this->count();
+
+        if (n <= 10)
+        {
+            for (int i=0; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+        }
+        else
+        {
+            for (int i=0; i<5; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+
+            parts.append("...");
+
+            for (int i=n-5; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+        }
+
+        return QObject::tr("%1( size=%2\n%3\n)")
+                        .arg(this->what()).arg(n).arg(parts.join("\n"));
+    }
 }
 
 /** Return whether or not it is possible to convert the variant
@@ -524,6 +617,7 @@ Q_DECLARE_METATYPE( SireMol::SegStringProperty );
 Q_DECLARE_METATYPE( SireMol::SegIntProperty );
 Q_DECLARE_METATYPE( SireMol::SegFloatProperty );
 Q_DECLARE_METATYPE( SireMol::SegVariantProperty );
+Q_DECLARE_METATYPE( SireMol::SegPropertyProperty );
 
 SIRE_EXPOSE_CLASS( SireMol::SegProp )
 
@@ -531,12 +625,14 @@ SIRE_EXPOSE_SEGMENT_PROPERTY( QString, SireMol::SegStringProperty )
 SIRE_EXPOSE_SEGMENT_PROPERTY( qint64, SireMol::SegIntProperty )
 SIRE_EXPOSE_SEGMENT_PROPERTY( double, SireMol::SegFloatProperty )
 SIRE_EXPOSE_SEGMENT_PROPERTY( QVariant, SireMol::SegVariantProperty )
+SIRE_EXPOSE_SEGMENT_PROPERTY( SireBase::PropertyPtr, SireMol::SegPropertyProperty )
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 template class SireMol::SegProperty<QString>;
 template class SireMol::SegProperty<qint64>;
 template class SireMol::SegProperty<double>;
 template class SireMol::SegProperty<QVariant>;
+template class SireMol::SegProperty<SireBase::PropertyPtr>;
 #endif
 
 SIRE_END_HEADER

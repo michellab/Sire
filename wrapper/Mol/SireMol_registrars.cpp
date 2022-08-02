@@ -336,18 +336,22 @@ void register_SireMol_objects()
     ObjectRegistry::registerConverterFor< SireMol::AtomIntProperty >();
     ObjectRegistry::registerConverterFor< SireMol::AtomFloatProperty >();
     ObjectRegistry::registerConverterFor< SireMol::AtomVariantProperty >();
+    ObjectRegistry::registerConverterFor< SireMol::AtomPropertyProperty >();
     ObjectRegistry::registerConverterFor< SireMol::BeadStringProperty >();
     ObjectRegistry::registerConverterFor< SireMol::BeadIntProperty >();
     ObjectRegistry::registerConverterFor< SireMol::BeadFloatProperty >();
     ObjectRegistry::registerConverterFor< SireMol::BeadVariantProperty >();
+    ObjectRegistry::registerConverterFor< SireMol::BeadPropertyProperty >();
     ObjectRegistry::registerConverterFor< SireMol::CGStringProperty >();
     ObjectRegistry::registerConverterFor< SireMol::CGIntProperty >();
     ObjectRegistry::registerConverterFor< SireMol::CGFloatProperty >();
     ObjectRegistry::registerConverterFor< SireMol::CGVariantProperty >();
+    ObjectRegistry::registerConverterFor< SireMol::CGPropertyProperty >();
     ObjectRegistry::registerConverterFor< SireMol::ChainStringProperty >();
     ObjectRegistry::registerConverterFor< SireMol::ChainIntProperty >();
     ObjectRegistry::registerConverterFor< SireMol::ChainFloatProperty >();
     ObjectRegistry::registerConverterFor< SireMol::ChainVariantProperty >();
+    ObjectRegistry::registerConverterFor< SireMol::ChainPropertyProperty >();
     ObjectRegistry::registerConverterFor< SireMol::ResStringProperty >();
     ObjectRegistry::registerConverterFor< SireMol::ResIntProperty >();
     ObjectRegistry::registerConverterFor< SireMol::ResFloatProperty >();
@@ -357,6 +361,7 @@ void register_SireMol_objects()
     ObjectRegistry::registerConverterFor< SireMol::SegIntProperty >();
     ObjectRegistry::registerConverterFor< SireMol::SegFloatProperty >();
     ObjectRegistry::registerConverterFor< SireMol::SegVariantProperty >();
+    ObjectRegistry::registerConverterFor< SireMol::SegPropertyProperty >();
 
 }
 

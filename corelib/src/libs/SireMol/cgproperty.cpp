@@ -36,9 +36,11 @@ namespace SireMol
     template class CGProperty<qint64>;
     template class CGProperty<double>;
     template class CGProperty<QVariant>;
+    template class CGProperty<SireBase::PropertyPtr>;
 }
 
 static const RegisterMetaType<CGStringProperty> r_cgstring;
 static const RegisterMetaType<CGIntProperty> r_cgint;
 static const RegisterMetaType<CGFloatProperty> r_cgfloat;
 static const RegisterMetaType<CGVariantProperty> r_cgvariant;
+static const RegisterMetaType<CGPropertyProperty> r_cgproprop;

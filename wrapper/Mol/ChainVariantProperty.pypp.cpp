@@ -89,6 +89,20 @@ void register_ChainVariantProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::ChainProperty< QVariant >::at
+        
+            typedef SireMol::ChainProperty< QVariant > exported_class_t;
+            typedef ::QVariant const & ( ::SireMol::ChainProperty< QVariant >::*at_function_type)( int ) const;
+            at_function_type at_function_value( &::SireMol::ChainProperty< QVariant >::at );
+            
+            ChainVariantProperty_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
         { //::SireMol::ChainProperty< QVariant >::canConvert
         
             typedef SireMol::ChainProperty< QVariant > exported_class_t;
@@ -140,6 +154,20 @@ void register_ChainVariantProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("chainidx") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::ChainProperty< QVariant >::get
+        
+            typedef SireMol::ChainProperty< QVariant > exported_class_t;
+            typedef ::QVariant const & ( ::SireMol::ChainProperty< QVariant >::*get_function_type)( int ) const;
+            get_function_type get_function_value( &::SireMol::ChainProperty< QVariant >::get );
+            
+            ChainVariantProperty_exposer.def( 
+                "get"
+                , get_function_value
+                , ( bp::arg("i") )
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
@@ -239,6 +267,46 @@ void register_ChainVariantProperty_class(){
                 , __getitem___function_value
                 , ( bp::arg("chainidx") )
                 , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::ChainProperty< QVariant >::operator[]
+        
+            typedef SireMol::ChainProperty< QVariant > exported_class_t;
+            typedef ::QVariant const & ( ::SireMol::ChainProperty< QVariant >::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ChainProperty< QVariant >::operator[] );
+            
+            ChainVariantProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::ChainProperty< QVariant >::operator[]
+        
+            typedef SireMol::ChainProperty< QVariant > exported_class_t;
+            typedef ::QList< QVariant > ( ::SireMol::ChainProperty< QVariant >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ChainProperty< QVariant >::operator[] );
+            
+            ChainVariantProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::ChainProperty< QVariant >::operator[]
+        
+            typedef SireMol::ChainProperty< QVariant > exported_class_t;
+            typedef ::QList< QVariant > ( ::SireMol::ChainProperty< QVariant >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ChainProperty< QVariant >::operator[] );
+            
+            ChainVariantProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
                 , "" );
         
         }

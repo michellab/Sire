@@ -20,7 +20,11 @@ residue.
 ...     residue["residue_center"] = center
 >>> mol = cursor.commit()
 >>> print(mol.property("residue_center"))
-
+SireMol::ResPropertyProperty( size=3
+0: ( 18.9264, 4.47803, 14.1498 )
+1: ( 16.0195, 4.60992, 15.5812 )
+2: ( 14.3873, 4.27636, 18.0041 )
+)
 
 .. note::
 
@@ -30,4 +34,37 @@ residue.
     properties. In this case, :class:`~sire.mol.Evaluator.center_of_mass`
     evaluates the center of mass of the atoms in the view, based on the
     atoms ``coordinates`` and ``mass`` properties.
+
+We will also add a radius for each residue. We will do this by calling
+:func:`sire.mol.Evaluator.bounding_sphere` to get a
+:class:`sire.maths.Sphere` object that represents the bounding sphere
+for each residue. We will then get the radius of this sphere by calling
+:func:`sire.maths.Sphere.radius`.
+
+We could do this either via a loop...
+
+>>> cursor = mol.cursor()
+>>> for residue in cursor.residues():
+...    residue["residue_radius"] = residue.evaluate().bounding_sphere().radius()
+>>> mol = cursor.commit()
+>>> print(mol.property("residue_radius"))
+SireMol::ResFloatProperty( size=3
+0: 2.06211
+1: 2.53194
+2: 1.69918
+)
+
+...or via ``apply`` and a lambda expression...
+
+>>> mol = mol.residues().cursor().apply(
+...         lambda res: res.set("residue_radius",
+...                             res.evaluate().bounding_sphere().radius())
+...  ).commit()
+>>> print(mol.property("residue_radius"))
+SireMol::ResFloatProperty( size=3
+0: 2.06211
+1: 2.53194
+2: 1.69918
+)
+
 

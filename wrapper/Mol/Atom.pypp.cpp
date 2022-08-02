@@ -234,6 +234,13 @@ const QVariant& get_Metadata_SireMol_AtomVariantProperty_function2(const SireMol
                                    const QString &key, const QString &metakey){
                                         return atom.metadata< QVariant >(key, metakey); }
 
+const SireBase::PropertyPtr& get_Metadata_SireMol_AtomPropertyProperty_function1(const SireMol::Atom &atom,
+                                   const QString &metakey){ return atom.metadata< SireBase::PropertyPtr >(metakey); }
+
+const SireBase::PropertyPtr& get_Metadata_SireMol_AtomPropertyProperty_function2(const SireMol::Atom &atom,
+                                   const QString &key, const QString &metakey){
+                                        return atom.metadata< SireBase::PropertyPtr >(key, metakey); }
+
 SireMol::Atom __copy__(const SireMol::Atom &other){ return SireMol::Atom(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -760,6 +767,9 @@ void register_Atom_class(){
         Atom_exposer.def( "_get_property_SireMol_AtomVariantProperty", &SireMol::Atom::property< QVariant >, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomVariantProperty", get_Metadata_SireMol_AtomVariantProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomVariantProperty", &get_Metadata_SireMol_AtomVariantProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
+        Atom_exposer.def( "_get_property_SireMol_AtomPropertyProperty", &SireMol::Atom::property< SireBase::PropertyPtr >, bp::return_value_policy<bp::copy_const_reference>());
+        Atom_exposer.def( "_get_metadata_SireMol_AtomPropertyProperty", get_Metadata_SireMol_AtomPropertyProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
+        Atom_exposer.def( "_get_metadata_SireMol_AtomPropertyProperty", &get_Metadata_SireMol_AtomPropertyProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "__copy__", &__copy__);
         Atom_exposer.def( "__deepcopy__", &__copy__);
         Atom_exposer.def( "clone", &__copy__);

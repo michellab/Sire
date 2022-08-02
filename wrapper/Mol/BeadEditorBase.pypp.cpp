@@ -71,6 +71,16 @@ SireMol::BeadEditorBase& set_Metadata_SireMol_BeadVariantProperty_function2(
                                    const QString &key, const QString &metakey, const QVariant &p)
                                    { return molview.setMetadata< QVariant >(key, metakey, p); }
 
+SireMol::BeadEditorBase& set_Metadata_SireMol_BeadPropertyProperty_function1(
+                                  SireMol::BeadEditorBase &molview,
+                                   const QString &metakey, const SireBase::PropertyPtr &p)
+                                   { return molview.setMetadata< SireBase::PropertyPtr >(metakey, p); }
+
+SireMol::BeadEditorBase& set_Metadata_SireMol_BeadPropertyProperty_function2(
+                                  SireMol::BeadEditorBase &molview,
+                                   const QString &key, const QString &metakey, const SireBase::PropertyPtr &p)
+                                   { return molview.setMetadata< SireBase::PropertyPtr >(key, metakey, p); }
+
 #include "Helpers/str.hpp"
 
 #include "Helpers/release_gil_policy.hpp"
@@ -611,6 +621,10 @@ void register_BeadEditorBase_class(){
                                            &SireMol::BeadEditorBase::setProperty< QVariant >, bp::return_self< >() );
         BeadEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_BeadVariantProperty_function1, bp::return_self< >());
         BeadEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_BeadVariantProperty_function2, bp::return_self< >());
+        BeadEditorBase_exposer.def( "_set_property_SireBase_PropertyPtr",
+                                           &SireMol::BeadEditorBase::setProperty< SireBase::PropertyPtr >, bp::return_self< >() );
+        BeadEditorBase_exposer.def( "_set_metadata_SireBase_PropertyPtr", &set_Metadata_SireMol_BeadPropertyProperty_function1, bp::return_self< >());
+        BeadEditorBase_exposer.def( "_set_metadata_SireBase_PropertyPtr", &set_Metadata_SireMol_BeadPropertyProperty_function2, bp::return_self< >());
         BeadEditorBase_exposer.def( "__str__", &__str__< ::SireMol::Editor<SireMol::BeadEditor, SireMol::Bead> > );
         BeadEditorBase_exposer.def( "__repr__", &__str__< ::SireMol::Editor<SireMol::BeadEditor, SireMol::Bead> > );
         BeadEditorBase_exposer.def( "__len__", &__len_size< ::SireMol::Editor<SireMol::BeadEditor, SireMol::Bead> > );

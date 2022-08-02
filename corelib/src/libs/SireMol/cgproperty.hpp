@@ -33,6 +33,7 @@
 
 #include "SireBase/qvariant_metatype.h"
 #include "SireBase/convert_property.hpp"
+#include "SireBase/slice.h"
 
 #include "moleculeinfodata.h"
 #include "molviewproperty.h"
@@ -67,6 +68,7 @@ typedef CGProperty<QString>  CGStringProperty;
 typedef CGProperty<qint64>   CGIntProperty;
 typedef CGProperty<double>   CGFloatProperty;
 typedef CGProperty<QVariant> CGVariantProperty;
+typedef CGProperty<SireBase::PropertyPtr> CGPropertyProperty;
 
 /** Small class used to provide a common base for all CGProperty types */
 class SIREMOL_EXPORT CGProp : public MolViewProperty
@@ -130,6 +132,13 @@ public:
     const T& operator[](const CGIdx &cgidx) const;
     const T& at(const CGIdx &cgidx) const;
     const T& get(const CGIdx &cgidx) const;
+
+    const T& operator[](int i) const;
+    const T& at(int i) const;
+    const T& get(int i) const;
+
+    QList<T> operator[](const QList<qint64> &idxs) const;
+    QList<T> operator[](const SireBase::Slice &slice) const;
 
     QVariant getAsVariant(const CGIdx &idx) const;
     SireBase::PropertyPtr getAsProperty(const CGIdx &idx) const;
@@ -259,6 +268,57 @@ bool CGProperty<T>::operator!=(const CGProperty<T> &other) const
     return props != other.props;
 }
 
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& CGProperty<T>::operator[](int i) const
+{
+    return props.constData()[SireID::Index(i).map(props.count())];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& CGProperty<T>::at(int i) const
+{
+    return this->operator[](i);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& CGProperty<T>::get(int i) const
+{
+    return this->operator[](i);
+}
+
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T> CGProperty<T>::operator[](const QList<qint64> &idxs) const
+{
+    QList<T> ret;
+
+    for (auto idx : idxs)
+    {
+        ret.append(this->operator[](idx));
+    }
+
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T> CGProperty<T>::operator[](const SireBase::Slice &slice) const
+{
+    QList<T> ret;
+
+    for (auto it = slice.begin(this->count()); not it.atEnd(); it.next())
+    {
+        ret.append(this->operator[](it.value()));
+    }
+
+    return ret;
+}
+
 /** Return the property for the CutGroup at index 'cgidx'
 
     \throw SireError::invalid_index
@@ -297,9 +357,44 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 QString CGProperty<T>::toString() const
 {
-    return QString("CGProperty<%1>( %2 )")
-                .arg( QMetaType::typeName( qMetaTypeId<T>() ) )
-                .arg( Sire::toString(this->array()) );
+    if (this->isEmpty())
+    {
+        return QObject::tr("%1::empty").arg(this->what());
+    }
+    else
+    {
+        QStringList parts;
+
+        const auto n = this->count();
+
+        if (n <= 10)
+        {
+            for (int i=0; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+        }
+        else
+        {
+            for (int i=0; i<5; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+
+            parts.append("...");
+
+            for (int i=n-5; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+        }
+
+        return QObject::tr("%1( size=%2\n%3\n)")
+                        .arg(this->what()).arg(n).arg(parts.join("\n"));
+    }
 }
 
 /** Return whether or not it is possible to convert the variant
@@ -525,6 +620,7 @@ Q_DECLARE_METATYPE( SireMol::CGStringProperty );
 Q_DECLARE_METATYPE( SireMol::CGIntProperty );
 Q_DECLARE_METATYPE( SireMol::CGFloatProperty );
 Q_DECLARE_METATYPE( SireMol::CGVariantProperty );
+Q_DECLARE_METATYPE( SireMol::CGPropertyProperty );
 
 SIRE_EXPOSE_CLASS( SireMol::CGProp )
 
@@ -532,12 +628,14 @@ SIRE_EXPOSE_CUTGROUP_PROPERTY( QString, SireMol::CGStringProperty )
 SIRE_EXPOSE_CUTGROUP_PROPERTY( qint64, SireMol::CGIntProperty )
 SIRE_EXPOSE_CUTGROUP_PROPERTY( double, SireMol::CGFloatProperty )
 SIRE_EXPOSE_CUTGROUP_PROPERTY( QVariant, SireMol::CGVariantProperty )
+SIRE_EXPOSE_CUTGROUP_PROPERTY( SireBase::PropertyPtr, SireMol::CGPropertyProperty )
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 template class SireMol::CGProperty<QString>;
 template class SireMol::CGProperty<qint64>;
 template class SireMol::CGProperty<double>;
 template class SireMol::CGProperty<QVariant>;
+template class SireMol::CGProperty<SireBase::PropertyPtr>;
 #endif
 
 SIRE_END_HEADER

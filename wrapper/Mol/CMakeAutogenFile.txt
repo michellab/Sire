@@ -34,6 +34,7 @@ set ( PYPP_SOURCES
        AtomPolarisabilities.pypp.cpp
        AtomProp.pypp.cpp
        AtomPropertyList.pypp.cpp
+       AtomPropertyProperty.pypp.cpp
        AtomRadicals.pypp.cpp
        AtomRadii.pypp.cpp
        AtomResultMatcher.pypp.cpp
@@ -56,6 +57,7 @@ set ( PYPP_SOURCES
        BeadIntProperty.pypp.cpp
        BeadNum.pypp.cpp
        BeadProp.pypp.cpp
+       BeadPropertyProperty.pypp.cpp
        BeadStringProperty.pypp.cpp
        BeadVariantProperty.pypp.cpp
        Beading.pypp.cpp
@@ -75,6 +77,7 @@ set ( PYPP_SOURCES
        CGIntProperty.pypp.cpp
        CGName.pypp.cpp
        CGProp.pypp.cpp
+       CGPropertyProperty.pypp.cpp
        CGResID.pypp.cpp
        CGStringProperty.pypp.cpp
        CGStructureEditor.pypp.cpp
@@ -90,6 +93,7 @@ set ( PYPP_SOURCES
        ChainIntProperty.pypp.cpp
        ChainName.pypp.cpp
        ChainProp.pypp.cpp
+       ChainPropertyProperty.pypp.cpp
        ChainResID.pypp.cpp
        ChainStringProperty.pypp.cpp
        ChainStructureEditor.pypp.cpp
@@ -226,6 +230,7 @@ set ( PYPP_SOURCES
        SegIntProperty.pypp.cpp
        SegName.pypp.cpp
        SegProp.pypp.cpp
+       SegPropertyProperty.pypp.cpp
        SegResID.pypp.cpp
        SegStringProperty.pypp.cpp
        SegStructureEditor.pypp.cpp

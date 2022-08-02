@@ -89,6 +89,20 @@ void register_ResPropertyProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::at
+        
+            typedef SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > > exported_class_t;
+            typedef ::SireBase::PropPtr< SireBase::Property > const & ( ::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::*at_function_type)( int ) const;
+            at_function_type at_function_value( &::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::at );
+            
+            ResPropertyProperty_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
         { //::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::canConvert
         
             typedef SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > > exported_class_t;
@@ -140,6 +154,20 @@ void register_ResPropertyProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("residx") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::get
+        
+            typedef SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > > exported_class_t;
+            typedef ::SireBase::PropPtr< SireBase::Property > const & ( ::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::*get_function_type)( int ) const;
+            get_function_type get_function_value( &::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::get );
+            
+            ResPropertyProperty_exposer.def( 
+                "get"
+                , get_function_value
+                , ( bp::arg("i") )
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
@@ -239,6 +267,46 @@ void register_ResPropertyProperty_class(){
                 , __getitem___function_value
                 , ( bp::arg("residx") )
                 , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::operator[]
+        
+            typedef SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > > exported_class_t;
+            typedef ::SireBase::PropPtr< SireBase::Property > const & ( ::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::operator[] );
+            
+            ResPropertyProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::operator[]
+        
+            typedef SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > > exported_class_t;
+            typedef ::QList< SireBase::PropPtr< SireBase::Property > > ( ::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::operator[] );
+            
+            ResPropertyProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::operator[]
+        
+            typedef SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > > exported_class_t;
+            typedef ::QList< SireBase::PropPtr< SireBase::Property > > ( ::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ResProperty< SireBase::PropPtr< SireBase::Property > >::operator[] );
+            
+            ResPropertyProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
                 , "" );
         
         }

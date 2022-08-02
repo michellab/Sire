@@ -89,6 +89,20 @@ void register_BeadIntProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::BeadProperty< long long >::at
+        
+            typedef SireMol::BeadProperty< long long > exported_class_t;
+            typedef long long int const & ( ::SireMol::BeadProperty< long long >::*at_function_type)( int ) const;
+            at_function_type at_function_value( &::SireMol::BeadProperty< long long >::at );
+            
+            BeadIntProperty_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
         { //::SireMol::BeadProperty< long long >::canConvert
         
             typedef SireMol::BeadProperty< long long > exported_class_t;
@@ -140,6 +154,20 @@ void register_BeadIntProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("beadidx") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::BeadProperty< long long >::get
+        
+            typedef SireMol::BeadProperty< long long > exported_class_t;
+            typedef long long int const & ( ::SireMol::BeadProperty< long long >::*get_function_type)( int ) const;
+            get_function_type get_function_value( &::SireMol::BeadProperty< long long >::get );
+            
+            BeadIntProperty_exposer.def( 
+                "get"
+                , get_function_value
+                , ( bp::arg("i") )
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
@@ -211,6 +239,46 @@ void register_BeadIntProperty_class(){
                 , __getitem___function_value
                 , ( bp::arg("beadidx") )
                 , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::BeadProperty< long long >::operator[]
+        
+            typedef SireMol::BeadProperty< long long > exported_class_t;
+            typedef long long int const & ( ::SireMol::BeadProperty< long long >::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::BeadProperty< long long >::operator[] );
+            
+            BeadIntProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::BeadProperty< long long >::operator[]
+        
+            typedef SireMol::BeadProperty< long long > exported_class_t;
+            typedef ::QList< long long > ( ::SireMol::BeadProperty< long long >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::BeadProperty< long long >::operator[] );
+            
+            BeadIntProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::BeadProperty< long long >::operator[]
+        
+            typedef SireMol::BeadProperty< long long > exported_class_t;
+            typedef ::QList< long long > ( ::SireMol::BeadProperty< long long >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::BeadProperty< long long >::operator[] );
+            
+            BeadIntProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
                 , "" );
         
         }

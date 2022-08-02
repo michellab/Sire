@@ -89,6 +89,20 @@ void register_ChainFloatProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::ChainProperty< double >::at
+        
+            typedef SireMol::ChainProperty< double > exported_class_t;
+            typedef double const & ( ::SireMol::ChainProperty< double >::*at_function_type)( int ) const;
+            at_function_type at_function_value( &::SireMol::ChainProperty< double >::at );
+            
+            ChainFloatProperty_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
         { //::SireMol::ChainProperty< double >::canConvert
         
             typedef SireMol::ChainProperty< double > exported_class_t;
@@ -140,6 +154,20 @@ void register_ChainFloatProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("chainidx") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::ChainProperty< double >::get
+        
+            typedef SireMol::ChainProperty< double > exported_class_t;
+            typedef double const & ( ::SireMol::ChainProperty< double >::*get_function_type)( int ) const;
+            get_function_type get_function_value( &::SireMol::ChainProperty< double >::get );
+            
+            ChainFloatProperty_exposer.def( 
+                "get"
+                , get_function_value
+                , ( bp::arg("i") )
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
@@ -239,6 +267,46 @@ void register_ChainFloatProperty_class(){
                 , __getitem___function_value
                 , ( bp::arg("chainidx") )
                 , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::ChainProperty< double >::operator[]
+        
+            typedef SireMol::ChainProperty< double > exported_class_t;
+            typedef double const & ( ::SireMol::ChainProperty< double >::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ChainProperty< double >::operator[] );
+            
+            ChainFloatProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::ChainProperty< double >::operator[]
+        
+            typedef SireMol::ChainProperty< double > exported_class_t;
+            typedef ::QList< double > ( ::SireMol::ChainProperty< double >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ChainProperty< double >::operator[] );
+            
+            ChainFloatProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::ChainProperty< double >::operator[]
+        
+            typedef SireMol::ChainProperty< double > exported_class_t;
+            typedef ::QList< double > ( ::SireMol::ChainProperty< double >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ChainProperty< double >::operator[] );
+            
+            ChainFloatProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
                 , "" );
         
         }

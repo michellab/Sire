@@ -75,6 +75,8 @@
 
 #include "AtomPropertyList.pypp.hpp"
 
+#include "AtomPropertyProperty.pypp.hpp"
+
 #include "AtomRadicals.pypp.hpp"
 
 #include "AtomRadii.pypp.hpp"
@@ -119,6 +121,8 @@
 
 #include "BeadProp.pypp.hpp"
 
+#include "BeadPropertyProperty.pypp.hpp"
+
 #include "BeadStringProperty.pypp.hpp"
 
 #include "BeadVariantProperty.pypp.hpp"
@@ -157,6 +161,8 @@
 
 #include "CGProp.pypp.hpp"
 
+#include "CGPropertyProperty.pypp.hpp"
+
 #include "CGResID.pypp.hpp"
 
 #include "CGStringProperty.pypp.hpp"
@@ -186,6 +192,8 @@
 #include "ChainName.pypp.hpp"
 
 #include "ChainProp.pypp.hpp"
+
+#include "ChainPropertyProperty.pypp.hpp"
 
 #include "ChainResID.pypp.hpp"
 
@@ -459,6 +467,8 @@
 
 #include "SegProp.pypp.hpp"
 
+#include "SegPropertyProperty.pypp.hpp"
+
 #include "SegResID.pypp.hpp"
 
 #include "SegStringProperty.pypp.hpp"
@@ -692,6 +702,8 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_AtomIntegerArrayProperty_class();
 
+    register_AtomPropertyProperty_class();
+
     register_AtomPropertyList_class();
 
     register_AtomStringArrayProperty_class();
@@ -754,6 +766,8 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_BeadVariantProperty_class();
 
+    register_BeadPropertyProperty_class();
+
     register_BeadFloatProperty_class();
 
     register_BeadIntProperty_class();
@@ -788,6 +802,8 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_CGVariantProperty_class();
 
+    register_CGPropertyProperty_class();
+
     register_CGFloatProperty_class();
 
     register_CGIntProperty_class();
@@ -811,6 +827,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_ChainStringProperty_class();
 
     register_ChainVariantProperty_class();
+
+    register_ChainPropertyProperty_class();
 
     register_ChainFloatProperty_class();
 
@@ -1033,6 +1051,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_SegStringProperty_class();
 
     register_SegVariantProperty_class();
+
+    register_SegPropertyProperty_class();
 
     register_SegFloatProperty_class();
 

@@ -89,6 +89,20 @@ void register_CGFloatProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::CGProperty< double >::at
+        
+            typedef SireMol::CGProperty< double > exported_class_t;
+            typedef double const & ( ::SireMol::CGProperty< double >::*at_function_type)( int ) const;
+            at_function_type at_function_value( &::SireMol::CGProperty< double >::at );
+            
+            CGFloatProperty_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
         { //::SireMol::CGProperty< double >::canConvert
         
             typedef SireMol::CGProperty< double > exported_class_t;
@@ -140,6 +154,20 @@ void register_CGFloatProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::CGProperty< double >::get
+        
+            typedef SireMol::CGProperty< double > exported_class_t;
+            typedef double const & ( ::SireMol::CGProperty< double >::*get_function_type)( int ) const;
+            get_function_type get_function_value( &::SireMol::CGProperty< double >::get );
+            
+            CGFloatProperty_exposer.def( 
+                "get"
+                , get_function_value
+                , ( bp::arg("i") )
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
@@ -239,6 +267,46 @@ void register_CGFloatProperty_class(){
                 , __getitem___function_value
                 , ( bp::arg("cgidx") )
                 , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::CGProperty< double >::operator[]
+        
+            typedef SireMol::CGProperty< double > exported_class_t;
+            typedef double const & ( ::SireMol::CGProperty< double >::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::CGProperty< double >::operator[] );
+            
+            CGFloatProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::CGProperty< double >::operator[]
+        
+            typedef SireMol::CGProperty< double > exported_class_t;
+            typedef ::QList< double > ( ::SireMol::CGProperty< double >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::CGProperty< double >::operator[] );
+            
+            CGFloatProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::CGProperty< double >::operator[]
+        
+            typedef SireMol::CGProperty< double > exported_class_t;
+            typedef ::QList< double > ( ::SireMol::CGProperty< double >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::CGProperty< double >::operator[] );
+            
+            CGFloatProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
                 , "" );
         
         }

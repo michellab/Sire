@@ -284,8 +284,7 @@ def _set_property(molview, key, property):
     except AttributeError as e:
         # no matching function - see if we have the generic 'PropertyProperty'
         if hasattr(molview, "_set_property_SireBase_PropertyPtr"):
-            from ..Base import wrap
-            return molview._set_property_SireBase_PropertyPtr(key, wrap(property))
+            return molview._set_property_SireBase_PropertyPtr(key, _Base.wrap(property))
 
         raise e
 

@@ -89,6 +89,20 @@ void register_CGStringProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::CGProperty< QString >::at
+        
+            typedef SireMol::CGProperty< QString > exported_class_t;
+            typedef ::QString const & ( ::SireMol::CGProperty< QString >::*at_function_type)( int ) const;
+            at_function_type at_function_value( &::SireMol::CGProperty< QString >::at );
+            
+            CGStringProperty_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
         { //::SireMol::CGProperty< QString >::canConvert
         
             typedef SireMol::CGProperty< QString > exported_class_t;
@@ -140,6 +154,20 @@ void register_CGStringProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::CGProperty< QString >::get
+        
+            typedef SireMol::CGProperty< QString > exported_class_t;
+            typedef ::QString const & ( ::SireMol::CGProperty< QString >::*get_function_type)( int ) const;
+            get_function_type get_function_value( &::SireMol::CGProperty< QString >::get );
+            
+            CGStringProperty_exposer.def( 
+                "get"
+                , get_function_value
+                , ( bp::arg("i") )
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
@@ -239,6 +267,46 @@ void register_CGStringProperty_class(){
                 , __getitem___function_value
                 , ( bp::arg("cgidx") )
                 , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::CGProperty< QString >::operator[]
+        
+            typedef SireMol::CGProperty< QString > exported_class_t;
+            typedef ::QString const & ( ::SireMol::CGProperty< QString >::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::CGProperty< QString >::operator[] );
+            
+            CGStringProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::CGProperty< QString >::operator[]
+        
+            typedef SireMol::CGProperty< QString > exported_class_t;
+            typedef ::QList< QString > ( ::SireMol::CGProperty< QString >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::CGProperty< QString >::operator[] );
+            
+            CGStringProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::CGProperty< QString >::operator[]
+        
+            typedef SireMol::CGProperty< QString > exported_class_t;
+            typedef ::QList< QString > ( ::SireMol::CGProperty< QString >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::CGProperty< QString >::operator[] );
+            
+            CGStringProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
                 , "" );
         
         }

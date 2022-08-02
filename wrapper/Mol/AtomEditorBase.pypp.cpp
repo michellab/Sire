@@ -297,6 +297,16 @@ SireMol::AtomEditorBase& set_Metadata_SireMol_AtomVariantProperty_function2(
                                    const QString &key, const QString &metakey, const QVariant &p)
                                    { return molview.setMetadata< QVariant >(key, metakey, p); }
 
+SireMol::AtomEditorBase& set_Metadata_SireMol_AtomPropertyProperty_function1(
+                                  SireMol::AtomEditorBase &molview,
+                                   const QString &metakey, const SireBase::PropertyPtr &p)
+                                   { return molview.setMetadata< SireBase::PropertyPtr >(metakey, p); }
+
+SireMol::AtomEditorBase& set_Metadata_SireMol_AtomPropertyProperty_function2(
+                                  SireMol::AtomEditorBase &molview,
+                                   const QString &key, const QString &metakey, const SireBase::PropertyPtr &p)
+                                   { return molview.setMetadata< SireBase::PropertyPtr >(key, metakey, p); }
+
 #include "Helpers/str.hpp"
 
 #include "Helpers/release_gil_policy.hpp"
@@ -901,6 +911,10 @@ void register_AtomEditorBase_class(){
                                            &SireMol::AtomEditorBase::setProperty< QVariant >, bp::return_self< >() );
         AtomEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_AtomVariantProperty_function1, bp::return_self< >());
         AtomEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_AtomVariantProperty_function2, bp::return_self< >());
+        AtomEditorBase_exposer.def( "_set_property_SireBase_PropertyPtr",
+                                           &SireMol::AtomEditorBase::setProperty< SireBase::PropertyPtr >, bp::return_self< >() );
+        AtomEditorBase_exposer.def( "_set_metadata_SireBase_PropertyPtr", &set_Metadata_SireMol_AtomPropertyProperty_function1, bp::return_self< >());
+        AtomEditorBase_exposer.def( "_set_metadata_SireBase_PropertyPtr", &set_Metadata_SireMol_AtomPropertyProperty_function2, bp::return_self< >());
         AtomEditorBase_exposer.def( "__str__", &__str__< ::SireMol::Editor<SireMol::AtomEditor, SireMol::Atom> > );
         AtomEditorBase_exposer.def( "__repr__", &__str__< ::SireMol::Editor<SireMol::AtomEditor, SireMol::Atom> > );
         AtomEditorBase_exposer.def( "__len__", &__len_size< ::SireMol::Editor<SireMol::AtomEditor, SireMol::Atom> > );

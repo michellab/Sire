@@ -33,6 +33,7 @@
 
 #include "SireBase/qvariant_metatype.h"
 #include "SireBase/convert_property.hpp"
+#include "SireBase/slice.h"
 
 #include "moleculeinfodata.h"
 #include "molviewproperty.h"
@@ -130,6 +131,13 @@ public:
     const T& operator[](const ResIdx &residx) const;
     const T& at(const ResIdx &residx) const;
     const T& get(const ResIdx &residx) const;
+
+    const T& operator[](int i) const;
+    const T& at(int i) const;
+    const T& get(int i) const;
+
+    QList<T> operator[](const QList<qint64> &idxs) const;
+    QList<T> operator[](const SireBase::Slice &slice) const;
 
     QVariant getAsVariant(const ResIdx &idx) const;
     SireBase::PropertyPtr getAsProperty(const ResIdx &idx) const;
@@ -259,6 +267,55 @@ bool ResProperty<T>::operator!=(const ResProperty<T> &other) const
     return props != other.props;
 }
 
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& ResProperty<T>::operator[](int i) const
+{
+    return props.constData()[SireID::Index(i).map(props.count())];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& ResProperty<T>::at(int i) const
+{
+    return this->operator[](i);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& ResProperty<T>::get(int i) const
+{
+    return this->operator[](i);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T> ResProperty<T>::operator[](const QList<qint64> &idxs) const
+{
+    QList<T> ret;
+
+    for (auto idx : idxs)
+    {
+        ret.append(this->operator[](idx));
+    }
+
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T> ResProperty<T>::operator[](const SireBase::Slice &slice) const
+{
+    QList<T> ret;
+
+    for (auto it = slice.begin(this->count()); not it.atEnd(); it.next())
+    {
+        ret.append(this->operator[](it.value()));
+    }
+
+    return ret;
+}
+
 /** Return the property for the residue at index 'residx'
 
     \throw SireError::invalid_index
@@ -297,9 +354,44 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 QString ResProperty<T>::toString() const
 {
-    return QString("ResProperty<%1>( %2 )")
-                .arg( QMetaType::typeName( qMetaTypeId<T>() ) )
-                .arg( Sire::toString(this->array()) );
+    if (this->isEmpty())
+    {
+        return QObject::tr("%1::empty").arg(this->what());
+    }
+    else
+    {
+        QStringList parts;
+
+        const auto n = this->count();
+
+        if (n <= 10)
+        {
+            for (int i=0; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+        }
+        else
+        {
+            for (int i=0; i<5; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+
+            parts.append("...");
+
+            for (int i=n-5; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+        }
+
+        return QObject::tr("%1( size=%2\n%3\n)")
+                        .arg(this->what()).arg(n).arg(parts.join("\n"));
+    }
 }
 
 /** Return whether or not it is possible to convert the variant
