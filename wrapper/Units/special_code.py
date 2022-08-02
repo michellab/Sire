@@ -14,18 +14,18 @@ def findGlobals():
     sourcedir = lines[1].split()[1]
 
     lines = open("%s/%s/units.h" % (root,sourcedir), "r").readlines()
-    
+
     FILE = open("_Units_global_variables.pyman.hpp", "w")
-    
+
     print("#ifndef _Units_global_variables_hpp", file=FILE)
     print("#define _Units_global_variables_hpp", file=FILE)
     print("\nvoid register_man_global_variables();\n", file=FILE)
     print("#endif", file=FILE)
-     
+
     FILE.close()
 
     FILE = open("_Units_global_variables.pyman.cpp", "w")
-    
+
     print("\n#include \"_Units_global_variables.pyman.hpp\"", file=FILE)
     print("#include <boost/python.hpp>", file=FILE)
     print("#include \"SireUnits/units.h\"", file=FILE)
@@ -33,20 +33,20 @@ def findGlobals():
     print("\nusing namespace boost::python;", file=FILE)
     print("using namespace SireUnits;", file=FILE)
     print("using namespace SireUnits::Dimension;\n", file=FILE)
-    
+
     print("void register_man_global_variables()", file=FILE)
     print("{", file=FILE)
-    
-    
+
+
     for line in lines:
         match = re.search(r"const Dimension::([\w\d\-<,>]+)\s+(\w+)", line)
-    
+
         if match:
             name = match.group(2)
             print("    scope().attr(\"%s\") = %s;\n" % (name,name), file=FILE)
         else:
             match = re.search(r"const double\s+(\w+)", line)
-            
+
             if match:
                 name = match.group(1)
                 print("    scope().attr(\"%s\") = %s;\n" % (name,name), file=FILE)
@@ -70,10 +70,13 @@ def fixMB(mb):
    mb.add_declaration_code("#include \"sireunits_dimensions.h\"")
    mb.add_declaration_code("#include \"generalunit.h\"")
    mb.add_declaration_code("#include \"_Units_global_variables.pyman.hpp\"")
-  
+
 
    mb.add_registration_code("register_SireUnits_dimensions();")
    mb.add_registration_code("register_man_global_variables();")
+
+   mb.add_declaration_code( "void autoconvert_GeneralUnitProperty();")
+   mb.add_registration_code( "autoconvert_GeneralUnitProperty();")
 
    #add all of the global physical constants to the module
    findGlobals()
@@ -89,4 +92,4 @@ implicitly_convertible = [ ("SireUnits::Dimension::TempBase",
                             "double"),
                            ("double", "SireUnits::Dimension::GeneralUnit"),
                          ]
- 
+

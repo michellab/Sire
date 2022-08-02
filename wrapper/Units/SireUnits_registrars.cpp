@@ -6,6 +6,7 @@
 #include "Helpers/version_error_impl.h"
 
 #include "dimensions.h"
+#include "generalunit.h"
 
 #include "Helpers/objectregistry.hpp"
 
@@ -40,6 +41,8 @@ void register_SireUnits_objects()
     ObjectRegistry::registerConverterFor< SireUnits::Dimension::Capacitance >();
     ObjectRegistry::registerConverterFor< SireUnits::Dimension::Current >();
     ObjectRegistry::registerConverterFor< SireUnits::Dimension::Potential >();
+    ObjectRegistry::registerConverterFor< SireUnits::Dimension::GeneralUnit >();
+    ObjectRegistry::registerConverterFor< SireUnits::Dimension::GeneralUnitProperty >();
 
 }
 

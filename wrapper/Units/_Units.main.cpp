@@ -11,6 +11,8 @@
 
 #include "GeneralUnit.pypp.hpp"
 
+#include "GeneralUnitProperty.pypp.hpp"
+
 #include "TempBase.pypp.hpp"
 
 #include "Unit.pypp.hpp"
@@ -31,6 +33,8 @@ namespace bp = boost::python;
 
 #include "_Units_global_variables.pyman.hpp"
 
+void autoconvert_GeneralUnitProperty();
+
 BOOST_PYTHON_MODULE(_Units){
     register_SireUnits_objects();
 
@@ -44,6 +48,8 @@ BOOST_PYTHON_MODULE(_Units){
 
     register_GeneralUnit_class();
 
+    register_GeneralUnitProperty_class();
+
     register_Fahrenheit_class();
 
     bp::implicitly_convertible< SireUnits::Dimension::TempBase, SireUnits::Dimension::Temperature >();
@@ -55,6 +61,8 @@ BOOST_PYTHON_MODULE(_Units){
     register_SireUnits_dimensions();
 
     register_man_global_variables();
+
+    autoconvert_GeneralUnitProperty();
 
     register_free_functions();
 }

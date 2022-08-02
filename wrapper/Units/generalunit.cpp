@@ -142,10 +142,9 @@ GeneralUnit::GeneralUnit(const GeneralUnit &other) : Unit(other)
 GeneralUnit::~GeneralUnit()
 {}
 
-/** Return the C++ type that this particular GeneralUnit corresponds to */
-QString GeneralUnit::typeName() const
+QString GeneralUnit::typeName()
 {
-    return detail::getTypeName(*this);
+    return QMetaType::typeName( qMetaTypeId<GeneralUnit>() );
 }
 
 /** Return the C++ type that this particular GeneralUnit corresponds to */
@@ -542,14 +541,102 @@ PropertyPtr GeneralUnit::toProperty() const
     }
     else
     {
-        qDebug() << QObject::tr(
-                "Tell the programmers that they need to add in automatic "
-                "wrapping of units of type '%1'").arg(this->toString());
-
-        throw SireError::incomplete_code( QObject::tr(
-                "Tell the programmers that they need to add in automatic "
-                "wrapping of units of type '%1'").arg(this->toString()),
-                   CODELOC );
-        return PropertyPtr();
+        return GeneralUnitProperty(*this);
     }
+}
+
+////
+//// Implementation of GeneralUnitProperty
+////
+
+static const RegisterMetaType<GeneralUnitProperty> r_genprop;
+
+QDataStream &operator<<(QDataStream &ds, const GeneralUnitProperty &prop)
+{
+    SireStream::writeHeader(ds, r_genprop, 1);
+    ds << prop.val;
+    return ds;
+}
+
+QDataStream &operator>>(QDataStream &ds, GeneralUnitProperty &prop)
+{
+    SireStream::VersionID v = SireStream::readHeader(ds, r_genprop);
+
+    if (v == 1)
+    {
+        ds >> prop.val;
+    }
+    else
+        throw SireStream::version_error(v, "1", r_genprop, CODELOC);
+
+    return ds;
+}
+
+/** Constructor - this constructs the integer "0" */
+GeneralUnitProperty::GeneralUnitProperty() : ConcreteProperty<GeneralUnitProperty,Property>(), val(0.0)
+{}
+
+/** Construct from the passed value */
+GeneralUnitProperty::GeneralUnitProperty(GeneralUnit value)
+               : ConcreteProperty<GeneralUnitProperty,Property>(), val(value)
+{}
+
+/** Construct from a VariantProperty */
+GeneralUnitProperty::GeneralUnitProperty(const Property &other)
+               : ConcreteProperty<GeneralUnitProperty,Property>(other)
+{
+    if (other.isA<VariantProperty>())
+    {
+        val = other.asA<VariantProperty>().convertTo<GeneralUnit>();
+    }
+    else
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast a %s into a GeneralUnitProperty").arg(other.toString()), CODELOC );
+}
+
+/** Copy constructor */
+GeneralUnitProperty::GeneralUnitProperty(const GeneralUnitProperty &other)
+               : ConcreteProperty<GeneralUnitProperty,Property>(other), val(other.val)
+{}
+
+/** Destructor */
+GeneralUnitProperty::~GeneralUnitProperty()
+{}
+
+const char* GeneralUnitProperty::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<GeneralUnitProperty>() );
+}
+
+/** Copy assignment operator */
+GeneralUnitProperty& GeneralUnitProperty::operator=(const GeneralUnitProperty &other)
+{
+    if (this != &other)
+    {
+        val = other.val;
+    }
+
+    return *this;
+}
+
+/** Comparison operator */
+bool GeneralUnitProperty::operator==(const GeneralUnitProperty &other) const
+{
+    return val == other.val;
+}
+
+/** Comparison operator */
+bool GeneralUnitProperty::operator!=(const GeneralUnitProperty &other) const
+{
+    return not this->operator==(other);
+}
+
+GeneralUnit GeneralUnitProperty::value() const
+{
+    return val;
+}
+
+QString GeneralUnitProperty::toString() const
+{
+    return val.toString();
 }

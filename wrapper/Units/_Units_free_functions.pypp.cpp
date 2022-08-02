@@ -179,11 +179,15 @@ namespace bp = boost::python;
 
 #include "SireBase/lengthproperty.h"
 
+#include "SireBase/numberproperty.h"
+
 #include "SireBase/timeproperty.h"
 
 #include "SireBase/variantproperty.h"
 
 #include "SireError/errors.h"
+
+#include "SireMaths/maths.h"
 
 #include "SireUnits/dimensions.h"
 

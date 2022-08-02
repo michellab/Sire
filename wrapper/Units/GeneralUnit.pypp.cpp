@@ -11,11 +11,15 @@ namespace bp = boost::python;
 
 #include "SireBase/lengthproperty.h"
 
+#include "SireBase/numberproperty.h"
+
 #include "SireBase/timeproperty.h"
 
 #include "SireBase/variantproperty.h"
 
 #include "SireError/errors.h"
+
+#include "SireMaths/maths.h"
 
 #include "SireUnits/dimensions.h"
 
@@ -48,6 +52,7 @@ void register_GeneralUnit_class(){
         GeneralUnit_exposer_t GeneralUnit_exposer = GeneralUnit_exposer_t( "GeneralUnit", "", bp::init< >("") );
         bp::scope GeneralUnit_scope( GeneralUnit_exposer );
         GeneralUnit_exposer.def( bp::init< double >(( bp::arg("value") ), "") );
+        GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit const & >(( bp::arg("unit") ), "") );
         GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit const & >(( bp::arg("other") ), "") );
         { //::SireUnits::Dimension::GeneralUnit::ANGLE
         
@@ -253,7 +258,7 @@ void register_GeneralUnit_class(){
         }
         { //::SireUnits::Dimension::GeneralUnit::typeName
         
-            typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*typeName_function_type)(  ) const;
+            typedef ::QString ( *typeName_function_type )(  );
             typeName_function_type typeName_function_value( &::SireUnits::Dimension::GeneralUnit::typeName );
             
             GeneralUnit_exposer.def( 
@@ -275,6 +280,7 @@ void register_GeneralUnit_class(){
                 , "" );
         
         }
+        GeneralUnit_exposer.staticmethod( "typeName" );
         GeneralUnit_exposer.def( bp::other<double>() + bp::self );
         GeneralUnit_exposer.def( bp::other<double>() - bp::self );
         GeneralUnit_exposer.def( bp::other<double>() * bp::self );

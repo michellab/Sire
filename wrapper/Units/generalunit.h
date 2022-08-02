@@ -21,10 +21,14 @@ namespace bp = boost::python;
 
 namespace SireUnits{ namespace Dimension {
 class GeneralUnit;
+class GeneralUnitProperty;
 }}
 
 SIREUNITS_EXPORT QDataStream& operator<<(QDataStream&, const SireUnits::Dimension::GeneralUnit&);
 SIREUNITS_EXPORT QDataStream& operator>>(QDataStream&, SireUnits::Dimension::GeneralUnit&);
+
+SIREUNITS_EXPORT QDataStream& operator<<(QDataStream&, const SireUnits::Dimension::GeneralUnitProperty&);
+SIREUNITS_EXPORT QDataStream& operator>>(QDataStream&, SireUnits::Dimension::GeneralUnitProperty&);
 
 namespace SireUnits
 {
@@ -71,7 +75,7 @@ public:
 
     ~GeneralUnit();
 
-    QString typeName() const;
+    static QString typeName();
     QString what() const;
 
     int MASS() const;
@@ -148,6 +152,40 @@ private:
     void assertCompatible(const GeneralUnit &other) const;
 
     int Mass, Length, Time, Charge, temperature, Quantity, Angle;
+};
+
+/** This class provides a thin Property wrapper around GeneralUnits
+
+    @author Christopher Woods
+*/
+class SIREBASE_EXPORT GeneralUnitProperty : public SireBase::ConcreteProperty<GeneralUnitProperty,SireBase::Property>
+{
+
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const GeneralUnitProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, GeneralUnitProperty&);
+
+public:
+    GeneralUnitProperty();
+    GeneralUnitProperty(GeneralUnit value);
+
+    GeneralUnitProperty(const GeneralUnitProperty &other);
+    GeneralUnitProperty(const SireBase::Property &other);
+
+    ~GeneralUnitProperty();
+
+    static const char* typeName();
+
+    GeneralUnitProperty& operator=(const GeneralUnitProperty &other);
+
+    bool operator==(const GeneralUnitProperty &other) const;
+    bool operator!=(const GeneralUnitProperty &other) const;
+
+    GeneralUnit value() const;
+
+    QString toString() const;
+
+private:
+    GeneralUnit val;
 };
 
 inline SireBase::PropertyPtr wrap(const GeneralUnit &unit)
@@ -301,7 +339,12 @@ void register_dimension()
 
 }
 
+Q_DECLARE_METATYPE( SireUnits::Dimension::GeneralUnit );
+Q_DECLARE_METATYPE( SireUnits::Dimension::GeneralUnitProperty );
+
 SIRE_EXPOSE_CLASS( SireUnits::Dimension::GeneralUnit )
+SIRE_EXPOSE_CLASS( SireUnits::Dimension::GeneralUnitProperty )
+
 SIRE_EXPOSE_FUNCTION( SireUnits::Dimension::wrap )
 
 SIRE_END_HEADER
