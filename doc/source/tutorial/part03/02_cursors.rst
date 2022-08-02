@@ -7,7 +7,7 @@ do this is by creating a :class:`sire.mol.Cursor` for the molecule.
 
 >>> cursor = mol.cursor()
 >>> print(cursor)
-Cursor(molecule:MolNum(635))
+Cursor(molecule, ACE:2)
 
 The :class:`~sire.mol.Cursor` represents a property editor that can
 be scanned across the molecule. First, we will scan to the atom
@@ -15,7 +15,7 @@ called `CA` using the `atom` function.
 
 >>> cursor = cursor.atom("CA")
 >>> print(cursor)
-Cursor(atom:AtomIdx(8))
+Cursor(atom, CA:9)
 
 The cursor provides a dictionary-style interface to all of the atom's
 properties.
@@ -51,6 +51,13 @@ Assigning to a non-existent key will create a new property.
 >>> print(cursor["color"])
 charcoal
 
+An alternative to using the dictionary-type functions is to use
+the `set` and `get` functions, e.g.
+
+>>> cursor.set("color", "charcoal")
+>>> print(cursor.get("color"))
+charcoal
+
 The cursor is editing a copy of the molecule. To commit and save the
 changes, you need to use the `commit()` function.
 
@@ -73,6 +80,20 @@ the properties of several atoms. This is because the `atoms()` function
 returns a list of cursors, one per atom.
 
 >>> cursor = mol.cursor()
+>>> print(cursor.atoms())
+Cursors( size=22
+1: Cursor(atom, HH31:1)
+2: Cursor(atom, CH3:2)
+3: Cursor(atom, HH32:3)
+4: Cursor(atom, HH33:4)
+5: Cursor(atom, C:5)
+...
+18: Cursor(atom, H:18)
+19: Cursor(atom, CH3:19)
+20: Cursor(atom, HH31:20)
+21: Cursor(atom, HH32:21)
+22: Cursor(atom, HH33:22)
+)
 >>> for atom in cursor.atoms():
 ...     atom["color"] = atom["element"].color_name()
 >>> mol = cursor.commit()
@@ -96,6 +117,34 @@ SireMol::AtomStringProperty( size=22
     Note how we have used the :func:`sire.mol.Element.color_name`
     function of :func:`sire.mol.Element` to get the color typically
     used to represent each atom in a molecular viewer.
+
+This process of creating a cursor, then applying a change to every single
+atom in the cursor, then commiting the changes back the molecule, is very common.
+It is so common, that sire provides the `apply` function to enable
+you to write this as a single line of code;
+
+>>> mol = mol.cursor().atoms().apply(
+...     lambda atom: atom.set("color", atom["element"].color_name())).commit()
+>>> print(mol.property("color"))
+SireMol::AtomStringProperty( size=22
+0: white
+1: charcoal
+2: white
+3: white
+4: charcoal
+...
+17: white
+18: charcoal
+19: white
+20: white
+21: white
+)
+
+.. note::
+
+    Note how we have to use the `atom.set("color", ...)` rather than
+    `atom["color"] = ...` in the lambda expression. This is because
+    assignments (using `=`) is not supported in a Python lambda expression.
 
 Searching by property
 ---------------------
@@ -150,6 +199,12 @@ SireMol::AtomFloatProperty( size=22
     the radius. Searching can only be performed with simple (numeric
     or boolean) properties.
 
+or, using `apply`, this could be written as
+
+>>> mol = mol.cursor().atoms().apply(
+...     lambda atom: atom.set("radius",
+...                           atom["element"].covalent_radius().value())).commit()
+
 We can now search for all atoms that have a radius that is less than `0.5`.
 
 >>> print(mol["atom property radius < 0.5"])
@@ -170,12 +225,17 @@ Selector<SireMol::Atom>( size=12
 Boolean properties are particularly useful, as these can be used to
 mark atoms as matching particular criteria.
 
-For example, we could set a property that is `True` for oxygen atoms,
+For example, we could set a property that is `True` for oxygen atoms using either
 
 >>> cursor = mol.cursor()
 >>> for atom in cursor.atoms("element O"):
 ...     atom["special"] = True
 >>> mol = cursor.commit()
+
+or
+
+>>> mol = mol.cursor().atoms("element O").apply(
+...             lambda atom: atom.set("special", True)).commit()
 
 and can then use this property to search for those atoms.
 
@@ -202,7 +262,8 @@ Deleting properties
 
 You can remove properties from the cursor in the same way that you
 remove properties from a normal Python dictionary. You just `del`
-the key for the property you want to remove.
+the key for the property you want to remove, or call the
+`delete` function of the Cursor, passing in the key.
 
 For example, we can delete the `radius` property we created earlier
 using
@@ -218,6 +279,16 @@ LJ, coordinates, dihedral, treechain, connectivity, special, charge,
 ambertype, parameters, atomtype, mass ].
 (call sire.error.get_last_error_details() for more info)'
 
+Or, alternatively, using the `delete` function,
+
+>>> cursor = mol.cursor()
+>>> cursor.delete("radius")
+>>> mol = cursor.commit()
+
+or, as one line,
+
+>>> mol = mol.cursor().delete("radius").commit()
+
 We can also remove the properties from individual atoms. Here, we will
 remove the `special` property from the oxygen atoms
 
@@ -225,6 +296,10 @@ remove the `special` property from the oxygen atoms
 >>> for atom in cursor.atoms("element O"):
 ...     del atom["special"]
 >>> mol = cursor.commit()
+
+or, alternatively, using the `delete` function,
+
+>>> mol = mol.cursor().atoms("element O").delete("special").commit()
 
 Deleting a property from an atom will reset it to a default-constructed
 value. This is `False` (or `0`) for boolean properties.
@@ -237,9 +312,6 @@ unexpected results for more complex properties. For example, deleting
 the `coordinates` property from an atom will set its coordinates to
 `(0, 0, 0)`...
 
->>> cursor = mol.cursor()
->>> for atom in cursor.atoms("element O"):
-...     del atom["coordinates"]
->>> mol = cursor.commit()
+>>> mol = mol.cursor().atoms("element O").delete("coordinates").commit()
 >>> print(mol["element O"].property("coordinates"))
 [( 0, 0, 0 ), ( 0, 0, 0 )]

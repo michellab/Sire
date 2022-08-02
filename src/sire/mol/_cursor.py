@@ -101,8 +101,19 @@ class Cursor:
     def __str__(self):
         if self._d.molecule is None:
             return "Cursor::null"
+        elif self._bond is None:
+            # This is a view cursor
+            try:
+                return f"Cursor({self.type()}, {self.name}:{self.number})"
+            except Exception:
+                return f"Cursor({self.type()}, {self.name})"
         else:
-            return f"Cursor({self.type()}:{self.id()})"
+            # This is a bond Cursor
+            a0 = self._d.molecule[self._bond.atom0()]
+            a1 = self._d.molecule[self._bond.atom1()]
+            return f"Cursor({self.type()}, " \
+                   f"{a0.name().value()}:{a0.number().value()} => " \
+                   f"{a1.name().value()}:{a1.number().value()})"
 
     def __repr__(self):
         return self.__str__()
@@ -155,21 +166,6 @@ class Cursor:
             self._d.molecule = self._view.molecule()
         else:
             self._d.set_bond_property(self._bond, key, value)
-
-        self._update()
-
-    def set(self, values):
-        """Set all of the properties from the passed dictionary of values"""
-        self._update()
-
-        if self._bond is None:
-            self._d.set_bond_properties(self._bond, values)
-        else:
-            for key in values.keys():
-                self._connectivity.set_property(self._bond, key, values[key])
-
-                self._molecule.set_property(self._connectivity_property,
-                                            self._connectivity.commit())
 
         self._update()
 
@@ -429,10 +425,12 @@ class Cursor:
            passed value
         """
         self.__setitem__(key, value)
+        return self
 
     def delete(self, key):
         """Remove the property associated with the key 'key'"""
         self.__delitem__(key)
+        return self
 
     def get_name(self):
         """Return the name of the current view. Note that this
@@ -457,6 +455,8 @@ class Cursor:
 
         self._view.rename(orig_name.__class__(name))
         self._d.molecule = self._view.molecule()
+
+        return self
 
     def get_number(self):
         """Return the number of the current view. This returns the
@@ -484,6 +484,8 @@ class Cursor:
             self._d.molecule = self._view.molecule()
         except AttributeError:
             raise TypeError(f"A {self._view.what()} does not have a number!")
+
+        return self
 
     def get_index(self):
         """Return the index of the current view. This returns it as
@@ -688,10 +690,71 @@ class Cursors:
         self._cursors = cursors
 
     def __getitem__(self, i):
-        return self._cursors[i]
+        try:
+            idx = int(i)
+        except Exception:
+            idx = None
+
+        if idx is not None:
+            return self._cursors[idx]
+        elif type(i) is slice:
+                return Cursors(self._parent, self._cursors[i])
+        else:
+            cs = []
+
+            for idx in i:
+                cs.append(self._cursors[idx])
+
+            return Cursors(self._parent, cs)
+
+    def __delitem__(self, i):
+        try:
+            # if this is an integer, then delete the ith cursor
+            self._cursors.__delitem__(i)
+            return
+        except Exception:
+            pass
+
+        # delete this key from all of the cursors
+        for c in self._cursors:
+            del c[i]
 
     def __len__(self):
         return len(self._cursors)
+
+    def __str__(self):
+        if len(self) == 0:
+            return "Cursors::null"
+        else:
+            lines = []
+
+            n = len(self._cursors)
+
+            if n <= 10:
+                for i in range(0, n):
+                    lines.append(f"{i+1}: {self._cursors[i]}")
+            else:
+                for i in range(0, 5):
+                    lines.append(f"{i+1}: {self._cursors[i]}")
+
+                lines.append("...")
+
+                for i in range(n-5, n):
+                    lines.append(f"{i+1}: {self._cursors[i]}")
+
+            lines = "\n".join(lines)
+
+            return f"Cursors( size={n}\n{lines}\n)"
+
+    def __repr__(self):
+        return self.__str__()
+
+    def delete(self, i):
+        """Remove either the ith cursor in the list, or i is a string,
+           delete that key from all of the cursors
+        """
+        self.__delitem__(i)
+        return self
 
     def commit(self):
         """Commit all of the changes and return the newly
