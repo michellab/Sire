@@ -207,6 +207,7 @@ set ( PYPP_SOURCES
        ResNum.pypp.cpp
        ResNumAtomNameMatcher.pypp.cpp
        ResProp.pypp.cpp
+       ResPropertyProperty.pypp.cpp
        ResStringProperty.pypp.cpp
        ResStructureEditor.pypp.cpp
        ResVariantProperty.pypp.cpp

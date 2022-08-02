@@ -421,6 +421,8 @@
 
 #include "ResProp.pypp.hpp"
 
+#include "ResPropertyProperty.pypp.hpp"
+
 #include "ResStringProperty.pypp.hpp"
 
 #include "ResStructureEditor.pypp.hpp"
@@ -1005,6 +1007,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_ResStringProperty_class();
 
     register_ResVariantProperty_class();
+
+    register_ResPropertyProperty_class();
 
     register_ResFloatProperty_class();
 

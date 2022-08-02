@@ -352,6 +352,7 @@ void register_SireMol_objects()
     ObjectRegistry::registerConverterFor< SireMol::ResIntProperty >();
     ObjectRegistry::registerConverterFor< SireMol::ResFloatProperty >();
     ObjectRegistry::registerConverterFor< SireMol::ResVariantProperty >();
+    ObjectRegistry::registerConverterFor< SireMol::ResPropertyProperty >();
     ObjectRegistry::registerConverterFor< SireMol::SegStringProperty >();
     ObjectRegistry::registerConverterFor< SireMol::SegIntProperty >();
     ObjectRegistry::registerConverterFor< SireMol::SegFloatProperty >();

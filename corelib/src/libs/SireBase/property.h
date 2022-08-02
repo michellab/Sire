@@ -117,9 +117,9 @@ public:
 
     virtual Property* clone() const=0;
     virtual Property* create() const=0;
-    
+
     virtual QString toString() const;
-    
+
     virtual void copy(const Property &other)=0;
     virtual bool equals(const Property &other) const=0;
 
@@ -138,7 +138,7 @@ public:
 
     template<class T>
     const T& asA() const;
-    
+
     template<class T>
     T& asA();
 
@@ -201,12 +201,12 @@ public:
     ConcreteProperty(const T0 &t0, const T1 &t1, const T2 &t2, const T3 &t3,
                      const T4 &t4, const T5 &t5);
 
-    template<class T0, class T1, class T2, class T3, class T4, 
+    template<class T0, class T1, class T2, class T3, class T4,
              class T5, class T6>
     ConcreteProperty(const T0 &t0, const T1 &t1, const T2 &t2, const T3 &t3,
                      const T4 &t4, const T5 &t5, const T6 &t6);
 
-    template<class T0, class T1, class T2, class T3, class T4, 
+    template<class T0, class T1, class T2, class T3, class T4,
              class T5, class T6, class T7>
     ConcreteProperty(const T0 &t0, const T1 &t1, const T2 &t2, const T3 &t3,
                      const T4 &t4, const T5 &t5, const T6 &t6, const T7 &t7);
@@ -246,18 +246,18 @@ class SIREBASE_EXPORT NullProperty
 {
 public:
     NullProperty();
-    
+
     NullProperty(const NullProperty &other);
 
     ~NullProperty();
 
     static const char* typeName();
-    
+
     QString toString() const;
 };
 
 /** This is base class of the polymorphic pointer holder for the entire
-    Property class hierarchy. This can hold implicitly 
+    Property class hierarchy. This can hold implicitly
     shared pointers to any property class.
 
     @author Christopher Woods
@@ -298,13 +298,13 @@ public:
 protected:
     PropPtrBase(const Property &property);
     PropPtrBase(Property *property);
-    
+
     PropPtrBase(const PropPtrBase &other);
 
     PropPtrBase& operator=(const PropPtrBase &other);
 
     const Property& read() const;
-    
+
     Property& write();
     Property& edit();
 
@@ -316,7 +316,7 @@ private:
 };
 
 /** This is base class of the global polymorphic pointer holder for the entire
-    Property class hierarchy. This can hold implicitly 
+    Property class hierarchy. This can hold implicitly
     shared pointers to any property class.
 
     @author Christopher Woods
@@ -355,7 +355,7 @@ public:
 protected:
     GlobalPropPtrBase(const Property &property);
     GlobalPropPtrBase(Property *property);
-    
+
     GlobalPropPtrBase(const GlobalPropPtrBase &other);
 
     GlobalPropPtrBase& operator=(const GlobalPropPtrBase &other);
@@ -371,7 +371,7 @@ private:
 
 /** This is the specialised pointer that is used to hold a hierarchy
     of properties that are derived from type 'T'
-    
+
     @author Christopher Woods
 */
 template<class T>
@@ -390,18 +390,18 @@ public:
 
     PropPtr(const T &obj);
     PropPtr(T *obj);
-    
+
     PropPtr(const Property &property);
 
     PropPtr(const PropPtrBase &other);
 
     PropPtr(const PropPtr<T> &other);
-    
+
     ~PropPtr();
-    
+
     PropPtr<T>& operator=(const T &obj);
     PropPtr<T>& operator=(T *obj);
-    
+
     PropPtr<T>& operator=(const Property &property);
 
     PropPtr<T>& operator=(const PropPtr<T> &other);
@@ -409,7 +409,7 @@ public:
 
     const T* operator->() const;
     const T& operator*() const;
-    
+
     const T& read() const;
     T& edit();
 
@@ -417,7 +417,7 @@ public:
     const T* constData() const;
 
     T* data();
-    
+
     operator const T&() const;
 
     bool isNull() const;
@@ -430,7 +430,7 @@ protected:
 
 /** This is the specialised global pointer that is used to hold a hierarchy
     of properties that are derived from type 'T'
-    
+
     @author Christopher Woods
 */
 template<class T>
@@ -445,18 +445,18 @@ public:
 
     GlobalPropPtr(const T &obj);
     GlobalPropPtr(T *obj);
-    
+
     GlobalPropPtr(const Property &property);
 
     GlobalPropPtr(const GlobalPropPtrBase &other);
 
     GlobalPropPtr(const GlobalPropPtr<T> &other);
-    
+
     ~GlobalPropPtr();
-    
+
     GlobalPropPtr<T>& operator=(const T &obj);
     GlobalPropPtr<T>& operator=(T *obj);
-    
+
     GlobalPropPtr<T>& operator=(const Property &property);
 
     GlobalPropPtr<T>& operator=(const GlobalPropPtr<T> &other);
@@ -464,12 +464,12 @@ public:
 
     const T* operator->() const;
     const T& operator*() const;
-    
+
     const T& read() const;
 
     const T* data() const;
     const T* constData() const;
-    
+
     operator const T&() const;
 
     bool isNull() const;
@@ -506,7 +506,7 @@ SIRE_OUTOFLINE_TEMPLATE
 const T& Property::asA() const
 {
     const T* as_t = dynamic_cast<const T*>(this);
-    
+
     if (not as_t)
     {
         if (QLatin1String(T::typeName()) == QLatin1String(this->what()))
@@ -518,7 +518,7 @@ const T& Property::asA() const
         else
             throwInvalidCast(T::typeName());
     }
-    
+
     return *as_t;
 }
 
@@ -527,7 +527,7 @@ SIRE_OUTOFLINE_TEMPLATE
 T& Property::asA()
 {
     T* as_t = dynamic_cast<T*>(this);
-    
+
     if (not as_t)
     {
         if (QLatin1String(T::typeName()) == QLatin1String(this->what()))
@@ -539,7 +539,7 @@ T& Property::asA()
         else
             throwInvalidCast(T::typeName());
     }
-       
+
     return *as_t;
 }
 
@@ -561,7 +561,7 @@ ConcreteProperty<Derived,Base>::ConcreteProperty(const T0 &t0) : Base(t0)
 template<class Derived, class Base>
 template<class T0, class T1>
 SIRE_OUTOFLINE_TEMPLATE
-ConcreteProperty<Derived,Base>::ConcreteProperty(const T0 &t0, const T1 &t1) 
+ConcreteProperty<Derived,Base>::ConcreteProperty(const T0 &t0, const T1 &t1)
                                : Base(t0,t1)
 {}
 
@@ -576,7 +576,7 @@ template<class Derived, class Base>
 template<class T0, class T1, class T2, class T3>
 SIRE_OUTOFLINE_TEMPLATE
 ConcreteProperty<Derived,Base>::ConcreteProperty(const T0 &t0, const T1 &t1,
-                                                 const T2 &t2, const T3 &t3) 
+                                                 const T2 &t2, const T3 &t3)
                                : Base(t0,t1,t2,t3)
 {}
 
@@ -586,7 +586,7 @@ template<class T0, class T1, class T2, class T3,
 SIRE_OUTOFLINE_TEMPLATE
 ConcreteProperty<Derived,Base>::ConcreteProperty(const T0 &t0, const T1 &t1,
                                                  const T2 &t2, const T3 &t3,
-                                                 const T4 &t4) 
+                                                 const T4 &t4)
                                : Base(t0,t1,t2,t3,t4)
 {}
 
@@ -596,7 +596,7 @@ template<class T0, class T1, class T2, class T3,
 SIRE_OUTOFLINE_TEMPLATE
 ConcreteProperty<Derived,Base>::ConcreteProperty(const T0 &t0, const T1 &t1,
                                                  const T2 &t2, const T3 &t3,
-                                                 const T4 &t4, const T5 &t5) 
+                                                 const T4 &t4, const T5 &t5)
                                : Base(t0,t1,t2,t3,t4,t5)
 {}
 
@@ -607,7 +607,7 @@ SIRE_OUTOFLINE_TEMPLATE
 ConcreteProperty<Derived,Base>::ConcreteProperty(const T0 &t0, const T1 &t1,
                                                  const T2 &t2, const T3 &t3,
                                                  const T4 &t4, const T5 &t5,
-                                                 const T6 &t6) 
+                                                 const T6 &t6)
                                : Base(t0,t1,t2,t3,t4,t5,t6)
 {}
 
@@ -618,7 +618,7 @@ SIRE_OUTOFLINE_TEMPLATE
 ConcreteProperty<Derived,Base>::ConcreteProperty(const T0 &t0, const T1 &t1,
                                                  const T2 &t2, const T3 &t3,
                                                  const T4 &t4, const T5 &t5,
-                                                 const T6 &t6, const T7 &t7) 
+                                                 const T6 &t6, const T7 &t7)
                                : Base(t0,t1,t2,t3,t4,t5,t6,t7)
 {}
 
@@ -629,7 +629,7 @@ ConcreteProperty<Derived,Base>::~ConcreteProperty()
 
 template<class Derived, class Base>
 SIRE_OUTOFLINE_TEMPLATE
-ConcreteProperty<Derived,Base>& 
+ConcreteProperty<Derived,Base>&
 ConcreteProperty<Derived,Base>::operator=(const Property &other)
 {
     const Derived* other_t = dynamic_cast<const Derived*>(&other);
@@ -742,7 +742,7 @@ bool ConcreteProperty<Derived,Base>::operator!=(
 /////// Implementation of PropPtr<T>
 ///////
 
-/** Assert that this is sane - this is to make sure that the 
+/** Assert that this is sane - this is to make sure that the
     Property really is derived from 'T' */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -873,7 +873,7 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 const T& PropPtr<T>::read() const
 {
-    //This is only safe as everything in this class ensures that 
+    //This is only safe as everything in this class ensures that
     //the base pointer really is a pointer to the derived type 'T' */
     return static_cast<const T&>( PropPtrBase::read() );
 }
@@ -883,7 +883,7 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 T& PropPtr<T>::edit()
 {
-    //This is only safe as everything in this class ensures that 
+    //This is only safe as everything in this class ensures that
     //the base pointer really is a pointer to the derived type 'T' */
     return static_cast<T&>( PropPtrBase::edit() );
 }
@@ -940,7 +940,7 @@ PropPtr<T>::operator const T&() const
 /////// Implementation of GlobalPropPtr<T>
 ///////
 
-/** Assert that this is sane - this is to make sure that the 
+/** Assert that this is sane - this is to make sure that the
     Property really is derived from 'T' */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -1071,7 +1071,7 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 const T& GlobalPropPtr<T>::read() const
 {
-    //This is only safe as everything in this class ensures that 
+    //This is only safe as everything in this class ensures that
     //the base pointer really is a pointer to the derived type 'T' */
     return static_cast<const T&>( GlobalPropPtrBase::read() );
 }
@@ -1120,7 +1120,7 @@ GlobalPropPtr<T>::operator const T&() const
 
 /** This is the specialised pointer that is used to hold a basic
     Property object
-    
+
     @author Christopher Woods
 */
 template<>
@@ -1135,9 +1135,9 @@ public:
     PropPtr(const PropPtrBase &other);
 
     PropPtr(const PropPtr<Property> &other);
-    
+
     ~PropPtr();
-    
+
     PropPtr<Property>& operator=(const Property &property);
     PropPtr<Property>& operator=(Property *property);
 
@@ -1146,7 +1146,7 @@ public:
 
     const Property* operator->() const;
     const Property& operator*() const;
-    
+
     const Property& read() const;
     Property& edit();
 
@@ -1154,7 +1154,7 @@ public:
     const Property* constData() const;
 
     Property* data();
-    
+
     operator const Property&() const;
 
     bool isNull() const;
@@ -1167,7 +1167,7 @@ public:
 
 /** This is the specialised global pointer that is used to hold a basic
     Property object
-    
+
     @author Christopher Woods
 */
 template<>
@@ -1182,9 +1182,9 @@ public:
     GlobalPropPtr(const GlobalPropPtrBase &other);
 
     GlobalPropPtr(const GlobalPropPtr<Property> &other);
-    
+
     ~GlobalPropPtr();
-    
+
     GlobalPropPtr<Property>& operator=(const Property &property);
     GlobalPropPtr<Property>& operator=(Property *property);
 
@@ -1193,12 +1193,12 @@ public:
 
     const Property* operator->() const;
     const Property& operator*() const;
-    
+
     const Property& read() const;
 
     const Property* data() const;
     const Property* constData() const;
-    
+
     operator const Property&() const;
 
     bool isNull() const;
@@ -1234,13 +1234,13 @@ SIRE_OUTOFLINE_TEMPLATE
 QDataStream& operator>>(QDataStream &ds, SireBase::PropPtr<T> &prop)
 {
     SireBase::PropPtr<T> ptr;
-    
+
     ds >> static_cast<SireBase::PropPtrBase&>(ptr);
-    
+
     ptr.assertSane();
-    
+
     prop = ptr;
-    
+
     return ds;
 }
 
@@ -1259,19 +1259,20 @@ SIRE_OUTOFLINE_TEMPLATE
 QDataStream& operator>>(QDataStream &ds, SireBase::GlobalPropPtr<T> &prop)
 {
     SireBase::GlobalPropPtr<T> ptr;
-    
+
     ds >> static_cast<SireBase::GlobalPropPtrBase&>(ptr);
-    
+
     ptr.assertSane();
-    
+
     prop = ptr;
-    
+
     return ds;
 }
 
 #endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 Q_DECLARE_METATYPE(SireBase::NullProperty);
+Q_DECLARE_METATYPE(SireBase::PropertyPtr);
 
 SIRE_EXPOSE_CLASS( SireBase::Property )
 SIRE_EXPOSE_CLASS( SireBase::NullProperty )

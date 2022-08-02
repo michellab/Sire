@@ -594,6 +594,18 @@ class Cursor:
         """Return whether this is pointing to a Segment"""
         return self.type() == "segment"
 
+    def evaluate(self, *args, **kwargs):
+        """Return a :class:`sire.mol.Evaluator` for the view
+           in this cursor
+        """
+        self._update()
+
+        if self._bond is None:
+            return self._view.evaluate(*args, **kwargs)
+        else:
+            from sire.mm import Bond
+            return Bond(self._d.molecule, self._bond)
+
     def commit(self):
         """Commit all of the changes and return the newly
            edited molecule (or MoleculeView)

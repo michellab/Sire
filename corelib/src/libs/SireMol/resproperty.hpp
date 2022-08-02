@@ -66,6 +66,7 @@ typedef ResProperty<QString>  ResStringProperty;
 typedef ResProperty<qint64>   ResIntProperty;
 typedef ResProperty<double>   ResFloatProperty;
 typedef ResProperty<QVariant> ResVariantProperty;
+typedef ResProperty<SireBase::PropertyPtr> ResPropertyProperty;
 
 /** Small class used to provide a common base for all ResProperty types */
 class SIREMOL_EXPORT ResProp : public MolViewProperty
@@ -524,6 +525,7 @@ Q_DECLARE_METATYPE( SireMol::ResStringProperty );
 Q_DECLARE_METATYPE( SireMol::ResIntProperty );
 Q_DECLARE_METATYPE( SireMol::ResFloatProperty );
 Q_DECLARE_METATYPE( SireMol::ResVariantProperty );
+Q_DECLARE_METATYPE( SireMol::ResPropertyProperty );
 
 SIRE_EXPOSE_CLASS( SireMol::ResProp )
 
@@ -531,15 +533,16 @@ SIRE_EXPOSE_RESIDUE_PROPERTY( QString, SireMol::ResStringProperty )
 SIRE_EXPOSE_RESIDUE_PROPERTY( qint64, SireMol::ResIntProperty )
 SIRE_EXPOSE_RESIDUE_PROPERTY( double, SireMol::ResFloatProperty )
 SIRE_EXPOSE_RESIDUE_PROPERTY( QVariant, SireMol::ResVariantProperty )
+SIRE_EXPOSE_RESIDUE_PROPERTY( SireBase::PropertyPtr, SireMol::ResPropertyProperty )
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 template class SireMol::ResProperty<QString>;
 template class SireMol::ResProperty<qint64>;
 template class SireMol::ResProperty<double>;
 template class SireMol::ResProperty<QVariant>;
+template class SireMol::ResProperty<SireBase::PropertyPtr>;
 #endif
 
 SIRE_END_HEADER
 
 #endif
-

@@ -279,7 +279,15 @@ def _set_property(molview, key, property):
 
     (typename, property) = __get_typename__(property)
 
-    return getattr(molview, "_set_property_%s" % typename)(key, property)
+    try:
+        return getattr(molview, "_set_property_%s" % typename)(key, property)
+    except AttributeError as e:
+        # no matching function - see if we have the generic 'PropertyProperty'
+        if hasattr(molview, "_set_property_SireBase_PropertyPtr"):
+            from ..Base import wrap
+            return molview._set_property_SireBase_PropertyPtr(key, wrap(property))
+
+        raise e
 
 
 def __set_property__(molview, key, property):

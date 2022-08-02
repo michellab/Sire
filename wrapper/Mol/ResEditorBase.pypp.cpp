@@ -83,6 +83,16 @@ SireMol::ResEditorBase& set_Metadata_SireMol_ResVariantProperty_function2(
                                    const QString &key, const QString &metakey, const QVariant &p)
                                    { return molview.setMetadata< QVariant >(key, metakey, p); }
 
+SireMol::ResEditorBase& set_Metadata_SireMol_ResPropertyProperty_function1(
+                                  SireMol::ResEditorBase &molview,
+                                   const QString &metakey, const SireBase::PropertyPtr &p)
+                                   { return molview.setMetadata< SireBase::PropertyPtr >(metakey, p); }
+
+SireMol::ResEditorBase& set_Metadata_SireMol_ResPropertyProperty_function2(
+                                  SireMol::ResEditorBase &molview,
+                                   const QString &key, const QString &metakey, const SireBase::PropertyPtr &p)
+                                   { return molview.setMetadata< SireBase::PropertyPtr >(key, metakey, p); }
+
 #include "Helpers/str.hpp"
 
 #include "Helpers/release_gil_policy.hpp"
@@ -623,6 +633,10 @@ void register_ResEditorBase_class(){
                                            &SireMol::ResEditorBase::setProperty< QVariant >, bp::return_self< >() );
         ResEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_ResVariantProperty_function1, bp::return_self< >());
         ResEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_ResVariantProperty_function2, bp::return_self< >());
+        ResEditorBase_exposer.def( "_set_property_SireBase_PropertyPtr",
+                                           &SireMol::ResEditorBase::setProperty< SireBase::PropertyPtr >, bp::return_self< >() );
+        ResEditorBase_exposer.def( "_set_metadata_SireBase_PropertyPtr", &set_Metadata_SireMol_ResPropertyProperty_function1, bp::return_self< >());
+        ResEditorBase_exposer.def( "_set_metadata_SireBase_PropertyPtr", &set_Metadata_SireMol_ResPropertyProperty_function2, bp::return_self< >());
         ResEditorBase_exposer.def( "__str__", &__str__< ::SireMol::Editor<SireMol::ResEditor, SireMol::Residue> > );
         ResEditorBase_exposer.def( "__repr__", &__str__< ::SireMol::Editor<SireMol::ResEditor, SireMol::Residue> > );
         ResEditorBase_exposer.def( "__len__", &__len_size< ::SireMol::Editor<SireMol::ResEditor, SireMol::Residue> > );

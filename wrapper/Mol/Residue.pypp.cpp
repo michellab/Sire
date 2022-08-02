@@ -69,6 +69,13 @@ const QVariant& get_Metadata_SireMol_ResVariantProperty_function2(const SireMol:
                                    const QString &key, const QString &metakey){
                                         return atom.metadata< QVariant >(key, metakey); }
 
+const SireBase::PropertyPtr& get_Metadata_SireMol_ResPropertyProperty_function1(const SireMol::Residue &atom,
+                                   const QString &metakey){ return atom.metadata< SireBase::PropertyPtr >(metakey); }
+
+const SireBase::PropertyPtr& get_Metadata_SireMol_ResPropertyProperty_function2(const SireMol::Residue &atom,
+                                   const QString &key, const QString &metakey){
+                                        return atom.metadata< SireBase::PropertyPtr >(key, metakey); }
+
 SireMol::Residue __copy__(const SireMol::Residue &other){ return SireMol::Residue(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -500,6 +507,9 @@ void register_Residue_class(){
         Residue_exposer.def( "_get_property_SireMol_ResVariantProperty", &SireMol::Residue::property< QVariant >, bp::return_value_policy<bp::copy_const_reference>());
         Residue_exposer.def( "_get_metadata_SireMol_ResVariantProperty", get_Metadata_SireMol_ResVariantProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
         Residue_exposer.def( "_get_metadata_SireMol_ResVariantProperty", &get_Metadata_SireMol_ResVariantProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
+        Residue_exposer.def( "_get_property_SireMol_ResPropertyProperty", &SireMol::Residue::property< SireBase::PropertyPtr >, bp::return_value_policy<bp::copy_const_reference>());
+        Residue_exposer.def( "_get_metadata_SireMol_ResPropertyProperty", get_Metadata_SireMol_ResPropertyProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
+        Residue_exposer.def( "_get_metadata_SireMol_ResPropertyProperty", &get_Metadata_SireMol_ResPropertyProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
         Residue_exposer.def( "__copy__", &__copy__);
         Residue_exposer.def( "__deepcopy__", &__copy__);
         Residue_exposer.def( "clone", &__copy__);
