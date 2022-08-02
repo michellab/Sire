@@ -410,14 +410,28 @@ Molecule.join = _molecule_join
 __p = _Base.Properties()
 
 def _pvt_property_cludge_fix(C):
-   __p.setProperty("c", C())
-   t = __p.property("c").array()
+    __p.setProperty("c", C())
+    try:
+        t = __p.property("c").array()
+    except Exception as e:
+        # this catches cases when the underlying PackedArray2D class
+        # is not wrapped - but this class isn't really needed any more
+        # print(f"WARNING: Problem with {C} : {e}")
+        pass
+
 
 __props = [ AtomCharges, AtomElements,
             AtomStringArrayProperty,
             AtomPropertyList,
             AtomDoubleArrayProperty,
-            AtomIntegerArrayProperty
+            AtomIntegerArrayProperty,
+            AtomEnergies, AtomFloatProperty,
+            AtomForces, AtomIntProperty,
+            AtomMasses, AtomPolarisabilities,
+            AtomRadicals, AtomRadii,
+            AtomStringProperty,
+            AtomVariantProperty,
+            AtomVelocities
           ]
 
 for __prop in __props:

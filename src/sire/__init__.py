@@ -51,7 +51,7 @@ def _fix_openmm_path():
 
     for file in openmm_files:
         binfile = os.path.join(bindir, os.path.basename(file))
-        
+
         if not os.path.exists(binfile):
             # We do need to add bindir to the PATH
             need_path = True
@@ -421,7 +421,7 @@ except Exception as e:
     print(e)
     _can_lazy_import = False
 
-#_can_lazy_import = False
+_can_lazy_import = False
 
 # Lazy import the modules for speed, and also to prevent pythonizing them
 # if the users wants to run in legacy mode

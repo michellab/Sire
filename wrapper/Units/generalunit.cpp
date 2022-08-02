@@ -310,6 +310,12 @@ GeneralUnit GeneralUnit::operator-() const
 
 GeneralUnit& GeneralUnit::operator+=(const GeneralUnit &other)
 {
+    if (this->isZero())
+    {
+        this->operator=(other);
+        return *this;
+    }
+
     assertCompatible(other);
     setScale(value() + other.value());
 
@@ -321,6 +327,12 @@ GeneralUnit& GeneralUnit::operator+=(const GeneralUnit &other)
 
 GeneralUnit& GeneralUnit::operator-=(const GeneralUnit &other)
 {
+    if (this->isZero())
+    {
+        this->operator=(-other);
+        return *this;
+    }
+
     assertCompatible(other);
     setScale(value() - other.value());
 
