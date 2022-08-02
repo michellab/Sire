@@ -1,5 +1,7 @@
 
-__all__ = ["Cursor"]
+from typing import List as _List
+
+__all__ = ["Cursor", "Cursors"]
 
 
 class _CursorData:
@@ -190,7 +192,7 @@ class Cursor:
             c._bond = bond.id()
             cursors.append(c)
 
-        return cursors
+        return Cursors(self, cursors)
 
     def atoms(self, id=None):
         """Return cursors for all of atoms in this view,
@@ -212,7 +214,7 @@ class Cursor:
             c._view = self._d.molecule.atom(atom.index())
             cursors.append(c)
 
-        return cursors
+        return Cursors(self, cursors)
 
     def residues(self, id=None):
         """Return cursors for all of residues in this view,
@@ -234,7 +236,7 @@ class Cursor:
             c._view = self._d.molecule.residue(residue.index())
             cursors.append(c)
 
-        return cursors
+        return Cursors(self, cursors)
 
     def chains(self, id=None):
         """Return cursors for all of chains in this view,
@@ -256,7 +258,7 @@ class Cursor:
             c._view = self._d.molecule.chain(chain.index())
             cursors.append(c)
 
-        return cursors
+        return Cursors(self, cursors)
 
     def segments(self, id=None):
         """Return cursors for all of segments in this view,
@@ -278,7 +280,7 @@ class Cursor:
             c._view = self._d.molecule.segment(segment.index())
             cursors.append(c)
 
-        return cursors
+        return Cursors(self, cursors)
 
     def atom(self, i):
         """Return the atom in the molecule that matches the passed ID"""
@@ -418,35 +420,84 @@ class Cursor:
 
         return c
 
-    def name(self):
-        """Return the name of the current view"""
+    def get(self, key):
+        """Return the property associated with key 'key'"""
+        return self.__getitem__(key)
+
+    def set(self, key, value):
+        """Set the property associated with key 'key' to the
+           passed value
+        """
+        self.__setitem__(key, value)
+
+    def delete(self, key):
+        """Remove the property associated with the key 'key'"""
+        self.__delitem__(key)
+
+    def get_name(self):
+        """Return the name of the current view. Note that this
+           returns the name as a simple string (it is not a
+           AtomName, ResName etc)"""
         self._update()
 
         if self._bond is not None:
             raise TypeError("A bond does not have a name!")
 
-        return self._view.name()
+        return self._view.name().value()
 
-    def number(self):
-        """Return the number of the current view"""
+    def set_name(self, name):
+        """Set the name of the object in the current view"""
+        self._update()
+
+        if self._bond is not None:
+            raise TypeError("A bond does not have a name!")
+
+        # get the type right...
+        orig_name = self._view.name()
+
+        self._view.rename(orig_name.__class__(name))
+        self._d.molecule = self._view.molecule()
+
+    def get_number(self):
+        """Return the number of the current view. This returns the
+           number as a simple number (it is not a AtomNum, ResNum etc)"""
         self._update()
 
         if self._bond is not None:
             raise TypeError("A bond does not have a number!")
 
         try:
-            return self._view.number()
+            return self._view.number().value()
         except Exception:
             raise TypeError(f"A {self._view.what()} does not have a number!")
 
-    def index(self):
-        """Return the index of the current view (e.g. AtomIdx, ResIdx etc)"""
+    def set_number(self, number):
+        """Set the number of the object in the current view"""
+        self._update()
+
+        if self._bond is not None:
+            raise TypeError("A bond does not have a number!")
+
+        try:
+            orig_number = self._view.number()
+            self._view.renumber(orig_number.__class__(number))
+            self._d.molecule = self._view.molecule()
+        except AttributeError:
+            raise TypeError(f"A {self._view.what()} does not have a number!")
+
+    def get_index(self):
+        """Return the index of the current view. This returns it as
+           as simple number (i.e. not as an AtomIdx, ResIdx etc)"""
         self._update()
 
         if self._bond is not None:
             raise TypeError("A bond does not have an index!")
 
-        return self._view.index()
+        return self._view.index().value()
+
+    name = property(get_name, set_name)
+    number = property(get_number, set_number)
+    index = property(get_index)
 
     def id(self):
         """Return the ID of this view (e.g. AtomIdx, MolNum, BondID)"""
@@ -526,6 +577,34 @@ class Cursor:
             from ..mm import Bond
             return Bond(self._d.molecule, self._bond.atom0(), self._bond.atom1())
 
+    def apply(self, func, *args, **kwargs):
+        """Apply the passed function (with optional position and keyword
+           arguments) to this Cursor. As the function is intended to use
+           the Cursor to edit molecules, only this Cursor will be returned.
+           This lets you run `.apply(...).commit()` as a single line.
+
+           The function can be either;
+
+           1. a string containing the name of the function to call, or
+           2. an actual function (either a normal function or a lambda expression)
+
+           You can optionally pass in positional and keyword arguments
+           here that will be passed to the function.
+
+           Args:
+               func (str or function): The function to be called, or the name
+                                       of the function to be called.
+
+           Returns:
+               Cursor: This cursor
+        """
+        if str(func) == func:
+            # we calling a named function
+            func = getattr(self, func)
+
+        func(self, *args, **kwargs)
+        return self
+
     def keys(self):
         self._update()
 
@@ -583,3 +662,78 @@ class Cursor:
             return self._d.connectivity.properties(self._bond)
 
         return p
+
+
+class Cursors:
+    """This class holds a list of Cursors. It provides some convenience
+       functions that make working with lists of Cursor objects easier.
+
+       This includes being able to commit back to the Cursor that
+       created the list, plus being able to apply a function to
+       each Cursor in the list
+    """
+    def __init__(self, parent: Cursor, cursors: _List[Cursor]):
+        if type(parent) is not Cursor:
+            raise TypeError(f"{parent} must be a Cursor object!")
+
+        for c in cursors:
+            if type(c) is not Cursor:
+                raise TypeError(f"{c} must be a Cursor object!")
+
+            if c._d is not parent._d:
+                raise ValueError(
+                    f"The list of cursors must be created from the parent!")
+
+        self._parent = parent
+        self._cursors = cursors
+
+    def __getitem__(self, i):
+        return self._cursors[i]
+
+    def __len__(self):
+        return len(self._cursors)
+
+    def commit(self):
+        """Commit all of the changes and return the newly
+           edited molecule (or MoleculeView). This commits
+           on the parent Cursor that was used to create
+           this list, e.g.
+
+           >>> mol.cursor().atoms().commit()
+
+           will commit and return the updated molecule (mol).
+
+           This is equivalent to `self.parent().commit()`
+        """
+        return self._parent.commit()
+
+    def parent(self):
+        """Return the parent cursor"""
+        return self._parent
+
+    def apply(self, func, *args, **kwargs):
+        """Apply the passed function (with optional position and keyword
+           arguments) to all of the cursors in this list of Cursors
+           (i.e. everything except the parent). As the function is intended to use
+           the Cursor to edit molecules, only this Cursors object will be returned.
+           This lets you run `.apply(...).commit()` as a single line.
+
+           The function can be either;
+
+           1. a string containing the name of the function to call, or
+           2. an actual function (either a normal function or a lambda expression)
+
+           You can optionally pass in positional and keyword arguments
+           here that will be passed to the function.
+
+           Args:
+               func (str or function): The function to be called, or the name
+                                       of the function to be called.
+
+           Returns:
+               Cursors: This list of cursors
+        """
+        for cursor in self._cursors:
+            cursor.apply(func, *args, **kwargs)
+
+        return self
