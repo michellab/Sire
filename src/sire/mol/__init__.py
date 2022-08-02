@@ -577,16 +577,33 @@ Molecule.connectivity = lambda x : x.property("connectivity")
 
 from ._cursor import *
 
+
 def _cursor(view):
     """Return a Cursor that can be used to edit the properties
        of this view
     """
     return Cursor(view)
 
+
 Atom.cursor = _cursor
 Residue.cursor = _cursor
 Chain.cursor = _cursor
 Segment.cursor = _cursor
 Molecule.cursor = _cursor
+
+
+def _cursors(views):
+    """Return the Cursors object that contains cursors for all
+       of the views in this collection. Note that the `parent`
+       cursor of this list will be the molecule
+    """
+    cursor = views.molecule().cursor()
+    return cursor._views(views)
+
+
+Selector_Atom_.cursor = _cursors
+Selector_Residue_.cursor = _cursors
+Selector_Chain_.cursor = _cursors
+Selector_Segment_.cursor = _cursors
 
 from ._element import *

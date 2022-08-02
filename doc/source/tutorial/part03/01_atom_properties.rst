@@ -6,7 +6,7 @@ Many of the properties you will use will be atomic properties. These
 are properties that have one value per atom in the molecule.
 
 For example, it is very common that molecules will have atomic coordinates.
-By default, these are placed into a property called `coordinates`.
+By default, these are placed into a property called ``coordinates``.
 
 >>> print(mol.property("coordinates"))
 AtomCoords( size=22
@@ -24,7 +24,7 @@ AtomCoords( size=22
 )
 
 The coordinates are held in a :class:`sire.mol.AtomCoords` object,
-which is an example of a `AtomProperty` object. This behaves like
+which is an example of a ``AtomProperty`` object. This behaves like
 a python list, e.g.
 
 >>> coords = mol.property("coordinates")
@@ -41,7 +41,7 @@ a python list, e.g.
 ( 20.0513, 3.63293, 13.2874 )
 
 The coordinates themselves are :class:`sire.maths.Vector` objects. You
-can get the x, y, and z components using the corresponding functions;
+can get the ``x``, ``y``, and ``z`` components using the corresponding functions;
 
 >>> coord = coords[0]
 >>> print(coord.x())
@@ -53,15 +53,15 @@ Accessing an atom property via the molecule will return the complete
 :class:`~sire.mol.AtomCoords` object, containing the coordinates for
 all of the atoms in the molecule.
 
-You can get the `coordinates` properties for an individual atom using
-the `property` function on the atom. For example, to get the coordinates
+You can get the ``coordinates`` properties for an individual atom using
+the ``property`` function on the atom. For example, to get the coordinates
 on the first atom in the molecule you could use;
 
 >>> atom = mol[0]
 >>> print(atom.property("coordinates"))
 ( 18.4532, 3.49423, 12.4365 )
 
-To get the charge on the `CH3` atom in residue number `1` you could use
+To get the charge on the ``CH3`` atom in residue number ``1`` you could use
 
 >>> print(mol["resnum 1"]["CH3"].property("charge"))
 -0.3662 |e|
@@ -70,23 +70,23 @@ Convenience functions
 ---------------------
 
 To reduce the amount of typing, there are shorthand, convenience functions
-that can be used via the `Atom` view to access commonly-used properties.
-The `coordinates` property can be accessed via the `coordinates` or
-`coords` functions, e.g.
+that can be used via the ``Atom`` view to access commonly-used properties.
+The ``coordinates`` property can be accessed via the ``coordinates`` or
+``coords`` functions, e.g.
 
 >>> print(atom.coordinates())
 ( 18.4532, 3.49423, 12.4365 )
 >>> print(atom.coords())
 ( 18.4532, 3.49423, 12.4365 )
 
-You can also get the `x`, `y`, and `z` components
+You can also get the ``x``, ``y``, and ``z`` components
 of the coordinates directly, e.g.
 
 >>> print(atom.x(), atom.y(), atom.z())
 18.4532476 3.4942278 12.4364968
 
-Properties that can be accessed this way are `charge`, `coordinates`,
-`element`, `lj` (Lennard Jones parameters) and `mass`.
+Properties that can be accessed this way are ``charge``, ``coordinates``,
+``element``, ``lj`` (Lennard Jones parameters) and ``mass``.
 
 >>> print(atom.charge(), atom.element(), atom.lj(), atom.mass())
 0.1123 |e| Hydrogen (H, 1)
@@ -94,19 +94,19 @@ LJ( sigma = 2.64953 A, epsilon = 0.0157 kcal mol-1 ) 1.008 g mol-1
 
 These convenience functions can also be used for larger views. However,
 in these cases they evaluate a single value that represents that
-view from all of the values of the atoms in that view. Calling the `mass()`
+view from all of the values of the atoms in that view. Calling the ``mass()``
 on a molecule will return the total mass of all atoms in that molecule;
 
 >>> print(mol.mass())
 144.176 g mol-1
 
-Similarly, calling `charge()` on a residue will return the total
+Similarly, calling ``charge()`` on a residue will return the total
 charge on that residue;
 
 >>> print(mol["resnum 1"].charge())
 5.48778e-10 |e|
 
-while calling `coordinates()` or `coords()` on a view will return
+while calling ``coordinates()`` or ``coords()`` on a view will return
 the center of mass of that view
 
 >>> print(mol["resnum 1"].coords())
@@ -123,7 +123,7 @@ Accessing atom properties via views
 
 While the above convenience functions are useful, there are times when
 you will want to get the individual atom properties for all atoms in
-a view. You can do this by calling the `property()` function on that
+a view. You can do this by calling the ``property()`` function on that
 view.
 
 For example, to get the elements of all of the atoms in the first residue
@@ -159,19 +159,26 @@ atoms using
  LJ( sigma = 3.39967 A, epsilon = 0.086 kcal mol-1 ),
  LJ( sigma = 3.39967 A, epsilon = 0.1094 kcal mol-1 )]
 
+.. note::
+
+    Note how the Lennard Jones property is called ``LJ`` (using
+    capital letters), while the ``.lj()`` convenience function on
+    ``Atom`` uses lower case letters. This is because functions are
+    named using the ``snake_case`` convention.
+
 Using apply to get the properties of views in a container
 ---------------------------------------------------------
 
-Another route to getting the properties is to use the `apply` function.
-The `apply` function will call the passed function on all views
-within a molecular container. For example, calling the `charge` function
-on `mol.atoms()` will return the total charge on the molecule,
+Another route to getting the properties is to use the ``apply`` function.
+The ``apply`` function will call the passed function on all views
+within a molecular container. For example, calling the ``charge`` function
+on ``mol.atoms()`` will return the total charge on the molecule,
 
 >>> print(mol.atoms().charge())
 -5.48778e-10 |e|
 
-To call the `charge` function on each atom in the `mol.atoms()` container,
-we would use `apply`, e.g.
+To call the ``charge`` function on each atom in the ``mol.atoms()`` container,
+we would use ``apply``, e.g.
 
 >>> print(mol.atoms().apply("charge"))
 [ 0.1123 |e|, -0.3662 |e|, 0.1123 |e|, 0.1123 |e|, 0.5972 |e|, -0.5679 |e|,
@@ -182,15 +189,15 @@ we would use `apply`, e.g.
 Apply calls the specified function on each view in a container, returning
 the result as a list. You can either pass in the name of the function
 you want to apply, or you can pass in a function yourself. In this case,
-we will use `apply` with a lambda expression to get the x coordinates
+we will use ``apply`` with a lambda expression to get the x coordinates
 of all of the atoms in the first residue;
 
 >>> print(mol["resnum 1"].apply(lambda atom: atom.x()))
 [18.4532476, 18.9818473, 20.0513009, 18.7980053, 18.4805331, 19.1865897]
 
 You can pass in positional and named arguments to the applied function
-as arguments to `apply`. For example, here we will ask for the `mass`
-property on each atom by calling the `property` function via an `apply`;
+as arguments to ``apply``. For example, here we will ask for the ``mass``
+property on each atom by calling the ``property`` function via an ``apply``å;
 
 >>> print(mol.atoms().apply("property", "mass"))
 [1.008 g mol-1, 12.01 g mol-1, 1.008 g mol-1, 1.008 g mol-1, 12.01 g mol-1,
@@ -198,3 +205,27 @@ property on each atom by calling the `property` function via an `apply`;
  12.01 g mol-1, 1.008 g mol-1, 1.008 g mol-1, 1.008 g mol-1, 12.01 g mol-1,
  16 g mol-1, 14.01 g mol-1, 1.008 g mol-1, 12.01 g mol-1, 1.008 g mol-1,
  1.008 g mol-1, 1.008 g mol-1]
+
+If you want to reduce the results of an ``apply`` back to a single value,
+then you can use the ``apply_reduce`` function. By default, this will
+reduce using addition, e.g. the total mass of the oxygen atoms could
+be calculated using
+
+>>> print(mol.atoms("element O").apply_reduce("mass"))
+32 g mol-1
+
+You can pass in a reduction function as the second argument. For example,
+to find the maximum residue mass you could type
+
+>>> print(mol.residues().apply_reduce("mass", max))
+71.08 g mol-1
+
+By combining the two you could get the maximum atom mass per residue, e.g.
+
+>>> print(mol.residues().apply("apply_reduce", "mass", max))
+[16 g mol-1, 16 g mol-1, 14.01 g mol-1]
+
+or, written using a lambda expression,
+
+>>> print(mol.residues().apply(lambda res: res.apply_reduce("mass", max)))
+[16 g mol-1, 16 g mol-1, 14.01 g mol-1]

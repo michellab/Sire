@@ -93,6 +93,11 @@ class Cursor:
         self._d = _CursorData(molecule=molecule,
                               connectivity_property=connectivity_property)
         self._view = self._d.update(molecule)
+
+        if (molecule is not None) and (bond is None):
+            if molecule.what().endswith("Bond"):
+                bond = molecule.id()
+
         self._bond = bond
 
     def _update(self):
@@ -186,6 +191,33 @@ class Cursor:
             c._d = self._d
             c._view = self._d.molecule
             c._bond = bond.id()
+            cursors.append(c)
+
+        return Cursors(self, cursors)
+
+    def _views(self, views):
+        """Hidden function that allows a set of views, e.g. from
+           a Selector_Atom_, SelectorBond etc, to be converted
+           to a set of Cursors
+        """
+        self._update()
+
+        cursors = []
+
+        from sire.mm import Bond
+
+        for view in views:
+            c = Cursor()
+            c._d = self._d
+
+            if type(view) is Bond:
+                # likely a bond
+                c._view = self._d.molecule
+                c._bond = view.id()
+            else:
+                # likely an atom, residue, chain or segment
+                c._view = self._d.molecule[view.index()]
+
             cursors.append(c)
 
         return Cursors(self, cursors)

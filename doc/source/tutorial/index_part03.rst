@@ -7,15 +7,15 @@ The :class:`~sire.mol.MoleculeView`-derived classes, such as
 containers for molecular information. This information is held
 via properties that are associated with each view in the molecule.
 
-To see how this works, we will first load up the `aladip` system.
+To see how this works, we will first load up the ``aladip`` system.
 
 >>> import sire as sr
 >>> mols = sr.load(sr.expand(sr.tutorial_url, ["ala.top", "ala.crd"]))
 >>> mol = mols[0]
 
-Properties are accessed via the `property` function. This takes,
+Properties are accessed via the ``property`` function. This takes,
 as argument, the name of the property you want to retrieve.
-For example, the coordinates are held in the `coordinates` property.
+For example, the coordinates are held in the ``coordinates`` property.
 
 >>> print(mol.property("coordinates"))
 AtomCoords( size=22
@@ -32,7 +32,7 @@ AtomCoords( size=22
 21: ( 13.2149, 3.33301, 17.6874 )
 )
 
-and the charges are held in the `charge` property,
+and the charges are held in the ``charge`` property,
 
 >>> print(mol.property("charge"))
 SireMol::AtomCharges( size=22
@@ -50,7 +50,7 @@ SireMol::AtomCharges( size=22
 )
 
 You can get a list of all of the properties that are contained in a molecule
-via the `property_keys` function
+via the ``property_keys`` function
 
 >>> print(mol.property_keys())
 ['element', 'bond', 'dihedral', 'connectivity', 'ambertype',
@@ -59,7 +59,7 @@ via the `property_keys` function
  'improper', 'intrascale', 'coordinates']
 
 You can get all of the properties in the molecule via the
-`properties` function
+``properties`` function
 
 >>> print(mol.properties())
 Properties(
@@ -277,7 +277,8 @@ have one value per chain.
 Sire's property system is extremely flexible and extendable. Molecules
 can have as many (or as few) properties as needed. Properties are created
 from the information contained in molecular input files, but can also
-be created and edited by you in a script.
+be created and edited by you in a script,
+e.g. :doc:`using a cursor <part03/02_cursors>`.
 
 In this chapter you will learn how to access, use and edit properties,
 across all of the views within molecules.

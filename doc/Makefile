@@ -4,7 +4,7 @@
 SHELL := /bin/bash
 
 # You can set these variables from the command line.
-SPHINXOPTS    = -j8 -v
+SPHINXOPTS    = -v
 SPHINXBUILD   ?= LANG=C sphinx-build
 PAPER         =
 

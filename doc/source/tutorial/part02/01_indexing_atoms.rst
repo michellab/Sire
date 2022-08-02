@@ -126,7 +126,7 @@ So far we have been accessing the molecular containers by index, as if
 they were Python lists. We can also treat the molecular containers
 like Python dictionaries, and get atoms by their name.
 
-For example, to get the atoms called "C" we would use
+For example, to get the atoms called ``C`` we would use
 
 >>> print(mol["C"])
 Selector<SireMol::Atom>( size=1494
@@ -143,7 +143,7 @@ Selector<SireMol::Atom>( size=1494
 1493:  Atom( C:11654 [  32.09,   -0.82,   34.12] )
 )
 
-Note that there are multiple atoms in this molecule called "C", hence
+Note that there are multiple atoms in this molecule called ``C``, hence
 several are returned. This would raise an exception if you called
 the shorthand :func:`~sire.mol.Atom.atom` function with this name,
 
@@ -158,7 +158,7 @@ AtomName('C') (number of matches is 1494).
 (call Sire.Error.get_last_error_details() for more info)"
 
 A ``KeyError`` exception has been raised because there are multiple
-atoms in this protein that are called "C" and Sire does not know which
+atoms in this protein that are called ``C`` and Sire does not know which
 one you want.
 
 In this case, you would have to use the shorthand
@@ -192,13 +192,13 @@ and so also has its own ``.atom()``, ``.atoms()`` and indexing functions, e.g.
 >>> print(mol["C"][0])
 Atom( C:3     [ -56.06,    9.95,   42.55] )
 
-gives the atom at the index 0 in the container of atoms that are called "C",
+gives the atom at the index 0 in the container of atoms that are called ``C``,
 and
 
 >>> print(mol["C"][-1])
 Atom( C:11654 [  32.09,   -0.82,   34.12] )
 
-gives the last atom in the container of atoms that are called "C".
+gives the last atom in the container of atoms that are called ``C``.
 
 Asking for an atom that doesn't exist will result in a ``KeyError``
 exception being raised.

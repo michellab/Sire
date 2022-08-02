@@ -25,3 +25,8 @@ for C in [Bond, SelectorBond, SelectorMBond]:
     _add_evals(C)
     _add_property_func(C)
     _add_apply_func(C)
+
+from sire.mol import _cursor, _cursors
+
+Bond.cursor = _cursor
+SelectorBond.cursor = _cursors

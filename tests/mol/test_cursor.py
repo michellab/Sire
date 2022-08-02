@@ -95,3 +95,61 @@ def test_cursors(ala_mols):
 
     for i in range(0, 3):
         assert cs[i].id() == cursors[idxs[i]].id()
+
+
+def test_cursor_renaming(ala_mols):
+    mols = ala_mols
+    mol = mols[0]
+
+    cursor = mol.cursor()
+
+    for atom in cursor.atoms():
+        atom.name = f"{atom.index}"
+        atom.number = atom.index
+
+    mol = cursor.commit()
+
+    for atom in mol.atoms():
+        assert atom.name().value() == f"{atom.index().value()}"
+        assert atom.number().value() == atom.index().value()
+
+    mol = mols[0]
+
+    for atom in mol.atoms():
+        assert atom.name().value() != f"{atom.index().value()}"
+        assert atom.number().value() != atom.index().value()
+
+    mol = mol.cursor().atoms().apply(
+        lambda atom: atom.set_name(f"{atom.index}")
+    ).apply(
+        lambda atom: atom.set_number(atom.index)
+    ).commit()
+
+    for atom in mol.atoms():
+        assert atom.name().value() == f"{atom.index().value()}"
+        assert atom.number().value() == atom.index().value()
+
+
+def test_inverse_cursor(ala_mols):
+    mols = ala_mols
+    mol = mols[0]
+
+    c0 = mol.cursor().atoms("element C")
+    c1 = mol.atoms("element C").cursor()
+
+    assert len(c0) == len(c1)
+
+    for i in range(0, len(c0)):
+        assert c0[i].id() == c1[i].id()
+
+    assert c0.commit().number() == c1.commit().number()
+
+    c0 = mol.cursor().bonds()
+    c1 = mol.bonds().cursor()
+
+    assert len(c0) == len(c1)
+
+    for i in range(0, len(c0)):
+        assert c0[i].id() == c1[i].id()
+
+    assert c0.commit().number() == c1.commit().number()
