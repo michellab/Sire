@@ -9,17 +9,11 @@ namespace bp = boost::python;
 
 #include "SireMaths/sphereproperty.h"
 
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
 #include "sphereproperty.h"
 
 #include "sphereproperty.h"
 
-SireMaths::SphereProperty __copy__(const SireMaths::SphereProperty &other){ return SireMaths::SphereProperty(other); }
-
-#include "Qt/qdatastream.hpp"
+SireBase::PODProperty<SireMaths::Sphere> __copy__(const SireBase::PODProperty<SireMaths::Sphere> &other){ return SireBase::PODProperty<SireMaths::Sphere>(other); }
 
 #include "Helpers/str.hpp"
 
@@ -27,30 +21,19 @@ SireMaths::SphereProperty __copy__(const SireMaths::SphereProperty &other){ retu
 
 void register_SphereProperty_class(){
 
-    { //::SireMaths::SphereProperty
-        typedef bp::class_< SireMaths::SphereProperty, bp::bases< SireMaths::Sphere, SireBase::Property > > SphereProperty_exposer_t;
-        SphereProperty_exposer_t SphereProperty_exposer = SphereProperty_exposer_t( "SphereProperty", "This class provides a simple Property wrapper around a Vector, thereby\nallowing the vector to be stored as a Property, e.g. for the center\nof a molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+    { //::SireBase::PODProperty< SireMaths::Sphere >
+        typedef bp::class_< SireBase::PODProperty< SireMaths::Sphere >, bp::bases< SireMaths::Sphere, SireBase::Property > > SphereProperty_exposer_t;
+        SphereProperty_exposer_t SphereProperty_exposer = SphereProperty_exposer_t( "SphereProperty", "", bp::init< >("") );
         bp::scope SphereProperty_scope( SphereProperty_exposer );
-        SphereProperty_exposer.def( bp::init< SireMaths::Sphere const & >(( bp::arg("value") ), "Construct a copy of the passed Sphere") );
-        SphereProperty_exposer.def( bp::init< SireMaths::SphereProperty const & >(( bp::arg("value") ), "Copy constructor") );
+        SphereProperty_exposer.def( bp::init< SireMaths::Sphere const & >(( bp::arg("value") ), "") );
+        SphereProperty_exposer.def( bp::init< SireBase::PODProperty< SireMaths::Sphere > const & >(( bp::arg("other") ), "") );
         SphereProperty_exposer.def( bp::self != bp::self );
-        { //::SireMaths::SphereProperty::operator=
+        SphereProperty_exposer.def( bp::self != bp::other< SireMaths::Sphere >() );
+        { //::SireBase::PODProperty< SireMaths::Sphere >::operator=
         
-            typedef ::SireMaths::SphereProperty & ( ::SireMaths::SphereProperty::*assign_function_type)( ::SireMaths::SphereProperty const & ) ;
-            assign_function_type assign_function_value( &::SireMaths::SphereProperty::operator= );
-            
-            SphereProperty_exposer.def( 
-                "assign"
-                , assign_function_value
-                , ( bp::arg("other") )
-                , bp::return_self< >()
-                , "" );
-        
-        }
-        { //::SireMaths::SphereProperty::operator=
-        
-            typedef ::SireMaths::SphereProperty & ( ::SireMaths::SphereProperty::*assign_function_type)( ::SireMaths::Sphere const & ) ;
-            assign_function_type assign_function_value( &::SireMaths::SphereProperty::operator= );
+            typedef SireBase::PODProperty< SireMaths::Sphere > exported_class_t;
+            typedef ::SireBase::PODProperty< SireMaths::Sphere > & ( ::SireBase::PODProperty< SireMaths::Sphere >::*assign_function_type)( ::SireBase::PODProperty< SireMaths::Sphere > const & ) ;
+            assign_function_type assign_function_value( &::SireBase::PODProperty< SireMaths::Sphere >::operator= );
             
             SphereProperty_exposer.def( 
                 "assign"
@@ -61,10 +44,12 @@ void register_SphereProperty_class(){
         
         }
         SphereProperty_exposer.def( bp::self == bp::self );
-        { //::SireMaths::SphereProperty::toString
+        SphereProperty_exposer.def( bp::self == bp::other< SireMaths::Sphere >() );
+        { //::SireBase::PODProperty< SireMaths::Sphere >::toString
         
-            typedef ::QString ( ::SireMaths::SphereProperty::*toString_function_type)(  ) const;
-            toString_function_type toString_function_value( &::SireMaths::SphereProperty::toString );
+            typedef SireBase::PODProperty< SireMaths::Sphere > exported_class_t;
+            typedef ::QString ( ::SireBase::PODProperty< SireMaths::Sphere >::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireBase::PODProperty< SireMaths::Sphere >::toString );
             
             SphereProperty_exposer.def( 
                 "toString"
@@ -73,10 +58,11 @@ void register_SphereProperty_class(){
                 , "" );
         
         }
-        { //::SireMaths::SphereProperty::typeName
+        { //::SireBase::PODProperty< SireMaths::Sphere >::typeName
         
+            typedef SireBase::PODProperty< SireMaths::Sphere > exported_class_t;
             typedef char const * ( *typeName_function_type )(  );
-            typeName_function_type typeName_function_value( &::SireMaths::SphereProperty::typeName );
+            typeName_function_type typeName_function_value( &::SireBase::PODProperty< SireMaths::Sphere >::typeName );
             
             SphereProperty_exposer.def( 
                 "typeName"
@@ -85,22 +71,11 @@ void register_SphereProperty_class(){
                 , "" );
         
         }
-        { //::SireMaths::SphereProperty::value
+        { //::SireBase::PODProperty< SireMaths::Sphere >::what
         
-            typedef ::SireMaths::Sphere ( ::SireMaths::SphereProperty::*value_function_type)(  ) const;
-            value_function_type value_function_value( &::SireMaths::SphereProperty::value );
-            
-            SphereProperty_exposer.def( 
-                "value"
-                , value_function_value
-                , bp::release_gil_policy()
-                , "Return the actual value of the Sphere" );
-        
-        }
-        { //::SireMaths::SphereProperty::what
-        
-            typedef char const * ( ::SireMaths::SphereProperty::*what_function_type)(  ) const;
-            what_function_type what_function_value( &::SireMaths::SphereProperty::what );
+            typedef SireBase::PODProperty< SireMaths::Sphere > exported_class_t;
+            typedef char const * ( ::SireBase::PODProperty< SireMaths::Sphere >::*what_function_type)(  ) const;
+            what_function_type what_function_value( &::SireBase::PODProperty< SireMaths::Sphere >::what );
             
             SphereProperty_exposer.def( 
                 "what"
@@ -113,13 +88,8 @@ void register_SphereProperty_class(){
         SphereProperty_exposer.def( "__copy__", &__copy__);
         SphereProperty_exposer.def( "__deepcopy__", &__copy__);
         SphereProperty_exposer.def( "clone", &__copy__);
-        SphereProperty_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireMaths::SphereProperty >,
-                            bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        SphereProperty_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMaths::SphereProperty >,
-                            bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        SphereProperty_exposer.def_pickle(sire_pickle_suite< ::SireMaths::SphereProperty >());
-        SphereProperty_exposer.def( "__str__", &__str__< ::SireMaths::SphereProperty > );
-        SphereProperty_exposer.def( "__repr__", &__str__< ::SireMaths::SphereProperty > );
+        SphereProperty_exposer.def( "__str__", &__str__< ::SireBase::PODProperty<SireMaths::Sphere> > );
+        SphereProperty_exposer.def( "__repr__", &__str__< ::SireBase::PODProperty<SireMaths::Sphere> > );
     }
 
 }

@@ -11,6 +11,8 @@ set ( PYPP_SOURCES
        CombineProperties.pypp.cpp
        DoubleArrayProperty.pypp.cpp
        FlopsMark.pypp.cpp
+       GeneralUnitArrayProperty.pypp.cpp
+       GeneralUnitProperty.pypp.cpp
        Incremint.pypp.cpp
        IntegerArrayProperty.pypp.cpp
        LengthProperty.pypp.cpp

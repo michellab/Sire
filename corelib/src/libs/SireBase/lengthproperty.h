@@ -50,6 +50,11 @@ using SireUnits::Dimension::Length;
 
 /** This class provides a thin Property wrapper around lengths
 
+    This class is deprecated, and only kept for compatibility with old S3
+    files.
+
+    You should now use GeneralUnitProperty to hold units
+
     @author Christopher Woods
 */
 class SIREBASE_EXPORT LengthProperty : public ConcreteProperty<LengthProperty,Property>

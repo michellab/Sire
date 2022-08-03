@@ -17,8 +17,6 @@
 
 #include "Array2D_Vector_.pypp.hpp"
 
-#include "ArrayProperty_Sphere_.pypp.hpp"
-
 #include "ArrayProperty_Vector_.pypp.hpp"
 
 #include "Average.pypp.hpp"
@@ -128,9 +126,13 @@ BOOST_PYTHON_MODULE(_Maths){
 
     register_Array2D_Vector__class();
 
-    register_ArrayProperty_Sphere__class();
-
     register_ArrayProperty_Vector__class();
+
+    register_SphereArrayProperty_class();
+
+    register_Sphere_class();
+
+    register_SphereProperty_class();
 
     register_TrigArray2D_Matrix__class();
 
@@ -197,12 +199,6 @@ BOOST_PYTHON_MODULE(_Maths){
     register_Rational_class();
 
     register_RecordValues_class();
-
-    register_Sphere_class();
-
-    register_SphereArrayProperty_class();
-
-    register_SphereProperty_class();
 
     register_Torsion_class();
 

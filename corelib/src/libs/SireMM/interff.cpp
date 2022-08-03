@@ -31,7 +31,7 @@
 #include "cljcalculator.h"
 
 #include "SireBase/booleanproperty.h"
-#include "SireBase/lengthproperty.h"
+#include "SireBase/generalunitproperty.h"
 #include "SireBase/refcountdata.h"
 
 #include "SireError/errors.h"
@@ -56,6 +56,7 @@ using namespace SireMM;
 using namespace SireMol;
 using namespace SireFF;
 using namespace SireBase;
+using namespace SireUnits::Dimension;
 using namespace SireStream;
 
 namespace SireMM
@@ -68,7 +69,7 @@ namespace SireMM
             InterFFData() : RefCountData(), fixed_only(false),
                             parallel_calc(true), repro_sum(false)
             {}
-            
+
             InterFFData(const InterFFData &other)
                  : RefCountData(),
                    cljfuncs(other.cljfuncs),
@@ -79,30 +80,30 @@ namespace SireMM
                    parallel_calc(other.parallel_calc),
                    repro_sum(other.repro_sum)
             {}
-            
+
             ~InterFFData()
             {}
 
             /** The function(s) used to calculate energies */
             QVector<CLJFunctionPtr> cljfuncs;
-            
-            /** All of the fixed atoms, duplicated for each 
+
+            /** All of the fixed atoms, duplicated for each
                 of the CLJFunctions */
             QVector<CLJGrid> fixed_atoms;
 
             /** The energy components available for this forcefield */
             MultiCLJComponent cljcomps;
-            
+
             /** All of the properties in this forcefield */
             Properties props;
-            
+
             /** Whether or not to only calculate the energy with
                 the fixed atoms */
             bool fixed_only;
-            
+
             /** Whether or not to calculate energies in parallel */
             bool parallel_calc;
-            
+
             /** Whether or not to sum energies using a reproducible sum */
             bool repro_sum;
         };
@@ -114,9 +115,9 @@ static RegisterMetaType<InterFF> r_interff;
 QDataStream &operator<<(QDataStream &ds, const InterFF &interff)
 {
     writeHeader(ds, r_interff, 3);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << interff.cljgroup << interff.needs_accepting
         << interff.d->cljfuncs
         << interff.d->cljcomps
@@ -131,24 +132,24 @@ QDataStream &operator<<(QDataStream &ds, const InterFF &interff)
 QDataStream &operator>>(QDataStream &ds, InterFF &interff)
 {
     VersionID v = readHeader(ds, r_interff);
-    
+
     if (v == 3)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> interff.cljgroup >> interff.needs_accepting
             >> interff.d->cljfuncs >> interff.d->cljcomps
             >> interff.d->fixed_atoms
             >> interff.d->fixed_only >> interff.d->parallel_calc
             >> interff.d->repro_sum
             >> static_cast<G1FF&>(interff);
-        
+
         interff.rebuildProps();
         interff._pvt_updateName();
     }
     else
         throw version_error(v, "3", r_interff, CODELOC);
-    
+
     return ds;
 }
 
@@ -210,7 +211,7 @@ const CLJFunction& InterFF::cljFunction() const
         throw SireError::program_bug( QObject::tr(
                 "There should always be at least one CLJFunction in InterFF!"),
                     CODELOC );
-    
+
     return d.constData()->cljfuncs.at(0).read();
 }
 
@@ -224,9 +225,9 @@ void InterFF::setCLJFunction(QString key, const CLJFunction &cljfunc)
             d->cljfuncs[i] = cljfunc;
             d->fixed_atoms[i].setCLJFunction(cljfunc);
         }
-        
+
         rebuildProps();
-        
+
         this->mustNowRecalculateFromScratch();
     }
     else if (key == "default")
@@ -236,19 +237,19 @@ void InterFF::setCLJFunction(QString key, const CLJFunction &cljfunc)
     else
     {
         int idx = d->cljcomps.add(key);
-        
+
         if (idx >= d->cljfuncs.count())
         {
             d->cljfuncs.resize( idx + 1 );
         }
-        
+
         //duplicate the fixed atoms so that we have a set for this
         //CLJFunction
         while (d->fixed_atoms.count() < d->cljfuncs.count())
         {
             d->fixed_atoms.append( d->fixed_atoms.last() );
         }
-        
+
         d->cljfuncs[idx] = cljfunc;
         d->fixed_atoms[idx].setCLJFunction(cljfunc);
 
@@ -265,12 +266,12 @@ void InterFF::removeCLJFunctionAt(QString key)
     if (key != "default")
     {
         int idx = d->cljcomps.remove(key);
-        
+
         if (idx > 0)
         {
             d->cljfuncs.removeAt(idx);
             d->fixed_atoms.removeAt(idx);
-            
+
             rebuildProps();
             this->mustNowRecalculateFromScratch();
         }
@@ -284,17 +285,17 @@ void InterFF::removeAllCLJFunctions()
         return;
 
     d->cljcomps.removeAll();
-    
+
     while (d->cljfuncs.count() > 1)
     {
         d->cljfuncs.removeLast();
     }
-    
+
     while (d->fixed_atoms.count() > 1)
     {
         d->fixed_atoms.removeLast();
     }
-    
+
     rebuildProps();
     this->mustNowRecalculateFromScratch();
 }
@@ -322,12 +323,12 @@ int InterFF::nCLJFunctions() const
 QHash<QString,CLJFunctionPtr> InterFF::cljFunctions() const
 {
     QHash<QString,CLJFunctionPtr> funcs;
-    
+
     foreach (QString key, d->cljcomps.keys())
     {
         funcs.insert( key, this->cljFunction(key) );
     }
-    
+
     return funcs;
 }
 
@@ -358,7 +359,7 @@ InterFF& InterFF::operator=(const InterFF &other)
         d = other.d;
         G1FF::operator=(other);
     }
-    
+
     return *this;
 }
 
@@ -388,7 +389,7 @@ const MultiCLJComponent& InterFF::components() const
     return d->cljcomps;
 }
 
-/** Internal function used to rebuild the properties object that 
+/** Internal function used to rebuild the properties object that
     stores all of the properties of this forcefield */
 void InterFF::rebuildProps()
 {
@@ -396,27 +397,27 @@ void InterFF::rebuildProps()
     //the first 'default' CLJFunction has precedence on the value of
     //properties
     d->props = d.constData()->cljfuncs.at(0).read().properties();
-    
+
     for (QString key : d.constData()->cljcomps.keys())
     {
         const int idx = d.constData()->cljcomps.indexOf(key);
-    
+
         d->props.setProperty( QString("cljFunction[%1]").arg(key),
                               d.constData()->cljfuncs.at(idx) );
-    
+
         Properties p = d.constData()->cljfuncs.at(idx).read().properties();
-        
+
         foreach (QString propkey, p.propertyKeys())
         {
             d->props.setProperty( QString("%1[%2]").arg(propkey).arg(key),
                                   p.property(propkey) );
         }
     }
-    
+
     d->props.setProperty("cljFunction", this->cljFunction());
     d->props.setProperty("useGrid", BooleanProperty(d->fixed_atoms[0].usesGrid()));
-    d->props.setProperty("gridBuffer", LengthProperty(d->fixed_atoms[0].gridBuffer()));
-    d->props.setProperty("gridSpacing", LengthProperty(d->fixed_atoms[0].gridSpacing()));
+    d->props.setProperty("gridBuffer", GeneralUnitProperty(GeneralUnit(d->fixed_atoms[0].gridBuffer())));
+    d->props.setProperty("gridSpacing", GeneralUnitProperty(GeneralUnit(d->fixed_atoms[0].gridSpacing())));
     d->props.setProperty("fixedOnly", BooleanProperty(d->fixed_only));
     d->props.setProperty("parallelCalculation", BooleanProperty(d->parallel_calc));
     d->props.setProperty("reproducibleCalculation", BooleanProperty(d->repro_sum));
@@ -448,14 +449,14 @@ bool InterFF::setProperty(const QString &name, const Property &property)
     else if (name == "useGrid")
     {
         bool use_grid = property.asA<BooleanProperty>().value();
-        
+
         if (use_grid != d.constData()->fixed_atoms[0].usesGrid())
         {
             for (int i=0; i<d->fixed_atoms.count(); ++i)
             {
                 d->fixed_atoms[i].setUseGrid(use_grid);
             }
-            
+
             d->props.setProperty("useGrid", BooleanProperty(use_grid));
             return true;
         }
@@ -464,15 +465,15 @@ bool InterFF::setProperty(const QString &name, const Property &property)
     }
     else if (name == "gridBuffer")
     {
-        Length buffer = property.asA<LengthProperty>().value();
-        
+        Length buffer = property.asA<GeneralUnitProperty>();
+
         if (buffer != d.constData()->fixed_atoms[0].gridBuffer())
         {
             for (int i=0; i<d->fixed_atoms.count(); ++i)
             {
                 d->fixed_atoms[i].setGridBuffer(buffer);
             }
-            
+
             d->props.setProperty("gridBuffer", property);
             return true;
         }
@@ -481,15 +482,15 @@ bool InterFF::setProperty(const QString &name, const Property &property)
     }
     else if (name == "gridSpacing")
     {
-        Length spacing = property.asA<LengthProperty>().value();
-        
+        Length spacing = property.asA<GeneralUnitProperty>();
+
         if (spacing != d.constData()->fixed_atoms[0].gridSpacing())
         {
             for (int i=0; i<d->fixed_atoms.count(); ++i)
             {
                 d->fixed_atoms[i].setGridSpacing(spacing);
             }
-            
+
             d->props.setProperty("gridSpacing", property);
             return true;
         }
@@ -499,7 +500,7 @@ bool InterFF::setProperty(const QString &name, const Property &property)
     else if (name == "fixedOnly")
     {
         bool fixed_only = property.asA<BooleanProperty>().value();
-        
+
         if (fixed_only != d.constData()->fixed_only)
         {
             d->fixed_only = fixed_only;
@@ -513,16 +514,16 @@ bool InterFF::setProperty(const QString &name, const Property &property)
     else if (name == "parallelCalculation")
     {
         bool parallel_calc = property.asA<BooleanProperty>().value();
-        
+
         if (parallel_calc != d.constData()->parallel_calc)
         {
             d->parallel_calc = parallel_calc;
-            
+
             for (int i=0; i<d->fixed_atoms.count(); ++i)
             {
                 d->fixed_atoms[i].setUseParallelCalculation(parallel_calc);
             }
-            
+
             d->props.setProperty("parallelCalculation", property);
             return true;
         }
@@ -532,16 +533,16 @@ bool InterFF::setProperty(const QString &name, const Property &property)
     else if (name == "reproducibleCalculation")
     {
         bool repro_sum = property.asA<BooleanProperty>().value();
-        
+
         if (repro_sum != d.constData()->repro_sum)
         {
             d->repro_sum = repro_sum;
-            
+
             for (int i=0; i<d->fixed_atoms.count(); ++i)
             {
                 d->fixed_atoms[i].setUseReproducibleCalculation(repro_sum);
             }
-            
+
             d->props.setProperty("reproducibleCalculation", property);
             return true;
         }
@@ -554,7 +555,7 @@ bool InterFF::setProperty(const QString &name, const Property &property)
         if (cljFunction().containsProperty(name))
         {
             CLJFunctionPtr newfunc = cljFunction().setProperty(name, property);
-            
+
             if ( not cljFunction().equals( newfunc.read() ) )
             {
                 this->setCLJFunction(newfunc);
@@ -569,7 +570,7 @@ bool InterFF::setProperty(const QString &name, const Property &property)
         auto subscr = getSubscriptedProperty(name);
         QString cljname = subscr.get<0>();
         QString cljkey = subscr.get<1>();
-    
+
         if (cljname == "cljFunction")
         {
             if (cljkey == "all")
@@ -606,7 +607,7 @@ bool InterFF::setProperty(const QString &name, const Property &property)
                     }
                     catch(...)
                     {}
-            
+
                     if (this_func_has_property and not property.equals(old_prop.read()))
                     {
                         //need to set the property
@@ -624,9 +625,9 @@ bool InterFF::setProperty(const QString &name, const Property &property)
                 if (cljFunction().containsProperty(cljname))
                 {
                     found_property = true;
-                
+
                     CLJFunctionPtr newfunc = cljFunction().setProperty(cljname, property);
-            
+
                     if ( not cljFunction().equals( newfunc.read() ) )
                     {
                         this->setCLJFunction(newfunc);
@@ -645,7 +646,7 @@ bool InterFF::setProperty(const QString &name, const Property &property)
                     if (cljFunction(cljkey).containsProperty(cljname))
                     {
                         CLJFunctionPtr newfunc = cljFunction(cljkey).setProperty(cljname, property);
-                        
+
                         if ( not cljFunction(cljkey).equals( newfunc.read() ) )
                         {
                             this->setCLJFunction(cljkey, newfunc);
@@ -703,13 +704,13 @@ const Properties& InterFF::properties() const
 void InterFF::addFixedAtoms(const CLJAtoms &atoms)
 {
     d->fixed_atoms[0].addFixedAtoms(atoms);
-    
+
     for (int i=1; i<d->fixed_atoms.count(); ++i)
     {
         d->fixed_atoms[i] = d->fixed_atoms[0];
         d->fixed_atoms[i].setCLJFunction( d->cljfuncs.at(i) );
     }
-    
+
     this->mustNowRecalculateFromScratch();
 }
 
@@ -729,13 +730,13 @@ void InterFF::addFixedAtoms(const Molecules &molecules, const PropertyMap &map)
 void InterFF::setFixedAtoms(const CLJAtoms &atoms)
 {
     d->fixed_atoms[0].setFixedAtoms(atoms);
-    
+
     for (int i=1; i<d->fixed_atoms.count(); ++i)
     {
         d->fixed_atoms[i] = d->fixed_atoms[0];
         d->fixed_atoms[i].setCLJFunction( d->cljfuncs.at(i).read() );
     }
-    
+
     this->mustNowRecalculateFromScratch();
 }
 
@@ -751,7 +752,7 @@ void InterFF::setFixedAtoms(const Molecules &molecules, const PropertyMap &map)
     this->setFixedAtoms( CLJAtoms(molecules,map) );
 }
 
-/** Set whether or not the energy calculation is only between the mobile and 
+/** Set whether or not the energy calculation is only between the mobile and
     fixed atoms (i.e. the mobile-mobile interaction is ignored) */
 void InterFF::setFixedOnly(bool on)
 {
@@ -772,7 +773,7 @@ void InterFF::setUseGrid(bool on)
         {
             d->fixed_atoms[i].setUseGrid(on);
         }
-        
+
         if (this->usesGrid() == on)
         {
             this->mustNowRecalculateFromScratch();
@@ -813,7 +814,7 @@ void InterFF::setUseParallelCalculation(bool on)
     {
         d->parallel_calc = on;
         d->props.setProperty("parallelCalculation", BooleanProperty(on));
-        
+
         for (int i=0; i<d->fixed_atoms.count(); ++i)
         {
             d->fixed_atoms[i].setUseParallelCalculation(on);
@@ -859,20 +860,20 @@ void InterFF::disableReproducibleCalculation()
     setUseReproducibleCalculation(false);
 }
 
-/** Switch on or off use of an energy summing algorithm that guarantees the 
-    same energy regardless of whether a single core or multicore calculation 
+/** Switch on or off use of an energy summing algorithm that guarantees the
+    same energy regardless of whether a single core or multicore calculation
     is being performed */
 void InterFF::setUseReproducibleCalculation(bool on)
 {
     if (on != d->repro_sum)
     {
         d->repro_sum = on;
-        
+
         for (int i=0; i<d->fixed_atoms.count(); ++i)
         {
             d->fixed_atoms[i].setUseReproducibleCalculation(on);
         }
-        
+
         d->props.setProperty("reproducibleCalculation", BooleanProperty(on));
     }
 }
@@ -902,9 +903,9 @@ void InterFF::setGridBuffer(Length buffer)
         {
             d->fixed_atoms[i].setGridBuffer(buffer);
         }
-        
-        d->props.setProperty("gridBuffer", LengthProperty(buffer));
-        
+
+        d->props.setProperty("gridBuffer", GeneralUnitProperty(GeneralUnit(buffer)));
+
         if (usesGrid())
             this->mustNowRecalculateFromScratch();
     }
@@ -925,9 +926,9 @@ void InterFF::setGridSpacing(Length spacing)
         {
             d->fixed_atoms[i].setGridSpacing(spacing);
         }
-        
-        d->props.setProperty("gridSpacing", LengthProperty(spacing));
-        
+
+        d->props.setProperty("gridSpacing", GeneralUnitProperty(GeneralUnit(spacing)));
+
         if (usesGrid())
             this->mustNowRecalculateFromScratch();
     }
@@ -955,15 +956,15 @@ void InterFF::regridAtoms()
         {
             cljgroup.accept();
             needs_accepting = false;
-            
+
             this->mustNowRecalculateFromScratch();
         }
-        
+
         for (int i=0; i<d->fixed_atoms.count(); ++i)
         {
             d->fixed_atoms[i].setGridDimensions( cljgroup.cljBoxes().atoms() );
         }
-        
+
         this->setDirty();
     }
 }
@@ -982,7 +983,7 @@ void InterFF::mustNowReallyRecalculateFromScratch()
 {
     cljgroup.mustReallyRecalculateFromScratch();
     needs_accepting = false;
-    
+
     this->regridAtoms();
     this->setDirty();
 }
@@ -996,7 +997,7 @@ void InterFF::recalculateEnergy()
         //grid if needed
         cljgroup.accept();
         needs_accepting = false;
-        
+
         if (cljgroup.isEmpty())
         {
             //no atoms
@@ -1007,20 +1008,20 @@ void InterFF::recalculateEnergy()
             else
             {
                 int n = d.constData()->cljcomps.count();
-                
+
                 d.constData()->cljcomps.setEnergy(*this,
                         MultiCLJEnergy( QVector<double>(n,0.0), QVector<double>(n,0.0) ) );
             }
-            
+
             this->setClean();
             return;
         }
-        
+
         //calculate the energy from scratch
         if (d.constData()->cljcomps.count() == 1)
         {
             tuple<double,double> nrgs(0,0);
-            
+
             if (not d.constData()->fixed_only)
             {
                 if (d.constData()->parallel_calc)
@@ -1037,19 +1038,19 @@ void InterFF::recalculateEnergy()
             if (not d.constData()->fixed_atoms[0].isEmpty())
             {
                 this->regridAtoms();
-                
+
                 tuple<double,double> grid_nrgs = d.constData()->fixed_atoms[0]
                                                                     .calculate(cljgroup.cljBoxes());
                 nrgs.get<0>() += grid_nrgs.get<0>();
                 nrgs.get<1>() += grid_nrgs.get<1>();
             }
-            
+
             d.constData()->cljcomps.setEnergy(*this, MultiCLJEnergy(nrgs.get<0>(), nrgs.get<1>()));
         }
         else
         {
             tuple< QVector<double>,QVector<double> > nrgs;
-            
+
             if (not d.constData()->fixed_only)
             {
                 if (d.constData()->parallel_calc)
@@ -1068,11 +1069,11 @@ void InterFF::recalculateEnergy()
                 nrgs.get<0>() = QVector<double>(d.constData()->cljfuncs.count(), 0.0);
                 nrgs.get<1>() = QVector<double>(d.constData()->cljfuncs.count(), 0.0);
             }
-            
+
             if (not d.constData()->fixed_atoms[0].isEmpty()) // if 0 is empty, they are all empty
             {
                 this->regridAtoms();
-                
+
                 for (int i=0; i<d.constData()->fixed_atoms.count(); ++i)
                 {
                     tuple<double,double> grid_nrgs = d.constData()->fixed_atoms[i]
@@ -1082,10 +1083,10 @@ void InterFF::recalculateEnergy()
                     nrgs.get<1>()[i] += grid_nrgs.get<1>();
                 }
             }
-            
+
             d.constData()->cljcomps.setEnergy(*this, MultiCLJEnergy(nrgs.get<0>(), nrgs.get<1>()));
         }
-        
+
         this->setClean();
     }
     else if (cljgroup.needsAccepting())
@@ -1096,12 +1097,12 @@ void InterFF::recalculateEnergy()
             tuple<double,double> delta_nrgs(0,0);
 
             CLJAtoms changed_atoms;
-            
+
             if (cljgroup.isSingleIDChange() or d.constData()->fixed_only)
             {
                 //the changed atoms don't interact with each other
                 changed_atoms = cljgroup.changedAtoms();
-            
+
                 if (not d.constData()->fixed_only)
                 {
                     //calculate the change in energy using the molecules in changed_atoms
@@ -1121,11 +1122,11 @@ void InterFF::recalculateEnergy()
             {
                 //the changed atoms interact with one another
                 tuple<CLJAtoms,CLJAtoms,CLJAtoms> changes = cljgroup.mergeChanges();
-                
+
                 changed_atoms = changes.get<0>();
                 const CLJAtoms &old_atoms = changes.get<1>();
                 const CLJAtoms &new_atoms = changes.get<2>();
-                
+
                 if (d.constData()->parallel_calc)
                 {
                     CLJCalculator calc(d.constData()->repro_sum);
@@ -1140,20 +1141,20 @@ void InterFF::recalculateEnergy()
                 //add on the change in interaction within changed_atoms
                 tuple<double,double> old_changes = cljFunction().calculate(old_atoms);
                 tuple<double,double> new_changes = cljFunction().calculate(new_atoms);
-                
+
                 delta_nrgs.get<0>() += new_changes.get<0>() - old_changes.get<0>();
                 delta_nrgs.get<1>() += new_changes.get<1>() - old_changes.get<1>();
             }
-            
+
             if (not d.constData()->fixed_atoms[0].isEmpty())
             {
                 tuple<double,double> grid_deltas = d.constData()->fixed_atoms[0]
                                                                 .calculate(changed_atoms);
-                
+
                 delta_nrgs.get<0>() += grid_deltas.get<0>();
                 delta_nrgs.get<1>() += grid_deltas.get<1>();
             }
-            
+
             d.constData()->cljcomps.changeEnergy(*this,
                                         MultiCLJEnergy(delta_nrgs.get<0>(), delta_nrgs.get<1>()));
         }
@@ -1162,12 +1163,12 @@ void InterFF::recalculateEnergy()
             tuple< QVector<double>,QVector<double> > delta_nrgs;
 
             CLJAtoms changed_atoms;
-            
+
             if (cljgroup.isSingleIDChange() or d.constData()->fixed_only)
             {
                 //the changed atoms don't interact with each other
                 changed_atoms = cljgroup.changedAtoms();
-            
+
                 if (not d.constData()->fixed_only)
                 {
                     //calculate the change in energy using the molecules in changed_atoms
@@ -1188,11 +1189,11 @@ void InterFF::recalculateEnergy()
             {
                 //the changed atoms interact with one another
                 tuple<CLJAtoms,CLJAtoms,CLJAtoms> changes = cljgroup.mergeChanges();
-                
+
                 changed_atoms = changes.get<0>();
                 const CLJAtoms &old_atoms = changes.get<1>();
                 const CLJAtoms &new_atoms = changes.get<2>();
-                
+
                 if (d.constData()->parallel_calc)
                 {
                     CLJCalculator calc(d.constData()->repro_sum);
@@ -1210,27 +1211,27 @@ void InterFF::recalculateEnergy()
                             = CLJFunction::multiCalculate(d.constData()->cljfuncs,old_atoms);
                 tuple< QVector<double>,QVector<double> > new_changes
                             = CLJFunction::multiCalculate(d.constData()->cljfuncs,new_atoms);
-                
+
                 for (int i=0; i<d.constData()->cljfuncs.count(); ++i)
                 {
                     delta_nrgs.get<0>()[i] += new_changes.get<0>()[i] - old_changes.get<0>()[i];
                     delta_nrgs.get<1>()[i] += new_changes.get<1>()[i] - old_changes.get<1>()[i];
                 }
             }
-            
+
             if (not d.constData()->fixed_atoms[0].isEmpty()) // if 0 is empty, they are all empty
             {
                 for (int i=0; i<d.constData()->fixed_atoms.count(); ++i)
                 {
                     tuple<double,double> grid_deltas = d.constData()->fixed_atoms[i]
                                                                 .calculate(changed_atoms);
-                
+
                     //only add on grid energies for the default CLJ function
                     delta_nrgs.get<0>()[i] += grid_deltas.get<0>();
                     delta_nrgs.get<1>()[i] += grid_deltas.get<1>();
                 }
             }
-            
+
             d.constData()->cljcomps.changeEnergy(*this,
                                         MultiCLJEnergy(delta_nrgs.get<0>(), delta_nrgs.get<1>()));
         }
@@ -1250,7 +1251,7 @@ void InterFF::recalculateEnergy()
         if (d.constData()->cljfuncs.count() == 1)
         {
             tuple<double,double> nrgs(0,0);
-            
+
             if (not d.constData()->fixed_only)
             {
                 if (d.constData()->parallel_calc)
@@ -1272,13 +1273,13 @@ void InterFF::recalculateEnergy()
                 nrgs.get<0>() += grid_nrgs.get<0>();
                 nrgs.get<1>() += grid_nrgs.get<1>();
             }
-            
+
             d.constData()->cljcomps.setEnergy(*this, MultiCLJEnergy(nrgs.get<0>(), nrgs.get<1>()));
         }
         else
         {
             tuple< QVector<double>,QVector<double> > nrgs;
-            
+
             if (not d.constData()->fixed_only)
             {
                 if (d.constData()->parallel_calc)
@@ -1301,7 +1302,7 @@ void InterFF::recalculateEnergy()
             if (not d.constData()->fixed_atoms[0].isEmpty())
             {
                 this->regridAtoms();
-                
+
                 for (int i=0; i<d.constData()->fixed_atoms.count(); ++i)
                 {
                     tuple<double,double> grid_nrgs = d.constData()->fixed_atoms[i]
@@ -1312,10 +1313,10 @@ void InterFF::recalculateEnergy()
                     nrgs.get<1>()[i] += grid_nrgs.get<1>();
                 }
             }
-            
+
             d.constData()->cljcomps.setEnergy(*this, MultiCLJEnergy(nrgs.get<0>(), nrgs.get<1>()));
         }
-        
+
         this->setClean();
     }
 }
@@ -1372,7 +1373,7 @@ void InterFF::_pvt_changed(const QList<SireMol::Molecule> &molecules, bool auto_
     {
         cljgroup.update(molecule);
     }
-    
+
     setDirty();
 }
 
@@ -1397,7 +1398,7 @@ bool InterFF::_pvt_wouldChangeProperties(SireMol::MolNum molnum,
     return cljgroup.mapForMolecule(molnum) != map;
 }
 
-/** Return whether or not this forcefield is using a temporary workspace that 
+/** Return whether or not this forcefield is using a temporary workspace that
     needs to be accepted */
 bool InterFF::needsAccepting() const
 {
@@ -1414,6 +1415,6 @@ void InterFF::accept()
         cljgroup.accept();
         needs_accepting = false;
     }
-    
+
     G1FF::accept();
 }

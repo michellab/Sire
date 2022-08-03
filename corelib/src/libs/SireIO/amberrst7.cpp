@@ -47,7 +47,7 @@
 
 #include "SireBase/parallel.h"
 #include "SireBase/stringproperty.h"
-#include "SireBase/timeproperty.h"
+#include "SireBase/generalunitproperty.h"
 
 #include "SireIO/errors.h"
 
@@ -728,7 +728,7 @@ AmberRst7::AmberRst7(const System &system, const PropertyMap &map)
 
     try
     {
-        time = system.property( map["time"] ).asA<TimeProperty>().value();
+        time = system.property( map["time"] ).asA<GeneralUnitProperty>();
     }
     catch(...)
     {}
@@ -1071,7 +1071,7 @@ void AmberRst7::addToSystem(System &system, const PropertyMap &map) const
     }
     else if (current_time >= 0)
     {
-        system.setProperty( time_property.source(), TimeProperty(current_time*picosecond) );
+        system.setProperty( time_property.source(), GeneralUnitProperty(GeneralUnit(current_time*picosecond)) );
     }
 
     //update the System fileformat property to record that it includes

@@ -33,7 +33,7 @@ void register_TimeProperty_class(){
 
     { //::SireBase::TimeProperty
         typedef bp::class_< SireBase::TimeProperty, bp::bases< SireBase::Property > > TimeProperty_exposer_t;
-        TimeProperty_exposer_t TimeProperty_exposer = TimeProperty_exposer_t( "TimeProperty", "This class provides a thin Property wrapper around times\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor - this constructs the integer 0") );
+        TimeProperty_exposer_t TimeProperty_exposer = TimeProperty_exposer_t( "TimeProperty", "This class provides a thin Property wrapper around times\n\nThis class is deprecated and only kept for compatibility with\nold S3 files.\n\nNow you should use GeneralUnitProperty for all units\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor - this constructs the integer 0") );
         bp::scope TimeProperty_scope( TimeProperty_exposer );
         TimeProperty_exposer.def( bp::init< SireUnits::Dimension::Time >(( bp::arg("value") ), "Construct from the passed length") );
         TimeProperty_exposer.def( bp::init< SireBase::TimeProperty const & >(( bp::arg("other") ), "Copy constructor") );

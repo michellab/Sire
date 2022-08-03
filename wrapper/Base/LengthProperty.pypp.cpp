@@ -33,7 +33,7 @@ void register_LengthProperty_class(){
 
     { //::SireBase::LengthProperty
         typedef bp::class_< SireBase::LengthProperty, bp::bases< SireBase::Property > > LengthProperty_exposer_t;
-        LengthProperty_exposer_t LengthProperty_exposer = LengthProperty_exposer_t( "LengthProperty", "This class provides a thin Property wrapper around lengths\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor - this constructs the integer 0") );
+        LengthProperty_exposer_t LengthProperty_exposer = LengthProperty_exposer_t( "LengthProperty", "This class provides a thin Property wrapper around lengths\n\nThis class is deprecated, and only kept for compatibility with old S3\nfiles.\n\nYou should now use GeneralUnitProperty to hold units\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor - this constructs the integer 0") );
         bp::scope LengthProperty_scope( LengthProperty_exposer );
         LengthProperty_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("value") ), "Construct from the passed length") );
         LengthProperty_exposer.def( bp::init< SireBase::LengthProperty const & >(( bp::arg("other") ), "Copy constructor") );

@@ -42,7 +42,6 @@ void register_SireUnits_objects()
     ObjectRegistry::registerConverterFor< SireUnits::Dimension::Current >();
     ObjectRegistry::registerConverterFor< SireUnits::Dimension::Potential >();
     ObjectRegistry::registerConverterFor< SireUnits::Dimension::GeneralUnit >();
-    ObjectRegistry::registerConverterFor< SireUnits::Dimension::GeneralUnitProperty >();
 
 }
 

@@ -3,7 +3,6 @@ set ( PYPP_SOURCES
        Celsius.pypp.cpp
        Fahrenheit.pypp.cpp
        GeneralUnit.pypp.cpp
-       GeneralUnitProperty.pypp.cpp
        TempBase.pypp.cpp
        Unit.pypp.cpp
        _Units_free_functions.pypp.cpp

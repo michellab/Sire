@@ -175,36 +175,6 @@ namespace bp = boost::python;
 
 #include "convert.h"
 
-#include "generalunit.h"
-
-#include "SireBase/lengthproperty.h"
-
-#include "SireBase/numberproperty.h"
-
-#include "SireBase/timeproperty.h"
-
-#include "SireBase/variantproperty.h"
-
-#include "SireError/errors.h"
-
-#include "SireMaths/maths.h"
-
-#include "SireUnits/dimensions.h"
-
-#include "SireUnits/temperature.h"
-
-#include "generalunit.h"
-
-#include <Python.h>
-
-#include <QHash>
-
-#include <QMutex>
-
-#include <QStringList>
-
-#include <boost/python.hpp>
-
 void register_free_functions(){
 
     { //::SireUnits::acute
@@ -333,19 +303,6 @@ void register_free_functions(){
             "convertTo"
             , convertTo_function_value
             , ( bp::arg("val"), bp::arg("to_units") )
-            , "" );
-    
-    }
-
-    { //::SireUnits::Dimension::wrap
-    
-        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::SireUnits::Dimension::GeneralUnit const & );
-        wrap_function_type wrap_function_value( &::SireUnits::Dimension::wrap );
-        
-        bp::def( 
-            "wrap"
-            , wrap_function_value
-            , ( bp::arg("unit") )
             , "" );
     
     }

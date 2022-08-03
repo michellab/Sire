@@ -12,6 +12,7 @@
 #include "countflops.h"
 #include "cpuid.h"
 #include "findexe.h"
+#include "generalunitproperty.h"
 #include "getinstalldir.h"
 #include "increment.h"
 #include "incremint.h"

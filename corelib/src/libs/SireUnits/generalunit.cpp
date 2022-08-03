@@ -1,28 +1,19 @@
 
-#include <Python.h>
-#include <boost/python.hpp>
-
 #include <QStringList>
 #include <QMutex>
 #include <QHash>
 
 #include "generalunit.h"
 
-#include "SireBase/lengthproperty.h"
-#include "SireBase/timeproperty.h"
-#include "SireBase/numberproperty.h"
-#include "SireBase/variantproperty.h"
-
 #include "SireError/errors.h"
-
-#include "SireMaths/maths.h"
 
 #include "SireUnits/dimensions.h"
 #include "SireUnits/temperature.h"
 
+#include <QDebug>
+
 using namespace SireUnits;
 using namespace SireUnits::Dimension;
-using namespace SireBase;
 
 QDataStream& operator<<(QDataStream &ds, const SireUnits::Dimension::GeneralUnit &u)
 {
@@ -76,7 +67,7 @@ static QString getKey(const GeneralUnit &unit)
               .arg(unit.QUANTITY()).arg(unit.ANGLE());
 }
 
-void registerTypeName(const GeneralUnit &unit, const char *typnam)
+void SIREUNITS_EXPORT registerTypeName(const GeneralUnit &unit, const char *typnam)
 {
     QString key = getKey(unit);
 
@@ -128,11 +119,6 @@ GeneralUnit::GeneralUnit(double value) : Unit(value)
     Angle = 0;
 }
 
-GeneralUnit::GeneralUnit(const GeneralUnitProperty &property) : Unit(0)
-{
-    this->operator=(property.value());
-}
-
 GeneralUnit::GeneralUnit(const GeneralUnit &other) : Unit(other)
 {
     Mass = other.Mass;
@@ -147,15 +133,15 @@ GeneralUnit::GeneralUnit(const GeneralUnit &other) : Unit(other)
 GeneralUnit::~GeneralUnit()
 {}
 
-QString GeneralUnit::typeName()
+const char* GeneralUnit::typeName()
 {
     return QMetaType::typeName( qMetaTypeId<GeneralUnit>() );
 }
 
 /** Return the C++ type that this particular GeneralUnit corresponds to */
-QString GeneralUnit::what() const
+const char* GeneralUnit::what() const
 {
-    return detail::getTypeName(*this);
+    return GeneralUnit::typeName();
 }
 
 void GeneralUnit::assertCompatible(const GeneralUnit &other) const
@@ -216,7 +202,7 @@ bool GeneralUnit::isDimensionless() const
 
 bool GeneralUnit::isZero() const
 {
-    return SireMaths::isZero(this->value());
+    return (std::abs(this->value()) < std::numeric_limits<double>::epsilon());
 }
 
 int GeneralUnit::MASS() const
@@ -547,118 +533,4 @@ GeneralUnit GeneralUnit::invert() const
     ret.Angle = -Angle;
 
     return ret;
-}
-
-PropertyPtr GeneralUnit::toProperty() const
-{
-    if (this->isDimensionless())
-    {
-        return NumberProperty(this->value());
-    }
-    else if (this->isUnit<SireUnits::Dimension::Length>())
-    {
-        return LengthProperty( SireUnits::Dimension::Length(this->value()) );
-    }
-    else if (this->isUnit<SireUnits::Dimension::Time>())
-    {
-        return TimeProperty( SireUnits::Dimension::Time(this->value()) );
-    }
-    else
-    {
-        return GeneralUnitProperty(*this);
-    }
-}
-
-////
-//// Implementation of GeneralUnitProperty
-////
-
-static const RegisterMetaType<GeneralUnitProperty> r_genprop;
-
-QDataStream &operator<<(QDataStream &ds, const GeneralUnitProperty &prop)
-{
-    SireStream::writeHeader(ds, r_genprop, 1);
-    ds << static_cast<const GeneralUnit&>(prop);
-    return ds;
-}
-
-QDataStream &operator>>(QDataStream &ds, GeneralUnitProperty &prop)
-{
-    SireStream::VersionID v = SireStream::readHeader(ds, r_genprop);
-
-    if (v == 1)
-    {
-        ds >> static_cast<GeneralUnit&>(prop);
-    }
-    else
-        throw SireStream::version_error(v, "1", r_genprop, CODELOC);
-
-    return ds;
-}
-
-/** Constructor - this constructs the integer "0" */
-GeneralUnitProperty::GeneralUnitProperty()
-                    : ConcreteProperty<GeneralUnitProperty,Property>(),
-                      GeneralUnit()
-{}
-
-/** Construct from the passed value */
-GeneralUnitProperty::GeneralUnitProperty(GeneralUnit value)
-                    : ConcreteProperty<GeneralUnitProperty,Property>(),
-                      GeneralUnit(value)
-{}
-
-GeneralUnitProperty::GeneralUnitProperty(const Property &other)
-                   : ConcreteProperty<GeneralUnitProperty,Property>(other)
-{
-    if (other.isA<VariantProperty>())
-    {
-        this->operator=(other.asA<VariantProperty>().convertTo<GeneralUnit>());
-    }
-    else
-        throw SireError::invalid_cast( QObject::tr(
-            "Cannot cast a %s into a GeneralUnitProperty").arg(other.toString()), CODELOC );
-}
-
-/** Copy constructor */
-GeneralUnitProperty::GeneralUnitProperty(const GeneralUnitProperty &other)
-                    : ConcreteProperty<GeneralUnitProperty,Property>(other),
-                      GeneralUnit(other)
-{}
-
-/** Destructor */
-GeneralUnitProperty::~GeneralUnitProperty()
-{}
-
-const char* GeneralUnitProperty::typeName()
-{
-    return QMetaType::typeName( qMetaTypeId<GeneralUnitProperty>() );
-}
-
-/** Copy assignment operator */
-GeneralUnitProperty& GeneralUnitProperty::operator=(const GeneralUnitProperty &other)
-{
-    if (this != &other)
-    {
-        GeneralUnit::operator=(other);
-    }
-
-    return *this;
-}
-
-/** Comparison operator */
-bool GeneralUnitProperty::operator==(const GeneralUnitProperty &other) const
-{
-    return GeneralUnit::operator==(other);
-}
-
-/** Comparison operator */
-bool GeneralUnitProperty::operator!=(const GeneralUnitProperty &other) const
-{
-    return not this->operator==(other);
-}
-
-QString GeneralUnitProperty::toString() const
-{
-    return GeneralUnit::toString();
 }

@@ -7,19 +7,7 @@
 
 namespace bp = boost::python;
 
-#include "generalunit.h"
-
-#include "SireBase/lengthproperty.h"
-
-#include "SireBase/numberproperty.h"
-
-#include "SireBase/timeproperty.h"
-
-#include "SireBase/variantproperty.h"
-
 #include "SireError/errors.h"
-
-#include "SireMaths/maths.h"
 
 #include "SireUnits/dimensions.h"
 
@@ -27,15 +15,13 @@ namespace bp = boost::python;
 
 #include "generalunit.h"
 
-#include <Python.h>
-
 #include <QHash>
 
 #include <QMutex>
 
 #include <QStringList>
 
-#include <boost/python.hpp>
+#include "generalunit.h"
 
 SireUnits::Dimension::GeneralUnit __copy__(const SireUnits::Dimension::GeneralUnit &other){ return SireUnits::Dimension::GeneralUnit(other); }
 
@@ -52,7 +38,6 @@ void register_GeneralUnit_class(){
         GeneralUnit_exposer_t GeneralUnit_exposer = GeneralUnit_exposer_t( "GeneralUnit", "", bp::init< >("") );
         bp::scope GeneralUnit_scope( GeneralUnit_exposer );
         GeneralUnit_exposer.def( bp::init< double >(( bp::arg("value") ), "") );
-        GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnitProperty const & >(( bp::arg("property") ), "") );
         GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit const & >(( bp::arg("unit") ), "") );
         GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit const & >(( bp::arg("other") ), "") );
         { //::SireUnits::Dimension::GeneralUnit::ANGLE
@@ -246,18 +231,6 @@ void register_GeneralUnit_class(){
                 , "" );
         
         }
-        { //::SireUnits::Dimension::GeneralUnit::toProperty
-        
-            typedef ::SireBase::PropertyPtr ( ::SireUnits::Dimension::GeneralUnit::*toProperty_function_type)(  ) const;
-            toProperty_function_type toProperty_function_value( &::SireUnits::Dimension::GeneralUnit::toProperty );
-            
-            GeneralUnit_exposer.def( 
-                "toProperty"
-                , toProperty_function_value
-                , bp::release_gil_policy()
-                , "" );
-        
-        }
         { //::SireUnits::Dimension::GeneralUnit::toString
         
             typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*toString_function_type)(  ) const;
@@ -272,7 +245,7 @@ void register_GeneralUnit_class(){
         }
         { //::SireUnits::Dimension::GeneralUnit::typeName
         
-            typedef ::QString ( *typeName_function_type )(  );
+            typedef char const * ( *typeName_function_type )(  );
             typeName_function_type typeName_function_value( &::SireUnits::Dimension::GeneralUnit::typeName );
             
             GeneralUnit_exposer.def( 
@@ -291,19 +264,19 @@ void register_GeneralUnit_class(){
                 "units"
                 , units_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the units of this value" );
         
         }
         { //::SireUnits::Dimension::GeneralUnit::what
         
-            typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*what_function_type)(  ) const;
+            typedef char const * ( ::SireUnits::Dimension::GeneralUnit::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireUnits::Dimension::GeneralUnit::what );
             
             GeneralUnit_exposer.def( 
                 "what"
                 , what_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the C++ type that this particular GeneralUnit corresponds to" );
         
         }
         GeneralUnit_exposer.staticmethod( "typeName" );

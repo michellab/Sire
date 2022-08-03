@@ -30,6 +30,7 @@ set ( SIREBASE_HEADERS
       cpuid.h
       errors.h
       findexe.h
+      generalunitproperty.h
       getinstalldir.h
       globalsharedpointer.hpp
       increment.h
@@ -49,6 +50,7 @@ set ( SIREBASE_HEADERS
       refcountdata.h
       sire_process.h
       parallel.h
+      podproperty.hpp
       properties.h
       property.h
       propertylist.h
@@ -86,6 +88,7 @@ set ( SIREBASE_SOURCES
       cpuid.cpp
       errors.cpp
       findexe.cpp
+      generalunitproperty.cpp
       getinstalldir.cpp
       globalsharedpointer.cpp
       lengthproperty.cpp

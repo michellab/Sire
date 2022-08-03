@@ -49,7 +49,7 @@
 
 #include "SireBase/parallel.h"
 #include "SireBase/stringproperty.h"
-#include "SireBase/timeproperty.h"
+#include "SireBase/generalunitproperty.h"
 #include "SireBase/booleanproperty.h"
 #include "SireBase/getinstalldir.h"
 #include "SireBase/unittest.h"
@@ -66,6 +66,7 @@ using namespace SireBase;
 using namespace SireSystem;
 using namespace SireVol;
 using namespace SireUnits;
+using namespace SireUnits::Dimension;
 using namespace SireStream;
 
 static const RegisterMetaType<AmberRst> r_rst;
@@ -1058,7 +1059,7 @@ AmberRst::AmberRst(const System &system, const PropertyMap &map)
     //extract the current time for the system
     try
     {
-        const auto time = system.property( map["time"] ).asA<TimeProperty>().value();
+        const Time time = system.property( map["time"] ).asA<GeneralUnitProperty>();
         current_time.append( time.to(picosecond) );
     }
     catch(...)
@@ -1450,11 +1451,11 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
 
         if (time_property.hasSource())
         {
-            system.setProperty(time_property.source(), TimeProperty(current_time[0]*picosecond));
+            system.setProperty(time_property.source(), GeneralUnitProperty(GeneralUnit(current_time[0]*picosecond)));
         }
         else
         {
-            system.setProperty("time", TimeProperty(current_time[0]*picosecond));
+            system.setProperty("time", GeneralUnitProperty(GeneralUnit(current_time[0]*picosecond)));
         }
     }
 }

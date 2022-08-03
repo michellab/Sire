@@ -317,9 +317,21 @@ namespace bp = boost::python;
 
 #include "SireMaths/sphereproperty.h"
 
+#include "sphereproperty.h"
+
+#include "sphereproperty.h"
+
+#include "SireMaths/vectorproperty.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
+
+#include "vectorproperty.h"
+
+#include "vectorproperty.h"
+
+#include "SireMaths/sphereproperty.h"
 
 #include "sphereproperty.h"
 
@@ -337,9 +349,21 @@ namespace bp = boost::python;
 
 #include "SireMaths/sphereproperty.h"
 
+#include "sphereproperty.h"
+
+#include "sphereproperty.h"
+
+#include "SireMaths/vectorproperty.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
+
+#include "vectorproperty.h"
+
+#include "vectorproperty.h"
+
+#include "SireMaths/sphereproperty.h"
 
 #include "sphereproperty.h"
 
@@ -357,10 +381,6 @@ namespace bp = boost::python;
 
 #include "SireMaths/sphereproperty.h"
 
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
 #include "sphereproperty.h"
 
 #include "sphereproperty.h"
@@ -376,50 +396,6 @@ namespace bp = boost::python;
 #include "vectorproperty.h"
 
 #include "SireMaths/sphereproperty.h"
-
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "sphereproperty.h"
-
-#include "sphereproperty.h"
-
-#include "SireMaths/vectorproperty.h"
-
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "vectorproperty.h"
-
-#include "vectorproperty.h"
-
-#include "SireMaths/sphereproperty.h"
-
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "sphereproperty.h"
-
-#include "sphereproperty.h"
-
-#include "SireMaths/vectorproperty.h"
-
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "vectorproperty.h"
-
-#include "vectorproperty.h"
-
-#include "SireMaths/sphereproperty.h"
-
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
 
 #include "sphereproperty.h"
 
@@ -770,7 +746,7 @@ void register_free_functions(){
         bp::def( 
             "wrap"
             , wrap_function_value
-            , ( bp::arg("sphere") )
+            , ( bp::arg("spheres") )
             , "" );
     
     }
@@ -783,7 +759,7 @@ void register_free_functions(){
         bp::def( 
             "wrap"
             , wrap_function_value
-            , ( bp::arg("sphere") )
+            , ( bp::arg("spheres") )
             , "" );
     
     }

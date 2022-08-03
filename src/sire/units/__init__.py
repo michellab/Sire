@@ -32,4 +32,3 @@ def _generalunit_approx_equal(u, v):
 
 
 GeneralUnit.approx_equal = _generalunit_approx_equal
-GeneralUnitProperty.approx_equal = _generalunit_approx_equal

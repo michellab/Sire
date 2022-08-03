@@ -29,8 +29,7 @@
 #ifndef SIREMATHS_SPHEREPROPERTY_H
 #define SIREMATHS_SPHEREPROPERTY_H
 
-#include "SireBase/property.h"
-#include "SireBase/arrayproperty.hpp"
+#include "SireBase/podproperty.hpp"
 
 #include "SireMaths/sphere.h"
 
@@ -38,101 +37,29 @@ SIRE_BEGIN_HEADER
 
 namespace SireMaths
 {
-class SphereProperty;
-class SphereArrayProperty;
-}
 
-SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::SphereProperty&);
-SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::SphereProperty&);
+typedef SireBase::PODProperty<Sphere> SphereProperty;
+typedef SireBase::PODArrayProperty<Sphere> SphereArrayProperty;
 
-SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::SphereArrayProperty&);
-SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::SphereArrayProperty&);
-
-namespace SireMaths
-{
-
-/** This class provides a simple Property wrapper around a Vector, thereby
-    allowing the vector to be stored as a Property, e.g. for the center
-    of a molecule
-
-    @author Christopher Woods
-*/
-class SIREMATHS_EXPORT SphereProperty
-            : public SireBase::ConcreteProperty<SphereProperty,SireBase::Property>,
-              public Sphere
-{
-
-friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const SphereProperty&);
-friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, SphereProperty&);
-
-public:
-    SphereProperty();
-    SphereProperty(const Sphere &value);
-    SphereProperty(const SphereProperty &value);
-
-    ~SphereProperty();
-
-    static const char* typeName();
-    const char* what() const;
-
-    SphereProperty& operator=(const SphereProperty &other);
-    SphereProperty& operator=(const Sphere &other);
-
-    bool operator==(const SphereProperty &other) const;
-    bool operator!=(const SphereProperty &other) const;
-
-    QString toString() const;
-
-    Sphere value() const;
-
-    SphereProperty* clone() const;
-};
-
-class SIREMATHS_EXPORT SphereArrayProperty
-        : public SireBase::ConcreteProperty<SphereArrayProperty,SireBase::ArrayProperty<Sphere> >
-{
-
-friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const SphereArrayProperty&);
-friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, SphereArrayProperty&);
-
-public:
-    SphereArrayProperty();
-    SphereArrayProperty(const QList<Sphere> &array);
-    SphereArrayProperty(const QVector<Sphere> &array);
-    SphereArrayProperty(const SphereArrayProperty &other);
-
-    ~SphereArrayProperty();
-
-    static const char* typeName();
-
-    SphereArrayProperty& operator=(const SphereArrayProperty &other);
-
-    bool operator==(const SphereArrayProperty &other) const;
-    bool operator!=(const SphereArrayProperty &other) const;
-
-    SphereArrayProperty operator+(const SphereArrayProperty &other) const;
-    SphereArrayProperty& operator+=(const SphereArrayProperty &other);
-};
-
-SIREMATHS_EXPORT SireBase::PropertyPtr wrap(const Sphere &sphere);
-SIREMATHS_EXPORT SireBase::PropertyPtr wrap(const QVector<Sphere> &sphere);
-SIREMATHS_EXPORT SireBase::PropertyPtr wrap(const QList<Sphere> &sphere);
+SireBase::PropertyPtr wrap(const Sphere &sphere);
+SireBase::PropertyPtr wrap(const QVector<Sphere> &spheres);
+SireBase::PropertyPtr wrap(const QList<Sphere> &spheres);
 
 }
 
-Q_DECLARE_METATYPE( SireMaths::SphereProperty )
-Q_DECLARE_METATYPE( SireMaths::SphereArrayProperty )
+Q_DECLARE_METATYPE(SireMaths::SphereProperty);
+Q_DECLARE_METATYPE(SireMaths::SphereArrayProperty);
 
-SIRE_EXPOSE_FUNCTION( SireMaths::wrap )
+SIRE_EXPOSE_FUNCTION(SireMaths::wrap)
 
-SIRE_EXPOSE_CLASS( SireMaths::SphereProperty )
-SIRE_EXPOSE_CLASS( SireMaths::SphereArrayProperty )
-
-SIRE_EXPOSE_ALIAS( (SireBase::ArrayProperty<SireMaths::Sphere>),
-                    SireBase::ArrayProperty_Sphere_ )
+SIRE_EXPOSE_ALIAS(SireBase::PODProperty<SireMaths::Sphere>,
+                  SireMaths::SphereProperty);
+SIRE_EXPOSE_ALIAS(SireBase::PODArrayProperty<SireMaths::Sphere>,
+                  SireMaths::SphereArrayProperty);
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
-template class SireBase::ArrayProperty<SireMaths::Sphere>;
+template class SireBase::PODProperty<SireMaths::Sphere>;
+template class SireBase::PODArrayProperty<SireMaths::Sphere>;
 #endif
 
 SIRE_END_HEADER

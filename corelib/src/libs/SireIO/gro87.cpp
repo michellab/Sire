@@ -46,7 +46,7 @@
 #include "SireVol/triclinicbox.h"
 
 #include "SireBase/parallel.h"
-#include "SireBase/timeproperty.h"
+#include "SireBase/generalunitproperty.h"
 #include "SireBase/numberproperty.h"
 #include "SireBase/stringproperty.h"
 
@@ -461,7 +461,7 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
 
     try
     {
-        time = system.property( map["time"] ).asA<TimeProperty>().value();
+        time = system.property( map["time"] ).asA<GeneralUnitProperty>();
     }
     catch(...)
     {}
@@ -1745,11 +1745,11 @@ void Gro87::finaliseSystem(System &system, const PropertyMap &map) const
 
         if (time_property.hasSource())
         {
-            system.setProperty(time_property.source(), TimeProperty(current_time[0]*picosecond));
+            system.setProperty(time_property.source(), GeneralUnitProperty(GeneralUnit(current_time[0]*picosecond)));
         }
         else
         {
-            system.setProperty("time", TimeProperty(current_time[0]*picosecond));
+            system.setProperty("time", GeneralUnitProperty(GeneralUnit(current_time[0]*picosecond)));
         }
     }
 }

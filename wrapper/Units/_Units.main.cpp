@@ -11,8 +11,6 @@
 
 #include "GeneralUnit.pypp.hpp"
 
-#include "GeneralUnitProperty.pypp.hpp"
-
 #include "TempBase.pypp.hpp"
 
 #include "Unit.pypp.hpp"
@@ -45,8 +43,6 @@ BOOST_PYTHON_MODULE(_Units){
     register_Unit_class();
 
     register_GeneralUnit_class();
-
-    register_GeneralUnitProperty_class();
 
     register_Fahrenheit_class();
 
