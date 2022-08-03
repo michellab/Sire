@@ -43,6 +43,7 @@ Functions
     wrap
 """
 
+from ..Units import _Units # Need to import so that we have GeneralUnit
 from ._Base import *
 
 _wrap_functions = []
