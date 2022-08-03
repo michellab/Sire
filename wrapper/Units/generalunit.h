@@ -54,6 +54,7 @@ friend QDataStream& ::operator>>(QDataStream&, GeneralUnit&);
 public:
     GeneralUnit();
     GeneralUnit(double value);
+    GeneralUnit(const GeneralUnitProperty &property);
 
     template<class D>
     explicit GeneralUnit(const D &unit) : Unit(unit)

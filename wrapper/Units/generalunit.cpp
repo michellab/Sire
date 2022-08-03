@@ -128,6 +128,11 @@ GeneralUnit::GeneralUnit(double value) : Unit(value)
     Angle = 0;
 }
 
+GeneralUnit::GeneralUnit(const GeneralUnitProperty &property) : Unit(0)
+{
+    this->operator=(property.value());
+}
+
 GeneralUnit::GeneralUnit(const GeneralUnit &other) : Unit(other)
 {
     Mass = other.Mass;

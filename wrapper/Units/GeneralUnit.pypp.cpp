@@ -52,6 +52,7 @@ void register_GeneralUnit_class(){
         GeneralUnit_exposer_t GeneralUnit_exposer = GeneralUnit_exposer_t( "GeneralUnit", "", bp::init< >("") );
         bp::scope GeneralUnit_scope( GeneralUnit_exposer );
         GeneralUnit_exposer.def( bp::init< double >(( bp::arg("value") ), "") );
+        GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnitProperty const & >(( bp::arg("property") ), "") );
         GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit const & >(( bp::arg("unit") ), "") );
         GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit const & >(( bp::arg("other") ), "") );
         { //::SireUnits::Dimension::GeneralUnit::ANGLE

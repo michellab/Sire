@@ -91,5 +91,7 @@ implicitly_convertible = [ ("SireUnits::Dimension::TempBase",
                            ("SireUnits::Dimension::TempBase",
                             "double"),
                            ("double", "SireUnits::Dimension::GeneralUnit"),
+                           ("SireUnits::Dimension::GeneralUnitProperty",
+                            "SireUnits::Dimension::GeneralUnit"),
                          ]
 

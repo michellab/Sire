@@ -47,7 +47,6 @@ struct GeneralUnitProperty_to_python
 {
     static PyObject* convert(const SireUnits::Dimension::GeneralUnitProperty &prop)
     {
-        qDebug() << "CONVERT!";
         auto raii = boost::python::release_gil_policy::acquire_gil();
         return bp::incref(bp::object(prop.value()).ptr());
     }
@@ -55,7 +54,6 @@ struct GeneralUnitProperty_to_python
 
 void autoconvert_GeneralUnitProperty()
 {
-    qDebug() << "REGISTER";
     //code to get a Python object from a GeneralUnitProperty
     bp::to_python_converter< SireUnits::Dimension::GeneralUnitProperty, GeneralUnitProperty_to_python >();
 }
