@@ -23,7 +23,6 @@ def fix_Mover(c):
     c.decls("change").call_policies = call_policies.return_self()
     c.decls("set").call_policies = call_policies.return_self()
     c.decls("setAll").call_policies = call_policies.return_self()
-    c.decls("alignTo").call_policies = call_policies.return_self()
     c.decls("align").call_policies = call_policies.return_self()
 
     #also include all of the header files included in mover.cpp

@@ -48,6 +48,7 @@ set ( SIREMATHS_HEADERS
       rotate.h
       sincos.h
       sphere.h
+      sphereproperty.h
       torsion.h
       triangle.h
       trigmatrix.h
@@ -96,6 +97,7 @@ set ( SIREMATHS_SOURCES
       rational.cpp
       sincos.cpp
       sphere.cpp
+      sphereproperty.cpp
       torsion.cpp
       triangle.cpp
       trigmatrix.cpp

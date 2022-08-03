@@ -75,9 +75,6 @@ def fixMB(mb):
    mb.add_registration_code("register_SireUnits_dimensions();")
    mb.add_registration_code("register_man_global_variables();")
 
-   mb.add_declaration_code( "void autoconvert_GeneralUnitProperty();")
-   mb.add_registration_code( "autoconvert_GeneralUnitProperty();")
-
    #add all of the global physical constants to the module
    findGlobals()
 
@@ -91,7 +88,5 @@ implicitly_convertible = [ ("SireUnits::Dimension::TempBase",
                            ("SireUnits::Dimension::TempBase",
                             "double"),
                            ("double", "SireUnits::Dimension::GeneralUnit"),
-                           ("SireUnits::Dimension::GeneralUnitProperty",
-                            "SireUnits::Dimension::GeneralUnit"),
                          ]
 

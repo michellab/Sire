@@ -164,22 +164,13 @@ public:
     AABox aaBox(const PropertyMap &map = PropertyMap()) const;
     Sphere boundingSphere(const PropertyMap &map = PropertyMap()) const;
 
+    SireUnits::Dimension::Length radius(const PropertyMap &map = PropertyMap()) const;
+    SireUnits::Dimension::Length radius(const Vector &center,
+                                        const PropertyMap &map = PropertyMap()) const;
+
     Vector centroid(const PropertyMap &map = PropertyMap()) const;
     Vector centerOfGeometry(const PropertyMap &map = PropertyMap()) const;
     Vector centerOfMass(const PropertyMap &map = PropertyMap()) const;
-
-    AxisSet principalAxes(const PropertyMap &map = PropertyMap()) const;
-    AxisSet principalAxes(Vector &principal_moments,
-                          const PropertyMap &map = PropertyMap()) const;
-
-    AxisSet alignmentAxes(const MoleculeView &other,
-                          const AtomMatcher &matcher,
-                          const PropertyMap &map = PropertyMap()) const;
-
-    AxisSet alignmentAxes(const MoleculeView &other,
-                          const AtomMatcher &matcher,
-                          const PropertyMap &map0,
-                          const PropertyMap &map1) const;
 
     SireUnits::Dimension::Length measure(const AtomID &atom0,
                                          const AtomID &atom1,

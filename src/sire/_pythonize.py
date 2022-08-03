@@ -83,6 +83,14 @@ def _pythonize(C, delete_old: bool=True) -> None:
         if new_attr.isupper():
             new_attr = new_attr.lower()
 
+        # change "MCSmatches" into "Mcs_matches" (it will then be
+        # converted to _mcs_matches by the code below)
+        new_attr = new_attr.replace("MCSmatches", "Mcs_matches")
+
+        # change "MCS" into "Mcs" (it will then be converted to _mcs by
+        # the code below)
+        new_attr = new_attr.replace("MCS", "Mcs")
+
         # change nSomething into num_somthing
         m = re.match("^n([A-Z])[a-z]", new_attr)
 

@@ -254,6 +254,25 @@ int GeneralUnit::ANGLE() const
     return Angle;
 }
 
+/** Return the units of this value */
+GeneralUnit GeneralUnit::units() const
+{
+    GeneralUnit ret(*this);
+    ret.setScale(1.0);
+    return ret;
+}
+
+bool GeneralUnit::hasSameUnits(const GeneralUnit &other) const
+{
+    return Mass == other.Mass and
+           Length == other.Length and
+           Time == other.Time and
+           Charge == other.Charge and
+           temperature == other.temperature and
+           Quantity == other.Quantity and
+           Angle == other.Angle;
+}
+
 GeneralUnit& GeneralUnit::operator=(const GeneralUnit &other)
 {
     setScale(other.value());
@@ -559,7 +578,7 @@ static const RegisterMetaType<GeneralUnitProperty> r_genprop;
 QDataStream &operator<<(QDataStream &ds, const GeneralUnitProperty &prop)
 {
     SireStream::writeHeader(ds, r_genprop, 1);
-    ds << prop.val;
+    ds << static_cast<const GeneralUnit&>(prop);
     return ds;
 }
 
@@ -569,7 +588,7 @@ QDataStream &operator>>(QDataStream &ds, GeneralUnitProperty &prop)
 
     if (v == 1)
     {
-        ds >> prop.val;
+        ds >> static_cast<GeneralUnit&>(prop);
     }
     else
         throw SireStream::version_error(v, "1", r_genprop, CODELOC);
@@ -578,21 +597,23 @@ QDataStream &operator>>(QDataStream &ds, GeneralUnitProperty &prop)
 }
 
 /** Constructor - this constructs the integer "0" */
-GeneralUnitProperty::GeneralUnitProperty() : ConcreteProperty<GeneralUnitProperty,Property>(), val(0.0)
+GeneralUnitProperty::GeneralUnitProperty()
+                    : ConcreteProperty<GeneralUnitProperty,Property>(),
+                      GeneralUnit()
 {}
 
 /** Construct from the passed value */
 GeneralUnitProperty::GeneralUnitProperty(GeneralUnit value)
-               : ConcreteProperty<GeneralUnitProperty,Property>(), val(value)
+                    : ConcreteProperty<GeneralUnitProperty,Property>(),
+                      GeneralUnit(value)
 {}
 
-/** Construct from a VariantProperty */
 GeneralUnitProperty::GeneralUnitProperty(const Property &other)
-               : ConcreteProperty<GeneralUnitProperty,Property>(other)
+                   : ConcreteProperty<GeneralUnitProperty,Property>(other)
 {
     if (other.isA<VariantProperty>())
     {
-        val = other.asA<VariantProperty>().convertTo<GeneralUnit>();
+        this->operator=(other.asA<VariantProperty>().convertTo<GeneralUnit>());
     }
     else
         throw SireError::invalid_cast( QObject::tr(
@@ -601,7 +622,8 @@ GeneralUnitProperty::GeneralUnitProperty(const Property &other)
 
 /** Copy constructor */
 GeneralUnitProperty::GeneralUnitProperty(const GeneralUnitProperty &other)
-               : ConcreteProperty<GeneralUnitProperty,Property>(other), val(other.val)
+                    : ConcreteProperty<GeneralUnitProperty,Property>(other),
+                      GeneralUnit(other)
 {}
 
 /** Destructor */
@@ -618,7 +640,7 @@ GeneralUnitProperty& GeneralUnitProperty::operator=(const GeneralUnitProperty &o
 {
     if (this != &other)
     {
-        val = other.val;
+        GeneralUnit::operator=(other);
     }
 
     return *this;
@@ -627,7 +649,7 @@ GeneralUnitProperty& GeneralUnitProperty::operator=(const GeneralUnitProperty &o
 /** Comparison operator */
 bool GeneralUnitProperty::operator==(const GeneralUnitProperty &other) const
 {
-    return val == other.val;
+    return GeneralUnit::operator==(other);
 }
 
 /** Comparison operator */
@@ -636,12 +658,7 @@ bool GeneralUnitProperty::operator!=(const GeneralUnitProperty &other) const
     return not this->operator==(other);
 }
 
-GeneralUnit GeneralUnitProperty::value() const
-{
-    return val;
-}
-
 QString GeneralUnitProperty::toString() const
 {
-    return val.toString();
+    return GeneralUnit::toString();
 }

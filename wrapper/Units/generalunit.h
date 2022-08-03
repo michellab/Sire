@@ -79,6 +79,8 @@ public:
     static QString typeName();
     QString what() const;
 
+    GeneralUnit units() const;
+
     int MASS() const;
     int LENGTH() const;
     int TIME() const;
@@ -86,6 +88,8 @@ public:
     int TEMPERATURE() const;
     int QUANTITY() const;
     int ANGLE() const;
+
+    bool hasSameUnits(const GeneralUnit &other) const;
 
     GeneralUnit& operator=(const GeneralUnit &other);
 
@@ -159,7 +163,9 @@ private:
 
     @author Christopher Woods
 */
-class SIREBASE_EXPORT GeneralUnitProperty : public SireBase::ConcreteProperty<GeneralUnitProperty,SireBase::Property>
+class SIREBASE_EXPORT GeneralUnitProperty
+    : public SireBase::ConcreteProperty<GeneralUnitProperty,SireBase::Property>,
+      public GeneralUnit
 {
 
 friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const GeneralUnitProperty&);
@@ -181,12 +187,7 @@ public:
     bool operator==(const GeneralUnitProperty &other) const;
     bool operator!=(const GeneralUnitProperty &other) const;
 
-    GeneralUnit value() const;
-
     QString toString() const;
-
-private:
-    GeneralUnit val;
 };
 
 inline SireBase::PropertyPtr wrap(const GeneralUnit &unit)

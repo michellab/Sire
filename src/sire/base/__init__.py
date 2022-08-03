@@ -18,10 +18,7 @@ def _add_property_operators(C):
     import operator
 
     def __property_op__(lhs, rhs, op):
-        if rhs.what().endswith("Property"):
-            return op(lhs.value(), rhs.value())
-        else:
-            return op(lhs.value(), rhs)
+        return op(lhs.value(), rhs)
 
     C.__add__ = lambda x, y: __property_op__(x, y, operator.add)
     C.__sub__ = lambda x, y: __property_op__(x, y, operator.sub)

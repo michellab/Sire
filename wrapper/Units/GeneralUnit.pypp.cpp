@@ -139,6 +139,19 @@ void register_GeneralUnit_class(){
                 , "" );
         
         }
+        { //::SireUnits::Dimension::GeneralUnit::hasSameUnits
+        
+            typedef bool ( ::SireUnits::Dimension::GeneralUnit::*hasSameUnits_function_type)( ::SireUnits::Dimension::GeneralUnit const & ) const;
+            hasSameUnits_function_type hasSameUnits_function_value( &::SireUnits::Dimension::GeneralUnit::hasSameUnits );
+            
+            GeneralUnit_exposer.def( 
+                "hasSameUnits"
+                , hasSameUnits_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireUnits::Dimension::GeneralUnit::invert
         
             typedef ::SireUnits::Dimension::GeneralUnit ( ::SireUnits::Dimension::GeneralUnit::*invert_function_type)(  ) const;
@@ -265,6 +278,18 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireUnits::Dimension::GeneralUnit::units
+        
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireUnits::Dimension::GeneralUnit::*units_function_type)(  ) const;
+            units_function_type units_function_value( &::SireUnits::Dimension::GeneralUnit::units );
+            
+            GeneralUnit_exposer.def( 
+                "units"
+                , units_function_value
                 , bp::release_gil_policy()
                 , "" );
         

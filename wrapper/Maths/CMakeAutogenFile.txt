@@ -5,6 +5,7 @@ set ( PYPP_SOURCES
        Array2D_NMatrix_.pypp.cpp
        Array2D_SireMaths_AccumulatorPtr_.pypp.cpp
        Array2D_Vector_.pypp.cpp
+       ArrayProperty_Sphere_.pypp.cpp
        ArrayProperty_Vector_.pypp.cpp
        Average.pypp.cpp
        AverageAndStddev.pypp.cpp
@@ -36,6 +37,8 @@ set ( PYPP_SOURCES
        Rational.pypp.cpp
        RecordValues.pypp.cpp
        Sphere.pypp.cpp
+       SphereArrayProperty.pypp.cpp
+       SphereProperty.pypp.cpp
        Torsion.pypp.cpp
        Transform.pypp.cpp
        Triangle.pypp.cpp

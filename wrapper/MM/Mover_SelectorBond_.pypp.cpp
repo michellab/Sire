@@ -154,62 +154,6 @@ void register_Mover_SelectorBond__class(){
                 , "" );
         
         }
-        { //::SireMol::Mover< SireMM::SelectorBond >::alignTo
-        
-            typedef SireMol::Mover< SireMM::SelectorBond > exported_class_t;
-            typedef ::SireMol::Mover< SireMM::SelectorBond > & ( ::SireMol::Mover< SireMM::SelectorBond >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
-            alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMM::SelectorBond >::alignTo );
-            
-            Mover_SelectorBond__exposer.def( 
-                "alignTo"
-                , alignTo_function_value
-                , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
-                , "" );
-        
-        }
-        { //::SireMol::Mover< SireMM::SelectorBond >::alignTo
-        
-            typedef SireMol::Mover< SireMM::SelectorBond > exported_class_t;
-            typedef ::SireMol::Mover< SireMM::SelectorBond > & ( ::SireMol::Mover< SireMM::SelectorBond >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
-            alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMM::SelectorBond >::alignTo );
-            
-            Mover_SelectorBond__exposer.def( 
-                "alignTo"
-                , alignTo_function_value
-                , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >()
-                , "" );
-        
-        }
-        { //::SireMol::Mover< SireMM::SelectorBond >::alignTo
-        
-            typedef SireMol::Mover< SireMM::SelectorBond > exported_class_t;
-            typedef ::SireMol::Mover< SireMM::SelectorBond > & ( ::SireMol::Mover< SireMM::SelectorBond >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
-            alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMM::SelectorBond >::alignTo );
-            
-            Mover_SelectorBond__exposer.def( 
-                "alignTo"
-                , alignTo_function_value
-                , ( bp::arg("other"), bp::arg("aligning_atoms"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
-                , "" );
-        
-        }
-        { //::SireMol::Mover< SireMM::SelectorBond >::alignTo
-        
-            typedef SireMol::Mover< SireMM::SelectorBond > exported_class_t;
-            typedef ::SireMol::Mover< SireMM::SelectorBond > & ( ::SireMol::Mover< SireMM::SelectorBond >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
-            alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMM::SelectorBond >::alignTo );
-            
-            Mover_SelectorBond__exposer.def( 
-                "alignTo"
-                , alignTo_function_value
-                , ( bp::arg("other"), bp::arg("aligning_atoms"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >()
-                , "" );
-        
-        }
         { //::SireMol::Mover< SireMM::SelectorBond >::change
         
             typedef SireMol::Mover< SireMM::SelectorBond > exported_class_t;

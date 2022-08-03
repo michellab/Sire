@@ -4,6 +4,9 @@ Residue, Chain and Segment Properties
 
 Residues, chains and segments can also have their own properties.
 
+Residue properties
+------------------
+
 For example, we will now create a new residue property that holds the
 radius of each residue. First, let's load the molecules again.
 
@@ -36,35 +39,110 @@ SireMol::ResPropertyProperty( size=3
     atoms ``coordinates`` and ``mass`` properties.
 
 We will also add a radius for each residue. We will do this by calling
-:func:`sire.mol.Evaluator.bounding_sphere` to get a
-:class:`sire.maths.Sphere` object that represents the bounding sphere
-for each residue. We will then get the radius of this sphere by calling
-:func:`sire.maths.Sphere.radius`.
+:func:`sire.mol.Evaluator.radius` and passing in the center calculated above.
 
 We could do this either via a loop...
 
 >>> cursor = mol.cursor()
 >>> for residue in cursor.residues():
-...    residue["residue_radius"] = residue.evaluate().bounding_sphere().radius()
+...    residue["residue_radius"] = residue.evaluate().radius(residue["residue_center"])
 >>> mol = cursor.commit()
 >>> print(mol.property("residue_radius"))
-SireMol::ResFloatProperty( size=3
-0: 2.06211
-1: 2.53194
-2: 1.69918
-)
 
 ...or via ``apply`` and a lambda expression...
 
 >>> mol = mol.residues().cursor().apply(
 ...         lambda res: res.set("residue_radius",
-...                             res.evaluate().bounding_sphere().radius())
+...                             res.evaluate().radius(res["residue_center"]))
 ...  ).commit()
 >>> print(mol.property("residue_radius"))
-SireMol::ResFloatProperty( size=3
-0: 2.06211
-1: 2.53194
-2: 1.69918
+
+Residue properties are a lot like atom properties. They behave like a list,
+with one value per residue (in residue index order). Default-constructed
+values are used for residues that don't have a property set.
+
+Chain properties
+----------------
+
+Chain properties work in the same way as residue properties. For example,
+load up protein ``7SA1``.
+
+>>> mols = sr.load("7SA1")
+>>> mol = mols[0]
+
+We will loop over each chain, adding in a ``sphere`` property that contains
+a bounding sphere for the entire chain.
+
+We could do this via a loop...
+
+>>> cursor = mol.cursor()
+>>> for chain in cursor.chains():
+...     chain["sphere"] = chain.evaluate().bounding_sphere()
+>>> mol = cursor.commit()
+>>> print(mol.property("sphere"))
+SireMol::ChainPropertyProperty( size=4
+0: Sphere( center() == ( -44.5915, 10.0365, 16.132 ), radius == 40.2531 )
+1: Sphere( center() == ( -31.0725, 27.279, 3.387 ), radius == 65.6821 )
+2: Sphere( center() == ( -5.827, 22.1885, 49.5585 ), radius == 40.2047 )
+3: Sphere( center() == ( 6.3375, 5.929, 31.511 ), radius == 65.5556 )
 )
 
+...or via an ``apply``
 
+>>> mol = mol.chains().cursor().apply(
+...        lambda chain: chain.set("sphere",
+...                                chain.evaluate().bounding_sphere())
+...       ).commit()
+>>> print(mol.property("sphere"))
+SireMol::ChainPropertyProperty( size=4
+0: Sphere( center() == ( -44.5915, 10.0365, 16.132 ), radius == 40.2531 )
+1: Sphere( center() == ( -31.0725, 27.279, 3.387 ), radius == 65.6821 )
+2: Sphere( center() == ( -5.827, 22.1885, 49.5585 ), radius == 40.2047 )
+3: Sphere( center() == ( 6.3375, 5.929, 31.511 ), radius == 65.5556 )
+)
+
+Chain properties behave identically to residue properties, i.e. like
+a list with one value per chain, in chain index order. Default-constructed
+values are used for chains that don't have a property set.
+
+Segment properties
+------------------
+
+Segment properties behave exactly like residue and chain properties. To
+demonstrate this, load up ``alanin`` again...
+
+>>> mols = sr.load(sr.expand(sr.tutorial_url, "alanin.psf"))
+>>> mol = mols[0]
+
+We will now add a property to the segments that is the number of atoms
+in that segment. Again, we can do this via a loop...
+
+>>> cursor = mol.cursor()
+>>> for segment in cursor.segments():
+...     segment["seg_atom_count"] = segment.view().num_atoms()
+>>> mol = cursor.commit()
+>>> print(mol.property("seg_atom_count"))
+SireMol::SegIntProperty( size=1
+0: 66
+)
+
+...or via an apply
+
+>>> mol = mol.segments().cursor().apply(
+...     lambda seg: seg.set("seg_atom_count", seg.view().num_atoms())
+...   ).commit()
+>>> print(mol.property("seg_atom_count"))
+SireMol::SegIntProperty( size=1
+0: 66
+)
+
+.. note::
+
+    Note how we use ``cursor.view()`` to gain access to the view on which
+    the cursor is operating. This is useful to call functions on that
+    view, e.g. ``segment.num_atoms()`` in this case.
+
+Segment properties behave identically to chain and residue properties, i.e.
+like a list with one value per segment, in segment index order.
+Default-constructed values are used for segments that don't have a
+property set.

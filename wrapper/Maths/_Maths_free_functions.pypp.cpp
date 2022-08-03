@@ -315,6 +315,16 @@ namespace bp = boost::python;
 
 #include "linearap.h"
 
+#include "SireMaths/sphereproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "sphereproperty.h"
+
+#include "sphereproperty.h"
+
 #include "SireMaths/vectorproperty.h"
 
 #include "SireStream/datastream.h"
@@ -325,6 +335,16 @@ namespace bp = boost::python;
 
 #include "vectorproperty.h"
 
+#include "SireMaths/sphereproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "sphereproperty.h"
+
+#include "sphereproperty.h"
+
 #include "SireMaths/vectorproperty.h"
 
 #include "SireStream/datastream.h"
@@ -334,6 +354,76 @@ namespace bp = boost::python;
 #include "vectorproperty.h"
 
 #include "vectorproperty.h"
+
+#include "SireMaths/sphereproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "sphereproperty.h"
+
+#include "sphereproperty.h"
+
+#include "SireMaths/vectorproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "vectorproperty.h"
+
+#include "vectorproperty.h"
+
+#include "SireMaths/sphereproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "sphereproperty.h"
+
+#include "sphereproperty.h"
+
+#include "SireMaths/vectorproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "vectorproperty.h"
+
+#include "vectorproperty.h"
+
+#include "SireMaths/sphereproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "sphereproperty.h"
+
+#include "sphereproperty.h"
+
+#include "SireMaths/vectorproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "vectorproperty.h"
+
+#include "vectorproperty.h"
+
+#include "SireMaths/sphereproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "sphereproperty.h"
+
+#include "sphereproperty.h"
 
 #include "SireMaths/vectorproperty.h"
 
@@ -461,19 +551,6 @@ void register_free_functions(){
             , gamma_function_value
             , ( bp::arg("alpha"), bp::arg("x") )
             , "" );
-    
-    }
-
-    { //::gamma
-    
-       /* typedef double ( *gamma_function_type )( double );
-        gamma_function_type gamma_function_value( &::gamma );
-        
-        bp::def( 
-            "gamma"
-            , gamma_function_value
-            , ( bp::arg("arg0") )
-            , "Obsolete alias for `lgamma." );*/
     
     }
 
@@ -668,6 +745,45 @@ void register_free_functions(){
             "wrap"
             , wrap_function_value
             , ( bp::arg("vector") )
+            , "" );
+    
+    }
+
+    { //::SireMaths::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::SireMaths::Sphere const & );
+        wrap_function_type wrap_function_value( &::SireMaths::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("sphere") )
+            , "" );
+    
+    }
+
+    { //::SireMaths::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QVector< SireMaths::Sphere > const & );
+        wrap_function_type wrap_function_value( &::SireMaths::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("sphere") )
+            , "" );
+    
+    }
+
+    { //::SireMaths::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QList< SireMaths::Sphere > const & );
+        wrap_function_type wrap_function_value( &::SireMaths::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("sphere") )
             , "" );
     
     }

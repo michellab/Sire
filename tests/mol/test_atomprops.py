@@ -86,14 +86,14 @@ def test_convenience_atom_funcs(ala_mols):
     for i in range(0, 5):
         mass += mol[i].mass()
 
-    assert mass == mol[0:5].mass()
+    assert mass.approx_equal(mol[0:5].mass())
 
     charge = 0 * mod_electron
 
     for atom in mol["resnum 1"].atoms():
         charge += atom.charge()
 
-    assert charge == mol["resnum 1"].charge()
+    assert charge.approx_equal(mol["resnum 1"].charge())
 
     assert mol.coords() == mol.evaluate().center_of_mass()
 

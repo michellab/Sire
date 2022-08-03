@@ -48,7 +48,7 @@ SireUnits::Dimension::GeneralUnitProperty __copy__(const SireUnits::Dimension::G
 void register_GeneralUnitProperty_class(){
 
     { //::SireUnits::Dimension::GeneralUnitProperty
-        typedef bp::class_< SireUnits::Dimension::GeneralUnitProperty, bp::bases< SireBase::Property > > GeneralUnitProperty_exposer_t;
+        typedef bp::class_< SireUnits::Dimension::GeneralUnitProperty, bp::bases< SireUnits::Dimension::GeneralUnit, SireUnits::Dimension::Unit, SireBase::Property > > GeneralUnitProperty_exposer_t;
         GeneralUnitProperty_exposer_t GeneralUnitProperty_exposer = GeneralUnitProperty_exposer_t( "GeneralUnitProperty", "This class provides a thin Property wrapper around GeneralUnits\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope GeneralUnitProperty_scope( GeneralUnitProperty_exposer );
         GeneralUnitProperty_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit >(( bp::arg("value") ), "") );
@@ -89,18 +89,6 @@ void register_GeneralUnitProperty_class(){
             GeneralUnitProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
-                , bp::release_gil_policy()
-                , "" );
-        
-        }
-        { //::SireUnits::Dimension::GeneralUnitProperty::value
-        
-            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireUnits::Dimension::GeneralUnitProperty::*value_function_type)(  ) const;
-            value_function_type value_function_value( &::SireUnits::Dimension::GeneralUnitProperty::value );
-            
-            GeneralUnitProperty_exposer.def( 
-                "value"
-                , value_function_value
                 , bp::release_gil_policy()
                 , "" );
         

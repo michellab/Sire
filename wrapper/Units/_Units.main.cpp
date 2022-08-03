@@ -33,8 +33,6 @@ namespace bp = boost::python;
 
 #include "_Units_global_variables.pyman.hpp"
 
-void autoconvert_GeneralUnitProperty();
-
 BOOST_PYTHON_MODULE(_Units){
     register_SireUnits_objects();
 
@@ -58,13 +56,9 @@ BOOST_PYTHON_MODULE(_Units){
 
     bp::implicitly_convertible< double, SireUnits::Dimension::GeneralUnit >();
 
-    bp::implicitly_convertible< SireUnits::Dimension::GeneralUnitProperty, SireUnits::Dimension::GeneralUnit >();
-
     register_SireUnits_dimensions();
 
     register_man_global_variables();
-
-    autoconvert_GeneralUnitProperty();
 
     register_free_functions();
 }

@@ -606,6 +606,12 @@ class Cursor:
             from sire.mm import Bond
             return Bond(self._d.molecule, self._bond)
 
+    def view(self):
+        """Return the view underpinning this cursor. This is actually
+           the same as committing the changes
+        """
+        return self.commit()
+
     def commit(self):
         """Commit all of the changes and return the newly
            edited molecule (or MoleculeView)

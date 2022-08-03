@@ -64,20 +64,20 @@ public:
 
     LengthProperty(const LengthProperty &other);
     LengthProperty(const Property &other);
-    
+
     ~LengthProperty();
-    
+
     static const char* typeName();
-    
+
     LengthProperty& operator=(const LengthProperty &other);
-    
+
     bool operator==(const LengthProperty &other) const;
     bool operator!=(const LengthProperty &other) const;
-    
+
     Length value() const;
-    
+
     QString toString() const;
-    
+
 private:
     Length val;
 };
