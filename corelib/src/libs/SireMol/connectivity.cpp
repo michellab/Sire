@@ -293,6 +293,7 @@ PropertyPtr ConnectivityBase::_pvt_makeCompatibleWith(const MoleculeInfoData &mo
             Connectivity ret;
             ret.connected_atoms = connected_atoms;
             ret.connected_res = connected_res;
+            ret.bond_props = bond_props;
             ret.minfo = MoleculeInfo(molinfo);
             return ret;
         }

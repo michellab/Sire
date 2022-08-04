@@ -24,7 +24,8 @@ from ..legacy.Mol import AtomName, AtomNum, AtomIdx, AtomID, \
                          Chain, Selector_Chain_, SelectorM_Chain_, \
                          Segment, Selector_Segment_, SelectorM_Segment_, \
                          Molecule, SelectorMol, \
-                         MoleculeView, Select
+                         MoleculeView, Select, \
+                         BondType, Stereoscopy
 
 # Here I will define some functions that make accessing
 # things from moleculeviews more convenient
