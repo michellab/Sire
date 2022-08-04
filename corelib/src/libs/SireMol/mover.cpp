@@ -71,39 +71,39 @@ namespace SireMol
     {
         const AtomCoords &coords0 = view0.data().property( map0["coordinates"] )
                                                 .asA<AtomCoords>();
-        
+
         const AtomCoords &coords1 = view1.data().property( map1["coordinates"] )
                                                 .asA<AtomCoords>();
-        
+
         QHash<AtomIdx,AtomIdx> map = matcher.match(view0, map0, view1, map1);
-        
+
         if (map.isEmpty())
         {
             //there are no matching atoms - we can't do anything
             qDebug() << "No matching atoms!";
             return Transform();
         }
-        
+
         QVector<Vector> p(map.count()), q(map.count());
-        
+
         int n = 0;
-        
+
         for (QHash<AtomIdx,AtomIdx>::const_iterator it = map.constBegin();
              it != map.constEnd();
              ++it)
         {
             p[n] = coords0.at( view0.data().info().cgAtomIdx(it.key()) );
             q[n] = coords1.at( view1.data().info().cgAtomIdx(it.value()) );
-            
+
             /*qDebug() << n << view0.data().info().name(it.key()).toString() << "=="
                           << view1.data().info().name(it.value()).toString();
             qDebug() << n << p[n].toString() << q[n].toString();*/
-            
+
             n += 1;
         }
-        
+
         Transform t = SireMaths::getAlignment(p, q, fit);
-        
+
         return t;
     }
 
@@ -193,7 +193,7 @@ void MoverBase::translate(AtomCoords &coords,
     if (delta.isZero() or selected_atoms.selectedNone())
         return;
 
-    int ncg = coords.count();
+    int ncg = coords.nCutGroups();
 
     if (selected_atoms.selectedAll())
     {
@@ -263,7 +263,7 @@ void MoverBase::rotate(AtomCoords &coords,
     if (selected_atoms.selectedNone())
         return;
 
-    int ncg = coords.count();
+    int ncg = coords.nCutGroups();
 
     if (selected_atoms.selectedAll())
     {
@@ -340,7 +340,7 @@ void MoverBase::transform(AtomCoords &coords,
     if (selected_atoms.selectedNone() or t.isZero())
         return;
 
-    int ncg = coords.count();
+    int ncg = coords.nCutGroups();
 
     if (selected_atoms.selectedAll())
     {
@@ -408,7 +408,7 @@ void MoverBase::mapInto(AtomCoords &coords,
     if (selected_atoms.selectedNone())
         return;
 
-    int ncg = coords.count();
+    int ncg = coords.nCutGroups();
 
     if (selected_atoms.selectedAll())
     {
@@ -477,7 +477,7 @@ void MoverBase::changeFrame(AtomCoords &coords,
     if (selected_atoms.selectedNone())
         return;
 
-    int ncg = coords.count();
+    int ncg = coords.nCutGroups();
 
     if (selected_atoms.selectedAll())
     {
@@ -613,7 +613,7 @@ void MoverBase::rotate(MoleculeData &moldata,
         if (center_property.hasSource() and moldata.hasProperty(center_property))
         {
             Vector center = moldata.property(center_property).asA<VectorProperty>();
-            
+
             if (center != point)
                 moldata.setProperty(center_property.source(),
                                     VectorProperty(SireMaths::rotate(center, rotmat, point)));
@@ -656,7 +656,7 @@ void MoverBase::transform(MoleculeData &moldata,
         if (center_property.hasSource() and moldata.hasProperty(center_property))
         {
             Vector center = moldata.property(center_property).asA<VectorProperty>();
-            
+
             moldata.setProperty(center_property.source(),
                                 VectorProperty(t.apply(center)));
         }
@@ -755,9 +755,9 @@ void MoverBase::mapInto(MoleculeData &moldata,
 }
 
 /** Map the atoms we are allowed to move from the coordinate frame
-    'from_frame' to the coordinate frame 'to_frame', finding the 
+    'from_frame' to the coordinate frame 'to_frame', finding the
     coordinates using the passed property map
-    
+
     \throw SireBase::missing_property
 */
 void MoverBase::changeFrame(MoleculeData &moldata,
@@ -834,7 +834,7 @@ static void applyAnchors(const AtomSelection &anchors,
     {
         groups.get<0>().deselectAll();
     }
-    
+
     if (groups.get<1>().intersects(anchors))
     {
         groups.get<1>().deselectAll();
@@ -912,11 +912,11 @@ void MoverBase::change(MoleculeData &moldata, const BondID &bond,
             throw SireMol::anchor_error( QObject::tr(
                 "Splitting the molecule into two about %1 has resulted "
                 "in two groups that are both anchored (anchors = %2)")
-                    .arg(bond.toString(), 
+                    .arg(bond.toString(),
                          Sire::toString( getAnchors(moldata, map).selectedAtoms()) ),
                              CODELOC );
         }
-    
+
         throw SireError::program_bug( QObject::tr(
             "Splitting the molecule about %1 has resulted "
             "in two empty groups!").arg(bond.toString()), CODELOC );
@@ -1036,11 +1036,11 @@ void MoverBase::change(MoleculeData &moldata, const AngleID &angle,
             throw SireMol::anchor_error( QObject::tr(
                 "Splitting the molecule into two about %1 has resulted "
                 "in two groups that are both anchored (anchors = %2)")
-                    .arg(angle.toString(), 
+                    .arg(angle.toString(),
                          Sire::toString( getAnchors(moldata, map).selectedAtoms()) ),
                              CODELOC );
         }
-    
+
         throw SireError::program_bug( QObject::tr(
             "Splitting the molecule about the %1 has resulted "
             "in two empty groups!").arg(angle.toString()), CODELOC );
@@ -1080,7 +1080,7 @@ void MoverBase::change(MoleculeData &moldata, const AngleID &angle,
     // This function contains lots of checks to ensure that a parallel
     // vector is always returned, even for co-linear or co-located atoms
     Vector perp = Vector::cross( coords2-coords0, coords1-coords0 );
-    
+
     //rotate the two groups
     if (weight0 != 0)
         MoverBase::rotate(coords, group0,
@@ -1139,8 +1139,8 @@ void MoverBase::change(MoleculeData &moldata, const DihedralID &dihedral,
     const Connectivity &connectivity =
               moldata.property(map["connectivity"]).asA<Connectivity>();
 
-    tuple<AtomSelection,AtomSelection> groups = 
-                        connectivity.split(atom0, atom1, 
+    tuple<AtomSelection,AtomSelection> groups =
+                        connectivity.split(atom0, atom1,
                                            atom2, atom3, movable_atoms);
 
     //see if there are any anchors that hold part of the
@@ -1160,11 +1160,11 @@ void MoverBase::change(MoleculeData &moldata, const DihedralID &dihedral,
             throw SireMol::anchor_error( QObject::tr(
                 "Splitting the molecule into two about %1 has resulted "
                 "in two groups that are both anchored (anchors = %2)")
-                    .arg(dihedral.toString(), 
+                    .arg(dihedral.toString(),
                          Sire::toString( getAnchors(moldata, map).selectedAtoms()) ),
                              CODELOC );
         }
-    
+
         throw SireError::program_bug( QObject::tr(
             "Splitting the molecule about the %1 has resulted "
             "in two empty groups!").arg(dihedral.toString()), CODELOC );
@@ -1258,7 +1258,7 @@ void MoverBase::change(MoleculeData &moldata, const BondID &bond,
     const Connectivity &connectivity =
               moldata.property(map["connectivity"]).asA<Connectivity>();
 
-    tuple<AtomSelection,AtomSelection> groups = 
+    tuple<AtomSelection,AtomSelection> groups =
                             connectivity.split(atom0, atom1, movable_atoms);
 
     //see if there are any anchors that hold part of the
@@ -1278,11 +1278,11 @@ void MoverBase::change(MoleculeData &moldata, const BondID &bond,
             throw SireMol::anchor_error( QObject::tr(
                 "Splitting the molecule into two about %1 has resulted "
                 "in two groups that are both anchored (anchors = %2)")
-                    .arg(bond.toString(), 
+                    .arg(bond.toString(),
                          Sire::toString( getAnchors(moldata, map).selectedAtoms()) ),
                              CODELOC );
         }
-    
+
         throw SireError::program_bug( QObject::tr(
             "Splitting the molecule about the %1 has resulted "
             "in two empty groups!").arg(bond.toString()), CODELOC );
@@ -1398,11 +1398,11 @@ void MoverBase::change(MoleculeData &moldata, const ImproperID &improper,
             throw SireMol::anchor_error( QObject::tr(
                 "Splitting the molecule into two about %1 has resulted "
                 "in two groups that are both anchored (anchors = %2)")
-                    .arg(improper.toString(), 
+                    .arg(improper.toString(),
                          Sire::toString( getAnchors(moldata, map).selectedAtoms()) ),
                              CODELOC );
         }
-    
+
         throw SireError::program_bug( QObject::tr(
             "Splitting the molecule about the %1 has resulted "
             "in two empty groups!").arg(improper.toString()), CODELOC );

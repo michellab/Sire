@@ -37,7 +37,10 @@ friend QDataStream& ::operator>>(QDataStream&, GeneralUnit&);
 
 public:
     GeneralUnit();
-    GeneralUnit(double value);
+
+    explicit GeneralUnit(const TempBase &temperature);
+
+    explicit GeneralUnit(double value);
 
     template<int M, int L, int T,
              int C, int t, int Q, int A>

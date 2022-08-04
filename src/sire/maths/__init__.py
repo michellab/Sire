@@ -11,3 +11,4 @@ _use_new_api()
 
 Vector = _Maths.Vector
 
+pi = _Maths.pi

@@ -85,8 +85,6 @@ special_code = { "SireUnits::Dimension::GeneralUnit" : fix_GeneralUnit,
 
 implicitly_convertible = [ ("SireUnits::Dimension::TempBase",
                             "SireUnits::Dimension::Temperature"),
-                           ("SireUnits::Dimension::TempBase",
-                            "double"),
                            ("double", "SireUnits::Dimension::GeneralUnit"),
                          ]
 

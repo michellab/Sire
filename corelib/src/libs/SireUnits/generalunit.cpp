@@ -119,6 +119,17 @@ GeneralUnit::GeneralUnit(double value) : Unit(value)
     Angle = 0;
 }
 
+GeneralUnit::GeneralUnit(const TempBase &t) : Unit(t)
+{
+    Mass = 0;
+    Length = 0;
+    Time = 0;
+    Charge = 0;
+    temperature = 1;
+    Quantity = 0;
+    Angle = 0;
+}
+
 GeneralUnit::GeneralUnit(const GeneralUnit &other) : Unit(other)
 {
     Mass = other.Mass;

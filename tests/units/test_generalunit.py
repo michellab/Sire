@@ -75,6 +75,16 @@ def test_generalunitproperty():
     assert g + g == h + h
 
 
+def test_generalunit_zero():
+    from sire.legacy.MM import CLJShiftFunction
+    from sire.units import angstrom
+
+    ff = CLJShiftFunction(100*angstrom, 150*angstrom)
+
+    # this raises an exception is zero is not handled correctly
+    ff = CLJShiftFunction(100*angstrom, 0*angstrom)
+
+
 if __name__ == "__main__":
     test_generalunit()
     test_generalunitproperty()

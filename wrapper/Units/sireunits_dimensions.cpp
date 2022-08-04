@@ -66,7 +66,12 @@ struct from_general_unit
             //that it is of the right dimension
             const Dimension::GeneralUnit &gen_unit = x();
 
-            if ( gen_unit.MASS() == D::MASS() and
+            if (gen_unit.isZero())
+            {
+                // zero is compatible with everything
+                return obj_ptr;
+            }
+            else if ( gen_unit.MASS() == D::MASS() and
                  gen_unit.LENGTH() == D::LENGTH() and
                  gen_unit.TIME() == D::TIME() and
                  gen_unit.CHARGE() == D::CHARGE() and
@@ -99,7 +104,18 @@ struct from_general_unit
             //that it is of the right dimension
             const Dimension::GeneralUnit &gen_unit = x();
 
-            if ( gen_unit.MASS() == D::MASS() and
+            if ( gen_unit.isZero() )
+            {
+                // zero is compatible with everything
+                void* storage =
+                    ( (converter::rvalue_from_python_storage<D>*)data )->storage.bytes;
+
+                //create the T container
+                new (storage) D(0.0);
+
+                data->convertible = storage;
+            }
+            else if ( gen_unit.MASS() == D::MASS() and
                  gen_unit.LENGTH() == D::LENGTH() and
                  gen_unit.TIME() == D::TIME() and
                  gen_unit.CHARGE() == D::CHARGE() and
