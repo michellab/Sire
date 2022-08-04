@@ -9,6 +9,10 @@ namespace bp = boost::python;
 
 #include "SireBase/generalunitproperty.h"
 
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
 #include "generalunitproperty.h"
 
 #include "generalunitproperty.h"
@@ -31,54 +35,54 @@ void register_GeneralUnitProperty_class(){
         GeneralUnitProperty_exposer.def( bp::init< SireBase::GeneralUnitProperty const & >(( bp::arg("other") ), "") );
         GeneralUnitProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::GeneralUnitProperty::operator=
-
+        
             typedef ::SireBase::GeneralUnitProperty & ( ::SireBase::GeneralUnitProperty::*assign_function_type)( ::SireBase::GeneralUnitProperty const & ) ;
             assign_function_type assign_function_value( &::SireBase::GeneralUnitProperty::operator= );
-
-            GeneralUnitProperty_exposer.def(
+            
+            GeneralUnitProperty_exposer.def( 
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
                 , bp::return_self< >()
                 , "" );
-
+        
         }
         GeneralUnitProperty_exposer.def( bp::self == bp::self );
         { //::SireBase::GeneralUnitProperty::toString
-
+        
             typedef ::QString ( ::SireBase::GeneralUnitProperty::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::GeneralUnitProperty::toString );
-
-            GeneralUnitProperty_exposer.def(
+            
+            GeneralUnitProperty_exposer.def( 
                 "toString"
                 , toString_function_value
                 , bp::release_gil_policy()
                 , "" );
-
+        
         }
         { //::SireBase::GeneralUnitProperty::typeName
-
+        
             typedef char const * ( *typeName_function_type )(  );
             typeName_function_type typeName_function_value( &::SireBase::GeneralUnitProperty::typeName );
-
-            GeneralUnitProperty_exposer.def(
+            
+            GeneralUnitProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
                 , bp::release_gil_policy()
                 , "" );
-
+        
         }
         { //::SireBase::GeneralUnitProperty::what
-
+        
             typedef char const * ( ::SireBase::GeneralUnitProperty::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireBase::GeneralUnitProperty::what );
-
-            GeneralUnitProperty_exposer.def(
+            
+            GeneralUnitProperty_exposer.def( 
                 "what"
                 , what_function_value
                 , bp::release_gil_policy()
                 , "" );
-
+        
         }
         GeneralUnitProperty_exposer.staticmethod( "typeName" );
         GeneralUnitProperty_exposer.def( "__copy__", &__copy__);

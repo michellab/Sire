@@ -45,6 +45,7 @@
 #include "SireBase/stringproperty.h"
 #include "SireBase/numberproperty.h"
 #include "SireBase/generalunitproperty.h"
+#include "SireBase/lengthproperty.h"
 #include "SireBase/errors.h"
 
 #include "SireStream/datastream.h"
@@ -1553,8 +1554,8 @@ Properties CLJCutoffFunction::properties() const
 {
     Properties props = CLJFunction::properties();
 
-    props.setProperty( "coulombCutoff", GeneralUnitProperty( GeneralUnit(Length(coul_cutoff)) ) );
-    props.setProperty( "ljCutoff", GeneralUnitProperty( GeneralUnit(Length(lj_cutoff)) ) );
+    props.setProperty( "coulombCutoff", GeneralUnitProperty(Length(coul_cutoff)) );
+    props.setProperty( "ljCutoff", GeneralUnitProperty(Length(lj_cutoff)) );
     props.setProperty( "switchingFunction", HarmonicSwitchingFunction( Length(coul_cutoff),
                                                                        Length(lj_cutoff) ) );
 
@@ -1574,11 +1575,17 @@ CLJFunctionPtr CLJCutoffFunction::setProperty(const QString &name, const Propert
     }
     else if (name == "coulombCutoff")
     {
-        ret.edit().setCoulombCutoff( value.asA<GeneralUnitProperty>() );
+        if (value.isA<LengthProperty>())
+            ret.edit().setCoulombCutoff( GeneralUnitProperty(value.asA<LengthProperty>().value()) );
+        else
+            ret.edit().setCoulombCutoff( value.asA<GeneralUnitProperty>() );
     }
     else if (name == "ljCutoff")
     {
-        ret.edit().setLJCutoff( value.asA<GeneralUnitProperty>() );
+        if (value.isA<LengthProperty>())
+            ret.edit().setLJCutoff( GeneralUnitProperty(value.asA<LengthProperty>().value()) );
+        else
+            ret.edit().setLJCutoff( value.asA<GeneralUnitProperty>() );
     }
     else
     {
@@ -1597,11 +1604,11 @@ PropertyPtr CLJCutoffFunction::property(const QString &name) const
     }
     else if (name == "coulombCutoff")
     {
-        return GeneralUnitProperty( GeneralUnit(Length(coul_cutoff)) );
+        return GeneralUnitProperty(Length(coul_cutoff));
     }
     else if (name == "ljCutoff")
     {
-        return GeneralUnitProperty( GeneralUnit(Length(lj_cutoff)) );
+        return GeneralUnitProperty(Length(lj_cutoff));
     }
     else
     {

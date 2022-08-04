@@ -15,6 +15,8 @@ namespace bp = boost::python;
 
 #include "generalunit.h"
 
+#include <QDebug>
+
 #include <QHash>
 
 #include <QMutex>
@@ -38,7 +40,6 @@ void register_GeneralUnit_class(){
         GeneralUnit_exposer_t GeneralUnit_exposer = GeneralUnit_exposer_t( "GeneralUnit", "", bp::init< >("") );
         bp::scope GeneralUnit_scope( GeneralUnit_exposer );
         GeneralUnit_exposer.def( bp::init< double >(( bp::arg("value") ), "") );
-        GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit const & >(( bp::arg("unit") ), "") );
         GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit const & >(( bp::arg("other") ), "") );
         { //::SireUnits::Dimension::GeneralUnit::ANGLE
         
@@ -120,6 +121,18 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "TIME"
                 , TIME_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireUnits::Dimension::GeneralUnit::_to_cpp_type
+        
+            typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*_to_cpp_type_function_type)(  ) const;
+            _to_cpp_type_function_type _to_cpp_type_function_value( &::SireUnits::Dimension::GeneralUnit::_to_cpp_type );
+            
+            GeneralUnit_exposer.def( 
+                "_to_cpp_type"
+                , _to_cpp_type_function_value
                 , bp::release_gil_policy()
                 , "" );
         

@@ -421,7 +421,7 @@ except Exception as e:
     print(e)
     _can_lazy_import = False
 
-_can_lazy_import = False
+#_can_lazy_import = False
 
 # Lazy import the modules for speed, and also to prevent pythonizing them
 # if the users wants to run in legacy mode

@@ -219,61 +219,9 @@ namespace bp = boost::python;
 
 #include "SireBase/generalunitproperty.h"
 
-#include "generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "SireError/errors.h"
-
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
-
-#include "arrayproperty.hpp"
-
-#include "booleanproperty.h"
-
-#include "numberproperty.h"
-
-#include "propertylist.h"
-
-#include "stringproperty.h"
-
-#include "tostring.h"
-
-#include "variantproperty.h"
-
-#include "propertylist.h"
-
-#include "SireBase/generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "SireError/errors.h"
-
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "arrayproperty.hpp"
-
-#include "booleanproperty.h"
-
-#include "numberproperty.h"
-
-#include "propertylist.h"
-
-#include "stringproperty.h"
-
-#include "tostring.h"
-
-#include "variantproperty.h"
-
-#include "propertylist.h"
-
-#include "SireBase/generalunitproperty.h"
 
 #include "generalunitproperty.h"
 
@@ -303,61 +251,9 @@ namespace bp = boost::python;
 
 #include "SireBase/generalunitproperty.h"
 
-#include "generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "SireError/errors.h"
-
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
-
-#include "arrayproperty.hpp"
-
-#include "booleanproperty.h"
-
-#include "numberproperty.h"
-
-#include "propertylist.h"
-
-#include "stringproperty.h"
-
-#include "tostring.h"
-
-#include "variantproperty.h"
-
-#include "propertylist.h"
-
-#include "SireBase/generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "SireError/errors.h"
-
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "arrayproperty.hpp"
-
-#include "booleanproperty.h"
-
-#include "numberproperty.h"
-
-#include "propertylist.h"
-
-#include "stringproperty.h"
-
-#include "tostring.h"
-
-#include "variantproperty.h"
-
-#include "propertylist.h"
-
-#include "SireBase/generalunitproperty.h"
 
 #include "generalunitproperty.h"
 
@@ -387,61 +283,9 @@ namespace bp = boost::python;
 
 #include "SireBase/generalunitproperty.h"
 
-#include "generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "SireError/errors.h"
-
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
-
-#include "arrayproperty.hpp"
-
-#include "booleanproperty.h"
-
-#include "numberproperty.h"
-
-#include "propertylist.h"
-
-#include "stringproperty.h"
-
-#include "tostring.h"
-
-#include "variantproperty.h"
-
-#include "propertylist.h"
-
-#include "SireBase/generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "SireError/errors.h"
-
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "arrayproperty.hpp"
-
-#include "booleanproperty.h"
-
-#include "numberproperty.h"
-
-#include "propertylist.h"
-
-#include "stringproperty.h"
-
-#include "tostring.h"
-
-#include "variantproperty.h"
-
-#include "propertylist.h"
-
-#include "SireBase/generalunitproperty.h"
 
 #include "generalunitproperty.h"
 
@@ -471,61 +315,9 @@ namespace bp = boost::python;
 
 #include "SireBase/generalunitproperty.h"
 
-#include "generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "SireError/errors.h"
-
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
-
-#include "arrayproperty.hpp"
-
-#include "booleanproperty.h"
-
-#include "numberproperty.h"
-
-#include "propertylist.h"
-
-#include "stringproperty.h"
-
-#include "tostring.h"
-
-#include "variantproperty.h"
-
-#include "propertylist.h"
-
-#include "SireBase/generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "SireError/errors.h"
-
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "arrayproperty.hpp"
-
-#include "booleanproperty.h"
-
-#include "numberproperty.h"
-
-#include "propertylist.h"
-
-#include "stringproperty.h"
-
-#include "tostring.h"
-
-#include "variantproperty.h"
-
-#include "propertylist.h"
-
-#include "SireBase/generalunitproperty.h"
 
 #include "generalunitproperty.h"
 
@@ -555,61 +347,9 @@ namespace bp = boost::python;
 
 #include "SireBase/generalunitproperty.h"
 
-#include "generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "SireError/errors.h"
-
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
-
-#include "arrayproperty.hpp"
-
-#include "booleanproperty.h"
-
-#include "numberproperty.h"
-
-#include "propertylist.h"
-
-#include "stringproperty.h"
-
-#include "tostring.h"
-
-#include "variantproperty.h"
-
-#include "propertylist.h"
-
-#include "SireBase/generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "SireError/errors.h"
-
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "arrayproperty.hpp"
-
-#include "booleanproperty.h"
-
-#include "numberproperty.h"
-
-#include "propertylist.h"
-
-#include "stringproperty.h"
-
-#include "tostring.h"
-
-#include "variantproperty.h"
-
-#include "propertylist.h"
-
-#include "SireBase/generalunitproperty.h"
 
 #include "generalunitproperty.h"
 
@@ -639,61 +379,9 @@ namespace bp = boost::python;
 
 #include "SireBase/generalunitproperty.h"
 
-#include "generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "SireError/errors.h"
-
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
-
-#include "arrayproperty.hpp"
-
-#include "booleanproperty.h"
-
-#include "numberproperty.h"
-
-#include "propertylist.h"
-
-#include "stringproperty.h"
-
-#include "tostring.h"
-
-#include "variantproperty.h"
-
-#include "propertylist.h"
-
-#include "SireBase/generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "SireError/errors.h"
-
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "arrayproperty.hpp"
-
-#include "booleanproperty.h"
-
-#include "numberproperty.h"
-
-#include "propertylist.h"
-
-#include "stringproperty.h"
-
-#include "tostring.h"
-
-#include "variantproperty.h"
-
-#include "propertylist.h"
-
-#include "SireBase/generalunitproperty.h"
 
 #include "generalunitproperty.h"
 
@@ -723,61 +411,9 @@ namespace bp = boost::python;
 
 #include "SireBase/generalunitproperty.h"
 
-#include "generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "SireError/errors.h"
-
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
-
-#include "arrayproperty.hpp"
-
-#include "booleanproperty.h"
-
-#include "numberproperty.h"
-
-#include "propertylist.h"
-
-#include "stringproperty.h"
-
-#include "tostring.h"
-
-#include "variantproperty.h"
-
-#include "propertylist.h"
-
-#include "SireBase/generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "generalunitproperty.h"
-
-#include "SireError/errors.h"
-
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "arrayproperty.hpp"
-
-#include "booleanproperty.h"
-
-#include "numberproperty.h"
-
-#include "propertylist.h"
-
-#include "stringproperty.h"
-
-#include "tostring.h"
-
-#include "variantproperty.h"
-
-#include "propertylist.h"
-
-#include "SireBase/generalunitproperty.h"
 
 #include "generalunitproperty.h"
 
@@ -807,6 +443,10 @@ namespace bp = boost::python;
 
 #include "SireBase/generalunitproperty.h"
 
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
 #include "generalunitproperty.h"
 
 #include "generalunitproperty.h"
@@ -834,6 +474,458 @@ namespace bp = boost::python;
 #include "propertylist.h"
 
 #include "SireBase/generalunitproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "generalunitproperty.h"
+
+#include "generalunitproperty.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "booleanproperty.h"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireBase/generalunitproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "generalunitproperty.h"
+
+#include "generalunitproperty.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "booleanproperty.h"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireBase/generalunitproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "generalunitproperty.h"
+
+#include "generalunitproperty.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "booleanproperty.h"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireBase/generalunitproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "generalunitproperty.h"
+
+#include "generalunitproperty.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "booleanproperty.h"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireBase/generalunitproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "generalunitproperty.h"
+
+#include "generalunitproperty.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "booleanproperty.h"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireBase/generalunitproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "generalunitproperty.h"
+
+#include "generalunitproperty.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "booleanproperty.h"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireBase/generalunitproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "generalunitproperty.h"
+
+#include "generalunitproperty.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "booleanproperty.h"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireBase/generalunitproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "generalunitproperty.h"
+
+#include "generalunitproperty.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "booleanproperty.h"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireBase/generalunitproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "generalunitproperty.h"
+
+#include "generalunitproperty.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "booleanproperty.h"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireBase/generalunitproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "generalunitproperty.h"
+
+#include "generalunitproperty.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "booleanproperty.h"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireBase/generalunitproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "generalunitproperty.h"
+
+#include "generalunitproperty.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "booleanproperty.h"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireBase/generalunitproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "generalunitproperty.h"
+
+#include "generalunitproperty.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "booleanproperty.h"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireBase/generalunitproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "generalunitproperty.h"
+
+#include "generalunitproperty.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "booleanproperty.h"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireBase/generalunitproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "generalunitproperty.h"
+
+#include "generalunitproperty.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "arrayproperty.hpp"
+
+#include "booleanproperty.h"
+
+#include "numberproperty.h"
+
+#include "propertylist.h"
+
+#include "stringproperty.h"
+
+#include "tostring.h"
+
+#include "variantproperty.h"
+
+#include "propertylist.h"
+
+#include "SireBase/generalunitproperty.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
 
 #include "generalunitproperty.h"
 

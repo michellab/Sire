@@ -39,17 +39,18 @@ public:
     GeneralUnit();
     GeneralUnit(double value);
 
-    template<class D>
-    explicit GeneralUnit(const D &unit) : Unit(unit)
+    template<int M, int L, int T,
+             int C, int t, int Q, int A>
+    explicit GeneralUnit(const PhysUnit<M,L,T,C,t,Q,A> &unit) : Unit(unit)
     {
-        Mass = D::MASS();
-        Length = D::LENGTH();
-        Time = D::TIME();
-        Charge = D::CHARGE();
-        temperature = D::TEMPERATURE();
-        Quantity = D::QUANTITY();
-        Angle = D::ANGLE();
-        detail::registerTypeName(*this, D::typeName());
+        Mass = M;
+        Length = L;
+        Time = T;
+        Charge = C;
+        temperature = t;
+        Quantity = Q;
+        Angle = A;
+        detail::registerTypeName(*this, PhysUnit<M,L,T,C,t,Q,A>::typeName());
 
         if (this->isZero())
             this->operator=(GeneralUnit());
@@ -61,6 +62,8 @@ public:
 
     static const char* typeName();
     const char* what() const;
+
+    QString _to_cpp_type() const;
 
     GeneralUnit units() const;
 

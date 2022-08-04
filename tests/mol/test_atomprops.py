@@ -97,3 +97,23 @@ def test_convenience_atom_funcs(ala_mols):
 
     assert mol.coords() == mol.evaluate().center_of_mass()
 
+
+def test_atompropprop(ala_mols):
+    mols = ala_mols
+    mol = mols[0]
+
+    import sire as sr
+
+    cursor = mol.cursor()
+
+    for atom in cursor.atoms():
+        atom["charge2"] = 5 * sr.units.mod_electron
+        atom["mass2"] = 3 * sr.units.g_per_mol
+        atom["coords2"] = sr.maths.Vector(1, 2, 3)
+
+    mol = cursor.commit()
+
+    # all of the above properties should *not* be AtomPropertyProperty...
+    assert type(mol.property("charge2")) == type(mol.property("charge"))
+    assert type(mol.property("mass2")) == type(mol.property("mass"))
+    assert type(mol.property("coords2")) == type(mol.property("coordinates"))

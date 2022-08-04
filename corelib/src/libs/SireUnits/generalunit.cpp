@@ -138,10 +138,15 @@ const char* GeneralUnit::typeName()
     return QMetaType::typeName( qMetaTypeId<GeneralUnit>() );
 }
 
-/** Return the C++ type that this particular GeneralUnit corresponds to */
 const char* GeneralUnit::what() const
 {
     return GeneralUnit::typeName();
+}
+
+/** Return the C++ type that this particular GeneralUnit corresponds to */
+QString GeneralUnit::_to_cpp_type() const
+{
+    return detail::getTypeName(*this);
 }
 
 void GeneralUnit::assertCompatible(const GeneralUnit &other) const

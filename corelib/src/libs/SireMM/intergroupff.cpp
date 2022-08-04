@@ -32,6 +32,7 @@
 
 #include "SireBase/booleanproperty.h"
 #include "SireBase/generalunitproperty.h"
+#include "SireBase/lengthproperty.h"
 #include "SireBase/refcountdata.h"
 
 #include "SireError/errors.h"
@@ -429,8 +430,8 @@ void InterGroupFF::rebuildProps()
 
     d->props.setProperty("cljFunction", this->cljFunction());
     d->props.setProperty("useGrid", BooleanProperty(d->fixed_atoms[0].usesGrid()));
-    d->props.setProperty("gridBuffer", GeneralUnitProperty(GeneralUnit(d->fixed_atoms[0].gridBuffer())));
-    d->props.setProperty("gridSpacing", GeneralUnitProperty(GeneralUnit(d->fixed_atoms[0].gridSpacing())));
+    d->props.setProperty("gridBuffer", GeneralUnitProperty(d->fixed_atoms[0].gridBuffer()));
+    d->props.setProperty("gridSpacing", GeneralUnitProperty(d->fixed_atoms[0].gridSpacing()));
     d->props.setProperty("fixedOnly", BooleanProperty(d->fixed_only));
     d->props.setProperty("parallelCalculation", BooleanProperty(d->parallel_calc));
     d->props.setProperty("reproducibleCalculation", BooleanProperty(d->repro_sum));
@@ -476,7 +477,12 @@ bool InterGroupFF::setProperty(const QString &name, const Property &property)
     }
     else if (name == "gridBuffer")
     {
-        Length buffer = property.asA<GeneralUnitProperty>();
+        Length buffer;
+
+        if (property.isA<LengthProperty>())
+            buffer = property.asA<LengthProperty>().value();
+        else
+            buffer = property.asA<GeneralUnitProperty>();
 
         if (buffer != d.constData()->fixed_atoms[0].gridBuffer())
         {
@@ -493,7 +499,12 @@ bool InterGroupFF::setProperty(const QString &name, const Property &property)
     }
     else if (name == "gridSpacing")
     {
-        Length spacing = property.asA<GeneralUnitProperty>();
+        Length spacing;
+
+        if (property.isA<LengthProperty>())
+            spacing = property.asA<LengthProperty>().value();
+        else
+            spacing = property.asA<GeneralUnitProperty>();
 
         if (spacing != d.constData()->fixed_atoms[0].gridSpacing())
         {
@@ -915,7 +926,7 @@ void InterGroupFF::setGridBuffer(Length buffer)
             d->fixed_atoms[i].setGridBuffer(buffer);
         }
 
-        d->props.setProperty("gridBuffer", GeneralUnitProperty(GeneralUnit(buffer)));
+        d->props.setProperty("gridBuffer", GeneralUnitProperty(buffer));
 
         if (usesGrid())
             this->mustNowRecalculateFromScratch();
@@ -938,7 +949,7 @@ void InterGroupFF::setGridSpacing(Length spacing)
             d->fixed_atoms[i].setGridSpacing(spacing);
         }
 
-        d->props.setProperty("gridSpacing", GeneralUnitProperty(GeneralUnit(spacing)));
+        d->props.setProperty("gridSpacing", GeneralUnitProperty(spacing));
 
         if (usesGrid())
             this->mustNowRecalculateFromScratch();

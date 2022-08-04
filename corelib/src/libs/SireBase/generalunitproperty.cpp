@@ -1,8 +1,13 @@
 
 #include "SireBase/generalunitproperty.h"
 
+#include "SireStream/datastream.h"
+#include "SireStream/shareddatastream.h"
+
 using namespace SireBase;
 using namespace SireUnits::Dimension;
+
+using namespace SireStream;
 
 namespace SireBase
 {
@@ -22,30 +27,52 @@ namespace SireBase
     }
 }
 
+static const RegisterMetaType<GeneralUnitProperty> r_genprop;
+static const RegisterMetaType<GeneralUnitArrayProperty> r_genarrayprop;
+
 SIREBASE_EXPORT QDataStream& operator<<(QDataStream &ds, const SireBase::GeneralUnitProperty &p)
 {
+    writeHeader(ds, r_genprop, 1);
     ds << static_cast<const GeneralUnit&>(p);
     return ds;
 }
 
 SIREBASE_EXPORT QDataStream& operator>>(QDataStream &ds, SireBase::GeneralUnitProperty &p)
 {
-    ds >> static_cast<GeneralUnit&>(p);
+    VersionID v = readHeader(ds, r_genprop);
+
+    if (v == 1)
+        ds >> static_cast<GeneralUnit&>(p);
+    else
+        throw version_error(v, "1", r_genprop, CODELOC);
+
     return ds;
 }
 
 SIREBASE_EXPORT QDataStream& operator<<(QDataStream &ds, const SireBase::GeneralUnitArrayProperty &p)
 {
-    ds << p.toVector();
+    writeHeader(ds, r_genarrayprop, 1);
+
+    SharedDataStream sds(ds);
+    sds << p.toVector();
+
     return ds;
 }
 
 SIREBASE_EXPORT QDataStream& operator>>(QDataStream &ds, SireBase::GeneralUnitArrayProperty &p)
 {
-    QVector<GeneralUnit> vals;
-    ds >> vals;
+    VersionID v = readHeader(ds, r_genarrayprop);
 
-    p = GeneralUnitArrayProperty(vals);
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+        QVector<GeneralUnit> vals;
+        sds >> vals;
+
+        p = GeneralUnitArrayProperty(vals);
+    }
+    else
+        throw version_error(v, "1", r_genarrayprop, CODELOC);
 
     return ds;
 }
@@ -70,7 +97,7 @@ GeneralUnitProperty::~GeneralUnitProperty()
 
 const char* GeneralUnitProperty::typeName()
 {
-    return "something";
+    return QMetaType::typeName(qMetaTypeId<GeneralUnitProperty>());
 }
 
 const char* GeneralUnitProperty::what() const
@@ -125,7 +152,7 @@ GeneralUnitArrayProperty::~GeneralUnitArrayProperty()
 
 const char* GeneralUnitArrayProperty::typeName()
 {
-    return "something";
+    return QMetaType::typeName(qMetaTypeId<GeneralUnitArrayProperty>());
 }
 
 const char* GeneralUnitArrayProperty::what() const

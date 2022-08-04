@@ -30,7 +30,13 @@ class SIREBASE_EXPORT GeneralUnitProperty
 {
 public:
     GeneralUnitProperty();
+
+    template<int M, int L, int T,
+             int C, int t, int Q, int A>
+    GeneralUnitProperty(const SireUnits::Dimension::PhysUnit<M,L,T,C,t,Q,A> &unit);
+
     GeneralUnitProperty(const SireUnits::Dimension::GeneralUnit &unit);
+
     GeneralUnitProperty(const GeneralUnitProperty &other);
 
     ~GeneralUnitProperty();
@@ -76,7 +82,22 @@ SireBase::PropertyPtr wrap(const SireUnits::Dimension::GeneralUnit &unit);
 SireBase::PropertyPtr wrap(const QVector<SireUnits::Dimension::GeneralUnit> &units);
 SireBase::PropertyPtr wrap(const QList<SireUnits::Dimension::GeneralUnit> &units);
 
+#ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+template<int M, int L, int T,
+         int C, int t, int Q, int A>
+SIRE_OUTOFLINE_TEMPLATE
+GeneralUnitProperty::GeneralUnitProperty(const SireUnits::Dimension::PhysUnit<M,L,T,C,t,Q,A> &unit)
+                    : SireBase::ConcreteProperty<GeneralUnitProperty, SireBase::Property>(),
+                      GeneralUnit(unit)
+{}
+
+#endif
+
 }
+
+Q_DECLARE_METATYPE(SireBase::GeneralUnitProperty);
+Q_DECLARE_METATYPE(SireBase::GeneralUnitArrayProperty);
 
 SIRE_EXPOSE_FUNCTION(SireBase::wrap)
 
