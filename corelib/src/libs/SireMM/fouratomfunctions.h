@@ -123,6 +123,11 @@ public:
     bool operator==(const IDQuad &other) const;
     bool operator!=(const IDQuad &other) const;
 
+    bool operator<(const IDQuad &other) const;
+    bool operator<=(const IDQuad &other) const;
+    bool operator>(const IDQuad &other) const;
+    bool operator>=(const IDQuad &other) const;
+
     quint32 atom0;
     quint32 atom1;
     quint32 atom2;

@@ -289,5 +289,5 @@ across all of the views within molecules.
    part03/01_atom_properties
    part03/02_cursors
    part03/03_residue_properties
-   part03/04_bond_properties
-   part03/05_molecule_properties
+   part03/04_molecule_properties
+   part03/05_bond_properties

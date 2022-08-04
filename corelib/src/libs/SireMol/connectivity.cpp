@@ -382,7 +382,7 @@ QString ConnectivityBase::toString() const
     {
         lines.append( QObject::tr("Connected residues:") );
 
-        for (int i=0; i<connected_res.count(); ++i)
+        for (int i=0; i<std::min(5,connected_res.count()); ++i)
         {
             QStringList resnums;
 
@@ -399,13 +399,16 @@ QString ConnectivityBase::toString() const
                         .arg(minfo.number(ResIdx(i)))
                         .arg(resnums.join(" ")) );
         }
+
+        if (connected_res.count() > 5)
+            lines.append("   ...");
     }
 
     if (not connected_atoms.isEmpty())
     {
         lines.append( QObject::tr("Connected atoms:") );
 
-        for (int i=0; i<connected_atoms.count(); ++i)
+        for (int i=0; i<std::min(10, connected_atoms.count()); ++i)
         {
             QStringList atoms;
 
@@ -419,6 +422,9 @@ QString ConnectivityBase::toString() const
                         .arg( ::atomString(info(),AtomIdx(i)) )
                         .arg( atoms.join(" ") ) );
         }
+
+        if (connected_atoms.count() > 10)
+            lines.append("   ...");
     }
 
     return lines.join("\n");
