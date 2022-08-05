@@ -765,7 +765,7 @@ void register_Evaluator_class(){
                 "radius"
                 , radius_function_value
                 , ( bp::arg("map")=SireBase::PropertyMap() )
-                , "" );
+                , "Return the radius of the sphere that encloses all of the atoms\n  in this view, assuming it is centered on the center of geometry" );
         
         }
         { //::SireMol::Evaluator::radius
@@ -777,7 +777,7 @@ void register_Evaluator_class(){
                 "radius"
                 , radius_function_value
                 , ( bp::arg("center"), bp::arg("map")=SireBase::PropertyMap() )
-                , "" );
+                , "Return the radius of the sphere that encloses all of the atoms\n  assuming that it is centered at center" );
         
         }
         { //::SireMol::Evaluator::rmsd

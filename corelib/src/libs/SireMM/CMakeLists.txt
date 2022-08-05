@@ -40,6 +40,7 @@ set ( SIREMM_HEADERS
       cljshiftfunction.h
       cljworkspace.h
       coulombpotential.h
+      dihedral.h
       dihedralrestraint.h
       distancerestraint.h
       errors.h
@@ -47,6 +48,7 @@ set ( SIREMM_HEADERS
       gridff.h
       gridff2.h
       gromacsparams.h
+      improper.h
       intercljff.h
       intercoulombff.h
       interff.h
@@ -74,8 +76,14 @@ set ( SIREMM_HEADERS
       restraint.h
       restraintcomponent.h
       restraintff.h
+      selectorangle.h
       selectorbond.h
+      selectordihedral.h
+      selectorimproper.h
+      selectormangle.h
       selectormbond.h
+      selectormdihedral.h
+      selectormimproper.h
       softcljcomponent.h
       softcljpotential.h
       switchingfunction.h

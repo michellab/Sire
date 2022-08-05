@@ -19,6 +19,8 @@
 
 #include "AmberParams.pypp.hpp"
 
+#include "Angle.pypp.hpp"
+
 #include "AngleComponent.pypp.hpp"
 
 #include "AngleParameterName.pypp.hpp"
@@ -143,6 +145,8 @@
 
 #include "CoulombScaleFactor.pypp.hpp"
 
+#include "Dihedral.pypp.hpp"
+
 #include "DihedralComponent.pypp.hpp"
 
 #include "DihedralParameterName.pypp.hpp"
@@ -176,6 +180,8 @@
 #include "GroupInternalParameters.pypp.hpp"
 
 #include "HarmonicSwitchingFunction.pypp.hpp"
+
+#include "Improper.pypp.hpp"
 
 #include "ImproperComponent.pypp.hpp"
 
@@ -301,9 +307,21 @@
 
 #include "MMDetail.pypp.hpp"
 
+#include "Mover_Angle_.pypp.hpp"
+
 #include "Mover_Bond_.pypp.hpp"
 
+#include "Mover_Dihedral_.pypp.hpp"
+
+#include "Mover_Improper_.pypp.hpp"
+
+#include "Mover_SelectorAngle_.pypp.hpp"
+
 #include "Mover_SelectorBond_.pypp.hpp"
+
+#include "Mover_SelectorDihedral_.pypp.hpp"
+
+#include "Mover_SelectorImproper_.pypp.hpp"
 
 #include "MultiCLJComponent.pypp.hpp"
 
@@ -327,9 +345,21 @@
 
 #include "ScaledLJParameterNames3D.pypp.hpp"
 
+#include "SelectorAngle.pypp.hpp"
+
 #include "SelectorBond.pypp.hpp"
 
+#include "SelectorDihedral.pypp.hpp"
+
+#include "SelectorImproper.pypp.hpp"
+
+#include "SelectorMAngle.pypp.hpp"
+
 #include "SelectorMBond.pypp.hpp"
+
+#include "SelectorMDihedral.pypp.hpp"
+
+#include "SelectorMImproper.pypp.hpp"
 
 #include "SoftCLJComponent.pypp.hpp"
 
@@ -486,6 +516,8 @@ BOOST_PYTHON_MODULE(_MM){
 
     register_AmberParams_class();
 
+    register_Angle_class();
+
     register_AngleComponent_class();
 
     register_AngleParameterName_class();
@@ -608,6 +640,8 @@ BOOST_PYTHON_MODULE(_MM){
 
     register_CoulombProbe_class();
 
+    register_Dihedral_class();
+
     register_DihedralComponent_class();
 
     register_DihedralParameterName_class();
@@ -643,6 +677,8 @@ BOOST_PYTHON_MODULE(_MM){
     register_GroupInternalParameters_class();
 
     register_HarmonicSwitchingFunction_class();
+
+    register_Improper_class();
 
     register_ImproperComponent_class();
 
@@ -718,9 +754,21 @@ BOOST_PYTHON_MODULE(_MM){
 
     register_ScaledLJParameterNames3D_class();
 
+    register_SelectorAngle_class();
+
     register_SelectorBond_class();
 
+    register_SelectorDihedral_class();
+
+    register_SelectorImproper_class();
+
+    register_SelectorMAngle_class();
+
     register_SelectorMBond_class();
+
+    register_SelectorMDihedral_class();
+
+    register_SelectorMImproper_class();
 
     register_SoftCLJComponent_class();
 
@@ -756,10 +804,22 @@ BOOST_PYTHON_MODULE(_MM){
 
     register_AtomLJs_class();
 
+    register_Mover_Angle__class();
+
     register_Mover_Bond__class();
+
+    register_Mover_Dihedral__class();
+
+    register_Mover_Improper__class();
+
+    register_Mover_SelectorAngle__class();
+
+    register_Mover_SelectorBond__class();
+
+    register_Mover_SelectorDihedral__class();
 
     register_SireMM_properties();
 
-    register_Mover_SelectorBond__class();
+    register_Mover_SelectorImproper__class();
 }
 

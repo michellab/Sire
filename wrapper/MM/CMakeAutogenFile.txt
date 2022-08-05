@@ -6,6 +6,7 @@ set ( PYPP_SOURCES
        AmberDihedral.pypp.cpp
        AmberNB14.pypp.cpp
        AmberParams.pypp.cpp
+       Angle.pypp.cpp
        AngleComponent.pypp.cpp
        AngleParameterName.pypp.cpp
        AngleRestraint.pypp.cpp
@@ -68,6 +69,7 @@ set ( PYPP_SOURCES
        CoulombPotentialInterface_IntraCoulombPotential_.pypp.cpp
        CoulombProbe.pypp.cpp
        CoulombScaleFactor.pypp.cpp
+       Dihedral.pypp.cpp
        DihedralComponent.pypp.cpp
        DihedralParameterName.pypp.cpp
        DihedralRestraint.pypp.cpp
@@ -85,6 +87,7 @@ set ( PYPP_SOURCES
        GromacsDihedral.pypp.cpp
        GroupInternalParameters.pypp.cpp
        HarmonicSwitchingFunction.pypp.cpp
+       Improper.pypp.cpp
        ImproperComponent.pypp.cpp
        ImproperParameterName.pypp.cpp
        ImproperSymbols.pypp.cpp
@@ -147,8 +150,14 @@ set ( PYPP_SOURCES
        LJProbe.pypp.cpp
        LJScaleFactor.pypp.cpp
        MMDetail.pypp.cpp
+       Mover_Angle_.pypp.cpp
        Mover_Bond_.pypp.cpp
+       Mover_Dihedral_.pypp.cpp
+       Mover_Improper_.pypp.cpp
+       Mover_SelectorAngle_.pypp.cpp
        Mover_SelectorBond_.pypp.cpp
+       Mover_SelectorDihedral_.pypp.cpp
+       Mover_SelectorImproper_.pypp.cpp
        MultiCLJComponent.pypp.cpp
        NoCutoff.pypp.cpp
        NullCLJFunction.pypp.cpp
@@ -160,8 +169,14 @@ set ( PYPP_SOURCES
        ScaledCLJParameterNames3D.pypp.cpp
        ScaledChargeParameterNames3D.pypp.cpp
        ScaledLJParameterNames3D.pypp.cpp
+       SelectorAngle.pypp.cpp
        SelectorBond.pypp.cpp
+       SelectorDihedral.pypp.cpp
+       SelectorImproper.pypp.cpp
+       SelectorMAngle.pypp.cpp
        SelectorMBond.pypp.cpp
+       SelectorMDihedral.pypp.cpp
+       SelectorMImproper.pypp.cpp
        SoftCLJComponent.pypp.cpp
        SoftCLJPotentialInterface_InterSoftCLJPotential_.pypp.cpp
        SoftCLJPotentialInterface_IntraSoftCLJPotential_.pypp.cpp

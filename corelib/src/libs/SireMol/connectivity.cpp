@@ -122,14 +122,15 @@ static const RegisterMetaType<ConnectivityBase> r_conbase(MAGIC_ONLY,
 QDataStream &operator<<(QDataStream &ds,
                         const ConnectivityBase &conbase)
 {
-    writeHeader(ds, r_conbase, 3);
+    writeHeader(ds, r_conbase, 4);
 
     SharedDataStream sds(ds);
 
     SharedDataPointer<MoleculeInfoData> d( conbase.minfo );
 
     sds << conbase.connected_atoms << conbase.connected_res
-        << conbase.bond_props
+        << conbase.bond_props << conbase.ang_props
+        << conbase.dih_props << conbase.imp_props
         << d << static_cast<const MolViewProperty&>(conbase);
 
     return ds;
@@ -141,7 +142,21 @@ QDataStream &operator>>(QDataStream &ds,
 {
     VersionID v = readHeader(ds, r_conbase);
 
-    if (v == 3)
+    if (v == 4)
+    {
+        SharedDataStream sds(ds);
+
+        SharedDataPointer<MoleculeInfoData> d;
+
+        sds >> conbase.connected_atoms >> conbase.connected_res
+            >> conbase.bond_props >> conbase.ang_props
+            >> conbase.dih_props >> conbase.imp_props
+            >> d
+            >> static_cast<MolViewProperty&>(conbase);
+
+        conbase.minfo = d;
+    }
+    else if (v == 3)
     {
         SharedDataStream sds(ds);
 
@@ -152,6 +167,10 @@ QDataStream &operator>>(QDataStream &ds,
             >> d
             >> static_cast<MolViewProperty&>(conbase);
 
+        conbase.ang_props.clear();
+        conbase.dih_props.clear();
+        conbase.imp_props.clear();
+
         conbase.minfo = d;
     }
     else if (v == 2)
@@ -161,6 +180,9 @@ QDataStream &operator>>(QDataStream &ds,
         SharedDataPointer<MoleculeInfoData> d;
 
         conbase.bond_props.clear();
+        conbase.ang_props.clear();
+        conbase.dih_props.clear();
+        conbase.imp_props.clear();
 
         sds >> conbase.connected_atoms >> conbase.connected_res
             >> d
@@ -175,6 +197,9 @@ QDataStream &operator>>(QDataStream &ds,
         SharedDataPointer<MoleculeInfoData> d;
 
         conbase.bond_props.clear();
+        conbase.ang_props.clear();
+        conbase.dih_props.clear();
+        conbase.imp_props.clear();
 
         sds >> conbase.connected_atoms >> conbase.connected_res
             >> d
@@ -189,8 +214,7 @@ QDataStream &operator>>(QDataStream &ds,
 }
 
 /** Null constructor */
-ConnectivityBase::ConnectivityBase()
-                 : MolViewProperty()
+ConnectivityBase::ConnectivityBase() : MolViewProperty()
 {}
 
 /** Return the info object that describes the molecule for which this connectivity applies */
@@ -241,6 +265,9 @@ ConnectivityBase::ConnectivityBase(const ConnectivityBase &other)
                    connected_atoms(other.connected_atoms),
                    connected_res(other.connected_res),
                    bond_props(other.bond_props),
+                   ang_props(other.ang_props),
+                   dih_props(other.dih_props),
+                   imp_props(other.imp_props),
                    minfo(other.minfo)
 {}
 
@@ -256,6 +283,9 @@ ConnectivityBase& ConnectivityBase::operator=(const ConnectivityBase &other)
         connected_atoms = other.connected_atoms;
         connected_res = other.connected_res;
         bond_props = other.bond_props;
+        ang_props = other.ang_props;
+        dih_props = other.dih_props;
+        imp_props = other.imp_props;
         minfo = other.minfo;
     }
 
@@ -267,7 +297,10 @@ bool ConnectivityBase::operator==(const ConnectivityBase &other) const
 {
     return minfo == other.minfo and
            connected_atoms == other.connected_atoms and
-           bond_props == other.bond_props;
+           bond_props == other.bond_props and
+           ang_props == other.ang_props and
+           dih_props == other.dih_props and
+           imp_props == other.imp_props;
 }
 
 /** Comparison operator */
@@ -348,6 +381,12 @@ PropertyPtr ConnectivityBase::_pvt_makeCompatibleWith(const MoleculeInfoData &mo
                 }
             }
         }
+
+        // clear the angle, dihedral and improper properties as
+        // these are too complex to make compatible
+        editor.ang_props.clear();
+        editor.dih_props.clear();
+        editor.imp_props.clear();
 
         return editor.commit();
     }
@@ -2735,6 +2774,57 @@ QVector< QVector<bool> > ConnectivityBase::getBondMatrix(int order) const
         return getBondMatrix(1,order);
 }
 
+/** Return all of the property keys for all of the bonds */
+QStringList ConnectivityBase::propertyKeys() const
+{
+    QSet<QString> keys;
+
+    for (const auto &key : this->bond_props.keys())
+    {
+        const auto &props = this->bond_props[key];
+
+        for (const auto &k : props.propertyKeys())
+        {
+            keys.insert(k);
+        }
+    }
+
+    for (const auto &key : this->ang_props.keys())
+    {
+        const auto &props = this->ang_props[key];
+
+        for (const auto &k : props.propertyKeys())
+        {
+            keys.insert(k);
+        }
+    }
+
+    for (const auto &key : this->dih_props.keys())
+    {
+        const auto &props = this->dih_props[key];
+
+        for (const auto &k : props.propertyKeys())
+        {
+            keys.insert(k);
+        }
+    }
+
+    for (const auto &key : this->imp_props.keys())
+    {
+        const auto &props = this->imp_props[key];
+
+        for (const auto &k : props.propertyKeys())
+        {
+            keys.insert(k);
+        }
+    }
+
+    QStringList ret = keys.values();
+    ret.sort();
+
+    return ret;
+}
+
 /** Return the properties of the passed bond */
 Properties ConnectivityBase::properties(const BondID &bond) const
 {
@@ -2756,27 +2846,6 @@ const char* ConnectivityBase::propertyType(const BondID &bond,
                                            const PropertyName &key) const
 {
     return this->properties(bond).propertyType(key);
-}
-
-/** Return all of the property keys for all of the bonds */
-QStringList ConnectivityBase::propertyKeys() const
-{
-    QSet<QString> keys;
-
-    for (const auto &key : this->bond_props.keys())
-    {
-        const auto &props = this->bond_props[key];
-
-        for (const auto &k : props.propertyKeys())
-        {
-            keys.insert(k);
-        }
-    }
-
-    QStringList ret = keys.values();
-    ret.sort();
-
-    return ret;
 }
 
 /** Return the property keys for the specified bond */
@@ -2811,6 +2880,206 @@ void ConnectivityBase::assertHasProperty(const BondID &bond,
             "Bond %1 "
             "does not have a valid property at key \"%2\".")
                 .arg(bond.toString()).arg(key.toString()), CODELOC );
+}
+
+AngleID _to_canonical(const AngleID &angle, const MoleculeInfoData &info)
+{
+    auto a0 = info.atomIdx(angle.atom0());
+    auto a1 = info.atomIdx(angle.atom1());
+    auto a2 = info.atomIdx(angle.atom2());
+
+    if (a0 < a2)
+        qSwap(a0, a2);
+
+    return AngleID(a0, a1, a2);
+}
+
+/** Return the properties of the passed angle */
+Properties ConnectivityBase::properties(const AngleID &angle) const
+{
+    return this->ang_props.value(_to_canonical(angle, this->info()));
+}
+
+/** Return whether the specified angle has a property at key 'key' */
+bool ConnectivityBase::hasProperty(const AngleID &angle,
+                                   const PropertyName &key) const
+{
+    return this->properties(angle).hasProperty(key);
+}
+
+/** Return the type of the property for the specified angle at key 'key' */
+const char* ConnectivityBase::propertyType(const AngleID &angle,
+                                           const PropertyName &key) const
+{
+    return this->properties(angle).propertyType(key);
+}
+
+/** Return the property keys for the specified angle */
+QStringList ConnectivityBase::propertyKeys(const AngleID &angle) const
+{
+    return this->properties(angle).propertyKeys();
+}
+
+/** Return the specified property of the specified angle */
+const Property& ConnectivityBase::property(const AngleID &angle,
+                                           const PropertyName &key) const
+{
+    return this->properties(angle).property(key);
+}
+
+/** Return the specified property of the specified angle, or
+    'default_value' if such a property is not defined
+ */
+const Property& ConnectivityBase::property(const AngleID &angle,
+                                           const PropertyName &key,
+                                           const Property &default_value) const
+{
+    return this->properties(angle).property(key, default_value);
+}
+
+/** Assert that the specified angle has the specified property */
+void ConnectivityBase::assertHasProperty(const AngleID &angle,
+                                         const PropertyName &key) const
+{
+    if (not this->hasProperty(angle, key))
+        throw SireBase::missing_property( QObject::tr(
+            "Angle %1 "
+            "does not have a valid property at key \"%2\".")
+                .arg(angle.toString()).arg(key.toString()), CODELOC );
+}
+
+DihedralID _to_canonical(const DihedralID &dihedral, const MoleculeInfoData &info)
+{
+    auto a0 = info.atomIdx(dihedral.atom0());
+    auto a1 = info.atomIdx(dihedral.atom1());
+    auto a2 = info.atomIdx(dihedral.atom2());
+    auto a3 = info.atomIdx(dihedral.atom3());
+
+    if (a0 < a3)
+    {
+        qSwap(a0, a3);
+        qSwap(a1, a2);
+    }
+
+    return DihedralID(a0, a1, a2, a3);
+}
+
+/** Return the properties of the passed dihedral */
+Properties ConnectivityBase::properties(const DihedralID &dihedral) const
+{
+    return this->dih_props.value(_to_canonical(dihedral, this->info()));
+}
+
+/** Return whether the specified dihedral has a property at key 'key' */
+bool ConnectivityBase::hasProperty(const DihedralID &dihedral,
+                                   const PropertyName &key) const
+{
+    return this->properties(dihedral).hasProperty(key);
+}
+
+/** Return the type of the property for the specified dihedral at key 'key' */
+const char* ConnectivityBase::propertyType(const DihedralID &dihedral,
+                                           const PropertyName &key) const
+{
+    return this->properties(dihedral).propertyType(key);
+}
+
+/** Return the property keys for the specified dihedral */
+QStringList ConnectivityBase::propertyKeys(const DihedralID &dihedral) const
+{
+    return this->properties(dihedral).propertyKeys();
+}
+
+/** Return the specified property of the specified dihedral */
+const Property& ConnectivityBase::property(const DihedralID &dihedral,
+                                           const PropertyName &key) const
+{
+    return this->properties(dihedral).property(key);
+}
+
+/** Return the specified property of the specified dihedral, or
+    'default_value' if such a property is not defined
+ */
+const Property& ConnectivityBase::property(const DihedralID &dihedral,
+                                           const PropertyName &key,
+                                           const Property &default_value) const
+{
+    return this->properties(dihedral).property(key, default_value);
+}
+
+/** Assert that the specified angle has the specified property */
+void ConnectivityBase::assertHasProperty(const DihedralID &dihedral,
+                                         const PropertyName &key) const
+{
+    if (not this->hasProperty(dihedral, key))
+        throw SireBase::missing_property( QObject::tr(
+            "Dihedral %1 "
+            "does not have a valid property at key \"%2\".")
+                .arg(dihedral.toString()).arg(key.toString()), CODELOC );
+}
+
+ImproperID _to_canonical(const ImproperID &improper, const MoleculeInfoData &info)
+{
+    auto a0 = info.atomIdx(improper.atom0());
+    auto a1 = info.atomIdx(improper.atom1());
+    auto a2 = info.atomIdx(improper.atom2());
+    auto a3 = info.atomIdx(improper.atom3());
+
+    return ImproperID(a0, a1, a2, a3);
+}
+
+/** Return the properties of the passed improper */
+Properties ConnectivityBase::properties(const ImproperID &improper) const
+{
+    return this->imp_props.value(_to_canonical(improper, this->info()));
+}
+
+/** Return whether the specified improper has a property at key 'key' */
+bool ConnectivityBase::hasProperty(const ImproperID &improper,
+                                   const PropertyName &key) const
+{
+    return this->properties(improper).hasProperty(key);
+}
+
+/** Return the type of the property for the specified improper at key 'key' */
+const char* ConnectivityBase::propertyType(const ImproperID &improper,
+                                           const PropertyName &key) const
+{
+    return this->properties(improper).propertyType(key);
+}
+
+/** Return the property keys for the specified improper */
+QStringList ConnectivityBase::propertyKeys(const ImproperID &improper) const
+{
+    return this->properties(improper).propertyKeys();
+}
+
+/** Return the specified property of the specified improper */
+const Property& ConnectivityBase::property(const ImproperID &improper,
+                                           const PropertyName &key) const
+{
+    return this->properties(improper).property(key);
+}
+
+/** Return the specified property of the specified improper, or
+    'default_value' if such a property is not defined
+ */
+const Property& ConnectivityBase::property(const ImproperID &improper,
+                                           const PropertyName &key,
+                                           const Property &default_value) const
+{
+    return this->properties(improper).property(key, default_value);
+}
+
+/** Assert that the specified angle has the specified property */
+void ConnectivityBase::assertHasProperty(const ImproperID &improper,
+                                         const PropertyName &key) const
+{
+    if (not this->hasProperty(improper, key))
+        throw SireBase::missing_property( QObject::tr(
+            "Improper %1 "
+            "does not have a valid property at key \"%2\".")
+                .arg(improper.toString()).arg(key.toString()), CODELOC );
 }
 
 /////////
@@ -3225,12 +3494,95 @@ ConnectivityEditor& ConnectivityEditor::setProperty(const BondID &bond,
     return *this;
 }
 
+/** Set the property for the specified angle, at the specified key, to 'value' */
+ConnectivityEditor& ConnectivityEditor::setProperty(const AngleID &angle,
+                                                    const QString &key,
+                                                    const Property &value)
+{
+    const auto id = _to_canonical(angle, this->minfo);
+
+    if (not ((this->areConnected(id.atom0(), id.atom1())) and
+             (this->areConnected(id.atom1(), id.atom2()))) )
+    {
+        throw SireMol::missing_angle( QObject::tr(
+            "You cannot set the property %1 as the atoms in %2 "
+            "are not connected.").arg(key).arg(angle.toString()), CODELOC);
+    }
+
+    if (not this->ang_props.contains(id))
+    {
+        this->ang_props.insert(id, Properties());
+    }
+
+    this->ang_props[id].setProperty(key, value);
+
+    return *this;
+}
+
+/** Set the property for the specified dihedral, at the specified key, to 'value' */
+ConnectivityEditor& ConnectivityEditor::setProperty(const DihedralID &dihedral,
+                                                    const QString &key,
+                                                    const Property &value)
+{
+    const auto id = _to_canonical(dihedral, this->minfo);
+
+    if (not ((this->areConnected(id.atom0(), id.atom1())) and
+             (this->areConnected(id.atom1(), id.atom2())) and
+             (this->areConnected(id.atom2(), id.atom3()))) )
+    {
+        throw SireMol::missing_angle( QObject::tr(
+            "You cannot set the property %1 as the atoms in %2 "
+            "are not connected.").arg(key).arg(dihedral.toString()), CODELOC);
+    }
+
+    if (not this->dih_props.contains(id))
+    {
+        this->dih_props.insert(id, Properties());
+    }
+
+    this->dih_props[id].setProperty(key, value);
+
+    return *this;
+}
+
+/** Set the property for the specified improper, at the specified key, to 'value' */
+ConnectivityEditor& ConnectivityEditor::setProperty(const ImproperID &improper,
+                                                    const QString &key,
+                                                    const Property &value)
+{
+    const auto id = _to_canonical(improper, this->minfo);
+
+    if (not this->imp_props.contains(id))
+    {
+        this->imp_props.insert(id, Properties());
+    }
+
+    this->imp_props[id].setProperty(key, value);
+
+    return *this;
+}
+
 /** Remove the specified property from all bonds */
 ConnectivityEditor& ConnectivityEditor::removeProperty(const QString &key)
 {
     for (const auto &id : this->bond_props.keys())
     {
         this->bond_props[id].removeProperty(key);
+    }
+
+    for (const auto &id : this->ang_props.keys())
+    {
+        this->ang_props[id].removeProperty(key);
+    }
+
+    for (const auto &id : this->dih_props.keys())
+    {
+        this->dih_props[id].removeProperty(key);
+    }
+
+    for (const auto &id : this->imp_props.keys())
+    {
+        this->imp_props[id].removeProperty(key);
     }
 
     return *this;
@@ -3250,6 +3602,48 @@ ConnectivityEditor& ConnectivityEditor::removeProperty(const BondID &bond,
     return *this;
 }
 
+/** Remove the specified property from the specified angle */
+ConnectivityEditor& ConnectivityEditor::removeProperty(const AngleID &angle,
+                                                       const QString &key)
+{
+    auto id = _to_canonical(angle, this->minfo);
+
+    if (this->ang_props.contains(id))
+    {
+        this->ang_props[id].removeProperty(key);
+    }
+
+    return *this;
+}
+
+/** Remove the specified property from the specified dihedral */
+ConnectivityEditor& ConnectivityEditor::removeProperty(const DihedralID &dihedral,
+                                                       const QString &key)
+{
+    auto id = _to_canonical(dihedral, this->minfo);
+
+    if (this->dih_props.contains(id))
+    {
+        this->dih_props[id].removeProperty(key);
+    }
+
+    return *this;
+}
+
+/** Remove the specified property from the specified improper */
+ConnectivityEditor& ConnectivityEditor::removeProperty(const ImproperID &imp,
+                                                       const QString &key)
+{
+    auto id = _to_canonical(imp, this->minfo);
+
+    if (this->imp_props.contains(id))
+    {
+        this->imp_props[id].removeProperty(key);
+    }
+
+    return *this;
+}
+
 /** Take the specified property from the specified bond - this removes
     and returns the property if it exists. If it doesn't, then
     a NullProperty is returned
@@ -3263,6 +3657,72 @@ PropertyPtr ConnectivityEditor::takeProperty(const BondID &bond,
     {
         PropertyPtr value = this->bond_props[id].property(key);
         this->bond_props[id].removeProperty(key);
+
+        return value;
+    }
+    else
+    {
+        return NullProperty();
+    }
+}
+
+/** Take the specified property from the specified angle - this removes
+    and returns the property if it exists. If it doesn't, then
+    a NullProperty is returned
+*/
+PropertyPtr ConnectivityEditor::takeProperty(const AngleID &angle,
+                                             const QString &key)
+{
+    auto id = _to_canonical(angle, this->minfo);
+
+    if (this->ang_props.contains(id))
+    {
+        PropertyPtr value = this->ang_props[id].property(key);
+        this->ang_props[id].removeProperty(key);
+
+        return value;
+    }
+    else
+    {
+        return NullProperty();
+    }
+}
+
+/** Take the specified property from the specified dihedral - this removes
+    and returns the property if it exists. If it doesn't, then
+    a NullProperty is returned
+*/
+PropertyPtr ConnectivityEditor::takeProperty(const DihedralID &dihedral,
+                                             const QString &key)
+{
+    auto id = _to_canonical(dihedral, this->minfo);
+
+    if (this->dih_props.contains(id))
+    {
+        PropertyPtr value = this->dih_props[id].property(key);
+        this->dih_props[id].removeProperty(key);
+
+        return value;
+    }
+    else
+    {
+        return NullProperty();
+    }
+}
+
+/** Take the specified property from the specified improper - this removes
+    and returns the property if it exists. If it doesn't, then
+    a NullProperty is returned
+*/
+PropertyPtr ConnectivityEditor::takeProperty(const ImproperID &improper,
+                                             const QString &key)
+{
+    auto id = _to_canonical(improper, this->minfo);
+
+    if (this->imp_props.contains(id))
+    {
+        PropertyPtr value = this->imp_props[id].property(key);
+        this->imp_props[id].removeProperty(key);
 
         return value;
     }

@@ -210,7 +210,7 @@ public:
 
 protected:
     /** The IDs of the Impropers (holding AtomIdx IDs) */
-    QList<SireMol::ImproperID> dihs;
+    QList<SireMol::ImproperID> imps;
 };
 
 } // end of namespace SireMM

@@ -45,6 +45,33 @@ def __is_bond_class(obj):
         SelectorBond in mro
 
 
+def __is_angle_class(obj):
+    mro = type(obj).mro()
+
+    from sire.mm import Angle, SelectorAngle
+
+    return Angle in mro or \
+        SelectorAngle in mro
+
+
+def __is_dihedral_class(obj):
+    mro = type(obj).mro()
+
+    from sire.mm import Dihedral, SelectorDihedral
+
+    return Dihedral in mro or \
+        SelectorDihedral in mro
+
+
+def __is_improper_class(obj):
+    mro = type(obj).mro()
+
+    from sire.mm import Improper, SelectorImproper
+
+    return Improper in mro or \
+        SelectorImproper in mro
+
+
 def __is_atom_class(obj):
     mro = type(obj).mro()
 
@@ -145,7 +172,10 @@ def __from_select_result(obj):
     if obj.list_count() == 1:
         obj = __fix_obj(obj.list_at(0))
 
-        if obj.what() == "SireMM::SelectorBond":
+        if obj.what() in ["SireMM::SelectorBond",
+                          "SireMM::SelectorAngle",
+                          "SireMM::SelectorDihedral",
+                          "SireMM::SelectorImproper"]:
             if obj.count() == 1:
                 obj = obj[0]
         elif obj.what() != typ:
@@ -178,9 +208,21 @@ def __from_select_result(obj):
         from ..mm import SelectorBond, SelectorMBond
         if SelectorBond in type(obj.list_at(0)).mro():
             return SelectorMBond(obj)
-        else:
-            # return this as a raw list
-            return obj.to_list()
+
+        from ..mm import SelectorAngle, SelectorMAngle
+        if SelectorAngle in type(obj.list_at(0)).mro():
+            return SelectorMAngle(obj)
+
+        from ..mm import SelectorDihedral, SelectorMDihedral
+        if SelectorDihedral in type(obj.list_at(0)).mro():
+            return SelectorMDihedral(obj)
+
+        from ..mm import SelectorImproper, SelectorMImproper
+        if SelectorImproper in type(obj.list_at(0)).mro():
+            return SelectorMImproper(obj)
+
+        # return this as a raw list
+        return obj.to_list()
 
 
 def __select_call__(obj, molecules, map={}):
@@ -224,6 +266,12 @@ def __fixed__getitem__(obj, key):
         return obj.segments(key, auto_reduce=True)
     elif BondID in type(key).mro():
         return obj.bonds(key, auto_reduce=True)
+    elif AngleID in type(key).mro():
+        return obj.angles(key, auto_reduce=True)
+    elif DihedralID in type(key).mro():
+        return obj.dihedrals(key, auto_reduce=True)
+    elif ImproperID in type(key).mro():
+        return obj.impropers(key, auto_reduce=True)
 
     if __is_selector_class(obj):
         return obj.__orig__getitem__(key)
@@ -280,6 +328,139 @@ def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False):
         return result
 
 
+def __fixed__angles__(obj, idx=None, idx1=None, idx2=None, auto_reduce=False):
+    if idx1 is None and idx2 is not None:
+        idx1 = idx2
+        idx2 = None
+
+    if idx is None and idx1 is not None:
+        idx = idx1
+        idx1 = None
+
+    if hasattr(obj, "molecules"):
+        # this is a multi-molecule container
+        from ..mm import SelectorMAngle
+        C = SelectorMAngle
+        def _fromAngleID(obj, angid):
+            return SelectorMAngle(obj.to_select_result(), angid)
+    else:
+        from ..mm import SelectorAngle
+        C = SelectorAngle
+        def _fromAngleID(obj, angid):
+            return SelectorAngle(obj, angid)
+
+    if idx is None:
+        result = C(obj)
+    elif idx1 is None:
+        if AngleID in type(idx).mro():
+            result = _fromAngleID(obj, idx)
+        else:
+            result = C(obj.atoms(idx))
+    elif idx2 is None:
+        result = C(obj.atoms(idx), obj.atoms(idx1))
+    else:
+        result = C(obj.atoms(idx), obj.atoms(idx1), obj.atoms(idx2))
+
+    if auto_reduce and len(result) == 1:
+        return result[0]
+    else:
+        return result
+
+
+def __fixed__dihedrals__(obj, idx=None, idx1=None,
+                         idx2=None, idx3=None, auto_reduce=False):
+    if idx2 is None and idx3 is not None:
+        idx2 = idx3
+        idx3 = None
+
+    if idx1 is None and idx2 is not None:
+        idx1 = idx2
+        idx2 = None
+
+    if idx is None and idx1 is not None:
+        idx = idx1
+        idx1 = None
+
+    if hasattr(obj, "molecules"):
+        # this is a multi-molecule container
+        from ..mm import SelectorMDihedral
+        C = SelectorMDihedral
+        def _fromDihedralID(obj, dihid):
+            return SelectorMDihedral(obj.to_select_result(), dihid)
+    else:
+        from ..mm import SelectorDihedral
+        C = SelectorDihedral
+        def _fromAngleID(obj, dihid):
+            return SelectorDihedral(obj, dihid)
+
+    if idx is None:
+        result = C(obj)
+    elif idx1 is None:
+        if DihedralID in type(idx).mro():
+            result = _fromDihedralID(obj, idx)
+        else:
+            result = C(obj.atoms(idx))
+    elif idx2 is None:
+        result = C(obj.atoms(idx), obj.atoms(idx1))
+    elif idx3 is None:
+        result = C(obj.atoms(idx), obj.atoms(idx1), obj.atoms(idx2))
+    else:
+        result = C(obj.atoms(idx), obj.atoms(idx1),
+                   obj.atoms(idx2), obj.atoms(idx3))
+
+    if auto_reduce and len(result) == 1:
+        return result[0]
+    else:
+        return result
+
+
+def __fixed__impropers__(obj, idx=None, idx1=None,
+                         idx2=None, idx3=None, auto_reduce=False):
+    if idx2 is None and idx3 is not None:
+        idx2 = idx3
+        idx3 = None
+
+    if idx1 is None and idx2 is not None:
+        idx1 = idx2
+        idx2 = None
+
+    if idx is None and idx1 is not None:
+        idx = idx1
+        idx1 = None
+
+    if hasattr(obj, "molecules"):
+        # this is a multi-molecule container
+        from ..mm import SelectorMImproper
+        C = SelectorMImproper
+        def _fromImproperID(obj, impid):
+            return SelectorMImproper(obj.to_select_result(), impid)
+    else:
+        from ..mm import SelectorImproper
+        C = SelectorImproper
+        def _fromImproperID(obj, dihid):
+            return SelectorImproper(obj, impid)
+
+    if idx is None:
+        result = C(obj)
+    elif idx1 is None:
+        if ImproperID in type(idx).mro():
+            result = _fromImproperID(obj, idx)
+        else:
+            result = C(obj.atoms(idx))
+    elif idx2 is None:
+        result = C(obj.atoms(idx), obj.atoms(idx1))
+    elif idx3 is None:
+        result = C(obj.atoms(idx), obj.atoms(idx1), obj.atoms(idx2))
+    else:
+        result = C(obj.atoms(idx), obj.atoms(idx1),
+                   obj.atoms(idx2), obj.atoms(idx3))
+
+    if auto_reduce and len(result) == 1:
+        return result[0]
+    else:
+        return result
+
+
 def __fixed__bond__(obj, idx=None, idx1=None):
     bonds = __fixed__bonds__(obj, idx, idx1, auto_reduce=False)
 
@@ -290,6 +471,42 @@ def __fixed__bond__(obj, idx=None, idx1=None):
             f"More than one bond matches. Number of matches is {len(bonds)}.")
 
     return bonds[0]
+
+
+def __fixed__angle__(obj, idx=None, idx1=None, idx2=None):
+    angles = __fixed__angles__(obj, idx, idx1, idx2, auto_reduce=False)
+
+    if len(angles) == 0:
+        raise KeyError("There is no matching angle in this view.")
+    elif len(angles) > 1:
+        raise KeyError(
+            f"More than one angle matches. Number of matches is {len(angles)}.")
+
+    return angles[0]
+
+
+def __fixed__dihedral__(obj, idx=None, idx1=None, idx2=None, idx3=None):
+    dihedrals = __fixed__dihedrals__(obj, idx, idx1, idx2, idx3, auto_reduce=False)
+
+    if len(dihedrals) == 0:
+        raise KeyError("There is no matching dihedral in this view.")
+    elif len(dihedrals) > 1:
+        raise KeyError(
+            f"More than one dihedral matches. Number of matches is {len(dihedrals)}.")
+
+    return dihedrals[0]
+
+
+def __fixed__improper__(obj, idx=None, idx1=None, idx2=None, idx3=None):
+    impropers = __fixed__impropers__(obj, idx, idx1, idx2, idx3, auto_reduce=False)
+
+    if len(impropers) == 0:
+        raise KeyError("There is no matching improper in this view.")
+    elif len(impropers) > 1:
+        raise KeyError(
+            f"More than one improper matches. Number of matches is {len(impropers)}.")
+
+    return impropers[0]
 
 
 def __fixed__residues__(obj, idx=None, auto_reduce=False):
@@ -382,6 +599,12 @@ def __fix_getitem(C):
 
     C.bonds = __fixed__bonds__
     C.bond = __fixed__bond__
+    C.angles = __fixed__angles__
+    C.angle = __fixed__angle__
+    C.dihedrals = __fixed__dihedrals__
+    C.dihedral = __fixed__dihedral__
+    C.impropers = __fixed__impropers__
+    C.improper = __fixed__improper__
 
 try:
     Residue.__len__ = Residue.nAtoms

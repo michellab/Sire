@@ -234,6 +234,45 @@ void register_ConnectivityEditor_class(){
                 , "Remove the specified property from the specified bond" );
         
         }
+        { //::SireMol::ConnectivityEditor::removeProperty
+        
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*removeProperty_function_type)( ::SireMol::AngleID const &,::QString const & ) ;
+            removeProperty_function_type removeProperty_function_value( &::SireMol::ConnectivityEditor::removeProperty );
+            
+            ConnectivityEditor_exposer.def( 
+                "removeProperty"
+                , removeProperty_function_value
+                , ( bp::arg("ang"), bp::arg("key") )
+                , bp::return_self< >()
+                , "Remove the specified property from the specified bond" );
+        
+        }
+        { //::SireMol::ConnectivityEditor::removeProperty
+        
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*removeProperty_function_type)( ::SireMol::DihedralID const &,::QString const & ) ;
+            removeProperty_function_type removeProperty_function_value( &::SireMol::ConnectivityEditor::removeProperty );
+            
+            ConnectivityEditor_exposer.def( 
+                "removeProperty"
+                , removeProperty_function_value
+                , ( bp::arg("dih"), bp::arg("key") )
+                , bp::return_self< >()
+                , "Remove the specified property from the specified bond" );
+        
+        }
+        { //::SireMol::ConnectivityEditor::removeProperty
+        
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*removeProperty_function_type)( ::SireMol::ImproperID const &,::QString const & ) ;
+            removeProperty_function_type removeProperty_function_value( &::SireMol::ConnectivityEditor::removeProperty );
+            
+            ConnectivityEditor_exposer.def( 
+                "removeProperty"
+                , removeProperty_function_value
+                , ( bp::arg("imp"), bp::arg("key") )
+                , bp::return_self< >()
+                , "Remove the specified property from the specified bond" );
+        
+        }
         { //::SireMol::ConnectivityEditor::setProperty
         
             typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*setProperty_function_type)( ::SireMol::BondID const &,::QString const &,::SireBase::Property const & ) ;
@@ -247,6 +286,45 @@ void register_ConnectivityEditor_class(){
                 , "Set the property for the specified bond, at the specified key, to value" );
         
         }
+        { //::SireMol::ConnectivityEditor::setProperty
+        
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*setProperty_function_type)( ::SireMol::AngleID const &,::QString const &,::SireBase::Property const & ) ;
+            setProperty_function_type setProperty_function_value( &::SireMol::ConnectivityEditor::setProperty );
+            
+            ConnectivityEditor_exposer.def( 
+                "setProperty"
+                , setProperty_function_value
+                , ( bp::arg("ang"), bp::arg("key"), bp::arg("value") )
+                , bp::return_self< >()
+                , "Set the property for the specified bond, at the specified key, to value" );
+        
+        }
+        { //::SireMol::ConnectivityEditor::setProperty
+        
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*setProperty_function_type)( ::SireMol::DihedralID const &,::QString const &,::SireBase::Property const & ) ;
+            setProperty_function_type setProperty_function_value( &::SireMol::ConnectivityEditor::setProperty );
+            
+            ConnectivityEditor_exposer.def( 
+                "setProperty"
+                , setProperty_function_value
+                , ( bp::arg("dih"), bp::arg("key"), bp::arg("value") )
+                , bp::return_self< >()
+                , "Set the property for the specified bond, at the specified key, to value" );
+        
+        }
+        { //::SireMol::ConnectivityEditor::setProperty
+        
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*setProperty_function_type)( ::SireMol::ImproperID const &,::QString const &,::SireBase::Property const & ) ;
+            setProperty_function_type setProperty_function_value( &::SireMol::ConnectivityEditor::setProperty );
+            
+            ConnectivityEditor_exposer.def( 
+                "setProperty"
+                , setProperty_function_value
+                , ( bp::arg("imp"), bp::arg("key"), bp::arg("value") )
+                , bp::return_self< >()
+                , "Set the property for the specified bond, at the specified key, to value" );
+        
+        }
         { //::SireMol::ConnectivityEditor::takeProperty
         
             typedef ::SireBase::PropertyPtr ( ::SireMol::ConnectivityEditor::*takeProperty_function_type)( ::SireMol::BondID const &,::QString const & ) ;
@@ -256,6 +334,45 @@ void register_ConnectivityEditor_class(){
                 "takeProperty"
                 , takeProperty_function_value
                 , ( bp::arg("bond"), bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Take the specified property from the specified bond - this removes\nand returns the property if it exists. If it doesnt, then\na NullProperty is returned\n" );
+        
+        }
+        { //::SireMol::ConnectivityEditor::takeProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::ConnectivityEditor::*takeProperty_function_type)( ::SireMol::AngleID const &,::QString const & ) ;
+            takeProperty_function_type takeProperty_function_value( &::SireMol::ConnectivityEditor::takeProperty );
+            
+            ConnectivityEditor_exposer.def( 
+                "takeProperty"
+                , takeProperty_function_value
+                , ( bp::arg("ang"), bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Take the specified property from the specified bond - this removes\nand returns the property if it exists. If it doesnt, then\na NullProperty is returned\n" );
+        
+        }
+        { //::SireMol::ConnectivityEditor::takeProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::ConnectivityEditor::*takeProperty_function_type)( ::SireMol::DihedralID const &,::QString const & ) ;
+            takeProperty_function_type takeProperty_function_value( &::SireMol::ConnectivityEditor::takeProperty );
+            
+            ConnectivityEditor_exposer.def( 
+                "takeProperty"
+                , takeProperty_function_value
+                , ( bp::arg("dih"), bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Take the specified property from the specified bond - this removes\nand returns the property if it exists. If it doesnt, then\na NullProperty is returned\n" );
+        
+        }
+        { //::SireMol::ConnectivityEditor::takeProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::ConnectivityEditor::*takeProperty_function_type)( ::SireMol::ImproperID const &,::QString const & ) ;
+            takeProperty_function_type takeProperty_function_value( &::SireMol::ConnectivityEditor::takeProperty );
+            
+            ConnectivityEditor_exposer.def( 
+                "takeProperty"
+                , takeProperty_function_value
+                , ( bp::arg("imp"), bp::arg("key") )
                 , bp::release_gil_policy()
                 , "Take the specified property from the specified bond - this removes\nand returns the property if it exists. If it doesnt, then\na NullProperty is returned\n" );
         

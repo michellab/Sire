@@ -396,6 +396,13 @@ SelectorAngle::SelectorAngle(const Selector<Atom> &atoms0,
     }
 }
 
+bool _contains(const AngleID &ang, const AtomIdx &atom)
+{
+    return ang.atom0() == atom or
+           ang.atom1() == atom or
+           ang.atom2() == atom;
+}
+
 SelectorAngle::SelectorAngle(const Selector<Atom> &atoms0,
                              const Selector<Atom> &atoms1,
                              const Selector<Atom> &atoms2,
@@ -417,40 +424,50 @@ SelectorAngle::SelectorAngle(const Selector<Atom> &atoms0,
     {
         auto c = atoms0.data().property(map["connectivity"]).asA<Connectivity>();
 
-        QSet<AngleID> seen_angs;
+        bool found = false;
 
-        QList<AngleID> angles;
-
-        for (int i=0; i<atoms0.count(); ++i)
+        for (const auto &angle : c.getAngles())
         {
-            for (int j=0; j<atoms1.count(); ++j)
+            for (int i=0; i<atoms0.count(); ++i)
             {
-                for (int k=0; k<atoms2.count(); ++k)
-                {
-                    auto atomidx0 = atoms0(i).index();
-                    auto atomidx1 = atoms1(j).index();
-                    auto atomidx2 = atoms2(k).index();
+                auto atomidx0 = atoms0(i).index();
 
-                    if (c.areAngled(atomidx0, atomidx1, atomidx2))
+                if (not _contains(angle, atomidx0))
+                    break;
+
+                for (int j=0; j<atoms1.count(); ++j)
+                {
+                    auto atomidx1 = atoms1(j).index();
+
+                    if (atomidx1 == atomidx0 or not _contains(angle, atomidx1))
+                        break;
+
+                    for (int k=0; k<atoms2.count(); ++k)
                     {
+                        auto atomidx2 = atoms2(k).index();
+
+                        if (atomidx2 == atomidx1 or atomidx2 == atomidx0 or
+                            not _contains(angle, atomidx2))
+                            break;
+
                         if (atomidx0 > atomidx2)
                         {
                             qSwap(atomidx0, atomidx2);
                         }
 
-                        AngleID a(atomidx0, atomidx1, atomidx2);
-
-                        if (not seen_angs.contains(a))
-                        {
-                            seen_angs.insert(a);
-                            angles.append(a);
-                        }
+                        angs.append(AngleID(atomidx0, atomidx1, atomidx2));
+                        found = true;
+                        break;
                     }
+
+                    if (found)
+                        break;
                 }
+
+                if (found)
+                    break;
             }
         }
-
-        angs = angles;
     }
 }
 

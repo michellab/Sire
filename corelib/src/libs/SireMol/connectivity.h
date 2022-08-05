@@ -154,15 +154,6 @@ public:
     bool areAngled(const AtomID &atom0, const AtomID &atom2) const;
     bool areDihedraled(const AtomID &atom0, const AtomID &atom3) const;
 
-    bool areAngled(const AtomID &atom0, const AtomID &atom1,
-                   const AtomID &atom2) const;
-    bool areAngled(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2) const;
-
-    bool areDihedraled(const AtomID &atom0, const AtomID &atom1,
-                       const AtomID &atom2, const AtomID &atom3) const;
-    bool areDihedraled(AtomIdx atom0, AtomIdx atom1,
-                       AtomIdx atom2, AtomIdx atom3) const;
-
     int connectionType(AtomIdx atom0, AtomIdx atom1) const;
     int connectionType(const AtomID &atom0, const AtomID &atom1) const;
 

@@ -516,6 +516,14 @@ SelectorDihedral::SelectorDihedral(const Selector<Atom> &atoms0,
     }
 }
 
+bool _contains(const DihedralID &dih, const AtomIdx &atom)
+{
+    return dih.atom0() == atom or
+           dih.atom1() == atom or
+           dih.atom2() == atom or
+           dih.atom3() == atom;
+}
+
 SelectorDihedral::SelectorDihedral(const Selector<Atom> &atoms0,
                                    const Selector<Atom> &atoms1,
                                    const Selector<Atom> &atoms2,
@@ -540,45 +548,64 @@ SelectorDihedral::SelectorDihedral(const Selector<Atom> &atoms0,
     {
         auto c = atoms0.data().property(map["connectivity"]).asA<Connectivity>();
 
-        QSet<DihedralID> seen_dihs;
-
-        QList<DihedralID> dihedrals;
-
-        for (int i=0; i<atoms0.count(); ++i)
+        for (const auto &dihedral : c.getDihedrals())
         {
-            for (int j=0; j<atoms1.count(); ++j)
-            {
-                for (int k=0; k<atoms2.count(); ++k)
-                {
-                    for (int l=0; l<atoms3.count(); ++l)
-                    {
-                        auto atomidx0 = atoms0(i).index();
-                        auto atomidx1 = atoms1(j).index();
-                        auto atomidx2 = atoms2(k).index();
-                        auto atomidx3 = atoms3(l).index();
+            bool found = false;
 
-                        if (c.areDihedraled(atomidx0, atomidx1, atomidx2, atomidx3))
+            for (int i=0; i<atoms0.count(); ++i)
+            {
+                auto atomidx0 = atoms0(i).index();
+
+                if (not _contains(dihedral, atomidx0))
+                    break;
+
+                for (int j=0; j<atoms1.count(); ++j)
+                {
+                    auto atomidx1 = atoms1(j).index();
+
+                    if (atomidx1 == atomidx0 or not _contains(dihedral, atomidx1))
+                        break;
+
+                    for (int k=0; k<atoms2.count(); ++k)
+                    {
+                        auto atomidx2 = atoms2(k).index();
+
+                        if (atomidx2 == atomidx1 or atomidx2 == atomidx0 or
+                            not _contains(dihedral, atomidx2))
+                            break;
+
+
+                        for (int l=0; l<atoms3.count(); ++l)
                         {
+                            auto atomidx3 = atoms3(l).index();
+
+                            if (atomidx3 == atomidx2 or atomidx3 == atomidx2 or
+                                atomidx3 == atomidx0 or not _contains(dihedral, atomidx3))
+                                break;
+
                             if (atomidx0 > atomidx3)
                             {
                                 qSwap(atomidx0, atomidx3);
                                 qSwap(atomidx1, atomidx2);
                             }
 
-                            DihedralID d(atomidx0, atomidx1, atomidx2, atomidx3);
-
-                            if (not seen_dihs.contains(d))
-                            {
-                                seen_dihs.insert(d);
-                                dihedrals.append(d);
-                            }
+                            dihs.append(DihedralID(atomidx0, atomidx1, atomidx2, atomidx3));
+                            found = true;
+                            break;
                         }
+
+                        if (found)
+                            break;
                     }
+
+                    if (found)
+                        break;
                 }
+
+                if (found)
+                    break;
             }
         }
-
-        dihs = dihedrals;
     }
 }
 

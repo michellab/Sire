@@ -48,4 +48,11 @@ special_code = { "AtomLJs" : fix_AtomLJs,
                  "SireMM::ThreeAtomFunctions" : fix_AtomFunctions,
                  "SireMM::TwoAtomFunctions" : fix_AtomFunctions,
                  "SireMol::Mover<SireMM::Bond>" : fix_Mover,
-                 "SireMol::Mover<SireMM::SelectorBond>" : fix_Mover }
+                 "SireMol::Mover<SireMM::SelectorBond>" : fix_Mover,
+                 "SireMol::Mover<SireMM::Angle>" : fix_Mover,
+                 "SireMol::Mover<SireMM::SelectorAngle>" : fix_Mover,
+                 "SireMol::Mover<SireMM::Dihedral>" : fix_Mover,
+                 "SireMol::Mover<SireMM::SelectorDihedral>" : fix_Mover,
+                 "SireMol::Mover<SireMM::Improper>" : fix_Mover,
+                 "SireMol::Mover<SireMM::SelectorImproper>" : fix_Mover,
+               }

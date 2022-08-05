@@ -5,6 +5,7 @@
 #include "SireMM_properties.h"
 
 #include "SireBase/errors.h"
+#include "SireBase/generalunitproperty.h"
 #include "SireBase/lengthproperty.h"
 #include "SireBase/numberproperty.h"
 #include "SireBase/properties.h"
