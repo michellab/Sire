@@ -146,12 +146,10 @@ Dihedral::Dihedral(const MoleculeData &moldata, const DihedralID &dihedral)
         qSwap(atomidx1, atomidx2);
     }
     else if ((atomidx0 == atomidx1) or
-             (atomidx0 == atomidx2) or
-             (atomidx0 == atomidx3) or
              (atomidx1 == atomidx2) or
-             (atomidx1 == atomidx3) or
              (atomidx2 == atomidx3))
     {
+        // note that atomidx0 == atomidx3 in a ring
         throw SireMol::duplicate_atom(QObject::tr(
             "You cannot make a Dihedral out of identical atoms. %1-%2-%3-%4")
                 .arg(atomidx0.toString())

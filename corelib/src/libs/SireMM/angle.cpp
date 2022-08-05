@@ -137,9 +137,9 @@ Angle::Angle(const MoleculeData &moldata, const AngleID &angle)
         qSwap(atomidx0, atomidx2);
     }
     else if ((atomidx0 == atomidx1) or
-             (atomidx0 == atomidx2) or
              (atomidx1 == atomidx2))
     {
+        // note that atomidx0 == atomidx2 in a ring
         throw SireMol::duplicate_atom(QObject::tr(
             "You cannot make a Angle out of identical atoms. %1-%2-%3")
                 .arg(atomidx0.toString())

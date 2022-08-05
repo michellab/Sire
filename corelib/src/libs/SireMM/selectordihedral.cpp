@@ -188,10 +188,7 @@ SelectorDihedral::SelectorDihedral(const MoleculeView &mol,
                         DihedralID d(atomidx0, atomidx1, atomidx2, atomidx3);
 
                         if (atomidx0 != atomidx1 and
-                            atomidx0 != atomidx2 and
-                            atomidx0 != atomidx3 and
                             atomidx1 != atomidx2 and
-                            atomidx1 != atomidx3 and
                             atomidx2 != atomidx3 and
                             c.areConnected(atomidx0, atomidx1) and
                             c.areConnected(atomidx1, atomidx2) and
@@ -402,10 +399,7 @@ SelectorDihedral::SelectorDihedral(const Selector<Atom> &atoms,
                 DihedralID dih(atomidx0, atomidx1, atomidx2, atomidx3);
 
                 if (atomidx0 != atomidx1 and
-                    atomidx0 != atomidx2 and
-                    atomidx0 != atomidx3 and
                     atomidx1 != atomidx2 and
-                    atomidx1 != atomidx3 and
                     atomidx2 != atomidx3 and
                     not seen_dihs.contains(dih))
                 {
@@ -570,8 +564,7 @@ SelectorDihedral::SelectorDihedral(const Selector<Atom> &atoms0,
                     {
                         auto atomidx2 = atoms2(k).index();
 
-                        if (atomidx2 == atomidx1 or atomidx2 == atomidx0 or
-                            not _contains(dihedral, atomidx2))
+                        if (atomidx2 == atomidx1 or not _contains(dihedral, atomidx2))
                             break;
 
 
@@ -579,8 +572,7 @@ SelectorDihedral::SelectorDihedral(const Selector<Atom> &atoms0,
                         {
                             auto atomidx3 = atoms3(l).index();
 
-                            if (atomidx3 == atomidx2 or atomidx3 == atomidx2 or
-                                atomidx3 == atomidx0 or not _contains(dihedral, atomidx3))
+                            if (atomidx3 == atomidx2 or not _contains(dihedral, atomidx3))
                                 break;
 
                             if (atomidx0 > atomidx3)

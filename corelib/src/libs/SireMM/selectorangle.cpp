@@ -179,7 +179,6 @@ SelectorAngle::SelectorAngle(const MoleculeView &mol,
                     AngleID a(atomidx0, atomidx1, atomidx2);
 
                     if (atomidx0 != atomidx1 and
-                        atomidx0 != atomidx2 and
                         atomidx1 != atomidx2 and
                         c.areConnected(atomidx0, atomidx1) and
                         c.areConnected(atomidx1, atomidx2) and
@@ -337,7 +336,6 @@ SelectorAngle::SelectorAngle(const Selector<Atom> &atoms,
                 AngleID ang(atomidx0, atomidx1, atomidx2);
 
                 if (atomidx0 != atomidx1 and
-                    atomidx0 != atomidx2 and
                     atomidx1 != atomidx2 and
                     not seen_angs.contains(ang))
                 {
@@ -446,8 +444,7 @@ SelectorAngle::SelectorAngle(const Selector<Atom> &atoms0,
                     {
                         auto atomidx2 = atoms2(k).index();
 
-                        if (atomidx2 == atomidx1 or atomidx2 == atomidx0 or
-                            not _contains(angle, atomidx2))
+                        if (atomidx2 == atomidx1 or not _contains(angle, atomidx2))
                             break;
 
                         if (atomidx0 > atomidx2)
