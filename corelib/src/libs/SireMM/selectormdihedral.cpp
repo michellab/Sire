@@ -1,0 +1,911 @@
+/********************************************\
+  *
+  *  Sire - Molecular Simulation Framework
+  *
+  *  Copyright (C) 2022  Christopher Woods
+  *
+  *  This program is free software; you can redistribute it and/or modify
+  *  it under the terms of the GNU General Public License as published by
+  *  the Free Software Foundation; either version 2 of the License, or
+  *  (at your option) any later version.
+  *
+  *  This program is distributed in the hope that it will be useful,
+  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  *  GNU General Public License for more details.
+  *
+  *  You should have received a copy of the GNU General Public License
+  *  along with this program; if not, write to the Free Software
+  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  *
+  *  For full details of the license please see the COPYING file
+  *  that should have come with this distribution.
+  *
+  *  You can contact the authors via the developer's mailing list
+  *  at http://siremol.org
+  *
+\*********************************************/
+
+#include "selectormdihedral.h"
+
+#include "SireID/index.h"
+
+#include "SireMol/errors.h"
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+#include "SireStream/shareddatastream.h"
+
+using namespace SireBase;
+using namespace SireStream;
+using namespace SireMol;
+using namespace SireMM;
+using namespace SireID;
+
+RegisterMetaType<SelectorMDihedral> r_sdih;
+
+/** Serialise to a binary datastream */
+SIREMOL_EXPORT QDataStream &operator<<(QDataStream &ds, const SelectorMDihedral &dihs)
+{
+    writeHeader(ds, r_sdih, 1);
+
+    SharedDataStream sds(ds);
+
+    sds << dihs.dihs << static_cast<const Property&>(dihs);
+
+    return ds;
+}
+
+/** Extract from a binary datastream */
+SIREMOL_EXPORT QDataStream &operator>>(QDataStream &ds, SelectorMDihedral &dihs)
+{
+    VersionID v = readHeader(ds, r_sdih);
+
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+        sds >> dihs.dihs >> static_cast<Property&>(dihs);
+    }
+    else
+        throw version_error(v, "1", r_sdih, CODELOC);
+
+    return ds;
+}
+
+SelectorMDihedral::SelectorMDihedral()
+                  : ConcreteProperty<SelectorMDihedral, Property>()
+{}
+
+SelectorMDihedral::SelectorMDihedral(const Dihedral &view)
+                  : ConcreteProperty<SelectorMDihedral, Property>()
+{
+    dihs.append(SelectorDihedral(view));
+}
+
+SelectorMDihedral::SelectorMDihedral(const Molecules &mols)
+                  : ConcreteProperty<SelectorMDihedral, Property>()
+{
+    if (not mols.isEmpty())
+    {
+        auto toList = [](const QSet<MolNum> &molnums)
+        {
+            return molnums.values();
+        };
+
+        auto molnums = toList(mols.molNums());
+
+        //sort them, as this is also likely the order the molecules
+        //were read in from a file, and so more likely to be the
+        //order the user would expect
+        std::sort(molnums.begin(), molnums.end());
+
+        this->dihs.reserve(molnums.count());
+
+        for (const auto &molnum : molnums)
+        {
+            SelectorDihedral d(mols.at(molnum));
+
+            if (not d.isEmpty())
+                this->dihs.append(d);
+        }
+    }
+}
+
+SelectorMDihedral::SelectorMDihedral(const MoleculeGroup &mols)
+                  : ConcreteProperty<SelectorMDihedral, Property>()
+{
+    if (not mols.isEmpty())
+    {
+        const auto molnums = mols.molNums();
+        this->dihs.reserve(molnums.count());
+
+        for (const auto &molnum : molnums)
+        {
+            SelectorDihedral d(mols.at(molnum));
+
+            if (not d.isEmpty())
+                this->dihs.append(d);
+        }
+    }
+}
+
+SelectorMDihedral::SelectorMDihedral(const MolGroupsBase &mols)
+                  : ConcreteProperty<SelectorMDihedral, Property>()
+{
+    if (not mols.isEmpty())
+    {
+        const auto molnums = mols.molNums();
+        this->dihs.reserve(molnums.count());
+
+        for (const auto &molnum : molnums)
+        {
+            SelectorDihedral d(mols.at(molnum));
+
+            if (not d.isEmpty())
+                this->dihs.append(d);
+        }
+    }
+}
+
+SelectorMDihedral::SelectorMDihedral(const SelectResult &mols)
+                  : ConcreteProperty<SelectorMDihedral, Property>()
+{
+    if (not mols.isEmpty())
+    {
+        this->dihs.reserve(mols.count());
+
+        for (const auto &mol : mols)
+        {
+            SelectorDihedral d;
+
+            if (mol->isA<SelectorDihedral>())
+                d = mol->asA<SelectorDihedral>();
+            else
+                d = SelectorDihedral(*mol);
+
+            if (not d.isEmpty())
+                this->dihs.append(d);
+        }
+    }
+}
+
+SelectorMDihedral::SelectorMDihedral(const SelectResult &mols, const PropertyMap &map)
+                  : ConcreteProperty<SelectorMDihedral, Property>()
+{
+    if (not mols.isEmpty())
+    {
+        this->dihs.reserve(mols.count());
+
+        for (const auto &mol : mols)
+        {
+            SelectorDihedral d(*mol, map);
+
+            if (not d.isEmpty())
+                this->dihs.append(d);
+        }
+    }
+}
+
+SelectorMDihedral::SelectorMDihedral(const SelectResult &mols,
+                                     const DihedralID &dihedral)
+                  : ConcreteProperty<SelectorMDihedral, Property>()
+{
+    if (not mols.isEmpty())
+    {
+        this->dihs.reserve(mols.count());
+
+        for (const auto &mol : mols)
+        {
+            try
+            {
+                auto d = SelectorDihedral(*mol, dihedral);
+
+                if (not d.isEmpty())
+                    this->dihs.append(d);
+            }
+            catch(...)
+            {}
+        }
+    }
+}
+
+SelectorMDihedral::SelectorMDihedral(const SelectorDihedral &dihedrals)
+                  : ConcreteProperty<SelectorMDihedral, Property>()
+{
+    if (not dihedrals.isEmpty())
+        dihs.append(dihedrals);
+}
+
+SelectorMDihedral::SelectorMDihedral(const SelectorMol &mols)
+                  : ConcreteProperty<SelectorMDihedral, Property>()
+{
+    if (not mols.isEmpty())
+    {
+        this->dihs.reserve(mols.count());
+
+        for (const auto &mol : mols)
+        {
+            SelectorDihedral d(mol);
+
+            if (not d.isEmpty())
+                dihs.append(d);
+        }
+    }
+}
+
+void SelectorMDihedral::_append(const Dihedral &dihedral)
+{
+    if (this->dihs.isEmpty())
+    {
+        this->dihs.append(SelectorDihedral(dihedral));
+    }
+    else if (this->dihs.last().data().number() != dihedral.data().number())
+    {
+        // new molecule
+        this->dihs.append(SelectorDihedral(dihedral));
+    }
+    else
+    {
+        // a new view in the current molecule
+        this->dihs.last() = this->dihs.last().add(dihedral);
+    }
+}
+
+SelectorMDihedral::SelectorMDihedral(const SelectorMDihedral &dihedrals,
+                                     const SireBase::Slice &slice)
+                  : SireBase::ConcreteProperty<SelectorMDihedral,Property>()
+{
+    for (auto it = slice.begin(dihedrals.count());
+         not it.atEnd(); it.next())
+    {
+        this->_append(dihedrals[it.value()]);
+    }
+}
+
+SelectorMDihedral::SelectorMDihedral(const SelectorMDihedral &dihedrals,
+                                     const QList<qint64> &idxs)
+                  : SireBase::ConcreteProperty<SelectorMDihedral,Property>()
+{
+    for (const auto &idx : idxs)
+    {
+        this->_append(dihedrals[idx]);
+    }
+}
+
+SelectorMDihedral::SelectorMDihedral(const SelectorMDihedral &other)
+                  : ConcreteProperty<SelectorMDihedral, Property>(),
+                    dihs(other.dihs)
+{}
+
+SelectorMDihedral::~SelectorMDihedral()
+{}
+
+const char* SelectorMDihedral::typeName()
+{
+    return QMetaType::typeName(qMetaTypeId<SelectorMDihedral>());
+}
+
+SelectorMDihedral& SelectorMDihedral::operator=(const SelectorMDihedral &other)
+{
+    if (this != &other)
+    {
+        dihs = other.dihs;
+        Property::operator=(other);
+    }
+
+    return *this;
+}
+
+bool SelectorMDihedral::operator==(const SelectorMDihedral &other) const
+{
+    return dihs == other.dihs;
+}
+
+bool SelectorMDihedral::operator!=(const SelectorMDihedral &other) const
+{
+    return not operator==(other);
+}
+
+Dihedral SelectorMDihedral::operator[](int i) const
+{
+    i = SireID::Index(i).map(this->count());
+
+    for (const auto &d : dihs)
+    {
+        if (i < d.count())
+        {
+            return d(i);
+        }
+        else
+        {
+            i -= d.count();
+        }
+    }
+
+    throw SireError::program_bug(QObject::tr("Should not get here!"), CODELOC);
+
+    return Dihedral();
+}
+
+SelectorMDihedral SelectorMDihedral::operator[](const SireBase::Slice &slice) const
+{
+    return SelectorMDihedral(*this, slice);
+}
+
+SelectorMDihedral SelectorMDihedral::operator[](const QList<qint64> &idxs) const
+{
+    return SelectorMDihedral(*this, idxs);
+}
+
+SelectorMDihedral SelectorMDihedral::operator[](const DihedralID &id) const
+{
+    SelectorMDihedral ret;
+
+    for (const auto &d : dihs)
+    {
+        try
+        {
+            auto r = d(id);
+
+            if (not r.isEmpty())
+            {
+                ret.dihs.append(r);
+            }
+        }
+        catch(...)
+        {}
+    }
+
+    return ret;
+}
+
+Dihedral SelectorMDihedral::operator()(int i) const
+{
+    return this->operator[](i);
+}
+
+SelectorMDihedral SelectorMDihedral::operator()(const SireBase::Slice &slice) const
+{
+    return this->operator[](slice);
+}
+
+SelectorMDihedral SelectorMDihedral::operator()(const QList<qint64> &idxs) const
+{
+    return this->operator[](idxs);
+}
+
+SelectorMDihedral SelectorMDihedral::operator()(const DihedralID &id) const
+{
+    return this->operator[](id);
+}
+
+QList<MolViewPtr> SelectorMDihedral::toList() const
+{
+    QList<MolViewPtr> l;
+    l.reserve(dihs.count());
+
+    for (const auto &dih : dihs)
+    {
+        l.append(MolViewPtr(dih.clone()));
+    }
+
+    return l;
+}
+
+int SelectorMDihedral::count() const
+{
+    int n = 0;
+
+    for (const auto &d : dihs)
+    {
+        n += d.count();
+    }
+
+    return n;
+}
+
+int SelectorMDihedral::size() const
+{
+    return this->count();
+}
+
+EvaluatorM SelectorMDihedral::evaluate() const
+{
+    return EvaluatorM(this->atoms());
+}
+
+MoleculeGroup SelectorMDihedral::toMoleculeGroup() const
+{
+    MoleculeGroup grp;
+
+    for (const auto &d : this->dihs)
+    {
+        grp.add(d);
+    }
+
+    return grp;
+
+}
+
+SelectResult SelectorMDihedral::toSelectResult() const
+{
+    QList<MolViewPtr> r;
+
+    for (const auto &d : dihs)
+    {
+        r.append(d);
+    }
+
+    return SelectResult(r);
+}
+
+Molecule SelectorMDihedral::molecule(int i) const
+{
+    return this->molecules().molecule(i);
+}
+
+Molecule SelectorMDihedral::molecule(const QString &name) const
+{
+    return this->molecules().molecule(name);
+}
+
+Molecule SelectorMDihedral::molecule(const MolID &molid)
+{
+    return this->molecules().molecule(molid);
+}
+
+SelectorMol SelectorMDihedral::molecules() const
+{
+    QList<Molecule> mols;
+
+    for (const auto &d : this->dihs)
+    {
+        mols.append(d.molecule());
+    }
+
+    return SelectorMol(mols);
+}
+
+SelectorMol SelectorMDihedral::molecules(int i) const
+{
+    return this->molecules().molecules(i);
+}
+
+SelectorMol SelectorMDihedral::molecules(const SireBase::Slice &slice) const
+{
+    return this->molecules().molecules(slice);
+}
+
+SelectorMol SelectorMDihedral::molecules(const QList<qint64> &idxs) const
+{
+    return this->molecules().molecules(idxs);
+}
+
+SelectorMol SelectorMDihedral::molecules(const QString &name) const
+{
+    return this->molecules().molecules(name);
+}
+
+SelectorMol SelectorMDihedral::molecules(const MolID &molid) const
+{
+    return this->molecules().molecules(molid);
+}
+
+Atom SelectorMDihedral::atom(int i) const
+{
+    return this->atoms()(i);
+}
+
+Atom SelectorMDihedral::atom(const QString &name) const
+{
+    return this->atoms()(name);
+}
+
+Atom SelectorMDihedral::atom(const AtomID &atomid) const
+{
+    return this->atoms()(atomid);
+}
+
+Residue SelectorMDihedral::residue(int i) const
+{
+    return this->residues()(i);
+}
+
+Residue SelectorMDihedral::residue(const QString &name) const
+{
+    return this->residues()(name);
+}
+
+Residue SelectorMDihedral::residue(const ResID &resid) const
+{
+    return this->residues()(resid);
+}
+
+Chain SelectorMDihedral::chain(int i) const
+{
+    return this->chains()(i);
+}
+
+Chain SelectorMDihedral::chain(const QString &name) const
+{
+    return this->chains()(name);
+}
+
+Chain SelectorMDihedral::chain(const ChainID &chainid) const
+{
+    return this->chains()(chainid);
+}
+
+Segment SelectorMDihedral::segment(int i) const
+{
+    return this->segments()(i);
+}
+
+Segment SelectorMDihedral::segment(const QString &name) const
+{
+    return this->segments()(name);
+}
+
+Segment SelectorMDihedral::segment(const SegID &segid) const
+{
+    return this->segments()(segid);
+}
+
+CutGroup SelectorMDihedral::cutGroup(int i) const
+{
+    return this->cutGroups()(i);
+}
+
+CutGroup SelectorMDihedral::cutGroup(const QString &name) const
+{
+    return this->cutGroups()(name);
+}
+
+CutGroup SelectorMDihedral::cutGroup(const CGID &cgid) const
+{
+    return this->cutGroups()(cgid);
+}
+
+SelectorM<Atom> SelectorMDihedral::atoms() const
+{
+    QList< Selector<Atom> > ret;
+
+    for (const auto &d : this->dihs)
+    {
+        ret.append(d.atoms());
+    }
+
+    return SelectorM<Atom>(ret);
+}
+
+SelectorM<Atom> SelectorMDihedral::atoms(int i) const
+{
+    return this->atoms().atoms(i);
+}
+
+SelectorM<Atom> SelectorMDihedral::atoms(const SireBase::Slice &slice) const
+{
+    return this->atoms().atoms(slice);
+}
+
+SelectorM<Atom> SelectorMDihedral::atoms(const QList<qint64> &idxs) const
+{
+    return this->atoms().atoms(idxs);
+}
+
+SelectorM<Atom> SelectorMDihedral::atoms(const QString &name) const
+{
+    return this->atoms().atoms(name);
+}
+
+SelectorM<Atom> SelectorMDihedral::atoms(const AtomID &atomid) const
+{
+    return this->atoms().atoms(atomid);
+}
+
+SelectorM<Residue> SelectorMDihedral::residues() const
+{
+    QList< Selector<Residue> > ret;
+
+    for (const auto &d : this->dihs)
+    {
+        ret.append(d.residues());
+    }
+
+    return SelectorM<Residue>(ret);
+}
+
+SelectorM<Residue> SelectorMDihedral::residues(int i) const
+{
+    return this->residues().residues(i);
+}
+
+SelectorM<Residue> SelectorMDihedral::residues(const SireBase::Slice &slice) const
+{
+    return this->residues().residues(slice);
+}
+
+SelectorM<Residue> SelectorMDihedral::residues(const QList<qint64> &idxs) const
+{
+    return this->residues().residues(idxs);
+}
+
+SelectorM<Residue> SelectorMDihedral::residues(const QString &name) const
+{
+    return this->residues().residues(name);
+}
+
+SelectorM<Residue> SelectorMDihedral::residues(const ResID &resid) const
+{
+    return this->residues().residues(resid);
+}
+
+SelectorM<Chain> SelectorMDihedral::chains() const
+{
+    QList< Selector<Chain> > ret;
+
+    for (const auto &d : this->dihs)
+    {
+        ret.append(d.chains());
+    }
+
+    return SelectorM<Chain>(ret);
+}
+
+SelectorM<Chain> SelectorMDihedral::chains(int i) const
+{
+    return this->chains().chains(i);
+}
+
+SelectorM<Chain> SelectorMDihedral::chains(const SireBase::Slice &slice) const
+{
+    return this->chains().chains(slice);
+}
+
+SelectorM<Chain> SelectorMDihedral::chains(const QList<qint64> &idxs) const
+{
+    return this->chains().chains(idxs);
+}
+
+SelectorM<Chain> SelectorMDihedral::chains(const QString &name) const
+{
+    return this->chains().chains(name);
+}
+
+SelectorM<Chain> SelectorMDihedral::chains(const ChainID &chainid) const
+{
+    return this->chains().chains(chainid);
+}
+
+SelectorM<Segment> SelectorMDihedral::segments() const
+{
+    QList< Selector<Segment> > ret;
+
+    for (const auto &d : this->dihs)
+    {
+        ret.append(d.segments());
+    }
+
+    return SelectorM<Segment>(ret);
+}
+
+SelectorM<Segment> SelectorMDihedral::segments(int i) const
+{
+    return this->segments().segments(i);
+}
+
+SelectorM<Segment> SelectorMDihedral::segments(const SireBase::Slice &slice) const
+{
+    return this->segments().segments(slice);
+}
+
+SelectorM<Segment> SelectorMDihedral::segments(const QList<qint64> &idxs) const
+{
+    return this->segments().segments(idxs);
+}
+
+SelectorM<Segment> SelectorMDihedral::segments(const QString &name) const
+{
+    return this->segments().segments(name);
+}
+
+SelectorM<Segment> SelectorMDihedral::segments(const SegID &segid) const
+{
+    return this->segments().segments(segid);
+}
+
+SelectorM<CutGroup> SelectorMDihedral::cutGroups() const
+{
+    QList< Selector<CutGroup> > ret;
+
+    for (const auto &d : this->dihs)
+    {
+        ret.append(d.cutGroups());
+    }
+
+    return SelectorM<CutGroup>(ret);
+}
+
+SelectorM<CutGroup> SelectorMDihedral::cutGroups(int i) const
+{
+    return this->cutGroups().cutGroups(i);
+}
+
+SelectorM<CutGroup> SelectorMDihedral::cutGroups(const SireBase::Slice &slice) const
+{
+    return this->cutGroups().cutGroups(slice);
+}
+
+SelectorM<CutGroup> SelectorMDihedral::cutGroups(const QList<qint64> &idxs) const
+{
+    return this->cutGroups().cutGroups(idxs);
+}
+
+SelectorM<CutGroup> SelectorMDihedral::cutGroups(const QString &name) const
+{
+    return this->cutGroups().cutGroups(name);
+}
+
+SelectorM<CutGroup> SelectorMDihedral::cutGroups(const CGID &cgid) const
+{
+    return this->cutGroups().cutGroups(cgid);
+}
+
+SelectResult SelectorMDihedral::search(const QString &search_string) const
+{
+    return this->toSelectResult().search(search_string);
+}
+
+QList<DihedralID> SelectorMDihedral::IDs() const
+{
+    QList<DihedralID> ret;
+
+    for (const auto &d : this->dihs)
+    {
+        ret += d.IDs();
+    }
+
+    return ret;
+}
+
+int SelectorMDihedral::nAtoms() const
+{
+    int n = 0;
+
+    for (const auto &d : this->dihs)
+    {
+        n += d.nAtoms();
+    }
+
+    return n;
+}
+
+int SelectorMDihedral::nResidues() const
+{
+    int n = 0;
+
+    for (const auto &d : this->dihs)
+    {
+        n += d.nResidues();
+    }
+
+    return n;
+}
+
+int SelectorMDihedral::nChains() const
+{
+    int n = 0;
+
+    for (const auto &d : this->dihs)
+    {
+        n += d.nChains();
+    }
+
+    return n;
+}
+
+int SelectorMDihedral::nSegments() const
+{
+    int n = 0;
+
+    for (const auto &d : this->dihs)
+    {
+        n += d.nSegments();
+    }
+
+    return n;
+}
+
+int SelectorMDihedral::nCutGroups() const
+{
+    int n = 0;
+
+    for (const auto &d : this->dihs)
+    {
+        n += d.nCutGroups();
+    }
+
+    return n;
+}
+
+int SelectorMDihedral::nMolecules() const
+{
+    return this->dihs.count();
+}
+
+bool SelectorMDihedral::isEmpty() const
+{
+    return this->dihs.isEmpty();
+}
+
+SelectorMDihedral::const_iterator SelectorMDihedral::begin() const
+{
+    return this->dihs.constBegin();
+}
+
+SelectorMDihedral::const_iterator SelectorMDihedral::end() const
+{
+    return this->dihs.constEnd();
+}
+
+SelectorMDihedral::const_iterator SelectorMDihedral::constBegin() const
+{
+    return this->dihs.constBegin();
+}
+
+SelectorMDihedral::const_iterator SelectorMDihedral::constEnd() const
+{
+    return this->dihs.constEnd();
+}
+
+QString SelectorMDihedral::toString() const
+{
+    if (this->isEmpty())
+    {
+        return QObject::tr("SelectorMDihedral::empty");
+    }
+    else
+    {
+        QStringList parts;
+
+        const auto n = this->count();
+
+        if (n <= 10)
+        {
+            for (int i=0; i<n; ++i)
+            {
+                const auto view = this->operator[](i);
+
+                parts.append(QString("%1: %2 %3")
+                    .arg(i).arg(view.data().number().toString())
+                    .arg(view.toString()));
+            }
+        }
+        else
+        {
+            for (int i=0; i<5; ++i)
+            {
+                const auto view = this->operator[](i);
+
+                parts.append(QString("%1: %2 %3")
+                    .arg(i).arg(view.data().number().toString())
+                    .arg(view.toString()));
+            }
+
+            parts.append("...");
+
+            for (int i=n-5; i<n; ++i)
+            {
+                const auto view = this->operator[](i);
+
+                parts.append(QString("%1: %2 %3")
+                    .arg(i).arg(view.data().number().toString())
+                    .arg(view.toString()));
+            }
+        }
+
+        return QObject::tr("SelectorMDihedral( size=%2\n%3\n)")
+                    .arg(n)
+                    .arg(parts.join("\n"));
+    }
+}
