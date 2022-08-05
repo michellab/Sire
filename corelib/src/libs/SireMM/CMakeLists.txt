@@ -17,6 +17,7 @@ include_directories(${TBB_INCLUDE_DIR})
 set ( SIREMM_HEADERS
       amberparams.h
       anglerestraint.h
+      angle.h
       atomfunctions.h
       atomljs.h
       atompairs.hpp
@@ -93,6 +94,7 @@ set ( SIREMM_SOURCES
       register_siremm.cpp
 
       amberparams.cpp
+      angle.cpp
       anglerestraint.cpp
       atomfunctions.cpp
       atomljs.cpp
@@ -115,6 +117,7 @@ set ( SIREMM_SOURCES
       cljshiftfunction.cpp
       cljworkspace.cpp
       coulombpotential.cpp
+      dihedral.cpp
       dihedralrestraint.cpp
       distancerestraint.cpp
       errors.cpp
@@ -122,6 +125,7 @@ set ( SIREMM_SOURCES
       gridff.cpp
       gridff2.cpp
       gromacsparams.cpp
+      improper.cpp
       intercljff.cpp
       intercoulombff.cpp
       interff.cpp
@@ -148,8 +152,14 @@ set ( SIREMM_SOURCES
       restraint.cpp
       restraintcomponent.cpp
       restraintff.cpp
+      selectorangle.cpp
       selectorbond.cpp
+      selectordihedral.cpp
+      selectorimproper.cpp
+      selectormangle.cpp
       selectormbond.cpp
+      selectormdihedral.cpp
+      selectormimproper.cpp
       softcljcomponent.cpp
       softcljpotential.cpp
       switchingfunction.cpp

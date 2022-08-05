@@ -86,7 +86,7 @@ Bond::Bond() : ConcreteProperty<Bond, MoleculeView>()
 
 
 Bond::Bond(const Atom &atom0, const Atom &atom1)
-     : ConcreteProperty<Bond, MoleculeView>(atom0)
+     : ConcreteProperty<Bond, MoleculeView>()
 {
     if (not atom0.isSameMolecule(atom1))
     {
@@ -97,14 +97,9 @@ Bond::Bond(const Atom &atom0, const Atom &atom1)
                 .arg(atom0.molecule().toString())
                 .arg(atom1.molecule().toString()), CODELOC);
     }
-    else if (atom0.index() == atom1.index())
-    {
-        throw SireMol::duplicate_atom(QObject::tr(
-            "You cannot create a bond from two identical atoms. %1")
-                .arg(atom0.toString()), CODELOC);
-    }
 
-    bnd = BondID(atom0.index(), atom1.index());
+    this->operator=(Bond(atom0.data(),
+                         BondID(atom0.index(), atom1.index())));
 }
 
 Bond::Bond(const MoleculeView &molview,

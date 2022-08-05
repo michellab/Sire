@@ -54,12 +54,12 @@ QDataStream &operator<<(QDataStream &ds,
                                        const ImproperID &improperid)
 {
     writeHeader(ds, r_improperid, 1);
-    
+
     SharedDataStream sds(ds);
-    
-    sds << improperid.atm0 << improperid.atm1 
+
+    sds << improperid.atm0 << improperid.atm1
         << improperid.atm2 << improperid.atm3;
-         
+
     return ds;
 }
 
@@ -68,17 +68,17 @@ QDataStream &operator>>(QDataStream &ds,
                                        ImproperID &improperid)
 {
     VersionID v = readHeader(ds, r_improperid);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
-        sds >> improperid.atm0 >> improperid.atm1 
+
+        sds >> improperid.atm0 >> improperid.atm1
             >> improperid.atm2 >> improperid.atm3;
     }
     else
         throw version_error(v, "1", r_improperid, CODELOC);
-        
+
     return ds;
 }
 
@@ -111,7 +111,7 @@ ImproperID& ImproperID::operator=(const ImproperID &other)
     atm1 = other.atm1;
     atm2 = other.atm2;
     atm3 = other.atm3;
-    
+
     return *this;
 }
 
@@ -144,7 +144,7 @@ bool ImproperID::equivalent(const ImproperID &other) const
 /** Return a hash for this ID */
 uint ImproperID::hash() const
 {
-    return ( (atm0.hash()*atm1.hash()) << 16) | 
+    return ( (atm0.hash()*atm1.hash()) << 16) |
            ( (atm2.hash()*atm3.hash()) & 0x0000FFFF);
 }
 
@@ -167,22 +167,22 @@ bool ImproperID::isNull() const
 bool ImproperID::operator==(const SireID::ID &other) const
 {
     const ImproperID *other_improper = dynamic_cast<const ImproperID*>(&other);
-    
+
     return other_improper and this->operator==(*other_improper);
 }
 
-/** Return the indicies of the four atoms in this improper - this returns 
-    them in the order 
+/** Return the indicies of the four atoms in this improper - this returns
+    them in the order
     tuple(improper.atom0(),improper.atom1(),improper.atom2(),improper.atom3())
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
 */
-tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx> 
+tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>
 ImproperID::map(const MoleculeInfoData &molinfo) const
 {
-    return tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>( 
+    return tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>(
                         molinfo.atomIdx(atm0), molinfo.atomIdx(atm1),
                         molinfo.atomIdx(atm2), molinfo.atomIdx(atm3) );
 }
@@ -191,18 +191,18 @@ ImproperID::map(const MoleculeInfoData &molinfo) const
     two molecules whose data is in 'mol0info' (containing improper.atom0()),
     'mol1info' (containing improper.atom1()), 'mol2info' (containing
     improper.atom2()) and 'mol3info' (containing improper.atom3())
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
 */
 tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>
-ImproperID::map(const MoleculeInfoData &mol0info, 
+ImproperID::map(const MoleculeInfoData &mol0info,
                 const MoleculeInfoData &mol1info,
-                const MoleculeInfoData &mol2info, 
+                const MoleculeInfoData &mol2info,
                 const MoleculeInfoData &mol3info) const
 {
-    return tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>( 
+    return tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>(
                         mol0info.atomIdx(atm0), mol1info.atomIdx(atm1),
                         mol2info.atomIdx(atm2), mol3info.atomIdx(atm3) );
 }
@@ -210,19 +210,19 @@ ImproperID::map(const MoleculeInfoData &mol0info,
 /** Return the geometric torsion formed by the four atoms
     of this improper in the molecule whose data is in 'moldata',
     using 'map' to find the coordinates property.
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
-*/                      
+*/
 Torsion ImproperID::torsion(const MoleculeData &moldata,
                             const PropertyMap &map) const
 {
     const AtomCoords &coords = moldata.property(map["coordinates"])
                                       .asA<AtomCoords>();
-                                    
+
     return Torsion( coords.at( moldata.info().cgAtomIdx(atm0) ),
                     coords.at( moldata.info().cgAtomIdx(atm1) ),
                     coords.at( moldata.info().cgAtomIdx(atm2) ),
@@ -237,13 +237,13 @@ Torsion ImproperID::torsion(const MoleculeData &moldata,
     'map1' to find the coordinates property of mol1,
     'map2' to find the coordinates property of mol2 and
     'map3' to find the coordinates property of mol3.
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
-*/                      
+*/
 Torsion ImproperID::torsion(const MoleculeData &mol0data,
                             const PropertyMap &map0,
                             const MoleculeData &mol1data,
@@ -267,20 +267,20 @@ Torsion ImproperID::torsion(const MoleculeData &mol0data,
                     coords2.at( mol2data.info().cgAtomIdx(atm2) ),
                     coords3.at( mol3data.info().cgAtomIdx(atm3) ) );
 }
-                  
+
 /** Return the geometric torsion formed by the four atoms,
     atom0() in the molecule whose data is in 'mol0data',
     atom1() from 'mol1data', atom2() from 'mol2data', and
     atom3() from 'mol3data',
-    using 'map' to find the coordinates property of 
+    using 'map' to find the coordinates property of
     the molecules
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
-*/                      
+*/
 Torsion ImproperID::torsion(const MoleculeData &mol0data,
                             const MoleculeData &mol1data,
                             const MoleculeData &mol2data,
@@ -292,10 +292,10 @@ Torsion ImproperID::torsion(const MoleculeData &mol0data,
                          mol2data, map,
                          mol3data, map);
 }
-     
+
 /** Return the size of this improper in the molecule whose data
     is in 'moldata', using 'map' to find the coordinates property
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
@@ -305,19 +305,19 @@ Torsion ImproperID::torsion(const MoleculeData &mol0data,
 Angle ImproperID::size(const MoleculeData &moldata,
                        const PropertyMap &map) const
 {
-    return this->torsion(moldata,map).angle();
+    return this->torsion(moldata,map).improperAngle();
 }
 
-/** Return the size of the improper between atom0() in the 
-    molecule whose data is in 'mol0data', atom1() in the 
-    molecule whose data is in 'mol1data', atom2() in 
+/** Return the size of the improper between atom0() in the
+    molecule whose data is in 'mol0data', atom1() in the
+    molecule whose data is in 'mol1data', atom2() in
     the molecule whose data is in 'mol2data', and
     atom3() in the molecule whose data is in 'mol3data', using 'map0'
     to the find the coordinates property of 'mol0',
     'map1' to find the coordinates property of 'mol1',
     'map2' to find the coordinates property of 'mol2' and
     'map3' to find the coordinates property of 'mol3'
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
@@ -333,20 +333,20 @@ Angle ImproperID::size(const MoleculeData &mol0data,
                        const MoleculeData &mol3data,
                        const PropertyMap &map3) const
 {
-    return this->torsion(mol0data, map0, 
+    return this->torsion(mol0data, map0,
                          mol1data, map1,
                          mol2data, map2,
-                         mol3data, map3).angle();
+                         mol3data, map3).improperAngle();
 }
 
-/** Return the size of the improper between atom0() in the 
-    molecule whose data is in 'mol0data', atom1() in the 
-    molecule whose data is in 'mol1data', atom2() in 
+/** Return the size of the improper between atom0() in the
+    molecule whose data is in 'mol0data', atom1() in the
+    molecule whose data is in 'mol1data', atom2() in
     the molecule whose data is in 'mol2data', and
-    atom3() in the molecule whose data is in 'mol3data', 
-    using 'map' to find the coordinates property of the 
+    atom3() in the molecule whose data is in 'mol3data',
+    using 'map' to find the coordinates property of the
     molecules
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
@@ -359,8 +359,8 @@ Angle ImproperID::size(const MoleculeData &mol0data,
                        const MoleculeData &mol3data,
                        const PropertyMap &map) const
 {
-    return this->torsion(mol0data, mol1data, 
-                         mol2data, mol3data, map).angle();
+    return this->torsion(mol0data, mol1data,
+                         mol2data, mol3data, map).improperAngle();
 }
 
 /** Return the ID of the first atom of the improper */
