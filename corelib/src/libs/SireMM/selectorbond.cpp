@@ -838,7 +838,7 @@ QList<PropertyPtr> SelectorBond::property(const PropertyName &key) const
             props.append(this->operator()(i).property(key));
             has_prop = true;
         }
-        catch(SireError::exception&)
+        catch(const SireError::exception&)
         {
             props.append(NullProperty());
         }

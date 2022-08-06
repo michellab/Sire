@@ -55,6 +55,8 @@ friend QDataStream& ::operator<<(QDataStream&, const SelectorImproper&);
 friend QDataStream& ::operator>>(QDataStream&, SelectorImproper&);
 
 public:
+    typedef QList<Improper>::const_iterator const_iterator;
+
     SelectorImproper();
     SelectorImproper(const SireMol::MoleculeData &molecule,
                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
@@ -207,6 +209,12 @@ public:
     SireUnits::Dimension::MolarEnergy energy() const;
     SireUnits::Dimension::MolarEnergy energy(
                             const SireBase::PropertyMap &map) const;
+
+    SelectorImproper::const_iterator constBegin() const;
+    SelectorImproper::const_iterator begin() const;
+
+    SelectorImproper::const_iterator constEnd() const;
+    SelectorImproper::const_iterator end() const;
 
 protected:
     /** The IDs of the Impropers (holding AtomIdx IDs) */

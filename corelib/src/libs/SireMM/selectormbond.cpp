@@ -30,8 +30,11 @@
 
 #include "SireID/index.h"
 
+#include "SireCAS/expression.h"
+
 #include "SireMol/errors.h"
 #include "SireError/errors.h"
+#include "SireBase/errors.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -908,3 +911,287 @@ QString SelectorMBond::toString() const
     }
 }
 
+SelectorMBond SelectorMBond::add(const SelectorMBond &other) const
+{
+    SelectorMBond ret(*this);
+
+    for (const auto &value : other)
+    {
+        if (ret.isEmpty())
+        {
+            ret.bnds.append(value);
+        }
+        else if (ret.bnds.last().isSameMolecule(value))
+        {
+            for (const auto &v : value)
+            {
+                ret._append(v);
+            }
+        }
+        else
+        {
+            ret.bnds.append(value);
+        }
+    }
+
+    return ret;
+}
+
+SelectorMBond SelectorMBond::intersection(const SelectorMBond &other) const
+{
+    if (this->count() < other.count())
+        return other.intersection(*this);
+
+    SelectorMBond ret;
+
+    for (const auto &val : bnds)
+    {
+        SelectorBond intersect;
+
+        for (const auto &other_val : other)
+        {
+            if (val.isSameMolecule(other_val))
+            {
+                if (intersect.isEmpty())
+                    intersect = val.intersection(other_val);
+                else
+                    intersect = intersect.add(val.intersection(other_val));
+            }
+        }
+
+        if (not intersect.isEmpty())
+            ret.bnds.append(intersect);
+    }
+
+    return ret;
+}
+
+SelectorMBond SelectorMBond::invert(const SireBase::PropertyMap &map) const
+{
+    SelectorMBond ret;
+
+    for (const auto &val : bnds)
+    {
+        ret.bnds.append(val.invert(map));
+    }
+
+    return ret;
+}
+
+SelectorMBond SelectorMBond::invert() const
+{
+    return this->invert(PropertyMap());
+}
+
+bool SelectorMBond::hasProperty(const SireBase::PropertyName &key) const
+{
+    for (const auto &val : bnds)
+    {
+        if (val.hasProperty(key))
+            return true;
+    }
+
+    return false;
+}
+
+bool SelectorMBond::hasMetadata(const SireBase::PropertyName &key) const
+{
+    for (const auto &val : bnds)
+    {
+        if (val.hasMetadata(key))
+            return true;
+    }
+
+    return false;
+}
+
+bool SelectorMBond::hasMetadata(const SireBase::PropertyName &key,
+                                const SireBase::PropertyName &metakey) const
+{
+    for (const auto &val : bnds)
+    {
+        if (val.hasMetadata(key, metakey))
+            return true;
+    }
+
+    return false;
+}
+
+template<class T>
+inline QSet<T> _to_set(const QList<T> &l)
+{
+    return QSet<T>(l.constBegin(), l.constEnd());
+}
+
+QStringList SelectorMBond::propertyKeys() const
+{
+    QSet<QString> keys;
+
+    for (const auto &val : bnds)
+    {
+        keys += _to_set(val.propertyKeys());
+    }
+
+    return keys.values();
+}
+
+QStringList SelectorMBond::metadataKeys() const
+{
+    QSet<QString> keys;
+
+    for (const auto &val : bnds)
+    {
+        keys += _to_set(val.metadataKeys());
+    }
+
+    return keys.values();
+}
+
+QStringList SelectorMBond::metadataKeys(const SireBase::PropertyName &key) const
+{
+    QSet<QString> keys;
+
+    for (const auto &val : bnds)
+    {
+        keys += _to_set(val.metadataKeys(key));
+    }
+
+    return keys.values();
+}
+
+QList<SireBase::Properties> SelectorMBond::properties() const
+{
+    QList<SireBase::Properties> props;
+
+    for (const auto &val : bnds)
+    {
+        props += val.properties();
+    }
+
+    return props;
+}
+
+QList<SireBase::PropertyPtr> SelectorMBond::property(const SireBase::PropertyName &key) const
+{
+    QList<SireBase::PropertyPtr> props;
+
+    bool has_prop = false;
+
+    for (const auto &val : bnds)
+    {
+        try
+        {
+            props += val.property(key);
+            has_prop = true;
+        }
+        catch(const SireError::exception&)
+        {
+            PropertyPtr null(new NullProperty());
+
+            for (int i=0; i<val.count(); ++i)
+            {
+                props.append(null);
+            }
+        }
+    }
+
+    if (not has_prop)
+        throw SireBase::missing_property(QObject::tr(
+            "None of the bonds in this container have a property called %1.")
+                .arg(key.source()), CODELOC);
+
+    return props;
+}
+
+QList<SireBase::PropertyPtr> SelectorMBond::property(const SireBase::PropertyName &key,
+                                                     const Property &default_value) const
+{
+    QList<SireBase::PropertyPtr> props;
+
+    for (const auto &val : bnds)
+    {
+        props += val.property(key, default_value);
+    }
+
+    return props;
+}
+
+QList<SireUnits::Dimension::Length> SelectorMBond::lengths() const
+{
+    return this->lengths(PropertyMap());
+}
+
+QList<SireUnits::Dimension::Length> SelectorMBond::lengths(const SireBase::PropertyMap &map) const
+{
+    QList<SireUnits::Dimension::Length> l;
+
+    for (const auto &val : bnds)
+    {
+        l += val.lengths(map);
+    }
+
+    return l;
+}
+
+QList<SireUnits::Dimension::Length> SelectorMBond::measures() const
+{
+    return this->lengths();
+}
+
+QList<SireUnits::Dimension::Length> SelectorMBond::measures(const SireBase::PropertyMap &map) const
+{
+    return this->lengths(map);
+}
+
+QList<SireCAS::Expression> SelectorMBond::potentials() const
+{
+    return this->potentials(PropertyMap());
+}
+
+QList<SireCAS::Expression> SelectorMBond::potentials(const SireBase::PropertyMap &map) const
+{
+    QList<SireCAS::Expression> e;
+
+    for (const auto &val : bnds)
+    {
+        e += val.potentials(map);
+    }
+
+    return e;
+}
+
+QList<SireUnits::Dimension::MolarEnergy> SelectorMBond::energies() const
+{
+    return this->energies(PropertyMap());
+}
+
+QList<SireUnits::Dimension::MolarEnergy> SelectorMBond::energies(
+                                    const SireBase::PropertyMap &map) const
+{
+    QList<SireUnits::Dimension::MolarEnergy> e;
+
+    for (const auto &val : bnds)
+    {
+        e += val.energies(map);
+    }
+
+    return e;
+}
+
+SireUnits::Dimension::MolarEnergy SelectorMBond::energy() const
+{
+    return this->energy(PropertyMap());
+}
+
+SireUnits::Dimension::MolarEnergy SelectorMBond::energy(
+                                const SireBase::PropertyMap &map) const
+{
+    SireUnits::Dimension::MolarEnergy nrg(0);
+
+    for (const auto &val : bnds)
+    {
+        nrg += val.energy(map);
+    }
+
+    return nrg;
+}

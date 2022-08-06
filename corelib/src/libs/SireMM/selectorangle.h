@@ -55,6 +55,8 @@ friend QDataStream& ::operator<<(QDataStream&, const SelectorAngle&);
 friend QDataStream& ::operator>>(QDataStream&, SelectorAngle&);
 
 public:
+    typedef QList<Angle>::const_iterator const_iterator;
+
     SelectorAngle();
     SelectorAngle(const SireMol::MoleculeData &molecule,
                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
@@ -182,6 +184,9 @@ public:
     QList<SireUnits::Dimension::Angle> sizes() const;
     QList<SireUnits::Dimension::Angle> sizes(const SireBase::PropertyMap &map) const;
 
+    QList<SireUnits::Dimension::Angle> measures() const;
+    QList<SireUnits::Dimension::Angle> measures(const SireBase::PropertyMap &map) const;
+
     QList<SireCAS::Expression> potentials() const;
     QList<SireCAS::Expression> potentials(const SireBase::PropertyMap &map) const;
 
@@ -192,6 +197,12 @@ public:
     SireUnits::Dimension::MolarEnergy energy() const;
     SireUnits::Dimension::MolarEnergy energy(
                             const SireBase::PropertyMap &map) const;
+
+    SelectorAngle::const_iterator constBegin() const;
+    SelectorAngle::const_iterator begin() const;
+
+    SelectorAngle::const_iterator constEnd() const;
+    SelectorAngle::const_iterator end() const;
 
 protected:
     /** The IDs of the angles (holding AtomIdx IDs) */

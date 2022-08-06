@@ -55,12 +55,20 @@ void register_SireUnits_containers()
     register_list< QVector<Dimension::MolarMass> >();
     register_list< QVector<Dimension::Length> > ();
     register_list< QVector<Dimension::MolarEnergy> > ();
+    register_list< QVector<Dimension::Angle> >();
+    register_list< QVector<Dimension::Time> >();
+    register_list< QVector<Dimension::Quantity> >();
+    register_list< QVector<Dimension::Mass> >();
 
     register_list< QList<Dimension::Charge> >();
     register_list< QList<Dimension::Mass> >();
     register_list< QList<Dimension::MolarMass> >();
     register_list< QList<Dimension::Length> > ();
     register_list< QList<Dimension::MolarEnergy> > ();
+    register_list< QList<Dimension::Angle> > ();
+    register_list< QList<Dimension::Time> >();
+    register_list< QList<Dimension::Quantity> >();
+    register_list< QList<Dimension::Mass> >();
 
     register_PackedArray< SireBase::PackedArray2D<Dimension::Charge> >();
     register_PackedArray< SireBase::PackedArray2D<Dimension::Mass> >();

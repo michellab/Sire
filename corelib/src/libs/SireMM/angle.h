@@ -134,6 +134,9 @@ public:
     SireUnits::Dimension::Angle size() const;
     SireUnits::Dimension::Angle size(const SireBase::PropertyMap &map) const;
 
+    SireUnits::Dimension::Angle measure() const;
+    SireUnits::Dimension::Angle measure(const SireBase::PropertyMap &map) const;
+
     SireCAS::Expression potential() const;
     SireCAS::Expression potential(const SireBase::PropertyMap &map) const;
 

@@ -55,6 +55,8 @@ friend QDataStream& ::operator<<(QDataStream&, const SelectorDihedral&);
 friend QDataStream& ::operator>>(QDataStream&, SelectorDihedral&);
 
 public:
+    typedef QList<Dihedral>::const_iterator const_iterator;
+
     SelectorDihedral();
     SelectorDihedral(const SireMol::MoleculeData &molecule,
                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
@@ -207,6 +209,12 @@ public:
     SireUnits::Dimension::MolarEnergy energy() const;
     SireUnits::Dimension::MolarEnergy energy(
                             const SireBase::PropertyMap &map) const;
+
+    SelectorDihedral::const_iterator constBegin() const;
+    SelectorDihedral::const_iterator begin() const;
+
+    SelectorDihedral::const_iterator constEnd() const;
+    SelectorDihedral::const_iterator end() const;
 
 protected:
     /** The IDs of the Dihedrals (holding AtomIdx IDs) */

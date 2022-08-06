@@ -55,6 +55,8 @@ friend QDataStream& ::operator<<(QDataStream&, const SelectorBond&);
 friend QDataStream& ::operator>>(QDataStream&, SelectorBond&);
 
 public:
+    typedef QList<Bond>::const_iterator const_iterator;
+
     SelectorBond();
     SelectorBond(const SireMol::MoleculeData &molecule,
                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
@@ -168,6 +170,9 @@ public:
     QList<SireUnits::Dimension::Length> lengths() const;
     QList<SireUnits::Dimension::Length> lengths(const SireBase::PropertyMap &map) const;
 
+    QList<SireUnits::Dimension::Length> measures() const;
+    QList<SireUnits::Dimension::Length> measures(const SireBase::PropertyMap &map) const;
+
     QList<SireCAS::Expression> potentials() const;
     QList<SireCAS::Expression> potentials(const SireBase::PropertyMap &map) const;
 
@@ -178,6 +183,12 @@ public:
     SireUnits::Dimension::MolarEnergy energy() const;
     SireUnits::Dimension::MolarEnergy energy(
                             const SireBase::PropertyMap &map) const;
+
+    SelectorBond::const_iterator constBegin() const;
+    SelectorBond::const_iterator begin() const;
+
+    SelectorBond::const_iterator constEnd() const;
+    SelectorBond::const_iterator end() const;
 
 protected:
     /** The IDs of the bond (holding AtomIdx IDs) */
