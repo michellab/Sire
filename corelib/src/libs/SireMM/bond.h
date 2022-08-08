@@ -131,7 +131,7 @@ public:
     SireUnits::Dimension::Length length(const SireBase::PropertyMap &map) const;
 
     SireUnits::Dimension::Length measure() const;
-    SireUnits::Dimension::Length measure(SireBase::PropertyMap &map) const;
+    SireUnits::Dimension::Length measure(const SireBase::PropertyMap &map) const;
 
     SireCAS::Expression potential() const;
     SireCAS::Expression potential(const SireBase::PropertyMap &map) const;

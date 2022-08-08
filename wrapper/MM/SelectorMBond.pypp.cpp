@@ -7,6 +7,10 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/errors.h"
+
+#include "SireCAS/expression.h"
+
 #include "SireError/errors.h"
 
 #include "SireID/index.h"
@@ -57,6 +61,19 @@ void register_SelectorMBond_class(){
             SelectorMBond_exposer.def( 
                 "IDs"
                 , IDs_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::add
+        
+            typedef ::SireMM::SelectorMBond ( ::SireMM::SelectorMBond::*add_function_type)( ::SireMM::SelectorMBond const & ) const;
+            add_function_type add_function_value( &::SireMM::SelectorMBond::add );
+            
+            SelectorMBond_exposer.def( 
+                "add"
+                , add_function_value
+                , ( bp::arg("other") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -421,6 +438,56 @@ void register_SelectorMBond_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorMBond::energies
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorMBond::*energies_function_type)(  ) const;
+            energies_function_type energies_function_value( &::SireMM::SelectorMBond::energies );
+            
+            SelectorMBond_exposer.def( 
+                "energies"
+                , energies_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::energies
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorMBond::*energies_function_type)( ::SireBase::PropertyMap const & ) const;
+            energies_function_type energies_function_value( &::SireMM::SelectorMBond::energies );
+            
+            SelectorMBond_exposer.def( 
+                "energies"
+                , energies_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::energy
+        
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorMBond::*energy_function_type)(  ) const;
+            energy_function_type energy_function_value( &::SireMM::SelectorMBond::energy );
+            
+            SelectorMBond_exposer.def( 
+                "energy"
+                , energy_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::energy
+        
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorMBond::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
+            energy_function_type energy_function_value( &::SireMM::SelectorMBond::energy );
+            
+            SelectorMBond_exposer.def( 
+                "energy"
+                , energy_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorMBond::evaluate
         
             typedef ::SireMol::EvaluatorM ( ::SireMM::SelectorMBond::*evaluate_function_type)(  ) const;
@@ -433,6 +500,83 @@ void register_SelectorMBond_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorMBond::hasMetadata
+        
+            typedef bool ( ::SireMM::SelectorMBond::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
+            hasMetadata_function_type hasMetadata_function_value( &::SireMM::SelectorMBond::hasMetadata );
+            
+            SelectorMBond_exposer.def( 
+                "hasMetadata"
+                , hasMetadata_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::hasMetadata
+        
+            typedef bool ( ::SireMM::SelectorMBond::*hasMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            hasMetadata_function_type hasMetadata_function_value( &::SireMM::SelectorMBond::hasMetadata );
+            
+            SelectorMBond_exposer.def( 
+                "hasMetadata"
+                , hasMetadata_function_value
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::hasProperty
+        
+            typedef bool ( ::SireMM::SelectorMBond::*hasProperty_function_type)( ::SireBase::PropertyName const & ) const;
+            hasProperty_function_type hasProperty_function_value( &::SireMM::SelectorMBond::hasProperty );
+            
+            SelectorMBond_exposer.def( 
+                "hasProperty"
+                , hasProperty_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::intersection
+        
+            typedef ::SireMM::SelectorMBond ( ::SireMM::SelectorMBond::*intersection_function_type)( ::SireMM::SelectorMBond const & ) const;
+            intersection_function_type intersection_function_value( &::SireMM::SelectorMBond::intersection );
+            
+            SelectorMBond_exposer.def( 
+                "intersection"
+                , intersection_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::invert
+        
+            typedef ::SireMM::SelectorMBond ( ::SireMM::SelectorMBond::*invert_function_type)( ::SireBase::PropertyMap const & ) const;
+            invert_function_type invert_function_value( &::SireMM::SelectorMBond::invert );
+            
+            SelectorMBond_exposer.def( 
+                "invert"
+                , invert_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::invert
+        
+            typedef ::SireMM::SelectorMBond ( ::SireMM::SelectorMBond::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMM::SelectorMBond::invert );
+            
+            SelectorMBond_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorMBond::isEmpty
         
             typedef bool ( ::SireMM::SelectorMBond::*isEmpty_function_type)(  ) const;
@@ -441,6 +585,81 @@ void register_SelectorMBond_class(){
             SelectorMBond_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::lengths
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > > ( ::SireMM::SelectorMBond::*lengths_function_type)(  ) const;
+            lengths_function_type lengths_function_value( &::SireMM::SelectorMBond::lengths );
+            
+            SelectorMBond_exposer.def( 
+                "lengths"
+                , lengths_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::lengths
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > > ( ::SireMM::SelectorMBond::*lengths_function_type)( ::SireBase::PropertyMap const & ) const;
+            lengths_function_type lengths_function_value( &::SireMM::SelectorMBond::lengths );
+            
+            SelectorMBond_exposer.def( 
+                "lengths"
+                , lengths_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::measures
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > > ( ::SireMM::SelectorMBond::*measures_function_type)(  ) const;
+            measures_function_type measures_function_value( &::SireMM::SelectorMBond::measures );
+            
+            SelectorMBond_exposer.def( 
+                "measures"
+                , measures_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::measures
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > > ( ::SireMM::SelectorMBond::*measures_function_type)( ::SireBase::PropertyMap const & ) const;
+            measures_function_type measures_function_value( &::SireMM::SelectorMBond::measures );
+            
+            SelectorMBond_exposer.def( 
+                "measures"
+                , measures_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::metadataKeys
+        
+            typedef ::QStringList ( ::SireMM::SelectorMBond::*metadataKeys_function_type)(  ) const;
+            metadataKeys_function_type metadataKeys_function_value( &::SireMM::SelectorMBond::metadataKeys );
+            
+            SelectorMBond_exposer.def( 
+                "metadataKeys"
+                , metadataKeys_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::metadataKeys
+        
+            typedef ::QStringList ( ::SireMM::SelectorMBond::*metadataKeys_function_type)( ::SireBase::PropertyName const & ) const;
+            metadataKeys_function_type metadataKeys_function_value( &::SireMM::SelectorMBond::metadataKeys );
+            
+            SelectorMBond_exposer.def( 
+                "metadataKeys"
+                , metadataKeys_function_value
+                , ( bp::arg("key") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -741,6 +960,81 @@ void register_SelectorMBond_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("id") )
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::potentials
+        
+            typedef ::QList< SireCAS::Expression > ( ::SireMM::SelectorMBond::*potentials_function_type)(  ) const;
+            potentials_function_type potentials_function_value( &::SireMM::SelectorMBond::potentials );
+            
+            SelectorMBond_exposer.def( 
+                "potentials"
+                , potentials_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::potentials
+        
+            typedef ::QList< SireCAS::Expression > ( ::SireMM::SelectorMBond::*potentials_function_type)( ::SireBase::PropertyMap const & ) const;
+            potentials_function_type potentials_function_value( &::SireMM::SelectorMBond::potentials );
+            
+            SelectorMBond_exposer.def( 
+                "potentials"
+                , potentials_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::properties
+        
+            typedef ::QList< SireBase::Properties > ( ::SireMM::SelectorMBond::*properties_function_type)(  ) const;
+            properties_function_type properties_function_value( &::SireMM::SelectorMBond::properties );
+            
+            SelectorMBond_exposer.def( 
+                "properties"
+                , properties_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::property
+        
+            typedef ::QList< SireBase::PropPtr< SireBase::Property > > ( ::SireMM::SelectorMBond::*property_function_type)( ::SireBase::PropertyName const & ) const;
+            property_function_type property_function_value( &::SireMM::SelectorMBond::property );
+            
+            SelectorMBond_exposer.def( 
+                "property"
+                , property_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::property
+        
+            typedef ::QList< SireBase::PropPtr< SireBase::Property > > ( ::SireMM::SelectorMBond::*property_function_type)( ::SireBase::PropertyName const &,::SireBase::Property const & ) const;
+            property_function_type property_function_value( &::SireMM::SelectorMBond::property );
+            
+            SelectorMBond_exposer.def( 
+                "property"
+                , property_function_value
+                , ( bp::arg("key"), bp::arg("default_value") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::propertyKeys
+        
+            typedef ::QStringList ( ::SireMM::SelectorMBond::*propertyKeys_function_type)(  ) const;
+            propertyKeys_function_type propertyKeys_function_value( &::SireMM::SelectorMBond::propertyKeys );
+            
+            SelectorMBond_exposer.def( 
+                "propertyKeys"
+                , propertyKeys_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

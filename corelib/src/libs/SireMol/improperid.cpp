@@ -34,6 +34,8 @@
 
 #include "SireBase/property.h"
 
+#include "SireID/index.h"
+
 #include "SireMaths/vector.h"
 #include "SireMaths/torsion.h"
 
@@ -127,6 +129,23 @@ bool ImproperID::operator!=(const ImproperID &other) const
 {
     return atm0 != other.atm0 or atm1 != other.atm1 or
            atm2 != other.atm2 or atm3 != other.atm3;
+}
+
+const AtomID& ImproperID::operator[](int i) const
+{
+    i = Index(i).map(4);
+
+    switch(i)
+    {
+    case 0:
+        return atm0.base();
+    case 1:
+        return atm1.base();
+    case 2:
+        return atm2.base();
+    default:
+        return atm3.base();
+    }
 }
 
 /** Are these impropers generally equivalent, i.e. do they contain the same

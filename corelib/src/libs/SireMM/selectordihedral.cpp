@@ -1104,6 +1104,16 @@ QList<SireUnits::Dimension::Angle> SelectorDihedral::sizes() const
     return this->sizes(PropertyMap());
 }
 
+QList<SireUnits::Dimension::Angle> SelectorDihedral::measures(const PropertyMap &map) const
+{
+    return this->sizes(map);
+}
+
+QList<SireUnits::Dimension::Angle> SelectorDihedral::measures() const
+{
+    return this->sizes();
+}
+
 QList<Expression> SelectorDihedral::potentials() const
 {
     return this->potentials(PropertyMap());

@@ -923,9 +923,9 @@ SelectorMBond SelectorMBond::add(const SelectorMBond &other) const
         }
         else if (ret.bnds.last().isSameMolecule(value))
         {
-            for (const auto &v : value)
+            for (int i=0; i<value.count(); ++i)
             {
-                ret._append(v);
+                ret._append(value(i));
             }
         }
         else
@@ -959,8 +959,7 @@ SelectorMBond SelectorMBond::intersection(const SelectorMBond &other) const
             }
         }
 
-        if (not intersect.isEmpty())
-            ret.bnds.append(intersect);
+        ret.bnds.append(intersect);
     }
 
     return ret;

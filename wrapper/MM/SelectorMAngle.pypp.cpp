@@ -7,6 +7,10 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/errors.h"
+
+#include "SireCAS/expression.h"
+
 #include "SireError/errors.h"
 
 #include "SireID/index.h"
@@ -57,6 +61,19 @@ void register_SelectorMAngle_class(){
             SelectorMAngle_exposer.def( 
                 "IDs"
                 , IDs_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::add
+        
+            typedef ::SireMM::SelectorMAngle ( ::SireMM::SelectorMAngle::*add_function_type)( ::SireMM::SelectorMAngle const & ) const;
+            add_function_type add_function_value( &::SireMM::SelectorMAngle::add );
+            
+            SelectorMAngle_exposer.def( 
+                "add"
+                , add_function_value
+                , ( bp::arg("other") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -421,6 +438,56 @@ void register_SelectorMAngle_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorMAngle::energies
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorMAngle::*energies_function_type)(  ) const;
+            energies_function_type energies_function_value( &::SireMM::SelectorMAngle::energies );
+            
+            SelectorMAngle_exposer.def( 
+                "energies"
+                , energies_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::energies
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorMAngle::*energies_function_type)( ::SireBase::PropertyMap const & ) const;
+            energies_function_type energies_function_value( &::SireMM::SelectorMAngle::energies );
+            
+            SelectorMAngle_exposer.def( 
+                "energies"
+                , energies_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::energy
+        
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorMAngle::*energy_function_type)(  ) const;
+            energy_function_type energy_function_value( &::SireMM::SelectorMAngle::energy );
+            
+            SelectorMAngle_exposer.def( 
+                "energy"
+                , energy_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::energy
+        
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorMAngle::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
+            energy_function_type energy_function_value( &::SireMM::SelectorMAngle::energy );
+            
+            SelectorMAngle_exposer.def( 
+                "energy"
+                , energy_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorMAngle::evaluate
         
             typedef ::SireMol::EvaluatorM ( ::SireMM::SelectorMAngle::*evaluate_function_type)(  ) const;
@@ -433,6 +500,83 @@ void register_SelectorMAngle_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorMAngle::hasMetadata
+        
+            typedef bool ( ::SireMM::SelectorMAngle::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
+            hasMetadata_function_type hasMetadata_function_value( &::SireMM::SelectorMAngle::hasMetadata );
+            
+            SelectorMAngle_exposer.def( 
+                "hasMetadata"
+                , hasMetadata_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::hasMetadata
+        
+            typedef bool ( ::SireMM::SelectorMAngle::*hasMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            hasMetadata_function_type hasMetadata_function_value( &::SireMM::SelectorMAngle::hasMetadata );
+            
+            SelectorMAngle_exposer.def( 
+                "hasMetadata"
+                , hasMetadata_function_value
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::hasProperty
+        
+            typedef bool ( ::SireMM::SelectorMAngle::*hasProperty_function_type)( ::SireBase::PropertyName const & ) const;
+            hasProperty_function_type hasProperty_function_value( &::SireMM::SelectorMAngle::hasProperty );
+            
+            SelectorMAngle_exposer.def( 
+                "hasProperty"
+                , hasProperty_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::intersection
+        
+            typedef ::SireMM::SelectorMAngle ( ::SireMM::SelectorMAngle::*intersection_function_type)( ::SireMM::SelectorMAngle const & ) const;
+            intersection_function_type intersection_function_value( &::SireMM::SelectorMAngle::intersection );
+            
+            SelectorMAngle_exposer.def( 
+                "intersection"
+                , intersection_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::invert
+        
+            typedef ::SireMM::SelectorMAngle ( ::SireMM::SelectorMAngle::*invert_function_type)( ::SireBase::PropertyMap const & ) const;
+            invert_function_type invert_function_value( &::SireMM::SelectorMAngle::invert );
+            
+            SelectorMAngle_exposer.def( 
+                "invert"
+                , invert_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::invert
+        
+            typedef ::SireMM::SelectorMAngle ( ::SireMM::SelectorMAngle::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMM::SelectorMAngle::invert );
+            
+            SelectorMAngle_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorMAngle::isEmpty
         
             typedef bool ( ::SireMM::SelectorMAngle::*isEmpty_function_type)(  ) const;
@@ -441,6 +585,56 @@ void register_SelectorMAngle_class(){
             SelectorMAngle_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::measures
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 > > ( ::SireMM::SelectorMAngle::*measures_function_type)(  ) const;
+            measures_function_type measures_function_value( &::SireMM::SelectorMAngle::measures );
+            
+            SelectorMAngle_exposer.def( 
+                "measures"
+                , measures_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::measures
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 > > ( ::SireMM::SelectorMAngle::*measures_function_type)( ::SireBase::PropertyMap const & ) const;
+            measures_function_type measures_function_value( &::SireMM::SelectorMAngle::measures );
+            
+            SelectorMAngle_exposer.def( 
+                "measures"
+                , measures_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::metadataKeys
+        
+            typedef ::QStringList ( ::SireMM::SelectorMAngle::*metadataKeys_function_type)(  ) const;
+            metadataKeys_function_type metadataKeys_function_value( &::SireMM::SelectorMAngle::metadataKeys );
+            
+            SelectorMAngle_exposer.def( 
+                "metadataKeys"
+                , metadataKeys_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::metadataKeys
+        
+            typedef ::QStringList ( ::SireMM::SelectorMAngle::*metadataKeys_function_type)( ::SireBase::PropertyName const & ) const;
+            metadataKeys_function_type metadataKeys_function_value( &::SireMM::SelectorMAngle::metadataKeys );
+            
+            SelectorMAngle_exposer.def( 
+                "metadataKeys"
+                , metadataKeys_function_value
+                , ( bp::arg("key") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -744,6 +938,81 @@ void register_SelectorMAngle_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorMAngle::potentials
+        
+            typedef ::QList< SireCAS::Expression > ( ::SireMM::SelectorMAngle::*potentials_function_type)(  ) const;
+            potentials_function_type potentials_function_value( &::SireMM::SelectorMAngle::potentials );
+            
+            SelectorMAngle_exposer.def( 
+                "potentials"
+                , potentials_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::potentials
+        
+            typedef ::QList< SireCAS::Expression > ( ::SireMM::SelectorMAngle::*potentials_function_type)( ::SireBase::PropertyMap const & ) const;
+            potentials_function_type potentials_function_value( &::SireMM::SelectorMAngle::potentials );
+            
+            SelectorMAngle_exposer.def( 
+                "potentials"
+                , potentials_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::properties
+        
+            typedef ::QList< SireBase::Properties > ( ::SireMM::SelectorMAngle::*properties_function_type)(  ) const;
+            properties_function_type properties_function_value( &::SireMM::SelectorMAngle::properties );
+            
+            SelectorMAngle_exposer.def( 
+                "properties"
+                , properties_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::property
+        
+            typedef ::QList< SireBase::PropPtr< SireBase::Property > > ( ::SireMM::SelectorMAngle::*property_function_type)( ::SireBase::PropertyName const & ) const;
+            property_function_type property_function_value( &::SireMM::SelectorMAngle::property );
+            
+            SelectorMAngle_exposer.def( 
+                "property"
+                , property_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::property
+        
+            typedef ::QList< SireBase::PropPtr< SireBase::Property > > ( ::SireMM::SelectorMAngle::*property_function_type)( ::SireBase::PropertyName const &,::SireBase::Property const & ) const;
+            property_function_type property_function_value( &::SireMM::SelectorMAngle::property );
+            
+            SelectorMAngle_exposer.def( 
+                "property"
+                , property_function_value
+                , ( bp::arg("key"), bp::arg("default_value") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::propertyKeys
+        
+            typedef ::QStringList ( ::SireMM::SelectorMAngle::*propertyKeys_function_type)(  ) const;
+            propertyKeys_function_type propertyKeys_function_value( &::SireMM::SelectorMAngle::propertyKeys );
+            
+            SelectorMAngle_exposer.def( 
+                "propertyKeys"
+                , propertyKeys_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorMAngle::residue
         
             typedef ::SireMol::Residue ( ::SireMM::SelectorMAngle::*residue_function_type)( int ) const;
@@ -997,6 +1266,31 @@ void register_SelectorMAngle_class(){
             SelectorMAngle_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::sizes
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 > > ( ::SireMM::SelectorMAngle::*sizes_function_type)(  ) const;
+            sizes_function_type sizes_function_value( &::SireMM::SelectorMAngle::sizes );
+            
+            SelectorMAngle_exposer.def( 
+                "sizes"
+                , sizes_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMAngle::sizes
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 > > ( ::SireMM::SelectorMAngle::*sizes_function_type)( ::SireBase::PropertyMap const & ) const;
+            sizes_function_type sizes_function_value( &::SireMM::SelectorMAngle::sizes );
+            
+            SelectorMAngle_exposer.def( 
+                "sizes"
+                , sizes_function_value
+                , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         

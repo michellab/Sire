@@ -68,7 +68,7 @@ using boost::tuple;
 
 /** This class provides a generic ID for a dihedral between
     four atoms
-    
+
     @author Christopher Woods
 */
 class SIREMOL_EXPORT DihedralID : public SireID::ID
@@ -83,37 +83,39 @@ public:
                const AtomID &atom2, const AtomID &atom3);
 
     DihedralID(const DihedralID &other);
-    
+
     ~DihedralID();
-    
+
     static const char* typeName();
-    
+
     const char* what() const
     {
         return DihedralID::typeName();
     }
-    
+
     DihedralID* clone() const;
-    
+
     uint hash() const;
 
     QString toString() const;
-    
+
     bool isNull() const;
-    
+
     DihedralID& operator=(const DihedralID &other);
-    
+
     bool operator==(const SireID::ID &other) const;
-    
+
     bool operator==(const DihedralID &other) const;
     bool operator!=(const DihedralID &other) const;
-    
+
     DihedralID mirror() const;
-    
-    tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx> 
+
+    const AtomID& operator[](int i) const;
+
+    tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>
     map(const MoleculeInfoData &molinfo) const;
-    
-    tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx> 
+
+    tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>
     map(const MoleculeInfoData &mol0info,
         const MoleculeInfoData &mol1info,
         const MoleculeInfoData &mol2info,
@@ -121,13 +123,13 @@ public:
 
     Torsion torsion(const MoleculeData &moldata,
                     const PropertyMap &map = PropertyMap()) const;
-                      
+
     Torsion torsion(const MoleculeData &mol0data,
                     const MoleculeData &mol1data,
                     const MoleculeData &mol2data,
                     const MoleculeData &mol3data,
                     const PropertyMap &map = PropertyMap()) const;
-                      
+
     Torsion torsion(const MoleculeData &mol0data,
                     const PropertyMap &map0,
                     const MoleculeData &mol1data,
@@ -140,12 +142,12 @@ public:
     SireUnits::Dimension::Angle size(const MoleculeData &moldata,
                                      const PropertyMap &map = PropertyMap()) const;
 
-    SireUnits::Dimension::Angle size(const MoleculeData &mol0data, 
+    SireUnits::Dimension::Angle size(const MoleculeData &mol0data,
                                      const MoleculeData &mol1data,
                                      const MoleculeData &mol2data,
                                      const MoleculeData &mol3data,
                                      const PropertyMap &map = PropertyMap()) const;
-                
+
     SireUnits::Dimension::Angle size(const MoleculeData &mol0data,
                                      const PropertyMap &map0,
                                      const MoleculeData &mol1data,

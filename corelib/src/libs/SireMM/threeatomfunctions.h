@@ -123,6 +123,19 @@ public:
     bool operator>(const IDTriple &other) const;
     bool operator>=(const IDTriple &other) const;
 
+    quint32 operator[](int i) const
+    {
+        switch(i)
+        {
+        case 0:
+            return atom0;
+        case 1:
+            return atom1;
+        default:
+            return atom2;
+        }
+    }
+
     quint32 atom0;
     quint32 atom1;
     quint32 atom2;

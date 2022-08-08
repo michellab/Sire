@@ -271,6 +271,31 @@ void register_SelectorImproper_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorImproper::measures
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 > > ( ::SireMM::SelectorImproper::*measures_function_type)(  ) const;
+            measures_function_type measures_function_value( &::SireMM::SelectorImproper::measures );
+            
+            SelectorImproper_exposer.def( 
+                "measures"
+                , measures_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorImproper::measures
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 > > ( ::SireMM::SelectorImproper::*measures_function_type)( ::SireBase::PropertyMap const & ) const;
+            measures_function_type measures_function_value( &::SireMM::SelectorImproper::measures );
+            
+            SelectorImproper_exposer.def( 
+                "measures"
+                , measures_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorImproper::metadataKeys
         
             typedef ::QStringList ( ::SireMM::SelectorImproper::*metadataKeys_function_type)(  ) const;

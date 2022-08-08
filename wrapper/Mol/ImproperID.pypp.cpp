@@ -171,6 +171,19 @@ void register_ImproperID_class(){
         }
         ImproperID_exposer.def( bp::self == bp::other< SireID::ID >() );
         ImproperID_exposer.def( bp::self == bp::self );
+        { //::SireMol::ImproperID::operator[]
+        
+            typedef ::SireMol::AtomID const & ( ::SireMol::ImproperID::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ImproperID::operator[] );
+            
+            ImproperID_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
+                , "" );
+        
+        }
         { //::SireMol::ImproperID::size
         
             typedef ::SireUnits::Dimension::Angle ( ::SireMol::ImproperID::*size_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;

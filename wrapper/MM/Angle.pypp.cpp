@@ -197,6 +197,31 @@ void register_Angle_class(){
                 , "" );
         
         }
+        { //::SireMM::Angle::measure
+        
+            typedef ::SireUnits::Dimension::Angle ( ::SireMM::Angle::*measure_function_type)(  ) const;
+            measure_function_type measure_function_value( &::SireMM::Angle::measure );
+            
+            Angle_exposer.def( 
+                "measure"
+                , measure_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Angle::measure
+        
+            typedef ::SireUnits::Dimension::Angle ( ::SireMM::Angle::*measure_function_type)( ::SireBase::PropertyMap const & ) const;
+            measure_function_type measure_function_value( &::SireMM::Angle::measure );
+            
+            Angle_exposer.def( 
+                "measure"
+                , measure_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::Angle::metadataKeys
         
             typedef ::QStringList ( ::SireMM::Angle::*metadataKeys_function_type)(  ) const;

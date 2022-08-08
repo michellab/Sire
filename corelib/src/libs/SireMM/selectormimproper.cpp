@@ -30,8 +30,11 @@
 
 #include "SireID/index.h"
 
+#include "SireCAS/expression.h"
+
 #include "SireMol/errors.h"
 #include "SireError/errors.h"
+#include "SireBase/errors.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -908,4 +911,288 @@ QString SelectorMImproper::toString() const
                     .arg(n)
                     .arg(parts.join("\n"));
     }
+}
+
+SelectorMImproper SelectorMImproper::add(const SelectorMImproper &other) const
+{
+    SelectorMImproper ret(*this);
+
+    for (const auto &value : other)
+    {
+        if (ret.isEmpty())
+        {
+            ret.imps.append(value);
+        }
+        else if (ret.imps.last().isSameMolecule(value))
+        {
+            for (int i=0; i<value.count(); ++i)
+            {
+                ret._append(value(i));
+            }
+        }
+        else
+        {
+            ret.imps.append(value);
+        }
+    }
+
+    return ret;
+}
+
+SelectorMImproper SelectorMImproper::intersection(const SelectorMImproper &other) const
+{
+    if (this->count() < other.count())
+        return other.intersection(*this);
+
+    SelectorMImproper ret;
+
+    for (const auto &val : imps)
+    {
+        SelectorImproper intersect;
+
+        for (const auto &other_val : other)
+        {
+            if (val.isSameMolecule(other_val))
+            {
+                if (intersect.isEmpty())
+                    intersect = val.intersection(other_val);
+                else
+                    intersect = intersect.add(val.intersection(other_val));
+            }
+        }
+
+        ret.imps.append(intersect);
+    }
+
+    return ret;
+}
+
+SelectorMImproper SelectorMImproper::invert(const SireBase::PropertyMap &map) const
+{
+    SelectorMImproper ret;
+
+    for (const auto &val : imps)
+    {
+        ret.imps.append(val.invert(map));
+    }
+
+    return ret;
+}
+
+SelectorMImproper SelectorMImproper::invert() const
+{
+    return this->invert(PropertyMap());
+}
+
+bool SelectorMImproper::hasProperty(const SireBase::PropertyName &key) const
+{
+    for (const auto &val : imps)
+    {
+        if (val.hasProperty(key))
+            return true;
+    }
+
+    return false;
+}
+
+bool SelectorMImproper::hasMetadata(const SireBase::PropertyName &key) const
+{
+    for (const auto &val : imps)
+    {
+        if (val.hasMetadata(key))
+            return true;
+    }
+
+    return false;
+}
+
+bool SelectorMImproper::hasMetadata(const SireBase::PropertyName &key,
+                                 const SireBase::PropertyName &metakey) const
+{
+    for (const auto &val : imps)
+    {
+        if (val.hasMetadata(key, metakey))
+            return true;
+    }
+
+    return false;
+}
+
+template<class T>
+inline QSet<T> _to_set(const QList<T> &l)
+{
+    return QSet<T>(l.constBegin(), l.constEnd());
+}
+
+QStringList SelectorMImproper::propertyKeys() const
+{
+    QSet<QString> keys;
+
+    for (const auto &val : imps)
+    {
+        keys += _to_set(val.propertyKeys());
+    }
+
+    return keys.values();
+}
+
+QStringList SelectorMImproper::metadataKeys() const
+{
+    QSet<QString> keys;
+
+    for (const auto &val : imps)
+    {
+        keys += _to_set(val.metadataKeys());
+    }
+
+    return keys.values();
+}
+
+QStringList SelectorMImproper::metadataKeys(const SireBase::PropertyName &key) const
+{
+    QSet<QString> keys;
+
+    for (const auto &val : imps)
+    {
+        keys += _to_set(val.metadataKeys(key));
+    }
+
+    return keys.values();
+}
+
+QList<SireBase::Properties> SelectorMImproper::properties() const
+{
+    QList<SireBase::Properties> props;
+
+    for (const auto &val : imps)
+    {
+        props += val.properties();
+    }
+
+    return props;
+}
+
+QList<SireBase::PropertyPtr> SelectorMImproper::property(const SireBase::PropertyName &key) const
+{
+    QList<SireBase::PropertyPtr> props;
+
+    bool has_prop = false;
+
+    for (const auto &val : imps)
+    {
+        try
+        {
+            props += val.property(key);
+            has_prop = true;
+        }
+        catch(const SireError::exception&)
+        {
+            PropertyPtr null(new NullProperty());
+
+            for (int i=0; i<val.count(); ++i)
+            {
+                props.append(null);
+            }
+        }
+    }
+
+    if (not has_prop)
+        throw SireBase::missing_property(QObject::tr(
+            "None of the impropers in this container have a property called %1.")
+                .arg(key.source()), CODELOC);
+
+    return props;
+}
+
+QList<SireBase::PropertyPtr> SelectorMImproper::property(const SireBase::PropertyName &key,
+                                                      const Property &default_value) const
+{
+    QList<SireBase::PropertyPtr> props;
+
+    for (const auto &val : imps)
+    {
+        props += val.property(key, default_value);
+    }
+
+    return props;
+}
+
+QList<SireUnits::Dimension::Angle> SelectorMImproper::sizes() const
+{
+    return this->sizes(PropertyMap());
+}
+
+QList<SireUnits::Dimension::Angle> SelectorMImproper::sizes(const SireBase::PropertyMap &map) const
+{
+    QList<SireUnits::Dimension::Angle> a;
+
+    for (const auto &val : imps)
+    {
+        a += val.sizes(map);
+    }
+
+    return a;
+}
+
+QList<SireUnits::Dimension::Angle> SelectorMImproper::measures() const
+{
+    return this->sizes();
+}
+
+QList<SireUnits::Dimension::Angle> SelectorMImproper::measures(const SireBase::PropertyMap &map) const
+{
+    return this->sizes(map);
+}
+
+QList<SireCAS::Expression> SelectorMImproper::potentials() const
+{
+    return this->potentials(PropertyMap());
+}
+
+QList<SireCAS::Expression> SelectorMImproper::potentials(const SireBase::PropertyMap &map) const
+{
+    QList<SireCAS::Expression> e;
+
+    for (const auto &val : imps)
+    {
+        e += val.potentials(map);
+    }
+
+    return e;
+}
+
+QList<SireUnits::Dimension::MolarEnergy> SelectorMImproper::energies() const
+{
+    return this->energies(PropertyMap());
+}
+
+QList<SireUnits::Dimension::MolarEnergy> SelectorMImproper::energies(
+                                    const SireBase::PropertyMap &map) const
+{
+    QList<SireUnits::Dimension::MolarEnergy> e;
+
+    for (const auto &val : imps)
+    {
+        e += val.energies(map);
+    }
+
+    return e;
+}
+
+SireUnits::Dimension::MolarEnergy SelectorMImproper::energy() const
+{
+    return this->energy(PropertyMap());
+}
+
+SireUnits::Dimension::MolarEnergy SelectorMImproper::energy(
+                                const SireBase::PropertyMap &map) const
+{
+    SireUnits::Dimension::MolarEnergy nrg(0);
+
+    for (const auto &val : imps)
+    {
+        nrg += val.energy(map);
+    }
+
+    return nrg;
 }

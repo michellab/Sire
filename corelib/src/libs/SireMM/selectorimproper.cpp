@@ -1077,6 +1077,16 @@ QList<SireUnits::Dimension::Angle> SelectorImproper::sizes() const
     return this->sizes(PropertyMap());
 }
 
+QList<SireUnits::Dimension::Angle> SelectorImproper::measures(const PropertyMap &map) const
+{
+    return this->sizes(map);
+}
+
+QList<SireUnits::Dimension::Angle> SelectorImproper::measures() const
+{
+    return this->sizes();
+}
+
 QList<Expression> SelectorImproper::potentials() const
 {
     return this->potentials(PropertyMap());

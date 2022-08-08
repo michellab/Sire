@@ -30,8 +30,11 @@
 
 #include "SireID/index.h"
 
+#include "SireCAS/expression.h"
+
 #include "SireMol/errors.h"
 #include "SireError/errors.h"
+#include "SireBase/errors.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -908,4 +911,288 @@ QString SelectorMDihedral::toString() const
                     .arg(n)
                     .arg(parts.join("\n"));
     }
+}
+
+SelectorMDihedral SelectorMDihedral::add(const SelectorMDihedral &other) const
+{
+    SelectorMDihedral ret(*this);
+
+    for (const auto &value : other)
+    {
+        if (ret.isEmpty())
+        {
+            ret.dihs.append(value);
+        }
+        else if (ret.dihs.last().isSameMolecule(value))
+        {
+            for (int i=0; i<value.count(); ++i)
+            {
+                ret._append(value(i));
+            }
+        }
+        else
+        {
+            ret.dihs.append(value);
+        }
+    }
+
+    return ret;
+}
+
+SelectorMDihedral SelectorMDihedral::intersection(const SelectorMDihedral &other) const
+{
+    if (this->count() < other.count())
+        return other.intersection(*this);
+
+    SelectorMDihedral ret;
+
+    for (const auto &val : dihs)
+    {
+        SelectorDihedral intersect;
+
+        for (const auto &other_val : other)
+        {
+            if (val.isSameMolecule(other_val))
+            {
+                if (intersect.isEmpty())
+                    intersect = val.intersection(other_val);
+                else
+                    intersect = intersect.add(val.intersection(other_val));
+            }
+        }
+
+        ret.dihs.append(intersect);
+    }
+
+    return ret;
+}
+
+SelectorMDihedral SelectorMDihedral::invert(const SireBase::PropertyMap &map) const
+{
+    SelectorMDihedral ret;
+
+    for (const auto &val : dihs)
+    {
+        ret.dihs.append(val.invert(map));
+    }
+
+    return ret;
+}
+
+SelectorMDihedral SelectorMDihedral::invert() const
+{
+    return this->invert(PropertyMap());
+}
+
+bool SelectorMDihedral::hasProperty(const SireBase::PropertyName &key) const
+{
+    for (const auto &val : dihs)
+    {
+        if (val.hasProperty(key))
+            return true;
+    }
+
+    return false;
+}
+
+bool SelectorMDihedral::hasMetadata(const SireBase::PropertyName &key) const
+{
+    for (const auto &val : dihs)
+    {
+        if (val.hasMetadata(key))
+            return true;
+    }
+
+    return false;
+}
+
+bool SelectorMDihedral::hasMetadata(const SireBase::PropertyName &key,
+                                 const SireBase::PropertyName &metakey) const
+{
+    for (const auto &val : dihs)
+    {
+        if (val.hasMetadata(key, metakey))
+            return true;
+    }
+
+    return false;
+}
+
+template<class T>
+inline QSet<T> _to_set(const QList<T> &l)
+{
+    return QSet<T>(l.constBegin(), l.constEnd());
+}
+
+QStringList SelectorMDihedral::propertyKeys() const
+{
+    QSet<QString> keys;
+
+    for (const auto &val : dihs)
+    {
+        keys += _to_set(val.propertyKeys());
+    }
+
+    return keys.values();
+}
+
+QStringList SelectorMDihedral::metadataKeys() const
+{
+    QSet<QString> keys;
+
+    for (const auto &val : dihs)
+    {
+        keys += _to_set(val.metadataKeys());
+    }
+
+    return keys.values();
+}
+
+QStringList SelectorMDihedral::metadataKeys(const SireBase::PropertyName &key) const
+{
+    QSet<QString> keys;
+
+    for (const auto &val : dihs)
+    {
+        keys += _to_set(val.metadataKeys(key));
+    }
+
+    return keys.values();
+}
+
+QList<SireBase::Properties> SelectorMDihedral::properties() const
+{
+    QList<SireBase::Properties> props;
+
+    for (const auto &val : dihs)
+    {
+        props += val.properties();
+    }
+
+    return props;
+}
+
+QList<SireBase::PropertyPtr> SelectorMDihedral::property(const SireBase::PropertyName &key) const
+{
+    QList<SireBase::PropertyPtr> props;
+
+    bool has_prop = false;
+
+    for (const auto &val : dihs)
+    {
+        try
+        {
+            props += val.property(key);
+            has_prop = true;
+        }
+        catch(const SireError::exception&)
+        {
+            PropertyPtr null(new NullProperty());
+
+            for (int i=0; i<val.count(); ++i)
+            {
+                props.append(null);
+            }
+        }
+    }
+
+    if (not has_prop)
+        throw SireBase::missing_property(QObject::tr(
+            "None of the dihedrals in this container have a property called %1.")
+                .arg(key.source()), CODELOC);
+
+    return props;
+}
+
+QList<SireBase::PropertyPtr> SelectorMDihedral::property(const SireBase::PropertyName &key,
+                                                      const Property &default_value) const
+{
+    QList<SireBase::PropertyPtr> props;
+
+    for (const auto &val : dihs)
+    {
+        props += val.property(key, default_value);
+    }
+
+    return props;
+}
+
+QList<SireUnits::Dimension::Angle> SelectorMDihedral::sizes() const
+{
+    return this->sizes(PropertyMap());
+}
+
+QList<SireUnits::Dimension::Angle> SelectorMDihedral::sizes(const SireBase::PropertyMap &map) const
+{
+    QList<SireUnits::Dimension::Angle> a;
+
+    for (const auto &val : dihs)
+    {
+        a += val.sizes(map);
+    }
+
+    return a;
+}
+
+QList<SireUnits::Dimension::Angle> SelectorMDihedral::measures() const
+{
+    return this->sizes();
+}
+
+QList<SireUnits::Dimension::Angle> SelectorMDihedral::measures(const SireBase::PropertyMap &map) const
+{
+    return this->sizes(map);
+}
+
+QList<SireCAS::Expression> SelectorMDihedral::potentials() const
+{
+    return this->potentials(PropertyMap());
+}
+
+QList<SireCAS::Expression> SelectorMDihedral::potentials(const SireBase::PropertyMap &map) const
+{
+    QList<SireCAS::Expression> e;
+
+    for (const auto &val : dihs)
+    {
+        e += val.potentials(map);
+    }
+
+    return e;
+}
+
+QList<SireUnits::Dimension::MolarEnergy> SelectorMDihedral::energies() const
+{
+    return this->energies(PropertyMap());
+}
+
+QList<SireUnits::Dimension::MolarEnergy> SelectorMDihedral::energies(
+                                    const SireBase::PropertyMap &map) const
+{
+    QList<SireUnits::Dimension::MolarEnergy> e;
+
+    for (const auto &val : dihs)
+    {
+        e += val.energies(map);
+    }
+
+    return e;
+}
+
+SireUnits::Dimension::MolarEnergy SelectorMDihedral::energy() const
+{
+    return this->energy(PropertyMap());
+}
+
+SireUnits::Dimension::MolarEnergy SelectorMDihedral::energy(
+                                const SireBase::PropertyMap &map) const
+{
+    SireUnits::Dimension::MolarEnergy nrg(0);
+
+    for (const auto &val : dihs)
+    {
+        nrg += val.energy(map);
+    }
+
+    return nrg;
 }

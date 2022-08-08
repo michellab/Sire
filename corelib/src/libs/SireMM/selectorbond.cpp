@@ -882,6 +882,16 @@ QList<Length> SelectorBond::lengths() const
     return this->lengths(PropertyMap());
 }
 
+QList<Length> SelectorBond::measures() const
+{
+    return this->lengths();
+}
+
+QList<Length> SelectorBond::measures(const PropertyMap &map) const
+{
+    return this->lengths(map);
+}
+
 QList<Expression> SelectorBond::potentials() const
 {
     return this->potentials(PropertyMap());

@@ -34,6 +34,8 @@
 
 #include "SireBase/property.h"
 
+#include "SireID/index.h"
+
 #include "SireMaths/vector.h"
 #include "SireMaths/triangle.h"
 
@@ -54,11 +56,11 @@ QDataStream &operator<<(QDataStream &ds,
                                        const AngleID &angleid)
 {
     writeHeader(ds, r_angleid, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << angleid.atm0 << angleid.atm1 << angleid.atm2;
-    
+
     return ds;
 }
 
@@ -67,16 +69,16 @@ QDataStream &operator>>(QDataStream &ds,
                                        AngleID &angleid)
 {
     VersionID v = readHeader(ds, r_angleid);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> angleid.atm0 >> angleid.atm1 >> angleid.atm2;
     }
     else
         throw version_error(v, "1", r_angleid, CODELOC);
-        
+
     return ds;
 }
 
@@ -108,7 +110,7 @@ AngleID& AngleID::operator=(const AngleID &other)
     atm0 = other.atm0;
     atm1 = other.atm1;
     atm2 = other.atm2;
-    
+
     return *this;
 }
 
@@ -126,20 +128,35 @@ bool AngleID::operator!=(const AngleID &other) const
            atm2 != other.atm2;
 }
 
-/** Return the mirror of this AngleID - i.e. if this is 
-    AngleID(atom0, atom1, atom2), this returns 
+const AtomID& AngleID::operator[](int i) const
+{
+    i = Index(i).map(3);
+
+    switch(i)
+    {
+    case 0:
+        return atm0.base();
+    case 1:
+        return atm1.base();
+    default:
+        return atm2.base();
+    }
+}
+
+/** Return the mirror of this AngleID - i.e. if this is
+    AngleID(atom0, atom1, atom2), this returns
     AngleID(atom2, atom1, atom0).
-    
+
     This is useful if you know that AngleID(atom0,atom1,atom2) equals
     AngleID(atom2,atom1,atom0), e.g. you can now write;
-    
+
     if (not (angles.contains(angle) or angles.contains(angle.mirror())) )
     {
         angles.insert(angle);
     }
-    
+
     or
-    
+
     if (angle == other_angle or angle.mirror() == other.angle())
     {
         //this is the same angle
@@ -175,18 +192,18 @@ bool AngleID::isNull() const
 bool AngleID::operator==(const SireID::ID &other) const
 {
     const AngleID *other_angle = dynamic_cast<const AngleID*>(&other);
-    
+
     return other_angle and this->operator==(*other_angle);
 }
 
-/** Return the indicies of the three atoms in this angle - this returns 
+/** Return the indicies of the three atoms in this angle - this returns
     them in the order tuple(angle.atom0(),angle.atom1(),angle.atom2())
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
 */
-tuple<AtomIdx,AtomIdx,AtomIdx> 
+tuple<AtomIdx,AtomIdx,AtomIdx>
 AngleID::map(const MoleculeInfoData &molinfo) const
 {
     return tuple<AtomIdx,AtomIdx,AtomIdx>( molinfo.atomIdx(atm0),
@@ -198,7 +215,7 @@ AngleID::map(const MoleculeInfoData &molinfo) const
     two molecules whose data is in 'mol0info' (containing angle.atom0()),
     'mol1info' (containing angle.atom1()) and 'mol2info' (containing
     angle.atom2())
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
@@ -216,19 +233,19 @@ AngleID::map(const MoleculeInfoData &mol0info,
 /** Return the geometric triangle formed by the three atoms
     of this angle in the molecule whose data is in 'moldata',
     using 'map' to find the coordinates property.
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
-*/                      
+*/
 Triangle AngleID::triangle(const MoleculeData &moldata,
                            const PropertyMap &map) const
 {
     const AtomCoords &coords = moldata.property(map["coordinates"])
                                     .asA<AtomCoords>();
-                                    
+
     return Triangle( coords.at( moldata.info().cgAtomIdx(atm0) ),
                      coords.at( moldata.info().cgAtomIdx(atm1) ),
                      coords.at( moldata.info().cgAtomIdx(atm2) ) );
@@ -240,13 +257,13 @@ Triangle AngleID::triangle(const MoleculeData &moldata,
     using 'map0' to find the coordinates property of mol0,
     'map1' to find the coordinates property of mol1 and
     'map2' to find the coordinates property of mol2.
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
-*/                      
+*/
 Triangle AngleID::triangle(const MoleculeData &mol0data,
                            const PropertyMap &map0,
                            const MoleculeData &mol1data,
@@ -265,19 +282,19 @@ Triangle AngleID::triangle(const MoleculeData &mol0data,
                      coords1.at( mol1data.info().cgAtomIdx(atm1) ),
                      coords2.at( mol2data.info().cgAtomIdx(atm2) ) );
 }
-                  
+
 /** Return the geometric triangle formed by the three atoms,
     atom0() in the molecule whose data is in 'mol0data',
     atom1() from 'mol1data' and atom2() from 'mol2data',
     using 'map' to find the coordinates property of the
     molecules
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
-*/                      
+*/
 Triangle AngleID::triangle(const MoleculeData &mol0data,
                            const MoleculeData &mol1data,
                            const MoleculeData &mol2data,
@@ -287,13 +304,13 @@ Triangle AngleID::triangle(const MoleculeData &mol0data,
                           mol1data, map,
                           mol2data, map);
 }
-                           
+
 /** Return the vector that is perpendicular to the plane
-    formed by atoms atom0(), atom1() and atom2() in the 
+    formed by atoms atom0(), atom1() and atom2() in the
     molecule whose data is in 'moldata', using the supplied
-    property map to find the property that contains the 
+    property map to find the property that contains the
     coordinates to be used
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
@@ -308,18 +325,18 @@ Vector AngleID::vector(const MoleculeData &moldata,
 
 /** Return the vector that is perpendicular to the plane
     formed by the atoms atom0() in 'mol0data', atom1() in
-    'mol1data' and atom2() in 'mol2data', using map0 to find the 
-    coordinates property of 'mol0', map1 to find the 
-    coordinates property of 'mol1' and map2 to find the 
+    'mol1data' and atom2() in 'mol2data', using map0 to find the
+    coordinates property of 'mol0', map1 to find the
+    coordinates property of 'mol1' and map2 to find the
     coordinates property of 'mol2'
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
 */
-Vector AngleID::vector(const MoleculeData &mol0data, 
+Vector AngleID::vector(const MoleculeData &mol0data,
                        const PropertyMap &map0,
                        const MoleculeData &mol1data,
                        const PropertyMap &map1,
@@ -332,26 +349,26 @@ Vector AngleID::vector(const MoleculeData &mol0data,
 
 /** Return the vector that is perpendicular to the plane
     formed by the atoms atom0() in 'mol0data', atom1() in
-    'mol1data' and atom2() in 'mol2data', using 'map' to find the 
+    'mol1data' and atom2() in 'mol2data', using 'map' to find the
     coordinates property of the molecules
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
 */
-Vector AngleID::vector(const MoleculeData &mol0data, 
+Vector AngleID::vector(const MoleculeData &mol0data,
                        const MoleculeData &mol1data,
                        const MoleculeData &mol2data,
                        const PropertyMap &map) const
 {
     return this->triangle(mol0data, mol1data, mol2data, map).vector();
 }
-     
+
 /** Return the size of this angle in the molecule whose data
     is in 'moldata', using 'map' to find the coordinates property
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
@@ -364,14 +381,14 @@ Angle AngleID::size(const MoleculeData &moldata,
     return this->triangle(moldata,map).angle();
 }
 
-/** Return the size of the angle between atom0() in the 
-    molecule whose data is in 'mol0data', atom1() in the 
-    molecule whose data is in 'mol1data' and atom2() in 
+/** Return the size of the angle between atom0() in the
+    molecule whose data is in 'mol0data', atom1() in the
+    molecule whose data is in 'mol1data' and atom2() in
     the molecule whose data is in 'mol2data', using 'map0'
     to the find the coordinates property of 'mol0',
     'map1' to find the coordinates property of 'mol1'
     and 'map2' to find the coordinates property of 'mol2'
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
@@ -385,17 +402,17 @@ Angle AngleID::size(const MoleculeData &mol0data,
                     const MoleculeData &mol2data,
                     const PropertyMap &map2) const
 {
-    return this->triangle(mol0data, map0, 
+    return this->triangle(mol0data, map0,
                           mol1data, map1,
                           mol2data, map2).angle();
 }
 
-/** Return the size of the angle between atom0() in the 
-    molecule whose data is in 'mol0data', atom1() in the 
-    molecule whose data is in 'mol1data' and atom2() in 
+/** Return the size of the angle between atom0() in the
+    molecule whose data is in 'mol0data', atom1() in the
+    molecule whose data is in 'mol1data' and atom2() in
     the molecule whose data is in 'mol2data', using 'map'
     to the find the coordinates property the molecules
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom

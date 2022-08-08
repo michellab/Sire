@@ -209,6 +209,31 @@ void register_Dihedral_class(){
                 , "" );
         
         }
+        { //::SireMM::Dihedral::measure
+        
+            typedef ::SireUnits::Dimension::Angle ( ::SireMM::Dihedral::*measure_function_type)(  ) const;
+            measure_function_type measure_function_value( &::SireMM::Dihedral::measure );
+            
+            Dihedral_exposer.def( 
+                "measure"
+                , measure_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Dihedral::measure
+        
+            typedef ::SireUnits::Dimension::Angle ( ::SireMM::Dihedral::*measure_function_type)( ::SireBase::PropertyMap const & ) const;
+            measure_function_type measure_function_value( &::SireMM::Dihedral::measure );
+            
+            Dihedral_exposer.def( 
+                "measure"
+                , measure_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::Dihedral::metadataKeys
         
             typedef ::QStringList ( ::SireMM::Dihedral::*metadataKeys_function_type)(  ) const;

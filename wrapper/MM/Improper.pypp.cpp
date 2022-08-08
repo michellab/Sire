@@ -209,6 +209,31 @@ void register_Improper_class(){
                 , "" );
         
         }
+        { //::SireMM::Improper::measure
+        
+            typedef ::SireUnits::Dimension::Angle ( ::SireMM::Improper::*measure_function_type)(  ) const;
+            measure_function_type measure_function_value( &::SireMM::Improper::measure );
+            
+            Improper_exposer.def( 
+                "measure"
+                , measure_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Improper::measure
+        
+            typedef ::SireUnits::Dimension::Angle ( ::SireMM::Improper::*measure_function_type)( ::SireBase::PropertyMap const & ) const;
+            measure_function_type measure_function_value( &::SireMM::Improper::measure );
+            
+            Improper_exposer.def( 
+                "measure"
+                , measure_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::Improper::metadataKeys
         
             typedef ::QStringList ( ::SireMM::Improper::*metadataKeys_function_type)(  ) const;

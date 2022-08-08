@@ -34,6 +34,8 @@
 #include "SireMol/mover.hpp"
 #include "SireMol/selector.hpp"
 
+#include "SireMM/threeatomfunctions.h"
+
 #include "SireCAS/symbol.h"
 #include "SireCAS/values.h"
 
@@ -57,6 +59,8 @@ using namespace SireID;
 using namespace SireStream;
 using namespace SireError;
 using namespace SireUnits;
+
+using SireMM::detail::IDTriple;
 
 static const RegisterMetaType<SelectorAngle> r_sangle;
 
@@ -145,6 +149,117 @@ SelectorAngle::SelectorAngle(const MoleculeData &moldata,
     this->operator=(SelectorAngle(Molecule(moldata), map));
 }
 
+QSet<IDTriple> _to_int_set(const QList<AngleID> &vals,
+                           const MoleculeInfoData &molinfo)
+{
+    QSet<IDTriple> s;
+    s.reserve(vals.count());
+
+    for (const auto &val : vals)
+    {
+        s.insert(IDTriple(molinfo.atomIdx(val[0]).value(),
+                          molinfo.atomIdx(val[1]).value(),
+                          molinfo.atomIdx(val[2]).value()));
+    }
+
+    return s;
+}
+
+QList<AngleID> _from_int_set(const QSet<IDTriple> &vals)
+{
+    QVector<IDTriple> v;
+    v.reserve(vals.count());
+
+    for (const auto &val : vals)
+    {
+        v.append(val);
+    }
+
+    std::sort(v.begin(), v.end());
+
+    QList<AngleID> l;
+    l.reserve(v.count());
+
+    for (const auto &val : v)
+    {
+        l.append(AngleID(AtomIdx(val.atom0),
+                         AtomIdx(val.atom1),
+                         AtomIdx(val.atom2)));
+    }
+
+    return l;
+}
+
+QList<AtomIdx> _filter(const QList<AtomIdx> &atoms, const AtomSelection &selection)
+{
+    QList<AtomIdx> ret;
+    ret.reserve(atoms.count());
+
+    for (const auto &atom : atoms)
+    {
+        if (selection.selected(atom))
+        {
+            ret.append(atom);
+        }
+    }
+
+    return ret;
+}
+
+QSet<IDTriple> _filter(const QSet<IDTriple> &angles,
+                       const QVector<quint32> &atoms,
+                       int position)
+{
+    QSet<IDTriple> result;
+
+    result.reserve(angles.count());
+
+    for (const auto &angle : angles)
+    {
+        const auto atomidx = angle[position];
+
+        for (const auto &atom : atoms)
+        {
+            if (atomidx == atom)
+            {
+                result.insert(angle);
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
+QVector<quint32> _to_int(const Selector<Atom> &atoms)
+{
+    QVector<quint32> ret;
+
+    const int n = atoms.count();
+
+    ret.reserve(n);
+
+    for (int i=0; i<n; ++i)
+    {
+        ret.append(atoms.index(i));
+    }
+
+    return ret;
+}
+
+QVector<quint32> _to_int(const QList<AtomIdx> &atoms)
+{
+    QVector<quint32> ret;
+    ret.reserve(atoms.count());
+
+    for (const auto &atom : atoms)
+    {
+        ret.append(atom.value());
+    }
+
+    return ret;
+}
+
 SelectorAngle::SelectorAngle(const MoleculeView &mol,
                              const AngleID &angle, const PropertyMap &map)
              : ConcreteProperty<SelectorAngle, MoleculeView>(mol)
@@ -155,60 +270,31 @@ SelectorAngle::SelectorAngle(const MoleculeView &mol,
 
     if (mol.data().hasProperty(map["connectivity"]))
     {
+        if (not mol.selectedAll())
+        {
+            const auto selection = mol.selection();
+            atoms0 = _filter(atoms0, selection);
+            atoms1 = _filter(atoms1, selection);
+            atoms2 = _filter(atoms2, selection);
+        }
+
+        auto int_atoms0 = _to_int(atoms0);
+        auto int_atoms1 = _to_int(atoms1);
+        auto int_atoms2 = _to_int(atoms2);
+
         auto c = mol.data().property(map["connectivity"]).asA<Connectivity>();
 
-        QSet<AngleID> seen_angles;
+        auto angles = _to_int_set(c.getAngles(), this->data().info());
 
-        QList<AngleID> angles;
+        auto left_angles = _filter(angles, int_atoms0, 0);
+        left_angles = _filter(left_angles, int_atoms1, 1);
+        left_angles = _filter(left_angles, int_atoms2, 2);
 
-        for (const auto &atom0 : atoms0)
-        {
-            for (const auto &atom1 : atoms1)
-            {
-                for (const auto &atom2 : atoms2)
-                {
-                    auto atomidx0 = atom0;
-                    auto atomidx1 = atom1;
-                    auto atomidx2 = atom2;
+        auto right_angles = _filter(angles, int_atoms0, 2);
+        right_angles = _filter(right_angles, int_atoms1, 1);
+        right_angles = _filter(right_angles, int_atoms2, 0);
 
-                    if (atomidx0 > atomidx2)
-                    {
-                        qSwap(atomidx0, atomidx2);
-                    }
-
-                    AngleID a(atomidx0, atomidx1, atomidx2);
-
-                    if (atomidx0 != atomidx1 and
-                        atomidx1 != atomidx2 and
-                        c.areConnected(atomidx0, atomidx1) and
-                        c.areConnected(atomidx1, atomidx2) and
-                        not seen_angles.contains(a))
-                    {
-                        seen_angles.insert(a);
-                        angles.append(a);
-                    }
-                }
-            }
-        }
-
-        if (mol.selectedAll())
-        {
-            angs = angles;
-        }
-        else
-        {
-            const auto s = mol.selection();
-
-            for (const auto &angle : angles)
-            {
-                if (s.selected(angle.atom0()) and
-                    s.selected(angle.atom1()) and
-                    s.selected(angle.atom2()))
-                {
-                    angs.append(angle);
-                }
-            }
-        }
+        angs = _from_int_set(left_angles + right_angles);
     }
 }
 
@@ -216,30 +302,27 @@ SelectorAngle::SelectorAngle(const MoleculeView &mol,
                              const AtomID &atom, const PropertyMap &map)
               : ConcreteProperty<SelectorAngle, MoleculeView>(mol)
 {
+    auto atoms = mol.data().info().map(atom);
+
     if (mol.data().hasProperty(map["connectivity"]))
     {
         auto c = mol.data().property(map["connectivity"]).asA<Connectivity>();
 
-        auto angles = c.getAngles(atom);
-
-        if (mol.selectedAll())
+        if (not mol.selectedAll())
         {
-            angs = angles;
+            const auto selection = mol.selection();
+            atoms = _filter(atoms, selection);
         }
-        else
-        {
-            const auto s = mol.selection();
 
-            for (const auto &angle : angles)
-            {
-                if (s.selected(angle.atom0()) and
-                    s.selected(angle.atom1()) and
-                    s.selected(angle.atom2()))
-                {
-                    angs.append(angle);
-                }
-            }
-        }
+        auto int_atoms = _to_int(atoms);
+
+        auto angles = _to_int_set(c.getAngles(), this->data().info());
+
+        auto angles0 = _filter(angles, int_atoms, 0);
+        auto angles1 = _filter(angles, int_atoms, 1);
+        auto angles2 = _filter(angles, int_atoms, 2);
+
+        angs = _from_int_set(angles0 + angles1 + angles2);
     }
 }
 
@@ -248,30 +331,38 @@ SelectorAngle::SelectorAngle(const MoleculeView &mol,
                              const PropertyMap &map)
               : ConcreteProperty<SelectorAngle, MoleculeView>(mol)
 {
+    auto atoms0 = mol.data().info().map(atom0);
+    auto atoms1 = mol.data().info().map(atom1);
+
     if (mol.data().hasProperty(map["connectivity"]))
     {
         auto c = mol.data().property(map["connectivity"]).asA<Connectivity>();
 
-        auto angles = c.getAngles(atom0, atom1);
-
-        if (mol.selectedAll())
+        if (not mol.selectedAll())
         {
-            angs = angles;
+            const auto selection = mol.selection();
+            atoms0 = _filter(atoms0, selection);
+            atoms1 = _filter(atoms1, selection);
         }
-        else
-        {
-            const auto s = mol.selection();
 
-            for (const auto &angle : angles)
-            {
-                if (s.selected(angle.atom0()) and
-                    s.selected(angle.atom1()) and
-                    s.selected(angle.atom2()))
-                {
-                    angs.append(angle);
-                }
-            }
-        }
+        auto int_atoms0 = _to_int(atoms0);
+        auto int_atoms1 = _to_int(atoms1);
+
+        auto angles = _to_int_set(c.getAngles(), this->data().info());
+
+        auto angles01 = _filter(angles, int_atoms0, 0);
+        angles01 = _filter(angles01, int_atoms1, 1);
+
+        auto angles12 = _filter(angles, int_atoms0, 1);
+        angles12 = _filter(angles12, int_atoms1, 2);
+
+        auto angles21 = _filter(angles, int_atoms0, 2);
+        angles21 = _filter(angles21, int_atoms1, 1);
+
+        auto angles10 = _filter(angles, int_atoms0, 1);
+        angles10 = _filter(angles, int_atoms1, 0);
+
+        angs = _from_int_set(angles01 + angles12 + angles21 + angles10);
     }
 }
 
@@ -312,40 +403,19 @@ SelectorAngle::SelectorAngle(const Selector<Atom> &atoms,
                              const PropertyMap &map)
               : ConcreteProperty<SelectorAngle, MoleculeView>(atoms)
 {
-    if (atoms.data().hasProperty(map["connectivity"]))
+    if (this->data().hasProperty(map["connectivity"]))
     {
-        auto c = atoms.data().property(map["connectivity"]).asA<Connectivity>();
+        auto c = this->data().property(map["connectivity"]).asA<Connectivity>();
 
-        QSet<AngleID> seen_angs;
+        auto int_atoms = _to_int(atoms);
 
-        QList<AngleID> angles;
+        auto angles = _to_int_set(c.getAngles(), this->data().info());
 
-        for (int i=0; i<atoms.count(); ++i)
-        {
-            for (const auto &a : c.getAngles(atoms(i).index()))
-            {
-                auto atomidx0 = atoms.data().info().atomIdx(a.atom0());
-                auto atomidx1 = atoms.data().info().atomIdx(a.atom1());
-                auto atomidx2 = atoms.data().info().atomIdx(a.atom2());
+        auto angles0 = _filter(angles, int_atoms, 0);
+        auto angles1 = _filter(angles, int_atoms, 1);
+        auto angles2 = _filter(angles, int_atoms, 2);
 
-                if (atomidx0 > atomidx2)
-                {
-                    qSwap(atomidx0, atomidx2);
-                }
-
-                AngleID ang(atomidx0, atomidx1, atomidx2);
-
-                if (atomidx0 != atomidx1 and
-                    atomidx1 != atomidx2 and
-                    not seen_angs.contains(ang))
-                {
-                    seen_angs.insert(ang);
-                    angles.append(ang);
-                }
-            }
-        }
-
-        angs = angles;
+        angs = _from_int_set(angles0 + angles1 + angles2);
     }
 }
 
@@ -362,43 +432,29 @@ SelectorAngle::SelectorAngle(const Selector<Atom> &atoms0,
                 .arg(atoms0.molecule().toString())
                 .arg(atoms1.molecule().toString()), CODELOC);
 
-    if (atoms0.data().hasProperty(map["connectivity"]))
+    if (this->data().hasProperty(map["connectivity"]))
     {
-        auto c = atoms0.data().property(map["connectivity"]).asA<Connectivity>();
+        auto c = this->data().property(map["connectivity"]).asA<Connectivity>();
 
-        QSet<AngleID> seen_angs;
+        auto int_atoms0 = _to_int(atoms0);
+        auto int_atoms1 = _to_int(atoms1);
 
-        QList<AngleID> angles;
+        auto angles = _to_int_set(c.getAngles(), this->data().info());
 
-        for (int i=0; i<atoms0.count(); ++i)
-        {
-            for (int j=0; j<atoms1.count(); ++j)
-            {
-                auto atomidx0 = atoms0(i).index();
-                auto atomidx1 = atoms1(j).index();
+        auto angles01 = _filter(angles, int_atoms0, 0);
+        angles01 = _filter(angles01, int_atoms1, 1);
 
-                auto angs = c.getAngles(atomidx0, atomidx1);
+        auto angles12 = _filter(angles, int_atoms0, 1);
+        angles12 = _filter(angles12, int_atoms1, 2);
 
-                for (const auto &ang : angs)
-                {
-                    if (not seen_angs.contains(ang))
-                    {
-                        seen_angs.insert(ang);
-                        angles.append(ang);
-                    }
-                }
-            }
-        }
+        auto angles21 = _filter(angles, int_atoms0, 2);
+        angles21 = _filter(angles21, int_atoms1, 1);
 
-        angs = angles;
+        auto angles10 = _filter(angles, int_atoms0, 1);
+        angles10 = _filter(angles10, int_atoms1, 0);
+
+        angs = _from_int_set(angles01 + angles12 + angles21 + angles10);
     }
-}
-
-bool _contains(const AngleID &ang, const AtomIdx &atom)
-{
-    return ang.atom0() == atom or
-           ang.atom1() == atom or
-           ang.atom2() == atom;
 }
 
 SelectorAngle::SelectorAngle(const Selector<Atom> &atoms0,
@@ -418,53 +474,25 @@ SelectorAngle::SelectorAngle(const Selector<Atom> &atoms0,
                 .arg(atoms1.molecule().toString())
                 .arg(atoms2.molecule().toString()), CODELOC);
 
-    if (atoms0.data().hasProperty(map["connectivity"]))
+    if (this->data().hasProperty(map["connectivity"]))
     {
-        auto c = atoms0.data().property(map["connectivity"]).asA<Connectivity>();
+        auto c = this->data().property(map["connectivity"]).asA<Connectivity>();
 
-        bool found = false;
+        auto int_atoms0 = _to_int(atoms0);
+        auto int_atoms1 = _to_int(atoms1);
+        auto int_atoms2 = _to_int(atoms2);
 
-        for (const auto &angle : c.getAngles())
-        {
-            for (int i=0; i<atoms0.count(); ++i)
-            {
-                auto atomidx0 = atoms0(i).index();
+        auto angles = _to_int_set(c.getAngles(), this->data().info());
 
-                if (not _contains(angle, atomidx0))
-                    break;
+        auto angles012 = _filter(angles, int_atoms0, 0);
+        angles012 = _filter(angles012, int_atoms1, 1);
+        angles012 = _filter(angles012, int_atoms2, 2);
 
-                for (int j=0; j<atoms1.count(); ++j)
-                {
-                    auto atomidx1 = atoms1(j).index();
+        auto angles210 = _filter(angles, int_atoms2, 0);
+        angles210 = _filter(angles210, int_atoms1, 1);
+        angles210 = _filter(angles210, int_atoms0, 0);
 
-                    if (atomidx1 == atomidx0 or not _contains(angle, atomidx1))
-                        break;
-
-                    for (int k=0; k<atoms2.count(); ++k)
-                    {
-                        auto atomidx2 = atoms2(k).index();
-
-                        if (atomidx2 == atomidx1 or not _contains(angle, atomidx2))
-                            break;
-
-                        if (atomidx0 > atomidx2)
-                        {
-                            qSwap(atomidx0, atomidx2);
-                        }
-
-                        angs.append(AngleID(atomidx0, atomidx1, atomidx2));
-                        found = true;
-                        break;
-                    }
-
-                    if (found)
-                        break;
-                }
-
-                if (found)
-                    break;
-            }
-        }
+        angs = _from_int_set(angles012 + angles210);
     }
 }
 
@@ -955,6 +983,16 @@ QList<SireUnits::Dimension::Angle> SelectorAngle::sizes(const PropertyMap &map) 
 QList<SireUnits::Dimension::Angle> SelectorAngle::sizes() const
 {
     return this->sizes(PropertyMap());
+}
+
+QList<SireUnits::Dimension::Angle> SelectorAngle::measures(const PropertyMap &map) const
+{
+    return this->sizes(map);
+}
+
+QList<SireUnits::Dimension::Angle> SelectorAngle::measures() const
+{
+    return this->sizes();
 }
 
 QList<Expression> SelectorAngle::potentials() const

@@ -199,6 +199,45 @@ public:
     SireMol::SelectorM<SireMol::CutGroup> cutGroups(const QString &name) const;
     SireMol::SelectorM<SireMol::CutGroup> cutGroups(const SireMol::CGID &cgid) const;
 
+    SelectorMImproper add(const SelectorMImproper &other) const;
+
+    SelectorMImproper intersection(const SelectorMImproper &other) const;
+
+    SelectorMImproper invert(const SireBase::PropertyMap &map) const;
+    SelectorMImproper invert() const;
+
+    bool hasProperty(const SireBase::PropertyName &key) const;
+    bool hasMetadata(const SireBase::PropertyName &key) const;
+    bool hasMetadata(const SireBase::PropertyName &key,
+                     const SireBase::PropertyName &metakey) const;
+
+    QStringList propertyKeys() const;
+    QStringList metadataKeys() const;
+    QStringList metadataKeys(const SireBase::PropertyName &key) const;
+
+    QList<SireBase::Properties> properties() const;
+
+    QList<SireBase::PropertyPtr> property(const SireBase::PropertyName &key) const;
+    QList<SireBase::PropertyPtr> property(const SireBase::PropertyName &key,
+                                          const Property &default_value) const;
+
+    QList<SireUnits::Dimension::Angle> sizes() const;
+    QList<SireUnits::Dimension::Angle> sizes(const SireBase::PropertyMap &map) const;
+
+    QList<SireUnits::Dimension::Angle> measures() const;
+    QList<SireUnits::Dimension::Angle> measures(const SireBase::PropertyMap &map) const;
+
+    QList<SireCAS::Expression> potentials() const;
+    QList<SireCAS::Expression> potentials(const SireBase::PropertyMap &map) const;
+
+    QList<SireUnits::Dimension::MolarEnergy> energies() const;
+    QList<SireUnits::Dimension::MolarEnergy> energies(
+                            const SireBase::PropertyMap &map) const;
+
+    SireUnits::Dimension::MolarEnergy energy() const;
+    SireUnits::Dimension::MolarEnergy energy(
+                            const SireBase::PropertyMap &map) const;
+
     SireMol::SelectResult search(const QString &search_string) const;
 
     QList<SireMol::ImproperID> IDs() const;

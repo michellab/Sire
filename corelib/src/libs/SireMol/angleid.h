@@ -68,7 +68,7 @@ using boost::tuple;
 
 /** This class provides a generic ID for an angle between
     three atoms
-    
+
     @author Christopher Woods
 */
 class SIREMOL_EXPORT AngleID : public SireID::ID
@@ -83,42 +83,44 @@ public:
             const AtomID &atom2);
 
     AngleID(const AngleID &other);
-    
+
     ~AngleID();
-    
+
     static const char* typeName();
-    
+
     const char* what() const
     {
         return AngleID::typeName();
     }
-    
+
     AngleID* clone() const;
-        
+
     uint hash() const;
 
     QString toString() const;
-    
+
     bool isNull() const;
-    
+
     AngleID& operator=(const AngleID &other);
-    
+
     bool operator==(const SireID::ID &other) const;
-    
+
     bool operator==(const AngleID &other) const;
     bool operator!=(const AngleID &other) const;
-    
+
     AngleID mirror() const;
-    
+
+    const AtomID& operator[](int i) const;
+
     tuple<AtomIdx,AtomIdx,AtomIdx> map(const MoleculeInfoData &molinfo) const;
     tuple<AtomIdx,AtomIdx,AtomIdx> map(const MoleculeInfoData &mol0info,
                                        const MoleculeInfoData &mol1info,
                                        const MoleculeInfoData &mol2info) const;
-                               
+
     Vector vector(const MoleculeData &moldata,
                   const PropertyMap &map = PropertyMap()) const;
-    
-    Vector vector(const MoleculeData &mol0data, 
+
+    Vector vector(const MoleculeData &mol0data,
                   const MoleculeData &mol1data,
                   const MoleculeData &mol2data,
                   const PropertyMap &map = PropertyMap()) const;
@@ -132,12 +134,12 @@ public:
 
     Triangle triangle(const MoleculeData &moldata,
                       const PropertyMap &map = PropertyMap()) const;
-                      
+
     Triangle triangle(const MoleculeData &mol0data,
                       const MoleculeData &mol1data,
                       const MoleculeData &mol2data,
                       const PropertyMap &map = PropertyMap()) const;
-                      
+
     Triangle triangle(const MoleculeData &mol0data,
                       const PropertyMap &map0,
                       const MoleculeData &mol1data,
@@ -148,11 +150,11 @@ public:
     SireUnits::Dimension::Angle size(const MoleculeData &moldata,
                                      const PropertyMap &map = PropertyMap()) const;
 
-    SireUnits::Dimension::Angle size(const MoleculeData &mol0data, 
+    SireUnits::Dimension::Angle size(const MoleculeData &mol0data,
                                      const MoleculeData &mol1data,
                                      const MoleculeData &mol2data,
                                      const PropertyMap &map = PropertyMap()) const;
-                
+
     SireUnits::Dimension::Angle size(const MoleculeData &mol0data,
                                      const PropertyMap &map0,
                                      const MoleculeData &mol1data,

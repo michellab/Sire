@@ -30,8 +30,11 @@
 
 #include "SireID/index.h"
 
+#include "SireCAS/expression.h"
+
 #include "SireMol/errors.h"
 #include "SireError/errors.h"
+#include "SireBase/errors.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -906,4 +909,288 @@ QString SelectorMAngle::toString() const
                     .arg(n)
                     .arg(parts.join("\n"));
     }
+}
+
+SelectorMAngle SelectorMAngle::add(const SelectorMAngle &other) const
+{
+    SelectorMAngle ret(*this);
+
+    for (const auto &value : other)
+    {
+        if (ret.isEmpty())
+        {
+            ret.angs.append(value);
+        }
+        else if (ret.angs.last().isSameMolecule(value))
+        {
+            for (int i=0; i<value.count(); ++i)
+            {
+                ret._append(value(i));
+            }
+        }
+        else
+        {
+            ret.angs.append(value);
+        }
+    }
+
+    return ret;
+}
+
+SelectorMAngle SelectorMAngle::intersection(const SelectorMAngle &other) const
+{
+    if (this->count() < other.count())
+        return other.intersection(*this);
+
+    SelectorMAngle ret;
+
+    for (const auto &val : angs)
+    {
+        SelectorAngle intersect;
+
+        for (const auto &other_val : other)
+        {
+            if (val.isSameMolecule(other_val))
+            {
+                if (intersect.isEmpty())
+                    intersect = val.intersection(other_val);
+                else
+                    intersect = intersect.add(val.intersection(other_val));
+            }
+        }
+
+        ret.angs.append(intersect);
+    }
+
+    return ret;
+}
+
+SelectorMAngle SelectorMAngle::invert(const SireBase::PropertyMap &map) const
+{
+    SelectorMAngle ret;
+
+    for (const auto &val : angs)
+    {
+        ret.angs.append(val.invert(map));
+    }
+
+    return ret;
+}
+
+SelectorMAngle SelectorMAngle::invert() const
+{
+    return this->invert(PropertyMap());
+}
+
+bool SelectorMAngle::hasProperty(const SireBase::PropertyName &key) const
+{
+    for (const auto &val : angs)
+    {
+        if (val.hasProperty(key))
+            return true;
+    }
+
+    return false;
+}
+
+bool SelectorMAngle::hasMetadata(const SireBase::PropertyName &key) const
+{
+    for (const auto &val : angs)
+    {
+        if (val.hasMetadata(key))
+            return true;
+    }
+
+    return false;
+}
+
+bool SelectorMAngle::hasMetadata(const SireBase::PropertyName &key,
+                                 const SireBase::PropertyName &metakey) const
+{
+    for (const auto &val : angs)
+    {
+        if (val.hasMetadata(key, metakey))
+            return true;
+    }
+
+    return false;
+}
+
+template<class T>
+inline QSet<T> _to_set(const QList<T> &l)
+{
+    return QSet<T>(l.constBegin(), l.constEnd());
+}
+
+QStringList SelectorMAngle::propertyKeys() const
+{
+    QSet<QString> keys;
+
+    for (const auto &val : angs)
+    {
+        keys += _to_set(val.propertyKeys());
+    }
+
+    return keys.values();
+}
+
+QStringList SelectorMAngle::metadataKeys() const
+{
+    QSet<QString> keys;
+
+    for (const auto &val : angs)
+    {
+        keys += _to_set(val.metadataKeys());
+    }
+
+    return keys.values();
+}
+
+QStringList SelectorMAngle::metadataKeys(const SireBase::PropertyName &key) const
+{
+    QSet<QString> keys;
+
+    for (const auto &val : angs)
+    {
+        keys += _to_set(val.metadataKeys(key));
+    }
+
+    return keys.values();
+}
+
+QList<SireBase::Properties> SelectorMAngle::properties() const
+{
+    QList<SireBase::Properties> props;
+
+    for (const auto &val : angs)
+    {
+        props += val.properties();
+    }
+
+    return props;
+}
+
+QList<SireBase::PropertyPtr> SelectorMAngle::property(const SireBase::PropertyName &key) const
+{
+    QList<SireBase::PropertyPtr> props;
+
+    bool has_prop = false;
+
+    for (const auto &val : angs)
+    {
+        try
+        {
+            props += val.property(key);
+            has_prop = true;
+        }
+        catch(const SireError::exception&)
+        {
+            PropertyPtr null(new NullProperty());
+
+            for (int i=0; i<val.count(); ++i)
+            {
+                props.append(null);
+            }
+        }
+    }
+
+    if (not has_prop)
+        throw SireBase::missing_property(QObject::tr(
+            "None of the angles in this container have a property called %1.")
+                .arg(key.source()), CODELOC);
+
+    return props;
+}
+
+QList<SireBase::PropertyPtr> SelectorMAngle::property(const SireBase::PropertyName &key,
+                                                      const Property &default_value) const
+{
+    QList<SireBase::PropertyPtr> props;
+
+    for (const auto &val : angs)
+    {
+        props += val.property(key, default_value);
+    }
+
+    return props;
+}
+
+QList<SireUnits::Dimension::Angle> SelectorMAngle::sizes() const
+{
+    return this->sizes(PropertyMap());
+}
+
+QList<SireUnits::Dimension::Angle> SelectorMAngle::sizes(const SireBase::PropertyMap &map) const
+{
+    QList<SireUnits::Dimension::Angle> a;
+
+    for (const auto &val : angs)
+    {
+        a += val.sizes(map);
+    }
+
+    return a;
+}
+
+QList<SireUnits::Dimension::Angle> SelectorMAngle::measures() const
+{
+    return this->sizes();
+}
+
+QList<SireUnits::Dimension::Angle> SelectorMAngle::measures(const SireBase::PropertyMap &map) const
+{
+    return this->sizes(map);
+}
+
+QList<SireCAS::Expression> SelectorMAngle::potentials() const
+{
+    return this->potentials(PropertyMap());
+}
+
+QList<SireCAS::Expression> SelectorMAngle::potentials(const SireBase::PropertyMap &map) const
+{
+    QList<SireCAS::Expression> e;
+
+    for (const auto &val : angs)
+    {
+        e += val.potentials(map);
+    }
+
+    return e;
+}
+
+QList<SireUnits::Dimension::MolarEnergy> SelectorMAngle::energies() const
+{
+    return this->energies(PropertyMap());
+}
+
+QList<SireUnits::Dimension::MolarEnergy> SelectorMAngle::energies(
+                                    const SireBase::PropertyMap &map) const
+{
+    QList<SireUnits::Dimension::MolarEnergy> e;
+
+    for (const auto &val : angs)
+    {
+        e += val.energies(map);
+    }
+
+    return e;
+}
+
+SireUnits::Dimension::MolarEnergy SelectorMAngle::energy() const
+{
+    return this->energy(PropertyMap());
+}
+
+SireUnits::Dimension::MolarEnergy SelectorMAngle::energy(
+                                const SireBase::PropertyMap &map) const
+{
+    SireUnits::Dimension::MolarEnergy nrg(0);
+
+    for (const auto &val : angs)
+    {
+        nrg += val.energy(map);
+    }
+
+    return nrg;
 }

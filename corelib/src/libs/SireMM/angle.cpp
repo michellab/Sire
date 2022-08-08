@@ -361,6 +361,16 @@ SireUnits::Dimension::Angle Angle::size() const
     return this->size(PropertyMap());
 }
 
+SireUnits::Dimension::Angle Angle::measure(const PropertyMap &map) const
+{
+    return this->size(map);
+}
+
+SireUnits::Dimension::Angle Angle::measure() const
+{
+    return this->size();
+}
+
 SireCAS::Expression Angle::potential() const
 {
     return this->potential(PropertyMap());

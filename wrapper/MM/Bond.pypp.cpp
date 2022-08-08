@@ -210,6 +210,31 @@ void register_Bond_class(){
                 , "" );
         
         }
+        { //::SireMM::Bond::measure
+        
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::Bond::*measure_function_type)(  ) const;
+            measure_function_type measure_function_value( &::SireMM::Bond::measure );
+            
+            Bond_exposer.def( 
+                "measure"
+                , measure_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Bond::measure
+        
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::Bond::*measure_function_type)( const ::SireBase::PropertyMap & ) const;
+            measure_function_type measure_function_value( &::SireMM::Bond::measure );
+            
+            Bond_exposer.def( 
+                "measure"
+                , measure_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::Bond::metadataKeys
         
             typedef ::QStringList ( ::SireMM::Bond::*metadataKeys_function_type)(  ) const;

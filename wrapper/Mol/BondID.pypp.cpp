@@ -181,6 +181,19 @@ void register_BondID_class(){
         }
         BondID_exposer.def( bp::self == bp::other< SireID::ID >() );
         BondID_exposer.def( bp::self == bp::self );
+        { //::SireMol::BondID::operator[]
+        
+            typedef ::SireMol::AtomID const & ( ::SireMol::BondID::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::BondID::operator[] );
+            
+            BondID_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
+                , "" );
+        
+        }
         { //::SireMol::BondID::size
         
             typedef double ( ::SireMol::BondID::*size_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;

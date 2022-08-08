@@ -290,6 +290,31 @@ void register_SelectorBond_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorBond::measures
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > > ( ::SireMM::SelectorBond::*measures_function_type)(  ) const;
+            measures_function_type measures_function_value( &::SireMM::SelectorBond::measures );
+            
+            SelectorBond_exposer.def( 
+                "measures"
+                , measures_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorBond::measures
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > > ( ::SireMM::SelectorBond::*measures_function_type)( ::SireBase::PropertyMap const & ) const;
+            measures_function_type measures_function_value( &::SireMM::SelectorBond::measures );
+            
+            SelectorBond_exposer.def( 
+                "measures"
+                , measures_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorBond::metadataKeys
         
             typedef ::QStringList ( ::SireMM::SelectorBond::*metadataKeys_function_type)(  ) const;

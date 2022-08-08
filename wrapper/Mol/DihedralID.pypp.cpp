@@ -170,6 +170,19 @@ void register_DihedralID_class(){
         }
         DihedralID_exposer.def( bp::self == bp::other< SireID::ID >() );
         DihedralID_exposer.def( bp::self == bp::self );
+        { //::SireMol::DihedralID::operator[]
+        
+            typedef ::SireMol::AtomID const & ( ::SireMol::DihedralID::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::DihedralID::operator[] );
+            
+            DihedralID_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
+                , "" );
+        
+        }
         { //::SireMol::DihedralID::size
         
             typedef ::SireUnits::Dimension::Angle ( ::SireMol::DihedralID::*size_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;

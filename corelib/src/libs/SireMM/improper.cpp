@@ -377,6 +377,16 @@ SireUnits::Dimension::Angle Improper::size() const
     return this->size(PropertyMap());
 }
 
+SireUnits::Dimension::Angle Improper::measure(const PropertyMap &map) const
+{
+    return this->size(map);
+}
+
+SireUnits::Dimension::Angle Improper::measure() const
+{
+    return this->size();
+}
+
 SireCAS::Expression Improper::potential() const
 {
     return this->potential(PropertyMap());

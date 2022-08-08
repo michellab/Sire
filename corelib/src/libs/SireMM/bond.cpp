@@ -339,6 +339,16 @@ SireUnits::Dimension::Length Bond::length() const
     return this->length(PropertyMap());
 }
 
+SireUnits::Dimension::Length Bond::measure(const PropertyMap &map) const
+{
+    return this->length(map);
+}
+
+SireUnits::Dimension::Length Bond::measure() const
+{
+    return this->length();
+}
+
 SireCAS::Expression Bond::potential() const
 {
     return this->potential(PropertyMap());

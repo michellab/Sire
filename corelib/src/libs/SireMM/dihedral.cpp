@@ -380,6 +380,16 @@ SireUnits::Dimension::Angle Dihedral::size() const
     return this->size(PropertyMap());
 }
 
+SireUnits::Dimension::Angle Dihedral::measure(const PropertyMap &map) const
+{
+    return this->size(map);
+}
+
+SireUnits::Dimension::Angle Dihedral::measure() const
+{
+    return this->size();
+}
+
 SireCAS::Expression Dihedral::potential() const
 {
     return this->potential(PropertyMap());

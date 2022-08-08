@@ -244,7 +244,7 @@ void register_ConnectivityEditor_class(){
                 , removeProperty_function_value
                 , ( bp::arg("ang"), bp::arg("key") )
                 , bp::return_self< >()
-                , "Remove the specified property from the specified bond" );
+                , "Remove the specified property from the specified angle" );
         
         }
         { //::SireMol::ConnectivityEditor::removeProperty
@@ -257,7 +257,7 @@ void register_ConnectivityEditor_class(){
                 , removeProperty_function_value
                 , ( bp::arg("dih"), bp::arg("key") )
                 , bp::return_self< >()
-                , "Remove the specified property from the specified bond" );
+                , "Remove the specified property from the specified dihedral" );
         
         }
         { //::SireMol::ConnectivityEditor::removeProperty
@@ -270,7 +270,7 @@ void register_ConnectivityEditor_class(){
                 , removeProperty_function_value
                 , ( bp::arg("imp"), bp::arg("key") )
                 , bp::return_self< >()
-                , "Remove the specified property from the specified bond" );
+                , "Remove the specified property from the specified improper" );
         
         }
         { //::SireMol::ConnectivityEditor::setProperty
@@ -296,7 +296,7 @@ void register_ConnectivityEditor_class(){
                 , setProperty_function_value
                 , ( bp::arg("ang"), bp::arg("key"), bp::arg("value") )
                 , bp::return_self< >()
-                , "Set the property for the specified bond, at the specified key, to value" );
+                , "Set the property for the specified angle, at the specified key, to value" );
         
         }
         { //::SireMol::ConnectivityEditor::setProperty
@@ -309,7 +309,7 @@ void register_ConnectivityEditor_class(){
                 , setProperty_function_value
                 , ( bp::arg("dih"), bp::arg("key"), bp::arg("value") )
                 , bp::return_self< >()
-                , "Set the property for the specified bond, at the specified key, to value" );
+                , "Set the property for the specified dihedral, at the specified key, to value" );
         
         }
         { //::SireMol::ConnectivityEditor::setProperty
@@ -322,7 +322,7 @@ void register_ConnectivityEditor_class(){
                 , setProperty_function_value
                 , ( bp::arg("imp"), bp::arg("key"), bp::arg("value") )
                 , bp::return_self< >()
-                , "Set the property for the specified bond, at the specified key, to value" );
+                , "Set the property for the specified improper, at the specified key, to value" );
         
         }
         { //::SireMol::ConnectivityEditor::takeProperty
@@ -348,7 +348,7 @@ void register_ConnectivityEditor_class(){
                 , takeProperty_function_value
                 , ( bp::arg("ang"), bp::arg("key") )
                 , bp::release_gil_policy()
-                , "Take the specified property from the specified bond - this removes\nand returns the property if it exists. If it doesnt, then\na NullProperty is returned\n" );
+                , "Take the specified property from the specified angle - this removes\nand returns the property if it exists. If it doesnt, then\na NullProperty is returned\n" );
         
         }
         { //::SireMol::ConnectivityEditor::takeProperty
@@ -361,7 +361,7 @@ void register_ConnectivityEditor_class(){
                 , takeProperty_function_value
                 , ( bp::arg("dih"), bp::arg("key") )
                 , bp::release_gil_policy()
-                , "Take the specified property from the specified bond - this removes\nand returns the property if it exists. If it doesnt, then\na NullProperty is returned\n" );
+                , "Take the specified property from the specified dihedral - this removes\nand returns the property if it exists. If it doesnt, then\na NullProperty is returned\n" );
         
         }
         { //::SireMol::ConnectivityEditor::takeProperty
@@ -374,7 +374,7 @@ void register_ConnectivityEditor_class(){
                 , takeProperty_function_value
                 , ( bp::arg("imp"), bp::arg("key") )
                 , bp::release_gil_policy()
-                , "Take the specified property from the specified bond - this removes\nand returns the property if it exists. If it doesnt, then\na NullProperty is returned\n" );
+                , "Take the specified property from the specified improper - this removes\nand returns the property if it exists. If it doesnt, then\na NullProperty is returned\n" );
         
         }
         { //::SireMol::ConnectivityEditor::typeName

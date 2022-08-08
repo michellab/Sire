@@ -241,7 +241,7 @@ void register_ConnectivityBase_class(){
                 , assertHasProperty_function_value
                 , ( bp::arg("ang"), bp::arg("key") )
                 , bp::release_gil_policy()
-                , "Assert that the specified bond has the specified property" );
+                , "Assert that the specified angle has the specified property" );
         
         }
         { //::SireMol::ConnectivityBase::assertHasProperty
@@ -254,7 +254,7 @@ void register_ConnectivityBase_class(){
                 , assertHasProperty_function_value
                 , ( bp::arg("dih"), bp::arg("key") )
                 , bp::release_gil_policy()
-                , "Assert that the specified bond has the specified property" );
+                , "Assert that the specified angle has the specified property" );
         
         }
         { //::SireMol::ConnectivityBase::assertHasProperty
@@ -267,7 +267,7 @@ void register_ConnectivityBase_class(){
                 , assertHasProperty_function_value
                 , ( bp::arg("imp"), bp::arg("key") )
                 , bp::release_gil_policy()
-                , "Assert that the specified bond has the specified property" );
+                , "Assert that the specified angle has the specified property" );
         
         }
         { //::SireMol::ConnectivityBase::connectionType
@@ -615,7 +615,7 @@ void register_ConnectivityBase_class(){
                 , hasProperty_function_value
                 , ( bp::arg("ang"), bp::arg("key") )
                 , bp::release_gil_policy()
-                , "Return whether the specified bond has a property at key key" );
+                , "Return whether the specified angle has a property at key key" );
         
         }
         { //::SireMol::ConnectivityBase::hasProperty
@@ -628,7 +628,7 @@ void register_ConnectivityBase_class(){
                 , hasProperty_function_value
                 , ( bp::arg("dih"), bp::arg("key") )
                 , bp::release_gil_policy()
-                , "Return whether the specified bond has a property at key key" );
+                , "Return whether the specified dihedral has a property at key key" );
         
         }
         { //::SireMol::ConnectivityBase::hasProperty
@@ -641,7 +641,7 @@ void register_ConnectivityBase_class(){
                 , hasProperty_function_value
                 , ( bp::arg("imp"), bp::arg("key") )
                 , bp::release_gil_policy()
-                , "Return whether the specified bond has a property at key key" );
+                , "Return whether the specified improper has a property at key key" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -925,7 +925,7 @@ void register_ConnectivityBase_class(){
                 , properties_function_value
                 , ( bp::arg("ang") )
                 , bp::release_gil_policy()
-                , "Return the properties of the passed bond" );
+                , "Return the properties of the passed angle" );
         
         }
         { //::SireMol::ConnectivityBase::properties
@@ -938,7 +938,7 @@ void register_ConnectivityBase_class(){
                 , properties_function_value
                 , ( bp::arg("dih") )
                 , bp::release_gil_policy()
-                , "Return the properties of the passed bond" );
+                , "Return the properties of the passed dihedral" );
         
         }
         { //::SireMol::ConnectivityBase::properties
@@ -951,7 +951,7 @@ void register_ConnectivityBase_class(){
                 , properties_function_value
                 , ( bp::arg("imp") )
                 , bp::release_gil_policy()
-                , "Return the properties of the passed bond" );
+                , "Return the properties of the passed improper" );
         
         }
         { //::SireMol::ConnectivityBase::property
@@ -990,7 +990,7 @@ void register_ConnectivityBase_class(){
                 , property_function_value
                 , ( bp::arg("ang"), bp::arg("key") )
                 , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
-                , "Return the specified property of the specified bond" );
+                , "Return the specified property of the specified angle" );
         
         }
         { //::SireMol::ConnectivityBase::property
@@ -1003,7 +1003,7 @@ void register_ConnectivityBase_class(){
                 , property_function_value
                 , ( bp::arg("ang"), bp::arg("key"), bp::arg("default_value") )
                 , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
-                , "Return the specified property of the specified bond, or\ndefault_value if such a property is not defined\n" );
+                , "Return the specified property of the specified angle, or\ndefault_value if such a property is not defined\n" );
         
         }
         { //::SireMol::ConnectivityBase::property
@@ -1016,7 +1016,7 @@ void register_ConnectivityBase_class(){
                 , property_function_value
                 , ( bp::arg("dih"), bp::arg("key") )
                 , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
-                , "Return the specified property of the specified bond" );
+                , "Return the specified property of the specified dihedral" );
         
         }
         { //::SireMol::ConnectivityBase::property
@@ -1029,7 +1029,7 @@ void register_ConnectivityBase_class(){
                 , property_function_value
                 , ( bp::arg("dih"), bp::arg("key"), bp::arg("default_value") )
                 , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
-                , "Return the specified property of the specified bond, or\ndefault_value if such a property is not defined\n" );
+                , "Return the specified property of the specified dihedral, or\ndefault_value if such a property is not defined\n" );
         
         }
         { //::SireMol::ConnectivityBase::property
@@ -1042,7 +1042,7 @@ void register_ConnectivityBase_class(){
                 , property_function_value
                 , ( bp::arg("imp"), bp::arg("key") )
                 , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
-                , "Return the specified property of the specified bond" );
+                , "Return the specified property of the specified improper" );
         
         }
         { //::SireMol::ConnectivityBase::property
@@ -1055,7 +1055,7 @@ void register_ConnectivityBase_class(){
                 , property_function_value
                 , ( bp::arg("imp"), bp::arg("key"), bp::arg("default_value") )
                 , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
-                , "Return the specified property of the specified bond, or\ndefault_value if such a property is not defined\n" );
+                , "Return the specified property of the specified improper, or\ndefault_value if such a property is not defined\n" );
         
         }
         { //::SireMol::ConnectivityBase::propertyKeys
@@ -1093,7 +1093,7 @@ void register_ConnectivityBase_class(){
                 , propertyKeys_function_value
                 , ( bp::arg("ang") )
                 , bp::release_gil_policy()
-                , "Return the property keys for the specified bond" );
+                , "Return the property keys for the specified angle" );
         
         }
         { //::SireMol::ConnectivityBase::propertyKeys
@@ -1106,7 +1106,7 @@ void register_ConnectivityBase_class(){
                 , propertyKeys_function_value
                 , ( bp::arg("dih") )
                 , bp::release_gil_policy()
-                , "Return the property keys for the specified bond" );
+                , "Return the property keys for the specified dihedral" );
         
         }
         { //::SireMol::ConnectivityBase::propertyKeys
@@ -1119,7 +1119,7 @@ void register_ConnectivityBase_class(){
                 , propertyKeys_function_value
                 , ( bp::arg("imp") )
                 , bp::release_gil_policy()
-                , "Return the property keys for the specified bond" );
+                , "Return the property keys for the specified improper" );
         
         }
         { //::SireMol::ConnectivityBase::propertyType
@@ -1145,7 +1145,7 @@ void register_ConnectivityBase_class(){
                 , propertyType_function_value
                 , ( bp::arg("ang"), bp::arg("key") )
                 , bp::release_gil_policy()
-                , "Return the type of the property for the specified bond at key key" );
+                , "Return the type of the property for the specified angle at key key" );
         
         }
         { //::SireMol::ConnectivityBase::propertyType
@@ -1158,7 +1158,7 @@ void register_ConnectivityBase_class(){
                 , propertyType_function_value
                 , ( bp::arg("dih"), bp::arg("key") )
                 , bp::release_gil_policy()
-                , "Return the type of the property for the specified bond at key key" );
+                , "Return the type of the property for the specified dihedral at key key" );
         
         }
         { //::SireMol::ConnectivityBase::propertyType
@@ -1171,7 +1171,7 @@ void register_ConnectivityBase_class(){
                 , propertyType_function_value
                 , ( bp::arg("imp"), bp::arg("key") )
                 , bp::release_gil_policy()
-                , "Return the type of the property for the specified bond at key key" );
+                , "Return the type of the property for the specified improper at key key" );
         
         }
         { //::SireMol::ConnectivityBase::split

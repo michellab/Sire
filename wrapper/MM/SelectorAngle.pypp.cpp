@@ -268,6 +268,31 @@ void register_SelectorAngle_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorAngle::measures
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 > > ( ::SireMM::SelectorAngle::*measures_function_type)(  ) const;
+            measures_function_type measures_function_value( &::SireMM::SelectorAngle::measures );
+            
+            SelectorAngle_exposer.def( 
+                "measures"
+                , measures_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorAngle::measures
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 > > ( ::SireMM::SelectorAngle::*measures_function_type)( ::SireBase::PropertyMap const & ) const;
+            measures_function_type measures_function_value( &::SireMM::SelectorAngle::measures );
+            
+            SelectorAngle_exposer.def( 
+                "measures"
+                , measures_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorAngle::metadataKeys
         
             typedef ::QStringList ( ::SireMM::SelectorAngle::*metadataKeys_function_type)(  ) const;
