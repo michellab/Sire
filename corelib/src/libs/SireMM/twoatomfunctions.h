@@ -121,6 +121,14 @@ public:
     bool operator>(const IDPair &other) const;
     bool operator>=(const IDPair &other) const;
 
+    quint32 operator[](int i) const
+    {
+        if (i == 0)
+            return atom0;
+        else
+            return atom1;
+    }
+
     quint32 atom0;
     quint32 atom1;
 };

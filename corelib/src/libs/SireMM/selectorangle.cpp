@@ -121,27 +121,6 @@ SelectorAngle::SelectorAngle(const MoleculeView &mol,
     }
 }
 
-SelectorAngle::SelectorAngle(const MoleculeView &mol,
-                             const QList<AngleID> &angles)
-              : ConcreteProperty<SelectorAngle, MoleculeView>(mol)
-{
-    const auto s = mol.selection();
-
-    for (const auto &angle : angles)
-    {
-        AngleID a(mol.data().info().atomIdx(angle.atom0()),
-                  mol.data().info().atomIdx(angle.atom1()),
-                  mol.data().info().atomIdx(angle.atom2()));
-
-        if (s.selected(a.atom0()) and
-            s.selected(a.atom1()) and
-            s.selected(a.atom2()))
-        {
-            angs.append(a);
-        }
-    }
-}
-
 SelectorAngle::SelectorAngle(const MoleculeData &moldata,
                              const SireBase::PropertyMap &map)
      : ConcreteProperty<SelectorAngle, MoleculeView>()
@@ -299,6 +278,62 @@ SelectorAngle::SelectorAngle(const MoleculeView &mol,
 }
 
 SelectorAngle::SelectorAngle(const MoleculeView &mol,
+                             const QList<AngleID> &angles,
+                             const SireBase::PropertyMap &map)
+              : ConcreteProperty<SelectorAngle, MoleculeView>(mol)
+{
+    if (angles.count() == 1)
+    {
+        this->operator=(SelectorAngle(mol, angles[0], map));
+        return;
+    }
+    else if (mol.data().hasProperty(map["connectivity"]) and not angles.isEmpty())
+    {
+        auto c = mol.data().property(map["connectivity"]).asA<Connectivity>();
+
+        auto all_angles = _to_int_set(c.getAngles(), this->data().info());
+
+        QSet<IDTriple> selected_angles;
+        selected_angles.reserve(all_angles.count());
+
+        for (const auto &angle : angles)
+        {
+            auto atoms0 = mol.data().info().map(angle.atom0());
+            auto atoms1 = mol.data().info().map(angle.atom1());
+            auto atoms2 = mol.data().info().map(angle.atom2());
+
+            if (not mol.selectedAll())
+            {
+                const auto selection = mol.selection();
+                atoms0 = _filter(atoms0, selection);
+                atoms1 = _filter(atoms1, selection);
+                atoms2 = _filter(atoms2, selection);
+            }
+
+            auto int_atoms0 = _to_int(atoms0);
+            auto int_atoms1 = _to_int(atoms1);
+            auto int_atoms2 = _to_int(atoms2);
+
+            auto left_angles = _filter(all_angles, int_atoms0, 0);
+            left_angles = _filter(left_angles, int_atoms1, 1);
+            left_angles = _filter(left_angles, int_atoms2, 2);
+
+            auto right_angles = _filter(all_angles, int_atoms0, 2);
+            right_angles = _filter(right_angles, int_atoms1, 1);
+            right_angles = _filter(right_angles, int_atoms2, 0);
+
+            selected_angles += left_angles;
+            selected_angles += right_angles;
+
+            if (selected_angles.count() == all_angles.count())
+                break;
+        }
+
+        angs = _from_int_set(selected_angles);
+    }
+}
+
+SelectorAngle::SelectorAngle(const MoleculeView &mol,
                              const AtomID &atom, const PropertyMap &map)
               : ConcreteProperty<SelectorAngle, MoleculeView>(mol)
 {
@@ -426,7 +461,7 @@ SelectorAngle::SelectorAngle(const Selector<Atom> &atoms0,
 {
     if (not atoms0.isSameMolecule(atoms1))
         throw SireError::incompatible_error(QObject::tr(
-            "You can only create an Angle from atoms in the same molecule. "
+            "You can only create an angle from atoms in the same molecule. "
             "%1 and %2 are from different molecules (%3 and %4)")
                 .arg(atoms0.toString()).arg(atoms1.toString())
                 .arg(atoms0.molecule().toString())
@@ -466,7 +501,7 @@ SelectorAngle::SelectorAngle(const Selector<Atom> &atoms0,
     if (not (atoms0.isSameMolecule(atoms1) and
              atoms0.isSameMolecule(atoms2)))
         throw SireError::incompatible_error(QObject::tr(
-            "You can only create an Angle from atoms in the same molecule. "
+            "You can only create an angle from atoms in the same molecule. "
             "%1, %2 and %3 are from different molecules (%4, %5 and %6)")
                 .arg(atoms0.toString()).arg(atoms1.toString())
                 .arg(atoms2.toString())
@@ -488,9 +523,9 @@ SelectorAngle::SelectorAngle(const Selector<Atom> &atoms0,
         angles012 = _filter(angles012, int_atoms1, 1);
         angles012 = _filter(angles012, int_atoms2, 2);
 
-        auto angles210 = _filter(angles, int_atoms2, 0);
+        auto angles210 = _filter(angles, int_atoms0, 2);
         angles210 = _filter(angles210, int_atoms1, 1);
-        angles210 = _filter(angles210, int_atoms0, 0);
+        angles210 = _filter(angles210, int_atoms2, 0);
 
         angs = _from_int_set(angles012 + angles210);
     }

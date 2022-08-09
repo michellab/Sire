@@ -224,7 +224,7 @@ void register_Bond_class(){
         }
         { //::SireMM::Bond::measure
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::Bond::*measure_function_type)( const ::SireBase::PropertyMap & ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::Bond::*measure_function_type)( ::SireBase::PropertyMap const & ) const;
             measure_function_type measure_function_value( &::SireMM::Bond::measure );
             
             Bond_exposer.def( 

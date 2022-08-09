@@ -56,12 +56,12 @@ friend QDataStream& ::operator>>(QDataStream&, SelectorImproper&);
 
 public:
     SelectorImproper();
+
     SelectorImproper(const SireMol::MoleculeData &molecule,
                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
     SelectorImproper(const MoleculeView &molecule,
                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
-    SelectorImproper(const SireMol::MoleculeView &molecule,
-                     const QList<SireMol::ImproperID> &impropers);
 
     SelectorImproper(const SireMol::MoleculeData &molecule,
                      const SireMol::AtomID &atom,
@@ -87,6 +87,10 @@ public:
 
     SelectorImproper(const SireMol::MoleculeView &molecule,
                      const SireMol::ImproperID &improper,
+                     const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorImproper(const SireMol::MoleculeView &molecule,
+                     const QList<SireMol::ImproperID> &impropers,
                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SelectorImproper(const SireMol::MoleculeView &molecule,

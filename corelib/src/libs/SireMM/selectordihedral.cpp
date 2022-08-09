@@ -49,6 +49,8 @@
 
 #include <QDebug>
 
+using SireMM::detail::IDQuad;
+
 using namespace SireMM;
 using namespace SireMol;
 using namespace SireBase;
@@ -118,34 +120,124 @@ SelectorDihedral::SelectorDihedral(const MoleculeView &mol,
     }
 }
 
-SelectorDihedral::SelectorDihedral(const MoleculeView &mol,
-                                   const QList<DihedralID> &dihedrals)
-                 : ConcreteProperty<SelectorDihedral, MoleculeView>(mol)
-{
-    const auto s = mol.selection();
-
-    for (const auto &dihedral : dihedrals)
-    {
-        DihedralID d(mol.data().info().atomIdx(dihedral.atom0()),
-                     mol.data().info().atomIdx(dihedral.atom1()),
-                     mol.data().info().atomIdx(dihedral.atom2()),
-                     mol.data().info().atomIdx(dihedral.atom3()));
-
-        if (s.selected(d.atom0()) and
-            s.selected(d.atom1()) and
-            s.selected(d.atom2()) and
-            s.selected(d.atom3()))
-        {
-            dihs.append(d);
-        }
-    }
-}
-
 SelectorDihedral::SelectorDihedral(const MoleculeData &moldata,
                                    const SireBase::PropertyMap &map)
                  : ConcreteProperty<SelectorDihedral, MoleculeView>()
 {
     this->operator=(SelectorDihedral(Molecule(moldata), map));
+}
+
+QSet<IDQuad> _to_int_set(const QList<DihedralID> &vals,
+                         const MoleculeInfoData &molinfo)
+{
+    QSet<IDQuad> s;
+    s.reserve(vals.count());
+
+    for (const auto &val : vals)
+    {
+        s.insert(IDQuad(molinfo.atomIdx(val[0]).value(),
+                        molinfo.atomIdx(val[1]).value(),
+                        molinfo.atomIdx(val[2]).value(),
+                        molinfo.atomIdx(val[3]).value()));
+    }
+
+    return s;
+}
+
+QList<DihedralID> _from_int_set(const QSet<IDQuad> &vals)
+{
+    QVector<IDQuad> v;
+    v.reserve(vals.count());
+
+    for (const auto &val : vals)
+    {
+        v.append(val);
+    }
+
+    std::sort(v.begin(), v.end());
+
+    QList<DihedralID> l;
+    l.reserve(v.count());
+
+    for (const auto &val : v)
+    {
+        l.append(DihedralID(AtomIdx(val.atom0),
+                            AtomIdx(val.atom1),
+                            AtomIdx(val.atom2),
+                            AtomIdx(val.atom3)));
+    }
+
+    return l;
+}
+
+QList<AtomIdx> _filter(const QList<AtomIdx> &atoms, const AtomSelection &selection)
+{
+    QList<AtomIdx> ret;
+    ret.reserve(atoms.count());
+
+    for (const auto &atom : atoms)
+    {
+        if (selection.selected(atom))
+        {
+            ret.append(atom);
+        }
+    }
+
+    return ret;
+}
+
+QSet<IDQuad> _filter(const QSet<IDQuad> &dihedrals,
+                     const QVector<quint32> &atoms,
+                     int position)
+{
+    QSet<IDQuad> result;
+
+    result.reserve(dihedrals.count());
+
+    for (const auto &dihedral : dihedrals)
+    {
+        const auto atomidx = dihedral[position];
+
+        for (const auto &atom : atoms)
+        {
+            if (atomidx == atom)
+            {
+                result.insert(dihedral);
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
+QVector<quint32> _to_int(const Selector<Atom> &atoms)
+{
+    QVector<quint32> ret;
+
+    const int n = atoms.count();
+
+    ret.reserve(n);
+
+    for (int i=0; i<n; ++i)
+    {
+        ret.append(atoms.index(i));
+    }
+
+    return ret;
+}
+
+QVector<quint32> _to_int(const QList<AtomIdx> &atoms)
+{
+    QVector<quint32> ret;
+    ret.reserve(atoms.count());
+
+    for (const auto &atom : atoms)
+    {
+        ret.append(atom.value());
+    }
+
+    return ret;
 }
 
 SelectorDihedral::SelectorDihedral(const MoleculeView &mol,
@@ -160,68 +252,96 @@ SelectorDihedral::SelectorDihedral(const MoleculeView &mol,
 
     if (mol.data().hasProperty(map["connectivity"]))
     {
+        if (not mol.selectedAll())
+        {
+            const auto selection = mol.selection();
+            atoms0 = _filter(atoms0, selection);
+            atoms1 = _filter(atoms1, selection);
+            atoms2 = _filter(atoms2, selection);
+            atoms3 = _filter(atoms3, selection);
+        }
+
+        auto int_atoms0 = _to_int(atoms0);
+        auto int_atoms1 = _to_int(atoms1);
+        auto int_atoms2 = _to_int(atoms2);
+        auto int_atoms3 = _to_int(atoms3);
+
         auto c = mol.data().property(map["connectivity"]).asA<Connectivity>();
 
-        QSet<DihedralID> seen_dihedrals;
+        auto dihedrals = _to_int_set(c.getDihedrals(), this->data().info());
 
-        QList<DihedralID> dihedrals;
+        auto dihedrals0123 = _filter(dihedrals, int_atoms0, 0);
+        dihedrals0123 = _filter(dihedrals0123, int_atoms1, 1);
+        dihedrals0123 = _filter(dihedrals0123, int_atoms2, 2);
+        dihedrals0123 = _filter(dihedrals0123, int_atoms3, 3);
 
-        for (const auto &atom0 : atoms0)
+        auto dihedrals3210 = _filter(dihedrals, int_atoms0, 3);
+        dihedrals3210 = _filter(dihedrals3210, int_atoms1, 2);
+        dihedrals3210 = _filter(dihedrals3210, int_atoms2, 1);
+        dihedrals3210 = _filter(dihedrals3210, int_atoms3, 0);
+
+        dihs = _from_int_set(dihedrals0123 + dihedrals3210);
+    }
+}
+
+SelectorDihedral::SelectorDihedral(const MoleculeView &mol,
+                                   const QList<DihedralID> &dihedrals,
+                                   const SireBase::PropertyMap &map)
+                 : ConcreteProperty<SelectorDihedral, MoleculeView>(mol)
+{
+    if (dihedrals.count() == 1)
+    {
+        this->operator=(SelectorDihedral(mol, dihedrals[0], map));
+        return;
+    }
+    else if (mol.data().hasProperty(map["connectivity"]) and not dihedrals.isEmpty())
+    {
+        auto c = mol.data().property(map["connectivity"]).asA<Connectivity>();
+
+        auto all_dihedrals = _to_int_set(c.getDihedrals(), this->data().info());
+
+        QSet<IDQuad> selected_dihedrals;
+        selected_dihedrals.reserve(all_dihedrals.count());
+
+        for (const auto &dihedral : dihedrals)
         {
-            for (const auto &atom1 : atoms1)
+            auto atoms0 = mol.data().info().map(dihedral.atom0());
+            auto atoms1 = mol.data().info().map(dihedral.atom1());
+            auto atoms2 = mol.data().info().map(dihedral.atom2());
+            auto atoms3 = mol.data().info().map(dihedral.atom3());
+
+            if (not mol.selectedAll())
             {
-                for (const auto &atom2 : atoms2)
-                {
-                    for (const auto &atom3 : atoms3)
-                    {
-                        auto atomidx0 = atom0;
-                        auto atomidx1 = atom1;
-                        auto atomidx2 = atom2;
-                        auto atomidx3 = atom3;
-
-                        if (atomidx0 > atomidx3)
-                        {
-                            qSwap(atomidx0, atomidx3);
-                            qSwap(atomidx1, atomidx2);
-                        }
-
-                        DihedralID d(atomidx0, atomidx1, atomidx2, atomidx3);
-
-                        if (atomidx0 != atomidx1 and
-                            atomidx1 != atomidx2 and
-                            atomidx2 != atomidx3 and
-                            c.areConnected(atomidx0, atomidx1) and
-                            c.areConnected(atomidx1, atomidx2) and
-                            c.areConnected(atomidx2, atomidx3) and
-                            not seen_dihedrals.contains(d))
-                        {
-                            seen_dihedrals.insert(d);
-                            dihedrals.append(d);
-                        }
-                    }
-                }
+                const auto selection = mol.selection();
+                atoms0 = _filter(atoms0, selection);
+                atoms1 = _filter(atoms1, selection);
+                atoms2 = _filter(atoms2, selection);
+                atoms3 = _filter(atoms3, selection);
             }
+
+            auto int_atoms0 = _to_int(atoms0);
+            auto int_atoms1 = _to_int(atoms1);
+            auto int_atoms2 = _to_int(atoms2);
+            auto int_atoms3 = _to_int(atoms3);
+
+            auto dihedrals0123 = _filter(all_dihedrals, int_atoms0, 0);
+            dihedrals0123 = _filter(dihedrals0123, int_atoms1, 1);
+            dihedrals0123 = _filter(dihedrals0123, int_atoms2, 2);
+            dihedrals0123 = _filter(dihedrals0123, int_atoms3, 3);
+
+            auto dihedrals3210 = _filter(all_dihedrals, int_atoms0, 3);
+            dihedrals3210 = _filter(dihedrals3210, int_atoms1, 2);
+            dihedrals3210 = _filter(dihedrals3210, int_atoms2, 1);
+            dihedrals3210 = _filter(dihedrals3210, int_atoms3, 0);
+
+            selected_dihedrals += dihedrals0123;
+            selected_dihedrals += dihedrals3210;
+
+            if (selected_dihedrals.count() == all_dihedrals.count())
+                break;
         }
 
-        if (mol.selectedAll())
-        {
-            dihs = dihedrals;
-        }
-        else
-        {
-            const auto s = mol.selection();
-
-            for (const auto &dihedral : dihedrals)
-            {
-                if (s.selected(dihedral.atom0()) and
-                    s.selected(dihedral.atom1()) and
-                    s.selected(dihedral.atom2()) and
-                    s.selected(dihedral.atom3()))
-                {
-                    dihs.append(dihedral);
-                }
-            }
-        }
+        dihs = _from_int_set(selected_dihedrals);
     }
 }
 
@@ -229,31 +349,29 @@ SelectorDihedral::SelectorDihedral(const MoleculeView &mol,
                                    const AtomID &atom, const PropertyMap &map)
                  : ConcreteProperty<SelectorDihedral, MoleculeView>(mol)
 {
+    auto atoms = mol.data().info().map(atom);
+
     if (mol.data().hasProperty(map["connectivity"]))
     {
         auto c = mol.data().property(map["connectivity"]).asA<Connectivity>();
 
-        auto dihedrals = c.getDihedrals(atom);
-
-        if (mol.selectedAll())
+        if (not mol.selectedAll())
         {
-            dihs = dihedrals;
+            const auto selection = mol.selection();
+            atoms = _filter(atoms, selection);
         }
-        else
-        {
-            const auto s = mol.selection();
 
-            for (const auto &dihedral : dihedrals)
-            {
-                if (s.selected(dihedral.atom0()) and
-                    s.selected(dihedral.atom1()) and
-                    s.selected(dihedral.atom2()) and
-                    s.selected(dihedral.atom3()))
-                {
-                    dihs.append(dihedral);
-                }
-            }
-        }
+        auto int_atoms = _to_int(atoms);
+
+        auto dihedrals = _to_int_set(c.getDihedrals(), this->data().info());
+
+        auto dihedrals0 = _filter(dihedrals, int_atoms, 0);
+        auto dihedrals1 = _filter(dihedrals, int_atoms, 1);
+        auto dihedrals2 = _filter(dihedrals, int_atoms, 2);
+        auto dihedrals3 = _filter(dihedrals, int_atoms, 3);
+
+        dihs = _from_int_set(dihedrals0 + dihedrals1 +
+                             dihedrals2 + dihedrals3);
     }
 }
 
@@ -262,65 +380,93 @@ SelectorDihedral::SelectorDihedral(const MoleculeView &mol,
                                    const PropertyMap &map)
                  : ConcreteProperty<SelectorDihedral, MoleculeView>(mol)
 {
+    auto atoms0 = mol.data().info().map(atom0);
+    auto atoms1 = mol.data().info().map(atom1);
+
     if (mol.data().hasProperty(map["connectivity"]))
     {
         auto c = mol.data().property(map["connectivity"]).asA<Connectivity>();
 
-        auto dihedrals = c.getDihedrals(atom0, atom1);
-
-        if (mol.selectedAll())
+        if (not mol.selectedAll())
         {
-            dihs = dihedrals;
+            const auto selection = mol.selection();
+            atoms0 = _filter(atoms0, selection);
+            atoms1 = _filter(atoms1, selection);
         }
-        else
-        {
-            const auto s = mol.selection();
 
-            for (const auto &dihedral : dihedrals)
-            {
-                if (s.selected(dihedral.atom0()) and
-                    s.selected(dihedral.atom1()) and
-                    s.selected(dihedral.atom2()) and
-                    s.selected(dihedral.atom3()))
-                {
-                    dihs.append(dihedral);
-                }
-            }
-        }
+        auto int_atoms0 = _to_int(atoms0);
+        auto int_atoms1 = _to_int(atoms1);
+
+        auto dihedrals = _to_int_set(c.getDihedrals(), this->data().info());
+
+        auto dihedrals01 = _filter(dihedrals, int_atoms0, 0);
+        dihedrals01 = _filter(dihedrals01, int_atoms1, 1);
+
+        auto dihedrals12 = _filter(dihedrals, int_atoms0, 1);
+        dihedrals12 = _filter(dihedrals12, int_atoms1, 2);
+
+        auto dihedrals23 = _filter(dihedrals, int_atoms0, 2);
+        dihedrals23 = _filter(dihedrals23, int_atoms1, 3);
+
+        auto dihedrals32 = _filter(dihedrals, int_atoms0, 3);
+        dihedrals32 = _filter(dihedrals32, int_atoms1, 2);
+
+        auto dihedrals21 = _filter(dihedrals, int_atoms0, 2);
+        dihedrals21 = _filter(dihedrals21, int_atoms1, 1);
+
+        auto dihedrals10 = _filter(dihedrals, int_atoms0, 1);
+        dihedrals10 = _filter(dihedrals, int_atoms1, 0);
+
+        dihs = _from_int_set(dihedrals01 + dihedrals12 + dihedrals23 +
+                             dihedrals32 + dihedrals21 + dihedrals10);
     }
 }
 
 SelectorDihedral::SelectorDihedral(const MoleculeView &mol,
                                    const AtomID &atom0, const AtomID &atom1,
-                                   const AtomID &atom2,
-                                   const PropertyMap &map)
+                                   const AtomID &atom2, const PropertyMap &map)
                  : ConcreteProperty<SelectorDihedral, MoleculeView>(mol)
 {
+    auto atoms0 = mol.data().info().map(atom0);
+    auto atoms1 = mol.data().info().map(atom1);
+    auto atoms2 = mol.data().info().map(atom2);
+
     if (mol.data().hasProperty(map["connectivity"]))
     {
         auto c = mol.data().property(map["connectivity"]).asA<Connectivity>();
 
-        auto dihedrals = c.getDihedrals(atom0, atom1, atom2);
-
-        if (mol.selectedAll())
+        if (not mol.selectedAll())
         {
-            dihs = dihedrals;
+            const auto selection = mol.selection();
+            atoms0 = _filter(atoms0, selection);
+            atoms1 = _filter(atoms1, selection);
+            atoms2 = _filter(atoms2, selection);
         }
-        else
-        {
-            const auto s = mol.selection();
 
-            for (const auto &dihedral : dihedrals)
-            {
-                if (s.selected(dihedral.atom0()) and
-                    s.selected(dihedral.atom1()) and
-                    s.selected(dihedral.atom2()) and
-                    s.selected(dihedral.atom3()))
-                {
-                    dihs.append(dihedral);
-                }
-            }
-        }
+        auto int_atoms0 = _to_int(atoms0);
+        auto int_atoms1 = _to_int(atoms1);
+        auto int_atoms2 = _to_int(atoms2);
+
+        auto dihedrals = _to_int_set(c.getDihedrals(), this->data().info());
+
+        auto dihedrals012 = _filter(dihedrals, int_atoms0, 0);
+        dihedrals012 = _filter(dihedrals012, int_atoms1, 1);
+        dihedrals012 = _filter(dihedrals012, int_atoms2, 2);
+
+        auto dihedrals123 = _filter(dihedrals, int_atoms0, 1);
+        dihedrals123 = _filter(dihedrals123, int_atoms1, 2);
+        dihedrals123 = _filter(dihedrals123, int_atoms2, 3);
+
+        auto dihedrals321 = _filter(dihedrals, int_atoms0, 3);
+        dihedrals321 = _filter(dihedrals321, int_atoms1, 2);
+        dihedrals321 = _filter(dihedrals321, int_atoms2, 1);
+
+        auto dihedrals210 = _filter(dihedrals, int_atoms0, 2);
+        dihedrals210 = _filter(dihedrals210, int_atoms1, 1);
+        dihedrals210 = _filter(dihedrals210, int_atoms2, 0);
+
+        dihs = _from_int_set(dihedrals012 + dihedrals123 +
+                             dihedrals321 + dihedrals210);
     }
 }
 
@@ -373,88 +519,66 @@ SelectorDihedral::SelectorDihedral(const Selector<Atom> &atoms,
                                    const PropertyMap &map)
                  : ConcreteProperty<SelectorDihedral, MoleculeView>(atoms)
 {
-    if (atoms.data().hasProperty(map["connectivity"]))
+    if (this->data().hasProperty(map["connectivity"]))
     {
-        auto c = atoms.data().property(map["connectivity"]).asA<Connectivity>();
+        auto c = this->data().property(map["connectivity"]).asA<Connectivity>();
 
-        QSet<DihedralID> seen_dihs;
+        auto int_atoms = _to_int(atoms);
 
-        QList<DihedralID> dihedrals;
+        auto dihedrals = _to_int_set(c.getDihedrals(), this->data().info());
 
-        for (int i=0; i<atoms.count(); ++i)
-        {
-            for (const auto &d : c.getDihedrals(atoms(i).index()))
-            {
-                auto atomidx0 = atoms.data().info().atomIdx(d.atom0());
-                auto atomidx1 = atoms.data().info().atomIdx(d.atom1());
-                auto atomidx2 = atoms.data().info().atomIdx(d.atom2());
-                auto atomidx3 = atoms.data().info().atomIdx(d.atom3());
+        auto dihedrals0 = _filter(dihedrals, int_atoms, 0);
+        auto dihedrals1 = _filter(dihedrals, int_atoms, 1);
+        auto dihedrals2 = _filter(dihedrals, int_atoms, 2);
+        auto dihedrals3 = _filter(dihedrals, int_atoms, 3);
 
-                if (atomidx0 > atomidx3)
-                {
-                    qSwap(atomidx0, atomidx3);
-                    qSwap(atomidx1, atomidx2);
-                }
-
-                DihedralID dih(atomidx0, atomidx1, atomidx2, atomidx3);
-
-                if (atomidx0 != atomidx1 and
-                    atomidx1 != atomidx2 and
-                    atomidx2 != atomidx3 and
-                    not seen_dihs.contains(dih))
-                {
-                    seen_dihs.insert(dih);
-                    dihedrals.append(dih);
-                }
-            }
-        }
-
-        dihs = dihedrals;
+        dihs = _from_int_set(dihedrals0 + dihedrals1 +
+                             dihedrals2 + dihedrals3);
     }
 }
 
 SelectorDihedral::SelectorDihedral(const Selector<Atom> &atoms0,
                                    const Selector<Atom> &atoms1,
                                    const PropertyMap &map)
-              : ConcreteProperty<SelectorDihedral, MoleculeView>(atoms0)
+                 : ConcreteProperty<SelectorDihedral, MoleculeView>(atoms0)
 {
     if (not atoms0.isSameMolecule(atoms1))
         throw SireError::incompatible_error(QObject::tr(
-            "You can only create a Dihedral from atoms in the same molecule. "
+            "You can only create a dihedral from atoms in the same molecule. "
             "%1 and %2 are from different molecules (%3 and %4)")
                 .arg(atoms0.toString()).arg(atoms1.toString())
                 .arg(atoms0.molecule().toString())
                 .arg(atoms1.molecule().toString()), CODELOC);
 
-    if (atoms0.data().hasProperty(map["connectivity"]))
+    if (this->data().hasProperty(map["connectivity"]))
     {
-        auto c = atoms0.data().property(map["connectivity"]).asA<Connectivity>();
+        auto c = this->data().property(map["connectivity"]).asA<Connectivity>();
 
-        QSet<DihedralID> seen_dihs;
+        auto int_atoms0 = _to_int(atoms0);
+        auto int_atoms1 = _to_int(atoms1);
 
-        QList<DihedralID> dihedrals;
+        auto dihedrals = _to_int_set(c.getDihedrals(), this->data().info());
 
-        for (int i=0; i<atoms0.count(); ++i)
-        {
-            for (int j=0; j<atoms1.count(); ++j)
-            {
-                auto atomidx0 = atoms0(i).index();
-                auto atomidx1 = atoms1(j).index();
+        auto dihedrals01 = _filter(dihedrals, int_atoms0, 0);
+        dihedrals01 = _filter(dihedrals01, int_atoms1, 1);
 
-                auto dihs = c.getDihedrals(atomidx0, atomidx1);
+        auto dihedrals12 = _filter(dihedrals, int_atoms0, 1);
+        dihedrals12 = _filter(dihedrals12, int_atoms1, 2);
 
-                for (const auto &dih : dihs)
-                {
-                    if (not seen_dihs.contains(dih))
-                    {
-                        seen_dihs.insert(dih);
-                        dihedrals.append(dih);
-                    }
-                }
-            }
-        }
+        auto dihedrals23 = _filter(dihedrals, int_atoms0, 2);
+        dihedrals23 = _filter(dihedrals23, int_atoms1, 3);
 
-        dihs = dihedrals;
+        auto dihedrals32 = _filter(dihedrals, int_atoms0, 3);
+        dihedrals32 = _filter(dihedrals32, int_atoms1, 2);
+
+        auto dihedrals21 = _filter(dihedrals, int_atoms0, 2);
+        dihedrals21 = _filter(dihedrals21, int_atoms1, 1);
+
+        auto dihedrals10 = _filter(dihedrals, int_atoms0, 1);
+        dihedrals10 = _filter(dihedrals10, int_atoms1, 0);
+
+        dihs = _from_int_set(dihedrals01 + dihedrals12 + dihedrals23 +
+                             dihedrals32 + dihedrals21 + dihedrals10);
     }
 }
 
@@ -462,11 +586,12 @@ SelectorDihedral::SelectorDihedral(const Selector<Atom> &atoms0,
                                    const Selector<Atom> &atoms1,
                                    const Selector<Atom> &atoms2,
                                    const PropertyMap &map)
-              : ConcreteProperty<SelectorDihedral, MoleculeView>(atoms0)
+                 : ConcreteProperty<SelectorDihedral, MoleculeView>(atoms0)
 {
-    if (not (atoms0.isSameMolecule(atoms1) and atoms0.isSameMolecule(atoms2)))
+    if (not (atoms0.isSameMolecule(atoms1) and
+             atoms0.isSameMolecule(atoms2)))
         throw SireError::incompatible_error(QObject::tr(
-            "You can only create a Dihedral from atoms in the same molecule. "
+            "You can only create a dihedral from atoms in the same molecule. "
             "%1, %2 and %3 are from different molecules (%4, %5 and %6)")
                 .arg(atoms0.toString()).arg(atoms1.toString())
                 .arg(atoms2.toString())
@@ -474,48 +599,35 @@ SelectorDihedral::SelectorDihedral(const Selector<Atom> &atoms0,
                 .arg(atoms1.molecule().toString())
                 .arg(atoms2.molecule().toString()), CODELOC);
 
-    if (atoms0.data().hasProperty(map["connectivity"]))
+    if (this->data().hasProperty(map["connectivity"]))
     {
-        auto c = atoms0.data().property(map["connectivity"]).asA<Connectivity>();
+        auto c = this->data().property(map["connectivity"]).asA<Connectivity>();
 
-        QSet<DihedralID> seen_dihs;
+        auto int_atoms0 = _to_int(atoms0);
+        auto int_atoms1 = _to_int(atoms1);
+        auto int_atoms2 = _to_int(atoms2);
 
-        QList<DihedralID> dihedrals;
+        auto dihedrals = _to_int_set(c.getDihedrals(), this->data().info());
 
-        for (int i=0; i<atoms0.count(); ++i)
-        {
-            for (int j=0; j<atoms1.count(); ++j)
-            {
-                for (int k=0; k<atoms2.count(); ++k)
-                {
-                    auto atomidx0 = atoms0(i).index();
-                    auto atomidx1 = atoms1(j).index();
-                    auto atomidx2 = atoms2(k).index();
+        auto dihedrals012 = _filter(dihedrals, int_atoms0, 0);
+        dihedrals012 = _filter(dihedrals012, int_atoms1, 1);
+        dihedrals012 = _filter(dihedrals012, int_atoms2, 2);
 
-                    auto dihs = c.getDihedrals(atomidx0, atomidx1, atomidx2);
+        auto dihedrals123 = _filter(dihedrals, int_atoms0, 1);
+        dihedrals123 = _filter(dihedrals123, int_atoms1, 2);
+        dihedrals123 = _filter(dihedrals123, int_atoms2, 3);
 
-                    for (const auto &dih : dihs)
-                    {
-                        if (not seen_dihs.contains(dih))
-                        {
-                            seen_dihs.insert(dih);
-                            dihedrals.append(dih);
-                        }
-                    }
-                }
-            }
-        }
+        auto dihedrals321 = _filter(dihedrals, int_atoms0, 3);
+        dihedrals321 = _filter(dihedrals321, int_atoms1, 2);
+        dihedrals321 = _filter(dihedrals321, int_atoms2, 1);
 
-        dihs = dihedrals;
+        auto dihedrals210 = _filter(dihedrals, int_atoms0, 2);
+        dihedrals210 = _filter(dihedrals210, int_atoms1, 1);
+        dihedrals210 = _filter(dihedrals210, int_atoms2, 0);
+
+        dihs = _from_int_set(dihedrals012 + dihedrals123 +
+                             dihedrals321 + dihedrals210);
     }
-}
-
-bool _contains(const DihedralID &dih, const AtomIdx &atom)
-{
-    return dih.atom0() == atom or
-           dih.atom1() == atom or
-           dih.atom2() == atom or
-           dih.atom3() == atom;
 }
 
 SelectorDihedral::SelectorDihedral(const Selector<Atom> &atoms0,
@@ -529,7 +641,7 @@ SelectorDihedral::SelectorDihedral(const Selector<Atom> &atoms0,
              atoms0.isSameMolecule(atoms2) and
              atoms0.isSameMolecule(atoms3)))
         throw SireError::incompatible_error(QObject::tr(
-            "You can only create an Dihedral from atoms in the same molecule. "
+            "You can only create a dihedral from atoms in the same molecule. "
             "%1, %2, %3 and %4 are from different molecules (%5, %6, %7 and %8)")
                 .arg(atoms0.toString()).arg(atoms1.toString())
                 .arg(atoms2.toString()).arg(atoms3.toString())
@@ -538,66 +650,28 @@ SelectorDihedral::SelectorDihedral(const Selector<Atom> &atoms0,
                 .arg(atoms2.molecule().toString())
                 .arg(atoms3.molecule().toString()), CODELOC);
 
-    if (atoms0.data().hasProperty(map["connectivity"]))
+    if (this->data().hasProperty(map["connectivity"]))
     {
-        auto c = atoms0.data().property(map["connectivity"]).asA<Connectivity>();
+        auto c = this->data().property(map["connectivity"]).asA<Connectivity>();
 
-        for (const auto &dihedral : c.getDihedrals())
-        {
-            bool found = false;
+        auto int_atoms0 = _to_int(atoms0);
+        auto int_atoms1 = _to_int(atoms1);
+        auto int_atoms2 = _to_int(atoms2);
+        auto int_atoms3 = _to_int(atoms3);
 
-            for (int i=0; i<atoms0.count(); ++i)
-            {
-                auto atomidx0 = atoms0(i).index();
+        auto dihedrals = _to_int_set(c.getDihedrals(), this->data().info());
 
-                if (not _contains(dihedral, atomidx0))
-                    break;
+        auto dihedrals0123 = _filter(dihedrals, int_atoms0, 0);
+        dihedrals0123 = _filter(dihedrals0123, int_atoms1, 1);
+        dihedrals0123 = _filter(dihedrals0123, int_atoms2, 2);
+        dihedrals0123 = _filter(dihedrals0123, int_atoms3, 3);
 
-                for (int j=0; j<atoms1.count(); ++j)
-                {
-                    auto atomidx1 = atoms1(j).index();
+        auto dihedrals3210 = _filter(dihedrals, int_atoms0, 3);
+        dihedrals3210 = _filter(dihedrals3210, int_atoms1, 2);
+        dihedrals3210 = _filter(dihedrals3210, int_atoms2, 1);
+        dihedrals3210 = _filter(dihedrals3210, int_atoms3, 0);
 
-                    if (atomidx1 == atomidx0 or not _contains(dihedral, atomidx1))
-                        break;
-
-                    for (int k=0; k<atoms2.count(); ++k)
-                    {
-                        auto atomidx2 = atoms2(k).index();
-
-                        if (atomidx2 == atomidx1 or not _contains(dihedral, atomidx2))
-                            break;
-
-
-                        for (int l=0; l<atoms3.count(); ++l)
-                        {
-                            auto atomidx3 = atoms3(l).index();
-
-                            if (atomidx3 == atomidx2 or not _contains(dihedral, atomidx3))
-                                break;
-
-                            if (atomidx0 > atomidx3)
-                            {
-                                qSwap(atomidx0, atomidx3);
-                                qSwap(atomidx1, atomidx2);
-                            }
-
-                            dihs.append(DihedralID(atomidx0, atomidx1, atomidx2, atomidx3));
-                            found = true;
-                            break;
-                        }
-
-                        if (found)
-                            break;
-                    }
-
-                    if (found)
-                        break;
-                }
-
-                if (found)
-                    break;
-            }
-        }
+        dihs = _from_int_set(dihedrals0123 + dihedrals3210);
     }
 }
 

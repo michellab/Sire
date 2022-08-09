@@ -43,7 +43,7 @@ void register_TwoAtomFunctions_class(){
 
     { //::SireMM::TwoAtomFunctions
         typedef bp::class_< SireMM::TwoAtomFunctions, bp::bases< SireMM::AtomFunctions, SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > TwoAtomFunctions_exposer_t;
-        TwoAtomFunctions_exposer_t TwoAtomFunctions_exposer = TwoAtomFunctions_exposer_t( "TwoAtomFunctions", "This class holds the set of TwoAtomFunction potentials that\nact between the atoms in a molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        TwoAtomFunctions_exposer_t TwoAtomFunctions_exposer = TwoAtomFunctions_exposer_t( "TwoAtomFunctions", "", bp::init< >("This class holds the set of TwoAtomFunction potentials that\nact between the atoms in a molecule\n\nAuthor: Christopher Woods\n") );
         bp::scope TwoAtomFunctions_scope( TwoAtomFunctions_exposer );
         TwoAtomFunctions_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") ), "Construct the container to hold the set of two-atom functions\nfor the molecule whose data is in moldata") );
         TwoAtomFunctions_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "Construct the container to hold the set of two-atom functions\nfor the molecule whose layout is in molinfo") );

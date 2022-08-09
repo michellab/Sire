@@ -56,12 +56,12 @@ friend QDataStream& ::operator>>(QDataStream&, SelectorDihedral&);
 
 public:
     SelectorDihedral();
+
     SelectorDihedral(const SireMol::MoleculeData &molecule,
                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
     SelectorDihedral(const MoleculeView &molecule,
                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
-    SelectorDihedral(const SireMol::MoleculeView &molecule,
-                     const QList<SireMol::DihedralID> &dihedrals);
 
     SelectorDihedral(const SireMol::MoleculeData &molecule,
                      const SireMol::AtomID &atom,
@@ -87,6 +87,10 @@ public:
 
     SelectorDihedral(const SireMol::MoleculeView &molecule,
                      const SireMol::DihedralID &dihedral,
+                     const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorDihedral(const SireMol::MoleculeView &molecule,
+                     const QList<SireMol::DihedralID> &dihedrals,
                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SelectorDihedral(const SireMol::MoleculeView &molecule,
