@@ -58,7 +58,6 @@ void register_SireUnits_containers()
     register_list< QVector<Dimension::Angle> >();
     register_list< QVector<Dimension::Time> >();
     register_list< QVector<Dimension::Quantity> >();
-    register_list< QVector<Dimension::Mass> >();
 
     register_list< QList<Dimension::Charge> >();
     register_list< QList<Dimension::Mass> >();
@@ -68,7 +67,6 @@ void register_SireUnits_containers()
     register_list< QList<Dimension::Angle> > ();
     register_list< QList<Dimension::Time> >();
     register_list< QList<Dimension::Quantity> >();
-    register_list< QList<Dimension::Mass> >();
 
     register_PackedArray< SireBase::PackedArray2D<Dimension::Charge> >();
     register_PackedArray< SireBase::PackedArray2D<Dimension::Mass> >();

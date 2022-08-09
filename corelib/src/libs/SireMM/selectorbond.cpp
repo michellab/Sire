@@ -125,6 +125,7 @@ SelectorBond::SelectorBond(const MoleculeData &moldata,
     this->operator=(SelectorBond(Molecule(moldata), map));
 }
 
+inline
 QSet<IDPair> _to_int_set(const QList<BondID> &vals,
                          const MoleculeInfoData &molinfo)
 {
@@ -140,6 +141,7 @@ QSet<IDPair> _to_int_set(const QList<BondID> &vals,
     return s;
 }
 
+inline
 QList<BondID> _from_int_set(const QSet<IDPair> &vals)
 {
     QVector<IDPair> v;
@@ -164,6 +166,7 @@ QList<BondID> _from_int_set(const QSet<IDPair> &vals)
     return l;
 }
 
+inline
 QList<AtomIdx> _filter(const QList<AtomIdx> &atoms, const AtomSelection &selection)
 {
     QList<AtomIdx> ret;
@@ -180,6 +183,7 @@ QList<AtomIdx> _filter(const QList<AtomIdx> &atoms, const AtomSelection &selecti
     return ret;
 }
 
+inline
 QSet<IDPair> _filter(const QSet<IDPair> &bonds,
                      const QVector<quint32> &atoms,
                      int position)
@@ -205,6 +209,7 @@ QSet<IDPair> _filter(const QSet<IDPair> &bonds,
     return result;
 }
 
+inline
 QVector<quint32> _to_int(const Selector<Atom> &atoms)
 {
     QVector<quint32> ret;
@@ -221,6 +226,7 @@ QVector<quint32> _to_int(const Selector<Atom> &atoms)
     return ret;
 }
 
+inline
 QVector<quint32> _to_int(const QList<AtomIdx> &atoms)
 {
     QVector<quint32> ret;

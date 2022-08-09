@@ -128,6 +128,7 @@ SelectorAngle::SelectorAngle(const MoleculeData &moldata,
     this->operator=(SelectorAngle(Molecule(moldata), map));
 }
 
+inline
 QSet<IDTriple> _to_int_set(const QList<AngleID> &vals,
                            const MoleculeInfoData &molinfo)
 {
@@ -144,6 +145,7 @@ QSet<IDTriple> _to_int_set(const QList<AngleID> &vals,
     return s;
 }
 
+inline
 QList<AngleID> _from_int_set(const QSet<IDTriple> &vals)
 {
     QVector<IDTriple> v;
@@ -169,6 +171,7 @@ QList<AngleID> _from_int_set(const QSet<IDTriple> &vals)
     return l;
 }
 
+inline
 QList<AtomIdx> _filter(const QList<AtomIdx> &atoms, const AtomSelection &selection)
 {
     QList<AtomIdx> ret;
@@ -185,6 +188,7 @@ QList<AtomIdx> _filter(const QList<AtomIdx> &atoms, const AtomSelection &selecti
     return ret;
 }
 
+inline
 QSet<IDTriple> _filter(const QSet<IDTriple> &angles,
                        const QVector<quint32> &atoms,
                        int position)
@@ -210,6 +214,7 @@ QSet<IDTriple> _filter(const QSet<IDTriple> &angles,
     return result;
 }
 
+inline
 QVector<quint32> _to_int(const Selector<Atom> &atoms)
 {
     QVector<quint32> ret;
@@ -226,6 +231,7 @@ QVector<quint32> _to_int(const Selector<Atom> &atoms)
     return ret;
 }
 
+inline
 QVector<quint32> _to_int(const QList<AtomIdx> &atoms)
 {
     QVector<quint32> ret;

@@ -49,6 +49,8 @@
 
 #include <QDebug>
 
+using SireMM::detail::IDQuad;
+
 using namespace SireMM;
 using namespace SireMol;
 using namespace SireBase;
@@ -139,34 +141,130 @@ SelectorImproper::SelectorImproper(const MoleculeView &mol,
     }
 }
 
-SelectorImproper::SelectorImproper(const MoleculeView &mol,
-                                   const QList<ImproperID> &impropers)
-                 : ConcreteProperty<SelectorImproper, MoleculeView>(mol)
-{
-    const auto s = mol.selection();
-
-    for (const auto &improper : impropers)
-    {
-        ImproperID i(mol.data().info().atomIdx(improper.atom0()),
-                     mol.data().info().atomIdx(improper.atom1()),
-                     mol.data().info().atomIdx(improper.atom2()),
-                     mol.data().info().atomIdx(improper.atom3()));
-
-        if (s.selected(i.atom0()) and
-            s.selected(i.atom1()) and
-            s.selected(i.atom2()) and
-            s.selected(i.atom3()))
-        {
-            imps.append(i);
-        }
-    }
-}
-
 SelectorImproper::SelectorImproper(const MoleculeData &moldata,
                                    const SireBase::PropertyMap &map)
                  : ConcreteProperty<SelectorImproper, MoleculeView>()
 {
     this->operator=(SelectorImproper(Molecule(moldata), map));
+}
+
+inline
+QSet<IDQuad> _to_int_set(const QList<ImproperID> &vals,
+                         const MoleculeInfoData &molinfo)
+{
+    QSet<IDQuad> s;
+    s.reserve(vals.count());
+
+    for (const auto &val : vals)
+    {
+        s.insert(IDQuad(molinfo.atomIdx(val[0]).value(),
+                        molinfo.atomIdx(val[1]).value(),
+                        molinfo.atomIdx(val[2]).value(),
+                        molinfo.atomIdx(val[3]).value()));
+    }
+
+    return s;
+}
+
+inline
+QList<ImproperID> _from_int_set(const QSet<IDQuad> &vals)
+{
+    QVector<IDQuad> v;
+    v.reserve(vals.count());
+
+    for (const auto &val : vals)
+    {
+        v.append(val);
+    }
+
+    std::sort(v.begin(), v.end());
+
+    QList<ImproperID> l;
+    l.reserve(v.count());
+
+    for (const auto &val : v)
+    {
+        l.append(ImproperID(AtomIdx(val.atom0),
+                            AtomIdx(val.atom1),
+                            AtomIdx(val.atom2),
+                            AtomIdx(val.atom3)));
+    }
+
+    return l;
+}
+
+inline
+QList<AtomIdx> _filter(const QList<AtomIdx> &atoms, const AtomSelection &selection)
+{
+    QList<AtomIdx> ret;
+    ret.reserve(atoms.count());
+
+    for (const auto &atom : atoms)
+    {
+        if (selection.selected(atom))
+        {
+            ret.append(atom);
+        }
+    }
+
+    return ret;
+}
+
+inline
+QSet<IDQuad> _filter(const QSet<IDQuad> &impropers,
+                     const QVector<quint32> &atoms,
+                     int position)
+{
+    QSet<IDQuad> result;
+
+    result.reserve(impropers.count());
+
+    for (const auto &improper : impropers)
+    {
+        const auto atomidx = improper[position];
+
+        for (const auto &atom : atoms)
+        {
+            if (atomidx == atom)
+            {
+                result.insert(improper);
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
+inline
+QVector<quint32> _to_int(const Selector<Atom> &atoms)
+{
+    QVector<quint32> ret;
+
+    const int n = atoms.count();
+
+    ret.reserve(n);
+
+    for (int i=0; i<n; ++i)
+    {
+        ret.append(atoms.index(i));
+    }
+
+    return ret;
+}
+
+inline
+QVector<quint32> _to_int(const QList<AtomIdx> &atoms)
+{
+    QVector<quint32> ret;
+    ret.reserve(atoms.count());
+
+    for (const auto &atom : atoms)
+    {
+        ret.append(atom.value());
+    }
+
+    return ret;
 }
 
 SelectorImproper::SelectorImproper(const MoleculeView &mol,
@@ -179,68 +277,82 @@ SelectorImproper::SelectorImproper(const MoleculeView &mol,
     auto atoms2 = mol.data().info().map(improper.atom2());
     auto atoms3 = mol.data().info().map(improper.atom3());
 
-    QList<ImproperID> all_impropers = _get_impropers(mol.data(), map);
-
-    QSet<ImproperID> seen_impropers;
-
-    QList<ImproperID> impropers;
-
-    for (const auto &atom0 : atoms0)
+    if (not mol.selectedAll())
     {
-        for (const auto &atom1 : atoms1)
+        const auto selection = mol.selection();
+        atoms0 = _filter(atoms0, selection);
+        atoms1 = _filter(atoms1, selection);
+        atoms2 = _filter(atoms2, selection);
+        atoms3 = _filter(atoms3, selection);
+    }
+
+    auto int_atoms0 = _to_int(atoms0);
+    auto int_atoms1 = _to_int(atoms1);
+    auto int_atoms2 = _to_int(atoms2);
+    auto int_atoms3 = _to_int(atoms3);
+
+    auto impropers = _to_int_set(_get_impropers(this->data(), map),
+                                    this->data().info());
+
+    auto impropers0123 = _filter(impropers, int_atoms0, 0);
+    impropers0123 = _filter(impropers0123, int_atoms1, 1);
+    impropers0123 = _filter(impropers0123, int_atoms2, 2);
+    impropers0123 = _filter(impropers0123, int_atoms3, 3);
+
+    imps = _from_int_set(impropers0123);
+}
+
+SelectorImproper::SelectorImproper(const MoleculeView &mol,
+                                   const QList<ImproperID> &impropers,
+                                   const SireBase::PropertyMap &map)
+                 : ConcreteProperty<SelectorImproper, MoleculeView>(mol)
+{
+    if (impropers.count() == 1)
+    {
+        this->operator=(SelectorImproper(mol, impropers[0], map));
+        return;
+    }
+    else if (not impropers.isEmpty())
+    {
+        auto all_impropers = _to_int_set(_get_impropers(this->data(), map),
+                                         this->data().info());
+
+        QSet<IDQuad> selected_impropers;
+        selected_impropers.reserve(all_impropers.count());
+
+        for (const auto &improper : impropers)
         {
-            for (const auto &atom2 : atoms2)
+            auto atoms0 = mol.data().info().map(improper.atom0());
+            auto atoms1 = mol.data().info().map(improper.atom1());
+            auto atoms2 = mol.data().info().map(improper.atom2());
+            auto atoms3 = mol.data().info().map(improper.atom3());
+
+            if (not mol.selectedAll())
             {
-                for (const auto &atom3 : atoms3)
-                {
-                    auto atomidx0 = atom0;
-                    auto atomidx1 = atom1;
-                    auto atomidx2 = atom2;
-                    auto atomidx3 = atom3;
-
-                    ImproperID i(atomidx0, atomidx1, atomidx2, atomidx3);
-
-                    if (atomidx0 != atomidx1 and
-                        atomidx0 != atomidx2 and
-                        atomidx0 != atomidx3 and
-                        atomidx1 != atomidx2 and
-                        atomidx1 != atomidx3 and
-                        atomidx2 != atomidx3 and
-                        not seen_impropers.contains(i))
-                    {
-                        // is this an improper?
-                        for (const auto &imp : all_impropers)
-                        {
-                            if (imp == i)
-                            {
-                                seen_impropers.insert(i);
-                                impropers.append(i);
-                            }
-                        }
-                    }
-                }
+                const auto selection = mol.selection();
+                atoms0 = _filter(atoms0, selection);
+                atoms1 = _filter(atoms1, selection);
+                atoms2 = _filter(atoms2, selection);
+                atoms3 = _filter(atoms3, selection);
             }
+
+            auto int_atoms0 = _to_int(atoms0);
+            auto int_atoms1 = _to_int(atoms1);
+            auto int_atoms2 = _to_int(atoms2);
+            auto int_atoms3 = _to_int(atoms3);
+
+            auto impropers0123 = _filter(all_impropers, int_atoms0, 0);
+            impropers0123 = _filter(impropers0123, int_atoms1, 1);
+            impropers0123 = _filter(impropers0123, int_atoms2, 2);
+            impropers0123 = _filter(impropers0123, int_atoms3, 3);
+
+            selected_impropers += impropers0123;
+
+            if (selected_impropers.count() == all_impropers.count())
+                break;
         }
 
-        if (mol.selectedAll())
-        {
-            imps = impropers;
-        }
-        else
-        {
-            const auto s = mol.selection();
-
-            for (const auto &improper : impropers)
-            {
-                if (s.selected(improper.atom0()) and
-                    s.selected(improper.atom1()) and
-                    s.selected(improper.atom2()) and
-                    s.selected(improper.atom3()))
-                {
-                    imps.append(improper);
-                }
-            }
-        }
+        imps = _from_int_set(selected_impropers);
     }
 }
 
@@ -248,29 +360,26 @@ SelectorImproper::SelectorImproper(const MoleculeView &mol,
                                    const AtomID &atom, const PropertyMap &map)
                  : ConcreteProperty<SelectorImproper, MoleculeView>(mol)
 {
-    auto all_impropers = _get_impropers(mol.data(), map);
+    auto atoms = mol.data().info().map(atom);
 
-    for (const auto &imp : all_impropers)
+    if (not mol.selectedAll())
     {
-        for (const auto &atomidx : mol.data().info().map(atom))
-        {
-            if (imp.atom0() == atomidx or
-                imp.atom1() == atomidx or
-                imp.atom2() == atomidx or
-                imp.atom3() == atomidx)
-            {
-                imps.append(imp);
-            }
-        }
+        const auto selection = mol.selection();
+        atoms = _filter(atoms, selection);
     }
-}
 
-bool _contains(const ImproperID &improper, const AtomIdx &atom)
-{
-    return atom == improper.atom0() or
-           atom == improper.atom1() or
-           atom == improper.atom2() or
-           atom == improper.atom3();
+    auto int_atoms = _to_int(atoms);
+
+    auto impropers = _to_int_set(_get_impropers(this->data(), map),
+                                 this->data().info());
+
+    auto impropers0 = _filter(impropers, int_atoms, 0);
+    auto impropers1 = _filter(impropers, int_atoms, 1);
+    auto impropers2 = _filter(impropers, int_atoms, 2);
+    auto impropers3 = _filter(impropers, int_atoms, 3);
+
+    imps = _from_int_set(impropers0 + impropers1 +
+                         impropers2 + impropers3);
 }
 
 SelectorImproper::SelectorImproper(const MoleculeView &mol,
@@ -281,77 +390,64 @@ SelectorImproper::SelectorImproper(const MoleculeView &mol,
     auto atoms0 = mol.data().info().map(atom0);
     auto atoms1 = mol.data().info().map(atom1);
 
-    auto impropers = _get_impropers(mol.data(), map);
-
-    for (const auto &improper : impropers)
+    if (not mol.selectedAll())
     {
-        bool added = false;
-
-        for (const auto &a0 : atoms0)
-        {
-            if (_contains(improper, a0))
-            {
-                for (const auto &a1 : atoms1)
-                {
-                    if (a0 != a1 and _contains(improper, a1))
-                    {
-                        imps.append(improper);
-                        added = true;
-                        break;
-                    }
-                }
-            }
-
-            if (added)
-                break;
-        }
+        const auto selection = mol.selection();
+        atoms0 = _filter(atoms0, selection);
+        atoms1 = _filter(atoms1, selection);
     }
+
+    auto int_atoms0 = _to_int(atoms0);
+    auto int_atoms1 = _to_int(atoms1);
+
+    auto impropers = _to_int_set(_get_impropers(this->data(), map),
+                                 this->data().info());
+
+    auto impropers01 = _filter(impropers, int_atoms0, 0);
+    impropers01 = _filter(impropers01, int_atoms1, 1);
+
+    auto impropers12 = _filter(impropers, int_atoms0, 1);
+    impropers12 = _filter(impropers12, int_atoms1, 2);
+
+    auto impropers23 = _filter(impropers, int_atoms0, 2);
+    impropers23 = _filter(impropers23, int_atoms1, 3);
+
+    imps = _from_int_set(impropers01 + impropers12 + impropers23);
 }
 
 SelectorImproper::SelectorImproper(const MoleculeView &mol,
                                    const AtomID &atom0, const AtomID &atom1,
-                                   const AtomID &atom2,
-                                   const PropertyMap &map)
+                                   const AtomID &atom2, const PropertyMap &map)
                  : ConcreteProperty<SelectorImproper, MoleculeView>(mol)
 {
     auto atoms0 = mol.data().info().map(atom0);
     auto atoms1 = mol.data().info().map(atom1);
     auto atoms2 = mol.data().info().map(atom2);
 
-    auto impropers = _get_impropers(mol.data(), map);
-
-    for (const auto &improper : impropers)
+    if (not mol.selectedAll())
     {
-        bool added = false;
-
-        for (const auto &a0 : atoms0)
-        {
-            if (_contains(improper, a0))
-            {
-                for (const auto &a1 : atoms1)
-                {
-                    if (a0 != a1 and _contains(improper, a1))
-                    {
-                        for (const auto &a2 : atoms2)
-                        {
-                            if (a0 != a2 and a1 != a2 and _contains(improper, a2))
-                            {
-                                imps.append(improper);
-                                added = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (added)
-                        break;
-                }
-            }
-
-            if (added)
-                break;
-        }
+        const auto selection = mol.selection();
+        atoms0 = _filter(atoms0, selection);
+        atoms1 = _filter(atoms1, selection);
+        atoms2 = _filter(atoms2, selection);
     }
+
+    auto int_atoms0 = _to_int(atoms0);
+    auto int_atoms1 = _to_int(atoms1);
+    auto int_atoms2 = _to_int(atoms2);
+
+    auto impropers = _to_int_set(_get_impropers(this->data(), map),
+                                 this->data().info());
+
+    auto impropers012 = _filter(impropers, int_atoms0, 0);
+    impropers012 = _filter(impropers012, int_atoms1, 1);
+    impropers012 = _filter(impropers012, int_atoms2, 2);
+
+    auto impropers123 = _filter(impropers, int_atoms0, 1);
+    impropers123 = _filter(impropers123, int_atoms1, 2);
+    impropers123 = _filter(impropers123, int_atoms2, 3);
+
+    imps = _from_int_set(impropers012 + impropers123);
 }
 
 SelectorImproper::SelectorImproper(const MoleculeView &mol,
@@ -403,17 +499,18 @@ SelectorImproper::SelectorImproper(const Selector<Atom> &atoms,
                                    const PropertyMap &map)
                  : ConcreteProperty<SelectorImproper, MoleculeView>(atoms)
 {
-    for (const auto &improper : _get_impropers(atoms.data(), map))
-    {
-        for (int i=0; i<atoms.count(); ++i)
-        {
-            if (_contains(improper, atoms(i).index()))
-            {
-                imps.append(improper);
-                break;
-            }
-        }
-    }
+    auto int_atoms = _to_int(atoms);
+
+    auto impropers = _to_int_set(_get_impropers(this->data(), map),
+                                 this->data().info());
+
+    auto impropers0 = _filter(impropers, int_atoms, 0);
+    auto impropers1 = _filter(impropers, int_atoms, 1);
+    auto impropers2 = _filter(impropers, int_atoms, 2);
+    auto impropers3 = _filter(impropers, int_atoms, 3);
+
+    imps = _from_int_set(impropers0 + impropers1 +
+                         impropers2 + impropers3);
 }
 
 SelectorImproper::SelectorImproper(const Selector<Atom> &atoms0,
@@ -423,50 +520,40 @@ SelectorImproper::SelectorImproper(const Selector<Atom> &atoms0,
 {
     if (not atoms0.isSameMolecule(atoms1))
         throw SireError::incompatible_error(QObject::tr(
-            "You can only create a improper from atoms in the same molecule. "
+            "You can only create an improper from atoms in the same molecule. "
             "%1 and %2 are from different molecules (%3 and %4)")
                 .arg(atoms0.toString()).arg(atoms1.toString())
                 .arg(atoms0.molecule().toString())
                 .arg(atoms1.molecule().toString()), CODELOC);
 
-    for (const auto &improper : _get_impropers(atoms0.data(), map))
-    {
-        bool found = false;
+    auto int_atoms0 = _to_int(atoms0);
+    auto int_atoms1 = _to_int(atoms1);
 
-        for (int i=0; i<atoms0.count(); ++i)
-        {
-            const auto atom0 = atoms0(i).index();
+    auto impropers = _to_int_set(_get_impropers(this->data(), map),
+                                 this->data().info());
 
-            if (_contains(improper, atom0))
-            {
-                for (int j=0; j<atoms1.count(); ++j)
-                {
-                    const auto atom1 = atoms1(j).index();
+    auto impropers01 = _filter(impropers, int_atoms0, 0);
+    impropers01 = _filter(impropers01, int_atoms1, 1);
 
-                    if (atom0 != atom1 and _contains(improper, atom1))
-                    {
-                        imps.append(improper);
-                        found = true;
-                        break;
-                    }
-                }
-            }
+    auto impropers12 = _filter(impropers, int_atoms0, 1);
+    impropers12 = _filter(impropers12, int_atoms1, 2);
 
-            if (found)
-                break;
-        }
-    }
+    auto impropers23 = _filter(impropers, int_atoms0, 2);
+    impropers23 = _filter(impropers23, int_atoms1, 3);
+
+    imps = _from_int_set(impropers01 + impropers12 + impropers23);
 }
 
 SelectorImproper::SelectorImproper(const Selector<Atom> &atoms0,
                                    const Selector<Atom> &atoms1,
                                    const Selector<Atom> &atoms2,
                                    const PropertyMap &map)
-              : ConcreteProperty<SelectorImproper, MoleculeView>(atoms0)
+                 : ConcreteProperty<SelectorImproper, MoleculeView>(atoms0)
 {
-    if (not (atoms0.isSameMolecule(atoms1) and atoms0.isSameMolecule(atoms2)))
+    if (not (atoms0.isSameMolecule(atoms1) and
+             atoms0.isSameMolecule(atoms2)))
         throw SireError::incompatible_error(QObject::tr(
-            "You can only create a Improper from atoms in the same molecule. "
+            "You can only create an improper from atoms in the same molecule. "
             "%1, %2 and %3 are from different molecules (%4, %5 and %6)")
                 .arg(atoms0.toString()).arg(atoms1.toString())
                 .arg(atoms2.toString())
@@ -474,44 +561,22 @@ SelectorImproper::SelectorImproper(const Selector<Atom> &atoms0,
                 .arg(atoms1.molecule().toString())
                 .arg(atoms2.molecule().toString()), CODELOC);
 
-    for (const auto &improper : _get_impropers(atoms0.data(), map))
-    {
-        bool found = false;
+    auto int_atoms0 = _to_int(atoms0);
+    auto int_atoms1 = _to_int(atoms1);
+    auto int_atoms2 = _to_int(atoms2);
 
-        for (int i=0; i<atoms0.count(); ++i)
-        {
-            const auto atom0 = atoms0(i).index();
+    auto impropers = _to_int_set(_get_impropers(this->data(), map),
+                                 this->data().info());
 
-            if (_contains(improper, atom0))
-            {
-                for (int j=0; j<atoms1.count(); ++j)
-                {
-                    const auto atom1 = atoms1(j).index();
+    auto impropers012 = _filter(impropers, int_atoms0, 0);
+    impropers012 = _filter(impropers012, int_atoms1, 1);
+    impropers012 = _filter(impropers012, int_atoms2, 2);
 
-                    if (atom0 != atom1 and _contains(improper, atom1))
-                    {
-                        for (int k=0; k<atoms2.count(); ++k)
-                        {
-                            const auto atom2 = atoms2(k).index();
+    auto impropers123 = _filter(impropers, int_atoms0, 1);
+    impropers123 = _filter(impropers123, int_atoms1, 2);
+    impropers123 = _filter(impropers123, int_atoms2, 3);
 
-                            if (atom0 != atom2 and atom1 != atom2 and _contains(improper, atom2))
-                            {
-                                imps.append(improper);
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (found)
-                        break;
-                }
-            }
-
-            if (found)
-                break;
-        }
-    }
+    imps = _from_int_set(impropers012 + impropers123);
 }
 
 SelectorImproper::SelectorImproper(const Selector<Atom> &atoms0,
@@ -525,7 +590,7 @@ SelectorImproper::SelectorImproper(const Selector<Atom> &atoms0,
              atoms0.isSameMolecule(atoms2) and
              atoms0.isSameMolecule(atoms3)))
         throw SireError::incompatible_error(QObject::tr(
-            "You can only create an Improper from atoms in the same molecule. "
+            "You can only create an improper from atoms in the same molecule. "
             "%1, %2, %3 and %4 are from different molecules (%5, %6, %7 and %8)")
                 .arg(atoms0.toString()).arg(atoms1.toString())
                 .arg(atoms2.toString()).arg(atoms3.toString())
@@ -534,55 +599,20 @@ SelectorImproper::SelectorImproper(const Selector<Atom> &atoms0,
                 .arg(atoms2.molecule().toString())
                 .arg(atoms3.molecule().toString()), CODELOC);
 
-    for (const auto &improper : _get_impropers(atoms0.data(), map))
-    {
-        bool found = false;
+    auto int_atoms0 = _to_int(atoms0);
+    auto int_atoms1 = _to_int(atoms1);
+    auto int_atoms2 = _to_int(atoms2);
+    auto int_atoms3 = _to_int(atoms3);
 
-        for (int i=0; i<atoms0.count(); ++i)
-        {
-            const auto atom0 = atoms0(i).index();
+    auto impropers = _to_int_set(_get_impropers(this->data(), map),
+                                 this->data().info());
 
-            if (_contains(improper, atom0))
-            {
-                for (int j=0; j<atoms1.count(); ++j)
-                {
-                    const auto atom1 = atoms1(j).index();
+    auto impropers0123 = _filter(impropers, int_atoms0, 0);
+    impropers0123 = _filter(impropers0123, int_atoms1, 1);
+    impropers0123 = _filter(impropers0123, int_atoms2, 2);
+    impropers0123 = _filter(impropers0123, int_atoms3, 3);
 
-                    if (atom0 != atom1 and _contains(improper, atom1))
-                    {
-                        for (int k=0; k<atoms2.count(); ++k)
-                        {
-                            const auto atom2 = atoms2(k).index();
-
-                            if (atom0 != atom2 and atom1 != atom2 and _contains(improper, atom2))
-                            {
-                                for (int l=0; l<atoms3.count(); ++l)
-                                {
-                                    const auto atom3 = atoms3(l).index();
-
-                                    if (atom0 != atom3 and atom1 != atom3 and atom2 != atom3 and _contains(improper, atom3))
-                                    {
-                                        imps.append(improper);
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (found)
-                                break;
-                        }
-                    }
-
-                    if (found)
-                        break;
-                }
-            }
-
-            if (found)
-                break;
-        }
-    }
+    imps = _from_int_set(impropers0123);
 }
 
 SelectorImproper::SelectorImproper(const SelectorImproper &other)

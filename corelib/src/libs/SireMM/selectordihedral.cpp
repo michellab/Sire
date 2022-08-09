@@ -127,6 +127,7 @@ SelectorDihedral::SelectorDihedral(const MoleculeData &moldata,
     this->operator=(SelectorDihedral(Molecule(moldata), map));
 }
 
+inline
 QSet<IDQuad> _to_int_set(const QList<DihedralID> &vals,
                          const MoleculeInfoData &molinfo)
 {
@@ -144,6 +145,7 @@ QSet<IDQuad> _to_int_set(const QList<DihedralID> &vals,
     return s;
 }
 
+inline
 QList<DihedralID> _from_int_set(const QSet<IDQuad> &vals)
 {
     QVector<IDQuad> v;
@@ -170,6 +172,7 @@ QList<DihedralID> _from_int_set(const QSet<IDQuad> &vals)
     return l;
 }
 
+inline
 QList<AtomIdx> _filter(const QList<AtomIdx> &atoms, const AtomSelection &selection)
 {
     QList<AtomIdx> ret;
@@ -186,6 +189,7 @@ QList<AtomIdx> _filter(const QList<AtomIdx> &atoms, const AtomSelection &selecti
     return ret;
 }
 
+inline
 QSet<IDQuad> _filter(const QSet<IDQuad> &dihedrals,
                      const QVector<quint32> &atoms,
                      int position)
@@ -211,6 +215,7 @@ QSet<IDQuad> _filter(const QSet<IDQuad> &dihedrals,
     return result;
 }
 
+inline
 QVector<quint32> _to_int(const Selector<Atom> &atoms)
 {
     QVector<quint32> ret;
@@ -227,6 +232,7 @@ QVector<quint32> _to_int(const Selector<Atom> &atoms)
     return ret;
 }
 
+inline
 QVector<quint32> _to_int(const QList<AtomIdx> &atoms)
 {
     QVector<quint32> ret;
