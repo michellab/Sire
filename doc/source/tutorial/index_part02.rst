@@ -52,4 +52,7 @@ The number of segments is 0
    part02/04_indexing_segments
    part02/05_indexing_molecules
    part02/06_indexing_bonds
-   part02/07_searching
+   part02/07_indexing_angles
+   part02/08_indexing_dihedrals
+   part02/09_indexing_impropers
+   part02/10_searching
