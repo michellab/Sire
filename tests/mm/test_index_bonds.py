@@ -2,6 +2,13 @@
 import sire as sr
 import pytest
 
+
+@pytest.fixture(scope="session")
+def ala_mols():
+    import sire as sr
+    return sr.load_test_files("ala.top", "ala.crd")
+
+
 def _assert_same_bonds(b0, b1):
     assert len(b0) == len(b1)
 
@@ -18,8 +25,8 @@ def _assert_same_bonds(b0, b1):
             assert False
 
 
-def test_index_bonds():
-    mols = sr.load_test_files("ala.top", "ala.crd")
+def test_index_bonds(ala_mols):
+    mols = ala_mols
 
     mol = mols[0]
 
@@ -42,8 +49,8 @@ def test_index_bonds():
     _assert_same_bonds(ccx["bonds from element C to element C"], cc)
 
 
-def test_index_mols_bonds():
-    mols = sr.load_test_files("ala.top", "ala.crd")
+def test_index_mols_bonds(ala_mols):
+    mols = ala_mols
 
     bnds = mols["bonds from element O to element H"]
 
@@ -68,7 +75,7 @@ def test_index_mols_bonds():
     # mols[1:] are the water molecules
     assert mols["bonds from element O to element H"].mass().value() == \
 	pytest.approx((mols[1:]["element O"].mass() + mols[1:]["element H"].mass()).value(), 0.0001)
-    
+
 if __name__ == "__main__":
     test_index_bonds()
     test_index_mols_bonds()

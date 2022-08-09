@@ -118,6 +118,11 @@ def __is_selector_class(obj):
                 t.find("SireMM::Selector") != -1
 
 
+def __is_internal_class(obj):
+    from ..mm import Bond, Angle, Dihedral, Improper
+    return type(obj) in [Bond, Angle, Dihedral, Improper]
+
+
 def __is_list_class(obj):
     if type(obj) is list:
         return True
@@ -247,6 +252,8 @@ def __fixed__getitem__(obj, key):
             return obj.__orig__getitem__(key)
         elif __is_chain_class(obj):
             return obj.residue(key)
+        elif __is_internal_class(obj):
+            return obj.atom(obj.id()[key])
         else:
             return obj.atom(key)
     elif type(key) is str:
