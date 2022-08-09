@@ -85,7 +85,8 @@ SelectorMDihedral::SelectorMDihedral(const Dihedral &view)
     dihs.append(SelectorDihedral(view));
 }
 
-SelectorMDihedral::SelectorMDihedral(const Molecules &mols)
+SelectorMDihedral::SelectorMDihedral(const Molecules &mols,
+                                     const PropertyMap &map)
                   : ConcreteProperty<SelectorMDihedral, Property>()
 {
     if (not mols.isEmpty())
@@ -106,7 +107,7 @@ SelectorMDihedral::SelectorMDihedral(const Molecules &mols)
 
         for (const auto &molnum : molnums)
         {
-            SelectorDihedral d(mols.at(molnum));
+            SelectorDihedral d(mols.at(molnum), map);
 
             if (not d.isEmpty())
                 this->dihs.append(d);
@@ -114,7 +115,8 @@ SelectorMDihedral::SelectorMDihedral(const Molecules &mols)
     }
 }
 
-SelectorMDihedral::SelectorMDihedral(const MoleculeGroup &mols)
+SelectorMDihedral::SelectorMDihedral(const MoleculeGroup &mols,
+                                     const PropertyMap &map)
                   : ConcreteProperty<SelectorMDihedral, Property>()
 {
     if (not mols.isEmpty())
@@ -124,7 +126,7 @@ SelectorMDihedral::SelectorMDihedral(const MoleculeGroup &mols)
 
         for (const auto &molnum : molnums)
         {
-            SelectorDihedral d(mols.at(molnum));
+            SelectorDihedral d(mols.at(molnum), map);
 
             if (not d.isEmpty())
                 this->dihs.append(d);
@@ -132,7 +134,8 @@ SelectorMDihedral::SelectorMDihedral(const MoleculeGroup &mols)
     }
 }
 
-SelectorMDihedral::SelectorMDihedral(const MolGroupsBase &mols)
+SelectorMDihedral::SelectorMDihedral(const MolGroupsBase &mols,
+                                     const PropertyMap &map)
                   : ConcreteProperty<SelectorMDihedral, Property>()
 {
     if (not mols.isEmpty())
@@ -142,7 +145,7 @@ SelectorMDihedral::SelectorMDihedral(const MolGroupsBase &mols)
 
         for (const auto &molnum : molnums)
         {
-            SelectorDihedral d(mols.at(molnum));
+            SelectorDihedral d(mols.at(molnum), map);
 
             if (not d.isEmpty())
                 this->dihs.append(d);
@@ -150,7 +153,8 @@ SelectorMDihedral::SelectorMDihedral(const MolGroupsBase &mols)
     }
 }
 
-SelectorMDihedral::SelectorMDihedral(const SelectResult &mols)
+SelectorMDihedral::SelectorMDihedral(const SelectResult &mols,
+                                     const PropertyMap &map)
                   : ConcreteProperty<SelectorMDihedral, Property>()
 {
     if (not mols.isEmpty())
@@ -164,24 +168,7 @@ SelectorMDihedral::SelectorMDihedral(const SelectResult &mols)
             if (mol->isA<SelectorDihedral>())
                 d = mol->asA<SelectorDihedral>();
             else
-                d = SelectorDihedral(*mol);
-
-            if (not d.isEmpty())
-                this->dihs.append(d);
-        }
-    }
-}
-
-SelectorMDihedral::SelectorMDihedral(const SelectResult &mols, const PropertyMap &map)
-                  : ConcreteProperty<SelectorMDihedral, Property>()
-{
-    if (not mols.isEmpty())
-    {
-        this->dihs.reserve(mols.count());
-
-        for (const auto &mol : mols)
-        {
-            SelectorDihedral d(*mol, map);
+                d = SelectorDihedral(*mol, map);
 
             if (not d.isEmpty())
                 this->dihs.append(d);
@@ -190,7 +177,8 @@ SelectorMDihedral::SelectorMDihedral(const SelectResult &mols, const PropertyMap
 }
 
 SelectorMDihedral::SelectorMDihedral(const SelectResult &mols,
-                                     const DihedralID &dihedral)
+                                     const DihedralID &dihedral,
+                                     const PropertyMap &map)
                   : ConcreteProperty<SelectorMDihedral, Property>()
 {
     if (not mols.isEmpty())
@@ -201,7 +189,7 @@ SelectorMDihedral::SelectorMDihedral(const SelectResult &mols,
         {
             try
             {
-                auto d = SelectorDihedral(*mol, dihedral);
+                auto d = SelectorDihedral(*mol, dihedral, map);
 
                 if (not d.isEmpty())
                     this->dihs.append(d);
@@ -219,7 +207,8 @@ SelectorMDihedral::SelectorMDihedral(const SelectorDihedral &dihedrals)
         dihs.append(dihedrals);
 }
 
-SelectorMDihedral::SelectorMDihedral(const SelectorMol &mols)
+SelectorMDihedral::SelectorMDihedral(const SelectorMol &mols,
+                                     const PropertyMap &map)
                   : ConcreteProperty<SelectorMDihedral, Property>()
 {
     if (not mols.isEmpty())
@@ -228,7 +217,7 @@ SelectorMDihedral::SelectorMDihedral(const SelectorMol &mols)
 
         for (const auto &mol : mols)
         {
-            SelectorDihedral d(mol);
+            SelectorDihedral d(mol, map);
 
             if (not d.isEmpty())
                 dihs.append(d);

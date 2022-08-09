@@ -78,24 +78,29 @@ public:
 
     SelectorMDihedral();
     SelectorMDihedral(const Dihedral &view);
-    SelectorMDihedral(const SireMol::Molecules &mols);
-    SelectorMDihedral(const SireMol::MoleculeGroup &mols);
-    SelectorMDihedral(const SireMol::MolGroupsBase &mols);
-    SelectorMDihedral(const SireMol::SelectResult &mols);
+    SelectorMDihedral(const SireMol::Molecules &mols,
+                      const SireBase::PropertyMap &map=SireBase::PropertyMap());
+    SelectorMDihedral(const SireMol::MoleculeGroup &mols,
+                      const SireBase::PropertyMap &map=SireBase::PropertyMap());
+    SelectorMDihedral(const SireMol::MolGroupsBase &mols,
+                      const SireBase::PropertyMap &map=SireBase::PropertyMap());
+    SelectorMDihedral(const SireMol::SelectResult &mols,
+                      const SireBase::PropertyMap &map=SireBase::PropertyMap());
     SelectorMDihedral(const SelectorDihedral &Dihedrals);
 
-    SelectorMDihedral(const SireMol::SelectorMol &mols);
+    SelectorMDihedral(const SireMol::SelectorMol &mols,
+                      const SireBase::PropertyMap &map=SireBase::PropertyMap());
 
     template<class U>
-    SelectorMDihedral(const SireMol::SelectorM<U> &other);
+    SelectorMDihedral(const SireMol::SelectorM<U> &other,
+                      const SireBase::PropertyMap &map=SireBase::PropertyMap());
 
     SelectorMDihedral(const SelectorMDihedral &dihedrals, const SireBase::Slice &slice);
     SelectorMDihedral(const SelectorMDihedral &dihedrals, const QList<qint64> &idxs);
 
-    SelectorMDihedral(const SireMol::SelectResult &mols, const SireMol::DihedralID &Dihedral);
-
     SelectorMDihedral(const SireMol::SelectResult &mols,
-                      const SireBase::PropertyMap &map);
+                      const SireMol::DihedralID &Dihedral,
+                      const SireBase::PropertyMap &map=SireBase::PropertyMap());
 
     SelectorMDihedral(const SelectorMDihedral &other);
 
@@ -282,7 +287,8 @@ namespace SireMM
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-SelectorMDihedral::SelectorMDihedral(const SireMol::SelectorM<T> &other)
+SelectorMDihedral::SelectorMDihedral(const SireMol::SelectorM<T> &other,
+                                     const SireBase::PropertyMap &map)
                   : SireBase::ConcreteProperty<SelectorMDihedral,SireBase::Property>()
 {
     if (not other.isEmpty())
@@ -291,7 +297,7 @@ SelectorMDihedral::SelectorMDihedral(const SireMol::SelectorM<T> &other)
 
         for (int i=0; i<other.nMolecules(); ++i)
         {
-            this->dihs.append(SelectorDihedral(other.molecule(i)));
+            this->dihs.append(SelectorDihedral(other.molecule(i), map));
         }
     }
 }

@@ -295,7 +295,11 @@ def __fixed__atoms__(obj, idx=None, auto_reduce=False):
         return result
 
 
-def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False):
+def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False, map=None):
+    if map is None:
+        from ..base import PropertyMap
+        map = PropertyMap()
+
     if idx is None and idx1 is not None:
         idx = idx1
         idx1 = None
@@ -305,12 +309,12 @@ def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False):
         from ..mm import SelectorMBond
         C = SelectorMBond
         def _fromBondID(obj, bondid):
-            return SelectorMBond(obj.to_select_result(), bondid)
+            return SelectorMBond(obj.to_select_result(), bondid, map=map)
     else:
         from ..mm import SelectorBond
         C = SelectorBond
         def _fromBondID(obj, bondid):
-            return SelectorBond(obj, bondid)
+            return SelectorBond(obj, bondid, map=map)
 
     if idx is None:
         result = C(obj)
@@ -328,7 +332,12 @@ def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False):
         return result
 
 
-def __fixed__angles__(obj, idx=None, idx1=None, idx2=None, auto_reduce=False):
+def __fixed__angles__(obj, idx=None, idx1=None, idx2=None, auto_reduce=False,
+                      map=None):
+    if map is None:
+        from ..base import PropertyMap
+        map = PropertyMap()
+
     if idx1 is None and idx2 is not None:
         idx1 = idx2
         idx2 = None
@@ -342,12 +351,12 @@ def __fixed__angles__(obj, idx=None, idx1=None, idx2=None, auto_reduce=False):
         from ..mm import SelectorMAngle
         C = SelectorMAngle
         def _fromAngleID(obj, angid):
-            return SelectorMAngle(obj.to_select_result(), angid)
+            return SelectorMAngle(obj.to_select_result(), angid, map=map)
     else:
         from ..mm import SelectorAngle
         C = SelectorAngle
         def _fromAngleID(obj, angid):
-            return SelectorAngle(obj, angid)
+            return SelectorAngle(obj, angid, map=map)
 
     if idx is None:
         result = C(obj)
@@ -368,7 +377,11 @@ def __fixed__angles__(obj, idx=None, idx1=None, idx2=None, auto_reduce=False):
 
 
 def __fixed__dihedrals__(obj, idx=None, idx1=None,
-                         idx2=None, idx3=None, auto_reduce=False):
+                         idx2=None, idx3=None, auto_reduce=False, map=None):
+    if map is None:
+        from ..base import PropertyMap
+        map = PropertyMap()
+
     if idx2 is None and idx3 is not None:
         idx2 = idx3
         idx3 = None
@@ -386,12 +399,12 @@ def __fixed__dihedrals__(obj, idx=None, idx1=None,
         from ..mm import SelectorMDihedral
         C = SelectorMDihedral
         def _fromDihedralID(obj, dihid):
-            return SelectorMDihedral(obj.to_select_result(), dihid)
+            return SelectorMDihedral(obj.to_select_result(), dihid, map=map)
     else:
         from ..mm import SelectorDihedral
         C = SelectorDihedral
         def _fromAngleID(obj, dihid):
-            return SelectorDihedral(obj, dihid)
+            return SelectorDihedral(obj, dihid, map=map)
 
     if idx is None:
         result = C(obj)
@@ -415,7 +428,11 @@ def __fixed__dihedrals__(obj, idx=None, idx1=None,
 
 
 def __fixed__impropers__(obj, idx=None, idx1=None,
-                         idx2=None, idx3=None, auto_reduce=False):
+                         idx2=None, idx3=None, auto_reduce=False, map=None):
+    if map is None:
+        from ..base import PropertyMap
+        map = PropertyMap()
+
     if idx2 is None and idx3 is not None:
         idx2 = idx3
         idx3 = None
@@ -433,12 +450,12 @@ def __fixed__impropers__(obj, idx=None, idx1=None,
         from ..mm import SelectorMImproper
         C = SelectorMImproper
         def _fromImproperID(obj, impid):
-            return SelectorMImproper(obj.to_select_result(), impid)
+            return SelectorMImproper(obj.to_select_result(), impid, map=map)
     else:
         from ..mm import SelectorImproper
         C = SelectorImproper
-        def _fromImproperID(obj, dihid):
-            return SelectorImproper(obj, impid)
+        def _fromImproperID(obj, impid):
+            return SelectorImproper(obj, impid, map=map)
 
     if idx is None:
         result = C(obj)
@@ -461,8 +478,8 @@ def __fixed__impropers__(obj, idx=None, idx1=None,
         return result
 
 
-def __fixed__bond__(obj, idx=None, idx1=None):
-    bonds = __fixed__bonds__(obj, idx, idx1, auto_reduce=False)
+def __fixed__bond__(obj, idx=None, idx1=None, map=None):
+    bonds = __fixed__bonds__(obj, idx, idx1, auto_reduce=False, map=map)
 
     if len(bonds) == 0:
         raise KeyError("There is no matching bond in this view.")
@@ -473,8 +490,9 @@ def __fixed__bond__(obj, idx=None, idx1=None):
     return bonds[0]
 
 
-def __fixed__angle__(obj, idx=None, idx1=None, idx2=None):
-    angles = __fixed__angles__(obj, idx, idx1, idx2, auto_reduce=False)
+def __fixed__angle__(obj, idx=None, idx1=None, idx2=None, map=None):
+    angles = __fixed__angles__(obj, idx, idx1, idx2,
+                               auto_reduce=False, map=map)
 
     if len(angles) == 0:
         raise KeyError("There is no matching angle in this view.")
@@ -485,8 +503,10 @@ def __fixed__angle__(obj, idx=None, idx1=None, idx2=None):
     return angles[0]
 
 
-def __fixed__dihedral__(obj, idx=None, idx1=None, idx2=None, idx3=None):
-    dihedrals = __fixed__dihedrals__(obj, idx, idx1, idx2, idx3, auto_reduce=False)
+def __fixed__dihedral__(obj, idx=None, idx1=None,
+                        idx2=None, idx3=None, map=None):
+    dihedrals = __fixed__dihedrals__(obj, idx, idx1, idx2, idx3,
+                                     auto_reduce=False, map=map)
 
     if len(dihedrals) == 0:
         raise KeyError("There is no matching dihedral in this view.")
@@ -497,8 +517,10 @@ def __fixed__dihedral__(obj, idx=None, idx1=None, idx2=None, idx3=None):
     return dihedrals[0]
 
 
-def __fixed__improper__(obj, idx=None, idx1=None, idx2=None, idx3=None):
-    impropers = __fixed__impropers__(obj, idx, idx1, idx2, idx3, auto_reduce=False)
+def __fixed__improper__(obj, idx=None, idx1=None,
+                        idx2=None, idx3=None, map=None):
+    impropers = __fixed__impropers__(obj, idx, idx1, idx2, idx3,
+                                     auto_reduce=False, map=map)
 
     if len(impropers) == 0:
         raise KeyError("There is no matching improper in this view.")

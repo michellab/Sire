@@ -85,7 +85,8 @@ SelectorMImproper::SelectorMImproper(const Improper &view)
     imps.append(SelectorImproper(view));
 }
 
-SelectorMImproper::SelectorMImproper(const Molecules &mols)
+SelectorMImproper::SelectorMImproper(const Molecules &mols,
+                                     const PropertyMap &map)
                   : ConcreteProperty<SelectorMImproper, Property>()
 {
     if (not mols.isEmpty())
@@ -106,7 +107,7 @@ SelectorMImproper::SelectorMImproper(const Molecules &mols)
 
         for (const auto &molnum : molnums)
         {
-            SelectorImproper d(mols.at(molnum));
+            SelectorImproper d(mols.at(molnum), map);
 
             if (not d.isEmpty())
                 this->imps.append(d);
@@ -114,7 +115,8 @@ SelectorMImproper::SelectorMImproper(const Molecules &mols)
     }
 }
 
-SelectorMImproper::SelectorMImproper(const MoleculeGroup &mols)
+SelectorMImproper::SelectorMImproper(const MoleculeGroup &mols,
+                                     const PropertyMap &map)
                   : ConcreteProperty<SelectorMImproper, Property>()
 {
     if (not mols.isEmpty())
@@ -124,7 +126,7 @@ SelectorMImproper::SelectorMImproper(const MoleculeGroup &mols)
 
         for (const auto &molnum : molnums)
         {
-            SelectorImproper d(mols.at(molnum));
+            SelectorImproper d(mols.at(molnum), map);
 
             if (not d.isEmpty())
                 this->imps.append(d);
@@ -132,7 +134,8 @@ SelectorMImproper::SelectorMImproper(const MoleculeGroup &mols)
     }
 }
 
-SelectorMImproper::SelectorMImproper(const MolGroupsBase &mols)
+SelectorMImproper::SelectorMImproper(const MolGroupsBase &mols,
+                                     const PropertyMap &map)
                   : ConcreteProperty<SelectorMImproper, Property>()
 {
     if (not mols.isEmpty())
@@ -142,7 +145,7 @@ SelectorMImproper::SelectorMImproper(const MolGroupsBase &mols)
 
         for (const auto &molnum : molnums)
         {
-            SelectorImproper d(mols.at(molnum));
+            SelectorImproper d(mols.at(molnum), map);
 
             if (not d.isEmpty())
                 this->imps.append(d);
@@ -150,7 +153,8 @@ SelectorMImproper::SelectorMImproper(const MolGroupsBase &mols)
     }
 }
 
-SelectorMImproper::SelectorMImproper(const SelectResult &mols)
+SelectorMImproper::SelectorMImproper(const SelectResult &mols,
+                                     const PropertyMap &map)
                   : ConcreteProperty<SelectorMImproper, Property>()
 {
     if (not mols.isEmpty())
@@ -164,24 +168,7 @@ SelectorMImproper::SelectorMImproper(const SelectResult &mols)
             if (mol->isA<SelectorImproper>())
                 d = mol->asA<SelectorImproper>();
             else
-                d = SelectorImproper(*mol);
-
-            if (not d.isEmpty())
-                this->imps.append(d);
-        }
-    }
-}
-
-SelectorMImproper::SelectorMImproper(const SelectResult &mols, const PropertyMap &map)
-                  : ConcreteProperty<SelectorMImproper, Property>()
-{
-    if (not mols.isEmpty())
-    {
-        this->imps.reserve(mols.count());
-
-        for (const auto &mol : mols)
-        {
-            SelectorImproper d(*mol, map);
+                d = SelectorImproper(*mol, map);
 
             if (not d.isEmpty())
                 this->imps.append(d);
@@ -190,7 +177,8 @@ SelectorMImproper::SelectorMImproper(const SelectResult &mols, const PropertyMap
 }
 
 SelectorMImproper::SelectorMImproper(const SelectResult &mols,
-                                     const ImproperID &improper)
+                                     const ImproperID &improper,
+                                     const PropertyMap &map)
                   : ConcreteProperty<SelectorMImproper, Property>()
 {
     if (not mols.isEmpty())
@@ -201,7 +189,7 @@ SelectorMImproper::SelectorMImproper(const SelectResult &mols,
         {
             try
             {
-                auto d = SelectorImproper(*mol, improper);
+                auto d = SelectorImproper(*mol, improper, map);
 
                 if (not d.isEmpty())
                     this->imps.append(d);
@@ -219,7 +207,8 @@ SelectorMImproper::SelectorMImproper(const SelectorImproper &impropers)
         imps.append(impropers);
 }
 
-SelectorMImproper::SelectorMImproper(const SelectorMol &mols)
+SelectorMImproper::SelectorMImproper(const SelectorMol &mols,
+                                     const PropertyMap &map)
                   : ConcreteProperty<SelectorMImproper, Property>()
 {
     if (not mols.isEmpty())
@@ -228,7 +217,7 @@ SelectorMImproper::SelectorMImproper(const SelectorMol &mols)
 
         for (const auto &mol : mols)
         {
-            SelectorImproper d(mol);
+            SelectorImproper d(mol, map);
 
             if (not d.isEmpty())
                 imps.append(d);

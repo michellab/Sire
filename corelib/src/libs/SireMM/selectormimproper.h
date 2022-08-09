@@ -78,24 +78,32 @@ public:
 
     SelectorMImproper();
     SelectorMImproper(const Improper &view);
-    SelectorMImproper(const SireMol::Molecules &mols);
-    SelectorMImproper(const SireMol::MoleculeGroup &mols);
-    SelectorMImproper(const SireMol::MolGroupsBase &mols);
-    SelectorMImproper(const SireMol::SelectResult &mols);
+
+    SelectorMImproper(const SireMol::Molecules &mols,
+                      const SireBase::PropertyMap &map=SireBase::PropertyMap());
+    SelectorMImproper(const SireMol::MoleculeGroup &mols,
+                      const SireBase::PropertyMap &map=SireBase::PropertyMap());
+    SelectorMImproper(const SireMol::MolGroupsBase &mols,
+                      const SireBase::PropertyMap &map=SireBase::PropertyMap());
+
     SelectorMImproper(const SelectorImproper &Impropers);
 
-    SelectorMImproper(const SireMol::SelectorMol &mols);
+    SelectorMImproper(const SireMol::SelectorMol &mols,
+                      const SireBase::PropertyMap &map=SireBase::PropertyMap());
 
     template<class U>
-    SelectorMImproper(const SireMol::SelectorM<U> &other);
+    SelectorMImproper(const SireMol::SelectorM<U> &other,
+                      const SireBase::PropertyMap &map=SireBase::PropertyMap());
 
     SelectorMImproper(const SelectorMImproper &impropers, const SireBase::Slice &slice);
     SelectorMImproper(const SelectorMImproper &impropers, const QList<qint64> &idxs);
 
-    SelectorMImproper(const SireMol::SelectResult &mols, const SireMol::ImproperID &Improper);
+    SelectorMImproper(const SireMol::SelectResult &mols,
+                      const SireMol::ImproperID &Improper,
+                      const SireBase::PropertyMap &map=SireBase::PropertyMap());
 
     SelectorMImproper(const SireMol::SelectResult &mols,
-                      const SireBase::PropertyMap &map);
+                      const SireBase::PropertyMap &map=SireBase::PropertyMap());
 
     SelectorMImproper(const SelectorMImproper &other);
 
@@ -282,7 +290,8 @@ namespace SireMM
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-SelectorMImproper::SelectorMImproper(const SireMol::SelectorM<T> &other)
+SelectorMImproper::SelectorMImproper(const SireMol::SelectorM<T> &other,
+                                     const SireBase::PropertyMap &map)
                   : SireBase::ConcreteProperty<SelectorMImproper,SireBase::Property>()
 {
     if (not other.isEmpty())
@@ -291,7 +300,7 @@ SelectorMImproper::SelectorMImproper(const SireMol::SelectorM<T> &other)
 
         for (int i=0; i<other.nMolecules(); ++i)
         {
-            this->imps.append(SelectorImproper(other.molecule(i)));
+            this->imps.append(SelectorImproper(other.molecule(i), map));
         }
     }
 }

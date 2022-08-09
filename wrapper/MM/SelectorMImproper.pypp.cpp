@@ -42,16 +42,15 @@ void register_SelectorMImproper_class(){
         SelectorMImproper_exposer_t SelectorMImproper_exposer = SelectorMImproper_exposer_t( "SelectorMImproper", "Multi-molecule selector for impropers", bp::init< >("") );
         bp::scope SelectorMImproper_scope( SelectorMImproper_exposer );
         SelectorMImproper_exposer.def( bp::init< SireMM::Improper const & >(( bp::arg("view") ), "") );
-        SelectorMImproper_exposer.def( bp::init< SireMol::Molecules const & >(( bp::arg("mols") ), "") );
-        SelectorMImproper_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("mols") ), "") );
-        SelectorMImproper_exposer.def( bp::init< SireMol::MolGroupsBase const & >(( bp::arg("mols") ), "") );
-        SelectorMImproper_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("mols") ), "") );
+        SelectorMImproper_exposer.def( bp::init< SireMol::Molecules const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMImproper_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMImproper_exposer.def( bp::init< SireMol::MolGroupsBase const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorMImproper_exposer.def( bp::init< SireMM::SelectorImproper const & >(( bp::arg("Impropers") ), "") );
-        SelectorMImproper_exposer.def( bp::init< SireMol::SelectorMol const & >(( bp::arg("mols") ), "") );
+        SelectorMImproper_exposer.def( bp::init< SireMol::SelectorMol const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorMImproper_exposer.def( bp::init< SireMM::SelectorMImproper const &, SireBase::Slice const & >(( bp::arg("impropers"), bp::arg("slice") ), "") );
         SelectorMImproper_exposer.def( bp::init< SireMM::SelectorMImproper const &, QList< long long > const & >(( bp::arg("impropers"), bp::arg("idxs") ), "") );
-        SelectorMImproper_exposer.def( bp::init< SireMol::SelectResult const &, SireMol::ImproperID const & >(( bp::arg("mols"), bp::arg("Improper") ), "") );
-        SelectorMImproper_exposer.def( bp::init< SireMol::SelectResult const &, SireBase::PropertyMap const & >(( bp::arg("mols"), bp::arg("map") ), "") );
+        SelectorMImproper_exposer.def( bp::init< SireMol::SelectResult const &, SireMol::ImproperID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("Improper"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMImproper_exposer.def( bp::init< SireMol::SelectResult const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorMImproper_exposer.def( bp::init< SireMM::SelectorMImproper const & >(( bp::arg("other") ), "") );
         { //::SireMM::SelectorMImproper::IDs
         

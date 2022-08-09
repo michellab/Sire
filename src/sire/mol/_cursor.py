@@ -13,17 +13,29 @@ class _CursorData:
        system used by Sire)
     """
     def __init__(self, molecule = None,
-                 connectivity_property: str="connectivity"):
+                 connectivity_property: str="connectivity",
+                 bond_property: str="bond",
+                 angle_property: str="angle",
+                 dihedral_property: str="dihedral",
+                 improper_property: str="improper"):
+
         if molecule is None:
             self.molecule = None
         else:
             self.molecule = molecule.molecule().edit()
 
+        from ..base import PropertyMap
+        self.map = PropertyMap({"connectivity": connectivity_property,
+                                "bond": bond_property,
+                                "angle": angle_property,
+                                "dihedral": dihedral_property,
+                                "improper": improper_property})
+
         self.connectivity_property = connectivity_property
 
         try:
             self.connectivity = self.molecule.property(
-                                    self.connectivity_property).edit()
+                                    connectivity_property).edit()
         except Exception:
             # the molecule doesn't have a connectivity. Create one for it
             from ..legacy.Mol import CovalentBondHunter
@@ -31,33 +43,33 @@ class _CursorData:
 
             try:
                 self.connectivity = hunter(self.molecule)
-                self.molecule.set_property(self.connectivity_property,
+                self.molecule.set_property(connectivity_property,
                                            self.connectivity)
                 self.connectivity = self.connectivity.edit()
             except Exception:
                 pass
 
-    def remove_bond_property(self, bond, key):
-        self.connectivity.remove_property(bond, key)
+    def remove_internal_property(self, internal, key):
+        self.connectivity.remove_property(internal, key)
         self.molecule.set_property(self.connectivity_property,
                                    self.connectivity.commit())
 
-    def set_bond_property(self, bond, key, value):
+    def set_internal_property(self, internal, key, value):
         if value is None:
-            self.remove_bond_property(bond, key)
+            self.remove_bond_property(internal, key)
         else:
-            self.connectivity.set_property(bond, key, value)
+            self.connectivity.set_property(internal, key, value)
             self.molecule.set_property(self.connectivity_property,
                                        self.connectivity.commit())
 
-    def set_bond_properties(self, bond, values):
+    def set_internal_properties(self, internal, values):
         for key in values.keys():
             value = values[key]
 
             if value is None:
-                self.connectivity.remove_property(bond, key)
+                self.connectivity.remove_property(internal, key)
             else:
-                self.connectivity.set_property(bond, key, value)
+                self.connectivity.set_property(internal, key, value)
 
         self.molecule.set_property(self.connectivity_property,
                                    self.connectivity.commit())
@@ -75,8 +87,12 @@ class Cursor:
        getting and setting of properties more pythonic in writing
        style, while also saving some typing.
     """
-    def __init__(self, molecule = None, bond = None,
-                 connectivity_property: str="connectivity"):
+    def __init__(self, molecule = None, internal = None,
+                 connectivity_property: str="connectivity",
+                 bond_property: str="bond",
+                 angle_property: str="angle",
+                 dihedral_property: str="dihedral",
+                 improper_property: str="improper"):
         """Construct the Cursor to explore and edit the
            properties of the passed MoleculeView.
 
@@ -91,14 +107,20 @@ class Cursor:
                >>> mol = cursor.commit()
         """
         self._d = _CursorData(molecule=molecule,
-                              connectivity_property=connectivity_property)
+                              connectivity_property=connectivity_property,
+                              bond_property=bond_property,
+                              angle_property=angle_property,
+                              dihedral_property=dihedral_property,
+                              improper_property=improper_property)
         self._view = self._d.update(molecule)
 
-        if (molecule is not None) and (bond is None):
-            if molecule.what().endswith("Bond"):
-                bond = molecule.id()
+        if (molecule is not None) and (internal is None):
+            w = molecule.what()
+            if w.endswith("Bond") or w.endswith("Angle") or \
+               w.endswith("Dihedral") or w.endswith("Dihedral"):
+                internal = molecule.id()
 
-        self._bond = bond
+        self._internal = internal
 
     def _update(self):
         self._view = self._d.update(self._view)
@@ -106,19 +128,43 @@ class Cursor:
     def __str__(self):
         if self._d.molecule is None:
             return "Cursor::null"
-        elif self._bond is None:
+        elif self.is_internal():
+            # This is an Internal Cursor
+            a0 = self._d.molecule[self._internal.atom0()]
+            a1 = self._d.molecule[self._internal.atom1()]
+
+            if self.is_bond():
+                return f"Cursor(bond, " \
+                    f"{a0.name().value()}:{a0.number().value()} => " \
+                    f"{a1.name().value()}:{a1.number().value()})"
+            elif self.is_angle():
+                a2 = self._d.molecule[self._internal.atom2()]
+                return f"Cursor(angle, " \
+                    f"{a0.name().value()}:{a0.number().value()} <= " \
+                    f"{a1.name().value()}:{a1.number().value()} => " \
+                    f"{a2.name().value()}:{a2.number().value()})"
+            else:
+                a2 = self._d.molecule[self._internal.atom2()]
+                a3 = self._d.molecule[self._internal.atom3()]
+
+                if self.is_dihedral():
+                    return f"Cursor(dihedral, " \
+                        f"{a0.name().value()}:{a0.number().value()} <= " \
+                        f"{a1.name().value()}:{a1.number().value()} == " \
+                        f"{a2.name().value()}:{a2.number().value()} => " \
+                        f"{a3.name().value()}:{a3.number().value()})"
+                else:
+                    return f"Cursor(improper, " \
+                        f"{a0.name().value()}:{a0.number().value()} => " \
+                        f"{a1.name().value()}:{a1.number().value()} == " \
+                        f"{a2.name().value()}:{a2.number().value()} <= " \
+                        f"{a3.name().value()}:{a3.number().value()})"
+        else:
             # This is a view cursor
             try:
                 return f"Cursor({self.type()}, {self.name}:{self.number})"
             except Exception:
                 return f"Cursor({self.type()}, {self.name})"
-        else:
-            # This is a bond Cursor
-            a0 = self._d.molecule[self._bond.atom0()]
-            a1 = self._d.molecule[self._bond.atom1()]
-            return f"Cursor({self.type()}, " \
-                   f"{a0.name().value()}:{a0.number().value()} => " \
-                   f"{a1.name().value()}:{a1.number().value()})"
 
     def __repr__(self):
         return self.__str__()
@@ -126,38 +172,40 @@ class Cursor:
     def __delitem__(self, key):
         self._update()
 
-        if self._bond is None:
+        if self.is_internal():
+            self._d.remove_internal_property(self._internal, key)
+        else:
             if self.is_molecule():
                 # remove the property entirely
                 self._d.molecule.remove_property(key)
             else:
                 # replace the property with a default-constructed value
                 self.__setitem__(key, None)
-        else:
-            self._d.remove_bond_property(self._bond, key)
 
         self._update()
 
     def __contains__(self, key):
         self._update()
 
-        if self._bond is None:
-            return self._view.has_property(key)
+        if self.is_internal():
+            return self._d.connectivity.has_property(self._internal, key)
         else:
-            return self._d.connectivity.has_property(self._bond, key)
+            return self._view.has_property(key)
 
     def __getitem__(self, key):
         self._update()
 
-        if self._bond is None:
-            return self._view.property(key)
+        if self.is_internal():
+            return self._d.connectivity.property(self._internal, key)
         else:
-            return self._d.connectivity.property(self._bond, key)
+            return self._view.property(key)
 
     def __setitem__(self, key, value):
         self._update()
 
-        if self._bond is None:
+        if self.is_internal():
+            self._d.set_internal_property(self._internal, key, value)
+        else:
             if value is None:
                 # we need to create a default-constructed value
                 try:
@@ -169,12 +217,10 @@ class Cursor:
 
             self._view.set_property(key, value)
             self._d.molecule = self._view.molecule()
-        else:
-            self._d.set_bond_property(self._bond, key, value)
 
         self._update()
 
-    def bonds(self):
+    def bonds(self, id=None):
         """Return cursors for all of the bonds in this
            view or, if 'id' is supplied, the bonds in this
            view that match 'id'
@@ -184,13 +230,92 @@ class Cursor:
         cursors = []
 
         from ..mm import SelectorBond
-        bonds = SelectorBond(self._view, {"connectivity": self._d.connectivity_property})
+
+        if id is None:
+            bonds = SelectorBond(self._view, self._d.map)
+        else:
+            bonds = SelectorBond(self._view, id, self._d.map)
 
         for bond in bonds:
             c = Cursor()
             c._d = self._d
             c._view = self._d.molecule
-            c._bond = bond.id()
+            c._internal = bond.id()
+            cursors.append(c)
+
+        return Cursors(self, cursors)
+
+    def angles(self, id=None):
+        """Return cursors for all of the angles in this
+           view or, if 'id' is supplied, the angles in this
+           view that match 'id'
+        """
+        self._update()
+
+        cursors = []
+
+        from ..mm import SelectorAngle
+
+        if id is None:
+            angles = SelectorAngle(self._view, self._d.map)
+        else:
+            angles = SelectorAngle(self._view, id, self._d.map)
+
+        for angle in angles:
+            c = Cursor()
+            c._d = self._d
+            c._view = self._d.molecule
+            c._internal = angle.id()
+            cursors.append(c)
+
+        return Cursors(self, cursors)
+
+    def dihedrals(self, id=None):
+        """Return cursors for all of the dihedrals in this
+           view or, if 'id' is supplied, the dihedrals in this
+           view that match 'id'
+        """
+        self._update()
+
+        cursors = []
+
+        from ..mm import SelectorDihedral
+
+        if id is None:
+            dihedrals = SelectorDihedral(self._view, self._d.map)
+        else:
+            dihedrals = SelectorDihedral(self._view, id, self._d.map)
+
+        for dihedral in dihedrals:
+            c = Cursor()
+            c._d = self._d
+            c._view = self._d.molecule
+            c._internal = dihedral.id()
+            cursors.append(c)
+
+        return Cursors(self, cursors)
+
+    def impropers(self, id=None):
+        """Return cursors for all of the impropers in this
+           view or, if 'id' is supplied, the impropers in this
+           view that match 'id'
+        """
+        self._update()
+
+        cursors = []
+
+        from ..mm import SelectorImproper
+
+        if id is None:
+            impropers = SelectorImproper(self._view, self._d.map)
+        else:
+            impropers = SelectorImproper(self._view, id, self._d.map)
+
+        for improper in impropers:
+            c = Cursor()
+            c._d = self._d
+            c._view = self._d.molecule
+            c._internal = improper.id()
             cursors.append(c)
 
         return Cursors(self, cursors)
@@ -204,16 +329,16 @@ class Cursor:
 
         cursors = []
 
-        from sire.mm import Bond
+        from sire.mm import Bond, Angle, Dihedral, Improper
 
         for view in views:
             c = Cursor()
             c._d = self._d
 
-            if type(view) is Bond:
+            if type(view) in [Bond, Angle, Dihedral, Improper]:
                 # likely a bond
                 c._view = self._d.molecule
-                c._bond = view.id()
+                c._internal = view.id()
             else:
                 # likely an atom, residue, chain or segment
                 c._view = self._d.molecule[view.index()]
@@ -406,17 +531,59 @@ class Cursor:
         c._view = self._d.molecule
         return c
 
-    def bond(self, bond, connectivity_property="connectivity"):
-        """Return the Cursor for the specified bond. This will
-           use the specified connectivity property to locate
-           the connectivity that defines the bonds in this molecule
-        """
+    def bond(self, bond):
+        """Return the Cursor for the specified bond."""
         self._update()
 
         c = Cursor()
         c._d = self._d
         c._view = self._d.molecule
-        c._bond = bond
+        c._internal = bond
+
+        # make sure that this works
+        c._view.bond(bond)
+
+        return c
+
+    def angle(self, angle):
+        """Return the Cursor for the specified angle."""
+        self._update()
+
+        c = Cursor()
+        c._d = self._d
+        c._view = self._d.molecule
+        c._internal = angle
+
+        # make sure that this works
+        c._view.angle(angle)
+
+        return c
+
+    def dihedral(self, dihedral):
+        """Return the Cursor for the specified dihedral."""
+        self._update()
+
+        c = Cursor()
+        c._d = self._d
+        c._view = self._d.molecule
+        c._internal = dihedral
+
+        # make sure that this works
+        c._view.dihedral(dihedral)
+
+        return c
+
+    def improper(self, improper):
+        """Return the Cursor for the specified improper."""
+        self._update()
+
+        c = Cursor()
+        c._d = self._d
+        c._view = self._d.molecule
+        c._internal = improper
+
+        # make sure that this works
+        c._view.improper(improper)
 
         return c
 
@@ -470,8 +637,8 @@ class Cursor:
            AtomName, ResName etc)"""
         self._update()
 
-        if self._bond is not None:
-            raise TypeError("A bond does not have a name!")
+        if self.is_internal():
+            raise TypeError("An internal (bond/angle/dihedral/improper) does not have a name!")
 
         return self._view.name().value()
 
@@ -479,8 +646,8 @@ class Cursor:
         """Set the name of the object in the current view"""
         self._update()
 
-        if self._bond is not None:
-            raise TypeError("A bond does not have a name!")
+        if self.is_internal():
+            raise TypeError("An internal (bond/angle/dihedral/improper) does not have a name!")
 
         # get the type right...
         orig_name = self._view.name()
@@ -495,8 +662,8 @@ class Cursor:
            number as a simple number (it is not a AtomNum, ResNum etc)"""
         self._update()
 
-        if self._bond is not None:
-            raise TypeError("A bond does not have a number!")
+        if self.is_internal():
+            raise TypeError("An internal (bond/angle/dihedral/improper) does not have a number!")
 
         try:
             return self._view.number().value()
@@ -507,8 +674,8 @@ class Cursor:
         """Set the number of the object in the current view"""
         self._update()
 
-        if self._bond is not None:
-            raise TypeError("A bond does not have a number!")
+        if self.is_internal():
+            raise TypeError("An internal (bond/angle/dihedral/improper) does not have a number!")
 
         try:
             orig_number = self._view.number()
@@ -524,8 +691,8 @@ class Cursor:
            as simple number (i.e. not as an AtomIdx, ResIdx etc)"""
         self._update()
 
-        if self._bond is not None:
-            raise TypeError("A bond does not have an index!")
+        if self.is_internal():
+            raise TypeError("An internal (bond/angle/dihedral/improper) does not have an index!")
 
         return self._view.index().value()
 
@@ -537,8 +704,8 @@ class Cursor:
         """Return the ID of this view (e.g. AtomIdx, MolNum, BondID)"""
         self._update()
 
-        if self._bond is not None:
-            return self._bond
+        if self.is_internal():
+            return self._internal
 
         try:
             return self._view.index()
@@ -550,8 +717,15 @@ class Cursor:
         """Return the type of this Cursor (e.g. 'atom', 'bond',
            'residue', 'chain', 'segment' or 'molecule')
         """
-        if self.is_bond():
-            return "bond"
+        if self.is_internal():
+            if self.is_bond():
+                return "bond"
+            elif self.is_angle():
+                return "angle"
+            elif self.is_dihedral():
+                return "dihedral"
+            elif self.is_improper():
+                return "improper"
 
         w = self._view.what()
 
@@ -572,11 +746,31 @@ class Cursor:
         """Return whether this is pointing to a Molecule"""
         return self.type() == "molecule"
 
+    def is_internal(self):
+        """Return whether or not this is a view of an internal
+           (i.e. bond, angle, dihedral or improper)
+        """
+        return self._internal is not None
+
     def is_bond(self):
         """Return whether this is pointing to a Bond"""
-        self._update()
+        from . import BondID
+        return BondID in type(self._internal).mro()
 
-        return self._bond is not None
+    def is_angle(self):
+        """Return whether this is pointing to an Angle"""
+        from . import AngleID
+        return AngleID in type(self._internal).mro()
+
+    def is_dihedral(self):
+        """Return whether this is pointing to a Dihedral"""
+        from . import DihedralID
+        return DihedralID in type(self._internal).mro()
+
+    def is_improper(self):
+        """Return whether this is pointing to an Improper"""
+        from . import ImproperID
+        return ImproperID in type(self._internal).mro()
 
     def is_atom(self):
         """Return whether this is pointing to an Atom"""
@@ -600,11 +794,21 @@ class Cursor:
         """
         self._update()
 
-        if self._bond is None:
-            return self._view.evaluate(*args, **kwargs)
-        else:
-            from sire.mm import Bond
-            return Bond(self._d.molecule, self._bond)
+        if self.is_internal():
+            if self.is_bond():
+                from ..mm import Bond
+                return Bond(self._d.molecule, self._internal)
+            elif self.is_angle():
+                from ..mm import Angle
+                return Angle(self._d.molecule, self._internal)
+            elif self.is_dihedral():
+                from ..mm import Dihedral
+                return Dihedral(self._d.molecule, self._internal)
+            elif self.is_improper():
+                from ..mm import Improper
+                return Improper(self._d.molecule, self._internal)
+
+        return self._view.evaluate(*args, **kwargs)
 
     def view(self):
         """Return the view underpinning this cursor. This is actually
@@ -620,14 +824,24 @@ class Cursor:
 
         mol = self._d.molecule.commit()
 
-        if self._bond is None:
-            try:
-                return mol[self._view.index()]
-            except Exception:
-                return mol
-        else:
-            from ..mm import Bond
-            return Bond(self._d.molecule, self._bond.atom0(), self._bond.atom1())
+        if self.is_internal():
+            if self.is_bond():
+                from ..mm import Bond
+                return Bond(self._d.molecule, self._internal)
+            elif self.is_angle():
+                from ..mm import Angle
+                return Angle(self._d.molecule, self._internal)
+            elif self.is_dihedral():
+                from ..mm import Dihedral
+                return Dihedral(self._d.molecule, self._internal)
+            elif self.is_improper():
+                from ..mm import Improper
+                return Improper(self._d.molecule, self._internal)
+
+        try:
+            return mol[self._view.index()]
+        except Exception:
+            return mol
 
     def apply(self, func, *args, **kwargs):
         """Apply the passed function (with optional position and keyword
@@ -660,19 +874,19 @@ class Cursor:
     def keys(self):
         self._update()
 
-        if self._bond is None:
-            return self._view.property_keys()
+        if self.is_internal():
+            return self._d.connectivity.property_keys(self._internal)
         else:
-            return self._d.connectivity.property_keys(self._bond)
+            return self._view.property_keys()
 
     def values(self):
         self._update()
 
         try:
-            if self._bond is None:
-                return self._view.property_values()
+            if self.is_internal():
+                return self._d.connectivity.property_values(self._internal)
             else:
-                return self._d.connectivity.property_values(self._bond)
+                return self._view.property_values()
         except Exception:
             vals = []
 
@@ -684,19 +898,19 @@ class Cursor:
     def items(self):
         self._update()
 
-        if self._bond is None:
+        if self.is_internal():
+            keys = self._d.connectivity.property_keys(self._internal)
+            items = []
+
+            for key in keys:
+                items.append((key, self._d.connectivity.property(self._internal,
+                                                                 key)))
+        else:
             keys = self._view.property_keys()
             items = []
 
             for key in keys:
                 items.append((key, self._view.property(key)))
-        else:
-            keys = self._d.connectivity.property_keys(self._bond)
-            items = []
-
-            for key in keys:
-                items.append((key, self._d.connectivity.property(self._bond,
-                                                                 key)))
 
         return items
 
@@ -707,11 +921,11 @@ class Cursor:
         from ..base import Properties
         p = Properties()
 
-        if self._bond is None:
+        if self.is_internal():
+            return self._d.connectivity.properties(self._internal)
+        else:
             for key in self.keys():
                 p[key] = self.__getitem__(key)
-        else:
-            return self._d.connectivity.properties(self._bond)
 
         return p
 

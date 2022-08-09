@@ -85,7 +85,8 @@ SelectorMAngle::SelectorMAngle(const Angle &view)
     angs.append(SelectorAngle(view));
 }
 
-SelectorMAngle::SelectorMAngle(const Molecules &mols)
+SelectorMAngle::SelectorMAngle(const Molecules &mols,
+                               const PropertyMap &map)
                : ConcreteProperty<SelectorMAngle, Property>()
 {
     if (not mols.isEmpty())
@@ -106,7 +107,7 @@ SelectorMAngle::SelectorMAngle(const Molecules &mols)
 
         for (const auto &molnum : molnums)
         {
-            SelectorAngle a(mols.at(molnum));
+            SelectorAngle a(mols.at(molnum), map);
 
             if (not a.isEmpty())
                 this->angs.append(a);
@@ -114,7 +115,8 @@ SelectorMAngle::SelectorMAngle(const Molecules &mols)
     }
 }
 
-SelectorMAngle::SelectorMAngle(const MoleculeGroup &mols)
+SelectorMAngle::SelectorMAngle(const MoleculeGroup &mols,
+                               const PropertyMap &map)
                : ConcreteProperty<SelectorMAngle, Property>()
 {
     if (not mols.isEmpty())
@@ -124,7 +126,7 @@ SelectorMAngle::SelectorMAngle(const MoleculeGroup &mols)
 
         for (const auto &molnum : molnums)
         {
-            SelectorAngle a(mols.at(molnum));
+            SelectorAngle a(mols.at(molnum), map);
 
             if (not a.isEmpty())
                 this->angs.append(a);
@@ -132,7 +134,8 @@ SelectorMAngle::SelectorMAngle(const MoleculeGroup &mols)
     }
 }
 
-SelectorMAngle::SelectorMAngle(const MolGroupsBase &mols)
+SelectorMAngle::SelectorMAngle(const MolGroupsBase &mols,
+                               const PropertyMap &map)
                : ConcreteProperty<SelectorMAngle, Property>()
 {
     if (not mols.isEmpty())
@@ -142,7 +145,7 @@ SelectorMAngle::SelectorMAngle(const MolGroupsBase &mols)
 
         for (const auto &molnum : molnums)
         {
-            SelectorAngle a(mols.at(molnum));
+            SelectorAngle a(mols.at(molnum), map);
 
             if (not a.isEmpty())
                 this->angs.append(a);
@@ -150,7 +153,8 @@ SelectorMAngle::SelectorMAngle(const MolGroupsBase &mols)
     }
 }
 
-SelectorMAngle::SelectorMAngle(const SelectResult &mols)
+SelectorMAngle::SelectorMAngle(const SelectResult &mols,
+                               const PropertyMap &map)
                : ConcreteProperty<SelectorMAngle, Property>()
 {
     if (not mols.isEmpty())
@@ -164,7 +168,7 @@ SelectorMAngle::SelectorMAngle(const SelectResult &mols)
             if (mol->isA<SelectorAngle>())
                 a = mol->asA<SelectorAngle>();
             else
-                a = SelectorAngle(*mol);
+                a = SelectorAngle(*mol, map);
 
             if (not a.isEmpty())
                 this->angs.append(a);
@@ -172,24 +176,9 @@ SelectorMAngle::SelectorMAngle(const SelectResult &mols)
     }
 }
 
-SelectorMAngle::SelectorMAngle(const SelectResult &mols, const PropertyMap &map)
-               : ConcreteProperty<SelectorMAngle, Property>()
-{
-    if (not mols.isEmpty())
-    {
-        this->angs.reserve(mols.count());
-
-        for (const auto &mol : mols)
-        {
-            SelectorAngle a(*mol, map);
-
-            if (not a.isEmpty())
-                this->angs.append(a);
-        }
-    }
-}
-
-SelectorMAngle::SelectorMAngle(const SelectResult &mols, const AngleID &angle)
+SelectorMAngle::SelectorMAngle(const SelectResult &mols,
+                               const AngleID &angle,
+                               const PropertyMap &map)
               : ConcreteProperty<SelectorMAngle, Property>()
 {
     if (not mols.isEmpty())
@@ -200,7 +189,7 @@ SelectorMAngle::SelectorMAngle(const SelectResult &mols, const AngleID &angle)
         {
             try
             {
-                auto a = SelectorAngle(*mol, angle);
+                auto a = SelectorAngle(*mol, angle, map);
 
                 if (not a.isEmpty())
                     this->angs.append(a);
@@ -218,7 +207,8 @@ SelectorMAngle::SelectorMAngle(const SelectorAngle &angles)
         angs.append(angles);
 }
 
-SelectorMAngle::SelectorMAngle(const SelectorMol &mols)
+SelectorMAngle::SelectorMAngle(const SelectorMol &mols,
+                               const PropertyMap &map)
               : ConcreteProperty<SelectorMAngle, Property>()
 {
     if (not mols.isEmpty())
@@ -227,7 +217,7 @@ SelectorMAngle::SelectorMAngle(const SelectorMol &mols)
 
         for (const auto &mol : mols)
         {
-            SelectorAngle a(mol);
+            SelectorAngle a(mol, map);
 
             if (not a.isEmpty())
                 angs.append(a);

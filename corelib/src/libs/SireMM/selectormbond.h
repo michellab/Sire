@@ -79,24 +79,29 @@ public:
 
     SelectorMBond();
     SelectorMBond(const Bond &view);
-    SelectorMBond(const SireMol::Molecules &mols);
-    SelectorMBond(const SireMol::MoleculeGroup &mols);
-    SelectorMBond(const SireMol::MolGroupsBase &mols);
-    SelectorMBond(const SireMol::SelectResult &mols);
+    SelectorMBond(const SireMol::Molecules &mols,
+                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
+    SelectorMBond(const SireMol::MoleculeGroup &mols,
+                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
+    SelectorMBond(const SireMol::MolGroupsBase &mols,
+                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
+    SelectorMBond(const SireMol::SelectResult &mols,
+                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
     SelectorMBond(const SelectorBond &bonds);
 
-    SelectorMBond(const SireMol::SelectorMol &mols);
+    SelectorMBond(const SireMol::SelectorMol &mols,
+                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     template<class U>
-    SelectorMBond(const SireMol::SelectorM<U> &other);
+    SelectorMBond(const SireMol::SelectorM<U> &other,
+                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SelectorMBond(const SelectorMBond &bonds, const SireBase::Slice &slice);
     SelectorMBond(const SelectorMBond &bonds, const QList<qint64> &idxs);
 
-    SelectorMBond(const SireMol::SelectResult &mols, const SireMol::BondID &bond);
-
     SelectorMBond(const SireMol::SelectResult &mols,
-                  const SireBase::PropertyMap &map);
+                  const SireMol::BondID &bond,
+                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SelectorMBond(const SelectorMBond &other);
 
@@ -283,7 +288,8 @@ namespace SireMM
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-SelectorMBond::SelectorMBond(const SireMol::SelectorM<T> &other)
+SelectorMBond::SelectorMBond(const SireMol::SelectorM<T> &other,
+                             const SireBase::PropertyMap &map)
               : SireBase::ConcreteProperty<SelectorMBond,SireBase::Property>()
 {
     if (not other.isEmpty())
@@ -292,7 +298,7 @@ SelectorMBond::SelectorMBond(const SireMol::SelectorM<T> &other)
 
         for (int i=0; i<other.nMolecules(); ++i)
         {
-            this->bnds.append(SelectorBond(other.molecule(i)));
+            this->bnds.append(SelectorBond(other.molecule(i), map));
         }
     }
 }

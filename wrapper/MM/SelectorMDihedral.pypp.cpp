@@ -42,16 +42,15 @@ void register_SelectorMDihedral_class(){
         SelectorMDihedral_exposer_t SelectorMDihedral_exposer = SelectorMDihedral_exposer_t( "SelectorMDihedral", "Multi-molecule selector for dihedrals", bp::init< >("") );
         bp::scope SelectorMDihedral_scope( SelectorMDihedral_exposer );
         SelectorMDihedral_exposer.def( bp::init< SireMM::Dihedral const & >(( bp::arg("view") ), "") );
-        SelectorMDihedral_exposer.def( bp::init< SireMol::Molecules const & >(( bp::arg("mols") ), "") );
-        SelectorMDihedral_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("mols") ), "") );
-        SelectorMDihedral_exposer.def( bp::init< SireMol::MolGroupsBase const & >(( bp::arg("mols") ), "") );
-        SelectorMDihedral_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("mols") ), "") );
+        SelectorMDihedral_exposer.def( bp::init< SireMol::Molecules const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMDihedral_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMDihedral_exposer.def( bp::init< SireMol::MolGroupsBase const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMDihedral_exposer.def( bp::init< SireMol::SelectResult const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorMDihedral_exposer.def( bp::init< SireMM::SelectorDihedral const & >(( bp::arg("Dihedrals") ), "") );
-        SelectorMDihedral_exposer.def( bp::init< SireMol::SelectorMol const & >(( bp::arg("mols") ), "") );
+        SelectorMDihedral_exposer.def( bp::init< SireMol::SelectorMol const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorMDihedral_exposer.def( bp::init< SireMM::SelectorMDihedral const &, SireBase::Slice const & >(( bp::arg("dihedrals"), bp::arg("slice") ), "") );
         SelectorMDihedral_exposer.def( bp::init< SireMM::SelectorMDihedral const &, QList< long long > const & >(( bp::arg("dihedrals"), bp::arg("idxs") ), "") );
-        SelectorMDihedral_exposer.def( bp::init< SireMol::SelectResult const &, SireMol::DihedralID const & >(( bp::arg("mols"), bp::arg("Dihedral") ), "") );
-        SelectorMDihedral_exposer.def( bp::init< SireMol::SelectResult const &, SireBase::PropertyMap const & >(( bp::arg("mols"), bp::arg("map") ), "") );
+        SelectorMDihedral_exposer.def( bp::init< SireMol::SelectResult const &, SireMol::DihedralID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("Dihedral"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorMDihedral_exposer.def( bp::init< SireMM::SelectorMDihedral const & >(( bp::arg("other") ), "") );
         { //::SireMM::SelectorMDihedral::IDs
         

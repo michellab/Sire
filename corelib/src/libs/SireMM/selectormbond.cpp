@@ -85,7 +85,8 @@ SelectorMBond::SelectorMBond(const Bond &view)
     bnds.append(SelectorBond(view));
 }
 
-SelectorMBond::SelectorMBond(const Molecules &mols)
+SelectorMBond::SelectorMBond(const Molecules &mols,
+                             const PropertyMap &map)
               : ConcreteProperty<SelectorMBond, Property>()
 {
     if (not mols.isEmpty())
@@ -106,7 +107,7 @@ SelectorMBond::SelectorMBond(const Molecules &mols)
 
         for (const auto &molnum : molnums)
         {
-            SelectorBond b(mols.at(molnum));
+            SelectorBond b(mols.at(molnum), map);
 
             if (not b.isEmpty())
                 this->bnds.append(b);
@@ -114,7 +115,8 @@ SelectorMBond::SelectorMBond(const Molecules &mols)
     }
 }
 
-SelectorMBond::SelectorMBond(const MoleculeGroup &mols)
+SelectorMBond::SelectorMBond(const MoleculeGroup &mols,
+                             const PropertyMap &map)
               : ConcreteProperty<SelectorMBond, Property>()
 {
     if (not mols.isEmpty())
@@ -124,7 +126,7 @@ SelectorMBond::SelectorMBond(const MoleculeGroup &mols)
 
         for (const auto &molnum : molnums)
         {
-            SelectorBond b(mols.at(molnum));
+            SelectorBond b(mols.at(molnum), map);
 
             if (not b.isEmpty())
                 this->bnds.append(b);
@@ -132,7 +134,8 @@ SelectorMBond::SelectorMBond(const MoleculeGroup &mols)
     }
 }
 
-SelectorMBond::SelectorMBond(const MolGroupsBase &mols)
+SelectorMBond::SelectorMBond(const MolGroupsBase &mols,
+                             const PropertyMap &map)
               : ConcreteProperty<SelectorMBond, Property>()
 {
     if (not mols.isEmpty())
@@ -142,7 +145,7 @@ SelectorMBond::SelectorMBond(const MolGroupsBase &mols)
 
         for (const auto &molnum : molnums)
         {
-            SelectorBond b(mols.at(molnum));
+            SelectorBond b(mols.at(molnum), map);
 
             if (not b.isEmpty())
                 this->bnds.append(b);
@@ -150,7 +153,8 @@ SelectorMBond::SelectorMBond(const MolGroupsBase &mols)
     }
 }
 
-SelectorMBond::SelectorMBond(const SelectResult &mols)
+SelectorMBond::SelectorMBond(const SelectResult &mols,
+                             const PropertyMap &map)
               : ConcreteProperty<SelectorMBond, Property>()
 {
     if (not mols.isEmpty())
@@ -164,7 +168,7 @@ SelectorMBond::SelectorMBond(const SelectResult &mols)
             if (mol->isA<SelectorBond>())
                 b = mol->asA<SelectorBond>();
             else
-                b = SelectorBond(*mol);
+                b = SelectorBond(*mol, map);
 
             if (not b.isEmpty())
                 this->bnds.append(b);
@@ -172,24 +176,8 @@ SelectorMBond::SelectorMBond(const SelectResult &mols)
     }
 }
 
-SelectorMBond::SelectorMBond(const SelectResult &mols, const PropertyMap &map)
-              : ConcreteProperty<SelectorMBond, Property>()
-{
-    if (not mols.isEmpty())
-    {
-        this->bnds.reserve(mols.count());
-
-        for (const auto &mol : mols)
-        {
-            SelectorBond b(*mol, map);
-
-            if (not b.isEmpty())
-                this->bnds.append(b);
-        }
-    }
-}
-
-SelectorMBond::SelectorMBond(const SelectResult &mols, const BondID &bond)
+SelectorMBond::SelectorMBond(const SelectResult &mols, const BondID &bond,
+                             const PropertyMap &map)
               : ConcreteProperty<SelectorMBond, Property>()
 {
     if (not mols.isEmpty())
@@ -200,7 +188,7 @@ SelectorMBond::SelectorMBond(const SelectResult &mols, const BondID &bond)
         {
             try
             {
-                auto b = SelectorBond(*mol, bond);
+                auto b = SelectorBond(*mol, bond, map);
 
                 if (not b.isEmpty())
                     this->bnds.append(b);
@@ -218,7 +206,8 @@ SelectorMBond::SelectorMBond(const SelectorBond &bonds)
         bnds.append(bonds);
 }
 
-SelectorMBond::SelectorMBond(const SelectorMol &mols)
+SelectorMBond::SelectorMBond(const SelectorMol &mols,
+                             const PropertyMap &map)
               : ConcreteProperty<SelectorMBond, Property>()
 {
     if (not mols.isEmpty())
@@ -227,7 +216,7 @@ SelectorMBond::SelectorMBond(const SelectorMol &mols)
 
         for (const auto &mol : mols)
         {
-            SelectorBond b(mol);
+            SelectorBond b(mol, map);
 
             if (not b.isEmpty())
                 bnds.append(b);

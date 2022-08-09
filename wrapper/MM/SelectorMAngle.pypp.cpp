@@ -42,16 +42,15 @@ void register_SelectorMAngle_class(){
         SelectorMAngle_exposer_t SelectorMAngle_exposer = SelectorMAngle_exposer_t( "SelectorMAngle", "Multi-molecule selector for angles", bp::init< >("") );
         bp::scope SelectorMAngle_scope( SelectorMAngle_exposer );
         SelectorMAngle_exposer.def( bp::init< SireMM::Angle const & >(( bp::arg("view") ), "") );
-        SelectorMAngle_exposer.def( bp::init< SireMol::Molecules const & >(( bp::arg("mols") ), "") );
-        SelectorMAngle_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("mols") ), "") );
-        SelectorMAngle_exposer.def( bp::init< SireMol::MolGroupsBase const & >(( bp::arg("mols") ), "") );
-        SelectorMAngle_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("mols") ), "") );
+        SelectorMAngle_exposer.def( bp::init< SireMol::Molecules const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMAngle_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMAngle_exposer.def( bp::init< SireMol::MolGroupsBase const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMAngle_exposer.def( bp::init< SireMol::SelectResult const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorMAngle_exposer.def( bp::init< SireMM::SelectorAngle const & >(( bp::arg("angles") ), "") );
-        SelectorMAngle_exposer.def( bp::init< SireMol::SelectorMol const & >(( bp::arg("mols") ), "") );
+        SelectorMAngle_exposer.def( bp::init< SireMol::SelectorMol const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorMAngle_exposer.def( bp::init< SireMM::SelectorMAngle const &, SireBase::Slice const & >(( bp::arg("angles"), bp::arg("slice") ), "") );
         SelectorMAngle_exposer.def( bp::init< SireMM::SelectorMAngle const &, QList< long long > const & >(( bp::arg("angles"), bp::arg("idxs") ), "") );
-        SelectorMAngle_exposer.def( bp::init< SireMol::SelectResult const &, SireMol::AngleID const & >(( bp::arg("mols"), bp::arg("angle") ), "") );
-        SelectorMAngle_exposer.def( bp::init< SireMol::SelectResult const &, SireBase::PropertyMap const & >(( bp::arg("mols"), bp::arg("map") ), "") );
+        SelectorMAngle_exposer.def( bp::init< SireMol::SelectResult const &, SireMol::AngleID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("angle"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorMAngle_exposer.def( bp::init< SireMM::SelectorMAngle const & >(( bp::arg("other") ), "") );
         { //::SireMM::SelectorMAngle::IDs
         

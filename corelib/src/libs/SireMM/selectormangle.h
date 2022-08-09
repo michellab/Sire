@@ -78,24 +78,29 @@ public:
 
     SelectorMAngle();
     SelectorMAngle(const Angle &view);
-    SelectorMAngle(const SireMol::Molecules &mols);
-    SelectorMAngle(const SireMol::MoleculeGroup &mols);
-    SelectorMAngle(const SireMol::MolGroupsBase &mols);
-    SelectorMAngle(const SireMol::SelectResult &mols);
+    SelectorMAngle(const SireMol::Molecules &mols,
+                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
+    SelectorMAngle(const SireMol::MoleculeGroup &mols,
+                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
+    SelectorMAngle(const SireMol::MolGroupsBase &mols,
+                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
+    SelectorMAngle(const SireMol::SelectResult &mols,
+                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
     SelectorMAngle(const SelectorAngle &angles);
 
-    SelectorMAngle(const SireMol::SelectorMol &mols);
+    SelectorMAngle(const SireMol::SelectorMol &mols,
+                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     template<class U>
-    SelectorMAngle(const SireMol::SelectorM<U> &other);
+    SelectorMAngle(const SireMol::SelectorM<U> &other,
+                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SelectorMAngle(const SelectorMAngle &angles, const SireBase::Slice &slice);
     SelectorMAngle(const SelectorMAngle &angles, const QList<qint64> &idxs);
 
-    SelectorMAngle(const SireMol::SelectResult &mols, const SireMol::AngleID &angle);
-
     SelectorMAngle(const SireMol::SelectResult &mols,
-                  const SireBase::PropertyMap &map);
+                   const SireMol::AngleID &angle,
+                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SelectorMAngle(const SelectorMAngle &other);
 
@@ -282,7 +287,8 @@ namespace SireMM
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-SelectorMAngle::SelectorMAngle(const SireMol::SelectorM<T> &other)
+SelectorMAngle::SelectorMAngle(const SireMol::SelectorM<T> &other,
+                               const SireBase::PropertyMap &map)
                : SireBase::ConcreteProperty<SelectorMAngle,SireBase::Property>()
 {
     if (not other.isEmpty())
@@ -291,7 +297,7 @@ SelectorMAngle::SelectorMAngle(const SireMol::SelectorM<T> &other)
 
         for (int i=0; i<other.nMolecules(); ++i)
         {
-            this->angs.append(SelectorAngle(other.molecule(i)));
+            this->angs.append(SelectorAngle(other.molecule(i), map));
         }
     }
 }
