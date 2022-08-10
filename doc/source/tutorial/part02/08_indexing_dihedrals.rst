@@ -261,136 +261,111 @@ SelectorDihedral( size=20
 
 returns all of the dihedrals that are around carbon-nitrogen bonds.
 
-Accessing angles by residue
----------------------------
+Accessing dihedrals by residue
+------------------------------
 
-You can also access angles by residue, by passing in residue identifiers.
-Passing in two residues identifiers, such as here
+You can also access dihedrals by residue, by passing in residue identifiers.
+Passing in two residue identifiers, such as here
 
->>> print(mol.angles("residx 0", "residx 1"))
-SelectorAngle( size=4
-0: Angle( CH3:2 <= C:5 => N:7 )
-1: Angle( C:5 <= N:7 => H:8 )
-2: Angle( C:5 <= N:7 => CA:9 )
-3: Angle( O:6 <= C:5 => N:7 )
+>>> print(mol.dihedrals("residx 0", "residx 1"))
+SelectorDihedral( size=10
+0: Dihedral( HH31:1 <= CH3:2 = C:5 => N:7 )
+1: Dihedral( CH3:2 <= C:5 = N:7 => H:8 )
+2: Dihedral( CH3:2 <= C:5 = N:7 => CA:9 )
+3: Dihedral( HH32:3 <= CH3:2 = C:5 => N:7 )
+4: Dihedral( HH33:4 <= CH3:2 = C:5 => N:7 )
+5: Dihedral( C:5 <= N:7 = CA:9 => HA:10 )
+6: Dihedral( C:5 <= N:7 = CA:9 => CB:11 )
+7: Dihedral( C:5 <= N:7 = CA:9 => C:15 )
+8: Dihedral( O:6 <= C:5 = N:7 => H:8 )
+9: Dihedral( O:6 <= C:5 = N:7 => CA:9 )
 )
 
-gives all of the angles that involve bonds that are between those two residues.
+gives all of the dihedrals that involve bonds that are between those two residues.
 
 While passing in a single residue identifier
 
->>> print(mol.angles("residx 0"))
-SelectorAngle( size=11
-0: Angle( HH31:1 <= CH3:2 => HH32:3 )
-1: Angle( HH31:1 <= CH3:2 => HH33:4 )
-2: Angle( HH31:1 <= CH3:2 => C:5 )
-3: Angle( CH3:2 <= C:5 => O:6 )
-4: Angle( CH3:2 <= C:5 => N:7 )
+>>> print(mol.dihedrals("residx 0"))
+SelectorDihedral( size=13
+0: Dihedral( HH31:1 <= CH3:2 = C:5 => O:6 )
+1: Dihedral( HH31:1 <= CH3:2 = C:5 => N:7 )
+2: Dihedral( CH3:2 <= C:5 = N:7 => H:8 )
+3: Dihedral( CH3:2 <= C:5 = N:7 => CA:9 )
+4: Dihedral( HH32:3 <= CH3:2 = C:5 => O:6 )
 ...
-6: Angle( HH32:3 <= CH3:2 => C:5 )
-7: Angle( HH33:4 <= CH3:2 => C:5 )
-8: Angle( C:5 <= N:7 => H:8 )
-9: Angle( C:5 <= N:7 => CA:9 )
-10: Angle( O:6 <= C:5 => N:7 )
+8: Dihedral( C:5 <= N:7 = CA:9 => HA:10 )
+9: Dihedral( C:5 <= N:7 = CA:9 => CB:11 )
+10: Dihedral( C:5 <= N:7 = CA:9 => C:15 )
+11: Dihedral( O:6 <= C:5 = N:7 => H:8 )
+12: Dihedral( O:6 <= C:5 = N:7 => CA:9 )
 )
 
-gives all of the angles that involve atoms in this residue (including the
-angles to other residues).
+gives all of the dihedrals that involve atoms in this residue (including the
+dihedrals to other residues).
 
-If you want the angles that are contained *only* within the residue, then
-use the ``angles`` function on that residue,
+If you want the dihedrals that are contained *only* within the residue, then
+use the ``dihedrals`` function on that residue,
 
->>> print(mol["residx 0"].angles())
-SelectorAngle( size=7
-0: Angle( HH31:1 <= CH3:2 => HH32:3 )
-1: Angle( HH31:1 <= CH3:2 => C:5 )
-2: Angle( HH31:1 <= CH3:2 => HH33:4 )
-3: Angle( CH3:2 <= C:5 => O:6 )
-4: Angle( HH32:3 <= CH3:2 => C:5 )
-5: Angle( HH32:3 <= CH3:2 => HH33:4 )
-6: Angle( HH33:4 <= CH3:2 => C:5 )
+>>> print(mol["residx 0"].dihedrals())
+SelectorDihedral( size=3
+0: Dihedral( HH31:1 <= CH3:2 = C:5 => O:6 )
+1: Dihedral( HH32:3 <= CH3:2 = C:5 => O:6 )
+2: Dihedral( HH33:4 <= CH3:2 = C:5 => O:6 )
 )
 
-Calling the ``angles`` function on any molecular container will return the
-angles that involve only the atoms that are fully contained in that container.
+Calling the ``dihedrals`` function on any molecular container will return the
+dihedrals that involve only the atoms that are fully contained in that container.
 
 .. note::
 
-   We have shown searching for angles by residue. You can also search
-   for angles by chain or segment if your molecule has chains or
-   segments. So ``print(mol.angles("chainidx 0", "chainidx 1"))``
-   would print the angles between the first two chains.
+   We have shown searching for dihedrals by residue. You can also search
+   for dihedrals by chain or segment if your molecule has chains or
+   segments. So ``print(mol.dihedrals("chainidx 0", "chainidx 1"))``
+   would print the dihedrals between the first two chains.
 
-Uniquely identifying an angle
------------------------------
+Uniquely identifying a dihedral
+-------------------------------
 
-Angles are identified by their :class:`~sire.mol.AngleID`. This is a triple
-of :class:`~sire.mol.AtomID` identifiers, one for each of the three
+Dihedrals are identified by their :class:`~sire.mol.DihedralID`. This is a quad
+of :class:`~sire.mol.AtomID` identifiers, one for each of the four
 atoms to be identified. While the atom identifier can be any type,
 it is best to use atom indexes, as these uniquely identify atoms in
-a molecule. A :class:`~sire.mol.AngleID` comprised of three
+a molecule. A :class:`~sire.mol.DihedralID` comprised of four
 :class:`~sire.mol.AtomIdx` identifiers will uniquely identify a single
-angle.
+dihedral.
 
-You can easily construct a :class:`~sire.mol.AngleID` using the
-:func:`sire.angleid` function, e.g.
+You can easily construct a :class:`~sire.mol.DihedralID` using the
+:func:`sire.dihedralid` function, e.g.
 
->>> print(sr.angleid(0, 1, 2))
-Angle( AtomIdx(0), AtomIdx(1), AtomIdx(2) )
+>>> print(sr.dihedralid(0, 1, 2, 3))
+Dihedral( AtomIdx(0), AtomIdx(1), AtomIdx(2), AtomIdx(3) )
 
-constructs a :class:`~sire.mol.AngleID` from atom indexes,
+constructs a :class:`~sire.mol.DihedralID` from atom indexes,
 
->>> print(sr.angleid("H2", "O", "H1"))
-Angle( AtomName('H2'), AtomName('O'), AtomName('H1') )
+>>> print(sr.dihedralid("HH31", "CH3", "C", "O"))
+Dihedral( AtomName('HH31'), AtomName('CH3'), AtomName('C'), AtomName('O') )
 
 constructs one from atom names, and
 
->>> print(sr.angleid(sr.atomid(1), sr.atomid(2), sr.atomid(3)))
-Angle( AtomNum(1), AtomNum(2), AtomNum(3) )
+>>> print(sr.dihedralid(sr.atomid(1), sr.atomid(2),
+...                     sr.atomid(3), sr.atomid(4)))
+Dihedral( AtomNum(1), AtomNum(2), AtomNum(3), AtomNum(4) )
 
 constructs one from atom numbers.
 
 You can mix and match the IDs if you want.
 
-You can then use the :class:`~sire.mol.AngleID` to index, just like
+You can then use the :class:`~sire.mol.DihedralID` to index, just like
 any other identifier class.
 
->>> print(mols[sr.angleid("H2", "O", "H1")])
-SelectorMAngle( size=630
-0: MolNum(3) Angle( H1:24 <= O:23 => H2:25 )
-1: MolNum(4) Angle( H1:27 <= O:26 => H2:28 )
-2: MolNum(5) Angle( H1:30 <= O:29 => H2:31 )
-3: MolNum(6) Angle( H1:33 <= O:32 => H2:34 )
-4: MolNum(7) Angle( H1:36 <= O:35 => H2:37 )
-...
-625: MolNum(628) Angle( H1:1899 <= O:1898 => H2:1900 )
-626: MolNum(629) Angle( H1:1902 <= O:1901 => H2:1903 )
-627: MolNum(630) Angle( H1:1905 <= O:1904 => H2:1906 )
-628: MolNum(631) Angle( H1:1908 <= O:1907 => H2:1909 )
-629: MolNum(632) Angle( H1:1911 <= O:1910 => H2:1912 )
-)
+>>> print(mols[sr.dihedralid("HH31", "CH3", "C", "O")])
+Dihedral( HH31:1 <= CH3:2 = C:5 => O:6 )
 
-gives all of the angles between the atoms called ``H2``, ``O`` and ``H1`` in
+gives the dihedral between the atoms called ``HH31``, ``CH3``, ``C`` and ``O`` in
 all molecules, while
 
->>> print(mols[0][sr.angleid(0, 1, 2)])
-Angle( HH31:1 <= CH3:2 => HH32:3 )
+>>> print(mols[sr.dihedralid(0, 1, 4, 5)])
+Dihedral( HH31:1 <= CH3:2 = C:5 => O:6 )
 
-gives just the angle between the first three atoms in the first molecule, and
-
->>> print(mols[sr.angleid(0, 1, 2)])
-SelectorMAngle( size=631
-0: MolNum(2) Angle( HH31:1 <= CH3:2 => HH32:3 )
-1: MolNum(3) Angle( O:23 <= H1:24 => H2:25 )
-2: MolNum(4) Angle( O:26 <= H1:27 => H2:28 )
-3: MolNum(5) Angle( O:29 <= H1:30 => H2:31 )
-4: MolNum(6) Angle( O:32 <= H1:33 => H2:34 )
-...
-626: MolNum(628) Angle( O:1898 <= H1:1899 => H2:1900 )
-627: MolNum(629) Angle( O:1901 <= H1:1902 => H2:1903 )
-628: MolNum(630) Angle( O:1904 <= H1:1905 => H2:1906 )
-629: MolNum(631) Angle( O:1907 <= H1:1908 => H2:1909 )
-630: MolNum(632) Angle( O:1910 <= H1:1911 => H2:1912 )
-)
-
-gives the angle between the first three atoms in each molecule.
+gives the dihedral between the first, second, fifth and sixth atoms
+in each molecule.

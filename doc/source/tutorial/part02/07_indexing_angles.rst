@@ -229,7 +229,7 @@ Accessing angles by residue
 ---------------------------
 
 You can also access angles by residue, by passing in residue identifiers.
-Passing in two residues identifiers, such as here
+Passing in two residue identifiers, such as here
 
 >>> print(mol.angles("residx 0", "residx 1"))
 SelectorAngle( size=4

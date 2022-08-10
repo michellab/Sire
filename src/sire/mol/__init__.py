@@ -410,7 +410,7 @@ def __fixed__dihedrals__(obj, idx=None, idx1=None,
     else:
         from ..mm import SelectorDihedral
         C = SelectorDihedral
-        def _fromAngleID(obj, dihid):
+        def _fromDihedralID(obj, dihid):
             return SelectorDihedral(obj, dihid, map=map)
 
     if idx is None:
