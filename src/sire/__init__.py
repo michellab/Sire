@@ -414,7 +414,7 @@ def angleid(atom0, atom1, atom2, case_sensitive: bool = True):
         case_sensitive: Whether or not the name is case sensitive
 
     Returns:
-        AngleID: The returned bond identifier
+        AngleID: The returned angle identifier
     """
 
     def _convert(id):
@@ -439,8 +439,104 @@ def angleid(atom0, atom1, atom2, case_sensitive: bool = True):
             else:
                 return atomid(id)
 
-    from .mol import BondID
+    from .mol import AngleID
     return AngleID(_convert(atom0), _convert(atom1), _convert(atom2))
+
+
+def dihedralid(atom0, atom1, atom2, atom3, case_sensitive: bool = True):
+    """Construct an identifier for a Dihedral from the passed
+       identifiers for the four atoms.
+
+       The atom identifiers can be:
+
+       * integers - in this case they are treated as Atom indexes
+       * strings - in this case they are treated as Atom names
+       * AtomIDs - these are AtomIDs created via, e.g. the atomid function.
+
+    Args:
+        atom0 (int, str, AtomID): The identifier for the first atom.
+        atom1 (int, str, AtomID): The identifier for the second atom.
+        atom2 (int, str, AtomID): The identifier for the third atom.
+        atom3 (int, str, AtomID): The identifier for the fourth atom.
+        case_sensitive: Whether or not the name is case sensitive
+
+    Returns:
+        DihedralID: The returned dihedral identifier
+    """
+
+    def _convert(id):
+        if type(id) is int:
+            from .mol import AtomIdx
+            return AtomIdx(id)
+        elif type(id) is str:
+            if case_sensitive:
+                from .id import CaseSensitive
+                cs = CaseSensitive
+            else:
+                from .id import CaseInsensitive
+                cs = CaseInsensitive
+
+            from .mol import AtomName
+            return AtomName(id, cs)
+        else:
+            from .mol import AtomID
+
+            if AtomID in type(id).mro():
+                return id
+            else:
+                return atomid(id)
+
+    from .mol import DihedralID
+    return DihedralID(_convert(atom0), _convert(atom1),
+                      _convert(atom2), _convert(atom3))
+
+
+def improperid(atom0, atom1, atom2, atom3, case_sensitive: bool = True):
+    """Construct an identifier for an Improper from the passed
+       identifiers for the four atoms.
+
+       The atom identifiers can be:
+
+       * integers - in this case they are treated as Atom indexes
+       * strings - in this case they are treated as Atom names
+       * AtomIDs - these are AtomIDs created via, e.g. the atomid function.
+
+    Args:
+        atom0 (int, str, AtomID): The identifier for the first atom.
+        atom1 (int, str, AtomID): The identifier for the second atom.
+        atom2 (int, str, AtomID): The identifier for the third atom.
+        atom3 (int, str, AtomID): The identifier for the fourth atom.
+        case_sensitive: Whether or not the name is case sensitive
+
+    Returns:
+        ImproperID: The returned improper identifier
+    """
+
+    def _convert(id):
+        if type(id) is int:
+            from .mol import AtomIdx
+            return AtomIdx(id)
+        elif type(id) is str:
+            if case_sensitive:
+                from .id import CaseSensitive
+                cs = CaseSensitive
+            else:
+                from .id import CaseInsensitive
+                cs = CaseInsensitive
+
+            from .mol import AtomName
+            return AtomName(id, cs)
+        else:
+            from .mol import AtomID
+
+            if AtomID in type(id).mro():
+                return id
+            else:
+                return atomid(id)
+
+    from .mol import ImproperID
+    return ImproperID(_convert(atom0), _convert(atom1),
+                      _convert(atom2), _convert(atom3))
 
 
 from . import config

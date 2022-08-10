@@ -73,8 +73,8 @@ Atom( CH3:2   [  18.98,    3.45,   13.39] )
 >>> print(angle.bonds()[0])
 Bond( HH31:1 => CH3:2 )
 
-Accessing angles by atom
------------------------
+Accessing angles by atom or bond
+--------------------------------
 
 You can also find angles by looking for their constituent atoms.
 For example,
@@ -100,24 +100,8 @@ This will raise a ``KeyError`` if multiple angles match, or if no angles
 match.
 
 You can use any valid atom identifier to identify the atoms. This includes
-search strings, e.g. finding all of the angles involving bonds
-between carbon and hydrogen atoms,
-
->>> print(mol.angles("element C", "element H"))
-SelectorBond( size=10
-0: Bond( HH31:1 => CH3:2 )
-1: Bond( CH3:2 => HH32:3 )
-2: Bond( CH3:2 => HH33:4 )
-3: Bond( CA:9 => HA:10 )
-4: Bond( CB:11 => HB1:12 )
-5: Bond( CB:11 => HB2:13 )
-6: Bond( CB:11 => HB3:14 )
-7: Bond( CH3:19 => HH31:20 )
-8: Bond( CH3:19 => HH32:21 )
-9: Bond( CH3:19 => HH33:22 )
-)
-
-or angles that have carbon only in the center
+search strings, e.g. here we can find all angles that have carbon
+only in the center
 
 >>> print(mol.angles("not element C", "element C", "not element C"))
 SelectorAngle( size=15
@@ -134,7 +118,31 @@ SelectorAngle( size=15
 14: Angle( HH32:21 <= CH3:19 => HH33:22 )
 )
 
-or using the atom identifying types
+Passing in three atom identifiers, as above, will search for angles by
+atom. Passing in two atom identifiers will search for angles
+that contain the corresponding bond.
+
+For example, here we can find all of the angles involving bonds
+between carbon and hydrogen atoms,
+
+>>> print(mol.angles("element C", "element H"))
+SelectorAngle( size=21
+0: Angle( HH31:1 <= CH3:2 => HH32:3 )
+1: Angle( HH31:1 <= CH3:2 => HH33:4 )
+2: Angle( HH31:1 <= CH3:2 => C:5 )
+3: Angle( HH32:3 <= CH3:2 => HH33:4 )
+4: Angle( HH32:3 <= CH3:2 => C:5 )
+...
+16: Angle( N:17 <= CH3:19 => HH32:21 )
+17: Angle( N:17 <= CH3:19 => HH33:22 )
+18: Angle( HH31:20 <= CH3:19 => HH32:21 )
+19: Angle( HH31:20 <= CH3:19 => HH33:22 )
+20: Angle( HH32:21 <= CH3:19 => HH33:22 )
+)
+
+This would also work using atom identifying types, e.g.
+looking for angles that contains the bond between
+atoms ``HH31:1`` and ``CH3:2``.
 
 >>> print(mol.angles(sr.atomid("HH31", 1), sr.atomid("CH3", 2)))
 SelectorAngle( size=3
@@ -143,8 +151,8 @@ SelectorAngle( size=3
 2: Angle( HH31:1 <= CH3:2 => C:5 )
 )
 
-or using complex search strings, here finding the angles between
-atoms in two residues
+You can even use complex search strings, here finding the angles involving
+the bonds between atoms connecting two residues
 
 >>> print(mol.angles("atoms in residx 0", "atoms in residx 1"))
 SelectorAngle( size=4
@@ -218,7 +226,7 @@ SelectorAngle( size=30
 returns all of the angles that have carbon as the central atom.
 
 Accessing angles by residue
---------------------------
+---------------------------
 
 You can also access angles by residue, by passing in residue identifiers.
 Passing in two residues identifiers, such as here
@@ -231,7 +239,7 @@ SelectorAngle( size=4
 3: Angle( O:6 <= C:5 => N:7 )
 )
 
-gives all of the angles that are between those two residues.
+gives all of the angles that involve bonds that are between those two residues.
 
 While passing in a single residue identifier
 
@@ -277,10 +285,10 @@ angles that involve only the atoms that are fully contained in that container.
    segments. So ``print(mol.angles("chainidx 0", "chainidx 1"))``
    would print the angles between the first two chains.
 
-Uniquely identifying a bond
----------------------------
+Uniquely identifying an angle
+-----------------------------
 
-Bonds are identified by their :class:`~sire.mol.AngleID`. This is a triple
+Angles are identified by their :class:`~sire.mol.AngleID`. This is a triple
 of :class:`~sire.mol.AtomID` identifiers, one for each of the three
 atoms to be identified. While the atom identifier can be any type,
 it is best to use atom indexes, as these uniquely identify atoms in
@@ -292,61 +300,61 @@ You can easily construct a :class:`~sire.mol.AngleID` using the
 :func:`sire.angleid` function, e.g.
 
 >>> print(sr.angleid(0, 1, 2))
-Bond( AtomIdx(0), AtomIdx(1) )
+Angle( AtomIdx(0), AtomIdx(1), AtomIdx(2) )
 
-constructs a :class:`~sire.mol.BondID` from atom indexes,
+constructs a :class:`~sire.mol.AngleID` from atom indexes,
 
->>> print(sr.bondid("O", "H1"))
-Bond( AtomName('O'), AtomName('H1') )
+>>> print(sr.angleid("H2", "O", "H1"))
+Angle( AtomName('H2'), AtomName('O'), AtomName('H1') )
 
 constructs one from atom names, and
 
->>> print(sr.bondid(sr.atomid(1), sr.atomid(2)))
-Bond( AtomNum(1), AtomNum(2) )
+>>> print(sr.angleid(sr.atomid(1), sr.atomid(2), sr.atomid(3)))
+Angle( AtomNum(1), AtomNum(2), AtomNum(3) )
 
 constructs one from atom numbers.
 
 You can mix and match the IDs if you want.
 
-You can then use the :class:`~sire.mol.BondID` to index, just like
+You can then use the :class:`~sire.mol.AngleID` to index, just like
 any other identifier class.
 
->>> print(mols[sr.bondid("O", "H1")])
-SelectorMBond( size=630
-0: MolNum(3) Bond( O:23 => H1:24 )
-1: MolNum(4) Bond( O:26 => H1:27 )
-2: MolNum(5) Bond( O:29 => H1:30 )
-3: MolNum(6) Bond( O:32 => H1:33 )
-4: MolNum(7) Bond( O:35 => H1:36 )
+>>> print(mols[sr.angleid("H2", "O", "H1")])
+SelectorMAngle( size=630
+0: MolNum(3) Angle( H1:24 <= O:23 => H2:25 )
+1: MolNum(4) Angle( H1:27 <= O:26 => H2:28 )
+2: MolNum(5) Angle( H1:30 <= O:29 => H2:31 )
+3: MolNum(6) Angle( H1:33 <= O:32 => H2:34 )
+4: MolNum(7) Angle( H1:36 <= O:35 => H2:37 )
 ...
-625: MolNum(628) Bond( O:1898 => H1:1899 )
-626: MolNum(629) Bond( O:1901 => H1:1902 )
-627: MolNum(630) Bond( O:1904 => H1:1905 )
-628: MolNum(631) Bond( O:1907 => H1:1908 )
-629: MolNum(632) Bond( O:1910 => H1:1911 )
+625: MolNum(628) Angle( H1:1899 <= O:1898 => H2:1900 )
+626: MolNum(629) Angle( H1:1902 <= O:1901 => H2:1903 )
+627: MolNum(630) Angle( H1:1905 <= O:1904 => H2:1906 )
+628: MolNum(631) Angle( H1:1908 <= O:1907 => H2:1909 )
+629: MolNum(632) Angle( H1:1911 <= O:1910 => H2:1912 )
 )
 
-gives all of the bonds between the atoms called ``O`` and ``H1`` in
+gives all of the angles between the atoms called ``H2``, ``O`` and ``H1`` in
 all molecules, while
 
->>> print(mols[0][sr.bondid(0, 1)])
-Bond( HH31:1 => CH3:2 )
+>>> print(mols[0][sr.angleid(0, 1, 2)])
+Angle( HH31:1 <= CH3:2 => HH32:3 )
 
-gives just the bond between the first and second atoms in the first molecule, and
+gives just the angle between the first three atoms in the first molecule, and
 
->>> print(mols[sr.bondid(0, 1)])
-SelectorMBond( size=631
-0: MolNum(2) Bond( HH31:1 => CH3:2 )
-1: MolNum(3) Bond( O:23 => H1:24 )
-2: MolNum(4) Bond( O:26 => H1:27 )
-3: MolNum(5) Bond( O:29 => H1:30 )
-4: MolNum(6) Bond( O:32 => H1:33 )
+>>> print(mols[sr.angleid(0, 1, 2)])
+SelectorMAngle( size=631
+0: MolNum(2) Angle( HH31:1 <= CH3:2 => HH32:3 )
+1: MolNum(3) Angle( O:23 <= H1:24 => H2:25 )
+2: MolNum(4) Angle( O:26 <= H1:27 => H2:28 )
+3: MolNum(5) Angle( O:29 <= H1:30 => H2:31 )
+4: MolNum(6) Angle( O:32 <= H1:33 => H2:34 )
 ...
-626: MolNum(628) Bond( O:1898 => H1:1899 )
-627: MolNum(629) Bond( O:1901 => H1:1902 )
-628: MolNum(630) Bond( O:1904 => H1:1905 )
-629: MolNum(631) Bond( O:1907 => H1:1908 )
-630: MolNum(632) Bond( O:1910 => H1:1911 )
+626: MolNum(628) Angle( O:1898 <= H1:1899 => H2:1900 )
+627: MolNum(629) Angle( O:1901 <= H1:1902 => H2:1903 )
+628: MolNum(630) Angle( O:1904 <= H1:1905 => H2:1906 )
+629: MolNum(631) Angle( O:1907 <= H1:1908 => H2:1909 )
+630: MolNum(632) Angle( O:1910 <= H1:1911 => H2:1912 )
 )
 
-gives the bond between the first and second atoms in each molecule.
+gives the angle between the first three atoms in each molecule.
