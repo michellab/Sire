@@ -88,6 +88,51 @@ SIREMM_EXPORT QDataStream& operator>>(QDataStream &ds, SelectorImproper &simprop
 SelectorImproper::SelectorImproper() : ConcreteProperty<SelectorImproper, MoleculeView>()
 {}
 
+inline
+QSet<IDQuad> _to_int_set(const QList<ImproperID> &vals,
+                         const MoleculeInfoData &molinfo)
+{
+    QSet<IDQuad> s;
+    s.reserve(vals.count());
+
+    for (const auto &val : vals)
+    {
+        s.insert(IDQuad(molinfo.atomIdx(val[0]).value(),
+                        molinfo.atomIdx(val[1]).value(),
+                        molinfo.atomIdx(val[2]).value(),
+                        molinfo.atomIdx(val[3]).value()));
+    }
+
+    return s;
+}
+
+inline
+QList<ImproperID> _from_int_set(const QSet<IDQuad> &vals)
+{
+    QVector<IDQuad> v;
+    v.reserve(vals.count());
+
+    for (const auto &val : vals)
+    {
+        v.append(val);
+    }
+
+    std::sort(v.begin(), v.end());
+
+    QList<ImproperID> l;
+    l.reserve(v.count());
+
+    for (const auto &val : v)
+    {
+        l.append(ImproperID(AtomIdx(val.atom0),
+                            AtomIdx(val.atom1),
+                            AtomIdx(val.atom2),
+                            AtomIdx(val.atom3)));
+    }
+
+    return l;
+}
+
 QList<ImproperID> _get_impropers(const MoleculeData &moldata,
                                  const PropertyMap &map)
 {
@@ -185,7 +230,10 @@ SelectorImproper::SelectorImproper(const MoleculeView &mol,
                                    const SireBase::PropertyMap &map)
                  : ConcreteProperty<SelectorImproper, MoleculeView>(mol)
 {
-    auto impropers = _get_impropers(mol.data(), map);
+    // do this so that the impropers are canonicalized and sorted
+    auto impropers = _from_int_set(
+                        _to_int_set(_get_impropers(this->data(), map),
+                                    this->data().info()));
 
     if (mol.selectedAll())
     {
@@ -213,51 +261,6 @@ SelectorImproper::SelectorImproper(const MoleculeData &moldata,
                  : ConcreteProperty<SelectorImproper, MoleculeView>()
 {
     this->operator=(SelectorImproper(Molecule(moldata), map));
-}
-
-inline
-QSet<IDQuad> _to_int_set(const QList<ImproperID> &vals,
-                         const MoleculeInfoData &molinfo)
-{
-    QSet<IDQuad> s;
-    s.reserve(vals.count());
-
-    for (const auto &val : vals)
-    {
-        s.insert(IDQuad(molinfo.atomIdx(val[0]).value(),
-                        molinfo.atomIdx(val[1]).value(),
-                        molinfo.atomIdx(val[2]).value(),
-                        molinfo.atomIdx(val[3]).value()));
-    }
-
-    return s;
-}
-
-inline
-QList<ImproperID> _from_int_set(const QSet<IDQuad> &vals)
-{
-    QVector<IDQuad> v;
-    v.reserve(vals.count());
-
-    for (const auto &val : vals)
-    {
-        v.append(val);
-    }
-
-    std::sort(v.begin(), v.end());
-
-    QList<ImproperID> l;
-    l.reserve(v.count());
-
-    for (const auto &val : v)
-    {
-        l.append(ImproperID(AtomIdx(val.atom0),
-                            AtomIdx(val.atom1),
-                            AtomIdx(val.atom2),
-                            AtomIdx(val.atom3)));
-    }
-
-    return l;
 }
 
 inline

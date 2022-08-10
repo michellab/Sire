@@ -397,7 +397,16 @@ Expression Improper::potential(const PropertyMap &map) const
     try
     {
         auto funcs = this->data().property(map["improper"]).asA<FourAtomFunctions>();
-        return funcs.potential(imp);
+        auto p = funcs.potential(imp);
+
+        if (p.isZero())
+        {
+            // try another order - sometimes the center atom is
+            // the third atom rather than the second
+            p = funcs.potential(ImproperID(imp[0], imp[2], imp[1], imp[3]));
+        }
+
+        return p;
     }
     catch(const SireError::exception&)
     {}
@@ -416,6 +425,7 @@ SireUnits::Dimension::MolarEnergy Improper::energy(const PropertyMap &map) const
     auto s = this->size(map);
 
     Values vals(Symbol("phi")==s.to(radians), Symbol("theta")==s.to(radians));
+
     return pot.evaluate(vals) * kcal_per_mol;
 }
 

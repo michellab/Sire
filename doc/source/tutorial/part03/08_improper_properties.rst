@@ -86,13 +86,13 @@ the algebraic expressions held in the molecule's ``improper`` property to calcul
 energy of the improper. This is reported in units of kilocalories per mole.
 
 >>> print(improper.energy())
-0
+0.0934184 kcal mol-1
 
 This could be converted to kilojoules per mole...
 
 >>> from sire.units import kJ_per_mol
 >>> print(improper.energy().to(kJ_per_mol))
-0
+0.39086262536239597
 
 You can also get the sizes and energies of all impropers in a view, e.g.
 to get the sizes of all impropers in the molecule you could use;
@@ -104,27 +104,29 @@ or to get the energies of all impropers with a central nitrogen atom
 you could use
 
 >>> print(mol.impropers("*", "element N", "*", "*").energies())
-[0 , 0 ]
+[8.3952e-07 kcal mol-1, 0.0234049 kcal mol-1]
 
 You can also use the ``.energy()`` function on a collection to get
 the total energy of all impropers in a molecule...
 
 >>> print(mol.impropers().energy())
-0
+0.235105 kcal mol-1
 
 ...or even of all impropers in the molecules that have been loaded
 from the file.
 
 >>> print(mols.impropers().energy())
-0
+0.235105 kcal mol-1
 
 Just as for bonds, we can use a loop to find all of the impropers that
 have a high energy, e.g.
 
 >>> from sire.units import kcal_per_mol
 >>> for improper in mols.impropers():
-...     if improper.energy() > 0.1 * kcal_per_mol:
+...     if improper.energy() > 0.05 * kcal_per_mol:
 ...         print(f"{improper} {improper.energy()}")
+Improper( CH3:2 <= C:5 => N:7 -- O:6 ) 0.0934184 kcal mol-1
+Improper( CA:9 <= C:15 => N:17 -- O:16 ) 0.118281 kcal mol-1
 
 Improper properties
 -------------------
@@ -138,7 +140,7 @@ The best way to do this is to use a cursor on the improper, e.g.
 >>> cursor = improper.cursor()
 >>> cursor["energy_kJ"] = improper.energy().to(kJ_per_mol)
 >>> print(cursor["energy_kJ"])
-0
+0.390863
 
 You can loop over lots of impropers to set their property, e.g.
 
@@ -146,8 +148,8 @@ You can loop over lots of impropers to set their property, e.g.
 >>> for improper in cursor.impropers():
 ...     improper["energy_kJ"] = improper.view().energy().to(kJ_per_mol)
 >>> mol = cursor.commit()
->>> print(mol.impropers()[1].property("energy_kJ"))
-0
+>>> print(mol.impropers()[0].property("energy_kJ"))
+0.390863
 
 Just for other properties, you can also use ``.apply()`` instead
 of a loop.
@@ -155,5 +157,5 @@ of a loop.
 >>> mol = mol.cursor().impropers().apply(
 ...    lambda improper: improper.set("energy_kJ", improper.view().energy().to(kJ_per_mol))
 ...   ).commit()
->>> print(mol.impropers()[1].property("energy_kJ"))
-0
+>>> print(mol.impropers()[0].property("energy_kJ"))
+0.390863
