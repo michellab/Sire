@@ -206,7 +206,7 @@ QString Improper::toString() const
     auto a2 = this->atom2();
     auto a3 = this->atom3();
 
-    return QObject::tr("Improper( %1:%2 >= %3:%4 = %5:%6 <= %7:%8 )")
+    return QObject::tr("Improper( %1:%2 <= %3:%4 => %5:%6 -- %7:%8 )")
             .arg(a0.name()).arg(a0.number())
             .arg(a1.name()).arg(a1.number())
             .arg(a2.name()).arg(a2.number())

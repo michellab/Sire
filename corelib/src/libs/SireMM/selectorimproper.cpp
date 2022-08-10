@@ -97,6 +97,20 @@ QList<ImproperID> _get_impropers(const MoleculeData &moldata,
     {
         auto funcs = moldata.property(map["improper"]).asA<FourAtomFunctions>();
 
+        bool have_connectivity = false;
+        Connectivity c;
+
+        if (moldata.hasProperty(map["connectivity"]))
+        {
+            try
+            {
+                c = moldata.property(map["connectivity"]).asA<Connectivity>();
+                have_connectivity = true;
+            }
+            catch(...)
+            {}
+        }
+
         const auto &molinfo = moldata.info();
 
         for (const auto &func : funcs.potentials())
@@ -106,8 +120,61 @@ QList<ImproperID> _get_impropers(const MoleculeData &moldata,
             auto atomidx2 = molinfo.atomIdx(func.atom2());
             auto atomidx3 = molinfo.atomIdx(func.atom3());
 
-            impropers.append(ImproperID(atomidx0, atomidx1,
-                                        atomidx2, atomidx3));
+            if (have_connectivity)
+            {
+                // we need to check the connectivity property too to find
+                // the bond and angles so we can identify the central
+                // atom in the improper
+                if (c.areConnected(atomidx0, atomidx1) and
+                    c.areConnected(atomidx2, atomidx1) and
+                    c.areConnected(atomidx3, atomidx1))
+                {
+                    // this is the expected order :-)
+                    impropers.append(ImproperID(atomidx0, atomidx1,
+                                                atomidx2, atomidx3));
+                }
+                else if (c.areConnected(atomidx0, atomidx2) and
+                         c.areConnected(atomidx1, atomidx2) and
+                         c.areConnected(atomidx3, atomidx2))
+                {
+                    //this is the reverse order
+                    impropers.append(ImproperID(atomidx0, atomidx2,
+                                                atomidx1, atomidx3));
+                }
+                else if (c.areConnected(atomidx0, atomidx1) and
+                         c.areConnected(atomidx0, atomidx2) and
+                         c.areConnected(atomidx0, atomidx3))
+                {
+                    //the first atom is the central atom - strange
+                    impropers.append(ImproperID(atomidx1, atomidx0,
+                                                atomidx2, atomidx3));
+                }
+                else if (c.areConnected(atomidx3, atomidx0) and
+                         c.areConnected(atomidx3, atomidx1) and
+                         c.areConnected(atomidx3, atomidx2))
+                {
+                    //the last atom is the central atom - strange
+                    impropers.append(ImproperID(atomidx0, atomidx3,
+                                                atomidx1, atomidx2));
+                }
+                else
+                {
+                    auto i = ImproperID(atomidx0, atomidx1,
+                                        atomidx2, atomidx3);
+
+                    qDebug() << i.toString()
+                             << "does not match the connectivity of the molecule.";
+
+                    impropers.append(i);
+                }
+            }
+            else
+            {
+                // we just have to trust this is right - normally from
+                // amber files the third atom is the central atom
+                impropers.append(ImproperID(atomidx0, atomidx2,
+                                            atomidx1, atomidx3));
+            }
         }
     }
 
@@ -403,16 +470,26 @@ SelectorImproper::SelectorImproper(const MoleculeView &mol,
     auto impropers = _to_int_set(_get_impropers(this->data(), map),
                                  this->data().info());
 
-    auto impropers01 = _filter(impropers, int_atoms0, 0);
-    impropers01 = _filter(impropers01, int_atoms1, 1);
+    auto impropers10 = _filter(impropers, int_atoms0, 1);
+    impropers10 = _filter(impropers10, int_atoms1, 0);
 
     auto impropers12 = _filter(impropers, int_atoms0, 1);
     impropers12 = _filter(impropers12, int_atoms1, 2);
 
-    auto impropers23 = _filter(impropers, int_atoms0, 2);
-    impropers23 = _filter(impropers23, int_atoms1, 3);
+    auto impropers13 = _filter(impropers, int_atoms0, 1);
+    impropers13 = _filter(impropers13, int_atoms1, 3);
 
-    imps = _from_int_set(impropers01 + impropers12 + impropers23);
+    auto impropers01 = _filter(impropers, int_atoms0, 0);
+    impropers01 = _filter(impropers01, int_atoms1, 1);
+
+    auto impropers21 = _filter(impropers, int_atoms0, 2);
+    impropers21 = _filter(impropers21, int_atoms1, 1);
+
+    auto impropers31 = _filter(impropers, int_atoms0, 3);
+    impropers31 = _filter(impropers31, int_atoms1, 1);
+
+    imps = _from_int_set(impropers10 + impropers12 + impropers13 +
+                         impropers01 + impropers21 + impropers31);
 }
 
 SelectorImproper::SelectorImproper(const MoleculeView &mol,
@@ -443,11 +520,28 @@ SelectorImproper::SelectorImproper(const MoleculeView &mol,
     impropers012 = _filter(impropers012, int_atoms1, 1);
     impropers012 = _filter(impropers012, int_atoms2, 2);
 
-    auto impropers123 = _filter(impropers, int_atoms0, 1);
-    impropers123 = _filter(impropers123, int_atoms1, 2);
-    impropers123 = _filter(impropers123, int_atoms2, 3);
+    auto impropers013 = _filter(impropers, int_atoms0, 0);
+    impropers013 = _filter(impropers013, int_atoms1, 1);
+    impropers013 = _filter(impropers013, int_atoms2, 3);
 
-    imps = _from_int_set(impropers012 + impropers123);
+    auto impropers213 = _filter(impropers, int_atoms0, 2);
+    impropers213 = _filter(impropers213, int_atoms1, 1);
+    impropers213 = _filter(impropers213, int_atoms2, 3);
+
+    auto impropers210 = _filter(impropers, int_atoms0, 2);
+    impropers210 = _filter(impropers210, int_atoms1, 1);
+    impropers210 = _filter(impropers210, int_atoms2, 0);
+
+    auto impropers310 = _filter(impropers, int_atoms0, 3);
+    impropers310 = _filter(impropers310, int_atoms1, 1);
+    impropers310 = _filter(impropers310, int_atoms2, 0);
+
+    auto impropers312 = _filter(impropers, int_atoms0, 3);
+    impropers312 = _filter(impropers312, int_atoms1, 1);
+    impropers312 = _filter(impropers312, int_atoms2, 2);
+
+    imps = _from_int_set(impropers012 + impropers013 + impropers213 +
+                         impropers210 + impropers310 + impropers312);
 }
 
 SelectorImproper::SelectorImproper(const MoleculeView &mol,
@@ -535,13 +629,23 @@ SelectorImproper::SelectorImproper(const Selector<Atom> &atoms0,
     auto impropers01 = _filter(impropers, int_atoms0, 0);
     impropers01 = _filter(impropers01, int_atoms1, 1);
 
+    auto impropers21 = _filter(impropers, int_atoms0, 2);
+    impropers21 = _filter(impropers21, int_atoms1, 1);
+
+    auto impropers31 = _filter(impropers, int_atoms0, 3);
+    impropers31 = _filter(impropers31, int_atoms1, 1);
+
+    auto impropers10 = _filter(impropers, int_atoms0, 1);
+    impropers10 = _filter(impropers10, int_atoms1, 0);
+
     auto impropers12 = _filter(impropers, int_atoms0, 1);
     impropers12 = _filter(impropers12, int_atoms1, 2);
 
-    auto impropers23 = _filter(impropers, int_atoms0, 2);
-    impropers23 = _filter(impropers23, int_atoms1, 3);
+    auto impropers13 = _filter(impropers, int_atoms0, 1);
+    impropers13 = _filter(impropers13, int_atoms1, 3);
 
-    imps = _from_int_set(impropers01 + impropers12 + impropers23);
+    imps = _from_int_set(impropers01 + impropers21 + impropers31 +
+                         impropers10 + impropers12 + impropers13);
 }
 
 SelectorImproper::SelectorImproper(const Selector<Atom> &atoms0,
@@ -572,11 +676,28 @@ SelectorImproper::SelectorImproper(const Selector<Atom> &atoms0,
     impropers012 = _filter(impropers012, int_atoms1, 1);
     impropers012 = _filter(impropers012, int_atoms2, 2);
 
-    auto impropers123 = _filter(impropers, int_atoms0, 1);
-    impropers123 = _filter(impropers123, int_atoms1, 2);
-    impropers123 = _filter(impropers123, int_atoms2, 3);
+    auto impropers013 = _filter(impropers, int_atoms0, 0);
+    impropers013 = _filter(impropers013, int_atoms1, 1);
+    impropers013 = _filter(impropers013, int_atoms2, 3);
 
-    imps = _from_int_set(impropers012 + impropers123);
+    auto impropers213 = _filter(impropers, int_atoms0, 2);
+    impropers213 = _filter(impropers213, int_atoms1, 1);
+    impropers213 = _filter(impropers213, int_atoms2, 3);
+
+    auto impropers210 = _filter(impropers, int_atoms0, 2);
+    impropers210 = _filter(impropers210, int_atoms1, 1);
+    impropers210 = _filter(impropers210, int_atoms2, 0);
+
+    auto impropers310 = _filter(impropers, int_atoms0, 3);
+    impropers310 = _filter(impropers310, int_atoms1, 1);
+    impropers310 = _filter(impropers310, int_atoms2, 0);
+
+    auto impropers312 = _filter(impropers, int_atoms0, 3);
+    impropers312 = _filter(impropers312, int_atoms1, 1);
+    impropers312 = _filter(impropers312, int_atoms2, 2);
+
+    imps = _from_int_set(impropers012 + impropers013 + impropers213 +
+                         impropers210 + impropers310 + impropers312);
 }
 
 SelectorImproper::SelectorImproper(const Selector<Atom> &atoms0,
