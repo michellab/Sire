@@ -1,6 +1,6 @@
-===================================
-Bond, Angle and Dihedral Properties
-===================================
+=========================
+Bond Views and Properties
+=========================
 
 The ``connectivity`` property, introduced in the last chapter,
 infers the presence of bonds, angles and dihedrals within a
@@ -8,7 +8,7 @@ molecule. The :class:`sire.mm.Bond`, :class:`sire.mm.Angle` and
 :class:`sire.mm.Dihedral` objects provide molecule views that
 can query their properties.
 
-Bond Views
+Bond views
 ----------
 
 The bonds in a molecule can be obtained using the ``.bonds()`` function,
@@ -80,7 +80,7 @@ make physical sense, while also reducing the risk of errors caused
 by mixing units.
 
 For example, the ``.energy()`` function on a :class:`~sire.mm.Bond` uses
-the algebraic expressions held in the ``bond`` property to calculate the
+the algebraic expressions held in the molecule's ``bond`` property to calculate the
 energy of the bond. This is reported in units of kilocalories per mole.
 
 >>> print(bond.energy())
@@ -105,6 +105,56 @@ or if you tried to add an energy to a length...
 UserWarning: SireError::incompatible_error: Units for values 1.09 angstrom
 and 2.0563e-10 kcal mol-1 are incompatible.
 (call sire.error.get_last_error_details() for more info)
+
+You can also get the lengths and energies of all bonds in a view, e.g.
+to get the lengths of all bonds in the first residue you could use;
+
+>>> print(mol["resnum 1"].bonds().lengths())
+[1.09 angstrom, 1.09 angstrom, 1.09 angstrom,
+ 1.54643 angstrom, 1.20803 angstrom]
+
+or to get the energies of all hydrogen-carbon bonds you
+would use
+
+>>> print(mol.bonds("element H", "element C").energies())
+[2.0563e-10 kcal mol-1, 1.65144e-09 kcal mol-1, 2.2471e-13 kcal mol-1,
+ 7.997e-09 kcal mol-1, 1.09482e-13 kcal mol-1, 8.56699e-11 kcal mol-1,
+ 1.22857e-09 kcal mol-1, 2.06535e-13 kcal mol-1, 5.18497e-09 kcal mol-1,
+ 4.39824e-11 kcal mol-1]
+
+You can also use the ``.energy()`` function on a collection to get
+the total energy of all bonds in a molecule...
+
+>>> print(mol.bonds().energy())
+4.54821 kcal mol-1
+
+...or even of all bonds in the molecules that have been loaded
+from the file.
+
+>>> print(mols.bonds().energy())
+4.54821 kcal mol-1
+
+This appears to be the same as the energy of the bonds in the first
+molecule. We can use slicing to get the energies of all bonds except
+for the first molecule.
+
+>>> print(mols[1:].bonds().energy())
+1.60207e-09 kcal mol-1
+
+We can find the bonds that have a high energy using a loop, e.g.
+
+>>> from sire.units import kcal_per_mol
+>>> for bond in mols.bonds():
+...     if bond.energy() > 0.1 * kcal_per_mol:
+...         print(bond, bond.energy())
+Bond( CH3:2 => C:5 ) 0.189213 kcal mol-1
+Bond( C:5 => O:6 ) 0.250565 kcal mol-1
+Bond( N:7 => CA:9 ) 0.27779 kcal mol-1
+Bond( CA:9 => C:15 ) 0.537132 kcal mol-1
+Bond( CA:9 => CB:11 ) 0.179525 kcal mol-1
+Bond( C:15 => O:16 ) 0.125648 kcal mol-1
+Bond( C:15 => N:17 ) 1.45641 kcal mol-1
+Bond( N:17 => CH3:19 ) 1.52335 kcal mol-1
 
 Bond properties
 ---------------
@@ -176,5 +226,3 @@ of a loop.
 ...   ).commit()
 >>> print(mol.bonds()[0].property("length"))
 1.42894 angstrom
-
-

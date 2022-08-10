@@ -618,7 +618,12 @@ def __fix_getitem(C):
     C.segments = __fixed__segments__
 
     C.count = C.__len__
-    C.size = C.__len__
+
+    if hasattr(C, "measure"):
+        # make sure we use the right `size` function
+        C.size = C.measure
+    else:
+        C.size = C.__len__
 
     if hasattr(C, "molecules"):
         if not hasattr(C, "__orig__molecules"):

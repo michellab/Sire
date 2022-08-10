@@ -72,12 +72,9 @@ class System:
     def numbers(self):
         return self.molecules().numbers()
 
-    def molecules(self, key=None):
+    def molecules(self, *args, **kwargs):
         if self._molecules is not None:
-            if key is None:
-                return self._molecules
-            else:
-                return self._molecules.molecules(key)
+            return self._molecules.molecules(*args, **kwargs)
 
         import sire.mol
         self._molecules = sire.mol.SelectorMol(self._system)
@@ -92,46 +89,61 @@ class System:
                 "bug and we will add support."
             )
 
-        return self.molecules(key)
+        return self.molecules(*args, **kwargs)
 
-    def segments(self, key=None):
-        if key is None:
-            return self.molecules().segments()
-        else:
-            return self.molecules().segments(key)
+    def segments(self, *args, **kwargs):
+        return self.molecules().segments(*args, **kwargs)
 
-    def chains(self, key=None):
-        if key is None:
-            return self.molecules().chains()
-        else:
-            return self.molecules().chains(key)
+    def chains(self, *args, **kwargs):
+        return self.molecules().chains(*args, **kwargs)
 
-    def residues(self, key=None):
-        if key is None:
-            return self.molecules().residues()
-        else:
-            return self.molecules().residues(key)
+    def residues(self, *args, **kwargs):
+        return self.molecules().residues(*args, **kwargs)
 
-    def atoms(self, key=None):
-        if key is None:
-            return self.molecules().atoms()
-        else:
-            return self.molecules().atoms(key)
+    def atoms(self, *args, **kwargs):
+        return self.molecules().atoms(*args, **kwargs)
 
-    def molecule(self, key):
-        return self.molecules().molecule(key)
+    def bonds(self, *args, **kwargs):
+        return self.molecules().bonds(*args, **kwargs)
 
-    def segment(self, key):
-        return self.molecules().segment(key)
+    def angles(self, *args, **kwargs):
+        return self.molecules().angles(*args, **kwargs)
 
-    def chain(self, key):
-        return self.molecules().chain(key)
+    def dihedrals(self, *args, **kwargs):
+        return self.molecules().dihedrals(*args, **kwargs)
 
-    def residue(self, key):
-        return self.molecules().residue(key)
+    def impropers(self, *args, **kwargs):
+        return self.molecules().impropers(*args, **kwargs)
 
-    def atom(self, key):
-        return self.molecules().atom(key)
+    def molecule(self, *args, **kwargs):
+        return self.molecules().molecule(*args, **kwargs)
+
+    def segment(self, *args, **kwargs):
+        return self.molecules().segment(*args, **kwargs)
+
+    def chain(self, *args, **kwargs):
+        return self.molecules().chain(*args, **kwargs)
+
+    def residue(self, *args, **kwargs):
+        return self.molecules().residue(*args, **kwargs)
+
+    def atom(self, *args, **kwargs):
+        return self.molecules().atom(*args, **kwargs)
+
+    def bond(self, *args, **kwargs):
+        return self.molecules().bond(*args, **kwargs)
+
+    def angle(self, *args, **kwargs):
+        return self.molecules().angle(*args, **kwargs)
+
+    def dihedral(self, *args, **kwargs):
+        return self.molecules().dihedral(*args, **kwargs)
+
+    def improper(self, *args, **kwargs):
+        return self.molecules().improper(*args, **kwargs)
+
+    def cursor(self):
+        return self.molecules().cursor()
 
     def update(self, value):
         self._molecules = None

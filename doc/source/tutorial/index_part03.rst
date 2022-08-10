@@ -291,3 +291,6 @@ across all of the views within molecules.
    part03/03_residue_properties
    part03/04_molecule_properties
    part03/05_bond_properties
+   part03/06_angle_properties
+   part03/07_dihedral_properties
+   part03/08_improper_properties
