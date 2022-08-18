@@ -51,6 +51,10 @@ void register_SelectorMImproper_class(){
         SelectorMImproper_exposer.def( bp::init< SireMM::SelectorMImproper const &, QList< long long > const & >(( bp::arg("impropers"), bp::arg("idxs") ), "") );
         SelectorMImproper_exposer.def( bp::init< SireMol::SelectResult const &, SireMol::ImproperID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("Improper"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorMImproper_exposer.def( bp::init< SireMol::SelectResult const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMImproper_exposer.def( bp::init< SireMol::SelectorM< SireMol::Atom > const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atoms"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMImproper_exposer.def( bp::init< SireMol::SelectorM< SireMol::Atom > const &, SireMol::SelectorM< SireMol::Atom > const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMImproper_exposer.def( bp::init< SireMol::SelectorM< SireMol::Atom > const &, SireMol::SelectorM< SireMol::Atom > const &, SireMol::SelectorM< SireMol::Atom > const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("atoms2"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMImproper_exposer.def( bp::init< SireMol::SelectorM< SireMol::Atom > const &, SireMol::SelectorM< SireMol::Atom > const &, SireMol::SelectorM< SireMol::Atom > const &, SireMol::SelectorM< SireMol::Atom > const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("atoms2"), bp::arg("atoms3"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorMImproper_exposer.def( bp::init< SireMM::SelectorMImproper const & >(( bp::arg("other") ), "") );
         { //::SireMM::SelectorMImproper::IDs
         

@@ -57,6 +57,8 @@ friend QDataStream& ::operator>>(QDataStream&, SelectorDihedral&);
 public:
     SelectorDihedral();
 
+    SelectorDihedral(const Dihedral &dihedral);
+
     SelectorDihedral(const SireMol::MoleculeData &molecule,
                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
 

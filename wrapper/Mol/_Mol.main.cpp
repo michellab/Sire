@@ -557,6 +557,10 @@ namespace bp = boost::python;
 
 #include "SireMol/moleculeinfo.h"
 
+#include "SireMol/selector.hpp"
+
+#include "SireMol/selectorm.hpp"
+
 BOOST_PYTHON_MODULE(_Mol){
     register_SireMol_objects();
 
@@ -1113,6 +1117,16 @@ BOOST_PYTHON_MODULE(_Mol){
     bp::implicitly_convertible< SireMol::MoleculeInfoData, SireMol::MoleculeInfo >();
 
     bp::implicitly_convertible< SireMol::MoleculeInfo, SireMol::MoleculeInfoData >();
+
+    bp::implicitly_convertible< SireMol::Selector<SireMol::Atom>, SireMol::SelectorM<SireMol::Atom> >();
+
+    bp::implicitly_convertible< SireMol::Selector<SireMol::Residue>, SireMol::SelectorM<SireMol::Residue> >();
+
+    bp::implicitly_convertible< SireMol::Selector<SireMol::CutGroup>, SireMol::SelectorM<SireMol::CutGroup> >();
+
+    bp::implicitly_convertible< SireMol::Selector<SireMol::Chain>, SireMol::SelectorM<SireMol::Chain> >();
+
+    bp::implicitly_convertible< SireMol::Selector<SireMol::Segment>, SireMol::SelectorM<SireMol::Segment> >();
 
     register_free_functions();
 }

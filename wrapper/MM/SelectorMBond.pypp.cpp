@@ -51,6 +51,8 @@ void register_SelectorMBond_class(){
         SelectorMBond_exposer.def( bp::init< SireMM::SelectorMBond const &, SireBase::Slice const & >(( bp::arg("bonds"), bp::arg("slice") ), "") );
         SelectorMBond_exposer.def( bp::init< SireMM::SelectorMBond const &, QList< long long > const & >(( bp::arg("bonds"), bp::arg("idxs") ), "") );
         SelectorMBond_exposer.def( bp::init< SireMol::SelectResult const &, SireMol::BondID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("bond"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMBond_exposer.def( bp::init< SireMol::SelectorM< SireMol::Atom > const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atoms"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMBond_exposer.def( bp::init< SireMol::SelectorM< SireMol::Atom > const &, SireMol::SelectorM< SireMol::Atom > const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorMBond_exposer.def( bp::init< SireMM::SelectorMBond const & >(( bp::arg("other") ), "") );
         { //::SireMM::SelectorMBond::IDs
         

@@ -90,6 +90,30 @@ SIREMM_EXPORT QDataStream& operator>>(QDataStream &ds, SelectorAngle &sangle)
 SelectorAngle::SelectorAngle() : ConcreteProperty<SelectorAngle, MoleculeView>()
 {}
 
+SelectorAngle::SelectorAngle(const Angle &angle)
+              : ConcreteProperty<SelectorAngle, MoleculeView>(angle)
+{
+    if (not angle.isEmpty())
+    {
+        auto atom0 = this->data().info().atomIdx(angle.ID().atom0());
+        auto atom1 = this->data().info().atomIdx(angle.ID().atom1());
+        auto atom2 = this->data().info().atomIdx(angle.ID().atom2());
+
+        if (atom0 > atom2)
+            qSwap(atom0, atom2);
+
+        if (atom0 == atom1 or atom0 == atom2 or atom1 == atom2)
+        {
+            // cannot add Angles to the same atom
+            this->operator=(SelectorAngle());
+        }
+        else
+        {
+            this->angs.append(AngleID(atom0, atom1, atom2));
+        }
+    }
+}
+
 SelectorAngle::SelectorAngle(const MoleculeView &mol,
                              const SireBase::PropertyMap &map)
      : ConcreteProperty<SelectorAngle, MoleculeView>(mol)

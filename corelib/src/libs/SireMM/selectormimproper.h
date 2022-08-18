@@ -105,6 +105,24 @@ public:
     SelectorMImproper(const SireMol::SelectResult &mols,
                       const SireBase::PropertyMap &map=SireBase::PropertyMap());
 
+    SelectorMImproper(const SireMol::SelectorM<SireMol::Atom> &atoms,
+                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorMImproper(const SireMol::SelectorM<SireMol::Atom> &atoms0,
+                      const SireMol::SelectorM<SireMol::Atom> &atoms1,
+                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorMImproper(const SireMol::SelectorM<SireMol::Atom> &atoms0,
+                      const SireMol::SelectorM<SireMol::Atom> &atoms1,
+                      const SireMol::SelectorM<SireMol::Atom> &atoms2,
+                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorMImproper(const SireMol::SelectorM<SireMol::Atom> &atoms0,
+                      const SireMol::SelectorM<SireMol::Atom> &atoms1,
+                      const SireMol::SelectorM<SireMol::Atom> &atoms2,
+                      const SireMol::SelectorM<SireMol::Atom> &atoms3,
+                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
     SelectorMImproper(const SelectorMImproper &other);
 
     virtual ~SelectorMImproper();
@@ -269,6 +287,7 @@ public:
 
 protected:
     void _append(const Improper &improper);
+    void _append(const SelectorImproper &impropers);
 
     /** The actual impropers */
     QList< SelectorImproper > imps;

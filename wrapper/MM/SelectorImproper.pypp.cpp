@@ -53,6 +53,7 @@ void register_SelectorImproper_class(){
         typedef bp::class_< SireMM::SelectorImproper, bp::bases< SireMol::MoleculeView, SireBase::Property > > SelectorImproper_exposer_t;
         SelectorImproper_exposer_t SelectorImproper_exposer = SelectorImproper_exposer_t( "SelectorImproper", "This provides a Selector<T>-style interface for multiple impropers", bp::init< >("") );
         bp::scope SelectorImproper_scope( SelectorImproper_exposer );
+        SelectorImproper_exposer.def( bp::init< SireMM::Improper const & >(( bp::arg("improper") ), "") );
         SelectorImproper_exposer.def( bp::init< SireMol::MoleculeData const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorImproper_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorImproper_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("atom"), bp::arg("map")=SireBase::PropertyMap() ), "") );

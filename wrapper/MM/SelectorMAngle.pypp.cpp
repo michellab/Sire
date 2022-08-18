@@ -51,6 +51,9 @@ void register_SelectorMAngle_class(){
         SelectorMAngle_exposer.def( bp::init< SireMM::SelectorMAngle const &, SireBase::Slice const & >(( bp::arg("angles"), bp::arg("slice") ), "") );
         SelectorMAngle_exposer.def( bp::init< SireMM::SelectorMAngle const &, QList< long long > const & >(( bp::arg("angles"), bp::arg("idxs") ), "") );
         SelectorMAngle_exposer.def( bp::init< SireMol::SelectResult const &, SireMol::AngleID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mols"), bp::arg("angle"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMAngle_exposer.def( bp::init< SireMol::SelectorM< SireMol::Atom > const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atoms"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMAngle_exposer.def( bp::init< SireMol::SelectorM< SireMol::Atom > const &, SireMol::SelectorM< SireMol::Atom > const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorMAngle_exposer.def( bp::init< SireMol::SelectorM< SireMol::Atom > const &, SireMol::SelectorM< SireMol::Atom > const &, SireMol::SelectorM< SireMol::Atom > const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("atoms2"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorMAngle_exposer.def( bp::init< SireMM::SelectorMAngle const & >(( bp::arg("other") ), "") );
         { //::SireMM::SelectorMAngle::IDs
         

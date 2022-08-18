@@ -82,7 +82,8 @@ SelectorMDihedral::SelectorMDihedral()
 SelectorMDihedral::SelectorMDihedral(const Dihedral &view)
                   : ConcreteProperty<SelectorMDihedral, Property>()
 {
-    dihs.append(SelectorDihedral(view));
+    if (not view.isEmpty())
+        dihs.append(SelectorDihedral(view));
 }
 
 SelectorMDihedral::SelectorMDihedral(const Molecules &mols,
@@ -225,6 +226,22 @@ SelectorMDihedral::SelectorMDihedral(const SelectorMol &mols,
     }
 }
 
+void SelectorMDihedral::_append(const SelectorDihedral &dihedrals)
+{
+    if (dihedrals.isEmpty())
+        return;
+
+    if (this->dihs.isEmpty())
+        this->dihs.append(dihedrals);
+    else
+    {
+        for (int i=0; i<dihedrals.count(); ++i)
+        {
+            this->_append(dihedrals(i));
+        }
+    }
+}
+
 void SelectorMDihedral::_append(const Dihedral &dihedral)
 {
     if (this->dihs.isEmpty())
@@ -261,6 +278,101 @@ SelectorMDihedral::SelectorMDihedral(const SelectorMDihedral &dihedrals,
     for (const auto &idx : idxs)
     {
         this->_append(dihedrals[idx]);
+    }
+}
+
+SelectorMDihedral::SelectorMDihedral(const SelectorM<Atom> &atoms,
+                               const PropertyMap &map)
+                  : ConcreteProperty<SelectorMDihedral, Property>()
+{
+    for (const auto &mol_atoms : atoms)
+    {
+        const auto dihedrals = SelectorDihedral(mol_atoms, map);
+        this->_append(dihedrals);
+    }
+}
+
+SelectorMDihedral::SelectorMDihedral(const SelectorM<Atom> &atoms0,
+                                     const SelectorM<Atom> &atoms1,
+                                     const PropertyMap &map)
+              : ConcreteProperty<SelectorMDihedral, Property>()
+{
+    for (const auto &mol_atoms0 : atoms0)
+    {
+        for (const auto &mol_atoms1 : atoms1)
+        {
+            if (mol_atoms0.isSameMolecule(mol_atoms1))
+            {
+                const auto dihedrals = SelectorDihedral(mol_atoms0,
+                                                        mol_atoms1, map);
+                this->_append(dihedrals);
+            }
+        }
+    }
+}
+
+SelectorMDihedral::SelectorMDihedral(const SelectorM<Atom> &atoms0,
+                                     const SelectorM<Atom> &atoms1,
+                                     const SelectorM<Atom> &atoms2,
+                                     const PropertyMap &map)
+                  : ConcreteProperty<SelectorMDihedral, Property>()
+{
+    for (const auto &mol_atoms0 : atoms0)
+    {
+        for (const auto &mol_atoms1 : atoms1)
+        {
+            if (mol_atoms0.isSameMolecule(mol_atoms1))
+            {
+                for (const auto &mol_atoms2 : atoms2)
+                {
+                    if (mol_atoms0.isSameMolecule(mol_atoms2))
+                    {
+                        const auto dihedrals = SelectorDihedral(
+                                                           mol_atoms0,
+                                                           mol_atoms1,
+                                                           mol_atoms2, map);
+                        this->_append(dihedrals);
+                    }
+                }
+            }
+        }
+    }
+}
+
+SelectorMDihedral::SelectorMDihedral(const SelectorM<Atom> &atoms0,
+                                     const SelectorM<Atom> &atoms1,
+                                     const SelectorM<Atom> &atoms2,
+                                     const SelectorM<Atom> &atoms3,
+                                     const PropertyMap &map)
+                  : ConcreteProperty<SelectorMDihedral, Property>()
+{
+    for (const auto &mol_atoms0 : atoms0)
+    {
+        for (const auto &mol_atoms1 : atoms1)
+        {
+            if (mol_atoms0.isSameMolecule(mol_atoms1))
+            {
+                for (const auto &mol_atoms2 : atoms2)
+                {
+                    if (mol_atoms0.isSameMolecule(mol_atoms2))
+                    {
+                        for (const auto &mol_atoms3 : atoms3)
+                        {
+                            if (mol_atoms0.isSameMolecule(mol_atoms3))
+                            {
+                                const auto dihedrals = SelectorDihedral(
+                                                                   mol_atoms0,
+                                                                   mol_atoms1,
+                                                                   mol_atoms2,
+                                                                   mol_atoms3,
+                                                                   map);
+                                this->_append(dihedrals);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

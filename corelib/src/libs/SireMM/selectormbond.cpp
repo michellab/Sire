@@ -82,7 +82,8 @@ SelectorMBond::SelectorMBond()
 SelectorMBond::SelectorMBond(const Bond &view)
               : ConcreteProperty<SelectorMBond, Property>()
 {
-    bnds.append(SelectorBond(view));
+    if (not view.isEmpty())
+        bnds.append(SelectorBond(view));
 }
 
 SelectorMBond::SelectorMBond(const Molecules &mols,
@@ -199,6 +200,35 @@ SelectorMBond::SelectorMBond(const SelectResult &mols, const BondID &bond,
     }
 }
 
+SelectorMBond::SelectorMBond(const SelectorM<Atom> &atoms,
+                             const PropertyMap &map)
+              : ConcreteProperty<SelectorMBond, Property>()
+{
+    for (const auto &mol_atoms : atoms)
+    {
+        const auto bonds = SelectorBond(mol_atoms, map);
+        this->_append(bonds);
+    }
+}
+
+SelectorMBond::SelectorMBond(const SelectorM<Atom> &atoms0,
+                             const SelectorM<Atom> &atoms1,
+                             const PropertyMap &map)
+              : ConcreteProperty<SelectorMBond, Property>()
+{
+    for (const auto &mol_atoms0 : atoms0)
+    {
+        for (const auto &mol_atoms1 : atoms1)
+        {
+            if (mol_atoms0.isSameMolecule(mol_atoms1))
+            {
+                const auto bonds = SelectorBond(mol_atoms0, mol_atoms1, map);
+                this->_append(bonds);
+            }
+        }
+    }
+}
+
 SelectorMBond::SelectorMBond(const SelectorBond &bonds)
               : ConcreteProperty<SelectorMBond, Property>()
 {
@@ -220,6 +250,22 @@ SelectorMBond::SelectorMBond(const SelectorMol &mols,
 
             if (not b.isEmpty())
                 bnds.append(b);
+        }
+    }
+}
+
+void SelectorMBond::_append(const SelectorBond &bonds)
+{
+    if (bonds.isEmpty())
+        return;
+
+    if (this->bnds.isEmpty())
+        this->bnds.append(bonds);
+    else
+    {
+        for (int i=0; i<bonds.count(); ++i)
+        {
+            this->_append(bonds(i));
         }
     }
 }

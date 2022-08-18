@@ -78,6 +78,7 @@ public:
 
     SelectorMDihedral();
     SelectorMDihedral(const Dihedral &view);
+
     SelectorMDihedral(const SireMol::Molecules &mols,
                       const SireBase::PropertyMap &map=SireBase::PropertyMap());
     SelectorMDihedral(const SireMol::MoleculeGroup &mols,
@@ -101,6 +102,24 @@ public:
     SelectorMDihedral(const SireMol::SelectResult &mols,
                       const SireMol::DihedralID &Dihedral,
                       const SireBase::PropertyMap &map=SireBase::PropertyMap());
+
+    SelectorMDihedral(const SireMol::SelectorM<SireMol::Atom> &atoms,
+                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorMDihedral(const SireMol::SelectorM<SireMol::Atom> &atoms0,
+                      const SireMol::SelectorM<SireMol::Atom> &atoms1,
+                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorMDihedral(const SireMol::SelectorM<SireMol::Atom> &atoms0,
+                      const SireMol::SelectorM<SireMol::Atom> &atoms1,
+                      const SireMol::SelectorM<SireMol::Atom> &atoms2,
+                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorMDihedral(const SireMol::SelectorM<SireMol::Atom> &atoms0,
+                      const SireMol::SelectorM<SireMol::Atom> &atoms1,
+                      const SireMol::SelectorM<SireMol::Atom> &atoms2,
+                      const SireMol::SelectorM<SireMol::Atom> &atoms3,
+                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SelectorMDihedral(const SelectorMDihedral &other);
 
@@ -266,6 +285,7 @@ public:
 
 protected:
     void _append(const Dihedral &dihedral);
+    void _append(const SelectorDihedral &dihedrals);
 
     /** The actual dihedrals */
     QList< SelectorDihedral > dihs;

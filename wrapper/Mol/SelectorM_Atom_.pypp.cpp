@@ -66,6 +66,7 @@ void register_SelectorM_Atom__class(){
         SelectorM_Atom__exposer_t SelectorM_Atom__exposer = SelectorM_Atom__exposer_t( "SelectorM_Atom_", "", bp::init< >("") );
         bp::scope SelectorM_Atom__scope( SelectorM_Atom__exposer );
         SelectorM_Atom__exposer.def( bp::init< SireMol::Atom const & >(( bp::arg("view") ), "") );
+        SelectorM_Atom__exposer.def( bp::init< SireMol::Selector< SireMol::Atom > const & >(( bp::arg("views") ), "") );
         SelectorM_Atom__exposer.def( bp::init< SireMol::Molecules const & >(( bp::arg("mols") ), "") );
         SelectorM_Atom__exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("mols") ), "") );
         SelectorM_Atom__exposer.def( bp::init< SireMol::MolGroupsBase const & >(( bp::arg("mols") ), "") );

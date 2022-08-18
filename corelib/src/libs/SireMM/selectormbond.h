@@ -79,6 +79,7 @@ public:
 
     SelectorMBond();
     SelectorMBond(const Bond &view);
+
     SelectorMBond(const SireMol::Molecules &mols,
                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
     SelectorMBond(const SireMol::MoleculeGroup &mols,
@@ -87,6 +88,7 @@ public:
                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
     SelectorMBond(const SireMol::SelectResult &mols,
                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
     SelectorMBond(const SelectorBond &bonds);
 
     SelectorMBond(const SireMol::SelectorMol &mols,
@@ -101,6 +103,13 @@ public:
 
     SelectorMBond(const SireMol::SelectResult &mols,
                   const SireMol::BondID &bond,
+                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorMBond(const SireMol::SelectorM<SireMol::Atom> &atoms,
+                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorMBond(const SireMol::SelectorM<SireMol::Atom> &atoms0,
+                  const SireMol::SelectorM<SireMol::Atom> &atoms1,
                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SelectorMBond(const SelectorMBond &other);
@@ -267,6 +276,7 @@ public:
 
 protected:
     void _append(const Bond &bond);
+    void _append(const SelectorBond &bonds);
 
     /** The actual bonds */
     QList< SelectorBond > bnds;

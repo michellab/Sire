@@ -78,6 +78,8 @@ def _pythonize(C, delete_old: bool=True) -> None:
         # change 'ID()' into 'id()'
         if new_attr == "ID":
             new_attr = "id"
+        elif new_attr == "IDs":
+            new_attr = "ids"
 
         # change all caps into lowercase
         if new_attr.isupper():

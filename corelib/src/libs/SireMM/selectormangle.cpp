@@ -82,7 +82,8 @@ SelectorMAngle::SelectorMAngle()
 SelectorMAngle::SelectorMAngle(const Angle &view)
                : ConcreteProperty<SelectorMAngle, Property>()
 {
-    angs.append(SelectorAngle(view));
+    if (not view.isEmpty())
+        angs.append(SelectorAngle(view));
 }
 
 SelectorMAngle::SelectorMAngle(const Molecules &mols,
@@ -225,6 +226,22 @@ SelectorMAngle::SelectorMAngle(const SelectorMol &mols,
     }
 }
 
+void SelectorMAngle::_append(const SelectorAngle &angles)
+{
+    if (angles.isEmpty())
+        return;
+
+    if (this->angs.isEmpty())
+        this->angs.append(angles);
+    else
+    {
+        for (int i=0; i<angles.count(); ++i)
+        {
+            this->_append(angles(i));
+        }
+    }
+}
+
 void SelectorMAngle::_append(const Angle &angle)
 {
     if (this->angs.isEmpty())
@@ -261,6 +278,63 @@ SelectorMAngle::SelectorMAngle(const SelectorMAngle &angles,
     for (const auto &idx : idxs)
     {
         this->_append(angles[idx]);
+    }
+}
+
+SelectorMAngle::SelectorMAngle(const SelectorM<Atom> &atoms,
+                               const PropertyMap &map)
+               : ConcreteProperty<SelectorMAngle, Property>()
+{
+    for (const auto &mol_atoms : atoms)
+    {
+        const auto angles = SelectorAngle(mol_atoms, map);
+        this->_append(angles);
+    }
+}
+
+SelectorMAngle::SelectorMAngle(const SelectorM<Atom> &atoms0,
+                               const SelectorM<Atom> &atoms1,
+                               const PropertyMap &map)
+              : ConcreteProperty<SelectorMAngle, Property>()
+{
+    for (const auto &mol_atoms0 : atoms0)
+    {
+        for (const auto &mol_atoms1 : atoms1)
+        {
+            if (mol_atoms0.isSameMolecule(mol_atoms1))
+            {
+                const auto angles = SelectorAngle(mol_atoms0, mol_atoms1, map);
+                this->_append(angles);
+            }
+        }
+    }
+}
+
+SelectorMAngle::SelectorMAngle(const SelectorM<Atom> &atoms0,
+                               const SelectorM<Atom> &atoms1,
+                               const SelectorM<Atom> &atoms2,
+                               const PropertyMap &map)
+              : ConcreteProperty<SelectorMAngle, Property>()
+{
+    for (const auto &mol_atoms0 : atoms0)
+    {
+        for (const auto &mol_atoms1 : atoms1)
+        {
+            if (mol_atoms0.isSameMolecule(mol_atoms1))
+            {
+                for (const auto &mol_atoms2 : atoms2)
+                {
+                    if (mol_atoms0.isSameMolecule(mol_atoms2))
+                    {
+                        const auto angles = SelectorAngle(mol_atoms0,
+                                                          mol_atoms1,
+                                                          mol_atoms2, map);
+
+                        this->_append(angles);
+                    }
+                }
+            }
+        }
     }
 }
 

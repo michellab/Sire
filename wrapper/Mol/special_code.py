@@ -461,7 +461,13 @@ implicitly_convertible = [ ("SireMol::AtomID", "SireMol::AtomIdentifier"),
                            ("SireMol::MoleculeView", "SireMol::MoleculeData"),
                            ("SireMol::MoleculeView", "SireMol::PartialMolecule"),
                            ("SireMol::MoleculeInfoData", "SireMol::MoleculeInfo"),
-                           ("SireMol::MoleculeInfo", "SireMol::MoleculeInfoData") ]
+                           ("SireMol::MoleculeInfo", "SireMol::MoleculeInfoData"),
+                           ("SireMol::Selector<SireMol::Atom>", "SireMol::SelectorM<SireMol::Atom>"),
+                           ("SireMol::Selector<SireMol::Residue>", "SireMol::SelectorM<SireMol::Residue>"),
+                           ("SireMol::Selector<SireMol::CutGroup>", "SireMol::SelectorM<SireMol::CutGroup>"),
+                           ("SireMol::Selector<SireMol::Chain>", "SireMol::SelectorM<SireMol::Chain>"),
+                           ("SireMol::Selector<SireMol::Segment>", "SireMol::SelectorM<SireMol::Segment>"),
+                         ]
 
 def fixMB(mb):
     mb.add_declaration_code("#include \"SireMol/moleculedata.h\"")
@@ -470,3 +476,5 @@ def fixMB(mb):
     mb.add_declaration_code("#include \"SireMol/mover.hpp\"")
     mb.add_declaration_code("#include \"SireMol/mgidentifier.h\"")
     mb.add_declaration_code("#include \"SireMol/moleculeinfo.h\"")
+    mb.add_declaration_code("#include \"SireMol/selector.hpp\"")
+    mb.add_declaration_code("#include \"SireMol/selectorm.hpp\"")

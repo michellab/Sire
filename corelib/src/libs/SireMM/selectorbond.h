@@ -57,6 +57,8 @@ friend QDataStream& ::operator>>(QDataStream&, SelectorBond&);
 public:
     SelectorBond();
 
+    SelectorBond(const Bond &bond);
+
     SelectorBond(const SireMol::MoleculeData &molecule,
                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
 

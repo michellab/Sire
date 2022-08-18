@@ -118,9 +118,32 @@ SelectorBond::SelectorBond(const MoleculeView &mol,
     }
 }
 
+SelectorBond::SelectorBond(const Bond &bond)
+             : ConcreteProperty<SelectorBond, MoleculeView>(bond)
+{
+    if (not bond.isEmpty())
+    {
+        auto atom0 = this->data().info().atomIdx(bond.ID().atom0());
+        auto atom1 = this->data().info().atomIdx(bond.ID().atom1());
+
+        if (atom0 > atom1)
+            qSwap(atom0, atom1);
+
+        if (atom0 == atom1)
+        {
+            // cannot add bonds to the same atom
+            this->operator=(SelectorBond());
+        }
+        else
+        {
+            this->bnds.append(BondID(atom0, atom1));
+        }
+    }
+}
+
 SelectorBond::SelectorBond(const MoleculeData &moldata,
                            const SireBase::PropertyMap &map)
-     : ConcreteProperty<SelectorBond, MoleculeView>()
+             : ConcreteProperty<SelectorBond, MoleculeView>()
 {
     this->operator=(SelectorBond(Molecule(moldata), map));
 }

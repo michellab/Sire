@@ -113,9 +113,12 @@ def __is_cutgroup_class(obj):
 
 
 def __is_selector_class(obj):
-    t = obj.what()
-    return t.find("SireMol::Selector") != -1 or \
-                t.find("SireMM::Selector") != -1
+    try:
+        t = obj.what()
+        return t.find("SireMol::Selector") != -1 or \
+                    t.find("SireMM::Selector") != -1
+    except Exception:
+        return False
 
 
 def __is_internal_class(obj):

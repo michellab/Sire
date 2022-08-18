@@ -88,6 +88,35 @@ SIREMM_EXPORT QDataStream& operator>>(QDataStream &ds, SelectorDihedral &sdihedr
 SelectorDihedral::SelectorDihedral() : ConcreteProperty<SelectorDihedral, MoleculeView>()
 {}
 
+SelectorDihedral::SelectorDihedral(const Dihedral &dihedral)
+                 : ConcreteProperty<SelectorDihedral, MoleculeView>(dihedral)
+{
+    if (not dihedral.isEmpty())
+    {
+        auto atom0 = this->data().info().atomIdx(dihedral.ID().atom0());
+        auto atom1 = this->data().info().atomIdx(dihedral.ID().atom1());
+        auto atom2 = this->data().info().atomIdx(dihedral.ID().atom2());
+        auto atom3 = this->data().info().atomIdx(dihedral.ID().atom3());
+
+        if (atom0 > atom3)
+        {
+            qSwap(atom0, atom3);
+            qSwap(atom1, atom2);
+        }
+
+        if (atom0 == atom1 or atom0 == atom2 or atom0 == atom3 or
+            atom1 == atom2 or atom1 == atom3 or atom2 == atom3)
+        {
+            // cannot add Dihedrals to the same atom
+            this->operator=(SelectorDihedral());
+        }
+        else
+        {
+            this->dihs.append(DihedralID(atom0, atom1, atom2, atom3));
+        }
+    }
+}
+
 SelectorDihedral::SelectorDihedral(const MoleculeView &mol,
                                    const SireBase::PropertyMap &map)
                  : ConcreteProperty<SelectorDihedral, MoleculeView>(mol)

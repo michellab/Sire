@@ -78,6 +78,7 @@ public:
 
     SelectorMAngle();
     SelectorMAngle(const Angle &view);
+
     SelectorMAngle(const SireMol::Molecules &mols,
                    const SireBase::PropertyMap &map = SireBase::PropertyMap());
     SelectorMAngle(const SireMol::MoleculeGroup &mols,
@@ -100,6 +101,18 @@ public:
 
     SelectorMAngle(const SireMol::SelectResult &mols,
                    const SireMol::AngleID &angle,
+                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorMAngle(const SireMol::SelectorM<SireMol::Atom> &atoms,
+                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorMAngle(const SireMol::SelectorM<SireMol::Atom> &atoms0,
+                   const SireMol::SelectorM<SireMol::Atom> &atoms1,
+                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorMAngle(const SireMol::SelectorM<SireMol::Atom> &atoms0,
+                   const SireMol::SelectorM<SireMol::Atom> &atoms1,
+                   const SireMol::SelectorM<SireMol::Atom> &atoms2,
                    const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SelectorMAngle(const SelectorMAngle &other);
@@ -266,6 +279,7 @@ public:
 
 protected:
     void _append(const Angle &angle);
+    void _append(const SelectorAngle &angles);
 
     /** The actual angles */
     QList< SelectorAngle > angs;

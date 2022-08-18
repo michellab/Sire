@@ -57,6 +57,8 @@ friend QDataStream& ::operator>>(QDataStream&, SelectorImproper&);
 public:
     SelectorImproper();
 
+    SelectorImproper(const Improper &improper);
+
     SelectorImproper(const SireMol::MoleculeData &molecule,
                      const SireBase::PropertyMap &map = SireBase::PropertyMap());
 

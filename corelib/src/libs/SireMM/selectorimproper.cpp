@@ -88,6 +88,30 @@ SIREMM_EXPORT QDataStream& operator>>(QDataStream &ds, SelectorImproper &simprop
 SelectorImproper::SelectorImproper() : ConcreteProperty<SelectorImproper, MoleculeView>()
 {}
 
+SelectorImproper::SelectorImproper(const Improper &improper)
+                 : ConcreteProperty<SelectorImproper, MoleculeView>(improper)
+{
+    if (not improper.isEmpty())
+    {
+        auto atom0 = this->data().info().atomIdx(improper.ID().atom0());
+        auto atom1 = this->data().info().atomIdx(improper.ID().atom1());
+        auto atom2 = this->data().info().atomIdx(improper.ID().atom2());
+        auto atom3 = this->data().info().atomIdx(improper.ID().atom3());
+
+
+        if (atom0 == atom1 or atom0 == atom2 or atom0 == atom3 or
+            atom1 == atom2 or atom1 == atom3 or atom2 == atom3)
+        {
+            // cannot add Impropers to the same atom
+            this->operator=(SelectorImproper());
+        }
+        else
+        {
+            this->imps.append(ImproperID(atom0, atom1, atom2, atom3));
+        }
+    }
+}
+
 inline
 QSet<IDQuad> _to_int_set(const QList<ImproperID> &vals,
                          const MoleculeInfoData &molinfo)

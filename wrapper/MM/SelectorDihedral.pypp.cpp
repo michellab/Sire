@@ -53,6 +53,7 @@ void register_SelectorDihedral_class(){
         typedef bp::class_< SireMM::SelectorDihedral, bp::bases< SireMol::MoleculeView, SireBase::Property > > SelectorDihedral_exposer_t;
         SelectorDihedral_exposer_t SelectorDihedral_exposer = SelectorDihedral_exposer_t( "SelectorDihedral", "This provides a Selector<T>-style interface for multiple dihedrals", bp::init< >("") );
         bp::scope SelectorDihedral_scope( SelectorDihedral_exposer );
+        SelectorDihedral_exposer.def( bp::init< SireMM::Dihedral const & >(( bp::arg("dihedral") ), "") );
         SelectorDihedral_exposer.def( bp::init< SireMol::MoleculeData const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorDihedral_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorDihedral_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("atom"), bp::arg("map")=SireBase::PropertyMap() ), "") );

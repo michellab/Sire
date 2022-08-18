@@ -82,7 +82,8 @@ SelectorMImproper::SelectorMImproper()
 SelectorMImproper::SelectorMImproper(const Improper &view)
                   : ConcreteProperty<SelectorMImproper, Property>()
 {
-    imps.append(SelectorImproper(view));
+    if (not view.isEmpty())
+        imps.append(SelectorImproper(view));
 }
 
 SelectorMImproper::SelectorMImproper(const Molecules &mols,
@@ -225,6 +226,22 @@ SelectorMImproper::SelectorMImproper(const SelectorMol &mols,
     }
 }
 
+void SelectorMImproper::_append(const SelectorImproper &impropers)
+{
+    if (impropers.isEmpty())
+        return;
+
+    if (this->imps.isEmpty())
+        this->imps.append(impropers);
+    else
+    {
+        for (int i=0; i<impropers.count(); ++i)
+        {
+            this->_append(impropers(i));
+        }
+    }
+}
+
 void SelectorMImproper::_append(const Improper &improper)
 {
     if (this->imps.isEmpty())
@@ -261,6 +278,101 @@ SelectorMImproper::SelectorMImproper(const SelectorMImproper &impropers,
     for (const auto &idx : idxs)
     {
         this->_append(impropers[idx]);
+    }
+}
+
+SelectorMImproper::SelectorMImproper(const SelectorM<Atom> &atoms,
+                                     const PropertyMap &map)
+                  : ConcreteProperty<SelectorMImproper, Property>()
+{
+    for (const auto &mol_atoms : atoms)
+    {
+        const auto impropers = SelectorImproper(mol_atoms, map);
+        this->_append(impropers);
+    }
+}
+
+SelectorMImproper::SelectorMImproper(const SelectorM<Atom> &atoms0,
+                                     const SelectorM<Atom> &atoms1,
+                                     const PropertyMap &map)
+              : ConcreteProperty<SelectorMImproper, Property>()
+{
+    for (const auto &mol_atoms0 : atoms0)
+    {
+        for (const auto &mol_atoms1 : atoms1)
+        {
+            if (mol_atoms0.isSameMolecule(mol_atoms1))
+            {
+                const auto impropers = SelectorImproper(mol_atoms0,
+                                                        mol_atoms1, map);
+                this->_append(impropers);
+            }
+        }
+    }
+}
+
+SelectorMImproper::SelectorMImproper(const SelectorM<Atom> &atoms0,
+                                     const SelectorM<Atom> &atoms1,
+                                     const SelectorM<Atom> &atoms2,
+                                     const PropertyMap &map)
+                  : ConcreteProperty<SelectorMImproper, Property>()
+{
+    for (const auto &mol_atoms0 : atoms0)
+    {
+        for (const auto &mol_atoms1 : atoms1)
+        {
+            if (mol_atoms0.isSameMolecule(mol_atoms1))
+            {
+                for (const auto &mol_atoms2 : atoms2)
+                {
+                    if (mol_atoms0.isSameMolecule(mol_atoms2))
+                    {
+                        const auto impropers = SelectorImproper(
+                                                           mol_atoms0,
+                                                           mol_atoms1,
+                                                           mol_atoms2, map);
+                        this->_append(impropers);
+                    }
+                }
+            }
+        }
+    }
+}
+
+SelectorMImproper::SelectorMImproper(const SelectorM<Atom> &atoms0,
+                                     const SelectorM<Atom> &atoms1,
+                                     const SelectorM<Atom> &atoms2,
+                                     const SelectorM<Atom> &atoms3,
+                                     const PropertyMap &map)
+                  : ConcreteProperty<SelectorMImproper, Property>()
+{
+    for (const auto &mol_atoms0 : atoms0)
+    {
+        for (const auto &mol_atoms1 : atoms1)
+        {
+            if (mol_atoms0.isSameMolecule(mol_atoms1))
+            {
+                for (const auto &mol_atoms2 : atoms2)
+                {
+                    if (mol_atoms0.isSameMolecule(mol_atoms2))
+                    {
+                        for (const auto &mol_atoms3 : atoms3)
+                        {
+                            if (mol_atoms0.isSameMolecule(mol_atoms3))
+                            {
+                                const auto impropers = SelectorImproper(
+                                                                   mol_atoms0,
+                                                                   mol_atoms1,
+                                                                   mol_atoms2,
+                                                                   mol_atoms3,
+                                                                   map);
+                                this->_append(impropers);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

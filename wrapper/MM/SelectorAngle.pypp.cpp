@@ -53,6 +53,7 @@ void register_SelectorAngle_class(){
         typedef bp::class_< SireMM::SelectorAngle, bp::bases< SireMol::MoleculeView, SireBase::Property > > SelectorAngle_exposer_t;
         SelectorAngle_exposer_t SelectorAngle_exposer = SelectorAngle_exposer_t( "SelectorAngle", "This provides a Selector<T>-style interface for multiple angles", bp::init< >("") );
         bp::scope SelectorAngle_scope( SelectorAngle_exposer );
+        SelectorAngle_exposer.def( bp::init< SireMM::Angle const & >(( bp::arg("angle") ), "") );
         SelectorAngle_exposer.def( bp::init< SireMol::MoleculeData const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorAngle_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorAngle_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("atom"), bp::arg("map")=SireBase::PropertyMap() ), "") );

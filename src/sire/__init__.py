@@ -608,3 +608,4 @@ config.version_string = _version_string
 from ._pythonize import *
 from ._load import *
 from ._thumbsup import *
+from ._measure import *

@@ -53,6 +53,7 @@ void register_SelectorBond_class(){
         typedef bp::class_< SireMM::SelectorBond, bp::bases< SireMol::MoleculeView, SireBase::Property > > SelectorBond_exposer_t;
         SelectorBond_exposer_t SelectorBond_exposer = SelectorBond_exposer_t( "SelectorBond", "This provides a Selector<T>-style interface for multiple bonds", bp::init< >("") );
         bp::scope SelectorBond_scope( SelectorBond_exposer );
+        SelectorBond_exposer.def( bp::init< SireMM::Bond const & >(( bp::arg("bond") ), "") );
         SelectorBond_exposer.def( bp::init< SireMol::MoleculeData const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorBond_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorBond_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("atom"), bp::arg("map")=SireBase::PropertyMap() ), "") );

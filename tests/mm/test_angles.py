@@ -66,3 +66,25 @@ def test_angle_cursor(ala_mols):
     for i, angle in enumerate(mol.angles()):
         assert angle.property("count").value() == i
         assert angle.property("count_string").value() == f"string_{i}"
+
+
+def test_multi_angles(ala_mols):
+    mols = ala_mols
+
+    from sire.mm import SelectorMAngle
+
+    mol = mols[4]
+
+    angs = SelectorMAngle(mol.atoms("element H"), mol.atoms("element O"), mol.atoms("element H"))
+
+    for ang in angs:
+        assert ang[0].element().num_protons() == 1
+        assert ang[1].element().num_protons() == 8
+        assert ang[2].element().num_protons() == 1
+
+    angs = mols.angles("element H", "element O", "element H")
+
+    for ang in angs:
+        assert ang[0].element().num_protons() == 1
+        assert ang[1].element().num_protons() == 8
+        assert ang[2].element().num_protons() == 1

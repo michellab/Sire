@@ -27,6 +27,7 @@ Getting Started
    index_part01
    index_part02
    index_part03
+   index_part04
 
 Intermediate Topics
 -------------------

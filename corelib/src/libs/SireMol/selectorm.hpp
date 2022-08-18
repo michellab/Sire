@@ -71,6 +71,7 @@ public:
 
     SelectorM();
     SelectorM(const T &view);
+    SelectorM(const Selector<T> &views);
     SelectorM(const Molecules &mols);
     SelectorM(const MoleculeGroup &mols);
     SelectorM(const MolGroupsBase &mols);
@@ -240,6 +241,15 @@ SelectorM<T>::SelectorM(const T &view)
              : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
 {
     this->vws.append(Selector<T>(view));
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T>::SelectorM(const Selector<T> &views)
+             : SireBase::ConcreteProperty<SelectorM<T>,SireBase::Property>()
+{
+    if (not views.isEmpty())
+        this->vws.append(views);
 }
 
 template<class T>

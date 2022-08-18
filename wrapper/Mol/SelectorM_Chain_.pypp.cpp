@@ -66,6 +66,7 @@ void register_SelectorM_Chain__class(){
         SelectorM_Chain__exposer_t SelectorM_Chain__exposer = SelectorM_Chain__exposer_t( "SelectorM_Chain_", "", bp::init< >("") );
         bp::scope SelectorM_Chain__scope( SelectorM_Chain__exposer );
         SelectorM_Chain__exposer.def( bp::init< SireMol::Chain const & >(( bp::arg("view") ), "") );
+        SelectorM_Chain__exposer.def( bp::init< SireMol::Selector< SireMol::Chain > const & >(( bp::arg("views") ), "") );
         SelectorM_Chain__exposer.def( bp::init< SireMol::Molecules const & >(( bp::arg("mols") ), "") );
         SelectorM_Chain__exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("mols") ), "") );
         SelectorM_Chain__exposer.def( bp::init< SireMol::MolGroupsBase const & >(( bp::arg("mols") ), "") );

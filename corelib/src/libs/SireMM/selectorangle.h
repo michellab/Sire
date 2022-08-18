@@ -57,6 +57,8 @@ friend QDataStream& ::operator>>(QDataStream&, SelectorAngle&);
 public:
     SelectorAngle();
 
+    SelectorAngle(const Angle &angle);
+
     SelectorAngle(const SireMol::MoleculeData &molecule,
                   const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
