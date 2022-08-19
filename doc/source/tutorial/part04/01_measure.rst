@@ -126,6 +126,94 @@ of geometry you would use
 ...                  waters[1].evaluate().center_of_geometry()))
 18.0674 angstrom
 
-... sub views, introduce sire.maths.Vector object.
+You can calculate distances between the centers of mass or geometry
+of arbitray views. For example, here we calculate the distance between
+the centers of mass of the first two residues of the first molecule;
 
+>>> res = mols[0].residues()
+>>> print(sr.measure(res[0], res[1]))
+3.24294 angstrom
 
+or, to get the distance between the centers of geometry
+
+>>> print(sr.measure(res[0].evaluate().center_of_geometry(),
+...                  res[1].evaluate().center_of_geometry()))
+3.79671 angstrom
+
+The same would work for angles, dihedrals or improper angles, e.g.
+
+>>> print(sr.measure(res[0], res[1], res[2]))
+148.946 degree
+
+You can also pass in a list of views, e.g.
+
+>>> print(sr.measure([res[0], res[1], res[2]]))
+148.946 degree
+
+or
+
+>>> print(sr.measure(res[0:3]))
+148.946 degree
+
+Measuring against points in space
+---------------------------------
+
+The actual coordinates of individual atoms, or of the centers of geometry
+or mass of molecular views, are represented as :class:`sire.maths.Vector`
+objects. These are simple objects that hold three double precision numbers
+that represent the x, y, and z coordinates of a point in 3D space
+in units of angstroms.
+
+For example, here is the :class:`~sire.maths.Vector` that corresponds
+to the center of mass of the first molecule.
+
+>>> print(mols[0].coordinates())
+( 16.5471, 4.50102, 15.6589 )
+
+You access the individual x, y, and z components either via the
+``x()``, ``y()`` and ``z()`` functions, or by treating the
+:class:`~sire.maths.Vector` as a container, e.g.
+
+>>> v = mols[0].coordinates()
+>>> print(v.x(), v.y(), v.z())
+16.5471 angstrom 4.50102 angstrom 15.6589 angstrom
+>>> print(v[0], v[1], v[2])
+16.5471 angstrom 4.50102 angstrom 15.6589 angstrom
+
+You construct :class:`~sire.maths.Vector` objects by passing in the
+values of the x, y, and z components. For example, here we calculate
+the distance between two points in space;
+
+>>> print(sr.measure(sr.maths.Vector(0, 0, 0),
+...                  sr.maths.Vector(5, 0, 0)))
+5 angstrom
+
+Notice how the distance is returned in angstroms. This is because the
+units of distance, if unspecified, are in angstrom. You need to
+specify the units if something other than angstroms is desired.
+
+>>> print(sr.measure(sr.maths.Vector(0, 0, 0),
+...                  sr.maths.Vector(5 * sr.units.picometer, 0, 0)))
+0.05 angstrom
+
+You can also pass in a tuple or list of three values, e.g.
+
+>>> print(sr.measure( (0,0,0), (5,0,0) ))
+5 angstrom
+>>> print(sr.measure( (0,0,0), (5*sr.units.picometer,0,0) ))
+0.05 angstrom
+
+Using :class:`~sire.maths.Vector` enables you to calculate distances,
+angles etc. between atoms or molecule views to arbitrary points in space.
+
+For example, here is the distance from the origin to the center of
+first molecule
+
+>>> print(sr.measure( (0,0,0), mols[0] ))
+23.2221 angstrom
+
+Or the angle between the oxygen in the first water molecule and
+the x axis
+
+>>> print(sr.measure( (0,0,0), (1,0,0), mols["water and element O"][0] ))
+135.775 degree

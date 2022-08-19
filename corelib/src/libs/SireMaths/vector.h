@@ -65,6 +65,7 @@ class NVector;
 using boost::tuple;
 
 using SireUnits::Dimension::Angle;
+using SireUnits::Dimension::Length;
 
 SIREMATHS_EXPORT const Vector operator+(const Vector &p1, const Vector &p2);
 SIREMATHS_EXPORT const Vector operator-(const Vector &p1, const Vector &p2);
@@ -122,8 +123,11 @@ public:
     typedef double value_type;
 
     Vector( double val=0.0 );
+    Vector( Length val );
     Vector( double xpos, double ypos, double zpos );
+    Vector( Length xpos, Length ypos, Length zpos );
     Vector( const tuple<double,double,double> &pos );
+    Vector( const tuple<Length,Length,Length> &pos );
 
     Vector( const QString &str );
 
@@ -175,7 +179,13 @@ public:
     void setG(double y);
     void setB(double z);
 
-    void set(int i, const double &v);
+    void set(Length x, Length y, Length z);
+    void setX(Length x);
+    void setY(Length y);
+    void setZ(Length z);
+
+    void set(int i, double v);
+    void set(int i, Length v);
 
     double operator[](int i) const;
 
@@ -235,6 +245,9 @@ public:
                           const Vector &v2, const Vector &v3);
 
     static Vector generate(double dst, const Vector &v1, const Angle &ang,
+                           const Vector &v2, const Angle &dih, const Vector &v3);
+
+    static Vector generate(Length dst, const Vector &v1, const Angle &ang,
                            const Vector &v2, const Angle &dih, const Vector &v3);
 
     friend SIREMATHS_EXPORT const Vector operator+(const Vector &p1, const Vector &p2);

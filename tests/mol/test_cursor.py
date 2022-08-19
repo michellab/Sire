@@ -55,10 +55,12 @@ def test_cursor_dict(ala_mols):
 
     mol = cursor.parent().commit()
 
+    from sire.units import angstrom
+
     for atom in mol.atoms("element O"):
-        assert atom.x() == 1.0
-        assert atom.y() == 2.0
-        assert atom.z() == 3.0
+        assert atom.x() == 1.0 * angstrom
+        assert atom.y() == 2.0 * angstrom
+        assert atom.z() == 3.0 * angstrom
 
     for atom in cursor.parent().atoms("element O"):
         del atom["coordinates"]

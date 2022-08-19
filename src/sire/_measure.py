@@ -52,17 +52,26 @@ def measure(item0, item1=None,
 
     if item1 is None:
         # this must be an object with a `.measure()` function
-        try:
+        if hasattr(item0, "measure"):
             return item0.measure()
-        except AttributeError:
-            pass
 
-        raise AttributeError(
-            "You can only call `measure` with a single item if that item "
-            "is a Bond, Angle, Dihedral or Improper. Asking to measure "
-            f"a single {item0} is not supported."
-        )
+        # or it could be a list of objects
+        try:
+            nvals = len(item0)
+        except Exception:
+            nvals = 0
 
+        if nvals < 2 or nvals > 4:
+            raise AttributeError(
+                "You can only call `measure` with a single item if that item "
+                "is a Bond, Angle, Dihedral or Improper. Asking to measure "
+                f"a single {item0} is not supported."
+            )
+
+        items = [i for i in item0]
+        return measure(*items, improper_angle=improper_angle)
+
+    from .maths import Vector
 
     def _to_coords(item):
         if item is None:
@@ -71,7 +80,9 @@ def measure(item0, item1=None,
             try:
                 return item.coordinates()
             except Exception:
-                return item
+                pass
+
+            return Vector.to_vector(item)
 
     item0 = _to_coords(item0)
     item1 = _to_coords(item1)
@@ -80,9 +91,7 @@ def measure(item0, item1=None,
 
     if item3 is None:
         if item2 is None:
-            from .maths import Vector
-            from .units import angstrom
-            return Vector.distance(item0, item1) * angstrom
+            return Vector.distance(item0, item1)
         else:
             from .maths import Triangle
             return Triangle(item0, item1, item2).angle()

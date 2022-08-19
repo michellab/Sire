@@ -53,8 +53,11 @@ void register_Vector_class(){
         typedef bp::class_< SireMaths::Vector > Vector_exposer_t;
         Vector_exposer_t Vector_exposer = Vector_exposer_t( "Vector", "", bp::init< bp::optional< double > >(( bp::arg("val")=0. ), "Construct from a tuple of three values") );
         bp::scope Vector_scope( Vector_exposer );
+        Vector_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("val") ), "Construct from an NVector") );
         Vector_exposer.def( bp::init< double, double, double >(( bp::arg("xpos"), bp::arg("ypos"), bp::arg("zpos") ), "") );
+        Vector_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("xpos"), bp::arg("ypos"), bp::arg("zpos") ), "") );
         Vector_exposer.def( bp::init< boost::tuples::tuple< double, double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("pos") ), "Construct from a tuple of three values") );
+        Vector_exposer.def( bp::init< boost::tuples::tuple< SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >, SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >, SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("pos") ), "Construct from a tuple of three values") );
         Vector_exposer.def( bp::init< QString const & >(( bp::arg("str") ), "Construct from a QString\nThrow: SireError::invalid_arg\n") );
         Vector_exposer.def( bp::init< SireMaths::NVector const & >(( bp::arg("other") ), "Copy constructor") );
         Vector_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("other") ), "Copy constructor") );
@@ -277,6 +280,19 @@ void register_Vector_class(){
         { //::SireMaths::Vector::generate
         
             typedef ::SireMaths::Vector ( *generate_function_type )( double,::SireMaths::Vector const &,::SireUnits::Dimension::Angle const &,::SireMaths::Vector const &,::SireUnits::Dimension::Angle const &,::SireMaths::Vector const & );
+            generate_function_type generate_function_value( &::SireMaths::Vector::generate );
+            
+            Vector_exposer.def( 
+                "generate"
+                , generate_function_value
+                , ( bp::arg("dst"), bp::arg("v1"), bp::arg("ang"), bp::arg("v2"), bp::arg("dih"), bp::arg("v3") )
+                , bp::release_gil_policy()
+                , "Generate a vector, v0, that has distance dst v0-v1, angle ang v0-v1-v2,\nand dihedral dih v0-v1-v2-v3" );
+        
+        }
+        { //::SireMaths::Vector::generate
+        
+            typedef ::SireMaths::Vector ( *generate_function_type )( ::SireUnits::Dimension::Length,::SireMaths::Vector const &,::SireUnits::Dimension::Angle const &,::SireMaths::Vector const &,::SireUnits::Dimension::Angle const &,::SireMaths::Vector const & );
             generate_function_type generate_function_value( &::SireMaths::Vector::generate );
             
             Vector_exposer.def( 
@@ -532,7 +548,33 @@ void register_Vector_class(){
         }
         { //::SireMaths::Vector::set
         
-            typedef void ( ::SireMaths::Vector::*set_function_type)( int,double const & ) ;
+            typedef void ( ::SireMaths::Vector::*set_function_type)( ::SireUnits::Dimension::Length,::SireUnits::Dimension::Length,::SireUnits::Dimension::Length ) ;
+            set_function_type set_function_value( &::SireMaths::Vector::set );
+            
+            Vector_exposer.def( 
+                "set"
+                , set_function_value
+                , ( bp::arg("x"), bp::arg("y"), bp::arg("z") )
+                , bp::release_gil_policy()
+                , "Set individual values of the vector" );
+        
+        }
+        { //::SireMaths::Vector::set
+        
+            typedef void ( ::SireMaths::Vector::*set_function_type)( int,double ) ;
+            set_function_type set_function_value( &::SireMaths::Vector::set );
+            
+            Vector_exposer.def( 
+                "set"
+                , set_function_value
+                , ( bp::arg("i"), bp::arg("v") )
+                , bp::release_gil_policy()
+                , "Set individual values of the vector" );
+        
+        }
+        { //::SireMaths::Vector::set
+        
+            typedef void ( ::SireMaths::Vector::*set_function_type)( int,::SireUnits::Dimension::Length ) ;
             set_function_type set_function_value( &::SireMaths::Vector::set );
             
             Vector_exposer.def( 
@@ -621,6 +663,19 @@ void register_Vector_class(){
                 , "Set individual values of the vector" );
         
         }
+        { //::SireMaths::Vector::setX
+        
+            typedef void ( ::SireMaths::Vector::*setX_function_type)( ::SireUnits::Dimension::Length ) ;
+            setX_function_type setX_function_value( &::SireMaths::Vector::setX );
+            
+            Vector_exposer.def( 
+                "setX"
+                , setX_function_value
+                , ( bp::arg("x") )
+                , bp::release_gil_policy()
+                , "Set individual values of the vector" );
+        
+        }
         { //::SireMaths::Vector::setY
         
             typedef void ( ::SireMaths::Vector::*setY_function_type)( double ) ;
@@ -634,9 +689,35 @@ void register_Vector_class(){
                 , "Set individual values of the vector" );
         
         }
+        { //::SireMaths::Vector::setY
+        
+            typedef void ( ::SireMaths::Vector::*setY_function_type)( ::SireUnits::Dimension::Length ) ;
+            setY_function_type setY_function_value( &::SireMaths::Vector::setY );
+            
+            Vector_exposer.def( 
+                "setY"
+                , setY_function_value
+                , ( bp::arg("y") )
+                , bp::release_gil_policy()
+                , "Set individual values of the vector" );
+        
+        }
         { //::SireMaths::Vector::setZ
         
             typedef void ( ::SireMaths::Vector::*setZ_function_type)( double ) ;
+            setZ_function_type setZ_function_value( &::SireMaths::Vector::setZ );
+            
+            Vector_exposer.def( 
+                "setZ"
+                , setZ_function_value
+                , ( bp::arg("z") )
+                , bp::release_gil_policy()
+                , "Set individual values of the vector" );
+        
+        }
+        { //::SireMaths::Vector::setZ
+        
+            typedef void ( ::SireMaths::Vector::*setZ_function_type)( ::SireUnits::Dimension::Length ) ;
             setZ_function_type setZ_function_value( &::SireMaths::Vector::setZ );
             
             Vector_exposer.def( 
