@@ -143,6 +143,8 @@ public:
 
     bool isZero() const;
 
+    void setAsDefault(const QString &unit_name) const;
+
 private:
     void assertCompatible(const GeneralUnit &other) const;
 

@@ -135,7 +135,7 @@ void register_GeneralUnit_class(){
                 "_to_cpp_type"
                 , _to_cpp_type_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the C++ type that this particular GeneralUnit corresponds to" );
         
         }
         { //::SireUnits::Dimension::GeneralUnit::hasSameUnits
@@ -219,6 +219,19 @@ void register_GeneralUnit_class(){
         GeneralUnit_exposer.def( bp::self == bp::self );
         GeneralUnit_exposer.def( bp::self > bp::self );
         GeneralUnit_exposer.def( bp::self >= bp::self );
+        { //::SireUnits::Dimension::GeneralUnit::setAsDefault
+        
+            typedef void ( ::SireUnits::Dimension::GeneralUnit::*setAsDefault_function_type)( ::QString const & ) const;
+            setAsDefault_function_type setAsDefault_function_value( &::SireUnits::Dimension::GeneralUnit::setAsDefault );
+            
+            GeneralUnit_exposer.def( 
+                "setAsDefault"
+                , setAsDefault_function_value
+                , ( bp::arg("unit_name") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireUnits::Dimension::GeneralUnit::to
         
             typedef double ( ::SireUnits::Dimension::GeneralUnit::*to_function_type)( ::SireUnits::Dimension::TempBase const & ) const;
@@ -290,7 +303,7 @@ void register_GeneralUnit_class(){
                 "what"
                 , what_function_value
                 , bp::release_gil_policy()
-                , "Return the C++ type that this particular GeneralUnit corresponds to" );
+                , "" );
         
         }
         GeneralUnit_exposer.staticmethod( "typeName" );

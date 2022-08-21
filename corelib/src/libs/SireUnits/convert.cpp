@@ -35,6 +35,7 @@
 
 #include "convert.h"
 #include "dimensions.h"
+#include "generalunit.h"
 
 #include <QDebug>
 
@@ -156,13 +157,67 @@ public:
     }
 };
 
+Q_GLOBAL_STATIC( QMutex, globalUnitMutex )
+
 boost::shared_ptr< QMap< DimensionKey,QPair<double,QString> > > default_strings;
+
+double convert_unspecified_to_internal(double value,
+                                       int M, int L, int T, int C,
+                                       int t, int Q, int A)
+{
+    QMutexLocker lkr( globalUnitMutex() );
+
+    QMap< DimensionKey,QPair<double,QString> >::const_iterator
+                 it = default_strings->constFind(DimensionKey(M,L,T,C,t,Q,A));
+
+    if (it != default_strings->constEnd())
+    {
+        return value / it->first;
+    }
+    else
+    {
+        // this must already be in default internal units
+        return value;
+    }
+}
+
+void set_default_unit(double value, QString unit_string,
+                      int M, int L, int T, int C,
+                      int t, int Q, int A)
+{
+    QMutexLocker lkr( globalUnitMutex() );
+
+    if (default_strings == 0)
+    {
+        // create the default set
+        lkr.unlock();
+        getUnitString(value, M, L, T, C, t, Q, A);
+        lkr.relock();
+    }
+
+    unit_string = unit_string.simplified();
+
+    if (not unit_string.startsWith("°"))
+        unit_string = QString(" %1").arg(unit_string);
+
+    default_strings->insert( DimensionKey(M,L,T,C,t,Q,A),
+                             QPair<double,QString>(value, unit_string) );
+}
+
+void GeneralUnit::setAsDefault(const QString &unit_name) const
+{
+    set_default_unit(this->value(), unit_name,
+                     Mass, Length, Time, Charge, temperature,
+                     Quantity, Angle);
+}
 
 /** Return a string representing the unit with specified dimensions */
 QString getUnitString(double value,
                       int M, int L, int T, int C,
                       int t, int Q, int A)
 {
+    QMutexLocker lkr( globalUnitMutex() );
+
     if (default_strings == 0)
     {
         boost::shared_ptr< QMap< DimensionKey, QPair<double,QString> > > strings(
@@ -170,6 +225,9 @@ QString getUnitString(double value,
 
         strings->insert( DimensionKey(kcal_per_mol),
                          QPair<double,QString>( kcal_per_mol, " kcal mol-1" ) );
+
+        strings->insert( DimensionKey(kcal),
+                         QPair<double,QString>( kcal, "kcal"));
 
         strings->insert( DimensionKey(kelvin),
                          QPair<double,QString>( kelvin, "°K"));
@@ -207,11 +265,14 @@ QString getUnitString(double value,
         strings->insert( DimensionKey(atm),
                          QPair<double,QString>( atm, " atm" ) );
 
-        strings->insert( DimensionKey(angstrom/femtosecond),
-                         QPair<double,QString>( angstrom/femtosecond, " Å fs-1" ) );
+        strings->insert( DimensionKey(gram),
+                         QPair<double,QString>( gram, "g"));
 
-        strings->insert( DimensionKey(angstrom/(femtosecond*femtosecond)),
-                         QPair<double,QString>( angstrom/(femtosecond*femtosecond), " Å fs-2" ) );
+        strings->insert( DimensionKey(angstrom/picosecond),
+                         QPair<double,QString>( angstrom/picosecond, " Å ps-1" ) );
+
+        strings->insert( DimensionKey(angstrom/(picosecond*picosecond)),
+                         QPair<double,QString>( angstrom/(picosecond*picosecond), " Å ps-2" ) );
 
         default_strings = strings;
     }
