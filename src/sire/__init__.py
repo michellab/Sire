@@ -549,21 +549,23 @@ __revisionid__ = config.sire_repository_version[0:7]
 
 _can_lazy_import = False
 
-try:
-    import lazy_import as _lazy_import
-    _lazy_import.logging.disable(_lazy_import.logging.DEBUG)
+import os as _os
 
-    # ignore warnings, as a lot are printed from the frozenlib
-    import warnings
-    warnings.filterwarnings('ignore')
-    _can_lazy_import = True
+if "SIRE_NO_LAZY_IMPORT" not in _os.environ:
+    try:
+        import lazy_import as _lazy_import
+        _lazy_import.logging.disable(_lazy_import.logging.DEBUG)
 
-except Exception as e:
-    print("Lazy import disabled")
-    print(e)
-    _can_lazy_import = False
+        # ignore warnings, as a lot are printed from the frozenlib
+        import warnings
+        warnings.filterwarnings('ignore')
+        _can_lazy_import = True
 
-#_can_lazy_import = False
+    except Exception as e:
+        print("Lazy import disabled")
+        print(e)
+        _can_lazy_import = False
+
 
 # Lazy import the modules for speed, and also to prevent pythonizing them
 # if the users wants to run in legacy mode

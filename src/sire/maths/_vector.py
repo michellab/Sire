@@ -2,45 +2,51 @@
 from ..legacy.Maths import Vector as _Vector
 
 def _fix_vector():
-    from ..units import angstrom
 
     def x(obj):
+        from ..units import angstrom
         return obj.__old__x() * angstrom
 
     _Vector.__old__x = _Vector.x
     _Vector.x = x
 
     def y(obj):
+        from ..units import angstrom
         return obj.__old__y() * angstrom
 
     _Vector.__old__y = _Vector.y
     _Vector.y = y
 
     def z(obj):
+        from ..units import angstrom
         return obj.__old__z() * angstrom
 
     _Vector.__old__z = _Vector.z
     _Vector.z = z
 
     def __getitem__(obj, i):
+        from ..units import angstrom
         return obj.__old__getitem__(i) * angstrom
 
     _Vector.__old__getitem__ = _Vector.__getitem__
     _Vector.__getitem__ = __getitem__
 
     def at(obj, i):
+        from ..units import angstrom
         return obj.__old__at(i) * angstrom
 
     _Vector.__old_at = _Vector.at
     _Vector.at = at
 
     def getitem(obj, i):
+        from ..units import angstrom
         return obj.__old__getitem(i) * angstrom
 
     _Vector.__old_getitem = _Vector.getitem
     _Vector.getitem = getitem
 
     def manhattan_length(obj):
+        from ..units import angstrom
         return obj.__old_manhattan_length() * angstrom
 
     try:
@@ -52,18 +58,21 @@ def _fix_vector():
     _Vector.manhattan_length = manhattan_length
 
     def length(obj):
+        from ..units import angstrom
         return obj.__old_length() * angstrom
 
     _Vector.__old_length = _Vector.length
     _Vector.length = length
 
     def length2(obj):
+        from ..units import angstrom
         return obj.__old_length2() * angstrom * angstrom
 
     _Vector.__old_length2 = _Vector.length2
     _Vector.length2 = length2
 
     def inv_length(obj):
+        from ..units import angstrom
         return obj.__old_inv_length() / angstrom
 
     try:
@@ -75,6 +84,7 @@ def _fix_vector():
     _Vector.inv_length = inv_length
 
     def inv_length2(obj):
+        from ..units import angstrom
         return obj.__old_inv_length2() / (angstrom*angstrom)
 
     try:
@@ -86,6 +96,7 @@ def _fix_vector():
     _Vector.inv_length2 = inv_length2
 
     def distance(v1, v2):
+        from ..units import angstrom
         v1 = Vector.to_vector(v1)
         v2 = Vector.to_vector(v2)
 
@@ -95,6 +106,7 @@ def _fix_vector():
     _Vector.distance = distance
 
     def distance2(v1, v2):
+        from ..units import angstrom
         v1 = Vector.to_vector(v1)
         v2 = Vector.to_vector(v2)
 
@@ -104,6 +116,7 @@ def _fix_vector():
     _Vector.distance2 = distance2
 
     def inv_distance(v1, v2):
+        from ..units import angstrom
         v1 = Vector.to_vector(v1)
         v2 = Vector.to_vector(v2)
 
@@ -118,6 +131,7 @@ def _fix_vector():
     _Vector.inv_distance = inv_distance
 
     def inv_distance2(v1, v2):
+        from ..units import angstrom
         v1 = Vector.to_vector(v1)
         v2 = Vector.to_vector(v2)
 
@@ -139,28 +153,28 @@ class Vector(_Vector):
     represent points in units of Angstroms.
     """
     def __init__(self, *args, **kwargs):
-        try:
-            super().__init__(*args, **kwargs)
-        except Exception:
-            from ..units import angstrom
+        from ..units import angstrom
 
-            def _is_number(v):
-                return isinstance(v, int) or isinstance(v, float)
+        # get the default unit of length
+        l = angstrom.get_default()
 
-            # mix of doubles and lengths?
-            new_args = []
+        def _is_number(v):
+            return isinstance(v, int) or isinstance(v, float)
 
-            for i in range(0, len(args)):
-                if _is_number(args[i]):
-                    new_args.append(args[i] * angstrom)
-                else:
-                    new_args.append(args[i])
+        # mix of doubles and lengths?
+        new_args = []
 
-            for key in kwargs.keys():
-                if _is_number(kwargs[key]):
-                    kwargs[key] = kwargs[key] * angstrom
+        for i in range(0, len(args)):
+            if _is_number(args[i]):
+                new_args.append(args[i] * l)
+            else:
+                new_args.append(args[i])
 
-            super().__init__(*new_args, **kwargs)
+        for key in kwargs.keys():
+            if _is_number(kwargs[key]):
+                kwargs[key] = kwargs[key] * l
+
+        super().__init__(*new_args, **kwargs)
 
     @staticmethod
     def to_vector(arg):

@@ -138,6 +138,18 @@ void register_GeneralUnit_class(){
                 , "Return the C++ type that this particular GeneralUnit corresponds to" );
         
         }
+        { //::SireUnits::Dimension::GeneralUnit::getDefault
+        
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireUnits::Dimension::GeneralUnit::*getDefault_function_type)(  ) const;
+            getDefault_function_type getDefault_function_value( &::SireUnits::Dimension::GeneralUnit::getDefault );
+            
+            GeneralUnit_exposer.def( 
+                "getDefault"
+                , getDefault_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireUnits::Dimension::GeneralUnit::hasSameUnits
         
             typedef bool ( ::SireUnits::Dimension::GeneralUnit::*hasSameUnits_function_type)( ::SireUnits::Dimension::GeneralUnit const & ) const;
@@ -278,6 +290,18 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireUnits::Dimension::GeneralUnit::unitString
+        
+            typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*unitString_function_type)(  ) const;
+            unitString_function_type unitString_function_value( &::SireUnits::Dimension::GeneralUnit::unitString );
+            
+            GeneralUnit_exposer.def( 
+                "unitString"
+                , unitString_function_value
                 , bp::release_gil_policy()
                 , "" );
         

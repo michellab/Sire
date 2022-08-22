@@ -117,7 +117,8 @@ private:
     double sclfac;
 };
 
-SIREUNITS_EXPORT QString getUnitString(double value, int M, int L, int T, int C, int t, int Q, int A);
+SIREUNITS_EXPORT QPair<double, QString> getUnitString(
+                            int M, int L, int T, int C, int t, int Q, int A);
 
 /** Construct a physical unit with the specified
     Mass, Length, Time, Charge, temperature,
@@ -293,9 +294,21 @@ public:
         return this->in(units);
     }
 
+    QString unitString() const
+    {
+        return SireUnits::Dimension::getUnitString(M, L, T, C, t, Q, A).second;
+    }
+
     QString toString() const
     {
-        return SireUnits::Dimension::getUnitString(this->scaleFactor(), M,L,T,C,t,Q,A);
+        auto u = SireUnits::Dimension::getUnitString(M, L, T, C, t, Q, A);
+
+        double v = value() / u.first;
+
+        if (u.second.startsWith("°"))
+            return QString("%1%2").arg(v).arg(u.second);
+        else
+            return QString("%1 %2").arg(v).arg(u.second);
     }
 
     static int MASS()

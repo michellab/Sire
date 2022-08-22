@@ -179,12 +179,27 @@ void GeneralUnit::assertCompatible(const GeneralUnit &other) const
     }
 }
 
-QString GeneralUnit::toString() const
+QString GeneralUnit::unitString() const
 {
-    return SireUnits::Dimension::getUnitString(value(), Mass, Length,
+    return SireUnits::Dimension::getUnitString(Mass, Length,
                                                Time, Charge,
                                                temperature, Quantity,
-                                               Angle);
+                                               Angle).second;
+}
+
+QString GeneralUnit::toString() const
+{
+    auto u = SireUnits::Dimension::getUnitString(Mass, Length,
+                                                 Time, Charge,
+                                                 temperature, Quantity,
+                                                 Angle);
+
+    double v = value() / u.first;
+
+    if (u.second.startsWith("°"))
+        return QString("%1%2").arg(v).arg(u.second);
+    else
+        return QString("%1 %2").arg(v).arg(u.second);
 }
 
 double GeneralUnit::to(const GeneralUnit &units) const

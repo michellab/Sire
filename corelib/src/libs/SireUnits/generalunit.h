@@ -68,6 +68,8 @@ public:
 
     QString _to_cpp_type() const;
 
+    QString unitString() const;
+
     GeneralUnit units() const;
 
     int MASS() const;
@@ -144,6 +146,8 @@ public:
     bool isZero() const;
 
     void setAsDefault(const QString &unit_name) const;
+
+    GeneralUnit getDefault() const;
 
 private:
     void assertCompatible(const GeneralUnit &other) const;

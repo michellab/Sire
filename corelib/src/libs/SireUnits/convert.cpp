@@ -191,17 +191,50 @@ void set_default_unit(double value, QString unit_string,
     {
         // create the default set
         lkr.unlock();
-        getUnitString(value, M, L, T, C, t, Q, A);
+        getUnitString(M, L, T, C, t, Q, A);
         lkr.relock();
     }
 
     unit_string = unit_string.simplified();
 
-    if (not unit_string.startsWith("°"))
-        unit_string = QString(" %1").arg(unit_string);
-
     default_strings->insert( DimensionKey(M,L,T,C,t,Q,A),
                              QPair<double,QString>(value, unit_string) );
+}
+
+double get_default_unit(int M, int L, int T, int C, int t, int Q, int A)
+{
+    QMutexLocker lkr( globalUnitMutex() );
+
+    if (default_strings == 0)
+    {
+        // create the default set
+        lkr.unlock();
+        getUnitString(M, L, T, C, t, Q, A);
+        lkr.relock();
+    }
+
+    QMap< DimensionKey,QPair<double,QString> >::const_iterator
+                 it = default_strings->constFind(DimensionKey(M,L,T,C,t,Q,A));
+
+    if (it != default_strings->constEnd())
+    {
+        return it->first;
+    }
+    else
+    {
+        // this must already be in default internal units
+        return 1.0;
+    }
+}
+
+GeneralUnit GeneralUnit::getDefault() const
+{
+    GeneralUnit ret(*this);
+
+    ret.setScale(get_default_unit(Mass, Length, Time, Charge,
+                                  temperature, Quantity, Angle));
+
+    return ret;
 }
 
 void GeneralUnit::setAsDefault(const QString &unit_name) const
@@ -212,9 +245,8 @@ void GeneralUnit::setAsDefault(const QString &unit_name) const
 }
 
 /** Return a string representing the unit with specified dimensions */
-QString getUnitString(double value,
-                      int M, int L, int T, int C,
-                      int t, int Q, int A)
+QPair<double,QString> getUnitString(int M, int L, int T, int C,
+                                    int t, int Q, int A)
 {
     QMutexLocker lkr( globalUnitMutex() );
 
@@ -224,7 +256,7 @@ QString getUnitString(double value,
                 new QMap< DimensionKey,QPair<double,QString> >() );
 
         strings->insert( DimensionKey(kcal_per_mol),
-                         QPair<double,QString>( kcal_per_mol, " kcal mol-1" ) );
+                         QPair<double,QString>( kcal_per_mol, "kcal mol-1" ) );
 
         strings->insert( DimensionKey(kcal),
                          QPair<double,QString>( kcal, "kcal"));
@@ -236,43 +268,43 @@ QString getUnitString(double value,
                          QPair<double,QString>( degree, "°" ) );
 
         strings->insert( DimensionKey(1/angstrom),
-                         QPair<double,QString>( 1/angstrom, " Å-1"));
+                         QPair<double,QString>( 1/angstrom, "Å-1"));
 
         strings->insert( DimensionKey(1/(angstrom*angstrom)),
-                         QPair<double,QString>( 1/(angstrom*angstrom), " Å-2"));
+                         QPair<double,QString>( 1/(angstrom*angstrom), "Å-2"));
 
         strings->insert( DimensionKey(angstrom),
-                         QPair<double,QString>( angstrom, " Å" ) );
+                         QPair<double,QString>( angstrom, "Å" ) );
 
         strings->insert( DimensionKey(angstrom2),
-                         QPair<double,QString>( angstrom2, " Å^2" ) );
+                         QPair<double,QString>( angstrom2, "Å^2" ) );
 
         strings->insert( DimensionKey(angstrom3),
-                         QPair<double,QString>( angstrom3, " Å^3" ) );
+                         QPair<double,QString>( angstrom3, "Å^3" ) );
 
         strings->insert( DimensionKey(g_per_mol),
-                         QPair<double,QString>( g_per_mol, " g mol-1" ) );
+                         QPair<double,QString>( g_per_mol, "g mol-1" ) );
 
         strings->insert( DimensionKey(mole),
-                         QPair<double,QString>( mole, " mol"));
+                         QPair<double,QString>( mole, "mol"));
 
         strings->insert( DimensionKey(mod_electron),
-                         QPair<double,QString>( mod_electron, " |e|" ) );
+                         QPair<double,QString>( mod_electron, "|e|" ) );
 
         strings->insert( DimensionKey(picosecond),
-                         QPair<double,QString>( picosecond, " ps" ) );
+                         QPair<double,QString>( picosecond, "ps" ) );
 
         strings->insert( DimensionKey(atm),
-                         QPair<double,QString>( atm, " atm" ) );
+                         QPair<double,QString>( atm, "atm" ) );
 
         strings->insert( DimensionKey(gram),
                          QPair<double,QString>( gram, "g"));
 
         strings->insert( DimensionKey(angstrom/picosecond),
-                         QPair<double,QString>( angstrom/picosecond, " Å ps-1" ) );
+                         QPair<double,QString>( angstrom/picosecond, "Å ps-1" ) );
 
         strings->insert( DimensionKey(angstrom/(picosecond*picosecond)),
-                         QPair<double,QString>( angstrom/(picosecond*picosecond), " Å ps-2" ) );
+                         QPair<double,QString>( angstrom/(picosecond*picosecond), "Å ps-2" ) );
 
         default_strings = strings;
     }
@@ -281,12 +313,10 @@ QString getUnitString(double value,
                  it = default_strings->constFind(DimensionKey(M,L,T,C,t,Q,A));
 
     if (it != default_strings->constEnd())
-    {
-        return QString("%1%2").arg( value / it->first )
-                              .arg( it->second );
-    }
+        return *it;
+
     else
-        return QString("%1 %2").arg(value).arg(getGenericUnitString(M,L,T,C,t,Q,A));
+        return QPair<double,QString>(1.0, getGenericUnitString(M,L,T,C,t,Q,A));
 }
 
 }
