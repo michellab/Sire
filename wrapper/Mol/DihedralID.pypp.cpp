@@ -10,6 +10,8 @@ namespace bp = boost::python;
 
 #include "SireBase/property.h"
 
+#include "SireID/index.h"
+
 #include "SireMaths/torsion.h"
 
 #include "SireMaths/vector.h"

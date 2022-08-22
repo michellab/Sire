@@ -101,6 +101,7 @@
 #include "selectormol.h"
 #include "specifymol.h"
 #include "stereoscopy.h"
+#include "trajectory.h"
 #include "viewsofmol.h"
 #include "volumemap.h"
 #include "weightfunction.h"
@@ -319,6 +320,7 @@ void register_SireMol_objects()
     ObjectRegistry::registerConverterFor< SireMol::SelectorM<SireMol::CutGroup> >();
     ObjectRegistry::registerConverterFor< SireMol::SpecifyMol >();
     ObjectRegistry::registerConverterFor< SireMol::Stereoscopy >();
+    ObjectRegistry::registerConverterFor< SireMol::Trajectory >();
     ObjectRegistry::registerConverterFor< SireMol::ViewsOfMol >();
     ObjectRegistry::registerConverterFor< SireMol::Mover<SireMol::ViewsOfMol> >();
     ObjectRegistry::registerConverterFor< SireMol::VolumeMap >();

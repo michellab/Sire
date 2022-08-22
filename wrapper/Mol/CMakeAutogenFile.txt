@@ -259,6 +259,7 @@ set ( PYPP_SOURCES
        Specify_ResID_.pypp.cpp
        Specify_SegID_.pypp.cpp
        Stereoscopy.pypp.cpp
+       Trajectory.pypp.cpp
        UserBeading.pypp.cpp
        Velocity3D.pypp.cpp
        VolumeMap.pypp.cpp

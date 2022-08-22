@@ -127,6 +127,7 @@
 #include "SireMol/errors.h"
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
+#include "SireVol/space.h"
 #include "atom.h"
 #include "atomselection.h"
 #include "chain.h"
@@ -137,6 +138,7 @@
 #include "segment.h"
 #include "select.h"
 #include "selector.hpp"
+#include "trajectory.h"
 #include <QDebug>
 #include "moleculeview.h"
 #include "SireCAS/identities.h"

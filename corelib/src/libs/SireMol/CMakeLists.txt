@@ -144,6 +144,7 @@ set ( SIREMOL_HEADERS
       specifymol.h
       stereoscopy.h
       structureeditor.h
+      trajectory.h
       viewsofmol.h
       volumemap.h
       weightfunction.h
@@ -244,6 +245,7 @@ set ( SIREMOL_SOURCES
       specifymol.cpp
       stereoscopy.cpp
       structureeditor.cpp
+      trajectory.cpp
       viewsofmol.cpp
       volumemap.cpp
       weightfunction.cpp

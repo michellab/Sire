@@ -117,6 +117,7 @@
 #include "selectormol.h"
 #include "specifymol.h"
 #include "stereoscopy.h"
+#include "trajectory.h"
 #include "viewsofmol.h"
 #include "volumemap.h"
 #include "weightfunction.h"

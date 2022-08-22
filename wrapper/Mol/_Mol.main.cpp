@@ -525,6 +525,8 @@
 
 #include "Stereoscopy.pypp.hpp"
 
+#include "Trajectory.pypp.hpp"
+
 #include "UserBeading.pypp.hpp"
 
 #include "Velocity3D.pypp.hpp"
@@ -1087,6 +1089,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_SpecifyMol_class();
 
     register_Stereoscopy_class();
+
+    register_Trajectory_class();
 
     register_UserBeading_class();
 

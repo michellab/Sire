@@ -64,6 +64,7 @@ class Chain;
 class Residue;
 class CutGroup;
 class Atom;
+class Trajectory;
 
 template<class T>
 class Selector;
@@ -337,6 +338,21 @@ public:
         this returns the metakeys of all AtomProperty derived objects */
     virtual QStringList metadataKeys(const PropertyName &key) const=0;
 
+    int nFrames() const;
+    int nFrames(const SireBase::PropertyMap &map) const;
+
+    void getFrame(int i);
+    void setFrame(int i);
+
+    void getFrame(int i, const SireBase::PropertyMap &map);
+    void setFrame(int i, const SireBase::PropertyMap &map);
+
+    void appendFrame();
+    void insertFrame(int i);
+
+    void appendFrame(const SireBase::PropertyMap &map);
+    void insertFrame(int i, const SireBase::PropertyMap &map);
+
     const char* propertyType(const PropertyName &key) const;
     const char* metadataType(const PropertyName &metakey) const;
 
@@ -383,6 +399,7 @@ protected:
                             const QString &key, const QString &metakey,
                             const Index &idx, const T &value);
 
+    Trajectory _getTrajectory(const SireBase::PropertyMap &map) const;
 
     /** Shared pointer to the raw data of the molecule */
     SireBase::SharedDataPointer<MoleculeData> d;
