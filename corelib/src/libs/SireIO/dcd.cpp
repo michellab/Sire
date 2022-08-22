@@ -27,6 +27,7 @@
 \*********************************************/
 
 #include "SireIO/dcd.h"
+#include "SireIO/fortranfile.h"
 
 #include "SireSystem/system.h"
 
@@ -58,6 +59,10 @@
 #include "SireIO/errors.h"
 
 #include "SireStream/shareddatastream.h"
+
+#include <QFile>
+#include <QDataStream>
+#include <QDebug>
 
 using namespace SireIO;
 using namespace SireIO::detail;
@@ -146,6 +151,10 @@ QString DCD::formatDescription() const
     data in this object */
 void DCD::parse(const QString &filename, const PropertyMap &map)
 {
+    FortranFile file(filename);
+
+    qDebug() << file.nRecords();
+
     //set the score, and save the warnings
     double score = 100.0 / (parse_warnings.count()+1);
     this->setScore(score);

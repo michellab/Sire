@@ -35,6 +35,7 @@ set ( SIREIO_HEADERS
       dcd.h
       errors.h
       flexibilitylibrary.h
+      fortranfile.h
       gro87.h
       grotop.h
       iobase.h
@@ -68,6 +69,7 @@ set ( SIREIO_SOURCES
       dcd.cpp
       errors.cpp
       flexibilitylibrary.cpp
+      fortranfile.cpp
       gro87.cpp
       grotop.cpp
       iobase.cpp
