@@ -24,26 +24,25 @@ properties.
 ['gb_screening', 'mass', 'ambertype', 'coordinates',
  'treechain', 'atomtype', 'velocity', 'LJ', 'gb_radii', 'charge', 'element']
 >>> print(cursor.items())
-[('gb_screening', 0.72),
- ('mass', 12.01 g mol-1),
- ('ambertype', 'CX'),
- ('coordinates', ( 16.5371, 5.02707, 15.812 )),
- ('treechain', 'M   '),
- ('atomtype', 'CX'),
- ('velocity',
-  ( 3.08134e-06 angstrom fs-1, -1.90426e-05 angstrom fs-1, 6.18047e-06 angstrom fs-1 )),
- ('LJ', LJ( sigma = 3.39967 A, epsilon = 0.1094 kcal mol-1 )),
- ('gb_radii', 1.7 angstrom),
+[('gb_radii', 1.7 Å),
+ ('coordinates', ( 16.5371 Å, 5.02707 Å, 15.812 Å )),
  ('charge', 0.0337 |e|),
- ('element', Carbon (C, 6))]
+ ('mass', 12.01 g mol-1),
+ ('LJ', LJ( sigma = 3.39967 Å, epsilon = 0.1094 kcal mol-1 )),
+ ('velocity', ( 0.00308134 Å ps-1, -0.0190426 Å ps-1, 0.00618047 Å ps-1 )),
+ ('atomtype', 'CX'),
+ ('gb_screening', 0.72),
+ ('treechain', 'M   '),
+ ('element', Carbon (C, 6)),
+ ('ambertype', 'CX')]
 >>> print(cursor["coordinates"])
-( 16.5371, 5.02707, 15.812 )
+( 16.5371 Å, 5.02707 Å, 15.812 Å )
 
 Assiging to the dictionary will update the corresponding property.
 
 >>> cursor["coordinates"] = (1.0, 2.0, 3.0)
 >>> print(cursor["coordinates"])
-( 1, 2, 3 )
+( 1 Å, 2 Å, 3 Å )
 
 Assigning to a non-existent key will create a new property.
 
@@ -65,7 +64,7 @@ changes, you need to use the ``commit()`` function.
 >>> print(mol["CA"].property("color"))
 charcoal
 >>> print(mol["CA"].coordinates())
-( 1, 2, 3 )
+( 1 Å, 2 Å, 3 Å )
 
 .. note::
 

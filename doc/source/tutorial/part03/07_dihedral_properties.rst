@@ -44,7 +44,8 @@ Dihedral( HH31:1 <= CH3:2 = C:5 => O:6 )
 ...       dihedral.atom1().coordinates(),
 ...       dihedral.atom2().coordinates(),
 ...       dihedral.atom3().coordinates())
-( 18.4532, 3.49423, 12.4365 ) ( 18.9818, 3.44823, 13.3886 ) ( 18.4805, 4.54971, 14.3514 ) ( 19.1866, 5.44143, 14.7584 )
+( 18.4532 Å, 3.49423 Å, 12.4365 Å ) ( 18.9818 Å, 3.44823 Å, 13.3886 Å )
+( 18.4805 Å, 4.54971 Å, 14.3514 Å ) ( 19.1866 Å, 5.44143 Å, 14.7584 Å )
 
 The dihedral object is a molecular container, so can be indexed and searched
 like any other container, e.g.
@@ -53,13 +54,14 @@ like any other container, e.g.
 ...       dihedral[1].coordinates(),
 ...       dihedral[2].coordinates(),
 ...       dihedral[3].coordinates())
-( 18.4532, 3.49423, 12.4365 ) ( 18.9818, 3.44823, 13.3886 ) ( 18.4805, 4.54971, 14.3514 ) ( 19.1866, 5.44143, 14.7584 )
+( 18.4532 Å, 3.49423 Å, 12.4365 Å ) ( 18.9818 Å, 3.44823 Å, 13.3886 Å )
+( 18.4805 Å, 4.54971 Å, 14.3514 Å ) ( 19.1866 Å, 5.44143 Å, 14.7584 Å )
 
 The ``.size()`` function is a convenience function that calculates
 the size of the dihedral based on the coordinates of the atoms.
 
 >>> print(dihedral.size())
-243.281 degree
+243.281°
 
 Note how this is reported with units. Most values calculated using sire
 are returned together with their units.
@@ -96,7 +98,7 @@ You can also get the sizes and energies of all dihedrals in a view, e.g.
 to get the sizes of all dihedrals in the first residue you could use;
 
 >>> print(mol["resnum 1"].dihedrals().sizes())
-[243.281 degree, 5.26777 degree, 126.647 degree]
+[243.281°, 5.26777°, 126.647°]
 
 or to get the energies of all dihedrals around carbon-carbon bonds
 you could use

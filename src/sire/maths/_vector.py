@@ -145,6 +145,12 @@ def _fix_vector():
 
     _Vector.inv_distance2 = inv_distance2
 
+    def __str__(obj):
+        return f"( {obj.x()}, {obj.y()}, {obj.z()} )"
+
+    _Vector.__str__ = __str__
+    _Vector.__repr__ = __str__
+
 
 class Vector(_Vector):
     """

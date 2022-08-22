@@ -10,17 +10,17 @@ By default, these are placed into a property called ``coordinates``.
 
 >>> print(mol.property("coordinates"))
 AtomCoords( size=22
-0: ( 18.4532, 3.49423, 12.4365 )
-1: ( 18.9818, 3.44823, 13.3886 )
-2: ( 20.0513, 3.63293, 13.2874 )
-3: ( 18.798, 2.43076, 13.7337 )
-4: ( 18.4805, 4.54971, 14.3514 )
+0: ( 18.4532 Å, 3.49423 Å, 12.4365 Å )
+1: ( 18.9818 Å, 3.44823 Å, 13.3886 Å )
+2: ( 20.0513 Å, 3.63293 Å, 13.2874 Å )
+3: ( 18.798 Å, 2.43076 Å, 13.7337 Å )
+4: ( 18.4805 Å, 4.54971 Å, 14.3514 Å )
 ...
-17: ( 15.3407, 5.44815, 17.9626 )
-18: ( 13.8341, 3.93668, 18.3509 )
-19: ( 14.3525, 3.40994, 19.1521 )
-20: ( 13.1933, 4.59022, 18.9428 )
-21: ( 13.2149, 3.33301, 17.6874 )
+17: ( 15.3407 Å, 5.44815 Å, 17.9626 Å )
+18: ( 13.8341 Å, 3.93668 Å, 18.3509 Å )
+19: ( 14.3525 Å, 3.40994 Å, 19.1521 Å )
+20: ( 13.1933 Å, 4.59022 Å, 18.9428 Å )
+21: ( 13.2149 Å, 3.33301 Å, 17.6874 Å )
 )
 
 The coordinates are held in a :class:`sire.mol.AtomCoords` object,
@@ -29,25 +29,25 @@ a python list, e.g.
 
 >>> coords = mol.property("coordinates")
 >>> print(coords[0])
-( 18.4532, 3.49423, 12.4365 )
+( 18.4532 Å, 3.49423 Å, 12.4365 Å )
 >>> print(coords[0:5])
-[( 18.4532, 3.49423, 12.4365 ), ( 18.9818, 3.44823, 13.3886 ),
- ( 20.0513, 3.63293, 13.2874 ), ( 18.798, 2.43076, 13.7337 ),
- ( 18.4805, 4.54971, 14.3514 )]
+[( 18.4532 Å, 3.49423 Å, 12.4365 Å ), ( 18.9818 Å, 3.44823 Å, 13.3886 Å ),
+ ( 20.0513 Å, 3.63293 Å, 13.2874 Å ), ( 18.798 Å, 2.43076 Å, 13.7337 Å ),
+ ( 18.4805 Å, 4.54971 Å, 14.3514 Å )]
 >>> for coord in coords[0:3]:
 ...     print(coord)
-( 18.4532, 3.49423, 12.4365 )
-( 18.9818, 3.44823, 13.3886 )
-( 20.0513, 3.63293, 13.2874 )
+( 18.4532 Å, 3.49423 Å, 12.4365 Å )
+( 18.9818 Å, 3.44823 Å, 13.3886 Å )
+( 20.0513 Å, 3.63293 Å, 13.2874 Å )
 
 The coordinates themselves are :class:`sire.maths.Vector` objects. You
 can get the ``x``, ``y``, and ``z`` components using the corresponding functions;
 
 >>> coord = coords[0]
 >>> print(coord.x())
-18.4532476
+18.4532 Å
 >>> print(coord.y(), coord.z())
-3.4942278 12.4364968
+3.49423 Å 12.4365 Å
 
 Accessing an atom property via the molecule will return the complete
 :class:`~sire.mol.AtomCoords` object, containing the coordinates for
@@ -59,7 +59,7 @@ on the first atom in the molecule you could use;
 
 >>> atom = mol[0]
 >>> print(atom.property("coordinates"))
-( 18.4532, 3.49423, 12.4365 )
+( 18.4532 Å, 3.49423 Å, 12.4365 Å )
 
 To get the charge on the ``CH3`` atom in residue number ``1`` you could use
 
@@ -75,22 +75,22 @@ The ``coordinates`` property can be accessed via the ``coordinates`` or
 ``coords`` functions, e.g.
 
 >>> print(atom.coordinates())
-( 18.4532, 3.49423, 12.4365 )
+( 18.4532 Å, 3.49423 Å, 12.4365 Å )
 >>> print(atom.coords())
-( 18.4532, 3.49423, 12.4365 )
+( 18.4532 Å, 3.49423 Å, 12.4365 Å )
 
 You can also get the ``x``, ``y``, and ``z`` components
 of the coordinates directly, e.g.
 
 >>> print(atom.x(), atom.y(), atom.z())
-18.4532476 3.4942278 12.4364968
+18.4532 Å 3.49423 Å 12.4365 Å
 
 Properties that can be accessed this way are ``charge``, ``coordinates``,
 ``element``, ``lj`` (Lennard Jones parameters) and ``mass``.
 
 >>> print(atom.charge(), atom.element(), atom.lj(), atom.mass())
 0.1123 |e| Hydrogen (H, 1)
-LJ( sigma = 2.64953 A, epsilon = 0.0157 kcal mol-1 ) 1.008 g mol-1
+LJ( sigma = 2.64953 Å, epsilon = 0.0157 kcal mol-1 ) 1.008 g mol-1
 
 These convenience functions can also be used for larger views. However,
 in these cases they evaluate a single value that represents that
@@ -110,7 +110,7 @@ while calling ``coordinates()`` or ``coords()`` on a view will return
 the center of mass of that view
 
 >>> print(mol["resnum 1"].coords())
-( 18.9264, 4.47803, 14.1498 )
+( 18.9264 Å, 4.47803 Å, 14.1498 Å )
 
 This works for any view into a molecule, e.g. the total mass of the
 first five atoms could be calculated via
@@ -144,20 +144,20 @@ This works for collections of views, e.g. to get all of the coordinates
 on the first five atoms of the molecule, you would use
 
 >>> print(mol[0:5].property("coordinates"))
-[( 18.4532, 3.49423, 12.4365 ), ( 18.9818, 3.44823, 13.3886 ),
- ( 20.0513, 3.63293, 13.2874 ), ( 18.798, 2.43076, 13.7337 ),
- ( 18.4805, 4.54971, 14.3514 )]
+[( 18.4532 Å, 3.49423 Å, 12.4365 Å ), ( 18.9818 Å, 3.44823 Å, 13.3886 Å ),
+ ( 20.0513 Å, 3.63293 Å, 13.2874 Å ), ( 18.798 Å, 2.43076 Å, 13.7337 Å ),
+ ( 18.4805 Å, 4.54971 Å, 14.3514 Å )]
 
 or you could get the Lennard Jones parameters of all of the carbon
 atoms using
 
 >>> print(mol["element C"].property("LJ"))
-[LJ( sigma = 3.39967 A, epsilon = 0.1094 kcal mol-1 ),
- LJ( sigma = 3.39967 A, epsilon = 0.086 kcal mol-1 ),
- LJ( sigma = 3.39967 A, epsilon = 0.1094 kcal mol-1 ),
- LJ( sigma = 3.39967 A, epsilon = 0.1094 kcal mol-1 ),
- LJ( sigma = 3.39967 A, epsilon = 0.086 kcal mol-1 ),
- LJ( sigma = 3.39967 A, epsilon = 0.1094 kcal mol-1 )]
+[LJ( sigma = 3.39967 Å, epsilon = 0.1094 kcal mol-1 ),
+ LJ( sigma = 3.39967 Å, epsilon = 0.086 kcal mol-1 ),
+ LJ( sigma = 3.39967 Å, epsilon = 0.1094 kcal mol-1 ),
+ LJ( sigma = 3.39967 Å, epsilon = 0.1094 kcal mol-1 ),
+ LJ( sigma = 3.39967 Å, epsilon = 0.086 kcal mol-1 ),
+ LJ( sigma = 3.39967 Å, epsilon = 0.1094 kcal mol-1 )]
 
 .. note::
 
@@ -193,7 +193,7 @@ we will use ``apply`` with a lambda expression to get the x coordinates
 of all of the atoms in the first residue;
 
 >>> print(mol["resnum 1"].apply(lambda atom: atom.x()))
-[18.4532476, 18.9818473, 20.0513009, 18.7980053, 18.4805331, 19.1865897]
+[18.4532 Å, 18.9818 Å, 20.0513 Å, 18.798 Å, 18.4805 Å, 19.1866 Å]
 
 You can pass in positional and named arguments to the applied function
 as arguments to ``apply``. For example, here we will ask for the ``mass``

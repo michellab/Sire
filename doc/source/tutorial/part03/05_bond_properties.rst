@@ -40,29 +40,22 @@ involved in the bond, and from their the coordinates of those atoms.
 >>> print(bond)
 Bond( HH31:1 => CH3:2 )
 >>> print(bond.atom0().coordinates(), bond.atom1().coordinates())
-( 18.4532, 3.49423, 12.4365 ) ( 18.9818, 3.44823, 13.3886 )
+( 18.4532 Å, 3.49423 Å, 12.4365 Å ) ( 18.9818 Å, 3.44823 Å, 13.3886 Å )
 
 The bond object is a molecular container, so can be indexed and searched
 like any other container, e.g.
 
 >>> print(bond[0].coordinates(), bond[1].coordinates())
-( 18.4532, 3.49423, 12.4365 ) ( 18.9818, 3.44823, 13.3886 )
+( 18.4532 Å, 3.49423 Å, 12.4365 Å ) ( 18.9818 Å, 3.44823 Å, 13.3886 Å )
 
 The ``.length()`` function is a convenience function that calculates
 the length of the bond based on the coordinates of the atoms.
 
 >>> print(bond.length())
-1.09 angstrom
+1.09 Å
 
 Note how this is reported with units. Most values calculated using sire
 are returned together with their units.
-
-.. note::
-
-    The only exception are coordinates,
-    as it would be too computationally inefficient to store the units
-    with the coordinates of the atoms. Coordinates are stored
-    and returned in units of angstroms.
 
 You can convert to any compatible units you want using the ``.to()``
 function, e.g.
@@ -74,6 +67,25 @@ function, e.g.
 .. note::
 
     The result of converting a unit is a plain double precision number.
+
+You can change the default units of length by calling
+:func:`sire.units.set_length_unit`, e.g.
+
+>>> sr.units.set_length_unit(picometer)
+>>> print(bond.length())
+109 pm
+
+Or you can change to a full set of default "SI" units using
+
+>>> sr.units.set_si_units()
+>>> print(bond.length())
+0.109 nm
+
+You return to sire's default internal units using
+
+>>> sr.units.set_internal_units()
+>>> print(bond.length())
+1.09 Å
 
 The units system helps ensure that any calculations made in sire
 make physical sense, while also reducing the risk of errors caused
@@ -106,12 +118,25 @@ UserWarning: SireError::incompatible_error: Units for values 1.09 angstrom
 and 2.0563e-10 kcal mol-1 are incompatible.
 (call sire.error.get_last_error_details() for more info)
 
+You can change the energy units using
+
+>>> from sire.units import kilojoule
+>>> sr.units.set_energy_unit(kilojoule)
+>>> print(bond.energy())
+8.60357e-10 kJ mol-1
+
+The default energy is kilocalories, which can be reset using
+
+>>> from sire.units import kcal
+>>> sr.units.set_energy_unit(kcal)
+>>> print(bond.energy())
+2.0563e-10 kcal mol-1
+
 You can also get the lengths and energies of all bonds in a view, e.g.
 to get the lengths of all bonds in the first residue you could use;
 
 >>> print(mol["resnum 1"].bonds().lengths())
-[1.09 angstrom, 1.09 angstrom, 1.09 angstrom,
- 1.54643 angstrom, 1.20803 angstrom]
+[1.09 Å, 1.54643 Å, 1.09 Å, 1.09 Å, 1.20803 Å]
 
 or to get the energies of all hydrogen-carbon bonds you
 would use
@@ -215,8 +240,8 @@ You can loop over lots of bonds to set their property, e.g.
 >>> for bond in cursor.bonds():
 ...     bond["length"] = bond.view().length()
 >>> mol = cursor.commit()
->>> print(mol.bonds()[0].property("length"))
-1.42894 angstrom
+>>> print(mol.bonds()[1].property("length"))
+1.54643 Å
 
 Just for other properties, you can also use ``.apply()`` instead
 of a loop.
@@ -224,5 +249,5 @@ of a loop.
 >>> mol = mol.cursor().bonds().apply(
 ...    lambda bond: bond.set("length", bond.view().length())
 ...   ).commit()
->>> print(mol.bonds()[0].property("length"))
-1.42894 angstrom
+>>> print(mol.bonds()[1].property("length"))
+1.54643 Å

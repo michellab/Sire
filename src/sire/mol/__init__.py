@@ -25,7 +25,8 @@ from ..legacy.Mol import AtomName, AtomNum, AtomIdx, AtomID, \
                          Segment, Selector_Segment_, SelectorM_Segment_, \
                          Molecule, SelectorMol, \
                          MoleculeView, Select, \
-                         BondType, Stereoscopy
+                         BondType, Stereoscopy, \
+                         AtomCoords, AtomMasses, AtomCharges
 
 # Here I will define some functions that make accessing
 # things from moleculeviews more convenient
@@ -672,6 +673,36 @@ Atom.coords = Atom.coordinates
 Atom.x = lambda x : x.coordinates().x()
 Atom.y = lambda x : x.coordinates().y()
 Atom.z = lambda x : x.coordinates().z()
+
+
+def __atomcoords__str__(obj):
+    n = len(obj)
+
+    if n == 0:
+        return "AtomCoords::empty"
+
+    parts = []
+
+    if n <= 10:
+        for i in range(0, 10):
+            parts.append(f"{i}: {obj[i]}")
+    else:
+        for i in range(0, 5):
+            parts.append(f"{i}: {obj[i]}")
+
+        parts.append("...")
+
+        for i in range(n-5, n):
+            parts.append(f"{i}: {obj[i]}")
+
+    joined = "\n".join(parts)
+
+    return f"AtomCoords( size={n}\n{joined}\n)"
+
+
+AtomCoords.__str__ = __atomcoords__str__
+AtomCoords.__repr__ = __atomcoords__str__
+
 
 def _add_evals(obj):
     obj.mass = lambda x : x.evaluate().mass()

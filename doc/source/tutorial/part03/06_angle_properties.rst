@@ -42,7 +42,8 @@ Angle( HH31:1 <= CH3:2 => C:5 )
 >>> print(angle.atom0().coordinates(),
 ...       angle.atom1().coordinates(),
 ...       angle.atom2().coordinates())
-( 18.4532, 3.49423, 12.4365 ) ( 18.9818, 3.44823, 13.3886 ) ( 18.4805, 4.54971, 14.3514 )
+( 18.4532 Å, 3.49423 Å, 12.4365 Å ) ( 18.9818 Å, 3.44823 Å, 13.3886 Å )
+( 18.4805 Å, 4.54971 Å, 14.3514 Å )
 
 The angle object is a molecular container, so can be indexed and searched
 like any other container, e.g.
@@ -50,13 +51,14 @@ like any other container, e.g.
 >>> print(angle[0].coordinates(),
 ...       angle[1].coordinates(),
 ...       angle[2].coordinates())
-( 18.4532, 3.49423, 12.4365 ) ( 18.9818, 3.44823, 13.3886 ) ( 18.4805, 4.54971, 14.3514 )
+( 18.4532 Å, 3.49423 Å, 12.4365 Å ) ( 18.9818 Å, 3.44823 Å, 13.3886 Å )
+( 18.4805 Å, 4.54971 Å, 14.3514 Å )
 
 The ``.size()`` function is a convenience function that calculates
 the size of the angle based on the coordinates of the atoms.
 
 >>> print(angle.size())
-103.539 degree
+110.889°
 
 Note how this is reported with units. Most values calculated using sire
 are returned together with their units.
@@ -93,8 +95,7 @@ You can also get the sizes and energies of all angles in a view, e.g.
 to get the sizes of all angles in the first residue you could use;
 
 >>> print(mol["resnum 1"].angles().sizes())
-[103.539 degree, 112.8 degree, 110.889 degree, 123.097 degree,
- 110.675 degree, 104.786 degree, 114.402 degree]
+[110.889°, 103.539°, 112.8°, 123.097°, 104.786°, 110.675°, 114.402°]
 
 or to get the energies of all hydrogen-carbon-hydrogen angles you
 would use

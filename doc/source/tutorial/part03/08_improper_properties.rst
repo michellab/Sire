@@ -46,7 +46,8 @@ Improper( CH3:2 <= C:5 => N:7 -- O:6 )
 ...       improper.atom1().coordinates(),
 ...       improper.atom2().coordinates(),
 ...       improper.atom3().coordinates())
-( 18.9818, 3.44823, 13.3886 ) ( 18.4805, 4.54971, 14.3514 ) ( 17.2214, 4.31498, 14.7128 ) ( 19.1866, 5.44143, 14.7584 )
+( 18.9818 Å, 3.44823 Å, 13.3886 Å ) ( 18.4805 Å, 4.54971 Å, 14.3514 Å )
+( 17.2214 Å, 4.31498 Å, 14.7128 Å ) ( 19.1866 Å, 5.44143 Å, 14.7584 Å )
 
 The improper object is a molecular container, so can be indexed and searched
 like any other container, e.g.
@@ -55,13 +56,14 @@ like any other container, e.g.
 ...       improper[1].coordinates(),
 ...       improper[2].coordinates(),
 ...       improper[3].coordinates())
-( 18.9818, 3.44823, 13.3886 ) ( 18.4805, 4.54971, 14.3514 ) ( 17.2214, 4.31498, 14.7128 ) ( 19.1866, 5.44143, 14.7584 )
+( 18.9818 Å, 3.44823 Å, 13.3886 Å ) ( 18.4805 Å, 4.54971 Å, 14.3514 Å )
+( 17.2214 Å, 4.31498 Å, 14.7128 Å ) ( 19.1866 Å, 5.44143 Å, 14.7584 Å )
 
 The ``.size()`` function is a convenience function that calculates
 the size of the improper based on the coordinates of the atoms.
 
 >>> print(improper.size())
--3.82426 degree
+-3.82426°
 
 Note how this is reported with units. Most values calculated using sire
 are returned together with their units.
@@ -98,7 +100,7 @@ You can also get the sizes and energies of all impropers in a view, e.g.
 to get the sizes of all impropers in the molecule you could use;
 
 >>> print(mol.impropers().sizes())
-[-3.82426 degree, -0.0353552 degree, 4.3041 degree, 5.92025 degree]
+[-3.82426°, -0.0353552°, 4.3041°, 5.92025°]
 
 or to get the energies of all impropers with a central nitrogen atom
 you could use
