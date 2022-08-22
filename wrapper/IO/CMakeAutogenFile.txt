@@ -6,6 +6,7 @@ set ( PYPP_SOURCES
        AmberRst7.pypp.cpp
        CharmmPSF.pypp.cpp
        Cube.pypp.cpp
+       DCD.pypp.cpp
        FlexibilityLibrary.pypp.cpp
        FlexibilityTemplate.pypp.cpp
        Gro87.pypp.cpp

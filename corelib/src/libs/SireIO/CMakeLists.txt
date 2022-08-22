@@ -32,6 +32,7 @@ set ( SIREIO_HEADERS
       biosimspace.h
       charmmpsf.h
       cube.h
+      dcd.h
       errors.h
       flexibilitylibrary.h
       gro87.h
@@ -64,6 +65,7 @@ set ( SIREIO_SOURCES
       biosimspace.cpp
       charmmpsf.cpp
       cube.cpp
+      dcd.cpp
       errors.cpp
       flexibilitylibrary.cpp
       gro87.cpp

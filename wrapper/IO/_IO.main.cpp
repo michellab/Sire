@@ -17,6 +17,8 @@
 
 #include "Cube.pypp.hpp"
 
+#include "DCD.pypp.hpp"
+
 #include "FlexibilityLibrary.pypp.hpp"
 
 #include "FlexibilityTemplate.pypp.hpp"
@@ -99,6 +101,8 @@ BOOST_PYTHON_MODULE(_IO){
     register_CharmmPSF_class();
 
     register_Cube_class();
+
+    register_DCD_class();
 
     register_FlexibilityLibrary_class();
 

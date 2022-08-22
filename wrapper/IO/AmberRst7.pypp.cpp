@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/generalunitproperty.h"
+
 #include "SireBase/parallel.h"
 
 #include "SireBase/stringproperty.h"

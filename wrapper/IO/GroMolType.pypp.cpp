@@ -462,7 +462,7 @@ void register_GroMolType_class(){
                 "setAtoms"
                 , setAtoms_function_value
                 , ( bp::arg("atoms"), bp::arg("is_lambda1")=(bool)(false) )
-                , "" );
+                , "Set the atoms to the passed vector" );
         
         }
         { //::SireIO::GroMolType::setNExcludedAtoms

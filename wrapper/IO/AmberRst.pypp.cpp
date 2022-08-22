@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "SireBase/booleanproperty.h"
 
+#include "SireBase/generalunitproperty.h"
+
 #include "SireBase/getinstalldir.h"
 
 #include "SireBase/parallel.h"
