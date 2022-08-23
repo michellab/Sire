@@ -43,6 +43,7 @@ namespace SireMol
 {
 class Trajectory;
 class TrajectoryData;
+class MolTrajectoryData;
 }
 
 QDataStream& operator<<(QDataStream&, const SireMol::Trajectory&);
@@ -51,6 +52,9 @@ QDataStream& operator>>(QDataStream&, SireMol::Trajectory&);
 QDataStream& operator<<(QDataStream&, const SireMol::TrajectoryData&);
 QDataStream& operator>>(QDataStream&, SireMol::TrajectoryData&);
 
+QDataStream& operator<<(QDataStream&, const SireMol::MolTrajectoryData&);
+QDataStream& operator>>(QDataStream&, SireMol::MolTrajectoryData&);
+
 namespace SireVol
 {
 class Space;
@@ -58,6 +62,8 @@ class Space;
 
 namespace SireMol
 {
+
+typedef SireBase::SharedPolyPointer<TrajectoryData> TrajectoryDataPtr;
 
 /** This is the virtual base class of all TrajectoryData objects.
  *  These objects hold handles to trajectory data. They do
@@ -85,7 +91,9 @@ public:
     virtual TrajectoryData* clone() const=0;
 
     virtual int nFrames() const=0;
-    virtual SireUnits::Dimension::Time timestep() const=0;
+
+    virtual SireUnits::Dimension::Time getTotalTime() const=0;
+    virtual SireUnits::Dimension::Time getDeltaTime(int frame) const=0;
 
     virtual bool containsSpace() const=0;
     virtual bool containsCoordinates() const=0;
@@ -120,9 +128,16 @@ public:
     virtual AtomVelocities getFrame(int i, const AtomVelocities &velocities, qint64 idx) const=0;
     virtual AtomForces getFrame(int i, const AtomForces &forces, qint64 idx) const=0;
 
-    virtual void setFrame(int i, const AtomCoords &coords, qint64 idx)=0;
-    virtual void setFrame(int i, const AtomVelocities &velocities, qint64 idx)=0;
-    virtual void setFrame(int i, const AtomForces &forces, qint64 idx)=0;
+    virtual bool isEditable() const;
+    virtual bool assertIsEditable() const;
+
+    virtual bool canMerge(const TrajectoryData &other) const;
+
+    virtual TrajectoryDataPtr makeEditable(const AtomCoords &coords, qint64 idx);
+
+    virtual void setFrame(int i, const AtomCoords &coords, qint64 idx);
+    virtual void setFrame(int i, const AtomVelocities &velocities, qint64 idx);
+    virtual void setFrame(int i, const AtomForces &forces, qint64 idx);
 
     virtual void appendFrame(const AtomCoords &coords, qint64 idx);
     virtual void appendFrame(const AtomVelocities &velocities, qint64 idx);
@@ -132,15 +147,80 @@ public:
     virtual void insertFrame(int i, const AtomVelocities &velocities, qint64 idx);
     virtual void insertFrame(int i, const AtomForces &forces, qint64 idx);
 
-    virtual void deleteFrame(int i, qint64 idx)=0;
+    virtual void deleteFrame(int i, qint64 idx);
 
-    virtual void insertFrame(int i)=0;
-    virtual void deleteFrame(int i)=0;
+    virtual void insertFrame(int i);
+    virtual void deleteFrame(int i);
 
 protected:
     TrajectoryData& operator=(const TrajectoryData &other);
 };
 
+/** This class holds an editable trajectory that has been extracted
+ *  for a single molecule. This is what is used when parts of a trajectory
+ *  are edited for a single molecule (or when new trajectory data is
+ *  generated for a new molecule)
+ */
+class SIREMOL_EXPORT MolTrajectoryData : public TrajectoryData
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const MolTrajectoryData&);
+friend QDataStream& ::operator>>(QDataStream&, MolTrajectoryData&);
+
+public:
+    MolTrajectoryData();
+    MolTrajectoryData(const QVector< QVector<SireMaths::Vector> > &coordinates,
+                      const QVector< QVector<SireMaths::Vector> > &velocities,
+                      const QVector< QVector<SireMaths::Vector> > &forces,
+                      const QVector< SireVol::SpacePtr > &spaces);
+
+    MolTrajectoryData(const MolTrajectoryData &other);
+
+    ~MolTrajectoryData();
+
+    const char* what() const;
+
+    static const char* typeName();
+
+    TrajectoryData* clone() const;
+
+    int nFrames() const;
+    SireUnits::Dimension::Time timestep() const;
+
+    bool containsSpace() const;
+    bool containsCoordinates() const;
+    bool containsVelocities() const;
+    bool containsForces() const;
+
+    bool supportsSpace() const;
+    bool supportsCoordinates() const;
+    bool supportsVelocities() const;
+    bool supportsForces() const;
+
+    void assertValidIndex(qint64 index) const;
+
+    QStringList filenames() const;
+
+    const SireVol::Space& getSpace(int i) const;
+    AtomCoords getFrame(int i, const AtomCoords &coords, qint64 idx) const;
+    AtomVelocities getFrame(int i, const AtomVelocities &velocities, qint64 idx) const;
+    AtomForces getFrame(int i, const AtomForces &forces, qint64 idx) const;
+
+    bool isEditable() const;
+    bool canMerge(const TrajectoryData &other) const;
+
+    TrajectoryDataPtr makeEditable(const AtomCoords &coords, qint64 idx);
+
+    void setFrame(int i, const AtomCoords &coords, qint64 idx)
+    void setFrame(int i, const AtomVelocities &velocities, qint64 idx)
+    void setFrame(int i, const AtomForces &forces, qint64 idx)
+
+    void insertFrame(int i, const AtomCoords &coords, qint64 idx);
+    void insertFrame(int i, const AtomVelocities &velocities, qint64 idx);
+    void insertFrame(int i, const AtomForces &forces, qint64 idx);
+
+    void deleteFrame(int i, qint64 idx);
+};
 
 /** This is a molecular property that holds the handle to the
  *  trajectory data for that molecule. In addition to the
@@ -158,7 +238,7 @@ friend QDataStream& ::operator>>(QDataStream&, Trajectory&);
 public:
     Trajectory();
     Trajectory(const TrajectoryData &data, qint64 index);
-
+    Trajectory(const QList<TrajectoryDataPtr> &data, qint64 index);
     Trajectory(const Trajectory &other);
 
     ~Trajectory();
@@ -177,52 +257,55 @@ public:
     bool isEmpty() const;
 
     int nFrames() const;
-    SireUnits::Dimension::Time timestep() const;
 
-    const SireVol::Space& getSpace(int i) const;
-    AtomCoords getFrame(int i, const AtomCoords &coords) const;
-    AtomVelocities getFrame(int i, const AtomVelocities &velocities) const;
-    AtomForces getFrame(int i, const AtomForces &forces) const;
+    const SireVol::Space& getSpace(int frame) const;
+    SireUnits::Dimension::Time getTime(int frame) const;
 
-    void setFrame(int i, const AtomCoords &coords);
-    void setFrame(int i, const AtomVelocities &velocities);
-    void setFrame(int i, const AtomForces &forces);
+    AtomCoords getFrame(int frame, const AtomCoords &coords) const;
+    AtomVelocities getFrame(int frame, const AtomVelocities &velocities) const;
+    AtomForces getFrame(int frame, const AtomForces &forces) const;
+
+    void setFrame(int frame, const AtomCoords &coords);
+    void setFrame(int frame, const AtomVelocities &velocities);
+    void setFrame(int frame, const AtomForces &forces);
 
     void appendFrame(const AtomCoords &coords);
     void appendFrame(const AtomVelocities &velocities);
     void appendFrame(const AtomForces &forces);
 
-    void insertFrame(int i, const AtomCoords &coords);
-    void insertFrame(int i, const AtomVelocities &velocities);
-    void insertFrame(int i, const AtomForces &forces);
+    void insertFrame(int frame, const AtomCoords &coords);
+    void insertFrame(int frame, const AtomVelocities &velocities);
+    void insertFrame(int frame, const AtomForces &forces);
 
-    void deleteFrame(int i);
+    void deleteFrame(int frame);
 
     bool isCompatibleWith(const MoleculeInfoData &molinfo) const;
 
-    bool containsSpace() const;
-    bool containsCoordinates() const;
-    bool containsVelocities() const;
-    bool containsForces() const;
+    bool containsSpace(int frame) const;
+    bool containsCoordinates(int frame) const;
+    bool containsVelocities(int frame) const;
+    bool containsForces(int frame) const;
 
-    bool supportsSpace() const;
-    bool supportsCoordinates() const;
-    bool supportsVelocities() const;
-    bool supportsForces() const;
+    bool supportsSpace(int frame) const;
+    bool supportsCoordinates(int frame) const;
+    bool supportsVelocities(int frame) const;
+    bool supportsForces(int frame) const;
 
-    void assertContainsSpace() const;
-    void assertContainsCoordinates() const;
-    void assertContainsVelocities() const;
-    void assertContainsForces() const;
+    void assertContainsSpace(int frame) const;
+    void assertContainsCoordinates(int frame) const;
+    void assertContainsVelocities(int frame) const;
+    void assertContainsForces(int frame) const;
 
-    void assertSupportsSpace() const;
-    void assertSupportsCoordinates() const;
-    void assertSupportsVelocities() const;
-    void assertSupportsForces() const;
+    void assertSupportsSpace(int frame) const;
+    void assertSupportsCoordinates(int frame) const;
+    void assertSupportsVelocities(int frame) const;
+    void assertSupportsForces(int frame) const;
 
 private:
-    /** Handle to the underlying trajectory data */
-    SireBase::SharedPolyPointer<TrajectoryData> d;
+    int _getTrajectoryForFrame(int &frame) const;
+
+    /** Handles to the underlying trajectory data */
+    QList<TrajectoryDataPtr> d;
 
     /** Index of the molecule's first atom in the trajectory */
     qint64 idx;

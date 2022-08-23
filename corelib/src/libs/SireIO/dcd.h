@@ -38,6 +38,9 @@ SIRE_BEGIN_HEADER
 namespace SireIO
 {
 class DCD;
+
+namespace detail{ class DCDFile; }
+
 }
 
 SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::DCD&);
@@ -65,6 +68,13 @@ public:
     QVector<double> readUnitCell(FortranFile &file, int frame);
     QVector<SireMaths::Vector> readCoordinates(FortranFile &file, int frame);
 
+    QString getTitle() const;
+
+    double getTimeStep() const;
+    qint64 getFrameStart() const;
+    qint64 getFrameDelta() const;
+
+private:
     QStringList title;
 
     QVector<qint32> fixed_atoms;
@@ -84,7 +94,6 @@ public:
     bool CHARMM_FORMAT;
     bool HAS_EXTRA_BLOCK;
     bool HAS_FOUR_DIMS;
-
 };
 }
 
@@ -200,6 +209,7 @@ private:
 }
 
 Q_DECLARE_METATYPE( SireIO::DCD )
+Q_DECLARE_METATYPE( SireIO::MolTrajectoryData)
 
 SIRE_EXPOSE_CLASS( SireIO::DCD )
 

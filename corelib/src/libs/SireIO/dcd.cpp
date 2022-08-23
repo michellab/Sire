@@ -77,6 +77,11 @@ using namespace SireUnits;
 using namespace SireUnits::Dimension;
 using namespace SireStream;
 
+
+//// Thanks to the MDAnalysis parser
+//// (https://github.com/MDAnalysis/mdanalysis/blob/develop/package/MDAnalysis/lib/formats/include/readdcd.h)
+//// which really helped with the reverse engineering of the DCD fileformat
+
 static const RegisterMetaType<DCD> r_dcd;
 const RegisterParser<DCD> register_dcd;
 
@@ -200,6 +205,9 @@ void SireIO::detail::DCDFile::readHeader(FortranFile &file)
         timestep = line.readFloat64At(40);
     }
 
+    // convert the timestep into picoseconds (currently femtoseconds?)
+    timestep *= 0.001;
+
     line = file[1];
 
     int ntitle = line.readInt32(1)[0];
@@ -273,13 +281,21 @@ void SireIO::detail::DCDFile::readHeader(FortranFile &file)
         num_lines_per_frame += 1;
     }
 
-    if (file.nRecords() != first_frame_line + (num_lines_per_frame * nframes))
+    if (nframes != 0)
     {
-        throw SireIO::parse_error(QObject::tr(
-            "Wrong number of records in the DCD file. Expect to have %1 "
-            "for %2 frames, but actually have %3.")
-                .arg(first_frame_line + (num_lines_per_frame*nframes))
-                .arg(nframes).arg(file.nRecords()), CODELOC);
+        if (file.nRecords() != first_frame_line + (num_lines_per_frame * nframes))
+        {
+            throw SireIO::parse_error(QObject::tr(
+                "Wrong number of records in the DCD file. Expect to have %1 "
+                "for %2 frames, but actually have %3.")
+                    .arg(first_frame_line + (num_lines_per_frame*nframes))
+                    .arg(nframes).arg(file.nRecords()), CODELOC);
+        }
+    }
+    else
+    {
+        // we need to calculate nframes
+        nframes = (file.nRecords() - first_frame_line) / num_lines_per_frame;
     }
 }
 
@@ -368,6 +384,26 @@ QVector<Vector> SireIO::detail::DCDFile::readCoordinates(FortranFile &file, int 
     }
 }
 
+QString SireIO::detail::DCDFile::getTitle() const
+{
+    return title.join("");
+}
+
+double SireIO::detail::DCDFile::getTimeStep() const
+{
+    return timestep;
+}
+
+qint64 SireIO::detail::DCDFile::getFrameStart() const
+{
+    return istart;
+}
+
+qint64 SireIO::detail::DCDFile::getFrameDelta() const
+{
+    return nsavc;
+}
+
 /** Parse the data contained in the lines - this clears any pre-existing
     data in this object */
 void DCD::parse(const QString &filename, const PropertyMap &map)
@@ -377,8 +413,8 @@ void DCD::parse(const QString &filename, const PropertyMap &map)
     SireIO::detail::DCDFile dcd;
     dcd.readHeader(file);
 
-    ttle = dcd.title.join(" ");
-    current_time = dcd.istart * dcd.timestep;
+    ttle = dcd.getTitle();
+    current_time = dcd.getFrameStart() * dcd.getTimeStep();
 
     coords = dcd.readCoordinates(file, 0);
     auto unitcell = dcd.readUnitCell(file, 0);
