@@ -60,6 +60,8 @@
 
 #include "SireStream/shareddatastream.h"
 
+#include "tostring.h"
+
 #include <QFile>
 #include <QDataStream>
 #include <QDebug>
@@ -147,13 +149,241 @@ QString DCD::formatDescription() const
                        "based on charmm / namd / x-plor format.");
 }
 
+SireIO::detail::DCDFile::DCDFile()
+               : timestep(0), istart(0),
+                 nsavc(0), nfixed(0), natoms(0),
+                 nframes(0), first_frame_line(0),
+                 CHARMM_FORMAT(false),
+                 HAS_EXTRA_BLOCK(false),
+                 HAS_FOUR_DIMS(false)
+{}
+
+SireIO::detail::DCDFile::~DCDFile()
+{}
+
+void SireIO::detail::DCDFile::readHeader(FortranFile &file)
+{
+    auto line = file[0];
+
+    auto typ = line.readChar(4);
+
+    if (typ != "CORD")
+        throw SireIO::parse_error(QObject::tr(
+            "This does not look like a DCD file, because it does "
+            "not start with 'CORD'. Starts with %1.").arg(typ), CODELOC);
+
+    auto ints = line.readInt32(9);
+
+    nframes = ints[0];
+    istart = ints[1];
+    nsavc = ints[2];
+    nfixed = ints[8];
+
+    // now need to check the value at buffer[80] as, if this is non-zero,
+    // then this is a CHARMM format DCD file
+    CHARMM_FORMAT = line.readInt32At(80) != 0;
+
+    // the value at buffer[44] says if there is an extra block
+    HAS_EXTRA_BLOCK = line.readInt32At(44) != 0;
+
+    // the value at buffer[48] says whether or not we have four dimensions
+    HAS_FOUR_DIMS = line.readInt32At(48) != 0;
+
+    timestep = 0;
+
+    if (CHARMM_FORMAT)
+    {
+        timestep = line.readFloat32At(40);
+    }
+    else
+    {
+        timestep = line.readFloat64At(40);
+    }
+
+    line = file[1];
+
+    int ntitle = line.readInt32(1)[0];
+
+    for (int i=0; i<ntitle; ++i)
+    {
+        QString t = line.readChar(32).simplified().replace('\0', "");
+
+        if (not t.isEmpty())
+            title.append(t);
+    }
+
+    line = file[2];
+
+    natoms = line.readInt32(1)[0];
+
+    int linenum = 3;
+
+    if (nfixed != 0)
+    {
+        line = file[linenum];
+        linenum += 1;
+
+        fixed_atoms = line.readInt32(nfixed);
+    }
+
+    first_frame_line = linenum;
+
+    if (nfixed != 0)
+    {
+        // we have to read in the first set of coordinates, as these
+        // hold the fixed atoms as well as the movable atoms
+        if (CHARMM_FORMAT and HAS_EXTRA_BLOCK)
+        {
+            line = file[linenum];
+            linenum += 1;
+
+            line.readFloat64(6);
+        }
+
+        line = file[linenum];
+        linenum += 1;
+        auto x = line.readFloat32(natoms);
+
+        line = file[linenum];
+        linenum += 1;
+        auto y = line.readFloat32(natoms);
+
+        line = file[linenum];
+        linenum += 1;
+        auto z = line.readFloat32(natoms);
+
+        first_frame = QVector<Vector>(natoms);
+
+        for (int i=0; i<natoms; ++i)
+        {
+            first_frame[i] = Vector(x[i], y[i], z[i]);
+        }
+    }
+
+    // now sanity check the rest of the file
+    int num_lines_per_frame = 3;
+
+    if (HAS_FOUR_DIMS)
+    {
+        num_lines_per_frame += 1;
+    }
+
+    if (CHARMM_FORMAT and HAS_EXTRA_BLOCK)
+    {
+        num_lines_per_frame += 1;
+    }
+
+    if (file.nRecords() != first_frame_line + (num_lines_per_frame * nframes))
+    {
+        throw SireIO::parse_error(QObject::tr(
+            "Wrong number of records in the DCD file. Expect to have %1 "
+            "for %2 frames, but actually have %3.")
+                .arg(first_frame_line + (num_lines_per_frame*nframes))
+                .arg(nframes).arg(file.nRecords()), CODELOC);
+    }
+}
+
+QVector<double> SireIO::detail::DCDFile::readUnitCell(FortranFile &file, int frame)
+{
+    if (frame < 0 or frame >= nframes)
+    {
+        throw SireIO::parse_error(QObject::tr(
+            "Trying to access an invalid frame (%1) from a DCD with %2 frames.")
+                .arg(frame).arg(nframes), CODELOC);
+    }
+
+    // get the line number for this frame
+    int num_lines_per_frame = 3;
+
+    if (HAS_FOUR_DIMS)
+        num_lines_per_frame += 1;
+
+    if (CHARMM_FORMAT and HAS_EXTRA_BLOCK)
+    {
+        num_lines_per_frame += 1;
+
+        int linenum = first_frame_line + (frame*num_lines_per_frame);
+
+        auto line = file[linenum];
+
+        return line.readFloat64(6);
+    }
+
+    return QVector<double>();
+}
+
+QVector<Vector> SireIO::detail::DCDFile::readCoordinates(FortranFile &file, int frame)
+{
+    if (frame < 0 or frame >= nframes)
+    {
+        throw SireIO::parse_error(QObject::tr(
+            "Trying to access an invalid frame (%1) from a DCD with %2 frames.")
+                .arg(frame).arg(nframes), CODELOC);
+    }
+
+    // get the line number for this frame
+    int num_lines_per_frame = 3;
+    int skip_unitcell = 0;
+
+    if (HAS_FOUR_DIMS)
+        num_lines_per_frame += 1;
+
+    if (CHARMM_FORMAT and HAS_EXTRA_BLOCK)
+    {
+        num_lines_per_frame += 1;
+        skip_unitcell = 1;
+    }
+
+    int linenum = first_frame_line + (frame*num_lines_per_frame) + skip_unitcell;
+
+    if (nfixed == 0)
+    {
+        // read in the x, y, and z data
+        auto line = file[linenum];
+        auto x = line.readFloat32(natoms);
+        line = file[linenum+1];
+        auto y = line.readFloat32(natoms);
+        line = file[linenum+2];
+        auto z = line.readFloat32(natoms);
+
+        QVector<Vector> coords(natoms);
+
+        for (int i=0; i<natoms; ++i)
+        {
+            coords[i] = Vector(x[i], y[i], z[i]);
+        }
+
+        return coords;
+    }
+    else if (frame == 0)
+    {
+        return first_frame;
+    }
+    else
+    {
+        // read the coordinates and map them into a copy of first_frame
+        QVector<Vector> frame = first_frame;
+
+        return frame;
+    }
+}
+
 /** Parse the data contained in the lines - this clears any pre-existing
     data in this object */
 void DCD::parse(const QString &filename, const PropertyMap &map)
 {
     FortranFile file(filename);
 
-    qDebug() << file.nRecords();
+    SireIO::detail::DCDFile dcd;
+    dcd.readHeader(file);
+
+    ttle = dcd.title.join(" ");
+    current_time = dcd.istart * dcd.timestep;
+
+    coords = dcd.readCoordinates(file, 0);
+    auto unitcell = dcd.readUnitCell(file, 0);
+
+    //need to convert unit cell...
 
     //set the score, and save the warnings
     double score = 100.0 / (parse_warnings.count()+1);
@@ -706,11 +936,11 @@ double DCD::time() const
 int DCD::nAtoms() const
 {
     if (not coords.isEmpty())
-        return coords[0].count();
+        return coords.count();
     else if (not vels.isEmpty())
-        return vels[0].count();
+        return vels.count();
     else if (not frcs.isEmpty())
-        return frcs[0].count();
+        return frcs.count();
     else
         return 0;
 }

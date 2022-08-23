@@ -46,6 +46,48 @@ SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::DCD&);
 namespace SireIO
 {
 
+class FortranFile;
+
+namespace detail
+{
+/** This class provides a low-level interface to reading and writing
+ *  a DCD file. It is designed to be used only with the
+ *  DCD and DCDTrajectory classes
+ */
+class DCDFile
+{
+public:
+    DCDFile();
+    ~DCDFile();
+
+    void readHeader(FortranFile &file);
+
+    QVector<double> readUnitCell(FortranFile &file, int frame);
+    QVector<SireMaths::Vector> readCoordinates(FortranFile &file, int frame);
+
+    QStringList title;
+
+    QVector<qint32> fixed_atoms;
+    QVector<SireMaths::Vector> first_frame;
+
+    double timestep;
+
+    qint64 istart;
+    qint64 nsavc;
+    qint64 nfixed;
+
+    qint64 natoms;
+    qint64 nframes;
+
+    qint64 first_frame_line;
+
+    bool CHARMM_FORMAT;
+    bool HAS_EXTRA_BLOCK;
+    bool HAS_FOUR_DIMS;
+
+};
+}
+
 /** This class represents a DCD file reader. Note that this will
     only read the first frame from the file (it is for loading molecules).
     The whole trajectory will be added and parsed using

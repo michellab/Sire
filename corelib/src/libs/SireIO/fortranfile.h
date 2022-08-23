@@ -52,15 +52,26 @@ public:
 
     FortranRecord& operator=(const FortranRecord &other);
 
-    QString readChar(int n) const;
+    int size() const;
 
-    QVector<double> readDouble(int n) const;
-    QVector<float> readFloat(int n) const;
-    QVector<qint32> readInt32(int n) const;
-    QVector<qint64> readInt64(int n) const;
+    QString readChar(int n);
+    QVector<double> readFloat64(int n);
+    QVector<float> readFloat32(int n);
+    QVector<qint32> readInt32(int n);
+    QVector<qint64> readInt64(int n);
+
+    char readCharAt(int pos) const;
+    double readFloat64At(int pos) const;
+    float readFloat32At(int pos) const;
+    qint32 readInt32At(int pos) const;
+    qint64 readInt64At(int pos) const;
 
 private:
+    void _assertPosValid(int pos, int size) const;
+    void _assertValid(int n, int size) const;
+
     QByteArray data;
+    int cursor;
     bool is_little_endian;
 };
 
