@@ -28,6 +28,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_QMProgram_class(){
 
     { //::Squire::QMProgram
@@ -43,6 +45,7 @@ void register_QMProgram_class(){
                 "calculateCharges"
                 , calculateCharges_function_value
                 , ( bp::arg("molecule"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Calculate the charges on the molecule molecule using the properties\nspecified in the passed property map" );
         
         }
@@ -55,6 +58,7 @@ void register_QMProgram_class(){
                 "calculateCharges"
                 , calculateCharges_function_value
                 , ( bp::arg("molecule") )
+                , bp::release_gil_policy()
                 , "Calculate the charges on the molecule molecule using the default\nproperty locations" );
         
         }
@@ -67,6 +71,7 @@ void register_QMProgram_class(){
                 "chargeCommandFile"
                 , chargeCommandFile_function_value
                 , ( bp::arg("molecule") )
+                , bp::release_gil_policy()
                 , "Return the command file that would be used to calculate the atomic\npartial charges of the passed molecule" );
         
         }
@@ -79,6 +84,7 @@ void register_QMProgram_class(){
                 "chargeCommandFile"
                 , chargeCommandFile_function_value
                 , ( bp::arg("molecule"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the command file that would be used to calculate the atomic\npartial charges of the passed molecule" );
         
         }
@@ -90,7 +96,7 @@ void register_QMProgram_class(){
             QMProgram_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -102,6 +108,7 @@ void register_QMProgram_class(){
             QMProgram_exposer.def( 
                 "numberOfMMAtomsLimit"
                 , numberOfMMAtomsLimit_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum number of MM atoms supported by this QM program. This\nreturns -1 if there is no limit" );
         
         }
@@ -114,6 +121,7 @@ void register_QMProgram_class(){
                 "numberOfMMAtomsLimit"
                 , numberOfMMAtomsLimit_function_value
                 , ( bp::arg("num_qm_atoms") )
+                , bp::release_gil_policy()
                 , "Return the maximum number of QM atoms supported by this QM program,\ngiven the supplied number of MM atoms. This returns -1 if there is\nno limit" );
         
         }
@@ -125,6 +133,7 @@ void register_QMProgram_class(){
             QMProgram_exposer.def( 
                 "supportsGaussianCharges"
                 , supportsGaussianCharges_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this QM program supports the use\nof gaussian lattice charges (which can polarise the QM wavefunction)" );
         
         }
@@ -136,6 +145,7 @@ void register_QMProgram_class(){
             QMProgram_exposer.def( 
                 "supportsLatticeCharges"
                 , supportsLatticeCharges_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this QM program supports the use\nof point lattice charges (which can polarise the QM wavefunction)" );
         
         }
@@ -147,6 +157,7 @@ void register_QMProgram_class(){
             QMProgram_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

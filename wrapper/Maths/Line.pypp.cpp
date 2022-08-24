@@ -21,6 +21,8 @@ SireMaths::Line __copy__(const SireMaths::Line &other){ return SireMaths::Line(o
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Line_class(){
@@ -51,6 +53,7 @@ void register_Line_class(){
             Line_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -62,6 +65,7 @@ void register_Line_class(){
             Line_exposer.def( 
                 "length"
                 , length_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -99,6 +103,7 @@ void register_Line_class(){
             Line_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of the line" );
         
         }
@@ -110,6 +115,7 @@ void register_Line_class(){
             Line_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -121,6 +127,7 @@ void register_Line_class(){
             Line_exposer.def( 
                 "vector"
                 , vector_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -132,6 +139,7 @@ void register_Line_class(){
             Line_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

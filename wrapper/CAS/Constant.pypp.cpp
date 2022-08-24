@@ -37,6 +37,8 @@ SireCAS::Constant __copy__(const SireCAS::Constant &other){ return SireCAS::Cons
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Constant_class(){
 
     { //::SireCAS::Constant
@@ -52,6 +54,7 @@ void register_Constant_class(){
             Constant_exposer.def( 
                 "children"
                 , children_function_value
+                , bp::release_gil_policy()
                 , "No children in a constant" );
         
         }
@@ -64,6 +67,7 @@ void register_Constant_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Differential of a constant is zero" );
         
         }
@@ -76,6 +80,7 @@ void register_Constant_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluation of a constant is 1" );
         
         }
@@ -88,6 +93,7 @@ void register_Constant_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluation of a constant is 1" );
         
         }
@@ -100,6 +106,7 @@ void register_Constant_class(){
                 "expand"
                 , expand_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -111,6 +118,7 @@ void register_Constant_class(){
             Constant_exposer.def( 
                 "functions"
                 , functions_function_value
+                , bp::release_gil_policy()
                 , "No functions in a constant" );
         
         }
@@ -122,6 +130,7 @@ void register_Constant_class(){
             Constant_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Hash a constant" );
         
         }
@@ -134,6 +143,7 @@ void register_Constant_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Integral of a constant is = constantsymbol + C" );
         
         }
@@ -147,6 +157,7 @@ void register_Constant_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "Cant substitute into a constant" );
         
         }
@@ -158,6 +169,7 @@ void register_Constant_class(){
             Constant_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "No symbols in a constant" );
         
         }
@@ -169,6 +181,7 @@ void register_Constant_class(){
             Constant_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this constant (actually an empty string)" );
         
         }
@@ -180,6 +193,7 @@ void register_Constant_class(){
             Constant_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -191,6 +205,7 @@ void register_Constant_class(){
             Constant_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

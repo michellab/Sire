@@ -36,6 +36,8 @@ SireFF::GridPotentialTable __copy__(const SireFF::GridPotentialTable &other){ re
 
 const char* pvt_get_name(const SireFF::GridPotentialTable&){ return "SireFF::GridPotentialTable";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_GridPotentialTable_class(){
@@ -55,6 +57,7 @@ void register_GridPotentialTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("ipoint"), bp::arg("potential") )
+                , bp::release_gil_policy()
                 , "Add the potential potential onto the potential for the ipointth grid point\nThrow: SireError::invalid_index\n" );
         
         }
@@ -67,6 +70,7 @@ void register_GridPotentialTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Add the potential in other onto that for this table - this only\nadds the potential if the two grids are identical" );
         
         }
@@ -79,6 +83,7 @@ void register_GridPotentialTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("potential") )
+                , bp::release_gil_policy()
                 , "Add the potential potential to all of the points in this table" );
         
         }
@@ -103,6 +108,7 @@ void register_GridPotentialTable_class(){
             GridPotentialTable_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of grid points (and thus potential values)" );
         
         }
@@ -115,6 +121,7 @@ void register_GridPotentialTable_class(){
                 "divide"
                 , divide_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Divide the potential at all of the points in this table by value" );
         
         }
@@ -126,7 +133,7 @@ void register_GridPotentialTable_class(){
             GridPotentialTable_exposer.def( 
                 "grid"
                 , grid_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the grid that contains the points at which the potential is\nevaluated - the order of points in the grid is the same as the order\nof potential values in this table" );
         
         }
@@ -138,6 +145,7 @@ void register_GridPotentialTable_class(){
             GridPotentialTable_exposer.def( 
                 "initialise"
                 , initialise_function_value
+                , bp::release_gil_policy()
                 , "Initialise the potential at each grid point to equal 0" );
         
         }
@@ -150,6 +158,7 @@ void register_GridPotentialTable_class(){
                 "multiply"
                 , multiply_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Multiply the potential at all of the points in this table by value" );
         
         }
@@ -161,6 +170,7 @@ void register_GridPotentialTable_class(){
             GridPotentialTable_exposer.def( 
                 "nPoints"
                 , nPoints_function_value
+                , bp::release_gil_policy()
                 , "Return the number of grid points (and thus potential values)" );
         
         }
@@ -234,6 +244,7 @@ void register_GridPotentialTable_class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("potential") )
+                , bp::release_gil_policy()
                 , "Set the potential at all of the points in this table equal to potential" );
         
         }
@@ -246,6 +257,7 @@ void register_GridPotentialTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("ipoint"), bp::arg("potential") )
+                , bp::release_gil_policy()
                 , "Subtract the potential potential from the potential for the ipointth grid point\nThrow: SireError::invalid_index\n" );
         
         }
@@ -258,6 +270,7 @@ void register_GridPotentialTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Subtract the potential in other from that for this table - this only\nsubtracts the potential if the two grids are identical" );
         
         }
@@ -270,6 +283,7 @@ void register_GridPotentialTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("potential") )
+                , bp::release_gil_policy()
                 , "Subtract the potential potential from all of the points in this table" );
         
         }
@@ -281,6 +295,7 @@ void register_GridPotentialTable_class(){
             GridPotentialTable_exposer.def( 
                 "toVector"
                 , toVector_function_value
+                , bp::release_gil_policy()
                 , "Return the array of potential values - the order is the same\nas the order of points in the grid" );
         
         }
@@ -292,6 +307,7 @@ void register_GridPotentialTable_class(){
             GridPotentialTable_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

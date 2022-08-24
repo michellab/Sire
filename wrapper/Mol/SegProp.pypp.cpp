@@ -15,6 +15,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SegProp_class(){
 
     { //::SireMol::SegProp
@@ -30,6 +32,7 @@ void register_SegProp_class(){
                 "assertCanConvert"
                 , assertCanConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -42,6 +45,7 @@ void register_SegProp_class(){
                 "assignFrom"
                 , assignFrom_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -54,6 +58,33 @@ void register_SegProp_class(){
                 "canConvert"
                 , canConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SegProp::getAsProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::SegProp::*getAsProperty_function_type)( ::SireMol::SegIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::SegProp::getAsProperty );
+            
+            SegProp_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("segidx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SegProp::getAsVariant
+        
+            typedef ::QVariant ( ::SireMol::SegProp::*getAsVariant_function_type)( ::SireMol::SegIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::SegProp::getAsVariant );
+            
+            SegProp_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("segidx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -65,6 +96,7 @@ void register_SegProp_class(){
             SegProp_exposer.def( 
                 "toVariant"
                 , toVariant_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

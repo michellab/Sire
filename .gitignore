@@ -2,9 +2,14 @@ build_core
 build_wrapper
 xcode
 build/miniconda.sh
+build/*_corelib/*
+build/*_wrapper/*
+build/*_module/*
 build/corelib/*
 build/wrapper/*
+build/module/*
 build/downloads/*
+recipes/sire/meta.yaml
 #files for wrapper
 module_info
 active_headers.data
@@ -12,8 +17,13 @@ exposed_decl.pypp.txt
 named_tuple.py
 wrapper/Py++/pyplusplus
 includes.tar.bz2
+doc/build/*
+doc/source/api/generated/*
+cache/*
+tests/cache/*
 *.pyc
 *.data
+.vscode
 
 # Compiled Object files
 *.slo
@@ -49,3 +59,6 @@ includes.tar.bz2
 
 #Atom
 .idea
+
+#VS Code
+.vscode

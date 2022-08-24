@@ -27,6 +27,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_QMChargeCalculator_class(){
 
     { //::Squire::QMChargeCalculator
@@ -89,6 +91,7 @@ void register_QMChargeCalculator_class(){
             QMChargeCalculator_exposer.def( 
                 "scaleFactor"
                 , scaleFactor_function_value
+                , bp::release_gil_policy()
                 , "Return the scale factor for the charges" );
         
         }
@@ -101,6 +104,7 @@ void register_QMChargeCalculator_class(){
                 "setScaleFactor"
                 , setScaleFactor_function_value
                 , ( bp::arg("sclfactor") )
+                , bp::release_gil_policy()
                 , "Set the scale factor for the charges" );
         
         }
@@ -112,6 +116,7 @@ void register_QMChargeCalculator_class(){
             QMChargeCalculator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

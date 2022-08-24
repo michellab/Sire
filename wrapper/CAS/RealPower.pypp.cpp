@@ -37,6 +37,8 @@ SireCAS::RealPower __copy__(const SireCAS::RealPower &other){ return SireCAS::Re
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_RealPower_class(){
 
     { //::SireCAS::RealPower
@@ -54,6 +56,7 @@ void register_RealPower_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this power" );
         
         }
@@ -66,6 +69,7 @@ void register_RealPower_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this power" );
         
         }
@@ -77,6 +81,7 @@ void register_RealPower_class(){
             RealPower_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash of this power" );
         
         }
@@ -89,6 +94,7 @@ void register_RealPower_class(){
             RealPower_exposer.def( 
                 "power"
                 , power_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -100,6 +106,7 @@ void register_RealPower_class(){
             RealPower_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -111,6 +118,7 @@ void register_RealPower_class(){
             RealPower_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -13,6 +13,8 @@ namespace bp = boost::python;
 
 #include "atomselection.h"
 
+#include "core.h"
+
 #include "editor.hpp"
 
 #include "evaluator.h"
@@ -34,6 +36,8 @@ SireMol::AbsFromMass __copy__(const SireMol::AbsFromMass &other){ return SireMol
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 void register_AbsFromMass_class(){
 
@@ -89,6 +93,7 @@ void register_AbsFromMass_class(){
             AbsFromMass_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

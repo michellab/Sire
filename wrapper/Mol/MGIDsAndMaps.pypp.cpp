@@ -23,6 +23,8 @@ SireMol::MGIDsAndMaps __copy__(const SireMol::MGIDsAndMaps &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_MGIDsAndMaps_class(){
@@ -55,6 +57,7 @@ void register_MGIDsAndMaps_class(){
             MGIDsAndMaps_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of identifier groups in this set" );
         
         }
@@ -66,6 +69,7 @@ void register_MGIDsAndMaps_class(){
             MGIDsAndMaps_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is an empty group of groups" );
         
         }
@@ -116,6 +120,7 @@ void register_MGIDsAndMaps_class(){
             MGIDsAndMaps_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this set of IDs" );
         
         }
@@ -127,6 +132,7 @@ void register_MGIDsAndMaps_class(){
             MGIDsAndMaps_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -115,6 +115,8 @@ public:
 
     void update(const MoleculeData &other);
 
+    MolViewPtr toSelector() const;
+
     AtomName name() const;
     AtomNum number() const;
     AtomIdx index() const;
@@ -273,6 +275,12 @@ namespace detail
 {
 
 void assertSameSize(Atom*, int nats, int nprops);
+
+template<>
+SIRE_ALWAYS_INLINE int getCount<Atom>(const MolInfo &molinfo)
+{
+    return molinfo.nAtoms();
+}
 
 template<>
 SIRE_ALWAYS_INLINE QList<AtomIdx> getAll<Atom>(const MolInfo &molinfo)

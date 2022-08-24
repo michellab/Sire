@@ -39,6 +39,8 @@ SireMove::NullGetPoint __copy__(const SireMove::NullGetPoint &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullGetPoint_class(){
 
     { //::SireMove::NullGetPoint
@@ -81,6 +83,7 @@ void register_NullGetPoint_class(){
             NullGetPoint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

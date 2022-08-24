@@ -29,6 +29,8 @@ SireMaths::BennettsFreeEnergyAverage __copy__(const SireMaths::BennettsFreeEnerg
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_BennettsFreeEnergyAverage_class(){
 
     { //::SireMaths::BennettsFreeEnergyAverage
@@ -51,6 +53,7 @@ void register_BennettsFreeEnergyAverage_class(){
                 "accumulate"
                 , accumulate_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Accumulate the passed value onto the average" );
         
         }
@@ -62,6 +65,7 @@ void register_BennettsFreeEnergyAverage_class(){
             BennettsFreeEnergyAverage_exposer.def( 
                 "bennettsRatio"
                 , bennettsRatio_function_value
+                , bp::release_gil_policy()
                 , "Return the Bennetts ratio. This is the ensemble average\nof 1 \n{1 + exp( beta dE - C ) } if this is a backwards ratio" );
         
         }
@@ -74,6 +78,7 @@ void register_BennettsFreeEnergyAverage_class(){
                 "bennettsStandardError"
                 , bennettsStandardError_function_value
                 , ( bp::arg("level") )
+                , bp::release_gil_policy()
                 , "Return the standard error on the Bennetts ratio to the passed confidence level" );
         
         }
@@ -85,6 +90,7 @@ void register_BennettsFreeEnergyAverage_class(){
             BennettsFreeEnergyAverage_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Clear this accumulator" );
         
         }
@@ -96,6 +102,7 @@ void register_BennettsFreeEnergyAverage_class(){
             BennettsFreeEnergyAverage_exposer.def( 
                 "constant"
                 , constant_function_value
+                , bp::release_gil_policy()
                 , "Return the value of the constant offset to the energy used in the Bennetts average" );
         
         }
@@ -107,6 +114,7 @@ void register_BennettsFreeEnergyAverage_class(){
             BennettsFreeEnergyAverage_exposer.def( 
                 "isBackwardsRatio"
                 , isBackwardsRatio_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a backwards ratio (the denominator in the expression)" );
         
         }
@@ -118,6 +126,7 @@ void register_BennettsFreeEnergyAverage_class(){
             BennettsFreeEnergyAverage_exposer.def( 
                 "isForwardsRatio"
                 , isForwardsRatio_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a forwards ratio (the numerator in the expression)" );
         
         }
@@ -145,6 +154,7 @@ void register_BennettsFreeEnergyAverage_class(){
             BennettsFreeEnergyAverage_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -156,6 +166,7 @@ void register_BennettsFreeEnergyAverage_class(){
             BennettsFreeEnergyAverage_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

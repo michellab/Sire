@@ -27,6 +27,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MolDeleter_class(){
 
     { //::SireMove::MolDeleter
@@ -42,6 +44,7 @@ void register_MolDeleter_class(){
                 "deleteFrom"
                 , deleteFrom_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -78,6 +81,7 @@ void register_MolDeleter_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -89,6 +93,7 @@ void register_MolDeleter_class(){
             MolDeleter_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

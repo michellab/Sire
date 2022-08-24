@@ -41,6 +41,8 @@ SireMM::CLJBoxes __copy__(const SireMM::CLJBoxes &other){ return SireMM::CLJBoxe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJBoxes_class(){
 
     { //::SireMM::CLJBoxes
@@ -62,6 +64,7 @@ void register_CLJBoxes_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Add a set of CLJAtoms to the box, returning the indicies of each added atom" );
         
         }
@@ -74,6 +77,7 @@ void register_CLJBoxes_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("idx") )
+                , bp::release_gil_policy()
                 , "Return the atom at the specified index, or a null atom if\nnone such atom exists" );
         
         }
@@ -85,6 +89,7 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "atoms"
                 , atoms_function_value
+                , bp::release_gil_policy()
                 , "Return all of the atoms in all of the boxes (these may\nbe returned with a lot of padding)" );
         
         }
@@ -97,6 +102,7 @@ void register_CLJBoxes_class(){
                 "atoms"
                 , atoms_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Return all of the atoms whose indicies are in idxs. The atoms are returned\nin the same order as they appear in idxs" );
         
         }
@@ -109,6 +115,7 @@ void register_CLJBoxes_class(){
                 "boxAt"
                 , boxAt_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith box" );
         
         }
@@ -121,6 +128,7 @@ void register_CLJBoxes_class(){
                 "boxAt"
                 , boxAt_function_value
                 , ( bp::arg("index") )
+                , bp::release_gil_policy()
                 , "Return the box at index index" );
         
         }
@@ -133,6 +141,7 @@ void register_CLJBoxes_class(){
                 "boxAt"
                 , boxAt_function_value
                 , ( bp::arg("coords") )
+                , bp::release_gil_policy()
                 , "Return the box that contains the point with coordinates coords" );
         
         }
@@ -144,6 +153,7 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "boxDimensions"
                 , boxDimensions_function_value
+                , bp::release_gil_policy()
                 , "Return an array containing all occupied box dimensions. This is in the same order\nas the boxes returned by boxes" );
         
         }
@@ -156,6 +166,7 @@ void register_CLJBoxes_class(){
                 "boxDimensionsAt"
                 , boxDimensionsAt_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the dimensions of the ith box" );
         
         }
@@ -168,6 +179,7 @@ void register_CLJBoxes_class(){
                 "boxDimensionsAt"
                 , boxDimensionsAt_function_value
                 , ( bp::arg("index") )
+                , bp::release_gil_policy()
                 , "Return the AABox that describes the boundary of the box at index index" );
         
         }
@@ -180,6 +192,7 @@ void register_CLJBoxes_class(){
                 "boxDimensionsAt"
                 , boxDimensionsAt_function_value
                 , ( bp::arg("coords") )
+                , bp::release_gil_policy()
                 , "Return the dimensions of the box that contains the point with coordinates coords" );
         
         }
@@ -191,6 +204,7 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "boxes"
                 , boxes_function_value
+                , bp::release_gil_policy()
                 , "Return an array containing all occupied boxes. This is in the same order\nas the box dimensions returned by boxDimensions" );
         
         }
@@ -203,6 +217,7 @@ void register_CLJBoxes_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Return all of the atoms whose indicies are in idxs. The atoms are returned\nin the same order as they appear in idxs" );
         
         }
@@ -215,6 +230,7 @@ void register_CLJBoxes_class(){
                 "getDistance"
                 , getDistance_function_value
                 , ( bp::arg("box0"), bp::arg("box1") )
+                , bp::release_gil_policy()
                 , "Return the distance between the two boxes, assuming they are in an infinite cartesian space" );
         
         }
@@ -227,6 +243,7 @@ void register_CLJBoxes_class(){
                 "getDistance"
                 , getDistance_function_value
                 , ( bp::arg("space"), bp::arg("box0"), bp::arg("box1") )
+                , bp::release_gil_policy()
                 , "Return the distance between the two boxes based on the space space" );
         
         }
@@ -239,6 +256,7 @@ void register_CLJBoxes_class(){
                 "getDistance"
                 , getDistance_function_value
                 , ( bp::arg("space"), bp::arg("box0"), bp::arg("box1"), bp::arg("nx"), bp::arg("ny"), bp::arg("nz") )
+                , bp::release_gil_policy()
                 , "Return the distance between the two boxes based on the space space, assuming that\none of the boxes covers a volume of nx,ny,nz box lengths above its minimum dimensions" );
         
         }
@@ -251,6 +269,7 @@ void register_CLJBoxes_class(){
                 "getDistances"
                 , getDistances_function_value
                 , ( bp::arg("space"), bp::arg("boxes") )
+                , bp::release_gil_policy()
                 , "Return the distances between all of the occupied boxes in boxes\nbased on the space space" );
         
         }
@@ -263,6 +282,7 @@ void register_CLJBoxes_class(){
                 "getDistances"
                 , getDistances_function_value
                 , ( bp::arg("space"), bp::arg("boxes"), bp::arg("cutoff") )
+                , bp::release_gil_policy()
                 , "Return the distances between all of the occupied boxes in boxes\nbased on the space space, only returning boxes that are separated\nby distances of less than cutoff" );
         
         }
@@ -275,6 +295,7 @@ void register_CLJBoxes_class(){
                 "getDistances"
                 , getDistances_function_value
                 , ( bp::arg("space"), bp::arg("boxes0"), bp::arg("boxes1") )
+                , bp::release_gil_policy()
                 , "Return the distances between all pairs of occupied boxes between the boxes in\nboxes0 and the boxes in boxes1" );
         
         }
@@ -287,6 +308,7 @@ void register_CLJBoxes_class(){
                 "getDistances"
                 , getDistances_function_value
                 , ( bp::arg("space"), bp::arg("boxes0"), bp::arg("boxes1"), bp::arg("cutoff") )
+                , bp::release_gil_policy()
                 , "Return the distances between all pairs of occupied boxes between the boxes in\nboxes0 and the boxes in boxes1" );
         
         }
@@ -299,6 +321,7 @@ void register_CLJBoxes_class(){
                 "getDistances"
                 , getDistances_function_value
                 , ( bp::arg("space"), bp::arg("atoms0"), bp::arg("boxes1") )
+                , bp::release_gil_policy()
                 , "Return the distances between all the passed atoms and all of the occupied\nboxes in boxes1, returning a set of CLJBoxDistance objects where box0() is 0" );
         
         }
@@ -311,6 +334,7 @@ void register_CLJBoxes_class(){
                 "getDistances"
                 , getDistances_function_value
                 , ( bp::arg("space"), bp::arg("atoms0"), bp::arg("boxes1"), bp::arg("cutoff") )
+                , bp::release_gil_policy()
                 , "Return the distances between all the passed atoms and all of the occupied\nboxes in boxes1, returning a set of CLJBoxDistance objects where box0() is 0" );
         
         }
@@ -323,6 +347,7 @@ void register_CLJBoxes_class(){
                 "getitem"
                 , getitem_function_value
                 , ( bp::arg("idx") )
+                , bp::release_gil_policy()
                 , "Return the atom at the specified index, or a null atom if\nnone such atom exists" );
         
         }
@@ -334,6 +359,7 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -345,6 +371,7 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "length"
                 , length_function_value
+                , bp::release_gil_policy()
                 , "Return the length of each side of each box" );
         
         }
@@ -356,6 +383,7 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the boxes" );
         
         }
@@ -367,6 +395,7 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "nOccupiedBoxes"
                 , nOccupiedBoxes_function_value
+                , bp::release_gil_policy()
                 , "Return the number of occupied boxes" );
         
         }
@@ -378,6 +407,7 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "occupiedBoxIndicies"
                 , occupiedBoxIndicies_function_value
+                , bp::release_gil_policy()
                 , "Return the indicies of all occupied boxes" );
         
         }
@@ -430,6 +460,7 @@ void register_CLJBoxes_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Remove the atoms at the specified indicies. This does a rapid remove, i.e.\nit just turns the specified atoms into dummies (which may be overwritten by\nsubsequent add operations). If you want to completely remove the atoms then\nuse remove followed by squeeze. This will turn the atoms into dummies and will\nthen remove all dummy atoms from the boxes" );
         
         }
@@ -441,6 +472,7 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "squeeze"
                 , squeeze_function_value
+                , bp::release_gil_policy()
                 , "Return a copy of the boxes where all of the CLJAtoms objects have been squeezed,\nand all empty boxes have been removed" );
         
         }
@@ -453,6 +485,7 @@ void register_CLJBoxes_class(){
                 "take"
                 , take_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Remove the atoms at the specified indicies, returning the atoms that are\nremoved. This does a rapid remove, i.e. it just turns the specified atoms into\ndummies (which may be overwritten by subsequent add operations). If you want\nto completely remove the atoms, use take followed by squeeze" );
         
         }
@@ -464,6 +497,7 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -475,6 +509,7 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -486,6 +521,7 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -128,13 +128,13 @@ public:
     int nSelected(ResIdx residx) const;
     int nSelected(ChainIdx chainidx) const;
     int nSelected(SegIdx segidx) const;
-    
+
     int nSelected(const CGID &cgid) const;
     int nSelected(const AtomID &atomid) const;
     int nSelected(const ResID &resid) const;
     int nSelected(const ChainID &chainid) const;
     int nSelected(const SegID &segid) const;
-    
+
     int nSelected(const AtomSelection &selection) const;
 
     int nSelectedAtoms() const;
@@ -148,6 +148,13 @@ public:
     int nResidues() const;
     int nChains() const;
     int nSegments() const;
+
+    bool isAtom() const;
+    bool isResidue() const;
+    bool isCutGroup() const;
+    bool isChain() const;
+    bool isSegment() const;
+    bool isMolecule() const;
 
     bool selectedAllAtoms() const;
     bool selectedAllCutGroups() const;
@@ -163,7 +170,7 @@ public:
     bool selected(ResIdx residx) const;
     bool selected(ChainIdx chainidx) const;
     bool selected(SegIdx segidx) const;
-    
+
     bool selected(const CGID &cgid) const;
     bool selected(const ResID &resid) const;
     bool selected(const ChainID &chainid) const;
@@ -178,7 +185,7 @@ public:
     bool selectedAll(ResIdx residx) const;
     bool selectedAll(ChainIdx chainidx) const;
     bool selectedAll(SegIdx segidx) const;
-    
+
     bool selectedAll(const AtomID &atomid) const;
     bool selectedAll(const CGID &cgid) const;
     bool selectedAll(const ResID &resid) const;
@@ -194,7 +201,7 @@ public:
     bool selectedNone(ResIdx residx) const;
     bool selectedNone(ChainIdx chainidx) const;
     bool selectedNone(SegIdx segidx) const;
-    
+
     bool selectedNone(const AtomID &atomid) const;
     bool selectedNone(const CGID &cgid) const;
     bool selectedNone(const ResID &resid) const;
@@ -222,7 +229,7 @@ public:
     AtomSelection& select(ChainIdx chainidx);
     AtomSelection& deselect(ChainIdx chainidx);
     AtomSelection& selectOnly(ChainIdx chainidx);
-    
+
     AtomSelection& select(SegIdx segidx);
     AtomSelection& deselect(SegIdx segidx);
     AtomSelection& selectOnly(SegIdx segidx);
@@ -282,7 +289,7 @@ public:
     AtomSelection& select(const ChainID &chainid);
     AtomSelection& deselect(const ChainID &chainid);
     AtomSelection& selectOnly(const ChainID &chainid);
-    
+
     AtomSelection& select(const SegID &segid);
     AtomSelection& deselect(const SegID &segid);
     AtomSelection& selectOnly(const SegID &segid);
@@ -292,13 +299,13 @@ public:
     AtomSelection& selectOnly(const AtomSelection &selection);
 
     AtomSelection& invert();
- 
+
     bool intersects(AtomIdx atomidx) const;
     bool intersects(CGIdx cgidx) const;
     bool intersects(ResIdx residx) const;
     bool intersects(ChainIdx chainidx) const;
     bool intersects(SegIdx segidx) const;
-    
+
     bool intersects(const AtomID &atomid) const;
     bool intersects(const CGID &cgid) const;
     bool intersects(const ResID &resid) const;
@@ -306,13 +313,13 @@ public:
     bool intersects(const SegID &segid) const;
 
     bool intersects(const AtomSelection &selection) const;
-    
+
     bool contains(AtomIdx atomidx) const;
     bool contains(CGIdx cgidx) const;
     bool contains(ResIdx residx) const;
     bool contains(ChainIdx chainidx) const;
     bool contains(SegIdx segidx) const;
-    
+
     bool contains(const AtomID &atomid) const;
     bool contains(const CGID &cgid) const;
     bool contains(const ResID &resid) const;
@@ -338,7 +345,7 @@ public:
     AtomSelection& intersect(const QList<ResIdx> &residx);
     AtomSelection& intersect(const QList<ChainIdx> &chainidx);
     AtomSelection& intersect(const QList<SegIdx> &segidx);
-    
+
     AtomSelection& intersect(const AtomID &atomid);
     AtomSelection& intersect(const CGID &cgid);
     AtomSelection& intersect(const ResID &resid);
@@ -364,7 +371,7 @@ public:
     AtomSelection& unite(const QList<ResIdx> &residx);
     AtomSelection& unite(const QList<ChainIdx> &chainidx);
     AtomSelection& unite(const QList<SegIdx> &segidx);
-    
+
     AtomSelection& unite(const AtomID &atomid);
     AtomSelection& unite(const CGID &cgid);
     AtomSelection& unite(const ResID &resid);
@@ -392,7 +399,7 @@ public:
     AtomSelection& subtract(const QList<ResIdx> &residx);
     AtomSelection& subtract(const QList<ChainIdx> &chainidx);
     AtomSelection& subtract(const QList<SegIdx> &segidx);
-    
+
     AtomSelection& subtract(const AtomID &atomid);
     AtomSelection& subtract(const CGID &cgid);
     AtomSelection& subtract(const ResID &resid);
@@ -418,7 +425,7 @@ public:
     AtomSelection& mask(const QList<ResIdx> &residx);
     AtomSelection& mask(const QList<ChainIdx> &chainidx);
     AtomSelection& mask(const QList<SegIdx> &segidx);
-    
+
     AtomSelection& mask(const AtomID &atomid);
     AtomSelection& mask(const CGID &cgid);
     AtomSelection& mask(const ResID &resid);
@@ -430,7 +437,7 @@ public:
     QVector<AtomIdx> selectedAtoms() const;
 
     QSet<Index> selectedAtoms(CGIdx cgid) const;
-    
+
     QList<CGIdx> selectedCutGroups() const;
     QList<ResIdx> selectedResidues() const;
     QList<ChainIdx> selectedChains() const;
@@ -438,7 +445,7 @@ public:
 
     void assertSelected(AtomIdx atomidx) const;
     void assertSelected(const AtomID &atomid) const;
-    
+
     bool isCompatibleWith(const MoleculeInfoData &molinfo) const;
 
     void assertCompatibleWith(const MoleculeData &moldata) const;
@@ -452,7 +459,7 @@ public:
 private:
     bool _pvt_selected(const CGAtomIdx &cgatomidx) const;
     bool _pvt_selected(AtomIdx atomidx) const;
-    
+
     bool _pvt_selectedAll(CGIdx cgidx) const;
     bool _pvt_selectedAll(const QVector<CGAtomIdx> &atomidxs) const;
 
@@ -460,15 +467,15 @@ private:
 
     void _pvt_select(AtomIdx atomidx);
     void _pvt_deselect(AtomIdx atomidx);
-    
+
     void _pvt_select(CGIdx cgidx);
     void _pvt_deselect(CGIdx cgidx);
-    
+
     void _pvt_select(const CGAtomIdx &cgatomidx);
     void _pvt_deselect(const CGAtomIdx &cgatomidx);
-    
+
     void _pvt_select(CGIdx cgidx, const QSet<Index> &atoms);
-    
+
     void _pvt_select(const QVector<CGAtomIdx> &cgatomidxs);
     void _pvt_deselect(const QVector<CGAtomIdx> &cgatomidxs);
 
@@ -476,12 +483,18 @@ private:
 
     template<class IDXS>
     void _pvt_selectAtoms(const IDXS &atoms);
-    
+
     template<class IDXS>
     void _pvt_deselectAtoms(const IDXS &atoms);
 
-    /** The indicies of selected atoms, arranged by CGIdx */
+    /** The indicies of selected atoms */
     QHash< CGIdx, QSet<Index> > selected_atoms;
+
+    /** The indicies of selected residues (residues that have at
+     *  least one atom selected). This is empty if all residues
+     *  are selected
+     */
+    QSet< ResIdx > selected_residues;
 
     /** The MoleculeInfo describing the molecule whose parts
         are being selected by this object */

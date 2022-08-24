@@ -168,7 +168,7 @@ QString getPIDString()
 
 } // end of namespace SireError
 
-bool FastExceptionFlag::enable_fast_exceptions = false;
+QAtomicInt FastExceptionFlag::enable_fast_exceptions(0);
 
 FastExceptionFlag::FastExceptionFlag()
 {}
@@ -194,18 +194,17 @@ FastExceptionFlag FastExceptionFlag::construct()
 
 void FastExceptionFlag::disable()
 {
-    enable_fast_exceptions = false;
     d.reset();
 }
 
 FastExceptionFlag::FastExceptionFlagData::FastExceptionFlagData()
 {
-    enable_fast_exceptions = true;
+    enable_fast_exceptions.ref();
 }
 
 FastExceptionFlag::FastExceptionFlagData::~FastExceptionFlagData()
 {
-    enable_fast_exceptions = false;
+    enable_fast_exceptions.deref();
 }
 
 /** Switch on fast exceptions. These are used, e.g. when you know that
@@ -233,7 +232,7 @@ exception::exception()
 */
 exception::exception(QString error, QString place) : err(error), plce(place)
 {
-    if (FastExceptionFlag::enable_fast_exceptions)
+    if (FastExceptionFlag::enable_fast_exceptions > 0)
         return;
 
     #if defined(SIRE_ENABLE_BACKTRACE) || defined(SIRE_ENABLE_BOOST_BACKTRACE)

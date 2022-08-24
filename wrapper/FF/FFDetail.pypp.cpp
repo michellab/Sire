@@ -27,6 +27,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FFDetail_class(){
 
     { //::SireFF::FFDetail
@@ -42,6 +44,7 @@ void register_FFDetail_class(){
                 "assertCompatibleWith"
                 , assertCompatibleWith_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Assert that this forcefield is compatible with other" );
         
         }
@@ -53,6 +56,7 @@ void register_FFDetail_class(){
             FFDetail_exposer.def( 
                 "forcefields"
                 , forcefields_function_value
+                , bp::release_gil_policy()
                 , "Return a list of all of the forcefields that have been registered" );
         
         }
@@ -65,6 +69,7 @@ void register_FFDetail_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("forcefield") )
+                , bp::release_gil_policy()
                 , "Return the forcefield that has been registered with this name. This\nreturns a null property if there is no property with this name" );
         
         }
@@ -77,6 +82,7 @@ void register_FFDetail_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -88,6 +94,7 @@ void register_FFDetail_class(){
             FFDetail_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is null" );
         
         }
@@ -99,6 +106,7 @@ void register_FFDetail_class(){
             FFDetail_exposer.def( 
                 "name"
                 , name_function_value
+                , bp::release_gil_policy()
                 , "Return the name of the forcefield" );
         
         }
@@ -125,6 +133,7 @@ void register_FFDetail_class(){
             FFDetail_exposer.def( 
                 "properties"
                 , properties_function_value
+                , bp::release_gil_policy()
                 , "Return all of the properties of this forcefield type" );
         
         }
@@ -136,6 +145,7 @@ void register_FFDetail_class(){
             FFDetail_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -37,6 +37,8 @@ SireMM::GromacsAtomType __copy__(const SireMM::GromacsAtomType &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_GromacsAtomType_class(){
 
     { //::SireMM::GromacsAtomType
@@ -62,6 +64,7 @@ void register_GromacsAtomType_class(){
             GromacsAtomType_exposer.def( 
                 "atomType"
                 , atomType_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -73,6 +76,7 @@ void register_GromacsAtomType_class(){
             GromacsAtomType_exposer.def( 
                 "bondType"
                 , bondType_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -84,6 +88,7 @@ void register_GromacsAtomType_class(){
             GromacsAtomType_exposer.def( 
                 "charge"
                 , charge_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +100,7 @@ void register_GromacsAtomType_class(){
             GromacsAtomType_exposer.def( 
                 "element"
                 , element_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -106,6 +112,7 @@ void register_GromacsAtomType_class(){
             GromacsAtomType_exposer.def( 
                 "hasMassOnly"
                 , hasMassOnly_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -117,6 +124,7 @@ void register_GromacsAtomType_class(){
             GromacsAtomType_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -128,6 +136,7 @@ void register_GromacsAtomType_class(){
             GromacsAtomType_exposer.def( 
                 "ljParameter"
                 , ljParameter_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -139,6 +148,7 @@ void register_GromacsAtomType_class(){
             GromacsAtomType_exposer.def( 
                 "mass"
                 , mass_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -165,6 +175,7 @@ void register_GromacsAtomType_class(){
             GromacsAtomType_exposer.def( 
                 "particleType"
                 , particleType_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -176,6 +187,7 @@ void register_GromacsAtomType_class(){
             GromacsAtomType_exposer.def( 
                 "particleTypeLetter"
                 , particleTypeLetter_function_value
+                , bp::release_gil_policy()
                 , "Return the single letter that represents the particle type" );
         
         }
@@ -187,6 +199,7 @@ void register_GromacsAtomType_class(){
             GromacsAtomType_exposer.def( 
                 "particleTypeString"
                 , particleTypeString_function_value
+                , bp::release_gil_policy()
                 , "Return a string version of the particle type" );
         
         }
@@ -199,6 +212,7 @@ void register_GromacsAtomType_class(){
                 "setElement"
                 , setElement_function_value
                 , ( bp::arg("elem") )
+                , bp::release_gil_policy()
                 , "Set the element to the passed value. This is useful if the atomtype section has\ninvalid mass informtion, as is the case for many topology files generted by acpype.\nThis allows us to update the element of the type using the mass from the atoms\nsection.\n" );
         
         }
@@ -222,6 +236,7 @@ void register_GromacsAtomType_class(){
             GromacsAtomType_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this object" );
         
         }
@@ -233,6 +248,7 @@ void register_GromacsAtomType_class(){
             GromacsAtomType_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -244,6 +260,7 @@ void register_GromacsAtomType_class(){
             GromacsAtomType_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

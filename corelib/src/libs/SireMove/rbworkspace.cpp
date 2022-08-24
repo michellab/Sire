@@ -35,6 +35,7 @@
 #include "SireMol/atomcoords.h"
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/core.h"
 
 #include "SireMaths/axisset.h"
 
@@ -57,33 +58,33 @@ static const RegisterMetaType<RBWorkspace> r_rbws;
 QDataStream &operator<<(QDataStream &ds, const RBWorkspace &rbws)
 {
     writeHeader(ds, r_rbws, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << static_cast<const IntegratorWorkspace&>(rbws);
-        
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, RBWorkspace &rbws)
 {
     VersionID v = readHeader(ds, r_rbws);
-    
+
     if (v == 1)
     {
         RBWorkspace rb;
-    
+
         SharedDataStream sds(ds);
-    
+
         sds >> static_cast<IntegratorWorkspace&>(rb);
-        
+
         rb.rebuildFromScratch();
-        
+
         rbws = rb;
     }
     else
         throw version_error(v, "1", r_rbws, CODELOC);
-        
+
     return ds;
 }
 
@@ -107,7 +108,7 @@ static Vector getPrincipalAxes(Matrix &inertia)
         if (inertia_array[i] < 1e-6 and inertia_array[i] > -1e-6)
             inertia_array[i] = 0;
     }
-    
+
     //symmetric matrix
     inertia_array[inertia.offset(1,0)] = inertia_array[inertia.offset(0,1)];
     inertia_array[inertia.offset(2,0)] = inertia_array[inertia.offset(0,2)];
@@ -117,10 +118,10 @@ static Vector getPrincipalAxes(Matrix &inertia)
 
     Vector &principle_inertia = eigs.get<0>();
     Matrix &orientation = eigs.get<1>();
-    
+
     //if one or more of the eigenvalues is zero then we may have a problem
     //because the wrong eigenvector direction may be chosen - in this case,
-    //we will build this eigenvector using a cross product to ensure that 
+    //we will build this eigenvector using a cross product to ensure that
     //the right-hand-rule definition of our axes is maintained
     //
     // Also, even if we have three eigenvalues, we still need to make sure
@@ -128,9 +129,9 @@ static Vector getPrincipalAxes(Matrix &inertia)
     bool zero_x = std::abs(principle_inertia[0]) < 1e-6;
     bool zero_y = std::abs(principle_inertia[1]) < 1e-6;
     bool zero_z = std::abs(principle_inertia[2]) < 1e-6;
-    
+
     int n_zeroes = int(zero_x) + int(zero_y) + int(zero_z);
-    
+
     if (n_zeroes == 3)
     {
         //no axes!
@@ -150,21 +151,21 @@ static Vector getPrincipalAxes(Matrix &inertia)
         Vector r0 = orientation.row0();
         Vector r1 = orientation.row1();
         Vector r2 = orientation.row2();
-        
+
         if (zero_x)
             r0 = Vector::cross(r1,r2);
         else if (zero_y)
             r1 = Vector::cross(r2,r0);
         else if (zero_z)
             r2 = Vector::cross(r0,r1);
-        
+
         orientation = Matrix(r0, r1, r2);
     }
     else
     {
         Vector r0 = orientation.row0();
         Vector r1 = orientation.row1();
-                 
+
         orientation = Matrix( r0, r1, Vector::cross(r0,r1) );
     }
 
@@ -173,7 +174,7 @@ static Vector getPrincipalAxes(Matrix &inertia)
 }
 
 template<class T>
-static QVector<Vector> buildBead(const ViewsOfMol &mol, 
+static QVector<Vector> buildBead(const ViewsOfMol &mol,
                                  const AtomCoords &coords,
                                  const AtomProperty<T> &masses,
                                  const QVector<qint32> &beading,
@@ -188,15 +189,15 @@ static QVector<Vector> buildBead(const ViewsOfMol &mol,
     if (mol.selectedAll())
     {
         int nats = moldata.info().nAtoms();
-    
+
         int_atom_coords = QVector<Vector>(nats);
         int_atom_coords.squeeze();
-        
+
         Vector *int_coords_array = int_atom_coords.data();
-        
+
         const Vector *coords_array = coords.array().constCoordsData();
         const T *masses_array = masses.array().constValueData();
-        
+
         if (beading.isEmpty())
         {
             //all atoms are part of the same bead
@@ -204,21 +205,21 @@ static QVector<Vector> buildBead(const ViewsOfMol &mol,
             double &bead_mass = bead_masses[0];
             Matrix &bead_to_world = beads_to_world[0];
             Vector &bead_inertia = bead_inertias[0];
-            
+
             //calculate the COM of the bead
             for (int i=0; i<nats; ++i)
             {
                 const double mass = ::getMass(masses_array[i]);
-            
+
                 bead_com += mass * coords_array[i];
                 bead_mass += mass;
             }
-            
+
             bead_com /= bead_mass;
             bead_orients[0] = Quaternion();
-            
+
             bead_to_world = Matrix( double(0) );
-            
+
             //now calculate moments of inertia
             for (int i=0; i<nats; ++i)
             {
@@ -227,21 +228,21 @@ static QVector<Vector> buildBead(const ViewsOfMol &mol,
                 Vector d = coords_array[i] - bead_com;
 
                 const double mass = ::getMass(masses_array[i]);
-        
-                inertia_array[ bead_to_world.offset(0,0) ] += 
+
+                inertia_array[ bead_to_world.offset(0,0) ] +=
                                                 mass * (d.y()*d.y() + d.z()*d.z());
-                inertia_array[ bead_to_world.offset(1,1) ] += 
+                inertia_array[ bead_to_world.offset(1,1) ] +=
                                                 mass * (d.x()*d.x() + d.z()*d.z());
-                inertia_array[ bead_to_world.offset(2,2) ] += 
+                inertia_array[ bead_to_world.offset(2,2) ] +=
                                                 mass * (d.x()*d.x() + d.y()*d.y());
-        
+
                 inertia_array[ bead_to_world.offset(0,1) ] -= mass * d.x() * d.y();
                 inertia_array[ bead_to_world.offset(0,2) ] -= mass * d.x() * d.z();
                 inertia_array[ bead_to_world.offset(1,2) ] -= mass * d.y() * d.z();
             }
 
             bead_inertia = ::getPrincipalAxes(bead_to_world);
-            
+
             //now calculate the coordinates of all of the atoms in terms
             //of the center of mass / orientaton frame
             Matrix inv_matrix = bead_to_world.inverse();
@@ -256,57 +257,57 @@ static QVector<Vector> buildBead(const ViewsOfMol &mol,
             //the molecule is split into several beads
             const qint32 *beading_array = beading.constData();
             int nbeads = 0;
-        
+
             //calculate the COM of each bead
             for (int i=0; i<nats; ++i)
             {
                 qint32 bead_idx = beading_array[i];
-            
+
                 if (bead_idx == -1)
                     //this atom is not part of any bead
                     continue;
-                
+
                 if (bead_idx+1 > nbeads)
                     nbeads = bead_idx + 1;
-                
+
                 const double mass = ::getMass(masses_array[i]);
-                
+
                 bead_coords[bead_idx] += mass * coords_array[i];
                 bead_masses[bead_idx] += mass;
             }
-        
+
             for (int i=0; i<nbeads; ++i)
             {
                 if (bead_masses[i] != 0)
                     bead_coords[i] /= bead_masses[i];
                 else
                     bead_coords[i] = Vector(0);
-                    
+
                 bead_orients[i] = Quaternion();
             }
-        
+
             //now calculate moments of inertia for each bead
             for (int i=0; i<nats; ++i)
             {
                 qint32 bead_idx = beading_array[i];
-                
+
                 if (bead_idx == -1)
                     continue;
-                    
+
                 Matrix &bead_to_world = beads_to_world[bead_idx];
                 double *inertia_array = bead_to_world.data();
 
                 Vector d = coords_array[i] - bead_coords[bead_idx];
-        
+
                 const double mass = ::getMass(masses_array[i]);
-        
-                inertia_array[ bead_to_world.offset(0,0) ] += 
+
+                inertia_array[ bead_to_world.offset(0,0) ] +=
                                                 mass * (d.y()*d.y() + d.z()*d.z());
-                inertia_array[ bead_to_world.offset(1,1) ] += 
+                inertia_array[ bead_to_world.offset(1,1) ] +=
                                                 mass * (d.x()*d.x() + d.z()*d.z());
-                inertia_array[ bead_to_world.offset(2,2) ] += 
+                inertia_array[ bead_to_world.offset(2,2) ] +=
                                                 mass * (d.x()*d.x() + d.y()*d.y());
-        
+
                 inertia_array[ bead_to_world.offset(0,1) ] -= mass * d.x() * d.y();
                 inertia_array[ bead_to_world.offset(0,2) ] -= mass * d.x() * d.z();
                 inertia_array[ bead_to_world.offset(1,2) ] -= mass * d.y() * d.z();
@@ -316,7 +317,7 @@ static QVector<Vector> buildBead(const ViewsOfMol &mol,
             {
                 bead_inertias[i] = ::getPrincipalAxes(beads_to_world[i]);
             }
-            
+
             //now calculate the coordinates of all of the atoms in terms
             //of the center of mass / orientaton frame
             qint32 last_idx = -1;
@@ -325,16 +326,16 @@ static QVector<Vector> buildBead(const ViewsOfMol &mol,
             for (int i=0; i<nats; ++i)
             {
                 qint32 bead_idx = beading_array[i];
-        
+
                 if (bead_idx == -1)
                     continue;
-    
+
                 if (bead_idx != last_idx)
                 {
                     last_idx = bead_idx;
                     inv_matrix = beads_to_world[bead_idx].inverse();
                 }
-    
+
                 int_coords_array[i] = inv_matrix
                                         * (coords_array[i] - bead_coords[bead_idx]);
             }
@@ -357,7 +358,7 @@ static QVector<Vector> buildBead(const ViewsOfMol &mol, const QVector<qint32> &b
                                  Vector *bead_inertia)
 {
     const MoleculeData &moldata = mol.data();
-    
+
     if (moldata.hasProperty(masses_property))
     {
         return ::buildBead(mol, moldata.property(coords_property).asA<AtomCoords>(),
@@ -384,11 +385,11 @@ static void getBeading(const ViewsOfMol &mol, const PropertyName &beading_proper
                        QPair< qint32,QVector<qint32> > &beading, qint32 &nbeads)
 {
     const MoleculeData &moldata = mol.data();
-    
+
     if (moldata.hasProperty(beading_property))
     {
         qDebug() << CODELOC;
-    
+
         if (mol.selectedAll())
         {
             throw SireError::incomplete_code( QObject::tr("TODO"), CODELOC );
@@ -412,41 +413,41 @@ static void getBeading(const ViewsOfMol &mol, const PropertyName &beading_proper
 void RBWorkspace::rebuildFromScratch()
 {
     const System &sys = this->system();
-    
+
     PropertyName coords_property = this->coordinatesProperty();
     PropertyName masses_property = this->massesProperty();
     PropertyName elements_property = this->elementsProperty();
     PropertyName velgen_property = this->velocityGeneratorProperty();
     PropertyName beading_property = this->beadingProperty();
-    
+
     const MoleculeGroup &molgroup = this->moleculeGroup();
-    
+
     int nmols = molgroup.nMolecules();
-    
+
     if (sys.containsProperty(velgen_property))
         vel_generator = sys.property(velgen_property).asA<VelocityGenerator>();
     else
         vel_generator = NullVelocityGenerator();
-    
+
     atom_int_coords = QVector< QVector<Vector> >(nmols);
     atoms_to_beads = QVector< QPair< qint32,QVector<qint32> > >(nmols,
                                  QPair< qint32,QVector<qint32> >(-1,QVector<qint32>()) );
-    
+
     atom_int_coords.squeeze();
     atoms_to_beads.squeeze();
-    
+
     QVector<Vector> *atom_int_coords_array = atom_int_coords.data();
     QPair< qint32,QVector<qint32> > *atoms_to_beads_array = atoms_to_beads.data();
 
     //bead up the molecules
     qint32 nbeads = 0;
-    
+
     for (int i=0; i<nmols; ++i)
     {
         MolNum molnum = molgroup.molNumAt(i);
         ::getBeading(molgroup[molnum], beading_property, atoms_to_beads_array[i], nbeads);
     }
-    
+
     if (nbeads == 0)
     {
         bead_coordinates.clear();
@@ -463,19 +464,19 @@ void RBWorkspace::rebuildFromScratch()
     bead_to_world = QVector<Matrix>(nbeads, Matrix(double(0)));
     bead_masses = QVector<double>(nbeads, 0.0);
     bead_inertia = QVector<Vector>(nbeads, Vector(0));
-    
+
     bead_coordinates.squeeze();
     bead_orientations.squeeze();
     bead_to_world.squeeze();
     bead_masses.squeeze();
     bead_inertia.squeeze();
-    
+
     Vector *bead_coords_array = bead_coordinates.data();
     Matrix *bead_to_world_array = bead_to_world.data();
     Quaternion *bead_orients_array = bead_orientations.data();
     double *bead_masses_array = bead_masses.data();
     Vector *bead_inertia_array = bead_inertia.data();
-    
+
     for (int i=0; i<nmols; ++i)
     {
         const QPair< qint32,QVector<qint32> > &beading = atoms_to_beads_array[i];
@@ -484,8 +485,8 @@ void RBWorkspace::rebuildFromScratch()
             //there are no beads for this molecule
             continue;
 
-        atom_int_coords_array[i] = ::buildBead(molgroup[molgroup.molNumAt(i)], 
-                                               beading.second, 
+        atom_int_coords_array[i] = ::buildBead(molgroup[molgroup.molNumAt(i)],
+                                               beading.second,
                                                coords_property, masses_property,
                                                elements_property,
                                                bead_coords_array + beading.first,
@@ -494,13 +495,13 @@ void RBWorkspace::rebuildFromScratch()
                                                bead_masses_array + beading.first,
                                                bead_inertia_array + beading.first);
     }
-    
+
     //create space for the forces, torques and momenta
     bead_forces = QVector<Vector>(nbeads, Vector(0));
     bead_torques = QVector<Vector>(nbeads, Vector(0));
     bead_linear_momenta = QVector<Vector>(nbeads, Vector(0));
     bead_angular_momenta = QVector<Vector>(nbeads, Vector(0));
-    
+
     bead_forces.squeeze();
     bead_torques.squeeze();
     bead_linear_momenta.squeeze();
@@ -525,18 +526,18 @@ static void calculateForces(const ViewsOfMol &mol, const MolForceTable &forces,
     {
         const Vector *atomforces = forces.constValueData();
         const int nats = atom_int_coords.count();
-        
+
         BOOST_ASSERT( forces.nValues() == nats );
-        
+
         if (beading.isEmpty())
         {
             //there is only a single bead for the molecule
             const Matrix &bead_to_world = beads_to_world[0];
             const Quaternion &bead_orient = bead_orients[0];
-            
+
             Vector &bead_force = bead_forces[0];
             Vector &bead_torque = bead_torques[0];
-            
+
             if (nats == 1)
             {
                 //and this is made of a single atom - force and no torque
@@ -547,12 +548,12 @@ static void calculateForces(const ViewsOfMol &mol, const MolForceTable &forces,
             {
                 Matrix orient = bead_orient.toMatrix() * bead_to_world;
                 const Vector *int_coords = atom_int_coords.constData();
-            
+
                 for (int i=0; i<nats; ++i)
                 {
                     bead_force += atomforces[i];
-                
-                    //calculate the vector from the center of mass to 
+
+                    //calculate the vector from the center of mass to
                     //the atom, in the World cartesian frame
                     Vector r = orient * int_coords[i];
 
@@ -560,7 +561,7 @@ static void calculateForces(const ViewsOfMol &mol, const MolForceTable &forces,
                     bead_torque -= ::cross(r, atomforces[i]);
                 }
 
-                //map the torque back from the cartesian frame to the 
+                //map the torque back from the cartesian frame to the
                 //internal frame
                 bead_torque = orient.inverse() * bead_torque;
             }
@@ -569,32 +570,32 @@ static void calculateForces(const ViewsOfMol &mol, const MolForceTable &forces,
         {
             const qint32 *beading_array = beading.constData();
             const Vector *int_coords = atom_int_coords.constData();
-        
+
             qint32 last_idx = -1;
             Matrix orient;
-            
+
             int nbeads = 0;
-            
+
             for (int i=0; i<nats; ++i)
             {
                 qint32 bead_idx = beading_array[i];
-                
+
                 if (i == -1)
                     //this atom is not part of a bead
                     continue;
-                    
+
                 if (bead_idx != last_idx)
                 {
                     last_idx = bead_idx;
                     orient = bead_orients[bead_idx].toMatrix() * beads_to_world[bead_idx];
-                    
+
                     if (bead_idx+1 > nbeads)
                         nbeads = bead_idx + 1;
                 }
-            
+
                 bead_forces[bead_idx] += atomforces[i];
-                
-                //calculate the vector from the center of mass to 
+
+                //calculate the vector from the center of mass to
                 //the atom, in the World cartesian frame
                 Vector r = orient * int_coords[i];
 
@@ -604,7 +605,7 @@ static void calculateForces(const ViewsOfMol &mol, const MolForceTable &forces,
 
             for (int i=0; i<nbeads; ++i)
             {
-                //map the torque back from the cartesian frame to the 
+                //map the torque back from the cartesian frame to the
                 //internal frame
                 Matrix orient = bead_orients[i].toMatrix() * beads_to_world[i];
 
@@ -622,7 +623,7 @@ static void calculateForces(const ViewsOfMol &mol, const MolForceTable &forces,
 bool RBWorkspace::calculateForces(const Symbol &nrg_component)
 {
     const int nbeads = bead_coordinates.count();
-    
+
     if (nbeads == 0)
         //no beads, so no need to calculate forces
         return false;
@@ -635,25 +636,25 @@ bool RBWorkspace::calculateForces(const Symbol &nrg_component)
 
     const MoleculeGroup &molgroup = moleculeGroup();
     const int nmols = molgroup.nMolecules();
-    
+
     Vector *bead_forces_array = bead_forces.data();
     Vector *bead_torques_array = bead_torques.data();
 
     const Matrix *bead_to_world_array = bead_to_world.constData();
     const Quaternion *bead_orients_array = bead_orientations.constData();
 
-    const QPair< qint32,QVector<qint32> > *atoms_to_beads_array 
+    const QPair< qint32,QVector<qint32> > *atoms_to_beads_array
                                                     = atoms_to_beads.constData();
     const QVector<Vector> *int_coords_array = atom_int_coords.constData();
-    
+
     const ForceTable &forcetable = forceTable();
-    
+
     for (int i=0; i<nbeads; ++i)
     {
         bead_forces_array[i] = Vector(0);
         bead_torques_array[i] = Vector(0);
     }
-    
+
     for (int i=0; i<nmols; ++i)
     {
         const QPair< qint32,QVector<qint32> > &beading = atoms_to_beads_array[i];
@@ -664,14 +665,14 @@ bool RBWorkspace::calculateForces(const Symbol &nrg_component)
 
         MolNum molnum = molgroup.molNumAt(i);
 
-        ::calculateForces(molgroup[molnum], forcetable.getTable(molnum), 
-                          int_coords_array[i], beading.second, 
+        ::calculateForces(molgroup[molnum], forcetable.getTable(molnum),
+                          int_coords_array[i], beading.second,
                           bead_to_world_array + beading.first,
                           bead_orients_array + beading.first,
                           bead_forces_array + beading.first,
                           bead_torques_array + beading.first);
     }
-    
+
     return true;
 }
 
@@ -714,7 +715,7 @@ RBWorkspace& RBWorkspace::operator=(const RBWorkspace &other)
     if (this != &other)
     {
         IntegratorWorkspace::operator=(other);
-     
+
         atom_int_coords = other.atom_int_coords;
         atoms_to_beads = other.atoms_to_beads;
         bead_coordinates = other.bead_coordinates;
@@ -728,16 +729,16 @@ RBWorkspace& RBWorkspace::operator=(const RBWorkspace &other)
         bead_inertia = other.bead_inertia;
         vel_generator = other.vel_generator;
     }
-    
+
     return *this;
 }
 
 /** Comparison operator */
 bool RBWorkspace::operator==(const RBWorkspace &other) const
 {
-    return this == &other or 
+    return this == &other or
            (IntegratorWorkspace::operator==(other) and
-            atom_int_coords == other.atom_int_coords and 
+            atom_int_coords == other.atom_int_coords and
             atoms_to_beads == other.atoms_to_beads and
             bead_coordinates == other.bead_coordinates and
             bead_to_world == other.bead_to_world and
@@ -747,7 +748,7 @@ bool RBWorkspace::operator==(const RBWorkspace &other) const
             bead_masses == other.bead_masses and
             bead_inertia == other.bead_inertia and
             vel_generator == other.vel_generator);
-            
+
     //don't need forces or torques as these are implied by the
     //forcetable in IntegratorWorkspace
 }
@@ -768,34 +769,34 @@ MolarEnergy RBWorkspace::kineticEnergy() const
 {
     //sum together the linear kinetic energy of the beads...
     double nrg = 0;
-    
+
     int nbeads = bead_linear_momenta.count();
-    
+
     const Vector *p = bead_linear_momenta.constData();
     const double *m = bead_masses.constData();
-    
+
     for (int i=0; i<nbeads; ++i)
     {
         if (m[i] != 0)
             nrg += p[i].length2() / (2 * m[i]);
     }
-    
+
     //now the angular kinetic energy
     const Vector *q = bead_angular_momenta.constData();
     const Vector *I = bead_inertia.constData();
-    
+
     for (int i=0; i<nbeads; ++i)
     {
         if (I[i].x() != 0)
             nrg += pow_2(q[i].x()) / (2 * I[i].x());
-            
+
         if (I[i].y() != 0)
             nrg += pow_2(q[i].y()) / (2 * I[i].y());
-            
+
         if (I[i].z() != 0)
             nrg += pow_2(q[i].z()) / (2 * I[i].z());
     }
-    
+
     return MolarEnergy(nrg);
 }
 
@@ -880,7 +881,7 @@ const Vector* RBWorkspace::beadInertiasArray() const
 {
     return bead_inertia.constData();
 }
-    
+
 /** Return the array of forces acting on the center of mass
     of each bead */
 const Vector* RBWorkspace::beadForcesArray() const
@@ -918,13 +919,13 @@ static AtomCoords updateCoordinates(const ViewsOfMol &mol,
         const Vector *int_coords_array = int_coords.constData();
         QVector<Vector> new_coords(nats);
         Vector *new_coords_array = new_coords.data();
-        
+
         if (beading.isEmpty())
         {
             //just one bead for the whole molecule
             const Vector &com = bead_coords[0];
             Matrix orient = bead_orients[0].toMatrix() * beads_to_world[0];
-        
+
             for (int i=0; i<nats; ++i)
             {
                 new_coords_array[i] = com + (orient * int_coords_array[i]);
@@ -936,67 +937,67 @@ static AtomCoords updateCoordinates(const ViewsOfMol &mol,
             qint32 last_idx = -1;
             Vector com;
             Matrix orient;
-            
+
             const Vector *old_coords_array = coords.array().constCoordsData();
-            
+
             const qint32 *beading_array = beading.constData();
-            
+
             for (int i=0; i<nats; ++i)
             {
                 qint32 bead_idx = beading_array[i];
-                
+
                 if (bead_idx == -1)
                 {
                     //this atom is not part of a bead
                     new_coords_array[i] = old_coords_array[i];
                     continue;
                 }
-                
+
                 if (bead_idx != last_idx)
                 {
                     last_idx = bead_idx;
                     com = bead_coords[bead_idx];
-                    orient = bead_orients[bead_idx].toMatrix() * beads_to_world[bead_idx];                     
+                    orient = bead_orients[bead_idx].toMatrix() * beads_to_world[bead_idx];
                 }
-                
+
                 new_coords_array[i] = com + (orient * int_coords_array[i]);
             }
         }
-            
+
         coords.copyFrom(new_coords);
     }
     else
         throw SireError::unsupported( QObject::tr(
                 "The code to support rigid body dynamics of partial "
                 "molecules has yet to be written."), CODELOC );
-                
+
     return coords;
 }
 
 /** Commit the coordinates back to the system. This maps the bead coordinates
-    and orientations back to atomic coordinates and position and 
+    and orientations back to atomic coordinates and position and
     updates the system with these */
 void RBWorkspace::commitCoordinates()
 {
     int nmols = atom_int_coords.count();
-    
+
     const MoleculeGroup &molgroup = moleculeGroup();
-    
+
     BOOST_ASSERT( molgroup.nMolecules() == nmols );
-    
+
     const QVector<Vector> *int_coords_array = atom_int_coords.constData();
-    const QPair< qint32,QVector<qint32> > 
+    const QPair< qint32,QVector<qint32> >
                 *atoms_to_beads_array = atoms_to_beads.constData();
-    
+
     const Vector *bead_coords_array = bead_coordinates.constData();
     const Quaternion *bead_orients_array = bead_orientations.constData();
     const Matrix *bead_to_world_array = bead_to_world.constData();
-    
+
     PropertyName coords_property = coordinatesProperty();
-    
+
     Molecules changed_mols;
     changed_mols.reserve(nmols);
-    
+
     for (int i=0; i<nmols; ++i)
     {
         const QPair< qint32,QVector<qint32> > &beading = atoms_to_beads_array[i];
@@ -1008,7 +1009,7 @@ void RBWorkspace::commitCoordinates()
         MolNum molnum = molgroup.molNumAt(i);
         const ViewsOfMol &mol = molgroup[molnum];
 
-        AtomCoords new_coords = ::updateCoordinates(mol, coords_property,  
+        AtomCoords new_coords = ::updateCoordinates(mol, coords_property,
                                                     beading.second,
                                                     int_coords_array[i],
                                                     bead_coords_array + beading.first,
@@ -1018,7 +1019,7 @@ void RBWorkspace::commitCoordinates()
         changed_mols.add( mol.molecule().edit()
                              .setProperty(coords_property,new_coords).commit() );
     }
-    
+
     IntegratorWorkspace::pvt_update(changed_mols);
 }
 
@@ -1029,7 +1030,7 @@ void RBWorkspace::commitVelocities()
     //throw SireError::incomplete_code( QObject::tr("Need to write!"), CODELOC );
 }
 
-/** Commit both the coordinates and velocities - this performs the 
+/** Commit both the coordinates and velocities - this performs the
     equivalent of commitCoordinates() and commitVelocities() in
     a single call */
 void RBWorkspace::commitCoordinatesAndVelocities()
@@ -1038,7 +1039,7 @@ void RBWorkspace::commitCoordinatesAndVelocities()
     //throw SireError::incomplete_code( QObject::tr("Need to write!"), CODELOC );
 }
 
-/** This internal function is called whenever a property is changed. 
+/** This internal function is called whenever a property is changed.
     This is used to see if the data has to be regenerated */
 void RBWorkspace::changedProperty(const QString &property)
 {

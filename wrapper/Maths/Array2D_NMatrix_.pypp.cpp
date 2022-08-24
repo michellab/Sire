@@ -31,6 +31,8 @@ SireBase::Array2D<SireMaths::NMatrix> __copy__(const SireBase::Array2D<SireMaths
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Array2D_NMatrix__class(){
 
     { //::SireBase::Array2D< SireMaths::NMatrix >
@@ -108,6 +110,7 @@ void register_Array2D_NMatrix__class(){
                 "redimension"
                 , redimension_function_value
                 , ( bp::arg("nrows"), bp::arg("ncolumns") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -121,6 +124,7 @@ void register_Array2D_NMatrix__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -134,6 +138,7 @@ void register_Array2D_NMatrix__class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -146,6 +151,7 @@ void register_Array2D_NMatrix__class(){
             Array2D_NMatrix__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -158,6 +164,7 @@ void register_Array2D_NMatrix__class(){
             Array2D_NMatrix__exposer.def( 
                 "transpose"
                 , transpose_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

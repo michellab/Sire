@@ -35,6 +35,7 @@
 #include "evaluator.h"
 #include "moleculeinfodata.h"
 #include "moleculeview.h"
+#include "mover.hpp"
 
 #include "tostring.h"
 
@@ -59,7 +60,7 @@ const AtomMultiMatcher& AtomMatcher::null()
 {
     if (not null_matcher)
         null_matcher = new AtomMultiMatcher();
-    
+
     return *null_matcher;
 }
 
@@ -70,9 +71,9 @@ static const RegisterMetaType<AtomMatcher> r_atommatcher( MAGIC_ONLY,
 QDataStream &operator<<(QDataStream &ds, const AtomMatcher &matcher)
 {
     writeHeader(ds, r_atommatcher, 1);
-    
+
     ds << static_cast<const Property&>(matcher);
-    
+
     return ds;
 }
 
@@ -80,14 +81,14 @@ QDataStream &operator<<(QDataStream &ds, const AtomMatcher &matcher)
 QDataStream &operator>>(QDataStream &ds, AtomMatcher &matcher)
 {
     VersionID v = readHeader(ds, r_atommatcher);
-    
+
     if (v == 1)
     {
         ds >> static_cast<Property&>(matcher);
     }
     else
         throw version_error(v, "1", r_atommatcher, CODELOC);
-        
+
     return ds;
 }
 
@@ -114,7 +115,7 @@ AtomMultiMatcher AtomMatcher::operator+(const AtomMatcher &other) const
 {
     return AtomMultiMatcher(*this, other);
 }
-    
+
 /** Return the matcher that matches using this matcher, and then 'other' (in that order) */
 AtomMultiMatcher AtomMatcher::add(const AtomMatcher &other) const
 {
@@ -127,12 +128,12 @@ bool AtomMatcher::pvt_changesOrder(const MoleculeInfoData &mol0,
 {
     if (mol0.nAtoms() != mol1.nAtoms())
         return true;
-    
+
     QHash<AtomIdx,AtomIdx> map = this->match(mol0, mol1);
-    
+
     if (map.count() != mol0.nAtoms())
         return true;
-    
+
     for (QHash<AtomIdx,AtomIdx>::const_iterator it = map.constBegin();
          it != map.constEnd();
          ++it)
@@ -140,7 +141,7 @@ bool AtomMatcher::pvt_changesOrder(const MoleculeInfoData &mol0,
         if (it.key() != it.value())
             return true;
     }
-    
+
     return false;
 }
 
@@ -152,15 +153,15 @@ bool AtomMatcher::pvt_changesOrder(const MoleculeView &molview0,
 {
     const int nats0 = molview0.selection().nSelectedAtoms();
     const int nats1 = molview1.selection().nSelectedAtoms();
-    
+
     if (nats0 != nats1)
         return true;
 
     QHash<AtomIdx,AtomIdx> map = this->match(molview0,map0,molview1,map1);
-    
+
     if (map.count() != nats0)
         return true;
-    
+
     for (QHash<AtomIdx,AtomIdx>::const_iterator it = map.constBegin();
          it != map.constEnd();
          ++it)
@@ -168,7 +169,7 @@ bool AtomMatcher::pvt_changesOrder(const MoleculeView &molview0,
         if (it.key() != it.value())
             return true;
     }
-    
+
     return false;
 }
 
@@ -279,7 +280,7 @@ QDataStream &operator<<(QDataStream &ds, const AtomResultMatcher &resmatcher)
     writeHeader(ds, r_resmatcher, 1);
     SharedDataStream sds(ds);
     sds << resmatcher.m << static_cast<const AtomMatcher&>(resmatcher);
-    
+
     return ds;
 }
 
@@ -287,7 +288,7 @@ QDataStream &operator<<(QDataStream &ds, const AtomResultMatcher &resmatcher)
 QDataStream &operator>>(QDataStream &ds, AtomResultMatcher &resmatcher)
 {
     VersionID v = readHeader(ds, r_resmatcher);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
@@ -312,7 +313,7 @@ AtomResultMatcher::AtomResultMatcher(const QHash<AtomIdx,AtomIdx> &results, bool
         //invert the map (this allows reverse lookups)
         m.clear();
         m.reserve(results.count());
-        
+
         for (QHash<AtomIdx,AtomIdx>::const_iterator it = results.constBegin();
              it != results.constEnd();
              ++it)
@@ -367,7 +368,7 @@ QString AtomResultMatcher::toString() const
 /** Match the atoms in 'mol1' to the atoms in 'mol0' - this
     returns the AtomIdxs of the atoms in 'mol1' that are in
     'mol0', indexed by the AtomIdx of the atom in 'mol0'.
-    
+
      This skips atoms in 'mol1' that are not in 'mol0'
 */
 QHash<AtomIdx,AtomIdx> AtomResultMatcher::pvt_match(const MoleculeView &mol0,
@@ -377,12 +378,12 @@ QHash<AtomIdx,AtomIdx> AtomResultMatcher::pvt_match(const MoleculeView &mol0,
 {
     const AtomSelection sel0 = mol0.selection();
     const AtomSelection sel1 = mol1.selection();
-    
+
     QHash<AtomIdx,AtomIdx> map;
-    
+
     const int nats0 = mol0.data().info().nAtoms();
     const int nats1 = mol1.data().info().nAtoms();
-    
+
     for (QHash<AtomIdx,AtomIdx>::const_iterator it = m.constBegin();
          it != m.constEnd();
          ++it)
@@ -396,23 +397,23 @@ QHash<AtomIdx,AtomIdx> AtomResultMatcher::pvt_match(const MoleculeView &mol0,
             }
         }
     }
-    
+
     return map;
 }
 /** Match the atoms in 'mol1' to the atoms in 'mol0' - this
     returns the AtomIdxs of the atoms in 'mol1' that are in
     'mol0', indexed by the AtomIdx of the atom in 'mol0'.
-    
+
      This skips atoms in 'mol1' that are not in 'mol0'
 */
 QHash<AtomIdx,AtomIdx> AtomResultMatcher::pvt_match(const MoleculeInfoData &mol0,
                                                     const MoleculeInfoData &mol1) const
 {
     QHash<AtomIdx,AtomIdx> map;
-    
+
     const int nats0 = mol0.nAtoms();
     const int nats1 = mol1.nAtoms();
-    
+
     for (QHash<AtomIdx,AtomIdx>::const_iterator it = m.constBegin();
          it != m.constEnd();
          ++it)
@@ -425,7 +426,7 @@ QHash<AtomIdx,AtomIdx> AtomResultMatcher::pvt_match(const MoleculeInfoData &mol0
             }
         }
     }
-    
+
     return map;
 }
 
@@ -446,7 +447,7 @@ QDataStream &operator<<(QDataStream &ds, const AtomMatchInverter &inverter)
     writeHeader(ds, r_inverter, 1);
     SharedDataStream sds(ds);
     sds << inverter.m << static_cast<const AtomMatcher&>(inverter);
-    
+
     return ds;
 }
 
@@ -454,7 +455,7 @@ QDataStream &operator<<(QDataStream &ds, const AtomMatchInverter &inverter)
 QDataStream &operator>>(QDataStream &ds, AtomMatchInverter &inverter)
 {
     VersionID v = readHeader(ds, r_inverter);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
@@ -523,7 +524,7 @@ QString AtomMatchInverter::toString() const
 /** Match the atoms in 'mol1' to the atoms in 'mol0' - this
     returns the AtomIdxs of the atoms in 'mol1' that are in
     'mol0', indexed by the AtomIdx of the atom in 'mol0'.
-    
+
      This skips atoms in 'mol1' that are not in 'mol0'
 */
 QHash<AtomIdx,AtomIdx> AtomMatchInverter::pvt_match(const MoleculeView &mol0,
@@ -533,23 +534,23 @@ QHash<AtomIdx,AtomIdx> AtomMatchInverter::pvt_match(const MoleculeView &mol0,
 {
     if (isNull())
         return QHash<AtomIdx,AtomIdx>();
-    
+
     //apply the match backwards, and then invert the result
     QHash<AtomIdx,AtomIdx> map = m.read().match(mol1,map1,mol0,map0);
-    
+
     //invert the match
     if (not map.isEmpty())
     {
         QHash<AtomIdx,AtomIdx> invmap;
         invmap.reserve(map.count());
-        
+
         for (QHash<AtomIdx,AtomIdx>::const_iterator it = map.constBegin();
              it != map.constEnd();
              ++it)
         {
             invmap.insert( it.value(), it.key() );
         }
-        
+
         return invmap;
     }
     else
@@ -558,7 +559,7 @@ QHash<AtomIdx,AtomIdx> AtomMatchInverter::pvt_match(const MoleculeView &mol0,
 /** Match the atoms in 'mol1' to the atoms in 'mol0' - this
     returns the AtomIdxs of the atoms in 'mol1' that are in
     'mol0', indexed by the AtomIdx of the atom in 'mol0'.
-    
+
      This skips atoms in 'mol1' that are not in 'mol0'
 */
 QHash<AtomIdx,AtomIdx> AtomMatchInverter::pvt_match(const MoleculeInfoData &mol0,
@@ -566,23 +567,23 @@ QHash<AtomIdx,AtomIdx> AtomMatchInverter::pvt_match(const MoleculeInfoData &mol0
 {
     if (isNull())
         return QHash<AtomIdx,AtomIdx>();
-    
+
     //apply the match backwards, and then invert the result
     QHash<AtomIdx,AtomIdx> map = m.read().match(mol1,mol0);
-    
+
     //invert the match
     if (not map.isEmpty())
     {
         QHash<AtomIdx,AtomIdx> invmap;
         invmap.reserve(map.count());
-        
+
         for (QHash<AtomIdx,AtomIdx>::const_iterator it = map.constBegin();
              it != map.constEnd();
              ++it)
         {
             invmap.insert( it.value(), it.key() );
         }
-        
+
         return invmap;
     }
     else

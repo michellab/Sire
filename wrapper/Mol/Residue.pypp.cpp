@@ -75,6 +75,8 @@ SireMol::Residue __copy__(const SireMol::Residue &other){ return SireMol::Residu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Residue_class(){
@@ -94,6 +96,7 @@ void register_Residue_class(){
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Assert that this residue contains some residue metadata at metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
@@ -106,6 +109,7 @@ void register_Residue_class(){
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Assert that this residue contains some residue metadata\nat metakey metakey for the property at key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -118,6 +122,7 @@ void register_Residue_class(){
                 "assertContainsProperty"
                 , assertContainsProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Assert that this residue contains a residue property at key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -142,6 +147,7 @@ void register_Residue_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return whether or not this residue contains the atom\nat index atomidx" );
         
         }
@@ -154,6 +160,7 @@ void register_Residue_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this residue contains all of\nthe atoms identified by the ID atomid" );
         
         }
@@ -165,6 +172,7 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "edit"
                 , edit_function_value
+                , bp::release_gil_policy()
                 , "Return an editor that can be used to edit any of the\natoms of this residue" );
         
         }
@@ -176,6 +184,7 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
+                , bp::release_gil_policy()
                 , "Return an Evaluator that evaluates values using all of\nthe atoms in the residue" );
         
         }
@@ -188,6 +197,7 @@ void register_Residue_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return whether or not there is a ResProperty at metakey metakey" );
         
         }
@@ -200,6 +210,7 @@ void register_Residue_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return whether the metadata at metakey metakey for the property\nat key key is a ResProperty\nThrow: SireBase::missing_property\n" );
         
         }
@@ -212,6 +223,7 @@ void register_Residue_class(){
                 "hasProperty"
                 , hasProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return whether or not there is a ResProperty at key key" );
         
         }
@@ -223,6 +235,7 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "index"
                 , index_function_value
+                , bp::release_gil_policy()
                 , "Return the index of this residue in the molecule" );
         
         }
@@ -235,6 +248,7 @@ void register_Residue_class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this residue contains some of\nthe atoms identified by the ID atomid" );
         
         }
@@ -246,6 +260,7 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Is this residue empty?" );
         
         }
@@ -257,6 +272,7 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "isWithinChain"
                 , isWithinChain_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this residue is part of a chain" );
         
         }
@@ -268,6 +284,7 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the metakeys of all ResProperty metadata" );
         
         }
@@ -280,6 +297,7 @@ void register_Residue_class(){
                 "metadataKeys"
                 , metadataKeys_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return the metakeys of all ResProperty metadata for\nthe property at key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -291,6 +309,7 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "move"
                 , move_function_value
+                , bp::release_gil_policy()
                 , "Return a Mover that moves all of the atoms in this residue" );
         
         }
@@ -302,6 +321,7 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in this residue" );
         
         }
@@ -313,6 +333,7 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "name"
                 , name_function_value
+                , bp::release_gil_policy()
                 , "Return the name of this residue" );
         
         }
@@ -324,6 +345,7 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "number"
                 , number_function_value
+                , bp::release_gil_policy()
                 , "Return the number of this residue" );
         
         }
@@ -342,6 +364,32 @@ void register_Residue_class(){
         
         }
         Residue_exposer.def( bp::self == bp::self );
+        { //::SireMol::Residue::propertyAsProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::Residue::*propertyAsProperty_function_type)( ::SireBase::PropertyName const & ) const;
+            propertyAsProperty_function_type propertyAsProperty_function_value( &::SireMol::Residue::propertyAsProperty );
+            
+            Residue_exposer.def( 
+                "propertyAsProperty"
+                , propertyAsProperty_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return the specified property as a PropertyPtr" );
+        
+        }
+        { //::SireMol::Residue::propertyAsVariant
+        
+            typedef ::QVariant ( ::SireMol::Residue::*propertyAsVariant_function_type)( ::SireBase::PropertyName const & ) const;
+            propertyAsVariant_function_type propertyAsVariant_function_value( &::SireMol::Residue::propertyAsVariant );
+            
+            Residue_exposer.def( 
+                "propertyAsVariant"
+                , propertyAsVariant_function_value
+                , ( bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return the specified property as a QVariant" );
+        
+        }
         { //::SireMol::Residue::propertyKeys
         
             typedef ::QStringList ( ::SireMol::Residue::*propertyKeys_function_type)(  ) const;
@@ -350,6 +398,7 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "propertyKeys"
                 , propertyKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the keys of all ResProperty properties" );
         
         }
@@ -361,6 +410,7 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "Is this residue the entire molecule?" );
         
         }
@@ -372,6 +422,7 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
                 , "Return the identities of the atoms that are selected as\npart of this residue" );
         
         }
@@ -383,7 +434,20 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "selector"
                 , selector_function_value
+                , bp::release_gil_policy()
                 , "Return a selector that can change the selection of residues" );
+        
+        }
+        { //::SireMol::Residue::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Residue::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::Residue::toSelector );
+            
+            Residue_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::Residue::toString
@@ -394,6 +458,7 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this residue" );
         
         }
@@ -405,6 +470,7 @@ void register_Residue_class(){
             Residue_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -417,6 +483,7 @@ void register_Residue_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "Update this residue with the passed molecule data.\nThrow: SireError::incompatible_error\n" );
         
         }

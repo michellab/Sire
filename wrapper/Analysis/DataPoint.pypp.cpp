@@ -29,6 +29,8 @@ SireAnalysis::DataPoint __copy__(const SireAnalysis::DataPoint &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_DataPoint_class(){
 
     { //::SireAnalysis::DataPoint
@@ -48,6 +50,7 @@ void register_DataPoint_class(){
                 "equalWithinError"
                 , equalWithinError_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return whether or not this data point is equal to the other, within\nthe error range of the two points" );
         
         }
@@ -60,6 +63,7 @@ void register_DataPoint_class(){
                 "equalWithinMaxError"
                 , equalWithinMaxError_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return whether or not this data point in equal to the other, within\nthe maximum error range of the two points" );
         
         }
@@ -72,6 +76,7 @@ void register_DataPoint_class(){
                 "equalWithinMinError"
                 , equalWithinMinError_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return whether or not this data point in equal to the other, within\nthe minimum error range of the two points" );
         
         }
@@ -83,6 +88,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "hasError"
                 , hasError_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this data point has any error" );
         
         }
@@ -94,6 +100,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "hasErrorRange"
                 , hasErrorRange_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this data point has an error range" );
         
         }
@@ -105,6 +112,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "hasXError"
                 , hasXError_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not there is any error in the x value" );
         
         }
@@ -116,6 +124,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "hasXErrorRange"
                 , hasXErrorRange_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not there is an error range on the x value" );
         
         }
@@ -127,6 +136,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "hasYError"
                 , hasYError_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not there is any error in the y value" );
         
         }
@@ -138,6 +148,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "hasYErrorRange"
                 , hasYErrorRange_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not there is an error range on the x value" );
         
         }
@@ -164,6 +175,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -175,6 +187,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -186,6 +199,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -197,6 +211,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "x"
                 , x_function_value
+                , bp::release_gil_policy()
                 , "Return the x value of the point" );
         
         }
@@ -208,6 +223,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "xError"
                 , xError_function_value
+                , bp::release_gil_policy()
                 , "Return the error on the x value. This is the average\nof the minimum and maximum error" );
         
         }
@@ -219,6 +235,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "xMaxError"
                 , xMaxError_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum size of the error on the x value" );
         
         }
@@ -230,6 +247,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "xMinError"
                 , xMinError_function_value
+                , bp::release_gil_policy()
                 , "Return the minimum size of the error on the x value" );
         
         }
@@ -241,6 +259,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "y"
                 , y_function_value
+                , bp::release_gil_policy()
                 , "Return the y value of the point" );
         
         }
@@ -252,6 +271,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "yError"
                 , yError_function_value
+                , bp::release_gil_policy()
                 , "Return the error on the y value. This is the average\nof the minimum and maximum error" );
         
         }
@@ -263,6 +283,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "yMaxError"
                 , yMaxError_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum size of the error on the y value" );
         
         }
@@ -274,6 +295,7 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "yMinError"
                 , yMinError_function_value
+                , bp::release_gil_policy()
                 , "Return the minimum size of the error on the y value" );
         
         }

@@ -62,6 +62,8 @@
 
 #include "tostring.h"
 
+#include "SireBase/slice.h"
+
 #include "SireMol/errors.h"
 #include "SireError/errors.h"
 
@@ -201,6 +203,30 @@ const MoleculeGroup& MolGroupsBase::operator[](const MGID &mgid) const
 ViewsOfMol MolGroupsBase::operator[](MolNum molnum) const
 {
     return this->at(molnum);
+}
+
+ViewsOfMol MolGroupsBase::operator[](int i) const
+{
+    return this->at(MolIdx(i));
+}
+
+ViewsOfMol MolGroupsBase::operator[](const QString &name) const
+{
+    return this->at(MolName(name));
+}
+
+QList<MolViewPtr> MolGroupsBase::operator[](const SireBase::Slice &slice) const
+{
+    const auto molnums = this->molNums();
+
+    QList<MolViewPtr> views;
+
+    for (auto it = slice.begin(molnums.count()); not it.atEnd(); it.next())
+    {
+        views.append(this->operator[](molnums.at(it.value())));
+    }
+
+    return views;
 }
 
 /** Return all of the views of the molecule identified by 'molid'
@@ -1530,6 +1556,58 @@ int MolGroupsBase::count() const
 int MolGroupsBase::nMolecules() const
 {
     return molnum_to_mgnum.count();
+}
+
+/** Return the total number of atoms in this groups in this set */
+int MolGroupsBase::nAtoms() const
+{
+    int n = 0;
+
+    for (const auto &mol : this->molecules())
+    {
+        n += mol.nAtoms();
+    }
+
+    return n;
+}
+
+/** Return the total number of residues in this groups in this set */
+int MolGroupsBase::nResidues() const
+{
+    int n = 0;
+
+    for (const auto &mol : this->molecules())
+    {
+        n += mol.nResidues();
+    }
+
+    return n;
+}
+
+/** Return the total number of chains in this groups in this set */
+int MolGroupsBase::nChains() const
+{
+    int n = 0;
+
+    for (const auto &mol : this->molecules())
+    {
+        n += mol.nChains();
+    }
+
+    return n;
+}
+
+/** Return the total number of segments in this groups in this set */
+int MolGroupsBase::nSegments() const
+{
+    int n = 0;
+
+    for (const auto &mol : this->molecules())
+    {
+        n += mol.nSegments();
+    }
+
+    return n;
 }
 
 /** Return the total number of views of molecules in the groups in this set.

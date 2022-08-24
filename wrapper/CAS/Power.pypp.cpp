@@ -39,6 +39,8 @@ SireCAS::Power __copy__(const SireCAS::Power &other){ return SireCAS::Power(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Power_class(){
 
     { //::SireCAS::Power
@@ -55,6 +57,7 @@ void register_Power_class(){
             Power_exposer.def( 
                 "core"
                 , core_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -67,6 +70,7 @@ void register_Power_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this power - this could be dodgy for negative bases with\nnon-integer powers" );
         
         }
@@ -79,6 +83,7 @@ void register_Power_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this power - this could be dodgy for negative bases with\nnon-integer powers" );
         
         }
@@ -90,6 +95,7 @@ void register_Power_class(){
             Power_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash for this power" );
         
         }
@@ -101,6 +107,7 @@ void register_Power_class(){
             Power_exposer.def( 
                 "isCompound"
                 , isCompound_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -113,6 +120,7 @@ void register_Power_class(){
             Power_exposer.def( 
                 "power"
                 , power_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -124,6 +132,7 @@ void register_Power_class(){
             Power_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -135,6 +144,7 @@ void register_Power_class(){
             Power_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

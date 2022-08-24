@@ -79,6 +79,8 @@ SireIO::PerturbationsTemplate __copy__(const SireIO::PerturbationsTemplate &othe
 
 const char* pvt_get_name(const SireIO::PerturbationsTemplate&){ return "SireIO::PerturbationsTemplate";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PerturbationsTemplate_class(){
 
     { //::SireIO::PerturbationsTemplate
@@ -95,6 +97,7 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getAngles"
                 , getAngles_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -106,6 +109,7 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getBonds"
                 , getBonds_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -117,6 +121,7 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getDihedrals"
                 , getDihedrals_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -129,6 +134,7 @@ void register_PerturbationsTemplate_class(){
                 "getFinalAngleK"
                 , getFinalAngleK_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -141,6 +147,7 @@ void register_PerturbationsTemplate_class(){
                 "getFinalAngleT"
                 , getFinalAngleT_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -153,6 +160,7 @@ void register_PerturbationsTemplate_class(){
                 "getFinalBondK"
                 , getFinalBondK_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -165,6 +173,7 @@ void register_PerturbationsTemplate_class(){
                 "getFinalBondR"
                 , getFinalBondR_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -177,6 +186,7 @@ void register_PerturbationsTemplate_class(){
                 "getFinalCharge"
                 , getFinalCharge_function_value
                 , ( bp::arg("atomname") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -189,6 +199,7 @@ void register_PerturbationsTemplate_class(){
                 "getFinalDihParams"
                 , getFinalDihParams_function_value
                 , ( bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -201,6 +212,7 @@ void register_PerturbationsTemplate_class(){
                 "getFinalImpParams"
                 , getFinalImpParams_function_value
                 , ( bp::arg("improper") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -213,6 +225,7 @@ void register_PerturbationsTemplate_class(){
                 "getFinalLJ"
                 , getFinalLJ_function_value
                 , ( bp::arg("atomname") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -225,6 +238,7 @@ void register_PerturbationsTemplate_class(){
                 "getFinalType"
                 , getFinalType_function_value
                 , ( bp::arg("atomname") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -236,6 +250,7 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getImpropers"
                 , getImpropers_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -248,6 +263,7 @@ void register_PerturbationsTemplate_class(){
                 "getInitAngleK"
                 , getInitAngleK_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -260,6 +276,7 @@ void register_PerturbationsTemplate_class(){
                 "getInitAngleT"
                 , getInitAngleT_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -272,6 +289,7 @@ void register_PerturbationsTemplate_class(){
                 "getInitBondK"
                 , getInitBondK_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -284,6 +302,7 @@ void register_PerturbationsTemplate_class(){
                 "getInitBondR"
                 , getInitBondR_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -296,6 +315,7 @@ void register_PerturbationsTemplate_class(){
                 "getInitCharge"
                 , getInitCharge_function_value
                 , ( bp::arg("atomname") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -308,6 +328,7 @@ void register_PerturbationsTemplate_class(){
                 "getInitDihParams"
                 , getInitDihParams_function_value
                 , ( bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -320,6 +341,7 @@ void register_PerturbationsTemplate_class(){
                 "getInitImpParams"
                 , getInitImpParams_function_value
                 , ( bp::arg("improper") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -332,6 +354,7 @@ void register_PerturbationsTemplate_class(){
                 "getInitLJ"
                 , getInitLJ_function_value
                 , ( bp::arg("atomname") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -344,6 +367,7 @@ void register_PerturbationsTemplate_class(){
                 "getInitType"
                 , getInitType_function_value
                 , ( bp::arg("atomname") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -355,6 +379,7 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getName"
                 , getName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -382,6 +407,7 @@ void register_PerturbationsTemplate_class(){
                 "setFinalAngleK"
                 , setFinalAngleK_function_value
                 , ( bp::arg("angle"), bp::arg("k") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -394,6 +420,7 @@ void register_PerturbationsTemplate_class(){
                 "setFinalAngleT"
                 , setFinalAngleT_function_value
                 , ( bp::arg("angle"), bp::arg("r") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -406,6 +433,7 @@ void register_PerturbationsTemplate_class(){
                 "setFinalBondK"
                 , setFinalBondK_function_value
                 , ( bp::arg("bond"), bp::arg("k") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -418,6 +446,7 @@ void register_PerturbationsTemplate_class(){
                 "setFinalBondR"
                 , setFinalBondR_function_value
                 , ( bp::arg("bond"), bp::arg("r") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -430,6 +459,7 @@ void register_PerturbationsTemplate_class(){
                 "setFinalCharge"
                 , setFinalCharge_function_value
                 , ( bp::arg("atomname"), bp::arg("atomcharge") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -442,6 +472,7 @@ void register_PerturbationsTemplate_class(){
                 "setFinalDihParams"
                 , setFinalDihParams_function_value
                 , ( bp::arg("dihedral"), bp::arg("params") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -454,6 +485,7 @@ void register_PerturbationsTemplate_class(){
                 "setFinalImpParams"
                 , setFinalImpParams_function_value
                 , ( bp::arg("improper"), bp::arg("params") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -466,6 +498,7 @@ void register_PerturbationsTemplate_class(){
                 "setFinalLJ"
                 , setFinalLJ_function_value
                 , ( bp::arg("atomname"), bp::arg("atomlj") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -478,6 +511,7 @@ void register_PerturbationsTemplate_class(){
                 "setFinalType"
                 , setFinalType_function_value
                 , ( bp::arg("atomname"), bp::arg("atype") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -490,6 +524,7 @@ void register_PerturbationsTemplate_class(){
                 "setInitAngleK"
                 , setInitAngleK_function_value
                 , ( bp::arg("angle"), bp::arg("k") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -502,6 +537,7 @@ void register_PerturbationsTemplate_class(){
                 "setInitAngleT"
                 , setInitAngleT_function_value
                 , ( bp::arg("angle"), bp::arg("r") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -514,6 +550,7 @@ void register_PerturbationsTemplate_class(){
                 "setInitBondK"
                 , setInitBondK_function_value
                 , ( bp::arg("bond"), bp::arg("k") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -526,6 +563,7 @@ void register_PerturbationsTemplate_class(){
                 "setInitBondR"
                 , setInitBondR_function_value
                 , ( bp::arg("bond"), bp::arg("r") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -538,6 +576,7 @@ void register_PerturbationsTemplate_class(){
                 "setInitCharge"
                 , setInitCharge_function_value
                 , ( bp::arg("atomname"), bp::arg("atomcharge") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -550,6 +589,7 @@ void register_PerturbationsTemplate_class(){
                 "setInitDihParams"
                 , setInitDihParams_function_value
                 , ( bp::arg("dihedral"), bp::arg("params") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -562,6 +602,7 @@ void register_PerturbationsTemplate_class(){
                 "setInitImpParams"
                 , setInitImpParams_function_value
                 , ( bp::arg("improper"), bp::arg("params") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -574,6 +615,7 @@ void register_PerturbationsTemplate_class(){
                 "setInitLJ"
                 , setInitLJ_function_value
                 , ( bp::arg("atomname"), bp::arg("atomlj") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -586,6 +628,7 @@ void register_PerturbationsTemplate_class(){
                 "setInitType"
                 , setInitType_function_value
                 , ( bp::arg("atomname"), bp::arg("atype") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -597,6 +640,7 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

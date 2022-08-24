@@ -37,6 +37,8 @@ SireMaths::Transform __copy__(const SireMaths::Transform &other){ return SireMat
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Transform_class(){
 
     { //::SireMaths::Transform
@@ -58,6 +60,7 @@ void register_Transform_class(){
                 "apply"
                 , apply_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Apply this transformation to the passed point, returning the result" );
         
         }
@@ -70,6 +73,7 @@ void register_Transform_class(){
                 "apply"
                 , apply_function_value
                 , ( bp::arg("points") )
+                , bp::release_gil_policy()
                 , "Apply this transformation to all of the passed points, returning the results" );
         
         }
@@ -81,6 +85,7 @@ void register_Transform_class(){
             Transform_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether this is null (has no transformation)" );
         
         }
@@ -92,6 +97,7 @@ void register_Transform_class(){
             Transform_exposer.def( 
                 "isZero"
                 , isZero_function_value
+                , bp::release_gil_policy()
                 , "Return whether this is zero (has no transformation)" );
         
         }
@@ -142,6 +148,7 @@ void register_Transform_class(){
             Transform_exposer.def( 
                 "rotationCenter"
                 , rotationCenter_function_value
+                , bp::release_gil_policy()
                 , "Return the center of rotation" );
         
         }
@@ -153,6 +160,7 @@ void register_Transform_class(){
             Transform_exposer.def( 
                 "rotationMatrix"
                 , rotationMatrix_function_value
+                , bp::release_gil_policy()
                 , "Return the rotation matrix" );
         
         }
@@ -164,6 +172,7 @@ void register_Transform_class(){
             Transform_exposer.def( 
                 "rotationQuaternion"
                 , rotationQuaternion_function_value
+                , bp::release_gil_policy()
                 , "Return the rotation matrix as a quaternion" );
         
         }
@@ -175,6 +184,7 @@ void register_Transform_class(){
             Transform_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -186,6 +196,7 @@ void register_Transform_class(){
             Transform_exposer.def( 
                 "translationDelta"
                 , translationDelta_function_value
+                , bp::release_gil_policy()
                 , "Return the amount by which to translate" );
         
         }
@@ -197,6 +208,7 @@ void register_Transform_class(){
             Transform_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -208,6 +220,7 @@ void register_Transform_class(){
             Transform_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

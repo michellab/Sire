@@ -29,6 +29,8 @@ SireCAS::Cosh __copy__(const SireCAS::Cosh &other){ return SireCAS::Cosh(other);
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Cosh_class(){
 
     { //::SireCAS::Cosh
@@ -46,6 +48,7 @@ void register_Cosh_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this function" );
         
         }
@@ -58,6 +61,7 @@ void register_Cosh_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Complex evaluation" );
         
         }
@@ -70,6 +74,7 @@ void register_Cosh_class(){
             Cosh_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -81,6 +86,7 @@ void register_Cosh_class(){
             Cosh_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

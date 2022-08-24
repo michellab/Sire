@@ -55,6 +55,8 @@ SireID::Specify<SireMol::SegID> __copy__(const SireID::Specify<SireMol::SegID> &
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Specify_SegID__class(){
 
     { //::SireID::Specify< SireMol::SegID >
@@ -75,6 +77,7 @@ void register_Specify_SegID__class(){
             Specify_SegID__exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -87,6 +90,7 @@ void register_Specify_SegID__class(){
             Specify_SegID__exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -100,6 +104,7 @@ void register_Specify_SegID__class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("obj") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -208,6 +213,7 @@ void register_Specify_SegID__class(){
             Specify_SegID__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -220,6 +226,7 @@ void register_Specify_SegID__class(){
             Specify_SegID__exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -232,6 +239,7 @@ void register_Specify_SegID__class(){
             Specify_SegID__exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

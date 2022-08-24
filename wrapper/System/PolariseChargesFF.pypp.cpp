@@ -36,6 +36,8 @@ namespace bp = boost::python;
 
 #include "SireMol/connectivity.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/mgname.h"
 
 #include "SireMol/molecule.h"
@@ -66,6 +68,8 @@ SireSystem::PolariseChargesFF __copy__(const SireSystem::PolariseChargesFF &othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_PolariseChargesFF_class(){
@@ -85,7 +89,7 @@ void register_PolariseChargesFF_class(){
             PolariseChargesFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the components of this forcefield" );
         
         }
@@ -98,6 +102,7 @@ void register_PolariseChargesFF_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "This forcefield doesnt contain any properties" );
         
         }
@@ -109,6 +114,7 @@ void register_PolariseChargesFF_class(){
             PolariseChargesFF_exposer.def( 
                 "mustNowRecalculateFromScratch"
                 , mustNowRecalculateFromScratch_function_value
+                , bp::release_gil_policy()
                 , "Tell the forcefield that the energy must now be recalculated\nfrom scratch" );
         
         }
@@ -148,7 +154,7 @@ void register_PolariseChargesFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "This forcefield doesnt contain any properties\nThrow: SireBase::missing_property\n" );
         
         }
@@ -161,6 +167,7 @@ void register_PolariseChargesFF_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("property") )
+                , bp::release_gil_policy()
                 , "You cannot set any properties of this forcefield\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -172,6 +179,7 @@ void register_PolariseChargesFF_class(){
             PolariseChargesFF_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -35,6 +35,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MGID_class(){
 
     { //::SireMol::MGID
@@ -50,6 +52,7 @@ void register_MGID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molgroups") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -101,6 +104,7 @@ void register_MGID_class(){
             MGID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -30,6 +30,8 @@ SireMaths::FreeEnergyAverage __copy__(const SireMaths::FreeEnergyAverage &other)
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FreeEnergyAverage_class(){
 
     { //::SireMaths::FreeEnergyAverage
@@ -50,6 +52,7 @@ void register_FreeEnergyAverage_class(){
                 "accumulate"
                 , accumulate_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Accumulate the passed energy difference onto the free energy average" );
         
         }
@@ -61,6 +64,7 @@ void register_FreeEnergyAverage_class(){
             FreeEnergyAverage_exposer.def( 
                 "average"
                 , average_function_value
+                , bp::release_gil_policy()
                 , "Return the average free energy. Note that if this is a backwards free energy,\nthen this will return the negative (so that it is easy to combine backwards\nand forwards values)" );
         
         }
@@ -72,6 +76,7 @@ void register_FreeEnergyAverage_class(){
             FreeEnergyAverage_exposer.def( 
                 "average2"
                 , average2_function_value
+                , bp::release_gil_policy()
                 , "Return the square of the average free energy. Note that if this is a backwards\nfree energy, then this will return the negative (so that it is easy to combine\nbackwards and forwards values)" );
         
         }
@@ -83,6 +88,7 @@ void register_FreeEnergyAverage_class(){
             FreeEnergyAverage_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Clear all data from the accumulator" );
         
         }
@@ -94,6 +100,7 @@ void register_FreeEnergyAverage_class(){
             FreeEnergyAverage_exposer.def( 
                 "fepFreeEnergy"
                 , fepFreeEnergy_function_value
+                , bp::release_gil_policy()
                 , "Return the average free energy. Note that if this is a backwards free energy,\nthen this will return the negative (so that it is easy to combine backwards\nand forwards values)" );
         
         }
@@ -105,7 +112,7 @@ void register_FreeEnergyAverage_class(){
             FreeEnergyAverage_exposer.def( 
                 "histogram"
                 , histogram_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the histogram of energies" );
         
         }
@@ -117,6 +124,7 @@ void register_FreeEnergyAverage_class(){
             FreeEnergyAverage_exposer.def( 
                 "isBackwardsFreeEnergy"
                 , isBackwardsFreeEnergy_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a backwards free energy" );
         
         }
@@ -128,6 +136,7 @@ void register_FreeEnergyAverage_class(){
             FreeEnergyAverage_exposer.def( 
                 "isForwardsFreeEnergy"
                 , isForwardsFreeEnergy_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a forwards free energy" );
         
         }
@@ -155,6 +164,7 @@ void register_FreeEnergyAverage_class(){
             FreeEnergyAverage_exposer.def( 
                 "taylorExpansion"
                 , taylorExpansion_function_value
+                , bp::release_gil_policy()
                 , "Return the Taylor series expansion estimate the difference in free energy" );
         
         }
@@ -166,6 +176,7 @@ void register_FreeEnergyAverage_class(){
             FreeEnergyAverage_exposer.def( 
                 "temperature"
                 , temperature_function_value
+                , bp::release_gil_policy()
                 , "Return the temperature at which the free energy average\nis being accumulated" );
         
         }
@@ -177,6 +188,7 @@ void register_FreeEnergyAverage_class(){
             FreeEnergyAverage_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -188,6 +200,7 @@ void register_FreeEnergyAverage_class(){
             FreeEnergyAverage_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

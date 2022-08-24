@@ -56,6 +56,8 @@ SireMol::AtomStructureEditor __copy__(const SireMol::AtomStructureEditor &other)
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AtomStructureEditor_class(){
 
     { //::SireMol::AtomStructureEditor
@@ -73,6 +75,7 @@ void register_AtomStructureEditor_class(){
             AtomStructureEditor_exposer.def( 
                 "chain"
                 , chain_function_value
+                , bp::release_gil_policy()
                 , "Return the editor for the chain that contains this atom" );
         
         }
@@ -84,6 +87,7 @@ void register_AtomStructureEditor_class(){
             AtomStructureEditor_exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "Commit all of the changes, returning the uneditable Atom" );
         
         }
@@ -95,6 +99,7 @@ void register_AtomStructureEditor_class(){
             AtomStructureEditor_exposer.def( 
                 "cutGroup"
                 , cutGroup_function_value
+                , bp::release_gil_policy()
                 , "Return the editor for the CutGrop that contains this atom" );
         
         }
@@ -106,6 +111,7 @@ void register_AtomStructureEditor_class(){
             AtomStructureEditor_exposer.def( 
                 "index"
                 , index_function_value
+                , bp::release_gil_policy()
                 , "Return the index number of this atom in the molecule" );
         
         }
@@ -117,6 +123,7 @@ void register_AtomStructureEditor_class(){
             AtomStructureEditor_exposer.def( 
                 "molecule"
                 , molecule_function_value
+                , bp::release_gil_policy()
                 , "Return the editor for the molecule that contains this atom" );
         
         }
@@ -128,7 +135,7 @@ void register_AtomStructureEditor_class(){
             AtomStructureEditor_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of this atom" );
         
         }
@@ -140,6 +147,7 @@ void register_AtomStructureEditor_class(){
             AtomStructureEditor_exposer.def( 
                 "number"
                 , number_function_value
+                , bp::release_gil_policy()
                 , "Return the number of this atom" );
         
         }
@@ -190,6 +198,7 @@ void register_AtomStructureEditor_class(){
             AtomStructureEditor_exposer.def( 
                 "remove"
                 , remove_function_value
+                , bp::release_gil_policy()
                 , "Completely remove this atom from the molecule and return\na MolStructureEditor that can be used to continue editing\nthe molecule" );
         
         }
@@ -305,6 +314,7 @@ void register_AtomStructureEditor_class(){
             AtomStructureEditor_exposer.def( 
                 "residue"
                 , residue_function_value
+                , bp::release_gil_policy()
                 , "Return the editor for the residue that contains this atom" );
         
         }
@@ -316,6 +326,7 @@ void register_AtomStructureEditor_class(){
             AtomStructureEditor_exposer.def( 
                 "segment"
                 , segment_function_value
+                , bp::release_gil_policy()
                 , "Return the editor for the segment that contain this atom" );
         
         }
@@ -327,6 +338,7 @@ void register_AtomStructureEditor_class(){
             AtomStructureEditor_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this contains the whole molecule" );
         
         }
@@ -338,6 +350,7 @@ void register_AtomStructureEditor_class(){
             AtomStructureEditor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this editor" );
         
         }
@@ -349,6 +362,7 @@ void register_AtomStructureEditor_class(){
             AtomStructureEditor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -360,6 +374,7 @@ void register_AtomStructureEditor_class(){
             AtomStructureEditor_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

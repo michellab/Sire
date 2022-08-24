@@ -51,6 +51,8 @@ Squire::SQM __copy__(const Squire::SQM &other){ return Squire::SQM(other); }
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SQM_class(){
 
     { //::Squire::SQM
@@ -92,6 +94,7 @@ void register_SQM_class(){
                 "environment"
                 , environment_function_value
                 , ( bp::arg("variable") )
+                , bp::release_gil_policy()
                 , "Return the value of the explicitly set environmental variable variable.\nA null string is returned if this variable has not been set\nexplicitly (this does not mean the variable doesnt exist - merely\nthat a specific value has not been set)" );
         
         }
@@ -103,6 +106,7 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "executable"
                 , executable_function_value
+                , bp::release_gil_policy()
                 , "Return the executable (full path and also arguments) to be used. This\nis null if the executable is searched for in the path" );
         
         }
@@ -114,6 +118,7 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "expectedNumberOfQMAtoms"
                 , expectedNumberOfQMAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum number of expected QM atoms. This returns -1 if\nwe dont expect any QM atoms" );
         
         }
@@ -137,6 +142,7 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "maximumNumberOfSQMInputLines"
                 , maximumNumberOfSQMInputLines_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum number of supported SQM input lines. This returns\n-1 if SQM doesnt have a file size limit" );
         
         }
@@ -148,6 +154,7 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "maximumRunTime"
                 , maximumRunTime_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum runtime allowed for a SQM job, in milliseconds" );
         
         }
@@ -171,6 +178,7 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "numberOfMMAtomsLimit"
                 , numberOfMMAtomsLimit_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum number of MM atoms supported by SQM. This returns\n-1 if there is no limit on the number of atoms" );
         
         }
@@ -183,6 +191,7 @@ void register_SQM_class(){
                 "numberOfMMAtomsLimit"
                 , numberOfMMAtomsLimit_function_value
                 , ( bp::arg("num_qm_atoms") )
+                , bp::release_gil_policy()
                 , "Return the maximum number of MM atoms supported by SQM if there\nare num_qm_atoms QM atoms. This returns\n-1 if there is no limit on the number of atoms" );
         
         }
@@ -210,6 +219,7 @@ void register_SQM_class(){
                 "setEnergyTemplate"
                 , setEnergyTemplate_function_value
                 , ( bp::arg("energy_template") )
+                , bp::release_gil_policy()
                 , "Set the template for the command file to be used to get\nSQM to calculate an energy. The following tags will\n" );
         
         }
@@ -222,6 +232,7 @@ void register_SQM_class(){
                 "setEnvironment"
                 , setEnvironment_function_value
                 , ( bp::arg("variable"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the environmental variable variable to have the value value\nwhen the SQM executable is run. This replaces any existing\nvalue of this environmental variable" );
         
         }
@@ -234,6 +245,7 @@ void register_SQM_class(){
                 "setExecutable"
                 , setExecutable_function_value
                 , ( bp::arg("SQM_exe") )
+                , bp::release_gil_policy()
                 , "Set the SQM executable (full path and also arguments) to be used" );
         
         }
@@ -246,6 +258,7 @@ void register_SQM_class(){
                 "setExpectedNumberOfQMAtoms"
                 , setExpectedNumberOfQMAtoms_function_value
                 , ( bp::arg("natoms") )
+                , bp::release_gil_policy()
                 , "Set the maximum number of expected QM atoms. This is used, together with\nthe maximum number of lines in a SQM input file, to work out the maximum\nnumber of supported MM atoms" );
         
         }
@@ -258,6 +271,7 @@ void register_SQM_class(){
                 "setForceTemplate"
                 , setForceTemplate_function_value
                 , ( bp::arg("force_template") )
+                , bp::release_gil_policy()
                 , "Set the template for the command file to be used to get\nSQM to calculate the forces. The following tags will\n" );
         
         }
@@ -270,6 +284,7 @@ void register_SQM_class(){
                 "setMaximumNumberOfSQMInputLines"
                 , setMaximumNumberOfSQMInputLines_function_value
                 , ( bp::arg("numlines") )
+                , bp::release_gil_policy()
                 , "Set the maximum number of lines that can be parsed from an SQM input file.\nCurrently, SQM has a hard-coded limit of 1000 lines" );
         
         }
@@ -282,6 +297,7 @@ void register_SQM_class(){
                 "setMaximumRunTime"
                 , setMaximumRunTime_function_value
                 , ( bp::arg("max_runtime") )
+                , bp::release_gil_policy()
                 , "Set the maximum allowed runtime for the SQM job - this is used\nto detect hangs - if the SQM job takes longer than this\ntime then it is killed and an exception raised. The maximum\nruntime is measured in milliseconds" );
         
         }
@@ -294,6 +310,7 @@ void register_SQM_class(){
                 "setMethod"
                 , setMethod_function_value
                 , ( bp::arg("method") )
+                , bp::release_gil_policy()
                 , "Set the QM method to be used to calculate the energy or\nforce (e.g. AM1, PM3, AM1d etc. See the AmberTools documentation\nfor SQM to find the supported methods and the string used to\nspecify that method). This will substitute for\n@QM_METHOD@ in the command file templates, and should be the same\nstring used in SQM as specified in the SQM documentation" );
         
         }
@@ -306,6 +323,7 @@ void register_SQM_class(){
                 "setTotalCharge"
                 , setTotalCharge_function_value
                 , ( bp::arg("charge") )
+                , bp::release_gil_policy()
                 , "Set the total charge of the system (in unit charges)" );
         
         }
@@ -317,6 +335,7 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "supportsLatticeCharges"
                 , supportsLatticeCharges_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -328,6 +347,7 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -339,6 +359,7 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "totalCharge"
                 , totalCharge_function_value
+                , bp::release_gil_policy()
                 , "Return the total charge of the system" );
         
         }
@@ -350,6 +371,7 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

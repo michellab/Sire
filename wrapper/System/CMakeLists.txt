@@ -6,7 +6,7 @@
 
 # Third Party dependencies of this module
 include_directories( ${BOOST_INCLUDE_DIR}
-                     ${PYTHON_INCLUDE_DIR} 
+                     ${PYTHON_INCLUDE_DIR}
                      ${SIRE_GSL_INCLUDE_PATH} )
 
 # Sire include paths
@@ -23,7 +23,7 @@ include(CMakeAutogenFile.txt)
 set ( WRAPSYSTEM_SOURCES
 
       _System.main.cpp
-     
+
       ${PYPP_SOURCES}
 
     )
@@ -39,18 +39,18 @@ set_target_properties (System
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
+
 target_link_libraries (System
                        SirePython
                        SIRE_SireSystem
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_System" "_init_System" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/System )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/System )
 
 install( TARGETS System
          LIBRARY DESTINATION ${INSTALLDIR}
@@ -59,6 +59,6 @@ install( TARGETS System
         )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )
 

@@ -4,18 +4,20 @@
 # where Sire is installed etc.
 #
 
-import Sire.Base
+import sire.legacy.Base as _Base
+import os as _os
 
-binary_directory = Sire.Base.getBinDir()
-library_directory = Sire.Base.getLibDir()
-include_directory = "%s/include" % Sire.Base.getInstallDir()
-share_directory = Sire.Base.getShareDir()
-parameter_directory = "%s/parameters" % share_directory
-test_directory = "%s/test" % Sire.Base.getInstallDir()
+binary_directory = _Base.getBinDir()
+library_directory = _Base.getLibDir()
+include_directory = _os.path.join(_Base.getInstallDir(), "include")
+share_directory = _Base.getShareDir()
+parameter_directory = _os.path.join(share_directory, "parameters")
+test_directory = _os.path.join(_Base.getInstallDir(), "test")
 
-sire_repository_url = Sire.Base.getRepositoryURL()
-sire_repository_version = Sire.Base.getRepositoryVersion()
-sire_python_repository_url = "@SVN_REPOSITORY_URL@"
-sire_python_repository_version = "@SVN_VERSION_NUMBER@"
+sire_repository_url = _Base.getRepositoryURL()
+sire_repository_version = _Base.getRepositoryVersion()
+sire_repository_branch = _Base.getRepositoryBranch()
+sire_python_repository_url = r"@SVN_REPOSITORY_URL@"
+sire_python_repository_version = r"@SVN_VERSION_NUMBER@"
 
-__version__ = "@SIRE_VERSION_MAJOR@.@SIRE_VERSION_MINOR@.@SIRE_VERSION_PATCH@"
+__version__ = r"@SIRE_VERSION_MAJOR@.@SIRE_VERSION_MINOR@.@SIRE_VERSION_PATCH@"

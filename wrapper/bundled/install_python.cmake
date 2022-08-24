@@ -3,6 +3,11 @@
 ### in the Sire bundle
 ###
 
+# This file is not used any more as we have moved to building into a conda python
+# This is kept only for legacy reasons as a learning resource in case we have 
+# future python problems
+
+
 if (ANACONDA_BUILD)
   if (NOT DEFINED PYTHON_EXECUTABLE)
     # we will just use the python that comes with anaconda

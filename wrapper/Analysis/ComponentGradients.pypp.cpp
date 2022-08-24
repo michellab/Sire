@@ -25,6 +25,8 @@ SireAnalysis::ComponentGradients __copy__(const SireAnalysis::ComponentGradients
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ComponentGradients_class(){
 
     { //::SireAnalysis::ComponentGradients
@@ -42,6 +44,7 @@ void register_ComponentGradients_class(){
             ComponentGradients_exposer.def( 
                 "conserveMemory"
                 , conserveMemory_function_value
+                , bp::release_gil_policy()
                 , "This function reduces the memory used by this object by ensuring that\nthe FreeEnergyMonitor at each lambda value uses the copy of the\nmolecules used at the first lambda value" );
         
         }
@@ -54,6 +57,7 @@ void register_ComponentGradients_class(){
                 "conserveMemory"
                 , conserveMemory_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "This function conserves memory by copying in all of the shared molecule\ndata etc. from other into this object" );
         
         }
@@ -66,6 +70,7 @@ void register_ComponentGradients_class(){
                 "coulombGradientsAt"
                 , coulombGradientsAt_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the set of coulomb free energy gradients for the ith free energy component" );
         
         }
@@ -78,6 +83,7 @@ void register_ComponentGradients_class(){
                 "coulombValues"
                 , coulombValues_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the actual values of the coulomb free energy gradients of the ith component" );
         
         }
@@ -89,6 +95,7 @@ void register_ComponentGradients_class(){
             ComponentGradients_exposer.def( 
                 "data"
                 , data_function_value
+                , bp::release_gil_policy()
                 , "Return the raw data for all of the free energy components" );
         
         }
@@ -100,6 +107,7 @@ void register_ComponentGradients_class(){
             ComponentGradients_exposer.def( 
                 "deltaLambda"
                 , deltaLambda_function_value
+                , bp::release_gil_policy()
                 , "Return the value of delta lambda used to approximate the free energy gradients" );
         
         }
@@ -112,6 +120,7 @@ void register_ComponentGradients_class(){
                 "gradientsAt"
                 , gradientsAt_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the set of free energy gradients for the ith free energy component" );
         
         }
@@ -124,6 +133,7 @@ void register_ComponentGradients_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Integrate the free energy gradients of the ith component\nand return the resulting PMF" );
         
         }
@@ -136,6 +146,7 @@ void register_ComponentGradients_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("i"), bp::arg("order") )
+                , bp::release_gil_policy()
                 , "Integrate the free energy gradients of the ith component to order order and\nreturn the resulting PMF" );
         
         }
@@ -148,6 +159,7 @@ void register_ComponentGradients_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("i"), bp::arg("range_min"), bp::arg("range_max") )
+                , bp::release_gil_policy()
                 , "Integrate the free energy gradients of the ith component between the range\nrange_min to range_max, and return the resulting PMF" );
         
         }
@@ -160,6 +172,7 @@ void register_ComponentGradients_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("i"), bp::arg("range_min"), bp::arg("range_max"), bp::arg("order") )
+                , bp::release_gil_policy()
                 , "Integrate the free energy gradients of the ith component to order order\nbetween the range range_min to range_max and return the resulting PMF" );
         
         }
@@ -172,6 +185,7 @@ void register_ComponentGradients_class(){
                 "integrateCoulomb"
                 , integrateCoulomb_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Integrate the coulomb free energy gradients of the ith component\nand return the resulting PMF" );
         
         }
@@ -184,6 +198,7 @@ void register_ComponentGradients_class(){
                 "integrateCoulomb"
                 , integrateCoulomb_function_value
                 , ( bp::arg("i"), bp::arg("order") )
+                , bp::release_gil_policy()
                 , "Integrate the coulomb free energy gradients of the ith component to order order and\nreturn the resulting PMF" );
         
         }
@@ -196,6 +211,7 @@ void register_ComponentGradients_class(){
                 "integrateCoulomb"
                 , integrateCoulomb_function_value
                 , ( bp::arg("i"), bp::arg("range_min"), bp::arg("range_max") )
+                , bp::release_gil_policy()
                 , "Integrate the coulomb free energy gradients of the ith component between the range\nrange_min to range_max, and return the resulting PMF" );
         
         }
@@ -208,6 +224,7 @@ void register_ComponentGradients_class(){
                 "integrateCoulomb"
                 , integrateCoulomb_function_value
                 , ( bp::arg("i"), bp::arg("range_min"), bp::arg("range_max"), bp::arg("order") )
+                , bp::release_gil_policy()
                 , "Integrate the coulomb free energy gradients of the ith component to order order\nbetween the range range_min to range_max and return the resulting PMF" );
         
         }
@@ -220,6 +237,7 @@ void register_ComponentGradients_class(){
                 "integrateLJ"
                 , integrateLJ_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Integrate the LJ free energy gradients of the ith component\nand return the resulting PMF" );
         
         }
@@ -232,6 +250,7 @@ void register_ComponentGradients_class(){
                 "integrateLJ"
                 , integrateLJ_function_value
                 , ( bp::arg("i"), bp::arg("order") )
+                , bp::release_gil_policy()
                 , "Integrate the LJ free energy gradients of the ith component to order order and\nreturn the resulting PMF" );
         
         }
@@ -244,6 +263,7 @@ void register_ComponentGradients_class(){
                 "integrateLJ"
                 , integrateLJ_function_value
                 , ( bp::arg("i"), bp::arg("range_min"), bp::arg("range_max") )
+                , bp::release_gil_policy()
                 , "Integrate the LJ free energy gradients of the ith component between the range\nrange_min to range_max, and return the resulting PMF" );
         
         }
@@ -256,6 +276,7 @@ void register_ComponentGradients_class(){
                 "integrateLJ"
                 , integrateLJ_function_value
                 , ( bp::arg("i"), bp::arg("range_min"), bp::arg("range_max"), bp::arg("order") )
+                , bp::release_gil_policy()
                 , "Integrate the LJ free energy gradients of the ith component to order order\nbetween the range range_min to range_max and return the resulting PMF" );
         
         }
@@ -268,6 +289,7 @@ void register_ComponentGradients_class(){
                 "isCompatible"
                 , isCompatible_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return whether or not this set of gradients is compatible with the ones\nprovided in other" );
         
         }
@@ -279,6 +301,7 @@ void register_ComponentGradients_class(){
             ComponentGradients_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this set is empty" );
         
         }
@@ -290,6 +313,7 @@ void register_ComponentGradients_class(){
             ComponentGradients_exposer.def( 
                 "lambdaValues"
                 , lambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return the lambda values over which all of the components were collected" );
         
         }
@@ -302,6 +326,7 @@ void register_ComponentGradients_class(){
                 "ljGradientsAt"
                 , ljGradientsAt_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the set of LJ free energy gradients for the ith free energy component" );
         
         }
@@ -314,6 +339,7 @@ void register_ComponentGradients_class(){
                 "ljValues"
                 , ljValues_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the actual values of the LJ free energy gradients of the ith component" );
         
         }
@@ -326,6 +352,7 @@ void register_ComponentGradients_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("gradients") )
+                , bp::release_gil_policy()
                 , "Merge together all of the passed gradients. Note that they must all be compatible\nwith one another, otherwise an exception will be raised" );
         
         }
@@ -337,6 +364,7 @@ void register_ComponentGradients_class(){
             ComponentGradients_exposer.def( 
                 "nComponents"
                 , nComponents_function_value
+                , bp::release_gil_policy()
                 , "Return the number of free energy components (number of molecule views whose\nfree energy of interaction was recorded)" );
         
         }
@@ -348,6 +376,7 @@ void register_ComponentGradients_class(){
             ComponentGradients_exposer.def( 
                 "nLambdaValues"
                 , nLambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return the number of lambda values over which the free energy components have\nbeen recorded" );
         
         }
@@ -359,6 +388,7 @@ void register_ComponentGradients_class(){
             ComponentGradients_exposer.def( 
                 "nSamples"
                 , nSamples_function_value
+                , bp::release_gil_policy()
                 , "Return the number of samples used to form all of the average components" );
         
         }
@@ -386,6 +416,7 @@ void register_ComponentGradients_class(){
             ComponentGradients_exposer.def( 
                 "temperature"
                 , temperature_function_value
+                , bp::release_gil_policy()
                 , "Return the temperature at which all of the components were collected" );
         
         }
@@ -397,6 +428,7 @@ void register_ComponentGradients_class(){
             ComponentGradients_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -408,6 +440,7 @@ void register_ComponentGradients_class(){
             ComponentGradients_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -420,6 +453,7 @@ void register_ComponentGradients_class(){
                 "values"
                 , values_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the actual values of the free energy gradients of the ith component" );
         
         }
@@ -432,6 +466,7 @@ void register_ComponentGradients_class(){
                 "viewAt"
                 , viewAt_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith view that corresponds to the ith free energy component.\nNote that this returns the view in the numerically first (lowest) lambda\nvalue. Use viewAt(int i, double lamval) if you want to specify the lambda\nvalue from which you want to extract the view." );
         
         }
@@ -444,6 +479,7 @@ void register_ComponentGradients_class(){
                 "viewAt"
                 , viewAt_function_value
                 , ( bp::arg("i"), bp::arg("lamval") )
+                , bp::release_gil_policy()
                 , "Return the ith view from lambda value lamval that corresponds to the\nith free energy component." );
         
         }
@@ -455,6 +491,7 @@ void register_ComponentGradients_class(){
             ComponentGradients_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

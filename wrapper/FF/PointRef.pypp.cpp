@@ -37,6 +37,8 @@ SireFF::PointRef __copy__(const SireFF::PointRef &other){ return SireFF::PointRe
 
 const char* pvt_get_name(const SireFF::PointRef&){ return "SireFF::PointRef";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PointRef_class(){
 
     { //::SireFF::PointRef
@@ -55,6 +57,7 @@ void register_PointRef_class(){
                 "addForce"
                 , addForce_function_value
                 , ( bp::arg("molforces"), bp::arg("force") )
+                , bp::release_gil_policy()
                 , "Decompose the force force acting on this point from the\nmolecule whose forces are in molforces and add the\nforce onto the table" );
         
         }
@@ -67,6 +70,7 @@ void register_PointRef_class(){
                 "addForce"
                 , addForce_function_value
                 , ( bp::arg("forces"), bp::arg("force") )
+                , bp::release_gil_policy()
                 , "Decompose the force force into the forces acting on\nthe molecules that contribute to this point and add those\nforces onto the table forces" );
         
         }

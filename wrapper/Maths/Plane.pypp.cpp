@@ -19,6 +19,8 @@ SireMaths::Plane __copy__(const SireMaths::Plane &other){ return SireMaths::Plan
 
 const char* pvt_get_name(const SireMaths::Plane&){ return "SireMaths::Plane";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Plane_class(){
 
     { //::SireMaths::Plane
@@ -37,6 +39,7 @@ void register_Plane_class(){
             Plane_exposer.def( 
                 "a"
                 , a_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -48,6 +51,7 @@ void register_Plane_class(){
             Plane_exposer.def( 
                 "b"
                 , b_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -59,6 +63,7 @@ void register_Plane_class(){
             Plane_exposer.def( 
                 "c"
                 , c_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -70,6 +75,7 @@ void register_Plane_class(){
             Plane_exposer.def( 
                 "d"
                 , d_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -82,6 +88,7 @@ void register_Plane_class(){
                 "distance"
                 , distance_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -117,6 +124,7 @@ void register_Plane_class(){
             Plane_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -128,6 +136,7 @@ void register_Plane_class(){
             Plane_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

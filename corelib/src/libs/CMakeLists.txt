@@ -18,6 +18,7 @@ set ( SUBDIRS SireAnalysis
               SireMM
               SireMol
               SireMove
+              SireSearch
               SireStream
               SireSystem
               SireUnits
@@ -33,10 +34,10 @@ set ( SIRE_HEADERS
       sireglobal.h
       tostring.h
     )
-    
+
 install( FILES ${SIRE_HEADERS}
          DESTINATION ${SIRE_INCLUDES} )
 
-install( EXPORT SireLibraries 
+install( EXPORT SireLibraries
          NAMESPACE SIRE_
          DESTINATION ${SIRE_CMAKEFILES} )

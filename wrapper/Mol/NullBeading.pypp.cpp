@@ -39,6 +39,8 @@ SireMol::NullBeading __copy__(const SireMol::NullBeading &other){ return SireMol
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullBeading_class(){
 
     { //::SireMol::NullBeading
@@ -69,6 +71,7 @@ void register_NullBeading_class(){
             NullBeading_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

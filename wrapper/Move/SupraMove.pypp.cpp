@@ -21,6 +21,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SupraMove_class(){
 
     { //::SireMove::SupraMove
@@ -35,6 +37,7 @@ void register_SupraMove_class(){
             SupraMove_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Clear all move statistics" );
         
         }
@@ -58,6 +61,7 @@ void register_SupraMove_class(){
             SupraMove_exposer.def( 
                 "nMoves"
                 , nMoves_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of supra-moves performed using this object" );
         
         }
@@ -81,6 +85,7 @@ void register_SupraMove_class(){
             SupraMove_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -92,6 +97,7 @@ void register_SupraMove_class(){
             SupraMove_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

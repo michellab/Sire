@@ -104,10 +104,10 @@ using SireBase::Version;
 /** This is a simulation system. If contains molecules, forcefields that
     provide energy functions of those molecules, and monitors that
     can monitor the changing state of the system
-    
+
     @author Christopher Woods
 */
-class SIRESYSTEM_EXPORT System 
+class SIRESYSTEM_EXPORT System
             : public SireBase::ConcreteProperty<System,MolGroupsBase>
 {
 
@@ -117,15 +117,15 @@ friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, System&);
 public:
     System();
     System(const QString &name);
-    
+
     System(const System &other);
 
     ~System();
-    
+
     static const char* typeName();
-    
+
     System& operator=(const System &other);
-    
+
     bool operator==(const System &other) const;
     bool operator!=(const System &other) const;
 
@@ -135,14 +135,18 @@ public:
     const SystemMonitor& operator[](const MonitorID &monid) const;
     const MoleculeGroup& operator[](const MGID &mgid) const;
 
+    ViewsOfMol operator[](int i) const;
+    ViewsOfMol operator[](const QString &name) const;
+    QList<SireMol::MolViewPtr> operator[](const SireBase::Slice &slice) const;
+
     ViewsOfMol operator[](MolNum molnum) const;
     ViewsOfMol operator[](const MolID &molid) const;
-    
+
     System& operator+=(const FF &forcefield);
     System& operator+=(const MoleculeGroup &molgroup);
     System& operator+=(const Constraint &constraint);
     System& operator+=(const Constraints &constraints);
-    
+
     System& operator-=(const FF &forcefield);
     System& operator-=(const MoleculeGroup &molgroup);
     System& operator-=(const FFID &ffid);
@@ -150,12 +154,13 @@ public:
     System& operator-=(const MolID &molid);
     System& operator-=(const Constraint &constraint);
     System& operator-=(const Constraints &constraints);
-    
+
     const QUuid& UID() const;
     const SysName& name() const;
     const Version& version() const;
     quint32 subVersion() const;
 
+    void setName(const SysName &newname);
     void setName(const QString &newname);
 
     void collectStats();
@@ -164,13 +169,13 @@ public:
     bool constraintsSatisfied() const;
 
     using SireMol::MolGroupsBase::at;
-    
+
     const FF& at(const FFID &ffid) const;
     const SystemMonitor& at(const MonitorID &monid) const;
-    
+
     const FF& forceField(const FFID &ffid) const;
     const FF& forceField(const MGID &mgid) const;
-    
+
     const SystemMonitor& monitor(const MonitorID &monid) const;
 
     QList<SysMonPtr> monitors(const MonitorID &monid) const;
@@ -178,104 +183,104 @@ public:
     int nForceFields() const;
     int nMonitors() const;
     int nConstraints() const;
-    
+
     FFIdx ffIdx(const FFID &ffid) const;
-    
+
     const FFName& ffName(const FFID &ffid) const;
 
     MonitorName monitorName(const MonitorID &monid) const;
-    
+
     QString toString() const;
-    
+
     const Symbol& totalComponent() const;
-    
+
     SireUnits::Dimension::MolarEnergy energy();
     SireUnits::Dimension::MolarEnergy energy(const Symbol &component);
-    
+
     Values energies();
     Values energies(const QSet<Symbol> &components);
-    
+
     bool isEnergyComponent(const Symbol &component) const;
     bool hasEnergyComponent(const Symbol &component) const;
-    
-    void setEnergyComponent(const Symbol &symbol, 
+
+    void setEnergyComponent(const Symbol &symbol,
                             const SireCAS::Expression &expression);
 
     QSet<Symbol> energySymbols() const;
     Values energyComponents();
-                            
+
     SireCAS::Expression energyExpression(const Symbol &expression) const;
     QHash<Symbol,SireCAS::Expression> energyExpressions(
                                             const QSet<Symbol> &symbols) const;
     QHash<Symbol,SireCAS::Expression> energyExpressions() const;
-                            
+
     double constant(const Symbol &component) const;
-    
+
     Values constants() const;
     Values constants(const QSet<Symbol> &components) const;
-    
+
     bool isConstantComponent(const Symbol &component) const;
     bool hasConstantComponent(const Symbol &component) const;
-    
+
     void setConstant(const Symbol &symbol, double value);
     void setConstant(const Symbol &symbol, const SireCAS::Expression &expression);
-    
+
     void setConstantComponent(const Symbol &symbol, double value);
     void setConstantComponent(const Symbol &symbol,
                               const SireCAS::Expression &expression);
 
     QSet<Symbol> constantSymbols() const;
     Values constantComponents() const;
-    
+
     SireCAS::Expression constantExpression(const Symbol &symbol) const;
     QHash<Symbol,SireCAS::Expression> constantExpressions(
                                             const QSet<Symbol> &symbols) const;
     QHash<Symbol,SireCAS::Expression> constantExpressions() const;
-    
+
     void setComponent(const Symbol &symbol, double value);
     void setComponent(const Symbol &symbol, const SireCAS::Expression &expression);
-    
+
     QSet<Symbol> componentSymbols() const;
     Values componentValues();
     Values componentValues(const QSet<Symbol> &symbols);
-    
+
     bool hasComponent(const Symbol &symbol) const;
     double componentValue(const Symbol &symbol);
-    
+
     SireCAS::Expression componentExpression(const Symbol &symbol) const;
     QHash<Symbol,SireCAS::Expression> componentExpressions(
                                             const QSet<Symbol> &symbols) const;
     QHash<Symbol,SireCAS::Expression> componentExpressions() const;
-    
+
     void energy(EnergyTable &energytable, double scale_energy=1);
     void energy(EnergyTable &energytable, const Symbol &component, double scale_energy=1);
 
     void force(ForceTable &forcetable, double scale_force=1);
     void force(ForceTable &forcetable, const Symbol &component,
                double scale_force=1);
-                   
+
     void field(FieldTable &fieldtable, double scale_field=1);
     void field(FieldTable &fieldtable, const Symbol &component,
                double scale_field=1);
-                   
+
     void field(FieldTable &fieldtable, const Probe &probe, double scale_field=1);
     void field(FieldTable &fieldtable, const Symbol &component,
                const Probe &probe, double scale_field=1);
-    
-    void potential(PotentialTable &pottable, const Probe &probe, 
+
+    void potential(PotentialTable &pottable, const Probe &probe,
                    double scale_potential=1);
     void potential(PotentialTable &pottable, const Symbol &component,
                    const Probe &probe, double scale_potential=1);
-    
+
     void potential(PotentialTable &pottable, double scale_potential=1);
     void potential(PotentialTable &pottable, const Symbol &component,
                    double scale_potential=1);
-    
+
     void setProperty(const QString &name, const Property &value);
     void setProperty(const FFID &ffid, const QString &name, const Property &value);
-    
+
     void removeProperty(const QString &name);
-    
+
     bool isCompoundProperty(const QString &name) const;
     bool isUserProperty(const QString &name) const;
     bool isBuiltinProperty(const QString &name) const;
@@ -283,7 +288,7 @@ public:
     const Property& compoundProperty(const QString &name) const;
     const Property& userProperty(const QString &name) const;
     const Property& builtinProperty(const QString &name) const;
-    
+
     const Property& property(const PropertyName &name) const;
 
     const Property& property(const FFID &ffid, const PropertyName &name) const;
@@ -296,52 +301,52 @@ public:
 
     bool containsProperty(const PropertyName &name) const;
     bool containsProperty(const FFID &ffid, const PropertyName &name) const;
-    
+
     Properties properties() const;
     Properties properties(const FFID &ffid) const;
-    
+
     Properties userProperties() const;
     Properties builtinProperties() const;
-    
+
     const SystemMonitors& monitors() const;
     const ForceFields& forceFields() const;
     const MoleculeGroups& extraGroups() const;
     const Constraints& constraints() const;
-    
+
     void clearStatistics();
     void clearStatistics(const MonitorID &monid);
-    
+
     void mustNowRecalculateFromScratch();
-    
+
     void accept();
     bool needsAccepting() const;
-    
+
     bool isDirty() const;
     bool isClean() const;
-    
+
     using SireMol::MolGroupsBase::add;
     using SireMol::MolGroupsBase::remove;
     using SireMol::MolGroupsBase::update;
-    
+
     void add(const QString &name, const SystemMonitor &monitor,
              int frequency = 1);
-    
+
     void add(const SystemMonitors &monitors);
     void add(const SystemMonitors &monitors, int frequency);
-    
+
     void setMonitors(const SystemMonitors &monitors);
     void setMonitors(const SystemMonitors &monitors, int frequency);
-    
+
     void add(const FF &forcefield);
     void add(const MoleculeGroup &molgroup);
-    
+
     void add(const Constraint &constraint);
     void add(const Constraints &constraints);
 
     void setConstraints(const Constraints &constraints);
-    
+
     void remove(const MonitorID &monid);
-    
+
     void remove(const FFID &ffid);
     void remove(const FF &ff);
 
@@ -371,7 +376,7 @@ public:
              const PropertyMap &map);
     void add(const MoleculeGroup &molgroup, const MGID &mgid,
              const PropertyMap &map);
-    
+
     void addIfUnique(const MoleculeView &molview, const MGID &mgid,
                      const PropertyMap &map);
     void addIfUnique(const ViewsOfMol &molviews, const MGID &mgid,
@@ -380,12 +385,12 @@ public:
                      const PropertyMap &map);
     void addIfUnique(const MoleculeGroup &molgroup, const MGID &mgid,
                      const PropertyMap &map);
-    
+
     void add(const MoleculeView &molview, const MGID &mgid);
     void add(const ViewsOfMol &molviews, const MGID &mgid);
     void add(const Molecules &molecules, const MGID &mgid);
     void add(const MoleculeGroup &molgroup, const MGID &mgid);
-    
+
     void addIfUnique(const MoleculeView &molview, const MGID &mgid);
     void addIfUnique(const ViewsOfMol &molviews, const MGID &mgid);
     void addIfUnique(const Molecules &molecules, const MGID &mgid);
@@ -398,7 +403,7 @@ public:
     bool remove(const ViewsOfMol &molviews, const MGID &mgid);
     bool remove(const Molecules &molecules, const MGID &mgid);
     bool remove(const MoleculeGroup &molgroup, const MGID &mgid);
-    
+
     bool removeAll(const MoleculeView &molview, const MGID &mgid);
     bool removeAll(const ViewsOfMol &molviews, const MGID &mgid);
     bool removeAll(const Molecules &molecules, const MGID &mgid);
@@ -410,7 +415,7 @@ public:
     void update(const MoleculeData &moldata, bool auto_commit=true);
     void update(const Molecules &molecules, bool auto_commit=true);
     void update(const MoleculeGroup &molgroup, bool auto_commit=true);
-    
+
     void setContents(const MGID &mgid, const MoleculeView &molview,
                      const PropertyMap &map);
     void setContents(const MGID &mgid, const ViewsOfMol &molviews,
@@ -419,17 +424,17 @@ public:
                      const PropertyMap &map);
     void setContents(const MGID &mgid, const MoleculeGroup &molgroup,
                      const PropertyMap &map);
-    
+
     void setContents(const MGID &mgid, const MoleculeView &molview);
     void setContents(const MGID &mgid, const ViewsOfMol &molviews);
     void setContents(const MGID &mgid, const Molecules &molecules);
-    void setContents(const MGID &mgid, const MoleculeGroup &molgroup);    
+    void setContents(const MGID &mgid, const MoleculeGroup &molgroup);
 
     static const System& null();
 
 protected:
     const MoleculeGroup& getGroup(MGNum mgnum) const;
-    
+
     void getGroups(const QList<MGNum> &mgnums,
                    QVarLengthArray<const MoleculeGroup*,10> &groups) const;
 
@@ -446,11 +451,11 @@ protected:
     bool deltaUpdate(const Symbol &component, double value);
     bool deltaUpdate(const QString &property, const Property &value);
     bool deltaUpdate(const QString &property, const FFID &ffid,
-                     const Property &value); 
+                     const Property &value);
     bool deltaUpdate(const QString &property, const QList<FFIdx> &ffidxs,
                      const Property &value);
 
-    void commitDelta(const Constraints &constraints, 
+    void commitDelta(const Constraints &constraints,
                      bool is_minor_change,
                      bool is_major_change);
 
@@ -463,15 +468,15 @@ private:
     const ForceFields& _pvt_forceFields() const;
 
     MoleculeGroups& _pvt_moleculeGroups();
-    
+
     const MoleculeGroups& _pvt_constMoleculeGroups() const;
     const MoleculeGroups& _pvt_moleculeGroups() const;
 
     MolGroupsBase& _pvt_moleculeGroups(MGNum mgnum);
-    
+
     const MolGroupsBase& _pvt_moleculeGroups(MGNum mgnum) const;
     const MolGroupsBase& _pvt_constMoleculeGroups(MGNum mgnum) const;
-    
+
     const MoleculeGroup& _pvt_moleculeGroup(MGNum mgnum) const;
 
     void _pvt_throwMissingGroup(MGNum mgnum) const;
@@ -482,10 +487,10 @@ private:
 
     /** The unique ID for this system */
     QUuid uid;
-    
+
     /** The name of this system */
     SysName sysname;
-    
+
     /** The version number of this system */
     MajorMinorVersion sysversion;
 
@@ -499,7 +504,7 @@ private:
 
     /** All of the constraints that are applied to this system */
     Constraints cons;
-    
+
     /** The index of which of the two set of MoleculeGroups each
         individual molecule group in this set is in */
     QHash<MGNum,int> mgroups_by_num;

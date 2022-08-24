@@ -34,6 +34,8 @@ SireMol::AngleID __copy__(const SireMol::AngleID &other){ return SireMol::AngleI
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AngleID_class(){
 
     { //::SireMol::AngleID
@@ -50,7 +52,7 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ID of the first atom of the angle" );
         
         }
@@ -62,7 +64,7 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ID of the second atom of the angle" );
         
         }
@@ -74,7 +76,7 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "atom2"
                 , atom2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ID of the third atom of the angle" );
         
         }
@@ -86,6 +88,7 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash for this ID" );
         
         }
@@ -97,6 +100,7 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether this is a null ID" );
         
         }
@@ -109,6 +113,7 @@ void register_AngleID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the three atoms in this angle - this returns\nthem in the order tuple(angle.atom0(),angle.atom1(),angle.atom2())\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -121,6 +126,7 @@ void register_AngleID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("mol0info"), bp::arg("mol1info"), bp::arg("mol2info") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the three atoms of this angle, between the\ntwo molecules whose data is in mol0info (containing angle.atom0()),\nmol1info (containing angle.atom1()) and mol2info (containing\nangle.atom2())\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -132,6 +138,7 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "mirror"
                 , mirror_function_value
+                , bp::release_gil_policy()
                 , "Return the mirror of this AngleID - i.e. if this is\nAngleID(atom0, atom1, atom2), this returns\nAngleID(atom2, atom1, atom0).\nThis is useful if you know that AngleID(atom0,atom1,atom2) equals\n" );
         
         }
@@ -184,6 +191,7 @@ void register_AngleID_class(){
                 "size"
                 , size_function_value
                 , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1"), bp::arg("mol2data"), bp::arg("map2") )
+                , bp::release_gil_policy()
                 , "Return the size of the angle between atom0() in the\nmolecule whose data is in mol0data, atom1() in the\nmolecule whose data is in mol1data and atom2() in\nthe molecule whose data is in mol2data, using map0\nto the find the coordinates property of mol0,\nmap1 to find the coordinates property of mol1\nand map2 to find the coordinates property of mol2\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -195,6 +203,7 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this ID" );
         
         }
@@ -231,6 +240,7 @@ void register_AngleID_class(){
                 "triangle"
                 , triangle_function_value
                 , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1"), bp::arg("mol2data"), bp::arg("map2") )
+                , bp::release_gil_policy()
                 , "Return the geometric triangle formed by the three atoms,\natom0() in the molecule whose data is in mol0data,\natom1() from mol1data and atom2() from mol2data,\nusing map0 to find the coordinates property of mol0,\nmap1 to find the coordinates property of mol1 and\nmap2 to find the coordinates property of mol2.\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -242,6 +252,7 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -278,6 +289,7 @@ void register_AngleID_class(){
                 "vector"
                 , vector_function_value
                 , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1"), bp::arg("mol2data"), bp::arg("map2") )
+                , bp::release_gil_policy()
                 , "Return the vector that is perpendicular to the plane\nformed by the atoms atom0() in mol0data, atom1() in\nmol1data and atom2() in mol2data, using map0 to find the\ncoordinates property of mol0, map1 to find the\ncoordinates property of mol1 and map2 to find the\ncoordinates property of mol2\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -289,6 +301,7 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -37,6 +37,8 @@ namespace bp = boost::python;
 
 #include "SireMol/connectivity.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/mgname.h"
 
 #include "SireMol/molecule.h"
@@ -71,7 +73,6 @@ namespace bp = boost::python;
 
 #include "openmmpmefep.h"
 
-
 #include <QDebug>
 
 #include <QTime>
@@ -90,11 +91,13 @@ SireMove::OpenMMPMEFEP __copy__(const SireMove::OpenMMPMEFEP &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_OpenMMPMEFEP_class(){
 
     { //::SireMove::OpenMMPMEFEP
         typedef bp::class_< SireMove::OpenMMPMEFEP, bp::bases< SireMove::Integrator, SireBase::Property > > OpenMMPMEFEP_exposer_t;
-        OpenMMPMEFEP_exposer_t OpenMMPMEFEP_exposer = OpenMMPMEFEP_exposer_t( "OpenMMPMEFEP", "This class implements single topology a free energy method using\nOpenMM.\n\nAuthor: Julien Michel, Gaetano Calabro, Antonia Mey, Hannes H Loeffler\n", bp::init< bp::optional< bool > >(( bp::arg("frequent_save_velocities")=(bool)(false) ), "Constructor") );
+        OpenMMPMEFEP_exposer_t OpenMMPMEFEP_exposer = OpenMMPMEFEP_exposer_t( "OpenMMPMEFEP", "This class implements the single topology free energy method using\nOpenMM.\n\nAuthor: Julien Michel, Gaetano Calabro, Antonia Mey, Hannes H Loeffler\n", bp::init< bp::optional< bool > >(( bp::arg("frequent_save_velocities")=(bool)(false) ), "Constructor") );
         bp::scope OpenMMPMEFEP_scope( OpenMMPMEFEP_exposer );
         OpenMMPMEFEP_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, bp::optional< bool > >(( bp::arg("molecule_group"), bp::arg("solutes"), bp::arg("solute_hard"), bp::arg("solute_todummy"), bp::arg("solute_fromdummy"), bp::arg("frequent_save_velocities")=(bool)(false) ), "Constructor using the passed molecule groups") );
         OpenMMPMEFEP_exposer.def( bp::init< SireMove::OpenMMPMEFEP const & >(( bp::arg("other") ), "Copy constructor") );
@@ -107,6 +110,7 @@ void register_OpenMMPMEFEP_class(){
                 "annealSystemToLambda"
                 , annealSystemToLambda_function_value
                 , ( bp::arg("system"), bp::arg("anneal_step_size"), bp::arg("annealing_steps") )
+                , bp::release_gil_policy()
                 , "\n annealSystemToLambda will anneal the system to the current alchemical lambda\n value of the system\n Par:am system                Sire System including molegroup, forcefield\n                              positions etc\n Par:am timestep              Default = 0.005. Time step used of the\n equilibration to the desired lambda\n Par:am annealingSteps        Default = 1000. Number of steps used for the\n annealing\n Return:                      Sire system with updated coordinates and\n velocities.\n" );
         
         }
@@ -142,6 +146,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "ensemble"
                 , ensemble_function_value
+                , bp::release_gil_policy()
                 , "Return the ensemble of this integrator" );
         
         }
@@ -153,6 +158,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getAlchemicalValue"
                 , getAlchemicalValue_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -164,6 +170,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getAndersen"
                 , getAndersen_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -175,6 +182,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getAndersenFrequency"
                 , getAndersenFrequency_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -186,6 +194,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getBackwardMetropolis"
                 , getBackwardMetropolis_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -197,6 +206,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getBufferFrequency"
                 , getBufferFrequency_function_value
+                , bp::release_gil_policy()
                 , "Get the frequency of buffering coordinates" );
         
         }
@@ -208,6 +218,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getCMMremovalFrequency"
                 , getCMMremovalFrequency_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -219,6 +230,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getCombiningRules"
                 , getCombiningRules_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -230,6 +242,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getConstraintType"
                 , getConstraintType_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -241,6 +254,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getCoulombPower"
                 , getCoulombPower_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -252,6 +266,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getCutoffDistance"
                 , getCutoffDistance_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -263,6 +278,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getCutoffType"
                 , getCutoffType_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -274,6 +290,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getDeltaAlchemical"
                 , getDeltaAlchemical_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -285,6 +302,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getDeviceIndex"
                 , getDeviceIndex_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -296,6 +314,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getEnergies"
                 , getEnergies_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -307,6 +326,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getEnergyFrequency"
                 , getEnergyFrequency_function_value
+                , bp::release_gil_policy()
                 , "Get the frequency of buffering coordinates" );
         
         }
@@ -318,6 +338,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getFieldDielectric"
                 , getFieldDielectric_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -329,6 +350,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getForwardMetropolis"
                 , getForwardMetropolis_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -340,6 +362,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getFriction"
                 , getFriction_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -351,6 +374,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getGradients"
                 , getGradients_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -362,6 +386,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getIntegrationTolerance"
                 , getIntegrationTolerance_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -373,6 +398,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getIntegrator"
                 , getIntegrator_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -384,6 +410,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getMCBarostat"
                 , getMCBarostat_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -395,6 +422,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getMCBarostatFrequency"
                 , getMCBarostatFrequency_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -406,6 +434,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getPlatform"
                 , getPlatform_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -418,6 +447,7 @@ void register_OpenMMPMEFEP_class(){
                 "getPotentialEnergy"
                 , getPotentialEnergy_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -429,6 +459,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getPrecision"
                 , getPrecision_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -440,6 +471,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getPressure"
                 , getPressure_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -451,6 +483,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getRandomSeed"
                 , getRandomSeed_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -462,6 +495,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getReducedPerturbedEnergies"
                 , getReducedPerturbedEnergies_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -473,6 +507,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getRestraint"
                 , getRestraint_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -484,6 +519,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getShiftDelta"
                 , getShiftDelta_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -495,6 +531,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getTemperature"
                 , getTemperature_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -506,6 +543,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "getTimetoSkip"
                 , getTimetoSkip_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -518,7 +556,7 @@ void register_OpenMMPMEFEP_class(){
                 "initialise"
                 , initialise_function_value
                 , ( bp::arg("fullPME")=(bool)(false) )
-                , "\n initialises the openMM Free energy single topology calculation\n Initialise must be called before anything else happens.\n" );
+                , "\n Initialise the OpenMM Free energy single topology calculation.\n Parameter fullPME is only useful for debugging of e.g. single ion systems.\n initialise() must be called before anything else happens.\n" );
         
         }
         { //::SireMove::OpenMMPMEFEP::integrate
@@ -530,6 +568,7 @@ void register_OpenMMPMEFEP_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("workspace"), bp::arg("nrg_component"), bp::arg("timestep"), bp::arg("nmoves"), bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "\n Main integration methods for advancing dynamics\n Par:am workspace             Sire Integrator workspace\n Par:am nrg_component\n Par:am timestep              Default = 0.002. Integration timestep\n Par:am nmoves                Number of moves\n Par:am record_stats          boolean that tracks recording.\n" );
         
         }
@@ -541,6 +580,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "isTimeReversible"
                 , isTimeReversible_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this integrator is time-reversible" );
         
         }
@@ -553,6 +593,7 @@ void register_OpenMMPMEFEP_class(){
                 "minimiseEnergy"
                 , minimiseEnergy_function_value
                 , ( bp::arg("system"), bp::arg("tolerance"), bp::arg("max_iteration") )
+                , bp::release_gil_policy()
                 , "\n <Runs an energy Minimization on the current system.>\n minimizeEnergy will find the nearest local potential energy minimum,\n given the current Sire::System. It calls the\n LocalEnergyMinimizer :: minimize() function of OpenMM.\n Par:am system                Sire System including molegroup, forcefield\n                              positions etc\n Par:am tolerance             Default = 1. This specifies how precisely the\n energy minimum must be located. Minimisation will be halted once the\n root-mean-square value of all force components reaches this tolerance.\n Par:am max_iteration         Default = 1000. this specifies the number of\n iterations are run for the minimisation. If max_iteration = 0, the\n iteration will run until convergence.\n\n Return:                      Sire System, with the updated energy\n minimised coordinates.\n" );
         
         }
@@ -580,6 +621,7 @@ void register_OpenMMPMEFEP_class(){
                 "setAlchemicalArray"
                 , setAlchemicalArray_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -592,6 +634,7 @@ void register_OpenMMPMEFEP_class(){
                 "setAlchemicalValue"
                 , setAlchemicalValue_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the alchemical value used to calculate the free energy change via TI method" );
         
         }
@@ -604,6 +647,7 @@ void register_OpenMMPMEFEP_class(){
                 "setAndersen"
                 , setAndersen_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set Andersen thermostat" );
         
         }
@@ -616,6 +660,7 @@ void register_OpenMMPMEFEP_class(){
                 "setAndersenFrequency"
                 , setAndersenFrequency_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Andersen Thermostat frequency collision" );
         
         }
@@ -628,6 +673,7 @@ void register_OpenMMPMEFEP_class(){
                 "setBufferFrequency"
                 , setBufferFrequency_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Center of Mass motion removal frequency" );
         
         }
@@ -640,6 +686,7 @@ void register_OpenMMPMEFEP_class(){
                 "setCMMremovalFrequency"
                 , setCMMremovalFrequency_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Center of Mass motion removal frequency" );
         
         }
@@ -652,6 +699,7 @@ void register_OpenMMPMEFEP_class(){
                 "setCombiningRules"
                 , setCombiningRules_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the combining rules type: arithmetic, geometric" );
         
         }
@@ -664,6 +712,7 @@ void register_OpenMMPMEFEP_class(){
                 "setConstraintType"
                 , setConstraintType_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Constraint type: none, hbonds, allbonds, hangles" );
         
         }
@@ -676,6 +725,7 @@ void register_OpenMMPMEFEP_class(){
                 "setCoulombPower"
                 , setCoulombPower_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the coulomb power used in the soft core potential" );
         
         }
@@ -688,6 +738,7 @@ void register_OpenMMPMEFEP_class(){
                 "setCutoffDistance"
                 , setCutoffDistance_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the cutoff distance in A" );
         
         }
@@ -700,6 +751,7 @@ void register_OpenMMPMEFEP_class(){
                 "setDebug"
                 , setDebug_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -712,6 +764,7 @@ void register_OpenMMPMEFEP_class(){
                 "setDeltatAlchemical"
                 , setDeltatAlchemical_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "\n Set the delta alchemical used in the FEP method\n Par:am deltaalchemical\n" );
         
         }
@@ -724,6 +777,7 @@ void register_OpenMMPMEFEP_class(){
                 "setDeviceIndex"
                 , setDeviceIndex_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the OpenMM Platform: CUDA, OpenCL, CPU" );
         
         }
@@ -736,6 +790,7 @@ void register_OpenMMPMEFEP_class(){
                 "setEnergyFrequency"
                 , setEnergyFrequency_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Center of Mass motion removal frequency" );
         
         }
@@ -748,6 +803,7 @@ void register_OpenMMPMEFEP_class(){
                 "setFieldDielectric"
                 , setFieldDielectric_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the dielectric constant" );
         
         }
@@ -760,6 +816,7 @@ void register_OpenMMPMEFEP_class(){
                 "setFriction"
                 , setFriction_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the friction used in specific Integrator type" );
         
         }
@@ -772,6 +829,7 @@ void register_OpenMMPMEFEP_class(){
                 "setIntegrationTolerance"
                 , setIntegrationTolerance_function_value
                 , ( bp::arg("tollerance") )
+                , bp::release_gil_policy()
                 , "Set the integration tolerance" );
         
         }
@@ -784,6 +842,7 @@ void register_OpenMMPMEFEP_class(){
                 "setIntegrator"
                 , setIntegrator_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Integrator type" );
         
         }
@@ -796,6 +855,7 @@ void register_OpenMMPMEFEP_class(){
                 "setMCBarostat"
                 , setMCBarostat_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set Monte Carlo Barostat onoff" );
         
         }
@@ -808,6 +868,7 @@ void register_OpenMMPMEFEP_class(){
                 "setMCBarostatFrequency"
                 , setMCBarostatFrequency_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Monte Carlo Barostat frequency in time speps" );
         
         }
@@ -820,6 +881,7 @@ void register_OpenMMPMEFEP_class(){
                 "setPlatform"
                 , setPlatform_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the OpenMM Platform: CUDA, OpenCL, CPU" );
         
         }
@@ -832,6 +894,7 @@ void register_OpenMMPMEFEP_class(){
                 "setPrecision"
                 , setPrecision_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the OpenMM Precision" );
         
         }
@@ -844,6 +907,7 @@ void register_OpenMMPMEFEP_class(){
                 "setPressure"
                 , setPressure_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Pressure" );
         
         }
@@ -856,6 +920,7 @@ void register_OpenMMPMEFEP_class(){
                 "setRandomSeed"
                 , setRandomSeed_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Integrator random seed" );
         
         }
@@ -868,6 +933,7 @@ void register_OpenMMPMEFEP_class(){
                 "setReinitialiseContext"
                 , setReinitialiseContext_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the flag to reinitialise the context" );
         
         }
@@ -880,6 +946,7 @@ void register_OpenMMPMEFEP_class(){
                 "setRestraint"
                 , setRestraint_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Retraint mode" );
         
         }
@@ -892,6 +959,7 @@ void register_OpenMMPMEFEP_class(){
                 "setShiftDelta"
                 , setShiftDelta_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "\n <Set the shift used in the soft core potential>\n Par:am shiftdelta\n" );
         
         }
@@ -904,6 +972,7 @@ void register_OpenMMPMEFEP_class(){
                 "setTemperature"
                 , setTemperature_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Temperature" );
         
         }
@@ -916,6 +985,7 @@ void register_OpenMMPMEFEP_class(){
                 "setTimetoSkip"
                 , setTimetoSkip_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Get total time to skip" );
         
         }
@@ -927,6 +997,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this integrator" );
         
         }
@@ -938,6 +1009,7 @@ void register_OpenMMPMEFEP_class(){
             OpenMMPMEFEP_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

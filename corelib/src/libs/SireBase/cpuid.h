@@ -48,7 +48,7 @@ namespace SireBase
 
 /** This class obtains and displays the capabilities and ID of
     the CPU at runtime
-    
+
     @author Christopher Woods
 */
 class SIREBASE_EXPORT CPUID : public ConcreteProperty<CPUID,Property>
@@ -60,42 +60,42 @@ friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, CPUID&);
 public:
     CPUID();
     CPUID(const CPUID &other);
-    
+
     ~CPUID();
-    
+
     CPUID& operator=(const CPUID &other);
-    
+
     bool operator==(const CPUID &other) const;
     bool operator!=(const CPUID &other) const;
-    
+
     CPUID* clone() const;
-    
+
     const char* what() const;
     static const char* typeName();
-    
+
     QString toString() const;
-    
+
     bool supports(const QString &feature) const;
 
     QStringList supportableFeatures() const;
-    
+
     QStringList supportedFeatures() const;
-    
+
     QString vendor() const;
     QString brand() const;
-    
+
     int clockSpeed() const;
     int numCores() const;
-    
+
     bool supportsSSE2() const;
     bool supportsAVX() const;
-    
+
 private:
     QHash<QString,QString>* getCPUID();
 
     /** A simple dictionary of key-value pairs for the CPU */
     QHash<QString,QString> props;
-    
+
     static QHash<QString,QString> *global_props;
 };
 

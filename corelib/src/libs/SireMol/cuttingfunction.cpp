@@ -34,6 +34,7 @@
 #include "molecule.h"
 #include "mover.hpp"
 #include "moleditor.h"
+#include "selector.hpp"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -48,14 +49,14 @@ using namespace SireStream;
 
 static const RegisterMetaType<CuttingFunction> r_cutfunc( MAGIC_ONLY,
                                                           "SireMol::CuttingFunction" );
-                                                          
+
 /** Serialise to a binary datastream */
 QDataStream &operator<<(QDataStream &ds, const CuttingFunction &cutfunc)
 {
     writeHeader(ds, r_cutfunc, 1);
-    
+
     ds << static_cast<const Property&>(cutfunc);
-    
+
     return ds;
 }
 
@@ -63,14 +64,14 @@ QDataStream &operator<<(QDataStream &ds, const CuttingFunction &cutfunc)
 QDataStream &operator>>(QDataStream &ds, CuttingFunction &cutfunc)
 {
     VersionID v = readHeader(ds, r_cutfunc);
-    
+
     if (v == 1)
     {
         ds >> static_cast<Property&>(cutfunc);
     }
     else
         throw version_error( v, "1", r_cutfunc, CODELOC );
-        
+
     return ds;
 }
 
@@ -92,9 +93,9 @@ CuttingFunction::~CuttingFunction()
 Molecule CuttingFunction::operator()(const Molecule &molecule) const
 {
     MolStructureEditor moleditor( molecule );
-    
+
     moleditor = this->operator()(moleditor);
-    
+
     return moleditor.commit();
 }
 

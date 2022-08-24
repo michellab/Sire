@@ -1,11 +1,28 @@
-#############################
-##
-## The Squire module
-##
-## (C) Christopher Woods
-##
+"""
+.. currentmodule:: sire.legacy.Squire
 
-import Sire.MM
-import Sire.System
+Classes
+=======
 
-from Sire.Squire._Squire import *
+.. autosummary::
+    :toctree: generated/
+
+    AM1BCC
+    Molpro
+    Mopac
+    PointCharge
+    PointDipole
+    QMChargeCalculator
+    QMChargeConstraint
+    QMComponent
+    QMFF
+    QMMMFF
+    QMProgram
+    SQM
+
+"""
+
+from .. import MM as _MM
+from .. import System as _System
+
+from ._Squire import *

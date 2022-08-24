@@ -15,6 +15,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ChainProp_class(){
 
     { //::SireMol::ChainProp
@@ -30,6 +32,7 @@ void register_ChainProp_class(){
                 "assertCanConvert"
                 , assertCanConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -42,6 +45,7 @@ void register_ChainProp_class(){
                 "assignFrom"
                 , assignFrom_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -54,6 +58,33 @@ void register_ChainProp_class(){
                 "canConvert"
                 , canConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::ChainProp::getAsProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::ChainProp::*getAsProperty_function_type)( ::SireMol::ChainIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::ChainProp::getAsProperty );
+            
+            ChainProp_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("chainidx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::ChainProp::getAsVariant
+        
+            typedef ::QVariant ( ::SireMol::ChainProp::*getAsVariant_function_type)( ::SireMol::ChainIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::ChainProp::getAsVariant );
+            
+            ChainProp_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("chainidx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -65,6 +96,7 @@ void register_ChainProp_class(){
             ChainProp_exposer.def( 
                 "toVariant"
                 , toVariant_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

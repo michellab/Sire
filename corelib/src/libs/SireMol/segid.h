@@ -69,7 +69,7 @@ class MoleculeGroup;
 class MolGroupsBase;
 class MolNum;
 
-/** This is the base class of all identifiers that are used 
+/** This is the base class of all identifiers that are used
     to identify a Segment within a Molecule
 
     @author Christopher Woods
@@ -132,7 +132,7 @@ public:
     SireID::InvertMatch<SegID> operator!() const;
     SireID::InvertMatch<SegID> invert() const;
     SireID::InvertMatch<SegID> inverse() const;
-    
+
     static SireID::MatchAll<SegID> any();
 
     AtomsIn<SegID> atoms() const;
@@ -146,36 +146,38 @@ public:
 
     virtual SegID* clone() const=0;
 
-    /** Map this ID back to the indicies of the segments in the molecule, 
+    static SegIdentifier fromString(const QString &id);
+
+    /** Map this ID back to the indicies of the segments in the molecule,
         using the passed MoleculeInfo to do the mapping */
     virtual QList<SegIdx> map(const MolInfo &molinfo) const=0;
 
     virtual QList<SegIdx> map(const MoleculeView &molview,
                                const PropertyMap &map = PropertyMap()) const;
-    
+
     virtual Segment selectFrom(const MoleculeView &molview,
                                const PropertyMap &map = PropertyMap()) const;
-    
+
     virtual Selector<Segment> selectAllFrom(const MoleculeView &molview,
                                          const PropertyMap &map = PropertyMap()) const;
-    
+
     virtual Segment selectFrom(const Molecules &molecules,
                                const PropertyMap &map = PropertyMap()) const;
-                            
+
     virtual QHash< MolNum,Selector<Segment> >
                 selectAllFrom(const Molecules &molecules,
                               const PropertyMap &map = PropertyMap()) const;
 
     virtual Segment selectFrom(const MoleculeGroup &molgroup,
                                const PropertyMap &map = PropertyMap()) const;
-                            
+
     virtual QHash< MolNum,Selector<Segment> >
                 selectAllFrom(const MoleculeGroup &molgroup,
                               const PropertyMap &map = PropertyMap()) const;
-    
+
     virtual Segment selectFrom(const MolGroupsBase &molgroups,
                                const PropertyMap &map = PropertyMap()) const;
-    virtual QHash< MolNum,Selector<Segment> > 
+    virtual QHash< MolNum,Selector<Segment> >
                 selectAllFrom(const MolGroupsBase &molgroups,
                               const PropertyMap &map = PropertyMap()) const;
 

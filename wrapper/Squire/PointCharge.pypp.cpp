@@ -21,6 +21,8 @@ Squire::PointCharge __copy__(const Squire::PointCharge &other){ return Squire::P
 
 const char* pvt_get_name(const Squire::PointCharge&){ return "Squire::PointCharge";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PointCharge_class(){
 
     { //::Squire::PointCharge
@@ -50,6 +52,7 @@ void register_PointCharge_class(){
             PointCharge_exposer.def( 
                 "charge"
                 , charge_function_value
+                , bp::release_gil_policy()
                 , "Return the magnitude of this point charge (in internal units)" );
         
         }
@@ -76,6 +79,7 @@ void register_PointCharge_class(){
             PointCharge_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

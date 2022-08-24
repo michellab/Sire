@@ -32,6 +32,8 @@ SireMove::SimStore __copy__(const SireMove::SimStore &other){ return SireMove::S
 
 const char* pvt_get_name(const SireMove::SimStore&){ return "SireMove::SimStore";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SimStore_class(){
 
     { //::SireMove::SimStore
@@ -48,6 +50,7 @@ void register_SimStore_class(){
             SimStore_exposer.def( 
                 "isPacked"
                 , isPacked_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the data is packed into memory or\nis packed onto disk" );
         
         }
@@ -59,6 +62,7 @@ void register_SimStore_class(){
             SimStore_exposer.def( 
                 "isPackedToDisk"
                 , isPackedToDisk_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the data is packed to disk" );
         
         }
@@ -70,6 +74,7 @@ void register_SimStore_class(){
             SimStore_exposer.def( 
                 "isPackedToMemory"
                 , isPackedToMemory_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the data is packed into a compressed\nbinary array" );
         
         }
@@ -81,7 +86,7 @@ void register_SimStore_class(){
             SimStore_exposer.def( 
                 "moves"
                 , moves_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return a copy of the moves being stored" );
         
         }
@@ -108,6 +113,7 @@ void register_SimStore_class(){
             SimStore_exposer.def( 
                 "pack"
                 , pack_function_value
+                , bp::release_gil_policy()
                 , "Pack the system - this packs the system to the same state\nas the last time this function was called (so if it was previously\npacked to disk, then this will pack it to disk). This allows\nyou to call SimStore::unpack(), knowing that SimStore::pack()\nwill restore the packing state" );
         
         }
@@ -119,6 +125,7 @@ void register_SimStore_class(){
             SimStore_exposer.def( 
                 "packToDisk"
                 , packToDisk_function_value
+                , bp::release_gil_policy()
                 , "Pack the system and moves to disk - this places the data in\na temporary file in QDir::tempPath()" );
         
         }
@@ -131,6 +138,7 @@ void register_SimStore_class(){
                 "packToDisk"
                 , packToDisk_function_value
                 , ( bp::arg("tempdir") )
+                , bp::release_gil_policy()
                 , "Pack the system and moves to disk - this places the data\ninto a temporary file in tempdir" );
         
         }
@@ -142,6 +150,7 @@ void register_SimStore_class(){
             SimStore_exposer.def( 
                 "packToMemory"
                 , packToMemory_function_value
+                , bp::release_gil_policy()
                 , "Pack the system and moves to memory - this will compress\nthem to a compressed binary array if they are not packed,\nwill do nothing if they are already packed to memory,\nor will move them from disk to memory if they are already\npacked to disk" );
         
         }
@@ -154,6 +163,7 @@ void register_SimStore_class(){
                 "setMoves"
                 , setMoves_function_value
                 , ( bp::arg("moves") )
+                , bp::release_gil_policy()
                 , "Set the moves to be stored" );
         
         }
@@ -166,6 +176,7 @@ void register_SimStore_class(){
                 "setSystem"
                 , setSystem_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Set the system to be stored" );
         
         }
@@ -178,6 +189,7 @@ void register_SimStore_class(){
                 "setSystemAndMoves"
                 , setSystemAndMoves_function_value
                 , ( bp::arg("system"), bp::arg("moves") )
+                , bp::release_gil_policy()
                 , "Set both the system and moves to be stored" );
         
         }
@@ -201,6 +213,7 @@ void register_SimStore_class(){
             SimStore_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -212,6 +225,7 @@ void register_SimStore_class(){
             SimStore_exposer.def( 
                 "unpack"
                 , unpack_function_value
+                , bp::release_gil_policy()
                 , "Unpack the system and move from the compressed binary array" );
         
         }
@@ -223,6 +237,7 @@ void register_SimStore_class(){
             SimStore_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

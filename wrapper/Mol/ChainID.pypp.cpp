@@ -51,6 +51,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ChainID_class(){
 
     { //::SireMol::ChainID
@@ -65,6 +67,7 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "any"
                 , any_function_value
+                , bp::release_gil_policy()
                 , "Return a match for any chains" );
         
         }
@@ -77,6 +80,7 @@ void register_ChainID_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return a specific atom in the matching residues" );
         
         }
@@ -88,6 +92,7 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "atoms"
                 , atoms_function_value
+                , bp::release_gil_policy()
                 , "Return the atoms in the matching residues" );
         
         }
@@ -100,7 +105,21 @@ void register_ChainID_class(){
                 "atoms"
                 , atoms_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Return a range of atoms in the matching residues" );
+        
+        }
+        { //::SireMol::ChainID::fromString
+        
+            typedef ::SireMol::ChainIdentifier ( *fromString_function_type )( ::QString const & );
+            fromString_function_type fromString_function_value( &::SireMol::ChainID::fromString );
+            
+            ChainID_exposer.def( 
+                "fromString"
+                , fromString_function_value
+                , ( bp::arg("id") )
+                , bp::release_gil_policy()
+                , "Return an AtomID constructed from the passed string" );
         
         }
         { //::SireMol::ChainID::inverse
@@ -111,6 +130,7 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "inverse"
                 , inverse_function_value
+                , bp::release_gil_policy()
                 , "Inverse this match" );
         
         }
@@ -122,6 +142,7 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "invert"
                 , invert_function_value
+                , bp::release_gil_policy()
                 , "Inverse this match" );
         
         }
@@ -134,6 +155,7 @@ void register_ChainID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Map this ID back to the indicies of the chains in the molecule,\nusing the passed MoleculeInfo to do the mapping" );
         
         }
@@ -253,6 +275,7 @@ void register_ChainID_class(){
                 "residue"
                 , residue_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return a specific atom in the matching residues" );
         
         }
@@ -264,6 +287,7 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "residues"
                 , residues_function_value
+                , bp::release_gil_policy()
                 , "Return the atoms in the matching residues" );
         
         }
@@ -276,6 +300,7 @@ void register_ChainID_class(){
                 "residues"
                 , residues_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Return a range of atoms in the matching residues" );
         
         }
@@ -383,10 +408,12 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
         ChainID_exposer.staticmethod( "any" );
+        ChainID_exposer.staticmethod( "fromString" );
         ChainID_exposer.staticmethod( "typeName" );
         ChainID_exposer.def( "__str__", &__str__< ::SireMol::ChainID > );
         ChainID_exposer.def( "__repr__", &__str__< ::SireMol::ChainID > );

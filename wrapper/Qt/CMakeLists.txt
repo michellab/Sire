@@ -9,7 +9,7 @@ include_directories( ${BOOST_INCLUDE_DIR}
                      ${PYTHON_INCLUDE_DIR} )
 
 # Other Sire libraries
-include_directories( ${CMAKE_SOURCE_DIR} ) 
+include_directories( ${CMAKE_SOURCE_DIR} )
 
 include_directories( BEFORE ${SIRE_INCLUDE_DIR} )
 
@@ -32,12 +32,12 @@ add_library (Qt ${WRAPQT_SOURCES})
 target_link_libraries (Qt
                        SirePython
                        SIRE_SireBase
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                        ${PYTHON_LIBRARIES}
                       )
 
 
-set_target_properties (Qt 
+set_target_properties (Qt
                        PROPERTIES
                          VERSION ${SIRE_VERSION}
                          SOVERSION ${SIRE_VERSION_MAJOR}
@@ -50,7 +50,7 @@ include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_Qt" "_init_Qt" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/Qt )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/Qt )
 
 install( TARGETS Qt
          LIBRARY DESTINATION ${INSTALLDIR}
@@ -59,5 +59,5 @@ install( TARGETS Qt
        )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )

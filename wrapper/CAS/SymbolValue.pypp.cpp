@@ -17,6 +17,8 @@ SireCAS::SymbolValue __copy__(const SireCAS::SymbolValue &other){ return SireCAS
 
 const char* pvt_get_name(const SireCAS::SymbolValue&){ return "SireCAS::SymbolValue";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SymbolValue_class(){
 
     { //::SireCAS::SymbolValue
@@ -31,6 +33,7 @@ void register_SymbolValue_class(){
             SymbolValue_exposer.def( 
                 "ID"
                 , ID_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -42,6 +45,7 @@ void register_SymbolValue_class(){
             SymbolValue_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

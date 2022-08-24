@@ -33,9 +33,6 @@
 #include "segproperty.hpp"
 #include "atomselection.h"
 
-#include "mover.hpp"
-#include "selector.hpp"
-
 SIRE_BEGIN_HEADER
 
 namespace SireMol
@@ -79,70 +76,77 @@ public:
     typedef SegID ID;
     typedef SegIdx Index;
     typedef SegName Name;
+    typedef SegIdx Number;
 
     Segment();
-    
+
     Segment(const MoleculeData &data, const SegID &segid);
-    
+
     Segment(const Segment &other);
-    
+
     ~Segment();
-    
+
     Segment& operator=(const Segment &other);
-    
+
     bool operator==(const Segment &other) const;
     bool operator!=(const Segment &other) const;
 
     static const char* typeName();
-    
+
     Segment* clone() const;
 
     QString toString() const;
-    
+
+    MolViewPtr toSelector() const;
+
     bool isEmpty() const;
     bool selectedAll() const;
-    
+
     AtomSelection selection() const;
-    
+
     void update(const MoleculeData &moldata);
-    
+
     const SegName& name() const;
     SegIdx index() const;
-    
+    SegIdx number() const;
+
     bool hasProperty(const PropertyName &key) const;
     bool hasMetadata(const PropertyName &metakey) const;
     bool hasMetadata(const PropertyName &key,
                      const PropertyName &metakey) const;
-                     
+
     QStringList propertyKeys() const;
     QStringList metadataKeys() const;
     QStringList metadataKeys(const PropertyName &key) const;
+
+    QVariant propertyAsVariant(const PropertyName &key) const;
+    SireBase::PropertyPtr propertyAsProperty(const PropertyName &key) const;
 
     template<class T>
     const T& property(const PropertyName &key) const;
 
     template<class T>
     const T& metadata(const PropertyName &metakey) const;
-    
+
     template<class T>
     const T& metadata(const PropertyName &key,
                       const PropertyName &metakey) const;
-    
+
     Mover<Segment> move() const;
     Evaluator evaluate() const;
     SegEditor edit() const;
     Selector<Segment> selector() const;
-    
+
     int nAtoms() const;
-    
+
     const QList<AtomIdx>& atomIdxs() const;
-    
+
     bool contains(AtomIdx atomidx) const;
     bool contains(const AtomID &atomid) const;
     bool intersects(const AtomID &atomid) const;
 
     void assertContainsProperty(const PropertyName &key) const;
-    
+
     void assertContainsMetadata(const PropertyName &metakey) const;
     void assertContainsMetadata(const PropertyName &key,
                                 const PropertyName &metakey) const;
@@ -150,10 +154,10 @@ public:
 protected:
     template<class T>
     void setProperty(const QString &key, const T &value);
-    
+
     template<class T>
     void setMetadata(const QString &metakey, const T &value);
-    
+
     template<class T>
     void setMetadata(const QString &key, const QString &metakey,
                      const T &value);
@@ -161,19 +165,19 @@ protected:
 private:
     /** The index of the segment in the molecule */
     SegIdx segidx;
-    
+
     /** The atoms that are part of this segment */
     AtomSelection selected_atoms;
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
-/** Return the property (of type T) at key 'key' that is 
+/** Return the property (of type T) at key 'key' that is
     specifically assigned to this segment. This will only work
     if the property at this key is a segment property (i.e.
     has one value for every segment) and that it can be
     cast to type T
-    
+
     \throw SireMol::missing_property
     \throw SireError::invalid_cast
 */
@@ -202,13 +206,13 @@ const T& Segment::metadata(const PropertyName &metakey) const
 
 /** Return the metadata at metakey 'metakey' for the property
     at key 'key'
-    
+
     \throw SireMol::missing_property
     \throw SireError::invalid_cast
 */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-const T& Segment::metadata(const PropertyName &key, 
+const T& Segment::metadata(const PropertyName &key,
                            const PropertyName &metakey) const
 {
     const Property &property = d->metadata(key, metakey);
@@ -220,9 +224,9 @@ const T& Segment::metadata(const PropertyName &key,
     segment to be equal to 'value'. This works by creating
     a SrgProperty<T> for this molecule, and assigning
     the value for this segment to 'value'. If there is already
-    a property at key 'key', then it must be of type 
+    a property at key 'key', then it must be of type
     SegProperty<T> for this to work
-    
+
     \throw SireMol::invalid_cast
 */
 template<class T>
@@ -233,9 +237,9 @@ void Segment::setProperty(const QString &key, const T &value)
                                                        value);
 }
 
-/** Set the metadata at metakey 'metakey' to the value 'value' 
+/** Set the metadata at metakey 'metakey' to the value 'value'
     for this residue
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -248,7 +252,7 @@ void Segment::setMetadata(const QString &metakey, const T &value)
 
 /** Set the metadata at metakey 'metakey' for the property at key
     'key' to the value 'value'
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -256,7 +260,7 @@ SIRE_OUTOFLINE_TEMPLATE
 void Segment::setMetadata(const QString &key, const QString &metakey,
                            const T &value)
 {
-    MoleculeView::setMetadata<SegIdx,SegProperty<T>,T>(*d, key, metakey, this->index(), 
+    MoleculeView::setMetadata<SegIdx,SegProperty<T>,T>(*d, key, metakey, this->index(),
                                                        value);
 }
 
@@ -264,6 +268,12 @@ namespace detail
 {
 
 void assertSameSize(Segment*, int nres, int nprops);
+
+template<>
+SIRE_ALWAYS_INLINE int getCount<Segment>(const MolInfo &molinfo)
+{
+    return molinfo.nSegments();
+}
 
 template<>
 SIRE_ALWAYS_INLINE QList<SegIdx> getAll<Segment>(const MolInfo &molinfo)
@@ -337,7 +347,7 @@ void set_metadata(Segment *ptr, MoleculeData &moldata,
                   const QList<V> &values)
 {
     assertSameSize(ptr, idxs.count(), values.count());
-    
+
     set_metadata<SegProperty<V>,Segment::Index,V>(moldata,idxs,key,metakey,values);
 }
 
@@ -373,12 +383,12 @@ void set_metadata(Segment*, MoleculeData &moldata,
 
 SIREMOL_EXPORT bool has_property(const Segment*, const MoleculeData &moldata,
                   const PropertyName &key);
-                  
+
 SIREMOL_EXPORT bool has_metadata(const Segment*, const MoleculeData &moldata,
                   const PropertyName &metakey);
-                  
+
 SIREMOL_EXPORT bool has_metadata(const Segment*, const MoleculeData &moldata,
-                  const PropertyName &key, const PropertyName &metakey);                 
+                  const PropertyName &key, const PropertyName &metakey);
 
 } //end of namespace detail
 

@@ -22,6 +22,8 @@ SireCAS::SymbolExpression __copy__(const SireCAS::SymbolExpression &other){ retu
 
 const char* pvt_get_name(const SireCAS::SymbolExpression&){ return "SireCAS::SymbolExpression";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SymbolExpression_class(){
 
     { //::SireCAS::SymbolExpression
@@ -48,7 +50,7 @@ void register_SymbolExpression_class(){
             SymbolExpression_exposer.def( 
                 "function"
                 , function_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol as a function - this is only safe\nif isFunction() returns true" );
         
         }
@@ -60,6 +62,7 @@ void register_SymbolExpression_class(){
             SymbolExpression_exposer.def( 
                 "isFunction"
                 , isFunction_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a function" );
         
         }
@@ -71,7 +74,7 @@ void register_SymbolExpression_class(){
             SymbolExpression_exposer.def( 
                 "symbol"
                 , symbol_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol" );
         
         }

@@ -49,6 +49,8 @@ SireMaths::Matrix __copy__(const SireMaths::Matrix &other){ return SireMaths::Ma
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Matrix_class(){
 
     { //::SireMaths::Matrix
@@ -71,6 +73,7 @@ void register_Matrix_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Return the element at index i,j" );
         
         }
@@ -83,6 +86,7 @@ void register_Matrix_class(){
                 "checkedOffset"
                 , checkedOffset_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Return the offset into the array of the value at index [i,j]\nThrow: SireError::invalid_index\n" );
         
         }
@@ -94,6 +98,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "column0"
                 , column0_function_value
+                , bp::release_gil_policy()
                 , "Return each column" );
         
         }
@@ -105,6 +110,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "column1"
                 , column1_function_value
+                , bp::release_gil_policy()
                 , "Return each column" );
         
         }
@@ -116,6 +122,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "column2"
                 , column2_function_value
+                , bp::release_gil_policy()
                 , "Return each column" );
         
         }
@@ -139,6 +146,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "determinant"
                 , determinant_function_value
+                , bp::release_gil_policy()
                 , "Return the determinant of the matrix" );
         
         }
@@ -150,6 +158,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "diagonalise"
                 , diagonalise_function_value
+                , bp::release_gil_policy()
                 , "Return the eigenvectors and eigenvalues of this matrix" );
         
         }
@@ -161,6 +170,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "enforceSymmetric"
                 , enforceSymmetric_function_value
+                , bp::release_gil_policy()
                 , "Ensure that this matrix is symmetric - this is done by copying the upper-right\ndiagonal to the lower-left diagonal. Note that you should only really use this\nfunction on matricies that you know are symmetric, but may have lost some of\ntheir symmetry due to numerical rounding error" );
         
         }
@@ -172,6 +182,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "getPrincipalAxes"
                 , getPrincipalAxes_function_value
+                , bp::release_gil_policy()
                 , "Obtain the principal axes of this matrix. This can only be performed if this\nmatrix is symmetric. You should only call this function for matricies that\nyou know are symmetric, as this function will assume that the matrix is\nsymmetric, and will thus only use the upper-right diagonal of values.\nThe returned principal axes will be sorted from the highest eigenvalue to\nthe lowest." );
         
         }
@@ -183,6 +194,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "identity"
                 , identity_function_value
+                , bp::release_gil_policy()
                 , "Return the identity matrix" );
         
         }
@@ -194,6 +206,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "inverse"
                 , inverse_function_value
+                , bp::release_gil_policy()
                 , "Return the inverse of this matrix. Throws a math_error if this\nmatrix cannot be inverted." );
         
         }
@@ -205,6 +218,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "isIdentity"
                 , isIdentity_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this matrix is equal to the identity matrix" );
         
         }
@@ -216,6 +230,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "isSymmetric"
                 , isSymmetric_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a symmetric matrix" );
         
         }
@@ -228,6 +243,7 @@ void register_Matrix_class(){
                 "offset"
                 , offset_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -267,6 +283,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "row0"
                 , row0_function_value
+                , bp::release_gil_policy()
                 , "Return each row" );
         
         }
@@ -278,6 +295,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "row1"
                 , row1_function_value
+                , bp::release_gil_policy()
                 , "Return each row" );
         
         }
@@ -289,6 +307,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "row2"
                 , row2_function_value
+                , bp::release_gil_policy()
                 , "Return each row" );
         
         }
@@ -300,6 +319,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "setToIdentity"
                 , setToIdentity_function_value
+                , bp::release_gil_policy()
                 , "Set the matrix to identity" );
         
         }
@@ -311,6 +331,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "singleValueDecomposition"
                 , singleValueDecomposition_function_value
+                , bp::release_gil_policy()
                 , "Return the single value decomposition of this matrix.\nThis calculates the decomposition of this matrix\ninto U S V^T, returning U, S and V in the tuple\n" );
         
         }
@@ -322,6 +343,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "svd"
                 , svd_function_value
+                , bp::release_gil_policy()
                 , "Return the single value decomposition of this matrix.\nThis calculates the decomposition of this matrix\ninto U S V^T, returning U, S and V in the tuple\n" );
         
         }
@@ -333,6 +355,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a QString representation of the matrix" );
         
         }
@@ -344,6 +367,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "trace"
                 , trace_function_value
+                , bp::release_gil_policy()
                 , "Return the trace of the matrix" );
         
         }
@@ -355,6 +379,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "transpose"
                 , transpose_function_value
+                , bp::release_gil_policy()
                 , "Return the transpose of the matrix" );
         
         }
@@ -366,6 +391,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -377,6 +403,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -388,6 +415,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "xx"
                 , xx_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -399,6 +427,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "xy"
                 , xy_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -410,6 +439,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "xz"
                 , xz_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -421,6 +451,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "yx"
                 , yx_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -432,6 +463,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "yy"
                 , yy_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -443,6 +475,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "yz"
                 , yz_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -454,6 +487,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "zero"
                 , zero_function_value
+                , bp::release_gil_policy()
                 , "Return the null matrix" );
         
         }
@@ -465,6 +499,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "zx"
                 , zx_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -476,6 +511,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "zy"
                 , zy_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -487,6 +523,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "zz"
                 , zz_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

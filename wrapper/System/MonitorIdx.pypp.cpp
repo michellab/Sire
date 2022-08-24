@@ -21,6 +21,8 @@ SireSystem::MonitorIdx __copy__(const SireSystem::MonitorIdx &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MonitorIdx_class(){
 
     { //::SireSystem::MonitorIdx
@@ -37,6 +39,7 @@ void register_MonitorIdx_class(){
             MonitorIdx_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -48,6 +51,7 @@ void register_MonitorIdx_class(){
             MonitorIdx_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -60,6 +64,7 @@ void register_MonitorIdx_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("monitors") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -71,6 +76,7 @@ void register_MonitorIdx_class(){
             MonitorIdx_exposer.def( 
                 "null"
                 , null_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +101,7 @@ void register_MonitorIdx_class(){
             MonitorIdx_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -106,6 +113,7 @@ void register_MonitorIdx_class(){
             MonitorIdx_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -117,6 +125,7 @@ void register_MonitorIdx_class(){
             MonitorIdx_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -3,6 +3,12 @@ import os
 import sys
 import tarfile
 
+try:
+    import sire
+    sire.use_old_api()
+except ImportError:
+    pass
+
 from Sire import try_import
 
 import Sire.Config
@@ -33,7 +39,7 @@ def downloadTestsFromWebsite():
         test_package_file = os.path.join(testdir, "unittests.tar.bz2")
         with open(test_package_file, "wb") as f:
             c = pycurl.Curl()
-            c.setopt(c.URL, 
+            c.setopt(c.URL,
               "http://siremol.org/largefiles/sire_releases/download.php?name=%s" \
                       % test_package )
             c.setopt(c.WRITEDATA, f)
@@ -48,7 +54,7 @@ def downloadTestsFromWebsite():
             if not os.path.exists("SireUnitTests/README.md"):
                 print("Could not find SireUnitTests/README.md in download - everything ok?")
                 raise IOError()
-            
+
             os.chdir(old_cwd)
             return True
     except:
@@ -71,7 +77,7 @@ if os.path.exists(unittestdir):
 else:
     #if is_clean and branch == "master":
     #    testdir_exists = downloadTestsFromWebsite()
-        
+
     if not testdir_exists:
         #things will be cloned
         try:

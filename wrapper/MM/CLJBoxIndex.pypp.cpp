@@ -41,6 +41,8 @@ SireMM::CLJBoxIndex __copy__(const SireMM::CLJBoxIndex &other){ return SireMM::C
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJBoxIndex_class(){
 
     { //::SireMM::CLJBoxIndex
@@ -58,6 +60,7 @@ void register_CLJBoxIndex_class(){
                 "box"
                 , box_function_value
                 , ( bp::arg("box_length") )
+                , bp::release_gil_policy()
                 , "Return the AABox that describes this box (for a given box length of box_length).\nThe boxes are arranged so that the box at (0,0,0) has its center at (0,0,0) and\nextends to (-0.5length,-0.5length,-0.5length) to (0.5length,0.5length,0.5length)" );
         
         }
@@ -69,6 +72,7 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "boxOnly"
                 , boxOnly_function_value
+                , bp::release_gil_policy()
                 , "Return a copy of this index that contains only the box index (not the atom index)" );
         
         }
@@ -81,6 +85,7 @@ void register_CLJBoxIndex_class(){
                 "countNonDummies"
                 , countNonDummies_function_value
                 , ( bp::arg("indicies") )
+                , bp::release_gil_policy()
                 , "Return the number of non-dummy indicies in the passed array" );
         
         }
@@ -93,6 +98,7 @@ void register_CLJBoxIndex_class(){
                 "createWithBoxLength"
                 , createWithBoxLength_function_value
                 , ( bp::arg("x"), bp::arg("y"), bp::arg("z"), bp::arg("box_length") )
+                , bp::release_gil_policy()
                 , "Create the index for the box that contains the point x,y,z in a set of boxes\nof length box_length" );
         
         }
@@ -105,6 +111,7 @@ void register_CLJBoxIndex_class(){
                 "createWithBoxLength"
                 , createWithBoxLength_function_value
                 , ( bp::arg("coords"), bp::arg("box_length") )
+                , bp::release_gil_policy()
                 , "Create the index for the box that contains the point x,y,z in a set of boxes\nof length box_length" );
         
         }
@@ -117,6 +124,7 @@ void register_CLJBoxIndex_class(){
                 "createWithInverseBoxLength"
                 , createWithInverseBoxLength_function_value
                 , ( bp::arg("x"), bp::arg("y"), bp::arg("z"), bp::arg("inv_length") )
+                , bp::release_gil_policy()
                 , "Create the index for the box that contains the point x,y,z in a set of boxes\nof length 1  inv_box_length" );
         
         }
@@ -129,6 +137,7 @@ void register_CLJBoxIndex_class(){
                 "createWithInverseBoxLength"
                 , createWithInverseBoxLength_function_value
                 , ( bp::arg("coords"), bp::arg("inv_length") )
+                , bp::release_gil_policy()
                 , "Create the index for the box that contains the point x,y,z in a set of boxes\nof length 1  inv_box_length" );
         
         }
@@ -140,6 +149,7 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "hasAtomIndex"
                 , hasAtomIndex_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -151,6 +161,7 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -162,6 +173,7 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "i"
                 , i_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -173,6 +185,7 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "index"
                 , index_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -184,6 +197,7 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is null" );
         
         }
@@ -195,6 +209,7 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "j"
                 , j_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -206,6 +221,7 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "k"
                 , k_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -218,6 +234,7 @@ void register_CLJBoxIndex_class(){
                 "max"
                 , max_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return the maximum box indicies of the two passed boxes" );
         
         }
@@ -230,6 +247,7 @@ void register_CLJBoxIndex_class(){
                 "min"
                 , min_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return the minimum box indicies of the two passed boxes" );
         
         }
@@ -241,6 +259,7 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "null"
                 , null_function_value
+                , bp::release_gil_policy()
                 , "Return a null CLJBoxIndex" );
         
         }
@@ -272,6 +291,7 @@ void register_CLJBoxIndex_class(){
                 "sameBox"
                 , sameBox_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -283,6 +303,7 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -294,6 +315,7 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -305,6 +327,7 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

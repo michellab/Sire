@@ -33,6 +33,8 @@ Squire::ElementParameterName3D __copy__(const Squire::ElementParameterName3D &ot
 
 const char* pvt_get_name(const Squire::ElementParameterName3D&){ return "Squire::ElementParameterName3D";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ElementParameterName3D_class(){
 
     { //::Squire::ElementParameterName3D

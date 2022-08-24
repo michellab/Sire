@@ -32,6 +32,7 @@
 #include <QVector>
 
 #include "SireBase/qvariant_metatype.h"
+#include "SireBase/convert_property.hpp"
 
 #include "moleculeinfodata.h"
 #include "molviewproperty.h"
@@ -72,30 +73,33 @@ class SIREMOL_EXPORT SegProp : public MolViewProperty
 public:
     SegProp();
     SegProp(const SegProp &other);
-    
+
     virtual ~SegProp();
-    
+
     virtual bool canConvert(const QVariant &value) const=0;
-    
+
     virtual void assignFrom(const SegProperty<QVariant> &values)=0;
-    
+
+    virtual QVariant getAsVariant(const SegIdx &segidx) const=0;
+    virtual SireBase::PropertyPtr getAsProperty(const SegIdx &segidx) const=0;
+
     virtual SegProperty<QVariant> toVariant() const=0;
-    
+
     virtual void assertCanConvert(const QVariant &value) const=0;
 };
 
 /** This is a property that can hold one value for each
     segment in the molecule.
-    
+
     mol.setProperty( "charge", SegCharges( [....] ) )
     mol.setProperty( "lj", SegLJs( [....] ) )
 
     seg.setProperty( "charge", 0.0 * mod_e )
-    
+
     @author Christopher Woods
 */
 template<class T>
-class SIREMOL_EXPORT SegProperty 
+class SIREMOL_EXPORT SegProperty
     : public SireBase::ConcreteProperty<SegProperty<T>, SegProp>
 {
 
@@ -106,25 +110,28 @@ public:
     SegProperty();
 
     SegProperty(const MoleculeInfoData &molinfo);
-    
+
     SegProperty(const QVector<T> &values);
-    
+
     SegProperty(const SegProperty<T> &other);
-    
+
     ~SegProperty();
-    
+
     SegProperty<T>& operator=(const SegProperty<T> &other);
-    
+
     static const char* typeName();
-    
+
     SegProperty<T>* clone() const;
-    
+
     bool operator==(const SegProperty<T> &other) const;
     bool operator!=(const SegProperty<T> &other) const;
 
     const T& operator[](const SegIdx &segidx) const;
     const T& at(const SegIdx &segidx) const;
     const T& get(const SegIdx &segidx) const;
+
+    QVariant getAsVariant(const SegIdx &idx) const;
+    SireBase::PropertyPtr getAsProperty(const SegIdx &idx) const;
 
     SegProperty<T>& set(SegIdx segidx, const T &value);
 
@@ -135,23 +142,23 @@ public:
 
     int size() const;
     int count() const;
-    
+
     int nSegments() const;
 
     QString toString() const;
-    
+
     const QVector<T>& array() const;
 
     void assignFrom(const SegProperty<QVariant> &values);
-    
+
     static SegProperty<T> fromVariant(const SegProperty<QVariant> &values);
-    
+
     SegProperty<QVariant> toVariant() const;
-    
+
     bool isCompatibleWith(const MoleculeInfoData &molinfo) const;
-    
+
     bool canConvert(const QVariant &value) const;
-    
+
     void assertCanConvert(const QVariant &value) const;
 
 private:
@@ -168,7 +175,7 @@ SegProperty<T>::SegProperty()
               : SireBase::ConcreteProperty<SegProperty<T>,SegProp>()
 {}
 
-/** Construct space for the values of the property for all of the 
+/** Construct space for the values of the property for all of the
     segments in the molecule described by 'molinfo' */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -194,7 +201,7 @@ SegProperty<T>::SegProperty(const QVector<T> &values)
 
 /** Assert that the variant can be converted to a value that can
     be held in this list of properties
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -251,7 +258,7 @@ bool SegProperty<T>::operator!=(const SegProperty<T> &other) const
     return props != other.props;
 }
 
-/** Return the property for the segment at index 'segidx' 
+/** Return the property for the segment at index 'segidx'
 
     \throw SireError::invalid_index
 */
@@ -261,7 +268,7 @@ const T& SegProperty<T>::operator[](const SegIdx &segidx) const
 {
     return props.constData()[segidx.map(props.count())];
 }
-    
+
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 const char* SegProperty<T>::typeName()
@@ -308,13 +315,13 @@ SegProperty<T> SegProperty<T>::fromVariant(const SegProperty<QVariant> &variant)
 {
     SegProperty<T> array;
     array.assignFrom(variant);
-    
+
     return array;
 }
 
 /** Assign the values of this property from the array of variants
     in 'values'
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -326,19 +333,19 @@ void SegProperty<T>::assignFrom(const SegProperty<QVariant> &variant)
         props.clear();
         return;
     }
-        
+
     int nvals = variant.count();
     const QVariant *variant_array = variant.constData();
-    
+
     props = QVector<T>(nvals);
     props.squeeze();
     T *props_array = props.data();
-    
+
     for (int i=0; i<nvals; ++i)
     {
         const QVariant &value = variant_array[i];
         SegProperty<T>::assertCanConvert(value);
-        
+
         if (value.isNull())
             props_array[i] = T();
         else
@@ -353,10 +360,10 @@ SegProperty<QVariant> SegProperty<T>::toVariant() const
 {
     if (props.isEmpty())
         return SegProperty<QVariant>();
-        
+
     int nvals = props.count();
     const T *props_array = props.constData();
-    
+
     QVector<QVariant> converted_vals(nvals);
     converted_vals.squeeze();
     QVariant *converted_vals_array = converted_vals.data();
@@ -365,11 +372,11 @@ SegProperty<QVariant> SegProperty<T>::toVariant() const
     {
         converted_vals_array[i].setValue<T>(props_array[i]);
     }
-    
+
     return SegProperty<QVariant>(converted_vals);
 }
 
-/** Return the property for the segment at index 'segidx' 
+/** Return the property for the segment at index 'segidx'
 
     \throw SireError::invalid_index
 */
@@ -380,7 +387,7 @@ const T& SegProperty<T>::at(const SegIdx &segidx) const
     return this->operator[](segidx);
 }
 
-/** Return the property for the segment at index 'segidx' 
+/** Return the property for the segment at index 'segidx'
 
     \throw SireError::invalid_index
 */
@@ -391,7 +398,35 @@ const T& SegProperty<T>::get(const SegIdx &segidx) const
     return this->operator[](segidx);
 }
 
-/** Set the value of the property for the segment at 
+/** Return the value for the passed index, as
+    a QVariant. This lets you get the value without knowing the
+    actual type of this property
+
+    \throw SireError::invalid_index
+*/
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QVariant SegProperty<T>::getAsVariant(const SegIdx &segidx) const
+{
+    const T &value = this->get(segidx);
+    return QVariant::fromValue(value);
+}
+
+/** Return the value for this index as a
+    Property. This lets you get the value without knowing the
+    actual type of this property
+
+   \throw SireError::invalid_index
+*/
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SireBase::PropertyPtr SegProperty<T>::getAsProperty(
+                                const SegIdx &segidx) const
+{
+    return SireBase::convert_property(this->get(segidx));
+}
+
+/** Set the value of the property for the segment at
     index 'segidx' */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -470,7 +505,7 @@ QDataStream& operator<<(QDataStream &ds, const SireMol::SegProperty<T> &prop)
     //serialise the base class - this writes the header and version!
     ds << static_cast<const SireMol::SegProp&>(prop);
     ds << prop.props;
-    
+
     return ds;
 }
 
@@ -481,7 +516,7 @@ QDataStream& operator>>(QDataStream &ds, SireMol::SegProperty<T> &prop)
 {
     ds >> static_cast<SireMol::SegProp&>(prop);
     ds >> prop.props;
-        
+
     return ds;
 }
 

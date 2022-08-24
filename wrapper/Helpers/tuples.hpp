@@ -95,6 +95,8 @@
  *
  **/
 
+#include "Helpers/release_gil_policy.hpp"
+
 namespace boost{ namespace python{
 
 namespace details{
@@ -114,11 +116,14 @@ struct to_py_tuple{
     typedef mpl::int_< tuples::length< TTuple >::value > length_type;
 
     static PyObject* convert(const TTuple& c_tuple){
-        list values;
-        //add all c_tuple items to "values" list
-        convert_impl( c_tuple, values, mpl::int_< 0 >(), length_type() );
-        //create Python tuple from the list
-        return incref( python::tuple( values ).ptr() );
+        auto raii = boost::python::release_gil_policy::acquire_gil();
+        {
+            list values;
+            //add all c_tuple items to "values" list
+            convert_impl( c_tuple, values, mpl::int_< 0 >(), length_type() );
+            //create Python tuple from the list
+            return incref( python::tuple( values ).ptr() );
+        }
     }
 
 private:
@@ -147,56 +152,68 @@ struct from_py_sequence{
 
     static long len(object const& obj)
     {
-        long result = PyObject_Length(obj.ptr());
-        if (PyErr_Occurred()) throw_error_already_set();
-        return result;
+        auto raii = boost::python::release_gil_policy::acquire_gil();
+        {
+            long result = PyObject_Length(obj.ptr());
+            if (PyErr_Occurred()) throw_error_already_set();
+            return result;
+        }
     }
 
     static void*
     convertible(PyObject* py_obj){
+        auto raii = boost::python::release_gil_policy::acquire_gil();
+        {
+            if( !PySequence_Check( py_obj ) ){
+                return 0;
+            }
 
-        if( !PySequence_Check( py_obj ) ){
-            return 0;
-        }
+            if( !PyObject_HasAttrString( py_obj, "__len__" ) ){
+                return 0;
+            }
 
-        if( !PyObject_HasAttrString( py_obj, "__len__" ) ){
-            return 0;
-        }
+            python::object py_sequence( handle<>( borrowed( py_obj ) ) );
 
-        python::object py_sequence( handle<>( borrowed( py_obj ) ) );
+            if( tuples::length< TTuple >::value != from_py_sequence<TTuple>::len( py_sequence ) ){
+                return 0;
+            }
 
-        if( tuples::length< TTuple >::value != from_py_sequence<TTuple>::len( py_sequence ) ){
-            return 0;
-        }
-
-        if( convertible_impl( py_sequence, mpl::int_< 0 >(), length_type() ) ){
-            return py_obj;
-        }
-        else{
-            return 0;
+            if( convertible_impl( py_sequence, mpl::int_< 0 >(), length_type() ) ){
+                return py_obj;
+            }
+            else{
+                return 0;
+            }
         }
     }
 
     static void
     construct( PyObject* py_obj, converter::rvalue_from_python_stage1_data* data){
-        typedef converter::rvalue_from_python_storage<TTuple> storage_t;
-        storage_t* the_storage = reinterpret_cast<storage_t*>( data );
-        void* memory_chunk = the_storage->storage.bytes;
-        TTuple* c_tuple = new (memory_chunk) TTuple();
-        data->convertible = memory_chunk;
+        // need to re-acquire the GIL when creating new objects
+        auto raii = boost::python::release_gil_policy::acquire_gil();
+        {
+            typedef converter::rvalue_from_python_storage<TTuple> storage_t;
+            storage_t* the_storage = reinterpret_cast<storage_t*>( data );
+            void* memory_chunk = the_storage->storage.bytes;
+            TTuple* c_tuple = new (memory_chunk) TTuple();
+            data->convertible = memory_chunk;
 
-        python::object py_sequence( handle<>( borrowed( py_obj ) ) );
-        construct_impl( py_sequence, *c_tuple, mpl::int_< 0 >(), length_type() );
+            python::object py_sequence( handle<>( borrowed( py_obj ) ) );
+            construct_impl( py_sequence, *c_tuple, mpl::int_< 0 >(), length_type() );
+        }
     }
 
     static TTuple to_c_tuple( PyObject* py_obj ){
-        if( !convertible( py_obj ) ){
-            throw std::runtime_error( "Unable to construct boost::tuples::tuple from Python object!" );
+        auto raii = boost::python::release_gil_policy::acquire_gil();
+        {
+            if( !convertible( py_obj ) ){
+                throw std::runtime_error( "Unable to construct boost::tuples::tuple from Python object!" );
+            }
+            TTuple c_tuple;
+            python::object py_sequence( handle<>( borrowed( py_obj ) ) );
+            construct_impl( py_sequence, c_tuple, mpl::int_< 0 >(), length_type() );
+            return c_tuple;
         }
-        TTuple c_tuple;
-        python::object py_sequence( handle<>( borrowed( py_obj ) ) );
-        construct_impl( py_sequence, c_tuple, mpl::int_< 0 >(), length_type() );
-        return c_tuple;
     }
 
 private:

@@ -48,6 +48,8 @@ SireMol::ChainStructureEditor __copy__(const SireMol::ChainStructureEditor &othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ChainStructureEditor_class(){
 
     { //::SireMol::ChainStructureEditor
@@ -66,6 +68,7 @@ void register_ChainStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("resname") )
+                , bp::release_gil_policy()
                 , "Add a residue called resname to this Chain and return\nan editor for that residue" );
         
         }
@@ -78,6 +81,7 @@ void register_ChainStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("resnum") )
+                , bp::release_gil_policy()
                 , "Add a residue with number resnum to this Chain and return\nan editor for that residue" );
         
         }
@@ -90,6 +94,7 @@ void register_ChainStructureEditor_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the atom that matches the ID atomid in\nthis Chain\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -101,6 +106,7 @@ void register_ChainStructureEditor_class(){
             ChainStructureEditor_exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "Commit the changes made by this editor and return the\nupdated Chain" );
         
         }
@@ -112,6 +118,7 @@ void register_ChainStructureEditor_class(){
             ChainStructureEditor_exposer.def( 
                 "index"
                 , index_function_value
+                , bp::release_gil_policy()
                 , "Return the index of this Chain in the molecule" );
         
         }
@@ -123,6 +130,7 @@ void register_ChainStructureEditor_class(){
             ChainStructureEditor_exposer.def( 
                 "molecule"
                 , molecule_function_value
+                , bp::release_gil_policy()
                 , "Return an editor for the molecule that contains this Chain" );
         
         }
@@ -134,6 +142,7 @@ void register_ChainStructureEditor_class(){
             ChainStructureEditor_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in this Chain (could be zero)" );
         
         }
@@ -145,6 +154,7 @@ void register_ChainStructureEditor_class(){
             ChainStructureEditor_exposer.def( 
                 "nResidues"
                 , nResidues_function_value
+                , bp::release_gil_policy()
                 , "Return the number of residues in this Chain (could be zero)" );
         
         }
@@ -156,7 +166,7 @@ void register_ChainStructureEditor_class(){
             ChainStructureEditor_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of this Chain" );
         
         }
@@ -272,6 +282,7 @@ void register_ChainStructureEditor_class(){
                 "residue"
                 , residue_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return an editor for the ith residue of this Chain\nThrow: SireError::invalid_index\n" );
         
         }
@@ -284,6 +295,7 @@ void register_ChainStructureEditor_class(){
                 "residue"
                 , residue_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the residue that matches the ID resid in\nthis chain\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -296,6 +308,7 @@ void register_ChainStructureEditor_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the atom that matches the ID atomid in\nthis Chain\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -308,6 +321,7 @@ void register_ChainStructureEditor_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return an editor for the ith residue of this Chain\nThrow: SireError::invalid_index\n" );
         
         }
@@ -320,6 +334,7 @@ void register_ChainStructureEditor_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the residue that matches the ID resid in\nthis chain\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
@@ -331,6 +346,7 @@ void register_ChainStructureEditor_class(){
             ChainStructureEditor_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this chain is the whole molecule" );
         
         }
@@ -342,6 +358,7 @@ void register_ChainStructureEditor_class(){
             ChainStructureEditor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this chain" );
         
         }
@@ -392,6 +409,7 @@ void register_ChainStructureEditor_class(){
             ChainStructureEditor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -403,6 +421,7 @@ void register_ChainStructureEditor_class(){
             ChainStructureEditor_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

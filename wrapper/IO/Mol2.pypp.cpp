@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "SireMol/atomelements.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/molecule.h"
 
 #include "SireMol/moleditor.h"
@@ -45,6 +47,8 @@ SireIO::Mol2 __copy__(const SireIO::Mol2 &other){ return SireIO::Mol2(other); }
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Mol2_class(){
 
     { //::SireIO::Mol2
@@ -63,6 +67,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "canFollow"
                 , canFollow_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -75,6 +80,7 @@ void register_Mol2_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("filename"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by reading in the passed\nfile using the passed properties" );
         
         }
@@ -87,6 +93,7 @@ void register_Mol2_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("lines"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by reading in the passed\ntext lines using the passed properties" );
         
         }
@@ -99,6 +106,7 @@ void register_Mol2_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by extract all necessary\ndata from the passed SireSystem::System using the specified properties" );
         
         }
@@ -110,6 +118,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "formatDescription"
                 , formatDescription_function_value
+                , bp::release_gil_policy()
                 , "Return a description of the file format" );
         
         }
@@ -121,6 +130,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "formatName"
                 , formatName_function_value
+                , bp::release_gil_policy()
                 , "Return the format name that is used to identify this file format within Sire" );
         
         }
@@ -132,6 +142,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "formatSuffix"
                 , formatSuffix_function_value
+                , bp::release_gil_policy()
                 , "Return the suffixes that these files are normally associated with" );
         
         }
@@ -143,6 +154,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "isLead"
                 , isLead_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -155,6 +167,7 @@ void register_Mol2_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in a specific molecule." );
         
         }
@@ -166,6 +179,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of atoms in all molecules." );
         
         }
@@ -178,6 +192,7 @@ void register_Mol2_class(){
                 "nBonds"
                 , nBonds_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the number of bonds in a specific molecule." );
         
         }
@@ -189,6 +204,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "nBonds"
                 , nBonds_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of bonds in all molecules." );
         
         }
@@ -200,6 +216,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "nMolAtoms"
                 , nMolAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in each molecule." );
         
         }
@@ -211,6 +228,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "nMolBonds"
                 , nMolBonds_function_value
+                , bp::release_gil_policy()
                 , "Return the number of bonds in each molecule." );
         
         }
@@ -222,6 +240,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "nMolSubstructures"
                 , nMolSubstructures_function_value
+                , bp::release_gil_policy()
                 , "Return the number of substructures in each molecule." );
         
         }
@@ -233,6 +252,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "nMolecules"
                 , nMolecules_function_value
+                , bp::release_gil_policy()
                 , "Return the number of molecules in the system." );
         
         }
@@ -245,6 +265,7 @@ void register_Mol2_class(){
                 "nSubstructures"
                 , nSubstructures_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the number of substructures in a specific molecule." );
         
         }
@@ -256,6 +277,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "nSubstructures"
                 , nSubstructures_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of substructures in all molecules." );
         
         }
@@ -282,6 +304,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "toLines"
                 , toLines_function_value
+                , bp::release_gil_policy()
                 , "Convert the the parsed data to a collection of Mol2 record lines." );
         
         }
@@ -293,6 +316,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this parser" );
         
         }
@@ -304,6 +328,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "Return the C++ name for this class" );
         
         }
@@ -315,6 +340,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "Return the C++ name for this class" );
         
         }

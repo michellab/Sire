@@ -31,6 +31,8 @@ Squire::P_GTO __copy__(const Squire::P_GTO &other){ return Squire::P_GTO(other);
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_P_GTO_class(){
 
     { //::Squire::P_GTO
@@ -47,6 +49,7 @@ void register_P_GTO_class(){
             P_GTO_exposer.def( 
                 "angularMomentum"
                 , angularMomentum_function_value
+                , bp::release_gil_policy()
                 , "The angular momentum of P-GTOs is 1" );
         
         }
@@ -58,6 +61,7 @@ void register_P_GTO_class(){
             P_GTO_exposer.def( 
                 "nOrbitals"
                 , nOrbitals_function_value
+                , bp::release_gil_policy()
                 , "There are 3 P-orbitals per shell (px, py and pz)" );
         
         }
@@ -84,6 +88,7 @@ void register_P_GTO_class(){
             P_GTO_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this orbital" );
         
         }
@@ -95,6 +100,7 @@ void register_P_GTO_class(){
             P_GTO_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

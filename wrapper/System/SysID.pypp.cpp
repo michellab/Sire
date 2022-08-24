@@ -21,6 +21,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SysID_class(){
 
     { //::SireSystem::SysID
@@ -36,6 +38,7 @@ void register_SysID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("systems") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -87,6 +90,7 @@ void register_SysID_class(){
             SysID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

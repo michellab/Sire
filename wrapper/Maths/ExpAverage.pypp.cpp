@@ -33,6 +33,8 @@ SireMaths::ExpAverage __copy__(const SireMaths::ExpAverage &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ExpAverage_class(){
 
     { //::SireMaths::ExpAverage
@@ -49,6 +51,7 @@ void register_ExpAverage_class(){
                 "accumulate"
                 , accumulate_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Accumulate the passed value onto the average" );
         
         }
@@ -60,6 +63,7 @@ void register_ExpAverage_class(){
             ExpAverage_exposer.def( 
                 "average"
                 , average_function_value
+                , bp::release_gil_policy()
                 , "Return the average value" );
         
         }
@@ -71,6 +75,7 @@ void register_ExpAverage_class(){
             ExpAverage_exposer.def( 
                 "average2"
                 , average2_function_value
+                , bp::release_gil_policy()
                 , "Return the average of the squared value" );
         
         }
@@ -82,6 +87,7 @@ void register_ExpAverage_class(){
             ExpAverage_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Completely clear the statistics in this accumulator" );
         
         }
@@ -109,6 +115,7 @@ void register_ExpAverage_class(){
             ExpAverage_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -120,6 +127,7 @@ void register_ExpAverage_class(){
             ExpAverage_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

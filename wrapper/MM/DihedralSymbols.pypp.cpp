@@ -36,6 +36,8 @@ SireMM::DihedralSymbols __copy__(const SireMM::DihedralSymbols &other){ return S
 
 const char* pvt_get_name(const SireMM::DihedralSymbols&){ return "SireMM::DihedralSymbols";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_DihedralSymbols_class(){
 
     { //::SireMM::DihedralSymbols
@@ -50,7 +52,7 @@ void register_DihedralSymbols_class(){
             DihedralSymbols_exposer.def( 
                 "phi"
                 , phi_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the torsion (phi)" );
         
         }

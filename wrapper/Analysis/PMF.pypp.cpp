@@ -29,6 +29,8 @@ SireAnalysis::PMF __copy__(const SireAnalysis::PMF &other){ return SireAnalysis:
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PMF_class(){
 
     { //::SireAnalysis::PMF
@@ -45,6 +47,7 @@ void register_PMF_class(){
             PMF_exposer.def( 
                 "deltaG"
                 , deltaG_function_value
+                , bp::release_gil_policy()
                 , "Return the total free energy change along the PMF (difference in\nfree energy of the end-points)" );
         
         }
@@ -56,6 +59,7 @@ void register_PMF_class(){
             PMF_exposer.def( 
                 "error"
                 , error_function_value
+                , bp::release_gil_policy()
                 , "Return the error on the total free energy calculation" );
         
         }
@@ -67,6 +71,7 @@ void register_PMF_class(){
             PMF_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this PMF is empty (has not values)" );
         
         }
@@ -93,6 +98,7 @@ void register_PMF_class(){
             PMF_exposer.def( 
                 "rangeMax"
                 , rangeMax_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum x-value of the PMF" );
         
         }
@@ -104,6 +110,7 @@ void register_PMF_class(){
             PMF_exposer.def( 
                 "rangeMin"
                 , rangeMin_function_value
+                , bp::release_gil_policy()
                 , "Return the minimum x-value of the PMF" );
         
         }
@@ -115,6 +122,7 @@ void register_PMF_class(){
             PMF_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -126,6 +134,7 @@ void register_PMF_class(){
             PMF_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -137,6 +146,7 @@ void register_PMF_class(){
             PMF_exposer.def( 
                 "values"
                 , values_function_value
+                , bp::release_gil_policy()
                 , "Return the raw data for the PMF" );
         
         }
@@ -148,6 +158,7 @@ void register_PMF_class(){
             PMF_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

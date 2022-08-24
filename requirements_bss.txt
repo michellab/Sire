@@ -1,0 +1,15 @@
+configargparse
+kcombu_bss
+lomap2
+mdtraj
+mdanalysis
+nglview
+openff-toolkit-base
+parmed
+py3dmol
+pydot
+pygtail
+pypdb
+pyyaml
+rdkit
+watchdog

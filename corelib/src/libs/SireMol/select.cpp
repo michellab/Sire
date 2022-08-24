@@ -31,12 +31,25 @@
 #include "SireMol/molecules.h"
 #include "SireMol/moleculegroup.h"
 
+#include "SireMol/core.h"
+
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
 using namespace SireBase;
 using namespace SireStream;
 using namespace SireMol;
+
+////////
+//////// implementation of parse_error
+////////
+
+const char* parse_error::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<parse_error>() );
+}
+
+static const RegisterMetaType<parse_error> r_parse;
 
 ///////////
 /////////// Implementation of SelectEngine
@@ -56,15 +69,52 @@ SireMol::parser::SelectEnginePtr SireMol::parser::SelectEngine::self()
     return selfptr.lock();
 }
 
+/** Return if any of the parts in 'molecule' match this engine */
+bool SireMol::parser::SelectEngine::matches(const MoleculeView &molecule,
+                                            const PropertyMap &map) const
+{
+    auto r = this->operator()(molecule, map);
+
+    return not r.isEmpty();
+}
+
+/** Return if all of the parts in 'molecule' match this engine */
+bool SireMol::parser::SelectEngine::matchesAll(const MoleculeView &molecule,
+                                               const PropertyMap &map) const
+{
+    auto r = this->operator()(molecule, map);
+
+    if (r.isEmpty())
+        return false;
+
+    if (molecule.nAtoms() > 1)
+    {
+        return r.contains(molecule);
+    }
+    else
+    {
+        return true;
+    }
+}
+
 SelectResult SireMol::parser::SelectEngine::operator()(const SelectResult &result,
                                                        const PropertyMap &map) const
 {
-    SelectResult r = this->select(result, map);
-
     if (hasParent())
-        return r;
+    {
+        return this->select(result, map);
+    }
     else
+    {
+        // need to pass in the context so that, e.g. a MolIdx search can
+        // know which molecule was referred to
+        PropertyMap m(map);
+        m.set("_context", result);
+
+        auto r = this->select(result, m);
+
         return this->expand(r);
+    }
 }
 
 SelectResult SireMol::parser::SelectEngine::operator()(const MolGroupsBase &molgroups,
@@ -97,6 +147,11 @@ void SireMol::parser::SelectEngine::setParent(SireMol::parser::SelectEnginePtr p
     const_cast<SireMol::parser::SelectEngine*>(this)->parent = ptr;
 }
 
+QString SireMol::parser::SelectEngine::toString() const
+{
+    return QObject::tr("%1").arg(typeid(*this).name());
+}
+
 /** Internal function used to make a shared pointer out of the passed pointer */
 SireMol::parser::SelectEnginePtr SireMol::parser::SelectEngine::makePtr(SelectEngine *ptr)
 {
@@ -124,22 +179,22 @@ bool SireMol::parser::SelectEngine::hasParent() const
 }
 
 /** Expand the passed molecule based on the selection type of this SelectEngine */
-ViewsOfMol SireMol::parser::SelectEngine::expandMol(const ViewsOfMol &mol) const
+MolViewPtr SireMol::parser::SelectEngine::expandMol(const MoleculeView &mol) const
 {
     switch(this->objectType())
     {
     case SelectEngine::ATOM:
-        return ViewsOfMol( mol.atoms() );
+        return mol.atoms();
     case SelectEngine::CUTGROUP:
-        return ViewsOfMol( mol.cutGroups() );
+        return mol.cutGroups();
     case SelectEngine::RESIDUE:
-        return ViewsOfMol( mol.residues() );
+        return mol.residues();
     case SelectEngine::CHAIN:
-        return ViewsOfMol( mol.chains() );
+        return mol.chains();
     case SelectEngine::SEGMENT:
-        return ViewsOfMol( mol.segments() );
+        return mol.segments();
     case SelectEngine::MOLECULE:
-        return ViewsOfMol( mol.molecule() );
+        return mol.molecule();
     default:
         return mol;
     }
@@ -150,58 +205,59 @@ SelectResult SireMol::parser::SelectEngine::expand(const SelectResult &results) 
 {
     const auto objtyp = this->objectType();
 
-    if (objtyp == SelectEngine::COMPLEX)
+    if (objtyp == SelectEngine::COMPLEX | objtyp == SelectEngine::BOND)
     {
-        //we don't need to do anything
+        //we don't need to do anything (or can't do anything for bonds!)
         return results;
     }
 
-    QList<ViewsOfMol> expanded;
+    QList<MolViewPtr> expanded;
 
     if (objtyp == SelectEngine::ATOM)
     {
         for (auto result : results)
         {
-            expanded.append( ViewsOfMol(result.atoms()) );
+            expanded.append( result->atoms() );
         }
     }
     else if (objtyp == SelectEngine::CUTGROUP)
     {
         for (auto result : results)
         {
-            expanded.append( ViewsOfMol(result.cutGroups()) );
+            expanded.append( result->cutGroups() );
         }
     }
     else if (objtyp == SelectEngine::RESIDUE)
     {
         for (auto result : results)
         {
-            expanded.append( ViewsOfMol(result.residues()) );
+            expanded.append( result->residues() );
         }
     }
     else if (objtyp == SelectEngine::CHAIN)
     {
         for (auto result : results)
         {
-            expanded.append( ViewsOfMol(result.chains()) );
+            expanded.append( result->chains() );
         }
     }
     else if (objtyp == SelectEngine::SEGMENT)
     {
         for (auto result : results)
         {
-            expanded.append( ViewsOfMol(result.segments()) );
+            expanded.append( result->segments() );
         }
     }
     else if (objtyp == SelectEngine::MOLECULE)
     {
         for (auto result : results)
         {
-            expanded.append( ViewsOfMol(result.molecule()) );
+            expanded.append( result->molecule() );
         }
     }
     else
     {
+        qDebug() << "UNRECOGNISED TYPE" << objtyp;
         return results;
     }
 
@@ -374,6 +430,8 @@ QString Select::objectType() const
         return QObject::tr("complex view");
     case SireMol::parser::SelectEngine::ATOM:
         return QObject::tr("atoms");
+    case SireMol::parser::SelectEngine::BOND:
+        return QObject::tr("bonds");
     case SireMol::parser::SelectEngine::CUTGROUP:
         return QObject::tr("cutgroups");
     case SireMol::parser::SelectEngine::RESIDUE:
@@ -385,6 +443,8 @@ QString Select::objectType() const
     case SireMol::parser::SelectEngine::MOLECULE:
         return QObject::tr("molecules");
     }
+
+    return QObject::tr("nothing");
 }
 
 QString Select::toString() const
@@ -449,6 +509,72 @@ SelectResult::SelectResult(const Molecules &molecules)
     }
 }
 
+SelectResult::SelectResult(const QList<Molecule> &views)
+             : ConcreteProperty<SelectResult,Property>()
+{
+    molviews.reserve(views.count());
+
+    for (const auto &view : views)
+    {
+        molviews.append(view);
+    }
+}
+
+SelectResult::SelectResult(const QList< Selector<Atom> > &views)
+             : ConcreteProperty<SelectResult,Property>()
+{
+    molviews.reserve(views.count());
+
+    for (const auto &view : views)
+    {
+        molviews.append(view);
+    }
+}
+
+SelectResult::SelectResult(const QList< Selector<Residue> > &views)
+             : ConcreteProperty<SelectResult,Property>()
+{
+    molviews.reserve(views.count());
+
+    for (const auto &view : views)
+    {
+        molviews.append(view);
+    }
+}
+
+SelectResult::SelectResult(const QList< Selector<Chain> > &views)
+             : ConcreteProperty<SelectResult,Property>()
+{
+    molviews.reserve(views.count());
+
+    for (const auto &view : views)
+    {
+        molviews.append(view);
+    }
+}
+
+SelectResult::SelectResult(const QList< Selector<Segment> > &views)
+             : ConcreteProperty<SelectResult,Property>()
+{
+    molviews.reserve(views.count());
+
+    for (const auto &view : views)
+    {
+        molviews.append(view);
+    }
+}
+
+SelectResult::SelectResult(const QList< Selector<CutGroup> > &views)
+             : ConcreteProperty<SelectResult,Property>()
+{
+    molviews.reserve(views.count());
+
+    for (const auto &view : views)
+    {
+        molviews.append(view);
+    }
+}
+
 /** Construct from the passed molecules */
 SelectResult::SelectResult(const MolGroupsBase &molgroups)
              : ConcreteProperty<SelectResult,Property>()
@@ -475,43 +601,40 @@ SelectResult::SelectResult(const MoleculeView &molview)
 {
     if (not molview.isEmpty())
     {
-        if (molview.isA<ViewsOfMol>())
-            molviews.append( molview.asA<ViewsOfMol>() );
-        else
-            molviews.append( ViewsOfMol(molview) );
+        molviews.append(molview);
     }
 }
 
 /** Construct from the passed molecules */
-SelectResult::SelectResult(const QList<ViewsOfMol> views)
+SelectResult::SelectResult(const QList<ViewsOfMol> &views)
              : ConcreteProperty<SelectResult,Property>()
 {
-    molviews = views;
-
-    bool remove_empty = false;
+    molviews.reserve(views.count());
 
     for (const auto &view : views)
     {
-        if (view.isEmpty())
+        if (not view.isEmpty())
         {
-            remove_empty = true;
-            break;
-        }
-    }
-
-    if (remove_empty)
-    {
-        QMutableListIterator<ViewsOfMol> it(molviews);
-
-        while (it.hasNext())
-        {
-            const auto &view = it.next();
-
-            if (view.isEmpty())
-                it.remove();
+            molviews.append(view);
         }
     }
 }
+
+/** Construct from the passed molecules */
+SelectResult::SelectResult(const QList<MolViewPtr> &views)
+             : ConcreteProperty<SelectResult,Property>()
+{
+    molviews.reserve(views.count());
+
+    for (const auto &view : views)
+    {
+        if (not (view.isNull() or view->isEmpty()))
+        {
+            molviews.append(view);
+        }
+    }
+}
+
 
 /** Copy constructor */
 SelectResult::SelectResult(const SelectResult &other)
@@ -571,7 +694,7 @@ int SelectResult::count() const
 
     for (const auto &view : molviews)
     {
-        total += view.nViews();
+        total += view->nViews();
     }
 
     return total;
@@ -589,30 +712,90 @@ bool SelectResult::contains(MolNum molnum) const
 {
     for (const auto &molview : molviews)
     {
-        if (molview.data().number() == molnum)
+        if (molview->data().number() == molnum)
             return true;
     }
 
     return false;
 }
 
+/** Return whether or not this set contains all of the atoms in the
+    passed molecule */
+bool SelectResult::contains(const MoleculeView &mol) const
+{
+    AtomSelection s;
+
+    QList<AtomSelection> selections;
+
+    for (const auto &molview : molviews)
+    {
+        if (molview->data().number() == mol.data().number())
+        {
+            if (s.isNull())
+            {
+                s = mol.selection();
+            }
+
+            auto selection = molview->selection();
+
+            if (selection.contains(s))
+            {
+                return true;
+            }
+
+            // maybe we will see another view of this molecule?
+            selections.append(selection);
+        }
+    }
+
+    if (selections.count() < 2)
+        // nope
+        return false;
+
+    auto selection = selections.takeFirst();
+    selection.unite(selections);
+
+    return selection.contains(s);
+}
+
 /** Return all of the views in this result, grouped by molecule */
 QList<ViewsOfMol> SelectResult::views() const
 {
-    return molviews;
+    QList<ViewsOfMol> v;
+
+    for (const auto &view : molviews)
+    {
+        v.append(ViewsOfMol(*view));
+    }
+
+    return v;
 }
 
 /** Return all of the views of the molecule with number 'molnum'. This
     returns an empty set of views if the molecule is not in this set */
 ViewsOfMol SelectResult::views(MolNum molnum) const
 {
+    ViewsOfMol v;
+
     for (const auto &molview : molviews)
     {
-        if (molview.data().number() == molnum)
-            return molview;
+        if (molview->data().number() == molnum)
+        {
+            for (int i=0; i<molview->nViews(); ++i)
+            {
+                if (v.isEmpty())
+                {
+                    v = molview->at(i);
+                }
+                else
+                {
+                    v += ViewsOfMol(molview->at(i));
+                }
+            }
+        }
     }
 
-    return ViewsOfMol();
+    return v;
 }
 
 /** Return the numbers of all molecules whose views are in this set,
@@ -623,10 +806,23 @@ QList<MolNum> SelectResult::molNums() const
 
     for (const auto &molview : molviews)
     {
-        molnums.append(molview.data().number());
+        molnums.append(molview->data().number());
     }
 
     return molnums;
+}
+
+/** Return the ith MolViewPtr in the underlying list */
+MolViewPtr SelectResult::listAt(int i) const
+{
+    i = Index(i).map(molviews.count());
+    return MolViewPtr(molviews.at(i)->clone());
+}
+
+/** Return the number of items in the list */
+int SelectResult::listCount() const
+{
+    return molviews.count();
 }
 
 /** Return the ith view in the result. This is automatically converted to
@@ -635,59 +831,18 @@ MolViewPtr SelectResult::operator[](int i) const
 {
     i = Index(i).map( this->count() );
 
-    int nmol = 0;
-
     for (const auto &view : molviews)
     {
-        nmol += 1;
-
-        if (i >= view.nViews())
+        if (i >= view->nViews())
         {
-            i -= view.nViews();
+            i -= view->nViews();
         }
         else
         {
-            auto mol = view.valueAt(i);
-
-            if (mol.selectedAll())
-            {
-                return MolViewPtr( mol.molecule() );
-            }
-            else if (mol.nAtoms() == 1)
-            {
-                return mol.atom();
-            }
-            else if (mol.nResidues() == 1)
-            {
-                const auto res = mol.residue();
-
-                if (mol.selection().selectedAll(res.number()))
-                    return MolViewPtr(res);
-            }
-            else if (mol.nChains() == 1)
-            {
-                const auto chain = mol.chain();
-
-                if (mol.selection().selectedAll(chain.name()))
-                    return MolViewPtr(chain);
-            }
-            else if (mol.nSegments() == 1)
-            {
-                const auto seg = mol.segment();
-
-                if (mol.selection().selectedAll(seg.name()))
-                    return MolViewPtr(seg);
-            }
-            else if (mol.nCutGroups() == 1)
-            {
-                const auto cg = mol.cutGroup();
-
-                if (mol.selection().selectedAll(cg.name()))
-                    return MolViewPtr(cg);
-            }
-
-            //this is a mixed view
-            return MolViewPtr(mol);
+            if (view->nViews() == 1)
+                return view;
+            else
+                return view->at(i);
         }
     }
 
@@ -704,42 +859,45 @@ MolViewPtr SelectResult::operator[](MolNum molnum) const
     return this->views(molnum);
 }
 
+/** Return the results as a list of MolViewPtrs */
+QList<MolViewPtr> SelectResult::toList() const
+{
+    return molviews;
+}
+
 QString SelectResult::toString() const
 {
     QStringList lines;
 
-    const int nviews = this->count();
+    const int nviews = this->listCount();
 
     if (nviews == 0)
         return QObject::tr("SelectResult::empty");
 
-    else if (nviews <= 5)
+    else if (nviews <= 10)
     {
         for (int i=0; i<nviews; ++i)
         {
-            lines.append( QString("%1 : %2").arg(i).arg(this->operator[](i).read().toString()) );
+            lines.append( QString("%1 : %2").arg(i).arg(this->listAt(i).read().toString()) );
         }
     }
     else
     {
-        for (int i=0; i<3; ++i)
+        for (int i=0; i<5; ++i)
         {
-            lines.append( QString("%1 : %2").arg(i).arg(this->operator[](i).read().toString()) );
+            lines.append( QString("%1 : %2").arg(i).arg(this->listAt(i).read().toString()) );
         }
 
         lines.append( "..." );
 
-        for (int i=-2; i<0; ++i)
+        for (int i=nviews-5; i<nviews; ++i)
         {
-            int idx = Index(i).map(nviews);
-
-            lines.append( QString("%1 : %2").arg(idx)
-                                            .arg(this->operator[](idx).read().toString()) );
+            lines.append( QString("%1 : %2").arg(i).arg(this->listAt(i).read().toString()) );
         }
     }
 
-    return QObject::tr("SelectResult{ count() == %1,\n  %2\n}")
-                .arg(nviews).arg(lines.join(",\n  "));
+    return QObject::tr("SelectResult( size=%1,\n%2\n)")
+                .arg(nviews).arg(lines.join("\n"));
 }
 
 /** Return a object that can be used to move all of the views in this result */
@@ -775,43 +933,99 @@ SelectResult SelectResult::search(const QString &search_term) const
 /** Return a copy of this result with all views joined into single views */
 SelectResult SelectResult::join() const
 {
-    return Select("join all")(*this);
+    QList<MolViewPtr> result;
+    result.reserve(molviews.count());
+
+    for (const auto &mol : molviews)
+    {
+        result.append( PartialMolecule(*mol).toUnit() );
+    }
+
+    return SelectResult(result);
 }
 
 /** Return a copy of this result with all views split into individual atoms */
 SelectResult SelectResult::atoms() const
 {
-    return Select("atoms with *")(*this);
+    QList<MolViewPtr> result;
+    result.reserve(molviews.count());
+
+    for (const auto &mol : molviews)
+    {
+        result.append(mol->atoms());
+    }
+
+    return SelectResult(result);
 }
 
 /** Return a copy of this result with all views split into individual cutgroups */
 SelectResult SelectResult::cutGroups() const
 {
-    return Select("cutgroups with *")(*this);
+    QList<MolViewPtr> result;
+    result.reserve(molviews.count());
+
+    for (const auto &mol : molviews)
+    {
+        result.append(mol->cutGroups());
+    }
+
+    return SelectResult(result);
 }
 
 /** Return a copy of this result with all views split into individual residues */
 SelectResult SelectResult::residues() const
 {
-    return Select("residues with *")(*this);
+    QList<MolViewPtr> result;
+    result.reserve(molviews.count());
+
+    for (const auto &mol : molviews)
+    {
+        result.append(mol->residues());
+    }
+
+    return SelectResult(result);
 }
 
 /** Return a copy of this result with all views split into individual chains */
 SelectResult SelectResult::chains() const
 {
-    return Select("chains with *")(*this);
+    QList<MolViewPtr> result;
+    result.reserve(molviews.count());
+
+    for (const auto &mol : molviews)
+    {
+        result.append(mol->chains());
+    }
+
+    return SelectResult(result);
 }
 
 /** Return a copy of this result with all views split into individual segments */
 SelectResult SelectResult::segments() const
 {
-    return Select("segments with *")(*this);
+    QList<MolViewPtr> result;
+    result.reserve(molviews.count());
+
+    for (const auto &mol : molviews)
+    {
+        result.append(mol->segments());
+    }
+
+    return SelectResult(result);
 }
 
 /** Return a copy of this result with all views split into individual molecules */
 SelectResult SelectResult::molecules() const
 {
-    return Select("molecules with *")(*this);
+    QList<MolViewPtr> result;
+    result.reserve(molviews.count());
+
+    for (const auto &mol : molviews)
+    {
+        result.append(mol->molecule());
+    }
+
+    return SelectResult(result);
 }
 
 SelectResult::const_iterator SelectResult::begin() const
@@ -832,6 +1046,133 @@ SelectResult::const_iterator SelectResult::constBegin() const
 SelectResult::const_iterator SelectResult::constEnd() const
 {
     return end();
+}
+
+/** Return the highest common type (e.g. SireMol::Atom, SireMol::Residue etc)
+ *  that suits all of the views in this result
+ */
+QString SelectResult::getCommonType() const
+{
+    if (molviews.isEmpty())
+        return QString();
+
+    // we need to start from the largest type and work downwards
+    // (as some atoms may be whole residues)
+
+    QList<AtomSelection> selections;
+
+    for (const auto &molview : molviews)
+    {
+        const auto typ = molview->what();
+
+        if (typ == Molecule::typeName() or
+            typ == Atom::typeName() or
+            typ == Residue::typeName() or
+            typ == Chain::typeName() or
+            typ == Segment::typeName() or
+            typ == CutGroup::typeName())
+        {
+            selections.append(molview->selection());
+        }
+        else
+        {
+            //this is a composite container
+            for (int i=0; i<molview->nViews(); ++i)
+            {
+                selections.append(molview->at(i)->selection());
+            }
+        }
+    }
+
+    bool is_molecule = true;
+
+    for (const auto &s : selections)
+    {
+        if (not s.isMolecule())
+        {
+            is_molecule = false;
+            break;
+        }
+    }
+
+    if (is_molecule)
+        return Molecule::typeName();
+
+    bool is_segment = true;
+
+    for (const auto &s : selections)
+    {
+        if (not s.isSegment())
+        {
+            is_segment = false;
+            break;
+        }
+    }
+
+    if (is_segment)
+        return Segment::typeName();
+
+    bool is_chain = true;
+
+    for (const auto &s : selections)
+    {
+        if (not s.isChain())
+        {
+            is_chain = false;
+            break;
+        }
+    }
+
+    if (is_chain)
+        return Chain::typeName();
+
+    bool is_residue = true;
+
+    for (const auto &s : selections)
+    {
+        if (not s.isResidue())
+        {
+            is_residue = false;
+            break;
+        }
+    }
+
+    if (is_residue)
+        return Residue::typeName();
+
+    bool is_atom = true;
+
+    for (const auto &s : selections)
+    {
+        if (not s.isAtom())
+        {
+            is_atom = false;
+            break;
+        }
+    }
+
+    if (is_atom)
+        return Atom::typeName();
+
+    bool is_cutgroup = true;
+
+    for (const auto &s : selections)
+    {
+        if (not s.isCutGroup())
+        {
+            is_cutgroup = false;
+            break;
+        }
+    }
+
+    if (is_cutgroup)
+        return CutGroup::typeName();
+
+    if (is_cutgroup)
+        return CutGroup::typeName();
+
+    // ok, go with the default
+    return PartialMolecule::typeName();
 }
 
 ///////////

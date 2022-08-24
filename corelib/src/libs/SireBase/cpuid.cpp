@@ -28,9 +28,7 @@
 
 #include "cpuid.h"
 
-#if defined(SIRE_FOUND_CPUID)
-    #include <libcpuid/libcpuid.h> // CONDITIONAL_INCLUDE
-#elif defined(_WIN32)
+#if defined(_WIN32)
     #define WIN32_LEAN_AND_MEAN
     #include <Windows.h>    // CONDITIONAL_INCLUDE
 #elif defined(__APPLE__) || defined(__FreeBSD__)
@@ -75,100 +73,76 @@ QDataStream &operator>>(QDataStream &ds, CPUID &cpuid)
     return ds;
 }
 
-#ifdef SIRE_FOUND_CPUID
-    static QString trueFalse(bool val)
-    {
-        if (val)
-            return "true";
-        else
-            return "false";
-    }
+static QHash<QString,QString> getCPUInfo()
+{
+    QHash<QString,QString> info;
 
-    /** Return the list of all searchable supportable features */
-    QStringList CPUID::supportableFeatures() const
-    {
-        QStringList features;
+    #if defined(__APPLE__) || defined(__FreeBSD__)
+        char buffer[1024];
+        size_t size=sizeof(buffer);
+        int err = 0;
 
-        for (int i=0; i<NUM_CPU_FEATURES; ++i)
+        err = sysctlbyname("machdep.cpu.brand_string", &buffer, &size, NULL, 0);
+        if (err == 0)
         {
-            features.append( QString(cpu_feature_str(cpu_feature_t(i))) );
+            info["CPU"] = QString(buffer);
         }
 
-        std::sort(features.begin(), features.end());
+        uint64_t val = 0;
+        size = sizeof(val);
 
-        return features;
-    }
-
-    static QHash<QString,QString> getCPUInfo()
-    {
-        if (not cpuid_present())
+        err = sysctlbyname("hw.cpufrequency", &val, &size, NULL, 0);
+        if (err == 0)
         {
-            return QHash<QString,QString>();
+            info["CPU.frequency"] = QString("%1 GHz").arg(val / 1000000000);
         }
 
-        cpu_raw_data_t raw_data;
-
-        if (cpuid_get_raw_data(&raw_data) != 0)
+        err = sysctlbyname("hw.ncpu", &val, &size, NULL, 0);
+        if (err == 0)
         {
-            return QHash<QString,QString>();
+            info["CPU.num_cores"] = QString("%1").arg(val);
         }
 
-        cpu_id_t cpuid;
-
-        if (cpu_identify(&raw_data, &cpuid) != 0)
+        err = sysctlbyname("hw.optional.arm64", &val, &size, NULL, 0);
+        if (err == 0)
         {
-            return QHash<QString,QString>();
+            if (val == 1)
+            {
+                info["CPU.architecture"] = "ARM64";
+            }
+            else
+            {
+                info["CPU.architecture"] = "x86-64";
+            }
         }
 
-        QHash<QString,QString> data;
-
-        data.insert("vendor", cpuid.vendor_str);
-        data.insert("brand", cpuid.brand_str);
-        data.insert("num_cores", QString::number(cpuid.num_cores));
-        data.insert("num_logical_cores", QString::number(cpuid.num_logical_cpus));
-        data.insert("total_logical_cores", QString::number(cpuid.total_logical_cpus));
-        data.insert("l1_data_cache", QString::number(cpuid.l1_data_cache));
-        data.insert("l1_instruction_cache", QString::number(cpuid.l1_instruction_cache));
-        data.insert("l2_cache", QString::number(cpuid.l2_cache));
-        data.insert("l3_cache", QString::number(cpuid.l3_cache));
-        data.insert("codename", cpuid.cpu_codename);
-
-        for (int i=0; i<NUM_CPU_FEATURES; ++i)
+        err = sysctlbyname("hw.memsize", &val, &size, NULL, 0);
+        if (err == 0)
         {
-            data.insert( QString(cpu_feature_str(cpu_feature_t(i))), trueFalse(cpuid.flags[i]) );
+            info["memory"] = QString("%1 GB").arg(val / (1024*1024*1024));
         }
+    #endif
 
-        data.insert("cpu_clock_os", QString::number(cpu_clock_by_os()));
-        data.insert("cpu_clock", QString::number(cpu_clock_measure(200, true)));
+    return info;
+}
 
-        return data;
-    }
-#else
-    static QHash<QString,QString> getCPUInfo()
-    {
-        return QHash<QString,QString>();
-    }
-
-    /** Return the list of all searchable supportable features */
-    QStringList CPUID::supportableFeatures() const
-    {
-        return QStringList();
-    }
-#endif
+/** Return the list of all searchable supportable features */
+QStringList CPUID::supportableFeatures() const
+{
+    return QStringList();
+}
 
 QHash<QString,QString>* CPUID::global_props = 0;
 
+Q_GLOBAL_STATIC( QMutex, globalMutex )
+
 QHash<QString,QString>* CPUID::getCPUID()
 {
-    //NOT THREAD SAFE - COULD END UP CREATING TWO CPUIDs IN WORST CASE
     if (not global_props)
     {
-        QHash<QString,QString> *p = new QHash<QString,QString>(getCPUInfo());
+        QMutexLocker lkr( globalMutex() );
 
-        if (not global_props)
-            global_props = p;
-        else
-            delete p;
+        global_props = new QHash<QString,QString>(getCPUInfo());
     }
 
     return global_props;
@@ -272,9 +246,7 @@ int CPUID::clockSpeed() const
     if this is not known (as we must have at least 1 core!) */
 int CPUID::numCores() const
 {
-    #if defined(SIRE_FOUND_CPUID)
-    return props.value("total_logical_cores", "1").toInt();
-    #elif defined(_WIN32)
+    #if defined(_WIN32)
     SYSTEM_INFO system_info;
     GetSystemInfo(&system_info);
     return system_info.dwNumberOfProcessors;

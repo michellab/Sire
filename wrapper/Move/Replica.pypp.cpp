@@ -36,6 +36,8 @@ SireMove::Replica __copy__(const SireMove::Replica &other){ return SireMove::Rep
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Replica_class(){
 
     { //::SireMove::Replica
@@ -52,6 +54,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "chemicalPotential"
                 , chemicalPotential_function_value
+                , bp::release_gil_policy()
                 , "Return the chemical potential of the replica (if the moves\nsample a constant chemical potential ensemble)\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -63,6 +66,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "energy"
                 , energy_function_value
+                , bp::release_gil_policy()
                 , "Return the total energy of this replica" );
         
         }
@@ -74,7 +78,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "energyComponent"
                 , energyComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the energy component that describes the Hamiltonian\nthat is sampled by this replica" );
         
         }
@@ -86,7 +90,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "ensemble"
                 , ensemble_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ensemble defined by the moves of this replica" );
         
         }
@@ -98,6 +102,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "fugacity"
                 , fugacity_function_value
+                , bp::release_gil_policy()
                 , "Return the fugacity of the replica (if the moves sample\na constant chemical potential ensemble)\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -109,6 +114,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "isConstantChemicalPotential"
                 , isConstantChemicalPotential_function_value
+                , bp::release_gil_policy()
                 , "Return whether the moves keep the same chemical potential" );
         
         }
@@ -120,6 +126,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "isConstantEnergy"
                 , isConstantEnergy_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a constant energy replica\n(all moves sample the same total energy)" );
         
         }
@@ -131,6 +138,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "isConstantFugacity"
                 , isConstantFugacity_function_value
+                , bp::release_gil_policy()
                 , "Return whether the moves keep the same fugacity" );
         
         }
@@ -143,6 +151,7 @@ void register_Replica_class(){
                 "isConstantLambda"
                 , isConstantLambda_function_value
                 , ( bp::arg("lam") )
+                , bp::release_gil_policy()
                 , "Return whether or not this is a constant lambda replica\n(there is a lambda component, lam, and all moves sample the\nsame value of this lambda coordinate)" );
         
         }
@@ -154,6 +163,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "isConstantNParticles"
                 , isConstantNParticles_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the number of particles is constant\n(all moves keep the same number of particles)" );
         
         }
@@ -165,6 +175,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "isConstantPressure"
                 , isConstantPressure_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a constant pressure replica\n(all moves sample the same pressure)" );
         
         }
@@ -176,6 +187,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "isConstantTemperature"
                 , isConstantTemperature_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a constant temperature replica\n(all moves sample the same temperature)" );
         
         }
@@ -187,6 +199,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "isConstantVolume"
                 , isConstantVolume_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a constant volume replica\n(all moves sample the same volume)" );
         
         }
@@ -198,7 +211,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "lambdaComponent"
                 , lambdaComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the component that can be used to change the Hamiltonian\nfor Hamiltonian replica exchange - this is a null symbol if\nthis replica is not used in Hamiltonian replica exchange" );
         
         }
@@ -210,6 +223,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "lambdaValue"
                 , lambdaValue_function_value
+                , bp::release_gil_policy()
                 , "Return the value of the lambda component - this returns 0 if\nthis replica is not suited for Hamiltonian replica exchange" );
         
         }
@@ -236,6 +250,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "pressure"
                 , pressure_function_value
+                , bp::release_gil_policy()
                 , "Return the pressure of the replica (if the moves sample\na constant pressure ensemble)\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -259,6 +274,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "temperature"
                 , temperature_function_value
+                , bp::release_gil_policy()
                 , "Return the temperature of the replica (if the moves sample\na constant temperature ensemble)\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -270,6 +286,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -281,6 +298,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "volume"
                 , volume_function_value
+                , bp::release_gil_policy()
                 , "Return the current volume of the replicas simulation space\n(this could be infinite)" );
         
         }

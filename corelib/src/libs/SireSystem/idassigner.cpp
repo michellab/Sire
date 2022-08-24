@@ -69,47 +69,47 @@ static const RegisterMetaType<IDAssigner> r_idassigner;
 QDataStream &operator<<(QDataStream &ds, const IDAssigner &idassigner)
 {
     writeHeader(ds, r_idassigner, 2);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << idassigner.molgroup << idassigner.identity_points
         << idassigner.spce << idassigner.map;
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, IDAssigner &idassigner)
 {
     VersionID v = readHeader(ds, r_idassigner);
-    
+
     if (v == 2)
     {
         SharedDataStream sds(ds);
-        
+
         MolGroupPtr molgroup;
         QVector<PointPtr> points;
         SpacePtr space;
         PropertyMap map;
-        
+
         sds >> molgroup >> points >> space >> map;
-        
+
         idassigner = IDAssigner(points, molgroup, space, map);
     }
     else if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         MolGroupPtr molgroup;
         QVector<PointPtr> points;
         PropertyMap map;
-        
+
         sds >> molgroup >> points >> map;
-        
+
         idassigner = IDAssigner(points, molgroup, map);
     }
     else
         throw version_error(v, "1,2", r_idassigner, CODELOC);
-        
+
     return ds;
 }
 
@@ -134,19 +134,19 @@ void IDAssigner::validateGroup(const MoleculeGroup &new_group) const
 {
     //run through each molecule and ensure that the coordinate properties
     //of them all are compatible
-    
+
     if (new_group.nMolecules() < 2)
         return;
-    
+
     const PropertyName &coords_property = map["coordinates"];
-    
+
     const ViewsOfMol &first_mol = new_group.moleculeAt(0);
-    
+
     const AtomCoords &coords = first_mol.data().property(coords_property)
                                                .asA<AtomCoords>();
-    
-    for ( Molecules::const_iterator it = new_group.constBegin(); 
-          it != new_group.constEnd(); 
+
+    for ( Molecules::const_iterator it = new_group.constBegin();
+          it != new_group.constEnd();
           ++it )
     {
         if (not coords.isCompatibleWith(it->data().info()))
@@ -163,13 +163,13 @@ void IDAssigner::validateGroup(const MoleculeGroup &new_group) const
 
 
 /** Constructor */
-IDAssigner::IDAssigner() 
+IDAssigner::IDAssigner()
            : ConcreteProperty<IDAssigner,Property>(), distances_changed(false)
 {}
 
 /** Construct to find the identity of the molecules from
-    'molgroup' that match the points in 'points' - 
-    this creates a list of n molecules, where the ith molecule 
+    'molgroup' that match the points in 'points' -
+    this creates a list of n molecules, where the ith molecule
     is matched to the ith point */
 IDAssigner::IDAssigner(const QVector<PointPtr> &points,
                        const MoleculeGroup &group,
@@ -186,19 +186,19 @@ IDAssigner::IDAssigner(const QVector<PointPtr> &points,
     if (not identity_points.isEmpty())
     {
         const int npoints = identity_points.count();
-        
+
         //construct a CloseMols to record the closest 'npoints' molecules
         //to each of the identity points
         points_with_mols.reserve(npoints);
-        
+
         for (int i=0; i<npoints; ++i)
         {
-            points_with_mols.append( CloseMols(identity_points.at(i), 
+            points_with_mols.append( CloseMols(identity_points.at(i),
                                                molgroup, spce, npoints, map) );
         }
-        
+
         points_with_mols.squeeze();
-        
+
         this->rebuildMolToMolNum();
         this->recalculateDistances();
         this->assignMoleculesToPoints();
@@ -206,8 +206,8 @@ IDAssigner::IDAssigner(const QVector<PointPtr> &points,
 }
 
 /** Construct to find the identity of the molecules from
-    'molgroup' that match the points in 'points' - 
-    this creates a list of n molecules, where the ith molecule 
+    'molgroup' that match the points in 'points' -
+    this creates a list of n molecules, where the ith molecule
     is matched to the ith point */
 IDAssigner::IDAssigner(const QVector<PointPtr> &points,
                        const MoleculeGroup &group,
@@ -239,14 +239,14 @@ IDAssigner::IDAssigner(const PointRef &point,
     points.append( PointPtr(point) );
     this->operator=( IDAssigner(points,group,space,property_map) );
 }
-  
-/** Copy constructor */                         
+
+/** Copy constructor */
 IDAssigner::IDAssigner(const IDAssigner &other)
            : ConcreteProperty<IDAssigner,Property>(other),
              molgroup(other.molgroup),
              identity_points(other.identity_points),
              spce(other.spce),
-             map(other.map), 
+             map(other.map),
              points_with_mols(other.points_with_mols),
              mol_to_molnum(other.mol_to_molnum),
              point_distances(other.point_distances),
@@ -273,7 +273,7 @@ IDAssigner& IDAssigner::operator=(const IDAssigner &other)
         point_to_mol = other.point_to_mol;
         distances_changed = other.distances_changed;
     }
-    
+
     return *this;
 }
 
@@ -322,12 +322,12 @@ const PropertyMap& IDAssigner::propertyMap() const
 }
 
 /** Update the space used to calculate the distances between
-    the points and the molecules - this returns whether or 
+    the points and the molecules - this returns whether or
     not the space has changed */
 bool IDAssigner::updateSpace(const System &system)
 {
     const Space &new_space = system.property(map["space"]).asA<Space>();
-    
+
     if (spce != new_space)
     {
         spce = new_space;
@@ -337,16 +337,16 @@ bool IDAssigner::updateSpace(const System &system)
         return false;
 }
 
-/** Update the points in this constraint from the passed system - 
+/** Update the points in this constraint from the passed system -
     this returns whether or not this changes any points */
 bool IDAssigner::updatePoints(const System &system)
 {
     int npoints = identity_points.count();
-    
+
     const PointPtr *const_points_array = identity_points.constData();
-    
+
     bool need_update = false;
-    
+
     for (int i=0; i<npoints; ++i)
     {
         if (const_points_array[i].read().usesMoleculesIn(system))
@@ -355,20 +355,20 @@ bool IDAssigner::updatePoints(const System &system)
             break;
         }
     }
-    
+
     if (need_update)
     {
         bool changed = false;
-        
+
         PointPtr *points_array = identity_points.data();
-        
+
         for (int i=0; i<npoints; ++i)
         {
             bool this_changed = points_array[i].edit().update(system);
-            
+
             changed = changed or this_changed;
         }
-        
+
         return changed;
     }
     else
@@ -386,19 +386,19 @@ bool IDAssigner::updateGroup(const System &system)
         molgroup.edit().update(system.molecules());
         return true;
     }
-        
+
     const MoleculeGroup &new_group = system[old_group.number()];
-    
+
     if (new_group.version() == old_group.version())
         return false;
-        
+
     else if (new_group.version().majorVersion() != old_group.version().majorVersion())
     {
         //the group's contents have changed - ensure that all
         //of the molecules are still compatible
         this->validateGroup(new_group);
     }
-    
+
     molgroup = new_group;
     return true;
 }
@@ -418,56 +418,56 @@ IDAssigner* IDAssigner::clone() const
     return new IDAssigner(*this);
 }
 
-/** Internal function used to recalculate all of the distances^2 
+/** Internal function used to recalculate all of the distances^2
     between the molecules in 'mol_to_molnum' and all of the identity points */
 void IDAssigner::recalculateDistances()
 {
     point_distances = QHash<MolNum,NVector>();
-    
+
     const Molecules &molecules = this->moleculeGroup().molecules();
-    
+
     const int nmols = mol_to_molnum.count();
     const MolNum *mol_to_molnum_array = mol_to_molnum.constData();
-    
+
     point_distances.reserve(nmols);
-    
+
     const int npoints = identity_points.count();
     const PointPtr *const_points_array = identity_points.constData();
-    
+
     QVector< Vector > points(npoints);
     Vector *points_array = points.data();
-    
+
     for (int i=0; i<npoints; ++i)
     {
         points_array[i] = const_points_array[i].read().point();
     }
-    
+
     const PropertyName &coords_property = map["coordinates"];
-    
+
     for (int i=0; i<nmols; ++i)
     {
         const MolNum &molnum = mol_to_molnum_array[i];
-    
+
         Molecules::const_iterator it = molecules.constFind(molnum);
         BOOST_ASSERT( it != molecules.constEnd() );
-    
+
         const AtomCoords &coords = it->data().property(coords_property)
                                              .asA<AtomCoords>();
-                                             
+
         Vector center = coords.array().aaBox().center();
-        
+
         NVector distances(npoints);
         double *distances_array = distances.data();
-        
+
         for (int j=0; j<npoints; ++j)
         {
             double dist2 = space().calcDist2(center, points_array[j]);
             distances_array[j] = dist2;
         }
-        
+
         point_distances.insert( molnum, distances );
     }
-    
+
     distances_changed = true;
 }
 
@@ -479,23 +479,23 @@ void IDAssigner::recalculateDistances()
 void IDAssigner::rebuildMolToMolNum()
 {
     mol_to_molnum = QVector<MolNum>();
-    
+
     const int npoints = points_with_mols.count();
     const QVector<MolNum> &molnums = molgroup.read().molNums();
     const int nmols = molnums.count();
-    
+
     //reserve space - worst case is we have to record all npoints molecules
     //from all npoints points, together with the npoints assigned molecules
     mol_to_molnum.reserve( qMin(nmols, npoints*(npoints+1)) );
-    
-    //loop through the molecules in the order they appear in the 
+
+    //loop through the molecules in the order they appear in the
     //molecule group and see if they are a candidate - the first 'npoints'
     //molecules are automatically candidates (as they are assigned)
     for (int i=0; i<nmols; ++i)
     {
         const MolNum &molnum = molnums.at(i);
-    
-        //is this molecule one of the close molecules to any 
+
+        //is this molecule one of the close molecules to any
         //of the points?
         for (int j=0; j<npoints; ++j)
         {
@@ -515,17 +515,17 @@ void IDAssigner::rebuildMolToMolNum()
 static QVector<int> invert(const QVector<int> &point_to_mol)
 {
     QVector<int> mol_to_point = point_to_mol;
-    
+
     const int *point_to_mol_array = point_to_mol.constData();
     int *mol_to_point_array = mol_to_point.data();
-    
+
     const int npoints = point_to_mol.count();
-    
+
     for (int i=0; i<npoints; ++i)
     {
         mol_to_point_array[ point_to_mol_array[i] ] = i;
     }
-    
+
     return mol_to_point;
 }
 
@@ -537,8 +537,8 @@ void IDAssigner::assignMoleculesToPoints()
 {
     if (not distances_changed)
         return;
-    
-    //the order of molecules may have changed - recalculate 
+
+    //the order of molecules may have changed - recalculate
     //the correct order
 
     //use the 'mol_to_molnum' array as this holds the numbers
@@ -546,15 +546,15 @@ void IDAssigner::assignMoleculesToPoints()
     //they appear in the molecule group
     const int nmols = mol_to_molnum.count();
     const MolNum *mol_to_molnum_array = mol_to_molnum.constData();
-    
+
     const int npoints = identity_points.count();
-    
+
     //construct the matrix that contains the distances between every
     //candidate molecule and every point - one molecule per row, one point
     //per column - this has to be a square matrix, so missing rows/columns
     //are given a value of 0
     NMatrix distmatrix;
-    
+
     if (nmols == npoints)
     {
         distmatrix = NMatrix(nmols, nmols);
@@ -563,12 +563,12 @@ void IDAssigner::assignMoleculesToPoints()
         for (int i=0; i<nmols; ++i)
         {
             const MolNum &molnum = mol_to_molnum_array[i];
-            
-            QHash<MolNum,NVector>::const_iterator 
+
+            QHash<MolNum,NVector>::const_iterator
                                        it = point_distances.constFind(molnum);
-                                                
+
             BOOST_ASSERT( it != point_distances.constEnd() );
-            
+
             distmatrix.setRow(i, it.value());
         }
     }
@@ -578,23 +578,23 @@ void IDAssigner::assignMoleculesToPoints()
         //points which have zero distance to all molecules
         distmatrix = NMatrix(nmols, nmols);
         distmatrix = distmatrix.transpose(); // change to row-major memory order
-        
+
         const int nzeroes = nmols - npoints;
         NVector new_row(npoints + nzeroes);
-        
+
         for (int i=0; i<nmols; ++i)
         {
             const MolNum &molnum = mol_to_molnum_array[i];
-            
-            QHash<MolNum,NVector>::const_iterator 
+
+            QHash<MolNum,NVector>::const_iterator
                                    it = point_distances.constFind(molnum);
-                                                
+
             BOOST_ASSERT( it != point_distances.constEnd() );
-            
+
             const NVector &distances = it.value();
-            
+
             memcpy( new_row.data(), distances.constData(), npoints*sizeof(double) );
-            
+
             distmatrix.setRow( i, new_row );
         }
     }
@@ -609,12 +609,12 @@ void IDAssigner::assignMoleculesToPoints()
         for (int i=0; i<nmols; ++i)
         {
             const MolNum &molnum = mol_to_molnum_array[i];
-            
-            QHash<MolNum,NVector>::const_iterator 
+
+            QHash<MolNum,NVector>::const_iterator
                                         it = point_distances.constFind(molnum);
-                                                
+
             BOOST_ASSERT( it != point_distances.constEnd() );
-            
+
             distmatrix.setRow(i, it.value());
         }
     }
@@ -625,22 +625,22 @@ void IDAssigner::assignMoleculesToPoints()
     {
         double delta0 = std::numeric_limits<double>::max();
         double delta1 = delta0;
-    
+
         const int nrows = distmatrix.nRows();
         const int ncolumns = qMin( distmatrix.nColumns(), npoints );
-        
+
         const double *distmatrix_array = distmatrix.constData();
-        
+
         for (int i=0; i<nrows; ++i)
         {
             const double *row = &(distmatrix_array[ distmatrix.offset(i,0) ]);
-            
+
             for (int j=0; j<ncolumns-1; ++j)
             {
                 for (int k=j+1; k<ncolumns; ++k)
                 {
                     const double delta = std::abs(row[k] - row[j]);
-                    
+
                     if (delta <= delta0)
                     {
                         if (delta < delta0)
@@ -656,7 +656,7 @@ void IDAssigner::assignMoleculesToPoints()
                 }
             }
         }
-    
+
         if (delta0 == 0)
         {
             //there are degeneracies - some molecules are an identical
@@ -664,13 +664,13 @@ void IDAssigner::assignMoleculesToPoints()
             if (delta1 == std::numeric_limits<double>::max())
                 //really degenerate!
                 delta1 = 0.1;
-    
+
             //add a small penalty function that make molecule 'i' prefer
             //point 'i', or the point as close to point 'i' as possible. This
             //is used to help remove degeneracies caused by using points with
             //the same coordinates. If multiple points have the same coordinates,
             //then the molecule with index closest to the index of the point
-            //will be preferred - this penalty function has to be kept to 
+            //will be preferred - this penalty function has to be kept to
             //about 10% of the smallest non-zero difference between distances,
             //so that it doesn't affect the assignment of points with no degeneracies
 
@@ -685,28 +685,28 @@ void IDAssigner::assignMoleculesToPoints()
             }
         }
     }
-    
+
     //now calculate optimum assignment of molecules to points that
     //minimises the total distance between each molecule and its
     //assigned point
     point_to_mol = solve_linear_assignment(distmatrix, true);
-    
+
     point_to_mol = ::invert(point_to_mol);
 
-    //if there are more molecules than points, then the last set of 
+    //if there are more molecules than points, then the last set of
     //molecules are not associated with points. To ensure deterministic
     //mapping the extra molecules must be ordered so that they are
     //assigned to the null points in order
     if (nmols > npoints)
     {
-        qSort( point_to_mol.data() + npoints, point_to_mol.data() + nmols );
+        std::sort(point_to_mol.data() + npoints, point_to_mol.data() + nmols );
     }
-    
+
     point_to_mol.squeeze();
     distances_changed = false;
 }
 
-/** Return the number of identity points (and thus the number of 
+/** Return the number of identity points (and thus the number of
     identified molecules) */
 int IDAssigner::nPoints() const
 {
@@ -717,14 +717,14 @@ int IDAssigner::nPoints() const
 QString IDAssigner::toString() const
 {
     QStringList lines;
-    
+
     for (QVector<PointPtr>::const_iterator it = identity_points.constBegin();
          it != identity_points.constEnd();
          ++it)
     {
         lines.append( (*it)->toString() );
     }
-    
+
     return QObject::tr("IDAssigner( points() => [ %1 ], moleculeGroup() = %2 )")
             .arg(lines.join(", "), molgroup->toString());
 }
@@ -745,7 +745,7 @@ void IDAssigner::update(const System &system)
         const int npoints = points_with_mols.count();
 
         bool closemols_changed = false;
-    
+
         for (int i=0; i<npoints; ++i)
         {
             bool this_changed = points_with_mols[i].update(system);
@@ -761,25 +761,25 @@ void IDAssigner::update(const System &system)
     this->assignMoleculesToPoints();
 }
 
-/** Returns the list of identified molecules from the system, 
+/** Returns the list of identified molecules from the system,
     which are returned in the same order as the list of identity points
 */
 QVector<PartialMolecule> IDAssigner::identifiedMolecules() const
 {
     //find each matching molecule in turn
     const Molecules molecules = this->moleculeGroup().molecules();
-    
+
     int n_to_match = qMin( identity_points.count(), molecules.count() );
-    
+
     const int *point_to_mol_array = point_to_mol.constData();
 
     QVector<PartialMolecule> matched_mols;
     matched_mols.reserve(point_to_mol.count());
-    
+
     //the match uses mol_to_molnum, as only a subset of molecules
     //are candidate molecules
     const MolNum *mol_to_molnum_array = mol_to_molnum.constData();
-    
+
     if (mol_to_molnum.count() < n_to_match)
         throw SireError::program_bug( QObject::tr(
                 "WEIRD: Number of matched molecules is greater than the number of "
@@ -793,13 +793,13 @@ QVector<PartialMolecule> IDAssigner::identifiedMolecules() const
                 "identified molecules? %1, %2, %3")
                     .arg(n_to_match).arg(point_to_mol.count())
                     .arg(Sire::toString(point_to_mol)), CODELOC );
-    
+
     for (int i=0; i<n_to_match; ++i)
     {
         const MolNum molnum = mol_to_molnum_array[ point_to_mol_array[i] ];
 
         matched_mols.append( PartialMolecule(molecules[molnum]) );
     }
-    
+
     return matched_mols;
 }

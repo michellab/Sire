@@ -53,6 +53,8 @@ SireIO::FlexibilityLibrary __copy__(const SireIO::FlexibilityLibrary &other){ re
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FlexibilityLibrary_class(){
 
     { //::SireIO::FlexibilityLibrary
@@ -70,6 +72,7 @@ void register_FlexibilityLibrary_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Add the templates in other into this library" );
         
         }
@@ -82,6 +85,7 @@ void register_FlexibilityLibrary_class(){
                 "getFlexibility"
                 , getFlexibility_function_value
                 , ( bp::arg("molecule") )
+                , bp::release_gil_policy()
                 , "Generate the Flexibility property for the atoms in the passed molecule view" );
         
         }
@@ -107,6 +111,7 @@ void register_FlexibilityLibrary_class(){
                 "loadTemplates"
                 , loadTemplates_function_value
                 , ( bp::arg("file") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -135,6 +140,7 @@ void register_FlexibilityLibrary_class(){
                 "setTemplate"
                 , setTemplate_function_value
                 , ( bp::arg("key"), bp::arg("tmplate") )
+                , bp::release_gil_policy()
                 , "Set the template associated with the passed key" );
         
         }
@@ -146,6 +152,7 @@ void register_FlexibilityLibrary_class(){
             FlexibilityLibrary_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

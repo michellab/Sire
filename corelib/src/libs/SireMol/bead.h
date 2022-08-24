@@ -65,7 +65,7 @@ using SireBase::Property;
 /** A Bead is a group of atoms (defined using a SireMol::Beading function)
     within a molecule. Beads can be used for coarse-graining, or for
     implementing group-based cutoffs
-    
+
     @author Christopher Woods
 */
 class SIREMOL_EXPORT Bead : public SireBase::ConcreteProperty<Bead,MoleculeView>
@@ -81,53 +81,55 @@ public:
     Bead();
     Bead(const MoleculeData &moldata, const BeadIdx &bead,
          const PropertyMap &map = PropertyMap());
-         
+
     Bead(const Bead &other);
-    
+
     ~Bead();
-    
+
     Bead& operator=(const Bead &other);
-    
+
     bool operator==(const Bead &other) const;
     bool operator!=(const Bead &other) const;
-    
+
     static const char* typeName();
 
     Bead* clone() const;
 
     MolViewPtr operator[](int i) const;
     int nViews() const;
-    
+
     Atom atom(int i) const;
 
     QString toString() const;
-    
+
     bool isEmpty() const;
     bool selectedAll() const;
+
+    MolViewPtr toSelector() const;
 
     AtomSelection selection() const;
 
     void update(const MoleculeData &moldata);
 
     BeadIdx index() const;
-    
+
     Beads beads() const;
-    
+
     bool hasProperty(const PropertyName &key) const;
     bool hasMetadata(const PropertyName &metakey) const;
     bool hasMetadata(const PropertyName &key,
                      const PropertyName &metakey) const;
-                     
+
     QStringList propertyKeys() const;
     QStringList metadataKeys() const;
     QStringList metadataKeys(const PropertyName &key) const;
-    
+
     template<class T>
     const T& property(const PropertyName &key) const;
-    
+
     template<class T>
     const T& metadata(const PropertyName &metakey) const;
-    
+
     template<class T>
     const T& metadata(const PropertyName &key,
                       const PropertyName &metakey) const;
@@ -135,19 +137,19 @@ public:
     Mover<Bead> move() const;
     Evaluator evaluate() const;
     BeadEditor edit() const;
-    
+
     int nAtoms() const;
-    
+
     QList<AtomIdx> atomIdxs() const;
-    
+
     const Beading& beading() const;
-    
+
     bool contains(AtomIdx atomidx) const;
     bool contains(const AtomID &atomid) const;
     bool intersects(const AtomID &atomid) const;
 
     void assertContainsProperty(const PropertyName &key) const;
-    
+
     void assertContainsMetadata(const PropertyName &metakey) const;
     void assertContainsMetadata(const PropertyName &key,
                                 const PropertyName &metakey) const;
@@ -158,7 +160,7 @@ protected:
 
     template<class T>
     void setMetadata(const QString &metakey, const T &value);
-    
+
     template<class T>
     void setMetadata(const QString &key, const QString &metakey,
                      const T &value);
@@ -170,25 +172,25 @@ protected:
 private:
     /** The index of the bead in the molecule */
     BeadIdx beadidx;
-    
+
     /** The beading used to create the beads */
     BeadingPtr bdng;
-    
+
     /** The location of the beading property */
     PropertyName beading_property;
-    
+
     /** The atoms that are selected as part of this residue */
     AtomSelection selected_atoms;
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
-/** Return the property (of type T) at key 'key' that is 
+/** Return the property (of type T) at key 'key' that is
     specifically assigned to this bead. This will only work
     if the property at this key is a bead property (i.e.
     has one value for every bead) and that it can be
     cast to type T
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
 */
@@ -217,13 +219,13 @@ const T& Bead::metadata(const PropertyName &metakey) const
 
 /** Return the metadata at metakey 'metakey' for the property
     at key 'key'
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
 */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-const T& Bead::metadata(const PropertyName &key, 
+const T& Bead::metadata(const PropertyName &key,
                         const PropertyName &metakey) const
 {
     const Property &property = d->metadata(key, metakey);
@@ -235,9 +237,9 @@ const T& Bead::metadata(const PropertyName &key,
     residue to be equal to 'value'. This works by creating
     a ResProperty<T> for this molecule, and assigning
     the value for this residue to 'value'. If there is already
-    a property at key 'key', then it must be of type 
+    a property at key 'key', then it must be of type
     ResProperty<T> for this to work
-    
+
     \throw SireMol::invalid_cast
 */
 template<class T>
@@ -246,7 +248,7 @@ void Bead::setProperty(const QString &key, const T &value)
 {
     BeadProperty<T> props;
     MoleculeData &data = *d;
-    
+
     if (data.hasProperty(key))
     {
         //take the property to prevent unnecessary copying caused
@@ -256,15 +258,15 @@ void Bead::setProperty(const QString &key, const T &value)
     }
     else
         props = BeadProperty<T>(data.info(), bdng.read());
-        
+
     props.set(this->index(), value);
-    
+
     data.setProperty(key, props);
 }
 
-/** Set the metadata at metakey 'metakey' to the value 'value' 
+/** Set the metadata at metakey 'metakey' to the value 'value'
     for this residue
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -273,7 +275,7 @@ void Bead::setMetadata(const QString &metakey, const T &value)
 {
     BeadProperty<T> props;
     MoleculeData &data = *d;
-    
+
     if (data.hasMetadata(metakey))
     {
         //take the metadata to prevent unnecessary copying caused
@@ -283,15 +285,15 @@ void Bead::setMetadata(const QString &metakey, const T &value)
     }
     else
         props = BeadProperty<T>(data.info(), bdng.read());
-        
+
     props.set(this->index(), value);
-    
+
     data.setMetadata(metakey, props);
 }
 
 /** Set the metadata at metakey 'metakey' for the property at key
     'key' to the value 'value'
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -301,7 +303,7 @@ void Bead::setMetadata(const QString &key, const QString &metakey,
 {
     BeadProperty<T> props;
     MoleculeData &data = *d;
-    
+
     if (data.hasMetadata(key, metakey))
     {
         //take the metadata to prevent unnecessary copying caused
@@ -311,9 +313,9 @@ void Bead::setMetadata(const QString &key, const QString &metakey,
     }
     else
         props = BeadProperty<T>(data.info(),bdng.read());
-        
+
     props.set(this->index(), value);
-    
+
     data.setMetadata(key, metakey, props);
 }
 
@@ -321,7 +323,7 @@ namespace detail
 {
 
 void assertSameSize(Bead*, int nres, int nprops);
-    
+
 template<class V>
 SIRE_OUTOFLINE_TEMPLATE
 QList<V> get_property(Bead*, const MoleculeData &moldata,
@@ -380,7 +382,7 @@ void set_metadata(Bead *ptr, MoleculeData &moldata,
                   const QList<V> &values)
 {
     assertSameSize(ptr, idxs.count(), values.count());
-    
+
     set_metadata<BeadProperty<V>,Bead::Index,V>(moldata,idxs,key,metakey,values);
 }
 
@@ -416,12 +418,12 @@ void set_metadata(Bead*, MoleculeData &moldata,
 
 SIREMOL_EXPORT bool has_property(const Bead*, const MoleculeData &moldata,
                   const PropertyName &key);
-                  
+
 SIREMOL_EXPORT bool has_metadata(const Bead*, const MoleculeData &moldata,
                   const PropertyName &metakey);
-                  
+
 SIREMOL_EXPORT bool has_metadata(const Bead*, const MoleculeData &moldata,
-                  const PropertyName &key, const PropertyName &metakey);                 
+                  const PropertyName &key, const PropertyName &metakey);
 
 
 } //end of namespace detail

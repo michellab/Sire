@@ -17,6 +17,8 @@ SireSystem::SysIdx __copy__(const SireSystem::SysIdx &other){ return SireSystem:
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SysIdx_class(){
 
     { //::SireSystem::SysIdx
@@ -33,6 +35,7 @@ void register_SysIdx_class(){
             SysIdx_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -44,6 +47,7 @@ void register_SysIdx_class(){
             SysIdx_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -56,6 +60,7 @@ void register_SysIdx_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("systems") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -67,6 +72,7 @@ void register_SysIdx_class(){
             SysIdx_exposer.def( 
                 "null"
                 , null_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -91,6 +97,7 @@ void register_SysIdx_class(){
             SysIdx_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -102,6 +109,7 @@ void register_SysIdx_class(){
             SysIdx_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -113,6 +121,7 @@ void register_SysIdx_class(){
             SysIdx_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

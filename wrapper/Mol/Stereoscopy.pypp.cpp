@@ -25,6 +25,8 @@ SireMol::Stereoscopy __copy__(const SireMol::Stereoscopy &other){ return SireMol
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Stereoscopy_class(){
 
     { //::SireMol::Stereoscopy
@@ -42,6 +44,7 @@ void register_Stereoscopy_class(){
             Stereoscopy_exposer.def( 
                 "down"
                 , down_function_value
+                , bp::release_gil_policy()
                 , "Return a down Stereoscopy" );
         
         }
@@ -53,6 +56,7 @@ void register_Stereoscopy_class(){
             Stereoscopy_exposer.def( 
                 "isDefined"
                 , isDefined_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the stereoscopy is defined" );
         
         }
@@ -64,6 +68,7 @@ void register_Stereoscopy_class(){
             Stereoscopy_exposer.def( 
                 "isDown"
                 , isDown_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a down bond" );
         
         }
@@ -75,6 +80,7 @@ void register_Stereoscopy_class(){
             Stereoscopy_exposer.def( 
                 "isNotStereo"
                 , isNotStereo_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a not stereo bond" );
         
         }
@@ -86,6 +92,7 @@ void register_Stereoscopy_class(){
             Stereoscopy_exposer.def( 
                 "isUp"
                 , isUp_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is an up bond" );
         
         }
@@ -97,6 +104,7 @@ void register_Stereoscopy_class(){
             Stereoscopy_exposer.def( 
                 "notStereo"
                 , notStereo_function_value
+                , bp::release_gil_policy()
                 , "Return a not stereo Stereoscopy" );
         
         }
@@ -123,6 +131,7 @@ void register_Stereoscopy_class(){
             Stereoscopy_exposer.def( 
                 "sdfValue"
                 , sdfValue_function_value
+                , bp::release_gil_policy()
                 , "Return the SDF-format value for this bond. This returns\n0 if the stereoscopy is undefined\n" );
         
         }
@@ -134,6 +143,7 @@ void register_Stereoscopy_class(){
             Stereoscopy_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -145,6 +155,7 @@ void register_Stereoscopy_class(){
             Stereoscopy_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -156,6 +167,7 @@ void register_Stereoscopy_class(){
             Stereoscopy_exposer.def( 
                 "undefined"
                 , undefined_function_value
+                , bp::release_gil_policy()
                 , "Return an undefined Stereoscopy" );
         
         }
@@ -167,6 +179,7 @@ void register_Stereoscopy_class(){
             Stereoscopy_exposer.def( 
                 "up"
                 , up_function_value
+                , bp::release_gil_policy()
                 , "Return an up Stereoscopy" );
         
         }
@@ -178,6 +191,7 @@ void register_Stereoscopy_class(){
             Stereoscopy_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "Return the stereo type (uses SDF values, e.g. 0 is not stereo,\n1 is up, 6 is down. We have added -1 to mean undefined)\n" );
         
         }

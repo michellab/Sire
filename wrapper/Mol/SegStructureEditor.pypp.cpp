@@ -46,6 +46,8 @@ SireMol::SegStructureEditor __copy__(const SireMol::SegStructureEditor &other){ 
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SegStructureEditor_class(){
 
     { //::SireMol::SegStructureEditor
@@ -64,6 +66,7 @@ void register_SegStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atomname") )
+                , bp::release_gil_policy()
                 , "Add an atom called atomname to this Segment and return\nan editor for that atom" );
         
         }
@@ -76,6 +79,7 @@ void register_SegStructureEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atomnum") )
+                , bp::release_gil_policy()
                 , "Add an atom with number atomnum to this Segment and return\nan editor for that atom" );
         
         }
@@ -88,6 +92,7 @@ void register_SegStructureEditor_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return an editor for the ith atom of this Segment\nThrow: SireError::invalid_index\n" );
         
         }
@@ -100,6 +105,7 @@ void register_SegStructureEditor_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the atom that matches the ID atomid in\nthis Segment\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -111,6 +117,7 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "Commit the changes made by this editor and return the\nupdated Segment" );
         
         }
@@ -122,6 +129,7 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "index"
                 , index_function_value
+                , bp::release_gil_policy()
                 , "Return the index of this Segment in the molecule" );
         
         }
@@ -133,6 +141,7 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "molecule"
                 , molecule_function_value
+                , bp::release_gil_policy()
                 , "Return an editor for the molecule that contains this Segment" );
         
         }
@@ -144,6 +153,7 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in this Segment (could be zero)" );
         
         }
@@ -155,7 +165,7 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of this Segment" );
         
         }
@@ -258,6 +268,7 @@ void register_SegStructureEditor_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return an editor for the ith atom of this Segment\nThrow: SireError::invalid_index\n" );
         
         }
@@ -270,6 +281,7 @@ void register_SegStructureEditor_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return an editor for the atom that matches the ID atomid in\nthis Segment\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -281,6 +293,7 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this segment is the whole molecule" );
         
         }
@@ -292,6 +305,7 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this editor" );
         
         }
@@ -342,6 +356,7 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -353,6 +368,7 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

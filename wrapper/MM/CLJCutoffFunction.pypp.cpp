@@ -53,6 +53,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJCutoffFunction_class(){
 
     { //::SireMM::CLJCutoffFunction
@@ -68,6 +70,7 @@ void register_CLJCutoffFunction_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not this function contains a property called name" );
         
         }
@@ -79,6 +82,7 @@ void register_CLJCutoffFunction_class(){
             CLJCutoffFunction_exposer.def( 
                 "coulombCutoff"
                 , coulombCutoff_function_value
+                , bp::release_gil_policy()
                 , "Return the coulomb cutoff distance" );
         
         }
@@ -90,6 +94,7 @@ void register_CLJCutoffFunction_class(){
             CLJCutoffFunction_exposer.def( 
                 "hasCutoff"
                 , hasCutoff_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this function has a cutoff" );
         
         }
@@ -101,6 +106,7 @@ void register_CLJCutoffFunction_class(){
             CLJCutoffFunction_exposer.def( 
                 "ljCutoff"
                 , ljCutoff_function_value
+                , bp::release_gil_policy()
                 , "Return the LJ cutoff distance" );
         
         }
@@ -112,6 +118,7 @@ void register_CLJCutoffFunction_class(){
             CLJCutoffFunction_exposer.def( 
                 "properties"
                 , properties_function_value
+                , bp::release_gil_policy()
                 , "Return the properties that can be set in this function" );
         
         }
@@ -124,6 +131,7 @@ void register_CLJCutoffFunction_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return the value of the property with name name" );
         
         }
@@ -136,6 +144,7 @@ void register_CLJCutoffFunction_class(){
                 "setCoulombCutoff"
                 , setCoulombCutoff_function_value
                 , ( bp::arg("distance") )
+                , bp::release_gil_policy()
                 , "Set the coulomb cutoff to the specified distance" );
         
         }
@@ -148,6 +157,7 @@ void register_CLJCutoffFunction_class(){
                 "setCutoff"
                 , setCutoff_function_value
                 , ( bp::arg("distance") )
+                , bp::release_gil_policy()
                 , "Set the coulomb and LJ cutoff distances to distance" );
         
         }
@@ -160,6 +170,7 @@ void register_CLJCutoffFunction_class(){
                 "setCutoff"
                 , setCutoff_function_value
                 , ( bp::arg("coulomb_cutoff"), bp::arg("lj_cutoff") )
+                , bp::release_gil_policy()
                 , "Set the coulomb and LJ cutoff distances to the specified values" );
         
         }
@@ -172,6 +183,7 @@ void register_CLJCutoffFunction_class(){
                 "setLJCutoff"
                 , setLJCutoff_function_value
                 , ( bp::arg("distance") )
+                , bp::release_gil_policy()
                 , "Set the LJ cutoff to the specified distance" );
         
         }
@@ -184,6 +196,7 @@ void register_CLJCutoffFunction_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the property with name name to value value" );
         
         }
@@ -195,6 +208,7 @@ void register_CLJCutoffFunction_class(){
             CLJCutoffFunction_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -206,6 +220,7 @@ void register_CLJCutoffFunction_class(){
             CLJCutoffFunction_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

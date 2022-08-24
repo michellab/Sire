@@ -23,6 +23,8 @@ SireMM::CoulombScaleFactor __copy__(const SireMM::CoulombScaleFactor &other){ re
 
 const char* pvt_get_name(const SireMM::CoulombScaleFactor&){ return "SireMM::CoulombScaleFactor";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CoulombScaleFactor_class(){
 
     { //::SireMM::CoulombScaleFactor
@@ -38,6 +40,7 @@ void register_CoulombScaleFactor_class(){
             CoulombScaleFactor_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
+                , bp::release_gil_policy()
                 , "Return the Coulomb parameter scaling factor" );
         
         }
@@ -64,6 +67,7 @@ void register_CoulombScaleFactor_class(){
             CoulombScaleFactor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -75,6 +79,7 @@ void register_CoulombScaleFactor_class(){
             CoulombScaleFactor_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

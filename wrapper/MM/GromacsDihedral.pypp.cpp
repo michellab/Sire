@@ -37,6 +37,8 @@ SireMM::GromacsDihedral __copy__(const SireMM::GromacsDihedral &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_GromacsDihedral_class(){
@@ -58,6 +60,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "assertResolved"
                 , assertResolved_function_value
+                , bp::release_gil_policy()
                 , "Assert that the parameters for this dihedral have been resolved" );
         
         }
@@ -70,6 +73,7 @@ void register_GromacsDihedral_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith parameter for this dihedral" );
         
         }
@@ -82,6 +86,7 @@ void register_GromacsDihedral_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("dihedral"), bp::arg("phi") )
+                , bp::release_gil_policy()
                 , "Construct from the passed dihedral, using phi as the symbol for the phi value" );
         
         }
@@ -94,6 +99,7 @@ void register_GromacsDihedral_class(){
                 "constructImproper"
                 , constructImproper_function_value
                 , ( bp::arg("dihedral"), bp::arg("phi") )
+                , bp::release_gil_policy()
                 , "Construct from the passed improper, using phi as the symbol for the phi value" );
         
         }
@@ -105,6 +111,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of parameters associated with this dihedral type" );
         
         }
@@ -116,6 +123,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "functionType"
                 , functionType_function_value
+                , bp::release_gil_policy()
                 , "Return the Gromacs ID number for the function type for this dihedral. See table\n5.5 in the Gromacs manual for information" );
         
         }
@@ -127,6 +135,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "functionTypeString"
                 , functionTypeString_function_value
+                , bp::release_gil_policy()
                 , "Return the string description of the function type for this dihedral" );
         
         }
@@ -138,6 +147,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash for this bond" );
         
         }
@@ -149,6 +159,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "isAngleTorsionCrossTerm"
                 , isAngleTorsionCrossTerm_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this dihedral is a angletorsion cross term" );
         
         }
@@ -160,6 +171,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "isCosine"
                 , isCosine_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a cosine-series dihedral" );
         
         }
@@ -171,6 +183,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "isImproperAngleTerm"
                 , isImproperAngleTerm_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this dihedral is really an improper angle term" );
         
         }
@@ -182,6 +195,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "isResolved"
                 , isResolved_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the parameters for this dihedral are resolved" );
         
         }
@@ -193,6 +207,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "isSimple"
                 , isSimple_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a simple dihedral function, based only on the\nsize of the torsion" );
         
         }
@@ -204,6 +219,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "needsResolving"
                 , needsResolving_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this parameter needs resolving" );
         
         }
@@ -246,6 +262,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "parameters"
                 , parameters_function_value
+                , bp::release_gil_policy()
                 , "Return all of the parameters for this dihedral" );
         
         }
@@ -257,6 +274,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of parameters associated with this dihedral type" );
         
         }
@@ -269,6 +287,7 @@ void register_GromacsDihedral_class(){
                 "toAngleTorsionExpression"
                 , toAngleTorsionExpression_function_value
                 , ( bp::arg("theta0"), bp::arg("theta1"), bp::arg("phi") )
+                , bp::release_gil_policy()
                 , "Return this function converted to a SireCAS::Expression using the passed\nsymbol to represent the torsion (phi) and the angles either side of the\ntorsion (theta0 and theta1)" );
         
         }
@@ -281,6 +300,7 @@ void register_GromacsDihedral_class(){
                 "toExpression"
                 , toExpression_function_value
                 , ( bp::arg("phi") )
+                , bp::release_gil_policy()
                 , "Return this function converted to a SireCAS::Expression using the passed symbol\nto represent the torsion size" );
         
         }
@@ -293,6 +313,7 @@ void register_GromacsDihedral_class(){
                 "toImproperExpression"
                 , toImproperExpression_function_value
                 , ( bp::arg("eta") )
+                , bp::release_gil_policy()
                 , "Return this function converted to a SireCAS::Expression using the passed\nsymbol to represent the improper angle eta" );
         
         }
@@ -304,6 +325,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this dihedral" );
         
         }
@@ -315,6 +337,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -326,6 +349,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

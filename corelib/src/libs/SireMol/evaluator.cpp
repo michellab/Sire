@@ -40,6 +40,7 @@
 #include "molecule.h"
 #include "mover.hpp"
 #include "editor.hpp"
+#include "core.h"
 
 #include "SireVol/coordgroup.h"
 
@@ -191,6 +192,11 @@ bool Evaluator::selectedAll() const
 AtomSelection Evaluator::selection() const
 {
     return selected_atoms;
+}
+
+MolViewPtr Evaluator::toSelector() const
+{
+    return PartialMolecule(*this).toSelector();
 }
 
 static void getMinMax(const CoordGroup &cgroup, Vector &min, Vector &max)
@@ -748,11 +754,15 @@ MolarMass Evaluator::mass(const PropertyMap &map) const
 
         return ::getMass(masses, selected_atoms);
     }
-    else
+    else if (d->hasProperty(map["element"]))
     {
         const AtomElements &elements = d->property(map["element"]).asA<AtomElements>();
 
         return ::getMass(elements, selected_atoms);
+    }
+    else
+    {
+        return MolarMass(0);
     }
 }
 
@@ -764,9 +774,22 @@ MolarMass Evaluator::mass(const PropertyMap &map) const
 */
 Charge Evaluator::charge(const PropertyMap &map) const
 {
-    const AtomCharges &charges = d->property(map["charge"]).asA<AtomCharges>();
+    if (d->hasProperty(map["charge"]))
+    {
+        const AtomCharges &charges = d->property(map["charge"]).asA<AtomCharges>();
 
-    return ::getCharge(charges, selected_atoms);
+        return ::getCharge(charges, selected_atoms);
+    }
+    else if (d->hasProperty(map["formal_charge"]))
+    {
+        const AtomCharges &charges = d->property(map["formal_charge"]).asA<AtomCharges>();
+
+        return ::getCharge(charges, selected_atoms);
+    }
+    else
+    {
+        return Charge(0);
+    }
 }
 
 /** Return the centroid of these atoms - this is the average

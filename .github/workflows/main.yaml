@@ -1,5 +1,10 @@
 name: Build
 
+# Note that push and pull-request builds are automatically
+# now skipped by GitHub if
+# [skip ci], [ci skip], [no ci], [skip actions], or [actions skip]
+# are in the commit message. We don't need to check for this ourselves.
+
 on:
   push:
     branches: [ devel ]
@@ -8,21 +13,44 @@ on:
 
 jobs:
   build:
-    name: build (${{ matrix.python-version }}, ${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    name: build (${{ matrix.python-version }}, ${{ matrix.platform.name }})
+    runs-on: ${{ matrix.platform.os }}
     strategy:
-      max-parallel: 6
+      max-parallel: 9
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest", "macos-latest"]
         python-version: ["3.7", "3.8", "3.9"]
+        platform:
+          - {
+              name: "windows",
+              os: "windows-latest",
+              shell: "pwsh"
+            }
+          - {
+              name: "linux",
+              os: "ubuntu-latest",
+              shell: "bash -l {0}"
+            }
+          - {
+              name: "macos",
+              os: "macos-latest",
+              shell: "bash -l {0}"
+            }
     environment:
       name: sire-build
+    defaults:
+      run:
+        shell: ${{ matrix.platform.shell }}
     env:
       SIRE_DONT_PHONEHOME: 1
       SIRE_SILENT_PHONEHOME: 1
     steps:
+#     Need to install and use VS 2017 for conda-compliant builds
+      - name: Set up Visual Studio 2017 Build Tools (required for Python modules)
+        run: |
+          choco install visualstudio2017-workload-vctools
+        if: matrix.platform.name == 'windows'
+#
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
@@ -31,29 +59,58 @@ jobs:
           miniforge-version: latest
           miniforge-variant: Mambaforge
           use-mamba: true
-      - name: Clone the repository
+#
+      - name: Clone the devel branch (push to devel)
         run: git clone https://github.com/michellab/Sire
-      - name: Checkout the head branch if a pull request
-        run: |
-          cd Sire
-          git checkout "$HEAD_BRANCH"
-        env:
-          HEAD_BRANCH: ${{ github.head_ref }}
+        if: github.event_name != 'pull_request'
+#
+      - name: Clone the feature branch (pull request to devel)
+        run: git clone -b ${{ github.head_ref }} --single-branch https://github.com/michellab/Sire
         if: github.event_name == 'pull_request'
+#
       - name: Setup Conda
-        shell: bash -l {0}
-        run: mamba install -y -c conda-forge boa anaconda-client
+        run: mamba install -y -c conda-forge boa anaconda-client pip-requirements-parser
+#
       - name: Update Conda recipe
-        run: Sire/actions/update_recipe.sh
+        run:
+          python ${{ github.workspace }}/Sire/actions/update_recipe.py
+#
+      - name: Prepare build location
+        run: mkdir ${{ github.workspace }}/build
+#
+      - name: Build Conda package using mamba build
+        run: conda mambabuild --croot ${{ github.workspace }}/build -c conda-forge -c michellab ${{ github.workspace }}/Sire/recipes/sire
+        if: matrix.platform.name != 'windows' || matrix.python-version != '3.7'
+#
+      - name: Build Conda package using conda build
+        run: conda build --croot ${{ github.workspace }}/build -c conda-forge -c michellab ${{ github.workspace }}/Sire/recipes/sire
+        if: matrix.platform.name == 'windows' && matrix.python-version == '3.7'
+#
+      - name: Collect failed artifacts
+        run:
+          python ${{ github.workspace }}/Sire/actions/collect_failed.py
         env:
-          SRC_DIR: ${{ github.workspace }}/Sire
-      - name: Build Conda package
-        shell: bash -l {0}
-        run: conda mambabuild -c conda-forge -c michellab Sire/recipes/sire
+          BUILD_DIR: ${{ github.workspace }}/build
+        if: ${{ failure() }}
+#
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build-${{ matrix.platform.name }}-${{matrix.python-version}}-${{ github.sha }}
+          path: ${{ github.workspace }}/build/*/sire-*.tar.bz2
+          retention-days: 10
+        if: ${{ success() }}
+#
+      - uses: actions/upload-artifact@v2
+        with:
+          name: failed-${{ matrix.platform.name }}-${{matrix.python-version}}-${{ github.sha }}
+          path: ${{ github.workspace }}/build/failed.tar.bz2
+          retention-days: 1
+        if: ${{ failure() }}
+#
       - name: Upload Conda package
-        shell: bash -l {0}
-        run: Sire/actions/upload_package.sh
+        run: python ${{ github.workspace }}/Sire/actions/upload_package.py
         env:
           SRC_DIR: ${{ github.workspace }}/Sire
+          BUILD_DIR: ${{ github.workspace }}/build
           ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
         if: github.event_name != 'pull_request'

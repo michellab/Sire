@@ -1,3 +1,9 @@
+try:
+    import sire
+    sire.use_old_api()
+except ImportError:
+    pass
+
 from Sire.Tools import Nautilus
 from Sire.Tools import readParams
 
@@ -59,7 +65,7 @@ elif "gridforces" in params:
 else:
     gridforces = "grid.forces"
     params["gridforces"] = gridforces
-    
+
 if args.regionfile:
     regionfile = args.regionfile
     params["regionfile"] = regionfile
@@ -81,7 +87,7 @@ if not (os.path.exists(gridforces) and os.path.exists(regionfile)):
         print("cannot find grid file %s" % gridforces)
     sys.exit(-1)
 
-#print (params,args)	
+#print (params,args)
 print("\nRunning nautilus-regionproperties.py using files %s and %s" % (gridforces, regionfile) )
 Nautilus.regionproperties(params)
 

@@ -1,0 +1,10 @@
+boost
+gsl
+lazy_import
+libcblas
+libnetcdf
+openmm
+pymbar<4
+qt
+tbb
+tbb-devel

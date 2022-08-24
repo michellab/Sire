@@ -35,6 +35,8 @@ SireCAS::ExpressionBase __copy__(const SireCAS::ExpressionBase &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ExpressionBase_class(){
 
     { //::SireCAS::ExpressionBase
@@ -51,6 +53,7 @@ void register_ExpressionBase_class(){
             ExpressionBase_exposer.def( 
                 "children"
                 , children_function_value
+                , bp::release_gil_policy()
                 , "Return the child expressions of this Expression" );
         
         }
@@ -62,6 +65,7 @@ void register_ExpressionBase_class(){
             ExpressionBase_exposer.def( 
                 "conjugate"
                 , conjugate_function_value
+                , bp::release_gil_policy()
                 , "Return the complex conjugate of this expression" );
         
         }
@@ -74,6 +78,7 @@ void register_ExpressionBase_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return an expression that the differential of this expression\nwith respect to symbol. Note an exception may\nbe thrown if this cannot be differentiated.\nThrow: SireCAS::unavailable_differential\n" );
         
         }
@@ -86,6 +91,7 @@ void register_ExpressionBase_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this ExBase using values values. Any\nmissing symbols are assumed to equal zero.\nNote that an exception will be thrown if the result of the\nevaluation of this, or one of its children, is complex.\nThrow: SireMaths::math_error\nThrow: SireMaths::domain_error\n" );
         
         }
@@ -98,6 +104,7 @@ void register_ExpressionBase_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this ExBase using the complex values values.\nAny missing symbols are assumed to equal zero.\nThrow: SireMaths::math_error\n" );
         
         }
@@ -110,6 +117,7 @@ void register_ExpressionBase_class(){
                 "expand"
                 , expand_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the factors and powers for the symbol symbol, given the values of the\nother symbols in values. This attempts to rearrange this equation\nso that it is of the form m  symbol^i + n  symbol^j ... + constant,\nand it returns the values of m,i, n,j etc..\nNote that this will fail if such a rearrangement is not possible\nThrow: SireCAS::rearrangement_error\n" );
         
         }
@@ -121,6 +129,7 @@ void register_ExpressionBase_class(){
             ExpressionBase_exposer.def( 
                 "functions"
                 , functions_function_value
+                , bp::release_gil_policy()
                 , "Return the set of Functions that appear in this ExBase" );
         
         }
@@ -132,6 +141,7 @@ void register_ExpressionBase_class(){
             ExpressionBase_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash of this object - return a combination of the\nidentifying magic for the class and a hash for its contents." );
         
         }
@@ -144,6 +154,7 @@ void register_ExpressionBase_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the indefinite integral of this expression with respect to\nsymbol. This is not guaranteed to work() and will return an\nexpression of the form Sum( integral(exbase) + integral_constant ).\nIf it doesnt work then an exception will be throw.\nThrow: SireCAS::unavailable_integral\n" );
         
         }
@@ -155,6 +166,7 @@ void register_ExpressionBase_class(){
             ExpressionBase_exposer.def( 
                 "isComplex"
                 , isComplex_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this expression contains any complex (imaginary)\nparts" );
         
         }
@@ -166,6 +178,7 @@ void register_ExpressionBase_class(){
             ExpressionBase_exposer.def( 
                 "isCompound"
                 , isCompound_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a compound expression, and thus as such\nrequires brackets placed around it when it is printed. Examples include\nSum, Product and Power. For most other functions it is safe to leave\nthis as false." );
         
         }
@@ -177,6 +190,7 @@ void register_ExpressionBase_class(){
             ExpressionBase_exposer.def( 
                 "isConstant"
                 , isConstant_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a constant expression (does not\ndepend on any symbols)" );
         
         }
@@ -189,6 +203,7 @@ void register_ExpressionBase_class(){
                 "isFunction"
                 , isFunction_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Return whether or not this is a function of the passed Symbol" );
         
         }
@@ -229,6 +244,7 @@ void register_ExpressionBase_class(){
                 "series"
                 , series_function_value
                 , ( bp::arg("symbol"), bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Return a series expansion of this expression with respect to\nsymbol, if possible, to order\nn. This is not guaranteed to work, and will return this expression\nunchanged if it doesnt work. If it is expanded, then a series\nwill be returned, together with an estimate of the error (e.g. O(x^2))" );
         
         }
@@ -253,6 +269,7 @@ void register_ExpressionBase_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "Return an expression that has the identities in identities\nsubstituted into this expression" );
         
         }
@@ -264,6 +281,7 @@ void register_ExpressionBase_class(){
             ExpressionBase_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return the set of Symbols that appear in this ExBase" );
         
         }
@@ -275,6 +293,7 @@ void register_ExpressionBase_class(){
             ExpressionBase_exposer.def( 
                 "toOpenMMString"
                 , toOpenMMString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -286,6 +305,7 @@ void register_ExpressionBase_class(){
             ExpressionBase_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this object" );
         
         }
@@ -297,6 +317,7 @@ void register_ExpressionBase_class(){
             ExpressionBase_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "Return the name of the type of this ExBase object" );
         
         }

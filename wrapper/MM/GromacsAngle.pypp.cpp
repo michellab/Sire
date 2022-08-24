@@ -37,6 +37,8 @@ SireMM::GromacsAngle __copy__(const SireMM::GromacsAngle &other){ return SireMM:
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_GromacsAngle_class(){
@@ -58,6 +60,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "assertResolved"
                 , assertResolved_function_value
+                , bp::release_gil_policy()
                 , "Assert that the parameters for this angle have been resolved" );
         
         }
@@ -70,6 +73,7 @@ void register_GromacsAngle_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith parameter for this angle" );
         
         }
@@ -81,6 +85,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of parameters associated with this angle type" );
         
         }
@@ -92,6 +97,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "functionType"
                 , functionType_function_value
+                , bp::release_gil_policy()
                 , "Return the Gromacs ID number for the function type for this angle. See table\n5.5 in the Gromacs manual for information" );
         
         }
@@ -103,6 +109,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "functionTypeString"
                 , functionTypeString_function_value
+                , bp::release_gil_policy()
                 , "Return the string description of the function type for this angle" );
         
         }
@@ -114,6 +121,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash for this bond" );
         
         }
@@ -125,6 +133,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "isBondAngleCrossTerm"
                 , isBondAngleCrossTerm_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this angle is really a mix of bond and angle terms" );
         
         }
@@ -136,6 +145,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "isBondBondCrossTerm"
                 , isBondBondCrossTerm_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this angle is really a mix of multiple bond terms" );
         
         }
@@ -147,6 +157,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "isHarmonic"
                 , isHarmonic_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a harmonic angle" );
         
         }
@@ -158,6 +169,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "isResolved"
                 , isResolved_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the parameters for this angle are resolved" );
         
         }
@@ -169,6 +181,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "isSimple"
                 , isSimple_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a simple angle function, based only on the\nsize of the angle" );
         
         }
@@ -180,6 +193,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "needsResolving"
                 , needsResolving_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this parameter needs resolving" );
         
         }
@@ -222,6 +236,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "parameters"
                 , parameters_function_value
+                , bp::release_gil_policy()
                 , "Return all of the parameters for this angle" );
         
         }
@@ -233,6 +248,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of parameters associated with this angle type" );
         
         }
@@ -244,6 +260,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "toAngleTerm"
                 , toAngleTerm_function_value
+                , bp::release_gil_policy()
                 , "Return only the angle term part of this angle" );
         
         }
@@ -256,6 +273,7 @@ void register_GromacsAngle_class(){
                 "toBondAngleExpression"
                 , toBondAngleExpression_function_value
                 , ( bp::arg("r"), bp::arg("theta") )
+                , bp::release_gil_policy()
                 , "Return this function converted to a SireCAS::Expression using the passed symbol\nto represent the bond length (r02) and angle size (t012)" );
         
         }
@@ -268,6 +286,7 @@ void register_GromacsAngle_class(){
                 "toBondBondExpression"
                 , toBondBondExpression_function_value
                 , ( bp::arg("r01"), bp::arg("r12"), bp::arg("r02") )
+                , bp::release_gil_policy()
                 , "Return this function converted to a SireCAS::Expression using the passed symbol\nto represent the bond lengths r01, r12 and r02" );
         
         }
@@ -279,6 +298,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "toBondTerm"
                 , toBondTerm_function_value
+                , bp::release_gil_policy()
                 , "Return only the bond term part of this angle" );
         
         }
@@ -291,6 +311,7 @@ void register_GromacsAngle_class(){
                 "toExpression"
                 , toExpression_function_value
                 , ( bp::arg("theta") )
+                , bp::release_gil_policy()
                 , "Return this function converted to a SireCAS::Expression using the passed symbol\nto represent the angle size" );
         
         }
@@ -302,6 +323,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this angle" );
         
         }
@@ -313,6 +335,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -324,6 +347,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

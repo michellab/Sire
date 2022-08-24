@@ -39,6 +39,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Restraint_class(){
 
     { //::SireMM::Restraint
@@ -53,6 +55,7 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "builtinSymbols"
                 , builtinSymbols_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -64,6 +67,7 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "builtinValues"
                 , builtinValues_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -76,6 +80,7 @@ void register_Restraint_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -88,6 +93,7 @@ void register_Restraint_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molid") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -100,6 +106,7 @@ void register_Restraint_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -111,6 +118,7 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "energy"
                 , energy_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -123,6 +131,7 @@ void register_Restraint_class(){
                 "getValue"
                 , getValue_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -135,6 +144,7 @@ void register_Restraint_class(){
                 "hasValue"
                 , hasValue_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -146,6 +156,7 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "molecules"
                 , molecules_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -170,6 +181,7 @@ void register_Restraint_class(){
                 "setValue"
                 , setValue_function_value
                 , ( bp::arg("symbol"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -181,6 +193,7 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -192,6 +205,7 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -203,6 +217,7 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -215,6 +230,7 @@ void register_Restraint_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -227,6 +243,7 @@ void register_Restraint_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -238,6 +255,7 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "userSymbols"
                 , userSymbols_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -249,6 +267,7 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "userValues"
                 , userValues_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -261,6 +280,7 @@ void register_Restraint_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -272,6 +292,7 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "values"
                 , values_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -42,6 +42,7 @@
 #include "SireMol/atomelements.h"
 #include "SireMol/connectivity.h"
 #include "SireMol/select.h"
+#include "SireMol/core.h"
 
 #include "SireMM/internalff.h"
 #include "SireMM/atomljs.h"

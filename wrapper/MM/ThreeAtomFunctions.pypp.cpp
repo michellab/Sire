@@ -35,6 +35,8 @@ SireMM::ThreeAtomFunctions __copy__(const SireMM::ThreeAtomFunctions &other){ re
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ThreeAtomFunctions_class(){
 
     { //::SireMM::ThreeAtomFunctions
@@ -53,6 +55,7 @@ void register_ThreeAtomFunctions_class(){
                 "clear"
                 , clear_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Clear all functions that involve the atom atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -65,6 +68,7 @@ void register_ThreeAtomFunctions_class(){
                 "clear"
                 , clear_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Clear any function that acts on the atoms identified by atom\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -77,6 +81,7 @@ void register_ThreeAtomFunctions_class(){
                 "clear"
                 , clear_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )
+                , bp::release_gil_policy()
                 , "Clear any function that acts between the atoms atom0 to atom2\nThrow: SireError::invalid_index\n" );
         
         }
@@ -89,6 +94,7 @@ void register_ThreeAtomFunctions_class(){
                 "clear"
                 , clear_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )
+                , bp::release_gil_policy()
                 , "Clear any function that acts between the atoms atom0 to atom2\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -101,6 +107,7 @@ void register_ThreeAtomFunctions_class(){
                 "clear"
                 , clear_function_value
                 , ( bp::arg("angleid") )
+                , bp::release_gil_policy()
                 , "Clear the potential that acts over the angle identified by angleid\nThis clears both 1-2-3 and 3-2-1\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -112,6 +119,7 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Completely clear all of the functions from this set" );
         
         }
@@ -124,6 +132,7 @@ void register_ThreeAtomFunctions_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the force (derivative of the potential with respect to symbol)\nbetween the atoms atom0 to atom2\nThrow: SireError::invalid_index\n" );
         
         }
@@ -136,6 +145,7 @@ void register_ThreeAtomFunctions_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the force (derivative of the potential with respect to symbol)\nbetween the atoms atom0 to atom2\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -148,6 +158,7 @@ void register_ThreeAtomFunctions_class(){
                 "force"
                 , force_function_value
                 , ( bp::arg("angleid"), bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the force (derivative of the potential with respect to symbol)\non the angle identified by angleid\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -160,6 +171,7 @@ void register_ThreeAtomFunctions_class(){
                 "forces"
                 , forces_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the force functions acting between the identified\ntriples of atoms, for the given symbol" );
         
         }
@@ -183,6 +195,7 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is empty (has no potentials for any internals)" );
         
         }
@@ -194,6 +207,7 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "nFunctions"
                 , nFunctions_function_value
+                , bp::release_gil_policy()
                 , "Return the number of functions in this set" );
         
         }
@@ -221,6 +235,7 @@ void register_ThreeAtomFunctions_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )
+                , bp::release_gil_policy()
                 , "Return the function acting between the atoms atom0 to atom2.\nThis returns an empty expression if there is no expression between\nthese atoms\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_atom\n" );
         
         }
@@ -233,6 +248,7 @@ void register_ThreeAtomFunctions_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )
+                , bp::release_gil_policy()
                 , "Return the function acting between the atoms atom0 to atom2.\nThis returns an empty expression if there is no expression between\nthese atoms\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -245,6 +261,7 @@ void register_ThreeAtomFunctions_class(){
                 "potential"
                 , potential_function_value
                 , ( bp::arg("angleid") )
+                , bp::release_gil_policy()
                 , "Return the function acting on the angle identified by angleid.\nThis returns an empty expression if there is no expression on\nthis angle\nThis search first for the function for 1-2-3, but if that\nis not found, then it returns the function for 3-2-1\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -256,6 +273,7 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "potentials"
                 , potentials_function_value
+                , bp::release_gil_policy()
                 , "Return the potential energy functions acting between the identified\ntriples of atoms" );
         
         }
@@ -268,6 +286,7 @@ void register_ThreeAtomFunctions_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("expression") )
+                , bp::release_gil_policy()
                 , "Set the potential energy function used by atoms atom0, atom1 and atom2\nto be equal to expression - this replaces any existing expression\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_atom\n" );
         
         }
@@ -280,6 +299,7 @@ void register_ThreeAtomFunctions_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("expression") )
+                , bp::release_gil_policy()
                 , "Set the potential energy function used by atoms atom0 to atom2\nto be equal to expression - this replaces any existing expression\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -292,6 +312,7 @@ void register_ThreeAtomFunctions_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("angleid"), bp::arg("expression") )
+                , bp::release_gil_policy()
                 , "Set the potential energy function used for the angle identified by angleid\nto be equal to expression - this replaces any existing expression\nThis replaces both 1-2-3 and 3-2-1\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -304,6 +325,7 @@ void register_ThreeAtomFunctions_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "Perform the substitutions contained in identities in all of\nthe expressions in this set. This could be useful if you have\ndefined these expressions with respect to a lambda parameter,\nand now want to set that value of lambda" );
         
         }
@@ -315,6 +337,7 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation" );
         
         }
@@ -326,6 +349,7 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

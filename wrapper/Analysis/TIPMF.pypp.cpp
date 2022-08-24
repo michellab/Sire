@@ -31,6 +31,8 @@ SireAnalysis::TIPMF __copy__(const SireAnalysis::TIPMF &other){ return SireAnaly
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_TIPMF_class(){
 
     { //::SireAnalysis::TIPMF
@@ -49,6 +51,7 @@ void register_TIPMF_class(){
             TIPMF_exposer.def( 
                 "dropEndPoints"
                 , dropEndPoints_function_value
+                , bp::release_gil_policy()
                 , "Return a copy of the PMF where the gradients at the end points\n(the first and last gradients) have been removed. This can be used\nto estimate the effect of end-point error" );
         
         }
@@ -60,6 +63,7 @@ void register_TIPMF_class(){
             TIPMF_exposer.def( 
                 "gradients"
                 , gradients_function_value
+                , bp::release_gil_policy()
                 , "Return the raw gradients used to calculate the PMF" );
         
         }
@@ -71,6 +75,7 @@ void register_TIPMF_class(){
             TIPMF_exposer.def( 
                 "integral"
                 , integral_function_value
+                , bp::release_gil_policy()
                 , "Return the free energy calculated using integration of the\npolynomial fitted to the gradients" );
         
         }
@@ -97,6 +102,7 @@ void register_TIPMF_class(){
             TIPMF_exposer.def( 
                 "order"
                 , order_function_value
+                , bp::release_gil_policy()
                 , "Return the order (number of polynomials) used to integrate\nthe gradients to get the PMF" );
         
         }
@@ -108,6 +114,7 @@ void register_TIPMF_class(){
             TIPMF_exposer.def( 
                 "quadrature"
                 , quadrature_function_value
+                , bp::release_gil_policy()
                 , "Return the free energy calculated using trapezium quadrature\nfrom the raw gradients" );
         
         }
@@ -119,6 +126,7 @@ void register_TIPMF_class(){
             TIPMF_exposer.def( 
                 "rangeMax"
                 , rangeMax_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum value of the range of integration" );
         
         }
@@ -130,6 +138,7 @@ void register_TIPMF_class(){
             TIPMF_exposer.def( 
                 "rangeMin"
                 , rangeMin_function_value
+                , bp::release_gil_policy()
                 , "Return the minimum value of the range of integration" );
         
         }
@@ -142,6 +151,7 @@ void register_TIPMF_class(){
                 "setGradients"
                 , setGradients_function_value
                 , ( bp::arg("gradients") )
+                , bp::release_gil_policy()
                 , "Set the raw gradients to be integrated" );
         
         }
@@ -154,6 +164,7 @@ void register_TIPMF_class(){
                 "setOrder"
                 , setOrder_function_value
                 , ( bp::arg("order") )
+                , bp::release_gil_policy()
                 , "Set the order (number of polynomials) to fit the gradients for\nPMF integration" );
         
         }
@@ -166,6 +177,7 @@ void register_TIPMF_class(){
                 "setRange"
                 , setRange_function_value
                 , ( bp::arg("min_x"), bp::arg("max_x") )
+                , bp::release_gil_policy()
                 , "Set the range of integration" );
         
         }
@@ -177,6 +189,7 @@ void register_TIPMF_class(){
             TIPMF_exposer.def( 
                 "smoothedGradients"
                 , smoothedGradients_function_value
+                , bp::release_gil_policy()
                 , "Return the smoothed (fitted) gradients used to calculate the PMF" );
         
         }
@@ -188,6 +201,7 @@ void register_TIPMF_class(){
             TIPMF_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -199,6 +213,7 @@ void register_TIPMF_class(){
             TIPMF_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -210,6 +225,7 @@ void register_TIPMF_class(){
             TIPMF_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

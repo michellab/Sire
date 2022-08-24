@@ -75,6 +75,12 @@ ResID::ResID(const ResID &other) : ID(other)
 ResID::~ResID()
 {}
 
+/** Return an ResID constructed from the passed string */
+ResIdentifier ResID::fromString(const QString &id)
+{
+    return ResName(id);
+}
+
 /** Return a specific object that matches this ID */
 Specify<ResID> ResID::operator[](qint64 i) const
 {
@@ -383,7 +389,7 @@ QList<ResIdx> ResID::map(const MoleculeView &molview, const PropertyMap&) const
 
         if (residxs.isEmpty())
             throw SireMol::missing_residue( QObject::tr(
-                    "No atoms matching %1 can be found in the passed molecule.")
+                    "No residues matching %1 can be found in the passed molecule.")
                         .arg(this->toString()), CODELOC );
 
         return residxs;
@@ -402,8 +408,8 @@ Residue ResID::selectFrom(const MoleculeView &molview, const PropertyMap &map) c
 
     if (residxs.count() > 1)
         throw SireMol::duplicate_residue( QObject::tr(
-                "More than one atom matches the ID %1 (atoms %2).")
-                    .arg(this->toString()).arg(Sire::toString(residxs)),
+                "More than one residue matches the ID %1 (number of matches is %2).")
+                    .arg(this->toString()).arg(residxs.count()),
                         CODELOC );
 
     return Residue(molview.data(), residxs.at(0));

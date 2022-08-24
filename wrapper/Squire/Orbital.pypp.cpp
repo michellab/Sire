@@ -19,6 +19,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Orbital_class(){
 
     { //::Squire::Orbital
@@ -33,6 +35,7 @@ void register_Orbital_class(){
             Orbital_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -44,6 +47,7 @@ void register_Orbital_class(){
             Orbital_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

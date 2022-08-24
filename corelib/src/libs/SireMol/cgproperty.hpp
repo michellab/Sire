@@ -32,6 +32,7 @@
 #include <QVector>
 
 #include "SireBase/qvariant_metatype.h"
+#include "SireBase/convert_property.hpp"
 
 #include "moleculeinfodata.h"
 #include "molviewproperty.h"
@@ -73,30 +74,33 @@ class SIREMOL_EXPORT CGProp : public MolViewProperty
 public:
     CGProp();
     CGProp(const CGProp &other);
-    
+
     virtual ~CGProp();
-    
+
     virtual bool canConvert(const QVariant &value) const=0;
-    
+
     virtual void assignFrom(const CGProperty<QVariant> &values)=0;
-    
+
+    virtual QVariant getAsVariant(const CGIdx &cgidx) const=0;
+    virtual SireBase::PropertyPtr getAsProperty(const CGIdx &cgidx) const=0;
+
     virtual CGProperty<QVariant> toVariant() const=0;
-    
+
     virtual void assertCanConvert(const QVariant &value) const=0;
 };
 
 /** This is a property that can hold one value for each
     CutGroup in the molecule.
-    
+
     mol.setProperty( "charge", CGCharges( [....] ) )
     mol.setProperty( "lj", CGLJs( [....] ) )
 
     cg.setProperty( "charge", 0.0 * mod_e )
-    
+
     @author Christopher Woods
 */
 template<class T>
-class SIREMOL_EXPORT CGProperty 
+class SIREMOL_EXPORT CGProperty
     : public SireBase::ConcreteProperty<CGProperty<T>, CGProp>
 {
 
@@ -107,25 +111,28 @@ public:
     CGProperty();
 
     CGProperty(const MoleculeInfoData &molinfo);
-    
+
     CGProperty(const QVector<T> &values);
-    
+
     CGProperty(const CGProperty<T> &other);
-    
+
     ~CGProperty();
-    
+
     CGProperty<T>& operator=(const CGProperty<T> &other);
-    
+
     static const char* typeName();
-    
+
     CGProperty<T>* clone() const;
-    
+
     bool operator==(const CGProperty<T> &other) const;
     bool operator!=(const CGProperty<T> &other) const;
 
     const T& operator[](const CGIdx &cgidx) const;
     const T& at(const CGIdx &cgidx) const;
     const T& get(const CGIdx &cgidx) const;
+
+    QVariant getAsVariant(const CGIdx &idx) const;
+    SireBase::PropertyPtr getAsProperty(const CGIdx &idx) const;
 
     CGProperty<T>& set(CGIdx cgidx, const T &value);
 
@@ -138,19 +145,19 @@ public:
 
     int size() const;
     int count() const;
-    
+
     int nCutGroups() const;
 
     void assignFrom(const CGProperty<QVariant> &variant);
 
     const QVector<T>& array() const;
-    
+
     CGProperty<QVariant> toVariant() const;
-    
+
     static CGProperty<T> fromVariant(const CGProperty<QVariant> &variant);
-    
+
     bool canConvert(const QVariant &value) const;
-    
+
     void assertCanConvert(const QVariant &value) const;
 
     bool isCompatibleWith(const MoleculeInfoData &molinfo) const;
@@ -169,7 +176,7 @@ CGProperty<T>::CGProperty()
               : SireBase::ConcreteProperty<CGProperty<T>,CGProp>()
 {}
 
-/** Construct space for the values of the property for all of the 
+/** Construct space for the values of the property for all of the
     CutGroups in the molecule described by 'molinfo' */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -195,7 +202,7 @@ CGProperty<T>::CGProperty(const QVector<T> &values)
 
 /** Assert that the variant can be converted to a value that can
     be held in this list of properties
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -252,7 +259,7 @@ bool CGProperty<T>::operator!=(const CGProperty<T> &other) const
     return props != other.props;
 }
 
-/** Return the property for the CutGroup at index 'cgidx' 
+/** Return the property for the CutGroup at index 'cgidx'
 
     \throw SireError::invalid_index
 */
@@ -262,7 +269,7 @@ const T& CGProperty<T>::operator[](const CGIdx &cgidx) const
 {
     return props.constData()[cgidx.map(props.count())];
 }
-    
+
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 const char* CGProperty<T>::typeName()
@@ -309,13 +316,13 @@ CGProperty<T> CGProperty<T>::fromVariant(const CGProperty<QVariant> &variant)
 {
     CGProperty<T> array;
     array.assignFrom(variant);
-    
+
     return array;
 }
 
 /** Assign the values of this property from the array of variants
     in 'values'
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -327,19 +334,19 @@ void CGProperty<T>::assignFrom(const CGProperty<QVariant> &variant)
         props.clear();
         return;
     }
-        
+
     int nvals = variant.count();
     const QVariant *variant_array = variant.constData();
-    
+
     props = QVector<T>(nvals);
     props.squeeze();
     T *props_array = props.data();
-    
+
     for (int i=0; i<nvals; ++i)
     {
         const QVariant &value = variant_array[i];
         CGProperty<T>::assertCanConvert(value);
-        
+
         if (value.isNull())
             props_array[i] = T();
         else
@@ -354,10 +361,10 @@ CGProperty<QVariant> CGProperty<T>::toVariant() const
 {
     if (props.isEmpty())
         return CGProperty<QVariant>();
-        
+
     int nvals = props.count();
     const T *props_array = props.constData();
-    
+
     QVector<QVariant> converted_vals(nvals);
     converted_vals.squeeze();
     QVariant *converted_vals_array = converted_vals.data();
@@ -366,11 +373,11 @@ CGProperty<QVariant> CGProperty<T>::toVariant() const
     {
         converted_vals_array[i].setValue<T>(props_array[i]);
     }
-    
+
     return CGProperty<QVariant>(converted_vals);
 }
 
-/** Return the property for the CutGroup at index 'cgidx' 
+/** Return the property for the CutGroup at index 'cgidx'
 
     \throw SireError::invalid_index
 */
@@ -381,7 +388,7 @@ const T& CGProperty<T>::at(const CGIdx &cgidx) const
     return this->operator[](cgidx);
 }
 
-/** Return the property for the CutGroup at index 'cgidx' 
+/** Return the property for the CutGroup at index 'cgidx'
 
     \throw SireError::invalid_index
 */
@@ -392,7 +399,35 @@ const T& CGProperty<T>::get(const CGIdx &cgidx) const
     return this->operator[](cgidx);
 }
 
-/** Set the value of the property for the CutGroup at 
+/** Return the value for the passed index, as
+    a QVariant. This lets you get the value without knowing the
+    actual type of this property
+
+    \throw SireError::invalid_index
+*/
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QVariant CGProperty<T>::getAsVariant(const CGIdx &cgidx) const
+{
+    const T &value = this->get(cgidx);
+    return QVariant::fromValue(value);
+}
+
+/** Return the value for this index as a
+    Property. This lets you get the value without knowing the
+    actual type of this property
+
+   \throw SireError::invalid_index
+*/
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SireBase::PropertyPtr CGProperty<T>::getAsProperty(
+                                const CGIdx &cgidx) const
+{
+    return SireBase::convert_property(this->get(cgidx));
+}
+
+/** Set the value of the property for the CutGroup at
     index 'cgidx' */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -471,7 +506,7 @@ QDataStream& operator<<(QDataStream &ds, const SireMol::CGProperty<T> &prop)
     //serialise the base class - this writes the header and version!
     ds << static_cast<const SireMol::CGProp&>(prop);
     ds << prop.props;
-    
+
     return ds;
 }
 
@@ -482,7 +517,7 @@ QDataStream& operator>>(QDataStream &ds, SireMol::CGProperty<T> &prop)
 {
     ds >> static_cast<SireMol::CGProp&>(prop);
     ds >> prop.props;
-        
+
     return ds;
 }
 

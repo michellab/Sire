@@ -47,6 +47,8 @@ SireCluster::ThisThread __copy__(const SireCluster::ThisThread &other){ return S
 
 const char* pvt_get_name(const SireCluster::ThisThread&){ return "SireCluster::ThisThread";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ThisThread_class(){
 
     { //::SireCluster::ThisThread
@@ -76,6 +78,7 @@ void register_ThisThread_class(){
             ThisThread_exposer.def( 
                 "reclaim"
                 , reclaim_function_value
+                , bp::release_gil_policy()
                 , "Reclaim this thread" );
         
         }

@@ -39,6 +39,7 @@
 #include "SireMol/mgname.h"
 #include "SireMol/moleditor.h"
 #include "SireMol/molidx.h"
+#include "SireMol/core.h"
 
 #include "SireVol/periodicbox.h"
 #include "SireVol/triclinicbox.h"
@@ -935,10 +936,16 @@ System repartitionHydrogenMass(
         {
             PropertyMap pmap;
 
+            // Whether to use coordinates to reconstruct the
+            // connectivity.
+            if (map["use_coordinates"].hasValue())
+            {
+                pmap.set("use_coordinates", map["use_coordinates"]);
+            }
+
             // Lambda = 0 mappings.
             pmap.set("mass", "mass0");
             pmap.set("element", "element0");
-            pmap.set("connectivity", "connectivity0");
             pmap.set("coordinates", "coordinates0");
 
             molecule = repartitionHydrogenMass(
@@ -947,7 +954,6 @@ System repartitionHydrogenMass(
             // Lambda = 1 mappings.
             pmap.set("mass", "mass1");
             pmap.set("element", "element1");
-            pmap.set("connectivity", "connectivity1");
             pmap.set("coordinates", "coordinates1");
 
             molecule = repartitionHydrogenMass(
@@ -955,8 +961,18 @@ System repartitionHydrogenMass(
         }
         else
         {
+            // Copy the property map.
+            PropertyMap pmap = map;
+
+            // Whether to use coordinates to reconstruct the
+            // connectivity.
+            if (map["use_coordinates"].hasValue())
+            {
+                pmap.set("use_coordinates", map["use_coordinates"]);
+            }
+
             molecule = repartitionHydrogenMass(
-                molecule, factor, water, map);
+                molecule, factor, water, pmap);
         }
 
         molgroup.add(molecule);
@@ -985,9 +1001,10 @@ Molecule repartitionHydrogenMass(
         return molecule;
     }
 
-    // Get the name of the element and mass properties.
+    // Get the name of the element, mass, and connectivity properties.
     const auto elem_prop = map["element"];
     const auto mass_prop = map["mass"];
+    const auto conn_prop = map["connectivity"];
 
     if (not molecule.hasProperty(elem_prop))
     {
@@ -1022,9 +1039,24 @@ Molecule repartitionHydrogenMass(
     if (hydrogens.count() == 0)
         return molecule;
 
-    // Generate the molecular connectivity. (Don't rely on the "connectivity"
-    // property.)
-    const auto connectivity = Connectivity(molecule, CovalentBondHunter(), map);
+    Connectivity connectivity;
+    // Generate the connectivity from the coordinates.
+    if (map["use_coordinates"].hasValue())
+    {
+        connectivity = Connectivity(molecule, CovalentBondHunter(), map);
+    }
+    // Use the "connectivity" property, if present.
+    else
+    {
+        if (not molecule.hasProperty(conn_prop))
+        {
+            throw SireError::incompatible_error(QObject::tr(
+                "The molecule doesn't have a \"%1\" property!")
+                    .arg(conn_prop.toString()), CODELOC);
+        }
+
+        connectivity = molecule.property(conn_prop).asA<Connectivity>();
+    }
 
     // Compute the initial mass.
     double initial_mass = 0;
@@ -1049,7 +1081,7 @@ Molecule repartitionHydrogenMass(
                            .molecule();
 
         // Store the indices of the atoms that are connected to this hydrogen.
-        connections.append(connectivity.connectionsTo(idx).toList());
+        connections.append(connectivity.connectionsTo(idx).values());
     }
 
     // Commit the changes.
@@ -1198,7 +1230,7 @@ boost::tuple<System, QHash<MolIdx, MolIdx> > updateCoordinatesAndVelocities(
                         }
 
                         // Try to update the velocity property. This isn't always present,
-                        // so olny try this when the passed system contains the property.
+                        // so only try this when the passed system contains the property.
                         if (molecule1.hasProperty(prop_v1))
                         {
                             try
@@ -1239,7 +1271,7 @@ boost::tuple<System, QHash<MolIdx, MolIdx> > updateCoordinatesAndVelocities(
     else
     {
         // Loop over the mapping.
-        for (const auto &molIdx0 : molecule_mapping)
+        for (const auto &molIdx0 : molecule_mapping.keys())
         {
             // Get the molecule index in molecule1.
             const auto molIdx1 = molecule_mapping[molIdx0];
@@ -1398,7 +1430,7 @@ boost::tuple<System, QHash<MolIdx, MolIdx> > updateCoordinatesAndVelocities(
                         }
 
                         // Try to update the velocity property. This isn't always present,
-                        // so olny try this when the passed system contains the property.
+                        // so only try this when the passed system contains the property.
                         if (molecule_updated.hasProperty(prop_v1))
                         {
                             try
@@ -1439,7 +1471,7 @@ boost::tuple<System, QHash<MolIdx, MolIdx> > updateCoordinatesAndVelocities(
     else
     {
         // Loop over the mapping.
-        for (const auto &molIdx0 : molecule_mapping)
+        for (const auto &molIdx0 : molecule_mapping.keys())
         {
             // Get the molecule index in molecule1.
             const auto molIdx1 = molecule_mapping[molIdx0];

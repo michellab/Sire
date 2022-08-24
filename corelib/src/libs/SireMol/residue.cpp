@@ -58,13 +58,13 @@ using namespace SireStream;
 
 static const RegisterMetaType<ResProp> r_resprop(MAGIC_ONLY,
                                                  "SireMol::ResProp");
-                                                   
+
 /** Serialise to a binary datastream */
 QDataStream &operator<<(QDataStream &ds, const ResProp &resprop)
 {
     writeHeader(ds, r_resprop, 1)
          << static_cast<const MolViewProperty&>(resprop);
-         
+
     return ds;
 }
 
@@ -72,14 +72,14 @@ QDataStream &operator<<(QDataStream &ds, const ResProp &resprop)
 QDataStream &operator>>(QDataStream &ds, ResProp &resprop)
 {
     VersionID v = readHeader(ds, r_resprop);
-    
+
     if (v == 1)
     {
         ds >> static_cast<MolViewProperty&>(resprop);
     }
     else
         throw version_error(v, "1", r_resprop, CODELOC);
-        
+
     return ds;
 }
 
@@ -104,7 +104,7 @@ QDataStream &operator<<(QDataStream &ds, const Residue &res)
     writeHeader(ds, r_res, 1);
 
     SharedDataStream sds(ds);
-    
+
     sds << res.residx << static_cast<const MoleculeView&>(res);
 
     return ds;
@@ -118,9 +118,9 @@ QDataStream &operator>>(QDataStream &ds, Residue &res)
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> res.residx >> static_cast<MoleculeView&>(res);
-        
+
         res.selected_atoms = AtomSelection(res.data());
         res.selected_atoms.selectOnly(res.residx);
     }
@@ -151,7 +151,7 @@ Residue::Residue(const MoleculeData &moldata, const ResID &resid)
     selected_atoms = AtomSelection(moldata);
     selected_atoms.selectOnly(residx);
 }
-        
+
 /** Copy constructor */
 Residue::Residue(const Residue &other)
         : ConcreteProperty<Residue,MoleculeView>(other), residx(other.residx),
@@ -171,14 +171,14 @@ Residue& Residue::operator=(const Residue &other)
         residx = other.residx;
         selected_atoms = other.selected_atoms;
     }
-    
+
     return *this;
 }
 
 /** Comparison operator */
 bool Residue::operator==(const Residue &other) const
 {
-    return residx == other.residx and 
+    return residx == other.residx and
            MoleculeView::operator==(other);
 }
 
@@ -192,9 +192,16 @@ bool Residue::operator!=(const Residue &other) const
 /** Return a string representation of this residue */
 QString Residue::toString() const
 {
-    return QObject::tr( "Residue( %1 : %2 )" )
-                .arg( this->name() )
-                .arg( this->number() );
+    QString n = QString("%1:%2").arg(this->name()).arg(this->number());
+
+    return QObject::tr( "Residue( %1 num_atoms=%2 )" )
+                .arg( n, -7 )
+                .arg( this->nAtoms() );
+}
+
+MolViewPtr Residue::toSelector() const
+{
+    return MolViewPtr( Selector<Residue>(*this) );
 }
 
 /** Is this residue empty? */
@@ -237,7 +244,7 @@ void Residue::update(const MoleculeData &moldata)
                 .arg(moldata.number()).arg(moldata.info().UID().toString()),
                     CODELOC );
     }
-    
+
     d = moldata;
 }
 
@@ -265,14 +272,14 @@ Mover<Residue> Residue::move() const
     return Mover<Residue>(*this);
 }
 
-/** Return an Evaluator that evaluates values using all of 
+/** Return an Evaluator that evaluates values using all of
     the atoms in the residue */
 Evaluator Residue::evaluate() const
 {
     return Evaluator(*this);
 }
 
-/** Return an editor that can be used to edit any of the  
+/** Return an editor that can be used to edit any of the
     atoms of this residue */
 ResEditor Residue::edit() const
 {
@@ -298,21 +305,21 @@ const QList<AtomIdx>& Residue::atomIdxs() const
     return d->info().getAtomsIn(residx);
 }
 
-/** Return whether or not this residue contains the atom 
+/** Return whether or not this residue contains the atom
     at index 'atomidx' */
 bool Residue::contains(AtomIdx atomidx) const
 {
     return d->info().contains(residx, atomidx);
 }
 
-/** Return whether or not this residue contains all of 
+/** Return whether or not this residue contains all of
     the atoms identified by the ID 'atomid' */
 bool Residue::contains(const AtomID &atomid) const
 {
     return d->info().contains(residx, atomid);
 }
 
-/** Return whether or not this residue contains some of  
+/** Return whether or not this residue contains some of
     the atoms identified by the ID 'atomid' */
 bool Residue::intersects(const AtomID &atomid) const
 {
@@ -323,6 +330,20 @@ bool Residue::intersects(const AtomID &atomid) const
 bool Residue::isWithinChain() const
 {
     return d->info().isWithinChain(residx);
+}
+
+/** Return the specified property as a QVariant */
+QVariant Residue::propertyAsVariant(const PropertyName &key) const
+{
+    const Property &property = d->property(key);
+    return property.asA<ResProp>().getAsVariant(residx);
+}
+
+/** Return the specified property as a PropertyPtr */
+PropertyPtr Residue::propertyAsProperty(const PropertyName &key) const
+{
+    const Property &property = d->property(key);
+    return property.asA<ResProp>().getAsProperty(residx);
 }
 
 /** Return whether or not there is a ResProperty at key 'key' */
@@ -339,7 +360,7 @@ bool Residue::hasMetadata(const PropertyName &metakey) const
 
 /** Return whether the metadata at metakey 'metakey' for the property
     at key 'key' is a ResProperty
-    
+
     \throw SireBase::missing_property
 */
 bool Residue::hasMetadata(const PropertyName &key,
@@ -389,7 +410,7 @@ void Residue::assertContainsMetadata(const PropertyName &key,
             "There is no residue metadata at metakey \"%1\" for the "
             "property at key \"%2\" for the "
             "residue %2 (%3) in the molecule \"%4\".")
-                .arg(metakey.toString(), key.toString(), 
+                .arg(metakey.toString(), key.toString(),
                      this->name()).arg(this->number())
                 .arg(d->name()), CODELOC );
 }
@@ -406,9 +427,9 @@ QStringList Residue::metadataKeys() const
     return d->properties().metadataKeysOfType<ResProp>();
 }
 
-/** Return the metakeys of all ResProperty metadata for 
+/** Return the metakeys of all ResProperty metadata for
     the property at key 'key'
-    
+
     \throw SireBase::missing_property
 */
 QStringList Residue::metadataKeys(const PropertyName &key) const
@@ -421,23 +442,23 @@ const char* Residue::typeName()
     return QMetaType::typeName( qMetaTypeId<Residue>() );
 }
 
-bool SireMol::detail::has_property(const Residue*, 
+bool SireMol::detail::has_property(const Residue*,
                                                   const MoleculeData &moldata,
                                                   const PropertyName &key)
 {
     return moldata.hasPropertyOfType<ResProp>(key);
 }
 
-bool SireMol::detail::has_metadata(const Residue*, 
+bool SireMol::detail::has_metadata(const Residue*,
                                                   const MoleculeData &moldata,
                                                   const PropertyName &metakey)
 {
     return moldata.hasMetadataOfType<ResProp>(metakey);
 }
 
-bool SireMol::detail::has_metadata(const Residue*, 
+bool SireMol::detail::has_metadata(const Residue*,
                                                   const MoleculeData &moldata,
-                                                  const PropertyName &key, 
+                                                  const PropertyName &key,
                                                   const PropertyName &metakey)
 {
     return moldata.hasMetadataOfType<ResProp>(key, metakey);

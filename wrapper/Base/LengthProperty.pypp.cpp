@@ -27,6 +27,8 @@ SireBase::LengthProperty __copy__(const SireBase::LengthProperty &other){ return
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_LengthProperty_class(){
 
     { //::SireBase::LengthProperty
@@ -59,6 +61,7 @@ void register_LengthProperty_class(){
             LengthProperty_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -70,6 +73,7 @@ void register_LengthProperty_class(){
             LengthProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -81,6 +85,7 @@ void register_LengthProperty_class(){
             LengthProperty_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "Return this number cast as a double" );
         
         }

@@ -60,5 +60,5 @@ install (FILES ${CMAKE_BINARY_DIR}/sire_python_version.h
          DESTINATION ${SIRE_INCLUDES})
 
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/__init__.py
-         DESTINATION ${SIRE_PYTHON}/Sire/Config/)
+         DESTINATION ${SIRE_PYTHON}/sire/legacy/Config/)
 

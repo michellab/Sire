@@ -43,6 +43,8 @@ SireIO::Tinker __copy__(const SireIO::Tinker &other){ return SireIO::Tinker(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Tinker_class(){
 
     { //::SireIO::Tinker
@@ -59,6 +61,7 @@ void register_Tinker_class(){
                 "loadParameters"
                 , loadParameters_function_value
                 , ( bp::arg("prmfile") )
+                , bp::release_gil_policy()
                 , "Load the parameter file prmfile into this reader. This will allow\nthe reader to parameterise the molecules as they are being read" );
         
         }
@@ -97,6 +100,7 @@ void register_Tinker_class(){
             Tinker_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

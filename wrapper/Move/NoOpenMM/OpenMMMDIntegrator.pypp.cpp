@@ -31,6 +31,8 @@ namespace bp = boost::python;
 
 #include "SireMol/bondid.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/connectivity.h"
 
 #include "SireMol/mgname.h"

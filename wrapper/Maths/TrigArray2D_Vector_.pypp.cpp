@@ -41,6 +41,8 @@ SireBase::TrigArray2D<SireMaths::Vector> __copy__(const SireBase::TrigArray2D<Si
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_TrigArray2D_Vector__class(){
@@ -120,6 +122,7 @@ void register_TrigArray2D_Vector__class(){
                 "redimension"
                 , redimension_function_value
                 , ( bp::arg("dimension") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -133,6 +136,7 @@ void register_TrigArray2D_Vector__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -146,6 +150,7 @@ void register_TrigArray2D_Vector__class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -158,6 +163,7 @@ void register_TrigArray2D_Vector__class(){
             TrigArray2D_Vector__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -170,6 +176,7 @@ void register_TrigArray2D_Vector__class(){
             TrigArray2D_Vector__exposer.def( 
                 "transpose"
                 , transpose_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

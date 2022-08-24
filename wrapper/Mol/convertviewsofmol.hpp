@@ -36,6 +36,10 @@
 
 #include "SireMol/viewsofmol.h"
 
+#include "Helpers/release_gil_policy.hpp"
+
+#include <QDebug>
+
 namespace bp = boost::python;
 
 SIRE_BEGIN_HEADER
@@ -58,6 +62,8 @@ struct viewsofmol_from_py_list
         to a ViewsOfMol */
     static void* convertible(PyObject* obj_ptr)
     {
+        auto raii = bp::release_gil_policy::acquire_gil();
+
         //is this a tuple type?
         if ( PyTuple_Check(obj_ptr) )
         {
@@ -67,7 +73,7 @@ struct viewsofmol_from_py_list
             //how many elements are there?
             int n = PyTuple_Size(obj_ptr);
 
-            //can they all be converted to type MoleculeView 
+            //can they all be converted to type MoleculeView
             //and they all have the same molecule number
             SireMol::MolNum molnum;
 
@@ -109,7 +115,7 @@ struct viewsofmol_from_py_list
             for (int i=0; i<n; ++i)
             {
                 bp::extract<SireMol::MoleculeView*> get_molview(l[i]);
-         
+
                 if (get_molview.check())
                 {
                     if (molnum.isNull())
@@ -139,6 +145,8 @@ struct viewsofmol_from_py_list
         PyObject* obj_ptr,
         bp::converter::rvalue_from_python_stage1_data* data)
     {
+        auto raii = bp::release_gil_policy::acquire_gil();
+
         if (PyTuple_Check(obj_ptr))
         {
             //convert the PyObject to a boost::python::object
@@ -146,7 +154,7 @@ struct viewsofmol_from_py_list
 
             //locate the storage space for the result
             void* storage =
-                ( (bp::converter::rvalue_from_python_storage<SireMol::ViewsOfMol>*)data 
+                ( (bp::converter::rvalue_from_python_storage<SireMol::ViewsOfMol>*)data
                              )->storage.bytes;
 
             //create the ViewsOfMol container
@@ -159,7 +167,7 @@ struct viewsofmol_from_py_list
 
             if (n > 0)
             {
-                *container = SireMol::ViewsOfMol( 
+                *container = SireMol::ViewsOfMol(
                          *(bp::extract<SireMol::MoleculeView*>(t[0])()) );
             }
 
@@ -178,7 +186,7 @@ struct viewsofmol_from_py_list
 
             //locate the storage space for the result
             void* storage =
-                ( (bp::converter::rvalue_from_python_storage<SireMol::ViewsOfMol>*)data 
+                ( (bp::converter::rvalue_from_python_storage<SireMol::ViewsOfMol>*)data
                        )->storage.bytes;
 
             //create the T container
@@ -195,7 +203,7 @@ struct viewsofmol_from_py_list
                          *(bp::extract<SireMol::MoleculeView*>(l[0])()) );
             }
 
-            for (int i=1; i<n; ++i) 
+            for (int i=1; i<n; ++i)
             {
                 container->add( bp::extract<SireMol::MoleculeView*>(l[i])()
                                      ->selection() );
@@ -206,7 +214,7 @@ struct viewsofmol_from_py_list
     }
 };
 
-/** Function that returns the passed molecule view converted into 
+/** Function that returns the passed molecule view converted into
     a boost python object of the appropriate type, e.g. if the
     view is a single atom, it is an Atom, if it is a single residue,
     it is a Residue etc. etc. */
@@ -270,6 +278,8 @@ struct viewsofmol_to_py_list
     //Atom, Residue, Molecule etc. views
     static PyObject* convert(const SireMol::ViewsOfMol &views)
     {
+        auto raii = bp::release_gil_policy::acquire_gil();
+
         if (views.nViews() == 0)
         {
             //return None
@@ -283,6 +293,45 @@ struct viewsofmol_to_py_list
         }
         else
         {
+            // are the views all of one type?
+            QString typ;
+
+            try
+            {
+                typ = views.getCommonType();
+            }
+            catch(...)
+            {}
+
+            if (typ == "SireMol::Atom")
+            {
+                return bp::incref(bp::object(views.atoms()).ptr());
+            }
+            else if (typ == "SireMol::Residue")
+            {
+                return bp::incref(bp::object(views.residues()).ptr());
+            }
+            else if (typ == "SireMol::Chain")
+            {
+                return bp::incref(bp::object(views.chains()).ptr());
+            }
+            else if (typ == "SireMol::CutGroup")
+            {
+                return bp::incref(bp::object(views.cutGroups()).ptr());
+            }
+            else if (typ == "SireMol::Segment")
+            {
+                return bp::incref(bp::object(views.segments()).ptr());
+            }
+            else if (typ == "SireMol::Molecule")
+            {
+                // we only return a single molecule if there are multiple views
+                bp::object obj = get_molview(views.valueAt(0));
+                return bp::incref( obj.ptr() );
+            }
+
+            // this is a mixture of types, so return this as a
+            // python list of views
             bp::list python_list;
 
             //add all items to the python list

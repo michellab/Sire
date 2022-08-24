@@ -29,6 +29,8 @@ SireAnalysis::FEPDeltas __copy__(const SireAnalysis::FEPDeltas &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FEPDeltas_class(){
 
     { //::SireAnalysis::FEPDeltas
@@ -46,6 +48,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "backwardsData"
                 , backwardsData_function_value
+                , bp::release_gil_policy()
                 , "Return the raw data for the backwards deltas" );
         
         }
@@ -57,6 +60,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "backwardsDeltas"
                 , backwardsDeltas_function_value
+                , bp::release_gil_policy()
                 , "Return the raw data for the backwards deltas" );
         
         }
@@ -68,6 +72,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "backwardsValues"
                 , backwardsValues_function_value
+                , bp::release_gil_policy()
                 , "Return the backwards deltas. This returns the lambda value of the from window,\ntogether with the free energy delta" );
         
         }
@@ -79,6 +84,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "forwardsData"
                 , forwardsData_function_value
+                , bp::release_gil_policy()
                 , "Return the raw data for the fowards deltas" );
         
         }
@@ -90,6 +96,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "forwardsDeltas"
                 , forwardsDeltas_function_value
+                , bp::release_gil_policy()
                 , "Return the raw data for the fowards deltas" );
         
         }
@@ -101,6 +108,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "forwardsValues"
                 , forwardsValues_function_value
+                , bp::release_gil_policy()
                 , "Return the forwards deltas. This returns the lambda value of the from window,\ntogether with the value of the free energy delta" );
         
         }
@@ -112,6 +120,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "integrate"
                 , integrate_function_value
+                , bp::release_gil_policy()
                 , "Integrate (sum) the deltas across the windows to return the PMF" );
         
         }
@@ -123,6 +132,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is empty" );
         
         }
@@ -134,6 +144,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "lambdaValues"
                 , lambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return the lambda values for all of the windows" );
         
         }
@@ -146,6 +157,7 @@ void register_FEPDeltas_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("deltas") )
+                , bp::release_gil_policy()
                 , "Merge together all of the passed FEPDeltas into a single object" );
         
         }
@@ -157,6 +169,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "nLambdaValues"
                 , nLambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return the number of lambda values (windows)" );
         
         }
@@ -168,6 +181,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "nSamples"
                 , nSamples_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of samples in the deltas" );
         
         }
@@ -179,6 +193,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "nWindows"
                 , nWindows_function_value
+                , bp::release_gil_policy()
                 , "Return the number of windows" );
         
         }
@@ -206,6 +221,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "sum"
                 , sum_function_value
+                , bp::release_gil_policy()
                 , "Integrate (sum) the deltas across the windows to return the PMF" );
         
         }
@@ -217,6 +233,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "sumBackwards"
                 , sumBackwards_function_value
+                , bp::release_gil_policy()
                 , "Integrate (sum) the backwards deltas across the windows to return the PMF" );
         
         }
@@ -228,6 +245,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "sumBackwardsTaylor"
                 , sumBackwardsTaylor_function_value
+                , bp::release_gil_policy()
                 , "Integrate (sum) the backwards Taylor expansions across the windows to return the PMF" );
         
         }
@@ -239,6 +257,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "sumForwards"
                 , sumForwards_function_value
+                , bp::release_gil_policy()
                 , "Integrate (sum) the forwards deltas across the windows to return the PMF" );
         
         }
@@ -250,6 +269,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "sumForwardsTaylor"
                 , sumForwardsTaylor_function_value
+                , bp::release_gil_policy()
                 , "Integrate (sum) the forwards taylor expansions across the windows to return the PMF" );
         
         }
@@ -261,6 +281,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "temperature"
                 , temperature_function_value
+                , bp::release_gil_policy()
                 , "Return the temperature at which the FEP deltas were all collected" );
         
         }
@@ -272,6 +293,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -283,6 +305,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -294,6 +317,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "values"
                 , values_function_value
+                , bp::release_gil_policy()
                 , "Return the values between windows. This returns the average of the\nforwards and backwards values" );
         
         }
@@ -305,6 +329,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -316,6 +341,7 @@ void register_FEPDeltas_class(){
             FEPDeltas_exposer.def( 
                 "windows"
                 , windows_function_value
+                , bp::release_gil_policy()
                 , "Return the values of all of the windows" );
         
         }

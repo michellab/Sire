@@ -51,6 +51,8 @@ SireMM::AngleParameterName __copy__(const SireMM::AngleParameterName &other){ re
 
 const char* pvt_get_name(const SireMM::AngleParameterName&){ return "SireMM::AngleParameterName";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AngleParameterName_class(){
 
     { //::SireMM::AngleParameterName

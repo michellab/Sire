@@ -40,6 +40,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_G1FF_class(){
@@ -56,6 +58,7 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "accept"
                 , accept_function_value
+                , bp::release_gil_policy()
                 , "Tell the forcefield that the last move was accepted. This tells the\nforcefield to make permanent any temporary changes that were used a workspace\nto avoid memory allocation during a move" );
         
         }
@@ -68,6 +71,7 @@ void register_G1FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molview"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -80,6 +84,7 @@ void register_G1FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molviews"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -92,6 +97,7 @@ void register_G1FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -104,6 +110,7 @@ void register_G1FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molgroup"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -116,6 +123,7 @@ void register_G1FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -128,6 +136,7 @@ void register_G1FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molviews") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -140,6 +149,7 @@ void register_G1FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -152,6 +162,7 @@ void register_G1FF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -164,6 +175,7 @@ void register_G1FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molview"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -176,6 +188,7 @@ void register_G1FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molviews"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -188,6 +201,7 @@ void register_G1FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molecules"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -200,6 +214,7 @@ void register_G1FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molgroup"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -212,6 +227,7 @@ void register_G1FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -224,6 +240,7 @@ void register_G1FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molviews") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -236,6 +253,7 @@ void register_G1FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -248,6 +266,7 @@ void register_G1FF_class(){
                 "addIfUnique"
                 , addIfUnique_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -260,6 +279,7 @@ void register_G1FF_class(){
                 "assertContains"
                 , assertContains_function_value
                 , ( bp::arg("mgnum") )
+                , bp::release_gil_policy()
                 , "Assert that this forcefield contains the group with number mgnum\nThrow: SireMol::missing_group\n" );
         
         }
@@ -272,7 +292,7 @@ void register_G1FF_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group with number mgnum\nThrow: SireMol::missing_group\n" );
         
         }
@@ -284,6 +304,7 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "needsAccepting"
                 , needsAccepting_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield is using temporary workspace that needs\nto be accepted" );
         
         }
@@ -296,6 +317,7 @@ void register_G1FF_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -308,6 +330,7 @@ void register_G1FF_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molviews") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -320,6 +343,7 @@ void register_G1FF_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -332,6 +356,7 @@ void register_G1FF_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -344,6 +369,7 @@ void register_G1FF_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -356,6 +382,7 @@ void register_G1FF_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("molnums") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -367,6 +394,7 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -379,6 +407,7 @@ void register_G1FF_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -391,6 +420,7 @@ void register_G1FF_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molviews") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -403,6 +433,7 @@ void register_G1FF_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -415,6 +446,7 @@ void register_G1FF_class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -427,6 +459,7 @@ void register_G1FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -439,6 +472,7 @@ void register_G1FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -451,6 +485,7 @@ void register_G1FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -463,6 +498,7 @@ void register_G1FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -475,6 +511,7 @@ void register_G1FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molview"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -487,6 +524,7 @@ void register_G1FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molviews"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -499,6 +537,7 @@ void register_G1FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molecules"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -511,6 +550,7 @@ void register_G1FF_class(){
                 "setContents"
                 , setContents_function_value
                 , ( bp::arg("molgroup"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }

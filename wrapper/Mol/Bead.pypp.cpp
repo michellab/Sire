@@ -14,13 +14,27 @@ namespace bp = boost::python;
 
 #include "SireStream/shareddatastream.h"
 
+#include "atom.h"
+
 #include "bead.h"
 
 #include "beadeditor.h"
 
 #include "beads.h"
 
+#include "chain.h"
+
+#include "cutgroup.h"
+
 #include "mover.hpp"
+
+#include "partialmolecule.h"
+
+#include "residue.h"
+
+#include "segment.h"
+
+#include "selector.hpp"
 
 #include "tostring.h"
 
@@ -62,6 +76,8 @@ SireMol::Bead __copy__(const SireMol::Bead &other){ return SireMol::Bead(other);
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Bead_class(){
@@ -81,6 +97,7 @@ void register_Bead_class(){
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Assert that this bead contains the metadata with key metakey\nThrow: SireBase::missing_property\n" );
         
         }
@@ -93,6 +110,7 @@ void register_Bead_class(){
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Assert that this bead contains the metadata property with key key:metakey\nThrow: SireBase::missing_property\n" );
         
         }
@@ -105,6 +123,7 @@ void register_Bead_class(){
                 "assertContainsProperty"
                 , assertContainsProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Assert that this bead contains the property with key key\nThrow: SireBase::missing_property\n" );
         
         }
@@ -117,6 +136,7 @@ void register_Bead_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith atom in this bead\nThrow: SireError::invalid_index\n" );
         
         }
@@ -128,6 +148,7 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "atomIdxs"
                 , atomIdxs_function_value
+                , bp::release_gil_policy()
                 , "Return the list of atom indexes of the atoms in this bead" );
         
         }
@@ -139,7 +160,7 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "beading"
                 , beading_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the beading function used to bead up the molecule" );
         
         }
@@ -151,6 +172,7 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "beads"
                 , beads_function_value
+                , bp::release_gil_policy()
                 , "Return the set of all beads" );
         
         }
@@ -163,6 +185,7 @@ void register_Bead_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return whether or not this bead contains the atom with index atomidx" );
         
         }
@@ -175,6 +198,7 @@ void register_Bead_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this bead contains the atom with ID atomid" );
         
         }
@@ -186,6 +210,7 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "edit"
                 , edit_function_value
+                , bp::release_gil_policy()
                 , "Return the editor for this bead" );
         
         }
@@ -197,6 +222,7 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
+                , bp::release_gil_policy()
                 , "Return the evaluator for this bead" );
         
         }
@@ -209,6 +235,7 @@ void register_Bead_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return whether or not this bead had some metadata at metakey" );
         
         }
@@ -221,6 +248,7 @@ void register_Bead_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "Return whether or not this bead has some metadata at key:metakey" );
         
         }
@@ -233,6 +261,7 @@ void register_Bead_class(){
                 "hasProperty"
                 , hasProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return whether or not this bead has a property called key" );
         
         }
@@ -244,6 +273,7 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "index"
                 , index_function_value
+                , bp::release_gil_policy()
                 , "Return the index of this bead" );
         
         }
@@ -256,6 +286,7 @@ void register_Bead_class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this bead contains the atom with ID atomid" );
         
         }
@@ -267,6 +298,7 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return if this is an empty bead" );
         
         }
@@ -278,6 +310,7 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
+                , bp::release_gil_policy()
                 , "Return a list of all of the metadata properties associated with this bead" );
         
         }
@@ -290,6 +323,7 @@ void register_Bead_class(){
                 "metadataKeys"
                 , metadataKeys_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Return a list of all of the metadata properties of the key key that\nare associated with this bead" );
         
         }
@@ -301,6 +335,7 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "move"
                 , move_function_value
+                , bp::release_gil_policy()
                 , "Return the mover for this bead" );
         
         }
@@ -312,6 +347,7 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in this bead" );
         
         }
@@ -323,6 +359,7 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "nViews"
                 , nViews_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -361,6 +398,7 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "propertyKeys"
                 , propertyKeys_function_value
+                , bp::release_gil_policy()
                 , "Return a list of all of the properties associated with this bead" );
         
         }
@@ -372,6 +410,7 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this bead includes all of the atoms in the molecule" );
         
         }
@@ -383,7 +422,20 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
                 , "Return the selection of atoms that are part of this bead" );
+        
+        }
+        { //::SireMol::Bead::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Bead::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::Bead::toSelector );
+            
+            Bead_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::Bead::toString
@@ -394,6 +446,7 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this bead" );
         
         }
@@ -405,6 +458,7 @@ void register_Bead_class(){
             Bead_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -417,6 +471,7 @@ void register_Bead_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "Update this bead using the passed molecule data" );
         
         }

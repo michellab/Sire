@@ -45,6 +45,8 @@
 
 #include "BendBendSymbols.pypp.hpp"
 
+#include "Bond.pypp.hpp"
+
 #include "BondComponent.pypp.hpp"
 
 #include "BondParameterName.pypp.hpp"
@@ -299,6 +301,10 @@
 
 #include "MMDetail.pypp.hpp"
 
+#include "Mover_Bond_.pypp.hpp"
+
+#include "Mover_SelectorBond_.pypp.hpp"
+
 #include "MultiCLJComponent.pypp.hpp"
 
 #include "NoCutoff.pypp.hpp"
@@ -320,6 +326,10 @@
 #include "ScaledChargeParameterNames3D.pypp.hpp"
 
 #include "ScaledLJParameterNames3D.pypp.hpp"
+
+#include "SelectorBond.pypp.hpp"
+
+#include "SelectorMBond.pypp.hpp"
 
 #include "SoftCLJComponent.pypp.hpp"
 
@@ -511,6 +521,8 @@ BOOST_PYTHON_MODULE(_MM){
     register_BendBendParameterName_class();
 
     register_BendBendSymbols_class();
+
+    register_Bond_class();
 
     register_BondComponent_class();
 
@@ -706,6 +718,10 @@ BOOST_PYTHON_MODULE(_MM){
 
     register_ScaledLJParameterNames3D_class();
 
+    register_SelectorBond_class();
+
+    register_SelectorMBond_class();
+
     register_SoftCLJComponent_class();
 
     register_StretchBendComponent_class();
@@ -738,8 +754,12 @@ BOOST_PYTHON_MODULE(_MM){
 
     register_UreyBradleyComponent_class();
 
+    register_AtomLJs_class();
+
+    register_Mover_Bond__class();
+
     register_SireMM_properties();
 
-    register_AtomLJs_class();
+    register_Mover_SelectorBond__class();
 }
 

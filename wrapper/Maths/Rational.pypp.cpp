@@ -25,6 +25,8 @@ SireMaths::Rational __copy__(const SireMaths::Rational &other){ return SireMaths
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Rational_class(){
 
     { //::SireMaths::Rational
@@ -42,6 +44,7 @@ void register_Rational_class(){
             Rational_exposer.def( 
                 "denominator"
                 , denominator_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -53,6 +56,7 @@ void register_Rational_class(){
             Rational_exposer.def( 
                 "numerator"
                 , numerator_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -104,6 +108,7 @@ void register_Rational_class(){
             Rational_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

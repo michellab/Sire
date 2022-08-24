@@ -1,0 +1,14 @@
+#!/bin/bash
+
+cd $HOME
+
+echo "Unpacking headers"
+
+if [[ -f "/opt/conda/includes.tar.bz2" ]]
+then
+    echo "Extracting headers for Sire dependencies"
+    cd /opt/conda && \
+       tar -jxvf includes.tar.bz2 && \
+       rm includes.tar.bz2 && \
+       cd $HOME
+fi

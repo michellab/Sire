@@ -17,6 +17,8 @@ SireMaths::Vector3D<SireUnits::Dimension::PhysUnit<1, 1, -2, 0, 0, 0, 0> > __cop
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Force3D_class(){
@@ -52,6 +54,7 @@ void register_Force3D_class(){
             Force3D_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -100,6 +103,7 @@ void register_Force3D_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -112,6 +116,7 @@ void register_Force3D_class(){
             Force3D_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -124,6 +129,7 @@ void register_Force3D_class(){
             Force3D_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -136,6 +142,7 @@ void register_Force3D_class(){
             Force3D_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

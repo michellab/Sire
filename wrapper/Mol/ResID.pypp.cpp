@@ -55,6 +55,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ResID_class(){
 
     { //::SireMol::ResID
@@ -69,6 +71,7 @@ void register_ResID_class(){
             ResID_exposer.def( 
                 "any"
                 , any_function_value
+                , bp::release_gil_policy()
                 , "Return a match for all residues" );
         
         }
@@ -81,6 +84,7 @@ void register_ResID_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return a specific atom in the matching residues" );
         
         }
@@ -92,6 +96,7 @@ void register_ResID_class(){
             ResID_exposer.def( 
                 "atoms"
                 , atoms_function_value
+                , bp::release_gil_policy()
                 , "Return the atoms in the matching residues" );
         
         }
@@ -104,6 +109,7 @@ void register_ResID_class(){
                 "atoms"
                 , atoms_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Return a range of atoms in the matching residues" );
         
         }
@@ -115,7 +121,21 @@ void register_ResID_class(){
             ResID_exposer.def( 
                 "chains"
                 , chains_function_value
+                , bp::release_gil_policy()
                 , "Return a Chain ID that matches chains that contain residues\nthat match this Residue ID" );
+        
+        }
+        { //::SireMol::ResID::fromString
+        
+            typedef ::SireMol::ResIdentifier ( *fromString_function_type )( ::QString const & );
+            fromString_function_type fromString_function_value( &::SireMol::ResID::fromString );
+            
+            ResID_exposer.def( 
+                "fromString"
+                , fromString_function_value
+                , ( bp::arg("id") )
+                , bp::release_gil_policy()
+                , "Return an ResID constructed from the passed string" );
         
         }
         { //::SireMol::ResID::inverse
@@ -126,6 +146,7 @@ void register_ResID_class(){
             ResID_exposer.def( 
                 "inverse"
                 , inverse_function_value
+                , bp::release_gil_policy()
                 , "Invert this match" );
         
         }
@@ -137,6 +158,7 @@ void register_ResID_class(){
             ResID_exposer.def( 
                 "invert"
                 , invert_function_value
+                , bp::release_gil_policy()
                 , "Invert this match" );
         
         }
@@ -149,6 +171,7 @@ void register_ResID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Map this ID back to the indicies of the residues in the molecule,\nusing the passed MoleculeInfo to do the mapping" );
         
         }
@@ -363,10 +386,12 @@ void register_ResID_class(){
             ResID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
         ResID_exposer.staticmethod( "any" );
+        ResID_exposer.staticmethod( "fromString" );
         ResID_exposer.staticmethod( "typeName" );
         ResID_exposer.def( "__str__", &__str__< ::SireMol::ResID > );
         ResID_exposer.def( "__repr__", &__str__< ::SireMol::ResID > );

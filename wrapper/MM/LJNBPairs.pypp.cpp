@@ -23,6 +23,8 @@ SireMM::LJNBPairs __copy__(const SireMM::LJNBPairs &other){ return SireMM::LJNBP
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_LJNBPairs_class(){
 
     { //::SireMM::LJNBPairs
@@ -69,6 +71,7 @@ void register_LJNBPairs_class(){
             LJNBPairs_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

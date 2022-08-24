@@ -23,6 +23,8 @@ SireMaths::VectorArrayProperty __copy__(const SireMaths::VectorArrayProperty &ot
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_VectorArrayProperty_class(){
@@ -58,6 +60,7 @@ void register_VectorArrayProperty_class(){
             VectorArrayProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

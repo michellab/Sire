@@ -38,6 +38,7 @@
 #include "SireMol/atommasses.h"
 #include "SireMol/atomcoords.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/core.h"
 
 #include "SireMol/amberparameters.h"
 

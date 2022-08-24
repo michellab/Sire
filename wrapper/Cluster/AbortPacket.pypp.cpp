@@ -27,6 +27,8 @@ SireCluster::AbortPacket __copy__(const SireCluster::AbortPacket &other){ return
 
 const char* pvt_get_name(const SireCluster::AbortPacket&){ return "SireCluster::AbortPacket";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AbortPacket_class(){
 
     { //::SireCluster::AbortPacket
@@ -42,6 +44,7 @@ void register_AbortPacket_class(){
             AbortPacket_exposer.def( 
                 "hasFinished"
                 , hasFinished_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the work has finished" );
         
         }
@@ -66,6 +69,7 @@ void register_AbortPacket_class(){
             AbortPacket_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -77,6 +81,7 @@ void register_AbortPacket_class(){
             AbortPacket_exposer.def( 
                 "wasAborted"
                 , wasAborted_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this was aborted (it obviously was)" );
         
         }
@@ -88,6 +93,7 @@ void register_AbortPacket_class(){
             AbortPacket_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

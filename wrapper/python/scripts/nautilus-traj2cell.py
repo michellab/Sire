@@ -1,3 +1,9 @@
+try:
+    import sire
+    sire.use_old_api()
+except ImportError:
+    pass
+
 from Sire.Tools import Nautilus
 from Sire.Tools import readParams
 
@@ -13,7 +19,7 @@ parser = argparse.ArgumentParser(description="Generate cell files from a passed 
                                         "http://siremol.org/nautilus",
                                  prog="nautilus")
 
-parser.add_argument('-C', '--config', nargs="?", 
+parser.add_argument('-C', '--config', nargs="?",
                     help='Supply an optional Nautilus CONFIG file to control the calculation.')
 
 parser.add_argument('--author', action="store_true",
@@ -85,7 +91,7 @@ elif "topfile" in params:
 else:
     top_file = "system.top"
     params["topfile"] = top_file
-    
+
 if args.data_file:
     traj_file = args.data_file
     params["trajfile"] = traj_file
@@ -115,7 +121,7 @@ if not (os.path.exists(coord_file) and os.path.exists(top_file)):
         print("(cannot find topology file %s)" % top_file)
     sys.exit(-1)
 
-if not (os.path.exists(traj_file)): 
+if not (os.path.exists(traj_file)):
     parser.print_help()
     print("\nPlease supply the name of an existing trajectory file.")
     sys.exit(-1)

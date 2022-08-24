@@ -20,6 +20,8 @@ SireMM::CLJComponent __copy__(const SireMM::CLJComponent &other){ return SireMM:
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJComponent_class(){
 
     { //::SireMM::CLJComponent
@@ -38,6 +40,7 @@ void register_CLJComponent_class(){
                 "changeEnergy"
                 , changeEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("cljnrg") )
+                , bp::release_gil_policy()
                 , "Change the CLJ components of the forcefield ff by delta" );
         
         }
@@ -49,7 +52,7 @@ void register_CLJComponent_class(){
             CLJComponent_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -61,7 +64,7 @@ void register_CLJComponent_class(){
             CLJComponent_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -74,6 +77,7 @@ void register_CLJComponent_class(){
                 "setEnergy"
                 , setEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("cljnrg") )
+                , bp::release_gil_policy()
                 , "Set the CLJ components of the forcefield ff to the passed values" );
         
         }
@@ -85,6 +89,7 @@ void register_CLJComponent_class(){
             CLJComponent_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -96,7 +101,7 @@ void register_CLJComponent_class(){
             CLJComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -108,6 +113,7 @@ void register_CLJComponent_class(){
             CLJComponent_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -119,6 +125,7 @@ void register_CLJComponent_class(){
             CLJComponent_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

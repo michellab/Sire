@@ -154,6 +154,7 @@ AtomSelection::AtomSelection(const MoleculeInfoData &molinfo)
 AtomSelection::AtomSelection(const AtomSelection &other)
               : ConcreteProperty<AtomSelection,MoleculeProperty>(other),
                 selected_atoms(other.selected_atoms),
+                selected_residues(other.selected_residues),
                 d(other.d), nselected(other.nselected)
 {}
 
@@ -167,6 +168,7 @@ AtomSelection& AtomSelection::operator=(const AtomSelection &other)
     MoleculeProperty::operator=(other);
 
     selected_atoms = other.selected_atoms;
+    selected_residues = other.selected_residues;
     d = other.d;
     nselected = other.nselected;
 
@@ -286,18 +288,10 @@ bool AtomSelection::selected(ResIdx residx) const
 {
     residx = ResIdx( residx.map(info().nResidues()) );
 
-    if (selected_atoms.isEmpty())
+    if (selected_residues.isEmpty())
         return nselected > 0;
     else
-    {
-        for ( const auto &atomidx : info().cgAtomIdxs(residx) )
-        {
-            if (this->_pvt_selected(atomidx))
-                return true;
-        }
-
-        return false;
-    }
+        return selected_residues.contains(residx);
 }
 
 /** Return whether or not any atoms in the chain
@@ -315,11 +309,8 @@ bool AtomSelection::selected(ChainIdx chainidx) const
     {
         foreach( ResIdx residx, info().getResiduesIn(chainidx) )
         {
-            foreach( const CGAtomIdx &atomidx, info().cgAtomIdxs(residx) )
-            {
-                if (this->_pvt_selected(atomidx))
-                    return true;
-            }
+            if (this->selected(residx))
+                return true;
         }
 
         return false;
@@ -503,13 +494,7 @@ bool AtomSelection::selectedAllResidues() const
         return nselected > 0;
     else
     {
-        for (ResIdx i(0); i<info().nResidues(); ++i)
-        {
-            if (not this->selected(i))
-                return false;
-        }
-
-        return true;
+        return selected_residues.count() == info().nResidues();
     }
 }
 
@@ -907,26 +892,9 @@ QList<ResIdx> AtomSelection::selectedResidues() const
     }
     else
     {
-        //run over all of the residues and see if they have
-        //any selected atoms
-        int nres = info().nResidues();
-        QList<ResIdx> selected_res;
-
-        for (ResIdx i(0); i<nres; ++i)
-        {
-            int nats = info().nAtoms(i);
-
-            for (int j(0); j<nats; ++j)
-            {
-                if (this->selected( info().getAtom(i,j) ))
-                {
-                    selected_res.append(i);
-                    break;
-                }
-            }
-        }
-
-        return selected_res;
+        QList<ResIdx> residxs = selected_residues.values();
+        std::sort(residxs.begin(), residxs.end());
+        return residxs;
     }
 }
 
@@ -1112,7 +1080,7 @@ int AtomSelection::nSelected(AtomIdx atomidx) const
 
 int AtomSelection::_pvt_nSelected(ResIdx residx) const
 {
-    if (this->isEmpty())
+    if (not this->selected(residx))
         return 0;
     else if (this->selectedAll())
         return info().nAtoms(residx);
@@ -1368,21 +1336,7 @@ int AtomSelection::nSelectedResidues() const
         return 0;
     else
     {
-        int nres = 0;
-
-        for (ResIdx i(0); i<info().nResidues(); ++i)
-        {
-            foreach (const CGAtomIdx &atomidx, info().cgAtomIdxs(i))
-            {
-                if (this->_pvt_selected(atomidx))
-                {
-                    ++nres;
-                    break;
-                }
-            }
-        }
-
-        return nres;
+        return selected_residues.count();
     }
 }
 
@@ -1463,6 +1417,7 @@ int AtomSelection::nSegments() const
 AtomSelection& AtomSelection::selectAll()
 {
     selected_atoms.clear();
+    selected_residues.clear();
     nselected = info().nAtoms();
 
     return *this;
@@ -1472,6 +1427,7 @@ AtomSelection& AtomSelection::selectAll()
 AtomSelection& AtomSelection::deselectAll()
 {
     selected_atoms.clear();
+    selected_residues.clear();
     nselected = 0;
 
     return *this;
@@ -1515,6 +1471,13 @@ void AtomSelection::_pvt_select(const CGAtomIdx &cgatomidx)
         }
         else
             it->insert(cgatomidx.atom());
+    }
+
+    const auto atomidx = info().atomIdx(cgatomidx);
+
+    if (info().isWithinResidue(atomidx))
+    {
+        selected_residues.insert(info().parentResidue(atomidx));
     }
 
     ++nselected;
@@ -1569,6 +1532,7 @@ void AtomSelection::_pvt_deselect(const CGAtomIdx &cgatomidx)
     {
         //we have just removed the last selected atom
         selected_atoms.clear();
+        selected_residues.clear();
         nselected = 0;
         return;
     }
@@ -1577,6 +1541,8 @@ void AtomSelection::_pvt_deselect(const CGAtomIdx &cgatomidx)
         //we need to create space for all CutGroups
         selected_atoms.clear();
         selected_atoms.reserve( info().nCutGroups() );
+        selected_residues.clear();
+        selected_residues.reserve( info().nResidues() );
 
         for (CGIdx i(0); i<info().nCutGroups(); ++i)
         {
@@ -1598,6 +1564,19 @@ void AtomSelection::_pvt_deselect(const CGAtomIdx &cgatomidx)
                 }
 
                 selected_atoms.insert(i, atoms);
+            }
+        }
+
+        //now find the selected residues
+        for (ResIdx i(0); i<info().nResidues(); ++i)
+        {
+            for (const auto &atomidx : info().getAtomsIn(i))
+            {
+                if (this->selected(info().cgAtomIdx(atomidx)))
+                {
+                    selected_residues.insert(i);
+                    break;
+                }
             }
         }
     }
@@ -1624,6 +1603,27 @@ void AtomSelection::_pvt_deselect(const CGAtomIdx &cgatomidx)
             //removed the one and only atom from the CutGroup
             selected_atoms.remove(cgatomidx.cutGroup());
         }
+
+        auto atomidx = info().atomIdx(cgatomidx);
+
+        if (info().isWithinResidue(atomidx))
+        {
+            auto residx = info().parentResidue(atomidx);
+
+            bool is_selected = false;
+
+            for (const auto &atomidx : info().getAtomsIn(residx))
+            {
+                if (this->selected(info().cgAtomIdx(atomidx)))
+                {
+                    is_selected = true;
+                    break;
+                }
+            }
+
+            if (not is_selected)
+                selected_residues.remove(residx);
+        }
     }
     else
     {
@@ -1639,6 +1639,27 @@ void AtomSelection::_pvt_deselect(const CGAtomIdx &cgatomidx)
                     "Invalid state: nselected not 1 when removing last atom? %1, %2")
                         .arg(nselected).arg(cgatomidx.toString()), CODELOC );
             }
+        }
+
+        auto atomidx = info().atomIdx(cgatomidx);
+
+        if (info().isWithinResidue(atomidx))
+        {
+            auto residx = info().parentResidue(atomidx);
+
+            bool is_selected = false;
+
+            for (const auto &atomidx : info().getAtomsIn(residx))
+            {
+                if (this->selected(info().cgAtomIdx(atomidx)))
+                {
+                    is_selected = true;
+                    break;
+                }
+            }
+
+            if (not is_selected)
+                selected_residues.remove(residx);
         }
     }
 
@@ -1732,6 +1753,22 @@ void AtomSelection::_pvt_select(CGIdx cgidx)
             selected_atoms.insert(cgidx, QSet<Index>());
         }
     }
+
+    if (info().isResidueCutting())
+    {
+        // we know that the CGIdx equals the ResIdx
+        selected_residues.insert(ResIdx(cgidx.value()));
+    }
+    else
+    {
+        for (const auto &atomidx : info().getAtomsIn(cgidx))
+        {
+            if (info().isWithinResidue(atomidx))
+            {
+                selected_residues.insert(info().parentResidue(atomidx));
+            }
+        }
+    }
 }
 
 void AtomSelection::_pvt_deselect(CGIdx cgidx)
@@ -1740,6 +1777,7 @@ void AtomSelection::_pvt_deselect(CGIdx cgidx)
     if (this->selectedAll())
     {
         selected_atoms.clear();
+        selected_residues.clear();
         nselected -= info().nAtoms(cgidx);
 
         if (info().nCutGroups() > 1)
@@ -1753,6 +1791,32 @@ void AtomSelection::_pvt_deselect(CGIdx cgidx)
                 if (i != cgidx)
                 {
                     selected_atoms.insert( i, QSet<Index>() );
+                }
+            }
+        }
+
+        if (info().isResidueCutting() and info().nResidues() > 1)
+        {
+            selected_residues.reserve(info().nResidues());
+            for (ResIdx i(0); i<info().nResidues(); ++i)
+            {
+                if (i.value() != cgidx.value())
+                    selected_residues.insert(i);
+            }
+        }
+        else
+        {
+            selected_residues.reserve(info().nResidues());
+
+            for (ResIdx i(0); i<info().nResidues(); ++i)
+            {
+                for (const auto &atomidx : info().getAtomsIn(i))
+                {
+                    if (this->selected(info().cgAtomIdx(atomidx)))
+                    {
+                        selected_residues.insert(i);
+                        break;
+                    }
                 }
             }
         }
@@ -1773,6 +1837,40 @@ void AtomSelection::_pvt_deselect(CGIdx cgidx)
             {
                 //only part of the CutGroup was selected
                 nselected -= atoms.count();
+            }
+        }
+
+        if (info().isResidueCutting())
+        {
+            selected_residues.remove(ResIdx(cgidx.value()));
+        }
+        else
+        {
+            QSet<ResIdx> residxs;
+
+            for (const auto &atomidx : info().getAtomsIn(cgidx))
+            {
+                if (info().isWithinResidue(atomidx))
+                {
+                    residxs.insert(info().parentResidue(atomidx));
+                }
+            }
+
+            for (const auto &residx : residxs)
+            {
+                bool is_selected = false;
+
+                for (const auto &atomidx : info().getAtomsIn(residx))
+                {
+                    if (this->selected(info().cgAtomIdx(atomidx)))
+                    {
+                        is_selected = true;
+                        break;
+                    }
+                }
+
+                if (not is_selected)
+                    selected_residues.remove(residx);
             }
         }
     }
@@ -4052,4 +4150,68 @@ AtomSelection& AtomSelection::unite(const QSet<SireMol::AtomIdx> &ids)
 const char* AtomSelection::typeName()
 {
     return QMetaType::typeName( qMetaTypeId<AtomSelection>() );
+}
+
+/** Return whether or not this selection represents the whole molecule */
+bool AtomSelection::isMolecule() const
+{
+    return this->selectedAll();
+}
+
+/** Return whether or not this selection represents a single atom */
+bool AtomSelection::isAtom() const
+{
+    return this->nSelected() == 1;
+}
+
+/** Return whether or not this selection represents a single CutGroup */
+bool AtomSelection::isCutGroup() const
+{
+    auto cgidxs = this->selectedCutGroups();
+
+    if (cgidxs.count() == 1)
+    {
+        return this->selectedAll(cgidxs.at(0));
+    }
+
+    return false;
+}
+
+/** Return whether or not this selection represents a single Residue */
+bool AtomSelection::isResidue() const
+{
+    auto residxs = this->selectedResidues();
+
+    if (residxs.count() == 1)
+    {
+        return this->selectedAll(residxs.at(0));
+    }
+
+    return false;
+}
+
+/** Return whether or not this selection represents a single Chain */
+bool AtomSelection::isChain() const
+{
+    auto chainidxs = this->selectedChains();
+
+    if (chainidxs.count() == 1)
+    {
+        return this->selectedAll(chainidxs.at(0));
+    }
+
+    return false;
+}
+
+/** Return whether or not this selection represents a single Segment */
+bool AtomSelection::isSegment() const
+{
+    auto segidxs = this->selectedSegments();
+
+    if (segidxs.count() == 1)
+    {
+        return this->selectedAll(segidxs.at(0));
+    }
+
+    return false;
 }

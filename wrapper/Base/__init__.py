@@ -1,25 +1,63 @@
-#############################
-##
-## The SireBase module
-##
-## This contains some base classes
-## that don't fit anywhere else.
-##
-## This module may be removed
-## as I find homes for some of
-## these classes
-##
-## (C) Christopher Woods
-##
+"""
+.. currentmodule:: sire.legacy.Base
 
-from Sire.Base._Base import *
+Classes
+=======
+
+.. autosummary::
+    :toctree: generated/
+
+    Property
+    Properties
+    PropertyList
+    PropertyMap
+    PropertyName
+    Range
+    SimpleRange
+    TempDir
+    TimeProperty
+    TrimString
+    UpperCaseString
+    VariantProperty
+    Version
+
+Functions
+=========
+
+.. autosummary::
+    :toctree: generated/
+
+    findExe
+    getBinDir
+    getBundledLibDir
+    getInstallDir
+    getLibDir
+    getReleaseVersion
+    getRepositoryBranch
+    getRepositoryURL
+    getRepositoryVersion
+    getRepositoryVersionIsClean
+    getShareDir
+    getSireDir
+    increment
+    wrap
+"""
+
+from ._Base import *
 
 _wrap_functions = []
 
 _base_wrap = wrap
 
 def wrap(value):
-    # First, try to wrap the python concrete classes
+    """Wrap the passed value into a :class:`~sire.base.Property`
+       object. This works recursively, wrapping all items in
+       a container, such that the returned value is derived
+       from :class:`~sire.base.Property` and can be passed to
+       the C++ code in sire. Note that you normally don't
+       need to call this yourself, as wrapping is handled
+       automatically.
+    """
     if isinstance(value, bool):
         return BooleanProperty(value)
 

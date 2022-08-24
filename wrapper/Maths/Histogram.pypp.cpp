@@ -27,6 +27,8 @@ SireMaths::Histogram __copy__(const SireMaths::Histogram &other){ return SireMat
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Histogram_class(){
@@ -47,6 +49,7 @@ void register_Histogram_class(){
                 "accumulate"
                 , accumulate_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Accumulate value onto the histogram" );
         
         }
@@ -59,6 +62,7 @@ void register_Histogram_class(){
                 "accumulate"
                 , accumulate_function_value
                 , ( bp::arg("value"), bp::arg("weight") )
+                , bp::release_gil_policy()
                 , "Accumulate value with the passed weight onto the histogram" );
         
         }
@@ -71,6 +75,7 @@ void register_Histogram_class(){
                 "accumulate"
                 , accumulate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Accumulate the passed values onto this histogram" );
         
         }
@@ -83,6 +88,7 @@ void register_Histogram_class(){
                 "accumulate"
                 , accumulate_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Accumulate the data from the passed histogram onto this histogram" );
         
         }
@@ -95,6 +101,7 @@ void register_Histogram_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Add value onto the histogram" );
         
         }
@@ -107,6 +114,7 @@ void register_Histogram_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("value"), bp::arg("weight") )
+                , bp::release_gil_policy()
                 , "Add value with the passed weight onto the histogram" );
         
         }
@@ -119,6 +127,7 @@ void register_Histogram_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Add the passed values on this histogram" );
         
         }
@@ -131,6 +140,7 @@ void register_Histogram_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Add the passed histogram onto this histogram. This will match the\nbin width of the passed histogram to this histogram" );
         
         }
@@ -143,6 +153,7 @@ void register_Histogram_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith bin in the histogram" );
         
         }
@@ -154,6 +165,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "binWidth"
                 , binWidth_function_value
+                , bp::release_gil_policy()
                 , "Return the width of the bins" );
         
         }
@@ -165,6 +177,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of bins in the histogram" );
         
         }
@@ -176,6 +189,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "kirtosis"
                 , kirtosis_function_value
+                , bp::release_gil_policy()
                 , "Return the excess kirtosis of the data. This is estimated based on the histogram\nof the data (this is the kirtosis minus 3, so that the normal distribution\nhas a kirtosis of 0)" );
         
         }
@@ -187,6 +201,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "maximumValue"
                 , maximumValue_function_value
+                , bp::release_gil_policy()
                 , "Return the highest value in the histogram" );
         
         }
@@ -198,6 +213,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "mean"
                 , mean_function_value
+                , bp::release_gil_policy()
                 , "Return the mean average of all values added to the histogram. This\nis calculated exactly from the added data" );
         
         }
@@ -209,6 +225,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "meanOfSquares"
                 , meanOfSquares_function_value
+                , bp::release_gil_policy()
                 , "Return the mean of the square values" );
         
         }
@@ -220,6 +237,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "median"
                 , median_function_value
+                , bp::release_gil_policy()
                 , "Return the median of all values added to the histogram. This is\nestimated based on the actual histogram of added data" );
         
         }
@@ -231,6 +249,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "minimumValue"
                 , minimumValue_function_value
+                , bp::release_gil_policy()
                 , "Return the lowest values in the histogram" );
         
         }
@@ -242,6 +261,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "mode"
                 , mode_function_value
+                , bp::release_gil_policy()
                 , "Return the mode of all values added to the histogram. This is\nestimated based on the actual histogram of added data" );
         
         }
@@ -253,6 +273,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "normalDistribution"
                 , normalDistribution_function_value
+                , bp::release_gil_policy()
                 , "Return the idealised normal distribution for the values in the histogram,\nbased on the current mean and standard deviation, and the sum of weights" );
         
         }
@@ -264,6 +285,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "normalise"
                 , normalise_function_value
+                , bp::release_gil_policy()
                 , "Return a normalised version of this histogram. The histogram\nis normalised so that the sum under the curve is 1 (e.g.\nsum_of_bins  bin_width is 1)" );
         
         }
@@ -305,6 +327,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "range"
                 , range_function_value
+                , bp::release_gil_policy()
                 , "Return the range for the data in the histogram" );
         
         }
@@ -317,6 +340,7 @@ void register_Histogram_class(){
                 "resize"
                 , resize_function_value
                 , ( bp::arg("binwidth") )
+                , bp::release_gil_policy()
                 , "Return a resized copy of this histogram with the passed new binwidth" );
         
         }
@@ -328,6 +352,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of bins in the histogram" );
         
         }
@@ -339,6 +364,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "skew"
                 , skew_function_value
+                , bp::release_gil_policy()
                 , "Return the skew of the data. This is estimated based on the histogram\nof the data" );
         
         }
@@ -350,6 +376,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "standardDeviation"
                 , standardDeviation_function_value
+                , bp::release_gil_policy()
                 , "Return the standard deviation of all values added to the histogram.\nThis is calculated exactly from the added data" );
         
         }
@@ -361,6 +388,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "standardError"
                 , standardError_function_value
+                , bp::release_gil_policy()
                 , "Return the standard error of the mean (standard deviation\ndivided by the square root of the number of samples)" );
         
         }
@@ -373,6 +401,7 @@ void register_Histogram_class(){
                 "standardError"
                 , standardError_function_value
                 , ( bp::arg("level") )
+                , bp::release_gil_policy()
                 , "Return the standard error calculated to the passed level\n(66, 90, 95 or 99%)" );
         
         }
@@ -384,6 +413,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "sumOfBins"
                 , sumOfBins_function_value
+                , bp::release_gil_policy()
                 , "Return the sum of the weights over all of the bins" );
         
         }
@@ -396,6 +426,7 @@ void register_Histogram_class(){
                 "tValue"
                 , tValue_function_value
                 , ( bp::arg("nsamples"), bp::arg("level") )
+                , bp::release_gil_policy()
                 , "Return the students t-value for the passed confidence level\nfor the passed number of samples for the mean" );
         
         }
@@ -408,6 +439,7 @@ void register_Histogram_class(){
                 "tValue"
                 , tValue_function_value
                 , ( bp::arg("level") )
+                , bp::release_gil_policy()
                 , "Return the students t-value for the passed confidence level\nfor the number of samples in the histogram" );
         
         }
@@ -419,6 +451,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this histogram" );
         
         }
@@ -430,6 +463,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -441,6 +475,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "values"
                 , values_function_value
+                , bp::release_gil_policy()
                 , "Return the set of all bins and values in the histogram. The bins\nwill be returned in numerical order" );
         
         }
@@ -452,6 +487,7 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -33,6 +33,8 @@ Squire::SS_GTO __copy__(const Squire::SS_GTO &other){ return Squire::SS_GTO(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SS_GTO_class(){
 
     { //::Squire::SS_GTO
@@ -49,6 +51,7 @@ void register_SS_GTO_class(){
             SS_GTO_exposer.def( 
                 "angularMomentum0"
                 , angularMomentum0_function_value
+                , bp::release_gil_policy()
                 , "Return the angular momentum of the first GTO shell in this pair" );
         
         }
@@ -60,6 +63,7 @@ void register_SS_GTO_class(){
             SS_GTO_exposer.def( 
                 "angularMomentum1"
                 , angularMomentum1_function_value
+                , bp::release_gil_policy()
                 , "Return the angular momentum of the second GTO shell in this pair" );
         
         }
@@ -71,6 +75,7 @@ void register_SS_GTO_class(){
             SS_GTO_exposer.def( 
                 "nOrbitals0"
                 , nOrbitals0_function_value
+                , bp::release_gil_policy()
                 , "Return the number of orbitals in the first GTO shell in this pair" );
         
         }
@@ -82,6 +87,7 @@ void register_SS_GTO_class(){
             SS_GTO_exposer.def( 
                 "nOrbitals1"
                 , nOrbitals1_function_value
+                , bp::release_gil_policy()
                 , "Return the number of orbitals in the second GTO shell in this pair" );
         
         }
@@ -108,6 +114,7 @@ void register_SS_GTO_class(){
             SS_GTO_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

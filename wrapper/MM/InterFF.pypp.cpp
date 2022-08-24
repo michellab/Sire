@@ -56,6 +56,8 @@ SireMM::InterFF __copy__(const SireMM::InterFF &other){ return SireMM::InterFF(o
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_InterFF_class(){
@@ -74,6 +76,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "accept"
                 , accept_function_value
+                , bp::release_gil_policy()
                 , "Tell the forcefield that the last move was accepted. This tells the\nforcefield to make permanent any temporary changes that were used a workspace\nto avoid memory allocation during a move" );
         
         }
@@ -110,6 +113,7 @@ void register_InterFF_class(){
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Add the passed atoms as fixed atoms to the forcefield" );
         
         }
@@ -121,7 +125,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "cljFunction"
                 , cljFunction_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the function used to calculate the energy" );
         
         }
@@ -134,7 +138,7 @@ void register_InterFF_class(){
                 "cljFunction"
                 , cljFunction_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the CLJFunction associated with the passed key" );
         
         }
@@ -146,6 +150,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "cljFunctionKeys"
                 , cljFunctionKeys_function_value
+                , bp::release_gil_policy()
                 , "Return the keys of all CLJFunctions added to this forcefield" );
         
         }
@@ -157,6 +162,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "cljFunctions"
                 , cljFunctions_function_value
+                , bp::release_gil_policy()
                 , "Return the hash of all CLJFunctions in this forcefield, indexed by their key" );
         
         }
@@ -168,7 +174,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the energy components of this forcefield" );
         
         }
@@ -181,6 +187,7 @@ void register_InterFF_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield contains the property property" );
         
         }
@@ -192,6 +199,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "disableGrid"
                 , disableGrid_function_value
+                , bp::release_gil_policy()
                 , "Turn off use of the grid" );
         
         }
@@ -203,6 +211,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "disableParallelCalculation"
                 , disableParallelCalculation_function_value
+                , bp::release_gil_policy()
                 , "Turn off use of a multicore parallel calculation of the energy.\nThis may be quicker if you have few atoms in the forcefield,\nor if you are only planning on allocating one core per forcefield" );
         
         }
@@ -214,6 +223,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "disableReproducibleCalculation"
                 , disableReproducibleCalculation_function_value
+                , bp::release_gil_policy()
                 , "Turn off an energy summing algorithm that guarantees the same energy\nregardless of whether a single core or multicore calculation is being\nperformed (i.e. rounding errors in both cases will not be identical)" );
         
         }
@@ -225,6 +235,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "enableGrid"
                 , enableGrid_function_value
+                , bp::release_gil_policy()
                 , "Turn on the use of the grid" );
         
         }
@@ -236,6 +247,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "enableParallelCalculation"
                 , enableParallelCalculation_function_value
+                , bp::release_gil_policy()
                 , "Turn on use of a multicore parallel calculation of the energy.\nThis is on by default, and spreads the energy calculations over\navailable cores" );
         
         }
@@ -247,6 +259,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "enableReproducibleCalculation"
                 , enableReproducibleCalculation_function_value
+                , bp::release_gil_policy()
                 , "Turn on an energy summing algorithm that guarantees the same energy\nregardless of whether a single core or multicore calculation is being\nperformed (i.e. rounding errors in both cases will be identical)" );
         
         }
@@ -258,6 +271,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "fixedOnly"
                 , fixedOnly_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not only the energy between the mobile and fixed\natoms is being calculated" );
         
         }
@@ -269,6 +283,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "grid"
                 , grid_function_value
+                , bp::release_gil_policy()
                 , "Return the grid used to calculate the energy with fixed atoms. This will\nonly be set after the first energy calculation that uses the grid" );
         
         }
@@ -280,6 +295,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "gridBuffer"
                 , gridBuffer_function_value
+                , bp::release_gil_policy()
                 , "Return the buffer used when working out the dimension of the grid" );
         
         }
@@ -291,6 +307,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "gridSpacing"
                 , gridSpacing_function_value
+                , bp::release_gil_policy()
                 , "Return spacing between grid points" );
         
         }
@@ -302,6 +319,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "mustNowRecalculateFromScratch"
                 , mustNowRecalculateFromScratch_function_value
+                , bp::release_gil_policy()
                 , "Signal that this forcefield must now be recalculated from scratch" );
         
         }
@@ -313,6 +331,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "nCLJFunctions"
                 , nCLJFunctions_function_value
+                , bp::release_gil_policy()
                 , "Return the number of CLJ functions in this forcefield. There should always\nbe at least one" );
         
         }
@@ -324,6 +343,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "needsAccepting"
                 , needsAccepting_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield is using a temporary workspace that\nneeds to be accepted" );
         
         }
@@ -363,7 +383,7 @@ void register_InterFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the value of the forcefield property with name name" );
         
         }
@@ -375,6 +395,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "removeAllCLJFunctions"
                 , removeAllCLJFunctions_function_value
+                , bp::release_gil_policy()
                 , "Function to remove all of the CLJFunctions (except for the default function)" );
         
         }
@@ -387,6 +408,7 @@ void register_InterFF_class(){
                 "removeCLJFunctionAt"
                 , removeCLJFunctionAt_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "Remove the CLJ function with key key - note that you cannot remove\nthe default CLJ function" );
         
         }
@@ -399,6 +421,7 @@ void register_InterFF_class(){
                 "setCLJFunction"
                 , setCLJFunction_function_value
                 , ( bp::arg("cljfunc") )
+                , bp::release_gil_policy()
                 , "Function used to set the CLJFunction used to calculate the energy" );
         
         }
@@ -411,6 +434,7 @@ void register_InterFF_class(){
                 "setCLJFunction"
                 , setCLJFunction_function_value
                 , ( bp::arg("key"), bp::arg("cljfunc") )
+                , bp::release_gil_policy()
                 , "Set the CLJFunction with key key equal to cljfunc" );
         
         }
@@ -447,6 +471,7 @@ void register_InterFF_class(){
                 "setFixedAtoms"
                 , setFixedAtoms_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Set the fixed atoms equal to atoms" );
         
         }
@@ -459,6 +484,7 @@ void register_InterFF_class(){
                 "setFixedOnly"
                 , setFixedOnly_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Set whether or not the energy calculation is only between the mobile and\nfixed atoms (i.e. the mobile-mobile interaction is ignored)" );
         
         }
@@ -471,6 +497,7 @@ void register_InterFF_class(){
                 "setGridBuffer"
                 , setGridBuffer_function_value
                 , ( bp::arg("buffer") )
+                , bp::release_gil_policy()
                 , "Set the buffer used when using a grid. This is the distance\nadded around the maximum extent of the atoms when working out the\ndimension of the grid" );
         
         }
@@ -483,6 +510,7 @@ void register_InterFF_class(){
                 "setGridSpacing"
                 , setGridSpacing_function_value
                 , ( bp::arg("spacing") )
+                , bp::release_gil_policy()
                 , "Set the spacing between grid points" );
         
         }
@@ -495,6 +523,7 @@ void register_InterFF_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("property") )
+                , bp::release_gil_policy()
                 , "Set the forcefield property called name to the value property. Note that\nthis only affects the default CLJFunction. Additional functions must\nbe configured before adding them to the forcefield, or by using the\nsyntax property_name[cljfunction], e.g. ff.setProperty(space[fwds], Cartesian())\nwould set the space property of the CLJFunction at key fwds to Cartesian()" );
         
         }
@@ -507,6 +536,7 @@ void register_InterFF_class(){
                 "setUseGrid"
                 , setUseGrid_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Set whether or not a grid is used to optimise energy calculations with the fixed atoms" );
         
         }
@@ -519,6 +549,7 @@ void register_InterFF_class(){
                 "setUseParallelCalculation"
                 , setUseParallelCalculation_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Set whether or not to use a multicore parallel algorithm\nto calculate the energy" );
         
         }
@@ -531,6 +562,7 @@ void register_InterFF_class(){
                 "setUseReproducibleCalculation"
                 , setUseReproducibleCalculation_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Switch on or off use of an energy summing algorithm that guarantees the\nsame energy regardless of whether a single core or multicore calculation\nis being performed" );
         
         }
@@ -542,6 +574,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -553,6 +586,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "usesGrid"
                 , usesGrid_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the grid is used" );
         
         }
@@ -564,6 +598,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "usesParallelCalculation"
                 , usesParallelCalculation_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not a parallel algorithm is used to calculate energies" );
         
         }
@@ -575,6 +610,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "usesReproducibleCalculation"
                 , usesReproducibleCalculation_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not a reproducible energy summing algorithm is being\nused to accumulate the energies" );
         
         }
@@ -586,6 +622,7 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

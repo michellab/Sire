@@ -16,4 +16,4 @@
 # from being loaded if another Qt wrapper library has already
 # been loaded
 
-from Sire.Qt._Qt import *
+from ._Qt import *

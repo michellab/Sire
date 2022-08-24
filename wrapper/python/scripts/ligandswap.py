@@ -19,7 +19,7 @@ sire.app/bin/ligandswap -c0 complex0.crd -t0 complex0.top -l0 LIG0 -c1 complex1.
 
 As well as calculating relative binding free energies, ligandswap can calculate relative hydration free energies by swapping two ligands between a solvent box and vacuum. To swap to vacuum, use the ‘--vacuum’ option (see ‘--help’).
 
-Sire will automatically use all of the processor cores available on your compute node. The calculation is not fast, and the free energy averages (collected simultaneously via thermodynamic integration (TI), free energy perturbation (FEP) and Bennetts Acceptance Ratio (BAR) method) will take 1-4 days of compute time to converge. 
+Sire will automatically use all of the processor cores available on your compute node. The calculation is not fast, and the free energy averages (collected simultaneously via thermodynamic integration (TI), free energy perturbation (FEP) and Bennetts Acceptance Ratio (BAR) method) will take 1-4 days of compute time to converge.
 
 Sire performs the calculation as a series of iterations (1000 by default), with the binding free energy (and binding free energy components) written to an output results file at the end of each iteration. This is performed for each stage (stage 1 being ligand 0 bound to ligand 1 bound, and stage 2 being ligand 1 bound to ligand 0 bound). These files, called output/stageX/results_????.log (where X is the stage number and ???? is the iteration number) can be monitored during the simulation to check for convergence. At the end of the simulation, you can analyse the results of each stage using the Sire app analyse_freenrg, e.g.
 
@@ -34,6 +34,12 @@ While ligandswap aims to calculate the relative binding free energy, it is not m
 
 If you need more help understanding or interpreting the results of a ligandswap calculation then please feel free to get in touch via the Sire users mailing list.
 """
+
+try:
+    import sire
+    sire.use_old_api()
+except ImportError:
+    pass
 
 from Sire.Tools import LSRC
 from Sire.Tools import readParams
@@ -93,7 +99,7 @@ parser.add_argument('-c1', '--coordinate_file1', nargs="?",
                     help="The Amber coordinate file (with periodic box) giving the coordinates "
                          "of all of the atoms in the passed topology file of the protein-ligand1 complex.")
 
-parser.add_argument('-C', '--config', nargs="?", 
+parser.add_argument('-C', '--config', nargs="?",
                     help='Supply an optional CONFIG file to control the calculation.')
 
 parser.add_argument('--lambda_values', type=float, nargs='+',
@@ -103,7 +109,7 @@ parser.add_argument('-n', '--num_iterations', type=int, nargs="?",
                     help='The number of waterswap iterations to perform (default 1000)')
 
 parser.add_argument('--vacuum', action="store_true",
-                    help="Swap ligands into a vacuum box rather than a water box (for relative hydration calculations).") 
+                    help="Swap ligands into a vacuum box rather than a water box (for relative hydration calculations).")
 
 parser.add_argument('-m', '--match', nargs="?",
                     help="Supply an optional match string to control alignment of the ligands. "
@@ -211,7 +217,7 @@ elif "ligand0" in params:
 
 if ligand0:
     print("Ligand 0 will be located by finding the first molecule containing residue %s" % ligand0)
-    
+
 else:
     print("Ligand 0 will be the first non-protein, non-solvent molecule found in system.")
 
@@ -224,7 +230,7 @@ elif "ligand1" in params:
 
 if ligand1:
     print("Ligand 1 will be located by finding the first molecule containing residue %s" % ligand1)
-    
+
 else:
     print("Ligand 1 will be the first non-protein, non-solvent molecule found in system.")
 

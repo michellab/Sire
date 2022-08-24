@@ -35,6 +35,8 @@ SireMM::InternalSymbols __copy__(const SireMM::InternalSymbols &other){ return S
 
 const char* pvt_get_name(const SireMM::InternalSymbols&){ return "SireMM::InternalSymbols";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_InternalSymbols_class(){
 
     { //::SireMM::InternalSymbols

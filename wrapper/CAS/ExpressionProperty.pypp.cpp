@@ -29,6 +29,8 @@ SireCAS::ExpressionProperty __copy__(const SireCAS::ExpressionProperty &other){ 
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ExpressionProperty_class(){
 
     { //::SireCAS::ExpressionProperty
@@ -46,6 +48,7 @@ void register_ExpressionProperty_class(){
             ExpressionProperty_exposer.def( 
                 "asABoolean"
                 , asABoolean_function_value
+                , bp::release_gil_policy()
                 , "Return this number cast as a boolean" );
         
         }
@@ -57,6 +60,7 @@ void register_ExpressionProperty_class(){
             ExpressionProperty_exposer.def( 
                 "asADouble"
                 , asADouble_function_value
+                , bp::release_gil_policy()
                 , "Return this number cast as a double" );
         
         }
@@ -68,6 +72,7 @@ void register_ExpressionProperty_class(){
             ExpressionProperty_exposer.def( 
                 "asAnInteger"
                 , asAnInteger_function_value
+                , bp::release_gil_policy()
                 , "Return this number cast as an integer" );
         
         }
@@ -79,6 +84,7 @@ void register_ExpressionProperty_class(){
             ExpressionProperty_exposer.def( 
                 "isABoolean"
                 , isABoolean_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -90,6 +96,7 @@ void register_ExpressionProperty_class(){
             ExpressionProperty_exposer.def( 
                 "isADouble"
                 , isADouble_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -101,6 +108,7 @@ void register_ExpressionProperty_class(){
             ExpressionProperty_exposer.def( 
                 "isAnInteger"
                 , isAnInteger_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -127,6 +135,7 @@ void register_ExpressionProperty_class(){
             ExpressionProperty_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -138,6 +147,7 @@ void register_ExpressionProperty_class(){
             ExpressionProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -149,6 +159,7 @@ void register_ExpressionProperty_class(){
             ExpressionProperty_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "Return this number cast as a double" );
         
         }

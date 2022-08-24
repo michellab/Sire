@@ -16,6 +16,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_BeadProp_class(){
 
     { //::SireMol::BeadProp
@@ -31,6 +33,7 @@ void register_BeadProp_class(){
                 "assertCanConvert"
                 , assertCanConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -43,6 +46,7 @@ void register_BeadProp_class(){
                 "assignFrom"
                 , assignFrom_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -54,7 +58,7 @@ void register_BeadProp_class(){
             BeadProp_exposer.def( 
                 "beading"
                 , beading_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the beading property used to define the beads in the molecule" );
         
         }
@@ -67,6 +71,7 @@ void register_BeadProp_class(){
                 "canConvert"
                 , canConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -79,6 +84,7 @@ void register_BeadProp_class(){
                 "setBeading"
                 , setBeading_function_value
                 , ( bp::arg("beading") )
+                , bp::release_gil_policy()
                 , "Set the beading property used to define the beads in the molecule" );
         
         }
@@ -90,6 +96,7 @@ void register_BeadProp_class(){
             BeadProp_exposer.def( 
                 "toVariant"
                 , toVariant_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

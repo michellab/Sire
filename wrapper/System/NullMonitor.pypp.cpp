@@ -25,6 +25,8 @@ SireSystem::NullMonitor __copy__(const SireSystem::NullMonitor &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullMonitor_class(){
 
     { //::SireSystem::NullMonitor
@@ -40,6 +42,7 @@ void register_NullMonitor_class(){
             NullMonitor_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "There are no statistics to clear" );
         
         }
@@ -52,6 +55,7 @@ void register_NullMonitor_class(){
                 "monitor"
                 , monitor_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "A null monitor doesnt monitor anything" );
         
         }
@@ -78,6 +82,7 @@ void register_NullMonitor_class(){
             NullMonitor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

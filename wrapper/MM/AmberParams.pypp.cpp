@@ -69,6 +69,8 @@ SireMM::AmberParams __copy__(const SireMM::AmberParams &other){ return SireMM::A
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AmberParams_class(){
 
     { //::SireMM::AmberParams
@@ -88,6 +90,7 @@ void register_AmberParams_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atom"), bp::arg("charge"), bp::arg("mass"), bp::arg("element"), bp::arg("ljparam"), bp::arg("amber_type"), bp::arg("born_radius"), bp::arg("screening_parameter"), bp::arg("treechain") )
+                , bp::release_gil_policy()
                 , "Set the atom parameters for the specified atom to the provided values" );
         
         }
@@ -100,6 +103,7 @@ void register_AmberParams_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("bond"), bp::arg("k"), bp::arg("r0"), bp::arg("includes_hydrogen") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -112,6 +116,7 @@ void register_AmberParams_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("angle"), bp::arg("k"), bp::arg("theta0"), bp::arg("includes_hydrogen") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -124,6 +129,7 @@ void register_AmberParams_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("dihedral"), bp::arg("k"), bp::arg("periodicity"), bp::arg("phase"), bp::arg("includes_hydrogen") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -136,6 +142,7 @@ void register_AmberParams_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("improper"), bp::arg("v"), bp::arg("periodicity"), bp::arg("phase"), bp::arg("includes_hydrogen") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -148,6 +155,7 @@ void register_AmberParams_class(){
                 "addNB14"
                 , addNB14_function_value
                 , ( bp::arg("pair"), bp::arg("cscl"), bp::arg("ljscl") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -159,6 +167,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "amberTypes"
                 , amberTypes_function_value
+                , bp::release_gil_policy()
                 , "Return all of the amber atom types" );
         
         }
@@ -170,6 +179,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "angleFunctions"
                 , angleFunctions_function_value
+                , bp::release_gil_policy()
                 , "Return all of the angle parameters converted to a set of ThreeAtomFunctions" );
         
         }
@@ -182,6 +192,7 @@ void register_AmberParams_class(){
                 "angleFunctions"
                 , angleFunctions_function_value
                 , ( bp::arg("THETA") )
+                , bp::release_gil_policy()
                 , "Return all of the angle parameters converted to a set of ThreeAtomFunctions" );
         
         }
@@ -193,6 +204,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "angles"
                 , angles_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -204,6 +216,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "bondFunctions"
                 , bondFunctions_function_value
+                , bp::release_gil_policy()
                 , "Return all of the bond parameters converted to a set of TwoAtomFunctions" );
         
         }
@@ -216,6 +229,7 @@ void register_AmberParams_class(){
                 "bondFunctions"
                 , bondFunctions_function_value
                 , ( bp::arg("R") )
+                , bp::release_gil_policy()
                 , "Return all of the bond parameters converted to a set of TwoAtomFunctions" );
         
         }
@@ -227,6 +241,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "bonds"
                 , bonds_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -238,6 +253,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "charges"
                 , charges_function_value
+                , bp::release_gil_policy()
                 , "Return the charges on the atoms" );
         
         }
@@ -249,6 +265,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "cljScaleFactors"
                 , cljScaleFactors_function_value
+                , bp::release_gil_policy()
                 , "Return the CLJ nonbonded 1-4 scale factors for the molecule" );
         
         }
@@ -260,6 +277,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "connectivity"
                 , connectivity_function_value
+                , bp::release_gil_policy()
                 , "Return the connectivity of the molecule implied by the\nthe bonds" );
         
         }
@@ -272,6 +290,7 @@ void register_AmberParams_class(){
                 "convert"
                 , convert_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "Convert the passed BondID into AtomIdx IDs, sorted in index order" );
         
         }
@@ -284,6 +303,7 @@ void register_AmberParams_class(){
                 "convert"
                 , convert_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "Convert the passed AngleID into AtomIdx IDs, sorted in index order" );
         
         }
@@ -296,6 +316,7 @@ void register_AmberParams_class(){
                 "convert"
                 , convert_function_value
                 , ( bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Convert the passed DihedralID into AtomIdx IDs, sorted in index order" );
         
         }
@@ -308,6 +329,7 @@ void register_AmberParams_class(){
                 "convert"
                 , convert_function_value
                 , ( bp::arg("improper") )
+                , bp::release_gil_policy()
                 , "Convert the passed ImproperID into AtomIdx IDs, sorted in index order" );
         
         }
@@ -319,6 +341,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "dihedralFunctions"
                 , dihedralFunctions_function_value
+                , bp::release_gil_policy()
                 , "Return all of the dihedral parameters converted to a set of FourAtomFunctions" );
         
         }
@@ -331,6 +354,7 @@ void register_AmberParams_class(){
                 "dihedralFunctions"
                 , dihedralFunctions_function_value
                 , ( bp::arg("PHI") )
+                , bp::release_gil_policy()
                 , "Return all of the dihedral parameters converted to a set of FourAtomFunctions" );
         
         }
@@ -342,6 +366,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "dihedrals"
                 , dihedrals_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -353,6 +378,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "elements"
                 , elements_function_value
+                , bp::release_gil_policy()
                 , "Return the atom elements" );
         
         }
@@ -364,6 +390,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "excludedAtoms"
                 , excludedAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the excluded atoms of the molecule. The returned\nobject has a matrix of all atom pairs, where the value\nis 0 for atom0-atom1 pairs that are to be excluded,\nand 1 for atom0-atom1 pairs that are to be included\nin the nonbonded calculation" );
         
         }
@@ -375,6 +402,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "gbRadii"
                 , gbRadii_function_value
+                , bp::release_gil_policy()
                 , "Return all of the Born radii of the atoms" );
         
         }
@@ -386,6 +414,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "gbScreening"
                 , gbScreening_function_value
+                , bp::release_gil_policy()
                 , "Return all of the Born screening parameters for the atoms" );
         
         }
@@ -398,6 +427,7 @@ void register_AmberParams_class(){
                 "getNB14"
                 , getNB14_function_value
                 , ( bp::arg("pair") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -410,6 +440,7 @@ void register_AmberParams_class(){
                 "getParameter"
                 , getParameter_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -422,6 +453,7 @@ void register_AmberParams_class(){
                 "getParameter"
                 , getParameter_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -434,6 +466,7 @@ void register_AmberParams_class(){
                 "getParameter"
                 , getParameter_function_value
                 , ( bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -446,6 +479,7 @@ void register_AmberParams_class(){
                 "getParameter"
                 , getParameter_function_value
                 , ( bp::arg("improper") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -457,6 +491,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "improperFunctions"
                 , improperFunctions_function_value
+                , bp::release_gil_policy()
                 , "Return all of the improper parameters converted to a set of FourAtomFunctions" );
         
         }
@@ -469,6 +504,7 @@ void register_AmberParams_class(){
                 "improperFunctions"
                 , improperFunctions_function_value
                 , ( bp::arg("PHI") )
+                , bp::release_gil_policy()
                 , "Return all of the improper parameters converted to a set of FourAtomFunctions" );
         
         }
@@ -480,6 +516,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "impropers"
                 , impropers_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -491,6 +528,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "info"
                 , info_function_value
+                , bp::release_gil_policy()
                 , "Return the layout of the molecule whose flexibility is contained\nin this object" );
         
         }
@@ -503,6 +541,7 @@ void register_AmberParams_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Return whether or not this flexibility is compatible with the molecule\nwhose info is in molinfo" );
         
         }
@@ -514,6 +553,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "ljs"
                 , ljs_function_value
+                , bp::release_gil_policy()
                 , "Return the atom LJ parameters" );
         
         }
@@ -525,6 +565,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "masses"
                 , masses_function_value
+                , bp::release_gil_policy()
                 , "Return the atom masses" );
         
         }
@@ -536,6 +577,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "nb14s"
                 , nb14s_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -575,6 +617,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "radiusSet"
                 , radiusSet_function_value
+                , bp::release_gil_policy()
                 , "Return the radius set used by LEAP to assign the Born radii" );
         
         }
@@ -587,6 +630,7 @@ void register_AmberParams_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -599,6 +643,7 @@ void register_AmberParams_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -611,6 +656,7 @@ void register_AmberParams_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -623,6 +669,7 @@ void register_AmberParams_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("improper") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -635,6 +682,7 @@ void register_AmberParams_class(){
                 "removeNB14"
                 , removeNB14_function_value
                 , ( bp::arg("pair") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -647,6 +695,7 @@ void register_AmberParams_class(){
                 "setExcludedAtoms"
                 , setExcludedAtoms_function_value
                 , ( bp::arg("excluded_atoms") )
+                , bp::release_gil_policy()
                 , "Set the excluded atoms of the molecule. This should be a\nCLJNBPairs with the value equal to 0 for atom0-atom1 pairs\nthat are excluded, and 1 for atom0-atom1 pairs that are\nto be included in the non-bonded calculation" );
         
         }
@@ -659,6 +708,7 @@ void register_AmberParams_class(){
                 "setPropertyMap"
                 , setPropertyMap_function_value
                 , ( bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Set the property map that should be used to find and update properties\nof the molecule" );
         
         }
@@ -671,6 +721,7 @@ void register_AmberParams_class(){
                 "setRadiusSet"
                 , setRadiusSet_function_value
                 , ( bp::arg("radius_set") )
+                , bp::release_gil_policy()
                 , "Set the radius set used by LEAP to assign the Born radii\nof the atoms. This is just a string that is used to label\nthe radius set in the PRM file" );
         
         }
@@ -682,6 +733,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -693,6 +745,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "treeChains"
                 , treeChains_function_value
+                , bp::release_gil_policy()
                 , "Return all of the Amber treechain classification for all of the atoms" );
         
         }
@@ -704,6 +757,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -716,6 +770,7 @@ void register_AmberParams_class(){
                 "updateFrom"
                 , updateFrom_function_value
                 , ( bp::arg("molview") )
+                , bp::release_gil_policy()
                 , "Update these parameters from the contents of the passed molecule. This\nwill only work if these parameters are compatible with this molecule" );
         
         }
@@ -727,6 +782,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "validate"
                 , validate_function_value
+                , bp::release_gil_policy()
                 , "Validate this set of parameters. This checks that all of the requirements\nfor an Amber set of parameters are met, e.g. that all Atom indicies are\ncontiguous and in-order, and that all atoms contiguously fill all residues\netc. This returns any errors as strings. An empty set of strings indicates\nthat there are no errors" );
         
         }
@@ -738,6 +794,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "validateAndFix"
                 , validateAndFix_function_value
+                , bp::release_gil_policy()
                 , "Validate this set of parameters. In addition to checking that the\nrequirements are met, this also does any work needed to fix problems,\nif they are fixable." );
         
         }

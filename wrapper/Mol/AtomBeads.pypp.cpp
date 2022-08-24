@@ -22,6 +22,8 @@ SireMol::AtomProperty<SireMol::BeadNum> __copy__(const SireMol::AtomProperty<Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_AtomBeads_class(){
@@ -62,6 +64,7 @@ void register_AtomBeads_class(){
                 "assertCanConvert"
                 , assertCanConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -75,6 +78,7 @@ void register_AtomBeads_class(){
                 "assignFrom"
                 , assignFrom_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -102,7 +106,7 @@ void register_AtomBeads_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -116,6 +120,7 @@ void register_AtomBeads_class(){
                 "canConvert"
                 , canConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -129,6 +134,7 @@ void register_AtomBeads_class(){
                 "copyFrom"
                 , copyFrom_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -142,6 +148,7 @@ void register_AtomBeads_class(){
                 "copyFrom"
                 , copyFrom_function_value
                 , ( bp::arg("values"), bp::arg("selection") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -154,6 +161,7 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -167,6 +175,7 @@ void register_AtomBeads_class(){
                 "divide"
                 , divide_function_value
                 , ( bp::arg("beads") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -180,6 +189,7 @@ void register_AtomBeads_class(){
                 "divideByResidue"
                 , divideByResidue_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -193,6 +203,7 @@ void register_AtomBeads_class(){
                 "fromVariant"
                 , fromVariant_function_value
                 , ( bp::arg("variant") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -220,7 +231,7 @@ void register_AtomBeads_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -234,6 +245,7 @@ void register_AtomBeads_class(){
                 "getAsProperty"
                 , getAsProperty_function_value
                 , ( bp::arg("cgatomidx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -247,6 +259,7 @@ void register_AtomBeads_class(){
                 "getAsVariant"
                 , getAsVariant_function_value
                 , ( bp::arg("cgatomidx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -260,6 +273,7 @@ void register_AtomBeads_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -273,6 +287,7 @@ void register_AtomBeads_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -285,6 +300,7 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -298,6 +314,7 @@ void register_AtomBeads_class(){
                 "matchToSelection"
                 , matchToSelection_function_value
                 , ( bp::arg("selection") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -311,6 +328,7 @@ void register_AtomBeads_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -323,6 +341,7 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -336,6 +355,7 @@ void register_AtomBeads_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("cgidx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -348,6 +368,7 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "nCutGroups"
                 , nCutGroups_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -391,7 +412,7 @@ void register_AtomBeads_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -432,6 +453,7 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -444,6 +466,7 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -456,6 +479,7 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "toVariant"
                 , toVariant_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -468,6 +492,7 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "toVector"
                 , toVector_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -481,6 +506,7 @@ void register_AtomBeads_class(){
                 "toVector"
                 , toVector_function_value
                 , ( bp::arg("selection") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -493,6 +519,7 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

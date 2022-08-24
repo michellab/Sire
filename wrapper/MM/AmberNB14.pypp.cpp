@@ -69,6 +69,8 @@ SireMM::AmberNB14 __copy__(const SireMM::AmberNB14 &other){ return SireMM::Amber
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AmberNB14_class(){
 
     { //::SireMM::AmberNB14
@@ -84,6 +86,7 @@ void register_AmberNB14_class(){
             AmberNB14_exposer.def( 
                 "cscl"
                 , cscl_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +98,7 @@ void register_AmberNB14_class(){
             AmberNB14_exposer.def( 
                 "ljscl"
                 , ljscl_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -137,6 +141,7 @@ void register_AmberNB14_class(){
             AmberNB14_exposer.def( 
                 "toScaleFactor"
                 , toScaleFactor_function_value
+                , bp::release_gil_policy()
                 , "Return the value converted to a CLJScaleFactor" );
         
         }
@@ -148,6 +153,7 @@ void register_AmberNB14_class(){
             AmberNB14_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -159,6 +165,7 @@ void register_AmberNB14_class(){
             AmberNB14_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -170,6 +177,7 @@ void register_AmberNB14_class(){
             AmberNB14_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

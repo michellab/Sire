@@ -37,6 +37,8 @@ SireVol::CoordGroupArrayArray __copy__(const SireVol::CoordGroupArrayArray &othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_CoordGroupArrayArray_class(){
@@ -59,6 +61,7 @@ void register_CoordGroupArrayArray_class(){
             CoordGroupArrayArray_exposer.def( 
                 "aaBox"
                 , aaBox_function_value
+                , bp::release_gil_policy()
                 , "Return an AABox that complete encompasses all of the CoordGroups\nin this array" );
         
         }
@@ -71,6 +74,7 @@ void register_CoordGroupArrayArray_class(){
                 "assertValidCoordGroup"
                 , assertValidCoordGroup_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Assert that i is a valid index for a CoordGroup\nThrow: SireError::invalid_index\n" );
         
         }
@@ -83,6 +87,7 @@ void register_CoordGroupArrayArray_class(){
                 "assertValidCoordGroup"
                 , assertValidCoordGroup_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Assert that there is a jth CoordGroup in the ith array\nThrow: SireError::invalid_index\n" );
         
         }
@@ -95,6 +100,7 @@ void register_CoordGroupArrayArray_class(){
                 "assertValidCoordGroupArray"
                 , assertValidCoordGroupArray_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Assert that i is a valid index for a CoordGroupArray\nThrow: SireError::invalid_index\n" );
         
         }
@@ -107,6 +113,7 @@ void register_CoordGroupArrayArray_class(){
                 "assertValidCoordinate"
                 , assertValidCoordinate_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Assert that i is a valid index for a coordinate\nThrow: SireError::invalid_index\n" );
         
         }
@@ -119,6 +126,7 @@ void register_CoordGroupArrayArray_class(){
                 "assertValidIndex"
                 , assertValidIndex_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Assert that i is a valid index for a CoordGroupArray\nThrow: SireError::invalid_index\n" );
         
         }
@@ -144,6 +152,7 @@ void register_CoordGroupArrayArray_class(){
                 "changeFrame"
                 , changeFrame_function_value
                 , ( bp::arg("from_frame"), bp::arg("to_frame") )
+                , bp::release_gil_policy()
                 , "Map all of the points in this array from the coordinate frame\nfrom_frame to the coordinate frame to_frame" );
         
         }
@@ -156,6 +165,7 @@ void register_CoordGroupArrayArray_class(){
                 "changeFrame"
                 , changeFrame_function_value
                 , ( bp::arg("i"), bp::arg("from_frame"), bp::arg("to_frame") )
+                , bp::release_gil_policy()
                 , "Map all of the points in this array from the coordinate frame\nfrom_frame to the coordinate frame to_frame\nThrow: SireError::invalid_index\n" );
         
         }
@@ -168,6 +178,7 @@ void register_CoordGroupArrayArray_class(){
                 "changeFrame"
                 , changeFrame_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("from_frame"), bp::arg("to_frame") )
+                , bp::release_gil_policy()
                 , "Map all of the points in the CoordGroup at index j in the\narray at index i from the coordinate frame from_frame to\nthe coordinate frame to_frame\nThrow: SireError::invalid_index\n" );
         
         }
@@ -179,6 +190,7 @@ void register_CoordGroupArrayArray_class(){
             CoordGroupArrayArray_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of CoordGroupArrays in this array" );
         
         }
@@ -191,6 +203,7 @@ void register_CoordGroupArrayArray_class(){
                 "mapInto"
                 , mapInto_function_value
                 , ( bp::arg("axes") )
+                , bp::release_gil_policy()
                 , "Map all of the points in this array into the coordinate frame\nrepresented by axes" );
         
         }
@@ -203,6 +216,7 @@ void register_CoordGroupArrayArray_class(){
                 "mapInto"
                 , mapInto_function_value
                 , ( bp::arg("i"), bp::arg("axes") )
+                , bp::release_gil_policy()
                 , "Map all of the points in the ith array into the coordinate frame\nrepresented by axes\nThrow: SireError::invalid_index\n" );
         
         }
@@ -215,6 +229,7 @@ void register_CoordGroupArrayArray_class(){
                 "mapInto"
                 , mapInto_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("axes") )
+                , bp::release_gil_policy()
                 , "Map all the points in the CoordGroup at index j in the array at\nindex i into the coordinate frame represented by axes\nThrow: SireError::invalid_index\n" );
         
         }
@@ -226,6 +241,7 @@ void register_CoordGroupArrayArray_class(){
             CoordGroupArrayArray_exposer.def( 
                 "merge"
                 , merge_function_value
+                , bp::release_gil_policy()
                 , "Merge this array of array of CoordGroups back into a single CoordGroup" );
         
         }
@@ -237,6 +253,7 @@ void register_CoordGroupArrayArray_class(){
             CoordGroupArrayArray_exposer.def( 
                 "nCoordGroupArrays"
                 , nCoordGroupArrays_function_value
+                , bp::release_gil_policy()
                 , "Return the number of CoordGroupArrays in this array" );
         
         }
@@ -248,6 +265,7 @@ void register_CoordGroupArrayArray_class(){
             CoordGroupArrayArray_exposer.def( 
                 "nCoordGroups"
                 , nCoordGroups_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of CoordGroups in all of the CoordGroupArrays\nin this array" );
         
         }
@@ -259,6 +277,7 @@ void register_CoordGroupArrayArray_class(){
             CoordGroupArrayArray_exposer.def( 
                 "nCoords"
                 , nCoords_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of points in all of the CoordGroups in\nall of the CoordGroupArrays in this array" );
         
         }
@@ -299,6 +318,7 @@ void register_CoordGroupArrayArray_class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("quat"), bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Rotate all of the points in this container using the quaternion quat\nabout the point point" );
         
         }
@@ -311,6 +331,7 @@ void register_CoordGroupArrayArray_class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("rotmat"), bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Rotate all of the points in this container using the matrix rotmat\nabout the point point" );
         
         }
@@ -323,6 +344,7 @@ void register_CoordGroupArrayArray_class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("i"), bp::arg("quat"), bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Rotate all of the points in the ith array using the quaternion quat\nabout the point point\nThrow: SireError::invalid_index\n" );
         
         }
@@ -335,6 +357,7 @@ void register_CoordGroupArrayArray_class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("i"), bp::arg("rotmat"), bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Rotate all of the points in the ith array using the matrix rotmat\nabout the point point\nThrow: SireError::invalid_index\n" );
         
         }
@@ -347,6 +370,7 @@ void register_CoordGroupArrayArray_class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("quat"), bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Rotate all of the points in the jth CoordGroup in the\nith array using the quaternion quat about the point point\nThrow: SireError::invalid_index\n" );
         
         }
@@ -359,6 +383,7 @@ void register_CoordGroupArrayArray_class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("rotmat"), bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Rotate all of the points in the jth CoordGroup in the\nith array using the matrix rotmat about the point point\nThrow: SireError::invalid_index\n" );
         
         }
@@ -370,6 +395,7 @@ void register_CoordGroupArrayArray_class(){
             CoordGroupArrayArray_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of CoordGroupArrays in this array" );
         
         }
@@ -381,6 +407,7 @@ void register_CoordGroupArrayArray_class(){
             CoordGroupArrayArray_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this array of arrays" );
         
         }
@@ -393,6 +420,7 @@ void register_CoordGroupArrayArray_class(){
                 "transform"
                 , transform_function_value
                 , ( bp::arg("t") )
+                , bp::release_gil_policy()
                 , "Rotate all of the points in this container using the matrix rotmat\nabout the point point" );
         
         }
@@ -405,6 +433,7 @@ void register_CoordGroupArrayArray_class(){
                 "transform"
                 , transform_function_value
                 , ( bp::arg("i"), bp::arg("t") )
+                , bp::release_gil_policy()
                 , "Transform all of the points in the ith array using the\ntransformation t\nThrow: SireError::invalid_index\n" );
         
         }
@@ -417,6 +446,7 @@ void register_CoordGroupArrayArray_class(){
                 "transform"
                 , transform_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("t") )
+                , bp::release_gil_policy()
                 , "Transform all of the points in the jth CoordGroup in the\nith array using the transformation t\nThrow: SireError::invalid_index\n" );
         
         }
@@ -429,6 +459,7 @@ void register_CoordGroupArrayArray_class(){
                 "translate"
                 , translate_function_value
                 , ( bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Translate all of the coordinates held in this container by delta" );
         
         }
@@ -441,6 +472,7 @@ void register_CoordGroupArrayArray_class(){
                 "translate"
                 , translate_function_value
                 , ( bp::arg("i"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Translate all of the points in the ith array by delta\nThrow: SireError::invalid_index\n" );
         
         }
@@ -453,6 +485,7 @@ void register_CoordGroupArrayArray_class(){
                 "translate"
                 , translate_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Translate all of the points in the jth CoordGroup of the ith\narray by delta\nThrow: SireError::invalid_index\n" );
         
         }
@@ -464,6 +497,7 @@ void register_CoordGroupArrayArray_class(){
             CoordGroupArrayArray_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -476,6 +510,7 @@ void register_CoordGroupArrayArray_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("i"), bp::arg("array") )
+                , bp::release_gil_policy()
                 , "Update the ith CoordGroupArray so that its contents are equal to array.\nNote that you can only do this if the configuration of the\nCoordGroupArray at index i is identical to array (same number\nof CoordGroups, with the same number of coordinates in\nequivalent CoordGroups)\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -488,6 +523,7 @@ void register_CoordGroupArrayArray_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("cgroup") )
+                , bp::release_gil_policy()
                 , "Update the jth CoordGroup of the ith CoordGroupArray so that its\ncoordinates are equal to cgroup. Note that you can only do this if\nthe number of coordinates in this CoordGroup is the same as\nin cgroup\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -499,6 +535,7 @@ void register_CoordGroupArrayArray_class(){
             CoordGroupArrayArray_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

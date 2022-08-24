@@ -35,7 +35,11 @@ namespace bp = boost::python;
 
 SireUnits::Dimension::GeneralUnit __copy__(const SireUnits::Dimension::GeneralUnit &other){ return SireUnits::Dimension::GeneralUnit(other); }
 
+#include "Qt/qdatastream.hpp"
+
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 void register_GeneralUnit_class(){
 
@@ -52,6 +56,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "ANGLE"
                 , ANGLE_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -63,6 +68,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "CHARGE"
                 , CHARGE_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -74,6 +80,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "LENGTH"
                 , LENGTH_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -85,6 +92,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "MASS"
                 , MASS_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -96,6 +104,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "QUANTITY"
                 , QUANTITY_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -107,6 +116,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "TEMPERATURE"
                 , TEMPERATURE_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -118,6 +128,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "TIME"
                 , TIME_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -129,6 +140,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "invert"
                 , invert_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -167,6 +179,7 @@ void register_GeneralUnit_class(){
                 "to"
                 , to_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -179,6 +192,7 @@ void register_GeneralUnit_class(){
                 "to"
                 , to_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -190,6 +204,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "toProperty"
                 , toProperty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -201,6 +216,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -212,6 +228,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -223,6 +240,7 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -231,6 +249,11 @@ void register_GeneralUnit_class(){
         GeneralUnit_exposer.def( "__copy__", &__copy__);
         GeneralUnit_exposer.def( "__deepcopy__", &__copy__);
         GeneralUnit_exposer.def( "clone", &__copy__);
+        GeneralUnit_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireUnits::Dimension::GeneralUnit >,
+                            bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        GeneralUnit_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireUnits::Dimension::GeneralUnit >,
+                            bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        GeneralUnit_exposer.def_pickle(sire_pickle_suite< ::SireUnits::Dimension::GeneralUnit >());
         GeneralUnit_exposer.def( "__str__", &__str__< ::SireUnits::Dimension::GeneralUnit > );
         GeneralUnit_exposer.def( "__repr__", &__str__< ::SireUnits::Dimension::GeneralUnit > );
     }

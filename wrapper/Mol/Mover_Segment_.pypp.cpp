@@ -81,6 +81,8 @@ SireMol::Mover<SireMol::Segment> __copy__(const SireMol::Mover<SireMol::Segment>
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Mover_Segment__class(){
@@ -297,6 +299,7 @@ void register_Mover_Segment__class(){
             Mover_Segment__exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -449,6 +452,7 @@ void register_Mover_Segment__class(){
             Mover_Segment__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -489,6 +493,7 @@ void register_Mover_Segment__class(){
             Mover_Segment__exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

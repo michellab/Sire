@@ -53,6 +53,8 @@ SireMove::ZMatrixCoordsLine __copy__(const SireMove::ZMatrixCoordsLine &other){ 
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ZMatrixCoordsLine_class(){
 
     { //::SireMove::ZMatrixCoordsLine
@@ -70,6 +72,7 @@ void register_ZMatrixCoordsLine_class(){
             ZMatrixCoordsLine_exposer.def( 
                 "angleSize"
                 , angleSize_function_value
+                , bp::release_gil_policy()
                 , "Return the size of the angle" );
         
         }
@@ -81,6 +84,7 @@ void register_ZMatrixCoordsLine_class(){
             ZMatrixCoordsLine_exposer.def( 
                 "bondLength"
                 , bondLength_function_value
+                , bp::release_gil_policy()
                 , "Return the length of the bond" );
         
         }
@@ -92,6 +96,7 @@ void register_ZMatrixCoordsLine_class(){
             ZMatrixCoordsLine_exposer.def( 
                 "dihedralSize"
                 , dihedralSize_function_value
+                , bp::release_gil_policy()
                 , "Return the size of the dihedral" );
         
         }
@@ -119,6 +124,7 @@ void register_ZMatrixCoordsLine_class(){
                 "setAngle"
                 , setAngle_function_value
                 , ( bp::arg("size") )
+                , bp::release_gil_policy()
                 , "Set the size of the angle" );
         
         }
@@ -131,6 +137,7 @@ void register_ZMatrixCoordsLine_class(){
                 "setBond"
                 , setBond_function_value
                 , ( bp::arg("length") )
+                , bp::release_gil_policy()
                 , "Set the length of the bond" );
         
         }
@@ -143,6 +150,7 @@ void register_ZMatrixCoordsLine_class(){
                 "setDihedral"
                 , setDihedral_function_value
                 , ( bp::arg("size") )
+                , bp::release_gil_policy()
                 , "Set the size of the dihedral" );
         
         }
@@ -154,6 +162,7 @@ void register_ZMatrixCoordsLine_class(){
             ZMatrixCoordsLine_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation" );
         
         }
@@ -165,6 +174,7 @@ void register_ZMatrixCoordsLine_class(){
             ZMatrixCoordsLine_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -176,6 +186,7 @@ void register_ZMatrixCoordsLine_class(){
             ZMatrixCoordsLine_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

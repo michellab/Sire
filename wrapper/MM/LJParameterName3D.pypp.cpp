@@ -47,6 +47,8 @@ SireMM::LJParameterName3D __copy__(const SireMM::LJParameterName3D &other){ retu
 
 const char* pvt_get_name(const SireMM::LJParameterName3D&){ return "SireMM::LJParameterName3D";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_LJParameterName3D_class(){
 
     { //::SireMM::LJParameterName3D

@@ -35,6 +35,8 @@
 #include "moleculedata.h"
 #include "moleculeinfodata.h"
 
+#include <limits>
+
 SIRE_BEGIN_HEADER
 
 namespace SireMol
@@ -44,6 +46,11 @@ class MoleculeView;
 
 SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MoleculeView&);
 SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MoleculeView&);
+
+namespace SireBase
+{
+class Slice;
+}
 
 namespace SireMol
 {
@@ -124,13 +131,25 @@ public:
     int count() const;
     virtual int nViews() const;
 
+    virtual int nAtoms() const;
+    virtual int nResidues() const;
+    virtual int nChains() const;
+    virtual int nSegments() const;
+    virtual int nCutGroups() const;
+
     virtual MolViewPtr operator[](int i) const;
+    virtual MolViewPtr operator[](const QString &name) const;
     virtual MolViewPtr operator[](const AtomID &atomid) const;
     virtual MolViewPtr operator[](const ResID &resid) const;
     virtual MolViewPtr operator[](const CGID &cgid) const;
     virtual MolViewPtr operator[](const ChainID &chainid) const;
     virtual MolViewPtr operator[](const SegID &segid) const;
     virtual MolViewPtr operator[](const SireID::Index &idx) const;
+    virtual MolViewPtr operator[](const SireBase::Slice &slice) const;
+    virtual MolViewPtr operator[](const QList<qint64> &idxs) const;
+
+    virtual QList<MolViewPtr> toList() const;
+    virtual MolViewPtr toSelector() const=0;
 
     MolViewPtr at(int i) const;
     MolViewPtr at(const AtomID &atomid) const;
@@ -140,7 +159,21 @@ public:
     MolViewPtr at(const SegID &segid) const;
     MolViewPtr at(const SireID::Index &idx) const;
 
+    Atom atom(int i, const PropertyMap &map = PropertyMap()) const;
+    Atom atom(const QString &name, const PropertyMap &map = PropertyMap()) const;
     Atom atom(const AtomID &atomid, const PropertyMap &map = PropertyMap()) const;
+
+    Selector<Atom> atoms(const QString &name,
+                         const PropertyMap &map = PropertyMap()) const;
+
+    Selector<Atom> atoms(const SireBase::Slice &slice,
+                         const PropertyMap &map = PropertyMap()) const;
+
+    Selector<Atom> atoms(const QList<qint64> &values,
+                         const PropertyMap &map = PropertyMap()) const;
+
+    Selector<Atom> atoms(const QStringList &names,
+                         const PropertyMap &map = PropertyMap()) const;
 
     Selector<Atom> atoms(const AtomID &atomid,
                          const PropertyMap &map = PropertyMap()) const;
@@ -148,7 +181,15 @@ public:
     Atom atom() const;
     Selector<Atom> atoms() const;
 
+    CutGroup cutGroup(int i, const PropertyMap &map = PropertyMap()) const;
+    CutGroup cutGroup(const QString &name, const PropertyMap &map = PropertyMap()) const;
     CutGroup cutGroup(const CGID &cgid, const PropertyMap &map = PropertyMap()) const;
+
+    Selector<CutGroup> cutGroups(const QString &name,
+                                 const PropertyMap &map = PropertyMap()) const;
+
+    Selector<CutGroup> cutGroups(const SireBase::Slice &slice,
+                                 const PropertyMap &map = PropertyMap()) const;
 
     Selector<CutGroup> cutGroups(const CGID &cgid,
                                  const PropertyMap &map = PropertyMap()) const;
@@ -156,7 +197,21 @@ public:
     CutGroup cutGroup() const;
     Selector<CutGroup> cutGroups() const;
 
+    Residue residue(int i, const PropertyMap &map = PropertyMap()) const;
+    Residue residue(const QString &name, const PropertyMap &map = PropertyMap()) const;
     Residue residue(const ResID &resid, const PropertyMap &map = PropertyMap()) const;
+
+    Selector<Residue> residues(const QString &name,
+                               const PropertyMap &map = PropertyMap()) const;
+
+    Selector<Residue> residues(const QList<qint64> &values,
+                               const PropertyMap &map = PropertyMap()) const;
+
+    Selector<Residue> residues(const QStringList &names,
+                               const PropertyMap &map = PropertyMap()) const;
+
+    Selector<Residue> residues(const SireBase::Slice &slice,
+                               const PropertyMap &map = PropertyMap()) const;
 
     Selector<Residue> residues(const ResID &resid,
                                const PropertyMap &map = PropertyMap()) const;
@@ -164,6 +219,20 @@ public:
     Residue residue() const;
     Selector<Residue> residues() const;
 
+    Selector<Chain> chains(const QString &name,
+                           const PropertyMap &map = PropertyMap()) const;
+
+    Selector<Chain> chains(const QList<qint64> &values,
+                           const PropertyMap &map = PropertyMap()) const;
+
+    Selector<Chain> chains(const QStringList &names,
+                           const PropertyMap &map = PropertyMap()) const;
+
+    Selector<Chain> chains(const SireBase::Slice &slice,
+                           const PropertyMap &map = PropertyMap()) const;
+
+    Chain chain(int i, const PropertyMap &map = PropertyMap()) const;
+    Chain chain(const QString &name, const PropertyMap &map = PropertyMap()) const;
     Chain chain(const ChainID &chainid, const PropertyMap &map = PropertyMap()) const;
 
     Selector<Chain> chains(const ChainID &chainid,
@@ -172,6 +241,20 @@ public:
     Chain chain() const;
     Selector<Chain> chains() const;
 
+    Selector<Segment> segments(const QString &name,
+                               const PropertyMap &map = PropertyMap()) const;
+
+    Selector<Segment> segments(const QList<qint64> &values,
+                               const PropertyMap &map = PropertyMap()) const;
+
+    Selector<Segment> segments(const QStringList &names,
+                               const PropertyMap &map = PropertyMap()) const;
+
+    Selector<Segment> segments(const SireBase::Slice &slice,
+                               const PropertyMap &map = PropertyMap()) const;
+
+    Segment segment(int i, const PropertyMap &map = PropertyMap()) const;
+    Segment segment(const QString &name, const PropertyMap &map = PropertyMap()) const;
     Segment segment(const SegID &segid, const PropertyMap &map = PropertyMap()) const;
 
     Selector<Segment> segments(const SegID &segid,

@@ -5,7 +5,7 @@ find_program( SVN_EXECUTABLE
               PATHS /usr/bin  /usr/local/bin ~/local/bin )
 
 IF (SVN_EXECUTABLE)
-  
+
    #get info about the repository
    exec_program( ${SVN_EXECUTABLE}
                  ARGS "info ${CMAKE_SOURCE_DIR}"
@@ -43,8 +43,8 @@ configure_file( ${CMAKE_SOURCE_DIR}/build/cmake/Config__init__.py.in
                 ESCAPE_QUOTES )
 
 # install this file into the Sire include directory
-install (FILES ${CMAKE_BINARY_DIR}/sire_python_version.h 
+install (FILES ${CMAKE_BINARY_DIR}/sire_python_version.h
          DESTINATION ${SIRE_INCLUDES})
 
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/__init__.py
-         DESTINATION ${SIRE_PYTHON}/Sire/Config/)   
+         DESTINATION ${SIRE_PYTHON}/sire/legacy/Config/)

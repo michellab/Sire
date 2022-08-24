@@ -33,6 +33,8 @@ SireMaths::AverageAndStddev __copy__(const SireMaths::AverageAndStddev &other){ 
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AverageAndStddev_class(){
 
     { //::SireMaths::AverageAndStddev
@@ -49,6 +51,7 @@ void register_AverageAndStddev_class(){
                 "accumulate"
                 , accumulate_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Accumulate the average and standard deviation" );
         
         }
@@ -60,6 +63,7 @@ void register_AverageAndStddev_class(){
             AverageAndStddev_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Completely clear the statistics in this accumulator" );
         
         }
@@ -71,6 +75,7 @@ void register_AverageAndStddev_class(){
             AverageAndStddev_exposer.def( 
                 "meanOfSquares"
                 , meanOfSquares_function_value
+                , bp::release_gil_policy()
                 , "Return the mean average of the squares" );
         
         }
@@ -98,6 +103,7 @@ void register_AverageAndStddev_class(){
             AverageAndStddev_exposer.def( 
                 "standardDeviation"
                 , standardDeviation_function_value
+                , bp::release_gil_policy()
                 , "Return the standard deviation of the average\n(calculated as the sqrt of the mean of the squares minus\nthe square of the mean)" );
         
         }
@@ -109,6 +115,7 @@ void register_AverageAndStddev_class(){
             AverageAndStddev_exposer.def( 
                 "standardError"
                 , standardError_function_value
+                , bp::release_gil_policy()
                 , "Return the standard error on the average" );
         
         }
@@ -121,6 +128,7 @@ void register_AverageAndStddev_class(){
                 "standardError"
                 , standardError_function_value
                 , ( bp::arg("level") )
+                , bp::release_gil_policy()
                 , "Return the standard error calculated to the passed level\n(66, 90, 95 or 99%)" );
         
         }
@@ -132,6 +140,7 @@ void register_AverageAndStddev_class(){
             AverageAndStddev_exposer.def( 
                 "stddev"
                 , stddev_function_value
+                , bp::release_gil_policy()
                 , "Return the standard deviation of the average\n(calculated as the sqrt of the mean of the squares minus\nthe square of the mean)" );
         
         }
@@ -143,6 +152,7 @@ void register_AverageAndStddev_class(){
             AverageAndStddev_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -154,6 +164,7 @@ void register_AverageAndStddev_class(){
             AverageAndStddev_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -32,6 +32,7 @@
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
 #include "SireMol/mover.hpp"
+#include "SireMol/core.h"
 
 #include "SireCAS/values.h"
 #include "SireCAS/identities.h"
@@ -52,12 +53,12 @@ QDataStream &operator<<(QDataStream &ds,
                                        const LJPerturbation &ljpert)
 {
     writeHeader(ds, r_ljpert, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << ljpert.sigma_mapfunc << quint32(ljpert.maptype)
         << static_cast<const Perturbation&>(ljpert);
-    
+
     return ds;
 }
 
@@ -65,14 +66,14 @@ QDataStream &operator>>(QDataStream &ds,
                                        LJPerturbation &ljpert)
 {
     VersionID v = readHeader(ds, r_ljpert);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         quint32 maptype;
         sds >> ljpert.sigma_mapfunc >> maptype >> static_cast<Perturbation&>(ljpert);
-        
+
         switch (maptype)
         {
             case LJPerturbation::MAP_SIGMA_AND_EPSILON:
@@ -90,11 +91,11 @@ QDataStream &operator>>(QDataStream &ds,
     }
     else
         throw version_error(v, "1", r_ljpert, CODELOC);
-        
+
     return ds;
 }
 
-/** Constructor - this creates a LJ perturbation that 
+/** Constructor - this creates a LJ perturbation that
     perturbs from LJs in "initial_LJ" to LJs in
     "final_LJ", placing the current LJs in "LJ",
     and using Perturbation::defaultEquation() to map the
@@ -147,7 +148,7 @@ LJPerturbation::LJPerturbation(const Expression &sigma_function,
 /** Construct, using the passed map to find the properties used
     by this perturbation and the passed mapping function to map
     the LJs between the states */
-LJPerturbation::LJPerturbation(const Expression &sigma_function, 
+LJPerturbation::LJPerturbation(const Expression &sigma_function,
                                const Expression &epsilon_function,
                                MapType typ,
                                const PropertyMap &map)
@@ -179,7 +180,7 @@ LJPerturbation& LJPerturbation::operator=(const LJPerturbation &other)
         maptype = other.maptype;
         Perturbation::operator=(other);
     }
-    
+
     return *this;
 }
 
@@ -200,7 +201,7 @@ PerturbationPtr LJPerturbation::recreate(const Expression &mapping_function) con
 {
     PerturbationPtr ret = Perturbation::recreate(mapping_function);
     ret.edit().asA<LJPerturbation>().sigma_mapfunc = mapping_function;
-    
+
     return ret;
 }
 
@@ -209,20 +210,20 @@ PerturbationPtr LJPerturbation::recreate(const Expression &mapping_function,
 {
     PerturbationPtr ret = Perturbation::recreate(mapping_function, map);
     ret.edit().asA<LJPerturbation>().sigma_mapfunc = mapping_function;
-    
+
     return ret;
 }
 
-/** Substitute the identities in 'identities' in all of the mapping functions 
-    used by this perturbation. This is useful if, for example, you want to 
+/** Substitute the identities in 'identities' in all of the mapping functions
+    used by this perturbation. This is useful if, for example, you want to
     switch from using 'lambda' to control the perturbation to using 'alpha', e.g.
-    
+
     alpha_perturbations = lambda_perturbations.substitute( lam == Expression(alpha) );
 */
 PerturbationPtr LJPerturbation::substitute(const Identities &identities) const
 {
     PerturbationPtr ret = Perturbation::substitute(identities);
-    
+
     ret.edit().asA<LJPerturbation>().sigma_mapfunc = sigma_mapfunc.substitute(identities);
 
     return ret;
@@ -270,19 +271,19 @@ QString LJPerturbation::toString() const
         {
             case MAP_SIGMA_AND_EPSILON:
                 return QObject::tr("LJPerturbation( sigma => %1, epsilon => %2 )")
-                            .arg(sigma_mapfunc.toString(), 
+                            .arg(sigma_mapfunc.toString(),
                                  Perturbation::mappingFunction().toString());
             case MAP_RMIN_AND_EPSILON:
                 return QObject::tr("LJPerturbation( r_min => %1, epsilon => %2 )")
-                            .arg(sigma_mapfunc.toString(), 
+                            .arg(sigma_mapfunc.toString(),
                                  Perturbation::mappingFunction().toString());
             case MAP_A_AND_B:
                 return QObject::tr("LJPerturbation( A => %1, B => %2 )")
-                            .arg(sigma_mapfunc.toString(), 
+                            .arg(sigma_mapfunc.toString(),
                                  Perturbation::mappingFunction().toString());
         }
     }
-    
+
     return QObject::tr( "LJParameter( ??? )" );
 }
 
@@ -317,7 +318,7 @@ const Expression& LJPerturbation::rMinMappingFunction() const
     return sigma_mapfunc;
 }
 
-/** Return the function used to map sigma 
+/** Return the function used to map sigma
 
     \throw SireError::invalid_state
 */
@@ -377,49 +378,49 @@ const Expression& LJPerturbation::B_MappingFunction() const
 QSet<QString> LJPerturbation::requiredProperties() const
 {
     QSet<QString> props;
-    
+
     PropertyName prop = propertyMap()["LJ"];
-    
+
     if (prop.hasSource())
         props.insert( prop.source() );
-        
+
     prop = propertyMap()["initial_LJ"];
-    
+
     if (prop.hasSource())
         props.insert( prop.source() );
-        
+
     prop = propertyMap()["final_LJ"];
-    
+
     if (prop.hasSource())
         props.insert( prop.source() );
-        
+
     return props;
 }
 
 /** Return whether or not this perturbation with the passed values would
     change the molecule 'molecule' */
-bool LJPerturbation::wouldChange(const Molecule &molecule, 
+bool LJPerturbation::wouldChange(const Molecule &molecule,
                                  const Values &values) const
 {
     try
     {
-        const AtomLJs &initial_ljs = molecule.property( 
+        const AtomLJs &initial_ljs = molecule.property(
                                             propertyMap()["initial_LJ"] )
                                                 .asA<AtomLJs>();
-                                           
-        const AtomLJs &final_ljs = molecule.property( 
+
+        const AtomLJs &final_ljs = molecule.property(
                                             propertyMap()["final_LJ"] )
                                                 .asA<AtomLJs>();
 
-        const AtomLJs &ljs = molecule.property( 
+        const AtomLJs &ljs = molecule.property(
                                             propertyMap()["LJ"] )
                                                 .asA<AtomLJs>();
-                                                
+
         const Expression &f0 = sigma_mapfunc;
         const Expression &f1 = Perturbation::mappingFunction();
         const Symbol &initial = this->symbols().initial();
         const Symbol &final = this->symbols().final();
-    
+
         for (CGIdx i(0); i<initial_ljs.nCutGroups(); ++i)
         {
             for (Index j(0); j<initial_ljs.nAtoms(i); ++j)
@@ -434,53 +435,53 @@ bool LJPerturbation::wouldChange(const Molecule &molecule,
                 {
                     if ( mapSigmaEpsilon() )
                     {
-                        Values atom_values = values + 
+                        Values atom_values = values +
                                             (initial == initial_lj.sigma().value()) +
                                             (final == final_lj.sigma().value());
-            
+
                         double new_sigma = f0(atom_values);
-                
+
                         atom_values = values +
                                     (initial == initial_lj.epsilon().value()) +
                                     (final == final_lj.epsilon().value());
-                                
+
                         double new_epsilon = f1(atom_values);
-            
+
                         if (lj != LJParameter(Length(new_sigma),MolarEnergy(new_epsilon)))
                             return true;
                     }
                     else if ( mapAB() )
                     {
-                        Values atom_values = values + 
+                        Values atom_values = values +
                                             (initial == initial_lj.A()) +
                                             (final == final_lj.A());
-            
+
                         double new_A = f0(atom_values);
-                
+
                         atom_values = values +
                                     (initial == initial_lj.B()) +
                                     (final == final_lj.B());
-                                
+
                         double new_B = f1(atom_values);
-            
+
                         if (lj != LJParameter::fromAAndB(new_A, new_B))
                             return true;
                     }
                     else
                     {
-                        Values atom_values = values + 
+                        Values atom_values = values +
                                             (initial == initial_lj.rmin().value()) +
                                             (final == final_lj.rmin().value());
-            
+
                         double new_rmin = f0(atom_values);
-                
+
                         atom_values = values +
                                     (initial == initial_lj.epsilon().value()) +
                                     (final == final_lj.epsilon().value());
-                                
+
                         double new_epsilon = f1(atom_values);
-            
-                        if (lj != LJParameter::fromRMinAndEpsilon(Length(new_rmin), 
+
+                        if (lj != LJParameter::fromRMinAndEpsilon(Length(new_rmin),
                                                            MolarEnergy(new_epsilon)))
                         {
                             return true;
@@ -493,7 +494,7 @@ bool LJPerturbation::wouldChange(const Molecule &molecule,
                 }
             }
         }
-        
+
         return false;
     }
     catch(...)
@@ -503,8 +504,8 @@ bool LJPerturbation::wouldChange(const Molecule &molecule,
 }
 
 /** Perturb the LJs in the passed molecule using the reaction
-    coordinate(s) in 'values' 
-    
+    coordinate(s) in 'values'
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
@@ -513,17 +514,17 @@ void LJPerturbation::perturbMolecule(MolEditor &molecule, const Values &values) 
 {
     const AtomLJs &initial_ljs = molecule.property( propertyMap()["initial_LJ"] )
                                          .asA<AtomLJs>();
-                                           
+
     const AtomLJs &final_ljs = molecule.property( propertyMap()["final_LJ"] )
                                        .asA<AtomLJs>();
-                                            
+
     AtomLJs ljs(initial_ljs);
-    
+
     const Expression &f0 = sigma_mapfunc;
     const Expression &f1 = Perturbation::mappingFunction();
     const Symbol &initial = this->symbols().initial();
     const Symbol &final = this->symbols().final();
-    
+
     for (CGIdx i(0); i<initial_ljs.nCutGroups(); ++i)
     {
         for (Index j(0); j<initial_ljs.nAtoms(i); ++j)
@@ -537,57 +538,57 @@ void LJPerturbation::perturbMolecule(MolEditor &molecule, const Values &values) 
             {
                 if ( mapSigmaEpsilon() )
                 {
-                    Values atom_values = values + 
+                    Values atom_values = values +
                                         (initial == initial_lj.sigma().value()) +
                                         (final == final_lj.sigma().value());
-        
+
                     double new_sigma = f0(atom_values);
-            
+
                     atom_values = values +
                                 (initial == initial_lj.epsilon().value()) +
                                 (final == final_lj.epsilon().value());
-                            
+
                     double new_epsilon = f1(atom_values);
 
-                    ljs.set( atomidx, LJParameter::fromSigmaAndEpsilon(Length(new_sigma), 
+                    ljs.set( atomidx, LJParameter::fromSigmaAndEpsilon(Length(new_sigma),
                                                             MolarEnergy(new_epsilon)) );
                 }
                 else if ( mapAB() )
                 {
-                    Values atom_values = values + 
+                    Values atom_values = values +
                                         (initial == initial_lj.A()) +
                                         (final == final_lj.A());
-        
+
                     double new_A = f0(atom_values);
-            
+
                     atom_values = values +
                                 (initial == initial_lj.B()) +
                                 (final == final_lj.B());
-                            
+
                     double new_B = f1(atom_values);
-        
+
                     ljs.set( atomidx, LJParameter::fromAAndB(new_A, new_B) );
                 }
                 else
                 {
-                    Values atom_values = values + 
+                    Values atom_values = values +
                                         (initial == initial_lj.rmin().value()) +
                                         (final == final_lj.rmin().value());
-        
+
                     double new_rmin = f0(atom_values);
-            
+
                     atom_values = values +
                                 (initial == initial_lj.epsilon().value()) +
                                 (final == final_lj.epsilon().value());
-                            
+
                     double new_epsilon = f1(atom_values);
-        
-                    ljs.set( atomidx, LJParameter::fromRMinAndEpsilon(Length(new_rmin), 
+
+                    ljs.set( atomidx, LJParameter::fromRMinAndEpsilon(Length(new_rmin),
                                                             MolarEnergy(new_epsilon)) );
                 }
             }
         }
     }
-    
+
     molecule.setProperty( propertyMap()["LJ"].source(), ljs );
 }

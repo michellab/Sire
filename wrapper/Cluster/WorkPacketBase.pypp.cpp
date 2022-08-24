@@ -25,6 +25,8 @@ namespace bp = boost::python;
 
 const char* pvt_get_name(const SireCluster::WorkPacketBase&){ return "SireCluster::WorkPacketBase";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_WorkPacketBase_class(){
 
     { //::SireCluster::WorkPacketBase
@@ -39,6 +41,7 @@ void register_WorkPacketBase_class(){
             WorkPacketBase_exposer.def( 
                 "approximatePacketSize"
                 , approximatePacketSize_function_value
+                , bp::release_gil_policy()
                 , "Return the approximate maximum size (in bytes) of the WorkPacket. This\ndoesnt have to exact (or indeed accurate) - it is used\nto help the WorkPacket::pack() function reserve enough\nspace when serialising this packet to a binary array.\nThe only penalty of getting this wrong is that youll\neither allocate too much space, or be reallocating while\nthe packet is being written" );
         
         }
@@ -50,6 +53,7 @@ void register_WorkPacketBase_class(){
             WorkPacketBase_exposer.def( 
                 "hasFinished"
                 , hasFinished_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -61,6 +65,7 @@ void register_WorkPacketBase_class(){
             WorkPacketBase_exposer.def( 
                 "isError"
                 , isError_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is an Error WorkPacket" );
         
         }
@@ -72,6 +77,7 @@ void register_WorkPacketBase_class(){
             WorkPacketBase_exposer.def( 
                 "progress"
                 , progress_function_value
+                , bp::release_gil_policy()
                 , "Return the current progress of the work (percentage)" );
         
         }
@@ -83,6 +89,7 @@ void register_WorkPacketBase_class(){
             WorkPacketBase_exposer.def( 
                 "runChunk"
                 , runChunk_function_value
+                , bp::release_gil_policy()
                 , "Perform one chunk of the calculation - Any exceptions are\ncaught in WorkPacket::runChunk, where that are converted\ninto an ErrorPacket" );
         
         }
@@ -94,6 +101,7 @@ void register_WorkPacketBase_class(){
             WorkPacketBase_exposer.def( 
                 "shouldPack"
                 , shouldPack_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this work packet should be stored\nas a binary array - this is used by Promise to work out\nhow to store the initial WorkPacket state. Only large\npackets should be binary packed (as they are then\ncompressed)" );
         
         }
@@ -105,6 +113,7 @@ void register_WorkPacketBase_class(){
             WorkPacketBase_exposer.def( 
                 "throwError"
                 , throwError_function_value
+                , bp::release_gil_policy()
                 , "Throw the error, if this is in an error state" );
         
         }
@@ -116,6 +125,7 @@ void register_WorkPacketBase_class(){
             WorkPacketBase_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -127,6 +137,7 @@ void register_WorkPacketBase_class(){
             WorkPacketBase_exposer.def( 
                 "wasAborted"
                 , wasAborted_function_value
+                , bp::release_gil_policy()
                 , "Whether or not the job has been aborted" );
         
         }
@@ -138,6 +149,7 @@ void register_WorkPacketBase_class(){
             WorkPacketBase_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

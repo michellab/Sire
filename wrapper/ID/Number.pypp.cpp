@@ -15,6 +15,8 @@ namespace bp = boost::python;
 
 const char* pvt_get_name(const SireID::Number&){ return "SireID::Number";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Number_class(){
 
     { //::SireID::Number
@@ -29,6 +31,7 @@ void register_Number_class(){
             Number_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -40,6 +43,7 @@ void register_Number_class(){
             Number_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -51,6 +55,7 @@ void register_Number_class(){
             Number_exposer.def( 
                 "null"
                 , null_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -62,6 +67,7 @@ void register_Number_class(){
             Number_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

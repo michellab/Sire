@@ -22,7 +22,7 @@ include(CMakeAutogenFile.txt)
 set ( WRAPID_SOURCES
 
       _ID.main.cpp
-     
+
       ${PYPP_SOURCES}
 
     )
@@ -30,7 +30,7 @@ set ( WRAPID_SOURCES
 # Create the library that holds all of the class wrappers
 add_library (ID ${WRAPID_SOURCES})
 
-set_target_properties (ID  
+set_target_properties (ID
                        PROPERTIES
                          VERSION ${SIRE_VERSION}
                          SOVERSION ${SIRE_VERSION_MAJOR}
@@ -38,18 +38,18 @@ set_target_properties (ID
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
+
 target_link_libraries (ID
                        SirePython
                        SIRE_SireID
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_ID" "_init_ID" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/ID )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/ID )
 
 install( TARGETS ID
          LIBRARY DESTINATION ${INSTALLDIR}
@@ -58,6 +58,6 @@ install( TARGETS ID
         )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )
 

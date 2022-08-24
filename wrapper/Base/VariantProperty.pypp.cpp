@@ -23,6 +23,8 @@ SireBase::VariantProperty __copy__(const SireBase::VariantProperty &other){ retu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_VariantProperty_class(){
 
     { //::SireBase::VariantProperty
@@ -42,6 +44,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "asABoolean"
                 , asABoolean_function_value
+                , bp::release_gil_policy()
                 , "Return the property converted to a string" );
         
         }
@@ -53,6 +56,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "asADouble"
                 , asADouble_function_value
+                , bp::release_gil_policy()
                 , "Return the property converted to a string" );
         
         }
@@ -64,6 +68,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "asAString"
                 , asAString_function_value
+                , bp::release_gil_policy()
                 , "Return the property converted to a string" );
         
         }
@@ -75,6 +80,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "asAnInteger"
                 , asAnInteger_function_value
+                , bp::release_gil_policy()
                 , "Return the property converted to a string" );
         
         }
@@ -86,6 +92,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "convertToBool"
                 , convertToBool_function_value
+                , bp::release_gil_policy()
                 , "Return the variant property converted to a bool using the QVariant conversion function" );
         
         }
@@ -97,6 +104,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "convertToDouble"
                 , convertToDouble_function_value
+                , bp::release_gil_policy()
                 , "Return the variant property converted to a double using the QVariant conversion function" );
         
         }
@@ -108,6 +116,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "convertToInt"
                 , convertToInt_function_value
+                , bp::release_gil_policy()
                 , "Return the variant property converted to an integer using the QVariant conversion function" );
         
         }
@@ -119,6 +128,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "convertToString"
                 , convertToString_function_value
+                , bp::release_gil_policy()
                 , "Return the variant property converted to a string using the QVariant conversion function" );
         
         }
@@ -130,6 +140,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "isABoolean"
                 , isABoolean_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this can be converted to a bool" );
         
         }
@@ -141,6 +152,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "isADouble"
                 , isADouble_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this can be converted to a double" );
         
         }
@@ -152,6 +164,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "isAString"
                 , isAString_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this can be converted to a string" );
         
         }
@@ -163,6 +176,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "isAnInteger"
                 , isAnInteger_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this can be converted to an integer" );
         
         }
@@ -202,6 +216,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "String operator" );
         
         }
@@ -213,6 +228,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

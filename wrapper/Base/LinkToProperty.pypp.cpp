@@ -22,6 +22,8 @@ SireBase::LinkToProperty __copy__(const SireBase::LinkToProperty &other){ return
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_LinkToProperty_class(){
 
     { //::SireBase::LinkToProperty
@@ -39,7 +41,7 @@ void register_LinkToProperty_class(){
             LinkToProperty_exposer.def( 
                 "filter"
                 , filter_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return any filter for this link (this is null if there is no filter)" );
         
         }
@@ -51,6 +53,7 @@ void register_LinkToProperty_class(){
             LinkToProperty_exposer.def( 
                 "isFiltered"
                 , isFiltered_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this link is filtered" );
         
         }
@@ -89,6 +92,7 @@ void register_LinkToProperty_class(){
             LinkToProperty_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this link" );
         
         }
@@ -100,6 +104,7 @@ void register_LinkToProperty_class(){
             LinkToProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

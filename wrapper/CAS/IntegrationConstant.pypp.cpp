@@ -21,6 +21,8 @@ SireCAS::IntegrationConstant __copy__(const SireCAS::IntegrationConstant &other)
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_IntegrationConstant_class(){
 
     { //::SireCAS::IntegrationConstant
@@ -36,6 +38,7 @@ void register_IntegrationConstant_class(){
             IntegrationConstant_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash for this object" );
         
         }
@@ -48,6 +51,7 @@ void register_IntegrationConstant_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Cannot integrate an expression containing an integration constant. This\nis to prevent integration constants from multiple integrations from\nappearing in the expression." );
         
         }
@@ -60,6 +64,7 @@ void register_IntegrationConstant_class(){
             IntegrationConstant_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -71,6 +76,7 @@ void register_IntegrationConstant_class(){
             IntegrationConstant_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

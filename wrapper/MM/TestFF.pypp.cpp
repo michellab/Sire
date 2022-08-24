@@ -33,6 +33,8 @@ SireMM::TestFF __copy__(const SireMM::TestFF &other){ return SireMM::TestFF(othe
 
 const char* pvt_get_name(const SireMM::TestFF&){ return "SireMM::TestFF";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_TestFF_class(){
 
     { //::SireMM::TestFF
@@ -49,6 +51,7 @@ void register_TestFF_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -61,6 +64,7 @@ void register_TestFF_class(){
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -72,6 +76,7 @@ void register_TestFF_class(){
             TestFF_exposer.def( 
                 "calculateEnergy"
                 , calculateEnergy_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -97,6 +102,7 @@ void register_TestFF_class(){
                 "setCutoff"
                 , setCutoff_function_value
                 , ( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") )
+                , bp::release_gil_policy()
                 , "" );
         
         }

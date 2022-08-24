@@ -27,6 +27,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Space_class(){
 
     { //::SireVol::Space
@@ -42,6 +44,7 @@ void register_Space_class(){
                 "beyond"
                 , beyond_function_value
                 , ( bp::arg("dist"), bp::arg("group0"), bp::arg("group1") )
+                , bp::release_gil_policy()
                 , "Return whether or not these two groups are definitely beyond the distance dist.\n\nWarning: Note beyond does not mean definitely within the distance\n" );
         
         }
@@ -54,6 +57,7 @@ void register_Space_class(){
                 "beyond"
                 , beyond_function_value
                 , ( bp::arg("dist"), bp::arg("aabox0"), bp::arg("aabox1") )
+                , bp::release_gil_policy()
                 , "Return whether or not two groups that are enclosed by the AABoxes\naabox0 and aabox1 are beyond the cutoff distance dist.\n\nWarning: Note beyond does not mean definitely within the distance\n" );
         
         }
@@ -66,6 +70,7 @@ void register_Space_class(){
                 "calcAngle"
                 , calcAngle_function_value
                 , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2") )
+                , bp::release_gil_policy()
                 , "Calculate the angle between the passed three points. This should return\nthe acute angle between the points, which should lie between 0 and 180 degrees" );
         
         }
@@ -78,6 +83,7 @@ void register_Space_class(){
                 "calcDihedral"
                 , calcDihedral_function_value
                 , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3") )
+                , bp::release_gil_policy()
                 , "Calculate the torsion angle between the passed four points. This should\nreturn the torsion angle measured clockwise when looking down the\ntorsion from point0-point1-point2-point3. This will lie between 0 and 360\ndegrees" );
         
         }
@@ -90,6 +96,7 @@ void register_Space_class(){
                 "calcDist"
                 , calcDist_function_value
                 , ( bp::arg("point0"), bp::arg("point1") )
+                , bp::release_gil_policy()
                 , "Calculate the distance between two points" );
         
         }
@@ -102,6 +109,7 @@ void register_Space_class(){
                 "calcDist"
                 , calcDist_function_value
                 , ( bp::arg("group"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances between all of the\npoints within a CoordGroup. This creates a symmetrical matrix,\nwith a 0 diagonal. This returns the shortest distance between\ntwo points within the group." );
         
         }
@@ -114,6 +122,7 @@ void register_Space_class(){
                 "calcDist"
                 , calcDist_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances between all of the\npoints of the two CoordGroups. Return the shortest distance^2 between the two\nCoordGroups." );
         
         }
@@ -126,6 +135,7 @@ void register_Space_class(){
                 "calcDist"
                 , calcDist_function_value
                 , ( bp::arg("group"), bp::arg("point"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix distmat with the distances between all of the\npoints in group to the point point. This returns the shortest\ndistance between the group points and point" );
         
         }
@@ -138,6 +148,7 @@ void register_Space_class(){
                 "calcDist2"
                 , calcDist2_function_value
                 , ( bp::arg("point0"), bp::arg("point1") )
+                , bp::release_gil_policy()
                 , "Calculate the distance squared between two points" );
         
         }
@@ -150,6 +161,7 @@ void register_Space_class(){
                 "calcDist2"
                 , calcDist2_function_value
                 , ( bp::arg("group"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances^2 between all of the\npoints within a CoordGroup. This creates a symmetrical matrix,\nwith a 0 diagonal. This returns the shortest distance^2 between\ntwo points within the group." );
         
         }
@@ -162,6 +174,7 @@ void register_Space_class(){
                 "calcDist2"
                 , calcDist2_function_value
                 , ( bp::arg("group"), bp::arg("point"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix distmat with the distances squared between all of the\npoints in group to the point point. This returns the shortest\ndistance between the group points and point" );
         
         }
@@ -174,6 +187,7 @@ void register_Space_class(){
                 "calcDist2"
                 , calcDist2_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances^2 between all of the\npoints of the two CoordGroups. Return the shortest distance^2 between the\ntwo CoordGroups." );
         
         }
@@ -186,6 +200,7 @@ void register_Space_class(){
                 "calcDistVector"
                 , calcDistVector_function_value
                 , ( bp::arg("point0"), bp::arg("point1") )
+                , bp::release_gil_policy()
                 , "Calculate the distance vector between two points" );
         
         }
@@ -198,6 +213,7 @@ void register_Space_class(){
                 "calcDistVectors"
                 , calcDistVectors_function_value
                 , ( bp::arg("group"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix distmat with all of the interpoint distance vectors\nbetween all points within the CoordGroup. This is not a symmetrical matrix,\nas the direction from point A to point B is the negative of the\ndirection from point B to point A. This returns the shortest distance\nbetween two points in the group (that is not the self-self distance)" );
         
         }
@@ -210,6 +226,7 @@ void register_Space_class(){
                 "calcDistVectors"
                 , calcDistVectors_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix distmat between all the points of the two CoordGroups\ngroup1 and group2 - the returned matrix has the vectors pointing\nfrom each point in group1 to each point in group2. This returns\nthe shortest distance between two points in the group" );
         
         }
@@ -222,6 +239,7 @@ void register_Space_class(){
                 "calcDistVectors"
                 , calcDistVectors_function_value
                 , ( bp::arg("group"), bp::arg("point"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix distmat with the distances between all of the\npoints in group to the point point. This returns the shortest\ndistance between the group points and point" );
         
         }
@@ -234,6 +252,7 @@ void register_Space_class(){
                 "calcInvDist"
                 , calcInvDist_function_value
                 , ( bp::arg("group"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the inverse distances between all of the\npoints within a CoordGroup. This creates a symmetrical matrix,\nwith a 0 diagonal. This returns the the largest inverse distance between\ntwo points within the group." );
         
         }
@@ -246,6 +265,7 @@ void register_Space_class(){
                 "calcInvDist"
                 , calcInvDist_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the inverse distances between all of the\npoints of the two CoordGroups. Return the largest inverse distance between the two\nCoordGroups." );
         
         }
@@ -258,6 +278,7 @@ void register_Space_class(){
                 "calcInvDist2"
                 , calcInvDist2_function_value
                 , ( bp::arg("group"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the inverse distances^2 between all of the\npoints within a CoordGroup. This creates a symmetrical matrix,\nwith a 0 diagonal. This returns the the largest inverse distance^2 between\ntwo points within the group." );
         
         }
@@ -270,6 +291,7 @@ void register_Space_class(){
                 "calcInvDist2"
                 , calcInvDist2_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the inverse distances^2 between all of the\npoints of the two CoordGroups. Return the largest inverse distance^2 between the two\nCoordGroups." );
         
         }
@@ -282,6 +304,7 @@ void register_Space_class(){
                 "changeVolume"
                 , changeVolume_function_value
                 , ( bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Change the volume of this space by delta" );
         
         }
@@ -294,6 +317,7 @@ void register_Space_class(){
                 "getBoxCenter"
                 , getBoxCenter_function_value
                 , ( bp::arg("p") )
+                , bp::release_gil_policy()
                 , "Return the center of the box that contains the point p assuming\nthat the center for the central box is located at the origin" );
         
         }
@@ -306,6 +330,7 @@ void register_Space_class(){
                 "getBoxCenter"
                 , getBoxCenter_function_value
                 , ( bp::arg("p"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Return the center of the box that contains the point p assuming\nthat the center for the central box is located at center" );
         
         }
@@ -318,6 +343,7 @@ void register_Space_class(){
                 "getCopiesWithin"
                 , getCopiesWithin_function_value
                 , ( bp::arg("group"), bp::arg("center"), bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -330,6 +356,7 @@ void register_Space_class(){
                 "getImagesWithin"
                 , getImagesWithin_function_value
                 , ( bp::arg("point"), bp::arg("center"), bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return all periodic images of point with respect to center within\ndist distance of center" );
         
         }
@@ -342,6 +369,7 @@ void register_Space_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("group"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Return the minimum image copy of group with respect to center.\nFor periodic spaces, this translates group into the box that\nhas its center at center (i.e. returns the closest copy of\ngroup to center according to the minimum image convention)" );
         
         }
@@ -366,6 +394,7 @@ void register_Space_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("aabox"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Return the minimum image copy of aabox with respect to center.\nFor periodic spaces, this returns the AABox translated into the\nbox that has its center at center" );
         
         }
@@ -378,6 +407,7 @@ void register_Space_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("point"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Return the minimum image copy of point with respect to center.\nFor periodic spaces, this returns the point translated into the\nbox that has its center at center" );
         
         }
@@ -390,6 +420,7 @@ void register_Space_class(){
                 "getRandomPoint"
                 , getRandomPoint_function_value
                 , ( bp::arg("center"), bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Return a random point within this space, using the passed\nrandom number generator to generate the necessary random numbers,\nand placing the center of the box at center" );
         
         }
@@ -402,6 +433,7 @@ void register_Space_class(){
                 "getRandomPoint"
                 , getRandomPoint_function_value
                 , ( bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Return a random point within this space using the global\nrandom number generator and with the box centered at center" );
         
         }
@@ -414,6 +446,7 @@ void register_Space_class(){
                 "getRandomPoint"
                 , getRandomPoint_function_value
                 , ( bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Return a random point within this space using the passed\nrandom number generator to generate any necessary random\nnumbers, and centering the box at the origin" );
         
         }
@@ -425,6 +458,7 @@ void register_Space_class(){
             Space_exposer.def( 
                 "getRandomPoint"
                 , getRandomPoint_function_value
+                , bp::release_gil_policy()
                 , "Return a random point within this space using the global\nrandom number generator, and with the box centered at the origin" );
         
         }
@@ -436,6 +470,7 @@ void register_Space_class(){
             Space_exposer.def( 
                 "isCartesian"
                 , isCartesian_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this space is cartesian\n( x==y==z == 1 and all angle between x-y, y-z, x-z all 90 degrees )" );
         
         }
@@ -447,6 +482,7 @@ void register_Space_class(){
             Space_exposer.def( 
                 "isPeriodic"
                 , isPeriodic_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this space is periodic" );
         
         }
@@ -459,6 +495,7 @@ void register_Space_class(){
                 "minimumDistance"
                 , minimumDistance_function_value
                 , ( bp::arg("group0"), bp::arg("group1") )
+                , bp::release_gil_policy()
                 , "Return the minimum distance between the points in group0 and group1.\nIf this is a periodic space then this uses the minimum image convention\n(i.e. the minimum distance between the closest periodic replicas are\nused)" );
         
         }
@@ -471,6 +508,7 @@ void register_Space_class(){
                 "minimumDistance"
                 , minimumDistance_function_value
                 , ( bp::arg("group") )
+                , bp::release_gil_policy()
                 , "Return the minimum distance between points within the group group." );
         
         }
@@ -483,6 +521,7 @@ void register_Space_class(){
                 "minimumDistance"
                 , minimumDistance_function_value
                 , ( bp::arg("box0"), bp::arg("box1") )
+                , bp::release_gil_policy()
                 , "Return the minimum distance between the two AABoxes" );
         
         }
@@ -507,6 +546,7 @@ void register_Space_class(){
                 "setVolume"
                 , setVolume_function_value
                 , ( bp::arg("volume") )
+                , bp::release_gil_policy()
                 , "Return a copy of this space with the volume of set to volume\n- this will scale the space uniformly, keeping the center at\nthe same location, to achieve this volume" );
         
         }
@@ -518,6 +558,7 @@ void register_Space_class(){
             Space_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this space" );
         
         }
@@ -529,6 +570,7 @@ void register_Space_class(){
             Space_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -540,6 +582,7 @@ void register_Space_class(){
             Space_exposer.def( 
                 "volume"
                 , volume_function_value
+                , bp::release_gil_policy()
                 , "Return the volume of the central box of this space. This\nthrows an exception if it is not possible to calculate the\nvolume of this space (e.g. it is an infinite space)" );
         
         }

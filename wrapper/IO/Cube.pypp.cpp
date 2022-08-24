@@ -33,6 +33,8 @@ SireIO::Cube __copy__(const SireIO::Cube &other){ return SireIO::Cube(other); }
 
 const char* pvt_get_name(const SireIO::Cube&){ return "SireIO::Cube";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Cube_class(){
 
     { //::SireIO::Cube

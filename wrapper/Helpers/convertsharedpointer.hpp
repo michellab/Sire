@@ -33,6 +33,8 @@ namespace bp = boost::python;
 
 #include "SireBase/sharedpolypointer.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 SIRE_BEGIN_HEADER
 
 using SireBase::SharedPolyPointer;
@@ -42,6 +44,7 @@ struct to_base_object
 {
     static PyObject* convert(const P &object_container)
     {
+        auto raii = boost::python::release_gil_policy::acquire_gil();
         return bp::incref( object( SireBase::SharedPolyPointer<Base>(object_container.base()) ).ptr() );
     }
 };

@@ -40,6 +40,8 @@ SireMove::GetCentroidPoint __copy__(const SireMove::GetCentroidPoint &other){ re
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_GetCentroidPoint_class(){
 
     { //::SireMove::GetCentroidPoint
@@ -58,7 +60,7 @@ void register_GetCentroidPoint_class(){
             GetCentroidPoint_exposer.def( 
                 "atomID"
                 , atomID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the AtomID(s) used to limit the search for the point" );
         
         }
@@ -97,6 +99,7 @@ void register_GetCentroidPoint_class(){
             GetCentroidPoint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -21,6 +21,8 @@ SireMaths::MultiInt __copy__(const SireMaths::MultiInt &other){ return SireMaths
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_MultiInt_class(){
@@ -43,6 +45,7 @@ void register_MultiInt_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith value in the multifloat" );
         
         }
@@ -55,6 +58,7 @@ void register_MultiInt_class(){
                 "compareEqual"
                 , compareEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -67,6 +71,7 @@ void register_MultiInt_class(){
                 "compareGreater"
                 , compareGreater_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -79,6 +84,7 @@ void register_MultiInt_class(){
                 "compareGreaterEqual"
                 , compareGreaterEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -91,6 +97,7 @@ void register_MultiInt_class(){
                 "compareLess"
                 , compareLess_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -103,6 +110,7 @@ void register_MultiInt_class(){
                 "compareLessEqual"
                 , compareLessEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -115,6 +123,7 @@ void register_MultiInt_class(){
                 "compareNotEqual"
                 , compareNotEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -126,6 +135,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -137,6 +147,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "doubleSum"
                 , doubleSum_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -149,6 +160,7 @@ void register_MultiInt_class(){
                 "fromArray"
                 , fromArray_function_value
                 , ( bp::arg("array") )
+                , bp::release_gil_policy()
                 , "Create an array of MultiInts from the passed array of integers. This will\npad the end of the array with zeroes if necessary" );
         
         }
@@ -161,6 +173,7 @@ void register_MultiInt_class(){
                 "fromArray"
                 , fromArray_function_value
                 , ( bp::arg("array"), bp::arg("size") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -173,6 +186,7 @@ void register_MultiInt_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the\nith value in the MultiInt" );
         
         }
@@ -185,6 +199,7 @@ void register_MultiInt_class(){
                 "getitem"
                 , getitem_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -196,6 +211,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "hasBinaryOne"
                 , hasBinaryOne_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not at least one of the elements of this vector\nis binary one (the float is equal to 0xFFFFFFFF)" );
         
         }
@@ -207,6 +223,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "hasBinaryZero"
                 , hasBinaryZero_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not at least one of the elements of this vector\nis binary zero (the float is equal to 0x00000000)" );
         
         }
@@ -218,6 +235,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "isAligned"
                 , isAligned_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this MultiInt is correctly aligned. If it is not,\nthen any SSE operations will fail" );
         
         }
@@ -229,6 +247,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "isBinaryOne"
                 , isBinaryOne_function_value
+                , bp::release_gil_policy()
                 , "Return whether all of the elements of this MultiInt are\nequal to 0xFFFFFFFF (e.g. every bit in the entire vector is 1)" );
         
         }
@@ -240,6 +259,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "isBinaryZero"
                 , isBinaryZero_function_value
+                , bp::release_gil_policy()
                 , "Return whether all of the elements of this MultiInt are\nequal to 0x00000000 (e.g. every bit in the entire vector is 0)" );
         
         }
@@ -251,6 +271,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "isNotBinaryOne"
                 , isNotBinaryOne_function_value
+                , bp::release_gil_policy()
                 , "Return whether all of the elements of this MultiInt are\nnot equal to 0xFFFFFFFF (e.g. at least one bit in the entire vector is 0)" );
         
         }
@@ -262,6 +283,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "isNotBinaryZero"
                 , isNotBinaryZero_function_value
+                , bp::release_gil_policy()
                 , "Return whether all of the elements of this MultiInt are\nnot equal to 0x00000000 (e.g. at least one bit in the entire vector is 1)" );
         
         }
@@ -274,6 +296,7 @@ void register_MultiInt_class(){
                 "logicalAnd"
                 , logicalAnd_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -286,6 +309,7 @@ void register_MultiInt_class(){
                 "logicalAndNot"
                 , logicalAndNot_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -297,6 +321,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "logicalNot"
                 , logicalNot_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -309,6 +334,7 @@ void register_MultiInt_class(){
                 "logicalOr"
                 , logicalOr_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -321,6 +347,7 @@ void register_MultiInt_class(){
                 "logicalXor"
                 , logicalXor_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -333,6 +360,7 @@ void register_MultiInt_class(){
                 "max"
                 , max_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -345,6 +373,7 @@ void register_MultiInt_class(){
                 "min"
                 , min_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -421,6 +450,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "reinterpretCastToFloat"
                 , reinterpretCastToFloat_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -432,6 +462,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "rotate"
                 , rotate_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -444,6 +475,7 @@ void register_MultiInt_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the ith value of the MultiInt to value" );
         
         }
@@ -455,6 +487,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -466,6 +499,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "sum"
                 , sum_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -478,6 +512,7 @@ void register_MultiInt_class(){
                 "toArray"
                 , toArray_function_value
                 , ( bp::arg("array") )
+                , bp::release_gil_policy()
                 , "Return the passed MultiInt converted back into a normal array" );
         
         }
@@ -489,6 +524,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "toBinaryString"
                 , toBinaryString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -500,6 +536,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -511,6 +548,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -522,6 +560,7 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

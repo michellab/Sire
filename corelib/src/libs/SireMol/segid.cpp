@@ -72,6 +72,12 @@ SegID::SegID(const SegID &other) : ID(other)
 SegID::~SegID()
 {}
 
+/** Return an AtomID constructed from the passed string */
+SegIdentifier SegID::fromString(const QString &id)
+{
+    return SegName(id);
+}
+
 /** Return a specific object that matches this ID */
 Specify<SegID> SegID::operator[](qint64 i) const
 {

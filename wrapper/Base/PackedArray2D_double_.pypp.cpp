@@ -17,6 +17,8 @@ SireBase::PackedArray2D<double> __copy__(const SireBase::PackedArray2D<double> &
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_PackedArray2D_double__class(){
@@ -41,6 +43,7 @@ void register_PackedArray2D_double__class(){
                 "append"
                 , append_function_value
                 , ( bp::arg("array") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -54,6 +57,7 @@ void register_PackedArray2D_double__class(){
                 "append"
                 , append_function_value
                 , ( bp::arg("arrays") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -67,6 +71,7 @@ void register_PackedArray2D_double__class(){
                 "append"
                 , append_function_value
                 , ( bp::arg("array") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -80,6 +85,7 @@ void register_PackedArray2D_double__class(){
                 "append"
                 , append_function_value
                 , ( bp::arg("arrays") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -93,6 +99,7 @@ void register_PackedArray2D_double__class(){
                 "assertValidIndex"
                 , assertValidIndex_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -133,6 +140,7 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -145,6 +153,7 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "detach"
                 , detach_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -158,6 +167,7 @@ void register_PackedArray2D_double__class(){
                 "fromVariant"
                 , fromVariant_function_value
                 , ( bp::arg("variant") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -170,6 +180,7 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -182,6 +193,7 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "nArrays"
                 , nArrays_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -194,6 +206,7 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "nValues"
                 , nValues_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -207,6 +220,7 @@ void register_PackedArray2D_double__class(){
                 "nValues"
                 , nValues_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -264,6 +278,7 @@ void register_PackedArray2D_double__class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -277,6 +292,7 @@ void register_PackedArray2D_double__class(){
                 "removeAll"
                 , removeAll_function_value
                 , ( bp::arg("idxs") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -289,6 +305,7 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -301,6 +318,7 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "toQVector"
                 , toQVector_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -313,6 +331,7 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "toQVectorVector"
                 , toQVectorVector_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -325,6 +344,7 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -337,6 +357,7 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "toVariant"
                 , toVariant_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -350,6 +371,7 @@ void register_PackedArray2D_double__class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("i"), bp::arg("array") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -363,6 +385,7 @@ void register_PackedArray2D_double__class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("i"), bp::arg("array") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -376,6 +399,7 @@ void register_PackedArray2D_double__class(){
                 "updateAll"
                 , updateAll_function_value
                 , ( bp::arg("idxs"), bp::arg("arrays") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
