@@ -122,6 +122,7 @@
 #include <QMutex>
 #include "moleculegroups.h"
 #include "SireBase/errors.h"
+#include "SireBase/generalunitproperty.h"
 #include "SireBase/slice.h"
 #include "SireError/errors.h"
 #include "SireMol/errors.h"

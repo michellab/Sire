@@ -237,6 +237,8 @@
 
 #include "Force3D.pypp.hpp"
 
+#include "Frame.pypp.hpp"
+
 #include "GeometryPerturbation.pypp.hpp"
 
 #include "GeometryPerturbations.pypp.hpp"
@@ -883,6 +885,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_Evaluator_class();
 
     register_EvaluatorM_class();
+
+    register_Frame_class();
 
     register_GeometryPerturbations_class();
 

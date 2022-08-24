@@ -65,6 +65,7 @@ class Residue;
 class CutGroup;
 class Atom;
 class Trajectory;
+class Frame;
 
 template<class T>
 class Selector;
@@ -341,17 +342,15 @@ public:
     int nFrames() const;
     int nFrames(const SireBase::PropertyMap &map) const;
 
-    void getFrame(int i);
-    void setFrame(int i);
+    void loadFrame(int frame);
+    void saveFrame(int frame);
+    void saveFrame();
+    void deleteFrame(int frame);
 
-    void getFrame(int i, const SireBase::PropertyMap &map);
-    void setFrame(int i, const SireBase::PropertyMap &map);
-
-    void appendFrame();
-    void insertFrame(int i);
-
-    void appendFrame(const SireBase::PropertyMap &map);
-    void insertFrame(int i, const SireBase::PropertyMap &map);
+    void loadFrame(int frame, const SireBase::PropertyMap &map);
+    void saveFrame(int frame, const SireBase::PropertyMap &map);
+    void saveFrame(const SireBase::PropertyMap &map);
+    void deleteFrame(int frame, const SireBase::PropertyMap &map);
 
     const char* propertyType(const PropertyName &key) const;
     const char* metadataType(const PropertyName &metakey) const;
@@ -383,6 +382,9 @@ protected:
 
     bool operator==(const MoleculeView &other) const;
     bool operator!=(const MoleculeView &other) const;
+
+    Frame _toFrame(const PropertyMap &map) const;
+    void _fromFrame(const Frame &frame, const PropertyMap &map);
 
     template<class Index, class PropType, class T>
     static void setProperty(MoleculeData &data,

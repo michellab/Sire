@@ -321,6 +321,7 @@ void register_SireMol_objects()
     ObjectRegistry::registerConverterFor< SireMol::SpecifyMol >();
     ObjectRegistry::registerConverterFor< SireMol::Stereoscopy >();
     ObjectRegistry::registerConverterFor< SireMol::Trajectory >();
+    ObjectRegistry::registerConverterFor< SireMol::Frame >();
     ObjectRegistry::registerConverterFor< SireMol::ViewsOfMol >();
     ObjectRegistry::registerConverterFor< SireMol::Mover<SireMol::ViewsOfMol> >();
     ObjectRegistry::registerConverterFor< SireMol::VolumeMap >();

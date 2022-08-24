@@ -32,6 +32,13 @@
 
 #include "SireVol/space.h"
 
+#include "SireMol/core.h"
+
+#include "SireUnits/dimensions.h"
+#include "SireUnits/units.h"
+
+#include "SireBase/generalunitproperty.h"
+
 #include "SireError/errors.h"
 
 #include "SireStream/datastream.h"
@@ -40,6 +47,8 @@
 using namespace SireMol;
 using namespace SireVol;
 using namespace SireBase;
+using namespace SireUnits;
+using namespace SireUnits::Dimension;
 using namespace SireStream;
 
 ////////
@@ -83,70 +92,6 @@ const char* TrajectoryData::typeName()
     return "SireMol::TrajectoryData";
 }
 
-void TrajectoryData::assertContainsSpace() const
-{
-    if (not this->containsSpace())
-        throw SireError::incompatible_error(QObject::tr(
-            "This trajectory does not contain any space information!"
-        ), CODELOC);
-}
-
-void TrajectoryData::assertContainsCoordinates() const
-{
-    if (not this->containsCoordinates())
-        throw SireError::incompatible_error(QObject::tr(
-            "This trajectory does not contain any coordinates!"
-        ), CODELOC);
-}
-
-void TrajectoryData::assertContainsVelocities() const
-{
-    if (not this->containsVelocities())
-        throw SireError::incompatible_error(QObject::tr(
-            "This trajectory does not contain any velocities!"
-        ), CODELOC);
-}
-
-void TrajectoryData::assertContainsForces() const
-{
-    if (not this->containsForces())
-        throw SireError::incompatible_error(QObject::tr(
-            "This trajectory does not contain any forces!"
-        ), CODELOC);
-}
-
-void TrajectoryData::assertSupportsSpace() const
-{
-    if (not this->supportsCoordinates())
-        throw SireError::incompatible_error(QObject::tr(
-            "This trajectory does not support space information!"
-        ), CODELOC);
-}
-
-void TrajectoryData::assertSupportsCoordinates() const
-{
-    if (not this->supportsCoordinates())
-        throw SireError::incompatible_error(QObject::tr(
-            "This trajectory does not support coordinates!"
-        ), CODELOC);
-}
-
-void TrajectoryData::assertSupportsVelocities() const
-{
-    if (not this->supportsVelocities())
-        throw SireError::incompatible_error(QObject::tr(
-            "This trajectory does not support velocities!"
-        ), CODELOC);
-}
-
-void TrajectoryData::assertSupportsForces() const
-{
-    if (not this->supportsForces())
-        throw SireError::incompatible_error(QObject::tr(
-            "This trajectory does not support forces!"
-        ), CODELOC);
-}
-
 int TrajectoryData::nFiles() const
 {
     return this->filenames().count();
@@ -157,40 +102,85 @@ bool TrajectoryData::isEmpty() const
     return this->nFrames() == 0;
 }
 
-void TrajectoryData::appendFrame(const AtomCoords &coords, qint64 idx)
+QList<Frame> TrajectoryData::getFrames() const
 {
-    this->insertFrame(this->nFrames(), coords, idx);
+    QList<Frame> frames;
+
+    const int n = this->nFrames();
+
+    frames.reserve(n);
+
+    for (int i=0; i<n; ++i)
+    {
+        frames.append(this->getFrame(i));
+    }
+
+    return frames;
 }
 
-void TrajectoryData::appendFrame(const AtomVelocities &velocities, qint64 idx)
+QList<Frame> TrajectoryData::getFrames(int start_atom, int natoms) const
 {
-    this->insertFrame(this->nFrames(), velocities, idx);
+    QList<Frame> frames;
+
+    const int n = this->nFrames();
+
+    frames.reserve(n);
+
+    for (int i=0; i<n; ++i)
+    {
+        frames.append(this->getFrame(i).subset(start_atom, natoms));
+    }
+
+    return frames;
 }
 
-void TrajectoryData::appendFrame(const AtomForces &forces, qint64 idx)
+Frame TrajectoryData::operator[](int i) const
 {
-    this->insertFrame(this->nFrames(), forces, idx);
+    return this->getFrame(i);
 }
 
-void TrajectoryData::insertFrame(int i, const AtomCoords &coords, qint64 idx)
+bool TrajectoryData::isEditable() const
 {
-    this->assertSupportsCoordinates();
-    this->insertFrame(i);
-    this->setFrame(i, coords, idx);
+    return false;
 }
 
-void TrajectoryData::insertFrame(int i, const AtomVelocities &velocities, qint64 idx)
+void TrajectoryData::assertIsEditable() const
 {
-    this->assertSupportsVelocities();
-    this->insertFrame(i);
-    this->setFrame(i, velocities, idx);
+    if (not this->isEditable())
+        throw SireError::incompatible_error(QObject::tr(
+            "You cannot edit a trajectory of type %1.")
+                .arg(this->what()), CODELOC);
 }
 
-void TrajectoryData::insertFrame(int i, const AtomForces &forces, qint64 idx)
+TrajectoryDataPtr TrajectoryData::makeEditable() const
 {
-    this->assertSupportsForces();
-    this->insertFrame(i);
-    this->setFrame(i, forces, idx);
+    return TrajectoryDataPtr(new MolTrajectoryData(this->getFrames()));
+}
+
+TrajectoryDataPtr TrajectoryData::makeSubsetEditable(int start_atom, int natoms) const
+{
+    return TrajectoryDataPtr(new MolTrajectoryData(
+                                    this->getFrames(start_atom, natoms)));
+}
+
+void TrajectoryData::setFrame(int, const Frame&)
+{
+    this->assertIsEditable();
+}
+
+void TrajectoryData::appendFrame(const Frame&)
+{
+    this->assertIsEditable();
+}
+
+void TrajectoryData::insertFrame(int, const Frame&)
+{
+    this->assertIsEditable();
+}
+
+void TrajectoryData::deleteFrame(int)
+{
+    this->assertIsEditable();
 }
 
 /////////////
@@ -204,7 +194,7 @@ SIREMOL_EXPORT QDataStream& operator<<(QDataStream &ds, const Trajectory &traj)
     writeHeader(ds, r_traj, 1);
 
     SharedDataStream sds(ds);
-    sds << traj.d << traj.idx;
+    sds << traj.d << traj.start_atom << traj.natoms;
 
     return ds;
 }
@@ -217,7 +207,7 @@ SIREMOL_EXPORT QDataStream& operator>>(QDataStream &ds, Trajectory &traj)
     {
         SharedDataStream sds(ds);
 
-        sds >> traj.d >> traj.idx;
+        sds >> traj.d >> traj.start_atom >> traj.natoms;
     }
     else
         throw version_error(v, "1", r_traj, CODELOC);
@@ -227,38 +217,112 @@ SIREMOL_EXPORT QDataStream& operator>>(QDataStream &ds, Trajectory &traj)
 
 Trajectory::Trajectory()
            : ConcreteProperty<Trajectory,MoleculeProperty>(),
-             idx(0)
+             start_atom(0), natoms(0)
 {}
 
-Trajectory::Trajectory(const TrajectoryData &data, qint64 index)
+Trajectory::Trajectory(const TrajectoryData &data)
            : ConcreteProperty<Trajectory,MoleculeProperty>(),
-             idx(index)
+             start_atom(0), natoms(0)
 {
-    data.assertValidIndex(index);
+    start_atom = 0;
+    natoms = data.nAtoms();
 
     if (data.nFrames() > 0)
         d.append(TrajectoryDataPtr(data));
 }
 
-Trajectory::Trajectory(const QList<TrajectoryDataPtr> &data, qint64 index)
+Trajectory::Trajectory(const QList<TrajectoryDataPtr> &data)
            : ConcreteProperty<Trajectory,MoleculeProperty>(),
-             idx(index)
+             start_atom(0), natoms(0)
 {
+    start_atom = 0;
+    natoms = 0;
+
     for (const auto &ptr : data)
     {
         if (ptr.constData() != 0)
         {
-            ptr->assertValidIndex(index);
-
             if (ptr->nFrames() > 0)
+            {
+                if (natoms == 0)
+                {
+                    natoms = ptr->nAtoms();
+                }
+                else if (natoms != ptr->nAtoms())
+                {
+                    throw SireError::incompatible_error(
+                        QObject::tr("Different number of atoms in different "
+                                    "trajectories: %1 versus %2.")
+                            .arg(natoms).arg(ptr->nAtoms()), CODELOC);
+                }
+
                 d.append(ptr);
+            }
+        }
+    }
+}
+
+Trajectory::Trajectory(const TrajectoryData &data, int s, int n)
+           : ConcreteProperty<Trajectory,MoleculeProperty>(),
+             start_atom(s), natoms(n)
+{
+    if (natoms <= 0 or data.nFrames() <= 0)
+        return;
+
+    if (start_atom < 0 or (start_atom+natoms) >= data.nAtoms())
+        throw SireError::incompatible_error(QObject::tr(
+            "Cannot use start_atom %1 and natoms %2 for a trajectory with %3 atoms.")
+                .arg(start_atom).arg(natoms).arg(data.nAtoms()),
+                    CODELOC);
+
+    d.append(TrajectoryDataPtr(data));
+}
+
+Trajectory::Trajectory(const QList<TrajectoryDataPtr> &data, int s, int n)
+           : ConcreteProperty<Trajectory,MoleculeProperty>(),
+             start_atom(s), natoms(n)
+{
+    if (natoms <= 0 or data.count() <= 0)
+        return;
+
+    n = 0;
+
+    for (const auto &ptr : data)
+    {
+        if (ptr.constData() != 0)
+        {
+            if (ptr->nFrames() > 0)
+            {
+                if (n == 0)
+                {
+                    n = ptr->nAtoms();
+                }
+                else if (n != ptr->nAtoms())
+                {
+                    throw SireError::incompatible_error(
+                        QObject::tr("Different number of atoms in different "
+                                    "trajectories: %1 versus %2.")
+                            .arg(natoms).arg(ptr->nAtoms()), CODELOC);
+                }
+
+                if (start_atom + natoms >= ptr->nAtoms())
+                {
+                    throw SireError::incompatible_error(
+                        QObject::tr("Cannot use start_atom %1 and natoms %2 "
+                                    "for a trajectory with %3 atoms.")
+                            .arg(start_atom).arg(natoms)
+                            .arg(ptr->nAtoms()), CODELOC);
+                }
+
+                d.append(ptr);
+            }
         }
     }
 }
 
 Trajectory::Trajectory(const Trajectory &other)
            : ConcreteProperty<Trajectory,MoleculeProperty>(other),
-             d(other.d), idx(other.idx)
+             d(other.d), start_atom(other.start_atom), natoms(other.natoms)
 {}
 
 Trajectory::~Trajectory()
@@ -270,7 +334,8 @@ Trajectory& Trajectory::operator=(const Trajectory &other)
     {
         MoleculeProperty::operator=(other);
         d = other.d;
-        idx = other.idx;
+        start_atom = other.start_atom;
+        natoms = other.natoms;
     }
 
     return *this;
@@ -278,7 +343,9 @@ Trajectory& Trajectory::operator=(const Trajectory &other)
 
 bool Trajectory::operator==(const Trajectory &other) const
 {
-    return idx == other.idx and d == other.d;
+    return start_atom == other.start_atom and
+           natoms == other.natoms and
+           d == other.d;
 }
 
 bool Trajectory::operator!=(const Trajectory &other) const
@@ -315,20 +382,23 @@ int Trajectory::nFrames() const
         nframes += ptr->nFrames();
     }
 
-    return qMax(nframes, 1);
+    return nframes;
+}
+
+int Trajectory::nAtoms() const
+{
+    return natoms;
 }
 
 // THIS WILL CHANGE 'frame' SO IT HAS THE RIGHT VALUE
 // FOR THE SPECIFIED TRAJECTORY
-int Trajectory::_getTrajectoryForFrame(int &frame) const
+int Trajectory::_getIndexForFrame(int &frame) const
 {
-    if (d.isEmpty())
-        throw SireError::invalid_index(QObject::tr(
-            "There are not trajectories loaded!"), CODELOC);
+    frame = SireID::Index(frame).map(this->nFrames());
 
     for (int i=0; i<d.count(); ++i)
     {
-        int n = d->nFrames();
+        int n = d[i]->nFrames();
 
         if (frame < n)
             return i;
@@ -336,406 +406,425 @@ int Trajectory::_getTrajectoryForFrame(int &frame) const
             frame -= n;
     }
 
-    int nframes = this->nFrames();
-
-    throw SireError::invalid_index(QObject::tr(
-        "Invalid frame number %1. Only %2 exist!")
-            .arg(frame+nframes).arg(nframes), CODELOC);
+    // we should never get here
+    throw SireError::program_bug(QObject::tr(
+            "How did we get here? %1 %2").arg(frame).arg(this->nFrames()),
+                CODELOC);
 
     return 0;
 }
 
-SireUnits::Dimension::Time Trajectory::getTime(int frame) const
+Frame Trajectory::getFrame(int i) const
+{
+    i = Index(i).map(this->nFrames());
+
+    int idx = _getIndexForFrame(i);
+
+    auto frame = d[idx]->getFrame(i);
+
+    if (frame.nAtoms() == natoms)
+        return frame;
+    else
+        return frame.subset(start_atom, natoms);
+}
+
+TrajectoryData& Trajectory::_makeEditable(int &frame)
 {
     frame = Index(frame).map(this->nFrames());
 
-    if (d.isEmpty())
-        return SireUnits::Dimension::Time(0);
+    int idx = _getIndexForFrame(frame);
 
-    int idx = _getTrajectoryForFrame(frame);
-
-    SireUnits::Dimension::Time time(0);
-
-    if (idx > 0)
+    if (d[idx]->nAtoms() != natoms or (not d[idx]->isEditable()))
     {
-        for (int i=0; i<idx-1; ++i)
+        if (d[idx]->nAtoms() == natoms)
         {
-            time += d[i]->getTotalTime();
+            d[idx] = d[idx]->makeEditable();
+        }
+        else
+        {
+            d[idx] = d[idx]->makeSubsetEditable(start_atom, natoms);
+
+            if (d[idx]->nAtoms() != natoms)
+                throw SireError::program_bug(QObject::tr(
+                    "The result from making the subset editable should "
+                    "be a data with natoms = %1 (not %2)")
+                        .arg(natoms).arg(d[idx]->nAtoms()), CODELOC);
         }
     }
 
-    time += d[i]->getDeltaTime(frame);
-
-    return time;
+    return *(d[idx]);
 }
 
-const Space& Trajectory::getSpace(int frame) const
+Frame Trajectory::_subset(const Frame &frame) const
 {
-    frame = Index(frame).map(this->nFrames());
+    if (frame.nAtoms() == natoms)
+        return frame;
+    else
+        return frame.subset(start_atom, natoms);
+}
 
-    if (d.isEmpty())
+void Trajectory::setFrame(int i, const Frame &frame)
+{
+    if (frame.isEmpty())
     {
-        this->assertContainsSpace();
+        this->deleteFrame(i);
     }
     else
     {
-        int idx = _getTrajectoryForFrame(frame);
-        d[idx]->assertContainsSpace();
-        return d[idx]->getSpace(frame);
+        this->_makeEditable(i).setFrame(i, this->_subset(frame));
     }
 }
 
-AtomCoords Trajectory::getFrame(int frame, const AtomCoords &coords) const
+void Trajectory::appendFrame(const Frame &frame)
 {
-    frame = Index(frame).map(this->nFrames());
+    if (frame.isEmpty())
+        return;
+
+    auto subset = this->_subset(frame);
 
     if (d.isEmpty())
-        return coords;
-
-    int idx = _getTrajectoryForFrame(frame);
-
-    d[idx]->assertValidIndex(idx + coords.nAtoms());
-
-    d[idx]->assertContainsCoordinates();
-
-    return d[idx]->getFrame(frame, coords, idx);
+    {
+        d.append(TrajectoryDataPtr(new MolTrajectoryData(subset)));
+    }
+    else if (d.last()->isEditable() and d.last()->nAtoms() == natoms)
+    {
+        d.last()->appendFrame(frame);
+    }
+    else
+    {
+        d.append(TrajectoryDataPtr(new MolTrajectoryData(subset)));
+    }
 }
 
-AtomVelocities Trajectory::getFrame(int i, const AtomVelocities &velocities) const
+void Trajectory::insertFrame(int i, const Frame &frame)
 {
-    frame = Index(frame).map(this->nFrames());
+    if (frame.isEmpty())
+        return;
 
-    if (d.isEmpty())
-        return velocities;
+    auto subset = this->_subset(frame);
 
-    int idx = _getTrajectoryForFrame(frame);
-
-    d[idx]->assertValidIndex(idx + velocities.nAtoms());
-
-    d[idx]->assertContainsVelocities();
-
-    return d[idx]->getFrame(frame, velocities, idx);
+    this->_makeEditable(i).insertFrame(i, subset);
 }
 
-AtomForces Trajectory::getFrame(int frame, const AtomForces &forces) const
+void Trajectory::deleteFrame(int i)
 {
-    frame = Index(frame).map(this->nFrames());
-
-    if (d.isEmpty())
-        return forces;
-
-    int idx = _getTrajectoryForFrame(frame);
-
-    d[idx]->assertValidIndex(idx + forces.nAtoms());
-
-    d[idx]->assertContainsForces();
-
-    return d[idx]->getFrame(frame, forces, idx);
-}
-
-void Trajectory::setFrame(int frame, const AtomCoords &coords)
-{
-    frame = Index(frame).map(this->nFrames());
-
-    if (d.isEmpty())
-        throw SireError::incompatible_error(
-            QObject::tr("You cannot edit a null trajectory."), CODELOC);
-
-    int idx = _getTrajectoryForFrame(frame);
-
-    if (not d[idx]->isEditable())
-    {
-        d[idx] = d[idx]->makeEditable(coords, idx);
-    }
-
-    d[idx]->setFrame(frame, coords, idx);
-}
-
-void Trajectory::setFrame(int frame, const AtomVelocities &velocities)
-{
-    frame = Index(frame).map(this->nFrames());
-
-    if (d.isEmpty())
-        throw SireError::incompatible_error(
-            QObject::tr("You cannot edit a null trajectory."), CODELOC);
-
-    int idx = _getTrajectoryForFrame(frame);
-
-    if (not d[idx]->isEditable())
-    {
-        d[idx] = d[idx]->makeEditable(velocities, idx);
-    }
-
-    d[idx]->setFrame(frame, velocities, idx);
-}
-
-void Trajectory::setFrame(int frame, const AtomForces &forces)
-{
-    frame = Index(frame).map(this->nFrames());
-
-    if (d.isEmpty())
-        throw SireError::incompatible_error(
-            QObject::tr("You cannot edit a null trajectory."), CODELOC);
-
-    int idx = _getTrajectoryForFrame(frame);
-
-    if (not d[idx]->isEditable())
-    {
-        d[idx] = d[idx]->makeEditable(forces, idx);
-    }
-
-    d[idx]->setFrame(frame, forces, idx);
-}
-
-void Trajectory::appendFrame(const AtomCoords &coords)
-{
-    if (d.isEmpty())
-    {
-        d.append(TrajectoryDataPtr(MolTrajectoryData()));
-    }
-
-    if (not d.last()->isEditable())
-    {
-        d.append(TrajectoryDataPtr(MolTrajectoryData()));
-    }
-
-    d.last()->appendFrame(coords, idx);
-}
-
-void Trajectory::appendFrame(const AtomVelocities &velocities)
-{
-    if (d.isEmpty())
-    {
-        d.append(TrajectoryDataPtr(MolTrajectoryData()));
-    }
-
-    if (not d.last()->isEditable())
-    {
-        d.append(TrajectoryDataPtr(MolTrajectoryData()));
-    }
-
-    d.last()->appendFrame(velocities, idx);
-}
-
-void Trajectory::appendFrame(const AtomForces &forces)
-{
-    if (d.isEmpty())
-    {
-        d.append(TrajectoryDataPtr(MolTrajectoryData()));
-    }
-
-    if (not d.last()->isEditable())
-    {
-        d.append(TrajectoryDataPtr(MolTrajectoryData()));
-    }
-
-    d.last()->appendFrame(forces, idx);
-}
-
-void Trajectory::insertFrame(int frame, const AtomCoords &coords)
-{
-    frame = Index(frame).map(this->nFrames());
-
-    if (d.isEmpty())
-        throw SireError::incompatible_error(
-            QObject::tr("You cannot edit a null trajectory."), CODELOC);
-
-    int idx = _getTrajectoryForFrame(frame);
-
-    if (not d[idx]->isEditable())
-    {
-        d[idx] = d[idx]->makeEditable(coords, idx);
-    }
-
-    d[idx]->insertFrame(frame, coords, idx);
-}
-
-void Trajectory::insertFrame(int frame, const AtomVelocities &velocities)
-{
-    frame = Index(frame).map(this->nFrames());
-
-    if (d.isEmpty())
-        throw SireError::incompatible_error(
-            QObject::tr("You cannot edit a null trajectory."), CODELOC);
-
-    int idx = _getTrajectoryForFrame(frame);
-
-    if (not d[idx]->isEditable())
-    {
-        d[idx] = d[idx]->makeEditable(velocities, idx);
-    }
-
-    d[idx]->insertFrame(frame, velocities, idx);
-}
-
-void Trajectory::insertFrame(int frame, const AtomForces &forces)
-{
-    frame = Index(frame).map(this->nFrames());
-
-    if (d.isEmpty())
-        throw SireError::incompatible_error(
-            QObject::tr("You cannot edit a null trajectory."), CODELOC);
-
-    int idx = _getTrajectoryForFrame(frame);
-
-    if (not d[idx]->isEditable())
-    {
-        d[idx] = d[idx]->makeEditable(forces, idx);
-    }
-
-    d[idx]->insertFrame(frame, forces, idx);
-}
-
-void Trajectory::deleteFrame(int frame)
-{
-    frame = Index(frame).map(this->nFrames());
-
-    if (d.isEmpty())
-        throw SireError::incompatible_error(
-            QObject::tr("You cannot edit a null trajectory."), CODELOC);
-
-    int idx = _getTrajectoryForFrame(frame);
-
-    if (not d[idx]->isEditable())
-    {
-        d[idx] = d[idx]->makeEditable(NEED NUMBER OF COORDS, idx);
-    }
-
-    d[idx]->deleteFrame(frame, idx);
+    this->_makeEditable(i).deleteFrame(i);
 }
 
 bool Trajectory::isCompatibleWith(const MoleculeInfoData &molinfo) const
 {
-    if (d.data() == 0)
-        return true;
+    return this->nAtoms() == molinfo.nAtoms();
+}
 
-    try
+///////
+/////// Implementation of Frame
+///////
+
+static const RegisterMetaType<Frame> r_frame;
+
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream &ds, const Frame &frame)
+{
+    writeHeader(ds, r_frame, 1);
+
+    SharedDataStream sds(ds);
+
+    sds << frame.coords << frame.vels << frame.frcs
+        << frame.spc << frame.t.to(picosecond);
+
+    return ds;
+}
+
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream &ds, Frame &frame)
+{
+    VersionID v = readHeader(ds, r_frame);
+
+    if (v == 1)
     {
-        d->assertValidIndex(idx + molinfo.nAtoms());
-        return true;
+        SharedDataStream sds(ds);
+
+        sds >> frame.coords >> frame.vels >> frame.frcs >> frame.spc;
+
+        double time;
+        sds >> time;
+
+        frame.t = time * picosecond;
     }
-    catch(...)
+    else
+        throw version_error(v, "1", r_frame, CODELOC);
+
+    return ds;
+}
+
+Frame::Frame()
+      : ConcreteProperty<Frame,MoleculeProperty>(),
+        spc(Space::null()), t(0)
+{}
+
+Frame::Frame(const Molecule &mol, const PropertyMap &map)
+      : ConcreteProperty<Frame,MoleculeProperty>(),
+        spc(Space::null()), t(0)
+{
+    this->operator=(Frame(mol.data(), map));
+}
+
+Frame::Frame(const MoleculeData &mol, const PropertyMap &map)
+      : ConcreteProperty<Frame,MoleculeProperty>(),
+        spc(Space::null()), t(0)
+{
+    if (mol.hasProperty(map["coordinates"]))
     {
-        return false;
+        try
+        {
+            coords = mol.property(map["coordinates"]).asA<AtomCoords>().toVector();
+        }
+        catch(...)
+        {}
+    }
+
+    if (mol.hasProperty(map["velocities"]))
+    {
+        try
+        {
+            vels = mol.property(map["velocities"]).asA<AtomVelocities>().toVector();
+        }
+        catch(...)
+        {}
+    }
+
+    if (mol.hasProperty(map["forces"]))
+    {
+        try
+        {
+            frcs = mol.property(map["forces"]).asA<AtomForces>().toVector();
+        }
+        catch(...)
+        {}
+    }
+
+    if (mol.hasProperty(map["time"]))
+    {
+        try
+        {
+            t = mol.property(map["time"]).asA<GeneralUnitProperty>();
+        }
+        catch(...)
+        {}
+    }
+
+    if (mol.hasProperty(map["space"]))
+    {
+        try
+        {
+            spc = mol.property(map["space"]).asA<Space>();
+        }
+        catch(...)
+        {}
     }
 }
 
-bool Trajectory::containsSpace() const
+Frame::Frame(const QVector<Vector> &coordinates,
+             const QVector<Velocity3D> &velocities,
+             const QVector<Force3D> &forces,
+             const Space &space,
+             SireUnits::Dimension::Time time)
+      : ConcreteProperty<Frame,MoleculeProperty>(),
+        coords(coordinates), vels(velocities), frcs(forces),
+        spc(space), t(time)
 {
-    if (d.data() == 0)
-        return false;
-    else
-        return d->containsCoordinates();
+    int natoms = coords.count();
+    bool error = false;
+
+    if (natoms == 0)
+    {
+        natoms = vels.count();
+    }
+    else if (vels.count() > 0 and natoms != vels.count())
+    {
+        error = true;
+    }
+
+    if (natoms == 0)
+    {
+        natoms = frcs.count();
+    }
+    else if (frcs.count() > 0 and natoms != frcs.count())
+    {
+        error = true;
+    }
+
+    if (error)
+    {
+        throw SireError::incompatible_error(QObject::tr(
+            "Disagreement over the number of atoms! %1 vs %2 vs %3")
+                .arg(coords.count()).arg(vels.count()).arg(frcs.count()),
+                    CODELOC);
+    }
 }
 
-bool Trajectory::containsCoordinates() const
+Frame::Frame(const Frame &other)
+      : ConcreteProperty<Frame,MoleculeProperty>(),
+        coords(other.coords),
+        vels(other.vels),
+        frcs(other.frcs),
+        spc(other.spc),
+        t(other.t)
+{}
+
+Frame::~Frame()
+{}
+
+Frame& Frame::operator=(const Frame &other)
 {
-    if (d.data() == 0)
-        return true;
-    else
-        return d->containsCoordinates();
+    if (this != &other)
+    {
+        coords = other.coords;
+        vels = other.vels;
+        frcs = other.frcs;
+        spc = other.spc;
+        t = other.t;
+    }
+
+    return *this;
 }
 
-bool Trajectory::containsVelocities() const
+bool Frame::operator==(const Frame &other) const
 {
-    if (d.data() == 0)
-        return true;
-    else
-        return d->containsVelocities();
+    return (this == &other) or
+           (coords == other.coords and
+            vels == other.vels and
+            frcs == other.frcs and
+            spc == other.spc and
+            t == other.t);
 }
 
-bool Trajectory::containsForces() const
+bool Frame::operator!=(const Frame &other) const
 {
-    if (d.data() == 0)
-        return true;
-    else
-        return d->containsForces();
+    return not operator==(other);
 }
 
-bool Trajectory::supportsSpace() const
+const char* Frame::typeName()
 {
-    if (d.data() == 0)
-        return false;
-    else
-        return d->supportsCoordinates();
+    return QMetaType::typeName(qMetaTypeId<Frame>());
 }
 
-bool Trajectory::supportsCoordinates() const
+const char* Frame::what() const
 {
-    if (d.data() == 0)
-        return true;
-    else
-        return d->supportsCoordinates();
+    return Frame::typeName();
 }
 
-bool Trajectory::supportsVelocities() const
+Frame* Frame::clone() const
 {
-    if (d.data() == 0)
-        return true;
-    else
-        return d->supportsVelocities();
+    return new Frame(*this);
 }
 
-bool Trajectory::supportsForces() const
+QString Frame::toString() const
 {
-    if (d.data() == 0)
-        return true;
-    else
-        return d->supportsForces();
+    QStringList c;
+
+    if (this->hasCoordinates())
+        c.append("C");
+
+    if (this->hasVelocities())
+        c.append("V");
+
+    if (this->hasForces())
+        c.append("F");
+
+    if (c.isEmpty())
+        return QObject::tr("Frame::null");
+
+    return QObject::tr("Frame( nAtoms=%1, time=%2, {%3} )")
+                .arg(this->nAtoms()).arg(this->time().toString()).arg(c.join(","));
 }
 
-void Trajectory::assertContainsSpace() const
+bool Frame::isEmpty() const
 {
-    if (d.data() != 0)
-        d->assertContainsSpace();
-    else
-        throw SireError::incompatible_error( QObject::tr(
-            "The null trajectory does not contain space information."),
-                CODELOC);
+    return coords.isEmpty() and vels.isEmpty() and frcs.isEmpty();
 }
 
-void Trajectory::assertContainsCoordinates() const
+bool Frame::hasCoordinates() const
 {
-    if (d.data() != 0)
-        d->assertContainsCoordinates();
+    return not coords.isEmpty();
 }
 
-void Trajectory::assertContainsVelocities() const
+bool Frame::hasVelocities() const
 {
-    if (d.data() != 0)
-        d->assertContainsVelocities();
+    return not vels.isEmpty();
 }
 
-void Trajectory::assertContainsForces() const
+bool Frame::hasForces() const
 {
-    if (d.data() != 0)
-        d->assertContainsForces();
+    return not frcs.isEmpty();
 }
 
-void Trajectory::assertSupportsSpace() const
+QVector<Vector> Frame::coordinates() const
 {
-    if (d.data() != 0)
-        d->assertContainsSpace();
-    else
-        throw SireError::incompatible_error( QObject::tr(
-            "The null trajectory does not support space information."),
-                CODELOC);
+    return coords;
 }
 
-void Trajectory::assertSupportsCoordinates() const
+QVector<Velocity3D> Frame::velocities() const
 {
-    if (d.data() != 0)
-        d->assertSupportsCoordinates();
+    return vels;
 }
 
-void Trajectory::assertSupportsVelocities() const
+QVector<Force3D> Frame::forces() const
 {
-    if (d.data() != 0)
-        d->assertSupportsVelocities();
+    return frcs;
 }
 
-void Trajectory::assertSupportsForces() const
+SireUnits::Dimension::Time Frame::time() const
 {
-    if (d.data() != 0)
-        d->assertSupportsForces();
+    return t;
+}
+
+const Space& Frame::space() const
+{
+    return *spc;
+}
+
+int Frame::nAtoms() const
+{
+    int nats = coords.count();
+
+    if (nats == 0)
+    {
+        nats = vels.count();
+    }
+
+    if (nats == 0)
+    {
+        nats = frcs.count();
+    }
+
+    return nats;
+}
+
+template<class T>
+QVector<T> _mid(const QVector<T> &v, int start, int count)
+{
+    if (v.count() == 0)
+        return v;
+
+    if (start < 0 or count < 0 or start+count >= v.count())
+        throw SireError::incompatible_error(QObject::tr(
+            "Cannot subset a vector of length %1 using start %2, count %3.")
+                .arg(v.count()).arg(start).arg(count), CODELOC);
+
+    return v.mid(start, count);
+}
+
+Frame Frame::subset(int start_atom, int natoms) const
+{
+    Frame ret(*this);
+
+    ret.coords = _mid(coords, start_atom, natoms);
+    ret.vels = _mid(vels, start_atom, natoms);
+    ret.frcs = _mid(frcs, start_atom, natoms);
+
+    return ret;
+}
+
+bool Frame::isCompatibleWith(const MoleculeInfoData &molinfo) const
+{
+    return this->nAtoms() == molinfo.nAtoms();
 }

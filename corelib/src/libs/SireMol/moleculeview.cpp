@@ -42,6 +42,10 @@
 
 #include "SireBase/slice.h"
 
+#include "SireBase/generalunitproperty.h"
+
+#include "SireVol/space.h"
+
 #include "SireBase/errors.h"
 #include "SireError/errors.h"
 #include "SireMol/errors.h"
@@ -53,6 +57,7 @@
 
 using namespace SireStream;
 using namespace SireBase;
+using namespace SireVol;
 using namespace SireMol;
 
 RegisterMetaType<MoleculeView> r_molview( MAGIC_ONLY,
@@ -140,28 +145,6 @@ bool MoleculeView::isNull() const
     return *d == *MoleculeData::null();
 }
 
-void MoleculeView::getFrame(int i)
-{
-    this->getFrame(i, PropertyMap());
-}
-
-void MoleculeView::setFrame(int i)
-{
-    this->setFrame(i, PropertyMap());
-}
-
-Trajectory MoleculeView::_getTrajectory(const SireBase::PropertyMap &map) const
-{
-    try
-    {
-        return d->property(map["trajectory"]).asA<Trajectory>();
-    }
-    catch(...)
-    {
-        return Trajectory();
-    }
-}
-
 int MoleculeView::nFrames() const
 {
     return this->nFrames(PropertyMap());
@@ -169,141 +152,184 @@ int MoleculeView::nFrames() const
 
 int MoleculeView::nFrames(const SireBase::PropertyMap &map) const
 {
-    return this->_getTrajectory(map).nFrames();
+    const auto traj_prop = map["trajectory"];
+
+    if (d->hasProperty(traj_prop))
+    {
+        return d->property(traj_prop).asA<Trajectory>().nFrames();
+    }
+    else
+    {
+        return 1;
+    }
 }
 
-void MoleculeView::getFrame(int i, const SireBase::PropertyMap &map)
+void MoleculeView::_fromFrame(const Frame &frame,
+                              const SireBase::PropertyMap &map)
 {
-    auto traj = this->_getTrajectory(map);
-
     const auto coords_prop = map["coordinates"];
     const auto vels_prop = map["velocities"];
-    const auto forces_prop = map["forces"];
+    const auto frcs_prop = map["forces"];
     const auto space_prop = map["space"];
+    const auto time_prop = map["time"];
 
-    if (traj.containsCoordinates() and d->hasProperty(coords_prop) and coords_prop.hasSource())
+    if (frame.hasCoordinates() and coords_prop.hasSource())
     {
-        d->setProperty(coords_prop.source(),
-                       traj.getFrame(i, d->property(coords_prop).asA<AtomCoords>()));
+        auto coords = AtomCoords(d->info());
+        coords.copyFrom(frame.coordinates());
+        d->setProperty(coords_prop.source(), coords);
     }
 
-    if (traj.containsVelocities() and d->hasProperty(vels_prop) and vels_prop.hasSource())
+    if (frame.hasVelocities() and vels_prop.hasSource())
     {
-        d->setProperty(vels_prop.source(),
-                       traj.getFrame(i, d->property(vels_prop).asA<AtomVelocities>()));
+        auto vels = AtomVelocities(d->info());
+        vels.copyFrom(frame.velocities());
+        d->setProperty(vels_prop.source(), vels);
     }
 
-    if (traj.containsForces() and d->hasProperty(forces_prop) and forces_prop.hasSource())
+    if (frame.hasForces() and frcs_prop.hasSource())
     {
-        d->setProperty(forces_prop.source(),
-                       traj.getFrame(i, d->property(forces_prop).asA<AtomForces>()));
+        auto frcs = AtomForces(d->info());
+        frcs.copyFrom(frame.forces());
+        d->setProperty(frcs_prop.source(), frcs);
     }
 
-    if (traj.containsSpace() and d->hasProperty(space_prop) and space_prop.hasSource())
+    if (space_prop.hasSource())
     {
-        d->setProperty(space_prop.source(), traj.getSpace(i));
+        d->setProperty(space_prop.source(), frame.space());
+    }
+
+    if (time_prop.hasSource())
+    {
+        d->setProperty(time_prop.source(), GeneralUnitProperty(frame.time()));
     }
 }
 
-void MoleculeView::setFrame(int i, const SireBase::PropertyMap &map)
+Frame MoleculeView::_toFrame(const SireBase::PropertyMap &map) const
+{
+    const auto coords_prop = map["coordinates"];
+    const auto vels_prop = map["velocities"];
+    const auto frcs_prop = map["forces"];
+    const auto space_prop = map["space"];
+    const auto time_prop = map["time"];
+
+    QVector<Vector> coords;
+    QVector<Velocity3D> vels;
+    QVector<Force3D> frcs;
+    SpacePtr space;
+    SireUnits::Dimension::Time time(0);
+
+    if (d->hasProperty(coords_prop))
+    {
+        coords = d->property(coords_prop).asA<AtomCoords>().toVector();
+    }
+
+    if (d->hasProperty(vels_prop))
+    {
+        vels = d->property(vels_prop).asA<AtomVelocities>().toVector();
+    }
+
+    if (d->hasProperty(frcs_prop))
+    {
+        frcs = d->property(frcs_prop).asA<AtomForces>().toVector();
+    }
+
+    if (d->hasProperty(space_prop))
+    {
+        space = d->property(space_prop).asA<Space>();
+    }
+
+    if (d->hasProperty(time_prop))
+    {
+        time = d->property(time_prop).asA<GeneralUnitProperty>();
+    }
+
+    return Frame(coords, vels, frcs, space, time);
+}
+
+void MoleculeView::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+void MoleculeView::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+void MoleculeView::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+void MoleculeView::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+void MoleculeView::loadFrame(int frame, const SireBase::PropertyMap &map)
 {
     const auto traj_prop = map["trajectory"];
 
-    if (not traj_prop.hasSource())
+    if (frame == 0 and (not d->hasProperty(traj_prop)))
         return;
 
-    auto traj = this->_getTrajectory(map);
+    auto traj = d->property(traj_prop).asA<Trajectory>();
 
-    const auto coords_prop = map["coordinates"];
-    const auto vels_prop = map["velocities"];
-    const auto forces_prop = map["forces"];
+    this->_fromFrame(traj[frame], map);
+}
 
-    if (traj.supportsCoordinates() and d->hasProperty(coords_prop))
+void MoleculeView::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    const auto traj_prop = map["trajectory"];
+
+    if (not (traj_prop.hasSource()))
+        return;
+
+    Trajectory traj;
+
+    if (d->hasProperty(traj_prop))
     {
-        traj.setFrame(i, d->property(coords_prop).asA<AtomCoords>());
+        traj = d->property(traj_prop.source()).asA<Trajectory>();
     }
 
-    if (traj.supportsVelocities() and d->hasProperty(vels_prop))
+    if (frame == traj.nFrames())
+        this->saveFrame();
+    else
     {
-        traj.setFrame(i, d->property(vels_prop).asA<AtomVelocities>());
+        traj.setFrame(frame, this->_toFrame(map));
+        d->setProperty(traj_prop.source(), traj);
+    }
+}
+
+void MoleculeView::saveFrame(const SireBase::PropertyMap &map)
+{
+    const auto traj_prop = map["trajectory"];
+
+    if (not (traj_prop.hasSource()))
+        return;
+
+    Trajectory traj;
+
+    if (d->hasProperty(traj_prop))
+    {
+        traj = d->property(traj_prop.source()).asA<Trajectory>();
     }
 
-    if (traj.supportsForces() and d->hasProperty(forces_prop))
-    {
-        traj.setFrame(i, d->property(forces_prop).asA<AtomForces>());
-    }
-
+    traj.appendFrame(this->_toFrame(map));
     d->setProperty(traj_prop.source(), traj);
 }
 
-void MoleculeView::appendFrame()
-{
-    this->appendFrame(PropertyMap());
-}
-
-void MoleculeView::insertFrame(int i)
-{
-    this->insertFrame(i, PropertyMap());
-}
-
-void MoleculeView::appendFrame(const SireBase::PropertyMap &map)
+void MoleculeView::deleteFrame(int frame, const SireBase::PropertyMap &map)
 {
     const auto traj_prop = map["trajectory"];
 
-    if (not traj_prop.hasSource())
+    if (not (traj_prop.hasSource() and d->hasProperty(traj_prop)))
         return;
 
-    auto traj = this->_getTrajectory(map);
+    auto traj = d->property(traj_prop.source()).asA<Trajectory>();
 
-    const auto coords_prop = map["coordinates"];
-    const auto vels_prop = map["velocities"];
-    const auto forces_prop = map["forces"];
-
-    if (traj.supportsCoordinates() and d->hasProperty(coords_prop))
-    {
-        traj.appendFrame(d->property(coords_prop).asA<AtomCoords>());
-    }
-
-    if (traj.supportsVelocities() and d->hasProperty(vels_prop))
-    {
-        traj.appendFrame(d->property(vels_prop).asA<AtomVelocities>());
-    }
-
-    if (traj.supportsForces() and d->hasProperty(forces_prop))
-    {
-        traj.appendFrame(d->property(forces_prop).asA<AtomForces>());
-    }
-
-    d->setProperty(traj_prop.source(), traj);
-}
-
-void MoleculeView::insertFrame(int i, const SireBase::PropertyMap &map)
-{
-    const auto traj_prop = map["trajectory"];
-
-    if (not traj_prop.hasSource())
-        return;
-
-    auto traj = this->_getTrajectory(map);
-
-    const auto coords_prop = map["coordinates"];
-    const auto vels_prop = map["velocities"];
-    const auto forces_prop = map["forces"];
-
-    if (traj.supportsCoordinates() and d->hasProperty(coords_prop))
-    {
-        traj.insertFrame(i, d->property(coords_prop).asA<AtomCoords>());
-    }
-
-    if (traj.supportsVelocities() and d->hasProperty(vels_prop))
-    {
-        traj.insertFrame(i, d->property(vels_prop).asA<AtomVelocities>());
-    }
-
-    if (traj.supportsForces() and d->hasProperty(forces_prop))
-    {
-        traj.insertFrame(i, d->property(forces_prop).asA<AtomForces>());
-    }
+    traj.deleteFrame(frame);
 
     d->setProperty(traj_prop.source(), traj);
 }
