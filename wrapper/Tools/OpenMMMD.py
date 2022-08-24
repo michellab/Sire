@@ -1609,6 +1609,7 @@ def setupMovesFreeEnergy(system, debug_seed, gpu_idx, lam_val):
         inverse_friction.val
     )  # Only meaningful for Langevin/Brownian integrators
     Integrator_OpenMM.setPlatform(platform.val)
+    Integrator_OpenMM.setCombiningRules(combining_rules.val)
     Integrator_OpenMM.setConstraintType(constraint.val)
 
     if cutoff_type.val != 'PME':

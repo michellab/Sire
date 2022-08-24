@@ -260,7 +260,7 @@ class DCDFile(object):
             molnums.sort()
             for i in range(0,group.nMolecules()):
                 #mol = group[MolIdx(i)].molecule()
-                mol = group[molnums[i]][0]
+                mol = group[molnums[i]][0].molecule()
                 molcoords = mol.property("buffered_coord_%s" % x)
 
                 coords += molcoords.toVector()
