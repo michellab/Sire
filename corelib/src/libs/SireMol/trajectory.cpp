@@ -89,6 +89,16 @@ TrajectoryData& TrajectoryData::operator=(const TrajectoryData&)
     return *this;
 }
 
+bool TrajectoryData::operator==(const TrajectoryData &other) const
+{
+    return this == &other or this->_equals(other);
+}
+
+bool TrajectoryData::operator!=(const TrajectoryData &other) const
+{
+    return not this->operator==(other);
+}
+
 const char* TrajectoryData::typeName()
 {
     return "SireMol::TrajectoryData";
@@ -135,6 +145,53 @@ QList<Frame> TrajectoryData::getFrames(int start_atom, int natoms) const
 
     return frames;
 }
+
+Frame TrajectoryData::createFrame(const QVector<Vector> &coords,
+                                  const Space &space,
+                                  SireUnits::Dimension::Time time) const
+{
+    Frame frame;
+    frame.coords = coords;
+    frame.spc = space;
+    frame.t = time;
+    frame.assertSane();
+
+    return frame;
+}
+
+Frame TrajectoryData::createFrame(const QVector<Vector> &coords,
+                                  const QVector<Velocity3D> &vels,
+                                  const Space &space,
+                                  SireUnits::Dimension::Time time) const
+{
+    Frame frame;
+    frame.coords = coords;
+    frame.vels = vels;
+    frame.spc = space;
+    frame.t = time;
+    frame.assertSane();
+
+    return frame;
+}
+
+Frame TrajectoryData::createFrame(const QVector<Vector> &coords,
+                                  const QVector<Velocity3D> &vels,
+                                  const QVector<Force3D> &frcs,
+                                  const Space &space,
+                                  SireUnits::Dimension::Time time) const
+{
+    Frame frame;
+    frame.coords = coords;
+    frame.vels = vels;
+    frame.frcs = frcs;
+    frame.spc = space;
+    frame.t = time;
+    frame.assertSane();
+
+    return frame;
+}
+
+
 
 Frame TrajectoryData::operator[](int i) const
 {
@@ -197,7 +254,7 @@ SIREMOL_EXPORT QDataStream& operator<<(QDataStream &ds, const MolTrajectoryData 
 
     SharedDataStream sds(ds);
 
-    sds << moldata.frames;
+    sds << moldata.frames << static_cast<const TrajectoryData&>(moldata);
 
     return ds;
 }
@@ -210,7 +267,7 @@ SIREMOL_EXPORT QDataStream& operator>>(QDataStream &ds, MolTrajectoryData &molda
     {
         SharedDataStream sds(ds);
 
-        sds >> moldata.frames;
+        sds >> moldata.frames >> static_cast<TrajectoryData&>(moldata);
     }
     else
         throw version_error(v, "1", r_moldata, CODELOC);
@@ -276,6 +333,23 @@ MolTrajectoryData::MolTrajectoryData(const MolTrajectoryData &other)
 
 MolTrajectoryData::~MolTrajectoryData()
 {}
+
+MolTrajectoryData& MolTrajectoryData::operator=(const MolTrajectoryData &other)
+{
+    frames = other.frames;
+    TrajectoryData::operator=(other);
+    return *this;
+}
+
+bool MolTrajectoryData::_equals(const TrajectoryData &other) const
+{
+    const MolTrajectoryData *ptr = dynamic_cast<const MolTrajectoryData*>(&other);
+
+    if (ptr)
+        return frames == ptr->frames;
+    else
+        return false;
+}
 
 const char* MolTrajectoryData::what() const
 {
@@ -1023,6 +1097,45 @@ const char* Frame::what() const
 Frame* Frame::clone() const
 {
     return new Frame(*this);
+}
+
+void Frame::assertSane() const
+{
+    int natoms = coords.count();
+    bool broken = false;
+
+    if (natoms == 0)
+    {
+        natoms = vels.count();
+    }
+    else if (vels.count() != 0 and natoms != vels.count())
+    {
+        broken = true;
+    }
+
+    if (natoms == 0)
+    {
+        natoms = frcs.count();
+    }
+    else if (frcs.count() != 0 and natoms != frcs.count())
+    {
+        broken = true;
+    }
+
+    if (broken)
+    {
+        throw SireError::program_bug(QObject::tr(
+            "Somehow the Frame has got into an invalid state! "
+            "%1 | %2 | %3").arg(coords.count()).arg(vels.count()).arg(frcs.count()),
+                CODELOC);
+    }
+
+    if (t.value() < 0)
+    {
+        throw SireError::program_bug(QObject::tr(
+            "The time of this frame is negative! This is not supported. %1")
+                .arg(t.toString()), CODELOC);
+    }
 }
 
 QString Frame::toString() const

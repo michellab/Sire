@@ -539,7 +539,7 @@ QVector<QString> MoleculeParser::readTextFile(QString filename)
 
 /** Construct the parser, parsing in all of the lines in the file
     with passed filename */
-MoleculeParser::MoleculeParser(const QString &filename,
+MoleculeParser::MoleculeParser(const QString &fname,
                                const PropertyMap &map)
                : Property(), scr(0), run_parallel(true)
 {
@@ -548,6 +548,7 @@ MoleculeParser::MoleculeParser(const QString &filename,
         run_parallel = map["parallel"].value().asA<BooleanProperty>().value();
     }
 
+    filename = QFileInfo(fname).absoluteFilePath();
     lnes = readTextFile(filename);
 }
 
@@ -672,6 +673,12 @@ bool MoleculeParser::isLead() const
 bool MoleculeParser::canFollow() const
 {
     return true;
+}
+
+/** Return the name of the file that was read */
+QString MoleculeParser::filename() const
+{
+    return filename;
 }
 
 /** Extract and return a FFDetail forcefield that is compatible with all of the
@@ -1492,7 +1499,7 @@ System MoleculeParser::toSystem(const MoleculeParser &other, const PropertyMap &
     // Construct a list of parsers.
     QList<MoleculeParserPtr> parsers({*this, MoleculeParserPtr(other)});
 
-    // A list of supplementary parers.
+    // A list of supplementary parsers.
     QList<MoleculeParserPtr> supplementary;
 
     // Sort the parsers: lead, then follower.
@@ -1821,7 +1828,7 @@ MoleculeParserPtr NullParser::construct(const SireSystem::System &system,
 
 /** Sort the parsers: Lead first, then followers. */
 void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers,
-    QList<MoleculeParserPtr> &supplementary) const
+                                 QList<MoleculeParserPtr> &supplementary) const
 {
     /* Parsers can be leaders or followers. Leaders are capable of
        constructing an entire molecular system on their own, whereas

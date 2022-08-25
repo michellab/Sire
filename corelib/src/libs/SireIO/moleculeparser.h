@@ -42,6 +42,7 @@ namespace SireIO
 {
 class MoleculeParser;
 class NullParser;
+class BrokenParser;
 }
 
 SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::MoleculeParser&);
@@ -49,6 +50,9 @@ SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::MoleculeParser&);
 
 SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::NullParser&);
 SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::NullParser&);
+
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::BrokenParser&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::BrokenParser&);
 
 namespace SireSystem
 {
@@ -243,6 +247,8 @@ public:
 
     virtual QStringList formatSuffix() const;
 
+    QString filename() const;
+
     double score() const;
 
     void enableParallel();
@@ -300,6 +306,9 @@ private:
     void sortParsers(QList<MoleculeParserPtr>& parsers,
                      QList<MoleculeParserPtr>& supplementary) const;
 
+    /** The name of the file (if one was read) */
+    QString fname;
+
     /** All of the lines in the file */
     QVector<QString> lnes;
 
@@ -311,7 +320,7 @@ private:
     bool run_parallel;
 };
 
-/** This is a null parser, returned when the file cannot be parsed */
+/** This is a null parser */
 class SIREIO_EXPORT NullParser : public SireBase::ConcreteProperty<NullParser,MoleculeParser>
 {
 
@@ -329,6 +338,46 @@ public:
     bool operator!=(const NullParser&) const;
 
     static const char* typeName();
+
+    QString formatName() const;
+    QString formatDescription() const;
+
+    MoleculeParserPtr construct(const QString &filename,
+                                const PropertyMap &map) const;
+
+    MoleculeParserPtr construct(const QStringList &lines,
+                                const PropertyMap &map) const;
+
+    MoleculeParserPtr construct(const SireSystem::System &system,
+                                const PropertyMap &map) const;
+
+    SireSystem::System toSystem(const PropertyMap &map = PropertyMap()) const;
+    SireSystem::System toSystem(const MoleculeParser &other,
+                                const PropertyMap &map = PropertyMap()) const;
+    SireSystem::System toSystem(const QList<MoleculeParserPtr> &others,
+                                const PropertyMap &map = PropertyMap()) const;
+};
+
+/** This is a broken parser, returned when the file cannot be parsed */
+class SIREIO_EXPORT BrokenParser : public SireBase::ConcreteProperty<BrokenParser,MoleculeParser>
+{
+
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const BrokenParser&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, BrokenParser&);
+
+public:
+    BrokenParser();
+    BrokenParser(const BrokenParser &other);
+    ~BrokenParser();
+
+    BrokenParser& operator=(const BrokenParser&);
+
+    bool operator==(const BrokenParser&) const;
+    bool operator!=(const BrokenParser&) const;
+
+    static const char* typeName();
+
+    QStringList errorReport() const;
 
     QString formatName() const;
     QString formatDescription() const;
@@ -404,8 +453,10 @@ SIRE_ALWAYS_INLINE bool MoleculeParser::usesParallel() const
 }
 
 Q_DECLARE_METATYPE( SireIO::NullParser )
+Q_DECLARE_METATYPE( SireIO::BrokenParser )
 
 SIRE_EXPOSE_CLASS( SireIO::MoleculeParser )
+SIRE_EXPOSE_CLASS( SireIO::BrokenParser )
 SIRE_EXPOSE_CLASS( SireIO::NullParser )
 
 SIRE_EXPOSE_PROPERTY( SireIO::MoleculeParserPtr, SireIO::MoleculeParser )

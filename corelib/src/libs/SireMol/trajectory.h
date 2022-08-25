@@ -76,6 +76,8 @@ class SIREMOL_EXPORT Frame
 friend QDataStream& ::operator<<(QDataStream&, const Frame&);
 friend QDataStream& ::operator>>(QDataStream&, Frame&);
 
+friend class TrajectoryData;
+
 public:
     Frame();
 
@@ -118,6 +120,9 @@ public:
 
     bool isCompatibleWith(const MoleculeInfoData &molinfo) const;
 
+protected:
+    void assertSane() const;
+
 private:
     QVector<Vector> coords;
     QVector<Velocity3D> vels;
@@ -151,6 +156,9 @@ public:
 
     virtual TrajectoryData* clone() const=0;
 
+    bool operator==(const TrajectoryData &other) const;
+    bool operator!=(const TrajectoryData &other) const;
+
     virtual int nFrames() const=0;
     virtual int nAtoms() const=0;
 
@@ -180,6 +188,23 @@ public:
 
 protected:
     TrajectoryData& operator=(const TrajectoryData &other);
+
+    virtual bool _equals(const TrajectoryData &other) const=0;
+
+    Frame createFrame(const QVector<Vector> &coords,
+                      const Space &space,
+                      SireUnits::Dimension::Time time) const;
+
+    Frame createFrame(const QVector<Vector> &coords,
+                      const QVector<Velocity3D> &vels,
+                      const Space &space,
+                      SireUnits::Dimension::Time time) const;
+
+    Frame createFrame(const QVector<Vector> &coords,
+                      const QVector<Velocity3D> &vels,
+                      const QVector<Force3D> &frcs,
+                      const Space &space,
+                      SireUnits::Dimension::Time time) const;
 };
 
 /** This class holds an editable trajectory that has been extracted
@@ -206,6 +231,8 @@ public:
 
     static const char* typeName();
 
+    MolTrajectoryData& operator=(const MolTrajectoryData &other);
+
     MolTrajectoryData* clone() const;
 
     int nFrames() const;
@@ -224,6 +251,9 @@ public:
     void appendFrame(const Frame &frame);
     void insertFrame(int i, const Frame &frame);
     void deleteFrame(int i);
+
+protected:
+    bool _equals(const TrajectoryData &other) const;
 
 private:
     QList<Frame> frames;

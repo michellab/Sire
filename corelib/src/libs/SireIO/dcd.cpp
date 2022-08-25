@@ -63,6 +63,7 @@
 #include "tostring.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QDataStream>
 #include <QDebug>
 
@@ -162,6 +163,18 @@ SireIO::detail::DCDFile::DCDFile()
                  HAS_EXTRA_BLOCK(false),
                  HAS_FOUR_DIMS(false)
 {}
+
+SireIO::detail::DCDFile::DCDFile(const QString &filename)
+               : timestep(0), istart(0),
+                 nsavc(0), nfixed(0), natoms(0),
+                 nframes(0), first_frame_line(0),
+                 CHARMM_FORMAT(false),
+                 HAS_EXTRA_BLOCK(false),
+                 HAS_FOUR_DIMS(false)
+{
+    FortranFile file(filename);
+    this->readHeader(file);
+}
 
 SireIO::detail::DCDFile::~DCDFile()
 {}
@@ -299,7 +312,12 @@ void SireIO::detail::DCDFile::readHeader(FortranFile &file)
     }
 }
 
-QVector<double> SireIO::detail::DCDFile::readUnitCell(FortranFile &file, int frame)
+double SireIO::detail::DCDFile::getTimeAtFrame(int frame) const
+{
+    return (istart*timestep) + (frame*timestep);
+}
+
+QVector<double> SireIO::detail::DCDFile::readUnitCell(FortranFile &file, int frame) const
 {
     if (frame < 0 or frame >= nframes)
     {
@@ -328,7 +346,7 @@ QVector<double> SireIO::detail::DCDFile::readUnitCell(FortranFile &file, int fra
     return QVector<double>();
 }
 
-QVector<Vector> SireIO::detail::DCDFile::readCoordinates(FortranFile &file, int frame)
+QVector<Vector> SireIO::detail::DCDFile::readCoordinates(FortranFile &file, int frame) const
 {
     if (frame < 0 or frame >= nframes)
     {
@@ -384,6 +402,15 @@ QVector<Vector> SireIO::detail::DCDFile::readCoordinates(FortranFile &file, int 
     }
 }
 
+QPair< QVector<double>, QVector<Vector> >
+SireIO::detail::DCDFile::readFrame(FortranFile &file, int frame) const
+{
+    return QPair< QVector<double>, QVector<Vector> >(
+        this->readUnitCell(file, frame),
+        this->readCoordinates(file, frame)
+    );
+}
+
 QString SireIO::detail::DCDFile::getTitle() const
 {
     return title.join("");
@@ -402,6 +429,16 @@ qint64 SireIO::detail::DCDFile::getFrameStart() const
 qint64 SireIO::detail::DCDFile::getFrameDelta() const
 {
     return nsavc;
+}
+
+qint64 SireIO::detail::DCDFile::nAtoms() const
+{
+    return natoms;
+}
+
+qint64 SireIO::detail::DCDFile::nFrames() const
+{
+    return nframes;
 }
 
 /** Parse the data contained in the lines - this clears any pre-existing
@@ -1064,4 +1101,136 @@ MoleculeParserPtr DCD::construct(const SireSystem::System &system,
 void DCD::writeToFile(const QString &filename) const
 {
     // (write all types to files, as needed)
+}
+
+////////
+//////// Implementation of DCDTrajectory
+////////
+
+static const RegisterMetaType<DCDTrajectory> r_dcdtraj;
+
+SIREIO_EXPORT QDataStream& operator<<(QDataStream &ds, const DCDTrajectory &traj)
+{
+    writeHeader(ds, r_dcdtraj, 1);
+
+    SharedDataStream sds(ds);
+
+    sds << traj.filename << static_cast<const TrajectoryData&>(traj);
+
+    return ds;
+}
+
+SIREIO_EXPORT QDataStream& operator>>(QDataStream &ds, DCDTrajectory &traj)
+{
+    VersionID v = readHeader(ds, r_dcdtraj);
+
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+        sds >> traj.filename >> static_cast<TrajectoryData&>(traj);
+
+        try
+        {
+            traj.dcd = SireIO::detail::DCDFile(traj.filename);
+        }
+        catch(SireError::exception &e)
+        {
+            qDebug() << "WARNING: CANNOT PARSE DCD TRAJECTORY FILE" << traj.filename;
+            qDebug() << e.what() << e.error();
+
+            traj.dcd = SireIO::detail::DCDFile();
+        }
+    }
+    else
+        throw version_error(v, "1", r_dcdtraj, CODELOC);
+
+    return ds;
+}
+
+DCDTrajectory::DCDTrajectory() : TrajectoryData()
+{}
+
+DCDTrajectory::DCDTrajectory(const QString &f) : TrajectoryData()
+{
+    filename = QFileInfo(f).absoluteFilePath();
+    dcd = SireIO::detail::DCDFile(filename);
+}
+
+DCDTrajectory::DCDTrajectory(const DCDTrajectory &other)
+              : TrajectoryData(other),
+                dcd(other.dcd),
+                filename(other.filename)
+{}
+
+DCDTrajectory::~DCDTrajectory()
+{}
+
+const char* DCDTrajectory::what() const
+{
+    return DCDTrajectory::typeName();
+}
+
+const char* DCDTrajectory::typeName()
+{
+    return QMetaType::typeName(qMetaTypeId<DCDTrajectory>());
+}
+
+bool DCDTrajectory::_equals(const TrajectoryData &other) const
+{
+    const DCDTrajectory *ptr = dynamic_cast<const DCDTrajectory*>(&other);
+
+    if (ptr)
+        return filename == ptr->filename;
+    else
+        return false;
+}
+
+DCDTrajectory& DCDTrajectory::operator=(const DCDTrajectory &other)
+{
+    if (this != &other)
+    {
+        filename = other.filename;
+        dcd = other.dcd;
+        TrajectoryData::operator=(other);
+    }
+
+    return *this;
+}
+
+DCDTrajectory* DCDTrajectory::clone() const
+{
+    return new DCDTrajectory(*this);
+}
+
+int DCDTrajectory::nFrames() const
+{
+    return dcd.nFrames();
+}
+
+int DCDTrajectory::nAtoms() const
+{
+    return dcd.nAtoms();
+}
+
+QStringList DCDTrajectory::filenames() const
+{
+    QStringList f;
+
+    if (not filename.isEmpty())
+        f.append(filename);
+
+    return f;
+}
+
+Frame DCDTrajectory::getFrame(int i) const
+{
+    i = SireID::Index(i).map(this->nFrames());
+
+    FortranFile file(filename);
+
+    auto frame = dcd.readFrame(file, i);
+
+    auto time = dcd.getTimeAtFrame(i) * picosecond;
+
+    return TrajectoryData::createFrame(frame.second, Cartesian(), time);
 }

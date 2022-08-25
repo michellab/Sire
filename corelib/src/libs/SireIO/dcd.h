@@ -31,6 +31,8 @@
 
 #include "moleculeparser.h"
 
+#include "SireMol/trajectory.h"
+
 #include "SireMaths/vector.h"
 
 SIRE_BEGIN_HEADER
@@ -38,6 +40,7 @@ SIRE_BEGIN_HEADER
 namespace SireIO
 {
 class DCD;
+class DCDTrajectory;
 
 namespace detail{ class DCDFile; }
 
@@ -45,6 +48,9 @@ namespace detail{ class DCDFile; }
 
 SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::DCD&);
 SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::DCD&);
+
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::DCDTrajectory&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::DCDTrajectory&);
 
 namespace SireIO
 {
@@ -61,18 +67,27 @@ class DCDFile
 {
 public:
     DCDFile();
+    DCDFile(const QString &filename);
     ~DCDFile();
 
     void readHeader(FortranFile &file);
 
-    QVector<double> readUnitCell(FortranFile &file, int frame);
-    QVector<SireMaths::Vector> readCoordinates(FortranFile &file, int frame);
+    QVector<double> readUnitCell(FortranFile &file, int frame) const;
+    QVector<SireMaths::Vector> readCoordinates(FortranFile &file, int frame) const;
+
+    QPair< QVector<double>,
+           QVector<SireMaths::Vector> > readFrame(FortranFile &file, int frame) const;
 
     QString getTitle() const;
 
     double getTimeStep() const;
     qint64 getFrameStart() const;
     qint64 getFrameDelta() const;
+
+    qint64 nFrames() const;
+    qint64 nAtoms() const;
+
+    double getTimeAtFrame(int frame) const;
 
 private:
     QStringList title;
@@ -97,6 +112,46 @@ private:
 };
 }
 
+/** This class holds a complete DCD trajectory, and enables access
+ *  to frames via the SireMol::Trajectory interface
+*/
+class SIREIO_EXPORT DCDTrajectory : public SireMol::TrajectoryData
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const DCDTrajectory&);
+friend QDataStream& ::operator>>(QDataStream&, DCDTrajectory&);
+
+public:
+    DCDTrajectory();
+    DCDTrajectory(const QString &filename);
+    DCDTrajectory(const DCDTrajectory &other);
+
+    ~DCDTrajectory();
+
+    const char* what() const;
+
+    static const char* typeName();
+
+    DCDTrajectory& operator=(const DCDTrajectory &other);
+
+    DCDTrajectory* clone() const;
+
+    int nFrames() const;
+    int nAtoms() const;
+
+    QStringList filenames() const;
+
+    SireMol::Frame getFrame(int i) const;
+
+protected:
+    bool _equals(const TrajectoryData &other) const;
+
+private:
+    detail::DCDFile dcd;
+
+    QString filename;
+};
+
 /** This class represents a DCD file reader. Note that this will
     only read the first frame from the file (it is for loading molecules).
     The whole trajectory will be added and parsed using
@@ -111,8 +166,8 @@ private:
 class SIREIO_EXPORT DCD : public SireBase::ConcreteProperty<DCD,MoleculeParser>
 {
 
-friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const DCD&);
-friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, DCD&);
+friend QDataStream& ::operator<<(QDataStream&, const DCD&);
+friend QDataStream& ::operator>>(QDataStream&, DCD&);
 
 public:
     DCD();
@@ -209,6 +264,7 @@ private:
 }
 
 Q_DECLARE_METATYPE( SireIO::DCD )
+Q_DECLARE_METATYPE( SireIO::DCDTrajectory )
 
 SIRE_EXPOSE_CLASS( SireIO::DCD )
 
