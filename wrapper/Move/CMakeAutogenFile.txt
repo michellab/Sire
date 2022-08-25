@@ -35,6 +35,7 @@ set ( PYPP_SOURCES
        OpenMMFrEnergyDT.pypp.cpp
        OpenMMFrEnergyST.pypp.cpp
        OpenMMMDIntegrator.pypp.cpp
+       OpenMMPMEFEP.pypp.cpp
        PrefSampler.pypp.cpp
        RBWorkspaceJM.pypp.cpp
        RepExMove.pypp.cpp
