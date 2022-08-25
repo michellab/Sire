@@ -1743,8 +1743,8 @@ def runFreeNrg():
         integrator = mdmoves.integrator()
 
         #saving all data
-        beg = (nmoves.val*(i-1)) + energy_frequency.val() # Add energy_frequency beacuse energies not saved at t = 0
-        end = nmoves.val*(i-1)+nmoves.val + energy_frequency.val()
+        beg = (nmoves.val*(i-1)) + energy_frequency.val # Add energy_frequency beacuse energies not saved at t = 0
+        end = nmoves.val*(i-1)+nmoves.val + energy_frequency.val
         steps = list(range(beg, end, energy_frequency.val))
         outdata = getAllData(integrator, steps)
         gradients = integrator.getGradients()
