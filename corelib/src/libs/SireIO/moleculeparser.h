@@ -279,6 +279,8 @@ protected:
 
     void setScore(double score);
 
+    void removeCommentLines(const QString &comment_flag);
+
     virtual SireSystem::System startSystem(const PropertyMap &map) const;
     virtual SireSystem::System startSystem(const QVector<QString> &lines,
                                            const PropertyMap &map) const;

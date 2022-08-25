@@ -217,9 +217,6 @@ public:
     int nFrames() const;
     int nAtoms() const;
 
-    SireUnits::Dimension::Time getTotalTime() const;
-    SireUnits::Dimension::Time getDeltaTime(int frame) const;
-
     QStringList filenames() const;
 
     Frame getFrame(int i) const;
@@ -320,6 +317,7 @@ private:
 
 Q_DECLARE_METATYPE(SireMol::Trajectory)
 Q_DECLARE_METATYPE(SireMol::Frame)
+Q_DECLARE_METATYPE(SireMol::MolTrajectoryData)
 
 SIRE_EXPOSE_CLASS(SireMol::Trajectory)
 SIRE_EXPOSE_CLASS(SireMol::Frame)

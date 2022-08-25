@@ -39,6 +39,8 @@
 
 #include "SireBase/generalunitproperty.h"
 
+#include "SireBase/slice.h"
+
 #include "SireError/errors.h"
 
 #include "SireStream/datastream.h"
@@ -182,6 +184,245 @@ void TrajectoryData::deleteFrame(int)
 {
     this->assertIsEditable();
 }
+
+////////
+//////// Implementation of MolTrajectoryData
+////////
+
+static const RegisterMetaType<MolTrajectoryData> r_moldata;
+
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream &ds, const MolTrajectoryData &moldata)
+{
+    writeHeader(ds, r_moldata, 1);
+
+    SharedDataStream sds(ds);
+
+    sds << moldata.frames;
+
+    return ds;
+}
+
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream &ds, MolTrajectoryData &moldata)
+{
+    VersionID v = readHeader(ds, r_moldata);
+
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+
+        sds >> moldata.frames;
+    }
+    else
+        throw version_error(v, "1", r_moldata, CODELOC);
+
+    return ds;
+}
+
+MolTrajectoryData::MolTrajectoryData() : TrajectoryData()
+{}
+
+MolTrajectoryData::MolTrajectoryData(const Frame &frame)
+                  : TrajectoryData()
+{
+    if (not frame.isEmpty())
+        frames.append(frame);
+}
+
+MolTrajectoryData::MolTrajectoryData(const QList<Frame> &f)
+                  : TrajectoryData()
+{
+    bool any_empty = false;
+    int natoms = 0;
+
+    for (const auto &frame : f)
+    {
+        if (frame.isEmpty())
+        {
+            any_empty = true;
+        }
+
+        if (natoms == 0)
+        {
+            natoms = frame.nAtoms();
+        }
+        else if (natoms != frame.nAtoms())
+        {
+            throw SireError::incompatible_error(QObject::tr(
+                "Frames needs to have the same number of atoms! %1 vs %2")
+                    .arg(natoms).arg(frame.nAtoms()), CODELOC);
+        }
+    }
+
+    frames = f;
+
+    if (any_empty)
+    {
+        QMutableListIterator<Frame> it(frames);
+
+        while (it.hasNext())
+        {
+            auto frame = it.next();
+            if (frame.isEmpty())
+            {
+                it.remove();
+            }
+        }
+    }
+}
+
+MolTrajectoryData::MolTrajectoryData(const MolTrajectoryData &other)
+                  : TrajectoryData(other), frames(other.frames)
+{}
+
+MolTrajectoryData::~MolTrajectoryData()
+{}
+
+const char* MolTrajectoryData::what() const
+{
+    return MolTrajectoryData::typeName();
+}
+
+const char* MolTrajectoryData::typeName()
+{
+    return QMetaType::typeName(qMetaTypeId<MolTrajectoryData>());
+}
+
+MolTrajectoryData* MolTrajectoryData::clone() const
+{
+    return new MolTrajectoryData(*this);
+}
+
+int MolTrajectoryData::nFrames() const
+{
+    return frames.count();
+}
+
+int MolTrajectoryData::nAtoms() const
+{
+    if (frames.isEmpty())
+        return 0;
+    else
+        return frames.first().nAtoms();
+}
+
+QStringList MolTrajectoryData::filenames() const
+{
+    return QStringList();
+}
+
+Frame MolTrajectoryData::getFrame(int i) const
+{
+    i = SireID::Index(i).map(this->nFrames());
+
+    return frames[i];
+}
+
+bool MolTrajectoryData::isEditable() const
+{
+    return true;
+}
+
+TrajectoryDataPtr MolTrajectoryData::makeEditable() const
+{
+    return *this;
+}
+
+TrajectoryDataPtr MolTrajectoryData::makeSubsetEditable(int start_atom,
+                                                        int natoms) const
+{
+    if (start_atom == 0 and natoms == this->nAtoms())
+    {
+        return *this;
+    }
+
+    start_atom = SireID::Index(start_atom).map(this->nAtoms());
+
+    if (start_atom + natoms >= this->nAtoms())
+    {
+        throw SireError::incompatible_error(QObject::tr(
+            "You cannot subset a trajectory as there are not enough atoms! "
+            "%1 versus %2").arg(start_atom + natoms).arg(this->nAtoms()),
+                CODELOC);
+    }
+
+    MolTrajectoryData ret;
+    ret.frames.reserve(frames.count());
+
+    for (const auto &frame : frames)
+    {
+        ret.frames.append(frame.subset(start_atom, natoms));
+    }
+
+    return ret;
+}
+
+void MolTrajectoryData::setFrame(int i, const Frame &frame)
+{
+    i = SireID::Index(i).map(this->nFrames());
+
+    if (frame.nAtoms() != this->nAtoms())
+    {
+        throw SireError::incompatible_error(QObject::tr(
+            "Cannot insert the frame as the number of atoms is not the same! "
+            "%1 vs %2").arg(frame.nAtoms()).arg(this->nAtoms()), CODELOC);
+    }
+
+    frames[i] = frame;
+}
+
+void MolTrajectoryData::appendFrame(const Frame &frame)
+{
+    if (frame.isEmpty())
+        return;
+
+    if (this->nFrames() == 0)
+    {
+        frames.append(frame);
+    }
+    else
+    {
+        if (frame.nAtoms() != this->nAtoms())
+        {
+            throw SireError::incompatible_error(QObject::tr(
+                "Cannot append the frame as the number of atoms is not the same! "
+                "%1 vs %2").arg(frame.nAtoms()).arg(this->nAtoms()), CODELOC);
+        }
+
+        frames.append(frame);
+    }
+}
+
+void MolTrajectoryData::insertFrame(int i, const Frame &frame)
+{
+    if (frame.isEmpty())
+        return;
+
+    if (i == this->nFrames())
+    {
+        this->appendFrame(frame);
+    }
+    else
+    {
+        i = SireID::Index(i).map(this->nFrames());
+
+        if (frame.nAtoms() != this->nAtoms())
+        {
+            throw SireError::incompatible_error(QObject::tr(
+                "Cannot insert the frame as the number of atoms is not the same! "
+                "%1 vs %2").arg(frame.nAtoms()).arg(this->nAtoms()), CODELOC);
+        }
+
+        frames.insert(i, frame);
+    }
+}
+
+void MolTrajectoryData::deleteFrame(int i)
+{
+    i = SireID::Index(i).map(this->nFrames());
+
+    frames.removeAt(i);
+}
+
 
 /////////////
 ///////////// Implementation of Trajectory
@@ -385,6 +626,16 @@ int Trajectory::nFrames() const
     return nframes;
 }
 
+int Trajectory::count() const
+{
+    return this->nFrames();
+}
+
+int Trajectory::size() const
+{
+    return this->nFrames();
+}
+
 int Trajectory::nAtoms() const
 {
     return natoms;
@@ -412,6 +663,36 @@ int Trajectory::_getIndexForFrame(int &frame) const
                 CODELOC);
 
     return 0;
+}
+
+Frame Trajectory::operator[](int i) const
+{
+    return this->getFrame(i);
+}
+
+QList<Frame> Trajectory::operator[](const QList<qint64> &idxs) const
+{
+    QList<Frame> frames;
+    frames.reserve(idxs.count());
+
+    for (const auto &idx : idxs)
+    {
+        frames.append(this->getFrame(idx));
+    }
+
+    return frames;
+}
+
+QList<Frame> Trajectory::operator[](const SireBase::Slice &slice) const
+{
+    QList<Frame> ret;
+
+    for (auto it = slice.begin(this->nFrames()); not it.atEnd(); it.next())
+    {
+        ret.append(this->getFrame(it.value()));
+    }
+
+    return ret;
 }
 
 Frame Trajectory::getFrame(int i) const

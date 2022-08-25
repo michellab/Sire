@@ -577,6 +577,39 @@ MoleculeParser::MoleculeParser(const MoleculeParser &other)
 MoleculeParser::~MoleculeParser()
 {}
 
+/** Remove any comment lines (those that start with 'comment_flag')
+ *  from the file. This should make parsing easier
+*/
+void MoleculeParser::removeCommentLines(const QString &comment_flag)
+{
+    bool has_comments = false;
+
+    for (int i=0; i<lnes.count(); ++i)
+    {
+        const auto &line = lnes.constData()[i];
+
+        if (line.startsWith(comment_flag))
+        {
+            has_comments = true;
+            break;
+        }
+    }
+
+    if (has_comments)
+    {
+        QMutableVectorIterator<QString> it(lnes);
+
+        while(it.hasNext())
+        {
+            const auto &line = it.next();
+            if (line.startsWith(comment_flag))
+            {
+                it.remove();
+            }
+        }
+    }
+}
+
 /** Function used by derived classes to set the lines */
 void MoleculeParser::setLines( const QVector<QString> &lines )
 {

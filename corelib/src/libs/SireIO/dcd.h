@@ -209,7 +209,6 @@ private:
 }
 
 Q_DECLARE_METATYPE( SireIO::DCD )
-Q_DECLARE_METATYPE( SireIO::MolTrajectoryData)
 
 SIRE_EXPOSE_CLASS( SireIO::DCD )
 
