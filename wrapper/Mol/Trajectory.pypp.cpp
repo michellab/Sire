@@ -239,6 +239,18 @@ void register_Trajectory_class(){
                 , "" );
         
         }
+        { //::SireMol::Trajectory::toString
+        
+            typedef ::QString ( ::SireMol::Trajectory::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireMol::Trajectory::toString );
+            
+            Trajectory_exposer.def( 
+                "toString"
+                , toString_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Trajectory::typeName
         
             typedef char const * ( *typeName_function_type )(  );

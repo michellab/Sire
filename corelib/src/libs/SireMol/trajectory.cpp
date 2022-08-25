@@ -609,9 +609,22 @@ Trajectory* Trajectory::clone() const
     return new Trajectory(*this);
 }
 
+QString Trajectory::toString() const
+{
+    if (this->isEmpty())
+    {
+        return QObject::tr("Trajectory::null");
+    }
+    else
+    {
+        return QObject::tr("Trajectory( num_frames=%1, num_atoms=%2 )")
+                    .arg(this->nFrames()).arg(this->nAtoms());
+    }
+}
+
 bool Trajectory::isEmpty() const
 {
-    return this->nFrames() == 0;
+    return d.isEmpty();
 }
 
 int Trajectory::nFrames() const
@@ -738,7 +751,7 @@ TrajectoryData& Trajectory::_makeEditable(int &frame)
 
 Frame Trajectory::_subset(const Frame &frame) const
 {
-    if (frame.nAtoms() == natoms)
+    if (this->isEmpty() or frame.nAtoms() == natoms)
         return frame;
     else
         return frame.subset(start_atom, natoms);
@@ -763,9 +776,18 @@ void Trajectory::appendFrame(const Frame &frame)
 
     auto subset = this->_subset(frame);
 
+    if (subset.nAtoms() == 0)
+    {
+        throw SireError::program_bug(QObject::tr(
+            "This should not be empty? %1 %2 %3")
+                .arg(subset.nAtoms()).arg(start_atom).arg(natoms), CODELOC);
+    }
+
     if (d.isEmpty())
     {
         d.append(TrajectoryDataPtr(new MolTrajectoryData(subset)));
+        start_atom = 0;
+        natoms = subset.nAtoms();
     }
     else if (d.last()->isEditable() and d.last()->nAtoms() == natoms)
     {
@@ -789,7 +811,16 @@ void Trajectory::insertFrame(int i, const Frame &frame)
 
 void Trajectory::deleteFrame(int i)
 {
+    int frame = Index(i).map(this->nFrames());
+
+    int idx = _getIndexForFrame(frame);
+
     this->_makeEditable(i).deleteFrame(i);
+
+    if (d[idx]->isEmpty())
+    {
+        d.removeAt(idx);
+    }
 }
 
 bool Trajectory::isCompatibleWith(const MoleculeInfoData &molinfo) const
@@ -852,14 +883,21 @@ Frame::Frame(const MoleculeData &mol, const PropertyMap &map)
       : ConcreteProperty<Frame,MoleculeProperty>(),
         spc(Space::null()), t(0)
 {
+    int natoms = 0;
+    int broken = false;
+
     if (mol.hasProperty(map["coordinates"]))
     {
         try
         {
             coords = mol.property(map["coordinates"]).asA<AtomCoords>().toVector();
+            natoms = coords.count();
         }
-        catch(...)
-        {}
+        catch(const SireError::exception &e)
+        {
+            qDebug() << "WARNING: Problem saving coordinates!";
+            qDebug() << e.what() << e.error();
+        }
     }
 
     if (mol.hasProperty(map["velocities"]))
@@ -867,9 +905,19 @@ Frame::Frame(const MoleculeData &mol, const PropertyMap &map)
         try
         {
             vels = mol.property(map["velocities"]).asA<AtomVelocities>().toVector();
+
+            if (natoms == 0)
+                natoms = vels.count();
+            else if (natoms != vels.count())
+            {
+                broken = true;
+            }
         }
-        catch(...)
-        {}
+        catch(const SireError::exception &e)
+        {
+            qDebug() << "WARNING: Problem saving velocities!";
+            qDebug() << e.what() << e.error();
+        }
     }
 
     if (mol.hasProperty(map["forces"]))
@@ -877,9 +925,27 @@ Frame::Frame(const MoleculeData &mol, const PropertyMap &map)
         try
         {
             frcs = mol.property(map["forces"]).asA<AtomForces>().toVector();
+
+            if (natoms == 0)
+                natoms = frcs.count();
+            else if (natoms != frcs.count())
+            {
+                broken = true;
+            }
         }
-        catch(...)
-        {}
+        catch(const SireError::exception &e)
+        {
+            qDebug() << "WARNING: Problem saving forces!";
+            qDebug() << e.what() << e.error();
+        }
+    }
+
+    if (broken)
+    {
+        throw SireError::incompatible_error(QObject::tr(
+            "Incompatibility between the coordinates, velocities and forces? "
+            "%1 | %2 | %3").arg(coords.count()).arg(vels.count())
+                .arg(frcs.count()), CODELOC);
     }
 
     if (mol.hasProperty(map["time"]))
@@ -900,45 +966,6 @@ Frame::Frame(const MoleculeData &mol, const PropertyMap &map)
         }
         catch(...)
         {}
-    }
-}
-
-Frame::Frame(const QVector<Vector> &coordinates,
-             const QVector<Velocity3D> &velocities,
-             const QVector<Force3D> &forces,
-             const Space &space,
-             SireUnits::Dimension::Time time)
-      : ConcreteProperty<Frame,MoleculeProperty>(),
-        coords(coordinates), vels(velocities), frcs(forces),
-        spc(space), t(time)
-{
-    int natoms = coords.count();
-    bool error = false;
-
-    if (natoms == 0)
-    {
-        natoms = vels.count();
-    }
-    else if (vels.count() > 0 and natoms != vels.count())
-    {
-        error = true;
-    }
-
-    if (natoms == 0)
-    {
-        natoms = frcs.count();
-    }
-    else if (frcs.count() > 0 and natoms != frcs.count())
-    {
-        error = true;
-    }
-
-    if (error)
-    {
-        throw SireError::incompatible_error(QObject::tr(
-            "Disagreement over the number of atoms! %1 vs %2 vs %3")
-                .arg(coords.count()).arg(vels.count()).arg(frcs.count()),
-                    CODELOC);
     }
 }
 
@@ -1096,6 +1123,9 @@ QVector<T> _mid(const QVector<T> &v, int start, int count)
 
 Frame Frame::subset(int start_atom, int natoms) const
 {
+    if (start_atom == 0 and natoms == this->nAtoms())
+        return *this;
+
     Frame ret(*this);
 
     ret.coords = _mid(coords, start_atom, natoms);

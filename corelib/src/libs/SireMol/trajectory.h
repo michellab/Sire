@@ -82,12 +82,6 @@ public:
     Frame(const Molecule &mol, const PropertyMap &map = PropertyMap());
     Frame(const MoleculeData &mol, const PropertyMap &map = PropertyMap());
 
-    Frame(const QVector<Vector> &coordinates,
-          const QVector<Velocity3D> &velocities,
-          const QVector<Force3D> &forces,
-          const SireVol::Space &space,
-          SireUnits::Dimension::Time time);
-
     Frame(const Frame &other);
 
     ~Frame();
@@ -270,6 +264,8 @@ public:
     bool operator!=(const Trajectory &other) const;
 
     static const char* typeName();
+
+    QString toString() const;
 
     const char* what() const;
 

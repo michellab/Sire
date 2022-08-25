@@ -160,7 +160,7 @@ int MoleculeView::nFrames(const SireBase::PropertyMap &map) const
     }
     else
     {
-        return 1;
+        return 0;
     }
 }
 
@@ -207,44 +207,7 @@ void MoleculeView::_fromFrame(const Frame &frame,
 
 Frame MoleculeView::_toFrame(const SireBase::PropertyMap &map) const
 {
-    const auto coords_prop = map["coordinates"];
-    const auto vels_prop = map["velocities"];
-    const auto frcs_prop = map["forces"];
-    const auto space_prop = map["space"];
-    const auto time_prop = map["time"];
-
-    QVector<Vector> coords;
-    QVector<Velocity3D> vels;
-    QVector<Force3D> frcs;
-    SpacePtr space;
-    SireUnits::Dimension::Time time(0);
-
-    if (d->hasProperty(coords_prop))
-    {
-        coords = d->property(coords_prop).asA<AtomCoords>().toVector();
-    }
-
-    if (d->hasProperty(vels_prop))
-    {
-        vels = d->property(vels_prop).asA<AtomVelocities>().toVector();
-    }
-
-    if (d->hasProperty(frcs_prop))
-    {
-        frcs = d->property(frcs_prop).asA<AtomForces>().toVector();
-    }
-
-    if (d->hasProperty(space_prop))
-    {
-        space = d->property(space_prop).asA<Space>();
-    }
-
-    if (d->hasProperty(time_prop))
-    {
-        time = d->property(time_prop).asA<GeneralUnitProperty>();
-    }
-
-    return Frame(coords, vels, frcs, space, time);
+    return Frame(this->data(), map);
 }
 
 void MoleculeView::loadFrame(int frame)
@@ -331,7 +294,14 @@ void MoleculeView::deleteFrame(int frame, const SireBase::PropertyMap &map)
 
     traj.deleteFrame(frame);
 
-    d->setProperty(traj_prop.source(), traj);
+    if (traj.isEmpty())
+    {
+        d->removeProperty(traj_prop.source());
+    }
+    else
+    {
+        d->setProperty(traj_prop.source(), traj);
+    }
 }
 
 /** Return whether or not this view is of the same molecule as 'other'

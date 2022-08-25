@@ -46,7 +46,6 @@ void register_Frame_class(){
         bp::scope Frame_scope( Frame_exposer );
         Frame_exposer.def( bp::init< SireMol::Molecule const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mol"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         Frame_exposer.def( bp::init< SireMol::MoleculeData const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mol"), bp::arg("map")=SireBase::PropertyMap() ), "") );
-        Frame_exposer.def( bp::init< QVector< SireMaths::Vector > const &, QVector< SireMaths::Vector3D< SireUnits::Dimension::Velocity > > const &, QVector< SireMaths::Vector3D< SireUnits::Dimension::Force > > const &, SireVol::Space const &, SireUnits::Dimension::Time >(( bp::arg("coordinates"), bp::arg("velocities"), bp::arg("forces"), bp::arg("space"), bp::arg("time") ), "") );
         Frame_exposer.def( bp::init< SireMol::Frame const & >(( bp::arg("other") ), "") );
         { //::SireMol::Frame::coordinates
         
