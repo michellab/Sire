@@ -57,7 +57,7 @@ void register_NullParser_class(){
 
     { //::SireIO::NullParser
         typedef bp::class_< SireIO::NullParser, bp::bases< SireIO::MoleculeParser, SireBase::Property > > NullParser_exposer_t;
-        NullParser_exposer_t NullParser_exposer = NullParser_exposer_t( "NullParser", "This is a null parser, returned when the file cannot be parsed", bp::init< >("") );
+        NullParser_exposer_t NullParser_exposer = NullParser_exposer_t( "NullParser", "This is a null parser", bp::init< >("") );
         bp::scope NullParser_scope( NullParser_exposer );
         NullParser_exposer.def( bp::init< SireIO::NullParser const & >(( bp::arg("arg0") ), "") );
         { //::SireIO::NullParser::construct

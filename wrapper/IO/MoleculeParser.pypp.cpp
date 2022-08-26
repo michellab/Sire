@@ -132,6 +132,30 @@ void register_MoleculeParser_class(){
                 , "Enable code to parse files in parallel" );
         
         }
+        { //::SireIO::MoleculeParser::errorReport
+        
+            typedef ::QString ( ::SireIO::MoleculeParser::*errorReport_function_type)(  ) const;
+            errorReport_function_type errorReport_function_value( &::SireIO::MoleculeParser::errorReport );
+            
+            MoleculeParser_exposer.def( 
+                "errorReport"
+                , errorReport_function_value
+                , bp::release_gil_policy()
+                , "Return the error report, if this parser is broken. If it isnt,\n  then an empty string is returned." );
+        
+        }
+        { //::SireIO::MoleculeParser::filename
+        
+            typedef ::QString ( ::SireIO::MoleculeParser::*filename_function_type)(  ) const;
+            filename_function_type filename_function_value( &::SireIO::MoleculeParser::filename );
+            
+            MoleculeParser_exposer.def( 
+                "filename"
+                , filename_function_value
+                , bp::release_gil_policy()
+                , "Return the name of the file that was parsed" );
+        
+        }
         { //::SireIO::MoleculeParser::formatDescription
         
             typedef ::QString ( ::SireIO::MoleculeParser::*formatDescription_function_type)(  ) const;
@@ -178,6 +202,18 @@ void register_MoleculeParser_class(){
                 , isBinaryFile_function_value
                 , bp::release_gil_policy()
                 , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::isBroken
+        
+            typedef bool ( ::SireIO::MoleculeParser::*isBroken_function_type)(  ) const;
+            isBroken_function_type isBroken_function_value( &::SireIO::MoleculeParser::isBroken );
+            
+            MoleculeParser_exposer.def( 
+                "isBroken"
+                , isBroken_function_value
+                , bp::release_gil_policy()
+                , "Return whether or not this parser is broken" );
         
         }
         { //::SireIO::MoleculeParser::isEmpty

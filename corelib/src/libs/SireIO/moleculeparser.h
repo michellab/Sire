@@ -79,6 +79,7 @@ namespace detail
         ~ParserFactoryHelper();
 
         bool isValid() const;
+        bool isSupplementary() const;
 
         QString formatName() const;
         QString formatDescription() const;
@@ -150,6 +151,9 @@ public:
     virtual MoleculeParser* clone() const=0;
 
     const QVector<QString>& lines() const;
+
+    virtual bool isBroken() const;
+    virtual QString errorReport() const;
 
     virtual MoleculeParserPtr construct(const QString &filename,
                                         const PropertyMap &map) const=0;
@@ -304,7 +308,8 @@ private:
     static MoleculeParserPtr _pvt_parse(const QString &filename, const PropertyMap &map);
 
     void sortParsers(QList<MoleculeParserPtr>& parsers,
-                     QList<MoleculeParserPtr>& supplementary) const;
+                     QList<MoleculeParserPtr>& supplementary,
+                     const PropertyMap &map) const;
 
     /** The name of the file (if one was read) */
     QString fname;
@@ -367,6 +372,13 @@ friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, BrokenParser&);
 
 public:
     BrokenParser();
+    BrokenParser(const QString &filename, const PropertyMap &map);
+    BrokenParser(const QStringList &lines, const PropertyMap &map);
+    BrokenParser(const SireSystem::System &system, const PropertyMap &map);
+    BrokenParser(const QString &filename, const QString &suffix,
+                 const QStringList &errors);
+    BrokenParser(const QString &filename, const QStringList &errors);
+
     BrokenParser(const BrokenParser &other);
     ~BrokenParser();
 
@@ -377,7 +389,8 @@ public:
 
     static const char* typeName();
 
-    QStringList errorReport() const;
+    bool isBroken() const;
+    QString errorReport() const;
 
     QString formatName() const;
     QString formatDescription() const;
@@ -396,6 +409,10 @@ public:
                                 const PropertyMap &map = PropertyMap()) const;
     SireSystem::System toSystem(const QList<MoleculeParserPtr> &others,
                                 const PropertyMap &map = PropertyMap()) const;
+
+private:
+    QStringList error_report;
+    QString suffix;
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS

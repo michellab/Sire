@@ -4,6 +4,7 @@ set ( PYPP_SOURCES
        AmberPrm.pypp.cpp
        AmberRst.pypp.cpp
        AmberRst7.pypp.cpp
+       BrokenParser.pypp.cpp
        CharmmPSF.pypp.cpp
        Cube.pypp.cpp
        DCD.pypp.cpp

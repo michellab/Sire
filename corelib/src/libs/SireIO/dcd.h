@@ -40,7 +40,6 @@ SIRE_BEGIN_HEADER
 namespace SireIO
 {
 class DCD;
-class DCDTrajectory;
 
 namespace detail{ class DCDFile; }
 
@@ -48,9 +47,6 @@ namespace detail{ class DCDFile; }
 
 SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::DCD&);
 SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::DCD&);
-
-SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::DCDTrajectory&);
-SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::DCDTrajectory&);
 
 namespace SireIO
 {
@@ -61,7 +57,7 @@ namespace detail
 {
 /** This class provides a low-level interface to reading and writing
  *  a DCD file. It is designed to be used only with the
- *  DCD and DCDTrajectory classes
+ *  DCD class
  */
 class DCDFile
 {
@@ -112,50 +108,7 @@ private:
 };
 }
 
-/** This class holds a complete DCD trajectory, and enables access
- *  to frames via the SireMol::Trajectory interface
-*/
-class SIREIO_EXPORT DCDTrajectory : public SireMol::TrajectoryData
-{
-
-friend QDataStream& ::operator<<(QDataStream&, const DCDTrajectory&);
-friend QDataStream& ::operator>>(QDataStream&, DCDTrajectory&);
-
-public:
-    DCDTrajectory();
-    DCDTrajectory(const QString &filename);
-    DCDTrajectory(const DCDTrajectory &other);
-
-    ~DCDTrajectory();
-
-    const char* what() const;
-
-    static const char* typeName();
-
-    DCDTrajectory& operator=(const DCDTrajectory &other);
-
-    DCDTrajectory* clone() const;
-
-    int nFrames() const;
-    int nAtoms() const;
-
-    QStringList filenames() const;
-
-    SireMol::Frame getFrame(int i) const;
-
-protected:
-    bool _equals(const TrajectoryData &other) const;
-
-private:
-    detail::DCDFile dcd;
-
-    QString filename;
-};
-
-/** This class represents a DCD file reader. Note that this will
-    only read the first frame from the file (it is for loading molecules).
-    The whole trajectory will be added and parsed using
-    the DCDTrajectory class.
+/** This class represents a DCD file reader.
 
     The format is described here
 
@@ -264,7 +217,6 @@ private:
 }
 
 Q_DECLARE_METATYPE( SireIO::DCD )
-Q_DECLARE_METATYPE( SireIO::DCDTrajectory )
 
 SIRE_EXPOSE_CLASS( SireIO::DCD )
 

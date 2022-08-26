@@ -33,7 +33,6 @@ set ( SIREIO_HEADERS
       charmmpsf.h
       cube.h
       dcd.h
-      dcdtrajectory.h
       errors.h
       flexibilitylibrary.h
       fortranfile.h
@@ -68,7 +67,6 @@ set ( SIREIO_SOURCES
       charmmpsf.cpp
       cube.cpp
       dcd.cpp
-      dcdtrajectory.cpp
       errors.cpp
       flexibilitylibrary.cpp
       fortranfile.cpp

@@ -27,6 +27,7 @@
 \*********************************************/
 
 #include "moleculeparser.h"
+#include "supplementary.h"
 
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
@@ -148,6 +149,12 @@ namespace detail
     bool ParserFactoryHelper::isValid() const
     {
         return parser.get() != 0;
+    }
+
+    /** Return whether or not this is the supplementary parser */
+    bool ParserFactoryHelper::isSupplementary() const
+    {
+        return parser.get() != 0 and parser->isA<Supplementary>();
     }
 
     /** Return the unique ID name of the parser in the program */
@@ -326,15 +333,33 @@ namespace detail
             return helpers;
         }
 
-        QList<ParserFactoryHelper> factoriesForSuffix(const QString &suffix)
+        QList<ParserFactoryHelper> factoriesForSuffix(const QString &suffix,
+                                                      bool disable_supplementary)
         {
             QMutexLocker lkr(&mutex);
             auto helpers = helpers_by_suffix.values(suffix);
             std::sort(helpers.begin(), helpers.end());
+
+            if (disable_supplementary)
+            {
+                QMutableListIterator<ParserFactoryHelper> it(helpers);
+
+                while (it.hasNext())
+                {
+                    const auto &value = it.next();
+
+                    if (value.isSupplementary())
+                    {
+                        it.remove();
+                    }
+                }
+            }
+
             return helpers;
         }
 
-        QList<ParserFactoryHelper> factoriesExcludingSuffix(const QString &suffix)
+        QList<ParserFactoryHelper> factoriesExcludingSuffix(const QString &suffix,
+                                                            bool disable_supplementary)
         {
             QMutexLocker lkr(&mutex);
 
@@ -342,6 +367,22 @@ namespace detail
             {
                 auto helpers = helpers_by_id.values();
                 std::sort(helpers.begin(), helpers.end());
+
+                if (disable_supplementary)
+                {
+                    QMutableListIterator<ParserFactoryHelper> it(helpers);
+
+                    while (it.hasNext())
+                    {
+                        const auto &value = it.next();
+
+                        if (value.isSupplementary())
+                        {
+                            it.remove();
+                        }
+                    }
+                }
+
                 return helpers;
             }
 
@@ -356,6 +397,22 @@ namespace detail
             }
 
             std::sort(helpers.begin(), helpers.end());
+
+            if (disable_supplementary)
+            {
+                QMutableListIterator<ParserFactoryHelper> it(helpers);
+
+                while (it.hasNext())
+                {
+                    const auto &value = it.next();
+
+                    if (value.isSupplementary())
+                    {
+                        it.remove();
+                    }
+                }
+            }
+
             return helpers;
         }
 
@@ -378,11 +435,14 @@ namespace detail
             {
                 const auto parser = helpers_by_id.value(key);
 
-                lines.append( QObject::tr("## Parser %1 ##").arg(key) );
-                lines.append( QObject::tr("Supports files: %1")
-                                    .arg(parser.suffixes().join(", ")) );
-                lines.append( parser.formatDescription() );
-                lines += QString("#").repeated(13 + key.length()) + "\n";
+                if (not parser.isSupplementary())
+                {
+                    lines.append( QObject::tr("## Parser %1 ##").arg(key) );
+                    lines.append( QObject::tr("Supports files: %1")
+                                        .arg(parser.suffixes().join(", ")) );
+                    lines.append( parser.formatDescription() );
+                    lines += QString("#").repeated(13 + key.length()) + "\n";
+                }
             }
 
             return lines.join("\n");
@@ -421,10 +481,10 @@ static const RegisterMetaType<MoleculeParser> r_parser( MAGIC_ONLY, MoleculePars
 
 QDataStream &operator<<(QDataStream &ds, const MoleculeParser &parser)
 {
-    writeHeader(ds, r_parser, 1);
+    writeHeader(ds, r_parser, 2);
 
     SharedDataStream sds(ds);
-    sds << parser.lnes << parser.scr << parser.run_parallel
+    sds << parser.fname << parser.lnes << parser.scr << parser.run_parallel
         << static_cast<const Property&>(parser);
 
     return ds;
@@ -434,11 +494,19 @@ QDataStream &operator>>(QDataStream &ds, MoleculeParser &parser)
 {
     VersionID v = readHeader(ds, r_parser);
 
-    if (v == 1)
+    if (v == 2)
+    {
+        SharedDataStream sds(ds);
+        sds >> parser.fname >> parser.lnes >> parser.scr >> parser.run_parallel
+            >> static_cast<Property&>(parser);
+    }
+    else if (v == 1)
     {
         SharedDataStream sds(ds);
         sds >> parser.lnes >> parser.scr >> parser.run_parallel
             >> static_cast<Property&>(parser);
+
+        parser.fname = QString();
     }
     else
         throw version_error(v,"1", r_parser, CODELOC);
@@ -539,7 +607,7 @@ QVector<QString> MoleculeParser::readTextFile(QString filename)
 
 /** Construct the parser, parsing in all of the lines in the file
     with passed filename */
-MoleculeParser::MoleculeParser(const QString &fname,
+MoleculeParser::MoleculeParser(const QString &filename,
                                const PropertyMap &map)
                : Property(), scr(0), run_parallel(true)
 {
@@ -548,8 +616,8 @@ MoleculeParser::MoleculeParser(const QString &fname,
         run_parallel = map["parallel"].value().asA<BooleanProperty>().value();
     }
 
-    filename = QFileInfo(fname).absoluteFilePath();
-    lnes = readTextFile(filename);
+    fname = QFileInfo(filename).absoluteFilePath();
+    lnes = readTextFile(fname);
 }
 
 /** Construct the parser, parsing in all of the passed text lines */
@@ -570,7 +638,8 @@ MoleculeParser::MoleculeParser(const QStringList &lines,
 
 /** Copy constructor */
 MoleculeParser::MoleculeParser(const MoleculeParser &other)
-               : Property(other), lnes(other.lnes), scr(other.scr),
+               : Property(other), fname(other.fname),
+                 lnes(other.lnes), scr(other.scr),
                  run_parallel(other.run_parallel)
 {}
 
@@ -624,22 +693,46 @@ const char* MoleculeParser::typeName()
 
 MoleculeParser& MoleculeParser::operator=(const MoleculeParser &other)
 {
-    lnes = other.lnes;
-    scr = other.scr;
-    run_parallel = other.run_parallel;
-    Property::operator=(other);
+    if (this != &other)
+    {
+        fname = other.fname;
+        lnes = other.lnes;
+        scr = other.scr;
+        run_parallel = other.run_parallel;
+        Property::operator=(other);
+    }
+
     return *this;
 }
 
 bool MoleculeParser::operator==(const MoleculeParser &other) const
 {
-    return lnes == other.lnes and scr == other.scr and
+    return fname == other.fname and lnes == other.lnes and scr == other.scr and
            run_parallel == other.run_parallel and Property::operator==(other);
 }
 
 bool MoleculeParser::operator!=(const MoleculeParser &other) const
 {
     return not MoleculeParser::operator==(other);
+}
+
+/** Return the name of the file that was parsed */
+QString MoleculeParser::filename() const
+{
+    return fname;
+}
+
+/** Return whether or not this parser is broken */
+bool MoleculeParser::isBroken() const
+{
+    return false;
+}
+
+/** Return the error report, if this parser is broken. If it isn't,
+ *  then an empty string is returned. */
+QString MoleculeParser::errorReport() const
+{
+    return QString();
 }
 
 /** Enable code to parse files in parallel */
@@ -673,12 +766,6 @@ bool MoleculeParser::isLead() const
 bool MoleculeParser::canFollow() const
 {
     return true;
-}
-
-/** Return the name of the file that was read */
-QString MoleculeParser::filename() const
-{
-    return filename;
 }
 
 /** Extract and return a FFDetail forcefield that is compatible with all of the
@@ -791,6 +878,14 @@ void MoleculeParser::writeToFile(const QString &filename) const
 MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
                                              const PropertyMap &map)
 {
+    bool disable_supplementary = false;
+
+    if (map.specified("DISABLE_SUPPLEMENTARY"))
+    {
+        disable_supplementary = map["DISABLE_SUPPLEMENTARY"]
+                                    .value().asA<BooleanProperty>().value();
+    }
+
     QFileInfo info(filename);
 
     if (not (info.isFile() and info.isReadable()))
@@ -804,20 +899,21 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
     QString suffix = info.suffix();
 
     QStringList errors;
+    QStringList suffix_errors;
     QMap<float,MoleculeParserPtr> parsers;
 
     if (not suffix.isEmpty())
     {
-        for (auto factory : getParserFactory()->factoriesForSuffix(suffix))
+        for (auto factory : getParserFactory()->factoriesForSuffix(suffix, disable_supplementary))
         {
             try
             {
-                const auto parser = factory.construct(filename, map);
+                const auto parser = factory.construct(info.absoluteFilePath(), map);
 
                 if (parser.read().score() <= 0)
                 {
-                    errors.append( QObject::tr("Failed to parse '%1' with parser '%2' "
-                       "as this file is not recognised as being of the required format.")
+                    suffix_errors.append( QObject::tr("*-- Failed to parse '%1' with parser '%2'.\n"
+                       "The file is not recognised as being of the required format.")
                                     .arg(filename).arg(factory.formatName()) );
                 }
                 else
@@ -827,9 +923,9 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
             }
             catch(const SireError::exception &e)
             {
-                errors.append( QObject::tr("Failed to parse '%1' with parser '%2'")
-                                .arg(filename).arg(factory.formatName()) );
-                errors.append( e.error() );
+                suffix_errors.append( QObject::tr("*-- Failed to parse '%1' with parser '%2'.\n%3")
+                                .arg(filename).arg(factory.formatName())
+                                .arg(e.error()) );
             }
         }
 
@@ -841,7 +937,7 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
     }
 
     //none of the tested parsers worked, so let's now try all of the parsers
-    for (auto factory : getParserFactory()->factoriesExcludingSuffix(suffix))
+    for (auto factory : getParserFactory()->factoriesExcludingSuffix(suffix, disable_supplementary))
     {
         try
         {
@@ -860,9 +956,9 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
         }
         catch(const SireError::exception &e)
         {
-            errors.append( QObject::tr("Failed to parse '%1' with parser '%2'")
-                            .arg(filename).arg(factory.formatName()) );
-            errors.append( e.error() );
+            errors.append( QObject::tr("Failed to parse '%1' with parser '%2'\n%3")
+                            .arg(filename).arg(factory.formatName())
+                            .arg(e.error()) );
         }
     }
 
@@ -872,21 +968,15 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
     }
     else
     {
-        if (suffix.isEmpty())
+        if (not suffix.isEmpty())
         {
-            throw SireIO::parse_error( QObject::tr(
-                    "There are no parsers available that can parse the file '%1'\n"
-                    "Errors reported by individual parsers are:\n\n%2\n")
-                        .arg(filename).arg(errors.join("\n\n")), CODELOC );
+            return MoleculeParserPtr(BrokenParser(filename, suffix,
+                                                  suffix_errors));
         }
         else
         {
-            throw SireIO::parse_error( QObject::tr(
-                    "There are no parsers available that can parser the file '%1'. "
-                    "All parsers were tried, including those that were associated with "
-                    "the extension of this file. Errors reported "
-                    "by individual parsers are:\n\n%2\n")
-                        .arg(filename).arg(errors.join("\n\n")), CODELOC );
+            return MoleculeParserPtr(BrokenParser(filename,
+                                                  suffix_errors + errors));
         }
 
         return MoleculeParserPtr();
@@ -1503,7 +1593,30 @@ System MoleculeParser::toSystem(const MoleculeParser &other, const PropertyMap &
     QList<MoleculeParserPtr> supplementary;
 
     // Sort the parsers: lead, then follower.
-    sortParsers(parsers, supplementary);
+    sortParsers(parsers, supplementary, map);
+
+    if (parsers.count() == 0)
+        return System();
+
+    if (parsers.first().read().isBroken())
+    {
+        //all of the parsers must be broken
+        QTextStream cout(stdout, QIODevice::WriteOnly);
+
+        cout << QObject::tr("Unable to read the file. Errors are below.\n\n");
+
+        QStringList filenames;
+
+        for (const auto &parser : parsers)
+        {
+            cout << "\n\n" << parser.read().errorReport();
+            filenames.append(parser.read().filename());
+        }
+
+        throw SireIO::parse_error(QObject::tr(
+            "Unable to load the file: %1")
+                .arg(filenames.join(", ")), CODELOC);
+    }
 
     // Instantiate an empty system.
     System system;
@@ -1542,7 +1655,30 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
     QList<MoleculeParserPtr> supplementary;
 
     // Sort the parsers: leader, then followers.
-    sortParsers(parsers, supplementary);
+    sortParsers(parsers, supplementary, map);
+
+    if (parsers.count() == 0)
+        return System();
+
+    if (parsers.first().read().isBroken())
+    {
+        //all of the parsers must be broken
+        QTextStream cout(stdout, QIODevice::WriteOnly);
+
+        cout << QObject::tr("Unable to read some of the files. Errors are below.\n");
+
+        QStringList filenames;
+
+        for (const auto &parser : parsers)
+        {
+            cout << parser.read().errorReport() << "\n\n";
+            filenames.append(parser.read().filename());
+        }
+
+        throw SireIO::parse_error(QObject::tr(
+            "Unable to load some of the files: %1")
+                .arg(filenames.join(", ")), CODELOC);
+    }
 
     // Instantiate an empty system.
     System system;
@@ -1688,6 +1824,163 @@ void MoleculeParser::addToSystem(System &system, const PropertyMap &map) const
                 .arg(this->toString()), CODELOC );
 }
 
+/** Sort the parsers: Lead first, then followers. */
+void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers,
+                                 QList<MoleculeParserPtr> &supplementary,
+                                 const PropertyMap &map) const
+{
+    /* Parsers can be leaders or followers. Leaders are capable of
+       constructing an entire molecular system on their own, whereas
+       followers cannot. However, certain lead parsers (PDB2, MOl2)
+       are also able to follow.
+
+       Here we sort the parsers into order, ready to construct a
+       system. If there is more than one lead, then we need to work
+       out which are capable of following.
+     */
+
+    // The leaders. We should end up with one.
+    QList<MoleculeParserPtr> leaders;
+
+    // The follower parsers.
+    QList<MoleculeParserPtr> followers;
+
+    // The broken parsers.
+    QList<MoleculeParserPtr> broken;
+
+    // First pass: work out leaders and followers.
+    for (auto parser : parsers)
+    {
+        // This is a lead parser.
+        if (parser.read().isBroken())
+        {
+            broken.append(parser);
+        }
+        else if (parser.read().isLead())
+        {
+            leaders.append(parser);
+        }
+        else
+        {
+            // This parser can follow.
+            if (parser.read().canFollow())
+            {
+                followers.append(parser);
+            }
+            // This parser must contain data that
+            // is supplementary to the lead.
+            else if (parser->isA<Supplementary>())
+            {
+                supplementary.append(parser);
+            }
+            else
+            {
+                throw SireIO::parse_error(QObject::tr(
+                    "A parser cannot lead or follow? %1"
+                        ).arg(parser.read().toString()), CODELOC);
+            }
+        }
+    }
+
+    if (broken.count() > 0)
+    {
+        //everything is broken!
+        parsers = broken;
+        return;
+    }
+
+    // No leaders.
+    if (leaders.count() == 0)
+    {
+        if (supplementary.count() > 0)
+        {
+            // likely a Supplementary is hiding a broken parser - reparse it...
+            for (const auto &parser : supplementary)
+            {
+                PropertyMap m2(map);
+                m2.set("DISABLE_SUPPLEMENTARY", BooleanProperty(true));
+
+                auto p = _pvt_parse(parser.read().filename(), m2);
+
+                if (p.read().isBroken())
+                {
+                    broken.append(p);
+                }
+            }
+
+            if (broken.count() > 0)
+            {
+                parsers = broken;
+                return;
+            }
+        }
+
+        throw SireIO::parse_error( QObject::tr(
+            "Unable to load any molecules from the files as none "
+            "contain the necessary molecular information to create a "
+            "system. Only coordinate or trajectory information "
+            "has been loaded. Structure or topology information, "
+            "e.g. as would be found in a topology file, is missing."), CODELOC );
+    }
+
+    // If there are multiple leaders, then check whether any can follow.
+    // If so, move them to the followers until only a single lead remains.
+    if (leaders.count() > 1)
+    {
+        // Whether the parser is the new leader.
+        QVector<bool> is_leader(leaders.count());
+        is_leader.fill(true);
+
+        // The number of leaders.
+        int num_lead = leaders.count();
+
+        for (int i=0; i<leaders.count(); ++i)
+        {
+            // Make sure we have one leader.
+            if (num_lead > 1)
+            {
+                // Add the leader to followers and flag that it's been removed.
+                if (leaders[i].read().canFollow())
+                {
+                    followers.append(leaders[i]);
+                    is_leader[i] = false;
+                    num_lead--;
+                }
+            }
+        }
+
+        // Can only have one leader.
+        if (num_lead > 1)
+        {
+            throw SireError::incompatible_error(QObject::tr(
+                "Cannot construct a System from multiple lead parsers if "
+                "none can follow!"), CODELOC);
+        }
+
+        // Find the new lead parser..
+        for (int i=0; i<leaders.count(); ++i)
+        {
+            // This parser is the new leader.
+            if (is_leader[i])
+            {
+                // Copy the ptr to the new lead.
+                MoleculeParserPtr leader = leaders[i];
+
+                // Clear the leaders list.
+                leaders.clear();
+
+                // Append the new leader.
+                leaders.append(leader);
+
+                break;
+            }
+        }
+    }
+
+    // Make the sorted list of parsers: leader, then followers.
+    parsers = leaders + followers;
+}
+
 Q_GLOBAL_STATIC( NullParser, nullParser )
 
 const NullParser& MoleculeParser::null()
@@ -1717,7 +2010,7 @@ QDataStream &operator>>(QDataStream &ds, NullParser &parser)
         ds >> static_cast<MoleculeParser&>(parser);
     }
     else
-        throw version_error(v, "1", r_parser, CODELOC);
+        throw version_error(v, "1", r_null, CODELOC);
 
     return ds;
 }
@@ -1826,112 +2119,190 @@ MoleculeParserPtr NullParser::construct(const SireSystem::System &system,
     return MoleculeParserPtr();
 }
 
-/** Sort the parsers: Lead first, then followers. */
-void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers,
-                                 QList<MoleculeParserPtr> &supplementary) const
+//////////////
+////////////// Implementation of BrokenParser
+//////////////
+
+static const RegisterMetaType<BrokenParser> r_broken;
+
+QDataStream &operator<<(QDataStream &ds, const BrokenParser &parser)
 {
-    /* Parsers can be leaders or followers. Leaders are capable of
-       constructing an entire molecular system on their own, whereas
-       followers cannot. However, certain lead parsers (PDB2, MOl2)
-       are also able to follow.
+    writeHeader(ds, r_broken, 1);
 
-       Here we sort the parsers into order, ready to construct a
-       system. If there is more than one lead, then we need to work
-       out which are capable of following.
-     */
+    SharedDataStream sds(ds);
 
-    // The leaders. We should end up with one.
-    QList<MoleculeParserPtr> leaders;
+    sds << parser.error_report << parser.suffix
+        << static_cast<const MoleculeParser&>(parser);
 
-    // The follower parsers.
-    QList<MoleculeParserPtr> followers;
+    return ds;
+}
 
-    // First pass: work out leaders and followers.
-    for (auto parser : parsers)
+QDataStream &operator>>(QDataStream &ds, BrokenParser &parser)
+{
+    VersionID v = readHeader(ds, r_broken);
+
+    if (v == 1)
     {
-        // This is a lead parser.
-        if (parser.read().isLead())
-        {
-            leaders.append(parser);
-        }
-        else
-        {
-            // This parser can follow.
-            if (parser.read().canFollow())
-            {
-                followers.append(parser);
-            }
+        SharedDataStream sds(ds);
+        sds >> parser.error_report >> parser.suffix
+            >> static_cast<MoleculeParser&>(parser);
+    }
+    else
+        throw version_error(v, "1", r_broken, CODELOC);
 
-            // This parser must contain data that
-            // is supplementary to the lead.
-            else
-            {
-                supplementary.append(parser);
-            }
+    return ds;
+}
+
+BrokenParser::BrokenParser() : ConcreteProperty<BrokenParser,MoleculeParser>()
+{}
+
+BrokenParser::BrokenParser(const QString &filename, const PropertyMap &map)
+             : ConcreteProperty<BrokenParser,MoleculeParser>(filename, map)
+{}
+
+BrokenParser::BrokenParser(const QString &filename, const QString &s,
+                           const QStringList &errors)
+             : ConcreteProperty<BrokenParser,MoleculeParser>(filename, PropertyMap())
+{
+    suffix = s;
+    error_report = errors;
+}
+
+BrokenParser::BrokenParser(const QString &filename, const QStringList &errors)
+             : ConcreteProperty<BrokenParser,MoleculeParser>(filename, PropertyMap())
+{
+    error_report = errors;
+}
+
+BrokenParser::BrokenParser(const QStringList &lines, const PropertyMap &map)
+             : ConcreteProperty<BrokenParser,MoleculeParser>(lines, map)
+{}
+
+BrokenParser::BrokenParser(const System&, const PropertyMap &map)
+             : ConcreteProperty<BrokenParser,MoleculeParser>(map)
+{}
+
+BrokenParser::BrokenParser(const BrokenParser &other)
+             : ConcreteProperty<BrokenParser,MoleculeParser>(other),
+               error_report(other.error_report), suffix(other.suffix)
+{}
+
+BrokenParser::~BrokenParser()
+{}
+
+BrokenParser& BrokenParser::operator=(const BrokenParser &other)
+{
+    if (this != &other)
+    {
+        error_report = other.error_report;
+        suffix = other.suffix;
+        MoleculeParser::operator=(other);
+    }
+
+    return *this;
+}
+
+bool BrokenParser::operator==(const BrokenParser &other) const
+{
+    return MoleculeParser::operator==(other);
+}
+
+bool BrokenParser::operator!=(const BrokenParser &other) const
+{
+    return MoleculeParser::operator!=(other);
+}
+
+const char* BrokenParser::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<BrokenParser>() );
+}
+
+QString BrokenParser::formatName() const
+{
+    return "BROKEN";
+}
+
+/** Return a description of the file format */
+QString BrokenParser::formatDescription() const
+{
+    return QObject::tr("Broken parser used to report an unparseable file.");
+}
+
+bool BrokenParser::isBroken() const
+{
+    return true;
+}
+
+QString BrokenParser::errorReport() const
+{
+    if (suffix.isEmpty())
+    {
+        return QObject::tr("== %1 ==\n\nThis file was not recognised by any of the file parsers!\n\n"
+                           "%2\n")
+                    .arg(this->filename())
+                    .arg(error_report.join("\n\n"));
+    }
+    else
+    {
+        return QObject::tr("== %1 ==\n\nThis file could not be parsed by any of the file parsers! "
+                           "It was recognised as a file of type %2, but all parsers failed "
+                           "to parse this file. The errors from the parsers associated "
+                           "with the suffix %2 are printed below:\n\n"
+                           "%3\n")
+                    .arg(this->filename()).arg(suffix)
+                    .arg(error_report.join("\n\n"));
+    }
+}
+
+System BrokenParser::toSystem(const PropertyMap&) const
+{
+    return System();
+}
+
+System BrokenParser::toSystem(const MoleculeParser &other,
+                              const PropertyMap&) const
+{
+    if (not other.isA<BrokenParser>())
+        throw SireError::incompatible_error( QObject::tr(
+                "Broken parsers cannot be combined with other parsers (%1)")
+                    .arg(other.toString()), CODELOC );
+
+    return System();
+}
+
+System BrokenParser::toSystem(const QList<MoleculeParserPtr> &others,
+                              const PropertyMap&) const
+{
+    for (const auto &other : others)
+    {
+        if (not other->isA<BrokenParser>())
+        {
+            throw SireError::incompatible_error( QObject::tr(
+                    "Broken parsers cannot be combined with other parsers (%1)")
+                        .arg(other.read().toString()), CODELOC );
         }
     }
 
-    // No leaders.
-    if (leaders.count() == 0)
-    {
-        throw SireError::program_bug( QObject::tr(
-            "There are no lead parsers!"), CODELOC );
-    }
+    return System();
+}
 
-    // If there are multiple leaders, then check whether any can follow.
-    // If so, move them to the followers until only a single lead remains.
-    if (leaders.count() > 1)
-    {
-        // Whether the parser is the new leader.
-        QVector<bool> is_leader(leaders.count());
-        is_leader.fill(true);
+/** Return this parser constructed from the passed filename */
+MoleculeParserPtr BrokenParser::construct(const QString &filename,
+                                          const PropertyMap &map) const
+{
+    return MoleculeParserPtr(BrokenParser(filename, map));
+}
 
-        // The number of leaders.
-        int num_lead = leaders.count();
+/** Return this parser constructed from the passed set of lines */
+MoleculeParserPtr BrokenParser::construct(const QStringList &lines,
+                                          const PropertyMap &map) const
+{
+    return MoleculeParserPtr(BrokenParser(lines, map));
+}
 
-        for (int i=0; i<leaders.count(); ++i)
-        {
-            // Make sure we have one leader.
-            if (num_lead > 1)
-            {
-                // Add the leader to followers and flag that it's been removed.
-                if (leaders[i].read().canFollow())
-                {
-                    followers.append(leaders[i]);
-                    is_leader[i] = false;
-                    num_lead--;
-                }
-            }
-        }
-
-        // Can only have one leader.
-        if (num_lead > 1)
-        {
-            throw SireError::incompatible_error(QObject::tr(
-                "Cannot construct a System from multiple lead parsers if "
-                "none can follow!"), CODELOC);
-        }
-
-        // Find the new lead parser..
-        for (int i=0; i<leaders.count(); ++i)
-        {
-            // This parser is the new leader.
-            if (is_leader[i])
-            {
-                // Copy the ptr to the new lead.
-                MoleculeParserPtr leader = leaders[i];
-
-                // Clear the leaders list.
-                leaders.clear();
-
-                // Append the new leader.
-                leaders.append(leader);
-
-                break;
-            }
-        }
-    }
-
-    // Make the sorted list of parsers: leader, then followers.
-    parsers = leaders + followers;
+/** Return this parser constructed from the passed SireSystem::System */
+MoleculeParserPtr BrokenParser::construct(const SireSystem::System &system,
+                                          const PropertyMap &map) const
+{
+    return MoleculeParserPtr(BrokenParser(system, map));
 }

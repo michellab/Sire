@@ -27,6 +27,8 @@ namespace bp = boost::python;
 
 #include "SireIO/errors.h"
 
+#include "SireIO/fortranfile.h"
+
 #include "SireMol/atomcoords.h"
 
 #include "SireMol/atomforces.h"
@@ -57,6 +59,16 @@ namespace bp = boost::python;
 
 #include "dcd.h"
 
+#include "tostring.h"
+
+#include <QDataStream>
+
+#include <QDebug>
+
+#include <QFile>
+
+#include <QFileInfo>
+
 #include "dcd.h"
 
 SireIO::DCD __copy__(const SireIO::DCD &other){ return SireIO::DCD(other); }
@@ -71,7 +83,7 @@ void register_DCD_class(){
 
     { //::SireIO::DCD
         typedef bp::class_< SireIO::DCD, bp::bases< SireIO::MoleculeParser, SireBase::Property > > DCD_exposer_t;
-        DCD_exposer_t DCD_exposer = DCD_exposer_t( "DCD", "This class represents a DCD file reader. Note that this will\nonly read the first frame from the file (it is for loading molecules).\nThe whole trajectory will be added and parsed using\nthe DCDTrajectory class.\n\nThe format is described here\n\nhttps:www.ks.uiuc.eduResearchvmdpluginsmolfiledcdplugin.html\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        DCD_exposer_t DCD_exposer = DCD_exposer_t( "DCD", "This class represents a DCD file reader.\n\nThe format is described here\n\nhttps:www.ks.uiuc.eduResearchvmdpluginsmolfiledcdplugin.html\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope DCD_scope( DCD_exposer );
         DCD_exposer.def( bp::init< QString const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by parsing the passed file") );
         DCD_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by parsing the data in the passed text lines") );

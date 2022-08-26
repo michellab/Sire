@@ -52,22 +52,22 @@ AmberFormat::AmberFormat(SireIO::AmberPrm::FLAG_TYPE flag, int num,
 AmberFormat::AmberFormat(const QString &line)
 {
     QRegularExpression re("%FORMAT\\((\\d+)(\\w)(\\d+)\\.?(\\d+)?\\)");
-    
+
     auto m = re.match(line);
-    
+
     if (not m.hasMatch())
     {
         throw SireIO::parse_error( QObject::tr(
                 "Could not extract the format from the line '%1'. "
                 "Expected to read a line similar to '%FORMAT(5E16.8)'.")
-                    .arg(line), CODELOC );
+                    .arg(line.simplified()), CODELOC );
     }
-    
+
     num_values = m.captured(1).toInt();
     field_width = m.captured(3).toInt();
-    
+
     QString typ = m.captured(2).toLower();
-    
+
     if (typ == "a")
         flag_type = AmberPrm::STRING;
     else if (typ == "i")
@@ -76,7 +76,7 @@ AmberFormat::AmberFormat(const QString &line)
         flag_type = AmberPrm::FLOAT;
     else
         flag_type = AmberPrm::UNKNOWN;
-    
+
     if (not m.captured(4).isNull())
     {
         point_width = m.captured(4).toInt();
@@ -128,28 +128,28 @@ namespace detail
 
 /** Internal function used to write out an array of integers using the passed AmberFormat.
     This will include the Amber format string as a header if 'include_header'
-    is true, and will append any errors encountered during writing to 'errors' 
+    is true, and will append any errors encountered during writing to 'errors'
     if this is non-zero. This returns the text lines as a QStringList */
 QStringList writeIntData(const QVector<qint64> &data, AmberFormat format,
                          QStringList *errors, bool include_header)
 {
     QStringList lines;
-    
+
     if (include_header)
     {
         lines.append( format.toAmberString() );
     }
 
     int n = 0;
-    
+
     QString line;
-    
+
     for (int i=0; i<data.count(); ++i)
     {
         const qint64 value = data.constData()[i];
-    
+
         QString sval = QString("%1").arg(value, format.width());
-        
+
         if (sval.length() > format.width())
         {
             //we couldn't fit this number into the specified width!
@@ -161,10 +161,10 @@ QStringList writeIntData(const QVector<qint64> &data, AmberFormat format,
 
             sval = QString("%1").arg(0, format.width());
         }
-        
+
         line += sval;
         n += 1;
-        
+
         if (n == format.numValues())
         {
             lines.append(line);
@@ -172,7 +172,7 @@ QStringList writeIntData(const QVector<qint64> &data, AmberFormat format,
             n = 0;
         }
     }
-    
+
     if (n > 0)
     {
         lines.append(line);
@@ -182,12 +182,12 @@ QStringList writeIntData(const QVector<qint64> &data, AmberFormat format,
     {
         lines.append(" ");
     }
-    
+
     return lines;
 }
 
 /** Function to read and return an array of integers from the passed lines,
-    according to the passed AmberFormat. The passed index specifies the 
+    according to the passed AmberFormat. The passed index specifies the
     indicies of the first and last lines in the list of lines to read,
     and the accumlated score and set of errors are updated assuming these
     are nonzero */
@@ -202,17 +202,17 @@ QVector<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
     //read in all of the lines...
     const int strt = index.first;
     const int end = index.first + index.second;
-    
+
     const QString *l = lines.constData();
-    
+
     data.reserve( (end-strt) * format.numValues() );
-    
+
     for (int i=strt; i<end; ++i)
     {
         const QString &line = l[i];
-        
+
         int nvalues = format.numValues(line);
-        
+
         if (errors and nvalues < format.numValues() and i != end-1)
         {
             //one of the data lines has too little data
@@ -220,18 +220,18 @@ QVector<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
                 "Expected %2 values but only saw %3.")
                     .arg(i+1).arg(format.numValues()).arg(nvalues) );
         }
-        
+
         double read_score = 0;
-        
+
         for (int j=0; j<nvalues; ++j)
         {
             auto ref = line.midRef( j*format.width(), format.width() );
-            
+
             if (not ref.isNull())
             {
                 bool ok = true;
                 qint64 value = ref.toLong(&ok);
-                
+
                 if (ok)
                 {
                     data.append(value);
@@ -264,28 +264,28 @@ QVector<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
 
 /** Internal function used to write out an array of doubles using the passed AmberFormat.
     This will include the Amber format string as a header if 'include_header'
-    is true, and will append any errors encountered during writing to 'errors' 
+    is true, and will append any errors encountered during writing to 'errors'
     if this is non-zero. This returns the text lines as a QStringList */
 QStringList writeFloatData(const QVector<double> &data, AmberFormat format,
                            QStringList *errors, bool include_header, char float_format)
 {
     QStringList lines;
-    
+
     if (include_header)
     {
         lines.append( format.toAmberString() );
     }
 
     int n = 0;
-    
+
     QString line;
-    
+
     for (int i=0; i<data.count(); ++i)
     {
         const double value = data.constData()[i];
-    
+
         QString sval = QString("%1").arg(value, format.width(), float_format, format.pointWidth());
-        
+
         if (sval.length() > format.width())
         {
             //we couldn't fit this number into the specified width!
@@ -297,10 +297,10 @@ QStringList writeFloatData(const QVector<double> &data, AmberFormat format,
 
             sval = QString("%1").arg(0.0, format.width(), float_format, format.pointWidth());
         }
-        
+
         line += sval;
         n += 1;
-        
+
         if (n == format.numValues())
         {
             lines.append(line);
@@ -308,7 +308,7 @@ QStringList writeFloatData(const QVector<double> &data, AmberFormat format,
             n = 0;
         }
     }
-    
+
     if (n > 0)
     {
         lines.append(line);
@@ -318,12 +318,12 @@ QStringList writeFloatData(const QVector<double> &data, AmberFormat format,
     {
         lines.append(" ");
     }
-    
+
     return lines;
 }
 
 /** Function to read and return an array of doubles from the passed lines,
-    according to the passed AmberFormat. The passed index specifies the 
+    according to the passed AmberFormat. The passed index specifies the
     indicies of the first and last lines in the list of lines to read,
     and the accumlated score and set of errors are updated assuming these
     are nonzero */
@@ -338,17 +338,17 @@ QVector<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
     //read in all of the lines...
     const int strt = index.first;
     const int end = index.first + index.second;
-    
+
     data.reserve( (end-strt) * format.numValues() );
-    
+
     const QString *l = lines.constData();
-    
+
     for (int i=strt; i<end; ++i)
     {
         const QString &line = l[i];
-        
+
         int nvalues = format.numValues(line);
-        
+
         if (errors and nvalues < format.numValues() and i != end-1)
         {
             //one of the data lines has too little data
@@ -356,18 +356,18 @@ QVector<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
                 "Expected %2 values but only saw %3.")
                     .arg(i+1).arg(format.numValues()).arg(nvalues) );
         }
-        
+
         double read_score = 0;
-        
+
         for (int j=0; j<nvalues; ++j)
         {
             auto ref = line.midRef( j*format.width(), format.width() );
-            
+
             if (not ref.isNull())
             {
                 bool ok = true;
                 double value = ref.toDouble(&ok);
-                
+
                 if (ok)
                 {
                     data.append(value);
@@ -385,7 +385,7 @@ QVector<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
                             .arg(i+1).arg(j+1) );
             }
         }
-        
+
         if (nvalues > 0)
         {
             score += read_score / nvalues;
@@ -400,26 +400,26 @@ QVector<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
 
 /** Internal function used to write out an array of strings using the passed AmberFormat.
     This will include the Amber format string as a header if 'include_header'
-    is true, and will append any errors encountered during writing to 'errors' 
+    is true, and will append any errors encountered during writing to 'errors'
     if this is non-zero. This returns the text lines as a QStringList */
 QStringList writeStringData(const QVector<QString> &data, AmberFormat format,
                             QStringList *errors, bool include_header)
 {
     QStringList lines;
-    
+
     if (include_header)
     {
         lines.append( format.toAmberString() );
     }
-    
+
     int n = 0;
-    
+
     QString line;
-    
+
     for (int i=0; i<data.count(); ++i)
     {
         const QString value = data.constData()[i];
-    
+
         if (value.length() < format.width())
         {
             line += QString("%1").arg(value, -format.width());
@@ -435,12 +435,12 @@ QStringList writeStringData(const QVector<QString> &data, AmberFormat format,
                     "Could not fully write the string data at index %1, value '%2', "
                     "as it can't fit into the format %3.")
                         .arg(i).arg(value).arg(format.toString()) );
-        
+
             line += value.mid(0,format.width());
         }
-        
+
         n += 1;
-        
+
         if (n == format.numValues())
         {
             lines.append(line);
@@ -448,7 +448,7 @@ QStringList writeStringData(const QVector<QString> &data, AmberFormat format,
             n = 0;
         }
     }
-    
+
     if (n > 0)
     {
         lines.append(line);
@@ -458,12 +458,12 @@ QStringList writeStringData(const QVector<QString> &data, AmberFormat format,
     {
         lines.append(" ");
     }
-    
+
     return lines;
 }
 
 /** Function to read and return an array of strings from the passed lines,
-    according to the passed AmberFormat. The passed index specifies the 
+    according to the passed AmberFormat. The passed index specifies the
     indicies of the first and last lines in the list of lines to read,
     and the accumlated score and set of errors are updated assuming these
     are nonzero */
@@ -478,17 +478,17 @@ QVector<QString> readStringData(const QVector<QString> &lines, AmberFormat forma
     //read in all of the lines...
     const int strt = index.first;
     const int end = index.first + index.second;
-    
+
     data.reserve( (end-strt) * format.numValues() );
-    
+
     const QString *l = lines.constData();
-    
+
     for (int i=strt; i<end; ++i)
     {
         const QString &line = l[i];
-        
+
         int nvalues = format.numValues(line);
-        
+
         if (errors and nvalues < format.numValues() and i != end-1)
         {
             //one of the data lines has too little data
@@ -496,13 +496,13 @@ QVector<QString> readStringData(const QVector<QString> &lines, AmberFormat forma
                 "Expected %2 values but only saw %3.")
                     .arg(i+1).arg(format.numValues()).arg(nvalues) );
         }
-        
+
         double read_score = 0;
-        
+
         for (int j=0; j<nvalues; ++j)
         {
             auto ref = line.midRef( j*format.width(), format.width() );
-            
+
             if (not ref.isNull())
             {
                 data.append( ref.toString() );
@@ -515,7 +515,7 @@ QVector<QString> readStringData(const QVector<QString> &lines, AmberFormat forma
                             .arg(i+1).arg(j+1) );
             }
         }
-        
+
         if (nvalues > 0)
         {
             score += read_score / nvalues;

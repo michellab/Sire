@@ -336,6 +336,7 @@ def load(path: _Union[str, _List[str]], *args, **kwargs):
         raise IOError("No valid files specified. Nothing to load?")
 
     from .io import load_molecules
+    from .base import wrap
     return load_molecules(paths, map={"GROMACS_PATH":_get_gromacs_dir()})
 
 
