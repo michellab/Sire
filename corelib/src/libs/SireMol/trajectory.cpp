@@ -146,53 +146,6 @@ QList<Frame> TrajectoryData::getFrames(int start_atom, int natoms) const
     return frames;
 }
 
-Frame TrajectoryData::createFrame(const QVector<Vector> &coords,
-                                  const Space &space,
-                                  SireUnits::Dimension::Time time) const
-{
-    Frame frame;
-    frame.coords = coords;
-    frame.spc = space;
-    frame.t = time;
-    frame.assertSane();
-
-    return frame;
-}
-
-Frame TrajectoryData::createFrame(const QVector<Vector> &coords,
-                                  const QVector<Velocity3D> &vels,
-                                  const Space &space,
-                                  SireUnits::Dimension::Time time) const
-{
-    Frame frame;
-    frame.coords = coords;
-    frame.vels = vels;
-    frame.spc = space;
-    frame.t = time;
-    frame.assertSane();
-
-    return frame;
-}
-
-Frame TrajectoryData::createFrame(const QVector<Vector> &coords,
-                                  const QVector<Velocity3D> &vels,
-                                  const QVector<Force3D> &frcs,
-                                  const Space &space,
-                                  SireUnits::Dimension::Time time) const
-{
-    Frame frame;
-    frame.coords = coords;
-    frame.vels = vels;
-    frame.frcs = frcs;
-    frame.spc = space;
-    frame.t = time;
-    frame.assertSane();
-
-    return frame;
-}
-
-
-
 Frame TrajectoryData::operator[](int i) const
 {
     return this->getFrame(i);
@@ -1041,6 +994,44 @@ Frame::Frame(const MoleculeData &mol, const PropertyMap &map)
         catch(...)
         {}
     }
+
+    this->assertSane();
+}
+
+Frame::Frame(const QVector<Vector> &coordinates,
+             const Space &space, Time time)
+      : ConcreteProperty<Frame,MoleculeProperty>(),
+        coords(coordinates),
+        spc(space),
+        t(time)
+{
+    this->assertSane();
+}
+
+Frame::Frame(const QVector<Vector> &coordinates,
+             const QVector<Velocity3D> &velocities,
+             const Space &space, Time time)
+      : ConcreteProperty<Frame,MoleculeProperty>(),
+        coords(coordinates),
+        vels(velocities),
+        spc(space),
+        t(time)
+{
+    this->assertSane();
+}
+
+Frame::Frame(const QVector<Vector> &coordinates,
+             const QVector<Velocity3D> &velocities,
+             const QVector<Force3D> &forces,
+             const Space &space, Time time)
+      : ConcreteProperty<Frame,MoleculeProperty>(),
+        coords(coordinates),
+        vels(velocities),
+        frcs(forces),
+        spc(space),
+        t(time)
+{
+    this->assertSane();
 }
 
 Frame::Frame(const Frame &other)

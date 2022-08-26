@@ -16,7 +16,11 @@ def supported_formats():
        that are supported by Sire
     """
     from .legacy.IO import MoleculeParser
-    return MoleculeParser.supportedFormats()
+
+    try:
+        return MoleculeParser.supportedFormats()
+    except AttributeError:
+        return MoleculeParser.supported_formats()
 
 
 def _create_dir(directory):

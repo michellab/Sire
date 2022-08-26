@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "DCD.pypp.hpp"
 
 namespace bp = boost::python;
@@ -44,6 +45,8 @@ namespace bp = boost::python;
 #include "SireMol/moleditor.h"
 
 #include "SireMol/molidx.h"
+
+#include "SireMol/trajectory.h"
 
 #include "SireStream/shareddatastream.h"
 
@@ -89,30 +92,6 @@ void register_DCD_class(){
         DCD_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by parsing the data in the passed text lines") );
         DCD_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by extracting the necessary data from the passed System") );
         DCD_exposer.def( bp::init< SireIO::DCD const & >(( bp::arg("other") ), "Copy constructor") );
-        { //::SireIO::DCD::boxAngles
-        
-            typedef ::SireMaths::Vector ( ::SireIO::DCD::*boxAngles_function_type)(  ) const;
-            boxAngles_function_type boxAngles_function_value( &::SireIO::DCD::boxAngles );
-            
-            DCD_exposer.def( 
-                "boxAngles"
-                , boxAngles_function_value
-                , bp::release_gil_policy()
-                , "Return the parsed box angles, or Vector(0) if there is no space information." );
-        
-        }
-        { //::SireIO::DCD::boxDimensions
-        
-            typedef ::SireMaths::Vector ( ::SireIO::DCD::*boxDimensions_function_type)(  ) const;
-            boxDimensions_function_type boxDimensions_function_value( &::SireIO::DCD::boxDimensions );
-            
-            DCD_exposer.def( 
-                "boxDimensions"
-                , boxDimensions_function_value
-                , bp::release_gil_policy()
-                , "Return the parsed box dimensions, or Vector(0) if there is no space information" );
-        
-        }
         { //::SireIO::DCD::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::DCD::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
@@ -164,18 +143,6 @@ void register_DCD_class(){
                 , "Return the parsed coordinate data." );
         
         }
-        { //::SireIO::DCD::forces
-        
-            typedef ::QVector< SireMaths::Vector > ( ::SireIO::DCD::*forces_function_type)(  ) const;
-            forces_function_type forces_function_value( &::SireIO::DCD::forces );
-            
-            DCD_exposer.def( 
-                "forces"
-                , forces_function_value
-                , bp::release_gil_policy()
-                , "Return the parsed force data." );
-        
-        }
         { //::SireIO::DCD::formatDescription
         
             typedef ::QString ( ::SireIO::DCD::*formatDescription_function_type)(  ) const;
@@ -212,40 +179,17 @@ void register_DCD_class(){
                 , "Return the suffixes that DCD files will typically use" );
         
         }
-        { //::SireIO::DCD::hasCoordinates
+        { //::SireIO::DCD::getFrame
         
-            typedef bool ( ::SireIO::DCD::*hasCoordinates_function_type)(  ) const;
-            hasCoordinates_function_type hasCoordinates_function_value( &::SireIO::DCD::hasCoordinates );
+            typedef ::SireMol::Frame ( ::SireIO::DCD::*getFrame_function_type)( int ) const;
+            getFrame_function_type getFrame_function_value( &::SireIO::DCD::getFrame );
             
             DCD_exposer.def( 
-                "hasCoordinates"
-                , hasCoordinates_function_value
+                "getFrame"
+                , getFrame_function_value
+                , ( bp::arg("i") )
                 , bp::release_gil_policy()
-                , "Return whether or not this DCD file provides coordinates" );
-        
-        }
-        { //::SireIO::DCD::hasForces
-        
-            typedef bool ( ::SireIO::DCD::*hasForces_function_type)(  ) const;
-            hasForces_function_type hasForces_function_value( &::SireIO::DCD::hasForces );
-            
-            DCD_exposer.def( 
-                "hasForces"
-                , hasForces_function_value
-                , bp::release_gil_policy()
-                , "Return whether or not this DCD file also provides forces" );
-        
-        }
-        { //::SireIO::DCD::hasVelocities
-        
-            typedef bool ( ::SireIO::DCD::*hasVelocities_function_type)(  ) const;
-            hasVelocities_function_type hasVelocities_function_value( &::SireIO::DCD::hasVelocities );
-            
-            DCD_exposer.def( 
-                "hasVelocities"
-                , hasVelocities_function_value
-                , bp::release_gil_policy()
-                , "Return whether or not this DCD file also provides velocities" );
+                , "Return the ith frame" );
         
         }
         { //::SireIO::DCD::isTextFile
@@ -270,6 +214,18 @@ void register_DCD_class(){
                 , nAtoms_function_value
                 , bp::release_gil_policy()
                 , "Return the number of atoms whose data are contained in this DCD file" );
+        
+        }
+        { //::SireIO::DCD::nFrames
+        
+            typedef int ( ::SireIO::DCD::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireIO::DCD::nFrames );
+            
+            DCD_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "Return the number of frames in this DCD file" );
         
         }
         DCD_exposer.def( bp::self != bp::self );
@@ -300,9 +256,21 @@ void register_DCD_class(){
                 , "Parse from the passed file" );
         
         }
+        { //::SireIO::DCD::space
+        
+            typedef ::SireVol::Space const & ( ::SireIO::DCD::*space_function_type)(  ) const;
+            space_function_type space_function_value( &::SireIO::DCD::space );
+            
+            DCD_exposer.def( 
+                "space"
+                , space_function_value
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
+                , "Return the parsed space" );
+        
+        }
         { //::SireIO::DCD::time
         
-            typedef double ( ::SireIO::DCD::*time_function_type)(  ) const;
+            typedef ::SireUnits::Dimension::Time ( ::SireIO::DCD::*time_function_type)(  ) const;
             time_function_type time_function_value( &::SireIO::DCD::time );
             
             DCD_exposer.def( 
@@ -346,18 +314,6 @@ void register_DCD_class(){
                 , typeName_function_value
                 , bp::release_gil_policy()
                 , "" );
-        
-        }
-        { //::SireIO::DCD::velocities
-        
-            typedef ::QVector< SireMaths::Vector > ( ::SireIO::DCD::*velocities_function_type)(  ) const;
-            velocities_function_type velocities_function_value( &::SireIO::DCD::velocities );
-            
-            DCD_exposer.def( 
-                "velocities"
-                , velocities_function_value
-                , bp::release_gil_policy()
-                , "Return the parsed velocity" );
         
         }
         { //::SireIO::DCD::warnings

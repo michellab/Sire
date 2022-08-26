@@ -59,6 +59,11 @@ namespace SireSystem
 class System;
 }
 
+namespace SireMol
+{
+class Frame;
+}
+
 namespace SireIO
 {
 
@@ -243,6 +248,10 @@ public:
     virtual bool isLead() const;
     virtual bool canFollow() const;
 
+    virtual int nFrames() const;
+
+    virtual SireMol::Frame getFrame(int i) const;
+
     /** Return the unique name of this format. This should be a short
         string in capital letters that will identify the format within
         the program, e.g. "PRM7", "RST7", "PDB3" etc. */
@@ -298,6 +307,8 @@ protected:
                              const PropertyMap &map) const;
 
     void setLines(const QVector<QString> &lines);
+
+    void setFilename(const QString &filename);
 
     static QVector<QString> readTextFile(QString filename);
 

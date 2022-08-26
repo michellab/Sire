@@ -76,13 +76,26 @@ class SIREMOL_EXPORT Frame
 friend QDataStream& ::operator<<(QDataStream&, const Frame&);
 friend QDataStream& ::operator>>(QDataStream&, Frame&);
 
-friend class TrajectoryData;
-
 public:
     Frame();
 
     Frame(const Molecule &mol, const PropertyMap &map = PropertyMap());
     Frame(const MoleculeData &mol, const PropertyMap &map = PropertyMap());
+
+    Frame(const QVector<Vector> &coordinates,
+          const Space &space,
+          SireUnits::Dimension::Time time);
+
+    Frame(const QVector<Vector> &coordinates,
+          const QVector<Velocity3D> &velocities,
+          const Space &space,
+          SireUnits::Dimension::Time time);
+
+    Frame(const QVector<Vector> &coordinates,
+          const QVector<Velocity3D> &velocites,
+          const QVector<Force3D> &forces,
+          const Space &space,
+          SireUnits::Dimension::Time time);
 
     Frame(const Frame &other);
 
@@ -190,21 +203,6 @@ protected:
     TrajectoryData& operator=(const TrajectoryData &other);
 
     virtual bool _equals(const TrajectoryData &other) const=0;
-
-    Frame createFrame(const QVector<Vector> &coords,
-                      const Space &space,
-                      SireUnits::Dimension::Time time) const;
-
-    Frame createFrame(const QVector<Vector> &coords,
-                      const QVector<Velocity3D> &vels,
-                      const Space &space,
-                      SireUnits::Dimension::Time time) const;
-
-    Frame createFrame(const QVector<Vector> &coords,
-                      const QVector<Velocity3D> &vels,
-                      const QVector<Force3D> &frcs,
-                      const Space &space,
-                      SireUnits::Dimension::Time time) const;
 };
 
 /** This class holds an editable trajectory that has been extracted

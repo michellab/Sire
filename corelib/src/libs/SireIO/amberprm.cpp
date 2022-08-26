@@ -1067,8 +1067,7 @@ void AmberPrm::parse(const PropertyMap &map)
     QString last_flag = QString();
 
     // make sure that there are no comment lines
-    // (temporarily removed this so that I can test the error reporting)
-    //this->removeCommentLines("%COMMENT");
+    this->removeCommentLines("%COMMENT");
 
     const int nlines = lines().count();
     const QString *lines_array = lines().constData();

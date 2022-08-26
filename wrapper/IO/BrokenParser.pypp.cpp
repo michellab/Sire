@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "SireMol/molecule.h"
 
+#include "SireMol/trajectory.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -30,6 +32,8 @@ namespace bp = boost::python;
 #include "SireSystem/system.h"
 
 #include "moleculeparser.h"
+
+#include "supplementary.h"
 
 #include <QDebug>
 
@@ -62,6 +66,8 @@ void register_BrokenParser_class(){
         BrokenParser_exposer.def( bp::init< QString const &, SireBase::PropertyMap const & >(( bp::arg("filename"), bp::arg("map") ), "") );
         BrokenParser_exposer.def( bp::init< QStringList const &, SireBase::PropertyMap const & >(( bp::arg("lines"), bp::arg("map") ), "") );
         BrokenParser_exposer.def( bp::init< SireSystem::System const &, SireBase::PropertyMap const & >(( bp::arg("system"), bp::arg("map") ), "") );
+        BrokenParser_exposer.def( bp::init< QString const &, QString const &, QStringList const & >(( bp::arg("filename"), bp::arg("suffix"), bp::arg("errors") ), "") );
+        BrokenParser_exposer.def( bp::init< QString const &, QStringList const & >(( bp::arg("filename"), bp::arg("errors") ), "") );
         BrokenParser_exposer.def( bp::init< SireIO::BrokenParser const & >(( bp::arg("other") ), "") );
         { //::SireIO::BrokenParser::construct
         

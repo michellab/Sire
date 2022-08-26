@@ -40,6 +40,7 @@
 #include "SireMol/atomvelocities.h"
 #include "SireMol/atomforces.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/trajectory.h"
 #include "SireMol/core.h"
 
 #include "SireVol/periodicbox.h"
@@ -92,10 +93,7 @@ QDataStream &operator<<(QDataStream &ds, const DCD &dcd)
 
     SharedDataStream sds(ds);
 
-    sds << dcd.ttle
-        << dcd.current_time
-        << dcd.coords << dcd.vels << dcd.frcs
-        << dcd.box_dims << dcd.box_angs
+    sds << dcd.coords
         << dcd.parse_warnings
         << static_cast<const MoleculeParser&>(dcd);
 
@@ -110,12 +108,22 @@ QDataStream &operator>>(QDataStream &ds, DCD &dcd)
     {
         SharedDataStream sds(ds);
 
-        sds >> dcd.ttle
-            >> dcd.current_time
-            >> dcd.coords >> dcd.vels >> dcd.frcs
-            >> dcd.box_dims >> dcd.box_angs
+        sds >> dcd.coords
             >> dcd.parse_warnings
             >> static_cast<MoleculeParser&>(dcd);
+
+        try
+        {
+            dcd.dcd = DCDFile();
+            FortranFile file(dcd.filename());
+            dcd.dcd.readHeader(file);
+        }
+        catch(SireError::exception &e)
+        {
+            qDebug() << "WARNING: Failed to reload DCD file" << dcd.filename();
+            qDebug() << e.what() << ":" << e.error();
+            dcd.dcd = DCDFile();
+        }
     }
     else
         throw version_error(v, "1", r_dcd, CODELOC);
@@ -126,7 +134,7 @@ QDataStream &operator>>(QDataStream &ds, DCD &dcd)
 static Vector cubic_angs(90,90,90);
 
 /** Constructor */
-DCD::DCD() : ConcreteProperty<DCD,MoleculeParser>(), current_time(0)
+DCD::DCD() : ConcreteProperty<DCD,MoleculeParser>()
 {}
 
 /** Return the format name that is used to identify this file format within Sire */
@@ -209,6 +217,7 @@ void SireIO::detail::DCDFile::readHeader(FortranFile &file)
 
     timestep = 0;
 
+    // read the timestep between frames (it is assumed to be in picoseconds)
     if (CHARMM_FORMAT)
     {
         timestep = line.readFloat32At(40);
@@ -217,9 +226,6 @@ void SireIO::detail::DCDFile::readHeader(FortranFile &file)
     {
         timestep = line.readFloat64At(40);
     }
-
-    // convert the timestep into picoseconds (currently femtoseconds?)
-    timestep *= 0.001;
 
     line = file[1];
 
@@ -248,6 +254,9 @@ void SireIO::detail::DCDFile::readHeader(FortranFile &file)
     }
 
     first_frame_line = linenum;
+
+    // now read in the space
+    spc = this->readSpace(file, 0);
 
     if (nfixed != 0)
     {
@@ -317,7 +326,35 @@ double SireIO::detail::DCDFile::getTimeAtFrame(int frame) const
     return (istart*timestep) + (frame*timestep);
 }
 
-QVector<double> SireIO::detail::DCDFile::readUnitCell(FortranFile &file, int frame) const
+double SireIO::detail::DCDFile::getCurrentTime() const
+{
+    return getTimeAtFrame(0);
+}
+
+void SireIO::detail::DCDFile::setCurrentTime(double time)
+{
+    if (timestep != 0)
+    {
+        istart = int(time / timestep);
+    }
+    else
+    {
+        timestep = time;
+        istart = 1;
+    }
+}
+
+void SireIO::detail::DCDFile::setSpace(const Space &s)
+{
+    spc = s;
+}
+
+const Space& SireIO::detail::DCDFile::getSpace() const
+{
+    return *spc;
+}
+
+SpacePtr SireIO::detail::DCDFile::readSpace(FortranFile &file, int frame) const
 {
     if (frame < 0 or frame >= nframes)
     {
@@ -340,10 +377,13 @@ QVector<double> SireIO::detail::DCDFile::readUnitCell(FortranFile &file, int fra
 
         auto line = file[linenum];
 
-        return line.readFloat64(6);
+        auto boxinfo = line.readFloat64(6);
+
+        // construct from the above boxinfo
+        return SpacePtr();
     }
 
-    return QVector<double>();
+    return SpacePtr();
 }
 
 QVector<Vector> SireIO::detail::DCDFile::readCoordinates(FortranFile &file, int frame) const
@@ -402,18 +442,36 @@ QVector<Vector> SireIO::detail::DCDFile::readCoordinates(FortranFile &file, int 
     }
 }
 
-QPair< QVector<double>, QVector<Vector> >
-SireIO::detail::DCDFile::readFrame(FortranFile &file, int frame) const
+Frame SireIO::detail::DCDFile::readFrame(FortranFile &file, int frame) const
 {
-    return QPair< QVector<double>, QVector<Vector> >(
-        this->readUnitCell(file, frame),
-        this->readCoordinates(file, frame)
-    );
+    frame = SireID::Index(frame).map(nframes);
+
+    auto space = this->readSpace(file, frame);
+    auto coords = this->readCoordinates(file, frame);
+
+    return Frame(coords, space, getTimeAtFrame(frame)*picosecond);
 }
 
 QString SireIO::detail::DCDFile::getTitle() const
 {
     return title.join("");
+}
+
+void SireIO::detail::DCDFile::setTitle(QString t)
+{
+    // need to split into blocks of 32 characters
+    title.clear();
+
+    while(t.length() > 32)
+    {
+        title.append(t.mid(0, 32));
+        t.remove(0, 32);
+    }
+
+    if (t.length() > 0)
+    {
+        title.append(t);
+    }
 }
 
 double SireIO::detail::DCDFile::getTimeStep() const
@@ -447,14 +505,10 @@ void DCD::parse(const QString &filename, const PropertyMap &map)
 {
     FortranFile file(filename);
 
-    SireIO::detail::DCDFile dcd;
+    dcd = DCDFile();
     dcd.readHeader(file);
 
-    ttle = dcd.getTitle();
-    current_time = dcd.getFrameStart() * dcd.getTimeStep();
-
     coords = dcd.readCoordinates(file, 0);
-    auto unitcell = dcd.readUnitCell(file, 0);
 
     //need to convert unit cell...
 
@@ -464,15 +518,16 @@ void DCD::parse(const QString &filename, const PropertyMap &map)
 }
 
 /** Construct by parsing the passed file */
-DCD::DCD(const QString &filename, const PropertyMap &map)
-    : ConcreteProperty<DCD,MoleculeParser>(map), current_time(0)
+DCD::DCD(const QString &fname, const PropertyMap &map)
+    : ConcreteProperty<DCD,MoleculeParser>(map)
 {
-    this->parse(filename, map);
+    MoleculeParser::setFilename(fname);
+    this->parse(MoleculeParser::filename(), map);
 }
 
 /** Construct by parsing the data in the passed text lines */
 DCD::DCD(const QStringList &lines, const PropertyMap &map)
-    : ConcreteProperty<DCD,MoleculeParser>(lines, map), current_time(0)
+    : ConcreteProperty<DCD,MoleculeParser>(lines, map)
 {
     throw SireIO::parse_error( QObject::tr(
             "You cannot create a binary DCD file from a set of text lines!"),
@@ -501,75 +556,6 @@ static QVector<Vector> getCoordinates(const Molecule &mol, const PropertyName &c
     return coords;
 }
 
-static QVector<Vector> getVelocities(const Molecule &mol, const PropertyName &vels_property)
-{
-    if (not mol.hasProperty(vels_property))
-    {
-        return QVector<Vector>();
-    }
-
-    try
-    {
-        const auto molvels = mol.property(vels_property).asA<AtomVelocities>();
-        const auto molinfo = mol.info();
-
-        QVector<Vector> vels( mol.nAtoms() );
-
-        const double units = 1.0 / (angstrom / (20.455*picosecond)).value();
-
-        for (int i=0; i<mol.nAtoms(); ++i)
-        {
-            const auto atomvels = molvels.at( molinfo.cgAtomIdx( AtomIdx(i) ) );
-
-            //need to convert the velocities into units of Angstroms / 20.455 picoseconds
-            vels[i] = Vector( atomvels.x().value() * units,
-                              atomvels.y().value() * units,
-                              atomvels.z().value() * units );
-        }
-
-        return vels;
-    }
-    catch(...)
-    {
-        return QVector<Vector>();
-    }
-}
-
-static QVector<Vector> getForces(const Molecule &mol, const PropertyName &forces_property)
-{
-    if (not mol.hasProperty(forces_property))
-    {
-        return QVector<Vector>();
-    }
-
-    try
-    {
-        const auto molforces = mol.property(forces_property).asA<AtomForces>();
-        const auto molinfo = mol.info();
-
-        QVector<Vector> forces( mol.nAtoms() );
-
-        const double units = 1.0 / ( atomic_mass_constant * angstrom /
-                                     (picosecond*picosecond) ).value();
-
-        for (int i=0; i<mol.nAtoms(); ++i)
-        {
-            const auto atomforces = molforces.at( molinfo.cgAtomIdx( AtomIdx(i) ) );
-
-            //need to convert the velocities into units of amu Angstroms / picosecond^2
-            forces[i] = Vector( atomforces.x().value() * units,
-                                atomforces.y().value() * units,
-                                atomforces.z().value() * units );
-        }
-
-        return forces;
-    }
-    catch(...)
-    {
-        return QVector<Vector>();
-    }
-}
-
 static bool hasData(const QVector< QVector<Vector> > &array)
 {
     for (int i=0; i<array.count(); ++i)
@@ -583,7 +569,7 @@ static bool hasData(const QVector< QVector<Vector> > &array)
 
 /** Construct by extracting the necessary data from the passed System */
 DCD::DCD(const System &system, const PropertyMap &map)
-    : ConcreteProperty<DCD,MoleculeParser>(), current_time(0)
+    : ConcreteProperty<DCD,MoleculeParser>()
 {
     //get the MolNums of each molecule in the System - this returns the
     //numbers in MolIdx order
@@ -599,12 +585,8 @@ DCD::DCD(const System &system, const PropertyMap &map)
     //get the coordinates (and velocities if available) for each molecule in the system
     {
         QVector< QVector<Vector> > all_coords(molnums.count());
-        QVector< QVector<Vector> > all_vels(molnums.count());
-        QVector< QVector<Vector> > all_forces(molnums.count());
 
         const auto coords_property = map["coordinates"];
-        const auto vels_property = map["velocity"];
-        const auto forces_property = map["force"];
 
         if (usesParallel())
         {
@@ -615,11 +597,7 @@ DCD::DCD(const System &system, const PropertyMap &map)
                 {
                     const auto mol = system[molnums[i]].molecule();
 
-                    tbb::parallel_invoke(
-                       [&](){ all_coords[i] = ::getCoordinates(mol, coords_property); },
-                       [&](){ all_vels[i] = ::getVelocities(mol, vels_property); },
-                       [&](){ all_forces[i] = ::getForces(mol, forces_property); }
-                                        );
+                    all_coords[i] = ::getCoordinates(mol, coords_property);
                 }
             });
         }
@@ -628,66 +606,30 @@ DCD::DCD(const System &system, const PropertyMap &map)
             for (int i=0; i<molnums.count(); ++i)
             {
                 const auto mol = system[molnums[i]].molecule();
-
                 all_coords[i] = ::getCoordinates(mol, coords_property);
-                all_vels[i] = ::getVelocities(mol, vels_property);
-                all_forces[i] = ::getForces(mol, forces_property);
             }
         }
 
         coords.clear();
-        vels.clear();
-        frcs.clear();
 
         if (::hasData(all_coords))
         {
             coords = collapse(all_coords);
         }
-
-        if (::hasData(all_vels))
-        {
-            vels = collapse(all_vels);
-        }
-
-        if (::hasData(all_forces))
-        {
-            frcs = collapse(all_forces);
-        }
     }
 
     //extract the space of the system
-    box_dims = Vector(0);
-    box_angs = Vector(0);
+    SpacePtr space;
 
-    try
+    if (system.containsProperty(map["space"]))
     {
-        if (system.property(map["space"]).isA<PeriodicBox>())
-        {
-            box_dims = system.property(map["space"]).asA<PeriodicBox>().dimensions();
-            box_angs = Vector(90,90,90);
-        }
-        else if (system.property(map["space"]).isA<TriclinicBox>())
-        {
-            Vector v0 = system.property(map["space"]).asA<TriclinicBox>().vector0();
-            Vector v1 = system.property(map["space"]).asA<TriclinicBox>().vector1();
-            Vector v2 = system.property(map["space"]).asA<TriclinicBox>().vector2();
-
-            // Store the box magnitudes.
-            box_dims = Vector(v0.magnitude(), v1.magnitude(), v2.magnitude());
-
-            double alpha = system.property(map["space"]).asA<TriclinicBox>().alpha();
-            double beta  = system.property(map["space"]).asA<TriclinicBox>().alpha();
-            double gamma = system.property(map["space"]).asA<TriclinicBox>().gamma();
-
-            // Store the angles between the box vectors.
-            box_angs = Vector(alpha, beta, gamma);
-        }
+        space = system.property(map["space"]).asA<Space>();
     }
-    catch(...)
-    {}
 
     //extract the current time for the system
-    try
+    double current_time = 0;
+
+    if (system.containsProperty(map["time"]))
     {
         const Property &prop = system.property( map["time"] );
 
@@ -700,19 +642,17 @@ DCD::DCD(const System &system, const PropertyMap &map)
 
         current_time = time.to(picosecond);
     }
-    catch(...)
-    {}
+
+    dcd.setCurrentTime(current_time);
 
     //extract the title for the system
-    ttle = system.name().value();
+    dcd.setTitle(system.name().value());
 }
 
 /** Copy constructor */
 DCD::DCD(const DCD &other)
     : ConcreteProperty<DCD,MoleculeParser>(other),
-      ttle(other.ttle), current_time(other.current_time),
-      coords(other.coords), vels(other.vels), frcs(other.frcs),
-      box_dims(other.box_dims), box_angs(other.box_angs),
+      coords(other.coords), dcd(other.dcd),
       parse_warnings(other.parse_warnings)
 {}
 
@@ -724,13 +664,8 @@ DCD& DCD::operator=(const DCD &other)
 {
     if (this != &other)
     {
-        ttle = other.ttle;
-        current_time = other.current_time;
         coords = other.coords;
-        vels = other.vels;
-        frcs = other.frcs;
-        box_dims = other.box_dims;
-        box_angs = other.box_angs;
+        dcd = other.dcd;
         parse_warnings = other.parse_warnings;
 
         MoleculeParser::operator=(other);
@@ -767,11 +702,8 @@ QString DCD::toString() const
     }
     else
     {
-        return QObject::tr("DCD( title() = %1, nAtoms() = %2, "
-                "hasCoordinates() = %3, hasVelocities() = %4, "
-                "hasForces() = %5 )")
-                .arg(title()).arg(nAtoms())
-                .arg(hasCoordinates()).arg(hasVelocities()).arg(hasForces());
+        return QObject::tr("DCD( title() = %1, nAtoms() = %2, nFrames() = %3 )")
+                .arg(title()).arg(nAtoms()).arg(nFrames());
     }
 }
 
@@ -784,15 +716,8 @@ DCD DCD::parse(const QString &filename)
 /** Internal function used to add the data from this parser into the passed System */
 void DCD::addToSystem(System &system, const PropertyMap &map) const
 {
-    const bool has_coords = hasCoordinates();
-    const bool has_vels = hasVelocities();
-    const bool has_forces = hasForces();
-
-    if (not (has_coords or has_vels or has_forces))
-    {
-        //nothing to add...
+    if (coords.isEmpty())
         return;
-    }
 
     //first, we are going to work with the group of all molecules, which should
     //be called "all". We have to assume that the molecules are ordered in "all"
@@ -826,12 +751,8 @@ void DCD::addToSystem(System &system, const PropertyMap &map) const
     Molecule *mols_array = mols.data();
 
     const PropertyName coords_property = map["coordinates"];
-    const PropertyName vels_property = map["velocity"];
-    const PropertyName forces_property = map["force"];
 
     const Vector *coords_array = this->coordinates().constData();
-    const Vector *vels_array = this->velocities().constData();
-    const Vector *forces_array = this->forces().constData();
 
     auto add_moldata = [&](int i)
     {
@@ -841,119 +762,54 @@ void DCD::addToSystem(System &system, const PropertyMap &map) const
 
         auto moleditor = mol.edit();
 
-        if (has_coords)
+        auto coords = QVector< QVector<Vector> >(molinfo.nCutGroups());
+
+        for (int j=0; j<molinfo.nCutGroups(); ++j)
         {
-            auto coords = QVector< QVector<Vector> >(molinfo.nCutGroups());
-
-            for (int j=0; j<molinfo.nCutGroups(); ++j)
-            {
-                coords[j] = QVector<Vector>(molinfo.nAtoms(CGIdx(j)));
-            }
-
-            for (int j=0; j<mol.nAtoms(); ++j)
-            {
-                auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(j));
-
-                const int atom_idx = atom_start_idx + j;
-
-                coords[cgatomidx.cutGroup()][cgatomidx.atom()] = coords_array[atom_idx];
-            }
-
-            moleditor.setProperty( coords_property,AtomCoords(CoordGroupArray(coords)) );
+            coords[j] = QVector<Vector>(molinfo.nAtoms(CGIdx(j)));
         }
 
-        if (has_vels)
+        for (int j=0; j<mol.nAtoms(); ++j)
         {
-            auto vels = AtomVelocities(molinfo);
+            auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(j));
 
-            for (int j=0; j<mol.nAtoms(); ++j)
-            {
-                auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(j));
+            const int atom_idx = atom_start_idx + j;
 
-                const int atom_idx = atom_start_idx + j;
-
-                //velocity is Angstroms per 1/20.455 ps
-                const auto vel_unit = (1.0 / 20.455) * angstrom / picosecond;
-
-                const Vector &vel = vels_array[atom_idx];
-                vels.set(cgatomidx, Velocity3D(vel.x() * vel_unit,
-                                               vel.y() * vel_unit,
-                                               vel.z() * vel_unit));
-            }
-
-            moleditor.setProperty( vels_property, vels );
+            coords[cgatomidx.cutGroup()][cgatomidx.atom()] = coords_array[atom_idx];
         }
 
-        if (has_forces)
-        {
-            auto forces = AtomForces(molinfo);
-
-            for (int j=0; j<mol.nAtoms(); ++j)
-            {
-                auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(j));
-
-                const int atom_idx = atom_start_idx + j;
-
-                //force is amu Angstroms per ps^2
-                const auto force_unit = atomic_mass_constant * angstrom / (picosecond*picosecond);
-
-                const Vector &f = forces_array[atom_idx];
-                forces.set(cgatomidx, Force3D(f.x() * force_unit,
-                                              f.y() * force_unit,
-                                              f.z() * force_unit));
-            }
-
-            moleditor.setProperty( forces_property, forces );
-        }
-
+        moleditor.setProperty(coords_property, AtomCoords(CoordGroupArray(coords)));
         mols_array[i] = moleditor.commit();
     };
 
-    if (usesParallel())
+    if (coords_property.hasSource())
     {
-        tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
-                           [&](tbb::blocked_range<int> r)
+        if (usesParallel())
         {
-            for (int i=r.begin(); i<r.end(); ++i)
+            tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
+                            [&](tbb::blocked_range<int> r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    add_moldata(i);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<nmols; ++i)
             {
                 add_moldata(i);
             }
-        });
-    }
-    else
-    {
-        for (int i=0; i<nmols; ++i)
-        {
-            add_moldata(i);
         }
-    }
 
-    system.update( Molecules(mols) );
+        system.update( Molecules(mols) );
+    }
 
     PropertyName space_property = map["space"];
-    if (space_property.hasValue())
+    if (space_property.hasSource())
     {
-        system.setProperty("space", space_property.value());
-    }
-    else if ((not box_dims.isZero()) and space_property.hasSource())
-    {
-        // PeriodicBox.
-        if (box_angs == cubic_angs)
-        {
-            system.setProperty( space_property.source(),
-                                SireVol::PeriodicBox(box_dims) );
-        }
-        // TriclinicBox.
-        else
-        {
-            system.setProperty( space_property.source(),
-                                SireVol::TriclinicBox(box_dims.x(),
-                                                      box_dims.y(),
-                                                      box_dims.z(),
-                                                      box_angs.x()*degrees,
-                                                      box_angs.y()*degrees,
-                                                      box_angs.z()*degrees) );
-        }
+        system.setProperty(space_property.source(), dcd.getSpace());
     }
 
     //update the System fileformat property to record that it includes
@@ -974,66 +830,54 @@ void DCD::addToSystem(System &system, const PropertyMap &map) const
     {
         system.setProperty(fileformat_property.source(), StringProperty(fileformat));
     }
-    else
-    {
-        system.setProperty("fileformat", StringProperty(fileformat));
-    }
 
     PropertyName time_property = map["time"];
 
     if (time_property.hasSource())
     {
-        system.setProperty(time_property.source(), GeneralUnitProperty(current_time*picosecond));
-    }
-    else
-    {
-        system.setProperty("time", GeneralUnitProperty(current_time*picosecond));
+        system.setProperty(time_property.source(), GeneralUnitProperty(dcd.getCurrentTime()*picosecond));
     }
 }
 
 /** Return the title of the file */
 QString DCD::title() const
 {
-    return ttle;
+    return dcd.getTitle();
 }
 
 /** Return the current time of the simulation from which this restart
     file was written. Returns 0 if there is no time set. If there are
     multiple frames, then the time of the first frame is returned */
-double DCD::time() const
+SireUnits::Dimension::Time DCD::time() const
 {
-    return current_time;
+    return dcd.getCurrentTime() * picosecond;
 }
 
 /** Return the number of atoms whose data are contained in this DCD file */
 int DCD::nAtoms() const
 {
-    if (not coords.isEmpty())
-        return coords.count();
-    else if (not vels.isEmpty())
-        return vels.count();
-    else if (not frcs.isEmpty())
-        return frcs.count();
-    else
-        return 0;
+    return coords.count();
 }
 
-/** Return whether or not this DCD file provides coordinates */
-bool DCD::hasCoordinates() const
+/** Return the number of frames in this DCD file */
+int DCD::nFrames() const
 {
-    return not coords.isEmpty();
+    return dcd.nFrames();
 }
 
-/** Return whether or not this DCD file also provides velocities */
-bool DCD::hasVelocities() const
+/** Return the ith frame */
+Frame DCD::getFrame(int i) const
 {
-    return not vels.isEmpty();
-}
+    //will eventually look to see if we should cache this?
+    QString f = this->filename();
 
-/** Return whether or not this DCD file also provides forces */
-bool DCD::hasForces() const
-{
-    return not frcs.isEmpty();
+    if (f.isEmpty())
+        throw SireIO::parse_error(QObject::tr(
+            "Cannot get the frame as the DCD filename has not been specified."),
+                CODELOC);
+
+    FortranFile file(this->filename());
+    return dcd.readFrame(file, i);
 }
 
 /** Return the parsed coordinate data. */
@@ -1042,28 +886,10 @@ QVector<SireMaths::Vector> DCD::coordinates() const
     return coords;
 }
 
-/** Return the parsed velocity */
-QVector<SireMaths::Vector> DCD::velocities() const
+/** Return the parsed space */
+const Space& DCD::space() const
 {
-    return vels;
-}
-
-/** Return the parsed force data. */
-QVector<SireMaths::Vector> DCD::forces() const
-{
-    return frcs;
-}
-
-/** Return the parsed box dimensions, or Vector(0) if there is no space information */
-SireMaths::Vector DCD::boxDimensions() const
-{
-    return box_dims;
-}
-
-/** Return the parsed box angles, or Vector(0) if there is no space information. */
-SireMaths::Vector DCD::boxAngles() const
-{
-    return box_angs;
+    return dcd.getSpace();
 }
 
 /** Return any warnings that were triggered during parsing */

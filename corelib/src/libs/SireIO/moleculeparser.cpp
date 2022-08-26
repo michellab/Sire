@@ -40,6 +40,7 @@
 #include "SireMM/mmdetail.h"
 
 #include "SireMol/molecule.h"
+#include "SireMol/trajectory.h"
 
 #include "SireSystem/system.h"
 
@@ -686,6 +687,12 @@ void MoleculeParser::setLines( const QVector<QString> &lines )
     lnes = lines;
 }
 
+/** Functions used by derived classes to set the filename */
+void MoleculeParser::setFilename(const QString &filename)
+{
+    fname = QFileInfo(filename).absoluteFilePath();
+}
+
 const char* MoleculeParser::typeName()
 {
     return "SireIO::MoleculeParser";
@@ -733,6 +740,30 @@ bool MoleculeParser::isBroken() const
 QString MoleculeParser::errorReport() const
 {
     return QString();
+}
+
+/** Return the number of trajectory frames contained in this parser.
+ *  Trajectory frames contain coordinates and/or velocities and/or
+ *  forces data. It is possible for a parser to have zero frames,
+ *  e.g. if it only contains topology information.
+*/
+int MoleculeParser::nFrames() const
+{
+    return 0;
+}
+
+/** Return the ith trajectory frame from this parser. Note that
+ *  some parsers may have to re-read the file, so this may fail
+ *  if the filename changes since the last time this parser
+ *  was used
+ */
+SireMol::Frame MoleculeParser::getFrame(int i) const
+{
+    // this will raise an exception as we will only
+    // be calling this function if the parser has zero frames
+    i = SireID::Index(i).map(0);
+
+    return SireMol::Frame();
 }
 
 /** Enable code to parse files in parallel */
@@ -1886,6 +1917,7 @@ void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers,
     {
         //everything is broken!
         parsers = broken;
+        supplementary.clear();
         return;
     }
 
@@ -1911,6 +1943,7 @@ void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers,
             if (broken.count() > 0)
             {
                 parsers = broken;
+                supplementary.clear();
                 return;
             }
         }

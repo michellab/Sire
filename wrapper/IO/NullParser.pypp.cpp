@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "SireMol/molecule.h"
 
+#include "SireMol/trajectory.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -30,6 +32,8 @@ namespace bp = boost::python;
 #include "SireSystem/system.h"
 
 #include "moleculeparser.h"
+
+#include "supplementary.h"
 
 #include <QDebug>
 

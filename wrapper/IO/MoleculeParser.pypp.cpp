@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "SireMol/molecule.h"
 
+#include "SireMol/trajectory.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -30,6 +32,8 @@ namespace bp = boost::python;
 #include "SireSystem/system.h"
 
 #include "moleculeparser.h"
+
+#include "supplementary.h"
 
 #include <QDebug>
 
@@ -192,6 +196,19 @@ void register_MoleculeParser_class(){
                 , "Return the suffix (or suffixes) given to files that support this format.\nThe first suffix is the preferred on to use" );
         
         }
+        { //::SireIO::MoleculeParser::getFrame
+        
+            typedef ::SireMol::Frame ( ::SireIO::MoleculeParser::*getFrame_function_type)( int ) const;
+            getFrame_function_type getFrame_function_value( &::SireIO::MoleculeParser::getFrame );
+            
+            MoleculeParser_exposer.def( 
+                "getFrame"
+                , getFrame_function_value
+                , ( bp::arg("i") )
+                , bp::release_gil_policy()
+                , "Return the ith trajectory frame from this parser. Note that\n  some parsers may have to re-read the file, so this may fail\n  if the filename changes since the last time this parser\n  was used\n" );
+        
+        }
         { //::SireIO::MoleculeParser::isBinaryFile
         
             typedef bool ( ::SireIO::MoleculeParser::*isBinaryFile_function_type)(  ) const;
@@ -340,6 +357,18 @@ void register_MoleculeParser_class(){
                 , ( bp::arg("filenames") )
                 , bp::release_gil_policy()
                 , "Synonym for MoleculeParser::read" );
+        
+        }
+        { //::SireIO::MoleculeParser::nFrames
+        
+            typedef int ( ::SireIO::MoleculeParser::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireIO::MoleculeParser::nFrames );
+            
+            MoleculeParser_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "Return the number of trajectory frames contained in this parser.\n  Trajectory frames contain coordinates andor velocities andor\n  forces data. It is possible for a parser to have zero frames,\n  e.g. if it only contains topology information.\n" );
         
         }
         { //::SireIO::MoleculeParser::null

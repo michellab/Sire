@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "SireBase/generalunitproperty.h"
 
+#include "SireBase/slice.h"
+
 #include "SireError/errors.h"
 
 #include "SireID/index.h"

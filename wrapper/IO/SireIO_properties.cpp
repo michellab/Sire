@@ -22,10 +22,12 @@
 #include "SireIO/errors.h"
 #include "SireMM/mmdetail.h"
 #include "SireMol/molecule.h"
+#include "SireMol/trajectory.h"
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 #include "SireSystem/system.h"
 #include "moleculeparser.h"
+#include "supplementary.h"
 #include <QDebug>
 #include <QElapsedTimer>
 #include <QFile>

@@ -68,17 +68,23 @@ public:
 
     void readHeader(FortranFile &file);
 
-    QVector<double> readUnitCell(FortranFile &file, int frame) const;
+    SireVol::SpacePtr readSpace(FortranFile &file, int frame) const;
     QVector<SireMaths::Vector> readCoordinates(FortranFile &file, int frame) const;
 
-    QPair< QVector<double>,
-           QVector<SireMaths::Vector> > readFrame(FortranFile &file, int frame) const;
+    SireMol::Frame readFrame(FortranFile &file, int frame) const;
 
+    void setTitle(QString title);
     QString getTitle() const;
 
     double getTimeStep() const;
     qint64 getFrameStart() const;
     qint64 getFrameDelta() const;
+
+    double getCurrentTime() const;
+    void setCurrentTime(double time);
+
+    void setSpace(const SireVol::Space &space);
+    const SireVol::Space& getSpace() const;
 
     qint64 nFrames() const;
     qint64 nAtoms() const;
@@ -92,6 +98,8 @@ private:
     QVector<SireMaths::Vector> first_frame;
 
     double timestep;
+
+    SireVol::SpacePtr spc;
 
     qint64 istart;
     qint64 nsavc;
@@ -165,19 +173,16 @@ public:
 
     int nAtoms() const;
 
-    bool hasCoordinates() const;
-    bool hasVelocities() const;
-    bool hasForces() const;
+    int nFrames() const;
+    SireMol::Frame getFrame(int i) const;
 
     QString title() const;
-    double time() const;
 
     QVector<SireMaths::Vector> coordinates() const;
-    QVector<SireMaths::Vector> velocities() const;
-    QVector<SireMaths::Vector> forces() const;
 
-    SireMaths::Vector boxDimensions() const;
-    SireMaths::Vector boxAngles() const;
+    const SireVol::Space& space() const;
+
+    SireUnits::Dimension::Time time() const;
 
     QStringList warnings() const;
 
@@ -189,26 +194,11 @@ protected:
 private:
     void parse(const QString &filename, const PropertyMap &map);
 
-    /** The title of the file */
-    QString ttle;
-
-    /** The current time of the simulation in picoseconds */
-    double current_time;
-
     /** The coordinate data */
     QVector<SireMaths::Vector> coords;
 
-    /** The velocity data */
-    QVector<SireMaths::Vector> vels;
-
-    /** The forces data */
-    QVector<SireMaths::Vector> frcs;
-
-    /** The box dimensions */
-    SireMaths::Vector box_dims;
-
-    /** The box angles */
-    SireMaths::Vector box_angs;
+    /** Handle to read in the DCD data */
+    detail::DCDFile dcd;
 
     /** Any warnings that were raised when reading the file */
     QStringList parse_warnings;
