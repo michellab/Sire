@@ -1706,6 +1706,15 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
         system = topology.read().startSystem(map);
     }
 
+    if (topology.read().hasWarnings())
+    {
+        QTextStream cout(stdout, QIODevice::WriteOnly);
+
+        cout << QObject::tr("\nWARNINGS encountered when parsing the topology:\n");
+        cout << topology.read().warnings().join("\n");
+        cout << "====\n\n";
+    }
+
     if (parsers.value("frame").count() > 0)
     {
         auto frames = parsers["frame"];
@@ -1714,6 +1723,15 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
         {
             // we need to add frame information from the first file
             frames[0].read().addToSystem(system, map);
+
+            if (frames[0].read().hasWarnings())
+            {
+                QTextStream cout(stdout, QIODevice::WriteOnly);
+
+                cout << QObject::tr("\nWARNINGS encountered when adding addition system data:\n");
+                cout << frames[0].read().warnings().join("\n");
+                cout << "====\n\n";
+            }
         }
 
         // if there is more than one frame, then we need to store the
@@ -1732,6 +1750,15 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
             for (const auto &frame : frames)
             {
                 trajectories.append(SireMol::TrajectoryDataPtr(new FileTrajectory(frame)));
+
+                if (frame.read().hasWarnings())
+                {
+                    QTextStream cout(stdout, QIODevice::WriteOnly);
+
+                    cout << QObject::tr("\nWARNINGS encountered when adding a trajectory frame:\n");
+                    cout << frame.read().warnings().join("\n");
+                    cout << "====\n\n";
+                }
             }
 
             system.setProperty("trajectory", SireMol::Trajectory(trajectories));
