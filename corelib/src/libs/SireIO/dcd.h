@@ -173,6 +173,8 @@ public:
 
     int nAtoms() const;
 
+    bool isFrame() const;
+
     int nFrames() const;
     SireMol::Frame getFrame(int i) const;
 

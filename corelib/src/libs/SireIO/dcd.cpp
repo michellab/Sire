@@ -859,6 +859,11 @@ int DCD::nAtoms() const
     return coords.count();
 }
 
+bool DCD::isFrame() const
+{
+    return true;
+}
+
 /** Return the number of frames in this DCD file */
 int DCD::nFrames() const
 {

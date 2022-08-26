@@ -192,6 +192,18 @@ void register_DCD_class(){
                 , "Return the ith frame" );
         
         }
+        { //::SireIO::DCD::isFrame
+        
+            typedef bool ( ::SireIO::DCD::*isFrame_function_type)(  ) const;
+            isFrame_function_type isFrame_function_value( &::SireIO::DCD::isFrame );
+            
+            DCD_exposer.def( 
+                "isFrame"
+                , isFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireIO::DCD::isTextFile
         
             typedef bool ( ::SireIO::DCD::*isTextFile_function_type)(  ) const;

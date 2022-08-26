@@ -45,6 +45,7 @@
 #include "SireMol/errors.h"
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/trajectory.h"
 #include "SireMol/core.h"
 
 #include "SireUnits/units.h"
@@ -57,6 +58,7 @@ using namespace SireIO;
 using namespace SireMol;
 using namespace SireStream;
 using namespace SireSystem;
+using namespace SireVol;
 using namespace SireUnits;
 
 const RegisterParser<PDB2> register_pdb;
@@ -1146,12 +1148,46 @@ QStringList PDB2::formatSuffix() const
     return suffixes;
 }
 
-/** Return whether or not this is a lead parser. The lead parser is responsible
-    for starting the process of turning the parsed file into the System. There
-    must be one and one-only lead parser in a set of parsers creating a System */
-bool PDB2::isLead() const
+bool PDB2::isTopology() const
 {
     return true;
+}
+
+bool PDB2::isFrame() const
+{
+    return true;
+}
+
+int PDB2::nFrames() const
+{
+    // we will eventually support reading multiple frames from
+    // a single PDB file...
+    return 1;
+}
+
+Frame PDB2::getFrame(int frame) const
+{
+    frame = SireID::Index(frame).map(this->nFrames());
+
+    QVector<Vector> coords;
+    coords.reserve(this->nAtoms());
+
+    for (const auto &molatoms : atoms)
+    {
+        for (const auto &atom : molatoms)
+        {
+            coords.append(atom.getCoord());
+        }
+    }
+
+    if (velocities.isEmpty())
+    {
+        return Frame(coords, Cartesian(), SireUnits::Dimension::Time(0));
+    }
+    else
+    {
+        return Frame(coords, velocities, Cartesian(), SireUnits::Dimension::Time(0));
+    }
 }
 
 /** Return the number of models (molecules). */

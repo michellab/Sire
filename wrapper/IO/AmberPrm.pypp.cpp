@@ -81,6 +81,8 @@ namespace bp = boost::python;
 
 #include "SireMol/selector.hpp"
 
+#include "SireMol/trajectory.h"
+
 #include "SireMove/flexibility.h"
 
 #include "SireMove/internalmove.h"
@@ -156,18 +158,6 @@ void register_AmberPrm_class(){
                 , assertSane_function_value
                 , bp::release_gil_policy()
                 , "Run through all of the data that has been read and perform a series\nof tests that will see if the prm7 data is sane. If any test fails,\nthen an exception will be thrown" );
-        
-        }
-        { //::SireIO::AmberPrm::canFollow
-        
-            typedef bool ( ::SireIO::AmberPrm::*canFollow_function_type)(  ) const;
-            canFollow_function_type canFollow_function_value( &::SireIO::AmberPrm::canFollow );
-            
-            AmberPrm_exposer.def( 
-                "canFollow"
-                , canFollow_function_value
-                , bp::release_gil_policy()
-                , "The AmberPrm cannot follow another lead parsers." );
         
         }
         { //::SireIO::AmberPrm::construct
@@ -332,16 +322,16 @@ void register_AmberPrm_class(){
                 , "Return the integer data for the passed flag. This returns an empty\nlist if there is no data associated with this flag. This raises\nan invalid_cast error if data exists, but it is the wrong type" );
         
         }
-        { //::SireIO::AmberPrm::isLead
+        { //::SireIO::AmberPrm::isTopology
         
-            typedef bool ( ::SireIO::AmberPrm::*isLead_function_type)(  ) const;
-            isLead_function_type isLead_function_value( &::SireIO::AmberPrm::isLead );
+            typedef bool ( ::SireIO::AmberPrm::*isTopology_function_type)(  ) const;
+            isTopology_function_type isTopology_function_value( &::SireIO::AmberPrm::isTopology );
             
             AmberPrm_exposer.def( 
-                "isLead"
-                , isLead_function_value
+                "isTopology"
+                , isTopology_function_value
                 , bp::release_gil_policy()
-                , "The AmberPrm parser is a lead parser - it is capable alone\nof creating the System." );
+                , "" );
         
         }
         { //::SireIO::AmberPrm::linesForFlag

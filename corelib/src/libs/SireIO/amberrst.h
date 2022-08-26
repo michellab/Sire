@@ -50,11 +50,11 @@ class NetCDFFile;
 
 /** This class represents an Amber-format restart/coordinate file (binary),
     currently supporting these files from Amber7 to Amber16.
-    
+
     This is a netcdf file format, which is described here;
-    
+
     http://ambermd.org/netcdf/nctraj.xhtml
- 
+
     @author Christopher Woods
 */
 class SIREIO_EXPORT AmberRst : public SireBase::ConcreteProperty<AmberRst,MoleculeParser>
@@ -71,23 +71,23 @@ public:
              const PropertyMap &map = PropertyMap());
     AmberRst(const SireSystem::System &system,
              const PropertyMap &map = PropertyMap());
-    
+
     AmberRst(const AmberRst &other);
-    
+
     ~AmberRst();
-    
+
     AmberRst& operator=(const AmberRst &other);
-    
+
     bool operator==(const AmberRst &other) const;
     bool operator!=(const AmberRst &other) const;
-    
+
     static const char* typeName();
-    
+
     const char* what() const;
 
     int count() const;
     int size() const;
-    
+
     AmberRst operator[](int i) const;
 
     MoleculeParserPtr construct(const QString &filename,
@@ -95,7 +95,7 @@ public:
 
     MoleculeParserPtr construct(const QStringList &lines,
                                 const PropertyMap &map) const;
-    
+
     MoleculeParserPtr construct(const SireSystem::System &system,
                                 const PropertyMap &map) const;
 
@@ -113,7 +113,7 @@ public:
     double time(int frame) const;
 
     int nAtoms() const;
-    
+
     bool hasCoordinates() const;
     bool hasVelocities() const;
     bool hasForces() const;
@@ -122,8 +122,12 @@ public:
     QVector<SireMaths::Vector> velocities() const;
     QVector<SireMaths::Vector> forces() const;
 
+    bool isFrame() const;
+
     int nFrames() const;
-    
+
+    SireMol::Frame getFrame(int i) const;
+
     QVector<SireMaths::Vector> coordinates(int frame) const;
     QVector<SireMaths::Vector> velocities(int frame) const;
     QVector<SireMaths::Vector> forces(int frame) const;
@@ -135,11 +139,11 @@ public:
     SireMaths::Vector boxAngles(int frame) const;
 
     QStringList warnings() const;
-    
+
     QString creatorApplication() const;
-    
+
     double formatVersion() const;
-    
+
     bool createdFromRestart() const;
     bool createdFromTrajectory() const;
 
@@ -156,34 +160,34 @@ private:
 
     /** The title of the file */
     QString ttle;
-    
+
     /** The current time of the simulation in picoseconds */
     QVector<double> current_time;
-    
+
     /** The coordinate data */
     QVector< QVector<SireMaths::Vector> > coords;
-    
+
     /** The velocity data in amber units (angstrom / 1/20.455 picosecond) */
     QVector< QVector<SireMaths::Vector> > vels;
-    
+
     /** The force data in amber units (amu*angstrom/picosecond^2) */
     QVector< QVector<SireMaths::Vector> > frcs;
-    
+
     /** The box dimensions */
     QVector<SireMaths::Vector> box_dims;
-    
+
     /** The box angles */
     QVector<SireMaths::Vector> box_angs;
-    
+
     /** The version of the file format */
     double convention_version;
-    
+
     /** The name and version of the application that wrote this file */
     QString creator_app;
-    
+
     /** Any warnings that were raised when reading the file */
     QStringList parse_warnings;
-    
+
     /** Whether or not this was read as a restart file */
     bool created_from_restart;
 };

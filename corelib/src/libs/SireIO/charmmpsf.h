@@ -272,8 +272,11 @@ public:
     QString formatDescription() const;
     QStringList formatSuffix() const;
 
-    bool isLead() const;
-    bool canFollow() const;
+    bool isTopology() const;
+    bool isFrame() const;
+
+    int nFrames() const;
+    SireMol::Frame getFrame(int i) const;
 
     int nMolecules() const;
     int nAtoms() const;

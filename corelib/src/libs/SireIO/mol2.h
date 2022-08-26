@@ -488,8 +488,11 @@ public:
     QString formatDescription() const;
     QStringList formatSuffix() const;
 
-    bool isLead() const;
-    bool canFollow() const;
+    bool isTopology() const;
+    bool isFrame() const;
+
+    int nFrames() const;
+    SireMol::Frame getFrame(int i) const;
 
     /** Return the number of molecules in the system. */
     int nMolecules() const;
@@ -544,23 +547,6 @@ private:
     /** Any warnings that were raised when reading the file. */
     QStringList parse_warnings;
 };
-
-#ifndef SIRE_SKIP_INLINE_FUNCTIONS
-
-/** The Mol2 parser is a lead parser - it is capable alone
-    of creating the System */
-SIRE_ALWAYS_INLINE bool Mol2::isLead() const
-{
-    return true;
-}
-
-/** The Mol2 parser can follow another a lead parser. */
-SIRE_ALWAYS_INLINE bool Mol2::canFollow() const
-{
-    return true;
-}
-
-#endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 }
 

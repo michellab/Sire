@@ -126,8 +126,7 @@ public:
 
     QString formatDescription() const;
 
-    bool isLead() const;
-    bool canFollow() const;
+    bool isTopology() const;
 
     static AmberPrm parse(const QString &filename,
                           const PropertyMap &map = PropertyMap());
@@ -234,7 +233,7 @@ private:
 
     /** A copy of the POINTER data to prevent over-lookup */
     QVector<qint64> pointers;
-    
+
     /** The forcefield for the molecules in this file */
     SireMM::MMDetail ffield;
 };

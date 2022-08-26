@@ -37,6 +37,7 @@
 #include "SireMol/atomcoords.h"
 #include "SireMol/atomvelocities.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/trajectory.h"
 #include "SireMol/core.h"
 
 #include "SireVol/periodicbox.h"
@@ -865,6 +866,23 @@ const char* AmberRst7::typeName()
 const char* AmberRst7::what() const
 {
     return AmberRst7::typeName();
+}
+
+bool AmberRst7::isFrame() const
+{
+    return true;
+}
+
+int AmberRst7::nFrames() const
+{
+    return 1;
+}
+
+Frame AmberRst7::getFrame(int i) const
+{
+    i = SireID::Index(i).map(this->nFrames());
+
+    return SireMol::Frame();
 }
 
 QString AmberRst7::toString() const

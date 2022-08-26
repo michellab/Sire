@@ -45,6 +45,8 @@ namespace bp = boost::python;
 
 #include "SireMol/molidx.h"
 
+#include "SireMol/trajectory.h"
+
 #include "SireStream/shareddatastream.h"
 
 #include "SireSystem/system.h"
@@ -316,6 +318,19 @@ void register_AmberRst_class(){
                 , "Return the version of the file format that was parsed" );
         
         }
+        { //::SireIO::AmberRst::getFrame
+        
+            typedef ::SireMol::Frame ( ::SireIO::AmberRst::*getFrame_function_type)( int ) const;
+            getFrame_function_type getFrame_function_value( &::SireIO::AmberRst::getFrame );
+            
+            AmberRst_exposer.def( 
+                "getFrame"
+                , getFrame_function_value
+                , ( bp::arg("i") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireIO::AmberRst::hasCoordinates
         
             typedef bool ( ::SireIO::AmberRst::*hasCoordinates_function_type)(  ) const;
@@ -350,6 +365,18 @@ void register_AmberRst_class(){
                 , hasVelocities_function_value
                 , bp::release_gil_policy()
                 , "Return whether or not this restart file also provides velocities" );
+        
+        }
+        { //::SireIO::AmberRst::isFrame
+        
+            typedef bool ( ::SireIO::AmberRst::*isFrame_function_type)(  ) const;
+            isFrame_function_type isFrame_function_value( &::SireIO::AmberRst::isFrame );
+            
+            AmberRst_exposer.def( 
+                "isFrame"
+                , isFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireIO::AmberRst::isTextFile

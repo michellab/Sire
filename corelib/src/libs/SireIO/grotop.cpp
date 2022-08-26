@@ -42,6 +42,7 @@
 #include "SireMol/atomelements.h"
 #include "SireMol/connectivity.h"
 #include "SireMol/select.h"
+#include "SireMol/trajectory.h"
 #include "SireMol/core.h"
 
 #include "SireMM/internalff.h"
@@ -4484,19 +4485,9 @@ const char* GroTop::what() const
     return GroTop::typeName();
 }
 
-/** Return whether or not this is a lead parser. The lead parser is responsible
-    for starting the process of turning the parsed file into the System. There
-    must be one and one-only lead parser in a set of parsers creating a System */
-bool GroTop::isLead() const
+bool GroTop::isTopology() const
 {
     return true;
-}
-
-/** Return whether or not this parser can follow another lead parser, and add
-    data to an existing molecular system. The GroTop parser cannot follow. */
-bool GroTop::canFollow() const
-{
-    return false;
 }
 
 /** Return the list of names of directories in which to search for

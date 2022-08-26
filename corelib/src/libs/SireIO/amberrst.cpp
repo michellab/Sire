@@ -39,6 +39,7 @@
 #include "SireMol/atomvelocities.h"
 #include "SireMol/atomforces.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/trajectory.h"
 #include "SireMol/core.h"
 
 #include "SireVol/periodicbox.h"
@@ -177,6 +178,18 @@ void AmberRst::assertSane() const
 bool AmberRst::isTextFile() const
 {
     return false;
+}
+
+bool AmberRst::isFrame() const
+{
+    return true;
+}
+
+Frame AmberRst::getFrame(int i) const
+{
+    i = SireID::Index(i).map(this->nFrames());
+
+    return SireMol::Frame();
 }
 
 /** Return a description of the file format */

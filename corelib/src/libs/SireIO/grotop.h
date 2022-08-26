@@ -372,8 +372,7 @@ public:
 
     const char* what() const;
 
-    bool isLead() const;
-    bool canFollow() const;
+    bool isTopology() const;
 
     QStringList includePath(bool absolute_paths=false) const;
     QStringList includedFiles(bool absolute_paths=false) const;

@@ -38,6 +38,7 @@
 #include "SireMol/mgname.h"
 #include "SireMol/molidx.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/trajectory.h"
 #include "SireMol/core.h"
 
 #include "SireUnits/units.h"
@@ -654,16 +655,21 @@ int Gro87::size() const
     return this->nFrames();
 }
 
-/** Gro87 can be a lead parser as well as a follower */
-bool Gro87::isLead() const
+bool Gro87::isTopology() const
 {
     return true;
 }
 
-/** Gro87 can be a lead parser as well as a follower */
-bool Gro87::canFollow() const
+bool Gro87::isFrame() const
 {
     return true;
+}
+
+Frame Gro87::getFrame(int i) const
+{
+    i = SireID::Index(i).map(this->nFrames());
+
+    return SireMol::Frame();
 }
 
 /** Return the Gro87 object that contains only the information for the ith

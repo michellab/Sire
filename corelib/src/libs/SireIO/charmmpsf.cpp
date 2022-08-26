@@ -52,6 +52,7 @@
 #include "SireMol/connectivity.h"
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/trajectory.h"
 #include "SireMol/core.h"
 
 #include "SireStream/datastream.h"
@@ -1101,6 +1102,28 @@ const char* CharmmPSF::what() const
     return CharmmPSF::typeName();
 }
 
+bool CharmmPSF::isTopology() const
+{
+    return true;
+}
+
+bool CharmmPSF::isFrame() const
+{
+    return true;
+}
+
+int CharmmPSF::nFrames() const
+{
+    return 1;
+}
+
+Frame CharmmPSF::getFrame(int i) const
+{
+    i = SireID::Index(i).map(this->nFrames());
+
+    return SireMol::Frame();
+}
+
 /** Return the parser that has been constructed by reading in the passed
     file using the passed properties */
 MoleculeParserPtr CharmmPSF::construct(const QString &filename,
@@ -1456,21 +1479,6 @@ QStringList CharmmPSF::formatSuffix() const
 {
     static const QStringList suffixes = { "psf" };
     return suffixes;
-}
-
-/** Return whether or not this is a lead parser. The lead parser is responsible
-    for starting the process of turning the parsed file into the System. There
-    must be one and one-only lead parser in a set of parsers creating a System */
-bool CharmmPSF::isLead() const
-{
-    return true;
-}
-
-/** Return whether or not this parser can follow another lead parser, and add
-    data to an existing molecular system. The CharmmPSF parser cannot follow. */
-bool CharmmPSF::canFollow() const
-{
-    return false;
 }
 
 /** Return the number of molecules. */

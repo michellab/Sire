@@ -157,7 +157,6 @@ public:
 
     const QVector<QString>& lines() const;
 
-    virtual bool isBroken() const;
     virtual QString errorReport() const;
 
     virtual MoleculeParserPtr construct(const QString &filename,
@@ -245,11 +244,12 @@ public:
     static QStringList save(const SireSystem::System &system,
                             const QStringList &filenames);
 
-    virtual bool isLead() const;
-    virtual bool canFollow() const;
+    virtual bool isTopology() const;
+    virtual bool isFrame() const;
+    virtual bool isBroken() const;
+    virtual bool isSupplementary() const;
 
     virtual int nFrames() const;
-
     virtual SireMol::Frame getFrame(int i) const;
 
     /** Return the unique name of this format. This should be a short
@@ -318,9 +318,9 @@ protected:
 private:
     static MoleculeParserPtr _pvt_parse(const QString &filename, const PropertyMap &map);
 
-    void sortParsers(QList<MoleculeParserPtr>& parsers,
-                     QList<MoleculeParserPtr>& supplementary,
-                     const PropertyMap &map) const;
+    QHash<QString, QList<MoleculeParserPtr> > sortParsers(
+                                        const QList<MoleculeParserPtr> &parsers,
+                                        const PropertyMap &map) const;
 
     /** The name of the file (if one was read) */
     QString fname;

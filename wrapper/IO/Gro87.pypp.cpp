@@ -43,6 +43,8 @@ namespace bp = boost::python;
 
 #include "SireMol/molidx.h"
 
+#include "SireMol/trajectory.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -184,18 +186,6 @@ void register_Gro87_class(){
                 , "Return the box V3 vector for the frame frame" );
         
         }
-        { //::SireIO::Gro87::canFollow
-        
-            typedef bool ( ::SireIO::Gro87::*canFollow_function_type)(  ) const;
-            canFollow_function_type canFollow_function_value( &::SireIO::Gro87::canFollow );
-            
-            Gro87_exposer.def( 
-                "canFollow"
-                , canFollow_function_value
-                , bp::release_gil_policy()
-                , "Gro87 can be a lead parser as well as a follower" );
-        
-        }
         { //::SireIO::Gro87::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::Gro87::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
@@ -308,6 +298,19 @@ void register_Gro87_class(){
                 , "Return the suffixes that these files are normally associated with" );
         
         }
+        { //::SireIO::Gro87::getFrame
+        
+            typedef ::SireMol::Frame ( ::SireIO::Gro87::*getFrame_function_type)( int ) const;
+            getFrame_function_type getFrame_function_value( &::SireIO::Gro87::getFrame );
+            
+            Gro87_exposer.def( 
+                "getFrame"
+                , getFrame_function_value
+                , ( bp::arg("i") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireIO::Gro87::hasCoordinates
         
             typedef bool ( ::SireIO::Gro87::*hasCoordinates_function_type)(  ) const;
@@ -332,16 +335,28 @@ void register_Gro87_class(){
                 , "Return whether or not this file contained velocity data" );
         
         }
-        { //::SireIO::Gro87::isLead
+        { //::SireIO::Gro87::isFrame
         
-            typedef bool ( ::SireIO::Gro87::*isLead_function_type)(  ) const;
-            isLead_function_type isLead_function_value( &::SireIO::Gro87::isLead );
+            typedef bool ( ::SireIO::Gro87::*isFrame_function_type)(  ) const;
+            isFrame_function_type isFrame_function_value( &::SireIO::Gro87::isFrame );
             
             Gro87_exposer.def( 
-                "isLead"
-                , isLead_function_value
+                "isFrame"
+                , isFrame_function_value
                 , bp::release_gil_policy()
-                , "Gro87 can be a lead parser as well as a follower" );
+                , "" );
+        
+        }
+        { //::SireIO::Gro87::isTopology
+        
+            typedef bool ( ::SireIO::Gro87::*isTopology_function_type)(  ) const;
+            isTopology_function_type isTopology_function_value( &::SireIO::Gro87::isTopology );
+            
+            Gro87_exposer.def( 
+                "isTopology"
+                , isTopology_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireIO::Gro87::nAtoms

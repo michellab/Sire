@@ -87,11 +87,11 @@ public:
 
     QString toString() const;
 
+    bool isSupplementary() const;
+
     QString formatName() const;
     QString formatDescription() const;
     QStringList formatSuffix() const;
-
-    bool canFollow() const;
 
 private:
     /** The name of the parsed file (if from a file). */

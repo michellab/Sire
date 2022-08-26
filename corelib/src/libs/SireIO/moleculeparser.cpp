@@ -735,6 +735,24 @@ bool MoleculeParser::isBroken() const
     return false;
 }
 
+/** Return whether or not this parser is a topology parser */
+bool MoleculeParser::isTopology() const
+{
+    return false;
+}
+
+/** Return whether or not this parser is a frame parser */
+bool MoleculeParser::isFrame() const
+{
+    return false;
+}
+
+/** Return whether or not this parser is a supplementary parser */
+bool MoleculeParser::isSupplementary() const
+{
+    return false;
+}
+
 /** Return the error report, if this parser is broken. If it isn't,
  *  then an empty string is returned. */
 QString MoleculeParser::errorReport() const
@@ -782,21 +800,6 @@ void MoleculeParser::disableParallel()
 void MoleculeParser::setUseParallel(bool on)
 {
     run_parallel = on;
-}
-
-/** Return whether or not this is a lead parser. The lead parser is responsible
-    for starting the process of turning the parsed file into the System. There
-    must be one and one-only lead parser in a set of parsers creating a System */
-bool MoleculeParser::isLead() const
-{
-    return false;
-}
-
-/** Return whether or not this parser can follow a lead parser and add data
-    to an existing molecular system. By default, all parsers can follow. */
-bool MoleculeParser::canFollow() const
-{
-    return true;
 }
 
 /** Extract and return a FFDetail forcefield that is compatible with all of the
@@ -1610,26 +1613,31 @@ QStringList MoleculeParser::save(const System &system,
 /** Return the System that is constructed from the data in this parser */
 System MoleculeParser::toSystem(const PropertyMap &map) const
 {
-    return this->startSystem(map);
+    QList<MoleculeParserPtr> others;
+    return this->toSystem(others, map);
 }
 
 /** Return the System that is constructed from the data in the two
     passed parsers (i.e. representing a topology and a coordinate file) */
 System MoleculeParser::toSystem(const MoleculeParser &other, const PropertyMap &map) const
 {
-    // Construct a list of parsers.
-    QList<MoleculeParserPtr> parsers({*this, MoleculeParserPtr(other)});
+    QList<MoleculeParserPtr> others;
+    others.append(other);
+    return this->toSystem(others, map);
+}
 
-    // A list of supplementary parsers.
-    QList<MoleculeParserPtr> supplementary;
-
-    // Sort the parsers: lead, then follower.
-    sortParsers(parsers, supplementary, map);
+/** Return the System that is constructed from the information in the passed
+    parsers. This will parse the information in order, meaning that data contained
+    in earlier parsers may be overwritten by data from later parsers */
+System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
+                                const PropertyMap &map) const
+{
+    auto parsers = this->sortParsers(others, map);
 
     if (parsers.count() == 0)
         return System();
 
-    if (parsers.first().read().isBroken())
+    if (parsers.value("broken").count() > 0)
     {
         //all of the parsers must be broken
         QTextStream cout(stdout, QIODevice::WriteOnly);
@@ -1638,7 +1646,7 @@ System MoleculeParser::toSystem(const MoleculeParser &other, const PropertyMap &
 
         QStringList filenames;
 
-        for (const auto &parser : parsers)
+        for (const auto &parser : parsers["broken"])
         {
             cout << "\n\n" << parser.read().errorReport();
             filenames.append(parser.read().filename());
@@ -1649,98 +1657,59 @@ System MoleculeParser::toSystem(const MoleculeParser &other, const PropertyMap &
                 .arg(filenames.join(", ")), CODELOC);
     }
 
+    if (parsers.value("topology").count() != 1)
+    {
+        throw SireError::program_bug(QObject::tr(
+            "Should only be here if we already have a topology!"), CODELOC);
+    }
+
+    const auto topology = parsers["topology"][0];
+
     // Instantiate an empty system.
     System system;
 
-    // No supplementary data.
-    if (supplementary.count() == 0)
+    if (parsers.value("supplementary").count() > 0)
     {
-        // Construct the system: leader, then follower.
-        system = parsers[0].read().startSystem(map);
-        parsers[1].read().addToSystem(system, map);
-    }
-    else
-    {
-        system = parsers[0].read()
-            .startSystem(supplementary[0].read().lines(), map);
+        QVector<QString> supplementary_lines;
 
-        parsers[1].read().addToSystem(system, map);
-    }
-
-    return system;
-}
-
-/** Return the System that is constructed from the information in the passed
-    parsers. This will parse the information in order, meaning that data contained
-    in earlier parsers may be overwritten by data from later parsers */
-System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
-                                const PropertyMap &map) const
-{
-    // Make a copy of the list of parsers.
-    auto parsers = others;
-
-    // Add this parser to the list.
-    parsers.append(*this);
-
-    // A list of supplementary parers.
-    QList<MoleculeParserPtr> supplementary;
-
-    // Sort the parsers: leader, then followers.
-    sortParsers(parsers, supplementary, map);
-
-    if (parsers.count() == 0)
-        return System();
-
-    if (parsers.first().read().isBroken())
-    {
-        //all of the parsers must be broken
-        QTextStream cout(stdout, QIODevice::WriteOnly);
-
-        cout << QObject::tr("Unable to read some of the files. Errors are below.\n");
-
-        QStringList filenames;
-
-        for (const auto &parser : parsers)
+        for (const auto &parser : parsers["supplementary"])
         {
-            cout << parser.read().errorReport() << "\n\n";
-            filenames.append(parser.read().filename());
+            supplementary_lines += parser.read().lines();
         }
 
-        throw SireIO::parse_error(QObject::tr(
-            "Unable to load some of the files: %1")
-                .arg(filenames.join(", ")), CODELOC);
-    }
-
-    // Instantiate an empty system.
-    System system;
-
-    // No supplementary data.
-    if (supplementary.count() == 0)
-    {
-        // Construct the initial system from the leader.
-        system = parsers[0].read().startSystem(map);
-
-        // Add to the system, using properties parsed by the followers.
-        for (int i=1; i<parsers.count(); ++i)
-            parsers[i].read().addToSystem(system, map);
+        system = topology.read().startSystem(supplementary_lines, map);
     }
     else
     {
-        // The list of supplementary record lines.
-        QVector<QString> supp_lines;
+        system = topology.read().startSystem(map);
+    }
 
-        // Combine all of the supplementary data into a single
-        // lists of record lines.
-        for (const auto &supp : supplementary)
-            supp_lines += supp.read().lines();
+    if (parsers.value("frame").count() > 0)
+    {
+        auto frames = parsers["frame"];
 
-        // Start a system using the lead parser, passing the
-        // supplementary data records.
-        system = parsers[0].read().startSystem(supp_lines, map);
+        if (not topology.read().isFrame())
+        {
+            // we need to add frame information from the first file
+            frames[0].read().addToSystem(system, map);
+        }
 
-        // Add to the system, using properties parsed by the followers.
-        for (int i=1; i<parsers.count(); ++i)
-            parsers[i].read().addToSystem(system, map);
+        // if there is more than one frame, then we need to store the
+        // trajectory too
+        int nframes = 0;
+
+        for (const auto &frame : frames)
+        {
+            nframes += frame.read().nFrames();
+        }
+
+        if (nframes > 1)
+        {
+            for (const auto &frame : frames)
+            {
+                qDebug() << "ADDING TRAJECTORY" << frame.read().toString();
+            }
+        }
     }
 
     return system;
@@ -1855,31 +1824,60 @@ void MoleculeParser::addToSystem(System &system, const PropertyMap &map) const
                 .arg(this->toString()), CODELOC );
 }
 
-/** Sort the parsers: Lead first, then followers. */
-void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers,
-                                 QList<MoleculeParserPtr> &supplementary,
-                                 const PropertyMap &map) const
+/** Sort the parsers into different categories (identified by name)
+ *
+ *  topology : contains molecular topology (and optionally also frame information)
+ *             so can be used to construct a System, and, if it has frame information,
+ *             also to specify the coordinates, velocities etc
+ *
+ *  frame : contains frame information (coordinates and/or velocities and/or
+ *          forces, with optionally a space and time)
+ *
+ *  supplementary : supplementary files used to give extra information.
+ *                  These don't have standard molecular information
+ *
+ *  broken : contains all of the BrokenParser objects for files that
+ *           could not be parsed
+ */
+QHash< QString,QList<MoleculeParserPtr> >
+MoleculeParser::sortParsers(const QList<MoleculeParserPtr> &parsers,
+                            const PropertyMap &map) const
 {
-    /* Parsers can be leaders or followers. Leaders are capable of
-       constructing an entire molecular system on their own, whereas
-       followers cannot. However, certain lead parsers (PDB2, MOl2)
-       are also able to follow.
+    QHash< QString,QList<MoleculeParserPtr> > ret;
 
-       Here we sort the parsers into order, ready to construct a
-       system. If there is more than one lead, then we need to work
-       out which are capable of following.
-     */
+    // The topology parsers - we should end up with one...
+    QList<MoleculeParserPtr> topology;
 
-    // The leaders. We should end up with one.
-    QList<MoleculeParserPtr> leaders;
+    // The frame parsers - we can have as many as specified...
+    QList<MoleculeParserPtr> frame;
 
-    // The follower parsers.
-    QList<MoleculeParserPtr> followers;
-
-    // The broken parsers.
+    // The broken parsers...
     QList<MoleculeParserPtr> broken;
 
-    // First pass: work out leaders and followers.
+    // The supplementary parsers
+    QList<MoleculeParserPtr> supplementary;
+
+    if (this->isBroken())
+    {
+        broken.append(*this);
+    }
+    else if (this->isSupplementary())
+    {
+        supplementary.append(*this);
+    }
+    else
+    {
+        if (this->isTopology())
+        {
+            topology.append(*this);
+        }
+
+        if (this->isFrame())
+        {
+            frame.append(*this);
+        }
+    }
+
     for (auto parser : parsers)
     {
         // This is a lead parser.
@@ -1887,28 +1885,20 @@ void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers,
         {
             broken.append(parser);
         }
-        else if (parser.read().isLead())
+        else if (parser.read().isSupplementary())
         {
-            leaders.append(parser);
+            supplementary.append(parser);
         }
         else
         {
-            // This parser can follow.
-            if (parser.read().canFollow())
+            if (parser.read().isTopology())
             {
-                followers.append(parser);
+                topology.append(parser);
             }
-            // This parser must contain data that
-            // is supplementary to the lead.
-            else if (parser->isA<Supplementary>())
+
+            if (parser.read().isFrame())
             {
-                supplementary.append(parser);
-            }
-            else
-            {
-                throw SireIO::parse_error(QObject::tr(
-                    "A parser cannot lead or follow? %1"
-                        ).arg(parser.read().toString()), CODELOC);
+                frame.append(parser);
             }
         }
     }
@@ -1916,13 +1906,12 @@ void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers,
     if (broken.count() > 0)
     {
         //everything is broken!
-        parsers = broken;
-        supplementary.clear();
-        return;
+        ret["broken"] = broken;
+        return ret;
     }
 
-    // No leaders.
-    if (leaders.count() == 0)
+    // No topology parsers - we can't create a system...
+    if (topology.count() == 0)
     {
         if (supplementary.count() > 0)
         {
@@ -1942,9 +1931,8 @@ void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers,
 
             if (broken.count() > 0)
             {
-                parsers = broken;
-                supplementary.clear();
-                return;
+                ret["broken"] = broken;
+                return ret;
             }
         }
 
@@ -1956,62 +1944,40 @@ void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers,
             "e.g. as would be found in a topology file, is missing."), CODELOC );
     }
 
-    // If there are multiple leaders, then check whether any can follow.
-    // If so, move them to the followers until only a single lead remains.
-    if (leaders.count() > 1)
+    // If there are topology parsers. We want to use the first one that
+    // can only be used as a topology parser (e.g. if the user has loaded
+    // a prmtop and a PDB file in the wrong order)
+    if (topology.count() > 1)
     {
-        // Whether the parser is the new leader.
-        QVector<bool> is_leader(leaders.count());
-        is_leader.fill(true);
+        int first_topology_only = 0;
+        int num_topology_only = 0;
 
-        // The number of leaders.
-        int num_lead = leaders.count();
-
-        for (int i=0; i<leaders.count(); ++i)
+        for (int i=0; i<topology.count(); ++i)
         {
-            // Make sure we have one leader.
-            if (num_lead > 1)
+            if (not topology[i].read().isFrame())
             {
-                // Add the leader to followers and flag that it's been removed.
-                if (leaders[i].read().canFollow())
-                {
-                    followers.append(leaders[i]);
-                    is_leader[i] = false;
-                    num_lead--;
-                }
+                num_topology_only += 1;
+
+                if (num_topology_only == 1)
+                    first_topology_only = i;
             }
         }
 
-        // Can only have one leader.
-        if (num_lead > 1)
+        if (num_topology_only > 1)
         {
-            throw SireError::incompatible_error(QObject::tr(
-                "Cannot construct a System from multiple lead parsers if "
-                "none can follow!"), CODELOC);
+            throw SireIO::parse_error(QObject::tr(
+                "Cannot construct a System from multiple topology-only parsers "
+                "if none can follow!"), CODELOC);
         }
 
-        // Find the new lead parser..
-        for (int i=0; i<leaders.count(); ++i)
-        {
-            // This parser is the new leader.
-            if (is_leader[i])
-            {
-                // Copy the ptr to the new lead.
-                MoleculeParserPtr leader = leaders[i];
-
-                // Clear the leaders list.
-                leaders.clear();
-
-                // Append the new leader.
-                leaders.append(leader);
-
-                break;
-            }
-        }
+        topology = {topology[first_topology_only]};
     }
 
-    // Make the sorted list of parsers: leader, then followers.
-    parsers = leaders + followers;
+    ret["topology"] = topology;
+    ret["frame"] = frame;
+    ret["supplementary"] = supplementary;
+
+    return ret;
 }
 
 Q_GLOBAL_STATIC( NullParser, nullParser )

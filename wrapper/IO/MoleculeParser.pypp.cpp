@@ -61,18 +61,6 @@ void register_MoleculeParser_class(){
         typedef bp::class_< SireIO::MoleculeParser, bp::bases< SireBase::Property >, boost::noncopyable > MoleculeParser_exposer_t;
         MoleculeParser_exposer_t MoleculeParser_exposer = MoleculeParser_exposer_t( "MoleculeParser", "The base class of all molecule parsers", bp::no_init );
         bp::scope MoleculeParser_scope( MoleculeParser_exposer );
-        { //::SireIO::MoleculeParser::canFollow
-        
-            typedef bool ( ::SireIO::MoleculeParser::*canFollow_function_type)(  ) const;
-            canFollow_function_type canFollow_function_value( &::SireIO::MoleculeParser::canFollow );
-            
-            MoleculeParser_exposer.def( 
-                "canFollow"
-                , canFollow_function_value
-                , bp::release_gil_policy()
-                , "Return whether or not this parser can follow a lead parser and add data\nto an existing molecular system. By default, all parsers can follow." );
-        
-        }
         { //::SireIO::MoleculeParser::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::MoleculeParser::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
@@ -245,16 +233,28 @@ void register_MoleculeParser_class(){
                 , "" );
         
         }
-        { //::SireIO::MoleculeParser::isLead
+        { //::SireIO::MoleculeParser::isFrame
         
-            typedef bool ( ::SireIO::MoleculeParser::*isLead_function_type)(  ) const;
-            isLead_function_type isLead_function_value( &::SireIO::MoleculeParser::isLead );
+            typedef bool ( ::SireIO::MoleculeParser::*isFrame_function_type)(  ) const;
+            isFrame_function_type isFrame_function_value( &::SireIO::MoleculeParser::isFrame );
             
             MoleculeParser_exposer.def( 
-                "isLead"
-                , isLead_function_value
+                "isFrame"
+                , isFrame_function_value
                 , bp::release_gil_policy()
-                , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
+                , "Return whether or not this parser is a frame parser" );
+        
+        }
+        { //::SireIO::MoleculeParser::isSupplementary
+        
+            typedef bool ( ::SireIO::MoleculeParser::*isSupplementary_function_type)(  ) const;
+            isSupplementary_function_type isSupplementary_function_value( &::SireIO::MoleculeParser::isSupplementary );
+            
+            MoleculeParser_exposer.def( 
+                "isSupplementary"
+                , isSupplementary_function_value
+                , bp::release_gil_policy()
+                , "Return whether or not this parser is a supplementary parser" );
         
         }
         { //::SireIO::MoleculeParser::isTextFile
@@ -267,6 +267,18 @@ void register_MoleculeParser_class(){
                 , isTextFile_function_value
                 , bp::release_gil_policy()
                 , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::isTopology
+        
+            typedef bool ( ::SireIO::MoleculeParser::*isTopology_function_type)(  ) const;
+            isTopology_function_type isTopology_function_value( &::SireIO::MoleculeParser::isTopology );
+            
+            MoleculeParser_exposer.def( 
+                "isTopology"
+                , isTopology_function_value
+                , bp::release_gil_policy()
+                , "Return whether or not this parser is a topology parser" );
         
         }
         { //::SireIO::MoleculeParser::lines

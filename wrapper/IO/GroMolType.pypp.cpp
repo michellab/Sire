@@ -51,6 +51,8 @@ namespace bp = boost::python;
 
 #include "SireMol/select.h"
 
+#include "SireMol/trajectory.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"

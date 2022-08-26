@@ -31,6 +31,8 @@ namespace bp = boost::python;
 
 #include "SireMol/moleditor.h"
 
+#include "SireMol/trajectory.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -140,16 +142,41 @@ void register_PDB2_class(){
                 , "Return the suffixes that these files are normally associated with" );
         
         }
-        { //::SireIO::PDB2::isLead
+        { //::SireIO::PDB2::getFrame
         
-            typedef bool ( ::SireIO::PDB2::*isLead_function_type)(  ) const;
-            isLead_function_type isLead_function_value( &::SireIO::PDB2::isLead );
+            typedef ::SireMol::Frame ( ::SireIO::PDB2::*getFrame_function_type)( int ) const;
+            getFrame_function_type getFrame_function_value( &::SireIO::PDB2::getFrame );
             
             PDB2_exposer.def( 
-                "isLead"
-                , isLead_function_value
+                "getFrame"
+                , getFrame_function_value
+                , ( bp::arg("i") )
                 , bp::release_gil_policy()
-                , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
+                , "" );
+        
+        }
+        { //::SireIO::PDB2::isFrame
+        
+            typedef bool ( ::SireIO::PDB2::*isFrame_function_type)(  ) const;
+            isFrame_function_type isFrame_function_value( &::SireIO::PDB2::isFrame );
+            
+            PDB2_exposer.def( 
+                "isFrame"
+                , isFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireIO::PDB2::isTopology
+        
+            typedef bool ( ::SireIO::PDB2::*isTopology_function_type)(  ) const;
+            isTopology_function_type isTopology_function_value( &::SireIO::PDB2::isTopology );
+            
+            PDB2_exposer.def( 
+                "isTopology"
+                , isTopology_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireIO::PDB2::nAtoms
@@ -200,6 +227,18 @@ void register_PDB2_class(){
                 , ( bp::arg("i") )
                 , bp::release_gil_policy()
                 , "Return the number of chains in molecule i." );
+        
+        }
+        { //::SireIO::PDB2::nFrames
+        
+            typedef int ( ::SireIO::PDB2::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireIO::PDB2::nFrames );
+            
+            PDB2_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireIO::PDB2::nMolecules
