@@ -537,7 +537,7 @@ Trajectory::Trajectory(const TrajectoryData &data, int s, int n)
     if (natoms <= 0 or data.nFrames() <= 0)
         return;
 
-    if (start_atom < 0 or (start_atom+natoms) >= data.nAtoms())
+    if (start_atom < 0 or (start_atom+natoms) > data.nAtoms())
         throw SireError::incompatible_error(QObject::tr(
             "Cannot use start_atom %1 and natoms %2 for a trajectory with %3 atoms.")
                 .arg(start_atom).arg(natoms).arg(data.nAtoms()),
@@ -573,7 +573,7 @@ Trajectory::Trajectory(const QList<TrajectoryDataPtr> &data, int s, int n)
                             .arg(natoms).arg(ptr->nAtoms()), CODELOC);
                 }
 
-                if (start_atom + natoms >= ptr->nAtoms())
+                if (start_atom + natoms > ptr->nAtoms())
                 {
                     throw SireError::incompatible_error(
                         QObject::tr("Cannot use start_atom %1 and natoms %2 "

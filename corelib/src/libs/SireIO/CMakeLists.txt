@@ -34,6 +34,7 @@ set ( SIREIO_HEADERS
       cube.h
       dcd.h
       errors.h
+      filetrajectory.h
       flexibilitylibrary.h
       fortranfile.h
       gro87.h
@@ -68,6 +69,7 @@ set ( SIREIO_SOURCES
       cube.cpp
       dcd.cpp
       errors.cpp
+      filetrajectory.cpp
       flexibilitylibrary.cpp
       fortranfile.cpp
       gro87.cpp

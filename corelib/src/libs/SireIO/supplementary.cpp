@@ -165,6 +165,11 @@ const char* Supplementary::what() const
     return Supplementary::typeName();
 }
 
+int Supplementary::nAtoms() const
+{
+    return 0;
+}
+
 /** Return the parser that has been constructed by reading in the passed
     file using the passed properties */
 MoleculeParserPtr Supplementary::construct(const QString &filename,

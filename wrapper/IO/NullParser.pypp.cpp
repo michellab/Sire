@@ -31,6 +31,8 @@ namespace bp = boost::python;
 
 #include "SireSystem/system.h"
 
+#include "filetrajectory.h"
+
 #include "moleculeparser.h"
 
 #include "supplementary.h"
@@ -123,6 +125,18 @@ void register_NullParser_class(){
             NullParser_exposer.def( 
                 "formatName"
                 , formatName_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireIO::NullParser::nAtoms
+        
+            typedef int ( ::SireIO::NullParser::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::NullParser::nAtoms );
+            
+            NullParser_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
                 , bp::release_gil_policy()
                 , "" );
         

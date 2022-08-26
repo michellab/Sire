@@ -125,6 +125,18 @@ void register_Supplementary_class(){
                 , "" );
         
         }
+        { //::SireIO::Supplementary::nAtoms
+        
+            typedef int ( ::SireIO::Supplementary::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::Supplementary::nAtoms );
+            
+            Supplementary_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         Supplementary_exposer.def( bp::self != bp::self );
         { //::SireIO::Supplementary::operator=
         

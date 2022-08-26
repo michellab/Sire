@@ -11,6 +11,7 @@
 #include "amberrst7.h"
 #include "charmmpsf.h"
 #include "dcd.h"
+#include "filetrajectory.h"
 #include "flexibilitylibrary.h"
 #include "gro87.h"
 #include "grotop.h"
@@ -40,6 +41,7 @@ void register_SireIO_objects()
     ObjectRegistry::registerConverterFor< SireIO::CharmmParam >();
     ObjectRegistry::registerConverterFor< SireIO::CharmmPSF >();
     ObjectRegistry::registerConverterFor< SireIO::DCD >();
+    ObjectRegistry::registerConverterFor< SireIO::FileTrajectory >();
     ObjectRegistry::registerConverterFor< SireIO::FlexibilityLibrary >();
     ObjectRegistry::registerConverterFor< SireIO::FlexibilityTemplate >();
     ObjectRegistry::registerConverterFor< SireIO::Gro87 >();

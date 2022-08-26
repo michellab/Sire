@@ -31,6 +31,8 @@ namespace bp = boost::python;
 
 #include "SireSystem/system.h"
 
+#include "filetrajectory.h"
+
 #include "moleculeparser.h"
 
 #include "supplementary.h"
@@ -195,6 +197,18 @@ void register_MoleculeParser_class(){
                 , ( bp::arg("i") )
                 , bp::release_gil_policy()
                 , "Return the ith trajectory frame from this parser. Note that\n  some parsers may have to re-read the file, so this may fail\n  if the filename changes since the last time this parser\n  was used\n" );
+        
+        }
+        { //::SireIO::MoleculeParser::hasWarnings
+        
+            typedef bool ( ::SireIO::MoleculeParser::*hasWarnings_function_type)(  ) const;
+            hasWarnings_function_type hasWarnings_function_value( &::SireIO::MoleculeParser::hasWarnings );
+            
+            MoleculeParser_exposer.def( 
+                "hasWarnings"
+                , hasWarnings_function_value
+                , bp::release_gil_policy()
+                , "Return whether there were any warnings when loading the file\n  using this parser" );
         
         }
         { //::SireIO::MoleculeParser::isBinaryFile
@@ -369,6 +383,18 @@ void register_MoleculeParser_class(){
                 , ( bp::arg("filenames") )
                 , bp::release_gil_policy()
                 , "Synonym for MoleculeParser::read" );
+        
+        }
+        { //::SireIO::MoleculeParser::nAtoms
+        
+            typedef int ( ::SireIO::MoleculeParser::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::MoleculeParser::nAtoms );
+            
+            MoleculeParser_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireIO::MoleculeParser::nFrames
@@ -739,6 +765,18 @@ void register_MoleculeParser_class(){
                 , usesParallel_function_value
                 , bp::release_gil_policy()
                 , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::warnings
+        
+            typedef ::QStringList ( ::SireIO::MoleculeParser::*warnings_function_type)(  ) const;
+            warnings_function_type warnings_function_value( &::SireIO::MoleculeParser::warnings );
+            
+            MoleculeParser_exposer.def( 
+                "warnings"
+                , warnings_function_value
+                , bp::release_gil_policy()
+                , "Return any warnings that were generated when loading data\n  using this parser\n" );
         
         }
         { //::SireIO::MoleculeParser::write

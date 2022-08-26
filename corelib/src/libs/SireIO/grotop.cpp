@@ -7427,6 +7427,11 @@ Molecule GroTop::createMolecule(QString moltype_name, QStringList &errors,
     return mol.commit();
 }
 
+int GroTop::nAtoms() const
+{
+    return this->startSystem(PropertyMap()).nAtoms();
+}
+
 /** Use the data contained in this parser to create a new System of molecules,
     assigning properties based on the mapping in 'map' */
 System GroTop::startSystem(const PropertyMap &map) const

@@ -89,6 +89,8 @@ public:
 
     bool isSupplementary() const;
 
+    int nAtoms() const;
+
     QString formatName() const;
     QString formatDescription() const;
     QStringList formatSuffix() const;

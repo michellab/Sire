@@ -426,6 +426,8 @@ public:
     GroMolType moleculeType(const QString &name) const;
     QVector<GroMolType> moleculeTypes() const;
 
+    int nAtoms() const;
+
     GroSystem groSystem() const;
 
     QStringList postprocessedLines() const;

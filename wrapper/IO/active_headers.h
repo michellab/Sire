@@ -11,6 +11,7 @@
 #include "charmmpsf.h"
 #include "cube.h"
 #include "dcd.h"
+#include "filetrajectory.h"
 #include "flexibilitylibrary.h"
 #include "gro87.h"
 #include "grotop.h"

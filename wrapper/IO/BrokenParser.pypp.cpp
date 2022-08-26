@@ -31,6 +31,8 @@ namespace bp = boost::python;
 
 #include "SireSystem/system.h"
 
+#include "filetrajectory.h"
+
 #include "moleculeparser.h"
 
 #include "supplementary.h"
@@ -152,6 +154,18 @@ void register_BrokenParser_class(){
             BrokenParser_exposer.def( 
                 "isBroken"
                 , isBroken_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireIO::BrokenParser::nAtoms
+        
+            typedef int ( ::SireIO::BrokenParser::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::BrokenParser::nAtoms );
+            
+            BrokenParser_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
                 , bp::release_gil_policy()
                 , "" );
         

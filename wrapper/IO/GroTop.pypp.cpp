@@ -428,6 +428,18 @@ void register_GroTop_class(){
                 , "Return all of the moleculetypes that have been loaded from this file" );
         
         }
+        { //::SireIO::GroTop::nAtoms
+        
+            typedef int ( ::SireIO::GroTop::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::GroTop::nAtoms );
+            
+            GroTop_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireIO::GroTop::nonBondedFunctionType
         
             typedef int ( ::SireIO::GroTop::*nonBondedFunctionType_function_type)(  ) const;

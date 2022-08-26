@@ -28,6 +28,7 @@
 
 #include "moleculeparser.h"
 #include "supplementary.h"
+#include "filetrajectory.h"
 
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
@@ -41,6 +42,8 @@
 
 #include "SireMol/molecule.h"
 #include "SireMol/trajectory.h"
+#include "SireMol/moleditor.h"
+#include "SireMol/core.h"
 
 #include "SireSystem/system.h"
 
@@ -760,6 +763,21 @@ QString MoleculeParser::errorReport() const
     return QString();
 }
 
+/** Return any warnings that were generated when loading data
+ *  using this parser
+ */
+QStringList MoleculeParser::warnings() const
+{
+    return QStringList();
+}
+
+/** Return whether there were any warnings when loading the file
+ *  using this parser */
+bool MoleculeParser::hasWarnings() const
+{
+    return not this->warnings().isEmpty();
+}
+
 /** Return the number of trajectory frames contained in this parser.
  *  Trajectory frames contain coordinates and/or velocities and/or
  *  forces data. It is possible for a parser to have zero frames,
@@ -934,12 +952,15 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
 
     QStringList errors;
     QStringList suffix_errors;
+    QStringList recognised_suffixes;
     QMap<float,MoleculeParserPtr> parsers;
 
     if (not suffix.isEmpty())
     {
         for (auto factory : getParserFactory()->factoriesForSuffix(suffix, disable_supplementary))
         {
+            recognised_suffixes.append(factory.preferredSuffix());
+
             try
             {
                 const auto parser = factory.construct(info.absoluteFilePath(), map);
@@ -1002,9 +1023,10 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
     }
     else
     {
-        if (not suffix.isEmpty())
+        if (not recognised_suffixes.isEmpty())
         {
-            return MoleculeParserPtr(BrokenParser(filename, suffix,
+            return MoleculeParserPtr(BrokenParser(filename,
+                                                  recognised_suffixes.join(","),
                                                   suffix_errors));
         }
         else
@@ -1705,9 +1727,33 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
 
         if (nframes > 1)
         {
+            QList<SireMol::TrajectoryDataPtr> trajectories;
+
             for (const auto &frame : frames)
             {
-                qDebug() << "ADDING TRAJECTORY" << frame.read().toString();
+                trajectories.append(SireMol::TrajectoryDataPtr(new FileTrajectory(frame)));
+            }
+
+            system.setProperty("trajectory", SireMol::Trajectory(trajectories));
+
+            // we now have to assume that the trajectories all had the atomic
+            // data in the same order and that this matches the atomidx order
+            // in the system...
+            int start_atom = 0;
+
+            for (int i=0; i<system.nMolecules(); ++i)
+            {
+                auto mol = system[i].molecule();
+
+                int natoms = mol.nAtoms();
+
+                SireMol::Trajectory traj(trajectories, start_atom, natoms);
+
+                mol = mol.edit().setProperty("trajectory", traj).commit();
+
+                system.update(mol);
+
+                start_atom += natoms;
             }
         }
     }
@@ -2056,6 +2102,11 @@ QString NullParser::formatDescription() const
     return QObject::tr("Null parser that should not be used for any real parsing.");
 }
 
+int NullParser::nAtoms() const
+{
+    return 0;
+}
+
 System NullParser::toSystem(const PropertyMap&) const
 {
     return System();
@@ -2225,6 +2276,11 @@ QString BrokenParser::formatName() const
 QString BrokenParser::formatDescription() const
 {
     return QObject::tr("Broken parser used to report an unparseable file.");
+}
+
+int BrokenParser::nAtoms() const
+{
+    return 0;
 }
 
 bool BrokenParser::isBroken() const

@@ -26,6 +26,7 @@
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 #include "SireSystem/system.h"
+#include "filetrajectory.h"
 #include "moleculeparser.h"
 #include "supplementary.h"
 #include <QDebug>

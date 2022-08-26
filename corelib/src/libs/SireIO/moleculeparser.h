@@ -249,6 +249,11 @@ public:
     virtual bool isBroken() const;
     virtual bool isSupplementary() const;
 
+    virtual QStringList warnings() const;
+    bool hasWarnings() const;
+
+    virtual int nAtoms() const=0;
+
     virtual int nFrames() const;
     virtual SireMol::Frame getFrame(int i) const;
 
@@ -358,6 +363,8 @@ public:
     QString formatName() const;
     QString formatDescription() const;
 
+    int nAtoms() const;
+
     MoleculeParserPtr construct(const QString &filename,
                                 const PropertyMap &map) const;
 
@@ -402,6 +409,8 @@ public:
 
     bool isBroken() const;
     QString errorReport() const;
+
+    int nAtoms() const;
 
     QString formatName() const;
     QString formatDescription() const;
