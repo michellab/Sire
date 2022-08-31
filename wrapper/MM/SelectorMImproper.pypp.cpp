@@ -441,6 +441,32 @@ void register_SelectorMImproper_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorMImproper::deleteFrame
+        
+            typedef void ( ::SireMM::SelectorMImproper::*deleteFrame_function_type)( int ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMM::SelectorMImproper::deleteFrame );
+            
+            SelectorMImproper_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMImproper::deleteFrame
+        
+            typedef void ( ::SireMM::SelectorMImproper::*deleteFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMM::SelectorMImproper::deleteFrame );
+            
+            SelectorMImproper_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorMImproper::energies
         
             typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorMImproper::*energies_function_type)(  ) const;
@@ -588,6 +614,32 @@ void register_SelectorMImproper_class(){
             SelectorMImproper_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMImproper::loadFrame
+        
+            typedef void ( ::SireMM::SelectorMImproper::*loadFrame_function_type)( int ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMM::SelectorMImproper::loadFrame );
+            
+            SelectorMImproper_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMImproper::loadFrame
+        
+            typedef void ( ::SireMM::SelectorMImproper::*loadFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMM::SelectorMImproper::loadFrame );
+            
+            SelectorMImproper_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -790,6 +842,31 @@ void register_SelectorMImproper_class(){
             SelectorMImproper_exposer.def( 
                 "nCutGroups"
                 , nCutGroups_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMImproper::nFrames
+        
+            typedef int ( ::SireMM::SelectorMImproper::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireMM::SelectorMImproper::nFrames );
+            
+            SelectorMImproper_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMImproper::nFrames
+        
+            typedef int ( ::SireMM::SelectorMImproper::*nFrames_function_type)( ::SireBase::PropertyMap const & ) const;
+            nFrames_function_type nFrames_function_value( &::SireMM::SelectorMImproper::nFrames );
+            
+            SelectorMImproper_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -1128,6 +1205,57 @@ void register_SelectorMImproper_class(){
                 "residues"
                 , residues_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMImproper::saveFrame
+        
+            typedef void ( ::SireMM::SelectorMImproper::*saveFrame_function_type)( int ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMM::SelectorMImproper::saveFrame );
+            
+            SelectorMImproper_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMImproper::saveFrame
+        
+            typedef void ( ::SireMM::SelectorMImproper::*saveFrame_function_type)(  ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMM::SelectorMImproper::saveFrame );
+            
+            SelectorMImproper_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMImproper::saveFrame
+        
+            typedef void ( ::SireMM::SelectorMImproper::*saveFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMM::SelectorMImproper::saveFrame );
+            
+            SelectorMImproper_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMImproper::saveFrame
+        
+            typedef void ( ::SireMM::SelectorMImproper::*saveFrame_function_type)( ::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMM::SelectorMImproper::saveFrame );
+            
+            SelectorMImproper_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         

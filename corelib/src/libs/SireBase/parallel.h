@@ -33,6 +33,8 @@
 
 SIRE_BEGIN_HEADER
 
+#ifndef GCCXML_PARSE
+
 #include <QVector>
 #include <QMutex>
 
@@ -79,6 +81,8 @@ namespace SireBase
     }
 
 } // end of namespace SireBase
+
+#endif
 
 SIRE_END_HEADER
 

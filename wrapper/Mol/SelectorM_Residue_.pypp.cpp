@@ -479,6 +479,34 @@ void register_SelectorM_Residue__class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorM< SireMol::Residue >::deleteFrame
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::Residue >::*deleteFrame_function_type)( int ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::SelectorM< SireMol::Residue >::deleteFrame );
+            
+            SelectorM_Residue__exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::deleteFrame
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::Residue >::*deleteFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::SelectorM< SireMol::Residue >::deleteFrame );
+            
+            SelectorM_Residue__exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::Residue >::evaluate
         
             typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
@@ -514,6 +542,34 @@ void register_SelectorM_Residue__class(){
             SelectorM_Residue__exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::loadFrame
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::Residue >::*loadFrame_function_type)( int ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::SelectorM< SireMol::Residue >::loadFrame );
+            
+            SelectorM_Residue__exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::loadFrame
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::Residue >::*loadFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::SelectorM< SireMol::Residue >::loadFrame );
+            
+            SelectorM_Residue__exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -678,6 +734,33 @@ void register_SelectorM_Residue__class(){
             SelectorM_Residue__exposer.def( 
                 "nCutGroups"
                 , nCutGroups_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::nFrames
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef int ( ::SireMol::SelectorM< SireMol::Residue >::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::SelectorM< SireMol::Residue >::nFrames );
+            
+            SelectorM_Residue__exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::nFrames
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef int ( ::SireMol::SelectorM< SireMol::Residue >::*nFrames_function_type)( ::SireBase::PropertyMap const & ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::SelectorM< SireMol::Residue >::nFrames );
+            
+            SelectorM_Residue__exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -988,6 +1071,61 @@ void register_SelectorM_Residue__class(){
                 "residues"
                 , residues_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::saveFrame
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::Residue >::*saveFrame_function_type)( int ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorM< SireMol::Residue >::saveFrame );
+            
+            SelectorM_Residue__exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::saveFrame
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::Residue >::*saveFrame_function_type)(  ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorM< SireMol::Residue >::saveFrame );
+            
+            SelectorM_Residue__exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::saveFrame
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::Residue >::*saveFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorM< SireMol::Residue >::saveFrame );
+            
+            SelectorM_Residue__exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::saveFrame
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::Residue >::*saveFrame_function_type)( ::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorM< SireMol::Residue >::saveFrame );
+            
+            SelectorM_Residue__exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         

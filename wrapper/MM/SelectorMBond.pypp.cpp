@@ -439,6 +439,32 @@ void register_SelectorMBond_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorMBond::deleteFrame
+        
+            typedef void ( ::SireMM::SelectorMBond::*deleteFrame_function_type)( int ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMM::SelectorMBond::deleteFrame );
+            
+            SelectorMBond_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::deleteFrame
+        
+            typedef void ( ::SireMM::SelectorMBond::*deleteFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMM::SelectorMBond::deleteFrame );
+            
+            SelectorMBond_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorMBond::energies
         
             typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorMBond::*energies_function_type)(  ) const;
@@ -611,6 +637,32 @@ void register_SelectorMBond_class(){
                 "lengths"
                 , lengths_function_value
                 , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::loadFrame
+        
+            typedef void ( ::SireMM::SelectorMBond::*loadFrame_function_type)( int ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMM::SelectorMBond::loadFrame );
+            
+            SelectorMBond_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::loadFrame
+        
+            typedef void ( ::SireMM::SelectorMBond::*loadFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMM::SelectorMBond::loadFrame );
+            
+            SelectorMBond_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -813,6 +865,31 @@ void register_SelectorMBond_class(){
             SelectorMBond_exposer.def( 
                 "nCutGroups"
                 , nCutGroups_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::nFrames
+        
+            typedef int ( ::SireMM::SelectorMBond::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireMM::SelectorMBond::nFrames );
+            
+            SelectorMBond_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::nFrames
+        
+            typedef int ( ::SireMM::SelectorMBond::*nFrames_function_type)( ::SireBase::PropertyMap const & ) const;
+            nFrames_function_type nFrames_function_value( &::SireMM::SelectorMBond::nFrames );
+            
+            SelectorMBond_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -1151,6 +1228,57 @@ void register_SelectorMBond_class(){
                 "residues"
                 , residues_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::saveFrame
+        
+            typedef void ( ::SireMM::SelectorMBond::*saveFrame_function_type)( int ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMM::SelectorMBond::saveFrame );
+            
+            SelectorMBond_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::saveFrame
+        
+            typedef void ( ::SireMM::SelectorMBond::*saveFrame_function_type)(  ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMM::SelectorMBond::saveFrame );
+            
+            SelectorMBond_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::saveFrame
+        
+            typedef void ( ::SireMM::SelectorMBond::*saveFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMM::SelectorMBond::saveFrame );
+            
+            SelectorMBond_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::saveFrame
+        
+            typedef void ( ::SireMM::SelectorMBond::*saveFrame_function_type)( ::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMM::SelectorMBond::saveFrame );
+            
+            SelectorMBond_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         

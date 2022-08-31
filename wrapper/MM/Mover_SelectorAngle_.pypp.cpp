@@ -17,6 +17,8 @@ namespace bp = boost::python;
 
 #include "SireID/index.h"
 
+#include "SireMM/threeatomfunctions.h"
+
 #include "SireMol/molecule.h"
 
 #include "SireMol/mover.hpp"

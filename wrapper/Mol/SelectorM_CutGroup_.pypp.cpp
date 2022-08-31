@@ -479,6 +479,34 @@ void register_SelectorM_CutGroup__class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorM< SireMol::CutGroup >::deleteFrame
+        
+            typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::CutGroup >::*deleteFrame_function_type)( int ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::SelectorM< SireMol::CutGroup >::deleteFrame );
+            
+            SelectorM_CutGroup__exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::CutGroup >::deleteFrame
+        
+            typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::CutGroup >::*deleteFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::SelectorM< SireMol::CutGroup >::deleteFrame );
+            
+            SelectorM_CutGroup__exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::CutGroup >::evaluate
         
             typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
@@ -514,6 +542,34 @@ void register_SelectorM_CutGroup__class(){
             SelectorM_CutGroup__exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::CutGroup >::loadFrame
+        
+            typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::CutGroup >::*loadFrame_function_type)( int ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::SelectorM< SireMol::CutGroup >::loadFrame );
+            
+            SelectorM_CutGroup__exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::CutGroup >::loadFrame
+        
+            typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::CutGroup >::*loadFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::SelectorM< SireMol::CutGroup >::loadFrame );
+            
+            SelectorM_CutGroup__exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -678,6 +734,33 @@ void register_SelectorM_CutGroup__class(){
             SelectorM_CutGroup__exposer.def( 
                 "nCutGroups"
                 , nCutGroups_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::CutGroup >::nFrames
+        
+            typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
+            typedef int ( ::SireMol::SelectorM< SireMol::CutGroup >::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::SelectorM< SireMol::CutGroup >::nFrames );
+            
+            SelectorM_CutGroup__exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::CutGroup >::nFrames
+        
+            typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
+            typedef int ( ::SireMol::SelectorM< SireMol::CutGroup >::*nFrames_function_type)( ::SireBase::PropertyMap const & ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::SelectorM< SireMol::CutGroup >::nFrames );
+            
+            SelectorM_CutGroup__exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -988,6 +1071,61 @@ void register_SelectorM_CutGroup__class(){
                 "residues"
                 , residues_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::CutGroup >::saveFrame
+        
+            typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::CutGroup >::*saveFrame_function_type)( int ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorM< SireMol::CutGroup >::saveFrame );
+            
+            SelectorM_CutGroup__exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::CutGroup >::saveFrame
+        
+            typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::CutGroup >::*saveFrame_function_type)(  ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorM< SireMol::CutGroup >::saveFrame );
+            
+            SelectorM_CutGroup__exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::CutGroup >::saveFrame
+        
+            typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::CutGroup >::*saveFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorM< SireMol::CutGroup >::saveFrame );
+            
+            SelectorM_CutGroup__exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::CutGroup >::saveFrame
+        
+            typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::CutGroup >::*saveFrame_function_type)( ::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorM< SireMol::CutGroup >::saveFrame );
+            
+            SelectorM_CutGroup__exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         

@@ -461,6 +461,32 @@ void register_SelectorMol_class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorMol::deleteFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*deleteFrame_function_type)( int ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::SelectorMol::deleteFrame );
+            
+            SelectorMol_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::deleteFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*deleteFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::SelectorMol::deleteFrame );
+            
+            SelectorMol_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorMol::evaluate
         
             typedef ::SireMol::EvaluatorM ( ::SireMol::SelectorMol::*evaluate_function_type)(  ) const;
@@ -493,6 +519,32 @@ void register_SelectorMol_class(){
             SelectorMol_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::loadFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*loadFrame_function_type)( int ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::SelectorMol::loadFrame );
+            
+            SelectorMol_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::loadFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*loadFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::SelectorMol::loadFrame );
+            
+            SelectorMol_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -735,6 +787,31 @@ void register_SelectorMol_class(){
             SelectorMol_exposer.def( 
                 "nCutGroups"
                 , nCutGroups_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::nFrames
+        
+            typedef int ( ::SireMol::SelectorMol::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::SelectorMol::nFrames );
+            
+            SelectorMol_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::nFrames
+        
+            typedef int ( ::SireMol::SelectorMol::*nFrames_function_type)( ::SireBase::PropertyMap const & ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::SelectorMol::nFrames );
+            
+            SelectorMol_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -1022,6 +1099,57 @@ void register_SelectorMol_class(){
                 "residues"
                 , residues_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::saveFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*saveFrame_function_type)( int ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorMol::saveFrame );
+            
+            SelectorMol_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::saveFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*saveFrame_function_type)(  ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorMol::saveFrame );
+            
+            SelectorMol_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::saveFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*saveFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorMol::saveFrame );
+            
+            SelectorMol_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::saveFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*saveFrame_function_type)( ::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorMol::saveFrame );
+            
+            SelectorMol_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         
