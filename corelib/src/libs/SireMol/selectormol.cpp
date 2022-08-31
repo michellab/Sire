@@ -1181,6 +1181,56 @@ int SelectorMol::nMolecules() const
     return this->mols.count();
 }
 
+int SelectorMol::nFrames() const
+{
+    return this->nFrames(PropertyMap());
+}
+
+int SelectorMol::nFrames(const SireBase::PropertyMap &map) const
+{
+    return SireMol::detail::_nFrames(this->mols, map);
+}
+
+void SelectorMol::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+void SelectorMol::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+void SelectorMol::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+void SelectorMol::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+void SelectorMol::loadFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_loadFrame(this->mols, frame, map);
+}
+
+void SelectorMol::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_saveFrame(this->mols, frame, map);
+}
+
+void SelectorMol::saveFrame(const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_saveFrame(this->mols, map);
+}
+
+void SelectorMol::deleteFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_deleteFrame(this->mols, frame, map);
+}
+
 bool SelectorMol::isEmpty() const
 {
     return this->mols.isEmpty();

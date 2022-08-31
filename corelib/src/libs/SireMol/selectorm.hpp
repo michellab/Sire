@@ -33,6 +33,9 @@
 
 #include "core.h"
 
+#include "SireBase/parallel.h"
+#include "SireBase/booleanproperty.h"
+
 #include "SireMol/errors.h"
 
 SIRE_BEGIN_HEADER
@@ -212,6 +215,19 @@ public:
 
     bool isEmpty() const;
 
+    int nFrames() const;
+    int nFrames(const SireBase::PropertyMap &map) const;
+
+    void loadFrame(int frame);
+    void saveFrame(int frame);
+    void saveFrame();
+    void deleteFrame(int frame);
+
+    void loadFrame(int frame, const SireBase::PropertyMap &map);
+    void saveFrame(int frame, const SireBase::PropertyMap &map);
+    void saveFrame(const SireBase::PropertyMap &map);
+    void deleteFrame(int frame, const SireBase::PropertyMap &map);
+
     const_iterator begin() const;
     const_iterator end() const;
 
@@ -228,6 +244,178 @@ protected:
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+#ifndef GCCXML_PARSE
+namespace detail
+{
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+bool _usesParallel(const QList<T> vws, const SireBase::PropertyMap &map)
+{
+    if (vws.count() < 16)
+        return false;
+
+    else if (map["parallel"].hasValue())
+    {
+        return map["parallel"].value().asA<SireBase::BooleanProperty>().value();
+    }
+
+    return true;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+int _nFrames(const QList<T> &vws, const SireBase::PropertyMap &map)
+{
+    int nframes = std::numeric_limits<int>::max();
+
+    if (_usesParallel(vws, map))
+    {
+        nframes = tbb::parallel_reduce( tbb::blocked_range<int>(0, vws.count()),
+                                        std::numeric_limits<int>::max(),
+                                        [&](tbb::blocked_range<int> r, int my_nframes)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                my_nframes = std::min(my_nframes, vws.at(i).nFrames(map));
+            }
+
+            return my_nframes;
+
+        }, [](int a, int b){ return std::min(a, b);});
+    }
+    else
+    {
+        for (const auto &view : vws)
+        {
+            nframes = std::min(nframes, view.nFrames(map));
+
+            if (nframes == 0)
+                break;
+        }
+    }
+
+    return nframes;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+void _loadFrame(QList<T> &vws, int frame, const SireBase::PropertyMap &map)
+{
+    frame = SireID::Index(frame).map(_nFrames(vws, map));
+
+    vws.detach();
+    const int n = vws.count();
+
+    if (_usesParallel(vws, map))
+    {
+        tbb::parallel_for(tbb::blocked_range<int>(0, n),
+                          [&](tbb::blocked_range<int> r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                vws[i].loadFrame(frame, map);
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<n; ++i)
+        {
+            vws[i].loadFrame(frame, map);
+        }
+    }
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+void _saveFrame(QList<T> &vws, int frame, const SireBase::PropertyMap &map)
+{
+    frame = SireID::Index(frame).map(_nFrames(vws, map));
+
+    vws.detach();
+    const int n = vws.count();
+
+    if (_usesParallel(vws, map))
+    {
+        tbb::parallel_for(tbb::blocked_range<int>(0, n),
+                          [&](tbb::blocked_range<int> r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                vws[i].saveFrame(frame, map);
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<n; ++i)
+        {
+            vws[i].saveFrame(frame, map);
+        }
+    }
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+void _saveFrame(QList<T> &vws, const SireBase::PropertyMap &map)
+{
+    vws.detach();
+    const int n = vws.count();
+
+    if (_usesParallel(vws, map))
+    {
+        tbb::parallel_for(tbb::blocked_range<int>(0, n),
+                          [&](tbb::blocked_range<int> r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                vws[i].saveFrame(map);
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<n; ++i)
+        {
+            vws[i].saveFrame(map);
+        }
+    }
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+void _deleteFrame(QList<T> &vws, int frame, const SireBase::PropertyMap &map)
+{
+    frame = SireID::Index(frame).map(_nFrames(vws, map));
+
+    vws.detach();
+    const int n = vws.count();
+
+    if (_usesParallel(vws, map))
+    {
+        tbb::parallel_for(tbb::blocked_range<int>(0, n),
+                          [&](tbb::blocked_range<int> r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                vws[i].deleteFrame(frame, map);
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<n; ++i)
+        {
+            vws[i].deleteFrame(frame, map);
+        }
+    }
+}
+
+} // end of namespace detail
+#endif // GCCXML_PARSE
+
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -1697,6 +1885,76 @@ SIRE_OUTOFLINE_TEMPLATE
 int SelectorM<T>::nMolecules() const
 {
     return this->vws.count();
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+int SelectorM<T>::nFrames() const
+{
+    return this->nFrames(PropertyMap());
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+int SelectorM<T>::nFrames(const SireBase::PropertyMap &map) const
+{
+    return SireMol::detail::_nFrames(this->vws, map);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+void SelectorM<T>::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+void SelectorM<T>::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+void SelectorM<T>::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+void SelectorM<T>::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+void SelectorM<T>::loadFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_loadFrame(this->vws, frame, map);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+void SelectorM<T>::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_saveFrame(this->vws, frame, map);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+void SelectorM<T>::saveFrame(const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_saveFrame(this->vws, map);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+void SelectorM<T>::deleteFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_deleteFrame(this->vws, frame, map);
 }
 
 template<class T>

@@ -874,6 +874,56 @@ bool SelectorMBond::isEmpty() const
     return this->bnds.isEmpty();
 }
 
+int SelectorMBond::nFrames() const
+{
+    return this->nFrames(PropertyMap());
+}
+
+int SelectorMBond::nFrames(const SireBase::PropertyMap &map) const
+{
+    return SireMol::detail::_nFrames(this->bnds, map);
+}
+
+void SelectorMBond::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+void SelectorMBond::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+void SelectorMBond::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+void SelectorMBond::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+void SelectorMBond::loadFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_loadFrame(this->bnds, frame, map);
+}
+
+void SelectorMBond::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_saveFrame(this->bnds, frame, map);
+}
+
+void SelectorMBond::saveFrame(const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_saveFrame(this->bnds, map);
+}
+
+void SelectorMBond::deleteFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_deleteFrame(this->bnds, frame, map);
+}
+
 SelectorMBond::const_iterator SelectorMBond::begin() const
 {
     return this->bnds.constBegin();

@@ -942,6 +942,56 @@ bool SelectorMDihedral::isEmpty() const
     return this->dihs.isEmpty();
 }
 
+int SelectorMDihedral::nFrames() const
+{
+    return this->nFrames(PropertyMap());
+}
+
+int SelectorMDihedral::nFrames(const SireBase::PropertyMap &map) const
+{
+    return SireMol::detail::_nFrames(this->dihs, map);
+}
+
+void SelectorMDihedral::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+void SelectorMDihedral::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+void SelectorMDihedral::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+void SelectorMDihedral::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+void SelectorMDihedral::loadFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_loadFrame(this->dihs, frame, map);
+}
+
+void SelectorMDihedral::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_saveFrame(this->dihs, frame, map);
+}
+
+void SelectorMDihedral::saveFrame(const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_saveFrame(this->dihs, map);
+}
+
+void SelectorMDihedral::deleteFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_deleteFrame(this->dihs, frame, map);
+}
+
 SelectorMDihedral::const_iterator SelectorMDihedral::begin() const
 {
     return this->dihs.constBegin();

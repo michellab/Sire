@@ -903,6 +903,56 @@ bool SelectorMAngle::isEmpty() const
     return this->angs.isEmpty();
 }
 
+int SelectorMAngle::nFrames() const
+{
+    return this->nFrames(PropertyMap());
+}
+
+int SelectorMAngle::nFrames(const SireBase::PropertyMap &map) const
+{
+    return SireMol::detail::_nFrames(this->angs, map);
+}
+
+void SelectorMAngle::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+void SelectorMAngle::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+void SelectorMAngle::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+void SelectorMAngle::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+void SelectorMAngle::loadFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_loadFrame(this->angs, frame, map);
+}
+
+void SelectorMAngle::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_saveFrame(this->angs, frame, map);
+}
+
+void SelectorMAngle::saveFrame(const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_saveFrame(this->angs, map);
+}
+
+void SelectorMAngle::deleteFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_deleteFrame(this->angs, frame, map);
+}
+
 SelectorMAngle::const_iterator SelectorMAngle::begin() const
 {
     return this->angs.constBegin();

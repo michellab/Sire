@@ -17,23 +17,7 @@ namespace bp = boost::python;
 
 #include "dimensions.h"
 
-#include <QDebug>
-
-#include <QMap>
-
-#include <QPair>
-
-#include <QString>
-
-#include <QStringList>
-
-#include <boost/shared_ptr.hpp>
-
-#include "convert.h"
-
-#include "convert.h"
-
-#include "dimensions.h"
+#include "generalunit.h"
 
 #include <QDebug>
 
@@ -53,23 +37,7 @@ namespace bp = boost::python;
 
 #include "dimensions.h"
 
-#include <QDebug>
-
-#include <QMap>
-
-#include <QPair>
-
-#include <QString>
-
-#include <QStringList>
-
-#include <boost/shared_ptr.hpp>
-
-#include "convert.h"
-
-#include "convert.h"
-
-#include "dimensions.h"
+#include "generalunit.h"
 
 #include <QDebug>
 
@@ -89,23 +57,7 @@ namespace bp = boost::python;
 
 #include "dimensions.h"
 
-#include <QDebug>
-
-#include <QMap>
-
-#include <QPair>
-
-#include <QString>
-
-#include <QStringList>
-
-#include <boost/shared_ptr.hpp>
-
-#include "convert.h"
-
-#include "convert.h"
-
-#include "dimensions.h"
+#include "generalunit.h"
 
 #include <QDebug>
 
@@ -125,23 +77,7 @@ namespace bp = boost::python;
 
 #include "dimensions.h"
 
-#include <QDebug>
-
-#include <QMap>
-
-#include <QPair>
-
-#include <QString>
-
-#include <QStringList>
-
-#include <boost/shared_ptr.hpp>
-
-#include "convert.h"
-
-#include "convert.h"
-
-#include "dimensions.h"
+#include "generalunit.h"
 
 #include <QDebug>
 
@@ -160,6 +96,88 @@ namespace bp = boost::python;
 #include "convert.h"
 
 #include "dimensions.h"
+
+#include "generalunit.h"
+
+#include <QDebug>
+
+#include <QMap>
+
+#include <QPair>
+
+#include <QString>
+
+#include <QStringList>
+
+#include <boost/shared_ptr.hpp>
+
+#include "convert.h"
+
+#include "convert.h"
+
+#include "dimensions.h"
+
+#include "generalunit.h"
+
+#include <QDebug>
+
+#include <QMap>
+
+#include <QPair>
+
+#include <QString>
+
+#include <QStringList>
+
+#include <boost/shared_ptr.hpp>
+
+#include "convert.h"
+
+#include "convert.h"
+
+#include "dimensions.h"
+
+#include "generalunit.h"
+
+#include <QDebug>
+
+#include <QMap>
+
+#include <QPair>
+
+#include <QString>
+
+#include <QStringList>
+
+#include <boost/shared_ptr.hpp>
+
+#include "convert.h"
+
+#include "convert.h"
+
+#include "dimensions.h"
+
+#include "generalunit.h"
+
+#include <QDebug>
+
+#include <QMap>
+
+#include <QPair>
+
+#include <QString>
+
+#include <QStringList>
+
+#include <boost/shared_ptr.hpp>
+
+#include "convert.h"
+
+#include "convert.h"
+
+#include "dimensions.h"
+
+#include "generalunit.h"
 
 #include <QDebug>
 

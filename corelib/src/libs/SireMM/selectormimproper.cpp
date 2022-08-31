@@ -942,6 +942,56 @@ bool SelectorMImproper::isEmpty() const
     return this->imps.isEmpty();
 }
 
+int SelectorMImproper::nFrames() const
+{
+    return this->nFrames(PropertyMap());
+}
+
+int SelectorMImproper::nFrames(const SireBase::PropertyMap &map) const
+{
+    return SireMol::detail::_nFrames(this->imps, map);
+}
+
+void SelectorMImproper::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+void SelectorMImproper::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+void SelectorMImproper::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+void SelectorMImproper::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+void SelectorMImproper::loadFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_loadFrame(this->imps, frame, map);
+}
+
+void SelectorMImproper::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_saveFrame(this->imps, frame, map);
+}
+
+void SelectorMImproper::saveFrame(const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_saveFrame(this->imps, map);
+}
+
+void SelectorMImproper::deleteFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_deleteFrame(this->imps, frame, map);
+}
+
 SelectorMImproper::const_iterator SelectorMImproper::begin() const
 {
     return this->imps.constBegin();
