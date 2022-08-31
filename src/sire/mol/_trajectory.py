@@ -6,7 +6,7 @@ class TrajectoryIterator:
     def __init__(self, view=None):
         if view is not None:
             self._view = view
-            self._values = range(0, self._view.num_frames())
+            self._values = range(0, max(1, self._view.num_frames()))
             self._iter = None
         else:
             self._view = None

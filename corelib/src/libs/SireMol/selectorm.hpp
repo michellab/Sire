@@ -303,7 +303,10 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 void _loadFrame(QList<T> &vws, int frame, const SireBase::PropertyMap &map)
 {
-    frame = SireID::Index(frame).map(_nFrames(vws, map));
+    const int nframes = _nFrames(vws, map);
+
+    if (not (nframes == 0 and frame == 0))
+        frame = SireID::Index(frame).map(nframes);
 
     vws.detach();
     const int n = vws.count();
