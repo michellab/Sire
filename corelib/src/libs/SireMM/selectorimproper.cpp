@@ -1055,16 +1055,11 @@ SelectorImproper SelectorImproper::intersection(const SelectorImproper &other) c
 
     MoleculeView::assertSameMolecule(other);
 
-    SelectorImproper ret(*this);
-    ret.imps.clear();
+    auto ret_imps = _to_int_set(this->imps, this->data().info());
+    ret_imps.intersect(_to_int_set(other.imps, other.data().info()));
 
-    for (const auto &improper : this->imps)
-    {
-        if (ret.imps.contains(improper))
-        {
-            ret.imps.append(improper);
-        }
-    }
+    SelectorImproper ret(*this);
+    ret.imps = _from_int_set(ret_imps);
 
     return ret;
 }
@@ -1073,16 +1068,12 @@ SelectorImproper SelectorImproper::invert(const PropertyMap &map) const
 {
     auto s = SelectorImproper(this->molecule(), map);
 
-    SelectorImproper ret(*this);
-    ret.imps.clear();
+    auto ret_imps = _to_int_set(s.imps, s.data().info());
 
-    for (const auto &improper : s.imps)
-    {
-        if (not this->imps.contains(improper))
-        {
-            ret.imps.append(improper);
-        }
-    }
+    ret_imps.subtract(_to_int_set(this->imps, this->data().info()));
+
+    SelectorImproper ret(*this);
+    ret.imps = _from_int_set(ret_imps);
 
     return ret;
 }

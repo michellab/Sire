@@ -1013,16 +1013,11 @@ SelectorDihedral SelectorDihedral::intersection(const SelectorDihedral &other) c
 
     MoleculeView::assertSameMolecule(other);
 
-    SelectorDihedral ret(*this);
-    ret.dihs.clear();
+    auto ret_dihs = _to_int_set(this->dihs, this->data().info());
+    ret_dihs.intersect(_to_int_set(other.dihs, other.data().info()));
 
-    for (const auto &dihedral : this->dihs)
-    {
-        if (ret.dihs.contains(dihedral))
-        {
-            ret.dihs.append(dihedral);
-        }
-    }
+    SelectorDihedral ret(*this);
+    ret.dihs = _from_int_set(ret_dihs);
 
     return ret;
 }
@@ -1031,16 +1026,12 @@ SelectorDihedral SelectorDihedral::invert(const PropertyMap &map) const
 {
     auto s = SelectorDihedral(this->molecule(), map);
 
-    SelectorDihedral ret(*this);
-    ret.dihs.clear();
+    auto ret_dihs = _to_int_set(s.dihs, s.data().info());
 
-    for (const auto &dihedral : s.dihs)
-    {
-        if (not this->dihs.contains(dihedral))
-        {
-            ret.dihs.append(dihedral);
-        }
-    }
+    ret_dihs.subtract(_to_int_set(this->dihs, this->data().info()));
+
+    SelectorDihedral ret(*this);
+    ret.dihs = _from_int_set(ret_dihs);
 
     return ret;
 }

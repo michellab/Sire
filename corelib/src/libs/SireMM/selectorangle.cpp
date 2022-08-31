@@ -851,16 +851,11 @@ SelectorAngle SelectorAngle::intersection(const SelectorAngle &other) const
 
     MoleculeView::assertSameMolecule(other);
 
-    SelectorAngle ret(*this);
-    ret.angs.clear();
+    auto ret_angs = _to_int_set(this->angs, this->data().info());
+    ret_angs.intersect(_to_int_set(other.angs, other.data().info()));
 
-    for (const auto &angle : this->angs)
-    {
-        if (ret.angs.contains(angle))
-        {
-            ret.angs.append(angle);
-        }
-    }
+    SelectorAngle ret(*this);
+    ret.angs = _from_int_set(ret_angs);
 
     return ret;
 }
@@ -869,16 +864,12 @@ SelectorAngle SelectorAngle::invert(const PropertyMap &map) const
 {
     auto s = SelectorAngle(this->molecule(), map);
 
-    SelectorAngle ret(*this);
-    ret.angs.clear();
+    auto ret_angs = _to_int_set(s.angs, s.data().info());
 
-    for (const auto &angle : s.angs)
-    {
-        if (not this->angs.contains(angle))
-        {
-            ret.angs.append(angle);
-        }
-    }
+    ret_angs.subtract(_to_int_set(this->angs, this->data().info()));
+
+    SelectorAngle ret(*this);
+    ret.angs = _from_int_set(ret_angs);
 
     return ret;
 }

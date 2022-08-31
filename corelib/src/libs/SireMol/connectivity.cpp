@@ -47,6 +47,7 @@
 #include "SireMol/errors.h"
 
 #include "SireBase/errors.h"
+#include "SireBase/parallel.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -109,6 +110,30 @@ bool SireMol::detail::IDPair::operator==(const SireMol::detail::IDPair &other) c
 bool SireMol::detail::IDPair::operator!=(const SireMol::detail::IDPair &other) const
 {
     return atom0 != other.atom0 or atom1 != other.atom1;
+}
+
+bool SireMol::detail::IDPair::operator<(const SireMol::detail::IDPair &other) const
+{
+    return atom0 < other.atom0 or
+           ((atom0 == other.atom0) and (atom1 < other.atom1));
+}
+
+bool SireMol::detail::IDPair::operator<=(const SireMol::detail::IDPair &other) const
+{
+    return atom0 < other.atom0 or
+           ((atom0 == other.atom0) and (atom1 <= other.atom1));
+}
+
+bool SireMol::detail::IDPair::operator>(const SireMol::detail::IDPair &other) const
+{
+    return atom0 > other.atom0 or
+           ((atom0 == other.atom0) and (atom1 > other.atom1));
+}
+
+bool SireMol::detail::IDPair::operator>=(const SireMol::detail::IDPair &other) const
+{
+    return atom0 > other.atom0 or
+           ((atom0 == other.atom0) and (atom1 >= other.atom1));
 }
 
 /////////
@@ -2366,255 +2391,665 @@ ConnectivityBase::split(const ImproperID &improper,
                         selected_atoms );
 }
 
-/** Return the list of bonds present in this connectivity*/
+QList<SireMol::detail::IDPair> _getBonds(const QVector< QSet<AtomIdx> > &connections)
+{
+    const QSet<AtomIdx> *connections_array = connections.constData();
+    const int nats = connections.count();
+
+    QList<SireMol::detail::IDPair> bonds;
+
+    bonds.reserve(nats * 4);
+
+    if (nats > 100)
+    {
+        tbb::spin_mutex mutex;
+
+        tbb::parallel_for(tbb::blocked_range<int>(0, nats),
+                          [&](const tbb::blocked_range<int> &r){
+
+            QList<SireMol::detail::IDPair> my_bonds;
+            my_bonds.reserve(4 * (r.end()-r.begin()));
+
+            for (quint32 i=r.begin(); i<r.end(); ++i)
+            {
+                for (const AtomIdx &j_idx : connections_array[i])
+                {
+                    const quint32 j = j_idx.value();
+
+                    if (i < j)
+                    {
+                        //only count connections when the i atom is less
+                        //than j - this avoids double counting the bond
+                        // i-j and j-i
+                        my_bonds.append(SireMol::detail::IDPair(i, j));
+                    }
+                }
+            }
+
+            tbb::spin_mutex::scoped_lock lock(mutex);
+            bonds += my_bonds;
+        });
+    }
+    else
+    {
+        for (quint32 i=0; i<nats; ++i)
+        {
+            for (const AtomIdx &j_idx : connections_array[i])
+            {
+                const quint32 j = j_idx.value();
+
+                if (i < j)
+                {
+                    //only count connections when the i atom is less
+                    //than j - this avoids double counting the bond
+                    // i-j and j-i
+                    bonds.append(SireMol::detail::IDPair(i, j));
+                }
+            }
+        }
+    }
+
+    return bonds;
+}
+
+/** Return the list of bonds present in this connectivity */
 QList<BondID> ConnectivityBase::getBonds() const
 {
-  QList<BondID> bonds;
-  int nats = connected_atoms.count();
-  for (int i=0; i < nats; ++i)
+    auto bonds = _getBonds(this->connected_atoms);
+
+    std::sort(bonds.begin(), bonds.end());
+
+    QList<BondID> ret;
+    ret.reserve(bonds.count());
+
+    for (const auto &bond : bonds)
     {
-      AtomIdx atomidx = AtomIdx(i);
-      QSet<AtomIdx> neighbors = this->connectionsTo(atomidx);
-      foreach (AtomIdx neighbor, neighbors)
-	{
-	  // Do not add the bond to the list if already found. Note that we
-	  // have to check if the bond has been defined in reverse order too
-	  // and we do that using the mirror() method
-	  BondID bond = BondID(atomidx, neighbor);
-	  if ( not ( bonds.contains(bond) or bonds.contains(bond.mirror()) ) )
-	    bonds.append(bond);
-	}
+        ret.append(BondID(AtomIdx(bond.atom0), AtomIdx(bond.atom1)));
     }
-  return bonds;
+
+    return ret;
 }
+
 /** Return the list of bonds in the connectivity containing atom */
 QList<BondID> ConnectivityBase::getBonds(const AtomID &atom) const
 {
-   QList<BondID> bonds;
+    const auto atoms = this->minfo.map(atom);
 
-   // the "connectionsTo()" function will throw exceptions
-   // if no atom matches the ID
+    QList<SireMol::detail::IDPair> bonds;
 
-   foreach (AtomIdx bonded_atom, this->connectionsTo(atom))
-   {
-       bonds.append( BondID(atom, bonded_atom) );
-   }
-   // It is ok to return an empty list of bonds
-   //if (bonds.isEmpty())
-   //    throw SireMol::missing_bond( QObject::tr(
-   //       "There are no bonds to the atom with ID %1.")
-   //           .arg(atom.toString()), CODELOC );
+    for (const auto &bond : _getBonds(this->connected_atoms))
+    {
+        for (const auto &a : atoms)
+        {
+            quint32 i = a.value();
 
-   return bonds;
+            if (bond.atom0 == i or bond.atom1 == i)
+            {
+                bonds.append(bond);
+                break;
+            }
+        }
+    }
+
+    std::sort(bonds.begin(), bonds.end());
+
+    QList<BondID> ret;
+    ret.reserve(bonds.count());
+
+    for (const auto &bond : bonds)
+    {
+        ret.append(BondID(AtomIdx(bond.atom0), AtomIdx(bond.atom1)));
+    }
+
+    return ret;
 }
+
+namespace SireMol{ namespace detail {
+
+class IDTriple
+{
+public:
+    IDTriple(quint32 a0=0, quint32 a1=0, quint32 a2=0)
+        : atom0(a0), atom1(a1), atom2(a2)
+    {}
+
+    IDTriple(const IDTriple &other)
+        : atom0(other.atom0), atom1(other.atom1), atom2(other.atom2)
+    {}
+
+    ~IDTriple()
+    {}
+
+    IDTriple& operator=(const IDTriple &other)
+    {
+        atom0 = other.atom0;
+        atom1 = other.atom1;
+        atom2 = other.atom2;
+        return *this;
+    }
+
+    bool operator==(const IDTriple &other) const
+    {
+        return atom0 == other.atom0 and
+               atom1 == other.atom1 and
+               atom2 == other.atom2;
+    }
+
+    bool operator!=(const IDTriple &other) const
+    {
+        return not operator==(other);
+    }
+
+    bool operator<(const IDTriple &other) const
+    {
+        return atom0 < other.atom0 or
+                ((atom0 == other.atom0) and
+                    ((atom1 < other.atom1) or (
+                        (atom1 == other.atom1) and (atom2 < other.atom2))
+                    )
+                );
+    }
+
+    quint32 atom0;
+    quint32 atom1;
+    quint32 atom2;
+};
+
+class IDQuad
+{
+public:
+    IDQuad(quint32 a0=0, quint32 a1=0, quint32 a2=0, quint32 a3=0)
+        : atom0(a0), atom1(a1), atom2(a2), atom3(a3)
+    {}
+
+    IDQuad(const IDQuad &other)
+        : atom0(other.atom0), atom1(other.atom1),
+          atom2(other.atom2), atom3(other.atom3)
+    {}
+
+    ~IDQuad()
+    {}
+
+    IDQuad& operator=(const IDQuad &other)
+    {
+        atom0 = other.atom0;
+        atom1 = other.atom1;
+        atom2 = other.atom2;
+        atom3 = other.atom3;
+        return *this;
+    }
+
+    bool operator==(const IDQuad &other) const
+    {
+        return atom0 == other.atom0 and
+               atom1 == other.atom1 and
+               atom2 == other.atom2 and
+               atom3 == other.atom3;
+    }
+
+    bool operator!=(const IDQuad &other) const
+    {
+        return not operator==(other);
+    }
+
+    bool operator<(const IDQuad &other) const
+    {
+        return atom0 < other.atom0 or
+                ((atom0 == other.atom0) and
+                    ((atom1 < other.atom1) or (
+                        (atom1 == other.atom1) and
+                            ((atom2 < other.atom2) or (
+                                (atom2 == other.atom2 and
+                                    atom3 < other.atom3))
+                    ))
+                ));
+    }
+
+    quint32 atom0;
+    quint32 atom1;
+    quint32 atom2;
+    quint32 atom3;
+};
+
+}}
+
+QList<SireMol::detail::IDTriple> _getAngles(const QVector< QSet<AtomIdx> > &connections)
+{
+    const int nats = connections.count();
+
+    QList<SireMol::detail::IDTriple> angles;
+    angles.reserve(3 * nats);
+
+    const QSet<AtomIdx> *connections_array = connections.constData();
+
+    if (nats > 100)
+    {
+        tbb::spin_mutex mutex;
+
+        tbb::parallel_for(tbb::blocked_range<int>(0, nats),
+                          [&](const tbb::blocked_range<int> &r){
+
+            QList<SireMol::detail::IDTriple> my_angs;
+            my_angs.reserve(3 * (r.end()-r.begin()));
+
+            for (quint32 i=r.begin(); i<r.end(); ++i)
+            {
+                for (const AtomIdx &j_idx : connections_array[i])
+                {
+                    const quint32 j = j_idx.value();
+
+                    for (const auto &k_idx : connections_array[j])
+                    {
+                        quint32 k = k_idx.value();
+
+                        if (k < i and k != j)
+                        {
+                            // only add angles in numeric order
+                            my_angs.append(SireMol::detail::IDTriple(i, j, k));
+                        }
+                    }
+                }
+            }
+
+            tbb::spin_mutex::scoped_lock lock(mutex);
+            angles += my_angs;
+        });
+    }
+    else
+    {
+        for (quint32 i=0; i<nats; ++i)
+        {
+            for (const auto &j_idx : connections_array[i])
+            {
+                quint32 j = j_idx.value();
+
+                for (const auto &k_idx : connections_array[j])
+                {
+                    quint32 k = k_idx.value();
+
+                    if (k < i and k != j)
+                    {
+                        // only add angles in numeric order
+                        angles.append(SireMol::detail::IDTriple(i, j, k));
+                    }
+                }
+            }
+        }
+    }
+
+    return angles;
+}
+
 /** Return a list of angles defined by the connectivity*/
 QList<AngleID> ConnectivityBase::getAngles() const
 {
-  QList<AngleID> angles;
-  int nats = connected_atoms.count();
-  for (int i=0; i < nats; ++i)
+    auto angles = _getAngles(this->connected_atoms);
+
+    std::sort(angles.begin(), angles.end());
+
+    QList<AngleID> ret;
+    ret.reserve(angles.count());
+
+    for (const auto &angle : angles)
     {
-      AtomIdx atom0idx = AtomIdx(i);
-      foreach (AtomIdx atom1idx, this->connectionsTo(atom0idx))
-	{
-	  foreach (AtomIdx atom2idx, this->connectionsTo(atom1idx))
-	    {
-	      if (atom2idx != atom0idx)
-		{
-		  AngleID angle = AngleID( atom0idx, atom1idx, atom2idx );
-		  if ( not ( angles.contains(angle) or angles.contains(angle.mirror()) ) )
-		    angles.append(angle);
-		}
-	    }
-	}
+        ret.append(AngleID(AtomIdx(angle.atom0),
+                           AtomIdx(angle.atom1),
+                           AtomIdx(angle.atom2)));
     }
-  return angles;
+
+    return ret;
 }
+
 /** Return a list of angles defined by the connectivity that involve atom0 and atom1*/
 QList<AngleID> ConnectivityBase::getAngles(const AtomID &atom0, const AtomID &atom1) const
 {
-  QList<AngleID> angles;
-  // Is this the best way to do this? What if map returns multiple atoms?
-  AtomIdx atom0idx = atom0.map(this->info())[0];
-  AtomIdx atom1idx = atom1.map(this->info())[0];
-  // check that atom0 and atom1 are bonded
-  QSet<AtomIdx> bonded_atoms0 = this->connectionsTo(atom0);
-  if (not bonded_atoms0.contains(atom1idx))
-    throw SireMol::missing_bond( QObject::tr(
-					     "There is no bond between atoms with ID %1 and %2.")
-				 .arg(atom0.toString(),atom1.toString()), CODELOC );
-  // Get all the neighbors of atom1 that are not atom0 (to get the set of atom0-atom1-atom2)
-  foreach (AtomIdx atom2idx, this->connectionsTo(atom1idx))
-    {
-      if ( atom2idx != atom0idx )
-	{
-	  AngleID angle = AngleID( atom0idx, atom1idx, atom2idx );
-	  if ( not ( angles.contains(angle) or angles.contains(angle.mirror()) ) )
-	    angles.append(angle);
-	}
-    }
-  // And now the neighbors of atom0 so we get the set (atom1-atom0-atom2)
-  foreach (AtomIdx atom2idx, this->connectionsTo(atom0idx))
-    {
-      if (atom2idx != atom1idx)
-	{
-	  AngleID angle = AngleID( atom1idx, atom0idx, atom2idx );
-	  if ( not ( angles.contains(angle) or angles.contains(angle.mirror()) ) )
-	    angles.append(angle);
-	}
-    }
-  // It is ok not to return an empty list of angles
-  //if (angles.isEmpty())
-  //  throw SireMol::missing_angle( QObject::tr(
-  //					      "There are no angles to the atoms with ID %1 and %2.")
-  //				  .arg( atom0.toString(),atom1.toString() ), CODELOC );
+    const auto atoms0 = this->minfo.map(atom0);
+    const auto atoms1 = this->minfo.map(atom1);
 
-  return angles;
+    QList<SireMol::detail::IDTriple> angles;
+
+    for (const auto &angle : _getAngles(this->connected_atoms))
+    {
+        bool found = false;
+
+        for (const auto &a : atoms0)
+        {
+            quint32 i = a.value();
+
+            if (angle.atom0 == i or angle.atom1 == i or angle.atom2 == i)
+            {
+                for (const auto &b : atoms1)
+                {
+                    quint32 j = b.value();
+
+                    if ((angle.atom0 == i and angle.atom1 == j) or
+                        (angle.atom1 == i and angle.atom2 == j) or
+                        (angle.atom0 == j and angle.atom1 == i) or
+                        (angle.atom1 == j and angle.atom2 == i))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            if (found)
+                break;
+        }
+
+        if (found)
+            angles.append(angle);
+    }
+
+    std::sort(angles.begin(), angles.end());
+
+    QList<AngleID> ret;
+    ret.reserve(angles.count());
+
+    for (const auto &angle : angles)
+    {
+        ret.append(AngleID(AtomIdx(angle.atom0),
+                           AtomIdx(angle.atom1),
+                           AtomIdx(angle.atom2)));
+    }
+
+    return ret;
 }
 
 /** Return a list of angles defined by the connectivity that involve atom0*/
 QList<AngleID> ConnectivityBase::getAngles(const AtomID &atom0) const
 {
-  QList<AngleID> angles;
-  AtomIdx atom0idx = atom0.map(this->info())[0];
-  foreach (AtomIdx atom1idx, this->connectionsTo(atom0idx))
+    const auto atoms = this->minfo.map(atom0);
+
+    QList<SireMol::detail::IDTriple> angles;
+
+    for (const auto &angle : _getAngles(this->connected_atoms))
     {
-      QList<AngleID> angles01 = this->getAngles(atom0idx, atom1idx);
-      foreach (AngleID angle, angles01)
-	{
-	  if ( not ( angles.contains(angle) or angles.contains(angle.mirror()) ) )
-	    angles.append(angle);
-	}
+        for (const auto &a : atoms)
+        {
+            quint32 i = a.value();
+
+            if (angle.atom0 == i or angle.atom1 == i or angle.atom2 == i)
+            {
+                angles.append(angle);
+                break;
+            }
+        }
     }
-  return angles;
+
+    std::sort(angles.begin(), angles.end());
+
+    QList<AngleID> ret;
+    ret.reserve(angles.count());
+
+    for (const auto &angle : angles)
+    {
+        ret.append(AngleID(AtomIdx(angle.atom0),
+                           AtomIdx(angle.atom1),
+                           AtomIdx(angle.atom2)));
+    }
+
+    return ret;
+}
+
+QList<SireMol::detail::IDQuad> _getDihedrals(const QVector< QSet<AtomIdx> > &connections)
+{
+    const int nats = connections.count();
+
+    QList<SireMol::detail::IDQuad> dihedrals;
+    dihedrals.reserve(4 * nats);
+
+    const QSet<AtomIdx> *connections_array = connections.constData();
+
+    if (nats > 100)
+    {
+        tbb::spin_mutex mutex;
+
+        tbb::parallel_for(tbb::blocked_range<int>(0, nats),
+                          [&](const tbb::blocked_range<int> &r){
+
+            QList<SireMol::detail::IDQuad> my_dihs;
+            my_dihs.reserve(3 * (r.end()-r.begin()));
+
+            for (quint32 i=r.begin(); i<r.end(); ++i)
+            {
+                for (const auto &j_idx : connections_array[i])
+                {
+                    quint32 j = j_idx.value();
+
+                    for (const auto &k_idx : connections_array[j])
+                    {
+                        quint32 k = k_idx.value();
+
+                        for (const auto &l_idx : connections_array[k])
+                        {
+                            quint32 l = l_idx.value();
+
+                            if (l < i and l != k and l != j and k != j and k != i and j != i)
+                            {
+                                // only add dihedrals in numeric order
+                                my_dihs.append(SireMol::detail::IDQuad(i, j, k, l));
+                            }
+                        }
+                    }
+                }
+            }
+
+            tbb::spin_mutex::scoped_lock lock(mutex);
+            dihedrals += my_dihs;
+        });
+    }
+    else
+    {
+        for (quint32 i=0; i<nats; ++i)
+        {
+            for (const auto &j_idx : connections_array[i])
+            {
+                quint32 j = j_idx.value();
+
+                for (const auto &k_idx : connections_array[j])
+                {
+                    quint32 k = k_idx.value();
+
+                    for (const auto &l_idx : connections_array[k])
+                    {
+                        quint32 l = l_idx.value();
+
+                        if (l < i and l != k and l != j and k != j and k != i and j != i)
+                        {
+                            // only add dihedrals in numeric order
+                            dihedrals.append(SireMol::detail::IDQuad(i, j, k, l));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return dihedrals;
 }
 
 /** Return a list of dihedrals defined by the connectivity*/
 QList<DihedralID> ConnectivityBase::getDihedrals() const
 {
-  QList<DihedralID> dihedrals;
-  int nats = connected_atoms.count();
-  for (int i=0; i < nats ; ++i)
+    auto dihedrals = _getDihedrals(this->connected_atoms);
+
+    QList<DihedralID> ret;
+    ret.reserve(dihedrals.count());
+
+    for (const auto &dihedral : dihedrals)
     {
-      AtomIdx atom0idx = AtomIdx(i);
-      foreach (AtomIdx atom1idx, this->connectionsTo(atom0idx))
-	{
-	  foreach (AtomIdx atom2idx, this->connectionsTo(atom1idx))
-	    {
-	      if (atom2idx != atom0idx)
-		{
-		  foreach (AtomIdx atom3idx, this->connectionsTo(atom2idx))
-		    {
-		      if (atom3idx != atom1idx)
-			{
-			  DihedralID dihedral = DihedralID( atom0idx, atom1idx, atom2idx, atom3idx);
-			  if ( not ( dihedrals.contains(dihedral) or dihedrals.contains(dihedral.mirror()) ) )
-			    dihedrals.append(dihedral);
-			}
-		    }
-		}
-	    }
-	}
+        ret.append(DihedralID(AtomIdx(dihedral.atom0),
+                              AtomIdx(dihedral.atom1),
+                              AtomIdx(dihedral.atom2),
+                              AtomIdx(dihedral.atom3)));
     }
-  return dihedrals;
+
+    return ret;
 }
+
 /** Return a list of dihedrals defined by the connectivity that involve atom0, atom1 and atom2*/
 QList<DihedralID> ConnectivityBase::getDihedrals(const AtomID &atom0, const AtomID &atom1, const AtomID &atom2) const
 {
-  QList<DihedralID> dihedrals;
-  AtomIdx atom0idx = atom0.map(this->info())[0];
-  AtomIdx atom1idx = atom1.map(this->info())[0];
-  AtomIdx atom2idx = atom2.map(this->info())[0];
-  //Check that atom0, atom1 & atom2 form an angle
-  QSet<AtomIdx> bonded_atoms0 = this->connectionsTo(atom0);
-  if (not bonded_atoms0.contains(atom1idx))
-        throw SireMol::missing_bond( QObject::tr(
-					     "There is no bond between atoms with ID %1 and %2.")
-				     .arg(atom0.toString(),atom1.toString()), CODELOC );
-  QSet<AtomIdx> bonded_atoms1 = this->connectionsTo(atom1);
-  if (not bonded_atoms1.contains(atom2idx))
-        throw SireMol::missing_bond( QObject::tr(
-					     "There is no bond between atoms with ID %1 and %2.")
-				     .arg(atom0.toString(),atom2.toString()), CODELOC );
-  // Get all the neighbors of atom2, that are not atom1 or atom0 so we build atom0-atom1-atom2-atom3
-  foreach (AtomIdx atom3idx, this->connectionsTo(atom2idx))
+    const auto atoms0 = this->minfo.map(atom0);
+    const auto atoms1 = this->minfo.map(atom1);
+    const auto atoms2 = this->minfo.map(atom2);
+
+    QList<SireMol::detail::IDQuad> dihedrals;
+
+    for (const auto &dih : _getDihedrals(this->connected_atoms))
     {
-      if ( (atom3idx != atom1idx) and (atom3idx != atom0idx) )
-	{
-	  DihedralID dihedral = DihedralID( atom0idx, atom1idx, atom2idx, atom3idx );
-	  if ( not ( dihedrals.contains(dihedral) or dihedrals.contains(dihedral.mirror()) ) )
-	    dihedrals.append(dihedral);
-	}
+        bool found = false;
+
+        for (const auto &atom0 : atoms0)
+        {
+            quint32 i = atom0.value();
+
+            if (dih.atom0 == i or dih.atom1 == i or dih.atom2 == i or dih.atom3 == i)
+            {
+                for (const auto &atom1 : atoms1)
+                {
+                    quint32 j = atom1.value();
+
+                    if ((dih.atom0 == i and dih.atom1 == j) or
+                        (dih.atom1 == i and dih.atom2 == j) or
+                        (dih.atom2 == i and dih.atom3 == j) or
+                        (dih.atom0 == j and dih.atom1 == i) or
+                        (dih.atom1 == j and dih.atom2 == i) or
+                        (dih.atom2 == j and dih.atom3 == i))
+                    {
+                        for (const auto &atom2 : atoms2)
+                        {
+                            quint32 k = atom2.value();
+
+                            if ((dih.atom0 == i and dih.atom1 == j and dih.atom2 == k) or
+                                (dih.atom1 == i and dih.atom2 == j and dih.atom3 == k) or
+                                (dih.atom0 == k and dih.atom2 == j and dih.atom3 == i) or
+                                (dih.atom1 == k and dih.atom2 == j and dih.atom3 == i))
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (found)
+                        break;
+                }
+            }
+
+            if (found)
+                break;
+        }
+
+        if (found)
+            dihedrals.append(dih);
     }
-  // And now building atom2-atom1-atom0-atom3
-  foreach (AtomIdx atom3idx, this->connectionsTo(atom0idx))
+
+    QList<DihedralID> ret;
+    ret.reserve(dihedrals.count());
+
+    for (const auto &dihedral : dihedrals)
     {
-      if ( (atom3idx != atom1idx) and (atom3idx != atom2idx) )
-	{
-	  DihedralID dihedral = DihedralID( atom2idx, atom1idx, atom0idx, atom3idx );
-	  if ( not ( dihedrals.contains(dihedral) or dihedrals.contains(dihedral.mirror()) ) )
-	    dihedrals.append(dihedral);
-	}
+        ret.append(DihedralID(AtomIdx(dihedral.atom0),
+                              AtomIdx(dihedral.atom1),
+                              AtomIdx(dihedral.atom2),
+                              AtomIdx(dihedral.atom3)));
     }
-  return dihedrals;
+
+    return ret;
 }
+
 /** Return a list of dihedrals defined by the connectivity that involve atom0 and atom1*/
 QList<DihedralID> ConnectivityBase::getDihedrals(const AtomID &atom0, const AtomID &atom1) const
 {
-  QList<DihedralID> dihedrals;
-  AtomIdx atom0idx = atom0.map(this->info())[0];
-  AtomIdx atom1idx = atom1.map(this->info())[0];
-  //Check that atom0 and atom1 are bonded
-  QSet<AtomIdx> bonded_atoms0 = this->connectionsTo(atom0);
-  if (not bonded_atoms0.contains(atom1idx))
-    throw SireMol::missing_bond( QObject::tr(
-					     "There is no bond between atoms with ID %1 and %2.")
-				 .arg(atom0.toString(),atom1.toString()), CODELOC );
-  foreach (AtomIdx atom2idx, this->connectionsTo(atom1idx))
+    const auto atoms0 = this->minfo.map(atom0);
+    const auto atoms1 = this->minfo.map(atom1);
+
+    QList<SireMol::detail::IDQuad> dihedrals;
+
+    for (const auto &dih : _getDihedrals(this->connected_atoms))
     {
-      if (atom2idx != atom0idx)
-	{
-	  // the dihedrals that are atom0-atom1-atom2-XXX
-	  QList<DihedralID> dihedrals012 = this->getDihedrals(atom0idx, atom1idx, atom2idx);
-	  foreach (DihedralID dihedral,dihedrals012)
-	    {
-	      if ( not ( dihedrals.contains(dihedral) or dihedrals.contains(dihedral.mirror()) ) )
-		dihedrals.append(dihedral);
-	    }
-	  // the dihedrals that are atom2-atom1-atom0-XXX
-	  QList<DihedralID> dihedrals210 = this->getDihedrals(atom2idx, atom1idx, atom0idx);
-	  foreach (DihedralID dihedral,dihedrals210)
-	    {
-	      if ( not ( dihedrals.contains(dihedral) or dihedrals.contains(dihedral.mirror()) ) )
-		dihedrals.append(dihedral);
-	    }
-	}
+        bool found = false;
+
+        for (const auto &atom0 : atoms0)
+        {
+            quint32 i = atom0.value();
+
+            if (dih.atom0 == i or dih.atom1 == i or dih.atom2 == i or dih.atom3 == i)
+            {
+                for (const auto &atom1 : atoms1)
+                {
+                    quint32 j = atom1.value();
+
+                    if ((dih.atom0 == i and dih.atom1 == j) or
+                        (dih.atom1 == i and dih.atom2 == j) or
+                        (dih.atom2 == i and dih.atom3 == j) or
+                        (dih.atom0 == j and dih.atom1 == i) or
+                        (dih.atom1 == j and dih.atom2 == i) or
+                        (dih.atom2 == j and dih.atom3 == i))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            if (found)
+                break;
+        }
+
+        if (found)
+            dihedrals.append(dih);
     }
-  return dihedrals;
+
+    QList<DihedralID> ret;
+    ret.reserve(dihedrals.count());
+
+    for (const auto &dihedral : dihedrals)
+    {
+        ret.append(DihedralID(AtomIdx(dihedral.atom0),
+                              AtomIdx(dihedral.atom1),
+                              AtomIdx(dihedral.atom2),
+                              AtomIdx(dihedral.atom3)));
+    }
+
+    return ret;
 }
+
 /** Return a list of dihedrals defined by the connectivity that involve atom0*/
 QList<DihedralID> ConnectivityBase::getDihedrals(const AtomID &atom0) const
 {
-  QList<DihedralID> dihedrals;
-  AtomIdx atom0idx = atom0.map(this->info())[0];
-  foreach (AtomIdx atom1idx, this->connectionsTo(atom0idx))
+    const auto atoms0 = this->minfo.map(atom0);
+
+    QList<SireMol::detail::IDQuad> dihedrals;
+
+    for (const auto &dih : _getDihedrals(this->connected_atoms))
     {
-      // Dihedrals going along atom0-atom1-XXX
-      QList<DihedralID> dihedrals01 = this->getDihedrals(atom0idx, atom1idx);
-      foreach (DihedralID dihedral,dihedrals01)
-	{
-	  if ( not ( dihedrals.contains(dihedral) or dihedrals.contains(dihedral.mirror()) ) )
-	    dihedrals.append(dihedral);
-	}
-      // Dihedrals going along atom1-atom0-XXX
-      QList<DihedralID> dihedrals10 = this->getDihedrals(atom1idx, atom0idx);
-      foreach (DihedralID dihedral,dihedrals10)
-	{
-	  if ( not ( dihedrals.contains(dihedral) or dihedrals.contains(dihedral.mirror()) ) )
-	    dihedrals.append(dihedral);
-	}
+        for (const auto &atom0 : atoms0)
+        {
+            quint32 i = atom0.value();
+
+            if (dih.atom0 == i or dih.atom1 == i or dih.atom2 == i or dih.atom3 == i)
+            {
+                dihedrals.append(dih);
+                break;
+            }
+        }
     }
-  return dihedrals;
+
+    QList<DihedralID> ret;
+    ret.reserve(dihedrals.count());
+
+    for (const auto &dihedral : dihedrals)
+    {
+        ret.append(DihedralID(AtomIdx(dihedral.atom0),
+                              AtomIdx(dihedral.atom1),
+                              AtomIdx(dihedral.atom2),
+                              AtomIdx(dihedral.atom3)));
+    }
+
+    return ret;
 }
 
 /** Return a matrix (organised by AtomIdx) that says which atoms are bonded between

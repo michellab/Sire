@@ -101,6 +101,12 @@ public:
     bool operator==(const IDPair &other) const;
     bool operator!=(const IDPair &other) const;
 
+    bool operator<(const IDPair &other) const;
+    bool operator<=(const IDPair &other) const;
+
+    bool operator>(const IDPair &other) const;
+    bool operator>=(const IDPair &other) const;
+
     quint32 atom0;
     quint32 atom1;
 };

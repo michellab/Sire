@@ -732,16 +732,11 @@ SelectorBond SelectorBond::intersection(const SelectorBond &other) const
 
     MoleculeView::assertSameMolecule(other);
 
-    SelectorBond ret(*this);
-    ret.bnds.clear();
+    auto ret_bnds = _to_int_set(this->bnds, this->data().info());
+    ret_bnds.intersect(_to_int_set(other.bnds, other.data().info()));
 
-    for (const auto &bond : this->bnds)
-    {
-        if (ret.bnds.contains(bond))
-        {
-            ret.bnds.append(bond);
-        }
-    }
+    SelectorBond ret(*this);
+    ret.bnds = _from_int_set(ret_bnds);
 
     return ret;
 }
@@ -750,16 +745,12 @@ SelectorBond SelectorBond::invert(const PropertyMap &map) const
 {
     auto s = SelectorBond(this->molecule(), map);
 
-    SelectorBond ret(*this);
-    ret.bnds.clear();
+    auto ret_bnds = _to_int_set(s.bnds, s.data().info());
 
-    for (const auto &bond : s.bnds)
-    {
-        if (not this->bnds.contains(bond))
-        {
-            ret.bnds.append(bond);
-        }
-    }
+    ret_bnds.subtract(_to_int_set(this->bnds, this->data().info()));
+
+    SelectorBond ret(*this);
+    ret.bnds = _from_int_set(ret_bnds);
 
     return ret;
 }

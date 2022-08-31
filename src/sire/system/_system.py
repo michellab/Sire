@@ -142,6 +142,12 @@ class System:
     def improper(self, *args, **kwargs):
         return self.molecules().improper(*args, **kwargs)
 
+    def trajectory(self):
+        return self.molecules().trajectory()
+
+    def num_frames(self):
+        return self.molecules().num_frames()
+
     def cursor(self):
         return self.molecules().cursor()
 

@@ -69,7 +69,7 @@ SelectorImproper.cursor = _cursors
 
 from ..mol import _trajectory
 
-SelectorMBond._trajectory = _trajectory
-SelectorMAngle._trajectory = _trajectory
-SelectorMDihedral._trajectory = _trajectory
-SelectorMImproper._trajectory = _trajectory
+SelectorMBond.trajectory = _trajectory
+SelectorMAngle.trajectory = _trajectory
+SelectorMDihedral.trajectory = _trajectory
+SelectorMImproper.trajectory = _trajectory

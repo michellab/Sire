@@ -1,9 +1,17 @@
 
+import pytest
+
 import sire as sr
 
 
-def test_dcd():
-    mols = sr.load(sr.expand(sr.tutorial_url, ["h7n9.pdb", "h7n9.dcd"]))
+@pytest.fixture(scope="session")
+def h7n9_mols():
+    import sire as sr
+    return sr.load_test_files("h7n9.pdb", "h7n9.dcd")
+
+
+def test_dcd(h7n9_mols):
+    mols = h7n9_mols
     mol = mols[0]
 
     assert mol.num_frames() == 501
@@ -47,3 +55,26 @@ def test_dcd():
     molecules.load_frame(500)
 
     assert molecules[0].coordinates() == coords500
+
+
+def test_dcd_trajectory(h7n9_mols):
+    mols = h7n9_mols
+
+    i = 0
+
+    for t in mols.trajectory()[0::100]:
+        i += 1
+
+    assert i == (mols.num_frames() // 100) + 1
+
+    bonds = mols.bonds()[0:5]
+
+    for t in bonds.trajectory()[0::100]:
+        assert t.count() == bonds.count()
+        assert len(t.measures()) == len(bonds.measures())
+
+    t = bonds.trajectory()[100].__next__()
+
+    bonds.load_frame(100)
+
+    assert bonds.measures() == t.measures()
