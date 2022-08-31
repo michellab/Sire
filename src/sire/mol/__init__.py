@@ -899,3 +899,17 @@ Selector_Chain_.cursor = _cursors
 Selector_Segment_.cursor = _cursors
 
 from ._element import *
+
+
+def _trajectory(obj):
+    from ._trajectory import TrajectoryIterator
+    return TrajectoryIterator(obj)
+
+
+MoleculeView.trajectory = _trajectory
+SelectorM_Atom_.trajectory = _trajectory
+SelectorM_Residue_.trajectory = _trajectory
+SelectorM_Chain_.trajectory = _trajectory
+SelectorM_Segment_.trajectory = _trajectory
+SelectorM_CutGroup_.trajectory = _trajectory
+SelectorMol.trajectory = _trajectory

@@ -66,3 +66,10 @@ Dihedral.cursor = _cursor
 SelectorDihedral.cursor = _cursors
 Improper.cursor = _cursor
 SelectorImproper.cursor = _cursors
+
+from ..mol import _trajectory
+
+SelectorMBond._trajectory = _trajectory
+SelectorMAngle._trajectory = _trajectory
+SelectorMDihedral._trajectory = _trajectory
+SelectorMImproper._trajectory = _trajectory
