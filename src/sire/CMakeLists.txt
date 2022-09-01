@@ -108,7 +108,7 @@ add_subdirectory (vol)
 
 install( FILES __init__.py _load.py
                _thumbsup.py _pythonize.py
-               _measure.py
+               _measure.py _colname.py
          DESTINATION ${SIRE_PYTHON}/sire
        )
 
