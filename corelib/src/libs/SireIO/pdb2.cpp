@@ -596,7 +596,7 @@ QString PDBAtom::toPDBRecord() const
 {
     QString line;
 
-    // Write all records as ATOM, i.e. convert HETATM to ATOM.
+    // First create an ATOM record.
     line.append("ATOM  ");
 
     // Append the atom serial number. Since we enforce a hard
@@ -675,6 +675,11 @@ QString PDBAtom::toPDBRecord() const
         if (charge < 0) line.append(QString("%1-").arg(qAbs(charge)));
         else            line.append(QString("%1+").arg(charge));
     }
+
+    // Convert ATOM record to HETATM. This avoids the need to change the
+    // justifaction of other terms in the record above.
+    if (this->is_het)
+        line.replace("ATOM  ", "HETATM");
 
     return line;
 }
@@ -2272,6 +2277,9 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
             // Make a copy of the atom lines.
             auto lines = atom_lines;
 
+            // The number of atom lines, including TER records.
+            int num_lines = 1;
+
             // Line index.
             int iline = 0;
 
@@ -2281,13 +2289,13 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
             {
                 // Copy the atom record across.
                 atom_lines[iline] = lines[i];
-                iline++;
+                atom_lines[iline].replace(6, 5, QString::number(1+iline++).rightJustified(5, ' '));
 
                 // Add a TER record for this atom.
                 if (is_ter[i])
                 {
-                    atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
-                                            .arg(lines[i].mid(6, 5))
+                    atom_lines[iline] = QString("TER    %1      %2 %3\%4\%5")
+                                            .arg(iline + 1)
                                             .arg(lines[i].mid(17, 3))
                                             .arg(lines[i].at(21))
                                             .arg(lines[i].mid(22, 4))
@@ -2311,13 +2319,13 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
 
             // Generate a PDB atom data record.
             atom_lines[iline] = atom.toPDBRecord();
-            iline++;
+            atom_lines[iline].replace(6, 5, QString::number(1+iline++).rightJustified(5, ' '));
 
             // Add a TER record for this atom.
             if (is_ter[i])
             {
-                atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
-                                        .arg(atom_lines[iline-1].mid(6, 5))
+                atom_lines[iline] = QString("TER    %1      %2 %3\%4\%5")
+                                        .arg(iline + 1)
                                         .arg(atom_lines[iline-1].mid(17, 3))
                                         .arg(atom_lines[iline-1].at(21))
                                         .arg(atom_lines[iline-1].mid(22, 4))
