@@ -1,5 +1,5 @@
 
-__all__ = ["colname"]
+__all__ = ["colname", "colnames"]
 
 
 _col_funcs = None
@@ -42,3 +42,7 @@ def colname(obj):
         return _col_funcs[type(obj)](obj)
     except KeyError:
         return str(obj)
+
+
+def colnames(views):
+    return [colname(view) for view in views]

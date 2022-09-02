@@ -31,7 +31,24 @@ def _fix_generalunit():
         else:
             return False
 
+    def _generalunit_to_default(obj):
+        """Return a floating point value that represents
+           this value in default units for this dimension
+
+           Example
+           -------
+
+           >>> import sire as sr
+           >>> l = 5 * sr.units.angstrom
+           >>> sr.units.set_length_unit(sr.units.picometer)
+           >>> print(l.to_default())
+               500.0
+        """
+        return obj.value() / obj.get_default().value()
+
+
     GeneralUnit.approx_equal = _generalunit_approx_equal
+    GeneralUnit.to_default = _generalunit_to_default
 
 
 if not hasattr(GeneralUnit, "approx_equal"):
