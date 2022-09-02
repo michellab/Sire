@@ -8,3 +8,6 @@ pymbar<4
 qt
 tbb
 tbb-devel
+rich
+yaspin
+pandas

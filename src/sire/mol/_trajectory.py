@@ -99,14 +99,42 @@ class TrajectoryIterator:
         time_unit = None
         measure_unit = None
 
+        from ..utils import Console
+
         if uses_measures:
             for view in self._view:
                 colnames.append(colname(view))
                 columns.append(np.zeros(nframes, dtype=float))
 
-            for idx, frame in enumerate(self.__iter__()):
-                for i, measure in enumerate(frame.measures(map=self._map)):
-                    columns[i][idx] = measure.to_default()
+            with Console.progress() as progress:
+                task = progress.add_task("Looping through frames", total=nframes)
+
+                for idx, frame in enumerate(self.__iter__()):
+                    for i, measure in enumerate(frame.measures(map=self._map)):
+                        columns[i][idx] = measure.to_default()
+                        times[idx] = frame.frame_time().to_default()
+
+                        if measure_unit is None:
+                            if not measure.is_zero():
+                                measure_unit = measure.get_default().unit_string()
+
+                        if time_unit is None:
+                            time = frame.frame_time()
+                            if not time.is_zero():
+                                time_unit = time.get_default().unit_string()
+
+                    indexes[idx] = frame.frame_index()
+                    progress.update(task, completed=idx)
+        else:
+            colnames.append(colname(view))
+            column = np.zeros(nframes, dtype=float)
+
+            with Console.progress() as progress:
+                task = progress.add_task("Looping through frames", total=nframes)
+
+                for idx, frame in enumerate(self.__iter__()):
+                    measure = frame.measure(map=self._map)
+                    column[idx] = measure.to_default()
                     times[idx] = frame.frame_time().to_default()
 
                     if measure_unit is None:
@@ -118,26 +146,8 @@ class TrajectoryIterator:
                         if not time.is_zero():
                             time_unit = time.get_default().unit_string()
 
-                indexes[idx] = frame.frame_index()
-        else:
-            colnames.append(colname(view))
-            column = np.zeros(nframes, dtype=float)
-
-            for idx, frame in enumerate(self.__iter__()):
-                measure = frame.measure(map=self._map)
-                column[idx] = measure.to_default()
-                times[idx] = frame.frame_time().to_default()
-
-                if measure_unit is None:
-                    if not measure.is_zero():
-                        measure_unit = measure.get_default().unit_string()
-
-                if time_unit is None:
-                    time = frame.frame_time()
-                    if not time.is_zero():
-                        time_unit = time.get_default().unit_string()
-
-                indexes[idx] = frame.frame_index()
+                    indexes[idx] = frame.frame_index()
+                    progress.update(task, completed=idx)
 
             columns = [column]
 
@@ -203,24 +213,28 @@ class TrajectoryIterator:
             colnames.append(key)
             columns.append(np.zeros(nframes, dtype=float))
 
-        import sire
+        from ..utils import Console
 
-        for idx, frame in enumerate(self.__iter__()):
-            for i, f in enumerate(func.values()):
-                measure = f(frame)
-                columns[i][idx] = measure.to_default()
-                times[idx] = frame.frame_time().to_default()
+        with Console.progress() as progress:
+            task = progress.add_task("Looping through frames", total=nframes)
 
-                if measure_unit is None:
-                    if not measure.is_zero():
-                        measure_unit = measure.get_default().unit_string()
+            for idx, frame in enumerate(self.__iter__()):
+                for i, f in enumerate(func.values()):
+                    measure = f(frame)
+                    columns[i][idx] = measure.to_default()
+                    times[idx] = frame.frame_time().to_default()
 
-                if time_unit is None:
-                    time = frame.frame_time()
-                    if not time.is_zero():
-                        time_unit = time.get_default().unit_string()
+                    if measure_unit is None:
+                        if not measure.is_zero():
+                            measure_unit = measure.get_default().unit_string()
 
-            indexes[idx] = frame.frame_index()
+                    if time_unit is None:
+                        time = frame.frame_time()
+                        if not time.is_zero():
+                            time_unit = time.get_default().unit_string()
+
+                indexes[idx] = frame.frame_index()
+                progress.update(task, completed=idx)
 
         data = {}
 

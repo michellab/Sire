@@ -587,6 +587,7 @@ if _can_lazy_import:
     squire = _lazy_import.lazy_module("sire.squire")
     stream = _lazy_import.lazy_module("sire.stream")
     units = _lazy_import.lazy_module("sire.units")
+    utils = _lazy_import.lazy_module("sire.utils")
     vol = _lazy_import.lazy_module("sire.vol")
 
 def _version_string():

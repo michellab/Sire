@@ -8,6 +8,10 @@
 set ( SCRIPTS
         __init__.py
         _try_import.py
+        _console.py
+        _profiler.py
+        _simple.py
+        _spring_flowers.py
     )
 
 # installation
