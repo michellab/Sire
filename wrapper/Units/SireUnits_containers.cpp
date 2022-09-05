@@ -41,6 +41,7 @@
 #include "Base/convertpackedarray.hpp"
 
 #include "SireUnits/dimensions.h"
+#include "SireUnits/generalunit.h"
 
 #include "SireBase/packedarray2d.hpp"
 
@@ -67,6 +68,10 @@ void register_SireUnits_containers()
     register_list< QList<Dimension::Angle> > ();
     register_list< QList<Dimension::Time> >();
     register_list< QList<Dimension::Quantity> >();
+
+    register_list< QList<Dimension::GeneralUnit> >();
+    register_list< QVector<Dimension::GeneralUnit> >();
+    register_dict< QHash<QString,Dimension::GeneralUnit> >();
 
     register_PackedArray< SireBase::PackedArray2D<Dimension::Charge> >();
     register_PackedArray< SireBase::PackedArray2D<Dimension::Mass> >();

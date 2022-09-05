@@ -24,3 +24,5 @@ create graphs, you will also learn how to visualise sire objects and data.
 
    part04/01_measure
    part04/02_trajectory
+   part04/03_energies
+

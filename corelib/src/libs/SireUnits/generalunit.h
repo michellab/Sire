@@ -2,6 +2,7 @@
 #define SIREUNITS_GENERALUNIT_H
 
 #include <QString>
+#include <QHash>
 
 #include "SireUnits/dimensions.h"
 
@@ -149,10 +150,26 @@ public:
 
     GeneralUnit getDefault() const;
 
+    QHash<QString,GeneralUnit> components() const;
+
+    GeneralUnit getComponent(const QString &component) const;
+
+    void setComponent(const QString &component,
+
+                      const GeneralUnit &value);
+
+    void addComponent(const QString &component,
+                      const GeneralUnit &value);
+
+    void subtractComponent(const QString &component,
+                           const GeneralUnit &value);
+
 private:
     void assertCompatible(const GeneralUnit &other) const;
 
     int Mass, Length, Time, Charge, temperature, Quantity, Angle;
+
+    QHash<QString,double> comps;
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS

@@ -85,6 +85,71 @@ def test_generalunit_zero():
     ff = CLJShiftFunction(100*angstrom, 0*angstrom)
 
 
-if __name__ == "__main__":
-    test_generalunit()
-    test_generalunitproperty()
+def test_generalunit_components():
+    v = 0 * kcal_per_mol
+
+    v.add_component("bond", 5 * kcal_per_mol)
+
+    assert v == 5 * kcal_per_mol
+
+    # note that this test validates that we have the
+    # "principle of least surprise" equality that does
+    # not compare the components of the energies
+    assert v.get_component("bond") == 5 * kcal_per_mol
+
+    with pytest.raises(UserWarning):
+        v.set_component("angle", 3 * angstrom)
+
+    v.add_component("angle", 3 * kcal_per_mol)
+
+    assert v == 8 * kcal_per_mol
+
+    assert v.get_component("bond") == 5 * kcal_per_mol
+    assert v.get_component("angle") == 3 * kcal_per_mol
+
+    v.add_component("bond", 10*kcal_per_mol)
+
+    assert v == 18 * kcal_per_mol
+
+    assert v.get_component("bond") == 15 * kcal_per_mol
+    assert v.get_component("angle") == 3 * kcal_per_mol
+
+    v.subtract_component("bond", 10*kcal_per_mol)
+
+    assert v == 8 * kcal_per_mol
+
+    assert v.get_component("bond") == 5 * kcal_per_mol
+    assert v.get_component("angle") == 3 * kcal_per_mol
+
+    v.set_component("bond", 2*kcal_per_mol)
+
+    assert v == 5 * kcal_per_mol
+
+    assert v.get_component("bond") == 2 * kcal_per_mol
+    assert v.get_component("angle") == 3 * kcal_per_mol
+
+    v.add_component("bond", -2*kcal_per_mol)
+
+    assert v == 3 * kcal_per_mol
+
+    assert v.get_component("bond") == 0
+    assert v.get_component("angle") == 3 * kcal_per_mol
+
+    assert v.get_component("dihedral") == 0
+
+    v.set_component("angle", 0)
+
+    assert v.get_component("bond") == 0
+    assert v.get_component("angle") == 0
+    assert v.get_component("dihedral") == 0
+
+    assert v == 0
+
+    v.set_component("bond", 5 * angstrom)
+
+    assert v == 5 * angstrom
+
+    assert v.get_component("bond") == 5 * angstrom
+
+    with pytest.raises(UserWarning):
+        v.set_component("angle", 3 * kcal_per_mol)

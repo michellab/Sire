@@ -7,6 +7,8 @@
 
 #include "SireError/errors.h"
 
+#include "SireStream/shareddatastream.h"
+
 #include "SireUnits/dimensions.h"
 #include "SireUnits/temperature.h"
 
@@ -14,9 +16,16 @@
 
 using namespace SireUnits;
 using namespace SireUnits::Dimension;
+using namespace SireStream;
+
+static const RegisterMetaType<GeneralUnit> r_genunit(NO_ROOT);
 
 QDataStream& operator<<(QDataStream &ds, const SireUnits::Dimension::GeneralUnit &u)
 {
+    writeHeader(ds, r_genunit, 1);
+
+    SharedDataStream sds(ds);
+
     qint8 a = u.ANGLE();
     qint8 c = u.CHARGE();
     qint8 l = u.LENGTH();
@@ -25,26 +34,37 @@ QDataStream& operator<<(QDataStream &ds, const SireUnits::Dimension::GeneralUnit
     qint8 t2 = u.TIME();
     qint8 q = u.QUANTITY();
 
-    ds << a << c << l << m << t1 << t2 << q
-       << static_cast<const Unit&>(u);
+    sds << u.comps
+        << a << c << l << m << t1 << t2 << q
+        << static_cast<const Unit&>(u);
 
     return ds;
 }
 
 QDataStream& operator>>(QDataStream &ds, SireUnits::Dimension::GeneralUnit &u)
 {
-    qint8 a, c, l, m, t1, t2, q;
+    VersionID v = readHeader(ds, r_genunit);
 
-    ds >> a >> c >> l >> m >> t1 >> t2 >> q
-       >> static_cast<Unit&>(u);
+    if (v == 1)
+    {
+        qint8 a, c, l, m, t1, t2, q;
 
-    u.Angle = a;
-    u.Charge = c;
-    u.Length = l;
-    u.Mass = m;
-    u.temperature = t1;
-    u.Time = t2;
-    u.Quantity = q;
+        SharedDataStream sds(ds);
+
+        sds >> u.comps
+            >> a >> c >> l >> m >> t1 >> t2 >> q
+            >> static_cast<Unit&>(u);
+
+        u.Angle = a;
+        u.Charge = c;
+        u.Length = l;
+        u.Mass = m;
+        u.temperature = t1;
+        u.Time = t2;
+        u.Quantity = q;
+    }
+    else
+        throw version_error(v, "1", r_genunit, CODELOC);
 
     return ds;
 }
@@ -130,7 +150,8 @@ GeneralUnit::GeneralUnit(const TempBase &t) : Unit(t)
     Angle = 0;
 }
 
-GeneralUnit::GeneralUnit(const GeneralUnit &other) : Unit(other)
+GeneralUnit::GeneralUnit(const GeneralUnit &other)
+            : Unit(other), comps(other.comps)
 {
     Mass = other.Mass;
     Length = other.Length;
@@ -231,9 +252,14 @@ bool GeneralUnit::isDimensionless() const
            Angle == 0;
 }
 
+bool _isZero(const double v)
+{
+    return std::abs(v) < std::numeric_limits<double>::epsilon();
+}
+
 bool GeneralUnit::isZero() const
 {
-    return (std::abs(this->value()) < std::numeric_limits<double>::epsilon());
+    return _isZero(this->value());
 }
 
 int GeneralUnit::MASS() const
@@ -301,12 +327,17 @@ GeneralUnit& GeneralUnit::operator=(const GeneralUnit &other)
     temperature = other.TEMPERATURE();
     Quantity = other.QUANTITY();
     Angle = other.ANGLE();
+    comps = other.comps;
 
     return *this;
 }
 
 bool GeneralUnit::operator==(const GeneralUnit &other) const
 {
+    // note that we don't compare the componetns because
+    // this leads to surprising behaviour where
+    // two totals that are equal are not the same
+
     assertCompatible(other);
     return value() == other.value();
 }
@@ -345,6 +376,12 @@ GeneralUnit GeneralUnit::operator-() const
 {
     GeneralUnit ret = *this;
     ret.setScale( -value() );
+
+    for (const auto &key : this->comps.keys())
+    {
+        ret.comps[key] = -(this->comps[key]);
+    }
+
     return ret;
 }
 
@@ -359,7 +396,17 @@ GeneralUnit& GeneralUnit::operator+=(const GeneralUnit &other)
     assertCompatible(other);
     setScale(value() + other.value());
 
-    if (this->isZero())
+    for (const auto &key : other.comps.keys())
+    {
+        this->comps[key] = this->comps.value(key) + other.comps[key];
+
+        if (_isZero(this->comps[key]))
+        {
+            this->comps.remove(key);
+        }
+    }
+
+    if (this->isZero() and this->comps.isEmpty())
         this->operator=(GeneralUnit());
 
     return *this;
@@ -376,7 +423,17 @@ GeneralUnit& GeneralUnit::operator-=(const GeneralUnit &other)
     assertCompatible(other);
     setScale(value() - other.value());
 
-    if (this->isZero())
+    for (const auto &key : other.comps.keys())
+    {
+        this->comps[key] = this->comps.value(key) - other.comps[key];
+
+        if (_isZero(this->comps[key]))
+        {
+            this->comps.remove(key);
+        }
+    }
+
+    if (this->isZero() and this->comps.isEmpty())
         this->operator=(GeneralUnit());
 
     return *this;
@@ -443,7 +500,43 @@ GeneralUnit GeneralUnit::operator*=(const GeneralUnit &other)
     Quantity += other.Quantity;
     Angle += other.Angle;
 
-    if (this->isZero())
+    if (other.comps.isEmpty())
+    {
+        // we can just multiply every component by the value
+        for (const auto &key : this->comps.keys())
+        {
+            this->comps[key] *= other.value();
+
+            if (_isZero(this->comps[key]))
+                this->comps.remove(key);
+        }
+    }
+    else if (this->comps.isEmpty())
+    {
+        // we can multiply by our constant
+        const double v = this->value();
+
+        this->comps = other.comps;
+
+        for (const auto &key : this->comps.keys())
+        {
+            this->comps[key] *= v;
+
+            if (_isZero(this->comps[key]))
+                this->comps.remove(key);
+        }
+    }
+    else
+    {
+        // we can't retain the components as they won't multiply
+        this->comps.clear();
+    }
+
+    // we lose the comppnents when we multiply with another
+    // unit - this is because multiplying sub-comppnents is not possible
+    this->comps.clear();
+
+    if (this->isZero() and this->comps.isEmpty())
         this->operator=(GeneralUnit());
 
     return *this;
@@ -460,7 +553,39 @@ GeneralUnit GeneralUnit::operator/=(const GeneralUnit &other)
     Quantity -= other.Quantity;
     Angle -= other.Angle;
 
-    if (this->isZero())
+    if (other.comps.isEmpty())
+    {
+        // we can just multiply every component by the value
+        for (const auto &key : this->comps.keys())
+        {
+            this->comps[key] /= other.value();
+
+            if (_isZero(this->comps[key]))
+                this->comps.remove(key);
+        }
+    }
+    else if (this->comps.isEmpty())
+    {
+        // we can multiply by our constant
+        const double v = this->value();
+
+        this->comps = other.comps;
+
+        for (const auto &key : this->comps.keys())
+        {
+            this->comps[key] /= v;
+
+            if (_isZero(this->comps[key]))
+                this->comps.remove(key);
+        }
+    }
+    else
+    {
+        // we can't retain the components as they won't multiply
+        this->comps.clear();
+    }
+
+    if (this->isZero() and this->comps.isEmpty())
         this->operator=(GeneralUnit());
 
     return *this;
@@ -485,7 +610,15 @@ GeneralUnit& GeneralUnit::operator*=(double val)
 {
     setScale(value() * val);
 
-    if (this->isZero())
+    for (const auto &key : this->comps.keys())
+    {
+        this->comps[key] *= val;
+
+        if (_isZero(this->comps[key]))
+            this->comps.remove(key);
+    }
+
+    if (this->isZero() and this->comps.isEmpty())
         this->operator=(GeneralUnit());
 
     return *this;
@@ -495,7 +628,15 @@ GeneralUnit& GeneralUnit::operator/=(double val)
 {
     setScale(value() / val);
 
-    if (this->isZero())
+    for (const auto &key : this->comps.keys())
+    {
+        this->comps[key] /= val;
+
+        if (_isZero(this->comps[key]))
+            this->comps.remove(key);
+    }
+
+    if (this->isZero() and this->comps.isEmpty())
         this->operator=(GeneralUnit());
 
     return *this;
@@ -503,22 +644,12 @@ GeneralUnit& GeneralUnit::operator/=(double val)
 
 GeneralUnit& GeneralUnit::operator*=(int val)
 {
-    setScale(value() * val);
-
-    if (this->isZero())
-        this->operator=(GeneralUnit());
-
-    return *this;
+    return this->operator*=(double(val));
 }
 
 GeneralUnit& GeneralUnit::operator/=(int val)
 {
-    setScale(value() / val);
-
-    if (this->isZero())
-        this->operator=(GeneralUnit());
-
-    return *this;
+    return this->operator/=(double(val));
 }
 
 GeneralUnit GeneralUnit::operator*(double val) const
@@ -563,5 +694,93 @@ GeneralUnit GeneralUnit::invert() const
     ret.Quantity = -Quantity;
     ret.Angle = -Angle;
 
+    // we can't retain the components
+    ret.comps.clear();
+
     return ret;
+}
+
+QHash<QString,GeneralUnit> GeneralUnit::components() const
+{
+    QHash<QString,GeneralUnit> c;
+    c.reserve(this->comps.count());
+
+    for (const auto &key : this->comps.keys())
+    {
+        GeneralUnit v(*this);
+        v.comps = QHash<QString,double>();
+        v.setScale(this->comps[key]);
+        c.insert(key, v);
+    }
+
+    return c;
+}
+
+GeneralUnit GeneralUnit::getComponent(const QString &component) const
+{
+    GeneralUnit v(*this);
+    v.comps = QHash<QString,double>();
+    v.setScale(this->comps.value(component));
+    return v;
+}
+
+void GeneralUnit::setComponent(const QString &component,
+                               const GeneralUnit &value)
+{
+    this->assertCompatible(value);
+
+    if (this->isZero() and this->comps.isEmpty())
+    {
+        this->operator=(value);
+        this->comps.clear();
+        this->setScale(0);
+    }
+
+    double delta = value.value() - this->comps.value(component);
+
+    this->comps[component] = value.value();
+
+    if (_isZero(this->comps[component]))
+    {
+        this->comps.remove(component);
+    }
+
+    this->setScale(this->value() + delta);
+
+    if (this->isZero() and this->comps.isEmpty())
+        this->operator=(GeneralUnit());
+}
+
+void GeneralUnit::addComponent(const QString &component,
+                               const GeneralUnit &value)
+{
+    if (value.isZero())
+        return;
+
+    if (this->isZero() and this->comps.isEmpty())
+    {
+        this->operator=(value);
+        this->comps.clear();
+        this->setScale(0);
+    }
+
+    this->assertCompatible(value);
+
+    this->comps[component] += value.value();
+
+    if (_isZero(this->comps[component]))
+    {
+        this->comps.remove(component);
+    }
+
+    this->setScale(this->value() + value.value());
+
+    if (this->isZero() and this->comps.isEmpty())
+        this->operator=(GeneralUnit());
+}
+
+void GeneralUnit::subtractComponent(const QString &component,
+                                    const GeneralUnit &value)
+{
+    this->addComponent(component, -value);
 }
