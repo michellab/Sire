@@ -200,6 +200,7 @@ set ( PYPP_SOURCES
        TwoAtomPerturbation.pypp.cpp
        UreyBradleyComponent.pypp.cpp
        UreyBradleyParameterName.pypp.cpp
+       _MM_free_functions.pypp.cpp
        SireMM_containers.cpp
        SireMM_properties.cpp
        SireMM_registrars.cpp

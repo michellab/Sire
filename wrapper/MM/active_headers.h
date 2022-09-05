@@ -9,6 +9,7 @@
 #include "atomfunctions.h"
 #include "atomljs.h"
 #include "bond.h"
+#include "calculate_energy.h"
 #include "clj14group.h"
 #include "cljatoms.h"
 #include "cljboxes.h"

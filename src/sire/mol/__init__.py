@@ -913,3 +913,26 @@ SelectorM_Chain_.trajectory = _trajectory
 SelectorM_Segment_.trajectory = _trajectory
 SelectorM_CutGroup_.trajectory = _trajectory
 SelectorMol.trajectory = _trajectory
+
+
+def _energy(obj, map=None):
+    from ..mm import calculate_energy
+
+    if map is None:
+        return calculate_energy(obj)
+    else:
+        return calculate_energy(obj, map=map)
+
+
+def _atom_energy(obj, map=None):
+    # An individual atom has a zero energy
+    from ..units import GeneralUnit
+    return GeneralUnit(0)
+
+
+Atom.energy = _atom_energy
+Residue.energy =  _energy
+Chain.energy = _energy
+Segment.energy = _energy
+CutGroup.energy = _energy
+Molecule.energy = _energy
