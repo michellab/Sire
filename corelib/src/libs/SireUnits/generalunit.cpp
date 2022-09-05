@@ -12,6 +12,8 @@
 #include "SireUnits/dimensions.h"
 #include "SireUnits/temperature.h"
 
+#include "tostring.h"
+
 #include <QDebug>
 
 using namespace SireUnits;
@@ -531,10 +533,6 @@ GeneralUnit GeneralUnit::operator*=(const GeneralUnit &other)
         // we can't retain the components as they won't multiply
         this->comps.clear();
     }
-
-    // we lose the comppnents when we multiply with another
-    // unit - this is because multiplying sub-comppnents is not possible
-    this->comps.clear();
 
     if (this->isZero() and this->comps.isEmpty())
         this->operator=(GeneralUnit());

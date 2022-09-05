@@ -153,3 +153,39 @@ def test_generalunit_components():
 
     with pytest.raises(UserWarning):
         v.set_component("angle", 3 * kcal_per_mol)
+
+    v = GeneralUnit()
+
+    v["bond"] = 5 * angstrom
+    v["angle"] = 3 * angstrom
+
+    assert v == 8 * angstrom
+
+    assert v["bond"] == 5 * angstrom
+    assert v["angle"] == 3 * angstrom
+
+    v["bond"] += 2 * angstrom
+
+    assert v["bond"] == 7 * angstrom
+    assert v == 10 * angstrom
+
+    v += v
+
+    assert v == 20 * angstrom
+    assert v["bond"] == 14 * angstrom
+    assert v["angle"] == 6 * angstrom
+
+    w = v * 5
+
+    assert w == 100 * angstrom
+    assert w["bond"] == 70 * angstrom
+    assert w["angle"] == 30 * angstrom
+
+    v *= 5
+
+    assert v == 100 * angstrom
+    assert v["bond"] == 70 * angstrom
+    assert v["angle"] == 30 * angstrom
+
+    assert v == w
+    assert v.components() == w.components()

@@ -46,9 +46,17 @@ def _fix_generalunit():
         """
         return obj.value() / obj.get_default().value()
 
+    def __generalunit__getitem__(obj, key):
+        return obj.get_component(key)
+
+    def __generalunit__setitem__(obj, key, value):
+        obj.set_component(key, value)
+        return obj
 
     GeneralUnit.approx_equal = _generalunit_approx_equal
     GeneralUnit.to_default = _generalunit_to_default
+    GeneralUnit.__setitem__ = __generalunit__setitem__
+    GeneralUnit.__getitem__ = __generalunit__getitem__
 
 
 if not hasattr(GeneralUnit, "approx_equal"):
