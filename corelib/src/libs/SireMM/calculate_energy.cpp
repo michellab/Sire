@@ -60,26 +60,41 @@ SIREMM_EXPORT GeneralUnit calculate_energy(ForceFields &ffields)
 
     for (const auto &ffield : ffields.forceFields())
     {
-        const auto &comps = ffield.read().components();
-
-        if (comps.isA<InternalComponent>())
+        if (ffield->isA<InterFF>())
         {
-            const auto &internal = comps.asA<InternalComponent>();
-
-            nrg.addComponent("bond", nrgs[internal.bond()] * kcal_per_mol);
-            nrg.addComponent("angle", nrgs[internal.angle()] * kcal_per_mol);
-            nrg.addComponent("dihedral", nrgs[internal.dihedral()] * kcal_per_mol);
-            nrg.addComponent("improper", nrgs[internal.improper()] * kcal_per_mol);
-            nrg.addComponent("urey-bradley", nrgs[internal.ureyBradley()] * kcal_per_mol);
-            nrg.addComponent("coulomb_1-4", nrgs[internal.intra14Coulomb()] * kcal_per_mol);
-            nrg.addComponent("LJ_1-4", nrgs[internal.intra14LJ()] * kcal_per_mol);
+            const auto &clj = ffield.read().components().asA<MultiCLJComponent>();
+            nrg.addComponent("coulomb", nrgs[clj.coulomb()] * kcal_per_mol);
+            nrg.addComponent("LJ", nrgs[clj.lj()] * kcal_per_mol);
         }
-        else if (comps.isA<MultiCLJComponent>())
+        else if (ffield->isA<IntraFF>())
         {
-            const auto &clj = comps.asA<MultiCLJComponent>();
+            const auto &clj = ffield.read().components().asA<MultiCLJComponent>();
+            nrg.addComponent("intra_coulomb", nrgs[clj.coulomb()] * kcal_per_mol);
+            nrg.addComponent("intra_LJ", nrgs[clj.lj()] * kcal_per_mol);
+        }
+        else
+        {
+            const auto &comps = ffield.read().components();
 
-            nrg.addComponent("coulomb_intra", nrgs[clj.coulomb()] * kcal_per_mol);
-            nrg.addComponent("LJ_intra", nrgs[clj.lj()] * kcal_per_mol);
+            if (comps.isA<InternalComponent>())
+            {
+                const auto &internal = comps.asA<InternalComponent>();
+
+                nrg.addComponent("bond", nrgs[internal.bond()] * kcal_per_mol);
+                nrg.addComponent("angle", nrgs[internal.angle()] * kcal_per_mol);
+                nrg.addComponent("dihedral", nrgs[internal.dihedral()] * kcal_per_mol);
+                nrg.addComponent("improper", nrgs[internal.improper()] * kcal_per_mol);
+                nrg.addComponent("urey-bradley", nrgs[internal.ureyBradley()] * kcal_per_mol);
+                nrg.addComponent("1-4_coulomb", nrgs[internal.intra14Coulomb()] * kcal_per_mol);
+                nrg.addComponent("1-4_LJ", nrgs[internal.intra14LJ()] * kcal_per_mol);
+            }
+            else if (comps.isA<MultiCLJComponent>())
+            {
+                const auto &clj = comps.asA<MultiCLJComponent>();
+
+                nrg.addComponent("coulomb", nrgs[clj.coulomb()] * kcal_per_mol);
+                nrg.addComponent("LJ", nrgs[clj.lj()] * kcal_per_mol);
+            }
         }
     }
 
@@ -112,6 +127,46 @@ SIREMM_EXPORT GeneralUnit calculate_energy(const SireMol::MoleculeView &mol,
 
     ffields.add(internalff);
     ffields.add(intraff);
+
+    return calculate_energy(ffields);
+}
+
+SIREMM_EXPORT GeneralUnit calculate_energy(const SireMol::Molecules &mols)
+{
+    return calculate_energy(mols, PropertyMap());
+}
+
+SIREMM_EXPORT GeneralUnit calculate_energy(const SireMol::Molecules &mols,
+                                           const SireBase::PropertyMap &map)
+{
+    ForceFields ffields;
+
+    InternalFF internalff("internal");
+    internalff.setStrict(true);
+    internalff.add(mols, map);
+
+    IntraFF intraff("intraff");
+    intraff.add(mols, map);
+
+    InterFF interff("interff");
+    interff.add(mols, map);
+
+    // set the space from the first one we can find from the molecules
+    const auto space_property = map["space"];
+
+    for (const auto &mol : mols)
+    {
+        if (mol.hasProperty(space_property))
+        {
+            interff.setProperty("space",
+                                mol.molecule().property(space_property));
+            break;
+        }
+    }
+
+    ffields.add(internalff);
+    ffields.add(intraff);
+    ffields.add(interff);
 
     return calculate_energy(ffields);
 }

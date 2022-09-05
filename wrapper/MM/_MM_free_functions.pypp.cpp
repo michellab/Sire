@@ -49,6 +49,34 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/interff.h"
+
+#include "SireMM/internalff.h"
+
+#include "SireMM/intraff.h"
+
+#include "SireMol/core.h"
+
+#include "calculate_energy.h"
+
+#include <QDebug>
+
+#include "calculate_energy.h"
+
+#include "SireMM/interff.h"
+
+#include "SireMM/internalff.h"
+
+#include "SireMM/intraff.h"
+
+#include "SireMol/core.h"
+
+#include "calculate_energy.h"
+
+#include <QDebug>
+
+#include "calculate_energy.h"
+
 void register_free_functions(){
 
     { //::SireMM::calculate_energy
@@ -73,6 +101,32 @@ void register_free_functions(){
             "calculate_energy"
             , calculate_energy_function_value
             , ( bp::arg("mol"), bp::arg("map") )
+            , "" );
+    
+    }
+
+    { //::SireMM::calculate_energy
+    
+        typedef ::SireUnits::Dimension::GeneralUnit ( *calculate_energy_function_type )( ::SireMol::Molecules const & );
+        calculate_energy_function_type calculate_energy_function_value( &::SireMM::calculate_energy );
+        
+        bp::def( 
+            "calculate_energy"
+            , calculate_energy_function_value
+            , ( bp::arg("mols") )
+            , "" );
+    
+    }
+
+    { //::SireMM::calculate_energy
+    
+        typedef ::SireUnits::Dimension::GeneralUnit ( *calculate_energy_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & );
+        calculate_energy_function_type calculate_energy_function_value( &::SireMM::calculate_energy );
+        
+        bp::def( 
+            "calculate_energy"
+            , calculate_energy_function_value
+            , ( bp::arg("mols"), bp::arg("map") )
             , "" );
     
     }

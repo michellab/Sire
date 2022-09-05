@@ -930,9 +930,38 @@ def _atom_energy(obj, map=None):
     return GeneralUnit(0)
 
 
+def _total_energy(obj, map=None):
+    if hasattr(obj, "to_molecule_group"):
+        mols = obj.to_molecule_group()
+    else:
+        from ..legacy.Mol import MoleculeGroup
+        mols = MoleculeGroup("all")
+        mols.add(obj)
+
+    from ..mm import calculate_energy
+
+    if map is None:
+        return calculate_energy(mols.molecules())
+    else:
+        return calculate_energy(mols.molecules(), map=map)
+
+
 Atom.energy = _atom_energy
 Residue.energy =  _energy
 Chain.energy = _energy
 Segment.energy = _energy
 CutGroup.energy = _energy
 Molecule.energy = _energy
+
+SelectorMol.energy = _total_energy
+Selector_Atom_.energy = _total_energy
+Selector_Residue_.energy = _total_energy
+Selector_Chain_.energy = _total_energy
+Selector_Segment_.energy = _total_energy
+Selector_CutGroup_.energy = _total_energy
+
+SelectorM_Atom_.energy = _total_energy
+SelectorM_Residue_.energy = _total_energy
+SelectorM_Chain_.energy = _total_energy
+SelectorM_Segment_.energy = _total_energy
+SelectorM_CutGroup_.energy = _total_energy

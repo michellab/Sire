@@ -31,6 +31,7 @@
 
 #include "SireUnits/generalunit.h"
 #include "SireMol/moleculeview.h"
+#include "SireMol/molecules.h"
 #include "SireFF/forcefields.h"
 #include "SireBase/propertymap.h"
 
@@ -43,6 +44,13 @@ namespace SireMM
 
     SIREMM_EXPORT SireUnits::Dimension::GeneralUnit
     calculate_energy(const SireMol::MoleculeView &mol,
+                     const SireBase::PropertyMap &map);
+
+    SIREMM_EXPORT SireUnits::Dimension::GeneralUnit
+    calculate_energy(const SireMol::Molecules &mols);
+
+    SIREMM_EXPORT SireUnits::Dimension::GeneralUnit
+    calculate_energy(const SireMol::Molecules &mols,
                      const SireBase::PropertyMap &map);
 
     SIREMM_EXPORT SireUnits::Dimension::GeneralUnit
