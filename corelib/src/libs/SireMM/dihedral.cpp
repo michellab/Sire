@@ -408,18 +408,20 @@ Expression Dihedral::potential(const PropertyMap &map) const
     return Expression();
 }
 
-SireUnits::Dimension::MolarEnergy Dihedral::energy() const
+SireUnits::Dimension::GeneralUnit Dihedral::energy() const
 {
     return this->energy(PropertyMap());
 }
 
-SireUnits::Dimension::MolarEnergy Dihedral::energy(const PropertyMap &map) const
+SireUnits::Dimension::GeneralUnit Dihedral::energy(const PropertyMap &map) const
 {
     auto pot = this->potential(map);
     auto s = this->size(map);
 
+    SireUnits::Dimension::GeneralUnit value;
     Values vals(Symbol("phi")==s.to(radians));
-    return pot.evaluate(vals) * kcal_per_mol;
+    value.setComponent("dihedral", pot.evaluate(vals) * kcal_per_mol);
+    return value;
 }
 
 namespace SireMol

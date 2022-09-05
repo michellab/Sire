@@ -245,12 +245,12 @@ public:
     QList<SireCAS::Expression> potentials() const;
     QList<SireCAS::Expression> potentials(const SireBase::PropertyMap &map) const;
 
-    QList<SireUnits::Dimension::MolarEnergy> energies() const;
-    QList<SireUnits::Dimension::MolarEnergy> energies(
+    QList<SireUnits::Dimension::GeneralUnit> energies() const;
+    QList<SireUnits::Dimension::GeneralUnit> energies(
                             const SireBase::PropertyMap &map) const;
 
-    SireUnits::Dimension::MolarEnergy energy() const;
-    SireUnits::Dimension::MolarEnergy energy(
+    SireUnits::Dimension::GeneralUnit energy() const;
+    SireUnits::Dimension::GeneralUnit energy(
                             const SireBase::PropertyMap &map) const;
 
     SireMol::SelectResult search(const QString &search_string) const;

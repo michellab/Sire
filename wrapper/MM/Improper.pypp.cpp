@@ -123,7 +123,7 @@ void register_Improper_class(){
         }
         { //::SireMM::Improper::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::Improper::*energy_function_type)(  ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::Improper::*energy_function_type)(  ) const;
             energy_function_type energy_function_value( &::SireMM::Improper::energy );
             
             Improper_exposer.def( 
@@ -135,7 +135,7 @@ void register_Improper_class(){
         }
         { //::SireMM::Improper::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::Improper::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::Improper::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
             energy_function_type energy_function_value( &::SireMM::Improper::energy );
             
             Improper_exposer.def( 

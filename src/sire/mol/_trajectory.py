@@ -37,7 +37,10 @@ class TrajectoryIterator:
 
         ret.load_frame(frame, map=self._map)
 
-        mol = ret.molecule()
+        try:
+            mol = ret.molecule()
+        except Exception:
+            mol = ret[0].molecule()
 
         time_property = self._map["time"]
 

@@ -111,7 +111,7 @@ void register_Angle_class(){
         }
         { //::SireMM::Angle::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::Angle::*energy_function_type)(  ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::Angle::*energy_function_type)(  ) const;
             energy_function_type energy_function_value( &::SireMM::Angle::energy );
             
             Angle_exposer.def( 
@@ -123,7 +123,7 @@ void register_Angle_class(){
         }
         { //::SireMM::Angle::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::Angle::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::Angle::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
             energy_function_type energy_function_value( &::SireMM::Angle::energy );
             
             Angle_exposer.def( 

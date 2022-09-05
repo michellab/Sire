@@ -117,7 +117,7 @@ void register_SelectorBond_class(){
         }
         { //::SireMM::SelectorBond::energies
         
-            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorBond::*energies_function_type)(  ) const;
+            typedef ::QList< SireUnits::Dimension::GeneralUnit > ( ::SireMM::SelectorBond::*energies_function_type)(  ) const;
             energies_function_type energies_function_value( &::SireMM::SelectorBond::energies );
             
             SelectorBond_exposer.def( 
@@ -129,7 +129,7 @@ void register_SelectorBond_class(){
         }
         { //::SireMM::SelectorBond::energies
         
-            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorBond::*energies_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::QList< SireUnits::Dimension::GeneralUnit > ( ::SireMM::SelectorBond::*energies_function_type)( ::SireBase::PropertyMap const & ) const;
             energies_function_type energies_function_value( &::SireMM::SelectorBond::energies );
             
             SelectorBond_exposer.def( 
@@ -142,7 +142,7 @@ void register_SelectorBond_class(){
         }
         { //::SireMM::SelectorBond::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorBond::*energy_function_type)(  ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::SelectorBond::*energy_function_type)(  ) const;
             energy_function_type energy_function_value( &::SireMM::SelectorBond::energy );
             
             SelectorBond_exposer.def( 
@@ -154,7 +154,7 @@ void register_SelectorBond_class(){
         }
         { //::SireMM::SelectorBond::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorBond::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::SelectorBond::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
             energy_function_type energy_function_value( &::SireMM::SelectorBond::energy );
             
             SelectorBond_exposer.def( 

@@ -469,7 +469,7 @@ void register_SelectorMImproper_class(){
         }
         { //::SireMM::SelectorMImproper::energies
         
-            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorMImproper::*energies_function_type)(  ) const;
+            typedef ::QList< SireUnits::Dimension::GeneralUnit > ( ::SireMM::SelectorMImproper::*energies_function_type)(  ) const;
             energies_function_type energies_function_value( &::SireMM::SelectorMImproper::energies );
             
             SelectorMImproper_exposer.def( 
@@ -481,7 +481,7 @@ void register_SelectorMImproper_class(){
         }
         { //::SireMM::SelectorMImproper::energies
         
-            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorMImproper::*energies_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::QList< SireUnits::Dimension::GeneralUnit > ( ::SireMM::SelectorMImproper::*energies_function_type)( ::SireBase::PropertyMap const & ) const;
             energies_function_type energies_function_value( &::SireMM::SelectorMImproper::energies );
             
             SelectorMImproper_exposer.def( 
@@ -494,7 +494,7 @@ void register_SelectorMImproper_class(){
         }
         { //::SireMM::SelectorMImproper::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorMImproper::*energy_function_type)(  ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::SelectorMImproper::*energy_function_type)(  ) const;
             energy_function_type energy_function_value( &::SireMM::SelectorMImproper::energy );
             
             SelectorMImproper_exposer.def( 
@@ -506,7 +506,7 @@ void register_SelectorMImproper_class(){
         }
         { //::SireMM::SelectorMImproper::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorMImproper::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::SelectorMImproper::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
             energy_function_type energy_function_value( &::SireMM::SelectorMImproper::energy );
             
             SelectorMImproper_exposer.def( 

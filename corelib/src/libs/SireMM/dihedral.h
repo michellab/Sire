@@ -39,6 +39,7 @@
 #include "SireMol/evaluator.h"
 
 #include "SireUnits/dimensions.h"
+#include "SireUnits/generalunit.h"
 
 SIRE_BEGIN_HEADER
 
@@ -142,8 +143,8 @@ public:
     SireCAS::Expression potential() const;
     SireCAS::Expression potential(const SireBase::PropertyMap &map) const;
 
-    SireUnits::Dimension::MolarEnergy energy() const;
-    SireUnits::Dimension::MolarEnergy energy(
+    SireUnits::Dimension::GeneralUnit energy() const;
+    SireUnits::Dimension::GeneralUnit energy(
                             const SireBase::PropertyMap &map) const;
 
 protected:

@@ -122,7 +122,7 @@ void register_SelectorAngle_class(){
         }
         { //::SireMM::SelectorAngle::energies
         
-            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorAngle::*energies_function_type)(  ) const;
+            typedef ::QList< SireUnits::Dimension::GeneralUnit > ( ::SireMM::SelectorAngle::*energies_function_type)(  ) const;
             energies_function_type energies_function_value( &::SireMM::SelectorAngle::energies );
             
             SelectorAngle_exposer.def( 
@@ -134,7 +134,7 @@ void register_SelectorAngle_class(){
         }
         { //::SireMM::SelectorAngle::energies
         
-            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorAngle::*energies_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::QList< SireUnits::Dimension::GeneralUnit > ( ::SireMM::SelectorAngle::*energies_function_type)( ::SireBase::PropertyMap const & ) const;
             energies_function_type energies_function_value( &::SireMM::SelectorAngle::energies );
             
             SelectorAngle_exposer.def( 
@@ -147,7 +147,7 @@ void register_SelectorAngle_class(){
         }
         { //::SireMM::SelectorAngle::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorAngle::*energy_function_type)(  ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::SelectorAngle::*energy_function_type)(  ) const;
             energy_function_type energy_function_value( &::SireMM::SelectorAngle::energy );
             
             SelectorAngle_exposer.def( 
@@ -159,7 +159,7 @@ void register_SelectorAngle_class(){
         }
         { //::SireMM::SelectorAngle::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorAngle::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::SelectorAngle::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
             energy_function_type energy_function_value( &::SireMM::SelectorAngle::energy );
             
             SelectorAngle_exposer.def( 

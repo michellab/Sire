@@ -1312,15 +1312,15 @@ QList<SireCAS::Expression> SelectorMDihedral::potentials(const SireBase::Propert
     return e;
 }
 
-QList<SireUnits::Dimension::MolarEnergy> SelectorMDihedral::energies() const
+QList<SireUnits::Dimension::GeneralUnit> SelectorMDihedral::energies() const
 {
     return this->energies(PropertyMap());
 }
 
-QList<SireUnits::Dimension::MolarEnergy> SelectorMDihedral::energies(
+QList<SireUnits::Dimension::GeneralUnit> SelectorMDihedral::energies(
                                     const SireBase::PropertyMap &map) const
 {
-    QList<SireUnits::Dimension::MolarEnergy> e;
+    QList<SireUnits::Dimension::GeneralUnit> e;
 
     for (const auto &val : dihs)
     {
@@ -1330,15 +1330,15 @@ QList<SireUnits::Dimension::MolarEnergy> SelectorMDihedral::energies(
     return e;
 }
 
-SireUnits::Dimension::MolarEnergy SelectorMDihedral::energy() const
+SireUnits::Dimension::GeneralUnit SelectorMDihedral::energy() const
 {
     return this->energy(PropertyMap());
 }
 
-SireUnits::Dimension::MolarEnergy SelectorMDihedral::energy(
+SireUnits::Dimension::GeneralUnit SelectorMDihedral::energy(
                                 const SireBase::PropertyMap &map) const
 {
-    SireUnits::Dimension::MolarEnergy nrg(0);
+    SireUnits::Dimension::GeneralUnit nrg(0);
 
     for (const auto &val : dihs)
     {

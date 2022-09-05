@@ -948,14 +948,14 @@ QList<Expression> SelectorBond::potentials(const PropertyMap &map) const
     return p;
 }
 
-QList<MolarEnergy> SelectorBond::energies() const
+QList<GeneralUnit> SelectorBond::energies() const
 {
     return this->energies(PropertyMap());
 }
 
-QList<MolarEnergy> SelectorBond::energies(const PropertyMap &map) const
+QList<GeneralUnit> SelectorBond::energies(const PropertyMap &map) const
 {
-    QList<MolarEnergy> nrgs;
+    QList<GeneralUnit> nrgs;
 
     for (int i=0; i<this->count(); ++i)
     {
@@ -965,14 +965,14 @@ QList<MolarEnergy> SelectorBond::energies(const PropertyMap &map) const
     return nrgs;
 }
 
-MolarEnergy SelectorBond::energy() const
+GeneralUnit SelectorBond::energy() const
 {
     return this->energy(PropertyMap());
 }
 
-MolarEnergy SelectorBond::energy(const PropertyMap &map) const
+GeneralUnit SelectorBond::energy(const PropertyMap &map) const
 {
-    MolarEnergy nrg(0);
+    GeneralUnit nrg(0);
 
     for (int i=0; i<this->count(); ++i)
     {

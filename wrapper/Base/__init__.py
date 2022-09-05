@@ -68,6 +68,18 @@ def wrap(value):
     elif isinstance(value, str):
         return StringProperty(value)
 
+    elif isinstance(value, list):
+        # do the number lists
+        try:
+            return IntegerArrayProperty(value)
+        except Exception:
+            pass
+
+        try:
+            return DoubleArrayProperty(value)
+        except Exception:
+            pass
+
     for func in _wrap_functions:
         try:
             return func(value)

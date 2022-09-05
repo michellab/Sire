@@ -1273,15 +1273,15 @@ QList<SireCAS::Expression> SelectorMAngle::potentials(const SireBase::PropertyMa
     return e;
 }
 
-QList<SireUnits::Dimension::MolarEnergy> SelectorMAngle::energies() const
+QList<SireUnits::Dimension::GeneralUnit> SelectorMAngle::energies() const
 {
     return this->energies(PropertyMap());
 }
 
-QList<SireUnits::Dimension::MolarEnergy> SelectorMAngle::energies(
+QList<SireUnits::Dimension::GeneralUnit> SelectorMAngle::energies(
                                     const SireBase::PropertyMap &map) const
 {
-    QList<SireUnits::Dimension::MolarEnergy> e;
+    QList<SireUnits::Dimension::GeneralUnit> e;
 
     for (const auto &val : angs)
     {
@@ -1291,15 +1291,15 @@ QList<SireUnits::Dimension::MolarEnergy> SelectorMAngle::energies(
     return e;
 }
 
-SireUnits::Dimension::MolarEnergy SelectorMAngle::energy() const
+SireUnits::Dimension::GeneralUnit SelectorMAngle::energy() const
 {
     return this->energy(PropertyMap());
 }
 
-SireUnits::Dimension::MolarEnergy SelectorMAngle::energy(
+SireUnits::Dimension::GeneralUnit SelectorMAngle::energy(
                                 const SireBase::PropertyMap &map) const
 {
-    SireUnits::Dimension::MolarEnergy nrg(0);
+    SireUnits::Dimension::GeneralUnit nrg(0);
 
     for (const auto &val : angs)
     {

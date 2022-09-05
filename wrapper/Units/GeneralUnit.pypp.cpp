@@ -9,11 +9,15 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
+#include "SireStream/shareddatastream.h"
+
 #include "SireUnits/dimensions.h"
 
 #include "SireUnits/temperature.h"
 
 #include "generalunit.h"
+
+#include "tostring.h"
 
 #include <QDebug>
 

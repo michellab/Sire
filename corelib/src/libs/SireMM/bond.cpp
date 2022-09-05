@@ -367,18 +367,22 @@ Expression Bond::potential(const PropertyMap &map) const
     return Expression();
 }
 
-SireUnits::Dimension::MolarEnergy Bond::energy() const
+SireUnits::Dimension::GeneralUnit Bond::energy() const
 {
     return this->energy(PropertyMap());
 }
 
-SireUnits::Dimension::MolarEnergy Bond::energy(const PropertyMap &map) const
+SireUnits::Dimension::GeneralUnit Bond::energy(const PropertyMap &map) const
 {
     auto pot = this->potential(map);
     auto l = this->length(map);
 
+    GeneralUnit value;
+
     Values vals(Symbol("r")==l.to(angstrom));
-    return pot.evaluate(vals) * kcal_per_mol;
+    value.setComponent("bond", pot.evaluate(vals) * kcal_per_mol);
+
+    return value;
 }
 
 namespace SireMol

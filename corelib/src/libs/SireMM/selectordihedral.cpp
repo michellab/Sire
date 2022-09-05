@@ -1231,14 +1231,14 @@ QList<Expression> SelectorDihedral::potentials(const PropertyMap &map) const
     return p;
 }
 
-QList<SireUnits::Dimension::MolarEnergy> SelectorDihedral::energies() const
+QList<SireUnits::Dimension::GeneralUnit> SelectorDihedral::energies() const
 {
     return this->energies(PropertyMap());
 }
 
-QList<SireUnits::Dimension::MolarEnergy> SelectorDihedral::energies(const PropertyMap &map) const
+QList<SireUnits::Dimension::GeneralUnit> SelectorDihedral::energies(const PropertyMap &map) const
 {
-    QList<SireUnits::Dimension::MolarEnergy> nrgs;
+    QList<SireUnits::Dimension::GeneralUnit> nrgs;
 
     for (int i=0; i<this->count(); ++i)
     {
@@ -1248,14 +1248,14 @@ QList<SireUnits::Dimension::MolarEnergy> SelectorDihedral::energies(const Proper
     return nrgs;
 }
 
-SireUnits::Dimension::MolarEnergy SelectorDihedral::energy() const
+SireUnits::Dimension::GeneralUnit SelectorDihedral::energy() const
 {
     return this->energy(PropertyMap());
 }
 
-SireUnits::Dimension::MolarEnergy SelectorDihedral::energy(const PropertyMap &map) const
+SireUnits::Dimension::GeneralUnit SelectorDihedral::energy(const PropertyMap &map) const
 {
-    SireUnits::Dimension::MolarEnergy nrg(0);
+    SireUnits::Dimension::GeneralUnit nrg(0);
 
     for (int i=0; i<this->count(); ++i)
     {

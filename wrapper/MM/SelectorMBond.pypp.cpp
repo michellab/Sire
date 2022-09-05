@@ -467,7 +467,7 @@ void register_SelectorMBond_class(){
         }
         { //::SireMM::SelectorMBond::energies
         
-            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorMBond::*energies_function_type)(  ) const;
+            typedef ::QList< SireUnits::Dimension::GeneralUnit > ( ::SireMM::SelectorMBond::*energies_function_type)(  ) const;
             energies_function_type energies_function_value( &::SireMM::SelectorMBond::energies );
             
             SelectorMBond_exposer.def( 
@@ -479,7 +479,7 @@ void register_SelectorMBond_class(){
         }
         { //::SireMM::SelectorMBond::energies
         
-            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorMBond::*energies_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::QList< SireUnits::Dimension::GeneralUnit > ( ::SireMM::SelectorMBond::*energies_function_type)( ::SireBase::PropertyMap const & ) const;
             energies_function_type energies_function_value( &::SireMM::SelectorMBond::energies );
             
             SelectorMBond_exposer.def( 
@@ -492,7 +492,7 @@ void register_SelectorMBond_class(){
         }
         { //::SireMM::SelectorMBond::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorMBond::*energy_function_type)(  ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::SelectorMBond::*energy_function_type)(  ) const;
             energy_function_type energy_function_value( &::SireMM::SelectorMBond::energy );
             
             SelectorMBond_exposer.def( 
@@ -504,7 +504,7 @@ void register_SelectorMBond_class(){
         }
         { //::SireMM::SelectorMBond::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorMBond::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::SelectorMBond::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
             energy_function_type energy_function_value( &::SireMM::SelectorMBond::energy );
             
             SelectorMBond_exposer.def( 

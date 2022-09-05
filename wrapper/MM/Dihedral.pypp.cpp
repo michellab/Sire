@@ -123,7 +123,7 @@ void register_Dihedral_class(){
         }
         { //::SireMM::Dihedral::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::Dihedral::*energy_function_type)(  ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::Dihedral::*energy_function_type)(  ) const;
             energy_function_type energy_function_value( &::SireMM::Dihedral::energy );
             
             Dihedral_exposer.def( 
@@ -135,7 +135,7 @@ void register_Dihedral_class(){
         }
         { //::SireMM::Dihedral::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::Dihedral::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::Dihedral::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
             energy_function_type energy_function_value( &::SireMM::Dihedral::energy );
             
             Dihedral_exposer.def( 

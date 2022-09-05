@@ -414,19 +414,21 @@ Expression Improper::potential(const PropertyMap &map) const
     return Expression();
 }
 
-SireUnits::Dimension::MolarEnergy Improper::energy() const
+SireUnits::Dimension::GeneralUnit Improper::energy() const
 {
     return this->energy(PropertyMap());
 }
 
-SireUnits::Dimension::MolarEnergy Improper::energy(const PropertyMap &map) const
+SireUnits::Dimension::GeneralUnit Improper::energy(const PropertyMap &map) const
 {
     auto pot = this->potential(map);
     auto s = this->size(map);
 
     Values vals(Symbol("phi")==s.to(radians), Symbol("theta")==s.to(radians));
 
-    return pot.evaluate(vals) * kcal_per_mol;
+    SireUnits::Dimension::GeneralUnit value;
+    value.setComponent("improper", pot.evaluate(vals) * kcal_per_mol);
+    return value;
 }
 
 namespace SireMol

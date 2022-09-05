@@ -99,7 +99,7 @@ void register_Bond_class(){
         }
         { //::SireMM::Bond::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::Bond::*energy_function_type)(  ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::Bond::*energy_function_type)(  ) const;
             energy_function_type energy_function_value( &::SireMM::Bond::energy );
             
             Bond_exposer.def( 
@@ -111,7 +111,7 @@ void register_Bond_class(){
         }
         { //::SireMM::Bond::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::Bond::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::Bond::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
             energy_function_type energy_function_value( &::SireMM::Bond::energy );
             
             Bond_exposer.def( 

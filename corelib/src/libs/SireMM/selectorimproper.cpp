@@ -1273,14 +1273,14 @@ QList<Expression> SelectorImproper::potentials(const PropertyMap &map) const
     return p;
 }
 
-QList<SireUnits::Dimension::MolarEnergy> SelectorImproper::energies() const
+QList<SireUnits::Dimension::GeneralUnit> SelectorImproper::energies() const
 {
     return this->energies(PropertyMap());
 }
 
-QList<SireUnits::Dimension::MolarEnergy> SelectorImproper::energies(const PropertyMap &map) const
+QList<SireUnits::Dimension::GeneralUnit> SelectorImproper::energies(const PropertyMap &map) const
 {
-    QList<SireUnits::Dimension::MolarEnergy> nrgs;
+    QList<SireUnits::Dimension::GeneralUnit> nrgs;
 
     for (int i=0; i<this->count(); ++i)
     {
@@ -1290,14 +1290,14 @@ QList<SireUnits::Dimension::MolarEnergy> SelectorImproper::energies(const Proper
     return nrgs;
 }
 
-SireUnits::Dimension::MolarEnergy SelectorImproper::energy() const
+SireUnits::Dimension::GeneralUnit SelectorImproper::energy() const
 {
     return this->energy(PropertyMap());
 }
 
-SireUnits::Dimension::MolarEnergy SelectorImproper::energy(const PropertyMap &map) const
+SireUnits::Dimension::GeneralUnit SelectorImproper::energy(const PropertyMap &map) const
 {
-    SireUnits::Dimension::MolarEnergy nrg(0);
+    SireUnits::Dimension::GeneralUnit nrg(0);
 
     for (int i=0; i<this->count(); ++i)
     {

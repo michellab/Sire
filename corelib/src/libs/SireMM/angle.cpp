@@ -389,18 +389,20 @@ Expression Angle::potential(const PropertyMap &map) const
     return Expression();
 }
 
-SireUnits::Dimension::MolarEnergy Angle::energy() const
+SireUnits::Dimension::GeneralUnit Angle::energy() const
 {
     return this->energy(PropertyMap());
 }
 
-SireUnits::Dimension::MolarEnergy Angle::energy(const PropertyMap &map) const
+SireUnits::Dimension::GeneralUnit Angle::energy(const PropertyMap &map) const
 {
     auto pot = this->potential(map);
     auto s = this->size(map);
 
+    SireUnits::Dimension::GeneralUnit value;
     Values vals(Symbol("theta")==s.to(radians));
-    return pot.evaluate(vals) * kcal_per_mol;
+    value.setComponent("angle", pot.evaluate(vals) * kcal_per_mol);
+    return value;
 }
 
 namespace SireMol

@@ -123,7 +123,7 @@ void register_SelectorDihedral_class(){
         }
         { //::SireMM::SelectorDihedral::energies
         
-            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorDihedral::*energies_function_type)(  ) const;
+            typedef ::QList< SireUnits::Dimension::GeneralUnit > ( ::SireMM::SelectorDihedral::*energies_function_type)(  ) const;
             energies_function_type energies_function_value( &::SireMM::SelectorDihedral::energies );
             
             SelectorDihedral_exposer.def( 
@@ -135,7 +135,7 @@ void register_SelectorDihedral_class(){
         }
         { //::SireMM::SelectorDihedral::energies
         
-            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorDihedral::*energies_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::QList< SireUnits::Dimension::GeneralUnit > ( ::SireMM::SelectorDihedral::*energies_function_type)( ::SireBase::PropertyMap const & ) const;
             energies_function_type energies_function_value( &::SireMM::SelectorDihedral::energies );
             
             SelectorDihedral_exposer.def( 
@@ -148,7 +148,7 @@ void register_SelectorDihedral_class(){
         }
         { //::SireMM::SelectorDihedral::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorDihedral::*energy_function_type)(  ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::SelectorDihedral::*energy_function_type)(  ) const;
             energy_function_type energy_function_value( &::SireMM::SelectorDihedral::energy );
             
             SelectorDihedral_exposer.def( 
@@ -160,7 +160,7 @@ void register_SelectorDihedral_class(){
         }
         { //::SireMM::SelectorDihedral::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorDihedral::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::SelectorDihedral::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
             energy_function_type energy_function_value( &::SireMM::SelectorDihedral::energy );
             
             SelectorDihedral_exposer.def( 

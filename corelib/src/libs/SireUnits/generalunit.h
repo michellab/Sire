@@ -155,7 +155,6 @@ public:
     GeneralUnit getComponent(const QString &component) const;
 
     void setComponent(const QString &component,
-
                       const GeneralUnit &value);
 
     void addComponent(const QString &component,
@@ -163,6 +162,30 @@ public:
 
     void subtractComponent(const QString &component,
                            const GeneralUnit &value);
+
+    template<int M, int L, int T,
+             int C, int t, int Q, int A>
+    void setComponent(const QString &component,
+                      const PhysUnit<M,L,T,C,t,Q,A> &value)
+    {
+        this->setComponent(component, GeneralUnit(value));
+    }
+
+    template<int M, int L, int T,
+             int C, int t, int Q, int A>
+    void addComponent(const QString &component,
+                      const PhysUnit<M,L,T,C,t,Q,A> &value)
+    {
+        this->addComponent(component, GeneralUnit(value));
+    }
+
+    template<int M, int L, int T,
+             int C, int t, int Q, int A>
+    void subtractComponent(const QString &component,
+                      const PhysUnit<M,L,T,C,t,Q,A> &value)
+    {
+        this->subtractComponent(component, GeneralUnit(value));
+    }
 
 private:
     void assertCompatible(const GeneralUnit &other) const;
