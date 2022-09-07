@@ -2233,12 +2233,54 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
         // Extract the atoms from the chain.
         auto atoms = chain.atoms();
 
+        // Store the index of the last atom in the chain, i.e.
+        // the first to check.
+        auto idx = atoms.count() - 1;
+
+        // Whether we've found a terminal atom in the chain. This is any
+        // non-HETATM atom.
+        bool found_ter = false;
+
+        // The current atom being checked.
+        SireMol::Atom atom;
+
+        // Loop until we've found the terminal atom.
+        while (not found_ter and idx > 0)
+        {
+            // Extract the atom.
+            atom = atoms[idx].read().asA<SireMol::Atom>();
+
+            if (atom.hasProperty(map["is_het"]))
+            {
+                // Not a HETATM, so can be used as a TER.
+                if (atom.property<QString>(map["is_het"]) == "False")
+                {
+                    found_ter = true;
+                    break;
+                }
+                else
+                {
+                    idx--;
+                }
+            }
+            // Not a HETATM, so can be used as a TER.
+            else
+            {
+                found_ter = true;
+                break;
+            }
+        }
+
+        // Error if a TER wasn't found.
+        if (not found_ter)
+        {
+            throw SireError::incompatible_error(QObject::tr("Unable to "
+                "locate terminal atom for chain index %1")
+                .arg(i), CODELOC);
+        }
+
         // Extract the number of the last atom in the chain
-        int terminal_atom = atoms[atoms.count()-1]
-                           .read()
-                           .asA<SireMol::Atom>()
-                           .index()
-                           .value();
+        int terminal_atom = atom.index().value();
 
         // Set the terminal atom.
         is_ter[terminal_atom] = true;
