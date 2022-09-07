@@ -1038,7 +1038,7 @@ QVector<QString> PDB2::toLines(bool is_velocity) const
                     if (atoms[i][j].isTer())
                     {
                         atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
-                                                .arg(lines[j].mid(6, 5))
+                                                .arg(QString::number(atom_lines[iline-1].mid(6, 5).toInt() + 1), 5)
                                                 .arg(lines[j].mid(17, 3))
                                                 .arg(lines[j].at(21))
                                                 .arg(lines[j].mid(22, 4))
@@ -1077,7 +1077,7 @@ QVector<QString> PDB2::toLines(bool is_velocity) const
                 if (atoms[i][j].isTer())
                 {
                     atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
-                                            .arg(atom_lines[iline-1].mid(6, 5))
+                                            .arg(QString::number(atom_lines[iline-1].mid(6, 5).toInt() + 1), 5)
                                             .arg(atom_lines[iline-1].mid(17, 3))
                                             .arg(atom_lines[iline-1].at(21))
                                             .arg(atom_lines[iline-1].mid(22, 4))
