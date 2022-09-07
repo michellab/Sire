@@ -675,6 +675,10 @@ QString PDBAtom::toPDBRecord() const
         if (charge < 0) line.append(QString("%1-").arg(qAbs(charge)));
         else            line.append(QString("%1+").arg(charge));
     }
+    else
+    {
+        line.append(QString("  "));
+    }
 
     // Convert ATOM record to HETATM. This avoids the need to change the
     // justifaction of other terms in the record above.
