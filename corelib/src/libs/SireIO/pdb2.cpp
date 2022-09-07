@@ -1037,7 +1037,7 @@ QVector<QString> PDB2::toLines(bool is_velocity) const
                     // Add a TER record for this atom.
                     if (atoms[i][j].isTer())
                     {
-                        atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
+                        atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5                                                     ")
                                                 .arg(QString::number(atom_lines[iline-1].mid(6, 5).toInt() + 1), 5)
                                                 .arg(lines[j].mid(17, 3))
                                                 .arg(lines[j].at(21))
@@ -1076,7 +1076,7 @@ QVector<QString> PDB2::toLines(bool is_velocity) const
                 // Add a TER record for this atom.
                 if (atoms[i][j].isTer())
                 {
-                    atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
+                    atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5                                                     ")
                                             .arg(QString::number(atom_lines[iline-1].mid(6, 5).toInt() + 1), 5)
                                             .arg(atom_lines[iline-1].mid(17, 3))
                                             .arg(atom_lines[iline-1].at(21))
@@ -2340,8 +2340,8 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
                 // Add a TER record for this atom.
                 if (is_ter[i])
                 {
-                    atom_lines[iline] = QString("TER    %1      %2 %3\%4\%5")
-                                            .arg(iline + 1)
+                    atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5                                                     ")
+                                            .arg(iline + 1, 5)
                                             .arg(lines[i].mid(17, 3))
                                             .arg(lines[i].at(21))
                                             .arg(lines[i].mid(22, 4))
@@ -2370,8 +2370,8 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
             // Add a TER record for this atom.
             if (is_ter[i])
             {
-                atom_lines[iline] = QString("TER    %1      %2 %3\%4\%5")
-                                        .arg(iline + 1)
+                atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5                                                     ")
+                                        .arg(iline + 1, 5)
                                         .arg(atom_lines[iline-1].mid(17, 3))
                                         .arg(atom_lines[iline-1].at(21))
                                         .arg(atom_lines[iline-1].mid(22, 4))
