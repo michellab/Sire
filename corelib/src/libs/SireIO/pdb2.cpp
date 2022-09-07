@@ -1567,7 +1567,7 @@ void PDB2::parseLines(const PropertyMap &map)
                    ascending order.
 
 				   However, residue numbers are not unique across
-                   chains, so we need to preserved the numbering if
+                   chains, so we need to preserve the numbering if
                    the chain ID differs.
                  */
 
