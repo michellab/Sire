@@ -915,22 +915,46 @@ SelectorM_CutGroup_.trajectory = _trajectory
 SelectorMol.trajectory = _trajectory
 
 
-def _energy(obj, map=None):
+def _to_molecules(obj):
+    if obj is None:
+        return None
+
+    if hasattr(obj, "to_molecule_group"):
+        return obj.to_molecule_group().molecules()
+    else:
+        from ..legacy.Mol import Molecules
+        m = Molecules(obj)
+        return m
+
+
+def _energy(obj, obj1=None, map=None):
     from ..mm import calculate_energy
 
     if map is None:
-        return calculate_energy(obj)
-    else:
+        if obj1 is None:
+            return calculate_energy(obj)
+        else:
+            return calculate_energy(obj, _to_molecules(obj1))
+    elif obj1 is None:
         return calculate_energy(obj, map=map)
+    else:
+        return calculate_energy(obj, _to_molecules(obj1), map=map)
 
 
-def _atom_energy(obj, map=None):
+def _atom_energy(obj, obj1=None, map=None):
     # An individual atom has a zero energy
-    from ..units import GeneralUnit
-    return GeneralUnit(0)
+    if obj1 is None:
+        from ..units import GeneralUnit
+        return GeneralUnit(0)
+    elif map is None:
+        from ..mm import calculate_energy
+        return calculate_energy(obj, _to_molecules(obj1))
+    else:
+        from ..mm import calculate_energy
+        return calculate_energy(obj, _to_molecules(obj1), map=map)
 
 
-def _total_energy(obj, map=None):
+def _total_energy(obj, obj1=None, map=None):
     if hasattr(obj, "to_molecule_group"):
         mols = obj.to_molecule_group()
     else:
@@ -941,9 +965,16 @@ def _total_energy(obj, map=None):
     from ..mm import calculate_energy
 
     if map is None:
-        return calculate_energy(mols.molecules())
-    else:
+        if obj1 is None:
+            return calculate_energy(mols.molecules())
+        else:
+            return calculate_energy(mols.molecules(),
+                                    _to_molecules(obj1))
+    elif obj1 is None:
         return calculate_energy(mols.molecules(), map=map)
+    else:
+        return calculate_energy(mols.molecules(),
+                                _to_molecules(obj1), map=map)
 
 
 Atom.energy = _atom_energy

@@ -9,6 +9,7 @@ from .. import use_new_api as _use_new_api
 _use_new_api()
 
 calculate_energy = _MM.calculate_energy
+create_forcefield = _MM.create_forcefield
 
 Bond = _MM.Bond
 SelectorBond = _MM.SelectorBond

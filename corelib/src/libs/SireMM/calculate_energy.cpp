@@ -31,6 +31,9 @@
 #include "SireMM/interff.h"
 #include "SireMM/intraff.h"
 #include "SireMM/internalff.h"
+#include "SireMM/intergroupff.h"
+
+#include "SireMM/intragroupff.h"
 
 #include "SireUnits/units.h"
 
@@ -49,6 +52,126 @@ using namespace SireUnits::Dimension;
 
 namespace SireMM
 {
+
+SIREMM_EXPORT ForceFields create_forcefield(const MoleculeView &mol,
+                                            const PropertyMap &map)
+{
+    ForceFields ffields;
+
+    InternalFF internalff("internal");
+    internalff.setStrict(true);
+    internalff.add(mol, map);
+
+    IntraFF intraff("intraff");
+    intraff.add(mol, map);
+
+    ffields.add(internalff);
+    ffields.add(intraff);
+
+    return ffields;
+}
+
+SIREMM_EXPORT ForceFields create_forcefield(const SireMol::Molecules &mols,
+                                            const SireBase::PropertyMap &map)
+{
+    ForceFields ffields;
+
+    InternalFF internalff("internal");
+    internalff.setStrict(true);
+    internalff.add(mols, map);
+
+    IntraFF intraff("intraff");
+    intraff.add(mols, map);
+
+    InterFF interff("interff");
+    interff.add(mols, map);
+
+    // set the space from the first one we can find from the molecules
+    const auto space_property = map["space"];
+
+    for (const auto &mol : mols)
+    {
+        if (mol.hasProperty(space_property))
+        {
+            interff.setProperty("space",
+                                mol.molecule().property(space_property));
+            break;
+        }
+    }
+
+    ffields.add(internalff);
+    ffields.add(intraff);
+    ffields.add(interff);
+
+    return ffields;
+}
+
+SIREMM_EXPORT ForceFields create_forcefield(const MoleculeView &mol0,
+                                            const MoleculeView &mol1,
+                                            const PropertyMap &map)
+{
+    return create_forcefield(Molecules(mol0), Molecules(mol1), map);
+}
+
+SIREMM_EXPORT ForceFields create_forcefield(const MoleculeView &mol0,
+                                            const Molecules &mols1,
+                                            const PropertyMap &map)
+{
+    return create_forcefield(Molecules(mol0), mols1, map);
+}
+
+SIREMM_EXPORT ForceFields create_forcefield(const Molecules &mols0,
+                                            const Molecules &mols1,
+                                            const PropertyMap &map)
+{
+    ForceFields ffields;
+
+    InterGroupFF interff("interff");
+    interff.add(mols0, MGIdx(0), map);
+    interff.add(mols1, MGIdx(1), map);
+
+    IntraGroupFF intraff("intraff");
+    intraff.add(mols0, MGIdx(0), map);
+    intraff.add(mols1, MGIdx(1), map);
+
+    // set the space from the first one we can find from the molecules
+    const auto space_property = map["space"];
+    bool has_property = false;
+
+    for (const auto &mol : mols0)
+    {
+        if (mol.hasProperty(space_property))
+        {
+            has_property = true;
+            interff.setProperty("space",
+                                mol.molecule().property(space_property));
+            break;
+        }
+    }
+
+    if (not has_property)
+    {
+        for (const auto &mol : mols1)
+        {
+            if (mol.hasProperty(space_property))
+            {
+                has_property = true;
+                interff.setProperty("space",
+                                    mol.molecule().property(space_property));
+                break;
+            }
+        }
+    }
+
+    ffields.add(interff);
+    ffields.add(intraff);
+
+    throw SireError::incomplete_code(QObject::tr(
+        "NEED InternalGroupFF"
+    ));
+
+    return ffields;
+}
 
 SIREMM_EXPORT GeneralUnit calculate_energy(ForceFields &ffields)
 {
@@ -116,19 +239,8 @@ SIREMM_EXPORT GeneralUnit calculate_energy(const SireMol::MoleculeView &mol)
 SIREMM_EXPORT GeneralUnit calculate_energy(const SireMol::MoleculeView &mol,
                                            const SireBase::PropertyMap &map)
 {
-    ForceFields ffields;
-
-    InternalFF internalff("internal");
-    internalff.setStrict(true);
-    internalff.add(mol, map);
-
-    IntraFF intraff("intraff");
-    intraff.add(mol, map);
-
-    ffields.add(internalff);
-    ffields.add(intraff);
-
-    return calculate_energy(ffields);
+    auto ff = create_forcefield(mol, map);
+    return calculate_energy(ff);
 }
 
 SIREMM_EXPORT GeneralUnit calculate_energy(const SireMol::Molecules &mols)
@@ -139,36 +251,50 @@ SIREMM_EXPORT GeneralUnit calculate_energy(const SireMol::Molecules &mols)
 SIREMM_EXPORT GeneralUnit calculate_energy(const SireMol::Molecules &mols,
                                            const SireBase::PropertyMap &map)
 {
-    ForceFields ffields;
+    auto ff = create_forcefield(mols, map);
+    return calculate_energy(ff);
+}
 
-    InternalFF internalff("internal");
-    internalff.setStrict(true);
-    internalff.add(mols, map);
+SIREMM_EXPORT GeneralUnit calculate_energy(const SireMol::MoleculeView &mol0,
+                                           const SireMol::MoleculeView &mol1)
+{
+    return calculate_energy(mol0, mol1, PropertyMap());
+}
 
-    IntraFF intraff("intraff");
-    intraff.add(mols, map);
+SIREMM_EXPORT GeneralUnit calculate_energy(const SireMol::MoleculeView &mol0,
+                                           const SireMol::MoleculeView &mol1,
+                                           const SireBase::PropertyMap &map)
+{
+    auto ff = create_forcefield(mol0, mol1, map);
+    return calculate_energy(ff);
+}
 
-    InterFF interff("interff");
-    interff.add(mols, map);
+SIREMM_EXPORT GeneralUnit calculate_energy(const SireMol::MoleculeView &mol0,
+                                           const SireMol::Molecules &mols1)
+{
+    return calculate_energy(mol0, mols1, PropertyMap());
+}
 
-    // set the space from the first one we can find from the molecules
-    const auto space_property = map["space"];
+SIREMM_EXPORT GeneralUnit calculate_energy(const SireMol::MoleculeView &mol0,
+                                           const SireMol::Molecules &mols1,
+                                           const SireBase::PropertyMap &map)
+{
+    auto ff = create_forcefield(mol0, mols1, map);
+    return calculate_energy(ff);
+}
 
-    for (const auto &mol : mols)
-    {
-        if (mol.hasProperty(space_property))
-        {
-            interff.setProperty("space",
-                                mol.molecule().property(space_property));
-            break;
-        }
-    }
+SIREMM_EXPORT GeneralUnit calculate_energy(const SireMol::Molecules &mols0,
+                                           const SireMol::Molecules &mols1)
+{
+    return calculate_energy(mols0, mols1, PropertyMap());
+}
 
-    ffields.add(internalff);
-    ffields.add(intraff);
-    ffields.add(interff);
-
-    return calculate_energy(ffields);
+SIREMM_EXPORT GeneralUnit calculate_energy(const SireMol::Molecules &mols0,
+                                           const SireMol::Molecules &mols1,
+                                           const SireBase::PropertyMap &map)
+{
+    auto ff = create_forcefield(mols0, mols1, map);
+    return calculate_energy(ff);
 }
 
 } // end of namespace SireMM

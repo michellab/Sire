@@ -40,6 +40,32 @@ SIRE_BEGIN_HEADER
 namespace SireMM
 {
     SIREMM_EXPORT SireUnits::Dimension::GeneralUnit
+    calculate_energy(SireFF::ForceFields &ffields);
+
+    SIREMM_EXPORT SireFF::ForceFields
+    create_forcefield(const SireMol::MoleculeView &mol,
+                      const SireBase::PropertyMap &map);
+
+    SIREMM_EXPORT SireFF::ForceFields
+    create_forcefield(const SireMol::Molecules &mols,
+                      const SireBase::PropertyMap &map);
+
+    SIREMM_EXPORT SireFF::ForceFields
+    create_forcefield(const SireMol::MoleculeView &mol0,
+                      const SireMol::MoleculeView &mol1,
+                      const SireBase::PropertyMap &map);
+
+    SIREMM_EXPORT SireFF::ForceFields
+    create_forcefield(const SireMol::MoleculeView &mol0,
+                      const SireMol::Molecules &mols1,
+                      const SireBase::PropertyMap &map);
+
+    SIREMM_EXPORT SireFF::ForceFields
+    create_forcefield(const SireMol::Molecules &mols0,
+                      const SireMol::Molecules &mols1,
+                      const SireBase::PropertyMap &map);
+
+    SIREMM_EXPORT SireUnits::Dimension::GeneralUnit
     calculate_energy(const SireMol::MoleculeView &mol);
 
     SIREMM_EXPORT SireUnits::Dimension::GeneralUnit
@@ -54,9 +80,35 @@ namespace SireMM
                      const SireBase::PropertyMap &map);
 
     SIREMM_EXPORT SireUnits::Dimension::GeneralUnit
-    calculate_energy(SireFF::ForceFields &ffields);
+    calculate_energy(const SireMol::MoleculeView &mol0,
+                     const SireMol::MoleculeView &mol1);
+
+    SIREMM_EXPORT SireUnits::Dimension::GeneralUnit
+    calculate_energy(const SireMol::MoleculeView &mol0,
+                     const SireMol::Molecules &mols1);
+
+    SIREMM_EXPORT SireUnits::Dimension::GeneralUnit
+    calculate_energy(const SireMol::Molecules &mols0,
+                     const SireMol::Molecules &mols1);
+
+    SIREMM_EXPORT SireUnits::Dimension::GeneralUnit
+    calculate_energy(const SireMol::MoleculeView &mol0,
+                     const SireMol::MoleculeView &mol1,
+                     const SireBase::PropertyMap &map);
+
+    SIREMM_EXPORT SireUnits::Dimension::GeneralUnit
+    calculate_energy(const SireMol::MoleculeView &mol0,
+                     const SireMol::Molecules &mols1,
+                     const SireBase::PropertyMap &map);
+
+    SIREMM_EXPORT SireUnits::Dimension::GeneralUnit
+    calculate_energy(const SireMol::Molecules &mols0,
+                     const SireMol::Molecules &mols1,
+                     const SireBase::PropertyMap &map);
+
 }
 
+SIRE_EXPOSE_FUNCTION( SireMM::create_forcefield )
 SIRE_EXPOSE_FUNCTION( SireMM::calculate_energy )
 
 SIRE_END_HEADER
