@@ -675,10 +675,6 @@ QString PDBAtom::toPDBRecord() const
         if (charge < 0) line.append(QString("%1-").arg(qAbs(charge)));
         else            line.append(QString("%1+").arg(charge));
     }
-    else
-    {
-        line.append(QString("  "));
-    }
 
     // Convert ATOM record to HETATM. This avoids the need to change the
     // justifaction of other terms in the record above.
@@ -853,6 +849,10 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
     }
 
     lines.append("END");
+
+    // Ensure that lines are 80 characters wide.
+    for (auto &line : lines)
+        line.resize(80, ' ');
 
     // Reparse the lines as a self-consistency check.
     PDB2 parsed(lines, map);
@@ -1037,7 +1037,7 @@ QVector<QString> PDB2::toLines(bool is_velocity) const
                     // Add a TER record for this atom.
                     if (atoms[i][j].isTer())
                     {
-                        atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5                                                     ")
+                        atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
                                                 .arg(QString::number(atom_lines[iline-1].mid(6, 5).toInt() + 1), 5)
                                                 .arg(lines[j].mid(17, 3))
                                                 .arg(lines[j].at(21))
@@ -1076,7 +1076,7 @@ QVector<QString> PDB2::toLines(bool is_velocity) const
                 // Add a TER record for this atom.
                 if (atoms[i][j].isTer())
                 {
-                    atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5                                                     ")
+                    atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
                                             .arg(QString::number(atom_lines[iline-1].mid(6, 5).toInt() + 1), 5)
                                             .arg(atom_lines[iline-1].mid(17, 3))
                                             .arg(atom_lines[iline-1].at(21))
@@ -1100,6 +1100,10 @@ QVector<QString> PDB2::toLines(bool is_velocity) const
     }
 
     lines.append("END");
+
+    // Ensure that lines are 80 characters wide.
+    for (auto &line : lines)
+        line.resize(80, ' ');
 
     return lines;
 }
@@ -2340,7 +2344,7 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
                 // Add a TER record for this atom.
                 if (is_ter[i])
                 {
-                    atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5                                                     ")
+                    atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
                                             .arg(iline + 1, 5)
                                             .arg(lines[i].mid(17, 3))
                                             .arg(lines[i].at(21))
@@ -2370,7 +2374,7 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
             // Add a TER record for this atom.
             if (is_ter[i])
             {
-                atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5                                                     ")
+                atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
                                         .arg(iline + 1, 5)
                                         .arg(atom_lines[iline-1].mid(17, 3))
                                         .arg(atom_lines[iline-1].at(21))
