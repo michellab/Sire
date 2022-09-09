@@ -217,7 +217,10 @@ QString GeneralUnit::toString() const
                                                  temperature, Quantity,
                                                  Angle);
 
-    double v = value() / u.first;
+    double v = value();
+
+    if (u.first != 0)
+        v /= u.first;
 
     if (u.second.startsWith("°"))
         return QString("%1%2").arg(v).arg(u.second);

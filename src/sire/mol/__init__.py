@@ -941,6 +941,10 @@ def _energy(obj, obj1=None, map=None):
         return calculate_energy(obj, _to_molecules(obj1), map=map)
 
 
+def _energies(obj, obj1, map=None):
+    return obj.apply("energy", obj1, map=map)
+
+
 def _atom_energy(obj, obj1=None, map=None):
     # An individual atom has a zero energy
     if obj1 is None:
@@ -996,3 +1000,16 @@ SelectorM_Residue_.energy = _total_energy
 SelectorM_Chain_.energy = _total_energy
 SelectorM_Segment_.energy = _total_energy
 SelectorM_CutGroup_.energy = _total_energy
+
+SelectorMol.energies = _energies
+Selector_Atom_.energies = _energies
+Selector_Residue_.energies = _energies
+Selector_Chain_.energies = _energies
+Selector_Segment_.energies = _energies
+Selector_CutGroup_.energies = _energies
+
+SelectorM_Atom_.energies = _energies
+SelectorM_Residue_.energies = _energies
+SelectorM_Chain_.energies = _energies
+SelectorM_Segment_.energies = _energies
+SelectorM_CutGroup_.energies = _energies
