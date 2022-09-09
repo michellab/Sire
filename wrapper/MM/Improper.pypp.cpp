@@ -16,6 +16,8 @@ namespace bp = boost::python;
 
 #include "SireCAS/values.h"
 
+#include "SireMaths/torsion.h"
+
 #include "SireMol/errors.h"
 
 #include "SireMol/molecule.h"
@@ -286,6 +288,31 @@ void register_Improper_class(){
         
         }
         Improper_exposer.def( bp::self == bp::self );
+        { //::SireMM::Improper::phi
+        
+            typedef ::SireUnits::Dimension::Angle ( ::SireMM::Improper::*phi_function_type)(  ) const;
+            phi_function_type phi_function_value( &::SireMM::Improper::phi );
+            
+            Improper_exposer.def( 
+                "phi"
+                , phi_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Improper::phi
+        
+            typedef ::SireUnits::Dimension::Angle ( ::SireMM::Improper::*phi_function_type)( ::SireBase::PropertyMap const & ) const;
+            phi_function_type phi_function_value( &::SireMM::Improper::phi );
+            
+            Improper_exposer.def( 
+                "phi"
+                , phi_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::Improper::potential
         
             typedef ::SireCAS::Expression ( ::SireMM::Improper::*potential_function_type)(  ) const;
@@ -405,6 +432,31 @@ void register_Improper_class(){
             Improper_exposer.def( 
                 "size"
                 , size_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Improper::theta
+        
+            typedef ::SireUnits::Dimension::Angle ( ::SireMM::Improper::*theta_function_type)(  ) const;
+            theta_function_type theta_function_value( &::SireMM::Improper::theta );
+            
+            Improper_exposer.def( 
+                "theta"
+                , theta_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Improper::theta
+        
+            typedef ::SireUnits::Dimension::Angle ( ::SireMM::Improper::*theta_function_type)( ::SireBase::PropertyMap const & ) const;
+            theta_function_type theta_function_value( &::SireMM::Improper::theta );
+            
+            Improper_exposer.def( 
+                "theta"
+                , theta_function_value
                 , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );

@@ -134,6 +134,12 @@ public:
     const Property& property(const SireBase::PropertyName &key,
                              const Property &default_value) const;
 
+    SireUnits::Dimension::Angle theta() const;
+    SireUnits::Dimension::Angle theta(const SireBase::PropertyMap &map) const;
+
+    SireUnits::Dimension::Angle phi() const;
+    SireUnits::Dimension::Angle phi(const SireBase::PropertyMap &map) const;
+
     SireUnits::Dimension::Angle size() const;
     SireUnits::Dimension::Angle size(const SireBase::PropertyMap &map) const;
 

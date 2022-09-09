@@ -38,6 +38,7 @@
 #include "SireBase/propertylist.h"
 
 #include "SireMol/mover.hpp"
+#include "SireMol/mgidx.h"
 
 #include "SireFF/detail/atomiccoords3d.h"
 
@@ -50,6 +51,8 @@
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
+
+#include "SireMol/errors.h"
 
 #include "tostring.h"
 
@@ -490,14 +493,6 @@ void InternalGroupFF::recalculateEnergy()
     //everything from scratch
     const int nmols = mols.count();
 
-    if (nmols != mols0.count() or nmols != mols1.count())
-    {
-        throw SireError::program_bug(QObject::tr(
-            "Disagreement in nmols: %1 %2 %3")
-                .arg(nmols).arg(mols0.count()).arg(mols1.count()),
-                    CODELOC);
-    }
-
     const ChunkedVector<InternalPotential::Molecule> &mols_array
                                         = mols.moleculesByIndex();
     const ChunkedVector<InternalPotential::Molecule> &mols0_array
@@ -505,65 +500,56 @@ void InternalGroupFF::recalculateEnergy()
     const ChunkedVector<InternalPotential::Molecule> &mols1_array
                                         = mols1.moleculesByIndex();
 
+    const auto &map0 = mols0.indexesByMolNum();
+    const auto &map1 = mols1.indexesByMolNum();
+
     Energy total_nrg;
     Energy total_nrg0;
     Energy total_nrg1;
 
+    double cnrg = 0;
+    double ljnrg = 0;
+    double cnrg0 = 0;
+    double ljnrg0 = 0;
+    double cnrg1 = 0;
+    double ljnrg1 = 0;
+
     for (int i=0; i<nmols; ++i)
     {
-        InternalPotential::calculateEnergy( mols_array[i], total_nrg );
-        InternalPotential::calculateEnergy( mols0_array[i], total_nrg0 );
-        InternalPotential::calculateEnergy( mols1_array[i], total_nrg1 );
+        const auto molnum = mols_array[i].number();
+
+        if (map0.contains(molnum) and map1.contains(molnum))
+        {
+            InternalPotential::calculateEnergy( mols_array[i], total_nrg );
+            InternalPotential::calculateEnergy( mols0_array[map0[molnum]], total_nrg0 );
+            InternalPotential::calculateEnergy( mols1_array[map1[molnum]], total_nrg1 );
+
+            if (calc_14_nrgs)
+            {
+                auto it = cljgroups.find(molnum);
+                it.value().mustNowRecalculateFromScratch();
+                boost::tuple<double,double> nrg = it.value().energy();
+                cnrg += nrg.get<0>();
+                ljnrg += nrg.get<1>();
+
+                it = cljgroups0.find(molnum);
+                it.value().mustNowRecalculateFromScratch();
+                nrg = it.value().energy();
+                cnrg0 += nrg.get<0>();
+                ljnrg0 += nrg.get<1>();
+
+                it = cljgroups1.find(molnum);
+                it.value().mustNowRecalculateFromScratch();
+                nrg = it.value().energy();
+                cnrg1 += nrg.get<0>();
+                ljnrg1 += nrg.get<1>();
+            }
+        }
     }
 
-    if (calc_14_nrgs)
-    {
-        double cnrg = 0;
-        double ljnrg = 0;
-
-        for (QHash<MolNum,CLJ14Group>::iterator it = cljgroups.begin();
-                it != cljgroups.end();
-                ++it)
-        {
-            it.value().mustNowRecalculateFromScratch();
-            boost::tuple<double,double> nrg = it.value().energy();
-            cnrg += nrg.get<0>();
-            ljnrg += nrg.get<1>();
-        }
-
-        total_nrg += Intra14Energy(cnrg, ljnrg);
-
-        double cnrg0 = 0;
-        double ljnrg0 = 0;
-
-        for (QHash<MolNum,CLJ14Group>::iterator it = cljgroups0.begin();
-                it != cljgroups0.end();
-                ++it)
-        {
-            it.value().mustNowRecalculateFromScratch();
-            boost::tuple<double,double> nrg = it.value().energy();
-            cnrg0 += nrg.get<0>();
-            ljnrg0 += nrg.get<1>();
-        }
-
-        total_nrg0 += Intra14Energy(cnrg0, ljnrg0);
-
-        double cnrg1 = 0;
-        double ljnrg1 = 0;
-
-        for (QHash<MolNum,CLJ14Group>::iterator it = cljgroups1.begin();
-                it != cljgroups1.end();
-                ++it)
-        {
-            it.value().mustNowRecalculateFromScratch();
-            boost::tuple<double,double> nrg = it.value().energy();
-            cnrg1 += nrg.get<0>();
-            ljnrg1 += nrg.get<1>();
-        }
-
-        total_nrg1 += Intra14Energy(cnrg1, ljnrg1);
-
-    }
+    total_nrg += Intra14Energy(cnrg, ljnrg);
+    total_nrg0 += Intra14Energy(cnrg0, ljnrg0);
+    total_nrg1 += Intra14Energy(cnrg1, ljnrg1);
 
     // we calculate the energy between the two parts as the difference
     // between the total energy of the combined parts minus the
@@ -584,13 +570,34 @@ void InternalGroupFF::recalculateEnergy()
 void InternalGroupFF::_pvt_added(quint32 group_id,
                                  const PartialMolecule &molecule, const PropertyMap &map)
 {
-    mols.add(molecule, map, *this, false);
+    const auto molnum = molecule.data().number();
 
-    if (group_id == 0)
-        mols0.add(molecule, map, *this, false);
-    else
-        mols1.add(molecule, map, *this, false);
+    // make sure this molecule is in both groups
+    const auto &group0 = this->select(MGIdx(0));
+    const auto &group1 = this->select(MGIdx(1));
 
+    if (not (group0.contains(molnum) and group1.contains(molnum)))
+    {
+        return;
+    }
+
+    const auto mol0 = group0[molnum];
+    const auto mol1 = group1[molnum];
+
+    if (mol0.selection().intersects(mol1.selection()))
+    {
+        throw SireMol::duplicate_atom(QObject::tr(
+            "One or more atoms of %1:%2 has been added to both groups. You "
+            "must be careful to sure that an atom is not added to both groups.")
+                .arg(molecule.data().name().value()).arg(molnum.value()),
+                    CODELOC);
+    }
+
+    mols.add(mol0, map, *this, false);
+    mols.add(mol1, map, *this, false);
+
+    mols0.add(mol0, map, *this, false);
+    mols1.add(mol1, map, *this, false);
 
     if (not map.isDefault())
     {
@@ -601,37 +608,34 @@ void InternalGroupFF::_pvt_added(quint32 group_id,
     {
         if (cljgroups.contains(molecule.number()))
         {
-            cljgroups[molecule.number()].add(molecule);
+            cljgroups[molecule.number()].add(mol0);
+            cljgroups[molecule.number()].add(mol1);
         }
         else
         {
-            cljgroups.insert(molecule.number(),
-                             CLJ14Group(molecule, combiningRules(), true, map));
+            cljgroups.insert(mol0.number(),
+                             CLJ14Group(mol0, combiningRules(), true, map));
+            cljgroups[molecule.number()].add(mol1);
         }
 
-        if (group_id == 0)
+        if (cljgroups0.contains(molecule.number()))
         {
-            if (cljgroups0.contains(molecule.number()))
-            {
-                cljgroups0[molecule.number()].add(molecule);
-            }
-            else
-            {
-                cljgroups0.insert(molecule.number(),
-                                CLJ14Group(molecule, combiningRules(), true, map));
-            }
+            cljgroups0[molecule.number()].add(mol0);
         }
         else
         {
-            if (cljgroups1.contains(molecule.number()))
-            {
-                cljgroups1[molecule.number()].add(molecule);
-            }
-            else
-            {
-                cljgroups1.insert(molecule.number(),
-                                CLJ14Group(molecule, combiningRules(), true, map));
-            }
+            cljgroups0.insert(molecule.number(),
+                              CLJ14Group(mol0, combiningRules(), true, map));
+        }
+
+        if (cljgroups1.contains(molecule.number()))
+        {
+            cljgroups1[molecule.number()].add(mol1);
+        }
+        else
+        {
+            cljgroups1.insert(molecule.number(),
+                              CLJ14Group(mol1, combiningRules(), true, map));
         }
     }
 }

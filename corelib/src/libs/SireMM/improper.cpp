@@ -39,6 +39,8 @@
 #include "SireCAS/values.h"
 #include "SireCAS/expression.h"
 
+#include "SireMaths/torsion.h"
+
 #include "SireBase/errors.h"
 #include "SireMol/errors.h"
 
@@ -369,12 +371,32 @@ const Property& Improper::property(const PropertyName &key,
 
 SireUnits::Dimension::Angle Improper::size(const PropertyMap &map) const
 {
-    return imp.size(*this, map);
+    return imp.torsion(this->data(), map).angle();
 }
 
 SireUnits::Dimension::Angle Improper::size() const
 {
     return this->size(PropertyMap());
+}
+
+SireUnits::Dimension::Angle Improper::phi(const PropertyMap &map) const
+{
+    return this->size(map);
+}
+
+SireUnits::Dimension::Angle Improper::phi() const
+{
+    return this->size();
+}
+
+SireUnits::Dimension::Angle Improper::theta(const PropertyMap &map) const
+{
+    return imp.torsion(this->data(), map).improperAngle();
+}
+
+SireUnits::Dimension::Angle Improper::theta() const
+{
+    return this->theta(PropertyMap());
 }
 
 SireUnits::Dimension::Angle Improper::measure(const PropertyMap &map) const
@@ -422,9 +444,11 @@ SireUnits::Dimension::GeneralUnit Improper::energy() const
 SireUnits::Dimension::GeneralUnit Improper::energy(const PropertyMap &map) const
 {
     auto pot = this->potential(map);
-    auto s = this->size(map);
+    auto phi = this->phi(map);
+    auto theta = this->theta(map);
 
-    Values vals(Symbol("phi")==s.to(radians), Symbol("theta")==s.to(radians));
+    Values vals(Symbol("phi")==phi.to(radians),
+                Symbol("theta")==theta.to(radians));
 
     SireUnits::Dimension::GeneralUnit value;
     value.setComponent("improper", pot.evaluate(vals) * kcal_per_mol);
