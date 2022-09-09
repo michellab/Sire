@@ -29,9 +29,12 @@
 #include "calculate_energy.h"
 
 #include "SireMM/interff.h"
+#include "SireMM/intergroupff.h"
 #include "SireMM/intraff.h"
+#include "SireMM/intragroupff.h"
 #include "SireMM/internalff.h"
 #include "SireMM/intergroupff.h"
+#include "SireMM/internalgroupff.h"
 
 #include "SireMM/intragroupff.h"
 
@@ -134,6 +137,10 @@ SIREMM_EXPORT ForceFields create_forcefield(const Molecules &mols0,
     intraff.add(mols0, MGIdx(0), map);
     intraff.add(mols1, MGIdx(1), map);
 
+    InternalGroupFF internalff("internalff");
+    internalff.add(mols0, MGIdx(0), map);
+    internalff.add(mols1, MGIdx(1), map);
+
     // set the space from the first one we can find from the molecules
     const auto space_property = map["space"];
     bool has_property = false;
@@ -165,10 +172,7 @@ SIREMM_EXPORT ForceFields create_forcefield(const Molecules &mols0,
 
     ffields.add(interff);
     ffields.add(intraff);
-
-    throw SireError::incomplete_code(QObject::tr(
-        "NEED InternalGroupFF"
-    ));
+    ffields.add(internalff);
 
     return ffields;
 }
@@ -183,13 +187,13 @@ SIREMM_EXPORT GeneralUnit calculate_energy(ForceFields &ffields)
 
     for (const auto &ffield : ffields.forceFields())
     {
-        if (ffield->isA<InterFF>())
+        if (ffield->isA<InterFF>() or ffield->isA<InterGroupFF>())
         {
             const auto &clj = ffield.read().components().asA<MultiCLJComponent>();
             nrg.addComponent("coulomb", nrgs[clj.coulomb()] * kcal_per_mol);
             nrg.addComponent("LJ", nrgs[clj.lj()] * kcal_per_mol);
         }
-        else if (ffield->isA<IntraFF>())
+        else if (ffield->isA<IntraFF>() or ffield->isA<IntraGroupFF>())
         {
             const auto &clj = ffield.read().components().asA<MultiCLJComponent>();
             nrg.addComponent("intra_coulomb", nrgs[clj.coulomb()] * kcal_per_mol);

@@ -41,6 +41,7 @@
 #include "interljff.h"
 #include "internalcomponent.h"
 #include "internalff.h"
+#include "internalgroupff.h"
 #include "internalparameters.h"
 #include "internalperturbation.h"
 #include "intersoftcljff.h"
@@ -169,6 +170,7 @@ void register_SireMM_objects()
     ObjectRegistry::registerConverterFor< SireMM::Intra14Component >();
     ObjectRegistry::registerConverterFor< SireMM::InternalComponent >();
     ObjectRegistry::registerConverterFor< SireMM::InternalFF >();
+    ObjectRegistry::registerConverterFor< SireMM::InternalGroupFF >();
     ObjectRegistry::registerConverterFor< SireMM::InternalParameters >();
     ObjectRegistry::registerConverterFor< SireMM::InternalParameters3D >();
     ObjectRegistry::registerConverterFor< SireMM::TwoAtomPerturbation >();

@@ -57,6 +57,7 @@ set ( SIREMM_HEADERS
       interljff.h
       internalcomponent.h
       internalff.h
+      internalgroupff.h
       internalparameters.h
       internalperturbation.h
       intersoftcljff.h
@@ -143,6 +144,7 @@ set ( SIREMM_SOURCES
       interljff.cpp
       internalcomponent.cpp
       internalff.cpp
+      internalgroupff.cpp
       internalparameters.cpp
       internalperturbation.cpp
       intersoftcljff.cpp

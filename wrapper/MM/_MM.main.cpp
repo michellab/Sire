@@ -229,6 +229,8 @@
 
 #include "InternalFF.pypp.hpp"
 
+#include "InternalGroupFF.pypp.hpp"
+
 #include "InternalParameterNames.pypp.hpp"
 
 #include "InternalParameterNames3D.pypp.hpp"
@@ -695,6 +697,8 @@ BOOST_PYTHON_MODULE(_MM){
     register_InternalComponent_class();
 
     register_InternalFF_class();
+
+    register_InternalGroupFF_class();
 
     register_StretchBendParameterName_class();
 

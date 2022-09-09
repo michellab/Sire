@@ -43,6 +43,7 @@
 #include "interljff.h"
 #include "internalcomponent.h"
 #include "internalff.h"
+#include "internalgroupff.h"
 #include "internalparameters.h"
 #include "internalperturbation.h"
 #include "intersoftcljff.h"

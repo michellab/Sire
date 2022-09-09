@@ -111,6 +111,7 @@ set ( PYPP_SOURCES
        InterSoftCLJFFBase.pypp.cpp
        InternalComponent.pypp.cpp
        InternalFF.pypp.cpp
+       InternalGroupFF.pypp.cpp
        InternalParameterNames.pypp.cpp
        InternalParameterNames3D.pypp.cpp
        InternalParameters.pypp.cpp
