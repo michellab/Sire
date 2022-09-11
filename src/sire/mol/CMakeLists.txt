@@ -10,6 +10,7 @@ set ( SCRIPTS
         _cursor.py
         _element.py
         _trajectory.py
+        _view.py
     )
 
 # installation

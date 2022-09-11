@@ -59,7 +59,7 @@ for C in [Bond, SelectorBond, SelectorMBond,
     _add_property_func(C)
     _add_apply_func(C)
 
-from sire.mol import _cursor, _cursors
+from ..mol import _cursor, _cursors, _trajectory, _view
 
 Bond.cursor = _cursor
 SelectorBond.cursor = _cursors
@@ -70,9 +70,17 @@ SelectorDihedral.cursor = _cursors
 Improper.cursor = _cursor
 SelectorImproper.cursor = _cursors
 
-from ..mol import _trajectory
-
 SelectorMBond.trajectory = _trajectory
 SelectorMAngle.trajectory = _trajectory
 SelectorMDihedral.trajectory = _trajectory
 SelectorMImproper.trajectory = _trajectory
+
+SelectorBond.view = _view
+SelectorAngle.view = _view
+SelectorDihedral.view = _view
+SelectorImproper.view = _view
+
+SelectorMBond.view = _view
+SelectorMAngle.view = _view
+SelectorMDihedral.view = _view
+SelectorMImproper.view = _view

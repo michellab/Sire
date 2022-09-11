@@ -154,6 +154,9 @@ class System:
     def cursor(self):
         return self.molecules().cursor()
 
+    def view(self, *args, **kwargs):
+        return self.molecules().view(*args, **kwargs)
+
     def update(self, value):
         self._molecules = None
         self._system.update(value)

@@ -345,7 +345,7 @@ def load(path: _Union[str, _List[str]], *args, **kwargs):
 
 
 def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
-         log={}) -> _List[str]:
+         log={}, map=None) -> _List[str]:
     """Save the passed molecules to a file called 'filename'. If the format
        is not specified, then the format will be guessed from the
        filename. If the format is specified, and is a list, then multiple
@@ -399,7 +399,10 @@ def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
     from .legacy.IO import MoleculeParser
     from .legacy.Base import PropertyMap, StringProperty
 
-    p = PropertyMap()
+    if map is None:
+        p = PropertyMap()
+    else:
+        p = PropertyMap(map)
 
     if format is not None:
         if type(format) is str:
