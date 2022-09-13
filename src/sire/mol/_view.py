@@ -77,31 +77,8 @@ if has_nglview:
             return str(self._obj)
 
         def get_structure_string(self):
-            from ..legacy.IO import PDB2
-
-            molecules = self._obj
-
-            if molecules.what() != "SireSystem::System":
-                from ..legacy.System import System
-                from ..legacy.Mol import MoleculeGroup
-                s = System()
-
-                try:
-                    m = molecules.to_molecule_group()
-                except AttributeError:
-                    m = MoleculeGroup("all")
-                    m.add(molecules)
-
-                s.add(m)
-                molecules = s
-
-            pdb2 = PDB2(molecules, map=self._map)
-
-            lines = pdb2.to_lines()
-
-            s = "\n".join(lines)
-
-            return s
+            from .. import save_to_string
+            return "\n".join(save_to_string(self._obj, self.ext))
 
         @property
         def n_frames(self):

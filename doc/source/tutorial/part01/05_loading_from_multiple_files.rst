@@ -37,7 +37,7 @@ or
 
 .. note::
 
-   `sr.tutorial_url` expands to the base URL for tutorial files
+   ``sr.tutorial_url`` expands to the base URL for tutorial files
    (https://siremol.org/m). It is worth using this variable for
    the tutorial as it auto-completes and will reduce errors.
 
@@ -48,16 +48,16 @@ If you are loading files, you can also make use of glob expressions
 
 .. note::
 
-   This line loads the `ala.top` and `ala.crd` files that
+   This line loads the ``ala.top`` and ``ala.crd`` files that
    were downloaded by the above lines. This is because Sire downloads
    files at URLs to the current directory. You can tell it to use
-   a different directory by passing that in via the `directory`
-   argument, e.g. `sr.load(sr.expand(sr.tutorial_url,"cholesterol.sdf"), directory="tmp")`.
+   a different directory by passing that in via the ``directory``
+   argument, e.g. ``sr.load(sr.expand(sr.tutorial_url,"cholesterol.sdf"), directory="tmp")``.
    The directory will be created automatically if it doesn't exist.
 
 .. note::
 
-   We couldn't use `ala.*` because the directory contains the compressed
-   input files, `ala.crd.bz2` and `ala.top.bz2`, which were downloaded
-   by `sr.load`. If you remove both these files, then you could
-   use `sr.load("ala.*")`.
+   We couldn't use ``ala.*`` because the directory contains the compressed
+   input files, ``ala.crd.bz2`` and ``ala.top.bz2``, which were downloaded
+   by ``sr.load``. If you remove both these files, then you could
+   use ``sr.load("ala.*")``.

@@ -2,7 +2,7 @@
 from typing import Union as _Union
 from typing import List as _List
 
-__all__ = ["load", "save", "create", "smiles", "expand",
+__all__ = ["load", "save", "save_to_string", "create", "smiles", "expand",
            "tutorial_url", "load_test_files", "supported_formats"]
 
 
@@ -178,20 +178,26 @@ def _resolve_path(path, directory, silent=False):
             return _resolve_path(filename, directory=directory, silent=silent)
         else:
             raise IOError(f"Downloaded file does not exist? {filename}")
-    else:
-        if len(path) == 4:
-            # the first character should be a number
-            try:
-                int(path[0])
-                is_code = True
-            except Exception:
-                is_code = False
 
-            if is_code:
-                code = path.lower()
-                # https://files.rcsb.org/download/4hhb.pdb.gz
-                return _resolve_path(f"https://files.rcsb.org/download/{path}.pdb.gz",
-                                     directory=directory, silent=silent)
+    elif len(path) == 4:
+        # the first character should be a number
+        try:
+            int(path[0])
+            is_code = True
+        except Exception:
+            is_code = False
+
+        if is_code:
+            code = path.lower()
+            # https://files.rcsb.org/download/4hhb.pdb.gz
+            return _resolve_path(f"https://files.rcsb.org/download/{path}.pdb.gz",
+                                    directory=directory, silent=silent)
+    elif path.startswith("alphafold:"):
+        # alphafold code
+        code = path[10:]
+        # https://alphafold.ebi.ac.uk/files/AF-" + pdbid + "-F1-model_v1.pdb
+        return _resolve_path(f"https://alphafold.ebi.ac.uk/files/AF-{code}-F1-model_v3.pdb",
+                                    directory=directory, silent=silent)
 
     # this may be a globbed path
     import glob
@@ -344,6 +350,54 @@ def load(path: _Union[str, _List[str]], *args, **kwargs):
     return load_molecules(paths, map={"GROMACS_PATH":_get_gromacs_dir()})
 
 
+def _to_legacy_system(molecules):
+    """Internal function to convert the passed set of molecule views
+       into a sire.legacy.System.System
+    """
+    from .legacy.System import System as LegacySystem
+
+    if type(molecules) is LegacySystem:
+        return molecules
+
+    from .system import System as NewSystem
+
+    if type(molecules) is NewSystem:
+        return molecules._system
+
+    s = LegacySystem()
+
+    if hasattr(molecules, "to_molecule_group"):
+        s.add(molecules.to_molecule_group())
+    else:
+        from .legacy.Mol import MoleculeGroup
+        m = MoleculeGroup("all")
+        m.add(molecules)
+        s.add(m)
+
+    return s
+
+
+def save_to_string(molecules, format: str, log={}, map=None) -> _List[str]:
+    """Save the passed molecules to an in-memory list of lines.
+       This will write the molecule(s) in the format specified
+       to memory, thereby avoiding writing any data to a text file
+
+       Note that you must pass in the format, and only a single
+       "file" can be written at a time.
+    """
+    from .legacy.Base import PropertyMap
+    from .legacy.IO import MoleculeParser
+
+    if map is None:
+        p = PropertyMap()
+    else:
+        p = PropertyMap(map)
+
+    molecules = _to_legacy_system(molecules)
+
+    return MoleculeParser.parse(molecules, format, map=p).lines()
+
+
 def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
          log={}, map=None) -> _List[str]:
     """Save the passed molecules to a file called 'filename'. If the format
@@ -410,14 +464,7 @@ def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
 
         p.set("fileformat", StringProperty(",".join(format)))
 
-    if molecules.what() != "SireSystem::System":
-        from .legacy.System import System
-        from .legacy.Mol import MoleculeGroup
-        s = System()
-        m = MoleculeGroup("all")
-        m.add(molecules)
-        s.add(m)
-        molecules = s
+    molecules = _to_legacy_system(molecules)
 
     return MoleculeParser.save(molecules, filename, map=p)
 

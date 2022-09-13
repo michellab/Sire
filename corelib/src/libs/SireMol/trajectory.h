@@ -129,6 +129,8 @@ public:
 
     int nAtoms() const;
 
+    int numBytes() const;
+
     Frame subset(int start_atom, int natoms) const;
 
     bool isCompatibleWith(const MoleculeInfoData &molinfo) const;

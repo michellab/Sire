@@ -1194,6 +1194,12 @@ const Space& Frame::space() const
     return *spc;
 }
 
+int Frame::numBytes() const
+{
+    // 3 doubles times the number of coordinates, velocities and forces
+    return 24 * (coords.count() + vels.count() + frcs.count());
+}
+
 int Frame::nAtoms() const
 {
     int nats = coords.count();

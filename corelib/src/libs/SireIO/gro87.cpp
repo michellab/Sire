@@ -235,9 +235,9 @@ static QVector<QString> toLines(const QVector<QString> &atmnams,
 }
 
 static std::tuple< QVector<QString>, QVector<qint64>, QVector<QString> >
-getIDs(const MoleculeInfo &mol)
+getIDs(const Selector<Atom> &atoms)
 {
-    const int nats = mol.nAtoms();
+    const int nats = atoms.count();
 
     //get the atoms out in AtomIdx order
     if (nats == 0)
@@ -249,66 +249,68 @@ getIDs(const MoleculeInfo &mol)
     QVector<qint64> resnums(nats);
     QVector<QString> atmnams(nats);
 
+    QString *resnams_data = resnams.data();
+    QString *atmnams_data = atmnams.data();
+    qint64 *resnums_data = resnums.data();
+
     for (int i=0; i<nats; ++i)
     {
-        const AtomIdx idx(i);
+        const auto &atom = atoms(i);
 
-        const auto residx = mol.parentResidue(idx);
+        const auto residue = atom.residue();
 
-        atmnams[i] = mol.name(idx).value();
-        resnams[i] = mol.name(residx).value();
-        resnums[i] = mol.number(residx).value();
+        atmnams_data[i] = atom.name().value();
+        resnams_data[i] = residue.name().value();
+        resnums_data[i] = residue.number().value();
     }
 
     return std::make_tuple(resnams, resnums, atmnams);
 }
 
-static QVector<Vector> getCoordinates(const Molecule &mol, const PropertyName &coords_property)
+static QVector<Vector> getCoordinates(const Selector<Atom> &atoms, const PropertyName &coords_property)
 {
-    if (not mol.hasProperty(coords_property))
+    if (not atoms.data().hasProperty(coords_property))
     {
         return QVector<Vector>();
     }
 
-    QVector<Vector> coords( mol.nAtoms() );
+    const int nats = atoms.count();
 
-    const auto molcoords = mol.property(coords_property).asA<AtomCoords>();
+    QVector<Vector> coords(nats);
+    Vector *coords_data = coords.data();
 
-    const auto molinfo = mol.info();
-
-    for (int i=0; i<mol.nAtoms(); ++i)
+    for (int i=0; i<nats; ++i)
     {
-        //coords are already in angstroms :-)
-        coords[i] = molcoords.at( molinfo.cgAtomIdx( AtomIdx(i) ) );
+        coords_data[i] = atoms(i).property<Vector>(coords_property);
     }
 
     return coords;
 }
 
-static QVector<Vector> getVelocities(const Molecule &mol, const PropertyName &vels_property)
+static QVector<Vector> getVelocities(const Selector<Atom> &atoms, const PropertyName &vels_property)
 {
-    if (not mol.hasProperty(vels_property))
+    if (not atoms.data().hasProperty(vels_property))
     {
         return QVector<Vector>();
     }
 
     try
     {
-        const auto molvels = mol.property(vels_property).asA<AtomVelocities>();
-        const auto molinfo = mol.info();
+        const int nats = atoms.count();
 
-        QVector<Vector> vels( mol.nAtoms() );
+        QVector<Vector> vels(nats);
+        Vector *vels_data = vels.data();
 
         const auto units = nanometer / picosecond;
 
-        for (int i=0; i<mol.nAtoms(); ++i)
+        for (int i=0; i<nats; ++i)
         {
-            const auto atomvels = molvels.at( molinfo.cgAtomIdx( AtomIdx(i) ) );
+            const auto atomvels = atoms(i).property<Velocity3D>(vels_property);
 
             //need to convert the velocities into units of nanometers / picoseconds
-            vels[i] = Vector( atomvels.x().to(units),
-                              atomvels.y().to(units),
-                              atomvels.z().to(units) );
+            vels_data[i] = Vector( atomvels.x().to(units),
+                                   atomvels.y().to(units),
+                                   atomvels.z().to(units) );
         }
 
         return vels;
@@ -353,14 +355,14 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
         {
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                const auto mol = system[molnums[i]].molecule();
+                const auto atoms = system[molnums[i]].atoms();
 
                 auto coords_property = map["coordinates"];
 
                 bool is_perturbable = false;
                 try
                 {
-                    is_perturbable = mol.property("is_perturbable").asABoolean();
+                    is_perturbable = atoms.data().property("is_perturbable").asABoolean();
                 }
                 catch (...)
                 {}
@@ -371,14 +373,14 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
                     if ((map["coordinates"] == "coordinates0") or
                         (map["coordinates"] == "coordinates1"))
                     {
-                            coords_property = map["coordinates"];
+                        coords_property = map["coordinates"];
                     }
                     else
                     {
                         // Default to lambda = 0.
-                        if (mol.hasProperty("coordinates0"))
+                        if (atoms.data().hasProperty("coordinates0"))
                             coords_property = "coordinates0";
-                        else if (mol.hasProperty("coordinates1"))
+                        else if (atoms.data().hasProperty("coordinates1"))
                             coords_property = "coordinates1";
                         else
                             throw SireError::incompatible_error(QObject::tr("Missing coordinates for perturbable molecule!"));
@@ -388,14 +390,14 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
                 tbb::parallel_invoke(
                     [&]()
                     {
-                        const auto ids = ::getIDs(mol.info());
+                        const auto ids = ::getIDs(atoms);
                         all_resnams[i] = std::get<0>(ids);
                         all_resnums[i] = std::get<1>(ids);
                         all_atmnams[i] = std::get<2>(ids);
                     },
-                    [&](){ all_coords[i] = ::getCoordinates(mol, coords_property); },
-                    [&](){ all_vels[i] = ::getVelocities(mol, vels_property); }
-                                    );
+                    [&](){ all_coords[i] = ::getCoordinates(atoms, coords_property); },
+                    [&](){ all_vels[i] = ::getVelocities(atoms, vels_property); }
+                );
             }
         });
     }
@@ -403,14 +405,14 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
     {
         for (int i=0; i<molnums.count(); ++i)
         {
-            const auto mol = system[molnums[i]].molecule();
+            const auto atoms = system[molnums[i]].atoms();
 
             auto coords_property = map["coordinates"];
 
             bool is_perturbable = false;
             try
             {
-                is_perturbable = mol.property("is_perturbable").asABoolean();
+                is_perturbable = atoms.data().property("is_perturbable").asABoolean();
             }
             catch (...)
             {}
@@ -426,23 +428,23 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
                 else
                 {
                     // Default to lambda = 0.
-                    if (mol.hasProperty("coordinates0"))
+                    if (atoms.data().hasProperty("coordinates0"))
                         coords_property = "coordinates0";
-                    else if (mol.hasProperty("coordinates1"))
+                    else if (atoms.data().hasProperty("coordinates1"))
                         coords_property = "coordinates1";
                     else
                         throw SireError::incompatible_error(QObject::tr("Missing coordinates for perturbable molecule!"));
                 }
             }
 
-            const auto ids = ::getIDs(mol.info());
+            const auto ids = ::getIDs(atoms);
 
             all_resnams[i] = std::get<0>(ids);
             all_resnums[i] = std::get<1>(ids);
             all_atmnams[i] = std::get<2>(ids);
 
-            all_coords[i] = ::getCoordinates(mol, coords_property);
-            all_vels[i] = ::getVelocities(mol, vels_property);
+            all_coords[i] = ::getCoordinates(atoms, coords_property);
+            all_vels[i] = ::getVelocities(atoms, vels_property);
         }
     }
 

@@ -1039,6 +1039,21 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
     }
 }
 
+/** Parse the passed system, returning the resulting Parser. You must
+ *  specify the parser that you want to use
+ */
+MoleculeParserPtr MoleculeParser::parse(const System &system,
+                                        const QString &format,
+                                        const PropertyMap &map)
+{
+    const auto factories = getParserFactory()->getFactories({format});
+
+    if (factories.count() == 0)
+        return MoleculeParserPtr(new BrokenParser());
+
+    return factories[0].construct(system, map);
+}
+
 /** Parse the passed file, returning the resulting Parser. This employs a lot
     of magic to automatically work out the format of the file and whether or
     not this is parseable by Sire... This raises an exception if the file

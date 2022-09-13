@@ -215,6 +215,9 @@ public:
                             const PropertyMap &map);
 
     static MoleculeParserPtr parse(const QString &filename);
+    static MoleculeParserPtr parse(const SireSystem::System &system,
+                                   const QString &format,
+                                   const PropertyMap &map);
 
     static QList<MoleculeParserPtr> parse(const QStringList &filenames);
 

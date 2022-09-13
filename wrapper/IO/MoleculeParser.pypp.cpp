@@ -466,6 +466,19 @@ void register_MoleculeParser_class(){
         }
         { //::SireIO::MoleculeParser::parse
         
+            typedef ::SireIO::MoleculeParserPtr ( *parse_function_type )( ::SireSystem::System const &,::QString const &,::SireBase::PropertyMap const & );
+            parse_function_type parse_function_value( &::SireIO::MoleculeParser::parse );
+            
+            MoleculeParser_exposer.def( 
+                "parse"
+                , parse_function_value
+                , ( bp::arg("system"), bp::arg("format"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::parse
+        
             typedef ::QList< SireBase::PropPtr< SireIO::MoleculeParser > > ( *parse_function_type )( ::QStringList const & );
             parse_function_type parse_function_value( &::SireIO::MoleculeParser::parse );
             
