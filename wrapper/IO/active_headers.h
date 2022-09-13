@@ -13,6 +13,7 @@
 #include "dcd.h"
 #include "filetrajectory.h"
 #include "flexibilitylibrary.h"
+#include "getcoordsarray.h"
 #include "gro87.h"
 #include "grotop.h"
 #include "iobase.h"

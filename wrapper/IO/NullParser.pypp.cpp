@@ -21,7 +21,11 @@ namespace bp = boost::python;
 
 #include "SireMM/mmdetail.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/molecule.h"
+
+#include "SireMol/moleditor.h"
 
 #include "SireMol/trajectory.h"
 

@@ -38,6 +38,7 @@ if has_nglview:
             self.params = {}
             import uuid
             self.id = str(uuid.uuid4())
+            self._frame_cache = {}
 
         def __repr__(self):
             return str(self._obj)
@@ -77,17 +78,19 @@ if has_nglview:
             return max(1, self._obj.num_frames())
 
         def get_coordinates(self, index):
+            if index in self._frame_cache:
+                return self._frame_cache[index]
+
+            from ..io import get_coords_array
+            from ..units import angstrom
+
             self._obj.load_frame(index)
-            coords = self._obj.property("coordinates")
-            import numpy as np
-            c = np.zeros(shape=(coords.num_atoms(), 3), dtype=float)
 
-            for i, coord in enumerate(coords):
-                c[i][0] = coord[0].value()
-                c[i][1] = coord[1].value()
-                c[i][2] = coord[2].value()
+            coords = get_coords_array(self._obj, units=angstrom, map=self._map)
 
-            return c
+            self._frame_cache[index] = coords
+
+            return coords
 
     def view(obj, map=None):
         struc_traj = _SireStructureTrajectory(obj, map=map)

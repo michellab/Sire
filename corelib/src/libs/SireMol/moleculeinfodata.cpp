@@ -2358,7 +2358,7 @@ ChainIdx MoleculeInfoData::parentChain(ResIdx residx) const
 
     if (chainidx.isNull())
         throw SireMol::missing_chain( QObject::tr(
-            "The residue at index 'residx' has not been added to any chain!")
+            "The residue at index '%1' has not been added to any chain!")
                 .arg(residx), CODELOC );
 
     return chainidx;

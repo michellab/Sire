@@ -319,7 +319,6 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
         An array of error messages.
  */
 PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map, QStringList &errors) :
-    serial(atom.number().value()),
     name(atom.name().value().toUpper()),
     occupancy(1.0),
     temperature(0.0),
@@ -328,6 +327,8 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map,
     is_het(false),
     is_ter(is_ter)
 {
+    setSerial(atom.number().value());
+
     // The atom must have atomic coordinates to be valid.
     if (not atom.hasProperty(map["coordinates"]))
     {
@@ -488,6 +489,11 @@ qint64 PDBAtom::getNumber() const
 /** Set the atom serial number. */
 void PDBAtom::setSerial(int serial)
 {
+    if (serial < 0)
+        serial = 0;
+    else if (serial > 99999)
+        serial = 99999;
+
     this->serial = serial;
 }
 
@@ -601,10 +607,7 @@ QString PDBAtom::toPDBRecord() const
     // Write all records as ATOM, i.e. convert HETATM to ATOM.
     line.append("ATOM  ");
 
-    // Append the atom serial number. Since we enforce a hard
-    // limit of 99999 atoms, we can assume that the serial is
-    // 5 characters or less.
-    // TODO: Handle non-standard serial numbers.
+    // Append the atom serial number
     line.append(QString("%1").arg(serial, 5));
 
     // Append the atom name, converting it to the correct PDB formatting.
@@ -729,8 +732,8 @@ PDB2::PDB2(const QStringList &lines, const PropertyMap &map) :
 /** Construct this parser by extracting all necessary information from the
     passed SireSystem::System, looking for the properties that are specified
     in the passed property map */
-PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
-    ConcreteProperty<PDB2,MoleculeParser>(map)
+PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map)
+     : ConcreteProperty<PDB2,MoleculeParser>(map)
 {
     // Get the MolNums of each molecule in the System - this returns the
     // numbers in MolIdx order.
@@ -748,24 +751,24 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
 
     // Check for velocities.
     // All molecules must have velocity properties to be able to generate a PDB
-    // velocity file for NAMD.
+    // velocity file for NAMD
     for (int i=0; i<nmols; ++i)
     {
         // Extract the molecule.
-        auto mol = system[molnums[i]].molecule();
+        auto mol = system[molnums[i]];
 
         // All molecules must have velocities.
-        if (not mol.hasProperty(map["velocity"]))
+        if (not mol.molecule().hasProperty(map["velocity"]))
         {
             velocities.clear();
             break;
         }
 
-        // Loop over all atoms in the molecule.
-        for (int j=0; j<mol.nAtoms(); j++)
+        const auto atoms = mol.atoms();
+
+        for (int j=0; j<atoms.count(); ++j)
         {
-            // Extract the atom.
-            auto atom = mol.atom(AtomIdx(j));
+            const auto &atom = atoms(j);
 
             // All atoms in the molecule must have velocities.
             if (not atom.hasProperty(map["velocity"]))
@@ -774,7 +777,6 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
                 i = nmols;
                 break;
             }
-
             // Append the velocity to the vector.
             else
             {
@@ -802,8 +804,8 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 // Now parse the rest of the molecular data, i.e. atoms, residues, etc.
-                parseMolecule(system[molnums[i]].molecule(),
-                    atom_lines[i], local_errors, map);
+                parseMolecule(system[molnums[i]],
+                              atom_lines[i], local_errors, map);
             }
 
             if (not local_errors.isEmpty())
@@ -821,8 +823,8 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
         for (int i=0; i<nmols; ++i)
         {
             // Now parse the rest of the molecular data, i.e. atoms, residues, etc.
-            parseMolecule(system[molnums[i]].molecule(),
-                atom_lines[i], parse_warnings, map);
+            parseMolecule(system[molnums[i]],
+                          atom_lines[i], parse_warnings, map);
         }
     }
 
@@ -2224,52 +2226,55 @@ MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
 
 /** Internal function used to parse a Sire molecule view into a PDB ATOM records using
     the parameters in the property map. */
-void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &atom_lines,
-    QStringList &errors, const SireBase::PropertyMap &map)
+void PDB2::parseMolecule(const SireMol::MoleculeView &sire_mol, QVector<QString> &atom_lines,
+                         QStringList &errors, const SireBase::PropertyMap &map)
 {
     // Store the number of atoms in the molecule.
-    int num_atoms = sire_mol.nAtoms();
+    const auto atoms = sire_mol.atoms();
+    int num_atoms = atoms.count();
 
     // Early exit.
     if (num_atoms == 0) return;
 
-    // TODO: Do we want a hard limit on the number of atoms?
-    if (num_atoms > 99999)
-    {
-        errors.append(QObject::tr("The number of atoms (%1) exceeds "
-            " the PDB file format limit (99999)!").arg(num_atoms));
-
-        return;
-    }
-
-    // Store the number of chains in the molecule.
-    int num_chains = sire_mol.nChains();
-
-    // Resize the data record containers (one TER record for each chain).
-    atom_lines.resize(num_atoms + num_chains);
+    // how many chains are there?
+    int num_chains = 0;
+    int last_chainidx = -1;
 
     // Whether each atom is a terminal atom, i.e. the end of a chain.
     QVector<bool> is_ter(num_atoms, false);
 
-    // Loop over the chains.
-    for (int i=0; i<num_chains; ++i)
+    for (int j=0; j<atoms.count(); ++j)
     {
-        // Extract the chain.
-        auto chain = sire_mol.chain(ChainIdx(i));
+        const auto &atom = atoms(j);
 
-        // Extract the atoms from the chain.
-        auto atoms = chain.atoms();
+        try
+        {
+            auto chainidx = atom.chain().index().value();
 
-        // Extract the number of the last atom in the chain
-        int terminal_atom = atoms[atoms.count()-1]
-                           .read()
-                           .asA<SireMol::Atom>()
-                           .index()
-                           .value();
-
-        // Set the terminal atom.
-        is_ter[terminal_atom] = true;
+            if (last_chainidx == -1)
+            {
+                last_chainidx = chainidx;
+                num_chains += 1;
+            }
+            else if (chainidx != last_chainidx)
+            {
+                last_chainidx = chainidx;
+                num_chains += 1;
+                is_ter[j] = true;
+            }
+        }
+        catch(...)
+        {
+            // one atom doesn't have a chain, so don't write any
+            // chain info
+            num_chains = 0;
+            is_ter = QVector<bool>(num_atoms, false);
+            break;
+        }
     }
+
+    // Resize the data record containers (one TER record for each chain).
+    atom_lines.resize(num_atoms + num_chains);
 
     if (usesParallel())
     {
@@ -2288,7 +2293,7 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
             // and generate a PDB data record.
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                local_atoms[i] = PDBAtom(sire_mol.atom(AtomIdx(i)), is_ter[i], map, local_errors);
+                local_atoms[i] = PDBAtom(atoms(i), is_ter[i], map, local_errors);
                 atom_lines[i] = local_atoms[i].toPDBRecord();
             }
 
@@ -2343,7 +2348,7 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
         for (int i=0; i<num_atoms; ++i)
         {
             // Initalise a PDBAtom.
-            PDBAtom atom(sire_mol.atom(AtomIdx(i)), is_ter[i], map, errors);
+            PDBAtom atom(atoms(i), is_ter[i], map, errors);
 
             // Generate a PDB atom data record.
             atom_lines[iline] = atom.toPDBRecord();

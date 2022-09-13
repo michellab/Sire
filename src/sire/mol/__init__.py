@@ -1014,17 +1014,17 @@ SelectorM_Chain_.energies = _energies
 SelectorM_Segment_.energies = _energies
 SelectorM_CutGroup_.energies = _energies
 
-from ._view import view as _view
+from ._view import view as _viewfunc
 
-MoleculeView.view = _view
-SelectorMol.view = _view
-Selector_Atom_.view = _view
-Selector_Residue_.view = _view
-Selector_Chain_.view = _view
-Selector_Segment_.view = _view
-Selector_CutGroup_.view = _view
-SelectorM_Atom_.view = _view
-SelectorM_Residue_.view = _view
-SelectorM_Chain_.view = _view
-SelectorM_Segment_.view = _view
-SelectorM_CutGroup_.view = _view
+MoleculeView.view = _viewfunc
+SelectorMol.view = _viewfunc
+Selector_Atom_.view = _viewfunc
+Selector_Residue_.view = _viewfunc
+Selector_Chain_.view = _viewfunc
+Selector_Segment_.view = _viewfunc
+Selector_CutGroup_.view = _viewfunc
+SelectorM_Atom_.view = _viewfunc
+SelectorM_Residue_.view = _viewfunc
+SelectorM_Chain_.view = _viewfunc
+SelectorM_Segment_.view = _viewfunc
+SelectorM_CutGroup_.view = _viewfunc

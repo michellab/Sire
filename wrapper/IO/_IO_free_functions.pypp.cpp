@@ -7,6 +7,42 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/parallel.h"
+
+#include "SireMol/core.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireUnits/units.h"
+
+#include "getcoordsarray.h"
+
+#include "getcoordsarray.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireMol/core.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireUnits/units.h"
+
+#include "getcoordsarray.h"
+
+#include "getcoordsarray.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireMol/core.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireUnits/units.h"
+
+#include "getcoordsarray.h"
+
+#include "getcoordsarray.h"
+
 #include "SireBase/getinstalldir.h"
 
 #include "SireError/errors.h"
@@ -424,6 +460,45 @@ namespace bp = boost::python;
 #include "biosimspace.h"
 
 void register_free_functions(){
+
+    { //::SireIO::getCoordsArray
+    
+        typedef ::QVector< float > ( *getCoordsArray_function_type )( ::SireMol::MoleculeView const &,::SireUnits::Dimension::Length const &,::SireBase::PropertyMap const & );
+        getCoordsArray_function_type getCoordsArray_function_value( &::SireIO::getCoordsArray );
+        
+        bp::def( 
+            "getCoordsArray"
+            , getCoordsArray_function_value
+            , ( bp::arg("mol"), bp::arg("to_unit"), bp::arg("map") )
+            , "" );
+    
+    }
+
+    { //::SireIO::getCoordsArray
+    
+        typedef ::QVector< float > ( *getCoordsArray_function_type )( ::SireMol::MoleculeGroup const &,::SireUnits::Dimension::Length const &,::SireBase::PropertyMap const & );
+        getCoordsArray_function_type getCoordsArray_function_value( &::SireIO::getCoordsArray );
+        
+        bp::def( 
+            "getCoordsArray"
+            , getCoordsArray_function_value
+            , ( bp::arg("mols"), bp::arg("to_unit"), bp::arg("map") )
+            , "" );
+    
+    }
+
+    { //::SireIO::getCoordsArray
+    
+        typedef ::QVector< float > ( *getCoordsArray_function_type )( ::SireSystem::System const &,::SireUnits::Dimension::Length const &,::SireBase::PropertyMap const & );
+        getCoordsArray_function_type getCoordsArray_function_value( &::SireIO::getCoordsArray );
+        
+        bp::def( 
+            "getCoordsArray"
+            , getCoordsArray_function_value
+            , ( bp::arg("system"), bp::arg("to_unit"), bp::arg("map") )
+            , "" );
+    
+    }
 
     { //::SireIO::isAmberWater
     

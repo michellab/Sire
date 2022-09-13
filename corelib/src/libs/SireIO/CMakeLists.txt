@@ -37,6 +37,7 @@ set ( SIREIO_HEADERS
       filetrajectory.h
       flexibilitylibrary.h
       fortranfile.h
+      getcoordsarray.h
       gro87.h
       grotop.h
       iobase.h
@@ -72,6 +73,7 @@ set ( SIREIO_SOURCES
       filetrajectory.cpp
       flexibilitylibrary.cpp
       fortranfile.cpp
+      getcoordsarray.cpp
       gro87.cpp
       grotop.cpp
       iobase.cpp
