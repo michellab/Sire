@@ -15,3 +15,4 @@ Torsion = _Maths.Torsion
 pi = _Maths.pi
 
 from ._vector import Vector
+from ._sphere import Sphere

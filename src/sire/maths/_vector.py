@@ -50,7 +50,7 @@ def _fix_vector():
         return obj.__old_manhattan_length() * angstrom
 
     try:
-        _Vector.__old_manhattan_length = _Vector.old_manhattan_length
+        _Vector.__old_manhattan_length = _Vector.manhattan_length
     except Exception:
         _Vector.__old_manhattan_length = _Vector.manhattanLength
         delattr(_Vector, "manhattanLength")
