@@ -15,11 +15,13 @@ class TrajectoryIterator:
             self._view = view
             self._values = range(0, max(1, self._view.num_frames(self._map)))
             self._iter = None
+            self._frame = None
         else:
             self._view = None
             self._values = []
             self._iter = None
             self._map = None
+            self._frame = None
 
     def __iter__(self):
         return self
@@ -31,28 +33,9 @@ class TrajectoryIterator:
         if self._iter is None:
             self._iter = self._values.__iter__()
 
-        frame = self._iter.__next__()
+        self._frame = self._iter.__next__()
 
-        ret = self._view.clone()
-
-        ret.load_frame(frame, map=self._map)
-
-        try:
-            mol = ret.molecule()
-        except Exception:
-            mol = ret[0].molecule()
-
-        time_property = self._map["time"]
-
-        if mol.has_property(time_property):
-            time = mol.property(time_property)
-            ret.frame_time = lambda: time
-        else:
-            ret.frame_time = lambda: 0
-
-        ret.frame_index = lambda: frame
-
-        return ret
+        return self.current()
 
     def __len__(self):
         return len(self._values)
@@ -70,6 +53,58 @@ class TrajectoryIterator:
             it._values = [self._values[v] for v in val]
 
         return it
+
+    def __str__(self):
+        if self._view is None:
+            return "TrajectoryIterator::null"
+        elif len(self._values) <= 1:
+            return str(self._view)
+        else:
+            return f"Trajectory({self._view}, num_frames={len(self._values)})"
+
+    def current(self):
+        """Return the current frame in the trajectory"""
+        if self._view is None or self._values is None:
+            raise StopIteration()
+
+        if self._frame is None:
+            self._frame = self._values[0]
+
+        ret = self._view.clone()
+
+        ret.load_frame(self._frame, map=self._map)
+
+        try:
+            mol = ret.molecule()
+        except Exception:
+            mol = ret[0].molecule()
+
+        time_property = self._map["time"]
+
+        if mol.has_property(time_property):
+            time = mol.property(time_property)
+            ret.frame_time = lambda: time
+        else:
+            ret.frame_time = lambda: 0
+
+        ret.frame_index = lambda: self._frame
+
+        return ret
+
+    def first(self):
+        """Return the first frame in the trajectory"""
+        if self._view is None or self._values is None:
+            raise StopIteration()
+
+        old_frame = self._frame
+
+        self._frame = self._values[0]
+
+        ret = self.current()
+
+        self._frame = old_frame
+
+        return ret
 
     def _simple_measures(self, to_pandas):
         from .._colname import colname
@@ -282,3 +317,7 @@ class TrajectoryIterator:
             return self._simple_measures(to_pandas=to_pandas)
         else:
             return self._custom_measures(func=func, to_pandas=to_pandas)
+
+    def view(self, *args, **kwargs):
+        from ._view import view
+        return view(self, *args, **kwargs)

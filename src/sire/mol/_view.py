@@ -48,10 +48,10 @@ if has_nglview:
     class _SireStructureTrajectory(_nglview.Trajectory, _nglview.Structure):
         def __init__(self, obj=None, map=None):
             if (type(obj) is _SireStructureTrajectory):
-                self._obj = obj._obj
+                self._traj = obj._traj
                 self._map = obj._map
             elif obj is not None:
-                self._obj = obj.__copy__()
+                from ._trajectory import TrajectoryIterator
                 from ..base import PropertyMap
 
                 if map is None:
@@ -60,8 +60,13 @@ if has_nglview:
                     map = PropertyMap(map)
 
                 self._map = map
+
+                if type(obj) is TrajectoryIterator:
+                    self._traj = obj
+                else:
+                    self._traj = obj.trajectory(self._map)
             else:
-                self._obj = None
+                self._traj = None
                 self._map = None
 
             self.ext = 'pdb'
@@ -71,18 +76,21 @@ if has_nglview:
             self._cache = _FrameCache()
 
         def __repr__(self):
-            return str(self._obj)
+            return str(self)
 
         def __str__(self):
-            return str(self._obj)
+            if self._traj is None:
+                return "NULL"
+            else:
+                return str(self._traj)
 
         def get_structure_string(self):
             from .. import save_to_string
-            return "\n".join(save_to_string(self._obj, self.ext))
+            return "\n".join(save_to_string(self._traj.first(), self.ext))
 
         @property
         def n_frames(self):
-            return max(1, self._obj.num_frames())
+            return max(1, len(self._traj))
 
         def get_coordinates(self, index):
             if index in self._cache:
@@ -91,9 +99,9 @@ if has_nglview:
             from ..io import get_coords_array
             from ..units import angstrom
 
-            self._obj.load_frame(index)
+            frame = self._traj[index].current()
 
-            coords = get_coords_array(self._obj, units=angstrom, map=self._map)
+            coords = get_coords_array(frame, units=angstrom, map=self._map)
 
             if coords.size == 0:
                 return coords

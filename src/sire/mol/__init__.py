@@ -901,9 +901,9 @@ Selector_Segment_.cursor = _cursors
 from ._element import *
 
 
-def _trajectory(obj):
+def _trajectory(obj, map=None):
     from ._trajectory import TrajectoryIterator
-    return TrajectoryIterator(obj)
+    return TrajectoryIterator(obj, map=map)
 
 
 MoleculeView.trajectory = _trajectory
