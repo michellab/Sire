@@ -312,6 +312,55 @@ class TrajectoryIterator:
 
         return data
 
+    def apply(self, func, *args, **kwargs):
+        """
+        Call the passed function on all frames of the trajectory,
+        appending the result to a list of results, which
+        is returned.
+
+        The function can be either;
+
+        1. a string containing the name of the function to call, or
+        2. an actual function (either a normal function or a lambda expression)
+
+        You can optionally pass in positional and keyword arguments
+        here that will be passed to the function.
+
+        Args:
+            func (str or function): The function to be called, or the name
+                                    of the function to be called.
+
+        Returns:
+            list: A list of the results, with one result per frame in the trajectory
+        """
+        result = []
+
+        from ..utils import Console
+
+        nframes = len(self)
+
+        if str(func) == func:
+            # we calling a named function
+            with Console.progress() as progress:
+                task = progress.add_task("Looping through frames", total=nframes)
+
+                for i in range(0, nframes):
+                    obj = self.__getitem__(i).current()
+                    result.append(getattr(obj, func)(*args, **kwargs))
+                    progress.update(task, completed=i+1)
+
+        else:
+            # we have been passed the function to call
+            with Console.progress() as progress:
+                task = progress.add_task("Looping through frames", total=nframes)
+
+                for i in range(0, nframes):
+                    obj = self.__getitem__(i).current()
+                    result.append(func(obj, *args, **kwargs))
+                    progress.update(task, completed=i+1)
+
+        return result
+
     def measures(self, func=None, to_pandas=False):
         if func is None:
             return self._simple_measures(to_pandas=to_pandas)

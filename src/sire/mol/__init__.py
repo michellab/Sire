@@ -760,14 +760,25 @@ def _apply(objs, func, *args, **kwargs):
     """
     result = []
 
+    from ..utils import Console
+
     if str(func) == func:
         # we calling a named function
-        for obj in objs:
-            result.append(getattr(obj, func)(*args, **kwargs))
+        with Console.progress() as progress:
+            task = progress.add_task("Looping through views", total=len(objs))
+
+            for i, obj in enumerate(objs):
+                result.append(getattr(obj, func)(*args, **kwargs))
+                progress.update(task, completed=i+1)
+
     else:
         # we have been passed the function to call
-        for obj in objs:
-            result.append(func(obj, *args, **kwargs))
+        with Console.progress() as progress:
+            task = progress.add_task("Looping through views", total=len(objs))
+
+            for i, obj in enumerate(objs):
+                result.append(func(obj, *args, **kwargs))
+                progress.update(task, completed=i+1)
 
     return result
 
