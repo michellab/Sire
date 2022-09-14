@@ -33,7 +33,10 @@ def test_measure(ala_mols):
     imp = mols[0].impropers()[0]
 
     assert imp.measure() == sr.measure(imp[0], imp[1], imp[2], imp[3],
-                                       improper_angle=True)
-
-    assert imp.measure() != sr.measure(imp[0], imp[1], imp[2], imp[3],
                                        improper_angle=False)
+
+    assert imp.phi() == sr.measure(imp[0], imp[1], imp[2], imp[3],
+                                   improper_angle=False)
+
+    assert imp.theta() == sr.measure(imp[0], imp[1], imp[2], imp[3],
+                                     improper_angle=True)

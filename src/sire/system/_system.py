@@ -151,6 +151,18 @@ class System:
     def num_frames(self):
         return self.molecules().num_frames()
 
+    def charge(self, *args, **kwargs):
+        return self.molecules().charge(*args, **kwargs)
+
+    def mass(self, *args, **kwargs):
+        return self.molecules().mass(*args, **kwargs)
+
+    def coordinates(self, *args, **kwargs):
+        return self.molecules().coordinates(*args, **kwargs)
+
+    def evaluate(self, *args, **kwargs):
+        return self.molecules().evaluate(*args, **kwargs)
+
     def cursor(self):
         return self.molecules().cursor()
 
