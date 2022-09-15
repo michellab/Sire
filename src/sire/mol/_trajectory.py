@@ -312,6 +312,12 @@ class TrajectoryIterator:
 
         return data
 
+    def measures(self, func=None, to_pandas=False):
+        if func is None:
+            return self._simple_measures(to_pandas=to_pandas)
+        else:
+            return self._custom_measures(func=func, to_pandas=to_pandas)
+
     def apply(self, func, *args, **kwargs):
         """
         Call the passed function on all frames of the trajectory,
@@ -360,12 +366,6 @@ class TrajectoryIterator:
                     progress.update(task, completed=i+1)
 
         return result
-
-    def measures(self, func=None, to_pandas=False):
-        if func is None:
-            return self._simple_measures(to_pandas=to_pandas)
-        else:
-            return self._custom_measures(func=func, to_pandas=to_pandas)
 
     def view(self, *args, **kwargs):
         from ._view import view

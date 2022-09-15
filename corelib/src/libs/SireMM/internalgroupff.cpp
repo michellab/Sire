@@ -613,7 +613,7 @@ void InternalGroupFF::_pvt_added(quint32 group_id,
         }
         else
         {
-            cljgroups.insert(mol0.number(),
+            cljgroups.insert(molecule.number(),
                              CLJ14Group(mol0, combiningRules(), true, map));
             cljgroups[molecule.number()].add(mol1);
         }

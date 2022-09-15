@@ -252,7 +252,7 @@ and can calculate the sum automatically using ``apply_reduce()``, e.g.
 -40.1213 kcal mol-1
 
 Because this is such a common thing that you may want to do, sire provides
-the ``.energies()`` function that does this automatically.
+the ``.energies()`` function that does this automatically, e.g.
 
 >>> print(mol.atoms().energies(mols["water"]))
 [0.663924 kcal mol-1, -2.10834 kcal mol-1, 0.191629 kcal mol-1,
@@ -264,7 +264,14 @@ the ``.energies()`` function that does this automatically.
 -2.12367 kcal mol-1, 0.540744 kcal mol-1, 0.0511683 kcal mol-1,
  1.00895 kcal mol-1]
 
+calculates the energy of each atom in the solute with each water
+molecule, while
 
+>>> print(mols[1:].energies(mols[0]))
+[-0.0489161 kcal mol-1, -0.0280827 kcal mol-1, 0 , 0 , -0.15308 kcal mol-1,
+ -0.805672 kcal mol-1, 0.0108842 kcal mol-1, 0 , -0.00142226 kcal mol-1,
+...
+ 0.147356 kcal mol-1, -0.00565305 kcal mol-1, 0 , -0.432694 kcal mol-1, 0 ]
 
-
-
+calculates the energies between the first molecule and every other
+molecule in the system.

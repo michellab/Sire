@@ -145,8 +145,11 @@ class System:
     def trajectory(self):
         return self.molecules().trajectory()
 
-    def energy(self, map=None):
-        return self.molecules().energy(map=map)
+    def energy(self, *args, **kwargs):
+        return self.molecules().energy(*args, **kwargs)
+
+    def energies(self, *args, **kwargs):
+        return self.molecules().energies(*args, **kwargs)
 
     def num_frames(self):
         return self.molecules().num_frames()

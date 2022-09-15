@@ -458,15 +458,10 @@ void CLJ14Group::add(const MoleculeView &new_molecule)
     }
     else
     {
-        if (newmol.data().number() != mol.data().number())
-            throw SireError::incompatible_error( QObject::tr(
-                    "You cannot add the new molecule %1 as it is not the same "
-                    "molecule as the old molecule %2.")
-                        .arg(new_molecule.toString())
-                        .arg(mol.toString()), CODELOC );
-
-        this->add(new_molecule.selection());
-        this->update(new_molecule);
+        mustReallyRecalculateFromScratch();
+        AtomSelection selected_atoms = newmol.selection();
+        selected_atoms = selected_atoms.select(new_molecule.selection());
+        this->update(PartialMolecule(new_molecule.data(), selected_atoms));
     }
 }
 

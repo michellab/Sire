@@ -35,6 +35,8 @@
 #include "SireMM/internalff.h"
 #include "SireMM/intergroupff.h"
 #include "SireMM/internalgroupff.h"
+#include "SireMM/mmdetail.h"
+#include "SireMM/cljshiftfunction.h"
 
 #include "SireMM/intragroupff.h"
 
@@ -45,6 +47,7 @@
 using namespace SireMM;
 using namespace SireFF;
 using namespace SireMol;
+using namespace SireVol;
 
 using namespace SireBase;
 
@@ -56,16 +59,87 @@ using namespace SireUnits::Dimension;
 namespace SireMM
 {
 
+MMDetail get_mmdetail (const MoleculeView &mol, const PropertyMap &map)
+{
+    try
+    {
+        return mol.data().property(map["forcefield"]).asA<MMDetail>();
+    }
+    catch(const SireError::exception &e)
+    {
+        throw SireError::incompatible_error(QObject::tr(
+            "Cannot calculate the energy as the molecule %1 does not "
+            "contain the necessary metadata describing its forcefield. "
+            "You may need to parameterise the molecule first. The "
+            "error was %2, %3.")
+                .arg(mol.toString())
+                .arg(e.what()).arg(e.error()), CODELOC);
+    }
+}
+
+template<class T>
+T get_cljfunc(const MMDetail &mm, SireUnits::Dimension::Length cutoff)
+{
+    if (not (mm.isAmberStyle() or mm.isOPLS()))
+    {
+        throw SireError::incompatible_error(QObject::tr(
+            "Calculating energies of forcefields that are not Amber- or "
+            "OPLS-style is currently not supported. The forcefield style "
+            "is %1.").arg(mm.toString()), CODELOC);
+    }
+
+    T cljfunc(cutoff);
+
+    if (mm.usesArithmeticCombiningRules())
+        cljfunc.setArithmeticCombiningRules(true);
+    else if (mm.usesGeometricCombiningRules())
+        cljfunc.setGeometricCombiningRules(true);
+
+    return cljfunc;
+}
+
+SireUnits::Dimension::Length get_cutoff(const Space &space)
+{
+    auto cutoff = 15 * angstrom;
+
+    if (space.isPeriodic())
+    {
+        // work out the maximum size of the box by looking for the periodic
+        // image of the cutoff
+        auto image = space.getMinimumImage(Vector(0),
+                                           Vector(cutoff.value(), 0, 0));
+
+        if (image.x() != cutoff.value())
+        {
+            // this has been translated
+            cutoff = 1.99 * image.x() * angstrom;
+            qDebug() << "CUTOFF REDUCED TO" << cutoff.toString();
+        }
+    }
+
+    return cutoff;
+}
+
 SIREMM_EXPORT ForceFields create_forcefield(const MoleculeView &mol,
                                             const PropertyMap &map)
 {
+    const auto mm = get_mmdetail(mol, map);
+
     ForceFields ffields;
 
     InternalFF internalff("internal");
     internalff.setStrict(true);
+    internalff.enable14Calculation();
+
+    if (mm.usesArithmeticCombiningRules())
+        internalff.setArithmeticCombiningRules(true);
+    else if (mm.usesGeometricCombiningRules())
+        internalff.setGeometricCombiningRules(true);
+
     internalff.add(mol, map);
 
     IntraFF intraff("intraff");
+    intraff.setCLJFunction(get_cljfunc<CLJIntraShiftFunction>(mm, 15*angstrom));
     intraff.add(mol, map);
 
     ffields.add(internalff);
@@ -77,30 +151,45 @@ SIREMM_EXPORT ForceFields create_forcefield(const MoleculeView &mol,
 SIREMM_EXPORT ForceFields create_forcefield(const SireMol::Molecules &mols,
                                             const SireBase::PropertyMap &map)
 {
+    if (mols.isEmpty())
+        return ForceFields();
+
+    const auto mm = get_mmdetail(*(mols.constBegin()), map);
+
     ForceFields ffields;
-
-    InternalFF internalff("internal");
-    internalff.setStrict(true);
-    internalff.add(mols, map);
-
-    IntraFF intraff("intraff");
-    intraff.add(mols, map);
-
-    InterFF interff("interff");
-    interff.add(mols, map);
 
     // set the space from the first one we can find from the molecules
     const auto space_property = map["space"];
+    SpacePtr space = Cartesian();
 
     for (const auto &mol : mols)
     {
         if (mol.hasProperty(space_property))
         {
-            interff.setProperty("space",
-                                mol.molecule().property(space_property));
+            space = mol.data().property(space_property).asA<Space>();
             break;
         }
     }
+
+    InternalFF internalff("internal");
+    internalff.setStrict(true);
+    internalff.enable14Calculation();
+
+    if (mm.usesArithmeticCombiningRules())
+        internalff.setArithmeticCombiningRules(true);
+    else if (mm.usesGeometricCombiningRules())
+        internalff.setGeometricCombiningRules(true);
+
+    internalff.add(mols, map);
+
+    IntraFF intraff("intraff");
+    intraff.setCLJFunction(get_cljfunc<CLJIntraShiftFunction>(mm, 15*angstrom));
+    intraff.add(mols, map);
+
+    InterFF interff("interff");
+    interff.setCLJFunction(get_cljfunc<CLJShiftFunction>(mm, get_cutoff(*space)));
+    interff.setProperty("space", *space);
+    interff.add(mols, map);
 
     ffields.add(internalff);
     ffields.add(intraff);
@@ -127,22 +216,23 @@ SIREMM_EXPORT ForceFields create_forcefield(const Molecules &mols0,
                                             const Molecules &mols1,
                                             const PropertyMap &map)
 {
-    ForceFields ffields;
+    if (mols0.isEmpty() or mols1.isEmpty())
+        return ForceFields();
 
-    InterGroupFF interff("interff");
-    interff.add(mols0, MGIdx(0), map);
-    interff.add(mols1, MGIdx(1), map);
+    const auto mm0 = get_mmdetail(*(mols0.constBegin()), map);
+    const auto mm1 = get_mmdetail(*(mols1.constBegin()), map);
 
-    IntraGroupFF intraff("intraff");
-    intraff.add(mols0, MGIdx(0), map);
-    intraff.add(mols1, MGIdx(1), map);
-
-    InternalGroupFF internalff("internalff");
-    internalff.add(mols0, MGIdx(0), map);
-    internalff.add(mols1, MGIdx(1), map);
+    if (not mm0.isCompatibleWith(mm1))
+    {
+        throw SireError::incompatible_error(QObject::tr(
+            "Cannot calculate the energy as the molecules have different "
+            "types of MM forcefield: %1 versus %2")
+                .arg(mm0.toString()).arg(mm1.toString()), CODELOC);
+    }
 
     // set the space from the first one we can find from the molecules
     const auto space_property = map["space"];
+    SpacePtr space = Cartesian();
     bool has_property = false;
 
     for (const auto &mol : mols0)
@@ -150,8 +240,7 @@ SIREMM_EXPORT ForceFields create_forcefield(const Molecules &mols0,
         if (mol.hasProperty(space_property))
         {
             has_property = true;
-            interff.setProperty("space",
-                                mol.molecule().property(space_property));
+            space = mol.data().property(space_property).asA<Space>();
             break;
         }
     }
@@ -163,12 +252,35 @@ SIREMM_EXPORT ForceFields create_forcefield(const Molecules &mols0,
             if (mol.hasProperty(space_property))
             {
                 has_property = true;
-                interff.setProperty("space",
-                                    mol.molecule().property(space_property));
+                space = mol.data().property(space_property).asA<Space>();
                 break;
             }
         }
     }
+
+    ForceFields ffields;
+
+    InterGroupFF interff("interff");
+    interff.setCLJFunction(get_cljfunc<CLJShiftFunction>(mm0, get_cutoff(*space)));
+    interff.setProperty("space", *space);
+    interff.add(mols0, MGIdx(0), map);
+    interff.add(mols1, MGIdx(1), map);
+
+    IntraGroupFF intraff("intraff");
+    intraff.setCLJFunction(get_cljfunc<CLJIntraShiftFunction>(mm0, 15*angstrom));
+    intraff.add(mols0, MGIdx(0), map);
+    intraff.add(mols1, MGIdx(1), map);
+
+    InternalGroupFF internalff("internalff");
+    internalff.enable14Calculation();
+
+    if (mm0.usesArithmeticCombiningRules())
+        internalff.setArithmeticCombiningRules(true);
+    else if (mm0.usesGeometricCombiningRules())
+        internalff.setGeometricCombiningRules(true);
+
+    internalff.add(mols0, MGIdx(0), map);
+    internalff.add(mols1, MGIdx(1), map);
 
     ffields.add(interff);
     ffields.add(intraff);

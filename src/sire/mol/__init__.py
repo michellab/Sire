@@ -952,8 +952,8 @@ def _energy(obj, obj1=None, map=None):
         return calculate_energy(obj, _to_molecules(obj1), map=map)
 
 
-def _energies(obj, obj1, map=None):
-    return obj.apply("energy", obj1, map=map)
+def _energies(obj, obj1=None, map=None):
+    return obj.apply("energy", obj1=obj1, map=map)
 
 
 def _atom_energy(obj, obj1=None, map=None):
