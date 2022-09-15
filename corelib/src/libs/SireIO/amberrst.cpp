@@ -189,7 +189,28 @@ Frame AmberRst::getFrame(int i) const
 {
     i = SireID::Index(i).map(this->nFrames());
 
-    return SireMol::Frame();
+    auto rst = this->operator[](i);
+
+    SireVol::SpacePtr space = SireVol::Cartesian();
+
+    // PeriodicBox.
+    if (rst.box_angs[0] == cubic_angs)
+    {
+        space = SireVol::PeriodicBox(rst.box_dims[0]);
+    }
+    // TriclinicBox.
+    else
+    {
+        space = SireVol::TriclinicBox(rst.box_dims[0].x(),
+                                      rst.box_dims[0].y(),
+                                      rst.box_dims[0].z(),
+                                      rst.box_angs[0].x()*degrees,
+                                      rst.box_angs[0].y()*degrees,
+                                      rst.box_angs[0].z()*degrees);
+    }
+
+    return SireMol::Frame(rst.coordinates(), *space,
+                          rst.current_time[0]*picosecond);
 }
 
 /** Return a description of the file format */
