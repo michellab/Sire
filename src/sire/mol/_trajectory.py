@@ -116,7 +116,7 @@ class TrajectoryIterator:
         colnames = []
         columns = []
 
-        from ..mm import create_forcefield
+        from ..mm import create_forcefield, calculate_energy
         from . import _to_molecules
 
         if obj1 is None:
@@ -156,7 +156,7 @@ class TrajectoryIterator:
                 if obj1_is_trajectory:
                     ff.update(_to_molecules(obj1[idx].current()))
 
-                nrg = ff.energy()
+                nrg = calculate_energy(ff)
 
                 if "total" not in components:
                     components["total"] = np.zeros(nframes, dtype=float)
