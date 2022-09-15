@@ -85,7 +85,8 @@ class TrajectoryIterator:
             time = mol.property(time_property)
             ret.frame_time = lambda: time
         else:
-            ret.frame_time = lambda: 0
+            from ..units import picosecond
+            ret.frame_time = lambda: 0*picosecond
 
         ret.frame_index = lambda: self._frame
 
@@ -105,6 +106,124 @@ class TrajectoryIterator:
         self._frame = old_frame
 
         return ret
+
+    def energy(self, obj1=None, to_pandas=False):
+        if self._view is None:
+            return {}
+
+        import numpy as np
+
+        colnames = []
+        columns = []
+
+        from ..mm import create_forcefield
+        from . import _to_molecules
+
+        if obj1 is None:
+            ff = create_forcefield(_to_molecules(self._view), self._map)
+            obj1_is_trajectory = False
+        else:
+            if type(obj1) is TrajectoryIterator:
+                if obj1.num_frames() != self.num_frames():
+                    raise ValueError(
+                        "The two trajectories have a different number of frames! "
+                        f"{self.num_frames()} versus f{obj1.num_frames()}.")
+
+                obj1_is_trajectory = True
+                ff = create_forcefield(_to_molecules(self._view), _to_molecules(obj1.first()), self._map)
+            else:
+                obj1_is_trajectory = False
+                ff = create_forcefield(_to_molecules(self._view), _to_molecules(obj1), self._map)
+
+        nframes = len(self)
+
+        times = np.zeros(nframes, dtype=float)
+        indexes = np.zeros(nframes, dtype=int)
+
+        time_unit = None
+        energy_unit = None
+
+        components = {}
+
+        from ..utils import Console
+
+        with Console.progress() as progress:
+            task = progress.add_task("Looping through frames", total=nframes)
+
+            for idx, frame in enumerate(self.__iter__()):
+                ff.update(_to_molecules(frame))
+
+                if obj1_is_trajectory:
+                    ff.update(_to_molecules(obj1[idx].current()))
+
+                nrg = ff.energy()
+
+                if "total" not in components:
+                    components["total"] = np.zeros(nframes, dtype=float)
+
+                components["total"][idx] = nrg.to_default()
+
+                for key, value in nrg.components().items():
+                    if key not in components:
+                        components[key] = np.zeros(nframes, dtype=float)
+
+                    components[key][idx] = value.to_default()
+
+                times[idx] = frame.frame_time().to_default()
+
+                if energy_unit is None:
+                    if not nrg.is_zero():
+                        energy_unit = nrg.get_default().unit_string()
+
+                if time_unit is None:
+                    time = frame.frame_time()
+                    if not time.is_zero():
+                        time_unit = time.get_default().unit_string()
+
+                indexes[idx] = frame.frame_index()
+                progress.update(task, completed=idx)
+
+        data = {}
+
+        data["frame"] = indexes
+        data["time"] = times
+
+        colnames = list(components.keys())
+        colnames.sort()
+
+        for colname in colnames:
+            data[colname] = components[colname]
+
+        if to_pandas:
+            import pandas as pd
+            df = pd.DataFrame(data)
+            df.set_index("frame")
+
+            df.time_unit = lambda: time_unit
+            df.energy_unit = lambda: energy_unit
+
+            def pretty_plot(x="time", y=None):
+                if y is None:
+                    y = colnames
+
+                if x == "time":
+                    xlabel = f"Time / {df.time_unit()}"
+                elif x == "frame":
+                    xlabel = "Frame"
+                else:
+                    xlabel = x
+
+                ax = df.plot(x=x, y=y)
+                ax.set_xlabel(xlabel)
+                ax.set_ylabel(f"Energy / {df.energy_unit()}")
+                ax.legend(bbox_to_anchor=(1.05, 1.0))
+
+            df.pretty_plot = pretty_plot
+
+            return df
+
+        return data
+
 
     def _simple_measures(self, to_pandas):
         from .._colname import colname
