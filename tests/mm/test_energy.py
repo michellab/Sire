@@ -8,6 +8,12 @@ def ala_mols():
     return sr.load_test_files("ala.top", "ala.crd")
 
 
+@pytest.fixture(scope="session")
+def ala_traj():
+    import sire as sr
+    return sr.load_test_files("ala.top", "ala.traj")
+
+
 def assert_approx_equal(nrg0, nrg1):
     assert nrg0.value() == pytest.approx(nrg1.value())
 
@@ -19,6 +25,39 @@ def assert_approx_equal(nrg0, nrg1):
             print(nrg0.components())
             print(nrg1.components())
             raise e
+
+
+def test_trajectory_energy(ala_traj):
+    mols = ala_traj
+    mol = mols[0]
+
+    def assert_same(view):
+        nrg0 = view.energy()
+        nrg1 = view.trajectory()[0].energy(to_pandas=False)
+
+        if nrg0.value() != nrg1["total"][0]:
+            print(nrg0.components())
+            print(nrg1)
+
+        assert nrg0.value() == nrg1["total"][0]
+
+    assert_same(mol)
+    assert_same(mol.bonds()[0])
+    assert_same(mol.atoms("element C"))
+    assert_same(mols)
+
+    def assert_same_pair(view, other):
+        nrg0 = view.energy(other)
+        nrg1 = view.trajectory()[0].energy(other, to_pandas=False)
+
+        if nrg0.value() != nrg1["total"][0]:
+            print(nrg0.components())
+            print(nrg1)
+
+        assert nrg0.value() == nrg1["total"][0]
+
+    assert_same_pair(mol["element C"], mol["not element C"])
+    assert_same_pair(mol, mols["water"])
 
 
 def test_energy(ala_mols):

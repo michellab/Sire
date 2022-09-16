@@ -182,12 +182,12 @@ static const RegisterMetaType<CLJ14Group> r_group( NO_ROOT );
 
 QDataStream &operator<<(QDataStream &ds, const CLJ14Group &group)
 {
-    writeHeader(ds, r_group, 2);
+    writeHeader(ds, r_group, 3);
 
     SharedDataStream sds(ds);
 
     sds << group.mol << group.newmol << group.propmap
-        << group.data_for_pair << group.cgidx_to_idx
+        << group.data_for_pair
         << qint32(group.combining_rules)
         << group.total_cnrg << group.total_ljnrg
         << group.needs_energy << group.is_strict;
@@ -199,14 +199,14 @@ QDataStream &operator>>(QDataStream &ds, CLJ14Group &group)
 {
     VersionID v = readHeader(ds, r_group);
 
-    if (v == 2)
+    if (v == 3)
     {
         SharedDataStream sds(ds);
 
         qint32 combining_rules;
 
         sds >> group.mol >> group.newmol >> group.propmap
-            >> group.data_for_pair >> group.cgidx_to_idx
+            >> group.data_for_pair
             >> combining_rules
             >> group.total_cnrg >> group.total_ljnrg
             >> group.needs_energy >> group.is_strict;
@@ -215,24 +215,8 @@ QDataStream &operator>>(QDataStream &ds, CLJ14Group &group)
 
         group.combining_rules = CLJFunction::COMBINING_RULES(combining_rules);
     }
-    else if (v == 1)
-    {
-        SharedDataStream sds(ds);
-
-        qint32 combining_rules;
-
-        sds >> group.mol >> group.newmol >> group.propmap
-            >> group.data_for_pair >> group.cgidx_to_idx
-            >> combining_rules
-            >> group.total_cnrg >> group.total_ljnrg
-            >> group.needs_energy;
-
-        group.is_strict = true;
-
-        group.combining_rules = CLJFunction::COMBINING_RULES(combining_rules);
-    }
     else
-        throw version_error(v, "1,2", r_group, CODELOC );
+        throw version_error(v, "3", r_group, CODELOC );
 
     return ds;
 }
@@ -269,7 +253,7 @@ CLJ14Group::CLJ14Group(const MoleculeView &molecule, CLJFunction::COMBINING_RULE
 /** Copy constructor */
 CLJ14Group::CLJ14Group(const CLJ14Group &other)
            : mol(other.mol), newmol(other.newmol), propmap(other.propmap),
-             data_for_pair(other.data_for_pair), cgidx_to_idx(other.cgidx_to_idx),
+             data_for_pair(other.data_for_pair),
              combining_rules(other.combining_rules),
              total_cnrg(other.total_cnrg), total_ljnrg(other.total_ljnrg),
              needs_energy(other.needs_energy), is_strict(other.is_strict)
@@ -288,7 +272,6 @@ CLJ14Group& CLJ14Group::operator=(const CLJ14Group &other)
         newmol = other.newmol;
         propmap = other.propmap;
         data_for_pair = other.data_for_pair;
-        cgidx_to_idx = other.cgidx_to_idx;
         combining_rules = other.combining_rules;
         total_cnrg = other.total_cnrg;
         total_ljnrg = other.total_ljnrg;
@@ -376,7 +359,6 @@ void CLJ14Group::mustReallyRecalculateFromScratch()
     total_cnrg = 0;
     total_ljnrg = 0;
     data_for_pair.clear();
-    cgidx_to_idx.clear();
     needs_energy = true;
 }
 
@@ -461,7 +443,8 @@ void CLJ14Group::add(const MoleculeView &new_molecule)
         mustReallyRecalculateFromScratch();
         AtomSelection selected_atoms = newmol.selection();
         selected_atoms = selected_atoms.select(new_molecule.selection());
-        this->update(PartialMolecule(new_molecule.data(), selected_atoms));
+        this->updateSelection(selected_atoms);
+        this->update(new_molecule);
     }
 }
 
@@ -509,13 +492,13 @@ void CLJ14Group::update(const MoleculeView &new_molecule)
 
     if (recalculatingFromScratch())
     {
-        newmol = new_molecule;
+        newmol = PartialMolecule(new_molecule.data(), newmol.selection());
         mol = new_molecule;
         needs_energy = true;
     }
     else
     {
-        newmol = new_molecule;
+        newmol = PartialMolecule(new_molecule.data(), newmol.selection());
         needs_energy = (newmol.version() != mol.version());
     }
 }
@@ -541,26 +524,6 @@ void CLJ14Group::remove(const MoleculeView &new_molecule)
     }
 }
 
-/** Internal function used to add the CG pair data for the 1-4 pairs between
-    CutGroups at indices cg0 and cg1 */
-void CLJ14Group::addCGData(CGIdx cg0, CGIdx cg1,
-                           const QVector<SireMM::detail::CLJ14PairData> &pairdata)
-{
-    if (pairdata.isEmpty())
-        return;
-
-    if (cg1 < cg0)
-        qSwap(cg0, cg1);
-
-    quint32 index = quint32( data_for_pair.count() );
-    data_for_pair.append(pairdata);
-
-    cgidx_to_idx[cg0].insert(index);
-
-    if (cg0 != cg1)
-        cgidx_to_idx[cg1].insert(index);
-}
-
 /** Return whether or not the passed property map would change properties that
     are used by this calculation */
 bool CLJ14Group::wouldChangeProperties(const PropertyMap &map) const
@@ -580,7 +543,6 @@ bool CLJ14Group::wouldChangeProperties(const PropertyMap &map) const
 void CLJ14Group::reextract()
 {
     data_for_pair.clear();
-    cgidx_to_idx.clear();
     total_cnrg = 0;
     total_ljnrg = 0;
     needs_energy = true;
@@ -597,226 +559,51 @@ void CLJ14Group::reextract()
 
     const CLJNBPairs &pairs = newmol.data().property( propmap["intrascale"] ).asA<CLJNBPairs>();
 
-    if (pairs.isEmpty())
-    {
-        //there are no 1-4 pairs
-        needs_energy = false;
-        return;
-    }
-
     const AtomCharges &chgs = newmol.data().property( propmap["charge"] ).asA<AtomCharges>();
     const AtomLJs &ljs = newmol.data().property( propmap["LJ"] ).asA<AtomLJs>();
 
-    if (selected_atoms.selectedAll())
+    const auto &connectivity = newmol.data().property( propmap["connectivity"] ).asA<Connectivity>();
+
+    const auto bond_matrix = connectivity.getBondMatrix(4,4);
+
+    const int nats = bond_matrix.count();
+
+    for (int i=0; i<nats-1; ++i)
     {
-        //loop through every pair of atoms and build a list of all pairs
-        for (CGIdx cg0(0); cg0<molinfo.nCutGroups(); ++cg0)
+        const auto row = bond_matrix.constData()[i];
+
+        const AtomIdx atomidx0(i);
+        const auto cgatomidx0 = molinfo.cgAtomIdx(atomidx0);
+
+        if (selected_atoms.selectedAll() or selected_atoms.selected(cgatomidx0))
         {
-            const int n0 = molinfo.nAtoms(cg0);
-
-            const Charge *chgs0 = chgs.constData(cg0);
-            const LJParameter *ljs0 = ljs.constData(cg0);
-
-            //do the CutGroup with itself
+            for (int j=i+1; j<nats; ++j)
             {
-                QVector<SireMM::detail::CLJ14PairData> cgpairdata;
-                cgpairdata.reserve(n0*n0);
-
-                const CLJNBPairs::CGPairs &cgpairs = pairs.get(cg0,cg0);
-
-                for (int i=0; i<n0-1; ++i)
+                if (row.constData()[j])
                 {
-                    for (int j=i+1; j<n0; ++j)
-                    {
-                        const CLJScaleFactor &scl = cgpairs.get(i,j);
+                    const AtomIdx atomidx1(j);
+                    const auto cgatomidx1 = molinfo.cgAtomIdx(atomidx1);
 
-                        if (scl != CLJScaleFactor(1,1) and scl != CLJScaleFactor(0))
+                    //these are 1-4 bonded :-)
+                    if ((not is_strict) or (selected_atoms.selectedAll()) or (selected_atoms.selected(cgatomidx1)))
+                    {
+                        const auto scl = pairs.get(cgatomidx0, cgatomidx1);
+
+                        if (scl != CLJScaleFactor(0))
                         {
-                            cgpairdata.append( SireMM::detail::CLJ14PairData(
-                                    CGAtomIdx(cg0,Index(i)),
-                                    CGAtomIdx(cg0,Index(j)),
-                                    chgs0[i], chgs0[j],
-                                    ljs0[i], ljs0[j],
-                                    scl) );
+                            data_for_pair.append( SireMM::detail::CLJ14PairData(
+                                cgatomidx0, cgatomidx1,
+                                chgs[cgatomidx0], chgs[cgatomidx1],
+                                ljs[cgatomidx0], ljs[cgatomidx1],
+                                scl) );
                         }
                     }
                 }
-
-                cgpairdata.squeeze();
-                addCGData(cg0, cg0, cgpairdata);
-
-            } // end of cutgroup with itself
-
-            //now look at this cutgroup with all other pairs
-            for (CGIdx cg1(cg0+1); cg1<molinfo.nCutGroups(); ++cg1)
-            {
-                const int n1 = molinfo.nAtoms(cg1);
-
-                QVector<SireMM::detail::CLJ14PairData> cgpairdata;
-                cgpairdata.reserve(n0*n1);
-
-                const CLJNBPairs::CGPairs &cgpairs = pairs.get(cg0,cg1);
-
-                const Charge *chgs1 = chgs.constData(cg1);
-                const LJParameter *ljs1 = ljs.constData(cg1);
-
-                if (cgpairs.isEmpty())
-                {
-                    if (cgpairs.defaultValue() != CLJScaleFactor(1,1) and
-                        cgpairs.defaultValue() != CLJScaleFactor(0))
-                    {
-                         //all pairs have the default scale factor
-                         for (int i=0; i<n0; ++i)
-                         {
-                            for (int j=0; j<n1; ++j)
-                            {
-                                cgpairdata.append( SireMM::detail::CLJ14PairData(
-                                                    CGAtomIdx(cg0,Index(i)),
-                                                    CGAtomIdx(cg1,Index(j)),
-                                                    chgs0[i], chgs1[j], ljs0[i], ljs1[j],
-                                                    cgpairs.defaultValue() ) );
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    for (int i=0; i<n0; ++i)
-                    {
-                        for (int j=0; j<n1; ++j)
-                        {
-                            const CLJScaleFactor &scl = cgpairs.get(i,j);
-
-                            if (scl != CLJScaleFactor(1,1) and
-                                scl != CLJScaleFactor(0))
-                            {
-                                cgpairdata.append( SireMM::detail::CLJ14PairData(
-                                                    CGAtomIdx(cg0,Index(i)),
-                                                    CGAtomIdx(cg1,Index(j)),
-                                                    chgs0[i], chgs1[j], ljs0[i], ljs1[j],
-                                                    scl ) );
-                            }
-                        }
-                    }
-                }
-
-                cgpairdata.squeeze();
-                addCGData(cg0, cg1, cgpairdata);
-
-            } // end of loop over j CutGroups
-        } // end of loop over i CutGroups
-    } // else if selected all
-    else if (is_strict)
-    {
-        const QList<CGIdx> selected_cgroups = selected_atoms.selectedCutGroups();
-
-        foreach (CGIdx cg0, selected_cgroups)
-        {
-            const Charge *chgs0 = chgs.constData(cg0);
-            const LJParameter *ljs0 = ljs.constData(cg0);
-
-            QSet<Index> atoms0 = selected_atoms.selectedAtoms(cg0);
-
-            //do the CutGroup with itself
-            {
-                QVector<SireMM::detail::CLJ14PairData> cgpairdata;
-                cgpairdata.reserve(atoms0.count()*atoms0.count());
-
-                const CLJNBPairs::CGPairs &cgpairs = pairs.get(cg0,cg0);
-
-                foreach (Index i, atoms0)
-                {
-                    foreach (Index j, atoms0)
-                    {
-                        if (i < j)
-                        {
-                            const CLJScaleFactor &scl = cgpairs.get(i,j);
-
-                            if (scl != CLJScaleFactor(1,1) and scl != CLJScaleFactor(0))
-                            {
-                                cgpairdata.append( SireMM::detail::CLJ14PairData(
-                                        CGAtomIdx(cg0,Index(i)),
-                                        CGAtomIdx(cg0,Index(j)),
-                                        chgs0[i], chgs0[j],
-                                        ljs0[i], ljs0[j],
-                                        scl) );
-                            }
-                        }
-                    }
-                }
-
-                cgpairdata.squeeze();
-                addCGData(cg0, cg0, cgpairdata);
-
-            } // end of cutgroup with itself
-
-            //now look at this cutgroup with all other pairs
-            foreach (CGIdx cg1, selected_cgroups)
-            {
-                if (cg0 < cg1)
-                {
-                    const QSet<Index> atoms1 = selected_atoms.selectedAtoms(cg1);
-
-                    QVector<SireMM::detail::CLJ14PairData> cgpairdata;
-                    cgpairdata.reserve(atoms0.count()*atoms1.count());
-
-                    const CLJNBPairs::CGPairs &cgpairs = pairs.get(cg0,cg1);
-
-                    const Charge *chgs1 = chgs.constData(cg1);
-                    const LJParameter *ljs1 = ljs.constData(cg1);
-
-                    if (cgpairs.isEmpty())
-                    {
-                        if (cgpairs.defaultValue() != CLJScaleFactor(1,1) and
-                            cgpairs.defaultValue() != CLJScaleFactor(0))
-                        {
-                            //all pairs have the default scale factor
-                            foreach (Index i, atoms0)
-                            {
-                                foreach (Index j, atoms1)
-                                {
-                                    cgpairdata.append( SireMM::detail::CLJ14PairData(
-                                                        CGAtomIdx(cg0,i),
-                                                        CGAtomIdx(cg1,j),
-                                                        chgs0[i], chgs1[j], ljs0[i], ljs1[j],
-                                                        cgpairs.defaultValue() ) );
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (Index i, atoms0)
-                        {
-                            foreach (Index j, atoms1)
-                            {
-                                const CLJScaleFactor &scl = cgpairs.get(i,j);
-
-                                if (scl != CLJScaleFactor(1,1) and
-                                    scl != CLJScaleFactor(0))
-                                {
-                                    cgpairdata.append( SireMM::detail::CLJ14PairData(
-                                                       CGAtomIdx(cg0,i),
-                                                       CGAtomIdx(cg1,j),
-                                                       chgs0[i], chgs1[j], ljs0[i], ljs1[j],
-                                                       scl ) );
-                                }
-                            }
-                        }
-                    }
-
-                    cgpairdata.squeeze();
-                    addCGData(cg0, cg1, cgpairdata);
-                }
-            } // end of loop over j CutGroups
-
-        } // end of loop over i CutGroups
-    } // end of if selected all else if is_strict
-    else
-    {
-        throw SireError::incomplete_code( QObject::tr(
-                "NEED TO WRITE THE CODE FOR NON_STRICT SELECTION OF 1-4 PAIRS"), CODELOC );
+            }
+        }
     }
+
+    data_for_pair.squeeze();
 }
 
 /** Internal function used to calculate the energy of the 1-4 interactions for the
@@ -916,122 +703,18 @@ boost::tuple<double,double> CLJ14Group::energy()
         return boost::tuple<double,double>(total_cnrg,total_ljnrg);
     }
 
-    if (recalculatingFromScratch())
+    if (data_for_pair.isEmpty())
     {
-        if (data_for_pair.isEmpty())
-        {
-            this->reextract();
-        }
-
-        total_cnrg = 0;
-        total_ljnrg = 0;
-
-        for (int i=0; i<data_for_pair.count(); ++i)
-        {
-            double cnrg, ljnrg;
-            ::calculateEnergy(combining_rules,
-                              newmol.data().property(propmap["coordinates"])
-                                    .asA<AtomCoords>(), data_for_pair.at(i), cnrg, ljnrg);
-            total_cnrg += cnrg;
-            total_ljnrg += ljnrg;
-        }
+        this->reextract();
     }
-    else
-    {
-        //see if the charge, LJ or intrascale properties have changed.
-        //If they have, then we need to really rebuild everything
-        //from scratch
-        const PropertyName chg_property = propmap["charge"];
-        const PropertyName lj_property = propmap["LJ"];
-        const PropertyName scl_property = propmap["intrascale"];
 
-        if (newmol.version(chg_property) != mol.version(chg_property) or
-            newmol.version(lj_property) != mol.version(lj_property) or
-            newmol.version(scl_property) != mol.version(scl_property))
-        {
-            this->mustReallyRecalculateFromScratch();
-            return this->energy();
-        }
+    total_cnrg = 0;
+    total_ljnrg = 0;
 
-        const PropertyName coords_property = propmap["coordinates"];
-
-        if (newmol.version(coords_property) == mol.version(coords_property))
-        {
-            //nothing has changed
-            return boost::tuple<double,double>(total_cnrg,total_ljnrg);
-        }
-
-        //only the coordinates have changed. Find out which CutGroups have
-        //changed
-        if (newmol.data().info().nCutGroups() <= 1)
-        {
-            this->mustNowRecalculateFromScratch();
-            return this->energy();
-        }
-
-        QSet<quint32> changed_cgroups;
-
-        const AtomCoords &newcoords = newmol.property(coords_property).asA<AtomCoords>();
-        const AtomCoords &oldcoords = mol.property(coords_property).asA<AtomCoords>();
-
-        const CoordGroup *newarray = newcoords.constData();
-        const CoordGroup *oldarray = oldcoords.constData();
-
-        if (newarray != oldarray)
-        {
-            for (int i=0; i<newmol.data().info().nCutGroups(); ++i)
-            {
-                const Vector *newatoms = newarray[i].constData();
-                const Vector *oldatoms = oldarray[i].constData();
-
-                if (newatoms != oldatoms)
-                {
-                    for (int j=0; j<newmol.data().info().nAtoms(CGIdx(i)); ++j)
-                    {
-                        if (newatoms[j] != oldatoms[j])
-                        {
-                            changed_cgroups.insert( quint32(i) );
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (changed_cgroups.count() >= int(0.4 * newmol.data().info().nCutGroups()))
-        {
-            this->mustNowRecalculateFromScratch();
-            return this->energy();
-        }
-
-        //calculate the change in energy as a delta
-        double delta_cnrg = 0;
-        double delta_ljnrg = 0;
-
-        QSet<quint32> changed_cgpairs;
-
-        foreach (quint32 cgroup, changed_cgroups)
-        {
-            changed_cgpairs += cgidx_to_idx.value(cgroup);
-        }
-
-        foreach (quint32 changed_cgpair, changed_cgpairs)
-        {
-            double old_cnrg, old_ljnrg;
-            ::calculateEnergy(combining_rules,
-                              oldcoords, data_for_pair.at(changed_cgpair), old_cnrg, old_ljnrg);
-
-            double new_cnrg, new_ljnrg;
-            ::calculateEnergy(combining_rules,
-                              newcoords, data_for_pair.at(changed_cgpair), new_cnrg, new_ljnrg);
-
-            delta_cnrg += (new_cnrg - old_cnrg);
-            delta_ljnrg += (new_ljnrg - old_ljnrg);
-        }
-
-        total_cnrg += delta_cnrg;
-        total_ljnrg += delta_ljnrg;
-    }
+    ::calculateEnergy(combining_rules,
+                      newmol.data().property(propmap["coordinates"])
+                                   .asA<AtomCoords>(),
+                      data_for_pair, total_cnrg, total_ljnrg);
 
     mol = newmol;
     needs_energy = false;
