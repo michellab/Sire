@@ -80,12 +80,15 @@ QDataStream &operator<<(QDataStream &ds, const AmberRst &rst)
 
     SharedDataStream sds(ds);
 
-    sds << rst.ttle << rst.current_time
-        << rst.coords << rst.vels << rst.frcs
-        << rst.box_dims << rst.box_angs
-        << rst.convention_version << rst.creator_app
-        << rst.parse_warnings << rst.created_from_restart
-        << static_cast<const MoleculeParser&>(rst);
+    //only save the first frame!
+    auto rst0 = rst[0];
+
+    sds << rst0.ttle << rst0.current_time
+        << rst0.coords << rst0.vels << rst0.frcs
+        << rst0.box_dims << rst0.box_angs
+        << rst0.convention_version << rst0.creator_app
+        << rst0.parse_warnings << rst0.created_from_restart
+        << static_cast<const MoleculeParser&>(rst0);
 
     return ds;
 }
@@ -209,8 +212,49 @@ Frame AmberRst::getFrame(int i) const
                                       rst.box_angs[0].z()*degrees);
     }
 
-    return SireMol::Frame(rst.coordinates(), *space,
-                          rst.current_time[0]*picosecond);
+    QVector<Vector> coordinates;
+    QVector<Velocity3D> velocities;
+    QVector<Force3D> forces;
+
+    if (this->hasCoordinates())
+    {
+        coordinates = this->coordinates(i);
+    }
+
+    if (this->hasVelocities())
+    {
+        const auto v = this->velocities(i);
+        velocities = QVector<Velocity3D>(v.count());
+
+        //velocity is Angstroms per 1/20.455 ps
+        const auto vel_unit = (1.0 / 20.455) * angstrom / picosecond;
+
+        for (int i=0; i<v.count(); ++i)
+        {
+            velocities[i] = Velocity3D(v[i].x() * vel_unit,
+                                       v[i].y() * vel_unit,
+                                       v[i].z() * vel_unit);
+        }
+    }
+
+    if (this->hasForces())
+    {
+        const auto f = this->forces(i);
+        forces = QVector<Force3D>(f.count());
+
+        //force is amu Angstroms per ps^2
+        const auto force_unit = atomic_mass_constant * angstrom / (picosecond*picosecond);
+
+        for (int i=0; i<f.count(); ++i)
+        {
+            forces[i] = Force3D(f[i].x() * force_unit,
+                                f[i].y() * force_unit,
+                                f[i].z() * force_unit);
+        }
+    }
+
+    return SireMol::Frame(coordinates, velocities, forces,
+                          *space, rst.current_time[0]*picosecond);
 }
 
 /** Return a description of the file format */
