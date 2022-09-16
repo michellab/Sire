@@ -158,6 +158,8 @@ private:
     void assertSane() const;
     void parse(const NetCDFFile &netcdf, const PropertyMap &map);
 
+    SireMol::Frame _getFrame(int i) const;
+
     /** The title of the file */
     QString ttle;
 
@@ -187,6 +189,9 @@ private:
 
     /** Any warnings that were raised when reading the file */
     QStringList parse_warnings;
+
+    /** The number of frames in this file */
+    qint64 nframes;
 
     /** Whether or not this was read as a restart file */
     bool created_from_restart;

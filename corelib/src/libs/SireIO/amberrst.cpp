@@ -76,7 +76,7 @@ const RegisterParser<AmberRst> register_amberrst;
 
 QDataStream &operator<<(QDataStream &ds, const AmberRst &rst)
 {
-    writeHeader(ds, r_rst, 1);
+    writeHeader(ds, r_rst, 2);
 
     SharedDataStream sds(ds);
 
@@ -87,7 +87,9 @@ QDataStream &operator<<(QDataStream &ds, const AmberRst &rst)
         << rst0.coords << rst0.vels << rst0.frcs
         << rst0.box_dims << rst0.box_angs
         << rst0.convention_version << rst0.creator_app
-        << rst0.parse_warnings << rst0.created_from_restart
+        << rst0.parse_warnings
+        << rst0.nframes
+        << rst0.created_from_restart
         << static_cast<const MoleculeParser&>(rst0);
 
     return ds;
@@ -97,7 +99,7 @@ QDataStream &operator>>(QDataStream &ds, AmberRst &rst)
 {
     VersionID v = readHeader(ds, r_rst);
 
-    if (v == 1)
+    if (v == 2)
     {
         SharedDataStream sds(ds);
 
@@ -105,11 +107,27 @@ QDataStream &operator>>(QDataStream &ds, AmberRst &rst)
             >> rst.coords >> rst.vels >> rst.frcs
             >> rst.box_dims >> rst.box_angs
             >> rst.convention_version >> rst.creator_app
-            >> rst.parse_warnings >> rst.created_from_restart
+            >> rst.parse_warnings
+            >> rst.nframes
+            >> rst.created_from_restart
             >> static_cast<MoleculeParser&>(rst);
     }
+    else if (v == 1)
+    {
+        SharedDataStream sds(ds);
+
+        sds >> rst.ttle >> rst.current_time
+            >> rst.coords >> rst.vels >> rst.frcs
+            >> rst.box_dims >> rst.box_angs
+            >> rst.convention_version >> rst.creator_app
+            >> rst.parse_warnings
+            >> rst.created_from_restart
+            >> static_cast<MoleculeParser&>(rst);
+
+        rst.nframes = 1;
+    }
     else
-        throw version_error(v, "1", r_rst, CODELOC);
+        throw version_error(v, "1,2", r_rst, CODELOC);
 
     return ds;
 }
@@ -136,46 +154,7 @@ QStringList AmberRst::formatSuffix() const
 
 /** Internal function called to assert that this object is in a sane state */
 void AmberRst::assertSane() const
-{
-    const int nframes = this->nFrames();
-    const int natoms = this->nAtoms();
-
-    if (not coords.isEmpty())
-    {
-        SireBase::assert_equal( coords.count(), nframes, CODELOC );
-
-        for (int i=0; i<nframes; ++i)
-        {
-            SireBase::assert_equal( coords[i].count(), natoms, CODELOC );
-        }
-    }
-
-    if (not vels.isEmpty())
-    {
-        SireBase::assert_equal( vels.count(), nframes, CODELOC );
-
-        for (int i=0; i<nframes; ++i)
-        {
-            SireBase::assert_equal( vels[i].count(), natoms, CODELOC );
-        }
-    }
-
-    if (not frcs.isEmpty())
-    {
-        SireBase::assert_equal( frcs.count(), nframes, CODELOC );
-
-        for (int i=0; i<nframes; ++i)
-        {
-            SireBase::assert_equal( frcs[i].count(), natoms, CODELOC );
-        }
-    }
-
-    if (not box_dims.isEmpty())
-    {
-        SireBase::assert_equal( box_dims.count(), nframes, CODELOC );
-        SireBase::assert_equal( box_angs.count(), nframes, CODELOC );
-    }
-}
+{}
 
 /** This is not a text file */
 bool AmberRst::isTextFile() const
@@ -188,7 +167,7 @@ bool AmberRst::isFrame() const
     return true;
 }
 
-Frame AmberRst::getFrame(int i) const
+Frame AmberRst::_getFrame(int i) const
 {
     i = SireID::Index(i).map(this->nFrames());
 
@@ -257,6 +236,26 @@ Frame AmberRst::getFrame(int i) const
                           *space, rst.current_time[0]*picosecond);
 }
 
+Frame AmberRst::getFrame(int i) const
+{
+    i = SireID::Index(i).map(this->nFrames());
+
+    if (this->filename().isEmpty())
+    {
+        if (i == 0)
+            return this->_getFrame(i);
+        else
+            throw SireIO::parse_error(QObject::tr(
+                "Cannot load the frame as the name of the trajectory file "
+                "has been lost!"), CODELOC);
+    }
+
+    AmberRst rst;
+    NetCDFFile file(this->filename());
+    rst.parse(file, PropertyMap());
+    return rst._getFrame(i);
+}
+
 /** Return a description of the file format */
 QString AmberRst::formatDescription() const
 {
@@ -270,7 +269,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 {
     //the netcdf conventions for Amber restart/trajectory files are
     //given here - http://ambermd.org/netcdf/nctraj.xhtml
-
     const bool uses_parallel = this->usesParallel();
 
     //collect all of the conventions
@@ -899,28 +897,40 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
         }
     }
 
+    if (not coords.isEmpty())
+        nframes = coords.count();
+    else if (not vels.isEmpty())
+        nframes = vels.count();
+    else if (not frcs.isEmpty())
+        nframes = frcs.count();
+    else
+        nframes = 0;
+
     //set the score, and save the warnings
     double score = 100.0 / (parse_warnings.count()+1);
     this->setScore(score);
 
-    //assert that this is sane
+    // assert that this is sane
     this->assertSane();
 }
 
 /** Construct by parsing the passed file */
 AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
          : ConcreteProperty<AmberRst,MoleculeParser>(map),
-           convention_version(0), created_from_restart(false)
+           convention_version(0), nframes(0), created_from_restart(false)
 {
-    //open the NetCDF file and extract all of the data
+    this->setFilename(filename);
+
+    //open the NetCDF file and extract the data for the first frame
     NetCDFFile netcdf(filename);
     this->parse(netcdf, map);
+    this->operator=(this->operator[](0));
 }
 
 /** Construct by parsing the data in the passed text lines */
 AmberRst::AmberRst(const QStringList &lines, const PropertyMap &map)
          : ConcreteProperty<AmberRst,MoleculeParser>(lines, map),
-           convention_version(0), created_from_restart(false)
+           convention_version(0), nframes(0), created_from_restart(false)
 {
     throw SireIO::parse_error( QObject::tr(
             "You cannot create a binary Amber RST file from a set of text lines!"),
@@ -1032,7 +1042,7 @@ static bool hasData(const QVector< QVector<Vector> > &array)
 /** Construct by extracting the necessary data from the passed System */
 AmberRst::AmberRst(const System &system, const PropertyMap &map)
          : ConcreteProperty<AmberRst,MoleculeParser>(),
-           convention_version(0), created_from_restart(false)
+           convention_version(0), nframes(1), created_from_restart(false)
 {
     //get the MolNums of each molecule in the System - this returns the
     //numbers in MolIdx order
@@ -1180,6 +1190,7 @@ AmberRst::AmberRst(const AmberRst &other)
            convention_version(other.convention_version),
            creator_app(other.creator_app),
            parse_warnings(other.parse_warnings),
+           nframes(other.nframes),
            created_from_restart(other.created_from_restart)
 {}
 
@@ -1205,9 +1216,6 @@ int AmberRst::size() const
 AmberRst AmberRst::operator[](int i) const
 {
     i = Index(i).map( this->nFrames() );
-
-    if (nFrames() == 1)
-        return *this;
 
     AmberRst ret(*this);
 
@@ -1260,6 +1268,7 @@ AmberRst& AmberRst::operator=(const AmberRst &other)
         convention_version = other.convention_version;
         creator_app = other.creator_app;
         parse_warnings = other.parse_warnings;
+        nframes = other.nframes;
         created_from_restart = other.created_from_restart;
 
         MoleculeParser::operator=(other);
@@ -1308,14 +1317,7 @@ QString AmberRst::toString() const
 /** Return the number of frames that have been loaded from the file */
 int AmberRst::nFrames() const
 {
-    if (not coords.isEmpty())
-        return coords.count();
-    else if (not vels.isEmpty())
-        return vels.count();
-    else if (not frcs.isEmpty())
-        return frcs.count();
-    else
-        return 0;
+    return nframes;
 }
 
 /** Parse from the passed file */
