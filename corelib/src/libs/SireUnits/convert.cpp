@@ -30,6 +30,7 @@
 #include <QStringList>
 #include <QMap>
 #include <QPair>
+#include <QMutex>
 
 #include <boost/shared_ptr.hpp>
 

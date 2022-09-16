@@ -8,7 +8,7 @@ def parse_requirements(filename):
         from pip_requirements_parser import RequirementsFile
     except ImportError as e:
         print("\n\n[ERROR] ** You need to install pip-requirements-parser")
-        print("Run `conda install pip-requirements-parser\n\n")
+        print("Run `conda install -c conda-forge pip-requirements-parser\n\n")
         raise e
 
     from pkg_resources import evaluate_marker

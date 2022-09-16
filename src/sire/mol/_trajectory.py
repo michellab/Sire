@@ -62,6 +62,9 @@ class TrajectoryIterator:
         else:
             return f"Trajectory({self._view}, num_frames={len(self._values)})"
 
+    def num_frames(self):
+        return len(self._values)
+
     def current(self):
         """Return the current frame in the trajectory"""
         if self._view is None or self._values is None:
