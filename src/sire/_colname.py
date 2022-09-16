@@ -30,6 +30,9 @@ def colname(obj):
         def _colname_improper(imp):
             return f"{_colname_atom(imp.atom0())}<={_colname_atom(imp.atom1())}=>{_colname_atom(imp.atom2())}--{_colname_atom(imp.atom3())}"
 
+        def _colname_molecule(mol):
+            return f"{mol.name().value()}:{mol.number().value()}"
+
         _col_funcs = {}
         _col_funcs[Atom] = _colname_atom
         _col_funcs[Residue] = _colname_residue
@@ -37,6 +40,7 @@ def colname(obj):
         _col_funcs[Angle] = _colname_angle
         _col_funcs[Dihedral] = _colname_dihedral
         _col_funcs[Improper] = _colname_improper
+        _col_funcs[Molecule] = _colname_molecule
 
     try:
         return _col_funcs[type(obj)](obj)

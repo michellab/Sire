@@ -184,8 +184,10 @@ class TrajectoryIterator:
 
                 mols = _to_molecules(frame)
 
-                for key, ff in forcefields.items():
-                    ff.update(mols)
+                for view in frame:
+                    key = colname(view)
+                    ff = forcefields[key]
+                    ff.update(view)
 
                     if obj1_is_trajectory:
                         ff.update(obj1_mols)
