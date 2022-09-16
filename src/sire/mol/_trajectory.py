@@ -110,14 +110,162 @@ class TrajectoryIterator:
 
         return ret
 
-    def energy(self, obj1=None, to_pandas=False):
+    def energies(self, obj1=None, forcefield=None,
+                 match_trajectory=None, to_pandas=True):
         if self._view is None:
             return {}
 
         import numpy as np
 
-        colnames = []
-        columns = []
+        from ..mm import create_forcefield, calculate_energy
+        from .._colname import colname
+        from . import _to_molecules
+
+        forcefields = {}
+
+        if obj1 is None:
+            for v in self._view:
+                forcefields[colname(v)] = create_forcefield(_to_molecules(v), self._map)
+
+            obj1_is_trajectory = False
+        else:
+            if match_trajectory:
+                if type(obj1) is not TrajectoryIterator:
+                    obj1 = obj1.trajectory()[self._values]
+
+            elif match_trajectory is None:
+                # try to guess what to do
+                if type(obj1) is not TrajectoryIterator:
+                    if obj1.num_frames() > 1:
+                        # try to match
+                        try:
+                            obj1 = obj1.trajectory()[self._values]
+                        except Exception:
+                            pass
+
+            if type(obj1) is TrajectoryIterator:
+                if obj1.num_frames() != self.num_frames():
+                    raise ValueError(
+                        "The two trajectories have a different number of frames! "
+                        f"{self.num_frames()} versus f{obj1.num_frames()}.")
+
+                obj1_is_trajectory = True
+
+                obj1_mols = _to_molecules(obj1.first())
+
+                for v in self._view:
+                    forcefields[colname(v)] = create_forcefield(_to_molecules(v), obj1_mols, self._map)
+            else:
+                obj1_is_trajectory = False
+
+                for v in self._view:
+                    forcefields[colname(v)] = create_forcefield(_to_molecules(v), ob1_mols, self._map)
+
+        nframes = len(self)
+
+        times = np.zeros(nframes, dtype=float)
+        indexes = np.zeros(nframes, dtype=int)
+
+        time_unit = None
+        energy_unit = None
+
+        components = {}
+
+        from ..utils import Console
+
+        with Console.progress() as progress:
+            task = progress.add_task("Looping through frames", total=nframes)
+
+            for idx, frame in enumerate(self.__iter__()):
+                if obj1_is_trajectory:
+                    obj1_mols = _to_molecules(obj1[idx].current())
+                else:
+                    obj1_mols = None
+
+                mols = _to_molecules(frame)
+
+                for key, ff in forcefields.items():
+                    ff.update(mols)
+
+                    if obj1_is_trajectory:
+                        ff.update(obj1_mols)
+
+                    nrg = calculate_energy(ff)
+
+                    total_key = f"total({key})"
+
+                    if total_key not in components:
+                        components[total_key] = np.zeros(nframes, dtype=float)
+
+                    components[total_key][idx] = nrg.to_default()
+
+                    for k, value in nrg.components().items():
+                        c_key = f"{k}({key})"
+                        if c_key not in components:
+                            components[c_key] = np.zeros(nframes, dtype=float)
+
+                        components[c_key][idx] = value.to_default()
+
+                times[idx] = frame.frame_time().to_default()
+
+                if energy_unit is None:
+                    if not nrg.is_zero():
+                        energy_unit = nrg.get_default().unit_string()
+
+                if time_unit is None:
+                    time = frame.frame_time()
+                    if not time.is_zero():
+                        time_unit = time.get_default().unit_string()
+
+                indexes[idx] = frame.frame_index()
+                progress.update(task, completed=idx)
+
+        data = {}
+
+        data["frame"] = indexes
+        data["time"] = times
+
+        colnames = list(components.keys())
+        colnames.sort()
+
+        for colname in colnames:
+            data[colname] = components[colname]
+
+        if to_pandas:
+            import pandas as pd
+            df = pd.DataFrame(data)
+            df.set_index("frame")
+
+            df.time_unit = lambda: time_unit
+            df.energy_unit = lambda: energy_unit
+
+            def pretty_plot(x="time", y=None):
+                if y is None:
+                    y = colnames
+
+                if x == "time":
+                    xlabel = f"Time / {df.time_unit()}"
+                elif x == "frame":
+                    xlabel = "Frame"
+                else:
+                    xlabel = x
+
+                ax = df.plot(x=x, y=y)
+                ax.set_xlabel(xlabel)
+                ax.set_ylabel(f"Energy / {df.energy_unit()}")
+                ax.legend(bbox_to_anchor=(1.05, 1.0))
+
+            df.pretty_plot = pretty_plot
+
+            return df
+
+        return data
+
+    def energy(self, obj1=None, match_trajectory=None, to_pandas=True):
+        if self._view is None:
+            return {}
+
+        import numpy as np
 
         from ..mm import create_forcefield, calculate_energy
         from . import _to_molecules
@@ -126,6 +274,20 @@ class TrajectoryIterator:
             ff = create_forcefield(_to_molecules(self._view), self._map)
             obj1_is_trajectory = False
         else:
+            if match_trajectory:
+                if type(obj1) is not TrajectoryIterator:
+                    obj1 = obj1.trajectory()[self._values]
+
+            elif match_trajectory is None:
+                # try to guess what to do
+                if type(obj1) is not TrajectoryIterator:
+                    if obj1.num_frames() > 1:
+                        # try to match
+                        try:
+                            obj1 = obj1.trajectory()[self._values]
+                        except Exception:
+                            pass
+
             if type(obj1) is TrajectoryIterator:
                 if obj1.num_frames() != self.num_frames():
                     raise ValueError(
@@ -434,7 +596,7 @@ class TrajectoryIterator:
 
         return data
 
-    def measures(self, func=None, to_pandas=False):
+    def measures(self, func=None, to_pandas=True):
         if func is None:
             return self._simple_measures(to_pandas=to_pandas)
         else:

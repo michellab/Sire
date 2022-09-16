@@ -1223,7 +1223,7 @@ QVector<T> _mid(const QVector<T> &v, int start, int count)
     if (v.count() == 0)
         return v;
 
-    if (start < 0 or count < 0 or start+count >= v.count())
+    if (start < 0 or count < 0 or start+count > v.count())
         throw SireError::incompatible_error(QObject::tr(
             "Cannot subset a vector of length %1 using start %2, count %3.")
                 .arg(v.count()).arg(start).arg(count), CODELOC);
