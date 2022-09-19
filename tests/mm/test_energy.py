@@ -27,19 +27,81 @@ def assert_approx_equal(nrg0, nrg1):
             raise e
 
 
+def test_trajectory_energies(ala_traj):
+    mols = ala_traj
+    mol = mols[0]
+
+    def assert_same(view):
+        from sire import colname
+
+        nrgs0 = [0, 0, 0]
+
+        view.load_frame(0)
+        nrgs0[0] = view.energies()
+        view.load_frame(1)
+        nrgs0[1] = view.energies()
+        view.load_frame(2)
+        nrgs0[2] = view.energies()
+
+        nrgs1 = view.trajectory()[0:3].energies(to_pandas=False)
+
+        for idx, v in enumerate(view):
+            for i in range(0, 3):
+                assert nrgs0[i][idx].value() == pytest.approx(nrgs1[colname(v, "total")][i])
+
+    assert_same(mol.residues())
+
+    def assert_same_pair(view, other):
+        from sire import colname
+
+        nrgs0 = [0, 0, 0]
+
+        view.load_frame(0)
+        other.load_frame(0)
+        nrgs0[0] = view.energies(other)
+        view.load_frame(1)
+        other.load_frame(1)
+        nrgs0[1] = view.energies(other)
+        view.load_frame(2)
+        other.load_frame(2)
+        nrgs0[2] = view.energies(other)
+
+        nrgs1 = view.trajectory()[0:3].energies(other, to_pandas=False)
+
+        for idx, v in enumerate(view):
+            for i in range(0, 3):
+                assert nrgs0[i][idx].value() == pytest.approx(nrgs1[colname(v, "total")][i])
+
+    assert_same_pair(mol.residues()[0:2], mol.residues()[-1])
+    assert_same_pair(mols["water"][0:5], mol)
+    assert_same_pair(mol.atoms(), mols["water and molecule within 5 of molidx 0"])
+
+
 def test_trajectory_energy(ala_traj):
     mols = ala_traj
     mol = mols[0]
 
     def assert_same(view):
-        nrg0 = view.energy()
-        nrg1 = view.trajectory()[0].energy(to_pandas=False)
+        view.load_frame(0)
+        nrg00 = view.energy()
+        view.load_frame(1)
+        nrg01 = view.energy()
+        view.load_frame(2)
+        nrg02 = view.energy()
 
-        if nrg0.value() != nrg1["total"][0]:
-            print(nrg0.components())
-            print(nrg1)
+        nrgs = view.trajectory()[0:3].energy(to_pandas=False)
 
-        assert nrg0.value() == nrg1["total"][0]
+        def check(n0, n1, i):
+            if n0.value() != pytest.approx(n1["total"][i]):
+                print(i, n0.value(), n1["total"][i])
+                for key in n0.components().keys():
+                    print(key, n0[key], n1[key])
+
+            assert n0.value() == pytest.approx(n1["total"][i])
+
+        check(nrg00, nrgs, 0)
+        check(nrg01, nrgs, 1)
+        check(nrg02, nrgs, 2)
 
     assert_same(mol)
     assert_same(mol.bonds()[0])
@@ -47,17 +109,33 @@ def test_trajectory_energy(ala_traj):
     assert_same(mols)
 
     def assert_same_pair(view, other):
-        nrg0 = view.energy(other)
-        nrg1 = view.trajectory()[0].energy(other, to_pandas=False)
+        view.load_frame(0)
+        other.load_frame(0)
+        nrg00 = view.energy(other)
+        view.load_frame(1)
+        other.load_frame(1)
+        nrg01 = view.energy(other)
+        view.load_frame(2)
+        other.load_frame(2)
+        nrg02 = view.energy(other)
 
-        if nrg0.value() != nrg1["total"][0]:
-            print(nrg0.components())
-            print(nrg1)
+        nrgs = view.trajectory()[0:3].energy(other, to_pandas=False)
 
-        assert nrg0.value() == nrg1["total"][0]
+        def check(n0, n1, i):
+            if n0.value() != pytest.approx(n1["total"][i]):
+                print(i, n0.value(), n1["total"][i])
+                for key in n0.components().keys():
+                    print(key, n0[key], n1[key])
+
+            assert n0.value() == pytest.approx(n1["total"][i])
+
+        check(nrg00, nrgs, 0)
+        check(nrg01, nrgs, 1)
+        check(nrg02, nrgs, 2)
 
     assert_same_pair(mol["element C"], mol["not element C"])
     assert_same_pair(mol, mols["water"])
+    assert_same_pair(mol.residues()[0:2], mol.residues()[-1])
 
 
 def test_energy(ala_mols):

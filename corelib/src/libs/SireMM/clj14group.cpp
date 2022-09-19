@@ -493,7 +493,7 @@ void CLJ14Group::update(const MoleculeView &new_molecule)
     if (recalculatingFromScratch())
     {
         newmol = PartialMolecule(new_molecule.data(), newmol.selection());
-        mol = new_molecule;
+        mol = newmol;
         needs_energy = true;
     }
     else

@@ -153,13 +153,13 @@ class TrajectoryIterator:
 
                 obj1_mols = _to_molecules(obj1.first())
 
-                for v in self._view:
+                for v in self.first():
                     forcefields[colname(v)] = create_forcefield(_to_molecules(v), obj1_mols, self._map)
             else:
                 obj1_is_trajectory = False
 
-                for v in self._view:
-                    forcefields[colname(v)] = create_forcefield(_to_molecules(v), ob1_mols, self._map)
+                for v in self.first():
+                    forcefields[colname(v)] = create_forcefield(_to_molecules(v), obj1_mols, self._map)
 
         nframes = len(self)
 
@@ -185,24 +185,28 @@ class TrajectoryIterator:
                 mols = _to_molecules(frame)
 
                 for view in frame:
-                    key = colname(view)
-                    ff = forcefields[key]
-                    ff.update(view)
+                    ff = forcefields[colname(view)]
 
                     if obj1_is_trajectory:
                         ff.update(obj1_mols)
 
+                    # update the forcefield with this frame second
+                    # as, sometimes, there are forcefields where you cannot
+                    # have a different version of a molecule, and so you want
+                    # the version from the trajectory frame
+                    ff.update(_to_molecules(view))
+
                     nrg = calculate_energy(ff)
 
-                    total_key = f"total({key})"
+                    total_key = colname(view, "total")
 
                     if total_key not in components:
                         components[total_key] = np.zeros(nframes, dtype=float)
 
                     components[total_key][idx] = nrg.to_default()
 
-                    for k, value in nrg.components().items():
-                        c_key = f"{k}({key})"
+                    for key, value in nrg.components().items():
+                        c_key = colname(view, key)
                         if c_key not in components:
                             components[c_key] = np.zeros(nframes, dtype=float)
 
@@ -297,10 +301,10 @@ class TrajectoryIterator:
                         f"{self.num_frames()} versus f{obj1.num_frames()}.")
 
                 obj1_is_trajectory = True
-                ff = create_forcefield(_to_molecules(self._view), _to_molecules(obj1.first()), self._map)
+                ff = create_forcefield(_to_molecules(self.first()), _to_molecules(obj1.first()), self._map)
             else:
                 obj1_is_trajectory = False
-                ff = create_forcefield(_to_molecules(self._view), _to_molecules(obj1), self._map)
+                ff = create_forcefield(_to_molecules(self.first()), _to_molecules(obj1), self._map)
 
         nframes = len(self)
 
@@ -318,10 +322,14 @@ class TrajectoryIterator:
             task = progress.add_task("Looping through frames", total=nframes)
 
             for idx, frame in enumerate(self.__iter__()):
-                ff.update(_to_molecules(frame))
-
                 if obj1_is_trajectory:
                     ff.update(_to_molecules(obj1[idx].current()))
+
+                # update the forcefield with this frame second
+                # as, sometimes, there are forcefields where you cannot
+                # have a different version of a molecule, and so you want
+                # the version from the trajectory frame
+                ff.update(_to_molecules(frame))
 
                 nrg = calculate_energy(ff)
 

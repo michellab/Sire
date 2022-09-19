@@ -725,6 +725,8 @@ void InternalGroupFF::_pvt_changed(quint32 group_id,
             cljgroups1[molecule.number()].update(molecule);
         }
     }
+
+    this->mustNowRecalculateFromScratch();
 }
 
 /** Record that the provided list of molecules have changed
@@ -772,6 +774,8 @@ void InternalGroupFF::_pvt_changed(quint32 group_id,
                 }
             }
         }
+
+        this->mustNowRecalculateFromScratch();
     }
     catch(...)
     {

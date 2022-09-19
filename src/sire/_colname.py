@@ -2,10 +2,13 @@
 __all__ = ["colname", "colnames"]
 
 
+from tkinter import N
+
+
 _col_funcs = None
 
 
-def colname(obj):
+def colname(obj, component=None):
     global _col_funcs
 
     if _col_funcs is None:
@@ -43,9 +46,14 @@ def colname(obj):
         _col_funcs[Molecule] = _colname_molecule
 
     try:
-        return _col_funcs[type(obj)](obj)
+        n = _col_funcs[type(obj)](obj)
     except KeyError:
-        return str(obj)
+        n = str(obj)
+
+    if component is None:
+        return n
+    else:
+        return f"{component}({n})"
 
 
 def colnames(views):
