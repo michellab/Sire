@@ -149,6 +149,18 @@ void register_Frame_class(){
                 , "" );
         
         }
+        { //::SireMol::Frame::numBytes
+        
+            typedef int ( ::SireMol::Frame::*numBytes_function_type)(  ) const;
+            numBytes_function_type numBytes_function_value( &::SireMol::Frame::numBytes );
+            
+            Frame_exposer.def( 
+                "numBytes"
+                , numBytes_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         Frame_exposer.def( bp::self != bp::self );
         { //::SireMol::Frame::operator=
         

@@ -287,6 +287,32 @@ void register_Molecules_class(){
                 , "Return the number of molecules in this set" );
         
         }
+        { //::SireMol::Molecules::deleteFrame
+        
+            typedef void ( ::SireMol::Molecules::*deleteFrame_function_type)( int ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::Molecules::deleteFrame );
+            
+            Molecules_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Molecules::deleteFrame
+        
+            typedef void ( ::SireMol::Molecules::*deleteFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::Molecules::deleteFrame );
+            
+            Molecules_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Molecules::first
         
             typedef ::SireMol::ViewsOfMol const & ( ::SireMol::Molecules::*first_function_type)(  ) const;
@@ -361,6 +387,32 @@ void register_Molecules_class(){
                 , "Return a reference to the last molecule in this set.\nThis throws an exception if this set is empty.\nThrow: SireError::invalid_index\n" );
         
         }
+        { //::SireMol::Molecules::loadFrame
+        
+            typedef void ( ::SireMol::Molecules::*loadFrame_function_type)( int ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::Molecules::loadFrame );
+            
+            Molecules_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Molecules::loadFrame
+        
+            typedef void ( ::SireMol::Molecules::*loadFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::Molecules::loadFrame );
+            
+            Molecules_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Molecules::molNums
         
             typedef ::QSet< SireMol::MolNum > ( ::SireMol::Molecules::*molNums_function_type)(  ) const;
@@ -384,6 +436,31 @@ void register_Molecules_class(){
                 , ( bp::arg("molnum") )
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the molecule at number molnum\nThrow: SireMol::missing_molecule\n" );
+        
+        }
+        { //::SireMol::Molecules::nFrames
+        
+            typedef int ( ::SireMol::Molecules::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::Molecules::nFrames );
+            
+            Molecules_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Molecules::nFrames
+        
+            typedef int ( ::SireMol::Molecules::*nFrames_function_type)( ::SireBase::PropertyMap const & ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::Molecules::nFrames );
+            
+            Molecules_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::Molecules::nMolecules
@@ -591,6 +668,57 @@ void register_Molecules_class(){
                 , ( bp::arg("nmolecules") )
                 , bp::release_gil_policy()
                 , "Reserve enough space for nmolecules molecules. This\nwill reserve the memory so that reallocations are minimised" );
+        
+        }
+        { //::SireMol::Molecules::saveFrame
+        
+            typedef void ( ::SireMol::Molecules::*saveFrame_function_type)( int ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::Molecules::saveFrame );
+            
+            Molecules_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Molecules::saveFrame
+        
+            typedef void ( ::SireMol::Molecules::*saveFrame_function_type)(  ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::Molecules::saveFrame );
+            
+            Molecules_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Molecules::saveFrame
+        
+            typedef void ( ::SireMol::Molecules::*saveFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::Molecules::saveFrame );
+            
+            Molecules_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Molecules::saveFrame
+        
+            typedef void ( ::SireMol::Molecules::*saveFrame_function_type)( ::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::Molecules::saveFrame );
+            
+            Molecules_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::Molecules::search

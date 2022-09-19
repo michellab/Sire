@@ -106,10 +106,22 @@ namespace SireMM
                      const SireMol::Molecules &mols1,
                      const SireBase::PropertyMap &map);
 
+    SIREMM_EXPORT QVector<SireUnits::Dimension::GeneralUnit>
+    calculate_trajectory_energy(const SireFF::ForceFields &ff,
+                                const QList<qint64> &frames,
+                                const SireBase::PropertyMap &map);
+
+    SIREMM_EXPORT QVector< QVector<SireUnits::Dimension::GeneralUnit > >
+    calculate_trajectory_energies(const QVector<SireFF::ForceFields> &ff,
+                                  const QList<qint64> &frames,
+                                  const SireBase::PropertyMap &map);
+
 }
 
 SIRE_EXPOSE_FUNCTION( SireMM::create_forcefield )
 SIRE_EXPOSE_FUNCTION( SireMM::calculate_energy )
+SIRE_EXPOSE_FUNCTION( SireMM::calculate_trajectory_energy )
+SIRE_EXPOSE_FUNCTION( SireMM::calculate_trajectory_energies )
 
 SIRE_END_HEADER
 

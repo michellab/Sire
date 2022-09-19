@@ -163,18 +163,18 @@ public:
     {
         QMutexLocker lkr(&TrajectoriesCache::mutex);
 
-        if (not cache.contains(ptr))
+        if (not TrajectoriesCache::cache.contains(ptr))
         {
-            cache.insert(ptr, std::shared_ptr<TrajectoryCache>(new TrajectoryCache()));
+            TrajectoriesCache::cache.insert(ptr, std::shared_ptr<TrajectoryCache>(new TrajectoryCache()));
         }
 
-        return cache[ptr];
+        return TrajectoriesCache::cache[ptr];
     }
 
     static void deleted(const void *ptr)
     {
         QMutexLocker lkr(&TrajectoriesCache::mutex);
-        cache.remove(ptr);
+        TrajectoriesCache::cache.remove(ptr);
     }
 
 private:

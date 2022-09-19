@@ -56,12 +56,12 @@ class SelectResult;
     forms a general purpose molecule container, which is used as the argument
     to functions which expect to be passed lots of molecules or parts
     of molecules. This class holds the Molecules using the
-    ViewsOfMol class, thereby allowing multiple arbitrary views of each 
+    ViewsOfMol class, thereby allowing multiple arbitrary views of each
     molecule to be held.
 
     @author Christopher Woods
 */
-class SIREMOL_EXPORT Molecules 
+class SIREMOL_EXPORT Molecules
             : public SireBase::ConcreteProperty<Molecules,SireBase::Property>
 {
 
@@ -100,15 +100,15 @@ public:
     Molecules* clone() const;
 
     Molecules& operator=(const Molecules &other);
-    
+
     bool operator==(const Molecules &other) const;
     bool operator!=(const Molecules &other) const;
-    
+
     QString toString() const;
-    
+
     const ViewsOfMol& operator[](MolNum molnum) const;
     PartialMolecule operator[](const boost::tuple<MolNum,SireID::Index> &viewidx) const;
-    
+
     const ViewsOfMol& at(MolNum molnum) const;
     PartialMolecule at(const boost::tuple<MolNum,SireID::Index> &viewidx) const;
 
@@ -136,13 +136,13 @@ public:
 
     int count() const;
     int nMolecules() const;
-    
+
     int nViews() const;
     int nViews(MolNum molnum) const;
 
     const ViewsOfMol& first() const;
     const ViewsOfMol& last() const;
-    
+
     const ViewsOfMol& front() const;
     const ViewsOfMol& back() const;
 
@@ -170,17 +170,30 @@ public:
     bool unite(const MoleculeView &molview);
     ViewsOfMol unite(const ViewsOfMol &molviews);
     QList<ViewsOfMol> unite(const Molecules &other);
-    
+
     bool remove(const MoleculeView &molview);
     ViewsOfMol remove(const ViewsOfMol &molviews);
     QList<ViewsOfMol> remove(const Molecules &molecules);
-    
+
     bool removeAll(const MoleculeView &molview);
     ViewsOfMol removeAll(const ViewsOfMol &molviews);
     QList<ViewsOfMol> removeAll(const Molecules &molecules);
-    
+
     ViewsOfMol remove(MolNum molnum);
     bool removeAll();
+
+    int nFrames() const;
+    int nFrames(const SireBase::PropertyMap &map) const;
+
+    void loadFrame(int frame);
+    void saveFrame(int frame);
+    void saveFrame();
+    void deleteFrame(int frame);
+
+    void loadFrame(int frame, const SireBase::PropertyMap &map);
+    void saveFrame(int frame, const SireBase::PropertyMap &map);
+    void saveFrame(const SireBase::PropertyMap &map);
+    void deleteFrame(int frame, const SireBase::PropertyMap &map);
 
     void clear();
 
@@ -198,7 +211,7 @@ private:
     static Molecules from(const T &molecules);
 
     /** Hash that contains all of the views of
-        all of the molecules, indexed by 
+        all of the molecules, indexed by
         their molecule number */
     SireBase::ChunkedHash<MolNum,ViewsOfMol> mols;
 };
@@ -220,9 +233,9 @@ Molecules Molecules::from(const T &molecules)
          it != molecules.end();
          ++it)
     {
-        SireBase::ChunkedHash<MolNum,ViewsOfMol>::iterator mol 
+        SireBase::ChunkedHash<MolNum,ViewsOfMol>::iterator mol
                                                     = mols.mols.find(it->number());
-        
+
         if (mol != mols.mols.end())
         {
             mol->add(*it);

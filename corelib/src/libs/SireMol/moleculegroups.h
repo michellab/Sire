@@ -345,6 +345,19 @@ public:
     virtual void setContents(const MGID &mgid, const Molecules &molecules)=0;
     virtual void setContents(const MGID &mgid, const MoleculeGroup &molgroup)=0;
 
+    virtual int nFrames() const;
+    virtual int nFrames(const SireBase::PropertyMap &map) const;
+
+    virtual void loadFrame(int frame);
+    virtual void saveFrame(int frame);
+    virtual void saveFrame();
+    virtual void deleteFrame(int frame);
+
+    virtual void loadFrame(int frame, const SireBase::PropertyMap &map);
+    virtual void saveFrame(int frame, const SireBase::PropertyMap &map);
+    virtual void saveFrame(const SireBase::PropertyMap &map);
+    virtual void deleteFrame(int frame, const SireBase::PropertyMap &map);
+
     static const MoleculeGroups& null();
 
 protected:

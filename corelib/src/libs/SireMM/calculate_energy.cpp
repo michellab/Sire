@@ -40,6 +40,8 @@
 
 #include "SireMM/intragroupff.h"
 
+#include "SireBase/parallel.h"
+
 #include "SireUnits/units.h"
 
 #include "SireMol/core.h"
@@ -411,6 +413,67 @@ SIREMM_EXPORT GeneralUnit calculate_energy(const SireMol::Molecules &mols0,
 {
     auto ff = create_forcefield(mols0, mols1, map);
     return calculate_energy(ff);
+}
+
+SIREMM_EXPORT QVector<GeneralUnit> calculate_trajectory_energy(
+            const ForceFields &ff, const QList<qint64> &frames,
+            const PropertyMap &map)
+{
+    QVector<GeneralUnit> nrgs;
+
+    if (frames.isEmpty())
+        return nrgs;
+
+    nrgs.resize(frames.count());
+
+    auto nrgs_data = nrgs.data();
+
+    QVector<qint64> local_frames = frames.toVector();
+    auto frames_data = local_frames.constData();
+
+    tbb::parallel_for(tbb::blocked_range<int>(0, frames.count()),
+                      [&](const tbb::blocked_range<int> &r){
+
+        ForceFields local_ff = ff;
+
+        for (int i=r.begin(); i<r.end(); ++i)
+        {
+            local_ff.loadFrame(frames_data[i], map);
+            nrgs_data[i] = calculate_energy(local_ff);
+        }
+    });
+
+    return nrgs;
+}
+
+SIREMM_EXPORT QVector< QVector<GeneralUnit> > calculate_trajectory_energies(
+        const QVector<ForceFields> &ffs, const QList<qint64> &frames,
+        const PropertyMap &map)
+{
+    QVector< QVector<GeneralUnit> > nrgs;
+
+    if (frames.isEmpty() or ffs.isEmpty())
+        return nrgs;
+
+    nrgs.reserve(ffs.count());
+
+    for (int i=0; i<ffs.count(); ++i)
+    {
+        nrgs.append(QVector<GeneralUnit>(frames.count(), GeneralUnit(0)));
+    }
+
+    QVector<ForceFields> local_ffs = ffs;
+
+    for (int i=0; i<frames.count(); ++i)
+    {
+        for (int j=0; j<local_ffs.count(); ++j)
+        {
+            local_ffs[j].loadFrame(frames[i], map);
+            nrgs[j][i] = calculate_energy(local_ffs[j]);
+        }
+    }
+
+    return nrgs;
 }
 
 } // end of namespace SireMM

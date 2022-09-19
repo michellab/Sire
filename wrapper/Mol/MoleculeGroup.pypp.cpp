@@ -446,6 +446,32 @@ void register_MoleculeGroup_class(){
                 , "Return whether or not this group contains all of the\nviews of any version of all of the molecules contained\nin molecules" );
         
         }
+        { //::SireMol::MoleculeGroup::deleteFrame
+        
+            typedef void ( ::SireMol::MoleculeGroup::*deleteFrame_function_type)( int ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::MoleculeGroup::deleteFrame );
+            
+            MoleculeGroup_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeGroup::deleteFrame
+        
+            typedef void ( ::SireMol::MoleculeGroup::*deleteFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::MoleculeGroup::deleteFrame );
+            
+            MoleculeGroup_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::MoleculeGroup::first
         
             typedef ::SireMol::ViewsOfMol const & ( ::SireMol::MoleculeGroup::*first_function_type)(  ) const;
@@ -635,6 +661,32 @@ void register_MoleculeGroup_class(){
                 , last_function_value
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return a reference to the last molecule in the group\nThrow: SireError::invalid_index\n" );
+        
+        }
+        { //::SireMol::MoleculeGroup::loadFrame
+        
+            typedef void ( ::SireMol::MoleculeGroup::*loadFrame_function_type)( int ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::MoleculeGroup::loadFrame );
+            
+            MoleculeGroup_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeGroup::loadFrame
+        
+            typedef void ( ::SireMol::MoleculeGroup::*loadFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::MoleculeGroup::loadFrame );
+            
+            MoleculeGroup_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::MoleculeGroup::majorVersion
@@ -887,6 +939,31 @@ void register_MoleculeGroup_class(){
                 , nChains_function_value
                 , bp::release_gil_policy()
                 , "Return the total number of chains in this group" );
+        
+        }
+        { //::SireMol::MoleculeGroup::nFrames
+        
+            typedef int ( ::SireMol::MoleculeGroup::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::MoleculeGroup::nFrames );
+            
+            MoleculeGroup_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeGroup::nFrames
+        
+            typedef int ( ::SireMol::MoleculeGroup::*nFrames_function_type)( ::SireBase::PropertyMap const & ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::MoleculeGroup::nFrames );
+            
+            MoleculeGroup_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::MoleculeGroup::nMolecules
@@ -1255,6 +1332,57 @@ void register_MoleculeGroup_class(){
                 , removeAll_function_value
                 , bp::release_gil_policy()
                 , "Remove all of the molecules from this group" );
+        
+        }
+        { //::SireMol::MoleculeGroup::saveFrame
+        
+            typedef void ( ::SireMol::MoleculeGroup::*saveFrame_function_type)( int ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::MoleculeGroup::saveFrame );
+            
+            MoleculeGroup_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeGroup::saveFrame
+        
+            typedef void ( ::SireMol::MoleculeGroup::*saveFrame_function_type)(  ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::MoleculeGroup::saveFrame );
+            
+            MoleculeGroup_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeGroup::saveFrame
+        
+            typedef void ( ::SireMol::MoleculeGroup::*saveFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::MoleculeGroup::saveFrame );
+            
+            MoleculeGroup_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeGroup::saveFrame
+        
+            typedef void ( ::SireMol::MoleculeGroup::*saveFrame_function_type)( ::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::MoleculeGroup::saveFrame );
+            
+            MoleculeGroup_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::MoleculeGroup::search

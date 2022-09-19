@@ -267,43 +267,27 @@ class TrajectoryIterator:
 
         return data
 
-    def energy(self, obj1=None, match_trajectory=None, to_pandas=True):
+    def energy(self, obj1=None, to_pandas=True):
         if self._view is None:
             return {}
 
         import numpy as np
 
-        from ..mm import create_forcefield, calculate_energy
+        from ..mm import create_forcefield
+        from ..legacy.MM import calculate_trajectory_energy
         from . import _to_molecules
 
         if obj1 is None:
-            ff = create_forcefield(self._view, map=self._map)
-            obj1_is_trajectory = False
+            ff = create_forcefield(self.current(), map=self._map)
         else:
-            if match_trajectory:
-                if type(obj1) is not TrajectoryIterator:
-                    obj1 = obj1.trajectory()[self._values]
-
-            elif match_trajectory is None:
-                # try to guess what to do
-                if type(obj1) is not TrajectoryIterator:
-                    if obj1.num_frames() > 1:
-                        # try to match
-                        try:
-                            obj1 = obj1.trajectory()[self._values]
-                        except Exception:
-                            pass
-
             if type(obj1) is TrajectoryIterator:
                 if obj1.num_frames() != self.num_frames():
                     raise ValueError(
                         "The two trajectories have a different number of frames! "
                         f"{self.num_frames()} versus f{obj1.num_frames()}.")
 
-                obj1_is_trajectory = True
                 ff = create_forcefield(self.first(), obj1.first(), map=self._map)
             else:
-                obj1_is_trajectory = False
                 ff = create_forcefield(self.first(), obj1, map=self._map)
 
         nframes = len(self)
@@ -321,42 +305,45 @@ class TrajectoryIterator:
         with Console.progress() as progress:
             task = progress.add_task("Looping through frames", total=nframes)
 
-            for idx, frame in enumerate(self.__iter__()):
-                if obj1_is_trajectory:
-                    ff.update(_to_molecules(obj1[idx].current()))
+            num_per_chunk = max(64, int(nframes / 10))
 
-                # update the forcefield with this frame second
-                # as, sometimes, there are forcefields where you cannot
-                # have a different version of a molecule, and so you want
-                # the version from the trajectory frame
-                ff.update(_to_molecules(frame))
+            if num_per_chunk < 8:
+                num_per_chunk = 8
 
-                nrg = calculate_energy(ff)
+            i = 0
 
-                if "total" not in components:
+            while i < nframes:
+                j = min(i+num_per_chunk, nframes)
+
+                nrgs = calculate_trajectory_energy(ff, list(self._values[i:j]), self._map)
+
+                if i == 0:
+                    nrg = nrgs[0]
+                    energy_unit = nrg.get_default().unit_string()
                     components["total"] = np.zeros(nframes, dtype=float)
-
-                components["total"][idx] = nrg.to_default()
-
-                for key, value in nrg.components().items():
-                    if key not in components:
+                    for key in nrg.components().keys():
                         components[key] = np.zeros(nframes, dtype=float)
 
-                    components[key][idx] = value.to_default()
+                for idx in range(i, j):
+                    nrg = nrgs[idx-i]
+                    components["total"][idx] = nrg.to_default()
 
-                times[idx] = frame.frame_time().to_default()
+                    for key, value in nrg.components().items():
+                        components[key][idx] = nrg[key].to_default()
 
-                if energy_unit is None:
-                    if not nrg.is_zero():
-                        energy_unit = nrg.get_default().unit_string()
+                    frame = self.__getitem__(idx).current()
 
-                if time_unit is None:
-                    time = frame.frame_time()
-                    if not time.is_zero():
-                        time_unit = time.get_default().unit_string()
+                    times[idx] = frame.frame_time().to_default()
 
-                indexes[idx] = frame.frame_index()
-                progress.update(task, completed=idx)
+                    if time_unit is None:
+                        time = frame.frame_time()
+                        if not time.is_zero():
+                            time_unit = time.get_default().unit_string()
+
+                    indexes[idx] = frame.frame_index()
+                    progress.update(task, completed=idx)
+
+                i = j
 
         data = {}
 

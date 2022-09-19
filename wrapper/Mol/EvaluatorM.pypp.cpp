@@ -230,7 +230,7 @@ void register_EvaluatorM_class(){
                 , centroid_function_value
                 , ( bp::arg("map") )
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the centroid of these atoms - this is the average\nof the coordinates\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\n" );
         
         }
         { //::SireMol::EvaluatorM::charge

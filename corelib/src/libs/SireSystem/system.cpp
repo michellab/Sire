@@ -3301,6 +3301,64 @@ void System::commitDelta(const Constraints &constraints,
     }
 }
 
+int System::nFrames() const
+{
+    return this->nFrames(PropertyMap());
+}
+
+int System::nFrames(const SireBase::PropertyMap &map) const
+{
+    return MolGroupsBase::nFrames(map);
+}
+
+void System::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+void System::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+void System::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+void System::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+void System::loadFrame(int frame, const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::loadFrame(frame, map);
+}
+
+void System::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::saveFrame(frame, map);
+}
+
+void System::saveFrame(const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::saveFrame(map);
+}
+
+void System::deleteFrame(int frame, const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::deleteFrame(frame, map);
+}
+
 const char* System::typeName()
 {
     return QMetaType::typeName( qMetaTypeId<System>() );

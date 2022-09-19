@@ -2192,6 +2192,64 @@ void MolGroupsBase::clearIndex()
     molnum_to_mgnum.clear();
 }
 
+int MolGroupsBase::nFrames() const
+{
+    return this->nFrames(PropertyMap());
+}
+
+int MolGroupsBase::nFrames(const SireBase::PropertyMap &map) const
+{
+    return this->molecules().nFrames(map);
+}
+
+void MolGroupsBase::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+void MolGroupsBase::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+void MolGroupsBase::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+void MolGroupsBase::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+void MolGroupsBase::loadFrame(int frame, const SireBase::PropertyMap &map)
+{
+    auto mols = this->molecules();
+    mols.loadFrame(frame, map);
+    this->update(mols);
+}
+
+void MolGroupsBase::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    auto mols = this->molecules();
+    mols.saveFrame(frame, map);
+    this->update(mols);
+}
+
+void MolGroupsBase::saveFrame(const SireBase::PropertyMap &map)
+{
+    auto mols = this->molecules();
+    mols.saveFrame(map);
+    this->update(mols);
+}
+
+void MolGroupsBase::deleteFrame(int frame, const SireBase::PropertyMap &map)
+{
+    auto mols = this->molecules();
+    mols.deleteFrame(frame, map);
+    this->update(mols);
+}
+
 /////////////
 ///////////// Implementation of MoleculeGroups
 /////////////

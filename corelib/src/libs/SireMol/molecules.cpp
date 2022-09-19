@@ -1014,3 +1014,96 @@ Molecules* Molecules::clone() const
 {
     return new Molecules(*this);
 }
+
+int Molecules::nFrames() const
+{
+    return this->nFrames(PropertyMap());
+}
+
+int Molecules::nFrames(const SireBase::PropertyMap &map) const
+{
+    int nframes = -1;
+
+    for (auto it = this->mols.begin(); it != this->mols.end(); ++it)
+    {
+        if (nframes == -1)
+        {
+            nframes = it->nFrames(map);
+        }
+        else
+        {
+            nframes = qMin(nframes, it->nFrames(map));
+        }
+    }
+
+    if (nframes < 0)
+        return 0;
+    else
+        return nframes;
+}
+
+void Molecules::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+void Molecules::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+void Molecules::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+void Molecules::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+void Molecules::loadFrame(int frame, const SireBase::PropertyMap &map)
+{
+    const int n = this->nFrames(map);
+
+    if (n == 0)
+    {
+        // we can always load frame 0
+        n == 1;
+    }
+
+    frame = Index(frame).map(n);
+
+    for (auto it = this->mols.begin(); it != this->mols.end(); ++it)
+    {
+        it->loadFrame(frame, map);
+    }
+}
+
+void Molecules::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    frame = Index(frame).map(this->nFrames(map));
+
+    for (auto it = this->mols.begin(); it != this->mols.end(); ++it)
+    {
+        it->saveFrame(frame, map);
+    }
+}
+
+void Molecules::saveFrame(const SireBase::PropertyMap &map)
+{
+    for (auto it = this->mols.begin(); it != this->mols.end(); ++it)
+    {
+        it->saveFrame(map);
+    }
+}
+
+void Molecules::deleteFrame(int frame, const SireBase::PropertyMap &map)
+{
+    frame = Index(frame).map(this->nFrames(map));
+
+    for (auto it = this->mols.begin(); it != this->mols.end(); ++it)
+    {
+        it->deleteFrame(frame, map);
+    }
+}

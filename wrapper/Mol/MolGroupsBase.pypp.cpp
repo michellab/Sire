@@ -569,6 +569,32 @@ void register_MolGroupsBase_class(){
                 , "Return all of the CutGroups from this set that match the ID cgid.\nThe returned CutGroups are arranged by molecule, and only one copy\nof each CutGroup is returned, regardless of how many times it appears\nin this set.\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
+        { //::SireMol::MolGroupsBase::deleteFrame
+        
+            typedef void ( ::SireMol::MolGroupsBase::*deleteFrame_function_type)( int ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::MolGroupsBase::deleteFrame );
+            
+            MolGroupsBase_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MolGroupsBase::deleteFrame
+        
+            typedef void ( ::SireMol::MolGroupsBase::*deleteFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::MolGroupsBase::deleteFrame );
+            
+            MolGroupsBase_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::MolGroupsBase::getGroupNumber
         
             typedef ::SireMol::MGNum ( ::SireMol::MolGroupsBase::*getGroupNumber_function_type)( ::SireMol::MGNum ) const;
@@ -902,6 +928,32 @@ void register_MolGroupsBase_class(){
                 , "Return whether or not this set is empty (contains no groups)" );
         
         }
+        { //::SireMol::MolGroupsBase::loadFrame
+        
+            typedef void ( ::SireMol::MolGroupsBase::*loadFrame_function_type)( int ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::MolGroupsBase::loadFrame );
+            
+            MolGroupsBase_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MolGroupsBase::loadFrame
+        
+            typedef void ( ::SireMol::MolGroupsBase::*loadFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::MolGroupsBase::loadFrame );
+            
+            MolGroupsBase_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::MolGroupsBase::map
         
             typedef ::QList< SireMol::MGNum > ( ::SireMol::MolGroupsBase::*map_function_type)( ::SireMol::MGNum ) const;
@@ -1154,6 +1206,31 @@ void register_MolGroupsBase_class(){
                 , nChains_function_value
                 , bp::release_gil_policy()
                 , "Return the total number of chains in this groups in this set" );
+        
+        }
+        { //::SireMol::MolGroupsBase::nFrames
+        
+            typedef int ( ::SireMol::MolGroupsBase::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::MolGroupsBase::nFrames );
+            
+            MolGroupsBase_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MolGroupsBase::nFrames
+        
+            typedef int ( ::SireMol::MolGroupsBase::*nFrames_function_type)( ::SireBase::PropertyMap const & ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::MolGroupsBase::nFrames );
+            
+            MolGroupsBase_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::MolGroupsBase::nGroups
@@ -1760,6 +1837,57 @@ void register_MolGroupsBase_class(){
                 , ( bp::arg("resid") )
                 , bp::release_gil_policy()
                 , "Return all of the residues from this set that match the ID resid.\nThe returned residues are arranged by molecule, and only one copy\nof each residue is returned, regardless of how many times it appears\nin this set.\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
+        
+        }
+        { //::SireMol::MolGroupsBase::saveFrame
+        
+            typedef void ( ::SireMol::MolGroupsBase::*saveFrame_function_type)( int ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::MolGroupsBase::saveFrame );
+            
+            MolGroupsBase_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MolGroupsBase::saveFrame
+        
+            typedef void ( ::SireMol::MolGroupsBase::*saveFrame_function_type)(  ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::MolGroupsBase::saveFrame );
+            
+            MolGroupsBase_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MolGroupsBase::saveFrame
+        
+            typedef void ( ::SireMol::MolGroupsBase::*saveFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::MolGroupsBase::saveFrame );
+            
+            MolGroupsBase_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MolGroupsBase::saveFrame
+        
+            typedef void ( ::SireMol::MolGroupsBase::*saveFrame_function_type)( ::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::MolGroupsBase::saveFrame );
+            
+            MolGroupsBase_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::MolGroupsBase::search

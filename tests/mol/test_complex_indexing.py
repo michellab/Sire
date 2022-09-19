@@ -24,7 +24,7 @@ def test_distance_searching(ala_mols):
 
     # these are the searches in the tutorial - check the sizes are correct
     assert len(mols["atoms within 2 of element C"]) == 21
-    assert len(mols["residues within 3 angstrom of resnum 1"]) == 14
+    assert len(mols["residues within 3 angstrom of resnum 1"]) == 15
     assert len(mols["atoms within 5.0 of (0, 0, 0)"]) == 6
     assert len(mols["molecules within 5.0 of (0, 0, 0)"]) == 2
 

@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -18,6 +20,8 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -29,6 +33,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -40,6 +46,8 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -51,6 +59,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -62,6 +72,8 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -73,6 +85,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -84,6 +98,8 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -95,6 +111,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -106,6 +124,8 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -117,6 +137,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -128,6 +150,8 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -139,6 +163,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -150,6 +176,8 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -161,6 +189,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -172,6 +202,8 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -183,6 +215,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -194,6 +228,8 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -205,6 +241,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -216,6 +254,8 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -227,6 +267,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -238,6 +280,8 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -249,6 +293,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -260,6 +306,8 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -271,6 +319,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -282,6 +332,8 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -293,6 +345,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -304,6 +358,8 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -315,6 +371,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -326,6 +384,8 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -337,6 +397,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/interff.h"
 
 #include "SireMM/intergroupff.h"
@@ -348,6 +410,60 @@ namespace bp = boost::python;
 #include "SireMM/intraff.h"
 
 #include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
+
+#include "SireMol/core.h"
+
+#include "SireUnits/units.h"
+
+#include "calculate_energy.h"
+
+#include <QDebug>
+
+#include "calculate_energy.h"
+
+#include "SireMM/cljshiftfunction.h"
+
+#include "SireMM/interff.h"
+
+#include "SireMM/intergroupff.h"
+
+#include "SireMM/internalff.h"
+
+#include "SireMM/internalgroupff.h"
+
+#include "SireMM/intraff.h"
+
+#include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
+
+#include "SireMol/core.h"
+
+#include "SireUnits/units.h"
+
+#include "calculate_energy.h"
+
+#include <QDebug>
+
+#include "calculate_energy.h"
+
+#include "SireMM/cljshiftfunction.h"
+
+#include "SireMM/interff.h"
+
+#include "SireMM/intergroupff.h"
+
+#include "SireMM/internalff.h"
+
+#include "SireMM/internalgroupff.h"
+
+#include "SireMM/intraff.h"
+
+#include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
 
 #include "SireMol/core.h"
 
@@ -500,6 +616,32 @@ void register_free_functions(){
             "calculate_energy"
             , calculate_energy_function_value
             , ( bp::arg("mols0"), bp::arg("mols1"), bp::arg("map") )
+            , "" );
+    
+    }
+
+    { //::SireMM::calculate_trajectory_energies
+    
+        typedef ::QVector< QVector< SireUnits::Dimension::GeneralUnit > > ( *calculate_trajectory_energies_function_type )( ::QVector< SireFF::ForceFields > const &,::QList< long long > const &,::SireBase::PropertyMap const & );
+        calculate_trajectory_energies_function_type calculate_trajectory_energies_function_value( &::SireMM::calculate_trajectory_energies );
+        
+        bp::def( 
+            "calculate_trajectory_energies"
+            , calculate_trajectory_energies_function_value
+            , ( bp::arg("ff"), bp::arg("frames"), bp::arg("map") )
+            , "" );
+    
+    }
+
+    { //::SireMM::calculate_trajectory_energy
+    
+        typedef ::QVector< SireUnits::Dimension::GeneralUnit > ( *calculate_trajectory_energy_function_type )( ::SireFF::ForceFields const &,::QList< long long > const &,::SireBase::PropertyMap const & );
+        calculate_trajectory_energy_function_type calculate_trajectory_energy_function_value( &::SireMM::calculate_trajectory_energy );
+        
+        bp::def( 
+            "calculate_trajectory_energy"
+            , calculate_trajectory_energy_function_value
+            , ( bp::arg("ff"), bp::arg("frames"), bp::arg("map") )
             , "" );
     
     }

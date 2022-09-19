@@ -72,30 +72,27 @@ class System:
     def numbers(self):
         return self.molecules().numbers()
 
-    def load_frame(self, i):
-        mols = self.molecules()
-        mols.load_frame(i)
+    def num_frames(self):
+        return self._system.num_frames()
 
-        self._system.update(mols.to_molecule_group().molecules())
+    def load_frame(self, i):
+        self._system.load_frame(i)
         self._molecules = None
 
     def save_frame(self, i=None):
-        mols = self.molecules()
-
         if i is None:
-            mols.save_frame()
+            self._system.save_frame()
         else:
-            mols.save_frame(i)
+            self._system.save_frame(i)
 
-        self._system.update(mols.to_molecule_group().molecules())
         self._molecules = None
 
-    def delete_frame(i):
-        mols = self.molecules()
-        mols.delete_frame(i)
-
-        self._system.update(mols.to_molecule_group().molecules())
+    def delete_frame(self, i):
+        self._system.delete_frame(i)
         self._molecules = None
+
+    def to_molecule_group(self):
+        return self.molecules().to_molecule_group()
 
     def molecules(self, *args, **kwargs):
         if self._molecules is not None:
@@ -175,9 +172,6 @@ class System:
 
     def energies(self, *args, **kwargs):
         return self.molecules().energies(*args, **kwargs)
-
-    def num_frames(self):
-        return self.molecules().num_frames()
 
     def charge(self, *args, **kwargs):
         return self.molecules().charge(*args, **kwargs)

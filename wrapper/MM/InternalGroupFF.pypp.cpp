@@ -28,6 +28,10 @@ namespace bp = boost::python;
 
 #include "SireMaths/triangle.h"
 
+#include "SireMol/errors.h"
+
+#include "SireMol/mgidx.h"
+
 #include "SireMol/mover.hpp"
 
 #include "SireStream/datastream.h"

@@ -251,8 +251,22 @@ Frame AmberRst::getFrame(int i) const
     }
 
     AmberRst rst;
+    QMutexLocker lkr(NetCDFFile::globalMutex());
     NetCDFFile file(this->filename());
-    rst.parse(file, PropertyMap());
+
+    try
+    {
+        rst.parse(file, PropertyMap());
+        file.close();
+        lkr.unlock();
+    }
+    catch(...)
+    {
+        file.close();
+        lkr.unlock();
+        throw;
+    }
+
     return rst._getFrame(i);
 }
 
@@ -269,7 +283,9 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 {
     //the netcdf conventions for Amber restart/trajectory files are
     //given here - http://ambermd.org/netcdf/nctraj.xhtml
-    const bool uses_parallel = this->usesParallel();
+
+    // NOTE THAT YOU CANNOT READ A NETCDF FILE IN PARALLEL
+    // THE NETCDF LIBRARY IS NOT THREAD SAFE
 
     //collect all of the conventions
     QString conventions = netcdf.getStringAttribute("Conventions");
@@ -380,7 +396,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
                 if (units != "picosecond")
                 {
-                    QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Units are not the default of picoseconds. "
                         "They are actually %1!").arg(units) );
                 }
@@ -391,7 +406,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
             if (data.nValues() < 1)
             {
-                QMutexLocker lkr(&warnings_mutex);
                 parse_warnings.append( QObject::tr("Could not interpret the time "
                                                    "as there is no value?") );
             }
@@ -435,7 +449,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
                 if (units != "angstrom")
                 {
-                    QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Units are not the default of angstroms. "
                         "They are actually %1!").arg(units) );
                 }
@@ -446,14 +459,12 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
             if (data.nValues() < 3)
             {
-                QMutexLocker lkr(&warnings_mutex);
                 parse_warnings.append( QObject::tr("Could not interpret the box lengths "
                                                    "as there are less than 3 values (%1)?")
                                                         .arg(data.nValues()) );
             }
             else if (data.nValues() % 3 != 0)
             {
-                QMutexLocker lkr(&warnings_mutex);
                 parse_warnings.append( QObject::tr("Could not interpret the box lengths "
                                                    "as the number of values is not evenly "
                                                    "divisible by 3 (%1)")
@@ -493,7 +504,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
                 if (units != "degree")
                 {
-                    QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Units are not the default of degrees. "
                         "They are actually %1!").arg(units) );
                 }
@@ -504,14 +514,12 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
             if (data.nValues() < 3)
             {
-                QMutexLocker lkr(&warnings_mutex);
                 parse_warnings.append( QObject::tr("Could not interpret the box angles "
                                                    "as there are less than 3 values (%1)?")
                                                         .arg(data.nValues()) );
             }
             else if (data.nValues() % 3 != 0)
             {
-                QMutexLocker lkr(&warnings_mutex);
                 parse_warnings.append( QObject::tr("Could not interpret the box angles "
                                                    "as the number of values is not evenly "
                                                    "divisible by 3 (%1)")
@@ -552,7 +560,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
                 if (not ok)
                 {
-                    QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Could not extract the scale factor "
                        "for the coordinates from the string '%1'")
                             .arg(atts["scale_factor"].toString()) );
@@ -565,7 +572,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
                 if (units != "angstrom")
                 {
-                    QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Units are not the default of angstroms. "
                         "They are actually %1!").arg(units) );
                 }
@@ -576,7 +582,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
             if (data.nValues() % 3 != 0)
             {
-                QMutexLocker lkr(&warnings_mutex);
                 parse_warnings.append( QObject::tr("Could not interpret the coordinates "
                                                    "as they are not divisible by three (%1)?")
                                                         .arg(data.nValues()) );
@@ -590,7 +595,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
                 if (natoms_times_nframes % natoms != 0)
                 {
-                    QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Could not interpret the coordinates "
                                     "as the amount of data (%1) does not equal 3 x nframes(%2) "
                                     "x natoms(%3)")
@@ -603,43 +607,18 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
                 coords = QVector< QVector<Vector> >(nframes);
 
-                if (uses_parallel)
+                for (int i=0; i<nframes; ++i)
                 {
-                    for (int i=0; i<nframes; ++i)
+                    QVector<Vector> c(natoms);
+
+                    for (int j=0; j<natoms; ++j)
                     {
-                        QVector<Vector> c(natoms);
+                        const int idx = 3*natoms*i + 3*j;
 
-                        tbb::parallel_for( tbb::blocked_range<int>(0,natoms),
-                                           [&](const tbb::blocked_range<int> &r)
-                        {
-                            for (int j=r.begin(); j<r.end(); ++j)
-                            {
-                                const int idx = 3*natoms*i + 3*j;
-
-                                c[j] = scale_factor * Vector( vals[idx],
-                                                              vals[idx+1],
-                                                              vals[idx+2] );
-                            }
-                        });
-
-                        coords[i] = c;
+                        c[j] = scale_factor * Vector( vals[idx], vals[idx+1], vals[idx+2] );
                     }
-                }
-                else
-                {
-                    for (int i=0; i<nframes; ++i)
-                    {
-                        QVector<Vector> c(natoms);
 
-                        for (int j=0; j<natoms; ++j)
-                        {
-                            const int idx = 3*natoms*i + 3*j;
-
-                            c[j] = scale_factor * Vector( vals[idx], vals[idx+1], vals[idx+2] );
-                        }
-
-                        coords[i] = c;
-                    }
+                    coords[i] = c;
                 }
             }
         }
@@ -665,7 +644,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
                 if (not ok)
                 {
-                    QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Could not extract the scale factor "
                        "for the velocities from the string '%1'")
                             .arg(atts["scale_factor"].toString()) );
@@ -678,7 +656,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
                 if (units != "angstrom/picosecond")
                 {
-                    QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Units are not the default of "
                         "angstrom/picosecond. They are actually %1!").arg(units) );
                 }
@@ -693,7 +670,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
             if (data.nValues() % 3 != 0)
             {
-                QMutexLocker lkr(&warnings_mutex);
                 parse_warnings.append( QObject::tr("Could not interpret the velocities "
                                                    "as they are not divisible by three (%1)?")
                                                         .arg(data.nValues()) );
@@ -706,7 +682,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
                 if (natoms_times_nframes % natoms != 0)
                 {
-                    QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Could not interpret the velocities "
                                     "as the amount of data (%1) does not equal 3 x nframes(%2) "
                                     "x natoms(%3)")
@@ -719,43 +694,18 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
                 vels = QVector< QVector<Vector> >(nframes);
 
-                if (uses_parallel)
+                for (int i=0; i<nframes; ++i)
                 {
-                    for (int i=0; i<nframes; ++i)
+                    QVector<Vector> v(natoms);
+
+                    for (int j=0; j<natoms; ++j)
                     {
-                        QVector<Vector> v(natoms);
+                        const int idx = 3*natoms*i + 3*j;
 
-                        tbb::parallel_for( tbb::blocked_range<int>(0,natoms),
-                                           [&](const tbb::blocked_range<int> &r)
-                        {
-                            for (int j=r.begin(); j<r.end(); ++j)
-                            {
-                                const int idx = 3*natoms*i + 3*j;
-
-                                v[j] = scale_factor * Vector( vals[idx],
-                                                              vals[idx+1],
-                                                              vals[idx+2] );
-                            }
-                        });
-
-                        vels[i] = v;
+                        v[j] = scale_factor * Vector( vals[idx], vals[idx+1], vals[idx+2] );
                     }
-                }
-                else
-                {
-                    for (int i=0; i<nframes; ++i)
-                    {
-                        QVector<Vector> v(natoms);
 
-                        for (int j=0; j<natoms; ++j)
-                        {
-                            const int idx = 3*natoms*i + 3*j;
-
-                            v[j] = scale_factor * Vector( vals[idx], vals[idx+1], vals[idx+2] );
-                        }
-
-                        vels[i] = v;
-                    }
+                    vels[i] = v;
                 }
             }
         }
@@ -781,7 +731,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
                 if (not ok)
                 {
-                    QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Could not extract the scale factor "
                        "for the forces from the string '%1'")
                             .arg(atts["scale_factor"].toString()) );
@@ -794,7 +743,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
                 if (units != "amu*angstrom/picosecond^2")
                 {
-                    QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Units are not the default of "
                         "amu*angstrom/picosecond^2. They are actually %1!").arg(units) );
                 }
@@ -805,7 +753,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
             if (data.nValues() % 3 != 0)
             {
-                QMutexLocker lkr(&warnings_mutex);
                 parse_warnings.append( QObject::tr("Could not interpret the forces "
                                                    "as they are not divisible by three (%1)?")
                                                         .arg(data.nValues()) );
@@ -818,7 +765,6 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
                 if (natoms_times_nframes % natoms != 0)
                 {
-                    QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Could not interpret the forces "
                                     "as the amount of data (%1) does not equal 3 x nframes(%2) "
                                     "x natoms(%3)")
@@ -831,43 +777,18 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 
                 frcs = QVector< QVector<Vector> >(nframes);
 
-                if (uses_parallel)
+                for (int i=0; i<nframes; ++i)
                 {
-                    for (int i=0; i<nframes; ++i)
+                    QVector<Vector> f(natoms);
+
+                    for (int j=0; j<natoms; ++j)
                     {
-                        QVector<Vector> f(natoms);
+                        const int idx = 3*natoms*i + 3*j;
 
-                        tbb::parallel_for( tbb::blocked_range<int>(0,natoms),
-                                           [&](const tbb::blocked_range<int> &r)
-                        {
-                            for (int j=r.begin(); j<r.end(); ++j)
-                            {
-                                const int idx = 3*natoms*i + 3*j;
-
-                                f[j] = scale_factor * Vector( vals[idx],
-                                                              vals[idx+1],
-                                                              vals[idx+2] );
-                            }
-                        });
-
-                        frcs[i] = f;
+                        f[j] = scale_factor * Vector( vals[idx], vals[idx+1], vals[idx+2] );
                     }
-                }
-                else
-                {
-                    for (int i=0; i<nframes; ++i)
-                    {
-                        QVector<Vector> f(natoms);
 
-                        for (int j=0; j<natoms; ++j)
-                        {
-                            const int idx = 3*natoms*i + 3*j;
-
-                            f[j] = scale_factor * Vector( vals[idx], vals[idx+1], vals[idx+2] );
-                        }
-
-                        frcs[i] = f;
-                    }
+                    frcs[i] = f;
                 }
             }
         }
@@ -877,24 +798,9 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
     const QVector< std::function<void()> > parse_functions =
             { parseBase, parseCoordinates, parseVelocities, parseForces };
 
-    //call the functions, either in parallel or in serial
-    if (uses_parallel)
+    for (int ifunc=0; ifunc<parse_functions.count(); ++ifunc)
     {
-        tbb::parallel_for( tbb::blocked_range<int>(0,parse_functions.count(),1),
-                           [&](const tbb::blocked_range<int> &r)
-        {
-            for (int ifunc=r.begin(); ifunc<r.end(); ++ifunc)
-            {
-                parse_functions[ifunc]();
-            }
-        });
-    }
-    else
-    {
-        for (int ifunc=0; ifunc<parse_functions.count(); ++ifunc)
-        {
-            parse_functions[ifunc]();
-        }
+        parse_functions[ifunc]();
     }
 
     if (not coords.isEmpty())
@@ -922,8 +828,22 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
     this->setFilename(filename);
 
     //open the NetCDF file and extract the data for the first frame
+    QMutexLocker lkr(NetCDFFile::globalMutex());
     NetCDFFile netcdf(filename);
-    this->parse(netcdf, map);
+
+    try
+    {
+        this->parse(netcdf, map);
+        netcdf.close();
+        lkr.unlock();
+    }
+    catch(...)
+    {
+        netcdf.close();
+        lkr.unlock();
+        throw;
+    }
+
     this->operator=(this->operator[](0));
 }
 
@@ -2036,5 +1956,6 @@ void AmberRst::writeToFile(const QString &filename) const
         }
     }
 
+    QMutexLocker lkr(NetCDFFile::globalMutex());
     NetCDFFile::write(filename, globals, data);
 }

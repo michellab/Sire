@@ -5729,6 +5729,64 @@ void ForceFields::accept()
     }
 }
 
+int ForceFields::nFrames() const
+{
+    return this->nFrames(PropertyMap());
+}
+
+int ForceFields::nFrames(const SireBase::PropertyMap &map) const
+{
+    return MolGroupsBase::nFrames(map);
+}
+
+void ForceFields::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+void ForceFields::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+void ForceFields::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+void ForceFields::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+void ForceFields::loadFrame(int frame, const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::loadFrame(frame, map);
+}
+
+void ForceFields::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::saveFrame(frame, map);
+}
+
+void ForceFields::saveFrame(const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::saveFrame(map);
+}
+
+void ForceFields::deleteFrame(int frame, const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::deleteFrame(frame, map);
+}
+
 const char* ForceFields::typeName()
 {
     return QMetaType::typeName( qMetaTypeId<ForceFields>() );

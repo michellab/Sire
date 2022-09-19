@@ -234,7 +234,7 @@ void MoleculeView::loadFrame(int frame, const SireBase::PropertyMap &map)
 {
     const auto traj_prop = map["trajectory"];
 
-    if (frame == 0 and (not d->hasProperty(traj_prop)))
+    if ((frame == 0 or frame == -1) and (not d->hasProperty(traj_prop)))
         return;
 
     auto traj = d->property(traj_prop).asA<Trajectory>();
