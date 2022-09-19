@@ -125,7 +125,7 @@ class TrajectoryIterator:
 
         if obj1 is None:
             for v in self._view:
-                forcefields[colname(v)] = create_forcefield(_to_molecules(v), self._map)
+                forcefields[colname(v)] = create_forcefield(v, map=self._map)
 
             obj1_is_trajectory = False
         else:
@@ -154,12 +154,12 @@ class TrajectoryIterator:
                 obj1_mols = _to_molecules(obj1.first())
 
                 for v in self.first():
-                    forcefields[colname(v)] = create_forcefield(_to_molecules(v), obj1_mols, self._map)
+                    forcefields[colname(v)] = create_forcefield(v, obj1_mols, map=self._map)
             else:
                 obj1_is_trajectory = False
 
                 for v in self.first():
-                    forcefields[colname(v)] = create_forcefield(_to_molecules(v), obj1_mols, self._map)
+                    forcefields[colname(v)] = create_forcefield(v, obj1_mols, map=self._map)
 
         nframes = len(self)
 
@@ -182,7 +182,7 @@ class TrajectoryIterator:
                 else:
                     obj1_mols = None
 
-                mols = _to_molecules(frame)
+                mols = frame
 
                 for view in frame:
                     ff = forcefields[colname(view)]
@@ -277,7 +277,7 @@ class TrajectoryIterator:
         from . import _to_molecules
 
         if obj1 is None:
-            ff = create_forcefield(_to_molecules(self._view), self._map)
+            ff = create_forcefield(self._view, map=self._map)
             obj1_is_trajectory = False
         else:
             if match_trajectory:
@@ -301,10 +301,10 @@ class TrajectoryIterator:
                         f"{self.num_frames()} versus f{obj1.num_frames()}.")
 
                 obj1_is_trajectory = True
-                ff = create_forcefield(_to_molecules(self.first()), _to_molecules(obj1.first()), self._map)
+                ff = create_forcefield(self.first(), obj1.first(), map=self._map)
             else:
                 obj1_is_trajectory = False
-                ff = create_forcefield(_to_molecules(self.first()), _to_molecules(obj1), self._map)
+                ff = create_forcefield(self.first(), obj1, map=self._map)
 
         nframes = len(self)
 

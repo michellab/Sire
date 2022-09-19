@@ -8,8 +8,53 @@ from ..legacy import MM as _MM
 from .. import use_new_api as _use_new_api
 _use_new_api()
 
-calculate_energy = _MM.calculate_energy
-create_forcefield = _MM.create_forcefield
+
+def calculate_energy(*args, **kwargs):
+    from ..mol import _to_molecules
+
+    new_args = []
+    new_kwargs = {}
+
+    for arg in args:
+        try:
+            new_args.append(_to_molecules(arg))
+        except Exception:
+            new_args.append(arg)
+
+    for key, value in kwargs.items():
+        try:
+            new_kwargs[key] = _to_molecules(value)
+        except Exception:
+            new_kwargs[key] = value
+
+    return _MM.calculate_energy(*new_args, **new_kwargs)
+
+
+def create_forcefield(*args, map=None, **kwargs):
+    from ..mol import _to_molecules
+
+    new_args = []
+    new_kwargs = {}
+
+    for arg in args:
+        try:
+            new_args.append(_to_molecules(arg))
+        except Exception:
+            new_args.append(arg)
+
+    for key, value in kwargs.items():
+        try:
+            new_kwargs[key] = _to_molecules(value)
+        except Exception:
+            new_kwargs[key] = value
+
+    if map is None:
+        map = {}
+
+    new_kwargs["map"] = map
+
+    return _MM.create_forcefield(*new_args, **new_kwargs)
+
 
 Bond = _MM.Bond
 SelectorBond = _MM.SelectorBond

@@ -2759,8 +2759,7 @@ SelectEnginePtr IDDistanceEngine::simplify()
 }
 
 QVector<Vector> _get_coords(const Selector<Atom> &atoms,
-                            const PropertyName &coords_property,
-                            const Space &space)
+                            const PropertyName &coords_property)
 {
     QVector<Vector> coords;
 
@@ -2770,9 +2769,7 @@ QVector<Vector> _get_coords(const Selector<Atom> &atoms,
     {
         const Atom &atom = atoms(i);
 
-        coords.append(space.getMinimumImage(
-                            atom.property<Vector>(coords_property),
-                            Vector(0)));
+        coords.append(atom.property<Vector>(coords_property));
     }
 
     return coords;
@@ -2859,13 +2856,27 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
     {
         space = map["space"].value().asA<SireVol::Space>();
     }
+    else
+    {
+        //try to find a space in refmols
+        const auto space_property = map["space"];
+
+        for (const auto &mol : refmols)
+        {
+            if (mol->data().hasProperty(space_property))
+            {
+                space = mol->data().property(space_property).asA<SireVol::Space>();
+                break;
+            }
+        }
+    }
 
     // merge all atoms in 'refmols' into a single array of coordinates
     QVector<Vector> ref_coords;
 
     for (const auto &mol : refmols)
     {
-        ref_coords += _get_coords(mol->atoms(), coords_property, *space);
+        ref_coords += _get_coords(mol->atoms(), coords_property);
     }
 
     CoordGroup ref_group(ref_coords);
@@ -2883,7 +2894,7 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
             const auto view = expanded->operator[](i);
 
             QVector<Vector> coords = _get_coords(view->atoms(),
-                                                 coords_property, *space);
+                                                 coords_property);
 
             if (_is_within(coords, ref_group, distance, typ, *space))
             {
@@ -2980,7 +2991,7 @@ SelectResult IDDistanceVectorEngine::select(const SelectResult &mols, const Prop
             const auto view = expanded->operator[](i);
 
             QVector<Vector> coords = _get_coords(view->atoms(),
-                                                 coords_property, *space);
+                                                 coords_property);
 
             if (_is_within(coords, ref_group, distance, typ, *space))
             {

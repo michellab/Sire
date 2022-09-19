@@ -8,10 +8,11 @@ do things with them. Typical things you may want to do could include;
 * Measuring distances, angles or torsion angles between atoms, residue or
   molecules.
 * Making measurements across multiple frames of a trajectory.
-* Measuring energies of molecules or subsets of molecules, potentially
+* Measuring energies of molecules or subsets of molecules, and
   across multiple frames of a trajectory.
 * Moving atoms, residues or molecules, e.g. by direct translation and
-  rotation of parts, or even by stretching bonds or rotating angles.
+  rotation of parts, or even by stretching bonds or rotating angles,
+  and saving these to a trajectory.
 * Performing energy scans by calculating the energy for different
   configurations of the molecule (e.g. a dihedral scan).
 
@@ -25,4 +26,4 @@ create graphs, you will also learn how to visualise sire objects and data.
    part04/01_measure
    part04/02_trajectory
    part04/03_energies
-
+   part04/04_energy_trajectories

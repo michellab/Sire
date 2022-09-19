@@ -109,7 +109,7 @@ SireUnits::Dimension::Length get_cutoff(const Space &space)
         auto image = space.getMinimumImage(Vector(0),
                                            Vector(cutoff.value(), 0, 0));
 
-        if (image.x() != cutoff.value())
+        if (image.x() <= cutoff.value())
         {
             // this has been translated
             cutoff = 1.99 * image.x() * angstrom;
@@ -142,8 +142,8 @@ SIREMM_EXPORT ForceFields create_forcefield(const MoleculeView &mol,
     intraff.setCLJFunction(get_cljfunc<CLJIntraShiftFunction>(mm, 15*angstrom));
     intraff.add(mol, map);
 
-    ffields.add(internalff);
     ffields.add(intraff);
+    ffields.add(internalff);
 
     return ffields;
 }
@@ -164,7 +164,7 @@ SIREMM_EXPORT ForceFields create_forcefield(const SireMol::Molecules &mols,
 
     for (const auto &mol : mols)
     {
-        if (mol.hasProperty(space_property))
+        if (mol.data().hasProperty(space_property))
         {
             space = mol.data().property(space_property).asA<Space>();
             break;
@@ -191,9 +191,9 @@ SIREMM_EXPORT ForceFields create_forcefield(const SireMol::Molecules &mols,
     interff.setProperty("space", *space);
     interff.add(mols, map);
 
-    ffields.add(internalff);
-    ffields.add(intraff);
     ffields.add(interff);
+    ffields.add(intraff);
+    ffields.add(internalff);
 
     return ffields;
 }
@@ -237,7 +237,7 @@ SIREMM_EXPORT ForceFields create_forcefield(const Molecules &mols0,
 
     for (const auto &mol : mols0)
     {
-        if (mol.hasProperty(space_property))
+        if (mol.data().hasProperty(space_property))
         {
             has_property = true;
             space = mol.data().property(space_property).asA<Space>();
@@ -249,7 +249,7 @@ SIREMM_EXPORT ForceFields create_forcefield(const Molecules &mols0,
     {
         for (const auto &mol : mols1)
         {
-            if (mol.hasProperty(space_property))
+            if (mol.data().hasProperty(space_property))
             {
                 has_property = true;
                 space = mol.data().property(space_property).asA<Space>();
