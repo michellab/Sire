@@ -126,6 +126,8 @@ public:
 
     int nFrames() const;
 
+    int nBytes() const;
+
     SireMol::Frame getFrame(int i) const;
 
     QVector<SireMaths::Vector> coordinates(int frame) const;

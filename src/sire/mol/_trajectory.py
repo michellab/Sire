@@ -341,7 +341,8 @@ class TrajectoryIterator:
                             time_unit = time.get_default().unit_string()
 
                     indexes[idx] = frame.frame_index()
-                    progress.update(task, completed=idx)
+
+                progress.update(task, completed=j)
 
                 i = j
 

@@ -31,11 +31,14 @@
 #include <QMutex>
 #include <QHash>
 
+#include "SireBase/centralcache.h"
+
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
 using namespace SireIO;
 using namespace SireMol;
+using namespace SireBase;
 using namespace SireStream;
 
 static const RegisterMetaType<FileTrajectory> r_traj;
@@ -96,95 +99,6 @@ SIREIO_EXPORT QDataStream& operator>>(QDataStream &ds, FileTrajectory &file)
     return ds;
 }
 
-class TrajectoryCache
-{
-public:
-    TrajectoryCache() : max_frames(100)
-    {}
-
-    ~TrajectoryCache()
-    {}
-
-    bool contains(int idx) const
-    {
-        return cache.contains(idx);
-    }
-
-    Frame get(int idx) const
-    {
-        return cache[idx];
-    }
-
-    void save(int idx, const Frame &frame)
-    {
-        if (order.isEmpty())
-        {
-            const int nbytes = frame.numBytes();
-
-            if (nbytes == 0)
-                return;
-
-            // calculate an appropriate number of frames to cache,
-            // assuming we don't want to consume more than ~512 MB
-            max_frames = qMax(1, int(512*1024*1024 / nbytes) + 1);
-        }
-
-        while (order.count() >= max_frames-1)
-        {
-            if (order.isEmpty())
-                break;
-
-            cache.remove(order.takeFirst());
-        }
-
-        if (not cache.contains(idx))
-        {
-            order.append(idx);
-        }
-
-        cache[idx] = frame;
-    }
-
-    // you must hold this mutex when calling any of the
-    // above functions!
-    QMutex mutex;
-
-private:
-    QHash<int, Frame> cache;
-    QList<int> order;
-
-    int max_frames;
-};
-
-class TrajectoriesCache
-{
-public:
-    static std::shared_ptr<TrajectoryCache> get(const void *ptr)
-    {
-        QMutexLocker lkr(&TrajectoriesCache::mutex);
-
-        if (not TrajectoriesCache::cache.contains(ptr))
-        {
-            TrajectoriesCache::cache.insert(ptr, std::shared_ptr<TrajectoryCache>(new TrajectoryCache()));
-        }
-
-        return TrajectoriesCache::cache[ptr];
-    }
-
-    static void deleted(const void *ptr)
-    {
-        QMutexLocker lkr(&TrajectoriesCache::mutex);
-        TrajectoriesCache::cache.remove(ptr);
-    }
-
-private:
-    static QMutex mutex;
-    static QHash<const void*, std::shared_ptr<TrajectoryCache> > cache;
-};
-
-QMutex TrajectoriesCache::mutex;
-QHash<const void*, std::shared_ptr<TrajectoryCache> > TrajectoriesCache::cache;
-
 FileTrajectory::FileTrajectory() : TrajectoryData()
 {}
 
@@ -197,9 +111,7 @@ FileTrajectory::FileTrajectory(const FileTrajectory &other)
 {}
 
 FileTrajectory::~FileTrajectory()
-{
-    TrajectoriesCache::deleted(this);
-}
+{}
 
 const char* FileTrajectory::what() const
 {
@@ -263,21 +175,26 @@ QStringList FileTrajectory::filenames() const
 
 Frame FileTrajectory::getFrame(int i) const
 {
-    auto cache = TrajectoriesCache::get(this);
-
-    QMutexLocker lkr(&(cache->mutex));
-
-    if (cache->contains(i))
-    {
-        return cache->get(i);
-    }
-
     i = SireID::Index(i).map(this->nFrames());
 
+    auto cached_data = CentralCache::get(QString("FileTrajectory::%1::%2")
+                            .arg(qint64(this)).arg(i));
+
+    QMutexLocker lkr(cached_data->mutex());
+
+    if (not cached_data->isEmpty())
+    {
+        try
+        {
+            return cached_data->data().value<Frame>();
+        }
+        catch(...)
+        {}
+    }
+
+    // something went wrong - read the frame again
     auto frame = parser.read().getFrame(i);
-
-    cache->save(i, frame);
-
+    cached_data->setData(QVariant::fromValue<Frame>(frame), frame.numBytes());
     return frame;
 }
 

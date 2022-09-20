@@ -55,6 +55,7 @@
 #include "SireBase/booleanproperty.h"
 #include "SireBase/getinstalldir.h"
 #include "SireBase/unittest.h"
+#include "SireBase/centralcache.h"
 
 #include "SireIO/errors.h"
 
@@ -250,22 +251,42 @@ Frame AmberRst::getFrame(int i) const
                 "has been lost!"), CODELOC);
     }
 
+    // have we still got this in the cache?
+    auto cached = CentralCache::get(QString("AmberRst::%1").arg(this->filename()));
+
+    QMutexLocker lkr(cached->mutex());
+
+    if (not cached->isEmpty())
+    {
+        try
+        {
+            return cached->data().value<AmberRst>()._getFrame(i);
+        }
+        catch(...)
+        {
+            // something went wrong with the cached data - we will
+            // reload the file instead
+        }
+    }
+
     AmberRst rst;
-    QMutexLocker lkr(NetCDFFile::globalMutex());
+    QMutexLocker lkr2(NetCDFFile::globalMutex());
     NetCDFFile file(this->filename());
 
     try
     {
         rst.parse(file, PropertyMap());
         file.close();
-        lkr.unlock();
+        lkr2.unlock();
     }
     catch(...)
     {
         file.close();
-        lkr.unlock();
+        lkr2.unlock();
         throw;
     }
+
+    cached->setData(QVariant::fromValue<AmberRst>(rst), rst.nBytes());
 
     return rst._getFrame(i);
 }
@@ -820,29 +841,73 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
     this->assertSane();
 }
 
+/** Return the number of bytes this takes */
+int AmberRst::nBytes() const
+{
+    int n = 0;
+
+    for (const auto &c : coords)
+    {
+        n += c.count();
+    }
+
+    for (const auto &v : vels)
+    {
+        n += v.count();
+    }
+
+    for (const auto &f : frcs)
+    {
+        n += f.count();
+    }
+
+    n += box_dims.count();
+    n += box_angs.count();
+
+
+    n = (n * sizeof(Vector)) + (current_time.count() * sizeof(double));
+
+    return n;
+}
+
 /** Construct by parsing the passed file */
 AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
          : ConcreteProperty<AmberRst,MoleculeParser>(map),
            convention_version(0), nframes(0), created_from_restart(false)
 {
+    // this gets the absolute file path
     this->setFilename(filename);
 
+    // have we loaded this before?
+    auto cached = CentralCache::get(QString("AmberRst::%1").arg(this->filename()));
+
+    QMutexLocker lkr(cached->mutex());
+
+    if (not cached->isEmpty())
+    {
+        this->operator=(cached->data().value<AmberRst>()[0]);
+        return;
+    }
+
     //open the NetCDF file and extract the data for the first frame
-    QMutexLocker lkr(NetCDFFile::globalMutex());
+    QMutexLocker lkr2(NetCDFFile::globalMutex());
     NetCDFFile netcdf(filename);
 
     try
     {
         this->parse(netcdf, map);
         netcdf.close();
-        lkr.unlock();
+        lkr2.unlock();
     }
     catch(...)
     {
         netcdf.close();
-        lkr.unlock();
+        lkr2.unlock();
         throw;
     }
+
+    cached->setData(QVariant::fromValue<AmberRst>(*this), this->nBytes());
+    lkr.unlock();
 
     this->operator=(this->operator[](0));
 }
