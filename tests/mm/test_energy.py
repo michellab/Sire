@@ -70,7 +70,7 @@ def test_trajectory_energies(ala_traj):
 
         for idx, v in enumerate(view):
             for i in range(0, 3):
-                assert nrgs0[i][idx].value() == pytest.approx(nrgs1[colname(v, "total")][i])
+                assert nrgs0[i][idx].value() == pytest.approx(nrgs1[colname(v, "total")][i], 1e-5)
 
     assert_same_pair(mol.residues()[0:2], mol.residues()[-1])
     assert_same_pair(mols["water"][0:5], mol)
