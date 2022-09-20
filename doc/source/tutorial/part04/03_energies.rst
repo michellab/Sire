@@ -15,26 +15,26 @@ You can get the energy of this molecule using the
 :func:`~sire.mol.MoleculeView.energy` function;
 
 >>> print(mol.energy())
--13.9986 kcal mol-1
+21.4855 kcal mol-1
 
 The energy is returned in sire's default units of energy, kilocalories
 per mole. You can change this using, e.g.
 
 >>> sr.units.set_energy_unit(sr.units.joule)
 >>> print(mol.energy())
--58570.3 joule mol-1
+89895.3 joule mol-1
 
 or can switch to sire's default SI units with
 
 >>> sr.units.set_si_units()
 >>> print(mol.energy())
--58.5703 kJ mol-1
+89.8953 kJ mol-1
 
 or can switch back to default internal units using
 
 >>> sr.units.set_internal_units()
 >>> print(mol.energy())
--13.9986 kcal mol-1
+21.4855 kcal mol-1
 
 Getting energy components
 =========================
@@ -46,9 +46,10 @@ You can get all of these components using
 
 >>> nrg = mol.energy()
 >>> print(nrg.components())
-{'angle': 6.79189 kcal mol-1, 'intra_coulomb': -34.0534 kcal mol-1,
- 'dihedral': 9.53259 kcal mol-1, 'intra_LJ': -1.10296 kcal mol-1,
- 'improper': 0.285078 kcal mol-1, 'bond': 4.54821 kcal mol-1}
+{'intra_LJ': -1.10296 kcal mol-1, 'improper': 0.285078 kcal mol-1,
+ 'angle': 6.79189 kcal mol-1, 'intra_coulomb': -46.3702 kcal mol-1,
+ 'bond': 4.54821 kcal mol-1, '1-4_coulomb': 44.8805 kcal mol-1,
+ '1-4_LJ': 2.92034 kcal mol-1, 'dihedral': 9.53259 kcal mol-1}
 
 The components are indexed by their name, and can be returned directly by
 treating the energy as a dictionary;
@@ -73,18 +74,19 @@ You can calculate the energy of any molecular container. So, to calculate the
 energy of all of the water molecules you could use
 
 >>> print(mols["water"].energy())
--4696.43 kcal mol-1
+-5907.76 kcal mol-1
 
 or the energy of all carbon atoms
 
 >>> print(mols["element C"].energy())
--1.86146 kcal mol-1
+11.5485 kcal mol-1
 
 or the components of the energy of all carbon atoms,
 
 >>> print(mols["element C"].energy().components())
-{'angle': 0.0143363 kcal mol-1, 'intra_coulomb': -2.59548 kcal mol-1,
- 'intra_LJ': -0.186179 kcal mol-1, 'bond': 0.905869 kcal mol-1}
+{'intra_LJ': -0.186179 kcal mol-1, 'angle': 0.0143363 kcal mol-1,
+ 'intra_coulomb': -4.6869 kcal mol-1, 'bond': 0.905869 kcal mol-1,
+ '1-4_coulomb': 15.5136 kcal mol-1, '1-4_LJ': -0.012299 kcal mol-1}
 
 Calculating interaction energies between selections
 ===================================================
@@ -94,21 +96,22 @@ For example, to calculate the interaction energy between the first molecule
 and all water molecules you would use
 
 >>> print(mols[0].energy(mols["water"]))
--40.1213 kcal mol-1
+-41.4064 kcal mol-1
 
 or to calculate the interaction energy between the first two residues
 of the first molecule use
 
 >>> print(mols[0].residues()[0].energy(mols[0].residues()[1]))
--0.0494905 kcal mol-1
+-21.3407 kcal mol-1
 
 Again, you can use the ``components()`` function to decompose this
 into individual energy components.
 
 >>> print(mols[0].residues()[0].energy(mols[0].residues()[1]).components())
-{'intra_coulomb': -4.93267 kcal mol-1, 'angle': 1.12332 kcal mol-1,
- 'intra_LJ': -0.59062 kcal mol-1, 'dihedral': 4.23544 kcal mol-1,
- 'improper': 0.106471 kcal mol-1, 'bond': 0.00857782 kcal mol-1}
+{'intra_LJ': -0.59062 kcal mol-1, 'improper': 0.106471 kcal mol-1,
+ 'angle': 1.12332 kcal mol-1, 'intra_coulomb': -7.90428 kcal mol-1,
+ 'bond': 0.00857782 kcal mol-1, '1-4_coulomb': -19.1969 kcal mol-1,
+ '1-4_LJ': 0.877224 kcal mol-1, 'dihedral': 4.23544 kcal mol-1}
 
 Again, the values are the same as you would have got calling ``energy`` on
 the corresponding bonds, angles, dihedrals etc, e.g.
@@ -123,9 +126,9 @@ The result of calling ``mol.energy()`` and ``mol.atoms().energy()``
 is the same,
 
 >>> print(mol.energy())
--13.9986 kcal mol-1
+21.4855 kcal mol-1
 >>> print(mol.atoms().energy())
--13.9986 kcal mol-1
+21.4855 kcal mol-1
 
 This is because the ``.energy()`` function returns the sum of the
 energies of all views within its molecular container. The total
@@ -143,18 +146,7 @@ in the container, e.g.
 0
 0
 0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
+..
 0
 0
 0
@@ -170,7 +162,7 @@ We can demonstrate this further by looking at decomposing a molecule's
 energy into residue-based components. The total molecular energy...
 
 >>> print(mol.energy())
--13.9986 kcal mol-1
+21.4855 kcal mol-1
 
 is equal to the sum of the energies of its three constituent residues...
 
@@ -178,9 +170,9 @@ is equal to the sum of the energies of its three constituent residues...
 >>> for residue in mol.residues():
 ...     print(residue.energy())
 ...     total += residue.energy()
-4.22896 kcal mol-1
--11.0069 kcal mol-1
-4.63643 kcal mol-1
+-13.8435 kcal mol-1
+32.8847 kcal mol-1
+12.8614 kcal mol-1
 
 ...plus the energy of interaction between each pair of residues...
 
@@ -188,11 +180,11 @@ is equal to the sum of the energies of its three constituent residues...
 ...    for j in range(i+1, 3):
 ...        print(i, j, mol.residues()[i].energy(mol.residues()[j]))
 ...        total += mol.residues()[i].energy(mol.residues()[j])
-0 1 -0.0494905 kcal mol-1
-0 2 -0.65824 kcal mol-1
-1 2 -11.1494 kcal mol-1
+0 1 -21.3407 kcal mol-1
+0 2 -0.709678 kcal mol-1
+1 2 11.6333 kcal mol-1
 >>> print(total)
--13.9986 kcal mol-1
+21.4855 kcal mol-1
 
 Decomposing into interaction energies
 =====================================
@@ -203,75 +195,76 @@ molecules is equal to the sum of the interaction energy between
 the first molecule's atoms and the water molecules.
 
 >>> print(mol.energy(mols["water"]))
--40.1213 kcal mol-1
+-41.4064 kcal mol-1
 >>> total = 0 * sr.units.kcal_per_mol
 >>> for atom in mol.atoms():
 ...     print(atom.energy(mols["water"]))
 ...     total += atom.energy(mols["water"])
-0.663924 kcal mol-1
--2.10834 kcal mol-1
-0.191629 kcal mol-1
--0.241149 kcal mol-1
-4.11264 kcal mol-1
--15.2177 kcal mol-1
--1.72778 kcal mol-1
--2.08338 kcal mol-1
--1.23467 kcal mol-1
-0.0201915 kcal mol-1
--4.04637 kcal mol-1
-0.0746471 kcal mol-1
-0.638956 kcal mol-1
-0.641426 kcal mol-1
-5.2854 kcal mol-1
--19.6452 kcal mol-1
--2.69302 kcal mol-1
--2.22972 kcal mol-1
--2.12367 kcal mol-1
-0.540744 kcal mol-1
-0.0511683 kcal mol-1
-1.00895 kcal mol-1
+0.609576 kcal mol-1
+-1.72327 kcal mol-1
+-0.0995291 kcal mol-1
+-0.863389 kcal mol-1
+3.62748 kcal mol-1
+-16.1531 kcal mol-1
+-1.379 kcal mol-1
+-2.86089 kcal mol-1
+-1.39983 kcal mol-1
+-0.0325111 kcal mol-1
+-4.24037 kcal mol-1
+0.112378 kcal mol-1
+0.714725 kcal mol-1
+0.64597 kcal mol-1
+3.88331 kcal mol-1
+-16.7354 kcal mol-1
+-2.67356 kcal mol-1
+-1.99815 kcal mol-1
+-2.38936 kcal mol-1
+0.477344 kcal mol-1
+0.120511 kcal mol-1
+0.950679 kcal mol-1
 >>> print(total)
--40.1213 kcal mol-1
+-41.4064 kcal mol-1
 
 As well as using a loop, you could use the ``apply()`` function
 to call ``energy`` on each view in a container, e.g.
 
 >>> print(mol.apply("energy", mols["water"]))
-[0.663924 kcal mol-1, -2.10834 kcal mol-1, 0.191629 kcal mol-1,
--0.241149 kcal mol-1, 4.11264 kcal mol-1, -15.2177 kcal mol-1,
--1.72778 kcal mol-1, -2.08338 kcal mol-1, -1.23467 kcal mol-1,
- 0.0201915 kcal mol-1, -4.04637 kcal mol-1, 0.0746471 kcal mol-1,
- 0.638956 kcal mol-1, 0.641426 kcal mol-1, 5.2854 kcal mol-1,
--19.6452 kcal mol-1, -2.69302 kcal mol-1, -2.22972 kcal mol-1,
--2.12367 kcal mol-1, 0.540744 kcal mol-1, 0.0511683 kcal mol-1,
- 1.00895 kcal mol-1]
+[0.609576 kcal mol-1, -1.72327 kcal mol-1, -0.0995291 kcal mol-1,
+-0.863389 kcal mol-1, 3.62748 kcal mol-1, -16.1531 kcal mol-1,
+-1.379 kcal mol-1, -2.86089 kcal mol-1, -1.39983 kcal mol-1,
+-0.0325111 kcal mol-1, -4.24037 kcal mol-1, 0.112378 kcal mol-1,
+ 0.714725 kcal mol-1, 0.64597 kcal mol-1, 3.88331 kcal mol-1,
+-16.7354 kcal mol-1, -2.67356 kcal mol-1, -1.99815 kcal mol-1,
+-2.38936 kcal mol-1, 0.477344 kcal mol-1, 0.120511 kcal mol-1,
+ 0.950679 kcal mol-1]
 
 and can calculate the sum automatically using ``apply_reduce()``, e.g.
 
 >>> print(mol.apply_reduce(lambda atom: atom.energy(mols["water"])))
--40.1213 kcal mol-1
+-41.4064 kcal mol-1
 
 Because this is such a common thing that you may want to do, sire provides
 the ``.energies()`` function that does this automatically, e.g.
 
 >>> print(mol.atoms().energies(mols["water"]))
-[0.663924 kcal mol-1, -2.10834 kcal mol-1, 0.191629 kcal mol-1,
--0.241149 kcal mol-1, 4.11264 kcal mol-1, -15.2177 kcal mol-1,
--1.72778 kcal mol-1, -2.08338 kcal mol-1, -1.23467 kcal mol-1,
- 0.0201915 kcal mol-1, -4.04637 kcal mol-1, 0.0746471 kcal mol-1,
- 0.638956 kcal mol-1, 0.641426 kcal mol-1, 5.2854 kcal mol-1,
--19.6452 kcal mol-1, -2.69302 kcal mol-1, -2.22972 kcal mol-1,
--2.12367 kcal mol-1, 0.540744 kcal mol-1, 0.0511683 kcal mol-1,
- 1.00895 kcal mol-1]
+[0.609576 kcal mol-1, -1.72327 kcal mol-1, -0.0995291 kcal mol-1,
+-0.863389 kcal mol-1, 3.62748 kcal mol-1, -16.1531 kcal mol-1,
+-1.379 kcal mol-1, -2.86089 kcal mol-1, -1.39983 kcal mol-1,
+-0.0325111 kcal mol-1, -4.24037 kcal mol-1, 0.112378 kcal mol-1,
+ 0.714725 kcal mol-1, 0.64597 kcal mol-1, 3.88331 kcal mol-1,
+-16.7354 kcal mol-1, -2.67356 kcal mol-1, -1.99815 kcal mol-1,
+-2.38936 kcal mol-1, 0.477344 kcal mol-1, 0.120511 kcal mol-1,
+ 0.950679 kcal mol-1]
 
 calculates the energy of each atom in the solute with each water
 molecule, while
 
 >>> print(mols[1:].energies(mols[0]))
-[-0.0489161 kcal mol-1, -0.0280827 kcal mol-1, 0 , 0 , -0.15308 kcal mol-1,
- -0.805672 kcal mol-1, 0.0108842 kcal mol-1, 0 , -0.00142226 kcal mol-1,
+[-0.0489166 kcal mol-1, -0.0414449 kcal mol-1, -0.0270237 kcal mol-1,
+  0.00493017 kcal mol-1, -0.15308 kcal mol-1, -0.805673 kcal mol-1,
 ...
- 0.147356 kcal mol-1, -0.00565305 kcal mol-1, 0 , -0.432694 kcal mol-1, 0 ]
+  0.113608 kcal mol-1, 0.147355 kcal mol-1, -0.0893536 kcal mol-1,
+ -0.0101503 kcal mol-1, -0.432695 kcal mol-1, -0.0120518 kcal mol-1]
 
 calculates the energies between the first molecule and every other
 molecule in the system.
