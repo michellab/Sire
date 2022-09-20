@@ -14,11 +14,13 @@ class TrajectoryIterator:
 
             self._view = view
             self._values = range(0, max(1, self._view.num_frames(self._map)))
+            self._times = None
             self._iter = None
             self._frame = None
         else:
             self._view = None
             self._values = []
+            self._times = None
             self._iter = None
             self._map = None
             self._frame = None
@@ -110,6 +112,28 @@ class TrajectoryIterator:
 
         return ret
 
+    def times(self):
+        if self._times is not None:
+            return self._times
+
+        if self._view is None:
+            return {}
+
+        # load the times from the actual underlying trajectory data
+        try:
+            mol = self._view.molecule()
+        except Exception:
+            mol = self._view[0].molecule()
+
+        traj = mol.property(self._map["trajectory"])
+
+        self._times = []
+
+        for idx in self._values:
+            self._times.append(traj[idx].time())
+
+        return self._times
+
     def energies(self, obj1=None, forcefield=None, to_pandas=True):
         if self._view is None:
             return {}
@@ -150,24 +174,33 @@ class TrajectoryIterator:
         times = np.zeros(nframes, dtype=float)
         indexes = np.zeros(nframes, dtype=int)
 
-        time_unit = None
+        t = self.times()
+
+        for i, idx in enumerate(self._values):
+            times[i] = t[i].to_default()
+            indexes[i] = idx
+
+        time_unit = t[0].get_default().unit_string()
         energy_unit = None
 
         components = {}
 
         from ..utils import Console
 
+        import os
+        cpu_count = os.cpu_count()
+
         with Console.progress() as progress:
             task = progress.add_task("Looping through frames", total=nframes)
 
-            num_per_chunk = max(64, int(nframes / 10))
-
-            if num_per_chunk < 8:
-                num_per_chunk = 8
+            num_per_chunk = cpu_count
 
             i = 0
 
+            import time
+
             while i < nframes:
+                start_time = time.time()
                 j = min(i+num_per_chunk, nframes)
 
                 ff_nrgs = calculate_trajectory_energies(forcefields, list(self._values[i:j]), self._map)
@@ -197,18 +230,17 @@ class TrajectoryIterator:
                                 components[k] = np.zeros(nframes, dtype=float)
                                 components[k][idx] = nrg[key].to_default()
 
-                    #frame = self.__getitem__(idx).current()
-
-                    #times[idx] = frame.frame_time().to_default()
-
-                    #if time_unit is None:
-                    #    time = frame.frame_time()
-                    #    if not time.is_zero():
-                    #        time_unit = time.get_default().unit_string()
-
-                    #indexes[idx] = frame.frame_index()
-
                     progress.update(task, completed=idx)
+
+                delta = time.time() - start_time
+
+                if delta > 0.8:
+                    # we want about 0.8 seconds between updates
+                    num_per_chunk = int(num_per_chunk / 2)
+                    if num_per_chunk < cpu_count:
+                        num_per_chunk = cpu_count
+                elif delta < 0.25:
+                    num_per_chunk = num_per_chunk + int(0.5 * num_per_chunk)
 
                 i = j
 
@@ -281,24 +313,33 @@ class TrajectoryIterator:
         times = np.zeros(nframes, dtype=float)
         indexes = np.zeros(nframes, dtype=int)
 
-        time_unit = None
+        t = self.times()
+
+        for i, idx in enumerate(self._values):
+            times[i] = t[i].to_default()
+            indexes[i] = idx
+
+        time_unit = t[0].get_default().unit_string()
         energy_unit = None
 
         components = {}
 
         from ..utils import Console
 
+        import os
+        cpu_count = os.cpu_count()
+
         with Console.progress() as progress:
             task = progress.add_task("Looping through frames", total=nframes)
 
-            num_per_chunk = max(64, int(nframes / 10))
-
-            if num_per_chunk < 8:
-                num_per_chunk = 8
+            num_per_chunk = cpu_count
 
             i = 0
 
+            import time
+
             while i < nframes:
+                start_time = time.time()
                 j = min(i+num_per_chunk, nframes)
 
                 nrgs = calculate_trajectory_energy(ff, list(self._values[i:j]), self._map)
@@ -321,18 +362,17 @@ class TrajectoryIterator:
                             components[key] = np.zeros(nframes, dtype=float)
                             components[key][idx] = nrg[key].to_default()
 
-                    #frame = self.__getitem__(idx).current()
-
-                    #times[idx] = frame.frame_time().to_default()
-
-                    #if time_unit is None:
-                    #    time = frame.frame_time()
-                    #    if not time.is_zero():
-                    #        time_unit = time.get_default().unit_string()
-
-                    #indexes[idx] = frame.frame_index()
-
                     progress.update(task, completed=idx)
+
+                delta = time.time() - start_time
+
+                if delta > 0.8:
+                    # we want about 0.8 seconds between updates
+                    num_per_chunk = int(num_per_chunk / 2)
+                    if num_per_chunk < cpu_count:
+                        num_per_chunk = cpu_count
+                elif delta < 0.25:
+                    num_per_chunk = num_per_chunk + int(0.5 * num_per_chunk)
 
                 i = j
 
