@@ -455,23 +455,39 @@ SIREMM_EXPORT QVector< QVector<GeneralUnit> > calculate_trajectory_energies(
     if (frames.isEmpty() or ffs.isEmpty())
         return nrgs;
 
-    nrgs.reserve(ffs.count());
+    nrgs.resize(ffs.count());
 
-    for (int i=0; i<ffs.count(); ++i)
-    {
-        nrgs.append(QVector<GeneralUnit>(frames.count(), GeneralUnit(0)));
-    }
+    auto nrgs_data = nrgs.data();
 
-    QVector<ForceFields> local_ffs = ffs;
+    auto local_ffs = ffs.constData();
 
-    for (int i=0; i<frames.count(); ++i)
-    {
-        for (int j=0; j<local_ffs.count(); ++j)
+    QVector<qint64> local_frames = frames.toVector();
+    auto frame_data = local_frames.constData();
+    const int nframes = local_frames.count();
+
+    tbb::parallel_for(tbb::blocked_range<int>(0, ffs.count()),
+                      [&](const tbb::blocked_range<int> &r){
+
+        for (int i=r.begin(); i<r.end(); ++i)
         {
-            local_ffs[j].loadFrame(frames[i], map);
-            nrgs[j][i] = calculate_energy(local_ffs[j]);
+            QVector<GeneralUnit> ff_nrgs(nframes);
+            auto ff_nrgs_data = ff_nrgs.data();
+
+            tbb::parallel_for(tbb::blocked_range<int>(0, nframes),
+                              [&](const tbb::blocked_range<int> &r2){
+
+                ForceFields local_ff = local_ffs[i];
+
+                for (int j=r2.begin(); j<r2.end(); ++j)
+                {
+                    local_ff.loadFrame(frame_data[j], map);
+                    ff_nrgs_data[j] = calculate_energy(local_ff);
+                }
+            });
+
+            nrgs_data[i] = ff_nrgs;
         }
-    }
+    });
 
     return nrgs;
 }

@@ -71,6 +71,7 @@ void register_SireUnits_containers()
 
     register_list< QList<Dimension::GeneralUnit> >();
     register_list< QVector<Dimension::GeneralUnit> >();
+    register_list< QVector< QVector<Dimension::GeneralUnit> > >();
     register_dict< QHash<QString,Dimension::GeneralUnit> >();
 
     register_PackedArray< SireBase::PackedArray2D<Dimension::Charge> >();

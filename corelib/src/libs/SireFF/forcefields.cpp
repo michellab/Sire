@@ -2524,7 +2524,7 @@ const FFName& ForceFields::ffName(const FFID &ffid) const
 /** Return a string representation of this set */
 QString ForceFields::toString() const
 {
-    return QObject::tr("FFPtr( nForceFields() == %1 )").arg(this->nForceFields());
+    return QObject::tr("ForceFields( nForceFields() == %1 )").arg(this->nForceFields());
 }
 
 /** Return the energy associated with the symbol 'component'. This component

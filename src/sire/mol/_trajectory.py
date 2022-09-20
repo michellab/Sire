@@ -110,56 +110,40 @@ class TrajectoryIterator:
 
         return ret
 
-    def energies(self, obj1=None, forcefield=None,
-                 match_trajectory=None, to_pandas=True):
+    def energies(self, obj1=None, forcefield=None, to_pandas=True):
         if self._view is None:
             return {}
 
         import numpy as np
 
-        from ..mm import create_forcefield, calculate_energy
+        from ..mm import create_forcefield
+        from ..legacy.MM import calculate_trajectory_energies
         from .._colname import colname
         from . import _to_molecules
 
-        forcefields = {}
+        colnames = []
+        forcefields = []
 
         if obj1 is None:
-            for v in self._view:
-                forcefields[colname(v)] = create_forcefield(v, map=self._map)
-
-            obj1_is_trajectory = False
+            for v in self.first():
+                colnames.append(colname(v))
+                forcefields.append(create_forcefield(v, map=self._map))
         else:
-            if match_trajectory:
-                if type(obj1) is not TrajectoryIterator:
-                    obj1 = obj1.trajectory()[self._values]
-
-            elif match_trajectory is None:
-                # try to guess what to do
-                if type(obj1) is not TrajectoryIterator:
-                    if obj1.num_frames() > 1:
-                        # try to match
-                        try:
-                            obj1 = obj1.trajectory()[self._values]
-                        except Exception:
-                            pass
-
             if type(obj1) is TrajectoryIterator:
                 if obj1.num_frames() != self.num_frames():
                     raise ValueError(
                         "The two trajectories have a different number of frames! "
                         f"{self.num_frames()} versus f{obj1.num_frames()}.")
 
-                obj1_is_trajectory = True
-
                 obj1_mols = _to_molecules(obj1.first())
 
                 for v in self.first():
-                    forcefields[colname(v)] = create_forcefield(v, obj1_mols, map=self._map)
+                    colnames.append(colname(v))
+                    forcefields.append(create_forcefield(v, obj1_mols, map=self._map))
             else:
-                obj1_is_trajectory = False
-
                 for v in self.first():
-                    forcefields[colname(v)] = create_forcefield(v, obj1_mols, map=self._map)
+                    colnames.append(colname(v))
+                    forcefields.append(create_forcefield(v, _to_molecules(obj1), map=self._map))
 
         nframes = len(self)
 
@@ -176,55 +160,57 @@ class TrajectoryIterator:
         with Console.progress() as progress:
             task = progress.add_task("Looping through frames", total=nframes)
 
-            for idx, frame in enumerate(self.__iter__()):
-                if obj1_is_trajectory:
-                    obj1_mols = _to_molecules(obj1[idx].current())
-                else:
-                    obj1_mols = None
+            num_per_chunk = max(64, int(nframes / 10))
 
-                mols = frame
+            if num_per_chunk < 8:
+                num_per_chunk = 8
 
-                for view in frame:
-                    ff = forcefields[colname(view)]
+            i = 0
 
-                    if obj1_is_trajectory:
-                        ff.update(obj1_mols)
+            while i < nframes:
+                j = min(i+num_per_chunk, nframes)
 
-                    # update the forcefield with this frame second
-                    # as, sometimes, there are forcefields where you cannot
-                    # have a different version of a molecule, and so you want
-                    # the version from the trajectory frame
-                    ff.update(_to_molecules(view))
+                ff_nrgs = calculate_trajectory_energies(forcefields, list(self._values[i:j]), self._map)
 
-                    nrg = calculate_energy(ff)
+                if i == 0:
+                    for ff_idx in range(0, len(forcefields)):
+                        nrg = ff_nrgs[ff_idx][0]
 
-                    total_key = colname(view, "total")
+                        if ff_idx == 0:
+                            energy_unit = nrg.get_default().unit_string()
 
-                    if total_key not in components:
-                        components[total_key] = np.zeros(nframes, dtype=float)
+                        components[colname(colnames[ff_idx], "total")] = np.zeros(nframes, dtype=float)
 
-                    components[total_key][idx] = nrg.to_default()
+                        for key in nrg.components().keys():
+                            components[colname(colnames[ff_idx], key)] = np.zeros(nframes, dtype=float)
 
-                    for key, value in nrg.components().items():
-                        c_key = colname(view, key)
-                        if c_key not in components:
-                            components[c_key] = np.zeros(nframes, dtype=float)
+                for idx in range(i, j):
+                    for ff_idx in range(0, len(forcefields)):
+                        nrg = ff_nrgs[ff_idx][idx-i]
+                        components[colname(colnames[ff_idx], "total")][idx] = nrg.to_default()
 
-                        components[c_key][idx] = value.to_default()
+                        for key, value in nrg.components().items():
+                            try:
+                                components[colname(colnames[ff_idx], key)][idx] = nrg[key].to_default()
+                            except KeyError:
+                                k = colname(colnames[ff_idx], key)
+                                components[k] = np.zeros(nframes, dtype=float)
+                                components[k][idx] = nrg[key].to_default()
 
-                times[idx] = frame.frame_time().to_default()
+                    #frame = self.__getitem__(idx).current()
 
-                if energy_unit is None:
-                    if not nrg.is_zero():
-                        energy_unit = nrg.get_default().unit_string()
+                    #times[idx] = frame.frame_time().to_default()
 
-                if time_unit is None:
-                    time = frame.frame_time()
-                    if not time.is_zero():
-                        time_unit = time.get_default().unit_string()
+                    #if time_unit is None:
+                    #    time = frame.frame_time()
+                    #    if not time.is_zero():
+                    #        time_unit = time.get_default().unit_string()
 
-                indexes[idx] = frame.frame_index()
-                progress.update(task, completed=idx)
+                    #indexes[idx] = frame.frame_index()
+
+                    progress.update(task, completed=idx)
+
+                i = j
 
         data = {}
 
@@ -278,7 +264,7 @@ class TrajectoryIterator:
         from . import _to_molecules
 
         if obj1 is None:
-            ff = create_forcefield(self.current(), map=self._map)
+            ff = create_forcefield(self.first(), map=self._map)
         else:
             if type(obj1) is TrajectoryIterator:
                 if obj1.num_frames() != self.num_frames():
@@ -329,20 +315,24 @@ class TrajectoryIterator:
                     components["total"][idx] = nrg.to_default()
 
                     for key, value in nrg.components().items():
-                        components[key][idx] = nrg[key].to_default()
+                        try:
+                            components[key][idx] = nrg[key].to_default()
+                        except KeyError:
+                            components[key] = np.zeros(nframes, dtype=float)
+                            components[key][idx] = nrg[key].to_default()
 
-                    frame = self.__getitem__(idx).current()
+                    #frame = self.__getitem__(idx).current()
 
-                    times[idx] = frame.frame_time().to_default()
+                    #times[idx] = frame.frame_time().to_default()
 
-                    if time_unit is None:
-                        time = frame.frame_time()
-                        if not time.is_zero():
-                            time_unit = time.get_default().unit_string()
+                    #if time_unit is None:
+                    #    time = frame.frame_time()
+                    #    if not time.is_zero():
+                    #        time_unit = time.get_default().unit_string()
 
-                    indexes[idx] = frame.frame_index()
+                    #indexes[idx] = frame.frame_index()
 
-                progress.update(task, completed=j)
+                    progress.update(task, completed=idx)
 
                 i = j
 

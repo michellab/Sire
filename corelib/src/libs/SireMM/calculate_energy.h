@@ -115,7 +115,6 @@ namespace SireMM
     calculate_trajectory_energies(const QVector<SireFF::ForceFields> &ff,
                                   const QList<qint64> &frames,
                                   const SireBase::PropertyMap &map);
-
 }
 
 SIRE_EXPOSE_FUNCTION( SireMM::create_forcefield )
