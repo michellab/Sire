@@ -1705,6 +1705,14 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
     // Instantiate an empty system.
     System system;
 
+    bool show_warnings = false;
+    bool has_warnings = false;
+
+    if (map["show_warnings"].hasValue())
+    {
+        show_warnings = map["show_warnings"].value().asA<BooleanProperty>().value();
+    }
+
     if (parsers.value("supplementary").count() > 0)
     {
         QVector<QString> supplementary_lines;
@@ -1723,11 +1731,16 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
 
     if (topology.read().hasWarnings())
     {
-        QTextStream cout(stdout, QIODevice::WriteOnly);
+        if (show_warnings)
+        {
+            QTextStream cout(stdout, QIODevice::WriteOnly);
 
-        cout << QObject::tr("\nWARNINGS encountered when parsing the topology:\n");
-        cout << topology.read().warnings().join("\n");
-        cout << "====\n\n";
+            cout << QObject::tr("\nWARNINGS encountered when parsing the topology:\n");
+            cout << topology.read().warnings().join("\n");
+            cout << "====\n\n";
+        }
+        else
+            has_warnings = true;
     }
 
     if (parsers.value("frame").count() > 0)
@@ -1741,11 +1754,16 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
 
             if (frames[0].read().hasWarnings())
             {
-                QTextStream cout(stdout, QIODevice::WriteOnly);
+                if (show_warnings)
+                {
+                    QTextStream cout(stdout, QIODevice::WriteOnly);
 
-                cout << QObject::tr("\nWARNINGS encountered when adding addition system data:\n");
-                cout << frames[0].read().warnings().join("\n");
-                cout << "====\n\n";
+                    cout << QObject::tr("\nWARNINGS encountered when adding addition system data:\n");
+                    cout << frames[0].read().warnings().join("\n");
+                    cout << "====\n\n";
+                }
+                else
+                    has_warnings = true;
             }
         }
 
@@ -1768,11 +1786,16 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
 
                 if (frame.read().hasWarnings())
                 {
-                    QTextStream cout(stdout, QIODevice::WriteOnly);
+                    if (show_warnings)
+                    {
+                        QTextStream cout(stdout, QIODevice::WriteOnly);
 
-                    cout << QObject::tr("\nWARNINGS encountered when adding a trajectory frame:\n");
-                    cout << frame.read().warnings().join("\n");
-                    cout << "====\n\n";
+                        cout << QObject::tr("\nWARNINGS encountered when adding a trajectory frame:\n");
+                        cout << frame.read().warnings().join("\n");
+                        cout << "====\n\n";
+                    }
+                    else
+                        has_warnings = true;
                 }
             }
 
@@ -1798,6 +1821,14 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
                 start_atom += natoms;
             }
         }
+    }
+
+    if (has_warnings and not show_warnings)
+    {
+        QTextStream cout(stdout, QIODevice::WriteOnly);
+
+        cout << QObject::tr("WARNINGS were encountered while reading.\n"
+                            "Reload with show_warnings=True to print the warnings out.\n");
     }
 
     return system;

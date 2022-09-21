@@ -269,7 +269,7 @@ def expand(base: str, path: _Union[str, _List[str]], *args, **kwargs):
     return expanded
 
 
-def load(path: _Union[str, _List[str]], *args, **kwargs):
+def load(path: _Union[str, _List[str]], *args, show_warnings=False, **kwargs):
     """Load the molecular system at 'path'. This can be a filename
        of a URL. If it is a URL, then the file will be downloaded
        to the current directory and loaded from there.
@@ -346,8 +346,12 @@ def load(path: _Union[str, _List[str]], *args, **kwargs):
         raise IOError("No valid files specified. Nothing to load?")
 
     from .io import load_molecules
-    from .base import wrap
-    return load_molecules(paths, map={"GROMACS_PATH":_get_gromacs_dir()})
+    from .base import PropertyMap, wrap
+    map = PropertyMap()
+    map.set("GROMACS_PATH", wrap(_get_gromacs_dir()))
+    map.set("show_warnings", wrap(show_warnings))
+
+    return load_molecules(paths, map=map)
 
 
 def _to_legacy_system(molecules):

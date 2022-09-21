@@ -269,21 +269,42 @@ def _match_to_type(typename, property):
 
 
 def _set_property(molview, key, property):
+    orig_typename = None
+
     if hasattr(molview, "has_property"):
         if molview.has_property(key):
-            typename = molview.property_type(key)
-            property = _match_to_type(typename, property)
+            orig_typename = molview.property_type(key)
+            property = _match_to_type(orig_typename, property)
     else:
         if molview.hasProperty(key):
             # get the type of the existing property
-            typename = molview.propertyType(key)
-            property = _match_to_type(typename, property)
+            orig_typename = molview.propertyType(key)
+            property = _match_to_type(orig_typename, property)
 
     (typename, property) = __get_typename__(property)
 
     try:
         return getattr(molview, "_set_property_%s" % typename)(key, property)
     except AttributeError as e:
+        if orig_typename is not None:
+            # we need to go for the original typename, if the property
+            # exists already
+            value = None
+
+            if orig_typename.endswith("Charges"):
+                from ..Units import mod_electron
+                value = mod_electron
+            elif orig_typename.endswith("Masses"):
+                from ..Units import g_per_mol
+                value = g_per_mol
+
+            if value is not None:
+                (typename, value) = __get_typename__(value)
+                try:
+                    return getattr(molview, "_set_property_%s" % typename)(key, property)
+                except AttributeError as e:
+                    print(e)
+
         # no matching function - see if we have the generic 'PropertyProperty'
         if hasattr(molview, "_set_property_SireBase_PropertyPtr"):
             return molview._set_property_SireBase_PropertyPtr(key, _Base.wrap(property))

@@ -37,6 +37,14 @@ def test_atomcharges(ala_mols):
 
     assert charges[0:3] == [charges[0], charges[1], charges[2]]
 
+    from sire.units import mod_electron
+
+    mol = mol[0].edit().set_property("charge2", 0*mod_electron).molecule().commit()
+    assert mol[0].property("charge2") == 0*mod_electron
+
+    mol = mol[0].edit().set_property("charge", 0*mod_electron).molecule().commit()
+    assert mol[0].property("charge") == 0*mod_electron
+
 
 def test_atomljs(ala_mols):
     mols = ala_mols
