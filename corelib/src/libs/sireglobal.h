@@ -45,6 +45,12 @@
     {
         return v.toList();
     }
+
+    template<class T>
+    inline QList<T> convert_to_qlist(const QSet<T> &s)
+    {
+        return s.toList();
+    }
 #else
     //Newer Qt also has a different way of initialising QSet!
     template<class T>
@@ -63,6 +69,12 @@
     inline QList<T> convert_to_qlist(const QVector<T> &v)
     {
         return QList<T>(v.begin(), v.end());
+    }
+
+    template<class T>
+    inline QList<T> convert_to_qlist(const QSet<T> &s)
+    {
+        return QList<T>(s.begin(), s.end());
     }
 #endif
 
