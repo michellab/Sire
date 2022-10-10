@@ -1367,7 +1367,7 @@ def generateDistanceRestraintsDict(system):
     # Find atom nearest to COG
     molecules = system.molecules()
     molnums = molecules.molNums()
-    solute = molecules.at(MolNum(1))[0].molecule()
+    solute = getSolute(system)
     nearestcog_atom = getAtomNearCOG( solute )
     icoord = nearestcog_atom.property("coordinates")
     # Step 2) Find nearest 'CA' heavy atom in other solutes (skip water  & ions)
