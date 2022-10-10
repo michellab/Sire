@@ -307,10 +307,10 @@ def getSolute(system):
     # matching the perturbed_resnum.val.
 
     # Create the query string.
-    query = f"mol with resnum {perturbed_resnum.val}"
+    query = f"resnum {perturbed_resnum.val}"
 
     # Perform the search.
-    search = system.search(query)
+    search = system.search(query).molecules()
 
     # Make sure there is only one result.
     if len(search) != 1:
