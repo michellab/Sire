@@ -858,6 +858,8 @@ def getDummies(molecule):
 
     from_dummies = None
     to_dummies = None
+    from_non_dummies = []
+    to_non_dummies = []
 
     for x in range(0, natoms):
         atom = atoms[x]
@@ -866,13 +868,17 @@ def getDummies(molecule):
                 from_dummies = molecule.selectAll(atom.index())
             else:
                 from_dummies += molecule.selectAll(atom.index())
-        elif atom.property("final_ambertype") == "du":
+        else:
+            from_non_dummies.append(atom.index())
+        if atom.property("final_ambertype") == "du":
             if to_dummies is None:
                 to_dummies = molecule.selectAll(atom.index())
             else:
                 to_dummies += molecule.selectAll(atom.index())
+        else:
+            to_non_dummies.append(atom.index())
 
-    return to_dummies, from_dummies
+    return to_dummies, from_dummies, to_non_dummies, from_non_dummies
 
 
 def createSystemFreeEnergy(molecules):
@@ -946,10 +952,10 @@ def createSystemFreeEnergy(molecules):
     solute_grp_ref_fromdummy = MoleculeGroup("solute_ref_fromdummy")
 
     solute_ref_hard = solute.selectAllAtoms()
-    solute_ref_todummy = solute_ref_hard.invert()
-    solute_ref_fromdummy = solute_ref_hard.invert()
+    solute_ref_todummy = solute.selectAllAtoms()
+    solute_ref_fromdummy = solute.selectAllAtoms()
 
-    to_dummies, from_dummies = getDummies(solute)
+    to_dummies, from_dummies, to_non_dummies, from_non_dummies = getDummies(solute)
 
     if to_dummies is not None:
         ndummies = to_dummies.count()
@@ -958,7 +964,9 @@ def createSystemFreeEnergy(molecules):
         for x in range(0, ndummies):
             dummy_index = dummies[x].index()
             solute_ref_hard = solute_ref_hard.subtract(solute.select(dummy_index))
-            solute_ref_todummy = solute_ref_todummy.add(solute.select(dummy_index))
+
+    for non_dummy in to_non_dummies:
+        solute_ref_todummy = solute_ref_todummy.subtract(solute.select(non_dummy))
 
     if from_dummies is not None:
         ndummies = from_dummies.count()
@@ -967,7 +975,9 @@ def createSystemFreeEnergy(molecules):
         for x in range(0, ndummies):
             dummy_index = dummies[x].index()
             solute_ref_hard = solute_ref_hard.subtract(solute.select(dummy_index))
-            solute_ref_fromdummy = solute_ref_fromdummy.add(solute.select(dummy_index))
+
+    for non_dummy in from_non_dummies:
+        solute_ref_fromdummy = solute_ref_fromdummy.subtract(solute.select(non_dummy))
 
     solute_grp_ref_hard.add(solute_ref_hard)
     solute_grp_ref_todummy.add(solute_ref_todummy)
