@@ -955,6 +955,17 @@ def createSystemFreeEnergy(molecules):
     solute_ref_todummy = solute.selectAllAtoms()
     solute_ref_fromdummy = solute.selectAllAtoms()
 
+    # N.B.: Currently Sire 2023 doesn't behave consistently with Sire < 2023 for
+    # selections with zero items. Previously it was possible to create an empty
+    # selector on a molecule by using .selectAllAtoms().invert(), then add items
+    # to that selector. For Sire 2023, an empty selector is Null, with no
+    # associated molecule. To work around this, we instead create an "all atom"
+    # selector, then remove unwanted atoms. An alternative approach is to use
+    # the .selection() operator on the solute, to create an AtomSelection. It is
+    # then possible to call .selectNone(), followed by repeated calls to .select()
+    # in order to add only the desired atoms. This can then be converted to a
+    # Selector_Atom_ by passing the solute and selection to the constructor.
+
     to_dummies, from_dummies, to_non_dummies, from_non_dummies = getDummies(solute)
 
     if to_dummies is not None:
