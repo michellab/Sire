@@ -753,6 +753,19 @@ void register_OpenMMFrEnergyST_class(){
                 , "Set the cutoff type: nocutoff, cutoffnonperiodic, cutoffperiodic" );
         
         }
+        { //::SireMove::OpenMMFrEnergyST::setDebug
+        
+            typedef void ( ::SireMove::OpenMMFrEnergyST::*setDebug_function_type)( bool ) ;
+            setDebug_function_type setDebug_function_value( &::SireMove::OpenMMFrEnergyST::setDebug );
+            
+            OpenMMFrEnergyST_exposer.def( 
+                "setDebug"
+                , setDebug_function_value
+                , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMove::OpenMMFrEnergyST::setDeltatAlchemical
         
             typedef void ( ::SireMove::OpenMMFrEnergyST::*setDeltatAlchemical_function_type)( double ) ;
