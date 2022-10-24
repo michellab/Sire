@@ -764,7 +764,7 @@ void OpenMMPMEFEP::initialise(bool fullPME)
 
     // use default tolerance for the moment
     double tolerance_PME = recip_space->getEwaldErrorTolerance();
-
+    
     // from NonbondedForceImpl.cpp
     double alpha_PME = (1.0 / converted_cutoff_distance)
                        * std::sqrt(-log(2.0 * tolerance_PME));
@@ -817,6 +817,9 @@ void OpenMMPMEFEP::initialise(bool fullPME)
 	custom_corr_recip->addGlobalParameter("alpha_pme", alpha_PME);
 	custom_corr_recip->addGlobalParameter("cutoff",
 					      converted_cutoff_distance);
+
+	/* JM 10/22 handle PBC */
+	custom_corr_recip->setUsesPeriodicBoundaryConditions(true);
 
 	addPerBondParameters(*custom_corr_recip, {"qcstart", "qcend"});
     }
@@ -3254,7 +3257,9 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
             // Solvent-Solvent and Protein Protein Non Bonded OFF
             // NOTE: this can dramatically change the potential energy and so the
             //       biases (reduced energies)
-            openmm_context->setParameter("SPOnOff", 1.0);
+            //openmm_context->setParameter("SPOnOff", 1.0);
+	    //*JM * keep this disabled 10/22 //
+	    openmm_context->setParameter("SPOnOff", 0.0);
         }
 
         // get new state as SPOnOff was set above
@@ -3356,11 +3361,11 @@ void OpenMMPMEFEP::integrate(IntegratorWorkspace &workspace,
                                     positions_openmm[j + k][1] * (OpenMM::AngstromsPerNm),
                                     positions_openmm[j + k][2] * (OpenMM::AngstromsPerNm));
 
-            if (Debug)
-                qDebug() << "X = " << positions_openmm[j + k][0] * OpenMM::AngstromsPerNm <<
-                         " A" <<
-                         " Y = " << positions_openmm[j + k][1] * OpenMM::AngstromsPerNm << " A" <<
-                         " Z = " << positions_openmm[j + k][2] * OpenMM::AngstromsPerNm << " A";
+            //if (Debug)
+            //    qDebug() << "X = " << positions_openmm[j + k][0] * OpenMM::AngstromsPerNm <<
+            //             " A" <<
+            //             " Y = " << positions_openmm[j + k][1] * OpenMM::AngstromsPerNm << " A" <<
+            //             " Z = " << positions_openmm[j + k][2] * OpenMM::AngstromsPerNm << " A";
 
             for (int l = 0; l < nframes; l++) {
                 //qDebug() << " i " << i << " j " << j << " k " << k << " l " << l;
@@ -3409,6 +3414,9 @@ double OpenMMPMEFEP::getPotentialEnergyAtLambda(double lambda)
     OpenMM::State state_openmm =
         openmm_context->getState(OpenMM::State::Energy, false, group_mask);
     curr_potential_energy = state_openmm.getPotentialEnergy();
+
+    if (Debug)
+        qDebug() << " lambda " << lambda << " Energy " << curr_potential_energy * kJ_per_mol << " kcal/mol ";    
 
     return curr_potential_energy;
 }
@@ -3549,8 +3557,8 @@ void OpenMMPMEFEP::updateBoxDimensions(
         state_openmm.getPeriodicBoxVectors(a, b, c);
         Vector new_dims = Vector(a[0] * OpenMM::AngstromsPerNm,
                                  b[1] * OpenMM::AngstromsPerNm, c[2] * OpenMM::AngstromsPerNm);
-        if (Debug)
-            qDebug() << " a " << a[0] << " b " << b[1] << " c " << c[2];
+        //if (Debug)
+        //    qDebug() << " a " << a[0] << " b " << b[1] << " c " << c[2];
 
         System & ptr_sys = ws.nonConstsystem();
         PeriodicBox sp = ptr_sys.property("space").asA<PeriodicBox>();
