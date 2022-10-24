@@ -596,7 +596,7 @@ QString PDBAtom::toPDBRecord() const
 {
     QString line;
 
-    // Write all records as ATOM, i.e. convert HETATM to ATOM.
+    // First create an ATOM record.
     line.append("ATOM  ");
 
     // Append the atom serial number. Since we enforce a hard
@@ -675,6 +675,11 @@ QString PDBAtom::toPDBRecord() const
         if (charge < 0) line.append(QString("%1-").arg(qAbs(charge)));
         else            line.append(QString("%1+").arg(charge));
     }
+
+    // Convert ATOM record to HETATM. This avoids the need to change the
+    // justifaction of other terms in the record above.
+    if (this->is_het)
+        line.replace("ATOM  ", "HETATM");
 
     return line;
 }
@@ -844,6 +849,10 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
     }
 
     lines.append("END");
+
+    // Ensure that lines are 80 characters wide.
+    for (auto &line : lines)
+        line.resize(80, ' ');
 
     // Reparse the lines as a self-consistency check.
     PDB2 parsed(lines, map);
@@ -1029,7 +1038,7 @@ QVector<QString> PDB2::toLines(bool is_velocity) const
                     if (atoms[i][j].isTer())
                     {
                         atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
-                                                .arg(lines[j].mid(6, 5))
+                                                .arg(QString::number(atom_lines[iline-1].mid(6, 5).toInt() + 1), 5)
                                                 .arg(lines[j].mid(17, 3))
                                                 .arg(lines[j].at(21))
                                                 .arg(lines[j].mid(22, 4))
@@ -1068,7 +1077,7 @@ QVector<QString> PDB2::toLines(bool is_velocity) const
                 if (atoms[i][j].isTer())
                 {
                     atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
-                                            .arg(atom_lines[iline-1].mid(6, 5))
+                                            .arg(QString::number(atom_lines[iline-1].mid(6, 5).toInt() + 1), 5)
                                             .arg(atom_lines[iline-1].mid(17, 3))
                                             .arg(atom_lines[iline-1].at(21))
                                             .arg(atom_lines[iline-1].mid(22, 4))
@@ -1091,6 +1100,10 @@ QVector<QString> PDB2::toLines(bool is_velocity) const
     }
 
     lines.append("END");
+
+    // Ensure that lines are 80 characters wide.
+    for (auto &line : lines)
+        line.resize(80, ' ');
 
     return lines;
 }
@@ -1558,7 +1571,7 @@ void PDB2::parseLines(const PropertyMap &map)
                    ascending order.
 
 				   However, residue numbers are not unique across
-                   chains, so we need to preserved the numbering if
+                   chains, so we need to preserve the numbering if
                    the chain ID differs.
                  */
 
@@ -2224,12 +2237,54 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
         // Extract the atoms from the chain.
         auto atoms = chain.atoms();
 
+        // Store the index of the last atom in the chain, i.e.
+        // the first to check.
+        auto idx = atoms.count() - 1;
+
+        // Whether we've found a terminal atom in the chain. This is any
+        // non-HETATM atom.
+        bool found_ter = false;
+
+        // The current atom being checked.
+        SireMol::Atom atom;
+
+        // Loop until we've found the terminal atom.
+        while (not found_ter and idx > 0)
+        {
+            // Extract the atom.
+            atom = atoms[idx].read().asA<SireMol::Atom>();
+
+            if (atom.hasProperty(map["is_het"]))
+            {
+                // Not a HETATM, so can be used as a TER.
+                if (atom.property<QString>(map["is_het"]) == "False")
+                {
+                    found_ter = true;
+                    break;
+                }
+                else
+                {
+                    idx--;
+                }
+            }
+            // Not a HETATM, so can be used as a TER.
+            else
+            {
+                found_ter = true;
+                break;
+            }
+        }
+
+        // Error if a TER wasn't found.
+        if (not found_ter)
+        {
+            throw SireError::incompatible_error(QObject::tr("Unable to "
+                "locate terminal atom for chain index %1")
+                .arg(i), CODELOC);
+        }
+
         // Extract the number of the last atom in the chain
-        int terminal_atom = atoms[atoms.count()-1]
-                           .read()
-                           .asA<SireMol::Atom>()
-                           .index()
-                           .value();
+        int terminal_atom = atom.index().value();
 
         // Set the terminal atom.
         is_ter[terminal_atom] = true;
@@ -2272,6 +2327,9 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
             // Make a copy of the atom lines.
             auto lines = atom_lines;
 
+            // The number of atom lines, including TER records.
+            int num_lines = 1;
+
             // Line index.
             int iline = 0;
 
@@ -2281,13 +2339,13 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
             {
                 // Copy the atom record across.
                 atom_lines[iline] = lines[i];
-                iline++;
+                atom_lines[iline].replace(6, 5, QString::number(1+iline++).rightJustified(5, ' '));
 
                 // Add a TER record for this atom.
                 if (is_ter[i])
                 {
                     atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
-                                            .arg(lines[i].mid(6, 5))
+                                            .arg(iline + 1, 5)
                                             .arg(lines[i].mid(17, 3))
                                             .arg(lines[i].at(21))
                                             .arg(lines[i].mid(22, 4))
@@ -2311,13 +2369,13 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
 
             // Generate a PDB atom data record.
             atom_lines[iline] = atom.toPDBRecord();
-            iline++;
+            atom_lines[iline].replace(6, 5, QString::number(1+iline++).rightJustified(5, ' '));
 
             // Add a TER record for this atom.
             if (is_ter[i])
             {
                 atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
-                                        .arg(atom_lines[iline-1].mid(6, 5))
+                                        .arg(iline + 1, 5)
                                         .arg(atom_lines[iline-1].mid(17, 3))
                                         .arg(atom_lines[iline-1].at(21))
                                         .arg(atom_lines[iline-1].mid(22, 4))

@@ -6,6 +6,7 @@ name: Build
 # are in the commit message. We don't need to check for this ourselves.
 
 on:
+  workflow_dispatch:
   push:
     branches: [ devel ]
   pull_request:

@@ -55,7 +55,7 @@ void register_CovalentBondHunter_class(){
 
     { //::SireMol::CovalentBondHunter
         typedef bp::class_< SireMol::CovalentBondHunter, bp::bases< SireMol::BondHunter, SireBase::Property > > CovalentBondHunter_exposer_t;
-        CovalentBondHunter_exposer_t CovalentBondHunter_exposer = CovalentBondHunter_exposer_t( "CovalentBondHunter", "This is a bond hunter that finds bonded atoms by comparing\nthe distance between the atoms to the sum of their covalent radii.\nIf the distance is less than the sum of the covalent radii then the atoms\nare bonded.\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< double > >(( bp::arg("tolerance")=1.1000000000000001 ), "Construct a CovalentBondHunter with a specified tolerance") );
+        CovalentBondHunter_exposer_t CovalentBondHunter_exposer = CovalentBondHunter_exposer_t( "CovalentBondHunter", "This is a bond hunter that finds bonded atoms by comparing\nthe distance between the atoms to the sum of their covalent radii.\nIf the distance is less than the sum of the covalent radii then the atoms\nare bonded.\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< double, double > >(( bp::arg("tolerance")=1.1000000000000001, bp::arg("max_radius2")=25 ), "Construct a CovalentBondHunter with a specified tolerance") );
         bp::scope CovalentBondHunter_scope( CovalentBondHunter_exposer );
         CovalentBondHunter_exposer.def( bp::init< SireMol::CovalentBondHunter const & >(( bp::arg("other") ), "Copy constructor") );
         CovalentBondHunter_exposer.def( bp::self != bp::self );

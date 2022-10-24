@@ -288,7 +288,7 @@ void register_MoleculeGroup_class(){
                 , at_function_value
                 , ( bp::arg("viewidx") )
                 , bp::release_gil_policy()
-                , "Return the specified view of the specified molecule in this group.\nThrow: SireMol::missing_molecule\nThrow: SireError::invalid_index\n" );
+                , "Return the view of hte molecule at viewidx\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::at
@@ -443,7 +443,7 @@ void register_MoleculeGroup_class(){
                 , contains_function_value
                 , ( bp::arg("MoleculeGroup") )
                 , bp::release_gil_policy()
-                , "Return whether or not this group contains all of the\nviews of any version of all of the molecules contained\nin molecules" );
+                , "Return whether or not this group contains all of the\nviews of any version of all of the molecules contained\nin the group other" );
         
         }
         { //::SireMol::MoleculeGroup::first

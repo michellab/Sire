@@ -519,10 +519,10 @@ def getSolute(system):
     # matching the perturbed_resnum.val.
 
     # Create the query string.
-    query = f"mol with resnum {perturbed_resnum.val}"
+    query = f"resnum {perturbed_resnum.val}"
 
     # Perform the search.
-    search = system.search(query)
+    search = system.search(query).molecules()
 
     # Make sure there is only one result.
     if len(search) != 1:
@@ -1153,6 +1153,8 @@ def getDummies(molecule):
 
     from_dummies = None
     to_dummies = None
+    from_non_dummies = []
+    to_non_dummies = []
 
     for x in range(0, natoms):
         atom = atoms[x]
@@ -1162,13 +1164,17 @@ def getDummies(molecule):
                 from_dummies = molecule.selectAll(atom.index())
             else:
                 from_dummies += molecule.selectAll(atom.index())
-        elif atom.property("final_ambertype") == "du":
+        else:
+            from_non_dummies.append(atom.index())
+        if atom.property("final_ambertype") == "du":
             if to_dummies is None:
                 to_dummies = molecule.selectAll(atom.index())
             else:
                 to_dummies += molecule.selectAll(atom.index())
+        else:
+            to_non_dummies.append(atom.index())
 
-    return to_dummies, from_dummies
+    return to_dummies, from_dummies, to_non_dummies, from_non_dummies
 
 
 def createSystemFreeEnergy(molecules):
@@ -1254,10 +1260,21 @@ def createSystemFreeEnergy(molecules):
     solute_grp_ref_fromdummy = MoleculeGroup("solute_ref_fromdummy")
 
     solute_ref_hard = solute.selectAllAtoms()
-    solute_ref_todummy = solute_ref_hard.invert()
-    solute_ref_fromdummy = solute_ref_hard.invert()
+    solute_ref_todummy = solute.selectAllAtoms()
+    solute_ref_fromdummy = solute.selectAllAtoms()
 
-    to_dummies, from_dummies = getDummies(solute)
+    # N.B.: Currently Sire 2023 doesn't behave consistently with Sire < 2023 for
+    # selections with zero items. Previously it was possible to create an empty
+    # selector on a molecule by using .selectAllAtoms().invert(), then add items
+    # to that selector. For Sire 2023, an empty selector is Null, with no
+    # associated molecule. To work around this, we instead create an "all atom"
+    # selector, then remove unwanted atoms. An alternative approach is to use
+    # the .selection() operator on the solute, to create an AtomSelection. It is
+    # then possible to call .selectNone(), followed by repeated calls to .select()
+    # in order to add only the desired atoms. This can then be converted to a
+    # Selector_Atom_ by passing the solute and selection to the constructor.
+
+    to_dummies, from_dummies, to_non_dummies, from_non_dummies = getDummies(solute)
 
     if to_dummies is not None:
         ndummies = to_dummies.count()
@@ -1265,12 +1282,11 @@ def createSystemFreeEnergy(molecules):
 
         for x in range(0, ndummies):
             dummy_index = dummies[x].index()
-            solute_ref_hard = solute_ref_hard.subtract(
-                solute.select(dummy_index)
-            )
-            solute_ref_todummy = solute_ref_todummy.add(
-                solute.select(dummy_index)
-            )
+            solute_ref_hard = solute_ref_hard.subtract(solute.select(dummy_index))
+
+    for non_dummy in to_non_dummies:
+        solute_ref_todummy = solute_ref_todummy.subtract(solute.select(non_dummy))
+
 
     if from_dummies is not None:
         ndummies = from_dummies.count()
@@ -1278,12 +1294,11 @@ def createSystemFreeEnergy(molecules):
 
         for x in range(0, ndummies):
             dummy_index = dummies[x].index()
-            solute_ref_hard = solute_ref_hard.subtract(
-                solute.select(dummy_index)
-            )
-            solute_ref_fromdummy = solute_ref_fromdummy.add(
-                solute.select(dummy_index)
-            )
+            solute_ref_hard = solute_ref_hard.subtract(solute.select(dummy_index))
+
+    for non_dummy in from_non_dummies:
+        solute_ref_fromdummy = solute_ref_fromdummy.subtract(solute.select(non_dummy))
+
 
     solute_grp_ref_hard.add(solute_ref_hard)
     solute_grp_ref_todummy.add(solute_ref_todummy)
@@ -1789,8 +1804,8 @@ def generateDistanceRestraintsDict(system):
     # Find atom nearest to COG
     molecules = system.molecules()
     molnums = molecules.molNums()
-    solute = molecules.at(MolNum(1))[0].molecule()
-    nearestcog_atom = getAtomNearCOG(solute)
+    solute = getSolute(system)
+    nearestcog_atom = getAtomNearCOG( solute )
     icoord = nearestcog_atom.property("coordinates")
     # Step 2) Find nearest 'CA' heavy atom in other solutes (skip water & ions)
     dmin = 9999999.0
@@ -1809,46 +1824,43 @@ def generateDistanceRestraintsDict(system):
             if d < dmin:
                 dmin = d
                 closest = ca
-    # Step 3) Compute position of 'mirror' CA. Find nearest CA atom to that
-    # point
-    jcoord = closest.property("coordinates")
-    mirror_coord = icoord - (jcoord - icoord)
-    dmin = 9999999.0
-    mirror_closest = None
-    for molnum in molnums:
-        molecule = molecules.molecule(molnum)[0].molecule()
-        if molecule == solute:
-            continue
-        if molecule.residues()[0].name() == ResName("WAT"):
-            continue
-        # print (molecule)
-        ca_atoms = molecule.selectAll(AtomName("CA"))
-        for ca in ca_atoms:
-            jcoord = ca.property("coordinates")
-            d = Sire.Maths.Vector().distance(mirror_coord, jcoord)
-            if d < dmin:
-                dmin = d
-                mirror_closest = ca
-    # print (mirror_closest)
-    # Step 4) Setup restraint parameters
-    kl = 10.00  # kcal/mol/Angstrom^2
-    Dl = 2.00  # Angstrom
-    i0 = nearestcog_atom.index().value()
-    i1 = closest.index().value()
-    i2 = mirror_closest.index().value()
-    r01 = Sire.Maths.Vector().distance(
-        nearestcog_atom.property("coordinates"),
-        closest.property("coordinates"),
-    )
-    r02 = Sire.Maths.Vector().distance(
-        nearestcog_atom.property("coordinates"),
-        mirror_closest.property("coordinates"),
-    )
-    restraints = {(i0, i1): (r01, kl, Dl), (i0, i2): (r02, kl, Dl)}
-    # print restraints
-    # distance_restraints_dict.val = restraints
-    # distance_restraints_dict
-    # import pdb; pdb.set_trace()
+
+    restraints = None
+
+    # Step 3) Compute position of 'mirror' CA. Find nearest CA atom to that point
+    if closest:
+        jcoord = closest.property("coordinates")
+        mirror_coord = icoord-(jcoord-icoord)
+        dmin = 9999999.0
+        mirror_closest = None
+        for molnum in molnums:
+            molecule = molecules.molecule(molnum)[0].molecule()
+            if molecule == solute:
+                continue
+            if molecule.residues()[0].name() == ResName("WAT"):
+                continue
+            #print (molecule)
+            ca_atoms = molecule.selectAll(AtomName("CA"))
+            for ca in ca_atoms:
+                jcoord = ca.property("coordinates")
+                d = Vector().distance(mirror_coord,jcoord)
+                if d < dmin:
+                    dmin = d
+                    mirror_closest = ca
+        #print (mirror_closest)
+        # Step 4) Setup restraint parameters
+        kl = 10.00 # kcal/mol/Angstrom^2
+        Dl = 2.00 # Angstrom
+        i0 = nearestcog_atom.index().value()
+        i1 = closest.index().value()
+        i2 = mirror_closest.index().value()
+        r01 = Vector().distance(nearestcog_atom.property("coordinates"),closest.property("coordinates"))
+        r02 = Vector().distance(nearestcog_atom.property("coordinates"),mirror_closest.property("coordinates"))
+        restraints = { (i0, i1): (r01, kl, Dl), (i0,i2): (r02, kl, Dl) }
+        #print restraints
+        #distance_restraints_dict.val = restraints
+        #distance_restraints_dict
+        #import pdb; pdb.set_trace()
 
     return restraints
 
@@ -2074,16 +2086,12 @@ def run():
                     "been specified. Will autogenerate."
                 )
                 restraints = generateDistanceRestraintsDict(system)
-                # Save restraints
-                print(
-                    "Autogenerated distance restraints values: %s "
-                    % distance_restraints_dict
-                )
-                stream = open("restraints.cfg", "w")
-                stream.write(
-                    "distance restraints dictionary = %s\n" % restraints
-                )
-                stream.close()
+                if restraints:
+                    # Save restraints
+                    print ("Autogenerated distance restraints values: %s " % distance_restraints_dict)
+                    stream = open("restraints.cfg",'w')
+                    stream.write("distance restraints dictionary = %s\n" % restraints)
+                    stream.close()
             system = setupDistanceRestraints(system, restraints=restraints)
 
         if hydrogen_mass_repartitioning_factor.val > 1.0:
@@ -2524,9 +2532,9 @@ def runFreeNrg():
         mdmoves = moves.moves()[0]
         integrator = mdmoves.integrator()
 
-        # saving all data
-        beg = nmoves.val * (i - 1)
-        end = nmoves.val * (i - 1) + nmoves.val
+        #saving all data
+        beg = (nmoves.val*(i-1)) + energy_frequency.val # Add energy_frequency beacuse energies not saved at t = 0
+        end = nmoves.val*(i-1)+nmoves.val + energy_frequency.val
         steps = list(range(beg, end, energy_frequency.val))
         outdata = getAllData(integrator, steps)
         gradients = integrator.getGradients()
