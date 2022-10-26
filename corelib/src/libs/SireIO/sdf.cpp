@@ -55,6 +55,7 @@
 #include "SireMol/bondtype.h"
 #include "SireMol/stereoscopy.h"
 #include "SireMol/radical.h"
+#include "SireMol/core.h"
 
 #include "SireBase/propertylist.h"
 

@@ -31,6 +31,8 @@ SireMaths::MultiDouble __copy__(const SireMaths::MultiDouble &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_MultiDouble_class(){
@@ -54,6 +56,7 @@ void register_MultiDouble_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith value in the multifloat" );
         
         }
@@ -66,6 +69,7 @@ void register_MultiDouble_class(){
                 "compareEqual"
                 , compareEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -78,6 +82,7 @@ void register_MultiDouble_class(){
                 "compareGreater"
                 , compareGreater_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -90,6 +95,7 @@ void register_MultiDouble_class(){
                 "compareGreaterEqual"
                 , compareGreaterEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -102,6 +108,7 @@ void register_MultiDouble_class(){
                 "compareLess"
                 , compareLess_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -114,6 +121,7 @@ void register_MultiDouble_class(){
                 "compareLessEqual"
                 , compareLessEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -126,6 +134,7 @@ void register_MultiDouble_class(){
                 "compareNotEqual"
                 , compareNotEqual_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -137,6 +146,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -148,6 +158,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "doubleSum"
                 , doubleSum_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -160,6 +171,7 @@ void register_MultiDouble_class(){
                 "fromArray"
                 , fromArray_function_value
                 , ( bp::arg("array") )
+                , bp::release_gil_policy()
                 , "Create an array of MultiFloats from the passed array of doubles. This\nwill pad the end of the array with zeroes if necessary" );
         
         }
@@ -172,6 +184,7 @@ void register_MultiDouble_class(){
                 "fromArray"
                 , fromArray_function_value
                 , ( bp::arg("array") )
+                , bp::release_gil_policy()
                 , "Create an array of MultiFloats from the passed array of floats. This will\npad the end of the array with zeroes if necessary" );
         
         }
@@ -184,6 +197,7 @@ void register_MultiDouble_class(){
                 "fromArray"
                 , fromArray_function_value
                 , ( bp::arg("array"), bp::arg("size") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -196,6 +210,7 @@ void register_MultiDouble_class(){
                 "fromArray"
                 , fromArray_function_value
                 , ( bp::arg("array"), bp::arg("size") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -208,6 +223,7 @@ void register_MultiDouble_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith value in the multifloat" );
         
         }
@@ -220,6 +236,7 @@ void register_MultiDouble_class(){
                 "getitem"
                 , getitem_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -231,6 +248,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "isAligned"
                 , isAligned_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this MultiDouble is correctly aligned. If it is not,\nthen any SSEAVX operations will fail" );
         
         }
@@ -243,6 +261,7 @@ void register_MultiDouble_class(){
                 "logicalAnd"
                 , logicalAnd_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -255,6 +274,7 @@ void register_MultiDouble_class(){
                 "logicalAndNot"
                 , logicalAndNot_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -266,6 +286,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "logicalNot"
                 , logicalNot_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -278,6 +299,7 @@ void register_MultiDouble_class(){
                 "logicalOr"
                 , logicalOr_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -290,6 +312,7 @@ void register_MultiDouble_class(){
                 "logicalXor"
                 , logicalXor_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -302,6 +325,7 @@ void register_MultiDouble_class(){
                 "max"
                 , max_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -314,6 +338,7 @@ void register_MultiDouble_class(){
                 "min"
                 , min_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -405,6 +430,7 @@ void register_MultiDouble_class(){
                 "quickSet"
                 , quickSet_function_value
                 , ( bp::arg("i"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the ith value without checking that i is valid" );
         
         }
@@ -416,6 +442,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "reciprocal"
                 , reciprocal_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -427,6 +454,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "rotate"
                 , rotate_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -438,6 +466,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "rsqrt"
                 , rsqrt_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -449,6 +478,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "rsqrt_approx"
                 , rsqrt_approx_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -460,6 +490,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "rsqrt_approx_nr"
                 , rsqrt_approx_nr_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -472,6 +503,7 @@ void register_MultiDouble_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the ith value of the multifloat to value" );
         
         }
@@ -483,6 +515,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -494,6 +527,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "sqrt"
                 , sqrt_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -505,6 +539,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "sum"
                 , sum_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -517,6 +552,7 @@ void register_MultiDouble_class(){
                 "swap"
                 , swap_function_value
                 , ( bp::arg("d0"), bp::arg("idx0"), bp::arg("d1"), bp::arg("idx1") )
+                , bp::release_gil_policy()
                 , "Swap the values of the value at index idx0 in f0 with the value at index idx in f1" );
         
         }
@@ -529,6 +565,7 @@ void register_MultiDouble_class(){
                 "toArray"
                 , toArray_function_value
                 , ( bp::arg("array") )
+                , bp::release_gil_policy()
                 , "Return the passed MultiDouble converted back into a normal array" );
         
         }
@@ -540,6 +577,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "toBinaryString"
                 , toBinaryString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -552,6 +590,7 @@ void register_MultiDouble_class(){
                 "toDoubleArray"
                 , toDoubleArray_function_value
                 , ( bp::arg("array") )
+                , bp::release_gil_policy()
                 , "Return the passed MultiFloat converted back into a normal array of doubles" );
         
         }
@@ -563,6 +602,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -574,6 +614,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -585,6 +626,7 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

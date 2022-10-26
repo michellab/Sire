@@ -38,6 +38,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Constraint_class(){
 
     { //::SireSystem::Constraint
@@ -53,6 +55,7 @@ void register_Constraint_class(){
                 "apply"
                 , apply_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Apply this constraint to the passed system, returning\na new system in which the constraint is satisfied" );
         
         }
@@ -65,6 +68,7 @@ void register_Constraint_class(){
                 "assertSatisfied"
                 , assertSatisfied_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Assert that the constraint is satisfied in the passed system\nThrow: SireSystem::constraint_error\n" );
         
         }
@@ -77,6 +81,7 @@ void register_Constraint_class(){
                 "isSatisfied"
                 , isSatisfied_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Return whether or not this constraint is satisfied for\nthe passed system" );
         
         }
@@ -89,6 +94,7 @@ void register_Constraint_class(){
                 "mayAffect"
                 , mayAffect_function_value
                 , ( bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Return whether or not this constraint may affect the passed delta" );
         
         }
@@ -100,7 +106,7 @@ void register_Constraint_class(){
             Constraint_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -112,6 +118,7 @@ void register_Constraint_class(){
             Constraint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

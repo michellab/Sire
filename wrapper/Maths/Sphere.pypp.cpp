@@ -27,6 +27,8 @@ SireMaths::Sphere __copy__(const SireMaths::Sphere &other){ return SireMaths::Sp
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Sphere_class(){
 
     { //::SireMaths::Sphere
@@ -57,6 +59,7 @@ void register_Sphere_class(){
                 "combinedVolume"
                 , combinedVolume_function_value
                 , ( bp::arg("spheres") )
+                , bp::release_gil_policy()
                 , "Return the combined volume of the passed array of spheres. This calculates the volume\nanalytically using the inclusionexclusion principle only up to third order\n" );
         
         }
@@ -81,6 +84,7 @@ void register_Sphere_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Return whether or not this sphere contains the point point\n(returns true even if the point is just on the surface of the sphere)" );
         
         }
@@ -93,6 +97,7 @@ void register_Sphere_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return whether or not this sphere contains other" );
         
         }
@@ -105,6 +110,7 @@ void register_Sphere_class(){
                 "intersectionVolume"
                 , intersectionVolume_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return the volume of space formed at the intersection of this sphere with other" );
         
         }
@@ -117,6 +123,7 @@ void register_Sphere_class(){
                 "intersectionVolume"
                 , intersectionVolume_function_value
                 , ( bp::arg("other0"), bp::arg("other1") )
+                , bp::release_gil_policy()
                 , "Return the volume of intersection of this sphere with the two other spheres.\nThis returns the volume of space covered by all three spheres." );
         
         }
@@ -129,6 +136,7 @@ void register_Sphere_class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return whether or not this sphere intersects with other" );
         
         }
@@ -154,6 +162,7 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "radius"
                 , radius_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -166,6 +175,7 @@ void register_Sphere_class(){
                 "setCenter"
                 , setCenter_function_value
                 , ( bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Set the position of the center of this sphere" );
         
         }
@@ -178,6 +188,7 @@ void register_Sphere_class(){
                 "setPosition"
                 , setPosition_function_value
                 , ( bp::arg("position") )
+                , bp::release_gil_policy()
                 , "Set the position of the center of this sphere" );
         
         }
@@ -190,6 +201,7 @@ void register_Sphere_class(){
                 "setRadius"
                 , setRadius_function_value
                 , ( bp::arg("radius") )
+                , bp::release_gil_policy()
                 , "Set the radius of this sphere" );
         
         }
@@ -201,6 +213,7 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "surfaceArea"
                 , surfaceArea_function_value
+                , bp::release_gil_policy()
                 , "Return the surface area of this sphere" );
         
         }
@@ -212,6 +225,7 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -224,6 +238,7 @@ void register_Sphere_class(){
                 "translate"
                 , translate_function_value
                 , ( bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Return a copy of this sphere translated by delta" );
         
         }
@@ -235,6 +250,7 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -246,6 +262,7 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "volume"
                 , volume_function_value
+                , bp::release_gil_policy()
                 , "Return the volume of this sphere" );
         
         }
@@ -257,6 +274,7 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

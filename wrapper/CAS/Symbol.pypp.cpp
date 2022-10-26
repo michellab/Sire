@@ -39,6 +39,8 @@ SireCAS::Symbol __copy__(const SireCAS::Symbol &other){ return SireCAS::Symbol(o
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Symbol_class(){
 
     { //::SireCAS::Symbol
@@ -56,6 +58,7 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "ID"
                 , ID_function_value
+                , bp::release_gil_policy()
                 , "Return the unique ID number of the symbol" );
         
         }
@@ -67,6 +70,7 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "children"
                 , children_function_value
+                , bp::release_gil_policy()
                 , "There are no child expressions in a symbol" );
         
         }
@@ -79,6 +83,7 @@ void register_Symbol_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Differentiate this symbol with respect to sym. This returns 1.0 if this\nis sym, else it returns 0.0" );
         
         }
@@ -91,6 +96,7 @@ void register_Symbol_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this symbol - returns the value of the symbol in values if\nit is present, else it returns 0.0" );
         
         }
@@ -103,6 +109,7 @@ void register_Symbol_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this symbol - returns the value of the symbol in values if\nit is present, else it returns 0" );
         
         }
@@ -115,6 +122,7 @@ void register_Symbol_class(){
                 "expand"
                 , expand_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -126,6 +134,7 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "functions"
                 , functions_function_value
+                , bp::release_gil_policy()
                 , "This is not a function" );
         
         }
@@ -137,6 +146,7 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Hash a symbol" );
         
         }
@@ -149,6 +159,7 @@ void register_Symbol_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Integrate this symbol with respect to sym. If sym == this, then\nreturn 0.5 sym^2, else return this  sym" );
         
         }
@@ -160,6 +171,7 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "isConstant"
                 , isConstant_function_value
+                , bp::release_gil_policy()
                 , "A symbol is by definition not constant" );
         
         }
@@ -172,6 +184,7 @@ void register_Symbol_class(){
                 "isFunction"
                 , isFunction_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Is this a function of symbol" );
         
         }
@@ -183,6 +196,7 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the symbol is null" );
         
         }
@@ -230,6 +244,7 @@ void register_Symbol_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "Return the expression that matches this symbol in identities - or return\nan expression holding only this symbol if it does no exist in identities" );
         
         }
@@ -241,6 +256,7 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return this symbol" );
         
         }
@@ -252,6 +268,7 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this symbol" );
         
         }
@@ -263,6 +280,7 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -274,6 +292,7 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -53,6 +53,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJSoftFunction_class(){
 
     { //::SireMM::CLJSoftFunction
@@ -67,6 +69,7 @@ void register_CLJSoftFunction_class(){
             CLJSoftFunction_exposer.def( 
                 "alpha"
                 , alpha_function_value
+                , bp::release_gil_policy()
                 , "Return the soft-core alpha value. A value of 0 is a completely hard\npotential, while increasing values of alpha will increasingly soften\nthe potential" );
         
         }
@@ -79,6 +82,7 @@ void register_CLJSoftFunction_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not this function contains a property called name" );
         
         }
@@ -90,6 +94,7 @@ void register_CLJSoftFunction_class(){
             CLJSoftFunction_exposer.def( 
                 "coulombPower"
                 , coulombPower_function_value
+                , bp::release_gil_policy()
                 , "Return the soft-core coulomb_power parameter. This is used to soften\nthe electrostatic interactions" );
         
         }
@@ -101,6 +106,7 @@ void register_CLJSoftFunction_class(){
             CLJSoftFunction_exposer.def( 
                 "isSoftened"
                 , isSoftened_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a softened function" );
         
         }
@@ -112,6 +118,7 @@ void register_CLJSoftFunction_class(){
             CLJSoftFunction_exposer.def( 
                 "properties"
                 , properties_function_value
+                , bp::release_gil_policy()
                 , "Return the properties that can be set in this function" );
         
         }
@@ -124,6 +131,7 @@ void register_CLJSoftFunction_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return the value of the property with name name" );
         
         }
@@ -136,6 +144,7 @@ void register_CLJSoftFunction_class(){
                 "setAlpha"
                 , setAlpha_function_value
                 , ( bp::arg("alpha") )
+                , bp::release_gil_policy()
                 , "Set the soft-core alpha parameter" );
         
         }
@@ -148,6 +157,7 @@ void register_CLJSoftFunction_class(){
                 "setCoulombPower"
                 , setCoulombPower_function_value
                 , ( bp::arg("power") )
+                , bp::release_gil_policy()
                 , "Set the soft-core coulomb power parameter" );
         
         }
@@ -160,6 +170,7 @@ void register_CLJSoftFunction_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the property with name name to value value" );
         
         }
@@ -172,6 +183,7 @@ void register_CLJSoftFunction_class(){
                 "setShiftDelta"
                 , setShiftDelta_function_value
                 , ( bp::arg("shift") )
+                , bp::release_gil_policy()
                 , "Set the soft-core shift delta parameter" );
         
         }
@@ -183,6 +195,7 @@ void register_CLJSoftFunction_class(){
             CLJSoftFunction_exposer.def( 
                 "shiftDelta"
                 , shiftDelta_function_value
+                , bp::release_gil_policy()
                 , "Return the soft-core shift_delta parameter. This is used to soften\nthe LJ interactions" );
         
         }
@@ -194,6 +207,7 @@ void register_CLJSoftFunction_class(){
             CLJSoftFunction_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

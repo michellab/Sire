@@ -25,6 +25,8 @@ SireCAS::Exp __copy__(const SireCAS::Exp &other){ return SireCAS::Exp(other); }
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Exp_class(){
 
     { //::SireCAS::Exp
@@ -41,6 +43,7 @@ void register_Exp_class(){
             Exp_exposer.def( 
                 "core"
                 , core_function_value
+                , bp::release_gil_policy()
                 , "Return the core of this power" );
         
         }
@@ -53,6 +56,7 @@ void register_Exp_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Differentiatial of e^x is e^x" );
         
         }
@@ -65,6 +69,7 @@ void register_Exp_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this expression at values" );
         
         }
@@ -77,6 +82,7 @@ void register_Exp_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Complex evaluate" );
         
         }
@@ -88,6 +94,7 @@ void register_Exp_class(){
             Exp_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash of this Exp function" );
         
         }
@@ -100,6 +107,7 @@ void register_Exp_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Integral of e^x is e^x + c" );
         
         }
@@ -112,6 +120,7 @@ void register_Exp_class(){
             Exp_exposer.def( 
                 "power"
                 , power_function_value
+                , bp::release_gil_policy()
                 , "Return the power of this power" );
         
         }
@@ -123,6 +132,7 @@ void register_Exp_class(){
             Exp_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this function" );
         
         }
@@ -134,6 +144,7 @@ void register_Exp_class(){
             Exp_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -145,6 +156,7 @@ void register_Exp_class(){
             Exp_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

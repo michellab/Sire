@@ -31,6 +31,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_HMCVelGen_class(){
 
     { //::SireMove::HMCVelGen
@@ -46,6 +48,7 @@ void register_HMCVelGen_class(){
                 "generate"
                 , generate_function_value
                 , ( bp::arg("system"), bp::arg("md") )
+                , bp::release_gil_policy()
                 , "Generate the velocites in the passed MD object,\nreturning the biasing factor for the HMC algorithm" );
         
         }
@@ -58,6 +61,7 @@ void register_HMCVelGen_class(){
                 "getBias"
                 , getBias_function_value
                 , ( bp::arg("md") )
+                , bp::release_gil_policy()
                 , "Return the bias for the velocities in the passed MD object" );
         
         }
@@ -70,6 +74,7 @@ void register_HMCVelGen_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator used to generate the random\nnumbers needed by this generator" );
         
         }
@@ -82,6 +87,7 @@ void register_HMCVelGen_class(){
                 "setTemperature"
                 , setTemperature_function_value
                 , ( bp::arg("temperature") )
+                , bp::release_gil_policy()
                 , "Set the temperature of the velocities to be generated" );
         
         }
@@ -93,6 +99,7 @@ void register_HMCVelGen_class(){
             HMCVelGen_exposer.def( 
                 "temperature"
                 , temperature_function_value
+                , bp::release_gil_policy()
                 , "Return the temperature of the velocities to be generated" );
         
         }

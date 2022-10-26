@@ -257,8 +257,12 @@ def setupDCD(system):
         interval = ncycles.val*nmoves.val
         Trajectory = DCDFile(dcd_filename, system[MGName("all")], system.property("space"), timestep.val, interval)
     else:
-        Trajectory = DCDFile(dcd_filename, system[MGName("all")], system.property("space"), timestep.val,
-                         interval=buffered_coords_freq.val * ncycles_per_snap.val)
+        if buffered_coords_freq.val == 0:
+            Trajectory = DCDFile(dcd_filename, system[MGName("all")], system.property("space"), timestep.val,
+                                 interval= ncycles_per_snap.val * nmoves.val)
+        else:
+            Trajectory = DCDFile(dcd_filename, system[MGName("all")], system.property("space"), timestep.val,
+                            interval=buffered_coords_freq.val * ncycles_per_snap.val)
 
     return Trajectory
 
@@ -1208,6 +1212,7 @@ def setupMovesFreeEnergy(system, debug_seed, GPUS, lam_val):
     Integrator_OpenMM.setIntegrator(integrator_type.val)
     Integrator_OpenMM.setFriction(inverse_friction.val)  # Only meaningful for Langevin/Brownian integrators
     Integrator_OpenMM.setPlatform(platform.val)
+    Integrator_OpenMM.setCombiningRules(combining_rules.val)
     Integrator_OpenMM.setConstraintType(constraint.val)
     Integrator_OpenMM.setCutoffType(cutoff_type.val)
     Integrator_OpenMM.setFieldDielectric(rf_dielectric.val)
@@ -1738,8 +1743,8 @@ def runFreeNrg():
         integrator = mdmoves.integrator()
 
         #saving all data
-        beg = (nmoves.val*(i-1))
-        end = nmoves.val*(i-1)+nmoves.val
+        beg = (nmoves.val*(i-1)) + energy_frequency.val # Add energy_frequency beacuse energies not saved at t = 0
+        end = nmoves.val*(i-1)+nmoves.val + energy_frequency.val
         steps = list(range(beg, end, energy_frequency.val))
         outdata = getAllData(integrator, steps)
         gradients = integrator.getGradients()

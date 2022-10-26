@@ -24,6 +24,8 @@ SireSystem::MonitorComponent __copy__(const SireSystem::MonitorComponent &other)
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MonitorComponent_class(){
 
     { //::SireSystem::MonitorComponent
@@ -41,7 +43,7 @@ void register_MonitorComponent_class(){
             MonitorComponent_exposer.def( 
                 "accumulator"
                 , accumulator_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the accumulator that is being used to accumulate the\nvalues of the component being monitored" );
         
         }
@@ -53,6 +55,7 @@ void register_MonitorComponent_class(){
             MonitorComponent_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Clear the statistics in this monitor" );
         
         }
@@ -64,7 +67,7 @@ void register_MonitorComponent_class(){
             MonitorComponent_exposer.def( 
                 "component"
                 , component_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the component being monitored" );
         
         }
@@ -77,6 +80,7 @@ void register_MonitorComponent_class(){
                 "monitor"
                 , monitor_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Call this function to add the statistics of the monitored\ncomponent from the passed system to the accumulator" );
         
         }
@@ -103,6 +107,7 @@ void register_MonitorComponent_class(){
             MonitorComponent_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

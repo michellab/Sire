@@ -29,6 +29,8 @@ SireMove::Replicas __copy__(const SireMove::Replicas &other){ return SireMove::R
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Replicas_class(){
@@ -64,6 +66,7 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "collectSupraStats"
                 , collectSupraStats_function_value
+                , bp::release_gil_policy()
                 , "Collect statistics - this records the current lambdaTrajectory and adds it to the history" );
         
         }
@@ -75,6 +78,7 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "lambdaTrajectory"
                 , lambdaTrajectory_function_value
+                , bp::release_gil_policy()
                 , "Return the lambda values for each of the replicas, in replica ID order.\nThis allows the lambda trajectory for each replica to be easily\ncollected during a simulation" );
         
         }
@@ -86,6 +90,7 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "lambdaTrajectoryHistory"
                 , lambdaTrajectoryHistory_function_value
+                , bp::release_gil_policy()
                 , "Return the history of lambda values sampled by each replica" );
         
         }
@@ -97,6 +102,7 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "nReplicas"
                 , nReplicas_function_value
+                , bp::release_gil_policy()
                 , "Return the number of replicas in this set" );
         
         }
@@ -148,6 +154,7 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "resetReplicaIDs"
                 , resetReplicaIDs_function_value
+                , bp::release_gil_policy()
                 , "Reset the replica IDs - this sets the ID of the ith replica to i" );
         
         }
@@ -160,6 +167,7 @@ void register_Replicas_class(){
                 "setChemicalPotential"
                 , setChemicalPotential_function_value
                 , ( bp::arg("chemical_potential") )
+                , bp::release_gil_policy()
                 , "Set the chemical potential of the ensemble sampled by all\nreplicas to chemical_potential\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -172,6 +180,7 @@ void register_Replicas_class(){
                 "setChemicalPotential"
                 , setChemicalPotential_function_value
                 , ( bp::arg("i"), bp::arg("chemical_potential") )
+                , bp::release_gil_policy()
                 , "Set the chemical potential of the ensemble sampled by the ith\nreplica to chemical_potential\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -184,6 +193,7 @@ void register_Replicas_class(){
                 "setEnergyComponent"
                 , setEnergyComponent_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Set the energy component sampled by all replicas to symbol" );
         
         }
@@ -196,6 +206,7 @@ void register_Replicas_class(){
                 "setEnergyComponent"
                 , setEnergyComponent_function_value
                 , ( bp::arg("i"), bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Set the energy component sampled by the ith replica to symbol\nThrow: SireError::invalid_index\n" );
         
         }
@@ -208,6 +219,7 @@ void register_Replicas_class(){
                 "setFugacity"
                 , setFugacity_function_value
                 , ( bp::arg("fugacity") )
+                , bp::release_gil_policy()
                 , "Set the fugacity of the ensemble sampled by all replicas\nto fugacity\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -220,6 +232,7 @@ void register_Replicas_class(){
                 "setFugacity"
                 , setFugacity_function_value
                 , ( bp::arg("i"), bp::arg("fugacity") )
+                , bp::release_gil_policy()
                 , "Set the fugacity of the ensemble sampled by the ith replica\nto fugacity\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -232,6 +245,7 @@ void register_Replicas_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("rangenerator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator used by all of the replicas\nto rangenerator - this doesnt give all of the replicas\nthe same generator - rather it uses this generator to\nreproducibly generate new generators for each replica" );
         
         }
@@ -244,6 +258,7 @@ void register_Replicas_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("i"), bp::arg("rangenerator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator used by the ith replica to generator\nThrow: SireError::invalid_index\n" );
         
         }
@@ -256,6 +271,7 @@ void register_Replicas_class(){
                 "setLambdaComponent"
                 , setLambdaComponent_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Set the lambda component used for Hamiltonian replica exchange\nfor all replicas to symbol" );
         
         }
@@ -268,6 +284,7 @@ void register_Replicas_class(){
                 "setLambdaComponent"
                 , setLambdaComponent_function_value
                 , ( bp::arg("i"), bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Set the lambda component used by the ith replica for Hamiltonian\nreplica exchange to symbol\nThrow: SireError::invalid_index\n" );
         
         }
@@ -280,6 +297,7 @@ void register_Replicas_class(){
                 "setLambdaValue"
                 , setLambdaValue_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the lambda value for Hamiltonian replica exchange for all\nreplicas to value" );
         
         }
@@ -292,6 +310,7 @@ void register_Replicas_class(){
                 "setLambdaValue"
                 , setLambdaValue_function_value
                 , ( bp::arg("i"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the value of lambda used for Hamiltonian replica exchange for\nthe ith replica to value\nThrow: SireError::invalid_index\n" );
         
         }
@@ -304,6 +323,7 @@ void register_Replicas_class(){
                 "setPressure"
                 , setPressure_function_value
                 , ( bp::arg("pressure") )
+                , bp::release_gil_policy()
                 , "Set the pressure of the ensemble sampled by all replicas\nto pressure" );
         
         }
@@ -316,6 +336,7 @@ void register_Replicas_class(){
                 "setPressure"
                 , setPressure_function_value
                 , ( bp::arg("i"), bp::arg("pressure") )
+                , bp::release_gil_policy()
                 , "Set the pressure of the ensemble sampled by the ith replica\nto pressure\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -328,6 +349,7 @@ void register_Replicas_class(){
                 "setReplica"
                 , setReplica_function_value
                 , ( bp::arg("replica") )
+                , bp::release_gil_policy()
                 , "Set the replicas to all be a copy of replica" );
         
         }
@@ -340,6 +362,7 @@ void register_Replicas_class(){
                 "setReplica"
                 , setReplica_function_value
                 , ( bp::arg("i"), bp::arg("replica") )
+                , bp::release_gil_policy()
                 , "Set the ith replica equal to replica\nThrow: SireError::invalid_index\n" );
         
         }
@@ -352,6 +375,7 @@ void register_Replicas_class(){
                 "setReplicas"
                 , setReplicas_function_value
                 , ( bp::arg("replicas") )
+                , bp::release_gil_policy()
                 , "Set the replicas from a copy of passed replicas" );
         
         }
@@ -364,6 +388,7 @@ void register_Replicas_class(){
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
                 , ( bp::arg("spaceproperty") )
+                , bp::release_gil_policy()
                 , "Set the property used to find the simulation space for all replicas\nto spaceproperty" );
         
         }
@@ -376,6 +401,7 @@ void register_Replicas_class(){
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
                 , ( bp::arg("i"), bp::arg("spaceproperty") )
+                , bp::release_gil_policy()
                 , "Set the space property used by the ith replica to spaceproperty\nThrow: SireError::invalid_index\n" );
         
         }
@@ -388,6 +414,7 @@ void register_Replicas_class(){
                 "setSubSystem"
                 , setSubSystem_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Overloaded function used to set all of the replicas equal to subsystem" );
         
         }
@@ -400,6 +427,7 @@ void register_Replicas_class(){
                 "setSubSystem"
                 , setSubSystem_function_value
                 , ( bp::arg("subsystem") )
+                , bp::release_gil_policy()
                 , "Overloaded function used to set all of the replicas equal to subsystem" );
         
         }
@@ -412,6 +440,7 @@ void register_Replicas_class(){
                 "setSubSystem"
                 , setSubSystem_function_value
                 , ( bp::arg("i"), bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Overloaded function used to set the ith subsystem equal to system\nThrow: SireError::invalid_index\n" );
         
         }
@@ -424,6 +453,7 @@ void register_Replicas_class(){
                 "setSubSystem"
                 , setSubSystem_function_value
                 , ( bp::arg("i"), bp::arg("subsystem") )
+                , bp::release_gil_policy()
                 , "Overloaded function used to ensure that this system only contains\nReplica subsystems\nThrow: SireError::invalid_index\n" );
         
         }
@@ -436,6 +466,7 @@ void register_Replicas_class(){
                 "setTemperature"
                 , setTemperature_function_value
                 , ( bp::arg("temperature") )
+                , bp::release_gil_policy()
                 , "Set the temperature of the ensemble sampled by all replicas\nto temperature\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -448,6 +479,7 @@ void register_Replicas_class(){
                 "setTemperature"
                 , setTemperature_function_value
                 , ( bp::arg("i"), bp::arg("temperature") )
+                , bp::release_gil_policy()
                 , "Set the temperature of the ensemble sampled by\nthe ith replica to temperature\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -460,6 +492,7 @@ void register_Replicas_class(){
                 "swapMolecules"
                 , swapMolecules_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Swap the molecules between replicas i and j\nThrow: SireError::invalid_index\n" );
         
         }
@@ -483,6 +516,7 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

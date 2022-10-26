@@ -30,6 +30,8 @@ SireMove::MTSMC __copy__(const SireMove::MTSMC &other){ return SireMove::MTSMC(o
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MTSMC_class(){
 
     { //::SireMove::MTSMC
@@ -54,6 +56,7 @@ void register_MTSMC_class(){
                 "addSlowConstraint"
                 , addSlowConstraint_function_value
                 , ( bp::arg("constraint") )
+                , bp::release_gil_policy()
                 , "Add a constraint that is applied at the end of each block\nof fast moves (i.e. before the slow move is tested)" );
         
         }
@@ -65,6 +68,7 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Completely clear all of the move statistics" );
         
         }
@@ -76,7 +80,7 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "fastEnergyComponent"
                 , fastEnergyComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the energy component on which the fast moves will operate" );
         
         }
@@ -88,7 +92,7 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "fastMoves"
                 , fastMoves_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the fast moves that will be performed for every\nslow move" );
         
         }
@@ -112,6 +116,7 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "nFastMoves"
                 , nFastMoves_function_value
+                , bp::release_gil_policy()
                 , "Return the number of fast moves to perform per slow move" );
         
         }
@@ -138,6 +143,7 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "removeSlowConstraints"
                 , removeSlowConstraints_function_value
+                , bp::release_gil_policy()
                 , "Remove all of the slow constraints" );
         
         }
@@ -150,6 +156,7 @@ void register_MTSMC_class(){
                 "setFastEnergyComponent"
                 , setFastEnergyComponent_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "Set the energy component to be used for the fast moves" );
         
         }
@@ -162,6 +169,7 @@ void register_MTSMC_class(){
                 "setFastMoves"
                 , setFastMoves_function_value
                 , ( bp::arg("fastmoves") )
+                , bp::release_gil_policy()
                 , "Set the moves to be performed using the fast energy component.\nNote that these moves will be performd using the current\nfast energy component, which will override any energy\ncomponent currently set for these moves" );
         
         }
@@ -174,6 +182,7 @@ void register_MTSMC_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("rangenerator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator used by this and all of the\ncontained moves" );
         
         }
@@ -186,6 +195,7 @@ void register_MTSMC_class(){
                 "setNFastMoves"
                 , setNFastMoves_function_value
                 , ( bp::arg("nfast") )
+                , bp::release_gil_policy()
                 , "Return the number of fast moves to perform per slow move" );
         
         }
@@ -198,6 +208,7 @@ void register_MTSMC_class(){
                 "setSlowConstraints"
                 , setSlowConstraints_function_value
                 , ( bp::arg("constraints") )
+                , bp::release_gil_policy()
                 , "Set the constraints that are applied at the end of each block\nof fast moves (i.e. before the slow move is tested).\nThis replaces any existing slow constraints" );
         
         }
@@ -210,6 +221,7 @@ void register_MTSMC_class(){
                 "setSlowEnergyComponent"
                 , setSlowEnergyComponent_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "Set the energy component that will be used for the slow moves" );
         
         }
@@ -233,7 +245,7 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "slowEnergyComponent"
                 , slowEnergyComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the energy component that will ultimately be used\nto generate the ensemble" );
         
         }
@@ -245,6 +257,7 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this move" );
         
         }
@@ -256,6 +269,7 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

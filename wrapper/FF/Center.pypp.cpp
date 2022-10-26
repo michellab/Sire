@@ -39,6 +39,8 @@ SireFF::Center __copy__(const SireFF::Center &other){ return SireFF::Center(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Center_class(){
 
     { //::SireFF::Center
@@ -57,6 +59,7 @@ void register_Center_class(){
                 "addForce"
                 , addForce_function_value
                 , ( bp::arg("molforces"), bp::arg("force") )
+                , bp::release_gil_policy()
                 , "Decompose the force force acting on this point from the\nmolecule whose forces are in molforces and add the\nforce onto the table" );
         
         }
@@ -69,6 +72,7 @@ void register_Center_class(){
                 "addForce"
                 , addForce_function_value
                 , ( bp::arg("forces"), bp::arg("force") )
+                , bp::release_gil_policy()
                 , "Decompose the force force into the forces acting on\nthe molecules that contribute to this point and add those\nforces onto the table forces" );
         
         }
@@ -81,6 +85,7 @@ void register_Center_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Return whether or not the molecule with number molnum is\nneeded to generate this point" );
         
         }
@@ -93,6 +98,7 @@ void register_Center_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this molecule with ID molid is\nneeded to generate this point" );
         
         }
@@ -104,6 +110,7 @@ void register_Center_class(){
             Center_exposer.def( 
                 "isExtraMoleculePoint"
                 , isExtraMoleculePoint_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is an extramolecular point (it is independent\nof the coordinates of atoms in any molecule, i.e. it is just a point in space)" );
         
         }
@@ -115,6 +122,7 @@ void register_Center_class(){
             Center_exposer.def( 
                 "isInterMoleculePoint"
                 , isInterMoleculePoint_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is an intermolecular point (it depends on\ncoordinates of atoms from than one molecule)" );
         
         }
@@ -126,6 +134,7 @@ void register_Center_class(){
             Center_exposer.def( 
                 "isIntraMoleculePoint"
                 , isIntraMoleculePoint_function_value
+                , bp::release_gil_policy()
                 , "Return whether this is an intramolecular point (it depends on coordinates\nof atoms in just one molecule)" );
         
         }
@@ -137,6 +146,7 @@ void register_Center_class(){
             Center_exposer.def( 
                 "molecules"
                 , molecules_function_value
+                , bp::release_gil_policy()
                 , "Return all of the molecules used to generate this point" );
         
         }
@@ -148,6 +158,7 @@ void register_Center_class(){
             Center_exposer.def( 
                 "nMolecules"
                 , nMolecules_function_value
+                , bp::release_gil_policy()
                 , "Return the number of molecules needed to generate this point" );
         
         }
@@ -175,6 +186,7 @@ void register_Center_class(){
                 "setSpace"
                 , setSpace_function_value
                 , ( bp::arg("space") )
+                , bp::release_gil_policy()
                 , "Set the space - if there is more than one molecule, then this\npoint can only be used with a cartesian, non-periodic space" );
         
         }
@@ -186,6 +198,7 @@ void register_Center_class(){
             Center_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation" );
         
         }
@@ -197,6 +210,7 @@ void register_Center_class(){
             Center_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -209,6 +223,7 @@ void register_Center_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "Update the molecules used to create this point" );
         
         }
@@ -221,6 +236,7 @@ void register_Center_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Update the molecules used to create this point" );
         
         }
@@ -233,6 +249,7 @@ void register_Center_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Update the molecules used to create this point" );
         
         }
@@ -245,6 +262,7 @@ void register_Center_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molgroups") )
+                , bp::release_gil_policy()
                 , "Update the molecules used to create this point" );
         
         }
@@ -257,6 +275,7 @@ void register_Center_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("forcetable") )
+                , bp::release_gil_policy()
                 , "Return whether or not this point uses data from any of the\nmolecules in the passed forcetable" );
         
         }
@@ -269,6 +288,7 @@ void register_Center_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Return whether or not this point uses data from any of the\nmolecules in molecules" );
         
         }
@@ -281,6 +301,7 @@ void register_Center_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Return whether or not this point uses data from any of the\nmolecules in the group molgroup" );
         
         }
@@ -293,6 +314,7 @@ void register_Center_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("molgroups") )
+                , bp::release_gil_policy()
                 , "Return whether or not this point uses data from any of the\nmolecules in the groups in molgroups" );
         
         }
@@ -305,6 +327,7 @@ void register_Center_class(){
                 "wouldUpdate"
                 , wouldUpdate_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "Return whether or not the passed molecule would change this point" );
         
         }
@@ -317,6 +340,7 @@ void register_Center_class(){
                 "wouldUpdate"
                 , wouldUpdate_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Return whether or not the passed molecules would change this point" );
         
         }
@@ -329,6 +353,7 @@ void register_Center_class(){
                 "wouldUpdate"
                 , wouldUpdate_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Return whether or not the passed molecules would change this point" );
         
         }
@@ -341,6 +366,7 @@ void register_Center_class(){
                 "wouldUpdate"
                 , wouldUpdate_function_value
                 , ( bp::arg("molgroups") )
+                , bp::release_gil_policy()
                 , "Return whether or not the passed molecules would change this point" );
         
         }

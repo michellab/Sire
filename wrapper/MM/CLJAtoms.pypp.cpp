@@ -49,6 +49,8 @@ SireMM::CLJAtoms __copy__(const SireMM::CLJAtoms &other){ return SireMM::CLJAtom
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_CLJAtoms_class(){
@@ -95,6 +97,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "IDs"
                 , IDs_function_value
+                , bp::release_gil_policy()
                 , "Return the IDs of all of the atoms" );
         
         }
@@ -107,6 +110,7 @@ void register_CLJAtoms_class(){
                 "append"
                 , append_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Append the passed atom onto the end of this set. Note that this is not space efficient\nas the atom will be added with a lot of padding" );
         
         }
@@ -131,6 +135,7 @@ void register_CLJAtoms_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith atom in the vector" );
         
         }
@@ -142,6 +147,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "atoms"
                 , atoms_function_value
+                , bp::release_gil_policy()
                 , "Return an array of all of the atoms" );
         
         }
@@ -153,6 +159,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "charges"
                 , charges_function_value
+                , bp::release_gil_policy()
                 , "Return the charges of all of the atoms" );
         
         }
@@ -164,6 +171,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "coordinates"
                 , coordinates_function_value
+                , bp::release_gil_policy()
                 , "Return the coordinates of all of the atoms" );
         
         }
@@ -176,6 +184,7 @@ void register_CLJAtoms_class(){
                 "copyIn"
                 , copyIn_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Copy the contents of other into this vectors, starting at index 0,\nand copying all elements of other" );
         
         }
@@ -187,6 +196,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in this set. Note that vectorisation\nmay mean that the array of atoms has been padded with dummy atoms" );
         
         }
@@ -211,6 +221,7 @@ void register_CLJAtoms_class(){
                 "getitem"
                 , getitem_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith atom in the vector" );
         
         }
@@ -222,6 +233,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "hasDummies"
                 , hasDummies_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not there are any dummy (or padded) atoms in this set" );
         
         }
@@ -233,6 +245,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "idOfDummy"
                 , idOfDummy_function_value
+                , bp::release_gil_policy()
                 , "Return a MultiFloat of the ID of a dummy atom" );
         
         }
@@ -245,6 +258,7 @@ void register_CLJAtoms_class(){
                 "isDummy"
                 , isDummy_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -256,6 +270,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this array is empty" );
         
         }
@@ -267,6 +282,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "isPadded"
                 , isPadded_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -278,6 +294,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "ljParameters"
                 , ljParameters_function_value
+                , bp::release_gil_policy()
                 , "Return the charges of all of the atoms" );
         
         }
@@ -290,6 +307,7 @@ void register_CLJAtoms_class(){
                 "makeDummy"
                 , makeDummy_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Make the ith atom into a dummy atom (set the atom ID to 0)" );
         
         }
@@ -301,6 +319,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "maxCoords"
                 , maxCoords_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum coordinates of these atoms (ignoring dummies)" );
         
         }
@@ -312,6 +331,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "minCoords"
                 , minCoords_function_value
+                , bp::release_gil_policy()
                 , "Return the minimum coordinates of these atoms (ignoring dummies)" );
         
         }
@@ -323,6 +343,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of non-dummy atoms in this set. This is equal to\ncount() - nDummies()" );
         
         }
@@ -334,6 +355,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "nDummies"
                 , nDummies_function_value
+                , bp::release_gil_policy()
                 , "Return the number of dummy (or padded) atoms in this set" );
         
         }
@@ -345,6 +367,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "nPadded"
                 , nPadded_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -356,6 +379,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "negate"
                 , negate_function_value
+                , bp::release_gil_policy()
                 , "Return a copy of these CLJAtoms where the charge and LJ epsilon parameters\nare negated. This will mean that the negative of the energy of these CLJAtoms\nwill be calculated by the CLJFunctions (useful for calculating energy differences)" );
         
         }
@@ -434,6 +458,7 @@ void register_CLJAtoms_class(){
                 "resize"
                 , resize_function_value
                 , ( bp::arg("new_size") )
+                , bp::release_gil_policy()
                 , "Resize this collection to hold n atoms. This will add dummy atoms (and padding)\nif necessary, or will delete elements (but keeping dummy padding) if needed" );
         
         }
@@ -446,6 +471,7 @@ void register_CLJAtoms_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Overwrite the atom at index i with the data in atom" );
         
         }
@@ -458,6 +484,7 @@ void register_CLJAtoms_class(){
                 "setAllID"
                 , setAllID_function_value
                 , ( bp::arg("idnum") )
+                , bp::release_gil_policy()
                 , "Set the ID number of all (non-dummy) atoms to idnum" );
         
         }
@@ -470,6 +497,7 @@ void register_CLJAtoms_class(){
                 "setCharge"
                 , setCharge_function_value
                 , ( bp::arg("i"), bp::arg("charge") )
+                , bp::release_gil_policy()
                 , "Set the charge of the ith atom to charge" );
         
         }
@@ -482,6 +510,7 @@ void register_CLJAtoms_class(){
                 "setCoordinates"
                 , setCoordinates_function_value
                 , ( bp::arg("i"), bp::arg("coords") )
+                , bp::release_gil_policy()
                 , "Set the coordinates of the ith atom to coords" );
         
         }
@@ -494,6 +523,7 @@ void register_CLJAtoms_class(){
                 "setID"
                 , setID_function_value
                 , ( bp::arg("i"), bp::arg("idnum") )
+                , bp::release_gil_policy()
                 , "Set the ID number for the ith atom to idnum" );
         
         }
@@ -506,6 +536,7 @@ void register_CLJAtoms_class(){
                 "setLJParameter"
                 , setLJParameter_function_value
                 , ( bp::arg("i"), bp::arg("ljparam") )
+                , bp::release_gil_policy()
                 , "Set the LJ parameter of the ith atom to ljparam" );
         
         }
@@ -529,6 +560,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in this set. Note that vectorisation\nmay mean that the array of atoms has been padded with dummy atoms" );
         
         }
@@ -540,6 +572,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "squeeze"
                 , squeeze_function_value
+                , bp::release_gil_policy()
                 , "Return a squeezed copy of these CLJAtoms whereby all of the\ndummy atoms are removed and atoms squeezed into a single, contiguous space" );
         
         }
@@ -551,6 +584,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -562,6 +596,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -573,6 +608,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

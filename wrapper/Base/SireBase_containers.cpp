@@ -45,6 +45,7 @@
 #include "SireBase/propertylist.h"
 #include "SireBase/numberproperty.h"
 #include "SireBase/stringproperty.h"
+#include "SireBase/properties.h"
 
 #include "SireCAS/expressionproperty.h"
 
@@ -314,6 +315,8 @@ void register_SireBase_containers()
     register_list< QList< PropertyPtr > >();
 
     register_PropertyList();
+
+    register_list< QList< Properties > >();
 
     #if QT_VERSION >= QT_VERSION_CHECK(4, 2, 0)
     register_dict< QHash<QString,PropertyName> >();

@@ -37,6 +37,7 @@
 #include "SireMol/atomcoords.h"
 #include "SireMol/atomvelocities.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/core.h"
 
 #include "SireVol/periodicbox.h"
 #include "SireVol/triclinicbox.h"

@@ -38,6 +38,7 @@
 #include "SireMol/mgname.h"
 #include "SireMol/molidx.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/core.h"
 
 #include "SireUnits/units.h"
 

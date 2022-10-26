@@ -51,6 +51,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CGID_class(){
 
     { //::SireMol::CGID
@@ -65,6 +67,7 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "any"
                 , any_function_value
+                , bp::release_gil_policy()
                 , "Return a match for any cutgroup" );
         
         }
@@ -77,6 +80,7 @@ void register_CGID_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return a specific atom in the matching residues" );
         
         }
@@ -88,6 +92,7 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "atoms"
                 , atoms_function_value
+                , bp::release_gil_policy()
                 , "Return the atoms in the matching residues" );
         
         }
@@ -100,7 +105,21 @@ void register_CGID_class(){
                 "atoms"
                 , atoms_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Return a range of atoms in the matching residues" );
+        
+        }
+        { //::SireMol::CGID::fromString
+        
+            typedef ::SireMol::CGIdentifier ( *fromString_function_type )( ::QString const & );
+            fromString_function_type fromString_function_value( &::SireMol::CGID::fromString );
+            
+            CGID_exposer.def( 
+                "fromString"
+                , fromString_function_value
+                , ( bp::arg("id") )
+                , bp::release_gil_policy()
+                , "Return an CGID constructed from the passed string" );
         
         }
         { //::SireMol::CGID::inverse
@@ -111,6 +130,7 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "inverse"
                 , inverse_function_value
+                , bp::release_gil_policy()
                 , "Return the inverse of this match" );
         
         }
@@ -122,6 +142,7 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "invert"
                 , invert_function_value
+                , bp::release_gil_policy()
                 , "Return the inverse of this match" );
         
         }
@@ -134,6 +155,7 @@ void register_CGID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Map this ID back to the indicies of the CutGroups\nwithin the molecule described by the info in molinfo" );
         
         }
@@ -346,10 +368,12 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
         CGID_exposer.staticmethod( "any" );
+        CGID_exposer.staticmethod( "fromString" );
         CGID_exposer.staticmethod( "typeName" );
         CGID_exposer.def( "__str__", &__str__< ::SireMol::CGID > );
         CGID_exposer.def( "__repr__", &__str__< ::SireMol::CGID > );

@@ -35,6 +35,8 @@ SireCAS::ArcCosh __copy__(const SireCAS::ArcCosh &other){ return SireCAS::ArcCos
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ArcCosh_class(){
 
     { //::SireCAS::ArcCosh
@@ -52,6 +54,7 @@ void register_ArcCosh_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate this function" );
         
         }
@@ -64,6 +67,7 @@ void register_ArcCosh_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Complex evaluation" );
         
         }
@@ -76,6 +80,7 @@ void register_ArcCosh_class(){
             ArcCosh_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -87,6 +92,7 @@ void register_ArcCosh_class(){
             ArcCosh_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -51,6 +51,8 @@ SireID::IDAndSet<SireMol::MolID> __copy__(const SireID::IDAndSet<SireMol::MolID>
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_IDAndSet_MolID__class(){
 
     { //::SireID::IDAndSet< SireMol::MolID >
@@ -83,6 +85,7 @@ void register_IDAndSet_MolID__class(){
             IDAndSet_MolID__exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +98,7 @@ void register_IDAndSet_MolID__class(){
             IDAndSet_MolID__exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -108,6 +112,7 @@ void register_IDAndSet_MolID__class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("mols") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -121,6 +126,7 @@ void register_IDAndSet_MolID__class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -134,6 +140,7 @@ void register_IDAndSet_MolID__class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molgroups") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -180,6 +187,7 @@ void register_IDAndSet_MolID__class(){
             IDAndSet_MolID__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -192,6 +200,7 @@ void register_IDAndSet_MolID__class(){
             IDAndSet_MolID__exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -204,6 +213,7 @@ void register_IDAndSet_MolID__class(){
             IDAndSet_MolID__exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

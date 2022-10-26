@@ -3,48 +3,29 @@
 #  CMake Project file for Sire
 #    Python 3 wrappers
 #
-#   (C) Christopher Woods
-#
 ################################
 
-# project version
-set (SIRE_VERSION_MAJOR "2022")
-set (SIRE_VERSION_MINOR "3")
-set (SIRE_VERSION_PATCH "0")
+# require cmake >= 3.3.0 (released in 2018)
+cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
+cmake_policy(VERSION 3.3)
 
-set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PATCH}")
+# Read the version number (so we can set it once in one place)
+file (STRINGS "../version.txt" SIRE_VERSION)
+
+string(REGEX MATCH "([0-9]*).([0-9]*).([0-9]*)" _ ${SIRE_VERSION})
+
+set (S_VERSION_MAJOR ${CMAKE_MATCH_1})
+set (S_VERSION_MINOR ${CMAKE_MATCH_2})
+set (S_VERSION_PATCH ${CMAKE_MATCH_3})
+
+message( STATUS "Building Sire Wrappers ${SIRE_VERSION}")
 
 ############
 ############ SETTING INITIAL SIRE VARIABLES
 ############
 
-# require cmake >= 2.8.11.2
-cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
-cmake_policy(VERSION 2.8)
-
 # use loose loop syntax in CMakeLists files
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
-
-if(COMMAND CMAKE_POLICY)
-  if (POLICY CMP0025)
-    cmake_policy(SET CMP0025 NEW)  # Anaconda clang is called Clang, not AppleClang
-  endif()
-  if (POLICY CMP0042)
-    cmake_policy(SET CMP0042 OLD)  # managing OS X @rpath manually
-  endif()
-  if (POLICY CMP0048)
-    cmake_policy(SET CMP0048 OLD)  # want to manage versions myself!
-  endif()
-  if (POLICY CMP0028)
-    cmake_policy(SET CMP0028 OLD)  # Qt has colons in names, which new cmake hates
-  endif()
-  if (POLICY CMP0045)
-    cmake_policy(SET CMP0045 OLD)  # Allow non-existant targets with -NOTFOUND
-  endif()
-  if (POLICY CMP0020)
-    cmake_policy(SET CMP0020 NEW)  # Automatically link to qtmain on windows
-  endif()
-endif()
 
 # Get rid of install messages (too verbose!)
 set( CMAKE_INSTALL_MESSAGE "NEVER" )
@@ -68,50 +49,31 @@ if (NCORES EQUAL 0)
 endif()
 message(STATUS "Configuring on a machine with number of cores = ${NCORES}")
 
-# Option to compile and install into an anaconda or miniconda directory
-option( ANACONDA_BUILD "Build into an existing anaconda/miniconda installation" OFF )
+message( STATUS "Building into an existing conda installation..." )
 
-if ( ANACONDA_BUILD )
-  message( STATUS "Building into an existing Anaconda/Miniconda installation..." )
-  # Where is anaconda installed
-  set( ANACONDA_BASE "$ENV{HOME}/miniconda3" CACHE PATH
-          "Install directory for Anaconda/Miniconda (python3)" )
+# Where is anaconda installed
+set( ANACONDA_BASE "$ENV{HOME}/miniconda3" CACHE PATH
+     "Install directory for conda (python3)" )
 
-  # Make sure that there is a python3 executable in the bin directory
-  if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" AND
-       NOT EXISTS "${ANACONDA_BASE}/python.exe"  AND
-       NOT EXISTS "${PYTHON_EXECUTABLE}" )
-    message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3, ${ANACONDA_BASE}/python.exe "
-                         "or ${PYTHON_EXECUTABLE}."
-                         "Please set the full path to the Anaconda or Miniconda "
-                         "installation directory." )
-  endif()
-
-  set( SIRE_APP "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
-          "Install directory for Sire within the Anaconda/Miniconda distribution" )
-#elseif( WIN32 OR WIN64 )
-#  # This should be MSYS2/MINGW64, so use the location of cmake to find the location
-#  # of the Sire installation
-#  message(STATUS "Compiling on windows using MSYS2/MINGW64...")
-#  set( MINGW_BASE "C:/msys64/mingw64" CACHE PATH "MSYS MINGW64 root directory" )
-#  get_filename_component(MINGW_CMAKE_BIN ${CMAKE_COMMAND} DIRECTORY)
-#  get_filename_component(MINGW_CMAKE_ROOT ${MINGW_CMAKE_BIN} DIRECTORY)
-#  message(STATUS "Using cmake ${CMAKE_COMMAND} from MING64 base ${MINGW_CMAKE_ROOT}")
-#
-#  set( MINGW_BASE "${MINGW_CMAKE_ROOT}")
-#  set( SIRE_APP "${MINGW_BASE}" )
-
-else()
-  #�Option to set the install directory of Sire
-  if (NOT DEFINED SIRE_APP)
-    set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
-            "The full path to the sire.app installed Sire application." )
-  endif()
+# Make sure that there is a python3 executable in the bin directory
+if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" AND
+     NOT EXISTS "${ANACONDA_BASE}/python.exe"  AND
+     NOT EXISTS "${PYTHON_EXECUTABLE}" )
+  message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3, ${ANACONDA_BASE}/python.exe "
+                       "or ${PYTHON_EXECUTABLE}."
+                       "Please set the full path to the Anaconda or Miniconda "
+                       "installation directory." )
 endif()
+
+set( SIRE_APP "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
+              "Install directory for Sire within the conda distribution" )
 
 message( STATUS "Using SIRE_APP = ${SIRE_APP}" )
 
 set( SIRE_INCLUDE_DIR "${SIRE_APP}/include/Sire" )
+
+set( CONDA_INCLUDE_DIR "${ANACONDA_BASE}/include" )
+message( STATUS "Using CONDA_INCLUDE_DIR = ${CONDA_INCLUDE_DIR}" )
 
 set ( SIRE_COMP_CMAKE "${SIRE_INCLUDE_DIR}/cmake/SireCompileVariables.cmake" )
 
@@ -119,46 +81,50 @@ set ( SIRE_COMP_CMAKE "${SIRE_INCLUDE_DIR}/cmake/SireCompileVariables.cmake" )
 if (EXISTS "${SIRE_COMP_CMAKE}")
   include( "${SIRE_COMP_CMAKE}" )
 else()
-  if (ANACONDA_BUILD)
-    message( FATAL_ERROR "You don't appear to have built corelib into this"
-               "Anaconda/Miniconda directory. Please build corelib first."
-               "(there should be a file called ${SIRE_COMP_CMAKE})" )
-  else()
-    message( STATUS "You need to provide the full path to sire.app and check that it contains the file ${SIRE_COMP_CMAKE}" )
-    message( FATAL_ERROR "Do this by running 'cmake -DSIRE_APP=/path/to/sire.app /path/to/python/source'" )
-  endif()
+  message( FATAL_ERROR "You don't appear to have built corelib into this "
+             "conda directory. Please build corelib first."
+             "(there should be a file called ${SIRE_COMP_CMAKE})" )
 endif()
 
-if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
-  set (SLASH_HYPHEN "/")
-else()
-  set (SLASH_HYPHEN "-")
-endif()
-
-# Now set the C++, C and Fortran compilers to be used to compile the wrappers
+# Now set the C++ and C compilers to be used to compile the wrappers
 # These have to be the same as used to compile corelib
 set(CMAKE_C_COMPILER "${SIRE_C_COMPILER}")
 set(CMAKE_CXX_COMPILER "${SIRE_CXX_COMPILER}")
 
 message( STATUS "Setting C compiler to ${SIRE_C_COMPILER} and C++ compiler to ${SIRE_CXX_COMPILER}" )
 
-# Conda can set incorrect CXX flags (i.e. -mtune=haswell on MacOS M1!)
-# It is safer to completely unset these flags.
-unset(ENV{CXXFLAGS})
-unset(ENV{DEBUG_CXXFLAGS})
-unset(ENV{CFLAGS})
-unset(ENV{DEBUG_CFLAGS})
+if ("$ENV{CONDA_BUILD}" STREQUAL "1")
+  message( STATUS "Compiling as part of a conda-build")
+else()
+  # conda can set incorrect CXX flags (i.e. -mtune=haswell on MacOS M1!)
+  # If is safer to completely unset these flags, except for on a conda build
+  unset(ENV{CXXFLAGS})
+  unset(ENV{DEBUG_CXXFLAGS})
+  unset(ENV{CFLAGS})
+  unset(ENV{DEBUG_CFLAGS})
+endif()
 
 # name the project
 project (SirePython CXX C)
 
-message( STATUS "PROJECT COMPLETED" )
+# make sure that libraries are not found in any system directories
+# This is because everything will be linked to from the conda directory
+set (CMAKE_IGNORE_PATH)
+foreach (_prefix, /usr /opt /usr/local /usr/local/Frameworks )
+  list(APPEND CMAKE_IGNORE_PATH ${_prefix}/include ${_prefix}/lib ${_prefix}/lib64)
+endforeach()
+
+# Absolutely can't run cmake in the source directory!
+if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
+  message( FATAL_ERROR "You must run CMake in a different directory to the source!" )
+endif ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
 
 set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
          "Prefix prepended to install directories" FORCE )
 
 message( STATUS "Sire will be compiled and installed to directory ${CMAKE_INSTALL_PREFIX}" )
 
+# We will be managing RPATH ourselves
 set( CMAKE_SKIP_RPATH FALSE )
 set (CMAKE_SKIP_BUILD_RPATH FALSE)
 
@@ -170,19 +136,14 @@ if (APPLE)
 
   # Add the two passed directories to the @rpaths to search for libraries. @executable_path
   # is the directory containing the executable, so the libraries are included in
-  # @exeutable_path/../${SIRE_LIBS} and @exeutable_path/../${SIRE_BUNDLED_LIBS}
-  set (SIRE_INSTALL_RPATH "@executable_path/../${SIRE_LIBS}:@executable_path/../${SIRE_BUNDLED_LIBS}")
+  # @exeutable_path/../${SIRE_LIBS}
+  set (SIRE_INSTALL_RPATH "@executable_path/../${SIRE_LIBS}")
 else()
-  set (SIRE_INSTALL_RPATH "\$ORIGIN/../${SIRE_LIBS}:\$ORIGIN/../${SIRE_BUNDLED_LIBS}:\$ORIGIN/../../../../../${SIRE_LIBS}:\$ORIGIN/../../../../../${SIRE_BUNDLED_LIBS}")
+  set (SIRE_INSTALL_RPATH "\$ORIGIN/../${SIRE_LIBS}:\$ORIGIN/../../../../../${SIRE_LIBS}")
 endif()
 
 set (CMAKE_INSTALL_RPATH "${SIRE_INSTALL_RPATH}")
 set (CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-
-# Absolutely can't run cmake in the source directory!
-if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
-  message( FATAL_ERROR "You must run CMake in a different directory to the source!" )
-endif ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
 
 # Path to the project's extra cmake files
 set (CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/build/cmake)
@@ -199,14 +160,13 @@ message( STATUS "Sire root = ${SIRE_INSTALL_PREFIX}" )
 message( STATUS "Header files in ${SIRE_INCLUDE_DIR}" )
 message( STATUS "Libraries in ${SIRE_INSTALL_PREFIX}/${SIRE_LIBS}" )
 
-set ( SIRE_STRIP_COMMAND "${CMAKE_STRIP} ${SIRE_STRIP_OPTIONS}" )
-
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/build/cmake/cmake_strip.in"
   "${CMAKE_CURRENT_BINARY_DIR}/cmake_strip"
   IMMEDIATE @ONLY)
 
 set ( CMAKE_STRIP "${CMAKE_CURRENT_BINARY_DIR}/cmake_strip" )
+set ( SIRE_STRIP_COMMAND "${CMAKE_STRIP} ${SIRE_STRIP_OPTIONS}" )
 
 # Make sure that we are using the same compiler as that used to compile Sire
 option (SIRE_CHECK_COMPILER "Turn off to skip the compiler check" ON)
@@ -258,22 +218,69 @@ endif()
 include_directories (BEFORE ${SIRE_INCLUDE_DIR})
 include_directories (BEFORE ${CMAKE_CURRENT_SOURCE_DIR})
 include_directories (BEFORE ${CMAKE_CURRENT_BINARY_DIR})
+
 if (TBB_INCLUDE_DIR)
   include_directories (${TBB_INCLUDE_DIR})
   message( STATUS "Using TBB from ${TBB_INCLUDE_DIR}")
 endif()
+
 if (SIRE_GSL_INCLUDE_PATH)
   include_directories (${SIRE_GSL_INCLUDE_PATH})
 endif()
-if (DEFINED SIRE_APP)
-  # For some reason, when using the conda GNU compilers,  CMake stripped
-  # "${SIRE_APP}/include" from the directories searched for header files
-  # If this happens, uncomment the following line
-  # unset(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES)
-  include_directories( "${SIRE_APP}/include" "${SIRE_APP}/Library/include" )
+
+if(CMAKE_GENERATOR MATCHES "Visual Studio")  # MSBuild
+  # Everything we need to do on Windows to allow the wrappers to
+  # build using Visual Studio
+
+  # Thanks to this project who have a solution to the tbb12 link
+  # issue on Windows
+  # https://fossies.org/linux/opencv/cmake/OpenCVFindLAPACK.cmake
+
+  # We may have tbb.lib for 'tbb' target, but not 'tbb12.lib'
+  message(STATUS "Adding tbb12 to ignore list")
+  set(SIRE_IGNORE_DEFAULTLIB_TBB "tbb12.lib")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:${SIRE_IGNORE_DEFAULTLIB_TBB}")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:${SIRE_IGNORE_DEFAULTLIB_TBB}")
+
+  message(STATUS "Turning on bigobj")  # needed to link _Mol.pyd
+  add_compile_options("/bigobj")
 endif()
 
-# MUST build shared libraries
+# Conda can mess up our include paths. This makes sure that every
+# directory is included directly, including testing that the
+# CONDA include directory is working
+include_directories( "${SIRE_APP}/include" "${SIRE_APP}/Library/include" )
+include_directories(BEFORE ${CONDA_INCLUDE_DIR})
+
+message(STATUS "Checking if conda/include is a hidden include...")
+include(CheckCXXSourceRuns)
+get_property(CMAKE_REQUIRED_INCLUDES DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+message(STATUS "${CMAKE_REQUIRED_INCLUDES}")
+  check_cxx_source_runs("
+
+  #include \"tbb/tbb.h\"
+
+  int main()
+  {
+    return 0;
+  }" IS_CONDA_INCLUDE_WORKING)
+
+if (IS_CONDA_INCLUDE_WORKING)
+  message(STATUS "-Iconda/include is used correctly.")
+
+  if (APPLE)
+    message(STATUS "...but, MacOS still causes issues where conda/include is removed.")
+    message(STATUS "Unsetting CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES so that conda/include is not hidden.")
+    unset(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES)
+  endif()
+
+else()
+  # Things don't work, so we need to switch off implicit include directories
+  unset(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES)
+  message(STATUS "Unsetting CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES so that conda/include is not hidden.")
+endif()
+
+# The wrappers MUST be built as shared libraries
 set (BUILD_SHARED_LIBS ON)
 
 # Uncomment for more verbose compiling/linking
@@ -284,6 +291,8 @@ set (BUILD_SHARED_LIBS ON)
 message( STATUS "Compiling the python wrappers using a SMALL build." )
 set( CMAKE_C_FLAGS ${SIRE_C_FLAGS_SMALL} )
 set( CMAKE_CXX_FLAGS ${SIRE_CXX_FLAGS_SMALL} )
+
+message( STATUS "SMALL: ${SIRE_CXX_FLAGS_SMALL}")
 
 if (SIRE_HAS_CPP_LIB)
   message(STATUS "Using libc++ in place of libstdc++")
@@ -314,143 +323,107 @@ else()
   endif()
 endif()
 
-# Option to disable all bundles
-option( SIRE_PYTHON_ENABLE_BUNDLING "Allow Sire Python to use bundled libraries and python interpreter" ON )
+# Now lets find Python...
+set(Python3_ROOT_DIR "${ANACONDA_BASE}")
+set(Python3_FIND_STRATEGY "LOCATION")
+set(Python3_USE_STATIC_LIBS False)
 
-# Fine-grain control of bundling each dependency
-option( SIRE_BUNDLE_PYTHON "Whether Sire should use its bundled copy of Python 3" ON )
-option( SIRE_BUNDLE_BOOST_PYTHON "Whether Sire should use its bundled copy of boost::python" ON )
+find_package( Python3 COMPONENTS Interpreter Development REQUIRED )
 
-if ( SIRE_PYTHON_ENABLE_BUNDLING )
-  if (MSYS)
-    message( STATUS "Building a bundled msys Sire (using msys python)" )
-  else()
-    message( STATUS "Sire Python will be compiled to use its own copy of bundled libraries." )
-  endif()
+set( PYTHON_LIBRARY "${Python3_LIBRARIES}") # need this on MacOS
+set( PYTHON_LIBRARIES "${Python3_LIBRARIES}")
+set( PYTHON_SITE_DIR "${Python3_SITELIB}")
+set( PYTHON_VERSION "${Python3_VERSION}")
+set( PYTHON_INCLUDE_DIR "${Python3_INCLUDE_DIRS}")
 
-  set( BUNDLE_BUILDDIR "${CMAKE_BINARY_DIR}/build_bundled" )
-
-  # We want to install the bundled libs directly into the sire.app directory
-  set( BUNDLE_STAGEDIR "${SIRE_APP}/${SIRE_BUNDLED_DIR}" )
-
-  if (NOT EXISTS "${BUNDLE_BUILDDIR}")
-    file(MAKE_DIRECTORY ${BUNDLE_BUILDDIR})
-  endif()
-
-  if (NOT EXISTS "${BUNDLE_STAGEDIR}")
-   file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR})
-  endif()
-
-  if (NOT EXISTS "${BUNDLE_STAGEDIR}/lib")
-    file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/lib)
-  endif()
-
-  if (NOT EXISTS "${BUNDLE_STAGEDIR}/include")
-    file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/include)
-  endif()
-
-  if ( SIRE_BUNDLE_PYTHON )
-    include( "bundled/install_python.cmake" )
-  endif()
-
-  if (NOT SIRE_FOUND_PYTHON)
-    # Need to find python before we compile the boost python wrappers
-    find_package( PythonLibs 3.2 REQUIRED )
-  endif()
-
-  if ( SIRE_BUNDLE_BOOST_PYTHON )
-    include( "bundled/install_boost_python.cmake" )
-  endif()
-
-  if ( NOT ${BUNDLE_STAGEDIR} STREQUAL ${CMAKE_INSTALL_PREFIX} )
-    # All of the bundled objects are built into the directory ${CMAKE_BINARY_DIR}/bundled
-    # This directory must be installed into the sire.app/ directory
-    install( DIRECTORY ${BUNDLE_STAGEDIR}
-             DESTINATION ${CMAKE_INSTALL_PREFIX}
-             USE_SOURCE_PERMISSIONS )
-  endif()
+if (WIN32)
+  set( PYTHON_MODULE_EXTENSION ".pyd" )
+else()
+  set( PYTHON_MODULE_EXTENSION ".so" )
 endif()
 
-if (NOT ${SIRE_FOUND_PYTHON})
-  find_package( PythonLibs 3.2 REQUIRED )
-endif()
-
-if (NOT PYTHON_MODULE_EXTENSION)
-  if (WIN32)
-    set( PYTHON_MODULE_EXTENSION ".pyd" )
-  else()
-    set( PYTHON_MODULE_EXTENSION ".so" )
-  endif()
-endif()
-
-if (NOT PYTHON_LIBRARIES)
-  set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
-endif()
+message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR} | ${PYTHON_SITE_DIR} | ${PYTHON_MODULE_EXTENSION}" )
 
 # Don't link against libPython on macOS! Since the conda-forge Python interpreter
 # statically links libPython you'll end up with duplicate symbols.
 if (APPLE)
   set( PYTHON_LIBRARIES "" )
+endif()
 
-  # Also need to add '-undefined dynamic_lookup' so that we can build
+if (APPLE)
+  # Also on MacOS need to add '-undefined dynamic_lookup' so that we can build
   # modules that can be imported by a python that has statically linked libPython
   set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -undefined dynamic_lookup" )
 
   # Need to remove anything other than `-O1` or `-Oz` from Python < 3.9
-  # X86 builds on MacOS as these causes crashes with boost_python
-  if (NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
+  # X86 builds on MacOS as these causes crashes with boost_python
+  if ((Python3_VERSION_MINOR LESS 9) AND NOT (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64"))
     message( STATUS "Disabling '-O3' : ${CMAKE_SYSTEM_PROCESSOR}")
-    string( REPLACE "-O3" "" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE} )
+    string( REPLACE "-O2" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+    string( REPLACE "-O2" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS} )
+    string( REPLACE "-O3" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+    string( REPLACE "-O3" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS} )
+    string( REPLACE "-Os" "-Oz" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+    string( REPLACE "-Os" "-Oz" CMAKE_C_FLAGS ${CMAKE_C_FLAGS} )
   endif()
+
 endif()
 
 message( STATUS  "CMAKE_SYSTEM_NAME      == ${CMAKE_SYSTEM_NAME}" )
+message( STATUS  "CMAKE_SYSTEM_PROCESSOR == ${CMAKE_SYSTEM_PROCESSOR}")
 message( STATUS  "CMAKE_C_COMPILER       == ${CMAKE_C_COMPILER}" )
 message( STATUS  "CMAKE_CXX_COMPILER     == ${CMAKE_CXX_COMPILER}" )
 message( STATUS  "C compiler flags       == ${CMAKE_C_FLAGS}" )
 message( STATUS  "C++ compiler flags     == ${CMAKE_CXX_FLAGS}" )
-message( STATUS  "CMake release flags    == ${CMAKE_CXX_FLAGS_RELEASE}" )
 message( STATUS  "Shared library flags   == ${CMAKE_SHARED_LINKER_FLAGS}" )
 message( STATUS  "Static library flags   == ${CMAKE_STATIC_LINKER_FLAGS}" )
 message( STATUS  "Executable link flags  == ${CMAKE_EXE_LINKER_FLAGS}" )
 
-if (NOT ${SIRE_FOUND_BOOST_PYTHON})
-  # Sire depends on >= boost 1.31 - all libraries must be dynamically linked
-  # (else we could end up with multiple boost::python libraries linked, which
-  #  causes problems for RTTI and exceptions)
-  set (BOOST_ALL_DYN_LINK "YES")
-  find_package( Boost 1.31 COMPONENTS python REQUIRED )
-  set ( BOOST_PYTHON_LIBRARY "${Boost_PYTHON_LIBRARY}" )
-  set ( BOOST_PYTHON_HEADERS "${Boost_INCLUDE_DIR}" )
-endif()
+# All boost python libraries must be dynamically linked
+# (else we could end up with multiple boost::python libraries linked, which
+#  causes problems for RTTI, implicit converters and exceptions)
+set (Boost_USE_STATIC_LIBS OFF)
+set (Boost_USE_STATIC_RUNTIME OFF)
+set (Boost_DEBUG ON)  # this gives a nice print out in the cmake list to debug how boost is found and linked
+find_package( Boost 1.7 COMPONENTS python REQUIRED )
 
-message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR} | ${PYTHON_SITE_DIR}" )
 include_directories( ${PYTHON_INCLUDE_DIR} )
-include_directories( "${BOOST_PYTHON_HEADERS}" )
 
-message( STATUS "boost::python library ${BOOST_PYTHON_LIBRARY} | ${BOOST_PYTHON_HEADERS}" )
+message( STATUS "boost::python library ${Boost_LIBRARIES}" )
 
 # set the location to install the python modules
 set (SIRE_PYTHON "${PYTHON_SITE_DIR}")
 
-# Use the same Qt library as was used to build corelib
-if (DEFINED Qt5Core_DIR)
-    message( STATUS "Looking for Qt5Core in directory ${Qt5Core_DIR}" )
-    find_package( Qt5Core )
-endif()
+# Use the same Qt library as was used to build corelib - this can get
+# unset a lot, hence why we keep checking it and updating
+
+# look for Qt5 in the system - this should be found from conda
+find_package( Qt5Core REQUIRED )
+
 get_target_property(QT5_LOCATION Qt5::Core LOCATION)
+get_filename_component(SIRE_QT5CORE_DIR ${QT5_LOCATION} PATH)
+
 if (QT5_LOCATION MATCHES NOTFOUND)
     message( STATUS "Looking for Qt5Core in directory ${SIRE_QT5CORE_DIR}" )
     set( Qt5Core_DIR "${SIRE_QT5CORE_DIR}/cmake/Qt5Core" )
     find_package( Qt5Core REQUIRED )
 endif()
+
 get_target_property(QT5_LOCATION Qt5::Core LOCATION)
 message( STATUS "Using Qt5Core in ${QT5_LOCATION}" )
 
 if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
-    add_compile_options("/EHsc")
-    add_compile_options("/permissive-")
+  message( STATUS "Adding useful MSVC compiler options" )
+  add_compile_options("/EHsc")  # exceptions are only thrown from C++ throw calls
+  add_compile_options("/permissive-")  # disable MSVC's permissive mode - ensures code is standards conforming
 endif()
+
+if (NOT DEFINED ${SIRE_VERSION})
+  message( STATUS "Strange, SIRE_VERSION has been unset. Resetting it.")
+  set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
+endif()
+
+message( STATUS "SIRE VERSION IS ${SIRE_VERSION}")
 
 # Add the helper library
 add_subdirectory (Helpers)
@@ -469,19 +442,23 @@ add_subdirectory (Maths)
 add_subdirectory (MM)
 add_subdirectory (Mol)
 add_subdirectory (Move)
+add_subdirectory (Search)
 add_subdirectory (Stream)
 add_subdirectory (Squire)
 add_subdirectory (System)
 add_subdirectory (Units)
 add_subdirectory (Vol)
 
-#also compile Sire's python executable
+# also compile Sire's python executable
 add_subdirectory (python)
 
+# and some additional tools used for e.g. waterswap or nautillus
 add_subdirectory (Tools)
 
+# Need to install the dunder for Sire. All C++ wrappers are
+# now placed into the sire/legacy folder.
 install( FILES __init__.py
-         DESTINATION ${SIRE_PYTHON}/Sire
+         DESTINATION ${SIRE_PYTHON}/sire/legacy
        )
 
 # Finally, write the version header file and finish off the component dependencies file

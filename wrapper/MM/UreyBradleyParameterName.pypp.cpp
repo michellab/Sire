@@ -51,6 +51,8 @@ SireMM::UreyBradleyParameterName __copy__(const SireMM::UreyBradleyParameterName
 
 const char* pvt_get_name(const SireMM::UreyBradleyParameterName&){ return "SireMM::UreyBradleyParameterName";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_UreyBradleyParameterName_class(){
 
     { //::SireMM::UreyBradleyParameterName

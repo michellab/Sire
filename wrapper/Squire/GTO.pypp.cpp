@@ -28,6 +28,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_GTO_class(){
 
     { //::Squire::GTO
@@ -42,6 +44,7 @@ void register_GTO_class(){
             GTO_exposer.def( 
                 "alpha"
                 , alpha_function_value
+                , bp::release_gil_policy()
                 , "Return the value of alpha (the exponent) for this gaussian" );
         
         }
@@ -53,6 +56,7 @@ void register_GTO_class(){
             GTO_exposer.def( 
                 "beta"
                 , beta_function_value
+                , bp::release_gil_policy()
                 , "Convenient synonym for alpha() - so you can write\na.alpha()  b.beta() and have it mean what you expect" );
         
         }
@@ -64,6 +68,7 @@ void register_GTO_class(){
             GTO_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this orbital shell is null - it is null\nif the scale or exponent are 0" );
         
         }
@@ -76,6 +81,7 @@ void register_GTO_class(){
                 "multiply"
                 , multiply_function_value
                 , ( bp::arg("coefficient") )
+                , bp::release_gil_policy()
                 , "Return this orbital shell multiplied by coefficient" );
         
         }
@@ -87,7 +93,7 @@ void register_GTO_class(){
             GTO_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -99,6 +105,7 @@ void register_GTO_class(){
             GTO_exposer.def( 
                 "scale"
                 , scale_function_value
+                , bp::release_gil_policy()
                 , "Return the unnormalised scaling factor for this gaussian" );
         
         }
@@ -110,6 +117,7 @@ void register_GTO_class(){
             GTO_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

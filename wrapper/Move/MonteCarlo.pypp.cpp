@@ -29,6 +29,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MonteCarlo_class(){
 
     { //::SireMove::MonteCarlo
@@ -43,6 +45,7 @@ void register_MonteCarlo_class(){
             MonteCarlo_exposer.def( 
                 "acceptanceRatio"
                 , acceptanceRatio_function_value
+                , bp::release_gil_policy()
                 , "Return the acceptance ratio (ratio of\naccepted moves to attempted moves)" );
         
         }
@@ -54,6 +57,7 @@ void register_MonteCarlo_class(){
             MonteCarlo_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Zero the move statistics" );
         
         }
@@ -65,6 +69,7 @@ void register_MonteCarlo_class(){
             MonteCarlo_exposer.def( 
                 "disableOptimisedMoves"
                 , disableOptimisedMoves_function_value
+                , bp::release_gil_policy()
                 , "Turn off use of optimised MC moves. This uses slightly slower, but likely\nless buggy code, and is worth using if you suspect there are problems with\nthe optimised code" );
         
         }
@@ -76,6 +81,7 @@ void register_MonteCarlo_class(){
             MonteCarlo_exposer.def( 
                 "enableOptimisedMoves"
                 , enableOptimisedMoves_function_value
+                , bp::release_gil_policy()
                 , "Turn on use of optimised MC moves. This turns on newer (and potentially more buggy)\ncode that aims to speed up the memory allocation and energy calculation for\nMC moves." );
         
         }
@@ -87,6 +93,7 @@ void register_MonteCarlo_class(){
             MonteCarlo_exposer.def( 
                 "ensemble"
                 , ensemble_function_value
+                , bp::release_gil_policy()
                 , "Return the ensemble for this move" );
         
         }
@@ -110,6 +117,7 @@ void register_MonteCarlo_class(){
             MonteCarlo_exposer.def( 
                 "nAccepted"
                 , nAccepted_function_value
+                , bp::release_gil_policy()
                 , "Return the number of accepted moves" );
         
         }
@@ -121,6 +129,7 @@ void register_MonteCarlo_class(){
             MonteCarlo_exposer.def( 
                 "nAttempted"
                 , nAttempted_function_value
+                , bp::release_gil_policy()
                 , "Return the number of attempted moves" );
         
         }
@@ -132,6 +141,7 @@ void register_MonteCarlo_class(){
             MonteCarlo_exposer.def( 
                 "nMoves"
                 , nMoves_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of these moves that have been performed" );
         
         }
@@ -143,6 +153,7 @@ void register_MonteCarlo_class(){
             MonteCarlo_exposer.def( 
                 "nRejected"
                 , nRejected_function_value
+                , bp::release_gil_policy()
                 , "Return the number of rejected moves" );
         
         }
@@ -155,6 +166,7 @@ void register_MonteCarlo_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator to use for these moves" );
         
         }
@@ -167,6 +179,7 @@ void register_MonteCarlo_class(){
                 "setUseOptimisedMoves"
                 , setUseOptimisedMoves_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Switch on or off use of the optimised MC code" );
         
         }
@@ -178,6 +191,7 @@ void register_MonteCarlo_class(){
             MonteCarlo_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -189,6 +203,7 @@ void register_MonteCarlo_class(){
             MonteCarlo_exposer.def( 
                 "usingOptimisedMoves"
                 , usingOptimisedMoves_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the optimised MC code is being used" );
         
         }

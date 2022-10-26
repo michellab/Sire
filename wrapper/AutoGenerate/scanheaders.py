@@ -1,7 +1,7 @@
 ##########################################
 #
 #  This script scans all of the header
-#  files in a specified directory to 
+#  files in a specified directory to
 #  get the list of classes that should
 #  be exposed in Python
 #
@@ -25,7 +25,7 @@ def getFiles(dir, pattern):
     return trimmed_files
 
 def getIncludes(file, lines):
-    
+
     includes = { "\"%s\"" % file : 1 }
 
     for line in lines:
@@ -46,7 +46,7 @@ def getDependencies(dir, file):
     try:
         #is there a corresponding .cpp file?
         file_cpp = re.sub(r"h(p*)$", "cpp", file)
-        
+
         lines = open("%s/%s" % (dir,file_cpp), "r").readlines()
         return getIncludes(file, lines)
 
@@ -56,7 +56,7 @@ def getDependencies(dir, file):
     try:
         #is there a corresponding .c file?
         file_c = re.sub(r"h(p*)$", "c", file)
-    
+
         lines = open("%s/%s" % (dir,file_c), "r").readlines()
         return getIncludes(file, lines)
 
@@ -78,14 +78,14 @@ class Properties:
 
     def addDependency(self, headerfile, dir, module_dir):
         deps = getDependencies(dir, headerfile) + getDependencies(module_dir, headerfile)
-        
+
         for dep in deps:
             self._dependencies[dep] = 1
 
     def dependencies(self):
         return list(self._dependencies.keys())
 
-skip_metatypes = [ "QVariant", 
+skip_metatypes = [ "QVariant",
                    "SireCAS::ExpressionBase",
                    "SireMaths::Rational",
                    "SireCluster::Node",
@@ -110,7 +110,7 @@ class HeaderInfo:
     def addMetaType(self, classname):
         #don't register some types
         if classname in skip_metatypes:
-            return        
+            return
 
         self._metatypes.append(classname)
 
@@ -275,9 +275,9 @@ def scanFiles(dir, module_dir, atom_properties, cg_properties,
                                res_properties, chain_properties, seg_properties,
                                bead_properties):
     """Scan the header files in the passed directory to get information
-       about all of the exposed classes, returning a list of all of 
+       about all of the exposed classes, returning a list of all of
        the classes that are being exposed, and placing meta information
-       into the directory 'module_dir'""" 
+       into the directory 'module_dir'"""
 
     h_files = getFiles(dir, "*.h") + getFiles(module_dir, "*.h")
     hpp_files = getFiles(dir, "*.hpp") + getFiles(module_dir, "*.hpp")
@@ -461,7 +461,7 @@ def scanFiles(dir, module_dir, atom_properties, cg_properties,
     return exposed_classes
 
 if __name__ == "__main__":
-    
+
     modules = { "Analysis" : "SireAnalysis",
                 "Base" : "SireBase",
                 "CAS" : "SireCAS",
@@ -473,16 +473,17 @@ if __name__ == "__main__":
                 "MM" : "SireMM",
                 "Mol" : "SireMol",
                 "Move" : "SireMove",
+                "Search" : "SireSearch",
                 "Squire" : "Squire",
                 "Stream" : "SireStream",
                 "System" : "SireSystem",
                 "Units" : "SireUnits",
                 "Vol" : "SireVol" }
-        
+
     if len(sys.argv) < 3:
         print("USAGE: python scanheaders.py input_path output_path")
         sys.exit(-1)
-    
+
     siredir = sys.argv[1]
     outdir = sys.argv[2]
 
@@ -496,7 +497,7 @@ if __name__ == "__main__":
     bead_properties = Properties()
 
     for module in modules:
-        
+
         try:
             os.makedirs( "%s/%s" % (outdir,module) )
         except:
@@ -513,7 +514,7 @@ if __name__ == "__main__":
         module_classes = scanFiles( "%s/%s" % (siredir,modules[module]),
                                     "%s/%s" % (outdir,module),
                                     atom_properties, cg_properties, res_properties,
-                                    chain_properties, seg_properties, bead_properties ) 
+                                    chain_properties, seg_properties, bead_properties )
 
         for clas in module_classes:
             exposed_classes[clas] = 1

@@ -1,3 +1,9 @@
+try:
+    import sire
+    sire.use_old_api()
+except ImportError:
+    pass
+
 from Sire.Tools import Nautilus
 from Sire.Tools import readParams
 
@@ -13,7 +19,7 @@ parser = argparse.ArgumentParser(description="Generate grid files from cell file
                                         "http://siremol.org/nautilus",
                                  prog="nautilus")
 
-parser.add_argument('-C', '--config', nargs="?", 
+parser.add_argument('-C', '--config', nargs="?",
                     help='Supply an optional Nautilus CONFIG file to control the calculation.')
 
 parser.add_argument('--author', action="store_true",
@@ -81,7 +87,7 @@ if args.end_frame:
 if args.benchmark:
     params["benchmark"] = True
 
-if not (os.path.exists(cell_dir)): 
+if not (os.path.exists(cell_dir)):
     parser.print_help()
     print("\nPlease supply the cell file directory, it is missing")
     sys.exit(-1)

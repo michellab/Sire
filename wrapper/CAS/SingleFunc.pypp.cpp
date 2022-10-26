@@ -25,6 +25,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SingleFunc_class(){
 
     { //::SireCAS::SingleFunc
@@ -51,6 +53,7 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "children"
                 , children_function_value
+                , bp::release_gil_policy()
                 , "Return the child expression of this function" );
         
         }
@@ -62,6 +65,7 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "conjugate"
                 , conjugate_function_value
+                , bp::release_gil_policy()
                 , "Return the conjugate of this function" );
         
         }
@@ -74,6 +78,7 @@ void register_SingleFunc_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the differential of this function with respect to symbol" );
         
         }
@@ -86,6 +91,7 @@ void register_SingleFunc_class(){
                 "expand"
                 , expand_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -97,6 +103,7 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "functions"
                 , functions_function_value
+                , bp::release_gil_policy()
                 , "Return the functions used in this function" );
         
         }
@@ -108,6 +115,7 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -120,6 +128,7 @@ void register_SingleFunc_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the integral of this function with respect to symbol" );
         
         }
@@ -131,6 +140,7 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "isComplex"
                 , isComplex_function_value
+                , bp::release_gil_policy()
                 , "Return whether this is complex" );
         
         }
@@ -142,6 +152,7 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "isCompound"
                 , isCompound_function_value
+                , bp::release_gil_policy()
                 , "A function is not compound" );
         
         }
@@ -153,6 +164,7 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "isConstant"
                 , isConstant_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is constant" );
         
         }
@@ -165,6 +177,7 @@ void register_SingleFunc_class(){
                 "isFunction"
                 , isFunction_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return if this is a function of symbol" );
         
         }
@@ -190,6 +203,7 @@ void register_SingleFunc_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "Substitute into this expression" );
         
         }
@@ -201,6 +215,7 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return the symbols used in this function" );
         
         }
@@ -212,6 +227,7 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "toOpenMMString"
                 , toOpenMMString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this function in the OpenMM syntax" );
         
         }
@@ -223,6 +239,7 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this function" );
         
         }

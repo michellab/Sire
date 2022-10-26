@@ -1,14 +1,44 @@
-#############################
-##
-## The Sire python module
-##
-## This contains the parts of the main Sire program
-## that are exposed to Python.
-##
-## (C) Christopher Woods
-##
+"""
+.. currentmodule:: sire.legacy
+
+This is the legacy Sire module. This holds all of the C++ modules
+on which the whole of Sire is built. These are designed to be used
+by developers, and are not part of the stable public API
+(which is sire)
+
+"""
+
+# ensure that the SireQt and SireError libraries are loaded as
+# these are vital for the rest of the module
+from . import Qt
+from . import Error
+from . import Config
+
+__version__ = Config.__version__
+
+__branch__ = Config.sire_repository_branch
+__repository__ = Config.sire_repository_url
+__revisionid__ = Config.sire_repository_version[0:7]
+
+
+def _versionString():
+    """Return a nicely formatted string that describes the current Sire version"""
+    from .Base import getReleaseVersion, getRepositoryBranch, \
+        getRepositoryVersionIsClean
+
+    from .Config import sire_repository_version
+
+    return """Sire %s [%s|%s, %s]""" % \
+              (getReleaseVersion(),
+               getRepositoryBranch(),
+               sire_repository_version[0:7],
+               ["unclean", "clean"][getRepositoryVersionIsClean()])
+
+
+Config.versionString = _versionString
 
 _module_to_package = {}
+
 
 def _install_package(name, package_registry):
     """Internal function used to install the module
@@ -72,6 +102,7 @@ def _install_package(name, package_registry):
 
     return
 
+
 def try_import(name, package_registry=_module_to_package):
     """Try to import the module called 'name', returning
        the loaded module as an argument. If the module
@@ -108,6 +139,7 @@ def try_import(name, package_registry=_module_to_package):
         return try_import(name, package_registry=None)
 
     raise ImportError("Failed to install module %s" % name)
+
 
 def try_import_from(name, fromlist, package_registry=_module_to_package):
     """Try to import from the module called 'name' the passed symbol
@@ -178,169 +210,3 @@ def try_import_from(name, fromlist, package_registry=_module_to_package):
                       % (name, ", ".join(missing_symbols)))
 
         return ret
-
-#ensure that the SireQt and SireError libraries are loaded as
-#these are vital for the rest of the module
-from . import Qt
-from . import Error
-from . import Config
-
-__version__ = Config.__version__
-
-def _versionString():
-    """Return a nicely formatted string that describes the current Sire version"""
-    import Sire.Base as Base
-
-    return """Sire %s [%s|%s, %s]""" % \
-              (Base.getReleaseVersion(),
-               Base.getRepositoryBranch(),
-               Config.sire_repository_version[0:7],
-               ["unclean", "clean"][Base.getRepositoryVersionIsClean()])
-
-Config.versionString = _versionString
-
-sent_usage_data = None
-
-def _getOSInfo():
-    import platform as _pf
-
-    data = {}
-    data["platform"] = _pf.system()
-
-    if _pf.system().startswith("Darwin"):
-        data["OS"] = _pf.mac_ver()[0]
-    elif _pf.system().startswith("Linux"):
-        ld = _pf.linux_distribution()
-        data["OS"] = "%s (%s %s)" % (ld[0],ld[1],ld[2])
-    else:
-        data["OS"] = "unknown"
-
-    u = _pf.uname()
-    data["uname"] = "%s | %s | %s | %s" % (u.system,u.release,u.machine,u.processor)
-
-    data["OS"] = "%s : %s"
-
-# Now try to upload usage data to siremol.org
-def _uploadUsageData():
-    try:
-        global sent_usage_data
-
-        if not sent_usage_data is None:
-            # don't send data twice
-            return
-
-        import time as _time
-        # wait a couple of seconds before uploading. This
-        # stops annoying uploads when people print help
-        _time.sleep(2)
-
-        import os as _os
-
-        if "SIRE_DONT_PHONEHOME" in _os.environ:
-            # respect user wish to not phone home
-            if not "SIRE_SILENT_PHONEHOME" in _os.environ:
-                print("\n=======================================================")
-                print("Respecting your privacy - not sending usage statistics.")
-                print("Please see http://siremol.org/analytics for more information.")
-                print("=======================================================\n")
-                return
-        else:
-            if not "SIRE_SILENT_PHONEHOME" in _os.environ:
-                print("\n==============================================================")
-                print("Sending anonymous Sire usage statistics to http://siremol.org.")
-                print("For more information, see http://siremol.org/analytics")
-                print("To disable, set the environment variable 'SIRE_DONT_PHONEHOME' to 1")
-                print("To see the information sent, set the environment variable ")
-                print("SIRE_VERBOSE_PHONEHOME equal to 1. To silence this message, set")
-                print("the environment variable SIRE_SILENT_PHONEHOME to 1.")
-                print("==============================================================\n")
-
-        from Sire.Base import CPUID as _CPUID
-
-        id = _CPUID()
-
-        data = {}
-
-        # get information about the processor
-        data["processor"] = id.brand()
-        data["vendor"] = id.vendor()
-        data["clockspeed"] = id.clockSpeed()
-        data["numcores"] = id.numCores()
-
-        # get information about the operating system
-        import platform as _pf
-
-        data["platform"] = _pf.system()
-
-        if _pf.system().startswith("Darwin"):
-            data["OS"] = _pf.mac_ver()[0]
-        elif _pf.system().startswith("Linux"):
-            ld = _pf.linux_distribution()
-            data["OS"] = "%s (%s %s)" % (ld[0],ld[1],ld[2])
-        elif _pf.system().startswith("Windows"):
-            ld = _pf.win32_ver()
-            data["OS"] = "%s (%s %s)" % (ld[0],ld[1],ld[2])
-        else:
-            data["OS"] = "unknown"
-
-        u = _pf.uname()
-        data["uname"] = "%s | %s | %s | %s" % (u.system,u.release,u.machine,u.processor)
-
-        # get information about the version of Sire
-        data["version"] = __version__
-        data["repository"] = Config.sire_repository_url
-        data["repository_version"] = Config.sire_repository_version
-
-        # now get information about which Sire app is running
-        import sys as _sys
-        # get the executable name, but make sure we don't get the path
-        # (as it may contain sensitive user information)
-        data["executable"] = _os.path.basename( _sys.executable )
-
-        # Was Sire was imported as part of BioSimSpace?
-        # If so, then rename the executable.
-        if "BioSimSpace" in _sys.modules:
-            data["executable"] = "BioSimSpace"
-
-        import json as _json
-
-        import http.client as _htc
-        import urllib.parse as _parse
-
-        params = _parse.urlencode({'data' : _json.dumps(data)})
-        headers = {"Content-type": "application/x-www-form-urlencoded",
-                   "Accept": "text/plain"}
-
-        if "SIRE_VERBOSE_PHONEHOME" in _os.environ:
-            print("Information sent to http://siremol.org is...")
-            keys = list(data.keys())
-            keys.sort()
-            for key in keys:
-                print(" -- %s == %s" % (key,data[key]))
-            print("\n")
-
-        sent_usage_data = data
-
-        conn = _htc.HTTPSConnection("siremol.org")
-        conn.request("POST", "/phonehome/postusagestats.php", params, headers)
-
-        # Next time this break, remember to uncomment the below lines so that
-        # we can inspect the response code and error from the server...
-
-        #r1 = conn.getresponse()
-        #print(r1.status, r1.reason)
-        #print(r1.read())
-
-    except:
-        # something went wrong - just ignore the error
-        # and cancel the phone home
-        return
-
-sent_usage_data = None
-
-if not sent_usage_data:
-    import threading as _threading
-
-    _thread = _threading.Thread(target=_uploadUsageData)
-    _thread.daemon = True
-    _thread.start()

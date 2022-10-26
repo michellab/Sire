@@ -34,6 +34,8 @@ SireVol::CombinedSpace __copy__(const SireVol::CombinedSpace &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_CombinedSpace_class(){
@@ -56,7 +58,7 @@ void register_CombinedSpace_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ith space that makes up this combined space\nThrow: SireError::invalid_index\n" );
         
         }
@@ -69,6 +71,7 @@ void register_CombinedSpace_class(){
                 "beyond"
                 , beyond_function_value
                 , ( bp::arg("dist"), bp::arg("group0"), bp::arg("group1") )
+                , bp::release_gil_policy()
                 , "Return whether or not these two groups are definitely beyond the cutoff distance." );
         
         }
@@ -81,6 +84,7 @@ void register_CombinedSpace_class(){
                 "beyond"
                 , beyond_function_value
                 , ( bp::arg("dist"), bp::arg("aabox0"), bp::arg("aabox1") )
+                , bp::release_gil_policy()
                 , "Return whether or not two groups enclosed by the AABoxes aabox0\nand aabox1 are definitely beyond the cutoff distance" );
         
         }
@@ -93,6 +97,7 @@ void register_CombinedSpace_class(){
                 "calcAngle"
                 , calcAngle_function_value
                 , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2") )
+                , bp::release_gil_policy()
                 , "Calculate the angle between the passed three points. This should return\nthe acute angle between the points, which should lie between 0 and 180 degrees" );
         
         }
@@ -105,6 +110,7 @@ void register_CombinedSpace_class(){
                 "calcDihedral"
                 , calcDihedral_function_value
                 , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3") )
+                , bp::release_gil_policy()
                 , "Calculate the torsion angle between the passed four points. This should\nreturn the torsion angle measured clockwise when looking down the\ntorsion from point0-point1-point2-point3. This will lie between 0 and 360\ndegrees" );
         
         }
@@ -117,6 +123,7 @@ void register_CombinedSpace_class(){
                 "calcDist"
                 , calcDist_function_value
                 , ( bp::arg("point0"), bp::arg("point1") )
+                , bp::release_gil_policy()
                 , "Calculate the distance between two points" );
         
         }
@@ -129,6 +136,7 @@ void register_CombinedSpace_class(){
                 "calcDist"
                 , calcDist_function_value
                 , ( bp::arg("group"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances between all points in\nthe group group. Return the shortest distance between points." );
         
         }
@@ -141,6 +149,7 @@ void register_CombinedSpace_class(){
                 "calcDist"
                 , calcDist_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances between all of the\npoints of the two CoordGroups. Return the shortest distance between the two\nCoordGroups." );
         
         }
@@ -153,6 +162,7 @@ void register_CombinedSpace_class(){
                 "calcDist"
                 , calcDist_function_value
                 , ( bp::arg("group"), bp::arg("point"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances between all of the\npoints of the two CoordGroups. Return the shortest distance between the two\nCoordGroups." );
         
         }
@@ -165,6 +175,7 @@ void register_CombinedSpace_class(){
                 "calcDist2"
                 , calcDist2_function_value
                 , ( bp::arg("point0"), bp::arg("point1") )
+                , bp::release_gil_policy()
                 , "Calculate the distance squared between two points" );
         
         }
@@ -177,6 +188,7 @@ void register_CombinedSpace_class(){
                 "calcDist2"
                 , calcDist2_function_value
                 , ( bp::arg("group"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances^2 between all points in\nthe group group. Return the shortest distance between points." );
         
         }
@@ -189,6 +201,7 @@ void register_CombinedSpace_class(){
                 "calcDist2"
                 , calcDist2_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances^2 between all of the\npoints of the two CoordGroups. Return the shortest distance between the\ntwo CoordGroups." );
         
         }
@@ -201,6 +214,7 @@ void register_CombinedSpace_class(){
                 "calcDist2"
                 , calcDist2_function_value
                 , ( bp::arg("group"), bp::arg("point"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the distances^2 between all of the\npoints of the two CoordGroups. Return the shortest distance between the\ntwo CoordGroups." );
         
         }
@@ -213,6 +227,7 @@ void register_CombinedSpace_class(){
                 "calcDistVector"
                 , calcDistVector_function_value
                 , ( bp::arg("point0"), bp::arg("point1") )
+                , bp::release_gil_policy()
                 , "Calculate the distance vector between two points" );
         
         }
@@ -225,6 +240,7 @@ void register_CombinedSpace_class(){
                 "calcDistVectors"
                 , calcDistVectors_function_value
                 , ( bp::arg("group"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix distmat with all of the interpoint distance vectors\nbetween all points within the CoordGroup. This is not a symmetrical matrix,\nas the direction from point A to point B is the negative of the\ndirection from point B to point A. This returns the shortest distance\nbetween two points in the group (that is not the self-self distance)" );
         
         }
@@ -237,6 +253,7 @@ void register_CombinedSpace_class(){
                 "calcDistVectors"
                 , calcDistVectors_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix distmat between all the points of the two CoordGroups\ngroup1 and group2 - the returned matrix has the vectors pointing\nfrom each point in group1 to each point in group2. This returns\nthe shortest distance between two points in the group" );
         
         }
@@ -249,6 +266,7 @@ void register_CombinedSpace_class(){
                 "calcDistVectors"
                 , calcDistVectors_function_value
                 , ( bp::arg("group"), bp::arg("point"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix distmat between all the points of the two CoordGroups\ngroup1 and group2 - the returned matrix has the vectors pointing\nfrom each point in group1 to each point in group2. This returns\nthe shortest distance between two points in the group" );
         
         }
@@ -261,6 +279,7 @@ void register_CombinedSpace_class(){
                 "calcInvDist"
                 , calcInvDist_function_value
                 , ( bp::arg("group"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the inverse distances between all points in\nthe group group. Return the smallest distance between points." );
         
         }
@@ -273,6 +292,7 @@ void register_CombinedSpace_class(){
                 "calcInvDist"
                 , calcInvDist_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the inverse distances between all of the\npoints of the two CoordGroups. Return the shortest distance between\nthe two CoordGroups." );
         
         }
@@ -285,6 +305,7 @@ void register_CombinedSpace_class(){
                 "calcInvDist2"
                 , calcInvDist2_function_value
                 , ( bp::arg("group"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the inverse distances^2 between all points in\nthe group group. Return the smallest distance between points." );
         
         }
@@ -297,6 +318,7 @@ void register_CombinedSpace_class(){
                 "calcInvDist2"
                 , calcInvDist2_function_value
                 , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , bp::release_gil_policy()
                 , "Populate the matrix mat with the inverse distances^2 between all of the\npoints of the two CoordGroups. Return the shortest distance between\nthe two CoordGroups." );
         
         }
@@ -308,6 +330,7 @@ void register_CombinedSpace_class(){
             CombinedSpace_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of spaces in this combined space" );
         
         }
@@ -320,6 +343,7 @@ void register_CombinedSpace_class(){
                 "getBoxCenter"
                 , getBoxCenter_function_value
                 , ( bp::arg("p") )
+                , bp::release_gil_policy()
                 , "Return the center of the box that contains the point p assuming\nthat the center for the central box is located at the origin" );
         
         }
@@ -332,6 +356,7 @@ void register_CombinedSpace_class(){
                 "getBoxCenter"
                 , getBoxCenter_function_value
                 , ( bp::arg("p"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Return the center of the box that contains the point p assuming\nthat the center for the central box is located at center" );
         
         }
@@ -344,6 +369,7 @@ void register_CombinedSpace_class(){
                 "getCopiesWithin"
                 , getCopiesWithin_function_value
                 , ( bp::arg("group"), bp::arg("center"), bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return a list of copies of CoordGroup group that are within\ndistance of the CoordGroup center, translating group so that\nit has the right coordinates to be around center. As this is not\na periodic space, this will merely return a copy of group if\nit is within the specified distance." );
         
         }
@@ -356,6 +382,7 @@ void register_CombinedSpace_class(){
                 "getImagesWithin"
                 , getImagesWithin_function_value
                 , ( bp::arg("point"), bp::arg("center"), bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -368,6 +395,7 @@ void register_CombinedSpace_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("group"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Return the minimum image copy of group with respect to center.\nIn this case, as this is not a periodic space, this just returns\ngroup" );
         
         }
@@ -392,6 +420,7 @@ void register_CombinedSpace_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("aabox"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "A cartesian space is not periodic, so this just returns the input aabox" );
         
         }
@@ -404,6 +433,7 @@ void register_CombinedSpace_class(){
                 "getMinimumImage"
                 , getMinimumImage_function_value
                 , ( bp::arg("point"), bp::arg("center") )
+                , bp::release_gil_policy()
                 , "A cartesian space is not periodic, so this just returns the input point" );
         
         }
@@ -416,6 +446,7 @@ void register_CombinedSpace_class(){
                 "getRandomPoint"
                 , getRandomPoint_function_value
                 , ( bp::arg("center"), bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Return a random point within the spaces used in this combined space" );
         
         }
@@ -427,6 +458,7 @@ void register_CombinedSpace_class(){
             CombinedSpace_exposer.def( 
                 "isCartesian"
                 , isCartesian_function_value
+                , bp::release_gil_policy()
                 , "A CombinedSpace space is only cartesian if all of the\nsub-spaces are cartesian" );
         
         }
@@ -438,6 +470,7 @@ void register_CombinedSpace_class(){
             CombinedSpace_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is empty" );
         
         }
@@ -449,6 +482,7 @@ void register_CombinedSpace_class(){
             CombinedSpace_exposer.def( 
                 "isPeriodic"
                 , isPeriodic_function_value
+                , bp::release_gil_policy()
                 , "A CombinedSpace is only periodic of all of the contained\nspaces are periodic" );
         
         }
@@ -461,6 +495,7 @@ void register_CombinedSpace_class(){
                 "minimumDistance"
                 , minimumDistance_function_value
                 , ( bp::arg("box0"), bp::arg("box1") )
+                , bp::release_gil_policy()
                 , "Return the minimum distance between the boxes box0 and box1." );
         
         }
@@ -473,6 +508,7 @@ void register_CombinedSpace_class(){
                 "minimumDistance"
                 , minimumDistance_function_value
                 , ( bp::arg("group0"), bp::arg("group1") )
+                , bp::release_gil_policy()
                 , "Return the minimum distance between the points in group0 and group1." );
         
         }
@@ -485,6 +521,7 @@ void register_CombinedSpace_class(){
                 "minimumDistance"
                 , minimumDistance_function_value
                 , ( bp::arg("group") )
+                , bp::release_gil_policy()
                 , "Return the minimum distance between points within the group group." );
         
         }
@@ -496,6 +533,7 @@ void register_CombinedSpace_class(){
             CombinedSpace_exposer.def( 
                 "nSpaces"
                 , nSpaces_function_value
+                , bp::release_gil_policy()
                 , "Return the number of spaces in this combined space" );
         
         }
@@ -523,7 +561,7 @@ void register_CombinedSpace_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -536,6 +574,7 @@ void register_CombinedSpace_class(){
                 "setVolume"
                 , setVolume_function_value
                 , ( bp::arg("volume") )
+                , bp::release_gil_policy()
                 , "Try to set the volume of this combined space - this will only\nwork if we are really just one space" );
         
         }
@@ -547,6 +586,7 @@ void register_CombinedSpace_class(){
             CombinedSpace_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of spaces in this combined space" );
         
         }
@@ -558,6 +598,7 @@ void register_CombinedSpace_class(){
             CombinedSpace_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this space" );
         
         }
@@ -569,6 +610,7 @@ void register_CombinedSpace_class(){
             CombinedSpace_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -580,6 +622,7 @@ void register_CombinedSpace_class(){
             CombinedSpace_exposer.def( 
                 "volume"
                 , volume_function_value
+                , bp::release_gil_policy()
                 , "Returned the combined (summed) volume of all of the spaces" );
         
         }

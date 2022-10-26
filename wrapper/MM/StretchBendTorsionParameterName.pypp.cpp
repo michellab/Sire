@@ -51,6 +51,8 @@ SireMM::StretchBendTorsionParameterName __copy__(const SireMM::StretchBendTorsio
 
 const char* pvt_get_name(const SireMM::StretchBendTorsionParameterName&){ return "SireMM::StretchBendTorsionParameterName";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_StretchBendTorsionParameterName_class(){
 
     { //::SireMM::StretchBendTorsionParameterName

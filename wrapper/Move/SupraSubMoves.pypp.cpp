@@ -24,6 +24,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_SupraSubMoves_class(){
@@ -40,6 +42,7 @@ void register_SupraSubMoves_class(){
             SupraSubMoves_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -51,6 +54,7 @@ void register_SupraSubMoves_class(){
             SupraSubMoves_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of types of SupraSubMove objects in this set" );
         
         }
@@ -63,6 +67,7 @@ void register_SupraSubMoves_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nsubmoves"), bp::arg("nsubmoves_per_block"), bp::arg("record_substats") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -74,6 +79,7 @@ void register_SupraSubMoves_class(){
             SupraSubMoves_exposer.def( 
                 "nSubMoveTypes"
                 , nSubMoveTypes_function_value
+                , bp::release_gil_policy()
                 , "Return the number of types of SupraSubMove objects in this set" );
         
         }
@@ -98,7 +104,7 @@ void register_SupraSubMoves_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -110,6 +116,7 @@ void register_SupraSubMoves_class(){
             SupraSubMoves_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of types of SupraSubMove objects in this set" );
         
         }
@@ -121,6 +128,7 @@ void register_SupraSubMoves_class(){
             SupraSubMoves_exposer.def( 
                 "subMoves"
                 , subMoves_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -132,6 +140,7 @@ void register_SupraSubMoves_class(){
             SupraSubMoves_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -143,6 +152,7 @@ void register_SupraSubMoves_class(){
             SupraSubMoves_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

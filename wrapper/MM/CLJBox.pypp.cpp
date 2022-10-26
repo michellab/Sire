@@ -41,6 +41,8 @@ SireMM::CLJBox __copy__(const SireMM::CLJBox &other){ return SireMM::CLJBox(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_CLJBox_class(){
@@ -61,6 +63,7 @@ void register_CLJBox_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Add the passed atoms into this box. This returns the indicies\nof each added atom (in the same order as they were added)" );
         
         }
@@ -73,6 +76,7 @@ void register_CLJBox_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Add the passed atoms into this box. This returns the indicies\nof each added atom (in the same order as they were added)" );
         
         }
@@ -85,6 +89,7 @@ void register_CLJBox_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith CLJAtom - this uses the CLJAtoms index, i.e. includes\ndummy atoms and padding" );
         
         }
@@ -108,6 +113,7 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "boxLength"
                 , boxLength_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -119,6 +125,7 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the count of the box - this includes dummy atoms and padding" );
         
         }
@@ -130,6 +137,7 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "dimensions"
                 , dimensions_function_value
+                , bp::release_gil_policy()
                 , "Return the dimensions of this box" );
         
         }
@@ -142,6 +150,7 @@ void register_CLJBox_class(){
                 "getitem"
                 , getitem_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the ith CLJAtom - this uses the CLJAtoms index, i.e. includes\ndummy atoms and padding" );
         
         }
@@ -165,6 +174,7 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -176,6 +186,7 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the box. This is equal to the\nnumber of actual atoms (i.e. not including padding or dummy atoms)" );
         
         }
@@ -216,6 +227,7 @@ void register_CLJBox_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Remove the atom at index atom from the box" );
         
         }
@@ -228,6 +240,7 @@ void register_CLJBox_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Remove the atoms whose indicies are in atoms" );
         
         }
@@ -240,6 +253,7 @@ void register_CLJBox_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Remove the atoms at the specified indicies" );
         
         }
@@ -251,6 +265,7 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the count of the box - this includes dummy atoms and padding" );
         
         }
@@ -262,6 +277,7 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "squeeze"
                 , squeeze_function_value
+                , bp::release_gil_policy()
                 , "Return a copy of this box where the CLJAtoms are squeezed" );
         
         }
@@ -274,6 +290,7 @@ void register_CLJBox_class(){
                 "take"
                 , take_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Remove the atom at index atom, returning the atom removed" );
         
         }
@@ -285,6 +302,7 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -296,6 +314,7 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -307,6 +326,7 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

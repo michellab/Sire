@@ -37,6 +37,8 @@ SireMaths::TrigMatrix __copy__(const SireMaths::TrigMatrix &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_TrigMatrix_class(){
@@ -58,6 +60,7 @@ void register_TrigMatrix_class(){
                 "assertNColumns"
                 , assertNColumns_function_value
                 , ( bp::arg("ncolumns") )
+                , bp::release_gil_policy()
                 , "Assert that this matrix has ncolumns columns\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -70,6 +73,7 @@ void register_TrigMatrix_class(){
                 "assertNRows"
                 , assertNRows_function_value
                 , ( bp::arg("nrows") )
+                , bp::release_gil_policy()
                 , "Assert that this matrix has nrows rows\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -81,6 +85,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "assertSquare"
                 , assertSquare_function_value
+                , bp::release_gil_policy()
                 , "Assert that this is a square matrix - it definitely is" );
         
         }
@@ -93,6 +98,7 @@ void register_TrigMatrix_class(){
                 "assertValidColumn"
                 , assertValidColumn_function_value
                 , ( bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Assert that there is an jth column\nThrow: SireError::invalid_index\n" );
         
         }
@@ -105,6 +111,7 @@ void register_TrigMatrix_class(){
                 "assertValidIndex"
                 , assertValidIndex_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Assert that the index [i,j] is valid for this matrix\nThrow: SireError::invalid_index\n" );
         
         }
@@ -117,6 +124,7 @@ void register_TrigMatrix_class(){
                 "assertValidRow"
                 , assertValidRow_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Assert that there is an ith row\nThrow: SireError::invalid_index\n" );
         
         }
@@ -129,6 +137,7 @@ void register_TrigMatrix_class(){
                 "checkedOffset"
                 , checkedOffset_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Calculate the offset in the 1D array of the value\nat index [i,j]\nThrow: SireError::invalid_index\n" );
         
         }
@@ -141,6 +150,7 @@ void register_TrigMatrix_class(){
                 "column"
                 , column_function_value
                 , ( bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Return a vector containing the contents of the jth column\nThrow: SireError::invalid_index\n" );
         
         }
@@ -152,6 +162,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -163,6 +174,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "determinant"
                 , determinant_function_value
+                , bp::release_gil_policy()
                 , "Return the determinant of this matrix\nThis uses LAPACK under the hood, for speed\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -174,6 +186,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "diagonal"
                 , diagonal_function_value
+                , bp::release_gil_policy()
                 , "Return a vector containing the diagonal of this matrix - this is only\nvalid for a square matrix\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -185,6 +198,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "diagonalise"
                 , diagonalise_function_value
+                , bp::release_gil_policy()
                 , "Return the eigenvalues and eigenvectors of this matrix. This\nuses LAPACK under the hood for speed\nThrow: SireError::incompatible_error\nThrow: SireMaths::domain_error\n" );
         
         }
@@ -196,6 +210,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "fullTranspose"
                 , fullTranspose_function_value
+                , bp::release_gil_policy()
                 , "Fully transpose the data of this matrix - again, this does nothing" );
         
         }
@@ -207,6 +222,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "inverse"
                 , inverse_function_value
+                , bp::release_gil_policy()
                 , "Return the inverse of this matrix\nThis uses LAPACK under the hood, for speed\nThrow: SireError::incompatible_error\nThrow: SireMaths::domain_error\n" );
         
         }
@@ -218,6 +234,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "isTransposed"
                 , isTransposed_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a transposed matrix (data\nis stored in row-major order rather than column-major order)" );
         
         }
@@ -229,6 +246,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "memory"
                 , memory_function_value
+                , bp::release_gil_policy()
                 , "Return the QVector containing the memory of this Matrix" );
         
         }
@@ -240,6 +258,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "nColumns"
                 , nColumns_function_value
+                , bp::release_gil_policy()
                 , "Return the number of columns in this matrix" );
         
         }
@@ -251,6 +270,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "nRows"
                 , nRows_function_value
+                , bp::release_gil_policy()
                 , "Return the number of rows in this matrix" );
         
         }
@@ -263,6 +283,7 @@ void register_TrigMatrix_class(){
                 "offset"
                 , offset_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -312,6 +333,7 @@ void register_TrigMatrix_class(){
                 "redimension"
                 , redimension_function_value
                 , ( bp::arg("dimension") )
+                , bp::release_gil_policy()
                 , "Redimension this matrix to have dimension rows and dimension\ncolumns. The contents of this matrix are undefined after\nthis redimension. This function will only reallocate\nmemory if there is not enough memory allocated to store\nthe new matrix. Use this function if you want to use\nthe same piece of memory over and over again for lots\nof different size matricies - just create a matrix with\nthe maximum dimension, then call this redimension function\nwhenever you want to change. It is very fast, as it just\nupdates the internal record of the size of the matrix" );
         
         }
@@ -324,6 +346,7 @@ void register_TrigMatrix_class(){
                 "row"
                 , row_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return a vector containing the contents of the ith row\nThrow: SireError::invalid_index\n" );
         
         }
@@ -336,6 +359,7 @@ void register_TrigMatrix_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the value of [i,j] (and [j,i]) to value\nThrow: SireError::invalid_index\n" );
         
         }
@@ -348,6 +372,7 @@ void register_TrigMatrix_class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set all entries in the matrix to the value value" );
         
         }
@@ -360,6 +385,7 @@ void register_TrigMatrix_class(){
                 "setColumn"
                 , setColumn_function_value
                 , ( bp::arg("j"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the values of all data in the column j to value\nThrow: SireError::invalid_index\n" );
         
         }
@@ -372,6 +398,7 @@ void register_TrigMatrix_class(){
                 "setColumn"
                 , setColumn_function_value
                 , ( bp::arg("j"), bp::arg("column") )
+                , bp::release_gil_policy()
                 , "Copy the vector column to column j\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -384,6 +411,7 @@ void register_TrigMatrix_class(){
                 "setRow"
                 , setRow_function_value
                 , ( bp::arg("i"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the values of all data in the row i to value\nThrow: SireError::invalid_index\n" );
         
         }
@@ -396,6 +424,7 @@ void register_TrigMatrix_class(){
                 "setRow"
                 , setRow_function_value
                 , ( bp::arg("i"), bp::arg("row") )
+                , bp::release_gil_policy()
                 , "Copy the vector row to row i\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -407,6 +436,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -418,6 +448,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this matrix" );
         
         }
@@ -429,6 +460,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "trace"
                 , trace_function_value
+                , bp::release_gil_policy()
                 , "Return the trace of this matrix - this is only valid for a square matrix\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -440,6 +472,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "transpose"
                 , transpose_function_value
+                , bp::release_gil_policy()
                 , "Return the transpose of this matrix. This is fast, as it doesnt\nactually have to do anything" );
         
         }
@@ -451,6 +484,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -462,6 +496,7 @@ void register_TrigMatrix_class(){
             TrigMatrix_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

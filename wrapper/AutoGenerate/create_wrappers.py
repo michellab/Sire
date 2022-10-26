@@ -1,7 +1,7 @@
 ####################################################
 #
 # This script uses Py++ to create the Python
-# wrappers for Sire. This script should be run
+# wrappers for sire. This script should be run
 # in a directory that contains the results
 # of scanheaders.py
 #
@@ -283,6 +283,41 @@ def is_copy_constructor(f):
     return False
 
 
+def _call_with_release_gil(f):
+    if f.call_policies is None or f.call_policies.is_default():
+        # we cannot hold the GIL for a function that has default arguments.
+        # This is because the default arguments will be deleted by python
+        # before the GIL is restored, leading to a crash
+
+        for arg in f.arguments:
+            if arg.default_value:
+                print(f"Skipping GIL for {f} as argument {arg} is not default. {arg.default_value}")
+                return
+
+        f.call_policies = call_policies.custom_call_policies( "bp::release_gil_policy" )
+
+def call_all_with_released_gil(c):
+    """Make sure that all functions in this class are called with
+       the gil released
+    """
+    try:
+        funs = c.member_functions()
+    except Exception:
+        return
+
+    for f in funs:
+        _call_with_release_gil(f)
+
+def call_with_released_gil(c, func_name):
+    """Make sure that the gil is released when calling this function"""
+    try:
+        funs = c.member_functions(func_name)
+    except Exception:
+        return
+
+    for f in funs:
+        _call_with_release_gil(f)
+
 def export_class(mb, classname, aliases, includes, special_code, auto_str_function=True):
    """Do all the work necessary to allow the class called 'classname'
       to be exported, using the supplied aliases, and using the
@@ -327,7 +362,7 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
    for f in funs:
        if has_clone_function(f.return_type):
            f.call_policies = call_policies.custom_call_policies( \
-                 "bp::return_value_policy<bp::clone_const_reference>", \
+                 "bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>", \
                  "Helpers/clone_const_reference.hpp" )
 
    #also add any operator[] or operator() functions
@@ -341,7 +376,7 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
        if (str(f).find("[]") != -1) or (str(f).find("()") != -1):
            if has_clone_function(f.return_type):
                f.call_policies = call_policies.custom_call_policies( \
-                   "bp::return_value_policy<bp::clone_const_reference>", \
+                   "bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>", \
                    "Helpers/clone_const_reference.hpp" )
 
    #remove any declarations that return a pointer to something
@@ -449,6 +484,11 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
 
            c.add_registration_code("def( \"__str__\", &pvt_get_name)")
            c.add_registration_code("def( \"__repr__\", &pvt_get_name)")
+
+   # call all functions while releasing the gil
+   call_all_with_released_gil(c)
+
+   c.add_declaration_code( "#include \"Helpers/release_gil_policy.hpp\"" )
 
    #is there a "count" or "size" function for this class?
    if has_function(c, "size"):

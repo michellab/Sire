@@ -39,6 +39,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AtomProp_class(){
 
     { //::SireMol::AtomProp
@@ -54,6 +56,7 @@ void register_AtomProp_class(){
                 "assertCanConvert"
                 , assertCanConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -66,6 +69,7 @@ void register_AtomProp_class(){
                 "assignFrom"
                 , assignFrom_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -78,6 +82,7 @@ void register_AtomProp_class(){
                 "canConvert"
                 , canConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -90,6 +95,7 @@ void register_AtomProp_class(){
                 "divide"
                 , divide_function_value
                 , ( bp::arg("beads") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -102,6 +108,7 @@ void register_AtomProp_class(){
                 "divideByResidue"
                 , divideByResidue_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -114,6 +121,7 @@ void register_AtomProp_class(){
                 "getAsProperty"
                 , getAsProperty_function_value
                 , ( bp::arg("cgatomidx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -126,6 +134,7 @@ void register_AtomProp_class(){
                 "getAsVariant"
                 , getAsVariant_function_value
                 , ( bp::arg("cgatomidx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -138,6 +147,7 @@ void register_AtomProp_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -162,6 +172,7 @@ void register_AtomProp_class(){
             AtomProp_exposer.def( 
                 "toVariant"
                 , toVariant_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

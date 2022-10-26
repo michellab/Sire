@@ -21,6 +21,8 @@ SireMol::ChainProperty<long long> __copy__(const SireMol::ChainProperty<long lon
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_ChainIntProperty_class(){
@@ -55,6 +57,7 @@ void register_ChainIntProperty_class(){
                 "assertCanConvert"
                 , assertCanConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -68,6 +71,7 @@ void register_ChainIntProperty_class(){
                 "assignFrom"
                 , assignFrom_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +99,7 @@ void register_ChainIntProperty_class(){
                 "canConvert"
                 , canConvert_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -107,6 +112,7 @@ void register_ChainIntProperty_class(){
             ChainIntProperty_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -120,6 +126,7 @@ void register_ChainIntProperty_class(){
                 "fromVariant"
                 , fromVariant_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -137,6 +144,34 @@ void register_ChainIntProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::ChainProperty< long long >::getAsProperty
+        
+            typedef SireMol::ChainProperty< long long > exported_class_t;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::ChainProperty< long long >::*getAsProperty_function_type)( ::SireMol::ChainIdx const & ) const;
+            getAsProperty_function_type getAsProperty_function_value( &::SireMol::ChainProperty< long long >::getAsProperty );
+            
+            ChainIntProperty_exposer.def( 
+                "getAsProperty"
+                , getAsProperty_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::ChainProperty< long long >::getAsVariant
+        
+            typedef SireMol::ChainProperty< long long > exported_class_t;
+            typedef ::QVariant ( ::SireMol::ChainProperty< long long >::*getAsVariant_function_type)( ::SireMol::ChainIdx const & ) const;
+            getAsVariant_function_type getAsVariant_function_value( &::SireMol::ChainProperty< long long >::getAsVariant );
+            
+            ChainIntProperty_exposer.def( 
+                "getAsVariant"
+                , getAsVariant_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::ChainProperty< long long >::isCompatibleWith
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
@@ -147,6 +182,7 @@ void register_ChainIntProperty_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -159,6 +195,7 @@ void register_ChainIntProperty_class(){
             ChainIntProperty_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -171,6 +208,7 @@ void register_ChainIntProperty_class(){
             ChainIntProperty_exposer.def( 
                 "nChains"
                 , nChains_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -227,6 +265,7 @@ void register_ChainIntProperty_class(){
             ChainIntProperty_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -239,6 +278,7 @@ void register_ChainIntProperty_class(){
             ChainIntProperty_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -251,6 +291,7 @@ void register_ChainIntProperty_class(){
             ChainIntProperty_exposer.def( 
                 "toVariant"
                 , toVariant_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -263,6 +304,7 @@ void register_ChainIntProperty_class(){
             ChainIntProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

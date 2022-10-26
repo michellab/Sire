@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/quaternion.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/molecule.h"
 
 #include "SireMol/partialmolecule.h"
@@ -32,6 +34,8 @@ namespace bp = boost::python;
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 void register_MolInserter_class(){
 
@@ -72,6 +76,7 @@ void register_MolInserter_class(){
                 "insert"
                 , insert_function_value
                 , ( bp::arg("molecule"), bp::arg("system"), bp::arg("space") )
+                , bp::release_gil_policy()
                 , "Insert the entire molecule molecule into the system system\nusing the space space, using the information about which\ngroups to add the molecule to (and which properties to use)\nwhich are contained in this inserter). This returns the\nprobability of where the molecule was inserted (normalised\nso that a probability of 1 is returned if the molecule\nwas added at a uniformly random orientation and position)" );
         
         }
@@ -84,6 +89,7 @@ void register_MolInserter_class(){
                 "insert"
                 , insert_function_value
                 , ( bp::arg("molecule"), bp::arg("system"), bp::arg("space") )
+                , bp::release_gil_policy()
                 , "Insert the partial molecule molecule into the system system\nusing the space space, using the information about which\ngroups to add the molecule to (and which properties to use)\nwhich are contained in this inserter). This returns the\nprobability of where the molecule was inserted (normalised\nso that a probability of 1 is returned if the molecule\nwas added at a uniformly random orientation and position)" );
         
         }
@@ -108,6 +114,7 @@ void register_MolInserter_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator used to generate the random\nnumbers used to insert the molecule" );
         
         }
@@ -120,6 +127,7 @@ void register_MolInserter_class(){
                 "setGroups"
                 , setGroups_function_value
                 , ( bp::arg("mgids") )
+                , bp::release_gil_policy()
                 , "Set the groups (and associated properties) used when adding\nthe molecule to the system" );
         
         }
@@ -131,6 +139,7 @@ void register_MolInserter_class(){
             MolInserter_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

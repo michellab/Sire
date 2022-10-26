@@ -27,7 +27,7 @@ set ( WRAPMATHS_SOURCES
 
       _Maths.main.cpp
       _Maths_global_variables.pyman.cpp
-     
+
       ${PYPP_SOURCES}
 
     )
@@ -43,18 +43,18 @@ set_target_properties (Maths
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
-target_link_libraries (Maths 
+
+target_link_libraries (Maths
                        SirePython
                        SIRE_SireMaths
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_Maths" "_init_Maths" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/Maths )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/Maths )
 
 install( TARGETS Maths
          LIBRARY DESTINATION ${INSTALLDIR}
@@ -63,6 +63,6 @@ install( TARGETS Maths
         )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )
 

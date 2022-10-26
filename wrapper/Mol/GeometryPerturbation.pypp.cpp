@@ -17,6 +17,8 @@ namespace bp = boost::python;
 
 #include "SireUnits/units.h"
 
+#include "core.h"
+
 #include "geometryperturbation.h"
 
 #include "molecule.h"
@@ -30,6 +32,8 @@ namespace bp = boost::python;
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 void register_GeometryPerturbation_class(){
 
@@ -57,6 +61,7 @@ void register_GeometryPerturbation_class(){
             GeometryPerturbation_exposer.def( 
                 "requiredProperties"
                 , requiredProperties_function_value
+                , bp::release_gil_policy()
                 , "Return the properties required or affected by this perturbation" );
         
         }
@@ -68,6 +73,7 @@ void register_GeometryPerturbation_class(){
             GeometryPerturbation_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

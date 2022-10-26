@@ -91,6 +91,8 @@ SireIO::Amber __copy__(const SireIO::Amber &other){ return SireIO::Amber(other);
 
 const char* pvt_get_name(const SireIO::Amber&){ return "SireIO::Amber";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Amber_class(){
 
     { //::SireIO::Amber
@@ -106,6 +108,7 @@ void register_Amber_class(){
             Amber_exposer.def( 
                 "coulomb14Factor"
                 , coulomb14Factor_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -117,6 +120,7 @@ void register_Amber_class(){
             Amber_exposer.def( 
                 "lj14Factor"
                 , lj14Factor_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -156,6 +160,7 @@ void register_Amber_class(){
                 "set14Factors"
                 , set14Factors_function_value
                 , ( bp::arg("coul_14"), bp::arg("lj_14") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -167,6 +172,7 @@ void register_Amber_class(){
             Amber_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -178,6 +184,7 @@ void register_Amber_class(){
             Amber_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

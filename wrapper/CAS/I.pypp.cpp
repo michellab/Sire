@@ -25,6 +25,8 @@ SireCAS::I __copy__(const SireCAS::I &other){ return SireCAS::I(other); }
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_I_class(){
 
     { //::SireCAS::I
@@ -40,6 +42,7 @@ void register_I_class(){
             I_exposer.def( 
                 "conjugate"
                 , conjugate_function_value
+                , bp::release_gil_policy()
                 , "Return the complex conjugate of i (-i)" );
         
         }
@@ -52,6 +55,7 @@ void register_I_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Cannot evaluate i as a real number, so throw a domain error" );
         
         }
@@ -64,6 +68,7 @@ void register_I_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Evaluate this as a complex number - return i" );
         
         }
@@ -75,6 +80,7 @@ void register_I_class(){
             I_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "Return a hash of this expression" );
         
         }
@@ -86,6 +92,7 @@ void register_I_class(){
             I_exposer.def( 
                 "isComplex"
                 , isComplex_function_value
+                , bp::release_gil_policy()
                 , "I is definitely complex :-)" );
         
         }
@@ -98,6 +105,7 @@ void register_I_class(){
             I_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation" );
         
         }
@@ -109,6 +117,7 @@ void register_I_class(){
             I_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -120,6 +129,7 @@ void register_I_class(){
             I_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

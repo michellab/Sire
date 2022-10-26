@@ -23,6 +23,8 @@ SireBase::Version __copy__(const SireBase::Version &other){ return SireBase::Ver
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Version_class(){
 
     { //::SireBase::Version
@@ -38,6 +40,7 @@ void register_Version_class(){
             Version_exposer.def( 
                 "majorVersion"
                 , majorVersion_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -49,6 +52,7 @@ void register_Version_class(){
             Version_exposer.def( 
                 "minorVersion"
                 , minorVersion_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -75,6 +79,7 @@ void register_Version_class(){
             Version_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this version number" );
         
         }
@@ -86,6 +91,7 @@ void register_Version_class(){
             Version_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -97,6 +103,7 @@ void register_Version_class(){
             Version_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

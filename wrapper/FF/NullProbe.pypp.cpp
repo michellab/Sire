@@ -21,6 +21,8 @@ SireFF::NullProbe __copy__(const SireFF::NullProbe &other){ return SireFF::NullP
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullProbe_class(){
 
     { //::SireFF::NullProbe
@@ -51,6 +53,7 @@ void register_NullProbe_class(){
             NullProbe_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

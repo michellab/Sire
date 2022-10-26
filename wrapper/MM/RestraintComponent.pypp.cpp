@@ -20,6 +20,8 @@ SireMM::RestraintComponent __copy__(const SireMM::RestraintComponent &other){ re
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_RestraintComponent_class(){
 
     { //::SireMM::RestraintComponent
@@ -38,6 +40,7 @@ void register_RestraintComponent_class(){
                 "changeEnergy"
                 , changeEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("nrg") )
+                , bp::release_gil_policy()
                 , "Change the restraint component of the energy in the forcefield ff\nby delta" );
         
         }
@@ -50,6 +53,7 @@ void register_RestraintComponent_class(){
                 "setEnergy"
                 , setEnergy_function_value
                 , ( bp::arg("ff"), bp::arg("nrg") )
+                , bp::release_gil_policy()
                 , "Set the restraint component of the energy in the forcefield ff\nto equal to the passed RestraintEnergy" );
         
         }
@@ -61,6 +65,7 @@ void register_RestraintComponent_class(){
             RestraintComponent_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -72,7 +77,7 @@ void register_RestraintComponent_class(){
             RestraintComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -84,6 +89,7 @@ void register_RestraintComponent_class(){
             RestraintComponent_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +101,7 @@ void register_RestraintComponent_class(){
             RestraintComponent_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

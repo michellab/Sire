@@ -39,6 +39,8 @@ SireMM::CLJSoftRFFunction __copy__(const SireMM::CLJSoftRFFunction &other){ retu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJSoftRFFunction_class(){
 
     { //::SireMM::CLJSoftRFFunction
@@ -64,6 +66,7 @@ void register_CLJSoftRFFunction_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not this function contains a property called name" );
         
         }
@@ -75,6 +78,7 @@ void register_CLJSoftRFFunction_class(){
             CLJSoftRFFunction_exposer.def( 
                 "defaultRFFunction"
                 , defaultRFFunction_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -86,6 +90,7 @@ void register_CLJSoftRFFunction_class(){
             CLJSoftRFFunction_exposer.def( 
                 "dielectric"
                 , dielectric_function_value
+                , bp::release_gil_policy()
                 , "Return the value of the dielectric constant" );
         
         }
@@ -112,6 +117,7 @@ void register_CLJSoftRFFunction_class(){
             CLJSoftRFFunction_exposer.def( 
                 "properties"
                 , properties_function_value
+                , bp::release_gil_policy()
                 , "Return the properties of this function" );
         
         }
@@ -124,6 +130,7 @@ void register_CLJSoftRFFunction_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return the value of the property with name name" );
         
         }
@@ -136,6 +143,7 @@ void register_CLJSoftRFFunction_class(){
                 "setDielectric"
                 , setDielectric_function_value
                 , ( bp::arg("dielectric") )
+                , bp::release_gil_policy()
                 , "Set the dielectric constant to dielectric" );
         
         }
@@ -148,6 +156,7 @@ void register_CLJSoftRFFunction_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Return a copy of this function where the property name has been set to the\nvalue value" );
         
         }
@@ -159,6 +168,7 @@ void register_CLJSoftRFFunction_class(){
             CLJSoftRFFunction_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -170,6 +180,7 @@ void register_CLJSoftRFFunction_class(){
             CLJSoftRFFunction_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -181,6 +192,7 @@ void register_CLJSoftRFFunction_class(){
             CLJSoftRFFunction_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -27,6 +27,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FFID_class(){
 
     { //::SireFF::FFID
@@ -42,6 +44,7 @@ void register_FFID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("ffields") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -93,6 +96,7 @@ void register_FFID_class(){
             FFID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

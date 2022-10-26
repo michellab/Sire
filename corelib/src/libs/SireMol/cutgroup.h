@@ -79,6 +79,7 @@ public:
     typedef CGID ID;
     typedef CGIdx Index;
     typedef CGName Name;
+    typedef CGIdx Number;
 
     CutGroup();
 
@@ -89,50 +90,56 @@ public:
     ~CutGroup();
 
     CutGroup& operator=(const CutGroup &other);
-    
+
     bool operator==(const CutGroup &other) const;
     bool operator!=(const CutGroup &other) const;
-    
+
     static const char* typeName();
-    
+
     CutGroup* clone() const;
 
     QString toString() const;
-    
+
     bool isEmpty() const;
     bool selectedAll() const;
-    
+
     AtomSelection selection() const;
-    
+
+    MolViewPtr toSelector() const;
+
     void update(const MoleculeData &moldata);
-    
+
     const CGName& name() const;
     CGIdx index() const;
-    
+    CGIdx number() const;
+
     bool hasProperty(const PropertyName &key) const;
     bool hasMetadata(const PropertyName &metakey) const;
     bool hasMetadata(const PropertyName &key,
                      const PropertyName &metakey) const;
-                     
+
     QStringList propertyKeys() const;
     QStringList metadataKeys() const;
     QStringList metadataKeys(const PropertyName &key) const;
-    
+
+    QVariant propertyAsVariant(const PropertyName &key) const;
+    SireBase::PropertyPtr propertyAsProperty(const PropertyName &key) const;
+
     template<class T>
     const T& property(const PropertyName &key) const;
-    
+
     template<class T>
     const T& metadata(const PropertyName &metakey) const;
-    
+
     template<class T>
     const T& metadata(const PropertyName &key,
                       const PropertyName &metakey) const;
-    
+
     Mover<CutGroup> move() const;
     Evaluator evaluate() const;
     CGEditor edit() const;
     Selector<CutGroup> selector() const;
-    
+
     int nAtoms() const;
 
     const QList<AtomIdx>& atomIdxs() const;
@@ -140,9 +147,9 @@ public:
     bool contains(const AtomID &atomid) const;
     bool contains(AtomIdx atomidx) const;
     bool intersects(const AtomID &atomid) const;
-    
+
     void assertContainsProperty(const PropertyName &key) const;
-    
+
     void assertContainsMetadata(const PropertyName &metakey) const;
     void assertContainsMetadata(const PropertyName &key,
                                 const PropertyName &metakey) const;
@@ -154,7 +161,7 @@ protected:
     template<class T>
     void setMetadata(const QString &key, const QString &metakey,
                      const T &value);
-                     
+
     template<class T>
     void setMetadata(const QString &metakey, const T &value);
 
@@ -165,12 +172,12 @@ private:
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
-/** Return the property (of type T) at key 'key' that is 
+/** Return the property (of type T) at key 'key' that is
     specifically assigned to this CutGroup. This will only work
     if the property at this key is a CutGroup property (i.e.
     has one value for every CutGroup) and that it can be
     cast to type T
-    
+
     \throw SireMol::missing_property
     \throw SireError::invalid_cast
 */
@@ -199,13 +206,13 @@ const T& CutGroup::metadata(const PropertyName &key) const
 
 /** Return the metadata at metakey 'metakey' for the property
     at key 'key'
-    
+
     \throw SireMol::missing_property
     \throw SireError::invalid_cast
 */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-const T& CutGroup::metadata(const PropertyName &key, 
+const T& CutGroup::metadata(const PropertyName &key,
                             const PropertyName &metakey) const
 {
     const Property &property = d->metadata(key, metakey);
@@ -217,9 +224,9 @@ const T& CutGroup::metadata(const PropertyName &key,
     CutGroup to be equal to 'value'. This works by creating
     a CGProperty<T> for this molecule, and assigning
     the value for this CutGroup to 'value'. If there is already
-    a property at key 'key', then it must be of type 
+    a property at key 'key', then it must be of type
     CGProperty<T> for this to work
-    
+
     \throw SireMol::invalid_cast
 */
 template<class T>
@@ -230,9 +237,9 @@ void CutGroup::setProperty(const QString &key, const T &value)
                                                      value);
 }
 
-/** Set the metadata at metakey 'metakey' to the value 'value' 
+/** Set the metadata at metakey 'metakey' to the value 'value'
     for this residue
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -245,7 +252,7 @@ void CutGroup::setMetadata(const QString &metakey, const T &value)
 
 /** Set the metadata at metakey 'metakey' for the property at key
     'key' to the value 'value'
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -253,7 +260,7 @@ SIRE_OUTOFLINE_TEMPLATE
 void CutGroup::setMetadata(const QString &key, const QString &metakey,
                            const T &value)
 {
-    MoleculeView::setMetadata<CGIdx,CGProperty<T>,T>(*d, key, metakey, this->index(), 
+    MoleculeView::setMetadata<CGIdx,CGProperty<T>,T>(*d, key, metakey, this->index(),
                                                      value);
 }
 
@@ -261,7 +268,13 @@ namespace detail
 {
 
 void assertSameSize(CutGroup*, int nres, int nprops);
-    
+
+template<>
+SIRE_ALWAYS_INLINE int getCount<CutGroup>(const MolInfo &molinfo)
+{
+    return molinfo.nCutGroups();
+}
+
 template<>
 SIRE_ALWAYS_INLINE QList<CGIdx> getAll<CutGroup>(const MolInfo &molinfo)
 {
@@ -334,7 +347,7 @@ void set_metadata(CutGroup *ptr, MoleculeData &moldata,
                   const QList<V> &values)
 {
     assertSameSize(ptr, idxs.count(), values.count());
-    
+
     set_metadata<CGProperty<V>,CutGroup::Index,V>(moldata,idxs,key,metakey,values);
 }
 
@@ -370,12 +383,12 @@ void set_metadata(CutGroup*, MoleculeData &moldata,
 
 SIREMOL_EXPORT bool has_property(const CutGroup*, const MoleculeData &moldata,
                   const PropertyName &key);
-                  
+
 SIREMOL_EXPORT bool has_metadata(const CutGroup*, const MoleculeData &moldata,
                   const PropertyName &metakey);
-                  
+
 SIREMOL_EXPORT bool has_metadata(const CutGroup*, const MoleculeData &moldata,
-                  const PropertyName &key, const PropertyName &metakey);                 
+                  const PropertyName &key, const PropertyName &metakey);
 
 } //end of namespace detail
 

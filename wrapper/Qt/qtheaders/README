@@ -1,5 +1,5 @@
-This directory contains the Qt headers that are scanned to 
-generate the Sire.Qt wrappers. These headers come
+This directory contains the Qt headers that are scanned to
+generate the sire.legacy.Qt wrappers. These headers come
 from the opensource X11 version of Qt 4.2.1
 
 (the minimum version of Qt supported by Sire)

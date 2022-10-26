@@ -25,6 +25,8 @@ SireBase::BooleanProperty __copy__(const SireBase::BooleanProperty &other){ retu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_BooleanProperty_class(){
 
     { //::SireBase::BooleanProperty
@@ -43,6 +45,7 @@ void register_BooleanProperty_class(){
             BooleanProperty_exposer.def( 
                 "asABoolean"
                 , asABoolean_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -54,6 +57,7 @@ void register_BooleanProperty_class(){
             BooleanProperty_exposer.def( 
                 "asADouble"
                 , asADouble_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -65,6 +69,7 @@ void register_BooleanProperty_class(){
             BooleanProperty_exposer.def( 
                 "asAString"
                 , asAString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -76,6 +81,7 @@ void register_BooleanProperty_class(){
             BooleanProperty_exposer.def( 
                 "asAnInteger"
                 , asAnInteger_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -87,6 +93,7 @@ void register_BooleanProperty_class(){
             BooleanProperty_exposer.def( 
                 "isABoolean"
                 , isABoolean_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -98,6 +105,7 @@ void register_BooleanProperty_class(){
             BooleanProperty_exposer.def( 
                 "isADouble"
                 , isADouble_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -109,6 +117,7 @@ void register_BooleanProperty_class(){
             BooleanProperty_exposer.def( 
                 "isAString"
                 , isAString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -120,6 +129,7 @@ void register_BooleanProperty_class(){
             BooleanProperty_exposer.def( 
                 "isAnInteger"
                 , isAnInteger_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -146,6 +156,7 @@ void register_BooleanProperty_class(){
             BooleanProperty_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -157,6 +168,7 @@ void register_BooleanProperty_class(){
             BooleanProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -168,6 +180,7 @@ void register_BooleanProperty_class(){
             BooleanProperty_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "Return this number cast as a double" );
         
         }

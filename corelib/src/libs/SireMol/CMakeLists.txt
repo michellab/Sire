@@ -71,6 +71,7 @@ set ( SIREMOL_HEADERS
       chainresid.h
       chargeperturbation.h
       connectivity.h
+      core.h
       cutgroup.h
       cuttingfunction.h
       dihedralid.h
@@ -80,6 +81,7 @@ set ( SIREMOL_HEADERS
       elementdb.h
       errors.h
       evaluator.h
+      evaluatorm.h
       improperid.h
       geometryperturbation.h
       groupatomids.h
@@ -114,12 +116,7 @@ set ( SIREMOL_HEADERS
       mover.h
       mover.hpp
       mover_metaid.h
-
       parser.h
-      parser/ast.h
-      parser/idengine.h
-      parser/grammar.h
-
       partialmolecule.h
       perturbation.h
       radical.h
@@ -142,6 +139,8 @@ set ( SIREMOL_HEADERS
       segproperty.hpp
       select.h
       selector.hpp
+      selectorm.hpp
+      selectormol.h
       specifymol.h
       stereoscopy.h
       structureeditor.h
@@ -198,6 +197,7 @@ set ( SIREMOL_SOURCES
       elementdb.cpp
       errors.cpp
       evaluator.cpp
+      evaluatorm.cpp
       improperid.cpp
       findmcs.cpp
       geometryperturbation.cpp
@@ -224,11 +224,7 @@ set ( SIREMOL_SOURCES
       molwithresid.cpp
       molviewproperty.cpp
       mover.cpp
-
       parser.cpp
-      parser/ast.cpp
-      parser/idengine.cpp
-
       partialmolecule.cpp
       perturbation.cpp
       radical.cpp
@@ -244,6 +240,7 @@ set ( SIREMOL_SOURCES
       segment.cpp
       segproperty.cpp
       select.cpp
+      selectormol.cpp
       specifymol.cpp
       stereoscopy.cpp
       structureeditor.cpp

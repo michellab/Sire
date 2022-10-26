@@ -27,6 +27,8 @@ SireBase::NumberProperty __copy__(const SireBase::NumberProperty &other){ return
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NumberProperty_class(){
 
     { //::SireBase::NumberProperty
@@ -46,6 +48,7 @@ void register_NumberProperty_class(){
             NumberProperty_exposer.def( 
                 "asABoolean"
                 , asABoolean_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -57,6 +60,7 @@ void register_NumberProperty_class(){
             NumberProperty_exposer.def( 
                 "asADouble"
                 , asADouble_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -68,6 +72,7 @@ void register_NumberProperty_class(){
             NumberProperty_exposer.def( 
                 "asAString"
                 , asAString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -79,6 +84,7 @@ void register_NumberProperty_class(){
             NumberProperty_exposer.def( 
                 "asAnInteger"
                 , asAnInteger_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -90,6 +96,7 @@ void register_NumberProperty_class(){
             NumberProperty_exposer.def( 
                 "isABoolean"
                 , isABoolean_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -101,6 +108,7 @@ void register_NumberProperty_class(){
             NumberProperty_exposer.def( 
                 "isADouble"
                 , isADouble_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -112,6 +120,7 @@ void register_NumberProperty_class(){
             NumberProperty_exposer.def( 
                 "isAString"
                 , isAString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -123,6 +132,7 @@ void register_NumberProperty_class(){
             NumberProperty_exposer.def( 
                 "isAnInteger"
                 , isAnInteger_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -149,6 +159,7 @@ void register_NumberProperty_class(){
             NumberProperty_exposer.def( 
                 "toDouble"
                 , toDouble_function_value
+                , bp::release_gil_policy()
                 , "Return this number cast as a double" );
         
         }
@@ -160,6 +171,7 @@ void register_NumberProperty_class(){
             NumberProperty_exposer.def( 
                 "toInt"
                 , toInt_function_value
+                , bp::release_gil_policy()
                 , "Return this number cast as an integer" );
         
         }
@@ -171,6 +183,7 @@ void register_NumberProperty_class(){
             NumberProperty_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -182,6 +195,7 @@ void register_NumberProperty_class(){
             NumberProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -193,6 +207,7 @@ void register_NumberProperty_class(){
             NumberProperty_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "Return this number cast as a double" );
         
         }

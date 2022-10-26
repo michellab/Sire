@@ -27,6 +27,8 @@ SireCluster::WorkTest __copy__(const SireCluster::WorkTest &other){ return SireC
 
 const char* pvt_get_name(const SireCluster::WorkTest&){ return "SireCluster::WorkTest";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_WorkTest_class(){
 
     { //::SireCluster::WorkTest
@@ -43,6 +45,7 @@ void register_WorkTest_class(){
             WorkTest_exposer.def( 
                 "approximatePacketSize"
                 , approximatePacketSize_function_value
+                , bp::release_gil_policy()
                 , "Return the approximate maximum size (in bytes) of the WorkPacket. This\ndoesnt have to exact (or indeed accurate) - it is used\nto help the WorkPacket::pack() function reserve enough\nspace when serialising this packet to a binary array.\nThe only penalty of getting this wrong is that youll\neither allocate too much space, or be reallocating while\nthe packet is being written" );
         
         }
@@ -54,6 +57,7 @@ void register_WorkTest_class(){
             WorkTest_exposer.def( 
                 "hasFinished"
                 , hasFinished_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the work has finished" );
         
         }
@@ -78,6 +82,7 @@ void register_WorkTest_class(){
             WorkTest_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -89,6 +94,7 @@ void register_WorkTest_class(){
             WorkTest_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

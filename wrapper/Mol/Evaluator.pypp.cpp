@@ -51,6 +51,8 @@ namespace bp = boost::python;
 
 #include "connectivity.h"
 
+#include "core.h"
+
 #include "dihedralid.h"
 
 #include "editor.hpp"
@@ -72,6 +74,8 @@ SireMol::Evaluator __copy__(const SireMol::Evaluator &other){ return SireMol::Ev
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 #include "Helpers/len.hpp"
 
@@ -119,6 +123,7 @@ void register_Evaluator_class(){
                 "alignmentAxes"
                 , alignmentAxes_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -587,6 +592,7 @@ void register_Evaluator_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -599,6 +605,7 @@ void register_Evaluator_class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("arg0"), bp::arg("arg1") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -611,6 +618,7 @@ void register_Evaluator_class(){
                 "hasProperty"
                 , hasProperty_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -622,6 +630,7 @@ void register_Evaluator_class(){
             Evaluator_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is empty" );
         
         }
@@ -717,6 +726,7 @@ void register_Evaluator_class(){
             Evaluator_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -729,6 +739,7 @@ void register_Evaluator_class(){
                 "metadataKeys"
                 , metadataKeys_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -790,6 +801,7 @@ void register_Evaluator_class(){
             Evaluator_exposer.def( 
                 "propertyKeys"
                 , propertyKeys_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -814,6 +826,7 @@ void register_Evaluator_class(){
                 "rmsd"
                 , rmsd_function_value
                 , ( bp::arg("other"), bp::arg("map0"), bp::arg("map1") )
+                , bp::release_gil_policy()
                 , "Return the root mean square deviation (RMSD) of the atoms in this view against\nthe atoms in other, using the passed property maps to find the required\nproperties" );
         
         }
@@ -838,6 +851,7 @@ void register_Evaluator_class(){
                 "rmsd"
                 , rmsd_function_value
                 , ( bp::arg("other"), bp::arg("atommatcher"), bp::arg("map0"), bp::arg("map1") )
+                , bp::release_gil_policy()
                 , "Return the root mean square deviation (RMSD) of the atoms in this view against\nthe atoms in other, using the passed AtomMatcher to match atoms in this\nview against other, and using the passed property maps to find the required\nproperties" );
         
         }
@@ -849,6 +863,7 @@ void register_Evaluator_class(){
             Evaluator_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this contains the whole molecule" );
         
         }
@@ -860,7 +875,20 @@ void register_Evaluator_class(){
             Evaluator_exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
                 , "Return the selected atoms over which the properties\nwill be evaluated" );
+        
+        }
+        { //::SireMol::Evaluator::toSelector
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Evaluator::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::Evaluator::toSelector );
+            
+            Evaluator_exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::Evaluator::toString
@@ -871,6 +899,7 @@ void register_Evaluator_class(){
             Evaluator_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this evaluator" );
         
         }
@@ -882,6 +911,7 @@ void register_Evaluator_class(){
             Evaluator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

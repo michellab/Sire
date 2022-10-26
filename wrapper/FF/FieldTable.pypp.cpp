@@ -35,6 +35,8 @@ SireFF::FieldTable __copy__(const SireFF::FieldTable &other){ return SireFF::Fie
 
 const char* pvt_get_name(const SireFF::FieldTable&){ return "SireFF::FieldTable";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FieldTable_class(){
 
     { //::SireFF::FieldTable
@@ -56,6 +58,7 @@ void register_FieldTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Add the contents of the table other onto this table. This will only\nadd the fields for the molecules  grids that are in both tables" );
         
         }
@@ -68,6 +71,7 @@ void register_FieldTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("field") )
+                , bp::release_gil_policy()
                 , "Add the field field onto all of the atom  grid points in this table" );
         
         }
@@ -80,6 +84,7 @@ void register_FieldTable_class(){
                 "assertContainsTableFor"
                 , assertContainsTableFor_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Assert that this contains a table for the molecule with number molnum\nThrow: SireError::unavailable_resource\n" );
         
         }
@@ -92,6 +97,7 @@ void register_FieldTable_class(){
                 "assertContainsTableFor"
                 , assertContainsTableFor_function_value
                 , ( bp::arg("grid") )
+                , bp::release_gil_policy()
                 , "Assert that this contains a table for the passed grid\nThrow: SireError::unavailable_resource\n" );
         
         }
@@ -130,6 +136,7 @@ void register_FieldTable_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Return whether or not this contains a table for the passed grid" );
         
         }
@@ -142,6 +149,7 @@ void register_FieldTable_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("grid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this contains a table for the passed grid" );
         
         }
@@ -154,6 +162,7 @@ void register_FieldTable_class(){
                 "divide"
                 , divide_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Divide the field at all atom and grid points by value" );
         
         }
@@ -204,6 +213,7 @@ void register_FieldTable_class(){
                 "indexOf"
                 , indexOf_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Return the index of the molecule with number molnum in this table\nThrow: SireMol::missing_molecule\n" );
         
         }
@@ -216,6 +226,7 @@ void register_FieldTable_class(){
                 "initialiseTable"
                 , initialiseTable_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Initialise the table for the molecule with number molnum" );
         
         }
@@ -228,6 +239,7 @@ void register_FieldTable_class(){
                 "initialiseTable"
                 , initialiseTable_function_value
                 , ( bp::arg("grid") )
+                , bp::release_gil_policy()
                 , "Initialise the table for the grid grid" );
         
         }
@@ -239,6 +251,7 @@ void register_FieldTable_class(){
             FieldTable_exposer.def( 
                 "initialiseTables"
                 , initialiseTables_function_value
+                , bp::release_gil_policy()
                 , "Initialise all of the tables to have a zero field" );
         
         }
@@ -250,6 +263,7 @@ void register_FieldTable_class(){
             FieldTable_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this table is empty" );
         
         }
@@ -261,6 +275,7 @@ void register_FieldTable_class(){
             FieldTable_exposer.def( 
                 "molNums"
                 , molNums_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -273,6 +288,7 @@ void register_FieldTable_class(){
                 "multiply"
                 , multiply_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Multiply the field at all atom and grid points by value" );
         
         }
@@ -284,6 +300,7 @@ void register_FieldTable_class(){
             FieldTable_exposer.def( 
                 "nGrids"
                 , nGrids_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -295,6 +312,7 @@ void register_FieldTable_class(){
             FieldTable_exposer.def( 
                 "nMolecules"
                 , nMolecules_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -342,6 +360,7 @@ void register_FieldTable_class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("field") )
+                , bp::release_gil_policy()
                 , "Set the field at all atom and grid points equal to field" );
         
         }
@@ -354,6 +373,7 @@ void register_FieldTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Subtract the contents of the table other from this table. This will only\nsubtract the fields for the molecules  grids that are in both tables" );
         
         }
@@ -366,6 +386,7 @@ void register_FieldTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("field") )
+                , bp::release_gil_policy()
                 , "Subtract the field field from all of the atom  grid points in this table" );
         
         }
@@ -377,6 +398,7 @@ void register_FieldTable_class(){
             FieldTable_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -388,6 +410,7 @@ void register_FieldTable_class(){
             FieldTable_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

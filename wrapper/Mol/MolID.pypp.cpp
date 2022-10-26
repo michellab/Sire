@@ -47,6 +47,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MolID_class(){
 
     { //::SireMol::MolID
@@ -62,6 +64,7 @@ void register_MolID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -74,6 +77,7 @@ void register_MolID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -86,6 +90,7 @@ void register_MolID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molgroupsbase") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -141,6 +146,7 @@ void register_MolID_class(){
             MolID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

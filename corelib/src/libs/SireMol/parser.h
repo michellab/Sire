@@ -30,59 +30,52 @@
 #define SIREMOL_PARSER_H
 
 #include "select.h"
-#include "SireMol/errors.h"
 
 SIRE_BEGIN_HEADER
 
 namespace SireMol
 {
 
-/** This exception is thrown when there was an error parsing a selection
-
-    @author Christopher Woods
-*/
-class SIREMOL_EXPORT parse_error : public siremol_error
-{
-public:
-    parse_error() : siremol_error()
-    {}
-
-    parse_error(QString err, QString place = QString())
-              : siremol_error(err,place)
-    {}
-
-    parse_error(const parse_error &other) : siremol_error(other)
-    {}
-
-    ~parse_error() throw()
-    {}
-
-    static const char* typeName();
-
-    const char* what() const throw()
-    {
-        return parse_error::typeName();
-    }
-
-    void throwSelf() const
-    {
-        throw parse_error(*this);
-    }
-};
-
 namespace parser
 {
-    using SireMol::parser::SelectEnginePtr;
+    class SIREMOL_EXPORT Parser
+    {
+    public:
+        Parser()
+        {}
+
+        virtual ~Parser()
+        {}
+
+        static void install_parser(Parser *parser);
+
+        virtual bool has_token(const QString &token)=0;
+
+        virtual QString get_token(const QString &token)=0;
+
+        virtual void set_token(const QString &token, const QString &selection)=0;
+
+        virtual void delete_token(const QString &token)=0;
+
+        virtual void delete_all_tokens()=0;
+
+        virtual void reset_tokens()=0;
+
+        virtual SireMol::parser::SelectEnginePtr parse(const QString &str)=0;
+
+        static Parser& globalParser();
+
+    private:
+        static Parser* global_parser;
+    };
 
     void set_token(const QString &token, const QString &selection);
     void reset_tokens();
 
-    SelectEnginePtr parse(const QString &str);
+    SireMol::parser::SelectEnginePtr parse(const QString &str);
 }
 
 }
-
-Q_DECLARE_METATYPE(SireMol::parse_error)
 
 SIRE_END_HEADER
 

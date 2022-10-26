@@ -39,6 +39,8 @@ namespace bp = boost::python;
 
 #include "SireMol/connectivity.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/errors.h"
 
 #include "SireMol/molecule.h"
@@ -77,6 +79,8 @@ SireIO::GroSystem __copy__(const SireIO::GroSystem &other){ return SireIO::GroSy
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_GroSystem_class(){
@@ -108,6 +112,7 @@ void register_GroSystem_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the molecule type of the ith molecule" );
         
         }
@@ -119,6 +124,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of molecules in the system" );
         
         }
@@ -130,6 +136,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is an empty system (no molecules)" );
         
         }
@@ -141,6 +148,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a null GroSystem" );
         
         }
@@ -152,6 +160,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "nMolecules"
                 , nMolecules_function_value
+                , bp::release_gil_policy()
                 , "Return the number of molecules in the system" );
         
         }
@@ -163,6 +172,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "name"
                 , name_function_value
+                , bp::release_gil_policy()
                 , "Return the name of the system" );
         
         }
@@ -202,6 +212,7 @@ void register_GroSystem_class(){
                 "setName"
                 , setName_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Set the name of the system" );
         
         }
@@ -213,6 +224,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of molecules in the system" );
         
         }
@@ -224,6 +236,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this system" );
         
         }
@@ -235,6 +248,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -246,6 +260,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "uniqueTypes"
                 , uniqueTypes_function_value
+                , bp::release_gil_policy()
                 , "Return the list of unique molecule types held in the system" );
         
         }
@@ -257,6 +272,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

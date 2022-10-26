@@ -63,7 +63,7 @@ class Residue;
 class Chain;
 class Segment;
 
-/** A Molecule represents a complete molecule. 
+/** A Molecule represents a complete molecule.
 
     Most of the manipulation of a molecule is handled by the 'or/er' classes,
     e.g. Mover, Selector, Editer, Evaluator.
@@ -104,7 +104,7 @@ friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Molecule&);
 public:
     Molecule();
     Molecule(const QString &molname);
-    
+
     Molecule(const MoleculeData &moldata);
 
     Molecule(const Molecule &other);
@@ -117,66 +117,76 @@ public:
     bool operator!=(const Molecule &other) const;
 
     static const char* typeName();
-    
+
     Molecule* clone() const;
 
     QString toString() const;
-    
+
     bool isEmpty() const;
     bool selectedAll() const;
-    
+
+    MolViewPtr toSelector() const;
+
     AtomSelection selection() const;
-    
+
     const MolName& name() const;
     MolNum number() const;
-    
+
     quint64 version() const;
     quint64 version(const PropertyName &key) const;
-    
+
     int nAtoms() const;
+    int nAtoms(const ResID &id) const;
+    int nAtoms(const ChainID &id) const;
+    int nAtoms(const SegID &seg) const;
+    int nAtoms(const CGID &id) const;
+
     int nCutGroups() const;
+
     int nResidues() const;
+    int nResidues(const ChainID &id) const;
+
     int nChains() const;
     int nSegments() const;
-    
+
     MoleculeInfo info() const;
-    
+
     Mover<Molecule> move() const;
     Evaluator evaluate() const;
     MolEditor edit() const;
-    
+
     void update(const MoleculeData &moldata);
-    
+
     bool hasProperty(const PropertyName &key) const;
     bool hasMetadata(const PropertyName &metakey) const;
     bool hasMetadata(const PropertyName &key,
                      const PropertyName &metakey) const;
-                     
+
     QStringList propertyKeys() const;
     QStringList metadataKeys() const;
     QStringList metadataKeys(const PropertyName &key) const;
-    
+
     const Properties& properties() const;
-    
+
     const Property& property(const PropertyName &key) const;
-                             
+
     const Property& metadata(const PropertyName &metakey) const;
-    
+
     const Property& metadata(const PropertyName &key,
                              const PropertyName &metakey) const;
 
     void assertContainsProperty(const PropertyName &key) const;
-    
+
     void assertContainsMetadata(const PropertyName &metakey) const;
     void assertContainsMetadata(const PropertyName &key,
                                 const PropertyName &metakey) const;
 
 protected:
     void setProperty(const QString &key, const Property &value);
-    
+
     void setMetadata(const QString &metakey,
                      const Property &value);
-                     
+
     void setMetadata(const QString &key, const QString &metakey,
                      const Property &value);
 };

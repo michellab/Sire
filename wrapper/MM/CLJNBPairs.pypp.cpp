@@ -23,6 +23,8 @@ SireMM::CLJNBPairs __copy__(const SireMM::CLJNBPairs &other){ return SireMM::CLJ
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJNBPairs_class(){
 
     { //::SireMM::CLJNBPairs
@@ -42,6 +44,7 @@ void register_CLJNBPairs_class(){
             CLJNBPairs_exposer.def( 
                 "excludedAtoms"
                 , excludedAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the IDs of atoms that dont interact with any other atom in\nthe intramolecular non-bonded calculation (their scale factors to all\nother atoms is zero)" );
         
         }
@@ -54,6 +57,7 @@ void register_CLJNBPairs_class(){
                 "excludedAtoms"
                 , excludedAtoms_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return the excluded atoms for the atom matching ID atomid. This\nreturns all of the atoms for which the interaction with atomid is\nequal to zero" );
         
         }
@@ -65,6 +69,7 @@ void register_CLJNBPairs_class(){
             CLJNBPairs_exposer.def( 
                 "nExcludedAtoms"
                 , nExcludedAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of atoms that are excluded from the internal\nnon-bonded calculation. These are atoms that do not interact with any\nother atoms (e.g. because their nbscl factors to all other atoms in\nthe molecule are zero)" );
         
         }
@@ -77,6 +82,7 @@ void register_CLJNBPairs_class(){
                 "nExcludedAtoms"
                 , nExcludedAtoms_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return the number of excluded atoms for the atom matching ID atomid.\nThis returns the number of atoms that do not interact with this atom\nusing a non-bonded potential" );
         
         }
@@ -103,6 +109,7 @@ void register_CLJNBPairs_class(){
             CLJNBPairs_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -114,6 +121,7 @@ void register_CLJNBPairs_class(){
             CLJNBPairs_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

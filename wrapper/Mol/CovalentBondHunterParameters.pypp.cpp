@@ -47,6 +47,8 @@ SireMol::CovalentBondHunterParameters __copy__(const SireMol::CovalentBondHunter
 
 const char* pvt_get_name(const SireMol::CovalentBondHunterParameters&){ return "SireMol::CovalentBondHunterParameters";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CovalentBondHunterParameters_class(){
 
     { //::SireMol::CovalentBondHunterParameters

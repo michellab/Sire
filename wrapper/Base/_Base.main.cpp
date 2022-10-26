@@ -147,6 +147,10 @@ namespace bp = boost::python;
 
 #include <QString>
 
+#include "SireBase/slice.h"
+
+void autoconvert_Slice();
+
 BOOST_PYTHON_MODULE(_Base){
     register_SireBase_objects();
 
@@ -289,6 +293,8 @@ BOOST_PYTHON_MODULE(_Base){
     bp::implicitly_convertible< SireBase::IntegerArrayProperty, SireBase::PropertyList >();
 
     bp::implicitly_convertible< SireBase::StringArrayProperty, SireBase::PropertyList >();
+
+    autoconvert_Slice();
 
     register_free_functions();
 }

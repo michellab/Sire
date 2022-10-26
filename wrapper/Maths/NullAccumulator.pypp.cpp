@@ -33,6 +33,8 @@ SireMaths::NullAccumulator __copy__(const SireMaths::NullAccumulator &other){ re
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullAccumulator_class(){
 
     { //::SireMaths::NullAccumulator
@@ -49,6 +51,7 @@ void register_NullAccumulator_class(){
                 "accumulate"
                 , accumulate_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Accumulate the passed value onto the average" );
         
         }
@@ -75,6 +78,7 @@ void register_NullAccumulator_class(){
             NullAccumulator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

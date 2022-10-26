@@ -30,6 +30,7 @@
 
 #include "SireMol/molecule.h"
 #include "SireMol/partialmolecule.h"
+#include "SireMol/core.h"
 
 #include "SireVol/space.h"
 

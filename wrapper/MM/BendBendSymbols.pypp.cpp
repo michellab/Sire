@@ -36,6 +36,8 @@ SireMM::BendBendSymbols __copy__(const SireMM::BendBendSymbols &other){ return S
 
 const char* pvt_get_name(const SireMM::BendBendSymbols&){ return "SireMM::BendBendSymbols";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_BendBendSymbols_class(){
 
     { //::SireMM::BendBendSymbols
@@ -50,7 +52,7 @@ void register_BendBendSymbols_class(){
             BendBendSymbols_exposer.def( 
                 "theta012"
                 , theta012_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the angle between atoms 0-1-2, theta_\n{012}" );
         
         }
@@ -62,7 +64,7 @@ void register_BendBendSymbols_class(){
             BendBendSymbols_exposer.def( 
                 "theta213"
                 , theta213_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the angle between atoms 2-1-3, theta_\n{213}" );
         
         }
@@ -74,7 +76,7 @@ void register_BendBendSymbols_class(){
             BendBendSymbols_exposer.def( 
                 "theta310"
                 , theta310_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the angle between atoms 3-1-0, theta_\n{310}" );
         
         }

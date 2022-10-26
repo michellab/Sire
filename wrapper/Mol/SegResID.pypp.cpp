@@ -19,6 +19,8 @@ SireMol::GroupGroupID<SireMol::SegID, SireMol::ResID> __copy__(const SireMol::Gr
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SegResID_class(){
 
     { //::SireMol::GroupGroupID< SireMol::SegID, SireMol::ResID >
@@ -36,6 +38,7 @@ void register_SegResID_class(){
             SegResID_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -48,6 +51,7 @@ void register_SegResID_class(){
             SegResID_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -61,6 +65,7 @@ void register_SegResID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -76,6 +81,7 @@ void register_SegResID_class(){
             SegResID_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -88,6 +94,7 @@ void register_SegResID_class(){
             SegResID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -100,6 +107,7 @@ void register_SegResID_class(){
             SegResID_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -33,6 +33,8 @@ SireMaths::Median __copy__(const SireMaths::Median &other){ return SireMaths::Me
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Median_class(){
 
     { //::SireMaths::Median
@@ -49,6 +51,7 @@ void register_Median_class(){
                 "accumulate"
                 , accumulate_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Accumulate the passed value onto the average" );
         
         }
@@ -60,6 +63,7 @@ void register_Median_class(){
             Median_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Completely clear the statistics in this accumulator" );
         
         }
@@ -71,6 +75,7 @@ void register_Median_class(){
             Median_exposer.def( 
                 "max"
                 , max_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum value" );
         
         }
@@ -82,6 +87,7 @@ void register_Median_class(){
             Median_exposer.def( 
                 "maximum"
                 , maximum_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum value" );
         
         }
@@ -93,6 +99,7 @@ void register_Median_class(){
             Median_exposer.def( 
                 "median"
                 , median_function_value
+                , bp::release_gil_policy()
                 , "Return the median value" );
         
         }
@@ -104,6 +111,7 @@ void register_Median_class(){
             Median_exposer.def( 
                 "min"
                 , min_function_value
+                , bp::release_gil_policy()
                 , "Return the minimum value" );
         
         }
@@ -115,6 +123,7 @@ void register_Median_class(){
             Median_exposer.def( 
                 "minimum"
                 , minimum_function_value
+                , bp::release_gil_policy()
                 , "Return the minimum value" );
         
         }
@@ -141,6 +150,7 @@ void register_Median_class(){
             Median_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -152,6 +162,7 @@ void register_Median_class(){
             Median_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

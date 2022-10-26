@@ -23,6 +23,8 @@ SireMaths::Triangle __copy__(const SireMaths::Triangle &other){ return SireMaths
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Triangle_class(){
@@ -41,6 +43,7 @@ void register_Triangle_class(){
             Triangle_exposer.def( 
                 "angle"
                 , angle_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -52,6 +55,7 @@ void register_Triangle_class(){
             Triangle_exposer.def( 
                 "angle0"
                 , angle0_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -63,6 +67,7 @@ void register_Triangle_class(){
             Triangle_exposer.def( 
                 "angle1"
                 , angle1_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -74,6 +79,7 @@ void register_Triangle_class(){
             Triangle_exposer.def( 
                 "angle2"
                 , angle2_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -98,6 +104,7 @@ void register_Triangle_class(){
             Triangle_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -109,6 +116,7 @@ void register_Triangle_class(){
             Triangle_exposer.def( 
                 "line0"
                 , line0_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -120,6 +128,7 @@ void register_Triangle_class(){
             Triangle_exposer.def( 
                 "line1"
                 , line1_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -131,6 +140,7 @@ void register_Triangle_class(){
             Triangle_exposer.def( 
                 "line2"
                 , line2_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -168,6 +178,7 @@ void register_Triangle_class(){
             Triangle_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of the triangle" );
         
         }
@@ -179,6 +190,7 @@ void register_Triangle_class(){
             Triangle_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -190,6 +202,7 @@ void register_Triangle_class(){
             Triangle_exposer.def( 
                 "vector"
                 , vector_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -201,6 +214,7 @@ void register_Triangle_class(){
             Triangle_exposer.def( 
                 "vector0"
                 , vector0_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -212,6 +226,7 @@ void register_Triangle_class(){
             Triangle_exposer.def( 
                 "vector1"
                 , vector1_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -223,6 +238,7 @@ void register_Triangle_class(){
             Triangle_exposer.def( 
                 "vector2"
                 , vector2_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -234,6 +250,7 @@ void register_Triangle_class(){
             Triangle_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

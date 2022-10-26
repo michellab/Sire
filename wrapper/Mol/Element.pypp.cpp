@@ -17,6 +17,8 @@ SireMol::Element __copy__(const SireMol::Element &other){ return SireMol::Elemen
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Element_class(){
 
     { //::SireMol::Element
@@ -36,6 +38,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "actinide"
                 , actinide_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is an actinide" );
         
         }
@@ -47,6 +50,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "alkaliEarthMetal"
                 , alkaliEarthMetal_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is an alkali earth metal (group 2)" );
         
         }
@@ -58,6 +62,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "alkaliMetal"
                 , alkaliMetal_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is an alkali metal (group 1 or 2)" );
         
         }
@@ -69,6 +74,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "biological"
                 , biological_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is biological\n(in first three periods and not a noble gas, or a halogen)\n(this does preclude iron, potassium and calcium, which are\nrather biological... :-)" );
         
         }
@@ -81,6 +87,7 @@ void register_Element_class(){
                 "biologicalElement"
                 , biologicalElement_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return a biological element that has been guessed from the passed name.\nNote that if no biological element was guessed, then the nearest\nnon-biological element match is used. A biological element is one that\nis in the first couple of rows (proton number < 18) and is not a noble gas." );
         
         }
@@ -92,6 +99,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "blue"
                 , blue_function_value
+                , bp::release_gil_policy()
                 , "Return the blue colour components (0.0->1.0) for\nthe colour of this element" );
         
         }
@@ -103,6 +111,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "bondOrderRadius"
                 , bondOrderRadius_function_value
+                , bp::release_gil_policy()
                 , "Return the bond order radius" );
         
         }
@@ -114,6 +123,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "covalentRadius"
                 , covalentRadius_function_value
+                , bp::release_gil_policy()
                 , "Return the elements covalent radius" );
         
         }
@@ -126,6 +136,7 @@ void register_Element_class(){
                 "elementWithMass"
                 , elementWithMass_function_value
                 , ( bp::arg("mass") )
+                , bp::release_gil_policy()
                 , "Return an element which has the closest mass to mass (in atomic\nmass units, g mol-1)" );
         
         }
@@ -137,6 +148,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "green"
                 , green_function_value
+                , bp::release_gil_policy()
                 , "Return the green colour components (0.0->1.0) for\nthe colour of this element" );
         
         }
@@ -148,6 +160,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "group"
                 , group_function_value
+                , bp::release_gil_policy()
                 , "Return the group number of this element (IUPAC group, from 1-18)\n(lanthanides and actinides have a group number of 0 - this should\nnot be too big a problem as I would be surprised to hear of anyone\nusing this code to simulate them...)" );
         
         }
@@ -159,6 +172,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "halogen"
                 , halogen_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a halogen" );
         
         }
@@ -170,6 +184,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "lanthanide"
                 , lanthanide_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a lanthanide" );
         
         }
@@ -181,6 +196,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "mass"
                 , mass_function_value
+                , bp::release_gil_policy()
                 , "Return the average mass of this element" );
         
         }
@@ -192,6 +208,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "maxBonds"
                 , maxBonds_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum number of simultaneous bonds that this\nelement can form" );
         
         }
@@ -203,6 +220,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "nProtons"
                 , nProtons_function_value
+                , bp::release_gil_policy()
                 , "Return the number of protons in the element" );
         
         }
@@ -214,6 +232,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "name"
                 , name_function_value
+                , bp::release_gil_policy()
                 , "Return the name of the element in the local language" );
         
         }
@@ -225,6 +244,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "nobleGas"
                 , nobleGas_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a noble gas" );
         
         }
@@ -255,6 +275,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "period"
                 , period_function_value
+                , bp::release_gil_policy()
                 , "Return the period (the row number) of the element (IUPAC period, from 1-7)" );
         
         }
@@ -266,6 +287,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "rareEarth"
                 , rareEarth_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a rare earth element (e.g. a lanthanide or actinide)" );
         
         }
@@ -277,6 +299,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "red"
                 , red_function_value
+                , bp::release_gil_policy()
                 , "Return the red colour components (0.0->1.0) for\nthe colour of this element" );
         
         }
@@ -288,6 +311,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "symbol"
                 , symbol_function_value
+                , bp::release_gil_policy()
                 , "Return the IUPAC symbol for the element" );
         
         }
@@ -299,6 +323,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of the Element" );
         
         }
@@ -310,6 +335,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "transitionMetal"
                 , transitionMetal_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a transition metal" );
         
         }
@@ -321,6 +347,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -332,6 +359,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "vdwRadius"
                 , vdwRadius_function_value
+                , bp::release_gil_policy()
                 , "Return the van der waals radius" );
         
         }
@@ -343,6 +371,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

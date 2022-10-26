@@ -42,6 +42,8 @@ SireFF::NullFF __copy__(const SireFF::NullFF &other){ return SireFF::NullFF(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_NullFF_class(){
@@ -59,6 +61,7 @@ void register_NullFF_class(){
             NullFF_exposer.def( 
                 "accept"
                 , accept_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -71,7 +74,7 @@ void register_NullFF_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -83,7 +86,7 @@ void register_NullFF_class(){
             NullFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -96,6 +99,7 @@ void register_NullFF_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -107,6 +111,7 @@ void register_NullFF_class(){
             NullFF_exposer.def( 
                 "mustNowRecalculateFromScratch"
                 , mustNowRecalculateFromScratch_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -118,6 +123,7 @@ void register_NullFF_class(){
             NullFF_exposer.def( 
                 "needsAccepting"
                 , needsAccepting_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -157,7 +163,7 @@ void register_NullFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -170,6 +176,7 @@ void register_NullFF_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -181,6 +188,7 @@ void register_NullFF_class(){
             NullFF_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -192,6 +200,7 @@ void register_NullFF_class(){
             NullFF_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

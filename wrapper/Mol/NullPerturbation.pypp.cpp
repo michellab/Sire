@@ -15,6 +15,8 @@ namespace bp = boost::python;
 
 #include "SireStream/shareddatastream.h"
 
+#include "core.h"
+
 #include "geometryperturbation.h"
 
 #include "molecule.h"
@@ -32,6 +34,8 @@ SireMol::NullPerturbation __copy__(const SireMol::NullPerturbation &other){ retu
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 void register_NullPerturbation_class(){
 
@@ -63,6 +67,7 @@ void register_NullPerturbation_class(){
             NullPerturbation_exposer.def( 
                 "requiredProperties"
                 , requiredProperties_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -74,6 +79,7 @@ void register_NullPerturbation_class(){
             NullPerturbation_exposer.def( 
                 "requiredSymbols"
                 , requiredSymbols_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -85,6 +91,7 @@ void register_NullPerturbation_class(){
             NullPerturbation_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -97,6 +104,7 @@ void register_NullPerturbation_class(){
                 "wouldChange"
                 , wouldChange_function_value
                 , ( bp::arg("molecule"), bp::arg("values") )
+                , bp::release_gil_policy()
                 , "" );
         
         }

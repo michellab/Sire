@@ -21,6 +21,8 @@ SireMM::CoulombProbe __copy__(const SireMM::CoulombProbe &other){ return SireMM:
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CoulombProbe_class(){
 
     { //::SireMM::CoulombProbe
@@ -39,6 +41,7 @@ void register_CoulombProbe_class(){
             CoulombProbe_exposer.def( 
                 "charge"
                 , charge_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -65,6 +68,7 @@ void register_CoulombProbe_class(){
             CoulombProbe_exposer.def( 
                 "reducedCharge"
                 , reducedCharge_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -76,6 +80,7 @@ void register_CoulombProbe_class(){
             CoulombProbe_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

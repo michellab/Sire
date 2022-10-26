@@ -54,13 +54,13 @@ using namespace SireStream;
 
 static const RegisterMetaType<SegProp> r_segprop(MAGIC_ONLY,
                                                  "SireMol::SegProp");
-                                                   
+
 /** Serialise to a binary datastream */
 QDataStream &operator<<(QDataStream &ds, const SegProp &segprop)
 {
     writeHeader(ds, r_segprop, 1)
          << static_cast<const MolViewProperty&>(segprop);
-         
+
     return ds;
 }
 
@@ -68,14 +68,14 @@ QDataStream &operator<<(QDataStream &ds, const SegProp &segprop)
 QDataStream &operator>>(QDataStream &ds, SegProp &segprop)
 {
     VersionID v = readHeader(ds, r_segprop);
-    
+
     if (v == 1)
     {
         ds >> static_cast<MolViewProperty&>(segprop);
     }
     else
         throw version_error(v, "1", r_segprop, CODELOC);
-        
+
     return ds;
 }
 
@@ -100,7 +100,7 @@ QDataStream &operator<<(QDataStream &ds, const Segment &seg)
     writeHeader(ds, r_seg, 1);
 
     SharedDataStream sds(ds);
-    
+
     sds << seg.segidx << static_cast<const MoleculeView&>(seg);
 
     return ds;
@@ -114,9 +114,9 @@ QDataStream &operator>>(QDataStream &ds, Segment &seg)
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> seg.segidx >> static_cast<MoleculeView&>(seg);
-        
+
         seg.selected_atoms = AtomSelection(seg.data());
         seg.selected_atoms.selectOnly(seg.segidx);
     }
@@ -132,13 +132,13 @@ Segment::Segment() : ConcreteProperty<Segment,MoleculeView>(), segidx( SegIdx::n
 
 /** Construct the Segment at ID 'cgid' in the molecule whose data
     is in 'moldata'
-    
+
     \throw SireMol::missing_Segment
     \throw SireMol::duplicate_Segment
     \throw SireError::invalid_index
 */
 Segment::Segment(const MoleculeData &moldata, const SegID &segid)
-      : ConcreteProperty<Segment,MoleculeView>(moldata), 
+      : ConcreteProperty<Segment,MoleculeView>(moldata),
         segidx( moldata.info().segIdx(segid) )
 {
     selected_atoms = AtomSelection(moldata);
@@ -167,7 +167,7 @@ Segment& Segment::operator=(const Segment &other)
 /** Comparison operator */
 bool Segment::operator==(const Segment &other) const
 {
-    return segidx == other.segidx and 
+    return segidx == other.segidx and
            MoleculeView::operator==(other);
 }
 
@@ -181,8 +181,8 @@ bool Segment::operator!=(const Segment &other) const
 /** Return a string representation of this segment */
 QString Segment::toString() const
 {
-    return QObject::tr( "Segment( %1 )" )
-                .arg( this->name() );
+    return QObject::tr( "Segment( %1 num_atoms=%2 )" )
+                .arg( this->name() ).arg(this->nAtoms());
 }
 
 /** Return whether or not this segment is empty */
@@ -195,6 +195,11 @@ bool Segment::isEmpty() const
 bool Segment::selectedAll() const
 {
     return selected_atoms.selectedAll();
+}
+
+MolViewPtr Segment::toSelector() const
+{
+    return MolViewPtr( Selector<Segment>(*this) );
 }
 
 /** Return the atoms that are in this Segment */
@@ -224,7 +229,7 @@ void Segment::update(const MoleculeData &moldata)
                 .arg(moldata.number()).arg(moldata.info().UID().toString()),
                     CODELOC );
     }
-    
+
     d = moldata;
 }
 
@@ -240,13 +245,19 @@ SegIdx Segment::index() const
     return segidx;
 }
 
+/** Return the number of this segment (same as its index) */
+SegIdx Segment::number() const
+{
+    return segidx;
+}
+
 /** Return an object that can move a copy of this Segment */
 Mover<Segment> Segment::move() const
 {
     return Mover<Segment>(*this);
 }
 
-/** Return an evaluator that can evaluate properties 
+/** Return an evaluator that can evaluate properties
     of this Segment */
 Evaluator Segment::evaluate() const
 {
@@ -279,25 +290,39 @@ const QList<AtomIdx>& Segment::atomIdxs() const
     return d->info().getAtomsIn(segidx);
 }
 
-/** Return whether or not this segment contains the atom 
+/** Return whether or not this segment contains the atom
     at index 'atomidx' */
 bool Segment::contains(AtomIdx atomidx) const
 {
     return d->info().contains(segidx, atomidx);
 }
 
-/** Return whether or not this segment contains all of 
+/** Return whether or not this segment contains all of
     the atoms identified by the ID 'atomid' */
 bool Segment::contains(const AtomID &atomid) const
 {
     return d->info().contains(segidx, atomid);
 }
 
-/** Return whether or not this segment contains some of  
+/** Return whether or not this segment contains some of
     the atoms identified by the ID 'atomid' */
 bool Segment::intersects(const AtomID &atomid) const
 {
     return d->info().intersects(segidx, atomid);
+}
+
+/** Return the specified property as a QVariant */
+QVariant Segment::propertyAsVariant(const PropertyName &key) const
+{
+    const Property &property = d->property(key);
+    return property.asA<SegProp>().getAsVariant(segidx);
+}
+
+/** Return the specified property as a PropertyPtr */
+PropertyPtr Segment::propertyAsProperty(const PropertyName &key) const
+{
+    const Property &property = d->property(key);
+    return property.asA<SegProp>().getAsProperty(segidx);
 }
 
 /** Return whether or not there is a SegProperty at key 'key' */
@@ -314,7 +339,7 @@ bool Segment::hasMetadata(const PropertyName &metakey) const
 
 /** Return whether the metadata at metakey 'metakey' for the property
     at key 'key' is a SegProperty
-    
+
     \throw SireBase::missing_property
 */
 bool Segment::hasMetadata(const PropertyName &key,
@@ -335,9 +360,9 @@ QStringList Segment::metadataKeys() const
     return d->properties().metadataKeysOfType<SegProp>();
 }
 
-/** Return the metakeys of all SegProperty metadata for 
+/** Return the metakeys of all SegProperty metadata for
     the property at key 'key'
-    
+
     \throw SireBase::missing_property
 */
 QStringList Segment::metadataKeys(const PropertyName &key) const
@@ -359,7 +384,7 @@ void Segment::assertContainsProperty(const PropertyName &key) const
 
 /** Assert that this segment has an SegProperty piece of metadata
     at metakey 'metakey'
-    
+
     \throw SireBase::missing_property
 */
 void Segment::assertContainsMetadata(const PropertyName &metakey) const
@@ -373,7 +398,7 @@ void Segment::assertContainsMetadata(const PropertyName &metakey) const
 
 /** Assert that the property at key 'key' has an SegProperty
     piece of metadata at metakey 'metakey'
-    
+
     \throw SireBase::missing_property
 */
 void Segment::assertContainsMetadata(const PropertyName &key,

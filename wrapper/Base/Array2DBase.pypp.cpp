@@ -21,6 +21,8 @@ namespace bp = boost::python;
 
 const char* pvt_get_name(const SireBase::Array2DBase&){ return "SireBase::Array2DBase";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Array2DBase_class(){
 
     { //::SireBase::Array2DBase
@@ -36,6 +38,7 @@ void register_Array2DBase_class(){
                 "assertValidIndex"
                 , assertValidIndex_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -48,6 +51,7 @@ void register_Array2DBase_class(){
                 "checkedOffset"
                 , checkedOffset_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -60,6 +64,7 @@ void register_Array2DBase_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -71,6 +76,7 @@ void register_Array2DBase_class(){
             Array2DBase_exposer.def( 
                 "nColumns"
                 , nColumns_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -82,6 +88,7 @@ void register_Array2DBase_class(){
             Array2DBase_exposer.def( 
                 "nRows"
                 , nRows_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -94,6 +101,7 @@ void register_Array2DBase_class(){
                 "offset"
                 , offset_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }

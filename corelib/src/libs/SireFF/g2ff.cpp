@@ -78,13 +78,13 @@ QDataStream &operator<<(QDataStream &ds,
                                       const G2FF &g2ff)
 {
     writeHeader(ds, r_g2ff, 1);
-    
+
     SharedDataStream sds(ds);
-    
-    sds << g2ff.molgroup[0] << g2ff.molgroup[1] 
+
+    sds << g2ff.molgroup[0] << g2ff.molgroup[1]
         << g2ff.allow_overlap_of_atoms
         << static_cast<const FF&>(g2ff);
-    
+
     return ds;
 }
 
@@ -93,17 +93,20 @@ QDataStream &operator>>(QDataStream &ds,
                                       G2FF &g2ff)
 {
     VersionID v = readHeader(ds, r_g2ff);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
         sds >> g2ff.molgroup[0] >> g2ff.molgroup[1]
             >> g2ff.allow_overlap_of_atoms
             >> static_cast<FF&>(g2ff);
+
+        g2ff.molgroup[0].setParent(&g2ff);
+        g2ff.molgroup[1].setParent(&g2ff);
     }
     else
         throw version_error(v, "1", r_g2ff, CODELOC);
-        
+
     return ds;
 }
 
@@ -112,10 +115,10 @@ G2FF::G2FF(bool allow_overlap) : FF(), allow_overlap_of_atoms(allow_overlap)
 {
     molgroup[0] = FFMolGroupPvt( QString("%1_A").arg(this->name()), 0, this );
     molgroup[1] = FFMolGroupPvt( QString("%1_B").arg(this->name()), 1, this );
-    
+
     molgroup[0].setParent(this);
     molgroup[1].setParent(this);
-    
+
     MolGroupsBase::addToIndex(molgroup[0]);
     MolGroupsBase::addToIndex(molgroup[1]);
 }
@@ -143,29 +146,29 @@ void G2FF::_pvt_updateName()
         molgroup[0].setNewNumber();
         need_reindex = true;
     }
-    
+
     if (molgroup[1].name().value() != name_b)
     {
         molgroup[1].setName(name_b);
         molgroup[1].setNewNumber();
         need_reindex = true;
     }
-    
+
     if (need_reindex)
         this->reindex();
 }
 
 /** Copy constructor */
-G2FF::G2FF(const G2FF &other) 
+G2FF::G2FF(const G2FF &other)
      : FF(other),
        allow_overlap_of_atoms(other.allow_overlap_of_atoms)
 {
     molgroup[0] = other.molgroup[0];
     molgroup[1] = other.molgroup[1];
-    
+
     molgroup[0].setParent(this);
     molgroup[1].setParent(this);
-    
+
     molgroup[0].setIndex(0);
     molgroup[1].setIndex(1);
 }
@@ -179,15 +182,15 @@ G2FF& G2FF::operator=(const G2FF &other)
 {
     molgroup[0] = other.molgroup[0];
     molgroup[1] = other.molgroup[1];
-    
+
     molgroup[0].setParent(this);
     molgroup[1].setParent(this);
     molgroup[0].setIndex(0);
     molgroup[1].setIndex(1);
-    
+
     allow_overlap_of_atoms = other.allow_overlap_of_atoms;
     FF::operator=(other);
-    
+
     return *this;
 }
 
@@ -213,7 +216,7 @@ void G2FF::assertContains(MGNum mgnum) const
 const MoleculeGroup& G2FF::getGroup(MGNum mgnum) const
 {
     G2FF::assertContains(mgnum);
-    
+
     if (molgroup[0].number() == mgnum)
         return molgroup[0];
     else
@@ -237,7 +240,7 @@ void G2FF::getGroups(const QList<MGNum> &mgnums,
                      QVarLengthArray<const MoleculeGroup*,10> &groups) const
 {
     groups.clear();
-    
+
     foreach (MGNum mgnum, mgnums)
     {
         groups.append( &(this->at(mgnum)) );
@@ -251,7 +254,7 @@ QHash<MGNum,const MoleculeGroup*> G2FF::getGroups() const
     groups.reserve(2);
     groups.insert( molgroup[0].number(), &(molgroup[0]) );
     groups.insert( molgroup[1].number(), &(molgroup[1]) );
-    
+
     return groups;
 }
 
@@ -276,9 +279,9 @@ void G2FF::group_setName(quint32 i, const QString &new_name)
     this->reindex();
 }
 
-/** Assert that there is no overlap between the atoms in 
+/** Assert that there is no overlap between the atoms in
     'molview' and the atoms in 'group'
-    
+
     \throw SireMol::duplicate_atom
 */
 void G2FF::assertNoOverlap(const MoleculeGroup &group,
@@ -292,9 +295,9 @@ void G2FF::assertNoOverlap(const MoleculeGroup &group,
                 .arg(group.name()).arg(group.number()), CODELOC );
 }
 
-/** Assert that there is no overlap between the atoms in the molecules 
+/** Assert that there is no overlap between the atoms in the molecules
     in 'molecules' and the atoms in the group 'group'
-    
+
     \throw SireMol::duplicate_atom
 */
 void G2FF::assertNoOverlap(const MoleculeGroup &group,
@@ -310,7 +313,7 @@ void G2FF::assertNoOverlap(const MoleculeGroup &group,
 
 /** Tell the derived forcefield that the following views have just
     been added to group 'groupid' - use the supplied map to get the parameters */
-void G2FF::_pvt_added(quint32 groupid, const ViewsOfMol &molviews, 
+void G2FF::_pvt_added(quint32 groupid, const ViewsOfMol &molviews,
                       const PropertyMap &map)
 {
     this->_pvt_added(groupid, molviews.all(), map);
@@ -337,7 +340,7 @@ void G2FF::_pvt_removedAll(quint32 groupid, const ViewsOfMol &mol)
 
 /** Assert that there is no overlap between the atoms in 'molview'
     and any atoms that exist currently in this molecule
-    
+
     \throw SireMol::duplicate_atom
 */
 void G2FF::assertNoOverlap(const MoleculeView &molview) const
@@ -346,10 +349,10 @@ void G2FF::assertNoOverlap(const MoleculeView &molview) const
     this->assertNoOverlap(molgroup[1], molview);
 }
 
-/** Add the molecule view in 'molview' to this forcefield, using the 
+/** Add the molecule view in 'molview' to this forcefield, using the
     supplied property map to get the names of the properties that contain
     the required forcefield parameters
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
@@ -366,7 +369,7 @@ void G2FF::group_add(quint32 i, const MoleculeView &molview,
         this->assertNoOverlap(molview);
 
     FFMolGroupPvt old_state = molgroup[i];
-    
+
     try
     {
         molgroup[i].add(molview);
@@ -380,15 +383,15 @@ void G2FF::group_add(quint32 i, const MoleculeView &molview,
     }
 }
 
-/** Add the views of the molecule in 'molviews' to this forcefield, using the 
+/** Add the views of the molecule in 'molviews' to this forcefield, using the
     supplied property map to get the names of the properties that contain
     the required forcefield parameters
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
 */
-void G2FF::group_add(quint32 i, const ViewsOfMol &molviews, 
+void G2FF::group_add(quint32 i, const ViewsOfMol &molviews,
                      const PropertyMap &map)
 {
     assertValidGroup(i);
@@ -401,9 +404,9 @@ void G2FF::group_add(quint32 i, const ViewsOfMol &molviews,
         this->assertNoOverlap(molviews);
         molviews.assertNoOverlap();
     }
-    
+
     FFMolGroupPvt old_state = molgroup[i];
-    
+
     try
     {
         molgroup[i].add(molviews);
@@ -417,15 +420,15 @@ void G2FF::group_add(quint32 i, const ViewsOfMol &molviews,
     }
 }
 
-/** Add the molecules in 'molecules' to this forcefield, using the 
+/** Add the molecules in 'molecules' to this forcefield, using the
     supplied property map to get the names of the properties that contain
     the required forcefield parameters
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
 */
-void G2FF::group_add(quint32 i, const Molecules &molecules, 
+void G2FF::group_add(quint32 i, const Molecules &molecules,
                      const PropertyMap &map)
 {
     assertValidGroup(i);
@@ -442,15 +445,15 @@ void G2FF::group_add(quint32 i, const Molecules &molecules,
              ++it)
         {
             this->assertNoOverlap(*it);
-        
+
             //also assert that there is no overlap within the molecule
             it->assertNoOverlap();
         }
     }
-    
+
     //save the old state of this forcefield
     boost::shared_ptr<FF> old_state( this->clone() );
-    
+
     try
     {
         if (not allow_overlap_of_atoms)
@@ -458,7 +461,7 @@ void G2FF::group_add(quint32 i, const Molecules &molecules,
             //add the molecules - they must be unique views of we'd
             //have thrown an exception earlier!
             QList<ViewsOfMol> added_mols = molgroup[i].addIfUnique(molecules);
-            
+
             foreach (const ViewsOfMol &added_mol, added_mols)
             {
                 this->_pvt_added(i, added_mol, map);
@@ -468,7 +471,7 @@ void G2FF::group_add(quint32 i, const Molecules &molecules,
         {
             //add the molecules...
             molgroup[i].add(molecules);
-            
+
             //now parameterise the molecules and add them
             for (Molecules::const_iterator it = molecules.constBegin();
                  it != molecules.constEnd();
@@ -477,7 +480,7 @@ void G2FF::group_add(quint32 i, const Molecules &molecules,
                 this->_pvt_added(i, *it, map);
             }
         }
-        
+
         FF::incrementVersion();
     }
     catch(...)
@@ -487,29 +490,29 @@ void G2FF::group_add(quint32 i, const Molecules &molecules,
     }
 }
 
-/** Add the views of the molecules in the group 'molgroup' to this forcefield, 
-    using the supplied property map to get the names of the properties that 
+/** Add the views of the molecules in the group 'molgroup' to this forcefield,
+    using the supplied property map to get the names of the properties that
     contain the required forcefield parameters
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
 */
-void G2FF::group_add(quint32 i, const MoleculeGroup &new_group, 
+void G2FF::group_add(quint32 i, const MoleculeGroup &new_group,
                      const PropertyMap &map)
 {
     G2FF::group_add(i, new_group.molecules(), map);
 }
 
-/** Add the molecule view in 'molview' to this forcefield, using the 
+/** Add the molecule view in 'molview' to this forcefield, using the
     supplied property map to get the names of the properties that contain
     the required forcefield parameters
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
 */
-bool G2FF::group_addIfUnique(quint32 i, const MoleculeView &molview, 
+bool G2FF::group_addIfUnique(quint32 i, const MoleculeView &molview,
                              const PropertyMap &map)
 {
     assertValidGroup(i);
@@ -518,7 +521,7 @@ bool G2FF::group_addIfUnique(quint32 i, const MoleculeView &molview,
         return false;
 
     FFMolGroupPvt old_state = molgroup[i];
-    
+
     try
     {
         if (molgroup[i].addIfUnique(molview))
@@ -535,7 +538,7 @@ bool G2FF::group_addIfUnique(quint32 i, const MoleculeView &molview,
             this->_pvt_added( i, PartialMolecule(molview), map );
 
             FF::incrementVersion();
-            
+
             return true;
         }
         else
@@ -546,32 +549,32 @@ bool G2FF::group_addIfUnique(quint32 i, const MoleculeView &molview,
         molgroup[i] = old_state;
         throw;
     }
-    
+
     return false;
 }
-                             
-/** Add the views of the molecule in 'molviews' to this forcefield, using the 
+
+/** Add the views of the molecule in 'molviews' to this forcefield, using the
     supplied property map to get the names of the properties that contain
     the required forcefield parameters
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
 */
-ViewsOfMol G2FF::group_addIfUnique(quint32 i, const ViewsOfMol &molviews, 
+ViewsOfMol G2FF::group_addIfUnique(quint32 i, const ViewsOfMol &molviews,
                                    const PropertyMap &map)
 {
     assertValidGroup(i);
 
     if (molviews.isEmpty())
         return ViewsOfMol();
-          
+
     FFMolGroupPvt old_state = molgroup[i];
-    
+
     try
     {
         ViewsOfMol added_views = molgroup[i].addIfUnique(molviews);
-        
+
         if (not added_views.isEmpty())
         {
             if (not allow_overlap_of_atoms)
@@ -581,10 +584,10 @@ ViewsOfMol G2FF::group_addIfUnique(quint32 i, const ViewsOfMol &molviews,
             }
 
             this->_pvt_added(i, added_views, map);
-            
+
             FF::incrementVersion();
         }
-        
+
         return added_views;
     }
     catch(...)
@@ -592,34 +595,34 @@ ViewsOfMol G2FF::group_addIfUnique(quint32 i, const ViewsOfMol &molviews,
         molgroup[i] = old_state;
         throw;
     }
-    
+
     return ViewsOfMol();
 }
 
-/** Add the molecules in 'molecules' to this forcefield, using the 
+/** Add the molecules in 'molecules' to this forcefield, using the
     supplied property map to get the names of the properties that contain
     the required forcefield parameters
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
 */
-QList<ViewsOfMol> G2FF::group_addIfUnique(quint32 i, const Molecules &molecules, 
+QList<ViewsOfMol> G2FF::group_addIfUnique(quint32 i, const Molecules &molecules,
                                           const PropertyMap &map)
 {
     assertValidGroup(i);
 
     if (molecules.isEmpty())
         return QList<ViewsOfMol>();
-        
+
     FFMolGroupPvt old_molgroup = molgroup[i];
-        
+
     boost::shared_ptr<FF> old_state( this->clone() );
-    
+
     try
     {
         QList<ViewsOfMol> added_mols = molgroup[i].addIfUnique(molecules);
-        
+
         if (not added_mols.isEmpty())
         {
             if (not allow_overlap_of_atoms)
@@ -632,16 +635,16 @@ QList<ViewsOfMol> G2FF::group_addIfUnique(quint32 i, const Molecules &molecules,
                     added_mol.assertNoOverlap();
                 }
             }
-            
+
             //now get the parameters
             foreach (const ViewsOfMol &added_mol, added_mols)
             {
                 this->_pvt_added(i, added_mol, map);
             }
-            
+
             FF::incrementVersion();
         }
-        
+
         return added_mols;
     }
     catch(...)
@@ -649,19 +652,19 @@ QList<ViewsOfMol> G2FF::group_addIfUnique(quint32 i, const Molecules &molecules,
         this->copy(*old_state);
         throw;
     }
-    
+
     return QList<ViewsOfMol>();
 }
 
-/** Add the views of the molecules in the group 'molgroup' to this forcefield, 
-    using the supplied property map to get the names of the properties that 
+/** Add the views of the molecules in the group 'molgroup' to this forcefield,
+    using the supplied property map to get the names of the properties that
     contain the required forcefield parameters
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireError::incompatible_error
 */
-QList<ViewsOfMol> G2FF::group_addIfUnique(quint32 i, const MoleculeGroup &new_group, 
+QList<ViewsOfMol> G2FF::group_addIfUnique(quint32 i, const MoleculeGroup &new_group,
                                           const PropertyMap &map)
 {
     return G2FF::group_addIfUnique(i, new_group.molecules(), map);
@@ -671,17 +674,17 @@ QList<ViewsOfMol> G2FF::group_addIfUnique(quint32 i, const MoleculeGroup &new_gr
 bool G2FF::group_remove(quint32 i, const MoleculeView &molview)
 {
     assertValidGroup(i);
-    
+
     FFMolGroupPvt old_state = molgroup[i];
-    
+
     try
     {
         if (molgroup[i].remove(molview))
         {
             this->_pvt_removed( i, PartialMolecule(molview) );
-            
+
             FF::incrementVersion();
-            
+
             return true;
         }
     }
@@ -690,7 +693,7 @@ bool G2FF::group_remove(quint32 i, const MoleculeView &molview)
         molgroup[i] = old_state;
         throw;
     }
-    
+
     return false;
 }
 
@@ -698,20 +701,20 @@ bool G2FF::group_remove(quint32 i, const MoleculeView &molview)
 ViewsOfMol G2FF::group_remove(quint32 i, const ViewsOfMol &molviews)
 {
     assertValidGroup(i);
-    
+
     FFMolGroupPvt old_state = molgroup[i];
-    
+
     try
     {
         ViewsOfMol removed_views = molgroup[i].remove(molviews);
-        
+
         if (not removed_views.isEmpty())
         {
             this->_pvt_removed(i, removed_views);
-            
+
             FF::incrementVersion();
         }
-            
+
         return removed_views;
     }
     catch(...)
@@ -719,7 +722,7 @@ ViewsOfMol G2FF::group_remove(quint32 i, const ViewsOfMol &molviews)
         molgroup[i] = old_state;
         throw;
     }
-    
+
     return ViewsOfMol();
 }
 
@@ -727,23 +730,23 @@ ViewsOfMol G2FF::group_remove(quint32 i, const ViewsOfMol &molviews)
 QList<ViewsOfMol> G2FF::group_remove(quint32 i, const Molecules &molecules)
 {
     assertValidGroup(i);
-    
+
     boost::shared_ptr<FF> old_state( this->clone() );
-    
+
     try
     {
         QList<ViewsOfMol> removed_mols = molgroup[i].remove(molecules);
-        
+
         if (not removed_mols.isEmpty())
         {
             foreach (const ViewsOfMol &removed_mol, removed_mols)
             {
                 this->_pvt_removed(i, removed_mol);
             }
-            
+
             FF::incrementVersion();
         }
-            
+
         return removed_mols;
     }
     catch(...)
@@ -751,7 +754,7 @@ QList<ViewsOfMol> G2FF::group_remove(quint32 i, const Molecules &molecules)
         this->copy(*old_state);
         throw;
     }
-    
+
     return QList<ViewsOfMol>();
 }
 
@@ -766,17 +769,17 @@ QList<ViewsOfMol> G2FF::group_remove(quint32 i, const MoleculeGroup &new_group)
 bool G2FF::group_removeAll(quint32 i, const MoleculeView &molview)
 {
     assertValidGroup(i);
-    
+
     FFMolGroupPvt old_state = molgroup[i];
-    
+
     try
     {
         if (molgroup[i].removeAll(molview))
         {
             this->_pvt_removedAll( i, PartialMolecule(molview) );
-            
+
             FF::incrementVersion();
-            
+
             return true;
         }
     }
@@ -785,7 +788,7 @@ bool G2FF::group_removeAll(quint32 i, const MoleculeView &molview)
         molgroup[i] = old_state;
         throw;
     }
-    
+
     return false;
 }
 
@@ -793,20 +796,20 @@ bool G2FF::group_removeAll(quint32 i, const MoleculeView &molview)
 ViewsOfMol G2FF::group_removeAll(quint32 i, const ViewsOfMol &molviews)
 {
     assertValidGroup(i);
-    
+
     FFMolGroupPvt old_state = molgroup[i];
-    
+
     try
     {
         ViewsOfMol removed_views = molgroup[i].removeAll(molviews);
-        
+
         if (not removed_views.isEmpty())
         {
             this->_pvt_removedAll(i, removed_views);
-            
+
             FF::incrementVersion();
         }
-            
+
         return removed_views;
     }
     catch(...)
@@ -814,7 +817,7 @@ ViewsOfMol G2FF::group_removeAll(quint32 i, const ViewsOfMol &molviews)
         molgroup[i] = old_state;
         throw;
     }
-    
+
     return ViewsOfMol();
 }
 
@@ -822,20 +825,20 @@ ViewsOfMol G2FF::group_removeAll(quint32 i, const ViewsOfMol &molviews)
 QList<ViewsOfMol> G2FF::group_removeAll(quint32 i, const Molecules &molecules)
 {
     assertValidGroup(i);
-    
+
     boost::shared_ptr<FF> old_state( this->clone() );
-    
+
     try
     {
         QList<ViewsOfMol> removed_mols = molgroup[i].removeAll(molecules);
-        
+
         foreach (const ViewsOfMol &removed_mol, removed_mols)
         {
             this->_pvt_removedAll(i, removed_mol);
-            
+
             FF::incrementVersion();
         }
-            
+
         return removed_mols;
     }
     catch(...)
@@ -843,7 +846,7 @@ QList<ViewsOfMol> G2FF::group_removeAll(quint32 i, const Molecules &molecules)
         this->copy(*old_state);
         throw;
     }
-    
+
     return QList<ViewsOfMol>();
 }
 
@@ -858,20 +861,20 @@ QList<ViewsOfMol> G2FF::group_removeAll(quint32 i, const MoleculeGroup &new_grou
 ViewsOfMol G2FF::group_remove(quint32 i, MolNum molnum)
 {
     assertValidGroup(i);
-    
+
     FFMolGroupPvt old_state = molgroup[i];
-    
+
     try
     {
         ViewsOfMol removed_mol = molgroup[i].remove(molnum);
-        
+
         if (not removed_mol.isEmpty())
         {
             this->_pvt_removed(i, removed_mol);
-            
+
             FF::incrementVersion();
         }
-            
+
         return removed_mol;
     }
     catch(...)
@@ -879,7 +882,7 @@ ViewsOfMol G2FF::group_remove(quint32 i, MolNum molnum)
         molgroup[i] = old_state;
         throw;
     }
-    
+
     return ViewsOfMol();
 }
 
@@ -888,23 +891,23 @@ ViewsOfMol G2FF::group_remove(quint32 i, MolNum molnum)
 QList<ViewsOfMol> G2FF::group_remove(quint32 i, const QSet<MolNum> &molnums)
 {
     assertValidGroup(i);
-    
+
     boost::shared_ptr<FF> old_state( this->clone() );
-    
+
     try
     {
         QList<ViewsOfMol> removed_mols = molgroup[i].remove(molnums);
-        
+
         if (not removed_mols.isEmpty())
         {
             foreach (const ViewsOfMol &removed_mol, removed_mols)
             {
                 this->_pvt_removed(i, removed_mol);
             }
-            
+
             FF::incrementVersion();
         }
-            
+
         return removed_mols;
     }
     catch(...)
@@ -912,7 +915,7 @@ QList<ViewsOfMol> G2FF::group_remove(quint32 i, const QSet<MolNum> &molnums)
         this->copy(*old_state);
         throw;
     }
-    
+
     return QList<ViewsOfMol>();
 }
 
@@ -930,17 +933,17 @@ void G2FF::group_removeAll(quint32 i)
 bool G2FF::group_update(quint32 i, const MoleculeData &moldata, bool auto_commit)
 {
     assertValidGroup(i);
-    
+
     FFMolGroupPvt old_state = molgroup[i];
-    
+
     try
     {
         if (molgroup[i].update(moldata,auto_commit))
         {
             this->_pvt_changed( i, Molecule(moldata), auto_commit );
-            
+
             FF::incrementVersion();
-            
+
             return true;
         }
     }
@@ -949,7 +952,7 @@ bool G2FF::group_update(quint32 i, const MoleculeData &moldata, bool auto_commit
         molgroup[i] = old_state;
         throw;
     }
-    
+
     return false;
 }
 
@@ -958,20 +961,20 @@ bool G2FF::group_update(quint32 i, const MoleculeData &moldata, bool auto_commit
 QList<Molecule> G2FF::group_update(quint32 i, const Molecules &molecules, bool auto_commit)
 {
     assertValidGroup(i);
-    
+
     FFMolGroupPvt old_state = molgroup[i];
-    
+
     try
     {
         QList<Molecule> updated_mols = molgroup[i].update(molecules, auto_commit);
-        
+
         if (not updated_mols.isEmpty())
         {
             this->_pvt_changed(i, updated_mols, auto_commit);
-            
+
             FF::incrementVersion();
         }
-            
+
         return updated_mols;
     }
     catch(...)
@@ -979,7 +982,7 @@ QList<Molecule> G2FF::group_update(quint32 i, const Molecules &molecules, bool a
         molgroup[i] = old_state;
         throw;
     }
-    
+
     return QList<Molecule>();
 }
 
@@ -990,31 +993,31 @@ QList<Molecule> G2FF::group_update(quint32 i, const MoleculeGroup &new_group, bo
     return G2FF::group_update(i, new_group.molecules(), auto_commit);
 }
 
-/** Set the contents of this forcefield so that it only contains the 
+/** Set the contents of this forcefield so that it only contains the
     view of the molecule in 'molview' (using the supplied property
     map to find the properties that contain the required parameters
     for this forcefield) */
-bool G2FF::group_setContents(quint32 i, const MoleculeView &molview, 
+bool G2FF::group_setContents(quint32 i, const MoleculeView &molview,
                              const PropertyMap &map)
 {
     assertValidGroup(i);
-    
+
     if (not allow_overlap_of_atoms)
         this->assertNoOverlap(molgroup[i!=1], molview);
-    
+
     boost::shared_ptr<FF> old_state( this->clone() );
-    
+
     try
     {
         bool changed = molgroup[i].setContents(molview);
-        
+
         if (changed or this->_pvt_wouldChangeProperties(i, molview.data().number(),map))
         {
             this->_pvt_removedAll(i);
             this->_pvt_added( i, PartialMolecule(molview), map );
-            
+
             FF::incrementVersion();
-            
+
             return true;
         }
     }
@@ -1023,36 +1026,36 @@ bool G2FF::group_setContents(quint32 i, const MoleculeView &molview,
         this->copy(*old_state);
         throw;
     }
-    
+
     return false;
 }
 
 /** Set the contents of this forcefield so that it contains just
     the views of the molecule in 'molviews' */
-bool G2FF::group_setContents(quint32 i, const ViewsOfMol &molviews, 
+bool G2FF::group_setContents(quint32 i, const ViewsOfMol &molviews,
                              const PropertyMap &map)
 {
     assertValidGroup(i);
-    
+
     if (not allow_overlap_of_atoms)
     {
         molviews.assertNoOverlap();
         this->assertNoOverlap(molgroup[i!=1], molviews);
     }
-        
+
     boost::shared_ptr<FF> old_state( this->clone() );
-    
+
     try
     {
         bool changed = molgroup[i].setContents(molviews);
-        
+
         if (changed or this->_pvt_wouldChangeProperties(i, molviews.number(), map))
         {
             this->_pvt_removedAll(i);
             this->_pvt_added(i, molviews, map);
-            
+
             FF::incrementVersion();
-            
+
             return true;
         }
     }
@@ -1061,16 +1064,16 @@ bool G2FF::group_setContents(quint32 i, const ViewsOfMol &molviews,
         this->copy(*old_state);
         throw;
     }
-    
+
     return false;
 }
 
 /** Set the contents of this forcefield so that it only contains 'molecules' */
-bool G2FF::group_setContents(quint32 i, const Molecules &molecules, 
+bool G2FF::group_setContents(quint32 i, const Molecules &molecules,
                              const PropertyMap &map)
 {
     assertValidGroup(i);
-    
+
     if (not allow_overlap_of_atoms)
     {
         for (Molecules::const_iterator it = molecules.constBegin();
@@ -1079,18 +1082,18 @@ bool G2FF::group_setContents(quint32 i, const Molecules &molecules,
         {
             it->assertNoOverlap();
         }
-        
+
         //assert that none of these molecules overlap with the
         //molecules in the other group
         this->assertNoOverlap(molgroup[i!=1], molecules);
     }
-    
+
     boost::shared_ptr<FF> old_state( this->clone() );
-    
+
     try
     {
         bool changed = molgroup[i].setContents(molecules);
-        
+
         if (not changed)
         {
             for (Molecules::const_iterator it = molecules.constBegin();
@@ -1104,20 +1107,20 @@ bool G2FF::group_setContents(quint32 i, const Molecules &molecules,
                 }
             }
         }
-        
+
         if (changed)
         {
             this->_pvt_removedAll(i);
-            
+
             for (Molecules::const_iterator it = molecules.constBegin();
                  it != molecules.constEnd();
                  ++it)
             {
                 this->_pvt_added(i, *it, map);
             }
-            
+
             FF::incrementVersion();
-            
+
             return true;
         }
     }
@@ -1126,17 +1129,17 @@ bool G2FF::group_setContents(quint32 i, const Molecules &molecules,
         this->copy(*old_state);
         throw;
     }
-    
+
     return false;
 }
 
 /** Set the contents of this forcefield so that it contains only
     the molecules in 'molgroup' */
-bool G2FF::group_setContents(quint32 i, const MoleculeGroup &new_group, 
+bool G2FF::group_setContents(quint32 i, const MoleculeGroup &new_group,
                              const PropertyMap &map)
 {
     assertValidGroup(i);
-    
+
     if (not allow_overlap_of_atoms)
     {
         for (MoleculeGroup::const_iterator it = new_group.constBegin();
@@ -1145,18 +1148,18 @@ bool G2FF::group_setContents(quint32 i, const MoleculeGroup &new_group,
         {
             it->assertNoOverlap();
         }
-        
+
         //assert that none of these molecules overlap with the
         //molecules in the other group
         this->assertNoOverlap(molgroup[i!=1], new_group.molecules());
     }
-    
+
     boost::shared_ptr<FF> old_state( this->clone() );
-    
+
     try
     {
         bool changed = molgroup[i].setContents(new_group);
-        
+
         if (not changed)
         {
             for (MoleculeGroup::const_iterator it = new_group.constBegin();
@@ -1170,20 +1173,20 @@ bool G2FF::group_setContents(quint32 i, const MoleculeGroup &new_group,
                 }
             }
         }
-        
+
         if (changed)
         {
             this->_pvt_removedAll(i);
-            
+
             for (MoleculeGroup::const_iterator it = new_group.constBegin();
                  it != new_group.constEnd();
                  ++it)
             {
                 this->_pvt_added(i, *it, map);
             }
-            
+
             FF::incrementVersion();
-            
+
             return true;
         }
     }
@@ -1192,7 +1195,7 @@ bool G2FF::group_setContents(quint32 i, const MoleculeGroup &new_group,
         this->copy(*old_state);
         throw;
     }
-    
+
     return false;
 }
 
@@ -1210,7 +1213,7 @@ void G2FF::accept()
 {
     if (molgroup[0].needsAccepting())
         molgroup[0].accept();
-    
+
     if (molgroup[1].needsAccepting())
         molgroup[1].accept();
 }

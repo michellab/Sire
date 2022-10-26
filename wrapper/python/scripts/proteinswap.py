@@ -17,7 +17,7 @@ Once you have written a configuration file, e.g. called “CONFIG”, then you c
 
 sire.app/bin/proteinswap -c0 complex0.crd -t0 complex0.top -l LIG0 -c1 complex1.crd -t1 complex1.top -C config
 
-Sire will automatically use all of the processor cores available on your compute node. The calculation is not fast, and the free energy averages (collected simultaneously via thermodynamic integration (TI), free energy perturbation (FEP) and Bennetts Acceptance Ratio (BAR) method) will take 1-4 days of compute time to converge. 
+Sire will automatically use all of the processor cores available on your compute node. The calculation is not fast, and the free energy averages (collected simultaneously via thermodynamic integration (TI), free energy perturbation (FEP) and Bennetts Acceptance Ratio (BAR) method) will take 1-4 days of compute time to converge.
 
 Sire performs the calculation as a series of iterations (1000 by default), with the binding free energy (and binding free energy components) written to an output results file at the end of each iteration. These files, called output/results_????.log (where X is the stage number and ???? is the iteration number) can be monitored during the simulation to check for convergence. At the end of the simulation, you can analyse the results using the Sire app analyse_freenrg, e.g.
 
@@ -31,6 +31,12 @@ While proteinswap aims to calculate the relative binding free energy, it is not 
 
 If you need more help understanding or interpreting the results of a proteinswap calculation then please feel free to get in touch via the Sire users mailing list.
 """
+
+try:
+    import sire
+    sire.use_old_api()
+except ImportError:
+    pass
 
 try:
     import PSRC
@@ -87,7 +93,7 @@ parser.add_argument('-c1', '--coordinate_file1', nargs="?",
                     help="The Amber coordinate file (with periodic box) giving the coordinates "
                          "of all of the atoms in the passed topology file of the protein1-ligand complex.")
 
-parser.add_argument('-C', '--config', nargs="?", 
+parser.add_argument('-C', '--config', nargs="?",
                     help='Supply an optional CONFIG file to control the calculation.')
 
 parser.add_argument('--lambda_values', type=float, nargs='+',
@@ -189,7 +195,7 @@ elif "ligand" in params:
 
 if ligand:
     print("The ligand will be located by finding the first molecule containing residue %s" % ligand)
-    
+
 else:
     print("The ligand will be the first non-protein, non-solvent molecule found in system.")
 

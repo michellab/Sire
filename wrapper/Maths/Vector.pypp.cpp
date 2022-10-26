@@ -43,6 +43,8 @@ SireMaths::Vector __copy__(const SireMaths::Vector &other){ return SireMaths::Ve
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Vector_class(){
@@ -65,6 +67,7 @@ void register_Vector_class(){
                 "angle"
                 , angle_function_value
                 , ( bp::arg("v0"), bp::arg("v1") )
+                , bp::release_gil_policy()
                 , "Return the angle between vectors v0 and v1 - this is the smallest\nangle, and will always lie between 0 and 180 degrees" );
         
         }
@@ -77,6 +80,7 @@ void register_Vector_class(){
                 "angle"
                 , angle_function_value
                 , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2") )
+                , bp::release_gil_policy()
                 , "Return the angle between v0-v1-v2 (treating the vectors as points in space)" );
         
         }
@@ -89,6 +93,7 @@ void register_Vector_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Access elements by index" );
         
         }
@@ -100,6 +105,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "b"
                 , b_function_value
+                , bp::release_gil_policy()
                 , "Return the components via rgb (limited between 0 and 1)" );
         
         }
@@ -111,6 +117,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "bearing"
                 , bearing_function_value
+                , bp::release_gil_policy()
                 , "Return the bearing of this vector against (0,1,0) (north) on the xy plane" );
         
         }
@@ -123,6 +130,7 @@ void register_Vector_class(){
                 "bearingXY"
                 , bearingXY_function_value
                 , ( bp::arg("v") )
+                , bp::release_gil_policy()
                 , "Return the bearing of this vector against v on the xy plane" );
         
         }
@@ -135,6 +143,7 @@ void register_Vector_class(){
                 "bearingXZ"
                 , bearingXZ_function_value
                 , ( bp::arg("v") )
+                , bp::release_gil_policy()
                 , "Return the bearing of this vector against v on the xz plane" );
         
         }
@@ -147,6 +156,7 @@ void register_Vector_class(){
                 "bearingYZ"
                 , bearingYZ_function_value
                 , ( bp::arg("v") )
+                , bp::release_gil_policy()
                 , "Return the bearing of this vector against v on the yz plane" );
         
         }
@@ -158,6 +168,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the size of the Vector (always 3 - unless you disagree\nwith me that we should be living in a 3-dimensional space)" );
         
         }
@@ -170,6 +181,7 @@ void register_Vector_class(){
                 "cross"
                 , cross_function_value
                 , ( bp::arg("v0"), bp::arg("v1") )
+                , bp::release_gil_policy()
                 , "Note that the cross product returns a normal vector, i.e. it has been\nnormalised" );
         
         }
@@ -182,6 +194,7 @@ void register_Vector_class(){
                 "dihedral"
                 , dihedral_function_value
                 , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2"), bp::arg("v3") )
+                , bp::release_gil_policy()
                 , "Return the dihedral angle between v0-v1-v2-v3 (treating the vectors as points)" );
         
         }
@@ -193,6 +206,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "direction"
                 , direction_function_value
+                , bp::release_gil_policy()
                 , "Return the unit vector pointing in the direction of this vector" );
         
         }
@@ -205,6 +219,7 @@ void register_Vector_class(){
                 "distance"
                 , distance_function_value
                 , ( bp::arg("v1"), bp::arg("v2") )
+                , bp::release_gil_policy()
                 , "Return the distance between two vectors" );
         
         }
@@ -217,6 +232,7 @@ void register_Vector_class(){
                 "distance2"
                 , distance2_function_value
                 , ( bp::arg("v1"), bp::arg("v2") )
+                , bp::release_gil_policy()
                 , "Return the distance squared between two vectors" );
         
         }
@@ -229,6 +245,7 @@ void register_Vector_class(){
                 "dot"
                 , dot_function_value
                 , ( bp::arg("v0"), bp::arg("v1") )
+                , bp::release_gil_policy()
                 , "Return the dot product of v0 and v1" );
         
         }
@@ -241,6 +258,7 @@ void register_Vector_class(){
                 "fromString"
                 , fromString_function_value
                 , ( bp::arg("str") )
+                , bp::release_gil_policy()
                 , "Construct a Vector from the QString representation returned by toString()\nThrow: SireError::invalid_arg\n" );
         
         }
@@ -252,6 +270,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "g"
                 , g_function_value
+                , bp::release_gil_policy()
                 , "Return the components via rgb (limited between 0 and 1)" );
         
         }
@@ -264,6 +283,7 @@ void register_Vector_class(){
                 "generate"
                 , generate_function_value
                 , ( bp::arg("dst"), bp::arg("v1"), bp::arg("ang"), bp::arg("v2"), bp::arg("dih"), bp::arg("v3") )
+                , bp::release_gil_policy()
                 , "Generate a vector, v0, that has distance dst v0-v1, angle ang v0-v1-v2,\nand dihedral dih v0-v1-v2-v3" );
         
         }
@@ -276,6 +296,7 @@ void register_Vector_class(){
                 "getitem"
                 , getitem_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Access elements by index (used by python)" );
         
         }
@@ -288,6 +309,7 @@ void register_Vector_class(){
                 "invDistance"
                 , invDistance_function_value
                 , ( bp::arg("v1"), bp::arg("v2") )
+                , bp::release_gil_policy()
                 , "Return the 1  distance between two vectors" );
         
         }
@@ -300,6 +322,7 @@ void register_Vector_class(){
                 "invDistance2"
                 , invDistance2_function_value
                 , ( bp::arg("v1"), bp::arg("v2") )
+                , bp::release_gil_policy()
                 , "Return 1  distance2 between two vectors" );
         
         }
@@ -311,6 +334,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "invLength"
                 , invLength_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -322,6 +346,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "invLength2"
                 , invLength2_function_value
+                , bp::release_gil_policy()
                 , "Return the inverse length squared" );
         
         }
@@ -333,6 +358,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "isZero"
                 , isZero_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a zero length vector" );
         
         }
@@ -344,6 +370,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "length"
                 , length_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -355,6 +382,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "length2"
                 , length2_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -366,6 +394,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "magnitude"
                 , magnitude_function_value
+                , bp::release_gil_policy()
                 , "Return the length of this vector" );
         
         }
@@ -377,6 +406,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "manhattanLength"
                 , manhattanLength_function_value
+                , bp::release_gil_policy()
                 , "Return the manhattan length of the vector" );
         
         }
@@ -389,6 +419,7 @@ void register_Vector_class(){
                 "max"
                 , max_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return a vector that has the maximum xyz components out of this\nand other" );
         
         }
@@ -400,6 +431,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "metricTensor"
                 , metricTensor_function_value
+                , bp::release_gil_policy()
                 , "Return the metric tensor of a vector, i.e.\n| yy + zz,    -xy    -xz      |\n|    -yx,   xx + zz  -yz      |\n|    -zx       -zy    xx + yy |\n" );
         
         }
@@ -412,6 +444,7 @@ void register_Vector_class(){
                 "min"
                 , min_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return a vector that has the minimum components" );
         
         }
@@ -423,6 +456,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "normalise"
                 , normalise_function_value
+                , bp::release_gil_policy()
                 , "Return a normalised form of the vector" );
         
         }
@@ -466,6 +500,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "r"
                 , r_function_value
+                , bp::release_gil_policy()
                 , "Return the components via rgb (limited between 0 and 1)" );
         
         }
@@ -478,6 +513,7 @@ void register_Vector_class(){
                 "realCross"
                 , realCross_function_value
                 , ( bp::arg("v0"), bp::arg("v1") )
+                , bp::release_gil_policy()
                 , "This is a regular cross product." );
         
         }
@@ -490,6 +526,7 @@ void register_Vector_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("x"), bp::arg("y"), bp::arg("z") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -502,6 +539,7 @@ void register_Vector_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("v") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -514,6 +552,7 @@ void register_Vector_class(){
                 "setB"
                 , setB_function_value
                 , ( bp::arg("z") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -526,6 +565,7 @@ void register_Vector_class(){
                 "setG"
                 , setG_function_value
                 , ( bp::arg("y") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -538,6 +578,7 @@ void register_Vector_class(){
                 "setMax"
                 , setMax_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Set this Vector so that it has the maximum xyz components out of\nthis and other (e.g. this->x = max(this->x(),other.x() etc.)" );
         
         }
@@ -550,6 +591,7 @@ void register_Vector_class(){
                 "setMin"
                 , setMin_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Set this Vector so that it has the minimum xyz components" );
         
         }
@@ -562,6 +604,7 @@ void register_Vector_class(){
                 "setR"
                 , setR_function_value
                 , ( bp::arg("x") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -574,6 +617,7 @@ void register_Vector_class(){
                 "setX"
                 , setX_function_value
                 , ( bp::arg("x") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -586,6 +630,7 @@ void register_Vector_class(){
                 "setY"
                 , setY_function_value
                 , ( bp::arg("y") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -598,6 +643,7 @@ void register_Vector_class(){
                 "setZ"
                 , setZ_function_value
                 , ( bp::arg("z") )
+                , bp::release_gil_policy()
                 , "Set individual values of the vector" );
         
         }
@@ -609,6 +655,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a QString representation of the vector" );
         
         }
@@ -620,6 +667,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -631,6 +679,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -642,6 +691,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "x"
                 , x_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -653,6 +703,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "y"
                 , y_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -664,6 +715,7 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "z"
                 , z_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

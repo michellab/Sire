@@ -30,6 +30,8 @@ SireMove::SpecifiedGroupsDeleter __copy__(const SireMove::SpecifiedGroupsDeleter
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SpecifiedGroupsDeleter_class(){
 
     { //::SireMove::SpecifiedGroupsDeleter
@@ -48,6 +50,7 @@ void register_SpecifiedGroupsDeleter_class(){
                 "deleteFrom"
                 , deleteFrom_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Delete a molecule from the system. This returns the molecule that\nwas deleted, and the probability with which it was sampled\n(normalised so that a probability of 1 is returned if the molecule\nwas picked purely randomly). This deleter deletes the molecule\nfrom the entire system. This returns an empty molecule if\nthe molecule was not contained in the system and nothing\nwas deleted" );
         
         }
@@ -71,7 +74,7 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "group"
                 , group_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group from which molecules are randomly\nselected to be deleted" );
         
         }
@@ -98,7 +101,7 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "sampler"
                 , sampler_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the sampler used to randomly select molecules to be deleted" );
         
         }
@@ -111,6 +114,7 @@ void register_SpecifiedGroupsDeleter_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("generator") )
+                , bp::release_gil_policy()
                 , "Set the random number generator used by the sampler to randomly\nselect molecules to be deleted" );
         
         }
@@ -123,6 +127,7 @@ void register_SpecifiedGroupsDeleter_class(){
                 "setGroup"
                 , setGroup_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Set the molecule group from which molecules are selected randomly" );
         
         }
@@ -135,6 +140,7 @@ void register_SpecifiedGroupsDeleter_class(){
                 "setSampler"
                 , setSampler_function_value
                 , ( bp::arg("sampler") )
+                , bp::release_gil_policy()
                 , "Set the sampler used to randomly select molecules to be deleted" );
         
         }
@@ -147,6 +153,7 @@ void register_SpecifiedGroupsDeleter_class(){
                 "setSampler"
                 , setSampler_function_value
                 , ( bp::arg("molgroup") )
+                , bp::release_gil_policy()
                 , "Set the sampler to one that selects molecules uniformly from the\npassed molecule group" );
         
         }
@@ -159,6 +166,7 @@ void register_SpecifiedGroupsDeleter_class(){
                 "setSpecifiedGroups"
                 , setSpecifiedGroups_function_value
                 , ( bp::arg("mgid") )
+                , bp::release_gil_policy()
                 , "Set the ID of the groups from which molecules are actually deleted" );
         
         }
@@ -170,7 +178,7 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "specifiedGroups"
                 , specifiedGroups_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ID of the groups from which molecules are actually deleted" );
         
         }
@@ -182,6 +190,7 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

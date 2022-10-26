@@ -35,6 +35,8 @@ SireBase::Array2D<SireBase::PropPtr<SireMaths::Accumulator> > __copy__(const Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Array2D_SireMaths_AccumulatorPtr__class(){
 
     { //::SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > >
@@ -112,6 +114,7 @@ void register_Array2D_SireMaths_AccumulatorPtr__class(){
                 "redimension"
                 , redimension_function_value
                 , ( bp::arg("nrows"), bp::arg("ncolumns") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -125,6 +128,7 @@ void register_Array2D_SireMaths_AccumulatorPtr__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -138,6 +142,7 @@ void register_Array2D_SireMaths_AccumulatorPtr__class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -150,6 +155,7 @@ void register_Array2D_SireMaths_AccumulatorPtr__class(){
             Array2D_SireMaths_AccumulatorPtr__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -162,6 +168,7 @@ void register_Array2D_SireMaths_AccumulatorPtr__class(){
             Array2D_SireMaths_AccumulatorPtr__exposer.def( 
                 "transpose"
                 , transpose_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

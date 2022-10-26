@@ -37,6 +37,8 @@ SireMM::CLJSoftShiftFunction __copy__(const SireMM::CLJSoftShiftFunction &other)
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJSoftShiftFunction_class(){
 
     { //::SireMM::CLJSoftShiftFunction
@@ -61,6 +63,7 @@ void register_CLJSoftShiftFunction_class(){
             CLJSoftShiftFunction_exposer.def( 
                 "defaultShiftFunction"
                 , defaultShiftFunction_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -87,6 +90,7 @@ void register_CLJSoftShiftFunction_class(){
             CLJSoftShiftFunction_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -98,6 +102,7 @@ void register_CLJSoftShiftFunction_class(){
             CLJSoftShiftFunction_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -109,6 +114,7 @@ void register_CLJSoftShiftFunction_class(){
             CLJSoftShiftFunction_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

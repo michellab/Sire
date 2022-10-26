@@ -25,6 +25,8 @@ SireCAS::Identities __copy__(const SireCAS::Identities &other){ return SireCAS::
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Identities_class(){
 
     { //::SireCAS::Identities
@@ -53,6 +55,7 @@ void register_Identities_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symex0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -65,6 +68,7 @@ void register_Identities_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symex0"), bp::arg("symex1") )
+                , bp::release_gil_policy()
                 , "Add the passed expressions" );
         
         }
@@ -77,6 +81,7 @@ void register_Identities_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2") )
+                , bp::release_gil_policy()
                 , "Add the passed expressions" );
         
         }
@@ -89,6 +94,7 @@ void register_Identities_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3") )
+                , bp::release_gil_policy()
                 , "Add the passed expressions" );
         
         }
@@ -101,6 +107,7 @@ void register_Identities_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4") )
+                , bp::release_gil_policy()
                 , "Add the passed expressions" );
         
         }
@@ -113,6 +120,7 @@ void register_Identities_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5") )
+                , bp::release_gil_policy()
                 , "Add the passed expressions" );
         
         }
@@ -125,6 +133,7 @@ void register_Identities_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6") )
+                , bp::release_gil_policy()
                 , "Add the passed expressions" );
         
         }
@@ -137,6 +146,7 @@ void register_Identities_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6"), bp::arg("symex7") )
+                , bp::release_gil_policy()
                 , "Add the passed expressions" );
         
         }
@@ -149,6 +159,7 @@ void register_Identities_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6"), bp::arg("symex7"), bp::arg("symex8") )
+                , bp::release_gil_policy()
                 , "Add the passed expressions" );
         
         }
@@ -161,6 +172,7 @@ void register_Identities_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6"), bp::arg("symex7"), bp::arg("symex8"), bp::arg("symex9") )
+                , bp::release_gil_policy()
                 , "Add the passed expressions" );
         
         }
@@ -173,6 +185,7 @@ void register_Identities_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("sym") )
+                , bp::release_gil_policy()
                 , "Return whether or not this set of identities contains an identity for\nthe symbol symbol" );
         
         }
@@ -185,6 +198,7 @@ void register_Identities_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("func") )
+                , bp::release_gil_policy()
                 , "Return whether or not this set of identities contains an identity for\nthe function func (or one of its relations)" );
         
         }
@@ -197,6 +211,7 @@ void register_Identities_class(){
                 "expression"
                 , expression_function_value
                 , ( bp::arg("sym") )
+                , bp::release_gil_policy()
                 , "Return the associated expression for symbol, or an expression containing\nthis symbol if there is no such expression" );
         
         }
@@ -209,6 +224,7 @@ void register_Identities_class(){
                 "function"
                 , function_function_value
                 , ( bp::arg("func") )
+                , bp::release_gil_policy()
                 , "Return the actual form of the function func stored in this set of\nidentities, or the null function if it is not present here" );
         
         }
@@ -235,6 +251,7 @@ void register_Identities_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("symbol"), bp::arg("expression") )
+                , bp::release_gil_policy()
                 , "Set the Symbol symbol equal to expression" );
         
         }
@@ -246,6 +263,7 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return a list of the symbols that are present in this set" );
         
         }
@@ -257,6 +275,7 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -268,6 +287,7 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -279,6 +299,7 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

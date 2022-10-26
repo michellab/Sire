@@ -41,7 +41,7 @@ static const RegisterMetaType<MoleculeInfo> r_molinfo;
 QDataStream &operator<<(QDataStream &ds, const MoleculeInfo &molinfo)
 {
     writeHeader(ds, r_molinfo, 1);
-    
+
     SharedDataStream sds(ds);
     sds << molinfo.d;
     return ds;
@@ -50,7 +50,7 @@ QDataStream &operator<<(QDataStream &ds, const MoleculeInfo &molinfo)
 QDataStream &operator>>(QDataStream &ds, MoleculeInfo &molinfo)
 {
     VersionID v = readHeader(ds, r_molinfo);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
@@ -58,7 +58,7 @@ QDataStream &operator>>(QDataStream &ds, MoleculeInfo &molinfo)
     }
     else
         throw version_error(v, "1", r_molinfo, CODELOC);
-    
+
     return ds;
 }
 
@@ -381,8 +381,8 @@ bool MoleculeInfo::isAtomCutting() const
     return d->isAtomCutting();
 }
 
-/** Return whether or not residue-based cutting is used for the entire 
-    molecule (meaning that there is exactly one cutgroup per residue, and 
+/** Return whether or not residue-based cutting is used for the entire
+    molecule (meaning that there is exactly one cutgroup per residue, and
     atoms in a cutgroup are in the same order as atoms in the residue). This
     is the default. Note that a single atom molecule is simultaneously
     atom cutting, residue cutting and molecule cutting. */
@@ -535,7 +535,7 @@ QList<AtomIdx> MoleculeInfo::getAtomsIn(const ChainID &chainid,
 {
     return d->getAtomsIn(chainid,name);
 }
-                          
+
 /** Return the indicies of all atoms in the specified chain(s) */
 const QList<AtomIdx>& MoleculeInfo::getAtomsIn(CGIdx cgidx) const
 {
@@ -758,6 +758,12 @@ bool MoleculeInfo::intersects(ChainIdx chainidx, const ResID &resid) const
     return d->intersects(chainidx,resid);
 }
 
+/** Return whether or not this is empty (contains no atoms) */
+bool MoleculeInfo::isEmpty() const
+{
+    return d->isEmpty();
+}
+
 /** Return the number of atoms in the molecule */
 int MoleculeInfo::nAtoms() const
 {
@@ -846,6 +852,91 @@ int MoleculeInfo::nCutGroups() const
 int MoleculeInfo::nSegments() const
 {
     return d->nSegments();
+}
+
+QList<AtomIdx> MoleculeInfo::mapNoThrow(const AtomName &name) const
+{
+    return d->mapNoThrow(name);
+}
+
+QList<AtomIdx> MoleculeInfo::mapNoThrow(const AtomNum &num) const
+{
+    return d->mapNoThrow(num);
+}
+
+QList<AtomIdx> MoleculeInfo::mapNoThrow(const AtomIdx &idx) const
+{
+    return d->mapNoThrow(idx);
+}
+
+QList<AtomIdx> MoleculeInfo::mapNoThrow(const AtomID &id) const
+{
+    return d->mapNoThrow(id);
+}
+
+QList<ResIdx> MoleculeInfo::mapNoThrow(const ResName &name) const
+{
+    return d->mapNoThrow(name);
+}
+
+QList<ResIdx> MoleculeInfo::mapNoThrow(const ResNum &num) const
+{
+    return d->mapNoThrow(num);
+}
+
+QList<ResIdx> MoleculeInfo::mapNoThrow(const ResIdx &idx) const
+{
+    return d->mapNoThrow(idx);
+}
+
+QList<ResIdx> MoleculeInfo::mapNoThrow(const ResID &id) const
+{
+    return d->mapNoThrow(id);
+}
+
+QList<ChainIdx> MoleculeInfo::mapNoThrow(const ChainName &name) const
+{
+    return d->mapNoThrow(name);
+}
+
+QList<ChainIdx> MoleculeInfo::mapNoThrow(const ChainIdx &idx) const
+{
+    return d->mapNoThrow(idx);
+}
+
+QList<ChainIdx> MoleculeInfo::mapNoThrow(const ChainID &id) const
+{
+    return d->mapNoThrow(id);
+}
+
+QList<SegIdx> MoleculeInfo::mapNoThrow(const SegName &name) const
+{
+    return d->mapNoThrow(name);
+}
+
+QList<SegIdx> MoleculeInfo::mapNoThrow(const SegIdx &idx) const
+{
+    return d->mapNoThrow(idx);
+}
+
+QList<SegIdx> MoleculeInfo::mapNoThrow(const SegID &id) const
+{
+    return d->mapNoThrow(id);
+}
+
+QList<CGIdx> MoleculeInfo::mapNoThrow(const CGName &name) const
+{
+    return d->mapNoThrow(name);
+}
+
+QList<CGIdx> MoleculeInfo::mapNoThrow(const CGIdx &idx) const
+{
+    return d->mapNoThrow(idx);
+}
+
+QList<CGIdx> MoleculeInfo::mapNoThrow(const CGID &id) const
+{
+    return d->mapNoThrow(id);
 }
 
 /** Return the indicies of the matching residue(s) */

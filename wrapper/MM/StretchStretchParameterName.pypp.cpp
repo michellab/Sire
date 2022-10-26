@@ -51,6 +51,8 @@ SireMM::StretchStretchParameterName __copy__(const SireMM::StretchStretchParamet
 
 const char* pvt_get_name(const SireMM::StretchStretchParameterName&){ return "SireMM::StretchStretchParameterName";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_StretchStretchParameterName_class(){
 
     { //::SireMM::StretchStretchParameterName

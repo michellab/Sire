@@ -20,6 +20,8 @@ namespace bp = boost::python;
 
 const char* pvt_get_name(const SireMM::LJPotentialInterface<SireMM::IntraLJPotential>&){ return "SireMM::LJPotentialInterface<SireMM::IntraLJPotential>";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_LJPotentialInterface_IntraLJPotential__class(){
 
     { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >
@@ -49,6 +51,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -61,6 +64,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "parameters"
                 , parameters_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -87,7 +91,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -101,6 +105,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
                 "setCombiningRules"
                 , setCombiningRules_function_value
                 , ( bp::arg("combiningrules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -114,6 +119,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -127,6 +133,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
                 "setSpace"
                 , setSpace_function_value
                 , ( bp::arg("new_space") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -140,6 +147,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
                 "setSwitchingFunction"
                 , setSwitchingFunction_function_value
                 , ( bp::arg("new_switchfunc") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -152,7 +160,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -165,7 +173,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "switchingFunction"
                 , switchingFunction_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }

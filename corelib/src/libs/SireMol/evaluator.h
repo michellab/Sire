@@ -152,6 +152,8 @@ public:
         return QStringList();
     }
 
+    MolViewPtr toSelector() const;
+
     AtomSelection selection() const;
 
     SireUnits::Dimension::MolarMass mass(const PropertyMap &map = PropertyMap()) const;

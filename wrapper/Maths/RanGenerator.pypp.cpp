@@ -41,6 +41,8 @@ SireMaths::RanGenerator __copy__(const SireMaths::RanGenerator &other){ return S
 
 const char* pvt_get_name(const SireMaths::RanGenerator&){ return "SireMaths::RanGenerator";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_RanGenerator_class(){
 
     { //::SireMaths::RanGenerator
@@ -58,6 +60,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "detach"
                 , detach_function_value
+                , bp::release_gil_policy()
                 , "Detach from shared storage" );
         
         }
@@ -69,6 +72,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "getState"
                 , getState_function_value
+                , bp::release_gil_policy()
                 , "Return the current state of the random number generator.\nUse this if you truly wish to get reproducible sequences\nof random numbers" );
         
         }
@@ -92,6 +96,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "lock"
                 , lock_function_value
+                , bp::release_gil_policy()
                 , "Take hold of the generator lock. Only you can now generate\nrandom numbers while this lock is held" );
         
         }
@@ -103,6 +108,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "locked_rand"
                 , locked_rand_function_value
+                , bp::release_gil_policy()
                 , "Return a random real number on [0,1]. Should only be called while\nyou hold the generator lock" );
         
         }
@@ -115,6 +121,7 @@ void register_RanGenerator_class(){
                 "locked_rand"
                 , locked_rand_function_value
                 , ( bp::arg("maxval") )
+                , bp::release_gil_policy()
                 , "Return a random real number on [0,maxval]. Should only be called while\nyou hold the generator lock" );
         
         }
@@ -127,6 +134,7 @@ void register_RanGenerator_class(){
                 "locked_rand"
                 , locked_rand_function_value
                 , ( bp::arg("minval"), bp::arg("maxval") )
+                , bp::release_gil_policy()
                 , "Return a random real number on [minval,maxval]. Should only be called while\nyou hold the generator lock" );
         
         }
@@ -138,6 +146,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "locked_randNorm"
                 , locked_randNorm_function_value
+                , bp::release_gil_policy()
                 , "Return a random number generated from the normal distribution\nwith mean 0 and standard deviation 1. You must hold the generator\nlock when calling this function" );
         
         }
@@ -150,6 +159,7 @@ void register_RanGenerator_class(){
                 "locked_randNorm"
                 , locked_randNorm_function_value
                 , ( bp::arg("minval"), bp::arg("maxval") )
+                , bp::release_gil_policy()
                 , "Return a random number from the normal distribution\nwith supplied mean and variance. You must hold the generator\nlock when calling this function" );
         
         }
@@ -161,6 +171,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "locked_vectorOnSphere"
                 , locked_vectorOnSphere_function_value
+                , bp::release_gil_policy()
                 , "Return a random vector on the unit sphere. You must hold the generator\nlock when calling this function" );
         
         }
@@ -173,6 +184,7 @@ void register_RanGenerator_class(){
                 "locked_vectorOnSphere"
                 , locked_vectorOnSphere_function_value
                 , ( bp::arg("radius") )
+                , bp::release_gil_policy()
                 , "Return a random vector on the sphere with radius radius.\nYou must hold the generator lock when calling this function" );
         
         }
@@ -185,6 +197,7 @@ void register_RanGenerator_class(){
                 "nrand"
                 , nrand_function_value
                 , ( bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Return an array of n random numbers on [0,1]" );
         
         }
@@ -197,6 +210,7 @@ void register_RanGenerator_class(){
                 "nrand"
                 , nrand_function_value
                 , ( bp::arg("n"), bp::arg("maxval") )
+                , bp::release_gil_policy()
                 , "Return an array of n random numbers on [0,maxval]" );
         
         }
@@ -209,6 +223,7 @@ void register_RanGenerator_class(){
                 "nrand"
                 , nrand_function_value
                 , ( bp::arg("n"), bp::arg("minval"), bp::arg("maxval") )
+                , bp::release_gil_policy()
                 , "Return an array of n random numbers on [minval,maxval]" );
         
         }
@@ -221,6 +236,7 @@ void register_RanGenerator_class(){
                 "nrand"
                 , nrand_function_value
                 , ( bp::arg("result") )
+                , bp::release_gil_policy()
                 , "Fill the passed array of doubles with random numbers. This replaces each\nvalue in the array with a random number on [0,1]" );
         
         }
@@ -233,6 +249,7 @@ void register_RanGenerator_class(){
                 "nrand"
                 , nrand_function_value
                 , ( bp::arg("result"), bp::arg("maxval") )
+                , bp::release_gil_policy()
                 , "Fill the passed array of doubles with random numbers. This replaces each\nvalue in the array with a random number on [0,maxval]" );
         
         }
@@ -245,6 +262,7 @@ void register_RanGenerator_class(){
                 "nrand"
                 , nrand_function_value
                 , ( bp::arg("result"), bp::arg("minval"), bp::arg("maxval") )
+                , bp::release_gil_policy()
                 , "Fill the passed array of doubles with random numbers. This replaces each\nvalue in the array with a random number on [minval,maxval]" );
         
         }
@@ -257,6 +275,7 @@ void register_RanGenerator_class(){
                 "nrandNorm"
                 , nrandNorm_function_value
                 , ( bp::arg("result"), bp::arg("mean"), bp::arg("variance") )
+                , bp::release_gil_policy()
                 , "Fill the passed array with random numbers drawn from the normal\ndistribution with supplied mean and variance" );
         
         }
@@ -269,6 +288,7 @@ void register_RanGenerator_class(){
                 "nrandNorm"
                 , nrandNorm_function_value
                 , ( bp::arg("n"), bp::arg("mean"), bp::arg("variance") )
+                , bp::release_gil_policy()
                 , "Return an array of N random numbers drawn from the normal distribution with\nsupplied mean and variance" );
         
         }
@@ -281,6 +301,7 @@ void register_RanGenerator_class(){
                 "nvectorOnSphere"
                 , nvectorOnSphere_function_value
                 , ( bp::arg("result") )
+                , bp::release_gil_policy()
                 , "Fill the passed array with random vectors on a unit sphere" );
         
         }
@@ -293,6 +314,7 @@ void register_RanGenerator_class(){
                 "nvectorOnSphere"
                 , nvectorOnSphere_function_value
                 , ( bp::arg("result"), bp::arg("radius") )
+                , bp::release_gil_policy()
                 , "Fill the passed array with random vectors on a sphere with radius radius" );
         
         }
@@ -305,6 +327,7 @@ void register_RanGenerator_class(){
                 "nvectorOnSphere"
                 , nvectorOnSphere_function_value
                 , ( bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Return an array of n random vectors on a unit sphere" );
         
         }
@@ -317,6 +340,7 @@ void register_RanGenerator_class(){
                 "nvectorOnSphere"
                 , nvectorOnSphere_function_value
                 , ( bp::arg("n"), bp::arg("radius") )
+                , bp::release_gil_policy()
                 , "Return an array of n random vectors on a sphere of radius radius" );
         
         }
@@ -343,6 +367,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "rand"
                 , rand_function_value
+                , bp::release_gil_policy()
                 , "Return a random real number on [0,1]" );
         
         }
@@ -355,6 +380,7 @@ void register_RanGenerator_class(){
                 "rand"
                 , rand_function_value
                 , ( bp::arg("maxval") )
+                , bp::release_gil_policy()
                 , "Return a random real number on [0,maxval]" );
         
         }
@@ -367,6 +393,7 @@ void register_RanGenerator_class(){
                 "rand"
                 , rand_function_value
                 , ( bp::arg("minval"), bp::arg("maxval") )
+                , bp::release_gil_policy()
                 , "Return a random real number on [minval,maxval]" );
         
         }
@@ -378,6 +405,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "rand53"
                 , rand53_function_value
+                , bp::release_gil_policy()
                 , "Return a high-precision random real number on [0,1)" );
         
         }
@@ -390,6 +418,7 @@ void register_RanGenerator_class(){
                 "rand53"
                 , rand53_function_value
                 , ( bp::arg("maxval") )
+                , bp::release_gil_policy()
                 , "Return a high-precision random real number on [0,1)" );
         
         }
@@ -402,6 +431,7 @@ void register_RanGenerator_class(){
                 "rand53"
                 , rand53_function_value
                 , ( bp::arg("minval"), bp::arg("maxval") )
+                , bp::release_gil_policy()
                 , "Return a high-precision random real number on [minval,maxval)" );
         
         }
@@ -413,6 +443,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "randBool"
                 , randBool_function_value
+                , bp::release_gil_policy()
                 , "Return a random true or false value" );
         
         }
@@ -424,6 +455,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "randInt"
                 , randInt_function_value
+                , bp::release_gil_policy()
                 , "Return a random 32bit unsigned integer in [0,2^32 - 1]" );
         
         }
@@ -436,6 +468,7 @@ void register_RanGenerator_class(){
                 "randInt"
                 , randInt_function_value
                 , ( bp::arg("maxval") )
+                , bp::release_gil_policy()
                 , "Return a random 32bit unsigned integer in [0,maxval]" );
         
         }
@@ -448,6 +481,7 @@ void register_RanGenerator_class(){
                 "randInt"
                 , randInt_function_value
                 , ( bp::arg("minval"), bp::arg("maxval") )
+                , bp::release_gil_policy()
                 , "Return a random 32bit integer in [minval,maxval]" );
         
         }
@@ -459,6 +493,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "randInt64"
                 , randInt64_function_value
+                , bp::release_gil_policy()
                 , "Return a random 64bit unsigned integer on [0,2^64 - 1]" );
         
         }
@@ -471,6 +506,7 @@ void register_RanGenerator_class(){
                 "randInt64"
                 , randInt64_function_value
                 , ( bp::arg("maxval") )
+                , bp::release_gil_policy()
                 , "Return a random 64bit unsigned integer on [0,maxval]" );
         
         }
@@ -483,6 +519,7 @@ void register_RanGenerator_class(){
                 "randInt64"
                 , randInt64_function_value
                 , ( bp::arg("minval"), bp::arg("maxval") )
+                , bp::release_gil_policy()
                 , "Return a random 64bit integer on [minval,maxval]" );
         
         }
@@ -494,6 +531,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "randNorm"
                 , randNorm_function_value
+                , bp::release_gil_policy()
                 , "Return a random number generated from the normal distribution\nwith mean 0 and standard deviation 1" );
         
         }
@@ -506,6 +544,7 @@ void register_RanGenerator_class(){
                 "randNorm"
                 , randNorm_function_value
                 , ( bp::arg("mean"), bp::arg("variance") )
+                , bp::release_gil_policy()
                 , "Return a random number from the normal distribution\nwith supplied mean and variance." );
         
         }
@@ -517,6 +556,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "seed"
                 , seed_function_value
+                , bp::release_gil_policy()
                 , "See the generator with a new, random seed - this will detach\nthis explicitly shared copy of the generator" );
         
         }
@@ -529,6 +569,7 @@ void register_RanGenerator_class(){
                 "seed"
                 , seed_function_value
                 , ( bp::arg("seed") )
+                , bp::release_gil_policy()
                 , "Seed the generator with s  - this will detach\nthis explicitly shared copy of the generator" );
         
         }
@@ -541,6 +582,7 @@ void register_RanGenerator_class(){
                 "seed"
                 , seed_function_value
                 , ( bp::arg("seed") )
+                , bp::release_gil_policy()
                 , "Seed the generator with seed - this will detach\nthis explicitly shared copy of the generator" );
         
         }
@@ -553,6 +595,7 @@ void register_RanGenerator_class(){
                 "seed"
                 , seed_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Seed the generator with another generator - this\nreally just copies the generator as they are\nall explicit copies of one another" );
         
         }
@@ -564,6 +607,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "seedGlobal"
                 , seedGlobal_function_value
+                , bp::release_gil_policy()
                 , "Seed the global random number generator" );
         
         }
@@ -576,6 +620,7 @@ void register_RanGenerator_class(){
                 "seedGlobal"
                 , seedGlobal_function_value
                 , ( bp::arg("seed") )
+                , bp::release_gil_policy()
                 , "Seed the global random number generator" );
         
         }
@@ -588,6 +633,7 @@ void register_RanGenerator_class(){
                 "seedGlobal"
                 , seedGlobal_function_value
                 , ( bp::arg("seed") )
+                , bp::release_gil_policy()
                 , "Seed the global random number generator" );
         
         }
@@ -600,6 +646,7 @@ void register_RanGenerator_class(){
                 "seedGlobal"
                 , seedGlobal_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Seed the global random number generator" );
         
         }
@@ -612,6 +659,7 @@ void register_RanGenerator_class(){
                 "setState"
                 , setState_function_value
                 , ( bp::arg("state") )
+                , bp::release_gil_policy()
                 , "Load the state into this generator - the state must have\nbeen produced by the getState() function above.\nThis will detach this copy from shared storage.\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -623,6 +671,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -634,6 +683,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "unlock"
                 , unlock_function_value
+                , bp::release_gil_policy()
                 , "Release the generator lock" );
         
         }
@@ -645,6 +695,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "vectorOnSphere"
                 , vectorOnSphere_function_value
+                , bp::release_gil_policy()
                 , "Return a random vector on the unit sphere" );
         
         }
@@ -657,6 +708,7 @@ void register_RanGenerator_class(){
                 "vectorOnSphere"
                 , vectorOnSphere_function_value
                 , ( bp::arg("radius") )
+                , bp::release_gil_policy()
                 , "Return a random vector on the sphere with radius radius" );
         
         }
@@ -668,6 +720,7 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

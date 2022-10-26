@@ -28,6 +28,8 @@ SireMol::MoleculeInfo __copy__(const SireMol::MoleculeInfo &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MoleculeInfo_class(){
 
     { //::SireMol::MoleculeInfo
@@ -58,6 +60,7 @@ void register_MoleculeInfo_class(){
                 "assertCompatibleWith"
                 , assertCompatibleWith_function_value
                 , ( bp::arg("selected_atoms") )
+                , bp::release_gil_policy()
                 , "Assert that this MoleculeInfo is compatible with the passed atom selection" );
         
         }
@@ -70,6 +73,7 @@ void register_MoleculeInfo_class(){
                 "assertCompatibleWith"
                 , assertCompatibleWith_function_value
                 , ( bp::arg("molecule") )
+                , bp::release_gil_policy()
                 , "Assert that this MoleculeInfo is compatible with the passed molecule" );
         
         }
@@ -82,6 +86,7 @@ void register_MoleculeInfo_class(){
                 "assertContains"
                 , assertContains_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Assert that this MoleculeInfo contains an atom at the passed index" );
         
         }
@@ -94,6 +99,7 @@ void register_MoleculeInfo_class(){
                 "assertContains"
                 , assertContains_function_value
                 , ( bp::arg("cgidx") )
+                , bp::release_gil_policy()
                 , "Assert that this MoleculeInfo contains an atom at the passed index" );
         
         }
@@ -106,6 +112,7 @@ void register_MoleculeInfo_class(){
                 "assertContains"
                 , assertContains_function_value
                 , ( bp::arg("residx") )
+                , bp::release_gil_policy()
                 , "Assert that this MoleculeInfo contains an atom at the passed index" );
         
         }
@@ -118,6 +125,7 @@ void register_MoleculeInfo_class(){
                 "assertContains"
                 , assertContains_function_value
                 , ( bp::arg("chainidx") )
+                , bp::release_gil_policy()
                 , "Assert that this MoleculeInfo contains an atom at the passed index" );
         
         }
@@ -130,6 +138,7 @@ void register_MoleculeInfo_class(){
                 "assertContains"
                 , assertContains_function_value
                 , ( bp::arg("segidx") )
+                , bp::release_gil_policy()
                 , "Assert that this MoleculeInfo contains an atom at the passed index" );
         
         }
@@ -142,6 +151,7 @@ void register_MoleculeInfo_class(){
                 "assertEqualTo"
                 , assertEqualTo_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Assert that this MoleculeInfo is equal to other" );
         
         }
@@ -154,6 +164,7 @@ void register_MoleculeInfo_class(){
                 "assertEqualTo"
                 , assertEqualTo_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Assert that this MoleculeInfo is equal to other" );
         
         }
@@ -166,6 +177,7 @@ void register_MoleculeInfo_class(){
                 "atomIdx"
                 , atomIdx_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return the index of the identified atom" );
         
         }
@@ -178,6 +190,7 @@ void register_MoleculeInfo_class(){
                 "atomIdx"
                 , atomIdx_function_value
                 , ( bp::arg("cgatomidx") )
+                , bp::release_gil_policy()
                 , "Return the index of the identified atom" );
         
         }
@@ -190,7 +203,7 @@ void register_MoleculeInfo_class(){
                 "cgAtomIdx"
                 , cgAtomIdx_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the combined CutGroup  AtomIndex of the identified atom" );
         
         }
@@ -203,7 +216,7 @@ void register_MoleculeInfo_class(){
                 "cgAtomIdx"
                 , cgAtomIdx_function_value
                 , ( bp::arg("atomid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the combined CutGroup  AtomIndex of the identified atom" );
         
         }
@@ -216,6 +229,7 @@ void register_MoleculeInfo_class(){
                 "cgAtomIdxs"
                 , cgAtomIdxs_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return the CGAtomIdxs of all of the identified atoms" );
         
         }
@@ -228,6 +242,7 @@ void register_MoleculeInfo_class(){
                 "cgAtomIdxs"
                 , cgAtomIdxs_function_value
                 , ( bp::arg("cgidx") )
+                , bp::release_gil_policy()
                 , "Return the CGAtomIdxs of the atoms in all of the identified CutGroups" );
         
         }
@@ -240,6 +255,7 @@ void register_MoleculeInfo_class(){
                 "cgAtomIdxs"
                 , cgAtomIdxs_function_value
                 , ( bp::arg("residx") )
+                , bp::release_gil_policy()
                 , "Return the CGAtomIdxs of the atoms in all of the identified residues" );
         
         }
@@ -252,6 +268,7 @@ void register_MoleculeInfo_class(){
                 "cgAtomIdxs"
                 , cgAtomIdxs_function_value
                 , ( bp::arg("chainidx") )
+                , bp::release_gil_policy()
                 , "Return the CGAtomIdxs of the atoms in all of the identified chains" );
         
         }
@@ -264,6 +281,7 @@ void register_MoleculeInfo_class(){
                 "cgAtomIdxs"
                 , cgAtomIdxs_function_value
                 , ( bp::arg("segidx") )
+                , bp::release_gil_policy()
                 , "Return the CGAtomIdxs of the atoms in all of the identified segments" );
         
         }
@@ -276,6 +294,7 @@ void register_MoleculeInfo_class(){
                 "cgAtomIdxs"
                 , cgAtomIdxs_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return the CGAtomIdxs of all of the identified atoms" );
         
         }
@@ -288,6 +307,7 @@ void register_MoleculeInfo_class(){
                 "cgAtomIdxs"
                 , cgAtomIdxs_function_value
                 , ( bp::arg("cgid") )
+                , bp::release_gil_policy()
                 , "Return the CGAtomIdxs of the atoms in all of the identified CutGroups" );
         
         }
@@ -300,6 +320,7 @@ void register_MoleculeInfo_class(){
                 "cgAtomIdxs"
                 , cgAtomIdxs_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return the CGAtomIdxs of the atoms in all of the identified residues" );
         
         }
@@ -312,6 +333,7 @@ void register_MoleculeInfo_class(){
                 "cgAtomIdxs"
                 , cgAtomIdxs_function_value
                 , ( bp::arg("chainid") )
+                , bp::release_gil_policy()
                 , "Return the CGAtomIdxs of the atoms in all of the identified chains" );
         
         }
@@ -324,6 +346,7 @@ void register_MoleculeInfo_class(){
                 "cgAtomIdxs"
                 , cgAtomIdxs_function_value
                 , ( bp::arg("segid") )
+                , bp::release_gil_policy()
                 , "Return the CGAtomIdxs of the atoms in all of the identified segments" );
         
         }
@@ -336,6 +359,7 @@ void register_MoleculeInfo_class(){
                 "cgIdx"
                 , cgIdx_function_value
                 , ( bp::arg("cgid") )
+                , bp::release_gil_policy()
                 , "Return the index of the identified CutGroup" );
         
         }
@@ -348,6 +372,7 @@ void register_MoleculeInfo_class(){
                 "cgIdx"
                 , cgIdx_function_value
                 , ( bp::arg("residx") )
+                , bp::release_gil_policy()
                 , "Return the index of the CutGroup that contains the atoms for residue\nwith ID id, if this molecule uses residue cutting. If not, an\nexception is thrown" );
         
         }
@@ -360,6 +385,7 @@ void register_MoleculeInfo_class(){
                 "cgIdx"
                 , cgIdx_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return the index of the CutGroup that contains the atoms for residue\nwith ID id, if this molecule uses residue cutting. If not, an\nexception is thrown" );
         
         }
@@ -372,6 +398,7 @@ void register_MoleculeInfo_class(){
                 "chainIdx"
                 , chainIdx_function_value
                 , ( bp::arg("chainid") )
+                , bp::release_gil_policy()
                 , "Return the index of the identified chain" );
         
         }
@@ -384,6 +411,7 @@ void register_MoleculeInfo_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("residx"), bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return whether or not the specified residue contains the specified atom" );
         
         }
@@ -396,6 +424,7 @@ void register_MoleculeInfo_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("chainidx"), bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return whether or not the specified chain contains the specified atom" );
         
         }
@@ -408,6 +437,7 @@ void register_MoleculeInfo_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("segidx"), bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return whether or not the specified segment contains the specified atom" );
         
         }
@@ -420,6 +450,7 @@ void register_MoleculeInfo_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("cgidx"), bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return whether or not the specified CutGroup contains the specified atom" );
         
         }
@@ -432,6 +463,7 @@ void register_MoleculeInfo_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("chainidx"), bp::arg("residx") )
+                , bp::release_gil_policy()
                 , "Return whether or not the specified chain contains the specified residue" );
         
         }
@@ -444,6 +476,7 @@ void register_MoleculeInfo_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("residx"), bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not the specified residue contains the specified atom" );
         
         }
@@ -456,6 +489,7 @@ void register_MoleculeInfo_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("chainidx"), bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not the specified chain contains the specified atom" );
         
         }
@@ -468,6 +502,7 @@ void register_MoleculeInfo_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("segidx"), bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not the specified segment contains the specified atom" );
         
         }
@@ -480,6 +515,7 @@ void register_MoleculeInfo_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("cgidx"), bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not the specified CutGroup contains the specified atom" );
         
         }
@@ -492,6 +528,7 @@ void register_MoleculeInfo_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("chainidx"), bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return whether or not the specified chain contains the specified residue" );
         
         }
@@ -516,6 +553,7 @@ void register_MoleculeInfo_class(){
                 "getAtom"
                 , getAtom_function_value
                 , ( bp::arg("cgidx"), bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the index of the ith atom in the specified CutGroup" );
         
         }
@@ -528,6 +566,7 @@ void register_MoleculeInfo_class(){
                 "getAtom"
                 , getAtom_function_value
                 , ( bp::arg("residx"), bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the index of the ith atom in the specified residue" );
         
         }
@@ -540,6 +579,7 @@ void register_MoleculeInfo_class(){
                 "getAtom"
                 , getAtom_function_value
                 , ( bp::arg("chainidx"), bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the index of the ith atom in the specified chain" );
         
         }
@@ -552,6 +592,7 @@ void register_MoleculeInfo_class(){
                 "getAtom"
                 , getAtom_function_value
                 , ( bp::arg("segidx"), bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the index of the ith atom in the specified segment" );
         
         }
@@ -563,6 +604,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "getAtoms"
                 , getAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the indicies of atoms" );
         
         }
@@ -588,6 +630,7 @@ void register_MoleculeInfo_class(){
                 "getAtomsIn"
                 , getAtomsIn_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return the indicies of all atoms in the specified residue(s)" );
         
         }
@@ -600,6 +643,7 @@ void register_MoleculeInfo_class(){
                 "getAtomsIn"
                 , getAtomsIn_function_value
                 , ( bp::arg("residx"), bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return the indicies of all atoms called name in the specified residue(s)" );
         
         }
@@ -612,6 +656,7 @@ void register_MoleculeInfo_class(){
                 "getAtomsIn"
                 , getAtomsIn_function_value
                 , ( bp::arg("resid"), bp::arg("atomname") )
+                , bp::release_gil_policy()
                 , "Return the indicies of all atoms called name in the specified residue(s)" );
         
         }
@@ -624,6 +669,7 @@ void register_MoleculeInfo_class(){
                 "getAtomsIn"
                 , getAtomsIn_function_value
                 , ( bp::arg("chainidx") )
+                , bp::release_gil_policy()
                 , "Return the indicies of all atoms in the specified chain(s)" );
         
         }
@@ -636,6 +682,7 @@ void register_MoleculeInfo_class(){
                 "getAtomsIn"
                 , getAtomsIn_function_value
                 , ( bp::arg("chainid") )
+                , bp::release_gil_policy()
                 , "Return the indicies of all atoms in the specified chain(s)" );
         
         }
@@ -648,6 +695,7 @@ void register_MoleculeInfo_class(){
                 "getAtomsIn"
                 , getAtomsIn_function_value
                 , ( bp::arg("chainidx"), bp::arg("atomname") )
+                , bp::release_gil_policy()
                 , "Return the indicies of all atoms called name in the specified residue(s)" );
         
         }
@@ -660,6 +708,7 @@ void register_MoleculeInfo_class(){
                 "getAtomsIn"
                 , getAtomsIn_function_value
                 , ( bp::arg("chainid"), bp::arg("atomname") )
+                , bp::release_gil_policy()
                 , "Return the indicies of all atoms called name in the specified residue(s)" );
         
         }
@@ -685,6 +734,7 @@ void register_MoleculeInfo_class(){
                 "getAtomsIn"
                 , getAtomsIn_function_value
                 , ( bp::arg("cgid") )
+                , bp::release_gil_policy()
                 , "Return the indicies of all atoms in the specified CutGroup(s)" );
         
         }
@@ -710,6 +760,7 @@ void register_MoleculeInfo_class(){
                 "getAtomsIn"
                 , getAtomsIn_function_value
                 , ( bp::arg("segid") )
+                , bp::release_gil_policy()
                 , "Return the indicies of all atoms in the specified segment(s)" );
         
         }
@@ -721,6 +772,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "getChains"
                 , getChains_function_value
+                , bp::release_gil_policy()
                 , "Return a list of the indicies of all chains" );
         
         }
@@ -732,6 +784,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "getCutGroups"
                 , getCutGroups_function_value
+                , bp::release_gil_policy()
                 , "Return a list of the indicies of all CutGroups" );
         
         }
@@ -744,6 +797,7 @@ void register_MoleculeInfo_class(){
                 "getResidue"
                 , getResidue_function_value
                 , ( bp::arg("chainidx"), bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the index of the ith residue in the specified chain" );
         
         }
@@ -755,6 +809,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "getResidues"
                 , getResidues_function_value
+                , bp::release_gil_policy()
                 , "Return a list of the indicies of all residues" );
         
         }
@@ -780,6 +835,7 @@ void register_MoleculeInfo_class(){
                 "getResiduesIn"
                 , getResiduesIn_function_value
                 , ( bp::arg("chainid") )
+                , bp::release_gil_policy()
                 , "Return the indicies of residues in the identified chain(s)" );
         
         }
@@ -791,6 +847,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "getSegments"
                 , getSegments_function_value
+                , bp::release_gil_policy()
                 , "Return a list of the indicies of all segments" );
         
         }
@@ -803,6 +860,7 @@ void register_MoleculeInfo_class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("residx"), bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not the specified residue contains the specified atom" );
         
         }
@@ -815,6 +873,7 @@ void register_MoleculeInfo_class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("chainidx"), bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not the specified chain contains the specified atom" );
         
         }
@@ -827,6 +886,7 @@ void register_MoleculeInfo_class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("segidx"), bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not the specified segment contains the specified atom" );
         
         }
@@ -839,6 +899,7 @@ void register_MoleculeInfo_class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("cgidx"), bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not the specified CutGroup contains the specified atom" );
         
         }
@@ -851,6 +912,7 @@ void register_MoleculeInfo_class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("chainidx"), bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return whether or not the specified chain contains the specified residue" );
         
         }
@@ -862,7 +924,20 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "isAtomCutting"
                 , isAtomCutting_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not atom-based cutting is used for the entire\nmolecule (meaning that there is exactly one cutgroup per atom). This\nis highly unusual, except for single-atom molecules" );
+        
+        }
+        { //::SireMol::MoleculeInfo::isEmpty
+        
+            typedef bool ( ::SireMol::MoleculeInfo::*isEmpty_function_type)(  ) const;
+            isEmpty_function_type isEmpty_function_value( &::SireMol::MoleculeInfo::isEmpty );
+            
+            MoleculeInfo_exposer.def( 
+                "isEmpty"
+                , isEmpty_function_value
+                , bp::release_gil_policy()
+                , "Return whether or not this is empty (contains no atoms)" );
         
         }
         { //::SireMol::MoleculeInfo::isMoleculeCutting
@@ -873,6 +948,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "isMoleculeCutting"
                 , isMoleculeCutting_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not molecule-based cutting is used for the entire\nmolecule (meaning that there is exactly one cutgroup for the whole molecule). This\nis unusual, except for single-residue molecules" );
         
         }
@@ -884,6 +960,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "isResidueCutting"
                 , isResidueCutting_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not residue-based cutting is used for the entire\nmolecule (meaning that there is exactly one cutgroup per residue, and\natoms in a cutgroup are in the same order as atoms in the residue). This\nis the default. Note that a single atom molecule is simultaneously\natom cutting, residue cutting and molecule cutting." );
         
         }
@@ -896,6 +973,7 @@ void register_MoleculeInfo_class(){
                 "isResidueCutting"
                 , isResidueCutting_function_value
                 , ( bp::arg("residx") )
+                , bp::release_gil_policy()
                 , "Return whether or not residue-based cutting is used for the specifed\nresidue" );
         
         }
@@ -908,6 +986,7 @@ void register_MoleculeInfo_class(){
                 "isResidueCutting"
                 , isResidueCutting_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return whether or not residue-based cutting is used for the specifed\nresidue" );
         
         }
@@ -920,6 +999,7 @@ void register_MoleculeInfo_class(){
                 "isWithinChain"
                 , isWithinChain_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return whether or not the identified atom is held in a chain" );
         
         }
@@ -932,6 +1012,7 @@ void register_MoleculeInfo_class(){
                 "isWithinChain"
                 , isWithinChain_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not the identified atom is held in a chain" );
         
         }
@@ -944,6 +1025,7 @@ void register_MoleculeInfo_class(){
                 "isWithinChain"
                 , isWithinChain_function_value
                 , ( bp::arg("residx") )
+                , bp::release_gil_policy()
                 , "Return whether or not the identified residue is held in a chain" );
         
         }
@@ -956,6 +1038,7 @@ void register_MoleculeInfo_class(){
                 "isWithinChain"
                 , isWithinChain_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return whether or not the identified residue is held in a chain" );
         
         }
@@ -968,6 +1051,7 @@ void register_MoleculeInfo_class(){
                 "isWithinResidue"
                 , isWithinResidue_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return whether or not the identified atom is held in a residue" );
         
         }
@@ -980,6 +1064,7 @@ void register_MoleculeInfo_class(){
                 "isWithinResidue"
                 , isWithinResidue_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not the identified atom is held in a residue" );
         
         }
@@ -992,6 +1077,7 @@ void register_MoleculeInfo_class(){
                 "isWithinSegment"
                 , isWithinSegment_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return whether or not the identified atom is held in a segment" );
         
         }
@@ -1004,6 +1090,7 @@ void register_MoleculeInfo_class(){
                 "isWithinSegment"
                 , isWithinSegment_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return whether or not the identified atom is held in a segment" );
         
         }
@@ -1016,6 +1103,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching residue(s)" );
         
         }
@@ -1028,6 +1116,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("num") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching residue(s)" );
         
         }
@@ -1040,6 +1129,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("idx") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching residue(s)" );
         
         }
@@ -1052,6 +1142,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching residue(s)" );
         
         }
@@ -1064,6 +1155,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching chain(s)" );
         
         }
@@ -1076,6 +1168,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("idx") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching chain(s)" );
         
         }
@@ -1088,6 +1181,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("chainid") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching chain(s)" );
         
         }
@@ -1100,6 +1194,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching segment(s)" );
         
         }
@@ -1112,6 +1207,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("idx") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching segment(s)" );
         
         }
@@ -1124,6 +1220,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("segid") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching segment(s)" );
         
         }
@@ -1136,6 +1233,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching CutGroup(s)" );
         
         }
@@ -1148,6 +1246,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("idx") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching CutGroup(s)" );
         
         }
@@ -1160,6 +1259,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("cgid") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching CutGroup(s)" );
         
         }
@@ -1172,6 +1272,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching atom(s)" );
         
         }
@@ -1184,6 +1285,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("num") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching atom(s)" );
         
         }
@@ -1196,6 +1298,7 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("idx") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching atom(s)" );
         
         }
@@ -1208,7 +1311,229 @@ void register_MoleculeInfo_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the matching atom(s)" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::AtomName const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("name") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::AtomNum const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("num") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::AtomIdx const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::AtomID const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::ResName const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("name") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::ResNum const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("num") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::ResIdx const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::ResID const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("resid") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::ChainName const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("name") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::ChainIdx const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::ChainID const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("chainid") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::SegIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::SegName const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("name") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::SegIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::SegIdx const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::SegIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::SegID const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("segid") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::CGIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::CGName const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("name") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::CGIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::CGIdx const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("idx") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::mapNoThrow
+        
+            typedef ::QList< SireMol::CGIdx > ( ::SireMol::MoleculeInfo::*mapNoThrow_function_type)( ::SireMol::CGID const & ) const;
+            mapNoThrow_function_type mapNoThrow_function_value( &::SireMol::MoleculeInfo::mapNoThrow );
+            
+            MoleculeInfo_exposer.def( 
+                "mapNoThrow"
+                , mapNoThrow_function_value
+                , ( bp::arg("cgid") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::MoleculeInfo::nAtoms
@@ -1219,6 +1544,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the molecule" );
         
         }
@@ -1231,6 +1557,7 @@ void register_MoleculeInfo_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("chainid") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the identified chain(s)" );
         
         }
@@ -1243,6 +1570,7 @@ void register_MoleculeInfo_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("chainidx") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the identified chain(s)" );
         
         }
@@ -1255,6 +1583,7 @@ void register_MoleculeInfo_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the identified residue(s)" );
         
         }
@@ -1267,6 +1596,7 @@ void register_MoleculeInfo_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("residx") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the identified residue(s)" );
         
         }
@@ -1279,6 +1609,7 @@ void register_MoleculeInfo_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("segid") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the identified segment(s)" );
         
         }
@@ -1291,6 +1622,7 @@ void register_MoleculeInfo_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("segidx") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the identified segment(s)" );
         
         }
@@ -1303,6 +1635,7 @@ void register_MoleculeInfo_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("cgid") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the identified CutGroup(s)" );
         
         }
@@ -1315,6 +1648,7 @@ void register_MoleculeInfo_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("cgidx") )
+                , bp::release_gil_policy()
                 , "Return the number of atoms in the identified CutGroup(s)" );
         
         }
@@ -1326,6 +1660,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "nChains"
                 , nChains_function_value
+                , bp::release_gil_policy()
                 , "Return the number of chains in the molecule" );
         
         }
@@ -1337,6 +1672,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "nCutGroups"
                 , nCutGroups_function_value
+                , bp::release_gil_policy()
                 , "Return the number of CutGroups in the molecule" );
         
         }
@@ -1348,6 +1684,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "nResidues"
                 , nResidues_function_value
+                , bp::release_gil_policy()
                 , "Return the number of residues in the molecule" );
         
         }
@@ -1360,6 +1697,7 @@ void register_MoleculeInfo_class(){
                 "nResidues"
                 , nResidues_function_value
                 , ( bp::arg("chainid") )
+                , bp::release_gil_policy()
                 , "Return the number of residues in the identified chain(s)" );
         
         }
@@ -1372,6 +1710,7 @@ void register_MoleculeInfo_class(){
                 "nResidues"
                 , nResidues_function_value
                 , ( bp::arg("chainidx") )
+                , bp::release_gil_policy()
                 , "Return the number of residues in the identified chain(s)" );
         
         }
@@ -1383,6 +1722,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "nSegments"
                 , nSegments_function_value
+                , bp::release_gil_policy()
                 , "Return the number of segments in the molecule" );
         
         }
@@ -1395,7 +1735,7 @@ void register_MoleculeInfo_class(){
                 "name"
                 , name_function_value
                 , ( bp::arg("chainid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of the identified chain" );
         
         }
@@ -1408,7 +1748,7 @@ void register_MoleculeInfo_class(){
                 "name"
                 , name_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of the identified chain" );
         
         }
@@ -1421,7 +1761,7 @@ void register_MoleculeInfo_class(){
                 "name"
                 , name_function_value
                 , ( bp::arg("segid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of the identified segment" );
         
         }
@@ -1434,7 +1774,7 @@ void register_MoleculeInfo_class(){
                 "name"
                 , name_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of the identified segment" );
         
         }
@@ -1447,7 +1787,7 @@ void register_MoleculeInfo_class(){
                 "name"
                 , name_function_value
                 , ( bp::arg("resid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of the identified residue" );
         
         }
@@ -1460,7 +1800,7 @@ void register_MoleculeInfo_class(){
                 "name"
                 , name_function_value
                 , ( bp::arg("residx") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of the identified residue" );
         
         }
@@ -1473,7 +1813,7 @@ void register_MoleculeInfo_class(){
                 "name"
                 , name_function_value
                 , ( bp::arg("cgid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of the identified CutGroup" );
         
         }
@@ -1486,7 +1826,7 @@ void register_MoleculeInfo_class(){
                 "name"
                 , name_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of the identified CutGroup" );
         
         }
@@ -1499,7 +1839,7 @@ void register_MoleculeInfo_class(){
                 "name"
                 , name_function_value
                 , ( bp::arg("atomid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of the identified atom" );
         
         }
@@ -1512,7 +1852,7 @@ void register_MoleculeInfo_class(){
                 "name"
                 , name_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the name of the identified atom" );
         
         }
@@ -1525,6 +1865,7 @@ void register_MoleculeInfo_class(){
                 "number"
                 , number_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return the number of the identified residue" );
         
         }
@@ -1537,6 +1878,7 @@ void register_MoleculeInfo_class(){
                 "number"
                 , number_function_value
                 , ( bp::arg("residx") )
+                , bp::release_gil_policy()
                 , "Return the number of the identified residue" );
         
         }
@@ -1549,6 +1891,7 @@ void register_MoleculeInfo_class(){
                 "number"
                 , number_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return the number of the identified atom" );
         
         }
@@ -1561,6 +1904,7 @@ void register_MoleculeInfo_class(){
                 "number"
                 , number_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return the number of the identified atom" );
         
         }
@@ -1588,6 +1932,7 @@ void register_MoleculeInfo_class(){
                 "parentChain"
                 , parentChain_function_value
                 , ( bp::arg("residx") )
+                , bp::release_gil_policy()
                 , "Return the index of the parent chain of the identified residue" );
         
         }
@@ -1600,6 +1945,7 @@ void register_MoleculeInfo_class(){
                 "parentChain"
                 , parentChain_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return the index of the parent chain of the identified residue" );
         
         }
@@ -1612,6 +1958,7 @@ void register_MoleculeInfo_class(){
                 "parentChain"
                 , parentChain_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return the index of the parent chain of the identified atom" );
         
         }
@@ -1624,6 +1971,7 @@ void register_MoleculeInfo_class(){
                 "parentChain"
                 , parentChain_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return the index of the parent chain of the identified atom" );
         
         }
@@ -1636,6 +1984,7 @@ void register_MoleculeInfo_class(){
                 "parentCutGroup"
                 , parentCutGroup_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return the index of the parent CutGroup of the identified atom" );
         
         }
@@ -1648,6 +1997,7 @@ void register_MoleculeInfo_class(){
                 "parentCutGroup"
                 , parentCutGroup_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return the index of the parent CutGroup of the identified atom" );
         
         }
@@ -1660,6 +2010,7 @@ void register_MoleculeInfo_class(){
                 "parentResidue"
                 , parentResidue_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return the index of the parent residue of the identified atom" );
         
         }
@@ -1672,6 +2023,7 @@ void register_MoleculeInfo_class(){
                 "parentResidue"
                 , parentResidue_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return the index of the parent residue of the identified atom" );
         
         }
@@ -1684,6 +2036,7 @@ void register_MoleculeInfo_class(){
                 "parentSegment"
                 , parentSegment_function_value
                 , ( bp::arg("atomidx") )
+                , bp::release_gil_policy()
                 , "Return the index of the parent segment of the identified atom" );
         
         }
@@ -1696,6 +2049,7 @@ void register_MoleculeInfo_class(){
                 "parentSegment"
                 , parentSegment_function_value
                 , ( bp::arg("atomid") )
+                , bp::release_gil_policy()
                 , "Return the index of the parent segment of the identified atom" );
         
         }
@@ -1708,6 +2062,7 @@ void register_MoleculeInfo_class(){
                 "rename"
                 , rename_function_value
                 , ( bp::arg("atomidx"), bp::arg("newname") )
+                , bp::release_gil_policy()
                 , "Return a copy of this MoleculeInfo where the identified atom has been\nrenamed to newname" );
         
         }
@@ -1720,6 +2075,7 @@ void register_MoleculeInfo_class(){
                 "rename"
                 , rename_function_value
                 , ( bp::arg("residx"), bp::arg("newname") )
+                , bp::release_gil_policy()
                 , "Return a copy of this MoleculeInfo where the identified residue has been\nrenamed to newname" );
         
         }
@@ -1732,6 +2088,7 @@ void register_MoleculeInfo_class(){
                 "rename"
                 , rename_function_value
                 , ( bp::arg("cgidx"), bp::arg("newname") )
+                , bp::release_gil_policy()
                 , "Return a copy of this MoleculeInfo where the identified CutGroup has been\nrenamed to newname" );
         
         }
@@ -1744,6 +2101,7 @@ void register_MoleculeInfo_class(){
                 "rename"
                 , rename_function_value
                 , ( bp::arg("chainidx"), bp::arg("newname") )
+                , bp::release_gil_policy()
                 , "Return a copy of this MoleculeInfo where the identified chain has been\nrenamed to newname" );
         
         }
@@ -1756,6 +2114,7 @@ void register_MoleculeInfo_class(){
                 "rename"
                 , rename_function_value
                 , ( bp::arg("segidx"), bp::arg("newname") )
+                , bp::release_gil_policy()
                 , "Return a copy of this MoleculeInfo where the identified segment has been\nrenamed to newname" );
         
         }
@@ -1768,6 +2127,7 @@ void register_MoleculeInfo_class(){
                 "renumber"
                 , renumber_function_value
                 , ( bp::arg("atomidx"), bp::arg("newnum") )
+                , bp::release_gil_policy()
                 , "Return a copy of this MoleculeInfo where the identified atom has been\nrenumbered to newnum" );
         
         }
@@ -1780,6 +2140,7 @@ void register_MoleculeInfo_class(){
                 "renumber"
                 , renumber_function_value
                 , ( bp::arg("residx"), bp::arg("newnum") )
+                , bp::release_gil_policy()
                 , "Return a copy of this MoleculeInfo where the identified residue has been\nrenumbered to newnum" );
         
         }
@@ -1792,6 +2153,7 @@ void register_MoleculeInfo_class(){
                 "resIdx"
                 , resIdx_function_value
                 , ( bp::arg("resid") )
+                , bp::release_gil_policy()
                 , "Return the index of the identified residue" );
         
         }
@@ -1804,6 +2166,7 @@ void register_MoleculeInfo_class(){
                 "segIdx"
                 , segIdx_function_value
                 , ( bp::arg("segid") )
+                , bp::release_gil_policy()
                 , "Return the index of the identified segment" );
         
         }
@@ -1816,6 +2179,7 @@ void register_MoleculeInfo_class(){
                 "squeeze"
                 , squeeze_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Use this function to minimise memory usage - this function\ncompares the shared data in this info with other, and where\nthey are equal it copies the data from other, thereby reducing\nwastage caused by duplicated storage\n" );
         
         }
@@ -1827,6 +2191,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -1838,6 +2203,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

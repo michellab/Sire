@@ -17,6 +17,8 @@ namespace bp = boost::python;
 
 const char* pvt_get_name(const SireMM::SoftCLJPotentialInterface<SireMM::InterSoftCLJPotential>&){ return "SireMM::SoftCLJPotentialInterface<SireMM::InterSoftCLJPotential>";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
 
     { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >
@@ -32,6 +34,7 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "alpha"
                 , alpha_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -45,6 +48,7 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
                 "alpha"
                 , alpha_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -57,6 +61,7 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "clearAlphas"
                 , clearAlphas_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -69,6 +74,7 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "coulombPower"
                 , coulombPower_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -82,6 +88,7 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
                 "hasAlphaValue"
                 , hasAlphaValue_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -94,6 +101,7 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "ljPower"
                 , ljPower_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -106,6 +114,7 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "nActiveAlphaComponents"
                 , nActiveAlphaComponents_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -119,6 +128,7 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
                 "removeAlpha"
                 , removeAlpha_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -132,6 +142,7 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
                 "setAlpha"
                 , setAlpha_function_value
                 , ( bp::arg("alpha") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -145,6 +156,7 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
                 "setAlpha"
                 , setAlpha_function_value
                 , ( bp::arg("i"), bp::arg("alpha") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -158,6 +170,7 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
                 "setCoulombPower"
                 , setCoulombPower_function_value
                 , ( bp::arg("power") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -171,6 +184,7 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
                 "setLJPower"
                 , setLJPower_function_value
                 , ( bp::arg("power") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -184,6 +198,7 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
                 "setShiftDelta"
                 , setShiftDelta_function_value
                 , ( bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -196,6 +211,7 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "shiftDelta"
                 , shiftDelta_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

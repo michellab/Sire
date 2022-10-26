@@ -31,6 +31,8 @@ namespace bp = boost::python;
 
 #include "moleculeview.h"
 
+#include "mover.hpp"
+
 #include "tostring.h"
 
 #include "atommatcher.h"
@@ -38,6 +40,8 @@ namespace bp = boost::python;
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 void register_AtomMatcher_class(){
 
@@ -54,6 +58,7 @@ void register_AtomMatcher_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return the matcher that matches using this matcher, and then other (in that order)" );
         
         }
@@ -66,6 +71,7 @@ void register_AtomMatcher_class(){
                 "changesOrder"
                 , changesOrder_function_value
                 , ( bp::arg("molinfo0"), bp::arg("molinfo1") )
+                , bp::release_gil_policy()
                 , "Return whether or not this match changes the order of number of atoms" );
         
         }
@@ -78,6 +84,7 @@ void register_AtomMatcher_class(){
                 "changesOrder"
                 , changesOrder_function_value
                 , ( bp::arg("molview0"), bp::arg("molview1") )
+                , bp::release_gil_policy()
                 , "Return whether or not this match changes the order of number of atoms" );
         
         }
@@ -90,6 +97,7 @@ void register_AtomMatcher_class(){
                 "changesOrder"
                 , changesOrder_function_value
                 , ( bp::arg("molview0"), bp::arg("map0"), bp::arg("molview1"), bp::arg("map1") )
+                , bp::release_gil_policy()
                 , "Return whether or not this match changes the order or number of viewed atoms" );
         
         }
@@ -102,6 +110,7 @@ void register_AtomMatcher_class(){
                 "changesOrder"
                 , changesOrder_function_value
                 , ( bp::arg("molview0"), bp::arg("molview1"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -113,6 +122,7 @@ void register_AtomMatcher_class(){
             AtomMatcher_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this matcher is null (cannot be used for matching)" );
         
         }
@@ -125,6 +135,7 @@ void register_AtomMatcher_class(){
                 "match"
                 , match_function_value
                 , ( bp::arg("molinfo0"), bp::arg("molinfo1") )
+                , bp::release_gil_policy()
                 , "Match atoms based only on the data in the MoleculeInfoData of the molecules." );
         
         }
@@ -137,6 +148,7 @@ void register_AtomMatcher_class(){
                 "match"
                 , match_function_value
                 , ( bp::arg("molview0"), bp::arg("map0"), bp::arg("molview1"), bp::arg("map1") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -149,6 +161,7 @@ void register_AtomMatcher_class(){
                 "match"
                 , match_function_value
                 , ( bp::arg("molview0"), bp::arg("molview1") )
+                , bp::release_gil_policy()
                 , "Match atoms based only on the data in the MoleculeInfoData of the molecules." );
         
         }
@@ -161,6 +174,7 @@ void register_AtomMatcher_class(){
                 "match"
                 , match_function_value
                 , ( bp::arg("molview0"), bp::arg("molview1"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -185,6 +199,7 @@ void register_AtomMatcher_class(){
             AtomMatcher_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

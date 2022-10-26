@@ -25,6 +25,8 @@ SireMol::Radical __copy__(const SireMol::Radical &other){ return SireMol::Radica
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Radical_class(){
 
     { //::SireMol::Radical
@@ -42,6 +44,7 @@ void register_Radical_class(){
             Radical_exposer.def( 
                 "doublet"
                 , doublet_function_value
+                , bp::release_gil_policy()
                 , "Return a doublet Radical" );
         
         }
@@ -53,6 +56,7 @@ void register_Radical_class(){
             Radical_exposer.def( 
                 "isDefined"
                 , isDefined_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the Radical is defined" );
         
         }
@@ -64,6 +68,7 @@ void register_Radical_class(){
             Radical_exposer.def( 
                 "isDoublet"
                 , isDoublet_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a doublet" );
         
         }
@@ -75,6 +80,7 @@ void register_Radical_class(){
             Radical_exposer.def( 
                 "isSinglet"
                 , isSinglet_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a singlet" );
         
         }
@@ -86,6 +92,7 @@ void register_Radical_class(){
             Radical_exposer.def( 
                 "isTriplet"
                 , isTriplet_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a triplet" );
         
         }
@@ -112,6 +119,7 @@ void register_Radical_class(){
             Radical_exposer.def( 
                 "sdfValue"
                 , sdfValue_function_value
+                , bp::release_gil_policy()
                 , "Return the SDF-format value for this radical. This returns\n4 if this is a double radical, or 0 otherwise\n" );
         
         }
@@ -123,6 +131,7 @@ void register_Radical_class(){
             Radical_exposer.def( 
                 "singlet"
                 , singlet_function_value
+                , bp::release_gil_policy()
                 , "Return a single Radical" );
         
         }
@@ -134,6 +143,7 @@ void register_Radical_class(){
             Radical_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -145,6 +155,7 @@ void register_Radical_class(){
             Radical_exposer.def( 
                 "triplet"
                 , triplet_function_value
+                , bp::release_gil_policy()
                 , "Return a triplet Radical" );
         
         }
@@ -156,6 +167,7 @@ void register_Radical_class(){
             Radical_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -167,6 +179,7 @@ void register_Radical_class(){
             Radical_exposer.def( 
                 "undefined"
                 , undefined_function_value
+                , bp::release_gil_policy()
                 , "Return an undefined Radical" );
         
         }
@@ -178,6 +191,7 @@ void register_Radical_class(){
             Radical_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "Return the radical type. 0 is undefined, 1 is singlet, 2 is doublet\nand 3 is triplet\n" );
         
         }

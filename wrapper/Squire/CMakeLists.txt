@@ -23,7 +23,7 @@ include(CMakeAutogenFile.txt)
 set ( WRAPSQUIRE_SOURCES
 
       _Squire.main.cpp
-     
+
       ${PYPP_SOURCES}
 
     )
@@ -39,19 +39,19 @@ set_target_properties (Squire
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
+
 target_link_libraries (Squire
                        SirePython
                        SIRE_Squire
                        SIRE_SireSystem
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_Squire" "_init_Squire" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/Squire )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/Squire )
 
 install( TARGETS Squire
          LIBRARY DESTINATION ${INSTALLDIR}
@@ -60,5 +60,5 @@ install( TARGETS Squire
         )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )

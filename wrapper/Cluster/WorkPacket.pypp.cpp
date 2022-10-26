@@ -28,6 +28,8 @@ SireCluster::WorkPacket __copy__(const SireCluster::WorkPacket &other){ return S
 
 const char* pvt_get_name(const SireCluster::WorkPacket&){ return "SireCluster::WorkPacket";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_WorkPacket_class(){
 
     { //::SireCluster::WorkPacket
@@ -44,6 +46,7 @@ void register_WorkPacket_class(){
             WorkPacket_exposer.def( 
                 "abort"
                 , abort_function_value
+                , bp::release_gil_policy()
                 , "Abort the work" );
         
         }
@@ -55,7 +58,7 @@ void register_WorkPacket_class(){
             WorkPacket_exposer.def( 
                 "base"
                 , base_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return a reference to the underlying Worker object" );
         
         }
@@ -67,6 +70,7 @@ void register_WorkPacket_class(){
             WorkPacket_exposer.def( 
                 "hasFinished"
                 , hasFinished_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the work has finished (or is in an\nerror state, or was aborted) - essentially, is there any\nmore of this work packet to run?" );
         
         }
@@ -78,6 +82,7 @@ void register_WorkPacket_class(){
             WorkPacket_exposer.def( 
                 "isError"
                 , isError_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this work is in an error state" );
         
         }
@@ -89,6 +94,7 @@ void register_WorkPacket_class(){
             WorkPacket_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is the null (empty) work packet" );
         
         }
@@ -113,6 +119,7 @@ void register_WorkPacket_class(){
             WorkPacket_exposer.def( 
                 "pack"
                 , pack_function_value
+                , bp::release_gil_policy()
                 , "Pack this WorkPacket into a binary array" );
         
         }
@@ -124,6 +131,7 @@ void register_WorkPacket_class(){
             WorkPacket_exposer.def( 
                 "progress"
                 , progress_function_value
+                , bp::release_gil_policy()
                 , "Return the current progress of the calculation (percentage)" );
         
         }
@@ -135,6 +143,7 @@ void register_WorkPacket_class(){
             WorkPacket_exposer.def( 
                 "runChunk"
                 , runChunk_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -146,6 +155,7 @@ void register_WorkPacket_class(){
             WorkPacket_exposer.def( 
                 "shouldPack"
                 , shouldPack_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not we should pack this WorkPacket when\nwe are storing it." );
         
         }
@@ -157,6 +167,7 @@ void register_WorkPacket_class(){
             WorkPacket_exposer.def( 
                 "throwError"
                 , throwError_function_value
+                , bp::release_gil_policy()
                 , "Throw any error associated with this WorkPacket\n(this does nothing if there is no error)" );
         
         }
@@ -168,6 +179,7 @@ void register_WorkPacket_class(){
             WorkPacket_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -180,6 +192,7 @@ void register_WorkPacket_class(){
                 "unpack"
                 , unpack_function_value
                 , ( bp::arg("data") )
+                , bp::release_gil_policy()
                 , "Unpack a WorkPacket from the passed binary data. This binary\ndata MUST have been created by WorkPacket::pack()" );
         
         }
@@ -191,6 +204,7 @@ void register_WorkPacket_class(){
             WorkPacket_exposer.def( 
                 "wasAborted"
                 , wasAborted_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the work was aborted" );
         
         }
@@ -202,6 +216,7 @@ void register_WorkPacket_class(){
             WorkPacket_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

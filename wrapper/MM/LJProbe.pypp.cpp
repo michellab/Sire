@@ -21,6 +21,8 @@ SireMM::LJProbe __copy__(const SireMM::LJProbe &other){ return SireMM::LJProbe(o
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_LJProbe_class(){
 
     { //::SireMM::LJProbe
@@ -66,6 +68,7 @@ void register_LJProbe_class(){
             LJProbe_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

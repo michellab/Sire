@@ -40,6 +40,8 @@ SireSystem::WindowedComponent __copy__(const SireSystem::WindowedComponent &othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_WindowedComponent_class(){
 
     { //::SireSystem::WindowedComponent
@@ -56,7 +58,7 @@ void register_WindowedComponent_class(){
             WindowedComponent_exposer.def( 
                 "component"
                 , component_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the component being constrained" );
         
         }
@@ -83,7 +85,7 @@ void register_WindowedComponent_class(){
             WindowedComponent_exposer.def( 
                 "referenceComponent"
                 , referenceComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the reference component" );
         
         }
@@ -95,6 +97,7 @@ void register_WindowedComponent_class(){
             WindowedComponent_exposer.def( 
                 "stepSize"
                 , stepSize_function_value
+                , bp::release_gil_policy()
                 , "Return the step size for this windows - this is the number of\nwindows above (or below if step_size is negative) for this\nwindow compared to the window containing the reference component" );
         
         }
@@ -106,6 +109,7 @@ void register_WindowedComponent_class(){
             WindowedComponent_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this constraint" );
         
         }
@@ -117,6 +121,7 @@ void register_WindowedComponent_class(){
             WindowedComponent_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

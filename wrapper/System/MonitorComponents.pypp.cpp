@@ -30,6 +30,8 @@ SireSystem::MonitorComponents __copy__(const SireSystem::MonitorComponents &othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MonitorComponents_class(){
 
     { //::SireSystem::MonitorComponents
@@ -50,7 +52,7 @@ void register_MonitorComponents_class(){
                 "accumulator"
                 , accumulator_function_value
                 , ( bp::arg("component") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the accumulator for the component component\nThrow: SireCAS::missing_symbol\n" );
         
         }
@@ -62,7 +64,7 @@ void register_MonitorComponents_class(){
             MonitorComponents_exposer.def( 
                 "accumulatorTemplate"
                 , accumulatorTemplate_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the accumulator that is the template used for new accumulators\nthat are created when a new component is monitored" );
         
         }
@@ -74,6 +76,7 @@ void register_MonitorComponents_class(){
             MonitorComponents_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Completely clear the statistics" );
         
         }
@@ -86,6 +89,7 @@ void register_MonitorComponents_class(){
                 "excludeComponent"
                 , excludeComponent_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "Make sure that the components in components are not monitored" );
         
         }
@@ -98,6 +102,7 @@ void register_MonitorComponents_class(){
                 "excludeComponent"
                 , excludeComponent_function_value
                 , ( bp::arg("components") )
+                , bp::release_gil_policy()
                 , "Make sure that the components in components are not monitored" );
         
         }
@@ -134,6 +139,7 @@ void register_MonitorComponents_class(){
                 "monitor"
                 , monitor_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Monitor the system system - this will only accumulate symbols\nthat represent existing components - this does nothing for components\nthat dont exist in the system" );
         
         }
@@ -145,6 +151,7 @@ void register_MonitorComponents_class(){
             MonitorComponents_exposer.def( 
                 "monitoredComponents"
                 , monitoredComponents_function_value
+                , bp::release_gil_policy()
                 , "Return the set of symbols that have been monitored so far\n(so have valid accumulators)" );
         
         }
@@ -171,6 +178,7 @@ void register_MonitorComponents_class(){
             MonitorComponents_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -49,6 +49,8 @@ SireCAS::Expression __copy__(const SireCAS::Expression &other){ return SireCAS::
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Expression_class(){
 
     { //::SireCAS::Expression
@@ -71,6 +73,7 @@ void register_Expression_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("ex") )
+                , bp::release_gil_policy()
                 , "Return this expression added to ex" );
         
         }
@@ -83,6 +86,7 @@ void register_Expression_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Return this expression added to val" );
         
         }
@@ -95,6 +99,7 @@ void register_Expression_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Return this expression added to val" );
         
         }
@@ -118,6 +123,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "children"
                 , children_function_value
+                , bp::release_gil_policy()
                 , "Return the child expressions that make up this expression" );
         
         }
@@ -129,6 +135,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "conjugate"
                 , conjugate_function_value
+                , bp::release_gil_policy()
                 , "Return the complex conjugate of this expression" );
         
         }
@@ -140,6 +147,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "cubed"
                 , cubed_function_value
+                , bp::release_gil_policy()
                 , "Return the cube of this expression" );
         
         }
@@ -176,6 +184,7 @@ void register_Expression_class(){
                 "divide"
                 , divide_function_value
                 , ( bp::arg("ex") )
+                , bp::release_gil_policy()
                 , "Return an expression that is this  ex" );
         
         }
@@ -188,6 +197,7 @@ void register_Expression_class(){
                 "divide"
                 , divide_function_value
                 , ( bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Return an expression that is this divided by val" );
         
         }
@@ -200,6 +210,7 @@ void register_Expression_class(){
                 "divide"
                 , divide_function_value
                 , ( bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Return an expression that is divided by the complex number z" );
         
         }
@@ -212,6 +223,7 @@ void register_Expression_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate the numerical value of this expression, using the values\nsupplied in values. Any unidentified symbols or functions are\nassumed to be equal to zero. Note that this only performs real-arithmetic,\nso an exception will be thrown if any part of this expression generates\na complex result.\nThrow: SireMaths::domain_error\n" );
         
         }
@@ -224,6 +236,7 @@ void register_Expression_class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Evaluate the numerical value of this expression using complex\narithmetic. Any unidentified symbols or functions are assumed\nto be equal to zero.\n" );
         
         }
@@ -236,6 +249,7 @@ void register_Expression_class(){
                 "expand"
                 , expand_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the factors and powers for the symbol symbol, given the values of the\nother symbols in values. This attempts to rearrange this equation\nso that it is of the form m  symbol^i + n  symbol^j ... + constant,\nand it returns the values of m,i, n,j etc..\nNote that this will fail if such a rearrangement is not possible\nThrow: SireCAS::rearrangement_error\n" );
         
         }
@@ -247,6 +261,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "factor"
                 , factor_function_value
+                , bp::release_gil_policy()
                 , "Return the factor of this expression" );
         
         }
@@ -258,6 +273,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "functions"
                 , functions_function_value
+                , bp::release_gil_policy()
                 , "Return all of the functions used in this expression" );
         
         }
@@ -269,6 +285,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "hash"
                 , hash_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -281,6 +298,7 @@ void register_Expression_class(){
                 "integ"
                 , integ_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Synonym for integrate" );
         
         }
@@ -293,6 +311,7 @@ void register_Expression_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Integrate this expression with respect to symbol and return the\nresulting expression.\nThrow: SireCAS::unavailable_integral\n" );
         
         }
@@ -304,6 +323,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "invert"
                 , invert_function_value
+                , bp::release_gil_policy()
                 , "Return 1  expression" );
         
         }
@@ -315,6 +335,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "isComplex"
                 , isComplex_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this expression has complex parts" );
         
         }
@@ -326,6 +347,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "isCompound"
                 , isCompound_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a compound expression (contains more\nthan a single expression, e.g. Sum, Product or PowerFunction)" );
         
         }
@@ -337,6 +359,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "isConstant"
                 , isConstant_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this expression is constant for all values" );
         
         }
@@ -349,6 +372,7 @@ void register_Expression_class(){
                 "isFunction"
                 , isFunction_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return whether or not this is a function of symbol" );
         
         }
@@ -360,6 +384,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "isZero"
                 , isZero_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this expression is equal to 0 for all values" );
         
         }
@@ -372,6 +397,7 @@ void register_Expression_class(){
                 "multiply"
                 , multiply_function_value
                 , ( bp::arg("ex") )
+                , bp::release_gil_policy()
                 , "Return an expression that is this multiplied by ex" );
         
         }
@@ -384,6 +410,7 @@ void register_Expression_class(){
                 "multiply"
                 , multiply_function_value
                 , ( bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Return an expression that is this multipled by val" );
         
         }
@@ -396,6 +423,7 @@ void register_Expression_class(){
                 "multiply"
                 , multiply_function_value
                 , ( bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Return an expression that is this multiplied by the complex value z" );
         
         }
@@ -407,6 +435,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "negate"
                 , negate_function_value
+                , bp::release_gil_policy()
                 , "Return the negative of this expression" );
         
         }
@@ -459,6 +488,7 @@ void register_Expression_class(){
                 "pow"
                 , pow_function_value
                 , ( bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Return this expression raised to the power n" );
         
         }
@@ -471,6 +501,7 @@ void register_Expression_class(){
                 "pow"
                 , pow_function_value
                 , ( bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Return this expression raised to a real number power" );
         
         }
@@ -483,6 +514,7 @@ void register_Expression_class(){
                 "pow"
                 , pow_function_value
                 , ( bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Return this expresssion raised to a complex power" );
         
         }
@@ -495,6 +527,7 @@ void register_Expression_class(){
                 "pow"
                 , pow_function_value
                 , ( bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Return this expression raised to the rational power n" );
         
         }
@@ -507,6 +540,7 @@ void register_Expression_class(){
                 "pow"
                 , pow_function_value
                 , ( bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Return this expression raised to a function" );
         
         }
@@ -519,6 +553,7 @@ void register_Expression_class(){
                 "root"
                 , root_function_value
                 , ( bp::arg("n") )
+                , bp::release_gil_policy()
                 , "Return the nth root of this expression" );
         
         }
@@ -531,6 +566,7 @@ void register_Expression_class(){
                 "series"
                 , series_function_value
                 , ( bp::arg("symbol"), bp::arg("order") )
+                , bp::release_gil_policy()
                 , "Return a series expansion of this function with respect to symbol\nup to order n. If an expansion is not possible, then this just\nreturns this expression" );
         
         }
@@ -554,6 +590,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "squared"
                 , squared_function_value
+                , bp::release_gil_policy()
                 , "Return the square of this expression" );
         
         }
@@ -566,6 +603,7 @@ void register_Expression_class(){
                 "substitute"
                 , substitute_function_value
                 , ( bp::arg("identities") )
+                , bp::release_gil_policy()
                 , "Return an expression whereby the identities in identities have\nbeen substituted into this expression" );
         
         }
@@ -578,6 +616,7 @@ void register_Expression_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("ex") )
+                , bp::release_gil_policy()
                 , "Return an expression that is this - ex" );
         
         }
@@ -590,6 +629,7 @@ void register_Expression_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Return an expression that is this - val" );
         
         }
@@ -602,6 +642,7 @@ void register_Expression_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("val") )
+                , bp::release_gil_policy()
                 , "Return an expression that is this - val" );
         
         }
@@ -613,6 +654,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "symbols"
                 , symbols_function_value
+                , bp::release_gil_policy()
                 , "Return all of the symbols used in this expression" );
         
         }
@@ -624,6 +666,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "toOpenMMString"
                 , toOpenMMString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this expression in the OpenMM syntax" );
         
         }
@@ -635,6 +678,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this expression" );
         
         }
@@ -646,6 +690,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -657,6 +702,7 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

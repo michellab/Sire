@@ -33,6 +33,8 @@ namespace bp = boost::python;
 
 const char* pvt_get_name(const SireMM::InternalSymbolsBase&){ return "SireMM::InternalSymbolsBase";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_InternalSymbolsBase_class(){
 
     { //::SireMM::InternalSymbolsBase

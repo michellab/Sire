@@ -21,6 +21,8 @@ SireBase::UnitTest __copy__(const SireBase::UnitTest &other){ return SireBase::U
 
 const char* pvt_get_name(const SireBase::UnitTest&){ return "SireBase::UnitTest";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_UnitTest_class(){
 
     { //::SireBase::UnitTest
@@ -36,6 +38,7 @@ void register_UnitTest_class(){
             UnitTest_exposer.def( 
                 "errorString"
                 , errorString_function_value
+                , bp::release_gil_policy()
                 , "Return the error string" );
         
         }
@@ -47,6 +50,7 @@ void register_UnitTest_class(){
             UnitTest_exposer.def( 
                 "name"
                 , name_function_value
+                , bp::release_gil_policy()
                 , "Return the name of the test" );
         
         }
@@ -82,6 +86,7 @@ void register_UnitTest_class(){
             UnitTest_exposer.def( 
                 "runTime"
                 , runTime_function_value
+                , bp::release_gil_policy()
                 , "Return the time taken to run the test, in nanoseconds" );
         
         }
@@ -93,6 +98,7 @@ void register_UnitTest_class(){
             UnitTest_exposer.def( 
                 "tests"
                 , tests_function_value
+                , bp::release_gil_policy()
                 , "Return all of the tests that have been registered" );
         
         }
@@ -104,6 +110,7 @@ void register_UnitTest_class(){
             UnitTest_exposer.def( 
                 "wasError"
                 , wasError_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the test was an error" );
         
         }
@@ -115,6 +122,7 @@ void register_UnitTest_class(){
             UnitTest_exposer.def( 
                 "wasSuccessful"
                 , wasSuccessful_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the test was successful" );
         
         }

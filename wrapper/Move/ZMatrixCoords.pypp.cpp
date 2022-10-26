@@ -54,6 +54,8 @@ SireMove::ZMatrixCoords __copy__(const SireMove::ZMatrixCoords &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ZMatrixCoords_class(){
 
     { //::SireMove::ZMatrixCoords
@@ -73,6 +75,7 @@ void register_ZMatrixCoords_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atom"), bp::arg("bond"), bp::arg("angle"), bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Add the z-matrix line containing the passed atoms. The internal\ncoordinates of this line are set from the current cartesian coordinates\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -85,6 +88,7 @@ void register_ZMatrixCoords_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Add the z-matrix line containing the passed dihedral. The internal\ncoordinates of this line are set from the current cartesian coordinates\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -97,6 +101,7 @@ void register_ZMatrixCoords_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atom"), bp::arg("bondlength"), bp::arg("bond"), bp::arg("anglesize"), bp::arg("angle"), bp::arg("dihedralsize"), bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Add the z-matrix line using the supplied atoms and internal coordinates\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -109,6 +114,7 @@ void register_ZMatrixCoords_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("zmatline") )
+                , bp::release_gil_policy()
                 , "Add the z-matrix line zmatline\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -121,6 +127,7 @@ void register_ZMatrixCoords_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("zmatline") )
+                , bp::release_gil_policy()
                 , "Add the z-matrix line zmatline to this z-matrix, adding both\nthe atoms and also setting the values of the internal coordinates\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -133,6 +140,7 @@ void register_ZMatrixCoords_class(){
                 "angleDelta"
                 , angleDelta_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Return the maximum amount that the angle to atom atom\nshould be changed\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -145,6 +153,7 @@ void register_ZMatrixCoords_class(){
                 "angleDelta"
                 , angleDelta_function_value
                 , ( bp::arg("atom"), bp::arg("bond"), bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "Return the maximum amount that the angle between atoms\natom-bond-angle should be changed\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -157,6 +166,7 @@ void register_ZMatrixCoords_class(){
                 "angleSize"
                 , angleSize_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Return the size of the angle to the atom atom\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -169,6 +179,7 @@ void register_ZMatrixCoords_class(){
                 "angleSize"
                 , angleSize_function_value
                 , ( bp::arg("atom"), bp::arg("bond"), bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "Return the size of the angle between the atoms in the z-matrix\natom-bond-angle\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -181,6 +192,7 @@ void register_ZMatrixCoords_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Return the z-matrix line for the atom identified by atom\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -193,6 +205,7 @@ void register_ZMatrixCoords_class(){
                 "bondDelta"
                 , bondDelta_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Return the maximum amount that the bond to atom atom\nshould be changed\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -205,6 +218,7 @@ void register_ZMatrixCoords_class(){
                 "bondDelta"
                 , bondDelta_function_value
                 , ( bp::arg("atom"), bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "Return the maximum amount that the bond between atoms\natom-bond should be changed\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -217,6 +231,7 @@ void register_ZMatrixCoords_class(){
                 "bondLength"
                 , bondLength_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Return the length of the bond to the atom atom\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -229,6 +244,7 @@ void register_ZMatrixCoords_class(){
                 "bondLength"
                 , bondLength_function_value
                 , ( bp::arg("atom"), bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "Return the length of the bond between the atoms in the z-matrix\natom-bond\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -241,6 +257,7 @@ void register_ZMatrixCoords_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Return whether or not the z-matrix contains an atom\nidentified by atom\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -253,6 +270,7 @@ void register_ZMatrixCoords_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("atom"), bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "Return whether or not the z-matrix defines\nthe bond atom-bond\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -265,6 +283,7 @@ void register_ZMatrixCoords_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("atom"), bp::arg("bond"), bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "Return whether or not the z-matrix defines\nthe angle atom-bond-angle\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -277,6 +296,7 @@ void register_ZMatrixCoords_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("atom"), bp::arg("bond"), bp::arg("angle"), bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Return whether or not the z-matrix defines\nthe dihedral atom-bond-angle-dihedral\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -289,6 +309,7 @@ void register_ZMatrixCoords_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "Return whether or not the z-matrix defines\nthe bond bond\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -301,6 +322,7 @@ void register_ZMatrixCoords_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "Return whether or not the z-matrix defines\nthe angle angle\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -313,6 +335,7 @@ void register_ZMatrixCoords_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Return whether or not the z-matrix defines\nthe dihedral dihedral\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
@@ -325,6 +348,7 @@ void register_ZMatrixCoords_class(){
                 "delta"
                 , delta_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "Return the maximum amount that the bond bond should be changed\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -337,6 +361,7 @@ void register_ZMatrixCoords_class(){
                 "delta"
                 , delta_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "Return the maximum amount that the angle angle should be changed\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -349,6 +374,7 @@ void register_ZMatrixCoords_class(){
                 "delta"
                 , delta_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "Return the maximum amount that the dihedral dihedral should be changed\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -361,6 +387,7 @@ void register_ZMatrixCoords_class(){
                 "dihedralDelta"
                 , dihedralDelta_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Return the maximum amount that the dihedral to atom atom\nshould be changed\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -373,6 +400,7 @@ void register_ZMatrixCoords_class(){
                 "dihedralDelta"
                 , dihedralDelta_function_value
                 , ( bp::arg("atom"), bp::arg("bond"), bp::arg("angle"), bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Return the maximum amount that the dihedral between atoms\natom-bond-angle-dihedral should be changed\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -385,6 +413,7 @@ void register_ZMatrixCoords_class(){
                 "dihedralSize"
                 , dihedralSize_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Return the size of the dihedral to the atom atom\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -397,6 +426,7 @@ void register_ZMatrixCoords_class(){
                 "dihedralSize"
                 , dihedralSize_function_value
                 , ( bp::arg("atom"), bp::arg("bond"), bp::arg("angle"), bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Return the size of the dihedral between the atoms in the z-matrix\natom-bond-angle-dihedral\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -409,6 +439,7 @@ void register_ZMatrixCoords_class(){
                 "getIndex"
                 , getIndex_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Return the index of the z-matrix line that positions the atom\nwith ID atom\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -421,6 +452,7 @@ void register_ZMatrixCoords_class(){
                 "getIndex"
                 , getIndex_function_value
                 , ( bp::arg("atom"), bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "Return the index of the z-matrix line that positions the\nbond between atoms atom-bond\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -433,6 +465,7 @@ void register_ZMatrixCoords_class(){
                 "getIndex"
                 , getIndex_function_value
                 , ( bp::arg("atom"), bp::arg("bond"), bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "Return the index of the z-matrix line that positions the\nbond between atoms atom-bond-angle\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -445,6 +478,7 @@ void register_ZMatrixCoords_class(){
                 "getIndex"
                 , getIndex_function_value
                 , ( bp::arg("atom"), bp::arg("bond"), bp::arg("angle"), bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Return the index of the z-matrix line that positions the\nbond between atoms atom-bond-angle-dihedral\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -457,6 +491,7 @@ void register_ZMatrixCoords_class(){
                 "getIndex"
                 , getIndex_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "Return the index of the z-matrix line that\ndefines the bond bond\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -469,6 +504,7 @@ void register_ZMatrixCoords_class(){
                 "getIndex"
                 , getIndex_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "Return the index of the z-matrix line that\ndefines the angle angle\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -481,6 +517,7 @@ void register_ZMatrixCoords_class(){
                 "getIndex"
                 , getIndex_function_value
                 , ( bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Return the index of the z-matrix line that\ndefines the dihedral dihedral\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -529,6 +566,7 @@ void register_ZMatrixCoords_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Return whether or not this zmatrix is compatible with the molecule\nwith info molinfo" );
         
         }
@@ -541,6 +579,7 @@ void register_ZMatrixCoords_class(){
                 "length"
                 , length_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "Return the length of the bond bond\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -552,6 +591,7 @@ void register_ZMatrixCoords_class(){
             ZMatrixCoords_exposer.def( 
                 "lines"
                 , lines_function_value
+                , bp::release_gil_policy()
                 , "Return all of the lines of the z-matrix" );
         
         }
@@ -564,6 +604,7 @@ void register_ZMatrixCoords_class(){
                 "matchToSelection"
                 , matchToSelection_function_value
                 , ( bp::arg("selection") )
+                , bp::release_gil_policy()
                 , "Return a z-matrix that only contains lines that involve the atoms\nthat are in selection" );
         
         }
@@ -576,6 +617,7 @@ void register_ZMatrixCoords_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("bond"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Change the bond bond by delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -588,6 +630,7 @@ void register_ZMatrixCoords_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("angle"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Change the angle angle by delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -600,6 +643,7 @@ void register_ZMatrixCoords_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("dihedral"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Change the dihedral dihedral by delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -612,6 +656,7 @@ void register_ZMatrixCoords_class(){
                 "moveAngle"
                 , moveAngle_function_value
                 , ( bp::arg("atom"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Move the angle to the atom atom by delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -624,6 +669,7 @@ void register_ZMatrixCoords_class(){
                 "moveAngle"
                 , moveAngle_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Change the angle between atoms atom0-atom1-atom2 by delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -636,6 +682,7 @@ void register_ZMatrixCoords_class(){
                 "moveBond"
                 , moveBond_function_value
                 , ( bp::arg("atom"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Move the bond to the atom atom by the length delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -648,6 +695,7 @@ void register_ZMatrixCoords_class(){
                 "moveBond"
                 , moveBond_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Change the bond between atoms atom0-atom1 by delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -660,6 +708,7 @@ void register_ZMatrixCoords_class(){
                 "moveDihedral"
                 , moveDihedral_function_value
                 , ( bp::arg("atom"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Move the dihedral to the atom atom by delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -672,6 +721,7 @@ void register_ZMatrixCoords_class(){
                 "moveDihedral"
                 , moveDihedral_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Change the dihedral between atoms atom0-atom1-atom2-atom3 by delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -711,6 +761,7 @@ void register_ZMatrixCoords_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("atom") )
+                , bp::release_gil_policy()
                 , "Remove the z-matrix lines that build the atom(s) with ID atom" );
         
         }
@@ -723,6 +774,7 @@ void register_ZMatrixCoords_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("atom"), bp::arg("bond"), bp::arg("angle"), bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Remove the z-matrix line that builds atom from bond,\nangle and dihedral" );
         
         }
@@ -735,6 +787,7 @@ void register_ZMatrixCoords_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Remove the z-matrix line that builds dihedral" );
         
         }
@@ -747,6 +800,7 @@ void register_ZMatrixCoords_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("zmatline") )
+                , bp::release_gil_policy()
                 , "Remove the z-matrix line zmatline from this z-matrix" );
         
         }
@@ -759,6 +813,7 @@ void register_ZMatrixCoords_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("bond"), bp::arg("length") )
+                , bp::release_gil_policy()
                 , "Set the bond bond to have the length length\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -771,6 +826,7 @@ void register_ZMatrixCoords_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("angle"), bp::arg("size") )
+                , bp::release_gil_policy()
                 , "Set the angle angle to have the size size\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -783,6 +839,7 @@ void register_ZMatrixCoords_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("dihedral"), bp::arg("size") )
+                , bp::release_gil_policy()
                 , "Set the dihedral dihedral to have the size size\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -795,6 +852,7 @@ void register_ZMatrixCoords_class(){
                 "setAngle"
                 , setAngle_function_value
                 , ( bp::arg("atom"), bp::arg("size") )
+                , bp::release_gil_policy()
                 , "Set the angle to atom atom to size\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -807,6 +865,7 @@ void register_ZMatrixCoords_class(){
                 "setAngle"
                 , setAngle_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("size") )
+                , bp::release_gil_policy()
                 , "Set the angle between atoms atom0-atom1-atom2 to have\nthe size size\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -819,6 +878,7 @@ void register_ZMatrixCoords_class(){
                 "setAngleDelta"
                 , setAngleDelta_function_value
                 , ( bp::arg("atom"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Set the maximum amount that the angle for the atom atom\ncan be changed to delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -831,6 +891,7 @@ void register_ZMatrixCoords_class(){
                 "setAngleDelta"
                 , setAngleDelta_function_value
                 , ( bp::arg("atom"), bp::arg("bond"), bp::arg("angle"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Set the maximum amount that the angle between atoms atom-bond-angle\ncan be changed by to delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -843,6 +904,7 @@ void register_ZMatrixCoords_class(){
                 "setBond"
                 , setBond_function_value
                 , ( bp::arg("atom"), bp::arg("length") )
+                , bp::release_gil_policy()
                 , "Set the bond to atom atom to length\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -855,6 +917,7 @@ void register_ZMatrixCoords_class(){
                 "setBond"
                 , setBond_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("length") )
+                , bp::release_gil_policy()
                 , "Set the bond between atoms atom0-atom1 to have\nthe length length\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -867,6 +930,7 @@ void register_ZMatrixCoords_class(){
                 "setBondDelta"
                 , setBondDelta_function_value
                 , ( bp::arg("atom"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Set the maximum amount that the bond for the atom atom\ncan be moved to delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -879,6 +943,7 @@ void register_ZMatrixCoords_class(){
                 "setBondDelta"
                 , setBondDelta_function_value
                 , ( bp::arg("atom"), bp::arg("bond"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Set the maximum amount that the bond between atoms atom-bond\ncan be changed by to delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -891,6 +956,7 @@ void register_ZMatrixCoords_class(){
                 "setDelta"
                 , setDelta_function_value
                 , ( bp::arg("bond"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Set the maximum amount that the bond bond\ncan be changed by to delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -903,6 +969,7 @@ void register_ZMatrixCoords_class(){
                 "setDelta"
                 , setDelta_function_value
                 , ( bp::arg("angle"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Set the maximum amount that the angle angle\ncan be changed by to delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -915,6 +982,7 @@ void register_ZMatrixCoords_class(){
                 "setDelta"
                 , setDelta_function_value
                 , ( bp::arg("dihedral"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Set the maximum amount that the dihedral dihedral\ncan be changed by to delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -927,6 +995,7 @@ void register_ZMatrixCoords_class(){
                 "setDihedral"
                 , setDihedral_function_value
                 , ( bp::arg("atom"), bp::arg("size") )
+                , bp::release_gil_policy()
                 , "Set the dihedral to atom atom to size\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -939,6 +1008,7 @@ void register_ZMatrixCoords_class(){
                 "setDihedral"
                 , setDihedral_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("size") )
+                , bp::release_gil_policy()
                 , "Set the dihedral between atoms atom0-atom1-atom2-atom3 to have\nthe size size\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -951,6 +1021,7 @@ void register_ZMatrixCoords_class(){
                 "setDihedralDelta"
                 , setDihedralDelta_function_value
                 , ( bp::arg("atom"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Set the maximum amount that the dihedral for the atom atom\ncan be changed to delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -963,6 +1034,7 @@ void register_ZMatrixCoords_class(){
                 "setDihedralDelta"
                 , setDihedralDelta_function_value
                 , ( bp::arg("atom"), bp::arg("bond"), bp::arg("angle"), bp::arg("dihedral"), bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Set the maximum amount that the dihedral between atoms\natom-bond-angle-dihedral can be changed by to delta\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -975,6 +1047,7 @@ void register_ZMatrixCoords_class(){
                 "size"
                 , size_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "Return the size of the angle angle\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -987,6 +1060,7 @@ void register_ZMatrixCoords_class(){
                 "size"
                 , size_function_value
                 , ( bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "Return the size of the angle angle\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMove::zmatrix_error\n" );
         
         }
@@ -998,7 +1072,7 @@ void register_ZMatrixCoords_class(){
             ZMatrixCoords_exposer.def( 
                 "toCartesian"
                 , toCartesian_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the cartesian representation of these internal co-ordinates\n(convert from z-matrix coordinates to cartesian coordinates)" );
         
         }
@@ -1010,6 +1084,7 @@ void register_ZMatrixCoords_class(){
             ZMatrixCoords_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this z-matrix" );
         
         }
@@ -1021,6 +1096,7 @@ void register_ZMatrixCoords_class(){
             ZMatrixCoords_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

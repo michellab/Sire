@@ -33,6 +33,8 @@ SireMaths::Average __copy__(const SireMaths::Average &other){ return SireMaths::
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Average_class(){
 
     { //::SireMaths::Average
@@ -49,6 +51,7 @@ void register_Average_class(){
                 "accumulate"
                 , accumulate_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Accumulate the passed value onto the average" );
         
         }
@@ -60,6 +63,7 @@ void register_Average_class(){
             Average_exposer.def( 
                 "average"
                 , average_function_value
+                , bp::release_gil_policy()
                 , "Return the average value" );
         
         }
@@ -71,6 +75,7 @@ void register_Average_class(){
             Average_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Completely clear the statistics in this accumulator" );
         
         }
@@ -98,6 +103,7 @@ void register_Average_class(){
             Average_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -109,6 +115,7 @@ void register_Average_class(){
             Average_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

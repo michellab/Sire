@@ -15,12 +15,6 @@ include_directories(${CMAKE_SOURCE_DIR}/src/libs)
 # This library uses Intel Threaded Building blocks
 include_directories(${TBB_INCLUDE_DIR})
 
-if (SIRE_FOUND_CPUID)
-  add_definitions( "-DSIRE_FOUND_CPUID" )
-  add_definitions( "${CPUID_DEFINITIONS}" )
-  include_directories( ${CPUID_INCLUDE_DIR} )
-endif()
-
 # Define the header files for SireBase
 set ( SIREBASE_HEADERS
 
@@ -31,6 +25,7 @@ set ( SIREBASE_HEADERS
       chunkedhash.hpp
       chunkedvector.hpp
       combineproperties.h
+      convert_property.hpp
       countflops.h
       cpuid.h
       errors.h
@@ -64,6 +59,7 @@ set ( SIREBASE_HEADERS
       shareddatapointer.hpp
       sharedpolypointer.hpp
       sharedpolypointer_cast.hpp
+      slice.h
       sparsematrix.hpp
       stringmangler.h
       stringproperty.h
@@ -109,11 +105,12 @@ set ( SIREBASE_SOURCES
       refcountdata.cpp
       savestate.cpp
       sharedpolypointer.cpp
-      stringmangler.cpp 
-      stringproperty.cpp    
+      slice.cpp
+      stringmangler.cpp
+      stringproperty.cpp
       tempdir.cpp
       timeproperty.cpp
-      trigarray2d.cpp 
+      trigarray2d.cpp
       unittest.cpp
       variantproperty.cpp
 
@@ -138,10 +135,6 @@ target_link_libraries (SireBase
                        ${TBB_MALLOC_LIBRARY}
                        )
 
-if (SIRE_FOUND_CPUID)
-  target_link_libraries( SireBase ${CPUID_LIBRARY} )
-endif()
-
 # installation
 install( TARGETS SireBase EXPORT SireLibraries
          RUNTIME DESTINATION ${SIRE_BIN}
@@ -149,5 +142,5 @@ install( TARGETS SireBase EXPORT SireLibraries
          ARCHIVE DESTINATION ${SIRE_ARCHIVES}
        )
 
-install( FILES ${SIREBASE_HEADERS} 
+install( FILES ${SIREBASE_HEADERS}
          DESTINATION ${SIRE_INCLUDES}/SireBase )

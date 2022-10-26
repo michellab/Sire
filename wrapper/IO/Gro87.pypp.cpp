@@ -27,6 +27,8 @@ namespace bp = boost::python;
 
 #include "SireMol/atomvelocities.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/errors.h"
 
 #include "SireMol/mgname.h"
@@ -67,6 +69,8 @@ SireIO::Gro87 __copy__(const SireIO::Gro87 &other){ return SireIO::Gro87(other);
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Gro87_class(){
@@ -87,6 +91,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "atomNames"
                 , atomNames_function_value
+                , bp::release_gil_policy()
                 , "Return the names of all of the atoms, in the same order as the coordinates" );
         
         }
@@ -98,6 +103,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "atomNumbers"
                 , atomNumbers_function_value
+                , bp::release_gil_policy()
                 , "Return the numbers of all of the atoms. These are in the same order\nas the coordinates" );
         
         }
@@ -109,6 +115,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "boxV1"
                 , boxV1_function_value
+                , bp::release_gil_policy()
                 , "Return the box V1 vector for the first frame" );
         
         }
@@ -121,6 +128,7 @@ void register_Gro87_class(){
                 "boxV1"
                 , boxV1_function_value
                 , ( bp::arg("frame") )
+                , bp::release_gil_policy()
                 , "Return the box V1 vector for the frame frame" );
         
         }
@@ -132,6 +140,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "boxV2"
                 , boxV2_function_value
+                , bp::release_gil_policy()
                 , "Return the box V2 vector for the first frame" );
         
         }
@@ -144,6 +153,7 @@ void register_Gro87_class(){
                 "boxV2"
                 , boxV2_function_value
                 , ( bp::arg("frame") )
+                , bp::release_gil_policy()
                 , "Return the box V2 vector for the frame frame" );
         
         }
@@ -155,6 +165,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "boxV3"
                 , boxV3_function_value
+                , bp::release_gil_policy()
                 , "Return the box V3 vector for the first frame" );
         
         }
@@ -167,6 +178,7 @@ void register_Gro87_class(){
                 "boxV3"
                 , boxV3_function_value
                 , ( bp::arg("frame") )
+                , bp::release_gil_policy()
                 , "Return the box V3 vector for the frame frame" );
         
         }
@@ -178,6 +190,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "canFollow"
                 , canFollow_function_value
+                , bp::release_gil_policy()
                 , "Gro87 can be a lead parser as well as a follower" );
         
         }
@@ -190,6 +203,7 @@ void register_Gro87_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("filename"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by reading in the passed\nfile using the passed properties" );
         
         }
@@ -202,6 +216,7 @@ void register_Gro87_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("lines"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by reading in the passed\ntext lines using the passed properties" );
         
         }
@@ -214,6 +229,7 @@ void register_Gro87_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by extract all necessary\ndata from the passed SireSystem::System using the specified properties" );
         
         }
@@ -225,6 +241,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "coordinates"
                 , coordinates_function_value
+                , bp::release_gil_policy()
                 , "Return the coordinates of the atoms for the first frame of the trajectory" );
         
         }
@@ -237,6 +254,7 @@ void register_Gro87_class(){
                 "coordinates"
                 , coordinates_function_value
                 , ( bp::arg("frame") )
+                , bp::release_gil_policy()
                 , "Return the coordinates of the atoms at frame frame" );
         
         }
@@ -248,6 +266,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of frames in the file" );
         
         }
@@ -259,6 +278,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "formatDescription"
                 , formatDescription_function_value
+                , bp::release_gil_policy()
                 , "Return a description of the file format" );
         
         }
@@ -270,6 +290,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "formatName"
                 , formatName_function_value
+                , bp::release_gil_policy()
                 , "Return the format name that is used to identify this file format within Sire" );
         
         }
@@ -281,6 +302,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "formatSuffix"
                 , formatSuffix_function_value
+                , bp::release_gil_policy()
                 , "Return the suffixes that these files are normally associated with" );
         
         }
@@ -292,6 +314,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "hasCoordinates"
                 , hasCoordinates_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this file contained coordinate data" );
         
         }
@@ -303,6 +326,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "hasVelocities"
                 , hasVelocities_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this file contained velocity data" );
         
         }
@@ -314,6 +338,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "isLead"
                 , isLead_function_value
+                , bp::release_gil_policy()
                 , "Gro87 can be a lead parser as well as a follower" );
         
         }
@@ -325,6 +350,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return the number of atoms whose data is contained in this file" );
         
         }
@@ -336,6 +362,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "nFrames"
                 , nFrames_function_value
+                , bp::release_gil_policy()
                 , "Return the number of frames of the trajectory loaded from the file" );
         
         }
@@ -347,6 +374,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "nResidues"
                 , nResidues_function_value
+                , bp::release_gil_policy()
                 , "Return the number of unique residues in this file" );
         
         }
@@ -385,6 +413,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "residueNames"
                 , residueNames_function_value
+                , bp::release_gil_policy()
                 , "Return the residue name for each atom (one per atom), in the same\norder as the coordinates" );
         
         }
@@ -396,6 +425,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "residueNumbers"
                 , residueNumbers_function_value
+                , bp::release_gil_policy()
                 , "Return the residue number for each atom (one per atom), in the same\norder as the coordinates" );
         
         }
@@ -407,6 +437,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of frames in the file" );
         
         }
@@ -418,6 +449,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "time"
                 , time_function_value
+                , bp::release_gil_policy()
                 , "Return the current time of the simulation from which this coordinate\nfile was written. Returns 0 if there is no time set. If there are\nmultiple frames, then the time of the first frame is returned" );
         
         }
@@ -430,6 +462,7 @@ void register_Gro87_class(){
                 "time"
                 , time_function_value
                 , ( bp::arg("frame") )
+                , bp::release_gil_policy()
                 , "Return the time for the structure at the specified frame" );
         
         }
@@ -441,6 +474,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "title"
                 , title_function_value
+                , bp::release_gil_policy()
                 , "Return the title of the file" );
         
         }
@@ -452,6 +486,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this parser" );
         
         }
@@ -463,6 +498,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "Return the C++ name for this class" );
         
         }
@@ -474,6 +510,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "velocities"
                 , velocities_function_value
+                , bp::release_gil_policy()
                 , "Return the velocities of the atoms for the first frame of the trajectory" );
         
         }
@@ -486,6 +523,7 @@ void register_Gro87_class(){
                 "velocities"
                 , velocities_function_value
                 , ( bp::arg("frame") )
+                , bp::release_gil_policy()
                 , "Return the velocities of the atoms at frame frame" );
         
         }
@@ -497,6 +535,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "warnings"
                 , warnings_function_value
+                , bp::release_gil_policy()
                 , "Return the warnings encountered when parsing the file. This\nis empty if everything was ok" );
         
         }
@@ -508,6 +547,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "Return the C++ name for this class" );
         
         }

@@ -21,6 +21,8 @@ namespace bp = boost::python;
 
 const char* pvt_get_name(const SireBase::TrigArray2DBase&){ return "SireBase::TrigArray2DBase";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_TrigArray2DBase_class(){
@@ -38,6 +40,7 @@ void register_TrigArray2DBase_class(){
                 "assertValidIndex"
                 , assertValidIndex_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -50,6 +53,7 @@ void register_TrigArray2DBase_class(){
                 "checkedOffset"
                 , checkedOffset_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -61,6 +65,7 @@ void register_TrigArray2DBase_class(){
             TrigArray2DBase_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -73,6 +78,7 @@ void register_TrigArray2DBase_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -84,6 +90,7 @@ void register_TrigArray2DBase_class(){
             TrigArray2DBase_exposer.def( 
                 "nColumns"
                 , nColumns_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +102,7 @@ void register_TrigArray2DBase_class(){
             TrigArray2DBase_exposer.def( 
                 "nRows"
                 , nRows_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -107,6 +115,7 @@ void register_TrigArray2DBase_class(){
                 "offset"
                 , offset_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -118,6 +127,7 @@ void register_TrigArray2DBase_class(){
             TrigArray2DBase_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

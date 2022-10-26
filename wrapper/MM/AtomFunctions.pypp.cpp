@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AtomFunctions_class(){
 
     { //::SireMM::AtomFunctions
@@ -38,6 +40,7 @@ void register_AtomFunctions_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Return whether or not this property is compatible with the molecule\nwhose layout information is in molinfo" );
         
         }

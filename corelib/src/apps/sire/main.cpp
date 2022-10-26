@@ -916,16 +916,16 @@ int main(int argc, char **argv)
                 "http://siremol.org") );
 
             printBox( QObject::tr(
-                    "%4@%5: Starting master node (%1 of %2): nThreads()=%3")
+                    "%4@%5: Starting primary node (%1 of %2): nThreads()=%3")
                        .arg(Cluster::getRank()).arg(Cluster::getCount())
                        .arg(ppn)
                        .arg(username,hostname) );
 
             //name this process and thread
-            SireError::setProcessString("master");
+            SireError::setProcessString("primary");
             SireError::setThreadString("main");
 
-            //start the cluster - on the master we need one extra
+            //start the cluster - on the primary we need one extra
             //thread for the Python interpreter
             #ifdef SIRE_USE_MPI
                 MPI_Barrier( MPI_COMM_WORLD );

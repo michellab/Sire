@@ -39,6 +39,8 @@ namespace bp = boost::python;
 
 #include "SireMol/molecule.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/moleculegroup.h"
 
 #include "SireMol/moleditor.h"
@@ -86,14 +88,14 @@ void register_OpenMMFrEnergyST_class(){
         OpenMMFrEnergyST_exposer_t OpenMMFrEnergyST_exposer = OpenMMFrEnergyST_exposer_t( "OpenMMFrEnergyST", bp::init< >() );
         bp::scope OpenMMFrEnergyST_scope( OpenMMFrEnergyST_exposer );
         { //::SireMove::OpenMMFrEnergyST::typeName
-        
+
             typedef char const * ( *typeName_function_type )(  );
             typeName_function_type typeName_function_value( &::SireMove::OpenMMFrEnergyST::typeName );
-            
-            OpenMMFrEnergyST_exposer.def( 
+
+            OpenMMFrEnergyST_exposer.def(
                 "typeName"
                 , typeName_function_value );
-        
+
         }
         OpenMMFrEnergyST_exposer.staticmethod( "typeName" );
         OpenMMFrEnergyST_exposer.def( "__copy__", &__copy__);

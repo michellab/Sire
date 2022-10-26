@@ -29,6 +29,8 @@ SireMove::UniformSampler __copy__(const SireMove::UniformSampler &other){ return
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_UniformSampler_class(){
 
     { //::SireMove::UniformSampler
@@ -59,6 +61,7 @@ void register_UniformSampler_class(){
                 "probabilityOf"
                 , probabilityOf_function_value
                 , ( bp::arg("molecule") )
+                , bp::release_gil_policy()
                 , "Return the probability of selecting the view in molview from\nthe system system. A probability of zero is returned if\nthis view cannot be chosen from the molecule group." );
         
         }
@@ -71,6 +74,7 @@ void register_UniformSampler_class(){
                 "probabilityOfMolecule"
                 , probabilityOfMolecule_function_value
                 , ( bp::arg("molecule") )
+                , bp::release_gil_policy()
                 , "Return the probability of selecting the molecule molecule from\nthe system system. A probability of zero is returned if\nthis molecule cannot be chosen from the molecule group" );
         
         }
@@ -82,6 +86,7 @@ void register_UniformSampler_class(){
             UniformSampler_exposer.def( 
                 "sample"
                 , sample_function_value
+                , bp::release_gil_policy()
                 , "Return a random view molecule from the molecule group, together with\nthe probability of choosing that view." );
         
         }
@@ -93,6 +98,7 @@ void register_UniformSampler_class(){
             UniformSampler_exposer.def( 
                 "sampleMolecule"
                 , sampleMolecule_function_value
+                , bp::release_gil_policy()
                 , "Return a random molecule from the molecule group, together with\nthe probability of choosing that molecule. This returns the entire\nmolecule even if only a part of the molecule is in the group" );
         
         }
@@ -104,6 +110,7 @@ void register_UniformSampler_class(){
             UniformSampler_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

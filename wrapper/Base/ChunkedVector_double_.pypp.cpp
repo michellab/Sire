@@ -19,6 +19,8 @@ SireBase::ChunkedVector<double, 100> __copy__(const SireBase::ChunkedVector<doub
 
 const char* pvt_get_name(const SireBase::ChunkedVector<double, 100>&){ return "SireBase::ChunkedVector<double, 100>";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_ChunkedVector_double__class(){
@@ -82,6 +84,7 @@ void register_ChunkedVector_double__class(){
                 "append"
                 , append_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -108,6 +111,7 @@ void register_ChunkedVector_double__class(){
             ChunkedVector_double__exposer.def( 
                 "capacity"
                 , capacity_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -120,6 +124,7 @@ void register_ChunkedVector_double__class(){
             ChunkedVector_double__exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -132,6 +137,7 @@ void register_ChunkedVector_double__class(){
             ChunkedVector_double__exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -145,6 +151,7 @@ void register_ChunkedVector_double__class(){
                 "count"
                 , count_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -158,6 +165,7 @@ void register_ChunkedVector_double__class(){
                 "fromList"
                 , fromList_function_value
                 , ( bp::arg("list") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -171,6 +179,7 @@ void register_ChunkedVector_double__class(){
                 "fromStdVector"
                 , fromStdVector_function_value
                 , ( bp::arg("vector") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -184,6 +193,7 @@ void register_ChunkedVector_double__class(){
                 "fromVector"
                 , fromVector_function_value
                 , ( bp::arg("vector") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -196,6 +206,7 @@ void register_ChunkedVector_double__class(){
             ChunkedVector_double__exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -253,6 +264,7 @@ void register_ChunkedVector_double__class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -266,6 +278,7 @@ void register_ChunkedVector_double__class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("i"), bp::arg("count") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -279,6 +292,7 @@ void register_ChunkedVector_double__class(){
                 "reserve"
                 , reserve_function_value
                 , ( bp::arg("count") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -292,6 +306,7 @@ void register_ChunkedVector_double__class(){
                 "resize"
                 , resize_function_value
                 , ( bp::arg("count") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -304,6 +319,7 @@ void register_ChunkedVector_double__class(){
             ChunkedVector_double__exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -316,6 +332,7 @@ void register_ChunkedVector_double__class(){
             ChunkedVector_double__exposer.def( 
                 "squeeze"
                 , squeeze_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -328,6 +345,7 @@ void register_ChunkedVector_double__class(){
             ChunkedVector_double__exposer.def( 
                 "toList"
                 , toList_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -340,6 +358,7 @@ void register_ChunkedVector_double__class(){
             ChunkedVector_double__exposer.def( 
                 "toStdVector"
                 , toStdVector_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -352,6 +371,7 @@ void register_ChunkedVector_double__class(){
             ChunkedVector_double__exposer.def( 
                 "toVector"
                 , toVector_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -365,6 +385,7 @@ void register_ChunkedVector_double__class(){
                 "value"
                 , value_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -378,6 +399,7 @@ void register_ChunkedVector_double__class(){
                 "value"
                 , value_function_value
                 , ( bp::arg("i"), bp::arg("default_value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }

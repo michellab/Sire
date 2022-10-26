@@ -6,7 +6,7 @@
 
 # Third Party dependencies of this module
 include_directories( ${BOOST_INCLUDE_DIR}
-                     ${PYTHON_INCLUDE_DIR} 
+                     ${PYTHON_INCLUDE_DIR}
                      ${SIRE_GSL_INCLUDE_PATH} )
 
 # Sire include paths
@@ -33,7 +33,7 @@ set ( WRAPSTREAM_SOURCES
 # Create the library that holds all of the class wrappers
 add_library (Stream ${WRAPSTREAM_SOURCES})
 
-set_target_properties (Stream  
+set_target_properties (Stream
                        PROPERTIES
                          VERSION ${SIRE_VERSION}
                          SOVERSION ${SIRE_VERSION_MAJOR}
@@ -41,18 +41,18 @@ set_target_properties (Stream
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
+
 target_link_libraries (Stream
                        SirePython
                        SIRE_SireStream
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_Stream" "_init_Stream" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/Stream )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/Stream )
 
 install( TARGETS Stream
          LIBRARY DESTINATION ${INSTALLDIR}
@@ -61,5 +61,5 @@ install( TARGETS Stream
         )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )

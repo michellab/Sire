@@ -45,6 +45,8 @@ Squire::AM1BCC __copy__(const Squire::AM1BCC &other){ return Squire::AM1BCC(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AM1BCC_class(){
 
     { //::Squire::AM1BCC
@@ -73,6 +75,7 @@ void register_AM1BCC_class(){
                 "environment"
                 , environment_function_value
                 , ( bp::arg("variable") )
+                , bp::release_gil_policy()
                 , "Return the value of the environmental variable variable" );
         
         }
@@ -124,6 +127,7 @@ void register_AM1BCC_class(){
                 "setEnvironment"
                 , setEnvironment_function_value
                 , ( bp::arg("variable"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the environmental variable variable to value. It is\nimportant that AMBERHOME is set, as this is needed by antechamber\nto generate the charges" );
         
         }
@@ -136,6 +140,7 @@ void register_AM1BCC_class(){
                 "setScaleFactor"
                 , setScaleFactor_function_value
                 , ( bp::arg("sclfac") )
+                , bp::release_gil_policy()
                 , "Set the scale factor for the charges" );
         
         }
@@ -148,6 +153,7 @@ void register_AM1BCC_class(){
                 "setTotalCharge"
                 , setTotalCharge_function_value
                 , ( bp::arg("charge") )
+                , bp::release_gil_policy()
                 , "Set the total charge of the molecule whose charges are being generated" );
         
         }
@@ -159,6 +165,7 @@ void register_AM1BCC_class(){
             AM1BCC_exposer.def( 
                 "totalCharge"
                 , totalCharge_function_value
+                , bp::release_gil_policy()
                 , "Return the total charge of the molecule whose charges are being generated" );
         
         }
@@ -170,6 +177,7 @@ void register_AM1BCC_class(){
             AM1BCC_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

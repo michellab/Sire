@@ -89,6 +89,8 @@ SireIO::PDB __copy__(const SireIO::PDB &other){ return SireIO::PDB(other); }
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PDB_class(){
 
     { //::SireIO::PDB
@@ -131,6 +133,7 @@ void register_PDB_class(){
             PDB_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -142,6 +145,7 @@ void register_PDB_class(){
             PDB_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

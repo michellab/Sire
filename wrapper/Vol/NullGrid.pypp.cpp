@@ -27,6 +27,8 @@ SireVol::NullGrid __copy__(const SireVol::NullGrid &other){ return SireVol::Null
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_NullGrid_class(){
@@ -60,6 +62,7 @@ void register_NullGrid_class(){
                 "recenter"
                 , recenter_function_value
                 , ( bp::arg("center") )
+                , bp::release_gil_policy()
                 , "Return a copy of this grid that has been recentered to center" );
         
         }
@@ -96,6 +99,7 @@ void register_NullGrid_class(){
                 "scale"
                 , scale_function_value
                 , ( bp::arg("scalefactor") )
+                , bp::release_gil_policy()
                 , "Return a copy of this grid that has been scaled uniformly by scalefactor" );
         
         }
@@ -108,6 +112,7 @@ void register_NullGrid_class(){
                 "translate"
                 , translate_function_value
                 , ( bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Return a copy of this grid that has been translated by delta" );
         
         }
@@ -119,6 +124,7 @@ void register_NullGrid_class(){
             NullGrid_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

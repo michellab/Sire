@@ -54,11 +54,15 @@
 #include "SireMol/moleculegroups.h"
 #include "SireMol/mgnum.h"
 #include "SireMol/mgname.h"
+#include "SireMol/molname.h"
+#include "SireMol/molidx.h"
 #include "SireMol/mgidsandmaps.h"
 #include "SireMol/partialmolecule.h"
 #include "SireMol/perturbation.h"
 #include "SireMol/geometryperturbation.h"
 #include "SireMol/improperid.h"
+#include "SireMol/atomvelocities.h"
+#include "SireMol/core.h"
 
 #include "Base/convertpackedarray.hpp"
 #include "SireBase/packedarray2d.hpp"
@@ -82,8 +86,15 @@ void register_SireMol_containers()
 
     register_list< QList<AtomIdx> >();
     register_list< QList< QList<AtomIdx> > >();
-    register_list< QList<AtomNum> >();
     register_list< QVector<AtomIdx> >();
+
+    register_list< QList<AtomName> >();
+    register_list< QList<AtomNum> >();
+
+    register_list< QList<ResName> >();
+    register_list< QList<ResNum> >();
+    register_list< QList<ChainName> >();
+    register_list< QList<SegName> >();
 
     register_list< QList<BondID> >();
     register_list< QList<AngleID> >();
@@ -94,6 +105,8 @@ void register_SireMol_containers()
     register_list< QList<ChainIdx> >();
     register_list< QList<SegIdx> >();
 
+    register_list< QList<MolIdx> >();
+    register_list< QList<MolName> >();
     register_list< QList<MolNum> >();
     register_list< QVector<MolNum> >();
     register_list< QList<MGNum> >();
@@ -112,6 +125,8 @@ void register_SireMol_containers()
     register_list< QList<CGIdentifier> >();
     register_list< QList<AtomIdentifier> >();
 
+    register_list< QList<MolViewPtr> >();
+
     register_list< QList<PerturbationPtr> >();
     register_list< QList<GeomPertPtr> >();
 
@@ -128,6 +143,8 @@ void register_SireMol_containers()
     register_list< QVector<Element> >();
 
     register_list< QVector<QHash<AtomIdx,AtomIdx> > >();
+
+    register_list< QVector<Velocity3D> >();
 
     register_tuple< boost::tuple<AtomIdx,AtomIdx> >();
     register_tuple< boost::tuple<AtomIdx,AtomIdx,AtomIdx> >();

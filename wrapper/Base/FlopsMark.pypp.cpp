@@ -21,6 +21,8 @@ SireBase::FlopsMark __copy__(const SireBase::FlopsMark &other){ return SireBase:
 
 const char* pvt_get_name(const SireBase::FlopsMark&){ return "SireBase::FlopsMark";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FlopsMark_class(){
 
     { //::SireBase::FlopsMark
@@ -36,6 +38,7 @@ void register_FlopsMark_class(){
             FlopsMark_exposer.def( 
                 "benchmark"
                 , benchmark_function_value
+                , bp::release_gil_policy()
                 , "Perform a simple benchmark to work out what the realistic maximum\nFLOPS count for this processor (compiled with this compiler)\nif a mixture of additions, products and sqrts are used" );
         
         }
@@ -47,6 +50,7 @@ void register_FlopsMark_class(){
             FlopsMark_exposer.def( 
                 "benchmarkProduct"
                 , benchmarkProduct_function_value
+                , bp::release_gil_policy()
                 , "Perform a simple benchmark to work out what the realistic maximum\nFLOPS count for this processor (compiled with this compiler)\nif a mixture of additions and products are used" );
         
         }
@@ -58,6 +62,7 @@ void register_FlopsMark_class(){
             FlopsMark_exposer.def( 
                 "benchmarkQuotient"
                 , benchmarkQuotient_function_value
+                , bp::release_gil_policy()
                 , "Perform a simple benchmark to work out what the realistic maximum\nFLOPS count for this processor (compiled with this compiler)\nif a mixture of additions and divides are used" );
         
         }
@@ -69,6 +74,7 @@ void register_FlopsMark_class(){
             FlopsMark_exposer.def( 
                 "benchmarkSum"
                 , benchmarkSum_function_value
+                , bp::release_gil_policy()
                 , "Perform a simple benchmark to work out what the realistic maximum\nFLOPS count for this processor (compiled with this compiler)\nif only additions are used" );
         
         }
@@ -80,6 +86,7 @@ void register_FlopsMark_class(){
             FlopsMark_exposer.def( 
                 "nFlops"
                 , nFlops_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of flops from all threads up to this point" );
         
         }
@@ -91,6 +98,7 @@ void register_FlopsMark_class(){
             FlopsMark_exposer.def( 
                 "nThreads"
                 , nThreads_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of threads that contributed to this\nflop count" );
         
         }
@@ -129,6 +137,7 @@ void register_FlopsMark_class(){
                 "threadFlops"
                 , threadFlops_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return a FlopsMark object that contains just the information\nfor the ith thread\nThrow: SireError::invalid_index\n" );
         
         }

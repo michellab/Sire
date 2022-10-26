@@ -41,6 +41,8 @@ SireIO::TrajectoryMonitor __copy__(const SireIO::TrajectoryMonitor &other){ retu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_TrajectoryMonitor_class(){
 
     { //::SireIO::TrajectoryMonitor
@@ -60,6 +62,7 @@ void register_TrajectoryMonitor_class(){
             TrajectoryMonitor_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Clear all statistics - this will clear all frames of the trajectory" );
         
         }
@@ -72,6 +75,7 @@ void register_TrajectoryMonitor_class(){
                 "monitor"
                 , monitor_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Monitor the system, writing an additional frame of the trajectory\nto this monitor" );
         
         }
@@ -99,6 +103,7 @@ void register_TrajectoryMonitor_class(){
                 "setTempDir"
                 , setTempDir_function_value
                 , ( bp::arg("tempdir") )
+                , bp::release_gil_policy()
                 , "Set the temporary directory used to store the trajectory as it\nis being monitored during the simulation" );
         
         }
@@ -110,6 +115,7 @@ void register_TrajectoryMonitor_class(){
             TrajectoryMonitor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -122,6 +128,7 @@ void register_TrajectoryMonitor_class(){
                 "writeToDisk"
                 , writeToDisk_function_value
                 , ( bp::arg("file_template") )
+                , bp::release_gil_policy()
                 , "Write the trajectory to disk, using the file template file_template.\nThis writes each frame to a separate file, numbering them sequentially\nfrom 0, replacing XXXXXX with the frame number" );
         
         }

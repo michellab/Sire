@@ -56,6 +56,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJFunction_class(){
 
     { //::SireMM::CLJFunction
@@ -76,6 +78,7 @@ void register_CLJFunction_class(){
                 "calculate"
                 , calculate_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Return the total energy between atoms, returning the coulomb part as the first\nelement of the tuple and the LJ part as the second" );
         
         }
@@ -100,6 +103,7 @@ void register_CLJFunction_class(){
                 "calculate"
                 , calculate_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Return the total energy between atoms, returning the coulomb part as the first\nelement of the tuple and the LJ part as the second" );
         
         }
@@ -112,6 +116,7 @@ void register_CLJFunction_class(){
                 "calculate"
                 , calculate_function_value
                 , ( bp::arg("atoms0"), bp::arg("atoms1") )
+                , bp::release_gil_policy()
                 , "Return the total energy between atoms0 and atoms1, returning the coulomb part as the first\nelement of the tuple and the LJ part as the second" );
         
         }
@@ -124,6 +129,7 @@ void register_CLJFunction_class(){
                 "calculate"
                 , calculate_function_value
                 , ( bp::arg("atoms0"), bp::arg("atoms1") )
+                , bp::release_gil_policy()
                 , "Return the total energy between atoms0 and atoms1, returning the coulomb part as the first\nelement of the tuple and the LJ part as the second" );
         
         }
@@ -136,6 +142,7 @@ void register_CLJFunction_class(){
                 "calculate"
                 , calculate_function_value
                 , ( bp::arg("atoms"), bp::arg("gridinfo") )
+                , bp::release_gil_policy()
                 , "Return the potential on the described grid of the passed atoms using\nthis function. This returns an empty grid if this function doesnt support\ngrid calculations" );
         
         }
@@ -147,6 +154,7 @@ void register_CLJFunction_class(){
             CLJFunction_exposer.def( 
                 "combiningRules"
                 , combiningRules_function_value
+                , bp::release_gil_policy()
                 , "Return the combining rules used by the function" );
         
         }
@@ -159,6 +167,7 @@ void register_CLJFunction_class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return whether or not this function contains a property with name name" );
         
         }
@@ -171,6 +180,7 @@ void register_CLJFunction_class(){
                 "coulomb"
                 , coulomb_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Return the coulomb energy between the atoms in atoms" );
         
         }
@@ -195,6 +205,7 @@ void register_CLJFunction_class(){
                 "coulomb"
                 , coulomb_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Return the coulomb energy between the atoms in atoms" );
         
         }
@@ -207,6 +218,7 @@ void register_CLJFunction_class(){
                 "coulomb"
                 , coulomb_function_value
                 , ( bp::arg("atoms0"), bp::arg("atoms1") )
+                , bp::release_gil_policy()
                 , "Return the coulomb energy between the atoms in atoms0 and in atoms1" );
         
         }
@@ -218,6 +230,7 @@ void register_CLJFunction_class(){
             CLJFunction_exposer.def( 
                 "coulombCutoff"
                 , coulombCutoff_function_value
+                , bp::release_gil_policy()
                 , "Return the coulomb cutoff if this function uses one" );
         
         }
@@ -229,6 +242,7 @@ void register_CLJFunction_class(){
             CLJFunction_exposer.def( 
                 "hasCutoff"
                 , hasCutoff_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this function uses a cutoff" );
         
         }
@@ -240,6 +254,7 @@ void register_CLJFunction_class(){
             CLJFunction_exposer.def( 
                 "isPeriodic"
                 , isPeriodic_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the space of the function is periodic" );
         
         }
@@ -251,6 +266,7 @@ void register_CLJFunction_class(){
             CLJFunction_exposer.def( 
                 "isSoftened"
                 , isSoftened_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this function uses a softened (soft-core) potential" );
         
         }
@@ -263,6 +279,7 @@ void register_CLJFunction_class(){
                 "lj"
                 , lj_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Return the LJ energy between the atoms in atoms" );
         
         }
@@ -287,6 +304,7 @@ void register_CLJFunction_class(){
                 "lj"
                 , lj_function_value
                 , ( bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "Return the LJ energy between the atoms in atoms" );
         
         }
@@ -299,6 +317,7 @@ void register_CLJFunction_class(){
                 "lj"
                 , lj_function_value
                 , ( bp::arg("atoms0"), bp::arg("atoms1") )
+                , bp::release_gil_policy()
                 , "Return the LJ energy between the atoms in atoms0 and in atoms1" );
         
         }
@@ -310,6 +329,7 @@ void register_CLJFunction_class(){
             CLJFunction_exposer.def( 
                 "ljCutoff"
                 , ljCutoff_function_value
+                , bp::release_gil_policy()
                 , "Return the LJ cutoff if this function uses one" );
         
         }
@@ -322,6 +342,7 @@ void register_CLJFunction_class(){
                 "multiCalculate"
                 , multiCalculate_function_value
                 , ( bp::arg("funcs"), bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -346,6 +367,7 @@ void register_CLJFunction_class(){
                 "multiCalculate"
                 , multiCalculate_function_value
                 , ( bp::arg("funcs"), bp::arg("atoms") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -358,6 +380,7 @@ void register_CLJFunction_class(){
                 "multiCalculate"
                 , multiCalculate_function_value
                 , ( bp::arg("funcs"), bp::arg("atoms0"), bp::arg("atoms1") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -370,6 +393,7 @@ void register_CLJFunction_class(){
                 "multiCalculate"
                 , multiCalculate_function_value
                 , ( bp::arg("funcs"), bp::arg("atoms0"), bp::arg("atoms1") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -453,6 +477,7 @@ void register_CLJFunction_class(){
             CLJFunction_exposer.def( 
                 "properties"
                 , properties_function_value
+                , bp::release_gil_policy()
                 , "Return all of the configurable properties of this function" );
         
         }
@@ -465,6 +490,7 @@ void register_CLJFunction_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return the value of the property with name name" );
         
         }
@@ -477,6 +503,7 @@ void register_CLJFunction_class(){
                 "setArithmeticCombiningRules"
                 , setArithmeticCombiningRules_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Tell the function to use arithmetic combining rules for LJ parameters" );
         
         }
@@ -489,6 +516,7 @@ void register_CLJFunction_class(){
                 "setCombiningRules"
                 , setCombiningRules_function_value
                 , ( bp::arg("rules") )
+                , bp::release_gil_policy()
                 , "Set the combining rules used by the function" );
         
         }
@@ -501,6 +529,7 @@ void register_CLJFunction_class(){
                 "setCoulombCutoff"
                 , setCoulombCutoff_function_value
                 , ( bp::arg("distance") )
+                , bp::release_gil_policy()
                 , "Set the coulomb cutoff if this function has a cutoff" );
         
         }
@@ -513,6 +542,7 @@ void register_CLJFunction_class(){
                 "setCutoff"
                 , setCutoff_function_value
                 , ( bp::arg("distance") )
+                , bp::release_gil_policy()
                 , "Set the coulomb and LJ cutoff to distance, if this function\nhas a cutoff" );
         
         }
@@ -525,6 +555,7 @@ void register_CLJFunction_class(){
                 "setCutoff"
                 , setCutoff_function_value
                 , ( bp::arg("coulomb_cutoff"), bp::arg("lj_cutoff") )
+                , bp::release_gil_policy()
                 , "Set the coulomb and LJ cutoff to the specified values, if this function\nhas a cutoff" );
         
         }
@@ -537,6 +568,7 @@ void register_CLJFunction_class(){
                 "setGeometricCombiningRules"
                 , setGeometricCombiningRules_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Tell the function to use geometric combining rules for LJ parameters" );
         
         }
@@ -549,6 +581,7 @@ void register_CLJFunction_class(){
                 "setLJCutoff"
                 , setLJCutoff_function_value
                 , ( bp::arg("distance") )
+                , bp::release_gil_policy()
                 , "Set the LJ cutoff if this function has a cutoff" );
         
         }
@@ -561,6 +594,7 @@ void register_CLJFunction_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Return a copy of this function where the property name has been set to\nthe value value\nThrow: SireBase::missing_property\n" );
         
         }
@@ -573,6 +607,7 @@ void register_CLJFunction_class(){
                 "setSpace"
                 , setSpace_function_value
                 , ( bp::arg("space") )
+                , bp::release_gil_policy()
                 , "Set the space used by the function" );
         
         }
@@ -584,7 +619,7 @@ void register_CLJFunction_class(){
             CLJFunction_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the space represented by the function" );
         
         }
@@ -596,6 +631,7 @@ void register_CLJFunction_class(){
             CLJFunction_exposer.def( 
                 "supportsGridCalculation"
                 , supportsGridCalculation_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this function supports calculating potentials on grids" );
         
         }
@@ -608,6 +644,7 @@ void register_CLJFunction_class(){
                 "total"
                 , total_function_value
                 , ( bp::arg("atoms"), bp::arg("cnrg"), bp::arg("ljnrg") )
+                , bp::release_gil_policy()
                 , "Return the total energy between atoms, returning the coulomb part in cnrg\nand the LJ part in ljnrg" );
         
         }
@@ -632,6 +669,7 @@ void register_CLJFunction_class(){
                 "total"
                 , total_function_value
                 , ( bp::arg("atoms"), bp::arg("cnrg"), bp::arg("ljnrg") )
+                , bp::release_gil_policy()
                 , "Return the total energy between atoms, returning the coulomb part in cnrg\nand the LJ part in ljnrg" );
         
         }
@@ -644,6 +682,7 @@ void register_CLJFunction_class(){
                 "total"
                 , total_function_value
                 , ( bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("cnrg"), bp::arg("ljnrg") )
+                , bp::release_gil_policy()
                 , "Return the total energy between atoms0 and atoms1, returning the coulomb part in cnrg\nand the LJ part in ljnrg" );
         
         }
@@ -655,6 +694,7 @@ void register_CLJFunction_class(){
             CLJFunction_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -666,6 +706,7 @@ void register_CLJFunction_class(){
             CLJFunction_exposer.def( 
                 "usingArithmeticCombiningRules"
                 , usingArithmeticCombiningRules_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not arithmetic combining rules are used" );
         
         }
@@ -677,6 +718,7 @@ void register_CLJFunction_class(){
             CLJFunction_exposer.def( 
                 "usingGeometricCombiningRules"
                 , usingGeometricCombiningRules_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not geometric combining rules are used" );
         
         }

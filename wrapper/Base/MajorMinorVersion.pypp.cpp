@@ -22,6 +22,8 @@ SireBase::MajorMinorVersion __copy__(const SireBase::MajorMinorVersion &other){ 
 
 const char* pvt_get_name(const SireBase::MajorMinorVersion&){ return "SireBase::MajorMinorVersion";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MajorMinorVersion_class(){
 
     { //::SireBase::MajorMinorVersion
@@ -39,6 +41,7 @@ void register_MajorMinorVersion_class(){
             MajorMinorVersion_exposer.def( 
                 "incrementMajor"
                 , incrementMajor_function_value
+                , bp::release_gil_policy()
                 , "Increment the major version number - this resets the\nminor version number to 0" );
         
         }
@@ -50,6 +53,7 @@ void register_MajorMinorVersion_class(){
             MajorMinorVersion_exposer.def( 
                 "incrementMinor"
                 , incrementMinor_function_value
+                , bp::release_gil_policy()
                 , "Increment the minor version number" );
         
         }
@@ -61,6 +65,7 @@ void register_MajorMinorVersion_class(){
             MajorMinorVersion_exposer.def( 
                 "majorVersion"
                 , majorVersion_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -72,6 +77,7 @@ void register_MajorMinorVersion_class(){
             MajorMinorVersion_exposer.def( 
                 "minorVersion"
                 , minorVersion_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -98,6 +104,7 @@ void register_MajorMinorVersion_class(){
             MajorMinorVersion_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -109,7 +116,7 @@ void register_MajorMinorVersion_class(){
             MajorMinorVersion_exposer.def( 
                 "version"
                 , version_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -121,6 +128,7 @@ void register_MajorMinorVersion_class(){
             MajorMinorVersion_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

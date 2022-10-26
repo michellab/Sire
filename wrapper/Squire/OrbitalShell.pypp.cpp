@@ -19,6 +19,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_OrbitalShell_class(){
 
     { //::Squire::OrbitalShell
@@ -33,6 +35,7 @@ void register_OrbitalShell_class(){
             OrbitalShell_exposer.def( 
                 "angularMomentum"
                 , angularMomentum_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -44,6 +47,7 @@ void register_OrbitalShell_class(){
             OrbitalShell_exposer.def( 
                 "nOrbitals"
                 , nOrbitals_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -55,6 +59,7 @@ void register_OrbitalShell_class(){
             OrbitalShell_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

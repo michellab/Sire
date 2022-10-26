@@ -87,6 +87,8 @@ SireMol::Mover<SireMol::Residue> __copy__(const SireMol::Mover<SireMol::Residue>
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_Mover_Residue__class(){
@@ -303,6 +305,7 @@ void register_Mover_Residue__class(){
             Mover_Residue__exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -455,6 +458,7 @@ void register_Mover_Residue__class(){
             Mover_Residue__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -495,6 +499,7 @@ void register_Mover_Residue__class(){
             Mover_Residue__exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

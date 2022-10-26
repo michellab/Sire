@@ -33,6 +33,8 @@ SireFF::EnergyTable __copy__(const SireFF::EnergyTable &other){ return SireFF::E
 
 const char* pvt_get_name(const SireFF::EnergyTable&){ return "SireFF::EnergyTable";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_EnergyTable_class(){
@@ -52,6 +54,7 @@ void register_EnergyTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Add the contents of the table other onto this table. This will only\nadd the forces for the molecules  grids that are in both tables" );
         
         }
@@ -64,6 +67,7 @@ void register_EnergyTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("force") )
+                , bp::release_gil_policy()
                 , "Add the force force onto all of the atom  grid points in this table" );
         
         }
@@ -76,6 +80,7 @@ void register_EnergyTable_class(){
                 "assertContainsTableFor"
                 , assertContainsTableFor_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Assert that this forcetable contains a table for the\nforces for the molecule at number molnum\nThrow: SireMol::missing_molecule\n" );
         
         }
@@ -101,6 +106,7 @@ void register_EnergyTable_class(){
                 "containsTable"
                 , containsTable_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -112,6 +118,7 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -124,6 +131,7 @@ void register_EnergyTable_class(){
                 "divide"
                 , divide_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Divide the force at all atom and grid points by value" );
         
         }
@@ -161,6 +169,7 @@ void register_EnergyTable_class(){
                 "indexOf"
                 , indexOf_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Return the index of the molecule with number molnum in this table\nThrow: SireMol::missing_molecule\n" );
         
         }
@@ -173,6 +182,7 @@ void register_EnergyTable_class(){
                 "initialiseTable"
                 , initialiseTable_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Initialise all of the forces for the table for the molecule\nwith number molnum\nThrow: SireMol::missing_molecule\n" );
         
         }
@@ -184,6 +194,7 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "initialiseTables"
                 , initialiseTables_function_value
+                , bp::release_gil_policy()
                 , "Initialise all of the tables - this resets all of the forces\nback to zero" );
         
         }
@@ -195,6 +206,7 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "molNums"
                 , molNums_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -207,6 +219,7 @@ void register_EnergyTable_class(){
                 "multiply"
                 , multiply_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Multiply the force at all atom and grid points by value" );
         
         }
@@ -254,6 +267,7 @@ void register_EnergyTable_class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("force") )
+                , bp::release_gil_policy()
                 , "Set the force at all atom and grid points equal to force" );
         
         }
@@ -266,6 +280,7 @@ void register_EnergyTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Subtract the contents of the table other from this table. This will only\nsubtract the forces for the molecules  grids that are in both tables" );
         
         }
@@ -278,6 +293,7 @@ void register_EnergyTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("force") )
+                , bp::release_gil_policy()
                 , "Subtract the force force from all of the atom  grid points in this table" );
         
         }
@@ -289,6 +305,7 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -300,6 +317,7 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

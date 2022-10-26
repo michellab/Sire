@@ -36,6 +36,8 @@ SireMM::BondSymbols __copy__(const SireMM::BondSymbols &other){ return SireMM::B
 
 const char* pvt_get_name(const SireMM::BondSymbols&){ return "SireMM::BondSymbols";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_BondSymbols_class(){
 
     { //::SireMM::BondSymbols
@@ -50,7 +52,7 @@ void register_BondSymbols_class(){
             BondSymbols_exposer.def( 
                 "r"
                 , r_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the vector along the bond (r)" );
         
         }

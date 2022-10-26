@@ -47,7 +47,11 @@ namespace bp = boost::python;
 
 SireMol::Selector<SireMol::Atom> __copy__(const SireMol::Selector<SireMol::Atom> &other){ return SireMol::Selector<SireMol::Atom>(other); }
 
+#include "Qt/qdatastream.hpp"
+
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 #include "Helpers/len.hpp"
 
@@ -63,6 +67,19 @@ void register_Selector_Atom__class(){
         Selector_Atom__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::Atom::ID const & >(( bp::arg("moldata"), bp::arg("viewid") ), "") );
         Selector_Atom__exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::AtomIdx > const & >(( bp::arg("moldata"), bp::arg("idxs") ), "") );
         Selector_Atom__exposer.def( bp::init< SireMol::Selector< SireMol::Atom > const & >(( bp::arg("other") ), "") );
+        { //::SireMol::Selector< SireMol::Atom >::IDs
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::Selector< SireMol::Atom >::*IDs_function_type)(  ) const;
+            IDs_function_type IDs_function_value( &::SireMol::Selector< SireMol::Atom >::IDs );
+            
+            Selector_Atom__exposer.def( 
+                "IDs"
+                , IDs_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::Atom >::add
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
@@ -73,6 +90,7 @@ void register_Selector_Atom__class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -86,6 +104,7 @@ void register_Selector_Atom__class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("view") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -99,6 +118,7 @@ void register_Selector_Atom__class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -112,6 +132,7 @@ void register_Selector_Atom__class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -125,6 +146,7 @@ void register_Selector_Atom__class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("view") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -138,6 +160,7 @@ void register_Selector_Atom__class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -150,6 +173,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "evaluate"
                 , evaluate_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -163,6 +187,7 @@ void register_Selector_Atom__class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -176,6 +201,7 @@ void register_Selector_Atom__class(){
                 "evaluate"
                 , evaluate_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -189,6 +215,7 @@ void register_Selector_Atom__class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -202,6 +229,7 @@ void register_Selector_Atom__class(){
                 "hasMetadata"
                 , hasMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -215,6 +243,7 @@ void register_Selector_Atom__class(){
                 "hasProperty"
                 , hasProperty_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -228,6 +257,20 @@ void register_Selector_Atom__class(){
                 "index"
                 , index_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::indexes
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::Selector< SireMol::Atom >::*indexes_function_type)(  ) const;
+            indexes_function_type indexes_function_value( &::SireMol::Selector< SireMol::Atom >::indexes );
+            
+            Selector_Atom__exposer.def( 
+                "indexes"
+                , indexes_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -241,6 +284,7 @@ void register_Selector_Atom__class(){
                 "intersection"
                 , intersection_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -254,6 +298,7 @@ void register_Selector_Atom__class(){
                 "intersection"
                 , intersection_function_value
                 , ( bp::arg("view") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -267,6 +312,7 @@ void register_Selector_Atom__class(){
                 "intersection"
                 , intersection_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -280,6 +326,7 @@ void register_Selector_Atom__class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -293,6 +340,7 @@ void register_Selector_Atom__class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("view") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -306,6 +354,7 @@ void register_Selector_Atom__class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -318,6 +367,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "invert"
                 , invert_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -330,6 +380,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -342,6 +393,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -355,6 +407,7 @@ void register_Selector_Atom__class(){
                 "metadataKeys"
                 , metadataKeys_function_value
                 , ( bp::arg("key") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -367,6 +420,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "move"
                 , move_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -380,6 +434,7 @@ void register_Selector_Atom__class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -393,6 +448,7 @@ void register_Selector_Atom__class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -405,6 +461,33 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "nViews"
                 , nViews_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::names
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::QList< SireMol::AtomName > ( ::SireMol::Selector< SireMol::Atom >::*names_function_type)(  ) const;
+            names_function_type names_function_value( &::SireMol::Selector< SireMol::Atom >::names );
+            
+            Selector_Atom__exposer.def( 
+                "names"
+                , names_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::numbers
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::QList< SireMol::AtomNum > ( ::SireMol::Selector< SireMol::Atom >::*numbers_function_type)(  ) const;
+            numbers_function_type numbers_function_value( &::SireMol::Selector< SireMol::Atom >::numbers );
+            
+            Selector_Atom__exposer.def( 
+                "numbers"
+                , numbers_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -425,6 +508,19 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::operator()
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Atom ( ::SireMol::Selector< SireMol::Atom >::*__call___function_type)( ::SireID::Index const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Atom >::operator() );
+            
+            Selector_Atom__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("idx") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::operator()
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
             typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Atom >::operator() );
             
@@ -432,6 +528,97 @@ void register_Selector_Atom__class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::operator()
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*__call___function_type)( ::SireBase::Slice const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Atom >::operator() );
+            
+            Selector_Atom__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("slice") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::operator()
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*__call___function_type)( ::QList< long long > const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Atom >::operator() );
+            
+            Selector_Atom__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::operator()
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*__call___function_type)( ::SireMol::AtomID const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Atom >::operator() );
+            
+            Selector_Atom__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("atomid") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::operator()
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Selector< SireMol::Atom >::*__call___function_type)( ::SireMol::ResID const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Atom >::operator() );
+            
+            Selector_Atom__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("resid") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::operator()
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::Atom >::*__call___function_type)( ::SireMol::CGID const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Atom >::operator() );
+            
+            Selector_Atom__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("cgid") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::operator()
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Atom >::*__call___function_type)( ::SireMol::ChainID const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Atom >::operator() );
+            
+            Selector_Atom__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("chainid") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::operator()
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Atom >::*__call___function_type)( ::SireMol::SegID const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Atom >::operator() );
+            
+            Selector_Atom__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("segid") )
                 , "" );
         
         }
@@ -480,6 +667,45 @@ void register_Selector_Atom__class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::operator[]
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Atom >::*__getitem___function_type)( ::QString const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Atom >::operator[] );
+            
+            Selector_Atom__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("name") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::operator[]
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Atom >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Atom >::operator[] );
+            
+            Selector_Atom__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::operator[]
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Atom >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Atom >::operator[] );
+            
+            Selector_Atom__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
                 , "" );
         
         }
@@ -570,6 +796,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "propertyKeys"
                 , propertyKeys_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -582,6 +809,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -594,6 +822,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -607,6 +836,7 @@ void register_Selector_Atom__class(){
                 "selection"
                 , selection_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -620,6 +850,7 @@ void register_Selector_Atom__class(){
                 "selection"
                 , selection_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -632,6 +863,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "selector"
                 , selector_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -645,6 +877,7 @@ void register_Selector_Atom__class(){
                 "selector"
                 , selector_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -658,6 +891,7 @@ void register_Selector_Atom__class(){
                 "selector"
                 , selector_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -671,6 +905,7 @@ void register_Selector_Atom__class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -684,6 +919,7 @@ void register_Selector_Atom__class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("view") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -697,6 +933,33 @@ void register_Selector_Atom__class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("id") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::toList
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::QList< SireBase::PropPtr< SireMol::MoleculeView > > ( ::SireMol::Selector< SireMol::Atom >::*toList_function_type)(  ) const;
+            toList_function_type toList_function_value( &::SireMol::Selector< SireMol::Atom >::toList );
+            
+            Selector_Atom__exposer.def( 
+                "toList"
+                , toList_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::toSelector
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Atom >::*toSelector_function_type)(  ) const;
+            toSelector_function_type toSelector_function_value( &::SireMol::Selector< SireMol::Atom >::toSelector );
+            
+            Selector_Atom__exposer.def( 
+                "toSelector"
+                , toSelector_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -709,6 +972,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -721,6 +985,7 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -728,6 +993,11 @@ void register_Selector_Atom__class(){
         Selector_Atom__exposer.def( "__copy__", &__copy__);
         Selector_Atom__exposer.def( "__deepcopy__", &__copy__);
         Selector_Atom__exposer.def( "clone", &__copy__);
+        Selector_Atom__exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireMol::Selector<SireMol::Atom> >,
+                            bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        Selector_Atom__exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMol::Selector<SireMol::Atom> >,
+                            bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
+        Selector_Atom__exposer.def_pickle(sire_pickle_suite< ::SireMol::Selector<SireMol::Atom> >());
         Selector_Atom__exposer.def( "__str__", &__str__< ::SireMol::Selector<SireMol::Atom> > );
         Selector_Atom__exposer.def( "__repr__", &__str__< ::SireMol::Selector<SireMol::Atom> > );
         Selector_Atom__exposer.def( "__len__", &__len_size< ::SireMol::Selector<SireMol::Atom> > );

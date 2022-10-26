@@ -31,6 +31,8 @@ SireIO::IOParametersBase __copy__(const SireIO::IOParametersBase &other){ return
 
 const char* pvt_get_name(const SireIO::IOParametersBase&){ return "SireIO::IOParametersBase";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_IOParametersBase_class(){
 
     { //::SireIO::IOParametersBase

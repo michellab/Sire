@@ -919,7 +919,14 @@ QList<MoleculeParserPtr> MoleculeParser::parse(const QStringList &filenames,
 System MoleculeParser::read(const QString &filename, const PropertyMap &map)
 {
     MoleculeParserPtr parser = MoleculeParser::parse(filename, map);
-    return parser.read().toSystem(map);
+    auto system = parser.read().toSystem(map);
+
+    if (system.name().isEmpty())
+    {
+        system.setName(QFileInfo(filename).baseName());
+    }
+
+    return system;
 }
 
 /** Read the two passed files, returning the System contained therein. The two
@@ -947,7 +954,24 @@ System MoleculeParser::read(const QString &file1, const QString &file2,
         parser2 = MoleculeParser::parse(file2,map);
     }
 
-    return parser1.read().toSystem(parser2.read(),map);
+    auto system = parser1.read().toSystem(parser2.read(),map);
+
+    if (system.name().isEmpty())
+    {
+        auto p1 = QFileInfo(file1).baseName();
+        auto p2 = QFileInfo(file2).baseName();
+
+        if (p1 == p2)
+        {
+            system.setName(p1);
+        }
+        else
+        {
+            system.setName(QString("%1:%2").arg(p1).arg(p2));
+        }
+    }
+
+    return system;
 }
 
 /** Read the files with passed filenames, returning the System contained therein.
@@ -962,7 +986,23 @@ System MoleculeParser::read(const QStringList &filenames, const PropertyMap &map
 
     MoleculeParserPtr parser = parsers.takeFirst();
 
-    return parser.read().toSystem(parsers, map);
+    auto system = parser.read().toSystem(parsers, map);
+
+    if (system.name().isEmpty())
+    {
+        QSet<QString> parts;
+        for (const auto &filename : filenames)
+        {
+            parts.insert(QFileInfo(filename).baseName());
+        }
+
+        //QStringList names(parts.constBegin(), parts.constEnd());
+        QStringList names = parts.values();
+
+        system.setName(names.join(":"));
+    }
+
+    return system;
 }
 
 /** Synonym for MoleculeParser::read */
@@ -981,6 +1021,60 @@ System MoleculeParser::load(const QString &file1, const QString &file2, const Pr
 System MoleculeParser::load(const QStringList &filenames, const PropertyMap &map)
 {
     return MoleculeParser::read(filenames, map);
+}
+
+/** Parse the passed file, returning the resulting Parser. This employs a lot
+    of magic to automatically work out the format of the file and whether or
+    not this is parseable by Sire... This raises an exception if the file
+    cannot be recognised, or if there is an error in parsing. */
+MoleculeParserPtr MoleculeParser::parse(const QString &filename)
+{
+    return parse(filename, PropertyMap());
+}
+
+/** Parse the passed set of files, returning the resulting Parsers */
+QList<MoleculeParserPtr> MoleculeParser::parse(const QStringList &filenames)
+{
+    return parse(filenames, PropertyMap());
+}
+
+/** Read the passed file called 'filename', returning the System contained therein */
+System MoleculeParser::read(const QString &filename)
+{
+    return read(filename, PropertyMap());
+}
+
+/** Read the two passed files, returning the System contained therein. The two
+    files must refer to the same System, i.e. they could be a parameter + coordinate file */
+System MoleculeParser::read(const QString &file1, const QString &file2)
+{
+    return read(file1, file2, PropertyMap());
+}
+
+/** Read the files with passed filenames, returning the System contained therein.
+    Note that all of the files must be connected to the same system
+    (i.e. it could be the Amber Parm and Rst file) */
+System MoleculeParser::read(const QStringList &filenames)
+{
+    return read(filenames, PropertyMap());
+}
+
+/** Synonym for MoleculeParser::read */
+System MoleculeParser::load(const QString &filename)
+{
+    return load(filename, PropertyMap());
+}
+
+/** Synonym for MoleculeParser::read */
+System MoleculeParser::load(const QString &file1, const QString &file2)
+{
+    return load(file1, file2, PropertyMap());
+}
+
+/** Synonym for MoleculeParser::read */
+System MoleculeParser::load(const QStringList &filenames)
+{
+    return load(filenames, PropertyMap());
 }
 
 /** Return the suffix (or suffixes) given to files that support this format.
@@ -1443,6 +1537,84 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
     }
 
     return system;
+}
+
+/** Save the passed System to the file called 'filename'. First, the 'fileformat'
+    property is looked at in 'map'. This is used to set the format(s) of
+    the files that are written (comma-separated list).
+
+    If this does not exist, then the extension of the
+    file is used to work out which format to use. If no extension is given,
+    then the System will be queried to find out its preferred format (normally
+    the format it was loaded with), via its 'fileformat' property
+    (again, comma separated list).
+
+    If their preferred format results in multiple files, then
+    multiple files will be written. This returns the full pathnames to
+    all of the files that are written
+*/
+QStringList MoleculeParser::write(const System &system, const QString &filename)
+{
+    return write(system, filename, PropertyMap());
+}
+
+/** Extension of MoleculeParser::write which allows many filenames.
+    The same rules to locate the fileformats are now used, except that now only
+    the number of files written must match the number of filenames */
+QStringList MoleculeParser::write(const System &system,
+                                  const QStringList &files)
+{
+    return write(system, files, PropertyMap());
+}
+
+/** Extension of MoleculeParser::write which allows you to specify two filenames.
+    The same rules to locate the fileformats are now used, except now only two
+    files are permitted to be written */
+QStringList MoleculeParser::write(const System &system, const QString &file1,
+                                  const QString &file2)
+{
+    return write(system, file1, file2, PropertyMap());
+}
+
+/** Synonym of MoleculeParser::write */
+QStringList MoleculeParser::save(const System &system, const QString &filename)
+{
+    return save(system, filename, PropertyMap());
+}
+
+/** Synonym of MoleculeParser::write */
+QStringList MoleculeParser::save(const System &system,
+                                 const QString &file1, const QString &file2)
+{
+    return save(system, file1, file2, PropertyMap());
+}
+
+/** Synonym of MoleculeParser::write */
+QStringList MoleculeParser::save(const System &system,
+                                 const QStringList &filenames)
+{
+    return save(system, filenames, PropertyMap());
+}
+
+/** Return the System that is constructed from the data in this parser */
+System MoleculeParser::toSystem() const
+{
+    return toSystem(PropertyMap());
+}
+
+/** Return the System that is constructed from the data in the two
+    passed parsers (i.e. representing a topology and a coordinate file) */
+System MoleculeParser::toSystem(const MoleculeParser &other) const
+{
+    return toSystem(other, PropertyMap());
+}
+
+/** Return the System that is constructed from the information in the passed
+    parsers. This will parse the information in order, meaning that data contained
+    in earlier parsers may be overwritten by data from later parsers */
+System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others) const
+{
+    return toSystem(others, PropertyMap());
 }
 
 /** Start creating a new System using the information contained in this parser,

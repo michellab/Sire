@@ -374,6 +374,12 @@ InvertMatch<AtomID> AtomID::operator!() const
     return InvertMatch<AtomID>(*this);
 }
 
+/** Return an AtomID constructed from the passed string */
+AtomIdentifier AtomID::fromString(const QString &id)
+{
+    return AtomName(id);
+}
+
 /** Return the invert (not) of this match */
 InvertMatch<AtomID> AtomID::invert() const
 {
@@ -455,8 +461,8 @@ Atom AtomID::selectFrom(const MoleculeView &molview, const PropertyMap &map) con
 
     if (atomidxs.count() > 1)
         throw SireMol::duplicate_atom( QObject::tr(
-                "More than one atom matches the ID %1 (atoms %2).")
-                    .arg(this->toString()).arg(Sire::toString(atomidxs)),
+                "More than one atom matches the ID %1 (number of matches is %2).")
+                    .arg(this->toString()).arg(atomidxs.count()),
                         CODELOC );
 
     return Atom(molview.data(), atomidxs.at(0));

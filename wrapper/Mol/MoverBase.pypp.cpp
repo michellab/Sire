@@ -55,6 +55,8 @@ SireMol::MoverBase __copy__(const SireMol::MoverBase &other){ return SireMol::Mo
 
 const char* pvt_get_name(const SireMol::MoverBase&){ return "SireMol::MoverBase";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MoverBase_class(){
 
     { //::SireMol::MoverBase

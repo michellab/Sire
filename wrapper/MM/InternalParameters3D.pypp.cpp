@@ -37,6 +37,8 @@ SireMM::InternalParameters3D __copy__(const SireMM::InternalParameters3D &other)
 
 const char* pvt_get_name(const SireMM::InternalParameters3D&){ return "SireMM::InternalParameters3D";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_InternalParameters3D_class(){
 
     { //::SireMM::InternalParameters3D
@@ -54,6 +56,7 @@ void register_InternalParameters3D_class(){
                 "addChangedGroups"
                 , addChangedGroups_function_value
                 , ( bp::arg("other"), bp::arg("changed_groups") )
+                , bp::release_gil_policy()
                 , "Add the changed groups that are different in other compared to this\nto changed_groups" );
         
         }
@@ -66,6 +69,7 @@ void register_InternalParameters3D_class(){
                 "applyMask"
                 , applyMask_function_value
                 , ( bp::arg("cgidxs") )
+                , bp::release_gil_policy()
                 , "Mask these parameters so that only the parameters for the CutGroups\nwhose indicies are in cgidxs are contained." );
         
         }
@@ -90,6 +94,7 @@ void register_InternalParameters3D_class(){
                 "changedAllGroups"
                 , changedAllGroups_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return whether or not all of the CutGroup have changed compared to other" );
         
         }
@@ -102,6 +107,7 @@ void register_InternalParameters3D_class(){
                 "getChangedGroups"
                 , getChangedGroups_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return the indicies of the CutGroups that have changed in other compared\nto this set of parameters" );
         
         }
@@ -113,6 +119,7 @@ void register_InternalParameters3D_class(){
             InternalParameters3D_exposer.def( 
                 "nCutGroups"
                 , nCutGroups_function_value
+                , bp::release_gil_policy()
                 , "Return the number of CutGroups in the molecule whose parameters are\ncontained in this object" );
         
         }
@@ -140,6 +147,7 @@ void register_InternalParameters3D_class(){
                 "setAtomicCoordinates"
                 , setAtomicCoordinates_function_value
                 , ( bp::arg("coords") )
+                , bp::release_gil_policy()
                 , "Set the coordinates used by these parameters" );
         
         }
@@ -151,6 +159,7 @@ void register_InternalParameters3D_class(){
             InternalParameters3D_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -162,6 +171,7 @@ void register_InternalParameters3D_class(){
             InternalParameters3D_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -49,6 +49,8 @@ SireMol::NullBondHunter __copy__(const SireMol::NullBondHunter &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullBondHunter_class(){
 
     { //::SireMol::NullBondHunter
@@ -76,6 +78,7 @@ void register_NullBondHunter_class(){
             NullBondHunter_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -87,6 +90,7 @@ void register_NullBondHunter_class(){
             NullBondHunter_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

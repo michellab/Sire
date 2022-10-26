@@ -20,6 +20,8 @@ namespace bp = boost::python;
 
 const char* pvt_get_name(const SireMM::CLJPotentialInterface<SireMM::IntraSoftCLJPotential>&){ return "SireMM::CLJPotentialInterface<SireMM::IntraSoftCLJPotential>";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
 
     { //::SireMM::CLJPotentialInterface< SireMM::IntraSoftCLJPotential >
@@ -49,6 +51,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
                 "containsProperty"
                 , containsProperty_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -61,6 +64,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
             CLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
                 "parameters"
                 , parameters_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -87,7 +91,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -100,6 +104,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
             CLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
                 "reactionFieldDielectric"
                 , reactionFieldDielectric_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -113,6 +118,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
                 "setCombiningRules"
                 , setCombiningRules_function_value
                 , ( bp::arg("combiningrules") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -126,6 +132,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -139,6 +146,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
                 "setReactionFieldDielectric"
                 , setReactionFieldDielectric_function_value
                 , ( bp::arg("dielectric") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -152,6 +160,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
                 "setShiftElectrostatics"
                 , setShiftElectrostatics_function_value
                 , ( bp::arg("switchelectro") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -165,6 +174,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
                 "setSpace"
                 , setSpace_function_value
                 , ( bp::arg("new_space") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -178,6 +188,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
                 "setSwitchingFunction"
                 , setSwitchingFunction_function_value
                 , ( bp::arg("new_switchfunc") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -191,6 +202,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
                 "setUseAtomisticCutoff"
                 , setUseAtomisticCutoff_function_value
                 , ( bp::arg("switchatomistic") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -204,6 +216,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
                 "setUseGroupCutoff"
                 , setUseGroupCutoff_function_value
                 , ( bp::arg("switchgroup") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -217,6 +230,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
                 "setUseReactionField"
                 , setUseReactionField_function_value
                 , ( bp::arg("switchrf") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -229,6 +243,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
             CLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
                 "shiftElectrostatics"
                 , shiftElectrostatics_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -241,7 +256,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
             CLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -254,7 +269,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
             CLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
                 "switchingFunction"
                 , switchingFunction_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -267,6 +282,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
             CLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
                 "useAtomisticCutoff"
                 , useAtomisticCutoff_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -279,6 +295,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
             CLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
                 "useGroupCutoff"
                 , useGroupCutoff_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -291,6 +308,7 @@ void register_CLJPotentialInterface_IntraSoftCLJPotential__class(){
             CLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
                 "useReactionField"
                 , useReactionField_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

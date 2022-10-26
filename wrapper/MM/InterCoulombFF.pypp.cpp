@@ -19,6 +19,8 @@ SireFF::Inter2B3DFF<SireMM::CoulombPotentialInterface<SireMM::InterCoulombPotent
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_InterCoulombFF_class(){
@@ -38,6 +40,7 @@ void register_InterCoulombFF_class(){
             InterCoulombFF_exposer.def( 
                 "energy"
                 , energy_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -51,6 +54,7 @@ void register_InterCoulombFF_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -183,6 +187,7 @@ void register_InterCoulombFF_class(){
             InterCoulombFF_exposer.def( 
                 "packCoordinates"
                 , packCoordinates_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -247,6 +252,7 @@ void register_InterCoulombFF_class(){
             InterCoulombFF_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -259,6 +265,7 @@ void register_InterCoulombFF_class(){
             InterCoulombFF_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

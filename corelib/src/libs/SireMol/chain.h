@@ -77,9 +77,10 @@ public:
     typedef ChainID ID;
     typedef ChainIdx Index;
     typedef ChainName Name;
+    typedef ChainIdx Number;
 
     Chain();
-    
+
     Chain(const MoleculeData &moldata, const ChainID &chainid);
 
     Chain(const Chain &other);
@@ -87,68 +88,79 @@ public:
     ~Chain();
 
     Chain& operator=(const Chain &other);
-    
+
     static const char* typeName();
-    
+
     Chain* clone() const;
-    
+
     bool operator==(const Chain &other) const;
     bool operator!=(const Chain &other) const;
 
+    MolViewPtr operator[](int i) const;
+    MolViewPtr operator[](const QString &name) const;
+    MolViewPtr operator[](const SireID::Index &idx) const;
+    MolViewPtr operator[](const SireBase::Slice &slice) const;
+
     QString toString() const;
-    
+
     bool isEmpty() const;
     bool selectedAll() const;
-    
+
     AtomSelection selection() const;
-    
+
+    MolViewPtr toSelector() const;
+
     void update(const MoleculeData &moldata);
-    
+
     ChainName name() const;
     ChainIdx index() const;
-    
+    ChainIdx number() const;
+
     bool hasProperty(const PropertyName &key) const;
     bool hasMetadata(const PropertyName &metakey) const;
     bool hasMetadata(const PropertyName &key,
                      const PropertyName &metakey) const;
-                     
+
     QStringList propertyKeys() const;
     QStringList metadataKeys() const;
     QStringList metadataKeys(const PropertyName &key) const;
-    
+
+    QVariant propertyAsVariant(const PropertyName &key) const;
+    SireBase::PropertyPtr propertyAsProperty(const PropertyName &key) const;
+
     template<class T>
     const T& property(const PropertyName &key) const;
-    
+
     template<class T>
     const T& metadata(const PropertyName &metakey) const;
-    
+
     template<class T>
     const T& metadata(const PropertyName &key,
                       const PropertyName &metakey) const;
-    
+
     Mover<Chain> move() const;
     Evaluator evaluate() const;
     ChainEditor edit() const;
     Selector<Chain> selector() const;
-    
+
     int nAtoms() const;
-    
+
     QList<AtomIdx> atomIdxs() const;
-    
+
     bool contains(AtomIdx atomidx) const;
     bool contains(const AtomID &atomid) const;
     bool intersects(const AtomID &atomid) const;
-    
+
     int nResidues() const;
-    
+
     const QList<ResIdx>& resIdxs() const;
-    
+
     bool contains(ResIdx residx) const;
     bool contains(const ResID &resid) const;
     bool intersects(const ResID &resid) const;
 
     void assertContainsProperty(const PropertyName &key) const;
-    
+
     void assertContainsMetadata(const PropertyName &metakey) const;
     void assertContainsMetadata(const PropertyName &key,
                                 const PropertyName &metakey) const;
@@ -159,7 +171,7 @@ protected:
 
     template<class T>
     void setMetadata(const QString &metakey, const T &value);
-    
+
     template<class T>
     void setMetadata(const QString &key, const QString &metakey,
                      const T &value);
@@ -167,19 +179,19 @@ protected:
 private:
     /** The index of the Chain in the molecule */
     ChainIdx chainidx;
-    
+
     /** The atoms that are selected as part of this Chain */
     AtomSelection selected_atoms;
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
-/** Return the property (of type T) at key 'key' that is 
+/** Return the property (of type T) at key 'key' that is
     specifically assigned to this chain. This will only work
     if the property at this key is a chain property (i.e.
     has one value for every chain) and that it can be
     cast to type T
-    
+
     \throw SireMol::missing_property
     \throw SireError::invalid_cast
 */
@@ -208,7 +220,7 @@ const T& Chain::metadata(const PropertyName &key) const
 
 /** Return the metadata at metakey 'metakey' for the property
     at key 'key'
-    
+
     \throw SireMol::missing_property
     \throw SireError::invalid_cast
 */
@@ -218,7 +230,7 @@ const T& Chain::metadata(const PropertyName &key, const PropertyName &metakey) c
 {
     const Property &property = d->metadata(key, metakey);
     const ChainProperty<T> &chain_props = property.asA< ChainProperty<T> >();
-                                                
+
     return chain_props.at(this->index());
 }
 
@@ -226,9 +238,9 @@ const T& Chain::metadata(const PropertyName &key, const PropertyName &metakey) c
     chain to be equal to 'value'. This works by creating
     a ChainProperty<T> for this molecule, and assigning
     the value for this chain to 'value'. If there is already
-    a property at key 'key', then it must be of type 
+    a property at key 'key', then it must be of type
     ChainProperty<T> for this to work
-    
+
     \throw SireMol::invalid_cast
 */
 template<class T>
@@ -239,9 +251,9 @@ void Chain::setProperty(const QString &key, const T &value)
                                                            value);
 }
 
-/** Set the metadata at metakey 'metakey' to the value 'value' 
+/** Set the metadata at metakey 'metakey' to the value 'value'
     for this residue
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -254,7 +266,7 @@ void Chain::setMetadata(const QString &metakey, const T &value)
 
 /** Set the metadata at metakey 'metakey' for the property at key
     'key' to the value 'value'
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -262,7 +274,7 @@ SIRE_OUTOFLINE_TEMPLATE
 void Chain::setMetadata(const QString &key, const QString &metakey,
                         const T &value)
 {
-    MoleculeView::setMetadata<ChainIdx,ChainProperty<T>,T>(*d, key, metakey, 
+    MoleculeView::setMetadata<ChainIdx,ChainProperty<T>,T>(*d, key, metakey,
                                                            this->index(), value);
 }
 
@@ -270,7 +282,13 @@ namespace detail
 {
 
 void assertSameSize(Chain*, int nres, int nprops);
-    
+
+template<>
+SIRE_ALWAYS_INLINE int getCount<Chain>(const MolInfo &molinfo)
+{
+    return molinfo.nChains();
+}
+
 template<>
 SIRE_ALWAYS_INLINE QList<ChainIdx> getAll<Chain>(const MolInfo &molinfo)
 {
@@ -343,7 +361,7 @@ void set_metadata(Chain *ptr, MoleculeData &moldata,
                   const QList<V> &values)
 {
     assertSameSize(ptr, idxs.count(), values.count());
-    
+
     set_metadata<ChainProperty<V>,Chain::Index,V>(moldata,idxs,key,metakey,values);
 }
 
@@ -379,12 +397,12 @@ void set_metadata(Chain*, MoleculeData &moldata,
 
 SIREMOL_EXPORT bool has_property(const Chain*, const MoleculeData &moldata,
                   const PropertyName &key);
-                  
+
 SIREMOL_EXPORT bool has_metadata(const Chain*, const MoleculeData &moldata,
                   const PropertyName &metakey);
-                  
+
 SIREMOL_EXPORT bool has_metadata(const Chain*, const MoleculeData &moldata,
-                  const PropertyName &key, const PropertyName &metakey);                 
+                  const PropertyName &key, const PropertyName &metakey);
 
 } //end of namespace detail
 

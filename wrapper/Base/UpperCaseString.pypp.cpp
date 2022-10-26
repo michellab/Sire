@@ -23,6 +23,8 @@ SireBase::UpperCaseString __copy__(const SireBase::UpperCaseString &other){ retu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_UpperCaseString_class(){
 
     { //::SireBase::UpperCaseString
@@ -39,6 +41,7 @@ void register_UpperCaseString_class(){
                 "mangle"
                 , mangle_function_value
                 , ( bp::arg("input") )
+                , bp::release_gil_policy()
                 , "Mangle the string - remove all initial and trailing spaces" );
         
         }
@@ -65,6 +68,7 @@ void register_UpperCaseString_class(){
             UpperCaseString_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

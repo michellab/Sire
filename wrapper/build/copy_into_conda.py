@@ -61,6 +61,8 @@ for file in os.listdir(fromdir):
         else:
             continue
 
+    print(f"copy_into_conda {fromfile} => {tofile}")
+
     # now copy symbolic links directly
     if os.path.islink(fromfile):
         shutil.copy(fromfile, tofile, follow_symlinks=False)

@@ -56,7 +56,7 @@ class Molecules;
 class MoleculeGroup;
 class MolGroupsBase;
 
-/** This is the base class of all identifiers that are used 
+/** This is the base class of all identifiers that are used
     to identify a Molecule
 
     @author Christopher Woods
@@ -69,9 +69,9 @@ public:
     typedef Molecules SearchObject;
 
     MolID();
-    
+
     MolID(const MolID &other);
-    
+
     virtual ~MolID();
 
     static const char* typeName()
@@ -80,11 +80,11 @@ public:
     }
 
     virtual MolID* clone() const=0;
-    
+
     SpecifyMol operator[](int i) const;
     SpecifyMol operator()(int i) const;
     SpecifyMol operator()(int i, int j) const;
-    
+
     IDAndSet<MolID> operator+(const MolID &other) const;
     MolAtomID operator+(const AtomID &other) const;
 
@@ -95,21 +95,21 @@ public:
 
     IDAndSet<MolID> operator&(const MolID &other) const;
     MolAtomID operator&(const AtomID &other) const;
-    
+
     IDOrSet<MolID> operator||(const MolID &other) const;
     IDOrSet<MolID> operator|(const MolID &other) const;
-    
+
     IDOrSet<AtomID> operator*(const AtomID &other) const;
     IDOrSet<AtomID> operator|(const AtomID &other) const;
     IDOrSet<AtomID> operator||(const AtomID &other) const;
-    
+
     /* TODO!!!
     SireID::InvertMatch<MolID> operator!() const;
     SireID::InvertMatch<MolID> invert() const;
     SireID::InvertMatch<MolID> inverse() const;
-    
+
     static SireID::MatchAll<MolID> any();*/
-    
+
     virtual QList<MolNum> map(const Molecules &molecules) const=0;
     virtual QList<MolNum> map(const MoleculeGroup &molgroup) const=0;
     virtual QList<MolNum> map(const MolGroupsBase &molgroupsbase) const=0;
@@ -144,42 +144,42 @@ public:
     IDAndSet();
     IDAndSet(const MolID &id);
     IDAndSet(const MolID &id0, const MolID &id1);
-    
+
     IDAndSet(const QList<MolIdentifier> &ids);
-    
+
     IDAndSet(const IDAndSet<MolID> &other);
-    
+
     ~IDAndSet();
-    
+
     static const char* typeName();
-    
+
     const char* what() const
     {
         return IDAndSet<MolID>::typeName();
     }
-    
+
     IDAndSet<MolID>* clone() const;
-    
+
     bool isNull() const;
-    
+
     uint hash() const;
-                
+
     QString toString() const;
 
     const QSet<MolIdentifier>& IDs() const;
-    
+
     IDAndSet<MolID>& operator=(const IDAndSet<MolID> &other);
     IDAndSet<MolID>& operator=(const MolID &other);
-    
+
     bool operator==(const SireID::ID &other) const;
     bool operator!=(const SireID::ID &other) const;
-   
+
     bool operator==(const IDAndSet<MolID> &other) const;
     bool operator!=(const IDAndSet<MolID> &other) const;
-    
+
     bool operator==(const MolID &other) const;
     bool operator!=(const MolID &other) const;
-    
+
     QList<MolNum> map(const Molecules &mols) const;
     QList<MolNum> map(const MoleculeGroup &molgroup) const;
     QList<MolNum> map(const MolGroupsBase &molgroups) const;
@@ -189,7 +189,7 @@ private:
 
     template<class T>
     QList<MolNum> _pvt_map(const T &group) const;
-    
+
     QSet<MolIdentifier> ids;
 };
 
@@ -204,42 +204,42 @@ public:
     IDOrSet();
     IDOrSet(const MolID &id);
     IDOrSet(const MolID &id0, const MolID &id1);
-    
+
     IDOrSet(const QList<MolIdentifier> &ids);
-    
+
     IDOrSet(const IDOrSet<MolID> &other);
-    
+
     ~IDOrSet();
-    
+
     static const char* typeName();
-    
+
     const char* what() const
     {
         return IDOrSet<MolID>::typeName();
     }
-    
+
     IDOrSet<MolID>* clone() const;
-    
+
     bool isNull() const;
-    
+
     uint hash() const;
-                
+
     QString toString() const;
 
     const QSet<MolIdentifier>& IDs() const;
-    
+
     IDOrSet<MolID>& operator=(const IDOrSet<MolID> &other);
     IDOrSet<MolID>& operator=(const MolID &other);
-    
+
     bool operator==(const SireID::ID &other) const;
     bool operator!=(const SireID::ID &other) const;
-   
+
     bool operator==(const IDOrSet<MolID> &other) const;
     bool operator!=(const IDOrSet<MolID> &other) const;
-    
+
     bool operator==(const MolID &other) const;
     bool operator!=(const MolID &other) const;
-    
+
     QList<MolNum> map(const Molecules &mols) const;
     QList<MolNum> map(const MoleculeGroup &molgroup) const;
     QList<MolNum> map(const MolGroupsBase &molgroups) const;

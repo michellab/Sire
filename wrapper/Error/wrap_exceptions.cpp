@@ -32,28 +32,173 @@
 
 #include "SireError/exception.h"
 #include "SireError/errors.h"
+#include "SireMol/errors.h"
+#include "SireMol/parser.h"
+#include "SireMol/core.h"
+#include "SireBase/errors.h"
+
+#include "Helpers/release_gil_policy.hpp"
 
 using namespace boost::python;
 
 #include <QDebug>
+#include <QMutex>
+#include <QHash>
 
 namespace SireError
 {
 
-void out_of_range( const SireError::invalid_index &ex )
+typedef QHash<QString, QString> LastErrorType;
+
+Q_GLOBAL_STATIC( LastErrorType, lastError );
+
+Q_GLOBAL_STATIC( QMutex, lastErrorMutex );
+
+void set_last_error(const SireError::exception &e)
 {
-    PyErr_SetString(PyExc_StopIteration,ex.toString().toUtf8());
+    LastErrorType d;
+
+    QString bt;
+
+    if (e.trace().isEmpty())
+        bt = QObject::tr("Backtrace disabled. Call sire.error.enable_backtrace_exceptions() to re-enable.");
+    else
+        bt = e.trace().join("\n");
+
+    d["type"] = e.what();
+    d["from"] = e.from();
+    d["backtrace"] = bt;
+    d["where"] = e.where();
+    d["why"] = e.why();
+    d["pid"] = e.pid();
+
+    QMutexLocker lkr( lastErrorMutex() );
+
+    lastError()->operator=(d);
+}
+
+LastErrorType get_last_error_details()
+{
+    QMutexLocker lkr( lastErrorMutex() );
+
+    LastErrorType d = *(lastError());
+
+    lkr.unlock();
+
+    return d;
+}
+
+QString get_exception_string(const SireError::exception &e)
+{
+    set_last_error(e);
+    return QString("%1: %2 (call sire.error.get_last_error_details() for more info)").arg(e.what()).arg(e.why());
+}
+
+void index_error( const SireError::exception &ex )
+{
+    boost::python::release_gil_policy::acquire_gil_no_raii();
+    PyErr_SetString(PyExc_IndexError,
+                    get_exception_string(ex).toUtf8());
+}
+
+void key_error( const SireError::exception &ex )
+{
+    boost::python::release_gil_policy::acquire_gil_no_raii();
+    PyErr_SetString(PyExc_KeyError,
+                    get_exception_string(ex).toUtf8());
+}
+
+void assertion_error( const SireError::exception &ex )
+{
+    boost::python::release_gil_policy::acquire_gil_no_raii();
+    PyErr_SetString(PyExc_AssertionError,
+                    get_exception_string(ex).toUtf8());
+}
+
+void type_error( const SireError::exception &ex )
+{
+    boost::python::release_gil_policy::acquire_gil_no_raii();
+    PyErr_SetString(PyExc_TypeError,
+                    get_exception_string(ex).toUtf8());
+}
+
+void input_output_error( const SireError::exception &ex )
+{
+    boost::python::release_gil_policy::acquire_gil_no_raii();
+    PyErr_SetString(PyExc_IOError,
+                    get_exception_string(ex).toUtf8());
+}
+
+void syntax_error( const SireError::exception &ex )
+{
+    boost::python::release_gil_policy::acquire_gil_no_raii();
+    PyErr_SetString(PyExc_SyntaxError,
+                    get_exception_string(ex).toUtf8());
 }
 
 void exception_translator( const SireError::exception &ex )
 {
-    PyErr_SetString(PyExc_UserWarning,ex.toString().toUtf8());
+    boost::python::release_gil_policy::acquire_gil_no_raii();
+    PyErr_SetString(PyExc_UserWarning,
+                    get_exception_string(ex).toUtf8());
+}
+
+void std_exception_translator( const std::exception &ex )
+{
+    boost::python::release_gil_policy::acquire_gil_no_raii();
+    PyErr_SetString(PyExc_UserWarning,
+                    QString("%1").arg(ex.what()).toUtf8());
+}
+
+SireError::FastExceptionFlag *fast_exception_flag(0);
+
+void enable_backtrace_exceptions()
+{
+    // python will hold the GIL when calling this function
+    // so it should be safe
+    if (fast_exception_flag)
+    {
+        delete fast_exception_flag;
+        fast_exception_flag = 0;
+    }
+}
+
+void disable_backtrace_exceptions()
+{
+    if (fast_exception_flag)
+        return;
+
+    fast_exception_flag = new SireError::FastExceptionFlag(
+                                SireError::exception::enableFastExceptions());
 }
 
 void export_exceptions()
 {
+    def("enable_backtrace_exceptions", &enable_backtrace_exceptions);
+    def("disable_backtrace_exceptions", &disable_backtrace_exceptions);
+
+    register_exception_translator<std::exception>(&std_exception_translator);
     register_exception_translator<SireError::exception>(&exception_translator);
-    register_exception_translator<SireError::invalid_index>(&out_of_range);
+    register_exception_translator<SireError::invalid_index>(&index_error);
+    register_exception_translator<SireError::invalid_key>(&key_error);
+    register_exception_translator<SireMol::missing_atom>(&key_error);
+    register_exception_translator<SireMol::missing_cutgroup>(&key_error);
+    register_exception_translator<SireMol::missing_residue>(&key_error);
+    register_exception_translator<SireMol::missing_chain>(&key_error);
+    register_exception_translator<SireMol::missing_segment>(&key_error);
+    register_exception_translator<SireMol::missing_molecule>(&key_error);
+    register_exception_translator<SireBase::missing_property>(&key_error);
+    register_exception_translator<SireMol::duplicate_atom>(&key_error);
+    register_exception_translator<SireMol::duplicate_cutgroup>(&key_error);
+    register_exception_translator<SireMol::duplicate_residue>(&key_error);
+    register_exception_translator<SireMol::duplicate_chain>(&key_error);
+    register_exception_translator<SireMol::duplicate_segment>(&key_error);
+    register_exception_translator<SireError::assertation_failed>(&assertion_error);
+    register_exception_translator<SireError::invalid_cast>(&type_error);
+    register_exception_translator<SireError::unknown_type>(&type_error);
+    register_exception_translator<SireError::io_error>(&input_output_error);
+    register_exception_translator<SireError::file_error>(&input_output_error);
+    register_exception_translator<SireMol::parse_error>(&syntax_error);
 }
 
 }

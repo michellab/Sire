@@ -12,6 +12,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/rangenerator.h"
 
+#include "SireMol/core.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -34,6 +36,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_Move_class(){
 
     { //::SireMove::Move
@@ -48,6 +52,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "chemicalPotential"
                 , chemicalPotential_function_value
+                , bp::release_gil_policy()
                 , "Return the constant chemical potential that this move samples\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -59,6 +64,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -83,6 +89,7 @@ void register_Move_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Return the energy of the system system - this is the energy\nof this configuration that will be seen by this move" );
         
         }
@@ -94,7 +101,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "energyComponent"
                 , energyComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol that describes the Hamiltonian that this move\nwill sample" );
         
         }
@@ -106,6 +113,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "ensemble"
                 , ensemble_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -117,6 +125,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "fugacity"
                 , fugacity_function_value
+                , bp::release_gil_policy()
                 , "Return the constant fugacity that this move samples\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -128,6 +137,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "isConstantChemicalPotential"
                 , isConstantChemicalPotential_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this move keeps the chemical potential constant" );
         
         }
@@ -139,6 +149,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "isConstantEnergy"
                 , isConstantEnergy_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this move keeps the total energy constant" );
         
         }
@@ -150,6 +161,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "isConstantFugacity"
                 , isConstantFugacity_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this move keeps the fugacity (related to the chemical\npotential) constant" );
         
         }
@@ -162,6 +174,7 @@ void register_Move_class(){
                 "isConstantLambda"
                 , isConstantLambda_function_value
                 , ( bp::arg("lam") )
+                , bp::release_gil_policy()
                 , "Return whether or not this move keeps the symbol lam constant" );
         
         }
@@ -173,6 +186,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "isConstantPressure"
                 , isConstantPressure_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this move keeps the pressure constant" );
         
         }
@@ -184,6 +198,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "isConstantTemperature"
                 , isConstantTemperature_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this move keeps the temperature constant" );
         
         }
@@ -195,6 +210,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "isConstantVolume"
                 , isConstantVolume_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this move keeps the volume constant" );
         
         }
@@ -207,6 +223,7 @@ void register_Move_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -219,6 +236,7 @@ void register_Move_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Perform a single move on the system system without\nrecording any statistics" );
         
         }
@@ -231,6 +249,7 @@ void register_Move_class(){
                 "move"
                 , move_function_value
                 , ( bp::arg("system"), bp::arg("nmoves") )
+                , bp::release_gil_policy()
                 , "Perform n moves on the system without recording any\nstatistics" );
         
         }
@@ -242,6 +261,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "nMoves"
                 , nMoves_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -253,7 +273,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "" );
         
         }
@@ -265,6 +285,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "pressure"
                 , pressure_function_value
+                , bp::release_gil_policy()
                 , "Return the constant pressure that this move samples\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -289,6 +310,7 @@ void register_Move_class(){
                 "setChemicalPotential"
                 , setChemicalPotential_function_value
                 , ( bp::arg("chemical_potential") )
+                , bp::release_gil_policy()
                 , "Set the chemical potential that this constant chemical potential move samples\nto chemical_potential\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -301,6 +323,7 @@ void register_Move_class(){
                 "setCoordinatesProperty"
                 , setCoordinatesProperty_function_value
                 , ( bp::arg("coords_property") )
+                , bp::release_gil_policy()
                 , "Set the property used to locate the molecule coordinates to be moved" );
         
         }
@@ -313,6 +336,7 @@ void register_Move_class(){
                 "setEnergyComponent"
                 , setEnergyComponent_function_value
                 , ( bp::arg("component") )
+                , bp::release_gil_policy()
                 , "Set the energy component that describes the Hamiltonian that this move\nwill sample" );
         
         }
@@ -325,6 +349,7 @@ void register_Move_class(){
                 "setFugacity"
                 , setFugacity_function_value
                 , ( bp::arg("fugacity") )
+                , bp::release_gil_policy()
                 , "Set the fugacity that this constant fugacity move samples\nto fugacity\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -337,6 +362,7 @@ void register_Move_class(){
                 "setGenerator"
                 , setGenerator_function_value
                 , ( bp::arg("rangenerator") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -349,6 +375,7 @@ void register_Move_class(){
                 "setPressure"
                 , setPressure_function_value
                 , ( bp::arg("pressure") )
+                , bp::release_gil_policy()
                 , "Set the pressure that this constant pressure move samples\nto pressure\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -361,6 +388,7 @@ void register_Move_class(){
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
                 , ( bp::arg("space_property") )
+                , bp::release_gil_policy()
                 , "Set the property used to find the simulation box for this move. This\nproperty is only used when the move involves changing the\nsimulation box, or when trying to find the volume using\nthe volume function" );
         
         }
@@ -373,6 +401,7 @@ void register_Move_class(){
                 "setTemperature"
                 , setTemperature_function_value
                 , ( bp::arg("temperature") )
+                , bp::release_gil_policy()
                 , "Set the temperature that this constant temperature move samples\nto temperature\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -396,6 +425,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "temperature"
                 , temperature_function_value
+                , bp::release_gil_policy()
                 , "Return the constant temperature that this move samples\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -407,6 +437,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -418,6 +449,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -430,6 +462,7 @@ void register_Move_class(){
                 "volume"
                 , volume_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Return the volume of the system system - this is the volume\nof this configuration that will be seen by this move" );
         
         }

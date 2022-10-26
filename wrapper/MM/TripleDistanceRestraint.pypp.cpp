@@ -36,6 +36,8 @@ SireMM::TripleDistanceRestraint __copy__(const SireMM::TripleDistanceRestraint &
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_TripleDistanceRestraint_class(){
 
     { //::SireMM::TripleDistanceRestraint
@@ -53,6 +55,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "builtinSymbols"
                 , builtinSymbols_function_value
+                , bp::release_gil_policy()
                 , "Return the built-in symbols of this restraint" );
         
         }
@@ -64,6 +67,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "builtinValues"
                 , builtinValues_function_value
+                , bp::release_gil_policy()
                 , "Return the values of the built-in symbols of this restraint" );
         
         }
@@ -76,6 +80,7 @@ void register_TripleDistanceRestraint_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molnum") )
+                , bp::release_gil_policy()
                 , "Return whether or not this restraint affects the molecule\nwith number molnum" );
         
         }
@@ -88,6 +93,7 @@ void register_TripleDistanceRestraint_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molid") )
+                , bp::release_gil_policy()
                 , "Return whether or not this restraint affects the molecule\nwith ID molid" );
         
         }
@@ -136,6 +142,7 @@ void register_TripleDistanceRestraint_class(){
                 "differentiate"
                 , differentiate_function_value
                 , ( bp::arg("symbol") )
+                , bp::release_gil_policy()
                 , "Return the differential of this restraint with respect to\nthe symbol symbol" );
         
         }
@@ -171,6 +178,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "molecules"
                 , molecules_function_value
+                , bp::release_gil_policy()
                 , "Return the molecules used in this restraint" );
         
         }
@@ -182,6 +190,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "nPoints"
                 , nPoints_function_value
+                , bp::release_gil_policy()
                 , "This restraint involves six points" );
         
         }
@@ -209,7 +218,7 @@ void register_TripleDistanceRestraint_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the ith point" );
         
         }
@@ -221,7 +230,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the first point" );
         
         }
@@ -233,7 +242,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the second point" );
         
         }
@@ -245,7 +254,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the third point" );
         
         }
@@ -257,7 +266,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "point3"
                 , point3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the fourth point" );
         
         }
@@ -269,7 +278,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "point4"
                 , point4_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the fifth point" );
         
         }
@@ -281,7 +290,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "point5"
                 , point5_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the sixth point" );
         
         }
@@ -293,7 +302,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol that represents the distance between the\npoints 0 and 1 (r01)" );
         
         }
@@ -305,7 +314,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "r23"
                 , r23_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol that represents the distance between the\npoints 2 and 3 (r23)" );
         
         }
@@ -317,7 +326,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "r45"
                 , r45_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol that represents the distance between the\npoints 4 and 5 (r45)" );
         
         }
@@ -330,6 +339,7 @@ void register_TripleDistanceRestraint_class(){
                 "setSpace"
                 , setSpace_function_value
                 , ( bp::arg("space") )
+                , bp::release_gil_policy()
                 , "Set the space used to evaluate the energy of this restraint\nThrow: SireVol::incompatible_space\n" );
         
         }
@@ -341,6 +351,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -353,6 +364,7 @@ void register_TripleDistanceRestraint_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
                 , "Update the points of this restraint using new molecule data from moldata\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -365,6 +377,7 @@ void register_TripleDistanceRestraint_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Update the points of this restraint using new molecule data from molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -377,6 +390,7 @@ void register_TripleDistanceRestraint_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("forcetable") )
+                , bp::release_gil_policy()
                 , "Return whether or not this restraint involves any of the molecules\nthat are in the forcetable forcetable" );
         
         }
@@ -389,6 +403,7 @@ void register_TripleDistanceRestraint_class(){
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
                 , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
                 , "Return whether or not this restraint involves any of the molecules\nin molecules" );
         
         }

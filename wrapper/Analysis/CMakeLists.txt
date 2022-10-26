@@ -23,7 +23,7 @@ include(CMakeAutogenFile.txt)
 set ( WRAPANALYSIS_SOURCES
 
       _Analysis.main.cpp
-     
+
       ${PYPP_SOURCES}
 
     )
@@ -39,18 +39,18 @@ set_target_properties (Analysis
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
+
 target_link_libraries (Analysis
                        SirePython
                        SIRE_SireAnalysis
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_Analysis" "_init_Analysis" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/Analysis )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/Analysis )
 
 install( TARGETS Analysis
          LIBRARY DESTINATION ${INSTALLDIR}
@@ -59,6 +59,6 @@ install( TARGETS Analysis
         )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )
 

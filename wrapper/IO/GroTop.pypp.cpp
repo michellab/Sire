@@ -39,6 +39,8 @@ namespace bp = boost::python;
 
 #include "SireMol/connectivity.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/errors.h"
 
 #include "SireMol/molecule.h"
@@ -77,6 +79,8 @@ SireIO::GroTop __copy__(const SireIO::GroTop &other){ return SireIO::GroTop(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_GroTop_class(){
 
     { //::SireIO::GroTop
@@ -96,6 +100,7 @@ void register_GroTop_class(){
                 "angle"
                 , angle_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("atm2"), bp::arg("func") )
+                , bp::release_gil_policy()
                 , "Return the angle potential data for the passed triple of atoms. This only returns\nthe most recently inserted parameter for these atoms. Use angles if you want\nto allow for multiple return values" );
         
         }
@@ -107,6 +112,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "anglePotentials"
                 , anglePotentials_function_value
+                , bp::release_gil_policy()
                 , "Return the angle potentials loaded from this file" );
         
         }
@@ -119,6 +125,7 @@ void register_GroTop_class(){
                 "angles"
                 , angles_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("atm2"), bp::arg("func") )
+                , bp::release_gil_policy()
                 , "Return the angle potential data for the passed triple of atoms. This returns\na list of all associated parameters" );
         
         }
@@ -131,6 +138,7 @@ void register_GroTop_class(){
                 "atomType"
                 , atomType_function_value
                 , ( bp::arg("atm") )
+                , bp::release_gil_policy()
                 , "Return the atom type data for the passed atom type. This returns\nnull data if it is not present" );
         
         }
@@ -142,6 +150,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "atomTypes"
                 , atomTypes_function_value
+                , bp::release_gil_policy()
                 , "Return the atom types loaded from this file" );
         
         }
@@ -154,6 +163,7 @@ void register_GroTop_class(){
                 "bond"
                 , bond_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("func") )
+                , bp::release_gil_policy()
                 , "Return the bond potential data for the passed pair of atoms. This only returns\nthe most recently inserted parameter for this pair. Use bonds if you want\nto allow for multiple return values" );
         
         }
@@ -165,6 +175,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "bondPotentials"
                 , bondPotentials_function_value
+                , bp::release_gil_policy()
                 , "Return the bond potentials loaded from this file" );
         
         }
@@ -177,6 +188,7 @@ void register_GroTop_class(){
                 "bonds"
                 , bonds_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("func") )
+                , bp::release_gil_policy()
                 , "Return the bond potential data for the passed pair of atoms. This returns\na list of all associated parameters" );
         
         }
@@ -188,6 +200,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "canFollow"
                 , canFollow_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this parser can follow another lead parser, and add\ndata to an existing molecular system. The GroTop parser cannot follow." );
         
         }
@@ -199,6 +212,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "combiningRules"
                 , combiningRules_function_value
+                , bp::release_gil_policy()
                 , "Return the combining rules to use for the molecules in this file" );
         
         }
@@ -211,6 +225,7 @@ void register_GroTop_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("filename"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by reading in the passed\nfile using the passed properties" );
         
         }
@@ -223,6 +238,7 @@ void register_GroTop_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("lines"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by reading in the passed\ntext lines using the passed properties" );
         
         }
@@ -235,6 +251,7 @@ void register_GroTop_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return the parser that has been constructed by extract all necessary\ndata from the passed SireSystem::System using the specified properties" );
         
         }
@@ -247,6 +264,7 @@ void register_GroTop_class(){
                 "dihedral"
                 , dihedral_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("atm2"), bp::arg("atm3"), bp::arg("func") )
+                , bp::release_gil_policy()
                 , "Return the dihedral potential data for the passed quad of atoms. This only returns\nthe most recently inserted parameter for these atoms. Use dihedrals if you want\nto allow for multiple return values" );
         
         }
@@ -258,6 +276,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "dihedralPotentials"
                 , dihedralPotentials_function_value
+                , bp::release_gil_policy()
                 , "Return the dihedral potentials loaded from this file" );
         
         }
@@ -270,6 +289,7 @@ void register_GroTop_class(){
                 "dihedrals"
                 , dihedrals_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("atm2"), bp::arg("atm3"), bp::arg("func") )
+                , bp::release_gil_policy()
                 , "Return the dihedral potential data for the passed quad of atoms. This returns\na list of all associated parameters" );
         
         }
@@ -281,6 +301,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "formatDescription"
                 , formatDescription_function_value
+                , bp::release_gil_policy()
                 , "Return a description of the file format" );
         
         }
@@ -292,6 +313,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "formatName"
                 , formatName_function_value
+                , bp::release_gil_policy()
                 , "Return the format name that is used to identify this file format within Sire" );
         
         }
@@ -303,6 +325,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "formatSuffix"
                 , formatSuffix_function_value
+                , bp::release_gil_policy()
                 , "Return the suffixes that these files are normally associated with" );
         
         }
@@ -314,6 +337,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "fudgeLJ"
                 , fudgeLJ_function_value
+                , bp::release_gil_policy()
                 , "Return the Lennard Jones fudge factor for the molecules in this file" );
         
         }
@@ -325,6 +349,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "fudgeQQ"
                 , fudgeQQ_function_value
+                , bp::release_gil_policy()
                 , "Return the electrostatic fudge factor for the molecules in this file" );
         
         }
@@ -336,6 +361,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "generateNonBondedPairs"
                 , generateNonBondedPairs_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not the non-bonded pairs should be automatically generated\nfor the molecules in this file" );
         
         }
@@ -347,6 +373,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "groSystem"
                 , groSystem_function_value
+                , bp::release_gil_policy()
                 , "Return the Gromacs System that describes the list of molecules that should\nbe contained" );
         
         }
@@ -382,6 +409,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "isLead"
                 , isLead_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
         
         }
@@ -394,6 +422,7 @@ void register_GroTop_class(){
                 "moleculeType"
                 , moleculeType_function_value
                 , ( bp::arg("name") )
+                , bp::release_gil_policy()
                 , "Return the moleculetype with name name. This returns an invalid (empty)\nGroMolType if one with this name does not exist" );
         
         }
@@ -405,6 +434,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "moleculeTypes"
                 , moleculeTypes_function_value
+                , bp::release_gil_policy()
                 , "Return all of the moleculetypes that have been loaded from this file" );
         
         }
@@ -416,6 +446,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "nonBondedFunctionType"
                 , nonBondedFunctionType_function_value
+                , bp::release_gil_policy()
                 , "Return the non-bonded function type for the molecules in this file" );
         
         }
@@ -442,6 +473,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "postprocessedLines"
                 , postprocessedLines_function_value
+                , bp::release_gil_policy()
                 , "Public function used to return the list of post-processed lines" );
         
         }
@@ -453,6 +485,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this parser" );
         
         }
@@ -464,6 +497,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "Return the C++ name for this class" );
         
         }
@@ -475,6 +509,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "warnings"
                 , warnings_function_value
+                , bp::release_gil_policy()
                 , "Return all of the warnings that were raised when parsing the file" );
         
         }
@@ -486,6 +521,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "Return the C++ name for this class" );
         
         }

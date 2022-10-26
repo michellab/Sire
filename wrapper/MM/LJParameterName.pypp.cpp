@@ -47,6 +47,8 @@ SireMM::LJParameterName __copy__(const SireMM::LJParameterName &other){ return S
 
 const char* pvt_get_name(const SireMM::LJParameterName&){ return "SireMM::LJParameterName";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_LJParameterName_class(){
 
     { //::SireMM::LJParameterName

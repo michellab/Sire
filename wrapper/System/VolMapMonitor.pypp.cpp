@@ -44,6 +44,8 @@ SireSystem::VolMapMonitor __copy__(const SireSystem::VolMapMonitor &other){ retu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_VolMapMonitor_class(){
 
     { //::SireSystem::VolMapMonitor
@@ -64,6 +66,7 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "averageOccupancy"
                 , averageOccupancy_function_value
+                , bp::release_gil_policy()
                 , "Return the average occupancy. This is a linear array that can be\naccessed using the accompanying GridInfo returned by gridInfo()" );
         
         }
@@ -75,6 +78,7 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
+                , bp::release_gil_policy()
                 , "Clear all statistics" );
         
         }
@@ -86,6 +90,7 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "gridInfo"
                 , gridInfo_function_value
+                , bp::release_gil_policy()
                 , "Return the grid dimensions" );
         
         }
@@ -97,6 +102,7 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "gridSpacing"
                 , gridSpacing_function_value
+                , bp::release_gil_policy()
                 , "Return the spacing of the grid" );
         
         }
@@ -108,7 +114,7 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "group"
                 , group_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group whose atoms are being monitored" );
         
         }
@@ -120,6 +126,7 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "map"
                 , map_function_value
+                , bp::release_gil_policy()
                 , "Return the property map used to find the properties needed by this monitor" );
         
         }
@@ -132,6 +139,7 @@ void register_VolMapMonitor_class(){
                 "monitor"
                 , monitor_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "Monitor the system" );
         
         }
@@ -143,6 +151,7 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "nSamples"
                 , nSamples_function_value
+                , bp::release_gil_policy()
                 , "Return the number of samples recorded so far" );
         
         }
@@ -170,6 +179,7 @@ void register_VolMapMonitor_class(){
                 "setGridSpacing"
                 , setGridSpacing_function_value
                 , ( bp::arg("grid_spacing") )
+                , bp::release_gil_policy()
                 , "Set the grid spacing on which we monitor the space" );
         
         }
@@ -194,6 +204,7 @@ void register_VolMapMonitor_class(){
                 "setPropertyMap"
                 , setPropertyMap_function_value
                 , ( bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Set the property map to be used by this monitor" );
         
         }
@@ -206,6 +217,7 @@ void register_VolMapMonitor_class(){
                 "setSkipLightAtoms"
                 , setSkipLightAtoms_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Turn on skipping light atoms" );
         
         }
@@ -217,6 +229,7 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "skippingLightAtoms"
                 , skippingLightAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not we are skipping light atoms (e.g. hydrogen)" );
         
         }
@@ -228,6 +241,7 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -239,6 +253,7 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -250,6 +265,7 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "volumeMap"
                 , volumeMap_function_value
+                , bp::release_gil_policy()
                 , "Return the actual volume map" );
         
         }
@@ -261,6 +277,7 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

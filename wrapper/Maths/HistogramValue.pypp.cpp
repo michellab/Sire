@@ -27,6 +27,8 @@ SireMaths::HistogramValue __copy__(const SireMaths::HistogramValue &other){ retu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_HistogramValue_class(){
 
     { //::SireMaths::HistogramValue
@@ -58,6 +60,7 @@ void register_HistogramValue_class(){
             HistogramValue_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation" );
         
         }
@@ -69,6 +72,7 @@ void register_HistogramValue_class(){
             HistogramValue_exposer.def( 
                 "value"
                 , value_function_value
+                , bp::release_gil_policy()
                 , "Return the value of the bin" );
         
         }

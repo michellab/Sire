@@ -44,6 +44,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_G2FF_class(){
@@ -60,6 +62,7 @@ void register_G2FF_class(){
             G2FF_exposer.def( 
                 "accept"
                 , accept_function_value
+                , bp::release_gil_policy()
                 , "Tell the forcefield that the last move was accepted. This tells the\nforcefield to make permanent any temporary changes that were used a workspace\nto avoid memory allocation during a move" );
         
         }
@@ -72,6 +75,7 @@ void register_G2FF_class(){
                 "assertContains"
                 , assertContains_function_value
                 , ( bp::arg("mgnum") )
+                , bp::release_gil_policy()
                 , "Assert that this forcefield contains the group with number mgnum\nThrow: SireMol::missing_group\n" );
         
         }
@@ -84,7 +88,7 @@ void register_G2FF_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the molecule group with number mgnum\nThrow: SireMol::missing_group\n" );
         
         }
@@ -96,6 +100,7 @@ void register_G2FF_class(){
             G2FF_exposer.def( 
                 "needsAccepting"
                 , needsAccepting_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this forcefield is using any temporary workspace\nthat needs to be accepted" );
         
         }

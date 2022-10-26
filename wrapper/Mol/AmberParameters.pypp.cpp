@@ -35,6 +35,8 @@ SireMol::AmberParameters __copy__(const SireMol::AmberParameters &other){ return
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AmberParameters_class(){
 
     { //::SireMol::AmberParameters
@@ -52,6 +54,7 @@ void register_AmberParameters_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("bond"), bp::arg("k"), bp::arg("ro") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -64,6 +67,7 @@ void register_AmberParameters_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("angle"), bp::arg("k"), bp::arg("theta0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -76,6 +80,7 @@ void register_AmberParameters_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("dihedral"), bp::arg("v"), bp::arg("periodicity"), bp::arg("phase") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -88,6 +93,7 @@ void register_AmberParameters_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("improper"), bp::arg("v"), bp::arg("periodicity"), bp::arg("phase") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -100,6 +106,7 @@ void register_AmberParameters_class(){
                 "add14Pair"
                 , add14Pair_function_value
                 , ( bp::arg("pair"), bp::arg("cscl"), bp::arg("ljscl") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -112,6 +119,7 @@ void register_AmberParameters_class(){
                 "get14PairParams"
                 , get14PairParams_function_value
                 , ( bp::arg("pair") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -123,6 +131,7 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "getAll14Pairs"
                 , getAll14Pairs_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -134,6 +143,7 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "getAllAngles"
                 , getAllAngles_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -145,6 +155,7 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "getAllBonds"
                 , getAllBonds_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -156,6 +167,7 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "getAllDihedrals"
                 , getAllDihedrals_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -167,6 +179,7 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "getAllImpropers"
                 , getAllImpropers_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -179,6 +192,7 @@ void register_AmberParameters_class(){
                 "getParams"
                 , getParams_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -191,6 +205,7 @@ void register_AmberParameters_class(){
                 "getParams"
                 , getParams_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -203,6 +218,7 @@ void register_AmberParameters_class(){
                 "getParams"
                 , getParams_function_value
                 , ( bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -215,6 +231,7 @@ void register_AmberParameters_class(){
                 "getParams"
                 , getParams_function_value
                 , ( bp::arg("improper") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -239,6 +256,7 @@ void register_AmberParameters_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Return whether or not this flexibility is compatible with the molecule\nwhose info is in molinfo" );
         
         }
@@ -266,6 +284,7 @@ void register_AmberParameters_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("bond") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -278,6 +297,7 @@ void register_AmberParameters_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("angle") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -290,6 +310,7 @@ void register_AmberParameters_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("dihedral") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -302,6 +323,7 @@ void register_AmberParameters_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("improper") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -314,6 +336,7 @@ void register_AmberParameters_class(){
                 "remove14Pair"
                 , remove14Pair_function_value
                 , ( bp::arg("pair") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -325,6 +348,7 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

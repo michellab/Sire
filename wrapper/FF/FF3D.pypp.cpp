@@ -15,6 +15,8 @@ namespace bp = boost::python;
 
 const char* pvt_get_name(const SireFF::FF3D&){ return "SireFF::FF3D";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FF3D_class(){
 
     { //::SireFF::FF3D
@@ -173,6 +175,7 @@ void register_FF3D_class(){
             FF3D_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

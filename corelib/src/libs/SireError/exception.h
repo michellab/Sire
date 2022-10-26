@@ -33,6 +33,7 @@
 
 #include <QString>
 #include <QStringList>
+#include <QAtomicInt>
 
 #include <boost/shared_ptr.hpp>
 
@@ -80,7 +81,7 @@ private:
     boost::shared_ptr<FastExceptionFlagData> d;
 
     /** Whether or not fast exceptions are enabled */
-    static bool enable_fast_exceptions;
+    static QAtomicInt enable_fast_exceptions;
 };
 
 /** This is the base class of all Sire specific exceptions. The python wrapping

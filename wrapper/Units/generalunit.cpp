@@ -400,9 +400,13 @@ PropertyPtr GeneralUnit::toProperty() const
     }
     else
     {
+        qDebug() << QObject::tr(
+                "Tell the programmers that they need to add in automatic "
+                "wrapping of units of type '%1'").arg(this->toString());
+
         throw SireError::incomplete_code( QObject::tr(
                 "Tell the programmers that they need to add in automatic "
-                "wrapping of units of type '%s'").arg(this->toString()),
+                "wrapping of units of type '%1'").arg(this->toString()),
                    CODELOC );
         return PropertyPtr();
     }

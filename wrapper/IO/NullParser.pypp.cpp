@@ -51,6 +51,8 @@ SireIO::NullParser __copy__(const SireIO::NullParser &other){ return SireIO::Nul
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullParser_class(){
 
     { //::SireIO::NullParser
@@ -67,6 +69,7 @@ void register_NullParser_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("filename"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return this parser constructed from the passed filename" );
         
         }
@@ -79,6 +82,7 @@ void register_NullParser_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("lines"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return this parser constructed from the passed set of lines" );
         
         }
@@ -91,6 +95,7 @@ void register_NullParser_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Return this parser constructed from the passed SireSystem::System" );
         
         }
@@ -102,6 +107,7 @@ void register_NullParser_class(){
             NullParser_exposer.def( 
                 "formatDescription"
                 , formatDescription_function_value
+                , bp::release_gil_policy()
                 , "Return a description of the file format" );
         
         }
@@ -113,6 +119,7 @@ void register_NullParser_class(){
             NullParser_exposer.def( 
                 "formatName"
                 , formatName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -175,6 +182,7 @@ void register_NullParser_class(){
             NullParser_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -13,13 +13,27 @@ namespace bp = boost::python;
 
 #include "SireStream/shareddatastream.h"
 
+#include "atom.h"
+
 #include "bead.h"
 
 #include "beadeditor.h"
 
 #include "beads.h"
 
+#include "chain.h"
+
+#include "cutgroup.h"
+
 #include "mover.hpp"
+
+#include "partialmolecule.h"
+
+#include "residue.h"
+
+#include "segment.h"
+
+#include "selector.hpp"
 
 #include "tostring.h"
 
@@ -72,6 +86,8 @@ namespace bp = boost::python;
 SireMol::Mover<SireMol::Bead> __copy__(const SireMol::Mover<SireMol::Bead> &other){ return SireMol::Mover<SireMol::Bead>(other); }
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 #include "Helpers/len.hpp"
 
@@ -289,6 +305,7 @@ void register_Mover_Bead__class(){
             Mover_Bead__exposer.def( 
                 "commit"
                 , commit_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -441,6 +458,7 @@ void register_Mover_Bead__class(){
             Mover_Bead__exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -481,6 +499,7 @@ void register_Mover_Bead__class(){
             Mover_Bead__exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

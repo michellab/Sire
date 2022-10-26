@@ -13,9 +13,12 @@ RUN apt-get update && apt-get -y upgrade \
 
 WORKDIR /root
 
-RUN conda install make clang clangdev llvmdev cmake && \
-    conda clean -a -f -y && \
-    pip install pyplusplus pygccxml fuzzywuzzy python-Levenshtein && \
+RUN conda install make clang clangdev llvmdev cmake
+
+RUN conda install -c conda-forge python-levenshtein && \
+    conda clean -a -f -y
+
+RUN pip install pyplusplus pygccxml fuzzywuzzy && \
     rm -fr ~/.cache/pip /tmp*
 
 RUN git clone https://github.com/CastXML/CastXML && \
@@ -28,8 +31,12 @@ RUN git clone https://github.com/CastXML/CastXML && \
     cd $HOME && \
     rm -rf CastXML
 
+# Need to fix an exception that is raised on Apple M1
+COPY scanner.py /opt/conda/lib/python3.9/site-packages/pygccxml/parser
+
 COPY includes.tar.bz2 /opt/conda
 COPY generate_wrappers /usr/bin
+COPY unpack_headers /usr/bin
 RUN chmod a+x /usr/bin/generate_wrappers
 COPY bashrc /root/.bashrc
 COPY push_wrappers /usr/bin

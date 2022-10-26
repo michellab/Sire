@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_MolViewProperty_class(){
 
     { //::SireMol::MolViewProperty
@@ -38,6 +40,7 @@ void register_MolViewProperty_class(){
                 "assertCompatibleWith"
                 , assertCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Assert that this property is compatible with the MoleculeInfoData info\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -50,6 +53,7 @@ void register_MolViewProperty_class(){
                 "assertCompatibleWith"
                 , assertCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Assert that this property is compatible with the MoleculeInfo info\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -62,6 +66,7 @@ void register_MolViewProperty_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Return whether or not this is compatible with the passed molinfo" );
         
         }
@@ -74,6 +79,7 @@ void register_MolViewProperty_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Return whether or not this is compatible with the passed molinfo" );
         
         }
@@ -86,6 +92,7 @@ void register_MolViewProperty_class(){
                 "makeCompatibleWith"
                 , makeCompatibleWith_function_value
                 , ( bp::arg("molinfo"), bp::arg("atommatcher") )
+                , bp::release_gil_policy()
                 , "Do everything possible to make this property compatible with the\nMoleculeInfoData layout in info - otherwise raise an error\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -98,6 +105,7 @@ void register_MolViewProperty_class(){
                 "makeCompatibleWith"
                 , makeCompatibleWith_function_value
                 , ( bp::arg("molinfo"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Do everything possible to make this property compatible with the\nMoleculeInfoData layout in info - otherwise raise an error\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -110,6 +118,7 @@ void register_MolViewProperty_class(){
                 "makeCompatibleWith"
                 , makeCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Do everything possible to make this property compatible with the molecule\nviewed in mol - otherwise raise an error\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -122,6 +131,7 @@ void register_MolViewProperty_class(){
                 "makeCompatibleWith"
                 , makeCompatibleWith_function_value
                 , ( bp::arg("mol") )
+                , bp::release_gil_policy()
                 , "Do everything possible to make this property compatible with the molecule\nviewed in mol - otherwise raise an error\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -134,6 +144,7 @@ void register_MolViewProperty_class(){
                 "makeCompatibleWith"
                 , makeCompatibleWith_function_value
                 , ( bp::arg("mol"), bp::arg("atommatcher") )
+                , bp::release_gil_policy()
                 , "Do everything possible to make this property compatible with the\nMoleculeInfoData layout in info - otherwise raise an error\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -146,6 +157,7 @@ void register_MolViewProperty_class(){
                 "makeCompatibleWith"
                 , makeCompatibleWith_function_value
                 , ( bp::arg("mol"), bp::arg("map") )
+                , bp::release_gil_policy()
                 , "Do everything possible to make this property compatible with the\nMoleculeInfoData layout in info - otherwise raise an error\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -157,6 +169,7 @@ void register_MolViewProperty_class(){
             MolViewProperty_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

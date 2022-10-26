@@ -51,6 +51,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SegID_class(){
 
     { //::SireMol::SegID
@@ -65,6 +67,7 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "any"
                 , any_function_value
+                , bp::release_gil_policy()
                 , "Return a match for anything" );
         
         }
@@ -77,6 +80,7 @@ void register_SegID_class(){
                 "atom"
                 , atom_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return a specific atom in the matching residues" );
         
         }
@@ -88,6 +92,7 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "atoms"
                 , atoms_function_value
+                , bp::release_gil_policy()
                 , "Return the atoms in the matching residues" );
         
         }
@@ -100,7 +105,21 @@ void register_SegID_class(){
                 "atoms"
                 , atoms_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Return a range of atoms in the matching residues" );
+        
+        }
+        { //::SireMol::SegID::fromString
+        
+            typedef ::SireMol::SegIdentifier ( *fromString_function_type )( ::QString const & );
+            fromString_function_type fromString_function_value( &::SireMol::SegID::fromString );
+            
+            SegID_exposer.def( 
+                "fromString"
+                , fromString_function_value
+                , ( bp::arg("id") )
+                , bp::release_gil_policy()
+                , "Return an AtomID constructed from the passed string" );
         
         }
         { //::SireMol::SegID::inverse
@@ -111,6 +130,7 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "inverse"
                 , inverse_function_value
+                , bp::release_gil_policy()
                 , "Return the inverse of this match" );
         
         }
@@ -122,6 +142,7 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "invert"
                 , invert_function_value
+                , bp::release_gil_policy()
                 , "Return the inverse of this match" );
         
         }
@@ -134,6 +155,7 @@ void register_SegID_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
                 , "Map this ID back to the indicies of the segments in the molecule,\nusing the passed MoleculeInfo to do the mapping" );
         
         }
@@ -346,10 +368,12 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
         SegID_exposer.staticmethod( "any" );
+        SegID_exposer.staticmethod( "fromString" );
         SegID_exposer.staticmethod( "typeName" );
         SegID_exposer.def( "__str__", &__str__< ::SireMol::SegID > );
         SegID_exposer.def( "__repr__", &__str__< ::SireMol::SegID > );

@@ -53,6 +53,8 @@ SireStream::FileHeader __copy__(const SireStream::FileHeader &other){ return Sir
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_FileHeader_class(){
 
     { //::SireStream::FileHeader
@@ -68,6 +70,7 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "assertCompatible"
                 , assertCompatible_function_value
+                , bp::release_gil_policy()
                 , "Assert that the libraries required are compatible with what has\nbeen loaded" );
         
         }
@@ -80,6 +83,7 @@ void register_FileHeader_class(){
                 "assertNotCorrupted"
                 , assertNotCorrupted_function_value
                 , ( bp::arg("compressed_data") )
+                , bp::release_gil_policy()
                 , "Assert that the data in compressed_data is not corrupt" );
         
         }
@@ -91,6 +95,7 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "buildVersion"
                 , buildVersion_function_value
+                , bp::release_gil_policy()
                 , "Return the version of the source code from the repository" );
         
         }
@@ -102,6 +107,7 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "compressionRatio"
                 , compressionRatio_function_value
+                , bp::release_gil_policy()
                 , "Return the compression ratio of the file" );
         
         }
@@ -149,6 +155,7 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "dataType"
                 , dataType_function_value
+                , bp::release_gil_policy()
                 , "Return the name of the data type of the object in this data\nThrow: SireError::invalid_state\n" );
         
         }
@@ -209,6 +216,7 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "repository"
                 , repository_function_value
+                , bp::release_gil_policy()
                 , "Return the repository from which this source code was downloaded" );
         
         }
@@ -221,6 +229,7 @@ void register_FileHeader_class(){
                 "requireLibrary"
                 , requireLibrary_function_value
                 , ( bp::arg("library") )
+                , bp::release_gil_policy()
                 , "Does this data require that the library library be loaded?" );
         
         }
@@ -232,6 +241,7 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "requiredLibraries"
                 , requiredLibraries_function_value
+                , bp::release_gil_policy()
                 , "Return the list of libraries required to load this data" );
         
         }
@@ -243,6 +253,7 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "requiredMemory"
                 , requiredMemory_function_value
+                , bp::release_gil_policy()
                 , "Return the minimum memory the will be necessary to read the file" );
         
         }
@@ -255,6 +266,7 @@ void register_FileHeader_class(){
                 "requiredVersion"
                 , requiredVersion_function_value
                 , ( bp::arg("library") )
+                , bp::release_gil_policy()
                 , "Return the version number required of the library library. This\nreturns 0 if this library isnt required." );
         
         }
@@ -278,6 +290,7 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this header" );
         
         }
@@ -289,6 +302,7 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "version"
                 , version_function_value
+                , bp::release_gil_policy()
                 , "Return the master version number for the file - this version number\nis changed only when the file format is completely changed (e.g. we\nmove away from using a compressed header, then the compressed object)\n" );
         
         }

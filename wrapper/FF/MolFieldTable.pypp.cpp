@@ -35,6 +35,8 @@ SireFF::MolFieldTable __copy__(const SireFF::MolFieldTable &other){ return SireF
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_MolFieldTable_class(){
@@ -54,6 +56,7 @@ void register_MolFieldTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("cgatomidx"), bp::arg("field") )
+                , bp::release_gil_policy()
                 , "Add the field field onto this table - this returns whether or not the\natom is in this table\nThrow: SireError::invalid_index\n" );
         
         }
@@ -66,6 +69,7 @@ void register_MolFieldTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("selected_atoms"), bp::arg("field") )
+                , bp::release_gil_policy()
                 , "Add the field field onto this table for all of the atoms\nin selected_atoms - this returns whether\nor not any selected atoms are in this table\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -78,6 +82,7 @@ void register_MolFieldTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Add the fields contained in other onto this field table. This will only\nadd the fields for CutGroups that are in both tables" );
         
         }
@@ -90,6 +95,7 @@ void register_MolFieldTable_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("field") )
+                , bp::release_gil_policy()
                 , "Add the field field onto all of the atom points in this table" );
         
         }
@@ -102,6 +108,7 @@ void register_MolFieldTable_class(){
                 "divide"
                 , divide_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Divide the field at all atom points by value" );
         
         }
@@ -113,6 +120,7 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "initialise"
                 , initialise_function_value
+                , bp::release_gil_policy()
                 , "Initialise this table - this clears all of the fields, resetting them to zero" );
         
         }
@@ -125,6 +133,7 @@ void register_MolFieldTable_class(){
                 "map"
                 , map_function_value
                 , ( bp::arg("cgidx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -136,6 +145,7 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "molNum"
                 , molNum_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -160,6 +170,7 @@ void register_MolFieldTable_class(){
                 "multiply"
                 , multiply_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Multiply the field at all atom points by value" );
         
         }
@@ -171,6 +182,7 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "nCutGroups"
                 , nCutGroups_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -182,6 +194,7 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "nSelectedCutGroups"
                 , nSelectedCutGroups_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -229,6 +242,7 @@ void register_MolFieldTable_class(){
                 "selected"
                 , selected_function_value
                 , ( bp::arg("cgidx") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -240,6 +254,7 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -252,6 +267,7 @@ void register_MolFieldTable_class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set all of the fields at the atom points equal to field" );
         
         }
@@ -264,6 +280,7 @@ void register_MolFieldTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("cgatomidx"), bp::arg("field") )
+                , bp::release_gil_policy()
                 , "Subtract the field field from this table - this returns whether or not the\natom is in this table\nThrow: SireError::invalid_index\n" );
         
         }
@@ -276,6 +293,7 @@ void register_MolFieldTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("selected_atoms"), bp::arg("field") )
+                , bp::release_gil_policy()
                 , "Subtract the field field from this table for all of the atoms\nin selected_atoms - this returns whether\nor not any selected atoms are in this table\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -288,6 +306,7 @@ void register_MolFieldTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Subtract the fields contained in other from this field table. This will only\nsubtract the fields for CutGroups that are in both tables" );
         
         }
@@ -300,6 +319,7 @@ void register_MolFieldTable_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("field") )
+                , bp::release_gil_policy()
                 , "Subtract the field field from all of the atom points in this table" );
         
         }
@@ -311,6 +331,7 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "toVector"
                 , toVector_function_value
+                , bp::release_gil_policy()
                 , "Return all of the fields in this table in a single array" );
         
         }
@@ -323,6 +344,7 @@ void register_MolFieldTable_class(){
                 "toVector"
                 , toVector_function_value
                 , ( bp::arg("selection") )
+                , bp::release_gil_policy()
                 , "Return an array of all of the fields at the location of\nthe atoms selected in selection\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -334,6 +356,7 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -345,6 +368,7 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -19,6 +19,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ShellPair_class(){
 
     { //::Squire::ShellPair
@@ -33,6 +35,7 @@ void register_ShellPair_class(){
             ShellPair_exposer.def( 
                 "angularMomentum0"
                 , angularMomentum0_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -44,6 +47,7 @@ void register_ShellPair_class(){
             ShellPair_exposer.def( 
                 "angularMomentum1"
                 , angularMomentum1_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -55,6 +59,7 @@ void register_ShellPair_class(){
             ShellPair_exposer.def( 
                 "nOrbitals0"
                 , nOrbitals0_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -66,6 +71,7 @@ void register_ShellPair_class(){
             ShellPair_exposer.def( 
                 "nOrbitals1"
                 , nOrbitals1_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -77,6 +83,7 @@ void register_ShellPair_class(){
             ShellPair_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

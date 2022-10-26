@@ -43,18 +43,18 @@ set_target_properties (Cluster
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
+
 target_link_libraries (Cluster
                        SirePython
                        SIRE_SireCluster
-                       ${BOOST_PYTHON_LIBRARY}
+                       ${Boost_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )
 export_this_symbol_only( "init_Cluster" "_init_Cluster" )
 
 # installation
-set( INSTALLDIR ${SIRE_PYTHON}/Sire/Cluster )
+set( INSTALLDIR ${SIRE_PYTHON}/sire/legacy/Cluster )
 
 install( TARGETS Cluster
          LIBRARY DESTINATION ${INSTALLDIR}
@@ -63,6 +63,6 @@ install( TARGETS Cluster
         )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )
 

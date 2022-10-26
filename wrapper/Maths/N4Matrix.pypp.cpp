@@ -31,6 +31,8 @@ SireMaths::N4Matrix __copy__(const SireMaths::N4Matrix &other){ return SireMaths
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_N4Matrix_class(){
 
     { //::SireMaths::N4Matrix
@@ -52,6 +54,7 @@ void register_N4Matrix_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("matrix") )
+                , bp::release_gil_policy()
                 , "Add the contents of matrix to the sub-matrix view at [i,j]\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -64,6 +67,7 @@ void register_N4Matrix_class(){
                 "assertNBigColumns"
                 , assertNBigColumns_function_value
                 , ( bp::arg("nbigcolumns") )
+                , bp::release_gil_policy()
                 , "Assert that this matrix has nbigcolumns big columns\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -76,6 +80,7 @@ void register_N4Matrix_class(){
                 "assertNBigRows"
                 , assertNBigRows_function_value
                 , ( bp::arg("nbigrows") )
+                , bp::release_gil_policy()
                 , "Assert that this matrix has nbigrows big rows\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -88,6 +93,7 @@ void register_N4Matrix_class(){
                 "assertNColumns"
                 , assertNColumns_function_value
                 , ( bp::arg("ncolumns") )
+                , bp::release_gil_policy()
                 , "Assert that this matrix has ncolumns columns\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -100,6 +106,7 @@ void register_N4Matrix_class(){
                 "assertNRows"
                 , assertNRows_function_value
                 , ( bp::arg("nrows") )
+                , bp::release_gil_policy()
                 , "Assert that this matrix has nrows rows\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -112,6 +119,7 @@ void register_N4Matrix_class(){
                 "assertValidBigColumn"
                 , assertValidBigColumn_function_value
                 , ( bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Assert that there is an jth big column\nThrow: SireError::invalid_index\n" );
         
         }
@@ -124,6 +132,7 @@ void register_N4Matrix_class(){
                 "assertValidBigRow"
                 , assertValidBigRow_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Assert that there is an ith big row\nThrow: SireError::invalid_index\n" );
         
         }
@@ -136,6 +145,7 @@ void register_N4Matrix_class(){
                 "assertValidColumn"
                 , assertValidColumn_function_value
                 , ( bp::arg("l") )
+                , bp::release_gil_policy()
                 , "Assert that there is an lth column\nThrow: SireError::invalid_index\n" );
         
         }
@@ -148,6 +158,7 @@ void register_N4Matrix_class(){
                 "assertValidIndex"
                 , assertValidIndex_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("l") )
+                , bp::release_gil_policy()
                 , "Assert that the index [i,j,k,l] is valid for this matrix\nThrow: SireError::invalid_index\n" );
         
         }
@@ -160,6 +171,7 @@ void register_N4Matrix_class(){
                 "assertValidRow"
                 , assertValidRow_function_value
                 , ( bp::arg("k") )
+                , bp::release_gil_policy()
                 , "Assert that there is an kth row\nThrow: SireError::invalid_index\n" );
         
         }
@@ -172,6 +184,7 @@ void register_N4Matrix_class(){
                 "checkedOffset"
                 , checkedOffset_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("l") )
+                , bp::release_gil_policy()
                 , "Calculate the offset in the 1D array of the value\nat index [i,j,k,l]\nThrow: SireError::invalid_index\n" );
         
         }
@@ -183,6 +196,7 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "memory"
                 , memory_function_value
+                , bp::release_gil_policy()
                 , "Return the raw QVector memory used by this matrix" );
         
         }
@@ -194,6 +208,7 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "nBigColumns"
                 , nBigColumns_function_value
+                , bp::release_gil_policy()
                 , "Return the number of big columns in this matrix" );
         
         }
@@ -205,6 +220,7 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "nBigRows"
                 , nBigRows_function_value
+                , bp::release_gil_policy()
                 , "Return the number of big rows in this matrix" );
         
         }
@@ -216,6 +232,7 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "nColumns"
                 , nColumns_function_value
+                , bp::release_gil_policy()
                 , "Return the number of columns in this matrix" );
         
         }
@@ -227,6 +244,7 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "nRows"
                 , nRows_function_value
+                , bp::release_gil_policy()
                 , "Return the number of rows in this matrix" );
         
         }
@@ -239,6 +257,7 @@ void register_N4Matrix_class(){
                 "offset"
                 , offset_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("l") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -296,6 +315,7 @@ void register_N4Matrix_class(){
                 "redimension"
                 , redimension_function_value
                 , ( bp::arg("nbigrows"), bp::arg("nbigcolumns"), bp::arg("nrows"), bp::arg("ncolumns") )
+                , bp::release_gil_policy()
                 , "Redimension this matrix to have nbigrows big rows,\nnbigcolumns big columns, nrows rows and ncolumns\ncolumns. The contents of this matrix are undefined after\nthis redimension. This function will only reallocate\nmemory if there is not enough memory allocated to store\nthe new matrix. Use this function if you want to use\nthe same piece of memory over and over again for lots\nof different size matricies - just create a matrix with\nthe maximum dimension, then call this redimension function\nwhenever you want to change. It is very fast, as it just\nupdates the internal record of the size of the matrix" );
         
         }
@@ -308,6 +328,7 @@ void register_N4Matrix_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("matrix") )
+                , bp::release_gil_policy()
                 , "Set the view at [i,j] equal to matrix\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -320,6 +341,7 @@ void register_N4Matrix_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("l"), bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set the value at [i,j,k,l] equal to value\nThrow: SireError::invalid_index\n" );
         
         }
@@ -332,6 +354,7 @@ void register_N4Matrix_class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("value") )
+                , bp::release_gil_policy()
                 , "Set all entries in the matrix to the value value" );
         
         }
@@ -344,6 +367,7 @@ void register_N4Matrix_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("matrix") )
+                , bp::release_gil_policy()
                 , "Subtract the contents of matrix from the sub-matrix view at [i,j]\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -355,6 +379,7 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this matrix" );
         
         }
@@ -366,6 +391,7 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -378,6 +404,7 @@ void register_N4Matrix_class(){
                 "view"
                 , view_function_value
                 , ( bp::arg("i"), bp::arg("j") )
+                , bp::release_gil_policy()
                 , "Return the sub-matrix view at [i,j,k,l]\nThrow: SireError::invalid_index\n" );
         
         }
@@ -389,6 +416,7 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

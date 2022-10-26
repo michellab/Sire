@@ -40,6 +40,8 @@ SireMove::GetCOGPoint __copy__(const SireMove::GetCOGPoint &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_GetCOGPoint_class(){
 
     { //::SireMove::GetCOGPoint
@@ -58,7 +60,7 @@ void register_GetCOGPoint_class(){
             GetCOGPoint_exposer.def( 
                 "atomID"
                 , atomID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the AtomID(s) used to limit the search for the point" );
         
         }
@@ -97,6 +99,7 @@ void register_GetCOGPoint_class(){
             GetCOGPoint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

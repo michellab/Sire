@@ -37,6 +37,8 @@ namespace bp = boost::python;
 
 #include "mover.h"
 
+#include "mover.hpp"
+
 #include "selector.hpp"
 
 #include "tostring.h"
@@ -48,6 +50,8 @@ SireMol::ResNumAtomNameMatcher __copy__(const SireMol::ResNumAtomNameMatcher &ot
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 void register_ResNumAtomNameMatcher_class(){
 
@@ -79,6 +83,7 @@ void register_ResNumAtomNameMatcher_class(){
             ResNumAtomNameMatcher_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -90,6 +95,7 @@ void register_ResNumAtomNameMatcher_class(){
             ResNumAtomNameMatcher_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -101,6 +107,7 @@ void register_ResNumAtomNameMatcher_class(){
             ResNumAtomNameMatcher_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

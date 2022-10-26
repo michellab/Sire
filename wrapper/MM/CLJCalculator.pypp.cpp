@@ -31,6 +31,8 @@ SireMM::CLJCalculator __copy__(const SireMM::CLJCalculator &other){ return SireM
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_CLJCalculator_class(){
 
     { //::SireMM::CLJCalculator
@@ -47,6 +49,7 @@ void register_CLJCalculator_class(){
                 "calculate"
                 , calculate_function_value
                 , ( bp::arg("func"), bp::arg("boxes") )
+                , bp::release_gil_policy()
                 , "Calculate the energy between all of the atoms in the passed CLJBoxes\nusing the passed CLJFunction, returning\nthe coulomb and LJ energy as a tuple (coulomb,lj)" );
         
         }
@@ -59,6 +62,7 @@ void register_CLJCalculator_class(){
                 "calculate"
                 , calculate_function_value
                 , ( bp::arg("funcs"), bp::arg("boxes") )
+                , bp::release_gil_policy()
                 , "Calculate the energy between all of the atoms in the passed CLJBoxes\nusing the passed array of CLJFunctions, returning the energies as\na tuple of arrays of the coulomb and LJ energy (coulomb,lj)" );
         
         }
@@ -71,6 +75,7 @@ void register_CLJCalculator_class(){
                 "calculate"
                 , calculate_function_value
                 , ( bp::arg("func"), bp::arg("boxes0"), bp::arg("boxes1") )
+                , bp::release_gil_policy()
                 , "Calculate the energy between all of the atoms in the passed two CLJBoxes\nusing the passed CLJFunction, returning\nthe coulomb and LJ energy as a tuple (coulomb,lj)" );
         
         }
@@ -83,6 +88,7 @@ void register_CLJCalculator_class(){
                 "calculate"
                 , calculate_function_value
                 , ( bp::arg("func"), bp::arg("atoms0"), bp::arg("boxes1") )
+                , bp::release_gil_policy()
                 , "Calculate the energy between all of the atoms in the atoms0 and atoms1\nusing the passed CLJFunction, returning\nthe coulomb and LJ energy as a tuple (coulomb,lj)" );
         
         }
@@ -95,6 +101,7 @@ void register_CLJCalculator_class(){
                 "calculate"
                 , calculate_function_value
                 , ( bp::arg("funcs"), bp::arg("boxes0"), bp::arg("boxes1") )
+                , bp::release_gil_policy()
                 , "Calculate the energy between all of the atoms in the passed two CLJBoxes\nusing the passed array of CLJFunctions, returning the energies as\na tuple of arrays of the coulomb and LJ energy (coulomb,lj)" );
         
         }
@@ -107,6 +114,7 @@ void register_CLJCalculator_class(){
                 "calculate"
                 , calculate_function_value
                 , ( bp::arg("funcs"), bp::arg("atoms0"), bp::arg("boxes1") )
+                , bp::release_gil_policy()
                 , "Calculate the energy between all of the atoms in the passed atoms0 and atoms1\nusing the passed array of CLJFunctions, returning the energies as\na tuple of arrays of the coulomb and LJ energy (coulomb,lj)" );
         
         }
@@ -133,6 +141,7 @@ void register_CLJCalculator_class(){
             CLJCalculator_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -144,6 +153,7 @@ void register_CLJCalculator_class(){
             CLJCalculator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -155,6 +165,7 @@ void register_CLJCalculator_class(){
             CLJCalculator_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -36,6 +36,8 @@ SireMM::StretchStretchSymbols __copy__(const SireMM::StretchStretchSymbols &othe
 
 const char* pvt_get_name(const SireMM::StretchStretchSymbols&){ return "SireMM::StretchStretchSymbols";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_StretchStretchSymbols_class(){
 
     { //::SireMM::StretchStretchSymbols
@@ -50,7 +52,7 @@ void register_StretchStretchSymbols_class(){
             StretchStretchSymbols_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the bond length r_\n{01}" );
         
         }
@@ -62,7 +64,7 @@ void register_StretchStretchSymbols_class(){
             StretchStretchSymbols_exposer.def( 
                 "r12"
                 , r12_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the bond length r_\n{12}" );
         
         }
@@ -74,7 +76,7 @@ void register_StretchStretchSymbols_class(){
             StretchStretchSymbols_exposer.def( 
                 "r21"
                 , r21_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the symbol representing the bond length r_\n{21}" );
         
         }

@@ -35,6 +35,8 @@ SireMol::VolumeMap __copy__(const SireMol::VolumeMap &other){ return SireMol::Vo
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_VolumeMap_class(){
 
     { //::SireMol::VolumeMap
@@ -180,6 +182,7 @@ void register_VolumeMap_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Add the data from the other passed volume map onto this map" );
         
         }
@@ -192,6 +195,7 @@ void register_VolumeMap_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("gridinfo"), bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Add the data from the passed grid onto this map" );
         
         }
@@ -203,6 +207,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Clear the current grid" );
         
         }
@@ -214,6 +219,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "clearMask"
                 , clearMask_function_value
+                , bp::release_gil_policy()
                 , "Clear the set of mask points and mask distance" );
         
         }
@@ -225,6 +231,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "fillType"
                 , fillType_function_value
+                , bp::release_gil_policy()
                 , "Return the method used to assign atoms to grid points" );
         
         }
@@ -248,6 +255,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "gridSpacing"
                 , gridSpacing_function_value
+                , bp::release_gil_policy()
                 , "Return the grid spacing" );
         
         }
@@ -259,6 +267,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this map is empty" );
         
         }
@@ -270,6 +279,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "isMasked"
                 , isMasked_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this volume map is masked" );
         
         }
@@ -281,6 +291,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "mapType"
                 , mapType_function_value
+                , bp::release_gil_policy()
                 , "Return the type of map" );
         
         }
@@ -292,6 +303,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "maskDistance"
                 , maskDistance_function_value
+                , bp::release_gil_policy()
                 , "Return the mask distance. Grid points are only evaluated if they are\nwithin this distance of any of the masking points" );
         
         }
@@ -303,6 +315,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "maskPoints"
                 , maskPoints_function_value
+                , bp::release_gil_policy()
                 , "Return all of the masking points. Grid points are only evaluated if\nthey are within the mask distance of any of these points" );
         
         }
@@ -314,6 +327,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "nGridPoints"
                 , nGridPoints_function_value
+                , bp::release_gil_policy()
                 , "Return the number of grid points in the grid" );
         
         }
@@ -325,6 +339,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "nMaxGridPoints"
                 , nMaxGridPoints_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum number of grid points available to this map" );
         
         }
@@ -336,6 +351,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "nSamples"
                 , nSamples_function_value
+                , bp::release_gil_policy()
                 , "Return the number of samples used to create this map" );
         
         }
@@ -375,6 +391,7 @@ void register_VolumeMap_class(){
                 "setFillType"
                 , setFillType_function_value
                 , ( bp::arg("fill_type") )
+                , bp::release_gil_policy()
                 , "Set the method to assign atoms to grid points. Supported methods are;\n" );
         
         }
@@ -387,6 +404,7 @@ void register_VolumeMap_class(){
                 "setGridSpacing"
                 , setGridSpacing_function_value
                 , ( bp::arg("grid_spacing") )
+                , bp::release_gil_policy()
                 , "Set the desired grid spacing. If this is not the same as the current\ngrid, then the current map is re-mapped onto the new grid" );
         
         }
@@ -399,6 +417,7 @@ void register_VolumeMap_class(){
                 "setMapType"
                 , setMapType_function_value
                 , ( bp::arg("map_type") )
+                , bp::release_gil_policy()
                 , "Set the type of map. Supported types are;\n" );
         
         }
@@ -447,6 +466,7 @@ void register_VolumeMap_class(){
                 "setNMaxGridPoints"
                 , setNMaxGridPoints_function_value
                 , ( bp::arg("nmax") )
+                , bp::release_gil_policy()
                 , "Set the maximum number of grid points available to this map. Note that\nif this is less than the current number of points, then it prevents\nthe map from growing (but doesnt shrink the map)" );
         
         }
@@ -459,6 +479,7 @@ void register_VolumeMap_class(){
                 "setSkipLightAtoms"
                 , setSkipLightAtoms_function_value
                 , ( bp::arg("on") )
+                , bp::release_gil_policy()
                 , "Set whether or not to exclude light atoms from the map" );
         
         }
@@ -470,6 +491,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "skipLightAtoms"
                 , skipLightAtoms_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not light atoms are excluded from the map" );
         
         }
@@ -481,6 +503,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -492,6 +515,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -503,6 +527,7 @@ void register_VolumeMap_class(){
             VolumeMap_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

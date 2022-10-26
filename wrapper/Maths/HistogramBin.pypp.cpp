@@ -27,6 +27,8 @@ SireMaths::HistogramBin __copy__(const SireMaths::HistogramBin &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_HistogramBin_class(){
 
     { //::SireMaths::HistogramBin
@@ -43,6 +45,7 @@ void register_HistogramBin_class(){
             HistogramBin_exposer.def( 
                 "maximum"
                 , maximum_function_value
+                , bp::release_gil_policy()
                 , "Return the maximum value of the bin" );
         
         }
@@ -54,6 +57,7 @@ void register_HistogramBin_class(){
             HistogramBin_exposer.def( 
                 "middle"
                 , middle_function_value
+                , bp::release_gil_policy()
                 , "Return the value at the middle of the bin" );
         
         }
@@ -65,6 +69,7 @@ void register_HistogramBin_class(){
             HistogramBin_exposer.def( 
                 "minimum"
                 , minimum_function_value
+                , bp::release_gil_policy()
                 , "Return the minimum value of the bin" );
         
         }
@@ -91,6 +96,7 @@ void register_HistogramBin_class(){
             HistogramBin_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation" );
         
         }

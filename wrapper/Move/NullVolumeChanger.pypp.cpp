@@ -37,6 +37,8 @@ SireMove::NullVolumeChanger __copy__(const SireMove::NullVolumeChanger &other){ 
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_NullVolumeChanger_class(){
 
     { //::SireMove::NullVolumeChanger
@@ -79,6 +81,7 @@ void register_NullVolumeChanger_class(){
             NullVolumeChanger_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

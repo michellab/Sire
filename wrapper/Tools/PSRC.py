@@ -31,6 +31,9 @@ except:
 
 wsrc_tools_dir = "%s/Tools/WSRC" % Sire.Config.share_directory
 
+# Switch to use RepExMove while RepExMove2 is unavailable
+RepExMove2 = RepExMove
+
 ####################################################
 # ALL OF THE GLOBAL USER-AVAILABLE WSRC PARAMETERS #
 ####################################################
@@ -67,7 +70,7 @@ random_seed = Parameter("random seed", None, """Random number seed. Set this if 
 
 identity_atoms = Parameter("identity atoms", None,
                            """The list of atom names in the ligand on which to place
-                              identity points. If this is not set, then the identity atoms 
+                              identity points. If this is not set, then the identity atoms
                               will be generated automatically.""")
 
 use_fixed_points = Parameter("fixed points", False,
@@ -75,7 +78,7 @@ use_fixed_points = Parameter("fixed points", False,
                                 the overlap with the atoms""")
 
 use_water_points = Parameter("water points", False,
-                             """Whether or not to move the identity points to the oxygens of 
+                             """Whether or not to move the identity points to the oxygens of
                                 the swap water molecules, and so keep them fixed in space during
                                 the simulation""")
 
@@ -96,7 +99,7 @@ reflect_volume_radius = Parameter("reflect volume radius", 1.75*angstrom,
 reflect_volume_buffer = Parameter("reflect volume buffer", 0*angstrom,
                                   """The buffer beyond the reflection volume radius that is used when selecting
                                      the water molecules that will be swapped. Swapped water molecules will be those
-                                     that are within 'reflect volume radius + reflect volume buffer' of any of 
+                                     that are within 'reflect volume radius + reflect volume buffer' of any of
                                      the heavy atoms of the swapped ligand.""")
 
 n_equil_swap = Parameter("swap water nequilmoves", 10000,
@@ -119,7 +122,7 @@ water_monitor_distance = Parameter("water monitor distance", 5.0*angstrom,
 waterbox_only = Parameter("waterbox only", True,
                           """Whether or not to select water molecules only from the water box.""")
 
-nrgmon_frequency = Parameter("energy monitor frequency", 1000, 
+nrgmon_frequency = Parameter("energy monitor frequency", 1000,
                              """The number of steps between each evaluation of the energy monitors.""")
 
 save_all_nrgmons = Parameter("save energy monitors", False,
@@ -148,11 +151,11 @@ ligand_reflection_radius = Parameter("ligand reflection radius", 1*angstrom,
 
 topfile0 = Parameter("topfile0", "complex0.top",
                      """Name of the topology file containing the solvated protein0-ligand complex.""")
-                      
+
 crdfile0 = Parameter("crdfile0", "complex0.crd",
                      """Name of the coordinate file containing the coordinates of the
                         solvated protein0-ligand complex.""")
-                            
+
 topfile1 = Parameter("topfile1", "complex1.top",
                      """Name of the topology file containing the solvated protein1-ligand complex.""")
 
@@ -161,11 +164,11 @@ crdfile1 = Parameter("crdfile1", "complex1.crd",
                         solvated protein1-ligand complex.""")
 
 s3file0 = Parameter("s3file0", "complex0.s3",
-                    """Name to use for the intermediate s3 file that will contain the 
+                    """Name to use for the intermediate s3 file that will contain the
                        solvated protein0-ligand complex after it has been loaded from the top/crd files.""")
 
 s3file1 = Parameter("s3file1", "complex1.s3",
-                    """Name to use for the intermediate s3 file that will contain the 
+                    """Name to use for the intermediate s3 file that will contain the
                        solvated protein1-ligand complex after it has been loaded from the top/crd files.""")
 
 water_topfile = Parameter("water topfile", "%s/waterbox.top" % wsrc_tools_dir,
@@ -175,7 +178,7 @@ water_crdfile = Parameter("water crdfile", "%s/waterbox.crd" % wsrc_tools_dir,
                           """Name of the coordinate file containing the coordinates of the water box.""")
 
 water_s3file = Parameter("water s3file", "waterbox.s3",
-                         """Name to use for the intermediate s3 file that will contain the 
+                         """Name to use for the intermediate s3 file that will contain the
                             water box after it has been loaded from the top/crd files.""")
 
 outdir = Parameter("output directory", "output",
@@ -192,7 +195,7 @@ nequilmoves = Parameter("nequilmoves", 50000,
 
 nmoves = Parameter("nmoves", 1000, """Number of RETI moves to perform during the simulation.""")
 
-move_backbone = Parameter("move backbone", True, 
+move_backbone = Parameter("move backbone", True,
                           """Whether or not to move the protein backbone.""")
 
 coul_power = Parameter("coulomb power", 0,
@@ -201,8 +204,8 @@ coul_power = Parameter("coulomb power", 0,
 shift_delta = Parameter("shift delta", 1.2,
                         """The soft-core shift delta parameter""")
 
-soften_water = Parameter("soften water", 1.1, 
-                         """The amount by which to scale the water-water electrostatic interactions in 
+soften_water = Parameter("soften water", 1.1,
+                         """The amount by which to scale the water-water electrostatic interactions in
                             the swap-water cluster between lambda=0 and lambda=1. This helps keep the cluster
                             together as it is swapped between the two boxes.""")
 
@@ -213,7 +216,7 @@ lj_buffer = Parameter("LJ buffer", 0.005,
                          e.g. for the default buffer of 0.001, the LJ lambda scale is from 0.001 to 0.999.""")
 
 uncharge_ligand = Parameter("uncharge ligand", False,
-                            """Whether or not to uncharge the ligand (and swap water cluster) before 
+                            """Whether or not to uncharge the ligand (and swap water cluster) before
                                swapping them. They are then recharged at the end of the swap.""")
 
 uncharge_ligand_max = Parameter("uncharge ligand max", 0.5,
@@ -223,14 +226,14 @@ uncharge_ligand_max = Parameter("uncharge ligand max", 0.5,
                                    uncharge the ligand and swap water cluster before swapping.""")
 
 uncharge_lambda_values = Parameter("uncharge lambda values", [0.0, 0.1, 0.25, 0.45, 0.55, 0.75, 0.9, 1.0],
-                                   """Lambda values to use when uncharging (and then recharging) the ligand. These will be 
+                                   """Lambda values to use when uncharging (and then recharging) the ligand. These will be
                                       added onto the swapped lambda values to give a new range squashed between 0 and 1.""")
 
 save_pdb = Parameter("save pdb", True,
                      """Whether or not to write a PDB of the system after each iteration.""")
 
 save_all_pdbs = Parameter("save all pdbs", False,
-                          """Whether or not to write all of the PDBs. If not, only PDBs at the two 
+                          """Whether or not to write all of the PDBs. If not, only PDBs at the two
                              end points of the simulation will be written.""")
 
 pdb_frequency = Parameter("pdb frequency", 100,
@@ -289,7 +292,7 @@ def getOverlapWaters(ligand, waters, radius=2*angstrom):
 
 
 def getIdentityPoints(ligand):
-    
+
     atoms = ligand.atoms()
 
     have_point = {}
@@ -323,7 +326,7 @@ def getIdentityPoints(ligand):
 
     for key in list(have_point_keys):
         if have_point[key]:
-            # if this is bonded to 3+ atoms that also have 
+            # if this is bonded to 3+ atoms that also have
             # identity points, then get rid of this point
             atom = ligand.atom( AtomName(key) )
 
@@ -514,7 +517,7 @@ def createPSRCMoves(system):
                     # the ligand is not allowed to move away from its original position,
                     # as we don't want to sample "unbound" states
                     if not ligand_reflection_radius.val is None:
-                        rb_moves.setReflectionSphere(mobile_ligand.moleculeAt(0).molecule().evaluate().centerOfMass(), 
+                        rb_moves.setReflectionSphere(mobile_ligand.moleculeAt(0).molecule().evaluate().centerOfMass(),
                                                      ligand_reflection_radius.val)
 
                     scale_moves = scale_moves / 2
@@ -585,10 +588,10 @@ def createPSRCMoves(system):
         print("Using generated random number seed %d" % seed)
     else:
         print("Using supplied random number seed %d" % seed)
-    
+
     moves.setGenerator( RanGenerator(seed) )
 
-    return moves    
+    return moves
 
 
 def getLambdaValues():
@@ -646,7 +649,7 @@ def printEnergies(nrgs, FILE):
 
 
 def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
-    
+
     print("Merging the two protein boxes and water box to create the PSRC system...")
 
     # create a group to hold all of the mobile water molecules in the water box
@@ -723,7 +726,7 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
         mobile_bound1_solutes_group.add( protein1_system[MGName("mobile_solutes")] )
         if mobile_bound1_solutes_group.nMolecules() > 0:
             bound1_leg.add(mobile_bound1_solutes_group)
-    
+
     # create a group to hold all of the mobile solvent molecules in the bound legs
     mobile_bound0_solvents_group = MoleculeGroup("mobile_bound0_solvents")
     mobile_bound0_water_group = MoleculeGroup("mobile_bound0_water")
@@ -733,20 +736,20 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
             solvent_mol = mols[molnum].molecule()
 
             try:
-                # this is a water molecule if we can swap the coordinates with the 
+                # this is a water molecule if we can swap the coordinates with the
                 # water molecule from the water box
                 water_mol.edit().setProperty("coordinates", \
                                      solvent_mol.property("coordinates"))
-                
+
                 for j in range(0,solvent_mol.nResidues()):
                     solvent_mol = solvent_mol.residue( ResIdx(j) ).edit() \
                                              .setProperty( PDB.parameters().pdbResidueName(), "BW0" ) \
                                              .commit().molecule()
-                
+
                 mobile_bound0_solvents_group.add(solvent_mol)
                 mobile_bound0_water_group.add(solvent_mol)
             except:
-                # the test molecule is not compatible, so it is not 
+                # the test molecule is not compatible, so it is not
                 # compatible with the water in the water box
                 mobile_bound0_solvents_group.add(solvent_mol)
 
@@ -763,20 +766,20 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
             solvent_mol = mols[molnum].molecule()
 
             try:
-                # this is a water molecule if we can swap the coordinates with the 
+                # this is a water molecule if we can swap the coordinates with the
                 # water molecule from the water box
                 water_mol.edit().setProperty("coordinates", \
                                      solvent_mol.property("coordinates"))
-                
+
                 for j in range(0,solvent_mol.nResidues()):
                     solvent_mol = solvent_mol.residue( ResIdx(j) ).edit() \
                                              .setProperty( PDB.parameters().pdbResidueName(), "BW1" ) \
                                              .commit().molecule()
-                
+
                 mobile_bound1_solvents_group.add(solvent_mol)
                 mobile_bound1_water_group.add(solvent_mol)
             except:
-                # the test molecule is not compatible, so it is not 
+                # the test molecule is not compatible, so it is not
                 # compatible with the water in the water box
                 mobile_bound1_solvents_group.add(solvent_mol)
 
@@ -785,7 +788,7 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
 
     bound1_leg.add(mobile_bound1_solvents_group)
 
-    # create the groups to hold all of the protein molecules. We will use "extract" to 
+    # create the groups to hold all of the protein molecules. We will use "extract" to
     # pull out only those protein atoms that are in the mobile region
     bound0_protein_intra_group = MoleculeGroup("bound0_protein_intra_group")
     mobile_bound0_proteins_group = MoleculeGroup("mobile_bound0_proteins")
@@ -817,12 +820,12 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
 
         for molnum in all_proteins.molNums():
             protein_mol = Molecule.join(all_proteins[molnum])
-            
+
             if protein_mol.selectedAll():
                 bound0_protein_intra_group.add(protein_mol)
                 bound0_leg.add(protein_mol)
 
-                mobile_protein = []                
+                mobile_protein = []
 
                 if protein_sidechains.contains(molnum):
                     sidechains = protein_sidechains[molnum]
@@ -923,12 +926,12 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
 
         for molnum in all_proteins.molNums():
             protein_mol = Molecule.join(all_proteins[molnum])
-            
+
             if protein_mol.selectedAll():
                 bound1_protein_intra_group.add(protein_mol)
                 bound1_leg.add(protein_mol)
 
-                mobile_protein = []                
+                mobile_protein = []
 
                 if protein_sidechains.contains(molnum):
                     sidechains = protein_sidechains[molnum]
@@ -1022,9 +1025,9 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
         fixed_points = []
         for point in identity_points:
             fixed_points.append( point.property("coordinates") )
-        
+
         identity_points = fixed_points
-        print(identity_points) 
+        print(identity_points)
 
     print("\nIdentifying the swap-water cluster...")
     swap_water_group = MoleculeGroup("swap water")
@@ -1103,7 +1106,7 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
         # of the center of each molecule of the swap water cluster. This prevents the swap cluster
         # from changing shape too much during the calculation
         print("\nUsing identity points based on fixed positions in space from the swap water cluster...")
-            
+
         fixed_points = []
 
         for i in range(0,swap_water_group.nMolecules()):
@@ -1141,13 +1144,13 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
     mobile_bound1_mols.add( mobile_bound1_solutes_group.molecules() )
     mobile_bound1_mols.add( bound1_protein_intra_group.molecules() )
 
-    # group holding all of the mobile atoms in the bound0 leg, excluding the 
+    # group holding all of the mobile atoms in the bound0 leg, excluding the
     # buffer atoms that are fixed, but bonded to mobile atoms
     mobile_buffered_bound0_mols = mobile_bound0_solvents_group.molecules()
     mobile_buffered_bound0_mols.add( mobile_bound0_solutes_group.molecules() )
     mobile_buffered_bound0_mols.add( mobile_bound0_proteins_group.molecules() )
 
-    # group holding all of the mobile atoms in the bound1 leg, excluding the 
+    # group holding all of the mobile atoms in the bound1 leg, excluding the
     # buffer atoms that are fixed, but bonded to mobile atoms
     mobile_buffered_bound1_mols = mobile_bound1_solvents_group.molecules()
     mobile_buffered_bound1_mols.add( mobile_bound1_solutes_group.molecules() )
@@ -1164,7 +1167,7 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
     ###
     ### INTRA-ENERGY OF THE LIGAND AND CLUSTER
     ###
-    
+
     # intramolecular energy of the ligand
     ligand_intraclj = IntraFF("ligand:intraclj")
     ligand_intraclj.setCLJFunction( getIntraCLJFunction() )
@@ -1236,7 +1239,7 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
 
     bound0_swap_mobile.add(swap_water_mols, MGIdx(0))
     bound0_swap_mobile.add(mobile_bound0_mols, MGIdx(1))
- 
+
     bound0_swap_fixed = InterGroupFF("bound0:swap-fixed")
     bound0_swap_fixed.setCLJFunction( getInterCLJFunction() )
     bound0_swap_fixed = setGridProperties(bound0_swap_fixed)
@@ -1255,7 +1258,7 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
 
     bound1_swap_mobile.add(swap_water_mols, MGIdx(0))
     bound1_swap_mobile.add(mobile_bound1_mols, MGIdx(1))
- 
+
     bound1_swap_fixed = InterGroupFF("bound1:swap-fixed")
     bound1_swap_fixed.setCLJFunction( getInterCLJFunction() )
     bound1_swap_fixed = setGridProperties(bound1_swap_fixed)
@@ -1604,7 +1607,7 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
 
     swap_bound0_coul_nrg_next = bound0_swap_mobile.components().coulomb("next") + \
                                 bound0_swap_fixed_coul_nrg
- 
+
     swap_bound0_lj_nrg_next = bound0_swap_mobile.components().lj("next") + \
                               bound0_swap_fixed_lj_nrg
 
@@ -1634,7 +1637,7 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
 
     swap_bound1_coul_nrg_next = bound1_swap_mobile.components().coulomb("next") + \
                                 bound1_swap_fixed_coul_nrg
- 
+
     swap_bound1_lj_nrg_next = bound1_swap_mobile.components().lj("next") + \
                               bound1_swap_fixed_lj_nrg
 
@@ -1765,7 +1768,7 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
 
     bound_bound0_nrg_sym = Symbol("E_{bound0-bound0}")
     bound_bound0_nrg = None
-    
+
     for bound0_forcefield in bound0_forcefields:
         if bound_bound0_nrg is None:
             bound_bound0_nrg = bound0_forcefield.components().total()
@@ -1778,7 +1781,7 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
 
     bound_bound1_nrg_sym = Symbol("E_{bound1-bound1}")
     bound_bound1_nrg = None
-    
+
     for bound1_forcefield in bound1_forcefields:
         if bound_bound1_nrg is None:
             bound_bound1_nrg = bound1_forcefield.components().total()
@@ -1828,7 +1831,7 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
     bound1_nrg_prev_sym = Symbol("E_{bound1_{prev}}")
     bound1_nrg_prev = (lam_coul_on_prev * swap_bound1_coul_nrg_prev_sym) + (lam_coul_off_prev * ligand_bound1_coul_nrg_prev_sym) + \
                       (lam_lj_on_prev * swap_bound1_lj_nrg_prev_sym) + (lam_lj_off_prev * ligand_bound1_lj_nrg_prev_sym)
-    
+
     box_nrg_sym = Symbol("E_{box}")
     box_nrg = bound_bound0_nrg_sym + bound_bound1_nrg_sym + ligand_int_nrg_sym + swap_int_nrg_sym
 
@@ -1893,7 +1896,7 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
     system.setComponent( Symbol("delta_bound1_nrg^{F}"), (bound1_nrg_f_sym - bound1_nrg_sym) )
     system.setComponent( Symbol("delta_bound1_nrg^{B}"), (bound1_nrg_b_sym - bound1_nrg_sym) )
 
-    # Now add constraints. These are used to keep the identity of the 
+    # Now add constraints. These are used to keep the identity of the
     # swap water, to keep all lambda values between 0 and 1, and to
     # map the alpha values of the softcore forcefields to lambda
     print("\nCreating WSRC system constraints...\n")
@@ -2065,7 +2068,7 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
     mobile_sidechains = MoleculeGroup("mobile_sidechains")
     mobile_sidechains.add(mobile_bound0_protein_sidechains_group.molecules())
     mobile_sidechains.add(mobile_bound1_protein_sidechains_group.molecules())
-    
+
     system.add( mobile_sidechains )
 
     # All protein backbones are moved together
@@ -2145,14 +2148,14 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
                                                     BennettsFreeEnergyAverage(0 * kcal_per_mol,
                                                                               temperature.val,
                                                                               0.1 * binwidth.val, False) ) )
-    
+
     system.add( "delta_bound0_g^{F}", MonitorComponent( Symbol("delta_bound0_nrg^{F}"),
                                                         FreeEnergyAverage(temperature.val,
                                                                           dlam * binwidth.val) ) )
     system.add( "delta_bound0_g^{B}", MonitorComponent( Symbol("delta_bound0_nrg^{B}"),
                                                         FreeEnergyAverage(temperature.val,
                                                                           dlam * binwidth.val, False) ) )
-    
+
     system.add( "delta_bound1_g^{F}", MonitorComponent( Symbol("delta_bound1_nrg^{F}"),
                                                         FreeEnergyAverage(temperature.val,
                                                                           dlam * binwidth.val) ) )
@@ -2261,16 +2264,16 @@ def makeRETI(system, moves):
     replicas.setSubMoves(moves)
     replicas.setNSubMoves(nsubmoves.val)
     replicas.setLambdaComponent(lam)
-    replicas.setRecordAllStatistics(True)        
+    replicas.setRecordAllStatistics(True)
 
     seed = random_seed.val
-    
+
     if seed is None:
         seed = RanGenerator().randInt(100000,1000000)
         print("RETI system using generated random number seed %d" % seed)
     else:
         print("RETI system using supplied random number seed %d" % seed)
-    
+
     replicas.setGenerator( RanGenerator(seed+5) )
 
     for i in range(0, len(lamvals)):
@@ -2326,7 +2329,7 @@ def alignSystem(system, ligand_mol, refmol):
     # Align the protein1 system so that the ligand overlaps as much as possible with
     # itself from the protein1 system
     print("\nMapping the atoms between the two ligands...")
-    mapping = AtomMCSMatcher(mcs_timeout.val).match(refmol, PropertyMap(), 
+    mapping = AtomMCSMatcher(mcs_timeout.val).match(refmol, PropertyMap(),
                                                     ligand_mol, PropertyMap())
 
     lines = []
@@ -2359,7 +2362,7 @@ def alignSystem(system, ligand_mol, refmol):
         molecule = system[molnum][0].molecule()
 
         # need to map this to all periodic replicas, and transform them all.
-        # We then reapply periodic boundaries, which will either remove the 
+        # We then reapply periodic boundaries, which will either remove the
         # molecule or will duplicate the molecule
 
         center = molecule.evaluate().center()
@@ -2383,7 +2386,7 @@ def alignSystem(system, ligand_mol, refmol):
 
             if len(mols) > 1:
                 for mol in mols[1:]:
-                    moved_mols.add( mol.edit().renumber().commit() ) 
+                    moved_mols.add( mol.edit().renumber().commit() )
 
         if have_progress_bar:
             bar.next()
@@ -2565,7 +2568,7 @@ def analysePSRC(replicas, iteration, bennetts_freenrgs, fep_freenrgs, ti_freenrg
     print("===========================", file=FILE)
 
     print("\ndelta_lambda == %f" % delta_lambda, file=FILE)
-    print("temperature == %f K\n" % replicas[0].subMoves().temperature().to(kelvin), file=FILE) 
+    print("temperature == %f K\n" % replicas[0].subMoves().temperature().to(kelvin), file=FILE)
 
     nreplicas = replicas.nReplicas()
 
@@ -2580,7 +2583,7 @@ def analysePSRC(replicas, iteration, bennetts_freenrgs, fep_freenrgs, ti_freenrg
 
     dg_bound0_f = {}
     dg_bound0_b = {}
-    
+
     dg_bound1_f = {}
     dg_bound1_b = {}
 
@@ -2698,7 +2701,7 @@ def run():
                 print("Equilibrating the system (number of moves: %d)..." % nequilmoves.val)
                 psrc_system = psrc_moves.move(psrc_system, nequilmoves.val, False)
                 print("...equilibration complete")
-            
+
             Sire.Stream.save( (psrc_system, psrc_moves), sysmoves_file.val)
 
         # Now replicate the PSRC system across all lambda values so that we

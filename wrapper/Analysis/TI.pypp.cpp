@@ -31,6 +31,8 @@ SireAnalysis::TI __copy__(const SireAnalysis::TI &other){ return SireAnalysis::T
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 #include "Helpers/len.hpp"
 
 void register_TI_class(){
@@ -51,6 +53,7 @@ void register_TI_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("gradients") )
+                , bp::release_gil_policy()
                 , "Add the passed free energy gradients to the TI calculation. The gradients\nare in a dictionary, indexed by lambda value, and are analytic TI gradients" );
         
         }
@@ -63,6 +66,7 @@ void register_TI_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("gradients") )
+                , bp::release_gil_policy()
                 , "Add the passed free energy gradients to the TI calculation. The gradients\nare in a dictionary, indexed by lambda value, and are pure TI gradients,\ni.e. they have been calculated exactly with an infinitesimal delta lambda" );
         
         }
@@ -75,6 +79,7 @@ void register_TI_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("gradients"), bp::arg("delta_lambda") )
+                , bp::release_gil_policy()
                 , "Add the passed free energy gradients to the TI calcualtion. The gradients\nare in a dictionary, indexed by lambda value, and are the raw free energies\ncalculated via the zwanzig equation as part of a finite-difference TI calculation.\nThe value of delta lambda used must also be passed (so that we can then divide\neach gradient by delta lambda to get an approximation of the gradient)" );
         
         }
@@ -87,6 +92,7 @@ void register_TI_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("forwards"), bp::arg("backwards"), bp::arg("delta_lambda") )
+                , bp::release_gil_policy()
                 , "Add the passed free energy gradients to the TI calculation. The gradients\nare in dictionaries, indexed by lambda values, and are the raw forwards and\nbackwards free energies calculated via the zwanzig equation as part of\na finite-difference TI calculation (backwards gradients calculated as the\nfree energy from lambda-delta_lambda -> lambda, while forwards gradients calculated as the\ndifference between lambda -> lambda+delta_lambda). The value of delta lambda\nmust be passed (so that we can then divide each gradient by delta lambda to get\nan approximation of the true gradient)" );
         
         }
@@ -99,6 +105,7 @@ void register_TI_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("gradients") )
+                , bp::release_gil_policy()
                 , "Add the passed free energy gradients to the TI calculation. The gradients\nare in a dictionary, indexed by lambda value, and are analytic TI gradients" );
         
         }
@@ -111,6 +118,7 @@ void register_TI_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Return the free energy gradient data for the ith iteration. This returns\na tuple of the forwards gradients, backwards gradients and the value\nof delta lambda. Note that for pure TI calculations, the forwards and\nbackwards gradients will be equal and the value of delta lambda will be 0" );
         
         }
@@ -122,6 +130,7 @@ void register_TI_class(){
             TI_exposer.def( 
                 "clear"
                 , clear_function_value
+                , bp::release_gil_policy()
                 , "Remove all values from the histogram" );
         
         }
@@ -133,6 +142,7 @@ void register_TI_class(){
             TI_exposer.def( 
                 "count"
                 , count_function_value
+                , bp::release_gil_policy()
                 , "Return the number of iterations" );
         
         }
@@ -144,6 +154,7 @@ void register_TI_class(){
             TI_exposer.def( 
                 "gradients"
                 , gradients_function_value
+                , bp::release_gil_policy()
                 , "Return the raw list of gradients" );
         
         }
@@ -155,6 +166,7 @@ void register_TI_class(){
             TI_exposer.def( 
                 "lambdaValues"
                 , lambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return all values of lambda that have data. The values are returned\nin numerical order" );
         
         }
@@ -167,6 +179,7 @@ void register_TI_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("start"), bp::arg("end") )
+                , bp::release_gil_policy()
                 , "Merge (average) together the gradients from iteration start to iteration\nend inclusive" );
         
         }
@@ -179,6 +192,7 @@ void register_TI_class(){
                 "merge"
                 , merge_function_value
                 , ( bp::arg("indicies") )
+                , bp::release_gil_policy()
                 , "Merge together the gradients from the iterations with the passed indicies" );
         
         }
@@ -190,6 +204,7 @@ void register_TI_class(){
             TI_exposer.def( 
                 "nIterations"
                 , nIterations_function_value
+                , bp::release_gil_policy()
                 , "Return the number of iterations (number of sets of gradients that have been added)" );
         
         }
@@ -201,6 +216,7 @@ void register_TI_class(){
             TI_exposer.def( 
                 "nLambdaValues"
                 , nLambdaValues_function_value
+                , bp::release_gil_policy()
                 , "Return the number of lambda values" );
         
         }
@@ -212,6 +228,7 @@ void register_TI_class(){
             TI_exposer.def( 
                 "nSamples"
                 , nSamples_function_value
+                , bp::release_gil_policy()
                 , "Return the total number of samples in this calculation" );
         
         }
@@ -251,6 +268,7 @@ void register_TI_class(){
                 "removeAt"
                 , removeAt_function_value
                 , ( bp::arg("i") )
+                , bp::release_gil_policy()
                 , "Remove the data for iteration i. This sets the data equal to Gradients()" );
         
         }
@@ -263,6 +281,7 @@ void register_TI_class(){
                 "removeRange"
                 , removeRange_function_value
                 , ( bp::arg("start"), bp::arg("end") )
+                , bp::release_gil_policy()
                 , "Remove every iteration from start to end (inclusively). This sets\nthe data equal to Gradients()" );
         
         }
@@ -275,6 +294,7 @@ void register_TI_class(){
                 "rollingAverage"
                 , rollingAverage_function_value
                 , ( bp::arg("niterations") )
+                , bp::release_gil_policy()
                 , "Return a list of Gradients that represents the rolling average over niterations\niterations over this TI data set. If this data set contains 100 iterations, and\nwe calculate the rolling average over 50 iterations, then the returned Gradients\nwill be the average from 1-50, then 2-51, 3-52.....51-100" );
         
         }
@@ -287,6 +307,7 @@ void register_TI_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("gradients") )
+                , bp::release_gil_policy()
                 , "Set the gradients for the ith iteration equal to gradients. These\nare analytic TI gradients" );
         
         }
@@ -299,6 +320,7 @@ void register_TI_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("gradients") )
+                , bp::release_gil_policy()
                 , "Set the gradients for the ith iteration equal to gradients. These\nmust be pure TI gradients, with no associated delta lambda value" );
         
         }
@@ -311,6 +333,7 @@ void register_TI_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("gradients"), bp::arg("delta_lambda") )
+                , bp::release_gil_policy()
                 , "Set the gradients for the ith iteration equal to gradients. These\nare finite difference TI gradients, which are the raw zwanzig\nfree energies together with the passed value of delta lambda" );
         
         }
@@ -323,6 +346,7 @@ void register_TI_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("forwards"), bp::arg("backwards"), bp::arg("delta_lambda") )
+                , bp::release_gil_policy()
                 , "Set the gradients for the ith iteration to the passed forwards\nand backwards finite difference TI values (together with associated\ndelta lambda). The forwards gradients should be the raw zwanzig\nvalues from lambda -> lambda+delta_lambda, while the backwards\ngradients should be the raw zwanzig values from lambda-delta_lambda -> lambda" );
         
         }
@@ -335,6 +359,7 @@ void register_TI_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("i"), bp::arg("gradients") )
+                , bp::release_gil_policy()
                 , "Set the gradients for the ith iteration equal to gradients. These\nare analytic TI gradients" );
         
         }
@@ -346,6 +371,7 @@ void register_TI_class(){
             TI_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
                 , "Return the number of iterations" );
         
         }
@@ -357,6 +383,7 @@ void register_TI_class(){
             TI_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -368,6 +395,7 @@ void register_TI_class(){
             TI_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -379,6 +407,7 @@ void register_TI_class(){
             TI_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

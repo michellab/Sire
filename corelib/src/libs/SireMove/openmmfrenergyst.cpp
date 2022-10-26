@@ -35,6 +35,7 @@
 #include "SireMol/atommasses.h"
 #include "SireMol/atomcoords.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/core.h"
 
 #include "SireMol/amberparameters.h"
 
@@ -402,7 +403,7 @@ void OpenMMFrEnergyST::initialise()
     //if ( solute.isEmpty() ){
     //    throw SireError::program_bug(QObject::tr("Cannot initialise OpenMMFrEnergyST because solute group has not been defined"), CODELOC);
     //}
-    
+
     const MoleculeGroup solutehard = this->solutehard.read();
 
     const MoleculeGroup solutetodummy = this->solutetodummy.read();

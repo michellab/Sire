@@ -25,6 +25,8 @@ SireVol::AABox __copy__(const SireVol::AABox &other){ return SireVol::AABox(othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_AABox_class(){
 
     { //::SireVol::AABox
@@ -47,6 +49,7 @@ void register_AABox_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Add another AABox to this one - this forms the union of both of the\nboxes." );
         
         }
@@ -59,6 +62,7 @@ void register_AABox_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Add a point to this box" );
         
         }
@@ -71,6 +75,7 @@ void register_AABox_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("points") )
+                , bp::release_gil_policy()
                 , "Add lots of points to this box" );
         
         }
@@ -82,6 +87,7 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "boundingSphere"
                 , boundingSphere_function_value
+                , bp::release_gil_policy()
                 , "Return the sphere that just contains this AABox" );
         
         }
@@ -106,6 +112,7 @@ void register_AABox_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return whether or not this box contains other" );
         
         }
@@ -118,6 +125,7 @@ void register_AABox_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Return whether or not this box contains the point point" );
         
         }
@@ -130,6 +138,7 @@ void register_AABox_class(){
                 "from"
                 , from_function_value
                 , ( bp::arg("point") )
+                , bp::release_gil_policy()
                 , "Return an AABox constructed to contain the coordinates of point" );
         
         }
@@ -142,6 +151,7 @@ void register_AABox_class(){
                 "from"
                 , from_function_value
                 , ( bp::arg("coordgroup") )
+                , bp::release_gil_policy()
                 , "Return an AABox constructed to contain the coordinates in coordinates" );
         
         }
@@ -154,6 +164,7 @@ void register_AABox_class(){
                 "from"
                 , from_function_value
                 , ( bp::arg("cgarray") )
+                , bp::release_gil_policy()
                 , "Return an AABox constructed to contain all of the CoordGroups in cgarray" );
         
         }
@@ -166,6 +177,7 @@ void register_AABox_class(){
                 "from"
                 , from_function_value
                 , ( bp::arg("cgarrays") )
+                , bp::release_gil_policy()
                 , "Return an AABox constructed to contain all of the CoordGroups in the\narrays in cgarrays" );
         
         }
@@ -178,6 +190,7 @@ void register_AABox_class(){
                 "from"
                 , from_function_value
                 , ( bp::arg("coords") )
+                , bp::release_gil_policy()
                 , "Return an AABox constructed to contain the coordinates in coordinates" );
         
         }
@@ -190,6 +203,7 @@ void register_AABox_class(){
                 "from"
                 , from_function_value
                 , ( bp::arg("mincoords"), bp::arg("maxcoords") )
+                , bp::release_gil_policy()
                 , "Construct a new AABox from the passed minimum and maximum coordinates" );
         
         }
@@ -214,6 +228,7 @@ void register_AABox_class(){
                 "intersects"
                 , intersects_function_value
                 , ( bp::arg("other") )
+                , bp::release_gil_policy()
                 , "Return whether this box intersects with box" );
         
         }
@@ -225,6 +240,7 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , bp::release_gil_policy()
                 , "Return if the AABox is empty" );
         
         }
@@ -236,6 +252,7 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "isNull"
                 , isNull_function_value
+                , bp::release_gil_policy()
                 , "Return if the AABox is null" );
         
         }
@@ -247,6 +264,7 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "maxCoords"
                 , maxCoords_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -258,6 +276,7 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "minCoords"
                 , minCoords_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -287,6 +306,7 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "radius"
                 , radius_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -299,6 +319,7 @@ void register_AABox_class(){
                 "recalculate"
                 , recalculate_function_value
                 , ( bp::arg("coordgroup") )
+                , bp::release_gil_policy()
                 , "Recalculate the AABox so that it completely encloses the CoordGroup coordgroup" );
         
         }
@@ -311,6 +332,7 @@ void register_AABox_class(){
                 "recalculate"
                 , recalculate_function_value
                 , ( bp::arg("cgarray") )
+                , bp::release_gil_policy()
                 , "Recalculate the AABox so that it completely encloses the CoordGroups\nin the array cgarray" );
         
         }
@@ -323,6 +345,7 @@ void register_AABox_class(){
                 "recalculate"
                 , recalculate_function_value
                 , ( bp::arg("cgarrays") )
+                , bp::release_gil_policy()
                 , "Recalculate the AABox so that it completely encloses the CoordGroups\nin the arrays cgarrays" );
         
         }
@@ -335,6 +358,7 @@ void register_AABox_class(){
                 "recalculate"
                 , recalculate_function_value
                 , ( bp::arg("coordinates") )
+                , bp::release_gil_policy()
                 , "Recalculate the AABox so that it completely encloses the coordinates" );
         
         }
@@ -346,6 +370,7 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this AABox" );
         
         }
@@ -358,6 +383,7 @@ void register_AABox_class(){
                 "translate"
                 , translate_function_value
                 , ( bp::arg("delta") )
+                , bp::release_gil_policy()
                 , "Translate this AABox by delta" );
         
         }
@@ -369,6 +395,7 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -380,6 +407,7 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "what"
                 , what_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -392,6 +420,7 @@ void register_AABox_class(){
                 "withinDistance"
                 , withinDistance_function_value
                 , ( bp::arg("dist"), bp::arg("box") )
+                , bp::release_gil_policy()
                 , "Return whether or not this box is within dist of box box.\n(using infinite cartesian axes)" );
         
         }

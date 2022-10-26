@@ -39,6 +39,8 @@ SireSystem::PropertyConstraint __copy__(const SireSystem::PropertyConstraint &ot
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_PropertyConstraint_class(){
 
     { //::SireSystem::PropertyConstraint
@@ -71,6 +73,7 @@ void register_PropertyConstraint_class(){
             PropertyConstraint_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of the constraint" );
         
         }
@@ -82,6 +85,7 @@ void register_PropertyConstraint_class(){
             PropertyConstraint_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

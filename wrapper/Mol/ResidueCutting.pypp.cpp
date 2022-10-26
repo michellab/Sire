@@ -41,6 +41,8 @@ SireMol::ResidueCutting __copy__(const SireMol::ResidueCutting &other){ return S
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ResidueCutting_class(){
 
     { //::SireMol::ResidueCutting
@@ -83,6 +85,7 @@ void register_ResidueCutting_class(){
             ResidueCutting_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

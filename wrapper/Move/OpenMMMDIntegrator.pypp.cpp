@@ -35,6 +35,8 @@ namespace bp = boost::python;
 
 #include "SireMol/connectivity.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/mgname.h"
 
 #include "SireMol/molecule.h"
@@ -81,6 +83,8 @@ SireMove::OpenMMMDIntegrator __copy__(const SireMove::OpenMMMDIntegrator &other)
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_OpenMMMDIntegrator_class(){
 
     { //::SireMove::OpenMMMDIntegrator
@@ -121,6 +125,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "ensemble"
                 , ensemble_function_value
+                , bp::release_gil_policy()
                 , "Return the ensemble of this integrator" );
         
         }
@@ -133,6 +138,7 @@ void register_OpenMMMDIntegrator_class(){
                 "equilibrateSystem"
                 , equilibrateSystem_function_value
                 , ( bp::arg("system"), bp::arg("equib_time_step"), bp::arg("equib_steps") )
+                , bp::release_gil_policy()
                 , "\n annealLambda will equilibrate the system to the current alchemical lambda\n value of the system\n Par:am system                Sire System including molegroup, forcefield\n                              positions etc\n Par:am timestep              Default = 0.005. Time step used of the\n equilibration to the desired lambda\n Par:am annealingSteps        Default = 1000. Number of steps used for the\n annealing\n Return:                      Sire system with updated coordinates and\n velocities.\n" );
         
         }
@@ -144,6 +150,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getAndersen"
                 , getAndersen_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -155,6 +162,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getAndersenFrequency"
                 , getAndersenFrequency_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -166,6 +174,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getBufferFrequency"
                 , getBufferFrequency_function_value
+                , bp::release_gil_policy()
                 , "Get the frequency of buffering coordinates" );
         
         }
@@ -177,6 +186,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getCMMremovalFrequency"
                 , getCMMremovalFrequency_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -188,6 +198,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getConstraintType"
                 , getConstraintType_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -199,6 +210,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getCutoffDistance"
                 , getCutoffDistance_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -210,6 +222,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getCutoffType"
                 , getCutoffType_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -221,6 +234,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getDeviceIndex"
                 , getDeviceIndex_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -232,6 +246,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getFieldDielectric"
                 , getFieldDielectric_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -243,6 +258,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getFriction"
                 , getFriction_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -254,6 +270,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getIntegrationTolerance"
                 , getIntegrationTolerance_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -265,6 +282,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getIntegrator"
                 , getIntegrator_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -276,6 +294,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getKineticEnergy"
                 , getKineticEnergy_function_value
+                , bp::release_gil_policy()
                 , "\n <Returns the kinetic energy of the OpenMM system>\n minimizeEnergy will find the nearest local potential energy minimum,\n given the current Sire::System. It calls the\n LocalEnergyMinimizer :: minimize() function of OpenMM.\n Par:am system                Sire System including molegroup, forcefield\n                              positions etc\n Return:                      Kinetic energy computed with OpenMM.\n" );
         
         }
@@ -287,6 +306,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getLJDispersion"
                 , getLJDispersion_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -298,6 +318,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getMCBarostat"
                 , getMCBarostat_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -309,6 +330,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getMCBarostatFrequency"
                 , getMCBarostatFrequency_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -320,6 +342,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getPlatform"
                 , getPlatform_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -332,6 +355,7 @@ void register_OpenMMMDIntegrator_class(){
                 "getPotentialEnergy"
                 , getPotentialEnergy_function_value
                 , ( bp::arg("system") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -343,6 +367,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getPrecision"
                 , getPrecision_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -354,6 +379,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getPressure"
                 , getPressure_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -365,6 +391,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getRestraint"
                 , getRestraint_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -376,6 +403,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getTemperature"
                 , getTemperature_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -387,6 +415,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getTimetoSkip"
                 , getTimetoSkip_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -398,6 +427,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "getToleranceEwaldPME"
                 , getToleranceEwaldPME_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -409,6 +439,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "initialise"
                 , initialise_function_value
+                , bp::release_gil_policy()
                 , "Integrate the coordinates of the atoms in the molecules in molgroup\nusing the forces in forcetable, using the optionally supplied\nproperty map to find the necessary molecular properties\nThrow: SireMol::missing_molecule\nThrow: SireBase::missing_property\nThrow: SireError:invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
@@ -421,6 +452,7 @@ void register_OpenMMMDIntegrator_class(){
                 "integrate"
                 , integrate_function_value
                 , ( bp::arg("workspace"), bp::arg("nrg_component"), bp::arg("timestep"), bp::arg("nmoves"), bp::arg("record_stats") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -432,6 +464,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "isTimeReversible"
                 , isTimeReversible_function_value
+                , bp::release_gil_policy()
                 , "Return whether or not this integrator is time-reversible" );
         
         }
@@ -444,6 +477,7 @@ void register_OpenMMMDIntegrator_class(){
                 "minimiseEnergy"
                 , minimiseEnergy_function_value
                 , ( bp::arg("system"), bp::arg("tolerance"), bp::arg("max_iteration") )
+                , bp::release_gil_policy()
                 , "\n <Runs an energy Minimisation on the current system.>\n minimizeEnergy will find the nearest local potential energy minimum,\n given the current Sire::System. It calls the\n LocalEnergyMinimizer :: minimize() function of OpenMM.\n Par:am system                Sire System including molegroup, forcefield\n                              positions etc\n Par:am tolerance             Default = 1. This specifies how precisely the\n energy minimum must be located. Minimisation will be halted once the\n root-mean-square value of all force components reaches this tolerance.\n Par:am max_iteration         Default = 1000. this specifies the number of\n iterations are run for the minimisation. If max_iteration = 0, the\n iteration will run until convergence.\n\n Return:                      Sire System, with the updated energy\n minimised coordinates.\n" );
         
         }
@@ -471,6 +505,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setAndersen"
                 , setAndersen_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set Andersen thermostat" );
         
         }
@@ -483,6 +518,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setAndersenFrequency"
                 , setAndersenFrequency_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Andersen Thermostat frequency collision" );
         
         }
@@ -495,6 +531,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setBufferFrequency"
                 , setBufferFrequency_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Center of Mass motion removal frequency" );
         
         }
@@ -507,6 +544,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setCMMremovalFrequency"
                 , setCMMremovalFrequency_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Center of Mass motion removal frequency" );
         
         }
@@ -519,6 +557,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setConstraintType"
                 , setConstraintType_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Constraint type: none, hbonds, allbonds, hangles" );
         
         }
@@ -531,6 +570,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setCutoffDistance"
                 , setCutoffDistance_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the cutoff distance in A" );
         
         }
@@ -543,6 +583,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setCutoffType"
                 , setCutoffType_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the cufott type: nocutoff, cutoffnonperiodic, cutoffperiodic" );
         
         }
@@ -555,6 +596,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setDeviceIndex"
                 , setDeviceIndex_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the OpenMM Platform: CUDA, OpenCL, CPU" );
         
         }
@@ -567,6 +609,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setFieldDielectric"
                 , setFieldDielectric_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the dielectric constant" );
         
         }
@@ -579,6 +622,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setFriction"
                 , setFriction_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -591,6 +635,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setIntegrationTolerance"
                 , setIntegrationTolerance_function_value
                 , ( bp::arg("tollerance") )
+                , bp::release_gil_policy()
                 , "Set the integration tolerance" );
         
         }
@@ -603,6 +648,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setIntegrator"
                 , setIntegrator_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -615,6 +661,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setLJDispersion"
                 , setLJDispersion_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Retraint mode" );
         
         }
@@ -627,6 +674,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setMCBarostat"
                 , setMCBarostat_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set Monte Carlo Barostat onoff" );
         
         }
@@ -639,6 +687,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setMCBarostatFrequency"
                 , setMCBarostatFrequency_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Monte Carlo Barostat frequency in time speps" );
         
         }
@@ -651,6 +700,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setPlatform"
                 , setPlatform_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the OpenMM Platform: CUDA, OpenCL, CPU" );
         
         }
@@ -663,6 +713,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setPrecision"
                 , setPrecision_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the OpenMM Precision" );
         
         }
@@ -675,6 +726,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setPressure"
                 , setPressure_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Pressure" );
         
         }
@@ -687,6 +739,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setReinitialiseContext"
                 , setReinitialiseContext_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the flag to reinitialise the context" );
         
         }
@@ -699,6 +752,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setRestraint"
                 , setRestraint_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Retraint mode" );
         
         }
@@ -711,6 +765,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setTemperature"
                 , setTemperature_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Set the Temperature" );
         
         }
@@ -723,6 +778,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setTimetoSkip"
                 , setTimetoSkip_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "Get total time to skip" );
         
         }
@@ -735,6 +791,7 @@ void register_OpenMMMDIntegrator_class(){
                 "setToleranceEwaldPME"
                 , setToleranceEwaldPME_function_value
                 , ( bp::arg("arg0") )
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -746,6 +803,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this integrator" );
         
         }
@@ -757,6 +815,7 @@ void register_OpenMMMDIntegrator_class(){
             OpenMMMDIntegrator_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }

@@ -8,7 +8,7 @@ and
 Woods, C. J., Malaisree, M., Michel, J., Long, B., McIntosh-Smith, S., Mulholland, A. J., "Rapid Decomposition and Visualisation of Protein-Ligand Binding Free Energies by Residue and by Water", Faraday Discussions 169: Molecular Simulation and Visualisation, 2014, DOI:10.1039/C3FD00125C
 
 The method works by constructing a reaction coordinate that swaps the ligand bound to the protein with an equivalent volume of water molecules. The affect is to move the from being bound to the protein, to being free in solution, while simultaneously transferring an equivalent volume of water from being free in solution to being bound to the protein.
- 
+
 The input files for a waterswap calculation are the Amber format coordinate and topology files that represent the solvated protein-ligand complex (solvated using TIP3P water in a periodic, orthorhombic/cubic box).
 
 Assuming that these files are called “complex.crd” and “complex.top”, and the ligand to be swapped with water has residue name “LIG”, then the command to run a waterswap simulation is;
@@ -23,7 +23,7 @@ Once you have written a configuration file, e.g. called “CONFIG”, then you c
 
 sire.app/bin/waterswap -c complex.crd -t complex.top -C CONFIG -l LIG
 
-Sire will automatically use all of the processor cores available on your compute node. The calculation is not fast, and the free energy averages (collected simultaneously via thermodynamic integration (TI), free energy perturbation (FEP) and Bennetts Acceptance Ratio (BAR) method) will take 1-4 days of compute time to converge. 
+Sire will automatically use all of the processor cores available on your compute node. The calculation is not fast, and the free energy averages (collected simultaneously via thermodynamic integration (TI), free energy perturbation (FEP) and Bennetts Acceptance Ratio (BAR) method) will take 1-4 days of compute time to converge.
 
 Sire performs the calculation as a series of iterations (1000 by default), with the binding free energy (and binding free energy components) written to an output results file at the end of each iteration. This file, called output/results_????.log (where ???? is the iteration number) can be monitored during the simulation to check for convergence. At the end of the simulation, you can analyse the results using the Sire app sire.app/bin/analyse_freenrg, e.g.
 
@@ -37,6 +37,12 @@ While waterswap aims to calculate the absolute binding free energy, it is not ma
 
 If you need more help understanding or interpreting the results of a waterswap calculation then please feel free to get in touch via the Sire users mailing list.
 """
+
+try:
+    import sire
+    sire.use_old_api()
+except ImportError:
+    pass
 
 from Sire.Tools import WSRC
 from Sire.Tools import readParams

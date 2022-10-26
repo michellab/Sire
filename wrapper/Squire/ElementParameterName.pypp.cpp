@@ -33,6 +33,8 @@ Squire::ElementParameterName __copy__(const Squire::ElementParameterName &other)
 
 const char* pvt_get_name(const Squire::ElementParameterName&){ return "Squire::ElementParameterName";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_ElementParameterName_class(){
 
     { //::Squire::ElementParameterName

@@ -31,6 +31,8 @@ namespace bp = boost::python;
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_SwitchingFunction_class(){
 
     { //::SireMM::SwitchingFunction
@@ -45,6 +47,7 @@ void register_SwitchingFunction_class(){
             SwitchingFunction_exposer.def( 
                 "cutoffDistance"
                 , cutoffDistance_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -57,6 +60,7 @@ void register_SwitchingFunction_class(){
                 "dElectrostaticScaleFactor"
                 , dElectrostaticScaleFactor_function_value
                 , ( bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return the derivative (gradient) of the electrostatic\nscale factor at the distance dist" );
         
         }
@@ -69,6 +73,7 @@ void register_SwitchingFunction_class(){
                 "dVDWScaleFactor"
                 , dVDWScaleFactor_function_value
                 , ( bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return the derivative (gradient) of the VDW\nscale factor at the distance dist" );
         
         }
@@ -80,6 +85,7 @@ void register_SwitchingFunction_class(){
             SwitchingFunction_exposer.def( 
                 "electrostaticCutoffDistance"
                 , electrostaticCutoffDistance_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -91,6 +97,7 @@ void register_SwitchingFunction_class(){
             SwitchingFunction_exposer.def( 
                 "electrostaticFeatherDistance"
                 , electrostaticFeatherDistance_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -103,6 +110,7 @@ void register_SwitchingFunction_class(){
                 "electrostaticScaleFactor"
                 , electrostaticScaleFactor_function_value
                 , ( bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return the electrostatic scale factor for the distance dist" );
         
         }
@@ -114,6 +122,7 @@ void register_SwitchingFunction_class(){
             SwitchingFunction_exposer.def( 
                 "featherDistance"
                 , featherDistance_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -137,6 +146,7 @@ void register_SwitchingFunction_class(){
             SwitchingFunction_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "Return a string representation of this switching function" );
         
         }
@@ -148,6 +158,7 @@ void register_SwitchingFunction_class(){
             SwitchingFunction_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -159,6 +170,7 @@ void register_SwitchingFunction_class(){
             SwitchingFunction_exposer.def( 
                 "vdwCutoffDistance"
                 , vdwCutoffDistance_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -170,6 +182,7 @@ void register_SwitchingFunction_class(){
             SwitchingFunction_exposer.def( 
                 "vdwFeatherDistance"
                 , vdwFeatherDistance_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -182,6 +195,7 @@ void register_SwitchingFunction_class(){
                 "vdwScaleFactor"
                 , vdwScaleFactor_function_value
                 , ( bp::arg("dist") )
+                , bp::release_gil_policy()
                 , "Return the VDW scale factor for the distance dist" );
         
         }

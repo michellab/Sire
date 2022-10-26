@@ -41,6 +41,8 @@ SireIO::TinkerParameters __copy__(const SireIO::TinkerParameters &other){ return
 
 const char* pvt_get_name(const SireIO::TinkerParameters&){ return "SireIO::TinkerParameters";}
 
+#include "Helpers/release_gil_policy.hpp"
+
 void register_TinkerParameters_class(){
 
     { //::SireIO::TinkerParameters

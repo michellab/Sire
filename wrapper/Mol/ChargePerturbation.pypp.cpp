@@ -21,6 +21,8 @@ namespace bp = boost::python;
 
 #include "mover.hpp"
 
+#include "selector.hpp"
+
 #include "chargeperturbation.h"
 
 SireMol::ChargePerturbation __copy__(const SireMol::ChargePerturbation &other){ return SireMol::ChargePerturbation(other); }
@@ -28,6 +30,8 @@ SireMol::ChargePerturbation __copy__(const SireMol::ChargePerturbation &other){ 
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/release_gil_policy.hpp"
 
 void register_ChargePerturbation_class(){
 
@@ -61,6 +65,7 @@ void register_ChargePerturbation_class(){
             ChargePerturbation_exposer.def( 
                 "requiredProperties"
                 , requiredProperties_function_value
+                , bp::release_gil_policy()
                 , "Return the properties required or changed by this perturbation" );
         
         }
@@ -72,6 +77,7 @@ void register_ChargePerturbation_class(){
             ChargePerturbation_exposer.def( 
                 "toString"
                 , toString_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -83,6 +89,7 @@ void register_ChargePerturbation_class(){
             ChargePerturbation_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
                 , "" );
         
         }
@@ -95,6 +102,7 @@ void register_ChargePerturbation_class(){
                 "wouldChange"
                 , wouldChange_function_value
                 , ( bp::arg("molecule"), bp::arg("values") )
+                , bp::release_gil_policy()
                 , "Return whether or not this perturbation with the passed values would\nchange the molecule molecule" );
         
         }
