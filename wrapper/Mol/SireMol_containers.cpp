@@ -61,6 +61,7 @@
 #include "SireMol/perturbation.h"
 #include "SireMol/geometryperturbation.h"
 #include "SireMol/improperid.h"
+#include "SireMol/atomvelocities.h"
 #include "SireMol/core.h"
 
 #include "Base/convertpackedarray.hpp"
@@ -142,6 +143,8 @@ void register_SireMol_containers()
     register_list< QVector<Element> >();
 
     register_list< QVector<QHash<AtomIdx,AtomIdx> > >();
+
+    register_list< QVector<Velocity3D> >();
 
     register_tuple< boost::tuple<AtomIdx,AtomIdx> >();
     register_tuple< boost::tuple<AtomIdx,AtomIdx,AtomIdx> >();
