@@ -553,6 +553,10 @@ QString ConnectivityBase::toCONECT(int offset) const
         }
     }
 
+    // Ensure that lines are 80 characters wide.
+    for (auto &line : lines)
+        line.resize(80, ' ');
+
     return lines.join("\n");
 }
 

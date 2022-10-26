@@ -133,7 +133,7 @@ friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CovalentBond
 friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, CovalentBondHunter&);
 
 public:
-    CovalentBondHunter(double tolerance=1.1);
+    CovalentBondHunter(double tolerance=1.1, double max_radius2=25);
     CovalentBondHunter(const CovalentBondHunter &other);
     
     ~CovalentBondHunter();
@@ -158,6 +158,9 @@ private:
 
     /** The tolerance added to the sum of vdw radii when hunting for bonds */
     double tol;
+
+    /** The maximum squared distance between CoordGroups */
+    double max_radius2;
 };
 
 /** This is a null bond hunter. This finds no bonds in a molecule and is used

@@ -4676,7 +4676,7 @@ static QString get_dihedral_id(const QString &atm0, const QString &atm1,
                                const QString &atm2, const QString &atm3,
                                int func_type)
 {
-    if (atm0 < atm3)
+    if ((atm0 < atm3) or (atm0 == atm3 and atm1 <= atm2))
     {
         return QString("%1;%2;%3;%4;%5").arg(atm0,atm1,atm2,atm3).arg(func_type);
     }

@@ -184,7 +184,7 @@ QDataStream &operator<<(QDataStream &ds, const CovalentBondHunter &hunter)
 {
     writeHeader(ds, r_covalenthunter, 1);
 
-    ds << hunter.tol << static_cast<const BondHunter&>(hunter);
+    ds << hunter.tol << hunter.max_radius2 << static_cast<const BondHunter&>(hunter);
 
     return ds;
 }
@@ -196,7 +196,7 @@ QDataStream &operator>>(QDataStream &ds, CovalentBondHunter &hunter)
 
     if (v == 1)
     {
-        ds >> hunter.tol >> static_cast<BondHunter&>(hunter);
+        ds >> hunter.tol >> hunter.max_radius2 >> static_cast<BondHunter&>(hunter);
     }
     else
         throw version_error(v, "1", r_covalenthunter, CODELOC);
@@ -205,15 +205,17 @@ QDataStream &operator>>(QDataStream &ds, CovalentBondHunter &hunter)
 }
 
 /** Construct a CovalentBondHunter with a specified tolerance */
-CovalentBondHunter::CovalentBondHunter(double tolerance)
+CovalentBondHunter::CovalentBondHunter(double tolerance, double max_radius2)
               : ConcreteProperty<CovalentBondHunter,BondHunter>(),
-                tol(tolerance)
+                tol(tolerance),
+                max_radius2(max_radius2)
 {}
 
 /** Copy constructor */
 CovalentBondHunter::CovalentBondHunter(const CovalentBondHunter &other)
               : ConcreteProperty<CovalentBondHunter,BondHunter>(other),
-                tol(other.tol)
+                tol(other.tol),
+                max_radius2(other.max_radius2)
 {}
 
 /** Destructor */
@@ -224,6 +226,7 @@ CovalentBondHunter::~CovalentBondHunter()
 CovalentBondHunter& CovalentBondHunter::operator=(const CovalentBondHunter &other)
 {
     tol = other.tol;
+    max_radius2 = other.max_radius2;
     BondHunter::operator=(other);
 
     return *this;
@@ -232,13 +235,13 @@ CovalentBondHunter& CovalentBondHunter::operator=(const CovalentBondHunter &othe
 /** Comparison operator */
 bool CovalentBondHunter::operator==(const CovalentBondHunter &other) const
 {
-    return tol == other.tol;
+    return tol == other.tol and max_radius2 == other.max_radius2;
 }
 
 /** Comparison operator */
 bool CovalentBondHunter::operator!=(const CovalentBondHunter &other) const
 {
-    return tol != other.tol;
+    return not (tol == other.tol and max_radius2 == other.max_radius2);
 }
 
 void addAllIntraBonds(ConnectivityEditor &connectivity, CGIdx cgidx,
@@ -302,15 +305,12 @@ void addSomeIntraBonds(ConnectivityEditor &connectivity, CGIdx cgidx,
     }
 }
 
-//the largest covalent radius is 2.4 A, so if the CoordGroups are more
-//than 5 A apart then they are not bonded!
-const double max_radius2 = 25;
-
 void addAllInterBonds(ConnectivityEditor &connectivity,
                       CGIdx cgidx0, CGIdx cgidx1,
                       const CoordGroup &coords0, const AtomElements::Array &elements0,
                       const CoordGroup &coords1, const AtomElements::Array &elements1,
-                      double tolerance)
+                      double tolerance,
+                      double max_radius2)
 {
     if ( Vector::distance2(coords0.aaBox().center(), coords1.aaBox().center())
              > max_radius2 )
@@ -466,7 +466,7 @@ Connectivity CovalentBondHunter::operator()(const MoleculeView &molview,
             {
                 addAllInterBonds(connectivity, i, j,
                                  coords_array[i], elements_array[i],
-                                 coords_array[j], elements_array[j], tol);
+                                 coords_array[j], elements_array[j], tol, max_radius2);
             }
         }
     }
@@ -487,7 +487,7 @@ Connectivity CovalentBondHunter::operator()(const MoleculeView &molview,
                     {
                         addAllInterBonds(connectivity, i, j,
                                          coords_array[i], elements_array[i],
-                                         coords_array[j], elements_array[j], tol);
+                                         coords_array[j], elements_array[j], tol, max_radius2);
                     }
                     else
                     {
@@ -547,7 +547,7 @@ Connectivity CovalentBondHunter::operator()(const MoleculeView &molview,
                     {
                         addAllInterBonds(connectivity, i, j,
                                          coords_array[i], elements_array[i],
-                                         coords_array[j], elements_array[j], tol);
+                                         coords_array[j], elements_array[j], tol, max_radius2);
                     }
                     else
                     {

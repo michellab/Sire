@@ -1,9 +1,11 @@
 configargparse
 kcombu_bss
+ipywidgets<8
 lomap2
 mdtraj
 mdanalysis
 nglview
+openff-interchange-base
 openff-toolkit-base
 parmed
 py3dmol

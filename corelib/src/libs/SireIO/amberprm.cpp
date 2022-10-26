@@ -1082,6 +1082,14 @@ void AmberPrm::parse(const PropertyMap &map)
             //this is a control line
             if (line.startsWith("%FLAG"))
             {
+                // We currently don't support CHAMBER files. Raise an exception
+                // whenever a FLAG line contains CHARMM.
+                if (line.contains("CHARMM"))
+                {
+                    throw SireError::file_error(QObject::tr(
+                        "We currently don't support CHAMBER files."), CODELOC);
+                }
+
                 //this is a new flag - close any open old flag
                 if (not last_flag.isNull())
                 {

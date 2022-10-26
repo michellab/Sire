@@ -402,6 +402,13 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map,
             is_het = true;
     }
 
+    // Determine whether this is a terminal (TER) atom.
+    if (atom.hasProperty(map["is_ter"]))
+    {
+        if (atom.property<QString>(map["is_ter"]) == "True")
+            is_ter = true;
+    }
+
     // Set the alternate location code.
     if (atom.hasProperty(map["alt_loc"]))
     {
@@ -604,7 +611,7 @@ QString PDBAtom::toPDBRecord() const
 {
     QString line;
 
-    // Write all records as ATOM, i.e. convert HETATM to ATOM.
+    // First create an ATOM record.
     line.append("ATOM  ");
 
     // Append the atom serial number
@@ -680,6 +687,11 @@ QString PDBAtom::toPDBRecord() const
         if (charge < 0) line.append(QString("%1-").arg(qAbs(charge)));
         else            line.append(QString("%1+").arg(charge));
     }
+
+    // Convert ATOM record to HETATM. This avoids the need to change the
+    // justifaction of other terms in the record above.
+    if (this->is_het)
+        line.replace("ATOM  ", "HETATM");
 
     return line;
 }
@@ -849,6 +861,10 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map)
 
     lines.append("END");
 
+    // Ensure that lines are 80 characters wide.
+    for (auto &line : lines)
+        line.resize(80, ' ');
+
     // Reparse the lines as a self-consistency check.
     PDB2 parsed(lines, map);
 
@@ -982,104 +998,40 @@ QVector<QString> PDB2::toLines(bool is_velocity) const
         // The number of atoms for this model.
         const int num_atoms = nAtoms(i);
 
-        // The number of chains for this model.
-        const int num_chains = nChains(i);
-
         // The atoms lines for this model.
-        QVector<QString> atom_lines(num_atoms + num_chains);
+        QVector<QString> atom_lines;
 
-        if (usesParallel())
+        // Loop over all of the atoms.
+        for (int j=0; j<num_atoms; ++j)
         {
-            tbb::parallel_for(tbb::blocked_range<int>(0, num_atoms),
-                            [&](const tbb::blocked_range<int> r)
+            // Generate the PDB record.
+            auto record = atoms[i][j].toPDBRecord();
+
+            // We are writing a PDB "velocity" file for NAMD.
+            if (is_velocity)
             {
-                for (int j=r.begin(); j<r.end(); ++j)
-                {
-                    atom_lines[j] = atoms[i][j].toPDBRecord();
+                // Create the velocity string.
+                QString vel_string(QString("   %1\%2\%3")
+                    .arg(velocities[offset+j][0].value(), 8, 'f', 3)
+                    .arg(velocities[offset+j][1].value(), 8, 'f', 3)
+                    .arg(velocities[offset+j][2].value(), 8, 'f', 3));
 
-                    // We are writing a PDB "velocity" file for NAMD.
-                    if (is_velocity)
-                    {
-                        // Create the velocity string.
-                        QString vel_string(QString("   %1\%2\%3")
-                            .arg(velocities[offset+j][0].value(), 8, 'f', 3)
-                            .arg(velocities[offset+j][1].value(), 8, 'f', 3)
-                            .arg(velocities[offset+j][2].value(), 8, 'f', 3));
-
-                        // Replace the coordinate record data with velocities.
-                        atom_lines[j].replace(30, 24, vel_string);
-                    }
-                }
-            });
-
-            // Create TER records if the system contains chains.
-            if (num_chains > 0)
-            {
-                // Make a copy of the atom lines.
-                auto lines = atom_lines;
-
-                // Line index.
-                int iline = 0;
-
-                // Now loop through the atoms and insert TER records as needed.
-                // This has to be done in serial.
-                for (int j=0; j<num_atoms; ++j)
-                {
-                    // Copy the atom record across.
-                    atom_lines[iline] = lines[j];
-                    iline++;
-
-                    // Add a TER record for this atom.
-                    if (atoms[i][j].isTer())
-                    {
-                        atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
-                                                .arg(lines[j].mid(6, 5))
-                                                .arg(lines[j].mid(17, 3))
-                                                .arg(lines[j].at(21))
-                                                .arg(lines[j].mid(22, 4))
-                                                .arg(lines[j].at(26));
-
-                        iline++;
-                    }
-                }
+                // Replace the coordinate record data with velocities.
+                record.replace(30, 24, vel_string);
             }
-        }
-        else
-        {
-            // Line index.
-            int iline = 0;
 
-            for (int j=0; j<num_atoms; ++j)
+            // Append the record.
+            atom_lines.append(record);
+
+            // Add a TER record for this atom.
+            if (atoms[i][j].isTer())
             {
-                atom_lines[iline] = atoms[i][j].toPDBRecord();
-
-                // We are writing a PDB "velocity" file for NAMD.
-                if (is_velocity)
-                {
-                    // Create the velocity string.
-                    QString vel_string(QString("   %1\%2\%3")
-                        .arg(velocities[offset+j][0].value(), 8, 'f', 3)
-                        .arg(velocities[offset+j][1].value(), 8, 'f', 3)
-                        .arg(velocities[offset+j][2].value(), 8, 'f', 3));
-
-                    // Replace the coordinate record data with velocities.
-                    atom_lines[j].replace(30, 24, vel_string);
-                }
-
-                iline++;
-
-                // Add a TER record for this atom.
-                if (atoms[i][j].isTer())
-                {
-                    atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
-                                            .arg(atom_lines[iline-1].mid(6, 5))
-                                            .arg(atom_lines[iline-1].mid(17, 3))
-                                            .arg(atom_lines[iline-1].at(21))
-                                            .arg(atom_lines[iline-1].mid(22, 4))
-                                            .arg(atom_lines[iline-1].at(26));
-
-                    iline++;
-                }
+                atom_lines.append(QString("TER   %1      %2 %3\%4\%5")
+                    .arg(QString::number(record.mid(6, 5).toInt() + 1), 5)
+                    .arg(record.mid(17, 3))
+                    .arg(record.at(21))
+                    .arg(record.mid(22, 4))
+                    .arg(record.at(26)));
             }
         }
 
@@ -1095,6 +1047,10 @@ QVector<QString> PDB2::toLines(bool is_velocity) const
     }
 
     lines.append("END");
+
+    // Ensure that lines are 80 characters wide.
+    for (auto &line : lines)
+        line.resize(80, ' ');
 
     return lines;
 }
@@ -1596,7 +1552,7 @@ void PDB2::parseLines(const PropertyMap &map)
                    ascending order.
 
 				   However, residue numbers are not unique across
-                   chains, so we need to preserved the numbering if
+                   chains, so we need to preserve the numbering if
                    the chain ID differs.
                  */
 
@@ -2166,6 +2122,7 @@ MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
     AtomFloatProperty  temperatures(molinfo);
     AtomStringProperty alt_loc(molinfo);
     AtomStringProperty is_het_atom(molinfo);
+    AtomStringProperty is_ter_atom(molinfo);
 
     // Residue property objects.
     ResStringProperty  insert_codes(molinfo);
@@ -2191,9 +2148,13 @@ MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
         alt_loc.set(cgatomidx, atom.getAltLoc());
 
         bool isHet = atom.isHet();
+        bool isTer = atom.isTer();
 
         if (isHet) is_het_atom.set(cgatomidx, "True");
         else       is_het_atom.set(cgatomidx, "False");
+
+        if (isTer) is_ter_atom.set(cgatomidx, "True");
+        else       is_ter_atom.set(cgatomidx, "False");
 
         // Store the residue index for the atom.
         qint64 res_idx = atom.getResIdx();
@@ -2219,6 +2180,7 @@ MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
               .setProperty(map["occupancy"], occupancies)
               .setProperty(map["beta_factor"], temperatures)
               .setProperty(map["is_het"], is_het_atom)
+              .setProperty(map["is_ter"], is_ter_atom)
               .setProperty(map["insert_code"], insert_codes)
               .setProperty(map["alt_loc"], alt_loc)
               .commit();
@@ -2236,138 +2198,112 @@ void PDB2::parseMolecule(const SireMol::MoleculeView &sire_mol, QVector<QString>
     // Early exit.
     if (num_atoms == 0) return;
 
-    // how many chains are there?
-    int num_chains = 0;
-    int last_chainidx = -1;
+    // TODO: Do we want a hard limit on the number of atoms?
+    if (num_atoms > 99999)
+    {
+        errors.append(QObject::tr("The number of atoms (%1) exceeds "
+            " the PDB file format limit (99999)!").arg(num_atoms));
+
+        return;
+    }
+
+    // Store the number of chains in the molecule.
+    int num_chains = sire_mol.nChains();
 
     // Whether each atom is a terminal atom, i.e. the end of a chain.
     QVector<bool> is_ter(num_atoms, false);
 
-    for (int j=0; j<atoms.count(); ++j)
+    // Work out the index of the terminal atom.
+    if (not sire_mol.hasProperty(map["is_ter"]))
     {
-        const auto &atom = atoms(j);
-
-        try
+        // Loop over the chains.
+        for (int i=0; i<num_chains; ++i)
         {
-            auto chainidx = atom.chain().index().value();
+            // Extract the chain.
+            auto chain = sire_mol.chain(ChainIdx(i));
 
-            if (last_chainidx == -1)
-            {
-                last_chainidx = chainidx;
-                num_chains += 1;
-            }
-            else if (chainidx != last_chainidx)
-            {
-                last_chainidx = chainidx;
-                num_chains += 1;
-                is_ter[j] = true;
-            }
-        }
-        catch(...)
-        {
-            // one atom doesn't have a chain, so don't write any
-            // chain info
-            num_chains = 0;
-            is_ter = QVector<bool>(num_atoms, false);
-            break;
+            // Extract the atoms from the chain.
+            auto atoms = chain.atoms();
+
+            // Extract the number of the last atom in the chain
+            int terminal_atom = atoms[atoms.count()-1]
+                            .read()
+                            .asA<SireMol::Atom>()
+                            .index()
+                            .value();
+
+            // Set the terminal atom.
+            is_ter[terminal_atom] = true;
         }
     }
-
-    // Resize the data record containers (one TER record for each chain).
-    atom_lines.resize(num_atoms + num_chains);
-
-    if (usesParallel())
-    {
-        QMutex mutex;
-
-        // Local data storage.
-        QVector<PDBAtom> local_atoms(num_atoms);
-
-        tbb::parallel_for(tbb::blocked_range<int>(0, num_atoms),
-                        [&](const tbb::blocked_range<int> &r)
-        {
-            // Create local data objects.
-            QStringList local_errors;
-
-            // Convert each atom into a PDBAtom object
-            // and generate a PDB data record.
-            for (int i=r.begin(); i<r.end(); ++i)
-            {
-                local_atoms[i] = PDBAtom(atoms(i), is_ter[i], map, local_errors);
-                atom_lines[i] = local_atoms[i].toPDBRecord();
-            }
-
-            if (not local_errors.isEmpty())
-            {
-                // Acquire a lock.
-                QMutexLocker lkr(&mutex);
-
-                // Update the warning messages.
-                errors += local_errors;
-            }
-        });
-
-        // Create TER records if the system contains chains.
-        if (num_chains > 0)
-        {
-            // Make a copy of the atom lines.
-            auto lines = atom_lines;
-
-            // Line index.
-            int iline = 0;
-
-            // Now loop through the atoms and insert TER records as needed.
-            // This has to be done in serial.
-            for (int i=0; i<num_atoms; ++i)
-            {
-                // Copy the atom record across.
-                atom_lines[iline] = lines[i];
-                iline++;
-
-                // Add a TER record for this atom.
-                if (is_ter[i])
-                {
-                    atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
-                                            .arg(lines[i].mid(6, 5))
-                                            .arg(lines[i].mid(17, 3))
-                                            .arg(lines[i].at(21))
-                                            .arg(lines[i].mid(22, 4))
-                                            .arg(lines[i].at(26));
-
-                    iline++;
-                }
-            }
-        }
-    }
+    // Use the existing is_ter property.
     else
     {
-        // Line index.
-        int iline = 0;
-
-        // Loop over all of the atoms.
         for (int i=0; i<num_atoms; ++i)
         {
-            // Initalise a PDBAtom.
-            PDBAtom atom(atoms(i), is_ter[i], map, errors);
+            const auto atom = sire_mol.atom(AtomIdx(i));
 
-            // Generate a PDB atom data record.
-            atom_lines[iline] = atom.toPDBRecord();
-            iline++;
+            if (atom.hasProperty(map["is_ter"]))
+            {
+                if (atom.property<QString>(map["is_ter"]) == "True")
+                    is_ter[i] = true;
+            }
+        }
+    }
+
+    // Line index.
+    int iline = 0;
+
+    // Whether the previous record was a TER.
+    bool prev_ter = false;
+
+    // The previous chain identifier.
+    QString prev_chain = " ";
+
+    // A vector to store post-TER (likely HETATM) records.
+    QVector<QString> post_ter_lines;
+
+    // Loop over all of the atoms.
+    for (int i=0; i<num_atoms; ++i)
+    {
+        // Initalise a PDBAtom.
+        PDBAtom atom(sire_mol.atom(AtomIdx(i)), is_ter[i], map, errors);
+
+        // Generate a PDB atom data record.
+        auto record = atom.toPDBRecord();
+        record.replace(6, 5, QString::number(1+iline++).rightJustified(5, ' '));
+
+        // If this record follows a TER, yet belongs to the same chain, then
+        // assume it is a HETATM record, which we'll place at the end of the file.
+        const auto id = atom.getChainID();
+        if (prev_ter and (not id.isSpace()) and (id == prev_chain))
+        {
+            post_ter_lines.append(record);
+        }
+        else
+        {
+            atom_lines.append(record);
+            prev_ter = false;
 
             // Add a TER record for this atom.
             if (is_ter[i])
             {
-                atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
-                                        .arg(atom_lines[iline-1].mid(6, 5))
-                                        .arg(atom_lines[iline-1].mid(17, 3))
-                                        .arg(atom_lines[iline-1].at(21))
-                                        .arg(atom_lines[iline-1].mid(22, 4))
-                                        .arg(atom_lines[iline-1].at(26));
+                atom_lines.append(QString("TER   %1      %2 %3\%4\%5")
+                                    .arg(iline + 1, 5)
+                                    .arg(record.mid(17, 3))
+                                    .arg(record.at(21))
+                                    .arg(record.mid(22, 4))
+                                    .arg(record.at(26)));
 
-                iline++;
+                prev_ter = true;
+                prev_chain = atom.getChainID();
             }
         }
     }
+
+    // Now append all of the post-TER records.
+    for (auto &line : post_ter_lines)
+        atom_lines.append(line.replace(6, 5, QString::number(1+iline++).rightJustified(5, ' ')));
 }
 
 /** Internal function used to parse a add PDB coordinate data to an existing
@@ -2401,6 +2337,7 @@ SireMol::Molecule PDB2::updateMolecule(const SireMol::Molecule &sire_mol,
     AtomFloatProperty  occupancies(molinfo);
     AtomFloatProperty  temperatures(molinfo);
     AtomStringProperty is_het_atom(molinfo);
+    AtomStringProperty is_ter_atom(molinfo);
 
     // Residue property objects.
     ResStringProperty  insert_codes(molinfo);
@@ -2425,9 +2362,13 @@ SireMol::Molecule PDB2::updateMolecule(const SireMol::Molecule &sire_mol,
         temperatures.set(cgatomidx, atom.getTemperature());
 
         bool isHet = atom.isHet();
+        bool isTer = atom.isTer();
 
         if (isHet) is_het_atom.set(cgatomidx, "True");
         else       is_het_atom.set(cgatomidx, "False");
+
+        if (isTer) is_ter_atom.set(cgatomidx, "True");
+        else       is_ter_atom.set(cgatomidx, "False");
 
         // Store the residue index for the atom.
         qint64 res_idx = atom.getResIdx();
@@ -2590,6 +2531,23 @@ SireMol::Molecule PDB2::updateMolecule(const SireMol::Molecule &sire_mol,
         else
         {
             edit_mol.setProperty(map["PDB.is_het[2]"], is_het_atom);
+        }
+    }
+
+    // Terminal atoms.
+    if (not sire_mol.hasProperty(map["is_ter"]))
+    {
+        edit_mol.setProperty(map["is_ter"], is_ter_atom);
+    }
+    else
+    {
+        if (not sire_mol.hasProperty(map["PDB.is_ter"]))
+        {
+            edit_mol.setProperty(map["PDB.is_ter"], is_ter_atom);
+        }
+        else
+        {
+            edit_mol.setProperty(map["PDB.is_ter[2]"], is_ter_atom);
         }
     }
 
