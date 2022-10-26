@@ -51,7 +51,7 @@ namespace SireMaths
 
 /** This is a simple small class that holds 3D value
     (e.g. 3D velocity, 3D forces)
-    
+
     @author Christopher Woods
 */
 template<class T>
@@ -68,46 +68,48 @@ public:
     Vector3D(const T &val);
     Vector3D(const T &x, const T &y, const T &z);
     Vector3D(const Vector &v);
-    
+
     Vector3D(const Vector3D<T> &other);
-    
+
     ~Vector3D();
-    
+
     Vector3D<T>& operator=(const Vector3D<T> &other);
-    
+
     bool operator==(const Vector3D<T> &other) const;
     bool operator!=(const Vector3D<T> &other) const;
-    
+
     const T& operator[](int i) const;
-    
+
     Vector3D<T>* clone() const;
 
     Vector3D<T>& operator+=(const Vector3D<T> &other);
     Vector3D<T>& operator-=(const Vector3D<T> &other);
-    
+
     Vector3D<T>& operator*=(double scale);
     Vector3D<T>& operator/=(double scale);
-    
+
     Vector3D<T> operator-() const;
     Vector3D<T> operator+(const Vector3D<T> &other) const;
     Vector3D<T> operator-(const Vector3D<T> &other) const;
     Vector3D<T> operator*(double scale) const;
     Vector3D<T> operator/(double scale) const;
-    
+
     static const char* typeName();
-    
+
+    const char* what() const;
+
     const T& x() const;
     const T& y() const;
     const T& z() const;
-    
+
     void set(int i, const T &value);
-    
+
     int count() const;
-    
+
     const T& at(int i) const;
-    
+
     Vector value() const;
-    
+
     QString toString() const;
 
 private:
@@ -181,7 +183,7 @@ Vector3D<T>& Vector3D<T>::operator=(const Vector3D<T> &other)
         sc[1] = other.sc[1];
         sc[2] = other.sc[2];
     }
-    
+
     return *this;
 }
 
@@ -220,10 +222,17 @@ Vector3D<T>* Vector3D<T>::clone() const
 }
 
 template<class T>
-SIRE_OUTOFLINE_TEMPLATE   
+SIRE_OUTOFLINE_TEMPLATE
 const char* Vector3D<T>::typeName()
 {
     return QMetaType::typeName( qMetaTypeId< Vector3D<T> >() );
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const char* Vector3D<T>::what() const
+{
+    return Vector3D<T>::typeName();
 }
 
 /** Return the x component */
@@ -288,12 +297,12 @@ SIRE_OUTOFLINE_TEMPLATE
 QString Vector3D<T>::toString() const
 {
     return QString( "( %1, %2, %3 )" )
-                .arg( Sire::toString(sc[0]), 
+                .arg( Sire::toString(sc[0]),
                       Sire::toString(sc[1]),
                       Sire::toString(sc[2]) );
 }
 
-/** Addition operator */    
+/** Addition operator */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 Vector3D<T>& Vector3D<T>::operator+=(const Vector3D<T> &other)
