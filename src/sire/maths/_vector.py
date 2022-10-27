@@ -151,6 +151,61 @@ def _fix_vector():
     _Vector.__str__ = __str__
     _Vector.__repr__ = __str__
 
+    def __add__(obj, other):
+        try:
+            other = Vector(other)
+        except Exception:
+            pass
+
+        return obj.__old__add__(other)
+
+    _Vector.__old__add__ = _Vector.__add__
+    _Vector.__add__ = __add__
+
+    def __sub__(obj, other):
+        try:
+            other = Vector(other)
+        except Exception:
+            pass
+
+        return obj.__old__sub__(other)
+
+    def __rsub__(obj, other):
+        try:
+            other = Vector(other)
+        except Exception:
+            pass
+
+        return other.__old__sub__(obj)
+
+    _Vector.__old__sub__ = _Vector.__sub__
+    _Vector.__sub__ = __sub__
+
+    _Vector.__radd__ = __add__
+    _Vector.__rsub__ = __rsub__
+
+    def __iadd__(obj, other):
+        try:
+            other = Vector(other)
+        except Exception:
+            pass
+
+        return obj.__old__iadd__(other)
+
+    _Vector.__old__iadd__ = _Vector.__iadd__
+    _Vector.__iadd__ = __iadd__
+
+    def __isub__(obj, other):
+        try:
+            other = Vector(other)
+        except Exception:
+            pass
+
+        return obj.__old__isub__(other)
+
+    _Vector.__old__isub__ = _Vector.__isub__
+    _Vector.__isub__ = __isub__
+
 
 class Vector(_Vector):
     """
@@ -172,13 +227,23 @@ class Vector(_Vector):
 
         for i in range(0, len(args)):
             if _is_number(args[i]):
-                new_args.append(args[i] * l)
+                new_args.append((args[i] * l).to(angstrom))
+            elif hasattr(args[i], "__len__"):
+                new_arg = []
+                for arg in args[i]:
+                    if _is_number(arg):
+                        new_arg.append((arg*l).to(angstrom))
+                    else:
+                        new_arg.append(arg.to(angstrom))
+                new_args.append(new_arg)
             else:
-                new_args.append(args[i])
+                new_args.append(args[i].to(angstrom))
 
         for key in kwargs.keys():
             if _is_number(kwargs[key]):
-                kwargs[key] = kwargs[key] * l
+                kwargs[key] = (kwargs[key] * l).to(angstrom)
+            else:
+                kwargs[key] = kwargs[key].to(angstrom)
 
         super().__init__(*new_args, **kwargs)
 
