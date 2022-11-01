@@ -1,4 +1,6 @@
+ambertools ; sys.platform != "win32"
 configargparse
+gromacs ; sys.platform != "win32"
 kcombu_bss
 ipywidgets<8
 lomap2
