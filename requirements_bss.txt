@@ -1,6 +1,13 @@
+# These packages aren't required by BioSimSpace, but are commonly
+# installed by users. As such, we add them as host requirements so
+# that Sire is built in a self-consistent manner. This allows a user
+# to create environments with and without these packages installed.
 ambertools ; sys.platform != "win32"
-configargparse
 gromacs ; sys.platform != "win32"
+
+# The following are actual BioSimSpace run-time requirements.
+# Please update this ass new requirements are added.
+configargparse
 kcombu_bss
 ipywidgets<8
 lomap2
