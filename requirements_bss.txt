@@ -1,7 +1,8 @@
 # BioSimSpace requirements. These aren't needed by Sire, but allow it to be
 # built in a self-consistent way, i.e. so BioSimSpace can be installed on top
-# of it. This will be added to the "host" section of Sire's requirements, hence
-# Sire will be built in an environment in which they are already installed.
+# of it. These will be added to the "host" section of Sire's requirements,
+# hence Sire will be built in an environment in which they are already
+# installed.
 
 # Optional packages: These packages aren't required by BioSimSpace, but are
 # commonly installed by users alongside it. Adding them here allows a
