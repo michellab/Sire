@@ -1,3 +1,5 @@
+# Build requirements for Sire.
+
 cmake
 git
 
