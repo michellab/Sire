@@ -11,7 +11,7 @@ ambertools ; sys.platform != "win32"
 gromacs ; sys.platform != "win32"
 
 # The following are actual BioSimSpace run-time requirements. Please update
-# this as new requirements are added.
+# this list as new requirements are added.
 configargparse
 kcombu_bss
 ipywidgets<8
