@@ -186,7 +186,8 @@ class System:
         return self.molecules().evaluate(*args, **kwargs)
 
     def cursor(self):
-        return self.molecules().cursor()
+        from ..mol._cursor import CursorsM
+        return CursorsM(self)
 
     def view(self, *args, **kwargs):
         return self.molecules().view(*args, **kwargs)

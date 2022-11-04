@@ -942,6 +942,19 @@ void register_Selector_CutGroup__class(){
                 , "" );
         
         }
+        { //::SireMol::Selector< SireMol::CutGroup >::toMolecules
+        
+            typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
+            typedef ::SireMol::Molecules ( ::SireMol::Selector< SireMol::CutGroup >::*toMolecules_function_type)(  ) const;
+            toMolecules_function_type toMolecules_function_value( &::SireMol::Selector< SireMol::CutGroup >::toMolecules );
+            
+            Selector_CutGroup__exposer.def( 
+                "toMolecules"
+                , toMolecules_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::CutGroup >::toSelector
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;

@@ -1308,6 +1308,19 @@ void register_SelectorM_CutGroup__class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorM< SireMol::CutGroup >::toMolecules
+        
+            typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
+            typedef ::SireMol::Molecules ( ::SireMol::SelectorM< SireMol::CutGroup >::*toMolecules_function_type)(  ) const;
+            toMolecules_function_type toMolecules_function_value( &::SireMol::SelectorM< SireMol::CutGroup >::toMolecules );
+            
+            SelectorM_CutGroup__exposer.def( 
+                "toMolecules"
+                , toMolecules_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::CutGroup >::toSelectResult
         
             typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
@@ -1343,6 +1356,20 @@ void register_SelectorM_CutGroup__class(){
             SelectorM_CutGroup__exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::CutGroup >::update
+        
+            typedef SireMol::SelectorM< SireMol::CutGroup > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::CutGroup >::*update_function_type)( ::SireMol::Molecules const & ) ;
+            update_function_type update_function_value( &::SireMol::SelectorM< SireMol::CutGroup >::update );
+            
+            SelectorM_CutGroup__exposer.def( 
+                "update"
+                , update_function_value
+                , ( bp::arg("molecules") )
                 , bp::release_gil_policy()
                 , "" );
         

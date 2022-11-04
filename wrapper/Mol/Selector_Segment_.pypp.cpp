@@ -938,6 +938,19 @@ void register_Selector_Segment__class(){
                 , "" );
         
         }
+        { //::SireMol::Selector< SireMol::Segment >::toMolecules
+        
+            typedef SireMol::Selector< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Molecules ( ::SireMol::Selector< SireMol::Segment >::*toMolecules_function_type)(  ) const;
+            toMolecules_function_type toMolecules_function_value( &::SireMol::Selector< SireMol::Segment >::toMolecules );
+            
+            Selector_Segment__exposer.def( 
+                "toMolecules"
+                , toMolecules_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::Segment >::toSelector
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;

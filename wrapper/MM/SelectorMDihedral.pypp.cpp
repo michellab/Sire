@@ -1450,6 +1450,18 @@ void register_SelectorMDihedral_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorMDihedral::toMolecules
+        
+            typedef ::SireMol::Molecules ( ::SireMM::SelectorMDihedral::*toMolecules_function_type)(  ) const;
+            toMolecules_function_type toMolecules_function_value( &::SireMM::SelectorMDihedral::toMolecules );
+            
+            SelectorMDihedral_exposer.def( 
+                "toMolecules"
+                , toMolecules_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorMDihedral::toSelectResult
         
             typedef ::SireMol::SelectResult ( ::SireMM::SelectorMDihedral::*toSelectResult_function_type)(  ) const;
@@ -1482,6 +1494,19 @@ void register_SelectorMDihedral_class(){
             SelectorMDihedral_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMDihedral::update
+        
+            typedef void ( ::SireMM::SelectorMDihedral::*update_function_type)( ::SireMol::Molecules const & ) ;
+            update_function_type update_function_value( &::SireMM::SelectorMDihedral::update );
+            
+            SelectorMDihedral_exposer.def( 
+                "update"
+                , update_function_value
+                , ( bp::arg("molecules") )
                 , bp::release_gil_policy()
                 , "" );
         

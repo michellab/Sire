@@ -139,9 +139,12 @@ public:
     SelectorMBond operator()(const SireMol::BondID &id) const;
 
     QList<SireMol::MolViewPtr> toList() const;
+    SireMol::Molecules toMolecules() const;
 
     int count() const;
     int size() const;
+
+    void update(const SireMol::Molecules &molecules);
 
     SireMol::EvaluatorM evaluate() const;
 

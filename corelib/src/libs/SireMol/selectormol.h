@@ -136,9 +136,12 @@ public:
     Molecule operator[](const MolID &molid) const;
 
     QList<MolViewPtr> toList() const;
+    Molecules toMolecules() const;
 
     int count() const;
     int size() const;
+
+    void update(const Molecules &molecules);
 
     EvaluatorM evaluate() const;
 

@@ -1,7 +1,7 @@
 
 from typing import List as _List
 
-__all__ = ["Cursor", "Cursors"]
+__all__ = ["Cursor", "Cursors", "CursorsM"]
 
 
 class _CursorData:
@@ -352,14 +352,14 @@ class Cursor:
            of, if 'id' is supplied, the atoms in this view
            that match 'id'
         """
-        self._update()
-
         cursors = []
 
+        view = self.commit()
+
         if id is None:
-            atoms = self._view.atoms()
+            atoms = view.atoms()
         else:
-            atoms = self._view.atoms(id)
+            atoms = view.atoms(id)
 
         for atom in atoms:
             c = Cursor()
@@ -374,14 +374,14 @@ class Cursor:
            of, if 'id' is supplied, the residues in this view
            that match 'id'
         """
-        self._update()
-
         cursors = []
 
+        view = self.commit()
+
         if id is None:
-            residues = self._view.residues()
+            residues = view.residues()
         else:
-            residues = self._view.residues(id)
+            residues = view.residues(id)
 
         for residue in residues:
             c = Cursor()
@@ -396,14 +396,14 @@ class Cursor:
            of, if 'id' is supplied, the chains in this view
            that match 'id'
         """
-        self._update()
-
         cursors = []
 
+        view = self.commit()
+
         if id is None:
-            chains = self._view.chains()
+            chains = view.chains()
         else:
-            chains = self._view.chains(id)
+            chains = view.chains(id)
 
         for chain in chains:
             c = Cursor()
@@ -418,14 +418,14 @@ class Cursor:
            of, if 'id' is supplied, the segments in this view
            that match 'id'
         """
-        self._update()
-
         cursors = []
 
+        view = self.commit()
+
         if id is None:
-            segments = self._view.segments()
+            segments = view.segments()
         else:
-            segments = self._view.segments(id)
+            segments = view.segments(id)
 
         for segment in segments:
             c = Cursor()
@@ -467,7 +467,7 @@ class Cursor:
 
         c = Cursor()
         c._d = self._d
-        c._view = c._view.residue(i)
+        c._view = self._view.residue(i)
         c._update()
 
         return c
@@ -929,6 +929,70 @@ class Cursor:
 
         return p
 
+    def translate(self, *args, map=None):
+        """Translate all of the atoms operated on by this cursor
+           by the passed arguments (these are converted automatically
+           to a sr.maths.Vector). Use 'map' to specify the property
+           map to use to find the coordinates property
+        """
+        from ..maths import Vector
+        delta = Vector(*args)
+
+        if map is None:
+            from ..base import PropertyMap
+            map = PropertyMap()
+
+        view = self.commit()
+        view = view.move().translate(delta, map=map).commit()
+
+        self._d.molecule = view.molecule().edit()
+        self._update()
+
+    def rotate(self, angle=None, axis=None, center=None,
+               quaternion=None, matrix=None,
+               map=None):
+        """Rotate all of the atoms operated on by this cursor
+           by the passed arguments. Use 'map' to specify the
+           property map to use to find the coordinates property.
+
+           There are many ways to specify the rotation, hence
+           the number of named arguments:
+
+           angle: (float or angle)
+                The angle to rotate by - this is interpreted as
+                degrees if you pass in a float. Otherwise use
+                sr.units.degrees or sr.units.radians to specify
+                the angle unit. This is superseded by the
+                quaternion or matrix arguments.
+
+            axis: sire.maths.Vector (or anything that can convert to a Vector)
+                The vector about which to rotate. If this is not
+                specified, and no other rotation specification is
+                used, then the rotation is about the z axis.
+                This is superseded by the quaternion or
+                matrix arguments.
+
+            center: sire.maths.Vector (or anything that can convert to a Vector)
+                The center for the rotation. If this isn't passed then
+                the center of geometry of the atoms operated on by this
+                cursor is used.
+
+            quaternion: sire.maths.Quaternion
+                The Quaternion description of the rotation. Note that,
+                if you pass this, then the angle, axis and matrix
+                arguments will be ignored.
+
+            matrix: sire.maths.Matrix
+                The 3x3 rotation matrix that describes the rotation.
+                Note that, if you pass this, then the angle and axis
+                arguments will be ignored. This is superseded by
+                the quaternion argument.
+
+            map: None, dict or sire.base.PropertyMap
+                The property map used to find the coordinates property
+        """
+        pass
+
 
 class Cursors:
     """This class holds a list of Cursors. It provides some convenience
@@ -1064,3 +1128,147 @@ class Cursors:
             cursor.apply(func, *args, **kwargs)
 
         return self
+
+    def translate(self, *args, map=None):
+        """Translate all of the atoms operated on by these cursors
+           by the passed arguments (these are converted automatically
+           to a sr.maths.Vector). Use 'map' to specify the property
+           map to use to find the coordinates property
+        """
+        for cursor in self._cursors:
+            cursor.translate(*args, map=map)
+
+
+class CursorsM:
+    """This class holds a list of Cursor/Cursors that operate across
+       multiple molecules. This allows you to perform editing
+       operations across many molecules at the same time.
+    """
+    def __init__(self, parent=None):
+        self._parent = parent.clone()
+        self._cursors = []
+
+        if parent is not None:
+            for child in parent:
+                self._cursors.append(child.cursor())
+
+    def __getitem__(self, i):
+        try:
+            idx = int(i)
+        except Exception:
+            idx = None
+
+        if idx is not None:
+            return self._cursors[idx]
+        elif type(i) is slice:
+            ret = CursorsM()
+            ret._parent = self._parent
+            for idx in i:
+                ret._cursors.append(self._cursors[idx])
+
+            return ret
+        else:
+            raise TypeError(
+                "You can only index a CursorsM object by integer or slice. "
+               f"Indexing using '{i}' is not supported."
+            )
+
+    def __delitem__(self, i):
+        try:
+            # if this is an integer, then delete the ith cursor
+            self._cursors.__delitem__(i)
+            return
+        except Exception:
+            pass
+
+        # delete this key from all of the cursors
+        for c in self._cursors:
+            del c[i]
+
+    def __len__(self):
+        return len(self._cursors)
+
+    def __str__(self):
+        if len(self) == 0:
+            return "CursorsM::null"
+        else:
+            lines = []
+
+            n = len(self._cursors)
+
+            if n <= 10:
+                for i in range(0, n):
+                    lines.append(f"{i+1}: {self._cursors[i]}")
+            else:
+                for i in range(0, 5):
+                    lines.append(f"{i+1}: {self._cursors[i]}")
+
+                lines.append("...")
+
+                for i in range(n-5, n):
+                    lines.append(f"{i+1}: {self._cursors[i]}")
+
+            lines = "\n".join(lines)
+
+            return f"CursorsM( size={n}\n{lines}\n)"
+
+    def __repr__(self):
+        return self.__str__()
+
+    def delete(self, i):
+        """Remove either the ith cursor in the list, or i is a string,
+           delete that key from all of the cursors
+        """
+        self.__delitem__(i)
+        return self
+
+    def commit(self):
+        """Commit all of the changes and return the newly
+           edited multi-molecule view.
+        """
+        from . import Molecules
+
+        updated = Molecules()
+        updated.reserve(len(self._cursors))
+
+        for cursor in self._cursors:
+            updated.add(cursor.commit())
+
+        self._parent.update(updated)
+        return self._parent
+
+    def apply(self, func, *args, **kwargs):
+        """Apply the passed function (with optional position and keyword
+           arguments) to all of the cursors in this list of Cursors.
+           As the function is intended to use
+           the Cursor to edit molecules, only this Cursors object will be returned.
+           This lets you run `.apply(...).commit()` as a single line.
+
+           The function can be either;
+
+           1. a string containing the name of the function to call, or
+           2. an actual function (either a normal function or a lambda expression)
+
+           You can optionally pass in positional and keyword arguments
+           here that will be passed to the function.
+
+           Args:
+               func (str or function): The function to be called, or the name
+                                       of the function to be called.
+
+           Returns:
+               Cursors: This list of cursors
+        """
+        for cursor in self._cursors:
+            cursor.apply(func, *args, **kwargs)
+
+        return self
+
+    def translate(self, *args, map=None):
+        """Translate all of the atoms operated on by these cursors
+           by the passed arguments (these are converted automatically
+           to a sr.maths.Vector). Use 'map' to specify the property
+           map to use to find the coordinates property
+        """
+        for cursor in self._cursors:
+            cursor.translate(*args, map=map)

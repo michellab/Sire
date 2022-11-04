@@ -234,7 +234,7 @@ Molecules Molecules::from(const T &molecules)
          ++it)
     {
         SireBase::ChunkedHash<MolNum,ViewsOfMol>::iterator mol
-                                                    = mols.mols.find(it->number());
+                                                    = mols.mols.find(it->data().number());
 
         if (mol != mols.mols.end())
         {
@@ -242,7 +242,7 @@ Molecules Molecules::from(const T &molecules)
         }
         else
         {
-            mols.mols.insert(it->number(), *it);
+            mols.mols.insert(it->data().number(), *it);
         }
     }
 

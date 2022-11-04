@@ -1448,6 +1448,18 @@ void register_SelectorMBond_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorMBond::toMolecules
+        
+            typedef ::SireMol::Molecules ( ::SireMM::SelectorMBond::*toMolecules_function_type)(  ) const;
+            toMolecules_function_type toMolecules_function_value( &::SireMM::SelectorMBond::toMolecules );
+            
+            SelectorMBond_exposer.def( 
+                "toMolecules"
+                , toMolecules_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorMBond::toSelectResult
         
             typedef ::SireMol::SelectResult ( ::SireMM::SelectorMBond::*toSelectResult_function_type)(  ) const;
@@ -1480,6 +1492,19 @@ void register_SelectorMBond_class(){
             SelectorMBond_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMBond::update
+        
+            typedef void ( ::SireMM::SelectorMBond::*update_function_type)( ::SireMol::Molecules const & ) ;
+            update_function_type update_function_value( &::SireMM::SelectorMBond::update );
+            
+            SelectorMBond_exposer.def( 
+                "update"
+                , update_function_value
+                , ( bp::arg("molecules") )
                 , bp::release_gil_policy()
                 , "" );
         

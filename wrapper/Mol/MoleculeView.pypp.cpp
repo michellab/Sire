@@ -1619,6 +1619,18 @@ void register_MoleculeView_class(){
                 , "Expand this into a list of unit classes. This will return the view itself if\n  this is a unit class, e.g. Atom, Residue, Molecule etc.\n  This will return a list of unit classes if this is a Selector<T> or\n  equivalent type class.\n" );
         
         }
+        { //::SireMol::MoleculeView::toMolecules
+        
+            typedef ::SireMol::Molecules ( ::SireMol::MoleculeView::*toMolecules_function_type)(  ) const;
+            toMolecules_function_type toMolecules_function_value( &::SireMol::MoleculeView::toMolecules );
+            
+            MoleculeView_exposer.def( 
+                "toMolecules"
+                , toMolecules_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::MoleculeView::toSelector
         
             typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*toSelector_function_type)(  ) const;
@@ -1664,6 +1676,19 @@ void register_MoleculeView_class(){
                 "update"
                 , update_function_value
                 , ( bp::arg("moldata") )
+                , bp::release_gil_policy()
+                , "Update this view with a new version of the molecule. You\ncan only update the molecule if it has the same layout UID\n(so same atoms, residues, cutgroups etc.)\nThrow: SireError::incompatible_error\n" );
+        
+        }
+        { //::SireMol::MoleculeView::update
+        
+            typedef void ( ::SireMol::MoleculeView::*update_function_type)( ::SireMol::Molecules const & ) ;
+            update_function_type update_function_value( &::SireMol::MoleculeView::update );
+            
+            MoleculeView_exposer.def( 
+                "update"
+                , update_function_value
+                , ( bp::arg("molecules") )
                 , bp::release_gil_policy()
                 , "Update this view with a new version of the molecule. You\ncan only update the molecule if it has the same layout UID\n(so same atoms, residues, cutgroups etc.)\nThrow: SireError::incompatible_error\n" );
         

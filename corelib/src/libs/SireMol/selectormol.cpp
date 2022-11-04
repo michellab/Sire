@@ -403,9 +403,41 @@ QList<MolViewPtr> SelectorMol::toList() const
     return l;
 }
 
+Molecules SelectorMol::toMolecules() const
+{
+    return Molecules(mols);
+}
+
 SelectResult SelectorMol::toSelectResult() const
 {
     return SelectResult(this->mols);
+}
+
+void SelectorMol::update(const Molecules &molecules)
+{
+    // better to create a map from MolNum to index here
+    QMultiHash<MolNum, int> molnum_to_idx;
+    molnum_to_idx.reserve(mols.count());
+
+    int i = 0;
+
+    for (const auto &mol : mols)
+    {
+        molnum_to_idx.insert(mol.number(), i);
+        i += 1;
+    }
+
+    for (const auto &mol : molecules)
+    {
+        const auto molnum = mol.data().number();
+
+        auto it = molnum_to_idx.constFind(molnum);
+
+        while (it != molnum_to_idx.constEnd() && it.key() == molnum)
+        {
+            mols[it.value()].update(mol.data());
+        }
+    }
 }
 
 EvaluatorM SelectorMol::evaluate() const

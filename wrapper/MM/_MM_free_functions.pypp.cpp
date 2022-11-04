@@ -7,31 +7,7 @@
 
 namespace bp = boost::python;
 
-#include "SireMM/cljshiftfunction.h"
-
-#include "SireMM/interff.h"
-
-#include "SireMM/intergroupff.h"
-
-#include "SireMM/internalff.h"
-
-#include "SireMM/internalgroupff.h"
-
-#include "SireMM/intraff.h"
-
-#include "SireMM/intragroupff.h"
-
-#include "SireMM/mmdetail.h"
-
-#include "SireMol/core.h"
-
-#include "SireUnits/units.h"
-
-#include "calculate_energy.h"
-
-#include <QDebug>
-
-#include "calculate_energy.h"
+#include "SireBase/parallel.h"
 
 #include "SireMM/cljshiftfunction.h"
 
@@ -59,31 +35,7 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
-#include "SireMM/cljshiftfunction.h"
-
-#include "SireMM/interff.h"
-
-#include "SireMM/intergroupff.h"
-
-#include "SireMM/internalff.h"
-
-#include "SireMM/internalgroupff.h"
-
-#include "SireMM/intraff.h"
-
-#include "SireMM/intragroupff.h"
-
-#include "SireMM/mmdetail.h"
-
-#include "SireMol/core.h"
-
-#include "SireUnits/units.h"
-
-#include "calculate_energy.h"
-
-#include <QDebug>
-
-#include "calculate_energy.h"
+#include "SireBase/parallel.h"
 
 #include "SireMM/cljshiftfunction.h"
 
@@ -111,31 +63,7 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
-#include "SireMM/cljshiftfunction.h"
-
-#include "SireMM/interff.h"
-
-#include "SireMM/intergroupff.h"
-
-#include "SireMM/internalff.h"
-
-#include "SireMM/internalgroupff.h"
-
-#include "SireMM/intraff.h"
-
-#include "SireMM/intragroupff.h"
-
-#include "SireMM/mmdetail.h"
-
-#include "SireMol/core.h"
-
-#include "SireUnits/units.h"
-
-#include "calculate_energy.h"
-
-#include <QDebug>
-
-#include "calculate_energy.h"
+#include "SireBase/parallel.h"
 
 #include "SireMM/cljshiftfunction.h"
 
@@ -163,31 +91,7 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
-#include "SireMM/cljshiftfunction.h"
-
-#include "SireMM/interff.h"
-
-#include "SireMM/intergroupff.h"
-
-#include "SireMM/internalff.h"
-
-#include "SireMM/internalgroupff.h"
-
-#include "SireMM/intraff.h"
-
-#include "SireMM/intragroupff.h"
-
-#include "SireMM/mmdetail.h"
-
-#include "SireMol/core.h"
-
-#include "SireUnits/units.h"
-
-#include "calculate_energy.h"
-
-#include <QDebug>
-
-#include "calculate_energy.h"
+#include "SireBase/parallel.h"
 
 #include "SireMM/cljshiftfunction.h"
 
@@ -215,31 +119,7 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
-#include "SireMM/cljshiftfunction.h"
-
-#include "SireMM/interff.h"
-
-#include "SireMM/intergroupff.h"
-
-#include "SireMM/internalff.h"
-
-#include "SireMM/internalgroupff.h"
-
-#include "SireMM/intraff.h"
-
-#include "SireMM/intragroupff.h"
-
-#include "SireMM/mmdetail.h"
-
-#include "SireMol/core.h"
-
-#include "SireUnits/units.h"
-
-#include "calculate_energy.h"
-
-#include <QDebug>
-
-#include "calculate_energy.h"
+#include "SireBase/parallel.h"
 
 #include "SireMM/cljshiftfunction.h"
 
@@ -267,31 +147,7 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
-#include "SireMM/cljshiftfunction.h"
-
-#include "SireMM/interff.h"
-
-#include "SireMM/intergroupff.h"
-
-#include "SireMM/internalff.h"
-
-#include "SireMM/internalgroupff.h"
-
-#include "SireMM/intraff.h"
-
-#include "SireMM/intragroupff.h"
-
-#include "SireMM/mmdetail.h"
-
-#include "SireMol/core.h"
-
-#include "SireUnits/units.h"
-
-#include "calculate_energy.h"
-
-#include <QDebug>
-
-#include "calculate_energy.h"
+#include "SireBase/parallel.h"
 
 #include "SireMM/cljshiftfunction.h"
 
@@ -319,31 +175,7 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
-#include "SireMM/cljshiftfunction.h"
-
-#include "SireMM/interff.h"
-
-#include "SireMM/intergroupff.h"
-
-#include "SireMM/internalff.h"
-
-#include "SireMM/internalgroupff.h"
-
-#include "SireMM/intraff.h"
-
-#include "SireMM/intragroupff.h"
-
-#include "SireMM/mmdetail.h"
-
-#include "SireMol/core.h"
-
-#include "SireUnits/units.h"
-
-#include "calculate_energy.h"
-
-#include <QDebug>
-
-#include "calculate_energy.h"
+#include "SireBase/parallel.h"
 
 #include "SireMM/cljshiftfunction.h"
 
@@ -371,31 +203,7 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
-#include "SireMM/cljshiftfunction.h"
-
-#include "SireMM/interff.h"
-
-#include "SireMM/intergroupff.h"
-
-#include "SireMM/internalff.h"
-
-#include "SireMM/internalgroupff.h"
-
-#include "SireMM/intraff.h"
-
-#include "SireMM/intragroupff.h"
-
-#include "SireMM/mmdetail.h"
-
-#include "SireMol/core.h"
-
-#include "SireUnits/units.h"
-
-#include "calculate_energy.h"
-
-#include <QDebug>
-
-#include "calculate_energy.h"
+#include "SireBase/parallel.h"
 
 #include "SireMM/cljshiftfunction.h"
 
@@ -423,6 +231,8 @@ namespace bp = boost::python;
 
 #include "calculate_energy.h"
 
+#include "SireBase/parallel.h"
+
 #include "SireMM/cljshiftfunction.h"
 
 #include "SireMM/interff.h"
@@ -448,6 +258,232 @@ namespace bp = boost::python;
 #include <QDebug>
 
 #include "calculate_energy.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireMM/cljshiftfunction.h"
+
+#include "SireMM/interff.h"
+
+#include "SireMM/intergroupff.h"
+
+#include "SireMM/internalff.h"
+
+#include "SireMM/internalgroupff.h"
+
+#include "SireMM/intraff.h"
+
+#include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
+
+#include "SireMol/core.h"
+
+#include "SireUnits/units.h"
+
+#include "calculate_energy.h"
+
+#include <QDebug>
+
+#include "calculate_energy.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireMM/cljshiftfunction.h"
+
+#include "SireMM/interff.h"
+
+#include "SireMM/intergroupff.h"
+
+#include "SireMM/internalff.h"
+
+#include "SireMM/internalgroupff.h"
+
+#include "SireMM/intraff.h"
+
+#include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
+
+#include "SireMol/core.h"
+
+#include "SireUnits/units.h"
+
+#include "calculate_energy.h"
+
+#include <QDebug>
+
+#include "calculate_energy.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireMM/cljshiftfunction.h"
+
+#include "SireMM/interff.h"
+
+#include "SireMM/intergroupff.h"
+
+#include "SireMM/internalff.h"
+
+#include "SireMM/internalgroupff.h"
+
+#include "SireMM/intraff.h"
+
+#include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
+
+#include "SireMol/core.h"
+
+#include "SireUnits/units.h"
+
+#include "calculate_energy.h"
+
+#include <QDebug>
+
+#include "calculate_energy.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireMM/cljshiftfunction.h"
+
+#include "SireMM/interff.h"
+
+#include "SireMM/intergroupff.h"
+
+#include "SireMM/internalff.h"
+
+#include "SireMM/internalgroupff.h"
+
+#include "SireMM/intraff.h"
+
+#include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
+
+#include "SireMol/core.h"
+
+#include "SireUnits/units.h"
+
+#include "calculate_energy.h"
+
+#include <QDebug>
+
+#include "calculate_energy.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireMM/cljshiftfunction.h"
+
+#include "SireMM/interff.h"
+
+#include "SireMM/intergroupff.h"
+
+#include "SireMM/internalff.h"
+
+#include "SireMM/internalgroupff.h"
+
+#include "SireMM/intraff.h"
+
+#include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
+
+#include "SireMol/core.h"
+
+#include "SireUnits/units.h"
+
+#include "calculate_energy.h"
+
+#include <QDebug>
+
+#include "calculate_energy.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireMM/cljshiftfunction.h"
+
+#include "SireMM/interff.h"
+
+#include "SireMM/intergroupff.h"
+
+#include "SireMM/internalff.h"
+
+#include "SireMM/internalgroupff.h"
+
+#include "SireMM/intraff.h"
+
+#include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
+
+#include "SireMol/core.h"
+
+#include "SireUnits/units.h"
+
+#include "calculate_energy.h"
+
+#include <QDebug>
+
+#include "calculate_energy.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireMM/cljshiftfunction.h"
+
+#include "SireMM/interff.h"
+
+#include "SireMM/intergroupff.h"
+
+#include "SireMM/internalff.h"
+
+#include "SireMM/internalgroupff.h"
+
+#include "SireMM/intraff.h"
+
+#include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
+
+#include "SireMol/core.h"
+
+#include "SireUnits/units.h"
+
+#include "calculate_energy.h"
+
+#include <QDebug>
+
+#include "calculate_energy.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireMM/cljshiftfunction.h"
+
+#include "SireMM/interff.h"
+
+#include "SireMM/intergroupff.h"
+
+#include "SireMM/internalff.h"
+
+#include "SireMM/internalgroupff.h"
+
+#include "SireMM/intraff.h"
+
+#include "SireMM/intragroupff.h"
+
+#include "SireMM/mmdetail.h"
+
+#include "SireMol/core.h"
+
+#include "SireUnits/units.h"
+
+#include "calculate_energy.h"
+
+#include <QDebug>
+
+#include "calculate_energy.h"
+
+#include "SireBase/parallel.h"
 
 #include "SireMM/cljshiftfunction.h"
 

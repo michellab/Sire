@@ -37,6 +37,7 @@
 #include "molecule.h"
 #include "select.h"
 #include "trajectory.h"
+#include "molecules.h"
 
 #include "SireVol/space.h"
 
@@ -357,6 +358,23 @@ void MoleculeView::update(const MoleculeData &moldata)
     d->info().assertEqualTo(moldata.info());
 
     d = moldata;
+}
+
+/** Update this view with a new version of the molecule
+    from 'molecules' (assuming this molecule is in molecules).
+    You can only update the molecule if it has the same layout UID
+    (so same atoms, residues, cutgroups etc.)
+
+    \throw SireError::incompatible_error
+*/
+void MoleculeView::update(const Molecules &molecules)
+{
+    auto it = molecules.constFind(this->data().number());
+
+    if (it != molecules.constEnd())
+    {
+        this->update(it.value().data());
+    }
 }
 
 /** Synonym for MoleculeView::propertyKeys */
@@ -1839,6 +1857,12 @@ int MoleculeView::size() const
 int MoleculeView::count() const
 {
     return this->nViews();
+}
+
+/** Return a Molecules set that contains this view (or views) */
+Molecules MoleculeView::toMolecules() const
+{
+    return Molecules(*this);
 }
 
 /** Expand this into a list of unit classes. This will return the view itself if

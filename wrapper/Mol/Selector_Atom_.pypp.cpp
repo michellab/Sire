@@ -950,6 +950,19 @@ void register_Selector_Atom__class(){
                 , "" );
         
         }
+        { //::SireMol::Selector< SireMol::Atom >::toMolecules
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Molecules ( ::SireMol::Selector< SireMol::Atom >::*toMolecules_function_type)(  ) const;
+            toMolecules_function_type toMolecules_function_value( &::SireMol::Selector< SireMol::Atom >::toMolecules );
+            
+            Selector_Atom__exposer.def( 
+                "toMolecules"
+                , toMolecules_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::Atom >::toSelector
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;

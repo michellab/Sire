@@ -124,9 +124,12 @@ public:
     T operator()(const typename T::ID &id) const;
 
     QList<MolViewPtr> toList() const;
+    Molecules toMolecules() const;
 
     int count() const;
     int size() const;
+
+    void update(const Molecules &molecules);
 
     EvaluatorM evaluate() const;
 
@@ -1162,9 +1165,45 @@ QList<MolViewPtr> SelectorM<T>::toList() const
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
+Molecules SelectorM<T>::toMolecules() const
+{
+    return Molecules(this->vws);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
 SelectResult SelectorM<T>::toSelectResult() const
 {
     return SelectResult(this->vws);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+void SelectorM<T>::update(const Molecules &molecules)
+{
+    // better to create a map from MolNum to index here
+    QMultiHash<MolNum, int> molnum_to_idx;
+    molnum_to_idx.reserve(this->vws.count());
+
+    int i = 0;
+
+    for (const auto &view : this->vws)
+    {
+        molnum_to_idx.insert(view.data().number(), i);
+        i += 1;
+    }
+
+    for (const auto &mol : molecules)
+    {
+        const auto molnum = mol.data().number();
+
+        auto it = molnum_to_idx.constFind(molnum);
+
+        while (it != molnum_to_idx.constEnd() && it.key() == molnum)
+        {
+            this->vws[it.value()].update(mol.data());
+        }
+    }
 }
 
 template<class T>

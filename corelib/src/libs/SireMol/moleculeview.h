@@ -59,6 +59,7 @@ class MoleculeData;
 class AtomSelection;
 
 class Molecule;
+class Molecules;
 class Segment;
 class Chain;
 class Residue;
@@ -151,6 +152,8 @@ public:
     virtual MolViewPtr operator[](const QList<qint64> &idxs) const;
 
     virtual QList<MolViewPtr> toList() const;
+    virtual Molecules toMolecules() const;
+
     virtual MolViewPtr toSelector() const=0;
 
     MolViewPtr at(int i) const;
@@ -300,6 +303,7 @@ public:
     Selector<Segment> selectAllSegments() const;
 
     virtual void update(const MoleculeData &moldata);
+    virtual void update(const Molecules &molecules);
 
     /** Return whether or not this view has the property at key 'key'
          - note that this returns true only if there is a property,

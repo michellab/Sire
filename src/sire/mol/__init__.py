@@ -23,7 +23,7 @@ from ..legacy.Mol import AtomName, AtomNum, AtomIdx, AtomID, \
                          Residue, Selector_Residue_, SelectorM_Residue_, \
                          Chain, Selector_Chain_, SelectorM_Chain_, \
                          Segment, Selector_Segment_, SelectorM_Segment_, \
-                         Molecule, SelectorMol, \
+                         Molecule, SelectorMol, Molecules, \
                          MoleculeView, Select, \
                          BondType, Stereoscopy, \
                          AtomCoords, AtomMasses, AtomCharges
@@ -684,7 +684,7 @@ def __atomcoords__str__(obj):
     parts = []
 
     if n <= 10:
-        for i in range(0, 10):
+        for i in range(0, n):
             parts.append(f"{i}: {obj[i]}")
     else:
         for i in range(0, 5):
@@ -924,6 +924,19 @@ SelectorM_Chain_.trajectory = _trajectory
 SelectorM_Segment_.trajectory = _trajectory
 SelectorM_CutGroup_.trajectory = _trajectory
 SelectorMol.trajectory = _trajectory
+
+
+def _cursorsm(obj):
+    from ._cursor import CursorsM
+    return CursorsM(parent=obj)
+
+
+SelectorM_Atom_.cursor = _cursorsm
+SelectorM_Residue_.cursor = _cursorsm
+SelectorM_Chain_.cursor = _cursorsm
+SelectorM_Segment_.cursor = _cursorsm
+SelectorM_CutGroup_.cursor = _cursorsm
+SelectorMol.cursor = _cursorsm
 
 
 def _to_molecules(obj):

@@ -496,6 +496,38 @@ QList<MolViewPtr> SelectorMImproper::toList() const
     return l;
 }
 
+Molecules SelectorMImproper::toMolecules() const
+{
+    return Molecules(this->imps);
+}
+
+void SelectorMImproper::update(const Molecules &molecules)
+{
+    // better to create a map from MolNum to index here
+    QMultiHash<MolNum, int> molnum_to_idx;
+    molnum_to_idx.reserve(this->imps.count());
+
+    int i = 0;
+
+    for (const auto &mol : this->imps)
+    {
+        molnum_to_idx.insert(mol.data().number(), i);
+        i += 1;
+    }
+
+    for (const auto &mol : molecules)
+    {
+        const auto molnum = mol.data().number();
+
+        auto it = molnum_to_idx.constFind(molnum);
+
+        while (it != molnum_to_idx.constEnd() && it.key() == molnum)
+        {
+            this->imps[it.value()].update(mol.data());
+        }
+    }
+}
+
 int SelectorMImproper::count() const
 {
     int n = 0;

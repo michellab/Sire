@@ -1308,6 +1308,19 @@ void register_SelectorM_Residue__class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorM< SireMol::Residue >::toMolecules
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::Molecules ( ::SireMol::SelectorM< SireMol::Residue >::*toMolecules_function_type)(  ) const;
+            toMolecules_function_type toMolecules_function_value( &::SireMol::SelectorM< SireMol::Residue >::toMolecules );
+            
+            SelectorM_Residue__exposer.def( 
+                "toMolecules"
+                , toMolecules_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::Residue >::toSelectResult
         
             typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
@@ -1343,6 +1356,20 @@ void register_SelectorM_Residue__class(){
             SelectorM_Residue__exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::update
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef void ( ::SireMol::SelectorM< SireMol::Residue >::*update_function_type)( ::SireMol::Molecules const & ) ;
+            update_function_type update_function_value( &::SireMol::SelectorM< SireMol::Residue >::update );
+            
+            SelectorM_Residue__exposer.def( 
+                "update"
+                , update_function_value
+                , ( bp::arg("molecules") )
                 , bp::release_gil_policy()
                 , "" );
         

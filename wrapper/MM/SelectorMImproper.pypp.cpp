@@ -1450,6 +1450,18 @@ void register_SelectorMImproper_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorMImproper::toMolecules
+        
+            typedef ::SireMol::Molecules ( ::SireMM::SelectorMImproper::*toMolecules_function_type)(  ) const;
+            toMolecules_function_type toMolecules_function_value( &::SireMM::SelectorMImproper::toMolecules );
+            
+            SelectorMImproper_exposer.def( 
+                "toMolecules"
+                , toMolecules_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorMImproper::toSelectResult
         
             typedef ::SireMol::SelectResult ( ::SireMM::SelectorMImproper::*toSelectResult_function_type)(  ) const;
@@ -1482,6 +1494,19 @@ void register_SelectorMImproper_class(){
             SelectorMImproper_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorMImproper::update
+        
+            typedef void ( ::SireMM::SelectorMImproper::*update_function_type)( ::SireMol::Molecules const & ) ;
+            update_function_type update_function_value( &::SireMM::SelectorMImproper::update );
+            
+            SelectorMImproper_exposer.def( 
+                "update"
+                , update_function_value
+                , ( bp::arg("molecules") )
                 , bp::release_gil_policy()
                 , "" );
         

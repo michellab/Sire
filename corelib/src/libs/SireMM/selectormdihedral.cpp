@@ -496,6 +496,38 @@ QList<MolViewPtr> SelectorMDihedral::toList() const
     return l;
 }
 
+Molecules SelectorMDihedral::toMolecules() const
+{
+    return Molecules(this->dihs);
+}
+
+void SelectorMDihedral::update(const Molecules &molecules)
+{
+    // better to create a map from MolNum to index here
+    QMultiHash<MolNum, int> molnum_to_idx;
+    molnum_to_idx.reserve(this->dihs.count());
+
+    int i = 0;
+
+    for (const auto &mol : this->dihs)
+    {
+        molnum_to_idx.insert(mol.data().number(), i);
+        i += 1;
+    }
+
+    for (const auto &mol : molecules)
+    {
+        const auto molnum = mol.data().number();
+
+        auto it = molnum_to_idx.constFind(molnum);
+
+        while (it != molnum_to_idx.constEnd() && it.key() == molnum)
+        {
+            this->dihs[it.value()].update(mol.data());
+        }
+    }
+}
+
 int SelectorMDihedral::count() const
 {
     int n = 0;

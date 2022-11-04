@@ -457,6 +457,38 @@ QList<MolViewPtr> SelectorMAngle::toList() const
     return l;
 }
 
+Molecules SelectorMAngle::toMolecules() const
+{
+    return Molecules(this->angs);
+}
+
+void SelectorMAngle::update(const Molecules &molecules)
+{
+    // better to create a map from MolNum to index here
+    QMultiHash<MolNum, int> molnum_to_idx;
+    molnum_to_idx.reserve(this->angs.count());
+
+    int i = 0;
+
+    for (const auto &mol : this->angs)
+    {
+        molnum_to_idx.insert(mol.data().number(), i);
+        i += 1;
+    }
+
+    for (const auto &mol : molecules)
+    {
+        const auto molnum = mol.data().number();
+
+        auto it = molnum_to_idx.constFind(molnum);
+
+        while (it != molnum_to_idx.constEnd() && it.key() == molnum)
+        {
+            this->angs[it.value()].update(mol.data());
+        }
+    }
+}
+
 int SelectorMAngle::count() const
 {
     int n = 0;
