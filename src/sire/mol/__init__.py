@@ -901,7 +901,7 @@ def _cursors(views):
        cursor of this list will be the molecule
     """
     cursor = views.molecule().cursor()
-    return cursor._views(views)
+    return cursor._from_views(views)
 
 
 Selector_Atom_.cursor = _cursors

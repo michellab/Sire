@@ -320,13 +320,36 @@ class Cursor:
 
         return Cursors(self, cursors)
 
-    def _views(self, views):
+    def _from_view(self, view):
+        """Hidden function that allows a single view of the
+           current molecule to be converted to a Cursor
+        """
+        if not self._d.molecule.is_same_molecule(view):
+            raise ValueError(
+                f"You cannot create from this view ({view}) as it is from "
+                f"a different molecule to {self._d.molecule}.")
+
+        c = Cursor()
+        c._d = self._d
+
+        from ..mm import Bond, Angle, Dihedral, Improper
+        from . import Molecule
+
+        if type(view) is Molecule:
+            c._view = self._d.molecule
+        elif type(view) in [Bond, Angle, Dihedral, Improper]:
+            c._view = self._d.molecule
+            c._internal = view.id()
+        else:
+            c._view = self._d.molecule[view.index()]
+
+        return c
+
+    def _from_views(self, views):
         """Hidden function that allows a set of views, e.g. from
            a Selector_Atom_, SelectorBond etc, to be converted
            to a set of Cursors
         """
-        self._update()
-
         cursors = []
 
         from sire.mm import Bond, Angle, Dihedral, Improper
@@ -336,7 +359,6 @@ class Cursor:
             c._d = self._d
 
             if type(view) in [Bond, Angle, Dihedral, Improper]:
-                # likely a bond
                 c._view = self._d.molecule
                 c._internal = view.id()
             else:
@@ -1045,7 +1067,7 @@ class Cursors:
         if idx is not None:
             return self._cursors[idx]
         elif type(i) is slice:
-                return Cursors(self._parent, self._cursors[i])
+            return Cursors(self._parent, self._cursors[i])
         else:
             cs = []
 
@@ -1218,9 +1240,20 @@ class CursorsM:
         self._parent = parent.clone()
         self._cursors = []
 
+        self._molcursors = {}
+
         if parent is not None:
+            from ..mol import Molecule
+
             for child in parent:
-                self._cursors.append(child.cursor())
+                child_mol = child.molecule()
+                molnum = child_mol.number()
+
+                if molnum not in self._molcursors:
+                    self._molcursors[molnum] = child_mol.cursor()
+
+                self._cursors.append(
+                        self._molcursors[molnum]._from_view(child))
 
     def __getitem__(self, i):
         try:
@@ -1233,6 +1266,8 @@ class CursorsM:
         elif type(i) is slice:
             ret = CursorsM()
             ret._parent = self._parent
+            ret._molcursors = self._molcursors
+
             for idx in i:
                 ret._cursors.append(self._cursors[idx])
 
