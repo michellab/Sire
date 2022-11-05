@@ -391,7 +391,8 @@ void Quaternion::fromMatrix(const Matrix &m)
 /** Return a string representation of this Quaternion */
 QString Quaternion::toString() const
 {
-    return QString("%1, %2, %3, %4").arg(sc[0], sc[1], sc[2], sc[3]);
+    return QString("(%1, %2, %3, %4)")
+                .arg(sc[0]).arg(sc[1]).arg(sc[2]).arg(sc[3]);
 }
 
 QRegExp quatregexp("([0-9.-]+),\\s{0,}([0-9.-]+),\\s{0,}([0-9.-]+),\\s{0,}([0-9.-]+)");

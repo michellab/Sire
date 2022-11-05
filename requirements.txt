@@ -9,5 +9,4 @@ qt
 tbb
 tbb-devel
 rich
-yaspin
 pandas

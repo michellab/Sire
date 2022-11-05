@@ -961,7 +961,7 @@ class Cursor:
            angle: (float or angle)
                 The angle to rotate by - this is interpreted as
                 degrees if you pass in a float. Otherwise use
-                sr.units.degrees or sr.units.radians to specify
+                sire.units.degrees or sire.units.radians to specify
                 the angle unit. This is superseded by the
                 quaternion or matrix arguments.
 
@@ -974,7 +974,7 @@ class Cursor:
 
             center: sire.maths.Vector (or anything that can convert to a Vector)
                 The center for the rotation. If this isn't passed then
-                the center of geometry of the atoms operated on by this
+                the center of mass of the atoms operated on by this
                 cursor is used.
 
             quaternion: sire.maths.Quaternion
@@ -991,7 +991,26 @@ class Cursor:
             map: None, dict or sire.base.PropertyMap
                 The property map used to find the coordinates property
         """
-        pass
+        from ..maths import create_quaternion, Vector
+
+        quaternion = create_quaternion(angle=angle, axis=axis,
+                                       matrix=matrix, quaternion=quaternion)
+
+        view = self.commit()
+
+        if map is None:
+            from ..base import PropertyMap
+            map = PropertyMap()
+
+        if center is None:
+            center = view.evaluate().center_of_mass(map=map)
+        else:
+            center = Vector(center)
+
+        view = view.move().rotate(quaternion, center, map=map).commit()
+
+        self._d.molecule = view.molecule().edit()
+        self._update()
 
 
 class Cursors:
@@ -1138,6 +1157,57 @@ class Cursors:
         for cursor in self._cursors:
             cursor.translate(*args, map=map)
 
+    def rotate(self, angle=None, axis=None, center=None,
+               quaternion=None, matrix=None,
+               map=None):
+        """Rotate all of the atoms operated on by this cursor
+           by the passed arguments. Use 'map' to specify the
+           property map to use to find the coordinates property.
+
+           There are many ways to specify the rotation, hence
+           the number of named arguments:
+
+           angle: (float or angle)
+                The angle to rotate by - this is interpreted as
+                degrees if you pass in a float. Otherwise use
+                sire.units.degrees or sire.units.radians to specify
+                the angle unit. This is superseded by the
+                quaternion or matrix arguments.
+
+            axis: sire.maths.Vector (or anything that can convert to a Vector)
+                The vector about which to rotate. If this is not
+                specified, and no other rotation specification is
+                used, then the rotation is about the z axis.
+                This is superseded by the quaternion or
+                matrix arguments.
+
+            center: sire.maths.Vector (or anything that can convert to a Vector)
+                The center for the rotation. If this isn't passed then
+                the center of mass of the atoms operated on by this
+                cursor is used.
+
+            quaternion: sire.maths.Quaternion
+                The Quaternion description of the rotation. Note that,
+                if you pass this, then the angle, axis and matrix
+                arguments will be ignored.
+
+            matrix: sire.maths.Matrix
+                The 3x3 rotation matrix that describes the rotation.
+                Note that, if you pass this, then the angle and axis
+                arguments will be ignored. This is superseded by
+                the quaternion argument.
+
+            map: None, dict or sire.base.PropertyMap
+                The property map used to find the coordinates property
+        """
+        from ..maths import create_quaternion
+
+        quaternion = create_quaternion(angle=angle, axis=axis,
+                                       matrix=matrix, quaternion=quaternion)
+
+        for cursor in self._cursors:
+            cursor.rotate(quaternion=quaternion, center=center, map=map)
+
 
 class CursorsM:
     """This class holds a list of Cursor/Cursors that operate across
@@ -1272,3 +1342,54 @@ class CursorsM:
         """
         for cursor in self._cursors:
             cursor.translate(*args, map=map)
+
+    def rotate(self, angle=None, axis=None, center=None,
+               quaternion=None, matrix=None,
+               map=None):
+        """Rotate all of the atoms operated on by this cursor
+           by the passed arguments. Use 'map' to specify the
+           property map to use to find the coordinates property.
+
+           There are many ways to specify the rotation, hence
+           the number of named arguments:
+
+           angle: (float or angle)
+                The angle to rotate by - this is interpreted as
+                degrees if you pass in a float. Otherwise use
+                sire.units.degrees or sire.units.radians to specify
+                the angle unit. This is superseded by the
+                quaternion or matrix arguments.
+
+            axis: sire.maths.Vector (or anything that can convert to a Vector)
+                The vector about which to rotate. If this is not
+                specified, and no other rotation specification is
+                used, then the rotation is about the z axis.
+                This is superseded by the quaternion or
+                matrix arguments.
+
+            center: sire.maths.Vector (or anything that can convert to a Vector)
+                The center for the rotation. If this isn't passed then
+                the center of mass of the atoms operated on by this
+                cursor is used.
+
+            quaternion: sire.maths.Quaternion
+                The Quaternion description of the rotation. Note that,
+                if you pass this, then the angle, axis and matrix
+                arguments will be ignored.
+
+            matrix: sire.maths.Matrix
+                The 3x3 rotation matrix that describes the rotation.
+                Note that, if you pass this, then the angle and axis
+                arguments will be ignored. This is superseded by
+                the quaternion argument.
+
+            map: None, dict or sire.base.PropertyMap
+                The property map used to find the coordinates property
+        """
+        from ..maths import create_quaternion
+
+        quaternion = create_quaternion(angle=angle, axis=axis,
+                                       matrix=matrix, quaternion=quaternion)
+
+        for cursor in self._cursors:
+            cursor.rotate(quaternion=quaternion, center=center, map=map)
