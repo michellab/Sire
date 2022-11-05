@@ -9,12 +9,7 @@ from ..legacy import Maths as _Maths
 from .. import use_new_api as _use_new_api
 _use_new_api()
 
-Matrix = _Maths.Matrix
-Quaternion = _Maths.Quaternion
-Triangle = _Maths.Triangle
-Torsion = _Maths.Torsion
-
-pi = _Maths.pi
+from ..legacy.Maths import Matrix, Quaternion, Triangle, Torsion, pi
 
 from ._vector import Vector
 from ._sphere import Sphere
@@ -62,7 +57,7 @@ def create_quaternion(angle=None, axis=None,
             # the user has passed in a quaternion as the first argument
             return angle
 
-        if type(angle is Matrix) and matrix is None:
+        if type(angle) is Matrix and matrix is None:
             # the user has passed in a rotation matrix as the first argument
             matrix = angle
             angle = None
@@ -103,8 +98,6 @@ def create_quaternion(angle=None, axis=None,
                 Console.warning(
                     "The angle and/or axis of rotation will be ignored "
                     "because you have passed in a rotation matrix.")
-
-            from ..maths import Matrix
 
             if type(matrix) is not Matrix:
                 raise TypeError(
