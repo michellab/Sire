@@ -243,7 +243,7 @@ class Cursor:
             c._internal = bond.id()
             cursors.append(c)
 
-        return Cursors(self, cursors)
+        return Cursors(self, cursors, bonds)
 
     def angles(self, id=None):
         """Return cursors for all of the angles in this
@@ -268,7 +268,7 @@ class Cursor:
             c._internal = angle.id()
             cursors.append(c)
 
-        return Cursors(self, cursors)
+        return Cursors(self, cursors, angles)
 
     def dihedrals(self, id=None):
         """Return cursors for all of the dihedrals in this
@@ -293,7 +293,7 @@ class Cursor:
             c._internal = dihedral.id()
             cursors.append(c)
 
-        return Cursors(self, cursors)
+        return Cursors(self, cursors, dihedrals)
 
     def impropers(self, id=None):
         """Return cursors for all of the impropers in this
@@ -318,7 +318,7 @@ class Cursor:
             c._internal = improper.id()
             cursors.append(c)
 
-        return Cursors(self, cursors)
+        return Cursors(self, cursors, impropers)
 
     def _from_view(self, view):
         """Hidden function that allows a single view of the
@@ -367,7 +367,7 @@ class Cursor:
 
             cursors.append(c)
 
-        return Cursors(self, cursors)
+        return Cursors(self, cursors, views)
 
     def atoms(self, id=None):
         """Return cursors for all of atoms in this view,
@@ -389,7 +389,7 @@ class Cursor:
             c._view = self._d.molecule.atom(atom.index())
             cursors.append(c)
 
-        return Cursors(self, cursors)
+        return Cursors(self, cursors, atoms)
 
     def residues(self, id=None):
         """Return cursors for all of residues in this view,
@@ -411,7 +411,7 @@ class Cursor:
             c._view = self._d.molecule.residue(residue.index())
             cursors.append(c)
 
-        return Cursors(self, cursors)
+        return Cursors(self, cursors, residues)
 
     def chains(self, id=None):
         """Return cursors for all of chains in this view,
@@ -433,7 +433,7 @@ class Cursor:
             c._view = self._d.molecule.chain(chain.index())
             cursors.append(c)
 
-        return Cursors(self, cursors)
+        return Cursors(self, cursors, chains)
 
     def segments(self, id=None):
         """Return cursors for all of segments in this view,
@@ -455,7 +455,7 @@ class Cursor:
             c._view = self._d.molecule.segment(segment.index())
             cursors.append(c)
 
-        return Cursors(self, cursors)
+        return Cursors(self, cursors, segments)
 
     def atom(self, i):
         """Return the atom in the molecule that matches the passed ID"""
@@ -1043,7 +1043,7 @@ class Cursors:
        created the list, plus being able to apply a function to
        each Cursor in the list
     """
-    def __init__(self, parent: Cursor, cursors: _List[Cursor]):
+    def __init__(self, parent: Cursor, cursors: _List[Cursor], view):
         if type(parent) is not Cursor:
             raise TypeError(f"{parent} must be a Cursor object!")
 
@@ -1057,36 +1057,24 @@ class Cursors:
 
         self._parent = parent
         self._cursors = cursors
+        self._view = view
 
     def __getitem__(self, i):
         try:
+            # do the simple thing if we are asking for the ith cursor
             idx = int(i)
-        except Exception:
-            idx = None
-
-        if idx is not None:
             return self._cursors[idx]
-        elif type(i) is slice:
-            return Cursors(self._parent, self._cursors[i])
-        else:
-            cs = []
-
-            for idx in i:
-                cs.append(self._cursors[idx])
-
-            return Cursors(self._parent, cs)
-
-    def __delitem__(self, i):
-        try:
-            # if this is an integer, then delete the ith cursor
-            self._cursors.__delitem__(i)
-            return
         except Exception:
             pass
 
-        # delete this key from all of the cursors
-        for c in self._cursors:
-            del c[i]
+        # otherwise we need to search the parent and
+        # get the cursors as needed
+        view = self._view[i]
+
+        if view.is_selector():
+            return self._parent._from_views(view)
+        else:
+            return self._parent._from_view(view)
 
     def __len__(self):
         return len(self._cursors)
@@ -1118,12 +1106,15 @@ class Cursors:
     def __repr__(self):
         return self.__str__()
 
-    def delete(self, i):
-        """Remove either the ith cursor in the list, or i is a string,
-           delete that key from all of the cursors
+    def view(self):
+        """Return the view underpinning this cursor. This is
+           the same as calling '.commit()'
         """
-        self.__delitem__(i)
-        return self
+        ret = self._view.clone()
+
+        from . import Molecules
+        ret.update(Molecules(self.commit()))
+        return ret
 
     def commit(self):
         """Commit all of the changes and return the newly
@@ -1138,6 +1129,150 @@ class Cursors:
            This is equivalent to `self.parent().commit()`
         """
         return self._parent.commit()
+
+    def atoms(self, id=None):
+        """Return cursors for all of atoms in this view,
+           of, if 'id' is supplied, the atoms in this view
+           that match 'id'
+        """
+        if id is None:
+            return self._parent._from_views(self._view.atoms())
+        else:
+            return self._parent._from_views(self._view.atoms(id))
+
+    def residues(self, id=None):
+        """Return cursors for all of residues in this view,
+           of, if 'id' is supplied, the residues in this view
+           that match 'id'
+        """
+        if id is None:
+            return self._parent._from_views(self._view.residues())
+        else:
+            return self._parent._from_views(self._view.residues(id))
+
+    def chains(self, id=None):
+        """Return cursors for all of chains in this view,
+           of, if 'id' is supplied, the chains in this view
+           that match 'id'
+        """
+        if id is None:
+            return self._parent._from_views(self._view.chains())
+        else:
+            return self._parent._from_views(self._view.chains(id))
+
+    def segments(self, id=None):
+        """Return cursors for all of segments in this view,
+           of, if 'id' is supplied, the segments in this view
+           that match 'id'
+        """
+        if id is None:
+            return self._parent._from_views(self._view.segments())
+        else:
+            return self._parent._from_views(self._view.segments(id))
+
+    def bonds(self, id=None):
+        """Return cursors for all of the bonds in this
+           view or, if 'id' is supplied, the bonds in this
+           view that match 'id'
+        """
+        if id is None:
+            return self._parent._from_views(self._view.bonds())
+        else:
+            return self._parent._from_views(self._view.bonds(id))
+
+    def angles(self, id=None):
+        """Return cursors for all of the angles in this
+           view or, if 'id' is supplied, the angles in this
+           view that match 'id'
+        """
+        if id is None:
+            return self._parent._from_views(self._view.angles())
+        else:
+            return self._parent._from_views(self._view.angles(id))
+
+    def dihedrals(self, id=None):
+        """Return cursors for all of the dihedrals in this
+           view or, if 'id' is supplied, the dihedrals in this
+           view that match 'id'
+        """
+        if id is None:
+            return self._parent._from_views(self._view.dihedrals())
+        else:
+            return self._parent._from_views(self._view.dihedrals(id))
+
+    def impropers(self, id=None):
+        """Return cursors for all of the impropers in this
+           view or, if 'id' is supplied, the impropers in this
+           view that match 'id'
+        """
+        if id is None:
+            return self._parent._from_views(self._view.impropers())
+        else:
+            return self._parent._from_views(self._view.impropers(id))
+
+    def atom(self, i):
+        """Return the atom in the molecule that matches the passed ID"""
+        return self._parent._from_view(self._view.atom(i))
+
+    def residue(self, i=None):
+        """Return the residue in the molecule that matches the passed ID.
+           If 'i' is None, then this returns the residue that contains
+           this atom (if this is an atom)
+        """
+        if i is None:
+            return self._parent._from_view(self._view.residue())
+        else:
+            return self._parent._from_view(self._view.residue(i))
+
+    def chain(self, i=None):
+        """Return the chain in the molecule that matches the passed ID.
+           If 'i' is None, then this returns the chain that contains
+           this atom (if this is an atom)"""
+        if i is None:
+            return self._parent._from_view(self._view.chain())
+        else:
+            return self._parent._from_view(self._view.chain(i))
+
+    def segment(self, i=None):
+        """Return the segment in the molecule that matches the passed ID.
+           If 'i' is None, then this returns the segment that contains
+           this atom (if this is an atom)"""
+        if i is None:
+            return self._parent._from_view(self._view.segment())
+        else:
+            return self._parent._from_view(self._view.segment(i))
+
+    def molecule(self):
+        """Return the molecule"""
+        return self._parent.molecule()
+
+    def bond(self, bond):
+        """Return the Cursor for the specified bond."""
+        if bond is None:
+            return self._parent._from_view(self._view.bond())
+        else:
+            return self._parent._from_view(self._view.bond(bond))
+
+    def angle(self, angle):
+        """Return the Cursor for the specified angle."""
+        if angle is None:
+            return self._parent._from_view(self._view.angle())
+        else:
+            return self._parent._from_view(self._view.angle(angle))
+
+    def dihedral(self, dihedral):
+        """Return the Cursor for the specified dihedral."""
+        if dihedral is None:
+            return self._parent._from_view(self._view.dihedral())
+        else:
+            return self._parent._from_view(self._view.dihedral(dihedral))
+
+    def improper(self, improper):
+        """Return the Cursor for the specified improper."""
+        if improper is None:
+            return self._parent._from_view(self._view.improper())
+        else:
+            return self._parent._from_view(self._view.improper(improper))
 
     def parent(self):
         """Return the parent cursor"""
@@ -1237,13 +1372,13 @@ class CursorsM:
        operations across many molecules at the same time.
     """
     def __init__(self, parent=None):
-        self._parent = parent.clone()
+        self._parent = None
         self._cursors = []
 
         self._molcursors = {}
 
         if parent is not None:
-            from ..mol import Molecule
+            self._parent = parent.clone()
 
             for child in parent:
                 child_mol = child.molecule()
@@ -1255,40 +1390,50 @@ class CursorsM:
                 self._cursors.append(
                         self._molcursors[molnum]._from_view(child))
 
+    def _from_view(self, view):
+        """Internal function that constructs from a single view"""
+        molnum = view.molecule().number()
+        molcursor = self._molcursors[molnum]
+
+        c = Cursor()
+        c._d = molcursor._d
+
+        from ..mm import Bond, Angle, Dihedral, Improper
+        from . import Molecule
+
+        if type(view) is Molecule:
+            c._view = molcursor._d.molecule
+        elif type(view) in [Bond, Angle, Dihedral, Improper]:
+            c._view = molcursor._d.molecule
+            c._internal = view.id()
+        else:
+            c._view = molcursor._d.molecule[view.index()]
+
+        c._update()
+
+        return c
+
+    def _from_views(self, views):
+        """Internal function to construct from a set of views"""
+        ret = CursorsM()
+        ret._parent = views.clone()
+        ret._molcursors = self._molcursors
+
+        for view in views:
+            molnum = view.molecule().number()
+            ret._cursors.append(ret._molcursors[molnum]._from_view(view))
+
+        return ret
+
     def __getitem__(self, i):
         try:
+            # try the simplest case - the ith cursor
             idx = int(i)
-        except Exception:
-            idx = None
-
-        if idx is not None:
             return self._cursors[idx]
-        elif type(i) is slice:
-            ret = CursorsM()
-            ret._parent = self._parent
-            ret._molcursors = self._molcursors
-
-            for idx in i:
-                ret._cursors.append(self._cursors[idx])
-
-            return ret
-        else:
-            raise TypeError(
-                "You can only index a CursorsM object by integer or slice. "
-               f"Indexing using '{i}' is not supported."
-            )
-
-    def __delitem__(self, i):
-        try:
-            # if this is an integer, then delete the ith cursor
-            self._cursors.__delitem__(i)
-            return
         except Exception:
             pass
 
-        # delete this key from all of the cursors
-        for c in self._cursors:
-            del c[i]
+        return self._from_views(self._parent[i])
 
     def __len__(self):
         return len(self._cursors)
@@ -1320,13 +1465,6 @@ class CursorsM:
     def __repr__(self):
         return self.__str__()
 
-    def delete(self, i):
-        """Remove either the ith cursor in the list, or i is a string,
-           delete that key from all of the cursors
-        """
-        self.__delitem__(i)
-        return self
-
     def commit(self):
         """Commit all of the changes and return the newly
            edited multi-molecule view.
@@ -1341,6 +1479,170 @@ class CursorsM:
 
         self._parent.update(updated)
         return self._parent
+
+    def atoms(self, id=None):
+        """Return cursors for all of atoms in this view,
+           or, if 'id' is supplied, the atoms in this view
+           that match 'id'
+        """
+        if id is None:
+            return self._from_views(self._parent.atoms())
+        else:
+            return self._from_views(self._parent.atoms(id))
+
+    def residues(self, id=None):
+        """Return cursors for all of residues in this view,
+           or, if 'id' is supplied, the residues in this view
+           that match 'id'
+        """
+        if id is None:
+            return self._from_views(self._parent.residues())
+        else:
+            return self._from_views(self._parent.residues(id))
+
+    def chains(self, id=None):
+        """Return cursors for all of chains in this view,
+           or, if 'id' is supplied, the chains in this view
+           that match 'id'
+        """
+        if id is None:
+            return self._from_views(self._parent.chains())
+        else:
+            return self._from_views(self._parent.chains(id))
+
+    def segments(self, id=None):
+        """Return cursors for all of segments in this view,
+           or, if 'id' is supplied, the segments in this view
+           that match 'id'
+        """
+        if id is None:
+            return self._from_views(self._parent.segments())
+        else:
+            return self._from_views(self._parent.segments(id))
+
+    def molecules(self, id=None):
+        """Return cursors for all of the molecules in this view,
+           or, if 'id' is supplied, the molecules in this view
+           that match 'id'
+        """
+        if id is None:
+            return self._from_views(self._parent.molecules())
+        else:
+            return self._from_views(self._parent.molecules(id))
+
+    def bonds(self, id=None):
+        """Return cursors for all of the bonds in this
+           view or, if 'id' is supplied, the bonds in this
+           view that match 'id'
+        """
+        if id is None:
+            return self._from_views(self._parent.bonds())
+        else:
+            return self._from_views(self._parent.bonds(id))
+
+    def angles(self, id=None):
+        """Return cursors for all of the angles in this
+           view or, if 'id' is supplied, the angles in this
+           view that match 'id'
+        """
+        if id is None:
+            return self._from_views(self._parent.angles())
+        else:
+            return self._from_views(self._parent.angles(id))
+
+    def dihedrals(self, id=None):
+        """Return cursors for all of the dihedrals in this
+           view or, if 'id' is supplied, the dihedrals in this
+           view that match 'id'
+        """
+        if id is None:
+            return self._from_views(self._parent.dihedrals())
+        else:
+            return self._from_views(self._parent.dihedrals(id))
+
+    def impropers(self, id=None):
+        """Return cursors for all of the impropers in this
+           view or, if 'id' is supplied, the impropers in this
+           view that match 'id'
+        """
+        if id is None:
+            return self._from_views(self._parent.impropers())
+        else:
+            return self._from_views(self._parent.impropers(id))
+
+    def atom(self, i):
+        """Return the atom in the molecule that matches the passed ID"""
+        return self._from_view(self._parent.atom(i))
+
+    def residue(self, i=None):
+        """Return the residue in the molecule that matches the passed ID.
+           If 'i' is None, then this returns the residue that contains
+           this atom (if this is an atom)
+        """
+        if i is None:
+            return self._from_view(self._parent.residue())
+        else:
+            return self._from_view(self._parent.residue(i))
+
+    def chain(self, i=None):
+        """Return the chain in the molecule that matches the passed ID.
+           If 'i' is None, then this returns the chain that contains
+           this atom (if this is an atom)"""
+        if i is None:
+            return self._from_view(self._parent.chain())
+        else:
+            return self._from_view(self._parent.chain(i))
+
+    def segment(self, i=None):
+        """Return the segment in the molecule that matches the passed ID.
+           If 'i' is None, then this returns the segment that contains
+           this atom (if this is an atom)"""
+        if i is None:
+            return self._from_view(self._parent.segment())
+        else:
+            return self._from_view(self._parent.segment(i))
+
+    def molecule(self, i=None):
+        """Return the molecule"""
+        if i is None:
+            mols = self._parent.molecules()
+            if len(mols) != 1:
+                raise ValueError(
+                    f"There is more than one molecule in this view ({len(mols)}) ."
+                    "You need to specify which one you want."
+                )
+
+            return self._from_view(mols[0])
+        else:
+            return self._from_view(self._parent.molecule(i))
+
+    def bond(self, bond):
+        """Return the Cursor for the specified bond."""
+        if bond is None:
+            return self._from_view(self._parent.bond())
+        else:
+            return self._from_view(self._parent.bond(bond))
+
+    def angle(self, angle):
+        """Return the Cursor for the specified angle."""
+        if angle is None:
+            return self._from_view(self._parent.angle())
+        else:
+            return self._from_view(self._parent.angle(angle))
+
+    def dihedral(self, dihedral):
+        """Return the Cursor for the specified dihedral."""
+        if dihedral is None:
+            return self._from_view(self._parent.dihedral())
+        else:
+            return self._from_view(self._parent.dihedral(dihedral))
+
+    def improper(self, improper):
+        """Return the Cursor for the specified improper."""
+        if improper is None:
+            return self._from_view(self._parent.improper())
+        else:
+            return self._from_view(self._parent.improper(improper))
 
     def apply(self, func, *args, **kwargs):
         """Apply the passed function (with optional position and keyword

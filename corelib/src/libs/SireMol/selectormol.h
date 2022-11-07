@@ -148,6 +148,8 @@ public:
     MoleculeGroup toMoleculeGroup() const;
     SelectResult toSelectResult() const;
 
+    bool isSelector() const;
+
     Molecule molecule(int i) const;
     Molecule molecule(const QString &name) const;
     Molecule molecule(const MolIdx &molidx) const;

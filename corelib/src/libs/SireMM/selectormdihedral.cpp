@@ -483,6 +483,11 @@ SelectorMDihedral SelectorMDihedral::operator()(const DihedralID &id) const
     return this->operator[](id);
 }
 
+bool SelectorMDihedral::isSelector() const
+{
+    return true;
+}
+
 QList<MolViewPtr> SelectorMDihedral::toList() const
 {
     QList<MolViewPtr> l;

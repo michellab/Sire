@@ -272,6 +272,18 @@ void register_SelectorImproper_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorImproper::isSelector
+        
+            typedef bool ( ::SireMM::SelectorImproper::*isSelector_function_type)(  ) const;
+            isSelector_function_type isSelector_function_value( &::SireMM::SelectorImproper::isSelector );
+            
+            SelectorImproper_exposer.def( 
+                "isSelector"
+                , isSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorImproper::measures
         
             typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 > > ( ::SireMM::SelectorImproper::*measures_function_type)(  ) const;

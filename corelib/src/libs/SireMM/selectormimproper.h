@@ -149,6 +149,8 @@ public:
     SelectorMImproper operator()(const QList<qint64> &idxs) const;
     SelectorMImproper operator()(const SireMol::ImproperID &id) const;
 
+    bool isSelector() const;
+
     QList<SireMol::MolViewPtr> toList() const;
     SireMol::Molecules toMolecules() const;
 

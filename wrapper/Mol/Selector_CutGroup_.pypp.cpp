@@ -376,6 +376,19 @@ void register_Selector_CutGroup__class(){
                 , "" );
         
         }
+        { //::SireMol::Selector< SireMol::CutGroup >::isSelector
+        
+            typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
+            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*isSelector_function_type)(  ) const;
+            isSelector_function_type isSelector_function_value( &::SireMol::Selector< SireMol::CutGroup >::isSelector );
+            
+            Selector_CutGroup__exposer.def( 
+                "isSelector"
+                , isSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::CutGroup >::metadataKeys
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;

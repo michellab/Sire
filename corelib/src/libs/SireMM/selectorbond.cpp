@@ -681,6 +681,11 @@ SelectorBond SelectorBond::operator()(const BondID &bond) const
     return ret;
 }
 
+bool SelectorBond::isSelector() const
+{
+    return true;
+}
+
 MolViewPtr SelectorBond::toSelector() const
 {
     return MolViewPtr(*this);

@@ -483,6 +483,11 @@ SelectorMImproper SelectorMImproper::operator()(const ImproperID &id) const
     return this->operator[](id);
 }
 
+bool SelectorMImproper::isSelector() const
+{
+    return true;
+}
+
 QList<MolViewPtr> SelectorMImproper::toList() const
 {
     QList<MolViewPtr> l;

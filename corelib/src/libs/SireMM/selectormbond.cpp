@@ -495,6 +495,11 @@ MoleculeGroup SelectorMBond::toMoleculeGroup() const
 
 }
 
+bool SelectorMBond::isSelector() const
+{
+    return true;
+}
+
 SelectResult SelectorMBond::toSelectResult() const
 {
     QList<MolViewPtr> r;

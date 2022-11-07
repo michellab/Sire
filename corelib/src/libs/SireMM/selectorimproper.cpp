@@ -1004,6 +1004,11 @@ SelectorImproper SelectorImproper::operator()(const ImproperID &improper) const
     return ret;
 }
 
+bool SelectorImproper::isSelector() const
+{
+    return true;
+}
+
 MolViewPtr SelectorImproper::toSelector() const
 {
     return MolViewPtr(*this);

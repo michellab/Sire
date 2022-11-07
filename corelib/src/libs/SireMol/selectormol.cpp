@@ -413,6 +413,11 @@ SelectResult SelectorMol::toSelectResult() const
     return SelectResult(this->mols);
 }
 
+bool SelectorMol::isSelector() const
+{
+    return true;
+}
+
 void SelectorMol::update(const Molecules &molecules)
 {
     // better to create a map from MolNum to index here

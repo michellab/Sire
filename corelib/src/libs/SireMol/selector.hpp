@@ -202,6 +202,8 @@ public:
     bool isEmpty() const;
     bool selectedAll() const;
 
+    bool isSelector() const;
+
     Selector<T> add(const Selector<T> &other) const;
     Selector<T> add(const T &view) const;
     Selector<T> add(const typename T::ID &id) const;
@@ -560,6 +562,14 @@ bool Selector<T>::selectedAll() const
     }
 
     return false;
+}
+
+/** Return whether or not this is a Selector object */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+bool Selector<T>::isSelector() const
+{
+    return true;
 }
 
 /** Return a string representation of this selector */

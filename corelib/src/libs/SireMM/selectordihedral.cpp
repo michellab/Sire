@@ -962,6 +962,11 @@ SelectorDihedral SelectorDihedral::operator()(const DihedralID &dihedral) const
     return ret;
 }
 
+bool SelectorDihedral::isSelector() const
+{
+    return true;
+}
+
 MolViewPtr SelectorDihedral::toSelector() const
 {
     return MolViewPtr(*this);

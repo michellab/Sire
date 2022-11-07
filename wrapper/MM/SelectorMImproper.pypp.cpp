@@ -618,6 +618,18 @@ void register_SelectorMImproper_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorMImproper::isSelector
+        
+            typedef bool ( ::SireMM::SelectorMImproper::*isSelector_function_type)(  ) const;
+            isSelector_function_type isSelector_function_value( &::SireMM::SelectorMImproper::isSelector );
+            
+            SelectorMImproper_exposer.def( 
+                "isSelector"
+                , isSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorMImproper::loadFrame
         
             typedef void ( ::SireMM::SelectorMImproper::*loadFrame_function_type)( int ) ;

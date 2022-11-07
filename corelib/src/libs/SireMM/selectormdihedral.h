@@ -147,6 +147,8 @@ public:
     SelectorMDihedral operator()(const QList<qint64> &idxs) const;
     SelectorMDihedral operator()(const SireMol::DihedralID &id) const;
 
+    bool isSelector() const;
+
     QList<SireMol::MolViewPtr> toList() const;
     SireMol::Molecules toMolecules() const;
 

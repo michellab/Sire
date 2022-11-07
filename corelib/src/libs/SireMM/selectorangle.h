@@ -158,6 +158,8 @@ public:
 
     SireMol::MolViewPtr toSelector() const;
 
+    bool isSelector() const;
+
     SireMol::AtomSelection selection() const;
 
     SelectorAngle add(const SelectorAngle &other) const;

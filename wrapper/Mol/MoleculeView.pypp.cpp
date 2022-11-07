@@ -720,6 +720,18 @@ void register_MoleculeView_class(){
                 , "Return whether or not this view is of the same molecule as other\n(albeit perhaps a different version of the molecule)" );
         
         }
+        { //::SireMol::MoleculeView::isSelector
+        
+            typedef bool ( ::SireMol::MoleculeView::*isSelector_function_type)(  ) const;
+            isSelector_function_type isSelector_function_value( &::SireMol::MoleculeView::isSelector );
+            
+            MoleculeView_exposer.def( 
+                "isSelector"
+                , isSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::MoleculeView::keys
         
             typedef ::QStringList ( ::SireMol::MoleculeView::*keys_function_type)(  ) const;

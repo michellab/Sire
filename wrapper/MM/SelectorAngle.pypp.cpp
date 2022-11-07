@@ -271,6 +271,18 @@ void register_SelectorAngle_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorAngle::isSelector
+        
+            typedef bool ( ::SireMM::SelectorAngle::*isSelector_function_type)(  ) const;
+            isSelector_function_type isSelector_function_value( &::SireMM::SelectorAngle::isSelector );
+            
+            SelectorAngle_exposer.def( 
+                "isSelector"
+                , isSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorAngle::measures
         
             typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 > > ( ::SireMM::SelectorAngle::*measures_function_type)(  ) const;

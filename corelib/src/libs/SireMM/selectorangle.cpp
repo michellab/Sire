@@ -800,6 +800,11 @@ SelectorAngle SelectorAngle::operator()(const AngleID &angle) const
     return ret;
 }
 
+bool SelectorAngle::isSelector() const
+{
+    return true;
+}
+
 MolViewPtr SelectorAngle::toSelector() const
 {
     return MolViewPtr(*this);

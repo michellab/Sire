@@ -618,6 +618,18 @@ void register_SelectorMDihedral_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorMDihedral::isSelector
+        
+            typedef bool ( ::SireMM::SelectorMDihedral::*isSelector_function_type)(  ) const;
+            isSelector_function_type isSelector_function_value( &::SireMM::SelectorMDihedral::isSelector );
+            
+            SelectorMDihedral_exposer.def( 
+                "isSelector"
+                , isSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorMDihedral::loadFrame
         
             typedef void ( ::SireMM::SelectorMDihedral::*loadFrame_function_type)( int ) ;

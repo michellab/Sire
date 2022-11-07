@@ -171,6 +171,8 @@ public:
     bool isEmpty() const;
     bool selectedAll() const;
 
+    bool isSelector() const;
+
     SireMol::MolViewPtr toSelector() const;
 
     SireMol::AtomSelection selection() const;

@@ -617,6 +617,18 @@ void register_SelectorMAngle_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorMAngle::isSelector
+        
+            typedef bool ( ::SireMM::SelectorMAngle::*isSelector_function_type)(  ) const;
+            isSelector_function_type isSelector_function_value( &::SireMM::SelectorMAngle::isSelector );
+            
+            SelectorMAngle_exposer.def( 
+                "isSelector"
+                , isSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorMAngle::loadFrame
         
             typedef void ( ::SireMM::SelectorMAngle::*loadFrame_function_type)( int ) ;

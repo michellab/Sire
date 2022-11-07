@@ -136,6 +136,8 @@ public:
     MoleculeGroup toMoleculeGroup() const;
     SelectResult toSelectResult() const;
 
+    bool isSelector() const;
+
     Molecule molecule(int i) const;
     Molecule molecule(const QString &name) const;
     Molecule molecule(const MolID &molid);
@@ -1175,6 +1177,13 @@ SIRE_OUTOFLINE_TEMPLATE
 SelectResult SelectorM<T>::toSelectResult() const
 {
     return SelectResult(this->vws);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+bool SelectorM<T>::isSelector() const
+{
+    return true;
 }
 
 template<class T>

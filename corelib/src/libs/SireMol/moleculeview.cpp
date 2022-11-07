@@ -1799,6 +1799,16 @@ Selector<Segment> MoleculeView::selectAllSegments() const
     return this->segments();
 }
 
+/** Return whether or not this is a Selector<T> object. This
+ *  helps code distinguish between views of single objects,
+ *  e.g. Atom, Residue etc., and views of multiple objects,
+ *  e.g. Selector<Atom>, Selector<Residue> etc.
+*/
+bool MoleculeView::isSelector() const
+{
+    return false;
+}
+
 /** Return a completely null molecule */
 const MoleculeView& MoleculeView::null()
 {

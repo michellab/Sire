@@ -302,6 +302,8 @@ public:
                                 const PropertyMap &map = PropertyMap()) const;
     Selector<Segment> selectAllSegments() const;
 
+    virtual bool isSelector() const;
+
     virtual void update(const MoleculeData &moldata);
     virtual void update(const Molecules &molecules);
 

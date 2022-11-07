@@ -444,6 +444,11 @@ SelectorMAngle SelectorMAngle::operator()(const AngleID &id) const
     return this->operator[](id);
 }
 
+bool SelectorMAngle::isSelector() const
+{
+    return true;
+}
+
 QList<MolViewPtr> SelectorMAngle::toList() const
 {
     QList<MolViewPtr> l;

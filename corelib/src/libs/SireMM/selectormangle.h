@@ -151,6 +151,8 @@ public:
 
     SireMol::EvaluatorM evaluate() const;
 
+    bool isSelector() const;
+
     SireMol::MoleculeGroup toMoleculeGroup() const;
     SireMol::SelectResult toSelectResult() const;
 

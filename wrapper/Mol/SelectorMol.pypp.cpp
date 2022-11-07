@@ -523,6 +523,18 @@ void register_SelectorMol_class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorMol::isSelector
+        
+            typedef bool ( ::SireMol::SelectorMol::*isSelector_function_type)(  ) const;
+            isSelector_function_type isSelector_function_value( &::SireMol::SelectorMol::isSelector );
+            
+            SelectorMol_exposer.def( 
+                "isSelector"
+                , isSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorMol::loadFrame
         
             typedef void ( ::SireMol::SelectorMol::*loadFrame_function_type)( int ) ;

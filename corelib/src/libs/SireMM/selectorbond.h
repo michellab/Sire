@@ -131,6 +131,8 @@ public:
 
     QList<SireMol::MolViewPtr> toList() const;
 
+    bool isSelector() const;
+
     QList<SireMol::BondID> IDs() const;
 
     SelectorBond add(const Bond &bond) const;
