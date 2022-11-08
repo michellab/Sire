@@ -236,3 +236,45 @@ def test_cursor_translate(ala_mols):
         assert c0[0].value() == pytest.approx(c1[0].value())
         assert c0[1].value() == pytest.approx(c1[1].value())
         assert c0[2].value() == pytest.approx(c1[2].value())
+
+
+def test_cursor_indexing(ala_mols):
+    mols = ala_mols
+
+    cursor = mols.cursor()
+
+    assert len(cursor) == len(mols)
+
+    c = cursor[0]
+
+    assert c.number == mols[0].number().value()
+    assert c.view().selected_all()
+
+    assert c.is_same_editor(c.atoms())
+    assert c.is_same_editor(c.atoms()[0])
+    assert c.atoms()[0].is_same_editor(c)
+
+    mol = mols[0]
+
+    assert len(c.atoms()) == len(mol.atoms())
+    assert len(c.atoms()[0:8:2]) == len(mol.atoms()[0:8:2])
+
+    assert c.atoms()[0:8:2].view() == mol.atoms()[0:8:2]
+
+    assert c.atoms("element C").view() == mol["element C"]
+    assert cursor["element C"].view() == mols["element C"]
+
+    assert cursor["element C"].commit() == mols["element C"]
+
+    assert cursor["element C"][0].is_same_editor(c)
+
+    assert cursor["element C"].molecule().view().selected_all()
+    assert cursor["element C"].molecule().is_same_editor(c)
+
+    assert c["element C"]["element"][0] == mol["element C"][0].property("element")
+
+    with pytest.raises(Exception):
+        c("element")
+
+    with pytest.raises(KeyError):
+        c["elemen"]

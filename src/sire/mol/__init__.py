@@ -315,17 +315,20 @@ def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False, map=None):
         idx = idx1
         idx1 = None
 
-    if hasattr(obj, "molecules"):
+    from . import MoleculeView
+
+    if issubclass(type(obj), MoleculeView):
+        # this is a single-molecule view
+        from ..mm import SelectorBond
+        C = SelectorBond
+        def _fromBondID(obj, bondid):
+            return SelectorBond(obj, bondid, map=map)
+    else:
         # this is a multi-molecule container
         from ..mm import SelectorMBond
         C = SelectorMBond
         def _fromBondID(obj, bondid):
             return SelectorMBond(obj.to_select_result(), bondid, map=map)
-    else:
-        from ..mm import SelectorBond
-        C = SelectorBond
-        def _fromBondID(obj, bondid):
-            return SelectorBond(obj, bondid, map=map)
 
     if idx is None:
         result = C(obj)
@@ -357,17 +360,20 @@ def __fixed__angles__(obj, idx=None, idx1=None, idx2=None, auto_reduce=False,
         idx = idx1
         idx1 = None
 
-    if hasattr(obj, "molecules"):
+    from . import MoleculeView
+
+    if issubclass(type(obj), MoleculeView):
+        # this is a single-molecule view
+        from ..mm import SelectorAngle
+        C = SelectorAngle
+        def _fromAngleID(obj, angid):
+            return SelectorAngle(obj, angid, map=map)
+    else:
         # this is a multi-molecule container
         from ..mm import SelectorMAngle
         C = SelectorMAngle
         def _fromAngleID(obj, angid):
             return SelectorMAngle(obj.to_select_result(), angid, map=map)
-    else:
-        from ..mm import SelectorAngle
-        C = SelectorAngle
-        def _fromAngleID(obj, angid):
-            return SelectorAngle(obj, angid, map=map)
 
     if idx is None:
         result = C(obj)
@@ -405,17 +411,20 @@ def __fixed__dihedrals__(obj, idx=None, idx1=None,
         idx = idx1
         idx1 = None
 
-    if hasattr(obj, "molecules"):
+    from . import MoleculeView
+
+    if issubclass(type(obj), MoleculeView):
+        # this is a single-molecule view
+        from ..mm import SelectorDihedral
+        C = SelectorDihedral
+        def _fromDihedralID(obj, dihid):
+            return SelectorDihedral(obj, dihid, map=map)
+    else:
         # this is a multi-molecule container
         from ..mm import SelectorMDihedral
         C = SelectorMDihedral
         def _fromDihedralID(obj, dihid):
             return SelectorMDihedral(obj.to_select_result(), dihid, map=map)
-    else:
-        from ..mm import SelectorDihedral
-        C = SelectorDihedral
-        def _fromDihedralID(obj, dihid):
-            return SelectorDihedral(obj, dihid, map=map)
 
     if idx is None:
         result = C(obj)
@@ -456,17 +465,20 @@ def __fixed__impropers__(obj, idx=None, idx1=None,
         idx = idx1
         idx1 = None
 
-    if hasattr(obj, "molecules"):
+    from . import MoleculeView
+
+    if issubclass(type(obj), MoleculeView):
+        # this is a single-molecule view
+        from ..mm import SelectorImproper
+        C = SelectorImproper
+        def _fromImproperID(obj, impid):
+            return SelectorImproper(obj, impid, map=map)
+    else:
         # this is a multi-molecule container
         from ..mm import SelectorMImproper
         C = SelectorMImproper
         def _fromImproperID(obj, impid):
             return SelectorMImproper(obj.to_select_result(), impid, map=map)
-    else:
-        from ..mm import SelectorImproper
-        C = SelectorImproper
-        def _fromImproperID(obj, impid):
-            return SelectorImproper(obj, impid, map=map)
 
     if idx is None:
         result = C(obj)
@@ -850,6 +862,51 @@ for C in [MoleculeView, SelectorMol, SelectorM_Atom_,
 
 for C in [Residue, Chain, Segment]:
     _add_property_func(C)
+
+
+def _molecule(obj, id=None):
+    """Return the molecule that contains this view. If 'id' is specified
+       then this will check that the ID matches this molecule before
+       returning it. This will raise an exception if the ID doesn't match.
+
+       Returns
+       -------
+
+       sire.mol.Molecule: The molecule containing this view
+    """
+    if id is None:
+        return obj.__orig__molecule()
+    else:
+        from . import SelectorMol
+        return SelectorMol(obj).molecule(id)
+
+
+def _molecules(obj, id=None):
+    """Return the molecule that contains this view as a list of molecules,
+       containing just a single molecule.
+
+       If 'id' is specified then this checks that this molecule matches
+       the ID before returning it. This will raise an exception if the
+       ID doesn't match.
+
+       Returns
+       -------
+
+       sire.mol.SelectorMol: A collection containing only a single molecule
+                             that contains this view.
+    """
+    from . import SelectorMol
+
+    if id is None:
+        return SelectorMol(obj).molecules()
+    else:
+        return SelectorMol(obj).molecules(id)
+
+
+if not hasattr(MoleculeView, "__orig__molecule"):
+    MoleculeView.__orig__molecule = MoleculeView.molecule
+    MoleculeView.molecule = _molecule
+    MoleculeView.molecules = _molecules
 
 
 def _get_atom_mass(x):

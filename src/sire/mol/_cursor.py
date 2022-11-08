@@ -170,6 +170,8 @@ class Cursor:
         return self.__str__()
 
     def __delitem__(self, key):
+        """Delete the property with specified key
+        """
         self._update()
 
         if self.is_internal():
@@ -185,6 +187,9 @@ class Cursor:
         self._update()
 
     def __contains__(self, key):
+        """Return whether a property with the specified key is
+           contained in this view.
+        """
         self._update()
 
         if self.is_internal():
@@ -192,15 +197,47 @@ class Cursor:
         else:
             return self._view.has_property(key)
 
-    def __getitem__(self, key):
-        self._update()
+    def __call__(self, key):
+        """Return a cursor that represents the sub-view of this
+           cursor, indexed by key. For example,
+           cursor("element C") would return a cursor for all
+           of the carbon atoms in this view.
+        """
+        view = self.view()[key]
 
-        if self.is_internal():
-            return self._d.connectivity.property(self._internal, key)
+        if view.is_selector():
+            return self._from_views(view)
         else:
-            return self._view.property(key)
+            return self._from_view(view)
+
+    def __getitem__(self, key):
+        """Return the property that matches the passed key, OR the
+           sub-view that matches the key. This will only look for
+           the sub-view if there is no matching property. Use
+           the __call__ function if you only want to search for
+           sub-views.
+        """
+        if type(key) is not str:
+            return self.__call__(key)
+
+        try:
+            return self.get(key)
+        except Exception as e:
+            property_error = e
+
+        # We can't find the property so try the sub-view
+        try:
+            return self.__call__(key)
+        except Exception:
+            pass
+
+        # We can't find the sub-view, but since this searches the
+        # property first, we will raise the property exception
+        raise property_error
 
     def __setitem__(self, key, value):
+        """Set the property with key 'key' to the passed 'value'
+        """
         self._update()
 
         if self.is_internal():
@@ -219,6 +256,25 @@ class Cursor:
             self._d.molecule = self._view.molecule()
 
         self._update()
+
+    def is_same_editor(self, other):
+        """Return whether this Cursor is using the same editor to edit
+           the molecule as 'other'. This returns true if the underlying
+           editor for both cursors is the same, i.e. changes made by
+           one cursor would be seen and be editable by the other cursor.
+        """
+        try:
+            # Other is a Cursor
+            return self._d is other._d
+        except AttributeError:
+            pass
+
+        try:
+            # Other is a Cursors
+            return self._d is other._parent._d
+        except AttributeError:
+            # Other is something else (a CursorsM?)
+            return False
 
     def bonds(self, id=None):
         """Return cursors for all of the bonds in this
@@ -639,7 +695,12 @@ class Cursor:
 
     def get(self, key):
         """Return the property associated with key 'key'"""
-        return self.__getitem__(key)
+        self._update()
+
+        if self.is_internal():
+            return self._d.connectivity.property(self._internal, key)
+        else:
+            return self._view.property(key)
 
     def set(self, key, value):
         """Set the property associated with key 'key' to the
@@ -1059,7 +1120,10 @@ class Cursors:
         self._cursors = cursors
         self._view = view
 
-    def __getitem__(self, i):
+    def __call__(self, i):
+        """Return the sub-view(s) of this cursor that match the index 'i'.
+           Note that this will not look at the properties of the cursors.
+        """
         try:
             # do the simple thing if we are asking for the ith cursor
             idx = int(i)
@@ -1075,6 +1139,46 @@ class Cursors:
             return self._parent._from_views(view)
         else:
             return self._parent._from_view(view)
+
+    def __getitem__(self, key):
+        """Either find the property that matches the passed 'key' or
+           look for the sub-view(s) of the cursor that match the passed key.
+           This will only look for sub-view(s) if there are no matching
+           properties. Use the __call__ operator to skip the property search.
+        """
+        if type(key) is not str:
+            return self.__call__(key)
+
+        try:
+            return self.get(key)
+        except Exception as e:
+            property_error = e
+
+        # We couldn't find the property, so instead
+        # try to find the matching sub-view
+        try:
+            return self.__call__(key)
+        except Exception:
+            pass
+
+        # This interface is primarily for properties,
+        # so raise the missing property error
+        raise property_error
+
+    def __setitem__(self, key, value):
+        for cursor in self._cursors:
+            cursor.set(key, value)
+
+    def __delitem__(self, key):
+        for cursor in self._cursors:
+            cursor.delete(key)
+
+    def __contains__(self, key):
+        for cursor in self._cursors:
+            if key in cursor:
+                return True
+
+        return False
 
     def __len__(self):
         return len(self._cursors)
@@ -1105,6 +1209,35 @@ class Cursors:
 
     def __repr__(self):
         return self.__str__()
+
+    def is_same_editor(self, other):
+        """Return whether this is using the same editor to edit
+           the molecule as 'other'. This returns true if the underlying
+           editor for both cursors is the same, i.e. changes made by
+           one cursor would be seen and be editable by the other cursor.
+        """
+        return self._parent.is_same_editor(other)
+
+    def get(self, key):
+        """Return the property associated with key 'key'"""
+        values = []
+
+        for cursor in self._cursors:
+            values.append(cursor.get(key))
+
+        return values
+
+    def set(self, key, value):
+        """Set the property associated with key 'key' to the
+           passed value
+        """
+        self.__setitem__(key, value)
+        return self
+
+    def delete(self, key):
+        """Remove the property associated with the key 'key'"""
+        self.__delitem__(key)
+        return self
 
     def view(self):
         """Return the view underpinning this cursor. This is
@@ -1425,7 +1558,7 @@ class CursorsM:
 
         return ret
 
-    def __getitem__(self, i):
+    def __call__(self, i):
         try:
             # try the simplest case - the ith cursor
             idx = int(i)
@@ -1434,6 +1567,37 @@ class CursorsM:
             pass
 
         return self._from_views(self._parent[i])
+
+    def __getitem__(self, key):
+        if type(key) is not str:
+            return self.__call__(key)
+
+        try:
+            return self.get(key)
+        except Exception as e:
+            property_error = e
+
+        try:
+            return self.__call__(key)
+        except Exception:
+            pass
+
+        raise property_error
+
+    def __setitem__(self, key, value):
+        for cursor in self._cursors:
+            cursor.set(key, value)
+
+    def __delitem__(self, key):
+        for cursor in self._cursors:
+            cursor.delete(key)
+
+    def __contains__(self, key):
+        for cursor in self._cursors:
+            if key in cursor:
+                return True
+
+        return False
 
     def __len__(self):
         return len(self._cursors)
@@ -1464,6 +1628,34 @@ class CursorsM:
 
     def __repr__(self):
         return self.__str__()
+
+    def get(self, key):
+        """Return the property associated with key 'key'"""
+        values = []
+
+        for cursor in self._cursors:
+            values.append(cursor.get(key))
+
+        return values
+
+    def set(self, key, value):
+        """Set the property associated with key 'key' to the
+           passed value
+        """
+        self.__setitem__(key, value)
+        return self
+
+    def delete(self, key):
+        """Remove the property associated with the key 'key'"""
+        self.__delitem__(key)
+        return self
+
+    def view(self):
+        """Return the view that underlies this Cursor. Note that
+           this may not be updated to reflect the edits made.
+           Use .commit() to get the up-to-date version of this view.
+        """
+        return self._parent.clone()
 
     def commit(self):
         """Commit all of the changes and return the newly
