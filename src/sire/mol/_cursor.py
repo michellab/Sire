@@ -1012,6 +1012,37 @@ class Cursor:
 
         return p
 
+    def num_frames(self):
+        """Return the number of trajectory frames contained by the molecule"""
+        return self._d.molecule.num_frames()
+
+    def load_frame(self, *args, **kwargs):
+        """Call the `load_frame` function on the contained view, passing
+           the arguments directly. This is equivalent to calling
+           `load_frame` directly on the contained view.
+        """
+        self._d.molecule.load_frame(*args, **kwargs)
+        self._update()
+        return self
+
+    def save_frame(self, *args, **kwargs):
+        """Call the `save_frame` function on the contained view, passing
+           the arguments directly. This is equivalent to calling
+           `save_frame` directly on the contained view.
+        """
+        self._d.molecule.save_frame(*args, **kwargs)
+        self._update()
+        return self
+
+    def delete_frame(self, *args, **kwargs):
+        """Call the `delete_frame` function on the contained view, passing
+           the arguments directly. This is equivalent to calling
+           `delete_frame` directly on the contained view.
+        """
+        self._d.molecule.delete_frame(*args, **kwargs)
+        self._update()
+        return self
+
     def translate(self, *args, map=None):
         """Translate all of the atoms operated on by this cursor
            by the passed arguments (these are converted automatically
@@ -1030,6 +1061,8 @@ class Cursor:
 
         self._d.molecule = view.molecule().edit()
         self._update()
+
+        return self
 
     def rotate(self, angle=None, axis=None, center=None,
                quaternion=None, matrix=None,
@@ -1094,6 +1127,8 @@ class Cursor:
 
         self._d.molecule = view.molecule().edit()
         self._update()
+
+        return self
 
 
 class Cursors:
@@ -1179,6 +1214,12 @@ class Cursors:
                 return True
 
         return False
+
+    def _update(self):
+        """Internal function used to ensure that all
+           child cursors are up to date"""
+        for cursor in self._cursors:
+            cursor._update()
 
     def __len__(self):
         return len(self._cursors)
@@ -1438,6 +1479,31 @@ class Cursors:
 
         return self
 
+    def num_frames(self):
+        """Return the number of frames in the trajectory held by this molecule"""
+        return self._parent.num_frames()
+
+    def load_frame(self, *args, **kwargs):
+        """Call `load_frame` with these arguments on all contained cursors"""
+        self._parent.load_frame(*args, **kwargs)
+        self._update()
+
+        return self
+
+    def save_frame(self, *args, **kwargs):
+        """Call 'save_frame' with these arguments on all contained cursors"""
+        self._parent.save_frame(*args, **kwargs)
+        self._update()
+
+        return self
+
+    def delete_frame(self, *args, **kwargs):
+        """Call 'delete_frame' with these arguments on all contained cursors"""
+        self._parent.delete_frame(*args, **kwargs)
+        self._update()
+
+        return self
+
     def translate(self, *args, map=None):
         """Translate all of the atoms operated on by these cursors
            by the passed arguments (these are converted automatically
@@ -1446,6 +1512,8 @@ class Cursors:
         """
         for cursor in self._cursors:
             cursor.translate(*args, map=map)
+
+        return self
 
     def rotate(self, angle=None, axis=None, center=None,
                quaternion=None, matrix=None,
@@ -1497,6 +1565,8 @@ class Cursors:
 
         for cursor in self._cursors:
             cursor.rotate(quaternion=quaternion, center=center, map=map)
+
+        return self
 
 
 class CursorsM:
@@ -1598,6 +1668,11 @@ class CursorsM:
                 return True
 
         return False
+
+    def _update(self):
+        """Ensure that all cursors are up to date"""
+        for cursor in self._cursors:
+            cursor._update()
 
     def __len__(self):
         return len(self._cursors)
@@ -1863,6 +1938,53 @@ class CursorsM:
 
         return self
 
+    def num_frames(self):
+        """Return the number of frames in the trajectories held by
+           this cursor
+        """
+        num = None
+
+        for cursor in self._molcursors.values():
+            if num is None:
+                num = cursor.num_frames()
+            else:
+                n = cursor.num_frames()
+
+                if n < num:
+                    num = n
+
+        return num
+
+    def load_frame(self, *args, **kwargs):
+        """Call the 'load_frame' function with these arguments on all
+           contained cursors"""
+        for cursor in self._molcursors.values():
+            cursor.load_frame(*args, **kwargs)
+
+        self._update()
+
+        return self
+
+    def save_frame(self, *args, **kwargs):
+        """Call the 'save_frame' function with these arguments on all
+           contained cursors"""
+        for cursor in self._molcursors.values():
+            cursor.save_frame(*args, **kwargs)
+
+        self._update()
+
+        return self
+
+    def delete_frame(self, *args, **kwargs):
+        """Call the 'delete_frame' function with these arguments on all
+           contained cursors"""
+        for cursor in self._molcursors.values():
+            cursor.delete_frame(*args, **kwargs)
+
+        self._update()
+
+        return self
+
     def translate(self, *args, map=None):
         """Translate all of the atoms operated on by these cursors
            by the passed arguments (these are converted automatically
@@ -1871,6 +1993,8 @@ class CursorsM:
         """
         for cursor in self._cursors:
             cursor.translate(*args, map=map)
+
+        return self
 
     def rotate(self, angle=None, axis=None, center=None,
                quaternion=None, matrix=None,
@@ -1922,3 +2046,5 @@ class CursorsM:
 
         for cursor in self._cursors:
             cursor.rotate(quaternion=quaternion, center=center, map=map)
+
+        return self
