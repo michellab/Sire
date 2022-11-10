@@ -1,18 +1,20 @@
 
+_nglview_import_error = None
+
 try:
     import nglview as _nglview
-    has_nglview = True
+    _has_nglview = True
 except ImportError:
-    has_nglview = False
+    _has_nglview = False
 except AttributeError as e:
-    has_nglview = False
-    print(f"Failed to import nglview: {e}")
+    _has_nglview = False
+    _nglview_import_error = e
 
 
 __all__ = ["view"]
 
 
-if has_nglview:
+if _has_nglview:
     class _FrameCache:
         def __init__(self, max_frames=100):
             self._cache = {}
@@ -120,9 +122,21 @@ if has_nglview:
         view = _nglview.NGLWidget(struc_traj)
         return view
 
+elif _nglview_import_error is not None:
+    def view(obj):
+        raise ImportError(
+            "nglview cannot be imported. This is because of an error "
+            f"when nglview was loaded ({_nglview_import_error}). One "
+            "possibility is that nglview is incompatible with the installed "
+            "version of ipywidgets. Try to downgrade ipywidgets, e.g. "
+            "\"mamba install 'ipywidgets>=7.6.0,<8'\". You will need to "
+            "restart Python and run this script/notebook again."
+        )
+
 else:
     def view(obj):
         raise ImportError(
             "You need to install nglview to be able to view "
             "molecules. Do this by typing, e.g. "
-            "'mamba install nglview'")
+            "'mamba install nglview' and then restarting Python "
+            "and running this script/notebook again.")
