@@ -2224,6 +2224,11 @@ bool _compare(const QString &left,
     }
 }
 
+inline bool _is_true(const QString &value)
+{
+    return value == "True";
+}
+
 template<class T>
 MolViewPtr _select_property_(const MolViewPtr &mol,
                              const PropertyName &property,
@@ -2240,11 +2245,21 @@ MolViewPtr _select_property_(const MolViewPtr &mol,
 
         if (view.hasProperty(property))
         {
-            auto p = view.propertyAsProperty(property)->asAString();
-
-            if (_compare(p, compare, value))
+            try
             {
-                idxs.append(i);
+                auto p = view.propertyAsProperty(property)->asAString();
+
+                if (_compare(p, compare, value))
+                {
+                    idxs.append(i);
+                }
+            }
+            catch(...)
+            {
+                if (compare == ID_CMP_EQ and _is_true(value))
+                {
+                    idxs.append(i);
+                }
             }
         }
     }
@@ -2271,9 +2286,19 @@ MolViewPtr _select_property_bond(const SelectorBond &bonds,
 
         if (bond.hasProperty(property))
         {
-            if (_compare(bond.property(property).asAString(), compare, value))
+            try
             {
-                idxs.append(i);
+                if (_compare(bond.property(property).asAString(), compare, value))
+                {
+                    idxs.append(i);
+                }
+            }
+            catch(...)
+            {
+                if (compare == ID_CMP_EQ and _is_true(value))
+                {
+                    idxs.append(i);
+                }
             }
         }
     }
@@ -2341,8 +2366,12 @@ SelectResult IDPropertyEngine::select(const SelectResult &mols, const PropertyMa
                 }
                 catch(...)
                 {
-                    // the property isn't compatible, so this molecule
-                    // can't match
+                    // this isn't a property that can be converted to a string.
+                    if (this->compare == ID_CMP_EQ and _is_true(value))
+                    {
+                        // we are only asking if this property exists
+                        ret.append(m);
+                    }
                 }
             }
         }
@@ -2360,7 +2389,7 @@ SelectResult IDPropertyEngine::select(const SelectResult &mols, const PropertyMa
             }
             catch(...)
             {
-                // the property isn't compatible, so this can't match
+                // this isn't a property that can be converted to a string
             }
         }
     }
