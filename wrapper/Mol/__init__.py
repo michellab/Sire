@@ -241,6 +241,10 @@ def __get_typename__(obj):
             return ("qint64", obj)
         elif isinstance(obj, str):
             return ("QString", obj)
+        elif isinstance(obj, list) or isinstance(obj, tuple):
+            return ("PropertyList", obj)
+        elif isinstance(obj, dict):
+            return ("Properties", obj)
         else:
             raise TypeError(f"Unable to wrap type {type(obj)}: {obj} : {e}")
 
@@ -262,6 +266,8 @@ def _match_to_type(typename, property):
         return _Base.IntegerArrayProperty(property)
     elif typename.endswith("PropertyList"):
         return _Base.PropertyList(property)
+    elif typename.endswith("Properties"):
+        return _Base.Properties(property)
     elif typename.endswith("Coords"):
         return _Maths.Vector(property)
     else:

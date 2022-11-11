@@ -33,6 +33,59 @@ def test_cursor(ala_mols):
         p = mol.property("special")
 
 
+def test_cursor_assign_from_container(ala_mols):
+    mols = ala_mols
+    mol = mols[0]
+
+    cursor = mol.cursor()
+
+    cursor["from_dict"] = {"cat": "meow", "dog": "woof", "fish": 3}
+
+    mol = cursor.commit()
+
+    assert mol.property("from_dict")["cat"] == "meow"
+    assert mol.property("from_dict")["dog"] == "woof"
+    assert mol.property("from_dict")["fish"] == 3
+
+    cursor["from_list"] = ["cat", "dog", "horse"]
+
+    mol = cursor.commit()
+
+    assert mol.property("from_list")[0] == "cat"
+    assert mol.property("from_list")[1] == "dog"
+    assert mol.property("from_list")[2] == "horse"
+
+    cursor["from_list"] = ["cat", 5]
+
+    mol = cursor.commit()
+
+    assert mol.property("from_list")[0] == "cat"
+    assert mol.property("from_list")[1] == 5
+
+    cursor = cursor[0]
+
+    cursor["atom_test"] = ["dog", 3.1, 5]
+
+    mol = cursor.parent().commit()
+
+    assert mol[0].property("atom_test")[0] == "dog"
+    assert mol[0].property("atom_test")[1] == 3.1
+    assert mol[0].property("atom_test")[2] == 5
+
+    cursor = cursor.parent()[1]
+
+    cursor["atom_test"] = {"cat": "meow", "dog": "woof"}
+
+    mol = cursor.parent().commit()
+
+    assert mol[0].property("atom_test")[0] == "dog"
+    assert mol[0].property("atom_test")[1] == 3.1
+    assert mol[0].property("atom_test")[2] == 5
+
+    assert mol[1].property("atom_test")["cat"] == "meow"
+    assert mol[1].property("atom_test")["dog"] == "woof"
+
+
 def test_cursor_dict(ala_mols):
     mols = ala_mols
     mol = mols[0]
