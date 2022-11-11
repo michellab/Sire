@@ -2144,6 +2144,40 @@ SelectEnginePtr IDPropertyEngine::construct(const IDObject &name,
 IDPropertyEngine::~IDPropertyEngine()
 {}
 
+/** Return whether or not the passed string is True.
+ *
+ *  If 'pytrue_only' is true, then this only
+ *  tests against the Python 'True' value as anything else risks
+ *  causing false matches against numeric values if we actually
+ *  want to find values that are equal to 1 (versus equal to 4)
+ *
+ *  Otherwise this compares against any case comparison of
+ *  'true', plus the integer not zero (0) or float not zero (0.0)
+*/
+inline bool _is_true(const QString &value, bool pytrue_only=true)
+{
+    if (pytrue_only)
+        return value == "True";
+    else
+        return value.toLower() == "true" or (value != "0" and value != "0.0");
+}
+
+/** Return whether or not the passed string is False
+ *
+ *  If 'pyfalse_only' is true, then this only
+ *  tests against the Python 'False' value as anything else risks
+ *  causing false matches against numeric values.
+ *
+ *  Otherwise this compares against any case comparison of
+ *  'false', plus the integer zero (0) or float zero (0.0)
+*/
+inline bool _is_false(const QString &value, bool pyfalse_only=true)
+{
+    if (pyfalse_only)
+        return value == "False";
+    else
+        return value.toLower() == "false" or value == "0" or value == "0.0";
+}
 
 bool _compare_equal(const QString &left,
                     const IDComparison &compare,
@@ -2152,6 +2186,15 @@ bool _compare_equal(const QString &left,
     // if they are strings, then this should be ok
     if (left == right)
         return true;
+
+    if (compare == ID_CMP_EQ and _is_true(right))
+    {
+        // we are just asking if 'left' is anything other than false
+        if (not _is_false(left, false))
+        {
+            return true;
+        }
+    }
 
     // could they both be numbers?
     {
@@ -2222,11 +2265,6 @@ bool _compare(const QString &left,
 
         return compare_func(left_num, right_num);
     }
-}
-
-inline bool _is_true(const QString &value)
-{
-    return value == "True";
 }
 
 template<class T>

@@ -187,7 +187,7 @@ QString DoubleArrayProperty::asAString() const
 {
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
-            "Cannot cast %s to a string").arg(this->toString()), CODELOC );
+            "Cannot cast %1 to a string").arg(this->toString()), CODELOC );
 
     return StringProperty(a.at(0)).asAString();
 }
@@ -196,7 +196,7 @@ double DoubleArrayProperty::asADouble() const
 {
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
-            "Cannot cast %s to a double").arg(this->toString()), CODELOC );
+            "Cannot cast %1 to a double").arg(this->toString()), CODELOC );
 
     return NumberProperty(a.at(0)).asADouble();
 }
@@ -205,7 +205,7 @@ int DoubleArrayProperty::asAnInteger() const
 {
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
-            "Cannot cast %s to an integer").arg(this->toString()), CODELOC );
+            "Cannot cast %1 to an integer").arg(this->toString()), CODELOC );
 
     return NumberProperty(a.at(0)).asAnInteger();
 }
@@ -214,7 +214,7 @@ bool DoubleArrayProperty::asABoolean() const
 {
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
-            "Cannot cast %s to a boolean").arg(this->toString()), CODELOC );
+            "Cannot cast %1 to a boolean").arg(this->toString()), CODELOC );
 
     return BooleanProperty(a.at(0)).asABoolean();
 }
@@ -368,7 +368,7 @@ QString IntegerArrayProperty::asAString() const
 {
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
-            "Cannot cast %s to a string").arg(this->toString()), CODELOC );
+            "Cannot cast %1 to a string").arg(this->toString()), CODELOC );
 
     return StringProperty(a.at(0)).asAString();
 }
@@ -377,7 +377,7 @@ double IntegerArrayProperty::asADouble() const
 {
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
-            "Cannot cast %s to a double").arg(this->toString()), CODELOC );
+            "Cannot cast %1 to a double").arg(this->toString()), CODELOC );
 
     return NumberProperty(a.at(0)).asADouble();
 }
@@ -386,7 +386,7 @@ int IntegerArrayProperty::asAnInteger() const
 {
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
-            "Cannot cast %s to an integer").arg(this->toString()), CODELOC );
+            "Cannot cast %1 to an integer").arg(this->toString()), CODELOC );
 
     return NumberProperty(a.at(0)).asAnInteger();
 }
@@ -395,7 +395,7 @@ bool IntegerArrayProperty::asABoolean() const
 {
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
-            "Cannot cast %s to a boolean").arg(this->toString()), CODELOC );
+            "Cannot cast %1 to a boolean").arg(this->toString()), CODELOC );
 
     return BooleanProperty(a.at(0)).asABoolean();
 }
@@ -570,7 +570,7 @@ QString StringArrayProperty::asAString() const
 {
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
-            "Cannot cast %s to a string").arg(this->toString()), CODELOC );
+            "Cannot cast %1 to a string").arg(this->toString()), CODELOC );
 
     return StringProperty(a.at(0)).asAString();
 }
@@ -579,7 +579,7 @@ double StringArrayProperty::asADouble() const
 {
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
-            "Cannot cast %s to a double").arg(this->toString()), CODELOC );
+            "Cannot cast %1 to a double").arg(this->toString()), CODELOC );
 
     return NumberProperty(a.at(0)).asADouble();
 }
@@ -588,7 +588,7 @@ int StringArrayProperty::asAnInteger() const
 {
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
-            "Cannot cast %s to an integer").arg(this->toString()), CODELOC );
+            "Cannot cast %1 to an integer").arg(this->toString()), CODELOC );
 
     return NumberProperty(a.at(0)).asAnInteger();
 }
@@ -597,7 +597,7 @@ bool StringArrayProperty::asABoolean() const
 {
     if (a.count() != 1)
         throw SireError::invalid_cast( QObject::tr(
-            "Cannot cast %s to a boolean").arg(this->toString()), CODELOC );
+            "Cannot cast %1 to a boolean").arg(this->toString()), CODELOC );
 
     return BooleanProperty(a.at(0)).asABoolean();
 }

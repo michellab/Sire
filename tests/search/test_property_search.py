@@ -73,3 +73,27 @@ def test_search_property_exists(ala_mols):
 
     assert mols["atom property find_atom == 1"] == mol[5]
     assert mols["atom property find_atom == 4"] == mol[4]
+
+    cursor["metadata"] = "something"
+
+    with pytest.raises(KeyError):
+        mol["property metadata"]
+
+    mol = cursor.commit()
+
+    assert mol["property metadata"] == mol
+
+    with pytest.raises(KeyError):
+        mols["property metadata"]
+
+    mols.update(mol)
+
+    assert mols["property metadata"] == mol
+
+    assert mols["property metadata == something"] == mol
+
+    with pytest.raises(KeyError):
+        mols["property metadata == else"]
+
+
+
