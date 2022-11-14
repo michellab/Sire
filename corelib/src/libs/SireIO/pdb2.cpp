@@ -803,7 +803,7 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map)
     // Lines for different PDB data records (one for each molecule).
     QVector<QVector<QString> > atom_lines(nmols);
 
-    if (false) //usesParallel())
+    if (usesParallel())
     {
         QMutex mutex;
 
