@@ -83,11 +83,11 @@ jobs:
         run: mkdir ${{ github.workspace }}/build
 #
       - name: Build Conda package using mamba build
-        run: conda mambabuild --croot ${{ github.workspace }}/build -c conda-forge -c michellab ${{ github.workspace }}/Sire/recipes/sire
+        run: conda mambabuild --croot ${{ github.workspace }}/build -c conda-forge -c michellab/label/dev ${{ github.workspace }}/Sire/recipes/sire
         if: matrix.platform.name != 'windows' || matrix.python-version != '3.7'
 #
       - name: Build Conda package using conda build
-        run: conda build --croot ${{ github.workspace }}/build -c conda-forge -c michellab ${{ github.workspace }}/Sire/recipes/sire
+        run: conda build --croot ${{ github.workspace }}/build -c conda-forge -c michellab/label/dev ${{ github.workspace }}/Sire/recipes/sire
         if: matrix.platform.name == 'windows' && matrix.python-version == '3.7'
 #
       - name: Collect failed artifacts
