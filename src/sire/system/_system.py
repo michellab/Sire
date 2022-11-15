@@ -107,7 +107,7 @@ class System:
             # the molecules and re-add them
             raise NotImplementedError(
                 "sire.system.System does not yet support Systems that hold "
-                "partial molecule!. Let us know that you have hit this "
+                "partial molecules!. Let us know that you have hit this "
                 "bug and we will add support."
             )
 

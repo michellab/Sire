@@ -1738,19 +1738,13 @@ class CursorsM:
         """
         from . import Molecules
 
-        print("HERE")
         updated = Molecules()
         updated.reserve(len(self._cursors))
-        print("GO")
 
         for cursor in self._cursors:
-            print(f"GO {cursor}")
             updated.add(cursor.commit())
-            print("DONE")
 
-        print("UPDATE")
         self._parent.update(updated)
-        print("DONE!")
         return self._parent
 
     def atoms(self, id=None):
