@@ -50,8 +50,3 @@ def test_search_order(ala_mols):
     assert len(result) == 2
     assert result[0] == mol1
     assert result[1] == mol0
-
-    print(mols._system.search("property is_perturable"))
-
-    raise ValueError()
-
