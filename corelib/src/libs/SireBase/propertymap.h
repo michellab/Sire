@@ -59,10 +59,10 @@ class Properties;
     by the code in the program, e.g. "coordinates" is the
     official name of the coordinates property, "charges"
     is the official name of the charges), the name for
-    the property assigned by the user (so the user can 
-    say that the "charges" property is actually in the 
+    the property assigned by the user (so the user can
+    say that the "charges" property is actually in the
     property called "my charges") and an overridden
-    value for the property that is used instead of 
+    value for the property that is used instead of
     the value found in the object being queried
     (so the user can say to use a specific value of
      a property)
@@ -70,18 +70,18 @@ class Properties;
     This class is not used directly by the code, but
     is instead used as part of the Property::set( ) function,
     so that the user can write;
-    
-    cljff.add( mol, Property::set("charges","chgs") + 
+
+    cljff.add( mol, Property::set("charges","chgs") +
                     Property::set("ljs","ljparams") );
-                    
+
     The PropertyMap/PropertyName classes provide a kwargs
     like interface for the C++ classes - indeed the python
     wrappers should allow code to be written like;
-    
+
     cljff.add( mol, {"charges" : "chgs", "ljs" : "ljparams"} )
-    
+
     or
-    
+
     cljff.add( mol, charges=="charges", ljs=="ljparams" )
 
     @author Christopher Woods
@@ -95,10 +95,10 @@ friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, PropertyName&);
 public:
     PropertyName();
     PropertyName(const char* source);
-    
+
     PropertyName(const QString &source);
     PropertyName(const QString &source, const Property &default_value);
-    
+
     PropertyName(const Property &value);
 
     PropertyName(const PropertyName &other);
@@ -106,7 +106,7 @@ public:
     ~PropertyName();
 
     static const char* typeName();
-    
+
     const char* what() const
     {
         return PropertyName::typeName();
@@ -132,33 +132,33 @@ public:
     static PropertyName none();
 
 private:
-    /** The name to use to find the property in the  
+    /** The name to use to find the property in the
         Properties container */
     QString src;
-    
+
     /** The supplied or default value of the property */
     PropertyPtr val;
-    
+
     /** Is the supplied value a default value? */
     bool value_is_default;
 };
 
 /** This is the class that holds the collection of user-supplied
     optional properties and their locations to functions.
-    
+
     This class allows the following code to be written;
-    
-    cljff.add( mol, Property::set("charges","chgs") + 
+
+    cljff.add( mol, Property::set("charges","chgs") +
                     Property::set("ljs","ljparams") );
-                    
+
     The PropertyMap/PropertyName classes provide a kwargs
     like interface for the C++ classes - indeed the python
     wrappers should allow code to be written like;
-    
+
     cljff.add( mol, {"charges" : "chgs", "ljs" : "ljparams"} )
-    
+
     or
-    
+
     cljff.add( mol, charges="charges", ljs="ljparams" )
 
     @author Christopher Woods
@@ -172,7 +172,7 @@ friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, PropertyMap&);
 public:
     PropertyMap();
     PropertyMap(const QString &property, const PropertyName &propname);
-    
+
     PropertyMap(const QHash<QString,PropertyName> &propnames);
 
     PropertyMap(const PropertyMap &other);
@@ -204,6 +204,8 @@ public:
     bool specified(const PropertyName &name) const;
 
     void set(const QString &name, const PropertyName &source);
+
+    PropertyMap merge(const PropertyMap &other) const;
 
     QString toString() const;
 

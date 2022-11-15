@@ -411,3 +411,22 @@ QString PropertyMap::toString() const
 
     return QString("[ %1 ]").arg( items.join(", ") );
 }
+
+/** Return a PropertyMap that is the combination of this and other.
+ *  Keys set in other take precedence over keys in this.
+*/
+PropertyMap PropertyMap::merge(const PropertyMap &other) const
+{
+    if (this->propmap == other.propmap)
+        return *this;
+
+    PropertyMap ret(*this);
+
+    for (auto it = other.propmap.constBegin();
+         it != other.propmap.constEnd(); ++it)
+    {
+        ret.propmap[it.key()] = it.value();
+    }
+
+    return ret;
+}

@@ -17,7 +17,8 @@ class _CursorData:
                  bond_property: str="bond",
                  angle_property: str="angle",
                  dihedral_property: str="dihedral",
-                 improper_property: str="improper"):
+                 improper_property: str="improper",
+                 map=None):
 
         if molecule is None:
             self.molecule = None
@@ -31,7 +32,11 @@ class _CursorData:
                                 "dihedral": dihedral_property,
                                 "improper": improper_property})
 
-        self.connectivity_property = connectivity_property
+        if map is not None:
+            self.map = self.map.merge(map)
+            self.connectivity_property = self.map["connectivity"].value()
+        else:
+            self.connectivity_property = connectivity_property
 
         try:
             self.connectivity = self.molecule.property(
@@ -48,6 +53,22 @@ class _CursorData:
                 self.connectivity = self.connectivity.edit()
             except Exception:
                 pass
+
+    def number(self):
+        """Return the molnum number of the molecule being edited
+           by this cursor
+        """
+        return self.molecule.number()
+
+    def merge(self, map):
+        """Return a property map that is the combination
+           of self.map and the passed map. The properties
+           set in the passed map have precedence.
+        """
+        if map is None:
+            return self.map
+        else:
+            return self.map.merge(map)
 
     def remove_internal_property(self, internal, key):
         self.connectivity.remove_property(internal, key)
@@ -92,7 +113,8 @@ class Cursor:
                  bond_property: str="bond",
                  angle_property: str="angle",
                  dihedral_property: str="dihedral",
-                 improper_property: str="improper"):
+                 improper_property: str="improper",
+                 map=None):
         """Construct the Cursor to explore and edit the
            properties of the passed MoleculeView.
 
@@ -111,7 +133,8 @@ class Cursor:
                               bond_property=bond_property,
                               angle_property=angle_property,
                               dihedral_property=dihedral_property,
-                              improper_property=improper_property)
+                              improper_property=improper_property,
+                              map=map)
         self._view = self._d.update(molecule)
 
         if (molecule is not None) and (internal is None):
@@ -121,6 +144,7 @@ class Cursor:
                 internal = molecule.id()
 
         self._internal = internal
+        self._add_extra_functions()
 
     def _update(self):
         self._view = self._d.update(self._view)
@@ -257,6 +281,116 @@ class Cursor:
 
         self._update()
 
+    def _add_bond_functions(self):
+        """Internal function used to add member functions that are
+           specific only to cursors that operate on bonds
+        """
+        def get_length(map=None):
+            """Return the length of the bond being edited by this cursor"""
+            map = self._d.merge(map)
+            return self.view().length(map=map)
+
+        def set_length(value, map=None):
+            """Set the length of the bond being edited by this cursor to
+               'value'. This should be either a length unit, or a float
+               (in which case it is converted into a value with default
+               length units)
+            """
+            from ..units import length
+
+            value = length(value)
+
+            map = self._d.merge(map)
+            view = self._d.molecule.commit()
+            view = view.move().set(self._internal, value, map).commit()
+
+            self._d.molecule = view.molecule().edit()
+            self._update()
+
+        def change_length(delta, map=None):
+            """Change the length of the bond being edited by this cursor by
+               'delta'. This should be either a length unit, or a float
+               (in which case it is converted into a value with default
+               length units)
+            """
+            from ..units import length
+
+            delta = length(delta)
+
+            map = self._d.merge(map)
+            view = self._d.molecule.commit()
+            view = view.move().change(self._internal, delta, map).commit()
+
+            self._d.molecule = view.molecule().edit()
+            self._update()
+
+        self.length = get_length
+        self.set_length = set_length
+        self.change_length = change_length
+        self.measure = get_length
+        self.set_measure = set_length
+        self.change_measure = change_length
+
+    def _add_angle_functions(self):
+        """Internal function used to add member functions that are
+           specific only to cursors that operate on angles, dihedrals
+           or impropers
+        """
+        def get_size(map=None):
+            """Return the size of the internal being edited by this cursor"""
+            map = self._d.merge(map)
+            return self.view().size(map=map)
+
+        def set_size(value, map=None):
+            """Set the size of the internal being edited by this cursor to
+               'delta'. This should be either an angle unit, or a float
+               (in which case it is converted into a value with default
+                angle units)
+            """
+            from ..units import angle
+
+            value = angle(value)
+
+            map = self._d.merge(map)
+            view = self._d.molecule.commit()
+            view = view.move().set(self._internal, value, map).commit()
+
+            self._d.molecule = view.molecule().edit()
+            self._update()
+
+        def change_size(delta, map=None):
+            """Change the size of the internal being edited by this cursor by
+               'delta'. This should be either an angle unit, or a float
+               (in which case it is converted into a value with default
+                angle units)
+            """
+            from ..units import angle
+
+            delta = angle(delta)
+
+            map = self._d.merge(map)
+            view = self._d.molecule.commit()
+            view = view.move().change(self._internal, delta, map).commit()
+
+            self._d.molecule = view.molecule().edit()
+            self._update()
+
+        self.size = get_size
+        self.set_size = set_size
+        self.change_size = change_size
+        self.measure = get_size
+        self.set_measure = set_size
+        self.change_measure = change_size
+
+    def _add_extra_functions(self):
+        """Internal function that adds additional functions to this
+           cursor depending on what type of object is being edited.
+        """
+        if self.is_bond():
+            self._add_bond_functions()
+        elif self.is_internal():
+            self._add_angle_functions()
+
     def is_same_editor(self, other):
         """Return whether this Cursor is using the same editor to edit
            the molecule as 'other'. This returns true if the underlying
@@ -276,7 +410,7 @@ class Cursor:
             # Other is something else (a CursorsM?)
             return False
 
-    def bonds(self, id=None):
+    def bonds(self, *args, **kwargs):
         """Return cursors for all of the bonds in this
            view or, if 'id' is supplied, the bonds in this
            view that match 'id'
@@ -285,23 +419,19 @@ class Cursor:
 
         cursors = []
 
-        from ..mm import SelectorBond
-
-        if id is None:
-            bonds = SelectorBond(self._view, self._d.map)
-        else:
-            bonds = SelectorBond(self._view, id, self._d.map)
+        bonds = self.view().bonds(*args, **kwargs)
 
         for bond in bonds:
             c = Cursor()
             c._d = self._d
             c._view = self._d.molecule
             c._internal = bond.id()
+            c._add_extra_functions()
             cursors.append(c)
 
         return Cursors(self, cursors, bonds)
 
-    def angles(self, id=None):
+    def angles(self, *args, **kwargs):
         """Return cursors for all of the angles in this
            view or, if 'id' is supplied, the angles in this
            view that match 'id'
@@ -310,23 +440,19 @@ class Cursor:
 
         cursors = []
 
-        from ..mm import SelectorAngle
-
-        if id is None:
-            angles = SelectorAngle(self._view, self._d.map)
-        else:
-            angles = SelectorAngle(self._view, id, self._d.map)
+        angles = self.view().angles(*args, **kwargs)
 
         for angle in angles:
             c = Cursor()
             c._d = self._d
             c._view = self._d.molecule
             c._internal = angle.id()
+            c._add_extra_functions()
             cursors.append(c)
 
         return Cursors(self, cursors, angles)
 
-    def dihedrals(self, id=None):
+    def dihedrals(self, *args, **kwargs):
         """Return cursors for all of the dihedrals in this
            view or, if 'id' is supplied, the dihedrals in this
            view that match 'id'
@@ -335,23 +461,19 @@ class Cursor:
 
         cursors = []
 
-        from ..mm import SelectorDihedral
-
-        if id is None:
-            dihedrals = SelectorDihedral(self._view, self._d.map)
-        else:
-            dihedrals = SelectorDihedral(self._view, id, self._d.map)
+        dihedrals = self.view().dihedrals(*args, **kwargs)
 
         for dihedral in dihedrals:
             c = Cursor()
             c._d = self._d
             c._view = self._d.molecule
             c._internal = dihedral.id()
+            c._add_extra_functions()
             cursors.append(c)
 
         return Cursors(self, cursors, dihedrals)
 
-    def impropers(self, id=None):
+    def impropers(self, *args, **kwargs):
         """Return cursors for all of the impropers in this
            view or, if 'id' is supplied, the impropers in this
            view that match 'id'
@@ -360,18 +482,14 @@ class Cursor:
 
         cursors = []
 
-        from ..mm import SelectorImproper
-
-        if id is None:
-            impropers = SelectorImproper(self._view, self._d.map)
-        else:
-            impropers = SelectorImproper(self._view, id, self._d.map)
+        impropers = self.view().impropers(*args, **kwargs)
 
         for improper in impropers:
             c = Cursor()
             c._d = self._d
             c._view = self._d.molecule
             c._internal = improper.id()
+            c._add_extra_functions()
             cursors.append(c)
 
         return Cursors(self, cursors, impropers)
@@ -399,6 +517,8 @@ class Cursor:
         else:
             c._view = self._d.molecule[view.index()]
 
+        c._add_extra_functions()
+
         return c
 
     def _from_views(self, views):
@@ -408,7 +528,7 @@ class Cursor:
         """
         cursors = []
 
-        from sire.mm import Bond, Angle, Dihedral, Improper
+        from ..mm import Bond, Angle, Dihedral, Improper
 
         for view in views:
             c = Cursor()
@@ -420,6 +540,8 @@ class Cursor:
             else:
                 # likely an atom, residue, chain or segment
                 c._view = self._d.molecule[view.index()]
+
+            c._add_extra_functions()
 
             cursors.append(c)
 
@@ -443,6 +565,7 @@ class Cursor:
             c = Cursor()
             c._d = self._d
             c._view = self._d.molecule.atom(atom.index())
+            c._add_extra_functions()
             cursors.append(c)
 
         return Cursors(self, cursors, atoms)
@@ -465,6 +588,7 @@ class Cursor:
             c = Cursor()
             c._d = self._d
             c._view = self._d.molecule.residue(residue.index())
+            c._add_extra_functions()
             cursors.append(c)
 
         return Cursors(self, cursors, residues)
@@ -487,6 +611,7 @@ class Cursor:
             c = Cursor()
             c._d = self._d
             c._view = self._d.molecule.chain(chain.index())
+            c._add_extra_functions()
             cursors.append(c)
 
         return Cursors(self, cursors, chains)
@@ -509,6 +634,7 @@ class Cursor:
             c = Cursor()
             c._d = self._d
             c._view = self._d.molecule.segment(segment.index())
+            c._add_extra_functions()
             cursors.append(c)
 
         return Cursors(self, cursors, segments)
@@ -520,6 +646,7 @@ class Cursor:
         c = Cursor()
         c._d = self._d
         c._view = self._view.atom(i)
+        c._add_extra_functions()
         c._update()
 
         return c
@@ -534,6 +661,7 @@ class Cursor:
                 c = Cursor()
                 c._d = self._d
                 c._view = self._view.residue()
+                c._add_extra_functions()
                 c._update()
                 return c
             except Exception:
@@ -546,6 +674,7 @@ class Cursor:
         c = Cursor()
         c._d = self._d
         c._view = self._view.residue(i)
+        c._add_extra_functions()
         c._update()
 
         return c
@@ -559,6 +688,7 @@ class Cursor:
                 c = Cursor()
                 c._d = self._d
                 c._view = self._view.chain()
+                c._add_extra_functions()
                 c._update()
                 return c
             except Exception:
@@ -571,6 +701,7 @@ class Cursor:
         c = Cursor()
         c._d = self._d
         c._view = self._view.chain(i)
+        c._add_extra_functions()
         c._update()
 
         return c
@@ -584,6 +715,7 @@ class Cursor:
                 c = Cursor()
                 c._d = self._d
                 c._view = self._view.segment()
+                c._add_extra_functions()
                 c._update()
                 return c
             except Exception:
@@ -596,6 +728,7 @@ class Cursor:
         c = Cursor()
         c._d = self._d
         c._view = self._view.segment(i)
+        c._add_extra_functions()
         c._update()
 
         return c
@@ -607,6 +740,7 @@ class Cursor:
         c = Cursor()
         c._d = self._d
         c._view = self._d.molecule
+        c._add_extra_functions()
         return c
 
     def bond(self, bond):
@@ -620,6 +754,8 @@ class Cursor:
 
         # make sure that this works
         c._view.bond(bond)
+
+        c._add_extra_functions()
 
         return c
 
@@ -635,6 +771,8 @@ class Cursor:
         # make sure that this works
         c._view.angle(angle)
 
+        c._add_extra_functions()
+
         return c
 
     def dihedral(self, dihedral):
@@ -649,6 +787,8 @@ class Cursor:
         # make sure that this works
         c._view.dihedral(dihedral)
 
+        c._add_extra_functions()
+
         return c
 
     def improper(self, improper):
@@ -662,6 +802,8 @@ class Cursor:
 
         # make sure that this works
         c._view.improper(improper)
+
+        c._add_extra_functions()
 
         return c
 
@@ -689,6 +831,7 @@ class Cursor:
         except Exception:
             pass
 
+        c._add_extra_functions()
         c._update()
 
         return c
@@ -1052,10 +1195,7 @@ class Cursor:
         from ..maths import Vector
         delta = Vector(*args)
 
-        if map is None:
-            from ..base import PropertyMap
-            map = PropertyMap()
-
+        map = self._d.merge(map)
         view = self.commit()
         view = view.move().translate(delta, map=map).commit()
 
@@ -1114,9 +1254,7 @@ class Cursor:
 
         view = self.commit()
 
-        if map is None:
-            from ..base import PropertyMap
-            map = PropertyMap()
+        map = self._d.merge(map)
 
         if center is None:
             center = view.evaluate().center_of_mass(map=map)
@@ -1154,6 +1292,8 @@ class Cursors:
         self._parent = parent
         self._cursors = cursors
         self._view = view
+
+        self._add_extra_functions()
 
     def __call__(self, i):
         """Return the sub-view(s) of this cursor that match the index 'i'.
@@ -1251,6 +1391,197 @@ class Cursors:
     def __repr__(self):
         return self.__str__()
 
+    def _add_bond_functions(self):
+        """Internal function that adds functions to this cursor
+           that are useful when editing bonds
+        """
+        def get_lengths(map=None):
+            """Return the lengths of all bonds being edited by these
+               cursors
+            """
+            map = self._parent._d.merge(map)
+
+            lengths = []
+
+            for cursor in self._cursors:
+                lengths.append(cursor.length(map=map))
+
+            return lengths
+
+        def set_lengths(values, map=None):
+            """Set the lengths of the  bonds being edited by this cursor to the specified
+               values. Note that there should be the same number of values
+               as there are cursors, and they should all be floats or
+               lengths.
+            """
+            map = self._parent._d.merge(map)
+
+            if len(values) != len(self._cursors):
+                raise ValueError(
+                    f"The number of length values ({len(values)}) does "
+                    f"not equal the number of cursors ({len(self._cursors)}).")
+
+            from ..units import length
+            values = [length(value) for value in values]
+
+            view = self._parent._d.molecule.commit().move()
+
+            for value, cursor in zip(values, self._cursors):
+                view.set(cursor._internal, value, map)
+
+            view = view.commit()
+
+            self._parent._d.molecule = view.molecule().edit()
+            self._update()
+
+        def set_length(value, map=None):
+            """Set all bonds edited by this cursor to the supplied length."""
+            values = [value for _ in range(0, len(self._cursors))]
+            set_lengths(values, map=map)
+
+        def change_lengths(deltas, map=None):
+            """Change the bonds being edited by this cursor by the specified
+               values. Note that there should be the same number of values
+               as there are cursors, and they should all be floats or
+               lengths.
+            """
+            map = self._parent._d.merge(map)
+
+            if len(deltas) != len(self._cursors):
+                raise ValueError(
+                    f"The number of length values ({len(deltas)}) does "
+                    f"not equal the number of cursors ({len(self._cursors)}).")
+
+            from ..units import length
+            deltas = [length(delta) for delta in deltas]
+
+            view = self._parent._d.molecule.commit().move()
+
+            for delta, cursor in zip(deltas, self._cursors):
+                view.change(cursor._internal, delta, map)
+
+            view = view.commit()
+
+            self._parent._d.molecule = view.molecule().edit()
+            self._update()
+
+        def change_length(delta, map=None):
+            """Change all bonds edited by this cursor by the supplied length."""
+            deltas = [delta for _ in range(0, len(self._cursors))]
+            change_lengths(deltas, map=map)
+
+        self.lengths = get_lengths
+        self.set_length = set_length
+        self.set_lengths = set_lengths
+        self.change_length = change_length
+        self.change_lengths = change_lengths
+
+        self.measures = get_lengths
+        self.set_measure = set_length
+        self.set_measures = set_lengths
+        self.change_measure = set_length
+        self.change_measures = set_lengths
+
+    def _add_angle_functions(self):
+        """Internal function that adds functions to this cursor
+           that are useful when editing angles, dihedrals or impropers
+        """
+        def get_sizes(map=None):
+            """Return the sizes of all internals being edited by these
+               cursors
+            """
+            map = self._parent._d.merge(map)
+
+            sizes = []
+
+            for cursor in self._cursors:
+                sizes.append(cursor.size(map=map))
+
+            return sizes
+
+        def set_sizes(values, map=None):
+            """Set the internals being edited by this cursor to the specified
+               values. Note that there should be the same number of values
+               as there are cursors, and they should all be floats or
+               angles.
+            """
+            map = self._parent._d.merge(map)
+
+            if len(values) != len(self._cursors):
+                raise ValueError(
+                    f"The number of angle values ({len(values)}) does "
+                    f"not equal the number of cursors ({len(self._cursors)}).")
+
+            from ..units import angle
+            values = [angle(value) for value in values]
+
+            view = self._parent._d.molecule.commit().move()
+
+            for value, cursor in zip(values, self._cursors):
+                view.set(cursor._internal, value, map)
+
+            view = view.commit()
+
+            self._parent._d.molecule = view.molecule().edit()
+            self._update()
+
+        def set_size(value, map=None):
+            """Set all internals edited by this cursor to the supplied angle."""
+            values = [value for _ in range(0, len(self._cursors))]
+            set_sizes(values, map=map)
+
+        def change_sizes(deltas, map=None):
+            """Change the internals being edited by this cursor by the specified
+               values. Note that there should be the same number of values
+               as there are cursors, and they should all be floats or
+               angles.
+            """
+            map = self._parent._d.merge(map)
+
+            if len(deltas) != len(self._cursors):
+                raise ValueError(
+                    f"The number of angle values ({len(deltas)}) does "
+                    f"not equal the number of cursors ({len(self._cursors)}).")
+
+            from ..units import angle
+            deltas = [angle(delta) for delta in deltas]
+
+            view = self._parent._d.molecule.commit().move()
+
+            for delta, cursor in zip(deltas, self._cursors):
+                view.change(cursor._internal, delta, map)
+
+            view = view.commit()
+
+            self._parent._d.molecule = view.molecule().edit()
+            self._update()
+
+        def change_size(delta, map=None):
+            """Change all internals edited by this cursor by the supplied angle."""
+            deltas = [delta for _ in range(0, len(self._cursors))]
+            change_sizes(deltas, map=map)
+
+        self.sizes = get_sizes
+        self.set_size = set_size
+        self.set_sizes = set_sizes
+        self.change_size = change_size
+        self.change_sizes = change_sizes
+
+        self.measures = get_sizes
+        self.set_measure = set_size
+        self.set_measures = set_sizes
+        self.change_measure = set_size
+        self.change_measures = set_sizes
+
+    def _add_extra_functions(self):
+        """Internal function used to add extra member functions to this
+           cursor depending on the type of object being edited
+        """
+        if hasattr(self._cursors[0], "set_length"):
+            self._add_bond_functions()
+        elif hasattr(self._cursors[0], "set_size"):
+            self._add_angle_functions()
+
     def is_same_editor(self, other):
         """Return whether this is using the same editor to edit
            the molecule as 'other'. This returns true if the underlying
@@ -1344,45 +1675,33 @@ class Cursors:
         else:
             return self._parent._from_views(self._view.segments(id))
 
-    def bonds(self, id=None):
+    def bonds(self, *args, **kwargs):
         """Return cursors for all of the bonds in this
            view or, if 'id' is supplied, the bonds in this
            view that match 'id'
         """
-        if id is None:
-            return self._parent._from_views(self._view.bonds())
-        else:
-            return self._parent._from_views(self._view.bonds(id))
+        return self._parent._from_views(self._view.bonds(*args, **kwargs))
 
-    def angles(self, id=None):
+    def angles(self, *args, **kwargs):
         """Return cursors for all of the angles in this
            view or, if 'id' is supplied, the angles in this
            view that match 'id'
         """
-        if id is None:
-            return self._parent._from_views(self._view.angles())
-        else:
-            return self._parent._from_views(self._view.angles(id))
+        return self._parent._from_views(self._view.angles(*args, **kwargs))
 
-    def dihedrals(self, id=None):
+    def dihedrals(self, *args, **kwargs):
         """Return cursors for all of the dihedrals in this
            view or, if 'id' is supplied, the dihedrals in this
            view that match 'id'
         """
-        if id is None:
-            return self._parent._from_views(self._view.dihedrals())
-        else:
-            return self._parent._from_views(self._view.dihedrals(id))
+        return self._parent._from_views(self._view.dihedrals(*args, **kwargs))
 
-    def impropers(self, id=None):
+    def impropers(self, *args, **kwargs):
         """Return cursors for all of the impropers in this
            view or, if 'id' is supplied, the impropers in this
            view that match 'id'
         """
-        if id is None:
-            return self._parent._from_views(self._view.impropers())
-        else:
-            return self._parent._from_views(self._view.impropers(id))
+        return self._parent._from_views(self._view.impropers(*args, **kwargs))
 
     def atom(self, i):
         """Return the atom in the molecule that matches the passed ID"""
@@ -1574,7 +1893,7 @@ class CursorsM:
        multiple molecules. This allows you to perform editing
        operations across many molecules at the same time.
     """
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, map=None):
         self._parent = None
         self._cursors = []
 
@@ -1588,10 +1907,223 @@ class CursorsM:
                 molnum = child_mol.number()
 
                 if molnum not in self._molcursors:
-                    self._molcursors[molnum] = child_mol.cursor()
+                    self._molcursors[molnum] = child_mol.cursor(map=map)
 
                 self._cursors.append(
                         self._molcursors[molnum]._from_view(child))
+
+            self._add_extra_functions()
+
+    def _add_bond_functions(self):
+        """Internal function used to add functions for editing bonds"""
+
+        def get_lengths(map=None):
+            """Return the lengths of all the bonds edited by this cursor."""
+            map = self._cursors[0]._d.merge(map)
+
+            lengths = []
+
+            for cursor in self._cursors:
+                lengths.append(cursor.length(map=map))
+
+            return lengths
+
+        def set_lengths(values, map=None):
+            """Set the lengths of the  bonds being edited by this cursor to the specified
+               values. Note that there should be the same number of values
+               as there are cursors, and they should all be floats or
+               lengths.
+            """
+            map = self._cursors[0]._d.merge(map)
+
+            if len(values) != len(self._cursors):
+                raise ValueError(
+                    f"The number of length values ({len(values)}) does "
+                    f"not equal the number of cursors ({len(self._cursors)}).")
+
+            from ..units import length
+            values = [length(value) for value in values]
+
+            movers = {}
+
+            for molnum, view in self._molcursors.items():
+                movers[molnum] = view._d.molecule.commit().move()
+
+            for value, cursor in zip(values, self._cursors):
+                movers[cursor._d.number()].set(cursor._internal, value, map)
+
+            for molnum, mover in movers.items():
+                self._molcursors[molnum]._d.molecule = mover.commit().edit()
+                self._molcursors[molnum]._update()
+
+            self._update()
+
+        def set_length(value, map=None):
+            """Set the lengths of all of the bonds edited by this
+               cursor to the passed value.
+            """
+            values = [value for _ in self._cursors]
+            set_lengths(values, map=map)
+
+        def change_lengths(values, map=None):
+            """Change the lengths of the  bonds being edited by this cursor by the specified
+               values. Note that there should be the same number of values
+               as there are cursors, and they should all be floats or
+               lengths.
+            """
+            map = self._cursors[0]._d.merge(map)
+
+            if len(values) != len(self._cursors):
+                raise ValueError(
+                    f"The number of length values ({len(values)}) does "
+                    f"not equal the number of cursors ({len(self._cursors)}).")
+
+            from ..units import length
+            values = [length(value) for value in values]
+
+            movers = {}
+
+            for molnum, view in self._molcursors.items():
+                movers[molnum] = view._d.molecule.commit().move()
+
+            for value, cursor in zip(values, self._cursors):
+                movers[cursor._d.number()].change(cursor._internal, value, map)
+
+            for molnum, mover in movers.items():
+                self._molcursors[molnum]._d.molecule = mover.commit().edit()
+                self._molcursors[molnum]._update()
+
+            self._update()
+
+        def change_length(value, map=None):
+            """Change the lengths of all of the bonds edited by this
+               cursor by the passed value.
+            """
+            values = [value for _ in self._cursors]
+            change_lengths(values, map=map)
+
+        self.lengths = get_lengths
+        self.set_length = set_length
+        self.set_lengths = set_lengths
+        self.change_length = change_length
+        self.change_lengths = change_lengths
+
+        self.measures = get_lengths
+        self.set_measure = set_length
+        self.set_measures = set_lengths
+        self.change_measure = change_length
+        self.change_measures = change_lengths
+
+    def _add_angle_functions(self):
+        """Internal function used to add functions for editing
+           angles, dihedrals or impropers
+        """
+
+        def get_sizes(map=None):
+            """Return the sizes of all the internals edited by this cursor."""
+            map = self._cursors[0]._d.merge(map)
+
+            sizes = []
+
+            for cursor in self._cursors:
+                sizes.append(cursor.size(map=map))
+
+            return sizes
+
+        def set_sizes(values, map=None):
+            """Set the sizes of the internals being edited by this cursor to the specified
+               values. Note that there should be the same number of values
+               as there are cursors, and they should all be floats or
+               angles.
+            """
+            map = self._cursors[0]._d.merge(map)
+
+            if len(values) != len(self._cursors):
+                raise ValueError(
+                    f"The number of angle values ({len(values)}) does "
+                    f"not equal the number of cursors ({len(self._cursors)}).")
+
+            from ..units import angle
+            values = [angle(value) for value in values]
+
+            movers = {}
+
+            for molnum, view in self._molcursors.items():
+                movers[molnum] = view._d.molecule.commit().move()
+
+            for value, cursor in zip(values, self._cursors):
+                movers[cursor._d.number()].set(cursor._internal, value, map)
+
+            for molnum, mover in movers.items():
+                self._molcursors[molnum]._d.molecule = mover.commit().edit()
+                self._molcursors[molnum]._update()
+
+            self._update()
+
+        def set_size(value, map=None):
+            """Set the sizes of all of the internals edited by this
+               cursor to the passed value.
+            """
+            values = [value for _ in self._cursors]
+            set_sizes(values, map=map)
+
+        def change_sizes(values, map=None):
+            """Change the sizes of the internals being edited by this cursor by the specified
+               values. Note that there should be the same number of values
+               as there are cursors, and they should all be floats or
+               angles.
+            """
+            map = self._cursors[0]._d.merge(map)
+
+            if len(values) != len(self._cursors):
+                raise ValueError(
+                    f"The number of angle values ({len(values)}) does "
+                    f"not equal the number of cursors ({len(self._cursors)}).")
+
+            from ..units import angle
+            values = [angle(value) for value in values]
+
+            movers = {}
+
+            for molnum, view in self._molcursors.items():
+                movers[molnum] = view._d.molecule.commit().move()
+
+            for value, cursor in zip(values, self._cursors):
+                movers[cursor._d.number()].change(cursor._internal, value, map)
+
+            for molnum, mover in movers.items():
+                self._molcursors[molnum]._d.molecule = mover.commit().edit()
+                self._molcursors[molnum]._update()
+
+            self._update()
+
+        def change_size(value, map=None):
+            """Change the sizes of all of the internals edited by this
+               cursor by the passed value.
+            """
+            values = [value for _ in self._cursors]
+            change_sizes(values, map=map)
+
+        self.sizes = get_sizes
+        self.set_size = set_size
+        self.set_sizes = set_sizes
+        self.change_size = change_size
+        self.change_sizes = change_sizes
+
+        self.measures = get_sizes
+        self.set_measure = set_size
+        self.set_measures = set_sizes
+        self.change_measure = change_size
+        self.change_measures = change_sizes
+
+    def _add_extra_functions(self):
+        """Internal function used to add extra member functions depending
+           on the type of object being edited
+        """
+        if hasattr(self._cursors[0], "set_length"):
+            self._add_bond_functions()
+        elif hasattr(self._cursors[0], "set_size"):
+            self._add_angle_functions()
 
     def _from_view(self, view):
         """Internal function that constructs from a single view"""
@@ -1612,6 +2144,7 @@ class CursorsM:
         else:
             c._view = molcursor._d.molecule[view.index()]
 
+        c._add_extra_functions()
         c._update()
 
         return c
@@ -1625,6 +2158,8 @@ class CursorsM:
         for view in views:
             molnum = view.molecule().number()
             ret._cursors.append(ret._molcursors[molnum]._from_view(view))
+
+        ret._add_extra_functions()
 
         return ret
 
@@ -1797,45 +2332,33 @@ class CursorsM:
         else:
             return self._from_views(self._parent.molecules(id))
 
-    def bonds(self, id=None):
+    def bonds(self, *args, **kwargs):
         """Return cursors for all of the bonds in this
            view or, if 'id' is supplied, the bonds in this
            view that match 'id'
         """
-        if id is None:
-            return self._from_views(self._parent.bonds())
-        else:
-            return self._from_views(self._parent.bonds(id))
+        return self._from_views(self._parent.bonds(*args, **kwargs))
 
-    def angles(self, id=None):
+    def angles(self, *args, **kwargs):
         """Return cursors for all of the angles in this
            view or, if 'id' is supplied, the angles in this
            view that match 'id'
         """
-        if id is None:
-            return self._from_views(self._parent.angles())
-        else:
-            return self._from_views(self._parent.angles(id))
+        return self._from_views(self._parent.angles(*args, **kwargs))
 
-    def dihedrals(self, id=None):
+    def dihedrals(self, *args, **kwargs):
         """Return cursors for all of the dihedrals in this
            view or, if 'id' is supplied, the dihedrals in this
            view that match 'id'
         """
-        if id is None:
-            return self._from_views(self._parent.dihedrals())
-        else:
-            return self._from_views(self._parent.dihedrals(id))
+        return self._from_views(self._parent.dihedrals(*args, **kwargs))
 
-    def impropers(self, id=None):
+    def impropers(self, *args, **kwargs):
         """Return cursors for all of the impropers in this
            view or, if 'id' is supplied, the impropers in this
            view that match 'id'
         """
-        if id is None:
-            return self._from_views(self._parent.impropers())
-        else:
-            return self._from_views(self._parent.impropers(id))
+        return self._from_views(self._parent.impropers(*args, **kwargs))
 
     def atom(self, i):
         """Return the atom in the molecule that matches the passed ID"""

@@ -46,6 +46,19 @@ void register_PropertyMap_class(){
                 , "Return whether or not this map is default - if it is,\nthen it doesnt specify any properties" );
         
         }
+        { //::SireBase::PropertyMap::merge
+        
+            typedef ::SireBase::PropertyMap ( ::SireBase::PropertyMap::*merge_function_type)( ::SireBase::PropertyMap const & ) const;
+            merge_function_type merge_function_value( &::SireBase::PropertyMap::merge );
+            
+            PropertyMap_exposer.def( 
+                "merge"
+                , merge_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         PropertyMap_exposer.def( bp::self != bp::self );
         PropertyMap_exposer.def( bp::self + bp::self );
         { //::SireBase::PropertyMap::operator=

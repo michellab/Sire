@@ -227,3 +227,43 @@ def set_internal_units():
     set_mass_unit(gram)
     set_time_unit(picosecond)
     set_length_unit(angstrom)
+
+
+def length(length):
+    """Convert the passed argument into a length. This will
+       return `length` if it is already a length, or it will
+       convert it into a length with default units if this
+       is a float or something that can be converted to
+       a float
+    """
+    try:
+        return float(length) * angstrom.get_default()
+    except Exception:
+        pass
+
+    if type(length) != type(angstrom):
+        raise TypeError(
+            f"The value '{length}' of type {type(length)} is "
+            "not a type that is compatible with a GeneralUnit Length")
+
+    return length
+
+
+def angle(angle):
+    """Convert the passed argument into an angle. This will
+       return 'angle' if it is already an angle, or will
+       convert it into an angle with default units if this
+       is a float or something that can be converted to
+       a float
+    """
+    try:
+        return float(angle) * degrees.get_default()
+    except Exception:
+        pass
+
+    if type(angle) != type(degrees):
+        raise TypeError(
+            f"The value '{angle}' of type {type(angle)} is "
+            "not a type that is compatible with a GeneralUnit angle")
+
+    return angle
