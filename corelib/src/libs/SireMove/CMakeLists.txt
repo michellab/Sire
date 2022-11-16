@@ -133,12 +133,14 @@ set ( SIREMOVE_OPENMM_HEADERS
       openmmmdintegrator.h
       openmmfrenergydt.h
       openmmfrenergyst.h
+      openmmpmefep.h
     )
 
 set ( SIREMOVE_OPENMM_SOURCES
       openmmmdintegrator.cpp
       openmmfrenergydt.cpp
       openmmfrenergyst.cpp
+      openmmpmefep.cpp
     )
 
 if ( ${SIRE_USE_OPENMM} )
