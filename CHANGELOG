@@ -3,6 +3,21 @@ SIRE changelog
 
 devel branch:
 
+    [2023.0.1] Improve handling of HETATM and TER records in PDB files. Fix
+               SOMD selection issues following update to the 2023 API. Fix
+               writing of steps to SOMD simfile.dat (@fjclark).  Throw
+               exception when CHAMBER format AMBER topology files are detected.
+               Expose toVector() method for the velocity property.  Match
+               against inverted dihedral records of for A-B-C-A when building
+               GROMACS topologies. Fixed calling of static Py++ functions.
+               Build against conda-forge AmberTools and GROMACS packages as
+               host requirements, allowing users to create BioSimSpace
+               environments with or without these dependencies installed.
+               Insure CI is run against correct repository URL for forks.
+               Added the ability to search on whether or not a property exists.
+               Make sure searches are returned in MolIdx order. Ensure Sire
+               is built against packages with the "dev" label.
+
     [2023.0.0] July 2023 - Updated Sire's API to a more pythonic style.
                Module names are in lower case, e.g. `import Sire` becomes
                `import sire`, or `import sire as sr`. Functions are in

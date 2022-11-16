@@ -12,6 +12,7 @@ gromacs ; sys.platform != "win32"
 
 # The following are actual BioSimSpace run-time requirements. Please update
 # this list as new requirements are added.
+alchemlyb ; python_version >= '3.8'
 configargparse
 kcombu_bss
 ipywidgets<8
