@@ -3,7 +3,7 @@
 # This includes the standard state correction and will be reliable when
 # restraints are sufficiently strong, r is sufficiently far from zero,
 # and r2, r1, l1, and r1, l1, l2 are sufficiently far from collinear. If
-# this is not the case, the semi-analytical expression should be used.
+# this is not the case, the numerical expression should be used.
 # @author: Finlay Clark
 # Based very closely on StandardState.py by Stefano Bosisio and Julien Michel
 

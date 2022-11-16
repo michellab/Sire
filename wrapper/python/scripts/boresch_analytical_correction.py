@@ -4,7 +4,7 @@ restraints - see Equation 32 in J. Phys. Chem. B 2003, 107, 35, 9535–9551
 This includes the standard state correction and will be reliable when
 restraints are sufficiently strong, r is sufficiently far from zero,
 and r2, r1, l1, and r1, l1, l2 are sufficiently far from collinear. If
-this is not the case, the semi-analytical expression should be used."""
+this is not the case, the numerical expression should be used."""
 
 from Sire.Tools import BoreschAnalyticalCorrection
 from Sire.Tools import readParams
@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser(description="An app to calculate the analytical
                                              "This includes the standard state correction and will be reliable when "
                                              "restraints are sufficiently strong, r is sufficiently far from zero, "
                                              "and r2, r1, l1, and r1, l1, l2 are sufficiently far from collinear. If "
-                                             "this is not the case, the semi-analytical expression should be used.",
+                                             "this is not the case, the numerical expression should be used.",
                                 epilog="boresch_analytical_correction is built using Sire and is distributed "
                                         "under the GPL. For more information please visit "
                                         "http://siremol.org",

@@ -1,11 +1,11 @@
 description="""
 An app to calculate the correction for releasing Boresch restraints
-semi-analytically (with numerical integration) - see Equation 12 in 
+using numerical integration - see Equation 12 in 
 J. Phys. Chem. B 2003, 107, 35, 9535–9551. This is more robust than
 the analytical correction, which can result in substantial errors in
 certain regimes."""
 
-from Sire.Tools import BoreschSemiAnaCorrection
+from Sire.Tools import BoreschNumericalCorrection
 from Sire.Tools import readParams
 import Sire.Config
 
@@ -14,14 +14,13 @@ import sys
 import os
 
 parser = argparse.ArgumentParser(description="An app to calculate the correction for releasing Boresch restraints "
-                                             "semi-analytically (with numerical integration) - see Equation 12 in "
-                                             "J. Phys. Chem. B 2003, 107, 35, 9535–9551. This is more robust than "
-                                             "the analytical correction, which can result in substantial errors in "
-                                             "certain regimes.",
-                                epilog="boresch_semi_ana_correction is built using Sire and is distributed "
+                                             "using numerical integration - see Equation 12 in J. Phys. Chem. B 2003, 107,"
+                                              "35, 9535–9551. This is more robust than the analytical correction, which"
+                                              "can result in substantial errors in certain regimes.",
+                                epilog="boresch_numerical_correction is built using Sire and is distributed "
                                         "under the GPL. For more information please visit "
                                         "http://siremol.org",
-                                 prog="boresch_semi_ana_correction")
+                                 prog="boresch_numerical_correction")
 
 parser.add_argument('-C', '--config', nargs="?",
                     help='A config file used for the simulation (only the restraints '
@@ -42,12 +41,12 @@ args = parser.parse_args()
 must_exit = False
 
 if args.author:
-    print("\nboresch_semi_ana_correction was written by Finlay Clark (C) 2022, but is very closely"
+    print("\nboresch_numerical_correction was written by Finlay Clark (C) 2022, but is very closely"
           "\nbased on standardstatecorrection, written by Julien Michel and Stefano Bosisio (C) 2017")
     must_exit = True
 
 if args.version:
-    print("boresch_semi_ana_correction -- from Sire release version <%s>" %Sire.__version__)
+    print("boresch_numerical_correction -- from Sire release version <%s>" %Sire.__version__)
     print("This particular release can be downloaded here: "
           "https://github.com/michellab/Sire/releases/tag/v%s" %Sire.__version__)
     must_exit = True
@@ -70,9 +69,9 @@ else:
 if args.verbose:
     params["verbose"] = True
 
-print("\nCalculating semi-analytical correction for Boresch restraints using temperature and "
+print("\nCalculating numerical correction for Boresch restraints using temperature and "
       "restraint information from %s." % args.config)
 
-BoreschSemiAnaCorrection.run(params)
+BoreschNumericalCorrection.run(params)
 
 

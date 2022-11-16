@@ -114,4 +114,4 @@ def run():
 
     dg = -R*T*log(8*pi**2*v0/z_r)
 
-    print(f"Semi-analytical correction for releasing Boresch restraints = {dg:.2f} kcal mol-1")
+    print(f"Numerical correction for releasing Boresch restraints = {dg:.2f} kcal mol-1")
