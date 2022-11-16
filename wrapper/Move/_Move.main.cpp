@@ -77,8 +77,6 @@
 
 #include "OpenMMMDIntegrator.pypp.hpp"
 
-#include "OpenMMPMEFEP.pypp.hpp"
-
 #include "PrefSampler.pypp.hpp"
 
 #include "RBWorkspaceJM.pypp.hpp"
@@ -255,8 +253,6 @@ BOOST_PYTHON_MODULE(_Move){
     register_OpenMMFrEnergyST_class();
 
     register_OpenMMMDIntegrator_class();
-
-    register_OpenMMPMEFEP_class();
 
     register_Sampler_class();
 

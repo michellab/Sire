@@ -24,7 +24,6 @@
 #include "openmmfrenergydt.h"
 #include "openmmfrenergyst.h"
 #include "openmmmdintegrator.h"
-#include "openmmpmefep.h"
 #include "prefsampler.h"
 #include "rbworkspace.h"
 #include "rbworkspacejm.h"
@@ -91,8 +90,6 @@ void register_SireMove_objects()
     ObjectRegistry::registerConverterFor< SireMove::OpenMMFrEnergyST >();
     ObjectRegistry::registerConverterFor< SireMove::OpenMMMDIntegrator >();
     ObjectRegistry::registerConverterFor< SireMove::OpenMMMDIntegrator >();
-    ObjectRegistry::registerConverterFor< SireMove::OpenMMPMEFEP >();
-    ObjectRegistry::registerConverterFor< SireMove::OpenMMPMEFEP >();
     ObjectRegistry::registerConverterFor< SireMove::PrefSampler >();
     ObjectRegistry::registerConverterFor< SireMove::RBWorkspace >();
     ObjectRegistry::registerConverterFor< SireMove::RBWorkspaceJM >();
