@@ -12,47 +12,48 @@ class _CursorData:
        Cursor is not thread-safe (unlike the underlying
        system used by Sire)
     """
-    def __init__(self, molecule = None,
-                 connectivity_property: str="connectivity",
-                 bond_property: str="bond",
-                 angle_property: str="angle",
-                 dihedral_property: str="dihedral",
-                 improper_property: str="improper",
-                 map=None):
-
+    def __init__(self, molecule = None, map=None):
         if molecule is None:
             self.molecule = None
+            self.map = None
+            self.connectivity = None
+            self.connectivity_property = None
+            return
         else:
             self.molecule = molecule.molecule().edit()
 
         from ..base import PropertyMap
-        self.map = PropertyMap({"connectivity": connectivity_property,
-                                "bond": bond_property,
-                                "angle": angle_property,
-                                "dihedral": dihedral_property,
-                                "improper": improper_property})
 
-        if map is not None:
-            self.map = self.map.merge(map)
-            self.connectivity_property = self.map["connectivity"].value()
+        if map is None:
+            self.map = PropertyMap()
         else:
-            self.connectivity_property = connectivity_property
+            self.map = PropertyMap(map)
+
+        self.connectivity_property = self.map["connectivity"].source()
+
+        if self.connectivity_property is None:
+            # we cannot support value-based connectivity properties
+            self.map.set("connectivity", "connectivity")
+            self.connectivity_property = self.map["connectivity"].source()
 
         try:
             self.connectivity = self.molecule.property(
-                                    connectivity_property).edit()
+                                    self.connectivity_property).edit()
         except Exception:
             # the molecule doesn't have a connectivity. Create one for it
             from ..legacy.Mol import CovalentBondHunter
             hunter = CovalentBondHunter()
 
             try:
-                self.connectivity = hunter(self.molecule)
-                self.molecule.set_property(connectivity_property,
-                                           self.connectivity)
-                self.connectivity = self.connectivity.edit()
-            except Exception:
-                pass
+                connectivity = hunter(self.molecule)
+                self.molecule.set_property(self.connectivity_property,
+                                           connectivity)
+                self.connectivity = connectivity.edit()
+            except Exception as e:
+                from ..utils import Console
+                Console.warning(
+                    f"Cannot auto-generate a connectivity for {self.molecule}. "
+                    f"The error is:\n\n{e}")
 
     def number(self):
         """Return the molnum number of the molecule being edited
@@ -77,7 +78,7 @@ class _CursorData:
 
     def set_internal_property(self, internal, key, value):
         if value is None:
-            self.remove_bond_property(internal, key)
+            self.remove_internal_property(internal, key)
         else:
             self.connectivity.set_property(internal, key, value)
             self.molecule.set_property(self.connectivity_property,
@@ -108,13 +109,7 @@ class Cursor:
        getting and setting of properties more pythonic in writing
        style, while also saving some typing.
     """
-    def __init__(self, molecule = None, internal = None,
-                 connectivity_property: str="connectivity",
-                 bond_property: str="bond",
-                 angle_property: str="angle",
-                 dihedral_property: str="dihedral",
-                 improper_property: str="improper",
-                 map=None):
+    def __init__(self, molecule = None, internal = None, map=None):
         """Construct the Cursor to explore and edit the
            properties of the passed MoleculeView.
 
@@ -128,13 +123,7 @@ class Cursor:
                >>> cursor["cat"] = "meow"
                >>> mol = cursor.commit()
         """
-        self._d = _CursorData(molecule=molecule,
-                              connectivity_property=connectivity_property,
-                              bond_property=bond_property,
-                              angle_property=angle_property,
-                              dihedral_property=dihedral_property,
-                              improper_property=improper_property,
-                              map=map)
+        self._d = _CursorData(molecule=molecule, map=map)
         self._view = self._d.update(molecule)
 
         if (molecule is not None) and (internal is None):
