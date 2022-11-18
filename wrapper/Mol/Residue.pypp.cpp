@@ -259,6 +259,18 @@ void register_Residue_class(){
                 , "Return whether or not this residue contains some of\nthe atoms identified by the ID atomid" );
         
         }
+        { //::SireMol::Residue::invert
+        
+            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Residue::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMol::Residue::invert );
+            
+            Residue_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "Return a selector that has everything except this view" );
+        
+        }
         { //::SireMol::Residue::isEmpty
         
             typedef bool ( ::SireMol::Residue::*isEmpty_function_type)(  ) const;

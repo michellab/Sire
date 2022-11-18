@@ -261,6 +261,16 @@ bool Dihedral::selectedAll() const
     return this->data().info().nAtoms() == 4;
 }
 
+SelectorDihedral Dihedral::selector() const
+{
+    return SelectorDihedral(*this);
+}
+
+SelectorDihedral Dihedral::invert() const
+{
+    return this->selector().invert();
+}
+
 AtomSelection Dihedral::selection() const
 {
     if (this->isNull())

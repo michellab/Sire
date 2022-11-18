@@ -134,6 +134,7 @@
 #include "chain.h"
 #include "cutgroup.h"
 #include "molecule.h"
+#include "molecules.h"
 #include "moleculeview.h"
 #include "residue.h"
 #include "segment.h"

@@ -222,6 +222,16 @@ bool Bond::selectedAll() const
     return this->data().info().nAtoms() == 2;
 }
 
+SelectorBond Bond::selector() const
+{
+    return SelectorBond(*this);
+}
+
+SelectorBond Bond::invert() const
+{
+    return this->selector().invert();
+}
+
 AtomSelection Bond::selection() const
 {
     if (this->isNull())

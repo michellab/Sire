@@ -59,6 +59,8 @@ class Expression;
 namespace SireMM
 {
 
+class SelectorBond;
+
 /** This class provides a molecule view to a bond */
 class SIREMM_EXPORT Bond
     : public SireBase::ConcreteProperty<Bond, SireMol::MoleculeView>
@@ -107,6 +109,9 @@ public:
 
     bool isEmpty() const;
     bool selectedAll() const;
+
+    SelectorBond selector() const;
+    SelectorBond invert() const;
 
     SireMol::AtomSelection selection() const;
 

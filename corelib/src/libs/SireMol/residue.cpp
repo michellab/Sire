@@ -292,6 +292,12 @@ Selector<Residue> Residue::selector() const
     return Selector<Residue>(*this);
 }
 
+/** Return a selector that has everything except this view */
+Selector<Residue> Residue::invert() const
+{
+    return this->selector().invert();
+}
+
 /** Return the number of atoms in this residue */
 int Residue::nAtoms() const
 {

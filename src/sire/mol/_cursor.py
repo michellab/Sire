@@ -103,6 +103,61 @@ class _CursorData:
             return self.molecule
 
 
+def _process_move_options(view, anchor, weighting, map):
+    """Internal function used to process the passed move options
+       and return a property map with those options set.
+
+       The default is to have no anchors and to have
+       the AbsFromNumber weighting (this is defined
+       in weightfunction.h in the C++ layer).
+
+       Here we convert the weighting (as a string option)
+       into a WeightFunction, plus we convert the anchor
+       (as a view and then selection into that view) into
+       an AtomSelection object
+    """
+    if anchor is None and weighting is None:
+        return map
+
+    from ..base import PropertyMap
+
+    if map is None:
+        map = PropertyMap()
+    else:
+        map = PropertyMap(map)
+
+    if anchor is not None:
+        try:
+            selection = view[anchor].selection()
+            map.set("anchors", selection)
+        except Exception as e:
+            from ..utils import Console
+            Console.warning(
+                f"Unable to find anchors '{anchor}'.\n\n{e}")
+
+    if weighting is not None:
+        from ..legacy.Mol import AbsFromMass, RelFromMass, \
+                                 AbsFromNumber, RelFromNumber
+
+        weightfuncs = {
+            "relative_mass": RelFromMass,
+            "absolute_mass": AbsFromMass,
+            "relative_number": RelFromNumber,
+            "absolute_number": AbsFromNumber
+        }
+
+        try:
+            weighting = weightfuncs[weighting]()
+        except Exception:
+            raise ValueError(
+                f"Unsupported weighting: {weighting}. Supported values "
+                f"are {weightfuncs.keys()}.")
+
+        map.set("weight function", weighting)
+
+    return map
+
+
 class Cursor:
     """This class provides a cursor that can be used to navigate through
        and edit the properties of Molecules. This makes the whole
@@ -279,39 +334,109 @@ class Cursor:
             map = self._d.merge(map)
             return self.view().length(map=map)
 
-        def set_length(value, map=None):
+        def set_length(value, anchor=None, weighting=None,
+                       auto_align=True, map=None):
             """Set the length of the bond being edited by this cursor to
                'value'. This should be either a length unit, or a float
                (in which case it is converted into a value with default
                length units)
+
+                value: float or length
+                    The length to which to set this bond.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
             """
             from ..units import length
 
             value = length(value)
 
-            map = self._d.merge(map)
             view = self._d.molecule.commit()
-            view = view.move().set(self._internal, value, map).commit()
 
-            self._d.molecule = view.molecule().edit()
+            map = _process_move_options(view=view, anchor=anchor,
+                                        weighting=weighting, map=map)
+            map = self._d.merge(map)
+
+            moved = view.move().set(self._internal, value, map)
+
+            if auto_align and (anchor is None):
+                moved.align(view, map)
+
+            self._d.molecule = moved.commit().molecule().edit()
             self._update()
 
-        def change_length(delta, map=None):
+            return self
+
+        def change_length(delta, anchor=None, weighting=None,
+                          auto_align=True, map=None):
             """Change the length of the bond being edited by this cursor by
                'delta'. This should be either a length unit, or a float
                (in which case it is converted into a value with default
                length units)
+
+                delta: float or length
+                    The length by which to change this bond.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
             """
             from ..units import length
 
             delta = length(delta)
 
-            map = self._d.merge(map)
             view = self._d.molecule.commit()
-            view = view.move().change(self._internal, delta, map).commit()
 
-            self._d.molecule = view.molecule().edit()
+            map = _process_move_options(view=view, anchor=anchor,
+                                        weighting=weighting, map=map)
+            map = self._d.merge(map)
+
+            moved = view.move().change(self._internal, delta, map)
+
+            if auto_align and (anchor is None):
+                moved.align(view, map)
+
+            self._d.molecule = moved.commit().molecule().edit()
             self._update()
+
+            return self
 
         self.length = get_length
         self.set_length = set_length
@@ -330,38 +455,127 @@ class Cursor:
             map = self._d.merge(map)
             return self.view().size(map=map)
 
-        def set_size(value, map=None):
+        def set_size(value, anchor=None, weighting=None,
+                     auto_align=True, move_all=True, map=None):
             """Set the size of the internal being edited by this cursor to
                'delta'. This should be either an angle unit, or a float
                (in which case it is converted into a value with default
                 angle units)
+
+                value: float or angle
+                    The angle to which to set this internal.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                move_all: bool
+                    Option only used for dihedrals. Whether or not to
+                    move all atoms around the dihedral or just the
+                    specified dihedral
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
             """
             from ..units import angle
 
             value = angle(value)
 
-            map = self._d.merge(map)
             view = self._d.molecule.commit()
-            view = view.move().set(self._internal, value, map).commit()
 
-            self._d.molecule = view.molecule().edit()
+            map = _process_move_options(view=view,
+                                        anchor=anchor,
+                                        weighting=weighting,
+                                        map=map)
+
+            map = self._d.merge(map)
+
+            if move_all and self.is_dihedral():
+                moved = view.move().set_all(self._internal, value, map)
+            else:
+                moved = view.move().set(self._internal, value, map)
+
+            if auto_align and (anchor is None):
+                moved.align(view, map)
+
+            self._d.molecule = moved.commit().molecule().edit()
             self._update()
 
-        def change_size(delta, map=None):
+            return self
+
+        def change_size(delta, anchor=None, weighting=None,
+                        auto_align=True, move_all=True, map=None):
             """Change the size of the internal being edited by this cursor by
                'delta'. This should be either an angle unit, or a float
                (in which case it is converted into a value with default
                 angle units)
+
+                delta: float or angle
+                    The angle by which this internal is changed.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                move_all: bool
+                    Option only used for dihedrals. Whether or not to
+                    move all atoms around the dihedral or just the
+                    specified dihedral
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
             """
             from ..units import angle
 
             delta = angle(delta)
+            view = self._d.molecule.commit()
+
+            map = _process_move_options(view=view, anchor=anchor,
+                                        weighting=weighting, map=map)
 
             map = self._d.merge(map)
-            view = self._d.molecule.commit()
-            view = view.move().change(self._internal, delta, map).commit()
 
-            self._d.molecule = view.molecule().edit()
+            if move_all and self.is_dihedral():
+                from . import BondID
+                center_bond = BondID(self._internal.atom1(), self._internal.atom2())
+                moved = view.move().change(center_bond, delta, map)
+            else:
+                moved = view.move().change(self._internal, delta, map)
+
+            if auto_align and (anchor is None):
+                moved.align(view, map)
+
+            self._d.molecule = moved.commit().molecule().edit()
             self._update()
 
         self.size = get_size
@@ -1397,14 +1611,38 @@ class Cursors:
 
             return lengths
 
-        def set_lengths(values, map=None):
-            """Set the lengths of the  bonds being edited by this cursor to the specified
+        def set_lengths(values, anchor=None, weighting=None,
+                        auto_align=True, map=None):
+            """Set the lengths of the bonds being edited by this cursor to the specified
                values. Note that there should be the same number of values
                as there are cursors, and they should all be floats or
                lengths.
-            """
-            map = self._parent._d.merge(map)
 
+                values: list[float] or list[length]
+                    The lengths to which to set these bonds.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
+            """
             if len(values) != len(self._cursors):
                 raise ValueError(
                     f"The number of length values ({len(values)}) does "
@@ -1413,29 +1651,90 @@ class Cursors:
             from ..units import length
             values = [length(value) for value in values]
 
-            view = self._parent._d.molecule.commit().move()
+            molecule = self._parent._d.molecule.commit()
+
+            map = _process_move_options(view=molecule, anchor=anchor,
+                                        weighting=weighting, map=map)
+            map = self._parent._d.merge(map)
+
+            moved = molecule.move()
 
             for value, cursor in zip(values, self._cursors):
-                view.set(cursor._internal, value, map)
+                moved.set(cursor._internal, value, map)
 
-            view = view.commit()
+            if auto_align and (anchor is None):
+                moved.align(molecule, map)
 
-            self._parent._d.molecule = view.molecule().edit()
+            self._parent._d.molecule = moved.commit().molecule().edit()
             self._update()
+            return self
 
-        def set_length(value, map=None):
-            """Set all bonds edited by this cursor to the supplied length."""
+        def set_length(value, anchor=None, weighting=None,
+                       auto_align=True, map=None):
+            """Set all bonds edited by this cursor to the supplied length.
+
+                value: float or length
+                    The length to which to set these bonds.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
+            """
             values = [value for _ in range(0, len(self._cursors))]
-            set_lengths(values, map=map)
+            set_lengths(values, anchor=anchor, weighting=weighting,
+                        auto_align=auto_align, map=map)
+            return self
 
-        def change_lengths(deltas, map=None):
+        def change_lengths(deltas, anchor=None, weighting=None,
+                           auto_align=True, map=None):
             """Change the bonds being edited by this cursor by the specified
                values. Note that there should be the same number of values
                as there are cursors, and they should all be floats or
                lengths.
-            """
-            map = self._parent._d.merge(map)
 
+                deltas: list[float] or list[length]
+                    The lengths by which to change these bonds.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
+            """
             if len(deltas) != len(self._cursors):
                 raise ValueError(
                     f"The number of length values ({len(deltas)}) does "
@@ -1444,20 +1743,55 @@ class Cursors:
             from ..units import length
             deltas = [length(delta) for delta in deltas]
 
-            view = self._parent._d.molecule.commit().move()
+            molecule = self._parent._d.molecule.commit()
+
+            map = _process_move_options(view=molecule, anchor=anchor,
+                                        weighting=weighting, map=map)
+            map = self._parent._d.merge(map)
+
+            moved = molecule.move()
 
             for delta, cursor in zip(deltas, self._cursors):
-                view.change(cursor._internal, delta, map)
+                moved.change(cursor._internal, delta, map)
 
-            view = view.commit()
+            if auto_align and (anchor is None):
+                moved.align(molecule, map)
 
-            self._parent._d.molecule = view.molecule().edit()
+            self._parent._d.molecule = moved.commit().molecule().edit()
             self._update()
+            return self
 
-        def change_length(delta, map=None):
-            """Change all bonds edited by this cursor by the supplied length."""
+        def change_length(delta, anchor=None, weighting=None,
+                          auto_align=True, map=None):
+            """Change all bonds edited by this cursor by the supplied length.
+
+                delta: float or length
+                    The length by which to change these bonds.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.            """
             deltas = [delta for _ in range(0, len(self._cursors))]
-            change_lengths(deltas, map=map)
+            change_lengths(deltas, anchor=anchor, weighting=weighting,
+                           auto_align=auto_align, map=map)
 
         self.lengths = get_lengths
         self.set_length = set_length
@@ -1488,14 +1822,43 @@ class Cursors:
 
             return sizes
 
-        def set_sizes(values, map=None):
+        def set_sizes(values, anchor=None, weighting=None,
+                      auto_align=True, move_all=True, map=None):
             """Set the internals being edited by this cursor to the specified
                values. Note that there should be the same number of values
                as there are cursors, and they should all be floats or
                angles.
-            """
-            map = self._parent._d.merge(map)
 
+                values: list[float] or list[angle]
+                    The angles to which to set these internals.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                move_all: bool
+                    Option only used for dihedrals. Whether or not to
+                    move all atoms around the dihedral or just the
+                    specified dihedral
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
+            """
             if len(values) != len(self._cursors):
                 raise ValueError(
                     f"The number of angle values ({len(values)}) does "
@@ -1504,29 +1867,105 @@ class Cursors:
             from ..units import angle
             values = [angle(value) for value in values]
 
-            view = self._parent._d.molecule.commit().move()
+            view = self._parent._d.molecule.commit()
 
-            for value, cursor in zip(values, self._cursors):
-                view.set(cursor._internal, value, map)
+            map = _process_move_options(view=view, anchor=anchor,
+                                        weighting=weighting, map=map)
 
-            view = view.commit()
+            map = self._parent._d.merge(map)
 
-            self._parent._d.molecule = view.molecule().edit()
+            moved = view.move()
+
+            if move_all and self._cursors[0].is_dihedral():
+                for value, cursor in zip(values, self._cursors):
+                    moved.set_all(cursor._internal, value, map)
+            else:
+                for value, cursor in zip(values, self._cursors):
+                    moved.set(cursor._internal, value, map)
+
+            if auto_align and (anchor is None):
+                moved.align(view, map)
+
+            self._parent._d.molecule = moved.commit().molecule().edit()
             self._update()
+            return self
 
-        def set_size(value, map=None):
-            """Set all internals edited by this cursor to the supplied angle."""
+        def set_size(value, anchor=None, weighting=None,
+                     auto_align=True, move_all=True, map=None):
+            """Set all internals edited by this cursor to the supplied angle.
+
+                value: float or angle
+                    The angle to which to set these internals.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                move_all: bool
+                    Option only used for dihedrals. Whether or not to
+                    move all atoms around the dihedral or just the
+                    specified dihedral
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
+            """
             values = [value for _ in range(0, len(self._cursors))]
-            set_sizes(values, map=map)
+            set_sizes(values, anchor=anchor, weighting=weighting,
+                      auto_align=auto_align, move_all=move_all, map=map)
+            return self
 
-        def change_sizes(deltas, map=None):
+        def change_sizes(deltas, anchor=None, weighting=None,
+                         auto_align=True, move_all=True, map=None):
             """Change the internals being edited by this cursor by the specified
                values. Note that there should be the same number of values
                as there are cursors, and they should all be floats or
                angles.
-            """
-            map = self._parent._d.merge(map)
 
+                deltas: list[float] or list[angle]
+                    The angles by which to change these internals.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                move_all: bool
+                    Option only used for dihedrals. Whether or not to
+                    move all atoms around the dihedral or just the
+                    specified dihedral
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
+            """
             if len(deltas) != len(self._cursors):
                 raise ValueError(
                     f"The number of angle values ({len(deltas)}) does "
@@ -1535,20 +1974,70 @@ class Cursors:
             from ..units import angle
             deltas = [angle(delta) for delta in deltas]
 
-            view = self._parent._d.molecule.commit().move()
+            view = self._parent._d.molecule.commit()
 
-            for delta, cursor in zip(deltas, self._cursors):
-                view.change(cursor._internal, delta, map)
+            map = _process_move_options(view=view, anchor=anchor,
+                                        weighting=weighting, map=map)
 
-            view = view.commit()
+            map = self._parent._d.merge(map)
 
-            self._parent._d.molecule = view.molecule().edit()
+            moved = view.move()
+
+            if move_all and self._cursors[0].is_dihedral():
+                from . import BondID
+                for delta, cursor in zip(deltas, self._cursors):
+                    bond = BondID(cursor._internal.atom0(),
+                                  cursor._internal.atom1())
+                    moved.change(bond, delta, map)
+            else:
+                for delta, cursor in zip(deltas, self._cursors):
+                    moved.change(cursor._internal, delta, map)
+
+            if auto_align and (anchor is None):
+                moved.align(view, map)
+
+            self._parent._d.molecule = moved.commit().molecule().edit()
             self._update()
+            return self
 
-        def change_size(delta, map=None):
-            """Change all internals edited by this cursor by the supplied angle."""
+        def change_size(delta, anchor=None, weighting=None,
+                        auto_align=True, move_all=True, map=None):
+            """Change all internals edited by this cursor by the supplied angle.
+
+                delta: float or angle
+                    The angle by which to change these internals.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                move_all: bool
+                    Option only used for dihedrals. Whether or not to
+                    move all atoms around the dihedral or just the
+                    specified dihedral
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
+            """
             deltas = [delta for _ in range(0, len(self._cursors))]
-            change_sizes(deltas, map=map)
+            change_sizes(deltas, anchor=anchor, weighting=weighting,
+                         auto_align=auto_align, move_all=move_all, map=map)
+            return self
 
         self.sizes = get_sizes
         self.set_size = set_size
@@ -1756,6 +2245,11 @@ class Cursors:
         else:
             return self._parent._from_view(self._view.improper(improper))
 
+    def invert(self):
+        """Return the inverse view of this cursor (i.e. all views that
+           are not selected - same as view.invert())"""
+        return self._parent._from_views(self._view.invert())
+
     def parent(self):
         """Return the parent cursor"""
         return self._parent
@@ -1917,14 +2411,38 @@ class CursorsM:
 
             return lengths
 
-        def set_lengths(values, map=None):
-            """Set the lengths of the  bonds being edited by this cursor to the specified
+        def set_lengths(values, anchor=None, weighting=None,
+                        auto_align=True, map=None):
+            """Set the lengths of the bonds being edited by this cursor to the specified
                values. Note that there should be the same number of values
                as there are cursors, and they should all be floats or
                lengths.
-            """
-            map = self._cursors[0]._d.merge(map)
 
+                values: list[float] or list[length]
+                    The lengths to which to set these bonds.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
+            """
             if len(values) != len(self._cursors):
                 raise ValueError(
                     f"The number of length values ({len(values)}) does "
@@ -1934,62 +2452,170 @@ class CursorsM:
             values = [length(value) for value in values]
 
             movers = {}
+            molecules = {}
+            maps = {}
 
             for molnum, view in self._molcursors.items():
-                movers[molnum] = view._d.molecule.commit().move()
+                molecules[molnum] = view._d.molecule.commit()
+                movers[molnum] = molecules[molnum].move()
+                maps[molnum] = self._cursors[0]._d.merge(
+                                _process_move_options(view=molecules[molnum],
+                                                      anchor=anchor,
+                                                      weighting=weighting,
+                                                      map=map))
 
             for value, cursor in zip(values, self._cursors):
-                movers[cursor._d.number()].set(cursor._internal, value, map)
+                molnum = cursor._d.number()
+                movers[molnum].set(cursor._internal, value,
+                                   maps[molnum])
 
             for molnum, mover in movers.items():
+                if auto_align and (anchor is None):
+                    mover.align(molecules[molnum], maps[molnum])
+
                 self._molcursors[molnum]._d.molecule = mover.commit().edit()
                 self._molcursors[molnum]._update()
 
             self._update()
+            return self
 
-        def set_length(value, map=None):
+        def set_length(value, anchor=None, weighting=None,
+                       auto_align=True, map=None):
             """Set the lengths of all of the bonds edited by this
                cursor to the passed value.
+
+                value: float or length
+                    The length to which to set these bonds.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
             """
             values = [value for _ in self._cursors]
-            set_lengths(values, map=map)
+            set_lengths(values, anchor=anchor, weighting=weighting,
+                        auto_align=auto_align, map=map)
+            return self
 
-        def change_lengths(values, map=None):
-            """Change the lengths of the  bonds being edited by this cursor by the specified
-               values. Note that there should be the same number of values
+        def change_lengths(deltas, anchor=None, weighting=None,
+                           auto_align=True, map=None):
+            """Change the lengths of the bonds being edited by this cursor by the specified
+               deltas. Note that there should be the same number of values
                as there are cursors, and they should all be floats or
                lengths.
-            """
-            map = self._cursors[0]._d.merge(map)
 
-            if len(values) != len(self._cursors):
+                deltas: list[float] or list[length]
+                    The lengths by which to change these bonds.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
+            """
+            if len(deltas) != len(self._cursors):
                 raise ValueError(
-                    f"The number of length values ({len(values)}) does "
+                    f"The number of length values ({len(deltas)}) does "
                     f"not equal the number of cursors ({len(self._cursors)}).")
 
             from ..units import length
-            values = [length(value) for value in values]
+            deltas = [length(delta) for delta in deltas]
 
             movers = {}
+            molecules = {}
+            maps = {}
 
             for molnum, view in self._molcursors.items():
-                movers[molnum] = view._d.molecule.commit().move()
+                molecules[molnum] = view._d.molecule.commit()
+                movers[molnum] = molecules[molnum].move()
+                maps[molnum] = self._cursors[0]._d.merge(
+                        _process_move_options(view=molecules[molnum],
+                                              anchor=anchor,
+                                              weighting=weighting,
+                                              map=map))
 
-            for value, cursor in zip(values, self._cursors):
-                movers[cursor._d.number()].change(cursor._internal, value, map)
+            for delta, cursor in zip(deltas, self._cursors):
+                molnum = cursor._d.number()
+                movers[molnum].change(cursor._internal,
+                                      delta, maps[molnum])
 
             for molnum, mover in movers.items():
+                if auto_align and (anchor is None):
+                    mover.align(molecules[molnum], maps[molnum])
+
                 self._molcursors[molnum]._d.molecule = mover.commit().edit()
                 self._molcursors[molnum]._update()
 
             self._update()
+            return self
 
-        def change_length(value, map=None):
+        def change_length(delta, anchor=None, weighting=None,
+                          auto_align=True, map=None):
             """Change the lengths of all of the bonds edited by this
                cursor by the passed value.
+
+                delta: float or length
+                    The length by which to change these bonds.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
             """
-            values = [value for _ in self._cursors]
-            change_lengths(values, map=map)
+            deltas = [delta for _ in self._cursors]
+            change_lengths(deltas, anchor=anchor, weighting=weighting,
+                           auto_align=auto_align, map=map)
+            return self
 
         self.lengths = get_lengths
         self.set_length = set_length
@@ -2019,14 +2645,43 @@ class CursorsM:
 
             return sizes
 
-        def set_sizes(values, map=None):
+        def set_sizes(values, anchor=None, weighting=None,
+                      auto_align=True, move_all=True, map=None):
             """Set the sizes of the internals being edited by this cursor to the specified
                values. Note that there should be the same number of values
                as there are cursors, and they should all be floats or
                angles.
-            """
-            map = self._cursors[0]._d.merge(map)
 
+                values: list[float] or list[angle]
+                    The angles to which to set these internals.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                move_all: bool
+                    Option only used for dihedrals. Whether or not to
+                    move all atoms around the dihedral or just the
+                    specified dihedral
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
+            """
             if len(values) != len(self._cursors):
                 raise ValueError(
                     f"The number of angle values ({len(values)}) does "
@@ -2035,63 +2690,198 @@ class CursorsM:
             from ..units import angle
             values = [angle(value) for value in values]
 
+            molecules = {}
             movers = {}
+            maps = {}
+
+            map = self._cursors[0]._d.merge(map)
 
             for molnum, view in self._molcursors.items():
-                movers[molnum] = view._d.molecule.commit().move()
+                molecules[molnum] = view._d.molecule.commit()
+                movers[molnum] = molecules[molnum].move()
+                maps[molnum] = self._cursors[0]._d.merge(
+                                _process_move_options(view=molecules[molnum],
+                                                      anchor=anchor,
+                                                      weighting=weighting,
+                                                      map=map))
 
             for value, cursor in zip(values, self._cursors):
-                movers[cursor._d.number()].set(cursor._internal, value, map)
+                molnum = cursor._d.number()
+                movers[molnum].set(cursor._internal, value,
+                                   maps[molnum])
 
             for molnum, mover in movers.items():
+                if auto_align and (anchor is None):
+                    mover.align(molecules[molnum], map[molnum])
+
                 self._molcursors[molnum]._d.molecule = mover.commit().edit()
                 self._molcursors[molnum]._update()
 
             self._update()
 
-        def set_size(value, map=None):
+            return self
+
+        def set_size(value, anchor=None, weighting=None,
+                     auto_align=True, move_all=True, map=None):
             """Set the sizes of all of the internals edited by this
                cursor to the passed value.
+
+                value: float or angle
+                    The angle to which to set these internals.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                move_all: bool
+                    Option only used for dihedrals. Whether or not to
+                    move all atoms around the dihedral or just the
+                    specified dihedral
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
             """
             values = [value for _ in self._cursors]
-            set_sizes(values, map=map)
+            set_sizes(values, anchor=anchor, weighting=weighting,
+                      auto_align=auto_align, move_all=move_all, map=map)
+            return self
 
-        def change_sizes(values, map=None):
+        def change_sizes(deltas, anchor=None, weighting=None,
+                         auto_align=True, move_all=True, map=None):
             """Change the sizes of the internals being edited by this cursor by the specified
                values. Note that there should be the same number of values
                as there are cursors, and they should all be floats or
                angles.
-            """
-            map = self._cursors[0]._d.merge(map)
 
-            if len(values) != len(self._cursors):
+                deltas: list[float] or list[angle]
+                    The angles by which to change these internals.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                move_all: bool
+                    Option only used for dihedrals. Whether or not to
+                    move all atoms around the dihedral or just the
+                    specified dihedral
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
+            """
+            if len(deltas) != len(self._cursors):
                 raise ValueError(
-                    f"The number of angle values ({len(values)}) does "
+                    f"The number of angle values ({len(deltas)}) does "
                     f"not equal the number of cursors ({len(self._cursors)}).")
 
             from ..units import angle
-            values = [angle(value) for value in values]
+            deltas = [angle(delta) for delta in deltas]
 
+            molecules = {}
             movers = {}
+            maps = {}
 
             for molnum, view in self._molcursors.items():
-                movers[molnum] = view._d.molecule.commit().move()
+                molecules[molnum] = view._d.molecule.commit()
+                movers[molnum] = molecules[molnum].move()
+                maps[molnum] = self._cursors[0]._d.merge(
+                                _process_move_options(view=molecules[molnum],
+                                                      anchor=anchor,
+                                                      weighting=weighting,
+                                                      map=map))
 
-            for value, cursor in zip(values, self._cursors):
-                movers[cursor._d.number()].change(cursor._internal, value, map)
+            if move_all and self._cursors[0].is_dihedral():
+                from . import BondID
+                for delta, cursor in zip(deltas, self._cursors):
+                    molnum = cursor._d.number()
+                    bond = BondID(cursor._internal.atom0(),
+                                  cursor._internal.atom1())
+                    movers[molnum].change(bond, delta, maps[molnum])
+            else:
+                for delta, cursor in zip(deltas, self._cursors):
+                    molnum = cursor._d.number()
+                    movers[molnum].change(cursor._internal, delta,
+                                          maps[molnum])
 
             for molnum, mover in movers.items():
+                if auto_align and (anchor is None):
+                    mover.align(molecules[molnum], maps[molnum])
+
                 self._molcursors[molnum]._d.molecule = mover.commit().edit()
                 self._molcursors[molnum]._update()
 
             self._update()
 
-        def change_size(value, map=None):
+            return self
+
+        def change_size(value, anchor=None, weighting=None,
+                        auto_align=True, move_all=True, map=None):
             """Change the sizes of all of the internals edited by this
                cursor by the passed value.
+
+                delta: float or angle
+                    The angle by which to change these internals.
+
+                anchor: string or ID
+                    The search or ID to identify atoms in the view that
+                    are anchored, and which cannot be moved when the
+                    internal is set.
+
+                weighting: string
+                    The weighting function used to distribute the move
+                    across the atoms in the view. This is either;
+                    'absolute_number', 'relative_number',
+                    'absolute_mass' or 'relative_mass'. It defaults
+                    to 'absolute_number'
+
+                auto_align: bool
+                    Whether or not to align the molecule against itself
+                    after the move
+
+                move_all: bool
+                    Option only used for dihedrals. Whether or not to
+                    move all atoms around the dihedral or just the
+                    specified dihedral
+
+                map: sire.base.PropertyMap or dict
+                    Map of property keys that are passed through to
+                    control which properties are used for the move,
+                    plus fine-grained control of the weight function
+                    or anchors.
             """
             values = [value for _ in self._cursors]
-            change_sizes(values, map=map)
+            change_sizes(values, anchor=anchor, weighting=weighting,
+                         auto_align=auto_align, move_all=move_all, map=map)
+            return self
 
         self.sizes = get_sizes
         self.set_size = set_size
@@ -2422,6 +3212,11 @@ class CursorsM:
             return self._from_view(self._parent.improper())
         else:
             return self._from_view(self._parent.improper(improper))
+
+    def invert(self):
+        """Return the inverse view of this cursor (i.e. all views that
+           are not selected - same as view.invert())"""
+        return self._from_views(self._parent.invert())
 
     def apply(self, func, *args, **kwargs):
         """Apply the passed function (with optional position and keyword

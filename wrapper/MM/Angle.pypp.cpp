@@ -185,6 +185,18 @@ void register_Angle_class(){
                 , "" );
         
         }
+        { //::SireMM::Angle::invert
+        
+            typedef ::SireMM::SelectorAngle ( ::SireMM::Angle::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMM::Angle::invert );
+            
+            Angle_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::Angle::isEmpty
         
             typedef bool ( ::SireMM::Angle::*isEmpty_function_type)(  ) const;
@@ -369,6 +381,18 @@ void register_Angle_class(){
             Angle_exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Angle::selector
+        
+            typedef ::SireMM::SelectorAngle ( ::SireMM::Angle::*selector_function_type)(  ) const;
+            selector_function_type selector_function_value( &::SireMM::Angle::selector );
+            
+            Angle_exposer.def( 
+                "selector"
+                , selector_function_value
                 , bp::release_gil_policy()
                 , "" );
         

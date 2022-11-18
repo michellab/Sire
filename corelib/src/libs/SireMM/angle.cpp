@@ -238,6 +238,16 @@ bool Angle::isEmpty() const
     return this->isNull();
 }
 
+SelectorAngle Angle::selector() const
+{
+    return SelectorAngle(*this);
+}
+
+SelectorAngle Angle::invert() const
+{
+    return this->selector().invert();
+}
+
 bool Angle::selectedAll() const
 {
     return this->data().info().nAtoms() == 3;

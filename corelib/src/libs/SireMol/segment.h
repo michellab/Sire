@@ -136,6 +136,7 @@ public:
     Evaluator evaluate() const;
     SegEditor edit() const;
     Selector<Segment> selector() const;
+    Selector<Segment> invert() const;
 
     int nAtoms() const;
 

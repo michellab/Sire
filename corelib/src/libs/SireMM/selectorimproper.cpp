@@ -1103,6 +1103,16 @@ bool SelectorImproper::selectedAll() const
     return this->selection().selectedAll();
 }
 
+SelectorImproper Improper::selector() const
+{
+    return SelectorImproper(*this);
+}
+
+SelectorImproper Improper::invert() const
+{
+    return this->selector().invert();
+}
+
 AtomSelection SelectorImproper::selection() const
 {
     if (this->isNull())

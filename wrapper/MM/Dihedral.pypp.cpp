@@ -197,6 +197,18 @@ void register_Dihedral_class(){
                 , "" );
         
         }
+        { //::SireMM::Dihedral::invert
+        
+            typedef ::SireMM::SelectorDihedral ( ::SireMM::Dihedral::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMM::Dihedral::invert );
+            
+            Dihedral_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::Dihedral::isEmpty
         
             typedef bool ( ::SireMM::Dihedral::*isEmpty_function_type)(  ) const;
@@ -381,6 +393,18 @@ void register_Dihedral_class(){
             Dihedral_exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Dihedral::selector
+        
+            typedef ::SireMM::SelectorDihedral ( ::SireMM::Dihedral::*selector_function_type)(  ) const;
+            selector_function_type selector_function_value( &::SireMM::Dihedral::selector );
+            
+            Dihedral_exposer.def( 
+                "selector"
+                , selector_function_value
                 , bp::release_gil_policy()
                 , "" );
         

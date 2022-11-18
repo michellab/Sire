@@ -138,6 +138,28 @@ public:
 
     bool isSelector() const;
 
+    SelectorM<T> add(const SelectorM<T> &other) const;
+    SelectorM<T> add(const Selector<T> &views) const;
+    SelectorM<T> add(const T &view) const;
+
+    SelectorM<T> subtract(const SelectorM<T> &other) const;
+    SelectorM<T> subtract(const Selector<T> &views) const;
+    SelectorM<T> subtract(const T &view) const;
+
+    SelectorM<T> intersection(const SelectorM<T> &other) const;
+    SelectorM<T> intersection(const Selector<T> &views) const;
+    SelectorM<T> intersection(const T &view) const;
+
+    SelectorM<T> invert() const;
+
+    bool intersects(const SelectorM<T> &other) const;
+    bool intersects(const Selector<T> &view) const;
+    bool intersects(const T &view) const;
+
+    bool contains(const SelectorM<T> &other) const;
+    bool contains(const Selector<T> &view) const;
+    bool contains(const T &view) const;
+
     Molecule molecule(int i) const;
     Molecule molecule(const QString &name) const;
     Molecule molecule(const MolID &molid);
@@ -1184,6 +1206,268 @@ SIRE_OUTOFLINE_TEMPLATE
 bool SelectorM<T>::isSelector() const
 {
     return true;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T> SelectorM<T>::add(const SelectorM<T> &other) const
+{
+    SelectorM<T> ret(*this);
+
+    for (int i=0; i<other.count(); ++i)
+    {
+        ret._append(other(i));
+    }
+
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T> SelectorM<T>::add(const Selector<T> &other) const
+{
+    SelectorM<T> ret(*this);
+
+    for (int i=0; i<other.count(); ++i)
+    {
+        ret._append(other(i));
+    }
+
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T> SelectorM<T>::add(const T &other) const
+{
+    SelectorM<T> ret(*this);
+    ret._append(other);
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T> SelectorM<T>::subtract(const SelectorM<T> &other) const
+{
+    SelectorM<T> ret;
+
+    for (const auto &view : this->vws)
+    {
+        auto result = view;
+
+        for (const auto &other_view : other.vws)
+        {
+            if (result.data().number() == other_view.data().number())
+            {
+                result = result.subtract(other_view);
+            }
+        }
+
+        if (not result.isEmpty())
+            ret.vws.append(result);
+    }
+
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T> SelectorM<T>::subtract(const Selector<T> &other) const
+{
+    SelectorM<T> ret;
+
+    for (const auto &view : this->vws)
+    {
+        if (view.data().number() == other.data().number())
+        {
+            auto result = view.subtract(other);
+
+            if (not result.isEmpty())
+                ret.vws.append(result);
+        }
+        else
+            ret.vws.append(view);
+    }
+
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T> SelectorM<T>::subtract(const T &other) const
+{
+    SelectorM<T> ret;
+
+    for (const auto &view : this->vws)
+    {
+        if (view.data().number() == other.data().number())
+        {
+            auto result = view.subtract(other);
+
+            if (not result.isEmpty())
+                ret.vws.append(result);
+        }
+        else
+            ret.vws.append(view);
+    }
+
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T> SelectorM<T>::intersection(const SelectorM<T> &other) const
+{
+    SelectorM<T> ret;
+
+    for (const auto &view : this->vws)
+    {
+        for (const auto &other_view : other.vws)
+        {
+            if (view.data().number() == other_view.data().number())
+            {
+                auto intersect = view.intersection(other_view);
+
+                if (not intersect.isEmpty())
+                {
+                    ret.vws.append(intersect);
+                }
+            }
+        }
+    }
+
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T> SelectorM<T>::intersection(const Selector<T> &views) const
+{
+    SelectorM<T> ret;
+
+    for (const auto &view : this->vws)
+    {
+        if (view.data().number() == view.data().number())
+        {
+            auto intersect = view.intersection(views);
+
+            if (not intersect.isEmpty())
+            {
+                ret.vws.append(intersect);
+            }
+        }
+    }
+
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T> SelectorM<T>::intersection(const T &view) const
+{
+    if (this->contains(view))
+    {
+        return SelectorM<T>(view);
+    }
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SelectorM<T> SelectorM<T>::invert() const
+{
+    SelectorM<T> ret;
+
+    for (const auto &view : this->vws)
+    {
+        auto inverted = view.invert();
+
+        if (not inverted.isEmpty())
+        {
+            ret.vws.append(inverted);
+        }
+    }
+
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+bool SelectorM<T>::intersects(const SelectorM<T> &other) const
+{
+    for (int i=0; i<other.count(); ++i)
+    {
+        if (this->contains(other(i)))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+bool SelectorM<T>::intersects(const Selector<T> &other) const
+{
+    for (int i=0; i<other.count(); ++i)
+    {
+        if (this->contains(other(i)))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+bool SelectorM<T>::intersects(const T &view) const
+{
+    return this->contains(view);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+bool SelectorM<T>::contains(const SelectorM<T> &other) const
+{
+    for (int i=0; i<other.count(); ++i)
+    {
+        if (not this->contains(other(i)))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+bool SelectorM<T>::contains(const Selector<T> &other) const
+{
+    for (int i=0; i<other.count(); ++i)
+    {
+        if (not this->contains(other(i)))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+bool SelectorM<T>::contains(const T &other) const
+{
+    for (const auto &view : this->vws)
+    {
+        if (view == other)
+            return true;
+    }
+
+    return false;
 }
 
 template<class T>

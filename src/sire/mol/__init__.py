@@ -331,7 +331,10 @@ def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False, map=None):
             return SelectorMBond(obj.to_select_result(), bondid, map=map)
 
     if idx is None:
-        result = C(obj)
+        try:
+            result = C(obj)
+        except Exception:
+            result = C(obj.to_select_result())
     elif idx1 is None:
         if BondID in type(idx).mro():
             result = _fromBondID(obj, idx)
@@ -376,7 +379,10 @@ def __fixed__angles__(obj, idx=None, idx1=None, idx2=None, auto_reduce=False,
             return SelectorMAngle(obj.to_select_result(), angid, map=map)
 
     if idx is None:
-        result = C(obj)
+        try:
+            result = C(obj)
+        except Exception:
+            result = C(obj.to_select_result())
     elif idx1 is None:
         if AngleID in type(idx).mro():
             result = _fromAngleID(obj, idx)
@@ -427,7 +433,10 @@ def __fixed__dihedrals__(obj, idx=None, idx1=None,
             return SelectorMDihedral(obj.to_select_result(), dihid, map=map)
 
     if idx is None:
-        result = C(obj)
+        try:
+            result = C(obj)
+        except Exception:
+            result = C(obj.to_select_result())
     elif idx1 is None:
         if DihedralID in type(idx).mro():
             result = _fromDihedralID(obj, idx)
@@ -481,7 +490,10 @@ def __fixed__impropers__(obj, idx=None, idx1=None,
             return SelectorMImproper(obj.to_select_result(), impid, map=map)
 
     if idx is None:
-        result = C(obj)
+        try:
+            result = C(obj)
+        except Exception:
+            result = C(obj.to_select_result())
     elif idx1 is None:
         if ImproperID in type(idx).mro():
             result = _fromImproperID(obj, idx)

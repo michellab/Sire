@@ -423,6 +423,18 @@ void register_Atom_class(){
                 , "Return the index number of this atom in the molecule" );
         
         }
+        { //::SireMol::Atom::invert
+        
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Atom::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMol::Atom::invert );
+            
+            Atom_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "Return a selector that has everything except this view" );
+        
+        }
         { //::SireMol::Atom::isEmpty
         
             typedef bool ( ::SireMol::Atom::*isEmpty_function_type)(  ) const;

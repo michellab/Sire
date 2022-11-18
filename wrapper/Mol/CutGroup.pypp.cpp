@@ -258,6 +258,18 @@ void register_CutGroup_class(){
                 , "Return whether or not this CutGroup contains some of\nthe atoms that match the ID atomid" );
         
         }
+        { //::SireMol::CutGroup::invert
+        
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::CutGroup::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMol::CutGroup::invert );
+            
+            CutGroup_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "Return a selector that has everything except this view" );
+        
+        }
         { //::SireMol::CutGroup::isEmpty
         
             typedef bool ( ::SireMol::CutGroup::*isEmpty_function_type)(  ) const;

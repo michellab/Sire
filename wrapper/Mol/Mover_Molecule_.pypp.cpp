@@ -37,6 +37,8 @@ namespace bp = boost::python;
 
 #include "selector.hpp"
 
+#include "selectormol.h"
+
 #include <QDebug>
 
 #include "molecule.h"

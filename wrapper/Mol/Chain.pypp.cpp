@@ -296,6 +296,18 @@ void register_Chain_class(){
                 , "Return whether or not this chain contains some\nof the residues identified by the ID resid" );
         
         }
+        { //::SireMol::Chain::invert
+        
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Chain::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMol::Chain::invert );
+            
+            Chain_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "Return a selector that has everything except this view" );
+        
+        }
         { //::SireMol::Chain::isEmpty
         
             typedef bool ( ::SireMol::Chain::*isEmpty_function_type)(  ) const;

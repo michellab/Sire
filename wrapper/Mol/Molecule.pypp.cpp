@@ -38,6 +38,8 @@ namespace bp = boost::python;
 
 #include "selector.hpp"
 
+#include "selectormol.h"
+
 #include <QDebug>
 
 #include "molecule.h"
@@ -173,6 +175,18 @@ void register_Molecule_class(){
                 , info_function_value
                 , bp::release_gil_policy()
                 , "Return the MoleculeInfo object that holds information about the layout\nof the atoms, residues, chains and segments in the molecule" );
+        
+        }
+        { //::SireMol::Molecule::invert
+        
+            typedef ::SireMol::SelectorMol ( ::SireMol::Molecule::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMol::Molecule::invert );
+            
+            Molecule_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::Molecule::isEmpty
@@ -473,6 +487,18 @@ void register_Molecule_class(){
                 , selection_function_value
                 , bp::release_gil_policy()
                 , "Return which atoms are selected in this view" );
+        
+        }
+        { //::SireMol::Molecule::selector
+        
+            typedef ::SireMol::SelectorMol ( ::SireMol::Molecule::*selector_function_type)(  ) const;
+            selector_function_type selector_function_value( &::SireMol::Molecule::selector );
+            
+            Molecule_exposer.def( 
+                "selector"
+                , selector_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::Molecule::toSelector

@@ -91,6 +91,48 @@ void register_SelectorM_Segment__class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorM< SireMol::Segment >::add
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorM< SireMol::Segment >::*add_function_type)( ::SireMol::SelectorM< SireMol::Segment > const & ) const;
+            add_function_type add_function_value( &::SireMol::SelectorM< SireMol::Segment >::add );
+            
+            SelectorM_Segment__exposer.def( 
+                "add"
+                , add_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::add
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorM< SireMol::Segment >::*add_function_type)( ::SireMol::Selector< SireMol::Segment > const & ) const;
+            add_function_type add_function_value( &::SireMol::SelectorM< SireMol::Segment >::add );
+            
+            SelectorM_Segment__exposer.def( 
+                "add"
+                , add_function_value
+                , ( bp::arg("views") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::add
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorM< SireMol::Segment >::*add_function_type)( ::SireMol::Segment const & ) const;
+            add_function_type add_function_value( &::SireMol::SelectorM< SireMol::Segment >::add );
+            
+            SelectorM_Segment__exposer.def( 
+                "add"
+                , add_function_value
+                , ( bp::arg("view") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::Segment >::atom
         
             typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
@@ -341,6 +383,48 @@ void register_SelectorM_Segment__class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorM< SireMol::Segment >::contains
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef bool ( ::SireMol::SelectorM< SireMol::Segment >::*contains_function_type)( ::SireMol::SelectorM< SireMol::Segment > const & ) const;
+            contains_function_type contains_function_value( &::SireMol::SelectorM< SireMol::Segment >::contains );
+            
+            SelectorM_Segment__exposer.def( 
+                "contains"
+                , contains_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::contains
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef bool ( ::SireMol::SelectorM< SireMol::Segment >::*contains_function_type)( ::SireMol::Selector< SireMol::Segment > const & ) const;
+            contains_function_type contains_function_value( &::SireMol::SelectorM< SireMol::Segment >::contains );
+            
+            SelectorM_Segment__exposer.def( 
+                "contains"
+                , contains_function_value
+                , ( bp::arg("view") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::contains
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef bool ( ::SireMol::SelectorM< SireMol::Segment >::*contains_function_type)( ::SireMol::Segment const & ) const;
+            contains_function_type contains_function_value( &::SireMol::SelectorM< SireMol::Segment >::contains );
+            
+            SelectorM_Segment__exposer.def( 
+                "contains"
+                , contains_function_value
+                , ( bp::arg("view") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::Segment >::count
         
             typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
@@ -529,6 +613,103 @@ void register_SelectorM_Segment__class(){
             SelectorM_Segment__exposer.def( 
                 "indexes"
                 , indexes_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::intersection
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorM< SireMol::Segment >::*intersection_function_type)( ::SireMol::SelectorM< SireMol::Segment > const & ) const;
+            intersection_function_type intersection_function_value( &::SireMol::SelectorM< SireMol::Segment >::intersection );
+            
+            SelectorM_Segment__exposer.def( 
+                "intersection"
+                , intersection_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::intersection
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorM< SireMol::Segment >::*intersection_function_type)( ::SireMol::Selector< SireMol::Segment > const & ) const;
+            intersection_function_type intersection_function_value( &::SireMol::SelectorM< SireMol::Segment >::intersection );
+            
+            SelectorM_Segment__exposer.def( 
+                "intersection"
+                , intersection_function_value
+                , ( bp::arg("views") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::intersection
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorM< SireMol::Segment >::*intersection_function_type)( ::SireMol::Segment const & ) const;
+            intersection_function_type intersection_function_value( &::SireMol::SelectorM< SireMol::Segment >::intersection );
+            
+            SelectorM_Segment__exposer.def( 
+                "intersection"
+                , intersection_function_value
+                , ( bp::arg("view") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::intersects
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef bool ( ::SireMol::SelectorM< SireMol::Segment >::*intersects_function_type)( ::SireMol::SelectorM< SireMol::Segment > const & ) const;
+            intersects_function_type intersects_function_value( &::SireMol::SelectorM< SireMol::Segment >::intersects );
+            
+            SelectorM_Segment__exposer.def( 
+                "intersects"
+                , intersects_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::intersects
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef bool ( ::SireMol::SelectorM< SireMol::Segment >::*intersects_function_type)( ::SireMol::Selector< SireMol::Segment > const & ) const;
+            intersects_function_type intersects_function_value( &::SireMol::SelectorM< SireMol::Segment >::intersects );
+            
+            SelectorM_Segment__exposer.def( 
+                "intersects"
+                , intersects_function_value
+                , ( bp::arg("view") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::intersects
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef bool ( ::SireMol::SelectorM< SireMol::Segment >::*intersects_function_type)( ::SireMol::Segment const & ) const;
+            intersects_function_type intersects_function_value( &::SireMol::SelectorM< SireMol::Segment >::intersects );
+            
+            SelectorM_Segment__exposer.def( 
+                "intersects"
+                , intersects_function_value
+                , ( bp::arg("view") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::invert
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorM< SireMol::Segment >::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMol::SelectorM< SireMol::Segment >::invert );
+            
+            SelectorM_Segment__exposer.def( 
+                "invert"
+                , invert_function_value
                 , bp::release_gil_policy()
                 , "" );
         
@@ -1291,6 +1472,48 @@ void register_SelectorM_Segment__class(){
             SelectorM_Segment__exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::subtract
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorM< SireMol::Segment >::*subtract_function_type)( ::SireMol::SelectorM< SireMol::Segment > const & ) const;
+            subtract_function_type subtract_function_value( &::SireMol::SelectorM< SireMol::Segment >::subtract );
+            
+            SelectorM_Segment__exposer.def( 
+                "subtract"
+                , subtract_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::subtract
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorM< SireMol::Segment >::*subtract_function_type)( ::SireMol::Selector< SireMol::Segment > const & ) const;
+            subtract_function_type subtract_function_value( &::SireMol::SelectorM< SireMol::Segment >::subtract );
+            
+            SelectorM_Segment__exposer.def( 
+                "subtract"
+                , subtract_function_value
+                , ( bp::arg("views") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Segment >::subtract
+        
+            typedef SireMol::SelectorM< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorM< SireMol::Segment >::*subtract_function_type)( ::SireMol::Segment const & ) const;
+            subtract_function_type subtract_function_value( &::SireMol::SelectorM< SireMol::Segment >::subtract );
+            
+            SelectorM_Segment__exposer.def( 
+                "subtract"
+                , subtract_function_value
+                , ( bp::arg("view") )
                 , bp::release_gil_policy()
                 , "" );
         

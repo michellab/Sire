@@ -57,6 +57,8 @@ class Mover;
 template<class T>
 class Selector;
 
+class SelectorMol;
+
 class Atom;
 class CutGroup;
 class Residue;
@@ -126,6 +128,9 @@ public:
     bool selectedAll() const;
 
     MolViewPtr toSelector() const;
+
+    SelectorMol selector() const;
+    SelectorMol invert() const;
 
     AtomSelection selection() const;
 

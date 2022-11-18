@@ -59,6 +59,8 @@ class Expression;
 namespace SireMM
 {
 
+class SelectorAngle;
+
 /** This class provides a molecule view to an angle */
 class SIREMM_EXPORT Angle
     : public SireBase::ConcreteProperty<Angle, SireMol::MoleculeView>
@@ -111,6 +113,9 @@ public:
 
     bool isEmpty() const;
     bool selectedAll() const;
+
+    SelectorAngle selector() const;
+    SelectorAngle invert() const;
 
     SireMol::AtomSelection selection() const;
 

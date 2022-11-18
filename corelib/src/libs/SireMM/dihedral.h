@@ -59,6 +59,8 @@ class Expression;
 namespace SireMM
 {
 
+class SelectorDihedral;
+
 /** This class provides a molecule view to a dihedral */
 class SIREMM_EXPORT Dihedral
     : public SireBase::ConcreteProperty<Dihedral, SireMol::MoleculeView>
@@ -113,6 +115,9 @@ public:
 
     bool isEmpty() const;
     bool selectedAll() const;
+
+    SelectorDihedral selector() const;
+    SelectorDihedral invert() const;
 
     SireMol::AtomSelection selection() const;
 

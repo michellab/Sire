@@ -34,6 +34,8 @@ namespace bp = boost::python;
 
 #include "molecule.h"
 
+#include "molecules.h"
+
 #include "moleculeview.h"
 
 #include "residue.h"
@@ -729,7 +731,7 @@ void register_MoleculeView_class(){
                 "isSelector"
                 , isSelector_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return whether or not this is a Selector<T> object. This\n  helps code distinguish between views of single objects,\n  e.g. Atom, Residue etc., and views of multiple objects,\n  e.g. Selector<Atom>, Selector<Residue> etc.\n" );
         
         }
         { //::SireMol::MoleculeView::keys
@@ -1640,7 +1642,7 @@ void register_MoleculeView_class(){
                 "toMolecules"
                 , toMolecules_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return a Molecules set that contains this view (or views)" );
         
         }
         { //::SireMol::MoleculeView::toSelector
@@ -1702,7 +1704,7 @@ void register_MoleculeView_class(){
                 , update_function_value
                 , ( bp::arg("molecules") )
                 , bp::release_gil_policy()
-                , "Update this view with a new version of the molecule. You\ncan only update the molecule if it has the same layout UID\n(so same atoms, residues, cutgroups etc.)\nThrow: SireError::incompatible_error\n" );
+                , "Update this view with a new version of the molecule\nfrom molecules (assuming this molecule is in molecules).\nYou can only update the molecule if it has the same layout UID\n(so same atoms, residues, cutgroups etc.)\nThrow: SireError::incompatible_error\n" );
         
         }
         MoleculeView_exposer.staticmethod( "null" );

@@ -59,6 +59,8 @@ class Expression;
 namespace SireMM
 {
 
+class SelectorImproper;
+
 /** This class provides a molecule view to an improper */
 class SIREMM_EXPORT Improper
     : public SireBase::ConcreteProperty<Improper, SireMol::MoleculeView>
@@ -113,6 +115,9 @@ public:
 
     bool isEmpty() const;
     bool selectedAll() const;
+
+    SelectorImproper selector() const;
+    SelectorImproper invert() const;
 
     SireMol::AtomSelection selection() const;
 

@@ -254,6 +254,18 @@ void register_Segment_class(){
                 , "Return whether or not this segment contains some of\nthe atoms identified by the ID atomid" );
         
         }
+        { //::SireMol::Segment::invert
+        
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Segment::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMol::Segment::invert );
+            
+            Segment_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "Return a selector that has everything except this view" );
+        
+        }
         { //::SireMol::Segment::isEmpty
         
             typedef bool ( ::SireMol::Segment::*isEmpty_function_type)(  ) const;

@@ -138,6 +138,7 @@ public:
     Evaluator evaluate() const;
     ResEditor edit() const;
     Selector<Residue> selector() const;
+    Selector<Residue> invert() const;
 
     int nAtoms() const;
 

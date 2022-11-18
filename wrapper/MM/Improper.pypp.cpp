@@ -199,6 +199,18 @@ void register_Improper_class(){
                 , "" );
         
         }
+        { //::SireMM::Improper::invert
+        
+            typedef ::SireMM::SelectorImproper ( ::SireMM::Improper::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMM::Improper::invert );
+            
+            Improper_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::Improper::isEmpty
         
             typedef bool ( ::SireMM::Improper::*isEmpty_function_type)(  ) const;
@@ -408,6 +420,18 @@ void register_Improper_class(){
             Improper_exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Improper::selector
+        
+            typedef ::SireMM::SelectorImproper ( ::SireMM::Improper::*selector_function_type)(  ) const;
+            selector_function_type selector_function_value( &::SireMM::Improper::selector );
+            
+            Improper_exposer.def( 
+                "selector"
+                , selector_function_value
                 , bp::release_gil_policy()
                 , "" );
         

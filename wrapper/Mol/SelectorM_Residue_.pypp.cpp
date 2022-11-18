@@ -91,6 +91,48 @@ void register_SelectorM_Residue__class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorM< SireMol::Residue >::add
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorM< SireMol::Residue >::*add_function_type)( ::SireMol::SelectorM< SireMol::Residue > const & ) const;
+            add_function_type add_function_value( &::SireMol::SelectorM< SireMol::Residue >::add );
+            
+            SelectorM_Residue__exposer.def( 
+                "add"
+                , add_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::add
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorM< SireMol::Residue >::*add_function_type)( ::SireMol::Selector< SireMol::Residue > const & ) const;
+            add_function_type add_function_value( &::SireMol::SelectorM< SireMol::Residue >::add );
+            
+            SelectorM_Residue__exposer.def( 
+                "add"
+                , add_function_value
+                , ( bp::arg("views") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::add
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorM< SireMol::Residue >::*add_function_type)( ::SireMol::Residue const & ) const;
+            add_function_type add_function_value( &::SireMol::SelectorM< SireMol::Residue >::add );
+            
+            SelectorM_Residue__exposer.def( 
+                "add"
+                , add_function_value
+                , ( bp::arg("view") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::Residue >::atom
         
             typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
@@ -341,6 +383,48 @@ void register_SelectorM_Residue__class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorM< SireMol::Residue >::contains
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef bool ( ::SireMol::SelectorM< SireMol::Residue >::*contains_function_type)( ::SireMol::SelectorM< SireMol::Residue > const & ) const;
+            contains_function_type contains_function_value( &::SireMol::SelectorM< SireMol::Residue >::contains );
+            
+            SelectorM_Residue__exposer.def( 
+                "contains"
+                , contains_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::contains
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef bool ( ::SireMol::SelectorM< SireMol::Residue >::*contains_function_type)( ::SireMol::Selector< SireMol::Residue > const & ) const;
+            contains_function_type contains_function_value( &::SireMol::SelectorM< SireMol::Residue >::contains );
+            
+            SelectorM_Residue__exposer.def( 
+                "contains"
+                , contains_function_value
+                , ( bp::arg("view") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::contains
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef bool ( ::SireMol::SelectorM< SireMol::Residue >::*contains_function_type)( ::SireMol::Residue const & ) const;
+            contains_function_type contains_function_value( &::SireMol::SelectorM< SireMol::Residue >::contains );
+            
+            SelectorM_Residue__exposer.def( 
+                "contains"
+                , contains_function_value
+                , ( bp::arg("view") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorM< SireMol::Residue >::count
         
             typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
@@ -529,6 +613,103 @@ void register_SelectorM_Residue__class(){
             SelectorM_Residue__exposer.def( 
                 "indexes"
                 , indexes_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::intersection
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorM< SireMol::Residue >::*intersection_function_type)( ::SireMol::SelectorM< SireMol::Residue > const & ) const;
+            intersection_function_type intersection_function_value( &::SireMol::SelectorM< SireMol::Residue >::intersection );
+            
+            SelectorM_Residue__exposer.def( 
+                "intersection"
+                , intersection_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::intersection
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorM< SireMol::Residue >::*intersection_function_type)( ::SireMol::Selector< SireMol::Residue > const & ) const;
+            intersection_function_type intersection_function_value( &::SireMol::SelectorM< SireMol::Residue >::intersection );
+            
+            SelectorM_Residue__exposer.def( 
+                "intersection"
+                , intersection_function_value
+                , ( bp::arg("views") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::intersection
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorM< SireMol::Residue >::*intersection_function_type)( ::SireMol::Residue const & ) const;
+            intersection_function_type intersection_function_value( &::SireMol::SelectorM< SireMol::Residue >::intersection );
+            
+            SelectorM_Residue__exposer.def( 
+                "intersection"
+                , intersection_function_value
+                , ( bp::arg("view") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::intersects
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef bool ( ::SireMol::SelectorM< SireMol::Residue >::*intersects_function_type)( ::SireMol::SelectorM< SireMol::Residue > const & ) const;
+            intersects_function_type intersects_function_value( &::SireMol::SelectorM< SireMol::Residue >::intersects );
+            
+            SelectorM_Residue__exposer.def( 
+                "intersects"
+                , intersects_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::intersects
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef bool ( ::SireMol::SelectorM< SireMol::Residue >::*intersects_function_type)( ::SireMol::Selector< SireMol::Residue > const & ) const;
+            intersects_function_type intersects_function_value( &::SireMol::SelectorM< SireMol::Residue >::intersects );
+            
+            SelectorM_Residue__exposer.def( 
+                "intersects"
+                , intersects_function_value
+                , ( bp::arg("view") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::intersects
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef bool ( ::SireMol::SelectorM< SireMol::Residue >::*intersects_function_type)( ::SireMol::Residue const & ) const;
+            intersects_function_type intersects_function_value( &::SireMol::SelectorM< SireMol::Residue >::intersects );
+            
+            SelectorM_Residue__exposer.def( 
+                "intersects"
+                , intersects_function_value
+                , ( bp::arg("view") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::invert
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorM< SireMol::Residue >::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMol::SelectorM< SireMol::Residue >::invert );
+            
+            SelectorM_Residue__exposer.def( 
+                "invert"
+                , invert_function_value
                 , bp::release_gil_policy()
                 , "" );
         
@@ -1291,6 +1472,48 @@ void register_SelectorM_Residue__class(){
             SelectorM_Residue__exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::subtract
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorM< SireMol::Residue >::*subtract_function_type)( ::SireMol::SelectorM< SireMol::Residue > const & ) const;
+            subtract_function_type subtract_function_value( &::SireMol::SelectorM< SireMol::Residue >::subtract );
+            
+            SelectorM_Residue__exposer.def( 
+                "subtract"
+                , subtract_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::subtract
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorM< SireMol::Residue >::*subtract_function_type)( ::SireMol::Selector< SireMol::Residue > const & ) const;
+            subtract_function_type subtract_function_value( &::SireMol::SelectorM< SireMol::Residue >::subtract );
+            
+            SelectorM_Residue__exposer.def( 
+                "subtract"
+                , subtract_function_value
+                , ( bp::arg("views") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorM< SireMol::Residue >::subtract
+        
+            typedef SireMol::SelectorM< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorM< SireMol::Residue >::*subtract_function_type)( ::SireMol::Residue const & ) const;
+            subtract_function_type subtract_function_value( &::SireMol::SelectorM< SireMol::Residue >::subtract );
+            
+            SelectorM_Residue__exposer.def( 
+                "subtract"
+                , subtract_function_value
+                , ( bp::arg("view") )
                 , bp::release_gil_policy()
                 , "" );
         

@@ -173,6 +173,18 @@ void register_Bond_class(){
                 , "" );
         
         }
+        { //::SireMM::Bond::invert
+        
+            typedef ::SireMM::SelectorBond ( ::SireMM::Bond::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMM::Bond::invert );
+            
+            Bond_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::Bond::isEmpty
         
             typedef bool ( ::SireMM::Bond::*isEmpty_function_type)(  ) const;
@@ -382,6 +394,18 @@ void register_Bond_class(){
             Bond_exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Bond::selector
+        
+            typedef ::SireMM::SelectorBond ( ::SireMM::Bond::*selector_function_type)(  ) const;
+            selector_function_type selector_function_value( &::SireMM::Bond::selector );
+            
+            Bond_exposer.def( 
+                "selector"
+                , selector_function_value
                 , bp::release_gil_policy()
                 , "" );
         
