@@ -131,3 +131,56 @@ def test_cursor_bond_moves(ala_mols):
     for l0, l1 in zip(lengths_h0, lengths_h1):
         assert l0.value() == pytest.approx(l1.value() - 0.5)
 
+    cursor = mols.cursor()
+
+    lengths = cursor.bonds("element C", "element H").set_lengths(100.0).lengths()
+
+    for l in lengths:
+        assert l.value() == pytest.approx(100.0)
+
+    mols = cursor.commit()
+
+    mol = mols[0]
+
+    bonds = mol.bonds("element C", "element H")
+
+    for l in bonds.lengths():
+        assert l.value() == pytest.approx(100.0)
+
+    for l in bonds.invert().lengths():
+        assert l.value() != pytest.approx(100.0)
+
+
+def test_cursor_angle_moves(ala_mols):
+    mols = ala_mols
+
+    mol = mols[0]
+
+    cursor = mol.cursor()
+
+    cursor.angles()[0].set_size(25)
+
+    mol = cursor.commit()
+
+    angle = mol.angles()[0]
+
+    from sire.units import degrees
+
+    assert angle.size().to(degrees) == pytest.approx(25)
+
+    for s in angle.invert().sizes():
+        assert s.to(degrees) != pytest.approx(25)
+
+    cursor = mols.cursor()
+
+    cursor["water"][0:10].angles(
+                "element H", "element O", "element H").change_size(10)
+
+    mols = cursor.commit()
+
+    ref_water = mols["water"][10]
+    ref_angle = ref_water.angle("element H", "element O", "element H").size()
+
+    for s in mols["water"][0:10].angles(
+            "element H", "element O", "element H").sizes():
+        assert s.to(degrees) == pytest.approx(ref_angle.to(degrees) + 10.0)

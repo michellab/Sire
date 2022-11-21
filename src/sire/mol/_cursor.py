@@ -1643,7 +1643,12 @@ class Cursors:
                     plus fine-grained control of the weight function
                     or anchors.
             """
-            if len(values) != len(self._cursors):
+            if not hasattr(values, "__len__"):
+                return self.set_length(value=values, anchor=anchor,
+                                       weighting=weighting,
+                                       auto_align=auto_align, map=map)
+
+            elif len(values) != len(self._cursors):
                 raise ValueError(
                     f"The number of length values ({len(values)}) does "
                     f"not equal the number of cursors ({len(self._cursors)}).")
@@ -1735,7 +1740,12 @@ class Cursors:
                     plus fine-grained control of the weight function
                     or anchors.
             """
-            if len(deltas) != len(self._cursors):
+            if not hasattr(deltas, "__len__"):
+                return self.change_length(delta=deltas, anchor=anchor,
+                                          weighting=weighting,
+                                          auto_align=auto_align, map=map)
+
+            elif len(deltas) != len(self._cursors):
                 raise ValueError(
                     f"The number of length values ({len(deltas)}) does "
                     f"not equal the number of cursors ({len(self._cursors)}).")
@@ -1859,7 +1869,13 @@ class Cursors:
                     plus fine-grained control of the weight function
                     or anchors.
             """
-            if len(values) != len(self._cursors):
+            if not hasattr(values, "__len__"):
+                return self.set_size(value=values, anchor=anchor,
+                                     weighting=weighting,
+                                     auto_align=auto_align,
+                                     move_all=move_all, map=map)
+
+            elif len(values) != len(self._cursors):
                 raise ValueError(
                     f"The number of angle values ({len(values)}) does "
                     f"not equal the number of cursors ({len(self._cursors)}).")
@@ -1966,7 +1982,13 @@ class Cursors:
                     plus fine-grained control of the weight function
                     or anchors.
             """
-            if len(deltas) != len(self._cursors):
+            if not hasattr(deltas, "__len__"):
+                return self.change_size(delta=deltas, anchor=anchor,
+                                        weighting=weighting,
+                                        auto_align=auto_align,
+                                        move_all=move_all, map=map)
+
+            elif len(deltas) != len(self._cursors):
                 raise ValueError(
                     f"The number of angle values ({len(deltas)}) does "
                     f"not equal the number of cursors ({len(self._cursors)}).")
@@ -2443,7 +2465,12 @@ class CursorsM:
                     plus fine-grained control of the weight function
                     or anchors.
             """
-            if len(values) != len(self._cursors):
+            if not hasattr(values, "__len__"):
+                return self.set_length(value=values, anchor=anchor,
+                                       weighting=weighting,
+                                       auto_align=auto_align, map=map)
+
+            elif len(values) != len(self._cursors):
                 raise ValueError(
                     f"The number of length values ({len(values)}) does "
                     f"not equal the number of cursors ({len(self._cursors)}).")
@@ -2455,17 +2482,19 @@ class CursorsM:
             molecules = {}
             maps = {}
 
-            for molnum, view in self._molcursors.items():
-                molecules[molnum] = view._d.molecule.commit()
-                movers[molnum] = molecules[molnum].move()
-                maps[molnum] = self._cursors[0]._d.merge(
-                                _process_move_options(view=molecules[molnum],
+            for value, cursor in zip(values, self._cursors):
+                molnum = cursor._d.number()
+
+                if molnum not in movers:
+                    molecule = self._molcursors[molnum]._d.molecule.commit()
+                    molecules[molnum] = molecule
+                    movers[molnum] = molecule.move()
+                    maps[molnum] = self._cursors[0]._d.merge(
+                                _process_move_options(view=molecule,
                                                       anchor=anchor,
                                                       weighting=weighting,
                                                       map=map))
 
-            for value, cursor in zip(values, self._cursors):
-                molnum = cursor._d.number()
                 movers[molnum].set(cursor._internal, value,
                                    maps[molnum])
 
@@ -2546,7 +2575,12 @@ class CursorsM:
                     plus fine-grained control of the weight function
                     or anchors.
             """
-            if len(deltas) != len(self._cursors):
+            if not hasattr(deltas, "__len__"):
+                return self.change_length(delta=deltas, anchor=anchor,
+                                          weighting=weighting,
+                                          auto_align=auto_align, map=map)
+
+            elif len(deltas) != len(self._cursors):
                 raise ValueError(
                     f"The number of length values ({len(deltas)}) does "
                     f"not equal the number of cursors ({len(self._cursors)}).")
@@ -2558,17 +2592,19 @@ class CursorsM:
             molecules = {}
             maps = {}
 
-            for molnum, view in self._molcursors.items():
-                molecules[molnum] = view._d.molecule.commit()
-                movers[molnum] = molecules[molnum].move()
-                maps[molnum] = self._cursors[0]._d.merge(
-                        _process_move_options(view=molecules[molnum],
-                                              anchor=anchor,
-                                              weighting=weighting,
-                                              map=map))
-
             for delta, cursor in zip(deltas, self._cursors):
                 molnum = cursor._d.number()
+
+                if molnum not in movers:
+                    molecule = self._molcursors[molnum]._d.molecule.commit()
+                    molecules[molnum] = molecule
+                    movers[molnum] = molecule.move()
+                    maps[molnum] = self._cursors[0]._d.merge(
+                            _process_move_options(view=molecule,
+                                                  anchor=anchor,
+                                                  weighting=weighting,
+                                                  map=map))
+
                 movers[molnum].change(cursor._internal,
                                       delta, maps[molnum])
 
@@ -2682,7 +2718,13 @@ class CursorsM:
                     plus fine-grained control of the weight function
                     or anchors.
             """
-            if len(values) != len(self._cursors):
+            if not hasattr(values, "__len__"):
+                return self.set_size(value=values, anchor=anchor,
+                                     weighting=weighting,
+                                     auto_align=auto_align,
+                                     move_all=move_all, map=map)
+
+            elif len(values) != len(self._cursors):
                 raise ValueError(
                     f"The number of angle values ({len(values)}) does "
                     f"not equal the number of cursors ({len(self._cursors)}).")
@@ -2696,17 +2738,19 @@ class CursorsM:
 
             map = self._cursors[0]._d.merge(map)
 
-            for molnum, view in self._molcursors.items():
-                molecules[molnum] = view._d.molecule.commit()
-                movers[molnum] = molecules[molnum].move()
-                maps[molnum] = self._cursors[0]._d.merge(
-                                _process_move_options(view=molecules[molnum],
-                                                      anchor=anchor,
-                                                      weighting=weighting,
-                                                      map=map))
-
             for value, cursor in zip(values, self._cursors):
                 molnum = cursor._d.number()
+
+                if molnum not in movers:
+                    molecule = self._molcursors[molnum]._d.molecule.commit()
+                    molecules[molnum] = molecule
+                    movers[molnum] = molecule.move()
+                    maps[molnum] = self._cursors[0]._d.merge(
+                            _process_move_options(view=molecule,
+                                                  anchor=anchor,
+                                                  weighting=weighting,
+                                                  map=map))
+
                 movers[molnum].set(cursor._internal, value,
                                    maps[molnum])
 
@@ -2798,7 +2842,13 @@ class CursorsM:
                     plus fine-grained control of the weight function
                     or anchors.
             """
-            if len(deltas) != len(self._cursors):
+            if not hasattr(deltas, "__len__"):
+                return self.change_size(delta=deltas, anchor=anchor,
+                                        weighting=weighting,
+                                        auto_align=auto_align,
+                                        move_all=move_all, map=map)
+
+            elif len(deltas) != len(self._cursors):
                 raise ValueError(
                     f"The number of angle values ({len(deltas)}) does "
                     f"not equal the number of cursors ({len(self._cursors)}).")
@@ -2810,25 +2860,38 @@ class CursorsM:
             movers = {}
             maps = {}
 
-            for molnum, view in self._molcursors.items():
-                molecules[molnum] = view._d.molecule.commit()
-                movers[molnum] = molecules[molnum].move()
-                maps[molnum] = self._cursors[0]._d.merge(
-                                _process_move_options(view=molecules[molnum],
-                                                      anchor=anchor,
-                                                      weighting=weighting,
-                                                      map=map))
-
             if move_all and self._cursors[0].is_dihedral():
                 from . import BondID
                 for delta, cursor in zip(deltas, self._cursors):
                     molnum = cursor._d.number()
+
+                    if molnum not in movers:
+                        molecule = self._molcursors[molnum]._d.molecule.commit()
+                        molecules[molnum] = molecule
+                        movers[molnum] = molecule.move()
+                        maps[molnum] = self._cursors[0]._d.merge(
+                                _process_move_options(view=molecule,
+                                                    anchor=anchor,
+                                                    weighting=weighting,
+                                                    map=map))
+
                     bond = BondID(cursor._internal.atom0(),
                                   cursor._internal.atom1())
                     movers[molnum].change(bond, delta, maps[molnum])
             else:
                 for delta, cursor in zip(deltas, self._cursors):
                     molnum = cursor._d.number()
+
+                    if molnum not in movers:
+                        molecule = self._molcursors[molnum]._d.molecule.commit()
+                        molecules[molnum] = molecule
+                        movers[molnum] = molecule.move()
+                        maps[molnum] = self._cursors[0]._d.merge(
+                                _process_move_options(view=molecule,
+                                                    anchor=anchor,
+                                                    weighting=weighting,
+                                                    map=map))
+
                     movers[molnum].change(cursor._internal, delta,
                                           maps[molnum])
 
