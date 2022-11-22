@@ -1,11 +1,4 @@
 
-import pytest
-
-@pytest.fixture(scope="session")
-def ala_mols():
-    import sire as sr
-    return sr.load_test_files("ala.top", "ala.crd")
-
 
 def test_search_order(ala_mols):
     mols = ala_mols

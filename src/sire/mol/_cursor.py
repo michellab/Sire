@@ -103,6 +103,10 @@ class _CursorData:
             return self.molecule
 
 
+_default_process_map = None
+_weightfuncs = None
+
+
 def _process_move_options(view, anchor, weighting, map):
     """Internal function used to process the passed move options
        and return a property map with those options set.
@@ -116,15 +120,18 @@ def _process_move_options(view, anchor, weighting, map):
        (as a view and then selection into that view) into
        an AtomSelection object
     """
-    if anchor is None and weighting is None:
-        return map
+    global _default_process_map
 
-    from ..base import PropertyMap
+    if _default_process_map is None:
+        from ..base import PropertyMap
+        from ..legacy.Mol import AbsFromMass
+        _default_process_map = PropertyMap()
+        _default_process_map.set("weight function", AbsFromMass())
 
     if map is None:
-        map = PropertyMap()
+        map = _default_process_map.clone()
     else:
-        map = PropertyMap(map)
+        map = _default_process_map.merge(map)
 
     if anchor is not None:
         try:
@@ -136,22 +143,25 @@ def _process_move_options(view, anchor, weighting, map):
                 f"Unable to find anchors '{anchor}'.\n\n{e}")
 
     if weighting is not None:
-        from ..legacy.Mol import AbsFromMass, RelFromMass, \
-                                 AbsFromNumber, RelFromNumber
+        global _weightfuncs
 
-        weightfuncs = {
-            "relative_mass": RelFromMass,
-            "absolute_mass": AbsFromMass,
-            "relative_number": RelFromNumber,
-            "absolute_number": AbsFromNumber
-        }
+        if _weightfuncs is None:
+            from ..legacy.Mol import AbsFromMass, RelFromMass, \
+                                     AbsFromNumber, RelFromNumber
+
+            _weightfuncs = {
+                "relative_mass": RelFromMass,
+                "absolute_mass": AbsFromMass,
+                "relative_number": RelFromNumber,
+                "absolute_number": AbsFromNumber
+            }
 
         try:
-            weighting = weightfuncs[weighting]()
+            weighting = _weightfuncs[weighting]()
         except Exception:
             raise ValueError(
                 f"Unsupported weighting: {weighting}. Supported values "
-                f"are {weightfuncs.keys()}.")
+                f"are {_weightfuncs.keys()}.")
 
         map.set("weight function", weighting)
 
@@ -560,6 +570,8 @@ class Cursor:
             delta = angle(delta)
             view = self._d.molecule.commit()
 
+            print(view)
+
             map = _process_move_options(view=view, anchor=anchor,
                                         weighting=weighting, map=map)
 
@@ -946,66 +958,50 @@ class Cursor:
         c._add_extra_functions()
         return c
 
-    def bond(self, bond):
+    def bond(self, *args, **kwargs):
         """Return the Cursor for the specified bond."""
-        self._update()
+        bond = self.view().bond(*args, **kwargs)
 
         c = Cursor()
         c._d = self._d
         c._view = self._d.molecule
-        c._internal = bond
-
-        # make sure that this works
-        c._view.bond(bond)
-
+        c._internal = bond.id()
         c._add_extra_functions()
 
         return c
 
-    def angle(self, angle):
+    def angle(self, *args, **kwargs):
         """Return the Cursor for the specified angle."""
-        self._update()
+        angle = self.view().angle(*args, **kwargs)
 
         c = Cursor()
         c._d = self._d
         c._view = self._d.molecule
-        c._internal = angle
-
-        # make sure that this works
-        c._view.angle(angle)
-
+        c._internal = angle.id()
         c._add_extra_functions()
 
         return c
 
-    def dihedral(self, dihedral):
+    def dihedral(self, *args, **kwargs):
         """Return the Cursor for the specified dihedral."""
-        self._update()
+        dihedral = self.view().dihedral(*args, **kwargs)
 
         c = Cursor()
         c._d = self._d
         c._view = self._d.molecule
-        c._internal = dihedral
-
-        # make sure that this works
-        c._view.dihedral(dihedral)
-
+        c._internal = dihedral.id()
         c._add_extra_functions()
 
         return c
 
-    def improper(self, improper):
+    def improper(self, *args, **kwargs):
         """Return the Cursor for the specified improper."""
-        self._update()
+        improper = self.view().improper(*args, **kwargs)
 
         c = Cursor()
         c._d = self._d
         c._view = self._d.molecule
-        c._internal = improper
-
-        # make sure that this works
-        c._view.improper(improper)
-
+        c._internal = improper.id()
         c._add_extra_functions()
 
         return c
@@ -2239,33 +2235,21 @@ class Cursors:
         """Return the molecule"""
         return self._parent.molecule()
 
-    def bond(self, bond):
+    def bond(self, *args, **kwargs):
         """Return the Cursor for the specified bond."""
-        if bond is None:
-            return self._parent._from_view(self._view.bond())
-        else:
-            return self._parent._from_view(self._view.bond(bond))
+        return self._parent._from_view(self._view.bond(*args, **kwargs))
 
-    def angle(self, angle):
+    def angle(self, *args, **kwargs):
         """Return the Cursor for the specified angle."""
-        if angle is None:
-            return self._parent._from_view(self._view.angle())
-        else:
-            return self._parent._from_view(self._view.angle(angle))
+        return self._parent._from_view(self._view.angle(*args, **kwargs))
 
-    def dihedral(self, dihedral):
+    def dihedral(self, *args, **kwargs):
         """Return the Cursor for the specified dihedral."""
-        if dihedral is None:
-            return self._parent._from_view(self._view.dihedral())
-        else:
-            return self._parent._from_view(self._view.dihedral(dihedral))
+        return self._parent._from_view(self._view.dihedral(*args, **kwargs))
 
-    def improper(self, improper):
+    def improper(self, *args, **kwargs):
         """Return the Cursor for the specified improper."""
-        if improper is None:
-            return self._parent._from_view(self._view.improper())
-        else:
-            return self._parent._from_view(self._view.improper(improper))
+        return self._parent._from_view(self._view.improper(*args, **kwargs))
 
     def invert(self):
         """Return the inverse view of this cursor (i.e. all views that
@@ -3248,33 +3232,21 @@ class CursorsM:
         else:
             return self._from_view(self._parent.molecule(i))
 
-    def bond(self, bond):
+    def bond(self, *args, **kwargs):
         """Return the Cursor for the specified bond."""
-        if bond is None:
-            return self._from_view(self._parent.bond())
-        else:
-            return self._from_view(self._parent.bond(bond))
+        return self._from_view(self._parent.bond(*args, **kwargs))
 
-    def angle(self, angle):
+    def angle(self, *args, **kwargs):
         """Return the Cursor for the specified angle."""
-        if angle is None:
-            return self._from_view(self._parent.angle())
-        else:
-            return self._from_view(self._parent.angle(angle))
+        return self._from_view(self._parent.angle(*args, **kwargs))
 
-    def dihedral(self, dihedral):
+    def dihedral(self, *args, **kwargs):
         """Return the Cursor for the specified dihedral."""
-        if dihedral is None:
-            return self._from_view(self._parent.dihedral())
-        else:
-            return self._from_view(self._parent.dihedral(dihedral))
+        return self._from_view(self._parent.dihedral(*args, **kwargs))
 
-    def improper(self, improper):
+    def improper(self, *args, **kwargs):
         """Return the Cursor for the specified improper."""
-        if improper is None:
-            return self._from_view(self._parent.improper())
-        else:
-            return self._from_view(self._parent.improper(improper))
+        return self._from_view(self._parent.improper(*args, **kwargs))
 
     def invert(self):
         """Return the inverse view of this cursor (i.e. all views that

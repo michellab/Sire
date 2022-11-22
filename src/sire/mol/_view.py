@@ -117,13 +117,54 @@ if _has_nglview:
 
             return coords
 
-    def view(obj, map=None):
+    def view(obj, representations=None, stage_parameters=None, map=None):
+        """Return an NGLView viewer for this view. The returned
+           viewer can be passed directly to, e.g. a Jupyter notebook
+           to directly view the molecule(s), or it can be captured
+           in a variable so that it's NGLViewer member functions
+           can be called to edit the viewer before display.
+
+           See the NGLView documentation for more information
+           on how to configure the viewer.
+
+           https://nglviewer.org/#nglview
+
+           representations: list
+                An optional dictionary that will be passed directly
+                to the NGLView object to control the representations
+                that will be used. If this is not passed then the
+                molecule(s) will be rendered using a licorice
+                representation.
+
+            stage_parameters: dict
+                An optional dictionary that will be passed directly
+                to the NGLView object to set the stage parameters.
+
+            map: dict or sire.base.PropertyMap
+                An optional property map that can be used to control
+                which properties are used to get the molecular data
+                to be viewed.
+        """
         struc_traj = _SireStructureTrajectory(obj, map=map)
         view = _nglview.NGLWidget(struc_traj)
+
+        if representations is None:
+            view.clear_representations()
+            view.add_representation("licorice")
+        else:
+            view.representations = representations
+
+        if stage_parameters is None:
+            view.stage.set_parameters(clipNear=0, clipFar=100, clipDist=0,
+                                      fogNear=0, fogFar=100,
+                                      backgroundColor="black")
+        else:
+            view.stage.set_parameters(**stage_parameters)
+
         return view
 
 elif _nglview_import_error is not None:
-    def view(obj):
+    def view(obj, *args, **kwargs):
         raise ImportError(
             "nglview cannot be imported. This is because of an error "
             f"when nglview was loaded ({_nglview_import_error}). One "
@@ -134,7 +175,7 @@ elif _nglview_import_error is not None:
         )
 
 else:
-    def view(obj):
+    def view(obj, *args, **kwargs):
         raise ImportError(
             "You need to install nglview to be able to view "
             "molecules. Do this by typing, e.g. "

@@ -1,11 +1,3 @@
-import sire as sr
-import pytest
-
-
-@pytest.fixture(scope="session")
-def ala_mols():
-    import sire as sr
-    return sr.load_test_files("ala.top", "ala.crd")
 
 
 def test_selector_angles(ala_mols):

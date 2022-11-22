@@ -1,15 +1,8 @@
 
-import sire as sr
-import pytest
-
-
-@pytest.fixture(scope="session")
-def ala_mols():
-    import sire as sr
-    return sr.load_test_files("ala.top", "ala.crd")
-
 
 def test_measure(ala_mols):
+    import sire as sr
+
     mols = ala_mols
 
     bond = mols[0].bonds()[0]

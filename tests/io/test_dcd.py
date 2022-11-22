@@ -1,14 +1,4 @@
 
-import pytest
-
-import sire as sr
-
-
-@pytest.fixture(scope="session")
-def h7n9_mols():
-    import sire as sr
-    return sr.load_test_files("h7n9.pdb", "h7n9.dcd")
-
 
 def test_dcd(h7n9_mols):
     mols = h7n9_mols

@@ -1,23 +1,6 @@
 
 import pytest
 
-@pytest.fixture(scope="session")
-def ala_mols():
-    import sire as sr
-    return sr.load_test_files("ala.top", "ala.crd")
-
-
-@pytest.fixture(scope="session")
-def p38_mols():
-    import sire as sr
-    return sr.load_test_files("p38.pdb")
-
-
-@pytest.fixture(scope="session")
-def alanin_mols():
-    import sire as sr
-    return sr.load_test_files("alanin.psf")
-
 
 def test_distance_searching(ala_mols):
     mols = ala_mols
@@ -91,7 +74,7 @@ def test_property_searching(ala_mols):
                        .set_property("number", 5.4)
                        .set_property("val", -42)
                        .commit())
-   
+
     assert mols["property 'test property' == 'cat goes meow'"] == mols[0]
 
     assert mols["property is_perturbable"] == mols[0]
@@ -140,7 +123,7 @@ def test_basic_indexing(ala_mols):
 
     assert len(mols["atomnum 1"]) == 1
     assert len(mols["atomnum 1,2"]) == 2
-    
+
     assert len(mols["atoms in *"]) == mols.num_atoms()
     assert len(mols["residues in *"]) == mols.num_residues()
 
@@ -189,7 +172,7 @@ def test_complex_indexing(p38_mols):
 
     assert mol.atom(0).index() == sr.mol.AtomIdx(0)
     assert mol[0] == mol.atom(0)
-    
+
     with pytest.raises(KeyError):
         mol.atom("CA")
 
@@ -376,7 +359,7 @@ def test_in_searches(ala_mols):
     assert mols["atoms in molidx 0"] == mols[0]["atoms"]
     assert mols["atoms in molidx -1"] == mols[-1]["atoms"]
 
-    # check precedence - want "atoms in molecules with resname ALA" to 
+    # check precedence - want "atoms in molecules with resname ALA" to
     # be "atoms in (molecules with resname ALA)"
     assert mols["atoms in molecules with resname ALA"] == mols["atoms in (molecules with resname ALA)"]
 

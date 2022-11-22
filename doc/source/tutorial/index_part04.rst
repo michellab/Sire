@@ -28,3 +28,4 @@ create graphs, you will also learn how to visualise sire objects and data.
    part04/03_energies
    part04/04_energy_trajectories
    part04/05_movement
+   part04/06_move_internals

@@ -1,11 +1,6 @@
 
 import pytest
 
-@pytest.fixture(scope="session")
-def ala_mols():
-    import sire as sr
-    return sr.load_test_files("ala.top", "ala.crd")
-
 
 def test_cursor_translate(ala_mols):
     mols = ala_mols
@@ -184,3 +179,53 @@ def test_cursor_angle_moves(ala_mols):
     for s in mols["water"][0:10].angles(
             "element H", "element O", "element H").sizes():
         assert s.to(degrees) == pytest.approx(ref_angle.to(degrees) + 10.0)
+
+
+def test_cursor_dihedral_moves(ala_mols):
+    mols = ala_mols
+
+    mol = mols[0]
+
+    cursor = mol.cursor()
+
+    # should change all around this dihedral
+    cursor.dihedrals()[0].change_size(60)
+
+    mol2 = cursor.commit()
+
+    from sire.units import degrees
+
+    def wrap(ang):
+        while ang > 360:
+            ang -= 360
+
+        return ang
+
+    for i in range(0,6):
+        assert mol2.dihedrals()[i].size().to(degrees) == pytest.approx(
+                wrap(mol.dihedrals()[i].size().to(degrees) + 60))
+
+    for i in range(6, len(mol.dihedrals())):
+        assert mol2.dihedrals()[i].size().to(degrees) == pytest.approx(
+                mol.dihedrals()[i].size().to(degrees))
+
+    mol = mols[0]
+
+    # this should change this dihedral only
+    cursor = mol.cursor()
+
+    cursor.dihedrals()[0].change_size(60, move_all=False,
+                                      weighting="absolute_mass")
+
+    mol2 = cursor.commit()
+
+    print(mol.dihedrals().sizes())
+    print(mol2.dihedrals().sizes())
+
+    for i in [0,3]:
+        assert mol2.dihedrals()[i].size().to(degrees) == pytest.approx(
+                wrap(mol.dihedrals()[i].size().to(degrees) + 60))
+
+    for i in [1,2] + list(range(4,len(mol.dihedrals()))):
+        assert mol2.dihedrals()[i].size().to(degrees) == pytest.approx(
+                mol.dihedrals()[i].size().to(degrees))

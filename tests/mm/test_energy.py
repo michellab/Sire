@@ -2,18 +2,6 @@
 import pytest
 
 
-@pytest.fixture(scope="session")
-def ala_mols():
-    import sire as sr
-    return sr.load_test_files("ala.top", "ala.crd")
-
-
-@pytest.fixture(scope="session")
-def ala_traj():
-    import sire as sr
-    return sr.load_test_files("ala.top", "ala.traj")
-
-
 def assert_approx_equal(nrg0, nrg1):
     assert nrg0.value() == pytest.approx(nrg1.value())
 

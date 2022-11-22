@@ -417,7 +417,11 @@ QString PropertyMap::toString() const
 */
 PropertyMap PropertyMap::merge(const PropertyMap &other) const
 {
-    if (this->propmap == other.propmap)
+    if (this->propmap.isEmpty())
+        return other;
+    else if (other.propmap.isEmpty())
+        return *this;
+    else if (this->propmap == other.propmap)
         return *this;
 
     PropertyMap ret(*this);

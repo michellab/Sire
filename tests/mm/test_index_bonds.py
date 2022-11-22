@@ -1,12 +1,5 @@
 
-import sire as sr
 import pytest
-
-
-@pytest.fixture(scope="session")
-def ala_mols():
-    import sire as sr
-    return sr.load_test_files("ala.top", "ala.crd")
 
 
 def _assert_same_bonds(b0, b1):
@@ -51,6 +44,8 @@ def test_index_bonds(ala_mols):
 
 def test_index_mols_bonds(ala_mols):
     mols = ala_mols
+
+    import sire as sr
 
     bnds = mols["bonds from element O to element H"]
 

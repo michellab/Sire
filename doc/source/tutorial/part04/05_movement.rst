@@ -78,13 +78,13 @@ AtomCoords( size=22
 21: ( 0 , 0 , 0  )
 )
 
-Moving molecules using move functions
--------------------------------------
+Translation using a Cursor
+--------------------------
 
-The :class:`~sire.mol.Cursor` has "move" functions that simplify
+The :class:`~sire.mol.Cursor` has additional functions that simplify
 the process of translating, rotating and moving atoms and molecules.
 
-For example, this is how you can use a cursor more easily translate
+For example, this is how you can use a cursor to translate
 the first molecule by 1 Å along the x axis.
 
 >>> mol = mols[0]
@@ -152,6 +152,9 @@ AtomCoords( size=3
 2: ( 29.3373 Å, 11.9243 Å, 27.7322 Å )
 )
 
+Rotation using a Cursor
+-----------------------
+
 You can rotate molecules using a cursor's :func:`~sire.mol.Cursor.rotate`
 function.
 
@@ -180,7 +183,7 @@ around its center of mass.
 You can specify the units yourself, e.g. ``5 * sr.units.degrees``, and can
 also specify the axis and centers of rotation as additional arguments, e.g.
 
->>> cursor.rotate(0.1*sr.units.radians, (1,0,0))
+>>> cursor.rotate(0.1*sr.units.radians, axis=(1,0,0))
 >>> print(cursor["coordinates"])
 AtomCoords( size=22
 0: ( 21.5337 Å, 7.99007 Å, 17.3691 Å )
@@ -199,7 +202,7 @@ AtomCoords( size=22
 rotates by 0.1 radians about the x-axis (``(1,0,0)``) around the
 molecule's center of mass, while
 
->>> cursor.rotate(10*sr.units.degrees, (0,1,0), (0,0,0))
+>>> cursor.rotate(10*sr.units.degrees, axis=(0,1,0), center=(0,0,0))
 >>> print(cursor["coordinates"])
 AtomCoords( size=22
 0: ( 24.2227 Å, 7.99007 Å, 13.3659 Å )
@@ -309,6 +312,13 @@ in the molecular trajectory.
 ...     cursor.rotate(360 / 25, (0,0,1))
 ...     cursor.save_frame()
 >>> mol = cursor.commit()
+
+.. note::
+
+   Note how the axis of rotation is passed in as the second positional
+   argument of ``rotate``. You can pass it in either as the second
+   positional argument or by using the ``axis`` keyword, e.g.
+   ``cursor.rotate(360 / 25, axis=(0,0,1))``.
 
 If you are in a Jupyter notebook (or similar) then you can view this
 as a movie via;

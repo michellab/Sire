@@ -3,10 +3,6 @@ import pytest
 
 from sire.legacy.IO import PDB2, Mol2, AmberPrm, GroTop, SDF, CharmmPSF
 
-@pytest.fixture(scope="session")
-def ala_mols():
-    import sire as sr
-    return sr.load_test_files("ala.top", "ala.crd")
 
 @pytest.mark.parametrize("format, Loader",
                           [
