@@ -570,8 +570,6 @@ class Cursor:
             delta = angle(delta)
             view = self._d.molecule.commit()
 
-            print(view)
-
             map = _process_move_options(view=view, anchor=anchor,
                                         weighting=weighting, map=map)
 

@@ -81,10 +81,9 @@ if _has_nglview:
             return str(self)
 
         def __str__(self):
-            if self._traj is None:
-                return "NULL"
-            else:
-                return str(self._traj)
+            # This is the additional string added by NGLView to
+            # identify atoms and bonds.
+            return ":"
 
         def get_structure_string(self):
             from .. import save_to_string
@@ -160,6 +159,8 @@ if _has_nglview:
                                       backgroundColor="black")
         else:
             view.stage.set_parameters(**stage_parameters)
+
+        view.center()
 
         return view
 

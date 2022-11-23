@@ -99,6 +99,9 @@ def _pythonize(C, delete_old: bool=True) -> None:
         # change "aaBox" into "aabox"
         new_attr = new_attr.replace("aaBox", "aabox")
 
+        # change "CONECT" to "Conect"
+        new_attr = new_attr.replace("CONECT", "Conect")
+
         # change nSomething into num_somthing
         m = re.match("^n([A-Z])[a-z]", new_attr)
 
