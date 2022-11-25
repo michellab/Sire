@@ -191,7 +191,7 @@ SIREMM_EXPORT ForceFields create_forcefield(const SireMol::Molecules &mols,
 
     auto cutoff_prop = map["cutoff"];
 
-    auto cutoff = 15.0 * angstrom;
+    auto cutoff = 7.5 * angstrom;
 
     if (cutoff_prop.hasValue())
     {
@@ -276,7 +276,7 @@ SIREMM_EXPORT ForceFields create_forcefield(const Molecules &mols0,
 
     auto cutoff_prop = map["cutoff"];
 
-    auto cutoff = 15.0 * angstrom;
+    auto cutoff = 7.5 * angstrom;
 
     if (cutoff_prop.hasValue())
     {
