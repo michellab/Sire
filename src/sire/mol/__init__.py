@@ -307,10 +307,6 @@ def __fixed__atoms__(obj, idx=None, auto_reduce=False):
 
 
 def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False, map=None):
-    if map is None:
-        from ..base import PropertyMap
-        map = PropertyMap()
-
     if idx is None and idx1 is not None:
         idx = idx1
         idx1 = None
@@ -322,13 +318,16 @@ def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False, map=None):
         from ..mm import SelectorBond
         C = SelectorBond
         def _fromBondID(obj, bondid):
-            return SelectorBond(obj, bondid, map=map)
+            from ..base import create_map
+            return SelectorBond(obj, bondid, map=create_map(map))
     else:
         # this is a multi-molecule container
         from ..mm import SelectorMBond
         C = SelectorMBond
         def _fromBondID(obj, bondid):
-            return SelectorMBond(obj.to_select_result(), bondid, map=map)
+            from ..base import create_map
+            return SelectorMBond(obj.to_select_result(), bondid,
+                                 map=create_map(map))
 
     if idx is None:
         try:
@@ -351,10 +350,6 @@ def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False, map=None):
 
 def __fixed__angles__(obj, idx=None, idx1=None, idx2=None, auto_reduce=False,
                       map=None):
-    if map is None:
-        from ..base import PropertyMap
-        map = PropertyMap()
-
     if idx1 is None and idx2 is not None:
         idx1 = idx2
         idx2 = None
@@ -370,13 +365,16 @@ def __fixed__angles__(obj, idx=None, idx1=None, idx2=None, auto_reduce=False,
         from ..mm import SelectorAngle
         C = SelectorAngle
         def _fromAngleID(obj, angid):
-            return SelectorAngle(obj, angid, map=map)
+            from ..base import create_map
+            return SelectorAngle(obj, angid, map=create_map(map))
     else:
         # this is a multi-molecule container
         from ..mm import SelectorMAngle
         C = SelectorMAngle
         def _fromAngleID(obj, angid):
-            return SelectorMAngle(obj.to_select_result(), angid, map=map)
+            from ..base import create_map
+            return SelectorMAngle(obj.to_select_result(), angid,
+                                  map=create_map(map))
 
     if idx is None:
         try:
@@ -401,10 +399,6 @@ def __fixed__angles__(obj, idx=None, idx1=None, idx2=None, auto_reduce=False,
 
 def __fixed__dihedrals__(obj, idx=None, idx1=None,
                          idx2=None, idx3=None, auto_reduce=False, map=None):
-    if map is None:
-        from ..base import PropertyMap
-        map = PropertyMap()
-
     if idx2 is None and idx3 is not None:
         idx2 = idx3
         idx3 = None
@@ -424,13 +418,16 @@ def __fixed__dihedrals__(obj, idx=None, idx1=None,
         from ..mm import SelectorDihedral
         C = SelectorDihedral
         def _fromDihedralID(obj, dihid):
-            return SelectorDihedral(obj, dihid, map=map)
+            from ..base import create_map
+            return SelectorDihedral(obj, dihid, map=create_map(map))
     else:
         # this is a multi-molecule container
         from ..mm import SelectorMDihedral
         C = SelectorMDihedral
         def _fromDihedralID(obj, dihid):
-            return SelectorMDihedral(obj.to_select_result(), dihid, map=map)
+            from ..base import create_map
+            return SelectorMDihedral(obj.to_select_result(), dihid,
+                                     map=create_map(map))
 
     if idx is None:
         try:
@@ -458,10 +455,6 @@ def __fixed__dihedrals__(obj, idx=None, idx1=None,
 
 def __fixed__impropers__(obj, idx=None, idx1=None,
                          idx2=None, idx3=None, auto_reduce=False, map=None):
-    if map is None:
-        from ..base import PropertyMap
-        map = PropertyMap()
-
     if idx2 is None and idx3 is not None:
         idx2 = idx3
         idx3 = None
@@ -481,13 +474,16 @@ def __fixed__impropers__(obj, idx=None, idx1=None,
         from ..mm import SelectorImproper
         C = SelectorImproper
         def _fromImproperID(obj, impid):
-            return SelectorImproper(obj, impid, map=map)
+            from ..base import create_map
+            return SelectorImproper(obj, impid, map=create_map(map))
     else:
         # this is a multi-molecule container
         from ..mm import SelectorMImproper
         C = SelectorMImproper
         def _fromImproperID(obj, impid):
-            return SelectorMImproper(obj.to_select_result(), impid, map=map)
+            from ..base import create_map
+            return SelectorMImproper(obj.to_select_result(), impid,
+                                     map=create_map(map))
 
     if idx is None:
         try:

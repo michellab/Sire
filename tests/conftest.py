@@ -30,3 +30,8 @@ def p38_mols():
 @pytest.fixture(scope="session")
 def alanin_mols():
     return sr.load_test_files("alanin.psf")
+
+
+@pytest.fixture(scope="session")
+def neura_mols():
+    return sr.load_test_files("proteinbox.crd", "proteinbox.top")

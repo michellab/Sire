@@ -209,6 +209,8 @@ public:
 
     QString toString() const;
 
+    const QHash<QString,PropertyName> toDict() const;
+
 private:
     /** Hash indexing all of the PropertyNames */
     QHash<QString,PropertyName> propmap;

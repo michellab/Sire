@@ -195,12 +195,12 @@ QString PropertyName::toString() const
     if (this->hasSource())
     {
         if (value_is_default)
-            return QString("%1 {default: %2}").arg(src).arg(val->what());
+            return QString("%1 {default: %2}").arg(src).arg(val->toString());
         else
             return src;
     }
     else if (this->hasValue())
-        return val->what();
+        return val->toString();
     else
         return "NULL";
 }
@@ -410,6 +410,12 @@ QString PropertyMap::toString() const
     }
 
     return QString("[ %1 ]").arg( items.join(", ") );
+}
+
+/** Return the raw underlying dictionary of the map */
+const QHash<QString,PropertyName> PropertyMap::toDict() const
+{
+    return this->propmap;
 }
 
 /** Return a PropertyMap that is the combination of this and other.

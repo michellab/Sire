@@ -8,7 +8,7 @@ from ..legacy import Base as _Base
 from .. import use_new_api as _use_new_api
 _use_new_api()
 
-from ..legacy.Base import Property, Properties, PropertyMap, PropertyList, \
+from ..legacy.Base import Property, PropertyMap, Properties, PropertyList, \
                           BooleanProperty, NumberProperty, StringProperty
 
 wrap = _Base.wrap
@@ -98,3 +98,77 @@ def _fix_wrapped_property_base_type(CLASS):
 _fix_wrapped_property_base_type(BooleanProperty)
 _fix_wrapped_property_base_type(NumberProperty)
 _fix_wrapped_property_base_type(StringProperty)
+
+
+if not hasattr(PropertyMap, "__orig__set"):
+    PropertyMap.__str__ = lambda x: str(x.to_dict())
+    PropertyMap.__repr__ = PropertyMap.__str__
+
+    def __propertymap_set(obj, key, value):
+        try:
+            obj.__orig__set(key, value)
+        except:
+            pass
+
+        try:
+            obj.__orig__set(key, _Base.PropertyName(value))
+        except:
+            pass
+
+        obj.__orig__set(key, _Base.PropertyName(wrap(value)))
+
+    PropertyMap.__orig__set = PropertyMap.set
+    PropertyMap.set = __propertymap_set
+
+
+def create_map(values):
+    """Construct a PropertyMap from the
+       passed values. A PropertyMap is a class that lets you either provide
+       extra options to some of the C++ functions, or to
+       map the default keys used to find properties to
+       your own keys
+
+       You normally wouldn't use the class yourself.
+       Instead, objects of this class will be created automatically
+       from dictionaries, e.g.
+
+       >>> mol.energy(map={"cutoff": 5*angstrom})
+
+       would automatically create a PropertyMap, and is
+       equivalent to writing
+
+       >>> mol.energy(map=create_map({"cutoff": 5*angstrom}))
+
+       In the above case you are providing an extra "cutoff"
+       option, and are passing the value "5*angstrom".
+
+       You can also use the map to change the keys used to
+       find properties, e.g.
+
+       >>> mol.energy(map={"coordinates": "my_coords"})
+
+       would map the default "coordinates" property to your
+       "my_coords" property. This means that the coordinates
+       for the energy would be found at "my_coords" rather
+       than "coordinates".
+
+       You can map as many properties, and provide as many
+       extra options as you want.
+    """
+    if values is None:
+        return PropertyMap()
+
+    try:
+        return PropertyMap(values)
+    except:
+        pass
+
+    wrapped_values = {}
+
+    for key, value in values.items():
+        try:
+            wrapped_values[key] = _Base.PropertyName(value)
+        except Exception:
+            wrapped_values[key] = _Base.PropertyName(wrap(value))
+
+    return PropertyMap(wrapped_values)

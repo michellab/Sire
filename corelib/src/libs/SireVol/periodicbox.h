@@ -56,7 +56,7 @@ A PeriodicBox is a volume  that represents standard periodic boundary conditions
 
 @author Christopher Woods
 */
-class SIREVOL_EXPORT PeriodicBox 
+class SIREVOL_EXPORT PeriodicBox
         : public SireBase::ConcreteProperty<PeriodicBox,Cartesian>
 {
 
@@ -73,7 +73,7 @@ public:
     ~PeriodicBox();
 
     PeriodicBox& operator=(const PeriodicBox &other);
-    
+
     bool operator==(const PeriodicBox &other) const;
     bool operator!=(const PeriodicBox &other) const;
 
@@ -82,12 +82,14 @@ public:
 
     QString toString() const;
 
+    SireUnits::Dimension::Length maximumCutoff() const;
+
     SireUnits::Dimension::Volume volume() const;
     SpacePtr setVolume(SireUnits::Dimension::Volume volume) const;
 
     void setDimensions(const Vector &dimensions);
     void setDimensions(const Vector &mincoords, const Vector &maxcoords);
-    
+
     const Vector& dimensions() const;
 
     Vector minCoords(const Vector &center = Vector(0)) const;
@@ -117,7 +119,7 @@ public:
                         DistMatrix &distmat) const;
 
     DistVector calcDistVector(const Vector &point0, const Vector &point1) const;
-    
+
     double calcDistVectors(const CoordGroup &group1, const CoordGroup &group2,
                            DistVectorMatrix &distmat) const;
 
@@ -154,7 +156,7 @@ public:
                                     bool translate_as_one=false) const;
 
     AABox getMinimumImage(const AABox &aabox, const Vector &center) const;
-    
+
     Vector getMinimumImage(const Vector &point, const Vector &center) const;
 
     QVector<Vector> getImagesWithin(const Vector &point, const Vector &center, double dist) const;

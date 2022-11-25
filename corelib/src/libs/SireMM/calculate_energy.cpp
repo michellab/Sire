@@ -41,6 +41,7 @@
 #include "SireMM/intragroupff.h"
 
 #include "SireBase/parallel.h"
+#include "SireBase/generalunitproperty.h"
 
 #include "SireUnits/units.h"
 
@@ -100,22 +101,22 @@ T get_cljfunc(const MMDetail &mm, SireUnits::Dimension::Length cutoff)
     return cljfunc;
 }
 
-SireUnits::Dimension::Length get_cutoff(const Space &space)
+SireUnits::Dimension::Length get_cutoff(const Space &space,
+                                        SireUnits::Dimension::Length cutoff)
 {
-    auto cutoff = 15 * angstrom;
+    if (cutoff.value() < 0)
+        return SireUnits::Dimension::Length(0);
 
-    if (space.isPeriodic())
+    else if (space.isPeriodic())
     {
-        // work out the maximum size of the box by looking for the periodic
-        // image of the cutoff
-        auto image = space.getMinimumImage(Vector(0),
-                                           Vector(cutoff.value(), 0, 0));
+        auto max_cutoff = space.maximumCutoff();
 
-        if (image.x() <= cutoff.value())
+        if (cutoff > max_cutoff)
         {
-            // this has been translated
-            cutoff = 1.99 * image.x() * angstrom;
-            qDebug() << "CUTOFF REDUCED TO" << cutoff.toString();
+            qDebug() << "Requested cutoff" << cutoff.toString()
+                     << "is too big for the space" << space.toString()
+                     << "so it has been reduced to" << max_cutoff.toString();
+            cutoff = max_cutoff;
         }
     }
 
@@ -188,8 +189,19 @@ SIREMM_EXPORT ForceFields create_forcefield(const SireMol::Molecules &mols,
     intraff.setCLJFunction(get_cljfunc<CLJIntraShiftFunction>(mm, 15*angstrom));
     intraff.add(mols, map);
 
+    auto cutoff_prop = map["cutoff"];
+
+    auto cutoff = 15.0 * angstrom;
+
+    if (cutoff_prop.hasValue())
+    {
+        cutoff = cutoff_prop.value().asA<GeneralUnitProperty>();
+    }
+
     InterFF interff("interff");
-    interff.setCLJFunction(get_cljfunc<CLJShiftFunction>(mm, get_cutoff(*space)));
+    interff.setCLJFunction(get_cljfunc<CLJShiftFunction>(mm,
+                                                         get_cutoff(*space,
+                                                                    cutoff)));
     interff.setProperty("space", *space);
     interff.add(mols, map);
 
@@ -262,8 +274,18 @@ SIREMM_EXPORT ForceFields create_forcefield(const Molecules &mols0,
 
     ForceFields ffields;
 
+    auto cutoff_prop = map["cutoff"];
+
+    auto cutoff = 15.0 * angstrom;
+
+    if (cutoff_prop.hasValue())
+    {
+        cutoff = cutoff_prop.value().asA<GeneralUnitProperty>();
+    }
+
     InterGroupFF interff("interff");
-    interff.setCLJFunction(get_cljfunc<CLJShiftFunction>(mm0, get_cutoff(*space)));
+    interff.setCLJFunction(get_cljfunc<CLJShiftFunction>(mm0, get_cutoff(*space,
+                                                                         cutoff)));
     interff.setProperty("space", *space);
     interff.add(mols0, MGIdx(0), map);
     interff.add(mols1, MGIdx(1), map);

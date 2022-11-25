@@ -486,6 +486,18 @@ void register_Space_class(){
                 , "Return whether or not this space is periodic" );
         
         }
+        { //::SireVol::Space::maximumCutoff
+        
+            typedef ::SireUnits::Dimension::Length ( ::SireVol::Space::*maximumCutoff_function_type)(  ) const;
+            maximumCutoff_function_type maximumCutoff_function_value( &::SireVol::Space::maximumCutoff );
+            
+            Space_exposer.def( 
+                "maximumCutoff"
+                , maximumCutoff_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireVol::Space::minimumDistance
         
             typedef double ( ::SireVol::Space::*minimumDistance_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const & ) const;

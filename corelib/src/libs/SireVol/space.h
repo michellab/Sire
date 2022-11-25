@@ -135,6 +135,8 @@ public:
     /** Return a string representation of this space */
     virtual QString toString() const=0;
 
+    virtual SireUnits::Dimension::Length maximumCutoff() const;
+
     /** Return the volume of the central box of this space. This
         throws an exception if it is not possible to calculate the
         volume of this space (e.g. it is an infinite space!) */
@@ -184,14 +186,14 @@ public:
     virtual double calcDist(const CoordGroup &group1, const CoordGroup &group2,
                             DistMatrix &distmat) const=0;
 
-    /** Populate the matrix 'distmat' with the distances between all of the 
-        points in 'group' to the point 'point'. This returns the shortest 
+    /** Populate the matrix 'distmat' with the distances between all of the
+        points in 'group' to the point 'point'. This returns the shortest
         distance between the group points and 'point' */
     virtual double calcDist(const CoordGroup &group, const Vector &point,
                             DistMatrix &distmat) const=0;
 
-    /** Populate the matrix 'distmat' with the distances squared between all of the 
-        points in 'group' to the point 'point'. This returns the shortest 
+    /** Populate the matrix 'distmat' with the distances squared between all of the
+        points in 'group' to the point 'point'. This returns the shortest
         distance between the group points and 'point' */
     virtual double calcDist2(const CoordGroup &group, const Vector &point,
                              DistMatrix &distmat) const=0;
@@ -215,17 +217,17 @@ public:
                                 DistMatrix &distmat) const=0;
 
     /** Calculate the distance vector between two points */
-    virtual DistVector calcDistVector(const Vector &point0, 
+    virtual DistVector calcDistVector(const Vector &point0,
                                       const Vector &point1) const=0;
 
     /** Populate the matrix 'distmat' with all of the interpoint distance vectors
         between all points within the CoordGroup. This is *not* a symmetrical matrix,
-        as the direction from point A to point B is the negative of the 
+        as the direction from point A to point B is the negative of the
         direction from point B to point A. This returns the shortest distance
         between two points in the group (that is not the self-self distance) */
     virtual double calcDistVectors(const CoordGroup &group,
                                    DistVectorMatrix &distmat) const=0;
-                                       
+
     /** Populate the matrix 'distmat' between all the points of the two CoordGroups
         'group1' and 'group2' - the returned matrix has the vectors pointing
         from each point in 'group1' to each point in 'group2'. This returns
@@ -234,8 +236,8 @@ public:
                                    const CoordGroup &group2,
                                    DistVectorMatrix &distmat) const=0;
 
-    /** Populate the matrix 'distmat' with the distances between all of the 
-        points in 'group' to the point 'point'. This returns the shortest 
+    /** Populate the matrix 'distmat' with the distances between all of the
+        points in 'group' to the point 'point'. This returns the shortest
         distance between the group points and 'point' */
     virtual double calcDistVectors(const CoordGroup &group, const Vector &point,
                                    DistVectorMatrix &distmat) const=0;
@@ -247,8 +249,8 @@ public:
                                                   const Vector &point2) const=0;
 
     /** Calculate the torsion angle between the passed four points. This should
-        return the torsion angle measured clockwise when looking down the 
-        torsion from point0-point1-point2-point3. This will lie between 0 and 360 
+        return the torsion angle measured clockwise when looking down the
+        torsion from point0-point1-point2-point3. This will lie between 0 and 360
         degrees */
     virtual SireUnits::Dimension::Angle calcDihedral(const Vector &point0,
                                                      const Vector &point1,
@@ -264,7 +266,7 @@ public:
 
     /** Return whether or not two groups that are enclosed by the AABoxes
         'aabox0' and 'aabox1' are beyond the cutoff distance 'dist'.
-        
+
         \warning Note 'beyond' does not mean definitely within the distance!
     */
     virtual bool beyond(double dist, const AABox &aabox0, const AABox &aabox1) const=0;
@@ -284,7 +286,7 @@ public:
 
     /** Return whether or not this space is periodic */
     virtual bool isPeriodic() const=0;
-    
+
     /** Return whether or not this space is cartesian
         ( x==y==z == 1 and all angle between x-y, y-z, x-z all 90 degrees ) */
     virtual bool isCartesian() const=0;
@@ -297,10 +299,10 @@ public:
         that the center for the central box is located at 'center' */
     virtual Vector getBoxCenter(const Vector &p, const Vector &center) const=0;
 
-    /** Return a random point within this space, using the passed 
+    /** Return a random point within this space, using the passed
         random number generator to generate the necessary random numbers,
         and placing the center of the box at 'center' */
-    virtual Vector getRandomPoint(const Vector &center, 
+    virtual Vector getRandomPoint(const Vector &center,
                                   const RanGenerator &generator) const=0;
 
     virtual Vector getRandomPoint(const Vector &center) const;
@@ -324,12 +326,12 @@ public:
                                             const Vector &center,
                                             bool translate_as_one=false) const=0;
 
-    /** Return the minimum image copy of 'aabox' with respect to 'center'.  
-        For periodic spaces, this returns the AABox translated into the 
+    /** Return the minimum image copy of 'aabox' with respect to 'center'.
+        For periodic spaces, this returns the AABox translated into the
         box that has its center at 'center' */
     virtual AABox getMinimumImage(const AABox &aabox, const Vector &center) const=0;
-    
-    /** Return the minimum image copy of 'point' with respect to 'center'. 
+
+    /** Return the minimum image copy of 'point' with respect to 'center'.
         For periodic spaces, this returns the point translated into the
         box that has its center at 'center' */
     virtual Vector getMinimumImage(const Vector &point, const Vector &center) const=0;

@@ -22,10 +22,14 @@ def calculate_energy(*args, **kwargs):
             new_args.append(arg)
 
     for key, value in kwargs.items():
-        try:
-            new_kwargs[key] = _to_molecules(value)
-        except Exception:
-            new_kwargs[key] = value
+        if key == "map":
+            from ..base import create_map
+            new_kwargs[key] = create_map(value)
+        else:
+            try:
+                new_kwargs[key] = _to_molecules(value)
+            except Exception:
+                new_kwargs[key] = value
 
     return _MM.calculate_energy(*new_args, **new_kwargs)
 

@@ -22,9 +22,8 @@ def get_coords_array(mol, units=None, map=None):
         from ..units import angstrom
         units = angstrom
 
-    if map is None:
-        from ..base import PropertyMap
-        map = PropertyMap()
+    from ..base import create_map
+    map = create_map(map)
 
     if hasattr(mol, "to_molecule_group"):
         mol = mol.to_molecule_group()

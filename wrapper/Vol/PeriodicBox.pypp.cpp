@@ -405,6 +405,18 @@ void register_PeriodicBox_class(){
                 , "Return the maximum coordinates of the box that has its center at center" );
         
         }
+        { //::SireVol::PeriodicBox::maximumCutoff
+        
+            typedef ::SireUnits::Dimension::Length ( ::SireVol::PeriodicBox::*maximumCutoff_function_type)(  ) const;
+            maximumCutoff_function_type maximumCutoff_function_value( &::SireVol::PeriodicBox::maximumCutoff );
+            
+            PeriodicBox_exposer.def( 
+                "maximumCutoff"
+                , maximumCutoff_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireVol::PeriodicBox::minCoords
         
             typedef ::SireMaths::Vector ( ::SireVol::PeriodicBox::*minCoords_function_type)( ::SireMaths::Vector const & ) const;

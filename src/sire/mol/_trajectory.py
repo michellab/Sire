@@ -5,13 +5,8 @@ __all__ = ["TrajectoryIterator"]
 class TrajectoryIterator:
     def __init__(self, view=None, map=None):
         if view is not None:
-            from ..legacy.Base import PropertyMap
-
-            if map is None:
-                self._map = PropertyMap()
-            else:
-                self._map = PropertyMap(map)
-
+            from ..base import create_map
+            self._map = create_map(map)
             self._view = view
             self._values = range(0, max(1, self._view.num_frames(self._map)))
             self._times = None
@@ -134,7 +129,7 @@ class TrajectoryIterator:
 
         return self._times
 
-    def energies(self, obj1=None, forcefield=None, to_pandas=True):
+    def energies(self, obj1=None, forcefield=None, to_pandas=True, map=None):
         if self._view is None:
             return {}
 
@@ -144,6 +139,8 @@ class TrajectoryIterator:
         from ..legacy.MM import calculate_trajectory_energies
         from .._colname import colname
         from . import _to_molecules
+        from ..base import create_map
+        map = self._map.merge(create_map(map))
 
         colnames = []
         forcefields = []
@@ -151,7 +148,7 @@ class TrajectoryIterator:
         if obj1 is None:
             for v in self.first():
                 colnames.append(colname(v))
-                forcefields.append(create_forcefield(v, map=self._map))
+                forcefields.append(create_forcefield(v, map=map))
         else:
             if type(obj1) is TrajectoryIterator:
                 if obj1.num_frames() != self.num_frames():
@@ -163,11 +160,13 @@ class TrajectoryIterator:
 
                 for v in self.first():
                     colnames.append(colname(v))
-                    forcefields.append(create_forcefield(v, obj1_mols, map=self._map))
+                    forcefields.append(
+                        create_forcefield(v, obj1_mols, map=map))
             else:
                 for v in self.first():
                     colnames.append(colname(v))
-                    forcefields.append(create_forcefield(v, _to_molecules(obj1), map=self._map))
+                    forcefields.append(
+                        create_forcefield(v, _to_molecules(obj1), map=map))
 
         nframes = len(self)
 
@@ -203,7 +202,8 @@ class TrajectoryIterator:
                 start_time = time.time()
                 j = min(i+num_per_chunk, nframes)
 
-                ff_nrgs = calculate_trajectory_energies(forcefields, list(self._values[i:j]), self._map)
+                ff_nrgs = calculate_trajectory_energies(
+                            forcefields, list(self._values[i:j]), map=map)
 
                 if i == 0:
                     for ff_idx in range(0, len(forcefields)):
@@ -285,7 +285,7 @@ class TrajectoryIterator:
 
         return data
 
-    def energy(self, obj1=None, to_pandas=True):
+    def energy(self, obj1=None, to_pandas=True, map=None):
         if self._view is None:
             return {}
 
@@ -294,9 +294,12 @@ class TrajectoryIterator:
         from ..mm import create_forcefield
         from ..legacy.MM import calculate_trajectory_energy
         from . import _to_molecules
+        from ..base import create_map
+
+        map = self._map.merge(create_map(map))
 
         if obj1 is None:
-            ff = create_forcefield(self.first(), map=self._map)
+            ff = create_forcefield(self.first(), map=map)
         else:
             if type(obj1) is TrajectoryIterator:
                 if obj1.num_frames() != self.num_frames():
@@ -304,9 +307,9 @@ class TrajectoryIterator:
                         "The two trajectories have a different number of frames! "
                         f"{self.num_frames()} versus f{obj1.num_frames()}.")
 
-                ff = create_forcefield(self.first(), obj1.first(), map=self._map)
+                ff = create_forcefield(self.first(), obj1.first(), map=map)
             else:
-                ff = create_forcefield(self.first(), obj1, map=self._map)
+                ff = create_forcefield(self.first(), obj1, map=map)
 
         nframes = len(self)
 
@@ -342,7 +345,8 @@ class TrajectoryIterator:
                 start_time = time.time()
                 j = min(i+num_per_chunk, nframes)
 
-                nrgs = calculate_trajectory_energy(ff, list(self._values[i:j]), self._map)
+                nrgs = calculate_trajectory_energy(
+                            ff, list(self._values[i:j]), map)
 
                 if i == 0:
                     nrg = nrgs[0]

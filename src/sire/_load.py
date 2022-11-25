@@ -346,12 +346,14 @@ def load(path: _Union[str, _List[str]], *args, show_warnings=False, **kwargs):
         raise IOError("No valid files specified. Nothing to load?")
 
     from .io import load_molecules
-    from .base import PropertyMap, wrap
-    map = PropertyMap()
-    map.set("GROMACS_PATH", wrap(_get_gromacs_dir()))
-    map.set("show_warnings", wrap(show_warnings))
+    from .base import create_map
 
-    return load_molecules(paths, map=map)
+    map = {
+            "GROMACS_PATH": _get_gromacs_dir(),
+            "show_warnings": show_warnings
+    }
+
+    return load_molecules(paths, map=create_map(map))
 
 
 def _to_legacy_system(molecules):
@@ -389,17 +391,12 @@ def save_to_string(molecules, format: str, log={}, map=None) -> _List[str]:
        Note that you must pass in the format, and only a single
        "file" can be written at a time.
     """
-    from .legacy.Base import PropertyMap
+    from .base import create_map
     from .legacy.IO import MoleculeParser
-
-    if map is None:
-        p = PropertyMap()
-    else:
-        p = PropertyMap(map)
 
     molecules = _to_legacy_system(molecules)
 
-    return MoleculeParser.parse(molecules, format, map=p).lines()
+    return MoleculeParser.parse(molecules, format, map=create_map(map)).lines()
 
 
 def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
@@ -455,22 +452,19 @@ def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
             (look at `log` to find in detail what went wrong)
     """
     from .legacy.IO import MoleculeParser
-    from .legacy.Base import PropertyMap, StringProperty
+    from .base import create_map
 
-    if map is None:
-        p = PropertyMap()
-    else:
-        p = PropertyMap(map)
+    map = create_map(map)
 
     if format is not None:
         if type(format) is str:
             format = [format]
 
-        p.set("fileformat", StringProperty(",".join(format)))
+        map.set("fileformat", ",".join(format))
 
     molecules = _to_legacy_system(molecules)
 
-    return MoleculeParser.save(molecules, filename, map=p)
+    return MoleculeParser.save(molecules, filename, map=map)
 
 
 def load_test_files(files: _Union[_List[str], str], *args):

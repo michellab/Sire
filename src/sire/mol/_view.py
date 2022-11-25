@@ -54,14 +54,9 @@ if _has_nglview:
                 self._map = obj._map
             elif obj is not None:
                 from ._trajectory import TrajectoryIterator
-                from ..base import PropertyMap
+                from ..base import create_map
 
-                if map is None:
-                    map = PropertyMap()
-                else:
-                    map = PropertyMap(map)
-
-                self._map = map
+                self._map = create_map(map)
 
                 if type(obj) is TrajectoryIterator:
                     self._traj = obj

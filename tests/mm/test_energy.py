@@ -19,19 +19,24 @@ def test_trajectory_energies(ala_traj):
     mols = ala_traj
     mol = mols[0]
 
+    from sire.units import angstrom
+    from sire.base import create_map
+
+    map = create_map({"cutoff": 10*angstrom})
+
     def assert_same(view):
         from sire import colname
 
         nrgs0 = [0, 0, 0]
 
         view.load_frame(0)
-        nrgs0[0] = view.energies()
+        nrgs0[0] = view.energies(map=map)
         view.load_frame(1)
-        nrgs0[1] = view.energies()
+        nrgs0[1] = view.energies(map=map)
         view.load_frame(2)
-        nrgs0[2] = view.energies()
+        nrgs0[2] = view.energies(map=map)
 
-        nrgs1 = view.trajectory()[0:3].energies(to_pandas=False)
+        nrgs1 = view.trajectory(map=map)[0:3].energies(to_pandas=False)
 
         for idx, v in enumerate(view):
             for i in range(0, 3):
@@ -46,15 +51,15 @@ def test_trajectory_energies(ala_traj):
 
         view.load_frame(0)
         other.load_frame(0)
-        nrgs0[0] = view.energies(other)
+        nrgs0[0] = view.energies(other, map=map)
         view.load_frame(1)
         other.load_frame(1)
-        nrgs0[1] = view.energies(other)
+        nrgs0[1] = view.energies(other, map=map)
         view.load_frame(2)
         other.load_frame(2)
-        nrgs0[2] = view.energies(other)
+        nrgs0[2] = view.energies(other, map=map)
 
-        nrgs1 = view.trajectory()[0:3].energies(other, to_pandas=False)
+        nrgs1 = view.trajectory()[0:3].energies(other, to_pandas=False, map=map)
 
         for idx, v in enumerate(view):
             for i in range(0, 3):
@@ -69,15 +74,20 @@ def test_trajectory_energy(ala_traj):
     mols = ala_traj
     mol = mols[0]
 
+    from sire.units import angstrom
+    from sire.base import create_map
+
+    map = create_map({"cutoff": 10*angstrom})
+
     def assert_same(view):
         view.load_frame(0)
-        nrg00 = view.energy()
+        nrg00 = view.energy(map=map)
         view.load_frame(1)
-        nrg01 = view.energy()
+        nrg01 = view.energy(map=map)
         view.load_frame(2)
-        nrg02 = view.energy()
+        nrg02 = view.energy(map=map)
 
-        nrgs = view.trajectory()[0:3].energy(to_pandas=False)
+        nrgs = view.trajectory()[0:3].energy(to_pandas=False, map=map)
 
         def check(n0, n1, i):
             if n0.value() != pytest.approx(n1["total"][i]):
@@ -99,15 +109,16 @@ def test_trajectory_energy(ala_traj):
     def assert_same_pair(view, other):
         view.load_frame(0)
         other.load_frame(0)
-        nrg00 = view.energy(other)
+        nrg00 = view.energy(other, map=map)
         view.load_frame(1)
         other.load_frame(1)
-        nrg01 = view.energy(other)
+        nrg01 = view.energy(other, map=map)
         view.load_frame(2)
         other.load_frame(2)
-        nrg02 = view.energy(other)
+        nrg02 = view.energy(other, map=map)
 
-        nrgs = view.trajectory()[0:3].energy(other, to_pandas=False)
+        nrgs = view.trajectory()[0:3].energy(other, to_pandas=False,
+                                             map=map)
 
         def check(n0, n1, i):
             if n0.value() != pytest.approx(n1["total"][i]):
@@ -205,3 +216,25 @@ def test_energy(ala_mols):
     assert_approx_equal(total, total0 + total1 + total2)
 
     total2 = mols["(not water) and element O"].energy(mols["water and element O"])
+
+
+def test_neura_energy(neura_mols):
+    mols = neura_mols
+
+    from sire.units import angstrom
+
+    # this is an integration test, plus test that 'map' is
+    # being interpreted and passed correctly
+    components = mols[0:5].energy(map={"cutoff": 15*angstrom}).components()
+
+    # these values have been pre-calculated. The test checks
+    # if anything has changed the energies
+    assert components["coulomb"].value() == pytest.approx(-587.683)
+    assert components["LJ"].value() == pytest.approx(-17.15338212)
+
+    components = mols[0:5].energy(map={"cutoff": 5*angstrom}).components()
+
+    # these values have been pre-calculated. The test checks
+    # if anything has changed the energies
+    assert components["coulomb"].value() == pytest.approx(-223.95138492)
+    assert components["LJ"].value() == pytest.approx(2.09059)

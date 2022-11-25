@@ -22,12 +22,9 @@ class _CursorData:
         else:
             self.molecule = molecule.molecule().edit()
 
-        from ..base import PropertyMap
+        from ..base import create_map
 
-        if map is None:
-            self.map = PropertyMap()
-        else:
-            self.map = PropertyMap(map)
+        self.map = create_map(map)
 
         self.connectivity_property = self.map["connectivity"].source()
 
