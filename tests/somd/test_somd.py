@@ -1,9 +1,12 @@
+import pytest
 import shlex
 import subprocess
+import sys
 import tempfile
 
 import sire as sr
 
+@pytest.mark.skipif(sys.platform == "win32", reason="Not supported on Windows")
 def test_parameters():
     """A test to catch invalid SOMD parameters. Updates to add PME
        functionality have broken paramter resolution, meaning that OpenMM
