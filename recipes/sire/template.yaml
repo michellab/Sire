@@ -52,7 +52,7 @@ test:
   source_files:
     - tests
   commands:
-    - pytest tests
+    - pytest -vvv --color=yes tests
 
 about:
   home: https://github.com/michellab/Sire
