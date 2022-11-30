@@ -10,7 +10,10 @@ set ( SCRIPTS
         __init__.py
         ap.py
         AmberLoader.py
+        BoreschAnalyticalCorrection.py
+        BoreschNumericalCorrection.py
         DCDFile.py
+        FreeEnergyAnalysis.py
         LJcutoff.py
         LSRC.py
         Nautilus.py
@@ -22,7 +25,6 @@ set ( SCRIPTS
         WaterChanger.py
         WaterView.py
         WSRC.py
-        FreeEnergyAnalysis.py
     )
 
 # If your script needs any default files (e.g. parameter or config files)
