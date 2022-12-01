@@ -186,6 +186,36 @@ distance_restraints_dict = Parameter("distance restraints dictionary", {},
                                      D the flat bottom radius. WARNING: PBC distance checks not implemented, avoid
                                      restraining pair of atoms that may diffuse out of the box.""")
 
+turn_on_restraints_mode = Parameter("turn on receptor-ligand restraints mode", False,
+                                  """If true, lambda will be used to scale the receptor-ligand restraint strength. A dummy
+                                  pert file mapping all original ligand atom parameters to themselves must be supplied.""")
+
+use_boresch_restraints = Parameter("use boresch restraints", False,
+                                    """Whether or not to use Boresch restraints between the ligand and receptor""")
+
+boresch_restraints_dict = Parameter("boresch restraints dictionary", {},
+                                    """Dictionary of four dictionaries: anchor points in ligand, anchor points in receptor,
+                                    equilibrium values for 6 Boresch-style external degrees of freedom, and associated force
+                                    constants. Syntax is:
+                                    {
+                                    "anchor_points":{"r1":r1, "r2":r2, "r3":r3, "l1":l1, "l2":l2, "l3":l3},
+                                    "equilibrium_values":{"r0":r0, "thetaA0": thetaA0, "thetaB0": thetaB0,
+                                                          "phiA0":phiA0, "phiB0": phiB0, "phiC0":phiC0},
+                                    "force_constants":{"kr":kr, "kthetaA": kthetaA, "kthetaB": kthetaB,
+                                                       "kphiA":kphiA, "kphiB": kphiB, "kphiC":kphiC}
+                                    }
+                                    r1 - 3 and l1 - 3 are the anchor points in the receptor and ligand, respectively,
+                                    given by atomic indices. r is | l1 - r1 | (A). thetaA, and thetaB are the angles
+                                    (r2, r1, l1) and (r1, l1, l2) (rad). phiA, phiB, and phiC are the dihedral angles
+                                    (r3, r2, r1, l1), (r2, r1, l1, l2), and (r1, l1, l2, l3), respectively (rad). A first
+                                    character of k indicates a force constant (kcal mol^-1 A^-2 for the distance and
+                                    kcal mol^-1 rad^-2 for the angles) and a final character of 0 indicates an
+                                    equilibrium value (A or rad). To use Boresch restraints, "use boresch restraints"
+                                    must be set equal to True in the config file. Note that for consistency with the distance
+                                    restraints implementation, the force constants are defined as E = k*x**2, rather than
+                                    E = 0.5*k*x**2 as in the original paper.
+                                    """)
+
 hydrogen_mass_repartitioning_factor = \
     Parameter('hydrogen mass repartitioning factor', 1.0,
               f'If larger than {HMR_MIN} (maximum is {HMR_MAX}), all hydrogen '
@@ -599,6 +629,90 @@ def linkbondVectorListToProperty(list):
 
     return prop
 
+def boreschDistRestraintToProperty(boresch_dict):
+    """Generates properties to store information needed to set up the single
+    Boresch distance restraint.
+    Args:
+        boresch_dict (dict): Containts the information required to set up all
+        Boresch restraints
+    Returns:
+        class 'Sire.Base._Base.Properties': The properties required to
+        set up the Boresch distance restraint
+    """
+
+    prop = Properties()
+
+    prop.setProperty("AtomNum0", VariantProperty(boresch_dict['anchor_points']['l1']))
+    prop.setProperty("AtomNum1", VariantProperty(boresch_dict['anchor_points']['r1']))
+    prop.setProperty("equil_val", VariantProperty(boresch_dict['equilibrium_values']['r0']))
+    prop.setProperty("force_const", VariantProperty(boresch_dict['force_constants']['kr']))
+
+    return prop
+
+def boreschAngleRestraintsToProperty(boresch_dict):
+    """Generates properties to store information needed to set up the two
+    Boresch angle restraints.
+    Args:
+        boresch_dict (dict): Containts the information required to set up all
+        Boresch restraints
+    Returns:
+        class 'Sire.Base._Base.Properties': The properties required to
+        set up the Boresch angle restraints
+    """
+
+    prop = Properties()
+
+    angle_anchor_dict = {"thetaA":["r2", "r1", "l1"], "thetaB":["r1", "l1", "l2"]}
+
+    i = 0
+    for angle in ["thetaA", "thetaB"]:
+        if boresch_dict["force_constants"][f"k{angle}"] != 0:
+            for j in range(3):
+                prop.setProperty(f"AtomNum{j}-{i}",
+                    VariantProperty(boresch_dict['anchor_points'][angle_anchor_dict[angle][j]]))
+            prop.setProperty(f"equil_val-{i}",
+                VariantProperty(boresch_dict["equilibrium_values"][f"{angle}0"]))
+            prop.setProperty(f"force_const-{i}",
+                VariantProperty(boresch_dict["force_constants"][f"k{angle}"]))
+
+            i += 1
+
+    prop.setProperty("n_boresch_angle_restraints", VariantProperty(i));
+
+    return prop
+
+def boreschDihedralRestraintsToProperty(boresch_dict):
+    """Generates properties to store information needed to set up the three
+    Boresch dihedral restraints.
+    Args:
+        boresch_dict (dict): Containts the information required to set up all
+        Boresch restraints
+    Returns:
+        class 'Sire.Base._Base.Properties': The properties required to
+        set up the Boresch dihedral restraints
+    """
+
+    prop = Properties()
+
+    dihedral_anchor_dict = {"phiA":["r3", "r2", "r1", "l1"], "phiB":["r2", "r1", "l1", "l2"],
+                            "phiC":["r1", "l1", "l2", "l3"]}
+
+    i = 0
+    for dihedral in ["phiA", "phiB", "phiC"]:
+        if boresch_dict["force_constants"][f"k{dihedral}"] != 0:
+            for j in range(4):
+                prop.setProperty(f"AtomNum{j}-{i}",
+                    VariantProperty(boresch_dict['anchor_points'][dihedral_anchor_dict[dihedral][j]]))
+            prop.setProperty(f"equil_val-{i}",
+                VariantProperty(boresch_dict["equilibrium_values"][f"{dihedral}0"]))
+            prop.setProperty(f"force_const-{i}",
+                VariantProperty(boresch_dict["force_constants"][f"k{dihedral}"]))
+
+            i += 1
+
+    prop.setProperty("n_boresch_dihedral_restraints", VariantProperty(i));
+
+    return prop
 
 def propertyToAtomNumList(prop):
     list = []
@@ -673,6 +787,15 @@ def setupRestraints(system):
 
     return system
 
+def saveTurnOnRestraintsModeProperty(system):
+    """Saves the property "turn_on_restraints_mode" in the solute where
+    the distance or Boresch restraint information is also stored."""
+    solute = getSolute(system)
+    solute = solute.edit().setProperty("turn_on_restraints_mode",
+                                    VariantProperty(turn_on_restraints_mode.val)).commit()
+    system.update(solute)
+
+    return(system)
 
 def setupDistanceRestraints(system, restraints=None):
     prop_list = []
@@ -717,6 +840,83 @@ def setupDistanceRestraints(system, restraints=None):
 
     return system
 
+def setupBoreschRestraints(system):
+    """Takes initial system and adds information specifying the Boresch
+    restraints. The distance, angle, and torsional restraints are stored as
+    properties in solute molecule.
+    Args:
+        system (System): The initial system
+    Returns:
+        System: The updated system with
+        Boresch restraint properties stored in the solute.
+    """
+    # Get Boresch restraint dict in dict form
+    boresch_dict = dict(boresch_restraints_dict.val)
+    print(f"Boresch restraints dictionary = {boresch_dict}")
+
+    # Check that restraint dict has the correct format
+    template_dict = {'anchor_points': {'r1':0, 'r2':0, 'r3':0, 'l1':0, 'l2':0, 'l3':0},
+                     'equilibrium_values': {'r0':0, 'thetaA0':0, 'thetaB0':0, 'phiA0':0, 'phiB0':0, 'phiC0':0},
+                     'force_constants': {'kr':0, 'kthetaA':0, 'kthetaB':0, 'kphiA':0, 'kphiB':0, 'kphiC':0}}
+    for key in template_dict:
+        if key not in boresch_dict:
+            raise Exception(f"Boresch restraints dictionary incorrectly formatted: {key} subdictionary is missing")
+        for subkey in template_dict[key]:
+            if subkey not in boresch_dict[key]:
+                raise Exception(f"Boresch restraints dictionary incorrectly formatted: {subkey} is "
+                                f"is missing from the {key} subdictionary")
+            val = boresch_dict[key][subkey]
+            # ignore anchor points - these are checked later
+            if key == "force_constants" or subkey == "r0":
+                if val < 0:
+                    raise Exception(f"{subkey} must be positive")
+            if key == "equilibrium_values" and subkey[:5] == "theta":
+                if val < 0 or val > pi:
+                    raise Exception(f"{subkey} must be between 0 and pi")
+            if key == "equilibrium_values" and subkey[:4] == "phi":
+                if val < -pi or val > pi:
+                    raise Exception(f"{subkey} must be between -pi and pi")
+
+    # Correct atom numbers by + 1
+    for key in boresch_dict["anchor_points"].keys():
+        boresch_dict["anchor_points"][key] += 1
+
+    # Get anchor points dicts
+    anchors_dict = boresch_dict["anchor_points"]
+
+    molecules = system[MGName("all")].molecules()
+    moleculeNumbers = molecules.molNums()
+
+    # Cycle through anchor points and print restrained atoms. Exit and notify
+    # the user if any anchor points specified are not present in the system.
+    anchors_not_present = list(anchors_dict.keys())
+    print("Boresch anchor points:")
+    for anchor in anchors_dict:
+        for moleculeNumber in moleculeNumbers:
+            mol = molecules.molecule(moleculeNumber)[0].molecule()
+            atoms_mol = mol.atoms()
+            natoms_mol = mol.nAtoms()
+            for j in range(0, natoms_mol):
+                at = atoms_mol[j]
+                atnumber = at.number()
+                if anchors_dict[anchor] == atnumber.value():
+                    anchors_not_present.remove(anchor)
+                    print(anchor + "=" + str(at))
+
+    if anchors_not_present:
+        print("Error! The following anchor points do not not exist in the system:")
+        for anchor in anchors_not_present:
+            print(f"{anchor}: index {anchors_dict[anchor]-1}")
+        sys.exit(-1)
+
+    # The solute will store all the information related to the Boresch restraints in the system
+    solute = getSolute(system)
+    solute = solute.edit().setProperty("boresch_dist_restraint", boreschDistRestraintToProperty(boresch_dict)).commit()
+    solute = solute.edit().setProperty("boresch_angle_restraints", boreschAngleRestraintsToProperty(boresch_dict)).commit()
+    solute = solute.edit().setProperty("boresch_dihedral_restraints", boreschDihedralRestraintsToProperty(boresch_dict)).commit()
+    system.update(solute)
+
+    return system
 
 def freezeResidues(system):
 
@@ -1479,6 +1679,13 @@ def run():
         if use_restraints.val:
             system = setupRestraints(system)
 
+        if turn_on_restraints_mode.val:
+            print('''In "turn on receptor-ligand restraints mode". Receptor-ligand
+                     restraint strengths will be scaled with lambda. Ensure that a dummy
+                     pert file which maps all original ligand atom parameters to themselves
+                     has been supplied.''')
+            system = saveTurnOnRestraintsModeProperty(system)
+
         if use_distance_restraints.val:
             restraints = None
             if len(distance_restraints_dict.val) == 0:
@@ -1491,6 +1698,10 @@ def run():
                     stream.write("distance restraints dictionary = %s\n" % restraints)
                     stream.close()
             system = setupDistanceRestraints(system, restraints=restraints)
+
+        if use_boresch_restraints.val:
+            print("Setting up Boresch restraints...")
+            system = setupBoreschRestraints(system)
 
         if hydrogen_mass_repartitioning_factor.val > 1.0:
             system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
@@ -1632,6 +1843,13 @@ def runFreeNrg():
         if use_restraints.val:
             system = setupRestraints(system)
 
+        if turn_on_restraints_mode.val:
+            print('''In "turn on receptor-ligand restraints mode". Lambda will be used to scale
+                  the strength of protein-ligand restraints. Ensure that a dummy pert file mapping
+                  the original parameters for all ligand atoms to themselves has been supplied.''')
+
+            system = saveTurnOnRestraintsModeProperty(system)
+
         if use_distance_restraints.val:
             restraints = None
             if len(distance_restraints_dict.val) == 0:
@@ -1645,6 +1863,9 @@ def runFreeNrg():
             system = setupDistanceRestraints(system, restraints=restraints)
 
             #import pdb; pdb.set_trace()
+        if use_boresch_restraints.val:
+            print("Setting up Boresch restraints...")
+            system = setupBoreschRestraints(system)
 
         if hydrogen_mass_repartitioning_factor.val > 1.0:
             system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)

@@ -45,6 +45,7 @@ jobs:
     env:
       SIRE_DONT_PHONEHOME: 1
       SIRE_SILENT_PHONEHOME: 1
+      REPO: "${{ github.event.pull_request.head.repo.full_name || github.repository }}"
     steps:
 #     Need to install and use VS 2017 for conda-compliant builds
       - name: Set up Visual Studio 2017 Build Tools (required for Python modules)
@@ -61,15 +62,12 @@ jobs:
           miniforge-variant: Mambaforge
           use-mamba: true
 #
-      - name: Use HTTPS git protocol
-        run: git config --global url."https://github".insteadOf git://github
-#
       - name: Clone the devel branch (push to devel)
-        run: git clone ${{ github.repositoryUrl }}
+        run: git clone https://github.com/${{ env.REPO }}
         if: github.event_name != 'pull_request'
 #
       - name: Clone the feature branch (pull request to devel)
-        run: git clone -b ${{ github.head_ref }} --single-branch ${{ github.repositoryUrl }}
+        run: git clone -b ${{ github.head_ref }} --single-branch https://github.com/${{ env.REPO }}
         if: github.event_name == 'pull_request'
 #
       - name: Setup Conda
