@@ -18,9 +18,6 @@ If ``sire`` imports without error, then everything is working.
 If you can't import ``sire``, or have any other problems, then
 please :doc:`ask for support. <../support>`
 
-Getting Started
----------------
-
 .. toctree::
    :maxdepth: 2
 
@@ -28,9 +25,3 @@ Getting Started
    index_part02
    index_part03
    index_part04
-
-Intermediate Topics
--------------------
-
-Advanced Topics
----------------

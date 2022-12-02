@@ -686,13 +686,24 @@ for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule,
           SelectorM_CutGroup_]:
     __fix_getitem(C)
 
+
+def _atom_coordinates(atom, map=None):
+    if map is None:
+        return atom.property("coordinates")
+
+    from ..base import create_map
+    map = create_map(map)
+
+    return atom.property(map["coordinates"])
+
+
 Atom.element = lambda x : x.property("element")
 Atom.lj = lambda x : x.property("LJ")
-Atom.coordinates = lambda x : x.property("coordinates")
+Atom.coordinates = _atom_coordinates
 Atom.coords = Atom.coordinates
-Atom.x = lambda x : x.coordinates().x()
-Atom.y = lambda x : x.coordinates().y()
-Atom.z = lambda x : x.coordinates().z()
+Atom.x = lambda atom, map=None: atom.coordinates(map=map).x()
+Atom.y = lambda atom, map=None: atom.coordinates(map=map).y()
+Atom.z = lambda atom, map=None: atom.coordinates(map=map).z()
 
 
 def __atomcoords__str__(obj):
@@ -725,13 +736,15 @@ AtomCoords.__repr__ = __atomcoords__str__
 
 
 def _add_evals(obj):
-    obj.mass = lambda x : x.evaluate().mass()
-    obj.charge = lambda x : x.evaluate().charge()
-    obj.coordinates = lambda x : x.evaluate().center_of_mass()
+    from ..base import create_map
+
+    obj.mass = lambda x, map=None : x.evaluate().mass(map=create_map(map))
+    obj.charge = lambda x, map=None : x.evaluate().charge(map=create_map(map))
+    obj.coordinates = lambda x, map=None : x.evaluate().center_of_mass(map=create_map(map))
     obj.coords = obj.coordinates
-    obj.x = lambda x : x.coordinates().x()
-    obj.y = lambda x : x.coordinates().y()
-    obj.z = lambda x : x.coordinates().z()
+    obj.x = lambda x, map=None : x.coordinates(map=map).x()
+    obj.y = lambda x, map=None : x.coordinates(map=map).y()
+    obj.z = lambda x, map=None : x.coordinates(map=map).z()
 
 
 def _get_property(x, key):

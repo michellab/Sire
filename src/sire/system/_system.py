@@ -185,6 +185,18 @@ class System:
     def evaluate(self, *args, **kwargs):
         return self.molecules().evaluate(*args, **kwargs)
 
+    def property(self, *args, **kwargs):
+        return self._system.property(*args, **kwargs)
+
+    def set_property(self, *args, **kwargs):
+        self._system.set_property(*args, **kwargs)
+
+    def properties(self):
+        return self._system.properties()
+
+    def property_keys(self):
+        return self._system.property_keys()
+
     def cursor(self):
         from ..mol._cursor import CursorsM
         return CursorsM(self)

@@ -240,7 +240,107 @@ You can get the energies for each frame using;
 Moving individual dihedrals
 ===========================
 
+You may have noticed that all of the atoms around a dihedral were rotated
+when you changed an individual dihedral. This is because, by default,
+the move rotates the bond that lies at the center of the dihedral.
+
+You can rotate only the specified dihedral by setting the ``move_all``
+option to ``False``. For example;
+
+>>> mol = mols[0]
+>>> cursor = mol.cursor().dihedrals("element N", "element C",
+                                    "element C", "element N")
+>>> cursor.save_frame()
+>>> for i in range(0, 12):
+...     cursor.change_size(30, move_all=False)
+...     cursor.save_frame()
+>>> mol = cursor.commit()
+>>> mol.view()
+
+.. image:: images/04_06_04.jpg
+   :alt: Still from a movie of the aladip molecule showing an unphysical angle.
+
+Notice how this results in a clash between the nitrogen (which is being
+rotated) and the oxygen (which is not rotated).
+
+In general, to avoid atom clashes, it is normally better to rotate all
+atoms about the central dihedral bond. As such, ``move_all`` defaults
+to ``True``.
 
 Aligning, Anchoring and Weighting
 =================================
 
+There are a few more options that can be used to give more
+fine-grained control over how the molecule is moved.
+
+The first is ``auto_align``. This defaults to ``True``, and switches
+on automatic re-alignment of the molecule against itself after the
+move. This is a simple alignment that minimises the root mean square
+deviation (RMSD) between the molecule before and after the move.
+
+Set ``auto_align`` to ``False`` if you want to switch off this
+automatic alignment.
+
+The next option is ``weighting``. The internal moves work by dividing
+the molecule into two sets about the bond (or bonds) involved in the move.
+For example, to rotate the ``N-C1-C2-N`` dihedral as we did above, the molecule
+is split into two sets about the central ``C1-C2`` bond. The "left" set
+contains all atoms that are bonded to ``C1``, or which can trace their
+connectivity to ``C1`` through other atoms. The "right" set contains
+all atoms that are bonded to ``C2``, or which can trace their connectivity
+to ``C2`` through other atoms.
+
+The rotation is achieved by rotating the "left" and "right" sets by opposite
+amounts around the vector of the ``C1-C2`` bond, depending on the "weight"
+of the two sets. For example, if the dihedral was to be rotated by 30°,
+and both sets were weighted equally, then one set would be rotated
+by +15°, whle the other would be rotated by -15°.
+
+The ``weighting`` option sets the algorithm that is used to weight the
+rotation (or translation in the case for bond moves). Valid options are;
+
+* ``relative_mass`` : the change is weighted linearly according to the relative
+  mass of the two sets. The lightest set will be moved the most, while the
+  heaviest set would move the least.
+* ``absolute_mass`` : the change will entirely be weighted towards the set
+  with the lightest mass. The lightest set will receive all of the move,
+  while the heaviest set will not be moved.
+* ``relative_number`` : the change is weighted linearly according to the relative
+  number of atoms in both sets. The set with fewest atoms will be moved the most,
+  while the set with most atoms will move the least.
+* ``absolute_number`` : the change will entirely be weighted towards the set
+  with the fewest atoms. The set with the fewest atoms will receive all of the
+  move, while the set with the most atoms will not be moved.
+
+Finally, you can specify ``anchor`` atoms using the ``anchor`` option.
+This specifies atoms which are anchored, and which should not be moved
+at all when you stretch a bond, or change an angle or dihedral. The
+``anchor`` option accepts any value that would be supported by
+the indexing operator of the view being moved. This will be used to index the
+view being moved, to get the set of atoms that must remain immobile.
+If one of the sets of atoms to be moved contains an anchor, then
+it will not be moved, and the full weight of the move will be applied
+to the other set. Note that it is an error to have anchors in both sets,
+as this would prevent the move from being made. An exception will be
+raised in this case. Note also that setting the ``anchor`` option will
+automatically disable automatic alignment.
+
+For example;
+
+>>> cursor.change_size(30, move_all=True,
+                       weighting="relative_mass",
+                       auto_align=False)
+
+would rotate all of the atoms around a dihedral by 30°, distributing
+the move according to the ``relative_mass`` algorithm. The molecule would
+not be automatically re-aligned after the move.
+
+or;
+
+>>> cursor.bonds("element C", "element H").set_length(1, anchor="element C")
+
+would set all carbon-hydrogen bonds to a length of 1 Å, while placing
+anchors on all the carbon atoms. This ensures that only the hydrogens
+will be moved. The use of anchors means that ``auto_align`` is set to
+``False``, and so the molecule would not be automatically re-aligned
+after the move.

@@ -38,6 +38,14 @@ Tutorial
 
    tutorial/index
 
+Cheat Sheets
+============
+
+.. toctree::
+   :maxdepth: 3
+
+   cheatsheet/index
+
 Getting help
 ============
 
