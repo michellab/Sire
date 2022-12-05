@@ -271,6 +271,8 @@ public:
     Molecule molecule() const;
 
     SelectResult search(const QString &search_string) const;
+    SelectResult search(const QString &search_string,
+                        const PropertyMap &map) const;
 
     CutGroup select(const CGID &cgid, const PropertyMap &map = PropertyMap()) const;
     Residue select(const ResID &resid, const PropertyMap &map = PropertyMap()) const;

@@ -162,71 +162,119 @@ public:
     SireMol::MoleculeGroup toMoleculeGroup() const;
     SireMol::SelectResult toSelectResult() const;
 
-    SireMol::Molecule molecule(int i) const;
-    SireMol::Molecule molecule(const QString &name) const;
-    SireMol::Molecule molecule(const SireMol::MolID &molid);
+    SireMol::Molecule molecule(int i,
+                               const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::Molecule molecule(const QString &name,
+                               const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::Molecule molecule(const SireMol::MolID &molid,
+                               const SireBase::PropertyMap &map=SireBase::PropertyMap());
 
     SireMol::SelectorMol molecules() const;
-    SireMol::SelectorMol molecules(int i) const;
-    SireMol::SelectorMol molecules(const SireBase::Slice &slice) const;
-    SireMol::SelectorMol molecules(const QList<qint64> &idxs) const;
-    SireMol::SelectorMol molecules(const QString &name) const;
-    SireMol::SelectorMol molecules(const SireMol::MolID &molid) const;
+    SireMol::SelectorMol molecules(int i,
+                                   const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorMol molecules(const SireBase::Slice &slice,
+                                   const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorMol molecules(const QList<qint64> &idxs,
+                                   const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorMol molecules(const QString &name,
+                                   const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorMol molecules(const SireMol::MolID &molid,
+                                   const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
 
-    SireMol::Atom atom(int i) const;
-    SireMol::Atom atom(const QString &name) const;
-    SireMol::Atom atom(const SireMol::AtomID &atomid) const;
+    SireMol::Atom atom(int i,
+                       const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::Atom atom(const QString &name,
+                       const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::Atom atom(const SireMol::AtomID &atomid,
+                       const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
 
-    SireMol::Residue residue(int i) const;
-    SireMol::Residue residue(const QString &name) const;
-    SireMol::Residue residue(const SireMol::ResID &resid) const;
+    SireMol::Residue residue(int i,
+                             const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::Residue residue(const QString &name,
+                             const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::Residue residue(const SireMol::ResID &resid,
+                             const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
 
-    SireMol::Chain chain(int i) const;
-    SireMol::Chain chain(const QString &name) const;
-    SireMol::Chain chain(const SireMol::ChainID &chainid) const;
+    SireMol::Chain chain(int i,
+                         const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::Chain chain(const QString &name,
+                         const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::Chain chain(const SireMol::ChainID &chainid,
+                         const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
 
-    SireMol::Segment segment(int i) const;
-    SireMol::Segment segment(const QString &name) const;
-    SireMol::Segment segment(const SireMol::SegID &segid) const;
+    SireMol::Segment segment(int i,
+                             const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::Segment segment(const QString &name,
+                             const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::Segment segment(const SireMol::SegID &segid,
+                             const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
 
-    SireMol::CutGroup cutGroup(int i) const;
-    SireMol::CutGroup cutGroup(const QString &name) const;
-    SireMol::CutGroup cutGroup(const SireMol::CGID &cgid) const;
+    SireMol::CutGroup cutGroup(int i,
+                               const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::CutGroup cutGroup(const QString &name,
+                               const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::CutGroup cutGroup(const SireMol::CGID &cgid,
+                               const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
 
     SireMol::SelectorM<SireMol::Atom> atoms() const;
-    SireMol::SelectorM<SireMol::Atom> atoms(int i) const;
-    SireMol::SelectorM<SireMol::Atom> atoms(const SireBase::Slice &slice) const;
-    SireMol::SelectorM<SireMol::Atom> atoms(const QList<qint64> &idxs) const;
-    SireMol::SelectorM<SireMol::Atom> atoms(const QString &name) const;
-    SireMol::SelectorM<SireMol::Atom> atoms(const SireMol::AtomID &atomid) const;
+    SireMol::SelectorM<SireMol::Atom> atoms(int i,
+                                            const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Atom> atoms(const SireBase::Slice &slice,
+                                            const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Atom> atoms(const QList<qint64> &idxs,
+                                            const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Atom> atoms(const QString &name,
+                                            const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Atom> atoms(const SireMol::AtomID &atomid,
+                                            const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
 
     SireMol::SelectorM<SireMol::Residue> residues() const;
-    SireMol::SelectorM<SireMol::Residue> residues(int i) const;
-    SireMol::SelectorM<SireMol::Residue> residues(const SireBase::Slice &slice) const;
-    SireMol::SelectorM<SireMol::Residue> residues(const QList<qint64> &idxs) const;
-    SireMol::SelectorM<SireMol::Residue> residues(const QString &name) const;
-    SireMol::SelectorM<SireMol::Residue> residues(const SireMol::ResID &resid) const;
+    SireMol::SelectorM<SireMol::Residue> residues(int i,
+                                                  const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Residue> residues(const SireBase::Slice &slice,
+                                                  const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Residue> residues(const QList<qint64> &idxs,
+                                                  const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Residue> residues(const QString &name,
+                                                  const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Residue> residues(const SireMol::ResID &resid,
+                                                  const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
 
     SireMol::SelectorM<SireMol::Chain> chains() const;
-    SireMol::SelectorM<SireMol::Chain> chains(int i) const;
-    SireMol::SelectorM<SireMol::Chain> chains(const SireBase::Slice &slice) const;
-    SireMol::SelectorM<SireMol::Chain> chains(const QList<qint64> &idxs) const;
-    SireMol::SelectorM<SireMol::Chain> chains(const QString &name) const;
-    SireMol::SelectorM<SireMol::Chain> chains(const SireMol::ChainID &chainid) const;
+    SireMol::SelectorM<SireMol::Chain> chains(int i,
+                                              const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Chain> chains(const SireBase::Slice &slice,
+                                              const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Chain> chains(const QList<qint64> &idxs,
+                                              const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Chain> chains(const QString &name,
+                                              const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Chain> chains(const SireMol::ChainID &chainid,
+                                              const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
 
     SireMol::SelectorM<SireMol::Segment> segments() const;
-    SireMol::SelectorM<SireMol::Segment> segments(int i) const;
-    SireMol::SelectorM<SireMol::Segment> segments(const SireBase::Slice &slice) const;
-    SireMol::SelectorM<SireMol::Segment> segments(const QList<qint64> &idxs) const;
-    SireMol::SelectorM<SireMol::Segment> segments(const QString &name) const;
-    SireMol::SelectorM<SireMol::Segment> segments(const SireMol::SegID &segid) const;
+    SireMol::SelectorM<SireMol::Segment> segments(int i,
+                                                  const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Segment> segments(const SireBase::Slice &slice,
+                                                  const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Segment> segments(const QList<qint64> &idxs,
+                                                  const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Segment> segments(const QString &name,
+                                                  const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::Segment> segments(const SireMol::SegID &segid,
+                                                  const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
 
     SireMol::SelectorM<SireMol::CutGroup> cutGroups() const;
-    SireMol::SelectorM<SireMol::CutGroup> cutGroups(int i) const;
-    SireMol::SelectorM<SireMol::CutGroup> cutGroups(const SireBase::Slice &slice) const;
-    SireMol::SelectorM<SireMol::CutGroup> cutGroups(const QList<qint64> &idxs) const;
-    SireMol::SelectorM<SireMol::CutGroup> cutGroups(const QString &name) const;
-    SireMol::SelectorM<SireMol::CutGroup> cutGroups(const SireMol::CGID &cgid) const;
+    SireMol::SelectorM<SireMol::CutGroup> cutGroups(int i,
+                                                    const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::CutGroup> cutGroups(const SireBase::Slice &slice,
+                                                    const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::CutGroup> cutGroups(const QList<qint64> &idxs,
+                                                    const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::CutGroup> cutGroups(const QString &name,
+                                                    const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
+    SireMol::SelectorM<SireMol::CutGroup> cutGroups(const SireMol::CGID &cgid,
+                                                    const SireBase::PropertyMap &map=SireBase::PropertyMap()) const;
 
     SelectorMDihedral add(const SelectorMDihedral &other) const;
 
@@ -268,6 +316,8 @@ public:
                             const SireBase::PropertyMap &map) const;
 
     SireMol::SelectResult search(const QString &search_string) const;
+    SireMol::SelectResult search(const QString &search_string,
+                                 const SireBase::PropertyMap &map) const;
 
     QList<SireMol::DihedralID> IDs() const;
 

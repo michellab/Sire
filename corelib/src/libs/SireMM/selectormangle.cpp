@@ -541,17 +541,17 @@ SelectResult SelectorMAngle::toSelectResult() const
     return SelectResult(r);
 }
 
-Molecule SelectorMAngle::molecule(int i) const
+Molecule SelectorMAngle::molecule(int i, const PropertyMap &map) const
 {
     return this->molecules().molecule(i);
 }
 
-Molecule SelectorMAngle::molecule(const QString &name) const
+Molecule SelectorMAngle::molecule(const QString &name, const PropertyMap &map) const
 {
     return this->molecules().molecule(name);
 }
 
-Molecule SelectorMAngle::molecule(const MolID &molid)
+Molecule SelectorMAngle::molecule(const MolID &molid, const PropertyMap &map)
 {
     return this->molecules().molecule(molid);
 }
@@ -568,104 +568,104 @@ SelectorMol SelectorMAngle::molecules() const
     return SelectorMol(mols);
 }
 
-SelectorMol SelectorMAngle::molecules(int i) const
+SelectorMol SelectorMAngle::molecules(int i, const PropertyMap &map) const
 {
     return this->molecules().molecules(i);
 }
 
-SelectorMol SelectorMAngle::molecules(const SireBase::Slice &slice) const
+SelectorMol SelectorMAngle::molecules(const SireBase::Slice &slice, const PropertyMap &map) const
 {
     return this->molecules().molecules(slice);
 }
 
-SelectorMol SelectorMAngle::molecules(const QList<qint64> &idxs) const
+SelectorMol SelectorMAngle::molecules(const QList<qint64> &idxs, const PropertyMap &map) const
 {
     return this->molecules().molecules(idxs);
 }
 
-SelectorMol SelectorMAngle::molecules(const QString &name) const
+SelectorMol SelectorMAngle::molecules(const QString &name, const PropertyMap &map) const
 {
     return this->molecules().molecules(name);
 }
 
-SelectorMol SelectorMAngle::molecules(const MolID &molid) const
+SelectorMol SelectorMAngle::molecules(const MolID &molid, const PropertyMap &map) const
 {
     return this->molecules().molecules(molid);
 }
 
-Atom SelectorMAngle::atom(int i) const
+Atom SelectorMAngle::atom(int i, const PropertyMap &map) const
 {
-    return this->atoms()(i);
+    return this->atoms().atom(i, map);
 }
 
-Atom SelectorMAngle::atom(const QString &name) const
+Atom SelectorMAngle::atom(const QString &name, const PropertyMap &map) const
 {
-    return this->atoms()(name);
+    return this->atoms().atom(name, map);
 }
 
-Atom SelectorMAngle::atom(const AtomID &atomid) const
+Atom SelectorMAngle::atom(const AtomID &atomid, const PropertyMap &map) const
 {
-    return this->atoms()(atomid);
+    return this->atoms().atom(atomid, map);
 }
 
-Residue SelectorMAngle::residue(int i) const
+Residue SelectorMAngle::residue(int i, const PropertyMap &map) const
 {
-    return this->residues()(i);
+    return this->residues().residue(i, map);
 }
 
-Residue SelectorMAngle::residue(const QString &name) const
+Residue SelectorMAngle::residue(const QString &name, const PropertyMap &map) const
 {
-    return this->residues()(name);
+    return this->residues().residue(name, map);
 }
 
-Residue SelectorMAngle::residue(const ResID &resid) const
+Residue SelectorMAngle::residue(const ResID &resid, const PropertyMap &map) const
 {
-    return this->residues()(resid);
+    return this->residues().residue(resid, map);
 }
 
-Chain SelectorMAngle::chain(int i) const
+Chain SelectorMAngle::chain(int i, const PropertyMap &map) const
 {
-    return this->chains()(i);
+    return this->chains().chain(i, map);
 }
 
-Chain SelectorMAngle::chain(const QString &name) const
+Chain SelectorMAngle::chain(const QString &name, const PropertyMap &map) const
 {
-    return this->chains()(name);
+    return this->chains().chain(name, map);
 }
 
-Chain SelectorMAngle::chain(const ChainID &chainid) const
+Chain SelectorMAngle::chain(const ChainID &chainid, const PropertyMap &map) const
 {
-    return this->chains()(chainid);
+    return this->chains().chain(chainid, map);
 }
 
-Segment SelectorMAngle::segment(int i) const
+Segment SelectorMAngle::segment(int i, const PropertyMap &map) const
 {
-    return this->segments()(i);
+    return this->segments().segment(i, map);
 }
 
-Segment SelectorMAngle::segment(const QString &name) const
+Segment SelectorMAngle::segment(const QString &name, const PropertyMap &map) const
 {
-    return this->segments()(name);
+    return this->segments().segment(name, map);
 }
 
-Segment SelectorMAngle::segment(const SegID &segid) const
+Segment SelectorMAngle::segment(const SegID &segid, const PropertyMap &map) const
 {
-    return this->segments()(segid);
+    return this->segments().segment(segid, map);
 }
 
-CutGroup SelectorMAngle::cutGroup(int i) const
+CutGroup SelectorMAngle::cutGroup(int i, const PropertyMap &map) const
 {
-    return this->cutGroups()(i);
+    return this->cutGroups().cutGroup(i, map);
 }
 
-CutGroup SelectorMAngle::cutGroup(const QString &name) const
+CutGroup SelectorMAngle::cutGroup(const QString &name, const PropertyMap &map) const
 {
-    return this->cutGroups()(name);
+    return this->cutGroups().cutGroup(name, map);
 }
 
-CutGroup SelectorMAngle::cutGroup(const CGID &cgid) const
+CutGroup SelectorMAngle::cutGroup(const CGID &cgid, const PropertyMap &map) const
 {
-    return this->cutGroups()(cgid);
+    return this->cutGroups().cutGroup(cgid, map);
 }
 
 SelectorM<Atom> SelectorMAngle::atoms() const
@@ -680,29 +680,29 @@ SelectorM<Atom> SelectorMAngle::atoms() const
     return SelectorM<Atom>(ret);
 }
 
-SelectorM<Atom> SelectorMAngle::atoms(int i) const
+SelectorM<Atom> SelectorMAngle::atoms(int i, const PropertyMap &map) const
 {
-    return this->atoms().atoms(i);
+    return this->atoms().atoms(i, map);
 }
 
-SelectorM<Atom> SelectorMAngle::atoms(const SireBase::Slice &slice) const
+SelectorM<Atom> SelectorMAngle::atoms(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->atoms().atoms(slice);
+    return this->atoms().atoms(slice, map);
 }
 
-SelectorM<Atom> SelectorMAngle::atoms(const QList<qint64> &idxs) const
+SelectorM<Atom> SelectorMAngle::atoms(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->atoms().atoms(idxs);
+    return this->atoms().atoms(idxs, map);
 }
 
-SelectorM<Atom> SelectorMAngle::atoms(const QString &name) const
+SelectorM<Atom> SelectorMAngle::atoms(const QString &name, const PropertyMap &map) const
 {
-    return this->atoms().atoms(name);
+    return this->atoms().atoms(name, map);
 }
 
-SelectorM<Atom> SelectorMAngle::atoms(const AtomID &atomid) const
+SelectorM<Atom> SelectorMAngle::atoms(const AtomID &atomid, const PropertyMap &map) const
 {
-    return this->atoms().atoms(atomid);
+    return this->atoms().atoms(atomid, map);
 }
 
 SelectorM<Residue> SelectorMAngle::residues() const
@@ -717,29 +717,29 @@ SelectorM<Residue> SelectorMAngle::residues() const
     return SelectorM<Residue>(ret);
 }
 
-SelectorM<Residue> SelectorMAngle::residues(int i) const
+SelectorM<Residue> SelectorMAngle::residues(int i, const PropertyMap &map) const
 {
-    return this->residues().residues(i);
+    return this->residues().residues(i, map);
 }
 
-SelectorM<Residue> SelectorMAngle::residues(const SireBase::Slice &slice) const
+SelectorM<Residue> SelectorMAngle::residues(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->residues().residues(slice);
+    return this->residues().residues(slice, map);
 }
 
-SelectorM<Residue> SelectorMAngle::residues(const QList<qint64> &idxs) const
+SelectorM<Residue> SelectorMAngle::residues(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->residues().residues(idxs);
+    return this->residues().residues(idxs, map);
 }
 
-SelectorM<Residue> SelectorMAngle::residues(const QString &name) const
+SelectorM<Residue> SelectorMAngle::residues(const QString &name, const PropertyMap &map) const
 {
-    return this->residues().residues(name);
+    return this->residues().residues(name, map);
 }
 
-SelectorM<Residue> SelectorMAngle::residues(const ResID &resid) const
+SelectorM<Residue> SelectorMAngle::residues(const ResID &resid, const PropertyMap &map) const
 {
-    return this->residues().residues(resid);
+    return this->residues().residues(resid, map);
 }
 
 SelectorM<Chain> SelectorMAngle::chains() const
@@ -754,29 +754,29 @@ SelectorM<Chain> SelectorMAngle::chains() const
     return SelectorM<Chain>(ret);
 }
 
-SelectorM<Chain> SelectorMAngle::chains(int i) const
+SelectorM<Chain> SelectorMAngle::chains(int i, const PropertyMap &map) const
 {
-    return this->chains().chains(i);
+    return this->chains().chains(i, map);
 }
 
-SelectorM<Chain> SelectorMAngle::chains(const SireBase::Slice &slice) const
+SelectorM<Chain> SelectorMAngle::chains(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->chains().chains(slice);
+    return this->chains().chains(slice, map);
 }
 
-SelectorM<Chain> SelectorMAngle::chains(const QList<qint64> &idxs) const
+SelectorM<Chain> SelectorMAngle::chains(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->chains().chains(idxs);
+    return this->chains().chains(idxs, map);
 }
 
-SelectorM<Chain> SelectorMAngle::chains(const QString &name) const
+SelectorM<Chain> SelectorMAngle::chains(const QString &name, const PropertyMap &map) const
 {
-    return this->chains().chains(name);
+    return this->chains().chains(name, map);
 }
 
-SelectorM<Chain> SelectorMAngle::chains(const ChainID &chainid) const
+SelectorM<Chain> SelectorMAngle::chains(const ChainID &chainid, const PropertyMap &map) const
 {
-    return this->chains().chains(chainid);
+    return this->chains().chains(chainid, map);
 }
 
 SelectorM<Segment> SelectorMAngle::segments() const
@@ -791,29 +791,29 @@ SelectorM<Segment> SelectorMAngle::segments() const
     return SelectorM<Segment>(ret);
 }
 
-SelectorM<Segment> SelectorMAngle::segments(int i) const
+SelectorM<Segment> SelectorMAngle::segments(int i, const PropertyMap &map) const
 {
-    return this->segments().segments(i);
+    return this->segments().segments(i, map);
 }
 
-SelectorM<Segment> SelectorMAngle::segments(const SireBase::Slice &slice) const
+SelectorM<Segment> SelectorMAngle::segments(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->segments().segments(slice);
+    return this->segments().segments(slice, map);
 }
 
-SelectorM<Segment> SelectorMAngle::segments(const QList<qint64> &idxs) const
+SelectorM<Segment> SelectorMAngle::segments(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->segments().segments(idxs);
+    return this->segments().segments(idxs, map);
 }
 
-SelectorM<Segment> SelectorMAngle::segments(const QString &name) const
+SelectorM<Segment> SelectorMAngle::segments(const QString &name, const PropertyMap &map) const
 {
-    return this->segments().segments(name);
+    return this->segments().segments(name, map);
 }
 
-SelectorM<Segment> SelectorMAngle::segments(const SegID &segid) const
+SelectorM<Segment> SelectorMAngle::segments(const SegID &segid, const PropertyMap &map) const
 {
-    return this->segments().segments(segid);
+    return this->segments().segments(segid, map);
 }
 
 SelectorM<CutGroup> SelectorMAngle::cutGroups() const
@@ -828,34 +828,42 @@ SelectorM<CutGroup> SelectorMAngle::cutGroups() const
     return SelectorM<CutGroup>(ret);
 }
 
-SelectorM<CutGroup> SelectorMAngle::cutGroups(int i) const
+SelectorM<CutGroup> SelectorMAngle::cutGroups(int i, const PropertyMap &map) const
 {
-    return this->cutGroups().cutGroups(i);
+    return this->cutGroups().cutGroups(i, map);
 }
 
-SelectorM<CutGroup> SelectorMAngle::cutGroups(const SireBase::Slice &slice) const
+SelectorM<CutGroup> SelectorMAngle::cutGroups(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->cutGroups().cutGroups(slice);
+    return this->cutGroups().cutGroups(slice, map);
 }
 
-SelectorM<CutGroup> SelectorMAngle::cutGroups(const QList<qint64> &idxs) const
+SelectorM<CutGroup> SelectorMAngle::cutGroups(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->cutGroups().cutGroups(idxs);
+    return this->cutGroups().cutGroups(idxs, map);
 }
 
-SelectorM<CutGroup> SelectorMAngle::cutGroups(const QString &name) const
+SelectorM<CutGroup> SelectorMAngle::cutGroups(const QString &name, const PropertyMap &map) const
 {
-    return this->cutGroups().cutGroups(name);
+    return this->cutGroups().cutGroups(name, map);
 }
 
-SelectorM<CutGroup> SelectorMAngle::cutGroups(const CGID &cgid) const
+SelectorM<CutGroup> SelectorMAngle::cutGroups(const CGID &cgid, const PropertyMap &map) const
 {
-    return this->cutGroups().cutGroups(cgid);
+    return this->cutGroups().cutGroups(cgid, map);
 }
 
 SelectResult SelectorMAngle::search(const QString &search_string) const
 {
-    return this->toSelectResult().search(search_string);
+    Select search(search_string);
+    return search(this->toSelectResult());
+}
+
+SelectResult SelectorMAngle::search(const QString &search_string,
+                                    const PropertyMap &map) const
+{
+    Select search(search_string);
+    return search(this->toSelectResult(), map);
 }
 
 QList<AngleID> SelectorMAngle::IDs() const

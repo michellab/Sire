@@ -52,8 +52,8 @@ def create_forcefield(*args, map=None, **kwargs):
         except Exception:
             new_kwargs[key] = value
 
-    if map is None:
-        map = {}
+    from ..base import create_map
+    map = create_map(map)
 
     new_kwargs["map"] = map
 

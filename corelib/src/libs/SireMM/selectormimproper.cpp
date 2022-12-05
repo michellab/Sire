@@ -580,19 +580,19 @@ SelectResult SelectorMImproper::toSelectResult() const
     return SelectResult(r);
 }
 
-Molecule SelectorMImproper::molecule(int i) const
+Molecule SelectorMImproper::molecule(int i, const PropertyMap &map) const
 {
-    return this->molecules().molecule(i);
+    return this->molecules().molecule(i, map);
 }
 
-Molecule SelectorMImproper::molecule(const QString &name) const
+Molecule SelectorMImproper::molecule(const QString &name, const PropertyMap &map) const
 {
-    return this->molecules().molecule(name);
+    return this->molecules().molecule(name, map);
 }
 
-Molecule SelectorMImproper::molecule(const MolID &molid)
+Molecule SelectorMImproper::molecule(const MolID &molid, const PropertyMap &map)
 {
-    return this->molecules().molecule(molid);
+    return this->molecules().molecule(molid, map);
 }
 
 SelectorMol SelectorMImproper::molecules() const
@@ -607,104 +607,104 @@ SelectorMol SelectorMImproper::molecules() const
     return SelectorMol(mols);
 }
 
-SelectorMol SelectorMImproper::molecules(int i) const
+SelectorMol SelectorMImproper::molecules(int i, const PropertyMap &map) const
 {
-    return this->molecules().molecules(i);
+    return this->molecules().molecules(i, map);
 }
 
-SelectorMol SelectorMImproper::molecules(const SireBase::Slice &slice) const
+SelectorMol SelectorMImproper::molecules(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->molecules().molecules(slice);
+    return this->molecules().molecules(slice, map);
 }
 
-SelectorMol SelectorMImproper::molecules(const QList<qint64> &idxs) const
+SelectorMol SelectorMImproper::molecules(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->molecules().molecules(idxs);
+    return this->molecules().molecules(idxs, map);
 }
 
-SelectorMol SelectorMImproper::molecules(const QString &name) const
+SelectorMol SelectorMImproper::molecules(const QString &name, const PropertyMap &map) const
 {
-    return this->molecules().molecules(name);
+    return this->molecules().molecules(name, map);
 }
 
-SelectorMol SelectorMImproper::molecules(const MolID &molid) const
+SelectorMol SelectorMImproper::molecules(const MolID &molid, const PropertyMap &map) const
 {
-    return this->molecules().molecules(molid);
+    return this->molecules().molecules(molid, map);
 }
 
-Atom SelectorMImproper::atom(int i) const
+Atom SelectorMImproper::atom(int i, const PropertyMap &map) const
 {
-    return this->atoms()(i);
+    return this->atoms().atom(i, map);
 }
 
-Atom SelectorMImproper::atom(const QString &name) const
+Atom SelectorMImproper::atom(const QString &name, const PropertyMap &map) const
 {
-    return this->atoms()(name);
+    return this->atoms().atom(name, map);
 }
 
-Atom SelectorMImproper::atom(const AtomID &atomid) const
+Atom SelectorMImproper::atom(const AtomID &atomid, const PropertyMap &map) const
 {
-    return this->atoms()(atomid);
+    return this->atoms().atom(atomid, map);
 }
 
-Residue SelectorMImproper::residue(int i) const
+Residue SelectorMImproper::residue(int i, const PropertyMap &map) const
 {
-    return this->residues()(i);
+    return this->residues().residue(i, map);
 }
 
-Residue SelectorMImproper::residue(const QString &name) const
+Residue SelectorMImproper::residue(const QString &name, const PropertyMap &map) const
 {
-    return this->residues()(name);
+    return this->residues().residue(name, map);
 }
 
-Residue SelectorMImproper::residue(const ResID &resid) const
+Residue SelectorMImproper::residue(const ResID &resid, const PropertyMap &map) const
 {
-    return this->residues()(resid);
+    return this->residues().residue(resid, map);
 }
 
-Chain SelectorMImproper::chain(int i) const
+Chain SelectorMImproper::chain(int i, const PropertyMap &map) const
 {
-    return this->chains()(i);
+    return this->chains().chain(i, map);
 }
 
-Chain SelectorMImproper::chain(const QString &name) const
+Chain SelectorMImproper::chain(const QString &name, const PropertyMap &map) const
 {
-    return this->chains()(name);
+    return this->chains().chain(name, map);
 }
 
-Chain SelectorMImproper::chain(const ChainID &chainid) const
+Chain SelectorMImproper::chain(const ChainID &chainid, const PropertyMap &map) const
 {
-    return this->chains()(chainid);
+    return this->chains().chain(chainid, map);
 }
 
-Segment SelectorMImproper::segment(int i) const
+Segment SelectorMImproper::segment(int i, const PropertyMap &map) const
 {
-    return this->segments()(i);
+    return this->segments().segment(i, map);
 }
 
-Segment SelectorMImproper::segment(const QString &name) const
+Segment SelectorMImproper::segment(const QString &name, const PropertyMap &map) const
 {
-    return this->segments()(name);
+    return this->segments().segment(name, map);
 }
 
-Segment SelectorMImproper::segment(const SegID &segid) const
+Segment SelectorMImproper::segment(const SegID &segid, const PropertyMap &map) const
 {
-    return this->segments()(segid);
+    return this->segments().segment(segid, map);
 }
 
-CutGroup SelectorMImproper::cutGroup(int i) const
+CutGroup SelectorMImproper::cutGroup(int i, const PropertyMap &map) const
 {
-    return this->cutGroups()(i);
+    return this->cutGroups().cutGroup(i, map);
 }
 
-CutGroup SelectorMImproper::cutGroup(const QString &name) const
+CutGroup SelectorMImproper::cutGroup(const QString &name, const PropertyMap &map) const
 {
-    return this->cutGroups()(name);
+    return this->cutGroups().cutGroup(name, map);
 }
 
-CutGroup SelectorMImproper::cutGroup(const CGID &cgid) const
+CutGroup SelectorMImproper::cutGroup(const CGID &cgid, const PropertyMap &map) const
 {
-    return this->cutGroups()(cgid);
+    return this->cutGroups().cutGroup(cgid, map);
 }
 
 SelectorM<Atom> SelectorMImproper::atoms() const
@@ -719,29 +719,29 @@ SelectorM<Atom> SelectorMImproper::atoms() const
     return SelectorM<Atom>(ret);
 }
 
-SelectorM<Atom> SelectorMImproper::atoms(int i) const
+SelectorM<Atom> SelectorMImproper::atoms(int i, const PropertyMap &map) const
 {
-    return this->atoms().atoms(i);
+    return this->atoms().atoms(i, map);
 }
 
-SelectorM<Atom> SelectorMImproper::atoms(const SireBase::Slice &slice) const
+SelectorM<Atom> SelectorMImproper::atoms(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->atoms().atoms(slice);
+    return this->atoms().atoms(slice, map);
 }
 
-SelectorM<Atom> SelectorMImproper::atoms(const QList<qint64> &idxs) const
+SelectorM<Atom> SelectorMImproper::atoms(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->atoms().atoms(idxs);
+    return this->atoms().atoms(idxs, map);
 }
 
-SelectorM<Atom> SelectorMImproper::atoms(const QString &name) const
+SelectorM<Atom> SelectorMImproper::atoms(const QString &name, const PropertyMap &map) const
 {
-    return this->atoms().atoms(name);
+    return this->atoms().atoms(name, map);
 }
 
-SelectorM<Atom> SelectorMImproper::atoms(const AtomID &atomid) const
+SelectorM<Atom> SelectorMImproper::atoms(const AtomID &atomid, const PropertyMap &map) const
 {
-    return this->atoms().atoms(atomid);
+    return this->atoms().atoms(atomid, map);
 }
 
 SelectorM<Residue> SelectorMImproper::residues() const
@@ -756,29 +756,29 @@ SelectorM<Residue> SelectorMImproper::residues() const
     return SelectorM<Residue>(ret);
 }
 
-SelectorM<Residue> SelectorMImproper::residues(int i) const
+SelectorM<Residue> SelectorMImproper::residues(int i, const PropertyMap &map) const
 {
-    return this->residues().residues(i);
+    return this->residues().residues(i, map);
 }
 
-SelectorM<Residue> SelectorMImproper::residues(const SireBase::Slice &slice) const
+SelectorM<Residue> SelectorMImproper::residues(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->residues().residues(slice);
+    return this->residues().residues(slice, map);
 }
 
-SelectorM<Residue> SelectorMImproper::residues(const QList<qint64> &idxs) const
+SelectorM<Residue> SelectorMImproper::residues(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->residues().residues(idxs);
+    return this->residues().residues(idxs, map);
 }
 
-SelectorM<Residue> SelectorMImproper::residues(const QString &name) const
+SelectorM<Residue> SelectorMImproper::residues(const QString &name, const PropertyMap &map) const
 {
-    return this->residues().residues(name);
+    return this->residues().residues(name, map);
 }
 
-SelectorM<Residue> SelectorMImproper::residues(const ResID &resid) const
+SelectorM<Residue> SelectorMImproper::residues(const ResID &resid, const PropertyMap &map) const
 {
-    return this->residues().residues(resid);
+    return this->residues().residues(resid, map);
 }
 
 SelectorM<Chain> SelectorMImproper::chains() const
@@ -793,29 +793,29 @@ SelectorM<Chain> SelectorMImproper::chains() const
     return SelectorM<Chain>(ret);
 }
 
-SelectorM<Chain> SelectorMImproper::chains(int i) const
+SelectorM<Chain> SelectorMImproper::chains(int i, const PropertyMap &map) const
 {
-    return this->chains().chains(i);
+    return this->chains().chains(i, map);
 }
 
-SelectorM<Chain> SelectorMImproper::chains(const SireBase::Slice &slice) const
+SelectorM<Chain> SelectorMImproper::chains(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->chains().chains(slice);
+    return this->chains().chains(slice, map);
 }
 
-SelectorM<Chain> SelectorMImproper::chains(const QList<qint64> &idxs) const
+SelectorM<Chain> SelectorMImproper::chains(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->chains().chains(idxs);
+    return this->chains().chains(idxs, map);
 }
 
-SelectorM<Chain> SelectorMImproper::chains(const QString &name) const
+SelectorM<Chain> SelectorMImproper::chains(const QString &name, const PropertyMap &map) const
 {
-    return this->chains().chains(name);
+    return this->chains().chains(name, map);
 }
 
-SelectorM<Chain> SelectorMImproper::chains(const ChainID &chainid) const
+SelectorM<Chain> SelectorMImproper::chains(const ChainID &chainid, const PropertyMap &map) const
 {
-    return this->chains().chains(chainid);
+    return this->chains().chains(chainid, map);
 }
 
 SelectorM<Segment> SelectorMImproper::segments() const
@@ -830,29 +830,29 @@ SelectorM<Segment> SelectorMImproper::segments() const
     return SelectorM<Segment>(ret);
 }
 
-SelectorM<Segment> SelectorMImproper::segments(int i) const
+SelectorM<Segment> SelectorMImproper::segments(int i, const PropertyMap &map) const
 {
-    return this->segments().segments(i);
+    return this->segments().segments(i, map);
 }
 
-SelectorM<Segment> SelectorMImproper::segments(const SireBase::Slice &slice) const
+SelectorM<Segment> SelectorMImproper::segments(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->segments().segments(slice);
+    return this->segments().segments(slice, map);
 }
 
-SelectorM<Segment> SelectorMImproper::segments(const QList<qint64> &idxs) const
+SelectorM<Segment> SelectorMImproper::segments(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->segments().segments(idxs);
+    return this->segments().segments(idxs, map);
 }
 
-SelectorM<Segment> SelectorMImproper::segments(const QString &name) const
+SelectorM<Segment> SelectorMImproper::segments(const QString &name, const PropertyMap &map) const
 {
-    return this->segments().segments(name);
+    return this->segments().segments(name, map);
 }
 
-SelectorM<Segment> SelectorMImproper::segments(const SegID &segid) const
+SelectorM<Segment> SelectorMImproper::segments(const SegID &segid, const PropertyMap &map) const
 {
-    return this->segments().segments(segid);
+    return this->segments().segments(segid, map);
 }
 
 SelectorM<CutGroup> SelectorMImproper::cutGroups() const
@@ -867,34 +867,42 @@ SelectorM<CutGroup> SelectorMImproper::cutGroups() const
     return SelectorM<CutGroup>(ret);
 }
 
-SelectorM<CutGroup> SelectorMImproper::cutGroups(int i) const
+SelectorM<CutGroup> SelectorMImproper::cutGroups(int i, const PropertyMap &map) const
 {
-    return this->cutGroups().cutGroups(i);
+    return this->cutGroups().cutGroups(i, map);
 }
 
-SelectorM<CutGroup> SelectorMImproper::cutGroups(const SireBase::Slice &slice) const
+SelectorM<CutGroup> SelectorMImproper::cutGroups(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->cutGroups().cutGroups(slice);
+    return this->cutGroups().cutGroups(slice, map);
 }
 
-SelectorM<CutGroup> SelectorMImproper::cutGroups(const QList<qint64> &idxs) const
+SelectorM<CutGroup> SelectorMImproper::cutGroups(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->cutGroups().cutGroups(idxs);
+    return this->cutGroups().cutGroups(idxs, map);
 }
 
-SelectorM<CutGroup> SelectorMImproper::cutGroups(const QString &name) const
+SelectorM<CutGroup> SelectorMImproper::cutGroups(const QString &name, const PropertyMap &map) const
 {
-    return this->cutGroups().cutGroups(name);
+    return this->cutGroups().cutGroups(name, map);
 }
 
-SelectorM<CutGroup> SelectorMImproper::cutGroups(const CGID &cgid) const
+SelectorM<CutGroup> SelectorMImproper::cutGroups(const CGID &cgid, const PropertyMap &map) const
 {
-    return this->cutGroups().cutGroups(cgid);
+    return this->cutGroups().cutGroups(cgid, map);
 }
 
 SelectResult SelectorMImproper::search(const QString &search_string) const
 {
-    return this->toSelectResult().search(search_string);
+    Select search(search_string);
+    return search(this->toSelectResult());
+}
+
+SelectResult SelectorMImproper::search(const QString &search_string,
+                                       const PropertyMap &map) const
+{
+    Select search(search_string);
+    return search(this->toSelectResult(), map);
 }
 
 QList<ImproperID> SelectorMImproper::IDs() const

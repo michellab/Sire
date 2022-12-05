@@ -580,19 +580,19 @@ SelectResult SelectorMDihedral::toSelectResult() const
     return SelectResult(r);
 }
 
-Molecule SelectorMDihedral::molecule(int i) const
+Molecule SelectorMDihedral::molecule(int i, const PropertyMap &map) const
 {
-    return this->molecules().molecule(i);
+    return this->molecules().molecule(i, map);
 }
 
-Molecule SelectorMDihedral::molecule(const QString &name) const
+Molecule SelectorMDihedral::molecule(const QString &name, const PropertyMap &map) const
 {
-    return this->molecules().molecule(name);
+    return this->molecules().molecule(name, map);
 }
 
-Molecule SelectorMDihedral::molecule(const MolID &molid)
+Molecule SelectorMDihedral::molecule(const MolID &molid, const PropertyMap &map)
 {
-    return this->molecules().molecule(molid);
+    return this->molecules().molecule(molid, map);
 }
 
 SelectorMol SelectorMDihedral::molecules() const
@@ -607,104 +607,104 @@ SelectorMol SelectorMDihedral::molecules() const
     return SelectorMol(mols);
 }
 
-SelectorMol SelectorMDihedral::molecules(int i) const
+SelectorMol SelectorMDihedral::molecules(int i, const PropertyMap &map) const
 {
-    return this->molecules().molecules(i);
+    return this->molecules().molecules(i, map);
 }
 
-SelectorMol SelectorMDihedral::molecules(const SireBase::Slice &slice) const
+SelectorMol SelectorMDihedral::molecules(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->molecules().molecules(slice);
+    return this->molecules().molecules(slice, map);
 }
 
-SelectorMol SelectorMDihedral::molecules(const QList<qint64> &idxs) const
+SelectorMol SelectorMDihedral::molecules(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->molecules().molecules(idxs);
+    return this->molecules().molecules(idxs, map);
 }
 
-SelectorMol SelectorMDihedral::molecules(const QString &name) const
+SelectorMol SelectorMDihedral::molecules(const QString &name, const PropertyMap &map) const
 {
-    return this->molecules().molecules(name);
+    return this->molecules().molecules(name, map);
 }
 
-SelectorMol SelectorMDihedral::molecules(const MolID &molid) const
+SelectorMol SelectorMDihedral::molecules(const MolID &molid, const PropertyMap &map) const
 {
-    return this->molecules().molecules(molid);
+    return this->molecules().molecules(molid, map);
 }
 
-Atom SelectorMDihedral::atom(int i) const
+Atom SelectorMDihedral::atom(int i, const PropertyMap &map) const
 {
-    return this->atoms()(i);
+    return this->atoms().atom(i, map);
 }
 
-Atom SelectorMDihedral::atom(const QString &name) const
+Atom SelectorMDihedral::atom(const QString &name, const PropertyMap &map) const
 {
-    return this->atoms()(name);
+    return this->atoms().atom(name, map);
 }
 
-Atom SelectorMDihedral::atom(const AtomID &atomid) const
+Atom SelectorMDihedral::atom(const AtomID &atomid, const PropertyMap &map) const
 {
-    return this->atoms()(atomid);
+    return this->atoms().atom(atomid, map);
 }
 
-Residue SelectorMDihedral::residue(int i) const
+Residue SelectorMDihedral::residue(int i, const PropertyMap &map) const
 {
-    return this->residues()(i);
+    return this->residues().residue(i, map);
 }
 
-Residue SelectorMDihedral::residue(const QString &name) const
+Residue SelectorMDihedral::residue(const QString &name, const PropertyMap &map) const
 {
-    return this->residues()(name);
+    return this->residues().residue(name, map);
 }
 
-Residue SelectorMDihedral::residue(const ResID &resid) const
+Residue SelectorMDihedral::residue(const ResID &resid, const PropertyMap &map) const
 {
-    return this->residues()(resid);
+    return this->residues().residue(resid, map);
 }
 
-Chain SelectorMDihedral::chain(int i) const
+Chain SelectorMDihedral::chain(int i, const PropertyMap &map) const
 {
-    return this->chains()(i);
+    return this->chains().chain(i, map);
 }
 
-Chain SelectorMDihedral::chain(const QString &name) const
+Chain SelectorMDihedral::chain(const QString &name, const PropertyMap &map) const
 {
-    return this->chains()(name);
+    return this->chains().chain(name, map);
 }
 
-Chain SelectorMDihedral::chain(const ChainID &chainid) const
+Chain SelectorMDihedral::chain(const ChainID &chainid, const PropertyMap &map) const
 {
-    return this->chains()(chainid);
+    return this->chains().chain(chainid, map);
 }
 
-Segment SelectorMDihedral::segment(int i) const
+Segment SelectorMDihedral::segment(int i, const PropertyMap &map) const
 {
-    return this->segments()(i);
+    return this->segments().segment(i, map);
 }
 
-Segment SelectorMDihedral::segment(const QString &name) const
+Segment SelectorMDihedral::segment(const QString &name, const PropertyMap &map) const
 {
-    return this->segments()(name);
+    return this->segments().segment(name, map);
 }
 
-Segment SelectorMDihedral::segment(const SegID &segid) const
+Segment SelectorMDihedral::segment(const SegID &segid, const PropertyMap &map) const
 {
-    return this->segments()(segid);
+    return this->segments().segment(segid, map);
 }
 
-CutGroup SelectorMDihedral::cutGroup(int i) const
+CutGroup SelectorMDihedral::cutGroup(int i, const PropertyMap &map) const
 {
-    return this->cutGroups()(i);
+    return this->cutGroups().cutGroup(i, map);
 }
 
-CutGroup SelectorMDihedral::cutGroup(const QString &name) const
+CutGroup SelectorMDihedral::cutGroup(const QString &name, const PropertyMap &map) const
 {
-    return this->cutGroups()(name);
+    return this->cutGroups().cutGroup(name, map);
 }
 
-CutGroup SelectorMDihedral::cutGroup(const CGID &cgid) const
+CutGroup SelectorMDihedral::cutGroup(const CGID &cgid, const PropertyMap &map) const
 {
-    return this->cutGroups()(cgid);
+    return this->cutGroups().cutGroup(cgid, map);
 }
 
 SelectorM<Atom> SelectorMDihedral::atoms() const
@@ -719,29 +719,29 @@ SelectorM<Atom> SelectorMDihedral::atoms() const
     return SelectorM<Atom>(ret);
 }
 
-SelectorM<Atom> SelectorMDihedral::atoms(int i) const
+SelectorM<Atom> SelectorMDihedral::atoms(int i, const PropertyMap &map) const
 {
-    return this->atoms().atoms(i);
+    return this->atoms().atoms(i, map);
 }
 
-SelectorM<Atom> SelectorMDihedral::atoms(const SireBase::Slice &slice) const
+SelectorM<Atom> SelectorMDihedral::atoms(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->atoms().atoms(slice);
+    return this->atoms().atoms(slice, map);
 }
 
-SelectorM<Atom> SelectorMDihedral::atoms(const QList<qint64> &idxs) const
+SelectorM<Atom> SelectorMDihedral::atoms(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->atoms().atoms(idxs);
+    return this->atoms().atoms(idxs, map);
 }
 
-SelectorM<Atom> SelectorMDihedral::atoms(const QString &name) const
+SelectorM<Atom> SelectorMDihedral::atoms(const QString &name, const PropertyMap &map) const
 {
-    return this->atoms().atoms(name);
+    return this->atoms().atoms(name, map);
 }
 
-SelectorM<Atom> SelectorMDihedral::atoms(const AtomID &atomid) const
+SelectorM<Atom> SelectorMDihedral::atoms(const AtomID &atomid, const PropertyMap &map) const
 {
-    return this->atoms().atoms(atomid);
+    return this->atoms().atoms(atomid, map);
 }
 
 SelectorM<Residue> SelectorMDihedral::residues() const
@@ -756,29 +756,29 @@ SelectorM<Residue> SelectorMDihedral::residues() const
     return SelectorM<Residue>(ret);
 }
 
-SelectorM<Residue> SelectorMDihedral::residues(int i) const
+SelectorM<Residue> SelectorMDihedral::residues(int i, const PropertyMap &map) const
 {
-    return this->residues().residues(i);
+    return this->residues().residues(i, map);
 }
 
-SelectorM<Residue> SelectorMDihedral::residues(const SireBase::Slice &slice) const
+SelectorM<Residue> SelectorMDihedral::residues(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->residues().residues(slice);
+    return this->residues().residues(slice, map);
 }
 
-SelectorM<Residue> SelectorMDihedral::residues(const QList<qint64> &idxs) const
+SelectorM<Residue> SelectorMDihedral::residues(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->residues().residues(idxs);
+    return this->residues().residues(idxs, map);
 }
 
-SelectorM<Residue> SelectorMDihedral::residues(const QString &name) const
+SelectorM<Residue> SelectorMDihedral::residues(const QString &name, const PropertyMap &map) const
 {
-    return this->residues().residues(name);
+    return this->residues().residues(name, map);
 }
 
-SelectorM<Residue> SelectorMDihedral::residues(const ResID &resid) const
+SelectorM<Residue> SelectorMDihedral::residues(const ResID &resid, const PropertyMap &map) const
 {
-    return this->residues().residues(resid);
+    return this->residues().residues(resid, map);
 }
 
 SelectorM<Chain> SelectorMDihedral::chains() const
@@ -793,29 +793,29 @@ SelectorM<Chain> SelectorMDihedral::chains() const
     return SelectorM<Chain>(ret);
 }
 
-SelectorM<Chain> SelectorMDihedral::chains(int i) const
+SelectorM<Chain> SelectorMDihedral::chains(int i, const PropertyMap &map) const
 {
-    return this->chains().chains(i);
+    return this->chains().chains(i, map);
 }
 
-SelectorM<Chain> SelectorMDihedral::chains(const SireBase::Slice &slice) const
+SelectorM<Chain> SelectorMDihedral::chains(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->chains().chains(slice);
+    return this->chains().chains(slice, map);
 }
 
-SelectorM<Chain> SelectorMDihedral::chains(const QList<qint64> &idxs) const
+SelectorM<Chain> SelectorMDihedral::chains(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->chains().chains(idxs);
+    return this->chains().chains(idxs, map);
 }
 
-SelectorM<Chain> SelectorMDihedral::chains(const QString &name) const
+SelectorM<Chain> SelectorMDihedral::chains(const QString &name, const PropertyMap &map) const
 {
-    return this->chains().chains(name);
+    return this->chains().chains(name, map);
 }
 
-SelectorM<Chain> SelectorMDihedral::chains(const ChainID &chainid) const
+SelectorM<Chain> SelectorMDihedral::chains(const ChainID &chainid, const PropertyMap &map) const
 {
-    return this->chains().chains(chainid);
+    return this->chains().chains(chainid, map);
 }
 
 SelectorM<Segment> SelectorMDihedral::segments() const
@@ -830,29 +830,29 @@ SelectorM<Segment> SelectorMDihedral::segments() const
     return SelectorM<Segment>(ret);
 }
 
-SelectorM<Segment> SelectorMDihedral::segments(int i) const
+SelectorM<Segment> SelectorMDihedral::segments(int i, const PropertyMap &map) const
 {
-    return this->segments().segments(i);
+    return this->segments().segments(i, map);
 }
 
-SelectorM<Segment> SelectorMDihedral::segments(const SireBase::Slice &slice) const
+SelectorM<Segment> SelectorMDihedral::segments(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->segments().segments(slice);
+    return this->segments().segments(slice, map);
 }
 
-SelectorM<Segment> SelectorMDihedral::segments(const QList<qint64> &idxs) const
+SelectorM<Segment> SelectorMDihedral::segments(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->segments().segments(idxs);
+    return this->segments().segments(idxs, map);
 }
 
-SelectorM<Segment> SelectorMDihedral::segments(const QString &name) const
+SelectorM<Segment> SelectorMDihedral::segments(const QString &name, const PropertyMap &map) const
 {
-    return this->segments().segments(name);
+    return this->segments().segments(name, map);
 }
 
-SelectorM<Segment> SelectorMDihedral::segments(const SegID &segid) const
+SelectorM<Segment> SelectorMDihedral::segments(const SegID &segid, const PropertyMap &map) const
 {
-    return this->segments().segments(segid);
+    return this->segments().segments(segid, map);
 }
 
 SelectorM<CutGroup> SelectorMDihedral::cutGroups() const
@@ -867,34 +867,43 @@ SelectorM<CutGroup> SelectorMDihedral::cutGroups() const
     return SelectorM<CutGroup>(ret);
 }
 
-SelectorM<CutGroup> SelectorMDihedral::cutGroups(int i) const
+SelectorM<CutGroup> SelectorMDihedral::cutGroups(int i, const PropertyMap &map) const
 {
-    return this->cutGroups().cutGroups(i);
+    return this->cutGroups().cutGroups(i, map);
 }
 
-SelectorM<CutGroup> SelectorMDihedral::cutGroups(const SireBase::Slice &slice) const
+SelectorM<CutGroup> SelectorMDihedral::cutGroups(const SireBase::Slice &slice, const PropertyMap &map) const
 {
-    return this->cutGroups().cutGroups(slice);
+    return this->cutGroups().cutGroups(slice, map);
 }
 
-SelectorM<CutGroup> SelectorMDihedral::cutGroups(const QList<qint64> &idxs) const
+SelectorM<CutGroup> SelectorMDihedral::cutGroups(const QList<qint64> &idxs, const PropertyMap &map) const
 {
-    return this->cutGroups().cutGroups(idxs);
+    return this->cutGroups().cutGroups(idxs, map);
 }
 
-SelectorM<CutGroup> SelectorMDihedral::cutGroups(const QString &name) const
+SelectorM<CutGroup> SelectorMDihedral::cutGroups(const QString &name, const PropertyMap &map) const
 {
-    return this->cutGroups().cutGroups(name);
+    return this->cutGroups().cutGroups(name, map);
 }
 
-SelectorM<CutGroup> SelectorMDihedral::cutGroups(const CGID &cgid) const
+SelectorM<CutGroup> SelectorMDihedral::cutGroups(const CGID &cgid, const PropertyMap &map) const
 {
-    return this->cutGroups().cutGroups(cgid);
+    return this->cutGroups().cutGroups(cgid, map);
 }
+
 
 SelectResult SelectorMDihedral::search(const QString &search_string) const
 {
-    return this->toSelectResult().search(search_string);
+    Select search(search_string);
+    return search(this->toSelectResult());
+}
+
+SelectResult SelectorMDihedral::search(const QString &search_string,
+                                       const PropertyMap &map) const
+{
+    Select search(search_string);
+    return search(this->toSelectResult(), map);
 }
 
 QList<DihedralID> SelectorMDihedral::IDs() const

@@ -207,3 +207,9 @@ class System:
     def update(self, value):
         self._molecules = None
         self._system.update(value)
+
+    def apply(self, *args, **kwargs):
+        return self.molecules().apply(*args, **kwargs)
+
+    def apply_reduce(self, *args, **kwargs):
+        return self.molecules().apply_reduce(*args, **kwargs)

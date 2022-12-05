@@ -1683,7 +1683,17 @@ Atom MoleculeView::select(const AtomID &atomid, const PropertyMap &map) const
     search string */
 SelectResult MoleculeView::search(const QString &search_string) const
 {
-    return Select(search_string)(*this);
+    Select search(search_string);
+    return search(*this);
+}
+
+/** Return the result of searching this molecule using the passed
+    search string */
+SelectResult MoleculeView::search(const QString &search_string,
+                                  const PropertyMap &map) const
+{
+    Select search(search_string);
+    return search(*this, map);
 }
 
 /** Return the atoms from this view that match the ID 'atomid'

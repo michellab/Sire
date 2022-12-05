@@ -1273,6 +1273,19 @@ void register_MoleculeView_class(){
                 , "Return the result of searching this molecule using the passed\nsearch string" );
         
         }
+        { //::SireMol::MoleculeView::search
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::MoleculeView::*search_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
+            search_function_type search_function_value( &::SireMol::MoleculeView::search );
+            
+            MoleculeView_exposer.def( 
+                "search"
+                , search_function_value
+                , ( bp::arg("search_string"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::MoleculeView::segment
         
             typedef ::SireMol::Segment ( ::SireMol::MoleculeView::*segment_function_type)( int,::SireBase::PropertyMap const & ) const;
