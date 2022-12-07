@@ -183,6 +183,48 @@ your preferred precedence using round brackets, e.g.
 use brackets to choose between ``(atomname CA or atomname C) and resname ALA``
 or ``atomname CA or (atomname C and resname ALA)``.
 
+Expansive (`with`) and Contractive (`in`) Searches
+--------------------------------------------------
+
+Expansive searches are those which return results that are
+at least the same size or larger than the original view being searched. For example, searching
+for the molecule from an atom view will give a molecule result. This
+is at least the same size (for single-atom molecules), but likely larger
+(for multi-atom molecules) than the searched atom.
+
+Contractive searches are those which return results that are
+at most the same size or smaller than the original view being searched.
+For example, searching for an atom from a molecule view will give an atom
+result. This is at least the same size (for single-atom molecules), but
+likely smaller (for multi-atom molecules) than the searched molecule.
+
+Whether a search is expansive or contractive depends on the relative
+size of the view being searched, and the view that is being returned
+as the result. This can be summarised as a table.
+
+TABLE OF EXPANSIVE AND CONTRACTIVE
+
+Another way to think of this is that contractive searches are looking
+inside a view, while expansive searches are looking outside a view
+(looking for results with the original searched view contained within).
+
+The ``in`` and ``with`` keywords enable you to be explicit about the
+contractive or expansive nature of a search.
+
+* ``view_type in X`` - perform a contractive search returning views of type ``view_type``
+  within the results of the search ``X``. Examples include; ``atoms in resname ALA``
+  (return all of the atom views in residues that have name ``ALA``);
+  ``residues in chainidx 0`` (return all of the residue views in the first
+  chain); and ``bonds in *`` (return all of the bonds in the current view).
+
+* ``view_type with X`` - perform an expansive search returning views of type ``view_type``
+  that contain the results of the search ``X``. Examples include;
+  ``residues with atomname CA`` (return all of the residues that contain
+  atoms called ``CA``); ``molecules with resname ALA``` (return all of the
+  molecules with residues called ``ALA``); and ``bonds with atomname H``
+
+  (return all of the bonds that contain at least one atom called ``H``)
+
 Match All Atoms, Residues, Chains etc.
 --------------------------------------
 
@@ -195,65 +237,35 @@ You can match everything, specifying the return view type using the
 * ``chains`` - return all of the chains in the searched object.
 * ``segments`` - return all of the segments in the searched object.
 * ``molecules`` - return all of the molecules in the searched object.
-* ``all`` or ``*`` - same as ``molecules``.
+* ``all`` or ``*`` - everything in the current view being searched.
 
-Note that these search terms are expansive, meaning that they expand
-the searched object to match the type of returned view. For example,
-``atom["molecules"]`` would expand the searched :class:`~sire.mol.Atom`
-view to the full :class:`~sire.mol.Molecule` that contained that atom.
+Whether these are expansive or contractive depends on the view that
+is searched, based on the same rules as for normal searches
+(e.g. searching for ``residues`` on an atoms view will be expansive,
+ as it returns all residues that contain those atoms, while searching
+ for ``residues`` on a molecule view will be contractive, as it searches
+ for all residues in that molecule)
 
-Using ``in`` or ``with`` to Choose Return View Type
-----------------------------------------------------
-
-You can choose the return view type of a search using ``with`` or ``in``.
-In most cases, they are both the same and act in the same way. The syntax is
-``view_type in X`` or ``view_type with X``, where ``view_type`` is
-the type of view you want returned, and ``X`` is any search.
-
-For example, ``atoms in resname ALA`` would convert the return view
-type of ``resname ALA`` from :class:`~sire.mol.Residue` to :class:`~sire.mol.Atom`,
-i.e. returning the atoms in residues called ``ALA``.
-
-Similarly, ``residues with atomname CA`` converts the return view
-type of ``atomname CA`` from :class:`~sire.mol.Atom` to :class:`~sire.mol.Residue`,
-i.e. returning the residue that contain atoms called ``CA``.
-
-Note that ``with`` makes more (english) grammatical sense when the
-view type gets larger, while ``in`` makes more sense when the view type
-gets smaller.
-
-However, in these cases, they are identical in the sire search grammar, so
-both ``residues in atomname CA`` and ``atoms with resname ALA`` are both
-valid and equivalent to ``residues with atomname CA`` or
-``atoms in resname ALA``.
-
-Advanced ``with`` and ``in`` searches
+Advanced ``in`` and ``with`` Searches
 -------------------------------------
 
 ``with`` and ``in`` can be used for more than just ``view_type in X`` searches.
 The general syntax is ``X in Y`` or ``X with Y``.
 
 * ``X in Y`` - search for views that match ``X`` in the results of the views
-  that match ``Y``.
+  that match ``Y``. An example would be ``atomname CA in resname ALA`` (find
+  atoms called ``CA`` in residues called ``ALA``)
 * ``X with Y`` - search for views that match ``Y`` in the results of the views
-  that match ``X``.
-
-For example, ``atomname CA in resname ALA`` will search for all atoms that
-have name ``CA`` that are contained within the residues that have name ``ALA``.
-
-Similarly, ``resname ALA with atomname CA`` will search for all residues
-that have name ``ALA`` from all of the atoms that have name ``CA``.
+  that match ``X``. An example would be ``resname ALA with atomname CA``
+  (find residues called ``ALA`` in all of the residues that contain atoms
+  called ``CA``)
 
 Understanding this, you can see that ``residues with atomname CA`` is a search
 that finds all residues that are from the results of searching for atoms
 with name ``CA``. Similarly ``atoms in resname ALA`` is searching for all atoms
 that are from the results of searching for residues with name ``ALA``.
-
-*NEED TO FIX AND CLEAN UP THE WITH/IN SYNTAX. I GET ILLOGICAL AND CONFUSING*
-*RESULTS FOR ``atomname CA in resname ALA`` and ``atomname CA with resname ALA``*
-*THAT DOESN'T MATCH ``atoms in resname ALA`` and ``atoms with resname ALA``*
-*BEHAVIOUR. THIS ALSO RELATES TO SLIGHTLY STRANGE EXPANSION BEHAVIOUR OF*
-*molecules, all etc.*
+Similarly ``bonds in *`` means search for all bonds that are in the
+current view.
 
 Searching for Bonds using ``in``, ``with``, ``from`` and ``to``
 ---------------------------------------------------------------
@@ -263,6 +275,19 @@ between (potentially) two views. At the most basic, they always
 involve connecting two atoms. But this bond could be entirely within
 a residue, or between pairs of residues (and similarly for chains
 and segments).
+
+* ``bonds in X`` - a contractive search that finds all bonds that
+  are contained wholly within the result of searching for ``X``,
+  e.g. ``bonds in residx 0`` returns all bonds that are wholly
+  within (both atoms within) the first residue.
+
+* ``bonds with X`` - an expansive search that finds all bonds that
+  contains the result of ``X``. As the only view smaller than a bond
+  is an atom, ``X`` can only be a search that returns atom views.
+  For example, ``bonds with atomname CA`` would return all bonds
+  where at least one of the atoms in the bond was called ``CA``.
+
+It would be really useful to do more. ``bonds to X``, ``bonds from X to Y``.
 
 This subtlety creates a difference between ``in`` and ``with``.
 

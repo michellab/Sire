@@ -2,8 +2,62 @@
 import pytest
 
 
+def test_search_property_map(ala_mols):
+    """Tests that searches that involve properties can be mapped to
+       different properties by passing in a property map
+    """
+    mols = ala_mols.clone()
+
+    mol = mols[0]
+
+    cursor = mol.cursor()
+
+    c = cursor["connectivity"]
+    c = c.edit().disconnect_all().commit()
+    cursor["connectivity2"] = c
+
+    cursor["charge2"] = cursor["charge"]
+    cursor["mass2"] = cursor["mass"]
+
+    for i in range(0, len(cursor)):
+        cursor[i]["charge2"] *= 1000
+        cursor[i]["mass2"] *= 1000
+
+    mol = cursor.commit()
+
+    with pytest.raises(KeyError):
+        mol["atom charge > 10"]
+
+    assert mol[("atom charge > 10", {"charge":"charge2"})] == mol["atom charge > 0.01"]
+    assert mol[("atom charge < 10", {"charge":"charge2"})] == mol["atom charge < 0.01"]
+
+    assert mol[("atom mass > 10", {"mass":"mass2"})] == mol["atom mass > 0.01"]
+
+    with pytest.raises(KeyError):
+        mol[("bonds to element C", {"connectivity":"connectivity2"})]
+
+    assert len(mol["bonds to element C"]) > 0
+
+    with pytest.raises(KeyError):
+        mols["property kitten"]
+
+    assert mols[("property kitten", {"kitten":"charge"})] == mols.molecules()
+
+    cursor[5]["find_atom"] = True
+
+    mol = cursor.commit()
+    mols.update(mol)
+
+    assert mols["atom property find_atom"] == mol[5]
+
+    with pytest.raises(KeyError):
+        mols["atom property find_mapped"]
+
+    assert mols[("atom property find_mapped", {"find_mapped": "find_atom"})] == mol[5]
+
+
 def test_search_property_exists(ala_mols):
-    mols = ala_mols
+    mols = ala_mols.clone()
 
     assert mols["property bond"] == mols.molecules()
 

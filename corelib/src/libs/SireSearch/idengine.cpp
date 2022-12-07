@@ -3139,6 +3139,10 @@ SelectResult IDAllEngine::select(const SelectResult &mols,
         return mols.molecules();
     case AST::BOND:
         return _get_bonds(mols, map);
+    case AST::VIEW:
+        // just return the current view - this is everything
+        // in the current view
+        return mols;
     default:
         return mols.molecules();
     }

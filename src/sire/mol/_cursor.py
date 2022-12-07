@@ -272,6 +272,9 @@ class Cursor:
         else:
             return self._view.has_property(key)
 
+    def __len__(self):
+        return len(self.view())
+
     def __call__(self, key):
         """Return a cursor that represents the sub-view of this
            cursor, indexed by key. For example,

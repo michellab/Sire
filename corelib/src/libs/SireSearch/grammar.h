@@ -127,8 +127,8 @@ public:
         /////
 
         //all of the different words to match "all"
-        all_token.add( "*", AST::IDAll() )
-                     ( "all", AST::IDAll() )
+        all_token.add( "*", AST::IDAll(AST::VIEW) )
+                     ( "all", AST::IDAll(AST::VIEW) )
                      ( "atoms", AST::IDAll(AST::ATOM) )
                      ( "bonds", AST::IDAll(AST::BOND) )
                      ( "residues", AST::IDAll(AST::RESIDUE) )
