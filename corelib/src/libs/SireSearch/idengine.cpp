@@ -2793,14 +2793,27 @@ SelectEngine::ObjType IDWithEngine::objectType() const
 IDElementEngine::IDElementEngine()
 {}
 
-SelectEnginePtr IDElementEngine::construct(const std::vector<SireMol::Element> &vals)
+SelectEnginePtr IDElementEngine::construct(const std::vector<QString> &vals)
 {
     IDElementEngine *ptr = new IDElementEngine();
     auto p = makePtr(ptr);
 
     for (const auto &value : vals)
     {
-        ptr->elements.insert(value);
+        if (value == "biological")
+        {
+            for (int i=1; i<50; ++i)
+            {
+                Element e(i);
+
+                if (e.biological())
+                {
+                    ptr->elements.insert(e);
+                }
+            }
+        }
+        else
+            ptr->elements.insert(Element(value));
     }
 
     return p;

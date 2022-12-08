@@ -545,7 +545,7 @@ namespace AST
     /** Structs that holds a list of elements */
     struct IDElement
     {
-        std::vector<SireMol::Element> values;
+        std::vector<QString> values;
 
         QString toString() const;
 
@@ -1034,7 +1034,7 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDName,
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDElement,
-                           (std::vector<SireMol::Element>, values)
+                           (std::vector<QString>, values)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDNumber,

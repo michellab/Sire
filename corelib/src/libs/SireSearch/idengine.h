@@ -147,7 +147,7 @@ private:
 class IDElementEngine : public SelectEngine
 {
 public:
-    static SelectEnginePtr construct(const std::vector<SireMol::Element> &values);
+    static SelectEnginePtr construct(const std::vector<QString> &values);
     ~IDElementEngine();
 
     ObjType objectType() const;

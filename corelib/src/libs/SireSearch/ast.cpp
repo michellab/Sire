@@ -354,7 +354,10 @@ namespace AST
 
         for (const auto &element : values)
         {
-            lines.append( element.symbol() );
+            if (element == "biological")
+                lines.append(element);
+            else
+                lines.append( SireMol::Element(element).symbol() );
         }
 
         return QObject::tr("element %1").arg(lines.join(","));

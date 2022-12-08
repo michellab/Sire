@@ -301,10 +301,13 @@ public:
             Element e(i);
 
             //add tokens for the capitalised symbol, and lowercase symbol and name
-            element_token.add( e.symbol().toLatin1().constData(), e );
-            element_token.add( e.symbol().toLower().toLatin1().constData(), e );
-            element_token.add( e.name().toLower().toLatin1().constData(), e );
+            element_token.add( e.symbol().toLatin1().constData(), e.symbol() );
+            element_token.add( e.symbol().toLower().toLatin1().constData(), e.symbol() );
+            element_token.add( e.name().toLower().toLatin1().constData(), e.symbol() );
         }
+
+        element_token.add("biological", "biological");
+        element_token.add("bio", "biological");
 
         //now get all of the user tokens (user-identified sub-expressions)
         user_token = getUserTokens();
@@ -650,7 +653,7 @@ public:
     qi::symbols<char,SireUnits::Dimension::Charge> charge_token;
     qi::symbols<char,AST::IDComparison> cmp_token;
     qi::symbols<char,AST::IDCoordType> coord_token;
-    qi::symbols<char,SireMol::Element> element_token;
+    qi::symbols<char,QString> element_token;
     qi::symbols<char,AST::IDAll> all_token;
     qi::symbols<char,AST::IDWater> water_token;
     qi::symbols<char,AST::IDPerturbable> pert_token;

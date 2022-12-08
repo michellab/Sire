@@ -333,4 +333,6 @@ The chemical element can be specified in a number of different ways:
    would be valid, as would ``element carbon, H, na``.
 
 * ``element biological`` - specify the elements that are considered to
-  be "biological", i.e.
+  be "biological", i.e. those in period 3 or less, which are not
+  halogens or noble gases (the same definition used by the
+  :func:`sire.mol.Element.biological` function).
