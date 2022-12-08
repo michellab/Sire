@@ -42,6 +42,8 @@
 
 #include "SireSearch/helper_funcs.h"
 
+#include "SireMol/errors.h"
+
 #include "tostring.h"
 
 #include <QRegExp>
@@ -51,6 +53,39 @@ using namespace SireMol;
 using namespace SireMM;
 using namespace SireBase;
 using namespace parser_idengine;
+
+QString objtype_to_string(SelectEngine::ObjType obj)
+{
+    switch(obj)
+    {
+    case SelectEngine::COMPLEX:
+        return "complex";
+    case SelectEngine::ATOM:
+        return "atom";
+    case SelectEngine::BOND:
+        return "bond";
+    case SelectEngine::ANGLE:
+        return "angle";
+    case SelectEngine::DIHEDRAL:
+        return "dihedral";
+    case SelectEngine::IMPROPER:
+        return "improper";
+    case SelectEngine::RESIDUE:
+        return "residue";
+    case SelectEngine::CHAIN:
+        return "chain";
+    case SelectEngine::SEGMENT:
+        return "segment";
+    case SelectEngine::CUTGROUP:
+        return "cutgroup";
+    case SelectEngine::MOLECULE:
+        return "molecule";
+    case SelectEngine::VIEW:
+        return "view";
+    default:
+        return "unknown";
+    };
+}
 
 SelectEngine::ObjType _to_obj_type(AST::IDObject obj)
 {
@@ -70,6 +105,8 @@ SelectEngine::ObjType _to_obj_type(AST::IDObject obj)
         return SelectEngine::MOLECULE;
     case AST::BOND:
         return SelectEngine::BOND;
+    case AST::VIEW:
+        return SelectEngine::VIEW;
     default:
         return SelectEngine::COMPLEX;
     }
@@ -2600,10 +2637,55 @@ SelectEnginePtr IDWithEngine::construct( SelectEnginePtr part0,
     auto p = makePtr(ptr);
 
     if (part0.get() == 0)
-        part0 = IDAllEngine::construct();
+        part0 = IDAllEngine::construct(AST::VIEW);
 
     if (part1.get() == 0)
-        part1 = IDAllEngine::construct();
+        part1 = IDAllEngine::construct(AST::VIEW);
+
+    auto type0 = part0->objectType();
+    auto type1 = part1->objectType();
+
+    if (type0 == type1)
+    {
+        QString compare_string = "greater";
+
+        if (token == AST::ID_IN)
+            compare_string = "smaller";
+
+        throw SireMol::parse_error(QObject::tr(
+            "Incompatible search types for a `%1` search. The view type (%2) "
+            "of both sides of the `%1` are the same. For this "
+            "type of search, the view type of the left hand side has "
+            "to be %3 than the view type of the right hand side.")
+                .arg(idtoken_to_string(token))
+                .arg(objtype_to_string(type0))
+                .arg(compare_string), CODELOC);
+    }
+    else if (token == AST::ID_IN and type0 > type1)
+    {
+        throw SireMol::parse_error(QObject::tr(
+            "Incompatible search types for an 'in' search. The view type (%1) "
+            "on the left hand side of the 'in' has to be smaller than the "
+            "view type (%2) on the right hand side. A %1 is larger than "
+            "a %2, so this condition is not satisfied. Use a 'with' search "
+            "if you want an expansive search where the left hand side "
+            "is larger than the right hand side.")
+                .arg(objtype_to_string(type0))
+                .arg(objtype_to_string(type1)), CODELOC);
+    }
+    else if (token == AST::ID_WITH and type0 < type1)
+    {
+        throw SireMol::parse_error(QObject::tr(
+            "Incompatible search types for a 'with' search. The view type (%1) "
+            "on the left hand side of the 'with' has to be larger than the "
+            "view type (%2) on the right hand side. A %1 is smaller than "
+            "a %2, so this condition is not satisfied. Use an 'in' search "
+            "if you want a contractive search where the left hand side "
+            "is smaller than the right hand side.")
+                .arg(objtype_to_string(type0))
+                .arg(objtype_to_string(type1)), CODELOC);
+
+    }
 
     part0->setParent(p);
     part1->setParent(p);

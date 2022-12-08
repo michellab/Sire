@@ -354,7 +354,11 @@ def test_in_searches(ala_mols):
     assert len(mols["atoms in resname ACE"]) == mols["resname ACE"].num_atoms()
     assert len(mols["atoms in (molecules with count(element O) > 1)"]) == mols[0].num_atoms()
     assert len(mols["atoms in (molecules with resname ALA)"]) == mols[0].num_atoms()
-    assert len(mols["(atoms in molecules) with resname ALA"]) == mols["resname ALA"].num_atoms()
+
+    with pytest.raises(SyntaxError):
+        assert len(mols["(atoms in molecules) with resname ALA"]) == mols["resname ALA"].num_atoms()
+
+    assert len(mols["(atoms in molecules) in resname ALA"]) == mols["resname ALA"].num_atoms()
 
     assert mols["atoms in molidx 0"] == mols[0]["atoms"]
     assert mols["atoms in molidx -1"] == mols[-1]["atoms"]
@@ -381,7 +385,10 @@ def test_with_searches(ala_mols):
     assert res.name().value() == "ALA"
     assert res.num_atoms() > 6
 
-    for atom in mols["atoms with resname ALA"]:
+    with pytest.raises(SyntaxError):
+        mols["atoms with resname ALA"]
+
+    for atom in mols["atoms in resname ALA"]:
         assert atom.residue().name().value() == "ALA"
 
     assert len(mols["residues with element C"]) == 3
@@ -396,8 +403,15 @@ def test_with_searches(ala_mols):
     # all but one molecule contains at one oxygen
     assert len(mols["molecules with count(element O) == 1"]) == len(mols)-1
 
-    assert mols["atoms with molidx 0"] == mols[0]["atoms"]
-    assert mols["atoms with molidx -1"] == mols[-1]["atoms"]
+    with pytest.raises(SyntaxError):
+        assert mols["atoms with molidx 0"] == mols[0]["atoms"]
+
+    assert mols["atoms in molidx 0"] == mols[0]["atoms"]
+
+    with pytest.raises(SyntaxError):
+        assert mols["atoms with molidx -1"] == mols[-1]["atoms"]
+
+    assert mols["atoms in molidx -1"] == mols[-1]["atoms"]
 
 
 def test_all_searches(ala_mols):

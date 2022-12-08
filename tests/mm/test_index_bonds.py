@@ -23,11 +23,25 @@ def test_index_bonds(ala_mols):
 
     mol = mols[0]
 
+    # assert we only find the 5 bonds wholly within the residue
     assert len(mol["bonds in resnum 1"]) == 5
-    assert len(mol["bonds with resnum 1"]) == 6
+
+    # assert we also find the extra bond that is to resnum 2
+    # (i.e. all bonds involving any atom in the residue)
+    assert len(mol["bonds with (atoms in resnum 1)"]) == 6
+
+    # check that we don't need brackets
+    assert len(mol["bonds with atoms in resnum 1"]) == 6
 
     _assert_same_bonds(mol["bonds in resnum 1"], mol["resnum 1"].bonds())
-    _assert_same_bonds(mol["bonds with resnum 1"], mol.bonds("resnum 1"))
+    _assert_same_bonds(mol["bonds with (atoms in resnum 1)"], mol.bonds("resnum 1"))
+    _assert_same_bonds(mol["bonds with atoms in resnum 1"], mol.bonds("resnum 1"))
+
+    # this is a single bond
+    assert mol["bonds to resnum 1"] == mol.bond("resnum 1", "resnum 2")
+
+    # still just a single bond
+    assert mol["bonds from resnum 1 to resnum 2"] == mol.bond("resnum 1", "resnum 2")
 
     cx = mol["bonds to element C"]
     ccx = mol["bonds with element C"]

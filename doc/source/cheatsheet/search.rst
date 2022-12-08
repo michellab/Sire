@@ -261,11 +261,11 @@ The general syntax is ``X in Y`` or ``X with Y``.
   called ``CA``)
 
 Understanding this, you can see that ``residues with atomname CA`` is a search
-that finds all residues that are from the results of searching for atoms
+that finds all residues that are with (contain) the results of searching for atoms
 with name ``CA``. Similarly ``atoms in resname ALA`` is searching for all atoms
-that are from the results of searching for residues with name ``ALA``.
+that are in the results of searching for residues with name ``ALA``.
 Similarly ``bonds in *`` means search for all bonds that are in the
-current view.
+current view (as ``*`` or ``all`` is returns the view being searched).
 
 Searching for Bonds using ``in``, ``with``, ``from`` and ``to``
 ---------------------------------------------------------------
@@ -276,32 +276,61 @@ involve connecting two atoms. But this bond could be entirely within
 a residue, or between pairs of residues (and similarly for chains
 and segments).
 
-* ``bonds in X`` - a contractive search that finds all bonds that
-  are contained wholly within the result of searching for ``X``,
-  e.g. ``bonds in residx 0`` returns all bonds that are wholly
-  within (both atoms within) the first residue.
-
 * ``bonds with X`` - an expansive search that finds all bonds that
   contains the result of ``X``. As the only view smaller than a bond
   is an atom, ``X`` can only be a search that returns atom views.
   For example, ``bonds with atomname CA`` would return all bonds
   where at least one of the atoms in the bond was called ``CA``.
 
-It would be really useful to do more. ``bonds to X``, ``bonds from X to Y``.
+* ``bonds in X`` - a contractive search that finds all bonds that
+  are contained wholly within the result of searching for ``X``,
+  e.g. ``bonds in residx 0`` returns all bonds that are wholly
+  within (both atoms within) the first residue.
 
-This subtlety creates a difference between ``in`` and ``with``.
+* ``bonds with atoms in X`` - an expansive search that finds all bonds
+   involve any atoms that is returned by the search ``X``. For example,
+   ``bonds with atoms in resname ALA`` returns all bonds that have
+   any atoms in residues called ``ALA``.
 
-*I WILL BE ABLE TO FINISH THIS ONCE I CLEAN UP IN AND WITH ABOVE*
+The above two searches find either all the bonds inside ``X``, or
+all the bonds that involve atoms in ``X``. We need other keywords
+to find the bonds that specifically bridge between two views.
+These are ``to`` and ``from .. to``.
 
-``bonds to resname ALA`` gives bonds that connects to ``resname ALA`` while
-``bonds from resname ALA to resname ASP`` give bonds that connect
-ALA to ASP.
+* ``bonds to X`` - a search that returns all bonds that have one
+  atom contained in ``X`` and one atom that is not contained in ``X``
+  (i.e. all bonds that connect ``X`` to another view). For example,
+  ``bonds to resnum 1`` returns all bonds that connect residue number
+  1 to any other residue (or view).
 
-``bonds from resname ALA to atomname N`` don't bridge residues - it is all
-bonds that connect the results from X to the results from Y
+* ``bonds from X to Y`` - a search that returns all bonds that have
+  one atom in ``X`` and one atom in ``Y``, i.e. that connect ``X``
+  and ``Y``. For example, ``bonds from resnum 1 to resnum 2`` returns
+  all the bonds between residue numbers 1 and 2.
 
-``bonds from X to Y``
+Searching by Chemical Element
+-----------------------------
 
-``bonds to X`` are all bonds that connect to results from X that contain
-one atom that is not in the results from X.
+You can search for views that match or contain atoms with specified
+chemical elements. You do this using ``element``. This search
+returns atom views. For example, ``element C`` would return all atom views
+that have the chemical element carbon.
 
+The chemical element can be specified in a number of different ways:
+
+* ``element C`` - specify the chemical element by its IUPAC symbol, e.g.
+  ``element H``, ``element Na`` etc.
+
+* ``element c`` - specify the chemical element using its lowercase
+  symbol, e.g. ``element h``, ``element na`` etc.
+
+* ``element carbon`` - specify the chemical element using its lowercase
+  name, e.g. ``element hydrogen``, ``element sodium`` etc.
+
+* ``element C, H, Na`` - specify a list of elements. The atoms returned
+   are those that match any in the list. The list can use any of the
+   ways of specifying elements as above, e.g. ``element carbon, hydrogen``
+   would be valid, as would ``element carbon, H, na``.
+
+* ``element biological`` - specify the elements that are considered to
+  be "biological", i.e.
