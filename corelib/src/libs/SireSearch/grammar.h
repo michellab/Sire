@@ -322,17 +322,22 @@ public:
         //a set of expressions is a list of expression rules separated by semicolons
         expressionsRule %= ( expressionRule % qi::lit( ';' ) );
 
-        //an expression is either a binary or a expression
+        //an expression is either a binary, a with or an expression
         expressionRule %= binaryRule2 | binaryRule | withRule2 | withRule | expressionPartRule;
 
         //a binary is two expressions separated by an op_token (and/or)
         binaryRule %= (expressionPartRule >> op_token >> expressionPartRule) |
+                      (expressionPartRule >> op_token >> withRule) |
+                      (withRule >> op_token >> expressionPartRule) |
+                      (withRule >> op_token >> withRule) |
                       ( qi::lit('(') >> binaryRule >> qi::lit(')') );
 
         //allow multiple op_tokens, e.g. a and b and c
         binaryRule2 %= binaryRule >> op_token >> binaryRule |
                        binaryRule >> op_token >> expressionPartRule |
                        expressionPartRule >> op_token >> binaryRule |
+                       withRule >> op_token >> binaryRule |
+                       binaryRule >> op_token >> withRule |
                        (qi::lit('(') >> binaryRule2 >> qi::lit(')') );
 
         //a withRule is two expressions separated by a "with" or "in"

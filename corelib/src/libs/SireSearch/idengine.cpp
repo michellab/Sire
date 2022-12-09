@@ -2706,20 +2706,23 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
 
     auto first = part0;
     auto second = part1;
+    auto expander = first;
+
+    // we need to expand bonds manually and swap things around
+    // if bonds are being searched
+    const bool is_bond = part0->objectType() == SelectEngine::BOND;
 
     if (token == AST::ID_IN)
     {
-        // an "in" search is an inverted "with" search
+        // "in" searches are reversed "with" searches, except we still
+        // expand the search using the object type of the first search
         first = part1;
         second = part0;
     }
 
-    // we need to expand bonds manually
-    const bool is_bond = part0->objectType() == SelectEngine::BOND;
-
     // need to expand the result so that we have the right type of unit
     // when we try to match the second part
-    for (const auto &mol : first->expand(first->operator()(mols, map)))
+    for (const auto &mol : expander->expand(first->operator()(mols, map)))
     {
         const auto units = mol->toList();
 

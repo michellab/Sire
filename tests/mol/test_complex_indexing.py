@@ -2,6 +2,32 @@
 import pytest
 
 
+def test_broken_searches(ala_mols):
+    """Use this test to collect together any searches that are found
+       to be broken, and to then fix them
+    """
+
+    mols = ala_mols
+
+    assert mols["atoms in count(residues) > 1"] == mols[0].atoms()
+
+    assert len(mols["atomname CA in resnum 2"]) == 1
+    assert mols["atomname CA in resnum 2"] == mols[0]["resnum 2"]["atomname CA"]
+
+    assert mols["resname ALA in molidx 0"] == mols[0]["resname ALA"]
+
+    assert mols["atomname CA in molecules with count(atoms) > 3"] == mols[0]["atomname CA"]
+
+    assert mols["molecules with count(residues) > 1"] == mols[0]
+
+    assert mols["residues with count(element C) > 1"] == mols[0].residues([0,1])
+
+    assert mols["atoms in residues with count(element C) > 1"] == mols[0].residues([0,1]).atoms()
+
+    assert mols["atoms in molecules with count(residues) > 1"] == mols[0].atoms()
+
+    assert mols["(molecules with count(element O) == 1) and (molecules with count(element H) == 2) and (molecules with count(atoms) == 3)"] == mols["water"]
+
 def test_distance_searching(ala_mols):
     mols = ala_mols
 
@@ -10,7 +36,6 @@ def test_distance_searching(ala_mols):
     assert len(mols["residues within 3 angstrom of resnum 1"]) == 15
     assert len(mols["atoms within 5.0 of (0, 0, 0)"]) == 6
     assert len(mols["molecules within 5.0 of (0, 0, 0)"]) == 2
-
 
 
 def test_bond_property_searching(ala_mols):

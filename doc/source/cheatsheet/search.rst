@@ -335,4 +335,44 @@ The chemical element can be specified in a number of different ways:
 * ``element biological`` - specify the elements that are considered to
   be "biological", i.e. those in period 3 or less, which are not
   halogens or noble gases (the same definition used by the
-  :func:`sire.mol.Element.biological` function).
+  :func:`sire.mol.Element.biological` function). Note you can use
+  the shorthand ``element bio`` to also match biological atoms.
+
+Searching by Count (i.e. number of atoms)
+-----------------------------------------
+
+You can search by counts, e.g. finding all molecules with more than
+one residue, using ``count``.
+
+You can do simple searches of the form ``view_type with/in count(view_type) compare number``, e.g.
+
+* ``molecules with count(residues) > 1`` - match all molecules that
+  contain more than on residue
+* ``atoms in count(residues) == 1`` - match all atoms that are in molecules
+  that contain just one residue
+* ``residues in molecules with count(atoms) < 20`` - match all residues that
+  are in molecules with less than twenty atoms
+
+You can also use more advanced ``with/in`` searches, e.g.
+
+* ``element C in residues with count(atoms) > 5`` - match all carbon atoms
+  in residues that have more than five atoms
+* ``element O in molecules with count(atoms) == 3`` - match all oxygen atoms
+  in molecules that have three atoms
+* ``resname /ALA/i in molecules with count(residues) > 20`` - match all
+  residues call ``ALA`` (in any case) in molecules that have more
+  than 20 residues.
+
+In the general case, the argument to ``count`` is actually a search too!
+So the full syntax is ``X with/in count(Y) compare number``, which
+returns views that match ``X`` where the count of views that match ``Y``
+in the view being searched compares true with the specified number.
+For example;
+
+* ``residues with count(element C) > 2`` - match all residues that contain
+  more than two carbon atoms
+* ``atoms in residues with count(atomname CA) == 1`` - match all atoms
+  in residues that contain a single atom called ``CA``
+* ``(molecules with count(element O) == 1) and (molecules with count(element H) == 2) and (molecules with count(atoms) == 3)`` -
+  match all molecules that contain there atoms, and that have one oxygen atom
+  and have two hydrogen atoms (i.e. are water molecules).
