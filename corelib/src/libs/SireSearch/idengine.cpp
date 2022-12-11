@@ -36,6 +36,9 @@
 #include "SireMol/core.h"
 
 #include "SireMM/selectorbond.h"
+#include "SireMM/selectorangle.h"
+#include "SireMM/selectordihedral.h"
+#include "SireMM/selectorimproper.h"
 
 #include "SireVol/space.h"
 #include "SireVol/cartesian.h"
@@ -110,6 +113,101 @@ SelectEngine::ObjType _to_obj_type(AST::IDObject obj)
     default:
         return SelectEngine::COMPLEX;
     }
+}
+
+IDObject mol_to_idobject(const MoleculeView &mol)
+{
+    const char* typ = mol.what();
+
+    if (typ == Atom::typeName())
+    {
+        return AST::ATOM;
+    }
+    else if (typ == Residue::typeName())
+    {
+        return AST::RESIDUE;
+    }
+    else if (typ == Chain::typeName())
+    {
+        return AST::CHAIN;
+    }
+    else if (typ == Segment::typeName())
+    {
+        return AST::SEGMENT;
+    }
+    else if (typ == CutGroup::typeName())
+    {
+        return AST::CUTGROUP;
+    }
+    else if (typ == Molecule::typeName())
+    {
+        return AST::MOLECULE;
+    }
+    else if (typ == Bond::typeName())
+    {
+        return AST::BOND;
+    }
+    else if (typ == Angle::typeName())
+    {
+        return AST::ANGLE;
+    }
+    else if (typ == Dihedral::typeName())
+    {
+        return AST::DIHEDRAL;
+    }
+    else if (typ == Improper::typeName())
+    {
+        return AST::IMPROPER;
+    }
+    else if (mol.isA<Atom>())
+    {
+        return AST::ATOM;
+    }
+    else if (mol.isA<Residue>())
+    {
+        return AST::RESIDUE;
+    }
+    else if (mol.isA<Chain>())
+    {
+        return AST::CHAIN;
+    }
+    else if (mol.isA<Segment>())
+    {
+        return AST::SEGMENT;
+    }
+    else if (mol.isA<CutGroup>())
+    {
+        return AST::CUTGROUP;
+    }
+    else if (mol.isA<Molecule>())
+    {
+        return AST::MOLECULE;
+    }
+    else if (mol.isA<Bond>())
+    {
+        return AST::BOND;
+    }
+    else if (mol.isA<Angle>())
+    {
+        return AST::ANGLE;
+    }
+    else if (mol.isA<Dihedral>())
+    {
+        return AST::DIHEDRAL;
+    }
+    else if (mol.isA<Improper>())
+    {
+        return AST::IMPROPER;
+    }
+    else
+    {
+        throw SireError::invalid_cast( QObject::tr(
+            "Unable to recognise the type of view '%1'. This is of type "
+            "'%2', which is not supported for property searches.")
+                .arg(mol.toString()).arg(mol.what()), CODELOC);
+    }
+
+    return AST::VIEW;
 }
 
 MolViewPtr _expand(const MoleculeView &mol, SelectEngine::ObjType typ,
@@ -1708,7 +1806,7 @@ QString IDCmpMass::toString() const
 
 SelectEnginePtr IDCmpMass::toEngine() const
 {
-    return IDMassEngine::construct(ATOM, compare, value.value * value.units);
+    return IDMassEngine::construct(VIEW, compare, value.value * value.units);
 }
 
 QString IDObjMass::toString() const
@@ -1769,7 +1867,7 @@ QString IDCmpCharge::toString() const
 
 SelectEnginePtr IDCmpCharge::toEngine() const
 {
-    return IDChargeEngine::construct(ATOM, compare, value.value * value.units);
+    return IDChargeEngine::construct(VIEW, compare, value.value * value.units);
 }
 
 QString IDObjCharge::toString() const
@@ -1965,6 +2063,27 @@ SelectResult IDMassEngine::select_mols(const SelectResult &mols,
     return SelectResult(ret);
 }
 
+SelectResult IDMassEngine::select_views(const SelectResult &mols,
+                                        const PropertyMap &map) const
+{
+    if (mols.count() == 0)
+        return SelectResult();
+
+    QList<MolViewPtr> ret;
+
+    auto compare_func = _get_compare(compare);
+
+    for (const auto &mol : mols)
+    {
+        if (compare_func(Evaluator(*mol).mass(map).value(), value.value()))
+        {
+            ret.append(mol);
+        }
+    }
+
+    return SelectResult(ret);
+}
+
 SelectResult IDMassEngine::select(const SelectResult &mols,
                                   const PropertyMap &map) const
 {
@@ -1984,6 +2103,8 @@ SelectResult IDMassEngine::select(const SelectResult &mols,
         return this->select_mols(mols, map);
     case AST::BOND:
         return this->select_bonds(mols, map);
+    case AST::VIEW:
+        return this->select_views(mols, map);
     default:
         throw SireError::invalid_key(QObject::tr("Unsupported search object!"));
     }
@@ -2129,6 +2250,27 @@ SelectResult IDChargeEngine::select_mols(const SelectResult &mols,
     return SelectResult(ret);
 }
 
+SelectResult IDChargeEngine::select_views(const SelectResult &mols,
+                                          const PropertyMap &map) const
+{
+    if (mols.count() == 0)
+        return SelectResult();
+
+    QList<MolViewPtr> ret;
+
+    auto compare_func = _get_compare(compare);
+
+    for (const auto &mol : mols)
+    {
+        if (compare_func(Evaluator(*mol).charge(map).value(), value.value()))
+        {
+            ret.append(mol);
+        }
+    }
+
+    return SelectResult(ret);
+}
+
 SelectResult IDChargeEngine::select(const SelectResult &mols,
                                     const PropertyMap &map) const
 {
@@ -2148,6 +2290,8 @@ SelectResult IDChargeEngine::select(const SelectResult &mols,
         return this->select_mols(mols, map);
     case AST::BOND:
         return this->select_bonds(mols, map);
+    case AST::VIEW:
+        return this->select_views(mols, map);
     default:
         throw SireError::invalid_key(QObject::tr("Unsupported search object!"));
     }
@@ -2159,7 +2303,7 @@ SelectResult IDChargeEngine::select(const SelectResult &mols,
 //////// Implementation of the IDPropertyEngine
 ////////
 
-IDPropertyEngine::IDPropertyEngine()
+IDPropertyEngine::IDPropertyEngine() : name(AST::VIEW)
 {}
 
 SelectEnginePtr IDPropertyEngine::construct(const IDObject &name,
@@ -2348,6 +2492,36 @@ MolViewPtr _select_property_(const MolViewPtr &mol,
         return Selector<T>();
 }
 
+MolViewPtr _select_property_molecule(const MolViewPtr &mol,
+                                     const PropertyName &property,
+                                     const IDComparison &compare,
+                                     const QString &value)
+{
+    auto m = mol->molecule();
+
+    if (m.hasProperty(property))
+    {
+        try
+        {
+            if (_compare(m.property(property).asAString(), compare, value))
+            {
+                return m;
+            }
+        }
+        catch(...)
+        {
+            // this isn't a property that can be converted to a string.
+            if (compare == ID_CMP_EQ and _is_true(value))
+            {
+                // we are only asking if this property exists
+                return m;
+            }
+        }
+    }
+
+    return Molecule();
+}
+
 MolViewPtr _select_property_bond(const SelectorBond &bonds,
                                  const PropertyName &property,
                                  const IDComparison &compare,
@@ -2412,6 +2586,8 @@ MolViewPtr _select_property(const MolViewPtr &mol,
         else
             return _select_property_bond(SelectorBond(*mol, map), property, compare, value);
     }
+    case AST::MOLECULE:
+        return _select_property_molecule(mol, property, compare, value);
     default:
         qDebug() << "UNRECOGNISED" << name;
         return MolViewPtr();
@@ -2424,30 +2600,21 @@ SelectResult IDPropertyEngine::select(const SelectResult &mols, const PropertyMa
 
     const auto p = map[this->property];
 
-    if (name == AST::MOLECULE)
+    if (name == AST::VIEW)
     {
         for (const auto &mol : mols)
         {
-            auto m = mol->molecule();
-
-            if (m.hasProperty(p))
+            try
             {
-                try
-                {
-                    if (_compare(m.property(p).asAString(), this->compare, this->value))
-                    {
-                        ret.append(m);
-                    }
-                }
-                catch(...)
-                {
-                    // this isn't a property that can be converted to a string.
-                    if (this->compare == ID_CMP_EQ and _is_true(value))
-                    {
-                        // we are only asking if this property exists
-                        ret.append(m);
-                    }
-                }
+                auto selected = _select_property(mol, mol_to_idobject(*mol),
+                                                 p, this->compare, this->value, map);
+
+                if (not selected->isEmpty())
+                    ret.append(selected);
+            }
+            catch(...)
+            {
+                // this isn't a property
             }
         }
     }
@@ -2645,46 +2812,51 @@ SelectEnginePtr IDWithEngine::construct( SelectEnginePtr part0,
     auto type0 = part0->objectType();
     auto type1 = part1->objectType();
 
-    if (type0 == type1)
+    if (not (type0 == AST::VIEW or type1 == AST::VIEW))
     {
-        QString compare_string = "greater";
+        // VIEW is a special case and can be either side of the
+        // in/with
 
-        if (token == AST::ID_IN)
-            compare_string = "smaller";
+        if (type0 == type1)
+        {
+            QString compare_string = "greater";
 
-        throw SireMol::parse_error(QObject::tr(
-            "Incompatible search types for a `%1` search. The view type (%2) "
-            "of both sides of the `%1` are the same. For this "
-            "type of search, the view type of the left hand side has "
-            "to be %3 than the view type of the right hand side.")
-                .arg(idtoken_to_string(token))
-                .arg(objtype_to_string(type0))
-                .arg(compare_string), CODELOC);
-    }
-    else if (token == AST::ID_IN and type0 > type1)
-    {
-        throw SireMol::parse_error(QObject::tr(
-            "Incompatible search types for an 'in' search. The view type (%1) "
-            "on the left hand side of the 'in' has to be smaller than the "
-            "view type (%2) on the right hand side. A %1 is larger than "
-            "a %2, so this condition is not satisfied. Use a 'with' search "
-            "if you want an expansive search where the left hand side "
-            "is larger than the right hand side.")
-                .arg(objtype_to_string(type0))
-                .arg(objtype_to_string(type1)), CODELOC);
-    }
-    else if (token == AST::ID_WITH and type0 < type1)
-    {
-        throw SireMol::parse_error(QObject::tr(
-            "Incompatible search types for a 'with' search. The view type (%1) "
-            "on the left hand side of the 'with' has to be larger than the "
-            "view type (%2) on the right hand side. A %1 is smaller than "
-            "a %2, so this condition is not satisfied. Use an 'in' search "
-            "if you want a contractive search where the left hand side "
-            "is smaller than the right hand side.")
-                .arg(objtype_to_string(type0))
-                .arg(objtype_to_string(type1)), CODELOC);
+            if (token == AST::ID_IN)
+                compare_string = "smaller";
 
+            throw SireMol::parse_error(QObject::tr(
+                "Incompatible search types for a `%1` search. The view type (%2) "
+                "of both sides of the `%1` are the same. For this "
+                "type of search, the view type of the left hand side has "
+                "to be %3 than the view type of the right hand side.")
+                    .arg(idtoken_to_string(token))
+                    .arg(objtype_to_string(type0))
+                    .arg(compare_string), CODELOC);
+        }
+        else if (token == AST::ID_IN and type0 > type1)
+        {
+            throw SireMol::parse_error(QObject::tr(
+                "Incompatible search types for an 'in' search. The view type (%1) "
+                "on the left hand side of the 'in' has to be smaller than the "
+                "view type (%2) on the right hand side. A %1 is larger than "
+                "a %2, so this condition is not satisfied. Use a 'with' search "
+                "if you want an expansive search where the left hand side "
+                "is larger than the right hand side.")
+                    .arg(objtype_to_string(type0))
+                    .arg(objtype_to_string(type1)), CODELOC);
+        }
+        else if (token == AST::ID_WITH and type0 < type1)
+        {
+            throw SireMol::parse_error(QObject::tr(
+                "Incompatible search types for a 'with' search. The view type (%1) "
+                "on the left hand side of the 'with' has to be larger than the "
+                "view type (%2) on the right hand side. A %1 is smaller than "
+                "a %2, so this condition is not satisfied. Use an 'in' search "
+                "if you want a contractive search where the left hand side "
+                "is smaller than the right hand side.")
+                    .arg(objtype_to_string(type0))
+                    .arg(objtype_to_string(type1)), CODELOC);
+        }
     }
 
     part0->setParent(p);

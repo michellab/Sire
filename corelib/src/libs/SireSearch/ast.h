@@ -579,7 +579,7 @@ namespace AST
             //reset the search
             property.clear();
             value.clear();
-            name = AST::MOLECULE;
+            name = AST::VIEW;
             compare = AST::ID_CMP_EQ;
             return *this;
         }

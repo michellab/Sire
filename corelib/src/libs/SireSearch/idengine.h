@@ -375,6 +375,8 @@ protected:
     template<class T>
     SelectResult select_t(const SelectResult &mols, const PropertyMap &map) const;
 
+    SelectResult select_views(const SelectResult &mols, const PropertyMap &map) const;
+
     SelectResult select_mols(const SelectResult &mols, const PropertyMap &map) const;
 
     SelectResult select_bonds(const SelectResult &mols, const PropertyMap &map) const;
@@ -400,6 +402,8 @@ protected:
 
     template<class T>
     SelectResult select_t(const SelectResult &mols, const PropertyMap &map) const;
+
+    SelectResult select_views(const SelectResult &mols, const PropertyMap &map) const;
 
     SelectResult select_mols(const SelectResult &mols, const PropertyMap &map) const;
 

@@ -255,6 +255,10 @@ SelectResult SireMol::parser::SelectEngine::expand(const SelectResult &results) 
             expanded.append( result->molecule() );
         }
     }
+    else if (objtyp == SelectEngine::VIEW)
+    {
+        return results;
+    }
     else
     {
         qDebug() << "UNRECOGNISED TYPE" << objtyp;
