@@ -2375,8 +2375,8 @@ def run():
         "###===========================================================###\n"
     )
 
-    energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
-    print(f'OpenMM Energy (PME): {energy}\n')
+    #energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
+    #print(f'OpenMM Energy (PME): {energy}\n')
 
     if minimise.val:
         print(
@@ -2685,9 +2685,9 @@ def runFreeNrg():
 
     print(f'Initial energy: {integrator.getPotentialEnergy(system)}')
 
-    energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
-    print(f'Raw OpenMM {openmm.__version__} energy '
-          f'({cutoff_type}): {energy:.2f} kcal mol-1\n')
+    #energy = computeOpenMMEnergy(topfile.val, crdfile.val, cutoff_dist.val)
+    #print(f'Raw OpenMM {openmm.__version__} energy '
+    #    f'({cutoff_type}): {energy:.2f} kcal mol-1\n')
 
     if minimise.val:
         print(
