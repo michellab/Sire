@@ -377,7 +377,7 @@ boresch_restraints_dict = Parameter(
     "                          'phiA0':phiA0, 'phiB0': phiB0, 'phiC0':phiC0},"
     "    'force_constants':{'kr':kr, 'kthetaA': kthetaA, 'kthetaB': kthetaB,"
     "                       'kphiA':kphiA, 'kphiB': kphiB, 'kphiC':kphiC}"
-    "  }"
+    "  } "
     "r1 - 3 and l1 - 3 are the anchor points in the receptor and ligand, "
     "respectively, given by atomic indices. r is | l1 - r1 | (A). thetaA, and "
     "thetaB are the angles (r2, r1, l1) and (r1, l1, l2) (rad). phiA, phiB, "
