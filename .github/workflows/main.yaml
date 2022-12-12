@@ -71,7 +71,7 @@ jobs:
         if: github.event_name == 'pull_request'
 #
       - name: Setup Conda
-        run: mamba install -y -c conda-forge boa anaconda-client pip-requirements-parser
+        run: mamba install -y -c conda-forge boa anaconda-client packaging=21 pip-requirements-parser
 #
       - name: Update Conda recipe
         run:
