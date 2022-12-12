@@ -1382,8 +1382,20 @@ SelectEngine::ObjType IDAndEngine::objectType() const
             return o0;
         else
         {
-            //the object type is always the smallest, e.g. atom and residue == atom
-            return qMin(o0,o1);
+            if (o0 > o1)
+                std::swap(o0, o1);
+
+            // combinations of a segment with anything smaller
+            // is an atom
+            if (o1 == SelectEngine::SEGMENT)
+            {
+                return SelectEngine::ATOM;
+            }
+            else
+            {
+                //the object type is always the smallest, e.g. atom and residue == atom
+                return o0;
+            }
         }
     }
     else if (part0.get())
@@ -1522,8 +1534,20 @@ SelectEngine::ObjType IDOrEngine::objectType() const
             }
             else if (o != part->objectType())
             {
-                //the object type is always the smallest, e.g. atom or residue == atom
-                o = qMin(o, part->objectType());
+                auto o2 = part->objectType();
+
+                if (o2 < o)
+                {
+                    std::swap(o2, o);
+                }
+
+                if (o2 == SelectEngine::SEGMENT)
+                {
+                    o = SelectEngine::ATOM;
+                }
+
+                if (o == SelectEngine::ATOM)
+                    return o;
             }
         }
     }
@@ -1731,6 +1755,9 @@ SelectResult IDSubScriptEngine::select(const SelectResult &mols, const PropertyM
 
     const int nviews = all.count();
 
+    if (nviews == 0)
+        return SelectResult();
+
     auto addView = [](const MoleculeView &view, QList<MolViewPtr> &result,
                       SelectEngine::ObjType obj,
                       const PropertyMap &map)
@@ -1754,6 +1781,8 @@ SelectResult IDSubScriptEngine::select(const SelectResult &mols, const PropertyM
     //now get the range of views to return
     auto slice = val.toSlice();
 
+    // use auto_fix = True so that the slice range is pinned to
+    // the actual number of returned values
     for (auto it = slice.begin(nviews, true); not it.atEnd(); it.next())
     {
         addView( *(all[it.value()]), result, obj, map );

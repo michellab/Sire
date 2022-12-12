@@ -102,7 +102,7 @@ namespace AST
     /** The different types of value comparison */
     enum IDComparison { ID_CMP_UNKNOWN = 0, ID_CMP_LT = 1, ID_CMP_LE = 2,
                         ID_CMP_EQ = 3, ID_CMP_NE = 4, ID_CMP_GT = 5, ID_CMP_GE = 6,
-                        ID_CMP_AE = 7 };
+                        ID_CMP_AE = 7, ID_CMP_GA = 8, ID_CMP_LA = 9 };
 
     QString idcomparison_to_string(IDComparison cmp);
 
@@ -216,7 +216,6 @@ namespace AST
                                           boost::recursive_wrapper<IDWhereWithin> >;
 
     using IDNames = std::vector<IDName>;
-    using Expressions = std::vector<Expression>;
     using NameValues = std::vector<NameValue>;
     using RangeValues = std::vector<RangeVariant>;
 
@@ -494,10 +493,10 @@ namespace AST
         SelectEnginePtr toEngine() const;
     };
 
-    /** The root node of the AST - this holds a set of Expressions */
+    /** The root node of the AST - this holds a single Expression */
     struct Node
     {
-        Expressions values;
+        Expression values;
 
         QString toString() const;
 
@@ -1019,10 +1018,6 @@ BOOST_FUSION_ADAPT_STRUCT( AST::RegExpValue,
                            (bool,is_case_sensitive)
                          )
 
-BOOST_FUSION_ADAPT_STRUCT( AST::Node,
-                           (AST::Expressions,values)
-                         )
-
 BOOST_FUSION_ADAPT_STRUCT( AST::IDNull,
                            (AST::IDObject, name),
                            (AST::NameValues, values)
@@ -1060,6 +1055,11 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDBond,
                            (AST::Expression,from_value)
                            (AST::IDBondToken,to_token)
                            (AST::Expression,to_value)
+                         )
+
+
+BOOST_FUSION_ADAPT_STRUCT( AST::Node,
+                           (AST::Expression, values)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::Expression,

@@ -291,14 +291,7 @@ namespace AST
 
     QString Node::toString() const
     {
-        QStringList lines;
-
-        for (const auto &value : values)
-        {
-            lines.append( value.toString() );
-        }
-
-        return lines.join("; ");
+        return values.toString();
     }
 
     QString IDNull::toString() const
@@ -444,7 +437,7 @@ namespace AST
 
     QString IDSubscript::toString() const
     {
-        return QString("{%1}[%2]").arg(value.toString()).arg(range.toString());
+        return QString("(%1)[%2]").arg(value.toString()).arg(range.toString());
     }
 
     QString IDWithin::toString() const
@@ -465,21 +458,7 @@ namespace AST
 
     SelectEnginePtr Node::toEngine() const
     {
-        if (values.size() == 0)
-            return SelectEnginePtr();
-        else if (values.size() == 1)
-            return values.at(0).toEngine();
-        else
-        {
-            QList<SelectEnginePtr> engines;
-
-            for (const auto &value : values)
-            {
-                engines.append( value.toEngine() );
-            }
-
-            return IDOrEngine::construct(engines);
-        }
+        return values.toEngine();
     }
 
     SelectEnginePtr Expression::toEngine() const

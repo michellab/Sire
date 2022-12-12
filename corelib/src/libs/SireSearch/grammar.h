@@ -130,12 +130,30 @@ public:
         all_token.add( "*", AST::IDAll(AST::VIEW) )
                      ( "all", AST::IDAll(AST::VIEW) )
                      ( "atoms", AST::IDAll(AST::ATOM) )
+                     ( "atom", AST::IDAll(AST::ATOM) )
                      ( "bonds", AST::IDAll(AST::BOND) )
+                     ( "bond", AST::IDAll(AST::BOND) )
+                     ( "angles", AST::IDAll(AST::ANGLE) )
+                     ( "angle", AST::IDAll(AST::ANGLE) )
+                     ( "dihedrals", AST::IDAll(AST::DIHEDRAL) )
+                     ( "dihedral", AST::IDAll(AST::DIHEDRAL) )
+                     ( "impropers", AST::IDAll(AST::IMPROPER) )
+                     ( "improper", AST::IDAll(AST::IMPROPER) )
                      ( "residues", AST::IDAll(AST::RESIDUE) )
+                     ( "residue", AST::IDAll(AST::RESIDUE) )
+                     ( "res", AST::IDAll(AST::RESIDUE) )
                      ( "chains", AST::IDAll(AST::CHAIN) )
+                     ( "chain", AST::IDAll(AST::CHAIN) )
                      ( "segments", AST::IDAll(AST::SEGMENT) )
+                     ( "segment", AST::IDAll(AST::SEGMENT) )
+                     ( "segs", AST::IDAll(AST::SEGMENT) )
+                     ( "seg", AST::IDAll(AST::SEGMENT) )
                      ( "molecules", AST::IDAll(AST::MOLECULE) )
+                     ( "molecule", AST::IDAll(AST::MOLECULE) )
+                     ( "mols", AST::IDAll(AST::MOLECULE) )
+                     ( "mol", AST::IDAll(AST::MOLECULE) )
                      ( "cutgroups", AST::IDAll(AST::CUTGROUP) )
+                     ( "cutgroup", AST::IDAll(AST::CUTGROUP) )
                      ;
 
         // all of the different tokens to match "water"
@@ -191,8 +209,12 @@ public:
         //all of the different types of logical operation
         op_token.add( "and", AST::ID_AND )
                     ( "AND", AST::ID_AND )
+                    ( "&", AST::ID_AND )
+                    ( "&&", AST::ID_AND )
                     ( "or", AST::ID_OR )
-                    ( "OR", AST::ID_OR );
+                    ( "OR", AST::ID_OR )
+                    ( "|", AST::ID_OR )
+                    ( "||", AST::ID_OR );
 
         //all of the different value comparison tokens
         cmp_token.add( "<=", AST::ID_CMP_LE )
@@ -201,7 +223,9 @@ public:
                      ( "!=", AST::ID_CMP_NE )
                      ( ">=", AST::ID_CMP_GE )
                      ( ">", AST::ID_CMP_GT )
-                     ( "=~", AST::ID_CMP_AE );
+                     ( "=~", AST::ID_CMP_AE )
+                     ( ">~", AST::ID_CMP_GA )
+                     ( "<~", AST::ID_CMP_LA );
 
         //all of the different object identification tokens
         obj_token.add( "atoms",  AST::ATOM )
@@ -320,7 +344,7 @@ public:
         nodeRule %= expressionsRule;
 
         //a set of expressions is a list of expression rules separated by semicolons
-        expressionsRule %= ( expressionRule % qi::lit( ';' ) );
+        expressionsRule %= expressionRule;
 
         //an expression is either a binary, a with or an expression
         expressionRule %= binaryRule2 | binaryRule | withRule2 | withRule | expressionPartRule;
@@ -350,15 +374,21 @@ public:
                      withRule >> with_token >> expressionPartRule |
                      (qi::lit('(') >> withRule2 >> qi::lit(')') );
 
+        //grammar to enable subscripting of an expression
+        subscriptRule %= (qi::lit("{") >> expressionRule >> qi::lit("}") >>
+                          qi::lit("[") >> rangeValueRule >> qi::lit("]")) |
+                         (qi::lit("{") >> subscriptRule >> qi::lit("}") >>
+                          qi::lit("[") >> rangeValueRule >> qi::lit("]"));
+
         //an expression is either a subscript, name, number, within, where, not
         //or user-identified expression, optionally surrounded by parenthesis '( )'
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
-                              withinRule | withinVectorRule | propertyRule | bondRule | all_token |
+                              withinRule | withinVectorRule | propertyRule | bondRule |
                               water_token | pert_token | protein_token |
                               whereRule | notRule | joinRule |
                               massRule | massCmpRule | chargeRule | chargeCmpRule |
                               massObjRule | massObjCmpRule | chargeObjRule | chargeObjCmpRule |
-                              countRule | user_token |
+                              all_token | countRule | user_token |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
 
         //grammar that specifies a list of names (comma-separated)
@@ -502,7 +532,9 @@ public:
                     (qi::lit("bonds") >> bond_token >> expressionRule);
 
         //grammar for a "not" expression
-        notRule %= qi::lit("not") >> expressionRule;
+        notRule %= qi::lit("not") >> expressionRule |
+                   qi::lit("NOT") >> expressionRule |
+                   qi::lit("!") >> expressionRule;
 
         //grammar for a "join" expression
         joinRule %= qi::lit("join") >> expressionRule;
@@ -514,10 +546,6 @@ public:
         //grammar for a "within" expression comparing with a vector position.
         withinVectorRule %= obj_token >> qi::lit("within") >> lengthValueRule
                                       >> qi::lit("of") >> vectorValueRule;
-
-        //grammar to enable subscripting of an expression
-        subscriptRule %= qi::lit("{") >> expressionRule >> qi::lit("}") >>
-                         qi::lit("[") >> rangeValueRule >> qi::lit("]");
 
         //grammar for a "where" expression
         whereRule %= obj_token >> qi::lit("where") >> coord_token >>
@@ -629,7 +657,7 @@ public:
     qi::rule<IteratorT, AST::IDWhereCompare(), SkipperT> whereCompareRule;
     qi::rule<IteratorT, AST::IDCount(), SkipperT> countRule;
 
-    qi::rule<IteratorT, AST::Expressions(), SkipperT> expressionsRule;
+    qi::rule<IteratorT, AST::Expression(), SkipperT> expressionsRule;
     qi::rule<IteratorT, AST::Expression(), SkipperT> expressionRule;
 
     qi::rule<IteratorT, AST::ExpressionPart(), SkipperT> expressionPartRule;

@@ -152,16 +152,12 @@ static void set_token(const std::string &token, const std::string &str)
     //first parse this into an AST::Node
     auto node = parse( str.begin(), str.end() );
 
-    if (node.values.size() != 1)
-        throw SireMol::parse_error( QObject::tr(
-            "Cannot set a token based on a multi-line selection!"), CODELOC );
-
     QMutexLocker lkr(tokensMutex());
 
     if (_user_tokens == 0)
         _user_tokens = new UserTokens();
 
-    _user_tokens->add(token, AST::IDUser(token,node.values[0].value));
+    _user_tokens->add(token, AST::IDUser(token,node.values.value));
 }
 
 static bool has_token(const std::string &token)

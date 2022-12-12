@@ -7,7 +7,15 @@ def test_broken_searches(ala_mols):
        to be broken, and to then fix them
     """
 
-    mols = ala_mols
+    mols = ala_mols.clone()
+
+    assert mols["{element C}[0] or {element C}[-1]"] == mols["element C"][ [0,-1] ]
+
+    assert mols["{{element C}[0] or {element C}[-1]}[-1]"] == mols["element C"][-1]
+
+    assert mols["{({element C}[0] or {element C}[-1])}[-1]"] == mols["element C"][-1]
+
+    assert mols["{element C in resname ALA}[1]"] == mols["element C in resname ALA"][1]
 
     assert mols["atoms in count(residues) > 1"] == mols[0].atoms()
 
@@ -27,6 +35,23 @@ def test_broken_searches(ala_mols):
     assert mols["atoms in molecules with count(residues) > 1"] == mols[0].atoms()
 
     assert mols["(molecules with count(element O) == 1) and (molecules with count(element H) == 2) and (molecules with count(atoms) == 3)"] == mols["water"]
+
+    mol = mols[0]
+    cursor = mol.cursor()
+    cursor["is_perturbable"] = True
+    cursor["final_atomtype"] = cursor["atomtype"]
+    cursor[0]["atomtype"] = "DU"
+    cursor[-1]["final_atomtype"] = "DU"
+    mol = cursor.commit()
+
+    mols.update(mol)
+
+    assert mols["property is_perturbable"] == mol
+
+    assert mols["atoms with property atomtype == DU in molecules with property is_perturbable"] == mol[0]
+    assert mols[("atoms with property atomtype == DU in molecules with property is_perturbable",
+                 {"atomtype": "final_atomtype"})] == mol[-1]
+
 
 def test_distance_searching(ala_mols):
     mols = ala_mols
@@ -315,26 +340,26 @@ def test_sizes_correct(ala_mols):
 def test_search_terms(ala_mols):
     mols = ala_mols
 
-    for atom in mols["mass >= 16 g_per_mol"]:
+    for atom in mols["atoms with mass >= 16 g_per_mol"]:
         assert atom.mass().value() >= 16.0
 
-    for atom in mols["charge < 0"]:
+    for atom in mols["atoms with charge < 0"]:
         assert atom.charge().value() < 0
 
-    for atom in mols["mass >= 16 and charge < 0"]:
+    for atom in mols["(atoms with mass >= 16) and (atoms with charge < 0)"]:
         assert atom.charge().value() < 0
         assert atom.mass().value() >= 16
 
     check_mass = mols[0][0].mass().value()
 
-    atoms = mols[0][f"mass >= {check_mass-0.001} and mass <= {check_mass+0.001}"]
+    atoms = mols[0][f"atom mass >= {check_mass-0.001} and atom mass <= {check_mass+0.001}"]
 
     assert len(atoms) > 0
 
     for atom in atoms:
         assert atom.mass().value() == pytest.approx(check_mass)
 
-    atoms = mols[0][f"mass =~ {check_mass}"]
+    atoms = mols[0][f"atom mass =~ {check_mass}"]
 
     assert len(atoms) > 0
 
@@ -343,14 +368,14 @@ def test_search_terms(ala_mols):
 
     check_charge = mols[0][1].charge().value()
 
-    atoms = mols[0][f"charge >= {check_charge-0.001} and charge <= {check_charge+0.001}"]
+    atoms = mols[0][f"atom charge >= {check_charge-0.001} and atom charge <= {check_charge+0.001}"]
 
     assert len(atoms) > 0
 
     for atom in atoms:
         assert atom.charge().value() == pytest.approx(check_charge)
 
-    atoms = mols[0][f"charge =~ {check_charge}"]
+    atoms = mols[0][f"atoms with charge =~ {check_charge}"]
 
     assert len(atoms) > 0
 
