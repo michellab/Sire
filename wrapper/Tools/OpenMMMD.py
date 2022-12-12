@@ -35,7 +35,6 @@ finally:
     print(f'OPENMM_PLUGIN_DIR = {openmm_dir}')
 
 import Sire.IO
-#import Sire.Mol
 import Sire.CAS
 import Sire.System
 import Sire.Move
