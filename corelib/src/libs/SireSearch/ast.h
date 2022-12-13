@@ -102,7 +102,8 @@ namespace AST
     /** The different types of value comparison */
     enum IDComparison { ID_CMP_UNKNOWN = 0, ID_CMP_LT = 1, ID_CMP_LE = 2,
                         ID_CMP_EQ = 3, ID_CMP_NE = 4, ID_CMP_GT = 5, ID_CMP_GE = 6,
-                        ID_CMP_AE = 7, ID_CMP_GA = 8, ID_CMP_LA = 9 };
+                        ID_CMP_AE = 7, ID_CMP_GA = 8, ID_CMP_LA = 9, ID_CMP_NA = 10,
+                        ID_CMP_GAE = 11, ID_CMP_LAE = 12 };
 
     QString idcomparison_to_string(IDComparison cmp);
 

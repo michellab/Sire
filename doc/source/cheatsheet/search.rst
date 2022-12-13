@@ -198,11 +198,33 @@ For example, searching for an atom from a molecule view will give an atom
 result. This is at least the same size (for single-atom molecules), but
 likely smaller (for multi-atom molecules) than the searched molecule.
 
-Whether a search is expansive or contractive depends on the relative
+Whether a search is expansive  (``with``) or contractive (``in``) depends on the relative
 size of the view being searched, and the view that is being returned
 as the result. This can be summarised as a table.
 
-TABLE OF EXPANSIVE AND CONTRACTIVE
++----------+---------------------+---------------------+------------------------+----------------------+------------------------+----------------------+
+|          | Atom                | Bond                | Residue                | Chain                | Segment                | Molecule             |
++----------+---------------------+---------------------+------------------------+----------------------+------------------------+----------------------+
+| Atom     | N/A                 | atoms in bond       | atoms in residue       | atoms in chain       | atoms in segment       | atoms in molecule    |
++----------+---------------------+---------------------+------------------------+----------------------+------------------------+----------------------+
+| Bond     | bonds with atom     | N/A                 | bonds in residue       | bonds in chain       | bonds in segment       | bonds in molecule    |
++----------+---------------------+---------------------+------------------------+----------------------+------------------------+----------------------+
+| Residue  | residues with atom  | residues with bond  | N/A                    | residues in chain    | residues in segment    | residues in molecule |
++----------+---------------------+---------------------+------------------------+----------------------+------------------------+----------------------+
+| Chain    | chains with atom    | chains with bond    | chains with residue    | N/A                  | chains in segment      | chains in molecule   |
++----------+---------------------+---------------------+------------------------+----------------------+------------------------+----------------------+
+| Segment  | segments with atomv | segments with bond  | segments with residue  | segments with chain  | N/A                    | segments in molecule |
++----------+---------------------+---------------------+------------------------+----------------------+------------------------+----------------------+
+| Molecule | molecules with atom | molecules with bond | molecules with residue | molecules with chain | molecules with segment | N/A                  |
++----------+---------------------+---------------------+------------------------+----------------------+------------------------+----------------------+
+
+.. note::
+
+   ``X in Y`` is a contractive search that looks for the smaller views of
+   type ``X`` within the larger view ``Y``.
+
+   ``Y with X`` is an expansive search that returns larger views of type
+   ``X`` that contain the smaller views of type ``Y``.
 
 Another way to think of this is that contractive searches are looking
 inside a view, while expansive searches are looking outside a view
@@ -231,22 +253,28 @@ Match All Atoms, Residues, Chains etc.
 You can match everything, specifying the return view type using the
 "match all" keywords:
 
-* ``atoms`` - return all of the atoms in the searched object.
-* ``bonds`` - return all of the bonds in the searched object.
-* ``residues`` - return all of the residues in the searched object.
-* ``chains`` - return all of the chains in the searched object.
+* ``atoms`` - return all of the atoms in the searched object. Also abbreviated
+  to ``atom``
+* ``bonds`` - return all of the bonds in the searched object. Also abbreviated
+  to ``bond``.
+* ``residues`` - return all of the residues in the searched object. Also
+  abbreviated to ``residue`` or ``res``.
+* ``chains`` - return all of the chains in the searched object. Also
+  abbreviated to ``chain``.
 * ``segments`` - return all of the segments in the searched object.
+  Also abbreviated to ``segment``, ``segs`` and ``seg``.
 * ``molecules`` - return all of the molecules in the searched object.
+  Also abbreviated to ``molecule``, ``mols`` and ``mol``.
 * ``all`` or ``*`` - everything in the current view being searched.
 
 Whether these are expansive or contractive depends on the view that
 is searched, based on the same rules as for normal searches
 (e.g. searching for ``residues`` on an atoms view will be expansive,
- as it returns all residues that contain those atoms, while searching
- for ``residues`` on a molecule view will be contractive, as it searches
- for all residues in that molecule)
+as it returns all residues that contain those atoms, while searching
+for ``residues`` on a molecule view will be contractive, as it searches
+for all residues in that molecule)
 
-Advanced ``in`` and ``with`` Searches
+Advanced ``with`` and ``in`` Searches
 -------------------------------------
 
 ``with`` and ``in`` can be used for more than just ``view_type in X`` searches.
@@ -288,7 +316,7 @@ and segments).
   within (both atoms within) the first residue.
 
 * ``bonds with atoms in X`` - an expansive search that finds all bonds
-   involve any atoms that is returned by the search ``X``. For example,
+   involving any atoms that is returned by the search ``X``. For example,
    ``bonds with atoms in resname ALA`` returns all bonds that have
    any atoms in residues called ``ALA``.
 
@@ -328,9 +356,9 @@ The chemical element can be specified in a number of different ways:
   name, e.g. ``element hydrogen``, ``element sodium`` etc.
 
 * ``element C, H, Na`` - specify a list of elements. The atoms returned
-   are those that match any in the list. The list can use any of the
-   ways of specifying elements as above, e.g. ``element carbon, hydrogen``
-   would be valid, as would ``element carbon, H, na``.
+  are those that match any in the list. The list can use any of the
+  ways of specifying elements as above, e.g. ``element carbon, hydrogen``
+  would be valid, as would ``element carbon, H, na``.
 
 * ``element biological`` - specify the elements that are considered to
   be "biological", i.e. those in period 3 or less, which are not
@@ -376,3 +404,107 @@ For example;
 * ``(molecules with count(element O) == 1) and (molecules with count(element H) == 2) and (molecules with count(atoms) == 3)`` -
   match all molecules that contain there atoms, and that have one oxygen atom
   and have two hydrogen atoms (i.e. are water molecules).
+
+Searching by Charge or Mass
+---------------------------
+
+You can search for views by their charge or mass using the ``charge`` or
+``mass`` keywords. The grammar is ``X with charge compare number``
+or ``X with mass Y compare number``, where ``X`` is the view (or views)
+you want to calculate the mass or charge for, ``compare`` is the
+comparison operator (e.g. ``==``, ``<=`` etc.), and ``number`` is the
+value of the charge or mass you want to compare to. For example,
+
+* ``atoms with charge < 0`` - return all atoms that have a change that
+  is less than zero.
+* ``atoms with mass > 4`` - return all atoms that have a mass that is
+  greater than ``4 g mol-1``.
+* ``residues with charge >= 0.8`` - return all residues that have a total
+  charge of greater than or equal to ``0.8 |e|`` (modulo electron charge units).
+* ``molecules with mass < 50`` - return all molecules whose total mass is
+  less than ``50 g mol-1``.
+
+In the general case, ``X`` can be any search. So you could use,
+
+* ``element C with charge > 0.1`` - return all carbon atoms with a charge
+  greater than ``0.1 |e|``.
+* ``resname LIG with mass > 100`` - return all residues called ``LIG``
+  that have a mass greater than ``100 g mol-1``.
+
+You could also combine this with other searches, e.g.
+
+* ``mols with count(residues with charge > 0.5) > 5`` - return all molecules
+  with more than five residues that have a charge of more than ``0.5 |e|``.
+
+Numerical imprecision can cause issues with ``charge`` searches.
+This is because rounding errors can mean that the sum of charges across,
+e.g. a residue or molecule, are non-integer. For example, for
+the ``aladip`` example used in the tutorials, the charges of the first
+two residues are ``5.48778e-10`` and ``-1.09756e-09``. Searches for
+residues with zero charge, or with negative charge would fail for
+these two residues.
+
+Searching by Charge using Approximate Comparisons
+-------------------------------------------------
+
+The approximate comparison operators can help solve the numerical
+imprecision issues experienced when searching for views by charge.
+
+The approximate comparison operators are;
+
+* ``=~`` - approximate equal to. :func:`sire.search.approx_equal`
+* ``!~`` - not approximates equal to. :func:`sire.search_approx_not_equal`
+* ``>~`` - greater than (but not approximately equal to). :func:`sire.search.approx_greater`
+* ``<~`` - less than (but not approximately equal to). :func:`sire.search.approx_less`
+* ``>=~`` - greater than or approximately equal to. :func:`sire.search.approx_greater_equal`
+* ``<=~`` - less than or approximatley equal to. :func:`sire.search.approx_less_equal`
+
+These operators are logically consistent. They are built from
+the approximately equal to operator (``=~``). This returns ``True``
+if the two values compared are equal, or are equal to within an
+epsilon value. This is set via :func:`sire.search.set_approx_epsilon` and
+can be retrieved using :func:`sire.search.get_approx_epsilon`.
+
+These operators can be used to, e.g.
+
+* ``mols with charge =~ 0`` - find all neutral molecules
+* ``residues with charge >~ 0`` - find all positively charged residues
+* ``(molecules with count(atoms) == 1) with charge =~ 1`` - all ``+1`` charge ions
+
+.. note::
+
+   Brackets were used for the last search to ensure that we look for
+   single-atom molecules first, and then, from these, find those that
+   have a charge of +1.
+
+Searching by Property
+---------------------
+
+You can search for views based on any of the properties of those views.
+There are several routes to do this;
+
+* ``X with property name`` - return all views that have a property
+  called ``name``, and if so, the value of this property is not
+  ``False`` or ``0``, ``0.0``, or the string ``false`` in any case.
+  For example, ``molecules with property is_perturbable`` would
+  return all molecules that have the ``is_perturbable`` property
+  and that it wasn't false. ``atoms with property atomtype``
+  would return all atoms that have an ``atomtype`` property, t
+  and if so, that it wasn't false.
+
+* ``X with property name compare value`` - return all views that have
+  a property called ``name``, and where the value of the property
+  compares truthfully using the comparison operator ``compare``
+  against the value ``value``. For example,
+  ``residues with property is_default == False`` would return
+  all residues that have an ``is_default`` property, and this
+  property is equal to ``False``. Searching for
+  ``atoms with property radius > 0.5`` would return all atoms
+  that have a ``residue`` property, and the value of this is
+  greater than ``0.5``, while ``atoms with property atomtype == HA``
+  would return all atoms with an ``atomtype`` property which
+  is equal to ``HA``.
+
+.. note::
+
+   Need to talk about how comparisons with unit-based properties work!

@@ -1977,6 +1977,16 @@ std::function<bool (double, double)> _get_compare(IDComparison compare)
         return std::greater_equal<double>();
     case ID_CMP_GT:
         return std::greater<double>();
+    case ID_CMP_GA:
+        return SireSearch::approx_greater;
+    case ID_CMP_LA:
+        return SireSearch::approx_less;
+    case ID_CMP_NA:
+        return SireSearch::approx_not_equal;
+    case ID_CMP_GAE:
+        return SireSearch::approx_greater_equal;
+    case ID_CMP_LAE:
+        return SireSearch::approx_less_equal;
     default:
         return std::equal_to<double>();
     }
@@ -2418,6 +2428,19 @@ bool _compare_equal(const QString &left,
         {
             auto compare_func = _get_compare(compare);
             return compare_func(left_num, right_num);
+        }
+        else if (right_ok)
+        {
+            // is the left value a number plus unit?
+            auto parts = left.split(" ");
+
+            double left_num = parts[0].toDouble(&left_ok);
+
+            if (left_ok)
+            {
+                auto compare_func = _get_compare(compare);
+                return compare_func(left_num, right_num);
+            }
         }
     }
 

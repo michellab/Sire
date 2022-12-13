@@ -225,7 +225,11 @@ public:
                      ( ">", AST::ID_CMP_GT )
                      ( "=~", AST::ID_CMP_AE )
                      ( ">~", AST::ID_CMP_GA )
-                     ( "<~", AST::ID_CMP_LA );
+                     ( "<~", AST::ID_CMP_LA )
+                     ( "!~", AST::ID_CMP_NA )
+                     ( "<=~", AST::ID_CMP_LAE )
+                     ( ">=~", AST::ID_CMP_GAE )
+                     ;
 
         //all of the different object identification tokens
         obj_token.add( "atoms",  AST::ATOM )
