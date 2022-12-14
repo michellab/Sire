@@ -41,6 +41,8 @@
 
 SIRE_BEGIN_HEADER
 
+namespace SireUnits{ namespace Dimension{ class GeneralUnit; }}
+
 namespace SireBase
 {
 class Property;
@@ -147,12 +149,14 @@ public:
     virtual bool isAnInteger() const;
     virtual bool isABoolean() const;
     virtual bool isAnArray() const;
+    virtual bool isAUnit() const;
 
     virtual QString asAString() const;
     virtual double asADouble() const;
     virtual int asAnInteger() const;
     virtual bool asABoolean() const;
     virtual PropertyList asAnArray() const;
+    virtual SireUnits::Dimension::GeneralUnit asAUnit() const;
 
     static const NullProperty& null();
 
@@ -288,11 +292,13 @@ public:
     bool isAnInteger() const;
     bool isABoolean() const;
     bool isAnArray() const;
+    bool isAUnit() const;
 
     QString asAString() const;
     double asADouble() const;
     int asAnInteger() const;
     bool asABoolean() const;
+    SireUnits::Dimension::GeneralUnit asAUnit() const;
     PropertyList asAnArray() const;
 
 protected:
@@ -343,11 +349,13 @@ public:
     bool isAnInteger() const;
     bool isABoolean() const;
     bool isAnArray() const;
+    bool isAUnit() const;
 
     QString asAString() const;
     double asADouble() const;
     int asAnInteger() const;
     bool asABoolean() const;
+    SireUnits::Dimension::GeneralUnit asAUnit() const;
     PropertyList asAnArray() const;
 
     operator const Property&() const;

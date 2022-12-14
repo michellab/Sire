@@ -42,9 +42,18 @@ def test_broken_searches(ala_mols):
     cursor["final_atomtype"] = cursor["atomtype"]
     cursor[0]["atomtype"] = "DU"
     cursor[-1]["final_atomtype"] = "DU"
+
+    import sire
+    cursor[2]["radius"] = 0.8 * sire.units.angstrom
+
     mol = cursor.commit()
 
     mols.update(mol)
+
+    assert mols["atoms with property radius"] == mol[2]
+    assert mols["atoms with property radius > 0.5"] == mol[2]
+    assert mols["atoms with property radius =~ 0.8"] == mol[2]
+    assert mols["atoms with property radius < 0.5"] == mol[2].invert()
 
     assert mols["property is_perturbable"] == mol
 

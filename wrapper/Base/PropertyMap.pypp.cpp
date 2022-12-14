@@ -172,7 +172,7 @@ void register_PropertyMap_class(){
                 "toDict"
                 , toDict_function_value
                 , bp::release_gil_policy()
-                , "" );
+                , "Return the raw underlying dictionary of the map" );
         
         }
         { //::SireBase::PropertyMap::toString

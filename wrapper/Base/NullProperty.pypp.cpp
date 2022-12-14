@@ -15,6 +15,8 @@ namespace bp = boost::python;
 
 #include "SireStream/shareddatastream.h"
 
+#include "generalunitproperty.h"
+
 #include "property.h"
 
 #include "propertylist.h"

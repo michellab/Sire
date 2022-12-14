@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "SireBase/generalunitproperty.h"
 
+#include "SireError/errors.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -33,6 +35,126 @@ void register_GeneralUnitProperty_class(){
         bp::scope GeneralUnitProperty_scope( GeneralUnitProperty_exposer );
         GeneralUnitProperty_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit const & >(( bp::arg("unit") ), "") );
         GeneralUnitProperty_exposer.def( bp::init< SireBase::GeneralUnitProperty const & >(( bp::arg("other") ), "") );
+        { //::SireBase::GeneralUnitProperty::asABoolean
+        
+            typedef bool ( ::SireBase::GeneralUnitProperty::*asABoolean_function_type)(  ) const;
+            asABoolean_function_type asABoolean_function_value( &::SireBase::GeneralUnitProperty::asABoolean );
+            
+            GeneralUnitProperty_exposer.def( 
+                "asABoolean"
+                , asABoolean_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireBase::GeneralUnitProperty::asADouble
+        
+            typedef double ( ::SireBase::GeneralUnitProperty::*asADouble_function_type)(  ) const;
+            asADouble_function_type asADouble_function_value( &::SireBase::GeneralUnitProperty::asADouble );
+            
+            GeneralUnitProperty_exposer.def( 
+                "asADouble"
+                , asADouble_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireBase::GeneralUnitProperty::asAString
+        
+            typedef ::QString ( ::SireBase::GeneralUnitProperty::*asAString_function_type)(  ) const;
+            asAString_function_type asAString_function_value( &::SireBase::GeneralUnitProperty::asAString );
+            
+            GeneralUnitProperty_exposer.def( 
+                "asAString"
+                , asAString_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireBase::GeneralUnitProperty::asAUnit
+        
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireBase::GeneralUnitProperty::*asAUnit_function_type)(  ) const;
+            asAUnit_function_type asAUnit_function_value( &::SireBase::GeneralUnitProperty::asAUnit );
+            
+            GeneralUnitProperty_exposer.def( 
+                "asAUnit"
+                , asAUnit_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireBase::GeneralUnitProperty::asAnInteger
+        
+            typedef int ( ::SireBase::GeneralUnitProperty::*asAnInteger_function_type)(  ) const;
+            asAnInteger_function_type asAnInteger_function_value( &::SireBase::GeneralUnitProperty::asAnInteger );
+            
+            GeneralUnitProperty_exposer.def( 
+                "asAnInteger"
+                , asAnInteger_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireBase::GeneralUnitProperty::isABoolean
+        
+            typedef bool ( ::SireBase::GeneralUnitProperty::*isABoolean_function_type)(  ) const;
+            isABoolean_function_type isABoolean_function_value( &::SireBase::GeneralUnitProperty::isABoolean );
+            
+            GeneralUnitProperty_exposer.def( 
+                "isABoolean"
+                , isABoolean_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireBase::GeneralUnitProperty::isADouble
+        
+            typedef bool ( ::SireBase::GeneralUnitProperty::*isADouble_function_type)(  ) const;
+            isADouble_function_type isADouble_function_value( &::SireBase::GeneralUnitProperty::isADouble );
+            
+            GeneralUnitProperty_exposer.def( 
+                "isADouble"
+                , isADouble_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireBase::GeneralUnitProperty::isAString
+        
+            typedef bool ( ::SireBase::GeneralUnitProperty::*isAString_function_type)(  ) const;
+            isAString_function_type isAString_function_value( &::SireBase::GeneralUnitProperty::isAString );
+            
+            GeneralUnitProperty_exposer.def( 
+                "isAString"
+                , isAString_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireBase::GeneralUnitProperty::isAUnit
+        
+            typedef bool ( ::SireBase::GeneralUnitProperty::*isAUnit_function_type)(  ) const;
+            isAUnit_function_type isAUnit_function_value( &::SireBase::GeneralUnitProperty::isAUnit );
+            
+            GeneralUnitProperty_exposer.def( 
+                "isAUnit"
+                , isAUnit_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireBase::GeneralUnitProperty::isAnInteger
+        
+            typedef bool ( ::SireBase::GeneralUnitProperty::*isAnInteger_function_type)(  ) const;
+            isAnInteger_function_type isAnInteger_function_value( &::SireBase::GeneralUnitProperty::isAnInteger );
+            
+            GeneralUnitProperty_exposer.def( 
+                "isAnInteger"
+                , isAnInteger_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         GeneralUnitProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::GeneralUnitProperty::operator=
         

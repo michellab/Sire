@@ -52,6 +52,18 @@ public:
 
     bool operator==(const GeneralUnitProperty &other) const;
     bool operator!=(const GeneralUnitProperty &other) const;
+
+    virtual bool isAString() const;
+    virtual bool isADouble() const;
+    virtual bool isAnInteger() const;
+    virtual bool isABoolean() const;
+    virtual bool isAUnit() const;
+
+    virtual QString asAString() const;
+    virtual double asADouble() const;
+    virtual int asAnInteger() const;
+    virtual bool asABoolean() const;
+    virtual SireUnits::Dimension::GeneralUnit asAUnit() const;
 };
 
 class SIREBASE_EXPORT GeneralUnitArrayProperty

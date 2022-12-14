@@ -15,6 +15,8 @@ namespace bp = boost::python;
 
 #include "SireStream/shareddatastream.h"
 
+#include "generalunitproperty.h"
+
 #include "property.h"
 
 #include "propertylist.h"
@@ -71,6 +73,18 @@ void register_Property_class(){
                 , asAString_function_value
                 , bp::release_gil_policy()
                 , "Return this property converted to a string. This throws an invalid\ncast if this is not possible" );
+        
+        }
+        { //::SireBase::Property::asAUnit
+        
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireBase::Property::*asAUnit_function_type)(  ) const;
+            asAUnit_function_type asAUnit_function_value( &::SireBase::Property::asAUnit );
+            
+            Property_exposer.def( 
+                "asAUnit"
+                , asAUnit_function_value
+                , bp::release_gil_policy()
+                , "Return this property converted to a unit" );
         
         }
         { //::SireBase::Property::asAnArray
@@ -157,6 +171,18 @@ void register_Property_class(){
                 , isAString_function_value
                 , bp::release_gil_policy()
                 , "Return whether or not this property holds a string (or can convert\nto a string)" );
+        
+        }
+        { //::SireBase::Property::isAUnit
+        
+            typedef bool ( ::SireBase::Property::*isAUnit_function_type)(  ) const;
+            isAUnit_function_type isAUnit_function_value( &::SireBase::Property::isAUnit );
+            
+            Property_exposer.def( 
+                "isAUnit"
+                , isAUnit_function_value
+                , bp::release_gil_policy()
+                , "Return whether or not this property holds a unit (or can convert\nto a unit)\n" );
         
         }
         { //::SireBase::Property::isAnArray

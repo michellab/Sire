@@ -2395,8 +2395,14 @@ inline bool _is_false(const QString &value, bool pyfalse_only=true)
 {
     if (pyfalse_only)
         return value == "False";
+    else if (value.toLower() == "false" or value == "0" or value == "0.0")
+        return true;
     else
-        return value.toLower() == "false" or value == "0" or value == "0.0";
+    {
+        // is this a number with a unit?
+        auto words = value.split(" ");
+        return words[0] == "0" or words[0] == "0.0";
+    }
 }
 
 bool _compare_equal(const QString &left,
@@ -2407,7 +2413,7 @@ bool _compare_equal(const QString &left,
     if (left == right)
         return true;
 
-    if (compare == ID_CMP_EQ and _is_true(right))
+    if ((compare == ID_CMP_EQ or compare == ID_CMP_AE) and _is_true(right))
     {
         // we are just asking if 'left' is anything other than false
         if (not _is_false(left, false))
@@ -2474,6 +2480,10 @@ bool _compare(const QString &left,
     {
         return not _compare(left, ID_CMP_EQ, right);
     }
+    else if (compare == ID_CMP_NA)
+    {
+        return not _compare(left, ID_CMP_AE, right);
+    }
     else if (compare == ID_CMP_EQ or compare == ID_CMP_AE)
     {
         return _compare_equal(left, compare, right);
@@ -2486,8 +2496,16 @@ bool _compare(const QString &left,
 
         double left_num = left.toDouble(&ok);
 
+        // the left number can be the unit property
         if (!ok)
-            return false;
+        {
+            // remove the units?
+            auto words = left.split(" ");
+            left_num = words[0].toDouble(&ok);
+
+            if (!ok)
+                return false;
+        }
 
         double right_num = right.toDouble(&ok);
 
@@ -2527,7 +2545,7 @@ MolViewPtr _select_property_(const MolViewPtr &mol,
             }
             catch(...)
             {
-                if (compare == ID_CMP_EQ and _is_true(value))
+                if ((compare == ID_CMP_EQ or compare == ID_CMP_AE) and _is_true(value))
                 {
                     idxs.append(i);
                 }
@@ -2563,7 +2581,7 @@ MolViewPtr _select_property_molecule(const MolViewPtr &mol,
         catch(...)
         {
             // this isn't a property that can be converted to a string.
-            if (compare == ID_CMP_EQ and _is_true(value))
+            if ((compare == ID_CMP_EQ or compare == ID_CMP_AE) and _is_true(value))
             {
                 // we are only asking if this property exists
                 return m;
@@ -2596,7 +2614,7 @@ MolViewPtr _select_property_bond(const SelectorBond &bonds,
             }
             catch(...)
             {
-                if (compare == ID_CMP_EQ and _is_true(value))
+                if ((compare == ID_CMP_EQ or compare == ID_CMP_AE) and _is_true(value))
                 {
                     idxs.append(i);
                 }

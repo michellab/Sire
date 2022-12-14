@@ -4,6 +4,8 @@
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
+#include "SireError/errors.h"
+
 using namespace SireBase;
 using namespace SireUnits::Dimension;
 
@@ -129,6 +131,62 @@ bool GeneralUnitProperty::operator==(const GeneralUnitProperty &other) const
 bool GeneralUnitProperty::operator!=(const GeneralUnitProperty &other) const
 {
     return GeneralUnit::operator!=(static_cast<const GeneralUnit&>(other));
+}
+
+
+bool GeneralUnitProperty::isAString() const
+{
+    return true;
+}
+
+bool GeneralUnitProperty::isADouble() const
+{
+    return this->isDimensionless();
+}
+
+bool GeneralUnitProperty::isAnInteger() const
+{
+    return this->isDimensionless();
+}
+
+bool GeneralUnitProperty::isABoolean() const
+{
+    return true;
+}
+
+bool GeneralUnitProperty::isAUnit() const
+{
+    return true;
+}
+
+QString GeneralUnitProperty::asAString() const
+{
+    return this->toString();
+}
+
+double GeneralUnitProperty::asADouble() const
+{
+    if (not this->isDimensionless())
+        throw SireError::invalid_cast( QObject::tr(
+            "You cannot convert a quantity with units (%1) to a unitless number.")
+                .arg(this->toString()), CODELOC);
+
+    return this->value();
+}
+
+int GeneralUnitProperty::asAnInteger() const
+{
+    return int(this->asADouble());
+}
+
+bool GeneralUnitProperty::asABoolean() const
+{
+    return not this->isZero();
+}
+
+SireUnits::Dimension::GeneralUnit GeneralUnitProperty::asAUnit() const
+{
+    return *this;
 }
 
 GeneralUnitArrayProperty::GeneralUnitArrayProperty()
