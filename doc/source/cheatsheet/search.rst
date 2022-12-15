@@ -529,3 +529,33 @@ has to be placed inside curly brackets.
 
 Searching by Distance
 ---------------------
+
+Talk about searching by distance
+
+Searching for Water or Protein Molecules
+----------------------------------------
+
+You can search for protein or water molecules using the ``protein``
+or ``water`` keywords.
+
+* ``water`` - search for all water molecules. These are defined as
+  molecules that contain one oxygen, two hydrogen and any number
+  of null-element (dummy) atoms.
+
+* ``protein`` - search for all protein molecules. These are defined
+  as molecules that contain a minimum number of residues whose
+  names are found in the list of possible protein residue names.
+
+You can get and set the minimum number of protein residues to match
+using the :func:`sire.search.get_min_protein_residues` and
+:func:`sire.search.set_min_protein_residues` functions. The default
+minimum is 5.
+
+You can get and set the list of protein residue names using the
+:func:`sire.search.get_protein_residue_names` and
+:func:`sire.search.set_protein_residue_names` functions. The names
+are searched via a case-insensitive search. The default list
+are the standard names of the biological amino acids, including
+names commonly used for protonated or deprotonated residues.
+
+
