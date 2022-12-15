@@ -1538,6 +1538,13 @@ class Cursors:
         raise property_error
 
     def __setitem__(self, key, value):
+        if type(value) is list or type(value) is tuple:
+            if len(value) == len(self._cursors):
+                for i, v in enumerate(value):
+                    self._cursors[i].set(key, v)
+
+                return
+
         for cursor in self._cursors:
             cursor.set(key, value)
 
@@ -3014,6 +3021,13 @@ class CursorsM:
         raise property_error
 
     def __setitem__(self, key, value):
+        if type(value) is list or type(value) is tuple:
+            if len(value) == len(self._cursors):
+                for i, v in enumerate(value):
+                    self._cursors[i].set(key, v)
+
+                return
+
         for cursor in self._cursors:
             cursor.set(key, value)
 

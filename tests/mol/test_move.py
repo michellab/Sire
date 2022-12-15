@@ -2,6 +2,54 @@
 import pytest
 
 
+def test_cursor_direct(ala_mols):
+    mols = ala_mols
+    mol = mols[0]
+
+    cursor = mol.cursor()
+
+    cursor.atoms()["coordinates"] = (0,0,0)
+
+    mol = cursor.commit()
+
+    def assert_equal(v0, v1):
+        for i in range(0, 3):
+            assert v0[0].value() == v1[0]
+
+    for atom in mol.atoms():
+        assert_equal(atom.coordinates(), (0,0,0))
+
+    cursor.atoms("element H")["coordinates"] = (1,2,3)
+
+    mol = cursor.commit()
+
+    for atom in mol.atoms():
+        if atom.element().num_protons() == 1:
+            assert_equal(atom.coordinates(), (1,2,3))
+        else:
+            assert_equal(atom.coordinates(), (0,0,0))
+
+    coords = [(5,6,7), (7,8,9), (10,11,12)]
+
+    cursor.atoms("element C")["coordinates"][0:3] = coords
+
+    mol = cursor.commit()
+
+    i = 0
+
+    for atom in mol.atoms():
+        if atom.element().num_protons() == 1:
+            assert_equal(atom.coordinates(), (1,2,3))
+        elif atom.element().num_protons() == 12:
+            if i < len(coords):
+                assert_equal(atom.coordinates(), coords[i])
+                i += 1
+            else:
+                assert_equal(atom.coordinates(), (0,0,0))
+        else:
+            assert_equal(atom.coordinates(), (0,0,0))
+
+
 def test_cursor_translate(ala_mols):
     mols = ala_mols
     mol = mols[0]

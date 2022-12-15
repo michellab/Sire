@@ -78,6 +78,54 @@ AtomCoords( size=22
 21: ( 0 , 0 , 0  )
 )
 
+Or, more directly
+
+>>> c.atoms("element H")["coordinates"] = (0,0,0)
+>>> mol = c.commit()
+>>> print(mol.property("coordinates"))
+AtomCoords( size=22
+0: ( 0 , 0 , 0  )
+1: ( 19.9818 Å, 3.44823 Å, 13.3886 Å )
+2: ( 0 , 0 , 0  )
+3: ( 0 , 0 , 0  )
+4: ( 19.4805 Å, 4.54971 Å, 14.3514 Å )
+...
+17: ( 0 , 0 , 0  )
+18: ( 14.8341 Å, 3.93668 Å, 18.3509 Å )
+19: ( 0 , 0 , 0  )
+20: ( 0 , 0 , 0  )
+21: ( 0 , 0 , 0  )
+)
+
+.. note::
+
+   Setting the property in a cursor collection sets the value for all
+   cursors contained in that collection.
+
+Or, you can set the coordinates of the atoms to different values, if you
+pass in a list of coordinates that has the same size as the number
+of cursors, e.g.
+
+>>> c.atoms("element H")[0:3]["coordinates"] = [(1, 1, 1), (2, 2, 2), (3, 3, 3)]
+>>> mol = c.commit()
+>>> print(mol.property("coordinates"))
+AtomCoords( size=22
+0: ( 1 Å, 1 Å, 1 Å )
+1: ( 19.9818 Å, 3.44823 Å, 13.3886 Å )
+2: ( 2 Å, 2 Å, 2 Å )
+3: ( 3 Å, 3 Å, 3 Å )
+4: ( 19.4805 Å, 4.54971 Å, 14.3514 Å )
+...
+17: ( 0 , 0 , 0  )
+18: ( 14.8341 Å, 3.93668 Å, 18.3509 Å )
+19: ( 0 , 0 , 0  )
+20: ( 0 , 0 , 0  )
+21: ( 0 , 0 , 0  )
+)
+
+sets the coordinates of the first three hydrogen atoms to ``(1,1,1)``,
+``(2,2,2)`` and ``(3,3,3)``.
+
 Translation using a Cursor
 --------------------------
 

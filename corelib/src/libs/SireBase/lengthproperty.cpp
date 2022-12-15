@@ -49,7 +49,7 @@ QDataStream &operator<<(QDataStream &ds, const LengthProperty &prop)
 QDataStream &operator>>(QDataStream &ds, LengthProperty &prop)
 {
     VersionID v = readHeader(ds, r_prop);
-    
+
     if (v == 1)
     {
         double val;
@@ -58,7 +58,7 @@ QDataStream &operator>>(QDataStream &ds, LengthProperty &prop)
     }
     else
         throw version_error(v, "1", r_prop, CODELOC);
-    
+
     return ds;
 }
 
@@ -81,7 +81,7 @@ LengthProperty::LengthProperty(const Property &other)
     }
     else
         throw SireError::invalid_cast( QObject::tr(
-            "Cannot cast a %s into a LengthProperty").arg(other.toString()), CODELOC );
+            "Cannot cast a %1 into a LengthProperty").arg(other.toString()), CODELOC );
 }
 
 /** Copy constructor */
@@ -105,7 +105,7 @@ LengthProperty& LengthProperty::operator=(const LengthProperty &other)
     {
         val = other.val;
     }
-    
+
     return *this;
 }
 

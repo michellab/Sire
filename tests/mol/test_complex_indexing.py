@@ -55,6 +55,19 @@ def test_broken_searches(ala_mols):
     assert mols["atoms with property radius =~ 0.8"] == mol[2]
     assert mols["atoms with property radius < 0.5"] == mol[2].invert()
 
+    # make sure that the unit search uses the default units
+    with pytest.raises(KeyError):
+        mols["atoms with property radius > 50"]
+
+    sire.units.set_length_unit(sire.units.picometer)
+
+    assert mols["atoms with property radius > 50"] == mol[2]
+
+    sire.units.set_length_unit(sire.units.angstrom)
+
+    with pytest.raises(KeyError):
+        mols["atoms with property radius > 50"]
+
     assert mols["property is_perturbable"] == mol
 
     assert mols["atoms with property atomtype == DU in molecules with property is_perturbable"] == mol[0]

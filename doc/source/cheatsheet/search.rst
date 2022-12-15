@@ -366,7 +366,7 @@ The chemical element can be specified in a number of different ways:
   :func:`sire.mol.Element.biological` function). Note you can use
   the shorthand ``element bio`` to also match biological atoms.
 
-Searching by Count (i.e. number of atoms)
+Searching by Count (i.e. Number of Atoms)
 -----------------------------------------
 
 You can search by counts, e.g. finding all molecules with more than
@@ -507,4 +507,25 @@ There are several routes to do this;
 
 .. note::
 
-   Need to talk about how comparisons with unit-based properties work!
+   The values in property searches should be in the default units
+   for the property being searched (e.g. ``radius > 0.5`` is in
+   units of Å as this is the default length unit). Remember this
+   if you change the default length unit, i.e. if the default
+   length unit is picometers, then the above search would be
+   ``radius > 50``.
+
+Finding the Nth View that Matches
+---------------------------------
+
+You can use subscripting to pick out the nth view that matches a particular
+search. The grammar is ``{X}[i]`` where ``X`` is the search, and ``i``
+is the index of the result you want to match. Note that the search
+has to be placed inside curly brackets.
+
+* ``{element C}[0]`` - return the first carbon atom
+* ``{resname ALA}[-1]`` - return the last residue called ``ALA``
+* ``{bonds with element H}[0:5]`` - return the first five bonds that
+  contain hydrogen.
+
+Searching by Distance
+---------------------
