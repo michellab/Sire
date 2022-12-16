@@ -1058,11 +1058,20 @@ Molecule repartitionHydrogenMass(
         connectivity = molecule.property(conn_prop).asA<Connectivity>();
     }
 
+    // Create a dummy element.
+    const auto dummy = Element("Xx");
+
     // Compute the initial mass.
     double initial_mass = 0;
+    unsigned idx = 0;
+    auto elements = molecule.property(elem_prop).asA<AtomElements>().toVector();
     for (const auto &mass : molecule.property(mass_prop).asA<AtomMasses>().toVector())
     {
-        initial_mass += mass.value();
+        // Exclude dummy atoms.
+        if (elements[idx] != dummy)
+        {
+            initial_mass += mass.value();
+        }
     }
 
     // Make the molecule editable.
@@ -1089,9 +1098,15 @@ Molecule repartitionHydrogenMass(
 
     // Compute the total adjusted mass.
     double final_mass = 0;
+    idx = 0;
     for (const auto &mass : molecule.property(mass_prop).asA<AtomMasses>().toVector())
     {
-        final_mass += mass.value();
+        // Exclude dummy atoms.
+        if (elements[idx] != dummy)
+        {
+            final_mass += mass.value();
+        }
+
     }
 
     // Work out the delta averaged across the bonded heavy atoms.
@@ -1106,29 +1121,33 @@ Molecule repartitionHydrogenMass(
     // Loop over all connected heavy atoms.
     for (const auto &idx : connections)
     {
-        Dimension::MolarMass mass;
-
-        // Use the current mass.
-        if (mass_hash.contains(idx))
+        // Ignore dummy atoms.
+        if (elements[idx.value()] != dummy)
         {
-            mass = mass_hash[idx];
+            Dimension::MolarMass mass;
+
+            // Use the current mass.
+            if (mass_hash.contains(idx))
+            {
+                mass = mass_hash[idx];
+            }
+            // Use the initial mass.
+            else
+            {
+                mass =  molecule.atom(idx).property<Dimension::MolarMass>(mass_prop);
+            }
+
+            // Reduce the mass.
+            mass -= delta_mass;
+
+            // Set the new mass.
+            edit_mol = edit_mol.atom(idx)
+                               .setProperty(mass_prop, mass)
+                               .molecule();
+
+            // Store the updated mass.
+            mass_hash[idx] = mass;
         }
-        // Use the initial mass.
-        else
-        {
-            mass =  molecule.atom(idx).property<Dimension::MolarMass>(mass_prop);
-        }
-
-        // Reduce the mass.
-        mass -= delta_mass;
-
-        // Set the new mass.
-        edit_mol = edit_mol.atom(idx)
-                           .setProperty(mass_prop, mass)
-                           .molecule();
-
-        // Store the updated mass.
-        mass_hash[idx] = mass;
     }
 
     return edit_mol.commit();
