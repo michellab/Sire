@@ -474,7 +474,7 @@ void register_MoleculeParser_class(){
                 , parse_function_value
                 , ( bp::arg("system"), bp::arg("format"), bp::arg("map") )
                 , bp::release_gil_policy()
-                , "" );
+                , "Parse the passed system, returning the resulting Parser. You must\n  specify the parser that you want to use\n" );
         
         }
         { //::SireIO::MoleculeParser::parse

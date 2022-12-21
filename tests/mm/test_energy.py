@@ -237,4 +237,4 @@ def test_neura_energy(neura_mols):
     # these values have been pre-calculated. The test checks
     # if anything has changed the energies
     assert components["coulomb"].value() == pytest.approx(-223.95138492)
-    assert components["LJ"].value() == pytest.approx(2.09059)
+    assert components["LJ"].value() == pytest.approx(2.09059, 1e-5)

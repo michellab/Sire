@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "SireBase/booleanproperty.h"
 
+#include "SireBase/centralcache.h"
+
 #include "SireBase/generalunitproperty.h"
 
 #include "SireBase/getinstalldir.h"
@@ -401,6 +403,18 @@ void register_AmberRst_class(){
                 , nAtoms_function_value
                 , bp::release_gil_policy()
                 , "Return the number of atoms whose data are contained in this restart file" );
+        
+        }
+        { //::SireIO::AmberRst::nBytes
+        
+            typedef int ( ::SireIO::AmberRst::*nBytes_function_type)(  ) const;
+            nBytes_function_type nBytes_function_value( &::SireIO::AmberRst::nBytes );
+            
+            AmberRst_exposer.def( 
+                "nBytes"
+                , nBytes_function_value
+                , bp::release_gil_policy()
+                , "Return the number of bytes this takes" );
         
         }
         { //::SireIO::AmberRst::nFrames
