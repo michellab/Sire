@@ -529,7 +529,53 @@ is the index of the result you want to match.
 Searching by Distance
 ---------------------
 
-Talk about searching by distance
+You can search for views based on their distances to either each other,
+or to fixed points in space. There are a few variants of this search.
+
+The first is ``X within D of Y``. This returns views that match ``X`` that are
+within the specified distance ``D`` (in default length units) of views that match
+``Y``. Examples include ``waters within 5 of resname ALA``, which finds
+all water molecules within 5 Å of residues called ``ALA``. Or
+``(element H in water) within 3 of (element O, Cl, F in protein)``
+which finds all hydrogen atoms in water molecules that are within
+3 Å of all oxygen, chlorine or fluorine atoms in protein molecules.
+
+The distance criterion used is whether any atoms in the view ``X`` is
+within the specified distance of any atom in the view ``Y``.
+
+You can specify the distance criterion using searches of form
+``X where CRITERION within D of Y``. The ``CRITERION`` has many possible
+values;
+
+* ``center`` - the geometric center of the atoms in the two views will
+  be compared, e.g. ``waters where center within 5 of resname ALA`` finds
+  all waters whose geometric centers are within 5 Å of the geometric
+  centers of all ``ALA`` residues combined.
+
+* ``max`` - the maximum coordinates of the two views will be compared,
+  e.g. ``atoms where max within 5 of protein`` finds all atoms that
+  are within 5 Å of the maximum coordinates of all proteins combined.
+
+* ``min`` - the minimum coordinates.
+
+* ``A.x``, ``A.y``, ``A.z`` - compare specifically the x, y or z
+  dimensions only, e.g. ``center.x`` compares only the x dimension
+  of the centers of the views, while ``max.y`` would compare the
+  y dimension of the maximum, and ``min.z`` would be the z dimension
+  of the minimum.
+
+You can compare against fixed points in space by passing in a vector
+in place of ``Y``. For example, ``atoms within 10 of (0,0,0)``
+would find all atoms within 10 Å of the origin, while
+``waters within 3 of (5.3, 9.8, -2.1)`` would find all water molecules
+within 3 Å of the point ``(5.3, 9.8, -2.1)``.
+
+.. note::
+
+   All distance searches use the first ``space`` property that can be
+   found in the views to calculate distances. This should ensure that
+   periodic boundaries are accounted for in the search. You can specify
+   the space to use by passing this in via a property map.
 
 Searching for Water or Protein Molecules
 ----------------------------------------
