@@ -73,8 +73,8 @@ def test_broken_searches(ala_mols):
 
     assert mols["property is_perturbable"] == mol
 
-    assert mols["atoms with property atomtype == DU in molecules with property is_perturbable"] == mol[0]
-    assert mols[("atoms with property atomtype == DU in molecules with property is_perturbable",
+    assert mols["(atoms with property atomtype == DU) in (molecules with property is_perturbable)"] == mol[0]
+    assert mols[("(atoms with property atomtype == DU) in (molecules with property is_perturbable)",
                  {"atomtype": "final_atomtype"})] == mol[-1]
 
 

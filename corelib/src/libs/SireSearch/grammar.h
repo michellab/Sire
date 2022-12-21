@@ -364,61 +364,55 @@ public:
                   (leftB >> expressionRule >> rightB);
 
         //an expression is either a binary, a with or an expression
-        expressionRule %= binaryRule2 | binaryRule |
-                          withinRule | withinVectorRule | whereRule |
-                          withRule2 | withRule | expressionPartRule;
+        expressionRule = binaryRule |
+                         withinRule | withinVectorRule | whereRule |
+                         withRule |
+                         expressionPartRule;
 
         //a binary is two expressions separated by an op_token (and/or)
-        binaryRule %= (expressionPartRule >> op_token >> expressionPartRule) |
-                      (expressionPartRule >> op_token >> withRule) |
-                      (withRule >> op_token >> expressionPartRule) |
-                      (withRule >> op_token >> withRule) |
-                      ( qi::lit('(') >> binaryRule >> qi::lit(')') );
-
-        //allow multiple op_tokens, e.g. a and b and c
-        binaryRule2 %= binaryRule >> op_token >> binaryRule |
-                       binaryRule >> op_token >> expressionPartRule |
-                       expressionPartRule >> op_token >> binaryRule |
-                       withRule >> op_token >> binaryRule |
-                       binaryRule >> op_token >> withRule |
-                       (qi::lit('(') >> binaryRule2 >> qi::lit(')') );
+        binaryRule = ( lhsRule >>
+                       op_token >>
+                       rhsRule
+                     ) |
+                     ( leftB >> binaryRule >> rightB );
 
         //a withRule is two expressions separated by a "with" or "in"
-        withRule %= (expressionPartRule >> with_token >> expressionPartRule) |
-                    ( qi::lit('(') >> withRule >> qi::lit(')') );
+        withRule = ( lhsRule >>
+                     with_token >>
+                     rhsRule ) |
+                   ( leftB >> withRule >> rightB );
 
         //grammar for a "within" expression
-        withinRule %= ( lhsRule >>
-                        qi::lit("within ") >>
-                        lengthValueRule >>
-                        qi::lit("of ") >>
-                        rhsRule
-                      ) | (leftB >> withinRule >> rightB);
+        withinRule = ( lhsRule >>
+                       qi::lit("within ") >>
+                       lengthValueRule >>
+                       qi::lit("of ") >>
+                       rhsRule
+                     ) | (leftB >> withinRule >> rightB);
 
         //grammar for a "within" expression comparing with a vector position.
-        withinVectorRule %= expressionPartRule >>
-                            qi::lit("within") >>
-                            lengthValueRule >>
-                            qi::lit("of") >>
-                            vectorValueRule;
+        withinVectorRule = ( lhsRule >>
+                             qi::lit("within ") >>
+                             lengthValueRule >>
+                             qi::lit("of") >>
+                             vectorValueRule
+                           ) | (leftB >> withinVectorRule >> rightB);
 
         //grammar for a "where" expression
-        whereRule %= expressionPartRule >> qi::lit("where") >>
-                     coord_token >>
-                    (whereWithinRule | whereCompareRule);
+        whereRule = ( lhsRule >>
+                      qi::lit("where ") >>
+                      coord_token >>
+                      (whereWithinRule | whereCompareRule)
+                    ) | (leftB >> whereRule >> rightB);
 
         //sub-grammar for a "where within" expression
-        whereWithinRule %= qi::lit("within") >> lengthValueRule >> qi::lit("of")
-                              >> expressionRule;
+        whereWithinRule = qi::lit("within ") >>
+                          lengthValueRule >>
+                          qi::lit("of ") >>
+                          rhsRule;
 
         //sub-grammar for a "where comparison" expression
-        whereCompareRule %= cmp_token >> vectorValueRule;
-
-        //allow multiple with_tokens, e.g. atoms in molecules with resname ALA
-        withRule2 %= withRule >> with_token >> withRule |
-                     expressionPartRule >> with_token >> withRule |
-                     withRule >> with_token >> expressionPartRule |
-                     (qi::lit('(') >> withRule2 >> qi::lit(')') );
+        whereCompareRule = cmp_token >> vectorValueRule;
 
         //grammar to enable subscripting of an expression
         subscriptRule %= (qi::lit("{") >> expressionRule >> qi::lit("}") >>
@@ -604,9 +598,7 @@ public:
         idNumberRule.name( "Number" );
         idElementRule.name( "Element" );
         binaryRule.name( "Binary" );
-        binaryRule2.name( "Binary2" );
         withRule.name( "With" );
-        withRule2.name( "With2" );
         withinRule.name( "Within" );
         withinVectorRule.name( "Within Vector" );
         notRule.name( "Not" );
@@ -661,11 +653,9 @@ public:
     qi::rule<IteratorT, AST::IDNumber(), SkipperT> idNumberRule;
     qi::rule<IteratorT, AST::IDElement(), SkipperT> idElementRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule;
-    qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
     qi::rule<IteratorT, AST::IDBond(), SkipperT> bondRule;
     qi::rule<IteratorT, AST::IDProperty(), SkipperT> propertyRule;
     qi::rule<IteratorT, AST::IDWith(), SkipperT> withRule;
-    qi::rule<IteratorT, AST::IDWith(), SkipperT> withRule2;
     qi::rule<IteratorT, AST::IDWithin(), SkipperT> withinRule;
     qi::rule<IteratorT, AST::IDWithinVector(), SkipperT> withinVectorRule;
     qi::rule<IteratorT, AST::IDNot(), SkipperT> notRule;
