@@ -518,13 +518,12 @@ Finding the Nth View that Matches
 ---------------------------------
 
 You can use subscripting to pick out the nth view that matches a particular
-search. The grammar is ``{X}[i]`` where ``X`` is the search, and ``i``
-is the index of the result you want to match. Note that the search
-has to be placed inside curly brackets.
+search. The grammar is ``X[i]`` where ``X`` is the search, and ``i``
+is the index of the result you want to match.
 
-* ``{element C}[0]`` - return the first carbon atom
-* ``{resname ALA}[-1]`` - return the last residue called ``ALA``
-* ``{bonds with element H}[0:5]`` - return the first five bonds that
+* ``element C[0]`` - return the first carbon atom
+* ``(resname ALA)[-1]`` - return the last residue called ``ALA``
+* ``(bonds with element H)[0:5]`` - return the first five bonds that
   contain hydrogen.
 
 Searching by Distance

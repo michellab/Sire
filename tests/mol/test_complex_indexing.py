@@ -12,13 +12,13 @@ def test_broken_searches(ala_mols):
     # noticed this was broken
     assert mols["molecules within 2 of resname ALA"] == mols["residues within 2 of resname ALA"].molecules()
 
-    assert mols["{element C}[0] or {element C}[-1]"] == mols["element C"][ [0,-1] ]
+    assert mols["(element C[0]) or (element C[-1])"] == mols["element C"][ [0,-1] ]
 
-    assert mols["{{element C}[0] or {element C}[-1]}[-1]"] == mols["element C"][-1]
+    assert mols["((element C[0]) or (element C[-1]))[-1]"] == mols["element C"][-1]
 
-    assert mols["{({element C}[0] or {element C}[-1])}[-1]"] == mols["element C"][-1]
+    assert mols["(((element C[0]) or (element C[-1])))[-1]"] == mols["element C"][-1]
 
-    assert mols["{element C in resname ALA}[1]"] == mols["element C in resname ALA"][1]
+    assert mols["(element C in resname ALA)[1]"] == mols["element C in resname ALA"][1]
 
     assert mols["atoms in count(residues) > 1"] == mols[0].atoms()
 
@@ -206,10 +206,11 @@ def test_basic_indexing(ala_mols):
 def test_search_indexing(ala_mols):
     mols = ala_mols
 
-    assert mols["{element C}[0]"] == mols["element C"][0]
-    assert mols["{element C}[-1]"] == mols["element C"][-1]
-    assert mols["{element C}[0:2]"] == mols["element C"][0:2]
-    assert mols["{element C}[2:0:-1]"] == mols["element C"][2:0:-1]
+    assert mols["element C[0]"] == mols["element C"][0]
+    assert mols["(element C)[-1]"] == mols["element C"][-1]
+    assert mols["(element C)[0:2]"] == mols["element C"][0:2]
+    assert mols["(element C)[2:0:-1]"] == mols["element C"][2:0:-1]
+    assert mols["((element C[0:3])[-1])[0]"] == mols["element C"][2]
 
 
 def test_logical_indexing(ala_mols):

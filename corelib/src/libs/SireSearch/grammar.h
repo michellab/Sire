@@ -358,8 +358,7 @@ public:
                   (leftB >> expressionRule >> rightB);
 
         //rule for the right hand side of an expression - this can only
-        //be an ExpressionRule, or an ExpressionRule that is enclosed
-        //in brackets
+        //be an ExpressionRule
         rhsRule = (expressionRule) |
                   (leftB >> expressionRule >> rightB);
 
@@ -367,20 +366,20 @@ public:
         expressionRule = binaryRule |
                          withinRule | withinVectorRule | whereRule |
                          withRule |
-                         expressionPartRule;
+                         subscriptRule |
+                         expressionPartRule |
+                         (leftB >> expressionRule >> rightB);
 
         //a binary is two expressions separated by an op_token (and/or)
         binaryRule = ( lhsRule >>
                        op_token >>
                        rhsRule
-                     ) |
-                     ( leftB >> binaryRule >> rightB );
+                     );
 
         //a withRule is two expressions separated by a "with" or "in"
         withRule = ( lhsRule >>
                      with_token >>
-                     rhsRule ) |
-                   ( leftB >> withRule >> rightB );
+                     rhsRule );
 
         //grammar for a "within" expression
         withinRule = ( lhsRule >>
@@ -388,7 +387,7 @@ public:
                        lengthValueRule >>
                        qi::lit("of ") >>
                        rhsRule
-                     ) | (leftB >> withinRule >> rightB);
+                     );
 
         //grammar for a "within" expression comparing with a vector position.
         withinVectorRule = ( lhsRule >>
@@ -396,14 +395,14 @@ public:
                              lengthValueRule >>
                              qi::lit("of") >>
                              vectorValueRule
-                           ) | (leftB >> withinVectorRule >> rightB);
+                           );
 
         //grammar for a "where" expression
         whereRule = ( lhsRule >>
                       qi::lit("where ") >>
                       coord_token >>
                       (whereWithinRule | whereCompareRule)
-                    ) | (leftB >> whereRule >> rightB);
+                    );
 
         //sub-grammar for a "where within" expression
         whereWithinRule = qi::lit("within ") >>
@@ -415,27 +414,29 @@ public:
         whereCompareRule = cmp_token >> vectorValueRule;
 
         //grammar to enable subscripting of an expression
-        subscriptRule %= (qi::lit("{") >> expressionRule >> qi::lit("}") >>
-                          qi::lit("[") >> rangeValueRule >> qi::lit("]")) |
-                         (qi::lit("{") >> subscriptRule >> qi::lit("}") >>
-                          qi::lit("[") >> rangeValueRule >> qi::lit("]"));
+        subscriptRule = ( lhsRule >>
+                          qi::lit("[") >>
+                          rangeValueRule >>
+                          qi::lit("]")
+                        );
 
         //an expression is either a subscript, name, number, within, where, not
         //or user-identified expression, optionally surrounded by parenthesis '( )'
-        expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
-                              propertyRule | bondRule |
-                              water_token | pert_token | protein_token |
-                              notRule | joinRule |
-                              massRule | massCmpRule | chargeRule | chargeCmpRule |
-                              massObjRule | massObjCmpRule | chargeObjRule | chargeObjCmpRule |
-                              all_token | countRule | user_token |
-                              ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
+        expressionPartRule = idNameRule | idNumberRule | idElementRule |
+                             propertyRule | bondRule |
+                             water_token | pert_token | protein_token |
+                             notRule | joinRule |
+                             massRule | massCmpRule |
+                             chargeRule | chargeCmpRule |
+                             massObjRule | massObjCmpRule |
+                             chargeObjRule | chargeObjCmpRule |
+                             all_token | countRule | user_token;
 
         //grammar that specifies a list of names (comma-separated)
-        nameValuesRule %= ( nameValueRule % qi::lit( ',' ) );
+        nameValuesRule = ( nameValueRule % qi::lit( ',' ) );
 
         //grammar for a single name (string or regular expression)
-        nameValueRule %= regExpRule | stringRule;
+        nameValueRule = regExpRule | stringRule;
 
         //grammar for a regular expression (identified using '/')
         regExpRule = eps [ _val = AST::RegExpValue() ] >>
@@ -446,7 +447,7 @@ public:
                      ;
 
         //grammar for a set of integers (either as ranges or comparisons)
-        rangeValuesRule %= ( (compareValueRule | rangeValueRule) % qi::lit( ',' ) );
+        rangeValuesRule = ( (compareValueRule | rangeValueRule) % qi::lit( ',' ) );
 
         //grammar for an integer or range (e.g. 0:10, or 5)
         rangeValueRule = eps [ _val = AST::RangeValue() ] >>
@@ -482,19 +483,19 @@ public:
                               ;
 
         //allow looking for mass
-        massRule %= qi::lit("mass") >> massValueRule;
-        massCmpRule %= qi::lit("mass") >> cmp_token >> massValueRule;
-        massObjRule %= obj_token >> qi::lit("mass") >> massValueRule;
-        massObjCmpRule %= obj_token >> qi::lit("mass") >> cmp_token >> massValueRule;
+        massRule = qi::lit("mass ") >> massValueRule;
+        massCmpRule = qi::lit("mass ") >> cmp_token >> massValueRule;
+        massObjRule = obj_token >> qi::lit("mass ") >> massValueRule;
+        massObjCmpRule = obj_token >> qi::lit("mass ") >> cmp_token >> massValueRule;
 
         //allow looking for charge
-        chargeRule %= qi::lit("charge") >> chargeValueRule;
-        chargeCmpRule %= qi::lit("charge") >> cmp_token >> chargeValueRule;
-        chargeObjRule %= obj_token >> qi::lit("charge") >> chargeValueRule;
-        chargeObjCmpRule %= obj_token >> qi::lit("charge") >> cmp_token >> chargeValueRule;
+        chargeRule = qi::lit("charge ") >> chargeValueRule;
+        chargeCmpRule = qi::lit("charge ") >> cmp_token >> chargeValueRule;
+        chargeObjRule = obj_token >> qi::lit("charge ") >> chargeValueRule;
+        chargeObjCmpRule = obj_token >> qi::lit("charge ") >> cmp_token >> chargeValueRule;
 
         //grammar for a comparison (e.g. x > 5)
-        compareValueRule %= cmp_token >> int_;
+        compareValueRule = cmp_token >> int_;
 
         //grammar for a length/distance (with optional unit)
         lengthValueRule = eps [ _val = AST::LengthValue() ] >>
@@ -524,7 +525,7 @@ public:
                             ;
 
         //grammar for an individual name assigned to name values
-        idNameRule  %= name_token >> nameValuesRule;
+        idNameRule = name_token >> nameValuesRule;
 
         //grammer for an individual numbers assigned to number values
         idNumberRule = eps [ _val = AST::IDNumber() ] >>
@@ -535,25 +536,25 @@ public:
                             ;
 
         //grammar for selecting by chemical element
-        idElementRule %= qi::lit("element") >> ( element_token % qi::lit(",") );
+        idElementRule = qi::lit("element ") >> ( element_token % qi::lit(",") );
 
         //allow searching by molecular property
         propertyRule = eps [ _val = AST::IDProperty() ] >>
                             (
-                                qi::lit("property")[ _val /= 1 ] >>
+                                qi::lit("property ")[ _val /= 1 ] >>
                                 stringRule[ _val += _1 ] >>
                                 cmp_token[ _val += _1 ] >>
                                 stringRule[ _val *= _1 ]
                             )
                             |
                             (
-                                qi::lit("property")[ _val /= 1 ] >>
+                                qi::lit("property ")[ _val /= 1 ] >>
                                 stringRule[ _val += _1 ]
                             )
                             |
                             (
                                 obj_token[ _val += _1 ] >>
-                                qi::lit("property") >>
+                                qi::lit("property ") >>
                                 stringRule[ _val += _1 ] >>
                                 cmp_token[ _val += _1 ] >>
                                 stringRule[ _val *= _1 ]
@@ -561,23 +562,23 @@ public:
                             |
                             (
                                 obj_token[ _val += _1 ] >>
-                                qi::lit("property") >>
+                                qi::lit("property ") >>
                                 stringRule[ _val += _1 ]
                             )
                             ;
 
         //allow looking for bonds
-        bondRule %= (qi::lit("bonds") >> bond_token >> expressionRule
+        bondRule = (qi::lit("bonds ") >> bond_token >> expressionRule
                                       >> bond_token >> expressionRule) |
-                    (qi::lit("bonds") >> bond_token >> expressionRule);
+                   (qi::lit("bonds ") >> bond_token >> expressionRule);
 
         //grammar for a "not" expression
-        notRule %= qi::lit("not") >> expressionRule |
-                   qi::lit("NOT") >> expressionRule |
-                   qi::lit("!") >> expressionRule;
+        notRule = qi::lit("not ") >> expressionRule |
+                  qi::lit("NOT ") >> expressionRule |
+                  qi::lit("!") >> expressionRule;
 
         //grammar for a "join" expression
-        joinRule %= qi::lit("join") >> expressionRule;
+        joinRule = qi::lit("join ") >> expressionRule;
 
         //grammar for a count expression e.g. count(atoms) < 5
         countRule = eps [ _val = AST::IDCount() ] >>
