@@ -558,4 +558,66 @@ are searched via a case-insensitive search. The default list
 are the standard names of the biological amino acids, including
 names commonly used for protonated or deprotonated residues.
 
+Creating Custom Search Tokens
+-----------------------------
 
+You can create and use your own search tokens! You set new search tokens
+using :func:`sire.search.set_token`, e.g.
+
+>>> sire.search.set_token("CH-bonds", "bonds from element C to element H")
+
+would create a new search token called ``CH-bonds`` that finds all bonds
+between carbon and hydrogen atoms. You could then use this token just
+like any other token, e.g.
+
+>>> mols["CH-bonds in protein"]
+
+would return all the carbon-hydrogen bonds in protein molecules.
+
+Token names cannot contain spaces, and must start with a letter (i.e.
+that can't start with numbers or symbols). Token names cannot be valid
+search terms themselves - meaning you can't use custom tokens to redefine
+the above tokens or grammar. They also can't start with any existing search
+term or token. This means that, once set, you cannot
+set the token again, or, indeed, set any token that starts with this token.
+To change a token you first have to delete it
+using the :func:`sire.search.delete_token` function, e.g.
+
+>>> sire.search.delete_token("CH-bonds")
+
+.. note::
+
+   This function will silently do nothing if the token doesn't exist,
+   or if you attempt to delete an built-in token. You cannot delete
+   built-in tokens, e.g. like ``protein`` or ``water``.
+
+You can use :func:`sire.search.delete_all_tokens` to delete all
+custom search tokens.
+
+The function :func:`sire.search.has_token` will query whether or not
+a particular token exists.
+
+The function :func:`sire.search.get_token` will return the search term
+that corresponds to the passed token, e.g.
+
+>>> sire.search.set_token("CH-bonds", "bonds from element C to element H")
+>>> print(sire.search.get_token("CH-bonds"))
+bonds from element C to element H
+
+Tokens are expanded when they are used as part of other tokens, e.g.
+
+>>> sire.search.set_token("p-CH-bonds", "CH-bonds in protein")
+>>> print(sire.search.get_token("p-CH-bonds"))
+({ CH-bonds => bonds from element C to element H }) in (protein)
+
+This shows that ``CH-bonds`` is ``bonds from element C to element H``.
+
+Deleting or changing the token later does not affect any pre-existing
+tokens that used it, e.g.
+
+>>> sire.search.delete_token("CH-bonds")
+>>> print(sire.search.get_token("p-CH-bonds"))
+({ CH-bonds => bonds from element C to element H }) in (protein)
+>>> sire.search.set_token("CH-bonds", "bonds to element C")
+>>> print(sire.search.get_token("p-CH-bonds"))
+({ CH-bonds => bonds from element C to element H }) in (protein)

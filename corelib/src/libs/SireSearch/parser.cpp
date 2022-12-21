@@ -149,6 +149,89 @@ AST::Node parse(const IteratorT & begin, const IteratorT & end)
 /** Function used internally to associate a user token with a user-specified selection */
 static void set_token(const std::string &token, const std::string &str)
 {
+    QString str_token = QString::fromStdString(token);
+    str_token = str_token.simplified();
+
+    // token names cannot contain spaces
+    for (const auto &token_char : str_token)
+    {
+        if (token_char.isSpace())
+        {
+            throw SireError::invalid_key(QObject::tr(
+                "You cannot use '%1' as the name of a search token as it "
+                "contains a space (or space-like) character. Please replace "
+                "all spaces with, e.g. underscores or hyphens.")
+                    .arg(str_token), CODELOC);
+        }
+    }
+
+    // they must also have a size...
+    if (str_token.isEmpty())
+    {
+        throw SireError::invalid_key(QObject::tr(
+            "You can't use an empty string as the name of a search token."),
+                CODELOC);
+    }
+
+    // they also can't start with a number (or maths) character
+    if (not str_token[0].isLetter())
+    {
+        throw SireError::invalid_key(QObject::tr(
+            "You cannot use '%1' as the name of a search token as it "
+            "starts with a non-letter character. Please "
+            "use a name that starts with a letter.")
+                .arg(str_token), CODELOC);
+    }
+
+    auto cleaned_token = str_token.toStdString();
+
+    //first check that we *can't* parse the name of the token. We should
+    //not be able to set token names that are valid search terms
+    bool token_is_parseable = false;
+    QString part_parseable;
+
+    try
+    {
+        parse(cleaned_token.begin(), cleaned_token.end());
+        token_is_parseable = true;
+    }
+    catch(const SireMol::parse_error &e)
+    {
+        // we want an exception to be raised as this
+        // shows that the token is not parseable
+
+        // but we need it to be entirely unparseable, else
+        // the token may confuse the parse engine. Tokens that
+        // start with 'protein' or 'resnum' confuse it
+
+        // This is a really annoying restriction...
+        if (e.why().indexOf("Failed to parse any of the selection") == -1)
+        {
+            token_is_parseable = true;
+            part_parseable = e.why();
+        }
+    }
+
+    if (token_is_parseable)
+    {
+        if (part_parseable.isEmpty())
+        {
+            throw SireError::invalid_key(QObject::tr(
+                "You cannot use '%1' as the name of a search token as this is, "
+                "itself, a valid search phrase. Please choose a name that is not "
+                "an existing search token.").arg(str_token), CODELOC);
+        }
+        else
+        {
+            throw SireError::invalid_key(QObject::tr(
+                "You cannot use '%1' as the name of a search token as it starts "
+                "with an existing search token. This would confuse the parser. "
+                "Please choose a name that does not start with any existing "
+                "search term. To help, here is the partial-parse message: %2")
+                    .arg(str_token).arg(part_parseable), CODELOC);
+        }
+    }
+
     //first parse this into an AST::Node
     auto node = parse( str.begin(), str.end() );
 
@@ -157,7 +240,7 @@ static void set_token(const std::string &token, const std::string &str)
     if (_user_tokens == 0)
         _user_tokens = new UserTokens();
 
-    _user_tokens->add(token, AST::IDUser(token,node.values.value));
+    _user_tokens->add(cleaned_token, AST::IDUser(token,node.values.value));
 }
 
 static bool has_token(const std::string &token)

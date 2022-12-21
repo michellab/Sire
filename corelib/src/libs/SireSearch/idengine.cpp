@@ -2739,7 +2739,7 @@ SelectEnginePtr IDBondEngine::construct( IDBondToken from_token,
         if (from_token != ID_BOND_FROM)
         {
             throw SireMol::parse_error(QObject::tr(
-                "Invalid syntax: Should be 'bonds from X to Y', not "
+                "Invalid syntax: Should be 'bonds from X to Y' or 'bonds to X', not "
                 "'bonds %1 X %2 Y'")
                     .arg(AST::idbondtoken_to_string(from_token))
                     .arg(AST::idbondtoken_to_string(to_token)), CODELOC);
@@ -2756,7 +2756,7 @@ SelectEnginePtr IDBondEngine::construct( IDBondToken from_token,
     if (from_token == ID_BOND_FROM and to_token != ID_BOND_TO)
     {
         throw SireMol::parse_error(QObject::tr(
-            "Invalid syntax: Should be 'bonds from X to Y', not "
+            "Invalid syntax: Should be 'bonds from X to Y' or 'bonds to X', not "
             "'bonds %1 X %2 Y'")
                 .arg(AST::idbondtoken_to_string(from_token))
                 .arg(AST::idbondtoken_to_string(to_token)), CODELOC);
