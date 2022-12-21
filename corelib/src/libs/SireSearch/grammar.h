@@ -375,10 +375,24 @@ public:
                     ( qi::lit('(') >> withRule >> qi::lit(')') );
 
         //grammar for a "within" expression
-        withinRule %= expressionPartRule >>
-                      qi::lit("within") >>
-                      lengthValueRule >>
-                      qi::lit("of") >> expressionRule;
+        withinRule %= (expressionPartRule >>
+                       qi::lit("within") >>
+                       lengthValueRule >>
+                       qi::lit("of") >> expressionRule) |
+
+                      (qi::lit('(') >> expressionRule >> qi::lit(')') >>
+                       qi::lit("within") >>
+                       lengthValueRule >>
+                       qi::lit("of") >> expressionRule) |
+
+                      (qi::lit('(') >> expressionRule >> qi::lit(')') >>
+                       qi::lit("within") >>
+                       lengthValueRule >>
+                       qi::lit("of") >>
+                       qi::lit('(') >> expressionRule) >> qi::lit(')') |
+
+                      (qi::lit('(') >> withinRule >> qi::lit(')'))
+                       ;
 
         //grammar for a "within" expression comparing with a vector position.
         withinVectorRule %= expressionPartRule >>
