@@ -344,15 +344,16 @@ public:
         ///// Now define all of the grammar rules
         /////
 
-        //root rule to read a node as a set of expressions
-        nodeRule %= expressionsRule;
+        //root rule to read a node as a single expression and no further input (eoi)
+        nodeRule = expressionRule >> qi::eoi;
 
         //a set of expressions is a list of expression rules separated by semicolons
-        expressionsRule %= expressionRule;
+        //expressionsRule %= expressionRule;
 
         //an expression is either a binary, a with or an expression
-        expressionRule %= binaryRule2 | binaryRule | withRule2 |
-                          withRule | expressionPartRule;
+        expressionRule %= binaryRule2 | binaryRule |
+                          withinRule | withinVectorRule | whereRule |
+                          withRule2 | withRule | expressionPartRule;
 
         //a binary is two expressions separated by an op_token (and/or)
         binaryRule %= (expressionPartRule >> op_token >> expressionPartRule) |
@@ -373,8 +374,30 @@ public:
         withRule %= (expressionPartRule >> with_token >> expressionPartRule) |
                     ( qi::lit('(') >> withRule >> qi::lit(')') );
 
-        //withinRule | withinVectorRule |
-        //whereRule |
+        //grammar for a "within" expression
+        withinRule %= expressionPartRule >>
+                      qi::lit("within") >>
+                      lengthValueRule >>
+                      qi::lit("of") >> expressionRule;
+
+        //grammar for a "within" expression comparing with a vector position.
+        withinVectorRule %= expressionPartRule >>
+                            qi::lit("within") >>
+                            lengthValueRule >>
+                            qi::lit("of") >>
+                            vectorValueRule;
+
+        //grammar for a "where" expression
+        whereRule %= expressionPartRule >> qi::lit("where") >>
+                     coord_token >>
+                    (whereWithinRule | whereCompareRule);
+
+        //sub-grammar for a "where within" expression
+        whereWithinRule %= qi::lit("within") >> lengthValueRule >> qi::lit("of")
+                              >> expressionRule;
+
+        //sub-grammar for a "where comparison" expression
+        whereCompareRule %= cmp_token >> vectorValueRule;
 
         //allow multiple with_tokens, e.g. atoms in molecules with resname ALA
         withRule2 %= withRule >> with_token >> withRule |
@@ -546,31 +569,6 @@ public:
 
         //grammar for a "join" expression
         joinRule %= qi::lit("join") >> expressionRule;
-
-        //grammar for a "within" expression
-        withinRule %= expressionRule >>
-                      qi::lit("within") >>
-                      lengthValueRule >>
-                      qi::lit("of") >> expressionRule;
-
-        //grammar for a "within" expression comparing with a vector position.
-        withinVectorRule %= expressionRule >>
-                            qi::lit("within") >>
-                            lengthValueRule >>
-                            qi::lit("of") >>
-                            vectorValueRule;
-
-        //grammar for a "where" expression
-        whereRule %= expressionRule >> qi::lit("where") >>
-                     coord_token >>
-                    (whereWithinRule | whereCompareRule);
-
-        //sub-grammar for a "where within" expression
-        whereWithinRule %= qi::lit("within") >> lengthValueRule >> qi::lit("of")
-                              >> expressionRule;
-
-        //sub-grammar for a "where comparison" expression
-        whereCompareRule %= cmp_token >> vectorValueRule;
 
         //grammar for a count expression e.g. count(atoms) < 5
         countRule = eps [ _val = AST::IDCount() ] >>
