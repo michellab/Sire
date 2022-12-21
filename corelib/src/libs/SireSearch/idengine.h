@@ -423,12 +423,14 @@ private:
 class IDDistanceEngine : public SelectEngine
 {
 public:
-    static SelectEnginePtr construct( IDObject obj, SireUnits::Dimension::Length distance,
-                                      SelectEnginePtr part );
-
-    static SelectEnginePtr construct( IDObject obj, IDCoordType typ,
+    static SelectEnginePtr construct( SelectEnginePtr part0,
                                       SireUnits::Dimension::Length distance,
-                                      SelectEnginePtr part );
+                                      SelectEnginePtr part1 );
+
+    static SelectEnginePtr construct( SelectEnginePtr part0,
+                                      IDCoordType typ,
+                                      SireUnits::Dimension::Length distance,
+                                      SelectEnginePtr part1 );
 
     ~IDDistanceEngine();
 
@@ -441,9 +443,9 @@ protected:
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
 
 private:
-    IDObject obj;
+    SelectEnginePtr part0;
     IDCoordType typ;
-    SelectEnginePtr part;
+    SelectEnginePtr part1;
     double distance;
 };
 
@@ -455,10 +457,12 @@ private:
 class IDDistanceVectorEngine : public SelectEngine
 {
 public:
-    static SelectEnginePtr construct( IDObject obj, SireUnits::Dimension::Length distance,
+    static SelectEnginePtr construct( SelectEnginePtr value0,
+                                      SireUnits::Dimension::Length distance,
                                       VectorValue position );
 
-    static SelectEnginePtr construct( IDObject obj, IDCoordType typ,
+    static SelectEnginePtr construct( SelectEnginePtr value0,
+                                      IDCoordType typ,
                                       SireUnits::Dimension::Length distance,
                                       VectorValue position );
 
@@ -473,7 +477,7 @@ protected:
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
 
 private:
-    IDObject obj;
+    SelectEnginePtr value0;
     IDCoordType typ;
     VectorValue position;
     double distance;

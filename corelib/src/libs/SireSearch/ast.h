@@ -824,11 +824,11 @@ namespace AST
     struct IDWhereWithin
     {
         LengthValue distance;
-        Expression value;
+        Expression value1;
 
         QString toString() const;
 
-        SelectEnginePtr toEngine(IDObject name, IDCoordType typ) const;
+        SelectEnginePtr toEngine(Expression value0, IDCoordType typ) const;
     };
 
     /** Struct that holds a "where" comparison expression, e.g.
@@ -840,15 +840,15 @@ namespace AST
 
         QString toString() const;
 
-        SelectEnginePtr toEngine(IDObject name, IDCoordType typ) const;
+        SelectEnginePtr toEngine(Expression value0, IDCoordType typ) const;
     };
 
     /** Struct that holds a general "where" expression */
     struct IDWhere
     {
-        IDObject name;
+        Expression value0;
         IDCoordType typ;
-        IDWhereVariant value;
+        IDWhereVariant value1;
 
         QString toString() const;
 
@@ -889,9 +889,9 @@ namespace AST
     /** Struct to hold expressions that select based on being within a distance */
     struct IDWithin
     {
-        IDObject name;
+        Expression value0;
         LengthValue distance;
-        Expression value;
+        Expression value1;
 
         QString toString() const;
 
@@ -901,9 +901,9 @@ namespace AST
     /** Struct to hold expressions that select based on being within a distance to a point*/
     struct IDWithinVector
     {
-        IDObject name;
+        Expression value0;
         LengthValue distance;
-        VectorValue value;
+        VectorValue value1;
 
         QString toString() const;
 
@@ -912,9 +912,9 @@ namespace AST
 }
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWithin,
-                           (AST::IDObject,name)
+                           (AST::Expression,value0)
                            (AST::LengthValue,distance)
-                           (AST::Expression,value)
+                           (AST::Expression,value1)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDCharge,
@@ -960,9 +960,9 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDObjCmpMass,
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWithinVector,
-                           (AST::IDObject,name)
+                           (AST::Expression,value0)
                            (AST::LengthValue,distance)
-                           (AST::VectorValue,value)
+                           (AST::VectorValue,value1)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::LengthValue,
@@ -978,7 +978,7 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDCount,
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWhereWithin,
                            (AST::LengthValue,distance)
-                           (AST::Expression,value)
+                           (AST::Expression,value1)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWhereCompare,
@@ -987,9 +987,9 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDWhereCompare,
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWhere,
-                           (AST::IDObject,name)
+                           (AST::Expression,value0)
                            (AST::IDCoordType,typ)
-                           (AST::IDWhereVariant,value)
+                           (AST::IDWhereVariant,value1)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::NameValue,

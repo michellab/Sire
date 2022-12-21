@@ -351,7 +351,8 @@ public:
         expressionsRule %= expressionRule;
 
         //an expression is either a binary, a with or an expression
-        expressionRule %= binaryRule2 | binaryRule | withRule2 | withRule | expressionPartRule;
+        expressionRule %= binaryRule2 | binaryRule | withRule2 |
+                          withRule | expressionPartRule;
 
         //a binary is two expressions separated by an op_token (and/or)
         binaryRule %= (expressionPartRule >> op_token >> expressionPartRule) |
@@ -372,6 +373,9 @@ public:
         withRule %= (expressionPartRule >> with_token >> expressionPartRule) |
                     ( qi::lit('(') >> withRule >> qi::lit(')') );
 
+        //withinRule | withinVectorRule |
+        //whereRule |
+
         //allow multiple with_tokens, e.g. atoms in molecules with resname ALA
         withRule2 %= withRule >> with_token >> withRule |
                      expressionPartRule >> with_token >> withRule |
@@ -387,9 +391,9 @@ public:
         //an expression is either a subscript, name, number, within, where, not
         //or user-identified expression, optionally surrounded by parenthesis '( )'
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
-                              withinRule | withinVectorRule | propertyRule | bondRule |
+                              propertyRule | bondRule |
                               water_token | pert_token | protein_token |
-                              whereRule | notRule | joinRule |
+                              notRule | joinRule |
                               massRule | massCmpRule | chargeRule | chargeCmpRule |
                               massObjRule | massObjCmpRule | chargeObjRule | chargeObjCmpRule |
                               all_token | countRule | user_token |
@@ -544,16 +548,22 @@ public:
         joinRule %= qi::lit("join") >> expressionRule;
 
         //grammar for a "within" expression
-        withinRule %= obj_token >> qi::lit("within") >> lengthValueRule
-                                >> qi::lit("of") >> expressionRule;
+        withinRule %= expressionRule >>
+                      qi::lit("within") >>
+                      lengthValueRule >>
+                      qi::lit("of") >> expressionRule;
 
         //grammar for a "within" expression comparing with a vector position.
-        withinVectorRule %= obj_token >> qi::lit("within") >> lengthValueRule
-                                      >> qi::lit("of") >> vectorValueRule;
+        withinVectorRule %= expressionRule >>
+                            qi::lit("within") >>
+                            lengthValueRule >>
+                            qi::lit("of") >>
+                            vectorValueRule;
 
         //grammar for a "where" expression
-        whereRule %= obj_token >> qi::lit("where") >> coord_token >>
-                        (whereWithinRule | whereCompareRule);
+        whereRule %= expressionRule >> qi::lit("where") >>
+                     coord_token >>
+                    (whereWithinRule | whereCompareRule);
 
         //sub-grammar for a "where within" expression
         whereWithinRule %= qi::lit("within") >> lengthValueRule >> qi::lit("of")

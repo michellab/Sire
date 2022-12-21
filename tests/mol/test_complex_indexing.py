@@ -9,6 +9,9 @@ def test_broken_searches(ala_mols):
 
     mols = ala_mols.clone()
 
+    # noticed this was broken
+    assert mols["molecules within 2 of resname ALA"] == mols["residues within 2 of resname ALA"].molecules()
+
     assert mols["{element C}[0] or {element C}[-1]"] == mols["element C"][ [0,-1] ]
 
     assert mols["{{element C}[0] or {element C}[-1]}[-1]"] == mols["element C"][-1]

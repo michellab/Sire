@@ -3129,29 +3129,33 @@ SelectEngine::ObjType IDElementEngine::objectType() const
 IDDistanceEngine::IDDistanceEngine()
 {}
 
-SelectEnginePtr IDDistanceEngine::construct(IDObject obj, IDCoordType typ,
+SelectEnginePtr IDDistanceEngine::construct(SelectEnginePtr part0,
+                                            IDCoordType typ,
                                             SireUnits::Dimension::Length distance,
-                                            SelectEnginePtr part)
+                                            SelectEnginePtr part1)
 {
     IDDistanceEngine *ptr = new IDDistanceEngine();
     auto p = makePtr(ptr);
 
-    if (part)
-        part->setParent(p);
+    if (part0)
+        part0->setParent(p);
 
-    ptr->part = part;
-    ptr->obj = obj;
+    if (part1)
+        part1->setParent(p);
+
+    ptr->part0 = part0;
+    ptr->part1 = part1;
     ptr->typ = typ;
     ptr->distance = distance.value();
 
     return p;
 }
 
-SelectEnginePtr IDDistanceEngine::construct(IDObject obj,
+SelectEnginePtr IDDistanceEngine::construct(SelectEnginePtr part0,
                                             SireUnits::Dimension::Length distance,
-                                            SelectEnginePtr part)
+                                            SelectEnginePtr part1)
 {
-    return IDDistanceEngine::construct(obj, ID_COORD_CLOSEST, distance, part);
+    return IDDistanceEngine::construct(part0, ID_COORD_CLOSEST, distance, part1);
 }
 
 IDDistanceEngine::~IDDistanceEngine()
@@ -3159,8 +3163,11 @@ IDDistanceEngine::~IDDistanceEngine()
 
 SelectEnginePtr IDDistanceEngine::simplify()
 {
-    if (part.get() != 0)
-        part->simplify();
+    if (part0.get() != 0)
+        part0->simplify();
+
+    if (part1.get() != 0)
+        part1->simplify();
 
     return selfptr.lock();
 }
@@ -3243,13 +3250,13 @@ bool _is_within(const QVector<Vector> &coords,
 
 SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    //first, get the objects against where the distance is calculated
-    if (part.get() == 0)
+    if (part0.get() == 0 or part1.get() == 0)
         return SelectResult();
 
+    //first, get the objects against where the distance is calculated
     QList<MolViewPtr> ret;
 
-    const auto refmols = part->operator()(mols, map);
+    const auto refmols = part1->operator()(mols, map);
 
     if (refmols.isEmpty())
         //nothing against which to compare
@@ -3288,43 +3295,53 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
 
     CoordGroup ref_group(ref_coords);
 
-    for (const auto &mol : mols)
+    // now search the matches from part0 that are within the distance
+    // specifed from part1
+    QList<MolViewPtr> result;
+
+    // need to expand the result so that we have the right type of unit
+    // when we try to match the second part
+    for (const auto &mol : part0->expand(part0->operator()(mols, map)))
     {
-        // expand this molecule into the views that are requested
-        const auto expanded = _expand(*mol, this->objectType(), map);
+        const auto units = mol->toList();
 
-        QList<qint64> idxs;
-        idxs.reserve(expanded->count());
+        QList<qint64> matches;
+        matches.reserve(units.count());
 
-        for (int i=0; i<expanded->count(); ++i)
+        for (int i=0; i<units.count(); ++i)
         {
-            const auto view = expanded->operator[](i);
-
-            QVector<Vector> coords = _get_coords(view->atoms(),
+            QVector<Vector> coords = _get_coords(units[i]->atoms(),
                                                  coords_property);
 
             if (_is_within(coords, ref_group, distance, typ, *space))
             {
-                idxs.append(i);
+                matches.append(i);
             }
         }
 
-        if (idxs.count() == expanded->count())
+        if (not matches.isEmpty())
         {
-            ret.append(expanded);
-        }
-        else if (not idxs.isEmpty())
-        {
-            ret.append(expanded->operator[](idxs));
+            if (matches.count() == units.count())
+            {
+                result.append(mol);
+            }
+            else
+            {
+                //rejoin the matches into the appropriate Selector
+                result.append(mol->operator[](matches));
+            }
         }
     }
 
-    return SelectResult(ret);
+    return SelectResult(result);
 }
 
 SelectEngine::ObjType IDDistanceEngine::objectType() const
 {
-    return _to_obj_type(obj);
+    if (part0.get() == 0)
+        return SelectEngine::COMPLEX;
+    else
+        return part0->objectType();
 }
 
 ////////
@@ -3334,26 +3351,30 @@ SelectEngine::ObjType IDDistanceEngine::objectType() const
 IDDistanceVectorEngine::IDDistanceVectorEngine()
 {}
 
-SelectEnginePtr IDDistanceVectorEngine::construct(IDObject obj, IDCoordType typ,
+SelectEnginePtr IDDistanceVectorEngine::construct(SelectEnginePtr value0,
+                                                  IDCoordType typ,
                                                   SireUnits::Dimension::Length distance,
                                                   VectorValue position)
 {
     IDDistanceVectorEngine *ptr = new IDDistanceVectorEngine();
     auto p = makePtr(ptr);
 
+    if (value0)
+        value0->setParent(p);
+
     ptr->position = position;
-    ptr->obj = obj;
+    ptr->value0 = value0;
     ptr->typ = typ;
     ptr->distance = distance.value();
 
     return p;
 }
 
-SelectEnginePtr IDDistanceVectorEngine::construct(IDObject obj,
+SelectEnginePtr IDDistanceVectorEngine::construct(SelectEnginePtr value0,
                                                   SireUnits::Dimension::Length distance,
                                                   VectorValue position)
 {
-    return IDDistanceVectorEngine::construct(obj, ID_COORD_CLOSEST, distance, position);
+    return IDDistanceVectorEngine::construct(value0, ID_COORD_CLOSEST, distance, position);
 }
 
 IDDistanceVectorEngine::~IDDistanceVectorEngine()
@@ -3385,43 +3406,53 @@ SelectResult IDDistanceVectorEngine::select(const SelectResult &mols, const Prop
     QVector<Vector> ref_coords(1, point);
     CoordGroup ref_group(ref_coords);
 
-    for (const auto &mol : mols)
+    // now search the matches from part0 that are within the distance
+    // specifed from part1
+    QList<MolViewPtr> result;
+
+    // need to expand the result so that we have the right type of unit
+    // when we try to match the second part
+    for (const auto &mol : value0->expand(value0->operator()(mols, map)))
     {
-        // expand this molecule into the views that are requested
-        const auto expanded = _expand(*mol, this->objectType(), map);
+        const auto units = mol->toList();
 
-        QList<qint64> idxs;
-        idxs.reserve(expanded->count());
+        QList<qint64> matches;
+        matches.reserve(units.count());
 
-        for (int i=0; i<expanded->count(); ++i)
+        for (int i=0; i<units.count(); ++i)
         {
-            const auto view = expanded->operator[](i);
-
-            QVector<Vector> coords = _get_coords(view->atoms(),
+            QVector<Vector> coords = _get_coords(units[i]->atoms(),
                                                  coords_property);
 
             if (_is_within(coords, ref_group, distance, typ, *space))
             {
-                idxs.append(i);
+                matches.append(i);
             }
         }
 
-        if (idxs.count() == expanded->count())
+        if (not matches.isEmpty())
         {
-            ret.append(expanded);
-        }
-        else if (not idxs.isEmpty())
-        {
-            ret.append(expanded->operator[](idxs));
+            if (matches.count() == units.count())
+            {
+                result.append(mol);
+            }
+            else
+            {
+                //rejoin the matches into the appropriate Selector
+                result.append(mol->operator[](matches));
+            }
         }
     }
 
-    return SelectResult(ret);
+    return SelectResult(result);
 }
 
 SelectEngine::ObjType IDDistanceVectorEngine::objectType() const
 {
-    return _to_obj_type(obj);
+    if (value0.get() == 0)
+        return SelectEngine::COMPLEX;
+    else
+        return value0->objectType();
 }
 
 ////////
