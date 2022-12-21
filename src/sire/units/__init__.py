@@ -58,6 +58,29 @@ def _fix_generalunit():
     GeneralUnit.__setitem__ = __generalunit__setitem__
     GeneralUnit.__getitem__ = __generalunit__getitem__
 
+    def __generalunit__bool__(obj):
+        return not obj.is_zero()
+
+    def __generalunit__float__(obj):
+        if not obj.is_dimensionless():
+            raise TypeError(
+                f"You cannot convert the dimensioned value {obj} "
+                 "to a dimensionless floating point number.")
+
+        return obj.value()
+
+    def __generalunit__int__(obj):
+        if not obj.is_dimensionless():
+            raise TypeError(
+                f"You cannot convert the dimensioned value {obj} "
+                 "to a dimensionless whole number integer.")
+
+        return int(obj.value())
+
+    GeneralUnit.__bool__ = __generalunit__bool__
+    GeneralUnit.__float__ = __generalunit__float__
+    GeneralUnit.__int__ = __generalunit__int__
+
 
 if not hasattr(GeneralUnit, "approx_equal"):
     _fix_generalunit()

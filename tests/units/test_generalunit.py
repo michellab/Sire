@@ -4,6 +4,49 @@ import pytest
 from sire.units import angstrom, kcal_per_mol, GeneralUnit
 from sire.base import Properties
 
+
+def test_unitless_conversion():
+    one = GeneralUnit(1)
+    zero = GeneralUnit(0)
+    fiveish = GeneralUnit(5.1)
+
+    assert one.is_dimensionless()
+    assert zero.is_dimensionless()
+    assert fiveish.is_dimensionless()
+
+    assert not one.is_zero()
+    assert not fiveish.is_zero()
+    assert zero.is_zero()
+
+    assert float(one) == 1.0
+    assert float(zero) == 0.0
+    assert float(fiveish) == 5.1
+
+    assert int(one) == 1
+    assert int(zero) == 0
+    assert int(fiveish) == 5
+
+    assert bool(one) is True
+    assert bool(zero) is False
+    assert bool(fiveish) is True
+
+    l = 5 * angstrom
+
+    with pytest.raises(TypeError):
+        float(l)
+
+    with pytest.raises(TypeError):
+        int(l)
+
+    assert bool(l) is True
+
+    l = 0 * angstrom
+
+    assert float(l) == 0
+    assert int(l) == 0
+    assert bool(l) is False
+
+
 def test_generalunit():
     l = 5 * angstrom
 

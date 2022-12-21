@@ -61,7 +61,7 @@ Numbers used in searches can be:
 * Individual, e.g. ``resnum 35`` searches for the residue with number ``35``.
 * A range, e.g. ``atomidx 0:10`` searches for atoms with indicies in the
   range from 0 to 9, i.e. the half-open range ``[0-10)``.
-* A stepped range, e.g. ``molidx 0:2:10`` would search for molecules with
+* A stepped range, e.g. ``molidx 0:10:2`` would search for molecules with
   indicies 0, 2, 4, 6, and 8, i.e. the half-open range from 0 to 10 in
   steps of 2.
 * A reverse range, e.g. ``residx 3:0:-1`` would search for residues with
@@ -87,7 +87,7 @@ Strings used in searches can be:
   ``HIE``, ``HIS``, ``HID`` or ``HIP``. This is implemented using Qt's
   `wildCardToRegularExpression <https://doc.qt.io/qt-5/qregularexpression.html#wildcardToRegularExpression>`__
   function, the syntax of which is `further described here <https://en.wikipedia.org/wiki/Glob_(programming)>`__.
-* A case-insensitive regular expression globa pattern, e.g. ``resname /ala/i`` matches any
+* A case-insensitive regular expression glob pattern, e.g. ``resname /ala/i`` matches any
   residue whose name (in any case) matches ``ala``.
 * A list of names, e.g. ``resname ALA,ARG,ASP`` would match any residue whose
   name was ``ALA`` or ``ARG`` or ``ASP``.
