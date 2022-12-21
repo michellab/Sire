@@ -18,7 +18,7 @@ except ImportError:
 try:
     scipy = Sire.try_import("scipy")
 except ImportError:
-    raise ImportError('Numpy is not installed. Please install numpy in order to use MBAR for your free energy analysis.')
+    raise ImportError('Scipy is not installed. Please install numpy in order to use MBAR for your free energy analysis.')
 
 try:
     from pymbar import MBAR

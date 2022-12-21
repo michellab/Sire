@@ -1,6 +1,7 @@
+
 try:
-    import sire
-    sire.use_old_api()
+    import sire as sr
+    sr.use_old_api()
 except ImportError:
     pass
 
@@ -49,6 +50,12 @@ parser.add_argument('-c', '--coordinate_file', nargs="?",
 parser.add_argument('-m', '--morph_file', nargs="?",
                     help="The morph file describing the single topology "
                          "calculation to be performed.")
+
+parser.add_argument('-q', '--charge_diff', default=0, type=int,
+                    help="The difference in net charge between the two end "
+                    "states.  This will trigger the selection of waters "
+                    "which will be transformed to ions to compensate for the "
+                    "change in charge along the lambda coordinate.")
 
 parser.add_argument('-d', '--device', nargs="?",
                     help="The device ID of the GPU on which you want to run the simulation.")
@@ -135,6 +142,8 @@ if args.lambda_val:
     lambda_val = float(args.lambda_val)
     params["lambda_val"] = lambda_val
 
+params['charge difference'] = args.charge_diff
+
 if not (os.path.exists(coord_file) and os.path.exists(top_file) and os.path.exists(morph_file)):
     parser.print_help()
     print("\nPlease supply the name of an existing topology, coordinate and morph file.")
@@ -148,5 +157,5 @@ if not (os.path.exists(coord_file) and os.path.exists(top_file) and os.path.exis
 
 print("\nRunning a somd-freenrg calculation using files %s, %s and %s." % (top_file, coord_file, morph_file))
 
-# Now lets run the OpenMMMD free energy calculation
+# Now lets run the OpenMMMD free energy calculation
 OpenMMMD.runFreeNrg(params)

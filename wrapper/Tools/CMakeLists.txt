@@ -10,7 +10,10 @@ set ( SCRIPTS
         __init__.py
         ap.py
         AmberLoader.py
+        BoreschAnalyticalCorrection.py
+        BoreschNumericalCorrection.py
         DCDFile.py
+        FreeEnergyAnalysis.py
         LJcutoff.py
         LSRC.py
         Nautilus.py
@@ -22,21 +25,10 @@ set ( SCRIPTS
         WaterChanger.py
         WaterView.py
         WSRC.py
-        FreeEnergyAnalysis.py
-    )
-
-# If your script needs any default files (e.g. parameter or config files)
-# then put those files in a named directory in the Config directory and
-# add the name of that directory here. This directory will be copied
-# to the share/Sire/Tools
-set ( CONFIGDIRS
-        WSRC
     )
 
 # installation
 install( FILES ${SCRIPTS} DESTINATION ${SIRE_PYTHON}/sire/legacy/Tools )
-
-install( DIRECTORY ${CONFIGDIRS} DESTINATION ${SIRE_SHARE}/Tools )
 
 # If this is an anaconda build, then make sure that all of the
 # necessary files are copied from the pkgs directory into the
