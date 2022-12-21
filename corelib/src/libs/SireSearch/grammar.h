@@ -347,8 +347,21 @@ public:
         //root rule to read a node as a single expression and no further input (eoi)
         nodeRule = expressionRule >> qi::eoi;
 
-        //a set of expressions is a list of expression rules separated by semicolons
-        //expressionsRule %= expressionRule;
+        //convenient shortcuts for the brackets
+        static const auto leftB = qi::lit("(");
+        static const auto rightB = qi::lit(")");
+
+        //rule for the left hand side of an expression - this can only
+        //be an ExpressionPartRule, or an ExpressionRule that is enclosed
+        //in brackets
+        lhsRule = (expressionPartRule) |
+                  (leftB >> expressionRule >> rightB);
+
+        //rule for the right hand side of an expression - this can only
+        //be an ExpressionRule, or an ExpressionRule that is enclosed
+        //in brackets
+        rhsRule = (expressionRule) |
+                  (leftB >> expressionRule >> rightB);
 
         //an expression is either a binary, a with or an expression
         expressionRule %= binaryRule2 | binaryRule |
@@ -375,24 +388,12 @@ public:
                     ( qi::lit('(') >> withRule >> qi::lit(')') );
 
         //grammar for a "within" expression
-        withinRule %= (expressionPartRule >>
-                       qi::lit("within") >>
-                       lengthValueRule >>
-                       qi::lit("of") >> expressionRule) |
-
-                      (qi::lit('(') >> expressionRule >> qi::lit(')') >>
-                       qi::lit("within") >>
-                       lengthValueRule >>
-                       qi::lit("of") >> expressionRule) |
-
-                      (qi::lit('(') >> expressionRule >> qi::lit(')') >>
-                       qi::lit("within") >>
-                       lengthValueRule >>
-                       qi::lit("of") >>
-                       qi::lit('(') >> expressionRule) >> qi::lit(')') |
-
-                      (qi::lit('(') >> withinRule >> qi::lit(')'))
-                       ;
+        withinRule %= ( lhsRule >>
+                        qi::lit("within ") >>
+                        lengthValueRule >>
+                        qi::lit("of ") >>
+                        rhsRule
+                      ) | (leftB >> withinRule >> rightB);
 
         //grammar for a "within" expression comparing with a vector position.
         withinVectorRule %= expressionPartRule >>
@@ -615,7 +616,8 @@ public:
         whereWithinRule.name( "Where Within" );
         whereCompareRule.name( "Where Compare" );
         countRule.name( "Count Rule" );
-        expressionsRule.name( "Expressions" );
+        lhsRule.name( "LHS" );
+        rhsRule.name( "RHS" );
         expressionRule.name( "Expression" );
         expressionPartRule.name( "Expression Part" );
         nameValuesRule.name( "Name Values" );
@@ -683,7 +685,9 @@ public:
     qi::rule<IteratorT, AST::IDWhereCompare(), SkipperT> whereCompareRule;
     qi::rule<IteratorT, AST::IDCount(), SkipperT> countRule;
 
-    qi::rule<IteratorT, AST::Expression(), SkipperT> expressionsRule;
+    qi::rule<IteratorT, AST::Expression(), SkipperT> lhsRule;
+    qi::rule<IteratorT, AST::Expression(), SkipperT> rhsRule;
+
     qi::rule<IteratorT, AST::Expression(), SkipperT> expressionRule;
 
     qi::rule<IteratorT, AST::ExpressionPart(), SkipperT> expressionPartRule;

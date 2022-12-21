@@ -200,7 +200,8 @@ namespace AST
                                              boost::recursive_wrapper<IDObjCharge>,
                                              boost::recursive_wrapper<IDObjCmpMass>,
                                              boost::recursive_wrapper<IDObjCmpCharge>,
-                                             boost::recursive_wrapper<ExpressionPart> >;
+                                             boost::recursive_wrapper<ExpressionPart>,
+                                             boost::recursive_wrapper<Expression> >;
 
     QString expression_to_string(const ExpressionVariant &expression);
 
