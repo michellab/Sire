@@ -41,9 +41,9 @@ namespace SireMaths
 typedef SireBase::PODProperty<Sphere> SphereProperty;
 typedef SireBase::PODArrayProperty<Sphere> SphereArrayProperty;
 
-SireBase::PropertyPtr wrap(const Sphere &sphere);
-SireBase::PropertyPtr wrap(const QVector<Sphere> &spheres);
-SireBase::PropertyPtr wrap(const QList<Sphere> &spheres);
+SIREMATHS_EXPORT SireBase::PropertyPtr wrap(const Sphere &sphere);
+SIREMATHS_EXPORT SireBase::PropertyPtr wrap(const QVector<Sphere> &spheres);
+SIREMATHS_EXPORT SireBase::PropertyPtr wrap(const QList<Sphere> &spheres);
 
 }
 

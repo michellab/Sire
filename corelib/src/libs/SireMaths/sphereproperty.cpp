@@ -51,6 +51,6 @@ namespace SireMaths
 
 namespace SireBase
 {
-    template SIREMATHS_EXPORT class SireBase::PODProperty<Sphere>;
-    template SIREMATHS_EXPORT class SireBase::PODArrayProperty<Sphere>;
+    template class PODProperty<SireMaths::Sphere>;
+    template class PODArrayProperty<SireMaths::Sphere>;
 }

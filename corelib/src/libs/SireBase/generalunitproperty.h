@@ -15,11 +15,11 @@ class GeneralUnitProperty;
 class GeneralUnitArrayProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::GeneralUnitProperty&);
-QDataStream& operator>>(QDataStream&, SireBase::GeneralUnitProperty&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::GeneralUnitProperty&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::GeneralUnitProperty&);
 
-QDataStream& operator<<(QDataStream&, const SireBase::GeneralUnitArrayProperty&);
-QDataStream& operator>>(QDataStream&, SireBase::GeneralUnitArrayProperty&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::GeneralUnitArrayProperty&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::GeneralUnitArrayProperty&);
 
 namespace SireBase
 {
@@ -90,9 +90,9 @@ public:
     bool operator!=(const GeneralUnitArrayProperty &other) const;
 };
 
-SireBase::PropertyPtr wrap(const SireUnits::Dimension::GeneralUnit &unit);
-SireBase::PropertyPtr wrap(const QVector<SireUnits::Dimension::GeneralUnit> &units);
-SireBase::PropertyPtr wrap(const QList<SireUnits::Dimension::GeneralUnit> &units);
+SIREBASE_EXPORT SireBase::PropertyPtr wrap(const SireUnits::Dimension::GeneralUnit &unit);
+SIREBASE_EXPORT SireBase::PropertyPtr wrap(const QVector<SireUnits::Dimension::GeneralUnit> &units);
+SIREBASE_EXPORT SireBase::PropertyPtr wrap(const QList<SireUnits::Dimension::GeneralUnit> &units);
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 

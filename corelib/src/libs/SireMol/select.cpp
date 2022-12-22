@@ -205,7 +205,7 @@ SelectResult SireMol::parser::SelectEngine::expand(const SelectResult &results) 
 {
     const auto objtyp = this->objectType();
 
-    if (objtyp == SelectEngine::COMPLEX | objtyp == SelectEngine::BOND)
+    if ((objtyp == SelectEngine::COMPLEX) | (objtyp == SelectEngine::BOND))
     {
         //we don't need to do anything (or can't do anything for bonds!)
         return results;

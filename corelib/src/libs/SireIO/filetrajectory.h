@@ -40,8 +40,8 @@ namespace SireIO
 class FileTrajectory;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::FileTrajectory&);
-QDataStream& operator>>(QDataStream&, SireIO::FileTrajectory&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::FileTrajectory&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::FileTrajectory&);
 
 namespace SireIO
 {

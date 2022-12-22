@@ -16,14 +16,14 @@ class PODArrayProperty;
 }
 
 template<class T>
-SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::PODProperty<T>&);
+QDataStream& operator<<(QDataStream&, const SireBase::PODProperty<T>&);
 template<class T>
-SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::PODProperty<T>&);
+QDataStream& operator>>(QDataStream&, SireBase::PODProperty<T>&);
 
 template<class T>
-SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::PODArrayProperty<T>&);
+QDataStream& operator<<(QDataStream&, const SireBase::PODArrayProperty<T>&);
 template<class T>
-SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::PODArrayProperty<T>&);
+QDataStream& operator>>(QDataStream&, SireBase::PODArrayProperty<T>&);
 
 namespace SireBase
 {
@@ -32,7 +32,7 @@ namespace SireBase
  *  type
  */
 template<class T>
-class SIREBASE_EXPORT PODProperty :
+class PODProperty :
         public ConcreteProperty<PODProperty<T>, Property>,
         public T
 {
@@ -61,7 +61,7 @@ public:
 
 /** This class creates an ArrayProperty around plain old data (POD) types */
 template<class T>
-class SIREBASE_EXPORT PODArrayProperty :
+class PODArrayProperty :
     public ConcreteProperty<PODArrayProperty<T>, ArrayProperty<T>>
 {
 public:
@@ -303,8 +303,8 @@ PODArrayProperty<T>* PODArrayProperty<T>::clone() const
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-SIREBASE_EXPORT QDataStream& operator<<(QDataStream &ds,
-                                        const SireBase::PODProperty<T> &p)
+QDataStream& operator<<(QDataStream &ds,
+                        const SireBase::PODProperty<T> &p)
 {
     ds << static_cast<const T&>(p);
     return ds;
@@ -312,8 +312,8 @@ SIREBASE_EXPORT QDataStream& operator<<(QDataStream &ds,
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-SIREBASE_EXPORT QDataStream& operator>>(QDataStream &ds,
-                                        SireBase::PODProperty<T> &p)
+QDataStream& operator>>(QDataStream &ds,
+                        SireBase::PODProperty<T> &p)
 {
     ds >> static_cast<T&>(p);
     return ds;
@@ -321,8 +321,8 @@ SIREBASE_EXPORT QDataStream& operator>>(QDataStream &ds,
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-SIREBASE_EXPORT QDataStream& operator<<(QDataStream &ds,
-                                        const SireBase::PODArrayProperty<T> &p)
+QDataStream& operator<<(QDataStream &ds,
+                        const SireBase::PODArrayProperty<T> &p)
 {
     ds << p.toVector();
     return ds;
@@ -330,8 +330,8 @@ SIREBASE_EXPORT QDataStream& operator<<(QDataStream &ds,
 
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-SIREBASE_EXPORT QDataStream& operator>>(QDataStream &ds,
-                                        SireBase::PODArrayProperty<T> &p)
+QDataStream& operator>>(QDataStream &ds,
+                        SireBase::PODArrayProperty<T> &p)
 {
     QVector<T> vals;
     ds >> vals;

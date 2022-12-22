@@ -48,7 +48,7 @@ using namespace SireID;
 RegisterMetaType<SelectorMAngle> r_sang;
 
 /** Serialise to a binary datastream */
-SIREMOL_EXPORT QDataStream &operator<<(QDataStream &ds, const SelectorMAngle &angs)
+SIREMM_EXPORT QDataStream &operator<<(QDataStream &ds, const SelectorMAngle &angs)
 {
     writeHeader(ds, r_sang, 1);
 
@@ -60,7 +60,7 @@ SIREMOL_EXPORT QDataStream &operator<<(QDataStream &ds, const SelectorMAngle &an
 }
 
 /** Extract from a binary datastream */
-SIREMOL_EXPORT QDataStream &operator>>(QDataStream &ds, SelectorMAngle &angs)
+SIREMM_EXPORT QDataStream &operator>>(QDataStream &ds, SelectorMAngle &angs)
 {
     VersionID v = readHeader(ds, r_sang);
 

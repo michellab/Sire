@@ -86,7 +86,7 @@ VariantProperty::VariantProperty(const QVariant &value)
 VariantProperty::VariantProperty(const Property &property)
                 : ConcreteProperty<VariantProperty,Property>(), QVariant()
 {
-    *this = property;
+    *this = property.asA<VariantProperty>();
 }
 
 VariantProperty::VariantProperty(const QString &value)

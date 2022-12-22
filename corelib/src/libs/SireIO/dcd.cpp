@@ -233,7 +233,7 @@ void SireIO::detail::DCDFile::readHeader(FortranFile &file)
 
     for (int i=0; i<ntitle; ++i)
     {
-        QString t = line.readChar(32).simplified().replace('\0', "");
+        QString t = line.readChar(32).simplified().replace(QChar('\0'), "");
 
         if (not t.isEmpty())
             title.append(t);

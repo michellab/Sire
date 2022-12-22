@@ -1064,12 +1064,12 @@ void Molecules::deleteFrame(int frame)
 
 void Molecules::loadFrame(int frame, const SireBase::PropertyMap &map)
 {
-    const int n = this->nFrames(map);
+    int n = this->nFrames(map);
 
     if (n == 0)
     {
         // we can always load frame 0
-        n == 1;
+        n = 1;
     }
 
     frame = Index(frame).map(n);

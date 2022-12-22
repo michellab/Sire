@@ -27,7 +27,7 @@ class _Pvt_Kelvin;
 
 namespace detail
 {
-void registerTypeName(const GeneralUnit &unit, const char *typnam);
+void SIREUNITS_EXPORT registerTypeName(const GeneralUnit &unit, const char *typnam);
 }
 
 class SIREUNITS_EXPORT GeneralUnit : public Unit

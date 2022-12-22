@@ -49,17 +49,17 @@ class TrajectoryData;
 class MolTrajectoryData;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::Trajectory&);
-QDataStream& operator>>(QDataStream&, SireMol::Trajectory&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Trajectory&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Trajectory&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::Frame&);
-QDataStream& operator>>(QDataStream&, SireMol::Frame&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Frame&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Frame&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::TrajectoryData&);
-QDataStream& operator>>(QDataStream&, SireMol::TrajectoryData&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::TrajectoryData&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::TrajectoryData&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::MolTrajectoryData&);
-QDataStream& operator>>(QDataStream&, SireMol::MolTrajectoryData&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MolTrajectoryData&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MolTrajectoryData&);
 
 namespace SireMol
 {
