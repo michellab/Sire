@@ -1178,7 +1178,11 @@ bool SelectorMAngle::hasMetadata(const SireBase::PropertyName &key,
 template<class T>
 inline QSet<T> _to_set(const QList<T> &l)
 {
-    return QSet<T>(l.constBegin(), l.constEnd());
+    #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+        return l.toSet();
+    #else
+        return QSet<T>(l.constBegin(), l.constEnd());
+    #endif
 }
 
 QStringList SelectorMAngle::propertyKeys() const
