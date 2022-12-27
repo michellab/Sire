@@ -27,7 +27,7 @@ extensions = [
 ]
 
 # Github repo
-issues_github_path = 'michellab/Sire'
+issues_github_path = 'openbiosim/sire'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -42,7 +42,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Sire'
+project = u'sire'
 copyright = u'2006-2022'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -124,7 +124,25 @@ html_theme = 'furo'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    "sidebar_hide_name": True
+    "sidebar_hide_name": True,
+    "light_css_variables": {
+        "font-stack": "Changa, sans-serif",
+        "font-stack--monospace": "Roboto Mono, monospace",
+        "color-foreground-primary": "#dddddd",     # main text and headings
+        "color-foreground-secondary": "#dddddd",    # secondary text
+        "color-foreground-muted" : "#d0d0d0",      # muted text
+        "color-foreground-border": "#923eb1",      # for content borders
+        "color-background-primary": "#160f30",     # for content
+        "color-background-secondary": "#201146", # for navigation + ToC
+        "color-background-hover": "#4f4fb0",   # for navigation-item hover
+        "color-background-hover--transparent": "#4f4fb000",
+        "color-background-border": "#301323",    # for UI borders
+        "color-background-item": "#411a30",      # for "background" items (eg: copybutton)
+        "color-announcement-background": "#000000dd",    # announcements
+        "color-announcement-text": "#eeebee",            # announcements
+        "color-brand-primary": "#eeeeee",        # brand colors (sidebar titles)
+        "color-brand-content": "#00dfef",        # brand colors (hyperlink color)
+    },
 }
 
 # pngmath_latex_preamble = r"""
@@ -137,10 +155,10 @@ html_theme_options = {
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "Sire Molecular Modelling"
+html_title = "openbiosim - sire"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title = "Sire"
+html_short_title = "sire"
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
@@ -156,7 +174,12 @@ html_favicon = None
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-html_css_files = []
+html_css_files = [
+    'css/custom_fonts.css',
+    'css/custom_style.css',
+    'css/custom_pygments.css'
+]
+
 html_js_files = []
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,

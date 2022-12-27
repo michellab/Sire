@@ -26,14 +26,10 @@ grounding in how Sire works and how the code is laid out. If you have
 any problems running the tutorial then please
 `raise and issue <https://github.com/michellab/Sire/issues>`__.
 
-Contributing new code
----------------------
+.. toctree::
+   :maxdepth: 2
 
-We welcome developers who want to join us to help reduce bugs and add
-new functionality.
-
-We have a :doc:`very detailed developer guide <development>` that
-we hope will help you get up to speed with development. We strive to
-be a helpful, friendly and welcoming community, so if you have any
-questions or anything is not clear then please get in touch with
-us by `raising an issue <https://github.com/michellab/Sire/issues>`__.
+   development
+   packaging
+   roadmap
+   snaglist

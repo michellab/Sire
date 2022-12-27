@@ -1,52 +1,41 @@
-========================
-Sire Molecular Modelling
-========================
+=================
+OpenBioSim | Sire
+=================
 
-Sire is a complete molecular modelling and prototyping package.
-It can be used for loading, editing, simulating and generally
-manipulating molecules.
+Sire is a molecular modelling framework that provides extensive
+functionality to manipulate representations of biomolecular systems.
 
-Features
-========
+It is used as a key component of `BioSimSpace <https://biosimspace.org>`__,
+and is distributed and supported as an open source community project by
+`OpenBioSim <https://openbiosim.org>`__.
+
+Quick Start
+===========
 
 .. toctree::
    :maxdepth: 1
 
    features
-
-Installation
-============
-
-.. toctree::
-   :maxdepth: 1
-
    install
-
-Quick Start Guide
-=================
-
-.. toctree::
-   :maxdepth: 1
-
    quickstart/index
 
 Tutorial
 ========
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    tutorial/index
 
-Cheat Sheets
-============
+Detailed Guides
+===============
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    cheatsheet/index
 
-Getting help
+Support
 ============
 
 .. toctree::
@@ -58,19 +47,15 @@ Contributing
 ============
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
-   contributing
-   roadmap
-   packaging
-   development
-   snaglist
+   contributing/index
 
-Documentation
-=============
+API Documentation
+=================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
 
    api/index
 
@@ -78,7 +63,7 @@ Changelog
 =========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    changelog
    history

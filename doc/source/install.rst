@@ -1,6 +1,6 @@
-===============
-Installing Sire
-===============
+============
+Installation
+============
 
 Instructions on how to install Sire...
 

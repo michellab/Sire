@@ -1,0 +1,29 @@
+
+/** Remove all underlines from hyperlinks */
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a:active {
+    text-decoration: none;
+}
+
+.highlight {
+    border-radius: 10px;
+}
+
+.bottom-of-page {
+    display: none;
+}
+
+.related-pages {
+    margin-bottom: 1em;
+}
