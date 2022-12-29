@@ -8,7 +8,7 @@ Changelog
 * Initial release of the OpenBioSim version of sire. The code has been completely
   refurbished using a tutorial-driven development process.
 
-GitHub (openbiosim): January 2023 - current
+GitHub (OpenBioSim): January 2023 - current
 -------------------------------------------
 
 Development was migrated into the
@@ -62,3 +62,15 @@ Here is a
 and all of the `commit history <https://siremol.org/f/original_repository_comments.txt>`__.
 
 This comprised 831 commits from developer `@chryswoods <https://github.com/chryswoods>`__.
+
+Sire started as ``ProtoMS 3``, a complete C++ rewrite of
+`ProtoMS 2 <https://code.google.com/archive/p/protoms/source/default/commits>`__,
+developed originally as a Fortran program
+by `@chryswoods <https://github.com/chryswoods>`__ and
+`@jmichel80 <https://github.com/jmichel80>`__. ProtoMS has since continued
+to be developed by the
+`Essex Group <https://www.essexgroup.soton.ac.uk>`__ and is
+itself now available as `ProtoMS 3.4 <https://protoms.org>`.
+
+More detail about the history and parallel development of Sire and
+ProtoMS can be `found here <https://www.essexgroup.soton.ac.uk/ProtoMS/FAQ/index.html>`__.
