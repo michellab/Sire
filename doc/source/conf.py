@@ -129,19 +129,23 @@ html_theme_options = {
         "font-stack": "Changa, sans-serif",
         "font-stack--monospace": "Roboto Mono, monospace",
         "color-foreground-primary": "#dddddd",     # main text and headings
-        "color-foreground-secondary": "#dddddd",    # secondary text
+        "color-foreground-secondary": "#cccccc",    # secondary text
         "color-foreground-muted" : "#d0d0d0",      # muted text
         "color-foreground-border": "#923eb1",      # for content borders
         "color-background-primary": "#160f30",     # for content
         "color-background-secondary": "#201146", # for navigation + ToC
         "color-background-hover": "#4f4fb0",   # for navigation-item hover
         "color-background-hover--transparent": "#4f4fb000",
-        "color-background-border": "#301323",    # for UI borders
+        "color-background-border": "#403333",    # for UI borders
         "color-background-item": "#411a30",      # for "background" items (eg: copybutton)
         "color-announcement-background": "#000000dd",    # announcements
         "color-announcement-text": "#eeebee",            # announcements
+        "color-admonition-title-background--note": "#FFFFFF33", # Note background
+        "color-admonition-title-background--warning": "#FF000033", # Warning background
+        "color-admonition-background": "#FFFFFF11", # Admonition backgrounds
         "color-brand-primary": "#eeeeee",        # brand colors (sidebar titles)
         "color-brand-content": "#00dfef",        # brand colors (hyperlink color)
+        "color-highlight-on-target": "#333300",  # Highlighted text background
     },
 }
 
