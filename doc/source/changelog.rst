@@ -25,7 +25,7 @@ GitHub (michellab): June 22nd 2015 - January 2023
 Thanks to `@ppxasjsm <https://github.com/ppxasjsm>`__ and
 `@jmichel80 <https://github.com/jmichel80>`__ development
 was migrated into the `michellab <https://github.com/michellab>`__
-organisation on `GitHub <https://github.com/michellab/sire>`.
+organisation on `GitHub <https://github.com/michellab/sire>`__.
 
 This comprised 2495 commits, from developers
 `@lohedges <https://github.com/lohedges>`__,
@@ -70,7 +70,7 @@ by `@chryswoods <https://github.com/chryswoods>`__ and
 `@jmichel80 <https://github.com/jmichel80>`__. ProtoMS has since continued
 to be developed by the
 `Essex Group <https://www.essexgroup.soton.ac.uk>`__ and is
-itself now available as `ProtoMS 3.4 <https://protoms.org>`.
+itself now available as `ProtoMS 3.4 <https://protoms.org>`__.
 
 More detail about the history and parallel development of Sire and
 ProtoMS can be `found here <https://www.essexgroup.soton.ac.uk/ProtoMS/FAQ/index.html>`__.

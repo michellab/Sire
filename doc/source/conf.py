@@ -184,7 +184,9 @@ html_css_files = [
     'css/custom_pygments.css'
 ]
 
-html_js_files = []
+html_js_files = [
+    'js/custom.js'
+]
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
