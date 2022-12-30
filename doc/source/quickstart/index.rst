@@ -12,7 +12,7 @@ Load a molecule from a URL, via :func:`sire.load`.
 
 .. note ::
 
-   ``sr.tutorial_url`` expands to the base URL that contains
+   :data:`sire.tutorial_url` expands to the base URL that contains
    all tutorial files.
 
 View molecules using :func:`~sire.mol.Molecule.view`.
@@ -29,7 +29,7 @@ multiple files.
 
 .. note::
 
-   You could use :func:`sire.expand` to put ``sr.tutorial_url`` in front
+   You could use :func:`sire.expand` to put :data:`sire.tutorial_url` in front
    of ``ala.top`` and ``ala.crd``, e.g. via
    ``sr.expand(sr.tutorial_url, ["ala.top", "ala.traj"])``
 
