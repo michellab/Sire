@@ -23,21 +23,16 @@ all: html
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
 	@echo "  html      to make standalone HTML files"
-	@echo "  latex     to make LaTeX files, you can set PAPER=a4 or PAPER=letter"
 
 clean:
 	-rm -rf $(BUILD_DIR)/* source/generated source/api/generated
 
 html:
 	mkdir -p $(BUILD_DIR)/html $(BUILD_DIR)/doctrees
-	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILD_DIR)/html $(FILES)
+	SIRE_NO_LAZY_IMPORT=1 $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILD_DIR)/html $(FILES)
 	@echo
 	@echo "Build finished. The HTML pages are in build/html."
 
-latex:
-	mkdir -p $(BUILD_DIR)/latex $(BUILD_DIR)/doctrees
-	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(BUILD_DIR)/latex $(FILES)
-
 html_check:
-	$(SPHINXBUILD) -b linkcheck $(ALLSPHINXOPTS) build/html $(FILES)
+	SIRE_NO_LAZY_IMPORT=1 $(SPHINXBUILD) -b linkcheck $(ALLSPHINXOPTS) build/html $(FILES)
 
