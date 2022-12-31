@@ -2,5 +2,5 @@
 Public API
 ==========
 
-.. automodule:: sire.mol
+.. automodule:: sire.stream
    :members:

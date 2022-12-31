@@ -10,8 +10,8 @@
 
 # Both ambertools and gromacs aren't available on Mac (M1) or Windows
 # We will only require them for Linux (not ARM64)
-ambertools ; sys_platform == "linux" && platform_machine == "x86_64" 
-gromacs ; sys_platform == "linux" && platform_machine == "x86_64"
+ambertools ; sys_platform == "linux" && platform_machine and "x86_64" 
+gromacs ; sys_platform == "linux" && platform_machine and "x86_64"
 
 # The following are actual BioSimSpace run-time requirements. Please update
 # this list as new requirements are added.

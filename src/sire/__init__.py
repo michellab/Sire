@@ -2,10 +2,13 @@
 Main module
 """
 
-__all__ = [ "load", "save",
-            "atomid", "resid", "chainid",
-            "segid", "molid", "thumbs_up",
-            "get_thumbs_up_info", "disable_thumbs_up" ]
+__all__ = [ "atomid", "chainid", "disable_thumbs_up",
+            "expand",
+            "get_thumbs_up_info",
+            "load", "load_test_files", "molid",
+            "save", "save_to_string",
+            "segid", "supported_formats", "thumbs_up", "tutorial_url"
+          ]
 
 
 def _fix_openmm_path():

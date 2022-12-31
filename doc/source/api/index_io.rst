@@ -1,8 +1,8 @@
-====
-sire
-====
+=======
+sire.io
+=======
 
 .. toctree::
    :maxdepth: 2
 
-   sire
+   io
