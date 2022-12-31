@@ -35,6 +35,14 @@ Detailed Guides
 
    cheatsheet/index
 
+API
+===
+
+.. toctree::
+   :maxdepth: 2
+
+   api/index
+
 Support
 ============
 
@@ -50,14 +58,6 @@ Contributing
    :maxdepth: 2
 
    contributing/index
-
-API Documentation
-=================
-
-.. toctree::
-   :maxdepth: 1
-
-   api/index
 
 Changelog
 =========

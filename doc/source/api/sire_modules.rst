@@ -11,6 +11,9 @@ Sub-modules
    index_maths
    index_mm
    index_mol
+   index_search
    index_stream
    index_system
    index_units
+   index_utils
+   index_vol

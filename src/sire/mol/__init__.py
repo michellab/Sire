@@ -1,6 +1,3 @@
-"""
-Module for viewing, editing and moving molecules (and molecule views)
-"""
 
 __all__ = [
             "Atom", "AtomIdx", "AtomName", "AtomNum",

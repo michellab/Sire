@@ -1,7 +1,5 @@
-"""
-.. currentmodule:: sire.cluster
 
-"""
+__all__ = []
 
 from ..legacy import Cluster as _Cluster
 

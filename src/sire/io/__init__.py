@@ -1,13 +1,9 @@
-"""
-.. currentmodule:: sire.io
 
-"""
+__all__ = ["get_coords_array"]
 
 from ..legacy import IO as _IO
 from .. import use_new_api as _use_new_api
 _use_new_api()
-
-from .. import system as _system
 
 
 def get_coords_array(mol, units=None, map=None):

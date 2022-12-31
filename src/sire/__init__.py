@@ -1,6 +1,3 @@
-"""
-Main module
-"""
 
 __all__ = [ "atomid", "chainid", "disable_thumbs_up",
             "expand",

@@ -19,7 +19,8 @@ You will rarely need to call functions or create classes from the
 sub-modules directly yourself.
 
 For example, :func:`sire.load` will use the file parsers defined
-in :mod:`sire.io` to load molecules (represented as :class:`~sire.mol.Molecule`
+in :mod:`sire.io` to load molecules (each represented as a
+:class:`~sire.mol.Molecule`
 object from :mod:`sire.mol`), and will return the result as a
 :class:`~sire.system.System` (defined in :mod:`sire.system`).
 
@@ -27,6 +28,8 @@ Key sub-modules are:
 
 * :mod:`sire.mol` - defines all of the objects that are used to represent
   and manipulate molecules (and views of molecules).
+* :mod:`sire.search` - provides the power behind the
+  :doc:`search functionality <../cheatsheet/search>`.
 * :mod:`sire.units` - implements a complete set of units so that all
   physical quantities are represented by proper units / dimensions.
 * :mod:`sire.maths` - provides a collection of maths functions and classes
@@ -48,11 +51,21 @@ Key sub-modules are:
   of all :mod:`sire` objects to an from a cross-platform, versioned binary
   format. This allows all C++ objects to be pickled via standard
   Python pickle.
+* :mod:`sire.vol` - provides different spaces (volumes) that can be used
+  to calculate distances between points with different boundary conditions.
+* :mod:`sire.utils` - a miscellaneous collection of utilities that
+  are Python-only, and don't fit neatly into any of the other sub-modules.
+
+Top-level documentation
+=======================
 
 .. toctree::
    :maxdepth: 3
 
    sire
+
+Sub-module documentation
+========================
 
 .. toctree::
    :maxdepth: 2

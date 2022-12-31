@@ -1,7 +1,5 @@
-"""
-.. currentmodule:: sire.analysis
 
-"""
+__all__ = []
 
 from ..legacy import Analysis as _Analysis
 

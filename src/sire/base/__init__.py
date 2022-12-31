@@ -1,7 +1,5 @@
-"""
-.. currentmodule:: sire.base
 
-"""
+__all__ = ["create_map", "wrap"]
 
 from ..legacy import Base as _Base
 

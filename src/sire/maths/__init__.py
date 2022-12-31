@@ -1,8 +1,12 @@
-"""
-.. currentmodule:: sire.maths
 
-
-"""
+__all__ = ["create_quaternion",
+           "Matrix",
+           "pi",
+           "Sphere",
+           "Torsion",
+           "Triangle",
+           "Vector"
+          ]
 
 from ..legacy import Maths as _Maths
 
