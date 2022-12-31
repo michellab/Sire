@@ -1,0 +1,6 @@
+====
+sire
+====
+
+.. automodule:: sire
+   :members:

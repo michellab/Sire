@@ -437,7 +437,7 @@ Searching by element
 --------------------
 
 The search strings are very powerful, and are described in more detail in a
-:doc:`later chapter <07_searching>`. One cool feature is that you can
+:doc:`later chapter <10_searching>`. One cool feature is that you can
 search for atoms by their element.
 
 >>> print(mol["element C"])

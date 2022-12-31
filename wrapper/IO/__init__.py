@@ -1,45 +1,4 @@
-"""
-.. currentmodule:: sire.legacy.IO
 
-Classes
-=======
-
-.. autosummary::
-    :toctree: generated/
-
-    Amber
-    AmberPrm
-    AmberRst
-    AmberRst7
-    CharmmPSF
-    Cube
-    Gro87
-    Mol2
-    MoleculeParser
-    PDB
-    PDB2
-    SDF
-    Tinker
-    TrajectoryMonitor
-    ZmatrixMaker
-
-Functions
-=========
-
-.. autosummary::
-    :toctree: generated/
-
-    isAmberWater
-    isGromacsWater
-    isWater
-    renumberConstituents
-    repartitionHydrogenMass
-    setAmberWater
-    setGromacsWater
-    updateAndPreserveOrder
-    updateCoordinatesAndVelocities
-
-"""
 from .. import Mol as _Mol
 from .. import System as _System
 from .. import Units as _Units

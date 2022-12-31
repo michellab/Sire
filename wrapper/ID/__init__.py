@@ -1,18 +1,3 @@
-"""
-.. currentmodule:: sire.legacy.ID
-
-Classes
-=======
-
-.. autosummary::
-    :toctree: generated/
-
-    ID
-    Index
-    Name
-    Number
-
-"""
 
 # Import all of the Qt classes
 from .. import Qt as _Qt

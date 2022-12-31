@@ -1,31 +1,5 @@
 """
-.. currentmodule:: sire
-
-This is the sire module.
-
-Functions
-=========
-
-.. autosummary::
-    :toctree: generated/
-
-    atomid
-    chainid
-    disable_thumbs_up
-    expand
-    get_thumbs_up_info
-    load
-    load_test_files
-    measure
-    molid
-    resid
-    save
-    save_to_string
-    segid
-    supported_formats
-    tutorial_url
-    thumbs_up
-
+Main module
 """
 
 __all__ = [ "load", "save",

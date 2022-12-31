@@ -1,25 +1,3 @@
-"""
-.. currentmodule:: sire.legacy.Stream
-
-Classes
-=======
-
-.. autosummary::
-    :toctree: generated/
-
-    FileHeader
-    MD5Sum
-
-Functions
-=========
-
-.. autosummary::
-    :toctree: generated/
-
-    load
-    save
-
-"""
 
 from ._Stream import *
 

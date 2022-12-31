@@ -66,7 +66,6 @@ Changelog
    :maxdepth: 1
 
    changelog
-   history
 
 Acknowledgements
 ================

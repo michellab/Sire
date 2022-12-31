@@ -25,11 +25,11 @@ help:
 	@echo "  html      to make standalone HTML files"
 
 clean:
-	-rm -rf $(BUILD_DIR)/* source/generated source/api/generated
+	-rm -rf $(BUILD_DIR)/* source/_generated source/api/_generated
 
 html:
 	mkdir -p $(BUILD_DIR)/html $(BUILD_DIR)/doctrees
-	SIRE_NO_LAZY_IMPORT=1 $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILD_DIR)/html $(FILES)
+	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILD_DIR)/html $(FILES)
 	@echo
 	@echo "Build finished. The HTML pages are in build/html."
 

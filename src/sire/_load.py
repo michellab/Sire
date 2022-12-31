@@ -17,6 +17,9 @@ class _tutorial_url:
     def __repr__(self):
         return self._value
 
+    def startswith(self, value):
+        return self._value.startswith(value)
+
 tutorial_url = _tutorial_url("https://siremol.org/m")
 
 _range = range

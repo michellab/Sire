@@ -21,7 +21,7 @@ When contributing, please keep in mind our
 `code of conduct <https://github.com/michellab/Sire/blob/devel/CODE_OF_CONDUCT.md>`__.
 
 Before contributing we encourage everyone to
-:doc:`complete the tutorial <tutorial/index>`, as this gives a good
+:doc:`complete the tutorial <../tutorial/index>`, as this gives a good
 grounding in how Sire works and how the code is laid out. If you have
 any problems running the tutorial then please
 `raise and issue <https://github.com/michellab/Sire/issues>`__.

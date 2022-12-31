@@ -148,7 +148,7 @@ SireMol::AtomStringProperty( size=22
 Searching by property
 ---------------------
 
-You have :doc:`already seen <../part02/07_searching>` how to search for the more
+You have :doc:`already seen <../part02/10_searching>` how to search for the more
 standard properties, such as ``element``, ``mass`` and ``charge``.
 
 You can also search for custom properties, such as the ``color`` property

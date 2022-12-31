@@ -59,7 +59,7 @@ will automatically trigger the GitHub Action to build the conda packages
 for the platforms and python versions that we currently support.
 These will be pushed automatically to conda-forge.
 
-Please remember to update the :doc:`changelog` with details about this release. This
+Please remember to update the :doc:`../changelog` with details about this release. This
 should include the link at the top of the release that shows the commit
 differences between versions. This can be easily copied from a previous
 release and updated.

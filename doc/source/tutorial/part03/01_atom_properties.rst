@@ -197,7 +197,7 @@ of all of the atoms in the first residue;
 
 You can pass in positional and named arguments to the applied function
 as arguments to ``apply``. For example, here we will ask for the ``mass``
-property on each atom by calling the ``property`` function via an ``apply``å;
+property on each atom by calling the ``property`` function via an ``apply``;
 
 >>> print(mol.atoms().apply("property", "mass"))
 [1.008 g mol-1, 12.01 g mol-1, 1.008 g mol-1, 1.008 g mol-1, 12.01 g mol-1,

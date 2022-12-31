@@ -6,4 +6,4 @@ API
    :maxdepth: 1
 
    index_sire
-   index_sire_mol
+   index_mol
