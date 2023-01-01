@@ -7,10 +7,6 @@
 # Export symbols when building the library
 add_definitions( "-DSIREMATHS_BUILD" )
 
-add_definitions( "-DSIRE_DISABLE_FORTRAN" )
-message( STATUS "Disabling SireMaths BLAS/LAPACK/LINPACK interfaces.")
-message( STATUS "Have to do this as Fortran code has been disabled.")
-
 # Other Sire libraries
 include_directories(${CMAKE_SOURCE_DIR}/src/libs)
 
@@ -56,10 +52,6 @@ set ( SIREMATHS_HEADERS
       vector3d.hpp
       vectorproperty.h
 
-      sire_blas.h
-      sire_lapack.h
-      sire_linpack.h
-
       third_party/eig3/eig3.cpp
     )
 
@@ -103,10 +95,6 @@ set ( SIREMATHS_SOURCES
       trigmatrix.cpp
       vector.cpp
       vectorproperty.cpp
-
-      sire_blas.cpp
-      sire_lapack.cpp
-      sire_linpack.cpp
 
       ${SIREMATHS_HEADERS}
     )

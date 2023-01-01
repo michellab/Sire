@@ -74,11 +74,6 @@ Acknowledgements
 
    acknowledgements
 
-Citation
-========
-
-Citation instructions...
-
 Indices and tables
 ==================
 
