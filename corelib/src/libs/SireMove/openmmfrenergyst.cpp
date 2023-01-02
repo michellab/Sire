@@ -1247,8 +1247,9 @@ void OpenMMFrEnergyST::initialise()
 
     /****************************************PERMANENT BOND LINK POTENTIAL*****************************/
 
-    OpenMM::CustomBondForce * custom_permanent_link_bond = new OpenMM::CustomBondForce("kl*max(0,d-dl*dl);"
-                                                                             "d=(r-reql)*(r-reql)");
+    OpenMM::CustomBondForce * custom_permanent_link_bond = new OpenMM::CustomBondForce("delta(min(0, r_eff))*kl*r_eff^2;"
+                                                                             "r_eff=abs(r-reql)-dl");
+
     custom_permanent_link_bond->addPerBondParameter("reql");
     custom_permanent_link_bond->addPerBondParameter("kl");
     custom_permanent_link_bond->addPerBondParameter("dl");
