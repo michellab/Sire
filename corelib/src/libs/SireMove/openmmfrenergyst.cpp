@@ -1232,7 +1232,7 @@ void OpenMMFrEnergyST::initialise()
     /****************************************BOND LINK POTENTIAL*****************************/
     /* FC 12/21 CustomBondForce now (OpenMM 7.4.0) allows application of PBC checks*/
 
-    OpenMM::CustomBondForce * custom_link_bond = new OpenMM::CustomBondForce("delta(min(0, r_eff))*lamrest*kl*r_eff^2;"
+    OpenMM::CustomBondForce * custom_link_bond = new OpenMM::CustomBondForce("delta(min(0, r_eff))*lamrest^5*kl*r_eff^2;"
                                                                              "r_eff=abs(r-reql)-dl");
     custom_link_bond->addPerBondParameter("reql");
     custom_link_bond->addPerBondParameter("kl");
@@ -1257,7 +1257,7 @@ void OpenMMFrEnergyST::initialise()
 
     /****************************************BORESCH DISTANCE POTENTIAL*****************************/
 
-    OpenMM::CustomBondForce * custom_boresch_dist_rest = new OpenMM::CustomBondForce("lamrest*force_const*(r-equil_val)^2");
+    OpenMM::CustomBondForce * custom_boresch_dist_rest = new OpenMM::CustomBondForce("lamrest^5*force_const*(r-equil_val)^2");
     custom_boresch_dist_rest->addPerBondParameter("force_const");
     custom_boresch_dist_rest->addPerBondParameter("equil_val");
     custom_boresch_dist_rest->setUsesPeriodicBoundaryConditions(true);
@@ -1268,7 +1268,7 @@ void OpenMMFrEnergyST::initialise()
 
     /****************************************BORESCH ANGLE POTENTIAL*****************************/
 
-    OpenMM::CustomAngleForce * custom_boresch_angle_rest = new OpenMM::CustomAngleForce("lamrest*force_const*(theta-equil_val)^2");
+    OpenMM::CustomAngleForce * custom_boresch_angle_rest = new OpenMM::CustomAngleForce("lamrest^5*force_const*(theta-equil_val)^2");
     custom_boresch_angle_rest->addPerAngleParameter("force_const");
     custom_boresch_angle_rest->addPerAngleParameter("equil_val");
     custom_boresch_angle_rest->setUsesPeriodicBoundaryConditions(true);
@@ -1279,7 +1279,7 @@ void OpenMMFrEnergyST::initialise()
 
     /****************************************BORESCH DIHEDRAL POTENTIAL*****************************/
 
-    OpenMM::CustomTorsionForce * custom_boresch_dihedral_rest = new OpenMM::CustomTorsionForce("lamrest*force_const*min(dtheta, 2*pi-dtheta)^2;"
+    OpenMM::CustomTorsionForce * custom_boresch_dihedral_rest = new OpenMM::CustomTorsionForce("lamrest^5*force_const*min(dtheta, 2*pi-dtheta)^2;"
                                                                                                "dtheta = abs(theta-equil_val); pi = 3.1415926535");
     custom_boresch_dihedral_rest->addPerTorsionParameter("force_const");
     custom_boresch_dihedral_rest->addPerTorsionParameter("equil_val");
