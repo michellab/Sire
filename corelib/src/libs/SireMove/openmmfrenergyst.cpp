@@ -1291,21 +1291,21 @@ void OpenMMFrEnergyST::initialise()
 
     /****************************************PERMANENT BORESCH DISTANCE POTENTIAL*****************************/
 
-    OpenMM::CustomBondForce * custom_permanent_boresch_dist_rest = new OpenMM::CustomBondForce("0.5*force_const*(r-equil_val)^2");
+    OpenMM::CustomBondForce * custom_permanent_boresch_dist_rest = new OpenMM::CustomBondForce("force_const*(r-equil_val)^2");
     custom_permanent_boresch_dist_rest->addPerBondParameter("force_const");
     custom_permanent_boresch_dist_rest->addPerBondParameter("equil_val");
     custom_permanent_boresch_dist_rest->setUsesPeriodicBoundaryConditions(true);
 
     /****************************************PERMANENT BORESCH ANGLE POTENTIAL*****************************/
 
-    OpenMM::CustomAngleForce * custom_permanent_boresch_angle_rest = new OpenMM::CustomAngleForce("0.5*force_const*(theta-equil_val)^2");
+    OpenMM::CustomAngleForce * custom_permanent_boresch_angle_rest = new OpenMM::CustomAngleForce("force_const*(theta-equil_val)^2");
     custom_permanent_boresch_angle_rest->addPerAngleParameter("force_const");
     custom_permanent_boresch_angle_rest->addPerAngleParameter("equil_val");
     custom_permanent_boresch_angle_rest->setUsesPeriodicBoundaryConditions(true);
 
     /****************************************PERMANENT BORESCH DIHEDRAL POTENTIAL*****************************/
 
-    OpenMM::CustomTorsionForce * custom_permanent_boresch_dihedral_rest = new OpenMM::CustomTorsionForce("0.5*force_const*min(dtheta, 2*pi-dtheta)^2;"
+    OpenMM::CustomTorsionForce * custom_permanent_boresch_dihedral_rest = new OpenMM::CustomTorsionForce("force_const*min(dtheta, 2*pi-dtheta)^2;"
                                                                                                "dtheta = abs(theta-equil_val); pi = 3.1415926535");
     custom_permanent_boresch_dihedral_rest->addPerTorsionParameter("force_const");
     custom_permanent_boresch_dihedral_rest->addPerTorsionParameter("equil_val");
