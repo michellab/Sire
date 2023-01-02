@@ -185,6 +185,16 @@ distance_restraints_dict = Parameter("distance restraints dictionary", {},
                                      indices. reql the equilibrium distance. Kl the force constant of the restraint.
                                      D the flat bottom radius.""")
 
+use_permanent_distance_restraints = Parameter("use permanent distance restraints", False,
+                                    """Whether or not to use restraints distances between pairs of atoms, the strength
+                                    of which is not scaled with lambda when in 'turn on receptor-ligand restraints mode.""")
+
+permanent_distance_restraints_dict = Parameter("permanent distance restraints dictionary", {},
+                                     """Dictionary of pair of atoms whose distance is restrained, and restraint
+                                     parameters. Syntax is {(atom0,atom1):(reql, kl, Dl)} where atom0, atom1 are atomic
+                                     indices. reql the equilibrium distance. Kl the force constant of the restraint.
+                                     D the flat bottom radius.""")
+
 turn_on_restraints_mode = Parameter("turn on receptor-ligand restraints mode", False,
                                   """If true, lambda will be used to scale the receptor-ligand restraint strength. A dummy
                                   pert file mapping all original ligand atom parameters to themselves must be supplied.""")
@@ -808,16 +818,18 @@ def saveTurnOnRestraintsModeProperty(system):
     return(system)
 
 
-def setupDistanceRestraints(system, restraints=None):
+def setupDistanceRestraints(system, permanent=False, restraints=None):
     prop_list = []
 
     molecules = system[MGName("all")].molecules()
 
-    if restraints is None:
-        #dic_items = list(distance_restraints_dict.val.items())
-        dic_items = list(dict(distance_restraints_dict.val).items())
+    if permanent == False:
+        if restraints is None:
+            dic_items = list(dict(distance_restraints_dict.val).items())
+        else:
+            dic_items = list(restraints.items())
     else:
-        dic_items = list(restraints.items())
+        dic_items = list(dict(permanent_distance_restraints_dict.val).items())
 
     molecules = system[MGName("all")].molecules()
     moleculeNumbers = molecules.molNums()
@@ -846,7 +858,10 @@ def setupDistanceRestraints(system, restraints=None):
     print (unique_prop_list)
     # The solute will store all the information related to the receptor-ligand restraints
     solute = getSolute(system)
-    solute = solute.edit().setProperty("linkbonds", linkbondVectorListToProperty(unique_prop_list)).commit()
+    if permanent == False:
+        solute = solute.edit().setProperty("linkbonds", linkbondVectorListToProperty(unique_prop_list)).commit()
+    else:
+        solute = solute.edit().setProperty("permanent_linkbonds", linkbondVectorListToProperty(unique_prop_list)).commit()
     system.update(solute)
 
     return system
@@ -1686,6 +1701,9 @@ def run():
                 stream.close()
             system = setupDistanceRestraints(system, restraints=restraints)
 
+        if use_permanent_distance_restraints.val:
+            system = setupDistanceRestraints(system, permanent=True)
+
         if use_boresch_restraints.val:
             print("Setting up Boresch restraints...")
             system = setupBoreschRestraints(system)
@@ -1848,6 +1866,9 @@ def runFreeNrg():
                 stream.write("distance restraints dictionary = %s\n" % restraints)
                 stream.close()
             system = setupDistanceRestraints(system, restraints=restraints)
+
+        if use_permanent_distance_restraints.val:
+            system = setupDistanceRestraints(system, permanent=True)
 
         if use_boresch_restraints.val:
             print("Setting up Boresch restraints...")
