@@ -1,88 +1,68 @@
 ****
-`Sire <http://siremol.org>`__
+`Sire <http://sire.openbiosim.org>`__
 ****
 
-.. image:: https://github.com/michellab/Sire/workflows/Build/badge.svg
-   :target: https://github.com/michellab/Sire/actions?query=workflow%3ABuild)
+.. image:: https://github.com/OpenBioSim/sire/workflows/Build/badge.svg
+   :target: https://github.com/OpenBioSim/sire/actions?query=workflow%3ABuild)
    :alt: Build status
 
-.. image:: https://anaconda.org/michellab/sire/badges/downloads.svg
-   :target: https://anaconda.org/michellab/sire
+.. image:: https://anaconda.org/OpenBioSim/sire/badges/downloads.svg
+   :target: https://anaconda.org/OpenBioSim/sire
    :alt: Downloads
 
-.. image:: https://img.shields.io/badge/License-GPL%20v2-blue.svg
-   :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+.. image:: https://img.shields.io/badge/License-GPL%20v3-blue.svg
+   :target: https://www.gnu.org/licenses/old-licenses/gpl-3.0.en.html
    :alt: License
 
 About
 =====
-`Sire <http://siremol.org>`__ is a free, open source, multiscale
-molecular simulation framework, written to allow computational
-modellers to quickly prototype and develop new algorithms for
-molecular simulation and molecular design. Sire is written
-as a collection of libraries, each of which contains self-contained
-and robust C++/Python building blocks. These building blocks are
-vectorised and thread-aware and can be streamed (saved/loaded)
-to and from a version-controlled and tagged binary format,
-thereby allowing them to be combined together easily to build
-custom multi-processor molecular simulation applications.
+
+Sire is a molecular modelling framework that provides extensive
+functionality to manipulate representations of biomolecular systems.
+
+It is used as a key component of `BioSimSpace <https://biosimspace.org>`__,
+and is distributed and supported as an open source community project by
+`OpenBioSim <https://openbiosim.org>`__.
 
 For more information about how to use Sire, and about application
-built with Sire, please `visit the Sire website <http://siremol.org>`__.
+built with Sire, please `visit the Sire website <http://sire.openbiosim.org>`__.
 
 Installation
 ============
 
-The easiest way to install Sire is using our `conda channel <https://anaconda.org/michellab/repo>`__.
+The easiest way to install Sire is using our `conda channel <https://anaconda.org/openbiosim/repo>`__.
 Sire is built using dependencies from `conda-forge <https://conda-forge.org/>`__,
 so please ensure that the channel takes strict priority. We recommend using
-`Miniforge <https://github.com/conda-forge/miniforge>`__.
+`mambaforge <https://github.com/conda-forge/miniforge#mambaforge>`__.
 
 To create a new environment:
 
 .. code-block:: bash
 
-    conda create -n sire -c conda-forge -c michellab sire
-    conda activate sire
+    mamba create -n openbiosim python==3.9
+    mamba activate openbiosim
+    mamba install -c openbiosim sire
 
 To install the latest development version you can use:
 
 .. code-block:: bash
 
-    conda create -n sire-dev -c conda-forge -c michellab/label/dev sire
-    conda activate sire-dev
-
-If you find that Conda is particularly slow to install or upgrade,
-then we advise using `mamba <https://github.com/TheSnakePit/mamba>`__:
-
-.. code-block:: bash
-
-    conda install -c conda-forge mamba
-
-You can then replace all ``conda`` commands with ``mamba``, e.g.:
-
-.. code-block:: bash
-
-    mamba create -n sire -c conda-forge -c michellab sire
+    mamba create -n openbiosim-dev python==3.9
+    mamba activate openbiosim-dev
+    mamba install -c openbiosim/label/dev sire
 
 However, as you are here, it is likely you want to download the latest,
-greatest version of the code, which you will need to compile. To compile Sire,
-you need a Git client to download the source, and a working internet connection
-(needed by the Sire compilation scripts to download additional dependencies).
+greatest version of the code, which you will need to compile. To compile
+sire,
+you need a git client to download the source, and a working internet connection
+(needed by the sire compilation scripts to download additional dependencies).
 
 First, you need to create and activate a conda environment, e.g.
 
 .. code-block:: bash
 
-    conda create -n sire-dev
-    conda activate sire-dev
-
-We find that Conda is particularly slow to install or upgrade,
-so we advise installing `mamba <https://github.com/TheSnakePit/mamba>`__:
-
-.. code-block:: bash
-
-    conda install -c conda-forge mamba
+    mamba create -n openbiosim-dev python==3.9
+    mamba activate openbiosim-dev
 
 Next, you need to install the Sire build dependencies.
 
@@ -110,17 +90,17 @@ and on Windows use
 
 Next, you can clone the Sire source code and compile and install Sire::
 
-    git clone git@github.com:michellab/Sire.git
-    cd Sire
+    git clone https://github.com/OpenBioSim/sire
+    cd sire
     python setup.py install
 
 A small word of warning, the compilation can easily take over an hour!
 
-The above will compile Sire in your existing conda environment.
+The above will compile sire in your existing conda environment.
 
 If you plan to build `BioSimSpace <https://github.com/michellab/BioSimSpace>`__
-on top of Sire, then you will need to resolve BioSimSpace's dependencies at
-the time Sire is installed to ensure that it is built in a self-consistent way.
+on top of sire, then you will need to resolve BioSimSpace's dependencies at
+the time sire is installed to ensure that it is built in a self-consistent way.
 This can be achieved as follows:
 
 .. code-block:: bash
@@ -133,21 +113,20 @@ Support and Development
 Bugs, Comments, Questions
 -------------------------
 For bug reports/sugguestions/complains please file an issue on
-`GitHub <http://github.com/michellab/Sire/issues>`__.
-or contact the developers via the google user group: `https://groups.google.com/forum/#!forum/sire-users`
+`GitHub <http://github.com/OpenBioSim/sire/issues>`__.
 
 Developers guide
 ----------------
-Please `visit the website <http://siremol.org>`__ for information on how to
-develop applications using Sire.
+Please `visit the website <http://sire.openbiosim.org>`__ for information on how to
+develop applications using sire.
 
 GitHub actions
 --------------
-Since Sire is quite large, a build can take quite long and might not be neccessary
+Since sire is quite large, a build can take quite long and might not be neccessary
 if a commit is only fixing a couple of typos. Simply add ``ci skip``
 to your commit message and GitHub actions will not invoke an autobuild.
 
-Note that every time you commit to devel, it will trigger a build of Sire,
+Note that every time you commit to devel, it will trigger a build of sire,
 full testing, construction of a Conda package and upload to our Anaconda
 channel. Please think twice before committing directly to devel. You should
 ideally be working in a _feature_ branch, and only commit to devel once you are

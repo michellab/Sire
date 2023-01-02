@@ -58,6 +58,12 @@ Contributing
    :maxdepth: 2
 
    contributing/index
+   contributors
+
+.. toctree::
+   :maxdepth: 1
+
+   code_of_conduct
 
 Changelog
 =========
