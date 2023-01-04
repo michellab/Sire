@@ -2,14 +2,14 @@
 
 package:
   name: {{ name }}
-  version: {{ GIT_DESCRIBE_TAG }}
+  version: {{ GIT_DESCRIBE_TAG if GIT_DESCRIBE_TAG is not none else 'PR' }}
 
 source:
   git_url: https://github.com/michellab/Sire.git
   git_tag: SIRE_BRANCH
 
 build:
-  number: {{ GIT_DESCRIBE_NUMBER }}
+  number: {{ GIT_DESCRIBE_NUMBER if GIT_DESCRIBE_NUMBER is not none else 0 }}
 
 requirements:
   build:
@@ -52,7 +52,7 @@ test:
   source_files:
     - tests
   commands:
-    - pytest tests
+    - pytest -vvv --color=yes tests
 
 about:
   home: https://github.com/michellab/Sire

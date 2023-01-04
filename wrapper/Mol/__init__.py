@@ -224,12 +224,14 @@ _typename_mapping = {"SireMol_Velocity3D" : "SireMaths_Vector3D_SireUnits_Dimens
 
 def __get_typename__(obj):
     try:
-        if hasattr(obj, "what"):
+        if hasattr(obj, "_to_cpp_type"):
+            typename = obj._to_cpp_type().replace("::","_")
+        elif hasattr(obj, "what"):
             typename = obj.what().replace("::","_")
         elif hasattr(obj, "typename"):
-            typename = obj.typename().replace("::","_")
+            typename = obj.__class__.typename().replace("::","_")
         else:
-            typename = obj.typeName().replace("::","_")
+            typename = obj.__class__.typeName().replace("::","_")
 
         return (_typename_mapping.get(typename, typename), obj)
     except Exception as e:

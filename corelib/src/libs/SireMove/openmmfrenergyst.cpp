@@ -381,7 +381,6 @@ QString OpenMMFrEnergyST::toString() const
 void OpenMMFrEnergyST::initialise()
 {
 
-    bool Debug = false;
     if (Debug)
     {
         qDebug() << "Initialising OpenMMFrEnergyST";
@@ -502,13 +501,16 @@ void OpenMMFrEnergyST::initialise()
     OpenMM::CustomBondForce * custom_intra_14_fromdummy = NULL;
     OpenMM::CustomBondForce * custom_intra_14_fromdummy_todummy = NULL;
 
+    QString energybase, intra_14_todummy, intra_14_fromdummy,
+	intra_14_fromdummy_todummy, intra_14_clj;
+
     if (flag_cutoff == NOCUTOFF)
     {
         if (coulomb_power > 0)
         {
             //This is necessary to avoid nan errors on the GPUs platform caused by the calculation of 0^0
             //JM 9/10/20 multiply Logic_mix_lam by * 0 instead of max(lam,1.0-lam)
-            std::string energybase = """(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hcs + Hls);"
+            energybase = """(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hcs + Hls);"
               "Hcs = (lambda^n) * 138.935456 * q_prod/sqrt(diff_cl+r^2);"
               "diff_cl = (1.0-lambda) * 0.01;"
               "Hls = 4.0 * eps_avg * (LJ*LJ-LJ);"
@@ -544,7 +546,7 @@ void OpenMMFrEnergyST::initialise()
                 energybase.append("sigma_avg = sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));");
             }
 
-            custom_force_field = new OpenMM::CustomNonbondedForce(energybase) ;
+            custom_force_field = new OpenMM::CustomNonbondedForce(energybase.toStdString()) ;
             custom_force_field->addGlobalParameter("lam", Alchemical_value);
             custom_force_field->addGlobalParameter("delta", shift_delta);
             custom_force_field->addGlobalParameter("n", coulomb_power);
@@ -552,7 +554,7 @@ void OpenMMFrEnergyST::initialise()
 
             custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::NoCutoff);
 
-            std::string intra_14_todummy = """Hcs + Hls;"
+            intra_14_todummy = """Hcs + Hls;"
                 "Hcs=(lamtd^ntd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
                 "diff_cl=(1.0-lamtd)*0.01;"
                 "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
@@ -571,12 +573,12 @@ void OpenMMFrEnergyST::initialise()
                 intra_14_todummy.append("sigma_avg = sqrt((1-lamtd)*(1-lamtd)*saend + lamtd*lamtd*sastart + lamtd*(1-lamtd)*samix);");
             }
 
-            custom_intra_14_todummy = new OpenMM::CustomBondForce(intra_14_todummy) ;
+            custom_intra_14_todummy = new OpenMM::CustomBondForce(intra_14_todummy.toStdString()) ;
             custom_intra_14_todummy->addGlobalParameter("lamtd", 1.0 - Alchemical_value);
             custom_intra_14_todummy->addGlobalParameter("deltatd", shift_delta);
             custom_intra_14_todummy->addGlobalParameter("ntd", coulomb_power);
 
-            std::string intra_14_fromdummy = """Hcs + Hls;"
+            intra_14_fromdummy = """Hcs + Hls;"
                 "Hcs=(lamfd^nfd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
                 "diff_cl=(1.0-lamfd)*0.01;"
                 "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
@@ -595,14 +597,14 @@ void OpenMMFrEnergyST::initialise()
                 intra_14_fromdummy.append("sigma_avg = sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);");
             }
 
-            custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy) ;
+            custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy.toStdString()) ;
             custom_intra_14_fromdummy->addGlobalParameter("lamfd", Alchemical_value);
             custom_intra_14_fromdummy->addGlobalParameter("deltafd", shift_delta);
             custom_intra_14_fromdummy->addGlobalParameter("nfd", coulomb_power);
 
             //JM 9/10/20 set lamFTD to 0 instead of max(lamftd,1-lamftd)
 
-            std::string intra_14_fromdummy_todummy = """Hcs + Hls;"
+            intra_14_fromdummy_todummy = """Hcs + Hls;"
                 "Hcs=(lamFTD^nftd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
                 "diff_cl=(1.0-lamFTD)*0.01;"
                 "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
@@ -623,7 +625,7 @@ void OpenMMFrEnergyST::initialise()
                 intra_14_fromdummy_todummy.append("sigma_avg = sqrt(lamftd*lamftd*saend + (1-lamftd)*(1-lamftd)*sastart + lamftd*(1-lamftd)*samix);");
             }
 
-            custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy) ;
+            custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy.toStdString()) ;
             custom_intra_14_fromdummy_todummy->addGlobalParameter("lamftd", Alchemical_value);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
@@ -634,7 +636,7 @@ void OpenMMFrEnergyST::initialise()
             // coulomb_power == 0. //This is necessary to avoid nan errors on the GPUs platform caused by the calculation of 0^0
 
             // JM 9/10/20 multiply Logix_mix_lam by 0 instead of max(lam,1.0-lam)
-            std::string energybase ="""(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hcs + Hls);"
+            energybase ="""(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hcs + Hls);"
               "Hcs = 138.935456 * q_prod/sqrt(diff_cl+r^2);"
               "diff_cl = (1.0-lambda) * 0.01;"
               "Hls = 4.0 * eps_avg * (LJ*LJ-LJ);"
@@ -670,7 +672,7 @@ void OpenMMFrEnergyST::initialise()
                 energybase.append("sigma_avg = sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));");
             }
 
-            custom_force_field = new OpenMM::CustomNonbondedForce(energybase) ;
+            custom_force_field = new OpenMM::CustomNonbondedForce(energybase.toStdString()) ;
             custom_force_field->addGlobalParameter("lam", Alchemical_value);
             custom_force_field->addGlobalParameter("delta", shift_delta);
             custom_force_field->addGlobalParameter("n", coulomb_power);
@@ -678,7 +680,7 @@ void OpenMMFrEnergyST::initialise()
 
             custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::NoCutoff);
 
-            std::string intra_14_todummy = """Hcs + Hls;"
+            intra_14_todummy = """Hcs + Hls;"
               "Hcs=138.935456*q_prod/sqrt(diff_cl+r^2);"
               "diff_cl=(1.0-lamtd)*0.01;"
               "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
@@ -697,12 +699,12 @@ void OpenMMFrEnergyST::initialise()
                 intra_14_todummy.append("sigma_avg = sqrt((1-lamtd)*(1-lamtd)*saend + lamtd*lamtd*sastart + lamtd*(1-lamtd)*samix);");
             }
 
-            custom_intra_14_todummy = new OpenMM::CustomBondForce(intra_14_todummy) ;
+            custom_intra_14_todummy = new OpenMM::CustomBondForce(intra_14_todummy.toStdString()) ;
             custom_intra_14_todummy->addGlobalParameter("lamtd", 1.0 - Alchemical_value);
             custom_intra_14_todummy->addGlobalParameter("deltatd", shift_delta);
             custom_intra_14_todummy->addGlobalParameter("ntd", coulomb_power);
 
-            std::string intra_14_fromdummy = """Hcs + Hls;"
+            intra_14_fromdummy = """Hcs + Hls;"
               "Hcs=(lamfd^nfd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
               "diff_cl=(1.0-lamfd)*0.01;"
               "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
@@ -721,14 +723,14 @@ void OpenMMFrEnergyST::initialise()
                 intra_14_fromdummy.append("sigma_avg = sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);");
             }
 
-            custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy) ;
+            custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy.toStdString()) ;
             custom_intra_14_fromdummy->addGlobalParameter("lamfd", Alchemical_value);
             custom_intra_14_fromdummy->addGlobalParameter("deltafd", shift_delta);
             custom_intra_14_fromdummy->addGlobalParameter("nfd", coulomb_power);
 
             // JM 9/10/20 set lamFTD to 0.0
 
-            std::string intra_14_fromdummy_todummy = """Hcs + Hls;"
+            intra_14_fromdummy_todummy = """Hcs + Hls;"
               "Hcs=138.935456*q_prod/sqrt(diff_cl+r^2);"
               "diff_cl=(1.0-lamFTD)*0.01;"
               "Hls=4.0*eps_avg*(LJ*LJ-LJ);"
@@ -749,13 +751,13 @@ void OpenMMFrEnergyST::initialise()
                 intra_14_fromdummy_todummy.append("sigma_avg = sqrt(lamftd*lamftd*saend + (1-lamftd)*(1-lamftd)*sastart + lamftd*(1-lamftd)*samix);");
             }
 
-            custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy) ;
+            custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy.toStdString()) ;
             custom_intra_14_fromdummy_todummy->addGlobalParameter("lamftd", Alchemical_value);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
         }
 
-        std::string intra_14_clj = """Hl+Hc;"
+        intra_14_clj = """Hl+Hc;"
             "Hl=4*eps_avg*((sigma_avg/r)^12-(sigma_avg/r)^6);"
             "Hc=138.935456*q_prod/r;"
             "eps_avg = sqrt(lamhd*lamhd*eaend + (1-lamhd)*(1-lamhd)*eastart + lamhd*(1-lamhd)*emix);"
@@ -770,7 +772,7 @@ void OpenMMFrEnergyST::initialise()
             intra_14_clj.append("sigma_avg = sqrt(lamhd*lamhd*saend + (1-lamhd)*(1-lamhd)*sastart + lamhd*(1-lamhd)*samix);");
         }
 
-        custom_intra_14_clj = new OpenMM::CustomBondForce(intra_14_clj) ;
+        custom_intra_14_clj = new OpenMM::CustomBondForce(intra_14_clj.toStdString()) ;
         custom_intra_14_clj->addGlobalParameter("lamhd", Alchemical_value);
 
         if (Debug)
@@ -794,7 +796,7 @@ void OpenMMFrEnergyST::initialise()
             //This is necessary to avoid nan errors on the GPUs platform caused by the calculation of 0^0
 
             // JM 9/10/20 multiply Logix_mix_lam * 0 instead of max(lam,1.0-lam)
-            std::string energybase = """(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hls + Hcs);"
+            energybase = """(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hls + Hcs);"
              "Hcs = (lambda^n) * 138.935456 * q_prod*(1/sqrt(diff_cl+r*r) + krflam*(diff_cl+r*r)-crflam);"
              "crflam = crf * src;"
              "krflam = krf * src * src * src;"
@@ -833,7 +835,7 @@ void OpenMMFrEnergyST::initialise()
                 energybase.append("sigma_avg = sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));");
             }
 
-            custom_force_field = new OpenMM::CustomNonbondedForce(energybase);
+            custom_force_field = new OpenMM::CustomNonbondedForce(energybase.toStdString());
             custom_force_field->setCutoffDistance(converted_cutoff_distance);
             custom_force_field->addGlobalParameter("lam", Alchemical_value);
             custom_force_field->addGlobalParameter("delta", shift_delta);
@@ -856,7 +858,7 @@ void OpenMMFrEnergyST::initialise()
             // the OpenMM potential energy is not equal to he Sire energy. This is caused by the application
             // of the reaction field on the 14 pairs in Sire.
 
-            std::string intra_14_todummy = """withinCutoff*(Hcs + Hls);"
+            intra_14_todummy = """withinCutoff*(Hcs + Hls);"
               "withinCutoff=step(cutofftd-r);"
               "Hcs=(lamtd^ntd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
               "diff_cl=(1.0-lamtd)*0.01;"
@@ -876,13 +878,13 @@ void OpenMMFrEnergyST::initialise()
                 intra_14_todummy.append("sigma_avg = sqrt((1-lamtd)*(1-lamtd)*saend + lamtd*lamtd*sastart + lamtd*(1-lamtd)*samix);");
             }
 
-            custom_intra_14_todummy = new OpenMM::CustomBondForce(intra_14_todummy) ;
+            custom_intra_14_todummy = new OpenMM::CustomBondForce(intra_14_todummy.toStdString()) ;
             custom_intra_14_todummy->addGlobalParameter("lamtd", 1.0 - Alchemical_value);
             custom_intra_14_todummy->addGlobalParameter("deltatd", shift_delta);
             custom_intra_14_todummy->addGlobalParameter("ntd", coulomb_power);
             custom_intra_14_todummy->addGlobalParameter("cutofftd", converted_cutoff_distance);
 
-            std::string intra_14_fromdummy = """withinCutoff*(Hcs + Hls);"
+            intra_14_fromdummy = """withinCutoff*(Hcs + Hls);"
               "withinCutoff=step(cutofffd-r);"
               "Hcs=(lamfd^nfd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
               "diff_cl=(1.0-lamfd)*0.01;"
@@ -902,14 +904,14 @@ void OpenMMFrEnergyST::initialise()
                 intra_14_fromdummy.append("sigma_avg = sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);");
             }
 
-            custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy) ;
+            custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy.toStdString()) ;
             custom_intra_14_fromdummy->addGlobalParameter("lamfd", Alchemical_value);
             custom_intra_14_fromdummy->addGlobalParameter("deltafd", shift_delta);
             custom_intra_14_fromdummy->addGlobalParameter("nfd", coulomb_power);
             custom_intra_14_fromdummy->addGlobalParameter("cutofffd", converted_cutoff_distance);
 
             //JM 9/10/20 set lamFTD to 0
-            std::string intra_14_fromdummy_todummy = """withinCutoff*(Hcs + Hls);"
+            intra_14_fromdummy_todummy = """withinCutoff*(Hcs + Hls);"
             "withinCutoff=step(cutoffftd-r);"
             "Hcs=(lamFTD^nftd)*138.935456*q_prod/sqrt(diff_cl+r^2);"
             "diff_cl=(1.0-lamFTD)*0.01;"
@@ -932,7 +934,7 @@ void OpenMMFrEnergyST::initialise()
                 intra_14_fromdummy_todummy.append("sigma_avg = sqrt(lamftd*lamftd*saend + (1-lamftd)*(1-lamftd)*sastart + lamftd*(1-lamftd)*samix);");
             }
 
-            custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy) ;
+            custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy.toStdString()) ;
             custom_intra_14_fromdummy_todummy->addGlobalParameter("lamftd", Alchemical_value);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
@@ -944,7 +946,7 @@ void OpenMMFrEnergyST::initialise()
 
             //JM 9/10/10 setting Logix_mix_lam output to 0 for lambda
 
-            std::string energybase = """(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hls + Hcs);"
+            energybase = """(1.0 - isSolvent1 * isSolvent2 * SPOnOff) * (Hls + Hcs);"
              "Hcs = 138.935456 * q_prod*(1/sqrt(diff_cl+r*r) + krflam*(diff_cl+r*r)-crflam);"
              "crflam = crf * src;"
              "krflam = krf * src * src * src;"
@@ -983,7 +985,7 @@ void OpenMMFrEnergyST::initialise()
                 energybase.append("sigma_avg = sqrt((sigmaend1*lam+(1.0-lam)*sigmastart1)*(sigmaend2*lam+(1.0-lam)*sigmastart2));");
             }
 
-            custom_force_field = new OpenMM::CustomNonbondedForce(energybase) ;
+            custom_force_field = new OpenMM::CustomNonbondedForce(energybase.toStdString()) ;
             custom_force_field->setCutoffDistance(converted_cutoff_distance);
             custom_force_field->addGlobalParameter("lam", Alchemical_value);
             custom_force_field->addGlobalParameter("delta", shift_delta);
@@ -1008,7 +1010,7 @@ void OpenMMFrEnergyST::initialise()
             // application of the reaction field on the 14 pairs in Sire.
 
 
-            std::string intra_14_todummy = """withinCutoff*(Hcs + Hls);"
+            intra_14_todummy = """withinCutoff*(Hcs + Hls);"
                 "withinCutoff=step(cutofftd-r);"
                 "Hcs=138.935456*q_prod/sqrt(diff_cl+r^2);"
                 "diff_cl=(1.0-lamtd)*0.01;"
@@ -1028,14 +1030,14 @@ void OpenMMFrEnergyST::initialise()
                 intra_14_todummy.append("sigma_avg = sqrt((1-lamtd)*(1-lamtd)*saend + lamtd*lamtd*sastart + lamtd*(1-lamtd)*samix);");
             }
 
-            custom_intra_14_todummy = new OpenMM::CustomBondForce(intra_14_todummy) ;
+            custom_intra_14_todummy = new OpenMM::CustomBondForce(intra_14_todummy.toStdString()) ;
             custom_intra_14_todummy->addGlobalParameter("lamtd", 1.0 - Alchemical_value);
             custom_intra_14_todummy->addGlobalParameter("deltatd", shift_delta);
             custom_intra_14_todummy->addGlobalParameter("ntd", coulomb_power);
             custom_intra_14_todummy->addGlobalParameter("cutofftd", converted_cutoff_distance);
 
 
-            std::string intra_14_fromdummy = """withinCutoff*(Hcs + Hls);"
+            intra_14_fromdummy = """withinCutoff*(Hcs + Hls);"
                 "withinCutoff=step(cutofffd-r);"
                 "Hcs=138.935456*q_prod/sqrt(diff_cl+r^2);"
                 "diff_cl=(1.0-lamfd)*0.01;"
@@ -1055,7 +1057,7 @@ void OpenMMFrEnergyST::initialise()
                 intra_14_fromdummy.append("sigma_avg = sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);");
             }
 
-            custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy) ;
+            custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy.toStdString()) ;
             custom_intra_14_fromdummy->addGlobalParameter("lamfd", Alchemical_value);
             custom_intra_14_fromdummy->addGlobalParameter("deltafd", shift_delta);
             custom_intra_14_fromdummy->addGlobalParameter("nfd", coulomb_power);
@@ -1063,7 +1065,7 @@ void OpenMMFrEnergyST::initialise()
 
             //JM 9/10/20 always set lamFTD to 0.0
 
-            std::string intra_14_fromdummy_todummy = """withinCutoff*(Hcs + Hls);"
+            intra_14_fromdummy_todummy = """withinCutoff*(Hcs + Hls);"
                 "withinCutoff=step(cutoffftd-r);"
                 "Hcs=138.935456*q_prod/sqrt(diff_cl+r^2);"
                 "diff_cl=(1.0-lamFTD)*0.01;"
@@ -1085,14 +1087,14 @@ void OpenMMFrEnergyST::initialise()
                 intra_14_fromdummy_todummy.append("sigma_avg = sqrt(lamftd*lamftd*saend + (1-lamftd)*(1-lamftd)*sastart + lamftd*(1-lamftd)*samix);");
             }
 
-            custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy) ;
+            custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy.toStdString()) ;
             custom_intra_14_fromdummy_todummy->addGlobalParameter("lamftd", Alchemical_value);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("cutoffftd", converted_cutoff_distance);
         }
 
-        std::string intra_14_clj = """withinCutoff*(Hl+Hc);"
+        intra_14_clj = """withinCutoff*(Hl+Hc);"
           "withinCutoff=step(cutoffhd-r);"
           "Hl=4*eps_avg*((sigma_avg/r)^12-(sigma_avg/r)^6);"
           "Hc=138.935456*q_prod/r;"
@@ -1109,7 +1111,7 @@ void OpenMMFrEnergyST::initialise()
             intra_14_clj.append("sigma_avg = sqrt(lamhd*lamhd*saend + (1-lamhd)*(1-lamhd)*sastart + lamhd*(1-lamhd)*samix);");
         }
 
-        custom_intra_14_clj = new OpenMM::CustomBondForce(intra_14_clj) ;
+        custom_intra_14_clj = new OpenMM::CustomBondForce(intra_14_clj.toStdString()) ;
         custom_intra_14_clj->addGlobalParameter("lamhd", Alchemical_value);
         custom_intra_14_clj->addGlobalParameter("cutoffhd", converted_cutoff_distance);
 
@@ -1118,10 +1120,19 @@ void OpenMMFrEnergyST::initialise()
         if (Debug)
         {
             qDebug() << "\nCut off type = " << CutoffType;
-            qDebug() << "CutOff distance = " << converted_cutoff_distance << " Nm";
+            qDebug() << "CutOff distance = " << converted_cutoff_distance << " nm";
             qDebug() << "Dielectric constant = " << field_dielectric;
             qDebug() << "Lambda = " << Alchemical_value << " Coulomb Power = " << coulomb_power << " Delta Shift = " << shift_delta;
         }
+    }
+
+    if (Debug)
+    {
+	qDebug() << "energybase:" << QString(energybase);
+	qDebug() << "intra_14_todummy:" << QString(intra_14_todummy);
+	qDebug() << "intra_14_fromdummy:" << QString(intra_14_fromdummy);
+	qDebug() << "intra_14_fromtodummy:" << QString(intra_14_fromdummy_todummy);
+	qDebug() << "custom_intra_14_clj:" << QString(intra_14_clj);
     }
 
     // Andersen thermostat
@@ -1211,15 +1222,74 @@ void OpenMMFrEnergyST::initialise()
             qDebug() << "\n\nRestraint is ON\n\n";
     }
 
-    /****************************************BOND LINK POTENTIAL*****************************/
-    /* !! CustomBondForce does not (OpenMM 6.2) apply PBC checks so code will be buggy is restraints involve one atom that diffuses
-       out of the box. */
 
-    OpenMM::CustomBondForce * custom_link_bond = new OpenMM::CustomBondForce("kl*max(0,d-dl*dl);"
-                                                                             "d=(r-reql)*(r-reql)");
+    /************************************RECEPTOR-lIGAND RESTRAINTS**************************/
+    // Check if we are in turn on receptor-ligand restraint mode
+
+    bool turn_on_restraints_mode{false};
+
+    for (int i = 0; i < nmols; i++)
+    {
+        Molecule molecule = moleculegroup.moleculeAt(i).molecule();
+
+        if (molecule.hasProperty("turn_on_restraints_mode"))
+        {
+            turn_on_restraints_mode = true; //Lambda will be used to turn on the receptor-ligand restraints
+            if (Debug)
+                qDebug() << "Lambda will be used to turn on the receptor-ligand restraints";
+            break; // We've found the solute - exit loop over molecules in system.
+        }
+    }
+
+    /****************************************BOND LINK POTENTIAL*****************************/
+    /* FC 12/21 CustomBondForce now (OpenMM 7.4.0) allows application of PBC checks*/
+
+    OpenMM::CustomBondForce * custom_link_bond = new OpenMM::CustomBondForce("delta(min(0, r_eff))*lamrest*kl*r_eff^2;"
+                                                                             "r_eff=abs(r-reql)-dl");
     custom_link_bond->addPerBondParameter("reql");
     custom_link_bond->addPerBondParameter("kl");
     custom_link_bond->addPerBondParameter("dl");
+    custom_link_bond->setUsesPeriodicBoundaryConditions(true);
+    // If in turn on receptor-ligand restraints mode, default value of lamrest needs to be lambda, because
+    // the default value is used for the first nrg_freq timesteps before being set by updateOpenMMContextLambda
+    if (turn_on_restraints_mode)
+        custom_link_bond->addGlobalParameter("lamrest", Alchemical_value);
+    // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
+    else custom_link_bond->addGlobalParameter("lamrest", 1);
+
+    /****************************************BORESCH DISTANCE POTENTIAL*****************************/
+
+    OpenMM::CustomBondForce * custom_boresch_dist_rest = new OpenMM::CustomBondForce("lamrest*force_const*(r-equil_val)^2");
+    custom_boresch_dist_rest->addPerBondParameter("force_const");
+    custom_boresch_dist_rest->addPerBondParameter("equil_val");
+    custom_boresch_dist_rest->setUsesPeriodicBoundaryConditions(true);
+    if (turn_on_restraints_mode)
+        custom_boresch_dist_rest->addGlobalParameter("lamrest", Alchemical_value);
+    // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
+    else custom_boresch_dist_rest->addGlobalParameter("lamrest", 1);
+
+    /****************************************BORESCH ANGLE POTENTIAL*****************************/
+
+    OpenMM::CustomAngleForce * custom_boresch_angle_rest = new OpenMM::CustomAngleForce("lamrest*force_const*(theta-equil_val)^2");
+    custom_boresch_angle_rest->addPerAngleParameter("force_const");
+    custom_boresch_angle_rest->addPerAngleParameter("equil_val");
+    custom_boresch_angle_rest->setUsesPeriodicBoundaryConditions(true);
+    if (turn_on_restraints_mode)
+        custom_boresch_angle_rest->addGlobalParameter("lamrest", Alchemical_value);
+    // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
+    else custom_boresch_angle_rest->addGlobalParameter("lamrest", 1);
+
+    /****************************************BORESCH DIHEDRAL POTENTIAL*****************************/
+
+    OpenMM::CustomTorsionForce * custom_boresch_dihedral_rest = new OpenMM::CustomTorsionForce("lamrest*force_const*min(dtheta, 2*pi-dtheta)^2;"
+                                                                                               "dtheta = abs(theta-equil_val); pi = 3.1415926535");
+    custom_boresch_dihedral_rest->addPerTorsionParameter("force_const");
+    custom_boresch_dihedral_rest->addPerTorsionParameter("equil_val");
+    custom_boresch_dihedral_rest->setUsesPeriodicBoundaryConditions(true);
+    if (turn_on_restraints_mode)
+        custom_boresch_dihedral_rest->addGlobalParameter("lamrest", Alchemical_value);
+    // We are not in turn on receptor-ligand restraints mode - set lamrest to 1
+    else custom_boresch_dihedral_rest->addGlobalParameter("lamrest", 1);
 
     //OpenMM vector coordinate
     std::vector<OpenMM::Vec3> positions_openmm(nats);
@@ -1415,7 +1485,7 @@ void OpenMMFrEnergyST::initialise()
 
     int nions = 0;
 
-    QVector<bool> perturbed_energies_tmp(8);
+    QVector<bool> perturbed_energies_tmp(9);
 
     for (int i = 0; i < perturbed_energies_tmp.size(); i++)
         perturbed_energies_tmp[i] = false;
@@ -2833,12 +2903,19 @@ void OpenMMFrEnergyST::initialise()
             qDebug() << "Added Perturbed Internal Angle energy term";
     }
 
+    if (turn_on_restraints_mode)
+    {
+        perturbed_energies_tmp[8] = true; //Lambda will be used to turn on the receptor-ligand restraints
+        if (Debug)
+            qDebug() << "Added Perturbed Receptor-Ligand Restraint energy term";
+    }
+
     perturbed_energies = perturbed_energies_tmp;
 
     //IMPORTANT: PERTURBED ENERGY TORSIONS ARE ADDED ABOVE
     bool UseLink_flag = true;
 
-    //Distance Restaint. All the information are stored in the first molecule only.
+    //Distance Restraint. All the information is stored in the solute.
 
     if (UseLink_flag == true)
     {
@@ -2891,6 +2968,152 @@ void OpenMMFrEnergyST::initialise()
         }//end of loop over molecules in system
     }//end of bond link flag
 
+    bool UseBoresch_flag = true;
+
+    //Boresch Restraints. All the information is stored in the solute only.
+
+    if (UseBoresch_flag == true)
+    {
+        bool found_solute{false};
+        for (int i = 0; i < nmols; i++)
+        {
+            Molecule molecule = moleculegroup.moleculeAt(i).molecule();
+
+            bool has_boresch_dist = molecule.hasProperty("boresch_dist_restraint");
+            bool has_boresch_angle = molecule.hasProperty("boresch_angle_restraints");
+            bool has_boresch_dihedral = molecule.hasProperty("boresch_dihedral_restraints");
+
+            if (has_boresch_dist)
+            {
+                found_solute = true; // We have found the solute, but before breaking we must also check
+                                    // if there are Boresch angle and torsion restraints.
+
+                if (Debug)
+                {
+                    qDebug() << "Boresch distance restraint properties stored = true";
+                    qDebug() << "Boresch angle restraint properties stored = " << has_boresch_angle;
+                    qDebug() << "Boresch dihedral restraint properties stored = " << has_boresch_dihedral;
+                }
+
+                std::vector<double> custom_boresch_dist_par(2);
+
+                const auto boresch_dist_prop = molecule.property("boresch_dist_restraint").asA<Properties>();
+
+                const auto atomnum0 = boresch_dist_prop.property(QString("AtomNum0")).asA<VariantProperty>().toInt();
+                const auto atomnum1 = boresch_dist_prop.property(QString("AtomNum1")).asA<VariantProperty>().toInt();
+                const auto force_const = boresch_dist_prop.property(QString("force_const")).asA<VariantProperty>().toDouble();
+                const auto equil_val = boresch_dist_prop.property(QString("equil_val")).asA<VariantProperty>().toDouble();
+
+                const auto openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
+                const auto openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
+
+                custom_boresch_dist_par[0] = force_const * (OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); //force_const
+                custom_boresch_dist_par[1] = equil_val * OpenMM::NmPerAngstrom; //equil_val
+
+                if (Debug)
+                {
+                    qDebug() << "Boresch distance restraint implemented";
+                    qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
+                    qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
+                    qDebug() << "force_const = " << force_const << " equil_val = " << equil_val;
+                }
+
+                custom_boresch_dist_rest->addBond(openmmindex0, openmmindex1, custom_boresch_dist_par);
+
+                system_openmm->addForce(custom_boresch_dist_rest);
+            }
+
+            if (has_boresch_angle)
+            {
+                std::vector<double> custom_boresch_angle_par(2);
+
+                const auto boresch_angle_prop = molecule.property("boresch_angle_restraints").asA<Properties>();
+
+                const auto n_angles = boresch_angle_prop.property(QString("n_boresch_angle_restraints")).asA<VariantProperty>().toInt();
+
+                if (Debug)
+                    qDebug() << "Number of Boresch angle restraints = " << n_angles;
+
+                for (int i = 0; i < n_angles; i++)
+                {
+                    const auto atomnum0 = boresch_angle_prop.property(QString("AtomNum0-%1").arg(i)).asA<VariantProperty>().toInt();
+                    const auto atomnum1 = boresch_angle_prop.property(QString("AtomNum1-%1").arg(i)).asA<VariantProperty>().toInt();
+                    const auto atomnum2 = boresch_angle_prop.property(QString("AtomNum2-%1").arg(i)).asA<VariantProperty>().toInt();
+                    const auto force_const = boresch_angle_prop.property(QString("force_const-%1").arg(i)).asA<VariantProperty>().toDouble();
+                    const auto equil_val = boresch_angle_prop.property(QString("equil_val-%1").arg(i)).asA<VariantProperty>().toDouble();
+
+                    const auto openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
+                    const auto openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
+                    const auto openmmindex2 = AtomNumToOpenMMIndex[atomnum2];
+
+                    custom_boresch_angle_par[0] = force_const * (OpenMM::KJPerKcal); //force_const
+                    custom_boresch_angle_par[1] = equil_val; //equil_val
+
+                    if (Debug)
+                    {
+                        qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
+                        qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
+                        qDebug() << "atomnum2 = " << atomnum2 << " openmmindex2 =" << openmmindex2;
+                        qDebug() << "force_const = " << force_const << " equil_val = " << equil_val;
+                    }
+
+                    custom_boresch_angle_rest->addAngle(openmmindex0, openmmindex1, openmmindex2, custom_boresch_angle_par);
+                }
+
+                system_openmm->addForce(custom_boresch_angle_rest);
+            }
+
+            if (has_boresch_dihedral)
+            {
+                std::vector<double> custom_boresch_dihedral_par(2);
+
+                const auto boresch_dihedral_prop = molecule.property("boresch_dihedral_restraints").asA<Properties>();
+
+                const auto n_dihedrals = boresch_dihedral_prop.property(QString("n_boresch_dihedral_restraints")).asA<VariantProperty>().toInt();
+
+                if (Debug)
+                    qDebug() << "Number of Boresch dihedral restraints = " << n_dihedrals;
+
+                for (int i = 0; i < n_dihedrals; i++)
+                {
+                    const auto atomnum0 = boresch_dihedral_prop.property(QString("AtomNum0-%1").arg(i)).asA<VariantProperty>().toInt();
+                    const auto atomnum1 = boresch_dihedral_prop.property(QString("AtomNum1-%1").arg(i)).asA<VariantProperty>().toInt();
+                    const auto atomnum2 = boresch_dihedral_prop.property(QString("AtomNum2-%1").arg(i)).asA<VariantProperty>().toInt();
+                    const auto atomnum3 = boresch_dihedral_prop.property(QString("AtomNum3-%1").arg(i)).asA<VariantProperty>().toInt();
+                    const auto force_const = boresch_dihedral_prop.property(QString("force_const-%1").arg(i)).asA<VariantProperty>().toDouble();
+                    const auto equil_val = boresch_dihedral_prop.property(QString("equil_val-%1").arg(i)).asA<VariantProperty>().toDouble();
+
+                    const auto openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
+                    const auto openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
+                    const auto openmmindex2 = AtomNumToOpenMMIndex[atomnum2];
+                    const auto openmmindex3 = AtomNumToOpenMMIndex[atomnum3];
+
+                    custom_boresch_dihedral_par[0] = force_const * (OpenMM::KJPerKcal); //force_const
+                    custom_boresch_dihedral_par[1] = equil_val; //equil_val
+
+                    if (Debug)
+                    {
+                        qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
+                        qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
+                        qDebug() << "atomnum2 = " << atomnum2 << " openmmindex2 =" << openmmindex2;
+                        qDebug() << "atomnum3 = " << atomnum3 << " openmmindex3 =" << openmmindex3;
+                        qDebug() << "force_const = " << force_const << " equil_val = " << equil_val;
+                    }
+
+                    custom_boresch_dihedral_rest->addTorsion(openmmindex0, openmmindex1, openmmindex2, openmmindex3, custom_boresch_dihedral_par);
+                }
+
+                system_openmm->addForce(custom_boresch_dihedral_rest);
+            }
+
+            if (found_solute) break; // We've found the molecule, exit the outer loop. If a molecule has Boresch
+                                     // distance restraints it must be the solute, but we cannot break immediately
+                                     // because it may also have angle/ dihedral restraints
+
+        }// End of loop over molecules in system
+
+    }// End of Boresch flag
+
     this->openmm_system = system_openmm;
     this->isSystemInitialised = true;
 }
@@ -2903,8 +3126,6 @@ void OpenMMFrEnergyST::initialise()
 
 void OpenMMFrEnergyST::createContext(IntegratorWorkspace &workspace, SireUnits::Dimension::Time timestep)
 {
-    bool Debug = false;
-
     if (Debug)
     {
         qDebug() << "In OpenMMFrEnergyST::createContext()\n\n";
@@ -3181,7 +3402,6 @@ MolarEnergy OpenMMFrEnergyST::getPotentialEnergy(const System &system)
  */
 System OpenMMFrEnergyST::minimiseEnergy(System &system, double tolerance = 1.0e-10, int max_iteration = 1)
 {
-    bool Debug = false;
     const MoleculeGroup moleculegroup = this->molgroup.read();
     IntegratorWorkspacePtr workspace = this->createWorkspace(moleculegroup);
     if (system.nMolecules() != moleculegroup.nMolecules())
@@ -3193,11 +3413,26 @@ System OpenMMFrEnergyST::minimiseEnergy(System &system, double tolerance = 1.0e-
     // Use helper function to create a Context
     SireUnits::Dimension::Time timestep = 0.0 * picosecond;
     createContext(workspace.edit(), timestep);
+
+    int infoMask = OpenMM::State::Positions;
+
+    if (Debug)
+       infoMask += OpenMM::State::Energy;
+
+    OpenMM::State state_openmm = openmm_context->getState(infoMask);
+
+    if (Debug)
+    {
+       MolarEnergy Epot = state_openmm.getPotentialEnergy() * kJ_per_mol;
+
+       qDebug() << "Energy before minimisation:" << Epot
+		<< "kcal/mol at lambda =" << Alchemical_value;
+    }
+
     // Step 2 minimise
     OpenMM::LocalEnergyMinimizer::minimize(*openmm_context, tolerance, max_iteration);
     // Step 3 update the positions in the system
-    int infoMask = OpenMM::State::Positions;
-    OpenMM::State state_openmm = openmm_context->getState(infoMask);
+    state_openmm = openmm_context->getState(infoMask);
     std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
     // Recast to atomicvelocityworkspace because want to use commitCoordinates() method to update system
     AtomicVelocityWorkspace &ws = workspace.edit().asA<AtomicVelocityWorkspace>();
@@ -3214,7 +3449,7 @@ System OpenMMFrEnergyST::minimiseEnergy(System &system, double tolerance = 1.0e-
                                     positions_openmm[j + k][2] * (OpenMM::AngstromsPerNm));
             if (Debug)
             {
-                std::cout << "X = " << positions_openmm[j + k][0] * OpenMM::AngstromsPerNm << " A" <<
+                qDebug() << "X = " << positions_openmm[j + k][0] * OpenMM::AngstromsPerNm << " A" <<
                     " Y = " << positions_openmm[j + k][1] * OpenMM::AngstromsPerNm << " A" <<
                     " Z = " << positions_openmm[j + k][2] * OpenMM::AngstromsPerNm << " A";
             }
@@ -3225,6 +3460,15 @@ System OpenMMFrEnergyST::minimiseEnergy(System &system, double tolerance = 1.0e-
     // This causes the workspace to update the system coordinates with the
     // contents of *sire_coords. Note that velocities aren't touched.
     ws.commitCoordinates();
+
+    if (Debug)
+    {
+       MolarEnergy Epot = state_openmm.getPotentialEnergy() * kJ_per_mol;
+
+       qDebug() << "Energy after minimisation:" << Epot
+		<< "kcal/mol at lambda =" << Alchemical_value;
+    }
+
     // Step 4 delete the context
     // JM 04/15 FIXME: See comment above at step 1
     this->destroyContext();
@@ -3250,7 +3494,6 @@ System OpenMMFrEnergyST::annealSystemToLambda(System &system,
                                       SireUnits::Dimension::Time anneal_step_size,
                                       int annealing_steps)
 {
-    bool Debug = false;
     const double AKMAPerPs = 0.04888821;
 
     const MoleculeGroup moleculegroup = this->molgroup.read();
@@ -3319,7 +3562,7 @@ System OpenMMFrEnergyST::annealSystemToLambda(System &system,
         // dummy buffered dimensions vector, maybe there is better solution
         //to this than just passing an empty vector
         QVector<QVector<Vector>> dimensions;
-        updateBoxDimensions(state_openmm, dimensions, Debug, ws);
+        updateBoxDimensions(state_openmm, dimensions, ws);
     }
     this->destroyContext();
     // Step 5. Return pointer to the workspace's system
@@ -3340,7 +3583,6 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
                                  int nmoves, bool record_stats)
 {
     createContext(workspace, timestep);
-    bool Debug = false;
     const int nats = openmm_system->getNumParticles();
 
     AtomicVelocityWorkspace &ws = workspace.asA<AtomicVelocityWorkspace>();
@@ -3475,8 +3717,8 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
         double p_energy_lambda = state_openmm.getPotentialEnergy();
         if (Debug)
         {
-            printf("Lambda = %f Potential energy = %.5f kcal/mol\n", Alchemical_value, p_energy_lambda * OpenMM::KcalPerKJ);
-            //exit(-1);
+            qDebug() << "Lambda =" << Alchemical_value << "Potential energy ="
+		     << p_energy_lambda * OpenMM::KcalPerKJ << "kcal/mol\n";
         }
         IsFiniteNumber = (p_energy_lambda <= DBL_MAX && p_energy_lambda >= -DBL_MAX);
 
@@ -3623,7 +3865,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
     //Now the box dimensions
     if (MCBarostat_flag == true)
     {
-        updateBoxDimensions(state_openmm, buffered_dimensions, Debug, ws);
+        updateBoxDimensions(state_openmm, buffered_dimensions, ws);
     }
     // Clear all buffers
 
@@ -3669,6 +3911,10 @@ void OpenMMFrEnergyST::updateOpenMMContextLambda(double lambda)
         openmm_context->setParameter("lamangle", lambda); //Angles
     if (perturbed_energies[7])
         openmm_context->setParameter("lamdih", lambda); //Torsions
+
+    // RECEPTOR-LIGAND RESTRAINTS
+    if (perturbed_energies[8])
+        openmm_context->setParameter("lamrest", lambda); //Receptor-ligand restraints
 }
 
 boost::tuples::tuple<double, double, double> OpenMMFrEnergyST::calculateGradient(
@@ -3712,7 +3958,6 @@ boost::tuples::tuple<double, double, double> OpenMMFrEnergyST::calculateGradient
 
 QVector<double> OpenMMFrEnergyST::computeReducedPerturbedEnergies(double beta)
 {
-    bool Debug = false;
     QVector<double> perturbed;
     QVector<double>::iterator i;
     for (i=alchemical_array.begin(); i!=alchemical_array.end(); i++)
@@ -3738,9 +3983,10 @@ void OpenMMFrEnergyST::emptyContainers()
     reduced_perturbed_energies.clear();
 }
 
-void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm,
-                                           QVector<QVector<Vector>> &buffered_dimensions,
-                                           bool Debug, AtomicVelocityWorkspace &ws)
+void OpenMMFrEnergyST::updateBoxDimensions(
+   OpenMM::State &state_openmm,
+   QVector<QVector<Vector>> &buffered_dimensions,
+   AtomicVelocityWorkspace &ws)
 {
     Debug = false;
     OpenMM::Vec3 a;
@@ -4207,4 +4453,10 @@ IntegratorWorkspacePtr OpenMMFrEnergyST::createWorkspace(const MoleculeGroup &mo
 const char* OpenMMFrEnergyST::typeName()
 {
     return QMetaType::typeName(qMetaTypeId<OpenMMFrEnergyST>());
+}
+
+
+void OpenMMFrEnergyST::setDebug(bool debug)
+{
+   Debug = debug;
 }

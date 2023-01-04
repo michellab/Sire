@@ -579,7 +579,20 @@ SelectResult::SelectResult(const QList< Selector<CutGroup> > &views)
 SelectResult::SelectResult(const MolGroupsBase &molgroups)
              : ConcreteProperty<SelectResult,Property>()
 {
-    this->operator=( SelectResult(molgroups.molecules()) );
+    // we need to add the molecules in MolIdx order, or else
+    // we will change the order randomly during the search
+
+    const auto molnums = molgroups.molNums();
+
+    molviews.reserve(molnums.count());
+
+    for (const auto &molnum : molnums)
+    {
+        const auto view = molgroups.at(molnum);
+
+        if (not view.isEmpty())
+            molviews.append(view);
+    }
 }
 
 /** Construct from the passed molecules */
@@ -588,6 +601,7 @@ SelectResult::SelectResult(const MoleculeGroup &molgroup)
 {
     for (int i=0; i<molgroup.nMolecules(); ++i)
     {
+        // note that 'moleculeAt()' returns a ViewsOfMol, not a Molecule
         const auto &view = molgroup.moleculeAt(i);
 
         if (not view.isEmpty())
