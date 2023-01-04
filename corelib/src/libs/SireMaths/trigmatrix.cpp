@@ -32,9 +32,6 @@
 #include "nvector.h"
 #include "vector.h"
 
-#include "sire_blas.h"
-#include "sire_lapack.h"
-
 #include "SireBase/array2d.hpp"
 
 #include "SireStream/datastream.h"
@@ -52,11 +49,11 @@ static const RegisterMetaType<TrigMatrix> r_trigmatrix(NO_ROOT);
 QDataStream &operator<<(QDataStream &ds, const TrigMatrix &matrix)
 {
     writeHeader(ds, r_trigmatrix, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << matrix.array << matrix.nrows;
-    
+
     return ds;
 }
 
@@ -64,16 +61,16 @@ QDataStream &operator<<(QDataStream &ds, const TrigMatrix &matrix)
 QDataStream &operator>>(QDataStream &ds, TrigMatrix &matrix)
 {
     VersionID v = readHeader(ds, r_trigmatrix);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> matrix.array >> matrix.nrows;
     }
     else
         throw version_error(v, "1", r_trigmatrix, CODELOC);
-        
+
     return ds;
 }
 
@@ -112,22 +109,22 @@ TrigMatrix::TrigMatrix(int dimension, double initial_value) : nrows(dimension)
 }
 
 /** Construct from the passed Matrix - if 'take_upper' is true,
-    then the upper right diagonal is copied - otherwise the 
+    then the upper right diagonal is copied - otherwise the
     lower left diagonal is taken */
 TrigMatrix::TrigMatrix(const NMatrix &matrix, bool take_upper) : nrows(0)
 {
     if (matrix.nRows() > 0)
     {
         matrix.assertSquare();
-        
+
         nrows = matrix.nRows();
 
         array = QVector<double>( (nrows*nrows + nrows)/2 );
         array.squeeze();
-    
+
         double *data = array.data();
         const double *mdata = matrix.constData();
-        
+
         if (take_upper)
         {
             for (int i=0; i<nrows; ++i)
@@ -220,7 +217,7 @@ void TrigMatrix::assertSquare() const
 double& TrigMatrix::operator()(int i, int j)
 {
     this->assertValidIndex(i,j);
-    
+
     return array.data()[ this->offset(i,j) ];
 }
 
@@ -231,7 +228,7 @@ double& TrigMatrix::operator()(int i, int j)
 const double& TrigMatrix::operator()(int i, int j) const
 {
     this->assertValidIndex(i,j);
-    
+
     return array.data()[ this->offset(i,j) ];
 }
 
@@ -261,7 +258,7 @@ void TrigMatrix::assertNColumns(int nc) const
                     .arg(nrows).arg(nrows).arg(nc), CODELOC );
 }
 
-/** Return the transpose of this matrix. This is fast, as it doesn't 
+/** Return the transpose of this matrix. This is fast, as it doesn't
     actually have to do anything! */
 TrigMatrix TrigMatrix::transpose() const
 {
@@ -274,43 +271,43 @@ TrigMatrix TrigMatrix::fullTranspose() const
     return *this;
 }
 
-/** Matrix addition 
+/** Matrix addition
 
     \throw SireError::incompatible_error
 */
 TrigMatrix& TrigMatrix::operator+=(const TrigMatrix &other)
 {
     assertNRows(other.nRows());
-    
+
     double *data = array.data();
     const double *other_data = other.array.constData();
     const int sz = array.count();
-    
+
     for (int i=0; i<sz; ++i)
     {
         data[i] += other_data[i];
     }
-    
+
     return *this;
 }
 
-/** Matrix subtraction 
+/** Matrix subtraction
 
     \throw SireError::incompatible_error
 */
 TrigMatrix& TrigMatrix::operator-=(const TrigMatrix &other)
 {
     assertNRows(other.nRows());
-    
+
     double *data = array.data();
     const double *other_data = other.array.constData();
     const int sz = array.count();
-    
+
     for (int i=0; i<sz; ++i)
     {
         data[i] -= other_data[i];
     }
-    
+
     return *this;
 }
 
@@ -334,7 +331,7 @@ TrigMatrix& TrigMatrix::operator*=(double scale)
             data[i] *= sz;
         }
     }
-    
+
     return *this;
 }
 
@@ -344,26 +341,26 @@ TrigMatrix& TrigMatrix::operator/=(double scale)
     if (scale == 0)
         throw SireMaths::domain_error( QObject::tr(
             "This code does not support dividing a matrix by zero!"), CODELOC );
-            
+
     return this->operator*=( 1/scale );
 }
 
 /** Matrix multiplication - this uses dgemm under the hood
-    for speed 
-    
+    for speed
+
     \throw SireError::incompatible_error
-*/  
+*/
 TrigMatrix& TrigMatrix::operator*=(const TrigMatrix &other)
 {
     this->operator=( TrigMatrix( NMatrix(*this) * NMatrix(other) ) );
-    
+
     return *this;
 }
 
 /** Return the inverse of this matrix
-    
+
     This uses LAPACK under the hood, for speed
-    
+
     \throw SireError::incompatible_error
     \throw SireMaths::domain_error
 */
@@ -372,7 +369,7 @@ TrigMatrix TrigMatrix::inverse() const
     return TrigMatrix( NMatrix(*this).inverse() );
 }
 
-/** Matrix division - this multiplies this matrix with the inverse of 'other' 
+/** Matrix division - this multiplies this matrix with the inverse of 'other'
 
     \throw SireMaths::domain_error
     \throw SireError::incompatible_error
@@ -390,16 +387,16 @@ TrigMatrix TrigMatrix::operator-() const
 
     const int sz = array.count();
     double *ret_data = ret.array.data();
-    
+
     for (int i=0; i<sz; ++i)
     {
         ret_data[i] = -ret_data[i];
     }
-    
+
     return ret;
 }
 
-/** Matrix addition 
+/** Matrix addition
 
     \throw SireError::incompatible_error
 */
@@ -407,11 +404,11 @@ TrigMatrix TrigMatrix::operator+(const TrigMatrix &other) const
 {
     TrigMatrix ret(*this);
     ret += other;
-    
+
     return ret;
 }
 
-/** Matrix subtraction 
+/** Matrix subtraction
 
     \throw SireError::incompatible_error
 */
@@ -419,25 +416,25 @@ TrigMatrix TrigMatrix::operator-(const TrigMatrix &other) const
 {
     TrigMatrix ret(*this);
     ret -= other;
-    
+
     return ret;
 }
 
 /** Matrix multiplication - this uses dgemm under the hood
-    for speed 
-    
+    for speed
+
     \throw SireError::incompatible_error
-*/  
+*/
 TrigMatrix TrigMatrix::operator*(const TrigMatrix &other) const
 {
     TrigMatrix ret(*this);
-    
+
     ret *= other;
-    
+
     return ret;
 }
 
-/** Matrix division - this multiplies this matrix with the inverse of 'other' 
+/** Matrix division - this multiplies this matrix with the inverse of 'other'
 
     \throw SireMaths::domain_error
     \throw SireError::incompatible_error
@@ -445,9 +442,9 @@ TrigMatrix TrigMatrix::operator*(const TrigMatrix &other) const
 TrigMatrix TrigMatrix::operator/(const TrigMatrix &other) const
 {
     TrigMatrix ret(*this);
-    
+
     ret /= other;
-    
+
     return ret;
 }
 
@@ -455,9 +452,9 @@ TrigMatrix TrigMatrix::operator/(const TrigMatrix &other) const
 TrigMatrix TrigMatrix::operator*(double scale) const
 {
     TrigMatrix ret(*this);
-    
+
     ret *= scale;
-    
+
     return ret;
 }
 
@@ -465,13 +462,13 @@ TrigMatrix TrigMatrix::operator*(double scale) const
 TrigMatrix TrigMatrix::operator/(double scale) const
 {
     TrigMatrix ret(*this);
-    
+
     ret /= scale;
-    
+
     return ret;
 }
 
-/** Perform matrix-vector multiplication - the number of 
+/** Perform matrix-vector multiplication - the number of
     rows of the vector must equal to the number of rows
     of this matrix
 
@@ -484,7 +481,7 @@ NVector TrigMatrix::operator*(const NVector &vector) const
     return NMatrix(*this) * vector;
 }
 
-/** Perform matrix-vector multiplication - the number of 
+/** Perform matrix-vector multiplication - the number of
     rows of the vector must equal to the number of rows
     of this matrix
 
@@ -509,7 +506,7 @@ int TrigMatrix::nColumns() const
     return nrows;
 }
 
-/** Redimension this matrix to have 'dimension' rows and 'dimension' 
+/** Redimension this matrix to have 'dimension' rows and 'dimension'
     columns. The contents of this matrix are undefined after
     this redimension. This function will only reallocate
     memory if there is not enough memory allocated to store
@@ -522,7 +519,7 @@ int TrigMatrix::nColumns() const
 void TrigMatrix::redimension(int dimension)
 {
     const int sz = (dimension*dimension + dimension) / 2;
-    
+
     if (sz <= 0)
     {
         nrows = 0;
@@ -531,12 +528,12 @@ void TrigMatrix::redimension(int dimension)
     {
         if (sz > array.count())
             array.resize(sz);
-            
+
         nrows = dimension;
     }
 }
 
-/** Assert that there is an ith row! 
+/** Assert that there is an ith row!
 
     \throw SireError::invalid_index
 */
@@ -548,7 +545,7 @@ void TrigMatrix::assertValidRow(int i) const
                     .arg(nrows).arg(nrows).arg(i), CODELOC );
 }
 
-/** Assert that there is an jth column! 
+/** Assert that there is an jth column!
 
     \throw SireError::invalid_index
 */
@@ -560,7 +557,7 @@ void TrigMatrix::assertValidColumn(int j) const
                     .arg(nrows).arg(nrows).arg(j), CODELOC );
 }
 
-/** Return a vector containing the contents of the ith row 
+/** Return a vector containing the contents of the ith row
 
     \throw SireError::invalid_index
 */
@@ -572,7 +569,7 @@ NVector TrigMatrix::row(int i) const
 
     const double *d = array.constData();
     double *vd = v.data();
-    
+
     for (int j=0; j<nrows; ++j)
     {
         vd[j] = d[ offset(i,j) ];
@@ -592,7 +589,7 @@ NVector TrigMatrix::column(int j) const
     NVector v(nrows);
     const double *d = array.constData();
     double *vd = v.data();
-    
+
     for (int i=0; i<nrows; ++i)
     {
         vd[i] = d[ offset(i,j) ];
@@ -617,9 +614,9 @@ void TrigMatrix::set(int i, int j, double value)
 void TrigMatrix::setRow(int i, double value)
 {
     this->assertValidRow(i);
-    
+
     double *d = array.data();
-    
+
     for (int j=0; j<nrows; ++j)
     {
         d[offset(i,j)] = value;
@@ -635,10 +632,10 @@ void TrigMatrix::setRow(int i, const NVector &row)
 {
     this->assertValidRow(i);
     this->assertNColumns(row.count());
-    
+
     double *d = array.data();
     const double *v = row.constData();
-    
+
     for (int j=0; j<nrows; ++j)
     {
         d[offset(i,j)] = v[j];
@@ -652,9 +649,9 @@ void TrigMatrix::setRow(int i, const NVector &row)
 void TrigMatrix::setColumn(int j, double value)
 {
     this->assertValidColumn(j);
-    
+
     double *d = array.data();
-    
+
     for (int i=0; i<nrows; ++i)
     {
         d[offset(i,j)] = value;
@@ -670,10 +667,10 @@ void TrigMatrix::setColumn(int j, const NVector &column)
 {
     this->assertValidColumn(j);
     this->assertNRows(column.count());
-    
+
     double *d = array.data();
     const double *v = column.constData();
-    
+
     for (int i=0; i<nrows; ++i)
     {
         d[offset(i,j)] = v[i];
@@ -685,7 +682,7 @@ void TrigMatrix::setAll(double value)
 {
     double *d = array.data();
     int sz = array.count();
-    
+
     for (int i=0; i<sz; ++i)
     {
         d[i] = value;
@@ -724,7 +721,7 @@ QVector<double> TrigMatrix::memory() const
 
 /** Calculate the offset in the 1D array of the value
     at index [i,j]
-    
+
     \throw SireError::invalid_index
 */
 int TrigMatrix::checkedOffset(int i, int j) const
@@ -738,33 +735,33 @@ QString TrigMatrix::toString() const
 {
     if (nrows == 0)
         return "( )";
-        
+
     else if (nrows == 1)
     {
         const double *d = array.constData();
-    
+
         QStringList row;
         for (qint32 j=0; j<nrows; ++j)
         {
             row.append( QString("%1").arg(d[j], 8) );
         }
-        
+
         return QString("( %1 )").arg( row.join(", ") );
     }
 
     QStringList rows;
-    
+
     const double *d = array.constData();
-    
+
     for (qint32 i=0; i<nrows; ++i)
     {
         QStringList row;
-        
+
         for (qint32 j=0; j<nrows; ++j)
         {
             row.append( QString("%1").arg(d[offset(i,j)], 8) );
         }
-        
+
         if (i == 0)
             rows.append( QString("/ %1 \\").arg( row.join(", ") ) );
         else if (i == this->nRows() - 1)
@@ -772,7 +769,7 @@ QString TrigMatrix::toString() const
         else
             rows.append( QString("| %1 |").arg( row.join(", ") ) );
     }
-    
+
     return rows.join("\n");
 }
 
@@ -795,18 +792,18 @@ double TrigMatrix::trace() const
 {
     const double *d = array.constData();
     double sum = 0;
-    
+
     for (int i=0; i<nrows; ++i)
     {
         sum += d[ offset(i,i) ];
     }
-    
+
     return sum;
 }
-    
+
 /** Return a vector containing the diagonal of this matrix - this is only
     valid for a square matrix
-    
+
     \throw SireError::incompatible_error
 */
 NVector TrigMatrix::diagonal() const
@@ -815,12 +812,12 @@ NVector TrigMatrix::diagonal() const
 
     NVector vector(nrows);
     double *v = vector.data();
-    
+
     for (int i=0; i<nrows; ++i)
     {
         v[i] = d[ offset(i,i) ];
     }
-    
+
     return vector;
 }
 

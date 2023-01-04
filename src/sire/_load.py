@@ -2,11 +2,25 @@
 from typing import Union as _Union
 from typing import List as _List
 
-__all__ = ["load", "save", "save_to_string", "create", "smiles", "expand",
+__all__ = ["load", "save", "save_to_string", "expand",
            "tutorial_url", "load_test_files", "supported_formats"]
 
 
-tutorial_url = "https://siremol.org/m"
+class _tutorial_url:
+    def __init__(self, value):
+        self._value = value
+        self.__doc__ = "The base URL for all molecule files used in the tutorial."
+
+    def __str__(self):
+        return self._value
+
+    def __repr__(self):
+        return self._value
+
+    def startswith(self, value):
+        return self._value.startswith(value)
+
+tutorial_url = _tutorial_url("https://siremol.org/m")
 
 _range = range
 
@@ -505,14 +519,3 @@ def load_test_files(files: _Union[_List[str], str], *args):
 
     files = expand(tutorial_url, files, suffix=".bz2")
     return load(files, directory=cache_dir, silent=True)
-
-
-def create(args):
-    """Create a Molecule from the passed arguments
-    """
-    pass
-
-
-def smiles(args):
-    """Create a Molecule from the passed smiles string"""
-    pass

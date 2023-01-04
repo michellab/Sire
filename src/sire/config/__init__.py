@@ -1,8 +1,5 @@
-"""
-.. currentmodule:: sire.config
 
-This provides configuration data for this installation of sire
-"""
+__all__ = []
 
 from ..legacy import Config as _Config
 

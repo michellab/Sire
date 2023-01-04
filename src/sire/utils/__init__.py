@@ -1,7 +1,12 @@
-"""
-.. currentmodule:: sire.utils
 
-"""
+__all__ = [
+           "Console",
+           "NullProfiler",
+           "Profiler",
+           "Table",
+           "try_import",
+           "try_import_from"
+          ]
 
 from ._try_import import *
 

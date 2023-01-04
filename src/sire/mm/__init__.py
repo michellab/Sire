@@ -1,7 +1,19 @@
-"""
-.. currentmodule:: sire.mm
 
-"""
+__all__ = ["Angle",
+           "Bond",
+           "calculate_energy",
+           "create_forcefield",
+           "Dihedral",
+           "Improper",
+           "SelectorAngle",
+           "SelectorBond",
+           "SelectorDihedral",
+           "SelectorImproper",
+           "SelectorMAngle",
+           "SelectorMBond",
+           "SelectorMDihedral",
+           "SelectorMImproper"
+           ]
 
 from ..legacy import MM as _MM
 

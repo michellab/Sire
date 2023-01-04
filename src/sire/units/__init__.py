@@ -1,7 +1,24 @@
-"""
-.. currentmodule:: sire.units
 
-"""
+__all__ = [
+           "angle",
+           "length",
+           "set_energy_unit",
+           "set_internal_units",
+           "set_length_unit",
+           "set_mass_unit",
+           "set_quantity_unit",
+           "set_si_units",
+           "set_time_unit",
+           "angstrom",
+           "femtosecond",
+           "g_per_mol",
+           "kcal_per_mol",
+           "kj_per_mol",
+           "nanometer",
+           "nanosecond",
+           "picometer",
+           "picosecond",
+          ]
 
 from ..legacy import Units as _Units
 
@@ -127,6 +144,9 @@ def _incompatible_units(a, b, typ:str):
 
 
 def set_quantity_unit(q, name: str=None):
+    """Set the default quantity unit to be used for
+       output and default conversions
+    """
 
     if not q.has_same_units(mole):
         _incompatible_units(q, mole, "quantity")
@@ -154,6 +174,9 @@ def set_quantity_unit(q, name: str=None):
 
 
 def set_energy_unit(energy, name: str=None):
+    """Set the default energy unit to be used for
+       output and default conversions
+    """
 
     if not energy.has_same_units(kcal):
         _incompatible_units(energy, kcal, "energy")
@@ -169,6 +192,9 @@ def set_energy_unit(energy, name: str=None):
 
 
 def set_length_unit(length, name: str=None):
+    """Set the default length unit to be used for
+       output and default conversions
+    """
 
     if not length.has_same_units(angstrom):
         _incompatible_units(length, angstrom, "length")
@@ -192,6 +218,9 @@ def set_length_unit(length, name: str=None):
 
 
 def set_mass_unit(mass, name:str = None):
+    """Set the default mass unit to be used for
+       output and default conversions
+    """
 
     if not mass.has_same_units(gram):
         _incompatible_units(mass, gram, "mass")
@@ -208,6 +237,9 @@ def set_mass_unit(mass, name:str = None):
 
 
 def set_time_unit(time, name:str = None):
+    """Set the default time unit to be used for
+       output and default conversions
+    """
 
     if not time.has_same_units(picosecond):
         _incompatible_units(time, picosecond, "time")
@@ -233,9 +265,12 @@ def set_si_units():
 
     This uses:
 
-        mass:    gram (g)
-        energy:  kilojoule (kJ)
-
+        mass:     gram (g)
+        energy:   kilojoule (kJ)
+        length:   nanometer
+        time:     picosecond
+        quantity: mole
+        charge:   mod_electron charges
     """
     set_quantity_unit(mole)
     set_energy_unit(kilojoule)
@@ -245,6 +280,19 @@ def set_si_units():
 
 
 def set_internal_units():
+    """
+    Switch over to using default (AKMA-style) units for output
+    and default conversions.
+
+    This uses:
+
+        mass:     gram (g)
+        energy:   kilocalorie (kcal)
+        length:   angstrom
+        time:     picosecond
+        quantity: mole
+        charge:   mod_electron charges
+    """
     set_quantity_unit(mole)
     set_energy_unit(kcal)
     set_mass_unit(gram)

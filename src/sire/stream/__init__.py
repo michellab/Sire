@@ -1,7 +1,5 @@
-"""
-.. currentmodule:: sire.stream
 
-"""
+__all__ = []
 
 from ..legacy import Stream as _Stream
 

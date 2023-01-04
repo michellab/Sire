@@ -1,10 +1,6 @@
 
 __all__ = ["colname", "colnames"]
 
-
-from tkinter import N
-
-
 _col_funcs = None
 
 

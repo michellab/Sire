@@ -1,7 +1,5 @@
-"""
-.. currentmodule:: sire.squire
 
-"""
+__all__ = []
 
 from ..legacy import Squire as _Squire
 

@@ -231,28 +231,28 @@ def use_new_api():
     _is_using_new_api = True
 
     # call Pythonize on all of the new modules
-    from . import move, io, system, squire, mm, ff, mol, \
-        analysis, base, cas, cluster, error, \
-        id, maths, qt, stream, units, vol
+    from .legacy import Move, IO, System, Squire, MM, FF, Mol, \
+        Analysis, Base, CAS, Cluster, Error, \
+        ID, Maths, Qt, Stream, Units, Vol
 
-    _pythonize_modules([analysis._Analysis,
-                        base._Base,
-                        cas._CAS,
-                        cluster._Cluster,
-                        error._Error,
-                        ff._FF,
-                        id._ID,
-                        io._IO,
-                        maths._Maths,
-                        mm._MM,
-                        mol._Mol,
-                        move._Move,
-                        qt._Qt,
-                        squire._Squire,
-                        stream._Stream,
-                        system._System,
-                        units._Units,
-                        vol._Vol])
+    _pythonize_modules([Analysis._Analysis,
+                        Base._Base,
+                        CAS._CAS,
+                        Cluster._Cluster,
+                        Error._Error,
+                        FF._FF,
+                        ID._ID,
+                        IO._IO,
+                        Maths._Maths,
+                        MM._MM,
+                        Mol._Mol,
+                        Move._Move,
+                        Qt._Qt,
+                        Squire._Squire,
+                        Stream._Stream,
+                        System._System,
+                        Units._Units,
+                        Vol._Vol])
 
 
 def use_old_api():

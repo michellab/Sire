@@ -1,7 +1,5 @@
-"""
-.. currentmodule:: sire.qt
 
-"""
+__all__ = []
 
 from ..legacy import Qt as _Qt
 

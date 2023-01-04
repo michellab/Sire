@@ -1,7 +1,8 @@
-"""
-.. currentmodule:: sire.vol
 
-"""
+__all__ = [
+           "Cartesian",
+           "PeriodicBox"
+          ]
 
 from ..legacy import Vol as _Vol
 

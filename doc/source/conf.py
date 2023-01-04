@@ -27,7 +27,7 @@ extensions = [
 ]
 
 # Github repo
-issues_github_path = 'michellab/Sire'
+issues_github_path = 'openbiosim/sire'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -42,7 +42,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Sire'
+project = u'sire'
 copyright = u'2006-2022'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -124,7 +124,29 @@ html_theme = 'furo'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    "sidebar_hide_name": True
+    "sidebar_hide_name": True,
+    "light_css_variables": {
+        "font-stack": "Changa, sans-serif",
+        "font-stack--monospace": "Roboto Mono, monospace",
+        "color-foreground-primary": "#dddddd",     # main text and headings
+        "color-foreground-secondary": "#cccccc",    # secondary text
+        "color-foreground-muted" : "#d0d0d0",      # muted text
+        "color-foreground-border": "#923eb1",      # for content borders
+        "color-background-primary": "#160f30",     # for content
+        "color-background-secondary": "#201146", # for navigation + ToC
+        "color-background-hover": "#4f4fb0",   # for navigation-item hover
+        "color-background-hover--transparent": "#4f4fb000",
+        "color-background-border": "#403333",    # for UI borders
+        "color-background-item": "#411a30",      # for "background" items (eg: copybutton)
+        "color-announcement-background": "#000000dd",    # announcements
+        "color-announcement-text": "#eeebee",            # announcements
+        "color-admonition-title-background--note": "#FFFFFF33", # Note background
+        "color-admonition-title-background--warning": "#FF000033", # Warning background
+        "color-admonition-background": "#FFFFFF11", # Admonition backgrounds
+        "color-brand-primary": "#eeeeee",        # brand colors (sidebar titles)
+        "color-brand-content": "#00dfef",        # brand colors (hyperlink color)
+        "color-highlight-on-target": "#333300",  # Highlighted text background
+    },
 }
 
 # pngmath_latex_preamble = r"""
@@ -137,10 +159,10 @@ html_theme_options = {
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "Sire Molecular Modelling"
+html_title = "openbiosim - sire"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title = "Sire"
+html_short_title = "sire"
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
@@ -156,8 +178,15 @@ html_favicon = None
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-html_css_files = []
-html_js_files = []
+html_css_files = [
+    'css/custom_fonts.css',
+    'css/custom_style.css',
+    'css/custom_pygments.css'
+]
+
+html_js_files = [
+    'js/custom.js'
+]
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
@@ -286,8 +315,9 @@ texinfo_documents = [
 autosummary_generate = True
 autodoc_default_options = {
     'members': None,  # Include all members (methods).
-    'special-members': None,
-    'exclude-members': '__dict__,__weakref__'  # Exclude "standard" methods.
+    'special-members': False,
+    'exclude-members': '__dict__,__weakref__',  # Exclude "standard" methods.
+    "private-members": False,
 }
 
 # spell checking
@@ -295,83 +325,3 @@ spelling_lang = 'en_US'
 spelling_word_list_filename = 'spelling_wordlist.txt'
 spelling_show_suggestions = True
 
-
-# try to exclude deprecated
-def skip_deprecated(app, what, name, obj, skip, options):
-    if hasattr(obj, "func_dict") and "__deprecated__" in obj.func_dict:
-        print("skipping " + name)
-        return True
-    return skip or False
-
-
-def setup(app):
-    app.connect('autodoc-skip-member', skip_deprecated)
-    try:
-        from sphinx.ext.autosummary import Autosummary
-        from sphinx.ext.autosummary import get_documenter
-        from docutils.parsers.rst import directives
-        from sphinx.util.inspect import safe_getattr
-        import re
-
-        class AutoAutoSummary(Autosummary):
-
-            option_spec = {
-                'methods': directives.unchanged,
-                'attributes': directives.unchanged
-            }
-
-            required_arguments = 1
-
-            @staticmethod
-            def get_members(obj, typ, include_public=None):
-                if not include_public:
-                    include_public = []
-                items = []
-                for name in dir(obj):
-                    try:
-                        documenter = get_documenter(
-                            app, safe_getattr(obj, name), obj)
-                    except AttributeError:
-                        continue
-                    if documenter.objtype == typ:
-                        items.append(name)
-                public = [
-                    x for x in items if x in include_public or not x.startswith('_')]
-                return public, items
-
-            def run(self):
-                clazz = self.arguments[0]
-                try:
-                    (module_name, class_name) = clazz.rsplit('.', 1)
-                    m = __import__(module_name, globals(),
-                                   locals(), [class_name])
-                    c = getattr(m, class_name)
-                    if 'methods' in self.options:
-                        _, methods = self.get_members(
-                            c, 'method', ['__init__'])
-
-                        self.content = ["~%s.%s" % (
-                            clazz, method) for method in methods if not method.startswith('_')]
-                    if 'attributes' in self.options:
-                        _, attribs = self.get_members(c, 'attribute')
-                        self.content = ["~%s.%s" % (
-                            clazz, attrib) for attrib in attribs if not attrib.startswith('_')]
-                finally:
-                    return super(AutoAutoSummary, self).run()
-
-        app.add_directive('autoautosummary', AutoAutoSummary)
-    except BaseException as e:
-        raise e
-
-
-# Napoleon settings
-napoleon_google_docstring = True
-napoleon_numpy_docstring = True
-napoleon_include_private_with_doc = False
-napoleon_include_special_with_doc = False
-napoleon_use_admonition_for_examples = False
-napoleon_use_admonition_for_notes = False
-napoleon_use_admonition_for_references = False
-napoleon_use_ivar = True
-napoleon_use_param = True
-napoleon_use_rtype = True

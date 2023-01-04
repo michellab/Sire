@@ -293,7 +293,7 @@ The values returned by the ``.measures()`` function are returned as
 floating point numbers in the default unit for the measurement. In this
 case, the values are in angstroms, as these are the default length unit.
 
-You can change the default units using the functions in :module:`sire.units`,
+You can change the default units using the functions in :mod:`sire.units`,
 e.g.
 
 >>> sr.units.set_length_unit(sr.units.picometer)

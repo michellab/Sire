@@ -1109,19 +1109,7 @@ bool CharmmPSF::isTopology() const
 
 bool CharmmPSF::isFrame() const
 {
-    return true;
-}
-
-int CharmmPSF::nFrames() const
-{
-    return 1;
-}
-
-Frame CharmmPSF::getFrame(int i) const
-{
-    i = SireID::Index(i).map(this->nFrames());
-
-    return SireMol::Frame();
+    return false;
 }
 
 /** Return the parser that has been constructed by reading in the passed

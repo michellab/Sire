@@ -1,31 +1,11 @@
-"""
-.. currentmodule:: sire
 
-This is the sire module.
-
-Functions
-=========
-
-.. autosummary::
-    :toctree: generated/
-
-    load
-    save
-    atomid
-    chainid
-    molid
-    resid
-    segid
-    thumbs_up
-    disable_thumbs_up
-    get_thumbs_up_info
-
-"""
-
-__all__ = [ "load", "save",
-            "atomid", "resid", "chainid",
-            "segid", "molid", "thumbs_up",
-            "get_thumbs_up_info", "disable_thumbs_up" ]
+__all__ = [ "atomid", "chainid", "disable_thumbs_up",
+            "expand",
+            "get_thumbs_up_info",
+            "load", "load_test_files", "molid",
+            "save", "save_to_string",
+            "segid", "supported_formats", "thumbs_up", "tutorial_url"
+          ]
 
 
 def _fix_openmm_path():

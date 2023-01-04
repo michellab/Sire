@@ -1,7 +1,5 @@
-"""
-.. currentmodule:: sire.move
 
-"""
+__all__ = []
 
 from ..legacy import Move as _Move
 

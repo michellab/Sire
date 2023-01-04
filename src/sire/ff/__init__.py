@@ -1,7 +1,5 @@
-"""
-.. currentmodule:: sire.ff
 
-"""
+__all__ = []
 
 from ..legacy import FF as _FF
 

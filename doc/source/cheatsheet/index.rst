@@ -1,8 +1,8 @@
-============
-Cheat Sheets
-============
+===============
+Detailed Guides
+===============
 
-Here are some cheat sheets that (we hope) will make it easier to
+Here are some detailed guides that (we hope) will make it easier to
 use and understand various parts of sire.
 
 .. toctree::

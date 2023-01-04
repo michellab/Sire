@@ -1,10 +1,19 @@
-"""
-.. currentmodule:: sire.mol
 
-"""
+__all__ = [
+            "Atom", "AtomIdx", "AtomName", "AtomNum",
+            "BondType", "Chain", "ChainIdx", "ChainName",
+            "Cursor", "Cursors", "CursorsM",
+            "Element", "ResIdx", "ResName", "ResNum",
+            "Residue", "MolIdx", "Molecule",
+            "MolName", "MolNum", "SegIdx", "Segment",
+            "SegName", "Selector_Atom_", "Selector_Chain_",
+            "Selector_Residue_", "Selector_Segment_",
+            "SelectorM_Atom_", "SelectorM_Chain_",
+            "SelectorM_Residue_", "SelectorM_Segment_",
+            "SelectorMol", "Stereoscopy", "TrajectoryIterator"
+           ]
 
-from multiprocessing import reduction
-from tkinter import E
+
 from ..legacy import Mol as _Mol
 from .. import use_new_api as _use_new_api
 _use_new_api()
@@ -999,6 +1008,7 @@ Molecule.connectivity = lambda x : x.property("connectivity")
 #### public API
 
 from ._cursor import *
+from ._trajectory import *
 
 
 def _cursor(view, map=None):
@@ -1172,3 +1182,6 @@ SelectorM_Residue_.view = _viewfunc
 SelectorM_Chain_.view = _viewfunc
 SelectorM_Segment_.view = _viewfunc
 SelectorM_CutGroup_.view = _viewfunc
+
+# Remove some temporary variables
+del C

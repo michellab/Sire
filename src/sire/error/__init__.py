@@ -1,7 +1,9 @@
-"""
-.. currentmodule:: sire.error
 
-"""
+__all__ = [
+           "disable_backtrace_exceptions",
+           "enable_backtrace_exceptions",
+           "get_last_error_details",
+           ]
 
 from ..legacy import Error as _Error
 
