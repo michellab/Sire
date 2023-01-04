@@ -10,6 +10,10 @@
 
 #include <QDebug>
 
+#ifdef _WIN32
+    #include <cstdlib>
+#endif
+
 static const qint64 NTEST = 16 * 2000;
 
 using namespace SireMaths;
@@ -44,8 +48,13 @@ int main(int argc, const char **argv)
         float *q0a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
         float *q1a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
     #else
-    #define _mm_malloc(x,y) aligned_alloc(y,x)
-    #define _mm_free(x) free(x)
+        #ifdef _WIN32
+            #define _mm_malloc(x,y) malloc(x)
+            #define _mm_free(x) free(x)
+        #else
+            #define _mm_malloc(x,y) aligned_alloc(y,x)
+            #define _mm_free(x) free(x)
+        #endif
         float *x0a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
         float *y0a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
         float *z0a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
