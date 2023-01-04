@@ -3,7 +3,8 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/Users/chris/sire.app/include"
             ],
             "defines": [],
             "macFrameworkPath": [

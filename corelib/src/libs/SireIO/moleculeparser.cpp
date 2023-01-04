@@ -1694,13 +1694,13 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
                 .arg(filenames.join(", ")), CODELOC);
     }
 
-    if (parsers.value("topology").count() != 1)
+    if (parsers.value("topology").count() == 0)
     {
         throw SireError::program_bug(QObject::tr(
             "Should only be here if we already have a topology!"), CODELOC);
     }
 
-    const auto topology = parsers["topology"][0];
+    auto topology = parsers["topology"][0];
 
     // Instantiate an empty system.
     System system;
@@ -1722,7 +1722,34 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
             supplementary_lines += parser.read().lines();
         }
 
-        system = topology.read().startSystem(supplementary_lines, map);
+        try
+        {
+            system = topology.read().startSystem(supplementary_lines, map);
+        }
+        catch(const SireError::exception&)
+        {
+            // we couldn't load this supplementary with this topology parser.
+            // We need to try other topology parsers, and accept the first one 
+            // that works.
+            auto tops = parsers["topology"];
+
+            bool ok = false;
+
+            for (int i=1; i<tops.count(); ++i)
+            {
+                try
+                {
+                    topology = tops[i];
+                    system = topology.read().startSystem(supplementary_lines, map);
+                    ok = true;
+                }
+                catch(...)
+                {}
+            }
+
+            if (not ok)
+                throw;
+        }
     }
     else
     {
@@ -2066,30 +2093,47 @@ MoleculeParser::sortParsers(const QList<MoleculeParserPtr> &parsers,
     // If there are topology parsers. We want to use the first one that
     // can only be used as a topology parser (e.g. if the user has loaded
     // a prmtop and a PDB file in the wrong order)
+    QList<int> top_or_frame;
+
     if (topology.count() > 1)
     {
-        int first_topology_only = 0;
-        int num_topology_only = 0;
+        int topology_only_idx = -1;
 
         for (int i=0; i<topology.count(); ++i)
         {
             if (not topology[i].read().isFrame())
             {
-                num_topology_only += 1;
+                if (topology_only_idx != -1)
+                {
+                    throw SireIO::parse_error(QObject::tr(
+                        "Cannot construct a System from multiple topology-only parsers "
+                        "if none can follow!"), CODELOC);
+                }
 
-                if (num_topology_only == 1)
-                    first_topology_only = i;
+                topology_only_idx = i;
+            }
+            else
+            {
+                top_or_frame.append(i);
             }
         }
 
-        if (num_topology_only > 1)
+        if (topology_only_idx != -1)
         {
-            throw SireIO::parse_error(QObject::tr(
-                "Cannot construct a System from multiple topology-only parsers "
-                "if none can follow!"), CODELOC);
+            topology = {topology[topology_only_idx]};
         }
+        else
+        {
+            auto tmp = topology;
+            tmp.clear();
 
-        topology = {topology[first_topology_only]};
+            for (const int idx : top_or_frame)
+            {
+                tmp.append(topology[idx]);
+            }
+            
+            topology = tmp;
+        }
     }
 
     ret["topology"] = topology;

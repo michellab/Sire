@@ -275,6 +275,14 @@ This will download and install all of the dependencies via ``mamba``
 the ``sire`` C++ libraries, and then the Python wrappers. Be patient,
 as compilation can take quite a while!
 
+.. note::
+
+   You need to have Visual Studio 2017 C++ compiler installed to compile on Windows.
+   The easiest way to do this is to `install chocolatey <https://chocolatey.org/install>`__
+   and then install the compilers using the command 
+   ``choco install visualstudio2017-workload-vctools``. This is all free, but 
+   you will need admin access to install chocolatey.
+
 If you plan to install `BioSimSpace <https://biosimspace.org>`__ on
 top of ``sire``, then you should install using;
 

@@ -164,19 +164,6 @@ void register_CharmmPSF_class(){
                 , "Return the suffixes that these files are normally associated with" );
         
         }
-        { //::SireIO::CharmmPSF::getFrame
-        
-            typedef ::SireMol::Frame ( ::SireIO::CharmmPSF::*getFrame_function_type)( int ) const;
-            getFrame_function_type getFrame_function_value( &::SireIO::CharmmPSF::getFrame );
-            
-            CharmmPSF_exposer.def( 
-                "getFrame"
-                , getFrame_function_value
-                , ( bp::arg("i") )
-                , bp::release_gil_policy()
-                , "" );
-        
-        }
         { //::SireIO::CharmmPSF::isFrame
         
             typedef bool ( ::SireIO::CharmmPSF::*isFrame_function_type)(  ) const;
@@ -324,18 +311,6 @@ void register_CharmmPSF_class(){
                 , ( bp::arg("i") )
                 , bp::release_gil_policy()
                 , "Return the number of dihedrals in molecule i." );
-        
-        }
-        { //::SireIO::CharmmPSF::nFrames
-        
-            typedef int ( ::SireIO::CharmmPSF::*nFrames_function_type)(  ) const;
-            nFrames_function_type nFrames_function_value( &::SireIO::CharmmPSF::nFrames );
-            
-            CharmmPSF_exposer.def( 
-                "nFrames"
-                , nFrames_function_value
-                , bp::release_gil_policy()
-                , "" );
         
         }
         { //::SireIO::CharmmPSF::nImpropers

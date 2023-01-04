@@ -275,9 +275,6 @@ public:
     bool isTopology() const;
     bool isFrame() const;
 
-    int nFrames() const;
-    SireMol::Frame getFrame(int i) const;
-
     int nMolecules() const;
     int nAtoms() const;
     int nAtoms(int i) const;
