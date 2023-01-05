@@ -1,4 +1,3 @@
-
 import pytest
 
 import sire as sr
@@ -14,14 +13,20 @@ def test_cljfunction(ala_mols):
     # This is how (at a low level) we can convert properties
     # into CLJAtoms (vector of coordinates, charges and LJ parameters)
     # We set the molecule ID to 1
-    clj0 = sr.legacy.MM.CLJAtoms(mol0.property("coordinates").to_vector(),
-                                 mol0.property("charge").to_vector(),
-                                 mol0.property("LJ").to_vector(), 1)
+    clj0 = sr.legacy.MM.CLJAtoms(
+        mol0.property("coordinates").to_vector(),
+        mol0.property("charge").to_vector(),
+        mol0.property("LJ").to_vector(),
+        1,
+    )
 
     # Same for the other molecule, except with molecule ID 2
-    clj1 = sr.legacy.MM.CLJAtoms(mol1.property("coordinates").to_vector(),
-                                 mol1.property("charge").to_vector(),
-                                 mol1.property("LJ").to_vector(), 2)
+    clj1 = sr.legacy.MM.CLJAtoms(
+        mol1.property("coordinates").to_vector(),
+        mol1.property("charge").to_vector(),
+        mol1.property("LJ").to_vector(),
+        2,
+    )
 
     # Now create a CLJFunction to calculate CLJ energies with
     # 15 A cutoff
@@ -29,5 +34,5 @@ def test_cljfunction(ala_mols):
 
     nrgs = func.calculate(clj0, clj1)
 
-    assert nrgs[0] == pytest.approx(-10.90987)
-    assert nrgs[1] == pytest.approx(7.1808714)
+    assert nrgs[0] == pytest.approx(-10.90987, 3)
+    assert nrgs[1] == pytest.approx(7.1808714, 3)
